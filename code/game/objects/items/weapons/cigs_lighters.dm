@@ -248,7 +248,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	//Items with special messages go first
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weapon/tool/weldingtool/WT = W
 		if(WT.is_hot()) //Badasses dont get blinded while lighting their cig with a welding tool
 			light("<span class='notice'>[user] casually lights \his [name] with \the [W], what a badass.</span>")
 

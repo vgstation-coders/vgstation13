@@ -35,7 +35,7 @@
 
 /datum/surgery_step/generic/cut_with_laser
 	allowed_tools = list(
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/weapon/tool/scalpel/laser = 100,
 		/obj/item/weapon/melee/energy/sword = 5 //haha, oh god what
 		)
 
@@ -75,8 +75,8 @@
 	"<span class='warning'>Your hand slips as the blade sputters, searing a long gash in [target]'s [affected.display_name] with \the [tool]!</span>")
 	affected.createwound(CUT, 7.5)
 	affected.createwound(BURN, 12.5)
-	if(istype(tool,/obj/item/weapon/scalpel))
-		var/obj/item/weapon/scalpel/S = tool
+	if(istype(tool,/obj/item/weapon/tool/scalpel))
+		var/obj/item/weapon/tool/scalpel/S = tool
 		S.icon_state = "[initial(S.icon_state)]_off"
 
 
@@ -84,7 +84,7 @@
 //////INCISION MANAGER(cut+clamp+retract)//////////
 /datum/surgery_step/generic/incision_manager
 	allowed_tools = list(
-		/obj/item/weapon/retractor/manager = 100
+		/obj/item/weapon/tool/retractor/manager = 100
 		)
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
@@ -139,7 +139,7 @@
 
 /datum/surgery_step/generic/cut_open
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
+		/obj/item/weapon/tool/scalpel = 100,
 		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
@@ -188,7 +188,7 @@
 ///////CLAMP BLEEDERS/////
 /datum/surgery_step/generic/clamp_bleeders
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
+		/obj/item/weapon/tool/hemostat = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/weapon/talisman = 70,
 		/obj/item/device/assembly/mousetrap = 20,
@@ -230,8 +230,8 @@
 ////////RETRACT SKIN//////
 /datum/surgery_step/generic/retract_skin
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
+		/obj/item/weapon/tool/retractor = 100,
+		/obj/item/weapon/tool/crowbar = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 50
 		)
 
@@ -297,11 +297,11 @@
 	return 0
 /datum/surgery_step/generic/cauterize
 	allowed_tools = list(
-	/obj/item/weapon/cautery = 100,
-	/obj/item/weapon/scalpel/laser = 100,
+	/obj/item/weapon/tool/cautery = 100,
+	/obj/item/weapon/tool/scalpel/laser = 100,
 	/obj/item/clothing/mask/cigarette = 75,
 	/obj/item/weapon/lighter = 50,
-	/obj/item/weapon/weldingtool = 25,
+	/obj/item/weapon/tool/weldingtool = 25,
 	)
 
 	duration = 3 SECONDS
@@ -339,7 +339,7 @@
 ////////CUT LIMB/////////
 /datum/surgery_step/generic/cut_limb
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
+		/obj/item/weapon/tool/circular_saw = 100,
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75,
 		/obj/item/weapon/hatchet = 75,
 		)
@@ -390,7 +390,7 @@
 
 /datum/surgery_step/generic/injectfoam
 	allowed_tools = list(
-	/obj/item/weapon/FixOVein/clot = 100,
+	/obj/item/weapon/tool/FixOVein/clot = 100,
 	)
 
 	priority = 0.1 //Tries to inject biofoam before other steps

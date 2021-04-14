@@ -939,7 +939,7 @@
 
 /datum/chemical_reaction/fixoveinmake/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/FixOVein(location)
+	new /obj/item/weapon/tool/FixOVein(location)
 	qdel(holder.my_atom)
 
 /datum/chemical_reaction/bonegelmake
@@ -952,7 +952,7 @@
 
 /datum/chemical_reaction/bonegelmake/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/bonegel(location)
+	new /obj/item/weapon/tool/bonegel(location)
 	qdel(holder.my_atom)
 
 ///////////////////////////////////////////////////////////////////////////////////

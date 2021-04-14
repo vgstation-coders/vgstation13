@@ -1837,17 +1837,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/surgery
 	name = "Surgery tools"
-	contains = list(/obj/item/weapon/cautery,
-					/obj/item/weapon/surgicaldrill,
+	contains = list(/obj/item/weapon/tool/cautery,
+					/obj/item/weapon/tool/surgicaldrill,
 					/obj/item/clothing/mask/breath/medical,
 					/obj/item/weapon/tank/anesthetic,
-					/obj/item/weapon/FixOVein,
-					/obj/item/weapon/hemostat,
-					/obj/item/weapon/scalpel,
-					/obj/item/weapon/bonegel,
-					/obj/item/weapon/retractor,
-					/obj/item/weapon/bonesetter,
-					/obj/item/weapon/circular_saw)
+					/obj/item/weapon/tool/FixOVein,
+					/obj/item/weapon/tool/hemostat,
+					/obj/item/weapon/tool/scalpel,
+					/obj/item/weapon/tool/bonegel,
+					/obj/item/weapon/tool/retractor,
+					/obj/item/weapon/tool/bonesetter,
+					/obj/item/weapon/tool/circular_saw)
 	cost = 25
 	containertype = "/obj/structure/closet/crate/secure/medsec"
 	containername = "surgery crate"

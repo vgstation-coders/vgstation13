@@ -141,11 +141,11 @@
 		/obj/item/device/multitool,
 		/obj/item/device/radio,
 		/obj/item/device/t_scanner,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/screwdriver,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/wrench,
+		/obj/item/weapon/tool/crowbar,
+		/obj/item/weapon/tool/screwdriver,
+		/obj/item/weapon/tool/weldingtool,
+		/obj/item/weapon/tool/wirecutters,
+		/obj/item/weapon/tool/wrench,
 		/obj/item/weapon/tank/emergency_oxygen,
 		/obj/item/weapon/tank/emergency_nitrogen,
 		/obj/item/device/device_analyser,
@@ -166,7 +166,7 @@
 		/obj/item/device/analyzer/plant_analyzer,
 		/obj/item/seeds,
 		/obj/item/weapon/reagent_containers/glass,
-		/obj/item/weapon/wirecutters/clippers,
+		/obj/item/weapon/tool/wirecutters/clippers,
 		/obj/item/weapon/minihoe)
 
 /obj/item/clothing/suit/storage/wintercoat/cargo

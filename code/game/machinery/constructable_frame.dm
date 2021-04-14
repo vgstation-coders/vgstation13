@@ -325,7 +325,7 @@ to destroy them and players will be able to make replacements.
 		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
 		if(!t)
 			return
-		var/obj/item/weapon/solder/S = O
+		var/obj/item/weapon/tool/solder/S = O
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 50)
@@ -338,7 +338,7 @@ to destroy them and players will be able to make replacements.
 			user.put_in_hands(I)
 		soldering = 0
 	else if(iswelder(O))
-		var/obj/item/weapon/weldingtool/WT = O
+		var/obj/item/weapon/tool/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.

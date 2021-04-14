@@ -517,7 +517,7 @@
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
 	var/obj/item/device/rcd/mech/RCD
-	var/obj/item/weapon/wrench/socket/sock
+	var/obj/item/weapon/tool/wrench/socket/sock
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
@@ -1437,7 +1437,7 @@
 		return
 	for(var/obj/item/I in mech_switchtool.switchtool.stored_modules)
 		if(iswelder(I))
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/weapon/tool/weldingtool/W = I
 			if(W.reagents.total_volume <= W.max_fuel-10)
 				W.reagents.add_reagent(FUEL, 10)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
@@ -1447,7 +1447,7 @@
 				C.add(5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
 		else if(issolder(I))
-			var/obj/item/weapon/solder/S = I
+			var/obj/item/weapon/tool/solder/S = I
 			if(S.reagents.total_volume < S.max_fuel-5)
 				S.reagents.add_reagent(SACID, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)

@@ -93,7 +93,7 @@ obj/structure/windoor_assembly/Destroy()
 
 /obj/structure/windoor_assembly/attackby(obj/item/W, mob/user)
 	if(iswelder(W) && (!anchored && !wired && !electronics))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weapon/tool/weldingtool/WT = W
 		user.visible_message("[user] dissassembles [src].", "You start to dissassemble [src].")
 		if(WT.do_weld(user, src, 40, 0))
 			if(gcDestroyed)

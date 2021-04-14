@@ -144,7 +144,7 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
+#define iswelder(A) istype(A, /obj/item/weapon/tool/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
 
@@ -154,7 +154,7 @@
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 
-#define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
+#define iswirecutter(A) istype(A, /obj/item/weapon/tool/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
@@ -168,11 +168,11 @@
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
-#define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
+#define iscrowbar(A) istype(A, /obj/item/weapon/tool/crowbar)
 
-#define issolder(A) istype(A, /obj/item/weapon/solder)
+#define issolder(A) istype(A, /obj/item/weapon/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
+#define issocketwrench(A) istype(A, /obj/item/weapon/tool/wrench/socket)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 

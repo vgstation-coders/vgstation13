@@ -259,7 +259,7 @@
 
 /obj/machinery/conveyor/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weapon/tool/weldingtool/WT = W
 		if(WT.do_weld(user, src, 30, 0))
 			user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
 			"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \

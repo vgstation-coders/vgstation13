@@ -15,10 +15,10 @@
 	not_next_to=list()
 
 	decorations=list(
-		/obj/item/weapon/screwdriver=2,
-		/obj/item/weapon/crowbar=2,
+		/obj/item/weapon/tool/screwdriver=2,
+		/obj/item/weapon/tool/crowbar=2,
 		/obj/item/stack/metal=1,
-		/obj/item/weapon/wrench=2
+		/obj/item/weapon/tool/wrench=2
 	)
 
 /layout_rule/place_adjacent/workbench/wooden

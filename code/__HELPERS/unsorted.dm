@@ -1216,21 +1216,21 @@ proc/get_mob_with_client_list()
 //Quick type checks for some tools
 var/global/list/common_tools = list(
 /obj/item/stack/cable_coil,
-/obj/item/weapon/wrench,
-/obj/item/weapon/weldingtool,
-/obj/item/weapon/screwdriver,
-/obj/item/weapon/wirecutters,
+/obj/item/weapon/tool/wrench,
+/obj/item/weapon/tool/weldingtool,
+/obj/item/weapon/tool/screwdriver,
+/obj/item/weapon/tool/wirecutters,
 /obj/item/device/multitool,
-/obj/item/weapon/crowbar)
+/obj/item/weapon/tool/crowbar)
 
 /proc/is_surgery_tool(obj/item/W as obj)
 	return (	\
-	istype(W, /obj/item/weapon/scalpel)			||	\
-	istype(W, /obj/item/weapon/hemostat)		||	\
-	istype(W, /obj/item/weapon/retractor)		||	\
-	istype(W, /obj/item/weapon/cautery)			||	\
-	istype(W, /obj/item/weapon/bonegel)			||	\
-	istype(W, /obj/item/weapon/bonesetter)
+	istype(W, /obj/item/weapon/tool/scalpel)			||	\
+	istype(W, /obj/item/weapon/tool/hemostat)		||	\
+	istype(W, /obj/item/weapon/tool/retractor)		||	\
+	istype(W, /obj/item/weapon/tool/cautery)			||	\
+	istype(W, /obj/item/weapon/tool/bonegel)			||	\
+	istype(W, /obj/item/weapon/tool/bonesetter)
 	)
 
 //check if mob is lying down on something we can operate him on.

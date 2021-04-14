@@ -294,7 +294,7 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	if(iswelder(C))
-		var/obj/item/weapon/weldingtool/W = C
+		var/obj/item/weapon/tool/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
 			user.visible_message("<span class='attack'>\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
