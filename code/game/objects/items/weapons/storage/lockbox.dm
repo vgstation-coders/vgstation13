@@ -226,7 +226,7 @@
 	req_one_access = null
 	storage_slots = 5
 	locked = 0
-	icon_state = src.icon_closed
+	icon_state = "lockbox" // Start open
 
 /obj/item/weapon/storage/lockbox/remote/New()
 	..()
