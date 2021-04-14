@@ -644,7 +644,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants Lockbox"
-	desc = "A lockbox containing 3 implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room." 
+	desc = "An opened, all-access lockbox containing 3 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room." 
 	item = /obj/item/weapon/storage/lockbox/remote
 	cost = 18
 	discounted_cost = 12

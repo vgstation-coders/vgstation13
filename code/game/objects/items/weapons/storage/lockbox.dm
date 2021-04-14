@@ -225,6 +225,8 @@
 	name = "lockbox (chemical implants)"
 	req_one_access = null
 	storage_slots = 5
+	locked = 0
+	icon_state = icon_closed
 
 /obj/item/weapon/storage/lockbox/remote/New()
 	..()
