@@ -642,6 +642,14 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")
 
+/datum/uplink_item/jobspecific/command_security/remoteexplosive
+	name = "Remote Explosive Implant"
+	desc = "An implant usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room." 
+	item = /obj/item/weapon/storage/box/syndie_kit/imp_remote_explosive
+	cost = 18
+	discounted_cost = 12
+	jobs_with_discount = list("Warden", "Head of Security")
+
 /datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
 	desc = "A hacked evidence scanner that allows you to forge evidence by setting a specific output that will apply on the next item scan only. Keep Security Records handy to input all requested data. Concealed as long as the evidence forger itself is not interacted with."
