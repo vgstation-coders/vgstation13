@@ -221,8 +221,10 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 		qdel(src)
 
-/obj/item/weapon/implant/explosive/remote/implanted(mob/source as mob)
-	return
+/obj/item/weapon/implant/explosive/remote/implanted()
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
+	return 1
 
 /obj/item/weapon/implant/chem
 	name = "chem implant"
