@@ -151,13 +151,14 @@
 	function setAudio(link, autoplay){
 		var sound = document.getElementById("sounddiv");
 		if(autoplay == 1){
-			sound.innerHTML = "<audio id='soundplayer' autoplay=''>"
+			sound.innerHTML = "<audio id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>"
 		}
 		else{
-			sound.innerHTML = "<audio id='soundplayer' preload='auto'>"
-		}
-		sound.innerHTML = sound.innerHTML + "<source src='" + link + "' type='audio/mpeg'></audio><img src='https://files.catbox.moe/h09wz7.png' id='test' onclick='ToggleAudio();'/>";
+  			sound.innerHTML = "<audio id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>"
+        }
+		sound.innerHTML = sound.innerHTML + "<img src='https://files.catbox.moe/h09wz7.png' id='test' onclick='ToggleAudio();'/>";
 	}
+
 
 	function setVolume(newVolume){
 		var volume = 75;
