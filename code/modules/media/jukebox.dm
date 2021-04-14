@@ -855,6 +855,14 @@ var/global/list/loopModeNames=list(
 		"thunderdome" = "Thunderdome"
 	)
 
+/obj/machinery/media/jukebox/dj/New()
+	..()
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	if(MM == 10)
+		playlists["halloween"] = "Halloween"
+	if(MM == 12)
+		playlists["christmas"] = "Christmas Jingles"
+
 // So I don't have to do all this shit manually every time someone sacrifices pun-pun.
 // Also for debugging.
 /obj/machinery/media/jukebox/superjuke
