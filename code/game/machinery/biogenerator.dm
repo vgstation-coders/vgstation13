@@ -239,7 +239,7 @@
 	cost=35
 	amount_per_unit=10
 	other_amounts=list(5)
-	
+
 /datum/biogen_recipe/misc/plantbgone
 	id="plantbgone"
 	name="Plant-B-Gone"
@@ -247,7 +247,7 @@
 	cost=35
 	amount_per_unit=10
 	other_amounts=list(5)
-	
+
 /datum/biogen_recipe/misc/candle
 	cost=50
 	id="candle"
@@ -447,7 +447,7 @@
 	update_icon()
 	return
 
-/obj/machinery/biogenerator/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/biogenerator/crowbarDestroy(mob/user, obj/item/weapon/tool/crowbar/I)
 	if(beaker)
 		to_chat(user, "<span class='warning'>A beaker is loaded, you cannot deconstruct \the [src].</span>")
 		return FALSE

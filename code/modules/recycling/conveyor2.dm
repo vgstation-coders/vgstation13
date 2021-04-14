@@ -254,7 +254,7 @@
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
 	return
 
-/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/weapon/tool/crowbar/I)
 	return
 
 /obj/machinery/conveyor/attackby(obj/item/W, mob/user)

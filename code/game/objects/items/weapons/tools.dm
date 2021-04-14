@@ -14,6 +14,11 @@
  *		Fuel Can
  */
 
+/obj/item/weapon/tool
+	name = "tool"
+	desc = "A tool."
+
+//The following was here before the "big tool path replace'ning".
 /* Used for fancy tool subtypes that are faster or slower than the standard tool.
  * The value for the key "construct" (or Co_CON_SPEED) is the multiplier for construction delay.
  * The value for the key "deconstruct" (or Co_DECON_SPEED) is the multiplier for deconstruction delay, in case you hadn't guessed.
