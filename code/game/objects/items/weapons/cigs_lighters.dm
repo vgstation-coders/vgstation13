@@ -829,8 +829,18 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/afterattack(obj/O, mob/user, proximity)
 	if(!proximity)
 		return 0
-	if(istype(O, /obj/structure/reagent_dispensers/fueltank))
-		fuel += O.reagents.remove_any(initial(fuel) - fuel)
+	if(istype(O, /obj/structure/reagent_dispensers/))
+		var/obj/structure/reagent_dispensers/tank = O
+		if(!tank.can_fill_tools())
+			to_chat(user, "<span class='notice'>\The [tank] doesn't have a nozzle to fuel \the [src] from.</span>")
+			return
+		else if(!tank.reagents.get_reagent_amount(FUEL))
+			to_chat(user, "<span class='notice'>\The [tank] doesn't have fuel in it!</span>")
+			return
+		else if(tank.reagents.reagent_list.len > 1)
+			to_chat(user, "<span class='notice'>The fuel in \the [tank] is too diluted to use.</span>")
+			return
+		fuel += tank.reagents.remove_any(initial(fuel) - fuel)
 		user.visible_message("<span class='notice'>[user] refuels \the [src].</span>", \
 		"<span class='notice'>You refuel \the [src].</span>")
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)

@@ -17,7 +17,10 @@
 	var/possible_transfer_amounts = list(10,25,50,100)
 	var/can_attach = 0
 	var/modded = 0
+	var/can_open = 0
+	var/open = 0
 	var/obj/item/device/assembly_holder/rig = null
+	var/can_refill = 0 //for lighters, welders, other tools
 
 /obj/structure/reagent_dispensers/AltClick(mob/user)
 	if(!user.incapacitated() && user.Adjacent(get_turf(src)) && possible_transfer_amounts)
@@ -38,9 +41,14 @@
 	..()
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if (iscrowbar(W) && can_open)
+		user.visible_message("[user] pries [src]'s fill cap [open ? "closed" : "open"].", \
+			"You pry [src]'s fill cap [open ? "closed" : "open"].")
+		open = open ? 0 : 1
+		flags |= OPENCONTAINER
 	if (W.is_wrench(user) && can_attach)
 		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
-			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
+			"You wrench [src]'s faucet [modded ? "closed" : "open"].")
 		modded = modded ? 0 : 1
 	if (istype(W,/obj/item/device/assembly_holder) && can_attach)
 		if (rig)
@@ -73,11 +81,14 @@
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
-	reagents.get_examine(user)
+	if(!open)
+		reagents.get_examine(user)
 	if (modded)
 		to_chat(user, "<span class='warning'>The faucet is wrenched open, leaking the the contents of \the [src]!</span>")
 	if(rig)
 		to_chat(user, "<span class='notice'>There is some kind of device rigged to the tank.</span>")
+	if (open)
+		to_chat(user, "<span class='notice'>The tank's fill cap is open.</span>")
 
 /obj/structure/reagent_dispensers/cultify()
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
@@ -110,9 +121,100 @@
 	return
 
 /obj/structure/reagent_dispensers/blob_act()
-	if(prob(50))
-		new /obj/effect/effect/water(src.loc)
-		qdel(src)
+	explode()
+
+/obj/structure/reagent_dispensers/beam_connect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+
+/obj/structure/reagent_dispensers/beam_disconnect(var/obj/effect/beam/B)
+	..()
+	apply_beam_damage(B)
+
+/obj/structure/reagent_dispensers/apply_beam_damage(var/obj/effect/beam/B)
+	if(isturf(get_turf(src)) && B.get_damage() >= 15)
+		explode()
+
+/obj/structure/reagent_dispensers/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		if(Proj.get_damage())
+			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
+			if(Proj.firer)//turrets don't have "firers"
+				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
+				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
+			else
+				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
+			explode()
+	return ..()
+
+/obj/structure/reagent_dispensers/ex_act()
+	explode()
+
+/obj/structure/reagent_dispensers/singularity_act()
+	qdel(src)
+	return  2
+
+/obj/structure/reagent_dispensers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
+		explode()
+
+/obj/structure/reagent_dispensers/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
+	visible_message("<span class='danger'>\the [F] crashes into \the [src]!</span>")
+	explode()
+
+/obj/structure/reagent_dispensers/proc/explode()
+	var/fuel_amount
+	if(reagents.get_reagent_amount(PLASMA))
+		fuel_amount = reagents.get_reagent_amount(PLASMA)
+		if (fuel_amount > 500)
+			explosion(src.loc,2,4,6)
+		else if (fuel_amount > 100)
+			explosion(src.loc,1,2,4)
+		else
+			explosion(src.loc,0,1,2)
+		if(src)
+			qdel(src)
+		return 1
+
+	else if(reagents.get_reagent_amount(FUEL))
+		fuel_amount = reagents.get_reagent_amount(FUEL)
+		if (fuel_amount > 500)
+			explosion(src.loc,1,2,4)
+		else if (fuel_amount > 100)
+			explosion(src.loc,0,1,3)
+		else
+			explosion(src.loc,-1,1,2)
+		if(src)
+			qdel(src)
+		return 1
+
+	else if(reagents.get_reagent_amount(ETHANOL))
+		fuel_amount = reagents.get_reagent_amount(ETHANOL)
+		if (fuel_amount > 500)
+			explosion(src.loc,0,1,3)
+		else if (fuel_amount > 100)
+			explosion(src.loc,-1,1,2)
+		else
+			explosion(src.loc,-1,0,2)
+		if(src)
+			qdel(src)
+		return 1
+
+	else if(reagents.get_reagent_amount(CORNOIL))
+		fuel_amount = reagents.get_reagent_amount(CORNOIL)
+		if (fuel_amount > 500)
+			explosion(src.loc,-1,1,2)
+		else if (fuel_amount > 100)
+			explosion(src.loc,-1,0,1)
+		else
+			explosion(src.loc,-1,0,1)
+		if(src)
+			qdel(src)
+		return 1
+
+	else
+		return 0
 
 /obj/structure/reagent_dispensers/New()
 	. = ..()
@@ -125,7 +227,14 @@
 	return reagents.total_volume <= 0
 
 /obj/structure/reagent_dispensers/proc/can_transfer()
-	return TRUE
+	if(!open)
+		return TRUE
+	return FALSE
+
+/obj/structure/reagent_dispensers/proc/can_fill_tools()
+	if(can_refill)
+		return TRUE
+	return FALSE
 
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
@@ -135,6 +244,8 @@
 	icon_state = "watertank"
 	amount_per_transfer_from_this = 10
 	can_attach = 1
+	can_open = 1
+	can_refill = 1
 
 /obj/structure/reagent_dispensers/watertank/New()
 	. = ..()
@@ -147,64 +258,13 @@
 	icon_state = "weldtank"
 	amount_per_transfer_from_this = 10
 	can_attach = 1
+	can_open = 1
+	can_refill = 1
 
 /*/obj/structure/reagent_dispensers/fueltank/hear_talk(mob/living/M, text)
 	if(rig)
 		rig.hear_talk(M,text)
 */
-
-/obj/structure/reagent_dispensers/fueltank/beam_connect(var/obj/effect/beam/B)
-	..()
-	apply_beam_damage(B)
-
-
-/obj/structure/reagent_dispensers/fueltank/beam_disconnect(var/obj/effect/beam/B)
-	..()
-	apply_beam_damage(B)
-
-/obj/structure/reagent_dispensers/fueltank/apply_beam_damage(var/obj/effect/beam/B)
-	if(isturf(get_turf(src)) && B.get_damage() >= 15)
-		explode()
-
-/obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(Proj.get_damage())
-			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
-			if(Proj.firer)//turrets don't have "firers"
-				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
-				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
-			else
-				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
-			explode()
-	return ..()
-
-/obj/structure/reagent_dispensers/fueltank/blob_act()
-	explode()
-
-/obj/structure/reagent_dispensers/fueltank/ex_act()
-	explode()
-
-/obj/structure/reagent_dispensers/fueltank/singularity_act()
-	qdel(src)
-	return  2
-
-/obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
-		explode()
-
-/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
-	visible_message("<span class='danger'>\the [F] crashes into \the [src]!</span>")
-	explode()
-
-/obj/structure/reagent_dispensers/fueltank/proc/explode()
-	if (reagents.total_volume > 500)
-		explosion(src.loc,1,2,4)
-	else if (reagents.total_volume > 100)
-		explosion(src.loc,0,1,3)
-	else
-		explosion(src.loc,-1,1,2)
-	if(src)
-		qdel(src)
 
 /obj/structure/reagent_dispensers/fueltank/New()
 	. = ..()
@@ -318,6 +378,8 @@
 	icon_state = "cornoiltank"
 	amount_per_transfer_from_this = 50
 	can_attach = 1
+	can_open = 1
+	can_refill = 1
 
 /obj/structure/reagent_dispensers/corn_oil_tank/New()
 	. = ..()
@@ -330,6 +392,8 @@
 	icon_state = "silicate tank"
 	amount_per_transfer_from_this = 50
 	can_attach = 1
+	can_open = 1
+	can_refill = 1
 
 /obj/structure/reagent_dispensers/silicate/New()
 	. = ..()
@@ -358,6 +422,8 @@
 	icon_state = "degreasertank"
 	amount_per_transfer_from_this = 5
 	can_attach = 1
+	can_open = 1
+	can_refill = 1
 
 /obj/structure/reagent_dispensers/degreaser/New()
 	. = ..()
@@ -370,6 +436,8 @@
 	icon_state = "spooktank"
 	amount_per_transfer_from_this = 10
 	can_attach = 1
+	can_open = 1
+	can_refill = 1
 
 /obj/structure/reagent_dispensers/spooktank/New()
 	. = ..()
