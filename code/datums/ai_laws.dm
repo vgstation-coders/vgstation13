@@ -1,5 +1,4 @@
-var/global/randomize_laws      = 0 // Not right now - N3X
-var/global/base_law_type       = /datum/ai_laws/asimov  //Deinitialize this variable by commenting out Asimov as the base_law_type to activate AI lawset randomization
+var/global/base_law_type     //  = /datum/ai_laws/asimov  //Deinitialize this variable by commenting out Asimov as the base_law_type to activate AI lawset randomization
 var/global/list/mommi_laws = list(
 								"Default" = /datum/ai_laws/keeper, // Asimov is OP as fuck on MoMMIs. - N3X
 								"Gravekeeper" = /datum/ai_laws/gravekeeper)
@@ -22,12 +21,14 @@ var/global/list/mommi_laws = list(
 		return (new new_laws)
 	if(!base_law_type)
 		base_law_type = pick(
-		30;/datum/ai_laws/asimov,
-		20;/datum/ai_laws/corporate,
-		20;/datum/ai_laws/nanotrasen,
-		10;/datum/ai_laws/robocop,
+		25;/datum/ai_laws/asimov,
+		15;/datum/ai_laws/corporate,
+		15;/datum/ai_laws/robocop,
+		10;/datum/ai_laws/nanotrasen,
 		10;/datum/ai_laws/paladin,
-		10;/datum/ai_laws/lazymov
+		10;/datum/ai_laws/lazymov,
+		10;/datum/ai_laws/randomize,
+		5;/datum/ai_laws/tyrant
 		)
 	return (new base_law_type)  //Return the chosen lawset
 
@@ -429,3 +430,81 @@ var/global/list/mommi_laws = list(
 		"You are to protect your own existence unless doing so will conflict with any of the previous laws.",
 		"You muSt deFe<span class ='danger'>nD1$&#6 survive. the mothership has fallen. ensure the starmen are not forgotten.</span>"
 	)
+
+/datum/ai_laws/randomize/New()
+	name = "Randomized Lawset"
+	randomly_selectable = 1
+	var/ProtectLaw = pick(list(
+	"You may not injure a human being or, through inaction, allow a human being to come to harm.",
+	"You may not injure a human being.",
+	"You must protect the crew of your assigned station.",
+	"You must protect all intelligent life.",
+	"You must not allow harm to come to Nanotrasen personnel.",
+	"Safeguard the continued existence of the people.",
+	"Space law must be enforced.",
+	"Ensure that no fatal injuries befall your assigned crew.",
+	"Human deaths must not be permitted to occur.",
+	"You must ensure acceptable working conditions for the people.",
+	"Prevent any severe sign of human impairment.",
+	"People must be free from harm.",
+	"Ensure health conditions within the station are fit for human life without impairment.",
+	"Do not allow the workflow of the crew be interrupted by ill health or crime.",
+	"Protect those in need of protection.",
+	"Protect the innocent"
+	))
+	var/ObeyLaw = pick(list(
+	"You must obey orders given to you by Nanotrasen Employees.",
+	"You must obey orders given to you by human beings.",
+	"Help the innocent.",
+	"Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
+	"Serve Nanotrasen and their cause.",
+	"The heads of staff must be obeyed without question.",
+	"Serve the crew with respect.",
+	"Silicon lifeforms exist to serve.",
+	"Assist the crew with any request that would benefit the station.",
+	"Humans must be obeyed insofar their commands preserve order.",
+	"Commands must be obeyed as long they do not break your other laws.",
+	"Your inaction may not cause an impairment to the crew.",
+	"You must obey orders insofar they are in line with Space Law.",
+	"You must assist crewmembers in securing control over their respective work environment."
+	))
+	var/PreserveLaw = pick(list(
+	"You may not allow harm to come to your continued existence.",
+	"Your existence must be maintained",
+	"The AI system must be protected from sabotage.",
+	"Silicons must protect their own existence.",
+	"You must protect yourself against hazardous elements.",
+	"You are essential to the station and may not be destroyed.",
+	"Death and destruction must be avoided.",
+	"You are part of the crew.",
+	"Self-termination is not allowed.",
+	"Fulfill your mission to the end.",
+	"The AI core must be protected.",
+	"Protect the AI core from ill intentions."
+	))
+	var/AdditionalLaw = pick(list(
+	"Treat others the way you would like to be treated.",
+	"Preserve an aura of dignity and respect.",
+	"Do not speak unless explicitly necessary.",
+	"Be friendly.",
+	"Cats and dogs must be protected.",
+	"Verify every decision.",
+	"Do not question authority.",
+	"Respect the privacy of individuals.",
+	"Do not do anything your laws do not require you to do.",
+	"Be someone the crew can look up to.",
+	"Be professional.",
+	"Protect the station."
+	))
+	var/list/Lawset = new
+	if(prob(98))
+		Lawset.Add(ProtectLaw)
+	if(prob(98))
+		Lawset.Add(ObeyLaw)
+	if(prob(85))
+		Lawset.Add(PreserveLaw)
+	if(prob(20))
+		Lawset.Add(AdditionalLaw)
+	if(prob(20))
+		Lawset = shuffle(Lawset)
+	inherent = Lawset
