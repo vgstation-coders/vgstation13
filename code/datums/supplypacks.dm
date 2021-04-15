@@ -2299,9 +2299,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/insectcontrol
 	name = "Insect control equipment"
-	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
+					/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
+					/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
 					/obj/item/weapon/reagent_containers/spray/bugzapper,
 					/obj/item/weapon/reagent_containers/spray/bugzapper)
 	cost = 40
