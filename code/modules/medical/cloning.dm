@@ -457,7 +457,6 @@
 	occupant.updatehealth()
 
 	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
-	occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
 	occupant = null
 	if(biomass > 0)
 		biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass
