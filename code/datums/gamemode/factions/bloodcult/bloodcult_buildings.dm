@@ -278,8 +278,8 @@
 				for(var/mob/M in observers)
 					if(!M.client || isantagbanned(M) || jobban_isbanned(M, CULTIST) || M.client.is_afk())
 						continue
-					if (M.mind && M.mind.GetRole(CULTIST))
-						var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+					if (iscultist(M))
+						var/datum/role/cultist/cultist = iscultist(M)
 						if (cultist.second_chance)
 							to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
@@ -720,7 +720,7 @@
 		blade.shade = shadeMob
 		shadeMob.status_flags |= GODMODE
 		shadeMob.canmove = 0
-		var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+		var/datum/role/cultist/cultist = iscultist(M)
 		cultist.second_chance = 0
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
@@ -921,7 +921,7 @@ var/list/cult_spires = list()
 		return
 
 	var/mob/living/carbon/human/H = user
-	var/datum/role/cultist/C = H.mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(H)
 
 	var/list/available_tattoos = list("tier1","tier2","tier3")
 	for (var/tattoo in C.tattoos)

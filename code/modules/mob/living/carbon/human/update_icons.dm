@@ -425,8 +425,8 @@ var/global/list/damage_icon_parts = list()
 			O.underlays	+= "coldfirevox_s"
 
 	//Cultist tattoos
-	if (mind && mind.GetRole(CULTIST))
-		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	if (iscultist(src))
+		var/datum/role/cultist/C = iscultist(src)
 		add_image = 1
 		for (var/T in C.tattoos)
 			var/datum/cult_tattoo/tattoo = C.tattoos[T]

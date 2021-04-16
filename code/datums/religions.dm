@@ -1,7 +1,7 @@
 /proc/DecidePrayerGod(var/mob/H)
 	if(!H || !H.mind)
 		return "a voice"
-	if(H.mind.GetRole(CULTIST))
+	if(iscultist(H))
 		return "Nar-Sie"
 	else if(H.mind.faith) // The user has a faith
 		var/datum/religion/R = H.mind.faith
