@@ -143,7 +143,7 @@
 			icon_state = "mirror"
 			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
-	else if(istype(I, /obj/item/weapon/crowbar))
+	else if(istype(I, /obj/item/tool/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))

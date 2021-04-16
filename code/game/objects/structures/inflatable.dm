@@ -56,7 +56,7 @@
 		weld(I, user)
 	..()
 
-/obj/item/inflatable/proc/weld(var/obj/item/weapon/weldingtool/WE, var/mob/user)
+/obj/item/inflatable/proc/weld(var/obj/item/tool/weldingtool/WE, var/mob/user)
 	if(!istype(WE))
 		return
 	if(!WE.remove_fuel(1, user))

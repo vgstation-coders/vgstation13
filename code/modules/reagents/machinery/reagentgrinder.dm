@@ -113,7 +113,7 @@ var/global/list/juice_items = list (
 		return -1
 	return ..()
 
-/obj/machinery/reagentgrinder/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/reagentgrinder/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(beaker)
 		to_chat(user, "You can't do that while \the [src] has a beaker loaded!")
 		return FALSE

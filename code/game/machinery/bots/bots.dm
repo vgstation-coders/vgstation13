@@ -637,7 +637,7 @@
 	else if(iswelder(W) && user.a_intent != I_HURT)
 		if(health < maxhealth)
 			if(open)
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				if(WT.remove_fuel(0))
 					health = min(maxhealth, health+10)
 					user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")

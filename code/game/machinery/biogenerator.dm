@@ -447,7 +447,7 @@
 	update_icon()
 	return
 
-/obj/machinery/biogenerator/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/biogenerator/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(beaker)
 		to_chat(user, "<span class='warning'>A beaker is loaded, you cannot deconstruct \the [src].</span>")
 		return FALSE

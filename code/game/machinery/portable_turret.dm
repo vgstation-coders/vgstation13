@@ -263,7 +263,7 @@ Status: []<BR>"},
 				qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
 
 		else if(iswelder(W))
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			to_chat(user, "<span class='notice'>You begin unwelding the turret's armor.</span>")
 			if(WT.do_weld(user, src, 30,5))
 				to_chat(user, "<span class='notice'>You unweld the turret's armor.</span>")
@@ -719,7 +719,7 @@ Status: []<BR>"},
 				return
 
 			else if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				if (WT.do_weld(user, src, 20, 5))
 					if(gcDestroyed)
 						return
@@ -789,7 +789,7 @@ Status: []<BR>"},
 
 		if(7)
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "<span class='notice'>You begin welding the turret's armor down.</span>")
 				if(WT.do_weld(user, src, 30,5))
 					build_step = 8

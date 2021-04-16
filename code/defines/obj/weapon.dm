@@ -325,7 +325,7 @@
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				I.playtoolsound(usr, 50)
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
-				var /obj/item/stack/cable_coil/S = new /obj/item/weapon/screwdriver(user.loc)
+				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(user.loc)
 				C.amount = 10
 				C._color = cable_color
 				C.icon_state = "coil_[C._color]"

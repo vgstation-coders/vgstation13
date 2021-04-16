@@ -195,7 +195,7 @@
 	if(!anchored)
 		return
 
-	if(istype(I, /obj/item/weapon/crowbar))
+	if(istype(I, /obj/item/tool/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))

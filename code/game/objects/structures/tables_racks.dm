@@ -600,7 +600,7 @@
 				return
 
 	else if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.isOn())
 			to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
 			if(WT.do_weld(user, src, 50, 0))

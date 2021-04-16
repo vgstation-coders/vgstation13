@@ -135,7 +135,7 @@
 					buildstage = 1
 				return 1
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT=W
+				var/obj/item/tool/weldingtool/WT=W
 				if(WT.do_weld(user, src, 10, 5))
 					to_chat(user, "<span class='notice'>You cut the intercom frame from the wall!</span>")
 					new /obj/item/mounted/frame/intercom(get_turf(src))

@@ -319,7 +319,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/apron,
 			slot_wear_mask_str = /obj/item/clothing/mask/surgical,
-			slot_l_store_str = /obj/item/weapon/scalpel,
+			slot_l_store_str = /obj/item/tool/scalpel,
 		),
 	)
 
@@ -379,7 +379,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/wcoat,
 			slot_r_store_str = /obj/item/weapon/melee/energy/sword,
-			slot_l_store_str = /obj/item/weapon/scalpel,
+			slot_l_store_str = /obj/item/tool/scalpel,
 		),
 	)
 	pda_type = /obj/item/device/pda/heads/assassin

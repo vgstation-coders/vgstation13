@@ -29,7 +29,7 @@
 /obj/item/weapon/cylinder_assembly/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding \the [src] together.")
 		if(WT.do_weld(user, src, 30))
 			to_chat(user, "You weld \the [src] together.")
@@ -166,7 +166,7 @@
 			C.use(5)
 			qdel(src)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the metal blades together.")
 		if(WT.do_weld(user, src, 30))
 			to_chat(user, "You weld the metal blades together.")
@@ -515,7 +515,7 @@
 //BLUNDERBUSS BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_reservoir_barrel_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the barrel to \the [src].")
 				if(WT.do_weld(user, src, 30, 0))
 					to_chat(user, "You weld the barrel to \the [src].")
@@ -568,7 +568,7 @@
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the barrel to \the [src].")
 				if(WT.do_weld(user, src, 30, 0))
 					to_chat(user, "You weld the barrel to \the [src].")
@@ -622,7 +622,7 @@
 //BLAST CANNON BEGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_pipe_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the bent pipe to \the [src].")
 				if(WT.do_weld(user, src, 30))
 					to_chat(user, "You weld the bent pipe to \the [src].")
@@ -638,7 +638,7 @@
 //SUBSPACE TUNNELER BEGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_ansible_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the subspace ansible onto \the [src].")
 				if(WT.do_weld(user, src, 30, 0))
 					to_chat(user, "You weld the subspace ansible onto \the [src].")
@@ -721,7 +721,7 @@
 
 
 //TOMAHAWK BEGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/obj/item/weapon/wrench_wired
+/obj/item/tool/wrench_wired
 	name = "wired wrench"
 	desc = "A wrench with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 	icon = 'icons/obj/weaponsmithing.dmi'
@@ -741,7 +741,7 @@
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	var/metal_assembly = 0
 
-/obj/item/weapon/wrench_wired/proc/update_wired_wrench_assembly()
+/obj/item/tool/wrench_wired/proc/update_wired_wrench_assembly()
 	if(metal_assembly)
 		name = "tomahawk assembly"
 		desc = "A makeshift handaxe with a fine blade of strong metal. The blade doesn't look very secure."
@@ -751,23 +751,23 @@
 		desc = "A wrench with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 		icon_state = "wrench"
 
-/obj/item/weapon/wrench_wired/attack_self(mob/user as mob)
+/obj/item/tool/wrench_wired/attack_self(mob/user as mob)
 	if(metal_assembly)
 		to_chat(user, "You remove the metal blade from \the [src].")
-		new /obj/item/weapon/wrench_wired(get_turf(src.loc))
+		new /obj/item/tool/wrench_wired(get_turf(src.loc))
 		new /obj/item/weapon/metal_blade(get_turf(src.loc))
 		qdel(src)
 	else
 		to_chat(user, "You unwrap the cable cuffs from around \the [src].")
-		new /obj/item/weapon/wrench(get_turf(src.loc))
+		new /obj/item/tool/wrench(get_turf(src.loc))
 		new /obj/item/weapon/handcuffs/cable(get_turf(src.loc))
 		qdel(src)
 
-/obj/item/weapon/wrench_wired/attackby(obj/item/weapon/W, mob/user)
+/obj/item/tool/wrench_wired/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(metal_assembly)
 		if(iswelder(W))
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			to_chat(user, "You begin welding the blade to \the [src].")
 			if(WT.do_weld(user, src, 30, 0))
 				to_chat(user, "You weld the blade to \the [src].")
@@ -853,7 +853,7 @@
 				siege_assembly = TRUE
 				qdel(BK)
 	else if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the barrel onto \the [src].")
 		if(WT.do_weld(user, src, 80, 0))
 			to_chat(user, "You weld the barrel onto \the [src].")
@@ -877,7 +877,7 @@
 		/obj/item/taperoll/syndie,
 		/obj/item/device/label_roll,
 		/obj/item/weapon/glue,
-		/obj/item/weapon/bonegel,
+		/obj/item/tool/bonegel,
 		/obj/item/stack/package_wrap,
 		/obj/item/stack/medical/bruise_pack/bandaid,
 		)

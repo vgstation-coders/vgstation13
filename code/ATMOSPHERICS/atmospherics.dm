@@ -319,7 +319,7 @@ Pipelines + Other Objects -> Pipe network
 	var/datum/gas_mixture/env_air = loc.return_air()
 	add_fingerprint(user)
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		if(istype(W, /obj/item/weapon/wrench/socket) && istype(src, /obj/machinery/atmospherics/pipe))
+		if(istype(W, /obj/item/tool/wrench/socket) && istype(src, /obj/machinery/atmospherics/pipe))
 			to_chat(user, "<span class='warning'>You begin to open the pressure release valve on the pipe...</span>")
 			if(!do_after(user, src, 50) || !loc)
 				return

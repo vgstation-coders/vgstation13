@@ -359,11 +359,11 @@
 
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
-		var/obj/item/weapon/solder/S = I
+		var/obj/item/tool/solder/S = I
 		if(S.remove_fuel(2,user))
 			solder_improve(user)
 	else if(iswelder(I))
-		var/obj/item/weapon/weldingtool/WT = I
+		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
@@ -417,7 +417,7 @@
 				src.state = 1
 				return 1
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/tool/weldingtool/WT = P
 				to_chat(user, "<span class='notice'>You start welding the frame back into metal.</span>")
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
 					if(gcDestroyed)

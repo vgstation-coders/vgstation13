@@ -131,7 +131,7 @@
 		return
 
 	else if (iswelder(W) && opened && !has_electronics)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the compressor frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if(gcDestroyed)

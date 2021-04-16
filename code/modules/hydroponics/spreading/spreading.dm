@@ -162,7 +162,7 @@
 		set_light(0)
 
 /obj/effect/plantsegment/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
 		if(sampled)
 			to_chat(user, "<span class='warning'>\The [src] has already been sampled recently.</span>")
 			return

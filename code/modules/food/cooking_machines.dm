@@ -657,7 +657,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(30)
-	if(istype(I,/obj/item/weapon/crowbar) && do_after(user,src,30))
+	if(istype(I,/obj/item/tool/crowbar) && do_after(user,src,30))
 		user.visible_message("<span class='notice'>[user] dissassembles the [src].</span>", "<span class='notice'>You dissassemble \the [src].</span>")
 		if(src.ingredient)
 			ingredient.forceMove(src.loc)

@@ -26,7 +26,7 @@
 		/obj/structure/sink,
 		/obj/structure/centrifuge,
 		/obj/item/weapon/storage,
-		/obj/item/weapon/solder,
+		/obj/item/tool/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
 		/obj/machinery/dna_scannernew,
 		/obj/item/weapon/grenade/chem_grenade,
@@ -108,7 +108,7 @@
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
+	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))

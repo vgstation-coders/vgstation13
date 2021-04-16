@@ -136,7 +136,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	force = 3
 
 /obj/item/weapon/fish/shark/attackby(var/obj/item/O, var/mob/user)
-	if(istype(O, /obj/item/weapon/wirecutters))
+	if(istype(O, /obj/item/tool/wirecutters))
 		to_chat(user, "You rip out the teeth of \the [src]!")
 		new /obj/item/weapon/fish/toothless_shark(get_turf(src))
 		new /obj/item/stack/teeth/shark(get_turf(src), 10)
@@ -247,7 +247,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "lobster_steamed_simple"
 
 /obj/item/weapon/steamed_lobster_simple_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso, simple version
-	if(istype(O, /obj/item/weapon/wirecutters))
+	if(istype(O, /obj/item/tool/wirecutters))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
 		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple(get_turf(src))
 		qdel(src)
@@ -261,7 +261,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "lobster_steamed_deluxe"
 
 /obj/item/weapon/steamed_lobster_deluxe_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso
-	if(istype(O, /obj/item/weapon/wirecutters))
+	if(istype(O, /obj/item/tool/wirecutters))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
 		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe(get_turf(src))
 		qdel(src)

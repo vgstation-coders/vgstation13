@@ -211,7 +211,7 @@
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && c_mode==1)
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the floorweld off the delivery chute.")
 		if(W.do_weld(user, src,20, 0))
 			if(gcDestroyed)

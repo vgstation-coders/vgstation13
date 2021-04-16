@@ -108,7 +108,7 @@
 			holder.add_hiddenprint(L)
 			if(href_list["fuse"]) // Toggles the fuse/unfuse status
 				if(issolder(I))
-					var/obj/item/weapon/solder/S = I
+					var/obj/item/tool/solder/S = I
 					if(S.remove_fuel(1,L))
 						I.playtoolsound(L.loc, 25)
 						var/greek = href_list["fuse"]

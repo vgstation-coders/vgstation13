@@ -49,7 +49,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(0)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/tool/weldingtool/WT = O
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -60,7 +60,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(1)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/tool/crowbar))
 					user.visible_message("[user] starts forcing open the bolt covers on [src].", "You start forcing open the anchoring bolt covers with [O]...")
 
 					if(do_after(user,  src, 15))
@@ -73,7 +73,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(2)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/tool/weldingtool/WT = O
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -96,7 +96,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(4)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/tool/crowbar))
 
 					user.visible_message("[user] begins lifting [src] off of the anchors.", "You begin lifting the device off the anchors...")
 

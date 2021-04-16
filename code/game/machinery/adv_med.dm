@@ -210,7 +210,7 @@
 		emagged = 0
 		return 0
 
-/obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
 		return FALSE

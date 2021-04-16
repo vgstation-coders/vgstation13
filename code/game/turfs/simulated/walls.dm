@@ -175,8 +175,8 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/tool/solder) && bullet_marks)
+		var/obj/item/tool/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -224,7 +224,7 @@
 
 	//Deconstruction
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			if(engraving)
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")

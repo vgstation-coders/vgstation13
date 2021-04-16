@@ -551,7 +551,7 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/weapon/wirecutters) )
+	else if(istype(W,/obj/item/tool/wirecutters) )
 		if(!string_attached)
 			..()
 			return
