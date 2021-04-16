@@ -1176,7 +1176,9 @@
 		/obj/item/weapon/reagent_containers/food/snacks/potentham,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-		/obj/item/mounted/frame/painting
+		/obj/item/mounted/frame/painting,
+		/obj/item/weapon/aiModule/randomize,
+		/obj/item/weapon/aiModule/core/hogan
 )
 
 
