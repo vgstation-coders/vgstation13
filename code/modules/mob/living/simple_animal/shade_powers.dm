@@ -35,7 +35,7 @@
 	add_spell(new /spell/soulblade/blade_mend, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_boil, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(src)
 	if (C)
 		C.logo_state = "shade-blade"
 
@@ -54,7 +54,7 @@
 	for(var/spell/soulblade/spell_to_remove in spell_list)
 		remove_spell(spell_to_remove)
 
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(src)
 	if (C)
 		C.logo_state = "cult-logo"
 

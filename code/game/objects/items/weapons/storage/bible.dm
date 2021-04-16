@@ -80,7 +80,7 @@
 			return 1
 		var/datum/role/cultist/cultist
 		if(iscultist(M))
-			cultist = M.mind.GetRole(CULTIST)
+			cultist = iscultist(M)
 			if (cultist.deconversion)
 				to_chat(user,"<span class='warning'>There is already a deconversion attempt undergoing!</span>")
 				return 1
@@ -265,7 +265,7 @@
 	var/mob/target
 	deconvertee.overlays += image('icons/effects/effects.dmi',src,"deconversion")
 	playsound(deconvertee, 'sound/effects/deconversion_start.ogg', 50, 0, -4)
-	cultist = deconvertee.mind.GetRole(CULTIST)
+	cultist = iscultist(deconvertee)
 	cultist.deconversion = src
 
 	deconvertee.eye_blurry = max(deconvertee.eye_blurry, 10)
