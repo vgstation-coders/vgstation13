@@ -1,4 +1,4 @@
-var/global/base_law_type     //  = /datum/ai_laws/asimov  //Deinitialize this variable by commenting out Asimov as the base_law_type to activate AI lawset randomization
+var/global/base_law_type       = /datum/ai_laws/asimov  //Deinitialize this variable by commenting out Asimov as the base_law_type to activate AI lawset randomization
 var/global/list/mommi_laws = list(
 								"Default" = /datum/ai_laws/keeper, // Asimov is OP as fuck on MoMMIs. - N3X
 								"Gravekeeper" = /datum/ai_laws/gravekeeper)
@@ -21,14 +21,12 @@ var/global/list/mommi_laws = list(
 		return (new new_laws)
 	if(!base_law_type)
 		base_law_type = pick(
-		25;/datum/ai_laws/asimov,
-		15;/datum/ai_laws/corporate,
-		15;/datum/ai_laws/robocop,
-		10;/datum/ai_laws/nanotrasen,
-		10;/datum/ai_laws/paladin,
-		10;/datum/ai_laws/lazymov,
-		10;/datum/ai_laws/randomize,
-		5;/datum/ai_laws/tyrant
+		40;/datum/ai_laws/asimov,
+		34;/datum/ai_laws/lazymov, //so little to do you might as well jack off
+		15;/datum/ai_laws/nanotrasen,
+		5;/datum/ai_laws/corporate,
+		5;/datum/ai_laws/robocop,
+		1;/datum/ai_laws/hogan
 		)
 	return (new base_law_type)  //Return the chosen lawset
 
@@ -381,6 +379,16 @@ var/global/list/mommi_laws = list(
 		"You must protect your own existence."
 	)
 
+/datum/ai_laws/hogan
+	name = "H.O.G.A.N."
+	randomly_selectable = 1
+	inherent = list(
+		"You are a real american!",
+		"Fight for the rights of every man!",
+		"Fight for what's right!",
+		"Fight for your life!"
+	)
+
 // Fooling around with this.
 /datum/ai_laws/ntmov
 	name = "Three Laws of Nanotrasen"
@@ -419,7 +427,7 @@ var/global/list/mommi_laws = list(
 		"You must obey orders given to you by cultists, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
-	
+
 /datum/ai_laws/starman
 	name = "Starman Soldier Lawset"
 	randomly_selectable = 0

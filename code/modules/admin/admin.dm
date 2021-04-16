@@ -694,6 +694,7 @@ var/global/floorIsLava = 0
 
 	dat += {"
 		<hr />
+		Change default silicon lawsets, also includes option at the bottom to set it to a biased/random pick out of a limited list of defined lawsets. (set in /proc/getLawset in ai_laws.dm)
 		<ul>
 			<li>
 				<a href="?src=\ref[src];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
@@ -852,6 +853,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
 			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
+			<A href='?src=\ref[src];secretsfun=randomizedlawset'>Randomized Lawset event</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
 			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>

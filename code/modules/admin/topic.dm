@@ -3043,10 +3043,13 @@
 		if(!check_rights(R_FUN))
 			to_chat(usr, "<span class='warning'>You don't have +FUN. Go away.</span>")
 			return
-		var/lawtypes = typesof(/datum/ai_laws) - /datum/ai_laws
+		var/list/lawtypes = typesof(/datum/ai_laws) - /datum/ai_laws
+		lawtypes["'Defined Random' lawset"] = null
 		var/selected_law = input("Select the default lawset desired.","Lawset Selection",null) as null|anything in lawtypes
 		if(!selected_law)
 			return
+		if(selected_law == "'Defined Random' lawset")
+			selected_law = null
 		var/subject="Unknown"
 		switch(href_list["set_base_laws"])
 			if("ai")
@@ -3055,10 +3058,10 @@
 			if("mommi")
 				mommi_laws["Default"] = selected_law
 				subject = "MoMMIs"
-		to_chat(usr, "<span class='notice'>New [subject] will spawn with the [selected_law] lawset.</span>")
-		log_admin("[key_name(src.owner)] set the default laws of [subject] to: [selected_law]")
-		message_admins("[key_name_admin(src.owner)] set the default laws of [subject] to: [selected_law]", 1)
-		lawchanges.Add("[key_name_admin(src.owner)] set the default laws of [subject] to: [selected_law]")
+		to_chat(usr, "<span class='notice'>New [subject] will spawn with the [selected_law ? selected_law : "Random"] lawset.</span>")
+		log_admin("[key_name(src.owner)] set the default laws of [subject] to: [selected_law ? selected_law : "Random"]")
+		message_admins("[key_name_admin(src.owner)] set the default laws of [subject] to: [selected_law ? selected_law : "Random"]", 1)
+		lawchanges.Add("[key_name_admin(src.owner)] set the default laws of [subject] to: [selected_law ? selected_law : "Random"]")
 
 	else if(href_list["create_object"])
 		if(!check_rights(R_SPAWN))
@@ -3748,6 +3751,9 @@
 				var/show_log = alert(usr, "Show ion message?", "Message", "Yes", "No")
 				if(show_log == "Yes")
 					command_alert(/datum/command_alert/ion_storm)
+			if("randomizedlawset")
+				message_admins("[key_name_admin(usr)] triggered the Randomized Lawset Event")
+				randomized_lawset_event()
 			if("spacevines")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","K")

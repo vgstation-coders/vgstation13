@@ -142,6 +142,20 @@ Refactored AI modules by N3X15
 	return 1
 
 
+/******************** Randomize ********************/
+
+/obj/item/weapon/aiModule/randomize
+	modname = "Randomize"
+	desc = "A 'Randomize' AI Module: 'Randomizes laws.'"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+/obj/item/weapon/aiModule/randomize/updateLaw()
+	return
+/obj/item/weapon/aiModule/randomize/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	..()
+	var/datum/ai_laws/randomize/RLS = new
+	laws.inherent = RLS.inherent
+	return 1
+
 
 // tl;dr repair shit, but don't get involved in other people's business
 /******************** keeper (MoMMIs only) *******************/
