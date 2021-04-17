@@ -27,20 +27,20 @@ var/list/machete_throw_sound = list('sound/weapons/hfmachete_throw01.ogg', 'soun
 var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg', 'sound/weapons/hfmachete_throw_hit02.ogg', 'sound/weapons/hfmachete_throw_hit03.ogg')
 var/list/card_swipe_sound = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg')
 var/list/mop_sound = list('sound/effects/mop1.ogg', 'sound/effects/mop2.ogg', 'sound/effects/mop3.ogg', 'sound/effects/mop4.ogg', 'sound/effects/mop5.ogg')
-var/list/voice_sound = list('sound/misc/Vocal1.ogg','sound/misc/Vocal2.ogg','sound/misc/Vocal3.ogg','sound/misc/Vocal4.ogg','sound/misc/Vocal5.ogg')
+var/list/voice_human_sound = list('sound/misc/Vocal1.ogg','sound/misc/Vocal2.ogg','sound/misc/Vocal3.ogg','sound/misc/Vocal4.ogg','sound/misc/Vocal5.ogg')
+var/list/voice_silicon_sound = list('sound/misc/silicon-vocal1.ogg','sound/misc/silicon-vocal2.ogg','sound/misc/silicon-vocal3.ogg','sound/misc/silicon-vocal4.ogg','sound/misc/silicon-vocal5.ogg')
 var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W95_error.ogg', 'sound/machines/W98_error.ogg', 'sound/machines/W7_error.ogg')
 var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuckupstep2.ogg')
+var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jinglebell2.ogg', 'sound/items/jinglebell3.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
-/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE)
+/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)
 	var/turf/turf_source = get_turf(source)
 
 	ASSERT(!isnull(turf_source))
 	ASSERT(!(isnull(soundin) && channel == 0)) // Unless a channel is specified, prevent null sounds.
-
-	var/frequency = vary ? get_rand_frequency() : 1 // Same frequency for everybody
 
 /* What's going on in this block?
 	If the proc isn't set to not be modified by air, the following steps occur:
@@ -120,9 +120,9 @@ var/const/SURROUND_CAP = 7
 
 	soundin = get_sfx(soundin)
 
-	var/sound/S = sound(soundin, 0, wait, channel, vol,)
+	var/sound/S = sound(soundin, 0, wait, channel, vol)
 
-	if (vary)
+	if(vary)
 		if(frequency)
 			S.frequency = frequency
 		else
@@ -211,11 +211,15 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(card_swipe_sound)
 			if ("mop")
 				soundin = pick(mop_sound)
-			if ("voice")
-				soundin = pick(voice_sound)
+			if ("voice-human")
+				soundin = pick(voice_human_sound)
+			if ("voice-silicon")
+				soundin = pick(voice_silicon_sound)
 			if ("windows error")
 				soundin = pick(windows_error)
 			if ("fuckupstep")
 				soundin = fuckup_step
+			if ("jinglebell")
+				soundin = jingle_sound
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

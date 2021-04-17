@@ -19,7 +19,7 @@
 	to_chat(antag.current, "<span class='danger'>The diseases you are carrying were added to your notes.</span>")
 
 
-/datum/role/catbeast/OnPostSetup()
+/datum/role/catbeast/OnPostSetup(var/laterole = FALSE)
 	var/mob/living/carbon/human/H = antag.current
 	H.set_species("Tajaran", force_organs=1)
 	H.my_appearance.s_tone = CATBEASTBLACK
@@ -172,13 +172,13 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	if(!istype(D))
 		return //It's not dynamic!
 	threat_generated += amount
-	if(D.threat >= D.threat_level)
-		D.create_threat(amount)
+	if(D.midround_threat >= D.midround_threat_level)
+		D.create_midround_threat(amount)
 		if(!threat_level_inflated) //Our first time raising the cap
 			D.threat_log += "[worldtime2text()]: A catbeast started increasing the threat cap."
 		threat_level_inflated += amount
 	else
-		D.refund_threat(amount)
+		D.refund_midround_threat(amount)
 
 /datum/role/catbeast/GetScoreboard()
 	. = ..()

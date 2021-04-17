@@ -69,6 +69,14 @@ var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	melt_temperature = 2473.15
 	sheettype = "brick"
 
+var/list/datum/stack_recipe/brick_recipes = list ( \
+	new/datum/stack_recipe("fireplace", /obj/machinery/space_heater/campfire/stove/fireplace, 15, time = 10 SECONDS, one_per_turf = 1, on_floor = 1)
+	)
+
+/obj/item/stack/sheet/mineral/brick/New(var/loc, var/amount=null)
+	recipes = brick_recipes
+	..()
+
 /*
  * Diamond
  */
@@ -153,7 +161,9 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
 	new/datum/stack_recipe("plasma door", /obj/machinery/door/mineral/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20, one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE)
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	null,
+	blacksmithing_recipes,
 	)
 
 /obj/item/stack/sheet/mineral/plasma/New(var/loc, var/amount=null)

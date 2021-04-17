@@ -75,7 +75,7 @@
 
 /obj/machinery/shield/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	if(health <=0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
 		qdel(src)
@@ -522,7 +522,7 @@
 
 /obj/machinery/shieldwallgen/bullet_act(var/obj/item/projectile/Proj)
 	storedpower -= Proj.damage
-	..()
+	return ..()
 
 //////////////Containment Field START
 /obj/machinery/shieldwall
@@ -583,7 +583,7 @@
 		else
 			G = gen_secondary
 		G.storedpower -= Proj.damage
-	..()
+	return ..()
 
 
 /obj/machinery/shieldwall/ex_act(severity)

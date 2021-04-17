@@ -410,6 +410,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_VEGAN		64
 #define DISABILITY_FLAG_ASTHMA 128
 #define DISABILITY_FLAG_LACTOSE		256
+#define DISABILITY_FLAG_LISP		512
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -607,6 +608,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
+#define ALWAYS_CRIT 65536
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
 
@@ -719,6 +721,12 @@ SEE_PIXELS	256
 
 //some arbitrary defines to be used by self-pruning global lists. (see master_controller)
 #define PROCESS_KILL 26	//Used to trigger removal from a processing list
+
+#define PROJECTILE_COLLISION_DEFAULT	0
+#define PROJECTILE_COLLISION_MISS		1
+#define PROJECTILE_COLLISION_BLOCKED	2
+#define PROJECTILE_COLLISION_REBOUND	3
+#define PROJECTILE_COLLISION_PORTAL		4
 
 #define HOSTILE_STANCE_IDLE 1
 #define HOSTILE_STANCE_ALERT 2
@@ -877,6 +885,7 @@ SEE_PIXELS	256
 #define ROLE_MINOR			"minor roles"
 #define ROLE_ALIEN			"xenomorph"
 #define ROLE_STRIKE			"striketeam"
+#define ROLE_PRISONER		"prisoner"
 
 #define AGE_MIN 17			//youngest a character can be
 #define AGE_MAX 85			//oldest a character can be
@@ -903,6 +912,7 @@ SEE_PIXELS	256
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
 #define IMPCHEM_HUD		    "impchem" // chemical implant
+#define IMPHOLY_HUD		    "impholy" // holy implant
 #define IMPTRACK_HUD		"imptrack" // tracking implant
 #define SPECIALROLE_HUD 	"specialrole" // AntagHUD image
 #define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
@@ -1046,25 +1056,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define CAN_EQUIP 1
 #define CAN_EQUIP_BUT_SLOT_TAKEN 2
 
-// Vampire power defines
-#define VAMP_REJUV    1
-#define VAMP_GLARE    2
-#define VAMP_HYPNO    3
-#define VAMP_SHAPE    4
-#define VAMP_VISION   5
-#define VAMP_DISEASE  6
-#define VAMP_CLOAK    7
-#define VAMP_BATS     8
-#define VAMP_SCREAM   9
-#define VAMP_HEAL     10
-#define VAMP_JAUNT    11
-#define VAMP_SLAVE    12
-#define VAMP_BLINK    13
-#define VAMP_MATURE   14
-#define VAMP_SHADOW   15
-#define VAMP_CHARISMA 16
-#define VAMP_UNDYING  17
-#define VAMP_CAPE	  18
+
 #define STARTING_BLOOD 10
 
 #define VAMP_FAILURE -1
@@ -1310,6 +1302,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MARTIAN "Martian"
 #define LANGUAGE_INSECT "Insectoid"
 #define LANGUAGE_DEATHSQUAD "Deathsquad"
+#define LANGUAGE_CLOWN "Clown"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1366,6 +1359,7 @@ var/proccalls = 1
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
 #define CHANNEL_STARMAN				1025
+#define CHANNEL_CRITSOUNDS			1026
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0

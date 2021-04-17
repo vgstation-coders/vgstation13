@@ -21,6 +21,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/hidden = 0 //Emaggable
 	var/contraband = 0 //Hackable via tools
 	var/group = "Supplies"
+	var/require_holiday = null
 
 /datum/supply_packs/New()
 	manifest += "<ul>"
@@ -356,7 +357,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/weapon/reagent_containers/glass/paint/green,
 	/obj/item/weapon/reagent_containers/glass/paint/blue,
 	/obj/item/weapon/reagent_containers/glass/paint/yellow,
-	/obj/item/weapon/reagent_containers/glass/paint/violet,
+	/obj/item/weapon/reagent_containers/glass/paint/purple,
 	/obj/item/weapon/reagent_containers/glass/paint/black,
 	/obj/item/weapon/reagent_containers/glass/paint/white,
 	/obj/item/weapon/reagent_containers/glass/paint/remover,
@@ -437,6 +438,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "airbag crate"
 	group = "Supplies"
 
+/datum/supply_packs/religious//you can only order default-looking bibles for now
+	name = "Religious Paraphernelia"
+	contains = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater,
+					/obj/item/weapon/storage/bible,
+					/obj/item/weapon/storage/fancy/incensebox/harebells,
+					/obj/item/weapon/thurible)
+	cost = 100
+	containertype = /obj/structure/closet/crate/basic
+	containername = "religious stuff crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume
@@ -506,7 +518,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/collectable/police,
 					/obj/item/clothing/head/collectable/slime,
 					/obj/item/clothing/head/collectable/xenom,
-					/obj/item/clothing/head/collectable/petehat)
+					/obj/item/clothing/head/collectable/petehat,)
 	name = "Collectable hats!"
 	cost = 200
 	containertype = /obj/structure/closet/crate/basic
@@ -516,6 +528,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/randomised/New()
 	manifest += "Contains any [num_contained] of:"
 	..()
+
+/datum/supply_packs/mann_co_key
+	name = "Mann Co. key"
+	cost = 200
+	containertype = /obj/structure/closet/crate/basic
+	contains = list(/obj/item/mann_co_key)
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
+
+/datum/supply_packs/mann_co_crate
+	name = "Mann Co. crate"
+	cost = 200
+	containertype = /obj/structure/mann_co_crate
+	contains = list()
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
 
 /datum/supply_packs/randomised/cheap_hats
 	name = "Cheap hats"
@@ -1074,6 +1104,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_armory)
 	group = "Security"
 
+/datum/supply_packs/holy
+	name = "Holy implants"
+	contains = list (/obj/item/weapon/storage/lockbox/holy)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "holy implant crate"
+	access = list(access_armory)
+	group = "Security"
+
 /datum/supply_packs/ballistic
 	name = "Ballistic gear"
 	contains = list(/obj/item/clothing/suit/armor/bulletproof,
@@ -1351,9 +1390,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/toy/xmas_cracker,
 					/obj/item/clothing/head/christmas/santahat/red,
 					/obj/item/clothing/head/christmas/santahat/green,
+					/obj/item/clothing/head/christmas/santahat/blue,
 					/obj/item/clothing/suit/jumper/christmas/red,
 					/obj/item/clothing/suit/jumper/christmas/green,
 					/obj/item/clothing/suit/jumper/christmas/blue,
+					/obj/item/clothing/under/onesie,
+					/obj/item/clothing/under/onesie/blue,
+					/obj/item/clothing/under/onesie/red,
+					/obj/item/clothing/under/onesie/pink,
+					/obj/item/clothing/under/onesie/white,
+					/obj/item/clothing/under/onesie/grey,
+					/obj/item/clothing/under/onesie/black,
+					/obj/item/clothing/under/onesie/redgreen,
+					/obj/item/clothing/under/onesie/bluenavy,
 					/obj/item/clothing/mask/scarf/red,
 					/obj/item/clothing/mask/scarf/blue,
 					/obj/item/clothing/mask/scarf/green,
@@ -1576,6 +1625,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_engine)
 	group = "Engineering"
 
+/datum/supply_packs/engine/amrcontainment/big
+	name = "Large Antimatter Containment Jar"
+	contains = list(/obj/item/weapon/am_containment/big)
+	cost = 200	//10x the fuel, 10x the cost + 50 for convenience
+	containername = "Large antimatter containment jar crate"
+
 /datum/supply_packs/rust_gyrotron
 	contains = list(/obj/machinery/rust/gyrotron)
 	name = "R-UST Mk. 7 gyrotron"
@@ -1756,6 +1811,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list()
 	cost = 200
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
+	group = "Engineering"
+
+/datum/supply_packs/gourmonger
+	name = "dehydrated gourmonger"
+	contains = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger)
+	cost = 75
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Gourmonger Crate"
+	access = list(access_engine_equip)
 	group = "Engineering"
 
 //////MEDICAL//////
@@ -2171,8 +2235,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/hydroponics
 	containername = "exotic fish crate"
 	group = "Hydroponics"
-
-
 
 //farm animals - useless and annoying, but potentially a good source of food
 /datum/supply_packs/cow

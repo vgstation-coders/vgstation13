@@ -291,7 +291,8 @@
 
 		//W.dropped(src)
 		//update_icons() // Redundant as u_equip will handle updating the specific overlay
-		return 1
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+	return 1
 
 
 // Drops all and only equipped items, including items in hand

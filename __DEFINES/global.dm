@@ -135,6 +135,7 @@ var/list/prisonsecuritywarp = list()	//prison security goes to these
 var/list/prisonwarped = list()	//list of players already warped
 var/list/blobstart = list()
 var/list/ninjastart = list()
+var/list/prisonerstart = list()
 var/list/voxstart = list() //Vox raider spawn points
 var/list/voxlocker = list() //Vox locker spawn points
 //	list/traitors = list()	//traitor list
@@ -406,6 +407,7 @@ var/malf_rcd_disable = FALSE
 //Cyborg killswitch time. If set at a time other than zero, cyborgs will self destruct at that time
 var/cyborg_detonation_time = 0
 
+
 //Radial menus currently existing in the world.
 var/global/list/radial_menus = list()
 
@@ -419,7 +421,7 @@ var/list/variables_not_to_be_copied = list(
 )
 
 //Item lists
-var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible,/obj/item/clothing/accessory/tie/bolo)
 
 //Observers
 var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit this to reduce the poltergeist cooldown globally

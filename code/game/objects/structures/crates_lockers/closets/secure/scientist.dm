@@ -35,13 +35,14 @@
 
 /obj/structure/closet/secure_closet/RD/atoms_to_spawn()
 	return list(
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/head/bio_hood/scientist,
 		/obj/item/clothing/suit/bio_suit/scientist,
 		/obj/item/clothing/under/rank/research_director,
 		/obj/item/clothing/under/dress/dress_rd,
 		/obj/item/clothing/suit/storage/labcoat/rd,
 		/obj/item/weapon/cartridge/rd,
-		/obj/item/clothing/shoes/white,
+		/obj/item/clothing/shoes/brown/rd,
 		/obj/item/clothing/gloves/latex,
 		/obj/item/device/radio/headset/heads/rd,
 		/obj/item/weapon/tank/air,

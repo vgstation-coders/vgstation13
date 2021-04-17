@@ -144,6 +144,7 @@
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
 		new /obj/item/weapon/beartrap(),\
 		new /obj/item/gun_part/scope(),\
+		new /obj/item/weapon/grenade/chem_grenade/timer(), \
 		)
 	)
 
@@ -186,7 +187,7 @@
 			return 0
 
 
-		else if(allowed_materials)
+		if(allowed_materials)
 
 			var/allowed_materials_volume = 0
 			for(var/mat_id in allowed_materials)
@@ -199,7 +200,7 @@
 				to_chat(user, output)
 				return 0
 
-		else if(isrobot(user))
+		if(isrobot(user))
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(I))
@@ -208,8 +209,8 @@
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
 				return 0
-		else if(!I.recyclable())
-			to_chat(user, "<span class = 'notice'>You can not recycle /the [I] at this time.</span>")
+		if(!I.recyclable(src))
+			to_chat(user, "<span class = 'notice'>You can not recycle \the [I] at this time.</span>")
 			return 0
 
 		if(user.drop_item(I, src))

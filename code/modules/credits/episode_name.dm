@@ -144,7 +144,9 @@
 		episode_names += new /datum/episode_name/rare("[pick("REAP WHAT YOU SOW", "OUT OF THE WOODS", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]*2))
 	if(score["disease"] >= score["escapees"] && score["escapees"] > 5)
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score["disease"]] disease points this round.", min(500, (score["disease"]*25) * (score["disease"]/score["escapees"])))
-	//future idea: "the crew loses their chill"/"disco inferno"/"ashes to ashes"/"burning down the house" if most of the station is on fire, if the chef was the only survivor, "if you can't stand the heat..."
+	var/list/p_hotspot = SSair.processing_parts[SSAIR_HOTSPOT]
+	if(p_hotspot.len > 200) // List of turfs on fire length
+		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[score["turfsonfire"]] turfs were on fire by the end of the round.", min(1000, score["turfsonfire"]/2))
 	//future idea: "a cold day in hell" if most of the station was freezing and threat was high
 	//future idea: "the crew has a blast" if six big explosions happen, "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways
 
@@ -248,7 +250,7 @@
 			if(chefcount > 2)
 				episode_names += new /datum/episode_name/rare("Too Many Cooks", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized, as the theme will customize it
 				theme = "cooks"
-			
+
 			if(human_escapees.len)
 				if(assistantcount / human_escapees.len > 0.6 && human_escapees.len > 3)
 					episode_names += new /datum/episode_name/rare("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
@@ -272,7 +274,7 @@
 			if(human_escapees.len == 1)
 				var/mob/living/carbon/human/H = human_escapees[1]
 
-				if(istraitor(H) || isdoubleagent(H) || isnukeop(H))
+				if(istraitor(H) || ischallenger(H) || isnukeop(H) || iselitesyndie(H))
 					theme = "syndie"
 
 				if(isloosecatbeast(H))
@@ -289,6 +291,8 @@
 					if(H.is_wearing_item(/obj/item/clothing/under/rank/chef))
 						chance += 250
 					episode_names += new /datum/episode_name/rare("HAIL TO THE CHEF", "The Chef was the only survivor in the shuttle.", chance)
+					if(p_hotspot.len > 200) // List of turfs on fire length
+						episode_names += new /datum/episode_name/rare("IF YOU CAN'T STAND THE HEAT...", "The Chef was the only survivor in the shuttle and [score["turfsonfire"]] turfs were on fire.", min(chance, score["turfsonfire"]/2))
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Clown")
 					var/chance = 250
 					if(H.is_wearing_item(/obj/item/clothing/mask/gas/clown_hat))
@@ -467,9 +471,9 @@
 
 				for(var/mob/living/M in mob_list)
 					if(istraitor(M))
-						adjectives |= "TRAITOROUS"
-					if(isdoubleagent(M))
-						adjectives |= "DOUBLE-CROSSING"
+						adjectives |= pick("TRAITOROUS","DOUBLE-CROSSING")
+					if(ischallenger(M))
+						adjectives |= "CHAOTIC"
 					if(isvampire(M))
 						adjectives |= "BLOOD-SUCKING"
 					if(isrev(M))

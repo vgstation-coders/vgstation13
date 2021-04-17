@@ -32,6 +32,8 @@
 	to_chat(source, "The implanted freedom implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
 	return 1
 
+/obj/item/weapon/implant/freedom/handle_removal(var/mob/remover)
+	makeunusable(75)
 
 /obj/item/weapon/implant/freedom/get_data()
 	var/dat = {"

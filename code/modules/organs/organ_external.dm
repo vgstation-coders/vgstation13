@@ -614,12 +614,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(species && species.anatomy_flags & NO_BLOOD))
-			if(!owner.reagents.has_any_reagents(list(BICARIDINE,INAPROVALINE,CLOTTING_AGENT,BIOFOAM)))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
-				W.open_wound(0.1 * wound_update_accuracy)
-				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
+			var/blood_factor = 1
 
-			if(!owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Clotting agent and biofoam stop bleeding entirely.
-				owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
+			if(owner.reagents.has_reagent(INAPROVALINE) || owner.reagents.has_reagent(BICARIDINE)) //Inaprovaline and bicaridine slow bleeding by 30%
+				blood_factor -= 0.3
+
+			if(owner.reagents.has_reagent(HYPERZINE)) //On the other hand, hyperzine speeds up bleeding by 30%
+				blood_factor += 0.3
+
+			if(owner.reagents.has_reagent(CLOTTING_AGENT) || owner.reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely.
+				blood_factor = 0
+
+			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * blood_factor)
+
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
 
@@ -764,16 +771,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(destspawn)
 		return
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
-		return
-
-	if(body_part == HEAD && iscultist(owner) && veil_thickness > CULT_PROLOGUE)
-		//spawning a skull where the head would have been
-		var/obj/item/weapon/skull/sk = new (get_turf(owner))
-		var/randomdir = pick(cardinal)
-		step(sk, randomdir)
-		//turning the body into skull-less remains, the dusting will take care of the shade's creation.
-		status |= ORGAN_DESTROYED
-		owner.dust(TRUE)
 		return
 
 	var/datum/species/species = src.species || owner.species
@@ -1823,7 +1820,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 				hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
 			overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
-	spawn(5)
+
 	if(brainmob && brainmob.client)
 		brainmob.client.screen.len = null //clear the hud
 
@@ -1861,10 +1858,20 @@ obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/
 	brainmob.name = H.real_name
 	brainmob.real_name = H.real_name
 	brainmob.dna = H.dna.Clone()
+
+	if (isbrain(H))
+		var/mob/living/carbon/brain/otherbrain = H
+		brainmob.timeofhostdeath = otherbrain.timeofhostdeath
+	else if (H.timeofdeath == 0)//happens when the human gets decapitated while still alive
+		brainmob.timeofhostdeath = world.time
+	else
+		brainmob.timeofhostdeath = H.timeofdeath
+
 	if(H.mind)
 		H.mind.transfer_to(brainmob)
 	brainmob.languages = H.languages
 	brainmob.default_language = H.default_language
+	brainmob.init_language = brainmob.default_language
 	brainmob.container = src
 
 obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)

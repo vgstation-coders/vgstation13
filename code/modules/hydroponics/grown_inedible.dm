@@ -63,11 +63,13 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
+	var/planks = 2
+
 /obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.sharpness_flags & CHOPWOOD) // I considered adding serrated to this but c'mon, making planks out of a serrated blade sounds like an awful idea
 		user.show_message("<span class='notice'>You make two planks out of \the [src].</span>", MESSAGE_SEE)
 		playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
-		drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 2, user)
+		drop_stack(/obj/item/stack/sheet/wood, get_turf(user), planks, user)
 
 		qdel(src)
 		return
@@ -78,6 +80,18 @@
 	desc = "A very heavy log, a main product of woodcutting. Much heavier than tower-cap logs."
 	force = 10
 	w_class = W_CLASS_LARGE
+
+	planks = 4
+
+/obj/item/weapon/grown/log/tree/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/weapon/grown/log/tree) && isturf(loc))
+		to_chat(user,"<span class='notice'>You begin building a storm door out of the heavy tree logs.</span>")
+		if(do_after(user,src,4 SECONDS))
+			to_chat(user,"<span class='notice'>You finish the door.</span>")
+			new /obj/machinery/door/mineral/wood/log(loc)
+			qdel(src)
+	else
+		..()
 
 /obj/item/weapon/grown/sunflower // FLOWER POWER!
 	plantname = "sunflowers"

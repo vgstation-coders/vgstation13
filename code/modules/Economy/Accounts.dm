@@ -10,6 +10,7 @@ var/next_account_number = 0
 var/obj/machinery/account_database/centcomm_account_db
 var/datum/money_account/vendor_account
 var/list/all_money_accounts = list()
+var/list/all_station_accounts = list()
 var/datum/money_account/trader_account
 
 var/station_allowance = 0//This is what Nanotrasen will send to the Station Account after every salary, as provision for the next salary.
@@ -63,12 +64,14 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	department_account.transaction_log.Add(T)
 	all_money_accounts.Add(department_account)
 
+	all_station_accounts.Add(department_account)
+
 	department_accounts[department] = department_account
 
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/makehidden = FALSE)
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1, var/makehidden = FALSE, var/isStationAccount = TRUE)
 
 	//create a new account
 	var/datum/money_account/M = new()
@@ -126,6 +129,8 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	//add the account
 	M.transaction_log.Add(T)
 	all_money_accounts.Add(M)
+	if (isStationAccount)
+		all_station_accounts.Add(M)
 
 	return M
 
@@ -182,7 +187,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 		for(var/department in station_departments)
 			create_department_account(department, recieves_wage = 1)
 	if(!vendor_account)
-		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE)
+		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"

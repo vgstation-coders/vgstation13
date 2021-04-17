@@ -82,7 +82,10 @@
 
 			chance = chance * 100
 
-			if(prob(chance) && !block)
+			if(self.id == HOLYWATER && istype(self.holder.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
+				if(M.reagents)
+					M.reagents.add_reagent(self.id, min(5,self.volume/2)) //holy water flasks only splash 5u at a time. But for deconversion purposes they will always be ingested.
+			else if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
 
@@ -90,6 +93,20 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
+
+/datum/reagent/proc/reaction_dropper_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
+	src = null
+	if(M.reagents)
+		M.reagents.add_reagent(self.id, self.volume) //Hardcoded, transfer half of volume
+
+	if (M.mind)
+		for (var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			R.handle_splashed_reagent(self.id)
+
+/datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
+	reaction_obj(O, volume)
 
 /datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	set waitfor = 0
@@ -614,6 +631,9 @@
 	else if(istype(O,/obj/machinery/space_heater/campfire))
 		var/obj/machinery/space_heater/campfire/campfire = O
 		campfire.snuff()
+	else if(istype(O, /obj/item/weapon/book/manual/snow))
+		var/obj/item/weapon/book/manual/snow/S = O
+		S.trigger()
 	else if(O.on_fire) // For extinguishing objects on fire
 		O.extinguish()
 	else if(O.molten) // Molten shit.
@@ -674,7 +694,7 @@
 		T.dry(TURF_WET_LUBE) //Absorbs water or lube
 
 /datum/reagent/anti_toxin
-	name = "Anti-Toxin (Dylovene)"
+	name = "Dylovene"
 	id = ANTI_TOXIN
 	description = "Dylovene is a broad-spectrum antitoxin."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -689,8 +709,8 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
-		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
 	if(holder.has_any_reagents(STOXINS))
 		holder.remove_reagents(STOXINS, 2 * REM)
 	if(holder.has_reagent(PLASMA))
@@ -1104,8 +1124,8 @@
 	..()
 
 	if(volume >= 5)
-		if(istype(M,/mob/living/simple_animal/construct))
-			var/mob/living/simple_animal/construct/C = M
+		if(istype(M,/mob/living/simple_animal/construct) || istype(M,/mob/living/simple_animal/shade))
+			var/mob/living/simple_animal/C = M
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
@@ -2452,6 +2472,32 @@
 		T.health -= 20
 		T.mutation_mod += 0.1
 
+/datum/reagent/toxin/insecticide
+	name = "Insecticide"
+	id = INSECTICIDE
+	description = "A broad pesticide. Do not ingest!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#49002E" //rgb: 73, 0, 46
+	density = 1.08
+	specheatcap = 4.18
+
+/datum/reagent/toxin/insecticide/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(!C.wear_mask) //If not wearing a mask
+			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
+		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
+			M.adjustToxLoss(10 * REM)
+		
+/datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+
+	T.pestlevel -= 8
+
+
 /datum/reagent/plasma
 	name = "Plasma"
 	id = PLASMA
@@ -2911,6 +2957,22 @@
 						E.damage = 0 //cosmic technologies
 					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
+/datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
+	. = ..()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+		if(eyes_covered)
+			return
+		else //eyedrops, why not
+			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+			if(istype(E) && !E.robotic)
+				M.eye_blurry = 0
+				M.eye_blind = 0
+				if(E.damage > 0)
+					E.damage = 0 //cosmic technologies
+				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
+
 /datum/reagent/inacusiate
 	name = "Inacusiate"
 	id = INACUSIATE
@@ -3349,8 +3411,8 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
-		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
 	if(holder.has_any_reagents(STOXINS))
 		holder.remove_reagents(STOXINS, 2 * REM)
 	if(holder.has_reagent(PLASMA))
@@ -3647,6 +3709,11 @@
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
 
+/datum/reagent/nanites/reaction_dropper_mob(var/mob/living/M)
+	if(prob(30))
+		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
+	return ..()
+
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
@@ -3666,6 +3733,11 @@
 		return 1
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
+
+/datum/reagent/xenomicrobes/reaction_dropper_mob(var/mob/living/M)
+	if(prob(30))
+		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
+	return ..()
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -4290,11 +4362,22 @@
 				return
 			else //Oh dear
 				H.audible_scream()
-				H << "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>"
+				to_chat(H, "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>")
 				H.eye_blurry = max(M.eye_blurry, 25)
 				H.eye_blind = max(M.eye_blind, 10)
 				H.Paralyse(1)
 				H.drop_item()
+
+/datum/reagent/condensedcapsaicin/reaction_dropper_mob(var/mob/living/M)
+	M.audible_scream()
+	to_chat(M, "<span class='danger'>Pure solid peppespray is dropped directly in your eyes!</span>")
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.eye_blurry = max(M.eye_blurry, 25)
+		H.eye_blind = max(M.eye_blind, 10)
+		H.Paralyse(1)
+		H.drop_item()
+	return ..()
 
 /datum/reagent/condensedcapsaicin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -4620,6 +4703,20 @@
 	..()
 	if(prob(1))
 		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
+
+/datum/reagent/drink/creamy_hot_coco
+	name = "Creamy Hot Chocolate"
+	id = CREAMY_HOT_COCO
+	description = "Never ever let it cool."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 2 * FOOD_METABOLISM
+	color = "#403010" //rgb: 64, 48, 16
+	glass_icon_state = "creamyhotchocolate"
+	glass_name = "\improper Creamy Hot Chocolate"
+	adj_temp = 5
+	density = 1.2
+	specheatcap = 4.18
+	mug_desc = "A delicious warm brew of milk and chocolate. Never ever let it cool."
 
 /datum/reagent/amatoxin
 	name = "Amatoxin"
@@ -5375,6 +5472,26 @@
 	T.adjust_nutrient(0.1)
 	T.adjust_water(0.9)
 
+
+/datum/reagent/drink/milk/mommimilk
+	name = "MoMMI Milk"
+	id = MOMMIMILK
+	description = "Milk from a MoMMI, but how is it produced?"
+	color = "#eaeaea" //rgb(234, 234, 234)
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Artificially white nutrition!"
+
+
+/datum/reagent/drink/milk/mommimilk/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.adjustToxLoss(1)
+/datum/reagent/drink/milk/mommimilk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
+	if(T.seed && !T.dead)
+		T.health -= 20
+
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
 	id = SOYMILK
@@ -6098,7 +6215,7 @@
 		return 1
 	if(!M.loc || prob(70))
 		return
-	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	playsound(M, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
 	dispense_cash(rand(5,15),get_turf(M))
 
 /datum/reagent/ethanol/bad_touch
@@ -6178,10 +6295,10 @@
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
 				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
-				I.plane = METABUDDY_HUD_PLANE
+				I.plane = MISC_HUD_MARKERS_PLANE
 				M.current.client.images += I
 				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
-				J.plane = METABUDDY_HUD_PLANE
+				J.plane = MISC_HUD_MARKERS_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu
@@ -6245,16 +6362,24 @@
 	dupeable = FALSE
 
 /datum/reagent/ethanol/scientists_serendipity/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
-	if(volume<10)
+	if(volume < 10)
 		glass_icon_state = "scientists_surprise"
 		glass_name = "\improper Scientist's Surprise"
 		glass_desc = "There is as yet insufficient data for a meaningful answer."
-	else
+		D.origin_tech = ""
+		
+	else if(volume < 50)
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Serendipity"
 		glass_desc = "Knock back a cold glass of R&D."
 		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
 
+	else
+		glass_icon_state = "scientists_serendipity"
+		glass_name = "\improper Scientist's Sapience"
+		glass_desc = "Why research what has already been catalogued?"
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
+				
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
@@ -6271,11 +6396,11 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
-			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
+			playsound(H, 'sound/voice/halt.ogg', 100, 1, 0)
 		else
 			H.Knockdown(10)
 			H.Stun(10)
-			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
+			playsound(H, 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
 	name = "Spiders"
@@ -6360,6 +6485,94 @@
 			thisisdumb.charge_max = 1
 			H.cast_spell(thisisdumb,list(H))
 		holder.remove_reagent(MAGICADELUXE,5)
+
+/datum/reagent/ethanol/drink/gravsingulo
+	name = "Gravitational Singulo"
+	id = GRAVSINGULO
+	description = "A true gravitational anomaly."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2E6671" //rgb: 46, 102, 113
+	custom_metabolism = 1 // A bit faster to prevent easy singuloosing
+	dizzy_adj = 15
+	slurr_adj = 15
+	data = 1 //Used as a tally
+	glass_icon_state = "gravsingulo"
+	glass_name = "\improper Gravitational Singulo"
+	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
+
+/datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	
+	switch(data)
+		if(0 to 65)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
+		if(65 to 130)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
+		if(130 to 250)
+			if(prob(5))
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
+			M.adjustBruteLoss(1)
+		if(250 to INFINITY)
+			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				new /obj/item/toy/spinningtoy(T)
+				M.gib()
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/50, data/50)
+	data++
+
+/datum/reagent/drink/tea/gravsingularitea
+	name = "Gravitational Singularitea"
+	id = GRAVSINGULARITEA
+	description = "Spirally!"
+	custom_metabolism = 1 // A bit faster to prevent easy singuloosing
+	data = 1 //Used as a tally
+	mug_icon_state = "gravsingularitea"
+	mug_name = "\improper Gravitational Singularitea"
+	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
+
+/datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	switch(data)
+		if(0 to 65)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
+		if(65 to 130)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
+		if(130 to 250)
+			if(prob(5))
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
+			M.adjustBruteLoss(1)
+		if(250 to INFINITY)
+			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				new /obj/item/toy/spinningtoy(T)
+				M.gib()
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/50, data/50)
+	data++
 
 /datum/reagent/ethanol/drink
 	id = EXPLICITLY_INVALID_REAGENT_ID
@@ -6802,6 +7015,33 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "longislandicedteaglass"
 	glass_name = "\improper Long Island Iced Tea"
+
+/datum/reagent/ethanol/drink/mudslide
+	name = "Mudslide"
+	id = MUDSLIDE
+	description = "Like a milkshake, but for irresponsible adults."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b6ac94" //rgb: 182, 172, 148
+	glass_icon_state = "mudslide"
+	glass_name = "\improper Mudslide"
+
+/datum/reagent/ethanol/drink/sacrificial_mary
+	name = "Sacrificial Mary"
+	id = SACRIFICIAL_MARY
+	description = "Fresh Altar-To-Table taste in every sip."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#bd1c1e" //rgb: 189, 28, 30
+	glass_icon_state = "sacrificialmary"
+	glass_name = "\improper Sacrificial Mary"
+
+/datum/reagent/ethanol/drink/boysenberry_blizzard
+	name = "Boysenberry Blizzard"
+	id = BOYSENBERRY_BLIZZARD
+	description = "Don't stick your tongue out for these snowflakes!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#aa4cbd" //rgb: 170, 76, 189
+	glass_icon_state = "boysenberryblizzard"
+	glass_name = "\improper Boysenberry Blizzard"
 
 /datum/reagent/ethanol/drink/moonshine
 	name = "Moonshine"
@@ -7557,6 +7797,25 @@
 		spawn(5 SECONDS)
 			dSon.death()
 
+/datum/reagent/ethanol/drink/eggnog
+	name = "Eggnog"
+	id = EGGNOG
+	description = "Milk, cream and egg."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#F0DFD1" //rgb: 240, 223, 209
+	glass_icon_state = "eggnog"
+	glass_name = "\improper eggnog"
+	glass_desc = "Celebrate the holidays with practically liquid custard. Something is missing though."
+
+/datum/reagent/ethanol/drink/festive_eggnog
+	name = "Festive Eggnog"
+	id = FESTIVE_EGGNOG
+	description = "Eggnog, complete with booze and a dusting of cinnamon."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#F0DFD1" //rgb: 240, 223, 209
+	glass_icon_state = "festive_eggnog"
+	glass_name = "\improper festive eggnog"
+	glass_desc = "Eggnog, complete with booze and a dusting of cinnamon for that winter warmth."
 
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
@@ -7597,7 +7856,7 @@
 
 	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
-		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
+		playsound(M, 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"
@@ -8287,7 +8546,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 
-			
+
 
 //A chemical for curing petrification. It only works after you've been fully petrified
 //Items on corpses will survive the process, but the corpses itself will be damaged and uncloneable after unstoning
@@ -8610,6 +8869,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	specheatcap = 208.4
 	custom_metabolism = 0.01 //oh shit what are you doin
 
+/datum/reagent/aminomician
+	name = "Aminomician"
+	id = AMINOMICIAN
+	description = "An experimental and unstable chemical, said to be able to create companionship. Potential reaction detected if mixed with nutriment."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#634848" //rgb: 99, 72, 72
+	density = 13.49 //our ingredients are pretty dense
+	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin
+
 /datum/reagent/aminocyprinidol
 	name = "Aminocyprinidol"
 	id = AMINOCYPRINIDOL
@@ -8682,7 +8951,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 /datum/reagent/diabeetusol
-	name = "diabeetusol"
+	name = "Diabeetusol"
 	id = DIABEETUSOL
 	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -8723,7 +8992,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 /datum/reagent/ectoplasm
-	name = "ectoplasm"
+	name = "Ectoplasm"
 	id = ECTOPLASM
 	description = "Pure, distilled spooky"
 	reagent_state = REAGENT_STATE_LIQUID

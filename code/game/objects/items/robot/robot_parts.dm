@@ -181,6 +181,9 @@
 			if(!istype(loc,/turf))
 				to_chat(user, "<span class='warning'>You can't put the [W] in, the frame has to be standing on the ground to be perfectly precise.</span>")
 				return
+			if(!map.map_specific_conditions(ROBOT_CHECK))
+				to_chat(user, "<span class='warning'>The station will not allow you to create oppressive mechanical minions!</span>")
+				return
 			if(!M.brainmob)
 				to_chat(user, "<span class='warning'>Sticking an empty [W] into the frame would sort of defeat the purpose.</span>")
 				return
@@ -202,7 +205,7 @@
 				return
 
 			var/datum/job/job_datum = job_master.GetJob("Cyborg")
-			if(!job_datum.player_old_enough(M.brainmob.client))
+			if(job_datum ? !job_datum.player_old_enough(M.brainmob.client) : 0)
 				to_chat(user, "<span class='warning'>This [W] is too inexperienced to handle being a cyborg</span>")
 				return
 

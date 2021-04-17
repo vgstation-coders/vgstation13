@@ -106,6 +106,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
+	var/pacify_aura = FALSE
+
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
@@ -123,6 +125,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
+
 /mob/living/simple_animal/New()
 	..()
 	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
@@ -132,6 +135,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		real_name = name
 
 	animal_count[src.type]++
+
+/mob/living/simple_animal/Destroy()
+	if (stat != DEAD)
+		animal_count[src.type]--//dealing with mobs getting deleted while still alive
+	..()
 
 /mob/living/simple_animal/Login()
 	if(src && src.client)
@@ -172,12 +180,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			icon_state = icon_living
 			src.resurrect()
 			stat = CONSCIOUS
+			animal_count[src.type]++//re-added to the count
 			setDensity(TRUE)
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
 		return 0
-
 
 	if(health < 1 && stat != DEAD)
 		death()
@@ -193,7 +201,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
+	update_canmove()
+
 	handle_jitteriness()
+	jitteriness = max(0, jitteriness - 1)
 
 	//Eyes
 	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
@@ -406,10 +417,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
-		return
+		return PROJECTILE_COLLISION_DEFAULT
 	Proj.on_hit(src, 0)
 	adjustBruteLoss(Proj.damage)
-	return 0
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
 	. = ..()

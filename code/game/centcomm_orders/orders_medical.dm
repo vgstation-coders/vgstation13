@@ -122,7 +122,7 @@
 			if (D.strength >= 80)
 				var/total_badness = 0
 				for(var/datum/disease2/effect/e in D.effects)
-					total_badness += e.badness
+					total_badness += text2num(e.badness)
 				if (total_badness >= 13)
 					return 1
 
@@ -155,7 +155,7 @@
 			var/datum/disease2/disease/D = blood_viruses[ID]
 			var/total_badness = 0
 			for(var/datum/disease2/effect/e in D.effects)
-				total_badness += e.badness
+				total_badness += text2num(e.badness)
 			if (total_badness <= 2)
 				return 1
 
@@ -208,14 +208,14 @@
 	)
 	worth = 100 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/vaccine/ExtraChecks(var/obj/item/weapon/dnainjector/I)
+/datum/centcomm_order/department/medical/clean_se/ExtraChecks(var/obj/item/weapon/dnainjector/I)
 	if (!istype(I))
 		return 0
 	if (!I.block && I.buf)//Not a block injector
 		var/datum/dna2/record/R = I.buf
 		if (R.types & DNA2_BUF_SE)//SE Injector
 			for (var/block in R.dna.SE)
-				if (I.buf.dna.SE >= 2050)
+				if (block >= 2050)
 					return 0
 		return 1
 	return 0

@@ -209,6 +209,13 @@
 	open_state = "cult_open"
 	closed_state = "cult_closed"
 
+/obj/abstract/screen/movable/spell_master/spider
+	name = "Spider"
+	icon_state = "spider_spell_ready"
+
+	open_state = "spider_open"
+	closed_state = "spider_closed"
+
 /obj/abstract/screen/movable/spell_master/mech
 	name = "Mech Modules"
 	icon_state = "mech_spell_ready"
@@ -216,6 +223,15 @@
 
 	//open and close states are defined later
 	override_icon = 'icons/mecha/mecha.dmi'
+	screen_loc = ui_alien_master
+
+/obj/abstract/screen/movable/spell_master/changeling
+	name = "Changeling Abilities"
+	icon_state = "changeling_spell_ready"
+
+	open_state = "ling-open"
+	closed_state = "ling-closed"
+
 	screen_loc = ui_alien_master
 
 //////////////ACTUAL SPELLS//////////////

@@ -175,7 +175,7 @@
 
 var/list/ray_draw_icon_cache = list()
 
-/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE)
+/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE, var/color_override=null)
 	var/distance_pointer = starting_distance
 	var/angle = direction.toAngle()
 	var/max_distance = draw_distance - distance_from_endpoint
@@ -197,6 +197,8 @@ var/list/ray_draw_icon_cache = list()
 		I.pixel_y = pixels.y
 		I.plane = EFFECTS_PLANE
 		I.layer = PROJECTILE_LAYER
+		if (color_override)
+			I.color = color_override
 
 		distance_pointer += step_size
 

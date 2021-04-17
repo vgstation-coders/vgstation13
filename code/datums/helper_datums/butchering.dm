@@ -192,6 +192,12 @@
 	..()
 	parent.dust()
 
+/datum/butchering_product/skin/bear/brownbear
+	result = /obj/item/clothing/head/bearpelt/brown/real
+
+/datum/butchering_product/skin/bear/polarbear
+	result = /obj/item/clothing/head/bearpelt/polar
+
 /datum/butchering_product/skin/xeno
 	result = /obj/item/stack/sheet/xenochitin
 	verb_name = "remove chitin"
@@ -208,6 +214,8 @@
 /datum/butchering_product/skin/monkey
 	result = /obj/item/stack/sheet/animalhide/monkey
 
+/datum/butchering_product/skin/wolf
+	result = /obj/item/clothing/head/wolfpelt
 //--------------Spider legs-------
 
 /datum/butchering_product/spider_legs
@@ -327,6 +335,9 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
 	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
 	/mob/living/simple_animal/hostile/bear/spare		= list(/datum/butchering_product/skin/bear/spare, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear/polarbear	= list(/datum/butchering_product/skin/bear/polarbear, TEETH_LOTS), // all bears have lots of teeth
+	/mob/living/simple_animal/hostile/bear/brownbear	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear/panda	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
 	/mob/living/simple_animal/hostile/alien				= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH), //Same as the player-controlled aliens
 	/mob/living/simple_animal/hostile/retaliate/cluwne	= list(TEETH_BUNCH), //honk
@@ -337,6 +348,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 	/mob/living/simple_animal/rabbit					= list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot),
 	/mob/living/simple_animal/snail						= list(/datum/butchering_product/snail_carapace),
+	/mob/living/simple_animal/hostile/wolf				= list(/datum/butchering_product/skin/wolf, TEETH_LOTS),
 
 	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
 	/mob/living/carbon/human/unathi						= list(TEETH_LOTS, /datum/butchering_product/skin/lizard/lots),

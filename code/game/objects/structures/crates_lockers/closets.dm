@@ -71,8 +71,7 @@
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
-
-	initialize()
+	take_contents()
 
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()
@@ -359,7 +358,7 @@
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	if(health <= 0)
 		broken = 1
 		if(has_electronics)
@@ -649,7 +648,7 @@
 		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
 			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //Scrying or astral travel, fuck them.
 				return
-		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
+		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 
 // -- Vox raiders.

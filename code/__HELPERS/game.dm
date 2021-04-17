@@ -234,53 +234,6 @@ proc/isInSight(var/atom/A, var/atom/B)
 			return M
 	return null
 
-//i think this is used soley by verb/give(), cael
-proc/check_can_reach(atom/user, atom/target)
-	if(!in_range(target,user))
-		return 0
-	return CanReachThrough(get_turf(user), get_turf(target), target)
-
-//dummy caching, used to speed up reach checks
-var/list/DummyCache = list()
-
-/proc/CanReachThrough(turf/srcturf, turf/targetturf, atom/target, var/pass_flags=0)
-
-
-	var/obj/item/weapon/dummy/D = locate() in DummyCache
-	if(!D)
-		D = new /obj/item/weapon/dummy( srcturf )
-	else
-		DummyCache.Remove(D)
-		D.forceMove(srcturf)
-
-	D.flags=initial(D.flags)
-	D.pass_flags=initial(D.pass_flags)
-	if(pass_flags&PASSTABLE)
-		D.pass_flags |= PASSTABLE
-
-	if(targetturf.density && targetturf != get_turf(target))
-		return 0
-
-	//Now, check objects to block exit that are on the border
-	for(var/obj/border_obstacle in srcturf)
-		if(border_obstacle.flow_flags & ON_BORDER)
-			if(!border_obstacle.Uncross(D, targetturf))
-				D.forceMove(null)
-				DummyCache.Add(D)
-				return 0
-
-	//Next, check objects to block entry that are on the border
-	for(var/obj/border_obstacle in targetturf)
-		if((border_obstacle.flow_flags & ON_BORDER) && (target != border_obstacle))
-			if(!border_obstacle.Cross(D, srcturf, 1, 0))
-				D.forceMove(null)
-				DummyCache.Add(D)
-				return 0
-
-	D.forceMove(null)
-	DummyCache.Add(D)
-	return 1
-
 // Comment out when done testing shit.
 //#define DEBUG_ROLESELECT
 
@@ -581,3 +534,20 @@ var/list/DummyCache = list()
 	//	return 0
 	// that's not the kind of operation we are running here, nerd
 	return clamp(round(mixedcolor), 0, 255)
+
+//Gets all areas within a department
+/proc/get_department_areas(atom/AM)
+	var/department_type
+	var/area/our_area = get_area(AM)
+	var/all_master_types = direct_subtypesof(/area)
+	for(var/checkable in all_master_types)
+		if(istype(our_area,checkable))
+			department_type = checkable
+			break
+	if(!department_type)
+		department_type = our_area.type
+	var/list/department_areas = list()
+	for(var/area/A in areas)
+		if(istype(A,department_type))
+			department_areas += A
+	return department_areas

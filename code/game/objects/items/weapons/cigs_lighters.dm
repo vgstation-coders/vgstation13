@@ -45,6 +45,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	processing_objects -= src
 
+/obj/item/weapon/match/is_hot()
+	if(lit==1)
+		return source_temperature
+	return 0
+
 /obj/item/weapon/match/ignite(temperature)
 	. = ..()
 	light()
@@ -614,7 +619,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
-	chem_volume = 50 //It's a fat blunt, a really fat blunt
+	chem_volume = 100 //It's a fat blunt, a really fat blunt
 
 /obj/item/clothing/mask/cigarette/blunt/rolled //grown.dm handles reagents for these
 

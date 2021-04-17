@@ -49,6 +49,9 @@
 	var/name = null
 
 	var/plural_name = null
+	
+	// role name assigned to the antag's potential uplink
+	var/name_for_uplink = null
 
 	// Various flags and things.
 	var/flags = 0
@@ -107,6 +110,11 @@
 	var/list/greets = list(GREET_DEFAULT,GREET_CUSTOM)
 
 	var/wikiroute
+
+	var/list/current_powers = list()
+	var/list/available_powers = list()		//holds instances of each power
+	var/datum/power_holder/power_holder
+	var/powerpoints = 0
 
 	// This datum represents all data that is exported to the statistics file at the end of the round.
 	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
@@ -226,14 +234,28 @@
 		antag.assigned_role="MODE"
 	return 1
 
+//remove all power-related spells
+/datum/role/proc/removespells()
+	for(var/datum/power/P in current_powers)
+		P.remove_spell()
+
+//Remove and re-grant role-related power spells
+/datum/role/proc/refreshpowers()
+	for(var/datum/power/P in current_powers)
+		P.remove_spell()
+		P.grant_spell()
+
 // Return 1 on success, 0 on failure.
-/datum/role/proc/OnPostSetup()
+/datum/role/proc/OnPostSetup(var/laterole = FALSE)
 	return 1
 
 /datum/role/proc/update_antag_hud()
 	return
 
 /datum/role/proc/process()
+	return
+
+/datum/role/proc/check_win()
 	return
 
 // Create objectives here.
@@ -558,7 +580,7 @@
 /datum/role/highlander/ForgeObjectives()
 	AppendObjective(/datum/objective/hijack)
 
-/datum/role/highlander/OnPostSetup()
+/datum/role/highlander/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	if(!.)
 		return
@@ -572,7 +594,7 @@
 	required_pref = MALF
 	logo_state = "malf-logo"
 
-/datum/role/malfAI/OnPostSetup()
+/datum/role/malfAI/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	if(!.)
 		return
@@ -604,7 +626,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	required_jobs = list("Cyborg")
 	logo_state = "malf-logo"
 
-/datum/role/malfbot/OnPostSetup()
+/datum/role/malfbot/OnPostSetup(var/laterole = FALSE)
 	if(!isrobot(antag.current))
 		return FALSE
 	Greet()

@@ -51,7 +51,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		//75% chance to have a secondary effect
 		if(prob(75))
 			effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-			secondary_effect = new effecttype(src, 1)
+			secondary_effect = new effecttype(src, 1, FALSE)
 			secondary_effect.artifact_id = "[artifact_id]b"
 			spawn(1)
 				if(secondary_effect)	//incase admin tools or something deleted the secondary
@@ -188,6 +188,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
 	on_projectile.Invoke(list(P.firer, "PROJECTILE",P))
+	return ..()
 
 /obj/machinery/artifact/beam_connect(var/obj/effect/beam/B)
 	..()
@@ -245,6 +246,6 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 			if(prob(50))
 				M.Stun(5)
 		M.apply_radiation(25, RAD_EXTERNAL)
-		
+
 /obj/machinery/artifact/can_overload()
 	return 0

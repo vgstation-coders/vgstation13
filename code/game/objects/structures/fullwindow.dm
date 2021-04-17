@@ -86,7 +86,6 @@
 			if("northwest")
 				dir = NORTHWEST
 		update_nearby_tiles()
-		ini_dir = dir
 
 /obj/structure/window/full/AltClick(var/mob/user)
 	. = ..()

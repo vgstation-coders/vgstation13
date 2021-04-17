@@ -338,7 +338,7 @@
 			add_fingerprint(user)
 			playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 
-/obj/structure/bed/chair/vehicle/adminbus/manual_unbuckle(mob/user as mob)
+/obj/structure/bed/chair/vehicle/adminbus/manual_unbuckle(mob/user, var/resisting = FALSE)
 	if(occupant && occupant == user)	//Are you the driver?
 		var/mob/living/M = occupant
 		M.visible_message(
@@ -407,7 +407,7 @@
 
 /obj/structure/bed/chair/vehicle/adminbus/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("<span class='warning'>The projectile harmlessly bounces off the bus.</span>")
-	return
+	return ..()
 
 /obj/structure/bed/chair/vehicle/adminbus/ex_act(severity)
 	visible_message("<span class='warning'>The bus withstands the explosion with no damage.</span>")

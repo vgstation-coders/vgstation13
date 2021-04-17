@@ -52,6 +52,58 @@
 	level_max = 7
 	level_min = 5
 
+///////HISS
+
+/datum/command_alert/xenomorph_station_lockdown
+	name = "Xenomorphs Confirmed"
+	alert_title = "Infestation Confirmed - Directive 7-10 Initiated"
+	alert = 'sound/AI/directive710_generic.ogg'
+	force_report = 1
+
+/datum/command_alert/xenomorph_station_lockdown/announce()
+	message = "The presence of hostile alien lifeforms has been confirmed aboard [station_name()]. Under Directive 7-10, this station is now locked down until further notice."
+	..()
+
+/datum/command_alert/xenomorph_station_nuke
+	name = "Xenomorphs Nuke"
+	alert_title = "Infestation Outbreak Critical"
+	noalert = 1
+	theme = "endgame"
+
+/datum/command_alert/xenomorph_station_nuke/announce()
+	message = "Hostile lifeforms are continuing to spread unchecked throughout [station_name()], total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized."
+	..()
+
+/datum/command_alert/xenomorph_station_unlock
+	name = "Xenomorphs destroyed"
+	alert_title = "Directives 7-10 to 7-12 Concluded."
+	force_report = 1
+	stoptheme = 1
+
+/datum/command_alert/xenomorph_station_unlock/announce()
+	message = "External scanners indicate that all hostile lifeforms capable of reproduction have been destroyed. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
+	..()
+
+/datum/command_alert/xenomorph_station_unlock_2
+	name = "Xenomorphs destroyed mostly"
+	alert_title = "Directives 7-10 to 7-12 Concluded."
+	force_report = 1
+	stoptheme = 1
+
+/datum/command_alert/xenomorph_station_unlock/announce()
+	message = "External scanners indicate that the number of hostile lifeforms on your station has fallen back to reasonable levels. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
+	..()
+
+/datum/command_alert/xenomorph_station_deatsquad
+	name = "Xenomorph Deathsquad"
+	alert_title = "!@$$#ERROR-- S##SHUTTLE@LOCKDOWN LIFTED%%@##"
+	theme = "endgame"
+
+/datum/command_alert/xenomorph_station_deathsquad/announce()
+	message = Gibberish("Directive 7-13 has been authorized for [station_name()]. Squad [pick("Alpha", "Bravo", "Charlie", "Delta")] has been mobilized.", 90)
+	..()
+
+
 
 ///////BIOHAZARD UPDATED
 
@@ -74,7 +126,6 @@
 
 /datum/command_alert/biohazard_station_nuke/announce()
 	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()]."
-
 	..()
 
 /datum/command_alert/biohazard_station_unlock
@@ -169,7 +220,7 @@
 	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
 	stoptheme = 1
 	alertlevel = "blue"
-	
+
 
 /// MALF
 
@@ -201,7 +252,7 @@
 /datum/command_alert/jungle_endgame/announce()
 	var/nukecode = "ERROR"
 	for(var/obj/machinery/nuclearbomb/bomb in machines)
-		if(bomb && bomb.r_code && bomb.z == STATION_Z)
+		if(bomb && bomb.r_code && bomb.z == STATION_Z && bomb.nt_aligned)
 			nukecode = bomb.r_code
 	message = "Central Command has deemed the situation beyond salvageable, and is releasing the nuclear fission explosive authorization code. Your authorization key is [nukecode]. Send them to Ape Hell."
 	..()
@@ -316,7 +367,7 @@
 	message = {"
 There's been a galaxy-wide electromagnetic pulse.  All of our systems are heavily damaged and many personnel are dead or dying. We are seeing increasing indications of the universe itself beginning to unravel.
 
-[station_name()], you are the only facility nearby a bluespace rift, which is near your research outpost.  You are hereby directed to enter the rift using all means necessary, quite possibly as the last humans alive.
+[station_name()], you are the only facility nearby a bluespace rift, which is near the [get_area_name(global_cascade_portal, 1)].  You are hereby directed to enter the rift using all means necessary, quite possibly as the last humans alive.
 
 You have five minutes before the universe collapses. Good l\[\[###!!!-
 
@@ -377,7 +428,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	var/meteor_delay = 2000
 	var/supply_delay = 100
-	
+
 
 /datum/command_alert/meteor_round/announce()
 	meteor_delay = rand(4500, 6000)
@@ -658,6 +709,19 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Automated Meteorological Update - Unforecasted Blizzard"
 	message = "ROKER-class storm early warning systems have detected unforecasted, sudden-onset snowstorm approaching in the next two to four minutes. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
 
+/datum/command_alert/blizzard_extended
+	alert_title = "Automated Meteorological Update - Inaccurate Forecast"
+	message = "ROKER-class storm analysis systems have detected an incongruity in blizzard forecasting. The current blizzard's estimated active period has been re-evaluated and extended."
+
 /datum/command_alert/omega_blizzard
 	alert_title = "Urgent Warning - Dark Season"
 	message = "ROKER-class storm warning has determined that the Dark Season on your planet's surface has started early. It is anticipated that the oncoming blizzard will last no more than two hours and the season itself will last sixteen months. As space may soon become inaccessible from surface, crew should migrate valuables from orbital outpost in the next eight to ten minutes."
+
+/datum/command_alert/prisoner_transfer
+	alert_title = "Prisoner Transfer"
+	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately three minutes. Crew payrolls will recieve a bonus as long as the prisoner is alive."
+
+/datum/command_alert/ancientpod
+	name = "Ancient Cryogenic Pod"
+	alert_title = "Abnormal Life Sign Report"
+	message = "An abnormal life sign has been detected in promiximity of the station. Long range scans determine signal to be human life. Approach with caution."

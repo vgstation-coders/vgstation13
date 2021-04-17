@@ -31,6 +31,25 @@
 		new /obj/item/stack/sheet/wood(src, 2)
 	..()
 
+/turf/simulated/wall/mineral/wood/log
+	name = "log wall"
+	desc = "A log wall, ideal for a cabin."
+	girder_type = null
+	walltype = "log"
+	mineral = "log"
+	icon_state = "log0"
+
+/turf/simulated/wall/mineral/wood/log/dismantle_wall()
+	new /obj/item/weapon/grown/log/tree(src)
+	for(var/obj/O in src.contents)
+		if(istype(O,/obj/effect/cult_shortcut))
+			qdel(O)
+		if(istype(O,/obj/structure/sign/poster))
+			var/obj/structure/sign/poster/P = O
+			P.roll_and_drop(src)
+	ChangeTurf(/turf/unsimulated/floor/snow/empty)
+	update_near_walls()
+
 /turf/simulated/wall/mineral/brick
 	name = "brick wall"
 	desc = "A wall with brick siding, it looks nice"
@@ -100,6 +119,7 @@
 	if(!active)
 		if(world.time > last_event+15)
 			active = 1
+			emitted_harvestable_radiation(src, 3, range = 5)
 			for(var/mob/living/L in range(3,src))
 				L.apply_radiation(12,RAD_EXTERNAL)
 			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))

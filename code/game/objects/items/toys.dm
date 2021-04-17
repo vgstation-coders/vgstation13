@@ -739,7 +739,8 @@
 	name = "whisperphone"
 	desc = "A device used to project your voice. Quietly."
 	icon_state = "megaphone"
-	item_state = "radio"
+	item_state = "megaphone"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -1269,6 +1270,7 @@
 
 /obj/item/toy/balloon/inflated/bullet_act()
 	pop()
+	return ..()
 
 /obj/item/toy/balloon/inflated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > T0C+100)

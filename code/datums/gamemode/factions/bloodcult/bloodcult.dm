@@ -53,7 +53,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	Nar-Sie's goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
-	hud_icons = list("cult-logo")
+	hud_icons = list("cult-chief-logo", "cult-logo")
 	var/list/bloody_floors = list()
 	//var/target_change = FALSE
 	//var/change_cooldown = 0
@@ -61,6 +61,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/warning = FALSE
 
 	var/list/cult_reminders = list()
+
+	var/list/bindings = list()
 
 /datum/faction/bloodcult/check_win()
 	return cult_win
@@ -188,10 +190,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 					new_obj = new /datum/objective/bloodcult_sacrifice
 					for(var/datum/role/cultist/C in members)
 						var/mob/M = C.antag.current
-						for(var/obj/item/weapon/implant/loyalty/I in M)
-							I.forceMove(get_turf(M))
-							I.implanted = 0
-							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
+						if (iscarbon(M))
+							var/mob/living/carbon/CARB = M
+							CARB.implant_pop()
 		if (CULT_ACT_III)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			minor_victory = TRUE // At any rate, we achieve a minor win.
@@ -252,6 +253,50 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
 			if (O.IsFulfilled())
 				stage(CULT_ACT_IV)
+
+/mob/living/carbon/proc/implant_pop()
+	for(var/obj/item/weapon/implant/loyalty/I in src)
+		if (I.implanted)
+			to_chat(src, "<span class='sinister'>Your blood pushes back against the loyalty implant, it will visibly pop out within seconds!</span>")
+			spawn(10 SECONDS)
+				I.forceMove(get_turf(src))
+				I.implanted = 0
+				visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
+
+/mob/living/carbon/proc/boxify(var/delete_body = TRUE, var/new_anim = TRUE, var/box_state = "cult")//now its own proc so admins may atomProcCall it if they so desire.
+	var/turf/T = get_turf(src)
+	for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+		if (M.client)
+			M.playsound_local(T, 'sound/effects/convert_failure.ogg', 75, 0, -4)
+	if (new_anim)
+		var/obj/effect/cult_ritual/conversion/anim = new(T)
+		anim.icon_state = ""
+		flick("rune_convert_failure",anim)
+		anim.Die()
+	var/obj/item/weapon/storage/cult/coffer = new(T)
+	coffer.icon_state = box_state
+	var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(coffer)
+	if (istype(src,/mob/living/carbon/human) && dna)
+		take_blood(cup, cup.volume)//Up to 60u
+		cup.on_reagent_change()//so we get the reagentsfillings overlay
+		new/obj/item/weapon/skull(coffer)
+	if (isslime(src))
+		cup.reagents.add_reagent(SLIMEJELLY, 50)
+	if (isalien(src))//w/e
+		cup.reagents.add_reagent(RADIUM, 50)
+
+	for(var/obj/item/weapon/implant/loyalty/I in src)
+		I.implanted = 0
+
+	for(var/obj/item/I in src)
+		u_equip(I)
+		if(I)
+			I.forceMove(T)
+			I.reset_plane_and_layer()
+			I.dropped(src)
+			I.forceMove(coffer)
+	if (delete_body)
+		qdel(src)
 
 /datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
 	if (!istype(T))
@@ -388,13 +433,19 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
 			if(!(H.species.anatomy_flags & NO_BLOOD))
-				for(var/datum/organ/external/org in H.organs)
-					if(org.status & ORGAN_BLEEDING)
-						var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
-						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-						data[BLOODCOST_TARGET_GRAB] = H
-						data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
-						amount_gathered += blood_gathered
+				var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
+				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+				data[BLOODCOST_TARGET_GRAB] = H
+				data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
+				amount_gathered += blood_gathered
+		if(ismonkey(Grab.affecting) || isalien(Grab.affecting))//Unlike humans, monkeys take oxy damage when blood is taken from them.
+			var/mob/living/carbon/C = Grab.affecting
+			if(!C.isDead())
+				var/blood_volume = round(max(0,C.health))
+				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+				data[BLOODCOST_TARGET_GRAB] = C
+				data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
+				amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_GRAB
@@ -528,12 +579,29 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
-	if(istype(H_user) && !(H_user.species.anatomy_flags & NO_BLOOD))
-		var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
-		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-		data[BLOODCOST_TARGET_USER] = H_user
-		data[BLOODCOST_AMOUNT_USER] = blood_gathered
-		amount_gathered += blood_gathered
+	if(istype(H_user))
+		if(!(H_user.species.anatomy_flags & NO_BLOOD))
+			var/blood_volume = round(H_user.vessel.get_reagent_amount(BLOOD))
+			var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+			data[BLOODCOST_TARGET_USER] = H_user
+			data[BLOODCOST_AMOUNT_USER] = blood_gathered
+			amount_gathered += blood_gathered
+	else//non-human trying to draw runes eh? let's see...
+		if (ismonkey(user) || isalien(user))
+			var/mob/living/carbon/C_user = user
+			if (!C_user.isDead())
+				var/blood_volume = round(max(0,C_user.health))//Unlike humans, monkeys take oxy damage when blood is taken from them.
+				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+				data[BLOODCOST_TARGET_USER] = C_user
+				data[BLOODCOST_AMOUNT_USER] = blood_gathered
+				amount_gathered += blood_gathered
+		else if (isconstruct(user))
+			var/mob/living/simple_animal/construct/C_user = user
+			if (!C_user.purge)//Constructs can use runes for free as long as they aren't getting purged by holy water or null rods
+				data[BLOODCOST_TARGET_USER] = C_user
+				data[BLOODCOST_AMOUNT_USER] = amount_needed
+				amount_gathered = amount_needed
+
 
 	if (amount_gathered >= amount_needed)
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
@@ -558,7 +626,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/total_accumulated = 0
 	var/total_needed = amount_needed
 	if (!tribute && iscultist(user))
-		var/datum/role/cultist/mycultist = user.mind.GetRole(CULTIST)
+		var/datum/role/cultist/mycultist = iscultist(user)
 		if (mycultist in blood_communion)
 			communion = 1
 			amount_needed = max(1,round(amount_needed * 4 / 5))//saving 20% blood
@@ -589,7 +657,6 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	switch (data[BLOODCOST_RESULT])
 		if (BLOODCOST_TRIBUTE)//if the drop of blood was paid for through blood communion, let's get the reference to the blood they used because we can
 			blood = new()
-			blood.data["blood_colour"] = DEFAULT_BLOOD
 			if (communion_data && communion_data[BLOODCOST_RESULT])
 				switch(communion_data[BLOODCOST_RESULT])
 					if (BLOODCOST_TARGET_HANDS)
@@ -610,17 +677,13 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 							blood.data["blood_type"] = B.blood_DNA[blood_DNA]
 						blood.data["virus2"] = virus_copylist(B.virus2)
 					if (BLOODCOST_TARGET_GRAB)
-						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
-						blood = get_blood(HU.vessel)
-						if (!blood.data["virus2"])
-							blood.data["virus2"] = list()
-						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
+						var/mob/living/carbon/CA = communion_data[BLOODCOST_TARGET_GRAB]
+						if (isliving(CA))
+							blood.apply_blood_data(CA.get_blood_data())
 					if (BLOODCOST_TARGET_BLEEDER)
-						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_BLEEDER]
-						blood = get_blood(HU.vessel)
-						if (!blood.data["virus2"])
-							blood.data["virus2"] = list()
-						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
+						var/mob/living/carbon/CA = communion_data[BLOODCOST_TARGET_BLEEDER]
+						if (isliving(CA))
+							blood.apply_blood_data(CA.get_blood_data())
 					if (BLOODCOST_TARGET_HELD)
 						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
 						blood = locate() in G.reagents.reagent_list
@@ -631,11 +694,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_CONTAINER]
 						blood = locate() in G.reagents.reagent_list
 					if (BLOODCOST_TARGET_USER)
-						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
-						blood = get_blood(HU.vessel)
-						if (!blood.data["virus2"])
-							blood.data["virus2"] = list()
-						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
+						var/mob/living/carbon/CA = communion_data[BLOODCOST_USER]
+						if (iscarbon(CA))
+							blood.apply_blood_data(CA.get_blood_data())
+						if (isconstruct(CA))//constructs can't get the blood communion tattoo but just in case they do later
+							blood.data["blood_colour"] = "#CC0E00"
 			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
 				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
 									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
@@ -667,25 +730,24 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_GRAB)
-			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_GRAB]
-			blood = get_blood(H.vessel)
-			if (!blood.data["virus2"])
-				blood.data["virus2"] = list()
-			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
-			if (!tribute && previous_result != BLOODCOST_TARGET_GRAB)
-				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data[BLOODCOST_TARGET_GRAB]], drawing blood from them!</span>",
-									"<span class='rose'>You stab your nails inside \the [data[BLOODCOST_TARGET_GRAB]] to draw some blood from them.</span>",
-									"<span class='warning'>You hear a liquid flowing.</span>")
+			var/mob/living/carbon/C = data[BLOODCOST_TARGET_GRAB]
+			if (iscarbon(C))
+				blood = new()
+				blood.apply_blood_data(C.get_blood_data())
+				if (!tribute && previous_result != BLOODCOST_TARGET_GRAB)
+					user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data[BLOODCOST_TARGET_GRAB]], drawing blood from them!</span>",
+										"<span class='rose'>You stab your nails inside \the [data[BLOODCOST_TARGET_GRAB]] to draw some blood from them.</span>",
+										"<span class='warning'>You hear a liquid flowing.</span>")
+
 		if (BLOODCOST_TARGET_BLEEDER)
-			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_BLEEDER]
-			blood = get_blood(H.vessel)
-			if (!tribute && previous_result != BLOODCOST_TARGET_BLEEDER)
-				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds!</span>",
-									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds to draw some blood from them.</span>",
-									"<span class='warning'>You hear a liquid flowing.</span>")
-			if (!blood.data["virus2"])
-				blood.data["virus2"] = list()
-			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
+			var/mob/living/carbon/C = data[BLOODCOST_TARGET_BLEEDER]
+			if (iscarbon(C))
+				blood = new()
+				blood.apply_blood_data(C.get_blood_data())
+				if (!tribute && previous_result != BLOODCOST_TARGET_BLEEDER)
+					user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds!</span>",
+										"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds to draw some blood from them.</span>",
+										"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_HELD)
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			blood = locate() in G.reagents.reagent_list
@@ -708,6 +770,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_USER)
+			blood = new()
 			if (!tribute)
 				if (data[BLOODCOST_HOLES_BLOODPACK])
 					to_chat(user, "<span class='warning'>You must puncture \the [data[BLOODCOST_TARGET_BLOODPACK]] before you can squeeze blood from it!</span>")
@@ -715,22 +778,26 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 					to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
 				else if (data[BLOODCOST_LID_CONTAINER])
 					to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_CONTAINER]]'s lid first!</span>")
-			var/mob/living/carbon/human/H = user
-			blood = get_blood(H.vessel)
-			if (!blood.data["virus2"])
-				blood.data["virus2"] = list()
-			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
-			if (previous_result != BLOODCOST_TARGET_USER)
-				if(!tribute && istype(H))
-					var/obj/item/weapon/W = H.get_active_hand()
+			if (iscarbon(user))
+				var/mob/living/carbon/C_user = user
+				blood.apply_blood_data(C_user.get_blood_data())
+
+			if (isconstruct(user))
+				blood.data["blood_colour"] = "#CC0E00"//not like constructs can write runes by themselves currently, but they might do at some point
+
+			if (!tribute && (previous_result != BLOODCOST_TARGET_USER))
+				if (iscarbon(user))//if the user is holding a sharp weapon, they get a custom message
+					var/obj/item/weapon/W = user.get_active_hand()
 					if (W && W.sharpness_flags & SHARP_BLADE)
 						to_chat(user, "<span class='rose'>You slice open your finger with \the [W] to let a bit of blood flow.</span>")
 					else
-						var/obj/item/weapon/W2 = H.get_inactive_hand()
+						var/obj/item/weapon/W2 = user.get_inactive_hand()
 						if (W2 && W2.sharpness_flags & SHARP_BLADE)
 							to_chat(user, "<span class='rose'>You slice open your finger with \the [W] to let a bit of blood flow.</span>")
 						else
 							to_chat(user, "<span class='rose'>You bite your finger and let the blood pearl up.</span>")
+				else if (isconstruct(user))
+					to_chat(user, "<span class='rose'>Your shell's connection past the veil lets you perform the ritual without the need for a local source of blood.</span>")
 		if (BLOODCOST_FAILURE)
 			if (!tribute)
 				if (data[BLOODCOST_HOLES_BLOODPACK])
@@ -757,9 +824,16 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			B.amount = max(0 , B.amount - data[BLOODCOST_AMOUNT_SPLATTER])
 		if (data[BLOODCOST_TARGET_GRAB])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_GRAB]
-			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_GRAB]
-			H.vessel.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_GRAB])
-			H.take_overall_damage(data[BLOODCOST_AMOUNT_GRAB] ? 0.1 : 0)
+			if (ishuman(data[BLOODCOST_TARGET_GRAB]))
+				var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_GRAB]
+				H.vessel.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_GRAB])
+				H.take_overall_damage(data[BLOODCOST_AMOUNT_GRAB] ? 0.1 : 0)
+			else if (ismonkey(data[BLOODCOST_TARGET_GRAB]))
+				var/mob/living/carbon/monkey/M = data[BLOODCOST_TARGET_GRAB]
+				M.adjustOxyLoss(data[BLOODCOST_AMOUNT_GRAB])
+			else if (isalien(data[BLOODCOST_TARGET_GRAB]))
+				var/mob/living/carbon/alien/A = data[BLOODCOST_TARGET_GRAB]
+				A.adjustBruteLoss(data[BLOODCOST_AMOUNT_GRAB])
 		if (data[BLOODCOST_TARGET_BLEEDER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLEEDER]
 			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_BLEEDER]
@@ -779,21 +853,42 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_CONTAINER])
 		if (data[BLOODCOST_TARGET_USER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_USER]
-			var/mob/living/carbon/human/H = user
-			var/blood_before = H.vessel.get_reagent_amount(BLOOD)
-			H.vessel.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_USER])
-			var/blood_after = H.vessel.get_reagent_amount(BLOOD)
-			if (blood_before > BLOOD_VOLUME_SAFE && blood_after < BLOOD_VOLUME_SAFE)
-				to_chat(user, "<span class='sinister'>You start looking pale.</span>")
-			else if (blood_before > BLOOD_VOLUME_WARN && blood_after < BLOOD_VOLUME_WARN)
-				to_chat(user, "<span class='sinister'>You feel weak from the lack of blood.</span>")
-			else if (blood_before > BLOOD_VOLUME_OKAY && blood_after < BLOOD_VOLUME_OKAY)
-				to_chat(user, "<span class='sinister'>You are about to pass out from the lack of blood.</span>")
-			else if (blood_before > BLOOD_VOLUME_BAD && blood_after < BLOOD_VOLUME_BAD)
-				to_chat(user, "<span class='sinister'>You have trouble focusing, things will go bad if you keep using your blood.</span>")
-			else if (blood_before > BLOOD_VOLUME_SURVIVE && blood_after < BLOOD_VOLUME_SURVIVE)
-				to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
-			H.take_overall_damage(data[BLOODCOST_AMOUNT_USER] ? 0.1 : 0)
+			if (ishuman(user))
+				var/mob/living/carbon/human/H = user
+				var/blood_before = H.vessel.get_reagent_amount(BLOOD)
+				H.vessel.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_USER])
+				var/blood_after = H.vessel.get_reagent_amount(BLOOD)
+				if (blood_before > BLOOD_VOLUME_SAFE && blood_after < BLOOD_VOLUME_SAFE)
+					to_chat(user, "<span class='sinister'>You start looking pale.</span>")
+				else if (blood_before > BLOOD_VOLUME_WARN && blood_after < BLOOD_VOLUME_WARN)
+					to_chat(user, "<span class='sinister'>You feel weak from the lack of blood.</span>")
+				else if (blood_before > BLOOD_VOLUME_OKAY && blood_after < BLOOD_VOLUME_OKAY)
+					to_chat(user, "<span class='sinister'>You are about to pass out from the lack of blood.</span>")
+				else if (blood_before > BLOOD_VOLUME_BAD && blood_after < BLOOD_VOLUME_BAD)
+					to_chat(user, "<span class='sinister'>You have trouble focusing, things will go bad if you keep using your blood.</span>")
+				else if (blood_before > BLOOD_VOLUME_SURVIVE && blood_after < BLOOD_VOLUME_SURVIVE)
+					to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
+				H.take_overall_damage(data[BLOODCOST_AMOUNT_USER] ? 0.1 : 0)
+			else if (ismonkey(user) || isalien(user))
+				var/mob/living/carbon/C = user
+				var/blood_before = C.health
+				if (ismonkey(C))
+					C.adjustOxyLoss(data[BLOODCOST_AMOUNT_USER])
+				else if (isalien(C))
+					C.adjustBruteLoss(data[BLOODCOST_AMOUNT_USER])
+				C.updatehealth()
+				var/blood_after = C.health
+				if (blood_before > (C.maxHealth*5/6) && blood_after < (C.maxHealth*5/6))
+					to_chat(user, "<span class='sinister'>You start looking pale.</span>")
+				else if (blood_before > (C.maxHealth*4/6) && blood_after < (C.maxHealth*4/6))
+					to_chat(user, "<span class='sinister'>You feel weak from the lack of blood.</span>")
+				else if (blood_before > (C.maxHealth*3/6) && blood_after < (C.maxHealth*3/6))
+					to_chat(user, "<span class='sinister'>You are about to pass out from the lack of blood.</span>")
+				else if (blood_before > (C.maxHealth*2/6) && blood_after < (C.maxHealth*2/6))
+					to_chat(user, "<span class='sinister'>You have trouble focusing, things will go bad if you keep using your blood.</span>")
+				else if (blood_before > (C.maxHealth*1/6) && blood_after < (C.maxHealth*1/6))
+					to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
+
 
 	if (communion && data[BLOODCOST_TOTAL] + total_accumulated >= amount_needed)
 		data[BLOODCOST_TOTAL] = max(data[BLOODCOST_TOTAL], total_needed)
@@ -811,10 +906,22 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/list/places_to_spawn = list()
 	for (var/i = 1 to 4)
 		for (var/j = 10; j > 0; j--)
-			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
-			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
+			/*
+			the value of i governs which corner of the map the bloodstone will try to spawn in.
+			from 1 to 4, the corners will be selected in this order: North-West, South-East, North-East, South-West
+
+			the higher j, the further away from the center of the map will the bloodstone be. it tries 10 times per bloodstone, and searches each time closer to the center
+			*/
+			var/coordX = map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 )
+			var/coordY = map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 )
+
+			var/turf/T = get_turf(pick(range(j*3,locate(coordX,coordY,map.zMainStation))))
+			if (!T)
+				message_admins("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
+				log_admin("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
+			else if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
 				//Adding some blacklisted areas, specifically solars
-				if (!istype(T.loc,/area/solar))
+				if (!istype(T.loc,/area/solar) && is_type_in_list(T.loc,the_station_areas))
 					places_to_spawn += T
 					break
 	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space or on a shuttle)
@@ -828,8 +935,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		if (!B.loc)
 			qdel(B)
-			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
-			log_admin("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			message_admins("Blood Cult: !ERROR! A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			log_admin("Blood Cult: !ERROR! A blood stone was somehow spawned in nullspace. It has been destroyed.")
 
 /*	prepare_cult_holomap
 	returns: the initialized cult holomap

@@ -443,4 +443,4 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	if(Proj.flag != "bullet")
 		AddEnergy(Proj.damage * 100, 0, 1)
 		update_icon()
-	return 0
+	return ..()

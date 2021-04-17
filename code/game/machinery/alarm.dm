@@ -1210,9 +1210,12 @@ FIRE ALARM
 	return src.attack_hand(user)
 
 /obj/machinery/firealarm/bullet_act(BLAH)
-	return src.alarm()
+	src.alarm()
+	return ..()
 
 /obj/machinery/firealarm/CtrlClick(var/mob/user)
+	if (ismouse(user)) // Squeak
+		return
 	if(user.incapacitated() || (!in_range(src, user) && !issilicon(user)))
 		return
 	else
@@ -1352,6 +1355,9 @@ FIRE ALARM
 
 /obj/machinery/firealarm/attack_hand(mob/user as mob)
 	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
+		return
+
+	if (!(ishigherbeing(user) || ismonkey(user))) // No squeaks or moos allowed.
 		return
 
 	if (buildstage != 2)
@@ -1578,6 +1584,11 @@ var/global/list/firealarms = list() //shrug
 	if(wires)
 		wires.npc_tamper(L)
 
-
+/obj/machinery/alarm/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && allowed(user))
+		locked = !locked
+		to_chat(user, "You [locked ? "" : "un"]lock \the [src] interface.")
+		update_icon()
+	return ..()
 
 #undef CHECKED_GAS

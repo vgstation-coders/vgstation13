@@ -4,7 +4,7 @@
 	icon_state = "recharge_floor"
 	var/obj/machinery/mech_bay_recharge_port/recharge_port
 	var/obj/machinery/computer/mech_bay_power_console/recharge_console
-	var/obj/mecha/recharging_mecha = null
+	var/obj/recharging_mecha = null
 	var/capacitor_max = 0 //How much can be stored
 	var/capacitor_stored = 0 //How much is presently stored
 	layer = ABOVE_TILE_LAYER
@@ -31,27 +31,36 @@
 /obj/machinery/mech_bay_recharge_floor/process()
 	..()
 	if(recharging_mecha&&capacitor_stored)
-		recharging_mecha.give_power(capacitor_stored)
+		var/obj/item/weapon/cell/C = recharging_mecha.get_cell()
+		C.give(capacitor_stored)
 		capacitor_stored = 0
 	else if(capacitor_stored<capacitor_max && recharge_port && !recharging_mecha)
 		var/delta = min(recharge_port.pr_recharger.max_charge,capacitor_max-capacitor_stored)
 		use_power(delta*150)
 		capacitor_stored += delta
 
-/obj/machinery/mech_bay_recharge_floor/Crossed(var/obj/mecha/mecha)
+/obj/machinery/mech_bay_recharge_floor/Crossed(var/atom/A)
 	. = ..()
-	if(istype(mecha))
-		mecha.occupant_message("<b>Initializing power control devices.</b>")
-		init_devices()
-		if(recharge_console && recharge_port)
-			recharging_mecha = mecha
-			recharge_console.mecha_in(mecha)
-			return
-		else if(!recharge_console)
-			mecha.occupant_message("<span class='rose'>Control console not found. Terminating.</span>")
-		else if(!recharge_port)
-			mecha.occupant_message("<span class='rose'>Power port not found. Terminating.</span>")
-	return
+	var/obj/O
+	if(istype(A, /obj/mecha))
+		O = A
+	else if(ishuman(A))
+		var/mob/living/carbon/human/H = A
+		if(H.head && istype(H.head,/obj/item/clothing/head/helmet/stun))
+			O = H.head
+	if(!O)
+		return
+
+	to_mech(O,"<b>Initializing power control devices.</b>")
+	init_devices()
+	if(recharge_console && recharge_port)
+		recharging_mecha = O
+		recharge_console.mecha_in(O)
+		return
+	else if(!recharge_console)
+		to_mech(O,"<span class='rose'>Control console not found. Terminating.</span>")
+	else if(!recharge_port)
+		to_mech(O,"<span class='rose'>Power port not found. Terminating.</span>")
 
 /obj/machinery/mech_bay_recharge_floor/Uncrossed(atom)
 	. = ..()
@@ -59,7 +68,12 @@
 		recharging_mecha = null
 		if(recharge_console)
 			recharge_console.mecha_out()
-	return
+	else if(ishuman(atom))
+		var/mob/living/carbon/human/C = atom
+		if(C.head == recharging_mecha)
+			recharging_mecha = null
+			if(recharge_console)
+				recharge_console.mecha_out()
 
 /obj/machinery/mech_bay_recharge_floor/proc/init_devices()
 	recharge_console = locate() in range(1,src)
@@ -107,13 +121,14 @@
 			lasercount += SP.rating-1
 	set_voltage(450+lasercount*100)
 
-/obj/machinery/mech_bay_recharge_port/proc/start_charge(var/obj/mecha/recharging_mecha)
+/obj/machinery/mech_bay_recharge_port/proc/start_charge(var/obj/recharging_mecha)
 	if(stat&(NOPOWER|BROKEN))
-		recharging_mecha.occupant_message("<span class='rose'>Power port not responding. Terminating.</span>")
+		to_mech(recharging_mecha,"<span class='rose'>Power port not responding. Terminating.</span>")
 		return 0
 	else
-		if(recharging_mecha.cell)
-			recharging_mecha.occupant_message("Now charging...")
+		var/obj/item/weapon/cell/C = recharging_mecha.get_cell()
+		if(C)
+			to_mech(recharging_mecha,"Now charging...")
 			pr_recharger.start(list(src, recharging_mecha))
 			return 1
 		else
@@ -153,24 +168,30 @@
 	var/max_charge = 450
 	check_for_null = 0 //since port.stop_charge() must be called. The checks are made in process()
 
-/datum/global_iterator/mech_bay_recharger/process(var/obj/machinery/mech_bay_recharge_port/port, var/obj/mecha/mecha)
+/datum/global_iterator/mech_bay_recharger/process(var/obj/machinery/mech_bay_recharge_port/port, var/obj/O)
 	if(!port)
 		return 0
-	if(mecha && (mecha in get_turf(port.recharge_floor)))
-		if(!mecha.cell)
+	if(O && (port.recharge_floor in get_turf(O)))
+		var/obj/item/weapon/cell/C = O.get_cell()
+		if(!C)
 			return
-		var/delta = min(max_charge, mecha.cell.maxcharge - mecha.cell.charge)
+		var/delta = min(max_charge, C.maxcharge - C.charge)
 		if(delta>0)
-			mecha.give_power(delta)
+			C.give(delta)
 			port.use_power(delta*150)
 		else
-			mecha.occupant_message("<span class='notice'><b>Fully charged.</b></span>")
+			to_mech(O,"<span class='notice'><b>Fully charged.</b></span>")
 			port.stop_charge()
 	else
 		port.stop_charge()
 
 
-
+/proc/to_mech(var/obj/O, var/chat)
+	if(istype(O, /obj/mecha))
+		var/obj/mecha/M = O
+		M.occupant_message(chat)
+	else if(isliving(O.loc))
+		to_chat(O.loc,chat)
 
 /obj/machinery/computer/mech_bay_power_console
 	name = "Mech Bay Power Control Console"
@@ -186,21 +207,18 @@
 
 	light_color = LIGHT_COLOR_PINK
 
-/obj/machinery/computer/mech_bay_power_console/proc/mecha_in(var/obj/mecha/mecha)
+/obj/machinery/computer/mech_bay_power_console/proc/mecha_in(var/obj/O)
 	if(stat&(NOPOWER|BROKEN))
-		mecha.occupant_message("<span class='rose'>Control console not responding. Terminating...</span>")
+		to_mech(O,"<span class='rose'>Control console not responding. Terminating...</span>")
 		return
 	if(recharge_port && autostart)
-		var/answer = recharge_port.start_charge(mecha)
+		var/answer = recharge_port.start_charge(O)
 		if(answer)
-			src.icon_state = initial(src.icon_state)+"_on"
-	return
+			icon_state = initial(src.icon_state)+"_on"
 
 /obj/machinery/computer/mech_bay_power_console/proc/mecha_out()
 	if(recharge_port)
 		recharge_port.stop_charge()
-	return
-
 
 /obj/machinery/computer/mech_bay_power_console/power_change()
 	if(stat & BROKEN)
@@ -226,7 +244,7 @@
 /obj/machinery/computer/mech_bay_power_console/attack_hand(mob/user as mob)
 	if(..())
 		return
-	if(!src.stat && (get_dist(src, user) <= 1 ||  istype(user, /mob/living/silicon)))
+	if(!stat && Adjacent(user) || istype(user, /mob/living/silicon))
 		return interact(user)
 
 /obj/machinery/computer/mech_bay_power_console/interact(mob/user as mob)
@@ -238,8 +256,8 @@
 		output += {"<b>Mech Bay Recharge Station Data:</b><div style='margin-left: 15px;'>
 						<b>Mecha: </b>[recharge_floor.recharging_mecha||"None"]<br>"}
 		if(recharge_floor.recharging_mecha)
-			var/cell_charge = recharge_floor.recharging_mecha.get_charge()
-			output += "<b>Cell charge: </b>[isnull(cell_charge)?"No powercell found":"[recharge_floor.recharging_mecha.cell.charge]/[recharge_floor.recharging_mecha.cell.maxcharge]"]<br>"
+			var/obj/item/weapon/cell/C = recharge_floor.recharging_mecha.get_cell()
+			output += "<b>Cell charge: </b>[isnull(C)?"No powercell found":"[C.charge]/[C.maxcharge]"]<br>"
 		output += "</div>"
 	if(!recharge_port)
 		output += "<span class='rose'>Mech Bay Power Port not initialized.</span><br>"
@@ -249,4 +267,3 @@
 	output += "</ body></html>"
 	user << browse(output, "window=mech_bay_console")
 	onclose(user, "mech_bay_console")
-	return

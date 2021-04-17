@@ -3,11 +3,11 @@
 /obj/machinery/computer/smelting
 	name = "ore processing console"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "computer_generic"//TODO
+	icon_state = "orecomp"
 	density = 1
 	anchored = 1
 	circuit = "/obj/item/weapon/circuitboard/smeltcomp"
-	light_color = LIGHT_COLOR_GREEN
+	light_color = LIGHT_COLOR_BLUE
 	req_access = list(access_mining)
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors.

@@ -16,6 +16,7 @@
 			/obj/item/weapon/storage/backpack/messenger/engi,
 			),
 		/obj/item/blueprints/primary,
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/under/rank/chief_engineer,
 		/obj/item/clothing/head/hardhat/white,
 		/obj/item/clothing/head/welding,
@@ -36,6 +37,7 @@
 		/obj/item/weapon/storage/belt/utility/chief,
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/weapon/card/debit/preferred/department/engineering,
+		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical

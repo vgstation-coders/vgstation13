@@ -268,28 +268,6 @@ Works together with spawning an observer, noted above.
 		else
 			visible.icon_state = "visible0"
 
-// Direct copied from medical HUD glasses proc, used to determine what health bar to put over the targets head.
-/mob/dead/proc/RoundHealth(var/health)
-	switch(health)
-		if(100 to INFINITY)
-			return "health100"
-		if(70 to 100)
-			return "health80"
-		if(50 to 70)
-			return "health60"
-		if(30 to 50)
-			return "health40"
-		if(18 to 30)
-			return "health25"
-		if(5 to 18)
-			return "health10"
-		if(1 to 5)
-			return "health1"
-		if(-99 to 0)
-			return "health0"
-		else
-			return "health-100"
-
 // Pretty much a direct copy of Medical HUD stuff, except will show ill if they are ill instead of also checking for known illnesses.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
@@ -424,7 +402,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(iscultist(src) && (ishuman(src)||isconstruct(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE)
+	var/timetocheck = timeofdeath
+	if (isbrain(src))
+		var/mob/living/carbon/brain/brainmob = src
+		timetocheck = brainmob.timeofhostdeath
+
+	if(iscultist(src) && (ishuman(src)||isconstruct(src)||isbrain(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE && (timetocheck == 0 || timetocheck >= world.time - DEATH_SHADEOUT_TIMER))
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
@@ -670,3 +653,24 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/proc/can_reenter_corpse()
 	var/mob/M = get_top_transmogrification()
 	return (M && M.client && can_reenter_corpse)
+
+/mob/dead/observer/AltClick(mob/user)
+	if(isAdminGhost(user))
+		var/choice_one = alert(user, "Do you wish to spawn a human?", "IC Spawning", "Yes", "No")
+		if(!choice_one)
+			return ..()
+		if(choice_one == "Yes")
+			var/choose_outfit = select_loadout()
+			if(choose_outfit)
+				var/datum/outfit/concrete_outfit = new choose_outfit
+				var/mob/living/carbon/human/sHuman = new /mob/living/carbon/human(get_turf(src))
+				sHuman.name = name
+				sHuman.real_name = real_name
+				concrete_outfit.equip(sHuman, TRUE)
+				client?.prefs.copy_to(sHuman)
+				sHuman.dna.UpdateSE()
+				sHuman.dna.UpdateUI()
+				sHuman.ckey = ckey
+				qdel(src)
+			return
+	return ..()

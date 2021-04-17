@@ -11,6 +11,7 @@
 	var/list/required_modules = list()
 	var/list/required_upgrades = list()
 	var/list/modules_to_add = list()
+	var/list/modules_to_remove = list() //Use this if you want to replace or disable items that the borg might already have
 	var/multi_upgrades = FALSE
 	w_type = RECYK_ELECTRONIC
 
@@ -62,6 +63,13 @@
 		for(var/module_to_add in modules_to_add)
 			if(!locate_component(module_to_add, R))
 				R.module.modules += new module_to_add(R.module)
+
+	if(modules_to_remove.len)
+		for(var/module_to_remove in modules_to_remove)
+			var/delete_object = locate_component(module_to_remove, R)
+			if(delete_object)
+				R.module.modules -= delete_object
+				qdel(delete_object)
 
 	to_chat(user, "<span class='notice'>You successfully apply \the [src] to \the [R].</span>")
 	user.drop_item(src, R)
@@ -219,18 +227,36 @@
 	R.SetEmagged()
 
 //Medical Stuff
-/obj/item/borg/upgrade/medical
+/obj/item/borg/upgrade/medical_upgrade
 	name = "medical cyborg MK-2 upgrade board"
-	desc = "Used to give a medical cyborg advanced care tools."
+	desc = "Used to give a medical cyborg advanced care tools. Also increases storage capacity for medical consumables."
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
 
-/obj/item/borg/upgrade/medical/organ_gripper
+/obj/item/borg/upgrade/medical_upgrade/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+	R.module.respawnables_max_amount = MEDICAL_MAX_KIT * 2
+
+/obj/item/borg/upgrade/surgery
+	name = "medical cyborg advanced surgery pack"
+	desc = "Enables a medical cyborg to have advanced surgery tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
+	modules_to_add = list(/obj/item/weapon/scalpel/laser/tier2, /obj/item/weapon/circular_saw/plasmasaw,
+	/obj/item/weapon/retractor/manager, /obj/item/weapon/hemostat/pico, /obj/item/weapon/surgicaldrill/diamond,
+	/obj/item/weapon/bonesetter/bone_mender, /obj/item/weapon/FixOVein/clot)
+	modules_to_remove = list(/obj/item/weapon/scalpel, /obj/item/weapon/hemostat, /obj/item/weapon/retractor,
+	/obj/item/weapon/circular_saw, /obj/item/weapon/cautery, /obj/item/weapon/surgicaldrill, /obj/item/weapon/bonesetter,
+	/obj/item/weapon/FixOVein)
+
+/obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
 	desc = "Used to give a medical cyborg a organ gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
+	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
 
 //Engineering stuff
@@ -466,5 +492,21 @@
 	icon_state = "portsmelter0"
 	required_modules = list(SUPPLY_MODULE, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/storage/bag/ore/furnace)
+
+/obj/item/borg/upgrade/xenoarch
+	name = "supply cyborg xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg xenoarchaeology tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(SUPPLY_MODULE)
+	modules_to_add = list(/obj/item/device/depth_scanner,/obj/item/weapon/pickaxe/excavationdrill,/obj/item/device/measuring_tape,/obj/item/device/core_sampler)
+
+/obj/item/borg/upgrade/xenoarch_adv
+	name = "supply cyborg advanced xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg even better xenoarchaeology tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(SUPPLY_MODULE)
+	required_upgrades = list(/obj/item/borg/upgrade/xenoarch)
+	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder)
+	modules_to_remove = list(/obj/item/weapon/pickaxe/excavationdrill)
 
 #undef FAILED_TO_ADD

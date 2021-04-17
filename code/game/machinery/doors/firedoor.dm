@@ -250,8 +250,8 @@ var/global/list/alert_overlays_global = list()
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 /obj/machinery/door/firedoor/CtrlClick(mob/user)
-	if(isAdminGhost(user))
-		attack_ai(user,TRUE)
+	if(isrobot(user) || isAdminGhost(user))
+		attack_ai(user, TRUE)
 	else
 		..()
 
@@ -323,13 +323,19 @@ var/global/list/alert_overlays_global = list()
 									"<span class='warning'>You hear slicing noises.</span>")
 				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 				blocked = !blocked
-				open(user)
+				force_open(user, C)
+				sleep(8)
+				blocked = TRUE
+				update_icon()
 			return
 		else
 			user.visible_message("<span class='warning'>[user] swiftly slices \the [src] open!</span>",\
 								"You slice \the [src] open in one clean cut!",\
 								"You hear the sound of a swift, sharp slice.")
-			open(user)
+			force_open(user, C)
+			sleep(8)
+			blocked = TRUE
+			update_icon()
 			return
 
 	if(C.is_wrench(user))
@@ -661,6 +667,8 @@ var/global/list/alert_overlays_global = list()
 		drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
 		qdel(src)
 
+/obj/machinery/door/firedoor/AICtrlClick(mob/user)
+	attack_ai(user,TRUE)
 
 //Removed pending a fix for atmos issues caused by full tile firelocks.
 /*

@@ -39,6 +39,20 @@
 		new /obj/item/bluespace_crystal(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
 
+/obj/item/weapon/storage/gachabox
+	name = "wholesale capsule kit"
+	can_only_hold = list(/obj/item/weapon/capsule)
+	storage_slots = 60
+	max_combined_w_class = ARBITRARILY_LARGE_NUMBER
+	display_contents_with_number = TRUE
+	allow_quick_empty = TRUE
+	allow_quick_gather = TRUE
+
+/obj/item/weapon/storage/gachabox/New()
+	..()
+	for(var/amount = 1 to 60)
+		new /obj/item/weapon/capsule(src)
+
 /obj/structure/closet/secure_closet/wonderful
 	name = "wonderful wardrobe"
 	desc = "Stolen from Space Narnia."
@@ -52,24 +66,35 @@
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
-	/obj/item/clothing/shoes/clown_shoes/advanced,
 	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
 	/obj/item/clothing/shoes/magboots/magnificent,
-	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee),
+	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee, /obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/hos, /obj/item/clothing/suit/space/plasmaman/security/hos, /obj/item/clothing/head/helmet/space/plasmaman/security/hop, /obj/item/clothing/suit/space/plasmaman/security/hop),
 	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
-	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
-	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelesuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
 	list(/obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
-	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
+	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw,
-	/obj/item/clothing/under/newclothes
+	/obj/item/clothing/under/newclothes,
+	/obj/item/clothing/suit/storage/draculacoat,
+	list(/obj/item/clothing/head/helmet/richard, /obj/item/clothing/under/jacketsuit),
+	list(/obj/item/clothing/under/rank/security/sneaksuit, /obj/item/clothing/head/headband),
+	/obj/item/clothing/under/galo,
+	/obj/item/clothing/suit/raincoat,
+	list(/obj/item/clothing/accessory/armband, /obj/item/clothing/accessory/armband/cargo, /obj/item/clothing/accessory/armband/engine, /obj/item/clothing/accessory/armband/science, /obj/item/clothing/accessory/armband/hydro, /obj/item/clothing/accessory/armband/medgreen),
+	list(/obj/item/clothing/head/helmet/space/grey, /obj/item/clothing/suit/space/grey),
+	list(/obj/item/clothing/under/bikersuit, /obj/item/clothing/gloves/bikergloves, /obj/item/clothing/head/helmet/biker, /obj/item/clothing/shoes/mime/biker),
+	list(/obj/item/clothing/monkeyclothes/space, /obj/item/clothing/head/helmet/space),
+	/obj/item/device/radio/headset/headset_earmuffs,
+	/obj/item/clothing/under/vault13,
+	list(/obj/item/clothing/head/leather/xeno, /obj/item/clothing/suit/leather/xeno),
+	/obj/item/clothing/accessory/rabbit_foot
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
 	..()
+	new /obj/item/clothing/shoes/clown_shoes/advanced(src)
 	for(var/amount = 1 to 10)
 		var/wonder_clothing = pick_n_take(wonder_whitelist)
 		if(islist(wonder_clothing))
@@ -171,6 +196,36 @@
 		return
 	..()
 
+//15+3+8 = 26
+var/global/list/shoal_stuff = list(
+	//5 of a kind
+	/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,
+	//3 of a kind
+	/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,
+	//1 of a kind
+	/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+	/obj/item/weapon/vinyl/echoes,
+	/obj/item/fish_eggs/seadevil,
+	/obj/structure/bed/therapy,
+	/obj/item/weapon/grenade/station/discount,
+	/obj/item/device/crank_charger/generous,
+	/obj/item/weapon/storage/gachabox,
+	/obj/item/weapon/storage/bluespace_crystal,
+)
+/obj/structure/closet/crate/shoaljunk
+	name = "Shoal junk crate"
+	desc = "What? It fell off a spacetruck."
+
+/obj/structure/closet/crate/shoaljunk/New()
+	..()
+	for(var/i = 1 to 9)
+		if(!shoal_stuff.len)
+			return
+		var/path = pick_n_take(shoal_stuff)
+		new path(src)
+
 /obj/structure/closet/crate/chest/alcatraz
 	name = "Alcatraz IV security crate"
 	desc = "It came from Alcatraz IV!"
@@ -190,15 +245,88 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/clothing/accessory/bangerboy,
 	/obj/item/key/security/spare,
 	/obj/item/weapon/ram_kit,
-	/obj/item/device/vampirehead,)
+	/obj/item/device/vampirehead,
+	/obj/item/weapon/storage/lockbox/unlockable/peace,
+	/obj/item/clothing/head/helmet/stun,
+	/obj/item/weapon/secway_kit,
+	)
 
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	for(var/i = 1 to 6)
+	for(var/i = 1 to 7)
 		if(!alcatraz_stuff.len)
 			return
 		var/path = pick_n_take(alcatraz_stuff)
 		new path(src)
+
+/obj/item/clothing/head/helmet/stun
+	name = "stun helmet"
+	desc = "For the experimental program of deploying armless security officers. Its complex wiring is known to block out psychic powers and 5G signals."
+	icon_state = "helmetstun"
+	light_power = 2.5
+	light_range = 4
+	light_color = LIGHT_COLOR_ORANGE
+	mech_flags = MECH_SCAN_FAIL
+	var/obj/item/weapon/cell/bcell
+
+/obj/item/clothing/head/helmet/stun/New()
+	..()
+	bcell = new(src)
+	bcell.charge = bcell.maxcharge
+	update_icon()
+
+/obj/item/clothing/head/helmet/stun/Destroy()
+	if (bcell)
+		qdel(bcell)
+		bcell = null
+
+	return ..()
+
+/obj/item/clothing/head/helmet/stun/get_cell()
+	return bcell
+
+/obj/item/clothing/head/helmet/stun/examine(mob/user)
+	..()
+	if(bcell)
+		to_chat(user, "<span class='info'>The helmet is [round(bcell.percent())]% charged.</span>")
+
+/obj/item/clothing/head/helmet/stun/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	if(!..() || !ishuman(M))
+		return CANNOT_EQUIP
+	if(clumsy_check(M))
+		to_chat(M, "<span class='warning'>You get stunned trying to don \the [src].</span>")
+		return CANNOT_EQUIP
+	var/mob/living/carbon/human/C = M
+	if(!C.head)
+		return CAN_EQUIP
+	if(C.head.canremove)
+		return CAN_EQUIP_BUT_SLOT_TAKEN
+	return CAN_EQUIP
+
+/obj/item/clothing/head/helmet/stun/proc/use(var/amount)
+	if(!bcell || bcell.charge < amount)
+		return FALSE
+	bcell.use(amount)
+	return TRUE
+
+#define STUN_HELMET_STRENGTH 10
+/obj/item/clothing/head/helmet/stun/bite_action(mob/target)
+	if(!isliving(loc) || !isliving(target) || !use(STUN_HELMET_STRENGTH**2))
+		return FALSE
+	var/mob/living/user = loc
+	var/mob/living/L = target
+	if(iscarbon(target))
+		var/mob/living/carbon/C = L
+		if(C.check_shields(0,src))
+			return FALSE
+		L.apply_effect(STUN_HELMET_STRENGTH, STUTTER)
+	playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	L.Knockdown(STUN_HELMET_STRENGTH)
+	L.Stun(STUN_HELMET_STRENGTH)
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
+	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
+	log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
+	return TRUE
 
 /obj/item/clothing/accessory/bangerboy
 	name = "\improper Banger Boy Advance"
@@ -230,8 +358,8 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
 	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
-	icon_state = "helmet_sec"
-	item_state = "helmet"
+	icon_state = "donutgiver"
+	item_state = "donutgiver"
 	species_fit = list(INSECT_SHAPED)
 	flags = HEAR | FPRINT
 	var/dna_profile = null
@@ -397,7 +525,7 @@ var/global/list/alcatraz_stuff = list(
 	req_access = list(access_brig)
 	icon = 'icons/obj/cage.dmi'
 	icon_state = "cage_secure"
-	var/mob_path = /mob/living/simple_animal/hostile/wolf
+	var/mob_path = /mob/living/simple_animal/hostile/wolf/pliable
 	var/bonus_path = /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 
 /obj/structure/largecrate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -464,7 +592,8 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/key/security/spare/New()
 	..()
-	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station")
+	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station",
+		 "Snow Station", "NRV Horizon", "Synergy Station", "Lamprey Station")
 	map_names -= map.nameLong
 	home_map = pick(map_names)
 
@@ -477,6 +606,7 @@ var/global/list/alcatraz_stuff = list(
 	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
+	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
 
@@ -498,6 +628,7 @@ var/global/list/alcatraz_stuff = list(
 
 
 #define VAMP_FLASH_CD 50
+#define VAMP_SCREAM_CD 600
 
 /obj/item/device/vampirehead
 	name = "shrunken vampire head"
@@ -505,8 +636,10 @@ var/global/list/alcatraz_stuff = list(
 	w_class = W_CLASS_TINY
 	icon_state = "vamphead0"
 	flags = HEAR | FPRINT
+	force = 7
 	var/obj/effect/decal/cleanable/blood/located_blood
-	var/last_used = 0
+	var/flash_last_used = 0
+	var/scream_last_used = 0
 
 /obj/item/device/vampirehead/New()
 	..()
@@ -581,6 +714,29 @@ var/global/list/alcatraz_stuff = list(
 			to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
 		return FALSE
 
+/obj/item/device/vampirehead/attack_self(mob/user)
+	if(!istype(user) || !genecheck(user))
+		return
+
+	if(scream_last_used + VAMP_SCREAM_CD > world.timeofday)
+		var/list/reject_phrases = list("Bah. You can't be serious.",
+										"Again? You work me harder than I beat my slaves.",
+										"Enough. I must recover, first.",
+										"Cease your incessant squeezing, mortal.",
+										"I am not a flashbang, you blithering idiot."
+										)
+		to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
+		return
+
+	user.attack_log += "\[[time_stamp()]\] <font color='red'>Used the [name] to perform a vampire screech.</font>"
+	log_attack("<font color='red'>[key_name(user)] Used the [name] to perform a vampire screech.</font>")
+	for(var/obj/structure/window/W in view(1))
+		W.shatter()
+
+	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
+
+	scream_last_used = world.timeofday
+
 /obj/item/device/vampirehead/attack(mob/living/M as mob, mob/user as mob)
 	if(!user || !M) //sanity
 		return
@@ -588,7 +744,7 @@ var/global/list/alcatraz_stuff = list(
 	if(!genecheck(user))
 		return
 
-	if(last_used + VAMP_FLASH_CD > world.timeofday)
+	if(flash_last_used + VAMP_FLASH_CD > world.timeofday)
 		var/list/reject_phrases = list("Bah. You can't be serious.",
 										"Again? You work me harder than I beat my slaves.",
 										"Enough. I must recover, first.",
@@ -612,12 +768,10 @@ var/global/list/alcatraz_stuff = list(
 		return
 	var/mob/living/carbon/Subject = M
 
-	if(Subject.eyecheck() > 0)
-		return
 	Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
 
 	visible_message("<span class='danger'>The eyes of [user]'s [name] emit a blinding flash toward [M]!</span>")
-	last_used = world.timeofday
+	flash_last_used = world.timeofday
 
 /obj/item/device/vampirehead/afterattack(atom/A, mob/user)
 	..()
@@ -633,8 +787,8 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/weapon/autocuffer
 	name = "autocuffer"
 	desc = "An experimental prototype handcuff dispenser that mysteriously went missing from a research facility on Alcatraz VI."
-	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "labeler0"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "autocuffer"
 	siemens_coefficient = 0
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
@@ -1020,6 +1174,95 @@ var/global/list/alcatraz_stuff = list(
 					living_mover.put_in_hands(I)
 				to_chat(mover,"<span class='good'>\The [src] dispenses a reward!</span>")
 
+#define AT_SEED 0
+#define AT_PLANTED 1
+#define AT_SAPLING 2
+#define AT_MATURE 3
+#define AT_FLOWERING 4
+
+/obj/structure/ammotree
+	name = "ammo tree seed"
+	desc = "The seed of an ammo tree. A gene-modified plant that was developed to synthesize metals. <B>If it was rammed in with enough force, you could get it to grow.</B>"
+	icon = 'icons/obj/flora/big_pots.dmi'
+	icon_state = "ammotree-0"
+	density = FALSE
+	anchored = FALSE
+	pixel_x = -16
+	plane = ABOVE_HUMAN_PLANE
+	var/state = AT_SEED
+
+/obj/structure/ammotree/attackby(obj/item/I, mob/user)
+	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
+		state = AT_PLANTED
+		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
+		processing_objects += src
+	else
+		..()
+	update_icon()
+
+/obj/structure/ammotree/attack_hand(mob/user)
+	if(state != AT_FLOWERING)
+		return
+	visible_message("<span class='notice>[user] picks some ammo fruit from \the [src].</span>")
+	state = AT_MATURE
+	update_icon()
+	processing_objects += src
+	playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
+	for(var/i = 1 to 4)
+		new /obj/item/ammofruit(user.loc)
+
+/obj/structure/ammotree/update_icon()
+	icon_state = "ammotree-[state]"
+	switch(state)
+		if(AT_PLANTED)
+			name = "strange pot"
+			desc = "Something is clearly putting down roots below."
+		if(AT_SAPLING)
+			name = "ammo tree sapling"
+			desc = "An ammo tree sapling. It looks thin enough to snap like a twig."
+		if(AT_MATURE)
+			name = "ammo tree"
+			desc = "A gene-modified plant that was developed to synthesize metals."
+
+/obj/structure/ammotree/process()
+	if(state >= AT_FLOWERING)
+		processing_objects -= src
+		return
+	if(prob(1))
+		state++
+		update_icon()
+
+/obj/item/ammofruit
+	name = "ammofruit"
+	desc = "Not edible. Feed it into your local ammolathe."
+	icon = 'icons/obj/ammo.dmi'
+	icon_state = "ammofruit"
+	w_class = W_CLASS_SMALL
+
+/obj/item/ammofruit/New()
+	..()
+	pixel_x = rand(-3,3)
+	pixel_y = rand(-3,3)
+	materials = new /datum/materials(src)
+	materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL*2)
+	if(prob(25))
+		if(prob(60))
+			materials.addAmount(MAT_PLASMA,CC_PER_SHEET_MISC*2)
+			name = "dragonbreath ammofruit"
+			icon_state = "ammofruit_plasma"
+		else
+			materials.addAmount(MAT_GLASS,CC_PER_SHEET_GLASS)
+			materials.addAmount(MAT_PLASTIC,CC_PER_SHEET_MISC)
+			materials.addAmount(MAT_WOOD, CC_PER_SHEET_MISC)
+			name = "gunstock ammofruit"
+			icon_state = "ammofruit_glass"
+	else
+		materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL)
+
+/obj/item/ammofruit/recyclable(var/obj/machinery/r_n_d/fabricator/F)
+	if(!istype(F, /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe))
+		return FALSE
+	return TRUE
 
 //Mystery mob cubes//////////////
 
@@ -1130,6 +1373,7 @@ var/global/list/alcatraz_stuff = list(
 		/obj/item/stack/sheet/bone = 50,
 		/obj/item/stack/sheet/mineral/sandstone = 50,
 		/obj/item/stack/sheet/brass = 35,
+		/obj/item/stack/sheet/ralloy = 35,
 		/obj/item/stack/sheet/mineral/gingerbread = 25,
 		/obj/item/stack/sheet/animalhide/xeno = 10,
 		/obj/item/stack/sheet/animalhide/human = 20,

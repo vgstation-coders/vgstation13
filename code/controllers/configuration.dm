@@ -194,6 +194,7 @@
 	// Discord crap.
 	var/discord_url
 	var/discord_password
+	var/kill_phrase = "All your bases are belong to us."
 
 	// Weighted Votes
 	var/weighted_votes = 0
@@ -617,6 +618,9 @@
 					discord_password = value
 				if("weighted_votes")
 					weighted_votes = TRUE
+
+				if ("kill_phrase")
+					kill_phrase = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"

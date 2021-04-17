@@ -610,4 +610,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 
 /client/proc/handle_hear_voice(var/mob/origin)
 	if(prefs.hear_voicesound)
-		mob.playsound_local(get_turf(origin), get_sfx("voice"),50,1)
+		if(issilicon(origin))
+			mob.playsound_local(get_turf(origin), get_sfx("voice-silicon"),50,1)
+		else
+			mob.playsound_local(get_turf(origin), get_sfx("voice-human"),50,1)

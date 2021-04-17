@@ -22,11 +22,11 @@ emp_act
 					P.reflected = 1
 					P.rebound(src)
 
-				return -1 // complete projectile permutation
+				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
 	if(check_shields(P.damage, P))
 		P.on_hit(src, 100)
-		return 2
+		return PROJECTILE_COLLISION_BLOCKED
 	return (..(P , def_zone))
 
 
@@ -184,9 +184,13 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
 	if(!..())
 		return
+
+	var/power = I.force
+	if (crit)
+		power *= CRIT_MULTIPLIER
 
 	var/target_zone = null
 	if(def_zone)
@@ -232,7 +236,7 @@ emp_act
 		knock_teeth = 1
 
 	var/armor = run_armor_check(affecting, "melee", quiet = 1)
-	var/final_force = run_armor_absorb(affecting, "melee", I.force)
+	var/final_force = run_armor_absorb(affecting, "melee", power)
 	if(knock_teeth) //You can't actually hit people in the mouth - this checks if the user IS targetting mouth, and if he didn't miss!
 		if((!armor) && (final_force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
 			var/chance = min(final_force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
@@ -317,6 +321,18 @@ emp_act
 
 			drugged_message = "<span class='info'>The tooth fairy takes some of \the [src]'s teeth out!</span>",\
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
+
+/mob/living/carbon/human/proc/foot_impact(var/atom/source, var/damage) //When our foot is hurt, for example by kicking something stationary
+	//note: as per can_kick() in human.dm, kicking requires both feet intact
+	if(shoes && istype(shoes, /obj/item/clothing/shoes))
+		var/obj/item/clothing/shoes/S = shoes
+		damage = S.impact_dampen(source, damage)
+	if(!damage)
+		return FALSE
+	var/chosen_foot = pick(LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT)
+	var/datum/organ/external/ourfoot = get_organ(chosen_foot)
+	apply_damage(damage, BRUTE, ourfoot)
+	return TRUE
 
 /mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 2)
 	//we're getting splashed with blood, so let's check for viruses

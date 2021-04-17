@@ -15,6 +15,8 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 	diagnostic_hud_users -= src
 
 proc/check_HUD_visibility(var/atom/target, var/mob/user)
+	if (user in blind_victims)//cult confusion
+		return FALSE
 	if(user.see_invisible < target.invisibility)
 		return FALSE
 	if(target.alpha <= 1)
@@ -189,6 +191,9 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					else if(istype(I,/obj/item/weapon/implant/chem))
 						holder = perp.hud_list[IMPCHEM_HUD]
 						holder.icon_state = "hud_imp_chem"
+					else if(istype(I,/obj/item/weapon/implant/holy))
+						holder = perp.hud_list[IMPHOLY_HUD]
+						holder.icon_state = "hud_imp_holy"
 					else
 						continue
 					C.images += holder

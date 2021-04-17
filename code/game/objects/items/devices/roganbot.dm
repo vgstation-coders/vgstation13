@@ -20,7 +20,7 @@
 			playtaunt(number2rogansound[index])
 
 /obj/item/device/roganbot/proc/playtaunt(var/datum/rogan_sound/S)
-	playsound(get_turf(src), S.soundfile, 35, FALSE)
+	playsound(src, S.soundfile, 35, FALSE)
 	if(S.transcript)
 		say(S.transcript)
 	else if(S.emote)

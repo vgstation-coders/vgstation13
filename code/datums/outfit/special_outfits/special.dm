@@ -253,6 +253,20 @@
 	..()
 	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(H))
 
+/datum/outfit/special/piratealt //no weapon & slightly different clothing
+	outfit_name = "Pirate Alternative"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/pirate,
+			slot_shoes_str = /obj/item/clothing/shoes/workboots,
+			slot_head_str = /obj/item/clothing/head/pirate,
+			slot_glasses_str = /obj/item/clothing/glasses/eyepatch,
+		)
+	)
+
+/datum/outfit/special/piratealt/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
 /datum/outfit/special/space_pirate
 	outfit_name = "Space Pirate"
 	items_to_spawn = list(
@@ -602,3 +616,175 @@
 /datum/outfit/special/marisa_wizard/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/staff(H))
+
+
+/datum/outfit/special/prisoner
+	equip_survival_gear = list() //no backpack, no gear
+	outfit_name = "Prisoner"
+	use_pref_bag = FALSE
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_head_str = /obj/item/clothing/head/beanie/black,
+		),
+		/datum/species/plasmaman = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/prisoner,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/prisoner,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/vox = list(
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_back_str = /obj/item/weapon/tank/nitrogen,
+		),
+	)
+
+/datum/outfit/special/prisoner/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+  
+/datum/outfit/special/prisoneralt //no headset + soap
+	outfit_name = "Prisoner Alternative"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_r_store_str = /obj/item/weapon/soap,
+		)
+	)
+
+/datum/outfit/special/prisoneralt/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/pizzaman
+	outfit_name = "Pizza Delivery Guy"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/rank/dispatch,
+			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_head_str = /obj/item/clothing/head/soft/blue,
+			slot_r_store_str = /obj/item/weapon/spacecash/c10,
+		)
+	)
+
+/datum/outfit/special/pizzaman/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/pizzaman/post_equip(var/mob/living/carbon/human/H)
+	..()
+	H.put_in_hands(new /obj/item/pizzabox/margherita(H))
+
+/datum/outfit/special/gangster
+	outfit_name = "Gangster"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/callum,
+			slot_wear_suit_str = /obj/item/clothing/suit/wcoat,
+			slot_shoes_str = /obj/item/clothing/shoes/knifeboot,
+			slot_head_str = /obj/item/clothing/head/det_hat/noir,
+			slot_r_store_str = /obj/item/weapon/switchtool/switchblade,
+			slot_wear_mask_str = /obj/item/clothing/mask/cigarette/cigar,
+		)
+	)
+
+/datum/outfit/special/gangster/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/roman
+	outfit_name = "Roman"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/roman,
+			slot_shoes_str = /obj/item/clothing/shoes/roman,
+			slot_head_str = /obj/item/clothing/head/helmet/roman/legionaire,
+			slot_r_store_str = /obj/item/weapon/coin/gold,
+		)
+	)
+
+/datum/outfit/special/roman/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/samurai
+	outfit_name = "Samurai"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/black,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/samurai,
+			slot_head_str = /obj/item/clothing/head/helmet/samurai,
+			slot_wear_mask_str = /obj/item/clothing/mask/gas/oni,
+		)
+	)
+
+/datum/outfit/special/samurai/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/cowboy
+	outfit_name = "Cowboy"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/det,
+			slot_shoes_str = /obj/item/clothing/shoes/jackboots/cowboy,
+			slot_wear_suit_str = /obj/item/clothing/suit/suspenders,
+			slot_head_str = /obj/item/clothing/head/cowboy,
+			slot_wear_mask_str = /obj/item/clothing/mask/bandana/red,
+			slot_r_store_str = /obj/item/weapon/reagent_containers/food/drinks/flask/detflask,
+		)
+	)
+
+/datum/outfit/special/cowboy/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/tourist
+	outfit_name = "Tourist"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/tourist,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_belt_str = /obj/item/device/camera,
+			slot_r_store_str = /obj/item/device/camera_film,
+			slot_l_store_str = /obj/item/weapon/spacecash/c100,
+		)
+	)
+
+/datum/outfit/special/tourist/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/cosmonaut
+	outfit_name = "Cosmonaut"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/soviet,
+			slot_shoes_str = /obj/item/clothing/shoes/jackboots/neorussian,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/syndicate/orange,
+			slot_head_str = /obj/item/clothing/head/helmet/space/syndicate/orange,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_belt_str = /obj/item/weapon/tank/emergency_oxygen/double,
+		)
+	)
+
+/datum/outfit/special/cosmonaut/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/sports
+	outfit_name = "Sports Fan"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/football,
+			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_r_store_str = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness,
+		)
+	)
+
+/datum/outfit/special/sports/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/sports/post_equip(var/mob/living/carbon/human/H)
+	..()
+	equip_accessory(H, /obj/item/clothing/accessory/storage/fannypack, /obj/item/clothing/under, 5)

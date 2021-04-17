@@ -74,7 +74,7 @@ var/max_snails = 40
 	return ..()
 
 /mob/living/simple_animal/snail/Crossed(mob/living/O)
-	if (!in_shell)
+	if (!in_shell && !isDead())
 		recoil()
 	return ..()
 

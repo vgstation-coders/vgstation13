@@ -34,6 +34,7 @@
 	return damage_done
 
 
+
 /mob/living/proc/apply_damages(var/brute = 0, var/burn = 0, var/tox = 0, var/oxy = 0, var/clone = 0, var/halloss = 0, var/def_zone = null, var/blocked = 0)
 	if(blocked >= 100)
 		return 0
@@ -51,6 +52,10 @@
 		apply_damage(halloss, HALLOSS, def_zone, blocked)
 	return 1
 
+
+/mob/living/proc/critlog(curH,prevH) //current health, previous health
+	if(stat == UNCONSCIOUS && curH < 0 && curH > -95.0 && prevH > 0)
+		src.attack_log += ("\[[time_stamp()]\] <font color='red'>Has gone into CRIT!</font>")
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)

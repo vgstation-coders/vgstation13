@@ -55,7 +55,7 @@
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		update_icon()
@@ -80,12 +80,12 @@
 			takeDamage(4)
 
 /obj/structure/cult/blob_act()
-	playsound(get_turf(src), sound_damaged, 75, 1)
+	playsound(src, sound_damaged, 75, 1)
 	takeDamage(20)
 
 /obj/structure/cult/bullet_act(var/obj/item/projectile/Proj)
 	takeDamage(Proj.damage)
-	..()
+	return ..()
 
 /obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype(W, /obj/item/weapon/grab))
@@ -103,7 +103,7 @@
 			if (W.hitsound)
 				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
-				playsound(get_turf(src), sound_damaged, 75, 1)
+				playsound(src, sound_damaged, 75, 1)
 			takeDamage(W.force)
 			if (W.attack_verb)
 				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
@@ -124,7 +124,7 @@
 							"You hear stone cracking.")
 		takeDamage(user.get_unarmed_damage(src))
 		if (sound_damaged)
-			playsound(get_turf(src), sound_damaged, 75, 1)
+			playsound(src, sound_damaged, 75, 1)
 	else if(iscultist(user))
 		cultist_act(user)
 	else
@@ -278,8 +278,8 @@
 				for(var/mob/M in observers)
 					if(!M.client || isantagbanned(M) || jobban_isbanned(M, CULTIST) || M.client.is_afk())
 						continue
-					if (M.mind && M.mind.GetRole(CULTIST))
-						var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+					if (iscultist(M))
+						var/datum/role/cultist/cultist = iscultist(M)
 						if (cultist.second_chance)
 							to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
@@ -557,10 +557,22 @@
 					var/extra = ""
 					if (H && istype(H))
 						if (H.isInCrit())
-							extra = " - <span style='color:#FF0000'>CRITICAL</span>"
+							extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
 						else if (H.isDead())
 							extra = " - <span style='color:#FF0000'>DEAD</span>"
 					dat += "<li><b>[M.name]</b></li> - [origin_text][extra]"
+				for(var/obj/item/weapon/handcuffs/cult/cuffs in cult.bindings)
+					if (iscarbon(cuffs.loc))
+						var/mob/living/carbon/C = cuffs.loc
+						if (C.handcuffed == cuffs && cuffs.gaoler && cuffs.gaoler.antag)
+							var/datum/mind/gaoler = cuffs.gaoler.antag
+							var/extra = ""
+							if (C && istype(C))
+								if (C.isInCrit())
+									extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
+								else if (C.isDead())
+									extra = " - <span style='color:#FF0000'>DEAD</span>"
+							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
 				dat += {"</ul></body>"}
 				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")
@@ -708,7 +720,7 @@
 		blade.shade = shadeMob
 		shadeMob.status_flags |= GODMODE
 		shadeMob.canmove = 0
-		var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+		var/datum/role/cultist/cultist = iscultist(M)
 		cultist.second_chance = 0
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
@@ -775,7 +787,7 @@
 			new_shade.name = "[M.real_name] the Shade"
 			new_shade.real_name = "[M.real_name]"
 			new_shade.give_blade_powers()
-			playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
 		var/turf/T = loc
@@ -909,7 +921,7 @@ var/list/cult_spires = list()
 		return
 
 	var/mob/living/carbon/human/H = user
-	var/datum/role/cultist/C = H.mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(H)
 
 	var/list/available_tattoos = list("tier1","tier2","tier3")
 	for (var/tattoo in C.tattoos)
@@ -1547,7 +1559,7 @@ var/list/bloodstone_list = list()
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		if (backup > (health > (2*maxHealth/3)) + (health > (maxHealth/3)))

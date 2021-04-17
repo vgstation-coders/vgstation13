@@ -57,7 +57,7 @@ var/list/potential_bonus_items = list(
 	logo_state = "vox-logo"
 	hud_icons = list("vox-logo")
 
-	var/time_left = (30 MINUTES)/10
+	var/time_left = (60 MINUTES)/10
 	var/completed = FALSE
 	var/results = "The Shoal didn't return yet."
 	var/list/dept_objective = list()

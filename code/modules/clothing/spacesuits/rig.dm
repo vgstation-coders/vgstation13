@@ -27,6 +27,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	var/obj/item/clothing/suit/space/rig/rig
+	body_parts_visible_override = 0
 
 /obj/item/clothing/head/helmet/space/rig/New()
 	check_light() //Needed to properly handle helmets with no lights

@@ -250,7 +250,7 @@ var/global/list/ghdel_profiling = list()
 	return 1
 
 /atom/proc/bullet_act(var/obj/item/projectile/Proj)
-	return 0
+	return PROJECTILE_COLLISION_DEFAULT
 
 /atom/proc/in_contents_of(container)//can take class or object instance as argument
 	if(ispath(container))

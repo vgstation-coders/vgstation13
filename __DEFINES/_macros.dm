@@ -60,6 +60,10 @@
 
 #define isalienadult(A) istype(A, /mob/living/carbon/alien/humanoid)
 
+#define isalienqueen(A)	istype(A, /mob/living/carbon/alien/humanoid/queen)
+
+#define isaliendrone(A)	istype(A, /mob/living/carbon/alien/humanoid/drone)
+
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
@@ -87,6 +91,8 @@
 #define isbear(A) istype(A, /mob/living/simple_animal/hostile/bear)
 
 #define iscarp(A) istype(A, /mob/living/simple_animal/hostile/carp)
+
+#define isspider(A) istype(A, /mob/living/simple_animal/hostile/giant_spider)
 
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
@@ -247,7 +253,11 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+#define isnewcultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
+
+#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
+
+#define iscultist(H) (isnewcultist(H) || ischiefcultist(H))
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
@@ -267,15 +277,15 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+#define ischallenger(H) (H.mind && H.mind.GetRole(CHALLENGER))
 
-#define iselitesyndie (H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
+#define iselitesyndie(H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
 
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
 
-#define issyndicate(H) ((H.mind && H.mind.GetRole(TRAITOR)) || (H.mind && H.mind.GetRole(SYNDIESQUADIE)) || (H.mind && H.mind.GetRole(NUKE_OP)))
+#define issyndicate(H) (H.mind && (H.mind.GetRole(TRAITOR) ||  H.mind.GetRole(SYNDIESQUADIE) || H.mind.GetRole(NUKE_OP) || H.mind.GetRole(CHALLENGER)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -302,6 +312,10 @@
 #define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
+
+#define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))
+
+#define istagmime(H) (H.mind && H.mind.GetRole(TAG_MIME))
 
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
@@ -393,7 +407,7 @@ proc/get_space_area()
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
+#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE, FALSE)
 //Starts 0 credits, not sourced from any database, earns 0 credits, hidden
 
 // strips all newlines from a string, replacing them with null

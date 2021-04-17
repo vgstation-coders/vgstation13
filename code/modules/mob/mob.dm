@@ -436,6 +436,10 @@
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
+
+	for (var/time in crit_rampup)
+		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
+			crit_rampup -= time
 	return
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
@@ -1198,10 +1202,10 @@ Use this proc preferably at the end of an equipment loadout
 	var/msg = strip_html(flavor_text)
 	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
 		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
-	if(length(msg) <= 32)
+	if(length(msg) <= 64)
 		return "<font color='#ffa000'><b>[msg]</b></font>"
 	else
-		return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];show_flavor_text=1'>More</a></b></font>"
+		return "<font color='#ffa000'><b>[copytext(msg, 1, 64)]...<a href='?src=\ref[src];show_flavor_text=1'>More</a></b></font>"
 
 /mob/verb/abandon_mob()
 	set name = "Respawn"
@@ -2166,7 +2170,7 @@ mob/proc/on_foot()
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
 			return TRUE
 
-	for(var/mob/living/simple_animal/hostile/asteroid/pillow/P in view(src))
+	for(var/mob/living/simple_animal/P in view(src))
 		if(P.isDead() || !P.pacify_aura)
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
@@ -2211,16 +2215,9 @@ mob/proc/on_foot()
 		//to_chat(world, "[target] has psy resist")
 		to_chat(src, "The target mind is resisting!")
 		return 0
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		if(H.is_wearing_item(/obj/item/clothing/head/tinfoil, slot_head))
-			to_chat(src, "Interference is disrupting the connection with the target mind.")
-			return 0
-	if(ismartian(target))
-		var/mob/living/carbon/complex/martian/MR = target
-		if(MR.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian, /obj/item/clothing/head/tinfoil), slot_head))
-			to_chat(src, "Interference is disrupting the connection with the target mind.")
-			return 0
+	if(target.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian,/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+		to_chat(src, "Interference is disrupting the connection with the target mind.")
+		return 0
 	return 1
 
 /mob/proc/get_personal_ambience()

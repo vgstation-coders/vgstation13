@@ -70,6 +70,7 @@
 
 	// Tells is_honorable() which special_roles to respect.
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
+	var/kick_fire_chance = 5
 
 /obj/item/weapon/gun/Destroy()
 	if(in_chamber)
@@ -466,3 +467,12 @@
 
 /obj/item/weapon/gun/proc/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
 	return
+
+/obj/item/weapon/gun/kick_act(mob/living/carbon/human/H)
+	. = ..()
+	if(prob(kick_fire_chance))
+		var/list/targets = list()
+		for(var/turf/t in oview(6))
+			targets += t
+		var/target = pick(targets)
+		src.Fire(target,H,0,0,1)

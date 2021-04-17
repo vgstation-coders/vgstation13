@@ -192,6 +192,9 @@
 	return TRUE
 
 /datum/teleport/instant/science/teleportChecks(var/ignore_jamming = FALSE)
+	if(istype(teleatom, /obj/effect/effect/sparks)) // Don't teleport sparks or the server dies
+		return FALSE
+	
 	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE
@@ -232,8 +235,5 @@
 			if(MM.locked_to_z != FALSE && destination.z != MM.locked_to_z)
 				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return FALSE
-
-	if(!isemptylist(recursive_type_check(teleatom, /obj/item/clothing/head/tinfoil)))
-		return FALSE
 
 	return TRUE

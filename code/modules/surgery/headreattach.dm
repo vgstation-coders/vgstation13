@@ -197,7 +197,7 @@
 		B.brainmob.mind.transfer_to(target)
 	target.languages = B.brainmob.languages
 	target.default_language = B.brainmob.default_language
-
+	target.init_language = target.default_language
 	affected.attach(B)
 	target.decapitated = null
 

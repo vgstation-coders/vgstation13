@@ -58,7 +58,7 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
-	var/potency = 0
+	var/potency = 20
 
 /obj/item/weapon/bananapeel/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
@@ -74,35 +74,6 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
-
-/obj/item/weapon/soap
-	name = "soap"
-	desc = "A cheap bar of soap. Doesn't smell."
-	gender = PLURAL
-	icon = 'icons/obj/items.dmi'
-	icon_state = "soap"
-	w_class = W_CLASS_TINY
-	siemens_coefficient = 0 //no conduct
-	throwforce = 0
-	throw_speed = 4
-	throw_range = 20
-	flags = FPRINT | NO_ATTACK_MSG
-
-/obj/item/weapon/soap/nanotrasen
-	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
-	icon_state = "soapnt"
-
-/obj/item/weapon/soap/deluxe
-	desc = "A deluxe Waffle Co. brand bar of soap. Smells of condoms."
-	icon_state = "soapdeluxe"
-
-/obj/item/weapon/soap/syndie
-	desc = "An untrustworthy bar of soap. Smells of fear."
-	icon_state = "soapsyndie"
-
-/obj/item/weapon/soap/holo
-	name = "UV sterilizer"
-	desc = "This shouldn't exist."
 
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
@@ -649,6 +620,7 @@
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
 		armed = 0
 		anchored = FALSE
+		update_icon()
 	..()
 
 /obj/item/weapon/beartrap/Crossed(AM)
@@ -1122,6 +1094,14 @@
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "ectoplasm"
 	w_type = RECYK_BIOLOGICAL
+
+
+/obj/item/weapon/ectoplasm/New(turf/loc, var/alt_color)
+	..()
+	if (alt_color)
+		var/icon/color_icon = icon(icon,"[icon_state]_blank")
+		color_icon.Blend(alt_color, ICON_ADD)
+		icon = color_icon
 
 /////////Random shit////////
 

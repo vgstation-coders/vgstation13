@@ -62,7 +62,7 @@
 			return equip_guns(R)
 
 /mob/living/carbon/human/proc/equip_guns(var/datum/role/R)
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag", "lolly_lobber")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser", "lasmusket", "retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag", "lolly_lobber")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -72,6 +72,8 @@
 			new /obj/item/weapon/gun/energy/gun(get_turf(src))
 		if("laser")
 			new /obj/item/weapon/gun/energy/laser(get_turf(src))
+		if("lasmusket")
+			new /obj/item/weapon/gun/energy/lasmusket/preloaded(get_turf(src))
 		if("retro")
 			new /obj/item/weapon/gun/energy/laser/retro(get_turf(src))
 		if("laserak")
@@ -430,7 +432,7 @@
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 		if("alchemy")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
-	 
+
 	var/receive_absorb = !(locate(/spell/targeted/absorb) in spell_list)
 
 	if(receive_absorb)

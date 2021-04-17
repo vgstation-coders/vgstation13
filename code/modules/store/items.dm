@@ -30,13 +30,19 @@
 	name = "Fast-Food Menu"
 	desc = "The normal sized average american meal. Courtesy of Nanotrasen."
 	typepath = /obj/item/weapon/storage/bag/food/menu1
-	cost = 25
+	cost = 40
 
 /datum/storeitem/menu2
 	name = "Fast-Food Menu (XL)"
 	desc = "For when you're 100% starved and want to become fat in 1 easy step."
 	typepath = /obj/item/weapon/storage/bag/food/menu2
-	cost = 50
+	cost = 75
+
+/datum/storeitem/diy_soda
+	name = "Dr. Pecker's DIY Soda"
+	desc = "A fun and tasty chemical experiment for the curious child! Vials and beakers included."
+	typepath = /obj/item/weapon/storage/box/diy_soda
+	cost = 45
 
 /////////////////////////////
 // Tools
@@ -52,6 +58,12 @@
 	desc = "Makes gifts 200% more touching."
 	typepath = /obj/item/stack/package_wrap/gift
 	cost = 5
+
+/datum/storeitem/cheap_soap
+	name = "Soap"
+	desc = "Guarranted for at least 20 scrubbings."
+	typepath = /obj/item/weapon/soap/nanotrasen/planned_obsolescence
+	cost = 30
 
 /datum/storeitem/swiss_army_knife
 	name = "Swiss Army Knife"
@@ -124,6 +136,24 @@
 /////////////////////////////
 // Clothing
 /////////////////////////////
+/datum/storeitem/sterilemask
+	name = "Face Mask"
+	desc = "Protects you from both contracting or spreading airborne diseases, at the cost of looking like a Virologist"
+	typepath = /obj/item/clothing/mask/surgical
+	cost = 5
+
+/datum/storeitem/sterilemask_black
+	name = "Black Face Mask"
+	desc = "A more sober face mask. Offers the same protection as a regular face mask."
+	typepath = /obj/item/clothing/mask/surgical/black
+	cost = 20
+
+/datum/storeitem/sterilemask_colorful
+	name = "Colorful Face Mask"
+	desc = "A fancier face mask. Offers the same protection as a regular face mask."
+	typepath = /obj/item/clothing/mask/surgical/colorful
+	cost = 20
+
 /datum/storeitem/robotnik_labcoat
 	name = "Robotnik's Research Labcoat"
 	desc = "Join the empire and display your hatred for woodland animals."

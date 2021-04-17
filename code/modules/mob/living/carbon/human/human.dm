@@ -160,6 +160,7 @@
 	movement_speed_modifier = species.move_speed_multiplier
 
 	default_language = get_default_language()
+	init_language = default_language
 
 	create_reagents(1000)
 
@@ -175,6 +176,7 @@
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPCHEM_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPHOLY_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
@@ -229,6 +231,12 @@
 	update_colour(0)
 
 	update_mutantrace()
+
+	lazy_register_event(/lazy_event/on_equipped, src, .proc/update_name)
+	lazy_register_event(/lazy_event/on_unequipped, src, .proc/update_name)
+
+/mob/living/carbon/human/proc/update_name()
+	name = get_visible_name()
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
@@ -385,7 +393,7 @@
 	if( head && head.is_hidden_identity())
 		return get_id_name("Unknown")	//Likewise for hats
 	var/datum/role/vampire/V = isvampire(src)
-	if(V && (VAMP_SHADOW in V.powers) && V.ismenacing)
+	if(V && (/datum/power/vampire/shadow in V.current_powers) && V.ismenacing)
 		return get_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")
@@ -1574,7 +1582,7 @@
 		return 1
 
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
-	if(T && T.amount >= 2)
+	if(T && T.amount >= -1)
 		return 1
 
 	return 0
@@ -1813,6 +1821,7 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1951,6 +1960,13 @@ mob/living/carbon/human/isincrit()
 		crawlcounter = 1
 	else
 		crawlcounter++
+	for(var/obj/effect/overlay/puddle/P in target)
+		if(P.wet == TURF_WET_WATER && prob(20))
+			to_chat(src, "<span class='warning'>Your hands slip and make no progress!</span>")
+			return FALSE
+		if(P.wet == TURF_WET_LUBE && prob(75))
+			to_chat(src, "<span class='warning'>You lose your grip on the extremely slippery floor and make no progress!</span>")
+			return FALSE
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
 	delayNextMove(crawldelay, additive = 1)
 

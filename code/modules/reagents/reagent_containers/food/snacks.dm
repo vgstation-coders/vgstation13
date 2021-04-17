@@ -1248,7 +1248,7 @@
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
-		playsound(get_turf(src), pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
+		playsound(src, pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
@@ -4677,16 +4677,17 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet
 	name = "\improper Sweet"
-	desc = "Comes in many different and unique flavours! One of the flagship products of the Getmore Chocolate Corp. Not suitable for children aged 0-3. Do not consume around open flames or expose to radiation. Expiration date: 2921."
+	desc = "Comes in many different and unique flavours! One of the flagship products of the Getmore Chocolate Corp. Not suitable for children aged 0-3. Do not consume around open flames or expose to radiation. Flavors may not match the description. Expiration date: 2921."
 	food_flags = FOOD_SWEET
 	icon = 'icons/obj/candymachine.dmi'
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(SUGAR, 2)
+	var/list/possible_reagents=list(NUTRIMENT=5, SUGAR=10, CORNOIL=5, BANANA=15, LIQUIDBUTTER=5, NUTRIMENT=10, CARAMEL=10, LEMONJUICE=10, APPLEJUICE=10, WATERMELONJUICE=10, GRAPEJUICE=10, ORANGEJUICE=10, TOMATOJUICE=10, LIMEJUICE=10, CARROTJUICE=10, BERRYJUICE=10, GGRAPEJUICE=10, POTATO=10, PLUMPHJUICE=10, COCO=10, SPRINKLES=10, NUTRIMENT=20)
 	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorice","\improper apple","\improper cranberry")
+	var/reagent=pick(possible_reagents)
+	reagents.add_reagent(reagent, possible_reagents[reagent])
 	var/variety = rand(1,flavors.len) //MORE SWEETS MAYBE IF YOU SPRITE IT
 	icon_state = "sweet[variety]"
 	name = "[flavors[variety]] sweet"
@@ -4697,7 +4698,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange/New()
 	..()
 	var/list/possible_reagents=list(ZOMBIEPOWDER=5, MINDBREAKER=5, PACID=5, HYPERZINE=5, CHLORALHYDRATE=5, TRICORDRAZINE=5, DOCTORSDELIGHT=5, MUTATIONTOXIN=5, MERCURY=5, ANTI_TOXIN=5, SPACE_DRUGS=5, HOLYWATER=5,  RYETALYN=5, CRYPTOBIOLIN=5, DEXALINP=5, HAMSERUM=1,
-	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5)
+	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5, WATER=5, DIABEETUSOL =5, SACID=5, LITHIUM=5, CHILLWAX=5, OXYCODONE=5, VOMIT=5, BLEACH=5, HEARTBREAKER=5, NANITES=5, CORNOIL=5, NOVAFLOUR=5, DEGENERATECALCIUM = 5, COLORFUL_REAGENT = 5, LIQUIDBUTTER = 5)
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
 

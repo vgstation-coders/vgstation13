@@ -242,7 +242,7 @@ var/global/list/crate_mimic_disguises = list(\
 		visible_message("<span class='danger'>\The [src] roars in rage!</span>")
 
 /mob/living/simple_animal/hostile/mimic/crate/bullet_act(obj/item/projectile/P, def_zone)
-	..()
+	. = ..()
 
 	if(P.damage > 0) //The projectile isn't a dummy
 		if(!angry)

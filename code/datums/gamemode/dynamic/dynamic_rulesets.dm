@@ -46,7 +46,7 @@
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		mode = ticker.mode
 	else
-		//message_admins("A dynamic ruleset was created but server isn't on Dynamic Mode!")
+		message_admins("A dynamic ruleset was created but server isn't on Dynamic Mode!")
 		qdel(src)
 
 /datum/dynamic_ruleset/roundstart//One or more of those drafted at roundstart
@@ -57,11 +57,12 @@
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
-
 /datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat_level=0)
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
 	//If your rule has extra checks, such as counting security officers, do that in ready() instead
 	if (!map.map_ruleset(src))
+		message_admins("Dynamic Mode: Skipping [name] due to map blacklist.")
+		log_admin("Dynamic Mode: Skipping [name] due to map blacklist")
 		return 0
 
 	if (player_list.len >= mode.high_pop_limit)
@@ -179,7 +180,7 @@
 		if(!applicants || applicants.len <= 0)
 			log_admin("DYNAMIC MODE: [name] received no applications.")
 			message_admins("DYNAMIC MODE: [name] received no applications.")
-			mode.refund_threat(cost)
+			mode.refund_midround_threat(cost)
 			mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (no applications)"
 			mode.executed_rules -= src
 			return
@@ -225,6 +226,14 @@
 	candidates -= M
 	return M
 
+////////////////////////////////////////////////////////////////////////
+
+/datum/forced_ruleset
+	var/name = ""
+	var/ruleType
+	var/calledBy
+
+
 //////////////////////////////////////////////
 //                                          //
 //           ROUNDSTART RULESETS            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,6 +245,7 @@
 	var/cand = candidates.len
 	var/a = 0
 	var/b = 0
+	var/b1 = 0
 	var/c = 0
 	var/c1 = 0
 	var/d = 0
@@ -248,9 +258,13 @@
 			candidates.Remove(P)
 			a++
 			continue
-		if (!P.client.desires_role(role_pref) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
+		if (!P.client.desires_role(role_pref))//are they willing?
 			candidates.Remove(P)
 			b++
+			continue
+		else if (jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they not antag-banned?
+			candidates.Remove(P)
+			b1++//we only count banned ones if they actually wanted to play the role
 			continue
 		if ((protected_from_jobs.len > 0) && P.mind.assigned_role && (P.mind.assigned_role in protected_from_jobs))
 			var/probability = initial(role_category.protected_traitor_prob)
@@ -267,8 +281,8 @@
 			candidates.Remove(P)
 			e++
 			continue
-	message_admins("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
-	log_admin("Dynamic Mode: Trimming [name]'s candidates: [candidates.len] remaining out of [cand] ([a],[b],[c] ([c1]),[d],[e])")
+	message_admins("DYNAMIC MODE: [name] has [candidates.len] valid candidates out of [cand] players ([a ? "[a] disconnected, ":""][b ? "[b] didn't want the role, ":""][b1 ? "[b1] wanted the role but are banned from it, ":""][c1 ? "[c1] out of [c] were protected from the role, " : ""][d ? "[d] were restricted from the role, " : ""][e ? "[e] didn't pick the job necessary for the role" : ""])")
+	log_admin("DYNAMIC MODE: [name] has [candidates.len] valid candidates out of [cand] players ([a ? "[a] disconnected, ":""][b ? "[b] didn't want the role, ":""][b1 ? "[b1] wanted the role but are banned from it, ":""][c1 ? "[c1] out of [c] were protected from the role, " : ""][d ? "[d] were restricted from the role, " : ""][e ? "[e] didn't pick the job necessary for the role" : ""])")
 
 /datum/dynamic_ruleset/roundstart/delayed/trim_candidates()
 	if (ticker && ticker.current_state <  GAME_STATE_PLAYING)
@@ -297,7 +311,6 @@
 			continue
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
-	message_admins("[name]: [length(candidates)] candidates")
 	if (!forced)
 		if(!check_enemy_jobs(FALSE))
 			return 0

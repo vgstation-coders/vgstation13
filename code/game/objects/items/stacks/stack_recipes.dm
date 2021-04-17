@@ -326,6 +326,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	new/datum/stack_recipe("spring", /obj/item/spring, 					1, time = 25, one_per_turf = 0, on_floor = 0),
+	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	null,
 	blacksmithing_recipes,
 	)
@@ -345,6 +346,13 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	null,
+	new/datum/stack_recipe_list("Vehicle Beds",list(
+		new/datum/stack_recipe("race car bed",                      /obj/structure/bed/racecar,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe("classic race car bed",                      /obj/structure/bed/racecar/classic,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe("shuttle bed",                      /obj/structure/bed/racecar/shuttle,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe("fire truck bed",                      /obj/structure/bed/racecar/firetruck,                    2, one_per_turf = 1, on_floor = 1),
+		)),
 	)
 
 /* ====================================================================

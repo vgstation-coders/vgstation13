@@ -1,7 +1,7 @@
 /spell/targeted/absorb
 	name = "Absorb"
 	desc = "This spell allows you to absorb the magical abilities from fallen wizards. You must be standing over their lifeless or mutilated body in order for the spell to work."
-	abbreviation = "DG"
+	abbreviation = "AB"
 	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"
@@ -39,7 +39,7 @@
 					for(var/spell/targetspell in C.spell_list)
 						canAbsorb = TRUE
 						for(var/spell/holderspell in L.spell_list)
-							if(targetspell.user_type == USER_TYPE_VAMPIRE || targetspell.user_type == USER_TYPE_CULT  || targetspell.user_type == USER_TYPE_MALFAI || targetspell.user_type == USER_TYPE_GENETIC)
+							if(targetspell.user_type != USER_TYPE_WIZARD && targetspell.user_type != USER_TYPE_SPELLBOOK)
 								continue
 							if(targetspell.type == holderspell.type)
 								canAbsorb = FALSE
@@ -50,7 +50,7 @@
 								if(holderspell.can_improve(Sp_SPEED))
 									to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have quickened [targetspell.name]!</span>")
 									holderspell.apply_upgrade(Sp_SPEED)
-						*/			hasAbsorbed = TRUE
+									hasAbsorbed = TRUE	*/
 						if(canAbsorb)
 							to_chat(target, "<span class='warning'>You feel the magical energy being drained from you!</span>")
 							to_chat(target, "<span class='warning'>You forget how to cast [targetspell.name]!</span>")

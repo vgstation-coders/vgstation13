@@ -942,7 +942,7 @@ var/list/arcane_tomes = list()
 		takeDamage(O.throwforce)
 
 /obj/item/weapon/melee/soulblade/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	takeDamage(P.damage)
 
 /obj/item/weapon/melee/soulblade/proc/capture_shade(var/mob/living/simple_animal/shade/target, var/mob/user)
@@ -1195,6 +1195,7 @@ var/list/arcane_tomes = list()
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
+	body_parts_visible_override = 0
 
 
 /obj/item/clothing/head/helmet/space/cult/get_cult_power()
@@ -1286,7 +1287,7 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
-	var/datum/role/cultist/newCultist = new
+	var/datum/role/cultist/chief/newCultist = new
 	newCultist.AssignToRole(user.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
@@ -1395,6 +1396,64 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/gamer
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
+
+///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
+/obj/item/weapon/handcuffs/cult
+	name = "ghastly bindings"
+	desc = ""
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "cultcuff"
+	restraint_resist_time = 60 SECONDS
+	mech_flags = MECH_SCAN_FAIL
+	origin_tech = null
+	var/datum/role/cultist/gaoler
+
+/obj/item/weapon/handcuffs/cult/New()
+	..()
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.OnPostSetup()
+
+	cult.bindings += src
+
+/obj/item/weapon/handcuffs/cult/Destroy()
+	..()
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.OnPostSetup()
+
+	cult.bindings -= src
+
+/obj/item/weapon/handcuffs/cult/examine(var/mob/user)
+	..()
+	if (!isliving(loc))//shouldn't happen unless they get admin spawned
+		to_chat(user, "<span class='info'>The tentacles flailing out of this egg-like object seem like they're trying to grasp at their surroundings.</span>")
+	else
+		var/mob/living/carbon/C = loc
+		if (C.handcuffed == src)
+			to_chat(user, "<span class='info'>These restrict your arms and inflict tremendous pain upon both your body and psyche. But given some time you should be able to break them.</span>")
+		else
+			to_chat(user, "<span class='info'>\The [C] seems to be in pain as these restrict their arms.</span>")
+
+/obj/item/weapon/handcuffs/cult/on_restraint_removal(var/mob/living/carbon/C)
+	C.pain_shock_stage = max(C.pain_shock_stage-50, 0)
+	spawn(1)
+		var/turf/T = get_turf(src)
+		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		anim(target = T, a_icon = 'icons/obj/cult.dmi', flick_anim = "cuffbreak")
+		if (gaoler && gaoler.antag && gaoler.antag.current)
+			to_chat(gaoler.antag.current, "<span class='sinister'>Bindings you placed upon someone have been shattered</span>")
+		qdel(src)
+
+/obj/item/weapon/handcuffs/cult/on_restraint_apply(var/mob/living/carbon/C)
+	C.pain_shock_stage = max(C.pain_shock_stage, 100)
+	to_chat(C, "<span class='danger'>[pick("It hurts so much!", "You really need some painkillers.", "Dear god, the pain!")]</span>")
+
+
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 

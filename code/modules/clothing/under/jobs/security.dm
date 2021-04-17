@@ -21,6 +21,7 @@
 	icon_state = "hosblueclothes"
 	item_state = "ba_suit"
 	_color = "hosblueclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/headofsecurity_navy
 	name = "\improper HoS' navy dress uniform"
@@ -28,6 +29,7 @@
 	icon_state = "hosdnavyclothes"
 	item_state = "jensensuit"
 	_color = "hosdnavyclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/headofsecurity_tan
 	name = "\improper HoS' tan dress uniform"
@@ -35,9 +37,11 @@
 	icon_state = "hostanclothes"
 	item_state = "ba_suit"
 	_color = "hostanclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/headofsecurity_navy/trimmed
 	_color = "hosdnavyclothestrimmed"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/warden_blue
 	name = "warden's blue dress uniform"
@@ -45,6 +49,7 @@
 	icon_state = "wardenblueclothes"
 	item_state = "ba_suit"
 	_color = "wardenblueclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/warden_navy
 	name = "warden's navy dress uniform"
@@ -52,6 +57,7 @@
 	icon_state = "wardendnavyclothes"
 	item_state = "jensensuit"
 	_color = "wardendnavyclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/warden_tan
 	name = "warden's tan dress uniform"
@@ -59,6 +65,7 @@
 	icon_state = "wardentanclothes"
 	item_state = "ba_suit"
 	_color = "wardentanclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/officer_blue
 	name = "officer's blue dress uniform"
@@ -66,6 +73,7 @@
 	icon_state = "officerblueclothes"
 	item_state = "ba_suit"
 	_color = "officerblueclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/officer_navy
 	name = "officer's navy dress uniform"
@@ -73,6 +81,7 @@
 	icon_state = "officerdnavyclothes"
 	item_state = "jensensuit"
 	_color = "officerdnavyclothes"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/secformal/officer_tan
 	name = "officer's tan dress uniform"
@@ -80,6 +89,7 @@
 	icon_state = "officertanclothes"
 	item_state = "ba_suit"
 	_color = "officertanclothes"
+	species_fit = list(INSECT_SHAPED)
 
  /*
  * Normalwear
@@ -135,7 +145,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/collar
 	name = "security officer's uniform"
@@ -146,6 +156,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
+	species_fit = list(INSECT_SHAPED)
 
 /*
  * Detective
@@ -163,10 +174,10 @@
 
 /obj/item/clothing/under/det/noir
 	desc = "This suit's stayed with you for years, like an old friend. Sure, it's seen better days, but it ain't shabby; after all, you can afford a blemish on your character, but not on your clothes."
-	icon_state = "sl_suit"
+	icon_state = "detective_noir"
 	item_state = "detective_noir"
 	_color = "detective_noir"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/det_hat
 	name = "hat"
@@ -188,7 +199,7 @@
 /obj/item/clothing/under/rank/head_of_security
 	desc = "It's a jumpsuit worn by those few with the dedication to achieve the position of \"Head of Security\". It has additional armor to protect the wearer."
 	name = "head of security's jumpsuit"
-	icon_state = "hos"
+	icon_state = "hosred"
 	item_state = "r_suit"
 	_color = "hosred"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -205,6 +216,13 @@
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	siemens_coefficient = 0.6
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/suit/armor/hos/surveyor
+	name = "surveyor coat"
+	desc = "Man is by nature a curious animal. You can hide the truth from him temporarily, but not forever."
+	icon_state = "surveyorcoat"
+	item_state = "surveyorcoat"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 //Jensen cosplay gear
 /obj/item/clothing/under/rank/head_of_security/jensen
@@ -266,4 +284,5 @@
 	_color = "metrocop"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
+	species_fit = list(INSECT_SHAPED)
 

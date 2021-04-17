@@ -162,7 +162,7 @@
 
 /datum/stat/role/vampire/generate_statistics(var/datum/role/vampire/V)
 	..(V)
-	for(var/datum/power/P in V.powers)
+	for(var/datum/power/P in V.current_powers)
 		powers.Add(P.type)
 	blood_total = V.blood_total
 
@@ -177,6 +177,8 @@
 	var/shuriken_thrown = 0
 	var/times_charged_sword = 0
 	var/stealth_posters_posted = 0
+
+/datum/stat/role/xenomorph
 
 /datum/stat/role/catbeast
 	var/ticks_survived = 0

@@ -198,6 +198,13 @@
 	icon_state = "com_headset"
 	item_state = "headset"
 	init_keyslot2_type = /obj/item/device/encryptionkey/headset_servsci
+	
+/obj/item/device/radio/headset/headset_iaa
+	name = "internal affairs radio headset"
+	desc = "A headset used to communicate with security and heads of staff. To access the security channel, use :s. For command, use :c."
+	icon_state = "iaa_headset"
+	item_state = "headset"
+	init_keyslot2_type = /obj/item/device/encryptionkey/headset_iaa
 
 /obj/item/device/radio/headset/headset_earmuffs
 	name = "headset earmuffs"
@@ -205,6 +212,11 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "headset_earmuffs"
 	item_state = "earmuffs"
+
+/obj/item/device/radio/headset/headset_earmuffs/syndie
+	origin_tech = Tc_SYNDICATE + "=3"
+	syndie = 1
+	init_keyslot1_type = /obj/item/device/encryptionkey/syndicate
 
 /obj/item/device/radio/headset/deathsquad
 	name = "Deathsquad headset"

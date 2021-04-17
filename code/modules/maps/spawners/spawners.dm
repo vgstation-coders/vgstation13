@@ -920,6 +920,7 @@
 	icon_state = "mob_wolf"
 	amount = 7
 	to_spawn = list(
+		/mob/living/simple_animal/hostile/wolf/pliable,
 		/mob/living/simple_animal/hostile/wolf,
 		/mob/living/simple_animal/hostile/wolf,
 		/mob/living/simple_animal/hostile/wolf,

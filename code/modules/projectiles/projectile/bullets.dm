@@ -871,48 +871,29 @@ obj/item/projectile/bullet/suffocationbullet
 	if(get_turf(src))
 		playsound(src, 'sound/effects/slosh.ogg', 20, 1)
 
-/obj/item/projectile/bullet/buckshot
+/obj/item/projectile/bullet/pellet
 	name = "buckshot pellet"
 	icon_state = "buckshot"
 	damage = 10
 	penetration = 0
 	rotate = 0
+
+/obj/item/projectile/bullet/buckshot
+	name = "buckshot pellet"
+	icon_state = "buckshot"
 	var/variance_angle = 20
 	var/total_amount_to_fire = 9
-	var/type_to_fire = /obj/item/projectile/bullet/buckshot
-	var/is_child = 0
-
-/obj/item/projectile/bullet/buckshot/New(atom/T, var/C = 0)
-	..(T)
-	is_child = C
+	var/type_to_fire = /obj/item/projectile/bullet/pellet
 
 /obj/item/projectile/bullet/buckshot/OnFired()
-	if(!is_child)
-		for(var/I = 1; I <=total_amount_to_fire-1; I++)
-			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			B.damage = src.damage
-			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
-	..()
+	for(var/I = 1; I <=total_amount_to_fire; I++)
+		var/obj/item/projectile/P = new type_to_fire(src.loc)
+		P.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
+	bullet_die() // otherwise the buckshot bullet is an extra projectile in addition to the pellets.
 
 /obj/item/projectile/bullet/buckshot/admin
 	name = "admin buckshot pellet"
-	icon_state = "buckshot"
-	damage = 101
-	penetration = 20
-	rotate = 0
 	type_to_fire = /obj/item/projectile/bullet/hecate
-
-/obj/item/projectile/bullet/buckshot/admin/New(atom/T, var/C = 0)
-	..(T)
-	is_child = C
-
-/obj/item/projectile/bullet/buckshot/admin/OnFired()
-	if(!is_child)
-		for(var/I = 1; I <=total_amount_to_fire-1; I++)
-			var/obj/item/projectile/bullet/hecate/B = new type_to_fire(src.loc, 1)
-			B.damage = src.damage
-			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
-	..()
 
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
@@ -953,7 +934,6 @@ obj/item/projectile/bullet/suffocationbullet
 /obj/item/projectile/bullet/buckshot/bullet_storm
 	name = "tiny pellet"
 	total_amount_to_fire = 100
-	type_to_fire = /obj/item/projectile/bullet/buckshot/bullet_storm
 	custom_impact = 1
 	embed_message = FALSE
 	variance_angle = 50

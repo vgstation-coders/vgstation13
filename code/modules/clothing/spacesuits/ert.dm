@@ -11,6 +11,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
+	body_parts_visible_override = 0
 	var/id_suffix = "ERT_empty"
 
 /obj/item/clothing/head/helmet/space/ert/equipped(var/mob/M)

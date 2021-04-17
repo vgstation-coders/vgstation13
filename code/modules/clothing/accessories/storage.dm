@@ -89,6 +89,17 @@
 	icon_state = "vest_brown"
 	_color = "vest_brown"
 	storage_slots = 5
+	
+/obj/item/clothing/accessory/storage/fannypack
+	name = "fanny pack"
+	desc = "Extremely lame, but it's nice to have an extra pocket."
+	icon_state = "fannypack"
+	_color = "fannypack"
+	storage_slots = 1
+	
+/obj/item/clothing/accessory/storage/fannypack/preloaded/assistant/New()
+	..()
+	new /obj/item/clothing/accessory/assistantcard(hold)
 
 /obj/item/clothing/accessory/storage/bandolier
 	name = "bandolier"

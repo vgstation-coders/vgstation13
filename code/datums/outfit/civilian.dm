@@ -17,10 +17,10 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = list(
 				"Assistant" = /obj/item/clothing/under/color/grey,
-				"Technical Assistant" = /obj/item/clothing/under/color/yellow,
-				"Medical Intern" = /obj/item/clothing/under/color/white,
-				"Research Assistant" = /obj/item/clothing/under/purple,
-				"Security Cadet" = /obj/item/clothing/under/color/red,
+				"Technical Assistant" = /obj/item/clothing/under/color/grey/tech,
+				"Medical Intern" = /obj/item/clothing/under/color/grey/intern,
+				"Research Assistant" = /obj/item/clothing/under/color/grey/research,
+				"Security Cadet" = /obj/item/clothing/under/color/grey/cadet,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 		),
@@ -29,10 +29,10 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = list(
 				"Assistant" = /obj/item/clothing/under/color/grey,
-				"Technical Assistant" = /obj/item/clothing/under/color/yellow,
-				"Medical Intern" = /obj/item/clothing/under/color/white,
-				"Research Assistant" = /obj/item/clothing/under/purple,
-				"Security Cadet" = /obj/item/clothing/under/color/red,
+				"Technical Assistant" = /obj/item/clothing/under/color/grey/tech,
+				"Medical Intern" = /obj/item/clothing/under/color/grey/intern,
+				"Research Assistant" = /obj/item/clothing/under/color/grey/research,
+				"Security Cadet" = /obj/item/clothing/under/color/grey/cadet,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/assistant,
@@ -43,10 +43,10 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = list(
 				"Assistant" = /obj/item/clothing/under/color/grey,
-				"Technical Assistant" = /obj/item/clothing/under/color/yellow,
-				"Medical Intern" = /obj/item/clothing/under/color/white,
-				"Research Assistant" = /obj/item/clothing/under/purple,
-				"Security Cadet" = /obj/item/clothing/under/color/red,
+				"Technical Assistant" = /obj/item/clothing/under/color/grey/tech,
+				"Medical Intern" = /obj/item/clothing/under/color/grey/intern,
+				"Research Assistant" = /obj/item/clothing/under/color/grey/research,
+				"Security Cadet" = /obj/item/clothing/under/color/grey/cadet,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
@@ -65,6 +65,7 @@
 
 /datum/outfit/assistant/post_equip_priority(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
+	equip_accessory(H, /obj/item/clothing/accessory/storage/fannypack/preloaded/assistant, /obj/item/clothing/under, 5)
 	return ..()
 
 // -- Bartender
@@ -88,7 +89,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 		),
 		/datum/species/plasmaman/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/bartender,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/service,
@@ -96,7 +97,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/service,
 		),
 		/datum/species/vox/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/bartender,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/bartender,
@@ -352,6 +353,9 @@
 	H.fully_replace_character_name(H.real_name,pick(clown_names))
 	H.dna.real_name = H.real_name
 	mob_rename_self(H,"clown")
+	H.add_language(LANGUAGE_CLOWN)
+	to_chat(H, "<span class = 'notice'>You can perfectly paint Her colourbook blindfolded and have learned how to communicate with in the holiest of languages, honk. Praise be her Honkmother.</span>")
+
 
 /datum/outfit/clown/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
@@ -416,15 +420,31 @@
 
 /datum/outfit/mime/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
-	H.add_spell(new /spell/targeted/oathbreak/)
-	mob_rename_self(H,"mime")
-	if (H.mind)
-		H.mind.miming = MIMING_OUT_OF_CHOICE
+	if (type == /datum/outfit/mime) // A bit hacky but post_equip should always call its parent.
+		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
+		H.add_spell(new /spell/targeted/oathbreak/)
+		mob_rename_self(H,"mime")
+		H.add_language(LANGUAGE_CLOWN)
+		to_chat(H, "<span class = 'notice'>The Clown-Mime war may have ended, but you were still taught their language. You can understand clownspeak as well as speak it, but a Mime wouldn't stoop so low, right?</span>")
+		if (H.mind)
+			H.mind.miming = MIMING_OUT_OF_CHOICE
 
 /datum/outfit/mime/post_equip_priority(var/mob/living/carbon/human/H)
 	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
 	return ..()
+
+// -- Clown ling (aka fake mime)
+/datum/outfit/mime/clown_ling
+	items_to_collect = list(
+		/obj/item/weapon/bikehorn = null,
+		/obj/item/weapon/stamp/clown = null,
+		/obj/item/clothing/under/rank/clown = null,
+		/obj/item/clothing/mask/gas/clown_hat/ling_mask = null,
+	)
+
+/datum/outfit/mime/clown_ling/post_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	mob_rename_self(H,"clown")
 
 // -- Janitor
 
@@ -561,9 +581,9 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset,
-				"Bridge Officer" = /obj/item/device/radio/headset/headset_com,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset,
+				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
+				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
@@ -590,9 +610,9 @@
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset,
-				"Bridge Officer" = /obj/item/device/radio/headset/headset_com,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset,
+				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
+				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
@@ -614,9 +634,9 @@
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset,
-				"Bridge Officer" = /obj/item/device/radio/headset/headset_com,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset,
+				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
+				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,

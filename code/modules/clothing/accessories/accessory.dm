@@ -82,7 +82,7 @@
 		. = list()
 		for(var/obj/item/clothing/accessory/accessory in accessories)
 			. += "[bicon(accessory)] \a [accessory]"
-		return " It has [english_list(.)]."
+		return " It has [counted_english_list(.)]."
 
 /obj/item/clothing/accessory/pinksquare
 	name = "pink square"
@@ -117,6 +117,13 @@
 	desc = "A neosilk clip-on tie. This one is disgusting."
 	icon_state = "horribletie"
 	_color = "horribletie"
+	accessory_exclusion = TIE
+
+/obj/item/clothing/accessory/tie/bolo
+	name = "bolo tie"
+	desc = "Feels more like a millstone."
+	icon_state = "bolotie"
+	_color = "bolotie"
 	accessory_exclusion = TIE
 
 /obj/item/clothing/accessory/stethoscope
@@ -297,6 +304,46 @@
 	if(isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
 
+/obj/item/clothing/accessory/assistantcard
+	name = "assistant card"
+	desc = "This nanopaper slip marks the holder as HELPFUL."
+	icon_state = "assistantcard"
+	_color = "assistantcard"
+	slot_flags = SLOT_BELT
+	var/stored_name = null
+	starting_materials = list(MAT_PLASTIC = 50)
+	w_type = RECYK_MISC
+
+/obj/item/clothing/accessory/assistantcard/attack_self(mob/user as mob)
+	if(!stored_name)
+		user.visible_message("<span class='notice'>[user] displays their official assistant card.\nIt reads: Here To Help.</span>","<span class='notice'>You display your official assistant card.\nIt reads: Here To Help.</span>")
+		return
+	if(isliving(user))
+		user.visible_message("<span class='notice'>[user] displays their official assistant card.\nIt reads: [stored_name], Here To Help.</span>","<span class='notice'>You display your official assistant card.\nIt reads: [stored_name], Here To Help.</span>")
+
+/obj/item/clothing/accessory/assistantcard/attackby(var/obj/item/O as obj, var/mob/user as mob)
+
+	if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+
+		var/obj/item/weapon/card/id/id_card = null
+
+		if(istype(O, /obj/item/weapon/card/id))
+			id_card = O
+		else
+			var/obj/item/device/pda/pda = O
+			id_card = pda.id
+
+		to_chat(user, "You imprint your ID details onto the card.")
+		stored_name = id_card.registered_name
+		name = "assistant card ([stored_name])"
+		desc = "This nanopaper slip marks [stored_name] as HELPFUL."
+		return
+	..()
+
+/obj/item/clothing/accessory/assistantcard/attack(mob/living/carbon/human/M, mob/living/user)
+	if(isliving(user))
+		user.visible_message("<span class='notice'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='notice'>You invade [M]'s personal space, thrusting [src] into their face insistently. You're here to help.</span>")
+
 /obj/item/clothing/accessory/lasertag
 	name = "laser tag vest"
 	desc = "A vest for player laser tag."
@@ -338,6 +385,37 @@
 		source_vest = null
 	qdel(src)
 
+
+/obj/item/clothing/accessory/jinglebells
+	name = "jingle bells"
+	desc = "A festive jingley bell, can be attached to shoes!"
+	icon_state = "jinglebells"
+	item_state = "jinglebells"
+	_color =  "jinglebells"
+
+/obj/item/clothing/accessory/jinglebells/pickup(mob/user)
+	user.callOnFace["\ref[src]"] = "jingle"
+	jingle()
+
+/obj/item/clothing/accessory/jinglebells/dropped(mob/user)
+	user.callOnFace -= "\ref[src]"
+
+/obj/item/clothing/accessory/jinglebells/proc/jingle()
+	var/turf/T = get_turf(src)
+	playsound(T, "jinglebell", 50, 1)
+
+/obj/item/clothing/accessory/jinglebells/can_attach_to(obj/item/clothing/C)
+	return istype(C, /obj/item/clothing/shoes)
+
+/obj/item/clothing/accessory/jinglebells/on_attached(obj/item/clothing/shoes/jingleshoe)
+	..()
+	attached_to = jingleshoe
+	jingleshoe.step_sound = "jinglebell"
+
+/obj/item/clothing/accessory/jinglebells/on_removed(mob/user)
+	var/obj/item/clothing/shoes/shoes_attached_to = attached_to
+	shoes_attached_to.step_sound = null
+	..()
 
 /obj/item/clothing/accessory/rad_patch
 	name = "radiation detection patch"
@@ -413,3 +491,11 @@
 		return istype(C, /obj/item/clothing/under)
 	else
 		return FALSE
+
+// -- Voter pin
+
+/obj/item/clothing/accessory/voter_pin
+	name = "voter pin"
+	desc = "This little pin proves the holder takes their civic duty very seriously."
+	icon_state = "voting_pin"
+	_color = "voting_pin"

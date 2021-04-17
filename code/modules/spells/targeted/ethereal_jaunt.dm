@@ -158,7 +158,7 @@
 
 /spell/targeted/ethereal_jaunt/shift/alt
 	desc = "Vibrate through the veil for about 5 seconds, letting you move around freely through any obstacle."
-	charge_max = 170
+	charge_max = 150
 	hud_state = "const_phase"
 	enteranim = "wraith2_phaseenter"
 	exitanim = "wraith2_phaseexit"

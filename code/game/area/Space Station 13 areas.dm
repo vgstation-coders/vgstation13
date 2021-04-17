@@ -436,13 +436,18 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Vox Skipjack"
 	icon_state = "yellow"
 	requires_power = 0
+	dynamic_lighting = 1
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship
 	name = "\improper Lightspeed Ship"
 	requires_power = 1
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship/start
-	icon_state = "yellow"
+	icon_state = "firingrange"
 
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
@@ -1919,6 +1924,13 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Planet Surface"
 	icon_state = "sno2"
 
+/area/surface/snow/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 39)
+			new /obj/structure/geyser(T)
+		else
+			new /obj/structure/geyser/vent(T)
+
 /area/surface/blizzard
 	name = "The Blizzard"
 	icon_state = "sno"
@@ -1932,6 +1944,15 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Junk Yard"
 	icon_state = "disposal"
 	construction_zone = FALSE
+
+/area/surface/forest/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 59)
+			new /obj/structure/geyser(T)
+		if (60 to 79)
+			new /obj/structure/geyser/unstable(T)
+		else
+			new /obj/structure/geyser/vent(T)
 
 /area/surface/forest/deer
 	name = "\improper Enclosed Forest"
@@ -1953,6 +1974,15 @@ proc/process_adminbus_teleport_locs()
 /area/surface/mine
 	name = "\improper Surface Mine"
 	icon_state = "mine"
+
+/area/surface/outer/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 39)
+			new /obj/structure/geyser(T)
+		if (40 to 79)
+			new /obj/structure/geyser/unstable(T)
+		else
+			new /obj/structure/geyser/critical(T)
 
 /area/surface/outer/nw
 	name = "\improper Northwest Reaches"

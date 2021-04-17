@@ -78,6 +78,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if(M_REGEN in mutations)
 					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
+				if (iscultist(src) && (iscultist(src) in blood_communion))//cultists that take on the blood communion tattoo get a slight blood regen bonus
+					if(M_REGEN in mutations)
+						B.volume += 0.6
+					else
+						B.volume += 0.3
 				if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
 					if(M_REGEN in mutations)
 						B.volume += 1.2
@@ -180,21 +185,32 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 		//Bleeding out
 		var/blood_max = 0
+		var/blood_factor = 1
 		for(var/datum/organ/external/temp in organs)
 			if(!(temp.status & ORGAN_BLEEDING) || temp.status & (ORGAN_ROBOT|ORGAN_PEG))
 				continue
+
 			for(var/datum/wound/W in temp.wounds) if(W.bleeding())
 				blood_max += W.damage / 4
+
 			if(temp.status & ORGAN_DESTROYED && !(temp.status & ORGAN_GAUZED) && !temp.amputated)
 				blood_max += 20 //Yer missing a fucking limb.
+
 			if (temp.open)
 				blood_max += 2 //Yer stomach is cut open
+
 			blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
+
 			if(lying)
-				blood_max = blood_max * 0.7
-			/*if(reagents.has_reagent(INAPROVALINE))
-				blood_max = blood_max * 0.7*/
-		drip(blood_max)
+				blood_factor -= 0.3
+
+			if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
+				blood_factor += 0.3
+
+			if(reagents.has_reagent(INAPROVALINE))
+				blood_factor -= 0.3
+
+		drip(blood_max * blood_factor)
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
@@ -279,6 +295,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		H = src
 	if (H?.species)
 		blood_data["blood_colour"] = H.species.blood_color
+	else if(isalien(src))
+		blood_data["blood_colour"] = ALIEN_BLOOD
+	else if(isrobot(src))
+		blood_data["blood_colour"] = ROBOT_OIL
 	else
 		blood_data["blood_colour"] = DEFAULT_BLOOD
 
@@ -313,6 +333,22 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if (data["immunity"])
 		blood_data["immunity"] = data["immunity"].Copy()
 	return blood_data
+
+/datum/reagent/blood/proc/apply_blood_data(var/list/list/blood_data)
+	data = list(
+		"viruses"		=null,
+		"blood_DNA"		=blood_data["blood_DNA"],
+		"blood_colour"	=blood_data["blood_colour"],
+		"blood_type"	=blood_data["blood_type"],
+		"resistances"	=null,
+		"trace_chem"	=blood_data["trace_chem"],
+		"virus2" 		=virus_copylist(blood_data["virus2"]),
+		"immunity" 		=null,
+		)
+	if (blood_data["resistances"])
+		data["resistances"] = blood_data["resistances"].Copy()
+	if (blood_data["immunity"])
+		data["immunity"] = blood_data["immunity"].Copy()
 
 //For humans, blood does not appear from blue, it comes from vessels.
 /mob/living/carbon/human/take_blood(obj/item/weapon/reagent_containers/container, var/amount)

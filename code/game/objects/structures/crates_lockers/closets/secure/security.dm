@@ -20,6 +20,7 @@
 		/obj/item/clothing/head/cap,
 		/obj/item/clothing/under/rank/captain,
 		/obj/item/clothing/suit/armor/vest,
+		/obj/item/clothing/suit/storage/armorjacketcapt,
 		/obj/item/weapon/cartridge/captain,
 		/obj/item/clothing/head/helmet/tactical/swat,
 		/obj/item/clothing/shoes/brown,
@@ -108,7 +109,10 @@
 		/obj/item/clothing/under/rank/head_of_security/jensen,
 		pick(
 			/obj/item/clothing/suit/armor/hos/jensen,
-			/obj/item/clothing/suit/armor/hos/sundowner),
+			/obj/item/clothing/suit/armor/hos/sundowner,
+			/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset,
+			),
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/weapon/cartridge/hos,
@@ -143,6 +147,7 @@
 			/obj/item/weapon/storage/backpack/satchel_sec,
 			/obj/item/weapon/storage/backpack/messenger/sec,
 			),
+		/obj/item/weapon/gun/projectile/glock/fancy,
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
 		/obj/item/clothing/suit/armor/vest/wardenshort,
@@ -266,6 +271,23 @@
 		/obj/item/weapon/reagent_containers/syringe/giant/chloral = 2,
 	)
 
+var/sec_key_lockup
+/obj/structure/closet/secure_closet/sec_snowmobile_keys
+	name = "Snowmobile Key Lockup"
+	req_access = list(access_brig)
+	anchored = 1
+	icon_state = "sec1"
+	icon_closed = "sec"
+	icon_locked = "sec1"
+	icon_opened = "secopen"
+	icon_broken = "secbroken"
+	icon_off = "secoff"
+
+/obj/structure/closet/secure_closet/sec_snowmobile_keys/New()
+	..()
+	if(sec_key_lockup)
+		message_admins("There was already a security key lockup. The new one will be used.")
+	sec_key_lockup = src
 
 /obj/structure/closet/secure_closet/brig
 	name = "Brig Locker"

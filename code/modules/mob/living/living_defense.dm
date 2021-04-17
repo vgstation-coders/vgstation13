@@ -66,7 +66,7 @@
 	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 100)
 		P.on_hit(src,2)
-		return 2
+		return PROJECTILE_COLLISION_BLOCKED
 	if(!P.nodamage)
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
 		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
@@ -75,7 +75,11 @@
 	if(istype(P, /obj/item/projectile/beam/lightning))
 		if(P.damage >= 200)
 			src.dust()
-	return absorb
+	return PROJECTILE_COLLISION_DEFAULT
+
+//Multiplier for damage when an object has hit.
+/mob/living/proc/thrown_defense(var/obj/O)
+	return 1
 
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
 	. = ..()
@@ -107,7 +111,7 @@
 				zone_normal_name = zone
 		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = O.throwforce*(speed/5)*O.sharpness)
 		if(armor < 100) //Stop the damage if the person is immune
-			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5))
+			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5) * thrown_defense(O))
 			apply_damage(damage, dtype, zone, armor, O.is_sharp(), O)
 
 		// Begin BS12 momentum-transfer code.
@@ -176,7 +180,20 @@
 
 //BITES
 /mob/living/bite_act(mob/living/carbon/human/M as mob)
-	var/damage = rand(1, 5)
+	if(M.head && istype(M.head,/obj/item/clothing/head))
+		var/obj/item/clothing/head/H = M.head
+		if(H.bite_action(src))
+			return //Head slot item overrode the bite
+
+	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in M.butchering_drops
+	var/damage = 0
+	var/attacktype = "bitten"
+
+	if(T?.amount > 0)
+		damage = rand(1, 5)
+	else //no teeth time to GUM
+		damage = 1
+		attacktype = "gummed"
 
 	if(M.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 		damage += 4
@@ -188,7 +205,7 @@
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	src.visible_message("<span class='danger'>\The [M] has [attacktype] \the [src]!</span>", "<span class='userdanger'>You were [attacktype] by \the [M]!</span>")
 
 	add_logs(M, src, "bit", admin=1, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)

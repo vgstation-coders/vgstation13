@@ -1,0 +1,16 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"s" = (/obj/effect/decal/warning_stripes/pathmarkers/yellow{dir = 4; pixel_y = 15; tag = "icon-pathmarker (EAST)"},/turf/unsimulated/floor/snow/asphalt,/area)
+"A" = (/obj/structure/bed/chair/wood/pew/right{name = "bench"},/turf/simulated/floor/wood,/area)
+"I" = (/obj/machinery/vending/coffee,/turf/simulated/floor/wood,/area)
+"K" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/snow/asphalt,/area)
+"M" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/wood,/area)
+"O" = (/obj/structure/bed/chair/wood/pew/left{name = "bench"},/turf/simulated/floor/wood,/area)
+"U" = (/turf/unsimulated/floor/snow/asphalt,/area)
+"W" = (/turf/simulated/wall/mineral/wood,/area)
+
+(1,1,1) = {"
+aaWWWWWWaa
+aaWIAOMWaa
+aaUUUUUKUa
+aUssssssaU
+"}

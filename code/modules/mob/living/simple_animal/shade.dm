@@ -5,7 +5,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "shade"
 	icon_living = "shade"
-	icon_dead = "shade_dead"
+	icon_dead = "shade"
 	maxHealth = 50
 	health = 50
 	speak_emote = list("hisses")
@@ -30,12 +30,14 @@
 	flying = TRUE
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
+	var/space_damage_warned = FALSE
 
 /mob/living/simple_animal/shade/New()
 	..()
 	add_language(LANGUAGE_CULT)
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
+	init_language = default_language
 
 /mob/living/simple_animal/shade/death(var/gibbed = FALSE)
 	var/turf/T = get_turf(src)
@@ -98,7 +100,12 @@
 				SB.blood++//no cap on blood regen when held by a cultist, no blood regen when held by a non-cultist (but there's a spell to take care of that)
 		else if (SB.blood < SB.maxregenblood)
 			SB.blood++
-
+	else
+		if (istype(loc,/turf/space))
+			if (!space_damage_warned)
+				space_damage_warned = TRUE
+				to_chat(src,"<span class='danger'>Your ghostly form suffers from the star's radiations. Remaining in space will slowly erase you.</span>")
+			adjustBruteLoss(1)
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	user.delayNextAttack(8)

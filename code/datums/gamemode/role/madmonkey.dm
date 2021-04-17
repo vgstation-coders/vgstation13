@@ -48,7 +48,7 @@ datum/role/madmonkey/Greet(var/greeting,var/custom)
 		else //default
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='warning'><B>You are a [name]!</B><BR>Bite crewmembers to add to your ranks!</span>")
 
-/datum/role/madmonkey/OnPostSetup()
+/datum/role/madmonkey/OnPostSetup(var/laterole = FALSE)
 	if(faction)
 		return
 	var/datum/faction/F = find_active_faction_by_type(/datum/faction/junglefever)

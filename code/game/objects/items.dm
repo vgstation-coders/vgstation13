@@ -74,6 +74,9 @@
 	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
 	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much.
 
+	var/crit_chance = CRIT_CHANCE_RANGED
+	var/crit_chance_melee = CRIT_CHANCE_MELEE
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -1212,9 +1215,8 @@ var/global/list/image/blood_overlays = list()
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
-			to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
-
-			H.apply_damage(rand(1,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+			if(H.foot_impact(src,rand(1,4)))
+				to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 		return
 
 	var/kick_dir = get_dir(H, src)
@@ -1361,7 +1363,7 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
 
-/obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
+/obj/item/proc/recyclable(var/obj/machinery/r_n_d/fabricator/F) //Called by RnD machines, for added object-specific sanity.
 	return TRUE
 
 /obj/item/proc/on_mousedrop_to_inventory_slot()

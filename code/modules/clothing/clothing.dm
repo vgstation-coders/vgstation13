@@ -388,6 +388,10 @@
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/gave_out_gifts = FALSE //for snowman animation
+
+/obj/item/clothing/head/proc/bite_action(mob/target)
+	return
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
@@ -427,6 +431,7 @@
 			src.icon_state = initial(icon_state)
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
+			sterility = initial(sterility)
 			flags = initial(flags)
 			body_parts_covered = initial(body_parts_covered)
 			to_chat(usr, "You push \the [src] back into place.")
@@ -436,6 +441,7 @@
 			to_chat(usr, "You push \the [src] out of the way.")
 			gas_transfer_coefficient = null
 			permeability_coefficient = null
+			sterility = 0
 			flags = 0
 			src.is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
@@ -458,8 +464,7 @@
 	desc = "Comfortable-looking shoes."
 	gender = PLURAL //Carn: for grammarically correct text-parsing
 
-	var/chained = 0
-	var/chaintype = null // Type of chain.
+	var/obj/item/weapon/chain = null // handcuffs attached
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
 	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
@@ -489,6 +494,10 @@
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
+
+//Called from human_defense.dm proc foot_impact
+/obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
+	return damage
 
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
 	if(user.equip_to_slot_if_possible(src, slot_shoes))

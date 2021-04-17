@@ -321,7 +321,7 @@
 	if ( tray.dead )
 		return 0
 
-	if ( !setting_ignoreEmpty && !tray.seed )
+	if ( setting_ignoreEmpty && !tray.seed )
 		return 0
 
 	if ( setting_water && tray.waterlevel <= 10 && tank && tank.reagents.total_volume >= 1 )

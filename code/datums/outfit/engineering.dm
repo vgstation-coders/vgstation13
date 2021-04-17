@@ -228,6 +228,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/engineer,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/engineer,
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_engsci,

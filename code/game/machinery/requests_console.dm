@@ -45,7 +45,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		// 1 = hacked
 	var/announcementConsole = 0
 		// 0 = This console cannot be used to send department announcements
-		// 1 = This console can send department announcementsf
+		// 1 = This console can send department announcements
 	var/open = 0 // 1 if open
 	var/announceAuth = 0 //Will be set to 1 when you authenticate yourself for announcements
 	var/msgVerified = "" //Will contain the name of the person who varified it
@@ -212,7 +212,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 				dat += text("<b>Message: </b>[message] <A href='?src=\ref[src];writeAnnouncement=1'>Write</A><BR><BR>")
 				if (announceAuth && message)
-					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>");
+					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
 			else	//main menu
@@ -478,8 +478,8 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			else
 				announceAuth = FALSE
 				to_chat(user, "<span class='warning'>You are not authorized to send announcements.</span>")
-
 			updateUsrDialog()
+
 	if (istype(O, /obj/item/weapon/stamp))
 		if(screen == 9)
 			var/obj/item/weapon/stamp/T = O

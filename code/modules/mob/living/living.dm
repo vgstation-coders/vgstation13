@@ -179,8 +179,9 @@
 		health = maxHealth
 		stat = CONSCIOUS
 	else if(!(flags & INVULNERABLE))
+		var/prevhealth = health
 		health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss() - getCloneLoss() - halloss
-
+		critlog(health,prevhealth)
 
 //This proc is used for mobs which are affected by pressure to calculate the amount of pressure that actually
 //affects them once clothing is factored in. ~Errorage
@@ -553,7 +554,7 @@ Thanks.
 	ear_damage = 0
 	say_mute = 0
 	said_last_words = 0
-	mutations &= ~M_HUSK
+	mutations.Remove(M_HUSK)
 	if(!reagents)
 		create_reagents(1000)
 	else
@@ -604,6 +605,9 @@ Thanks.
 			IO.status = 0
 			IO.robotic = 0
 		H.updatehealth()
+		H.op_stage.butt = SURGERY_HAS_A_BUTT
+		H.op_stage.butt_replace = SURGERY_BEGIN_BUTT_REPLACE
+
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
 	for (var/ID in virus2)
@@ -969,7 +973,7 @@ Thanks.
 								C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
 								                  "<span class='notice'>You successfully unbuckle yourself.</span>",\
 								self_drugged_message="<span class='notice'>You successfully regain control of your legs and stand up.</span>")
-								B.manual_unbuckle(C)
+								B.manual_unbuckle(C, resisting = TRUE)
 							else
 								C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
 									"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
@@ -1807,14 +1811,7 @@ Thanks.
 //Called in Life() by humans (in handle_breath.dm), monkeys and mice
 /mob/living/proc/breath_airborne_diseases()//only tries to find Airborne spread diseases. Blood and Contact ones are handled by find_nearby_disease()
 	if (!check_airborne_sterility() && isturf(loc))//checking for sterile mouth protections
-		for(var/turf/T in range(1, src))
-			for(var/obj/effect/effect/pathogen_cloud/cloud in T.contents)
-				if (!cloud.sourceIsCarrier || cloud.source != src)
-					if (Adjacent(cloud))
-						for (var/ID in cloud.viruses)
-							var/datum/disease2/disease/V = cloud.viruses[ID]
-							//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
-							infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+		breath_airborne_diseases_from_clouds()
 
 		var/turf/T = get_turf(src)
 		var/list/breathable_cleanable_types = list(
@@ -1838,18 +1835,34 @@ Thanks.
 					if(V.spread & SPREAD_AIRBORNE)
 						infect_disease2(V, notes="(Airborne, from [R])")
 
-		//spreading our own airborne viruses
-		if (virus2 && virus2.len > 0)
-			var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
-			if (airborne_viruses && airborne_viruses.len > 0)
-				var/strength = 0
-				for (var/ID in airborne_viruses)
-					var/datum/disease2/disease/V = airborne_viruses[ID]
-					strength += V.infectionchance
-				strength = round(strength/airborne_viruses.len)
-				while (strength > 0)//stronger viruses create more clouds at once
-					new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
-					strength -= 40
+		spawn (1)
+			//we don't want the rest of the mobs to start breathing clouds before they've settled down
+			//otherwise it can produce exponential amounts of lag if many mobs are in an enclosed space
+			spread_airborne_diseases()
+
+/mob/living/proc/breath_airborne_diseases_from_clouds()
+	for(var/turf/T in range(1, src))
+		for(var/obj/effect/effect/pathogen_cloud/cloud in T.contents)
+			if (!cloud.sourceIsCarrier || cloud.source != src || cloud.modified)
+				if (Adjacent(cloud))
+					for (var/ID in cloud.viruses)
+						var/datum/disease2/disease/V = cloud.viruses[ID]
+						//if (V.spread & SPREAD_AIRBORNE)	//Anima Syndrome allows for clouds of non-airborne viruses
+						infect_disease2(V, notes="(Airborne, from a pathogenic cloud[cloud.source ? " created by [key_name(cloud.source)]" : ""])")
+
+/mob/living/proc/spread_airborne_diseases()
+	//spreading our own airborne viruses
+	if (virus2 && virus2.len > 0)
+		var/list/airborne_viruses = filter_disease_by_spread(virus2,required = SPREAD_AIRBORNE)
+		if (airborne_viruses && airborne_viruses.len > 0)
+			var/strength = 0
+			for (var/ID in airborne_viruses)
+				var/datum/disease2/disease/V = airborne_viruses[ID]
+				strength += V.infectionchance
+			strength = round(strength/airborne_viruses.len)
+			while (strength > 0)//stronger viruses create more clouds at once
+				new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
+				strength -= 40
 
 /mob/living/proc/handle_virus_updates()
 	if(status_flags & GODMODE)

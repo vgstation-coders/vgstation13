@@ -62,7 +62,7 @@
 
 /obj/effect/alien/resin/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	healthcheck()
 
 /obj/effect/alien/resin/ex_act(severity)
@@ -528,7 +528,7 @@
 
 /obj/effect/alien/egg/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	healthcheck()
 
 

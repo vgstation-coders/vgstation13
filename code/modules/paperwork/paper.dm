@@ -517,7 +517,7 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/intercoms/initialize()
 	..()
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br>\
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio frequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br>\
 	Here is a list of frequencies for you to listen on.<br>\
 	<ul>\
 		<li>[COMMON_FREQ] - Common Channel</li>\

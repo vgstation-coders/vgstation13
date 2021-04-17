@@ -65,7 +65,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	..()
 
 /proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
-	station_account.money += station_allowance
+	station_account.money += station_allowance + WageBonuses()
 
 	var/datum/transaction/T = new()
 	T.purpose = "Nanotrasen station allowance"
@@ -96,11 +96,13 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	//checking for wage raises/decreases and emptying station account
 	requested_payroll_amount = 0
-	for(var/datum/money_account/Acc in all_money_accounts)
+	for(var/datum/money_account/Acc in all_station_accounts)
 		if(Acc.wage_gain)
 			requested_payroll_amount += Acc.wage_gain
-
-	payroll_modifier = station_account.money / requested_payroll_amount
+	if(requested_payroll_amount>0)
+		payroll_modifier = station_account.money / requested_payroll_amount
+	else
+		payroll_modifier = 1
 	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
 	var/datum/transaction/salaries = new()
@@ -114,21 +116,33 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	station_account.money = 0
 
-
 	//actually paying the departments and employees
 	for(var/datum/money_account/Acc in all_money_accounts)
-		if(Acc.wage_gain)
-			adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
-			Acc.money += adjusted_wage_gain
+		if(locate(Acc) in all_station_accounts)
+			if(Acc.wage_gain)
+				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
+				Acc.money += adjusted_wage_gain
 
-			if(adjusted_wage_gain > 0)
+				if(adjusted_wage_gain > 0)
+					var/datum/transaction/T = new()
+					T.purpose = "Nanotrasen employee payroll"
+					T.target_name = Acc.owner_name
+					T.amount = "[adjusted_wage_gain]"
+					T.date = current_date_string
+					T.time = worldtime2text()
+					T.source_terminal = station_account.owner_name
+					Acc.transaction_log.Add(T)
+
+		else 	//non-station accounts get their money from magic, not that these accounts have any wages anyway
+			Acc.money += Acc.wage_gain
+			if(Acc.wage_gain > 0)
 				var/datum/transaction/T = new()
-				T.purpose = "Nanotrasen employee payroll"
+				T.purpose = "mysterious transaction"
 				T.target_name = Acc.owner_name
-				T.amount = "[adjusted_wage_gain]"
+				T.amount = "[Acc.wage_gain]"
 				T.date = current_date_string
 				T.time = worldtime2text()
-				T.source_terminal = station_account.owner_name
+				T.source_terminal = "unknown"
 				Acc.transaction_log.Add(T)
 
 	//telling the crew
@@ -141,6 +155,16 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	//refuelling the station account for the next salary
 	stationAllowance()
+
+/proc/WageBonuses()		//Add any conditions that increase wages here
+	var/bonus = 0
+
+	//1000 bonus per prisoner
+	for(var/mob/living/carbon/human/H in current_prisoners) 
+		if(H.z == STATION_Z && !isspace(get_area(H)) && !H.isDead())
+			bonus += 1000
+
+	return bonus
 
 /proc/WageLoop()
 	set waitfor = 0

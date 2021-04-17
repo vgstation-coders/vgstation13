@@ -9,7 +9,7 @@
     var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null
 
 // -- Transforms us into the devlish Grinch
-/datum/role/grinch/OnPostSetup()
+/datum/role/grinch/OnPostSetup(var/laterole = FALSE)
     . = ..()
     var/mob/old_mob = antag.current
     var/mob/living/simple_animal/hostile/gremlin/grinch/G = new
