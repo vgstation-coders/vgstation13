@@ -192,6 +192,12 @@
 		else
 			return
 
+/obj/machinery/suit_storage_unit/emag_act()
+	emagged = TRUE
+	new/obj/effect/effect/sparks(get_turf(src))
+	playsound(loc,"sparks",50,1)
+	to_chat(user, "<span class='danger'>You short out the locking mechanism, dumping the contents</span>")
+	dump_everything()
 
 /obj/machinery/suit_storage_unit/attack_hand(mob/user as mob)
 	var/dat
@@ -199,7 +205,12 @@
 		return
 	if(stat & NOPOWER)
 		return
-	if(panel_open) //The maintenance panel is open. Time for some shady stuff
+	if(emagged)
+
+		dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
+			<font color='maroon'><B>Unit locking and storage system is shorted. Please call for a qualified individual to perform maintenance.</font></B><BR><BR>"}
+		dat+= text("<HR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close control panel</A>", user)
+	else if(panel_open) //The maintenance panel is open. Time for some shady stuff
 
 		dat += {"<HEAD><TITLE>Suit storage unit: Maintenance panel</TITLE></HEAD>
 			<Font color ='black'><B>Maintenance panel controls</B></font><HR>
