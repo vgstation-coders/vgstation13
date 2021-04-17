@@ -3110,6 +3110,22 @@
 	if(prob(5) && M.stat == CONSCIOUS)
 		M.emote(pick("twitch","blink_r","shiver"))
 
+/datum/reagent/hyperzine/on_overdose(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.get_heart())// Got a heart?
+			var/datum/organ/internal/heart/damagedheart = H.get_heart()
+			if(H.species.name != "Diona" && damagedheart) // Not on dionae
+				if(prob(5) && M.stat == CONSCIOUS)
+					to_chat(H, "<span class='danger'>You feel a sharp pain in your chest!</span>")
+				damagedheart.damage += 1
+			else
+				M.adjustFireLoss(1) // Burn damage for dionae
+		else
+			M.adjustToxLoss(1) // Toxins for everyone else
+	else
+		M.adjustToxLoss(1) // Toxins for everyone else
+
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
 	id = HYPOZINE
