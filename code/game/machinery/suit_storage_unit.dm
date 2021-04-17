@@ -618,7 +618,7 @@
 	updateUsrDialog()
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
-	if((stat & BROKEN) && issolder(I))
+	if(((stat & BROKEN) || emagged) && issolder(I))
 		var/obj/item/weapon/solder/S = I
 		if(!S.remove_fuel(4,user))
 			return
@@ -626,6 +626,7 @@
 		if(do_after(user, src,40))
 			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
+			emagged = FALSE
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
 	if((stat & NOPOWER) && iscrowbar(I) && !islocked)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
