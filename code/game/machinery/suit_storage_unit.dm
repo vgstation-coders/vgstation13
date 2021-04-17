@@ -192,7 +192,7 @@
 		else
 			return
 
-/obj/machinery/suit_storage_unit/emag_act()
+/obj/machinery/suit_storage_unit/emag_act(var/mob/user)
 	emagged = TRUE
 	new/obj/effect/effect/sparks(get_turf(src))
 	playsound(loc,"sparks",50,1)
