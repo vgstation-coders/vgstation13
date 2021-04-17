@@ -221,21 +221,6 @@
 	new /obj/item/weapon/reagent_containers/syringe(src)
 	new /obj/item/weapon/implanter(src)
 
-/obj/item/weapon/storage/lockbox/remote
-	name = "lockbox (chemical implants)"
-	req_one_access = null
-	storage_slots = 5
-	locked = 0
-	icon_state = "lockbox" // Start open
-
-/obj/item/weapon/storage/lockbox/remote/New()
-	..()
-	new /obj/item/weapon/implantcase/remote(src)
-	new /obj/item/weapon/implantcase/remote(src)
-	new /obj/item/weapon/implantcase/remote(src)
-	new /obj/item/weapon/reagent_containers/syringe(src)
-	new /obj/item/weapon/implanter(src)
-
 /obj/item/weapon/storage/lockbox/holy
 	name = "lockbox (holy implants)"
 	req_one_access = list(access_security)
