@@ -46,6 +46,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/atmos
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots/atmos
+	req_access = list(access_atmospherics)
 
 /obj/machinery/suit_storage_unit/prison
 	name = "Prisoner Suit Storage Unit"
@@ -61,6 +62,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/engineer
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_engine_equip)
 
 /obj/machinery/suit_storage_unit/elite
 	name = "Advanced Suit Storage Unit"
@@ -68,6 +70,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/engineer/elite
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots/elite
+	req_access = list(access_ce)
 
 /obj/machinery/suit_storage_unit/mining
 	name = "Miners Suit Storage Unit"
@@ -75,6 +78,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/mining
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_mining)
 
 /obj/machinery/suit_storage_unit/excavation
 	name = "Excavation Suit Storage Unit"
@@ -82,6 +86,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/arch
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_science)
 
 /obj/machinery/suit_storage_unit/ror
 	name = "Survivor's Suit Storage Unit"
@@ -96,6 +101,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/security
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_security)
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
@@ -104,6 +110,7 @@
 	helmet_type = null
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/magboots/captain
+	req_access = list(access_captain)
 
 /obj/machinery/suit_storage_unit/medical
 	name = "Medical Suit Storage Unit"
@@ -111,6 +118,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/medical
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_medical)
 
 /obj/machinery/suit_storage_unit/medical/empty
 	isopen = 1
@@ -422,6 +430,9 @@
 		to_chat(user, "<span class='red'>The Unit's safety protocols disallow locking when a biological form is detected inside its compartments.</span>")
 		return
 	if(isopen)
+		return
+	if(!allowed(user))
+		to_chat(user, "<span class='red'>Access denied.</span>")
 		return
 	islocked = !islocked
 	return
