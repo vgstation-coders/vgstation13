@@ -542,6 +542,7 @@
 #include "code\game\centcomm_orders\orders_engineering.dm"
 #include "code\game\centcomm_orders\orders_medical.dm"
 #include "code\game\centcomm_orders\orders_science.dm"
+#include "code\game\centcomm_orders\orders_security.dm"
 #include "code\game\centcomm_orders\orders_service.dm"
 #include "code\game\dna\dna2.dm"
 #include "code\game\dna\dna2_domutcheck.dm"
