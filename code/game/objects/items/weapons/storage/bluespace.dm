@@ -51,20 +51,11 @@
 	var/turf/T = get_turf(src)
 	qdel(H)
 	qdel(src)
-	var/datum/zLevel/ourzLevel = map.zLevels[user.z]
-	if(ourzLevel.bluespace_jammed)
-		//Stop breaking into centcomm via dungeons you shits
-		message_admins("[key_name_admin(user)] detonated [H] and [src], creating an explosion.")
-		log_game("[key_name(user)] detonated [H] and [src], creating an explosion.")
-		empulse(T,(20),(40))
-		explosion(T, 5, 10, 20, 40, 1)
-		user.gib() //Just to be sure
-	else
-		investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")
-		message_admins("[key_name_admin(user)] detonated [H] and [src], creating a singularity.")
-		log_game("[key_name(user)] detonated [H] and [src], creating a singularity.")
-		var/obj/machinery/singularity/S = new (T)
-		S.consume(user) //So the BoHolder can't run away from his wrongdoing
+	investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")
+	message_admins("[key_name_admin(user)] detonated [H] and [src], creating a singularity.")
+	log_game("[key_name(user)] detonated [H] and [src], creating a singularity.")
+	var/obj/machinery/singularity/S = new (T)
+	S.consume(user) //So the BoHolder can't run away from his wrongdoing
 
 /obj/item/weapon/storage/backpack/holding/singularity_act(var/current_size,var/obj/machinery/singularity/S)
 	var/dist = max(current_size, 1)
