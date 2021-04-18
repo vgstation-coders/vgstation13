@@ -35,6 +35,9 @@ var/datum/early_init/early_init_datum = new
 
 /world/New()
 	world_startup_time = world.timeofday
+	#if DM_BUILD >= 1506
+	Profile(world_startup_time)
+	#endif
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
