@@ -27,6 +27,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/current_heat_capacity = 50
 	var/running_bob_animation = 0 // This is used to prevent threads from building up if update_icons is called multiple times
 
+	var/output_dir //Which direction to try to place our patients onto, should they eject naturally.
+
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 
 	light_color = LIGHT_COLOR_HALOGEN
@@ -328,7 +330,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
 			update_icon()
 
-
+	if(ismultitool(G) && Adjacent(user))
+		output_dir = get_dir(src, user)
+		to_chat(user, "<span class='notice'>[bicon(src)]Output location set.</span>")
+		return
 	if(G.is_wrench(user))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
 		return
 	if(G.is_screwdriver(user))
@@ -500,9 +505,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
 	//loc.assume_air(expel_gas)
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc, var/ejector)
+/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit, var/ejector)
 	if(!occupant || ejecting)
 		return 0
+	if(!exit)
+		exit = output_turf()
 	if (occupant.bodytemperature > T0C+31)
 		boot_contents(exit, FALSE, ejector) //No temperature regulation cycle required
 	else
@@ -689,6 +696,14 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(beaker)// If there is, effectively, a beaker
 		detach()
 	add_fingerprint(user)
+
+/obj/machinery/atmospherics/unary/cryo_cell/proc/output_turf()
+	if(!output_dir)
+		return get_turf(loc)
+
+	. = get_step(get_turf(src), output_dir)
+	if(!.)
+		return loc // Map edge I guess.
 
 /obj/machinery/atmospherics/unary/cryo_cell/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
