@@ -52,6 +52,9 @@
 		if(banned_mob.client)
 			computerid = banned_mob.client.computer_id
 			ip = banned_mob.client.address
+		else
+			computerid = banned_mob.computer_id
+			ip = banned_mob.lastKnownIP
 	else if(banckey)
 		ckey = ckey(banckey)
 
