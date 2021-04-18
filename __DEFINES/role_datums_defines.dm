@@ -238,6 +238,11 @@
 #define INTERCEPT_TIME_LOW 10 MINUTES
 #define INTERCEPT_TIME_HIGH 18 MINUTES
 
+// -- The other paper
+
+#define INTERCEPT_MID_TIME_LOW 60 MINUTES
+#define INTERCEPT_MID_TIME_HIGH 90 MINUTES
+
 // -- Injection delays (in ticks, ie, you need the /20 to get the real result)
 
 #define LATEJOIN_DELAY_MIN (5 MINUTES)/20

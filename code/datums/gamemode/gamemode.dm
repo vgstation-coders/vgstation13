@@ -188,7 +188,10 @@
 		display_roundstart_logout_report()
 
 	spawn (rand(INTERCEPT_TIME_LOW , INTERCEPT_TIME_HIGH))
-		send_intercept()
+		send_intercept(starting_threat)
+
+	spawn (rand(INTERCEPT_MID_TIME_LOW , INTERCEPT_MID_TIME_HIGH))
+		send_intercept(midround_starting_threat)
 
 	feedback_set_details("round_start","[time2text(world.realtime)]")
 	if(ticker && ticker.mode)
