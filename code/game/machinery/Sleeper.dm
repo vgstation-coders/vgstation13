@@ -167,47 +167,43 @@
 		add_fingerprint(usr)
 	return
 
-/obj/machinery/sleeper/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if(!ismob(O)) //mobs only
-		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
-		return
-	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
-		return
-	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
-		return
-	if(O.locked_to)
-		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
-		if(!istype(category, /datum/locking_category/buckle/bed/roller))
-			return
-	else if(O.anchored)
-		return
-	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
-		return
-	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
-		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return
-	if(occupant)
-		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
-		return
-	if(isrobot(user))
-		var/mob/living/silicon/robot/robit = usr
-		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
-			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
-			return
-	var/mob/living/L = O
+/obj/machinery/sleeper/proc/put_mob(mob/living/L, mob/user)
 	if(!istype(L))
 		return
-	for(var/mob/living/carbon/slime/M in range(1,L))
-		if(M.Victim == L)
-			to_chat(usr, "[L.name] will not fit into the sleeper because they have a slime latched onto their head.")
+	if(istype(L, /mob/living/simple_animal) || istype(L, /mob/living/silicon)) //animals and robutts dont fit
+		return
+
+	if(L.locked_to)
+		var/datum/locking_category/category = L.locked_to.get_lock_cat_for(L)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(L.anchored)
+		return
+
+	if(user)
+		if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+			return
+		if(isrobot(user))
+			var/mob/living/silicon/robot/robit = usr
+			if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
+				to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
+				return
+
+	for(var/mob/living/carbon/slime/S in range(1,L))
+		if(S.Victim == L)
+			if(user)
+				to_chat(user, "<span class='warning'>[L] will not fit into \the [src] because they have a slime latched onto their head.</span>")
 			return
 
-	if(L == user)
-		visible_message("[user] climbs into \the [src].")
-	else
-		visible_message("[user] places [L.name] into \the [src].")
+	if(occupant)
+		if(user)
+			to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
+		return
 
+	if(user && user.pulling == L)
+		user.stop_pulling()
+	if(user)
+		add_fingerprint(user)
 	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	L.forceMove(src)
 	L.reset_view()
@@ -219,12 +215,35 @@
 	add_fingerprint(user)
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
-	sedativeblock = TRUE
 	update_icon()
+
+	if(user)
+		if(L == user)
+			visible_message("[user] climbs into \the [src].")
+		else
+			visible_message("[user] places \the [L] into \the [src].")
+	else
+		visible_message("\the [L] is placed into \the [src].")
+
+	sedativeblock = TRUE
 	sleep(drag_delay)
 	sedativeblock = FALSE
-	return
 
+/obj/machinery/sleeper/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if(!ismob(O)) //mobs only
+		return
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
+		return
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+		return
+	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+
+	var/mob/living/L = O
+	if(!istype(L))
+		return
+
+	put_mob(L, user)
 
 /obj/machinery/sleeper/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
@@ -296,25 +315,9 @@
 	visible_message("[user] places [tar_grab.affecting.name] into \the [src].")
 
 	var/mob/tar_mob = tar_grab.affecting
-	if(!isliving(tar_mob) || tar_mob.locked_to)
+	if(!isliving(tar_mob))
 		return
-	tar_mob.forceMove(src)
-	tar_mob.reset_view()
-	occupant = tar_mob
-
-	to_chat(tar_mob, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
-	process()
-	for(var/obj/tar_obj in src)
-		tar_obj.forceMove(loc)
-	add_fingerprint(user)
-	qdel(tar_grab)
-	if(!(stat & (BROKEN|NOPOWER)))
-		set_light(light_range_on, light_power_on)
-	update_icon()
-	sedativeblock = TRUE
-	spawn(drag_delay)
-	sedativeblock = FALSE
-	return
+	put_mob(tar_mob, user)
 
 /obj/machinery/sleeper/attack_hand(mob/user)
 	if(!isobserver(user) && (user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.incapacitated()))
