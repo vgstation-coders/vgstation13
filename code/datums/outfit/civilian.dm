@@ -669,6 +669,7 @@
 /datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
+	H.set_light(1, 3, "#006400") //Green
 
 // -- Chaplain
 
