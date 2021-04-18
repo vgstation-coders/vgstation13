@@ -314,7 +314,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		M.angry = 0
 		M.apply_disguise()
 	for(var/mob/living/M in contents)
-		if(!istype(M, /mob/living/simple_animal/hostile/mimic))
+		if(isanyantag(M))
+			for(var/datum/centcomm_order/O in centcomm_orders)
+				if(istype(O,/datum/centcomm_order/department/security/criminal))
+					return FALSE
+			return TRUE
+		else if(!istype(M, /mob/living/simple_animal/hostile/mimic))
 			return TRUE
 
 	if (locate(/obj/item/weapon/disk/nuclear) in contents)
