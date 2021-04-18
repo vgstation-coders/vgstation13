@@ -669,7 +669,9 @@
 /datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
-	H.set_light(1, 3, "#006400") //Green
+	if(H.mind.role_alt_title == "Lawyer" || H.mind.role_alt_title == "Bridge Officer") //Lawyers and bridge officers are exempt
+		return
+	H.set_light(1, 3, "#006400") //Dark green, RGB(0,100,0)
 
 // -- Chaplain
 
