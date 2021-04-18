@@ -291,7 +291,6 @@
 
 		//W.dropped(src)
 		//update_icons() // Redundant as u_equip will handle updating the specific overlay
-	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	return 1
 
 
@@ -364,7 +363,7 @@
 	if(!W)
 		return 0
 	var/success = 0
-
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null

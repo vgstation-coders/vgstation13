@@ -42,6 +42,7 @@
 	return TRUE
 
 /mob/living/silicon/robot/mommi/u_equip(W as obj)
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	if(W == tool_state)
 		if(module_active == tool_state)
 			module_active = null

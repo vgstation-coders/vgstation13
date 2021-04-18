@@ -8,13 +8,13 @@
 		return
 	if(!istype(W))
 		return
-
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	switch(slot)
 		if(slot_handcuffed)
 			var/obj/item/weapon/handcuffs/cuffs = W
 			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
 				src.mutual_handcuffs = cuffs
-			else 
+			else
 				src.handcuffed = W
 		else
 			return

@@ -237,6 +237,7 @@
 	if(!W)
 		return 0
 	var/success
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
