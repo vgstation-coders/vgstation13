@@ -102,7 +102,7 @@
 
 	command_alert(/datum/command_alert/enemy_comms_interception)
 
-/datum/gamemode/dynamic/send_intercept(var/threat)
+/datum/gamemode/dynamic/send_intercept(var/roundstart = TRUE)
 	var/intercepttext = {"<html><style>
 						body {color: #000000; background: #EDD6B6;}
 						h1 {color: #000000; font-size:30px;}
@@ -110,7 +110,7 @@
 						<body>
 						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"><BR>"}
 
-	var/list/threat_detected = round(threat)
+	var/list/threat_detected = roundstart ? round(starting_threat) : round(midround_starting_threat)
 
 	switch(threat_detected)
 		if(0 to 19)
