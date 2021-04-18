@@ -8,7 +8,6 @@
 		return
 	if(!istype(W))
 		return
-	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	switch(slot)
 		if(slot_handcuffed)
 			var/obj/item/weapon/handcuffs/cuffs = W

@@ -101,20 +101,20 @@
 		hat = null
 		success = 1
 		slot = slot_head
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 		update_inv_hat()
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	else if(W == glasses)
 		glasses = null
 		success = 1
 		slot = slot_glasses
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 		update_inv_glasses()
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	else if(W == uniform)
 		uniform = null
 		success = 1
 		slot = slot_w_uniform
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 		update_inv_uniform()
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	else
 		success = ..()
 	if(success)

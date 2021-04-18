@@ -200,7 +200,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 
 		var/perpname = perp.get_face_name()
 		if(lowertext(perpname) == "unknown" || !perpname)
-			perpname = perp.get_id_name("Unknown")
+			perpname = perp.get_worn_id_name("Unknown")
 		if(perpname)
 			var/datum/data/record/R = find_record("name", perpname, data_core.security)
 			if(R)

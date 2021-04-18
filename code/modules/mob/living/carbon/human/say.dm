@@ -165,7 +165,7 @@
 
 /mob/living/carbon/human/get_alt_name()
 	if(name != GetVoice())
-		return get_id_name("Unknown")
+		return get_worn_id_name("Unknown")
 	return null
 
 /mob/living/carbon/human/say_understands(var/mob/other,var/datum/language/speaking = null)

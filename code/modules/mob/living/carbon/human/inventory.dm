@@ -237,7 +237,6 @@
 	if(!W)
 		return 0
 	var/success
-	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
@@ -348,7 +347,8 @@
 		update_inv_legcuffed()
 	else
 		return 0
-
+	// Call update_name AFTER the inventory gets updated.
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	if(success)
 		update_hidden_item_icons(W)
 
