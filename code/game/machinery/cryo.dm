@@ -708,8 +708,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
 		var/mob/living/L = AM
-		if(put_mob(L))
-			return TRUE
+		if(L.lying)
+			if(put_mob(L))
+				return TRUE
 	return FALSE
 
 /datum/data/function/proc/reset()

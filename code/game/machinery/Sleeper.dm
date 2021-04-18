@@ -278,8 +278,9 @@
 /obj/machinery/sleeper/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
 		var/mob/living/L = AM
-		if(put_mob(L))
-			return TRUE
+		if(L.lying)
+			if(put_mob(L))
+				return TRUE
 	return FALSE
 
 /obj/machinery/sleeper/allow_drop()
