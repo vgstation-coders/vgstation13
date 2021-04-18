@@ -300,6 +300,13 @@
 			break
 	return TRUE
 
+/obj/machinery/dna_scannernew/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(isliving(AM))
+		var/mob/living/L = AM
+		if(put_in(L))
+			return TRUE
+	return FALSE
+
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc, var/mob/ejector)
