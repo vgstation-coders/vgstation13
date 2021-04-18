@@ -1015,7 +1015,7 @@ obj/machinery/media/jukebox/holyjuke
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
 	// EMAG DOES NOTHING
 	if(istype(W, /obj/item/weapon/card/emag))
-		to_chat(user, "<span class='warning'>A guiltiness fills your heart as a higher power pushes away [W]!</span>")
+		to_chat(user, "<span class='warning'>A guiltiness fills your heart as a higher power pushes away \the [W]!</span>")
 		return
 	..()
 
