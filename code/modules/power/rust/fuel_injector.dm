@@ -79,7 +79,7 @@
 		return FALSE
 	. =  ..()
 
-/obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weapon/weldingtool/WT, var/mob/user)
+/obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/tool/weldingtool/WT, var/mob/user)
 	if(..() == 1)
 		switch(state)
 			if(1)

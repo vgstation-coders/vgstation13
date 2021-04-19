@@ -448,7 +448,7 @@
 
 	update_icon()
 
-/obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/weapon/weldingtool/WT, var/mob/user)
+/obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/tool/weldingtool/WT, var/mob/user)
 
 
 	if(busy)

@@ -90,7 +90,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	if(stat & BROKEN || !powernet)
 		Shutdown()
 
-/obj/machinery/power/rust_core/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+/obj/machinery/power/rust_core/weldToFloor(var/obj/item/tool/weldingtool/WT, mob/user)
 	if(owned_field)
 		to_chat(user, "<span class='warning'>Turn \the [src] off first!</span>")
 		return -1

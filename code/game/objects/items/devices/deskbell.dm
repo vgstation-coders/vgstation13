@@ -269,7 +269,7 @@
 					to_chat(user, "<span class='warning'>You must add wires first.</span>")
 					return
 			if(1)
-				if(istype(W,/obj/item/weapon/wirecutters))
+				if(istype(W,/obj/item/tool/wirecutters))
 					if(has_signaler)
 						to_chat(user, "<span class='warning'>You must remove the signaler first.</span>")
 						return

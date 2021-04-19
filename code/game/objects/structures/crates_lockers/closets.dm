@@ -442,7 +442,7 @@
 			return 0
 
 		if(iswelder(W) && canweld())
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
@@ -458,7 +458,7 @@
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(iswelder(W) && canweld())
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded

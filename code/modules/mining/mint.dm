@@ -235,7 +235,7 @@
 	mover = null
 	..()
 
-/obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(..())
 		if(materials)
 			for(var/matID in materials.storage)

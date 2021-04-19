@@ -244,12 +244,12 @@
 	desc = "Enables a medical cyborg to have advanced surgery tools."
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
-	modules_to_add = list(/obj/item/weapon/scalpel/laser/tier2, /obj/item/weapon/circular_saw/plasmasaw,
-	/obj/item/weapon/retractor/manager, /obj/item/weapon/hemostat/pico, /obj/item/weapon/surgicaldrill/diamond,
-	/obj/item/weapon/bonesetter/bone_mender, /obj/item/weapon/FixOVein/clot)
-	modules_to_remove = list(/obj/item/weapon/scalpel, /obj/item/weapon/hemostat, /obj/item/weapon/retractor,
-	/obj/item/weapon/circular_saw, /obj/item/weapon/cautery, /obj/item/weapon/surgicaldrill, /obj/item/weapon/bonesetter,
-	/obj/item/weapon/FixOVein)
+	modules_to_add = list(/obj/item/tool/scalpel/laser/tier2, /obj/item/tool/circular_saw/plasmasaw,
+	/obj/item/tool/retractor/manager, /obj/item/tool/hemostat/pico, /obj/item/tool/surgicaldrill/diamond,
+	/obj/item/tool/bonesetter/bone_mender, /obj/item/tool/FixOVein/clot)
+	modules_to_remove = list(/obj/item/tool/scalpel, /obj/item/tool/hemostat, /obj/item/tool/retractor,
+	/obj/item/tool/circular_saw, /obj/item/tool/cautery, /obj/item/tool/surgicaldrill, /obj/item/tool/bonesetter,
+	/obj/item/tool/FixOVein)
 
 /obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
@@ -265,7 +265,7 @@
 	desc = "Adds several tools and materials for the robot to use."
 	icon_state = "cyborg_upgrade3"
 	required_modules = list(ENGINEERING_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
-	modules_to_add = list(/obj/item/weapon/wrench/socket)
+	modules_to_add = list(/obj/item/tool/wrench/socket)
 
 /obj/item/borg/upgrade/engineering/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -310,7 +310,7 @@
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
 	icon_state = "mainboard"
 	required_modules = list(SERVICE_MODULE)
-	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
+	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/tool/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -405,7 +405,7 @@
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_modules = list(SECURITY_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/tool/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())

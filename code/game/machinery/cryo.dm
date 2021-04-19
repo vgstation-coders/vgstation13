@@ -337,7 +337,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		beaker.forceMove(get_step(loc, SOUTH))
 		beaker = null
 
-/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(on)
 		to_chat(user, "[src] is on.")
 		return FALSE

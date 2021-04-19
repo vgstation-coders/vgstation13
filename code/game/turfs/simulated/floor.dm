@@ -622,7 +622,7 @@ turf/simulated/floor/update_icon()
 				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
 	else if(iswelder(C))
-		var/obj/item/weapon/weldingtool/welder = C
+		var/obj/item/tool/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
 				if(welder.remove_fuel(1,user))

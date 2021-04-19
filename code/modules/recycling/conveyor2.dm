@@ -256,12 +256,12 @@
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
 	return
 
-/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	return
 
 /obj/machinery/conveyor/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.do_weld(user, src, 30, 0))
 			user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
 			"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \

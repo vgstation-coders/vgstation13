@@ -488,7 +488,7 @@ Class Procs:
 		else
 			qdel(I)
 
-/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
@@ -535,7 +535,7 @@ Class Procs:
 	togglePanelOpen(toggleitem, user)
 	return 1
 
-/obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+/obj/machinery/proc/weldToFloor(var/obj/item/tool/weldingtool/WT, mob/user)
 	if(!anchored)
 		state = 0 //since this might be wrong, we go sanity
 		to_chat(user, "You need to secure \the [src] before it can be welded.")

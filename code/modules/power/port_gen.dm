@@ -167,7 +167,7 @@
 	emp_act(1)
 	return 1
 
-/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I) //don't like the copy/paste, but the proc has special handling in the middle so we need it
+/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user, obj/item/tool/crowbar/I) //don't like the copy/paste, but the proc has special handling in the middle so we need it
 	if(..())
 		while ( sheets > 0 )
 			var/obj/item/stack/sheet/G = new sheet_path(src.loc)

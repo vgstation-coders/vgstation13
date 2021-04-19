@@ -39,7 +39,7 @@
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/tool/weldingtool/WT = P
 				if(WT.do_weld(user, src, 2 SECONDS, 0))
 					if(gcDestroyed || state != NOCIRCUITBOARD)
 						return

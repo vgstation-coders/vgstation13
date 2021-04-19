@@ -188,7 +188,7 @@
 		return P
 	return 0
 
-/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(contents.len)
 		to_chat(user, "You can't do that while something is loaded in \the [src].")
 		return 0

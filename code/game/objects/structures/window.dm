@@ -463,7 +463,7 @@ var/list/one_way_windows
 					return
 
 				if(iswelder(W))
-					var/obj/item/weapon/weldingtool/WT = W
+					var/obj/item/tool/weldingtool/WT = W
 					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
 					if(WT.do_weld(user, src, 40, 1) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
@@ -490,7 +490,7 @@ var/list/one_way_windows
 			return
 
 		if(iswelder(W) && !d_state)
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
 			if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Ditto above

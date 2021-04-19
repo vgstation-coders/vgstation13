@@ -50,7 +50,7 @@
 
 /obj/structure/lattice/attackby(obj/item/C as obj, mob/user as mob)
 	if(iswelder(C))
-		var/obj/item/weapon/weldingtool/WeldingTool = C
+		var/obj/item/tool/weldingtool/WeldingTool = C
 		if(WeldingTool.remove_fuel(0, user))
 			to_chat(user, "<span class='notice'>Slicing [src] joints...</span>")
 			new/obj/item/stack/rods(loc)

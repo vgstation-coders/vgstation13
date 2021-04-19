@@ -28,7 +28,7 @@
 "aB" = (/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "aC" = (/obj/structure/largecrate/porcelain,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "aD" = (/obj/structure/largecrate,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"aE" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/weapon/crowbar,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aE" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/tool/crowbar,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "aF" = (/obj/structure/largecrate/showers,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "aG" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/floor,/area/vault/sokoban)
 "aH" = (/obj/effect/landmark/corpse/mutilated,/obj/item/weapon/gun/projectile/russian/empty,/turf/simulated/shuttle/floor,/area/vault/sokoban)

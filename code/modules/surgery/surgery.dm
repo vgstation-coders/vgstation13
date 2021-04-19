@@ -75,7 +75,7 @@
 			if (blood_level > 1)
 				H.bloody_body(target,0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
 
-	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
+	if(istype(tool,/obj/item/tool/scalpel/laser) || istype(tool,/obj/item/tool/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"
 		spawn(duration * tool.toolspeed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 			tool.icon_state = "[initial(tool.icon_state)]_off"
@@ -83,7 +83,7 @@
 
 	// does stuff to end the step, which is normally print a message + do whatever this step changes
 /datum/surgery_step/proc/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
+	if(istype(tool,/obj/item/tool/scalpel/laser) || istype(tool,/obj/item/tool/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_off"
 	return
 

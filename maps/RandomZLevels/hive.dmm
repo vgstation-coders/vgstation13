@@ -137,7 +137,7 @@
 "cG" = (/obj/structure/hive/husk/diona,/turf/unsimulated/floor/evil/breathing,/area/awaymission/hive)
 "cH" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/awaymission/hive)
 "cI" = (/turf/simulated/shuttle/wall{icon_state = "swall15"},/area/awaymission/hive)
-"cJ" = (/obj/item/weapon/wrench,/turf/unsimulated/floor/evil,/area/awaymission/hive)
+"cJ" = (/obj/item/tool/wrench,/turf/unsimulated/floor/evil,/area/awaymission/hive)
 "cK" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/hive_alien/constructor,/turf/unsimulated/floor/evil,/area/awaymission/hive)
 "cL" = (/obj/effect/narration/hive/ambience_sound_4,/turf/unsimulated/floor/evil,/area/awaymission/hive)
 "cM" = (/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/evil,/area/awaymission/hive)

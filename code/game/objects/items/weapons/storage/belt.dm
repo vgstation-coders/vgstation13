@@ -28,12 +28,12 @@
 		"/obj/item/device/lightreplacer"
 		)
 	can_only_hold = list(
-		"/obj/item/weapon/crowbar",
-		"/obj/item/weapon/screwdriver",
-		"/obj/item/weapon/weldingtool",
-		"/obj/item/weapon/solder",
-		"/obj/item/weapon/wirecutters",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/crowbar",
+		"/obj/item/tool/screwdriver",
+		"/obj/item/tool/weldingtool",
+		"/obj/item/tool/solder",
+		"/obj/item/tool/wirecutters",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/multitool",
 		"/obj/item/device/flashlight",
 		"/obj/item/stack/cable_coil",
@@ -54,31 +54,31 @@
 
 /obj/item/weapon/storage/belt/utility/complete/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 /obj/item/weapon/storage/belt/utility/full/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 
 /obj/item/weapon/storage/belt/utility/atmostech/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
 
 /obj/item/weapon/storage/belt/utility/chief
@@ -88,12 +88,12 @@
 	item_state = "utilitychief"
 	fits_max_w_class = 5
 	can_only_hold = list(
-		"/obj/item/weapon/crowbar",
-		"/obj/item/weapon/screwdriver",
-		"/obj/item/weapon/weldingtool",
-		"/obj/item/weapon/solder",
-		"/obj/item/weapon/wirecutters",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/crowbar",
+		"/obj/item/tool/screwdriver",
+		"/obj/item/tool/weldingtool",
+		"/obj/item/tool/solder",
+		"/obj/item/tool/wirecutters",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/multitool",
 		"/obj/item/device/flashlight",
 		"/obj/item/stack/cable_coil",
@@ -121,17 +121,17 @@
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
 	..()
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/weldingtool/hugetank(src)
-	new /obj/item/weapon/wirecutters(src)
-	new /obj/item/weapon/wrench(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/weldingtool/hugetank(src)
+	new /obj/item/tool/wirecutters(src)
+	new /obj/item/tool/wrench(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/stack/cable_coil(src)
 	new /obj/item/stack/cable_coil(src)
 	new /obj/item/device/t_scanner(src)
 	new /obj/item/device/analyzer(src)
-	new /obj/item/weapon/solder/pre_fueled(src)
+	new /obj/item/tool/solder/pre_fueled(src)
 	new /obj/item/device/silicate_sprayer(src)
 	new /obj/item/device/rcd/rpd(src)
 	new /obj/item/device/rcd/matter/engineering/pre_loaded(src)
@@ -182,11 +182,11 @@
 
 /obj/item/weapon/storage/belt/slim/pro/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/multitool(src)
 
 /obj/item/weapon/storage/belt/security
@@ -386,9 +386,9 @@
 		"/obj/item/weapon/paper",
 		"/obj/item/weapon/pen",
 		"/obj/item/clothing/glasses",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/mining_scanner",
-		"/obj/item/weapon/crowbar",
+		"/obj/item/tool/crowbar",
 		"/obj/item/weapon/storage/box/excavation",
 		"/obj/item/weapon/gun/energy/kinetic_accelerator",
 		"/obj/item/weapon/resonator",
