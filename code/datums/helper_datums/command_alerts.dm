@@ -210,12 +210,12 @@
 /datum/command_alert/blob_defcon_2
 	name = "Biohazard Alert (level 5) DEFCON 2"
 	alert_title = "Biohazard Alert 5 DEFON 2"
-	message = "Accelerated growth of Biohazard Alert Level 5. Additional DEFCON provisions engaged. Additional reinforcements available. Cyborg units have been reset."
+	message = "Accelerated growth of Biohazard Alert Level 5. Additional DEFCON provisions engaged. Additional reinforcements available. Cyborg units can switch a new module."
 
 /datum/command_alert/blob_defcon_1
 	name = "Biohazard Alert (level 5) DEFCON 1"
 	alert_title = "Biohazard Alert 5 DEFON 1"
-	message = "Accelerated growth of Biohazard Alert Level 5. Terminal DEFCON provisions engaged. Increased access to all personel. Additional equipment may be transfered from Communications Consoles."
+	message = "Accelerated growth of Biohazard Alert Level 5. Terminal DEFCON provisions engaged. Increased access to all personnel. Additional equipment may be transfered from Communications Consoles."
 
 /// REVS
 

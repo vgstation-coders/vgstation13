@@ -152,14 +152,14 @@
 				if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE)) // Clownborgs & al
 					continue
 				R.throw_alert(SCREEN_ALARM_ROBOT_RESET, /obj/abstract/screen/alert/robot/reset_self, 0)
-				to_chat(R, "<span class='notice'>DEFCON Procedure triggered. Emergency Reset System remotely uploaded.</span>")
+				to_chat(R, "<span class='notice'>DEFCON Procedure triggered. Emergency Reset System remotely uploaded. This unit has 60 seconds to choose a new module.</span>")
 			sent_strike_teams -= "ERT"
 
 		if (BLOB_DEFCON_1)
 			command_alert(/datum/command_alert/blob_defcon_1)
 			// Egalitarian mode
 			for(var/obj/machinery/door/airlock/W in all_doors)
-				if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+				if(W.z == STATION_Z  && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
 					W.backup_access = W.req_access
 					W.req_access = list()
 			for (var/obj/machinery/computer/communications/comm in machines)
