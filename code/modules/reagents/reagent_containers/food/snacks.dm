@@ -1521,12 +1521,24 @@
 /obj/item/weapon/reagent_containers/food/snacks/no_raisin
 	name = "4no raisins"
 	icon_state = "4no_raisins"
-	desc = "Best raisins in the universe. Not sure why."
+	desc = "Best raisins in the universe. They've been FORtified with a number (no.) of nutrients, hence the name."
 	trash = /obj/item/trash/raisins
 
 /obj/item/weapon/reagent_containers/food/snacks/no_raisin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins
+	name = "economy-class raisins"
+	icon_state = "cheap_raisins"
+	desc = "Entire galactic economies have been brought to their knees over raisins just like these. The raisins must flow. He who controls the raisins, controls the universe."
+	//You don't even get trash back!
+
+/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins/New()
+	..()
+	reagents.add_reagent(GRAPEJUICE, 2) //Overall, these are 9x less nutritious than 4no raisins
+	reagents.add_reagent(WATER, 2)
+	reagents.add_reagent(DISCOUNT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/bustanuts
 	name = "Busta-Nuts"
