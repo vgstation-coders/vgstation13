@@ -14,6 +14,7 @@
 
 	var/list/allowed_shuttles = list() //List of allowed shuttles. Accepts paths (for example /datum/shuttle/arrival). If empty, all shuttles are allowed
 	starting_materials = list(MAT_GLASS = 1250)
+
 //Example:
 /obj/item/weapon/disk/shuttle_coords/station_arrivals
 	destination = /obj/docking_port/destination/transport/station
