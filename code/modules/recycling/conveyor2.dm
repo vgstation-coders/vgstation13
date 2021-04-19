@@ -105,6 +105,8 @@
 
 	if(!id_tag) //Without an ID tag we'll never work, so let's try to copy it from one of our neighbors.
 		copy_radio_from_neighbors()
+	if(!id_tag) //still no go
+		id_tag = "[rand(9999)]"
 
 	update_nearby_conveyors() //smooth with diagonals
 
@@ -326,11 +328,9 @@
 	if(.)
 		return .
 	if("setdir" in href_list)
-		operating=0
 		update_dir(text2num(href_list["setdir"]))
 		return MT_UPDATE
 	if("reverse" in href_list)
-		operating=0
 		in_reverse=!in_reverse
 		updateConfig()
 		return MT_UPDATE
@@ -465,6 +465,12 @@
 /obj/machinery/conveyor_switch/New()
 	..()
 	if(!id_tag)
+		for(var/obj/machinery/conveyor/conveyor in orange(src,1))
+			if(conveyor && conveyor.id_tag)
+				id_tag = conveyor.id_tag
+				set_frequency(conveyor.frequency)
+				break
+	if(!id_tag) //still no go
 		id_tag = "[rand(9999)]"
 		set_frequency(frequency) //I tried just assigning the ID tag during initialize(), but that didn't work somehow, probably because it makes TOO MUCH SENSE
 	update()
