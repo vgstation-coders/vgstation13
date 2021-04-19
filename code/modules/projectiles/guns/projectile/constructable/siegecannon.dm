@@ -9,6 +9,7 @@
 	var/wFuel = 0
 	var/maxFuel = 20
 	var/maxSize = W_CLASS_LARGE	//Anything bigger won't fit.
+	var/beenClowned = FALSE
 
 /obj/structure/siege_cannon/Destroy()
 	unloadCannon()
@@ -34,6 +35,8 @@
 		return 1
 	if(W.is_wrench())
 		wrenchAnchor(user, W, 5)	//Half a second to wrench. Being able to turn it via verb while anchored is intentional.
+	else if((istype(W, /obj/item/weapon/stamp/clown) || istype(W, /obj/item/toy/crayon/rainbow)) && !beenClowned)
+		becomeClownnon(W, user)
 	else
 		loadCannon(W, user)
 
@@ -143,12 +146,37 @@
 
 /obj/structure/siege_cannon/proc/mobFire()
 	var/atom/target = get_edge_target_turf(src, dir)
-	var/mSpeed = 32		//Twice that of an non-emagged mass driver.
-	if(M_FAT in loadedMob.mutations)
-		mSpeed = 40	//Big boi
 	loadedMob.forceMove(loc)
-	loadedMob.throw_at(target, wFuel*2, mSpeed)
+	if(beenClowned)
+		circusFlip(target, loadedMob)	//Passes loadedMob to flipMob because waitfor = FALSE can null it, causing runtimes
+	else
+		var/mSpeed = 32		//Twice that of an non-emagged mass driver.
+		if(M_FAT in loadedMob.mutations)
+			mSpeed = 40	//Big boi
+		loadedMob.throw_at(target, wFuel*2, mSpeed)
 	loadedMob = null
+
+/obj/structure/siege_cannon/proc/circusFlip(var/atom/target, var/mob/living/flipMob)
+	set waitfor = FALSE
+	flipMob.throw_at(target, wFuel*2, 32, 1, 1)
+	var/flips = 0
+	while(flipMob.throwing)
+		flipMob.transform = turn(flipMob.transform, 45)
+		flips++
+		sleep(2)
+	flipMob.transform = null
+	if(ishuman(flipMob))
+		var/mob/living/carbon/human/H = flipMob
+		if(!clumsy_check(H) && flips >= 8)
+			H.vomit(0,1)
+			H.Knockdown(flips/8)
+
+/obj/structure/siege_cannon/proc/becomeClownnon(var/obj/item/C, mob/user)
+	to_chat(user,"<span class='notice'>You begin modifying \the [src].</span>")
+	if(do_after(user, src, 3 SECONDS))
+		beenClowned = TRUE
+		icon_state = "clownnon"
+		name = "Circus Cannon"
 
 /obj/structure/siege_cannon/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
@@ -198,10 +226,10 @@
 		throw_speed = 1
 		throwforce = 3
 
-/obj/item/cannonball/throw_impact(atom/hit_atom)
+/obj/item/cannonball/to_bump(atom/Obstacle)
 	..()
-	if(cannonFired && !hit_atom.gcDestroyed)
-		cannonEffect(hit_atom)
+	if(cannonFired && !Obstacle.gcDestroyed)
+		cannonEffect(Obstacle)
 
 /obj/item/cannonball/proc/cannonEffect(var/atom/cTarg)
 	return
@@ -218,9 +246,12 @@
 		else
 			var/eS = rand(2,3)
 			cTarg.ex_act(eS)	//May destroy normal walls, has a chance of destroying r_walls but most likely just damages them. Structures are usually 50 50.
-	else if(isliving(cTarg))
-		siegeMob(cTarg)
 	cannonAdjust()
+
+/obj/item/cannonball/iron/throw_impact(atom/hit_atom, var/speed, mob/user)
+	..()
+	if(isliving(hit_atom))
+		siegeMob(hit_atom)
 
 /obj/item/cannonball/iron/proc/siegeMachine(var/obj/machinery/M)
 	if(prob(50))	//Let's just do a coin flip
@@ -243,3 +274,69 @@
 		H.Knockdown(5)
 	else if(L.size == SIZE_TINY)	//splat
 		L.gib()
+
+//Bananium////////
+
+/obj/item/cannonball/bananium
+	name = "clownnonball"
+	desc = "A large sphere of honk."
+	icon = 'icons/obj/siege_cannon.dmi'
+	icon_state = "clownnonball"
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_METAL*3)
+	adjRange = 50
+	adjSpeed = 1
+	adjForce = 0
+
+/obj/item/cannonball/bananium/throw_at(atom/target, range, speed, override = 1)
+	if(!cannonFired)
+		..()
+	else
+		..(target, 50, 1000, 1, 1)	//Always travels as slow as possible. High speed is to appease throw_at and doesn't translate to any damage
+
+/obj/item/cannonball/bananium/cannonEffect(var/atom/cTarg)
+	if(ishuman(cTarg))
+		honkMob(cTarg)
+	honkBounce(cTarg)
+
+/obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
+	..()
+	if(isliving(hit_atom))
+		honkMob(hit_atom)
+
+/obj/item/cannonball/bananium/proc/honkMob(var/mob/living/L)
+	L.Knockdown(rand(2,10))
+	playsound(src, 'sound/items/bikehorn.ogg', 75, 1)
+	honkBounce(L)
+
+/obj/item/cannonball/bananium/proc/honkBounce(var/atom/cTarg)
+	var/list/honkStep = alldirs.Copy()
+	var/honkDir = get_dir(src, cTarg)
+	honkStep -= list(honkDir, turn(honkDir, 45), turn(honkDir, -45))	//Every direction possible except directly, or diagonally, toward what we hit
+	honkDir = pick(honkStep)
+	spawn(3)	//Prevents multiple instances of throw_at() from being active
+		bounceStep(honkDir)
+
+/obj/item/cannonball/bananium/proc/bounceStep(var/honkDir)
+	if(cannonFired)
+		if(prob(10) && istype(get_turf(src), /turf/simulated))
+			var/turf/simulated/T = get_turf(src)
+			T.wet(800, TURF_WET_LUBE)
+		var/target = get_ranged_target_turf(src, honkDir, 50)
+		throw_at(target, 50, 1000, 1, 1)
+
+/obj/item/cannonball/bananium/proc/stopBouncing()
+	throwing = 0
+	kinetic_acceleration = 0
+	if(cannonFired)
+		cannonAdjust()
+
+/obj/item/cannonball/bananium/Crossed(atom/movable/A)	//Yes, you have to arrest the cannonball
+	..()
+	if(istype(A, /obj/item/projectile))	//It's going to be moving a lot, might as well limit typechecking as much as possible
+		if(istype(A, /obj/item/projectile/energy/electrode) || istype(A, /obj/item/projectile/ricochet/taser))
+			var/obj/item/projectile/P = A
+			P.bullet_die()
+			stopBouncing()
+	if(istype(A, /obj/item/weapon/legcuffs/bolas) && A.throwing)
+		stopBouncing()
+
