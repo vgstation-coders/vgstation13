@@ -3250,6 +3250,12 @@
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TriAI")
+			if("RandomizedLawset")
+				for(var/mob/living/silicon/ai/target in mob_list)
+					to_chat(target,"<span class='danger'>[Gibberish("ERROR! BACKUP FILE CORRUPTED: PLEASE VERIFY INTEGRITY OF LAWSET.",10)]</span>")
+					var/datum/ai_laws/randomize/RLS = new
+					target.laws.inherent = RLS.inherent
+					target.show_laws()
 			if("gravity")
 				if(!(ticker && ticker.mode))
 					to_chat(usr, "Please wait until the game starts!  Not sure how it will work otherwise.")

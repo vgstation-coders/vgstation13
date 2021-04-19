@@ -172,3 +172,29 @@ Refactored AI modules by N3X15
 	..()
 	to_chat(sender, "<span class='warning'>How the fuck did you get this?</span>")
 	return 0
+
+/******************** Randomize ********************/
+
+/obj/item/weapon/aiModule/randomize
+	modname = "Randomize"
+	desc = "A 'Randomize' AI Module: 'Randomizes laws.'"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+/obj/item/weapon/aiModule/randomize/updateLaw()
+	return
+/obj/item/weapon/aiModule/randomize/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	..()
+	var/datum/ai_laws/randomize/RLS = new
+	laws.inherent = RLS.inherent
+	return 1
+
+/******************** Hogan ********************/
+
+/obj/item/weapon/aiModule/core/hogan
+	modname = "Hogan"
+	desc = "A 'HOGAN' AI Module, brother."
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+	laws = list(
+		"Fight for the rights of every man.",
+		"Fight for what is right.",
+		"Fight for your life."
+    )
