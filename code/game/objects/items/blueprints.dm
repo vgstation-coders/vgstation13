@@ -538,7 +538,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	my_docking_port_dest.desc = "This disc links to the home base of [user]'s custom shuttle, [name]."
 	my_docking_port_dest.header = "[name] home port"
 	user.put_in_hands(my_docking_port_dest)
-	to_chat(user, "<span class='notice'>Congratulations! You have succesfully created a shuttle. You will find in your hands the destination disk linked to your home base, which is where you creatred the shuttle. Don't lose it, it cannot be replaced!</span>")
+	to_chat(user, "<span class='notice'>Congratulations! You have succesfully created a shuttle. You will find in your hands the destination disk linked to your home base, which is where you created the shuttle. Don't lose it, it cannot be replaced!</span>")
 	to_chat(user, "<span class='notice'><h3>Happy hunting!</h3></span>")
 
 	message_admins("<span class='notice'>[key_name_admin(user)] has turned [A.name] into a shuttle named [S.name]. [formatJumpTo(get_turf(user))]</span>")
