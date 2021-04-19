@@ -438,6 +438,9 @@
 		occupant.client.eye = occupant.client.mob
 		occupant.client.perspective = MOB_PERSPECTIVE
 	occupant.forceMove(exit)
+	var/obj/machinery/conveyor/C = locate() in exit
+	if(C && C.operating != 0)
+		occupant << sound('sound/ambience/powerhouse.ogg') //the ride begins
 	icon_state = "pod_0"
 	eject_wait = FALSE //If it's still set somehow.
 	//do early ejection damage
