@@ -583,12 +583,13 @@
 		go_out()
 
 /obj/machinery/cloning/clonepod/proc/output_turf()
-	if(!output_dir)
-		return get_turf(loc)
+	if(!output_dir || !isturf(loc))
+		return loc
 
-	. = get_step(get_turf(src), output_dir)
-	if(!.)
-		return loc // Map edge I guess.
+	var/turf/T = get_step(get_turf(src), output_dir)
+	if(!T || is_blocked_turf(T))
+		return loc
+	return T
 
 /obj/machinery/cloning/clonepod/Topic(href,href_list)
 	if(..())

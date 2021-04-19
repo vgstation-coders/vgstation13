@@ -698,17 +698,18 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	add_fingerprint(user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/output_turf()
-	if(!output_dir)
-		return get_turf(loc)
+	if(!output_dir || !isturf(loc))
+		return loc
 
-	. = get_step(get_turf(src), output_dir)
-	if(!.)
-		return loc // Map edge I guess.
+	var/turf/T = get_step(get_turf(src), output_dir)
+	if(!T || is_blocked_turf(T))
+		return loc
+	return T
 
 /obj/machinery/atmospherics/unary/cryo_cell/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
 		var/mob/living/L = AM
-		if(L.lying)
+		if(L.lying || L.getCloneLoss())
 			if(put_mob(L))
 				return TRUE
 	return FALSE
