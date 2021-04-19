@@ -379,6 +379,13 @@
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
 
+/obj/item/weapon/storage/box/remeximp/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/implantcase/remote(src)
+	new /obj/item/weapon/implanter(src)
+	new /obj/item/weapon/implantpad(src)
+
 /obj/item/weapon/storage/box/bolas
 	name = "bolas box"
 	desc = "Box of bolases. Make sure to take them out before throwing them."
