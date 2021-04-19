@@ -285,7 +285,7 @@
 	H.flavor_text = H.dna.flavor_text
 
 	H.suiciding = FALSE
-	H.name = H.get_visible_name()
+	H.update_name()
 	return TRUE
 
 //Grow clones to maturity then kick them out.  FREELOADERS

@@ -151,7 +151,7 @@
 			qdel(src)
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
-		H.name = H.get_visible_name()
+		H.update_name()
 	return uses
 
 /obj/item/weapon/dnainjector/attack(mob/M as mob, mob/user as mob)
