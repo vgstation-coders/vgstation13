@@ -146,7 +146,7 @@
 /datum/stat/manifest_entry/New(var/datum/mind/M)
 	key = ckey(M.key)
 	name = STRIP_NEWLINE(M.name)
-	assignment = STRIP_NEWLINE(M.assigned_job)
+	assignment = STRIP_NEWLINE(M.assigned_role)
 
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
 	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")

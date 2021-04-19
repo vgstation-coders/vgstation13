@@ -1508,7 +1508,8 @@
 			return
 
 		var/mob/M = locate(href_list["newban"])
-		if(!ismob(M))
+		if(!ismob(M) || !M.ckey)
+			to_chat(usr, "<span class='notice'>There is no mob, or no ckey, to ban. Perhaps the player has ghosted?</span>")
 			return
 
 		// now you can! if(M.client && M.client.holder)	return	//admins cannot be banned. Even if they could, the ban doesn't affect them anyway
