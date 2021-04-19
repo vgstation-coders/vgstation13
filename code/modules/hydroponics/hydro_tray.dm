@@ -302,7 +302,7 @@
 			C.being_potted = FALSE
 		return
 
-	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
 
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")

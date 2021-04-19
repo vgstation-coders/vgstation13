@@ -619,7 +619,7 @@
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
 	if(((stat & BROKEN) || emagged) && issolder(I))
-		var/obj/item/weapon/solder/S = I
+		var/obj/item/tool/solder/S = I
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 100)

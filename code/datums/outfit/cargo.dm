@@ -183,7 +183,7 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/crowbar = GRASP_LEFT_HAND,
+		/obj/item/tool/crowbar = GRASP_LEFT_HAND,
 		/obj/item/weapon/storage/bag/ore = slot_l_store_str,
 	)
 

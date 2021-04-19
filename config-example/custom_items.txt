@@ -8,7 +8,7 @@ compactninja: Al Peterson: /obj/item/clothing/head/flatcap
 compactninja: Lister Black: /obj/item/weapon/storage/pill_bottle/fluff/listermedbottle, /obj/item/weapon/storage/pill_bottle/fluff/listermedbottle
 crazy2455: Murad Hassim: /obj/item/clothing/gloves/fluff/murad_hassim_1
 cubejackal: Barry Sharke: /obj/item/clothing/mask/fluff/electriccig
-daaneesh: Zelda Creedy: /obj/item/weapon/crowbar/fluff/zelda_creedy_1
+daaneesh: Zelda Creedy: /obj/item/tool/crowbar/fluff/zelda_creedy_1
 deusdactyl: James Girard: /obj/item/clothing/head/secsoft/fluff/swatcap, /obj/item/clothing/suit/armor/vest/fluff/deus_blueshield
 donofnyc3: Oen'g Issek: /obj/item/weapon/melee/baton/fluff/oeng_baton
 eternal248: Maximilian Haynes: /obj/item/weapon/paper/certificate

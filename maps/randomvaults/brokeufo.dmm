@@ -27,7 +27,7 @@
 "aA" = (/turf/simulated/shuttle/wall{icon_state = "swall15"},/area/vault/brokeufo)
 "aB" = (/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/floor/carpet/floor_tile,/area/vault/brokeufo)
 "aC" = (/turf/simulated/floor/carpet/floor_tile,/area/vault/brokeufo)
-"aD" = (/obj/structure/table/reinforced,/obj/item/weapon/bonesetter,/obj/item/weapon/bonegel,/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)
+"aD" = (/obj/structure/table/reinforced,/obj/item/tool/bonesetter,/obj/item/tool/bonegel,/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)
 "aE" = (/obj/structure/table/reinforced,/obj/item/weapon/switchtool/surgery,/obj/item/organ/internal/lungs/filter,/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)
 "aF" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/regular,/obj/item/weapon/storage/firstaid/adv,/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)
 "aG" = (/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)

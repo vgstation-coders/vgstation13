@@ -64,7 +64,7 @@
 		if(skipping < 3)
 			var/fullpath = path+binary
 			if(copytext(fullpath,-4,0) == ".dmb")
-				all_maps[potential] = path + binary
+				all_maps[copytext(potential,1,length(potential))] = path + binary // Makes key not have / at end, looks better in lists
 			else
 				binary = null
 				continue
@@ -103,7 +103,7 @@
 		if(!binary)
 			warning("Map folder [path] does not contain a valid byond binary, skipping.")
 		else
-			maps[potential] = path + binary
+			maps[copytext(potential,1,length(potential))] = path + binary // Makes key not have / at end, looks better in lists
 			binary = null
 		recursion_limit--
 	var/list/maplist = get_list_of_keys(maps)

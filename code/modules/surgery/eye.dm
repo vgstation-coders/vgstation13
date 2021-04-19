@@ -26,7 +26,7 @@
 
 /datum/surgery_step/eye/cut_open
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
+		/obj/item/tool/scalpel = 100,
 		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
@@ -63,7 +63,7 @@
 //////LIFT EYES///////
 /datum/surgery_step/eye/lift_eyes
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
+		/obj/item/tool/retractor = 100,
 		/obj/item/weapon/kitchen/utensil/fork = 50,
 		)
 
@@ -95,7 +95,7 @@
 ///////MEND EYES/////////
 /datum/surgery_step/eye/mend_eyes
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
+		/obj/item/tool/hemostat = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 10,	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
@@ -132,11 +132,11 @@
 	return 0
 /datum/surgery_step/eye/cauterize
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/tool/cautery = 100,
+		/obj/item/tool/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
 		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/tool/weldingtool = 25,
 		)
 
 	duration = 7 SECONDS

@@ -291,7 +291,7 @@
 
 /obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
 	..()
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if(istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
 		if(do_after(user, src, 30))
 			new /obj/item/weapon/nullrod/mosinnagant/obrez(get_turf(src))
@@ -311,7 +311,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
 /obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
-    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+    if (istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
         return
     else
         return ..()

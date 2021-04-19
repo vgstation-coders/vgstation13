@@ -11,7 +11,7 @@
 "jQ" = (/obj/structure/geyser/critical,/turf/simulated/floor/engine,/area/vault/thermalplant)
 "kA" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/full/reinforced/plasma,/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 10},/turf/simulated/floor/plating,/area/vault/thermalplant)
 "kD" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 10},/turf/unsimulated/floor/snow,/area)
-"kJ" = (/obj/item/weapon/wrench,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"kJ" = (/obj/item/tool/wrench,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
 "lQ" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 6},/turf/unsimulated/floor/snow,/area)
 "mS" = (/obj/machinery/atmospherics/binary/volume_pump{dir = 1; name = "Cold Gas Circulator"},/turf/simulated/floor/plating,/area/vault/thermalplant)
 "na" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 5},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 4; tag = "icon-pathmarker (EAST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)

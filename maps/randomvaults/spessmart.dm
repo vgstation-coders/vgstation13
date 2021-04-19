@@ -20,13 +20,13 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/extinguisher/foam = 20,
 
 /obj/item/device/multitool = 8,
-/obj/item/weapon/crowbar/red = 5,
+/obj/item/tool/crowbar/red = 5,
 /obj/item/weapon/bikehorn/rubberducky = 5,
 /obj/item/weapon/bikehorn = 5,
 /obj/item/weapon/lighter/zippo = 20,
-/obj/item/weapon/screwdriver = 3,
-/obj/item/weapon/wrench = 3,
-/obj/item/weapon/wrench/socket = 100,
+/obj/item/tool/screwdriver = 3,
+/obj/item/tool/wrench = 3,
+/obj/item/tool/wrench/socket = 100,
 /obj/item/queen_bee = 5,
 /obj/item/toy/gooncode = 400, //honk
 /obj/item/mounted/poster = 20,
@@ -60,14 +60,14 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/disk/shuttle_coords/vault/random = 90,
 
 //tools
-/obj/item/weapon/surgicaldrill = 100,
-/obj/item/weapon/circular_saw = 100,
-/obj/item/weapon/scalpel/laser/tier2 = 120,
-/obj/item/weapon/scalpel = 70,
-/obj/item/weapon/retractor = 30,
-/obj/item/weapon/cautery = 30,
-/obj/item/weapon/bonegel = 30,
-/obj/item/weapon/FixOVein = 30,
+/obj/item/tool/surgicaldrill = 100,
+/obj/item/tool/circular_saw = 100,
+/obj/item/tool/scalpel/laser/tier2 = 120,
+/obj/item/tool/scalpel = 70,
+/obj/item/tool/retractor = 30,
+/obj/item/tool/cautery = 30,
+/obj/item/tool/bonegel = 30,
+/obj/item/tool/FixOVein = 30,
 
 /obj/item/weapon/switchtool/surgery = 100,
 /obj/item/weapon/switchtool/swiss_army_knife = 300,
@@ -120,10 +120,10 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/reagent_scanner = 50,
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 25,
-/obj/item/weapon/solder = 10,
+/obj/item/tool/solder = 10,
 /obj/item/supermatter_shielding = 100,
 /obj/item/weapon/cell/hyper = 50,
-/obj/item/weapon/weldingtool/gatling/empty = 100,
+/obj/item/tool/weldingtool/gatling/empty = 100,
 
 
 //weapons

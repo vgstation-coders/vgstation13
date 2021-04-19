@@ -52,7 +52,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		return -1
 	return ..()
 
-/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(..())
 		if(loaded_item)
 			loaded_item.forceMove(loc)

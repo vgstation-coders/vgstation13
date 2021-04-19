@@ -75,7 +75,7 @@
 
 /obj/item/stack/conveyor_assembly/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
 			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \

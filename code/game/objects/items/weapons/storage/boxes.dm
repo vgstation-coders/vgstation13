@@ -379,6 +379,13 @@
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
 
+/obj/item/weapon/storage/box/remeximp/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/implantcase/remote(src)
+	new /obj/item/weapon/implanter(src)
+	new /obj/item/weapon/implantpad(src)
+
 /obj/item/weapon/storage/box/bolas
 	name = "bolas box"
 	desc = "Box of bolases. Make sure to take them out before throwing them."
@@ -750,6 +757,16 @@
 	..()
 	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+
+/obj/item/weapon/storage/box/antiviral_syringes
+	name = "box of anti-viral syringes"
+	desc = "Contains anti-viral syringes."
+	icon_state = "syringe"
+
+/obj/item/weapon/storage/box/antiviral_syringes/New()
+	..()
+	for (var/i; i < BOX_SPACE; i++)
+		new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
 
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"

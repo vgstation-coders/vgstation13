@@ -656,13 +656,13 @@
 /area/crew_quarters/bar)
 "ce" = (
 /obj/structure/table,
-/obj/item/weapon/hemostat{
+/obj/item/tool/hemostat{
 	pixel_y = 4
 	},
-/obj/item/weapon/cautery{
+/obj/item/tool/cautery{
 	pixel_y = 4
 	},
-/obj/item/weapon/FixOVein{
+/obj/item/tool/FixOVein{
 	pixel_x = -6;
 	pixel_y = 1
 	},
@@ -671,25 +671,25 @@
 "cf" = (
 /obj/structure/table,
 /obj/item/stack/medical/bruise_pack,
-/obj/item/weapon/retractor{
+/obj/item/tool/retractor{
 	pixel_y = 6
 	},
-/obj/item/weapon/scalpel,
+/obj/item/tool/scalpel,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cg" = (
 /obj/structure/table,
-/obj/item/weapon/bonegel{
+/obj/item/tool/bonegel{
 	pixel_x = 4;
 	pixel_y = 3
 	},
-/obj/item/weapon/bonesetter,
+/obj/item/tool/bonesetter,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "ch" = (
 /obj/structure/table,
-/obj/item/weapon/surgicaldrill,
-/obj/item/weapon/circular_saw,
+/obj/item/tool/surgicaldrill,
+/obj/item/tool/circular_saw,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "ci" = (
@@ -760,7 +760,7 @@
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/wirecutters/clippers,
+/obj/item/tool/wirecutters/clippers,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cr" = (
@@ -771,7 +771,7 @@
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/wirecutters/clippers,
+/obj/item/tool/wirecutters/clippers,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cs" = (
@@ -801,8 +801,8 @@
 	dir = 4
 	},
 /obj/structure/table/reinforced,
-/obj/item/weapon/crowbar,
-/obj/item/weapon/wrench{
+/obj/item/tool/crowbar,
+/obj/item/tool/wrench{
 	pixel_x = 5;
 	pixel_y = -5
 	},
@@ -930,8 +930,8 @@
 "cM" = (
 /obj/structure/closet/crate/hydroponics,
 /obj/item/weapon/pickaxe/shovel/spade,
-/obj/item/weapon/wrench,
-/obj/item/weapon/screwdriver,
+/obj/item/tool/wrench,
+/obj/item/tool/screwdriver,
 /obj/item/weapon/reagent_containers/glass/bucket,
 /obj/item/weapon/paper/hydroponics,
 /obj/item/weapon/book/manual/hydroponics_beekeeping,

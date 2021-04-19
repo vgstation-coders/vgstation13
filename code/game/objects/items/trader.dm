@@ -333,7 +333,7 @@ var/global/list/alcatraz_stuff = list(
 	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to trigger them for early detonation. Straps nicely onto security armor."
 	icon_state = "bangerboy"
 	mech_flags = MECH_SCAN_FAIL
-	var/obj/item/weapon/screwdriver/S
+	var/obj/item/tool/screwdriver/S
 
 /obj/item/clothing/accessory/bangerboy/New()
 	..()
@@ -1102,7 +1102,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
 	if(iswelder(W))
 		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
-		var/obj/item/weapon/weldingtool/WT=W
+		var/obj/item/tool/weldingtool/WT=W
 		if(WT.do_weld(user, src, 10 SECONDS, 5))
 			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
 			qdel(src)
@@ -1337,7 +1337,7 @@ var/global/list/alcatraz_stuff = list(
 	for(var/i = 1 to 3)
 		var/boosterPack = pick(legalCircuits)
 		new boosterPack(src)
-	new /obj/item/weapon/solder(src)
+	new /obj/item/tool/solder(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker/sulphuric(src)
 	new /obj/item/weapon/paper/permissionslip(src)
 

@@ -59,7 +59,7 @@
 "bj" = (/obj/item/toy/gasha/carptoy,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/wood,/area/vault/zathura)
 "bk" = (/obj/effect/decal/cleanable/soot{alpha = 120},/obj/effect/decal/cleanable/soot{alpha = 120},/turf/simulated/floor/wood{tag = "icon-wood-broken2"; icon_state = "wood-broken2"},/area/vault/zathura)
 "bl" = (/obj/effect/decal/cleanable/dirt,/obj/item/stack/sheet/wood,/turf/simulated/floor/wood,/area/vault/zathura)
-"bm" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/crowbar,/turf/simulated/floor/wood,/area/vault/zathura)
+"bm" = (/obj/effect/decal/cleanable/dirt,/obj/item/tool/crowbar,/turf/simulated/floor/wood,/area/vault/zathura)
 "bn" = (/obj/effect/decal/cleanable/dirt,/obj/structure/bed/chair/office/dark,/turf/simulated/floor/plating,/area/vault/zathura)
 "bo" = (/obj/machinery/light/built{tag = "icon-ltube1 (EAST)"; icon_state = "ltube1"; dir = 4},/turf/simulated/floor/wood,/area/vault/zathura)
 "bp" = (/obj/structure/grille,/obj/structure/window/reinforced{tag = "icon-rwindow (EAST)"; icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced{tag = "icon-rwindow (NORTH)"; icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced{tag = "icon-rwindow (WEST)"; icon_state = "rwindow"; dir = 8},/turf/simulated/floor/plating,/area/vault/zathura)

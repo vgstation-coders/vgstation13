@@ -24,7 +24,7 @@
 		if(integrity >= TELECOMMS_MAX_INTEGRITY)
 			to_chat(user, "It's not damaged.")
 			return
-		var/obj/item/weapon/solder/S = W
+		var/obj/item/tool/solder/S = W
 		if (!S.remove_fuel(2, user))
 			to_chat(user, "You need more fuel.")
 			return

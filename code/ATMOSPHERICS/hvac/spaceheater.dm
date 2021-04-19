@@ -162,7 +162,7 @@
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
 		if(iswelder(I))
-			var/obj/item/weapon/weldingtool/WT = I
+			var/obj/item/tool/weldingtool/WT = I
 			if(WT.is_hot()) //Badasses dont get blinded while lighting their !!campfire!! with a welding tool
 				light("<span class='notice'>[user] casually lights \the [name] with \the [I], what a badass.</span>")
 		else if(istype(I, /obj/item/weapon/lighter/zippo))

@@ -190,7 +190,7 @@
 		if(!isigniter(a_left) && !isigniter(a_right))
 			to_chat(user, "<span class='warning'>You can't make an igniter without an igniting component!</span>")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
 		if (WT.do_weld(user, src, 40, 0))
 			var/obj/machinery/igniter/igniter=new(src.loc)

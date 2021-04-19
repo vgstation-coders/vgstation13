@@ -971,7 +971,7 @@
 			if(health >= maxHealth)
 				to_chat(user, "<span class='warning'>Nothing to fix here!</span>")
 				return
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(WT.remove_fuel(5))
 				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
@@ -987,7 +987,7 @@
 			if(health >= maxHealth)
 				to_chat(user, "<span class='warning'>Nothing to fix here!</span>")
 				return
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(WT.remove_fuel(5))
 				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)

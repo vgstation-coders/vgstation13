@@ -20,4 +20,5 @@
 #include "reagent_ids.dm"
 #include "supermatter_airflow.dm"
 #include "languages.dm"
+#include "hour_calculations.dm"
 #endif

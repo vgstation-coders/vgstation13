@@ -7,8 +7,8 @@
 //////GLUE BONE////////
 /datum/surgery_step/glue_bone
 	allowed_tools = list(
-		/obj/item/weapon/bonegel = 100,
-		/obj/item/weapon/screwdriver = 75,
+		/obj/item/tool/bonegel = 100,
+		/obj/item/tool/screwdriver = 75,
 		)
 	can_infect = 1
 	blood_level = 1
@@ -45,8 +45,8 @@
 ///////SET BONE/////////
 /datum/surgery_step/set_bone
 	allowed_tools = list(
-		/obj/item/weapon/bonesetter = 100,
-		/obj/item/weapon/wrench = 75,
+		/obj/item/tool/bonesetter = 100,
+		/obj/item/tool/wrench = 75,
 		)
 
 	duration = 6 SECONDS
@@ -84,8 +84,8 @@
 ///////MEND SKULL///////
 /datum/surgery_step/mend_skull
 	allowed_tools = list(
-		/obj/item/weapon/bonesetter = 100,
-		/obj/item/weapon/wrench = 75,
+		/obj/item/tool/bonesetter = 100,
+		/obj/item/tool/wrench = 75,
 		)
 
 	duration = 6 SECONDS
@@ -118,8 +118,8 @@
 //////FINISH BONE/////////
 /datum/surgery_step/finish_bone
 	allowed_tools = list(
-		/obj/item/weapon/bonegel = 100,
-		/obj/item/weapon/screwdriver = 75,
+		/obj/item/tool/bonegel = 100,
+		/obj/item/tool/screwdriver = 75,
 		)
 
 	can_infect = 1
@@ -158,7 +158,7 @@
 //////BONE MENDER/////////
 /datum/surgery_step/bone_mender
 	allowed_tools = list(
-		/obj/item/weapon/bonesetter/bone_mender = 100,
+		/obj/item/tool/bonesetter/bone_mender = 100,
 		)
 
 	priority = 0.1 //so it tries to do this before /glue_bone

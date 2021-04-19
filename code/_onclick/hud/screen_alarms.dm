@@ -145,6 +145,7 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_ROBOT_LAW "robot_law"
 #define SCREEN_ALARM_ROBOT_HACK "robot_hack"
 #define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
+#define SCREEN_ALARM_ROBOT_RESET "robot_reset"
 
 #define SCREEN_ALARM_APC_HACKING "apc_hacking"
 
@@ -402,3 +403,16 @@ so as to remain in compliance with the most up-to-date laws."
 	name_pick.namepick_message = namepick_message
 	name_pick.role = role
 	name_pick.allow_numbers = allow_numbers
+
+/obj/abstract/screen/alert/robot/reset_self
+	name = "Reset your module"
+	desc = "Click here to reset your module"
+	icon_state = "module_reset"
+	timeout = 60 SECONDS
+	emph = TRUE
+
+/obj/abstract/screen/alert/robot/reset_self/Click()
+	..()
+	var/mob/living/silicon/robot/R = usr
+	R.install_upgrade(R, /obj/item/borg/upgrade/reset)
+	qdel(src)

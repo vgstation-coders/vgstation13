@@ -94,7 +94,7 @@
 
 /obj/item/weapon/shard/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			var/obj/item/stack/sheet/glass/new_item = new glass()
 			new_item.forceMove(user.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.

@@ -1022,7 +1022,7 @@
 	pixel_x = 6;
 	pixel_y = 5
 	},
-/obj/item/weapon/screwdriver,
+/obj/item/tool/screwdriver,
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
@@ -2627,7 +2627,7 @@
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 1
 	},
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/structure/window/reinforced{
 	dir = 8
 	},
@@ -5619,7 +5619,7 @@
 	icon_state = "4-8"
 	},
 /obj/item/device/radio,
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /turf/simulated/floor{
 	icon_state = "redcorner"
 	},
@@ -6739,9 +6739,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/item/device/radio,
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -9304,7 +9304,7 @@
 /area/security/brig)
 "apk" = (
 /obj/structure/table,
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "apl" = (
@@ -10198,7 +10198,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/courtroom)
 "aqG" = (
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "aqH" = (
@@ -14710,12 +14710,12 @@
 "ayW" = (
 /obj/structure/table,
 /obj/item/weapon/c_tube,
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "ayX" = (
 /obj/structure/table,
-/obj/item/weapon/weldingtool{
+/obj/item/tool/weldingtool{
 	pixel_y = 6
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -15171,7 +15171,7 @@
 /area/maintenance/fsmaint2)
 "azZ" = (
 /obj/structure/closet,
-/obj/item/weapon/crowbar/red,
+/obj/item/tool/crowbar/red,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "aAa" = (
@@ -17345,7 +17345,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint2)
 "aEU" = (
-/obj/item/weapon/screwdriver,
+/obj/item/tool/screwdriver,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "aEV" = (
@@ -18295,7 +18295,7 @@
 /area/maintenance/fsmaint2)
 "aGT" = (
 /obj/structure/rack,
-/obj/item/weapon/weldingtool/hugetank/empty,
+/obj/item/tool/weldingtool/hugetank/empty,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
@@ -19621,7 +19621,7 @@
 "aJE" = (
 /obj/structure/rack,
 /obj/item/device/multitool,
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wirecutters,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "aJF" = (
@@ -21258,7 +21258,7 @@
 /turf/simulated/floor/plating,
 /area/crew_quarters/fitness)
 "aMQ" = (
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "aMR" = (
@@ -21544,7 +21544,7 @@
 /area/storage/primary)
 "aNz" = (
 /obj/structure/table,
-/obj/item/weapon/wirecutters{
+/obj/item/tool/wirecutters{
 	pixel_y = 4
 	},
 /turf/simulated/floor,
@@ -21563,7 +21563,7 @@
 "aNB" = (
 /obj/structure/table,
 /obj/item/device/assembly/igniter,
-/obj/item/weapon/screwdriver{
+/obj/item/tool/screwdriver{
 	pixel_y = 16
 	},
 /obj/machinery/camera{
@@ -21631,7 +21631,7 @@
 /area/storage/primary)
 "aNH" = (
 /obj/structure/table,
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -22965,7 +22965,7 @@
 	},
 /area/security/checkpoint2)
 "aQq" = (
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/item/device/flash,
 /obj/item/device/radio/intercom{
 	name = "Station Intercom (General)";
@@ -23019,7 +23019,7 @@
 	pixel_x = 3;
 	pixel_y = -7
 	},
-/obj/item/weapon/screwdriver{
+/obj/item/tool/screwdriver{
 	pixel_y = 16
 	},
 /obj/item/weapon/cell/high{
@@ -23967,10 +23967,10 @@
 /area/storage/primary)
 "aRZ" = (
 /obj/structure/table,
-/obj/item/weapon/weldingtool{
+/obj/item/tool/weldingtool{
 	pixel_y = 4
 	},
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/item/stack/package_wrap,
 /obj/item/stack/package_wrap,
 /obj/item/stack/package_wrap,
@@ -24560,7 +24560,7 @@
 /obj/structure/table/reinforced,
 /obj/item/weapon/melee/energy/axe,
 /obj/item/weapon/fireaxe,
-/obj/item/weapon/circular_saw,
+/obj/item/tool/circular_saw,
 /obj/item/weapon/melee/energy/sword,
 /obj/machinery/light{
 	dir = 4
@@ -24686,7 +24686,7 @@
 /area/maintenance/fpmaint2)
 "aTx" = (
 /obj/structure/table,
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/item/device/analyzer,
 /turf/simulated/floor,
 /area/storage/primary)
@@ -24709,7 +24709,7 @@
 /area/storage/primary)
 "aTB" = (
 /obj/structure/table,
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/item/device/assembly/prox_sensor{
 	pixel_x = -8;
 	pixel_y = 4
@@ -24860,7 +24860,7 @@
 	icon_state = "0-8"
 	},
 /obj/structure/table,
-/obj/item/weapon/screwdriver{
+/obj/item/tool/screwdriver{
 	pixel_y = 6
 	},
 /turf/simulated/floor{
@@ -25368,7 +25368,7 @@
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/wirecutters/clippers,
+/obj/item/tool/wirecutters/clippers,
 /turf/simulated/floor{
 	icon_state = "hydrofloor"
 	},
@@ -25386,7 +25386,7 @@
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/wirecutters/clippers,
+/obj/item/tool/wirecutters/clippers,
 /turf/simulated/floor{
 	icon_state = "hydrofloor"
 	},
@@ -25404,7 +25404,7 @@
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/pickaxe/shovel/spade,
 /obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/wirecutters/clippers,
+/obj/item/tool/wirecutters/clippers,
 /turf/simulated/floor{
 	icon_state = "hydrofloor"
 	},
@@ -27017,7 +27017,7 @@
 /obj/item/device/radio/headset/headset_service,
 /obj/item/weapon/reagent_containers/food/drinks/flask/barflask,
 /obj/item/stack/package_wrap,
-/obj/item/weapon/screwdriver,
+/obj/item/tool/screwdriver,
 /obj/item/device/rcd/tile_painter,
 /obj/item/weapon/book/manual/barman_recipes,
 /obj/item/weapon/reagent_containers/food/drinks/shaker,
@@ -27098,8 +27098,8 @@
 "aYy" = (
 /obj/structure/closet/crate/hydroponics,
 /obj/item/weapon/pickaxe/shovel/spade,
-/obj/item/weapon/wrench,
-/obj/item/weapon/screwdriver,
+/obj/item/tool/wrench,
+/obj/item/tool/screwdriver,
 /obj/item/weapon/reagent_containers/glass/bucket,
 /obj/item/weapon/paper/hydroponics,
 /obj/item/weapon/book/manual/hydroponics_beekeeping,
@@ -31554,7 +31554,7 @@
 	},
 /area/bridge)
 "bhJ" = (
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/structure/table/reinforced,
 /obj/machinery/camera{
 	c_tag = "Bridge West"
@@ -32099,7 +32099,7 @@
 	pixel_x = 3;
 	pixel_y = 5
 	},
-/obj/item/weapon/screwdriver{
+/obj/item/tool/screwdriver{
 	pixel_y = 15
 	},
 /turf/simulated/floor,
@@ -38481,7 +38481,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "bvT" = (
-/obj/item/weapon/screwdriver,
+/obj/item/tool/screwdriver,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "bvU" = (
@@ -39054,7 +39054,7 @@
 	name = "Autopsy Camera"
 	},
 /obj/item/weapon/autopsy_scanner,
-/obj/item/weapon/scalpel,
+/obj/item/tool/scalpel,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -42767,7 +42767,7 @@
 	pixel_x = 6;
 	pixel_y = 5
 	},
-/obj/item/weapon/screwdriver{
+/obj/item/tool/screwdriver{
 	pixel_x = -2;
 	pixel_y = 6
 	},
@@ -46172,10 +46172,10 @@
 /area/science/chargebay)
 "bJV" = (
 /obj/structure/table,
-/obj/item/weapon/circular_saw{
+/obj/item/tool/circular_saw{
 	pixel_y = 4
 	},
-/obj/item/weapon/scalpel{
+/obj/item/tool/scalpel{
 	pixel_y = 14
 	},
 /turf/simulated/floor{
@@ -46206,7 +46206,7 @@
 /area/science/robotics)
 "bJY" = (
 /obj/structure/table,
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/item/device/radio/headset/headset_sci{
 	pixel_x = -3
 	},
@@ -46744,7 +46744,7 @@
 	pixel_y = 20
 	},
 /obj/structure/closet/crate,
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /turf/simulated/floor,
 /area/teleporter)
 "bLa" = (
@@ -47201,9 +47201,9 @@
 "bLN" = (
 /obj/structure/table,
 /obj/item/weapon/storage/box/bodybags,
-/obj/item/weapon/cautery,
-/obj/item/weapon/retractor,
-/obj/item/weapon/hemostat,
+/obj/item/tool/cautery,
+/obj/item/tool/retractor,
+/obj/item/tool/hemostat,
 /obj/item/weapon/reagent_containers/spray/cleaner{
 	desc = "Someone has crossed out the Space from Space Cleaner and written in Surgery. 'Do not remove under punishment of death!!!' is scrawled on the back.";
 	name = "Surgery Cleaner";
@@ -48237,8 +48237,8 @@
 	dir = 4
 	},
 /obj/structure/table/reinforced,
-/obj/item/weapon/crowbar,
-/obj/item/weapon/wrench{
+/obj/item/tool/crowbar,
+/obj/item/tool/wrench{
 	pixel_x = 5;
 	pixel_y = -5
 	},
@@ -54008,13 +54008,13 @@
 /area/medical/surgery)
 "bXT" = (
 /obj/structure/table,
-/obj/item/weapon/hemostat{
+/obj/item/tool/hemostat{
 	pixel_y = 4
 	},
-/obj/item/weapon/cautery{
+/obj/item/tool/cautery{
 	pixel_y = 4
 	},
-/obj/item/weapon/FixOVein{
+/obj/item/tool/FixOVein{
 	pixel_x = -6;
 	pixel_y = 1
 	},
@@ -54025,21 +54025,21 @@
 "bXU" = (
 /obj/structure/table,
 /obj/item/stack/medical/bruise_pack,
-/obj/item/weapon/retractor{
+/obj/item/tool/retractor{
 	pixel_y = 6
 	},
-/obj/item/weapon/scalpel,
+/obj/item/tool/scalpel,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
 /area/medical/surgery)
 "bXV" = (
 /obj/structure/table,
-/obj/item/weapon/bonegel{
+/obj/item/tool/bonegel{
 	pixel_x = 4;
 	pixel_y = 3
 	},
-/obj/item/weapon/bonesetter,
+/obj/item/tool/bonesetter,
 /obj/machinery/door_control{
 	id_tag = "medpriv4";
 	name = "Privacy Shutters";
@@ -54051,9 +54051,9 @@
 /area/medical/surgery)
 "bXW" = (
 /obj/structure/table,
-/obj/item/weapon/surgicaldrill,
-/obj/item/weapon/circular_saw,
-/obj/item/weapon/retractor/manager,
+/obj/item/tool/surgicaldrill,
+/obj/item/tool/circular_saw,
+/obj/item/tool/retractor/manager,
 /obj/item/weapon/switchtool/surgery,
 /turf/simulated/floor{
 	icon_state = "white"
@@ -54872,11 +54872,11 @@
 /obj/item/stack/medical/bruise_pack{
 	pixel_y = 4
 	},
-/obj/item/weapon/retractor{
+/obj/item/tool/retractor{
 	pixel_y = 6
 	},
-/obj/item/weapon/circular_saw,
-/obj/item/weapon/scalpel,
+/obj/item/tool/circular_saw,
+/obj/item/tool/scalpel,
 /obj/structure/sign/nosmoking_1{
 	pixel_y = 28
 	},
@@ -55425,8 +55425,8 @@
 /area/science/mixing)
 "cal" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/wrench,
-/obj/item/weapon/screwdriver{
+/obj/item/tool/wrench,
+/obj/item/tool/screwdriver{
 	pixel_y = 10
 	},
 /obj/item/device/radio/intercom{
@@ -55830,13 +55830,13 @@
 /area/engineering/mechanics)
 "caZ" = (
 /obj/structure/table,
-/obj/item/weapon/hemostat{
+/obj/item/tool/hemostat{
 	pixel_y = 4
 	},
-/obj/item/weapon/cautery{
+/obj/item/tool/cautery{
 	pixel_y = 4
 	},
-/obj/item/weapon/surgicaldrill,
+/obj/item/tool/surgicaldrill,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -57040,12 +57040,12 @@
 /area/maintenance/asmaint)
 "cdc" = (
 /obj/structure/table,
-/obj/item/weapon/FixOVein{
+/obj/item/tool/FixOVein{
 	pixel_x = -6;
 	pixel_y = 1
 	},
-/obj/item/weapon/bonesetter,
-/obj/item/weapon/bonegel{
+/obj/item/tool/bonesetter,
+/obj/item/tool/bonegel{
 	pixel_x = 4;
 	pixel_y = 3
 	},
@@ -58795,10 +58795,10 @@
 /area/storage/tech)
 "cgl" = (
 /obj/structure/table,
-/obj/item/weapon/screwdriver{
+/obj/item/tool/screwdriver{
 	pixel_y = 16
 	},
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wirecutters,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -60007,8 +60007,8 @@
 	},
 /area/maintenance/asmaint)
 "cid" = (
-/obj/item/weapon/crowbar/red,
-/obj/item/weapon/wrench,
+/obj/item/tool/crowbar/red,
+/obj/item/tool/wrench,
 /obj/machinery/power/apc{
 	dir = 8;
 	pixel_x = -24
@@ -64074,9 +64074,9 @@
 /area/medical/virology_break)
 "cpM" = (
 /obj/structure/table,
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wirecutters,
 /obj/item/weapon/kitchen/utensil/fork,
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/item/stack/rods,
 /obj/effect/decal/warning_stripes{
 	dir = 8;
@@ -64113,7 +64113,7 @@
 /area/medical/surgery_ghetto)
 "cpQ" = (
 /obj/structure/table,
-/obj/item/weapon/screwdriver,
+/obj/item/tool/screwdriver,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
 /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey,
 /obj/machinery/light{
@@ -64718,7 +64718,7 @@
 /obj/item/stack/cable_coil{
 	amount = 5
 	},
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/effect/decal/warning_stripes{
 	dir = 10;
 	icon_state = "warning";
@@ -66630,7 +66630,7 @@
 	pixel_x = 2;
 	pixel_y = 2
 	},
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/item/device/pipe_painter,
 /obj/item/stack/sheet/metal{
 	amount = 50
@@ -73930,7 +73930,7 @@
 /area/science/xenobiology)
 "cHH" = (
 /obj/machinery/atmospherics/unary/portables_connector,
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/effect/decal/warning_stripes{
 	dir = 6;
 	icon_state = "warning";
@@ -74935,7 +74935,7 @@
 /obj/structure/table,
 /obj/item/clothing/gloves/black,
 /obj/item/clothing/gloves/black,
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/item/weapon/storage/box/lights/mixed,
 /turf/simulated/floor,
 /area/engineering/break_room)
@@ -79643,7 +79643,7 @@
 	pixel_x = 3;
 	pixel_y = -7
 	},
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/effect/decal/warning_stripes{
 	dir = 8;
 	icon_state = "warning";
@@ -79660,7 +79660,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/engine)
 "cQM" = (
-/obj/item/weapon/screwdriver,
+/obj/item/tool/screwdriver,
 /turf/simulated/floor,
 /area/engineering/engine)
 "cQN" = (
@@ -80094,7 +80094,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "cRP" = (
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wirecutters,
 /obj/effect/decal/warning_stripes{
 	icon_state = "warning";
 	tag = "icon-warning"
@@ -80321,7 +80321,7 @@
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "cSt" = (
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 4;
@@ -80616,7 +80616,7 @@
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "cTc" = (
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wirecutters,
 /turf/space,
 /area)
 "cTd" = (
@@ -80720,7 +80720,7 @@
 /turf/space,
 /area)
 "cTr" = (
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /turf/space,
 /area)
 "cTs" = (
@@ -80779,7 +80779,7 @@
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "cTz" = (
-/obj/item/weapon/wrench,
+/obj/item/tool/wrench,
 /obj/structure/catwalk,
 /turf/space,
 /area)
@@ -80981,7 +80981,7 @@
 	},
 /area/engineering/engine_storage)
 "cTR" = (
-/obj/item/weapon/weldingtool,
+/obj/item/tool/weldingtool,
 /turf/space,
 /area)
 "cTS" = (
@@ -81102,7 +81102,7 @@
 /turf/simulated/floor/plating/airless,
 /area/engineering/engine)
 "cUg" = (
-/obj/item/weapon/screwdriver,
+/obj/item/tool/screwdriver,
 /obj/structure/lattice,
 /turf/space,
 /area)
@@ -82518,7 +82518,7 @@
 	pixel_x = 2;
 	pixel_y = 3
 	},
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /turf/simulated/shuttle/floor{
 	icon_state = "floor3"
 	},
@@ -83386,7 +83386,7 @@
 	pixel_x = 2;
 	pixel_y = 3
 	},
-/obj/item/weapon/crowbar,
+/obj/item/tool/crowbar,
 /obj/item/weapon/reagent_containers/blood/OMinus,
 /turf/simulated/shuttle/floor{
 	icon_state = "floor3"

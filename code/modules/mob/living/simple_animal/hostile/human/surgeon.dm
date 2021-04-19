@@ -17,7 +17,7 @@
 	gender = MALE
 
 	corpse = /obj/effect/landmark/corpse/surgeon
-	items_to_drop = list(/obj/item/weapon/circular_saw/plasmasaw)
+	items_to_drop = list(/obj/item/tool/circular_saw/plasmasaw)
 
 /mob/living/simple_animal/hostile/humanoid/surgeon/boss
 	name = "Doctor Peter Holden"

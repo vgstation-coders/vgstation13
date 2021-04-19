@@ -556,7 +556,7 @@
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
 	else if (iswelder(W) && opened && has_electronics==0 && !terminal)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the APC frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
@@ -610,7 +610,7 @@
 				&& !opened \
 				&& ( \
 					(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) \
-					|| istype(W,/obj/item/weapon/crowbar) \
+					|| istype(W,/obj/item/tool/crowbar) \
 				) \
 				&& prob(20) )
 			user.do_attack_animation(src, W)

@@ -1301,7 +1301,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/assembly/igniter = 3,
 		/obj/item/device/assembly/signaler = 4,
 		/obj/item/device/assembly/infra = 6,
-		/obj/item/weapon/wirecutters = 1,
+		/obj/item/tool/wirecutters = 1,
 		/obj/item/weapon/cartridge/signal = 4,
 		/obj/item/weapon/stock_parts/manipulator = 5,
 		/obj/item/weapon/stock_parts/micro_laser = 3,
@@ -1771,7 +1771,7 @@ var/global/num_vending_terminals = 1
 	..()
 	component_parts = 0
 
-/obj/machinery/vending/wallmed1/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
+/obj/machinery/vending/wallmed1/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
 	if(do_after(user, src, 40))
@@ -1789,7 +1789,7 @@ var/global/num_vending_terminals = 1
 		return TRUE
 	return FALSE
 
-/obj/machinery/vending/wallmed2/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
+/obj/machinery/vending/wallmed2/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
 	if(do_after(user, src, 40))
@@ -2310,18 +2310,18 @@ var/global/num_vending_terminals = 1
 	vend_delay = 11
 	products = list(
 		/obj/item/stack/cable_coil/random = 10,
-		/obj/item/weapon/crowbar = 5,
-		/obj/item/weapon/weldingtool = 3,
-		/obj/item/weapon/wirecutters = 5,
-		/obj/item/weapon/wrench = 5,
+		/obj/item/tool/crowbar = 5,
+		/obj/item/tool/weldingtool = 3,
+		/obj/item/tool/wirecutters = 5,
+		/obj/item/tool/wrench = 5,
 		/obj/item/device/analyzer = 5,
 		/obj/item/device/t_scanner = 5,
-		/obj/item/weapon/screwdriver = 5,
-		/obj/item/weapon/solder = 3,
+		/obj/item/tool/screwdriver = 5,
+		/obj/item/tool/solder = 3,
 		/obj/item/device/silicate_sprayer = 2
 		)
 	contraband = list(
-		/obj/item/weapon/weldingtool/hugetank = 2,
+		/obj/item/tool/weldingtool/hugetank = 2,
 		/obj/item/clothing/gloves/fyellow = 2,
 		)
 	premium = list(
@@ -2427,16 +2427,16 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/belt/utility = 4,
 		/obj/item/clothing/glasses/scanner/meson = 4,
 		/obj/item/clothing/gloves/yellow = 4,
-		/obj/item/weapon/screwdriver = 12,
-		/obj/item/weapon/crowbar = 12,
-		/obj/item/weapon/wirecutters = 12,
+		/obj/item/tool/screwdriver = 12,
+		/obj/item/tool/crowbar = 12,
+		/obj/item/tool/wirecutters = 12,
 		/obj/item/device/multitool = 12,
-		/obj/item/weapon/wrench = 12,
+		/obj/item/tool/wrench = 12,
 		/obj/item/device/t_scanner = 12,
 		/obj/item/device/analyzer = 12,
 		/obj/item/stack/cable_coil = 8,
 		/obj/item/weapon/cell = 8,
-		/obj/item/weapon/weldingtool = 8,
+		/obj/item/tool/weldingtool = 8,
 		/obj/item/clothing/head/welding = 8,
 		/obj/item/weapon/light/tube = 10,
 		/obj/item/clothing/suit/fire = 4,
@@ -2447,7 +2447,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stock_parts/console_screen = 5,
 		)
 	contraband = list(
-		/obj/item/weapon/wrench/socket = 1,
+		/obj/item/tool/wrench/socket = 1,
 		/obj/item/weapon/extinguisher/foam = 1,
 		/obj/item/device/device_analyser = 2,
 		)
@@ -2477,12 +2477,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/assembly/prox_sensor = 3,
 		/obj/item/device/assembly/signaler = 3,
 		/obj/item/device/healthanalyzer = 3,
-		/obj/item/weapon/scalpel = 2,
-		/obj/item/weapon/circular_saw = 2,
+		/obj/item/tool/scalpel = 2,
+		/obj/item/tool/circular_saw = 2,
 		/obj/item/weapon/tank/anesthetic = 2,
 		/obj/item/clothing/mask/breath/medical = 5,
-		/obj/item/weapon/screwdriver = 5,
-		/obj/item/weapon/crowbar = 5,
+		/obj/item/tool/screwdriver = 5,
+		/obj/item/tool/crowbar = 5,
 		)
 	//everything after the power cell had no amounts, I improvised.  -Sayu
 
@@ -2957,6 +2957,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 12
 		)
 	contraband = list(
@@ -2969,6 +2970,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 3,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 3,
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_sauce = 1
 		)
@@ -3545,7 +3547,7 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED  = 1,
-		/obj/item/weapon/solder/pre_fueled = 2,
+		/obj/item/tool/solder/pre_fueled = 2,
 		)
 	premium = list(
 		/obj/item/weapon/circuitboard/message_monitor = 1,
