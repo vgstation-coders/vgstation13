@@ -210,6 +210,11 @@ var/global/list/loopModeNames=list(
 		linked_account = department_accounts[department]
 	else
 		linked_account = station_account
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	if(MM == 10 && !("halloween" in playlists)) //Checking for jukeboxes with it already
+		playlists["halloween"] = "Halloween"
+	if(MM == 12 && !("christmas" in playlists)) //Checking for jukeboxes with it already
+		playlists["christmas"] = "Christmas Jingles"
 
 /obj/machinery/media/jukebox/Destroy()
 	if(wires)
@@ -816,14 +821,6 @@ var/global/list/loopModeNames=list(
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance"
 	)
-
-/obj/machinery/media/jukebox/bar/New()
-	..()
-	var/MM = text2num(time2text(world.timeofday, "MM"))
-	if(MM == 10)
-		playlists["halloween"] = "Halloween"
-	if(MM == 12)
-		playlists["christmas"] = "Christmas Jingles"
 
 
 // Relaxing elevator music~
