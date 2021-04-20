@@ -1198,7 +1198,6 @@ var/list/has_died_as_golem = list()
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
-	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1
 	tox_mod = 0.5
 
@@ -1247,6 +1246,7 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
+
 
 
 /datum/species/mushroom

@@ -500,3 +500,6 @@ This function restores all organs.
 		if(reagents.has_reagent(LITHOTORCRAZINE))
 			rads = rads/2
 	return ..()
+
+/mob/living/carbon/human/insectoid/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	..(rads/2, application)
