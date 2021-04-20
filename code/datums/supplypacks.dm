@@ -684,8 +684,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "space suit crate"
 	group = "Clothing"
 
-/datum/supply_packs/spacesuit
-	name = "Magboots pair"
+/datum/supply_packs/magboots
+	name = "Magboots"
 	contains = list(/obj/item/clothing/shoes/magboots)
 	cost = 100
 	containertype = /obj/structure/closet/crate/basic
