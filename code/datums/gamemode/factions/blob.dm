@@ -37,7 +37,6 @@
 	var/outbreak_announcement
 
 	stat_datum_type = /datum/stat/faction/blob
-	var/defcon = 4
 
 // -- Victory procs --
 
@@ -194,7 +193,6 @@
 			mining_shuttle.lockdown = null
 			declared = FALSE
 			world << sound('sound/misc/notice1.ogg')
-			defcon = 4
 			if(stage >= FACTION_ENDGAME)
 				..() //Set thematic, send shuttle
 				command_alert(/datum/command_alert/FUBAR)
