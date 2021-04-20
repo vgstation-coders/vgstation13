@@ -77,6 +77,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/internals
 	containername = "internals crate"
 	group = "Supplies"
+	
+/datum/supply_packs/spacesuit
+	name = "Spacesuit kit"
+	contains = list(/obj/item/clothing/suit/space,
+					/obj/item/clothing/head/helmet/space,
+					/obj/item/clothing/mask/breath,
+					/obj/item/clothing/shoes/magboots,
+					/obj/item/weapon/tank/oxygen)
+	cost = 125
+	containertype = /obj/structure/closet/crate/internals
+	containername = "space suit crate"
+	group = "Supplies"
 
 /datum/supply_packs/evacuation
 	name = "Emergency equipment"
