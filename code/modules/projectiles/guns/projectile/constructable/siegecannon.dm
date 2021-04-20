@@ -163,7 +163,7 @@
 	while(flipMob.throwing)
 		flipMob.transform = turn(flipMob.transform, 45)
 		flips++
-		sleep(2)
+		sleep(1)
 	flipMob.transform = null
 	if(ishuman(flipMob))
 		var/mob/living/carbon/human/H = flipMob
@@ -176,7 +176,7 @@
 	if(do_after(user, src, 3 SECONDS))
 		beenClowned = TRUE
 		icon_state = "clownnon"
-		name = "Circus Cannon"
+		name = "circus Cannon"
 
 /obj/structure/siege_cannon/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
@@ -300,8 +300,15 @@
 
 /obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
+	if(!cannonFired)
+		return
 	if(isliving(hit_atom))
 		honkMob(hit_atom)
+	if(isitem(hit_atom) && hit_atom.density)
+		spawn(3)	//Give throwing time to stop bullying me
+			if(!throwing && cannonFired)
+				honkBounce(hit_atom)
+
 
 /obj/item/cannonball/bananium/proc/honkMob(var/mob/living/L)
 	L.Knockdown(rand(2,10))
@@ -332,11 +339,16 @@
 
 /obj/item/cannonball/bananium/Crossed(atom/movable/A)	//Yes, you have to arrest the cannonball
 	..()
-	if(istype(A, /obj/item/projectile))	//It's going to be moving a lot, might as well limit typechecking as much as possible
-		if(istype(A, /obj/item/projectile/energy/electrode) || istype(A, /obj/item/projectile/ricochet/taser))
-			var/obj/item/projectile/P = A
+	if(istype(A, /obj/item/projectile))
+		var/obj/item/projectile/P = A
+		if(P.stun && P.nodamage)
 			P.bullet_die()
 			stopBouncing()
-	if(istype(A, /obj/item/weapon/legcuffs/bolas) && A.throwing)
-		stopBouncing()
+	if(isitem(A))
+		if(istype(A, /obj/item/weapon/legcuffs/bolas) && A.throwing)
+			stopBouncing()
+		if(istype(A, /obj/item/weapon/melee/baton))
+			var/obj/item/weapon/melee/baton/B = A
+			if(B.status && B.throwing && prob(50))
+				stopBouncing()
 
