@@ -80,6 +80,8 @@
 		..()
 
 /mob/living/carbon/brain/gib(animation = FALSE, meat = TRUE)
+	if(!isUnconscious())
+		forcesay("-")
 	death(1)
 	monkeyizing = 1
 	canmove = 0

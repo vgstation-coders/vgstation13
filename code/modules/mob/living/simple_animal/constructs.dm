@@ -102,6 +102,8 @@
 #undef HEAR_CULT_CHAT
 
 /mob/living/simple_animal/construct/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(1)
 	monkeyizing = 1
 	canmove = 0

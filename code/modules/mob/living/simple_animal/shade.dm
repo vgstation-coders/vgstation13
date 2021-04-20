@@ -61,6 +61,8 @@
 	. = ..(message, "C")
 
 /mob/living/simple_animal/shade/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(TRUE)
 	monkeyizing = TRUE
 	canmove = FALSE
