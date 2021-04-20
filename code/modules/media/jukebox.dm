@@ -211,9 +211,9 @@ var/global/list/loopModeNames=list(
 	else
 		linked_account = station_account
 	var/MM = text2num(time2text(world.timeofday, "MM"))
-	if(MM == 10 && (!"halloween" in playlists)) //Checking for jukeboxes with it already
+	if(MM == 10 && !("halloween" in playlists)) //Checking for jukeboxes with it already
 		playlists["halloween"] = "Halloween"
-	if(MM == 12 && (!"christmas" in playlists)) //Checking for jukeboxes with it already
+	if(MM == 12 && !("christmas" in playlists)) //Checking for jukeboxes with it already
 		playlists["christmas"] = "Christmas Jingles"
 
 /obj/machinery/media/jukebox/Destroy()
