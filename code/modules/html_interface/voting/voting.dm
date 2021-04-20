@@ -449,6 +449,8 @@ var/global/datum/controller/vote/vote = new()
 	switch(href_list["vote"])
 		if ("cancel_vote")
 			var/mob_ckey = usr.ckey
+			if (!(mob_ckey in voted))
+				return
 			voted -= mob_ckey
 			choices[choices[current_votes[mob_ckey]]]--
 			current_votes[mob_ckey] = null
