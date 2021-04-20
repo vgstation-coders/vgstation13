@@ -36,6 +36,7 @@
 	var/outbreak_announcement
 
 	stat_datum_type = /datum/stat/faction/blob
+	var/defcon = 4
 
 // -- Victory procs --
 
@@ -69,12 +70,15 @@
 	if(outbreak_announcement && world.time >= outbreak_announcement && detect_overminds()) //Must be alive to advance.
 		outbreak_announcement = 0
 		stage(FACTION_ACTIVE)
-	if (declared && 0.20*blobwincount)
+	if (declared && 0.20*blobwincount <= blobs.len && defcon > 3)
 		stage(BLOB_DEFCON_3)
-	if (declared && 0.30*blobwincount)
+		defcon = 3
+	if (declared && 0.30*blobwincount <= blobs.len && defcon > 2)
 		stage(BLOB_DEFCON_2)
-	if (declared && 0.40*blobwincount)
+		defcon = 2
+	if (declared && 0.40*blobwincount <= blobs.len && defcon > 1)
 		stage(BLOB_DEFCON_1)
+		defcon = 1
 	if(declared && 0.66*blobwincount <= blobs.len && stage<FACTION_ENDGAME) // Blob almost won !
 		stage(FACTION_ENDGAME)
 
@@ -188,6 +192,7 @@
 			mining_shuttle.lockdown = null
 			declared = FALSE
 			world << sound('sound/misc/notice1.ogg')
+			defcon = 4
 			if(stage >= FACTION_ENDGAME)
 				..() //Set thematic, send shuttle
 				command_alert(/datum/command_alert/FUBAR)
