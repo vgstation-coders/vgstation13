@@ -124,6 +124,9 @@
 		return
 	spark(src)
 	playsound(src, 'sound/effects/Explosion_Small1.ogg', 100, 1)
+	if(beenClowned)
+		spawn(1)
+			playsound(src, 'sound/items/bikehorn.ogg', 20, 1)
 	if(loadedItem)
 		itemFire()
 	else if(loadedMob)
@@ -176,7 +179,7 @@
 	if(do_after(user, src, 3 SECONDS))
 		beenClowned = TRUE
 		icon_state = "clownnon"
-		name = "circus Cannon"
+		name = "circus cannon"
 
 /obj/structure/siege_cannon/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
@@ -304,7 +307,7 @@
 		return
 	if(isliving(hit_atom))
 		honkMob(hit_atom)
-	if(isitem(hit_atom) && hit_atom.density)
+	else if(isitem(hit_atom) && hit_atom.density)
 		spawn(3)	//Give throwing time to stop bullying me
 			if(!throwing && cannonFired)
 				honkBounce(hit_atom)
@@ -344,10 +347,10 @@
 		if(P.stun && P.nodamage)
 			P.bullet_die()
 			stopBouncing()
-	if(isitem(A))
+	else if(isitem(A))
 		if(istype(A, /obj/item/weapon/legcuffs/bolas) && A.throwing)
 			stopBouncing()
-		if(istype(A, /obj/item/weapon/melee/baton))
+		else if(istype(A, /obj/item/weapon/melee/baton))
 			var/obj/item/weapon/melee/baton/B = A
 			if(B.status && B.throwing && prob(50))
 				stopBouncing()
