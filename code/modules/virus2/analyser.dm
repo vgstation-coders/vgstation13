@@ -73,6 +73,27 @@
 			else
 				to_chat(user, "<span class='warning'>You must open the dish's lid before it can be analysed. Be sure to wear proper protection first (at least a sterile mask and latex gloves).</span>")
 
+/obj/machinery/disease2/diseaseanalyser/attack_ghost(var/mob/dead/observer/user)
+	if(!can_spook())
+		return FALSE
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
+		return
+	if (scanner)
+		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
+		return
+	if(!user.can_poltergeist())
+		to_chat(user, "Your poltergeist abilities are still cooling down.")
+		return FALSE
+	add_hiddenprint(user)
+	icon_state = "analyser_processing"
+	flick("analyser_turnon",src)
+	set_light(2,2)
+	playsound(loc, "sound/machines/heps.ogg", 50, 1)
+	spawn(1 SECONDS)
+		update_icon()
+		flick("analyser_turnoff",src)
+
 /obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user)
 	. = ..()
 	if(stat & (BROKEN))

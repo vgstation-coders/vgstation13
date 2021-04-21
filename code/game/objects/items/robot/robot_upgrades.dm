@@ -11,6 +11,7 @@
 	var/list/required_modules = list()
 	var/list/required_upgrades = list()
 	var/list/modules_to_add = list()
+	var/list/modules_to_remove = list() //Use this if you want to replace or disable items that the borg might already have
 	var/multi_upgrades = FALSE
 	w_type = RECYK_ELECTRONIC
 
@@ -37,7 +38,7 @@
 		if(!(R.modtype in required_modules))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
-	
+
 	if(required_upgrades.len)
 		for(var/U in required_upgrades)
 			if(!R.module.upgrades.Find(U))
@@ -63,6 +64,13 @@
 			if(!locate_component(module_to_add, R))
 				R.module.modules += new module_to_add(R.module)
 
+	if(modules_to_remove.len)
+		for(var/module_to_remove in modules_to_remove)
+			var/delete_object = locate_component(module_to_remove, R)
+			if(delete_object)
+				R.module.modules -= delete_object
+				qdel(delete_object)
+
 	to_chat(user, "<span class='notice'>You successfully apply \the [src] to \the [R].</span>")
 	user.drop_item(src, R)
 
@@ -78,7 +86,7 @@
 
 	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
-	
+
 	if(R.modtype == HUG_MODULE)
 		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
 		if(C)
@@ -219,18 +227,36 @@
 	R.SetEmagged()
 
 //Medical Stuff
-/obj/item/borg/upgrade/medical
+/obj/item/borg/upgrade/medical_upgrade
 	name = "medical cyborg MK-2 upgrade board"
-	desc = "Used to give a medical cyborg advanced care tools."
+	desc = "Used to give a medical cyborg advanced care tools. Also increases storage capacity for medical consumables."
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
 
-/obj/item/borg/upgrade/medical/organ_gripper
+/obj/item/borg/upgrade/medical_upgrade/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+	R.module.respawnables_max_amount = MEDICAL_MAX_KIT * 2
+
+/obj/item/borg/upgrade/surgery
+	name = "medical cyborg advanced surgery pack"
+	desc = "Enables a medical cyborg to have advanced surgery tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
+	modules_to_add = list(/obj/item/tool/scalpel/laser/tier2, /obj/item/tool/circular_saw/plasmasaw,
+	/obj/item/tool/retractor/manager, /obj/item/tool/hemostat/pico, /obj/item/tool/surgicaldrill/diamond,
+	/obj/item/tool/bonesetter/bone_mender, /obj/item/tool/FixOVein/clot)
+	modules_to_remove = list(/obj/item/tool/scalpel, /obj/item/tool/hemostat, /obj/item/tool/retractor,
+	/obj/item/tool/circular_saw, /obj/item/tool/cautery, /obj/item/tool/surgicaldrill, /obj/item/tool/bonesetter,
+	/obj/item/tool/FixOVein)
+
+/obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
 	desc = "Used to give a medical cyborg a organ gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
+	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
 
 //Engineering stuff
@@ -239,7 +265,7 @@
 	desc = "Adds several tools and materials for the robot to use."
 	icon_state = "cyborg_upgrade3"
 	required_modules = list(ENGINEERING_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
-	modules_to_add = list(/obj/item/weapon/wrench/socket)
+	modules_to_add = list(/obj/item/tool/wrench/socket)
 
 /obj/item/borg/upgrade/engineering/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -284,7 +310,7 @@
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
 	icon_state = "mainboard"
 	required_modules = list(SERVICE_MODULE)
-	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
+	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/tool/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -294,7 +320,7 @@
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)
+	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/disk/botany)
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"
@@ -379,7 +405,7 @@
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_modules = list(SECURITY_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/tool/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -396,10 +422,10 @@
 		new_icons += list("Heavy" = "[R.base_icon]-H")
 	if(new_icons.len > 0)
 		R.set_module_sprites(new_icons)
-	
+
 	if(R.modtype == HUG_MODULE)
 		securify_module(R)
-	
+
 	R.module.quirk_flags |= MODULE_HAS_FLASH_RES
 
 /obj/item/borg/upgrade/hos
@@ -417,15 +443,15 @@
 	var/obj/item/weapon/gripper/service/noir/G = locate_component(/obj/item/weapon/gripper/service/noir, R, user)
 	if(!G)
 		return FAILED_TO_ADD
-	
+
 	var/obj/item/weapon/gun/projectile/detective/PG = locate_component(/obj/item/weapon/gun/projectile/detective, R, user)
 	if(!PG)
 		return FAILED_TO_ADD
-	
+
 	var/obj/item/ammo_storage/speedloader/c38/cyborg/SL = locate_component(/obj/item/ammo_storage/speedloader/c38/cyborg, R, user)
 	if(!SL)
 		return FAILED_TO_ADD
-	
+
 	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R)
 
 	if(T) //Since having a taser isn't necessary for this upgrade, this is fine.
@@ -447,7 +473,7 @@
 
 	if(R.modtype == HUG_MODULE)
 		R.set_module_sprites(list("Head of Silicons" = "peaceborg-hos"))
-	
+
 	R.module.quirk_flags |= MODULE_IS_FLASHPROOF | MODULE_IS_DEFINITIVE
 
 //Supply Stuff
@@ -466,5 +492,21 @@
 	icon_state = "portsmelter0"
 	required_modules = list(SUPPLY_MODULE, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/storage/bag/ore/furnace)
+
+/obj/item/borg/upgrade/xenoarch
+	name = "supply cyborg xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg xenoarchaeology tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(SUPPLY_MODULE)
+	modules_to_add = list(/obj/item/device/depth_scanner,/obj/item/weapon/pickaxe/excavationdrill,/obj/item/device/measuring_tape,/obj/item/device/core_sampler)
+
+/obj/item/borg/upgrade/xenoarch_adv
+	name = "supply cyborg advanced xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg even better xenoarchaeology tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(SUPPLY_MODULE)
+	required_upgrades = list(/obj/item/borg/upgrade/xenoarch)
+	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder)
+	modules_to_remove = list(/obj/item/weapon/pickaxe/excavationdrill)
 
 #undef FAILED_TO_ADD

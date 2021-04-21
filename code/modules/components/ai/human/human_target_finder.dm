@@ -12,11 +12,11 @@
 			continue
 		if(M.isUnconscious())
 			continue
-		if((M in B.enemies) || (M.faction && M.faction in B.enemy_factions) || (M.type in B.enemy_types))
+		if((M in B.enemies) || (M.faction && (M.faction in B.enemy_factions)) || (M.type in B.enemy_types))
 			o += M
 		else if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if(H.species && H.species.name in B.enemy_species)
+			if(H.species && (H.species.name in B.enemy_species))
 				o += M
 	return o
 

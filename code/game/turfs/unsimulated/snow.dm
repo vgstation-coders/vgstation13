@@ -61,6 +61,7 @@
 		qdel(snowprint_parent)
 	if(blizzard_parent)
 		qdel(blizzard_parent)
+	..()
 
 /turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)
@@ -215,7 +216,30 @@
 		"<span class='notice'>You reach down and bolster your snowball.</span>")
 		user.delayNextAttack(10)
 		extract_snowballs(1, TRUE, user, W)
-
+	else if(istype(W,/obj/item/weapon/grown/log))
+		var/buildtime = 3 SECONDS
+		if(snowballs)
+			user.visible_message("<span class='notice'>[user] begins building a log wall.</span>", \
+		"<span class='notice'>You start to build a log wall, slowed by the presence of the snow.</span>")
+			buildtime += 3 SECONDS
+		else
+			user.visible_message("<span class='notice'>[user] begins building a log wall.</span>", \
+		"<span class='notice'>You start to build a log wall over the clear ground.</span>")
+		if(do_after(user,src, buildtime))
+			var/found_on_ground = FALSE
+			var/list/places_to_search = contents + user.loc.contents
+			for(var/obj/item/weapon/grown/log/L in places_to_search)
+				qdel(L)
+				found_on_ground = TRUE
+				break
+			if(!found_on_ground)
+				qdel(W)
+			user.visible_message("<span class='notice'>[user] finishes \the log wall.</span>", \
+						"<span class='notice'>You finish the log wall.</span>")
+			var/turf/simulated/wall/X = ChangeTurf(/turf/simulated/wall/mineral/wood/log)
+			if(X)
+				X.add_hiddenprint(user)
+				X.add_fingerprint(user)
 
 /turf/unsimulated/floor/snow/CtrlClick(mob/user)
 
@@ -300,11 +324,16 @@
 	real_snow_tile = FALSE
 	name = "asphalt"
 	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."
+	holomap_draw_override = HOLOMAP_DRAW_HALLWAY
+	protect_infrastructure = TRUE
 
 /turf/unsimulated/floor/snow/asphalt/mine
 	name = "mine road"
 	desc = "Made of asphalt. If you get lost, just follow the old mining road..."
 	ignore_blizzard_updates = TRUE
+
+/turf/unsimulated/floor/snow/empty
+	initial_snowballs = 0
 
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
@@ -342,6 +371,7 @@
 	snowprints = FALSE
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
 	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules
@@ -406,7 +436,7 @@
 		var/obj/glacier/adj_glacier = locate(/obj/glacier) in adj_tile
 		if(adj_glacier)
 			junction |= dir_to_smoothingdir(direction)
-			if(adj_glacier.isedge && direction in cardinal)
+			if(adj_glacier.isedge && (direction in cardinal))
 				edgenum |= direction
 				edgesnum = adj_glacier.isedge
 	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lotterys

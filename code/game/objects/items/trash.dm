@@ -131,6 +131,24 @@
 /obj/item/trash/plate
 	name = "plate"
 	icon_state = "plate"
+	var/clean = FALSE
+/obj/item/trash/plate/clean
+	icon_state = "cleanplate"
+	desc = "Clean enough to eat on, probably."
+	clean = TRUE
+/obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
+	if(istype(I,/obj/item/weapon/soap))
+		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
+		clean = TRUE
+		update_icon()
+		return TRUE
+	return ..()
+
+/obj/item/trash/plate/update_icon()
+	if(clean)
+		icon_state = "cleanplate"
+	else
+		icon_state = "plate"
 
 /obj/item/trash/pietin
 	name = "pie tin"
@@ -184,8 +202,10 @@
 /obj/item/trash/chicken_bucket
 	name = "chicken bucket"
 	icon_state = "kfc_bucket"
+	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
 
 /obj/item/trash/mannequin/cultify()

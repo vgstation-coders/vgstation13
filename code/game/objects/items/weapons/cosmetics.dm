@@ -56,21 +56,35 @@
 		if(H.lip_style)	//if they already have lipstick on
 			to_chat(user, "<span class='notice'>You need to wipe off the old lipstick first!</span>")
 			return
+		if(H.species.flags & SPECIES_NO_MOUTH)
+			to_chat(user, "<span class='warning'>You try to apply the lipstick, but alas, you have no mouth.</span>")
+			return
+		if(H.check_body_part_coverage(MOUTH))
+			to_chat(user, "<span class='warning'>Remove the equipment covering your mouth, first.</span>")
+			return
 		if(H == user)
-			user.visible_message("<span class='notice'>[user] does their lips with \the [src].</span>", \
-								 "<span class='notice'>You take a moment to apply \the [src]. Perfect!</span>")
+			if(H.species.anatomy_flags & HAS_LIPS)
+				user.visible_message("<span class='notice'>[user] does their lips with \the [src].</span>", \
+									 "<span class='notice'>You take a moment to apply \the [src]. Perfect!</span>")
+			else
+				user.visible_message("<span class='notice'>[user] applies \the [src] onto the place where their lips should be, looking quite silly.</span>", \
+									 "<span class='notice'>You take a moment to apply \the [src] onto your lipless face. Perfect!</span>")
 			H.lip_style = colour
 			H.update_body()
 		else
-			user.visible_message("<span class='warning'>[user] begins to do [H]'s lips with \the [src].</span>", \
+			user.visible_message("<span class='warning'>[user] begins to apply \the [src] onto [H].</span>", \
 								 "<span class='notice'>You begin to apply \the [src].</span>")
 			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
-				user.visible_message("<span class='notice'>[user] does [H]'s lips with \the [src].</span>", \
-									 "<span class='notice'>You apply \the [src].</span>")
+				if(H.species.anatomy_flags & HAS_LIPS)
+					user.visible_message("<span class='notice'>[user] does [H]'s lips with \the [src].</span>", \
+									 	"<span class='notice'>You apply \the [src].</span>")
+				else
+					user.visible_message("<span class='notice'>[user] applied some of \the [src] onto [H]'s lipless face.</span>", \
+									 	"<span class='notice'>You apply \the [src] onto [H]'s lipless face.</span>")
 				H.lip_style = colour
 				H.update_body()
 	else
-		to_chat(user, "<span class='notice'>Where are the lips on that?</span>")
+		to_chat(user, "<span class='notice'>That would look stupid.</span>")
 
 /obj/item/weapon/eyeshadow
 	name = "black eyeshadow"
@@ -259,7 +273,56 @@
 		H.my_appearance.g_hair = color_g
 		H.my_appearance.b_hair = color_b
 	H.update_hair()
+	if(H.species.anatomy_flags & RGBSKINTONE)
+		H.update_body()
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
+
+/obj/item/weapon/hair_dye/skin_dye
+	name = "magic skin dye"
+	desc = "Bubble, bubble, toil and trouble!"
+	var/uses = 3
+
+/obj/item/weapon/hair_dye/skin_dye/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>It has [uses] uses left.</span>")
+
+/obj/item/weapon/hair_dye/skin_dye/attack(mob/M, mob/user)
+	if(!ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	if(H.w_uniform && (H.w_uniform.body_parts_covered & UPPER_TORSO))
+		to_chat(user,"<span class='warning'>[H] needs to have an uncovered chest to really let the dye sink in.</span>")
+		return
+	if(H != user)
+		visible_message(user,"<span class='danger'>[user] is trying to spray down [H] with skin dye!</span>")
+		if(do_after(user,H, 10 SECONDS))
+			visible_message(user,"<span class='info'>[user] dyed [H].</span>")
+			dye(H)
+	else
+		dye(H)
+
+/obj/item/weapon/hair_dye/skin_dye/proc/dye(mob/living/carbon/human/H)
+	H.species.anatomy_flags |= MULTICOLOR
+	H.multicolor_skin_r = color_r
+	H.multicolor_skin_g = color_g
+	H.multicolor_skin_b = color_b
+	H.update_body()
+	if(H.species.anatomy_flags & RGBSKINTONE)
+		H.my_appearance.r_hair = color_r
+		H.my_appearance.g_hair = color_g
+		H.my_appearance.b_hair = color_b
+		H.update_hair()
+	uses--
+	if(!uses)
+		qdel(src)
+
+/obj/item/weapon/hair_dye/skin_dye/discount
+	name = "discount skin dye"
+	desc = "This is... probably no more unhealthy than a spray-on tan, right?"
+
+/obj/item/weapon/hair_dye/skin_dye/discount/dye(mob/living/carbon/human/H)
+	..()
+	H.reagents.add_reagent(TOXIN,1)
 
 /obj/item/weapon/invisible_spray
 	name = "can of invisible spray"
@@ -393,6 +456,9 @@
 			if(H.check_body_part_coverage(HEAD))
 				to_chat(user,"<span class='warning'>The headgear is in the way!</span>")
 				return
+			if(H.species.anatomy_flags & NO_BALD)
+				to_chat(user,"<span class='warning'>[H] does not have hair to shave!</span>")
+				return
 			if(H.my_appearance.h_style == "Bald" || H.my_appearance.h_style == "Skinhead")
 				to_chat(user,"<span class='warning'>There is not enough hair left to shave!</span>")
 				return
@@ -434,7 +500,7 @@
 		var/mob/living/carbon/human/H = user
 		if (isvampire(H))
 			var/datum/role/vampire/V = H.mind.GetRole(VAMPIRE)
-			if (!(VAMP_MATURE in V.powers))
+			if (!(/datum/power/vampire/mature in V.current_powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
 

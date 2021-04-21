@@ -139,16 +139,15 @@
 		if(loadedammo)
 			to_chat(user, "There is already something in the barrel of \the [src].")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
-			return 1
 		to_chat(user, "You load \a [W] into the barrel of \the [src].")
 		if(istype(W, /obj/item/stack/rods))
 			var/obj/item/stack/rods/R = W
 			R.use(1)
 			loadedammo = new /obj/item/stack/rods(null)
 		else if(istype(W, /obj/item/weapon/nullrod))
-			W.forceMove(src)
+			if(!user.drop_item(W, src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+				return 1
 			loadedammo = W
 		else if(istype(W, /obj/item/weapon/coin))
 			var/obj/item/weapon/coin/C = W
@@ -158,9 +157,10 @@
 			if (C.siemens_coefficient == 0)
 				to_chat(user, "That [C.name] won't work.")
 				return
-			else
-				C.forceMove(src)
-				loadedammo = C
+			if(!user.drop_item(C, src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [C]!</span>")
+				return 1
+			loadedammo = C
 		update_icon()
 
 	else if(W.is_screwdriver(user))
@@ -171,6 +171,8 @@
 			to_chat(user, "You tighten the rail assembly inside \the [src].")
 			W.playtoolsound(src, 50)
 		rails_secure = !rails_secure
+	else
+		to_chat(user, "<span class='warning'>\The [W] won't fit inside \the [src].</span>")
 
 /obj/item/weapon/gun/projectile/railgun/examine(mob/user)
 	..()
@@ -187,7 +189,7 @@
 	if(!rails_secure && loadedassembly)
 		to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] is unsecured.</span>")
 
-/obj/item/weapon/gun/projectile/railgun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/projectile/railgun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (istype(A, /obj/item/weapon/storage/backpack ))
 		return
 
@@ -218,15 +220,15 @@
 /obj/item/weapon/gun/projectile/railgun/proc/calculate_strength(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(!loadedcapacitor || !loadedammo)
 		return
-	
+
 	var/shot_charge = round(loadedcapacitor.stored_charge)
 	strength = shot_charge / 5000000
-	
+
 	loadedcapacitor.stored_charge -= shot_charge
 	if(shot_charge < TEN_MEGAWATTS)
 		strength = 0
 		throw_ammo(A,user)
-	
+
 	if(strength)
 		var/obj/item/projectile/bullet/APS/B = new(null)
 		if(istype(loadedammo, /obj/item/weapon/coin))
@@ -248,7 +250,7 @@
 		else if(strength == 90)
 			B.penetration = 10
 		in_chamber = B
-		
+
 		if(Fire(A,user,params, "struggle" = struggle))
 			loadedammo = null
 			if(strength >= 200)
@@ -294,20 +296,16 @@
 /obj/item/weapon/gun/projectile/railgun/preloaded
 	var/ammotype = /obj/item/weapon/coin/iron
 	var/capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super
-	
+
 /obj/item/weapon/gun/projectile/railgun/preloaded/New()
 	..()
 	loadedassembly = new /obj/item/weapon/rail_assembly(src)
 	rails_secure = 1
 	loadedammo = new ammotype(src)
 	loadedcapacitor = new capacitortype(src)
-	loadedcapacitor.stored_charge = loadedcapacitor.maximum_charge 
+	loadedcapacitor.stored_charge = loadedcapacitor.maximum_charge
 
 /obj/item/weapon/gun/projectile/railgun/preloaded/godslayer
 	ammotype = /obj/item/weapon/nullrod
 	capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super/ultra
 
-#undef MEGAWATT
-#undef TEN_MEGAWATTS
-#undef HUNDRED_MEGAWATTS
-#undef GIGAWATT

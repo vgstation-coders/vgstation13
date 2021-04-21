@@ -12,6 +12,11 @@
 /obj/item/weapon/gun/energy/taser/isHandgun()
 	return TRUE
 
+/obj/item/weapon/gun/energy/taser/ricochet
+	name = "ricochet taser gun"
+	desc = "The nightmare-creation of Alcatraz IV. Who let it free?"
+	projectile_type = "/obj/item/projectile/ricochet/taser"
+
 /obj/item/weapon/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."
@@ -109,6 +114,7 @@
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=5"
 	silenced = 1
+	fire_volume = 10
 	fire_sound = 'sound/weapons/ebow.ogg'
 	projectile_type = "/obj/item/projectile/energy/bolt"
 	cell_type = "/obj/item/weapon/cell/crap"
@@ -168,3 +174,57 @@
 		to_chat(M, "<span class='warning'>\The [src] fizzles.</span>")
 		return 0
 	return ..()
+
+#define SPEEDMODE 0
+#define SCATTERMODE 1
+/obj/item/weapon/gun/energy/shotgun
+	name = "energy shotgun"
+	desc = "An experimental energy shotgun from Alcatraz IV. It has two modes that fire experimental stun electrodes codenamed HUNTER and SWEEPER."
+	icon_state = "eshotgun"
+	item_state = "shotgun"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
+	projectile_type = "/obj/item/projectile/energy/electrode/fast"
+	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	charge_cost = 100
+	cell_type = "/obj/item/weapon/cell/crap"
+	w_class = W_CLASS_LARGE
+	var/pumped = FALSE
+	var/mode = SPEEDMODE
+
+/obj/item/weapon/gun/energy/shotgun/process_chambered()
+	if(!pumped)
+		return FALSE
+	else
+		return ..()
+
+/obj/item/weapon/gun/energy/shotgun/Fire(atom/target, mob/living/user, params, reflex, struggle, use_shooter_turf)
+	if(..()) //gun successfully fired
+		pumped = FALSE
+		return TRUE
+
+/obj/item/weapon/gun/energy/shotgun/proc/pump(mob/M as mob)
+	if(world.time > pumped + 1 SECONDS)
+		if(power_supply.charge >= charge_cost)
+			playsound(src, 'sound/weapons/shotgunpump.ogg', 60, 1)
+			pumped = world.time
+		else
+			click_empty(M)
+
+/obj/item/weapon/gun/energy/shotgun/examine(mob/user)
+	..()
+	if(is_holder_of(user, src) && !user.incapacitated())
+		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode. Toggle with alt-click.</span>")
+
+/obj/item/weapon/gun/energy/shotgun/attack_self(mob/user)
+	if(is_holder_of(user, src) && !user.incapacitated())
+		pump()
+
+/obj/item/weapon/gun/energy/shotgun/AltClick(mob/user)
+	if(is_holder_of(user, src) && !user.incapacitated())
+		mode = !mode
+		to_chat(user,"<span class='notice'>You flick the toggle into the [mode ? "SWEEPER" : "HUNTER"] position.</span>")
+		if(!mode)
+			projectile_type = "/obj/item/projectile/energy/electrode/fast"
+		else
+			projectile_type = "/obj/item/projectile/energy/electrode/scatter"

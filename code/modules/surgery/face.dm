@@ -23,13 +23,15 @@
 
 /datum/surgery_step/generic/cut_face
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
+		/obj/item/tool/scalpel = 100,
+		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
+		/obj/item/soulstone/gem = 0,
+		/obj/item/soulstone = 50,
 		)
 
-	min_duration = 90
-	max_duration = 110
+	duration = 9 SECONDS
 
 /datum/surgery_step/generic/cut_face/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == "mouth" && target.op_stage.face == 0 && check_anesthesia(target)
@@ -56,13 +58,12 @@
 ///////MEND VOCAL///////
 /datum/surgery_step/face/mend_vocal
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
+		/obj/item/tool/hemostat = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 10	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
 
-	min_duration = 70
-	max_duration = 90
+	duration = 7 SECONDS
 
 /datum/surgery_step/face/mend_vocal/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.face == 1
@@ -87,13 +88,12 @@
 ////////FIX FACE//////
 /datum/surgery_step/face/fix_face
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 55,
+		/obj/item/tool/retractor = 100,
+		/obj/item/tool/crowbar = 55,
 		/obj/item/weapon/kitchen/utensil/fork = 75,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/face/fix_face/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.face == 2
@@ -125,15 +125,14 @@
 	return 0
 /datum/surgery_step/face/cauterize
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/tool/cautery = 100,
+		/obj/item/tool/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
 		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/tool/weldingtool = 25,
 		)
 
-	min_duration = 70
-	max_duration = 100
+	duration = 7 SECONDS
 
 /datum/surgery_step/face/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.face > 0
@@ -155,6 +154,7 @@
 		target.visible_message("<span class='notice'>[target]'s face has been repaired.</span>")
 	target.op_stage.face = 0
 	target.op_stage.tooth_replace = 0
+	target.update_name()
 
 /datum/surgery_step/face/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

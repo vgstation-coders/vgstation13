@@ -22,8 +22,8 @@
 /obj/item/weapon/gun/mahoguny/can_discharge()
 	if (current_ammo)
 		return 1
-	
-/obj/item/weapon/gun/mahoguny/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+
+/obj/item/weapon/gun/mahoguny/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -39,7 +39,7 @@
 	if(Fire(A,user,params, "struggle" = struggle))
 		current_ammo--
 
-/obj/item/weapon/gun/mahoguny/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/mahoguny/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	. = ..()
 	if(.)
 		var/list/turf/possible_turfs = list()

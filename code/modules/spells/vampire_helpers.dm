@@ -10,7 +10,7 @@
 		world.log << "[src] has vampire spells but isn't a vampire."
 		return 0
 
-	var/fullpower = (VAMP_JAUNT in vampire.powers)
+	var/fullpower = (/datum/power/vampire/jaunt in vampire.current_powers)
 
 	if(src.stat > max_stat)
 		to_chat(src, "<span class='warning'>You are incapacitated.</span>")
@@ -43,7 +43,7 @@
 	if(restrained())
 		to_chat(src, "<span class ='warning'> You cannot do this while restrained! </span>")
 		return 0
-	if(!(VAMP_CHARISMA in V.powers)) //Charisma allows implanted targets to be enthralled.
+	if(!(/datum/power/vampire/charisma in V.current_powers)) //Charisma allows implanted targets to be enthralled.
 		for(var/obj/item/weapon/implant/loyalty/L in H)
 			if(L && L.implanted)
 				implanted = TRUE
@@ -70,7 +70,7 @@
 	if (implanted)
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a strange sensation in your skull that quickly dissipates.</span>")
 		return FALSE
-	if(H.vampire_affected(mind) < 0)
+	if(H.vampire_affected(mind) <= 0)
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil!</span>")
 	return TRUE
 
@@ -89,10 +89,10 @@
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
-			if (VAMP_UNDYING in V.powers)
+			if (locate(/datum/power/vampire/undying) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact has turned our powers against us!</span>")
 				return VAMP_FAILURE
-			if (VAMP_JAUNT in V.powers)
+			if (locate(/datum/power/vampire/jaunt) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
 				return 0
 		return 1

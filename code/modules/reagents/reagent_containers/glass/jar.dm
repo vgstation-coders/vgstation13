@@ -78,7 +78,7 @@
 		to_chat(user, "<span class = 'info'>It has \a [held_item] floating within.</span>")
 		to_chat(user, "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[held_item]'>Take a closer look.</a></span>")
 
-/obj/item/weapon/reagent_containers/glass/jar/recyclable()
+/obj/item/weapon/reagent_containers/glass/jar/recyclable(var/obj/machinery/r_n_d/fabricator/F)
 	if(held_item)
 		return FALSE
 	return TRUE
@@ -123,7 +123,7 @@
 		if(held_item)
 			held_item.forceMove(loc)
 			held_item = null
-		getFromPool(/obj/item/weapon/shard, loc)
+		new /obj/item/weapon/shard(loc)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer

@@ -7,3 +7,6 @@
 var/global/internal_tick_usage = 0.2 * world.tick_lag // default value. extools-updated value, see extools maptick
 #define TICK_CHECK ( world.tick_usage > CURRENT_TICKLIMIT ? stoplag() : 0 )
 #define CHECK_TICK if (world.tick_usage > CURRENT_TICKLIMIT)  stoplag()
+
+// Do X until it's done, while looking for lag.
+#define UNTIL(X) while(!(X)) stoplag()

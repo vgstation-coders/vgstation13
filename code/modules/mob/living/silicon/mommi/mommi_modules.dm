@@ -4,7 +4,7 @@
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
 	languages = list()
 	sprites = list("Basic" = "mommi")
-	respawnables = list (/obj/item/stack/cable_coil)
+	respawnables = list (/obj/item/stack/cable_coil/yellow)
 	respawnables_max_amount = MOMMI_MAX_COIL
 	default_modules = FALSE
 	var/ae_type = "Default" //Anti-emancipation override type, pretty much just fluffy.
@@ -13,11 +13,11 @@
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
 	..()
 
-	modules += new /obj/item/weapon/weldingtool/largetank(src)
-	modules += new /obj/item/weapon/screwdriver(src)
-	modules += new /obj/item/weapon/wrench(src)
-	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/wirecutters(src)
+	modules += new /obj/item/tool/weldingtool/largetank(src)
+	modules += new /obj/item/tool/screwdriver(src)
+	modules += new /obj/item/tool/wrench(src)
+	modules += new /obj/item/tool/crowbar(src)
+	modules += new /obj/item/tool/wirecutters(src)
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/t_scanner(src)
 	modules += new /obj/item/device/analyzer(src)
@@ -31,7 +31,7 @@
 	modules += new /obj/item/device/silicate_sprayer(src)
 	modules += new /obj/item/borg/fire_shield
 
-	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
+	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil/yellow(src)
 	W.amount = MOMMI_MAX_COIL
 	W.max_amount = MOMMI_MAX_COIL
 	modules += W
@@ -55,7 +55,8 @@
 		"Replicator" = "replicator",
 		"RepairBot" = "repairbot",
 		"Hover" = "hovermommi",
-		"Junkheap" = "junkmommi"
+		"Junkheap" = "junkmommi",
+		"Cutie" = "cutie"
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
 

@@ -25,8 +25,8 @@
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/stock_parts/console_screen/rped_rating()
-	// Same as T3 parts so that you don't dump them along with T1 ones.
-	return 3
+	// Same as T4 parts so that you don't dump them along with T1 ones.
+	return 4
 
 /obj/item/weapon/stock_parts/capacitor
 	name = "capacitor"
@@ -60,7 +60,7 @@
 				new /obj/machinery/power/secured_capacitor(get_turf(src.loc))
 			if(/obj/item/weapon/stock_parts/capacitor/adv)
 				new /obj/machinery/power/secured_capacitor/adv(get_turf(src.loc))
-			if(/obj/item/weapon/stock_parts/capacitor/adv/super)
+			if(/obj/item/weapon/stock_parts/capacitor/adv/super, /obj/item/weapon/stock_parts/capacitor/adv/super/pre_charged)
 				new /obj/machinery/power/secured_capacitor/adv/super(get_turf(src.loc))
 			if(/obj/item/weapon/stock_parts/capacitor/adv/super/ultra)
 				new /obj/machinery/power/secured_capacitor/adv/super/ultra(get_turf(src.loc))

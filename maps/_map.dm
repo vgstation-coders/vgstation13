@@ -101,6 +101,37 @@
 	var/snow_theme = FALSE
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
+	var/has_engines = FALSE // Is the map a space ship with big engines?
+
+	var/list/holodeck_rooms = list(
+		"Basketball Court",
+		"Beach",
+		"Boxing Court",
+		"Checkers Court",
+		"Chess Board",
+		"Desert",
+		"Dining Hall",
+		"Empty Court",
+		"Firing Range",
+		"Gym",
+		"Laser Tag Arena",
+		"Maze",
+		"Meeting Hall",
+		"Panic Bunker",
+		"Picnic Area",
+		"Snow Field",
+		"Theatre",
+		"Thunderdome Court",
+		"Wild Ride",
+		"Zoo"
+	)
+	var/list/emagged_holodeck_rooms = list(
+		"Begin Atmospheric Burn Simulation" = "Ensure the holodeck is empty before testing.",
+		"Begin Wildlife Simulation" = "Ensure the holodeck is empty before testing.",
+		"Club Catnip" = "Ensure the holodeck is empty before testing.",
+		"Combat Arena" = "Safety protocols disabled - weapons are not for recreation.",
+		"Medieval Tournament" = "Safety protocols disabled - weapons are not for recreation.",
+	)
 
 /datum/map/New()
 	. = ..()
@@ -117,6 +148,12 @@
 		return FALSE
 
 	return TRUE //If false, fails Ready()
+
+/datum/map/proc/ruleset_multiplier(var/datum/dynamic_ruleset/DR)
+	return 1
+
+/datum/map/proc/ignore_enemy_requirement(var/datum/dynamic_ruleset/DR)
+	return 0
 
 /datum/map/proc/loadZLevels(list/levelPaths)
 
@@ -145,6 +182,10 @@ var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()
 
+//Set map-specific conditions here
+/datum/map/proc/map_specific_conditions(var/condition)
+	return 1
+
 //For any map-specific UI, like AI jumps
 /datum/map/proc/special_ui(var/obj/abstract/screen/S, mob/user)
 	return FALSE
@@ -155,7 +196,7 @@ var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/give_AI_jumps(var/list/L)
 	var/obj/abstract/screen/using
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "AI Core"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "ai_core"
@@ -163,6 +204,11 @@ var/global/list/accessable_z_levels = list()
 	L += using
 	return L
 
+/datum/map/proc/generate_mapvaults()
+	return FALSE
+
+/datum/map/proc/map_equip(var/mob/living/carbon/human/H)
+	return
 
 ////////////////////////////////////////////////////////////////
 
@@ -212,6 +258,12 @@ var/global/list/accessable_z_levels = list()
 	base_area = /area/surface/snow
 	movementJammed = TRUE
 	transitionLoops = TRUE
+
+//for Horizon
+/datum/zLevel/hyperspace
+	name = "hyperspace"
+	base_turf = /turf/space/transit/horizon //NRV Horizon flies ever onward.  Replace this with faketransit if the change to the horizon turf goes through or crew will get chucked around like little dolls.
+	movementJammed = TRUE
 
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert

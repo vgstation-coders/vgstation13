@@ -39,7 +39,6 @@
 	var/toxin_dmg = 0
 
 /obj/effect/landmark/corpse/New()
-	AddToProfiler()
 	if(ticker)
 		initialize()
 
@@ -114,6 +113,9 @@
 		if(istype(L))
 			src.corpsesuit = pick(L)
 		M.equip_to_slot_or_del(new src.corpsesuit(M), slot_wear_suit)
+		if(isrig(M.wear_suit))
+			var/obj/item/clothing/suit/space/rig/R = M.wear_suit
+			R.initialize_suit()
 
 	if(src.corpseshoes)
 		var/list/L = src.corpseshoes
@@ -239,12 +241,28 @@
 	corpsegloves = /obj/item/clothing/gloves/swat
 	corpseradio = /obj/item/device/radio/headset
 	corpsemask = /obj/item/clothing/mask/gas/syndicate
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/syndi
 	corpseback = /obj/item/weapon/tank/jetpack/oxygen
 	corpsepocket1 = /obj/item/weapon/tank/emergency_oxygen
 	corpseid = 1
 	corpseidjob = "Operative"
 	corpseidaccess = "Syndicate"
+
+
+
+/obj/effect/landmark/corpse/syndicateexec
+    name = "Syndicate Executive"
+    corpseuniform = /obj/item/clothing/under/syndicate/executive
+    corpsesuit = /obj/item/clothing/suit/storage/syndicateexec
+    corpseshoes = /obj/item/clothing/shoes/swat
+    corpsehelmet = /obj/item/clothing/head/beret/centcom
+    corpseid = 1
+    corpseidjob = "Executive"
+    corpseidaccess = "Syndicate"
+
+/obj/effect/landmark/corpse/syndicateexec/space
+    corpsesuit =  /obj/item/clothing/suit/space/rig/syndicate_elite
+    corpsemask = /obj/item/clothing/mask/gas/syndicate
+    corpseback = /obj/item/weapon/tank/jetpack/oxygen
 
 
 
@@ -269,10 +287,10 @@
 	corpseradio = list(/obj/item/device/radio/headset/headset_sec, /obj/item/device/radio/headset/heads/captain, /obj/item/device/radio/headset/heads/hos, /obj/item/device/radio/headset/heads/hop)
 	corpseglasses = list(/obj/item/clothing/glasses/hud/health, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/sechud, /obj/item/clothing/glasses/welding)
 	corpsemask = list(/obj/item/clothing/mask/cigarette/cigar, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas/swat, /obj/item/clothing/mask/balaclava)
-	corpsehelmet = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/head/helmet/space/rig/ror, /obj/item/clothing/head/helmet/space/rig/syndi, /obj/item/clothing/head/helmet/space/rig/atmos, /obj/item/clothing/head/helmet/cap, /obj/item/clothing/head/helmet/tactical, /obj/item/clothing/head/helmet/tactical/HoS/dermal, /obj/item/clothing/head/helmet/siren, /obj/item/clothing/head/collectable/petehat, /obj/item/clothing/head/hardhat/red, /obj/item/clothing/head/welding, /obj/item/clothing/head/collectable/welding, /obj/item/clothing/head/helmet/space/rig/security, /obj/item/clothing/head/helmet/space/rig/mining)
+	corpsehelmet = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/head/cap, /obj/item/clothing/head/helmet/tactical, /obj/item/clothing/head/HoS/dermal, /obj/item/clothing/head/helmet/siren, /obj/item/clothing/head/collectable/petehat, /obj/item/clothing/head/hardhat/red, /obj/item/clothing/head/welding, /obj/item/clothing/head/collectable/welding)
 	corpsebelt = list(/obj/item/weapon/gun/energy/laser/retro/ancient, /obj/item/weapon/storage/belt/utility/full, /obj/item/weapon/storage/belt/utility/chief/full, /obj/item/weapon/storage/belt/slim, /obj/item/weapon/storage/belt/security, /obj/item/weapon/gun/energy/gun, /obj/item/weapon/sword, /obj/item/weapon/pickaxe, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/telebaton)
-	corpsepocket1 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
-	corpsepocket2 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
+	corpsepocket1 = list(/obj/item/device/radio/off, /obj/item/tool/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
+	corpsepocket2 = list(/obj/item/device/radio/off, /obj/item/tool/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
 	corpseback = list(/obj/item/weapon/fireaxe, /obj/item/weapon/storage/backpack/clown, /obj/item/weapon/storage/backpack/security, /obj/item/weapon/storage/backpack/captain, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack)
 	corpseidaccess = "Captain"
 
@@ -337,7 +355,6 @@
 /obj/effect/landmark/corpse/miner/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/mining
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/mining
 
 /obj/effect/landmark/corpse/clown
 	name = "Clown"
@@ -458,7 +475,7 @@
 	corpsehelmet = /obj/item/clothing/head/surgery/green
 	corpseuniform = /obj/item/clothing/under/rank/medical/green
 	corpsesuit = /obj/item/clothing/suit/storage/labcoat
-	corpsepocket1 = /obj/item/weapon/scalpel
+	corpsepocket1 = /obj/item/tool/scalpel
 	corpseshoes = /obj/item/clothing/shoes/leather
 	corpseid = 1
 	corpseidjob = "Surgeon"
@@ -517,7 +534,6 @@
 	corpsesuit = /obj/item/clothing/suit/space/rig/medical
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/medical
 
 /obj/effect/landmark/corpse/cmo
 	name = "Chief Medical Officer"
@@ -545,10 +561,9 @@
 	corpseidaccess = "Station Engineer"
 
 /obj/effect/landmark/corpse/engineer/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/engineer
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig
 
 /obj/effect/landmark/corpse/atmostech
 	name = "Atmospheric Technician"
@@ -566,7 +581,6 @@
 	corpsesuit = /obj/item/clothing/suit/space/rig/atmos
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/atmos
 
 /obj/effect/landmark/corpse/mechanic
 	name = "Mechanic"
@@ -594,10 +608,9 @@
 	corpseidaccess = "Chief Engineer"
 
 /obj/effect/landmark/corpse/chiefengineer/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig/elite
+	corpsesuit = /obj/item/clothing/suit/space/rig/engineer/elite
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/elite
 
 /obj/effect/landmark/corpse/scientist
 	name = "Scientist"
@@ -678,7 +691,6 @@
 	corpsesuit = /obj/item/clothing/suit/space/rig/security
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/security
 
 /obj/effect/landmark/corpse/detective
 	name = "Detective"
@@ -714,7 +726,6 @@
 	corpsesuit = /obj/item/clothing/suit/space/rig/security
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/security
 
 /obj/effect/landmark/corpse/headofpersonnel
 	name = "Head of Personnel"
@@ -748,7 +759,6 @@
 /obj/effect/landmark/corpse/captain/rig
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/capspace
 
 /obj/effect/landmark/corpse/waifu
 	name = "Waifu"
@@ -897,7 +907,6 @@
 
 /obj/effect/landmark/corpse/nazi/spacetrooper
 	name = "Nazi Trooper"
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/nazi
 	corpsesuit = /obj/item/clothing/suit/space/rig/nazi
 
 //////////////////Admin Use//////////////////////////////
@@ -928,7 +937,7 @@
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
 	corpseglasses = /obj/item/clothing/glasses/thermal/eyepatch
 	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
-	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsehelmet = /obj/item/clothing/head/HoS/dermal
 	corpsegloves = /obj/item/clothing/gloves/combat
 	corpseshoes = /obj/item/clothing/shoes/combat
 	corpsepocket1 = /obj/item/weapon/storage/fancy/matchbox
@@ -971,7 +980,7 @@
 	corpseuniform = /obj/item/clothing/under/acj
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
 	corpseglasses = /obj/item/clothing/glasses/hud/security/jensenshades
-	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsehelmet = /obj/item/clothing/head/HoS/dermal
 	corpsegloves = /obj/item/clothing/gloves/combat
 	corpseshoes = /obj/item/clothing/shoes/combat
 	corpsebelt = /obj/item/weapon/storage/belt/security
@@ -986,7 +995,6 @@
 
 /obj/effect/landmark/corpse/wizard/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/wizard
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/wizard
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
 

@@ -4,7 +4,6 @@
 		////////////////
 	var/datum/admins/holder = null
 	var/buildmode		= 0
-	var/list/buildmode_objs = list()
 
 	var/last_message	= "" //Contains the last message sent by this client - used to protect against copy-paste spamming.
 	var/last_message_count = 0 //contins a number of how many times a message identical to last_message was sent.
@@ -91,6 +90,12 @@
 	var/received_credits = FALSE
 	var/received_roundend_audio = FALSE
 
+	// Runechat messages
+	var/list/seen_messages = list()
+	var/toggle_runechat_outlines = TRUE
+
+	// Voting & civic duty
+	var/ivoted = FALSE
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

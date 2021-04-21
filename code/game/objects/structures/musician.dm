@@ -60,11 +60,14 @@
 	for(var/mob/M in get_hearers_in_view(15, source))
 		if(!M.client)
 			continue
-		if(M.client.prefs.hear_instruments)
-			M.playsound_local(source, soundfile, 100, falloff = 5)
+		if(M.is_deaf())
+			continue
 		if(istype(instrumentObj,/obj/item/device/instrument))
 			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
+		if(!M.client.prefs.hear_instruments)
+			continue
+		M.playsound_local(source, soundfile, 100, falloff = 5)
 
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
@@ -260,6 +263,8 @@
 	else if(href_list["tempo"])
 		tempo = sanitize_tempo(tempo + text2num(href_list["tempo"]))
 	else if(href_list["play"])
+		if(playing)
+			return
 		playing = 1
 		spawn()
 			playsong(usr)
@@ -360,7 +365,7 @@
 	..()
 
 /obj/structure/piano/attack_hand(mob/user)
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
 	if(broken)
@@ -422,6 +427,7 @@
 	else if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 		if(prob(Proj.damage))
 			src.ex_act(2)
+	return ..()
 
 /obj/structure/piano/xylophone
 	name = "xylophone"

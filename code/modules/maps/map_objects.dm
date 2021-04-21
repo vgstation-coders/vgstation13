@@ -13,14 +13,8 @@
 	mouse_opacity = 0
 
 /obj/abstract/map/New()
-
 	..()
-
 	perform_spawn()
-	qdel(src)
-
-/obj/abstract/map/Destroy()
-	return
 
 //Spawn proc that can be modified, so New() can inherit properly
 /obj/abstract/map/proc/perform_spawn()

@@ -106,6 +106,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
+	var/pacify_aura = FALSE
+
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
@@ -123,6 +125,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
+
 /mob/living/simple_animal/New()
 	..()
 	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
@@ -132,6 +135,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		real_name = name
 
 	animal_count[src.type]++
+
+/mob/living/simple_animal/Destroy()
+	if (stat != DEAD)
+		animal_count[src.type]--//dealing with mobs getting deleted while still alive
+	..()
 
 /mob/living/simple_animal/Login()
 	if(src && src.client)
@@ -172,12 +180,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			icon_state = icon_living
 			src.resurrect()
 			stat = CONSCIOUS
+			animal_count[src.type]++//re-added to the count
 			setDensity(TRUE)
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
 		return 0
-
 
 	if(health < 1 && stat != DEAD)
 		death()
@@ -193,7 +201,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
+	update_canmove()
+
 	handle_jitteriness()
+	jitteriness = max(0, jitteriness - 1)
 
 	//Eyes
 	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
@@ -228,16 +239,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
+					StartMoving()
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
+					EndMoving()
 
 	handle_automated_speech()
 
 	var/datum/gas_mixture/environment
 	if(loc)
 		environment = loc.return_air()
-		
+
 	handle_environment(environment)
 	handle_regular_hud_updates()
 
@@ -333,7 +346,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(icon_gib)
-		flick(icon_gib, src)
+		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)
 
 	if(meat && meat_type)
 		for(var/i = 0; i < (src.size - meat_taken); i++)
@@ -404,10 +417,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
-		return
-	adjustBruteLoss(Proj.damage)
+		return PROJECTILE_COLLISION_DEFAULT
 	Proj.on_hit(src, 0)
-	return 0
+	adjustBruteLoss(Proj.damage)
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
 	. = ..()
@@ -580,7 +593,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -596,7 +609,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -718,9 +731,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(name != initial(name)) //Not chicken
 		new_animal.name = name
+	if(mind)
+		mind.transfer_to(new_animal)
 	new_animal.inherit_mind(src)
-	new_animal.ckey = src.ckey
-	new_animal.key = src.key
 
 	if(colour)
 		new_animal.colour = colour
@@ -799,10 +812,29 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	flick_overlay(heart, list(user.client), 20)
 
 
+/mob/living/simple_animal/make_meat(location)
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/ourMeat = new meat_type(location)
+	if(!istype(ourMeat))
+		return
+	if(species_type)
+		var/mob/living/specimen = species_type
+		ourMeat.name = "[initial(specimen.name)] meat"
+		ourMeat.animal_name = initial(specimen.name)
+	else
+		ourMeat.name = "[initial(name)] meat"
+		ourMeat.animal_name = initial(name)
+	return ourMeat
+
+
+/mob/living/simple_animal/meatEndStep(mob/user)
+	if(meat_taken < meat_amount)
+		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
+		return
+	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
+	if(size > SIZE_TINY) //Tiny animals don't produce gibs
+		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
+	else
+		qdel(src)
+
+
 /datum/locking_category/simple_animal
-
-
-/mob/living/simple_animal/resetVariables()
-	..("emote_hear", "emote_see", args)
-	emote_hear = list()
-	emote_see = list()

@@ -77,9 +77,9 @@
 	update_icon()
 
 	if(network1)
-		returnToPool(network1)
+		qdel(network1)
 	if(network3)
-		returnToPool(network3)
+		qdel(network3)
 	build_network()
 
 	if(network1&&network2)
@@ -103,9 +103,9 @@
 	update_icon()
 
 	if(network1)
-		returnToPool(network1)
+		qdel(network1)
 	if(network2)
-		returnToPool(network2)
+		qdel(network2)
 	build_network()
 
 	if(network1&&network3)
@@ -181,7 +181,7 @@
 	icon = 'icons/obj/atmospherics/digital_valve.dmi'
 
 	var/frequency = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 
 	mirror = /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored
@@ -202,7 +202,7 @@
 			id_tag = newid
 			initialize()
 		return MT_UPDATE
-		
+
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")

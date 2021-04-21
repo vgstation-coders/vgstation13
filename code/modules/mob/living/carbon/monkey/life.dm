@@ -79,9 +79,11 @@
 
 	if(!client && stat == CONSCIOUS)
 
-		if(prob(33) && canmove && isturf(loc) && !pulledby) //won't move if being pulled
+		if(prob(33) && canmove && isturf(loc) && !pulledby && !(grabbed_by?.len)) //won't move if being pulled
 
+			StartMoving()
 			step(src, pick(cardinal))
+			EndMoving()
 
 		if(prob(1))
 			passive_emote()

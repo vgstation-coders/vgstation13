@@ -38,7 +38,7 @@
 
 /obj/structure/headpole/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/crowbar))
+	if(istype(W, /obj/item/tool/crowbar))
 		to_chat(user, "You pry \the [head] off \the [spear].")
 		if(head)
 			head.forceMove(get_turf(src))
@@ -67,3 +67,19 @@
 	H.name = "severed head"
 	spear = new (src)
 	..(A, H)
+
+obj/structure/bigpeppermint_red
+	name = "mounted peppermint"
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "bigpeppermint_red"
+	desc = "Must be a culture thing."
+	density = 0
+	anchored = 1
+
+obj/structure/bigpeppermint_green
+	name = "mounted peppermint"
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "bigpeppermint_green"
+	desc = "Must be a culture thing."
+	density = 0
+	anchored = 1

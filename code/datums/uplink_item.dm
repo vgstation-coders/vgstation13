@@ -62,13 +62,19 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
+//This will get called that is essentially a New() by default.
+//Use this to make New()s that have extra conditions, such as bundles
+//Make sure to add a return or else it will break a part of buy()
+/datum/uplink_item/proc/new_uplink_item(var/new_item, var/turf/location, mob/user)
+	return new new_item(location)
+
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc,user)
+	return new_uplink_item(item, loc, user)
 
 /datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
 	if(!istype(U))
@@ -217,7 +223,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/dangerous/revolver
 	name = "Loaded .357 Revolver"
 	desc = "A traditional repeating handgun with seven chambers which fires .357 rounds. Can incapacitate most unarmored targets in two shots."
-	item = /obj/item/weapon/gun/projectile
+	item = /obj/item/weapon/gun/projectile/revolver
 	cost = 12
 
 /datum/uplink_item/dangerous/ammo
@@ -362,6 +368,9 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/card/emag
 	cost = 6
 
+/datum/uplink_item/device_tools/emag/new_uplink_item(new_item, turf/location, mob/user)
+	return new new_item(location, 1) //Uplink emags are infinite
+
 /datum/uplink_item/device_tools/explosive_gum
 	name = "Explosive Chewing Gum"
 	desc = "A single stick of explosive chewing gum that detonates five seconds after you start chewing, perfectly disguised as regular gum. Make sure to pull it out of your mouth if you don't intend to explode with it. Gum can be stuck to objects and walls, but not other people."
@@ -466,6 +475,14 @@ var/list/uplink_items = list()
 	num_in_stock = 1
 	cost = 10
 
+/datum/uplink_item/sabotage_tools/loic_remote
+	name = "Low Orbit Ion Cannon Remote"
+	desc = "This device can activate a remote syndicate satellite every 15 minutes, generating a randomized law in the station's AI. Results may vary."
+	item = /obj/item/device/loic_remote
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = SCIENCE_POSITIONS
+
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
 	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
@@ -533,6 +550,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 14
 
+/datum/uplink_item/badass/bundle/new_uplink_item(new_item, location, user)
+	var/list/conditions = list()
+	if(isplasmaman(user))
+		conditions += "plasmaman"
+	return new new_item(location, conditions)
+
 /datum/uplink_item/badass/balloon
 	name = "For showing that you are The Boss"
 	desc = "A useless red balloon with the syndicate logo printed on it which can blow even the deepest of covers. Otherwise looks similar to the Synidicate HUD pip that Nuclear Operatives would see."
@@ -551,13 +574,19 @@ var/list/uplink_items = list()
  	item = /obj/item/clothing/suit/raincoat
  	cost = 1
 
+/datum/uplink_item/badass/experimental_gear
+	name = "Syndicate Experimental Gear Bundle"
+	desc = "A box that contains a randomly-selected experimental Syndicate gear, an unique state-of-the-art object. Satisfaction not guaranteed."
+	item = /obj/item/weapon/storage/box/syndicate_experimental
+	cost = 20
+
 /datum/uplink_item/badass/random
 	name = "Random Item"
 	desc = "Picking this choice will send you a random item from anywhere in the list for half the normal cost. Useful for when you cannot think of a strategy to finish your objectives with, or cannot think of anything to begin with."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
-/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
+/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, user)
 
 	var/list/buyable_items = get_uplink_items()
 	var/list/possible_items = list()
@@ -576,7 +605,7 @@ var/list/uplink_items = list()
 		var/datum/uplink_item/I = pick(possible_items)
 		U.uses -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
-		return new I.item(loc)
+		return new_uplink_item(I.item, loc, user)
 
 /datum/uplink_item/jobspecific/command_security
 	category = "Command and Security Specials"
@@ -596,6 +625,30 @@ var/list/uplink_items = list()
 	cost = 10
 	discounted_cost = 8
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
+
+/datum/uplink_item/jobspecific/command_security/syndibaton
+	name = "Harm Baton"
+	desc = "A stun baton modified with tesla relay coils capable of discharging high amount of shock to overload human pain registers. It can also use this energy to boost the impact of the baton."
+	item = /obj/item/weapon/melee/baton/harm/loaded
+	cost = 12
+	discounted_cost = 9
+	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
+
+/datum/uplink_item/jobspecific/command_security/batlinggun
+	name = "Batling gun"
+	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
+	item = /obj/item/weapon/gun/gatling/batling
+	cost = 18
+	discounted_cost = 12
+	jobs_with_discount = list("Warden", "Head of Security")
+
+/datum/uplink_item/jobspecific/command_security/remoteexplosive
+	name = "Remote Explosive Implants"
+	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room." 
+	item = /obj/item/weapon/storage/box/remeximp
+	cost = 18
+	discounted_cost = 12
+	jobs_with_discount = list("Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
@@ -636,6 +689,14 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical
 	category = "Medical Specials"
+
+/datum/uplink_item/jobspecific/medical/mouser
+	name = "Mouser Pistol"
+	desc = "A pistol that turns unfortunate victims into labrats and stuns them briefly. All of their gear becomes part of their body, and if the mouse dies, the target becomes human once again, fully armed and unharmed."
+	item = /obj/item/weapon/gun/energy/mouser
+	cost = 12
+	discounted_cost = 8
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/medical/wheelchair
 	name = "Syndicate Wheelchair"
@@ -685,10 +746,10 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Geneticist", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/medical/zombievirus
-	name = "Zombie Virus Syndrome"
-	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a virus data disk, requires full virus splicing and growth to deploy. Avoid ingesting end results if possible, and ensure you create spare virus data disks if needed."
-	item = /obj/item/weapon/disk/disease/zombie
+/datum/uplink_item/jobspecific/medical/viruscollection
+	name = "Deadly Syndrome Collection"
+	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
+	item = /obj/item/weapon/storage/lockbox/diskettebox/syndisease
 	cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
@@ -702,6 +763,14 @@ var/list/uplink_items = list()
 	item = /obj/item/clothing/gloves/yellow/power
 	cost = 14
 	discounted_cost = 8
+	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/teslagun
+	name = "Tesla Cannon"
+	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be loaded with capacitors in order to fire, each charged to at least 1 MW. The amount of damage scales with the power stored in the capacitor. The cannon comes with one free, pre-charged capacitor."
+	item = /obj/item/weapon/gun/tesla/preloaded
+	cost = 18
+	discounted_cost = 14
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
@@ -763,11 +832,6 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Cargo Technician", "Quartermaster")
 
-/datum/uplink_item/jobspecific/cargo/syndiepaper/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
-	U.uses -= max(cost, 0)
-	feedback_add_details("traitor_uplink_items_bought", name)
-	return new item(loc) //Fix for amount ref
-
 /datum/uplink_item/jobspecific/cargo/mastertrainer
 	name = "Master Trainer's Belt"
 	desc = "A trainer's belt containing 6 Lazarus capsules loaded with random but particularly hostile and lethal mobs loyal to you alone. You can inspect what the Lazarus capsules contain before throwing them."
@@ -813,7 +877,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/service/meatcleaver
 	name = "Meat Cleaver"
-	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also has a strong to stun when thrown."
+	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also stuns when thrown."
 	item = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	cost = 12
 	discounted_cost = 10
@@ -904,7 +968,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/glue
 	cost = 6
 	discounted_cost = 4
-	jobs_with_discount = list("Clown", "Mime")
+	jobs_with_discount = list("Clown", "Mime", "Captain")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
@@ -927,6 +991,15 @@ var/list/uplink_items = list()
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 12
 	jobs_exclusive = list("Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/punchline
+	name = "Punchline"
+	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
+	item = /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox
+	cost = 14
+	discounted_cost = 10
+	jobs_with_discount = list("Clown")
+	jobs_excluded = list("Mime")
 
 /datum/uplink_item/jobspecific/assistant
 	category = "Assistant Specials"
@@ -962,3 +1035,75 @@ var/list/uplink_items = list()
 	cost = 7
 	discounted_cost = 4
 	jobs_with_discount = list("Assistant")
+
+/datum/uplink_item/jobspecific/command
+	category = "Command Specials"
+
+/datum/uplink_item/jobspecific/command/pocketsat
+	name = "Pocket Satellite"
+	desc = "A grenade which, when detonated in space, creates a circular station with radius 7. The station is loaded with self-powered computers, useful gear, and machinery as well as a teleporter beacon. Anyone right under it when it unfolds is crushed."
+	item = /obj/item/weapon/grenade/station
+	cost = 20
+	discounted_cost = 14
+	jobs_with_discount = list("Captain", "Head of Personnel")
+
+/datum/uplink_item/jobspecific/trader
+	category = "Trader Specials"
+
+/datum/uplink_item/jobspecific/trader/dartgun
+	name = "Chemical Dart Gun"
+	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
+	item = /obj/item/weapon/gun/dartgun/vox/raider
+	cost = 16
+	jobs_exclusive = list("Trader")
+
+/datum/uplink_item/jobspecific/trader/dart_cartridge
+	name = "Dart Cartridge"
+	desc = "A spare cartridge to refill your dart gun."
+	item = /obj/item/weapon/dart_cartridge
+	cost = 2
+	jobs_exclusive = list("Trader")
+
+/datum/uplink_item/jobspecific/trader/cratesender
+	name = "Modified Crate Sender"
+	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
+	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
+	cost = 6
+	jobs_exclusive = list("Trader")
+
+// SYNDICATE COOP
+// Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
+
+/datum/uplink_item/syndie_coop
+	category = "Cooperative Cell"
+	jobs_excluded = list("Nuclear Operative", CHALLENGER)
+
+/datum/uplink_item/syndie_coop/elite_bundle
+	name = "Elite Syndicate Bundle"
+	desc = "A Syndicate bundle designed for a team of two agents."
+	item = /obj/item/weapon/storage/box/syndicate_team
+	cost = 28
+
+/datum/uplink_item/syndie_coop/stone
+	name = "SG-VPR-23 Pathogenic Medium"
+	desc = "A closely guarded artifact leveraged from the Vampire Lords.  It possesses an active sample of the SG-VPR-23 strain that is the source of all known cases of vampirism within the galaxy.  This piece is only to be granted to an operative cell that wishes to execute, and accepts the risk, of an SG-VPR-23 outbreak.  It is brittle in its old age, and may only survive one use."
+	item = /obj/item/clothing/mask/stone
+	cost = 60
+
+/datum/uplink_item/syndie_coop/changeling_vial
+	name = "CH-L1-NG Bioweapon Sample"
+	desc = "A securely contained vial of the experimental mutagen 'CH-L1-NG'.  Originally designed as a transhumanist super-soldier serum, the mutagen was reclassified as a bioweapon when research showed that the afflicted would completely dissociate from their identity and loyalties.  Victims of 'CH-L1-NG' were found to be the perfect killing machines to be released upon enemies of the Syndicate."
+	item = /obj/item/changeling_vial
+	cost = 60
+
+/datum/uplink_item/syndie_coop/bloodcult_pamphlet
+	name = "Esoteric Propaganda Pamphlet"
+	desc = "A pamphlet found within the controlled literature archives detailing what appears to be a communication ritual to contact the celestial NRS-1.  Exposure to NRS-1 is known to induce the formation of a hive-like social structure among the afflicted, delusions of grandeur, and collective suicidal tendencies.  An operative cell wishing to weaponize contact with NRS-1 should proceed with extreme caution."
+	item = /obj/item/weapon/bloodcult_pamphlet/oneuse
+	cost = 60
+
+/datum/uplink_item/syndie_coop/codebreaker
+	name = "Codebreaker"
+	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."
+	item = /obj/item/device/codebreaker
+	cost = 100

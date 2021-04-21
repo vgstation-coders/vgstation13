@@ -8,6 +8,7 @@
 	ammo_type = "/obj/item/ammo_casing/c38"
 	recoil = 3
 	var/perfect = 0
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
 	special_check(var/mob/living/carbon/human/M) //to see if the gun fires 357 rounds safely. A non-modified revolver randomly blows up
 		if(getAmmo()) //this is a good check, I like this check
@@ -91,8 +92,8 @@
 	icon_state = "mateba"
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	recoil = 3
-	
-	
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT
+
 /obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
 	name = "nagant revolver"
 	desc = "Just like in those neo-russian spy movies! Uses 7.62x38R ammo."
@@ -104,7 +105,8 @@
 	gun_flags = SILENCECOMP
 	fire_sound = 'sound/weapons/nagant.ogg'
 	recoil = 3
-	
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT | SILENCECOMP
+
 /obj/item/weapon/gun/projectile/nagant/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
@@ -228,7 +230,7 @@
 
 	..()
 
-/obj/item/weapon/gun/projectile/russian/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/russian/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	var/obj/item/ammo_casing/AC = loaded[1]
 	if(!AC || !AC.BB)
 		user.visible_message("<span class='warning'>*click*</span>")
@@ -264,6 +266,12 @@
 	var/cocked = FALSE
 	var/last_spin = 0
 	var/spin_delay = 1 SECONDS	//let's not get crazy
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT
+
+/obj/item/weapon/gun/projectile/colt/examine(mob/user)
+	..()
+	if(user.is_holding_item(src))
+		to_chat(user,"<span class='info'>Alt-click to spin the gun.</span>")
 
 /obj/item/weapon/gun/projectile/colt/update_icon()
 	if(cocked)
@@ -271,9 +279,16 @@
 	else
 		icon_state = "colt"
 
-/obj/item/weapon/gun/projectile/colt/attack_self(mob/user, params, var/callparent = FALSE)
-	if(callparent)
+/obj/item/weapon/gun/projectile/colt/attack_self(mob/user)
+	if(cocked)
 		return ..(user)
+	else
+		cocked = TRUE
+		update_icon()
+		to_chat(user, "You cock \the [src].")
+		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
+
+/obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user) //spin to win with alt-click
 	if(cocked)
 		if(!last_spin || (world.time - last_spin) >= spin_delay)
 			user.visible_message("\The [user] spins \the [src] around \his finger.","You spin \the [src] around your finger.")
@@ -287,10 +302,7 @@
 		to_chat(user, "You cock \the [src].")
 		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
 
-/obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user)
-	attack_self(user, callparent = TRUE)
-
-/obj/item/weapon/gun/projectile/colt/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
+/obj/item/weapon/gun/projectile/colt/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(cocked)
 		..()
 		cocked = FALSE
@@ -313,7 +325,7 @@
 	user.put_in_hands(B)
 	qdel(src)
 
-/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	. = ..()
 	make_peel(user)
 
@@ -326,3 +338,6 @@
 		in_chamber = null
 		make_peel(user)
 		user.visible_message("<span class='danger'>\The [src] explodes as \the [user] bites into it!</span>","<span class='danger'>\The [src] explodes as you bite into it!</span>")
+
+/obj/item/weapon/gun/projectile/revolver	//a copy of parent to define traitor revolver as separate, because fuck you for making a class prototype not just that
+	gun_flags = EMPTYCASINGS | CHAMBERSPENT

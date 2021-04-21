@@ -24,6 +24,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	//New() stuff
 	startup_sound = 'sound/misc/interference.ogg'
 
+	//mommi milkie
+	var/gives_milk = FALSE
+	var/datum/reagents/udder = null
+
 	//This is no cyborg boy, no cyborg!
 	cell_type = /obj/item/weapon/cell/crepe/mommi //The secret behind MoMMIs, literal powercreep.
 	wiring_type = /datum/wires/robot/mommi
@@ -59,7 +63,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/remove_screen_objs()
 	..()
 	if(inv_tool)
-		returnToPool(inv_tool)
+		qdel(inv_tool)
 		if(client)
 			client.screen -= inv_tool
 		inv_tool = null
@@ -177,6 +181,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		help_shake_act(user)
 		return FALSE
 
+	else if(gives_milk && udder && stat == CONSCIOUS && istype(W, /obj/item/weapon/reagent_containers/glass))
+		user.visible_message("<span class='notice'>[user] milks [src] using \the [W].</span>")
+		var/obj/item/weapon/reagent_containers/glass/G = W
+		var/transfered = udder.trans_id_to(G, MOMMIMILK, rand(5,10))
+		if(G.reagents.total_volume >= G.volume)
+			to_chat(user, "<span class='warning'>[W] is full.</span>")
+		if(!transfered)
+			to_chat(user, "<span class='warning'>The MoMMI seems exhausted. Wait a bit longer...</span>")
 	else
 		user.do_attack_animation(src, W)
 		spark(src, 5, FALSE)
@@ -312,7 +324,23 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				TS.forceMove(loc)
 
 		installed_modules()
-	return
 
 /mob/living/silicon/robot/mommi/radio_menu()
 	radio.interact(src)//Just use the radio's Topic() instead of bullshit special-snowflake code
+
+/mob/living/silicon/robot/mommi/process_killswitch()
+	return
+
+/mob/living/silicon/robot/mommi/New()
+	if(Holiday == APRIL_FOOLS_DAY)
+		gives_milk = TRUE
+	udder = new(50)
+	udder.my_atom = src
+	..()
+
+/mob/living/silicon/robot/mommi/Life()
+	if(timestopped)
+		return 0 //under effects of time magick
+	if(gives_milk && udder && prob(5))
+		udder.add_reagent(MOMMIMILK, rand(5, 10))
+	..()

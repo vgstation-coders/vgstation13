@@ -8,6 +8,11 @@
 #define SHUTTLETRANSITTIME 120		// 2 minutes = 120 seconds
 #define SHUTTLEGRACEPERIOD 300      // time after roundstart until the shuttle can be called, 5 minutes = 300 seconds
 
+#define EMERGENCY_SHUTTLE_RECALLED	-1
+#define EMERGENCY_SHUTTLE_STANDBY	0
+#define EMERGENCY_SHUTTLE_GOING_TO_STATION 1
+#define EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM 2
+
 var/global/datum/emergency_shuttle/emergency_shuttle
 
 datum/emergency_shuttle
@@ -79,7 +84,7 @@ datum/emergency_shuttle/proc/recall()
 		if(alert == 0)
 			if(timeleft >= 600)
 				return
-			captain_announce("The emergency shuttle has been recalled.")
+			command_alert(/datum/command_alert/emergency_shuttle_recalled)
 			world << sound('sound/AI/shuttlerecalled.ogg')
 			setdirection(-1)
 			online = 1
@@ -226,7 +231,8 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				settimeleft(SHUTTLELEAVETIME)
 				send2mainirc("The Emergency Shuttle has docked with the station.")
 				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
-				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
+				send2ickdiscord("The **Emergency Shuttle** has docked with the station.")
+				command_alert(/datum/command_alert/emergency_shuttle_docked)
 				world << sound('sound/AI/shuttledock.ogg')
 			if(ticker)
 				ticker.shuttledocked_time = world.time / 10
@@ -253,8 +259,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 
 				// Shuttle Radio
 				CallHook("EmergencyShuttleDeparture", list())
-
-				captain_announce("The Emergency Shuttle has left the station. Estimate [round(timeleft()/60,1)] minutes until the shuttle docks at Central Command.")
+				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
@@ -279,6 +284,27 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 			else
 				vote_preload()
 				location = 2
+
+			//if the crew brought items ordered by centcom with them, they get paid for those as if it were the supply shuttle
+			for(var/atom/movable/MA in shuttle.linked_area)
+				if(MA.anchored && !ismecha(MA))
+					continue
+
+				if(istype(MA,/obj/structure/closet/crate))
+					for(var/obj/A in MA)
+						SSsupply_shuttle.SellObjToOrders(A,1,TRUE)
+				else
+					SSsupply_shuttle.SellObjToOrders(MA,0,TRUE)
+
+				for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
+					O.cargo_contribution = 0//Cargo doesn't get their 10% bonus when items are shipped this way.
+					if(O.CheckFulfilled())
+						if (!istype(O, /datum/centcomm_order/per_unit))
+							O.Pay()//per_unit payments are handled by CheckFulfilled()
+						SSsupply_shuttle.centcomm_orders.Remove(O)
+						for(var/obj/machinery/computer/supplycomp/S in SSsupply_shuttle.supply_consoles)//juiciness!
+							S.say("Central Command request fulfilled!")
+							playsound(S, 'sound/machines/info.ogg', 50, 1)
 
 			if(ticker)
 				ticker.mode.ShuttleDocked(2)

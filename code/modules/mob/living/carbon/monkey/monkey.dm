@@ -41,6 +41,7 @@
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
 	var/canPossess = FALSE
+	var/unmonkey_anim = "monkey2h"
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -81,6 +82,7 @@
 
 		add_language(languagetoadd)
 		default_language = all_languages[languagetoadd]
+		init_language = default_language
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
@@ -316,7 +318,7 @@
 
 
 
-/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
 	if(!..())
 		return
 
@@ -404,9 +406,6 @@
 		return
 
 
-/mob/living/carbon/monkey/IsAdvancedToolUser()//Unless its monkey mode monkeys cant use advanced tools
-	return dexterity_check()
-
 // Get ALL accesses available.
 /mob/living/carbon/monkey/GetAccess()
 	var/list/ACL=list()
@@ -454,12 +453,12 @@
 
 /mob/living/carbon/monkey/dexterity_check()
 	if(stat != CONSCIOUS)
-		return 0
-	if(ticker.mode.name == "monkey")
-		return 1
+		return FALSE
+	if(ticker.mode.name == "monkey")//monkey mode override
+		return TRUE
 	if(reagents.has_reagent(METHYLIN))
-		return 1
-	return 0
+		return TRUE
+	return FALSE//monkeys can't use complex things by default unless they're high on methylin
 
 /mob/living/carbon/monkey/reset_layer()
 	if(lying)
@@ -526,6 +525,10 @@
 			var/matrix/M = adult.transform
 			M.Scale(0)
 			adult.set_species("Mushroom")
+			adult.my_appearance.h_style = "Plump Helmet"
+			adult.my_appearance.r_hair = 60
+			adult.my_appearance.g_hair = 40
+			adult.my_appearance.b_hair = 80
 			for(var/datum/language/L in languages)
 				adult.add_language(L.name)
 

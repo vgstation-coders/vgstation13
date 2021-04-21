@@ -51,7 +51,8 @@
 	for(var/path in to_spawn)
 		var/amount = to_spawn[path] || 1
 		for(var/i in 1 to amount)
-			new path(src)
+			var/atom/A = new path(src)
+			A.initialize()  // recursive
 
 /obj/structure/closet/basic
 	has_lock_type = /obj/structure/closet/secure_closet/basic
@@ -70,8 +71,7 @@
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
-
-	initialize()
+	take_contents()
 
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()
@@ -90,7 +90,7 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
-	
+
 	for(var/mob/living/carbon/carbon in src.loc)
 		if (carbon.mutual_handcuffs)
 			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
@@ -124,7 +124,6 @@
 	for(var/atom/movable/AM in src.loc)
 		if(insert(AM) == -1) // limit reached
 			break
-		INVOKE_EVENT(AM.on_moved,list("loc"=src))
 
 /obj/structure/closet/proc/open(mob/user)
 	if(src.opened)
@@ -359,7 +358,7 @@
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	if(health <= 0)
 		broken = 1
 		if(has_electronics)
@@ -443,7 +442,7 @@
 			return 0
 
 		if(iswelder(W) && canweld())
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
@@ -459,7 +458,7 @@
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(iswelder(W) && canweld())
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
@@ -649,7 +648,7 @@
 		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
 			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //Scrying or astral travel, fuck them.
 				return
-		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
+		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 
 // -- Vox raiders.

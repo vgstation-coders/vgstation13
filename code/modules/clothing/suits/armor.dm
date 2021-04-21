@@ -31,6 +31,11 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
+	sound_change = list(CLOTHING_SOUND_SCREAM)
+	sound_priority = CLOTHING_SOUND_MED_PRIORITY
+	sound_file = list('sound/misc/deusex_1.ogg','sound/misc/deusex_2.ogg','sound/misc/deusex_3.ogg')
+	sound_species_whitelist = list("Human")
+	sound_genders_allowed = list(MALE)
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/vest/attackby(obj/item/I, mob/user)
@@ -79,6 +84,14 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/suit/armor/vest/wardenshort
+	name = "Warden's short jacket"
+	desc = "A short, armored jacket, perfect for desk duty."
+	icon_state = "wardenjacket"
+	item_state = "wardenjacket"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/suit/armor/vest/neorussian
 	name = "neo-Russian vest"
 	desc = "The narkotiki camo pattern will come useful for botany raids."
@@ -92,6 +105,14 @@
 	item_state = "chainmail_torso"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 20, bullet = 35, laser = 10, energy = 10, bomb = 25, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/armor/vest/metrocop
+	name = "civil protection armor"
+	desc = "Pick up that can."
+	icon_state = "metrocop_armor"
+	item_state = "armor"
+	species_fit = list()
+	clothing_flags = 0
 
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"
@@ -118,6 +139,7 @@
 	desc = "A classic suit of plate armour, highly effective at stopping melee attacks."
 	icon_state = "knight_green"
 	item_state = "knight_green"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
@@ -129,26 +151,31 @@
 	desc = "Forged long ago, in a distant land."
 	icon_state = "samurai"
 	item_state = "samurai"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 40, bullet = 0, laser = 10, energy = 5, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/knight/yellow
 	icon_state = "knight_yellow"
 	item_state = "knight_yellow"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/blue
 	icon_state = "knight_blue"
 	item_state = "knight_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/red
 	icon_state = "knight_red"
 	item_state = "knight_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/templar
 	name = "crusader armour"
 	desc = "God wills it!"
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/plain
 	icon_state = "knight_grey"
@@ -169,6 +196,7 @@
 	desc = "A suit of armor with heavy padding to protect against projectile attacks. Distributed to shadow organization squaddies."
 	icon_state = "xcomarmor2"
 	item_state = "xcomarmor2"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 10, bullet = 50, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.5
@@ -185,6 +213,7 @@
 	desc = "A suit of armor with heavy plating to protect against melee attacks. Distributed to shadow organization squaddies."
 	icon_state = "xcomarmor1"
 	item_state = "xcomarmor1"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 50, bullet = 10, laser = 10, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
@@ -254,6 +283,7 @@
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 
+
 //Reactive armor
 //When the wearer gets hit, this armor will teleport the user a short distance away (to safety or to more danger, no one knows. That's the fun of it!)
 /obj/item/clothing/suit/armor/reactive
@@ -296,29 +326,9 @@
 	if(L.wear_suit != src) //Not worn
 		return 0 //Don't do anything
 
-	var/list/turfs = new/list()
-
-	for(var/turf/T in orange(6, loc))
-		if(istype(T,/turf/space))
-			continue
-		if(T.density)
-			continue
-		if(T.x>world.maxx-6 || T.x<6)
-			continue
-		if(T.y>world.maxy-6 || T.y<6)
-			continue
-		turfs += T
-	if(!turfs.len)
-		turfs += pick(/turf in orange(6))
-	var/turf/picked = pick(turfs)
-	if(!isturf(picked))
-		return
-
+	L.teleport_radius(6)
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of \the [blocked]!</span>", "<span class='notice'>The reactive teleport system flings you clear of \the [blocked].</span>")
-
-	playsound(L, 'sound/effects/teleport.ogg', 30, 1)
-
-	L.forceMove(picked)
+	playsound(L, 'sound/effects/teleport.ogg', 50, 1)
 
 	return 1
 

@@ -10,6 +10,8 @@
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
 	//Used for bizarre/odd/reference vaults, entering them causes the wild wasteland sound to play
 	var/mysterious = FALSE
 
@@ -19,9 +21,6 @@
 	if(mysterious)
 		//Create a narrator object to play a sound to everybody who enters the area
 		narrator = new /obj/effect/narration/mystery_sound(null)
-
-/area/vault/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
 
 //Special area that can be used in map elements. When loaded, it creates a new area object and transfers all of its contents into it.
 //This means that this area can be put into multiple map elements without any issues
@@ -40,7 +39,10 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
+/area/vault/gingerbread_house
 
+/area/vault/mechclubhouse
+	requires_power = 1
 
 /area/vault/icetruck
 
@@ -78,6 +80,9 @@
 /area/vault/rsvault
 
 /area/vault/syndiecargo
+
+/area/vault/black_site_prism
+	jammed = 2
 
 //prison vault
 
@@ -195,62 +200,6 @@
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
-
-
-/area/vault/lightship
-	name = "\improper Lightspeed Ship"
-	requires_power = 1
-
-/area/vault/lightship/nopowerstorage
-	name = "\improper Engine Storage Bay"
-	icon_state = "engine"
-	requires_power = 0
-
-/area/vault/lightship/cockpit
-	name = "\improper Cockpit"
-
-/area/vault/lightship/dronebay
-	name = "\improper Drone Bay"
-
-/area/vault/lightship/Doormaint
-	name = "\improper Airlock Maintenance"
-
-/area/vault/lightship/cameraroom
-	name = "\improper Surveillance Room"
-
-/area/vault/lightship/shieldbattery
-	name = "\improper Shield Battery"
-
-/area/vault/lightship/Medbay
-	name = "\improper Medical Bay"
-
-/area/vault/lightship/lounge
-	name = "\improper Lounge"
-
-/area/vault/lightship/dining
-	name = "\improper Dining Quarters"
-
-/area/vault/lightship/atmospherics
-	name = "\improper Atmospherics"
-
-/area/vault/lightship/teleporter
-	name = "\improper Teleportation Station"
-
-/area/vault/lightship/maintenance
-	name = "\improper Maintenance"
-
-/area/vault/lightship/engine
-	name = "\improper Engineering"
-
-/area/vault/lightship/portdock
-	name = "\improper Port Docking"
-
-/area/vault/lightship/starboarddocking
-	name = "\improper Starboard Docking"
-
-/area/vault/lightship/weaponsroom
-	name = "\improper Weapon Systems"
-
 
 /area/vault/icecomet
 	jammed = 2
@@ -505,7 +454,6 @@
 
 /obj/item/projectile/beam/retro/weak
 	damage = 15
-	linear_movement = 0
 
 /turf/simulated/floor/engine/old
 	icon_state = "engineold"
@@ -925,4 +873,4 @@
 /obj/machinery/turret/russian
 	faction = "russian"
 	lasers = 1
-	lasertype = 2
+	lasertype = /obj/item/projectile/beam/heavylaser

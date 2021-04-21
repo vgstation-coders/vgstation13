@@ -30,7 +30,6 @@
 	var/key
 	var/name				//replaces mob/var/original_name
 	var/mob/current
-	var/mob/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
 	var/active = 0
 
 	var/memory
@@ -41,7 +40,8 @@
 
 	var/role_alt_title
 
-	var/datum/job/assigned_job
+	var/job_priority // How much did we want the job we ended up having? Used for assistant rerolls.
+
 	var/datum/religion/faith
 
 	var/list/kills=list()
@@ -54,8 +54,9 @@
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
 
-		//put this here for easier tracking ingame
+	//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
+	var/initial_wallet_funds = 0
 
 	var/total_TC = 0
 	var/spent_TC = 0
@@ -85,6 +86,7 @@
 		R.PreMindTransfer(current)
 
 	if(current)					//remove ourself from our old body's mind variable
+		current.old_assigned_role = assigned_role
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
@@ -104,6 +106,7 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
+	lazy_invoke_event(/lazy_event/after_mind_transfer, list("mind" = src))
 
 /datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
@@ -280,7 +283,7 @@
 				if (joined)
 					joined.HandleRecruitedRole(newRole)
 
-		newRole.OnPostSetup(FALSE)
+		newRole.OnPostSetup()
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
 			newRole.Greet(chosen_greeting,custom_greeting)
 
@@ -514,7 +517,6 @@
 		mind.key = key
 	else
 		mind = new /datum/mind(key)
-		mind.original = src
 		if(ticker)
 			ticker.minds += mind
 		else

@@ -55,7 +55,7 @@
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		update_icon()
@@ -80,19 +80,19 @@
 			takeDamage(4)
 
 /obj/structure/cult/blob_act()
-	playsound(get_turf(src), sound_damaged, 75, 1)
+	playsound(src, sound_damaged, 75, 1)
 	takeDamage(20)
 
 /obj/structure/cult/bullet_act(var/obj/item/projectile/Proj)
 	takeDamage(Proj.damage)
-	..()
+	return ..()
 
 /obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		if(iscarbon(G.affecting))
 			MouseDropTo(G.affecting,user)
-			returnToPool(W)
+			qdel(W)
 	else if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
@@ -103,7 +103,7 @@
 			if (W.hitsound)
 				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
-				playsound(get_turf(src), sound_damaged, 75, 1)
+				playsound(src, sound_damaged, 75, 1)
 			takeDamage(W.force)
 			if (W.attack_verb)
 				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
@@ -124,7 +124,7 @@
 							"You hear stone cracking.")
 		takeDamage(user.get_unarmed_damage(src))
 		if (sound_damaged)
-			playsound(get_turf(src), sound_damaged, 75, 1)
+			playsound(src, sound_damaged, 75, 1)
 	else if(iscultist(user))
 		cultist_act(user)
 	else
@@ -161,7 +161,7 @@
 	apply_beam_damage(B)
 	last_beamchecks.Remove("\ref[B]") // RIP
 	if(beams.len == 0)
-		if(!custom_process && src in processing_objects)
+		if(!custom_process)
 			processing_objects.Remove(src)
 
 /obj/structure/cult/apply_beam_damage(var/obj/effect/beam/B)
@@ -209,7 +209,7 @@
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
-	var/datum/station_holomap/holomap_datum
+	var/datum/station_holomap/cult/holomap_datum
 
 
 /obj/structure/cult/altar/New()
@@ -229,7 +229,7 @@
 	holomarker.z = src.z
 	holomap_markers[HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"] = holomarker
 
-	holomap_datum = new /datum/station_holomap/cult()
+	holomap_datum = new
 	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
 
 
@@ -278,8 +278,8 @@
 				for(var/mob/M in observers)
 					if(!M.client || isantagbanned(M) || jobban_isbanned(M, CULTIST) || M.client.is_afk())
 						continue
-					if (M.mind && M.mind.GetRole(CULTIST))
-						var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+					if (iscultist(M))
+						var/datum/role/cultist/cultist = iscultist(M)
 						if (cultist.second_chance)
 							to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
@@ -297,7 +297,7 @@
 				C.resting = 1
 				C.update_canmove()
 			C.forceMove(loc)
-			returnToPool(G)
+			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
 			return 1
 	..()
@@ -353,7 +353,11 @@
 		return
 	if (!istype(O))
 		return
-	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
+	if(user.incapacitated() || user.lying)
+		return
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(O))
+		return
+	if (user.get_active_hand() == O)
 		if(!user.drop_item(O))
 			return
 	else
@@ -361,13 +365,7 @@
 			return
 		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
 			return
-		if(user.incapacitated() || user.lying)
-			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src))
-			return
 		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon))
-			return
-		if(!user.loc)
 			return
 		var/mob/living/L = O
 		if(!istype(L) || L.locked_to || L == user)
@@ -453,7 +451,7 @@
 		return
 	if(is_locking(lock_type))
 		var/choices = list(
-			list("Remove Blade", "radial_altar_remove", "Transfer some of your blood to the blade to repair it and refuel its blood level, or you could just slash someone."),
+			list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
 			list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
 			)
 		var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
@@ -559,10 +557,22 @@
 					var/extra = ""
 					if (H && istype(H))
 						if (H.isInCrit())
-							extra = " - <span style='color:#FF0000'>CRITICAL</span>"
+							extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
 						else if (H.isDead())
 							extra = " - <span style='color:#FF0000'>DEAD</span>"
 					dat += "<li><b>[M.name]</b></li> - [origin_text][extra]"
+				for(var/obj/item/weapon/handcuffs/cult/cuffs in cult.bindings)
+					if (iscarbon(cuffs.loc))
+						var/mob/living/carbon/C = cuffs.loc
+						if (C.handcuffed == cuffs && cuffs.gaoler && cuffs.gaoler.antag)
+							var/datum/mind/gaoler = cuffs.gaoler.antag
+							var/extra = ""
+							if (C && istype(C))
+								if (C.isInCrit())
+									extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
+								else if (C.isDead())
+									extra = " - <span style='color:#FF0000'>DEAD</span>"
+							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
 				dat += {"</ul></body>"}
 				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")
@@ -642,7 +652,7 @@
 					sleep (gem_delay/3)
 					altar_task = ALTARTASK_NONE
 					update_icon()
-					var/obj/item/device/soulstone/gem/gem = new (loc)
+					var/obj/item/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
 
 /obj/structure/cult/altar/proc/replace_target(var/mob/user)
@@ -707,9 +717,10 @@
 			to_chat(usr, "<span class='warning'>Another shade was faster, and is currently possessing \the [blade].</span>")
 			return
 		var/mob/living/simple_animal/shade/shadeMob = new(blade)
+		blade.shade = shadeMob
 		shadeMob.status_flags |= GODMODE
 		shadeMob.canmove = 0
-		var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+		var/datum/role/cultist/cultist = iscultist(M)
 		cultist.second_chance = 0
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
@@ -756,6 +767,7 @@
 			blade.forceMove(loc)
 			blade.blood = blade.maxblood
 			new_shade.forceMove(blade)
+			blade.shade = new_shade
 			blade.update_icon()
 			blade = null
 
@@ -775,7 +787,7 @@
 			new_shade.name = "[M.real_name] the Shade"
 			new_shade.real_name = "[M.real_name]"
 			new_shade.give_blade_powers()
-			playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
 		var/turf/T = loc
@@ -909,7 +921,7 @@ var/list/cult_spires = list()
 		return
 
 	var/mob/living/carbon/human/H = user
-	var/datum/role/cultist/C = H.mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(H)
 
 	var/list/available_tattoos = list("tier1","tier2","tier3")
 	for (var/tattoo in C.tattoos)
@@ -1423,7 +1435,7 @@ var/list/bloodstone_list = list()
 		if (cult)
 			cult.fail()
 		if(anchor)
-			global_anchor_bloodstone -= src
+			global_anchor_bloodstone = null
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)
@@ -1547,7 +1559,7 @@ var/list/bloodstone_list = list()
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		if (backup > (health > (2*maxHealth/3)) + (health > (maxHealth/3)))

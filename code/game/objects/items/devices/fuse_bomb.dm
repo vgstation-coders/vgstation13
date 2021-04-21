@@ -23,7 +23,7 @@
 	..()
 	if(!fuse_lit)
 		if(iswelder(W))
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(WT.isOn())
 				lit(user,W)
 		else if(istype(W, /obj/item/weapon/lighter))

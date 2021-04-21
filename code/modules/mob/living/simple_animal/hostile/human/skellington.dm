@@ -6,6 +6,7 @@
 	icon_state = "skellington"
 
 	faction = "skeleton"
+	mob_property_flags = MOB_UNDEAD
 
 	corpse = /obj/effect/landmark/corpse/skellington
 

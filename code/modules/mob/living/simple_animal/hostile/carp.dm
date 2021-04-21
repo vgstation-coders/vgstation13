@@ -180,6 +180,8 @@
 		//Start growing up
 		desc = "[initial(desc)] <span class='notice'>It ate a lot recently, and it appears to be ready to grow up.</span>"
 		spawn(rand(5 SECONDS, 30 SECONDS))
+			if(src.stat == DEAD)
+				return
 			grow_up()
 
 /mob/living/simple_animal/hostile/carp/baby/reagent_act(id, method, volume)

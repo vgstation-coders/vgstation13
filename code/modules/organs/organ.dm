@@ -78,8 +78,8 @@
 	W.time_inflicted = world.time
 
 /mob/living/carbon/human/var/list/organs = list()
-/mob/living/carbon/human/var/list/organs_by_name = list() //Map organ names to organs
-/mob/living/carbon/human/var/list/internal_organs_by_name = list() //So internal organs have less ickiness too
+/mob/living/carbon/human/var/list/datum/organ/external/organs_by_name = list() //Map organ names to organs
+/mob/living/carbon/human/var/list/datum/organ/internal/internal_organs_by_name = list() //So internal organs have less ickiness too
 /mob/living/carbon/human/var/list/grasp_organs = list()
 
 /mob/living/carbon/human/proc/can_use_hand(var/this_hand = active_hand)

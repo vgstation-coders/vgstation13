@@ -34,7 +34,7 @@
 
 /obj/item/target/attackby(obj/item/W as obj, mob/user as mob)
 	if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			overlays.len = 0
 			to_chat(usr, "You slice off [src]'s uneven chunks of aluminum and scorch marks.")
@@ -148,9 +148,9 @@
 
 		icon = virtualIcon // apply bulletholes over decals
 
-		return
+		return ..()
 
-	return -1 // the bullet/projectile goes through the target! Ie, you missed
+	return PROJECTILE_COLLISION_MISS // the bullet/projectile goes through the target! Ie, you missed
 
 
 // Small memory holder entity for transparent bullet holes

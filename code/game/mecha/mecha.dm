@@ -32,7 +32,8 @@
 	var/deflect_chance = 10 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
 	//the values in this list show how much damage will pass through, not how much will be absorbed.
 	var/list/damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=1)
-	var/obj/item/weapon/cell/cell
+	var/obj/item/weapon/cell/cell = null
+	var/cell_type = /obj/item/weapon/cell/high/mecha
 	var/state = STATE_BOLTSHIDDEN
 	var/list/log = new //Holds the log of what the mecha has done (Attacked, fired at, been attacked by, gone into maintenance mode, etc.)
 	var/last_message = 0 // Used in occupant_message()
@@ -81,21 +82,18 @@
 	var/max_equip = 3 //The maximum amount of equipment this mecha an hold at one time.
 
 	var/turf/crashing = null
-	var/list/mech_parts = list(/obj/item/weapon/cell,
-						/obj/machinery/portable_atmospherics/canister, //I shit you not this thing uses a literal air canister
-						/obj/item/device/radio,
-						/obj/item/mecha_parts,
-						/obj/item/device/mmi,
-						/obj/item/mecha_parts/mecha_tracking,
-						/obj/item/device/radio/electropack,
-						/obj/machinery/portable_atmospherics/scrubber/mech)
+	var/list/mech_parts = list()
 
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
 
 	var/list/never_deflect = list(
 		/obj/item/projectile/ion,
+		/obj/item/projectile/bullet/APS,
 	)
+
+	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
+	var/paintable = 0
 
 /obj/mecha/get_cell()
 	return cell
@@ -119,7 +117,6 @@
 	mechas_list += src //global mech list
 	icon_state = initial_icon
 	icon_state += "-open"
-	return
 
 /obj/mecha/Destroy()
 	go_out(loc, TRUE)
@@ -137,6 +134,7 @@
 		explosion(T, 0, 0, 1, 3)
 	if(wreckage)
 		var/obj/effect/decal/mecha_wreckage/WR = new wreckage(T)
+		WR.icon_state = initial_icon + "-broken"
 		for(var/obj/item/mecha_parts/mecha_equipment/E in equipment)
 			if(E.salvageable && prob(30))
 				WR.crowbar_salvage += E
@@ -160,6 +158,7 @@
 			E.forceMove(T)
 			qdel(E)
 	equipment.Cut() //Equipment is handled above, either by being deleted, or by being moved to the wreckage.
+	mech_parts.Cut() //We don't need this list anymore, too.
 	mechas_list -= src //global mech list
 	if(cell)
 		qdel(cell)
@@ -212,16 +211,12 @@
 
 /obj/mecha/proc/add_airtank()
 	internal_tank = new /obj/machinery/portable_atmospherics/canister/air(src)
+	mech_parts.Add(internal_tank)
 	return internal_tank
 
-/obj/mecha/proc/add_cell(var/obj/item/weapon/cell/C=null)
-	if(C)
-		C.forceMove(src)
-		cell = C
-		return
-	cell = new(src)
-	cell.charge = 15000
-	cell.maxcharge = 15000
+/obj/mecha/proc/add_cell()
+	cell = new cell_type(src)
+	mech_parts.Add(cell)
 
 /obj/mecha/proc/add_cabin()
 	cabin_air = new
@@ -230,6 +225,7 @@
 	cabin_air.adjust_multi(
 		GAS_OXYGEN, O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature),
 		GAS_NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
+	mech_parts.Add(cabin_air)
 	return cabin_air
 
 /obj/mecha/proc/add_radio()
@@ -238,9 +234,11 @@
 	radio.icon = icon
 	radio.icon_state = icon_state
 	radio.subspace_transmission = 1
+	mech_parts.Add(radio)
 
 /obj/mecha/proc/add_tracking_beacon()
 	tracking = new(src)
+	mech_parts.Add(tracking)
 	return tracking
 
 /obj/mecha/proc/add_iterators()
@@ -293,6 +291,8 @@
 	if(!get_charge())
 		return
 	if(src == target)
+		var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack)
+		R.rack.AltClick(user)
 		return
 	var/dir_to_target = get_dir(src,target)
 	if(dir_to_target && !(dir_to_target & src.dir))//wrong direction
@@ -560,6 +560,10 @@
 		src.log_message("Attack by paw. Attacker - [user].",1)
 	else
 		src.log_message("Attack by hand. Attacker - [user].",1)
+	var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack)
+	if(R && operation_allowed(user))
+		R.rack.AltClick(user)
+		return
 	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
@@ -645,8 +649,7 @@
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
-	..()
-	return
+	return ..()
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(prob(src.deflect_chance) && !is_type_in_list(Proj, never_deflect))
@@ -816,17 +819,20 @@
 				if ("power cell")
 					if(!cell)
 						return
-					cell.forceMove(src.loc)
+					cell.forceMove(loc)
+					mech_parts.Remove(cell)
 					cell = null
 				if ("exosuit tracking beacon")
 					if(!tracking)
 						return
-					tracking.forceMove(src.loc)
+					tracking.forceMove(loc)
+					mech_parts.Remove(tracking)
 					tracking = null
 				if ("electropack")
 					if(!electropack)
 						return
-					electropack.forceMove(src.loc)
+					electropack.forceMove(loc)
+					mech_parts.Remove(electropack)
 					electropack = null
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [remove] from \the [src].</span>")
@@ -849,37 +855,40 @@
 		return
 	else if(istype(W, /obj/item/weapon/cell))
 		if(state==STATE_BOLTSOPENED)
-			if(!src.cell)
+			if(!cell)
 				if(user.drop_item(W, src))
 					to_chat(user, "You install the powercell.")
-					src.cell = W
-					src.log_message("Powercell installed.")
+					cell = W
+					mech_parts.Add(cell)
+					log_message("Powercell installed.")
 			else
 				to_chat(user, "There's already a powercell installed.")
 		return
 	else if(istype(W, /obj/item/mecha_parts/mecha_tracking))
 		if(state==STATE_BOLTSOPENED)
-			if(!src.tracking)
+			if(!tracking)
 				if(user.drop_item(W, src))
 					to_chat(user, "You install the tracking beacon and safeties.")
-					src.tracking = W
-					src.log_message("Exosuit tracking beacon installed.")
+					tracking = W
+					mech_parts.Add(tracking)
+					log_message("Exosuit tracking beacon installed.")
 			else
 				to_chat(user, "There's already a tracking beacon installed.")
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))
 		if(state==STATE_BOLTSOPENED)
-			if(!src.electropack)
+			if(!electropack)
 				if(user.drop_item(W, src))
 					to_chat(user, "You rig the electropack to the cockpit.")
-					src.electropack = W
-					src.log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
+					electropack = W
+					mech_parts.Add(electropack)
+					log_message("Emergency ejection routines installed.") //not exactly a legitimate upgrade!
 			else
 				to_chat(user, "There's already an electropack installed.")
 		return
 
 	else if(iswelder(W) && user.a_intent != I_HURT)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			if (hasInternalDamage(MECHA_INT_TANK_BREACH))
 				clearInternalDamage(MECHA_INT_TANK_BREACH)
@@ -1125,36 +1134,35 @@
 		to_chat(usr, "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>")
 		return
 */
-	var/passed
-	if(src.dna)
-		if(usr.dna.unique_enzymes==src.dna)
-			passed = 1
-	else if(src.operation_allowed(usr))
-		passed = 1
-	if(!passed)
+	if(!operation_allowed(usr))
 		to_chat(usr, "<span class='warning'>Access Denied.</span>")
-		src.log_append_to_last("Permission denied.")
+		log_append_to_last("Permission denied.")
 		return
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
 
-	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
-
-
-	if(do_after(usr, src, 40))
-		if(!src.occupant)
-			moved_inside(usr)
-			refresh_spells()
-		else if(src.occupant!=usr)
-			to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
+	if(get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/runningboard))
+		moved_inside(usr)
+		refresh_spells()
+		visible_message("<span class='good'>[usr] is instantly lifted into \the [src] by the running board!</span>")
 	else
-		to_chat(usr, "You stop entering the exosuit.")
-	return
+		visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
+		if(do_after(usr, src, 40))
+			if(!src.occupant)
+				moved_inside(usr)
+				refresh_spells()
+			else if(src.occupant!=usr)
+				to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
+		else
+			to_chat(usr, "You stop entering the exosuit.")
+
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
 
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
-	if(!isnull(src.loc) && H && H.client && H in range(1))
+	if(!isnull(src.loc) && H && H.client && (H in range(1)))
 		H.reset_view(src)
 		H.stop_pulling()
 		H.unlock_from()
@@ -1208,7 +1216,7 @@
 	return 0
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
-	if(!isnull(src.loc) && mmi_as_oc && user in range(1))
+	if(!isnull(src.loc) && mmi_as_oc && (user in range(1)))
 		if(!mmi_as_oc.brainmob || !mmi_as_oc.brainmob.client)
 			to_chat(user, "Consciousness matrix not detected.")
 			return 0
@@ -1222,6 +1230,7 @@
 		brainmob.forceMove(src) //should allow relaymove
 		brainmob.canmove = 1
 		mmi_as_oc.forceMove(src)
+		mech_parts.Add(mmi_as_oc)
 		mmi_as_oc.mecha = src
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
@@ -1312,14 +1321,18 @@
 		go_out(over_location)
 	add_fingerprint(usr)
 
-/obj/mecha/proc/empty_bad_contents() //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
+/obj/mecha/proc/empty_bad_contents(var/list/extra_stuff=null) //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
 	for(var/obj/O in src)
-		if(!is_type_in_list(O,mech_parts))
-			O.forceMove(src.loc)
-	return
+		if(O in mech_parts) //One of our internal components
+			continue
+		if(O in equipment) //It's our equipment
+			continue
+		if(extra_stuff && (O in extra_stuff)) //Something else we need to keep? Say no more!
+			continue
+		O.forceMove(loc) //Somehow got inside, drop it.
 
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
-	if(!src.occupant)
+	if(!occupant)
 		return
 
 	if(lock_controls) //No ejecting while using the Gravpult!
@@ -1334,40 +1347,43 @@
 
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
-		mob_container = src.occupant
-	else if(istype(occupant, /mob/living/carbon/brain))
+		mob_container = occupant
+	else if(isbrain(occupant))
 		var/mob/living/carbon/brain/brain = occupant
 		mob_container = brain.container
 	else
 		return
+
 	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
 	if(mob_container.forceMove(exit))//ejecting mob container
-		src.log_message("[mob_container] moved out.")
+		log_message("[mob_container] moved out.")
 		occupant.reset_view()
 		empty_bad_contents()
-		src.occupant << browse(null, "window=exosuit")
+		occupant << browse(null, "window=exosuit")
 		remove_mech_spells()
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
 				occupant.forceMove(mmi)
+				mech_parts.Remove(mmi)
+			occupant.canmove = FALSE
 			mmi.mecha = null
-			src.occupant.canmove = 0
-			src.verbs += /obj/mecha/verb/eject
+			verbs += /obj/mecha/verb/eject
 
 		//change the cursor
-		if(src.occupant && src.occupant.client)
-			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
+		if(occupant && occupant.client)
+			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
 
-		src.occupant = null
-		src.icon_state = src.initial_icon+"-open"
+		occupant = null
+		icon_state = initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
 			set_light(0)
-		src.dir = dir_in
-		if (G)
+		dir = dir_in
+		if(G)
 			G.hud_off()
 
-	return
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
 	spark(src, 2, FALSE)
@@ -1392,11 +1408,14 @@
 /////////////////////////
 
 /obj/mecha/proc/operation_allowed(mob/living/carbon/human/H)
+	if(dna)
+		if(!(usr.dna.unique_enzymes==dna))
+			return FALSE
 	if(istype(H))
 		for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-			if(src.check_access(ID,src.operation_req_access))
+			if(src.check_access(ID,operation_req_access))
 				return 1
-		return 0
+	return FALSE
 
 
 /obj/mecha/proc/internals_access_allowed(mob/living/carbon/human/H)
@@ -1581,6 +1600,13 @@
 	output += "</div>"
 	return output
 
+//returns an equipment object if we have one of that type, useful since is_type_in_list won't return the object
+//since is_type_in_list uses caching, this is a slower operation, so only use it if needed
+/obj/mecha/proc/get_equipment(var/equip_type)
+	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+		if(istype(ME,equip_type))
+			return ME
+	return null
 
 /obj/mecha/proc/get_log_html()
 	var/output = "<html><head><title>[src.name] Log</title></head><body style='font: 13px 'Courier', monospace;'>"
@@ -2019,6 +2045,8 @@
 		src.visible_message("[src] raises [ME]")
 		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 
+/spell/mech/proc/update_spell_icon() //overwritten by painting a mech
+
 ///////////////////////
 ///// Power stuff /////
 ///////////////////////
@@ -2082,6 +2110,40 @@
 		if(0 to 0.10)
 			return "huddiagdead"
 	return "huddiagmax"
+
+
+/obj/item/device/mech_painter
+	name = "mecha painter"
+	desc = "A device used to paint mechs in various colours and fashions."
+	icon = 'icons/obj/RCD.dmi'
+	icon_state = "rpd"//placeholder art, someone please sprite it
+	force = 0
+
+/obj/item/device/mech_painter/afterattack(var/obj/mecha/M, var/mob/user)
+	if (!M.paintable)
+		to_chat(user, "<span class='warning'>This mech cannot be painted.</span>")
+		return 1
+	if (!M.mech_sprites.len)
+		to_chat(user, "<span class='warning'>This mech has no other paint-jobs.</span>")
+		return 1
+	if (M.occupant) //this check seems pointless and I would love to get rid of it, but because there's no way to figure out the current state of the mech when painting it, it's a necessary evil
+		to_chat(user, "<span class='warning'>This mech has an occupant. It must be empty before you can paint it.</span>")
+		return 1
+
+	var/icontype = input("Select the paint-job!")in M.mech_sprites
+
+	if(icontype == M.initial_icon)
+		to_chat(user, "<span class='warning'>This mech is already painted in that style.</span>")
+		return 1
+	if(icontype)
+		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
+		if (do_after(user, M , 30))
+			M.initial_icon = icontype
+			M.icon_state = icontype +"-open"
+			for(var/spell/mech/MS in M.intrinsic_spells)
+				MS.update_spell_icon()
+			M.refresh_spells() //I think this does something important
+	return 1
 
 
 //////////////////////////////////////////

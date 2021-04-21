@@ -1,7 +1,6 @@
 /* Clown Items
  * Contains:
  * 		Banana Peels
- *		Soap
  *		Bike Horns
  */
 
@@ -11,73 +10,25 @@
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(2, 2, 1))
+		if(slip_n_slide(M))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
-/*
- * Soap
- */
-/obj/item/weapon/soap/Crossed(AM as mob|obj) //EXACTLY the same as bananapeel for now, so it makes sense to put it in the same dm -- Urist
-	if (istype(AM, /mob/living/carbon))
-		var/mob/living/carbon/M = AM
-		if (M.Slip(3, 2, 1))
-			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
-				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+/datum/locking_category/banana_peel
 
-/obj/item/weapon/soap/afterattack(atom/target, mob/user as mob)
-	//I couldn't feasibly fix the overlay bugs caused by cleaning items we are wearing.
-	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
-	//Overlay bugs can probably be fixed by updating the user's icon, see watercloset.dm
-	if(!user.Adjacent(target))
-		return
+/obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
+	if(!M.Slip(2,2,1))
+		return 0
+	var/tiles_to_slip = rand(round(potency/20, 1),round(potency/10, 1))
+	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
+		M.lock_atom(src, /datum/locking_category/banana_peel)
+		for(var/i = 1 to tiles_to_slip)
+			if(!M.locked_to)
+				step(M, M.dir)
+				sleep(1)
+		spawn(1) M.unlock_atom(src)
+	return 1
 
-	if(user.client && (target in user.client.screen) && !(user.is_holding_item(target)))
-		user.simple_message("<span class='notice'>You need to take that [target.name] off before cleaning it.</span>",
-			"<span class='notice'>You need to take that [target.name] off before destroying it.</span>")
-
-	else if(istype(target,/obj/effect/decal/cleanable))
-		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
-			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
-		returnToPool(target)
-
-	else if(istype(target,/turf/simulated))
-		var/turf/simulated/T = target
-		var/list/cleanables = list()
-
-		for(var/obj/effect/decal/cleanable/CC in T)
-			if(!istype(CC) || !CC)
-				continue
-			cleanables += CC
-
-		for(var/obj/effect/decal/cleanable/CC in get_turf(user)) //Get all nearby decals drawn on this wall and erase them
-			if(CC.on_wall == target)
-				cleanables += CC
-
-		if(!cleanables.len)
-			user.simple_message("<span class='notice'>You fail to clean anything.</span>",
-				"<span class='notice'>There is nothing for you to vandalize.</span>")
-			return
-		cleanables = shuffle(cleanables)
-		var/obj/effect/decal/cleanable/C
-		for(var/obj/effect/decal/cleanable/d in cleanables)
-			if(d && istype(d))
-				C = d
-				break
-		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
-			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
-		returnToPool(C)
-	else
-		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
-			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")
-		target.clean_blood()
-	return
-
-/obj/item/weapon/soap/attack(mob/target as mob, mob/user as mob)
-	if(target && user && ishuman(target) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
-		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with soap!</span>")
-		return
-	..()
 
 /*
  * Bike Horns
@@ -136,6 +87,35 @@
 		playsound(src, hitsound, 50, vary_pitch)
 		return 1
 	return 0
+
+/obj/item/weapon/bikehorn/syndicate
+	var/super_honk_delay = 50 //5 seconds
+	var/last_super_honk_time
+
+/obj/item/weapon/bikehorn/syndicate/attack_self(mob/user)
+	add_fingerprint(user)
+	super_honk(user)
+
+/obj/item/weapon/bikehorn/syndicate/proc/super_honk(var/mob/user)
+	if(world.time - last_super_honk_time >= super_honk_delay)
+		last_super_honk_time = world.time
+		to_chat(user, "<span class='warning'>HONK</span>")
+		playsound(user, 'sound/items/AirHorn.ogg', 100, 1)
+		for(var/mob/living/carbon/M in ohearers(4, user))
+			if(M.is_deaf() || M.earprot())
+				continue
+			to_chat(M, "<font color='red' size='5'>HONK</font>")
+			M.sleeping = 0
+			M.stuttering += 10
+			M.ear_deaf += 5
+			M.confused += 5
+			M.dizziness += 5
+			M.jitteriness += 5
+
+/obj/item/weapon/bikehorn/syndicate/examine(mob/user)
+	..()
+	if(is_holder_of(user, src))
+		to_chat(user, "<span class='warning'>On closer inspection, this one appears to have a tiny megaphone inside...</span>")
 
 /obj/item/weapon/bikehorn/rubberducky
 	name = "rubber ducky"
@@ -208,7 +188,7 @@
 	var/list/allowed_glue_types = list(
 		/obj/item,
 		/obj/structure/bed,
-	)	
+	)
 
 /obj/item/weapon/glue/examine(mob/user)
 	..()

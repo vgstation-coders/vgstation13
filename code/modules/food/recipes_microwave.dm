@@ -33,6 +33,15 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
 
+/datum/recipe/bagel
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bagel
+
+/datum/recipe/bagel/make_food(obj/container)
+	score["bagelscooked"]++
+	return ..()
+
 // Burgers /////////////////////////////////////////////////////
 
 /datum/recipe/customizable_bun
@@ -93,6 +102,14 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/clothing/head/beret)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mimeburger
+
+/datum/recipe/donutburger
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/donutburger
 
 /datum/recipe/assburger
 	reagents = list(FLOUR = 5)
@@ -169,6 +186,12 @@
 	reagents = list(FLOUR = 5, CARAMEL = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/caramelburger
+
+/datum/recipe/bearburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bearburger
+
 
 // Burger sliders //////////////////////////////////////////////
 
@@ -339,10 +362,16 @@
 /datum/recipe/poppypretzel
 	reagents = list(FLOUR = 5)
 	items = list(
-		/obj/item/seeds/poppyseed,
+		/obj/item/seeds,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
+
+/datum/recipe/poppypretzel/check_items(obj/container)
+	. = ..()
+	if(. == 1)
+		var/obj/item/seeds/seed_item = locate() in container // Parent call returned 1 so this is expected to be non-null
+		return seed_item.seed_type == "poppies"
 
 /datum/recipe/rofflewaffles
 	reagents = list(PSILOCYBIN = 5, FLOUR = 10)
@@ -2459,28 +2488,28 @@
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi
 
 /datum/recipe/sushi_Ikura
 	items = list(/obj/item/fish_eggs/salmon,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura
 
 /datum/recipe/sushi_Sake     // 100000 TIMES FOLDED SUSHI CAN CUT THROUGH DIAMONDS
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake
 
 /datum/recipe/sushi_SmokedSalmon
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonsteak,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon // this shit sounds fucking delicous IRL
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon // this shit sounds fucking delicous IRL
 
 /datum/recipe/sushi_Tamago
 	reagents = list(SAKE = 5)
@@ -2488,31 +2517,31 @@
 	/obj/item/weapon/reagent_containers/food/snacks/egg
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago
 
 /datum/recipe/sushi_Inari
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/reagent_containers/food/snacks/tofu
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari
 
 /datum/recipe/sushi_Masago
 	items = list(/obj/item/fish_eggs/goldfish,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago
 
 /datum/recipe/sushi_Tobiko
 	items = list(/obj/item/fish_eggs/shark,                                                                                                                                                                                                                                              //Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands.
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko
 
 /datum/recipe/sushi_TobikoEgg
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko,
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko,
 	/obj/item/weapon/reagent_containers/food/snacks/egg
 	)
 
@@ -2522,7 +2551,7 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/catfishmeat,
 	/obj/item/weapon/reagent_containers/food/snacks/boiledrice)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai
 // this is a lot of fucking fish
 
 /datum/recipe/sushi_Unagi
@@ -2531,14 +2560,14 @@
 	/obj/item/weapon/fish/electric_eel
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi
 
 /datum/recipe/sushi_avocado
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
 	/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
 	)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado
 
 /datum/recipe/friedshrimp
 	reagents = list(CORNOIL = 5)
@@ -2797,3 +2826,59 @@
 		/obj/item/weapon/paper,
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/es_cargo
+
+/datum/recipe/steamed_lobster_deluxe //the deluxe comes with butter and a slice of lemon
+	reagents = list (WATER = 10)
+	items = list(
+		/obj/item/weapon/lobster,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
+		/obj/item/weapon/reagent_containers/food/snacks/butter,
+		)
+	result = /obj/item/weapon/steamed_lobster_deluxe_uncracked //this is the lobster whose shell isnt cracked, break its seal and steal its soul, you vile cretin
+
+/datum/recipe/steamed_lobster_simple //the simple has no fancy butter or lemon
+	reagents = list (WATER = 10)
+	items = list(
+		/obj/item/weapon/lobster
+		)
+	result = /obj/item/weapon/steamed_lobster_simple_uncracked //same as the deluxe, wirecutter it to make it edible
+
+/datum/recipe/lobster_roll //lobster hot dog
+	reagents = list (MAYO = 10) // these things are mostly mayo
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_roll
+
+/datum/recipe/lobster_roll_butter //lobster hot dog, no mayo and buttery
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+		/obj/item/weapon/reagent_containers/food/snacks/butter
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter
+
+/datum/recipe/lobster_tail_baked
+	reagents = list (SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail,
+		/obj/item/weapon/reagent_containers/food/snacks/butter,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked
+
+/datum/recipe/lobster_dumplings
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/doughslice
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings
+
+/datum/recipe/lobster_sushi
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat,
+		/obj/item/weapon/reagent_containers/food/snacks/boiledrice
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
+

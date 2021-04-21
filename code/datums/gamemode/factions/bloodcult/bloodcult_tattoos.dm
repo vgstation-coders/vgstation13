@@ -15,7 +15,7 @@
 		return
 	if (!iscultist(src))
 		return
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(src)
 	for (var/tattoo in C.tattoos)
 		var/datum/cult_tattoo/CT = C.tattoos[tattoo]
 		if (CT.name == tattoo_name)
@@ -38,7 +38,7 @@ var/list/blood_communion = list()
 /datum/cult_tattoo/bloodpool/getTattoo(var/mob/M)
 	..()
 	if (iscultist(M))
-		blood_communion.Add(M.mind.GetRole(CULTIST))
+		blood_communion.Add(iscultist(M))
 
 /datum/cult_tattoo/silent
 	name = TATTOO_SILENT
@@ -54,7 +54,7 @@ var/list/blood_communion = list()
 
 /datum/cult_tattoo/dagger/getTattoo(var/mob/M)
 	..()
-	if (M.mind && M.mind.GetRole(CULTIST))
+	if (iscultist(M))
 		M.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 
@@ -78,7 +78,7 @@ var/list/blood_communion = list()
 
 /datum/cult_tattoo/memorize/getTattoo(var/mob/M)
 	..()
-	if (M.mind && M.mind.GetRole(CULTIST))
+	if (iscultist(M))
 		M.add_spell(new /spell/cult/arcane_dimension, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/cult_tattoo/chat

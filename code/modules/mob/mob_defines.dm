@@ -108,6 +108,8 @@
 	//SIZE_HUGE for even bigger guys
 
 	var/list/callOnFace = list()
+	var/list/callOnStartMove = list()
+	var/list/callOnEndMove = list()
 	var/list/pinned = list()            // List of things pinning this creature to walls (see living_defense.dm)
 	var/list/embedded = list()          // Embedded items, since simple mobs don't have organs.
 	var/list/abilities = list()         // For species-derived or admin-given powers.
@@ -270,18 +272,12 @@
 	penetration_dampening = 7
 
 	var/list/languages[0]
-	var/event/on_spellcast
-	var/event/on_uattack
-	var/event/on_ruattack	//on restrained unarmed attack
-	var/event/on_logout
-	var/event/on_damaged
-	var/event/on_irradiate
-	var/event/on_death
-	// Allows overiding click modifiers and such.
-	var/event/on_clickon
+	var/event/on_bumping //We bumped someone
+	var/event/on_bumped //We got bumped
+	var/event/on_touched // We got touched by anything
 
 	var/list/alphas = list()
-	var/spell_channeling
+	var/spell/spell_channeling // The spell that's currently being channeled
 
 	var/see_in_dark_override = 0	//for general guaranteed modification of these variables
 	var/see_invisible_override = 0
@@ -290,36 +286,6 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
+	var/old_assigned_role // If they ghosted, what role did they have?
 
-/mob/resetVariables()
-	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", \
-	"attack_log", "speak_emote", "alphas", "heard_by", "control_object", "orient_object", "actions", "held_items", "click_delayer", "attack_delayer", "throw_delayer", "special_delayer", \
-	"clong_delayer", args)
-
-	callOnFace = list()
-	pinned = list()
-	embedded = list()
-	abilities = list()
-	grabbed_by = list()
-	requests = list()
-	mapobjs = list()
-	mutations = list()
-	spell_list = list()
-	viruses = list()
-	resistances = list()
-	radar_blips = list()
-	active_genes = list()
-	attack_log = list()
-	speak_emote = list()
-	alphas = list()
-	heard_by = list()
-	control_object = list()
-	orient_object = list()
-	actions = list()
-	held_items = list()
-
-	click_delayer   = new (1,ARBITRARILY_LARGE_NUMBER)
-	attack_delayer  = new (1,ARBITRARILY_LARGE_NUMBER)
-	special_delayer = new (1,ARBITRARILY_LARGE_NUMBER)
-	clong_delayer   = new (10,ARBITRARILY_LARGE_NUMBER)
-	throw_delayer = new (3, ARBITRARILY_LARGE_NUMBER)
+	var/list/crit_rampup = list() // Of the form timestamp/damage

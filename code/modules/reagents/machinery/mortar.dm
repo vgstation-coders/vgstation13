@@ -3,6 +3,8 @@
 	desc = "This is a reinforced bowl, used for crushing stuff into reagents."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "mortar"
+	item_state = "mortar"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT  | OPENCONTAINER
 	volume = 50
 	amount_per_transfer_from_this = 5

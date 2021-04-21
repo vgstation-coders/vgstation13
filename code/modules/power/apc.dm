@@ -54,6 +54,7 @@
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
 	var/cell_type = 2500				// 0=no cell, 1=regular, 2=high-cap (x5) <- old, now it's just 0=no cell, otherwise dictate cellcapacity by changing this value. 1 used to be 1000, 2 was 2500
+	var/cell_type_path = /obj/item/weapon/cell
 	var/opened = 0                      //0=closed, 1=opened, 2=cover removed
 	var/shorted = 0
 	var/lighting = 3
@@ -75,11 +76,11 @@
 	var/wiresexposed = 0
 	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
+	var/mob/living/silicon/ai/hacking_ai = null     //The AI that is currently attempting to hack this APC
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
 	var/malflocked = 0 //used for malfs locking down APCs
 //	luminosity = 1
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
-	var/overload = 1 //used for the Blackout malf module
 	var/beenhit = 0 // used for counting how many times it has been hit, used for Aliens at the moment
 	var/mob/living/silicon/ai/occupant = null
 	var/longtermpower = 10
@@ -157,7 +158,7 @@
 	has_electronics = 2 //installed and secured
 	// is starting with a power cell installed, create it and set its charge level
 	if(cell_type)
-		src.cell = new/obj/item/weapon/cell(src)
+		src.cell = new cell_type_path(src)
 		cell.maxcharge = cell_type	// cell_type is maximum charge (old default was 1000 or 2500 (values one and two respectively)
 		cell.charge = start_charge * cell.maxcharge / 100.0 		// (convert percentage to actual value)
 
@@ -537,7 +538,7 @@
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 				spark(src, 5)
 				return
-			getFromPool(/obj/item/stack/cable_coil, get_turf(user), 10)
+			new /obj/item/stack/cable_coil(get_turf(user), 10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cut the cables and dismantled the power terminal.</span>",\
 				"You cut the cables and dismantle the power terminal.")
@@ -555,11 +556,11 @@
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
 	else if (iswelder(W) && opened && has_electronics==0 && !terminal)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the APC frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
-				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
+				new /obj/item/stack/sheet/metal(get_turf(src), 1)
 				user.visible_message(\
 					"<span class='warning'>[src] has been cut apart by [user.name] with the weldingtool.</span>",\
 					"You disassembled the broken APC frame.",\
@@ -599,6 +600,9 @@
 			if (opened==2)
 				opened = 1
 			update_icon()
+	else if(istype(W, /obj/item/weapon/kitchen/utensil/fork) && opened) // Sticking fork in open APC shocks you
+		to_chat(user, "<span class='warning'>That was really, really dumb of you.</span>") // Why would you even do this
+		shock(user, 75, W.siemens_coefficient)
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
@@ -606,7 +610,7 @@
 				&& !opened \
 				&& ( \
 					(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) \
-					|| istype(W,/obj/item/weapon/crowbar) \
+					|| istype(W,/obj/item/tool/crowbar) \
 				) \
 				&& prob(20) )
 			user.do_attack_animation(src, W)
@@ -925,14 +929,18 @@
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
-			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot perform other actions during the process.")
+			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
+			to_chat(malfai, "Beginning override of APC systems. This will take [time_required/10] seconds, and you cannot hack other APC's during the process.")
 			malfai.malfhack = src
 			malfai.malfhacking = 1
-			sleep(600)
+			hacking_ai = malfai
+			malfai.handle_regular_hud_updates()
+			sleep(time_required)
 			if(src && malfai)
 				if (!src.aidisabled)
 					malfai.malfhack = null
 					malfai.malfhacking = 0
+					hacking_ai = null
 					locked = 1
 					if(M && STATION_Z == z)
 						M.apcs++
@@ -941,6 +949,7 @@
 					else
 						src.malfai = usr
 					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
+					malfai.handle_regular_hud_updates()
 					update_icon()
 
 	else if (href_list["occupyapc"])
@@ -999,7 +1008,7 @@
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
@@ -1036,6 +1045,8 @@
 			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 
+/obj/machinery/power/apc/can_overload()
+	return 1
 
 /obj/machinery/power/apc/proc/ion_act()
 	//intended to be exactly the same as an AI malf attack
@@ -1333,6 +1344,10 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	var/area/this_area = get_area(src)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
+		if(hacking_ai)	//APC got destroyed mid-hack
+			hacking_ai.malfhack = null
+			hacking_ai.malfhacking = 0
+			to_chat(hacking_ai, "<span class='warning'>The APC you were currently hacking was destroyed.</span>")
 		if(malfai && operating)
 			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 			if (M && STATION_Z == z)
@@ -1378,6 +1393,15 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(shorted || (!cell && !charging))
 		return FALSE
+	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
+		siemenspassed = 0.7
+	//Process the shocking via powernet
+	if(terminal)
+		if(electrocute_mob(user, terminal.get_powernet(), terminal, siemenspassed))
+			spark(src)
+			return TRUE
+		else
+			return FALSE
 	return ..()
 
 /obj/machinery/power/apc/npc_tamper_act(mob/living/L)
@@ -1385,6 +1409,14 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		togglePanelOpen(null, L)
 	if(wires)
 		wires.npc_tamper(L)
+
+/obj/machinery/power/apc/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && allowed(user))
+		locked = !locked
+		to_chat(user, "You [locked ? "" : "un"]lock \the [src] interface.")
+		update_icon()
+	return ..()
+
 
 
 #undef APC_UPDATE_ICON_COOLDOWN

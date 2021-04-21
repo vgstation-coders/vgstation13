@@ -4,12 +4,13 @@
 /datum/component/controller/movement/basic/RecieveSignal(var/message_type, var/list/args)
 	if(isliving(container.holder))
 		var/mob/living/M=container.holder
-		if(COMSIG_MOVE)
-			if("loc" in args)
-				M.start_walk_to(args["loc"], 1, walk_delay)
-			if("dir" in args)
-				M.set_glide_size(DELAY2GLIDESIZE(walk_delay))
-				walk(M, args["dir"], walk_delay)
+		switch(message_type)
+			if(COMSIG_MOVE)
+				if("loc" in args)
+					M.start_walk_to(args["loc"], 1, walk_delay)
+				if("dir" in args)
+					M.set_glide_size(DELAY2GLIDESIZE(walk_delay))
+					walk(M, args["dir"], walk_delay)
 
 /datum/component/controller/movement/astar
 	var/list/movement_nodes = list()

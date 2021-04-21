@@ -2,36 +2,22 @@
 #define JITTER_HIGH 300
 
 /mob/living/carbon/human/examine(mob/user)
+	var/msg = get_examine_text(user)
+	to_chat(user, msg)
+	if(istype(user))
+		user.heard(src)
+
+/mob/living/carbon/human/proc/get_examine_text(mob/user)
 	var/list/obscured = check_obscured_slots()
-	var/skipgloves = 0
-	//var/skipsuitstorage = 0
-	var/skipjumpsuit = 0
-	var/skipshoes = 0
-	var/skipmask = 0
 	var/skipface = 0
 
-/*
-
-
-
-	//exosuits and helmets obscure our view and stuff.
-	if(wear_suit)
-		skipgloves = wear_suit.flags_inv & HIDEGLOVES
-		skipsuitstorage = wear_suit.flags_inv & HIDESUITSTORAGE
-		skipjumpsuit = wear_suit.flags_inv & HIDEJUMPSUIT
-		skipshoes = wear_suit.flags_inv & HIDESHOES
-
-	if(head)
-		skipmask = head.flags_inv & HIDEMASK
-		skipeyes = head.flags_inv & HIDEEYES
-		skipears = head.flags_inv & HIDEEARS
-		skipface = head.flags_inv & HIDEFACE
-
-
-*/
+	var/is_gender_visible = 1
 
 	if(wear_mask)
 		skipface |= check_hidden_head_flags(HIDEFACE)
+	
+	if(wear_mask?.is_hidden_identity() || head?.is_hidden_identity())
+		is_gender_visible = 0
 
 	// crappy hacks because you can't do \his[src] etc. I'm sorry this proc is so unreadable, blame the text macros :<
 	var/t_He = "It" //capitalised for use at the start of each line.
@@ -44,7 +30,7 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is "
 
-	if((slot_w_uniform in obscured) && skipface)
+	if((slot_w_uniform in obscured) && !is_gender_visible)
 		t_He = "They"
 		t_his = "their"
 		t_him = "them"
@@ -249,6 +235,7 @@
 				is_destroyed["[temp.display_name]"] = 1
 				wound_flavor_text["[temp.display_name]"] = "<span class='danger'>[t_He] [t_is] missing [t_his] [temp.display_name].</span>\n"
 				continue
+
 			if(temp.status & ORGAN_PEG)
 				if(!(temp.brute_dam + temp.burn_dam))
 					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] [t_has] a peg [temp.display_name]!</span>\n"
@@ -350,53 +337,62 @@
 					is_bleeding["[temp.display_name]"] = 1
 			else
 				wound_flavor_text["[temp.display_name]"] = ""
+			if(temp.open == 3) // Magic number! Someone #define this.
+				var/organ_text = list("<span class='notice'>[capitalize(t_his)] [temp.display_name] is <span class='danger'>wide open</span>. ")
+				if(length(temp.implants))
+					if(length(temp.implants) == 1)
+						organ_text += "\A [temp.implants[1]] is visible inside it."
+					else
+						organ_text += "[english_list(temp.implants)] are visible inside it."
+				organ_text += "</span><br>"
+				wound_flavor_text["[temp.display_name]"] += jointext(organ_text, null)
 
 	//Handles the text strings being added to the actual description.
 	//If they have something that covers the limb, and it is not missing, put flavortext.  If it is covered but bleeding, add other flavortext.
 	var/display_chest = 0
 	var/display_shoes = 0
 	var/display_gloves = 0
-	if(wound_flavor_text["head"] && (is_destroyed["head"] || (!skipmask && !(wear_mask && istype(wear_mask, /obj/item/clothing/mask/gas)))))
+	if(wound_flavor_text["head"] && (is_destroyed["head"] || !(wear_mask && istype(wear_mask, /obj/item/clothing/mask/gas))))
 		msg += wound_flavor_text["head"]
 	else if(is_bleeding["head"])
 		msg += "<span class='warning'>[src] has blood running down [t_his] face!</span>\n"
-	if(wound_flavor_text["chest"] && !w_uniform && !skipjumpsuit) //No need.  A missing chest gibs you.
+	if(wound_flavor_text["chest"] && !w_uniform) //No need.  A missing chest gibs you.
 		msg += wound_flavor_text["chest"]
 	else if(is_bleeding["chest"])
 		display_chest = 1
-	if(wound_flavor_text["left arm"] && (is_destroyed["left arm"] || (!w_uniform && !skipjumpsuit)))
+	if(wound_flavor_text["left arm"] && (is_destroyed["left arm"] || !w_uniform))
 		msg += wound_flavor_text["left arm"]
 	else if(is_bleeding["left arm"])
 		display_chest = 1
-	if(wound_flavor_text["left hand"] && (is_destroyed["left hand"] || (!gloves && !skipgloves)))
+	if(wound_flavor_text["left hand"] && (is_destroyed["left hand"] || !gloves))
 		msg += wound_flavor_text["left hand"]
 	else if(is_bleeding["left hand"])
 		display_gloves = 1
-	if(wound_flavor_text["right arm"] && (is_destroyed["right arm"] || (!w_uniform && !skipjumpsuit)))
+	if(wound_flavor_text["right arm"] && (is_destroyed["right arm"] || !w_uniform))
 		msg += wound_flavor_text["right arm"]
 	else if(is_bleeding["right arm"])
 		display_chest = 1
-	if(wound_flavor_text["right hand"] && (is_destroyed["right hand"] || (!gloves && !skipgloves)))
+	if(wound_flavor_text["right hand"] && (is_destroyed["right hand"] || !gloves))
 		msg += wound_flavor_text["right hand"]
 	else if(is_bleeding["right hand"])
 		display_gloves = 1
-	if(wound_flavor_text["groin"] && (is_destroyed["groin"] || (!w_uniform && !skipjumpsuit)))
+	if(wound_flavor_text["groin"] && (is_destroyed["groin"] || !w_uniform))
 		msg += wound_flavor_text["groin"]
 	else if(is_bleeding["groin"])
 		display_chest = 1
-	if(wound_flavor_text["left leg"] && (is_destroyed["left leg"] || (!w_uniform && !skipjumpsuit)))
+	if(wound_flavor_text["left leg"] && (is_destroyed["left leg"] || !w_uniform))
 		msg += wound_flavor_text["left leg"]
 	else if(is_bleeding["left leg"])
 		display_chest = 1
-	if(wound_flavor_text["left foot"]&& (is_destroyed["left foot"] || (!shoes && !skipshoes)))
+	if(wound_flavor_text["left foot"] && (is_destroyed["left foot"] || !shoes))
 		msg += wound_flavor_text["left foot"]
 	else if(is_bleeding["left foot"])
 		display_shoes = 1
-	if(wound_flavor_text["right leg"] && (is_destroyed["right leg"] || (!w_uniform && !skipjumpsuit)))
+	if(wound_flavor_text["right leg"] && (is_destroyed["right leg"] || !w_uniform))
 		msg += wound_flavor_text["right leg"]
 	else if(is_bleeding["right leg"])
 		display_chest = 1
-	if(wound_flavor_text["right foot"]&& (is_destroyed["right foot"] || (!shoes  && !skipshoes)))
+	if(wound_flavor_text["right foot"]&& (is_destroyed["right foot"] || !shoes))
 		msg += wound_flavor_text["right foot"]
 	else if(is_bleeding["right foot"])
 		display_shoes = 1
@@ -461,9 +457,7 @@
 
 	msg += "*---------*</span>"
 
-	to_chat(user, msg)
-	if(istype(user))
-		user.heard(src)
+	return msg
 
 #undef JITTER_MEDIUM
 #undef JITTER_HIGH

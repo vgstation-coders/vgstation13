@@ -174,6 +174,9 @@
 		locked = 0
 		visible_message("<span class='danger'>[src]'s panel clicks open.</span>", 1)
 
+/obj/machinery/bot/bloodbot/can_path()
+	return !currently_drawing_blood
+
 /obj/machinery/bot/bloodbot/process_bot()
 	// Emagged behaviour
 	if (emagged)
@@ -192,16 +195,14 @@
 		set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 		Move(get_step(src, pick(cardinal)))
 
-/obj/machinery/bot/bloodbot/find_target()
+/obj/machinery/bot/bloodbot/target_selection()
 	if (emagged)
 		var/list/possible_targets = list()
-		for(var/mob/living/carbon/human/H in view(7,src))
+		for(var/mob/living/carbon/human/H in view(target_chasing_distance,src))
 			if(H.vessel.has_reagent(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
-				to_chat(world, "[H] is a possible target")
 				possible_targets += H
 		if (possible_targets.len)
 			target = pick(possible_targets)
-			to_chat(world, "final target is [target]")
 			process_path() // Let's waste no time
 
 /obj/machinery/bot/bloodbot/proc/drink(mob/living/carbon/human/H)
@@ -246,7 +247,7 @@
 		if(!H.vessel.has_reagent(BLOOD))
 			return
 		H.vessel.remove_reagent(BLOOD,DANGER_DRINK_RATE)
-		getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
+		new /obj/effect/decal/cleanable/blood(get_turf(src))
 		playsound(src, 'sound/effects/splat.ogg', 50, 1)
 		spawn(1 SECONDS)
 			drink(H)

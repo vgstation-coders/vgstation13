@@ -42,12 +42,15 @@
 	if(Adjacent(usr))
 		return empty_container_into()
 	return ..()
-/obj/structure/toilet/attack_hand(mob/living/user as mob)
+/obj/structure/toilet/attack_hand(mob/living/user)
+	if(user.attack_delayer.blocked())
+		return
 	if(swirlie)
+		user.delayNextAttack(1 SECONDS)
 		swirlie.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='userdanger'>[user] slams the toilet seat onto your head!</span>", "You hear reverberating porcelain.")
 		swirlie.apply_damage(8, BRUTE, LIMB_HEAD, used_weapon = name)
 		playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-		add_attacklogs(user, swirlie, "slammed the toilet seat")
+		add_attacklogs(user, swirlie, "slammed the toilet seat", admin_warn=FALSE)
 		add_fingerprint(user)
 		add_fingerprint(swirlie)
 		return
@@ -125,15 +128,18 @@
 
 						if(!GM.internal && GM.losebreath <= 30)
 							GM.losebreath += 5
-							add_attacklogs(user, GM, "gave a swirlie to")
+							add_attacklogs(user, GM, "gave a swirlie to", admin_warn=FALSE)
 						else
-							add_attacklogs(user, GM, "gave a swirle with no effect to")
+							add_attacklogs(user, GM, "gave a swirle with no effect to", admin_warn=FALSE)
 					swirlie = null
 				else
+					if(user.attack_delayer.blocked())
+						return
+					user.delayNextAttack(1 SECONDS)
 					GM.visible_message("<span class='danger'>[user] slams [GM.name] into \the [src]!</span>", "<span class='userdanger'>[user] slams you into \the [src]!</span>")
 					GM.adjustBruteLoss(8)
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-					add_attacklogs(user, GM, "slammed into the toilet")
+					add_attacklogs(user, GM, "slammed into the toilet", admin_warn=FALSE)
 					add_fingerprint(user)
 					add_fingerprint(GM)
 					return
@@ -189,11 +195,11 @@
 	if(!anchored)
 		return
 
-	if(istype(I, /obj/item/weapon/crowbar))
+	if(istype(I, /obj/item/tool/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
-			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+			new /obj/item/stack/sheet/metal(loc, 2)
 			qdel(src)
 		return
 
@@ -302,16 +308,17 @@
 				if(anchored)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
 								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+					on = 0
 					anchored = 0
+					update_icon()
 				else
 					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
 								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
 					anchored = 1
-
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
-		returnToPool(mymist)
+		qdel(mymist)
 		mymist = null
 
 	if(on)
@@ -324,16 +331,16 @@
 			spawn(50)
 				if(src && on)
 					ismist = 1
-					mymist = getFromPool(/obj/effect/mist, get_turf(src))
+					mymist = new /obj/effect/mist(get_turf(src))
 		else
 			ismist = 1
-			mymist = getFromPool(/obj/effect/mist, get_turf(src))
+			mymist = new /obj/effect/mist(get_turf(src))
 	else if(ismist)
 		ismist = 1
-		mymist = getFromPool(/obj/effect/mist, get_turf(src))
+		mymist = new /obj/effect/mist(get_turf(src))
 		spawn(250)
 			if(src && !on)
-				returnToPool(mymist)
+				qdel(mymist)
 				mymist = null
 				ismist = 0
 
@@ -369,19 +376,19 @@
 			var/washglasses = 1
 
 			if(H.wear_suit)
-				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES))
-				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES))
+				washgloves = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDEGLOVES, 0, H.wear_suit.body_parts_visible_override))
+				washshoes = !(is_slot_hidden(H.wear_suit.body_parts_covered, HIDESHOES, 0, H.wear_suit.body_parts_visible_override))
 
 			if(H.head)
-				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK))
-				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES))
-				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS))
+				washmask = !(is_slot_hidden(H.head.body_parts_covered, HIDEMASK, 0, H.head.body_parts_visible_override))
+				washglasses = !(is_slot_hidden(H.head.body_parts_covered, HIDEEYES, 0, H.head.body_parts_visible_override))
+				washears = !(is_slot_hidden(H.head.body_parts_covered, HIDEEARS, 0, H.head.body_parts_visible_override))
 
 			if(H.wear_mask)
 				if(washears)
-					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS))
+					washears = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEARS, 0, H.wear_mask.body_parts_visible_override))
 				if(washglasses)
-					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES))
+					washglasses = !(is_slot_hidden(H.wear_mask.body_parts_covered, HIDEEYES, 0, H.wear_mask.body_parts_visible_override))
 
 			if(H.head)
 				if(prob(CLEAN_PROB) && H.head.clean_blood())
@@ -565,6 +572,11 @@
 			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
+
+	if(istype(O,/obj/item/trash/plate))
+		var/obj/item/trash/plate/the_plate = O
+		the_plate.clean = TRUE
+		O.update_icon()
 
 	else if (istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O

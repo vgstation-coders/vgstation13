@@ -54,11 +54,17 @@ var/list/existing_vaults = list()
 		new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(S), original) //Make copies
 		qdel(S)
 
+/datum/map_element/vault/gingerbread_house
+	file_path = "maps/randomvaults/gingerbread_house.dmm"
+
 /datum/map_element/vault/tommyboyasteroid
 	file_path = "maps/randomvaults/tommyboyasteroid.dmm"
 
 /datum/map_element/vault/hivebot_factory
 	file_path = "maps/randomvaults/hivebot_factory.dmm"
+
+/datum/map_element/vault/pretty_rad_clubhouse
+	file_path = "maps/randomvaults/pretty_rad_clubhouse.dmm"
 
 /datum/map_element/vault/clown_base
 	file_path = "maps/randomvaults/clown_base.dmm"
@@ -167,6 +173,9 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/syndiecargo
 	file_path = "maps/randomvaults/syndiecargo.dmm"
+
+/datum/map_element/vault/black_site_prism
+	file_path = "maps/randomvaults/black_site_prism.dmm"
 
 /datum/map_element/vault/skeleton_den
 	file_path = "maps/randomvaults/rattlemebones.dmm"

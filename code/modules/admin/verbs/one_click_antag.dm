@@ -96,7 +96,7 @@ client/proc/one_click_antag()
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.OnPostSetup()
 				RR.Greet(GREET_LATEJOIN)
-				message_admins("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
+				message_admins("[key_name(H)] has been recruited as recruit of [FF.name] via create antagonist verb.")
 				recruit_count++
 
 		FF.OnPostSetup()
@@ -232,7 +232,6 @@ client/proc/one_click_antag()
 	// Create a brand new mind for the dude
 	new_character.mind = new
 	new_character.mind.current = new_character
-	new_character.mind.original = new_character
 
 	return new_character
 
@@ -257,13 +256,15 @@ client/proc/one_click_antag()
 	new_syndicate_commando.mind.assigned_role = "MODE"
 	new_syndicate_commando.mind.special_role = "Syndicate Commando"
 
-	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)
+	var/datum/outfit/striketeam/syndie_deathsquad/syndie_outfit = new
+	syndie_outfit.equip(new_syndicate_commando)
 
 	return new_syndicate_commando
 
 /datum/admins/proc/makeVoxRaiders()
 
 
+// To fix...
 
 /datum/admins/proc/create_vox_raider(obj/spawn_location, leader_chosen = 0)
 	var/mob/living/carbon/human/new_vox = new(spawn_location.loc)
@@ -284,6 +285,15 @@ client/proc/one_click_antag()
 	new_vox.mind.special_role = "Vox Raider"
 	new_vox.mutations |= M_NOCLONE //Stops the station crew from messing around with their DNA.
 
-	equip_vox_raider(new_vox)
+	var/datum/outfit/striketeam/voxraider/v = new
+	v.equip(new_vox)
+
+	/*
+	spawn()
+		var/chosen_loadout = input(new_vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		v.chosen_spec = chosen_loadout
+		v.equip_special_items(new_vox)
+	*/
+	v.post_equip(new_vox)
 
 	return new_vox

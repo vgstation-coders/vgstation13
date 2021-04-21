@@ -1,6 +1,6 @@
 //This is the proc for gibbing a mob. Cannot gib ghosts.
 //added different sort of gibs and animations. N
-/mob/proc/gib()
+/mob/proc/gib(animation = FALSE, meat = TRUE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -33,7 +33,7 @@
 
 /mob/proc/death(gibbed)
 	timeofdeath = world.time
-	INVOKE_EVENT(on_death, list("user" = src,"body_destroyed" = gibbed))
+	lazy_invoke_event(/lazy_event/on_death, list("user" = src, "body_destroyed" = gibbed))
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
@@ -45,14 +45,16 @@
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.on_holder_death(src)
 	if(transmogged_from)
-		var/obj/transmog_body_container/C = transmogged_from
-		var/mob/living/L = C.contained_mob
-		transmogrify()
-		L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
-		if(istype(L))
-			L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
-			L.updatehealth()
-		return
+		transmog_death()
+
+/mob/proc/transmog_death()
+	var/obj/transmog_body_container/C = transmogged_from
+	var/mob/living/L = C.contained_mob
+	transmogrify()
+	L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
+	if(istype(L))
+		L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
+		L.updatehealth()
 
 //This proc should be used when you're restoring a guy to life. It will remove him from the dead mob list, and add him to the living mob list. It will also remove any verbs
 //that his dead body has

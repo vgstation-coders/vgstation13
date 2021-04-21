@@ -160,14 +160,11 @@
 /mob/living/silicon/proc/damage_mob(var/brute = 0, var/fire = 0, var/tox = 0)
 	return
 
-/mob/living/silicon/IsAdvancedToolUser()
-	return 1
-
 /mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj.nodamage)
 		adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src,2)
-	return 2
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
 	return 0//The only effect that can hit them atm is flashes and they still directly edit so this works for now
@@ -326,7 +323,7 @@
 	return
 
 /mob/living/silicon/dexterity_check()
-	return 1
+	return TRUE
 
 /mob/living/silicon/html_mob_check(var/typepath)
 	for(var/atom/movable/AM in html_machines)

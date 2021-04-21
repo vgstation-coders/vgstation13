@@ -34,7 +34,7 @@
 //	expression			:	( unary_expression | '(' expression ')' | value ) [binary_operator expression]
 //	unary_expression	:	unary_operator ( unary_expression | value | '(' expression ')' )
 //	comparitor			:	'=' | '==' | '!=' | '<>' | '<' | '<=' | '>' | '>='
-//	value				:	variable | string | number | 'null'
+//	value				:	variable | string | number | 'null' | typepath
 //	unary_operator		:	'!' | '-' | '~'
 //	binary_operator		:	comparitor | '+' | '-' | '/' | '*' | '&' | '|' | '^'
 //	bool_operator		:	'AND' | '&&' | 'OR' | '||'
@@ -556,7 +556,7 @@
 	return i + 1
 
 
-//value:	variable | string | number | 'null'
+//value:	variable | string | number | 'null' | typepath
 /datum/SDQL_parser/proc/value(i, list/node)
 	if(token(i) == "null")
 		node += "null"
@@ -570,11 +570,15 @@
 		node += text2num(token(i))
 		i++
 
+	else if(text2path(token(i)))
+		node += text2path(token(i++))
+
 	else if(copytext(token(i), 1, 2) in list("'", "\""))
 		i = string(i, node)
 
 	else if(copytext(token(i), 1, 2) == "\[") // Start a list.
 		i = array(i, node)
+
 	else
 		i = variable(i, node)
 

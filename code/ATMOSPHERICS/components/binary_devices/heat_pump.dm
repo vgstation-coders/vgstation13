@@ -36,16 +36,9 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 
 	ghost_read = FALSE
 
-	var/id_tag
 	var/frequency = 0
 	var/datum/radio_frequency/radio_connection
 	machine_flags = MULTITOOL_MENU
-
-
-/obj/machinery/atmospherics/binary/heat_pump/New()
-	..()
-	if(ticker)
-		initialize()
 
 
 /obj/machinery/atmospherics/binary/heat_pump/process()

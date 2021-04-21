@@ -26,6 +26,18 @@
 		/obj/structure/bed/chair/vehicle,
 		)
 
+/obj/item/projectile/ricochet/taser
+	name = "electrode"
+	damage = 0
+	nodamage = 1
+	stun = 10
+	weaken = 10
+	stutter = 10
+	jittery = 20
+	agony = 10
+	hitsound = 'sound/weapons/taserhit.ogg'
+	icon_state = "ricochet_head_t"
+
 /obj/item/projectile/ricochet/OnFired()	//The direction and position of the projectile when it spawns depends heavily on where the player clicks.
 	var/turf/T1 = get_turf(shot_from)	//From a single turf, a player can fire the ricochet rifle in 8 different directions.
 	var/turf/T2 = get_turf(original)
@@ -140,7 +152,7 @@
 	else
 		OnDeath()
 		loc = null
-		returnToPool(src)
+		qdel(src)
 		return
 
 	var/turf/newspawn = locate(T1.x + X_spawn, T1.y + Y_spawn, z)
@@ -175,6 +187,8 @@
 /obj/item/projectile/ricochet/proc/bounce()
 	bouncin = 1
 	var/obj/structure/ricochet_bump/bump = new(loc)
+	if(nodamage)
+		bump.icon_state += "_t"
 	bump.dir = pos_to
 	playsound(src, 'sound/items/metal_impact.ogg', 50, 1)
 	switch(pos_to)
@@ -204,7 +218,7 @@
 			pos_from = WEST
 
 /obj/item/projectile/ricochet/proc/bulletdies(var/atom/A = null)
-	var/obj/effect/overlay/beam/impact = getFromPool(/obj/effect/overlay/beam,get_turf(src),10,0,'icons/obj/projectiles_impacts.dmi')
+	var/obj/effect/overlay/beam/impact = new /obj/effect/overlay/beam(get_turf(src), 10, 0, 'icons/obj/projectiles_impacts.dmi')
 	if(A)
 		switch(get_dir(src,A))
 			if(NORTH)
@@ -215,13 +229,13 @@
 				impact.pixel_x = WORLD_ICON_SIZE/2
 			if(WEST)
 				impact.pixel_x = -WORLD_ICON_SIZE/2
-	impact.icon_state = "ricochet_hit"
+	impact.icon_state = "ricochet_hit[nodamage ? "_t" : ""]"
 	playsound(impact, 'sound/weapons/pierce.ogg', 30, 1)
 
 	spawn()
 		setDensity(FALSE)
 		invisibility = 101
-		returnToPool(src)
+		qdel(src)
 		OnDeath()
 
 /obj/item/projectile/ricochet/to_bump(atom/A as mob|obj|turf|area)
@@ -280,6 +294,8 @@
 
 /obj/item/projectile/ricochet/proc/ricochet_step(var/phase=1)
 	var/obj/structure/ricochet_trail/trail = new(loc)
+	if(nodamage)
+		trail.icon_state += "_t"
 	switch(pos_to)
 		if(NORTH)
 			if(pos_from == WEST)

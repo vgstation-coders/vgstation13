@@ -41,6 +41,7 @@ var/list/special_fruits = list()
 		if(!seed)
 			return
 		icon = seed.plant_dmi
+		icon_state = seed.plant_icon_state
 		potency = round(seed.potency)
 		force = seed.thorny ? 5+seed.carnivorous*3 : 0
 		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
@@ -199,8 +200,7 @@ var/list/special_fruits = list()
 		to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
-	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)
-	S.New(S.loc)
+	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)
 	if(seed.splat_type == /obj/effect/decal/cleanable/fruit_smudge/)
 		if(filling_color != "#FFFFFF")
 			S.color = filling_color
@@ -1037,3 +1037,11 @@ var/list/special_fruits = list()
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "silverpear"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant
+	name = "mustard flowers"
+	desc = "A bunch of bright yellow flowers, unrelated to mustard gas"
+	potency = 10
+	filling_color = "#DFE88B"
+	plantname = "mustardplant"
+	fragrance = INCENSE_MUSTARDPLANT

@@ -50,4 +50,4 @@
 					temp_glassairlock.prison_open()
 
 				for(var/obj/machinery/door_timer/temp_timer in A)
-					temp_timer.releasetime = 1
+					temp_timer.timeleft = 0

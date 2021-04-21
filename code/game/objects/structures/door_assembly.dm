@@ -170,7 +170,7 @@
 		return
 
 	if (iswelder(W) && ( (istext(glass)) || (glass == 1) || (!anchored) ))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 
 		if (WT.remove_fuel(0, user))
 			busy = TRUE
@@ -211,7 +211,7 @@
 
 					to_chat(user, "<span class='notice'>You dissasembled the airlock assembly!</span>")
 
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+					var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 					M.amount = 4
 
 					qdel (src)

@@ -17,6 +17,7 @@
 	amt_dizziness = 86
 	amt_confused = 86 // 2.1 seconds per = 180.6s
 	amt_stuttering = 86
+	mind_affecting = 1
 
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 	spell_flags = WAIT_FOR_CLICK

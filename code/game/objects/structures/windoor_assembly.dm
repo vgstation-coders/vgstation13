@@ -16,7 +16,6 @@
 	density = FALSE
 	dir = NORTH
 
-	var/ini_dir
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
@@ -27,15 +26,15 @@
 	var/reinforce_material = /obj/item/stack/sheet/plasteel
 	var/wired = FALSE	//How hard was to make a fucking var to check this jesus christ old coders.
 	var/glass_type = /obj/item/stack/sheet/glass/rglass
+	var/created_name = null
 
 /obj/structure/windoor_assembly/proc/update_name()
 	name = "[secure ? "secure ":""][anchored ? "anchored ":""][anchored && wired ? "and ":""][wired ? "wired ":""][initial(name)]"
 	if(anchored && wired && electronics) //We're almost there bros
 		name = "near finished [secure ? "secure ":""][initial(name)]"
 
-/obj/structure/windoor_assembly/New(dir=NORTH)
+/obj/structure/windoor_assembly/New()
 	..()
-	ini_dir = dir
 	update_nearby_tiles()
 
 obj/structure/windoor_assembly/Destroy()
@@ -86,23 +85,36 @@ obj/structure/windoor_assembly/Destroy()
 			windoor.req_one_access = electronics.conf_access
 		else
 			windoor.req_access = electronics.conf_access
+		electronics.forceMove(windoor)
+		windoor.electronics = electronics
+		electronics.installed = TRUE
 		windoor.set_electronics()
-		qdel(electronics)
 		electronics = null
 
 
 /obj/structure/windoor_assembly/attackby(obj/item/W, mob/user)
+
+	// Now can be renamed like doors
+	if(istype(W, /obj/item/weapon/pen))
+		var/t = copytext(stripped_input(user, "Enter the name for the windoor.", src.name, src.created_name),1,MAX_NAME_LEN)
+		if(!t)
+			return
+		if(!in_range(src, usr) && src.loc != usr)
+			return
+		created_name = t
+		return
+	
 	if(iswelder(W) && (!anchored && !wired && !electronics))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		user.visible_message("[user] dissassembles [src].", "You start to dissassemble [src].")
 		if(WT.do_weld(user, src, 40, 0))
 			if(gcDestroyed)
 				return
 			to_chat(user, "<span class='notice'>You dissasembled [src]!</span>")
 			if(glass_type)
-				getFromPool(glass_type,loc,5)
+				new glass_type(loc, 5)
 			if(secure)
-				getFromPool(reinforce_material,loc,2)
+				new reinforce_material(loc, 2)
 			qdel(src)
 		else
 			to_chat(user, "<span class='rose'>You need more welding fuel to dissassemble [src].</span>")
@@ -218,6 +230,8 @@ obj/structure/windoor_assembly/Destroy()
 			if(gcDestroyed)
 				return
 			var/obj/machinery/door/window/windoor = make_windoor()
+			if(created_name)
+				windoor.name = created_name
 			to_chat(user, "<span class='notice'>You finish the [windoor.name]!</span>")
 			qdel(src)
 
@@ -238,7 +252,6 @@ obj/structure/windoor_assembly/Destroy()
 		return FALSE
 	dir = turn(dir, 270)
 	update_nearby_tiles()
-	ini_dir = dir
 	update_icon()
 
 //Flips the windoor assembly, determines whather the door opens to the left or the right

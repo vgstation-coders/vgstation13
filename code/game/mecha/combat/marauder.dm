@@ -9,6 +9,7 @@
 	damage_absorption = list("brute"=0.5,"fire"=0.7,"bullet"=0.45,"laser"=0.6,"energy"=0.7,"bomb"=0.7)
 	max_temperature = 60000
 	infra_luminosity = 3
+	cell_type = /obj/item/weapon/cell/super
 	var/zoom = 0
 	var/thrusters = 0
 	var/smoke = 5
@@ -24,6 +25,7 @@
 	force = 45
 	max_equip = 4
 	starts_with_tracking_beacon = FALSE
+	paintable = 0
 
 /obj/mecha/combat/marauder/seraph
 	desc = "Heavy-duty, command-type exosuit. This is a custom model, utilized only by high-ranking military personnel."
@@ -48,14 +50,10 @@
 
 /obj/mecha/combat/marauder/New()
 	..()
-	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
-	ME.attach(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
+	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
+	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
 	src.smoke_system.set_up(3, 0, src)
 	src.smoke_system.attach(src)
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
@@ -84,17 +82,11 @@
 			equipment -= ME
 			qdel(ME)
 			ME = null
-	ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
-	ME.attach(src)
-	return
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack(src)
+	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
+	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
+	new /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster(src)
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)
 	stopMechWalking()
@@ -187,7 +179,6 @@
 		Marauder.occupant_message("<font color='[Marauder.thrusters?"blue":"red"]'>Thrusters [Marauder.thrusters?"en":"dis"]abled.")
 	return
 
-
 /spell/mech/marauder/dash
 	name = "Rocket-Dash"
 	desc = "Activate the mech's thrusters to charge in a line and knock down anything in your way."
@@ -199,6 +190,9 @@
 /spell/mech/marauder/dash/New()
 	..()
 	hud_state = linked_mech.initial_icon + "-dash"
+
+/spell/mech/marauder/dash/update_spell_icon()
+	hud_state = "[linked_mech.initial_icon]-dash"
 
 /spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
 	if(linked_mech.lock_controls)
@@ -265,5 +259,3 @@
 					"}
 	return output
 
-/obj/mecha/combat/marauder/add_cell()
-	..(new /obj/item/weapon/cell/super)

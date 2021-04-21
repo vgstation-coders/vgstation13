@@ -19,13 +19,13 @@
 			W.playtoolsound(src, 50)
 
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "Now welding the [src]...")
 		if (WT.do_weld(user, src, 20, 0))
 			if(gcDestroyed)
 				return
 			user.visible_message("<span class='warning'>[user] cuts the [src] apart.</span>", "<span class='warning'>You cut the [src] apart.</span>", "You hear welding.")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 			M.amount = 5
 			qdel(src)
 			return

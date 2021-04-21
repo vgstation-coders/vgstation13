@@ -28,9 +28,9 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/getFireFuel()
 	return fire_fuel
 
-/atom/proc/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
+/atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
-	if(fire_fuel<=0.1)
+	if(fire_fuel <= 0.1)
 		//testing("[src] ashifying (BFF)!")
 		ashify()
 
@@ -41,9 +41,8 @@ Attach to transfer valve and open. BOOM.
 			in_fire = TRUE
 			break
 		if(!in_fire)
-			fire_fuel -= 0.2
-			if(fire_fuel<=0.1)
-				ashify()
+			var/used_ratio = min(0.2 / getFireFuel(), 1) //To maintain the previous behavior of just using 0.2 fire_fuel
+			burnFireFuel(1, used_ratio) //1 is valid as used_fuel_ratio and the two arguments should multiply to used_ratio, so this is simplest.
 		sleep(2 SECONDS)
 
 /atom/proc/ashify()
@@ -475,10 +474,10 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 
 	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
 
-	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, "Fire")
-	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, "Fire")
-	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, "Fire")
+	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")

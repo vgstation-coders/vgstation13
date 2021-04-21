@@ -24,7 +24,7 @@
 
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
-	returnToPool(src)
+	qdel(src)
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
@@ -62,7 +62,7 @@
 	if(ismob(user))
 		shock(user, 60) //Give the user the benifit of the doubt
 
-/obj/structure/grille/hitby(AM as mob|obj)
+/obj/structure/grille/hitby(var/atom/movable/AM)
 	. = ..()
 	if(.)
 		return
@@ -70,13 +70,15 @@
 		var/mob/M = AM
 		health -= 10
 		healthcheck(TRUE)
-		visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
-		"<span class='danger'>You slam into \the [src].</span>")
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
+			"<span class='danger'>You slam into \the [src].</span>")
 	else if(isobj(AM))
 		var/obj/item/I = AM
 		health -= I.throwforce
 		healthcheck(TRUE)
-		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
 
 /obj/structure/grille/attack_paw(mob/user as mob)
 	attack_hand(user)
@@ -155,7 +157,7 @@
 		return
 	health -= Proj.damage //Just use the projectile damage, it already has high odds of "missing"
 	healthcheck(hitsound = 1)
-	return 0
+	return ..()
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -167,7 +169,6 @@
 				if(S)
 					S.forceMove(get_turf(src))
 					S.dir = get_dir(src, user)
-					S.ini_dir = S.dir
 					return
 		return
 	if(iswirecutter(W))
@@ -245,7 +246,6 @@
 	reset_vars_after_duration(resettable_vars, duration)
 
 /obj/structure/grille/AltClick(var/mob/user)
-	. = ..()
 	var/turf/T = loc
 	if (istype(T))
 		if (user.listed_turf == T)

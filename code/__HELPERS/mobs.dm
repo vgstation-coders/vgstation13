@@ -154,9 +154,9 @@ proc/age2agedescription(age)
 
 proc/RoundHealth(health)
 	switch(health)
-		if(100 to INFINITY)
+		if(99 to INFINITY)
 			return "health100"
-		if(70 to 100)
+		if(70 to 99)
 			return "health80"
 		if(50 to 70)
 			return "health60"
@@ -172,7 +172,6 @@ proc/RoundHealth(health)
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 /proc/cyborg_health_to_icon_state(var/health_ratio)
 	switch(health_ratio)
@@ -313,3 +312,10 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 			L.Add(A)
 
 	return L
+
+//not to be confused with is_loyalty_implanted in human/human.dm L290
+/mob/proc/is_implanted(var/type)
+	for(var/obj/item/weapon/implant/I in src)
+		if(I.implanted && istype(I,type))
+			return TRUE
+	return FALSE

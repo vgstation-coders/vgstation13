@@ -19,7 +19,7 @@
 	var/neurotoxin_cooldown = 0
 
 	var/obj/item/weapon/card/id/wear_id = null // Fix for station bounced radios -- Skie
-	var/has_fine_manipulation = 0
+	var/has_fine_manipulation = 0//Deprecated, only used by /mob/living/carbon/alien/humanoid/special which isn't compiled
 
 	var/move_delay_add = 0 // movement delay to add
 
@@ -33,6 +33,12 @@
 
 	var/heat_protection = 0.5
 	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
+
+/mob/living/carbon/alien/New()
+	add_language(LANGUAGE_XENO)
+	default_language = all_languages[LANGUAGE_XENO]
+	init_language = default_language
+	. = ..()
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
@@ -89,8 +95,7 @@ In all, this is a lot like the monkey code. /N
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
 		MB.RunOverCreature(src,"#00ff00")
-		var/obj/effect/decal/cleanable/blood/xeno/X = getFromPool(/obj/effect/decal/cleanable/blood/xeno, src.loc) //new /obj/effect/decal/cleanable/blood/xeno(src.loc)
-		X.New(src.loc)
+		new /obj/effect/decal/cleanable/blood/xeno(src.loc)
 
 /mob/living/carbon/alien/updatehealth()
 	if(status_flags & GODMODE)
@@ -194,8 +199,8 @@ In all, this is a lot like the monkey code. /N
 	bodytemperature += BODYTEMP_HEATING_MAX //If you're on fire, you heat up!
 	return
 
-/mob/living/carbon/alien/IsAdvancedToolUser()
-	return has_fine_manipulation
+/mob/living/carbon/alien/dexterity_check()
+	return FALSE
 
 /mob/living/carbon/alien/Process_Spaceslipping()
 	return 0 // Don't slip in space.

@@ -105,6 +105,7 @@
 				if(!block) //isolated block?
 					M.UpdateAppearance(buf.dna.UI.Copy())
 					if (buf.types & DNA2_BUF_UE) //unique enzymes? yes
+						M.dna.unique_enzymes = buf.dna.unique_enzymes
 						M.real_name = buf.dna.real_name
 						M.flavor_text = buf.dna.flavor_text
 						M.name = buf.dna.real_name
@@ -119,7 +120,8 @@
 					M.dna.UpdateSE()
 				else
 					M.dna.SetSEValue(block,src.GetValue())
-				domutcheck(M, null, nofail)
+				spawn() //domutcheck can include monkeyization which is long and stops the proc until it's done, this fixes it
+					domutcheck(M, null, nofail)
 				uses--
 				//if(prob(5))
 					//trigger_side_effect(M)
@@ -147,6 +149,9 @@
 			user.drop_from_inventory(src)
 		if(!uses)
 			qdel(src)
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.update_name()
 	return uses
 
 /obj/item/weapon/dnainjector/attack(mob/M as mob, mob/user as mob)

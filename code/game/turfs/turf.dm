@@ -23,7 +23,7 @@
 
 	var/blocks_air = 0
 
-	var/list/PathNodes = list()
+	var/list/PathNodes = null
 
 	// Bot shit
 	var/targetted_by=null
@@ -35,6 +35,8 @@
 
 	// Powernet /datum/power_connections.  *Uninitialized until used to conserve memory*
 	var/list/power_connections = null
+
+	var/protect_infrastructure = FALSE //protect cables/pipes from explosive damage
 
 	// holy water
 	var/holy = 0
@@ -70,6 +72,8 @@
 	var/junction = 0
 
 	var/volume_mult = 1 //how loud are things on this turf?
+
+	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
 /turf/examine(mob/user)
 	..()
@@ -118,6 +122,10 @@
 				return 0
 	return 1
 
+/turf/Exited(atom/movable/mover, atom/newloc)
+	..()
+	lazy_invoke_event(/lazy_event/on_exited, list("mover" = mover, "location" = src, "newloc" = newloc))
+
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
 		return 1
@@ -153,7 +161,7 @@
 	return 1 //Nothing found to block so return success!
 
 
-/turf/Entered(atom/movable/A as mob|obj)
+/turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
@@ -166,6 +174,7 @@
 		A.inertia_dir = 0
 
 	..()
+	lazy_invoke_event(/lazy_event/on_entered, list("mover" = A, "location" = src, "oldloc" = OldLoc))
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj in range(1, src))
@@ -239,9 +248,9 @@
 			if(!move_to_z)
 				return
 
-			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
-				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+			A.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			for(var/atom/movable/AA in contents_brought)
+				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -271,9 +280,9 @@
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			INVOKE_EVENT(A.post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
-				INVOKE_EVENT(AA.post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+			A.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			for(var/atom/movable/AA in contents_brought)
+				AA.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
@@ -352,6 +361,7 @@
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
 	var/old_density = density
+	var/old_holomap_draw_override = holomap_draw_override
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -373,8 +383,11 @@
 
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
+		//No longer phazon, not a teleport destination
+		if(F.material=="phazon")
+			phazontiles -= src
 		if(F.floor_tile)
-			returnToPool(F.floor_tile)
+			qdel(F.floor_tile)
 			F.floor_tile = null
 		F = null
 
@@ -435,6 +448,8 @@
 			else
 				lighting_clear_overlay()
 
+	if (!ticker)
+		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
 	if(density != old_density)
@@ -744,8 +759,10 @@
 //Pathnode stuff
 
 /turf/proc/FindPathNode(var/id)
-	return PathNodes["[id]"]
+	return PathNodes ? PathNodes["[id]"] : null
 
 /turf/proc/AddPathNode(var/PathNode/PN, var/id)
-	ASSERT(!PathNodes["[id]"])
+	ASSERT(!PathNodes || !PathNodes["[id]"])
+	if (!PathNodes)
+		PathNodes = list()
 	PathNodes["[id]"] = PN

@@ -3,11 +3,11 @@
 /obj/machinery/computer/smelting
 	name = "ore processing console"
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "computer_generic"//TODO
+	icon_state = "orecomp"
 	density = 1
 	anchored = 1
 	circuit = "/obj/item/weapon/circuitboard/smeltcomp"
-	light_color = LIGHT_COLOR_GREEN
+	light_color = LIGHT_COLOR_BLUE
 	req_access = list(access_mining)
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors.
@@ -229,7 +229,7 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.data["tag"] = smelter_tag
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
@@ -277,7 +277,6 @@
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors
-	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
 	var/datum/materials/ore
@@ -293,15 +292,11 @@
 
 /obj/machinery/mineral/processing_unit/Destroy()
 	. = ..()
-
-	id_tag = null
-
 	qdel(mover)
 	mover = null
 
 /obj/machinery/mineral/processing_unit/power_change()
 	. = ..()
-
 	update_icon()
 
 /obj/machinery/mineral/processing_unit/update_icon()
@@ -374,7 +369,7 @@
 	send_signal(data)
 
 /obj/machinery/mineral/processing_unit/proc/send_signal(list/data)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data["tag"] = id_tag
@@ -408,7 +403,7 @@
 
 		credits += A.materials.getValue()
 		ore.addFrom(A.materials, FALSE)
-		returnToPool(A)
+		qdel(A)
 
 /obj/machinery/mineral/processing_unit/process()
 	if(stat & (NOPOWER | BROKEN))
@@ -538,6 +533,7 @@
 
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
 			if(A.recycle(ore))
+				ore.addFrom(A.materials, FALSE)
 				qdel(A)
 				continue
 

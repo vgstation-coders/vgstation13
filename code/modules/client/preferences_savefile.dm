@@ -1,46 +1,6 @@
-#define SAVEFILE_VERSION_MIN	8
-#define SAVEFILE_VERSION_MAX	11
-
-//handles converting savefiles to new formats
-//MAKE SURE YOU KEEP THIS UP TO DATE!
-//If the sanity checks are capable of handling any issues. Only increase SAVEFILE_VERSION_MAX,
-//this will mean that savefile_version will still be over SAVEFILE_VERSION_MIN, meaning
-//this savefile update doesn't run everytime we load from the savefile.
-//This is mainly for format changes, such as the bitflags in toggles changing order or something.
-//if a file can't be updated, return 0 to delete it and start again
-//if a file was updated, return 1
-
 /// IF YOU NEED A FIELD ADDED TO THE DATABASE, CREATE A MIGRATION SO SHIT GETS UPDATED.
+/// Also update SQL/players2.sql.
 /// SEE code/modules/migrations/SS13_Prefs/
-
-/datum/preferences/proc/savefile_update()
-	// Preseed roles.
-	for(var/role_id in special_roles)
-		roles[role_id]=0
-
-	if(savefile_version < 8)	//lazily delete everything + additional files so they can be saved in the new format
-		for(var/ckey in preferences_datums)
-			var/datum/preferences/D = preferences_datums[ckey]
-			if(D == src)
-				var/delpath = "data/player_saves/[copytext(ckey,1,2)]/[ckey]/"
-				if(delpath && fexists(delpath))
-					fdel(delpath)
-				break
-		return 0
-
-	if(savefile_version == SAVEFILE_VERSION_MAX)	//update successful.
-		save_preferences()
-		save_character()
-		return 1
-	return 0
-
-
-/datum/preferences/proc/load_path(ckey,filename="preferences.sav")
-	if(!ckey)
-		return
-	path = "data/player_saves/[copytext(ckey,1,2)]/[ckey]/[filename]"
-	savefile_version = SAVEFILE_VERSION_MAX
-
 
 /datum/preferences/proc/SetChangelog(ckey,hash)
 	lastchangelog=hash
@@ -106,13 +66,23 @@
 	jingle	 		=	preference_list_client["jingle"]
 	window_flashing  =	text2num(preference_list_client["window_flashing"])
 	antag_objectives =  text2num(preference_list_client["antag_objectives"])
+	typing_indicator 	 =  text2num(preference_list_client["typing_indicator"])
+	mob_chat_on_map 	 =  text2num(preference_list_client["mob_chat_on_map"])
+	max_chat_length 	 =  text2num(preference_list_client["max_chat_length"])
+	obj_chat_on_map 	 =  text2num(preference_list_client["obj_chat_on_map"])
+	no_goonchat_for_obj  =  text2num(preference_list_client["no_goonchat_for_obj"])
+	tgui_fancy           =  text2num(preference_list_client["tgui_fancy"])
+	show_warning_next_time = text2num(preference_list_client["show_warning_next_time"])
+	last_warned_message = preference_list_client["last_warned_message"]
+	warning_admin = preference_list_client["warning_admin"]
+	fps = preference_list_client["fps"]
 
 	ooccolor		= 	sanitize_hexcolor(ooccolor, initial(ooccolor))
 	lastchangelog	= 	sanitize_text(lastchangelog, initial(lastchangelog))
 	UI_style		= 	sanitize_inlist(UI_style, list("White", "Midnight","Orange","old"), initial(UI_style))
 	//be_special		= 	sanitize_integer(be_special, 0, 65535, initial(be_special))
 	default_slot	= 	sanitize_integer(default_slot, 1, MAX_SAVE_SLOTS, initial(default_slot))
-	toggles			= 	sanitize_integer(toggles, 0, 65535, initial(toggles))
+	toggles			= 	sanitize_integer(toggles, 0, 131071, initial(toggles))
 	UI_style_color	= 	sanitize_hexcolor(UI_style_color, initial(UI_style_color))
 	UI_style_alpha	= 	sanitize_integer(UI_style_alpha, 0, 255, initial(UI_style_alpha))
 	randomslot		= 	sanitize_integer(randomslot, 0, 1, initial(randomslot))
@@ -135,6 +105,14 @@
 	credits_volume  = sanitize_integer(credits_volume, 0, 100, initial(credits_volume))
 	window_flashing = sanitize_integer(window_flashing, 0, 1, initial(window_flashing))
 	antag_objectives =  sanitize_integer(antag_objectives, 0, 1, initial(antag_objectives))
+	typing_indicator 	 =  sanitize_integer(typing_indicator, 0, 1, initial(typing_indicator))
+	mob_chat_on_map 	 =  sanitize_integer(mob_chat_on_map, 0, 1, initial(mob_chat_on_map))
+	max_chat_length 	 =  sanitize_integer(max_chat_length, 0, CHAT_MESSAGE_MAX_LENGTH, initial(max_chat_length))
+	obj_chat_on_map 	 =  sanitize_integer(obj_chat_on_map, 0, 1, initial(obj_chat_on_map))
+	no_goonchat_for_obj  =  sanitize_integer(no_goonchat_for_obj, 0, 1, initial(no_goonchat_for_obj))
+	tgui_fancy           =  sanitize_integer(tgui_fancy, 0, 1, initial(tgui_fancy))
+	show_warning_next_time = sanitize_integer(show_warning_next_time, 0, 1, initial(show_warning_next_time))
+	fps = sanitize_integer(fps, -1, 1000, initial(fps))
 	initialize_preferences()
 	return 1
 
@@ -149,82 +127,21 @@
 		item_animation_viewers -= client
 		person_animation_viewers -= client
 
-
-/datum/preferences/proc/load_preferences()
-	if(!path)
-		return 0
-	if(!fexists(path))
-		return 0
-	var/savefile/S = new /savefile(path)
-	if(!S)
-		return 0
-	S.cd = "/"
-
-	S["version"] >> savefile_version
-	//Conversion
-	if(!savefile_version || !isnum(savefile_version) || savefile_version < SAVEFILE_VERSION_MIN || savefile_version > SAVEFILE_VERSION_MAX)
-		if(!savefile_update())  //handles updates
-			savefile_version = SAVEFILE_VERSION_MAX
-			save_preferences()
-			save_character()
-			return 0
-
-	//general preferences
-	S["ooccolor"]			>> ooccolor
-	S["lastchangelog"]		>> lastchangelog
-	S["UI_style"]			>> UI_style
-	//S["be_special"]			>> be_special
-	S["default_slot"]		>> default_slot
-	S["toggles"]			>> toggles
-	S["UI_style_color"]		>> UI_style_color
-	S["UI_style_alpha"]		>> UI_style_alpha
-	S["warns"]				>> warns
-	S["warnbans"]			>> warnbans
-	S["randomslot"]			>> randomslot
-	S["volume"]				>> volume
-	S["special_popup"]		>> special_popup
-	S["credits"]			>> credits
-	S["jingle"]				>> jingle
-	//Sanitize
-	ooccolor		= sanitize_hexcolor(ooccolor, initial(ooccolor))
-	lastchangelog	= sanitize_text(lastchangelog, initial(lastchangelog))
-	UI_style		= sanitize_inlist(UI_style, list("White", "Midnight","Orange","old"), initial(UI_style))
-	//be_special		= sanitize_integer(be_special, 0, 65535, initial(be_special))
-	default_slot	= sanitize_integer(default_slot, 1, MAX_SAVE_SLOTS, initial(default_slot))
-	toggles			= sanitize_integer(toggles, 0, 65535, initial(toggles))
-	UI_style_color	= sanitize_hexcolor(UI_style_color, initial(UI_style_color))
-	UI_style_alpha	= sanitize_integer(UI_style_alpha, 0, 255, initial(UI_style_alpha))
-	randomslot		= sanitize_integer(randomslot, 0, 1, initial(randomslot))
-	volume			= sanitize_integer(volume, 0, 100, initial(volume))
-	special_popup	= sanitize_integer(special_popup, 0, 2, initial(special_popup))
-	credits			= 	sanitize_inlist(credits, list(CREDITS_NEVER, CREDITS_ALWAYS, CREDITS_NO_RERUNS), initial(credits))
-	jingle			= 	sanitize_inlist(jingle, list(JINGLE_NEVER, JINGLE_CLASSIC, JINGLE_ALL), initial(jingle))
-
-	initialize_preferences()
-	return 1
-
-
 /datum/preferences/proc/save_preferences_sqlite(var/user, var/ckey)
-	/* FUCK YOU
-	if(!(world.timeofday >= (lastPolled + POLLED_LIMIT)))
-		to_chat(user, "You need to wait [round((((lastPolled + POLLED_LIMIT) - world.timeofday) / 10))] seconds before you can save again.")
-		return
-	*/
-
 	var/database/query/check = new
 	var/database/query/q = new
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, fps) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, fps)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, credits_volume=?, window_flashing=?, antag_objectives=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, credits_volume=?, window_flashing=?, antag_objectives=? , typing_indicator=? , mob_chat_on_map=? , max_chat_length=?, obj_chat_on_map=?, no_goonchat_for_obj=?, tgui_fancy=?, show_warning_next_time=?, last_warned_message=?, warning_admin=?, fps=? WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map,no_goonchat_for_obj, tgui_fancy, show_warning_next_time, last_warned_message, warning_admin, fps, ckey)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
@@ -235,56 +152,6 @@
 		return 0
 	to_chat(user, "Preferences Updated.")
 	lastPolled = world.timeofday
-	return 1
-
-/datum/preferences/proc/save_preferences()
-	if(!path)
-		return 0
-	var/savefile/S = new /savefile(path)
-	if(!S)
-		return 0
-	S.cd = "/"
-
-	S["version"] << savefile_version
-
-	//general preferences
-	S["ooccolor"]       << ooccolor
-	S["lastchangelog"]  << lastchangelog
-	S["UI_style"]       << UI_style
-//	S["be_special"]     << be_special
-	S["default_slot"]   << default_slot
-	S["toggles"]        << toggles
-	S["UI_style_color"] << UI_style_color
-	S["UI_style_alpha"] << UI_style_alpha
-	S["warns"]          << warns
-	S["warnbans"]       << warnbans
-	S["randomslot"]     << randomslot
-	S["volume"]         << volume
-	S["space_parallax"] << space_parallax
-	S["space_dust"]		<< space_dust
-	S["parallax_speed"]	<< parallax_speed
-	S["attack_animation"]<< attack_animation
-	S["pulltoggle"]		<< pulltoggle
-	S["credits"]		<< credits
-	S["jingle"]			<< jingle
-	S["hear_voicesound"]<< hear_voicesound
-	S["hear_instruments"]<< hear_instruments
-	S["ambience_volume"]<< ambience_volume
-	S["credits_volume"]<< credits_volume
-	S["window_flashing"]<< window_flashing
-	S["antag_objectives"]<< antag_objectives
-	return 1
-
-//saving volume changes
-/datum/preferences/proc/save_volume()
-	if(!path)
-		return 0
-	var/savefile/S = new /savefile(path)
-	if(!S)
-		return 0
-	S.cd = "/"
-
-	S["volume"] << volume
 	return 1
 
 /datum/preferences/proc/load_save_sqlite(var/ckey, var/user, var/slot)
@@ -554,124 +421,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	return 1
 
-
-/datum/preferences/proc/load_save(dir)
-	var/savefile/S = new /savefile(path)
-	if(!S)
-		return 0
-	S.cd = dir
-
-	//Character
-	S["OOC_Notes"]			>> metadata
-	S["real_name"]			>> real_name
-	S["name_is_always_random"] >> be_random_name
-	S["body_is_always_random"] >> be_random_body
-	S["gender"]				>> gender
-	S["age"]				>> age
-	S["species"]			>> species
-	S["language"]			>> language
-
-	//colors to be consolidated into hex strings (requires some work with dna code)
-	S["hair_red"]			>> r_hair
-	S["hair_green"]			>> g_hair
-	S["hair_blue"]			>> b_hair
-	S["facial_red"]			>> r_facial
-	S["facial_green"]		>> g_facial
-	S["facial_blue"]		>> b_facial
-	S["skin_tone"]			>> s_tone
-	S["hair_style_name"]	>> h_style
-	S["facial_style_name"]	>> f_style
-	S["eyes_red"]			>> r_eyes
-	S["eyes_green"]			>> g_eyes
-	S["eyes_blue"]			>> b_eyes
-	S["underwear"]			>> underwear
-	S["backbag"]			>> backbag
-
-	//Jobs
-	S["alternate_option"]	>> alternate_option
-	S["job_civilian_high"]	>> job_civilian_high
-	S["job_civilian_med"]	>> job_civilian_med
-	S["job_civilian_low"]	>> job_civilian_low
-	S["job_medsci_high"]	>> job_medsci_high
-	S["job_medsci_med"]		>> job_medsci_med
-	S["job_medsci_low"]		>> job_medsci_low
-	S["job_engsec_high"]	>> job_engsec_high
-	S["job_engsec_med"]		>> job_engsec_med
-	S["job_engsec_low"]		>> job_engsec_low
-
-	//Miscellaneous
-	S["flavor_text"]		>> flavor_text
-	S["med_record"]			>> med_record
-	S["sec_record"]			>> sec_record
-	S["gen_record"]			>> gen_record
-	//S["be_special"]			>> be_special
-	S["disabilities"]		>> disabilities
-	S["player_alt_titles"]		>> player_alt_titles
-	S["used_skillpoints"]	>> used_skillpoints
-	S["skills"]				>> skills
-	S["skill_specialization"] >> skill_specialization
-	S["organ_data"]			>> organ_data
-
-	S["nanotrasen_relation"] >> nanotrasen_relation
-	S["bank_security"] >> bank_security
-	//S["skin_style"]			>> skin_style
-
-	//Sanitize
-	metadata		= sanitize_text(metadata, initial(metadata))
-	real_name		= reject_bad_name(real_name)
-	if(isnull(species))
-		species = "Human"
-	if(isnull(language))
-		language = "None"
-	if(isnull(nanotrasen_relation))
-		nanotrasen_relation = initial(nanotrasen_relation)
-	if(isnull(bank_security))
-		bank_security = initial(bank_security)
-	if(!real_name)
-		real_name = random_name(gender,species)
-	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
-	be_random_body	= sanitize_integer(be_random_body, 0, 1, initial(be_random_body))
-	gender			= sanitize_gender(gender)
-	age				= sanitize_integer(age, AGE_MIN, AGE_MAX, initial(age))
-	r_hair			= sanitize_integer(r_hair, 0, 255, initial(r_hair))
-	g_hair			= sanitize_integer(g_hair, 0, 255, initial(g_hair))
-	b_hair			= sanitize_integer(b_hair, 0, 255, initial(b_hair))
-	r_facial		= sanitize_integer(r_facial, 0, 255, initial(r_facial))
-	g_facial		= sanitize_integer(g_facial, 0, 255, initial(g_facial))
-	b_facial		= sanitize_integer(b_facial, 0, 255, initial(b_facial))
-	s_tone			= sanitize_integer(s_tone, -185, 34, initial(s_tone))
-	h_style			= sanitize_inlist(h_style, hair_styles_list, initial(h_style))
-	f_style			= sanitize_inlist(f_style, facial_hair_styles_list, initial(f_style))
-	r_eyes			= sanitize_integer(r_eyes, 0, 255, initial(r_eyes))
-	g_eyes			= sanitize_integer(g_eyes, 0, 255, initial(g_eyes))
-	b_eyes			= sanitize_integer(b_eyes, 0, 255, initial(b_eyes))
-	underwear		= sanitize_integer(underwear, 1, underwear_m.len, initial(underwear))
-	backbag			= sanitize_integer(backbag, 1, backbaglist.len, initial(backbag))
-
-	alternate_option = sanitize_integer(alternate_option, 0, 2, initial(alternate_option))
-	job_civilian_high = sanitize_integer(job_civilian_high, 0, 65535, initial(job_civilian_high))
-	job_civilian_med = sanitize_integer(job_civilian_med, 0, 65535, initial(job_civilian_med))
-	job_civilian_low = sanitize_integer(job_civilian_low, 0, 65535, initial(job_civilian_low))
-	job_medsci_high = sanitize_integer(job_medsci_high, 0, 65535, initial(job_medsci_high))
-	job_medsci_med = sanitize_integer(job_medsci_med, 0, 65535, initial(job_medsci_med))
-	job_medsci_low = sanitize_integer(job_medsci_low, 0, 65535, initial(job_medsci_low))
-	job_engsec_high = sanitize_integer(job_engsec_high, 0, 65535, initial(job_engsec_high))
-	job_engsec_med = sanitize_integer(job_engsec_med, 0, 65535, initial(job_engsec_med))
-	job_engsec_low = sanitize_integer(job_engsec_low, 0, 65535, initial(job_engsec_low))
-
-	if(!skills)
-		skills = list()
-	if(!used_skillpoints)
-		used_skillpoints= 0
-	if(isnull(disabilities))
-		disabilities = 0
-	if(!player_alt_titles)
-		player_alt_titles = new()
-	if(!organ_data)
-		src.organ_data = list()
-	//if(!skin_style) skin_style = "Default"
-
-
 /datum/preferences/proc/random_character_sqlite(var/user, var/ckey)
 	var/database/query/q = new
 	var/list/slot_list = new
@@ -687,52 +436,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	load_save_sqlite(ckey, user, random_slot)
 	return 1
 
-/datum/preferences/proc/random_character()
-	if(!path)
-		return 0
-	if(!fexists(path))
-		return 0
-	var/savefile/S = new /savefile(path)
-	if(!S)
-		return 0
-	var/list/saves = list()
-	var/name
-	for(var/i=1, i<=MAX_SAVE_SLOTS, i++)
-		S.cd = "/character[i]"
-		S["real_name"] >> name
-		if(!name)
-			continue
-		saves.Add(S.cd)
-
-	if(!saves.len)
-		load_character()
-		return 0
-	S.cd = pick(saves)
-	load_save(S.cd)
-	return 1
-
-/datum/preferences/proc/load_character(slot)
-	if(!path)
-		return 0
-	if(!fexists(path))
-		return 0
-	var/savefile/S = new /savefile(path)
-	if(!S)
-		return 0
-	S.cd = "/"
-	if(!slot)
-		slot = default_slot
-	slot = sanitize_integer(slot, 1, MAX_SAVE_SLOTS, initial(default_slot))
-	if(slot != default_slot)
-		default_slot = slot
-		S["default_slot"] << slot
-	S.cd = "/character[slot]"
-	load_save(S.cd)
-	return 1
-
 /datum/preferences/proc/save_character_sqlite(var/ckey, var/user, var/slot)
-
-
 	if(slot > MAX_SAVE_SLOTS)
 		to_chat(user, "You are limited to 8 character slots.")
 		message_admins("[ckey] attempted to override character slot limit")
@@ -861,71 +565,3 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			return 0
 
 	return 1
-
-
-/datum/preferences/proc/save_character()
-
-
-	if(!path)
-		return 0
-	var/savefile/S = new /savefile(path)
-	if(!S)
-		return 0
-	S.cd = "/character[default_slot]"
-
-	//Character + misc
-	S["OOC_Notes"]             << metadata
-	S["real_name"]             << real_name
-	S["name_is_always_random"] << be_random_name
-	S["body_is_always_random"] << be_random_body
-	S["gender"]                << gender
-	S["age"]                   << age
-	S["species"]               << species
-	S["language"]              << language
-	S["flavor_text"]           << flavor_text
-	S["med_record"]            << med_record
-	S["sec_record"]            << sec_record
-	S["gen_record"]            << gen_record
-	S["player_alt_titles"]     << player_alt_titles
-//	S["be_special"]            << be_special
-	S["disabilities"]          << disabilities
-	S["used_skillpoints"]      << used_skillpoints
-	S["skills"]                << skills
-	S["skill_specialization"]  << skill_specialization
-	S["organ_data"]            << organ_data
-	S["nanotrasen_relation"]   << nanotrasen_relation
-	S["bank_security"]	       << bank_security
-	//Body
-	S["hair_red"]              << r_hair
-	S["hair_green"]            << g_hair
-	S["hair_blue"]             << b_hair
-	S["facial_red"]            << r_facial
-	S["facial_green"]          << g_facial
-	S["facial_blue"]           << b_facial
-	S["skin_tone"]             << s_tone
-	S["hair_style_name"]       << h_style
-	S["facial_style_name"]     << f_style
-	S["eyes_red"]              << r_eyes
-	S["eyes_green"]            << g_eyes
-	S["eyes_blue"]             << b_eyes
-	S["underwear"]             << underwear
-	S["backbag"]               << backbag
-
-	//Jobs
-	S["alternate_option"]      << alternate_option
-	S["job_civilian_high"]     << job_civilian_high
-	S["job_civilian_med"]      << job_civilian_med
-	S["job_civilian_low"]      << job_civilian_low
-	S["job_medsci_high"]       << job_medsci_high
-	S["job_medsci_med"]        << job_medsci_med
-	S["job_medsci_low"]        << job_medsci_low
-	S["job_engsec_high"]       << job_engsec_high
-	S["job_engsec_med"]        << job_engsec_med
-	S["job_engsec_low"]        << job_engsec_low
-//	S["skin_style"]            << skin_style
-
-	return 1
-
-
-#undef SAVEFILE_VERSION_MAX
-#undef SAVEFILE_VERSION_MIN

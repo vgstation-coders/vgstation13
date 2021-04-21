@@ -110,7 +110,7 @@ var/global/list/pathmakers = list()
 	exclude = nexclude
 	debug = ndebug
 	path_count++
-	PM_id = "PM_[path_count]"
+	PM_id = "PM_[path_count]_\ref[owner]"
 	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0,PM_id))
 	pathmakers.Add(src)
 
@@ -118,6 +118,9 @@ var/global/list/pathmakers = list()
 	if(!owner || owner.gcDestroyed) //crit fail
 		astar_debug("owner no longer exists [owner?"owner is destroyed":"no owner"]")
 		qdel(src)
+		return FALSE
+	if(gcDestroyed)
+		astar_debug("We are being deleted")
 		return FALSE
 	if(get_turf(owner) != start)
 		astar_debug("owner not in start position")
@@ -137,13 +140,11 @@ var/global/list/pathmakers = list()
 	pathmakers.Remove(src)
 	//cleaning after us
 	for(var/PathNode/PN in open.L)
-		PN.source.PathNodes[PM_id] = null
-		PN.source.PathNodes.Remove("[PM_id]")
+		open.L -= PN
 		qdel(PN)
 	for(var/turf/T in closed)
 		var/PathNode/PN = T.FindPathNode(PM_id)
-		T.PathNodes[PM_id] = null
-		T.PathNodes.Remove("[PM_id]")
+		closed -= T
 		qdel(PN)
 	owner = null
 	start = null
@@ -209,7 +210,7 @@ var/global/list/pathmakers = list()
 				PNode.distance_from_start = call(cur.source,dist)(T)
 				PNode.distance_from_end = newenddist
 				PNode.calc_f()
-				if(!open.ReSort(PNode.source))//reorder the changed element in the list
+				if(!open.ReSort(PNode))//reorder the changed element in the list
 					astar_debug("failed to reorder, requeuing")
 					open.Enqueue(PNode)
 	astar_debug("open:[open.List().len]")

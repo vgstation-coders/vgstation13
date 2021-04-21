@@ -45,9 +45,6 @@
 	var/throwpass = 0
 	var/level = 2
 
-	// When this object moves. (args: loc)
-	var/event/on_moved
-
 	var/atom/movable/tether_master
 	var/list/tether_slaves
 	var/list/current_tethers
@@ -56,41 +53,29 @@
 	var/ignore_blocking = 0
 
 	var/last_explosion_push = 0
-
-	var/list/datum/tracker/trackers = list()
+	var/mob/virtualhearer/virtualhearer
 
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
-		getFromPool(/mob/virtualhearer, src)
+		virtualhearer = new /mob/virtualhearer(src)
 
 	if(starting_materials)
-		materials = getFromPool(/datum/materials, src)
+		materials = new /datum/materials(src)
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
-	on_moved = new("owner"=src)
-
 /atom/movable/Destroy()
-	var/turf/T = loc
-	if (opacity && istype(T))
+	var/turf/T
+	if (opacity && isturf(loc))
+		T = loc // recalc_atom_opacity() is called later on this
 		T.reconsider_lights()
 
 	if(materials)
-		returnToPool(materials)
+		qdel(materials)
 		materials = null
 
-	if(on_moved)
-		on_moved.holder = null
-		on_moved = null
-
-	var/turf/un_opaque
-	if (opacity && isturf(loc))
-		un_opaque = loc
-
-	loc = null
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
+	lazy_invoke_event(/lazy_event/on_destroyed, list("thing" = src))
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -100,16 +85,19 @@
 
 	for (var/datum/locking_category/category in locking_categories)
 		qdel(category)
-
 	locking_categories      = null
 	locking_categories_name = null
 
 	break_all_tethers()
 
-	if((flags & HEAR) && !ismob(src))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
+	forceMove(null, harderforce = TRUE)
+
+	if (T)
+		T.recalc_atom_opacity()
+
+	if(virtualhearer)
+		qdel(virtualhearer)
+		virtualhearer = null
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
@@ -238,8 +226,7 @@
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
 
 /atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
 	var/list/found = ..()
@@ -279,7 +266,7 @@
 		var/mob/living/M = AM
 		for(var/obj/item/weapon/grab/G in M.grabbed_by)
 			if (istype(G, /obj/item/weapon/grab))
-				returnToPool(G)
+				qdel(G)
 
 	AM.locked_to = src
 	if (ismob(AM))
@@ -319,7 +306,7 @@
 	if(locking_categories_name.Find(id))
 		return locking_categories_name[id]
 
-	var/datum/locking_category/C = getFromPool(type, src)
+	var/datum/locking_category/C = new type(src)
 	C.name = id
 	locking_categories_name[id] = C
 	locking_categories += C
@@ -333,7 +320,7 @@
 		if (istext(category))
 			return
 
-		. = getFromPool(category, src)
+		. = new category(src)
 		locking_categories_name[category] = .
 		locking_categories += .
 
@@ -394,13 +381,23 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/to_bump(atom/Obstacle)
-	if(src.throwing)
-		src.throw_impact(Obstacle)
-		src.throwing = 0
-
-	if (Obstacle)
-		Obstacle.Bumped(src)
+// Always override this proc instead of BYOND-provided Bump().
+// This is a workaround for some dumb BYOND behavior:
+// The `Obstacle` argument passed to Bump() is the first dense object
+// in the turf's `contents`. The argument we provide to this proc
+// is instead the actual object that's blocking movement.
+/atom/movable/proc/to_bump(atom/Obstacle)
+	if(airflow_speed > 0 && airflow_dest)
+		airflow_hit(Obstacle)
+	else
+		airflow_speed = 0
+		airflow_time = 0
+		if(src.throwing)
+			src.throw_impact(Obstacle)
+			src.throwing = 0
+		if(Obstacle)
+			Obstacle.Bumped(src)
+	sound_override = 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
@@ -433,11 +430,10 @@
 
 	update_client_hook(loc)
 
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=loc))
+	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
 	var/turf/T = get_turf(destination)
 	if(old_loc && T && old_loc.z != T.z)
-		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
+		lazy_invoke_event(/lazy_event/on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
@@ -646,13 +642,42 @@
 		src.throw_impact(get_turf(src), speed, user)
 
 //Overlays
+
+/datum/locking_category/overlay
+
 /atom/movable/overlay
 	var/atom/master = null
 	anchored = 1
+	lockflags = 0 //Neither dense when locking or dense when locked to something
 
 /atom/movable/overlay/New()
 	. = ..()
+	if(!loc)
+		qdel(src)
+		CRASH("[type] created in nullspace.")
+
+	master = loc
+	name = master.name
+	dir = master.dir
+
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.lock_atom(src, /datum/locking_category/overlay)
+	if (istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 	verbs.len = 0
+
+/atom/movable/overlay/proc/qdel_self(datum/thing)
+	qdel(src) // Rest in peace
+
+/atom/movable/overlay/Destroy()
+	if(istype(master, /atom/movable))
+		var/atom/movable/AM = master
+		AM.unlock_atom(src)
+		AM.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
+	master = null
+	return ..()
 
 /atom/movable/overlay/blob_act()
 	return
@@ -672,6 +697,12 @@
 		return src.master.attack_hand(a, b, c)
 	return
 
+/atom/movable/overlay/proc/move_to_turf_or_null(atom/movable/mover)
+	var/turf/T = get_turf(mover)
+	var/atom/movable/AM = master // the proc is only called if the master has a "on_moved" event.
+	if(T != loc)
+		forceMove(T, glide_size_override = DELAY2GLIDESIZE(AM.move_speed))
+
 /atom/movable/proc/attempt_to_follow(var/atom/movable/A,var/turf/T)
 	if(anchored)
 		return 0
@@ -682,6 +713,11 @@
 		if(!U)
 			return null
 		return src.forceMove(U)
+
+/atom/movable/overlay/crit
+	icon = 'icons/random_krit.dmi'
+	icon_state = "randomcrit"
+	plane = ABOVE_HUMAN_PLANE
 
 /////////////////////////////
 // SINGULOTH PULL REFACTOR
@@ -697,13 +733,13 @@
 ////////////
 /atom/movable/proc/addHear()
 	flags |= HEAR
-	getFromPool(/mob/virtualhearer, src)
+	virtualhearer = new /mob/virtualhearer(src)
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
-	for(var/mob/virtualhearer/VH in virtualhearers)
-		if(VH.attached == src)
-			returnToPool(VH)
+	if(virtualhearer)
+		qdel(virtualhearer)
+		virtualhearer = null
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)
@@ -1057,7 +1093,8 @@
 	endy = rand((world.maxy/2)-radius,(world.maxy/2)+radius)
 	var/turf/startzone = locate(startx, starty, 1)
 	var/turf/endzone = locate(endx, endy, 1)
-	if(!isspace(get_area(startzone)))
+	var/area/startzone_area = get_area(startzone)
+	if(!isspace(startzone_area))
 		return FALSE
 	forceMove(startzone)
 	throw_at(endzone, null, throwspeed)
@@ -1088,10 +1125,29 @@
 				return TRUE
 	return FALSE
 
+/atom/movable/proc/teleport_radius(var/range)
+	var/list/best_options = list()
+	var/list/backup_options = list()
+	var/turf/picked
+	for(var/turf/T in orange(range, src))
+		if(T.x>world.maxx-6 || T.x<6 || T.y>world.maxy-6 || T.y<6) //Conditions we will NEVER accept: too close to edge
+			continue
+		if(istype(T,/turf/space) || T.density) //Only as a fallback: dense turf or space
+			backup_options += T
+			continue
+		best_options += T
+	if(best_options.len)
+		picked = pick(best_options)
+	else if(backup_options.len)
+		picked = pick(backup_options)
+	else
+		return
+	forceMove(picked)
+
 // -- trackers
 
 /atom/movable/proc/add_tracker(var/datum/tracker/T)
-	on_moved.Add(T, "recieve_position")
+	lazy_register_event(T, /datum/tracker/proc/recieve_position)
 
 /datum/tracker
 	var/name = "Tracker"

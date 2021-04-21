@@ -7,7 +7,8 @@
 	flags = FPRINT
 	clothing_flags = PLASMAGUARD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
-	body_parts_covered = HEAD|EARS|EYES|MOUTH
+	body_parts_covered = HEAD|EARS|EYES|MOUTH|HIDEHAIR
+	body_parts_visible_override = EYES|BEARD
 	siemens_coefficient = 0.9
 	sterility = 100
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
@@ -17,7 +18,7 @@
 	desc = "A suit that protects against biological contamination."
 	icon_state = "bio"
 	item_state = "bio_suit"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -58,6 +59,7 @@
 	name = "security bio suit"
 	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
+	species_fit = list(INSECT_SHAPED)
 	allowed = list(
 		/obj/item/weapon/gun/energy,
 		/obj/item/weapon/reagent_containers/spray/pepper,
@@ -105,6 +107,7 @@
 /obj/item/clothing/suit/bio_suit/beekeeping
 	name = "beekeeping suit"
 	icon_state = "bio_beekeeping"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 70, rad = 0)
 	sterility = 50
 
@@ -115,6 +118,8 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 30, rad = 0)
 	sterility = 50
 
+	body_parts_visible_override = FACE
+
 
 //Plague Dr mask can be found in clothing/masks/gasmask.dm
 /obj/item/clothing/suit/bio_suit/plaguedoctorsuit
@@ -122,3 +127,4 @@
 	desc = "It protected doctors from the Black Death, back then. You bet your arse it's gonna help you against viruses."
 	icon_state = "plaguedoctor"
 	item_state = "bio_suit"
+	species_fit = list(INSECT_SHAPED)

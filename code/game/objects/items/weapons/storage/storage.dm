@@ -39,7 +39,7 @@
 	playsound(src, rustle_sound, 50, 1, -5)
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
-	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
+	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src) || distance_interact(usr)))
 		orient2hud()
 		show_to(usr)
 		return
@@ -54,12 +54,24 @@
 	return ..()
 
 /obj/item/weapon/storage/AltClick(mob/user)
-	if(!(in_range(src, user) || is_holder_of(user, src)))
+	if(!(in_range(src, user) || is_holder_of(user, src) || distance_interact(user)))
 		return ..()
 	orient2hud(user)
 	if(user.s_active)
 		user.s_active.close(user)
 	src.show_to(user)
+
+//override to allow certain circumstances of looking inside this item if not holding or adjacent
+//distance interact can let you use storage even inside a mecha (see screen_objects.dm L160)
+//and also pull items out of that storage; it can be quite powerful, add narrow conditions
+/obj/item/weapon/storage/proc/distance_interact(mob/user)
+	return FALSE
+
+/obj/item/weapon/storage/Adjacent(var/atom/neighbor)
+	if(ismob(neighbor) && distance_interact(neighbor))
+		return TRUE
+	else
+		return ..()
 
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
@@ -197,8 +209,10 @@
 	var/col_count = min(7,storage_slots) -1
 	if(col_count < 0)
 		col_count = 6 //Show 7 inventory slots instead of breaking the inventory
-	if (adjusted_contents > 7)
+	if(adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
+	if(adjusted_contents && (adjusted_contents % 7 == 0) && !is_full())
+		row_num++ //If we have a full row of items, but we still have leftover space... Don't collapse the row, so people can still put stuff inside
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
@@ -352,7 +366,7 @@
 
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
-/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
+/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	if(!istype(W))
 		return 0
 
@@ -364,7 +378,6 @@
 	if(istype(src, /obj/item/weapon/storage/fancy))
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
-
 
 	if(new_location)
 		var/mob/M
@@ -402,7 +415,7 @@
 
 //This proc is called when you want to place an item into the storage item.
 /obj/item/weapon/storage/attackby(obj/item/W as obj, mob/user as mob)
-	if(!Adjacent(user,MAX_ITEM_DEPTH))
+	if(!Adjacent(user,MAX_ITEM_DEPTH) && !distance_interact(user))
 		return
 	..()
 
@@ -444,6 +457,11 @@
 	if(!stealthy(user))
 		playsound(src, rustle_sound, 50, 1, -5)
 
+	if (user.s_active == src) // Click on the backpack again to close it.
+		close(user)
+		src.add_fingerprint(user)
+		return
+
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if((H.l_store == src || H.r_store == src || H.head == src) && !H.get_active_hand())	//Prevents opening if it's in a pocket or head slot. Terrible kludge, I'm sorry.
@@ -464,10 +482,12 @@
 	if (maxloc == user)
 		orient2hud()
 		show_to(user)
+		src.add_fingerprint(user)
+		return
 	else
 		..()
 		close_all()
-	src.add_fingerprint(user)
+		src.add_fingerprint(user)
 
 /obj/item/weapon/storage/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -517,13 +537,13 @@
 	else
 		verbs -= /obj/item/weapon/storage/verb/toggle_gathering_mode
 
-	src.boxes = getFromPool(/obj/abstract/screen/storage)
+	src.boxes = new /obj/abstract/screen/storage
 	src.boxes.name = "storage"
 	src.boxes.master = src
 	src.boxes.icon_state = "block"
 	src.boxes.screen_loc = "7,7 to 10,8"
 	src.boxes.layer = HUD_BASE_LAYER
-	src.closer = getFromPool(/obj/abstract/screen/close)
+	src.closer = new /obj/abstract/screen/close
 	src.closer.master = src
 	src.closer.icon_state = "x"
 	src.closer.layer = HUD_ITEM_LAYER
@@ -583,10 +603,10 @@
 /obj/item/weapon/storage/Destroy()
 	close_all()
 	if(boxes)
-		returnToPool(boxes)
+		qdel(boxes)
 		boxes = null
 	if(closer)
-		returnToPool(closer)
+		qdel(closer)
 		closer = null
 	for(var/atom/movable/AM in contents)
 		qdel(AM)
@@ -657,3 +677,9 @@
 	for (var/i in no_storage_slot)
 		if(contents.len && (slot == i))
 			return CANNOT_EQUIP
+
+/obj/item/weapon/storage/proc/is_full()
+	var/sum_w_class = 0 //Given BYOND's horrid memory limit, which is worse for performance: Recalculating this, or storing it in memory? Who knows.
+	for(var/obj/item/I in contents)
+		sum_w_class += I.w_class
+	return (storage_slots && (contents.len >= storage_slots)) || (sum_w_class >= max_combined_w_class)

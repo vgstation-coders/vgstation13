@@ -30,8 +30,6 @@
 
 	real_name = src.name
 	..()
-	add_language(LANGUAGE_XENO)
-	default_language = all_languages[LANGUAGE_XENO]
 
 /mob/living/carbon/alien/humanoid/queen/add_spells_and_verbs()
 	..()

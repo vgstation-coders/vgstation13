@@ -45,7 +45,8 @@
 		if(AI.client)
 			AI.client.images += blood_image
 
-	global_runesets[runeset_identifier].rune_list.Add(src)
+	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+	rune_set.rune_list.Add(src)
 
 	..()
 
@@ -69,7 +70,8 @@
 		active_spell.abort()
 		active_spell = null
 
-	global_runesets[runeset_identifier].rune_list.Remove(src)
+	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+	rune_set.rune_list.Remove(src)
 
 	..()
 
@@ -248,16 +250,31 @@
 /obj/effect/rune/attack_animal(var/mob/living/simple_animal/user)
 	if(istype(user, /mob/living/simple_animal/construct))
 		trigger(user)
+	if(istype(user, /mob/living/simple_animal/shade))
+		trigger(user)
 
 /obj/effect/rune/attack_paw(var/mob/living/user)
 	if(ismonkey(user))
+		assume_contact_diseases(user)
+		trigger(user)
+
+/obj/effect/rune/attack_alien(var/mob/living/user)
+	if(isalien(user))
 		trigger(user)
 
 /obj/effect/rune/attack_hand(var/mob/living/user)
+	assume_contact_diseases(user)
 	trigger(user)
 
 /obj/effect/rune/attack_robot(var/mob/living/user) //Allows for robots to remotely trigger runes, since attack_robot has infinite range.
 	trigger(user)
+
+/obj/effect/rune/proc/assume_contact_diseases(var/mob/living/user)
+	var/block = 0
+	var/bleeding = 0
+	block = user.check_contact_sterility(HANDS)
+	bleeding = user.check_bodypart_bleeding(HANDS)
+	user.assume_contact_diseases(virus2,src,block,bleeding)
 
 /obj/effect/rune/proc/trigger(var/mob/living/user)
 	user.delayNextAttack(5)
@@ -268,7 +285,7 @@
 
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
-		if (C.muted())
+		if (C.occult_muted())
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
 
@@ -330,6 +347,35 @@
 		return 1
 	return 0
 
+/obj/effect/rune/proc/manage_diseases(var/datum/reagent/blood/source)
+	virus2 = list()
+
+	if (blood1)
+		blood1.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood1_diseases = blood1.data["virus2"]
+		for (var/ID in blood1_diseases)
+			var/datum/disease2/disease/V = blood1_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
+	if (blood2)
+		blood2.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood2_diseases = blood2.data["virus2"]
+		for (var/ID in blood2_diseases)
+			if (ID in virus2)
+				continue
+			var/datum/disease2/disease/V = blood2_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
+	if (blood3)
+		blood3.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood3_diseases = blood3.data["virus2"]
+		for (var/ID in blood3_diseases)
+			if (ID in virus2)
+				continue
+			var/datum/disease2/disease/V = blood3_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
+
 /////////////////////////BLOOD CULT RUNES//////////////////////
 
 /obj/effect/rune/blood_cult
@@ -372,7 +418,7 @@
 
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
-		if (C.muted())
+		if (C.occult_muted())
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
 
@@ -454,23 +500,31 @@
 							"Oh just fuck off",)].</span></span>")
 
 
-/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source, var/word = null, var/mob/caster = null)
+/proc/write_rune_word(var/turf/T, var/word = null, var/datum/reagent/blood/source, var/mob/caster = null)
 	if (!word)
-		return 0
+		return RUNE_WRITE_CANNOT
+
+	if (!source)
+		source = new
 
 	//Add word to a rune if there is one, otherwise create one. However, there can be no more than 3 words.
 	//Returns 0 if failure, 1 if finished a rune, 2 if success but rune still has room for words.
 
+	var/newrune = FALSE
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
 		var/datum/runeword/rune_typecast = word
-		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.
+		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.//WHYYYYYYYYYYY
 			rune = new /obj/effect/rune/blood_cult(T)
+			newrune = TRUE
 
 	if (rune.word1 && rune.word2 && rune.word3)
-		return 0
+		return RUNE_WRITE_CANNOT
 
 	if (caster)
+		if (newrune)
+			log_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+			message_admins("BLOODCULT: [key_name(caster)] has created a new rune at [formatJumpTo(T)].")
 		rune.add_hiddenprint(caster)
 
 	if (!rune.word1)
@@ -527,17 +581,12 @@
 		if (source.data["virus2"])
 			rune.blood3.data["virus2"] = virus_copylist(source.data["virus2"])
 
-	if (rune.blood3) //Viruses spread to the other blood.
-		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"] | rune.blood3.data["virus2"]
-		rune.update_icon()
-		return 1
-	else if (rune.blood2)
-		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"]
-	else if (rune.blood1)
-		rune.virus2 = rune.blood1.data["virus2"]
+	rune.manage_diseases(source)
 
 	rune.update_icon()
-	return 2
+	if (rune.blood3)
+		return RUNE_WRITE_COMPLETE
+	return RUNE_WRITE_CONTINUE
 
 
 /proc/erase_rune_word(var/turf/T)

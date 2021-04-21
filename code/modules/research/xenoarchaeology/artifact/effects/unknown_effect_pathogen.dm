@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/pathogen
 	effecttype = "pathogen"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
 	effect = ARTIFACT_EFFECT_PULSE
 	var/datum/disease2/disease/pathogen
 
@@ -8,7 +9,7 @@
 	..()
 	effect_type = pick(6,7)
 
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	pathogen = new virus_choice
 
 	var/list/anti = list(
@@ -37,6 +38,6 @@
 		L["[pathogen.uniqueID]-[pathogen.subID]"] = pathogen
 
 		for (var/i = 1 to max(1,round(chargelevelmax/20)))
-			getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(holder),null,virus_copylist(L),FALSE)
+			new /obj/effect/effect/pathogen_cloud/core(get_turf(holder), null, virus_copylist(L), FALSE)
 
 		return 1

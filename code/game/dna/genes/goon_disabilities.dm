@@ -60,8 +60,6 @@
 	activation_message = "You feel blubbery and lethargic!"
 	deactivation_message = "You feel fit!"
 
-	mutation = M_OBESITY
-
 /datum/dna/gene/disability/fat/can_activate(var/mob/M, var/flags)
 	if(!ishuman(M))
 		return 0
@@ -71,6 +69,10 @@
 		return 0
 
 	return 1
+
+/datum/dna/gene/disability/fat/activate(var/mob/M)
+	if(M.overeatduration < 500)
+		M.overeatduration = 600 // This ensures M_FAT activates if the mob isn't already fat
 
 /datum/dna/gene/disability/fat/New()
 	..()
@@ -260,7 +262,7 @@
 		var/cword = pick(words)
 		words.Remove(cword)
 		var/suffix = copytext(cword,length(cword)-1,length(cword))
-		while(length(cword)>0 && suffix in list(".",",",";","!",":","?"))
+		while(length(cword)>0 && (suffix in list(".",",",";","!",":","?")))
 			cword  = copytext(cword,1              ,length(cword)-1)
 			suffix = copytext(cword,length(cword)-1,length(cword)  )
 		if(length(cword))
@@ -396,7 +398,7 @@
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-			
+
 			if (!no_blood)
 				gibs(H.loc, H.virus2, H.dna)
 		else

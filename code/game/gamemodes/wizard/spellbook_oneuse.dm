@@ -7,9 +7,11 @@
 	var/spellname = "sandbox"
 	var/used = 0
 	name = "spellbook of "
+	item_state = "oneuse"
 	uses = 1
 	max_uses = 1
 	desc = "This template spellbook was never meant for the eyes of man..."
+	var/disabled_from_bundle //if 1, this will not appear in the spellbook bundle
 
 /obj/item/weapon/spellbook/oneuse/New()
 	..()
@@ -28,6 +30,7 @@
 	if(used)
 		recoil(user)
 	else
+		S.refund_price = 0 // So that they can't be refunded
 		user.add_spell(S)
 		to_chat(user, "<span class='notice'>you rapidly read through the arcane book. Suddenly you realize you understand [spellname]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.real_name] ([user.ckey]) learned the spell [spellname] ([S]).</font>")
@@ -51,7 +54,7 @@
 
 /obj/item/weapon/spellbook/oneuse/fireball/recoil(mob/user as mob)
 	..()
-	explosion(user.loc, -1, 0, 2, 3, 0, flame_range = 2)
+	explosion(user.loc, -1, 0, 2, 3, 0)
 	qdel(src)
 
 /obj/item/weapon/spellbook/oneuse/smoke
@@ -142,6 +145,7 @@
 	spellname = "charging"
 	icon_state ="bookcharge"
 	desc = "This book is made of 100% post-consumer wizard."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user as mob)
 	..()
@@ -258,6 +262,7 @@
 	spellname  = "highlander power"
 	icon_state = "bookhighlander"
 	desc = "You can hear the bagpipes playing already."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/disorient
 	spell = /spell/targeted/disorient
@@ -300,6 +305,7 @@
 	spell = /spell/targeted/buttbots_revenge
 	spellname = "ass magic"
 	icon_state = "bookbutt"
+	desc = "You feel as if your ass could explode at any moment, just by looking at this."
 
 /obj/item/weapon/spellbook/oneuse/buttbot/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -318,6 +324,7 @@
 	spell = /spell/lightning
 	spellname = "lightning"
 	icon_state = "booklightning"
+	desc = "You can hear it crackle with malevolent electricity."
 
 /obj/item/weapon/spellbook/oneuse/lightning/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -330,6 +337,7 @@
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
 	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/timestop
 	spell = /spell/aoe_turf/fall
@@ -487,6 +495,25 @@
 	..()
 	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
 	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
+
+/obj/item/weapon/spellbook/oneuse/alchemy
+	spell = /spell/targeted/alchemy
+	spellname = "Street Alchemy"
+	desc = "The letters are all in different hand writing and the ink varies in colour."
+	icon_state = "bookalch"
+
+/obj/item/weapon/spellbook/oneuse/alchemy/recoil(mob/living/carbon/user)
+	..()
+	playsound(user, "sound/effects/bubbles.ogg", 75, 1)
+	var/datum/reagent/toAdd = pick(PACID, HELL_RAMEN, CHLORALHYDRATE, MINDBREAKER)
+	user.reagents.add_reagent(toAdd, 3)
+
+/obj/item/weapon/spellbook/oneuse/absorb
+	spell = /spell/targeted/absorb
+	spellname = "absorb"
+	icon_state ="bookabsorb"
+	desc = "This book glows with sinister energy."
+	disabled_from_bundle = 1
 
 
 ///// ANCIENT SPELLBOOK /////

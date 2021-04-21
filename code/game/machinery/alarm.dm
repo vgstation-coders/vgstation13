@@ -560,7 +560,7 @@ var/global/list/airalarm_presets = list(
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 
@@ -700,7 +700,7 @@ var/global/list/airalarm_presets = list(
 	if(!frequency)
 		return
 
-	var/datum/signal/alert_signal = getFromPool(/datum/signal)
+	var/datum/signal/alert_signal = new /datum/signal
 	alert_signal.source = src
 	alert_signal.transmission_method = 1
 	var/area/this_area = get_area(src)
@@ -1070,7 +1070,7 @@ var/global/list/airalarm_presets = list(
 				update_icon()
 				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
 				W.playtoolsound(src, 50)
-				getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
+				new /obj/item/stack/cable_coil(get_turf(user), 5)
 				return
 			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
 				if(stat & (NOPOWER|BROKEN))
@@ -1210,9 +1210,12 @@ FIRE ALARM
 	return src.attack_hand(user)
 
 /obj/machinery/firealarm/bullet_act(BLAH)
-	return src.alarm()
+	src.alarm()
+	return ..()
 
 /obj/machinery/firealarm/CtrlClick(var/mob/user)
+	if (!(user.dexterity_check())) // Squeak
+		return
 	if(user.incapacitated() || (!in_range(src, user) && !issilicon(user)))
 		return
 	else
@@ -1265,7 +1268,7 @@ FIRE ALARM
 			if(2)
 				if (ismultitool(W))
 					src.detecting = !( src.detecting )
-					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]reconnected [src]'s detecting unit.")
+					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]connected [src]'s detecting unit.")
 					playsound(src, 'sound/items/healthanalyzer.ogg', 50, 1)
 				if(iswirecutter(W))
 					to_chat(user, "You begin to cut the wiring...")
@@ -1274,7 +1277,7 @@ FIRE ALARM
 						buildstage=1
 						user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
 						update_icon()
-						getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
+						new /obj/item/stack/cable_coil(get_turf(user), 5)
 			if(1)
 				if(iscablecoil(W))
 					var/obj/item/stack/cable_coil/coil = W
@@ -1352,6 +1355,9 @@ FIRE ALARM
 
 /obj/machinery/firealarm/attack_hand(mob/user as mob)
 	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
+		return
+
+	if (!(user.dexterity_check())) // No squeaks or moos allowed.
 		return
 
 	if (buildstage != 2)
@@ -1578,6 +1584,11 @@ var/global/list/firealarms = list() //shrug
 	if(wires)
 		wires.npc_tamper(L)
 
-
+/obj/machinery/alarm/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && allowed(user))
+		locked = !locked
+		to_chat(user, "You [locked ? "" : "un"]lock \the [src] interface.")
+		update_icon()
+	return ..()
 
 #undef CHECKED_GAS

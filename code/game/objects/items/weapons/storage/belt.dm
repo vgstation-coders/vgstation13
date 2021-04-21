@@ -28,12 +28,12 @@
 		"/obj/item/device/lightreplacer"
 		)
 	can_only_hold = list(
-		"/obj/item/weapon/crowbar",
-		"/obj/item/weapon/screwdriver",
-		"/obj/item/weapon/weldingtool",
-		"/obj/item/weapon/solder",
-		"/obj/item/weapon/wirecutters",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/crowbar",
+		"/obj/item/tool/screwdriver",
+		"/obj/item/tool/weldingtool",
+		"/obj/item/tool/solder",
+		"/obj/item/tool/wirecutters",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/multitool",
 		"/obj/item/device/flashlight",
 		"/obj/item/stack/cable_coil",
@@ -44,7 +44,7 @@
 		"/obj/item/taperoll/atmos",
 		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
-		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/stack/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
@@ -54,31 +54,31 @@
 
 /obj/item/weapon/storage/belt/utility/complete/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 /obj/item/weapon/storage/belt/utility/full/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 
 /obj/item/weapon/storage/belt/utility/atmostech/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
 
 /obj/item/weapon/storage/belt/utility/chief
@@ -88,12 +88,12 @@
 	item_state = "utilitychief"
 	fits_max_w_class = 5
 	can_only_hold = list(
-		"/obj/item/weapon/crowbar",
-		"/obj/item/weapon/screwdriver",
-		"/obj/item/weapon/weldingtool",
-		"/obj/item/weapon/solder",
-		"/obj/item/weapon/wirecutters",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/crowbar",
+		"/obj/item/tool/screwdriver",
+		"/obj/item/tool/weldingtool",
+		"/obj/item/tool/solder",
+		"/obj/item/tool/wirecutters",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/multitool",
 		"/obj/item/device/flashlight",
 		"/obj/item/stack/cable_coil",
@@ -108,7 +108,7 @@
 		"/obj/item/device/rcd/rpd",
 		"/obj/item/device/rcd/tile_painter",
 		"/obj/item/weapon/storage/component_exchanger",
-		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/stack/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/blueprints",
 		"/obj/item/device/lightreplacer",
@@ -121,17 +121,17 @@
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
 	..()
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/weldingtool/hugetank(src)
-	new /obj/item/weapon/wirecutters(src)
-	new /obj/item/weapon/wrench(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/weldingtool/hugetank(src)
+	new /obj/item/tool/wirecutters(src)
+	new /obj/item/tool/wrench(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/stack/cable_coil(src)
 	new /obj/item/stack/cable_coil(src)
 	new /obj/item/device/t_scanner(src)
 	new /obj/item/device/analyzer(src)
-	new /obj/item/weapon/solder/pre_fueled(src)
+	new /obj/item/tool/solder/pre_fueled(src)
 	new /obj/item/device/silicate_sprayer(src)
 	new /obj/item/device/rcd/rpd(src)
 	new /obj/item/device/rcd/matter/engineering/pre_loaded(src)
@@ -148,6 +148,7 @@
 	allow_quick_empty = TRUE
 	use_to_pickup = TRUE
 	can_only_hold = list(
+		"/obj/item/weapon/reagent_containers/hypospray",
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
 		"/obj/item/weapon/reagent_containers/dropper",
@@ -163,14 +164,14 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
 		"/obj/item/device/antibody_scanner",
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
-		"/obj/item/weapon/electrolyzer"
+		"/obj/item/weapon/electrolyzer",
+		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro"
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -181,11 +182,11 @@
 
 /obj/item/weapon/storage/belt/slim/pro/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/multitool(src)
 
 /obj/item/weapon/storage/belt/security
@@ -193,7 +194,7 @@
 	desc = "Can hold security gear like handcuffs and flashes."
 	icon_state = "securitybelt"
 	item_state = "security"//Could likely use a better one.
-	storage_slots = 7
+	storage_slots = 14
 	fits_max_w_class = 3
 	max_combined_w_class = 21
 	can_only_hold = list(
@@ -205,6 +206,9 @@
 		"/obj/item/ammo_casing/shotgun",
 		"/obj/item/ammo_storage",
 		"/obj/item/weapon/reagent_containers/food/snacks/donut",
+		"/obj/item/weapon/reagent_containers/food/snacks/donutiron",
+		"/obj/item/pedometer",
+		"/obj/item/ammo_storage/speedloader/energy",
 		"/obj/item/weapon/storage/fancy/cigarettes",
 		"/obj/item/weapon/lighter",
 		"/obj/item/weapon/cigpacket",
@@ -221,6 +225,7 @@
 		"/obj/item/device/hailer",
 		"/obj/item/weapon/melee/telebaton",
 		"/obj/item/device/gps/secure",
+		"/obj/item/device/law_planner",
 		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/autocuffer",
 		"/obj/item/weapon/depocket_wand",
@@ -229,6 +234,8 @@
 /obj/item/weapon/storage/belt/detective
 	name = "hard-worn belt"
 	desc = "There's a lot you can tell about a man from his clothes - sometimes it's all he can afford, or maybe he chooses to wear something as a message... this belt, then, is a statement. Classy, but not too drab. Fashionable, but still useful. People look at this belt and think, 'My god. That belt is frighteningly well placed. The shades of beige that seem to flood over themselves, splayed across every notch... I fear many things, but I fear most the man who possesses such an incredible belt.'"
+	icon_state = "detective"
+	item_state = "detective"
 	max_combined_w_class = 200 //Some of their stuff is pretty large and they have a lot of crap so lets just be safe.
 	can_only_hold = list(
 		"/obj/item/clothing/glasses",
@@ -280,17 +287,17 @@
 	item_state = "soulstonebelt"
 	storage_slots = 6
 	can_only_hold = list(
-		"/obj/item/device/soulstone"
+		"/obj/item/soulstone"
 		)
 
 /obj/item/weapon/storage/belt/soulstone/full/New()
 	..()
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
 
 
 /obj/item/weapon/storage/belt/champion
@@ -320,7 +327,7 @@
 /obj/item/weapon/storage/belt/silicon
 	name = "cyber trophy belt"
 	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
-	icon_state = "securitybelt"
+	icon_state = "cyberbelt"
 	item_state = "security"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
@@ -345,7 +352,7 @@
 	return mobs
 
 /proc/RenderBeltChat(var/obj/item/weapon/storage/belt/silicon/B,var/mob/living/C,var/message)
-	var/list/listeners = observers
+	var/list/listeners = observers.Copy()
 	if(istype(B.loc,/mob))
 		var/mob/M = B.loc
 		listeners += M
@@ -379,9 +386,9 @@
 		"/obj/item/weapon/paper",
 		"/obj/item/weapon/pen",
 		"/obj/item/clothing/glasses",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/mining_scanner",
-		"/obj/item/weapon/crowbar",
+		"/obj/item/tool/crowbar",
 		"/obj/item/weapon/storage/box/excavation",
 		"/obj/item/weapon/gun/energy/kinetic_accelerator",
 		"/obj/item/weapon/resonator",

@@ -1,3 +1,40 @@
+var/global/list/mineralSpawnChance[]
+/proc/SetupMineralSpawnLists()
+	if(!mineralSpawnChance) mineralSpawnChance = list()
+	mineralSpawnChance["random"] = list(
+		"Iron"      = 50,
+		"Plasma"    = 25,
+		"Ice"		= 10,
+		"Uranium"   = 5,
+		"Gold"      = 5,
+		"Silver"    = 5,
+		"Gibtonite" = 5,
+		"Diamond"   = 1,
+		"Cave"      = 1,
+	)
+	mineralSpawnChance["snow"] = list(
+		"Nanotrasite" = 24,
+		"Electrum"  = 8,
+		"Diamond"   = 1,
+		"Ice Cave"  = 1,
+	)
+	mineralSpawnChance["random_high"] = list(
+		"Uranium" = 10,
+		"Iron"    = 30,
+		"Diamond" = 2,
+		"Gold"    = 10,
+		"Silver"  = 10,
+		"Plasma"  = 25,
+	)
+	mineralSpawnChance["clown"] = list(
+		"Uranium" = 10,
+		"Diamond" = 2,
+		"Gold"    = 5,
+		"Silver"  = 5,
+		"Plasma"  = 25,
+		"Clown"   = 15,
+		"Phazon"  = 10
+	)
 /**********************Mineral deposits**************************/
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
@@ -9,6 +46,7 @@
 	opacity = 1
 	density = 1
 	blocks_air = 1
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 	//temperature = TCMB
 	var/mineral/mineral
 	var/last_act = 0
@@ -18,7 +56,6 @@
 //	var/next_rock = 0
 	var/archaeo_overlay = ""
 	var/excav_overlay = ""
-	var/obj/item/weapon/last_find
 	var/datum/artifact_find/artifact_find
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 	var/mineral_overlay
@@ -106,9 +143,6 @@
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
-
-/turf/unsimulated/mineral/Destroy()
-	return
 
 /turf/unsimulated/mineral/New()
 	mineral_turfs += src
@@ -222,7 +256,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "\improper [mineral.display_name] deposit"
 	update_icon()
 
-/turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/mineral/attackby(obj/item/weapon/W, mob/user)
 
 	if(busy)
 		return
@@ -335,7 +369,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				if(artifact_find)
 					if(excavation_level > 0)
 
-						B = getFromPool(/obj/structure/boulder, src)
+						B = new /obj/structure/boulder(src)
 						B.geological_data = geologic_data
 
 						B.artifact_find = artifact_find
@@ -346,7 +380,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 						artifact_debris(1)
 
 				else if(excavation_level > 0 && prob(15))
-					B = getFromPool(/obj/structure/boulder, src)
+					B = new /obj/structure/boulder(src)
 					B.geological_data = geologic_data
 
 				GetDrilled(artifact_destroyed)
@@ -447,18 +481,15 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
-		investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] destroyed by [key_name(usr)].")
-		for(var/mob/living/M in range(src, 200))
-			to_chat(M, "<span class='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></span>")
-			if(prob(50)) //pain
-				flick("pain",M.pain)
-				if(prob(50))
-					M.adjustBruteLoss(5)
-			else
-				M.flash_eyes(visual = 1)
-				if(prob(50))
-					M.Stun(5)
-			M.apply_radiation(25, RAD_EXTERNAL)
+		var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
+		destroyed.artifact_id = artifact_find.artifact_id
+		destroyed.last_loc = src
+		destroyed.artifact_type = artifact_find.artifact_find_type
+		if (artifact_find.artifact_find_type == /obj/machinery/artifact)
+			destroyed.primary_effect = "???"
+			destroyed.secondary_effect = "???"
+		razed_large_artifacts[artifact_find.artifact_id] += destroyed
+		ArtifactRepercussion(src, usr, "", "[artifact_find.artifact_find_type]")
 
 	if(artifact_fail && !mineral)
 		if(prob(1))
@@ -509,7 +540,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(severity)
 		switch(rand(1,3))
 			if(1)
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
+				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal((src))
 				M.amount = rand(5,25)
 			if(2)
 				var/obj/item/stack/sheet/plasteel/R = new(src)
@@ -526,16 +557,16 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				var/obj/item/stack/tile/plasteel/R = new(src)
 				R.amount = rand(1,5)
 			if(3)
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
+				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal((src))
 				M.amount = rand(1,5)
 			if(4)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					getFromPool(/obj/item/weapon/shard, loc)
+					new /obj/item/weapon/shard(loc)
 			if(5)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					getFromPool(/obj/item/weapon/shard/plasma, loc)
+					new /obj/item/weapon/shard/plasma(loc)
 
 /turf/unsimulated/mineral/dense
 	name = "dense rock"
@@ -584,11 +615,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
 
 /turf/unsimulated/floor/asteroid/New()
-	var/proper_name = name
 	..()
-
-	name = proper_name
-
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
 
@@ -604,7 +631,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			gets_dug()
 	return
 
-/turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
 
 	if(!W || !user)
 		return 0
@@ -622,12 +649,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			to_chat(user, "<span class='rose'>This area has already been dug.</span>")
 			return
 
-		to_chat(user, "<span class='rose'>You start digging.<span>")
 		playsound(src, 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
 		if(do_after(user, src, (MINE_DURATION * used_digging.toolspeed)) && user) //the better the drill, the faster the digging
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
-			to_chat(user, "<span class='notice'>You dug a hole.</span>")
 			gets_dug()
 
 	else
@@ -669,7 +694,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	..()
 	qdel(floor_tile)
 	floor_tile = null
-	name = initial(name)
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
@@ -710,7 +734,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(1.0)
 			gets_dug()
 
-/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
 	if(!W || !user)
 		return 0
 	if (istype(W, /obj/item/weapon/pickaxe))
@@ -749,25 +773,15 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
-	var/mineralSpawnChanceList = list(
-		"Iron"      = 50,
-		"Plasma"    = 25,
-		"Ice"		= 10,
-		"Uranium"   = 5,
-		"Gold"      = 5,
-		"Silver"    = 5,
-		"Gibtonite" = 5,
-		"Diamond"   = 1,
-		"Cave"      = 1,
-	)
+	var/mineralPool = "random"
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
 /turf/unsimulated/mineral/random/New()
-	if (prob(mineralChance) && !mineral)
-		var/mineral_name = pickweight(mineralSpawnChanceList) //temp mineral name
-
+	if (prob(mineralChance) && !mineral && mineralPool)
 		if(!name_to_mineral)
 			SetupMinerals()
+
+		var/mineral_name = pickweight(mineralSpawnChance[mineralPool]) //temp mineral name
 
 		if (mineral_name)
 			if(mineral_name in name_to_mineral)
@@ -784,12 +798,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
 
-	mineralSpawnChanceList = list(
-		"Nanotrasite" = 24,
-		"Electrum"  = 8,
-		"Diamond"   = 1,
-		"Ice Cave"  = 1,
-	)
+	mineralPool = "snow"
 
 
 /turf/unsimulated/mineral/random/snow/New()
@@ -799,14 +808,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/random/high_chance
 	icon_state = "rock(high)"
 	mineralChance = 25
-	mineralSpawnChanceList = list(
-		"Uranium" = 10,
-		"Iron"    = 30,
-		"Diamond" = 2,
-		"Gold"    = 10,
-		"Silver"  = 10,
-		"Plasma"  = 25,
-	)
+	mineralPool = "random_high"
 
 /turf/unsimulated/mineral/random/high_chance/snow
 	icon_state = "snow_rock"
@@ -818,25 +820,13 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
 	mineralChance = 40
-	mineralSpawnChanceList = list(
-		"Uranium" = 10,
-		"Diamond" = 2,
-		"Gold"    = 5,
-		"Silver"  = 5,
-		"Plasma"  = 25,
-		"Clown"   = 15,
-		"Phazon"  = 10
-	)
+	mineralPool = "clown"
 
 /turf/unsimulated/mineral/random/high_chance_clown/snow
 	icon_state = "snow_rock"
 	base_icon_state = "snow_rock"
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
-
-
-/turf/unsimulated/mineral/random/Destroy()
-	return
 
 /turf/unsimulated/mineral/uranium
 	name = "Uranium deposit"

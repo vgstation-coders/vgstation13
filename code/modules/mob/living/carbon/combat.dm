@@ -7,6 +7,7 @@
 			return TRUE
 		else
 			to_chat(src, "<span class='warning'>You fail to catch \the [I]!")
+	INVOKE_EVENT(on_touched, list("user" = src, "hit by" = I))
 	return ..()
 
 /mob/living/carbon/proc/can_catch(var/obj/item/I, var/speed)
@@ -21,10 +22,13 @@
 
 
 //Checks armor, special attackby of object instances, and miss chance
-/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
 	if(!I || !user)
 		return FALSE
 	var/target_zone = null
+	var/power = I.force
+	if (crit)
+		power *= CRIT_MULTIPLIER
 	if(def_zone)
 		target_zone = get_zone_with_miss_chance(def_zone, src)
 	else if(originator)
@@ -37,9 +41,11 @@
 		target_zone = user.zone_sel.selecting
 	if(!target_zone && !src.stat)
 		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
+		add_logs(user, src, "missed", admin=1, object=I, addition="intended damage: [power]")
 		return FALSE
 
-	if((user != src) && check_shields(I.force, I))
+	if((user != src) && check_shields(power, I))
+		add_logs(user, src, "shieldbounced", admin=1, object=I, addition="intended damage: [power]")
 		return FALSE
 
 	user.do_attack_animation(src, I)
@@ -50,12 +56,19 @@
 		var/hit_area = affecting.display_name
 		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
 		if(armor >= 100)
+			add_logs(user, src, "armor bounced", admin=1, object=I, addition="weapon force vs armor: [power] - [armor]")
 			return TRUE //We still connected
-		if(!I.force)
+		if(!power)
+			add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
 			return TRUE
-	var/damage = run_armor_absorb(target_zone, I.damtype, I.force)
-	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	var/damage = run_armor_absorb(target_zone, I.damtype, power)
+	if(originator)
+		add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [max(damage - armor, 0)]")
+	else
+		add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [max(damage - armor, 0)]")
 
+	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	INVOKE_EVENT(on_touched, list("user" = src, "attacked by" = I))
 	return TRUE
 
 /mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)

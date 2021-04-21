@@ -51,6 +51,8 @@
 	var/internal_light = 1
 	var/light_on = 0
 
+	var/key_name_last_user = ""
+
 	// Seed details/line data.
 	var/datum/seed/seed = null // The currently planted seed
 
@@ -197,6 +199,7 @@
 		return 0
 
 	add_fingerprint(user)
+	key_name_last_user = key_name(user)
 
 	if (istype(O, /obj/item/seeds))
 
@@ -214,10 +217,10 @@
 			switch(S.seed.spread)
 				if(1)
 					var/turf/T = get_turf(src)
-					msg_admin_attack("[key_name(user)] has planted a creeper packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+					msg_admin_attack("[key_name(user)] has planted a creeper packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a> ([bad_stuff()])")
 				if(2)
 					var/turf/T = get_turf(src)
-					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a> ([bad_stuff()])")
 			if(S.seed.exude_gasses && S.seed.exude_gasses.len)
 				add_gamelogs(user, "planted a packet exuding [english_list(S.seed.exude_gasses)]", tp_link = TRUE)
 
@@ -228,7 +231,7 @@
 				nutrilevel = 1
 
 			//Snowflakey, maybe move this to the seed datum
-			health = (istype(S, /obj/item/seeds/cutting) ? round(seed.endurance/rand(2,5)) : seed.endurance)
+			health = seed.endurance
 
 			lastcycle = world.time
 
@@ -274,14 +277,14 @@
 				S.icon_state += "-large"
 
 			if(dead)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
+				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
+				S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
+				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
 			else
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[seed.growth_stages]")
+				S.overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
 
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
@@ -299,7 +302,7 @@
 			C.being_potted = FALSE
 		return
 
-	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
 
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
@@ -583,5 +586,17 @@
 	if((usr.incapacitated() || !Adjacent(usr)))
 		return
 	close_lid()
+
+// See no evil, hear no evil. Returns all the potentially bad things on a hydroponic tray.
+/obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
+	var/list/things = list()
+	if (seed.thorny)
+		things += "thorny"
+	if (seed.carnivorous)
+		things += "carnivorous"
+	for (var/chemical_id in seed.chems)
+		if (chemical_id in reagents_to_log)
+			things += chemical_id
+	return english_list(things, "nothing")
 
 /datum/locking_category/hydro_tray

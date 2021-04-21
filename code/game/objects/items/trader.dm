@@ -8,21 +8,6 @@
 	name = "trader coin"
 	icon_state = "coin_mythril"
 
-/obj/item/weapon/storage/trader_marauder
-	name = "box of Marauder circuits"
-	desc = "All in one box!"
-	icon = 'icons/obj/storage/smallboxes.dmi'
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
-	icon_state = "box_of_doom"
-	item_state = "box_of_doom"
-
-/obj/item/weapon/storage/trader_marauder/New() //Because we're good jews, they won't be able to finish the marauder. The box is missing a circuit.
-	..()
-	new /obj/item/weapon/circuitboard/mecha/marauder(src)
-	new /obj/item/weapon/circuitboard/mecha/marauder/peripherals(src)
-	//new /obj/item/weapon/circuitboard/mecha/marauder/targeting(src)
-	new /obj/item/weapon/circuitboard/mecha/marauder/main(src)
-
 /obj/item/weapon/storage/trader_chemistry
 	name = "chemist's pallet"
 	desc = "Everything you need to make art."
@@ -36,6 +21,9 @@
 	new /obj/item/weapon/reagent_containers/glass/bottle/peridaxon(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/rezadone(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/bluespace(src)
+	new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer(src)
 
 /obj/item/weapon/storage/bluespace_crystal
 	name = "natural bluespace crystals box"
@@ -51,6 +39,20 @@
 		new /obj/item/bluespace_crystal(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
 
+/obj/item/weapon/storage/gachabox
+	name = "wholesale capsule kit"
+	can_only_hold = list(/obj/item/weapon/capsule)
+	storage_slots = 60
+	max_combined_w_class = ARBITRARILY_LARGE_NUMBER
+	display_contents_with_number = TRUE
+	allow_quick_empty = TRUE
+	allow_quick_gather = TRUE
+
+/obj/item/weapon/storage/gachabox/New()
+	..()
+	for(var/amount = 1 to 60)
+		new /obj/item/weapon/capsule(src)
+
 /obj/structure/closet/secure_closet/wonderful
 	name = "wonderful wardrobe"
 	desc = "Stolen from Space Narnia."
@@ -64,25 +66,35 @@
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
-	/obj/item/clothing/shoes/clown_shoes/advanced,
 	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
 	/obj/item/clothing/shoes/magboots/magnificent,
-	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee),
+	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee, /obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/hos, /obj/item/clothing/suit/space/plasmaman/security/hos, /obj/item/clothing/head/helmet/space/plasmaman/security/hop, /obj/item/clothing/suit/space/plasmaman/security/hop),
 	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
-	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
-	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelesuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
-	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
-	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
-	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
+	list(/obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
+	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw,
-	/obj/item/clothing/under/newclothes
+	/obj/item/clothing/under/newclothes,
+	/obj/item/clothing/suit/storage/draculacoat,
+	list(/obj/item/clothing/head/helmet/richard, /obj/item/clothing/under/jacketsuit),
+	list(/obj/item/clothing/under/rank/security/sneaksuit, /obj/item/clothing/head/headband),
+	/obj/item/clothing/under/galo,
+	/obj/item/clothing/suit/raincoat,
+	list(/obj/item/clothing/accessory/armband, /obj/item/clothing/accessory/armband/cargo, /obj/item/clothing/accessory/armband/engine, /obj/item/clothing/accessory/armband/science, /obj/item/clothing/accessory/armband/hydro, /obj/item/clothing/accessory/armband/medgreen),
+	list(/obj/item/clothing/head/helmet/space/grey, /obj/item/clothing/suit/space/grey),
+	list(/obj/item/clothing/under/bikersuit, /obj/item/clothing/gloves/bikergloves, /obj/item/clothing/head/helmet/biker, /obj/item/clothing/shoes/mime/biker),
+	list(/obj/item/clothing/monkeyclothes/space, /obj/item/clothing/head/helmet/space),
+	/obj/item/device/radio/headset/headset_earmuffs,
+	/obj/item/clothing/under/vault13,
+	list(/obj/item/clothing/head/leather/xeno, /obj/item/clothing/suit/leather/xeno),
+	/obj/item/clothing/accessory/rabbit_foot
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
 	..()
+	new /obj/item/clothing/shoes/clown_shoes/advanced(src)
 	for(var/amount = 1 to 10)
 		var/wonder_clothing = pick_n_take(wonder_whitelist)
 		if(islist(wonder_clothing))
@@ -90,14 +102,6 @@
 				new i(src)
 		else
 			new wonder_clothing(src)
-
-/*/obj/structure/cage/with_random_slime
-	..()
-
-	add_mob
-
-/mob/living/carbon/slime/proc/randomSlime()
-*/
 
 /area/vault/mecha_graveyard
 
@@ -192,23 +196,144 @@
 		return
 	..()
 
+//15+3+8 = 26
+var/global/list/shoal_stuff = list(
+	//5 of a kind
+	/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,
+	//3 of a kind
+	/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,
+	//1 of a kind
+	/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+	/obj/item/weapon/vinyl/echoes,
+	/obj/item/fish_eggs/seadevil,
+	/obj/structure/bed/therapy,
+	/obj/item/weapon/grenade/station/discount,
+	/obj/item/device/crank_charger/generous,
+	/obj/item/weapon/storage/gachabox,
+	/obj/item/weapon/storage/bluespace_crystal,
+)
+/obj/structure/closet/crate/shoaljunk
+	name = "Shoal junk crate"
+	desc = "What? It fell off a spacetruck."
+
+/obj/structure/closet/crate/shoaljunk/New()
+	..()
+	for(var/i = 1 to 9)
+		if(!shoal_stuff.len)
+			return
+		var/path = pick_n_take(shoal_stuff)
+		new path(src)
+
 /obj/structure/closet/crate/chest/alcatraz
 	name = "Alcatraz IV security crate"
 	desc = "It came from Alcatraz IV!"
 
+	//6+6+6=18
+var/global/list/alcatraz_stuff = list(
+	//3 of a kind
+	/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,
+	/obj/item/pedometer,/obj/item/pedometer,/obj/item/pedometer,
+	//2 of a kind
+	/obj/item/weapon/autocuffer,/obj/item/weapon/autocuffer,
+	/obj/item/clothing/mask/gas/hecu,/obj/item/clothing/mask/gas/hecu,
+	/obj/item/clothing/gloves/swat/operator,/obj/item/clothing/gloves/swat/operator,
+	//1 of a kind
+	/obj/item/clothing/under/securityskirt/elite,
+	/obj/item/clothing/head/helmet/donutgiver,
+	/obj/item/clothing/accessory/bangerboy,
+	/obj/item/key/security/spare,
+	/obj/item/weapon/ram_kit,
+	/obj/item/device/vampirehead,
+	/obj/item/weapon/storage/lockbox/unlockable/peace,
+	/obj/item/clothing/head/helmet/stun,
+	/obj/item/weapon/secway_kit,
+	)
+
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	new /obj/item/clothing/head/helmet/donutgiver(src)
-	new /obj/item/clothing/under/securityskirt/elite(src)
-	new /obj/item/clothing/accessory/bangerboy(src)
-	new /obj/item/weapon/autocuffer(src)
+	for(var/i = 1 to 7)
+		if(!alcatraz_stuff.len)
+			return
+		var/path = pick_n_take(alcatraz_stuff)
+		new path(src)
+
+/obj/item/clothing/head/helmet/stun
+	name = "stun helmet"
+	desc = "For the experimental program of deploying armless security officers. Its complex wiring is known to block out psychic powers and 5G signals."
+	icon_state = "helmetstun"
+	light_power = 2.5
+	light_range = 4
+	light_color = LIGHT_COLOR_ORANGE
+	mech_flags = MECH_SCAN_FAIL
+	var/obj/item/weapon/cell/bcell
+
+/obj/item/clothing/head/helmet/stun/New()
+	..()
+	bcell = new(src)
+	bcell.charge = bcell.maxcharge
+	update_icon()
+
+/obj/item/clothing/head/helmet/stun/Destroy()
+	if (bcell)
+		qdel(bcell)
+		bcell = null
+
+	return ..()
+
+/obj/item/clothing/head/helmet/stun/get_cell()
+	return bcell
+
+/obj/item/clothing/head/helmet/stun/examine(mob/user)
+	..()
+	if(bcell)
+		to_chat(user, "<span class='info'>The helmet is [round(bcell.percent())]% charged.</span>")
+
+/obj/item/clothing/head/helmet/stun/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	if(!..() || !ishuman(M))
+		return CANNOT_EQUIP
+	if(clumsy_check(M))
+		to_chat(M, "<span class='warning'>You get stunned trying to don \the [src].</span>")
+		return CANNOT_EQUIP
+	var/mob/living/carbon/human/C = M
+	if(!C.head)
+		return CAN_EQUIP
+	if(C.head.canremove)
+		return CAN_EQUIP_BUT_SLOT_TAKEN
+	return CAN_EQUIP
+
+/obj/item/clothing/head/helmet/stun/proc/use(var/amount)
+	if(!bcell || bcell.charge < amount)
+		return FALSE
+	bcell.use(amount)
+	return TRUE
+
+#define STUN_HELMET_STRENGTH 10
+/obj/item/clothing/head/helmet/stun/bite_action(mob/target)
+	if(!isliving(loc) || !isliving(target) || !use(STUN_HELMET_STRENGTH**2))
+		return FALSE
+	var/mob/living/user = loc
+	var/mob/living/L = target
+	if(iscarbon(target))
+		var/mob/living/carbon/C = L
+		if(C.check_shields(0,src))
+			return FALSE
+		L.apply_effect(STUN_HELMET_STRENGTH, STUTTER)
+	playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	L.Knockdown(STUN_HELMET_STRENGTH)
+	L.Stun(STUN_HELMET_STRENGTH)
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
+	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
+	log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
+	return TRUE
 
 /obj/item/clothing/accessory/bangerboy
 	name = "\improper Banger Boy Advance"
-	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to easily configure their onboard timers. Straps nicely onto security armor."
+	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to trigger them for early detonation. Straps nicely onto security armor."
 	icon_state = "bangerboy"
-	origin_tech = Tc_COMBAT + "=2"
-	var/obj/item/weapon/screwdriver/S
+	mech_flags = MECH_SCAN_FAIL
+	var/obj/item/tool/screwdriver/S
 
 /obj/item/clothing/accessory/bangerboy/New()
 	..()
@@ -221,7 +346,9 @@
 
 /obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/grenade))
-		W.attackby(S,user)
+		var/obj/item/weapon/grenade/G = W
+		G.det_time = 1.5 SECONDS
+		G.activate(user)
 	else
 		..()
 
@@ -231,8 +358,9 @@
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
 	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
-	icon_state = "helmet_sec"
-	item_state = "helmet"
+	icon_state = "donutgiver"
+	item_state = "donutgiver"
+	species_fit = list(INSECT_SHAPED)
 	flags = HEAR | FPRINT
 	var/dna_profile = null
 	var/last_donut = 0
@@ -385,6 +513,7 @@
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
@@ -396,7 +525,7 @@
 	req_access = list(access_brig)
 	icon = 'icons/obj/cage.dmi'
 	icon_state = "cage_secure"
-	var/mob_path = /mob/living/simple_animal/hostile/wolf
+	var/mob_path = /mob/living/simple_animal/hostile/wolf/pliable
 	var/bonus_path = /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 
 /obj/structure/largecrate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -432,84 +561,6 @@
 	mob_path = null
 	bonus_path = /mob/living/carbon/human/frankenstein
 
-/*/obj/item/device/law_planner                                                      Scapped, but maybe in the future
-	name = "law planning frame"
-	desc = "A large data pad with buttons for crimes. Used for planning a brig sentence."
-	w_class = W_CLASS_SMALL
-	origin_tech = Tc_PROGRAMMING + "=6"
-	icon = 'icons/obj/pda.dmi'
-	icon_state = "aicard"
-	item_state = "electronic"
-	req_access = list(access_brig)
-	var/announce = 1 //0 = Off, 1 = On select, 2 = On upload
-	var/start_timer = FALSE //If true, automatically start the timer on upload
-	var/datum/data/record/upload_crimes = null //If has DNA, will look for an associated datacore file and upload crimes
-	var/list/rapsheet = list()
-	var/total_time = 0
-
-	var/list/minor_crimes = list(
-							"RESISTING ARREST"=2,
-							"PETTY CRIME"=3,
-							"DRUGGING"=4,
-							"POSSESSION"=5,
-							"MANHUNT"=5,
-							"ESCAPE"=5,
-							"FRAMING"=5,
-							"WORKPLACE HAZARD"=5,
-							"ASSAULT"=6,
-							"POSS. WEAPON"=7,
-							"POSS. EXPLOSIVE"=8)
-	var/list/major_crimes = list(
-							"B&E RESTRICTED"=10,
-							"INTERFERENCE"=10,
-							"UNLAWFUL UPLOAD"=10,
-							"ABUSE OF POWER"=10,
-							"ASSAULT ON SEC"=10,
-							"MAJOR TRESPASS"=10,
-							"MAJOR B&E"=15,
-							"GRAND THEFT"=15)
-
-/obj/item/device/law_planner/proc/announce()
-	say(english_list(rapsheet))
-	say("[total_time] minutes.")
-
-/obj/item/device/law_planner/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
-	if(!proximity_flag)
-		to_chat(user, "<span class='warning'>You can't seem to reach \the [A].</span>")
-		return 0
-	if(!allowed)
-		to_chat(user, "<span class='warning'>You must wear your ID!</span>")
-		return 0
-	if(ishuman(A)&&!(A==user))
-		for(var/datum/data/record/E in data_core.security)
-			if(E.fields["name"] == A.name)
-				say("Verified. Found record match for [A].")
-				upload_crimes = E
-	if(istype(A,/obj/machinery/door_timer))
-		if(announce==2)
-			announce()
-		if(upload_crimes)
-			upload_crimes.fields["criminal"] = "Incarcerated"
-			var/counter = 1
-			while(upload_crimes.fields["com_[counter]"])
-				counter++
-			upload_crimes.fields["com_[counter]"] = text("Made by [user] (Automated) on [time2text(world.realtime, "DDD MMM DD")]<BR>[english_list(rapsheet)]")
-		var/obj/machinery/door_timer/D = A
-		if(D.timeleft())
-			//We're adding time
-			D.releasetime += total_time*60
-		else
-			//Setting time
-			D.timeset(total_time*60)
-		if(start_timer && !D.timing)
-			D.timer_start()
-		upload_crimes = null
-		rapsheet = null
-		total_time = null
-	else
-		..()*/
-
-
 /obj/item/weapon/boxofsnow
 	name = "box of winter"
 	desc = "It has a single red button on top. Probably want to be careful where you open this."
@@ -541,7 +592,8 @@
 
 /obj/item/key/security/spare/New()
 	..()
-	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station")
+	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station",
+		 "Snow Station", "NRV Horizon", "Synergy Station", "Lamprey Station")
 	map_names -= map.nameLong
 	home_map = pick(map_names)
 
@@ -554,20 +606,29 @@
 	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
+	w_class = W_CLASS_SMALL
 
-/obj/item/weapon/depocket_wand/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.handcuffed)
-			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
-			to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+			scan(H,user)
 		else
-			to_chat(user,"<span class='warning'>The subject must be handcuffed.</span>")
+			user.visible_message("<span class='danger'>[user] begins waving \the [src] over [M].</span>","<span class='danger'>You begin waving \the [src] over [M].</span>")
+			if(do_after(user,H, 2 SECONDS))
+				scan(H,user)
 	else
 		..()
 
+/obj/item/weapon/depocket_wand/proc/scan(mob/living/carbon/human/H, mob/living/user)
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+
+
+
 #define VAMP_FLASH_CD 50
+#define VAMP_SCREAM_CD 600
 
 /obj/item/device/vampirehead
 	name = "shrunken vampire head"
@@ -575,8 +636,10 @@
 	w_class = W_CLASS_TINY
 	icon_state = "vamphead0"
 	flags = HEAR | FPRINT
+	force = 7
 	var/obj/effect/decal/cleanable/blood/located_blood
-	var/last_used = 0
+	var/flash_last_used = 0
+	var/scream_last_used = 0
 
 /obj/item/device/vampirehead/New()
 	..()
@@ -651,6 +714,29 @@
 			to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
 		return FALSE
 
+/obj/item/device/vampirehead/attack_self(mob/user)
+	if(!istype(user) || !genecheck(user))
+		return
+
+	if(scream_last_used + VAMP_SCREAM_CD > world.timeofday)
+		var/list/reject_phrases = list("Bah. You can't be serious.",
+										"Again? You work me harder than I beat my slaves.",
+										"Enough. I must recover, first.",
+										"Cease your incessant squeezing, mortal.",
+										"I am not a flashbang, you blithering idiot."
+										)
+		to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
+		return
+
+	user.attack_log += "\[[time_stamp()]\] <font color='red'>Used the [name] to perform a vampire screech.</font>"
+	log_attack("<font color='red'>[key_name(user)] Used the [name] to perform a vampire screech.</font>")
+	for(var/obj/structure/window/W in view(1))
+		W.shatter()
+
+	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
+
+	scream_last_used = world.timeofday
+
 /obj/item/device/vampirehead/attack(mob/living/M as mob, mob/user as mob)
 	if(!user || !M) //sanity
 		return
@@ -658,7 +744,7 @@
 	if(!genecheck(user))
 		return
 
-	if(last_used + VAMP_FLASH_CD > world.timeofday)
+	if(flash_last_used + VAMP_FLASH_CD > world.timeofday)
 		var/list/reject_phrases = list("Bah. You can't be serious.",
 										"Again? You work me harder than I beat my slaves.",
 										"Enough. I must recover, first.",
@@ -682,12 +768,10 @@
 		return
 	var/mob/living/carbon/Subject = M
 
-	if(Subject.eyecheck() > 0)
-		return
 	Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
 
 	visible_message("<span class='danger'>The eyes of [user]'s [name] emit a blinding flash toward [M]!</span>")
-	last_used = world.timeofday
+	flash_last_used = world.timeofday
 
 /obj/item/device/vampirehead/afterattack(atom/A, mob/user)
 	..()
@@ -703,8 +787,8 @@
 /obj/item/weapon/autocuffer
 	name = "autocuffer"
 	desc = "An experimental prototype handcuff dispenser that mysteriously went missing from a research facility on Alcatraz VI."
-	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "labeler0"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "autocuffer"
 	siemens_coefficient = 0
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
@@ -751,3 +835,581 @@
 		name = "[t]'s ID card ([assignment])"
 	else
 		return
+
+
+/obj/item/weapon/mech_expansion_kit
+	name = "exosuit expansion kit"
+	desc = "All the equipment you need to replace that useless legroom with a useful bonus equipment slot on your mech."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
+	flags = FPRINT
+	siemens_coefficient = 0
+	w_class = W_CLASS_SMALL
+	var/working = FALSE
+
+/obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
+	if(!proximity)
+		return
+	if(!istype(target,/obj/mecha))
+		to_chat(user,"<span class='warning'>That isn't an exosuit!</span>")
+		return
+	if(working)
+		to_chat(user,"<span class='warning'>This is already being used to upgrade something!</span>")
+		return
+	var/obj/mecha/M = target
+	if(M.max_equip > initial(M.max_equip))
+		to_chat(user,"<span class='warning'>That exosuit cannot be modified any further. There's no more legroom to eliminate!</span>")
+		return
+	to_chat(user,"<span class='notice'>You begin modifying the exosuit.</span>")
+	working = TRUE
+	if(do_after(user,target,4 SECONDS))
+		to_chat(user,"<span class='notice'>You finish modifying the exosuit!</span>")
+		M.max_equip++
+		qdel(src)
+	else
+		to_chat(user,"<span class='notice'>You stop modifying the exosuit.</span>")
+		working = FALSE
+	return 1
+
+/obj/structure/wetdryvac
+	name = "wet/dry vacuum"
+	desc = "A powerful vacuum cleaner that can collect both trash and fluids."
+	density = TRUE
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "wetdryvac1"
+	var/max_trash = 50
+	var/list/trash = list()
+	var/obj/item/vachandle/myhandle
+
+/obj/structure/wetdryvac/New()
+	..()
+	create_reagents(50)
+	myhandle = new /obj/item/vachandle(src)
+
+/obj/structure/wetdryvac/Destroy()
+	if(myhandle)
+		if(myhandle.loc == src)
+			qdel(myhandle)
+		else
+			myhandle.myvac = null
+		myhandle = null
+	for(var/obj/item/I in trash)
+		qdel(I)
+	trash.Cut()
+	..()
+
+/obj/structure/wetdryvac/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>The wet tank gauge reads: [reagents.total_volume]/[reagents.maximum_volume]</span>")
+	to_chat(user,"<span class='info'>The dry storage gauge reads: [trash.len]/[max_trash]</span>")
+
+/obj/structure/wetdryvac/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/vachandle))
+		if(!myhandle)
+			myhandle = W
+		if(myhandle == W)
+			to_chat(user,"<span class='notice'>You insert \the [W] into \the [src].")
+			user.drop_item(W,src)
+			update_icon()
+	else
+		..()
+
+/obj/structure/wetdryvac/attack_hand(mob/user)
+	if(myhandle && myhandle.loc == src)
+		user.put_in_hands(myhandle)
+		update_icon()
+	else
+		..()
+
+/obj/structure/wetdryvac/update_icon()
+	if(myhandle)
+		icon_state = "wetdryvac[myhandle.loc == src]"
+	else
+		icon_state = "wetdryvac0"
+
+/obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!can_use(usr,O))
+		return
+	if(istype(O,/obj/structure/sink))
+		if(!reagents.total_volume)
+			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+		reagents.clear_reagents()
+		to_chat(usr, "<span class='notice'>You flush \the [src] wet contents down \the [O].</span>")
+	else if(istype(O,/obj/item/weapon/reagent_containers) && O.is_open_container())
+		if(!reagents.total_volume)
+			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+		to_chat(usr, "<span class='notice'>You pour \the [src] wet contents into \the [O].</span>")
+		reagents.trans_to(O.reagents,reagents.total_volume)
+	else if(istype(O,/obj/machinery/disposal))
+		if(!contents.len)
+			to_chat(usr,"<span class='warning'>\The [src] dry storage is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/freeze.ogg', 25, 1) //this sounds like trash moving to me
+		for(var/obj/item/I in trash)
+			I.forceMove(O)
+		trash.Cut()
+		to_chat(usr, "<span class='notice'>You dump \the [src] dry contents into \the [O].</span>")
+
+/obj/structure/wetdryvac/MouseDropTo(atom/O, mob/user)
+	if(!can_use(user,O))
+		return
+	whrr(get_turf(O))
+
+/obj/structure/wetdryvac/proc/whrr(var/turf/T)
+	if(!T)
+		return
+	playsound(src, 'sound/effects/vacuum.ogg', 25, 1)
+	for(var/obj/effect/decal/cleanable/C in T)
+		if(C.reagent)
+			if(reagents.is_full())
+				visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
+				break
+			reagents.add_reagent(C.reagent,1)
+		qdel(C)
+	for(var/obj/effect/overlay/puddle/P in T)
+		if(reagents.is_full())
+			visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
+			break
+		if(P.wet == TURF_WET_LUBE)
+			reagents.add_reagent(LUBE,1)
+		else if(P.wet == TURF_WET_WATER)
+			reagents.add_reagent(WATER,1)
+		qdel(P)
+	T.clean_blood()
+	for(var/obj/item/trash/R in T)
+		if(trash.len >= max_trash)
+			visible_message("<span class='warning'>\The [src] sputters, dry storage full!</span>")
+			return
+		R.forceMove(src)
+		trash += R
+
+/obj/structure/wetdryvac/proc/can_use(mob/user, atom/target)
+	if(!ishigherbeing(user) && !isrobot(user) || user.incapacitated() || user.lying)
+		return FALSE
+	if(!Adjacent(user) || !user.Adjacent(target))
+		return FALSE
+	return TRUE
+
+/obj/item/vachandle
+	name = "vacuum handle"
+	desc = "Handy. It doesn't suck per se, it merely conveys suckage."
+	w_class = W_CLASS_MEDIUM
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "vachandle"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "vachandle"
+	w_class = W_CLASS_HUGE
+	var/obj/structure/wetdryvac/myvac
+	var/event_key = null
+
+/obj/item/vachandle/New()
+	..()
+	myvac = loc
+
+/obj/item/vachandle/Destroy()
+	myvac.myhandle = null
+	myvac = null
+	..()
+
+/obj/item/vachandle/pickup(mob/user)
+	..()
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
+/obj/item/vachandle/dropped(mob/user)
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	if(loc != myvac)
+		retract()
+
+/obj/item/vachandle/throw_at()
+	retract()
+
+/obj/item/vachandle/proc/mob_moved(atom/movable/mover)
+	if(myvac && get_dist(src,myvac) > 2) //Needs a little leeway because dragging isn't instant
+		retract()
+
+/obj/item/vachandle/proc/retract()
+	if(loc == myvac)
+		return
+	visible_message("<span class='warning'>\The [src] snaps back into \the [myvac]!</span>")
+	if(ismob(loc))
+		var/mob/M = loc
+		M.drop_item(src,myvac)
+	else
+		forceMove(myvac)
+	myvac.update_icon()
+
+/obj/item/vachandle/preattack(atom/target, mob/user , proximity)
+	if(!myvac)
+		to_chat(user, "<span class='warning'>\The [src] isn't attached to a vacuum!</span>")
+		return
+	if(!proximity || !myvac.can_use(user,target))
+		return
+	if(target == myvac)
+		return ..()
+	myvac.whrr(get_turf(target))
+	return 1
+
+/obj/item/weapon/fakeposter_kit
+	name = "cargo cache kit"
+	desc = "Used to create a hidden cache behind what appears to be a cargo poster."
+	icon = 'icons/obj/barricade.dmi'
+	icon_state = "barricade_kit"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
+	if(!proximity)
+		return
+	if(istype(target,/turf/simulated/wall))
+		playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
+		if(do_after(user,target,4 SECONDS))
+			to_chat(user,"<span class='notice'>Using the kit, you hollow out the wall and hang the poster in front.</span>")
+			var/obj/structure/fakecargoposter/FCP = new(target)
+			FCP.access_loc = get_turf(user)
+			qdel(src)
+			return 1
+	else
+		return ..()
+
+/obj/structure/fakecargoposter
+	icon = 'icons/obj/posters.dmi'
+	var/obj/item/weapon/storage/cargocache/cash
+	var/turf/access_loc
+
+/obj/structure/fakecargoposter/New()
+	..()
+	var/datum/poster/type = pick(/datum/poster/special/cargoflag,/datum/poster/special/cargofull)
+	icon_state = initial(type.icon_state)
+	desc = initial(type.desc)
+	name = initial(type.name)
+	cash = new(src)
+
+/obj/structure/fakecargoposter/examine(mob/user)
+	..()
+	if(user.loc == access_loc)
+		to_chat(user, "<span class='info'>Upon closer inspection, there's a hidden cache behind it accessible with a free hand.</span>")
+
+/obj/structure/fakecargoposter/Destroy()
+	for(var/atom/movable/A in cash.contents)
+		A.forceMove(loc)
+	qdel(cash)
+	cash = null
+	..()
+
+/obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
+	if(iswelder(W))
+		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
+		var/obj/item/tool/weldingtool/WT=W
+		if(WT.do_weld(user, src, 10 SECONDS, 5))
+			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
+			qdel(src)
+	else if(user.loc == access_loc)
+		cash.attackby(W,user)
+	else
+		..()
+
+/obj/structure/fakecargoposter/attack_hand(mob/user)
+	if(user.loc == access_loc)
+		cash.AltClick(user)
+
+/obj/item/weapon/storage/cargocache
+	name = "cargo cache"
+	desc = "A large hidey hole for all your goodies."
+	icon = 'icons/obj/posters.dmi'
+	icon_state = "cargoposter-flag"
+	fits_max_w_class = W_CLASS_LARGE
+	max_combined_w_class = 28
+	slot_flags = 0
+
+/obj/item/weapon/storage/cargocache/distance_interact(mob/user)
+	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
+		return TRUE
+	return FALSE
+
+#define REWARD_FREQUENCY 1000
+/obj/item/pedometer
+	name = "patrolmens' pedometer"
+	desc = "A device which estimates steps taken. This one dispenses prizes for patrolling maintenance or major hallways. It needs to be on your belt, pockets, or in hand to register movement."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "pedometer"
+	w_class = W_CLASS_SMALL
+	slot_flags = SLOT_BELT
+	var/count = 0
+	var/list/approved_areas = list(/area/maintenance,/area/hallway)
+	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)
+	var/list/regular_rewards = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee,
+									/obj/item/weapon/reagent_containers/food/snacks/donutiron,
+									/obj/item/ammo_storage/speedloader/energy)
+
+/obj/item/pedometer/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>The reward ticker reads [count].</span>")
+
+/obj/item/pedometer/pickup(mob/user)
+	..()
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
+/obj/item/pedometer/dropped(mob/user)
+	..()
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
+/obj/item/pedometer/proc/mob_moved(atom/movable/mover)
+	var/turf/T = get_turf(src)
+	var/area/A = get_area(T)
+	if(is_type_in_list(A,approved_areas))
+		count++
+		if(!(count % REWARD_FREQUENCY))
+			var/path
+			if(special_rewards.len)
+				path = pick_n_take(special_rewards)
+			else
+				path = pick(regular_rewards)
+			if(path)
+				var/obj/item/I = new path(get_turf(src))
+				if(isliving(mover))
+					var/mob/living/living_mover = mover
+					living_mover.put_in_hands(I)
+				to_chat(mover,"<span class='good'>\The [src] dispenses a reward!</span>")
+
+#define AT_SEED 0
+#define AT_PLANTED 1
+#define AT_SAPLING 2
+#define AT_MATURE 3
+#define AT_FLOWERING 4
+
+/obj/structure/ammotree
+	name = "ammo tree seed"
+	desc = "The seed of an ammo tree. A gene-modified plant that was developed to synthesize metals. <B>If it was rammed in with enough force, you could get it to grow.</B>"
+	icon = 'icons/obj/flora/big_pots.dmi'
+	icon_state = "ammotree-0"
+	density = FALSE
+	anchored = FALSE
+	pixel_x = -16
+	plane = ABOVE_HUMAN_PLANE
+	var/state = AT_SEED
+
+/obj/structure/ammotree/attackby(obj/item/I, mob/user)
+	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
+		state = AT_PLANTED
+		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
+		processing_objects += src
+	else
+		..()
+	update_icon()
+
+/obj/structure/ammotree/attack_hand(mob/user)
+	if(state != AT_FLOWERING)
+		return
+	visible_message("<span class='notice>[user] picks some ammo fruit from \the [src].</span>")
+	state = AT_MATURE
+	update_icon()
+	processing_objects += src
+	playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
+	for(var/i = 1 to 4)
+		new /obj/item/ammofruit(user.loc)
+
+/obj/structure/ammotree/update_icon()
+	icon_state = "ammotree-[state]"
+	switch(state)
+		if(AT_PLANTED)
+			name = "strange pot"
+			desc = "Something is clearly putting down roots below."
+		if(AT_SAPLING)
+			name = "ammo tree sapling"
+			desc = "An ammo tree sapling. It looks thin enough to snap like a twig."
+		if(AT_MATURE)
+			name = "ammo tree"
+			desc = "A gene-modified plant that was developed to synthesize metals."
+
+/obj/structure/ammotree/process()
+	if(state >= AT_FLOWERING)
+		processing_objects -= src
+		return
+	if(prob(1))
+		state++
+		update_icon()
+
+/obj/item/ammofruit
+	name = "ammofruit"
+	desc = "Not edible. Feed it into your local ammolathe."
+	icon = 'icons/obj/ammo.dmi'
+	icon_state = "ammofruit"
+	w_class = W_CLASS_SMALL
+
+/obj/item/ammofruit/New()
+	..()
+	pixel_x = rand(-3,3)
+	pixel_y = rand(-3,3)
+	materials = new /datum/materials(src)
+	materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL*2)
+	if(prob(25))
+		if(prob(60))
+			materials.addAmount(MAT_PLASMA,CC_PER_SHEET_MISC*2)
+			name = "dragonbreath ammofruit"
+			icon_state = "ammofruit_plasma"
+		else
+			materials.addAmount(MAT_GLASS,CC_PER_SHEET_GLASS)
+			materials.addAmount(MAT_PLASTIC,CC_PER_SHEET_MISC)
+			materials.addAmount(MAT_WOOD, CC_PER_SHEET_MISC)
+			name = "gunstock ammofruit"
+			icon_state = "ammofruit_glass"
+	else
+		materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL)
+
+/obj/item/ammofruit/recyclable(var/obj/machinery/r_n_d/fabricator/F)
+	if(!istype(F, /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe))
+		return FALSE
+	return TRUE
+
+//Mystery mob cubes//////////////
+
+/obj/item/weapon/storage/box/mysterycubes
+	name = "mystery cube box"
+	desc = "Dehydrated friends!"
+	icon = 'icons/obj/pbag.dmi'
+	icon_state = "pbag"	//Supposed to look kind of shitty, cubes aren't even wrapped
+	foldable = /obj/item/weapon/paper
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube")
+
+/obj/item/weapon/storage/box/mysterycubes/New()
+	..()
+	var/friendAmount = 1
+	friendAmount = rand(1, 3)
+	for(var/i = 1 to friendAmount)
+		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube
+	name = "mystery cube"
+	desc = "A portable friend!"
+	var/static/list/potentialFriends = list()
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube/New()
+	..()
+	if(!length(potentialFriends))
+		potentialFriends = existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs)
+	contained_mob = pick(potentialFriends)
+
+
+//Mystery chem beakers//////////////
+
+/obj/item/weapon/storage/box/mystery_vial
+	name = "assorted chemical pack"
+	desc = "A mix of reagents from who knows where."
+	icon_state = "beaker"
+
+/obj/item/weapon/storage/box/mystery_vial/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/reagent_containers/glass/beaker/vial/mystery(src)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/mystery
+	name = "recycled vial"
+	desc = "Slightly scratched and worn, it looks like this wasn't its original purpose. The label has been sloppily peeled off."
+	mech_flags = MECH_SCAN_FAIL	//Nip that in the bud
+	var/static/list/illegalChems = list(	//Just a bad idea
+		ADMINORDRAZINE,
+		BLOCKIZINE,
+		AUTISTNANITES,
+		XENOMICROBES,
+		PAISMOKE
+	)
+
+/obj/item/weapon/reagent_containers/glass/beaker/vial/mystery/New()
+	..()
+	var/list/mysteryChems = chemical_reagents_list - illegalChems
+	reagents.add_reagent(pick(mysteryChems), volume)
+
+
+//Mystery circuits////////////
+
+/obj/item/weapon/storage/box/mystery_circuit
+	name = "children's circuitry circus educational toy booster pack"
+	desc = "Ages 6 and up"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "circuit"
+
+/obj/item/weapon/storage/box/mystery_circuit/New()
+	..()
+	var/list/legalCircuits = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom	//Identical to spessmart spawner
+	for(var/i = 1 to 3)
+		var/boosterPack = pick(legalCircuits)
+		new boosterPack(src)
+	new /obj/item/tool/solder(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/sulphuric(src)
+	new /obj/item/weapon/paper/permissionslip(src)
+
+/obj/item/weapon/paper/permissionslip
+	name = "circuitry circus education toy booster pack legally binding permission slip"
+	desc = "Very clearly hand written."
+
+/obj/item/weapon/paper/permissionslip/New()
+	..()
+	info = "The purchaser or purchasers of this or any other Circuitry Circus Education Toy Booster Pack <i>TM</i> recognizes, accepts, and is bound to the terms and conditions found within any Circuitry Circus Education Toy Starter Pack <i>TM</i>. This includes but is not limited to: <BR>the relinquishment of any state, country, nation, or planetary given rights protecting those of select ages from legal action based on misuse of the product.<BR>All: injuries, dismemberments, trauma (mental or physical), diseases, invasive species, deaths, memory loss, time loss, genetic recombination, or quantum displacement is the sole responsibility of the owner of the Circuitry Circus Education Toy Booster Pack <i>TM</i> <BR><BR>Please ask for your parent or guardian's permission before playing. Have fun."
+
+
+//Mystery material//////////////////////
+
+/obj/item/weapon/storage/box/large/mystery_material
+	name = "surplus material scrap box"
+	desc = "Caked in layers of dust, smells like a warehouse."
+	var/list/surplusMat= list(
+		/obj/item/stack/sheet/metal = 50,
+		/obj/item/stack/sheet/glass/glass = 35,
+		/obj/item/stack/sheet/plasteel = 25,
+		/obj/item/stack/sheet/mineral/uranium = 20,
+		/obj/item/stack/sheet/mineral/silver = 20,
+		/obj/item/stack/sheet/mineral/gold = 15,
+		/obj/item/stack/sheet/mineral/diamond = 5,
+		/obj/item/stack/sheet/mineral/phazon = 1,
+		/obj/item/stack/sheet/mineral/clown = 1
+	)
+
+/obj/item/weapon/storage/box/large/mystery_material/odd
+	name = "surplus odd material scrap box"
+	surplusMat = list(
+		/obj/item/stack/sheet/bone = 50,
+		/obj/item/stack/sheet/mineral/sandstone = 50,
+		/obj/item/stack/sheet/brass = 35,
+		/obj/item/stack/sheet/ralloy = 35,
+		/obj/item/stack/sheet/mineral/gingerbread = 25,
+		/obj/item/stack/sheet/animalhide/xeno = 10,
+		/obj/item/stack/sheet/animalhide/human = 20,
+		/obj/item/stack/sheet/snow = 25,
+		/obj/item/stack/sheet/cardboard = 20,
+		/obj/item/stack/telecrystal = 2,	//Emergent gameplay!
+		/obj/item/stack/teeth/gold = 10,
+		/obj/item/stack/tile/slime = 20
+	)
+
+/obj/item/weapon/storage/box/large/mystery_material/New()
+	..()
+	for(var/i = 1 to 6)
+		var/theSurplus = pickweight(surplusMat)
+		new theSurplus(src, surplusMat[theSurplus])
+
+
+//Mystery food////////////////////
+
+/obj/structure/closet/crate/freezer/bootlegpicnic
+	name = "bootleg picnic supplies"
+	desc = "Tangible proof against prohibition."
+
+/obj/structure/closet/crate/freezer/bootlegpicnic/New()
+	..()
+	for(var/i = 1 to 4)
+		var/bootlegSnack = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks))
+		new bootlegSnack(src)
+	for(var/i = 1 to 2)
+		var/bootlegDrink = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/drinks))
+		new bootlegDrink(src)
+
+
+//Restock//////////////////////
+
+/obj/structure/vendomatpack/trader
+	name = "trader supply recharge pack"
+	targetvendomat = /obj/machinery/vending/trader
+	icon_state = "sale"

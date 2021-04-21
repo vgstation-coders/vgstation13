@@ -149,21 +149,11 @@
 		var/obj/item/weapon/storage/bag/B = O
 		for (var/obj/item/weapon/reagent_containers/food/snacks/G in O.contents)
 			B.remove_from_storage(G,src)
-			if(contents && contents.len >= limit) //Sanity checking so the microwave doesn't overfill
-				to_chat(user, "You fill the Microwave to the brim.")
+			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
+				to_chat(user, "<span class='notice'>You fill \the [src]] to the brim.</span>")
 				break
+		src.updateUsrDialog()
 
-		if(!O.contents.len)
-			to_chat(user, "You empty \the [O] into the Microwave.")
-			src.updateUsrDialog()
-			return 0
-			if (!is_type_in_list(O.contents))
-				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
-				return 1
-
-		if(user.drop_item(O, src))
-			holdingitems += O
-			src.updateUsrDialog()
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
 		if (istype(O,/obj/item/stack) && O:amount>1)
@@ -548,10 +538,8 @@
 			list("Toggle Reagent Disposal", (reagent_disposal ? "radial_chem_notrash" : "radial_chem_trash")),
 			list("Examine", "radial_examine")
 		)
-		var/event/menu_event = new(owner = usr)
-		menu_event.Add(src, "radial_check_handler")
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
 		if(!radial_check(usr))
 			return
 
@@ -567,10 +555,6 @@
 				usr.examination(src)
 		return
 	return ..()
-
-/obj/machinery/microwave/proc/radial_check_handler(list/arguments)
-	var/event/E = arguments["event"]
-	return radial_check(E.holder)
 
 /obj/machinery/microwave/proc/radial_check(mob/living/user)
 	if(!istype(user))

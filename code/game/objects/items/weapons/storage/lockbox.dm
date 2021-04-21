@@ -117,7 +117,7 @@
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
 			health -= Proj.damage
-	..()
+	. = ..()
 	if(health <= 0)
 		for(var/atom/movable/A in src)
 			remove_from_storage(A, get_turf(src))
@@ -185,6 +185,16 @@
 	new /obj/item/weapon/implantcase/loyalty(src)
 	new /obj/item/weapon/implanter/loyalty(src)
 
+/obj/item/weapon/storage/lockbox/exile
+	name = "lockbox (exile implants)"
+	req_one_access = list(access_armory)
+
+/obj/item/weapon/storage/lockbox/exile/New()
+	..()
+	new /obj/item/weapon/implantcase/exile(src)
+	new /obj/item/weapon/implantcase/exile(src)
+	new /obj/item/weapon/implanter/exile(src)
+
 /obj/item/weapon/storage/lockbox/tracking
 	name = "lockbox (tracking implants)"
 	req_one_access = list(access_security)
@@ -210,6 +220,17 @@
 	new /obj/item/weapon/implantcase/chem(src)
 	new /obj/item/weapon/reagent_containers/syringe(src)
 	new /obj/item/weapon/implanter(src)
+
+/obj/item/weapon/storage/lockbox/holy
+	name = "lockbox (holy implants)"
+	req_one_access = list(access_security)
+
+/obj/item/weapon/storage/lockbox/holy/New()
+	..()
+	new /obj/item/weapon/implantcase/holy(src)
+	new /obj/item/weapon/implantcase/holy(src)
+	new /obj/item/weapon/implantcase/holy(src)
+	new /obj/item/weapon/implanter/holy(src)
 
 /obj/item/weapon/storage/lockbox/clusterbang
 	name = "lockbox (clusterbang)"
@@ -261,6 +282,14 @@
 				return
 	else
 		. = ..()
+
+/obj/item/weapon/storage/lockbox/unlockable/peace
+	name = "semi-secure lockbox (pax implants)"
+
+/obj/item/weapon/storage/lockbox/unlockable/peace/New()
+	..()
+	for(var/i = 1 to 5)
+		new/obj/item/weapon/implantcase/peace(src)
 
 /obj/item/weapon/storage/lockbox/coinbox
 	name = "coinbox"
@@ -332,6 +361,7 @@
 	icon_state = "map_diskbox"
 	item_state = "diskbox"
 	can_only_hold = list("/obj/item/weapon/disk")
+	cant_hold = list("/obj/item/weapon/disk/harddiskdrive")
 	fits_max_w_class = 3
 	w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
@@ -486,3 +516,50 @@
 	..()
 	for(var/i in 1 to 6)
 		new /obj/item/clothing/accessory/spesstv_tactical_camera(src)
+
+/obj/item/weapon/storage/lockbox/advanced
+	name = "advanced lockbox"
+	desc = "A highly advanced lockbox from Alcatraz IV, from series RE-4. It has ablative plating to repel lasers and its flat surfaces avoid the vulnerabilities of an ablative vest. Its shock-dispersing core makes it impossible to bomb or drill, it's reinforced against ballistics, and it can reactively teleport. The solid state controller on its scanner cannot be disrupted by electromagnetic pulse and uses elliptic-curve cryptography to frustrate common sequencer hacking. This lockbox is probably more valuable than whatever is inside it."
+	health = 200
+	storage_slots = 1
+	fits_max_w_class = W_CLASS_LARGE
+
+/obj/item/weapon/storage/lockbox/advanced/ex_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/emp_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/emag_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/bullet_act(var/obj/item/projectile/P)
+	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+		visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s ablative plating!</span>")
+		if(!istype(P, /obj/item/projectile/beam))
+			P.reflected = 1
+			P.rebound(src)
+		return PROJECTILE_COLLISION_BLOCKED
+	react()
+	return ..()
+
+/obj/item/weapon/storage/lockbox/advanced/proc/react()
+	teleport_radius(6)
+	visible_message("<span class='danger'>\The [src] displaces itself with its reactive teleport system!</span>")
+	playsound(src, 'sound/effects/teleport.ogg', 50, 1)
+
+/obj/item/weapon/storage/lockbox/advanced/energyshotgun
+	name = "advanced lockbox (energy shotgun)"
+	req_access = list(access_security)
+
+/obj/item/weapon/storage/lockbox/advanced/energyshotgun/New()
+	..()
+	new /obj/item/weapon/gun/energy/shotgun(src)
+
+/obj/item/weapon/storage/lockbox/advanced/ricochettaser
+	name = "advanced lockbox (ricochet taser)"
+	req_access = list(access_security)
+
+/obj/item/weapon/storage/lockbox/advanced/ricochettaser/New()
+	..()
+	new /obj/item/weapon/gun/energy/taser/ricochet(src)

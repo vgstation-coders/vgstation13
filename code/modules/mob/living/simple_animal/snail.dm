@@ -74,7 +74,9 @@ var/max_snails = 40
 	return ..()
 
 /mob/living/simple_animal/snail/Crossed(mob/living/O)
-	if (!in_shell)
+	if(O.intent == I_HURT && prob(30))
+		adjustBruteLoss(4) // Owie
+	if (!in_shell && !isDead())
 		recoil()
 	return ..()
 
@@ -98,6 +100,8 @@ var/max_snails = 40
 	if (snail_count >= max_snails)
 		return
 	for(var/mob/living/simple_animal/snail/partner in loc)
+		if (partner == src) // no
+			continue
 		if (partner.being_romantic)
 			return // the other snail is busy
 

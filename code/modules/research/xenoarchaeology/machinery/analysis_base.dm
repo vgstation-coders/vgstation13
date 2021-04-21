@@ -1,19 +1,3 @@
-//Handles how much the temperature changes on power use. (Joules/Kelvin)
-//Equates to as much heat energy per kelvin as a quarter tile of air.
-#define XENOARCH_HEAT_CAPACITY 5000
-
-//Handles heat transfer to the air. (In watts)
-//Can heat a single tile 2 degrees per tick.
-#define XENOARCH_MAX_ENERGY_TRANSFER 4000
-
-//How many joules of electrical energy produce how many joules of heat energy?
-#define XENOARCH_HEAT_COEFFICIENT 3
-
-#define XENOARCH_SAFETY_TEMP 350
-#define XENOARCH_MAX_TEMP 400
-// I literally don't even know why this one is different from XENOARCH_MAX_TEMP.
-#define XENOARCH_MAX_HEAT_INCREASE_TEMP 450
-
 /obj/machinery/anomaly
 	name = "Analysis machine"
 	desc = "A specialised, complex analysis machine."
@@ -22,8 +6,8 @@
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "analyser_old"
 
-	idle_power_usage = 20 //watts
-	active_power_usage = 300 //Because  I need to make up numbers~
+	idle_power_usage = 10
+	active_power_usage = 1000
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -34,11 +18,11 @@
 	// If it's zero we're not scanning.
 	var/scan_process = 0
 
-	//measured in kelvin, if this exceeds 1200, the machine is damaged and requires repairs
-	//if this exceeds 600 and safety is enabled it will shutdown
-	//temp greater than 600 also requires a safety prompt to initiate scanning
-	var/temperature = T0C
-
+/obj/machinery/anomaly/Destroy()
+	if (held_container)
+		held_container.forceMove(loc)
+		held_container = null
+	..()
 
 /obj/machinery/anomaly/RefreshParts()
 	var/scancount = 0
@@ -51,67 +35,24 @@
 	..()
 	if (stat & NOPOWER && scan_process)
 		stop()
-
 	else
 		update_icon()
 
 /obj/machinery/anomaly/process()
-	//not sure if everything needs to heat up, or just the GLPC
-	var/datum/gas_mixture/env = loc.return_air()
-	var/environmental_temp = env.temperature
+	//First we deal with the machine's task
 	if(scan_process)
-		// Shouldn't be reachable, still can't hurt.
-		if(stat & NOPOWER)
+		if (stat & (NOPOWER|BROKEN))
 			stop()
-
-		if(scan_process++ > target_scan_ticks)
-			FinishScan()
-		else if(temperature > XENOARCH_MAX_TEMP)
-			visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>")
-			scan_process = 0
-		else if(temperature > XENOARCH_SAFETY_TEMP && prob(10))
-			visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>")
-
-		//show we're busy
-		if(prob(5))
-			visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>")
-
-		use_power = 2
-
-	else
-		use_power = 1
-
-	//Add 3000 joules when active.  This is about 0.6 degrees per tick.
-	//May need adjustment
-	if(use_power == 1)
-		var/heat_added = active_power_usage * XENOARCH_HEAT_COEFFICIENT
-
-		if(temperature < XENOARCH_MAX_HEAT_INCREASE_TEMP)
-			temperature += heat_added / XENOARCH_HEAT_CAPACITY
-
-		var/temperature_difference = abs(environmental_temp - temperature)
-		var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
-		var/heat_capacity = removed.heat_capacity()
-
-		heat_added = min(temperature_difference * heat_capacity, XENOARCH_MAX_ENERGY_TRANSFER)
-
-		if(temperature > environmental_temp)
-			//cool down to match the air
-			temperature = max(TCMB, temperature - heat_added / XENOARCH_HEAT_CAPACITY)
-			removed.temperature = max(TCMB, removed.temperature + heat_added / heat_capacity)
-
-			if(temperature_difference > 10 && prob(5))
-				visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", "You hear a soft hiss.")
-
 		else
-			//heat up to match the air
-			temperature = max(TCMB, temperature + heat_added / XENOARCH_HEAT_CAPACITY)
-			removed.temperature = max(TCMB, removed.temperature - heat_added / heat_capacity)
+			use_power = MACHINE_POWER_USE_ACTIVE
+			if(scan_process++ > target_scan_ticks)
+				FinishScan()
 
-			if(temperature_difference > 10 && prob(5))
-				visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", "You hear a quiet plink.")
-
-		env.merge(removed)
+			//show we're busy if we're still going
+			if(scan_process && prob(5))
+				visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>")
+	else
+		use_power = MACHINE_POWER_USE_IDLE
 
 	nanomanager.update_uis(src)
 
@@ -126,7 +67,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You put \the [W] into the [src].</span>")
-
+			playsound(loc, 'sound/machines/click.ogg', 50, 1)
 			held_container = W
 			nanomanager.update_uis(src)
 
@@ -143,6 +84,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 
 	//determine the results and print a report
 	if(held_container)
+		alert_noise("ping")
 		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", "You hear an insistent chime.")
 		var/obj/item/weapon/paper/P = new(loc)
 		P.name = "[src] report #[++report_num]"
@@ -158,7 +100,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 		return
 
 	if (href_list["eject"] && held_container && !scan_process)
-		eject()
+		eject(usr)
 		. = 1
 
 	if (href_list["begin"] && !scan_process && held_container)
@@ -169,23 +111,23 @@ obj/machinery/anomaly/Topic(href, href_list)
 		stop()
 		. = 1
 
-/obj/machinery/anomaly/proc/eject()
+/obj/machinery/anomaly/proc/eject(var/mob/user)
 	held_container.forceMove(loc)
+	playsound(loc, 'sound/machines/click.ogg', 50, 1)
+	if (user && Adjacent(user))
+		user.put_in_hands(held_container)
 	held_container = null
 	nanomanager.update_uis(src)
 
 /obj/machinery/anomaly/proc/start(var/mob/user)
-	if (temperature >= XENOARCH_SAFETY_TEMP)
-		var/proceed = input("Unsafe internal temperature detected, enter YES below to continue.","Warning")
-		if (proceed != "YES" || user.incapacitated() || !user.Adjacent(src))
-			return FALSE
-
 	scan_process = 1
+	use_power = MACHINE_POWER_USE_ACTIVE
 	update_icon()
 	nanomanager.update_uis(src)
 
 /obj/machinery/anomaly/proc/stop()
 	scan_process = 0
+	use_power = MACHINE_POWER_USE_IDLE
 	update_icon()
 	nanomanager.update_uis(src)
 
@@ -201,7 +143,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
 		return
 
-	eject()
+	eject(user)
 
 /obj/machinery/anomaly/CtrlClick(var/mob/user)
 	if (!anchored)
@@ -218,9 +160,6 @@ obj/machinery/anomaly/Topic(href, href_list)
 		return
 
 	var/list/data[0]
-	data["max_temperature"] = XENOARCH_MAX_TEMP
-	data["safety_temperature"] = XENOARCH_SAFETY_TEMP
-	data["temperature"] = temperature
 
 	data["target_ticks"] = target_scan_ticks
 	data["scan_process"] = scan_process

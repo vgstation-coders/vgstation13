@@ -308,7 +308,8 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
 	. = ..()
 	if(ishuman(eater))
-		eater.contract_disease(new /datum/disease/wendigo_transformation)
+		var/mob/living/carbon/human/H = eater
+		H.infect_disease2_predefined(DISEASE_WENDIGO, 1, "Wendigo Meat")
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	name = "gelatin"
@@ -330,3 +331,58 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/snail/New()
 	. = ..()
 	reagents.add_reagent(NUTRIMENT,5)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother
+	name = "Royal Gingjelly"
+	icon_state = "royal_gingjelly"
+	desc = "The sickly sweet smell wafting from this sticky glob triggers some primal fear. You absolutely should not eat this."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent (CARAMEL, 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/consume(mob/living/carbon/eater, messages = 0)
+
+	if(ishuman(eater))
+
+		var/mob/living/carbon/C = eater
+
+		if(C.monkeyizing)
+			return
+		to_chat(eater, "<span class='warning'>Your flesh hardens and your blood turns to frosting. This is agony!</span>")
+		sleep (30)
+		C.monkeyizing = 1
+		C.canmove = 0
+		C.icon = null
+		C.overlays.len = 0
+		C.invisibility = 101
+		for(var/obj/item/W in C)
+			if(istype(W, /obj/item/weapon/implant))
+				var/obj/item/weapon/implant/I = W
+				if(I.imp_in == C)
+					qdel(W)
+					continue
+			W.reset_plane_and_layer()
+			W.forceMove(C.loc)
+			W.dropped(C)
+		var/mob/living/simple_animal/hostile/ginger/gingerbomination/new_mob = new /mob/living/simple_animal/hostile/ginger/gingerbomination(C.loc)
+		new_mob.a_intent = I_HURT
+		if(C.mind)
+			C.mind.transfer_to(new_mob)
+		else
+			new_mob.key = C.key
+		C.transferBorers(new_mob)
+		qdel(C)
+		playsound(src, 'sound/effects/evolve.ogg', 100, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman
+	name = "plasmaman meat"
+	desc = "A charred, dry piece of what you think is meant to be meat. It smells burnt."
+	icon_state = "plasmaman_meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman/New()
+	..()
+	reagents.remove_reagent(NUTRIMENT, 2.5)
+	reagents.add_reagent(PLASMA, 5)
+	bitesize = 1

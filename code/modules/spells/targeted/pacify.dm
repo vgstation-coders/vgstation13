@@ -25,8 +25,9 @@
 	if(targets)
 		if(user.reagents)
 			user.reagents.add_reagent(CHILLWAX, 4 + (spell_levels[Sp_POWER]/2))
-		if(isturf(targets[1]))
-			targets[1].vis_contents += new /obj/effect/overlay/pacify_aoe(targets[1], spell_levels[Sp_POWER], spell_levels[Sp_RANGE])
+		var/turf/target = targets[1]
+		if(isturf(target))
+			target.vis_contents += new /obj/effect/overlay/pacify_aoe(target, spell_levels[Sp_POWER], spell_levels[Sp_RANGE])
 
 /spell/targeted/pacify/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
@@ -45,7 +46,7 @@
 			return "Increases how long targets are pacified for."
 		if(Sp_RANGE)
 			return "Increases the area of the spell's impact."
-	
+
 /spell/targeted/pacify/is_valid_target(var/atom/target)
 	if(!istype(target))
 		return 0

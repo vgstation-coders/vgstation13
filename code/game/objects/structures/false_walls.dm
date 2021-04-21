@@ -197,7 +197,7 @@
 			qdel(src)
 
 		if( iswelder(W) )
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(WT.welding )
 				if(!mineral)
 					T.ChangeTurf(/turf/simulated/wall)
@@ -301,7 +301,7 @@
 		qdel(src)
 
 	if( iswelder(W) )
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if( WT.remove_fuel(0,user) )
 			var/turf/T = get_turf(src)
 			T.ChangeTurf(/turf/simulated/wall)
@@ -385,6 +385,15 @@
 	desc = "A wall made of colorful plastic blocks attached together."
 	icon_state = ""
 	mineral = "plastic"
+
+/obj/structure/falsewall/gingerbread
+	name = "gingerbread wall"
+	desc = "Extremely stale and generally unappetizing."
+	icon_state = ""
+	mineral = "gingerbread"
+	density = 1
+	opacity = 1
+	anchored = 1
 
 //-----------wtf?-----------start
 /obj/structure/falsewall/clown

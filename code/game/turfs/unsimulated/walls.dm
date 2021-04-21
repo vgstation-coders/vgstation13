@@ -7,6 +7,8 @@
 	explosion_block = 2
 	blocks_air = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 	var/walltype = "riveted"
 /turf/unsimulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(/turf/unsimulated/wall)
@@ -40,13 +42,21 @@
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "snow_rock"
 
+/turf/unsimulated/wall/rock/ice/New()
+	..()
+	var/image/img = image('icons/turf/rock_overlay.dmi', "snow_rock_overlay",layer = SIDE_LAYER)
+	img.pixel_x = -4*PIXEL_MULTIPLIER
+	img.pixel_y = -4*PIXEL_MULTIPLIER
+	img.plane = BELOW_TURF_PLANE
+	overlays += img
+
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/tool/solder) && bullet_marks)
+		var/obj/item/tool/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)

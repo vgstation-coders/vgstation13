@@ -44,15 +44,6 @@
 		to_chat(user, "Plant Yield: <span class='info'>[(seed.yield != -1) ? seed.yield : "<span class='warning'> ERROR</span>"]</span>")
 		to_chat(user, "Plant Potency: <span class='info'>[(seed.potency != -1) ? seed.potency : "<span class='warning'> ERROR</span>"]</span>")
 
-/obj/item/seeds/cutting
-	name = "cuttings"
-	desc = "Some plant cuttings."
-
-/obj/item/seeds/cutting/update_appearance()
-	..()
-	icon = seed.plant_dmi
-	src.name = "packet of [seed.seed_name] cuttings"
-
 /obj/item/seeds/random
 	seed_type = null
 
@@ -285,6 +276,11 @@
 /obj/item/seeds/sunflowerseed
 	name = "packet of sunflower seeds"
 	seed_type = "sunflowers"
+	vending_cat = "flowers"
+
+/obj/item/seeds/mustardplantseed
+	name = "packet of mustardplant seeds"
+	seed_type = "mustardplants"
 	vending_cat = "flowers"
 
 /obj/item/seeds/moonflowerseed
@@ -582,7 +578,7 @@
 	plant_dmi = 'icons/obj/hydroponics/deathberry.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
-	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5), CYTISINE = list(1))
 
 	yield = 3
 	potency = 50
@@ -760,7 +756,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris)
 	mutants = list("ambrosiadeus")
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
 
 	lifespan = 60
 	maturation = 6
@@ -782,7 +778,7 @@
 	production = 6
 	yield = 6
 	potency = 5
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5), SPIRITBREAKER = list(10))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SPIRITBREAKER = list(10))
 
 
 /datum/seed/ambrosia/deus
@@ -792,7 +788,7 @@
 	plant_dmi = 'icons/obj/hydroponics/ambrosiadeus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus)
 	mutants = null
-	chems = list(NUTRIMENT = list(1), OPIUM = list(1,8), CYTISINE = list(1), COCAINE = list(1,10,1), MESCALINE = list(1,10))
+	chems = list(NUTRIMENT = list(1), PHYTOCARISOL = list(1,8), KATHALAI = list(1,8), COCAINE = list(1,10,1), MESCALINE = list(1,10))
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
@@ -819,7 +815,7 @@
 	name = "mold"
 	seed_name = "brown mold"
 	display_name = "brown mold"
-	plant_dmi = "icons/obj/hydroponics/mold.dmi"
+	plant_dmi = 'icons/obj/hydroponics/mold.dmi'
 	products = null
 	mutants = null
 	//mutants = list("wallrot") //TBD.
@@ -1044,6 +1040,22 @@
 	biolum = 1
 	biolum_colour = "#FF9900"
 
+	large = 0
+
+/datum/seed/flower/mustardplant //yes this is a real plant
+	name = "mustardplants"
+	seed_name = "mustardplant"
+	display_name = "mustardplants"
+	plant_dmi = 'icons/obj/hydroponics/mustardplant.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant)
+	chems = list(MUSTARD_POWDER = list(4,10))
+
+	lifespan = 40 //real mustard plants live for like two months
+	maturation = 6
+	growth_stages = 3
+	ideal_light = 8
+	water_consumption = 6
+	nutrient_consumption = 0 //these are a bunch of flowers, not an actual food
 	large = 0
 
 //Grapes/varieties
@@ -1574,25 +1586,6 @@
 	yield = 2
 	potency = 30
 	ideal_light = 0
-
-
-/datum/seed/test
-	name = "test"
-	seed_name = "testing"
-	seed_noun = "data"
-	display_name = "runtimes"
-	products = list(/mob/living/simple_animal/cat/Runtime)
-
-	nutrient_consumption = 0
-	water_consumption = 0
-	pest_tolerance = 11
-	weed_tolerance = 11
-	lifespan = 1000
-	endurance = 100
-	maturation = 1
-	production = 1
-	yield = 1
-	potency = 1
 
 /datum/seed/nofruit
 	name = "nofruit"

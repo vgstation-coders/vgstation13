@@ -45,12 +45,30 @@
 	icon_state = "spoon"
 	attack_verb = list("attacks", "pokes", "hits")
 	melt_temperature = MELTPOINT_STEEL
+	var/bendable = TRUE
+	var/bent = FALSE
+
+/obj/item/weapon/kitchen/utensil/spoon/attack_self(mob/user)
+	if(!bendable || !(M_TK in user.mutations))
+		visible_message("[user] holds up [src] and stares at it intently. What a weirdo.")
+		return
+	bend(user)
+
+/obj/item/weapon/kitchen/utensil/spoon/proc/bend(mob/user)
+	visible_message(message = "<span class='warning'>Whoa, [user] looks at [src] and it bends like clay!</span>")
+	if(!bent)
+		bent = TRUE
+		icon_state = initial(icon_state) + "_bent"
+		return
+	bent = FALSE
+	icon_state = initial(icon_state)
 
 /obj/item/weapon/kitchen/utensil/spoon/plastic
 	name = "plastic spoon"
 	desc = "Super dull action!"
 	icon_state = "pspoon"
 	melt_temperature = MELTPOINT_PLASTIC
+	bendable = FALSE
 
 /*
  * Forks
@@ -83,6 +101,9 @@
 
 	if (src.loaded_food)
 		reagents.update_total()
+		if(!M.hasmouth())
+			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
+			return
 		if(M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 			feed_to(user, user)
@@ -240,7 +261,7 @@
 	if(user.is_in_modules(src))
 		return
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You slice the handle off of \the [src].")
 			WT.playtoolsound(user, 50)
@@ -292,13 +313,14 @@
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	name = "meat cleaver"
 	icon_state = "mcleaver"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
 	armor_penetration = 50
 	force = 25.0
 	throwforce = 15.0
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
-	if(istype(hit_atom, /mob/living) && prob(85))
+	if(istype(hit_atom, /mob/living))
 		var/mob/living/L = hit_atom
 		L.Stun(5)
 		L.Knockdown(5)
@@ -618,7 +640,8 @@
 /obj/item/weapon/tray/dropped(mob/user)
 	spawn() //because throwing drops items before setting their throwing var, and a lot of other zany bullshit
 		if(throwing)
-			return ..()
+			..()
+			return
 		//This is so monumentally bad that I have to leave it in as a comment
 		/*var/mob/living/M
 		for(M in src.loc) //to handle hand switching
@@ -626,7 +649,8 @@
 		if(isturf(loc))
 			for(var/obj/structure/table/T in loc)
 				remove_items()
-				return ..()
+				..()
+				return
 			// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
 			whoops()
 		..()

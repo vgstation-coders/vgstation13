@@ -4,7 +4,6 @@ var/global/list/igniters = list()
 	desc = "It's useful for igniting plasma."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "igniter1"
-	var/id_tag = null
 	var/on = 1.0
 	var/obj/item/device/assembly_holder/assembly=null
 	anchored = 1.0
@@ -64,7 +63,7 @@ var/global/list/igniters = list()
 
 /obj/machinery/igniter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(iswelder(W) && src.assembly)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin to cut \the [src] off the floor...</span>")
 		if (WT.do_weld(user, src, 40, 0))
 			user.visible_message( \
@@ -86,7 +85,6 @@ var/global/list/igniters = list()
 	desc = "A wall-mounted ignition device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "migniter"
-	var/id_tag = null
 	var/disable = 0
 	var/last_spark = 0
 	var/base_state = "migniter"
@@ -170,7 +168,7 @@ var/global/list/igniters = list()
 	return src.attack_hand(user)
 
 /obj/machinery/ignition_switch/attack_hand(mob/user as mob)
-
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(active)

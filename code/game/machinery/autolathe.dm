@@ -37,13 +37,13 @@
 	part_sets = list(
 		"Tools"=list(
 		new /obj/item/device/multitool(), \
-		new /obj/item/weapon/weldingtool/empty(), \
-		new /obj/item/weapon/crowbar(), \
-		new /obj/item/weapon/screwdriver(), \
-		new /obj/item/weapon/wirecutters(), \
-		new /obj/item/weapon/wrench(), \
-		new /obj/item/weapon/solder(),\
-		new /obj/item/weapon/wirecutters/clippers(),\
+		new /obj/item/tool/weldingtool/empty(), \
+		new /obj/item/tool/crowbar(), \
+		new /obj/item/tool/screwdriver(), \
+		new /obj/item/tool/wirecutters(), \
+		new /obj/item/tool/wrench(), \
+		new /obj/item/tool/solder(),\
+		new /obj/item/tool/wirecutters/clippers(),\
 		new /obj/item/weapon/minihoe(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
@@ -62,7 +62,7 @@
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
 		new /obj/item/device/assembly/signaler(), \
-		/*new /obj/item/device/assembly/infra(), \*/
+		new /obj/item/device/assembly/infra(), \
 		new /obj/item/device/assembly/timer(), \
 		new /obj/item/device/assembly/voice(), \
 		new /obj/item/device/assembly/prox_sensor(), \
@@ -84,12 +84,12 @@
 		"Medical"=list(
 		new /obj/item/weapon/storage/pill_bottle(),\
 		new /obj/item/weapon/reagent_containers/syringe(), \
-		new /obj/item/weapon/scalpel(), \
-		new /obj/item/weapon/circular_saw(), \
-		new /obj/item/weapon/surgicaldrill(),\
-		new /obj/item/weapon/retractor(),\
-		new /obj/item/weapon/cautery(),\
-		new /obj/item/weapon/hemostat(),\
+		new /obj/item/tool/scalpel(), \
+		new /obj/item/tool/circular_saw(), \
+		new /obj/item/tool/surgicaldrill(),\
+		new /obj/item/tool/retractor(),\
+		new /obj/item/tool/cautery(),\
+		new /obj/item/tool/hemostat(),\
 		),
 		"Ammunition"=list(
 		new /obj/item/ammo_casing/shotgun/blank(), \
@@ -118,7 +118,7 @@
 		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
-		new /obj/item/weapon/rcd_ammo(), \
+		new /obj/item/stack/rcd_ammo(), \
 		new /obj/item/weapon/light/tube(), \
 		new /obj/item/weapon/light/bulb(), \
 		new /obj/item/ashtray/glass(), \
@@ -136,13 +136,15 @@
 		new /obj/item/device/rcd/matter/engineering(), \
 		new /obj/item/device/rcd/rpd(),\
 		new /obj/item/device/radio/electropack(), \
-		new /obj/item/weapon/weldingtool/largetank/empty(), \
+		new /obj/item/tool/weldingtool/largetank/empty(), \
 		new /obj/item/weapon/handcuffs(), \
 		new /obj/item/ammo_storage/box/a357(), \
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
 		new /obj/item/weapon/beartrap(),\
+		new /obj/item/gun_part/scope(),\
+		new /obj/item/weapon/grenade/chem_grenade/timer(), \
 		)
 	)
 
@@ -177,31 +179,44 @@
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/attackby(obj/item/I, mob/user)
 	if(..())
-		return 1
+		return 0
 
 	else if(I.materials && (research_flags & FAB_RECYCLER))
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
-			return 1
-		else if(I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())
-			to_chat(user, "\The [src] can only accept objects made out of metal and glass.")
-			return 1
-		else if(isrobot(user))
+			return 0
+
+
+		if(allowed_materials)
+
+			var/allowed_materials_volume = 0
+			for(var/mat_id in allowed_materials)
+				allowed_materials_volume += I.materials.storage[mat_id]
+
+			if (allowed_materials_volume != I.materials.getVolume())
+				var/output = "\The [src] can only accept objects made out of these: "
+				for(var/mat_id in allowed_materials)
+					output += (material_list[mat_id].processed_name + " ")
+				to_chat(user, output)
+				return 0
+
+		if(isrobot(user))
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(I))
 					to_chat(user, "You cannot recycle your built in tools.")
-					return 1
+					return 0
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
-				return 1
-		else if(!I.recyclable())
-			to_chat(user, "<span class = 'notice'>You can not recycle /the [I] at this time.</span>")
-			return 1
+				return 0
+		if(!I.recyclable(src))
+			to_chat(user, "<span class = 'notice'>You can not recycle \the [I] at this time.</span>")
+			return 0
 
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
 								"You put \the [I] in \the [src]'s recycling unit.")
 			qdel(I)
-		return 1
+			return 1
+	return 0

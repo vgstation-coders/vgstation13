@@ -177,7 +177,7 @@ proc/process_adminbus_teleport_locs()
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
-	flags = NO_PERSISTENCE 
+	flags = NO_PERSISTENCE
 
 //These are shuttle areas, they must contain two areas in a subgroup if you want to move a shuttle from one
 //place to another. Look at escape shuttle for example.
@@ -189,9 +189,7 @@ proc/process_adminbus_teleport_locs()
 	//haha fuck you we dynamic lights now
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
-
-/area/shuttle/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
@@ -282,6 +280,10 @@ proc/process_adminbus_teleport_locs()
 
 //SHOULD YOU ADD NEW ESCAPE PODS, REMEMBER TO UPDATE shuttle_controller.dm
 
+/area/shuttle/bagel
+	name = "bagel ferry"
+	icon_state = "shuttle"
+
 /area/shuttle/supply
 	name = "supply shuttle"
 	icon_state = "shuttle3"
@@ -348,7 +350,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "shuttlered"
 
 /area/shuttle/nuclearops
-	name = "\improper Nuclear Opeartive Shuttle"
+	name = "\improper Nuclear Operative Shuttle"
 	icon_state = "yellow"
 	requires_power = 0
 	dynamic_lighting = 1
@@ -434,6 +436,18 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Vox Skipjack"
 	icon_state = "yellow"
 	requires_power = 0
+	dynamic_lighting = 1
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
+/area/shuttle/lightship
+	name = "\improper Lightspeed Ship"
+	requires_power = 1
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
+/area/shuttle/lightship/start
+	icon_state = "firingrange"
 
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
@@ -597,16 +611,12 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Asteroid - Underground"
 	icon_state = "cave"
 	requires_power = 0
-
-/area/asteroid/cave/holomapDrawOverride()
-	return HOLOMAP_DRAW_FULL
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/asteroid/artifactroom
 	name = "\improper Asteroid - Artifact"
 	icon_state = "cave"
-
-/area/asteroid/artifactroom/holomapDrawOverride()
-	return HOLOMAP_DRAW_FULL
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/planet/clown
 	name = "\improper Clown Planet"
@@ -618,9 +628,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Clown Roid"
 	icon_state = "honk"
 	requires_power = 0
-
-/area/asteroid/clown/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/tdome
 	name = "\improper Thunderdome"
@@ -1902,6 +1910,7 @@ proc/process_adminbus_teleport_locs()
 /area/icebar
 	name = "\improper Ice Bar"
 	icon_state = "ghettobar"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/station/garage
 	name = "\improper Public Garage"
@@ -1914,6 +1923,13 @@ proc/process_adminbus_teleport_locs()
 /area/surface/snow
 	name = "\improper Planet Surface"
 	icon_state = "sno2"
+
+/area/surface/snow/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 39)
+			new /obj/structure/geyser(T)
+		else
+			new /obj/structure/geyser/vent(T)
 
 /area/surface/blizzard
 	name = "The Blizzard"
@@ -1928,6 +1944,15 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Junk Yard"
 	icon_state = "disposal"
 	construction_zone = FALSE
+
+/area/surface/forest/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 59)
+			new /obj/structure/geyser(T)
+		if (60 to 79)
+			new /obj/structure/geyser/unstable(T)
+		else
+			new /obj/structure/geyser/vent(T)
 
 /area/surface/forest/deer
 	name = "\improper Enclosed Forest"
@@ -1944,10 +1969,20 @@ proc/process_adminbus_teleport_locs()
 /area/surface/cave
 	name = "\improper Snow Cave"
 	icon_state = "cave"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/surface/mine
 	name = "\improper Surface Mine"
 	icon_state = "mine"
+
+/area/surface/outer/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 39)
+			new /obj/structure/geyser(T)
+		if (40 to 79)
+			new /obj/structure/geyser/unstable(T)
+		else
+			new /obj/structure/geyser/critical(T)
 
 /area/surface/outer/nw
 	name = "\improper Northwest Reaches"
@@ -1971,9 +2006,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Ruskie DJ Station"
 	icon_state = "DJ"
 	shuttle_can_crush = FALSE
-
-/area/djstation/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/djstation/solars
 	name = "\improper DJ Station Solars"
@@ -2024,9 +2057,7 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/secret
 	name = "\improper Derelict Secret Room"
 	icon_state = "library"
-
-/area/derelict/secret/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/derelict/bridge/access
 	name = "Derelict Control Room Access"
@@ -2084,9 +2115,7 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/ship
 	name = "\improper Abandoned Ship"
 	icon_state = "yellow"
-
-/area/derelict/ship/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/solar/derelict_starboard
 	name = "\improper Derelict Starboard Solar Array"
@@ -2153,6 +2182,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "eva"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "eva"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP
 
 /area/ai_monitored/storage/secure
 	name = "Secure Storage"
@@ -2812,3 +2843,36 @@ var/list/the_station_areas = list (
 		/datum/ambience/dorf,
 		/datum/ambience/minecraft,
 		/datum/ambience/torvusmusic)
+
+/area/maintenance/engine
+	name = "Engine"
+// BEGIN Horizon
+/area/hallway/primary/foreport
+	name = "Fore Port"
+	icon_state = "hallP"
+
+/area/hallway/primary/forestarboard
+	name = "Fore Starboard"
+	icon_state = "hallS"
+
+/area/hallway/primary/upperstarboard
+	name = "Upper Starboard"
+	icon_state = "hallS"
+
+/area/hallway/primary/upperport
+	name = "Upper Port"
+	icon_state = "hallP"
+
+/area/hallway/secondary/podescape1
+	name = "Upper Port"
+	icon_state = "escape"
+
+/area/hallway/secondary/podescape2
+	name = "Upper Port"
+	icon_state = "escape"
+
+/area/hallway/secondary/exit2
+	name = "Escape Shuttle Hallway Right"
+	icon_state = "escape"
+
+// END Horizon

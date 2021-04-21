@@ -119,7 +119,7 @@
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/tool/weldingtool/W = I
 			to_chat(user, "You start slicing the floorweld off the disposal unit.")
 			if(W.do_weld(user, src,20, 0))
 				if(gcDestroyed)
@@ -472,7 +472,7 @@
 		return
 
 	//We are restrained or can't move, this will compromise taking out the trash
-	if(user.restrained() || !user.canmove)
+	if(user.restrained() || !user.canmove || user.incapacitated())
 		return
 	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
@@ -486,7 +486,7 @@
 			attackby(dropping, user)
 		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
 			if(do_after(user,src,20))
-				if(dropping.locked_to || user.restrained() || !user.canmove)
+				if(dropping.locked_to || !user.canmove || user.incapacitated() || !isturf(dropping.loc))
 					return
 				user.visible_message("[user] hoists \the [dropping] into \the [src].", "You hoist \the [dropping] into \the [src].")
 				add_fingerprint(user)
@@ -922,7 +922,10 @@
 
 // pipe affected by explosion
 /obj/structure/disposalpipe/ex_act(severity)
-
+	if(isturf(loc))
+		var/turf/T = loc
+		if(T.protect_infrastructure)
+			return
 	for(var/atom/movable/A in src)
 		A.ex_act(severity)
 	switch(severity)
@@ -959,7 +962,7 @@
 		return
 	src.add_fingerprint(user)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the disposal pipe.")
 		if(W.do_weld(user, src, 3 SECONDS, 0))
 			if(gcDestroyed)
@@ -1458,7 +1461,7 @@
 		return
 	src.add_fingerprint(user)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the disposal pipe.")
 		if(W.do_weld(user, src, 3 SECONDS))
 			if(gcDestroyed)
@@ -1605,7 +1608,7 @@
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && mode==1)
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the floorweld off the disposal outlet.")
 		if(W.do_weld(user, src, 20, 0))
 			if(gcDestroyed)

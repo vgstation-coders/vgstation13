@@ -13,7 +13,6 @@
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 	steps_per = 2
-	bot_flags = BOT_DENSE
 	control_filter = RADIO_SECBOT
 	var/cuffing = 0
 	var/lastfired = 0
@@ -35,7 +34,7 @@
 	var/declare_arrests = 1 //When making an arrest, should it notify everyone wearing sechuds?
 	var/idcheck = 1 //If true, arrest people with no IDs
 	var/weaponscheck = 1 //If true, arrest people for weapons if they don't have access
-	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
+	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL|BOT_DENSE
 	//List of weapons that secbots will not arrest for, also copypasted in secbot.dm and metaldetector.dm
 	var/safe_weapons = list(
 		/obj/item/weapon/gun/energy/tag,
@@ -45,6 +44,8 @@
 		/obj/item/weapon/melee/defibrillator
 		)
 
+	target_chasing_distance = 12
+	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/item/weapon/ed209_assembly
 	name = "ED-209 assembly"
@@ -209,7 +210,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/ed209/kick_act(mob/living/H)
 	..()
-
+	summoned = FALSE // Anger
 	threatlevel = H.assess_threat(src)
 	threatlevel += PERP_LEVEL_ARREST_MORE
 
@@ -240,10 +241,10 @@ Auto Patrol: []"},
 		arrest_type = 1//Don't even try to cuff
 		declare_arrests = 0
 
-/obj/machinery/bot/ed209/find_target()
+/obj/machinery/bot/ed209/target_selection()
 	anchored = 0
 	threatlevel = 0
-	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a criminal
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Let's find us a criminal
 		if ((C.stat) || (C.handcuffed))
 			continue
 
@@ -339,9 +340,11 @@ Auto Patrol: []"},
 
 	return threatcount
 
+/obj/machinery/bot/ed209/can_path()
+	return !cuffing
 
 /obj/machinery/bot/ed209/process_bot()
-	if (!target || target.gcDestroyed || get_dist(src, target) > 12)
+	if (can_abandon_target())
 		target = null
 		find_target()
 
@@ -353,6 +356,7 @@ Auto Patrol: []"},
 		if (Adjacent(target))		// if right next to perp
 			var/mob/living/carbon/M = target
 			target = null // Don't teabag them
+			path = list() // Kill our path
 			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
 			if (beat_them)
@@ -413,6 +417,7 @@ Auto Patrol: []"},
 	if(!lasercolor)
 		var/obj/item/weapon/gun/energy/taser/G = new /obj/item/weapon/gun/energy/taser(Tsec)
 		G.power_supply.charge = 0
+		G.update_icon()
 	else if(lasercolor == "b")
 		var/obj/item/weapon/gun/energy/tag/blue/G = new /obj/item/weapon/gun/energy/tag/blue(Tsec)
 		G.power_supply.charge = 0
@@ -437,7 +442,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	getFromPool(/obj/effect/decal/cleanable/blood/oil, loc)
+	new /obj/effect/decal/cleanable/blood/oil(loc)
 	qdel(src)
 
 
@@ -518,6 +523,14 @@ Auto Patrol: []"},
 					if (toarrest)
 						target = toarrest
 
+/obj/machinery/bot/ed209/return_status()
+	if (target)
+		return "Chasing prep"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
+
+
 #define ED209_BUILD_STEP_INITIAL 0
 #define ED209_BUILD_STEP_ONELEG 1
 #define ED209_BUILD_STEP_VEST 2
@@ -572,7 +585,7 @@ Auto Patrol: []"},
 
 		if(ED209_BUILD_STEP_WELD)
 			if( iswelder(W) )
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
 					build_step++
 					name = "shielded frame assembly"
@@ -664,22 +677,22 @@ Auto Patrol: []"},
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
 			disabled = 1
 			//del (Proj)
-			returnToPool(Proj)
+			qdel(Proj)
 			sleep(100)
 			disabled = 0
 		else
-			..()
+			. = ..()
 	else if((lasercolor == "r") && (disabled == 0))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
 			disabled = 1
 			//del (Proj)
-			returnToPool(Proj)
+			qdel(Proj)
 			sleep(100)
 			disabled = 0
 		else
-			..()
+			. = ..()
 	else
-		..()
+		return ..()
 
 /obj/machinery/bot/ed209/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
 	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))

@@ -21,7 +21,8 @@
 	var/list/sound_change //Clothing can change audible emotes, this will determine what is affected
 	var/sound_priority //The priority of the clothing when it comes to playing sounds, higher priority means it will always play first otherwise it will randomly pick
 	var/list/sound_file //The actual files to be played, it will pick from the list
-	var/list/sound_respect_species //Species will not play sounds from clothing
+	var/list/sound_species_whitelist
+	var/list/sound_genders_allowed //Checks for what gender it is allowed to play the sound for
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -387,6 +388,10 @@
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/gave_out_gifts = FALSE //for snowman animation
+
+/obj/item/clothing/head/proc/bite_action(mob/target)
+	return
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
@@ -426,6 +431,7 @@
 			src.icon_state = initial(icon_state)
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
+			sterility = initial(sterility)
 			flags = initial(flags)
 			body_parts_covered = initial(body_parts_covered)
 			to_chat(usr, "You push \the [src] back into place.")
@@ -435,6 +441,7 @@
 			to_chat(usr, "You push \the [src] out of the way.")
 			gas_transfer_coefficient = null
 			permeability_coefficient = null
+			sterility = 0
 			flags = 0
 			src.is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
@@ -457,8 +464,7 @@
 	desc = "Comfortable-looking shoes."
 	gender = PLURAL //Carn: for grammarically correct text-parsing
 
-	var/chained = 0
-	var/chaintype = null // Type of chain.
+	var/obj/item/weapon/chain = null // handcuffs attached
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
 	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
@@ -488,6 +494,10 @@
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
+
+//Called from human_defense.dm proc foot_impact
+/obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
+	return damage
 
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
 	if(user.equip_to_slot_if_possible(src, slot_shoes))
@@ -542,13 +552,14 @@
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_visible_override = EYES
 	siemens_coefficient = 0.9
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")
 	eyeprot = 1
 	cold_breath_protection = 230
 	sterility = 100
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -570,7 +581,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	clothing_flags = CANEXTINGUISH
 	sterility = 100
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 //Under clothing
 /obj/item/clothing/under

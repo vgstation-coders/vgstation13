@@ -21,10 +21,6 @@
 	master = null
 	..()
 
-/obj/abstract/screen/resetVariables()
-	..("icon","icon_state","name","master", "screen_loc", args)
-	animate(src)
-
 /obj/abstract/screen/text
 	icon = null
 	icon_state = null
@@ -158,7 +154,14 @@
 	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
-		return 1
+		if(istype(master,/obj/item/weapon/storage)) //should always be true, but sanity
+			var/obj/item/weapon/storage/S = master
+			if(!S.distance_interact(usr))
+				return 1
+			//else... continue onward to master.attackby
+		else
+			//master isn't storage, exit
+			return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
 		if(I)
@@ -331,22 +334,10 @@
 				L.resist()
 
 		if("mov_intent")
-			if(iscarbon(usr))
+			if (iscarbon(usr))
 				var/mob/living/carbon/C = usr
-				if(C.legcuffed)
-					to_chat(C, "<span class='notice'>You are legcuffed! You cannot run until you get [C.legcuffed] removed!</span>")
-					C.m_intent = M_INTENT_WALK	//Just incase
-					C.hud_used.move_intent.icon_state = "walking"
-					return 1
-				switch(usr.m_intent)
-					if(M_INTENT_RUN)
-						usr.m_intent = M_INTENT_WALK
-						usr.hud_used.move_intent.icon_state = "walking"
-					if(M_INTENT_WALK)
-						usr.m_intent = M_INTENT_RUN
-						usr.hud_used.move_intent.icon_state = "running"
-				if(istype(usr,/mob/living/carbon/alien/humanoid))
-					usr.update_icons()
+				C.toggle_move_intent()
+
 		if("m_intent")
 			if(!usr.m_int)
 				switch(usr.m_intent)
@@ -495,10 +486,10 @@
 				var/mob/living/silicon/ai/AI = usr
 				AI.make_announcement()
 
-		if("Call Emergency Shuttle")
+		if("(Re)Call Emergency Shuttle")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.ai_call_shuttle()
+				AI.ai_call_or_recall_shuttle()
 
 		if("State Laws")
 			if(isAI(usr))
@@ -792,7 +783,7 @@
 /client/proc/reset_screen()
 	for(var/obj/abstract/screen/objects in src.screen)
 		if(!objects.globalscreen)
-			returnToPool(objects)
+			qdel(objects)
 	src.screen = null
 
 /obj/abstract/screen/acidable()

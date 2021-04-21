@@ -1,10 +1,13 @@
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
+//Be sure to update the vars if you ever add even more weird AI link stuff.
 /mob/living/silicon/robot/hugborg
 	cell_type = /obj/item/weapon/cell/super
+	lawupdate = FALSE
+	AIlink = FALSE
+	scrambledcodes = TRUE
 
 /mob/living/silicon/robot/hugborg/New()
 	..()
-	UnlinkSelf()
 	laws = new /datum/ai_laws/asimov()
 	pick_module(HUG_MODULE)
 	set_module_sprites(list("Peacekeeper" = "peaceborg"))

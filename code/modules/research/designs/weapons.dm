@@ -154,6 +154,16 @@
 	build_path = /obj/item/weapon/reagent_containers/spray/chemsprayer
 	req_lock_access = list(access_medical, access_cmo)
 
+/datum/design/syringegun
+	name = "Basic Syringe Gun"
+	desc = "A gun that fires a single syringe."
+	id = "syringegun"
+	req_tech = list(Tc_COMBAT = 2, Tc_MATERIALS = 2, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
+	category = "Weapons"
+	build_path = /obj/item/weapon/gun/syringe
+
 /datum/design/rapidsyringe
 	name = "Rapid Syringe Gun"
 	desc = "A gun that fires many syringes."
@@ -163,6 +173,8 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/syringe/rapidsyringe
+	locked = TRUE
+	req_lock_access = list(access_medical, access_cmo)
 
 /datum/design/largecrossbow
 	name = "Energy Crossbow"
@@ -365,7 +377,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 250)
 	build_path = /obj/item/ammo_casing/shotgun/blank
-	
+
 /datum/design/shotgun_shell/dragonsbreath
 	name = "12ga. dragon's breath shell"
 	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
@@ -373,7 +385,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
 	build_path = /obj/item/ammo_casing/shotgun/dragonsbreath
-	
+
 /datum/design/shotgun_shell/frag
 	name = "12ga. frag shell"
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
@@ -478,7 +490,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
 	build_path = /obj/item/ammo_storage/box/flare
-	
+
 /datum/design/ammo_shotgun/dragonsbreath
 	name = "Ammunition box (12ga. dragon's breath)"
 	desc = "A box of 12-gauge dragon's breath shells."
@@ -486,7 +498,7 @@
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000, MAT_PLASMA = 32000)
 	build_path = /obj/item/weapon/storage/box/dragonsbreathshells
-	
+
 /datum/design/ammo_shotgun/frag
 	name = "Ammunition box (12ga. frag)"
 	desc = "A box of 12-gauge explosive shells."
@@ -634,6 +646,13 @@
 	materials = list(MAT_IRON = 400)
 	build_path = /obj/item/ammo_storage/speedloader/shotgun
 
+/datum/design/scope
+	name = "Telescopic sight"
+	desc = "A sight for some long range rifles."
+	id = "telescopicsight"
+	build_type = AMMOLATHE | AUTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GLASS = 2000)
+	build_path = /obj/item/gun_part/scope
 
 //Hidden
 

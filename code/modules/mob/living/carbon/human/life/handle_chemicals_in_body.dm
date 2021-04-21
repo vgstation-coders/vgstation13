@@ -22,13 +22,13 @@
 
 	if(status_flags & GODMODE)
 		return 0 //Godmode. This causes jittering and other variables to never go down but whatever.
-
-	var/total_plasmaloss = 0
-	for(var/obj/item/I in src)
-		if(I.contaminated && !(species.flags & PLASMA_IMMUNE))
-			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
-		I.OnMobLife(src)
-	adjustToxLoss(total_plasmaloss)
+	if(!(species.flags & PLASMA_IMMUNE))
+		var/total_plasmaloss = 0
+		for(var/obj/item/I in src)
+			if(I.contaminated)
+				total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
+			I.OnMobLife(src)
+		adjustToxLoss(total_plasmaloss)
 
 	if(species.flags & REQUIRE_LIGHT)
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing
@@ -47,23 +47,6 @@
 				adjustToxLoss(-(light_amount))
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
-
-	if(species.flags & REQUIRE_DARK && !(head && head.islightshielded()))
-		var/light_amount = 0
-		if(isturf(loc))
-			var/turf/T = loc
-			light_amount = T.get_lumcount() * 10
-
-		nutrition -= -3+light_amount
-		pain_shock_stage += -3+light_amount
-
-		if(species.flags & IS_PLANT)
-			if(nutrition > 500)
-				nutrition = 500
-			if(!reagents.has_reagent(HYPERZINE))
-				adjustBruteLoss(-10+light_amount)
-				adjustToxLoss(-10+light_amount)
-				adjustOxyLoss(-10+light_amount)
 
 	if(isslimeperson(src) && reagents.total_volume > 10)
 		blend_multicolor_skin(get_weighted_reagent_color(reagents), min(0.5, (reagents.total_volume / 1000)), 1)
@@ -115,8 +98,8 @@
 			nutrition = OVEREAT_THRESHOLD
 	else
 		if(overeatduration > 1)
-			if(M_OBESITY in mutations)
-				overeatduration -= 1 //Those with obesity gene take twice as long to unfat
+			if(M_FAT in mutations)
+				overeatduration -= 1 //Those already fat take twice as long to unfat
 			else
 				overeatduration -= 2
 

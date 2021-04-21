@@ -137,9 +137,9 @@
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
 
 	if(curturf.z != destturf.z)
-		INVOKE_EVENT(teleatom.on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
-		for(var/atom/AA in recursive_type_check(teleatom))
-			INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
+		teleatom.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
+		for(var/atom/movable/AA in recursive_type_check(teleatom))
+			AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
 
 	if(force_teleport)
 		teleatom.forceMove(destturf,TRUE)
@@ -192,6 +192,9 @@
 	return TRUE
 
 /datum/teleport/instant/science/teleportChecks(var/ignore_jamming = FALSE)
+	if(istype(teleatom, /obj/effect/effect/sparks)) // Don't teleport sparks or the server dies
+		return FALSE
+	
 	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE
@@ -232,8 +235,5 @@
 			if(MM.locked_to_z != FALSE && destination.z != MM.locked_to_z)
 				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return FALSE
-
-	if(!isemptylist(recursive_type_check(teleatom, /obj/item/clothing/head/tinfoil)))
-		return FALSE
 
 	return TRUE

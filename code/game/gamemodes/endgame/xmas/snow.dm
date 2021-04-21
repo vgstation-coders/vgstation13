@@ -279,7 +279,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 
 /obj/item/stack/sheet/snow/emag_act(mob/user)
 	to_chat(user, "<span class='warning'>You slide the emag across the snowball. Holy fuck. You are probably the most stupid person you've ever met.</span>")
-	
+
 /obj/item/stack/sheet/snow/proc/remove_snowball()
 	if(src && (src.loc == spawn_loc) && istype(src.loc,/turf))
 		qdel(src)
@@ -325,7 +325,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 		..()
 
 var/global/list/datum/stack_recipe/snow_recipes = list (
-	new/datum/stack_recipe("snowman", /mob/living/simple_animal/hostile/retaliate/snowman, 10, time = 50, one_per_turf = 0, on_floor = 1),
+	new/datum/stack_recipe("snowman", /obj/structure/snowman, 10, time = 50, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("snow barricade", /obj/structure/window/barricade/snow, 20, time = 50, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("ice armor", /obj/item/clothing/suit/armor/ice, 50, time = 50, one_per_turf = 0, on_floor = 0),
 	)

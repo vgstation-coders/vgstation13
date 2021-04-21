@@ -54,12 +54,12 @@
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
-		return
+		return PROJECTILE_COLLISION_DEFAULT
 	if(prob(65))
 		src.health -= Proj.damage
 	else
 		visible_message("<span class='danger'>[src] blocks [Proj] with its shield!</span>")
-	return 0
+	return PROJECTILE_COLLISION_DEFAULT
 
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/space
@@ -118,3 +118,27 @@
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space/Process_Spacemove(var/check_drift = 0)
 	return 1
+
+/mob/living/simple_animal/hostile/humanoid/syndicate/exec
+    name = "Syndicate Executive"
+    icon_state = "exec"
+    icon_living = "exec"
+    corpse = /obj/effect/landmark/corpse/syndicateexec
+
+/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/exec
+    icon_state = "exec_ranged"
+    icon_living = "exec_ranged"
+    name = "Syndicate Executive"
+    projectilesound = 'sound/weapons/elecfire.ogg'
+    projectiletype = /obj/item/projectile/energy/plasma/pistol
+    items_to_drop = list(/obj/item/weapon/gun/energy/plasma/pistol)
+    corpse = /obj/effect/landmark/corpse/syndicateexec
+
+/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space/exec
+    icon_state = "exec_ranged_space"
+    icon_living = "exec_ranged_space"
+    name = "Syndicate Executive"
+    projectilesound = 'sound/weapons/elecfire.ogg'
+    projectiletype = /obj/item/projectile/energy/plasma/pistol
+    items_to_drop = list(/obj/item/weapon/gun/energy/plasma/pistol)
+    corpse = /obj/effect/landmark/corpse/syndicateexec/space

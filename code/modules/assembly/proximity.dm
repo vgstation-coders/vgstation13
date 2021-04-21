@@ -114,11 +114,11 @@
 	overlays.len = 0
 	attached_overlays = list()
 	if(timing)
-		attached_overlays += "prox_timing"
-		overlays += image(icon = icon, icon_state = "prox_timing")
+		attached_overlays["prox_timing"] = image(icon = icon, icon_state = "prox_timing")
+		overlays += attached_overlays["prox_timing"]
 	if(scanning)
-		attached_overlays += "prox_scanning"
-		overlays += image(icon = icon, icon_state = "prox_scanning")
+		attached_overlays["prox_scanning"] = image(icon = icon, icon_state = "prox_scanning")
+		overlays += attached_overlays["prox_scanning"]
 	if(holder)
 		holder.update_icon()
 	if(holder && istype(holder.loc,/obj/item/weapon/grenade/chem_grenade))

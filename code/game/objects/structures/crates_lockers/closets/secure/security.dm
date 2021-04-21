@@ -17,9 +17,10 @@
 			),
 		/obj/item/clothing/suit/captunic,
 		/obj/item/clothing/suit/storage/capjacket,
-		/obj/item/clothing/head/helmet/cap,
+		/obj/item/clothing/head/cap,
 		/obj/item/clothing/under/rank/captain,
 		/obj/item/clothing/suit/armor/vest,
+		/obj/item/clothing/suit/storage/armorjacketcapt,
 		/obj/item/weapon/cartridge/captain,
 		/obj/item/clothing/head/helmet/tactical/swat,
 		/obj/item/clothing/shoes/brown,
@@ -49,7 +50,7 @@
 	return list(
 		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/suit/storage/Hop_Coat,
-		/obj/item/clothing/head/helmet/hopcap,
+		/obj/item/clothing/head/hopcap,
 		/obj/item/weapon/cartridge/hop,
 		/obj/item/device/radio/headset/heads/hop,
 		/obj/item/weapon/storage/box/ids = 2,
@@ -104,13 +105,16 @@
 			/obj/item/weapon/storage/backpack/satchel_sec,
 			/obj/item/weapon/storage/backpack/messenger/sec,
 		),
-		/obj/item/clothing/head/helmet/tactical/HoS,
+		/obj/item/clothing/head/HoS,
 		/obj/item/clothing/under/rank/head_of_security/jensen,
 		pick(
 			/obj/item/clothing/suit/armor/hos/jensen,
-			/obj/item/clothing/suit/armor/hos/sundowner),
+			/obj/item/clothing/suit/armor/hos/sundowner,
+			/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset,
+			),
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/suit/armor/hos,
-		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/weapon/cartridge/hos,
 		/obj/item/device/detective_scanner,
 		/obj/item/device/radio/headset/heads/hos,
@@ -143,9 +147,11 @@
 			/obj/item/weapon/storage/backpack/satchel_sec,
 			/obj/item/weapon/storage/backpack/messenger/sec,
 			),
+		/obj/item/weapon/gun/projectile/glock/fancy,
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
-		/obj/item/clothing/head/helmet/tactical/warden,
+		/obj/item/clothing/suit/armor/vest/wardenshort,
+		/obj/item/clothing/head/warden,
 		/obj/item/weapon/storage/box/flashbangs,
 		/obj/item/weapon/storage/box/bolas,
 		/obj/item/weapon/batteringram,
@@ -208,6 +214,11 @@
 	)
 
 
+/obj/structure/closet/secure_closet/security/empty
+
+/obj/structure/closet/secure_closet/security/empty/atoms_to_spawn()
+	return list()
+
 //The detectivegear box can be found at at the same location as the securitygear box and it contains:
 //sec headset, sec hud, black gloves, sps, 2x .38 ammoboxes, speedloader, evidence bag box, scanner, binoculars, and a hand TV set.
 /obj/structure/closet/secure_closet/detective
@@ -228,6 +239,7 @@
 		/obj/item/clothing/suit/storage/det_suit/noir,
 		/obj/item/clothing/suit/storage/forensics/blue,
 		/obj/item/clothing/suit/storage/forensics/red,
+		/obj/item/clothing/suit/storage/labcoat/forensic,
 		/obj/item/clothing/head/det_hat,
 		/obj/item/clothing/head/det_hat/noir,
 		/obj/item/clothing/shoes/brown,
@@ -259,12 +271,28 @@
 		/obj/item/weapon/reagent_containers/syringe/giant/chloral = 2,
 	)
 
+var/sec_key_lockup
+/obj/structure/closet/secure_closet/sec_snowmobile_keys
+	name = "Snowmobile Key Lockup"
+	req_access = list(access_brig)
+	anchored = 1
+	icon_state = "sec1"
+	icon_closed = "sec"
+	icon_locked = "sec1"
+	icon_opened = "secopen"
+	icon_broken = "secbroken"
+	icon_off = "secoff"
+
+/obj/structure/closet/secure_closet/sec_snowmobile_keys/New()
+	..()
+	if(sec_key_lockup)
+		message_admins("There was already a security key lockup. The new one will be used.")
+	sec_key_lockup = src
 
 /obj/structure/closet/secure_closet/brig
 	name = "Brig Locker"
 	req_access = list(access_brig)
 	anchored = 1
-	var/id_tag = null
 
 /obj/structure/closet/secure_closet/brig/atoms_to_spawn()
 	return list(

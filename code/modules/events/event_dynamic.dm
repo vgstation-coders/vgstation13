@@ -23,12 +23,13 @@ var/list/event_last_fired = list()
 	var/list/possibleEvents = list()
 
 	//see:
-	// Code/WorkInProgress/Cael_Aislinn/Economy/Economy_Events.dm
-	// Code/WorkInProgress/Cael_Aislinn/Economy/Economy_Events_Mundane.dm
+	// code\modules\Economy\Economy_Events.dm
+	// code\modules\Economy\Economy_Events_Mundane.dm
 	//Commented out for now. Let's be honest, a string of text on PDA is not worth a meteor shower or ion storm
-	//possibleEvents[/datum/event/economic_event] = 100
-	//possibleEvents[/datum/event/trivial_news] = 150
-	//possibleEvents[/datum/event/mundane_news] = 100
+	//Will be re-implemented in the near future, its chance to proc will be independant from the other random events
+	//possibleEvents[/datum/event/news_event] = 100//
+	//possibleEvents[/datum/event/trivial_news] = 150//Gibson Gazette, taken from config/trivial.txt
+	//possibleEvents[/datum/event/mundane_news] = 100//Tau Ceti Daily
 
 	//It is this coder's thought that weighting events on job counts is dumb and predictable as hell. 10 Engies ? Hope you like Meteors
 	//Instead, weighting goes from 100 (boring and common) to 10 (exceptional)

@@ -56,12 +56,6 @@
 			new /obj/item/stack/rods(src.loc, 2)
 			new /obj/structure/lattice(src.loc)
 			qdel(src)
-		return
-
-	if(istype(C, /obj/item/stack/cable_coil))
-		var/obj/item/stack/cable_coil/coil = C
-		if(get_turf(src) == src.loc)
-			coil.turf_place(src.loc, user)
 
 /obj/structure/catwalk/invulnerable/ex_act()
 	return

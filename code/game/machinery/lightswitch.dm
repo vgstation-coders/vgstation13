@@ -16,6 +16,7 @@
 
 /obj/machinery/light_switch/initialize()
 	add_self_to_holomap()
+	toggle_switch(newstate = 0)
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
@@ -39,6 +40,7 @@
 	overlays.Cut()
 	if((stat & NOPOWER) || buildstage != 2)
 		icon_state = "light-p"
+		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
 		overlay.icon_state = "[icon_state]-overlay"
@@ -104,7 +106,7 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_paw(mob/user)
-	src.attack_hand(user)
+	toggle_switch()
 
 /obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/ghost)
 	if(!can_spook())
@@ -116,9 +118,15 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_hand(mob/user)
+	toggle_switch()
+
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null)
+	if(!isnull(newstate) && on == newstate)
+		return
 	if(buildstage != 2)
 		return
 	on = !on
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	var/area/this_area = get_area(src)
 	this_area.lightswitch = on
 	this_area.updateicon()

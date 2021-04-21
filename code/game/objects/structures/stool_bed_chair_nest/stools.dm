@@ -56,7 +56,7 @@
 		user.visible_message("<span class='warning'>[user] breaks \the [src] over [M]'s back!.</span>")
 		user.u_equip(src, 0)
 
-		getFromPool(sheet_type, get_turf(src), 1)
+		new sheet_type(get_turf(src), 1)
 		qdel(src)
 
 		var/mob/living/T = M

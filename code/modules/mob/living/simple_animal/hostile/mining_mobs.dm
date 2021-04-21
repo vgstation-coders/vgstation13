@@ -37,7 +37,7 @@
 	if(P.damage < 30)
 		P.damage = (P.damage / 2)
 		visible_message("<span class='danger'>\The [P] has a reduced effect on \the [src]!</span>")
-	..()
+	return ..()
 
 /mob/living/simple_animal/hostile/asteroid/hitby(atom/movable/AM, speed)//No floor tiling them to death, wiseguy
 	. = ..()
@@ -243,7 +243,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/bullet_act(var/obj/item/projectile/P)
 	visible_message("<span class='danger'>\The [P] was repelled by \the [src]'s girth!</span>")
-	return
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/death(var/gibbed = FALSE)
 	alerted = 0
@@ -281,7 +281,7 @@ obj/item/asteroid/basilisk_hide/New()
 	pass_flags = PASSTABLE
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = getFromPool(/mob/living/simple_animal/hostile/asteroid/hivelordbrood,src.loc)
+	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
 	A.GiveTarget(target)
 	A.friends = friends
 	A.faction = faction
@@ -381,7 +381,7 @@ obj/item/asteroid/basilisk_hide/New()
 		to_chat(user, "<span class='notice'>\The [target] refuses \the [src].</span>")
 		return
 
-	if (!target.hasmouth)
+	if (!target.hasmouth())
 		if (target != user)
 			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to \the [target], but you realize they don't have a mouth. How dumb!</span>")
 		else
@@ -431,11 +431,11 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/New()
 	..()
 	spawn(100)
-		returnToPool(src)
+		qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
 	..(TRUE)
-	returnToPool(src)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"
@@ -538,9 +538,6 @@ obj/item/asteroid/basilisk_hide/New()
 	if(proximity_flag && istype(target, /obj/item/clothing))
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
-		if(!isturf(C.loc))
-			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
-			return
 		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
 			if(current_armor["melee"] < 90)
@@ -554,6 +551,8 @@ obj/item/asteroid/basilisk_hide/New()
 			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
 			C._color = "mining_goliath[C.hidecount]"
+		if(user.is_wearing_item(C))
+			user.regenerate_icons()
 
 /mob/living/simple_animal/hostile/asteroid/goliath/david
 	name = "david"
@@ -679,7 +678,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 	switch(fire_extremity)
 		if(1) // Fire spout
-			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg')
+			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg', src)
 			if(environment)
 				environment.add_thermal_energy(350000)
 		if(2) //Fire blast
@@ -882,11 +881,13 @@ obj/item/asteroid/basilisk_hide/New()
 	icon_dead = "pillow_dead"
 	holder_type = /obj/item/weapon/holder/animal/pillow
 	size = SIZE_SMALL
-	var/pacify_aura = TRUE
+	pacify_aura = TRUE
 	var/image/eyes
 
 /mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
 	pacify_aura = FALSE
+	environment_smash_flags = 0
+	response_help = "pets"
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
 	..()

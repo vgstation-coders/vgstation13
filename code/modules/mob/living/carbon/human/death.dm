@@ -1,8 +1,8 @@
-/mob/living/carbon/human/gib()
+/mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
 	if(species)
 		species.gib(src)
 		return
-	
+
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -26,7 +26,7 @@
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
-	qdel(src)	
+	qdel(src)
 
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
@@ -60,7 +60,7 @@
 				L.client.images -= pathogen
 		pathogen = null
 
-	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
+	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE && (timeofdeath == 0 || timeofdeath >= world.time - DEATH_SHADEOUT_TIMER))
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/shade = new (T)
@@ -88,7 +88,7 @@
 	..()
 
 	for(var/obj/abstract/Overlays/O in obj_overlays)
-		returnToPool(O)
+		qdel(O)
 
 	obj_overlays = null
 
@@ -130,11 +130,9 @@
 		if(!suiciding) //Cowards don't count
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
 	if(ticker && ticker.mode)
-//		world.log << "k"
 		sql_report_death(src)
-		//ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
-	if(become_zombie_after_death && isjusthuman(src)) //2 if they retain their mind, 1 if they don't
+	if(become_zombie_after_death && isjusthuman(src))
 		spawn(30 SECONDS)
 			if(!gcDestroyed)
 				make_zombie(retain_mind = become_zombie_after_death-1)

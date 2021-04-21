@@ -614,12 +614,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(species && species.anatomy_flags & NO_BLOOD))
-			if(!owner.reagents.has_any_reagents(list(BICARIDINE,INAPROVALINE,CLOTTING_AGENT,BIOFOAM)))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
-				W.open_wound(0.1 * wound_update_accuracy)
-				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
+			var/blood_factor = 1
 
-			if(!owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Clotting agent and biofoam stop bleeding entirely.
-				owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
+			if(owner.reagents.has_reagent(INAPROVALINE) || owner.reagents.has_reagent(BICARIDINE)) //Inaprovaline and bicaridine slow bleeding by 30%
+				blood_factor -= 0.3
+
+			if(owner.reagents.has_reagent(HYPERZINE)) //On the other hand, hyperzine speeds up bleeding by 30%
+				blood_factor += 0.3
+
+			if(owner.reagents.has_reagent(CLOTTING_AGENT) || owner.reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely.
+				blood_factor = 0
+
+			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * blood_factor)
+
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
 
@@ -909,7 +916,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/proc/release_restraints(var/uncuff = UNCUFF_BOTH)
 	if(uncuff >= UNCUFF_BOTH)
-		if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
+		if(owner.handcuffed && (body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT)))
 			owner.visible_message(\
 				"\The [owner.handcuffed.name] falls off of [owner.name].",\
 				"\The [owner.handcuffed.name] falls off you.")
@@ -917,7 +924,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			owner.drop_from_inventory(owner.handcuffed)
 
 	if(uncuff <= UNCUFF_BOTH)
-		if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
+		if(owner.legcuffed && (body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT)))
 			owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
 			"\The [owner.legcuffed.name] falls off you.")
 
@@ -979,10 +986,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	perma_injury = brute_dam
 
 	//Fractures have a chance of getting you out of restraints. All spacemen are all trained to be Houdini.
-	if(owner.handcuffed && body_part in list(HAND_LEFT, HAND_RIGHT))
+	if(owner.handcuffed && (body_part in list(HAND_LEFT, HAND_RIGHT)))
 		if(prob(25))
 			release_restraints(UNCUFF_HANDS)//Handcuffs only.
-	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT))
+	if(owner.legcuffed && (body_part in list(FOOT_LEFT, FOOT_RIGHT)))
 		if(prob(25))
 			release_restraints(UNCUFF_LEGS)//Legcuffs only.
 
@@ -1796,7 +1803,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 	//Add (facial) hair.
 	if(H && H.my_appearance.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
-		if(facial_hair_style && species.name in facial_hair_style.species_allowed)
+		if(facial_hair_style && (species.name in facial_hair_style.species_allowed))
 			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
 			if(facial_hair_style.do_colouration)
 				facial.Blend(rgb(H.my_appearance.r_facial, H.my_appearance.g_facial, H.my_appearance.b_facial), ICON_ADD)
@@ -1805,7 +1812,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 
 	if(H && H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
-		if(hair_style && species.name in hair_style.species_allowed)
+		if(hair_style && (species.name in hair_style.species_allowed))
 			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
 			if(hair_style.do_colouration)
 				hair.Blend(rgb(H.my_appearance.r_hair, H.my_appearance.g_hair, H.my_appearance.b_hair), ICON_ADD)
@@ -1813,7 +1820,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 				hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
 			overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
-	spawn(5)
+
 	if(brainmob && brainmob.client)
 		brainmob.client.screen.len = null //clear the hud
 
@@ -1851,14 +1858,24 @@ obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/
 	brainmob.name = H.real_name
 	brainmob.real_name = H.real_name
 	brainmob.dna = H.dna.Clone()
+
+	if (isbrain(H))
+		var/mob/living/carbon/brain/otherbrain = H
+		brainmob.timeofhostdeath = otherbrain.timeofhostdeath
+	else if (H.timeofdeath == 0)//happens when the human gets decapitated while still alive
+		brainmob.timeofhostdeath = world.time
+	else
+		brainmob.timeofhostdeath = H.timeofdeath
+
 	if(H.mind)
 		H.mind.transfer_to(brainmob)
 	brainmob.languages = H.languages
 	brainmob.default_language = H.default_language
+	brainmob.init_language = brainmob.default_language
 	brainmob.container = src
 
 obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
+	if(istype(W,/obj/item/tool/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(0)
@@ -1878,7 +1895,7 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		else
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
 
-	else if(istype(W,/obj/item/weapon/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
+	else if(istype(W,/obj/item/tool/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(1)
@@ -1918,8 +1935,10 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 					..()
 		else
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
-	else if(istype(W,/obj/item/device/soulstone))
-		W.capture_soul_head(src,user)
+	else if(istype(W,/obj/item/soulstone) || istype(W,/obj/item/weapon/melee/soulblade))
+		var/datum/soul_capture/capture_datum = new()
+		capture_datum.init_datum(user, src, W)
+		qdel(capture_datum)
 		return
 	else if(istype(W,/obj/item/device/healthanalyzer))
 		to_chat(user, "<span class='notice'>You use \the [W] to induce a small electric shock into \the [src].</span>")

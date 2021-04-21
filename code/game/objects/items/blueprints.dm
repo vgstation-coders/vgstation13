@@ -412,7 +412,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	for (var/obj/structure/window/W in T2)
 		if(turn(dir,180) == W.dir)
 			return BORDER_BETWEEN
-		if (W.is_fulltile())
+		if (W.is_fulltile)
 			return BORDER_2NDTILE
 	for(var/obj/machinery/door/window/D in T2)
 		if(turn(dir,180) == D.dir)
@@ -437,7 +437,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		for (var/dir in cardinal)
 			var/skip = 0
 			for (var/obj/structure/window/W in T)
-				if(dir == W.dir || (W.is_fulltile()))
+				if(dir == W.dir || W.is_fulltile)
 					skip = 1; break
 			if (skip)
 				continue
@@ -520,14 +520,26 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	var/obj/docking_port/shuttle/DP = new /obj/docking_port/shuttle(get_turf(src))
 	DP.dir = user.dir
-
+	// Link the custom shuttle to a basic homing port to return to.
+	var/turf/home_base = get_step(get_turf(DP), DP.dir)
+	var/obj/docking_port/destination/my_shuttle_home_base = new(home_base)
+	my_shuttle_home_base.name = "[name] home port"
+	my_shuttle_home_base.dir = reverse_direction(DP.dir)
 
 	var/datum/shuttle/custom/S = new(starting_area = A)
 	S.initialize()
 	S.name = name
+	S.linked_port.docked_with = my_shuttle_home_base
 
-	to_chat(user, "Shuttle created!")
-
+	to_chat(user, "<span class='notice'>Shuttle created!</span>")
+	var/obj/item/weapon/disk/shuttle_coords/my_docking_port_dest = new(get_turf(src))
+	my_docking_port_dest.destination = my_shuttle_home_base
+	my_docking_port_dest.name = "[name] home port"
+	my_docking_port_dest.desc = "This disc links to the home base of [user]'s custom shuttle, [name]."
+	my_docking_port_dest.header = "[name] home port"
+	user.put_in_hands(my_docking_port_dest)
+	to_chat(user, "<span class='notice'>Congratulations! You have succesfully created a shuttle. You will find in your hands the destination disk linked to your home base, which is where you created the shuttle. Don't lose it, it cannot be replaced!</span>")
+	to_chat(user, "<span class='notice'><h3>Happy hunting!</h3></span>")
 
 	message_admins("<span class='notice'>[key_name_admin(user)] has turned [A.name] into a shuttle named [S.name]. [formatJumpTo(get_turf(user))]</span>")
 	log_admin("[key_name(user)]  has turned [A.name] into a shuttle named [S.name].")

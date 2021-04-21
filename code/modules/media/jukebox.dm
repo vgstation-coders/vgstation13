@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -70,7 +70,20 @@ var/global/global_playlists = list()
 			reader.i = 1
 			var/songdata = reader.read_value()
 			for(var/list/record in songdata)
-				playlist += new /datum/song_info(record)
+				if (("track" in record) && record["track"])
+					//sorted playlist
+					if (playlist == list())
+						var/length = 0
+						for(var/list/entry in songdata)
+							length++
+						var/M[length]
+						playlist = M//turns "playlist" into an empty list of size of the actual playlist
+					var/track = text2num(record["track"])
+					playlist.Insert(track, new /datum/song_info(record))
+				else
+					//unsorted playlist
+					playlist += new /datum/song_info(record)
+
 			if(playlist.len==0)
 				visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
 				stat &= BROKEN
@@ -95,6 +108,7 @@ var/global/global_playlists = list()
 
 	var/url    = ""
 	var/length = 0 // decaseconds
+	var/crossfade_time = 0 // decaseconds, if the song ends up with a decresendo/fadeout so we can crossfade into the next one.
 
 	var/emagged = 0
 
@@ -106,6 +120,9 @@ var/global/global_playlists = list()
 	url    = json["url"]
 
 	length = text2num(json["length"])
+	crossfade_time = text2num(json["crossfade_time"])
+	if (isnull(crossfade_time))
+		crossfade_time = 0
 
 /datum/song_info/proc/display()
 	var/str="\"[title]\""
@@ -193,6 +210,11 @@ var/global/list/loopModeNames=list(
 		linked_account = department_accounts[department]
 	else
 		linked_account = station_account
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	if(MM == 10 && !("halloween" in playlists)) //Checking for jukeboxes with it already
+		playlists["halloween"] = "Halloween"
+	if(MM == 12 && !("christmas" in playlists)) //Checking for jukeboxes with it already
+		playlists["christmas"] = "Christmas Jingles"
 
 /obj/machinery/media/jukebox/Destroy()
 	if(wires)
@@ -208,6 +230,16 @@ var/global/list/loopModeNames=list(
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 	attack_hand(user)
+
+/obj/machinery/media/jukebox/examine(mob/user)
+	..()
+	if (current_song_info)
+		if (!current_song_info.emagged)
+			to_chat(user, "<span class='info'>It is playing [current_song_info.display()].</span>")
+		else
+			to_chat(user, "<span class='info'>What is that hellish noise?</span>")
+	else
+		to_chat(user, "<span class='info'>It is currently silent.</span>")
 
 /obj/machinery/media/jukebox/power_change()
 	..()
@@ -302,6 +334,7 @@ var/global/list/loopModeNames=list(
 			else if(current_song > playlist.len)
 				current_song = playlist.len
 			var/datum/song_info/song=playlist[current_song]
+			t += "<b>Playlist:<b> [playlists[playlist_id]]<br />"
 			t += "<b>Current song:</b> [song.artist] - [song.title]<br />"
 		if(next_song)
 			var/datum/song_info/song=playlist[next_song]
@@ -508,11 +541,14 @@ var/global/list/loopModeNames=list(
 		screen = JUKEBOX_SCREEN_MAIN
 
 /obj/machinery/media/jukebox/proc/rad_pulse() //Called by pulsing the transmit wire
+	emitted_harvestable_radiation(get_turf(src), 20, range = 5)	//Standing by a juke applies a dose of 17 rads to humans so we'll round based on that. 1/5th the power of a freshly born stage 1 singularity.
 	for(var/mob/living/carbon/M in view(src,3))
 		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful.
 		M.apply_radiation(round(rads/2),RAD_EXTERNAL) //Distance/rads: 1 = 18, 2 = 14, 3 = 12
 
 /obj/machinery/media/jukebox/Topic(href, href_list)
+	if(wires.interference)
+		return
 	if(isobserver(usr) && !isAdminGhost(usr))
 		to_chat(usr, "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>")
 		return
@@ -565,8 +601,7 @@ var/global/list/loopModeNames=list(
 			var/success = 0
 			var/error = 0
 
-			//Loop through each line
-			forLineInText(choice)
+			for(var/line in splittext(choice, "\n"))
 				var/list/L = params2list(line)
 				if(L.len >= 3)
 					var/list/params = list()
@@ -664,9 +699,14 @@ var/global/list/loopModeNames=list(
 			return
 	if(playing)
 		var/datum/song_info/song
+		var/datum/song_info/next_song_datum
+		var/fadeout_time = 0
 		if(current_song && playlist.len)
 			song = playlist[current_song]
-		if(!current_song || (song && world.time >= media_start_time + song.length))
+		if(next_song && playlist.len)
+			next_song_datum = playlist[next_song]
+			fadeout_time = next_song_datum.crossfade_time
+		if(!current_song || (song && world.time >= media_start_time + song.length - fadeout_time))
 			current_song=1
 			if(next_song)
 				current_song = next_song
@@ -714,15 +754,18 @@ var/global/list/loopModeNames=list(
 	if(current_song > playlist.len)
 		current_song = 0
 	if(current_song && playing)
-		var/datum/song_info/song = playlist[current_song]
-		media_url = song.url
+		current_song_info = playlist[current_song]
+		current_song_info.emagged = emagged
+		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
-		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
+		media_finish_time = world.time + current_song_info.length
+		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [current_song_info.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
 		media_url=""
 		media_start_time = 0
+		current_song_info = null
 	..()
 
 /obj/machinery/media/jukebox/proc/stop_playing()
@@ -767,6 +810,7 @@ var/global/list/loopModeNames=list(
 	playlists=list(
 		"lilslugger" = "Battle of Lil Slugger",
 		"bar"  = "Bar Mix",
+		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"folk" = "Folk",
@@ -777,14 +821,6 @@ var/global/list/loopModeNames=list(
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance"
 	)
-
-/obj/machinery/media/jukebox/bar/New()
-	..()
-	var/MM = text2num(time2text(world.timeofday, "MM"))
-	if(MM == 10)
-		playlists["halloween"] = "Halloween"
-	if(MM == 12)
-		playlists["christmas"] = "Christmas Jingles"
 
 
 // Relaxing elevator music~
@@ -799,15 +835,18 @@ var/global/list/loopModeNames=list(
 	// Must be defined on your server.
 	playlists=list(
 		"bar"  = "Bar Mix",
+		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"filk" = "Filk",
+		"funk" = "Funk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzakjazz" = "Jazzy Muzak",
+		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
 		"thunderdome" = "Thunderdome"
@@ -829,15 +868,18 @@ var/global/list/loopModeNames=list(
 	playlists=list(
 		"lilslugger" = "Battle of Lil' Slugger",
 		"bar"  = "Bar Mix",
+		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"filk" = "Filk",
+		"funk" = "Funk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
-		"muzakjazz" = "Jazzy Muzak",
+		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"shuttle" = "Shuttle",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
@@ -871,15 +913,18 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/thematic/update_music()
 	if(current_song && playing)
-		var/datum/song_info/song = playlist[current_song]
-		media_url = song.url
+		current_song_info = playlist[current_song]
+		current_song_info.emagged = emagged
+		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
-		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
+		media_finish_time = world.time + current_song_info.length
+		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [current_song_info.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
 		media_url=""
 		media_start_time = 0
+		current_song_info = null
 
 	// Send update to clients.
 	for(var/mob/M in mob_list)
@@ -949,6 +994,27 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/adminbus/cultify()
 	return
 
+obj/machinery/media/jukebox/holyjuke
+	name = "Holyjuke"
+	desc = "The Pastor's jukebox. You feel a weight being lifted simply by basking in its presence."
+
+	state_base = "holyjuke"
+	icon_state = "holyjuke"
+
+	change_cost = 0
+
+	playlist_id="holy"
+	// Must be defined on your server.
+	playlists=list(
+		"holy" = "Pastor's Paradise"
+	)
+
+/obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
+	// EMAG DOES NOTHING
+	if(istype(W, /obj/item/weapon/card/emag))
+		to_chat(user, "<span class='warning'>A guiltiness fills your heart as a higher power pushes away \the [W]!</span>")
+		return
+	..()
 
 /obj/item/weapon/vinyl
 	name = "nanovinyl"
@@ -966,6 +1032,7 @@ var/global/list/loopModeNames=list(
 	attack_verb = list("plays out", "records", "frisbees") //Fuck it, we'll do it live. Fucking thing sucks!
 	var/unformatted
 	var/formatted
+	var/mask = "#FF0000"//red
 
 /obj/item/weapon/vinyl/New(loc,U,F)
 	..(loc)
@@ -974,20 +1041,32 @@ var/global/list/loopModeNames=list(
 	if(F)
 		formatted = F
 	name = "nanovinyl - [formatted]"
+	for (var/vinyl_type in subtypesof(/obj/item/weapon/vinyl))
+		var/obj/item/weapon/vinyl/V = vinyl_type
+		if (initial(V.unformatted) == U)
+			mask = initial(V.mask)
+			break
+
+	var/image/label = image(icon, src, "vinyl-mask")
+	label.icon += mask
+	overlays += label
 
 //Premades
 /obj/item/weapon/vinyl/bar
 	name = "nanovinyl - bar"
 	unformatted = "bar"
 	formatted = "Bar"
+	mask = "#800000"//maroon
 /obj/item/weapon/vinyl/bomberman
 	name = "nanovinyl - bomberman"
 	unformatted = "bomberman"
 	formatted = "Bomberman"
+	mask = "#00FFFF"//cyan
 /obj/item/weapon/vinyl/depresso
 	name = "nanovinyl - depresso"
 	unformatted = "depresso"
 	formatted = "Depresso"
+	mask = "#000000"//black
 /obj/item/weapon/vinyl/echoes
 	name = "nanovinyl - echoes"
 	unformatted = "echoes"
@@ -996,6 +1075,7 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - electronic"
 	unformatted = "electronica"
 	formatted = "Electronic"
+	mask = "#FFFFFF"//white
 /obj/item/weapon/vinyl/emagged
 	name = "nanovinyl - syndicate"
 	unformatted = "emagged"
@@ -1008,10 +1088,18 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - filk"
 	unformatted = "filk"
 	formatted = "Filk"
+/obj/item/weapon/vinyl/funk
+	name = "nanovinyl - funk"
+	unformatted = "funk"
+	formatted = "Funk"
 /obj/item/weapon/vinyl/folk
 	name = "nanovinyl - folk"
 	unformatted = "folk"
 	formatted = "Folk"
+/obj/item/weapon/vinyl/jazz
+	name = "nanovinyl - jazz & swing"
+	unformatted = "jazzswing"
+	formatted = "Jazz & Swing"
 /obj/item/weapon/vinyl/malf
 	name = "nanovinyl - silicon assault"
 	unformatted = "malfdelta"
@@ -1027,7 +1115,7 @@ var/global/list/loopModeNames=list(
 /obj/item/weapon/vinyl/muzakjazz
 	name = "nanovinyl - jazzy muzak"
 	unformatted = "muzakjazz"
-	formatted = "Jazzy Muzak"
+	formatted = "Muzak"
 /obj/item/weapon/vinyl/syndie_assault
 	name = "nanovinyl - syndicate assault"
 	unformatted = "nukesquad"
@@ -1040,7 +1128,13 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - rock"
 	unformatted = "rock"
 	formatted = "Rock"
-	/obj/item/weapon/vinyl/security
+/obj/item/weapon/vinyl/shoegaze
+	name = "nanovinyl - shoegaze"
+	desc = "More reverb than you can handle."
+	unformatted = "shoegaze"
+	formatted = "Shoegaze"
+	mask = "#FF00FF"//magenta
+/obj/item/weapon/vinyl/security
 	name = "nanovinyl - security"
 	unformatted = "security"
 	formatted = "Security"
@@ -1048,7 +1142,8 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - shuttle"
 	unformatted = "shuttle"
 	formatted = "Shuttle"
-	/obj/item/weapon/vinyl/thunderdome
+	mask = "#000080"//navy
+/obj/item/weapon/vinyl/thunderdome
 	name = "nanovinyl - thunderdome"
 	unformatted = "thunderdome"
 	formatted =	"Thunderdome"
@@ -1061,15 +1156,22 @@ var/global/list/loopModeNames=list(
 	desc = "Oh no."
 	unformatted = "SCOTLANDFOREVER"
 	formatted = "Highlander"
+	mask = "#0000FF"//blue
 /obj/item/weapon/vinyl/halloween
 	name = "nanovinyl - halloween"
 	unformatted = "halloween"
 	formatted = "Halloween"
 /obj/item/weapon/vinyl/slugger
 	name = "nanovynil - slugger"
+	desc = "A go-to for bars all over the sector. Every time you walk in one, you can almost bet it's playing."
 	unformatted = "lilslugger"
 	formatted = "Battle of Lil Slugger"
 obj/item/weapon/vinyl/christmas
 	name = "nanovynil - christmas"
 	unformatted = "christmas"
 	formatted = "Christmas Jingles"
+/obj/item/weapon/vinyl/holy
+	name = "nanovinyl - holy"
+	unformatted = "holy"
+	formatted = "Holy"
+	mask = "#8000FF"//purple

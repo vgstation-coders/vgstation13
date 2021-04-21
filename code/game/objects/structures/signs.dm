@@ -88,9 +88,8 @@
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
 
 	if(prob(70))
-		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
-
-		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+		if(H.foot_impact(src,rand(5,7)))
+			to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
 /obj/structure/sign/double/map
 	name = "station map"
@@ -188,6 +187,11 @@
 	desc = "\"To be robust is not an action or a way of life, but a mental state. Only those with the force of will strong enough to act during a crisis, saving friend from foe, acting when everyone else may think and act against you, are truly robust. Stay robust, my friends.\""
 	icon_state = "goldenplaque"
 
+/obj/structure/sign/shiggymemorial
+	name = "Shiggypiggy Memorial"
+	desc = "Rest in Peace"
+	icon_state = "goldenplaque"
+
 /obj/structure/sign/kiddieplaque
 	name = "\improper AI developer's plaque"
 	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\"."
@@ -238,10 +242,30 @@
 	desc = "A direction sign, pointing out the direction of the medical bay."
 	icon_state = "direction_med"
 
+/obj/structure/sign/directions/carg
+	name = "Cargo Bay"
+	desc = "A direction sign, pointing out which way Cargo bay is."
+	icon_state = "direction_carg"
+
+/obj/structure/sign/directions/chap
+	name = "Chapel"
+	desc = "A direction sign, pointing out which way Chapel is."
+	icon_state = "direction_chap"
+
 /obj/structure/sign/directions/evac
 	name = "Escape Arm"
 	desc = "A direction sign, pointing out which way escape shuttle dock is."
 	icon_state = "direction_evac"
+
+/obj/structure/sign/directions/podbay
+	name = "Pod Bay"
+	desc = "A direction sign, pointing out where Pod bay is."
+	icon_state = "direction_pod"
+
+/obj/structure/sign/directions/trader
+	name = "Trader dock"
+	desc = "A direction sign, pointing out which way the Trader ship arrives to the station."
+	icon_state = "direction_trad"
 
 /obj/structure/sign/crime
 	name = "CRIME DOES NOT PAY"

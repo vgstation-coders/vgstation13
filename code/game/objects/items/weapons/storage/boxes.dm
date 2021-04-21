@@ -121,10 +121,17 @@
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/gas/syndicate(src)
-	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 	new /obj/item/weapon/reagent_containers/pill/cyanide(src) //For those who hate fun
 	new /obj/item/weapon/reagent_containers/pill/laststand(src) //HOOOOOO HOOHOHOHOHOHO - N3X
+
+/obj/item/weapon/storage/box/survival/nuke/vox/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_nitrogen(src)
+
+/obj/item/weapon/storage/box/survival/nuke/human/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 
 /obj/item/weapon/storage/box/priority_care
 	name = "priority care parcel"
@@ -358,6 +365,7 @@
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
 	new /obj/item/weapon/locator(src)
+	new /obj/item/device/locator_holomap(src)
 
 /obj/item/weapon/storage/box/chemimp
 	name = "chemical implant kit"
@@ -368,6 +376,13 @@
 	..()
 	for(var/i = 1 to 5)
 		new /obj/item/weapon/implantcase/chem(src)
+	new /obj/item/weapon/implanter(src)
+	new /obj/item/weapon/implantpad(src)
+
+/obj/item/weapon/storage/box/remeximp/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/implantcase/remote(src)
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
 
@@ -554,6 +569,7 @@
 	new /obj/item/weapon/reagent_containers/spray/pepper(src)
 	new /obj/item/taperoll/police(src)
 	new /obj/item/device/hailer(src)
+	new /obj/item/device/law_planner(src)
 
 /obj/item/weapon/storage/box/large/detectivegear
 	name = "detective essentials"
@@ -648,7 +664,7 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
-		
+
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
@@ -658,12 +674,12 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/dragonsbreath(src)
-		
+
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
-	storage_slots = 16		
-		
+	storage_slots = 16
+
 /obj/item/weapon/storage/box/fragshells/New()
 	..()
 	for(var/i in 1 to 16)
@@ -741,6 +757,16 @@
 	..()
 	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+
+/obj/item/weapon/storage/box/antiviral_syringes
+	name = "box of anti-viral syringes"
+	desc = "Contains anti-viral syringes."
+	icon_state = "syringe"
+
+/obj/item/weapon/storage/box/antiviral_syringes/New()
+	..()
+	for (var/i; i < BOX_SPACE; i++)
+		new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
 
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
@@ -874,17 +900,16 @@
 
 /obj/item/weapon/storage/box/spellbook/New()
 	..()
-	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
-	possible_books -= /obj/item/weapon/spellbook/oneuse
-	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
+	var/list/possible_books = subtypesof(/obj/item/weapon/spellbook/oneuse)
+	for(var/S in possible_books)
+		var/obj/item/weapon/spellbook/oneuse/O = S
+		if(initial(O.disabled_from_bundle))
+			possible_books -= O
 	for(var/i =1; i <= 7; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)
 		src.contents += book
 		possible_books -= randombook
-
-/obj/item/weapon/storage/box/spellbook/random/New()
-	..()
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"
 
@@ -1395,3 +1420,37 @@
 	new /obj/item/clothing/under/clownpsyche(src)
 	new /obj/item/clothing/shoes/clownshoespsyche(src)
 	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit
+	name = "Gemsuit outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit/New()
+	new /obj/item/clothing/suit/space/rig/wizard(src)
+	new /obj/item/clothing/head/helmet/space/rig/wizard(src)
+	new /obj/item/clothing/gloves/purple(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset
+	name = "hos surveyor outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset/New()
+	new /obj/item/clothing/suit/armor/hos/surveyor(src)
+	new /obj/item/clothing/head/HoS/surveyor(src)
+	..()
+
+/obj/item/weapon/storage/box/biscuit
+	name = "biscuit box"
+	desc = "Just the right way to start your day."
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "biscuitbox"
+	storage_slots = 6
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/risenshiny")
+	foldable = /obj/item/stack/sheet/cardboard
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type = RECYK_MISC
+
+/obj/item/weapon/storage/box/biscuit/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/snacks/risenshiny(src)

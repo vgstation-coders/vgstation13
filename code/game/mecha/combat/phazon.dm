@@ -19,7 +19,14 @@
 	var/phasing = 0
 	var/phasing_energy_drain = 200
 	max_equip = 4
-
+	mech_sprites = list(
+		"phazon",
+		"phazon_blanco",
+		"plazmus",
+		"imperion",
+		"janus",
+	)
+	paintable = 1
 
 /obj/mecha/combat/phazon/New()
 	..()
@@ -41,7 +48,7 @@
 			return
 		if(can_move)
 			can_move = 0
-			flick("phazon-phase", src)
+			flick("[initial_icon]-phase", src)
 			src.forceMove(new_turf)
 			src.use_power(phasing_energy_drain)
 			spawn(step_in*3)
@@ -56,6 +63,9 @@
 	charge_counter = 10
 	hud_state = "phazon-phase"
 	override_icon = 'icons/mecha/mecha.dmi'
+
+/spell/mech/phazon/phasing/update_spell_icon()
+	hud_state = "[linked_mech.initial_icon]-phase"
 
 /spell/mech/phazon/phasing/cast(list/targets, mob/user)
 	var/obj/mecha/combat/phazon/Phazon = linked_mech

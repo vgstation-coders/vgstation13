@@ -287,7 +287,6 @@
 		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
 			reagent_total += RC.reagents.get_reagent_amount(M)
 		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
-	return 0
 
 //The build_part_loop fires independently and will build stuff until the queue is over or when it is stopped.
 /obj/machinery/r_n_d/fabricator/proc/build_part_loop()
@@ -334,7 +333,7 @@
 		flick("[base_state]_end",src)
 	if(being_built)
 		if(!being_built.materials)
-			being_built.materials = getFromPool(/datum/materials, being_built)
+			being_built.materials = new /datum/materials(being_built)
 		for(var/matID in part.materials)
 			if(copytext(matID, 1, 2) != "$") //it's not a material, let's ignore it
 				continue
@@ -668,7 +667,7 @@
 		while(to_spawn > 0)
 			var/obj/item/stack/sheet/mats
 			if(material.sheettype == /obj/item/stack/sheet/metal)
-				mats = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+				mats = new /obj/item/stack/sheet/metal(get_turf(src))
 			else
 				mats = new material.sheettype(src)
 			if(to_spawn > mats.max_amount)

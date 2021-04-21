@@ -11,7 +11,7 @@
 	name = "Wish Granter"
 	desc = "You're not so sure about this, anymore..."
 	icon = 'icons/obj/device.dmi'
-	icon_state = "syndbeacon"
+	icon_state = "wishgranter"
 
 	anchored = 1
 	density = 1

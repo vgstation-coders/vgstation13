@@ -60,8 +60,8 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/tool/solder) && bullet_marks)
+		var/obj/item/tool/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -134,7 +134,7 @@
 
 			//Repairing outer grille, use welding tool
 			else if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins mending the damage on \the [src]'s outer grille.</span>", \
 				"<span class='notice'>You begin mending the damage on \the [src]'s outer grille.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -148,7 +148,7 @@
 
 		if(WALLCOVERUNSECURED)
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s external cover.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -185,7 +185,7 @@
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1) //SLAM
 					src.d_state = WALLCOVERREMOVED
 					update_icon()
-					getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
+					new /obj/item/stack/sheet/plasteel(get_turf(src))
 					user.visible_message("<span class='warning'>[user] pries off \the [src]'s external cover.</span>", \
 					"<span class='notice'>You pry off \the [src]'s external cover.</span>")
 				return
@@ -193,7 +193,7 @@
 			//Fix welding damage caused above, by welding shit into place again
 			else if(iswelder(W))
 
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins fixing the welding damage on \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin fixing the welding damage on \the [src]'s external cover.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -240,7 +240,7 @@
 		if(WALLRODSUNSECURED)
 			if(iswelder(W))
 
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s external support rods.</span>")
 
@@ -303,7 +303,7 @@
 			//Repair the external support rods welded through in the previous step, with a welding tool. Naturally
 			else if(iswelder(W))
 
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				if(WT.remove_fuel(1,user))
 					user.visible_message("<span class='notice'>[user] begins mending \the [src]'s external support rods.</span>", \
 					"<span class='notice'>You begin mending \the [src]'s external support rods.</span>")
@@ -361,11 +361,11 @@
 
 /turf/simulated/wall/r_wall/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rods
+		new /obj/item/stack/sheet/plasteel(src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rod)
 		new girder_type(src)
 	else
-		getFromPool(/obj/item/stack/rods, src, 2)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)
+		new /obj/item/stack/rods(src, 2)
+		new /obj/item/stack/sheet/plasteel(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
@@ -388,7 +388,7 @@
 			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
 				src.d_state = WALLCOVERREMOVED
 				update_icon()
-				getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src)) //Lose the plasteel needed to get there
+				new /obj/item/stack/sheet/plasteel(get_turf(src)) //Lose the plasteel needed to get ther)
 			else
 				dismantle_wall(0,1)
 		if(3.0)

@@ -50,6 +50,7 @@
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
+	body_parts_visible_override = 0//I mean technically the eyes are visible on the sprite, but they're manually drawn, the helmet itself not having any transparency, so w/e
 
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)
@@ -76,7 +77,7 @@
 	name = "plasmaman atmospheric suit"
 	icon_state = "plasmamanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -95,7 +96,7 @@
 	name = "plasmaman engineer suit"
 	icon_state = "plasmamanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -133,7 +134,7 @@
 	name = "plasmaman botanist helmet"
 	icon_state = "plasmamanBotanist_helmet0"
 	base_state = "plasmamanBotanist_helmet"
-	
+
 /obj/item/clothing/suit/space/plasmaman/librarian
 	name = "plasmaman librarian suit"
 	icon_state = "plasmamanLibrarian_suit"
@@ -141,7 +142,7 @@
 /obj/item/clothing/head/helmet/space/plasmaman/librarian
 	name = "plasmaman librarian helmet"
 	icon_state = "plasmamanLibrarian_helmet0"
-	base_state = "plasmamanLibrarian_helmet"	
+	base_state = "plasmamanLibrarian_helmet"
 
 /obj/item/clothing/suit/space/plasmaman/chaplain
 	name = "plasmaman chaplain suit"
@@ -422,3 +423,28 @@
 	base_state = "plasmamanCult_helmet"
 	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+
+//Sith
+
+/obj/item/clothing/suit/space/plasmaman/sith
+	name = "plasmaman Sith suit"
+	icon_state = "plasmaman_sith_suit"
+	item_state = "plasmaman_sith_suit"
+	desc = "A menacing armored suit that protects the wearer from harm, fit for a plasmaman. It appears to permanently seal itself once worn."
+	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
+	canremove = 0
+
+/obj/item/clothing/suit/space/plasmaman/sith/acidable()
+	return 0
+
+//Unlike the suit, the helmet can be taken off
+/obj/item/clothing/head/helmet/space/plasmaman/sith
+	name = "plasmaman Sith helmet"
+	icon_state = "plasmaman_sith_helmet0"
+	item_state = "plasmaman_sith_helmet0"
+	base_state = "plasmaman_sith_helmet"
+	desc = "A menacing helmet that protects the wearer from harm, fit for a plasmaman."
+	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
+
+/obj/item/clothing/head/helmet/space/plasmaman/sith/acidable()
+	return 0

@@ -229,6 +229,11 @@
 	targetvendomat = /obj/machinery/vending/team_security
 	icon_state = "team_security"
 
+/obj/structure/vendomatpack/telecomms
+	name = "Telecommunications Supplies recharge pack"
+	targetvendomat = /obj/machinery/vending/telecomms
+	icon_state = "telecomms"
+
 //////EMPTY PACKS//////
 
 /obj/item/emptyvendomatpack
@@ -267,7 +272,7 @@
 	return
 
 /obj/structure/stackopacks/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
+	if(istype(W,/obj/item/tool/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/tool/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
 		var/turf/T = get_turf(src)
 		for(var/obj/O in contents)
 			O.forceMove(T)

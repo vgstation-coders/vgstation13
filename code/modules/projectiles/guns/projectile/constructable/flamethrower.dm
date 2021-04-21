@@ -28,7 +28,7 @@
 	var/lit = 0	//on or off
 	var/operating = 0//cooldown
 	var/turf/previousturf = null
-	var/obj/item/weapon/weldingtool/weldtool = null
+	var/obj/item/tool/weldingtool/weldtool = null
 	var/obj/item/device/assembly/igniter/igniter = null
 	var/obj/item/weapon/tank/plasma/ptank = null
 	var/window_open = 0
@@ -77,14 +77,14 @@
 		item_state = "flamethrower_0"
 	return
 
-/obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/target, mob/user, flag)
-	if (istype(target, /obj/item/weapon/storage/backpack ))
+/obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if (istype(A, /obj/item/weapon/storage/backpack ))
 		return
 
-	else if (target.loc == user.loc)
+	else if (A.loc == user.loc)
 		return
 
-	else if (target.loc == user)
+	else if (A.loc == user)
 		return
 
 	else if (locate (/obj/structure/table, src.loc))
@@ -129,7 +129,7 @@
 	B.jet_pressure = pressure * (throw_percent/100)
 	B.gas_jet = tank_gas.remove_ratio(throw_percent/100)
 
-	if(Fire(target,user))
+	if(Fire(A,user))
 		user.visible_message("<span class='danger'>[user] shoots a jet of gas from \his [src.name]!</span>","<span class='danger'>You shoot a jet of gas from your [src.name]!</span>")
 		playsound(user, 'sound/weapons/flamethrower.ogg', 50, 1)
 		src.updateUsrDialog()
@@ -149,7 +149,7 @@
 		if(ptank)
 			ptank.forceMove(T)
 			ptank = null
-		getFromPool(/obj/item/stack/rods, T)
+		new /obj/item/stack/rods(T)
 		qdel(src)
 		return
 
@@ -241,7 +241,7 @@
 
 /obj/item/weapon/gun/projectile/flamethrower/full/New(var/loc)
 	..()
-	weldtool = new /obj/item/weapon/weldingtool(src)
+	weldtool = new /obj/item/tool/weldingtool(src)
 	weldtool.status = 0
 	igniter = new /obj/item/device/assembly/igniter(src)
 	igniter.secured = 0

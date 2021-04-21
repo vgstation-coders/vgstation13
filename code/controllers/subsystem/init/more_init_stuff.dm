@@ -9,7 +9,7 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	setup_economy()
+	setup_news()
 	var/watch=start_watch()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
@@ -43,7 +43,21 @@ var/datum/subsystem/more_init/SSmore_init
 	for (var/obj/machinery/computer/security/S in tv_monitors)
 		S.init_cams()
 
+	create_global_diseases()
+
 	init_wizard_apprentice_setups()
+	machinery_rating_cache = cache_machinery_components_rating()
+	typing_indicator = new
+
+/proc/cache_machinery_components_rating()
+	var/list/cache = list()
+	for(var/obj/machinery/machine in all_machines)
+		if(!cache[machine.type])
+			var/rating = 0
+			for(var/obj/item/weapon/stock_parts/SP in machine.component_parts)
+				rating += SP.rating
+			cache[machine.type] = rating
+	return cache
 
 /proc/init_wizard_apprentice_setups()
 	for (var/setup_type in subtypesof(/datum/wizard_apprentice_setup))
@@ -87,11 +101,16 @@ var/datum/subsystem/more_init/SSmore_init
 			for(var/brute = 1 to 3)
 				for(var/burn = 1 to 3)
 					var/damage_state = "[brute][burn]"
-					DI = icon('icons/mob/dam_human.dmi', "[damage_state]")			// the damage icon for whole human
-					DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
 					if(species_blood)
+						DI = icon('icons/mob/dam_human.dmi', "[brute]0-color")
 						DI.Blend(S.blood_color, ICON_MULTIPLY)
-					//testing("Completed [damage_state]/[O.icon_name]/[species_blood]")
+						var/icon/DI_burn = icon('icons/mob/dam_human.dmi', "0[burn]")//we don't want burns to blend with the species' blood color
+						DI.Blend(DI_burn, ICON_OVERLAY)
+						DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
+					else
+						DI = icon('icons/mob/dam_human.dmi', "[damage_state]")
+						DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
+
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
 	spawn(1)
 		qdel(H)

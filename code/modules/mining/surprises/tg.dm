@@ -22,7 +22,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/organ=2, // OM NOM
 		/obj/structure/closet/crate/freezer=2,
 		/obj/machinery/optable=1,
-		/obj/item/weapon/scalpel=1,
+		/obj/item/tool/scalpel=1,
 		/obj/item/weapon/storage/firstaid/regular=3,
 		/obj/item/weapon/tank/anesthetic=1,
 		///obj/item/weapon/surgical_drapes=2
@@ -45,7 +45,7 @@
 	spawntypes = list(
 		/mob/living/simple_animal/hostile/creature=1,
 		// /obj/item/organ/internal/heart=2,
-		/obj/item/device/soulstone=1
+		/obj/item/soulstone=1
 	)
 	fluffitems = list(
 		/obj/effect/gateway=1,

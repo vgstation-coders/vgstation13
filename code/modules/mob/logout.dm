@@ -1,12 +1,15 @@
 /mob/Logout()
+	SStgui.on_logout(src)
+	nanomanager.close_user_uis(src)
+
 	if (isobj(loc))
 		var/obj/location = loc
 		location.on_logout(src)
 
 	if((flags & HEAR) && !(flags & HEAR_ALWAYS))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
+		if(virtualhearer)
+			qdel(virtualhearer)
+			virtualhearer = null
 	world.log << "[src] logout"
 
 	remove_spell_channeling() //remove spell channeling before we log out
@@ -31,6 +34,9 @@
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 				client.images -= C.pathogen
 
+	if(client && client.media)
+		client.media.stop_music()
+
 	if(admin_datums[src.ckey])
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
 			var/admins_number = admins.len
@@ -46,6 +52,6 @@
 				send2adminirc("[key_name(src, showantag = FALSE)] logged out - no more admins online.")
 				send2admindiscord("[key_name(src, showantag = FALSE)] logged out. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 
-	INVOKE_EVENT(on_logout, list())
+	lazy_invoke_event(/lazy_event/on_logout, list("user" = src))
 
 	..()

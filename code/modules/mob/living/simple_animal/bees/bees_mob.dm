@@ -143,9 +143,9 @@ var/bee_mobs_count = 0
 
 /mob/living/simple_animal/bee/death(var/gibbed = FALSE)
 	..(gibbed)
-	returnToPool(src)
+	qdel(src)
 
-/mob/living/simple_animal/bee/gib()
+/mob/living/simple_animal/bee/gib(var/animation = 0, var/meat = 1)
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -188,7 +188,7 @@ var/bee_mobs_count = 0
 	panic_attack(M)
 
 /mob/living/simple_animal/bee/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P && P.firer)
 		panic_attack(P.firer)
 
@@ -225,6 +225,10 @@ var/bee_mobs_count = 0
 			visible_message("<span class='danger'>The bees stop moving...</span>")
 			adjustBruteLoss(rand(40,110)) //Kills 4-11 bees. Maximum bees per swarm 20.
 			panic_attack() //Bees don't know who is responsible, but they'll get mad at everyone!
+		if(INSECTICIDE)
+			visible_message("<span class='danger'>The bees writhe in agony before falling to the floor, dead.</span>")
+			adjustBruteLoss(rand(90,180)) //Since insecticide is designed to kill insects rather than just being generally poisonous, kills from 9 to 18.
+			panic_attack()
 
 /mob/living/simple_animal/bee/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	..()
@@ -323,11 +327,6 @@ var/bee_mobs_count = 0
 		if (!visited_plants.Find(new_plant))
 			visited_plants.Add(new_plant)
 
-/mob/living/simple_animal/bee/resetVariables()
-	..("bees", "visited_plants", args)
-	bees = list()
-	visited_plants = list()
-
 ////////////////////////////////LIFE////////////////////////////////////////
 
 /mob/living/simple_animal/bee/Life()
@@ -378,7 +377,7 @@ var/bee_mobs_count = 0
 					mood_change(BEE_HEADING_HOME)
 
 				else
-					var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,T)
+					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
 					for (var/datum/bee/B in home_goers)
 						B_mob.addBee(B)
 						bees.Remove(B)
@@ -390,7 +389,7 @@ var/bee_mobs_count = 0
 					mood_change(BEE_OUT_FOR_PLANTS)
 
 				else
-					var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,T)
+					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
 					for (var/datum/bee/B in pollinaters)
 						B_mob.addBee(B)
 						bees.Remove(B)
@@ -431,7 +430,7 @@ var/bee_mobs_count = 0
 				target = null
 			if(bees.len > 5)
 				//calm down and spread out a little
-				var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
 				for (var/i = 1 to rand(1,5))
 					var/datum/bee/B = pick(bees)
 					B_mob.addBee(B)
@@ -442,7 +441,7 @@ var/bee_mobs_count = 0
 				step_rand(B_mob)
 
 		//ATTACKING TARGET
-		else if(state == BEE_OUT_FOR_ENEMIES && M in view(src,1))
+		else if(state == BEE_OUT_FOR_ENEMIES && (M in view(src,1)))
 			var/sting_prob = 100
 			if(istype(M))
 				var/obj/item/clothing/worn_suit = M.wear_suit
@@ -527,7 +526,7 @@ var/bee_mobs_count = 0
 					queen = 1
 					break
 			if (state != BEE_ROAMING || !queen)//homeless bees spread out if there's no queen among them
-				var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
 				var/datum/bee/B = pick(bees)
 				B_mob.addBee(B)
 				bees.Remove(B)
@@ -600,7 +599,7 @@ var/bee_mobs_count = 0
 		//REACHING FOR FLOWERS
 		if(state == BEE_OUT_FOR_PLANTS && pollinating <= 0)
 			var/turf/target_turf = null
-			if(target_plant && target_plant in view(src,7))
+			if(target_plant && (target_plant in view(src,7)))
 				target_turf = get_turf(target_plant)
 				wander = 0
 			else

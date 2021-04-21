@@ -13,6 +13,7 @@ Mineral Sheets
 	Others:
 		- Adamantine
 		- Mythril
+		- Gingerbread
 */
 
 /obj/item/stack/sheet/mineral
@@ -67,6 +68,14 @@ var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	w_class = W_CLASS_MEDIUM
 	melt_temperature = 2473.15
 	sheettype = "brick"
+
+var/list/datum/stack_recipe/brick_recipes = list ( \
+	new/datum/stack_recipe("fireplace", /obj/machinery/space_heater/campfire/stove/fireplace, 15, time = 10 SECONDS, one_per_turf = 1, on_floor = 1)
+	)
+
+/obj/item/stack/sheet/mineral/brick/New(var/loc, var/amount=null)
+	recipes = brick_recipes
+	..()
 
 /*
  * Diamond
@@ -152,7 +161,9 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
 	new/datum/stack_recipe("plasma door", /obj/machinery/door/mineral/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20, one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE)
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	null,
+	blacksmithing_recipes,
 	)
 
 /obj/item/stack/sheet/mineral/plasma/New(var/loc, var/amount=null)
@@ -187,6 +198,8 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("blood bag", /obj/item/weapon/reagent_containers/blood/empty, 3, on_floor = 1), \
 	new/datum/stack_recipe("plastic coat", /obj/item/clothing/suit/raincoat, 5), \
 	new/datum/stack_recipe("plastic flaps", /obj/structure/plasticflaps, 10, one_per_turf = 1, on_floor = 1, start_unanchored = 1), \
+	new/datum/stack_recipe("plastic chair", /obj/structure/bed/chair/plastic/plastic_chair, 3, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("plastic table parts", /obj/item/weapon/table_parts/plastic, 5, on_floor = 1), \
 	new/datum/stack_recipe("water-cooler", /obj/structure/reagent_dispensers/water_cooler, 4, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("warning cone", /obj/item/weapon/caution/cone, 2, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe_list("curtains",list(
@@ -527,3 +540,28 @@ var/list/datum/stack_recipe/mythril_recipes = list ( \
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=5"
 	perunit = CC_PER_SHEET_MOLITZ
+
+obj/item/stack/sheet/mineral/gingerbread
+	name = "gingerbread"
+	icon_state = "sheet-gingerbread"
+	force = 5.0
+	throwforce = 5
+	w_class = W_CLASS_MEDIUM
+	throw_speed = 3
+	throw_range = 3
+	origin_tech = Tc_MATERIALS + "=5"
+	perunit = CC_PER_SHEET_GINGERBREAD
+
+var/list/datum/stack_recipe/gingerbread_recipes = list ( \
+	new/datum/stack_recipe("gingerbread floor tile", /obj/item/stack/tile/mineral/gingerbread, 1, 4, 20), \
+	new/datum/stack_recipe("wall mounted peppermint red",/obj/structure/bigpeppermint_red, 5, time = 10, on_floor = 1),\
+	new/datum/stack_recipe("wall mounted peppermint green", /obj/structure/bigpeppermint_green,	5, time = 10,	on_floor = 1),\
+	new/datum/stack_recipe("gingerbread wall", /turf/simulated/wall/mineral/gingerbread, 6, time = 40, one_per_turf = 1, on_floor = 1),\
+	new/datum/stack_recipe("gingerbread door", /obj/machinery/door/mineral/gingerbread, 5, time = 30, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("gingerbread false wall", /obj/structure/falsewall/gingerbread, 6, time = 40, one_per_turf = 1, on_floor = 1),\
+		)
+
+/obj/item/stack/sheet/mineral/gingerbread/New(var/loc, var/amount=null)
+	recipes = gingerbread_recipes
+
+	..()

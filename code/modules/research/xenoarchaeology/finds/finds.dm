@@ -50,7 +50,9 @@
 
 
 /datum/find/proc/spawn_item() //Makes the item. Returns item.
-	return new /obj/item/weapon/archaeological_find
+	log_admin("/datum/find/spawn_item() parent proc was called, that should never happen. Find type is [type]")
+	message_admins("/datum/find/spawn_item() parent proc was called, that should never happen. Find type is [type]")
+	return
 
 /datum/find/proc/apply_prefix(var/obj/item/I)
 	I.name = "[pick("strange","ancient","alien","")] [item_type?"[item_type]":"[initial(I.name)]"]"
@@ -113,6 +115,7 @@
 /datum/find/bowl/spawn_item()
 	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing, 25;/obj/item/weapon/reagent_containers/glass/xenoviral)
 	var/obj/item/weapon/new_item = new glass_type
+	new_item.name = "bowl"
 	new_item.icon_state = "bowl"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
@@ -133,6 +136,7 @@
 /datum/find/urn/spawn_item()
 	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing, 25;/obj/item/weapon/reagent_containers/glass/xenoviral)
 	var/obj/item/weapon/new_item = new glass_type
+	new_item.name = "urn"
 	new_item.icon_state = "urn"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
@@ -168,7 +172,7 @@
 	responsive_reagent = MERCURY
 
 /datum/find/statuette/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	new_item.icon_state = "statuette"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
@@ -186,7 +190,7 @@
 	responsive_reagent = MERCURY
 
 /datum/find/instrument/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	new_item.icon_state = "instrument"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	if(prob(30))
@@ -207,10 +211,33 @@
 
 /datum/find/knife/spawn_item()
 	var/obj/item/new_item = new /obj/item/weapon/kitchen/utensil/knife/large
-	item_type = "[pick("bladed knife","serrated blade","sharp cutting implement")]"
+	item_type = "[pick("double-bladed knife","serrated blade","sharp cutting implement")]"
+	new_item.icon = 'icons/obj/weapons.dmi'
+	switch(item_type)
+		if ("double-bladed knife")
+			new_item.icon_state = "double_bladed"
+		if ("serrated blade")
+			new_item.icon_state = "serrated_blade"
+		if ("sharp cutting implement")
+			new_item.icon_state = "cutting_implement"
 	return new_item
 
 /datum/find/knife/additional_description(var/obj/item/I)
+	I.desc += "[pick("It doesn't look safe.",\
+			"It looks wickedly jagged",\
+			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
+
+/datum/find/ritualknife
+	find_ID = ARCHAEO_RITUALKNIFE
+	additional_desc = TRUE
+	apply_material_decorations = TRUE
+	responsive_reagent = IRON
+
+/datum/find/ritualknife/spawn_item()
+	var/obj/item/new_item = new /obj/item/weapon/kitchen/utensil/knife/large/ritual
+	return new_item
+
+/datum/find/ritualknife/additional_description(var/obj/item/I)
 	I.desc += "[pick("It doesn't look safe.",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
@@ -313,11 +340,11 @@
 
 /datum/find/tool/spawn_item()
 	if(prob(25))
-		return new /obj/item/weapon/wrench
+		return new /obj/item/tool/wrench
 	else if(prob(25))
-		return new /obj/item/weapon/crowbar
+		return new /obj/item/tool/crowbar
 	else
-		return new /obj/item/weapon/screwdriver
+		return new /obj/item/tool/screwdriver
 
 /datum/find/tool/additional_description(var/obj/item/I)
 	I.desc += "[pick("It doesn't look safe.",\
@@ -346,7 +373,7 @@
 
 	var/new_type = pick(possible_spawns)
 	if(new_type == /obj/item/stack/sheet/metal)
-		new_item = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		new_item = new /obj/item/stack/sheet/metal(get_turf(src))
 	else
 		new_item = new new_type(get_turf(src))
 	new_item.amount = rand(5,45)
@@ -376,18 +403,18 @@
 	responsive_reagent = NITROGEN
 
 /datum/find/crystal/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_find = ..()
+	var/obj/item/weapon/archaeological_find/new_find = new()
 	if(prob(25))
-		item_type = "smooth green crystal"
+		new_find.name = "smooth green crystal"
 		new_find.icon_state = "Green lump"
 	else if(prob(33))
-		item_type = "irregular purple crystal"
+		new_find.name = "irregular purple crystal"
 		new_find.icon_state = "Phazon"
 	else if(prob(50))
-		item_type = "rough red crystal"
+		new_find.name = "rough red crystal"
 		new_find.icon_state = "changerock"
 	else
-		item_type = "smooth red crystal"
+		new_find.name = "smooth red crystal"
 		new_find.icon_state = "smoothrock"
 
 	if(prob(10))
@@ -454,19 +481,27 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/cultrobes/spawn_item()
-	var/list/possible_spawns = list()
-	if (prob(1))
-		possible_spawns = list(/obj/item/clothing/head/legacy_culthood,
-							/obj/item/clothing/head/legacy_magus,
-							/obj/item/clothing/head/legacy_culthood/alt,
-							/obj/item/clothing/head/helmet/space/legacy_cult)
-	else
-		possible_spawns = list(
-			/obj/item/clothing/head/culthood,
-			/obj/item/clothing/head/culthood/old,
-			/obj/item/clothing/head/magus,
-			/obj/item/clothing/head/helmet/space/cult)
-	var/choice = pick(possible_spawns)
+
+	//75% chance to get a headgear
+	//25% chance to get a suit
+
+	//33% chance to get current cult hood/robes
+	//26.6% chance to get red cult hood/robes
+	//20% chance to get magus hood/robes
+	//13% chance to get current cult helmet/armor
+	//6.6% chance to get legacy cult helmet/armor
+
+	var/choice = pick(
+	75;/obj/item/clothing/head/culthood,
+	25;/obj/item/clothing/suit/cultrobes,
+	60;/obj/item/clothing/head/culthood/old,
+	20;/obj/item/clothing/suit/cultrobes/old,
+	45;/obj/item/clothing/head/magus,
+	15;/obj/item/clothing/suit/magusred,
+	30;/obj/item/clothing/head/helmet/space/cult,
+	10;/obj/item/clothing/suit/space/cult,
+	15;/obj/item/clothing/head/helmet/space/legacy_cult,
+	5;/obj/item/clothing/suit/space/legacy_cult)
 	return new choice
 
 /datum/find/soulstone
@@ -478,7 +513,7 @@
 	responsive_reagent = NITROGEN
 
 /datum/find/soulstone/spawn_item()
-	return new /obj/item/device/soulstone
+	return new /obj/item/soulstone
 
 /datum/find/shard
 	find_ID = ARCHAEO_SHARD
@@ -489,9 +524,9 @@
 
 /datum/find/shard/spawn_item()
 	if(prob(50))
-		return getFromPool(/obj/item/weapon/shard)
+		return new /obj/item/weapon/shard
 	else
-		return getFromPool(/obj/item/weapon/shard/plasma)
+		return new /obj/item/weapon/shard/plasma
 
 /datum/find/rods
 	find_ID = ARCHAEO_RODS
@@ -549,23 +584,95 @@
 	responsive_reagent = IRON
 
 /datum/find/laser/spawn_item()
-	var/spawn_type = pick(
-		/obj/item/weapon/gun/energy/laser/practice,
-		/obj/item/weapon/gun/energy/laser,
-		/obj/item/weapon/gun/energy/xray,
-		/obj/item/weapon/gun/energy/laser/captain,
-		/obj/item/weapon/gun/energy/ionrifle,
-		/obj/item/weapon/gun/energy/plasma/pistol,
-		/obj/item/weapon/gun/energy/floragun,
-		/obj/item/weapon/gun/energy/laser/rainbow,
-		/obj/item/weapon/gun/energy/taser)
-	var/obj/item/weapon/gun/energy/new_gun = new spawn_type
+
+	var/gun_base = pickweight(list(
+		/obj/item/weapon/gun/energy/laser/alien				=	75,		//75% chance to be a normal gun
+		/obj/item/weapon/gun/energy/laser/captain/alien	=	20,		//20% chance to be self-recharging
+		/obj/item/weapon/gun/energy/bison/alien			= 	5,		//5% chance to be pump-charge
+	))
+	var/obj/item/weapon/gun/energy/new_gun = new gun_base
 	new_gun.icon = 'icons/obj/xenoarchaeology.dmi'
 	new_gun.icon_state = "egun[rand(1,6)]"
 	new_gun.item_state = new_gun.icon_state
 	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	new_gun.charge_states = 0 //let's prevent it from losing that great icon if we charge it
 	new_gun.desc = ""
+
+	//Randomize it!
+
+	new_gun.projectile_type = pickweight(list(		//Randomize the beam it fires. Standard laser deals 30 burn.
+
+		/obj/item/projectile/beam 							= 250,
+		/obj/item/projectile/beam/captain					= 80,	//40 damage
+		/obj/item/projectile/beam/retro						= 120,
+		/obj/item/projectile/beam/practice					= 130,	//Deals no damage.
+		/obj/item/projectile/beam/lightlaser				= 120,	//25 damage
+		/obj/item/projectile/beam/weaklaser					= 130,	//15 damage
+		/obj/item/projectile/beam/veryweaklaser				= 140,	//5 damage
+		/obj/item/projectile/beam/heavylaser				= 40,	//60 damage
+		/obj/item/projectile/beam/heavylaser/lawgiver		= 80,	//40 damage
+		/obj/item/projectile/beam/xray						= 80,	//Shoots through walls.
+		/obj/item/projectile/beam/bison						= 110,	//15 damage, pierces
+		/obj/item/projectile/beam/white						= 100 ,	//Injects HONK serum and spacedrugs
+		/obj/item/projectile/beam/combustion				= 70,	//Creates a small explosion on impact, not all that powerful really
+		/obj/item/projectile/energy/declone					= 70,	//Decloner bolts
+		/obj/item/projectile/energy/bolt					= 70 ,	//Ebow bolts
+		/obj/item/projectile/energy/buster					= 120,	//20 damage
+		/obj/item/projectile/energy/floramut				= 100,	//floral somatray bolts
+		/obj/item/projectile/kinetic						= 100,	//KA bolts
+		/obj/item/projectile/ricochet						= 100,	//Richochet lasers
+		/obj/item/projectile/spur/polarstar					= 100,	//Polar star
+		/obj/item/weapon/gun/energy/polarstar/spur			= 80,	//Spur
+		//ION BOLTS
+		/obj/item/projectile/ion							= 120,	//Its an ion bolt.
+		/obj/item/projectile/ion/small						= 110,	//Its a small ion bolt.
+		//PLASMA BOLTS
+		/obj/item/projectile/energy/plasma/light			= 90,	//35 damage, contaminates
+		/obj/item/projectile/energy/plasma/rifle			= 50,	//50 damage, contaminates
+		/obj/item/projectile/energy/plasma/pistol			= 120,	//25 damage, contaminates
+		//TASERS
+		/obj/item/projectile/energy/electrode				= 180,	//Its a taser electrode
+		/obj/item/projectile/energy/electrode/fast			= 80,	//fast tasers
+		/obj/item/projectile/energy/electrode/scatter		= 80,	//3-way tasers
+		//DUMB SHIT
+		/obj/item/projectile/energy/osipr					= 10,	//oh no
+		/obj/item/projectile/energy/rad						= 50,	//30 damage, irradiates
+		/obj/item/projectile/gravitywell					= 10,	//uh oh
+		/obj/item/projectile/beam/pulse						= 40,	//50 damage, destroys walls
+//		/obj/item/projectile/energy/electrode/scatter/sun 	= 10,	//holy christ
+		/obj/item/projectile/swap							= 50,	//swap staff bolts
+		/obj/item/projectile/forcebolt						= 50,	//mental focus bolts
+		/obj/item/projectile/beam/mindflayer				= 50,	//deals brain damage
+	))
+
+	var/delay = rand(1, 20)
+	new_gun.fire_delay = delay		//Randomize the fire delay
+	new_gun.attack_delay = delay
+	new_gun.charge_cost = rand(25, 225)		//Randomize the cost-per-fire (how many shots it has)
+
+	if(istype(new_gun.projectile_type, /obj/item/projectile/gravitywell))	//If its a gravity gun set the charge to 200 so the game doesnt break.
+		new_gun.charge_cost = 200
+
+	new_gun.fire_sound = pick(list(				//Randomize the sound it makes
+		'sound/weapons/alien_laser1.ogg',
+		'sound/weapons/alien_laser2.ogg',
+		'sound/weapons/blaster.ogg',
+		'sound/weapons/electriczap.ogg',
+		'sound/weapons/hivehand.ogg',
+		'sound/weapons/kinetic_accelerator.ogg',
+		'sound/weapons/Laser.ogg',
+		'sound/weapons/Laser2.ogg',
+		'sound/weapons/laser3.ogg',
+		'sound/weapons/lasercannonfire.ogg',
+		'sound/weapons/ion.ogg',
+		'sound/weapons/megabuster.ogg',
+		'sound/weapons/pulse.ogg',
+		'sound/weapons/pulse2.ogg',
+		'sound/weapons/pulse3.ogg',
+		'sound/weapons/Taser.ogg',
+		'sound/weapons/Taser2.ogg'
+	))
+
 
 	//5% chance to explode when first fired
 	//10% chance to have an unchargeable cell
@@ -583,6 +690,8 @@
 
 /datum/find/laser/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique energy weapon, you're not sure if it will fire or not."
+	if(istype(I, /obj/item/weapon/gun/energy/bison))
+		I.desc += "There seems to be some sort of pump on the back of the stock."
 	if(prob(10)) // 10% chance to be a smart gun
 		I.can_take_pai = TRUE
 		I.desc += " There seems to be some sort of slot in the handle."
@@ -665,7 +774,7 @@
 	responsive_reagent = MERCURY
 
 /datum/find/unknown/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	if(prob(50))
 		qdel(new_item)
 		new_item = new /obj/item/weapon/glow_orb
@@ -743,7 +852,7 @@
 	responsive_reagent = CARBON
 
 /datum/find/remains_human/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	item_type = "humanoid [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remains"
@@ -767,7 +876,7 @@
 	responsive_reagent = IRON
 
 /datum/find/remains_robot/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	item_type = "[pick("mechanical","robotic","cyborg")] [pick("remains","chassis","debris")]"
 	new_item.icon = 'icons/mob/robots.dmi'
 	new_item.icon_state = "remainsrobot"
@@ -792,7 +901,7 @@
 	responsive_reagent = CARBON
 
 /datum/find/remains_xeno/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	item_type = "alien [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remainsxeno"
@@ -920,6 +1029,16 @@
 		var/result = pick(existing_typesof(/obj/item/toy))
 		return new result
 
+/datum/find/toybox
+	find_ID = ARCHAEO_TOYBOX
+	apply_material_decorations = FALSE
+	apply_image_decorations = FALSE
+	apply_prefix = FALSE
+	responsive_reagent = POTASSIUM
+
+/datum/find/toybox/spawn_item()
+	return new /obj/item/weapon/butterflyknife/viscerator/bunny
+
 /datum/find/largecrystal
 	find_ID = ARCHAEO_LARGE_CRYSTAL
 	apply_material_decorations = FALSE
@@ -1015,30 +1134,14 @@
 		qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Archaeological finds
+// Basic archaeological find
 
 /obj/item/weapon/archaeological_find
 	name = "object"
 	desc = "This object is completely alien."
 	icon = 'icons/obj/xenoarchaeology.dmi'
-	icon_state = "ano01"
-	var/datum/find/find_type
+	icon_state = "unknown1"
 
-/obj/item/weapon/archaeological_find/New(loc, var/new_item_type)
+/obj/item/weapon/archaeological_find/New(loc)
 	..()
-	AddToProfiler()
-	if(new_item_type)
-		find_type = new_item_type
-	else
-		find_type = get_random_find()
-
 	icon_state = "unknown[rand(1,4)]"
-	var/obj/item/weapon/new_item = find_type.create_find(src)
-
-	var/turf/T = get_turf(src)
-	if(new_item != src)
-		new_item.forceMove(src.loc)
-		qdel(src)
-
-	if(istype(T, /turf/unsimulated/mineral))
-		T:last_find = new_item

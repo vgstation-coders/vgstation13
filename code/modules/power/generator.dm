@@ -20,7 +20,6 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 	var/tmp/datum/html_interface/nanotrasen/interface
-	var/tmp/on_pipenet_tick_key
 
 /obj/machinery/power/generator/New()
 	..()
@@ -49,7 +48,7 @@
 	interface = new(src, name, 450, 410, head)
 
 	html_machines += src
-	on_pipenet_tick_key = global.on_pipenet_tick.Add(src, "pipenet_process")
+	global.pipenet_processing_objects += src
 
 	init_ui()
 
@@ -67,7 +66,7 @@
 	interface = null
 
 	html_machines -= src
-	global.on_pipenet_tick.Remove(on_pipenet_tick_key)
+	global.pipenet_processing_objects -= src
 
 /obj/machinery/power/generator/proc/init_ui()
 	interface.updateLayout({"
@@ -266,7 +265,7 @@
 		overlays += image(icon = icon, icon_state = "teg-op[lastgenlev]")
 
 // We actually tick power gen on the pipenet process to make sure we're synced with pipenet updates.
-/obj/machinery/power/generator/proc/pipenet_process(var/list/event_args)
+/obj/machinery/power/generator/pipenet_process()
 	if(!operable())
 		return
 

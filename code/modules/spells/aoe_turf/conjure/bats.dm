@@ -32,7 +32,7 @@
 		if(locs.len >= 3) //we found 3 locations and thats all we need
 			break
 		var/turf/T = get_step(user, direction) //getting a loc in that direction
-		if(quick_AStar(user.loc, T, /turf/proc/AdjacentTurfs, /turf/proc/Distance, 1)) // if a path exists, so no dense objects in the way its valid salid
+		if(quick_AStar(user.loc, T, /turf/proc/AdjacentTurfs, /turf/proc/Distance, 1, reference="\ref[src]")) // if a path exists, so no dense objects in the way its valid salid
 			locs += T
 		else
 

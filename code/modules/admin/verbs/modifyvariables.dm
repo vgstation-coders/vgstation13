@@ -1,7 +1,8 @@
 var/list/forbidden_varedit_object_types = list(
 										/datum/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
-										/datum/blackbox,	//Prevents people messing with feedback gathering
+										/datum/blackbox,					//Prevents people messing with feedback gathering
 										/datum/feedback_variable,			//Prevents people messing with feedback gathering
+										/datum/subsystem/dbcore/,			// No messing with the database.
 									)
 
 //Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value

@@ -64,7 +64,7 @@ var/syndicate_elite_shuttle_timeleft = 0
 		to_chat(usr, "<span class='warning'>The Syndicate Elite shuttle is unable to leave.</span>")
 		return
 
-		sleep(600)
+	sleep(600)
 /*
 	//Begin Marauder launchpad.
 	spawn(0)//So it parallel processes it.
@@ -131,7 +131,7 @@ var/syndicate_elite_shuttle_timeleft = 0
 					spawn(0)
 						M.close()
 						*/
-		elite_squad.readyreset()//Reset firealarm after the team launched.
+	elite_squad.readyreset()//Reset firealarm after the team launched.
 	//End Marauder launchpad.
 /*
 	var/obj/explosionmarker = locate("Syndicate Breach Area")
@@ -141,7 +141,7 @@ var/syndicate_elite_shuttle_timeleft = 0
 			explosion(T,4,6,8,10,0)
 
 	sleep(40)
-	
+
 	//what the fuck is that \/
 //	proc/explosion(turf/epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, adminlog = 1)
 

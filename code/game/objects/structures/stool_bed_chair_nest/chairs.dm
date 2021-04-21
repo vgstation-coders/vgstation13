@@ -58,6 +58,11 @@
 			return
 
 	if(W.is_wrench(user))
+		if (locked_atoms && locked_atoms.len)
+			for (var/mob/living/L in locked_atoms)
+				visible_message("<span class='warning'>\The [L] slips from the chair!</span>'")
+				L.unlock_from(src)
+				L.Stun(2)
 		W.playtoolsound(src, 50)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
@@ -157,22 +162,27 @@
 			return
 	change_dir(direction)
 	return 1
-	
+
 /obj/structure/bed/chair/AltClick(mob/user as mob)
-	buckle_chair(user,user)	
+	buckle_chair(user,user, 0) // Require to stand on the chair in order to do that
 
 /obj/structure/bed/chair/MouseDropTo(mob/M as mob, mob/user as mob)
 	buckle_chair(M,user)
 
-/obj/structure/bed/chair/proc/buckle_chair(mob/M as mob, mob/user as mob)
+/obj/structure/bed/chair/proc/buckle_chair(mob/M as mob, mob/user as mob, var/override_buckle_range = null)
 	if(!istype(M))
-		return ..()
+		return
+
+	var/effective_buckle_range = (isnull(override_buckle_range) ? buckle_range : override_buckle_range)
 
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
-		
-	if(!user.Adjacent(M) || !user.Adjacent(src))
+
+	if(user!=M && (!user.Adjacent(M) || !user.Adjacent(src)))
+		return
+
+	if(get_dist(src,user) > effective_buckle_range)
 		return
 
 	if(target && target.op_stage.butt == 4 && Adjacent(target) && user.Adjacent(src) && !user.incapacitated()) //Butt surgery is at stage 4
@@ -181,7 +191,7 @@
 				"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
 				"Having no butt, you slide right out of the [src]",\
 				"You hear metal clanking.")
-				
+
 			M.Knockdown(5)
 			M.Stun(5)
 		else
@@ -623,7 +633,7 @@
 		if (locked_atoms && locked_atoms.len > 0)
 			to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the plasteel off \the [src]")
 		if (WT.do_weld(user, src, 50, 3))
 			if(gcDestroyed)
@@ -683,3 +693,19 @@
 
 /obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
 	change_dir(turn(dir, 90))
+
+//Plastic chairs
+/obj/structure/bed/chair/plastic
+	sheet_type = /obj/item/stack/sheet/mineral/plastic
+	sheet_amt = 3
+	anchored = 0
+
+/obj/structure/bed/chair/plastic/plastic_chair
+	icon_state = "plastic_chair"
+	name = "plastic chair"
+	desc = "All ready for the barbecue."
+
+/obj/structure/bed/chair/plastic/plastic_chair/New()
+	..()
+	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE

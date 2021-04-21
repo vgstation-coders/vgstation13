@@ -6,7 +6,7 @@
 "f" = (/obj/item/weapon/gift,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "g" = (/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "h" = (/obj/item/weapon/gun/energy/gun/nuclear,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"i" = (/obj/item/device/soulstone,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"i" = (/obj/item/soulstone,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "j" = (/obj/item/ammo_storage/box/a357,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "k" = (/obj/effect/rune,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "l" = (/obj/machinery/turret{dir = 8; lasers = 1; name = "Angry Turret"},/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor{icon_state = "white"},/area/awaymission)

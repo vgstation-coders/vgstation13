@@ -8,10 +8,9 @@
 	nodamage = 0
 	flag = "bullet"
 	var/embed = 1
-	var/explosive = 1
 	var/picked_up_speed = 0.66 //This is basically projectile speed, so
 	fire_sound = 'sound/weapons/rocket.ogg'
-	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room, 
+	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room,
 	var/exheavy = 3 //but won't punch through reinforced walls
 	var/exlight = 5
 	var/exflash = 8
@@ -32,19 +31,37 @@
 			pixel_y = PixelY
 		sleep(picked_up_speed)
 
+// -- Random critz
+/obj/item/projectile/rocket/become_crit()
+	exdev += 2
+	exheavy += 2
+	exlight += 2
+	..()
+
+/obj/item/projectile/rocket/calculate_falloff(var/atom/impact)
+	var/dist_falloff = get_dist(firer, impact) - 5
+	var/total_falloff = clamp((1 - dist_falloff/15), 0.5, 1) // No rampup + more distance for firing
+	return total_falloff
+
+/obj/item/projectile/rocket/do_falloff(var/total_falloff)
+	. = ..()
+	exdev = Floor(total_falloff*exdev)
+	exheavy = Floor(total_falloff*exheavy)
+	exlight = Floor(total_falloff*exlight)
+	exflash = Floor(total_falloff*exflash)
+	emheavy = Floor(total_falloff*emheavy)
+	emlight = Floor(total_falloff*emlight)
+
 /obj/item/projectile/rocket/to_bump(var/atom/A)
-	if(explosive == 1)
-		explosion(A, exdev, exheavy, exlight, exflash) 
-		if(!gcDestroyed)
-			qdel(src)
-	else
-		..()
-		if(!gcDestroyed)
-			qdel(src)
+	var/A_turf = get_turf(A)
+	..()
+	explosion(A_turf, exdev, exheavy, exlight, exflash)
+	if(!gcDestroyed)
+		qdel(src)
 
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
-	icon_state = "rpground"
+	icon_state = "rpground_lowyield"
 	damage = 45
 	stun = 10
 	weaken = 10
@@ -55,6 +72,7 @@
 
 /obj/item/projectile/rocket/blank
 	name = "blank rocket"
+	icon_state = "rpground_blank"
 	damage = 5
 	weaken = 10
 	agony = 10
@@ -65,28 +83,36 @@
 
 /obj/item/projectile/rocket/blank/emp
 	name = "EMP rocket"
+	icon_state = "rpground_emp"
 	damage = 10
 	agony = 30
 	emheavy = 3
 	emlight = 5
 
-/obj/item/projectile/rocket/emp/to_bump(var/atom/A)
+
+/obj/item/projectile/rocket/blank/emp/to_bump(var/atom/A)
 	empulse(A, 3, 5)
 	..()
-	
+
+
 /obj/item/projectile/rocket/blank/stun
 	name = "stun rocket"
+	icon_state = "rpground_stun"
 	damage = 15
 	stun = 20
 	weaken = 20
 	agony = 30
 
-/obj/item/projectile/rocket/stun/to_bump(var/atom/A)
+
+/obj/item/projectile/rocket/blank/stun/to_bump(var/atom/A)
 	flashbangprime(TRUE, FALSE, FALSE)
 	..()
-		
+
+
+
 /obj/item/projectile/rocket/lowyield/extreme
 	name = "extreme yield rocket"
+	icon_state = "rpground_extreme"
 	damage = 200
 	exdev 	= 7
 	exheavy = 14
@@ -145,6 +171,7 @@
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			detonate()
+	return ..()
 
 /obj/item/projectile/rocket/nikita/Destroy()
 	reset_view()
@@ -229,3 +256,96 @@
 	if(C)
 		C.break_control()
 		qdel(C)
+
+
+//Clown missiles
+
+/obj/item/projectile/rocket/clown
+	name = "clown rocket" //abstract
+	damage = 0
+	weaken = 0
+	agony = 0
+	exdev 	= -1
+	exheavy = 0
+	exlight = 0
+	exflash = 0
+	stun = 5
+	var/payload = TRUE
+	var/payload_type
+	var/payload_power = 5
+	var/payload_radius = 2
+
+
+/obj/item/projectile/rocket/clown/to_bump(var/atom/A)
+	if(payload)
+		launch_payload()
+	..()
+
+
+/obj/item/projectile/rocket/clown/proc/launch_payload()
+	if(payload_type)
+		var/atom/curloc = get_turf(src)
+		var/list/possible_targets= block_borders(locate(curloc.x-payload_radius, curloc.y-payload_radius, curloc.z), locate(curloc.x+payload_radius, curloc.y+payload_radius, curloc.z))  //I want to throw at the outer reaches of the radius
+
+		//create the payload and throw at each location
+		for(var/atom/loc in possible_targets)
+			var/atom/movable/payload = new payload_type(curloc)
+			payload.throw_at(loc,9,payload_power) // the last one is throwspeed, maybe have the payload determine lethality
+
+
+/obj/item/projectile/rocket/clown/mouse
+	name = "mouse rocket"
+	icon_state = "rpground_mouse"
+	payload_type = /mob/living/simple_animal/mouse
+
+/obj/item/projectile/rocket/clown/pizza
+	name = "pizza rocket"
+	icon_state = "rpground_pizza"
+	payload_type = /obj/item/weapon/reagent_containers/food/snacks/margheritaslice
+
+/obj/item/projectile/rocket/clown/pie
+	name = "pie rocket"
+	icon_state = "rpground_pie"
+	payload_type = /obj/item/weapon/reagent_containers/food/snacks/pie
+
+/obj/item/projectile/rocket/clown/cow
+	name = "cow rocket"
+	icon_state = "rpground_cow"
+	payload_type =/mob/living/simple_animal/cow
+
+/obj/item/projectile/rocket/clown/goblin
+	name = "clown goblin rocket"
+	icon_state = "rpground_clowngoblin"
+	payload_type = /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
+
+
+/obj/item/projectile/rocket/clown/transmog
+	//these missiles transmog victims in an aoe of the explosion depending on the transmog type for a duration
+	name = "rocket"
+	icon_state = "rpground"
+	var/transmog_duration = 100
+	var/transmog_type
+	payload = FALSE
+
+
+/obj/item/projectile/rocket/clown/transmog/to_bump(var/atom/A)
+	aoe_transmog()
+	..()
+
+/obj/item/projectile/rocket/clown/transmog/proc/aoe_transmog()
+	var/atom/curloc = get_turf(src)
+	var/list/possible_targets= block(locate(curloc.x-payload_radius, curloc.y-payload_radius, curloc.z), locate(curloc.x+payload_radius, curloc.y+payload_radius, curloc.z))  //I want to throw at the outer reaches of the radius
+	for(var/atom/loc in possible_targets)
+		for(var/mob/living/M in loc)
+			var/mob/living/holder = M.transmogrify(transmog_type)
+			spawn(transmog_duration)
+				holder.transmogrify()
+
+/obj/item/projectile/rocket/clown/transmog/cluwne
+	name = "cluwnification rocket"
+	icon_state = "rpground_clowngoblin"
+	transmog_type = /mob/living/simple_animal/hostile/retaliate/cluwne/tempcluwne
+
+/obj/item/projectile/rocket/clown/transmog/cluwne/to_bump(var/atom/A)
+	..()
+	playsound(src,'sound/items/bikehorn.ogg',100)

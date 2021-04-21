@@ -248,11 +248,11 @@
 		/obj/item/stack/cable_coil/random,
 		/obj/item/weapon/camera_assembly,
 		/obj/item/weapon/cell,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/screwdriver,
-		/obj/item/weapon/wrench,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/wirecutters,
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wrench,
 		/obj/item/weapon/extinguisher,
 		/obj/item/weapon/hand_labeler,
 		/obj/item/weapon/light/bulb,
@@ -303,7 +303,7 @@
 		/obj/item/device/flashlight,
 		/obj/item/device/flashlight/lantern,
 		/obj/item/device/flashlight/flare,
-		/obj/item/weapon/weldingtool/largetank,
+		/obj/item/tool/weldingtool/largetank,
 		/obj/item/device/gps,
 		/obj/item/device/gps/science,
 		/obj/item/device/gps/engineering,
@@ -523,6 +523,8 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
+		/obj/item/weapon/disk,
+		/obj/item/weapon/disk/hdd,
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/handcuffs/cable,
 		/obj/item/weapon/hatchet,
@@ -533,7 +535,7 @@
 		/obj/item/weapon/mop,
 		/obj/item/weapon/newspaper,
 		/obj/item/weapon/pen,
-		/obj/item/weapon/scalpel,
+		/obj/item/tool/scalpel,
 		/obj/item/weapon/shard,
 		/obj/item/weapon/stool,
 		/obj/item/weapon/reagent_containers/blood/OMinus,
@@ -575,7 +577,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake,
 		/obj/item/weapon/reagent_containers/food/snacks/tofurkey,
 		/obj/item/device/radio/headset/headset_earmuffs,
-		/obj/item/weapon/solder/pre_fueled,
+		/obj/item/tool/solder/pre_fueled,
 		/obj/item/weapon/storage/box/smokebombs,
 		/obj/item/weapon/storage/box/wind,
 		/obj/item/weapon/storage/box/foam,
@@ -729,9 +731,9 @@
 		/obj/item/weapon/pickaxe/jackhammer,
 		/obj/item/device/rcd/rpd,
 		/obj/item/device/rcd,
-		/obj/item/weapon/rcd_ammo,
+		/obj/item/stack/rcd_ammo,
 		/obj/item/device/rcd/matter/rsf,
-		/obj/item/weapon/weldingtool/hugetank,
+		/obj/item/tool/weldingtool/hugetank,
 		/obj/item/weapon/tank/plasma,
 		/obj/item/gun_part/silencer,
 		/obj/item/weapon/storage/backpack/holding,
@@ -857,6 +859,7 @@
 		if (4)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+	qdel(src)
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/abstract/map/spawner/mobs/monkeys
@@ -917,6 +920,7 @@
 	icon_state = "mob_wolf"
 	amount = 7
 	to_spawn = list(
+		/mob/living/simple_animal/hostile/wolf/pliable,
 		/mob/living/simple_animal/hostile/wolf,
 		/mob/living/simple_animal/hostile/wolf,
 		/mob/living/simple_animal/hostile/wolf,
@@ -1159,11 +1163,11 @@
 		/obj/item/clothing/accessory/holster/handgun,
 		/obj/item/clothing/glasses/scanner/night,
 		/obj/item/clothing/head/collectable/petehat,
-		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/abstract/loadout/soviet_rigsuit,
-		/obj/abstract/loadout/nazi_rigsuit,
+		/obj/item/clothing/suit/space/rig/soviet,
+		/obj/item/clothing/suit/space/rig/nazi,
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/roburger,
 		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
@@ -1172,7 +1176,9 @@
 		/obj/item/weapon/reagent_containers/food/snacks/potentham,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-		/obj/item/mounted/frame/painting
+		/obj/item/mounted/frame/painting,
+		/obj/item/weapon/aiModule/randomize,
+		/obj/item/weapon/aiModule/core/hogan
 )
 
 
@@ -1235,12 +1241,12 @@
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,
 	/obj/item/clothing/head/collectable/petehat,
-	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+	/obj/item/clothing/head/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/abstract/loadout/soviet_rigsuit,
-	/obj/abstract/loadout/nazi_rigsuit,
-	/obj/abstract/loadout/dredd_gear
+	/obj/item/clothing/suit/space/rig/soviet,
+	/obj/item/clothing/suit/space/rig/nazi,
+	/obj/abstract/spawn_all/dredd_gear
 )
 
 /obj/abstract/map/spawner/safe/medal
@@ -1409,3 +1415,33 @@
 		if (22)
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
+	qdel(src)
+
+// Spawn all in the turf
+/obj/abstract/spawn_all
+	var/list/to_spawn = list()
+	var/where_to_spawn = SPAWN_ON_TURF
+
+/obj/abstract/spawn_all/New()
+	. = ..()
+	var/location
+	if (where_to_spawn == SPAWN_ON_TURF)
+		location = get_turf(src)
+	else
+		location = src.loc
+	for (var/thing in to_spawn)
+		new thing(location)
+	qdel(src)
+
+/obj/abstract/spawn_all/dredd_gear
+	to_spawn = list(
+		/obj/item/clothing/under/darkred,
+		/obj/item/clothing/glasses/hud/security,
+		/obj/item/clothing/gloves/combat,
+		/obj/item/clothing/shoes/combat,
+		/obj/item/clothing/head/helmet/dredd,
+		/obj/item/clothing/mask/gas/swat,
+		/obj/item/weapon/storage/belt/security,
+		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/weapon/gun/lawgiver,
+	)

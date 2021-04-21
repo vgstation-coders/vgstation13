@@ -37,7 +37,7 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network)
-			returnToPool(network)
+			qdel(network)
 
 	node1 = null
 

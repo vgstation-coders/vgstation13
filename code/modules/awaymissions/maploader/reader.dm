@@ -92,7 +92,10 @@ var/list/map_dimension_cache = list()
 		var/model_key = copytext(tline,2,2+key_len)
 		var/model_contents = copytext(tline,findtext(tfile,"=")+3,length(tline))
 		grid_models[model_key] = model_contents
-		sleep(-1)
+		if (remove_lag)
+			CHECK_TICK
+		else
+			sleep(-1)
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	//now let's fill the map with turf and objects using the constructed model map
@@ -144,6 +147,8 @@ var/list/map_dimension_cache = list()
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
 				spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+				if (remove_lag)
+					CHECK_TICK
 			if(map_element)
 				map_element.width = xcrd - x_offset
 
@@ -439,6 +444,6 @@ var/list/map_dimension_cache = list()
 	target_path = path
 
 /dmm_suite/preloader/proc/load(atom/what)
-	for(var/attribute in attributes)
+	for(var/attribute in attributes - lockedvars)
 		what.vars[attribute] = attributes[attribute]
 	Del()

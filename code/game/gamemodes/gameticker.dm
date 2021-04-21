@@ -39,11 +39,15 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
+	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
 
 	// Hack
 	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
+
+	// Tag mode!
+	var/tag_mode_enabled = FALSE
 
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
@@ -81,7 +85,7 @@ var/datum/controller/gameticker/ticker
 	else
 		login_music = fcopy_rsc(oursong)
 
-	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
 	do
 #ifdef GAMETICKER_LOBBY_DURATION
@@ -207,9 +211,6 @@ var/datum/controller/gameticker/ticker
 	for(var/mob/new_player/player in player_list)
 		player.new_player_panel_proc()
 
-
-	//here to initialize the random events nicely at round start
-	setup_economy()
 
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
@@ -386,14 +387,17 @@ var/datum/controller/gameticker/ticker
 		if(player.ready && player.mind)
 			if(player.mind.assigned_role=="AI")
 				player.close_spawn_windows()
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				player.AIize()
 			else if(player.mind.assigned_role=="Cyborg")
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				player.create_roundstart_cyborg()
 
 			else if(!player.mind.assigned_role)
 				continue
 			else
-
+				if(player.mind.assigned_role=="Mobile MMI")
+					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				var/mob/living/carbon/human/new_character = player.create_character()
 				switch(new_character.mind.assigned_role)
 					if("MODE","Mobile MMI","Trader")
@@ -453,8 +457,6 @@ var/datum/controller/gameticker/ticker
 		spawn
 			declare_completion()
 
-			end_credits.on_round_end()
-
 			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
@@ -469,7 +471,7 @@ var/datum/controller/gameticker/ticker
 					choices.Add(key)
 				var/mapname=pick(choices)
 				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
-				watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
+				watchdog.chosen_map = mapname
 				log_game("Server chose [watchdog.chosen_map]!")
 
 
@@ -482,6 +484,8 @@ var/datum/controller/gameticker/ticker
 				feedback_set_details("end_proper","\proper completion")
 				if(!delay_end && !watchdog.waiting)
 					to_chat(world, "<span class='notice'><B>Restarting in [restart_timeout/10] seconds</B></span>")
+
+			end_credits.on_round_end()
 
 			if(blackbox)
 				if(config.map_voting)
@@ -732,6 +736,37 @@ var/datum/controller/gameticker/ticker
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
 
+	//Toggle lightswitches on in occupied departments
+	var/discrete_areas = list()
+	for(var/mob/living/carbon/human/H in player_list)
+		var/area/A = get_area(H)
+		if(!(A in discrete_areas)) //We've already added their department
+			discrete_areas += get_department_areas(H)
+	for(var/area/DA in discrete_areas)
+		for(var/obj/machinery/light_switch/LS in DA)
+			LS.toggle_switch(1)
+
+// -- Tag mode!
+
+/datum/controller/gameticker/proc/tag_mode(var/mob/user)
+	tag_mode_enabled = TRUE
+	to_chat(world, "<h1>Tag mode enabled!<h1>")
+	to_chat(world, "<span class='notice'>Tag mode is a 'gamemode' about a changeling clown infiltrated in a station populated by Mimes. His goal is to destroy it. Any mime killing the clown will in turn become the changeling.</span>")
+	to_chat(world, "<span class='notice'>The game ends when all mimes are dead, or when the shuttle is called.</span>")
+	to_chat(world, "<span class='notice'>Have fun!</span>")
+
+	// This is /datum/forced_ruleset thing. This shit exists ONLY for pre-roundstart rulesets. Yes. This is a thing.
+	var/datum/forced_ruleset/tag_mode = new
+	tag_mode.name = "Tag mode"
+	tag_mode.calledBy = "[key_name(user)]"
+	forced_roundstart_ruleset += tag_mode
+	dynamic_forced_extended = TRUE
+
+/datum/controller/gameticker/proc/cancel_tag_mode(var/mob/user)
+	tag_mode_enabled = FALSE
+	to_chat(world, "<h1>Tag mode has been cancelled.<h1>")
+	dynamic_forced_extended = FALSE
+	forced_roundstart_ruleset = list()
 
 /world/proc/has_round_started()
 	return ticker && ticker.current_state >= GAME_STATE_PLAYING

@@ -10,7 +10,7 @@
 
 /obj/item/weapon/hatchet/tomahawk/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/surgicaldrill))
+	if(istype(W, /obj/item/tool/surgicaldrill))
 		to_chat(user, "You begin drilling a hole through the handle of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 30))
@@ -77,13 +77,13 @@
 			var/obj/item/weapon/broken_pipe_tomahawk/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			var/obj/item/weapon/wrench/I = new (get_turf(user))
+			var/obj/item/tool/wrench/I = new (get_turf(user))
 			user.put_in_hands(I)
 	else
 		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
 			new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
 		else
-			new /obj/item/weapon/wrench(get_turf(src.loc))
+			new /obj/item/tool/wrench(get_turf(src.loc))
 	qdel(src)
 
 /obj/item/weapon/hatchet/tomahawk/examine(mob/user)
@@ -152,18 +152,15 @@
 	icon_state = "pipe_tomahawk_glass"
 	item_state = "pipe_tomahawk_glass"
 	ispipe = 1
-	var/current_blunt = null
+	var/obj/item/clothing/mask/cigarette/blunt/rolled/current_blunt = null
 	var/blunt_name = null
 	var/is_lit = 0
-	var/blunt_hook = null //the hook to call the burnout proc when the blunt is destroyed
 	var/not_burned_out = 0 //prevent the going-out message from qdel()s other than the blunt's own qdel().
 	slot_flags = SLOT_MASK
 
 /obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
-	if(blunt_hook && current_blunt)
-		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = current_blunt
-		B.on_destroyed.Remove()
 	if(current_blunt)
+		current_blunt.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/burnout)
 		qdel(current_blunt)
 		current_blunt = null
 	..()
@@ -182,7 +179,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		blunt_hook = B.on_destroyed.Add(src, "burnout")
+		B.lazy_register_event(/lazy_event/on_destroyed, src, .proc/burnout)
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()
@@ -325,7 +322,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		blunt_hook = B.on_destroyed.Add(src, "burnout")
+		B.lazy_register_event(/lazy_event/on_destroyed, src, .proc/burnout)
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()
@@ -384,7 +381,7 @@
 		current_blunt = null
 		verbs -= /obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe
 
-/obj/item/weapon/broken_pipe_tomahawk/proc/burnout()
+/obj/item/weapon/broken_pipe_tomahawk/proc/burnout(datum/thing)
 	current_blunt = null
 	set_light(0)
 	is_lit = 0

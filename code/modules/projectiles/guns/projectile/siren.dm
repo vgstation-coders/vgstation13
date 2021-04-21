@@ -14,7 +14,7 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	var/hard = 1 //When toggled on, the gun's shots will deal damage. When off, they deal no damage, but deliver five times the reagents.
 	var/max_reagents = 50
-	var/projectile_type = /obj/item/projectile/bullet/liquid_blob
+	var/obj/item/projectile/projectile_type = /obj/item/projectile/bullet/liquid_blob
 
 /obj/item/weapon/gun/siren/isHandgun()
 	return FALSE
@@ -61,7 +61,7 @@
 		fire_sound = 'sound/items/egg_squash.ogg'
 		recoil = 0
 
-/obj/item/weapon/gun/siren/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/siren/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -122,8 +122,8 @@
 	name = "super soaker"
 	desc = "For ages 10 and up."
 	icon_state = "super_soaker"
-	item_state = "gun"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	item_state = "super_soaker"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	origin_tech = Tc_COMBAT + "=1"
 	recoil = 0
 	flags = FPRINT | OPENCONTAINER
@@ -135,7 +135,7 @@
 	var/last_pump = 0
 	var/pumps = 0
 
-/obj/item/weapon/gun/siren/supersoaker/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/siren/supersoaker/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -146,6 +146,7 @@
 	if(!in_chamber)
 		in_chamber = new projectile_type(src, max(3+(round(pumps/2)),15))
 		reagents.trans_to(in_chamber, 10)
+	projectile_type.firer = user
 	Fire(A,user,params, struggle = struggle)
 	if(reagents.total_volume >= 10)
 		in_chamber = new projectile_type(src)
@@ -167,6 +168,7 @@
 	name = "squirt gun"
 	desc = "Fun for all ages!"
 	icon_state = "squirt_gun"
+	item_state = "squirt_gun"
 	max_reagents = 50
 
 /obj/item/weapon/gun/siren/supersoaker/pistol/isHandgun()

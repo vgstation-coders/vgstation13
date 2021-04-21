@@ -4,6 +4,7 @@
 	icon_state = "gingerbreadman"
 	icon_living = "gingerbreadman"
 	icon_dead = "gingerbreadman_dead"
+	environment_smash_flags = 0
 	turns_per_move = 15 //You can't catch me, I'm the Gingerbread man!
 	speak_chance = 1
 	speak = list("Nya ha ha", "They couldn't catch me!", "I'd like to see somebody take a bite outta me now!")
@@ -30,4 +31,4 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	speed = 5
+	speed = 7

@@ -33,7 +33,7 @@
 			to_chat(user, "<span class='notice'>The authorized user field on the card is blank.</span>")
 
 /obj/item/weapon/card/debit/proc/change_authorized_name(var/desired_authorized_name)
-	authorized_name = uppertext(sanitize_simple(utf8_sanitize(desired_authorized_name, length = DEBIT_MAX_AUTHORIZED_NAME_LENGTH)))
+	authorized_name = uppertext(sanitize_simple(strip_html_simple(desired_authorized_name, DEBIT_MAX_AUTHORIZED_NAME_LENGTH)))
 
 /obj/item/weapon/card/debit/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())

@@ -1,4 +1,4 @@
-//Listen here you god damn piece of shit. Do not add magazines for strong calibers. 
+//Listen here you god damn piece of shit. Do not add magazines for strong calibers.
 //Dont fucking do it. If you do you're gonna gunk the vector to high heaven again and someone's gonna get mad that they got one hit and grudgecode
 //So dont fucking do it
 
@@ -15,7 +15,7 @@
 	light_color = LIGHT_COLOR_RED
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK //| EMAGGABLE
-	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES
+	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | LOCKBOXES | FAB_RECYCLER
 
 	one_part_set_only = 0
 	part_sets = list(
@@ -66,6 +66,7 @@
 		"Misc_Other"=list(
 		new /obj/item/ammo_storage/speedloader/c38/empty(), \
 		new /obj/item/ammo_storage/speedloader/shotgun(), \
+		new /obj/item/gun_part/scope(), \
 		),
 		"Hidden_Items" = list(
 		new /obj/item/ammo_storage/speedloader/a357/empty(), \
@@ -95,3 +96,6 @@
 	)
 
 	RefreshParts()
+
+
+	

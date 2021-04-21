@@ -24,6 +24,8 @@
 
 	explosion_block = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 /turf/simulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,
@@ -43,16 +45,16 @@
 
 /turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
 	if(mineral == "metal")
-		getFromPool(/obj/item/stack/sheet/metal, src, 2)
+		new /obj/item/stack/sheet/metal(src, 2)
 	else if(mineral == "wood")
-		getFromPool(/obj/item/stack/sheet/wood, src, 2)
+		new /obj/item/stack/sheet/wood(src, 2)
 	else
 		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 		if(M)
-			getFromPool(M, src, 2)
+			new M(src, 2)
 
 	if(devastated)
-		getFromPool(/obj/item/stack/sheet/metal, src)
+		new /obj/item/stack/sheet/metal(src)
 	else
 		if(girder_type)
 			new girder_type(src)
@@ -120,6 +122,7 @@
 	user.delayNextAttack(8)
 	if(M_HULK in user.mutations)
 		user.do_attack_animation(src, user)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 		if(prob(100 - hardness) || rotting)
 			dismantle_wall(1)
 			user.visible_message("<span class='danger'>[user] smashes through \the [src].</span>", \
@@ -137,6 +140,10 @@
 	if (iscultist(user) && !(locate(/obj/effect/cult_shortcut) in src))
 		var/datum/cult_tattoo/CT = user.checkTattoo(TATTOO_SHORTCUT)
 		if (CT)
+			var/mob/living/carbon/C = user
+			if (C.occult_muted())
+				to_chat(user, "<span class='warning'>The holy aura preying upon your body prevents you from correctly drawing the sigil.</span>")
+				return
 			var/data = use_available_blood(user, CT.blood_cost)
 			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
 				if(do_after(user, src, 30))
@@ -168,8 +175,8 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/tool/solder) && bullet_marks)
+		var/obj/item/tool/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -217,7 +224,7 @@
 
 	//Deconstruction
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			if(engraving)
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")
@@ -406,9 +413,8 @@
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
 
 	if(prob(70))
-		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
-
-		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+		if(H.foot_impact(src,rand(5,7)))
+			to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
 /turf/simulated/wall/acidable()
 	return !(flags & INVULNERABLE)

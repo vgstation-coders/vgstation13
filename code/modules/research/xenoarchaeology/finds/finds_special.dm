@@ -29,7 +29,7 @@
 
 /obj/item/weapon/reagent_containers/glass/xenoviral/New()
 	..()
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	var/datum/disease2/disease/new_virus = new virus_choice
 
 	var/list/anti = list(
@@ -52,7 +52,6 @@
 	new_virus.makerandom(list(40,60),list(20,90),anti,bad,null)
 
 	var/list/blood_data = list(
-		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O-",

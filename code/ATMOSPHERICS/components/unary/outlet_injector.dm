@@ -13,7 +13,6 @@
 	var/max_rate=50
 
 	var/frequency = 0
-	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
 	level = 1
@@ -93,7 +92,7 @@
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 

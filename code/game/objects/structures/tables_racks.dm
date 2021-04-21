@@ -60,8 +60,7 @@
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
-	..()
-	return 0
+	return ..()
 
 /obj/structure/table/proc/destroy()
 	if(parts)
@@ -90,6 +89,10 @@
 				base = "rtable"
 			if (istype(src, /obj/structure/table/glass))
 				base = "glasstable"
+			if (istype(src, /obj/structure/table/glass/plasma))
+				base = "plasma_table"
+			if (istype(src, /obj/structure/table/plastic))
+				base = "plastictable"
 
 			icon_state = "[base]flip[type]"
 			if (type==1)
@@ -97,7 +100,7 @@
 					icon_state = icon_state+"-"
 				if (tabledirs & turn(dir,-90))
 					icon_state = icon_state+"+"
-			return 1
+			return
 
 		var/dir_sum = 0
 		for(var/direction in alldirs)
@@ -146,22 +149,22 @@
 							dir_sum += 128
 
 		var/table_type = 0 //stand_alone table
-		if(dir_sum%16 in cardinal)
+		if((dir_sum%16) in cardinal)
 			table_type = 1 //endtable
 			dir_sum %= 16
-		if(dir_sum%16 in list(3,12))
+		if((dir_sum%16) in list(3,12))
 			table_type = 2 //1 tile thick, streight table
 			if(dir_sum%16 == 3) //3 doesn't exist as a dir
 				dir_sum = 2
 			if(dir_sum%16 == 12) //12 doesn't exist as a dir.
 				dir_sum = 4
-		if(dir_sum%16 in list(5,6,9,10))
+		if((dir_sum%16) in list(5,6,9,10))
 			if(locate(/obj/structure/table,get_step(src.loc,dir_sum%16)))
 				table_type = 3 //full table (not the 1 tile thick one, but one of the 'tabledir' tables)
 			else
 				table_type = 2 //1 tile thick, corner table (treated the same as streight tables in code later on)
 			dir_sum %= 16
-		if(dir_sum%16 in list(13,14,7,11)) //Three-way intersection
+		if((dir_sum%16) in list(13,14,7,11)) //Three-way intersection
 			table_type = 5 //full table as three-way intersections are not sprited, would require 64 sprites to handle all combinations.  TOO BAD -- SkyMarshal
 			switch(dir_sum%16)	//Begin computation of the special type tables.  --SkyMarshal
 				if(7)
@@ -360,7 +363,7 @@
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return
 		var/mob/living/carbon/M = user
-		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = name)
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
 		M.Stun(1)
@@ -397,7 +400,7 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 			return
 
 	if (W.is_wrench(user) && can_disassemble())
@@ -597,7 +600,7 @@
 				return
 
 	else if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.isOn())
 			to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
 			if(WT.do_weld(user, src, 50, 0))
@@ -651,7 +654,7 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 
 	else if (user.a_intent == I_HURT)
 		user.do_attack_animation(src, W)
@@ -690,6 +693,15 @@
 	return
 
 /*
+ * Plastic
+ */
+obj/structure/table/plastic
+	name = "plastic table"
+	desc = "A plastic table perfect for on a space patio."
+	icon_state = "plastictable"
+	parts = /obj/item/weapon/table_parts/plastic
+
+/*
  * Racks
  */
 /obj/structure/rack
@@ -718,8 +730,7 @@
 /obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
-	..()
-	return 0
+	return ..()
 
 /obj/structure/rack/ex_act(severity)
 	switch(severity)

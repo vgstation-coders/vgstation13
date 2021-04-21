@@ -179,7 +179,6 @@
 		if (src.holding)
 			src.holding.forceMove(src.loc)
 			src.holding = null
-		INVOKE_EVENT(on_destroyed, list())
 		nanomanager.update_uis(src)
 		return 1
 	else
@@ -256,13 +255,13 @@
 	if(Proj.damage)
 		src.health -= round(Proj.damage / 2)
 		healthcheck()
-	..()
+	return ..()
 
 /obj/machinery/portable_atmospherics/canister/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(iswelder(W) && src.destroyed)
 		if(weld(W, user))
 			to_chat(user, "<span class='notice'>You salvage what's left of \the [src].</span>")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))//new /obj/item/stack/sheet/metal(src.loc)
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))//new /obj/item/stack/sheet/metal(src.loc)
 			M.amount = 3
 			qdel (src)
 		return
@@ -449,7 +448,7 @@
 
 	update_icon()
 
-/obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/weapon/weldingtool/WT, var/mob/user)
+/obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/tool/weldingtool/WT, var/mob/user)
 
 
 	if(busy)

@@ -80,3 +80,14 @@
 
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull
 	faction = "wizard"
+	meat_type = /obj/item/weapon/ectoplasm //a magical dog
+
+/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/death(var/gibbed = FALSE)
+	..()
+	if(!gibbed)
+		if(prob(95))
+			animate(src, alpha = 0, time = 4 SECONDS)
+			spawn(4 SECONDS)
+				qdel(src)
+		else
+			gib()

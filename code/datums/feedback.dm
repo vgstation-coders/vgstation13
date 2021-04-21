@@ -73,31 +73,25 @@ var/datum/blackbox/blackbox = new
 	var/watch = start_watch()
 	log_startup_progress("Storing Black Box data...")
 	round_end_data_gathering() //round_end time logging and some other data processing
-	establish_db_connection()
-	if(!dbcon.IsConnected())
+	if(!SSdbcore.Connect())
 		return
 	var/round_id
 
 	var/nqueries = 0
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT MAX(round_id) AS round_id FROM erro_feedback")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT MAX(round_id) AS round_id FROM erro_feedback")
+	if(!query.Execute())
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+		return
 	nqueries++
 	while(query.NextRow())
 		round_id = query.item[1]
-
+	qdel(query)
 	if(!isnum(round_id))
 		round_id = text2num(round_id)
 	round_id++
 
-	/*
-	for(var/datum/feedback_variable/FV in feedback)
-		var/sql = "INSERT INTO erro_feedback VALUES (null, Now(), [round_id], \"[FV.get_variable()]\", [FV.get_value()], \"[FV.get_details()]\")"
-		var/DBQuery/query_insert = dbcon.NewQuery(sql)
-		query_insert.Execute()
-		nqueries++
-		sleep(1) // Let other shit do things
-	*/
 	// MySQL and MariaDB support compound inserts and this insert is slow as fuck.
 	var/sql = "INSERT INTO erro_feedback VALUES "
 	var/ninserts=0
@@ -106,10 +100,13 @@ var/datum/blackbox/blackbox = new
 			sql += ","
 		ninserts++
 		sql += "(null, Now(), [round_id], \"[FV.get_variable()]\", [FV.get_value()], \"[FV.get_details()]\")"
-	var/DBQuery/query_insert = dbcon.NewQuery(sql)
-	query_insert.Execute()
+	var/datum/DBQuery/query_insert = SSdbcore.NewQuery(sql)
+	if(!query_insert.Execute())
+		log_sql("Error: [query_insert.ErrorMsg()]")
+		qdel(query_insert)
+		return
 	nqueries++
-
+	qdel(query_insert)
 	log_startup_progress("  Wrote Black Box data with [nqueries] queries in [stop_watch(watch)]s.")
 
 
@@ -147,7 +144,9 @@ var/datum/blackbox/blackbox = new
 		value = num
 
 /datum/feedback_variable/proc/get_value()
-	return value
+	var/to_copy = value
+	to_copy = replacetext(to_copy, "\"", "") // Get rid of double quotes (") in entries.
+	return to_copy
 
 /datum/feedback_variable/proc/get_variable()
 	return variable

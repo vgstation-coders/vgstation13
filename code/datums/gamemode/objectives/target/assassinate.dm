@@ -1,5 +1,12 @@
+var/list/assassination_objectives = list()
+
 /datum/objective/target/assassinate
 	name = "Assassinate <target>"
+	var/syndicate_checked = 0
+
+/datum/objective/target/assassinate/New(var/text,var/auto_target = TRUE, var/mob/user = null)
+	..()
+	assassination_objectives += src
 
 /datum/objective/target/assassinate/find_target()
 	..()
@@ -44,8 +51,59 @@
 		return TRUE
 	//Borgs/brains/AIs count as dead for traitor objectives. --NeoFite
 	// If they're in an away mission/custom z-level by the time you're checking this might as well count them as MIA
+	switch (syndicate_checked)
+		if (SYNDICATE_VALIDATED)
+			return TRUE
+		if (SYNDICATE_CANCELED)
+			return FALSE
 	if(target && target.current)
 		if(target.current.stat == DEAD || issilicon(target.current) || isbrain(target.current) || target.current.z > 6 || !target.current.ckey || isborer(target.current))
 			return TRUE
 		return FALSE
 	return TRUE
+
+/datum/objective/target/assassinate/proc/SyndicateCertification()
+	if (syndicate_checked == SYNDICATE_CANCELED)//if your death was reported prior, you're out of the race. Better luck next time.
+		return
+
+	syndicate_checked = SYNDICATE_VALIDATED
+
+	//The syndicate has confirmed that the double agent has taken out their target.
+	//They will now assign the new objective of assassinating their old target's target.
+	//Unless said target is themselves, which then means that all other agents have been eliminated and they have won.
+	var/datum/role/traitor/challenger/self = owner.GetRole(CHALLENGER)
+	var/datum/role/traitor/challenger/enemy = target.GetRole(CHALLENGER)
+	if (!self ||!enemy)
+		return
+
+	for (var/datum/objective/target/assassinate/A in enemy.objectives.objectives)
+		if (A.syndicate_checked)
+			continue
+
+		var/obj/item/device/uplink/hidden/owner_uplink = owner.find_syndicate_uplink()
+		var/obj/item/device/uplink/hidden/enemy_uplink = target.find_syndicate_uplink(enemy.uplink)
+		//chances are the target's uplink is no longer on their mind.current especially if they got decapitated or such.
+		//by associating the uplink with the role we can at least try and get the TCs out of it.
+
+		if (A.target == owner)
+			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your Victory. Look forward to be assigned on higher risk operations another day.</span>")
+		else
+			if (owner_uplink)
+				owner_uplink.uses += DOUBLE_AGENT_TC_REWARD
+				if (enemy_uplink)
+					owner_uplink.uses += enemy_uplink.uses
+					enemy_uplink.uses = 0
+				to_chat(owner.current, "<span class='notice'>Good work agent. [DOUBLE_AGENT_TC_REWARD] additional tele-crystals have been sent to your uplink.</span>")
+			else
+				to_chat(owner.current, "<span class='notice'>Good work agent. Unfortunately we couldn't find your uplink on your person, so no additional tele-crystals could be distributed.</span>")
+			var/datum/objective/target/assassinate/new_kill_target = new(auto_target = FALSE)
+			if(new_kill_target.set_target(A.target))
+				self.AppendObjective(new_kill_target)
+				to_chat(owner.current, "<b>New Objective</b>: [new_kill_target.explanation_text]<br>")
+
+		if (owner_uplink && enemy_uplink)
+			owner_uplink.uses += enemy_uplink.uses
+			enemy_uplink.uses = 0
+
+		A.syndicate_checked = SYNDICATE_CANCELED
+		to_chat(target.current, "<span class='warning'>The Syndicate has taken note of your demise. You are therefore ineligible for victory this time around. Better luck next time!</span>")

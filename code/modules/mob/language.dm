@@ -67,8 +67,21 @@
 	ask_verb = "hisses"
 	exclaim_verb = "roars"
 	colour = "soghun"
-	key = "o"
+	key = "*"
 	syllables = list("ss","ss","ss","ss","skak","seeki","resh","las","esi","kor","sh")
+
+/datum/language/clown
+	name = LANGUAGE_CLOWN
+	desc = "The forbidden language of clowns. Taught at the clown planet. Only native clowns can weave sentences in such a complex system. Composed of honking and clownish noises."
+	speech_verb = "honks"
+	ask_verb = "slips"
+	exclaim_verb = "farts"
+	whisper_verb = "bwoinks"
+	colour = "clown"
+	native=1
+	key = "!"
+	space_chance = 65
+	syllables = list("honk", "henk", "nk", "ho", "ha", "hunke", "hunk", "hu", "ba", "nana", "bwo", "bwoink", "ink", "fart", "peel", "banana", "poot", "toot", "cluwn", "!", "?")
 
 /datum/language/tajaran
 	name = LANGUAGE_CATBEAST
@@ -77,7 +90,7 @@
 	ask_verb = "mrowls"
 	exclaim_verb = "yowls"
 	colour = "tajaran"
-	key = "j"
+	key = "+"
 	syllables = list("rr","rr","tajr","kir","raj","kii","mir","kra","ahk","nal","vah","khaz","jri","ran","darr", \
 	"mi","jri","dynh","manq","rhe","zar","rrhaz","kal","chur","eech","thaa","dra","jurl","mah","sanu","dra","ii'r", \
 	"ka","aasi","far","wa","baq","ara","qara","zir","sam","mak","hrar","nja","rir","khan","jun","dar","rik","kah", \
@@ -90,7 +103,7 @@
 	ask_verb = "warbles"
 	exclaim_verb = "warbles"
 	colour = "skrell"
-	key = "k"
+	key = "/"
 	syllables = list("qr","qrr","xuq","qil","quum","xuqm","vol","xrim","zaoo","qu-uu","qix","qoo","zix","*","!")
 
 /datum/language/vox
@@ -310,31 +323,29 @@
 
 	var/datum/language/new_language = all_languages[language]
 
-	if(!istype(new_language) || new_language in languages)
+	if(!istype(new_language) || (new_language in languages))
 		return 0
 
 	languages.Add(new_language)
 	return 1
 
-/mob/proc/remove_language(var/rem_language)
+/mob/proc/remove_language(rem_language)
 	var/datum/language/L = all_languages[rem_language]
-	. = (L in languages)
-	languages.Remove(L)
+	return languages.Remove(L)
 
 /mob/living/remove_language(rem_language)
-	var/datum/language/L = all_languages[rem_language]
-	if(default_language == L)
-		if(all_languages.len)
-			default_language = all_languages[1]
-		else
-			default_language = null
-	return ..()
+	. = ..()
+	if(.)
+		var/datum/language/L = all_languages[rem_language]
+		if(default_language == L)
+			if(languages.len)
+				default_language = languages[1]
+			else
+				default_language = null
 
 // Can we speak this language, as opposed to just understanding it?
 /mob/proc/can_speak_lang(datum/language/speaking)
-
-
-	return (universal_speak || speaking in src.languages)
+	return (universal_speak || (speaking in src.languages))
 
 //TBD
 /mob/verb/check_languages()

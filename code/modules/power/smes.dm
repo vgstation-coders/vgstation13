@@ -93,7 +93,7 @@ var/list/smes_list = list()
 				if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 					spark(src, 5)
 					return
-				getFromPool(/obj/item/stack/cable_coil, get_turf(src), 10)
+				new /obj/item/stack/cable_coil(get_turf(src), 10)
 				user.visible_message(\
 					"<span class='warning'>[user.name] cut the cables and dismantled the power terminal.</span>",\
 					"You cut the cables and dismantle the power terminal.")

@@ -11,6 +11,8 @@
 #define CHEMFLAG_OBSCURING 2
 
 
+#define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
+
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
@@ -81,6 +83,7 @@
 #define EZNUTRIENT 			"eznutrient"
 #define ROBUSTHARVEST 			"robustharvest"
 #define PLANTBGONE 			"plantbgone"
+#define INSECTICIDE 			"insecticide"
 #define PLASMA 			"plasma"
 #define LEPORAZINE 			"leporazine"
 #define CRYPTOBIOLIN 			"cryptobiolin"
@@ -90,6 +93,7 @@
 #define DEXALIN 			"dexalin"
 #define DEXALINP 			"dexalinp"
 #define TRICORDRAZINE 			"tricordrazine"
+#define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
@@ -194,6 +198,7 @@
 #define NOTHING 			"nothing"
 #define POTATO 			"potato"
 #define MILK 			"milk"
+#define MOMMIMILK 			"mommimilk"
 #define SOYMILK 			"soymilk"
 #define CREAM 			"cream"
 #define COFFEE 			"coffee"
@@ -261,6 +266,10 @@
 #define IRISHCREAM 			"irishcream"
 #define MANLYDORF 			"manlydorf"
 #define LONGISLANDICEDTEA 			"longislandicedtea"
+#define MUDSLIDE			"mudslide"
+#define BOYSENBERRY_BLIZZARD			"boysenberry_blizzard"
+#define SACRIFICIAL_MARY			"sacrificial_mary"
+#define CREAMY_HOT_COCO			"creamy_hot_coco"
 #define MOONSHINE 			"moonshine"
 #define MIDNIGHTKISS	"midnightkiss"
 #define COSMOPOLITAN	"cosmopolitan"
@@ -285,6 +294,8 @@
 #define MANHATTANFIREBALL		"manhattanfireball"
 #define FIREBALLCOLA	"fireballcola"
 #define FIRERITA 		"firerita"
+#define MAGICA			"magica"
+#define MAGICADELUXE			"magicadeluxe"
 #define IRISHCOFFEE 			"irishcoffee"
 #define MARGARITA 			"margarita"
 #define BLACKRUSSIAN 			"blackrussian"
@@ -401,10 +412,13 @@
 #define WEED_EATER		"weed_eater"
 #define RAGSTORICHES	"ragstoriches"
 #define WAIFU			"waifu"
+#define HUSBANDO		"husbando"
 #define BEEPSKY_CLASSIC	"beepsky_classic"
 #define SMOKYROOM		"smokyroom"
 #define BAD_TOUCH		"bad_touch"
 #define SUICIDE			"suicide"
+#define GRAVSINGULO 			"gravitationalsingulo"
+#define GRAVSINGULARITEA 			"gravitationalsingularitea"
 #define KARMOTRINE		"karmotrine"
 #define DEGENERATECALCIUM "degeneratecalcium"
 #define GRAPEJUICE		"grapejuice"
@@ -415,6 +429,18 @@
 #define PLUMPHWINE		"phwine"
 #define IRONROT			"ironrot"
 #define GEOMETER		"geometer"
+#define EGG_YOLK		"egg_yolk"
+#define MUSTARD_POWDER	"mustard_powder"
+#define MAYO			"mayo"
+#define DIABEETUSOL		"diabeetusol"
+#define MANNITOL		"mannitol"
+#define DIETINE			"dietine"
+#define GATORMIX		"gatormix"
+#define BLISTEROL		"blisterol"
+#define ECTOPLASM		"ectoplasm"
+#define MONSTERMASH		"monstermash"
+#define EGGNOG			"eggnog"
+#define FESTIVE_EGGNOG	"festive_eggnog"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -449,6 +475,7 @@
 #define SODIUMSILICATE	"sodiumsilicate"
 #define COLORFUL_REAGENT "colorful_reagent"
 #define AMINOMICIN		"aminomicin"
+#define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
@@ -496,6 +523,8 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
 #define LEXORINS list(LEXORIN, CORIAMYRTIN)
 #define DEXALINS list(DEXALIN, THYMOL)
+#define PETRITRICINCURES list(SACID, PACID, FORMIC_ACID, PACID, PHENOL, ACIDSPIT, ACIDTEA)
+#define WATERS list(WATER, HOLYWATER)
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"
@@ -509,3 +538,4 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"
 #define INCENSE_CORNOIL 	"cornoils"
+#define INCENSE_MUSTARDPLANT "mustardplant"

@@ -240,9 +240,9 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/proc/cut(mob/user, var/turf/T)
 	if(src.d1)	// 0-X cables are 1 unit, X-X cables are 2 units long
-		getFromPool(/obj/item/stack/cable_coil, T, 2, light_color)
+		new /obj/item/stack/cable_coil(T, 2, light_color)
 	else
-		getFromPool(/obj/item/stack/cable_coil, T, 1, light_color)
+		new /obj/item/stack/cable_coil(T, 1, light_color)
 
 	user.visible_message("<span class='warning'>[user] cuts the cable.</span>", "<span class='info'>You cut the cable.</span>")
 
@@ -265,7 +265,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	message_admins(message, 0, 1)
 
-	returnToPool(src)
+	qdel(src)
 
 // shock the user with probability prb
 /obj/structure/cable/proc/shock(mob/user, prb, siemens_coeff = 1.0)
@@ -281,18 +281,22 @@ By design, d1 is the smallest direction and d2 is the highest
 
 // explosion handling
 /obj/structure/cable/ex_act(severity)
+	if(isturf(loc))
+		var/turf/T = loc
+		if(T.protect_infrastructure)
+			return
 	switch(severity)
 		if(1.0)
-			returnToPool(src)
+			qdel(src)
 		if(2.0)
 			if(prob(50))
-				getFromPool(/obj/item/stack/cable_coil,  src.loc, src.d1 ? 2 : 1, light_color)
-				returnToPool(src)
+				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, light_color)
+				qdel(src)
 
 		if(3.0)
 			if(prob(25))
-				getFromPool(/obj/item/stack/cable_coil, src.loc, src.d1 ? 2 : 1, light_color)
-				returnToPool(src)
+				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, light_color)
+				qdel(src)
 	return
 
 /obj/structure/cable/proc/cableColor(var/colorC = "red")
@@ -351,7 +355,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			continue
 		if(C.d1 == (direction ^ 3) || C.d2 == (direction ^ 3)) // we've got a diagonally matching cable
 			if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
-				var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+				var/datum/powernet/newPN = new /datum/powernet/
 				newPN.add_cable(C)
 			if(powernet) //if we already have a powernet, then merge the two powernets
 				merge_powernets(powernet,C.powernet)
@@ -368,7 +372,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			continue
 		if(C.d1 == (direction ^ 12) || C.d2 == (direction ^ 12)) // we've got a diagonally matching cable
 			if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
-				var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+				var/datum/powernet/newPN = new /datum/powernet/
 				newPN.add_cable(C)
 			if(powernet) // if we already have a powernet, then merge the two powernets
 				merge_powernets(powernet, C.powernet)
@@ -391,7 +395,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			continue
 		if(C.d1 == fdir || C.d2 == fdir) // we've got a matching cable in the neighbor turf
 			if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
-				var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+				var/datum/powernet/newPN = new /datum/powernet/
 				newPN.add_cable(C)
 			if(powernet) // if we already have a powernet, then merge the two powernets
 				merge_powernets(powernet,C.powernet)
@@ -404,7 +408,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/list/connections = list()
 
 	if(!powernet) // if we somehow have no powernet, make one (should not happen for cables)
-		var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+		var/datum/powernet/newPN = new /datum/powernet/
 		newPN.add_cable(src)
 
 	// first let's add turf cables to our powernet
@@ -500,11 +504,11 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/list/powerlist = power_list(T1, src, 0, 0) // find the other cables that ended in the centre of the turf, with or without a powernet
 
 	if(powerlist.len>0)
-		var/datum/powernet/PN = getFromPool(/datum/powernet/)
+		var/datum/powernet/PN = new /datum/powernet/
 		propagate_network(powerlist[1], PN) // propagates the new powernet beginning at the source cable
 
 		if(PN.is_empty()) // can happen with machines made nodeless when smoothing cables
-			returnToPool(PN) //powernets do not get qdelled
+			qdel(PN) //powernets do not get qdelled
 
 /obj/structure/cable/spawned_by_map_element(datum/map_element/ME, list/objects)
 	.=..()

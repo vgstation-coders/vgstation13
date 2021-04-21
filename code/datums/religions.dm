@@ -1,7 +1,7 @@
 /proc/DecidePrayerGod(var/mob/H)
 	if(!H || !H.mind)
 		return "a voice"
-	if(H.mind.GetRole(CULTIST))
+	if(iscultist(H))
 		return "Nar-Sie"
 	else if(H.mind.faith) // The user has a faith
 		var/datum/religion/R = H.mind.faith
@@ -27,7 +27,7 @@
 
 	for (var/R in typesof(/datum/religion))
 		var/datum/religion/rel = new R
-		for (var/key in rel.keys)
+		for (var/key in (rel.keys + rel.deity_names + rel.deity_name))
 			if (lowertext(new_religion) == lowertext(key))
 				rel.equip_chaplain(H) // We do the misc things related to the religion
 				chaplain_religion = rel
@@ -389,7 +389,7 @@
 	bible_name = "The Holy Bible"
 	male_adept = "Bishop"
 	female_adept = "Bishop"
-	keys = list("catholic", "catholicism", "roman catholicism")
+	keys = list("catholic", "jesus", "catholicism", "roman catholicism")
 	symbolstyle = 2
 	bookstyle = "Bible"
 
@@ -449,6 +449,7 @@
 
 /datum/religion/slam/equip_chaplain(var/mob/living/carbon/human/H)
 	H.put_in_hands(new/obj/item/weapon/beach_ball/holoball)
+	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
 
 /datum/religion/judaism
 	name = "Judaism"
@@ -483,6 +484,9 @@
 	male_adept = "Kannushi"
 	female_adept = "Shrine Maiden"
 	keys = list("shinto", "shintoism", "anime", "weeaboo", "japan", "waifu")
+
+/datum/religion/shintoism/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/kimono(H), slot_wear_suit)
 
 /datum/religion/mormonism
 	name = "Mormonism"
@@ -548,6 +552,9 @@
 	keys = list("druidism", "celtic")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
 
+/datum/religion/celtic/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/wintercoat/druid(H), slot_wear_suit)
+
 /datum/religion/atheism
 	name = "Atheism"
 	deity_name = "Richard Dawkins"
@@ -555,7 +562,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Militant Atheist" // Wasn't defined so the poor dude ended up being a chaplain
 	female_adept = "Militant Atheist"
-	keys = list("atheism", "none")
+	keys = list("atheism", "none", "atheist")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/sunflowers
 	bookstyle = "Atheist"
 
@@ -739,7 +746,7 @@
 	bible_name = "The 36 Lessons of Vivec"
 	male_adept = "Curate"
 	female_adept = "Curate"
-	keys = list("Justice", "Tribunal", "almsivi")
+	keys = list("Justice", "Tribunal", "almsivi", "vehk")
 
 /datum/religion/elder_scrolls
 	name = "Cult of the Divines"
@@ -808,6 +815,9 @@
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
 	symbolstyle = 9
 	bookstyle = "Ianism"
+
+/datum/religion/ianism/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/ianshirt(H), slot_wear_suit)
 
 /datum/religion/admins
 	name = "Adminism"
@@ -919,6 +929,9 @@
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	bookstyle = "Tome"
 
+/datum/religion/suicide/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/under/skelesuit, slot_w_uniform)
+
 /datum/religion/communism
 	name = "Communism"
 	deity_name = "Karl Marx"
@@ -943,6 +956,9 @@
 
 /datum/religion/capitalism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/that(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/under/suit_jacket/really_black, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/glasses/monocle, slot_glasses)
+
 
 /datum/religion/america
 	name = "American Exceptionalism"
@@ -955,6 +971,7 @@
 
 /datum/religion/america/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/libertyhat(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/libertycoat(H), slot_wear_suit)
 
 /datum/religion/nazism
 	name = "Nazism"
@@ -967,6 +984,7 @@
 
 /datum/religion/nazism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/naziofficer(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/officercoat(H), slot_wear_suit)
 
 /datum/religion/security
 	name = "Security"
@@ -980,6 +998,8 @@
 
 /datum/religion/security/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/centhat(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/centcom_officer, slot_w_uniform)
+
 
 /datum/religion/security/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/held_banger = preacher.find_held_item_by_type(/obj/item/weapon/grenade/flashbang)
@@ -987,8 +1007,8 @@
 		to_chat(preacher, "<span class='warning'>You need to hold a flashbang to begin the conversion.</span>")
 		return FALSE
 	var/held_screwdriver = null
-	for(var/obj/item/I in preacher.held_items)
-		if(I.is_screwdriver(preacher))
+	for(var/obj/item/I in subject.held_items)
+		if(I.is_screwdriver(subject))
 			held_screwdriver = I
 			break
 	if (!held_screwdriver)
@@ -996,7 +1016,7 @@
 		return FALSE
 
 	var/obj/item/weapon/grenade/flashbang/F = preacher.held_items[held_banger]
-	var/obj/item/weapon/screwdriver/S = subject.held_items[held_screwdriver]
+	var/obj/item/tool/screwdriver/S = subject.held_items[held_screwdriver]
 
 	if (F.det_time != 50) // The timer isn't properly set
 		to_chat(preacher, "<span class='warning'>The timer in the flashbang isn't properly set up. Set it to 5 seconds.</span>")
@@ -1049,6 +1069,9 @@
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	bookstyle = "Tome"
 
+/datum/religion/cult/equip_chaplain(var/mob/living/carbon/human/H)
+	H.add_language(LANGUAGE_CULT)
+
 /datum/religion/cult/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/obj/effect/decal/cleanable/crayon/rune = locate(/obj/effect/decal/cleanable/crayon/, subject.loc)
 	if (!rune)
@@ -1091,6 +1114,9 @@
 	keys = list("revolution", "rev", "revolt")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
+/datum/religion/revolution/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_l_store)
+
 /datum/religion/wizard
 	name = "Wizardry"
 	deity_name = "The Space Wizard Federation"
@@ -1102,6 +1128,7 @@
 
 /datum/religion/wizard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/wizard(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/wizrobe/fake(H), slot_wear_suit)
 
 /datum/religion/malfunctioning
 	name = "Artificial Intelligence Cult"
@@ -1182,6 +1209,7 @@
 
 /datum/religion/ancap/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/toy/gun(H), slot_l_store) //concealed carry
+	H.equip_or_collect(new /obj/item/clothing/under/suit_jacket, slot_w_uniform)
 
 /datum/religion/ancom
 	name = "Anarcho-Communism"
@@ -1190,10 +1218,11 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Activist"
 	female_adept = "Activist"
-	keys = list("anarcho-communism", "communalism", "mutualism")
+	keys = list("anarcho-communism", "ancom", "communalism", "mutualism")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 
 /datum/religion/ancom/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/mask/balaclava(H), slot_l_store) // Black Bloc
+	H.equip_or_collect(new /obj/item/clothing/mask/bandana/red(H), slot_l_store)
 
 /datum/religion/samurai
 	name = "Bushido" // The way of the warrior
@@ -1201,7 +1230,7 @@
 	bible_name = "Kojiki"//Japan's oldest book, the origin "muh honor" and "muh katana"
 	male_adept = "Samurai"
 	female_adept = "Samurai"
-	keys = list("samurai", "honor", "bushido", "weaboo")
+	keys = list("samurai", "honor", "bushido", "weaboo", "weeb")
 
 /datum/religion/samurai/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/rice_hat(H), slot_head)
@@ -1334,7 +1363,7 @@
 	bible_name = "Guide to Speedrunning"
 	male_adept = "Speedrunner"
 	female_adept = "Speedrunner"
-	keys = list("speedrun","ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
+	keys = list("speedrun", "gdq", "ADGQ","SGDQ","any%", "glitchless", "100%", "gotta go fast", "kill the animals", "greetings from germany", "cancer", "dilation station", "dilation stations")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 	bookstyle = "Creeper"
 
@@ -1379,7 +1408,7 @@
 
 /datum/religion/esports/equip_chaplain(mob/living/carbon/human/H)
 	var/turf/here = get_turf(H)
-	new /obj/item/weapon/crowbar/red(here)
+	new /obj/item/tool/crowbar/red(here)
 	var/obj/item/clothing/head/donitos_pope/pope_hat = new(here)
 	H.equip_to_appropriate_slot(pope_hat, override=TRUE)
 	var/obj/structure/closet/crate/flatpack/tv_pack1 = new(here)
@@ -1420,3 +1449,69 @@
 
 	convert(subject, preacher)
 	return TRUE
+
+/datum/religion/xeno
+	name = "Xenophilism"
+	deity_name = "Xenomorph Queen"
+	bible_name = "The Principles of Hivemind Communication"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Xenophile"
+	female_adept = "Xenophile"
+	keys = list("Xeno", "Xenophilia", "Xenomorph", "Alien")
+
+/datum/religion/xeno/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/xenos(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/xenos(H), slot_wear_suit)
+
+/datum/religion/dudeism
+	name = "Dudeism"
+	deity_name = "The Dude"
+	bible_name = "The Big Lebowski"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Dude"
+	female_adept = "Dudette"
+	keys = list("dudeism", "dude", "big lebowski")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/poppies
+
+/datum/religion/dudeism/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/under/tourist, slot_w_uniform)
+
+/datum/religion/degenerate
+	name = "Degeneracy"
+	deity_name = "Mai Waifu"
+	bible_name = "Boku No Pico"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Degenerate"
+	female_adept = "Degenerate"
+	keys = list("degeneracy", "catgirls", "felinids")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
+
+/datum/religion/degenerate/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/kitty/anime/cursed(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/under/schoolgirl, slot_w_uniform)
+
+/datum/religion/egypt
+	name = "Kemetism"
+	deity_names = list("Osiris", "Anubis", "Ra", "Horus", "Kek")
+	bible_name = "The Pyramid Texts"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Hem-Netjer"
+	female_adept = "Hemet-Netjer"
+	keys = list("kemetism", "egypt", "egyptian")
+
+/datum/religion/egypt/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/pharaoh(H), slot_head)
+
+/datum/religion/anprim
+	name = "Primitivism"
+	deity_name = "Grug"
+	bible_name = "Industrial Society and Its Future"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Primitive"
+	female_adept = "Primitive"
+	keys = list("anarcho-primitivism", "primitivism", "anprim", "primitive", "grug")
+	bookstyle = "Scrapbook"
+
+/datum/religion/anprim/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/suit/unathi/mantle(H), slot_wear_suit)

@@ -33,6 +33,8 @@ Example of the second method:
 
 /datum/map_element/away_mission
 	type_abbreviation = "AM"
+	load_at_once = FALSE
+
 	var/generate_randomly = 1 //If 0, don't generate this away mission randomly
 
 	var/datum/zLevel/zLevel

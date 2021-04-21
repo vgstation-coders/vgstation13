@@ -174,12 +174,14 @@ var/global/list/facial_hair_styles_female_list	= list()
 	// FIXME:  Species-specific defaults pls
 	if(!character.my_appearance.h_style)
 		character.my_appearance.h_style = "Skinhead"
-	var/hair = hair_styles_list.Find(character.my_appearance.h_style)
+	var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, character.species.name)
+	var/hair = species_hair.Find(character.my_appearance.h_style)
 
 	// Facial Hair
 	if(!character.my_appearance.f_style)
 		character.my_appearance.f_style = "Shaved"
-	var/beard	= facial_hair_styles_list.Find(character.my_appearance.f_style)
+	var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, character.species.name)
+	var/beard = species_facial_hair.Find(character.my_appearance.f_style)
 
 	SetUIValueRange(DNA_UI_HAIR_R,    character.my_appearance.r_hair,    255,    1)
 	SetUIValueRange(DNA_UI_HAIR_G,    character.my_appearance.g_hair,    255,    1)
@@ -197,8 +199,8 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 	SetUIState(DNA_UI_GENDER,         character.gender!=MALE,        1)
 
-	SetUIValueRange(DNA_UI_HAIR_STYLE,  hair,  hair_styles_list.len,       1)
-	SetUIValueRange(DNA_UI_BEARD_STYLE, beard, facial_hair_styles_list.len,1)
+	SetUIValueRange(DNA_UI_HAIR_STYLE,  hair,  species_hair.len,       1)
+	SetUIValueRange(DNA_UI_BEARD_STYLE, beard, species_facial_hair.len,1)
 
 	UpdateUI()
 
@@ -225,16 +227,15 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return
 	ASSERT(maxvalue<=4095)
-	var/range = (4095 / maxvalue)
-	if(value)
-		SetUIValue(block,round(value * range),defer)
+	var/mapped_value = round(map_range(value, 0, maxvalue, 0, 0xFFF))
+	SetUIValue(block, mapped_value, defer)
 
 // Getter version of above.
 /datum/dna/proc/GetUIValueRange(var/block,var/maxvalue)
 	if (block<=0)
 		return 0
 	var/value = GetUIValue(block)
-	return round(1 +(value / 4096)*maxvalue)
+	return round(map_range(value, 0, 0xFFF, 0, maxvalue))
 
 // Is the UI gene "on" or "off"?
 // For UI, this is simply a check of if the value is > 2050.

@@ -81,6 +81,7 @@
 	projectile_type = "/obj/item/projectile/change"
 	origin_tech = null
 	clumsy_check = 0
+	honor_check = 0
 	var/charge_tick = 0
 
 
@@ -140,6 +141,19 @@
 			changetype=selected
 	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
 
+/obj/item/weapon/gun/energy/mouser
+	name = "mouser pistol"
+	desc = "This gun isn't Kafka-esque because it transforms people. It's Kafka-esque because it represents an indifferent faceless authority which subjugates the confused, disoriented common man."
+	icon_state = "mauser"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	fire_sound = 'sound/effects/stealthoff.ogg'
+	projectile_type = "/obj/item/projectile/mouse"
+	charge_cost = 100
+
+/obj/item/weapon/gun/energy/mouser/update_icon()
+	return
+
 /obj/item/weapon/gun/energy/staff/sinterklaas
 	name = "staff of sinterklaas"
 	desc = "There's a knock on the door, a hard knock, a soft knock, there's a knock on the door, who could it be?"
@@ -160,7 +174,9 @@
 
 #define RAISE_TYPE_ZOMBIE 0
 #define RAISE_TYPE_SKELETON 1
-//#define RAISE_TYPE_FAITHLESS 2
+#define RAISE_HUMAN 1
+#define RAISE_ANIMAL 2
+#define RAISE_MEAT 3
 /obj/item/weapon/gun/energy/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
@@ -171,17 +187,20 @@
 	var/charges = 3
 	var/raisetype = 0
 	var/next_change = 0
+
 /obj/item/weapon/gun/energy/staff/necro/New()
 	..()
 	processing_objects.Add(src)
-
 
 /obj/item/weapon/gun/energy/staff/necro/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-
 /obj/item/weapon/gun/energy/staff/necro/process()
+	if(islich(loc))
+		var/mob/living/carbon/human/L = loc
+		L.adjustBruteLoss(-2)
+		charge_tick++
 	charge_tick++
 	if(charge_tick < 4)
 		return 0
@@ -193,26 +212,65 @@
 	if(next_change > world.timeofday)
 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
 		return
-	/*if(raisetype < RAISE_TYPE_FAITHLESS)
-		raisetype = !raisetype
-	else
-		raisetype = RAISE_TYPE_ZOMBIE*/
 	raisetype = !raisetype
 
 	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
 	next_change = world.timeofday + 30
 
-/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/user, proximity)
-	if(!ishuman(target) || !charges || get_dist(target, user) > 7)
+/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user, flag, params, struggle = 0)
+	if(!charges || istype(target, /mob/living/simple_animal/hostile/necro) || get_dist(target, user) > 7)
 		return 0
-	var/mob/living/carbon/human/H = target
-	if(!H.stat || (H.stat < DEAD && H.health > config.health_threshold_crit))
-		to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
-		return 0
+	var/toRaise = canRaise(target, user)
+	if(!toRaise)
+		return
+	switch(toRaise)
+		if(RAISE_HUMAN)
+			humanRaise(target, user)
+		if(RAISE_ANIMAL)
+			var/mob/living/L = target
+			if(L.stat == DEAD)
+				simpleRaise(target, user)
+			else
+				to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
+		if(RAISE_MEAT)
+			meatRaise(target, user)
 
-	//Pretty particles
+
+/obj/item/weapon/gun/energy/staff/necro/proc/canRaise(atom/target, mob/living/user)
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if(H.stat != DEAD && !H.InCritical())
+			to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
+			return 0
+		return RAISE_HUMAN
+	if(isanimal(target) || ismonkey(target))
+		return RAISE_ANIMAL
+	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
+		return RAISE_MEAT
+
+	return 0
+
+
+
+/obj/item/weapon/gun/energy/staff/necro/proc/meatRaise(var/obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
+	var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(M), user)
+	make_tracker_effects(get_turf(M), user)
+	mG.ghoulifyMeat(M)
+	mG.faction = "\ref[user]"
+	qdel(M)
+	charges--
+
+/obj/item/weapon/gun/energy/staff/necro/proc/simpleRaise(var/mob/living/S, mob/living/user)
+	var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(S), user, S)
+	make_tracker_effects(get_turf(S), user)
+	aG.ghoulifyAnimal(S)
+	aG.faction = "\ref[user]"
+	S.gib()
+	charges--
+
+/obj/item/weapon/gun/energy/staff/necro/proc/humanRaise(mob/target, mob/user)
+	var/mob/living/carbon/human/H = target
 	make_tracker_effects(get_turf(H), user)
-	//Not so pretty manical laughter
 	if(iswizard(user) || isapprentice(user))
 		user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
 		"BOW BEFORE [pick("MY POWER","ME, [uppertext(H.real_name)]")].",\
@@ -223,19 +281,19 @@
 		"A NEW PLAYTHING FOR MY COLLECTION.",\
 		"YOUR TIME HAS NOT COME, YET.",\
 		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
-
 	playsound(src, get_sfx("soulstone"), 50,1)
-
 	switch(raisetype)
 		if(RAISE_TYPE_ZOMBIE)
-			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H)
+			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), user, H)
 			T.get_clothes(H, T)
 			T.name = H.real_name
 			T.host = H
 			H.loc = null
+			T.faction = "\ref[user]"
 		if(RAISE_TYPE_SKELETON)
-			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H)
+			var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
 			H.gib()
+			spooky.faction = "\ref[user]"
 	charges--
 
 
@@ -245,6 +303,10 @@
 
 #undef RAISE_TYPE_ZOMBIE
 #undef RAISE_TYPE_SKELETON
+#undef RAISE_HUMAN
+#undef RAISE_ANIMAL
+#undef RAISE_MEAT
+
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
@@ -299,7 +361,7 @@
 	else
 		src.Fire(target,user,0,0,0)
 
-/obj/item/weapon/gun/energy/staff/destruction_wand/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/energy/staff/destruction_wand/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(power_supply.charge == charge_cost || lifekiller)
 		if(!istype(target, /turf/simulated/wall) && !istype(target, /turf/simulated/floor))
 			if(!istype(target, /mob/living))
@@ -456,7 +518,7 @@
 			modifystate = "floraemag"
 			update_icon()
 
-/obj/item/weapon/gun/energy/floragun/afterattack(obj/target, mob/user, flag)
+/obj/item/weapon/gun/energy/floragun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 		if(process_chambered())
@@ -654,7 +716,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 
-obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(defective && prob(30))
 		target = get_ranged_target_turf(user, pick(diagonal), 7)
 	..()
@@ -704,6 +766,11 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 		icon_state = "bison50"
 	else
 		icon_state = "bison0"
+
+/obj/item/weapon/gun/energy/bison/alien
+	name = "alien gun"
+
+/obj/item/weapon/gun/energy/bison/alien/update_icon()
 	return
 
 #define SPUR_FULL_POWER 4
@@ -735,7 +802,7 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 	..()
 	playsound(src, 'sound/weapons/spur_spawn.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
 
-/obj/item/weapon/gun/energy/polarstar/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/energy/polarstar/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	levelChange()
 	..()
 

@@ -28,7 +28,6 @@
 	var/age = 0
 	var/limited_growth = 0
 	var/plant_damage_noun = "Thorns"
-	var/tmp/on_resist_key //For resisting out of vines.
 
 /obj/effect/plantsegment/creeper
 	limited_growth = 1
@@ -131,6 +130,14 @@
 
 	arbitrary_measurement_of_how_lush_I_am_right_now = max(1, arbitrary_measurement_of_how_lush_I_am_right_now)
 
+	color = null
+	if (seed.hematophage && seed.ligneous)
+		color = "#804040"
+	else if (seed.hematophage)
+		color = "#800000"
+	else if (seed.ligneous)
+		color = "#808080"
+
 	switch(arbitrary_measurement_of_how_lush_I_am_right_now)
 		if(1)
 			icon_state = "Light[rand(1,3)]"
@@ -155,7 +162,7 @@
 		set_light(0)
 
 /obj/effect/plantsegment/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
 		if(sampled)
 			to_chat(user, "<span class='warning'>\The [src] has already been sampled recently.</span>")
 			return

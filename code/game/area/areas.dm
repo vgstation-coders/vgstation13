@@ -17,6 +17,7 @@ var/area/space_area
 	var/shuttle_can_crush = TRUE
 	var/project_shadows = FALSE
 	var/obj/effect/narration/narrator = null
+	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
 	flags = 0
 
@@ -337,6 +338,9 @@ var/area/space_area
 		return ambience_list
 
 /area/proc/updateicon()
+	if (!areaapc)
+		icon_state = null
+		return
 	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
 		// Highest priority at the top.
 		if(radalert && !fire)
@@ -748,3 +752,6 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 
 	for(var/obj/machinery/door/D in doors)
 		D.update_nearby_tiles()
+
+/area/proc/make_geyser(turf/T)
+	return

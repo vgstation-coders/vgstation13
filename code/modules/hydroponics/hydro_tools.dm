@@ -1,13 +1,13 @@
 //Analyzer, pestkillers, weedkillers, nutrients, hatchets, cutters.
 
-/obj/item/weapon/wirecutters/clippers
+/obj/item/tool/wirecutters/clippers
 	name = "plant clippers"
 	desc = "A tool used to take samples from plants."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon_state = "plantclippers"
 	item_state = "plantclippers"
 
-/obj/item/weapon/wirecutters/clippers/New()
+/obj/item/tool/wirecutters/clippers/New()
 	..()
 	icon_state = "plantclippers"
 	item_state = "plantclippers"

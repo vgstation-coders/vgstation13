@@ -17,7 +17,6 @@
 
 /obj/item/device/radio/intercom/universe/GhostsAlwaysHear()
 	return TRUE
-
 /obj/item/device/radio/intercom/initialize()
 	..()
 	add_self_to_holomap()
@@ -136,7 +135,7 @@
 					buildstage = 1
 				return 1
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT=W
+				var/obj/item/tool/weldingtool/WT=W
 				if(WT.do_weld(user, src, 10, 5))
 					to_chat(user, "<span class='notice'>You cut the intercom frame from the wall!</span>")
 					new /obj/item/mounted/frame/intercom(get_turf(src))
@@ -180,3 +179,80 @@
 /obj/item/device/radio/intercom/medbay/broadcast_nospeaker
 	broadcasting = 1
 	listening = 0
+
+/obj/item/device/radio/intercom/security
+	name = "station intercom (Security)"
+
+/obj/item/device/radio/intercom/security/initialize()
+	..()
+	set_frequency(SEC_FREQ)
+
+/obj/item/device/radio/intercom/security/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
+/obj/item/device/radio/intercom/engineering
+	name = "station intercom (Engineering)"
+
+/obj/item/device/radio/intercom/engineering/initialize()
+	..()
+	set_frequency(ENG_FREQ)
+
+/obj/item/device/radio/intercom/engineering/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
+/obj/item/device/radio/intercom/science
+	name = "station intercom (Science)"
+
+/obj/item/device/radio/intercom/science/initialize()
+	..()
+	set_frequency(SCI_FREQ)
+
+/obj/item/device/radio/intercom/science/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
+/obj/item/device/radio/intercom/supply
+	name = "station intercom (Supply)"
+
+/obj/item/device/radio/intercom/supply/initialize()
+	..()
+	set_frequency(SUP_FREQ)
+
+/obj/item/device/radio/intercom/aiprivate
+	name = "station intercom (AI Private)"
+
+/obj/item/device/radio/intercom/aiprivate/initialize()
+	..()
+	set_frequency(AIPRIV_FREQ)
+
+/obj/item/device/radio/intercom/supply/broadcast_nospeaker
+	broadcasting = 1
+	listening = 0
+
+/datum/intercom_settings
+	var/frequency
+	var/broadcasting
+	var/listening
+
+/datum/intercom_settings/New(var/obj/item/device/radio/intercom/copy)
+	src.frequency = copy.frequency
+	src.broadcasting = copy.broadcasting
+	src.listening = copy.listening
+	
+/obj/item/device/radio/intercom/AIShiftClick(var/mob/living/silicon/ai/clicker)
+	if(clicker.intercom_clipboard)
+		src.frequency = clicker.intercom_clipboard.frequency
+		src.broadcasting = clicker.intercom_clipboard.broadcasting
+		src.listening = clicker.intercom_clipboard.listening		
+
+		src.updateDialog()
+
+		to_chat(clicker, "<span class='confirm'>Pasted settings to \the [src].</span>")
+	else
+		to_chat(clicker, "<span class='warn'>You don't have any intercom settings copied to clipboard!</span>")
+
+/obj/item/device/radio/intercom/AICtrlClick(var/mob/living/silicon/ai/clicker)
+	clicker.intercom_clipboard = new /datum/intercom_settings(src)
+	to_chat(clicker, "<span class='confirm'>Copied settings from \the [src].</span>")

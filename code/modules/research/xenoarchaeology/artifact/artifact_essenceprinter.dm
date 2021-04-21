@@ -4,7 +4,6 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "Essence_imprinter_idle"
 	var/datum/dna2/record/R
-	var/soulbound
 	var/mob/bound_soul
 	var/ready
 
@@ -13,10 +12,10 @@
 	set_light(3,5,LIGHT_COLOR_RED)
 
 /obj/structure/essence_printer/Destroy()
-	if(bound_soul && bound_soul.on_death)
-		bound_soul.on_death.Remove(soulbound)
-	bound_soul = null
-	soulbound = null
+	new /datum/artifact_postmortem_data(src)
+	if(bound_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/print)
+		bound_soul = null
 	..()
 
 /obj/structure/essence_printer/proc/bind(var/mob/living/carbon/human/H)
@@ -34,10 +33,10 @@
 	R.types=DNA2_BUF_UI|DNA2_BUF_UE|DNA2_BUF_SE
 	R.languages = H.languages.Copy()
 	R.name=R.dna.real_name
-	if(bound_soul && bound_soul.on_death)
-		bound_soul.on_death.Remove(soulbound)
+	if(bound_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/print)
 	bound_soul = H
-	soulbound = H.on_death.Add(src, "print")
+	H.lazy_register_event(/lazy_event/on_death, src, .proc/print)
 
 /obj/structure/essence_printer/attack_ghost(mob/user)
 	if(!ready)
@@ -56,11 +55,11 @@
 		to_chat(H, "<span class = 'notice'>You bind your essence to \the [src].</span>")
 		bind(H)
 
-/obj/structure/essence_printer/proc/print(list/arguments)
+/obj/structure/essence_printer/proc/print(mob/user, body_destroyed)
 	do_flick(src,"Essence_imprinter_scan_start",10)
 	ready = FALSE
 	icon_state = "Essence_imprinter_scan_loop"
-	var/mob/living/carbon/human/previous = arguments["user"]
+	var/mob/living/carbon/human/previous = user
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
 	H.dna = R.dna.Clone()
 	H.dna.flavor_text = R.dna.flavor_text
@@ -77,6 +76,17 @@
 	H.flavor_text = H.dna.flavor_text
 
 	H.maxHealth = round(previous.maxHealth/2)
+
+	// Prevent nonhumans from dying immediately in non-ideal atmospheres.
+	if (isvox(H))
+		// Nitrogen heals tox damage from O2 in environment and is also what cloner uses.
+		H.reagents.add_reagent(NITROGEN, 60)
+
+	else if (isplasmaman(H))
+		// Plasmamen both catch on fire AND have no plasma to breathe, so...
+		H.reagents.add_reagent(LEPORAZINE, 60)
+		H.reagents.add_reagent(DEXALIN, 60)
+
 	spawn(rand(30 SECONDS,60 SECONDS))
 		do_flick(src,"Essence_imprinter_scan_complete",8)
 		icon_state = "Essence_imprinter_idle"

@@ -96,7 +96,7 @@
 /obj/machinery/door/mineral/proc/Dismantle(devastated = 0)
 	var/obj/item/stack/ore
 	if(src.prefix == "metal")
-		ore = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		ore = new /obj/item/stack/sheet/metal(get_turf(src))
 	else
 		var/P = text2path("/obj/item/stack/sheet/mineral/[prefix]")
 		if(P)
@@ -163,7 +163,7 @@
 
 /obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			TemperatureAct(100)
 	return ..()
@@ -209,6 +209,44 @@
 	qdel(src)
 	return
 
+/obj/machinery/door/mineral/wood/log
+	prefix = "log"
+	icon_state = "logdoor_closed"
+	soundeffect = 'sound/effects/wood_door_slam.ogg'
+	animation_delay = 0
+	var/try_closing = FALSE //while true, repeatedly try to close
+
+/obj/machinery/door/mineral/wood/log/New()
+	..()
+	fast_machines += src
+
+/obj/machinery/door/mineral/wood/log/Destroy()
+	fast_machines -= src
+	..()
+
+/obj/machinery/door/mineral/wood/log/open()
+	..()
+	spawn(1 SECONDS) //Don't attempt closing until a second after it opens
+		if(!try_closing)
+			try_closing = TRUE
+			process()
+
+/obj/machinery/door/mineral/wood/log/close()
+	..()
+	if(density) //successful, cease processing
+		try_closing = FALSE
+
+/obj/machinery/door/mineral/wood/log/process()
+	if(!density && try_closing)
+		close()
+		visible_message("\The [src] slams shut!", "You hear a slamming of wood.")
+
+/obj/machinery/door/mineral/wood/log/Dismantle(devestated = 0)
+	if(!devestated)
+		new /obj/item/weapon/grown/log/tree(src)
+		new /obj/item/weapon/grown/log/tree(src)
+	qdel(src)
+
 /obj/machinery/door/mineral/resin
 	prefix = "resin"
 	icon_state = "resindoor_closed"
@@ -225,6 +263,7 @@
 	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
 		hardness -= Proj.damage/100
 		CheckHardness()
+	return ..()
 
 /obj/machinery/door/mineral/resin/open()
 	..()
@@ -332,6 +371,7 @@
 	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
 		health -= Proj.damage
 		CheckHardness()
+	return ..()
 
 /obj/machinery/door/mineral/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/card))
@@ -349,3 +389,9 @@
 	update_icon()
 	if(health <= 0)
 		qdel(src)
+
+/obj/machinery/door/mineral/gingerbread
+	prefix = "gingerbread"
+	icon_state = "gingerbreaddoor_closed"
+	hardness = 0.5
+	soundeffect = 'sound/effects/tooth_crack.ogg'

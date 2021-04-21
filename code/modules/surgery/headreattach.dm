@@ -21,13 +21,12 @@
 ////////PEEL//////
 /datum/surgery_step/head/peel
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
+		/obj/item/tool/retractor = 100,
+		/obj/item/tool/crowbar = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 50,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 
 /datum/surgery_step/head/peel/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -54,13 +53,12 @@
 //////SHAPE///////
 /datum/surgery_step/head/shape
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/tool/FixOVein = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 10,	//ok chinsky
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/shape/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -91,13 +89,12 @@
 //////SUTURE//////
 /datum/surgery_step/head/suture
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
+		/obj/item/tool/hemostat = 100,
 		/obj/item/stack/cable_coil = 60,
-		/obj/item/weapon/FixOVein = 80,
+		/obj/item/tool/FixOVein = 80,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/suture/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -133,15 +130,14 @@
 	return 0
 /datum/surgery_step/head/prepare
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/tool/cautery = 100,
+		/obj/item/tool/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
 		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/tool/weldingtool = 25,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/head/prepare/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -179,8 +175,7 @@
 
 	can_infect = 0
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/head = target.get_organ(target_zone)
@@ -202,7 +197,7 @@
 		B.brainmob.mind.transfer_to(target)
 	target.languages = B.brainmob.languages
 	target.default_language = B.brainmob.default_language
-
+	target.init_language = target.default_language
 	affected.attach(B)
 	target.decapitated = null
 
@@ -221,8 +216,7 @@
 
 	can_infect = 0
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/attach_robot/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/head = target.get_organ(target_zone)

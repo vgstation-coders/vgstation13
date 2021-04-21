@@ -3,6 +3,15 @@
 //MEDBOT ASSEMBLY
 #define INJECTION_TIME 30
 
+var/list/firstaid_exceptions = list(
+	"antitoxfirstaid",
+	"antitoxfirstaid2",
+	"antitoxfirstaid3",
+	"radfirstaid2",
+	"radfirstaid3",
+	"nanotrasen"
+	)//these use a different mask since they don't have a "+" at the front
+
 /obj/item/weapon/medbot_cube
 	name = "advanced medibot cube"
 	desc = "Compressed Nanotrasen Advanced Medibot, ready for deployment. Just unwrap the cube!"
@@ -27,7 +36,7 @@
 	health = 20
 	maxhealth = 20
 	req_access =list(access_medical)
-	bot_flags = BOT_NOT_CHASING
+	bot_flags = BOT_NOT_CHASING|BOT_CONTROL
 	can_take_pai = TRUE
 	var/stunned = 0 //It can be stunned by tasers. Delicate circuits.
 	var/list/botcard_access = list(access_medical)
@@ -39,10 +48,10 @@
 	var/heal_threshold = 10 //Start healing when they have this much damage in a category
 	var/use_beaker = 0 //Use reagents in beaker instead of default treatment agents.
 	//Setting which reagents to use to treat what by default. By id.
-	var/treatment_brute = TRICORDRAZINE
-	var/treatment_oxy = TRICORDRAZINE
-	var/treatment_fire = TRICORDRAZINE
-	var/treatment_tox = TRICORDRAZINE
+	var/treatment_brute = BICARIDINE
+	var/treatment_oxy = DEXALIN
+	var/treatment_fire = KELOTANE
+	var/treatment_tox = ANTI_TOXIN
 	var/treatment_virus = SPACEACILLIN
 	var/declare_treatment = 0 //When attempting to treat a patient, should it notify everyone wearing medhuds?
 	var/shut_up = 0 //self explanatory :)
@@ -53,6 +62,7 @@
 	var/last_spoke = 0
 
 	bot_type = MED_BOT
+	commanding_radio = /obj/item/radio/integrated/signal/bot/medbot
 
 /obj/machinery/bot/medbot/mysterious
 	name = "Mysterious Medibot"
@@ -75,43 +85,61 @@
 	icon_state = "firstaid_arm"
 	var/build_step = 0
 	var/created_name = "Medibot" //To preserve the name if it's a unique medbot I guess
-	var/skin = null //Same as medbot, set to tox or ointment for the respective kits.
+	var/skin = null
+	var/image/skin_image = null
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/firstaid_arm_assembly/New()
+/obj/item/weapon/firstaid_arm_assembly/New(turf/loc, var/new_skin)
 	..()
-	spawn(5)
-		if(skin)
-			overlays += image('icons/obj/aibots.dmi', "kit_skin_[skin]")
 
-/obj/machinery/bot/medbot/New()
+	if (!skin)
+		skin = new_skin ? new_skin : "firstaid"
+
+	var/icon/I
+	if (skin in firstaid_exceptions)
+		I = new /icon('icons/obj/aibots.dmi', "mask_assembly_exception")
+	else
+		I = new /icon('icons/obj/aibots.dmi', "mask_assembly")
+
+	I.Blend(new /icon('icons/obj/storage/storage.dmi', skin),ICON_MULTIPLY)
+
+	/*
+	var/icon/J = new /icon(icon,icon_state)
+	J.Blend(I,ICON_OVERLAY)
+	*/
+
+	overlays += I
+
+/obj/machinery/bot/medbot/New(turf/loc, var/new_skin)
 	..()
 	icon_state = "[icon_initial][on]"
-	spawn(4)
-		if(skin)
-			overlays += image('icons/obj/aibots.dmi', "medskin_[skin]")
-			switch(skin)
-				if("tox")
-					treatment_tox = ANTI_TOXIN
-				if("ointment")
-					treatment_fire = KELOTANE
-				if("o2")
-					treatment_oxy = DEXALIN
-		else
-			treatment_brute = BICARIDINE
-		botcard = new /obj/item/weapon/card/id(src)
-		if(isnull(botcard_access) || (botcard_access.len < 1))
-			var/datum/job/doctor/J = new/datum/job/doctor
-			botcard.access = J.get_access()
-		else
-			botcard.access = botcard_access
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
-		initialize()
 
-/obj/machinery/bot/medbot/initialize()
-	. = ..()
-	if(radio_controller)
-		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
+	if (!skin)
+		skin = new_skin ? new_skin : "firstaid"
+
+	var/icon/I
+	if (skin in firstaid_exceptions)
+		I = new /icon('icons/obj/aibots.dmi', "mask_bot_exception")
+	else
+		I = new /icon('icons/obj/aibots.dmi', "mask_bot")
+
+	I.Blend(new /icon('icons/obj/storage/storage.dmi', skin),ICON_MULTIPLY)
+	I.Shift(EAST,5)
+	I.Shift(SOUTH,5)
+
+	/*
+	var/icon/J = new /icon(icon,icon_state)
+	J.Blend(I,ICON_OVERLAY)
+	*/
+
+	overlays += I
+
+	botcard = new /obj/item/weapon/card/id(src)
+	if(isnull(botcard_access) || (botcard_access.len < 1))
+		var/datum/job/doctor/D = new/datum/job/doctor
+		botcard.access = D.get_access()
+	else
+		botcard.access = botcard_access
 
 /obj/machinery/bot/medbot/turn_on()
 	. = ..()
@@ -122,7 +150,7 @@
 	..()
 	target = null
 	old_targets = list()
-	path = new()
+	path = list()
 	currently_healing = 0
 	icon_state = "[icon_initial][on]"
 	updateUsrDialog()
@@ -277,22 +305,28 @@
 		on = 1
 		icon_state = "[icon_initial][on]"
 
+/obj/machinery/bot/medbot/can_path()
+	return !(stunned || currently_healing)
+
 /obj/machinery/bot/medbot/process_bot()
 	if(stunned)
 		stunned--
 		return
 
-	if (!target || target.gcDestroyed)
+	if (can_abandon_target())
 		target = null
+		currently_healing = 0
 		find_target()
 
 	decay_oldtargets()
 
 	if (get_dist(src, target) <= 1)
+		if (summoned)
+			summoned = FALSE
+		path = list() // Kill our path
 		if(!currently_healing)
 			currently_healing = TRUE
 			medicate_patient(target)
-
 
 /obj/machinery/bot/medbot/proc/medicate_patient(mob/living/carbon/C)
 	if(!on)
@@ -418,7 +452,7 @@
 /obj/machinery/bot/medbot/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag == "taser")
 		stunned = min(stunned+10,20)
-	..()
+	return ..()
 
 /obj/machinery/bot/medbot/explode()
 	on = 0
@@ -426,15 +460,8 @@
 	playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35, channel = CHANNEL_MEDBOTS)
 	var/turf/Tsec = get_turf(src)
 
-	switch(skin)
-		if("tox")
-			new /obj/item/weapon/storage/firstaid/toxin/empty(Tsec)
-		if("ointment")
-			new /obj/item/weapon/storage/firstaid/fire/empty(Tsec)
-		if("o2")
-			new /obj/item/weapon/storage/firstaid/o2/empty(Tsec)
-		else
-			new /obj/item/weapon/storage/firstaid(Tsec)
+	var/obj/item/weapon/storage/firstaid/medkit = new (Tsec)
+	medkit.icon_state = skin
 
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 	new /obj/item/device/healthanalyzer(Tsec)
@@ -451,8 +478,9 @@
 	qdel(src)
 	return
 
-/obj/machinery/bot/medbot/find_target()
-	for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
+/obj/machinery/bot/medbot/target_selection()
+	look_for_target = TRUE
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Time to find a patient!
 		if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
 			continue
 
@@ -470,7 +498,9 @@
 					broadcast_medical_hud_message("[name] is treating <b>[C]</b> in <b>[location]</b>", src)
 			visible_message("<b>[src]</b> points at [C.name]!")
 			process_path() // Let's waste no time
+			look_for_target = FALSE
 			break
+	look_for_target = FALSE
 
 /obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C)
 	//Time to see if they need medical help!
@@ -506,14 +536,20 @@
 	if((C.getToxLoss() >= heal_threshold) && (!C.reagents.has_reagent(treatment_tox)))
 		return 1
 
-
-	for(var/datum/disease/D in C.viruses)
-		if((D.stage > 1) || (D.spread_type == AIRBORNE))
-
-			if (!C.reagents.has_reagent(treatment_virus))
-				return 1 //STOP DISEASE FOREVER
+	for(var/ID in C.virus2)
+		if (ID in virusDB)
+			var/datum/data/record/v = virusDB[ID]
+			if ((v.fields["danger"] != "Safe") && (!C.reagents.has_reagent(treatment_virus)))
+				return 1
 
 	return 0
+
+/obj/machinery/bot/medbot/return_status()
+	if (currently_healing)
+		return "Healing"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
 
 /*
  *	Medbot Assembly -- Can be made out of all three medkits.
@@ -530,13 +566,7 @@
 		to_chat(user, "<span class='notice'>You need to empty [src] out first.</span>")
 		return
 
-	var/obj/item/weapon/firstaid_arm_assembly/A = new /obj/item/weapon/firstaid_arm_assembly
-	if(istype(src,/obj/item/weapon/storage/firstaid/fire))
-		A.skin = "ointment"
-	else if(istype(src,/obj/item/weapon/storage/firstaid/toxin))
-		A.skin = "tox"
-	else if(istype(src,/obj/item/weapon/storage/firstaid/o2))
-		A.skin = "o2"
+	var/obj/item/weapon/firstaid_arm_assembly/A = new /obj/item/weapon/firstaid_arm_assembly(get_turf(src),icon_state)
 
 	qdel(S)
 	S = null
@@ -574,7 +604,7 @@
 						to_chat(user, "<span class='notice'>You complete the Medibot! Beep boop.</span>")
 						playsound(src.loc, 'sound/medbot/Automedic_on.ogg', 35, channel = CHANNEL_MEDBOTS)
 						var/turf/T = get_turf(src)
-						var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T)
+						var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot(T,skin)
 						S.skin = skin
 						S.name = created_name
 						user.drop_from_inventory(src)

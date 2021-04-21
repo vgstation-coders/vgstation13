@@ -29,6 +29,7 @@
 
 /obj/structure/closet/secure_closet/quartermaster/atoms_to_spawn()
 	return list(
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/under/rank/cargo,
 		/obj/item/clothing/shoes/brown,
 		/obj/item/device/radio/headset/headset_cargo,
@@ -38,5 +39,8 @@
 		/obj/item/clothing/mask/gas,
 		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/clothing/head/soft,
+		/obj/item/mounted/poster/cargo,
+		/obj/item/mounted/poster/cargo,
+		/obj/item/mounted/poster/cargo,
 		/obj/item/weapon/card/debit/preferred/department/cargo,
 	)

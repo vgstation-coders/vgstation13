@@ -20,13 +20,13 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/extinguisher/foam = 20,
 
 /obj/item/device/multitool = 8,
-/obj/item/weapon/crowbar/red = 5,
+/obj/item/tool/crowbar/red = 5,
 /obj/item/weapon/bikehorn/rubberducky = 5,
 /obj/item/weapon/bikehorn = 5,
 /obj/item/weapon/lighter/zippo = 20,
-/obj/item/weapon/screwdriver = 3,
-/obj/item/weapon/wrench = 3,
-/obj/item/weapon/wrench/socket = 100,
+/obj/item/tool/screwdriver = 3,
+/obj/item/tool/wrench = 3,
+/obj/item/tool/wrench/socket = 100,
 /obj/item/queen_bee = 5,
 /obj/item/toy/gooncode = 400, //honk
 /obj/item/mounted/poster = 20,
@@ -60,14 +60,14 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/disk/shuttle_coords/vault/random = 90,
 
 //tools
-/obj/item/weapon/surgicaldrill = 100,
-/obj/item/weapon/circular_saw = 100,
-/obj/item/weapon/scalpel/laser/tier2 = 120,
-/obj/item/weapon/scalpel = 70,
-/obj/item/weapon/retractor = 30,
-/obj/item/weapon/cautery = 30,
-/obj/item/weapon/bonegel = 30,
-/obj/item/weapon/FixOVein = 30,
+/obj/item/tool/surgicaldrill = 100,
+/obj/item/tool/circular_saw = 100,
+/obj/item/tool/scalpel/laser/tier2 = 120,
+/obj/item/tool/scalpel = 70,
+/obj/item/tool/retractor = 30,
+/obj/item/tool/cautery = 30,
+/obj/item/tool/bonegel = 30,
+/obj/item/tool/FixOVein = 30,
 
 /obj/item/weapon/switchtool/surgery = 100,
 /obj/item/weapon/switchtool/swiss_army_knife = 300,
@@ -91,7 +91,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/instrument/violin = 50,
 /obj/item/device/maracas = 5,
 /obj/item/device/aicard = 50,
-/obj/item/device/soulstone = 250, //What could go wrong
+/obj/item/soulstone = 250, //What could go wrong
 /obj/item/device/taperecorder = 30,
 /obj/item/device/rcd/tile_painter = 30,
 /obj/item/device/rcd/matter/engineering = 30,
@@ -106,7 +106,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/am_containment = 10,
 /obj/item/weapon/cane = 5,
 /obj/item/weapon/beartrap = 50,
-/obj/item/weapon/rcd_ammo = 10,
+/obj/item/stack/rcd_ammo = 10,
 /obj/item/weapon/storage/pneumatic = 40,
 /obj/item/weapon/resonator = 100,
 /obj/item/weapon/gun/energy/kinetic_accelerator = 80,
@@ -120,10 +120,10 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/reagent_scanner = 50,
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 25,
-/obj/item/weapon/solder = 10,
+/obj/item/tool/solder = 10,
 /obj/item/supermatter_shielding = 100,
 /obj/item/weapon/cell/hyper = 50,
-/obj/item/weapon/weldingtool/gatling/empty = 100,
+/obj/item/tool/weldingtool/gatling/empty = 100,
 
 
 //weapons
@@ -203,7 +203,7 @@ var/list/shop_prices = list( //Cost in space credits
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
-var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
+var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - typesof(/obj/item/clothing/head/helmet/space/rig) - list(/obj/item/clothing/suit/space/rig/engineer/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
 var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket
@@ -238,19 +238,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket/shop/proc/setup()
 	spawn()
-		/*
-		looping:
-			for(var/obj/item/I in contents)
-				for(var/type in shop_prices + circuitboard_prices + clothing_prices)
-					if(istype(I, type))
-						I.name = "[I.name] ($[shop_prices[type]])"
-						I.on_destroyed.Add(src, "item_destroyed") //Only trigger alarm when an item for sale is destroyed
-
-						items[I] = shop_prices[type]
-
-						continue looping
-		*/ //This is handled by spawners now
-
 		var/area/vault/supermarket/entrance/E = locate(/area/vault/supermarket/entrance)
 		var/list/protected_objects = list(
 			/obj/structure/window, //Destroying these objects triggers an alarm
@@ -263,9 +250,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		for(var/atom/movable/AM in (src.contents + E.contents))
 
 			if(!is_type_in_list(AM, protected_objects)) continue
-
-			if(AM.on_destroyed)
-				AM.on_destroyed.Add(src, "item_destroyed")
+			AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/item_destroyed)
 
 /area/vault/supermarket/shop/Exited(atom/movable/AM, atom/newloc)
 	..()
@@ -290,8 +275,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		map_element.goods_purchased++
 		map_element.credits_spent += price
 
-/area/vault/supermarket/shop/proc/item_destroyed(list/params)
-	var/atom/destroyed = params["atom"]
+/area/vault/supermarket/shop/proc/item_destroyed(datum/thing)
+	var/atom/destroyed = thing
 
 	if(istype(destroyed, /obj/item))
 		if(items.Find(destroyed))
@@ -738,7 +723,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			var/price = to_spawn[new_item_type]
 
 			I.name = "[I.name] ($[price])"
-			I.on_destroyed.Add(S, "item_destroyed") //Only trigger alarm when an item for sale is destroyed
+			I.lazy_register_event(/lazy_event/on_destroyed, S, /area/vault/supermarket/shop/proc/item_destroyed) //Only trigger alarm when an item for sale is destroyed
 
 			S.items[I] = price
 

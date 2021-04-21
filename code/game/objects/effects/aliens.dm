@@ -62,7 +62,7 @@
 
 /obj/effect/alien/resin/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	healthcheck()
 
 /obj/effect/alien/resin/ex_act(severity)
@@ -511,7 +511,7 @@
 			if(!child)
 				src.visible_message("<span class='warning'>The egg bursts apart, revealing nothing!</span>")
 				status = "GROWN"
-				getFromPool(/obj/effect/decal/cleanable/blood/xeno, src)
+				new /obj/effect/decal/cleanable/blood/xeno(src)
 				health = min(health,0)
 				return
 			child.forceMove(loc)
@@ -528,7 +528,7 @@
 
 /obj/effect/alien/egg/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	healthcheck()
 
 

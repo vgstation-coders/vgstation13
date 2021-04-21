@@ -23,7 +23,6 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/viewcontents = 1
 	var/flammable = 0
 	var/flammin = 0
 	var/flammin_color = null
@@ -309,6 +308,56 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/latte
+	name = "Smooth Latte"
+	desc = "A pleasant soft taste of latte will sooth any and all pain, while relaxing music plays in your head."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/latte/New()
+	..()
+	reagents.add_reagent(CAFE_LATTE, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soy_latte
+	name = "Soy Latte"
+	desc = "Soy version of a latte for soy people."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/soy_latte/New()
+	..()
+	reagents.add_reagent(SOY_LATTE, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/cappuccino
+	name = "Cappuccino"
+	desc = "You will ask yourself: how is cappuccino different from latte? It tastes the same; and you will be right."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/cappuccino/New()
+	..()
+	reagents.add_reagent(CAPPUCCINO, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/espresso
+	name = "Zip Espresso"
+	desc = "When you need a small and quick kick."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/espresso/New()
+	..()
+	reagents.add_reagent(ESPRESSO, 15)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/doppio
+	name = "Doppio x2"
+	desc = "Double espresso made only out of the finest twin coffee beans."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/doppio/New()
+	..()
+	reagents.add_reagent(DOPPIO, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
 	icon_state = "tea"
@@ -328,6 +377,17 @@
 			name = "Hippie Farms Eco-Tea"
 			desc = "Remember when the station was powered by solar panels instead of raping space for its plasma, then creating an engine of destruction? Hippie Farms remembers, maaaan."
 			reagents.add_reagent(GREENTEA, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/chifir
+	name = "Siberian Chifir"
+	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
+	icon_state = "tea"
+	item_state = "mug_empty"
+/obj/item/weapon/reagent_containers/food/drinks/chifir/New()
+	..()
+	reagents.add_reagent(CHIFIR, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -511,7 +571,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink/New()
 	..()
 	reagents.add_reagent(DISCOUNT, 30)
-	reagents.add_reagent(WATER, 20)
+	reagents.add_reagent(MANNITOL, 20)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -753,6 +813,7 @@
 	name = "Gunka-Cola Family Sized"
 	desc = "An unnaturally-sized can for unnaturally-sized men. Taste the Consumerism!"
 	icon_state = "gunka_cola"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gunka_cola/New()
@@ -1058,6 +1119,16 @@
 	icon_state = "barflask"
 	volume = 60
 
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient
+	name = "ancient flask"
+	desc = "A flask recovered from the asteroid. How old is it?"
+	icon_state = "oldflask"
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/ancient/New()
+	..()
+	reagents.add_reagent(KARMOTRINE, 15)
+
 /obj/item/weapon/reagent_containers/food/drinks/britcup
 	name = "cup"
 	desc = "A cup with the British flag emblazoned on it."
@@ -1068,6 +1139,12 @@
 	name = "cup"
 	desc = "A cup with the American flag emblazoned on it."
 	icon_state = "americup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug
+	name = "Gromit Mug"
+	desc = "Gromit Mug."
+	icon_state = "gromitmug"
 	volume = 30
 
 ///////////////////////////////////////////////Alchohol bottles! -Agouri //////////////////////////
@@ -1426,7 +1503,7 @@
 		B.icon_state = "glass_empty"
 
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(M || src)) // Create a glass shard at the target's location! Or
+		new /obj/item/weapon/shard(get_turf(M || src)) // Create a glass shard at the target's location! O)
 
 	var/icon/I = new('icons/obj/drinks.dmi', B.icon_state)
 	I.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
@@ -1478,7 +1555,7 @@
 		B.icon_state = "glass_empty"
 
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
+		new /obj/item/weapon/shard(get_turf(src)) // Create a glass shard at the hit location)
 
 	var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
 	Q.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
@@ -1624,8 +1701,7 @@
 
 			// Geometrically checking if we're on a straight line.
 			var/vector/V = atoms2vector(src, over_location)
-			var/vector/V_norm = V.duplicate()
-			V_norm.normalize()
+			var/vector/V_norm = V.normalized()
 			if (!V_norm.is_integer())
 				return ..() // Only a cardinal vector (north, south, east, west) can pass this test
 

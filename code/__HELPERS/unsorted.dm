@@ -248,7 +248,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
-//Last modified by Carn
+//Also used for the screen alarm rename option
 /mob/proc/rename_self(var/role, var/allow_numbers=0, var/namepick_message = "You are a [role]. Would you like to change your name to something else?")
 	spawn(0)
 		var/oldname = real_name
@@ -275,6 +275,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		if(cmptext("ai",role))
 			if(isAI(src))
 				var/mob/living/silicon/ai/A = src
+				if(A.connected_robots.len) //let the borgs know what their master's new name is
+					for(var/mob/living/silicon/robot/robitt in A.connected_robots)
+						to_chat(robitt, "<span class='notice' style=\"font-family:Courier\">Notice: Linked AI [oldname] renamed to [newname].</span>")
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
 //				world << sound('sound/AI/newAI.ogg')
@@ -288,6 +291,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					A.aiPDA.name = newname + " (" + A.aiPDA.ownjob + ")"
 
 
+		to_chat(src, "<span class='notice'>You will now be known as [newname].</span>")
 		fully_replace_character_name(oldname,newname)
 
 
@@ -731,7 +735,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	progress_bar.pixel_z = WORLD_ICON_SIZE
 	progress_bar.plane = HUD_PLANE
 	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
-	progress_bar.appearance_flags = RESET_COLOR
+	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	return progress_bar
 
 /proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
@@ -789,7 +793,43 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 	return TRUE
 
-/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
+
+// Returns TRUE if the checks passed
+/proc/do_after_default_checks(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	if(!user)
+		return FALSE
+	if(user.isStunned())
+		return FALSE
+	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
+	if(user_loc_to_check != user_original_location)
+		return FALSE
+	if(target.loc != target_original_location)
+		return FALSE
+	if(needhand)
+		if(originally_held_item)
+			if(!user.is_holding_item(originally_held_item))
+				return FALSE
+		else
+			if(user.get_active_hand())
+				return FALSE
+	return TRUE
+
+/**
+  * Used to delay actions.
+  *
+  * Given a mob, a target atom and a duration,
+  * returns TRUE if the mob wasn't interrupted and stayed
+  * at the same position for the specified duration.
+  * Arguments:
+  * * mob/user - the user who will see the progress bar
+  * * atom/target - the atom the progress bar will be attached to
+  * * delay - duration in deciseconds of the delay
+  * * numticks - how many times the failure conditions will be checked throughout the duration
+  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration
+  * * use_user_turf - if TRUE, the turf of the user is checked instead of its location
+  * * custom_checks - if specified, the return value of this callback (called every `delay/numticks` seconds) will determine whether the action succeeded
+  */
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
@@ -813,11 +853,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.appearance_flags = RESET_COLOR
-		//if(!barbar)
-			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
-			//barbar.pixel_y = 36
-	//var/oldstate
+			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	for (var/i = 1 to numticks)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
@@ -825,35 +861,18 @@ proc/GaussRandRound(var/sigma,var/roundto)
 				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
-				progbar.appearance_flags = RESET_COLOR
-			//oldstate = progbar.icon_state
+				progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
 		sleep(delayfraction)
-		//if(user.client && progbar.icon_state != oldstate)
-			//user.client.images.Remove(progbar)
-		var/user_loc_to_check
-		if(use_user_turf)
-			user_loc_to_check = get_turf(user)
+		var/success
+		if(custom_checks)
+			success = custom_checks.invoke(user, use_user_turf, Location, target, target_location, needhand, holding)
 		else
-			user_loc_to_check = user.loc
-		if(!user || user.isStunned() || !(user_loc_to_check == Location) || !(target.loc == target_location))
+			success = do_after_default_checks(user, use_user_turf, Location, target, target_location, needhand, holding)
+		if(!success)
 			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
-			return 0
-		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))	//Sometimes you don't want the user to have to use any hands
-			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
+				stop_progress_bar(user, progbar)
 			return 0
 	if(user && user.client)
 		user.client.images -= progbar
@@ -865,14 +884,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	flick(icon_state, A)
 	sleep(time)
 	return 1
-
-//Takes: Anything that could possibly have variables and a varname to check.
-//Returns: 1 if found, 0 if not.
-/proc/hasvar(var/datum/A, var/varname)
-	if(A.vars.Find(lowertext(varname)))
-		return 1
-	else
-		return 0
 
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
@@ -965,22 +976,20 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/datum/coords/CR = new(x_pos+C.x_pos,y_pos+C.y_pos,z_pos+C.z_pos)
 	return CR
 
-proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
-	if(!original)
-		return null
-
-	var/obj/O = null
-
-	if(sameloc)
-		O=new original.type(original.loc)
-	else
-		O=new original.type(locate(0,0,0))
-
-	if(perfectcopy)
-		if((O) && (original))
-			for(var/V in original.vars - variables_not_to_be_copied)
-				O.vars[V] = original.vars[V]
-	return O
+// If you're looking at this proc and thinking "that's exactly what I need!"
+// then you're wrong and you need to take a step back and reconsider.
+/atom/movable/proc/DuplicateObject(var/location)
+	var/atom/movable/duplicate = new src.type(location)
+	duplicate.change_dir(dir)
+	duplicate.plane = plane
+	duplicate.layer = layer
+	duplicate.name = name
+	duplicate.desc = desc
+	duplicate.pixel_x = pixel_x
+	duplicate.pixel_y = pixel_y
+	duplicate.pixel_w = pixel_w
+	duplicate.pixel_z = pixel_z
+	return duplicate
 
 
 /area/proc/copy_contents_to(var/area/A , var/platingRequired = 0 )
@@ -1039,6 +1048,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 				var/datum/coords/C_trg = refined_trg[B]
 				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
 
+					var/old_name = T.name
 					var/old_dir1 = T.dir
 					var/old_icon_state1 = T.icon_state
 					var/old_icon1 = T.icon
@@ -1048,9 +1058,12 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 							continue moving
 
 					var/turf/X = B.ChangeTurf(T.type)
+					X.name = old_name
 					X.dir = old_dir1
 					X.icon_state = old_icon_state1
 					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
+
+					X.return_air().copy_from(T.return_air())
 
 					var/list/objs = new/list()
 					var/list/newobjs = new/list()
@@ -1066,11 +1079,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 					for(var/obj/O in objs)
-						newobjs += DuplicateObject(O , 1)
-
-
-					for(var/obj/O in newobjs)
-						O.forceMove(X)
+						newobjs += O.DuplicateObject(X)
 
 					for(var/mob/M in T)
 
@@ -1079,24 +1088,10 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 						mobs += M
 
 					for(var/mob/M in mobs)
-						newmobs += DuplicateObject(M , 1)
-
-					for(var/mob/M in newmobs)
-						M.forceMove(X)
+						newmobs += M.DuplicateObject(X)
 
 					copiedobjs += newobjs
 					copiedobjs += newmobs
-
-
-
-					for(var/V in T.vars - variables_not_to_be_copied)
-						X.vars[V] = T.vars[V]
-
-//					var/area/AR = X.loc
-
-//					if(AR.dynamic_lighting)
-//						X.opacity = !X.opacity
-//						X.sd_SetOpacity(!X.opacity)			//TODO: rewrite this code so it's not messed by lighting ~Carn
 
 					toupdate += X
 
@@ -1221,21 +1216,21 @@ proc/get_mob_with_client_list()
 //Quick type checks for some tools
 var/global/list/common_tools = list(
 /obj/item/stack/cable_coil,
-/obj/item/weapon/wrench,
-/obj/item/weapon/weldingtool,
-/obj/item/weapon/screwdriver,
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wrench,
+/obj/item/tool/weldingtool,
+/obj/item/tool/screwdriver,
+/obj/item/tool/wirecutters,
 /obj/item/device/multitool,
-/obj/item/weapon/crowbar)
+/obj/item/tool/crowbar)
 
 /proc/is_surgery_tool(obj/item/W as obj)
 	return (	\
-	istype(W, /obj/item/weapon/scalpel)			||	\
-	istype(W, /obj/item/weapon/hemostat)		||	\
-	istype(W, /obj/item/weapon/retractor)		||	\
-	istype(W, /obj/item/weapon/cautery)			||	\
-	istype(W, /obj/item/weapon/bonegel)			||	\
-	istype(W, /obj/item/weapon/bonesetter)
+	istype(W, /obj/item/tool/scalpel)			||	\
+	istype(W, /obj/item/tool/hemostat)		||	\
+	istype(W, /obj/item/tool/retractor)		||	\
+	istype(W, /obj/item/tool/cautery)			||	\
+	istype(W, /obj/item/tool/bonegel)			||	\
+	istype(W, /obj/item/tool/bonesetter)
 	)
 
 //check if mob is lying down on something we can operate him on.
@@ -1244,6 +1239,8 @@ var/global/list/common_tools = list(
 		return 0
 	if((ishuman(M) || isslime(M)) && M.lying)
 		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
+			return 1
+		if(iscultist(U) && locate(/obj/structure/cult/altar, M.loc))
 			return 1
 		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
 			return 1
@@ -1373,6 +1370,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	return
 
 /mob/dview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
 	CRASH("Somebody called qdel on dview. That's extremely rude.")
 
 //Returns a list of everything target can see, taking into account its sight, but without being blocked by being inside an object.
@@ -1392,6 +1390,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 
 //Aside from usage, this proc is the only difference between tview and dview.
 /mob/dview/tview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
 	CRASH("Somebody called qdel on tview. That's extremely rude.")
 
 //They SHOULD both be independent children of a common parent, but dview has been around much longer and I don't really want to change it
@@ -1584,6 +1583,9 @@ var/mob/dview/tview/tview_mob = new()
 			colour += temp_col
 	return colour
 
+/proc/get_random_potion()	//Pulls up a random potion, excluding minor-types
+	return pick(subtypesof(/obj/item/potion) - /obj/item/potion/mutation)
+
 //We check if a specific game mode is currently undergoing.
 //First by checking if it is the current main mode,
 //Secondly by checking if it is part of a Mixed game mode.
@@ -1677,11 +1679,11 @@ Game Mode config tags:
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
-	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
-		C.output_to_special_tab(sane_msg)
+		C.output_to_special_tab(msg)
 
-/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+// This is awful and probably should be thrown away at some point.
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound, var/mob/firer)
 	var/turf/T = get_turf(source)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
@@ -1699,8 +1701,8 @@ Game Mode config tags:
 	projectile.original = target
 	projectile.target = U
 	projectile.shot_from = source
-	if(istype(source, /mob))
-		projectile.firer = source
+	projectile.firer = firer
+
 	projectile.current = T
 	projectile.starting = T
 	projectile.yo = U.y - T.y

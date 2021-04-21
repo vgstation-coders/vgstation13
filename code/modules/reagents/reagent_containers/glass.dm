@@ -26,7 +26,7 @@
 		/obj/structure/sink,
 		/obj/structure/centrifuge,
 		/obj/item/weapon/storage,
-		/obj/item/weapon/solder,
+		/obj/item/tool/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
 		/obj/machinery/dna_scannernew,
 		/obj/item/weapon/grenade/chem_grenade,
@@ -108,7 +108,7 @@
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
+	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
@@ -226,22 +226,44 @@
 	icon_state = "beakerplasma"
 	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter
+	name = "supermatter beaker"
+	desc = "A beaker with a supermatter sliver. It heats fluids inside, but holding it makes your hand feel strange..."
+	icon_state = "beakersupermatter"
+	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_MATERIALS + "=4"
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/New()
+	..()
+	processing_objects += src
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/process()
+	if(reagents.total_volume)
+		reagents.heating(9000, TEMPERATURE_PLASMA)
+	if(ishuman(loc))
+		//held or in pocket of a human
+		var/mob/living/L = loc
+		L.apply_radiation(3, RAD_EXTERNAL)
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	icon_state = "beakernoreact"
-	starting_materials = list(MAT_GLASS = 500)
-	volume = 50
+	starting_materials = list(MAT_GLASS = 1000)
+	volume = 100
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 200 units."
 	icon_state = "beakernoreactlarge"
-	starting_materials = list(MAT_GLASS = 1500)
-	volume = 100
+	starting_materials = list(MAT_GLASS = 3000)
+	volume = 200
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace
@@ -332,14 +354,26 @@
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "bucket"
 	item_state = "bucket"
+	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,25,30,50,100,150)
+	armor = list(melee = 8, bullet = 3, laser = 3, energy = 0, bomb = 1, bio = 1, rad = 0)
 	volume = 150
 	flags = FPRINT | OPENCONTAINER
 	slot_flags = SLOT_HEAD
+
+/obj/item/weapon/reagent_containers/glass/bucket/equipped(var/mob/M, var/slot)
+	..()
+	if(slot == slot_head)
+		if(reagents.total_volume)
+			for(var/atom/movable/O in M.loc)
+				reagents.reaction(O, TOUCH)
+			reagents.reaction(M.loc, TOUCH)
+			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
+			reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())

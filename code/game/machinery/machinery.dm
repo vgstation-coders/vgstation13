@@ -28,6 +28,7 @@ Class Variables:
          1 -- machine is using power at its idle power level
          2 -- machine is using power at its active power level
 
+
    active_power_usage (num)
       Value for the amount of power to use when in active power mode
 
@@ -136,6 +137,9 @@ Class Procs:
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
 
+	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
+	var/battery_dependent = 0	//Requires a battery to run
+
 	//These are some values to automatically set the light power/range on machines if they have power
 	var/light_range_on = 0
 	var/light_power_on = 0
@@ -153,6 +157,7 @@ Class Procs:
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
+	var/id_tag = null // Identify the machine
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
@@ -165,6 +170,7 @@ Class Procs:
 	..()
 
 /obj/machinery/New()
+	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
 	//if(ticker) initialize()
 	return ..()
@@ -180,7 +186,7 @@ Class Procs:
 		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
 /obj/machinery/Destroy()
-
+	all_machines -= src
 	machines.Remove(src)
 
 	power_machines.Remove(src)
@@ -241,7 +247,7 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel))
+	if(!powered(power_channel) && !connected_cell)
 		return 0
 
 	switch (use_power)
@@ -332,10 +338,11 @@ Class Procs:
 
 		if("buffer" in href_list)
 			if(istype(src, /obj/machinery/telecomms))
-				if(!hasvar(src, "id"))
+				var/obj/machinery/telecomms/T = src
+				if(!T.id)
 					to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 					return
-			else if(!hasvar(src, "id_tag"))
+			else if(!id_tag)
 				to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 				return
 			P.buffer = src
@@ -375,7 +382,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (BROKEN|NOPOWER))
 		return 1
 	if(href_list["close"])
 		return
@@ -481,7 +488,7 @@ Class Procs:
 		else
 			qdel(I)
 
-/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
@@ -495,7 +502,7 @@ Class Procs:
 
 //just something silly to delete the machine while still leaving something behind
 /obj/machinery/proc/smashDestroy(var/destroy_chance = 50)
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 2)
+	new /obj/item/stack/sheet/metal(get_turf(src), 2)
 	spillContents(destroy_chance)
 	qdel(src)
 
@@ -528,7 +535,7 @@ Class Procs:
 	togglePanelOpen(toggleitem, user)
 	return 1
 
-/obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+/obj/machinery/proc/weldToFloor(var/obj/item/tool/weldingtool/WT, mob/user)
 	if(!anchored)
 		state = 0 //since this might be wrong, we go sanity
 		to_chat(user, "You need to secure \the [src] before it can be welded.")
@@ -641,7 +648,7 @@ Class Procs:
 	return 1
 
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
-	return(src in machines)
+	return 1
 
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
@@ -736,14 +743,14 @@ Class Procs:
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src].</span>", "<span class='danger'>You kick \the [src].</span>")
 	if(prob(70))
-		H.apply_damage(rand(2,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+		H.foot_impact(src, rand(2,4))
 
 	if(!anchored && !locked_to) //What could go wrong
 		var/strength = H.get_strength()
 		var/kick_dir = get_dir(H, src)
 
 		if(!Move(get_step(loc, kick_dir))) //The structure that we kicked is up against a wall - this hurts our foot
-			H.apply_damage(rand(2,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+			H.foot_impact(src, rand(2,4))
 
 		if(strength > 1) //Strong - kick further
 			spawn()

@@ -62,7 +62,7 @@
 				if(toner > 0)
 					var/obj/item/weapon/paper/paper_type = copy.type
 					var/obj/item/weapon/paper/c = new paper_type(loc)
-					if(toner > 10)	//lots of toner, make it dark
+					if(toner > 3)	//lots of toner, make it dark
 						c.info = "<font color = #101010>"
 					else			//no toner? shitty copies for you!
 						c.info = "<font color = #808080>"
@@ -88,21 +88,21 @@
 			for(var/i = 0, i < copies, i++)
 				if(!copying)
 					break
-				if(toner >= 5)  //Was set to = 0, but if there was say 3 toner left and this ran, you would get -2 which would be weird for ink
+				if(toner >= 2)  //Was set to = 0, but if there was say 3 toner left and this ran, you would get -2 which would be weird for ink
 					var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
 					var/icon/I = icon(photocopy.icon, photocopy.icon_state)
 					var/icon/img = icon(photocopy.img)
 					if(greytoggle == "Greyscale")
-						if(toner > 10) //plenty of toner, go straight greyscale
+						if(toner > 3) //plenty of toner, go straight greyscale
 							I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0)) //I'm not sure how expensive this is, but given the many limitations of photocopying, it shouldn't be an issue.
 							img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
 						else //not much toner left, lighten the photo
 							I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(100,100,100))
 							img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(100,100,100))
-						toner -= 5	//photos use a lot of ink!
+						toner -= 2	//photos use a lot of ink!
 					else if(greytoggle == "Color")
-						if(toner >= 10)
-							toner -= 10 //Color photos use even more ink!
+						if(toner >= 3)
+							toner -= 3 //Color photos use even more ink!
 						else
 							continue
 					p.icon = I
@@ -115,6 +115,7 @@
 					p.photo_size = photocopy.photo_size
 					p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
 					p.info = photocopy.info
+					p.double_agent_completion_ids = photocopy.double_agent_completion_ids.Copy()
 
 					sleep(15)
 				else
@@ -130,7 +131,7 @@
 				var/icon/temp_img
 				if(ishuman(ass) && (ass.get_item_by_slot(slot_w_uniform) || ass.get_item_by_slot(slot_wear_suit)))
 					to_chat(user, "<span class='notice'>You feel kind of silly copying [ass == user ? "your" : ass][ass == user ? "" : "\'s"] ass with [ass == user ? "your" : "their"] clothes on.</span>")
-				else if(toner >= 5 && check_ass()) //You have to be sitting on the copier and either be a xeno or a human without clothes on.
+				else if(toner >= 2 && check_ass()) //You have to be sitting on the copier and either be a xeno or a human without clothes on.
 					if(isalien(ass) || istype(ass,/mob/living/simple_animal/hostile/alien)) //Xenos have their own asses, thanks to Pybro.
 						temp_img = icon("icons/ass/assalien.png")
 					else if(ishuman(ass) || istype(ass, /mob/living/simple_animal/hostile/gremlin)) //Suit checks are in check_ass
@@ -152,7 +153,7 @@
 					small_img.Scale(8, 8)
 					ic.Blend(small_img,ICON_OVERLAY, 10, 13)
 					p.icon = ic
-					toner -= 5
+					toner -= 2
 					sleep(15)
 				else
 					break
@@ -382,14 +383,12 @@
 				qdel(src)
 			else
 				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-					O.New(O.loc)
+					new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
 					toner = 0
 		else
 			if(prob(50))
 				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-					O.New(O.loc)
+					new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
 					toner = 0
 	return
 
@@ -398,8 +397,7 @@
 		qdel(src)
 	else
 		if(toner > 0)
-			var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
-			O.New(O.loc)
+			new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
 			toner = 0
 	return
 
@@ -481,7 +479,7 @@
 	return 0
 
 /obj/machinery/photocopier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0))
+	if(!mover || air_group || (height==0))
 		return 1
 
 	return (!mover.density || !density || mover.pass_flags)

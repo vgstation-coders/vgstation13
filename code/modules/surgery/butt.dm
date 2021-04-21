@@ -16,13 +16,12 @@
 /////SLICE CHEEK////////
 /datum/surgery_step/butt/slice_cheek
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
+		/obj/item/tool/circular_saw = 100,
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75, \
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt/slice_cheek/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_HAS_A_BUTT && istype(target)
@@ -57,13 +56,15 @@
 
 /datum/surgery_step/butt/seperate_anus
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
+		/obj/item/tool/scalpel = 100,
+		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
+		/obj/item/soulstone/gem = 0,
+		/obj/item/soulstone = 50,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt/seperate_anus/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt == SURGERY_BUTT_CUT
@@ -92,13 +93,12 @@
 //////SAW HIP///////
 /datum/surgery_step/butt/saw_hip
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
+		/obj/item/tool/circular_saw = 100,
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75,
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt/saw_hip/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SEPARATE_ANUS
@@ -130,15 +130,14 @@
 	return 0
 /datum/surgery_step/butt/cauterize_butt
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/tool/cautery = 100,
+		/obj/item/tool/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
 		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/tool/weldingtool = 25,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt/cauterize_butt/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SAW_HIP
@@ -168,22 +167,22 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/butt_replace
-	/datum/surgery_step/butt_replace/priority = 2 //this is more important than anything else!
-	/datum/surgery_step/butt_replace/can_infect = 0
-	/datum/surgery_step/butt_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return target_zone == LIMB_GROIN && hasorgans(target)
+	priority = 2 //this is more important than anything else!
+	can_infect = 0
+
+/datum/surgery_step/butt_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	return target_zone == LIMB_GROIN && hasorgans(target)
 
 
 /////PULL FLESH////////
 /datum/surgery_step/butt_replace/peel
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
+		/obj/item/tool/retractor = 100,
+		/obj/item/tool/crowbar = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 50,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt_replace/peel/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt_replace == SURGERY_BEGIN_BUTT_REPLACE && target.op_stage.butt == SURGERY_NO_BUTT && istype(target)
@@ -208,13 +207,12 @@
 //////REPAIR HIPS///////
 /datum/surgery_step/butt_replace/hips
 	allowed_tools = list(
-		/obj/item/weapon/bonegel = 100,
-		/obj/item/weapon/bonesetter/bone_mender = 100,
-		/obj/item/weapon/screwdriver = 75,
+		/obj/item/tool/bonegel = 100,
+		/obj/item/tool/bonesetter/bone_mender = 100,
+		/obj/item/tool/screwdriver = 75,
 		)
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt_replace/hips/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt_replace == SURGERY_BUTT_PEEL && istype(target)
@@ -240,13 +238,12 @@
 //////SHAPE///////
 /datum/surgery_step/butt_replace/shape
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/tool/FixOVein = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 10,	//ok chinsky
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt_replace/shape/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt_replace == SURGERY_REPLACE_HIP && istype(target)
@@ -274,8 +271,7 @@
 		/obj/item/clothing/head/butt = 100,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt_replace/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt_replace == SURGERY_BUTT_SHAPE && istype(target)
@@ -315,15 +311,14 @@
 	return 0
 /datum/surgery_step/butt_replace/cauterize
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/tool/cautery = 100,
+		/obj/item/tool/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
 		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/tool/weldingtool = 25,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt_replace/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SAW_HIP && target.op_stage.butt_replace

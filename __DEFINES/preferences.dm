@@ -2,6 +2,7 @@
 #define GET_RANDOM_JOB 0
 #define BE_ASSISTANT 1
 #define RETURN_TO_LOBBY 2
+#define GET_EMPTY_JOB 3
 
 // /datum/preferences/var/special_popup
 #define SPECIAL_POPUP_DISABLED 0 // only output to chat

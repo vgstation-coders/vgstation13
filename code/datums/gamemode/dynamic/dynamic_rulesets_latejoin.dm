@@ -46,7 +46,7 @@
 							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = 10
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
@@ -75,7 +75,7 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
-	weight = 1
+	weight = 5
 	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -110,13 +110,13 @@
 //////////////////////////////////////////////
 
 
-/*/datum/dynamic_ruleset/latejoin/ninja
+/datum/dynamic_ruleset/latejoin/ninja
 	name = "Space Ninja Attack"
 	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 10
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -126,21 +126,20 @@
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(candidates)
+	if(!latejoinprompt(M,src))
+		message_admins("[M.key] has opted out of becoming a ninja.")
+		return 0
 	assigned += M
 	candidates -= M
 	var/datum/role/ninja/newninja = new
 	newninja.AssignToRole(M.mind,1)
+	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
+	if (!spoider)
+		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	spoider.HandleRecruitedRole(newninja)
 	newninja.Greet(GREET_DEFAULT)
-	newninja.OnPostSetup()
-	newninja.AnnounceObjectives()
-	spawn(1) //TODO - FIX THE NEED FOR THIS. CHECK PR, CHECK THE REVERTED COMMIT
-		if(!newninja.antag.current.ThrowAtStation())
-			newninja.antag.current.spawn_rand_maintenance()
 	return 1
-*/
-//TODO: ADD A "DO YOU WANT TO BE A [ROLE]?" PROMPT TO LATE-JOINERS BECAUSE PEOPLE HATE BEING A NINJA
-//TODO: ADD AN EQUIVALENT OF generate_ruleset_body() FOR LATEJOINS SO NINJAS DON'T SPAWN AS NAKED DYING VOX
-//DON'T RE-ENABLE TILL THAT'S DONE
+
 
 
 //////////////////////////////////////////////
@@ -156,7 +155,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_pop = list(20,20,15,15,15,15,15,0,0,0)
 	required_candidates = 1
-	weight = 2
+	weight = 10
 	cost = 20
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)

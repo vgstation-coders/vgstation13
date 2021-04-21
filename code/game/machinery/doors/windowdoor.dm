@@ -24,7 +24,7 @@
 	var/obj/machinery/smartglass_electronics/smartwindow
 	var/window_is_opaque = FALSE //The var that helps darken the glass when the door opens/closes
 	var/assembly_type = /obj/structure/windoor_assembly
-	var/id_tag = null
+
 
 /obj/machinery/door/window/New()
 	..()
@@ -187,15 +187,15 @@
 	health = max(0, health - damage)
 	if(health <= 0)
 		playsound(src, "shatter", 70, 1)
-		getFromPool(shard_type, loc)
-		getFromPool(/obj/item/stack/cable_coil,loc,2)
+		new shard_type(loc)
+		new /obj/item/stack/cable_coil(loc, 2)
 		eject_electronics()
 		qdel(src)
 
 /obj/machinery/door/window/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damage)
 		take_damage(round(Proj.damage / 2))
-	..()
+	return ..()
 
 //When an object is thrown at the window
 /obj/machinery/door/window/hitby(atom/movable/AM)
@@ -214,6 +214,15 @@
 /obj/machinery/door/window/attack_ai(mob/user)
 	add_hiddenprint(user)
 	return attack_hand(user)
+
+/obj/machinery/door/window/attack_ghost(mob/user)
+	if(isAdminGhost(user))
+		if (!density)
+			return close()
+		else
+			return open()
+	else
+		..()
 
 /obj/machinery/door/window/attack_paw(mob/living/user)
 	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))

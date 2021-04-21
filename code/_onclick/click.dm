@@ -75,7 +75,8 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	on_clickon.Invoke(list(
+	lazy_invoke_event(/lazy_event/on_clickon, list(
+		"user" = src,
 		"modifiers" = modifiers,
 		"target" = A
 	))
@@ -143,13 +144,7 @@
 			item_attack_delay = held_item.attack_delay
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
-				if(ismob(A) && modifiers["def_zone"])
-					var/mob/M = A
-					var/def_zone
-					def_zone = modifiers["def_zone"]
-					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
-				else
-					resolved = A.attackby(held_item, src, params)
+				resolved = A.attackby(held_item, src, params)
 				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item)
@@ -157,7 +152,7 @@
 		else
 			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+			if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 
@@ -188,7 +183,7 @@
 	else
 		if(ismob(A))
 			delayNextAttack(10)
-		if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+		if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 			return
 		RangedAttack(A, params)
 
@@ -250,8 +245,7 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	if(INVOKE_EVENT(on_ruattack,list("atom"=A))) //This returns 1 when doing an action intercept
-		return
+	lazy_invoke_event(/lazy_event/on_ruattack, list("atom" = A))
 
 /*
 	Middle click
@@ -269,7 +263,11 @@
 */
 
 /mob/proc/MiddleShiftClickOn(var/atom/A)
-	pointed(A)
+	A.MiddleShiftClick(src)
+	
+/atom/proc/MiddleShiftClick(var/mob/user)
+	user.pointed(src)
+
 
 /*
 	Shift click
@@ -345,7 +343,7 @@
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 
-	var/obj/item/projectile/beam/LE = getFromPool(/obj/item/projectile/beam, loc)
+	var/obj/item/projectile/beam/LE = new /obj/item/projectile/beam(loc)
 	LE.icon = 'icons/effects/genetics.dmi'
 	LE.icon_state = "eyelasers"
 	playsound(usr.loc, 'sound/weapons/laser2.ogg', 75, 1)
@@ -390,7 +388,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
+		StartMoving()
 		Facing()
+		EndMoving()
 		return
 
 	if(abs(dx) < abs(dy))
@@ -404,7 +404,9 @@
 		else
 			change_dir(WEST)
 
+	StartMoving()
 	Facing()
+	EndMoving()
 
 
 // File renamed to mouse.dm?

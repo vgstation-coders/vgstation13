@@ -25,22 +25,11 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	var/invcos = arccos(x / sqrt(x * x + y * y))
 	return y >= 0 ? invcos : -invcos
 
-#if DM_VERSION < 513
-proc/arctan(x)
-	var/y=arcsin(x/sqrt(1+x*x))
-	return y
-#endif
-
 /proc/Ceiling(x, y = 1)
 	. = -round(-x / y) * y
 
-/proc/sgn(const/i)
-	if(i > 0)
-		return 1
-	else if(i < 0)
-		return -1
-	else
-		return 0
+// Returns the sign of the given number (1 or -1)
+#define sgn(x) ((x) != 0 ? (x) / abs(x) : 0)
 
 // -- Returns a Lorentz-distributed number.
 // -- The probability density function has centre x0 and width s.
@@ -327,60 +316,8 @@ proc/arctan(x)
 	assert_eq(count_set_bitflags(1|4|16), 3)
 #endif
 
-// Basic geometry things.
-
-/vector/
-	var/x = 0
-	var/y = 0
-
-/vector/New(var/x, var/y)
-	src.x = x
-	src.y = y
-
-/vector/proc/duplicate()
-	return new /vector(x, y)
-
-/vector/proc/euclidian_norm()
-	return sqrt(x*x + y*y)
-
-/vector/proc/squared_norm()
-	return x*x + y*y
-
-/vector/proc/normalize()
-	var/norm = euclidian_norm()
-	x = x/norm
-	y = y/norm
-	return src
-
-/vector/proc/chebyshev_norm()
-	return max(abs(x), abs(y))
-
-/vector/proc/chebyshev_normalize()
-	var/norm = chebyshev_norm()
-	x = x/norm
-	y = y/norm
-	return src
-
-/vector/proc/is_integer()
-	return IS_INT(x) && IS_INT(y)
-
-/atom/movable/proc/vector_translate(var/vector/V, var/delay)
-	var/turf/T = get_turf(src)
-	var/turf/destination = locate(T.x + V.x, T.y + V.y, z)
-	var/vector/V_norm = V.duplicate()
-	V_norm.chebyshev_normalize()
-	if (!V_norm.is_integer())
-		return
-	var/turf/destination_temp
-	while (destination_temp != destination)
-		destination_temp = locate(T.x + V_norm.x, T.y + V_norm.y, z)
-		forceMove(destination_temp, glide_size_override = DELAY2GLIDESIZE(delay))
-		T = get_turf(src)
-		sleep(delay + world.tick_lag) // Shortest possible time to sleep
-
-/atom/proc/get_translated_turf(var/vector/V)
-	var/turf/T = get_turf(src)
-	return locate(T.x + V.x, T.y + V.y, z)
-
-/proc/atoms2vector(var/atom/A, var/atom/B)
-	return new /vector((B.x - A.x), (B.y - A.y)) // Vector from A -> B
+// Given a number in the range [old_bottom, old_top],
+// Returns that number mapped to the range [new_bottom, new_top]
+/proc/map_range(old_value, old_bottom, old_top, new_bottom, new_top)
+	var/new_value = (old_value - old_bottom) / (old_top - old_bottom) * (new_top - new_bottom) + new_bottom
+	return new_value

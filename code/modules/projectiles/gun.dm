@@ -1,6 +1,9 @@
 #define UNCLOWN 1
 #define CLOWNABLE 2
 #define CLOWNED 3
+#define SILENCER_OFFSET_X 1
+#define SILENCER_OFFSET_Y 2
+
 /obj/item/weapon/gun
 	name = "gun"
 	desc = "Its a gun. It's pretty terrible, though."
@@ -24,7 +27,7 @@
 	min_harm_label = 20
 	harm_label_examine = list("<span class='info'>A label is stuck to the trigger, but it is too small to get in the way.</span>", "<span class='warning'>A label firmly sticks the trigger to the guard!</span>")
 	ghost_read = 0
-
+	hitsound = 'sound/weapons/smash.ogg'
 	var/fire_sound = 'sound/weapons/Gunshot.ogg'
 	var/fire_action = "fire"
 	var/empty_sound = 'sound/weapons/empty.ogg'
@@ -32,6 +35,8 @@
 	var/obj/item/projectile/in_chamber = null
 	var/list/caliber //the ammo the gun will accept. Now multiple types (make sure to set them to =1)
 	var/silenced = 0
+	var/list/silencer_offset = list() //x,y coords to bump silencer overlay to FROM (4,13) (use barrel end pixel position)
+	var/list/gun_part_overlays = list() //holds copy of overlays to allow for sane manipulation
 	var/recoil = 0
 	var/ejectshell = 1
 
@@ -65,6 +70,13 @@
 
 	// Tells is_honorable() which special_roles to respect.
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
+	var/kick_fire_chance = 5
+
+/obj/item/weapon/gun/Destroy()
+	if(in_chamber)
+		qdel(in_chamber)
+		in_chamber = null
+	..()
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -89,7 +101,7 @@
 /obj/item/weapon/gun/proc/can_discharge() //because process_chambered() is an atrocity
 	return 0
 
-/obj/item/weapon/gun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -111,24 +123,30 @@
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
 /obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
-	if(silenced)
+	if(istype(silenced, /obj/item/gun_part/silencer))
+		var/obj/item/gun_part/silencer/A = silenced
 		if(fire_sound)
-			playsound(user, fire_sound, fire_volume/5, 1)
+			playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+			playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
+		if(A.volume_mult <= 1)
+			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
+			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 	else
 		if(fire_sound)
 			playsound(user, fire_sound, fire_volume, 1)
 		else if (in_chamber.fire_sound)
 			playsound(user, in_chamber.fire_sound, fire_volume, 1)
-		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-		"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
-		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
+		if(!silenced)
+			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
+			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
 	if(advanced_tool_user_check)
-		if (!user.IsAdvancedToolUser())
+		if (!user.dexterity_check())
 			firing_dexterity = 0
 	if(MoMMI_check)
 		if(isMoMMI(user))
@@ -167,7 +185,7 @@
 			return 0
 	return 1
 
-/obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)//TODO: go over this
+/obj/item/weapon/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	//Exclude lasertag guns from the M_CLUMSY check.
 	var/explode = FALSE
 	var/dehand = FALSE
@@ -341,10 +359,11 @@
 		if (process_chambered())
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
 			if(silenced)
+				var/obj/item/gun_part/silencer/A = silenced
 				if(fire_sound)
-					playsound(user, fire_sound, fire_volume/5, 1)
+					playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 				else if (in_chamber.fire_sound)
-					playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+					playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
 			else
 				if(fire_sound)
 					playsound(user, fire_sound, fire_volume, 1)
@@ -381,7 +400,7 @@
 				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
 			src.Fire(M,user,0,0,1)
 			return
-		else if(target && M in target)
+		else if(target && (M in target))
 			process_chambered()
 			src.Fire(M,user,0,0,1) ///Otherwise, shoot!
 			return
@@ -445,3 +464,15 @@
 
 /obj/item/weapon/gun/update_icon()
 	icon_state = initial(icon_state) + "[clowned == CLOWNED ? "c" : ""]"
+
+/obj/item/weapon/gun/proc/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
+	return
+
+/obj/item/weapon/gun/kick_act(mob/living/carbon/human/H)
+	. = ..()
+	if(prob(kick_fire_chance))
+		var/list/targets = list()
+		for(var/turf/t in oview(6))
+			targets += t
+		var/target = pick(targets)
+		src.Fire(target,H,0,0,1)

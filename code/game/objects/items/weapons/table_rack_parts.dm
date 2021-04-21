@@ -58,12 +58,24 @@
 			to_chat(user, "<span class='notice'>You add plasma glass panes to \the [name].</span>")
 			plasma.use(1)
 			qdel(src)
+
 /obj/item/weapon/table_parts/attack_self(mob/user)
-	if(locate(/obj/structure/table) in get_turf(user))
+	preattack(get_turf(user), user, 1)
+
+/obj/item/weapon/table_parts/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = 1
+	if(!proximity_flag)
+		return
+	if(!isturf(target))
+		return ..()
+	var/turf/T = target
+	if(locate(/obj/structure/table) in T)
 		to_chat(user, "<span class='warning'>There is already a table here!</span>")
 		return
-
-	new table_type(user.loc)
+	if(T.density)
+		to_chat(user, "<span class='warning'>You can't build there!</span>")
+		return
+	new table_type(T)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
 
@@ -177,6 +189,15 @@
 /obj/item/weapon/table_parts/clockwork/clockworkify()
 	return
 
+/obj/item/weapon/table_parts/plastic
+	name = "plastic table parts"
+	desc = "Parts for a plastic table for your space patio."
+	icon_state = "plastic_tableparts"
+	starting_materials = list(MAT_PLASTIC = 3750)
+	table_type = /obj/structure/table/plastic
+	sheet_type = /obj/item/stack/sheet/mineral/plastic
+	sheet_amount = 5
+
 /obj/item/weapon/rack_parts
 	name = "rack parts"
 	desc = "Parts of a rack."
@@ -196,7 +217,7 @@
 		qdel(src)
 		return
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin slicing through \the [src].")
 			WT.playtoolsound(user, 50)

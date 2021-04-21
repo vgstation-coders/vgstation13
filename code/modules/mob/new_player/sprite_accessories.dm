@@ -62,7 +62,7 @@
 	name = "Bald"
 	icon_state = "bald"
 	gender = MALE
-	species_allowed = list("Human","Manifested","Insectoid","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+	species_allowed = list("Human","Manifested","Insectoid","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime")
 
 /datum/sprite_accessory/hair/short
 	name = "Short Hair"	  // try to capatilize the names please~
@@ -75,10 +75,6 @@
 /datum/sprite_accessory/hair/long
 	name = "Shoulder-length Hair"
 	icon_state = "hair_b"
-
-/datum/sprite_accessory/hair/longalt
-	name = "Shoulder-length Hair Alt"
-	icon_state = "hair_longfringe"
 
 /*/datum/sprite_accessory/hair/longish
 	name = "Longer Hair"
@@ -116,6 +112,50 @@
 	name = "Ponytail 1"
 	icon_state = "hair_ponytail"
 
+/datum/sprite_accessory/hair/sideswept
+	name = "Sideswept"
+	icon_state = "hair_sideswept"
+
+/datum/sprite_accessory/hair/rightside
+	name = "Right Side"
+	icon_state = "hair_rightside"
+
+/datum/sprite_accessory/hair/amazon
+	name = "Amazon"
+	icon_state = "hair_amazon"
+
+/datum/sprite_accessory/hair/gipsy
+	name = "Gipsy"
+	icon_state = "hair_gipsy"
+
+/datum/sprite_accessory/hair/bluntbangs
+	name = "Blunt Bangs"
+	icon_state = "hair_bluntbangs"
+
+/datum/sprite_accessory/hair/longhalfshave
+	name = "Long Half-Shave"
+	icon_state = "hair_halfshaved"
+
+/datum/sprite_accessory/hair/longsidepart
+	name = "Long Sidepart"
+	icon_state = "hair_longsidepartstraight"
+
+/datum/sprite_accessory/hair/slightlymessy
+	name = "Slightly Messy"
+	icon_state = "hair_slightlymessy"
+
+/datum/sprite_accessory/hair/baum
+	name = "Baum"
+	icon_state = "hair_baum"
+
+/datum/sprite_accessory/hair/slick
+	name = "Slick"
+	icon_state = "hair_slick"
+
+/datum/sprite_accessory/hair/wolfmane
+	name = "Wolfmane"
+	icon_state = "hair_wolfmane"
+
 /datum/sprite_accessory/hair/ponytail2
 	name = "Ponytail 2"
 	icon_state = "hair_pa"
@@ -128,6 +168,10 @@
 /datum/sprite_accessory/hair/longpony
 	name = "Long Ponytail"
 	icon_state = "hair_longpony"
+
+/datum/sprite_accessory/hair/mediumpony
+	name = "Medium Ponytail"
+	icon_state = "hair_mediumpony"
 
 /datum/sprite_accessory/hair/highpony
 	name = "High Ponytail"
@@ -152,6 +196,10 @@
 /datum/sprite_accessory/hair/parted
 	name = "Parted"
 	icon_state = "hair_parted"
+
+/datum/sprite_accessory/hair/partedalt
+	name = "Parted Alt"
+	icon_state = "hair_partedalt"
 
 /datum/sprite_accessory/hair/pompadour
 	name = "Pompadour"
@@ -222,6 +270,10 @@
 /datum/sprite_accessory/hair/dreadlocks
 	name = "Dreadlocks"
 	icon_state = "hair_dreads"
+
+/datum/sprite_accessory/hair/dreadlockslong
+	name = "Long Dreadlocks"
+	icon_state = "hair_dreads_long"	
 
 /datum/sprite_accessory/hair/curls
 	name = "Curls"
@@ -490,6 +542,10 @@
 	icon_state = "hair_nia"
 	gender = FEMALE
 
+/datum/sprite_accessory/hair/nia_short
+	name = "Nia (Short)"
+	icon_state = "hair_nia_short"
+
 /datum/sprite_accessory/hair/shinobu
 	name = "Shinobu"
 	icon_state = "hair_shinobu"
@@ -507,6 +563,10 @@
 	name = "Manbun"
 	icon_state = "hair_manbun"
 	gender = MALE
+
+/datum/sprite_accessory/hair/sonicboom
+	name = "SonicBoom"
+	icon_state = "hair_sonicboom"
 
 /*
 ///////////////////////////////////
@@ -633,112 +693,108 @@
 	icon_state = "insect_antennae"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_long
 	name = "Long Insectoid Antennae"
 	icon_state = "insect_antennae_long"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_curly
 	name = "Curly Insectoid Antennae"
 	icon_state = "insect_curly"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_crest
 	name =  "Short Crest"
 	icon_state = "insect_crest_short"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_thick
 	name = "Thick Carapace"
 	icon_state = "insect_thick"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_sharp
 	name = "Sharp Insectoid Crest"
 	icon_state = "crest_sharp"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_quad
 	name = "Quad Insectoid Antennae"
 	icon_state = "insect_quad"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_swept
 	name = "Swept-back Antennae"
 	icon_state = "insect_swept"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_ridge
 	name = "Ridged Carapace"
 	icon_state = "insect_ridges"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_wide
 	name = "Wide Carapace"
 	icon_state = "insect_wide"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_nasute
 	name = "Nasute Head"
 	icon_state = "insect_nasute"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_triple
 	name = "Triple Insectoid Horns"
 	icon_state = "insect_triple"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_mandible
 	name = "Large Mandibles"
 	icon_state = "insect_mandibles"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_wedge
 	name = "Wedge Head"
 	icon_state = "insect_wedge"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_hiver
 	name = "Hiver Head"
 	icon_state = "insect_hiver"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_soldier
 	name = "Soldier Head"
 	icon_state = "insect_soldier"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
+
+/datum/sprite_accessory/hair/insect_shiny
+	name = "Shiny Head"
+	icon_state = "insect_shiny"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+
+/datum/sprite_accessory/hair/insect_hornet
+	name = "Hornet Head"
+	icon_state = "insect_hornet"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
 
 
 /datum/sprite_accessory/hair/una_spines_long
@@ -1132,3 +1188,23 @@
 	name = "Mohawk"
 	icon_state = "mohawk"
 
+/datum/sprite_accessory/hair/mush_plumphelmet
+	name = "Plump Helmet"
+	icon_state = "mush_plumphelmet"
+	species_allowed = list("Mushroom")
+
+/datum/sprite_accessory/hair/mush_amanita
+	name = "Amanita"
+	icon_state = "mush_amanita"
+	species_allowed = list("Mushroom")
+	additional_accessories = TRUE
+
+/datum/sprite_accessory/hair/mush_flat
+	name = "Flat Cap"
+	icon_state = "mush_flat"
+	species_allowed = list("Mushroom")
+
+/datum/sprite_accessory/hair/mush_chanterelle
+	name = "Chanterelle"
+	icon_state = "mush_chanterelle"
+	species_allowed = list("Mushroom")

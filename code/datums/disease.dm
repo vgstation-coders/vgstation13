@@ -145,7 +145,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 
 	if(isturf(source.loc))
 		for(var/mob/living/carbon/M in oview(check_range, source))
-			if(isturf(M.loc) && quick_AStar(source.loc, M, /turf/proc/AdjacentTurfs, /turf/proc/Distance, check_range))
+			if(isturf(M.loc) && quick_AStar(source.loc, M, /turf/proc/AdjacentTurfs, /turf/proc/Distance, check_range, reference="\ref[src]"))
 				M.contract_disease(src, 0, 1, force_spread)
 
 /datum/disease/proc/process()
@@ -191,6 +191,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	active_diseases -= src
 	if(affected_mob)
 		affected_mob.viruses -= src
+	holder = null
 	..()
 
 /datum/disease/New(var/process=1, var/datum/disease/D)//process = 1 - adding the object to global list. List is processed by master controller.

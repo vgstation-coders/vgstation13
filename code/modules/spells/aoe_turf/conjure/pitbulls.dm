@@ -18,6 +18,7 @@
 	override_icon = 'icons/mob/animal.dmi'
 	hud_state = "pitbull"
 	cast_sound = 'sound/voice/pitbullbark.ogg'
+	quicken_price = Sp_BASE_PRICE
 
 var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls won't attack other pitbulls when feeling treacherous (and instead attack the wizard)
 
@@ -31,7 +32,7 @@ var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls
 		if(locs.len >= 3) //we found 3 locations and thats all we need
 			break
 		var/turf/T = get_step(user, direction) //getting a loc in that direction
-		if(quick_AStar(get_turf(user), T, /turf/proc/AdjacentTurfs, /turf/proc/Distance, 1)) // if a path exists, so no dense objects in the way its valid salid
+		if(quick_AStar(get_turf(user), T, /turf/proc/AdjacentTurfs, /turf/proc/Distance, 1, reference="\ref[src]")) // if a path exists, so no dense objects in the way its valid salid
 			locs += T
 
 	if(locs.len < 3) //if we only found one location, spawn more on top of our tile so we dont get stacked pitbulls

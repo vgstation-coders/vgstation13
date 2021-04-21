@@ -82,6 +82,10 @@
 		client.screen -= alert
 	qdel(alert)
 
+/mob/proc/clear_all_alerts()
+	for(var/category in alerts)
+		clear_alert(category)
+
 
 // PRIVATE = only edit, use, or override these if you're editing the system as a whole
 
@@ -97,6 +101,8 @@ var/global/list/screen_alarms_locs = list(
 /datum/hud/proc/reorganize_alerts()
 	var/list/alerts = mymob.alerts
 	var/icon_pref
+	if(!alerts.len)
+		return FALSE
 	if(!hud_shown)
 		for(var/i = 1, i <= alerts.len, i++)
 			mymob.client.screen -= alerts[alerts[i]]
@@ -139,6 +145,9 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_ROBOT_LAW "robot_law"
 #define SCREEN_ALARM_ROBOT_HACK "robot_hack"
 #define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
+#define SCREEN_ALARM_ROBOT_RESET "robot_reset"
+
+#define SCREEN_ALARM_APC_HACKING "apc_hacking"
 
 #define SCREEN_ALARM_NAMEPICK "namepick"
 
@@ -279,8 +288,14 @@ var/global/list/screen_alarms_locs = list(
 	icon_state = "alien_burn"
 
 //Cult Alarms
-/obj/abstract/screen/alert/carbon/burn/fire/cult
-	icon_state = "cult_burn"
+/obj/abstract/screen/alert/carbon/burn/fire/construct
+	icon_state = "construct_burn"
+	desc = "The heat is too intense even for your obsidian body."
+
+//Spider Alarms
+/obj/abstract/screen/alert/carbon/burn/fire/spider
+	icon_state = "spider_burn"
+	desc = "You are on fire."
 
 //Silicon Alarms
 /obj/abstract/screen/alert/robot
@@ -325,6 +340,20 @@ var/global/list/screen_alarms_locs = list(
 	name = "On Fire"
 	desc = "This unit is on fire."
 	icon_state = "silicon_fire"
+
+/obj/abstract/screen/alert/robot/apc_hacking
+	icon_state = "hacking"
+	name = "Overriding APC"
+	desc = "You are currently overriding an APC's programming. Click this alert to jump to the APC."
+
+/obj/abstract/screen/alert/robot/apc_hacking/Click()
+	..()
+	if(!isAI(usr))
+		return
+	var/mob/living/silicon/ai/A = usr
+	if(A.alerts[SCREEN_ALARM_APC_HACKING] == src)
+		if(A.eyeobj && A.malfhacking && A.malfhack)
+			A.eyeobj.forceMove(A.malfhack.loc)
 
 /obj/abstract/screen/alert/robot/hacked
 	name = "Hacked"
@@ -374,3 +403,16 @@ so as to remain in compliance with the most up-to-date laws."
 	name_pick.namepick_message = namepick_message
 	name_pick.role = role
 	name_pick.allow_numbers = allow_numbers
+
+/obj/abstract/screen/alert/robot/reset_self
+	name = "Reset your module"
+	desc = "Click here to reset your module"
+	icon_state = "module_reset"
+	timeout = 60 SECONDS
+	emph = TRUE
+
+/obj/abstract/screen/alert/robot/reset_self/Click()
+	..()
+	var/mob/living/silicon/robot/R = usr
+	R.install_upgrade(R, /obj/item/borg/upgrade/reset)
+	qdel(src)

@@ -27,22 +27,24 @@
 	activate_id = "0"
 	global_search = 0
 	reset_name = 0
-	
+
 /obj/structure/button/ninja/attack_hand(mob/user)
 
 	visible_message("<span class='info'>[user] presses \the [src].</span>")
 	activate(user)
-	
+
 /obj/structure/button/ninja/launcher
 	name = "launcher button"
 	desc = "Pressing this button will activate your space protection and launch you to the target station from a random direction."
-	
+
 /obj/structure/button/ninja/launcher/activate(mob/user)
 	var/mob/living/carbon/human/spaceninja = user
 	if(spaceninja.get_item_by_slot(slot_wear_suit))
-		spaceninja.get_item_by_slot(slot_wear_suit).pressurize()
+		var/obj/item/clothing/suit/space/ninja/apprentice/ninja_suit = spaceninja.get_item_by_slot(slot_wear_suit)
+		ninja_suit.pressurize()
 	if(spaceninja.get_item_by_slot(slot_shoes))
-		spaceninja.get_item_by_slot(slot_shoes).activateMagnets()
+		var/obj/item/clothing/shoes/ninja/apprentice/ninja_shoes = spaceninja.get_item_by_slot(slot_shoes)
+		ninja_shoes.activateMagnets()
 	spaceninja.ThrowAtStation()
 
 /obj/structure/button/ninja/teleporter
@@ -51,19 +53,19 @@
 
 /obj/structure/button/ninja/teleporter/activate(mob/user)
 	usr.spawn_rand_maintenance()
-	
+
 /obj/effect/decal/ninjaporter
 	name = "ninja teleporter"
 	desc = "Teleports you at the press of a button!"
 	icon = 'icons/mecha/mecha_equipment.dmi' //placeholder until someone sprites something better
 	icon_state = "mecha_teleport"  // much like the acoustic floors instead of tatami mats
-	
+
 /obj/effect/decal/arrow
 	name = "arrow"
 	desc = "Points at something."
 	icon = 'icons/effects/effects.dmi'
-	icon_state = "arrows"  
-	
+	icon_state = "arrows"
+
 /obj/structure/sign/ninjaglove
 	name = "Glove Draining Practice"
 	desc = "This sign indicates you can practice power glove draining here."

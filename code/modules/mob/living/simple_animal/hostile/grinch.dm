@@ -32,7 +32,7 @@
 // Stolen from advanced holograms
 /mob/living/simple_animal/hostile/gremlin/grinch/New()
 	. = ..()
-	obj_overlays[BACK_LAYER]		= getFromPool(/obj/abstract/Overlays/back_layer)
+	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
 
 /mob/living/simple_animal/hostile/gremlin/grinch/u_equip(obj/item/W, dropped = 1)
 	var/success = 0
@@ -44,9 +44,9 @@
 		back = null
 		success = 1
 		update_inv_back()
-
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	else
-		..()
+		success = ..()
 
 	if(success)
 		if (W)
@@ -59,7 +59,7 @@
 			if(W)
 				W.reset_plane_and_layer()
 
-	return
+	return success
 
 /mob/living/simple_animal/hostile/gremlin/grinch/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
 	if(!istype(W))
@@ -106,7 +106,7 @@
 		return
 	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
 	if(!O)
-		O = getFromPool(/obj/abstract/Overlays/hand_layer)
+		O = new /obj/abstract/Overlays/hand_layer
 		obj_overlays["[HAND_LAYER]-[index]"] = O
 	else
 		overlays.Remove(O)

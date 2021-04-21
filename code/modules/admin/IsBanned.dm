@@ -1,26 +1,28 @@
 /world/IsBanned(key, address, computer_id, type)
-
-	if (!key || !address || !computer_id)
-		log_access("Failed Login (invalid data): [key] [address]-[computer_id]")
-		return list("reason" = "invalid login data", "desc" = "Your computer provided invalid or blank information to the server on connection (byond username, IP, and Computer ID.) Provided information for reference: Username: '[key]' IP: '[address]' Computer ID: '[computer_id]', If you continue to get this error, please restart byond or contact byond support.")
-	if (computer_id == 2147483647) //this cid causes stickybans to go haywire
-		log_access("Failed Login (invalid cid): [key] [address]-[computer_id]")
-		return list("reason"="invalid login data", "desc"="Error: Could not check ban status, Please try again. Error message: Your computer provided an invalid Computer ID.)")
+	var/real_login = type != "goonchat" //Certain actions don't make sense to perform for the cookie checks.
 
 	log_access("IsBanned: Checking [ckey(key)], [address], [computer_id], [type]")
-	//Guest Checking
-	if(!guests_allowed && IsGuestKey(key))
-		log_access("Failed Login: [key] - Guests not allowed")
-		message_admins("<span class='notice'>Failed Login: [key] - Guests not allowed</span>")
-		return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
+	if(real_login) //There are valid reasons for the cookie to contain certain blank fields or guest ckeys, which caused lots of false positives. The rest of these are just not necessary for cookie checks.
+		if(!key || !address || !computer_id)
+			log_access("Failed Login (invalid data): [key] [address]-[computer_id]")
+			return list("reason" = "invalid login data", "desc" = "Your computer provided invalid or blank information to the server on connection (byond username, IP, and Computer ID.) Provided information for reference: Username: '[key]' IP: '[address]' Computer ID: '[computer_id]', If you continue to get this error, please restart byond or contact byond support.")
+		if(computer_id == 2147483647) //this cid causes stickybans to go haywire
+			log_access("Failed Login (invalid cid): [key] [address]-[computer_id]")
+			return list("reason"="invalid login data", "desc"="Error: Could not check ban status, Please try again. Error message: Your computer provided an invalid Computer ID.)")
 
-	//check if the IP address is a known TOR node
-	if(config && config.ToRban && ToRban_isbanned(address))
-		log_access("Failed Login: [src] - Banned: ToR")
-		message_admins("<span class='notice'>Failed Login: [src] - Banned: ToR</span>")
-		//ban their computer_id and ckey for posterity
-		AddBan(ckey(key), computer_id, "Use of ToR", "Automated Ban", 0, 0)
-		return list("reason"="Using ToR", "desc"="\nReason: The network you are using to connect has been banned.\nIf you believe this is a mistake, please request help at [config.banappeals]")
+		//Guest Checking
+		if(!guests_allowed && IsGuestKey(key))
+			log_access("Failed Login: [key] - Guests not allowed")
+			message_admins("<span class='notice'>Failed Login: [key] - Guests not allowed</span>")
+			return list("reason"="guest", "desc"="\nReason: Guests not allowed. Please sign in with a byond account.")
+
+		//check if the IP address is a known TOR node
+		if(config?.ToRban && ToRban_isbanned(address))
+			log_access("Failed Login: [src] - Banned: ToR")
+			message_admins("<span class='notice'>Failed Login: [src] - Banned: ToR</span>")
+			//ban their computer_id and ckey for posterity
+			AddBan(ckey(key), computer_id, "Use of ToR", "Automated Ban", 0, 0)
+			return list("reason"="Using ToR", "desc"="\nReason: The network you are using to connect has been banned.\nIf you believe this is a mistake, please request help at [config.banappeals]")
 
 
 	if(config.ban_legacy_system)
@@ -51,26 +53,32 @@
 
 		var/ckeytext = ckey(key)
 
-		if(!establish_db_connection())
+		if(!SSdbcore.Connect())
 			world.log << "Ban database connection failure. Key [ckeytext] not checked"
 			diary << "Ban database connection failure. Key [ckeytext] not checked"
 			return
+
 		var/failedcid = 1
 		var/failedip = 1
 
-		var/ipquery = ""
-		var/cidquery = ""
 		if(address)
 			failedip = 0
-			ipquery = " OR ip = '[address]' "
 
 		if(computer_id)
 			failedcid = 0
-			cidquery = " OR computerid = '[computer_id]' "
 
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = '[ckeytext]' [ipquery] [cidquery]) AND (bantype = 'PERMABAN'  OR (bantype = 'TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)")
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND (bantype = 'PERMABAN'  OR (bantype = 'TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)",
+			list(
+				"ckey" = "[ckeytext]",
+				"address" = "[address]",
+				"computer_id" = "[computer_id]"
+		))
 
-		query.Execute()
+		if(!query.Execute())
+			message_admins("Error: [query.ErrorMsg()]")
+			log_sql("Error: [query.ErrorMsg()]")
+			qdel(query)
+			return
 		while(query.NextRow())
 			var/pckey = query.item[1]
 			//var/pip = query.item[2]
@@ -92,12 +100,13 @@
 			else
 				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime] \nBan type: [bantype] \nExpires: [expires] \nAppeal: <span class='warning'>No ban appeals link set</span>"
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [desc]")
+			qdel(query)
 			return list("reason"="[bantype]", "desc"="[desc]")
 			//return "[bantype][desc]"
-
-		if (failedcid)
+		qdel(query)
+		if(failedcid && real_login)
 			message_admins("[key] has logged in with a blank computer id in the ban check.")
-		if (failedip)
+		if(failedip && real_login)
 			message_admins("[key] has logged in with a blank ip in the ban check.")
 		//sticky ban logging
 		. = ..()

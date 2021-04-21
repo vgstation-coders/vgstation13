@@ -10,6 +10,9 @@
 	name = text
 	return src
 
+/obj/effect/statclick/time/Click()
+	to_chat(usr,"<span class='notice'>The server time is [time2text(world.timeofday, "hh:mm:ss")]. The time slot is [getTimeslot()].</span>")
+
 /obj/effect/statclick/debug
 	var/class
 
@@ -93,9 +96,6 @@
 		if("Cameras")
 			debug_variables(cameranet)
 			feedback_add_details("admin_verb","DCameras")
-		if("Garbage")
-			debug_variables(garbageCollector)
-			feedback_add_details("admin_verb","DGarbage")
 		if("Vote")
 			debug_variables(vote)
 			feedback_add_details("admin_verb","DprocessVote")
@@ -115,16 +115,18 @@
 			return
 		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	else
-		winner = input(usr,"Add a result.","Add a result","") as text|null
-		if(!winner)
-			return
 		if(vote.ismapvote)
-			var/path = input(usr,"Add the map path.","Path","") as text|null
+			winner = input(usr,"Pick a map, choose a duplicate and pomf will hurt you.") as text|anything|null in vote.allmaps
+			var/path = vote.allmaps[winner]
 			if(!path)
 				to_chat(usr,"<span class='warning'>You must specify a path to rig a mapvote!</span>")
 				return
 			vote.ismapvote[winner] = path
 			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
+		else
+			winner = input(usr,"Add a result.","Add a result","") as text|null
+		if(!winner)
+			return
 		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
 	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")

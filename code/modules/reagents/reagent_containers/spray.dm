@@ -97,7 +97,7 @@
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
 		transfer_amount = reagents.total_volume
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
-	var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)
+	var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 	reagents.trans_to(D, transfer_amount, 1/3)
 
 	// Move the puff toward the target
@@ -107,7 +107,7 @@
 			D.react()
 			sleep(3)
 
-		returnToPool(D)
+		qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
@@ -150,11 +150,11 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/plantbgone/New()
 	..()
-	reagents.add_reagent(PLANTBGONE, 100)
+	reagents.add_reagent(PLANTBGONE, 250)
 
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
@@ -162,11 +162,11 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/bugzapper/New()
 	..()
-	reagents.add_reagent(TOXIN, 100)
+	reagents.add_reagent(INSECTICIDE, 250)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer
@@ -191,7 +191,7 @@
 		if (src.reagents.total_volume < 1)
 			break
 
-		var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)
+		var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 		reagents.trans_to(D, amount_per_transfer_from_this)
 		Sprays[i] = D
 
@@ -217,7 +217,7 @@
 				D.react(iteration_delay = 0)
 				sleep(2)
 
-			returnToPool(D)
+			qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
@@ -237,7 +237,7 @@
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
 		transfer_amount = reagents.total_volume
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
-	var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)
+	var/obj/effect/decal/chemical_puff/D = new /obj/effect/decal/chemical_puff(get_turf(src), mix_color, amount_per_transfer_from_this)
 	D.flags |= NOREACT
 	reagents.trans_to(D, transfer_amount, 1/3)
 
@@ -251,6 +251,6 @@
 			D.react()
 			sleep(3)
 
-		returnToPool(D)
+		qdel(D)
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)

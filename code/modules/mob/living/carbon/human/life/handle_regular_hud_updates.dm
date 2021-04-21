@@ -109,7 +109,7 @@
 				if (N)
 					if (i > V.cached_images.len)
 						var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
-						I.plane = VAMP_ANTAG_HUD_PLANE
+						I.plane = MISC_HUD_MARKERS_PLANE
 						V.cached_images += I
 						src.client.images += I
 					else
@@ -117,9 +117,9 @@
 						src.client.images += V.cached_images[i]
 					i++
 
-		if (!V || (!(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.powers))) // Not a vampire, or a vampire but neither of the spells.
+		if (!V || (!(/datum/power/vampire/vision in V.current_powers) && !(/datum/power/vampire/mature in V.current_powers))) // Not a vampire, or a vampire but neither of the spells.
 			change_sight(removing = SEE_MOBS)
-		if (!V || !(VAMP_MATURE in V.powers))
+		if (!V || !(/datum/power/vampire/mature in V.current_powers))
 			change_sight(removing = SEE_TURFS|SEE_OBJS)
 			var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 			if(E)
@@ -141,6 +141,8 @@
 				if("shadow")
 					see_in_dark = 8
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
+		if(M_THERMALS in mutations)
+			change_sight(adding = SEE_MOBS)
 		if(M_XRAY in mutations)
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8

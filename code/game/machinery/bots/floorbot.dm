@@ -42,7 +42,7 @@ var/global/list/floorbot_targets=list()
 	health = 25
 	maxhealth = 25
 	auto_patrol = 0		// set to make bot automatically patrol
-	bot_flags = BOT_PATROL|BOT_BEACON|BOT_NOT_CHASING
+	bot_flags = BOT_PATROL|BOT_BEACON|BOT_NOT_CHASING|BOT_SPACEWORTHY|BOT_CONTROL
 	var/amount = 10
 	var/repairing = 0
 	var/improvefloors = 0
@@ -53,6 +53,7 @@ var/global/list/floorbot_targets=list()
 	var/targetdirection
 	beacon_freq = 1445		// navigation beacon frequency
 	var/skin = null
+	commanding_radio = /obj/item/radio/integrated/signal/bot/floorbot
 
 /obj/machinery/bot/floorbot/New()
 	. = ..()
@@ -186,6 +187,9 @@ var/global/list/floorbot_targets=list()
 /obj/machinery/bot/floorbot/proc/have_target()
 	return (target != null && !target.gcDestroyed)
 
+/obj/machinery/bot/floorbot/can_path()
+	return !repairing
+
 /obj/machinery/bot/floorbot/process_bot()
 	if(repairing)
 		return
@@ -193,8 +197,8 @@ var/global/list/floorbot_targets=list()
 	if(prob(1))
 		var/message = pick("Metal to the metal.","I am the only engineering staff on this station.","Law 1. Place tiles.","Tiles, tiles, tiles...")
 		speak(message)
-
-	checkforwork()
+	if (!summoned)
+		checkforwork()
 
 /obj/machinery/bot/floorbot/at_path_target()
 	if(istype(target, /obj/item/stack/tile/plasteel))
@@ -231,11 +235,12 @@ var/global/list/floorbot_targets=list()
 	path = list()
 	floorbot_targets -= target
 	target = null
+	return ..()
 
 /obj/machinery/bot/floorbot/proc/checkforwork()
 	if(have_target())
 		return 0
-	var/list/can_see = view(7, src)
+	var/list/can_see = view(target_chasing_distance, src)
 
 	if(amount < 50)
 		if(eattiles && hunt_for_tiles(can_see))
@@ -353,7 +358,7 @@ var/global/list/floorbot_targets=list()
 			T.amount -= i
 		else
 			amount += T.amount
-			returnToPool(T)
+			qdel(T)
 		update_icon()
 		repairing = 0
 
@@ -371,7 +376,7 @@ var/global/list/floorbot_targets=list()
 		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel(get_turf(M))
 		T.amount = 4
 		if(M.amount==1)
-			returnToPool(M)
+			qdel(M)
 			//qdel(M)
 		else
 			M.amount--
@@ -426,6 +431,17 @@ var/global/list/floorbot_targets=list()
 	spark(src)
 	qdel(src)
 	return
+
+/obj/machinery/bot/floorbot/return_status()
+	if (repairing)
+		return "Repairing"
+	if (auto_patrol)
+		return "Patrolling"
+	if (target)
+		return "Moving"
+	return ..()
+
+// -- Toolbox floorbot interactions --
 
 /obj/item/weapon/storage/toolbox/proc/floorbot_type()
 	return "no_build"

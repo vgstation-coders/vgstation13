@@ -82,7 +82,7 @@
 		. = list()
 		for(var/obj/item/clothing/accessory/accessory in accessories)
 			. += "[bicon(accessory)] \a [accessory]"
-		return " It has [english_list(.)]."
+		return " It has [counted_english_list(.)]."
 
 /obj/item/clothing/accessory/pinksquare
 	name = "pink square"
@@ -117,6 +117,13 @@
 	desc = "A neosilk clip-on tie. This one is disgusting."
 	icon_state = "horribletie"
 	_color = "horribletie"
+	accessory_exclusion = TIE
+
+/obj/item/clothing/accessory/tie/bolo
+	name = "bolo tie"
+	desc = "Feels more like a millstone."
+	icon_state = "bolotie"
+	_color = "bolotie"
 	accessory_exclusion = TIE
 
 /obj/item/clothing/accessory/stethoscope
@@ -219,13 +226,13 @@
 /obj/item/clothing/accessory/medal/gold/heroism
 	name = "medal of exceptional heroism"
 	desc = "An extremely rare golden medal awarded only by CentComm. To recieve such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
-	
+
 /obj/item/clothing/accessory/medal/byond
 	name = "\improper BYOND support pin"
 	icon_state = "byond"
 	_color = "byond"
 	desc = "A cheap, but surprisingly rare, plastic pin. Sent to supporters by the BYOND corporation."
-	
+
 /obj/item/clothing/accessory/medal/byond/on_attached(obj/item/clothing/C)
 	..()
 	if(ismob(C.loc))
@@ -297,6 +304,46 @@
 	if(isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
 
+/obj/item/clothing/accessory/assistantcard
+	name = "assistant card"
+	desc = "This nanopaper slip marks the holder as HELPFUL."
+	icon_state = "assistantcard"
+	_color = "assistantcard"
+	slot_flags = SLOT_BELT
+	var/stored_name = null
+	starting_materials = list(MAT_PLASTIC = 50)
+	w_type = RECYK_MISC
+
+/obj/item/clothing/accessory/assistantcard/attack_self(mob/user as mob)
+	if(!stored_name)
+		user.visible_message("<span class='notice'>[user] displays their official assistant card.\nIt reads: Here To Help.</span>","<span class='notice'>You display your official assistant card.\nIt reads: Here To Help.</span>")
+		return
+	if(isliving(user))
+		user.visible_message("<span class='notice'>[user] displays their official assistant card.\nIt reads: [stored_name], Here To Help.</span>","<span class='notice'>You display your official assistant card.\nIt reads: [stored_name], Here To Help.</span>")
+
+/obj/item/clothing/accessory/assistantcard/attackby(var/obj/item/O as obj, var/mob/user as mob)
+
+	if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+
+		var/obj/item/weapon/card/id/id_card = null
+
+		if(istype(O, /obj/item/weapon/card/id))
+			id_card = O
+		else
+			var/obj/item/device/pda/pda = O
+			id_card = pda.id
+
+		to_chat(user, "You imprint your ID details onto the card.")
+		stored_name = id_card.registered_name
+		name = "assistant card ([stored_name])"
+		desc = "This nanopaper slip marks [stored_name] as HELPFUL."
+		return
+	..()
+
+/obj/item/clothing/accessory/assistantcard/attack(mob/living/carbon/human/M, mob/living/user)
+	if(isliving(user))
+		user.visible_message("<span class='notice'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='notice'>You invade [M]'s personal space, thrusting [src] into their face insistently. You're here to help.</span>")
+
 /obj/item/clothing/accessory/lasertag
 	name = "laser tag vest"
 	desc = "A vest for player laser tag."
@@ -339,6 +386,37 @@
 	qdel(src)
 
 
+/obj/item/clothing/accessory/jinglebells
+	name = "jingle bells"
+	desc = "A festive jingley bell, can be attached to shoes!"
+	icon_state = "jinglebells"
+	item_state = "jinglebells"
+	_color =  "jinglebells"
+
+/obj/item/clothing/accessory/jinglebells/pickup(mob/user)
+	user.callOnFace["\ref[src]"] = "jingle"
+	jingle()
+
+/obj/item/clothing/accessory/jinglebells/dropped(mob/user)
+	user.callOnFace -= "\ref[src]"
+
+/obj/item/clothing/accessory/jinglebells/proc/jingle()
+	var/turf/T = get_turf(src)
+	playsound(T, "jinglebell", 50, 1)
+
+/obj/item/clothing/accessory/jinglebells/can_attach_to(obj/item/clothing/C)
+	return istype(C, /obj/item/clothing/shoes)
+
+/obj/item/clothing/accessory/jinglebells/on_attached(obj/item/clothing/shoes/jingleshoe)
+	..()
+	attached_to = jingleshoe
+	jingleshoe.step_sound = "jinglebell"
+
+/obj/item/clothing/accessory/jinglebells/on_removed(mob/user)
+	var/obj/item/clothing/shoes/shoes_attached_to = attached_to
+	shoes_attached_to.step_sound = null
+	..()
+
 /obj/item/clothing/accessory/rad_patch
 	name = "radiation detection patch"
 	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation"
@@ -352,31 +430,27 @@
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
 
-/obj/item/clothing/accessory/rad_patch/proc/check_rads(list/arguments)
+/obj/item/clothing/accessory/rad_patch/proc/check_rads(mob/living/carbon/human/user, rads)
 	if(triggered)
 		return
-	var/mob/user = arguments["user"]
-	var/rads = arguments["rads"]
 	rad_absorbed += rads
 
 	if(rad_absorbed > rad_threshold)
 		triggered = TRUE
 		update_icon()
 		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
-		user.on_irradiate.Remove(event_key)
-		event_key = null
+
+		user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
 	if(ismob(C.loc) && !triggered)
 		var/mob/user = C.loc
-		event_key = user.on_irradiate.Add(src, "check_rads")
+		user.lazy_register_event(/lazy_event/on_irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	if(event_key)
-		user.on_irradiate.Remove(event_key)
-		event_key = null
+	user?.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)
@@ -417,3 +491,11 @@
 		return istype(C, /obj/item/clothing/under)
 	else
 		return FALSE
+
+// -- Voter pin
+
+/obj/item/clothing/accessory/voter_pin
+	name = "voter pin"
+	desc = "This little pin proves the holder takes their civic duty very seriously."
+	icon_state = "voting_pin"
+	_color = "voting_pin"

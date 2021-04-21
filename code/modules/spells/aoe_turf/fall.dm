@@ -70,14 +70,14 @@ var/global/list/falltempoverlays = list()
 		for(i = -x, i <= x, i++)
 			. += "[x],[y]"
 
-/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, var/ignore_timeless = FALSE, var/ignore_path = null) //if recharge is started is important for the trigger spells
+/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, list/target_override, var/ignore_timeless = FALSE, var/ignore_path = null) //if recharge is started is important for the trigger spells
 	if(!holder)
 		set_holder(user) //just in case
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		return
-	var/list/targets = choose_targets(user)
+	var/list/targets = target_override || choose_targets(user)
 	if(targets && targets.len)
 		if(prob(the_world_chance))
 			invocation = "ZA WARUDO"
@@ -113,7 +113,7 @@ var/global/list/falltempoverlays = list()
 				if(C.mob)
 					C.mob.see_fall()
 
-	INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets, "user" = user))
+	user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = targets))
 
 		//animate(aoe_underlay, transform = null, time = 2)
 	//var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
@@ -121,8 +121,8 @@ var/global/list/falltempoverlays = list()
 
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
-		
-		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, user.mind, src, invocation == "ZA WARUDO", ignore_path)
+
+		oureffects += new /obj/effect/stop/sleeping(T, sleepfor, user.mind, src, invocation == "ZA WARUDO", ignore_path)
 		for(var/atom/movable/everything in T)
 			if(isliving(everything))
 				var/mob/living/L = everything
@@ -152,7 +152,7 @@ var/global/list/falltempoverlays = list()
 
 		affected += T
 	return
-	
+
 /spell/aoe_turf/fall/proc/recursive_timestop(var/atom/O, var/ignore_timeless = FALSE)
 	var/list/processing_list = list(O)
 	var/list/processed_list = new/list()
@@ -179,7 +179,7 @@ var/global/list/falltempoverlays = list()
 		sleep(1)
 	//animate(aoe_underlay, transform = aoe_underlay.transform / 50, time = 2)
 	for(var/obj/effect/stop/sleeping/S in oureffects)
-		returnToPool(S)
+		qdel(S)
 		oureffects -= S
 	for(var/atom/everything in affected)
 		everything.appearance = falltempoverlays[everything]
@@ -247,4 +247,3 @@ var/global/list/falltempoverlays = list()
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
 		else
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
-		

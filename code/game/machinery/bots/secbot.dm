@@ -24,7 +24,6 @@
 	var/declare_arrests = 0 //When making an arrest, should it notify everyone wearing sechuds?
 	var/next_harm_time = 0
 
-	var/blockcount = 0		//number of times retried a blocked path
 	var/arrest_message = null //unique arrest message for beepsky variants
 	var/cuffing = 0 // Are we currently cuffing
 	var/threatlevel = 0
@@ -53,6 +52,8 @@
 	var/obj/item/weapon/melee/baton/baton = null
 	var/baton_type = /obj/item/weapon/melee/baton/
 	var/secbot_assembly_type = /obj/item/weapon/secbot_assembly/
+
+	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/machinery/bot/secbot/power_change()
 	..()
@@ -91,7 +92,7 @@
 /obj/machinery/bot/secbot/turn_off()
 	..()
 	target = null
-	steps_per = initial(steps_per)
+	steps_per = initial_steps_per
 	old_targets = list()
 	anchored = 0
 	start_walk_to(0)
@@ -170,10 +171,17 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
+/obj/machinery/bot/secbot/can_path()
+	return !cuffing
+
 /obj/machinery/bot/secbot/proc/set_target(var/mob/M)
+	summoned = FALSE
 	target = M
 	steps_per = 3
-	process_path()
+	//process_path()
+
+/obj/machinery/bot/secbot/can_patrol()
+	return steps_per == initial_steps_per
 
 /obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
@@ -214,7 +222,7 @@ Auto Patrol: []"},
 		for(var/mob/O in hearers(src))
 			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		src.target = null
-		steps_per = initial(steps_per)
+		steps_per = initial_steps_per
 		if(user)
 			add_oldtarget(user, 12)
 		src.anchored = 0
@@ -222,10 +230,10 @@ Auto Patrol: []"},
 		src.on = 1
 		src.icon_state = "[src.icon_initial][src.on]"
 
-/obj/machinery/bot/secbot/find_target()
+/obj/machinery/bot/secbot/target_selection()
 	anchored = 0
 	threatlevel = 0
-	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a criminal
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Let's find us a criminal
 		if ((C.stat) || (C.handcuffed))
 			continue
 
@@ -248,9 +256,9 @@ Auto Patrol: []"},
 			visible_message("<b>[src]</b> points at [C.name]!")
 
 /obj/machinery/bot/secbot/process_bot()
-	if (!target || target.gcDestroyed || get_dist(src, target) > 7)
+	if (can_abandon_target())
 		target = null
-		steps_per = initial(steps_per)
+		steps_per = initial_steps_per
 		find_target()
 
 	decay_oldtargets()
@@ -258,8 +266,10 @@ Auto Patrol: []"},
 	if (target)		// make sure target exists
 		if(!istype(target.loc, /turf))
 			return
-		if (Adjacent(target))		// if right next to perp
+
+		if (Adjacent(target))		// if right next to perp, arrest them
 			var/mob/living/carbon/M = target
+			path = list() // Kill our path
 			target = null // Don't teabag them
 			add_oldtarget(M.name, 12)
 			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
@@ -281,7 +291,6 @@ Auto Patrol: []"},
 				cuffing = 1
 				var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
 				spawn(cuff_time)
-					cuffing = 0
 					if (Adjacent(M))
 						if (!istype(M))
 							return
@@ -290,6 +299,10 @@ Auto Patrol: []"},
 						M.handcuffed = new /obj/item/weapon/handcuffs(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
 						playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+						spawn (1.5 SECONDS)
+							cuffing = 0
+					else
+						cuffing = 0
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
@@ -297,6 +310,20 @@ Auto Patrol: []"},
 
 			anchored = 1
 			return
+
+/obj/machinery/bot/secbot/return_status()
+	if (target)
+		return "On the move"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
+
+/obj/machinery/bot/secbot/execute_signal_command(var/datum/signal/signal, var/command)
+	if (..())
+		return
+	switch (command)
+		if ("arrest_for_ids")
+			idcheck = !idcheck
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.
@@ -379,8 +406,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
+	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	qdel(src)
 
 /obj/machinery/bot/secbot/attack_alien(var/mob/living/carbon/alien/user as mob)
@@ -409,7 +435,7 @@ Auto Patrol: []"},
 /obj/item/weapon/secbot_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if((iswelder(W)) && (!src.build_step))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
 			src.overlays += image('icons/obj/aibots.dmi', "hs_hole")
@@ -481,9 +507,9 @@ Auto Patrol: []"},
 		broadcast_security_hud_message("[src.name] has spotted level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
 
 /obj/machinery/bot/secbot/beepsky/cheapsky/process_bot()
-	if (!target || target.gcDestroyed)
+	if (!summoned && (!target || target.gcDestroyed))
 		target = null
-		steps_per = initial(steps_per)
+		steps_per = initial_steps_per
 		find_target()
 
 	decay_oldtargets()
@@ -505,7 +531,7 @@ Auto Patrol: []"},
 
 			add_oldtarget(target.name, 6)
 			target = null
-			steps_per = initial(steps_per)
+			steps_per = initial_steps_per
 
 			if(declare_arrests)
 				var/area/location = get_area(src)
@@ -536,8 +562,7 @@ Auto Patrol: []"},
 	for(var/i in parts)
 		new i(Tsec)
 	spark(src)
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
+	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	qdel(src)
 
 /obj/machinery/bot/secbot/beepsky/cheapsky
@@ -618,16 +643,16 @@ Auto Patrol: []"},
 		/obj/item/weapon/bananapeel,
 		/obj/item/weapon/soap,
 		/obj/item/weapon/bikehorn,
-		/obj/item/weapon/wrench,
-		/obj/item/weapon/screwdriver,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/solder,
-		/obj/item/weapon/scalpel,
-		/obj/item/weapon/surgicaldrill,
-		/obj/item/weapon/circular_saw,
-		/obj/item/weapon/bonesetter,
+		/obj/item/tool/wrench,
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wirecutters,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/solder,
+		/obj/item/tool/scalpel,
+		/obj/item/tool/surgicaldrill,
+		/obj/item/tool/circular_saw,
+		/obj/item/tool/bonesetter,
 		/obj/item/weapon/match,
 		/obj/item/weapon/lighter,
 		/obj/item/weapon/kitchen,
@@ -665,7 +690,7 @@ Auto Patrol: []"},
 /obj/item/weapon/secbot_assembly/britsky/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if((iswelder(W)) && (!src.build_step))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
 			src.overlays += image('icons/obj/aibots.dmi', "bhs_hole")

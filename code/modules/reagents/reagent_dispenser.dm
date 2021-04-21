@@ -118,6 +118,7 @@
 			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
 			if(rig)
 				rig.forceMove(get_turf(usr))
+				rig.master = null
 				rig = null
 			overlays = new/list()
 
@@ -147,6 +148,7 @@
 				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 
 			rig = W
+			rig.master = src
 
 			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
 			overlays += test
@@ -168,7 +170,7 @@
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(Proj.get_damage())
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
@@ -176,6 +178,7 @@
 			else
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
 			explode()
+	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
@@ -254,7 +257,7 @@
 
 /obj/structure/reagent_dispensers/water_cooler/attackby(obj/item/I as obj, mob/user as mob)
 	if (iswelder(I))
-		var/obj/item/weapon/weldingtool/WT = I
+		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(0, user))
 			new /obj/item/stack/sheet/mineral/plastic (src.loc,4)
 			qdel(src)
@@ -359,6 +362,17 @@
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
 
+/obj/structure/reagent_dispensers/spooktank
+	name = "spooktank"
+	desc = "A storage tank containing spook."
+	icon = 'icons/obj/halloween.dmi'
+	icon_state = "spooktank"
+	amount_per_transfer_from_this = 10
+
+/obj/structure/reagent_dispensers/spooktank/New()
+	. = ..()
+	reagents.add_reagent(MONSTERMASH, 1000)
+
 /obj/structure/reagent_dispensers/cauldron
 	name = "cauldron"
 	icon_state = "cauldron"
@@ -399,16 +413,28 @@
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of metal."
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
-	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
 	var/list/exiting = list() // Manages people leaving the barrel
+	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
+	var/health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
 	icon_state = "woodenbarrel"
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
+	health = 30
 
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/take_damage(var/damage, var/sound_effect = 1)
+	health = max(0, health - damage)
+	if(sound_effect)
+		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)
+	if(health <= 0)
+		spawn(1)
+			Destroy()
+		return 1
+	return 0
 
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
@@ -424,7 +450,7 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user))
+	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers))
 		return
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
@@ -433,9 +459,9 @@
 		if(do_after_many(user,list(target,src),10)) //Twice the normal time
 			enter_barrel(target)
 	else
+		take_damage(W.force)
+		user.delayNextAttack(10)
 		..()
-
-/obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/W, mob/user, params)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/proc/enter_barrel(mob/user)
 	user.forceMove(src)
@@ -476,7 +502,7 @@
 			enter_barrel(target)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/container_resist(mob/user)
-	if (exiting.Remove(user)) 
+	if (exiting.Remove(user))
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
@@ -491,3 +517,29 @@
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
 	..()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/bullet_act(var/obj/item/projectile/Proj)
+	. = ..()
+	if(Proj.damage)
+		take_damage(Proj.damage)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/ex_act(severity)
+	switch(severity)
+		if(1)
+			Destroy()
+		if(2)
+			Destroy()
+		if(3)
+			take_damage(rand(15,45), 0)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_animal(var/mob/living/simple_animal/M)
+	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))
+		M.visible_message("<span class='danger'>[M] tears open \the [src]!</span>")
+	else
+		M.visible_message("<span class='danger'>[M] [M.attacktext] \the [src]!</span>")
+	M.delayNextAttack(10)
+	return 1
+
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_alien(mob/user)
+	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
+	Destroy()

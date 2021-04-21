@@ -26,7 +26,7 @@
 	if(istype(user.loc, /turf/space))
 		to_chat(user, "<span class='warning'>You can't build barricades out in space.</span>")
 		return
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 	switch(alert("What do you want ([kit_uses] use\s left)", "Barricade Kit", "Directional", "Full Tile", "Cancel", null))
@@ -37,7 +37,7 @@
 				return 1
 			//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinal direction, etc.
 			for(var/obj/structure/window/barricade/BC in user.loc)
-				if(!BC.is_fulltile() && BC.dir == user.dir)
+				if(!BC.is_fulltile && BC.dir == user.dir)
 					to_chat(user, "<span class='warning'>There already is a barricade facing that way</span>")
 					return
 			user.visible_message("<span class='warning'>[user] starts building a barricade.</span>", \

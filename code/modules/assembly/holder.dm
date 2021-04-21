@@ -88,11 +88,19 @@
 	if(a_left)
 		overlays += image(icon = icon, icon_state = "[a_left.icon_state]_left")
 		for(var/O in a_left.attached_overlays)
-			overlays += image(icon = icon, icon_state = "[O]_l")
+			var/image/I = a_left.attached_overlays[O]
+			var/image/J = image(icon = I.icon, icon_state = "[I.icon_state]_r", dir = I.dir)
+			J.layer = I.layer
+			J.plane = I.plane
+			overlays += J
 	if(a_right)
 		src.overlays += image(icon = icon, icon_state = "[a_right.icon_state]_right")
 		for(var/O in a_right.attached_overlays)
-			overlays += image(icon = icon, icon_state = "[O]_r")
+			var/image/I = a_right.attached_overlays[O]
+			var/image/J = image(icon = I.icon, icon_state = "[I.icon_state]_r", dir = I.dir)
+			J.layer = I.layer
+			J.plane = I.plane
+			overlays += J
 	if(master)
 		master.update_icon()
 
@@ -182,7 +190,7 @@
 		if(!isigniter(a_left) && !isigniter(a_right))
 			to_chat(user, "<span class='warning'>You can't make an igniter without an igniting component!</span>")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
 		if (WT.do_weld(user, src, 40, 0))
 			var/obj/machinery/igniter/igniter=new(src.loc)
@@ -266,7 +274,7 @@
 	a_right = ign
 	secured = 1
 	update_icon()
-	name = initial(name) + " ([tmr.time] secs)"
+	name = initial(name)
 
 	loc.verbs += /obj/item/device/assembly_holder/timer_igniter/verb/configure
 
@@ -277,7 +285,6 @@
 /obj/item/device/assembly_holder/timer_igniter/verb/configure()
 	set name = "Set Timer"
 	set category = "Object"
-	set src in usr
 
 	if ( !(usr.isUnconscious() || usr.restrained()) )
 		var/obj/item/device/assembly_holder/holder

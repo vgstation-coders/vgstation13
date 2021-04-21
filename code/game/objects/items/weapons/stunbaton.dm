@@ -48,10 +48,12 @@
 			if(bcell.charge < hitcost)
 				status = 0
 				update_icon()
+				depower()
 			return 1
 		else
 			status = 0
 			update_icon()
+			depower()
 			return 0
 
 /obj/item/weapon/melee/baton/proc/canbehonkified()
@@ -99,6 +101,7 @@
 			to_chat(user, "<span class='notice'>You remove the cell from the [src].</span>")
 			status = 0
 			update_icon()
+			depower()
 			return
 		..()
 	else if(isbikehorn(W) && canbehonkified(src))
@@ -123,12 +126,19 @@
 				qdel(HONKER)
 				qdel(src)
 
+/obj/item/weapon/melee/baton/proc/apply_baton_effect(mob/victim)
+	victim.Knockdown(stunforce)
+	victim.Stun(stunforce)
+	if(iscarbon(victim))
+		var/mob/living/L = victim
+		L.apply_effect(10, STUTTER)
+	return
+
 /obj/item/weapon/melee/baton/attack_self(mob/user)
 	if(status && clumsy_check(user) && prob(50))
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
 			"<span class='danger'>The [name] blasts you with its power!</span>")
-		user.Knockdown(stunforce)
-		user.Stun(stunforce)
+		apply_baton_effect(user)
 		playsound(loc, "sparks", 75, 1, -1)
 		deductcharge(hitcost)
 		return
@@ -155,8 +165,7 @@
 	if(status && clumsy_check(user) && prob(50))
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
-		user.Knockdown(stunforce)
-		user.Stun(stunforce)
+		apply_baton_effect(user)
 		deductcharge(hitcost)
 		return
 
@@ -187,9 +196,7 @@
 		user.lastattacked = L
 		L.lastattacker = user
 
-		L.Stun(stunforce)
-		L.apply_effect(10, STUTTER, 0)
-		L.Knockdown(stunforce)
+		apply_baton_effect(L)
 
 		L.visible_message("<span class='danger'>\The [L] has been stunned with \the [src] by [user]!</span>",\
 			"<span class='userdanger'>You have been stunned with \the [src] by \the [user]!</span>",\
@@ -220,9 +227,7 @@
 		foundmob.lastattacked = L
 		L.lastattacker = foundmob
 
-	L.Stun(stunforce)
-	L.Knockdown(stunforce)
-	L.apply_effect(stunforce, STUTTER)
+	apply_baton_effect(L)
 
 	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 	playsound(loc, stunsound, 50, 1, -1)
@@ -250,6 +255,10 @@
 	if(bcell)
 		bcell.charge = bcell.maxcharge
 
+/obj/item/weapon/melee/baton/proc/depower()
+	force = initial(force)
+	throwforce = initial(throwforce)
+
 //Makeshift stun baton. Replacement for stun gloves.
 /obj/item/weapon/melee/baton/cattleprod
 	name = "stunprod"
@@ -275,3 +284,81 @@
 		var/mob/living/silicon/robot/R = loc
 		if (R.cell)
 			R.cell.use(hitcost)
+
+/obj/item/weapon/melee/baton/harm
+	desc = "A baton for permanently incapacitating people with."
+	icon_state = "harmbaton"
+	item_state = "baton0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	origin_tech = Tc_COMBAT + "=2;" + Tc_SYNDICATE + "=3"
+	attack_verb = list("robusts", "harms")
+	var/dial = 1
+
+/obj/item/weapon/melee/baton/harm/examine(mob/user)
+	..()
+	if(user.is_holding_item(src))
+		to_chat(user, "<span class='notice'>It has a small dial at the base.</span>") //if you add a feature and won't add a way to advertise it, no one is going to use it
+
+/obj/item/weapon/melee/baton/harm/apply_baton_effect(mob/victim)
+	var/mob/living/L = victim
+	L.apply_effect(10, STUTTER) //sanity
+	L.apply_effect(stunforce, AGONY) //apply pain by throwing, it doesn't damage them though
+	L.audible_scream()
+	return
+
+/obj/item/weapon/melee/baton/harm/attack_self(mob/user) //putting this here because having damage increases closer to harm baton is more clear
+	if(status && clumsy_check(user) && prob(50))
+		..()
+		return
+	if(bcell && bcell.charge >= hitcost)
+		..()
+		if(status)
+			force += 10 + 2*(dial-1) //send someone into the shadow realm with 10
+			throwforce += 10 + 2*(dial-1) //it doesn't deal damage on throw, this is just a constistency thing, I guess
+			hitcost = 100 * (dial * dial) // 100 cost on 1, 10000 cost on 10, change power cell
+			stunforce = 10 * dial //welcome to the world of pain
+		else
+			depower()
+		update_icon()
+	else
+		..()
+		depower()
+
+	add_fingerprint(user)
+
+/obj/item/weapon/melee/baton/harm/proc/turning_dial(mob/user)
+	if(status)
+		status = !status //if it's enabled, it get disabled when turing dial
+		update_icon()
+		depower()
+	var new_dial = input(user, "What would you like the dial to be set to from 1 to 10?","Dial",dial) as num
+	if(new_dial < 1)
+		to_chat(user, "<span class = 'warning'>There is no option to set it on 0, you either harm them or don't, pussy.</span>")
+		return
+	if(new_dial > 10)
+		to_chat(user, "<span class = 'notice'>Your lust for inflicting pain is admirable, but 10 is maximum.</span>")
+		new_dial = 10
+	dial = new_dial
+	hitcost = 100 * (dial * dial)
+	to_chat(user, "<span class = 'notice'>The dial is set to [dial].</span>")
+	add_fingerprint(user)
+	return
+
+/obj/item/weapon/melee/baton/harm/verb/turn_dial()
+	set name = "Turn dial"
+	set category = "Object"
+	set src in usr
+	if(!usr.is_holding_item(src))
+		to_chat(usr, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
+		return
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='rose'>You can't do this!</span>")
+		return
+	turning_dial(usr)
+
+/obj/item/weapon/melee/baton/harm/loaded/New() //starting cell, only really enough for dial 1
+	..()
+	bcell = new(src)
+	bcell.charge=bcell.maxcharge
+	update_icon()
+

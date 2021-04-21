@@ -56,6 +56,7 @@
 	mutations = list(M_CLUMSY)
 
 	var/datum/speech_filter/speech_filter
+	var/bookgib = 1
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/New()
 	..()
@@ -97,7 +98,7 @@
 	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 	health = currenthealth
 	//only knowledge can kill a cluwne
-	if(istype(O,/obj/item/weapon/book))
+	if(istype(O,/obj/item/weapon/book)&&(bookgib))
 		gib()
 		return
 	/*if(O.force)
@@ -136,7 +137,7 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/emote(var/act, var/type, var/message, var/auto)
+/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE)
 	if(timestopped)
 		return //under effects of time magick
 
@@ -155,6 +156,13 @@
 				footstep++
 		else
 			playsound(src, "clownstep", 20, 1)
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/death(var/gibbed = FALSE)
+	..(gibbed)
+	if(client && iscluwnebanned(src))
+		to_chat(src, "<big><span class='danger'>You have died, and will not be able to rejoin the game until the next round.</span><big>")
+		sleep(1)
+		del(client)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
 	name = "clown goblin"
@@ -233,3 +241,10 @@
 	new /obj/item/clothing/mask/gas/clownmaskpsyche(src.loc)
 	new /obj/item/clothing/shoes/clownshoespsyche(src.loc)
 	qdel(src)
+
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/tempcluwne
+	//this version of a cluwne  is for when someone is temporarily turned into a cluwne but you don't intend for them to die before the transformation is finished
+	maxHealth = 500
+	health = 500
+	bookgib = 0

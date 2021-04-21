@@ -28,7 +28,8 @@
 	var/health = 80			// the turret's health
 	var/locked = 1			// if the turret's behaviour control access is locked
 
-	var/obj/item/weapon/gun/energy/installed = null		// the type of weapon installed
+	var/obj/item/weapon/gun/installed = null		// the type of weapon installed
+
 	var/reqpower = 750 //power used per shot
 
 	var/obj/machinery/porta_turret_cover/cover = null	// the cover that is covering this turret
@@ -206,7 +207,8 @@ Status: []<BR>"},
 		else //But when unsecured the cover is gone, so it shows the message itself
 			visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
 		if(istype(installed, /obj/item/weapon/gun/energy/tag/red) || istype(installed, /obj/item/weapon/gun/energy/tag/red))
-			installed.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
+			var/obj/item/weapon/gun/energy/E = installed
+			E.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
 		emagged = 1
 		req_access = list()
 		on = 0 // turns off the turret temporarily
@@ -231,7 +233,7 @@ Status: []<BR>"},
 					lasercolor = null
 					salvaged++
 			if(prob(75))
-				getFromPool(/obj/item/stack/sheet/metal, loc, rand(2,6))
+				new /obj/item/stack/sheet/metal(loc, rand(2, 6))
 				salvaged++
 			if(prob(50))
 				new /obj/item/device/assembly/prox_sensor(get_turf(src))
@@ -245,19 +247,37 @@ Status: []<BR>"},
 
 	..()
 
-	if(W.is_wrench(user) && !on && !raised && wrenchAnchor(user, W))
-		// This code handles moving the turret around. After all, it's a portable turret!
+	if(!on && !raised)
+		if(W.is_wrench(user) && wrenchAnchor(user, W))
+			// This code handles moving the turret around. After all, it's a portable turret!
 
-		if(anchored)
-			invisibility = INVISIBILITY_LEVEL_TWO
-			icon_state = "[lasercolor]grey_target_prism"
-			cover=new/obj/machinery/porta_turret_cover(src.loc) // create a new turret cover. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
-			cover.Parent_Turret = src // make the cover's parent src
-			power_change()
-		else
-			icon_state = "turretCover"
-			invisibility = 0
-			qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
+			if(anchored)
+				invisibility = INVISIBILITY_LEVEL_TWO
+				icon_state = "[lasercolor]grey_target_prism"
+				cover=new/obj/machinery/porta_turret_cover(src.loc) // create a new turret cover. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
+				cover.Parent_Turret = src // make the cover's parent src
+				power_change()
+			else
+				icon_state = "turretCover"
+				invisibility = 0
+				qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
+
+		else if(iswelder(W))
+			var/obj/item/tool/weldingtool/WT = W
+			to_chat(user, "<span class='notice'>You begin unwelding the turret's armor.</span>")
+			if(WT.do_weld(user, src, 30,5))
+				to_chat(user, "<span class='notice'>You unweld the turret's armor.</span>")
+
+				// Deconstruct into frame
+				var/obj/machinery/porta_turret_construct/TurretFrame = new/obj/machinery/porta_turret_construct(locate(x,y,z))
+				var/obj/item/I = installed
+				TurretFrame.installed = I // Keep installed gun
+				TurretFrame.build_step = 7 // Reset to final step
+				TurretFrame.icon_state = "turret_frame2" // Update icon
+				TurretFrame.anchored = 1 // As in build_step 1 and onwards
+				I.forceMove(TurretFrame)
+				installed = null // Workaround for qdel() deleting references to the installed gun too in the process
+				qdel(src)
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		// Behavior lock/unlock mangement
@@ -294,7 +314,7 @@ Status: []<BR>"},
 		attacked += 5
 
 	src.health -= Proj.damage
-	..()
+	. = ..()
 	if(prob(45) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	if (src.health <= 0)
@@ -610,7 +630,13 @@ Status: []<BR>"},
 //		 //Shooting Code:
 	playsound(src, installed.fire_sound, 75, 1)
 	var/obj/item/projectile/A
-	A = new installed.projectile_type(loc)
+	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
+		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
+		R.choose_projectile()
+		A = new R.in_chamber.type(loc)
+	else
+		var/obj/item/weapon/gun/energy/E = installed
+		A = new E.projectile_type(loc)
 	A.original = target
 	A.starting = T
 	A.shot_from = installed
@@ -662,7 +688,7 @@ Status: []<BR>"},
 			else if(iscrowbar(W) && !anchored)
 				W.playtoolsound(src, 75)
 				to_chat(user, "You dismantle the turret construction.")
-				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
+				new /obj/item/stack/sheet/metal(loc, 5)
 				qdel(src)
 				return
 
@@ -670,6 +696,7 @@ Status: []<BR>"},
 			if(istype(W, /obj/item/stack/sheet/metal))
 				var/obj/item/stack/sheet/metal/stack = W
 				if(stack.use(2)) // requires 2 metal sheets
+					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 					to_chat(user, "<span class='notice'>You add some metal armor to the interior frame.</span>")
 					build_step = 2
 					icon_state = "turret_frame2"
@@ -692,19 +719,19 @@ Status: []<BR>"},
 				return
 
 			else if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				if (WT.do_weld(user, src, 20, 5))
 					if(gcDestroyed)
 						return
 					build_step = 1
 					to_chat(user, "You remove the turret's interior metal armor.")
-					getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+					new /obj/item/stack/sheet/metal(loc, 2)
 					icon_state = "turret_frame"
 					return
 
 
 		if(3)
-			if(istype(W, /obj/item/weapon/gun/energy)) // the gun installation part
+			if(istype(W, /obj/item/weapon/gun/energy) || istype(W, /obj/item/weapon/gun/projectile/roulette_revolver)) // the gun installation part
 				if(!user.drop_item(W, src))
 					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 					return
@@ -746,6 +773,7 @@ Status: []<BR>"},
 			if(istype(W, /obj/item/stack/sheet/metal))
 				var/obj/item/stack/sheet/metal/stack = W
 				if(stack.use(2))
+					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 					to_chat(user, "<span class='notice'>You add some metal armor to the exterior frame.</span>")
 					build_step = 7
 					return
@@ -761,7 +789,8 @@ Status: []<BR>"},
 
 		if(7)
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
+				to_chat(user, "<span class='notice'>You begin welding the turret's armor down.</span>")
 				if(WT.do_weld(user, src, 30,5))
 					build_step = 8
 					to_chat(user, "<span class='notice'>You weld the turret's armor down.</span>")
@@ -777,7 +806,7 @@ Status: []<BR>"},
 			else if(iscrowbar(W))
 				W.playtoolsound(src, 75)
 				to_chat(user, "You pry off the turret's exterior armor.")
-				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+				new /obj/item/stack/sheet/metal(loc, 2)
 				build_step = 6
 				return
 
@@ -802,9 +831,11 @@ Status: []<BR>"},
 /obj/machinery/porta_turret_construct/attack_hand(mob/user as mob)
 	switch(build_step)
 		if(4)
-			if(!installed)
-				return
 			build_step = 3
+
+			if(!installed) // Skip to build_step 3 if no gun
+				to_chat(user, "<span class='notice'>Somehow, this turret had no gun???</span>")
+				return
 
 			to_chat(user, "You remove \the [installed] from the turret frame.")
 			var/obj/item/I = installed

@@ -203,6 +203,7 @@
 
 /obj/item/weapon/grenade/iedcasing/preassembled/New()
     ..()
+    underlays += image('icons/obj/drinks.dmi', icon_state = "greyshitvodka")
     det_time = rand(30,80)
     overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
     overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_wired")

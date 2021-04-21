@@ -185,7 +185,6 @@
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
 
-
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 
@@ -208,6 +207,60 @@
 
 	send_resources()
 
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype, unbanned, unbanned_ckey, unbanned_datetime FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND unbanned_notification = 0;",
+		list(
+			"ckey" = ckey,
+			"address" = address,
+			"computer_id" = computer_id,
+	))
+
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+	else
+		while(query.NextRow())
+			var/id = query.item[1]
+			var/pckey = query.item[2]
+			//var/pip = query.item[3]
+			//var/pcid = query.item[4]
+			var/ackey = query.item[5]
+			var/reason = query.item[6]
+			var/expiration = query.item[7]
+			var/duration = query.item[8]
+			var/bantime = query.item[9]
+			//var/bantype = query.item[10]
+			var/unbanned = query.item[11]
+			var/unbanned_ckey = query.item[12]
+			var/unbanned_datetime = query.item[13]
+			if (unbanned && unbanned_ckey && unbanned_datetime)
+				to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([pckey]) were banned by [ackey] on [bantime] [duration > 0 ? "for [duration] minutes" : "permanently"].</b></span>")
+				to_chat(src, "<span class='notice'>This ban has been revoked by [unbanned_ckey] at time [unbanned_datetime].</span>")
+				to_chat(src, "<span class='notice'>The reason was: '[reason]'.</span>")
+				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
+				to_chat(src, "<span class='notice'><b>This ban has expired. You can now play the game.</b></span>")
+			else
+				to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([pckey]) were banned by [ackey] on [bantime] [duration > 0 ? "for [duration] minutes" : "permanently"].</b></span>")
+				if (duration > 0)
+					to_chat(src, "<span class='notice'>This ban expired on [expiration].</span>")
+				to_chat(src, "<span class='notice'>The reason was: '[reason]'.</span>")
+				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
+				to_chat(src, "<span class='notice'><b>This ban has expired. You can now play the game.</b></span>")
+
+			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET unbanned_notification = 1 WHERE id = [id]")
+			if(!update_query.Execute())
+				message_admins("Error: [update_query.ErrorMsg()]")
+				log_sql("Error: [update_query.ErrorMsg()]")
+			qdel(update_query)
+	qdel(query)
+
+	if (prefs && prefs.show_warning_next_time)
+		to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([ckey]) were warned by [prefs.warning_admin].</b></span>")
+		to_chat(src, "<span class='notice'>The reason was: '[prefs.last_warned_message]'.</span>")
+		to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
+		to_chat(src, "<span class='notice'><b>You can now play the game.</b></span>")
+		prefs.show_warning_next_time = 0
+		prefs.save_preferences_sqlite(src, src.ckey)
+
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
 		prefs.SetChangelog(ckey,changelog_hash)
@@ -218,18 +271,19 @@
 
 	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
-	// Notify scanners.
-	INVOKE_EVENT(on_login,list(
-		"client"=src,
-		"admin"=(holder!=null)
-	))
-
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
 	//This is down here because of the browse() calls in tooltip/New()
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
+	if(holder && prefs.toggles & AUTO_DEADMIN)
+		message_admins("[src] was automatically de-admined.")
+		deadmin()
+		verbs += /client/proc/readmin
+		deadmins += ckey
+		to_chat(src, "<span class='interface'>You are now de-admined.</span>")
+	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -246,10 +300,9 @@
 	if(IsGuestKey(key))
 		return
 
-	establish_db_connection()
-
-	if(!dbcon.IsConnected())
+	if(!SSdbcore.Connect())
 		return
+
 	var/list/http[] = world.Export("http://www.byond.com/members/[src.key]?format=text")  // Retrieve information from BYOND
 	var/Joined = 2550-01-01
 	if(http && http.len && ("CONTENT" in http))
@@ -258,35 +311,40 @@
 		Joined = copytext(String, JoinPos, JoinPos+10)  //  Get the date in the YYYY-MM-DD format
 
 	account_joined = Joined
-
-	var/sql_ckey = sanitizeSQL(ckey)
 	var/age
-	testing("sql_ckey = [sql_ckey]")
-	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = :ckey", list("ckey" = ckey))
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+		return
 	var/sql_id = 0
 	while(query.NextRow())
 		sql_id = query.item[1]
 		player_age = text2num(query.item[2])
 		age = text2num(query.item[3])
 		break
+	qdel(query)
 
-	var/sql_address = sanitizeSQL(address)
-
-	var/DBQuery/query_ip = dbcon.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE ip = '[sql_address]'")
-	query_ip.Execute()
+	var/datum/DBQuery/query_ip = SSdbcore.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE ip = :address", list("address" = address))
+	if(!query_ip.Execute())
+		log_sql("Error: [query_ip.ErrorMsg()]")
+		qdel(query_ip)
+		return
 	related_accounts_ip = ""
 	while(query_ip.NextRow())
 		related_accounts_ip += "[query_ip.item[1]], "
+	qdel(query_ip)
 
-
-	var/sql_computerid = sanitizeSQL(computer_id)
-
-	var/DBQuery/query_cid = dbcon.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE computerid = '[sql_computerid]'")
-	query_cid.Execute()
+	var/datum/DBQuery/query_cid = SSdbcore.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE computerid = :computer_id", list("computer_id" = computer_id))
+	if(!query_cid.Execute())
+		log_sql("Error: [query_cid.ErrorMsg()]")
+		qdel(query_cid)
+		return
 	related_accounts_cid = ""
 	while(query_cid.NextRow())
 		related_accounts_cid += "[query_cid.item[1]], "
+	qdel(query_cid)
 
 	//Just the standard check to see if it's actually a number
 	if(sql_id)
@@ -300,31 +358,51 @@
 	if(istype(holder))
 		admin_rank = holder.rank
 
-	var/sql_admin_rank = sanitizeSQL(admin_rank)
-
 	if(sql_id)
 		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
-		var/DBQuery/query_update
+		var/datum/DBQuery/query_update
 		if(isnum(age))
-			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
+			query_update = SSdbcore.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = :address, computerid = :computer_id, lastadminrank = :admin_rank WHERE id = :id",
+				list(
+					"address" = address,
+					"computer_id" = computer_id,
+					"admin_rank" = admin_rank,
+					"id" = sql_id,
+			))
 		else
-			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
+			query_update = SSdbcore.NewQuery("UPDATE erro_player SET lastseen = Now(),ip = :address, computerid = :computer_id, lastadminrank = :admin_rank, accountjoined = :joined WHERE id = :id",
+				list(
+					"address" = address,
+					"computer_id" = computer_id,
+					"admin_rank" = admin_rank,
+					"joined" = Joined,
+					"id" = sql_id,
+			))
 		query_update.Execute()
 		if(query_update.ErrorMsg())
 			WARNING("FINGERPRINT: [query_update.ErrorMsg()]")
-
+		qdel(query_update)
 	else
 		//New player!! Need to insert all the stuff
-		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
+		var/datum/DBQuery/query_insert = SSdbcore.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, :ckey, Now(), Now(), :address, :computer_id, :admin_rank, :joined)",
+			list(
+				"ckey" = ckey,
+				"address" = address,
+				"computer_id" = computer_id,
+				"admin_rank" = admin_rank,
+				"joined" = Joined,
+		))
 		query_insert.Execute()
 		if(query_insert.ErrorMsg())
 			WARNING("FINGERPRINT: [query_insert.ErrorMsg()]")
-
+		qdel(query_insert)
 	if(!isnum(age))
-		var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
-		query_age.Execute()
+		var/datum/DBQuery/query_age = SSdbcore.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = :ckey", list("ckey" = ckey))
+		if(!query_age.Execute())
+			WARNING("FINGERPRINT: [query_age.ErrorMsg()]")
 		while(query_age.NextRow())
 			age = text2num(query_age.item[1])
+		qdel(query_age)
 	if(!isnum(player_age))
 		player_age = 0
 	if(age < 14)
@@ -335,12 +413,18 @@
 
 	// logging player access
 	var/server_address_port = "[world.internet_address]:[world.port]"
-	var/sql_server_address_port = sanitizeSQL(server_address_port)
-	var/DBQuery/query_connection_log = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[sql_server_address_port]','[sql_ckey]','[sql_address]','[sql_computerid]');")
+	var/datum/DBQuery/query_connection_log = SSdbcore.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),:server_address_port,:ckey,:address,:computer_id);",
+		list(
+			"ckey" = ckey,
+			"address" = address,
+			"computer_id" = computer_id,
+			"server_address_port" = server_address_port,
+	))
 
 	query_connection_log.Execute()
 	if(query_connection_log.ErrorMsg())
 		WARNING("FINGERPRINT: [query_connection_log.ErrorMsg()]")
+	qdel(query_connection_log)
 
 #undef TOPIC_SPAM_DELAY
 #undef UPLOAD_LIMIT
@@ -526,4 +610,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 
 /client/proc/handle_hear_voice(var/mob/origin)
 	if(prefs.hear_voicesound)
-		mob.playsound_local(get_turf(origin), get_sfx("voice"),50,1)
+		if(issilicon(origin))
+			mob.playsound_local(get_turf(origin), get_sfx("voice-silicon"),50,1)
+		else
+			mob.playsound_local(get_turf(origin), get_sfx("voice-human"),50,1)

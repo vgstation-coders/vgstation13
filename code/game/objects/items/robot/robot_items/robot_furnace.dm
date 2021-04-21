@@ -72,7 +72,7 @@
 					ore.removeAmount(ore_id, R.ingredients[ore_id])
 					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
 
-				getFromPool(R.yieldtype, get_turf(loc))
+				new R.yieldtype(get_turf(loc))
 				sheets_this_tick++
 
 				if(sheets_this_tick >= sheets_per_tick)

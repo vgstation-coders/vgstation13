@@ -55,7 +55,7 @@
 		qdel(E)
 
 /obj/effect/decal/mecha_wreckage/bullet_act(var/obj/item/projectile/Proj)
-	return
+	return null
 
 /obj/effect/decal/mecha_wreckage/examine(var/mob/user)
 	..()
@@ -83,7 +83,7 @@
 
 /obj/effect/decal/mecha_wreckage/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(isemptylist(welder_salvage))
 			to_chat(user, "You don't see anything that can be cut with [W].")
 			return
@@ -246,6 +246,10 @@
 /obj/effect/decal/mecha_wreckage/odysseus
 	name = "Odysseus wreckage"
 	icon_state = "odysseus-broken"
+
+/obj/effect/decal/mecha_wreckage/odysseus/murdysseus
+	name = "MURDYSSEUS wreckage"
+	icon_state = "murdysseus-broken"
 
 /obj/effect/decal/mecha_wreckage/odysseus/New()
 	..()

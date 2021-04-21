@@ -31,7 +31,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/defective = 0
 	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
-	var/event/on_use
 	var/sheet_type = /obj/item/stack/sheet/metal
 	var/sheet_amt = 1
 	var/can_take_pai = FALSE
@@ -55,10 +54,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(istype(T) && ticker && ticker.current_state != GAME_STATE_PLAYING)
 		T.add_holomap(src)
 
-/obj/New()
-	..()
-	on_use = new(owner=src)
-
 /obj/Destroy()
 	for(var/mob/user in _using)
 		user.unset_machine()
@@ -69,10 +64,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(integratedpai)
 		qdel(integratedpai)
 		integratedpai = null
-	if(on_use)
-		on_use.holder = null
-		qdel(on_use)
-		on_use = null
 
 	material_type = null //Don't qdel, they're held globally
 	..()
@@ -102,7 +93,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
 	if(W)
-		INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
 		if(W.material_type)
 			W.material_type.on_use(W, src, user)
 
@@ -721,6 +711,8 @@ a {
 
 //Return true if thrown object misses
 /obj/PreImpact(atom/movable/A, speed)
+	if(flow_flags & ON_BORDER) //If the object should hit this, it will just by normal collision detection.
+		return ..()
 	if(density && !throwpass)
 		return FALSE
 	return TRUE
@@ -739,7 +731,7 @@ a {
 				var/danger = FALSE
 
 				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
-				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+				if(foot && !H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
 					if(foot.is_organic())
 						danger = TRUE
 

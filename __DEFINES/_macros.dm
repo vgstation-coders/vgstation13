@@ -1,12 +1,3 @@
-//#define ASTAR_DEBUG 1
-
-#ifdef ASTAR_DEBUG
-#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
-#define astar_debug(text) to_chat(world, text)
-#else
-#define astar_debug(text)
-#endif
-
 //Define your macros here if they're used in general code
 
 //Typechecking macros
@@ -69,6 +60,10 @@
 
 #define isalienadult(A) istype(A, /mob/living/carbon/alien/humanoid)
 
+#define isalienqueen(A)	istype(A, /mob/living/carbon/alien/humanoid/queen)
+
+#define isaliendrone(A)	istype(A, /mob/living/carbon/alien/humanoid/drone)
+
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
@@ -96,6 +91,8 @@
 #define isbear(A) istype(A, /mob/living/simple_animal/hostile/bear)
 
 #define iscarp(A) istype(A, /mob/living/simple_animal/hostile/carp)
+
+#define isspider(A) istype(A, /mob/living/simple_animal/hostile/giant_spider)
 
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
@@ -147,7 +144,7 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
+#define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
 
@@ -157,7 +154,7 @@
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 
-#define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
+#define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
@@ -171,11 +168,11 @@
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
-#define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
+#define iscrowbar(A) istype(A, /obj/item/tool/crowbar)
 
-#define issolder(A) istype(A, /obj/item/weapon/solder)
+#define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
+#define issocketwrench(A) istype(A, /obj/item/tool/wrench/socket)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
@@ -209,10 +206,6 @@
 
 #define isatom(A) isloc(A)
 
-#if DM_VERSION < 513
-#define ismovable(A) (istype(A, /atom/movable))
-#endif
-
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
 #define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
@@ -229,7 +222,7 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
@@ -238,6 +231,12 @@
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
 
 #define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
+
+#define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
+
+#define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
+
+#define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
@@ -254,7 +253,13 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+#define isnewcultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
+
+#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
+
+#define iscultist(H) (isnewcultist(H) || ischiefcultist(H))
+
+#define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
 #define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))
 
@@ -272,11 +277,15 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+#define ischallenger(H) (H.mind && H.mind.GetRole(CHALLENGER))
+
+#define iselitesyndie(H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
 
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define issyndicate(H) (H.mind && (H.mind.GetRole(TRAITOR) ||  H.mind.GetRole(SYNDIESQUADIE) || H.mind.GetRole(NUKE_OP) || H.mind.GetRole(CHALLENGER)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -304,10 +313,14 @@
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
+#define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))
+
+#define istagmime(H) (H.mind && H.mind.GetRole(TAG_MIME))
+
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
-
+#define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 //Macro for AREAS!
 
@@ -343,12 +356,6 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#if DM_VERSION < 513
-#define clamp(x, y, z) 	min(max(x, y), z)
-//x is the number you want to clamp
-//y is the minimum
-//z is the maximum
-#endif
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
@@ -400,8 +407,11 @@ proc/get_space_area()
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
 
-#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
+#define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE, FALSE)
 //Starts 0 credits, not sourced from any database, earns 0 credits, hidden
 
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) (isatom(A))
+#define isapperanceeditable(A) (isatom(A))

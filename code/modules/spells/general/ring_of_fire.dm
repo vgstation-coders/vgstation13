@@ -7,8 +7,8 @@
 	charge_max = 300
 	cooldown_min = 100
 
-	spell_levels = list(Sp_SPEED = 0, Sp_MOVE = 0)
-	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 3, Sp_MOVE = 1)
+	spell_levels = list(Sp_SPEED = 0, Sp_MOVE = 0, Sp_POWER = 0)
+	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 3, Sp_MOVE = 1, Sp_POWER = 1)
 
 	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	spell_aspect_flags = SPELL_FIRE
@@ -22,6 +22,7 @@
 	range = 3
 	selection_type = "range"
 	var/move_with_user = 0
+	var/living_fire = 0
 
 /spell/aoe_turf/ring_of_fire/choose_targets(mob/user = usr)
 	return trange(range, get_turf(user)) - trange(range - 1, get_turf(user))
@@ -31,7 +32,8 @@
 	if (user.is_pacified())
 		return
 
-	var/obj/effect/ring = new /obj/effect/ring_of_fire(get_turf(user), targets, duration)
+	var/obj/effect/ring_of_fire/ring = new /obj/effect/ring_of_fire(get_turf(user), targets, duration, living_fire)
+	ring.master = user
 
 	if(move_with_user)
 		user.lock_atom(ring, /datum/locking_category/ring_of_fire)
@@ -61,8 +63,13 @@
 		if(Sp_MOVE)
 			spell_levels[Sp_MOVE]++
 			move_with_user = 1
-			desc = "Summon a ring of flames around yourself for 10 seconds. The ring moves together with you, and while it's active you are immune to fire and burns."
+			desc += " The ring moves together with you."
 			return "The ring will now move together with you."
+		if(Sp_POWER)
+			spell_levels[Sp_POWER]++
+			living_fire = 1
+			desc += " Once the spell is finished, the flames will look for nearby targets and lock on them. Scary!"
+			return "The ring will now cast living flames after it's done burning."
 
 	return ..()
 
@@ -70,6 +77,8 @@
 	switch(upgrade_type)
 		if(Sp_MOVE)
 			return "Make the ring move together with you."
+		if(Sp_POWER)
+			return "Make the ring cast living flames when it is over."
 
 	return ..()
 
@@ -77,8 +86,9 @@
 /obj/effect/ring_of_fire
 	anchored = TRUE
 	invisibility = 101
+	var/mob/master
 
-/obj/effect/ring_of_fire/New(loc, list/locations, duration)
+/obj/effect/ring_of_fire/New(loc, list/locations, duration, var/living_fire)
 	..()
 
 	var/list/processing_locking_cats = list()
@@ -112,11 +122,39 @@
 			sleep(5)
 
 	spawn(duration)
+		if (living_fire)
+			var/list/outter_ring = view(3, get_turf(loc)) - view(3 - 1, get_turf(loc))
+			for (var/turf/T in outter_ring)
+				var/list/possible_targets = list()
+				for (var/mob/living/L in (view(3, T) - master))
+					possible_targets += L
+				if (!possible_targets.len)
+					continue
+				var/obj/item/projectile/moving_fire/MF = new(T)
+				MF.tracking = TRUE
+				generic_projectile_fire(pick(possible_targets), T, MF, 'sound/weapons/fireball.ogg', master)
+
 		qdel(src)
 
 /obj/effect/fire_blast/ring_of_fire
 	fire_damage = 8
 	spread = 0
+
+/obj/item/projectile/moving_fire
+	name = "Living fire"
+	damage_type = BURN
+	damage = 8
+	flag = "energy"
+	icon = 'icons/effects/fire.dmi'
+	icon_state = "2"
+	fire_sound = 'sound/weapons/fireball.ogg'
+	projectile_speed = 4
+	linear_movement = FALSE
+	kill_count = 15
+
+/obj/item/projectile/moving_fire/hit_apply(var/mob/living/X, var/blocked)
+	. = ..()
+	new /obj/effect/fire_blast(get_turf(X))
 
 /datum/locking_category/ring_of_fire
 	var/target_x_offset

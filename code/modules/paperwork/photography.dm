@@ -37,6 +37,8 @@
 	autoignition_temperature = 530 // Kelvin
 	fire_fuel = TRUE
 
+	var/list/double_agent_completion_ids = list()
+
 
 /obj/item/weapon/photo/attack_self(mob/user)
 	show(user)
@@ -73,7 +75,7 @@
 			displaylength = 320
 		if(7)
 			displaylength = 448
-		
+
 	user << browse("<html><head><title>[name]</title></head>" \
 		+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
 		+ "<img src='tmp_photo.png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' />" \
@@ -133,6 +135,9 @@
 	var/icon_on = "camera"
 	var/icon_off = "camera_off"
 	var/blueprints = FALSE	//are blueprints visible in the current photo being created?
+
+	var/list/double_agent_completion_ids = list()
+
 	var/list/aipictures = list() //Allows for storage of pictures taken by AI, in a similar manner the datacore stores info
 
 	var/photo_size = 3 //Default is 3x3. 1x1, 5x5, 7x7 are also options
@@ -203,9 +208,9 @@
 			photo_size = 7
 		if(7)
 			photo_size = 1
-			
+
 	usr.simple_message("<span class='info'>You switch the camera zoom to [photo_size]x[photo_size].</span>", "<span class='danger'>You press the... you wonder if you can photograph those rainbow guys dancing in the background.</span>")
-		
+
 	/*if(photo_size == 3)
 		photo_size = 1
 		usr.simple_message("<span class='info'>You zoom the camera in.</span>", "<span class='danger'>You drink from the mysterious bottle labeled \"DRINK ME\". Everything feels huge!</span>") //Second message is shown when hallucinating
@@ -313,7 +318,7 @@
 	var/icon/res = get_base_photo_icon()
 
 	for(var/atom/A in plane_layer_sort(atoms))
-	
+
 		CHECK_TICK
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
@@ -333,6 +338,28 @@
 
 
 	return res
+
+
+
+/obj/item/device/camera/proc/camera_get_assassination_results(turf/the_turf)
+	if (assassination_objectives.len > 0)
+		for(var/mob/living/A in the_turf)
+			if (A.mind && A.health < 0)//well they might be in crit but that's good enough I guess
+				for(var/datum/objective/target/assassinate/ass in assassination_objectives)
+					if (ass.target == A.mind)
+						double_agent_completion_ids += makeweakref(ass)
+		for(var/obj/item/organ/external/head/H in the_turf)
+			var/mob/living/carbon/brain/brainmob = H.brainmob
+			if (brainmob && brainmob.mind)
+				for(var/datum/objective/target/assassinate/ass in assassination_objectives)
+					if (ass.target == brainmob.mind)
+						double_agent_completion_ids += makeweakref(ass)
+		for(var/obj/item/organ/internal/brain/B in the_turf)
+			var/mob/living/carbon/brain/brainmob = B.brainmob
+			if (brainmob && brainmob.mind)
+				for(var/datum/objective/target/assassinate/ass in assassination_objectives)
+					if (ass.target == brainmob.mind)
+						double_agent_completion_ids += makeweakref(ass)
 
 
 
@@ -357,6 +384,7 @@
 			mob_detail = "You can see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]. "
 		else
 			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
+
 	for(var/mob/living/simple_animal/S in the_turf)
 		if(S.invisibility != 0)
 			continue
@@ -432,6 +460,7 @@
 			else
 				turfs += T
 				mobs += camera_get_mobs(T)
+				camera_get_assassination_results(T)
 
 	var/icon/temp = get_base_photo_icon()
 
@@ -461,6 +490,10 @@
 		P.blueprints = TRUE
 		blueprints = FALSE
 
+	if (double_agent_completion_ids.len > 0)
+		P.double_agent_completion_ids = double_agent_completion_ids.Copy()
+		double_agent_completion_ids = list()
+
 /obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, flag) //Creates photos in sepia
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	user.put_in_hands(P)
@@ -482,8 +515,8 @@
 	var/icon/I1 = icon(P.icon, P.icon_state)
 	var/icon/I2 = icon(P.img)
 
-	I1.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(112,66,20))//sepia magic formula
-	I2.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(112,66,20))
+	I1.MapColors(rgb(100,89,69), rgb(196,175,136), rgb(48,43,33))//sepia magic formula
+	I2.MapColors(rgb(100,89,69), rgb(196,175,136), rgb(48,43,33))
 
 	P.icon = I1
 	P.img = I2

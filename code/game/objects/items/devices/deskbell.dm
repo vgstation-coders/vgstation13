@@ -29,7 +29,7 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(W.is_wrench(user) && isturf(src.loc))
+	if(W.is_wrench(user) && isturf(loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
@@ -56,17 +56,21 @@
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
-		var/obj/item/device/deskbell_assembly/A = new /obj/item/device/deskbell_assembly(get_turf(src))
-		A.frequency = frequency
-		A.has_signaler = 0
-		A.build_step = 1
-		A.final_name = name
-		A.update_icon()
-		qdel(src)
+		disassemble()
 		return
 
 	ring(user)
 	..()
+
+/obj/item/device/deskbell/proc/disassemble()
+	var/obj/item/device/deskbell_assembly/A = new /obj/item/device/deskbell_assembly(get_turf(src))
+	A.frequency = frequency
+	A.code = code
+	A.has_signaler = 1
+	A.build_step = 1
+	A.final_name = name
+	A.update_icon()
+	qdel(src)
 
 /obj/item/device/deskbell/attack_self(mob/living/carbon/user)
 	return attack_hand(user)
@@ -131,44 +135,8 @@
 			radio_controller.remove_object(src, frequency)
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
-/obj/item/device/deskbell/signaler/attackby(obj/item/W, mob/user)
-	if(W.is_wrench(user))
-		user.visible_message(
-			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
-			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
-			)
-		W.playtoolsound(loc, 50)
-
-		if(wrenching)
-			return
-		wrenching = 1
-		if(do_after(user, src, 30))
-			if(src)
-				anchored = !anchored
-				user.visible_message(
-					"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
-					"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
-					"<span class='notice'>You hear a ratchet.</span>"
-					)
-		wrenching = 0
-
-		return
-
-	if(W.is_screwdriver(user))
-		if(anchored)
-			to_chat(user, "You need to unwrench \the [src] first.")
-			return
-		var/obj/item/device/deskbell_assembly/A = new /obj/item/device/deskbell_assembly(get_turf(src))
-		A.frequency = frequency
-		A.code = code
-		A.has_signaler = 1
-		A.build_step = 1
-		A.update_icon()
-		radio_controller.remove_object(src, frequency)
-		qdel(src)
-		return
-
-	ring(user)
+/obj/item/device/deskbell/signaler/disassemble()
+	radio_controller.remove_object(src, frequency)
 	..()
 
 /obj/item/device/deskbell/signaler/ring()
@@ -188,7 +156,7 @@
 		if(!radio_connection)
 			return	//the desk bell also works like a simple send-only signaler.
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source = src
 		signal.encryption = code					//Since its default code is 0, which cannot be set on a remote signaling device,
 		signal.data["message"] = "ACTIVATE"			//there is no risk that one of the desk bells already there at round start could trigger a signaler
@@ -283,7 +251,7 @@
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
 					W.playtoolsound(src, 50)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+					var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 					M.amount = 2
 					qdel(src)
 					return
@@ -301,7 +269,7 @@
 					to_chat(user, "<span class='warning'>You must add wires first.</span>")
 					return
 			if(1)
-				if(istype(W,/obj/item/weapon/wirecutters))
+				if(istype(W,/obj/item/tool/wirecutters))
 					if(has_signaler)
 						to_chat(user, "<span class='warning'>You must remove the signaler first.</span>")
 						return

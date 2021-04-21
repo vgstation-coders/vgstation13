@@ -50,13 +50,14 @@
 	second.equip_to_slot(cuffs, slot_handcuffed)
 	first.equip_to_slot(cuffs, slot_handcuffed)
 
-	first.z_transition_bringalong_key = first.on_z_transition.Add(first, "z_transition_bringalong")
-	second.z_transition_bringalong_key = second.on_z_transition.Add(second, "z_transition_bringalong")
-	first.post_z_transition_bringalong_key = first.post_z_transition.Add(first, "post_z_transition_bringalong")
-	second.post_z_transition_bringalong_key = second.post_z_transition.Add(second, "post_z_transition_bringalong")
+	first.lazy_register_event(/lazy_event/on_z_transition, first, /mob/living/carbon/proc/z_transition_bringalong)
+	second.lazy_register_event(/lazy_event/on_z_transition, second, /mob/living/carbon/proc/z_transition_bringalong)
 
-	second.mutual_handcuffed_to_event_key = second.on_moved.Add(first, "on_mutual_cuffed_move")
-	first.mutual_handcuffed_to_event_key = first.on_moved.Add(second, "on_mutual_cuffed_move")
+	first.lazy_register_event(/lazy_event/on_post_z_transition, first, /mob/living/carbon/proc/post_z_transition_bringalong)
+	second.lazy_register_event(/lazy_event/on_post_z_transition, second, /mob/living/carbon/proc/post_z_transition_bringalong)
+
+	second.lazy_register_event(/lazy_event/on_moved, first, /mob/living/carbon/proc/on_mutual_cuffed_move)
+	first.lazy_register_event(/lazy_event/on_moved, second, /mob/living/carbon/proc/on_mutual_cuffed_move)
 
 	cuffs.on_restraint_apply(first)
 	cuffs.on_restraint_apply(second)
@@ -74,14 +75,14 @@
 		mutual_handcuffed_mobs.Remove(handcuffed_to)
 
 		//remove from the event
-		C.on_moved.Remove(C.mutual_handcuffed_to_event_key)
-		handcuffed_to.on_moved.Remove(handcuffed_to.mutual_handcuffed_to_event_key)
+		C.lazy_unregister_event(/lazy_event/on_moved, C, /mob/living/carbon/proc/on_mutual_cuffed_move)
+		handcuffed_to.lazy_unregister_event(/lazy_event/on_moved, handcuffed_to, /mob/living/carbon/proc/on_mutual_cuffed_move)
 
-		C.on_z_transition.Remove(C.z_transition_bringalong_key)
-		handcuffed_to.on_z_transition.Remove(handcuffed_to.z_transition_bringalong_key)
+		C.lazy_unregister_event(/lazy_event/on_z_transition, C, /mob/living/carbon/proc/z_transition_bringalong)
+		handcuffed_to.lazy_unregister_event(/lazy_event/on_z_transition, handcuffed_to, /mob/living/carbon/proc/z_transition_bringalong)
 
-		C.post_z_transition.Remove(C.post_z_transition_bringalong_key)
-		handcuffed_to.post_z_transition.Remove(handcuffed_to.post_z_transition_bringalong_key)
+		C.lazy_unregister_event(/lazy_event/on_post_z_transition, C, /mob/living/carbon/proc/post_z_transition_bringalong)
+		handcuffed_to.lazy_unregister_event(/lazy_event/on_post_z_transition, handcuffed_to, /mob/living/carbon/proc/post_z_transition_bringalong)
 
 		//reset the mob's vars
 		handcuffed_to.mutual_handcuffed_to = null
@@ -91,7 +92,7 @@
 		C.u_equip(src)
 		handcuffed_to.u_equip(src)
 
-/mob/living/carbon/proc/on_mutual_cuffed_move()
+/mob/living/carbon/proc/on_mutual_cuffed_move(atom/movable/mover)
 	if (!isturf(loc) || (mutual_handcuffed_to && get_dist(mutual_handcuffed_to, src) > 3)) // We moved to a mech, a sleeper, or a locker, or got teleported
 		var/obj/item/weapon/handcuffs/H = mutual_handcuffs
 		if (!istype(H))
@@ -113,17 +114,14 @@
 /mob/living/carbon/proc/z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
 	if (mutual_handcuffed_to)
 		// Remove the ability to bring his buddy, since his buddy already brought him here
-		mutual_handcuffed_to.on_z_transition.Remove(mutual_handcuffed_to.z_transition_bringalong_key)
-		mutual_handcuffed_to.z_transition_bringalong_key = null
-		mutual_handcuffed_to.post_z_transition.Remove(mutual_handcuffed_to.post_z_transition_bringalong_key)
-		mutual_handcuffed_to.post_z_transition_bringalong_key = null
-		mutual_handcuffed_to.on_moved.Remove(mutual_handcuffed_to.mutual_handcuffed_to_event_key)
-		mutual_handcuffed_to_event_key = null
+		mutual_handcuffed_to.lazy_unregister_event(/lazy_event/on_z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/z_transition_bringalong)
+		mutual_handcuffed_to.lazy_unregister_event(/lazy_event/on_post_z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/post_z_transition_bringalong)
+		mutual_handcuffed_to.lazy_unregister_event(/lazy_event/on_moved, mutual_handcuffed_to, /mob/living/carbon/proc/on_mutual_cuffed_move)
 
 /mob/living/carbon/proc/post_z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
 	if (mutual_handcuffed_to)
 		// Re-adds the events on the fly once the transition is done.
 		mutual_handcuffed_to.forceMove(get_turf(src))
-		mutual_handcuffed_to.z_transition_bringalong_key = mutual_handcuffed_to.on_z_transition.Add(mutual_handcuffed_to, "z_transition_bringalong")
-		mutual_handcuffed_to.post_z_transition_bringalong_key = mutual_handcuffed_to.post_z_transition.Add(mutual_handcuffed_to, "post_z_transition_bringalong")
-		mutual_handcuffed_to_event_key = mutual_handcuffed_to.on_moved.Add(src, "on_mutual_cuffed_move")
+		mutual_handcuffed_to.lazy_register_event(/lazy_event/on_z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/z_transition_bringalong)
+		mutual_handcuffed_to.lazy_register_event(/lazy_event/on_post_z_transition, mutual_handcuffed_to, /mob/living/carbon/proc/post_z_transition_bringalong)
+		mutual_handcuffed_to.lazy_register_event(/lazy_event/on_moved, mutual_handcuffed_to, /mob/living/carbon/proc/on_mutual_cuffed_move)

@@ -56,7 +56,7 @@ var/list/department_radio_keys = list(
 	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
 	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
 	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
-	  //o Used by LANGUAGE_UNATHI
+	  ":o" = "Common",		"#o" = "Common",		".o" = "Common",
 	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
 	  //q Used by LANGUAGE_ROOTSPEAK
 	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
@@ -72,6 +72,20 @@ var/list/department_radio_keys = list(
 	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
 	  //borers
 	  ":&" = "borerchat", "#&" = "borerchat", ".&" = "borerchat",
+)
+
+var/list/headset_modes = list(
+	"Response Team",
+	"Command",
+	"Service",
+	"Engineering",
+	"Security",
+	"Syndicate",
+	"Supply",
+	"Medical",
+	"Science",
+	"department",
+	"Common",
 )
 
 /mob/living/proc/get_default_language()
@@ -101,7 +115,7 @@ var/list/department_radio_keys = list(
 	say_testing(src, "/mob/living/say(\"[message]\", [bubble_type]")
 	if(timestopped)
 		return //under the effects of time magick
-	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
+	message = sanitize_speech(message)
 	message = capitalize(message)
 
 	say_testing(src, "Say start, message=[message]")
@@ -168,10 +182,10 @@ var/list/department_radio_keys = list(
 	speech.message = trim_left(speech.message)
 	if(handle_inherent_channels(speech, message_mode))
 		say_testing(src, "Handled by inherent channel")
-		returnToPool(speech)
+		qdel(speech)
 		return
 	if(!can_speak_vocal(speech.message))
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 	//parse the language code and consume it
@@ -181,9 +195,11 @@ var/list/department_radio_keys = list(
 	treat_speech(speech)
 
 	var/radio_return = get_speech_flags(message_mode)
+	if (speech_was_spoken_into_radio(message_mode))
+		speech.wrapper_classes.Add("spoken_into_radio")
 	if(radio_return & NOPASS) //There's a whisper() message_mode, no need to continue the proc if that is called
 		whisper(speech.message, speech.language)
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 	if(radio_return & REDUCE_RANGE)
@@ -200,7 +216,7 @@ var/list/department_radio_keys = list(
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")
-	returnToPool(speech)
+	qdel(speech)
 	return 1
 
 /mob/living/proc/resist_memes(var/datum/speech/speech)
@@ -244,7 +260,7 @@ var/list/department_radio_keys = list(
 		rendered_message = render_speech(speech)
 
 	//checking for syndie codephrases if person is a tator
-	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP))
+	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
 		//is tator
 		for(var/T in syndicate_code_phrase)
 			rendered_message = replacetext(rendered_message, T, "<b style='color: red;'>[T]</b>")
@@ -252,7 +268,25 @@ var/list/department_radio_keys = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
-	show_message(rendered_message, type, deaf_message, deaf_type, src)
+	//AI mentions
+	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
+		var/mob/living/silicon/ai/ai = src
+		if(ai.mentions_on)
+			if(findtextEx(speech.message, "AI") || findtext(speech.message, ai.real_name))
+				ai << 'sound/machines/twobeep.ogg'
+				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
+				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
+
+	// Runechat messages
+	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	if (ismob(speech.speaker))
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
@@ -349,6 +383,10 @@ var/list/department_radio_keys = list(
 	else if(length(message) > 2)
 		return department_radio_keys[lowertext(copytext(message, 1, 3))]
 
+#define SPEAK_OVER_GENERAL_CULT_CHAT 0
+#define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
+#define HEAR_CULT_CHAT 2
+
 /mob/living/proc/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
 		if(MODE_CHANGELING)
@@ -364,12 +402,12 @@ var/list/department_radio_keys = list(
 						handle_render(M,themessage,src)
 				return 1
 		if(MODE_CULTCHAT)
-			if(construct_chat_check(1)) /*sending check for humins*/
+			if(construct_chat_check(SPEAK_OVER_CHANNEL_INTO_CULT_CHAT))
 				var/turf/T = get_turf(src)
 				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
 				var/themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				for(var/mob/M in player_list)
-					if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+					if(M.construct_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
 				return 1
 		if(MODE_ANCIENT)
@@ -421,6 +459,10 @@ var/list/department_radio_keys = list(
 				return 1
 	return 0
 
+#undef SPEAK_OVER_GENERAL_CULT_CHAT
+#undef SPEAK_OVER_CHANNEL_INTO_CULT_CHAT
+#undef HEAR_CULT_CHAT
+
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
 	if(!(copytext(speech.message, 1, 2) == "*"))
 		for(var/obj/item/I in get_all_slots() + held_items)
@@ -444,6 +486,14 @@ var/list/department_radio_keys = list(
 		return ITALICS | REDUCE_RANGE //for borgs and polly
 
 	return 0
+
+/mob/living/proc/speech_was_spoken_into_radio(var/message_mode)
+	if (message_mode in headset_modes)
+		return TRUE
+	switch (message_mode)
+		if(MODE_HEADSET, MODE_SECURE_HEADSET, MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
+			return TRUE
+	return FALSE
 
 /mob/living/proc/radio(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
@@ -480,26 +530,35 @@ var/list/department_radio_keys = list(
 		return 1
 	return 0
 
-/mob/living/construct_chat_check(var/setting = 0) //setting: 0 is to speak over general into cultchat, 1 is to speak over channel into cultchat, 2 is to hear cultchat
+#define SPEAK_OVER_GENERAL_CULT_CHAT 0
+#define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
+#define HEAR_CULT_CHAT 2
+
+/mob/living/construct_chat_check(var/setting = SPEAK_OVER_GENERAL_CULT_CHAT)
 	if(!mind)
 		return
-	if(setting == 0) //overridden for constructs
+	if(setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
 		return
 
-	if (iscultist(src))
-		if(setting == 1)
-			if (checkTattoo(TATTOO_CHAT))
+	var/datum/role/cultist/culto = iscultist(src)
+	if (culto)
+		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
+			if (checkTattoo(TATTOO_CHAT) || istype(culto, /datum/role/cultist/chief))
 				return 1
-		if(setting == 2)
+		if(setting == HEAR_CULT_CHAT)
 			return 1
 
 	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
 	if(cult)
-		if(setting == 1)
+		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
 			if(universal_cult_chat == 1)
 				return 1
-		if(setting == 2)
+		if(setting == HEAR_CULT_CHAT)
 			return 1
+
+#undef SPEAK_OVER_GENERAL_CULT_CHAT
+#undef SPEAK_OVER_CHANNEL_INTO_CULT_CHAT
+#undef HEAR_CULT_CHAT
 
 // Obsolete for any mob which uses a language.
 /mob/living/say_quote()
@@ -631,7 +690,7 @@ var/list/department_radio_keys = list(
 	if (said_last_words) // dying words
 		succumb_proc(0)
 
-	returnToPool(speech)
+	qdel(speech)
 
 /obj/effect/speech_bubble
 	var/mob/parent

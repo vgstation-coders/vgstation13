@@ -1,5 +1,6 @@
 /datum/artifact_effect/reagentblock
 	effecttype = "reagentblock"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_RELIQUARY)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	var/duration = 0
 	copy_for_battery = list("duration")
@@ -22,7 +23,7 @@
 
 /datum/artifact_effect/reagentblock/DoEffectAura()
 	if(holder)
-		for(var/mob/living/carbon/C in range(effectrange,holder))
+		for(var/mob/living/carbon/C in range(effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
 				if(C.reagents.has_reagent(BLOCKIZINE))
@@ -33,7 +34,7 @@
 
 /datum/artifact_effect/reagentblock/DoEffectPulse()
 	if(holder)
-		for(var/mob/living/carbon/C in range(effectrange,holder))
+		for(var/mob/living/carbon/C in range(effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
 				if(C.reagents.has_reagent(BLOCKIZINE))

@@ -13,10 +13,13 @@
 		"Food" = list(
 			/datum/storeitem/menu1,
 			/datum/storeitem/menu2,
+			/datum/storeitem/diy_soda,
 			),
 		"Tools" = list(
 			/datum/storeitem/pen,
 			/datum/storeitem/wrapping_paper,
+			/datum/storeitem/cheap_soap,
+			/datum/storeitem/swiss_army_knife,
 			),
 		"Electronics" = list(
 			/datum/storeitem/boombox,
@@ -32,12 +35,16 @@
 			/datum/storeitem/roganbot,
 			),
 		"Clothing" = list(
+			/datum/storeitem/sterilemask,
+			/datum/storeitem/sterilemask_black,
+			/datum/storeitem/sterilemask_colorful,
 			/datum/storeitem/robotnik_labcoat,
 			/datum/storeitem/robotnik_jumpsuit,
 			),
 		"Luxury" = list(
 			/datum/storeitem/wallet,
 			/datum/storeitem/photo_album,
+			/datum/storeitem/poster,
 			/datum/storeitem/painting,
 			),
 		)

@@ -29,7 +29,7 @@
 
 			continue //Happy connected client
 		for(var/mob/dead/observer/D in mob_list)
-			if(D.mind && (D.mind.original == L || D.mind.current == L))
+			if(D.mind && D.mind.current == L)
 				if(L.stat == DEAD)
 					if(L.suiciding)	//Suicider
 						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
@@ -165,16 +165,41 @@
 	qdel(wizard_mob.shoes)
 	qdel(wizard_mob.r_store)
 	qdel(wizard_mob.l_store)
-
 	if(!wizard_mob.find_empty_hand_index())
 		wizard_mob.u_equip(wizard_mob.held_items[GRASP_LEFT_HAND])
-
 	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
 	disable_suit_sensors(wizard_mob)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
+	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
+	if(WPF && PFW)  //Are there wizwar factions?
+		if(WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(wizard_mob), slot_wear_suit)
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(wizard_mob), slot_head)
+			wizard_mob.add_spell(new /spell/targeted/absorb)
+			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
+		//	S.uses = Sp_BASE_PRICE * 3.5
+		//	S.max_uses = Sp_BASE_PRICE * 3.5
+			wizard_mob.put_in_hands(S)
+		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+			wizard_mob.add_spell(new /spell/targeted/absorb)
+			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
+		//	S.uses = Sp_BASE_PRICE * 3.5
+		//	S.max_uses = Sp_BASE_PRICE * 3.5
+			wizard_mob.put_in_hands(S)
+		else //An ordinary wizard spawned after the wizwar ruleset was called, this shouldn't happen unless someone forces ragin' mages. Give them normal robes but no absorb spell.
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+			if(!apprentice)
+				wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
+	else //No wizwar, give them normal robes
+		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
+		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+		if(!apprentice)
+			wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 	if(wizard_mob.backbag == 2)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(wizard_mob), slot_back)
 	if(wizard_mob.backbag == 3)
@@ -182,11 +207,10 @@
 	if(wizard_mob.backbag == 4)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
 	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
 	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
-	if(!apprentice)
-		wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 
 	wizard_mob.make_all_robot_parts_organic()
 
@@ -286,7 +310,7 @@
 			roles += player.mind.assigned_role
 	return roles
 
-/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20)
+/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20, var/datum/role/traitor/role)
 	if (!istype(traitor_mob))
 		return
 	. = 1
@@ -302,6 +326,7 @@
 		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you a radio.")
 		. = 0
 	else
+		var/obj/item/device/uplink/hidden/T
 		if (istype(R, /obj/item/device/radio))
 			// generate list of radio freqs
 			var/obj/item/device/radio/target_radio = R
@@ -315,7 +340,7 @@
 					freq += 1
 			freq = freqlist[rand(1, freqlist.len)]
 
-			var/obj/item/device/uplink/hidden/T = new(R)
+			T = new(R)
 			T.uses = uses
 			target_radio.hidden_uplink = T
 			target_radio.traitor_frequency = freq
@@ -326,7 +351,7 @@
 			// generate a passcode if the uplink is hidden in a PDA
 			var/pda_pass = "[rand(100,999)] [pick("Alpha","Bravo","Delta","Omega")]"
 
-			var/obj/item/device/uplink/hidden/T = new(R)
+			T = new(R)
 			R.hidden_uplink = T
 			var/obj/item/device/pda/P = R
 			P.lock_code = pda_pass
@@ -334,14 +359,20 @@
 			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features.")
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
+		if (role && T)
+			role.uplink = T
+			T.job = role.name_for_uplink
 
-/datum/mind/proc/find_syndicate_uplink()
+/datum/mind/proc/find_syndicate_uplink(var/obj/item/device/uplink/true_uplink)
 	var/uplink = null
 
 	for (var/obj/item/I in get_contents_in_object(current, /obj/item))
 		if (I && I.hidden_uplink)
 			uplink = I.hidden_uplink
 			break
+
+	if (!uplink && true_uplink)
+		return true_uplink//returns the uplink they spawned with rather than the one they are currently carrying
 
 	return uplink
 
@@ -372,7 +403,12 @@
 	if(!agent.mind)
 		message_admins("tried to call share_syndicate_codephrase() on [agent] but it had no mind!")
 		return 0
-	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
+	var/words
+	if (ischallenger(agent))
+		words = "<b>For the Syndicate to validate your assassination, you must take a photo of your target's corpse, severed head, or brain, and publish it publicly via newscaster for all to see.</b><br>"
+		words += "As is tradition the Syndicate has provided you and other agents with code words, but be mindful that using them in this context is akin to painting a target on your back:<br>"
+	else
+		words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
 	if (syndicate_code_phrase)
 		var/phrases = syndicate_code_phrase.Join(", ")
 		words += "<span class='warning'>Code Phrases: </span>[phrases].<br>"
@@ -386,7 +422,7 @@
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 
-	if(syndicate_code_phrase || syndicate_code_response)
+	if(!ischallenger(agent) && (syndicate_code_phrase || syndicate_code_response))
 		words += "Use the code words in the order provided, during regular conversation, to identify other agents. Proceed with caution, however, as everyone is a potential foe.<br>"
 	else
 		words += "Trust nobody.<br>"
@@ -426,29 +462,29 @@
 
 
 /proc/equip_vox_raider(var/mob/living/carbon/human/H)
-	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider(src)
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider
 	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
 	H.equip_to_slot_or_del(R, slot_ears)
 
-	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes(src)
-	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider(src))
+	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes
+	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider)
 	H.equip_to_slot_or_del(uni, slot_w_uniform)
 
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox, slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox, slot_gloves) // AS ABOVE.
 
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(src), slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen(src), slot_back)
-	H.equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/device/flashlight, slot_r_store)
 
-	var/obj/item/weapon/card/id/syndicate/C = new(get_turf(src))
+	var/obj/item/weapon/card/id/syndicate/C = new
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
 	C.UpdateName()
-	C.SetOwnerInfo(src)
+	C.SetOwnerInfo(H)
 	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
-	var/obj/item/weapon/storage/wallet/W = new(get_turf(src))
+	var/obj/item/weapon/storage/wallet/W = new
 	W.handle_item_insertion(C)
 	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
 	H.equip_to_slot_or_del(W, slot_wear_id)

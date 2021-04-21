@@ -593,3 +593,19 @@ th.misc {
 	line-height: 110%;
 	font-size: 10px;
 }
+
+/* Law Frame */
+.redButton {
+	width:112px;
+    background: #ea0000;
+}
+
+.yellowButton {
+	width:112px;
+    background: #cacc00;
+}
+
+.greenButton {
+	width:112px;
+    background: #2f943c;
+}

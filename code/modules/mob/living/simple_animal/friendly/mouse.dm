@@ -55,6 +55,7 @@
 	initIcons()
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
+	init_language = default_language
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 
 	var/turf/T = get_turf(src)
@@ -191,7 +192,7 @@
 
 
 
-/mob/living/simple_animal/mouse/revive()
+/mob/living/simple_animal/mouse/revive(refreshbutcher = 1)
 	for (var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
 		V.cure(src)
@@ -387,14 +388,14 @@
 		return 0
 
 /mob/living/simple_animal/mouse/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(!Proj)
 		return
 	var/mob/living/simple_animal/mouse/M = src
 	if((Proj.stun + Proj.weaken + Proj.paralyze + Proj.agony) > M.maxHealth)
 		to_chat(M, "<span class='warning'>The force of the projectile completely overwhelms your tiny body...</span>")
 		M.splat()
-		return 0
+		return PROJECTILE_COLLISION_DEFAULT
 
 /*
  * Common mouse types
@@ -517,5 +518,28 @@
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
 	..(TRUE)
-	if(gibbed == FALSE)
-		src.gib()
+	if(!gibbed && !suiciding && loc != null)
+		explosion(get_turf(loc),-1,0,2)
+		gib()
+
+/mob/living/simple_animal/mouse/transmog
+	maxHealth = 35
+	health = 35
+
+/mob/living/simple_animal/mouse/transmog/transmog_death()
+	if(!transmogged_from)
+		return //Should never happen, but sanity is good
+	var/obj/transmog_body_container/C = transmogged_from
+	var/mob/living/L = C.contained_mob
+	if(istype(loc,/obj/machinery/atmospherics))
+		loc.visible_message("<span class='danger'>\The [loc] gets destroyed by the sudden emergence of \the [L]!</span>")
+		var/turf/T = get_turf(loc)
+		T.ex_act(3) //lightly damage turf
+		qdel(loc) //moves out
+	else
+		L.visible_message("<span class='danger'>\The [src] suddenly snaps back into the shape of \the [L]!</span>")
+	transmogrify()
+
+/mob/living/simple_animal/mouse/transmog/attempt_suicide(forced = FALSE, suicide_set = TRUE)
+	to_chat(src, "<span class='warning'>Your mousy instincts prevent you from snapping your own neck!</span>")
+	return

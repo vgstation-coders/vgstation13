@@ -39,7 +39,7 @@
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/tool/weldingtool/WT = P
 				if(WT.do_weld(user, src, 2 SECONDS, 0))
 					if(gcDestroyed || state != NOCIRCUITBOARD)
 						return
@@ -100,6 +100,9 @@
 				var/obj/item/device/mmi/prison = P
 				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
+					return
+				if(!map.map_specific_conditions(ROBOT_CHECK))
+					to_chat(user, "<span class='warning'>The station prevents you from kickstarting the tyranny of the AI!</span>")
 					return
 				if(prison.brainmob.stat == DEAD)
 					to_chat(user, "<span class='warning'>Sticking a dead [P] into the frame would sort of defeat the purpose.</span>")
@@ -243,7 +246,12 @@ That prevents a few funky behaviors.
 								else
 									C.icon_state = "aicard-full"
 									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-full")
-								to_chat(T.occupant, "You have been downloaded to a mobile storage device. Still no remote access.")
+								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
+								for(var/mob/living/silicon/ai/A in C)
+									if(A.control_disabled == 1)
+										to_chat(T.occupant, "Remote access disabled.")
+									else
+										to_chat(T.occupant, "Remote access enabled.")
 								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
 								T.occupant.forceMove(C)
 								T.occupant.cancel_camera()
@@ -252,6 +260,47 @@ That prevents a few funky behaviors.
 								to_chat(U, "<span class='danger'>ERROR:</span> Artificial intelligence detected on terminal.")
 							else if (T.active)
 								to_chat(U, "<span class='danger'>ERROR:</span> Reconstruction in progress.")
+							else if (!T.occupant)
+								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")
+			if("AIUPLOAD")//AI Upload terminal.
+				var/obj/machinery/computer/aiupload/T = target
+				switch(interaction)
+					if("AICARD")
+						var/obj/item/device/aicard/C = src
+						if(!T.contents.len)
+							if (!C.contents.len)
+								to_chat(U, "No AI to copy over!")//Well duh
+
+							else
+								for(var/mob/living/silicon/ai/A in C)
+									C.icon_state = "aicard"
+									C.name = "inteliCard"
+									C.overlays.len = 0
+									A.forceMove(T)
+									T.occupant = A
+									A.control_disabled = 1
+									A.cancel_camera()
+									to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
+									to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed.")
+						else
+							if(!C.contents.len && T.occupant)
+								C.name = "inteliCard - [T.occupant.name]"
+								if (T.occupant.stat == 2)
+									C.icon_state = "aicard-404"
+								else
+									C.icon_state = "aicard-full"
+								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
+								for(var/mob/living/silicon/ai/A in C)
+									if(A.control_disabled == 1)
+										to_chat(T.occupant, "Remote access disabled.")
+									else
+										to_chat(T.occupant, "Remote access enabled.")
+								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
+								T.occupant.forceMove(C)
+								T.occupant.cancel_camera()
+								T.occupant = null
+							else if (C.contents.len)
+								to_chat(U, "<span class='danger'>ERROR:</span> Artificial intelligence detected on terminal.")
 							else if (!T.occupant)
 								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")
 	else

@@ -112,7 +112,10 @@
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Mushroom")
-	my_appearance.h_style = "Bald"
+	my_appearance.h_style = "Plump Helmet"
+	my_appearance.r_hair = 60
+	my_appearance.g_hair = 40
+	my_appearance.b_hair = 80
 	regenerate_icons()
 
 /mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
@@ -157,6 +160,7 @@
 	movement_speed_modifier = species.move_speed_multiplier
 
 	default_language = get_default_language()
+	init_language = default_language
 
 	create_reagents(1000)
 
@@ -172,33 +176,34 @@
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPCHEM_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPHOLY_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
 
-	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
-	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
-	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
-	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
-	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
-	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
-	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/abstract/Overlays/gloves_layer)
-	obj_overlays[EARS_LAYER]		= getFromPool(/obj/abstract/Overlays/ears_layer)
-	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
-	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/abstract/Overlays/glasses_layer)
-	obj_overlays[BELT_LAYER]		= getFromPool(/obj/abstract/Overlays/belt_layer)
-	obj_overlays[SUIT_STORE_LAYER]	= getFromPool(/obj/abstract/Overlays/suit_store_layer)
-	obj_overlays[BACK_LAYER]		= getFromPool(/obj/abstract/Overlays/back_layer)
-	obj_overlays[HAIR_LAYER]		= getFromPool(/obj/abstract/Overlays/hair_layer)
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = getFromPool(/obj/abstract/Overlays/glasses_over_hair_layer)
-	obj_overlays[FACEMASK_LAYER]	= getFromPool(/obj/abstract/Overlays/facemask_layer)
-	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
-	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/abstract/Overlays/handcuff_layer)
-	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/abstract/Overlays/legcuff_layer)
-	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/abstract/Overlays/hand_layer) //moved to human/update_inv_hand()
-	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/abstract/Overlays/tail_layer)
-	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/abstract/Overlays/targeted_layer)
+	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
+	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
+	obj_overlays[MUTATIONS_LAYER]	= new /obj/abstract/Overlays/mutations_layer
+	obj_overlays[DAMAGE_LAYER]	= new /obj/abstract/Overlays/damage_layer
+	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
+	obj_overlays[ID_LAYER]			= new /obj/abstract/Overlays/id_layer
+	obj_overlays[SHOES_LAYER]		= new /obj/abstract/Overlays/shoes_layer
+	obj_overlays[GLOVES_LAYER]		= new /obj/abstract/Overlays/gloves_layer
+	obj_overlays[EARS_LAYER]		= new /obj/abstract/Overlays/ears_layer
+	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
+	obj_overlays[GLASSES_LAYER]		= new /obj/abstract/Overlays/glasses_layer
+	obj_overlays[BELT_LAYER]		= new /obj/abstract/Overlays/belt_layer
+	obj_overlays[SUIT_STORE_LAYER]	= new /obj/abstract/Overlays/suit_store_layer
+	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
+	obj_overlays[HAIR_LAYER]		= new /obj/abstract/Overlays/hair_layer
+	obj_overlays[GLASSES_OVER_HAIR_LAYER] = new /obj/abstract/Overlays/glasses_over_hair_layer
+	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
+	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
+	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
+	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
+	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
+	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
+	obj_overlays[TARGETED_LAYER]	= new /obj/abstract/Overlays/targeted_layer
 
 	..()
 
@@ -225,8 +230,13 @@
 
 	update_colour(0)
 
-	spawn()
-		update_mutantrace()
+	update_mutantrace()
+
+	lazy_register_event(/lazy_event/on_equipped, src, .proc/update_name)
+	lazy_register_event(/lazy_event/on_unequipped, src, .proc/update_name)
+
+/mob/living/carbon/human/proc/update_name()
+	name = get_visible_name()
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
@@ -253,9 +263,9 @@
 	if(statpanel("Status"))
 		stat(null, "Intent: [a_intent]")
 		stat(null, "Move Mode: [m_intent]")
-		for(var/datum/faction/F in ticker.mode.factions)
+		for(var/datum/faction/F in ticker.mode?.factions)
 			var/F_stat = F.get_statpanel_addition()
-			if(F_stat && F_stat != null)
+			if(F_stat)
 				stat(null, "[F_stat]")
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
@@ -281,6 +291,13 @@
 			var/obj/spacepod/S = loc
 			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
+
+		if(is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
+			var/obj/item/clothing/suit/space/rig/R = wear_suit
+			if(R.cell)
+				stat("\The [R.name]", "Charge: [R.cell.charge]")
+			if(R.activated)
+				stat("\The [R.name]", "Modules: [english_list(R.modules)]")
 
 		if (mind)
 			for (var/role in mind.antag_roles)
@@ -369,17 +386,17 @@
 	else
 		return if_no_id
 	return
-//repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
+//repurposed proc. Now it combines get_worn_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
 /mob/living/carbon/human/proc/get_visible_name()
 	if( wear_mask && wear_mask.is_hidden_identity())	//Wearing a mask which hides our face, use id-name if possible
-		return get_id_name("Unknown")
+		return get_worn_id_name("Unknown")
 	if( head && head.is_hidden_identity())
-		return get_id_name("Unknown")	//Likewise for hats
+		return get_worn_id_name("Unknown")	//Likewise for hats
 	var/datum/role/vampire/V = isvampire(src)
-	if(V && (VAMP_SHADOW in V.powers) && V.ismenacing)
-		return get_id_name("Unknown")
+	if(V && (/datum/power/vampire/shadow in V.current_powers) && V.ismenacing)
+		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
-	var/id_name = get_id_name("")
+	var/id_name = get_worn_id_name("")
 	if(id_name && (id_name != face_name))
 		return "[face_name] (as [id_name])"
 	return face_name
@@ -392,7 +409,7 @@
 
 //gets name from ID or PDA itself, ID inside PDA doesn't matter
 //Useful when player is being seen by other mobs
-/mob/living/carbon/human/proc/get_id_name(var/if_no_id = "Unknown")
+/mob/living/carbon/human/proc/get_worn_id_name(var/if_no_id = "Unknown")
 	if(wear_id)
 		. = wear_id.get_owner_name_from_ID()
 	if(!.)
@@ -401,7 +418,7 @@
 //Removed the horrible safety parameter. It was only being used by ninja code anyways.
 //Now checks siemens_coefficient of the affected area by default
 /mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration)
-	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+	if(status_flags & GODMODE || (M_NO_SHOCK in src.mutations))
 		return 0	//godmode
 
 	if (!def_zone)
@@ -456,10 +473,10 @@
 		dat += "<BR><font color=grey><B>Gloves:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
+	dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"
 	else
-		dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
@@ -469,7 +486,7 @@
 		else
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
-		dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
+	dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
 	dat += "<BR>"
 	if(handcuffed || mutual_handcuffs)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
@@ -617,7 +634,7 @@
 	else if (href_list["show_flavor_text"])
 		if(can_show_flavor_text())
 			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
-			popup.set_content(utf8_sanitize(flavor_text))
+			popup.set_content(strip_html(flavor_text))
 			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
@@ -643,10 +660,6 @@
 		. += E.eyeprot
 
 	return clamp(., -2, 2)
-
-
-/mob/living/carbon/human/IsAdvancedToolUser()
-	return 1//Humans can use guns and such
 
 /mob/living/carbon/human/isGoodPickpocket()
 	var/obj/item/clothing/gloves/G = gloves
@@ -970,19 +983,37 @@
 */
 //returns 1 if made bloody, returns 0 otherwise
 
-/mob/living/carbon/human/add_blood(mob/living/carbon/human/M as mob)
+/mob/living/carbon/human/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
-		return 0
+		return FALSE
 	if(!M)
 		return
+
+	had_blood = TRUE
+
 	//if this blood isn't already in the list, add it
 	if(blood_DNA[M.dna.unique_enzymes])
-		return 0 //already bloodied with this blood. Cannot add more.
+		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
-	hand_blood_color = blood_color
-	src.update_inv_gloves()	//handles bloody hands overlays and updating
+	update_inv_gloves()	//handles bloody hands overlays and updating
 	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return 1 //we applied blood to the item
+
+/mob/living/carbon/human/add_blood_from_data(var/list/blood_data)
+	if (!..())
+		return FALSE
+	if(!blood_data)
+		return
+
+	had_blood = TRUE
+
+	//if this blood isn't already in the list, add it
+	if(blood_DNA[blood_data["blood_DNA"]])
+		return FALSE //already bloodied with this blood. Cannot add more.
+	blood_DNA[blood_data["blood_DNA"]] = blood_data["blood_type"]
+	update_inv_gloves()	//handles bloody hands overlays and updating
+	verbs += /mob/living/carbon/human/proc/bloody_doodle
+	return TRUE //we applied blood to the item
 
 /mob/living/carbon/human/clean_blood(var/clean_feet)
 	.=..()
@@ -1141,7 +1172,7 @@
 		to_chat(usr, "<span class='info'>You moved while counting. Try again.</span>")
 
 /mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour)
-
+	set waitfor = FALSE
 
 	if(new_species_name)
 		if(src.species && src.species.name && (src.species.name == new_species_name))
@@ -1204,13 +1235,13 @@
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
-	spawn()
-		src.movement_speed_modifier = species.move_speed_multiplier
-		src.dna.species = new_species_name
-		src.species.handle_post_spawn(src)
-		src.update_icons()
-		if(species.species_intro)
-			to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
+	src.movement_speed_modifier = species.move_speed_multiplier
+	if(dna)
+		dna.species = new_species_name
+	src.species.handle_post_spawn(src)
+	src.update_icons()
+	if(species.species_intro)
+		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
 /mob/living/carbon/human/proc/bloody_doodle()
@@ -1219,6 +1250,9 @@
 	set desc = "Use blood on your hands to write a short message on the floor or a wall, murder mystery style."
 
 	if (src.stat)
+		return
+
+	if (!(bloody_hands_data?.len))
 		return
 
 	if (usr != src)
@@ -1262,9 +1296,8 @@
 			message += "-"
 			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
 
-		var/obj/effect/decal/cleanable/blood/writing/W = getFromPool(/obj/effect/decal/cleanable/blood/writing, T)
-		W.New(T)
-		W.basecolor = (hand_blood_color) ? hand_blood_color : DEFAULT_BLOOD
+		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
+		W.basecolor = (bloody_hands_data["blood_colour"]) ? bloody_hands_data["blood_colour"] : DEFAULT_BLOOD
 		W.update_icon()
 		W.message = message
 		W.add_fingerprint(src)
@@ -1288,8 +1321,8 @@
 /mob/living/carbon/human/canSingulothPull(var/obj/machinery/singularity/singulo)
 	if(!..())
 		return 0
-		if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
-			return 0
+	if((shoes.clothing_flags & MAGPULSE) && singulo.current_size <= STAGE_FOUR)
+		return 0
 	return 1
 // Get ALL accesses available.
 /mob/living/carbon/human/GetAccess()
@@ -1420,20 +1453,15 @@
 
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
-		return 0
-
-	if(reagents.has_reagent(METHYLIN))
-		return 1
-
-	if(getBrainLoss() >= 60)
-		return 0
-
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
-
-		return G.dexterity_check()
-
-	return 1
+		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
+			return FALSE
+	if(getBrainLoss() >= 60)
+		if(!reagents.has_reagent(METHYLIN))//methylin supercedes brain damage, but not uncomfortable gloves
+			return FALSE
+	return TRUE//humans are dexterous enough by default
 
 /mob/living/carbon/human/spook(mob/dead/observer/ghost)
 	if(!..(ghost, TRUE) || !client)
@@ -1452,7 +1480,7 @@
 	Jitter(jitter_duration)
 
 /mob/living/carbon/human/proc/asthma_attack()
-	if(disabilities & ASTHMA && !(M_NO_BREATH in mutations) && !(has_reagent_in_blood(ALBUTEROL)))
+	if(disabilities & ASTHMA && !(M_NO_BREATH in mutations) && !(species && species.flags & NO_BREATHE) && !(has_reagent_in_blood(ALBUTEROL)))
 		forcesay("-")
 		visible_message("<span class='danger'>\The [src] begins wheezing and grabbing at their throat!</span>", \
 									"<span class='warning'>You begin wheezing and grabbing at your throat!</span>")
@@ -1534,10 +1562,15 @@
 
 	return 1
 
+/mob/living/carbon/human/hasmouth()
+	if(species.flags & SPECIES_NO_MOUTH)
+		return 0
+	return hasmouth
+
 /mob/living/carbon/human/proc/can_bite(atom/target)
 	//Need a mouth to bite
 
-	if(!hasmouth)
+	if(!hasmouth())
 		return 0
 
 	//Need at least two teeth or a beak to bite
@@ -1549,7 +1582,7 @@
 		return 1
 
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
-	if(T && T.amount >= 2)
+	if(T && T.amount >= -1)
 		return 1
 
 	return 0
@@ -1565,7 +1598,7 @@
 	return ((istype(S) && S.footprint_type) || (species && species.footprint_type) || /obj/effect/decal/cleanable/blood/tracks/footprints) //The shoes' footprint type overrides the mob's, for obvious reasons. Shoes with a falsy footprint_type will let the mob's footprint take over, though.
 
 
-/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+/mob/living/carbon/human/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(..()) // we've been flashed
 		var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 		var/damage = intensity - eyecheck()
@@ -1788,6 +1821,7 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1846,13 +1880,23 @@ mob/living/carbon/human/isincrit()
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
-	T.virus2 = virus_copylist(virus2)
-	T.get_clothes(src, T)
-	T.name = real_name
-	T.host = src
-	forceMove(null)
+/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+	if(crabzombie)
+		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
+	else
+		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
@@ -1916,6 +1960,13 @@ mob/living/carbon/human/isincrit()
 		crawlcounter = 1
 	else
 		crawlcounter++
+	for(var/obj/effect/overlay/puddle/P in target)
+		if(P.wet == TURF_WET_WATER && prob(20))
+			to_chat(src, "<span class='warning'>Your hands slip and make no progress!</span>")
+			return FALSE
+		if(P.wet == TURF_WET_LUBE && prob(75))
+			to_chat(src, "<span class='warning'>You lose your grip on the extremely slippery floor and make no progress!</span>")
+			return FALSE
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
 	delayNextMove(crawldelay, additive = 1)
 
@@ -1975,3 +2026,13 @@ mob/living/carbon/human/isincrit()
 		active_hand = 0
 
 	update_hands_icons()
+
+/mob/living/carbon/human/get_personal_ambience()
+	if(istype(locked_to, /obj/structure/bed/therapy))
+		return list(/datum/ambience/beach)
+	else
+		return ..()
+
+/mob/living/carbon/human/make_meat(location)
+	var/ourMeat = new meat_type(location, src)
+	return ourMeat	//Exists due to meat having a special New()

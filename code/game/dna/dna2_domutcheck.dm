@@ -104,7 +104,9 @@
 			//testing("[gene.name] deactivated!")
 			var/tempflag = flags
 			if(ishuman(M))
-				tempflag |= (((ishuman(M) && M:species) && gene.block in M:species:default_blocks) ? 4 : 0)
+				var/mob/living/carbon/human/dude = M
+				if(gene.block in dude.species?.default_blocks)
+					tempflag |= GENE_NATURAL
 			gene.deactivate(M,connected,tempflag)
 			if(M)
 				//testing("Removing [gene.name]([gene.type]) from activegenes")

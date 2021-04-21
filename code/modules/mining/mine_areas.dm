@@ -14,6 +14,7 @@
 /area/mine/unexplored
 	name = "Mine"
 	icon_state = "unexplored"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 //TODO: Make all these types inherit from /area/mining_outpost/ instead.
 /area/mine/lobby
@@ -45,6 +46,10 @@
 /area/mine/maintenance
 	name = "Mining Station Communications"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 
 /area/mine/cafeteria
 	name = "Mining station Cafeteria"

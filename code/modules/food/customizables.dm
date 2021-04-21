@@ -73,6 +73,8 @@
 	desc = "An empty bowl. Put some food in it to start making a soup."
 	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "soup"
+	item_state = "bowl"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 
 /obj/item/trash/bowl/attackby(obj/item/I,mob/user,params)
 	if(istype(I,/obj/item/stack/sheet/metal))

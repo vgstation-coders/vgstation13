@@ -10,8 +10,9 @@
 		if(O.is_organic() && O.is_existing())
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
+	var/prevhealth = health
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
-
+	critlog(health,prevhealth)
 	if((maxHealth - total_burn) < config.health_threshold_dead)
 		death(FALSE)
 		ChangeToHusk()
@@ -55,7 +56,7 @@
 
 	amount = amount * brute_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
 		return 0
 
 	if(amount > 0)
@@ -67,7 +68,7 @@
 /mob/living/carbon/human/adjustFireLoss(var/amount)
 	amount = amount * burn_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
 		return 0
 
 	if(amount > 0)
@@ -82,7 +83,7 @@
 /mob/living/carbon/human/proc/adjustBruteLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * brute_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
 		return 0
 
 	if (organ_name in organs_by_name)
@@ -99,7 +100,7 @@
 /mob/living/carbon/human/proc/adjustFireLossByPart(var/amount, var/organ_name, var/obj/damage_source = null)
 	amount = amount * burn_damage_modifier
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
 		return 0
 
 	if (organ_name in organs_by_name)
@@ -135,7 +136,7 @@
 	if(isslimeperson(src))
 		amount = 0
 
-	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = CLONE, "amount" = amount)))
 		return 0
 
 	var/heal_prob = max(0, 80 - getCloneLoss())
@@ -303,6 +304,7 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/get_organ(var/zone)
+	RETURN_TYPE(/datum/organ/external)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
@@ -372,19 +374,23 @@ This function restores all organs.
 	if(blocked)
 		damage = (damage/100)*(100-blocked)
 
-	if(!ignore_events && INVOKE_EVENT(on_damaged, list("type" = damagetype, "amount" = damage)))
+	if(!ignore_events && lazy_invoke_event(/lazy_event/on_damaged, list("kind" = damagetype, "amount" = damage)))
 		return 0
 
 	switch(damagetype)
 		if(BRUTE)
-			damageoverlaytemp = 20
 			damage = damage * brute_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 		if(BURN)
-			damageoverlaytemp = 20
 			damage = damage * burn_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
@@ -488,7 +494,7 @@ This function restores all organs.
 		return
 
 	if(application == RAD_EXTERNAL)
-		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
+		lazy_invoke_event(/lazy_event/on_irradiate, list("user" = src, "rads" = rads))
 
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))

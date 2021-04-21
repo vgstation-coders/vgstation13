@@ -53,6 +53,7 @@
 /obj/item/clothing/head/legacy_culthood/alt
 	icon_state = "culthelmet_old"
 	item_state = "culthelmet_old"
+	body_parts_visible_override = EYES
 
 /obj/item/clothing/suit/legacy_cultrobes/alt
 	icon_state = "cultarmor_old"
@@ -75,6 +76,7 @@
 	name = "magus helm"
 	icon_state = "magus"
 	item_state = "magus"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A helm worn by the followers of Nar-Sie."
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
@@ -94,7 +96,7 @@
 
 
 /obj/item/clothing/head/helmet/space/legacy_cult
-	name = "cult helmet"
+	name = "ancient cult helmet"
 	desc = "A space worthy helmet used by the followers of Nar-Sie"
 	icon_state = "culthelmet_old"
 	item_state = "cult_helmet"
@@ -102,7 +104,7 @@
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/space/legacy_cult
-	name = "cult armor"
+	name = "ancient cult armor"
 	icon_state = "cultarmor_old"
 	item_state = "cult_armour"
 	desc = "A bulky suit of armor bristling with spikes. It looks space proof."
