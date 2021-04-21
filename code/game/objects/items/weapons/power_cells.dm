@@ -247,7 +247,7 @@
 
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
-	switch(rand(4))
+	switch(rand(3))
 		if(0)
 			charge_rate *= severity*0.3
 			damaged = TRUE
@@ -255,20 +255,17 @@
 			maxcharge *= severity*0.3
 			charge = 0
 		if(2)
-			charge_rate *= severity*0.2
-			damaged = TRUE
-		if(3)
 			maxcharge *= severity*0.3
 			charge = 0
 			charge_rate *= severity*0.3
 			damaged = TRUE
-		if(4)
+		if(3)
 			return
 
 /obj/item/weapon/cell/rad/examine(mob/user)
 	..()
 	if(damaged)
-		to_chat(user, "<span class='warning'>Seems to be damaged as if it were leaking power, you estimate that it selfcharges [(1-charge_rate/initial(charge_rate))*100]% slower than before.</span>")
+		to_chat(user, "<span class='warning'>Seems to be damaged as if it were leaking power, you estimate that it selfcharges [(1-charge_rate/initial(charge_rate))*100]% slower than normal.</span>")
 
 /obj/item/weapon/cell/rad/large
 	name = "PDTG power cell"
