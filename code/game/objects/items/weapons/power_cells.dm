@@ -244,6 +244,9 @@
 		return 0
 	var/power_used = min(maxcharge-charge,charge_rate)
 	charge += power_used
+	if(prob(5))
+		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
+			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
 
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
