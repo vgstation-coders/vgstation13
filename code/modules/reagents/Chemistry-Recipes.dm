@@ -2266,7 +2266,7 @@
 	name = "Cream"
 	id = CREAM
 	result = CREAM
-	required_reagents = list(MILK = 10, SACIDS = 1)
+	required_reagents = list(MILK = 10,SACIDS = 1)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 5
 
