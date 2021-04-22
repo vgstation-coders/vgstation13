@@ -3368,6 +3368,13 @@
 	required_reagents = list(SALTWATER = 10, AMMONIA = 1)
 	result_amount = 10
 
+/datum/chemical_reaction/calciumoxide
+	name = "Calcium Oxide"
+	id = CALCIUMOXIDE
+	result = CALCIUMOXIDE
+	required_reagents = list(MILK = 1, OXYGEN = 1, SACIDS = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/calciumhydroxide
 	name = "Calcium Hydroxide"
 	id = CALCIUMHYDROXIDE
