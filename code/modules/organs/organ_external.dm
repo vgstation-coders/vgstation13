@@ -869,7 +869,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(name != LIMB_HEAD)
 				qdel(organ)
 			else
-				var/headloc = organ.loc
+				var/headloc = get_turf(organ)
 				rejuvenate_limb()
 				var/datum/organ/internal/I = organ.organ_data
 				var/obj/item/organ/internal/O = I.remove(owner)
@@ -980,7 +980,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(owner.feels_pain())
 		owner.audible_scream()
 
-	playsound(owner.loc, "fracture", 100, 1, -2)
+	playsound(get_turf(owner), "fracture", 100, 1, -2)
 	status |= ORGAN_BROKEN
 	broken_description = pick("broken", "fracture", "hairline fracture")
 	perma_injury = brute_dam
@@ -1282,12 +1282,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(is_robotic())
-			current_organ = new /obj/item/robot_parts/l_leg(owner.loc)
+			current_organ = new /obj/item/robot_parts/l_leg(get_turf(owner))
 		else
-			current_organ = new /obj/item/organ/external/l_leg(owner.loc, owner, src)
+			current_organ = new /obj/item/organ/external/l_leg(get_turf(owner), owner, src)
 	return current_organ
 
 /datum/organ/external/r_leg
@@ -1320,12 +1320,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(is_robotic())
-			current_organ = new /obj/item/robot_parts/r_leg(owner.loc)
+			current_organ = new /obj/item/robot_parts/r_leg(get_turf(owner))
 		else
-			current_organ = new /obj/item/organ/external/r_leg(owner.loc, owner, src)
+			current_organ = new /obj/item/organ/external/r_leg(get_turf(owner), owner, src)
 	return current_organ
 
 //======Arms=======
@@ -1343,12 +1343,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_arm/generate_dropped_organ(current_organ)
 	if(status & ORGAN_PEG)
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(status & ORGAN_ROBOT)
-			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
+			current_organ= new /obj/item/robot_parts/l_arm(get_turf(owner))
 		else
-			current_organ= new /obj/item/organ/external/l_arm(owner.loc, owner, src)
+			current_organ= new /obj/item/organ/external/l_arm(get_turf(owner), owner, src)
 	return current_organ
 
 /datum/organ/external/r_arm
@@ -1364,12 +1364,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_arm/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(is_robotic())
-			current_organ = new /obj/item/robot_parts/r_arm(owner.loc)
+			current_organ = new /obj/item/robot_parts/r_arm(get_turf(owner))
 		else
-			current_organ = new /obj/item/organ/external/r_arm(owner.loc, owner, src)
+			current_organ = new /obj/item/organ/external/r_arm(get_turf(owner), owner, src)
 	return current_organ
 
 /datum/organ/external/l_foot
@@ -1386,10 +1386,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/l_foot(owner.loc, owner, src)
+			current_organ = new /obj/item/organ/external/l_foot(get_turf(owner), owner, src)
 	return current_organ
 
 /datum/organ/external/r_foot
@@ -1406,10 +1406,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/r_foot(owner.loc, owner, src)
+			current_organ = new /obj/item/organ/external/r_foot(get_turf(owner), owner, src)
 	return current_organ
 
 /datum/organ/external/r_hand
@@ -1427,10 +1427,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/r_hand(owner.loc, owner, src)
+			current_organ = new /obj/item/organ/external/r_hand(get_turf(owner), owner, src)
 	return current_organ
 
 /datum/organ/external/l_hand
@@ -1448,10 +1448,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/weapon/peglimb(get_turf(owner))
 	if(!current_organ)
 		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/l_hand(owner.loc, owner, src)
+			current_organ = new /obj/item/organ/external/l_hand(get_turf(owner), owner, src)
 	return current_organ
 
 /datum/organ/external/head
@@ -1470,7 +1470,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/head/generate_dropped_organ(current_organ)
 	if(!current_organ)
-		current_organ = new /obj/item/organ/external/head(owner.loc, owner, src)
+		current_organ = new /obj/item/organ/external/head(get_turf(owner), owner, src)
 		owner.decapitated = current_organ
 	var/datum/organ/internal/brain/B = eject_brain()
 	var/obj/item/organ/external/head/H = current_organ
