@@ -50,7 +50,7 @@ var/list/smes_list = list()
 /obj/machinery/power/battery/smes/initialize()
 	..()
 	connect_to_network()
-	if(ticker?.mode == "sandbox")
+	if(ticker?.mode.name == "sandbox")
 		infinite_power = TRUE
 	spawn(5)
 		if(!terminal)
