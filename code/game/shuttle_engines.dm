@@ -82,6 +82,15 @@
 	to_chat(user, "<span class = 'warning'>There is no engine within range of \the [src] it can connect to.</span>")
 	return FALSE
 	
+/obj/structure/shuttle/engine/heater/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	.=..()
+	if(.)
+		if(!anchored)
+			disconnect()
+		else if(!connected_engine)
+			try_connect()
+
+
 
 /obj/structure/shuttle/engine/propulsion/DIY
 	name = "shuttle engine"
@@ -107,7 +116,16 @@
 				return TRUE
 		src.desc = initial(src.desc)
 		return FALSE
-			
+	
+	proc/retard_checks()
+		if(!heater)
+			return
+		if(!heater.anchored) // uHhhhHh, it's somehow gotten desynchronized, ficksit
+			disconnect()
+			return
+		if(abs(heater.x - src.x) + abs(heater.y - src.y) != 1 || heater.z != src.z) // someone is trying to pull a fast one, it's not where it should be
+			disconnect()
+			return
 /obj/structure/shuttle/engine/propulsion/DIY/attackby(obj/item/I, mob/user)
 	if(I.is_wrench(user))
 		return wrenchAnchor(user, I, 5 SECONDS)
