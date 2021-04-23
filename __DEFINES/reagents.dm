@@ -56,6 +56,7 @@
 #define CARAMEL 			"caramel"
 #define SACID 			"sacid"
 #define PACID 			"pacid"
+#define CALCIUM 			"calcium"
 #define GLYCEROL 			"glycerol"
 #define NITROGLYCERIN 			"nitroglycerin"
 #define RADIUM 			"radium"
