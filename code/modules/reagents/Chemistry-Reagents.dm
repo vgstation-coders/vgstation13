@@ -1404,6 +1404,14 @@
 	if(prob(5))
 		M.emote(pick("twitch","drool","moan"), null, null, TRUE)
 
+/datum/reagent/calcium
+	name = "Calcium"
+	id = CALCIUM
+	description = "Calcium is an alkalyne earth metal, somewhat reactive when exposed to air. Good for the bones."
+	color = "FFFFFF" //absolute white, bcoz milk despite elemental calcium being gray/silver
+	density = 1.55
+	specheatcap = 0.650
+
 /datum/reagent/sugar
 	name = "Sugar"
 	id = SUGAR
