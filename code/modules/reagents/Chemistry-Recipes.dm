@@ -2266,8 +2266,7 @@
 	name = "Cream"
 	id = CREAM
 	result = CREAM
-	required_reagents = list(MILK = 10,SACIDS = 1)
-	required_catalysts = list(ENZYME = 5)
+	required_reagents = list(MILK = 10, SACIDS = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/syntiflesh
@@ -3373,7 +3372,7 @@
 	name = "Calcium Oxide"
 	id = CALCIUMOXIDE
 	result = CALCIUMOXIDE
-	required_reagents = list(MILK = 1, OXYGEN = 1, SACIDS = 1)
+	required_reagents = list(MILK = 1, OXYGEN = 1, PACIDS = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/calciumhydroxide
