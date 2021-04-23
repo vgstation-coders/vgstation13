@@ -663,6 +663,8 @@
 		if(50000 to INFINITY)
 			score["rating"] = "Nanotrasen's Finest"
 	dat += "<B><U>RATING:</U></B> [score["rating"]]<br><br>"
+	send2mainirc("Final crew score: [score["crewscore"]]. Rating: [score["rating"]]")
+	send2maindiscord("Final crew score: **[score["crewscore"]]**. Rating: **[score["rating"]]**")
 
 	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	dat += "<b>TOP 5 RICHEST ESCAPEES:</b><br>"
