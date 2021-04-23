@@ -56,7 +56,8 @@
 			if(D.anchored && !D.heater && D.dir == src.dir)
 				D.heater = src
 				connected_engine = D
-				src.desc += " It is connected to an engine."
+				src.desc += " It is connected to an engine." // have to do both, because only one of the parts' try_connect()s runs
+				D.desc = initial(D.desc) + " It is connected to a preheater."
 				return TRUE
 		src.desc = initial(src.desc)
 		return FALSE
@@ -113,6 +114,7 @@
 				heater = D
 				D.connected_engine = src
 				src.desc += " It is connected to a preheater."
+				D.desc = initial(D.desc) + " It is connected to an engine."
 				return TRUE
 		src.desc = initial(src.desc)
 		return FALSE
