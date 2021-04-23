@@ -189,6 +189,9 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	mag_slow = MAGBOOTS_SLOWDOWN_LOW
 
+/obj/item/clothing/shoes/magboots/syndie/emag_act() // not emaggable
+	return
+
 //Captain
 /obj/item/clothing/shoes/magboots/captain
 	desc = "A relic predating magboots, these ornate greaves have retractable spikes in the soles to maintain grip."
