@@ -192,18 +192,8 @@
 
 	holder.remove_reagent(src.id, custom_plant_metabolism)
 
-/datum/reagent/proc/on_move(var/mob/M)
-	return
-
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)
-	return
-
-//Called when two reagents are mixing
-/datum/reagent/proc/on_merge(var/data)
-	return
-
-/datum/reagent/proc/on_update(var/atom/A)
 	return
 
 /datum/reagent/proc/on_removal(var/data)
@@ -211,9 +201,6 @@
 
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
-
-/datum/reagent/proc/OnTransfer()
-	return
 
 /datum/reagent/send_to_past(var/duration)
 	var/static/list/resettable_vars = list(
@@ -470,16 +457,6 @@
 								L.infect_disease2(D, notes="(Blood, splashed with infected blood)")
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
-
-/datum/reagent/blood/on_merge(var/data)
-	if(data["blood_colour"])
-		color = data["blood_colour"]
-	return ..()
-
-/datum/reagent/blood/on_update(var/atom/A)
-	if(data["blood_colour"])
-		color = data["blood_colour"]
-	return ..()
 
 /datum/reagent/blood/reaction_turf(var/turf/simulated/T, var/volume) //Splash the blood all over the place
 
