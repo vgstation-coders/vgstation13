@@ -48,20 +48,25 @@
 	anchored = FALSE
 	
 	proc/try_connect()
-		if(!anchored) return
+		if(!anchored) 
+			src.desc = initial(src.desc)
+			return FALSE
 		disconnect()
 		for(var/obj/structure/shuttle/engine/propulsion/DIY/D in range(1,src))
 			if(D.anchored && !D.heater && D.dir == src.dir)
 				D.heater = src
 				connected_engine = D
+				src.desc += " It is connected to an engine."
 				return TRUE
+		src.desc = initial(src.desc)
 		return FALSE
 		
 	proc/disconnect()
 		if(connected_engine)
-			connected_engine.heater = null
-			connected_engine = null
-			src.anchored = FALSE
+			connected_engine.heater = null // prevent infinite recursion and subsequent serb CPU fire
+			connected_engine.disconnect()
+		connected_engine = null
+		src.desc = initial(src.desc)
 			
 /obj/structure/shuttle/engine/heater/DIY/attackby(obj/item/I, mob/user)
 	if(I.is_wrench(user) && wrenchAnchor(user, I, 5 SECONDS))
@@ -69,6 +74,8 @@
 	return ..()
 
 /obj/structure/shuttle/engine/heater/DIY/canAffixHere(var/mob/user)
+	if(src.anchored) // always allow unbolting, a la don't bug out if someone removes the engine
+		return ..()
 	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in range(1,src))
 		if(D.anchored && !D.heater && D.dir == src.dir)
 			return ..()
@@ -83,18 +90,22 @@
 	
 	proc/disconnect()
 		if(heater)
-			heater.connected_engine = null // don't ruin the heater please
-			heater.anchored = FALSE
+			heater.disconnect()
 		heater = null
+		src.desc = initial(src.desc)
+		
 	proc/try_connect()
 		if(!src.anchored)
+			src.desc = initial(src.desc)
 			return FALSE
 		disconnect()
 		for(var/obj/structure/shuttle/engine/heater/DIY/D in range(1,src))
 			if(D.anchored && !D.connected_engine && D.dir == src.dir)
 				heater = D
 				D.connected_engine = src
+				src.desc += " It is connected to a preheater."
 				return TRUE
+		src.desc = initial(src.desc)
 		return FALSE
 			
 /obj/structure/shuttle/engine/propulsion/DIY/attackby(obj/item/I, mob/user)
