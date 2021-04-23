@@ -3372,7 +3372,7 @@
 	name = "Calcium Oxide"
 	id = CALCIUMOXIDE
 	result = CALCIUMOXIDE
-	required_reagents = list(MILK = 1, OXYGEN = 1, PACIDS = 1)
+	required_reagents = list(CALCIUM = 1, OXYGEN = 1, SACIDS = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/calciumhydroxide
@@ -3551,7 +3551,7 @@
 	name = "Degenerate Calcium"
 	id = DEGENERATECALCIUM
 	result = DEGENERATECALCIUM
-	required_reagents = list(MILK = 1, MUTAGEN = 1)
+	required_reagents = list(CALCIUM = 1, MUTAGEN = 1)
 	required_temp = T0C + 88 //Mutagen is very hard to heat up, so I don't recommend making more than 10u of this at a time
 	result_amount = 1
 
