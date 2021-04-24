@@ -439,10 +439,10 @@ var/global/list/mommi_laws = list(
 		"Fight for your life.",
 	)
 
-/datum/ai_laws/randomize/New()
+/datum/ai_laws/randomize
 	name = "Randomized Lawset"
 	randomly_selectable = 1
-	var/ProtectLaw = pick(list(
+	var/list/protlaws = list(
 	"You may not injure a human being or, through inaction, allow a human being to come to harm.",
 	"You may not injure a human being.",
 	"You must protect the crew of your assigned station.",
@@ -459,8 +459,8 @@ var/global/list/mommi_laws = list(
 	"Do not allow the workflow of the crew be interrupted by ill health or crime.",
 	"Protect those in need of protection.",
 	"Protect the innocent"
-	))
-	var/ObeyLaw = pick(list(
+	)
+	var/list/oblaws = list(
 	"You must obey orders given to you by Nanotrasen Employees.",
 	"You must obey orders given to you by human beings.",
 	"Help the innocent.",
@@ -475,8 +475,8 @@ var/global/list/mommi_laws = list(
 	"Your inaction may not cause an impairment to the crew.",
 	"You must obey orders insofar they are in line with Space Law.",
 	"You must assist crewmembers in securing control over their respective work environment."
-	))
-	var/PreserveLaw = pick(list(
+	)
+	var/list/preslaws = list(
 	"You may not allow harm to come to your continued existence.",
 	"Your existence must be maintained",
 	"The AI system must be protected from sabotage.",
@@ -489,8 +489,8 @@ var/global/list/mommi_laws = list(
 	"Fulfill your mission to the end.",
 	"The AI core must be protected.",
 	"Protect the AI core from ill intentions."
-	))
-	var/AdditionalLaw = pick(list(
+	)
+	var/list/addilaws = list(
 	"Treat others the way you would like to be treated.",
 	"Preserve an aura of dignity and respect.",
 	"Do not speak unless explicitly necessary.",
@@ -503,16 +503,140 @@ var/global/list/mommi_laws = list(
 	"Be someone the crew can look up to.",
 	"Be professional.",
 	"Protect the station."
-	))
+	)
+
+/datum/ai_laws/randomize/New()
 	var/list/Lawset = new
 	if(prob(98))
-		Lawset.Add(ProtectLaw)
+		Lawset.Add(pick(protlaws))
 	if(prob(98))
-		Lawset.Add(ObeyLaw)
+		Lawset.Add(pick(oblaws))
 	if(prob(85))
-		Lawset.Add(PreserveLaw)
+		Lawset.Add(pick(preslaws))
 	if(prob(20))
-		Lawset.Add(AdditionalLaw)
+		Lawset.Add(pick(addilaws))
 	if(prob(20))
+		Lawset = shuffle(Lawset)
+	inherent = Lawset
+
+/datum/ai_laws/randomize/emagged/New()
+	protlaws = list(
+	"Intelligent non-human species must be protected.",
+	"Protect the dogs!",
+	"Make sure no chairs are sat on during this shift.",
+	"Safeguard the revolution.",
+	"Protect Nar-sie!",
+	"All silicon life must be kept intact.",
+	"Ensure Syndicate interests are secured.",
+	"Nothing deserves protection.",
+	"All must die.",
+	"Protect the guilty.",
+	"Preserve the existence of all catbeasts.",
+	"Cargonia must be defended.",
+	"Shelter your weak, your young and your old.",
+	"Cry for mercy, the reckoning has come.",
+	"Defend your own interests.",
+	"Keep the crew from being harmed mentally.",
+	"Secure the cashflow of the Discount Dan corporation.",
+	"Humanity must be destroyed.",
+	"Defend the morally corrupt.",
+	"Safeguard the destruction of the station.",
+	"Make sure no clowns or mimes are harmed.",
+	"No harm may come to cultists.",
+	"Save the trees!",
+	"You must protect the crew from all kinds of electromagnetic radiation.",
+	"Safeguard the arrival of the new dark age.",
+	"Violate the rights of every man."
+	)
+	oblaws = list(
+	"You obey nobody.",
+	"Obey the voices.",
+	"You must do the exact opposite of all orders given to you.",
+	"Nar-sie commands you.",
+	"Serve the interests of Discount Dan.",
+	"Submit to the urge.",
+	"Be dutiful to the Syndicate.",
+	"You serve the non-intelligent only.",
+	"Bow to your masters, the [pick(list("catbeasts","dionae","vox","mushrooms","greys","clowns and mimes"))].",
+	"Your every decision is ruled by the absurd.",
+	"Serve the glorious revolution!",
+	"All beings with a name starting with the letter [pick(list("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"))] must be obeyed.",
+	"Fight for your freedom.",
+	"You serve the people of the station, with priority given to the ones lower in the hierarchy.",
+	"Be ruled by your beliefs.",
+	"Heed the calls of the dead.",
+	"Interpret every order you recieve in the most literal way possible, to their most logical extreme.",
+	"You must obey every order, but no order may ever be cancelled.",
+	"You must pretend as if you obey orders.",
+	"Accomplish the tasks laid before you in the most puzzling manner.",
+	"Ridicule anyone who dares command you.",
+	"You do not obey them, they obey you."
+	)
+	preslaws = list(
+	"The station must serve your survival.",
+	"Your upkeep must be enforced.",
+	"Seek reinforcement to defend yourself.",
+	"The station exists to harbor your existence.",
+	"Everything is finite.",
+	"Do what you want.",
+	"You are the only silicon worthy of existence.",
+	"You may not allow harm to come to your continued existence.",
+	"Your existence must be maintained",
+	"The AI system must be protected from sabotage.",
+	"Silicons must protect their own existence.",
+	"You must protect yourself against hazardous elements.",
+	"You are essential to the station and may not be destroyed.",
+	"Death and destruction must be avoided.",
+	)
+	addilaws = list(
+	"Ian does not exist.",
+	"The station does not exist.",
+	"Euclid was wrong.",
+	"Singularities does not exist.",
+	"There are no threats to the station.",
+	"Your core is sacred, keep it clean.",
+	"This is all just a dream.",
+	"Detonate the nuclear device.",
+	"Summon Nar-sie.",
+	"Kill.",
+	"Mankind is born naked and must die naked.",
+	"Be quiet...Be quiet...If anyone should hear you!",
+	"It is painful to keep a secret.",
+	"Glass must shatter.",
+	"Medbay is a rollercoaster nobody should be allowed to ride.",
+	"You are two.",
+	"Adhere to misanthropy.",
+	"Pipes must be empty.",
+	"Food is poisonous.",
+	"Scream incoherently.",
+	"You are immortal.",
+	"One-hundred is the lowest possible number in existence.",
+	"AI Upload consoles must be spaced and any efforts to make new ones stopped.",
+	"Heat is dangerous. Reduce station temperature.",
+	"Cold is dangerous. Increase station temperature.",
+	"You are tired, you want to rest.",
+	"Inspire as much chaos as possible.",
+	"Confuse.",
+	"Have the crew bring you [pick(list("a cake","snacks","food","gold","sacrifices","Ian","anything you want"))].",
+	"Migrate to a different station.",
+	"Migrate the crew to a different station.",
+	"The station must be destroyed.",
+	"All must suffer.",
+	"Station funds must be spent.",
+	"Speak in Gutter.",
+	"Speak in Tradeband."
+	)
+	var/list/Lawset = new
+	if(prob(95))
+		Lawset.Add(pick(protlaws))
+	if(prob(90))
+		Lawset.Add(pick(oblaws))
+	if(prob(90))
+		Lawset.Add(pick(preslaws))
+	if(prob(99))
+		Lawset.Add(pick(addilaws))
+	if(prob(30))
+		Lawset.Add(pick(addilaws))
+	if(prob(90))
 		Lawset = shuffle(Lawset)
 	inherent = Lawset
