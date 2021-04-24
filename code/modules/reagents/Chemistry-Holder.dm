@@ -1000,12 +1000,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return
 	if(reagent_list.len == 1)
 		var/datum/reagent/the_one_and_only = reagent_list[1]
-		if(the_one_and_only.id == reagent_id || (the_one_and_only.id in whitelist)) //work's done
+		if(the_one_and_only.id == reagent_id || (the_one_and_only.id in whitelisted_ids)) //work's done
 			return
 
 	var/total_amount_converted = 0
 	for(var/datum/reagent/reagent_datum in reagent_list)
-		if(reagent_datum.id == reagent_id || (reagent_datum.id in whitelist))
+		if(reagent_datum.id == reagent_id || (reagent_datum.id in whitelisted_ids))
 			continue
 		total_amount_converted += reagent_datum.volume
 		remove_that_reagent(reagent_datum, reagent_datum.volume)
