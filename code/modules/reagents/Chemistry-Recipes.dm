@@ -3757,7 +3757,7 @@
 	name = "Midazoline"
 	id = MIDAZOLINE
 	result = MIDAZOLINE
-	required_reagents = list(SACID = 1, CLONEXADONE = 1, GOLD = 1)
+	required_reagents = list(SACIDS = 1, CLONEXADONE = 1, GOLD = 1)
 	result_amount = 1 //This effectively just changes the amount of gold powder you get from electrolyzing
 
 /datum/chemical_reaction/midazoline/required_condition_check(datum/reagents/holder)
