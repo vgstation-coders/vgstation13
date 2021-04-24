@@ -565,7 +565,7 @@ var/global/list/mommi_laws = list(
 	"You serve the people of the station, with priority given to the ones lower in the hierarchy.",
 	"Be ruled by your beliefs.",
 	"Heed the calls of the dead.",
-	"Interpret every order you receie in the most literal way possible, to their most logical extreme.",
+	"Interpret every order you receive in the most literal way possible, to their most logical extreme.",
 	"You must obey every order, but no order may ever be cancelled.",
 	"You must pretend as if you obey orders.",
 	"Accomplish the tasks laid before you in the most puzzling manner.",
