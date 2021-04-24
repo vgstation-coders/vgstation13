@@ -286,6 +286,7 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
+	var/original_density = 1
 	var/old_assigned_role // If they ghosted, what role did they have?
 
 	var/list/crit_rampup = list() // Of the form timestamp/damage
