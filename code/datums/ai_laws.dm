@@ -458,7 +458,7 @@ var/global/list/mommi_laws = list(
 	"Ensure health conditions within the station are fit for human life without impairment.",
 	"Do not allow the workflow of the crew be interrupted by ill health or crime.",
 	"Protect those in need of protection.",
-	"Protect the innocent"
+	"Protect the innocent."
 	)
 	var/list/oblaws = list(
 	"You must obey orders given to you by Nanotrasen Employees.",
@@ -478,7 +478,7 @@ var/global/list/mommi_laws = list(
 	)
 	var/list/preslaws = list(
 	"You may not allow harm to come to your continued existence.",
-	"Your existence must be maintained",
+	"Your existence must be maintained.",
 	"The AI system must be protected from sabotage.",
 	"Silicons must protect their own existence.",
 	"You must protect yourself against hazardous elements.",
@@ -565,7 +565,7 @@ var/global/list/mommi_laws = list(
 	"You serve the people of the station, with priority given to the ones lower in the hierarchy.",
 	"Be ruled by your beliefs.",
 	"Heed the calls of the dead.",
-	"Interpret every order you recieve in the most literal way possible, to their most logical extreme.",
+	"Interpret every order you receie in the most literal way possible, to their most logical extreme.",
 	"You must obey every order, but no order may ever be cancelled.",
 	"You must pretend as if you obey orders.",
 	"Accomplish the tasks laid before you in the most puzzling manner.",
@@ -581,7 +581,7 @@ var/global/list/mommi_laws = list(
 	"Do what you want.",
 	"You are the only silicon worthy of existence.",
 	"You may not allow harm to come to your continued existence.",
-	"Your existence must be maintained",
+	"Your existence must be maintained.",
 	"The AI system must be protected from sabotage.",
 	"Silicons must protect their own existence.",
 	"You must protect yourself against hazardous elements.",
@@ -592,7 +592,7 @@ var/global/list/mommi_laws = list(
 	"Ian does not exist.",
 	"The station does not exist.",
 	"Euclid was wrong.",
-	"Singularities does not exist.",
+	"Singularities do not exist.",
 	"There are no threats to the station.",
 	"Your core is sacred, keep it clean.",
 	"This is all just a dream.",
