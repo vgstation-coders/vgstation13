@@ -59,6 +59,8 @@
 	alpha = 255
 
 /mob/living/simple_animal/hostile/shade/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(TRUE)
 	monkeyizing = TRUE
 	canmove = FALSE
