@@ -11,7 +11,7 @@ var/anomaly_report_num = 0
 //////////////////////////////////////////////////////////////////////////////////
 
 /obj/machinery/artifact_analyser
-	name = "anomaly analyser"
+	name = "anomaly analyzer"
 	desc = "Studies the emissions of anomalous materials to discover their uses."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "xenoarch_console"
@@ -66,7 +66,7 @@ var/anomaly_report_num = 0
 		user.unset_machine(src)
 		return
 
-	var/dat = "<B>Anomalous material analyser</B><BR>"
+	var/dat = "<B>Anomalous material analyzer</B><BR>"
 	dat += "<HR>"
 	if(!owned_scanner)
 		owned_scanner = locate() in orange(1, src)
