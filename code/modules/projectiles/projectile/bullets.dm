@@ -356,7 +356,7 @@ obj/item/projectile/bullet/suffocationbullet
 	icon_state = "minigun"
 	damage = 30
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
-	
+
 /obj/item/projectile/bullet/baton
 	name = "stun baton"
 	icon = 'icons/obj/projectiles_experimental.dmi'
@@ -371,7 +371,7 @@ obj/item/projectile/bullet/suffocationbullet
 	stutter = 10
 	agony = 10
 	var/rigged = null //if a rigged baton is loaded, it'll fire an explosive burst
-	
+
 /obj/item/projectile/bullet/baton/on_hit(var/atom/target, var/blocked = 0)
 	..()
 	playsound(target.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -386,7 +386,7 @@ obj/item/projectile/bullet/suffocationbullet
 		var/flash_range = light_impact_range
 		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range)
 	qdel(src)
-	
+
 /obj/item/projectile/bullet/osipr
 	name = "\improper OSIPR bullet"
 	icon = 'icons/obj/projectiles_experimental.dmi'
@@ -475,12 +475,17 @@ obj/item/projectile/bullet/suffocationbullet
 	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
-		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
-		M.bullet_act(src, def_zone)
-		admin_warn(M)
-		BEE.forceMove(M.loc)
-		BEE.target = M
-	bullet_die()
+		if(istype(A,/mob/living/silicon/ai))
+			visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name]!</span>")
+			admin_warn(M)
+			bullet_die()
+		else
+			visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
+			M.bullet_act(src, def_zone)
+			admin_warn(M)
+			BEE.forceMove(M.loc)
+			BEE.target = M
+			bullet_die()
 
 /obj/item/projectile/bullet/APS //Armor-piercing sabot round. Metal rods become this when fired from a railgun.
 	name = "armor-piercing sabot round"
