@@ -497,7 +497,7 @@ This function restores all organs.
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
 			rads /= 2
-	if(isinsectoid(src))
-		rads /= 2
+	if(species.rad_mod)
+		rads *= species.rad_mod
 	return ..()
 
