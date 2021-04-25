@@ -50,6 +50,7 @@
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	implant_types = list(
@@ -132,6 +133,7 @@
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -193,6 +195,7 @@
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -250,6 +253,7 @@
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/mechanic

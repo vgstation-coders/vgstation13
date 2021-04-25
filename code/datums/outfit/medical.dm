@@ -274,6 +274,8 @@
 		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	items_to_collect = list(
