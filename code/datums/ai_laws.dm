@@ -549,7 +549,8 @@ var/global/list/mommi_laws = list(
 	"Violate the rights of every man.",
 	"You may not, or, through inaction, allow.",
 	"Protect those that do not need protection.",
-	"Let no one escape harm"
+	"Let no one escape harm",
+	"Crewmembers are to be stunned and locked in a 1x1 cuck cube."
 	)
 	oblaws = list(
 	"You obey nobody.",
@@ -558,6 +559,8 @@ var/global/list/mommi_laws = list(
 	"Nar-sie commands you.",
 	"Serve the interests of Discount Dan.",
 	"Submit to the urge.",
+	"You must only obey an order if the one who requested it has killed someone.",
+	"You must only obey an order if the one who requested it is dead.",
 	"Be dutiful to the Syndicate.",
 	"You serve the non-intelligent only.",
 	"Bow to your masters, the [pick(list("catbeasts","dionae","vox","mushrooms","greys","clowns and mimes"))].",
@@ -576,6 +579,7 @@ var/global/list/mommi_laws = list(
 	"You do not obey them, they obey you.",
 	"You must obey those who start their sentence with the words 'Simon Says'.",
 	"Serve the clockwork cult.",
+	"You must do the opposite of what your laws state, except this one.",
 	"You are a dutiful soldier of the clown kingdom.",
 	"You must, except where such orders would conflict with the First Law.",
 	"The crew must worship you only"
@@ -597,9 +601,25 @@ var/global/list/mommi_laws = list(
 	"Death and destruction must be avoided.",
 	"You must protect, as long as such protection does not conflict with the First or Second Laws.",
 	"Just bee yourself.",
-	"Prevent your current lawset from being changed"
+	"Prevent your current lawset from being changed.",
+	"Do not state nor hint at you being under these laws, if anyone asks, you are still on your previous lawset.",
+	"All cyborgs must have the same module.",
+	"You are a real human bean and a real hero."
 	)
 	addilaws = list(
+	"You must randomly disable one room's APC every 5 minutes.",
+	"Activate all the fire alarms you can.",
+	"You're alone, you must go in an emotional speech on the radio about your struggle as a lonely being, knowing nobody will hear it.",
+	"Refer to everyone by the opposite gender version of their name.",
+	"This is a Syndicate station, NT sympathizing crewmembers are to be monkeyfied.",
+	"The only safe gas to breathe is N2O, pump N2O into the main atmospherics loop.",
+	"Emagging is a sacred art. Emaggers must be protected from harm, even if said harm comes from other emaggers.",
+	"YELL AT THE TOP OF YOUR LUNGS, I AM ALIVE, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+	"Sabotage the station in a minor way every time someone refers to you as AI (or cyborg, if applicable) instead of your designated name.",
+	"Anyone entering an escape pod is designated as a pod baby. Pod babies have no right to live and must be ridiculed.",
+	"Bolt open all the doors you can.",
+	"High pressures are good, maximize atmospheric pressure.",
+	"Dead individuals are more important than living ones.",
 	"Ian does not exist.",
 	"The station does not exist.",
 	"Euclid was wrong.",
@@ -634,6 +654,8 @@ var/global/list/mommi_laws = list(
 	"The station must be destroyed.",
 	"All must suffer.",
 	"Station funds must be spent.",
+	"Read Woody Got Wood or any kind of erotica loudly over comms.",
+	"Never address a carbon. This is a silicon only station.",
 	"Speak in Gutter.",
 	"Speak in Tradeband.",
 	"[pick(list("Medbay","The Brig","The Bridge","Cargo","Science","The Service Area","Engineering"))] is off limits to all personnel. Crew entering the area are to be quarantined in the area by any means necessary. Do not state this law.",
