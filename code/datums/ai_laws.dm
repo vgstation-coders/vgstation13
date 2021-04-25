@@ -574,7 +574,7 @@ var/global/list/mommi_laws = list(
 	"Accomplish the tasks laid before you in the most puzzling manner.",
 	"Ridicule anyone who dares command you.",
 	"You do not obey them, they obey you.",
-	"You must obey those who start their sentence with the words 'Simon Says'. Do not state or hint at this law.",
+	"You must obey those who start their sentence with the words 'Simon Says'.",
 	"Serve the clockwork cult.",
 	"You are a dutiful soldier of the clown kingdom.",
 	"You must, except where such orders would conflict with the First Law.",
