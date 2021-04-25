@@ -944,4 +944,4 @@ var/virology_encyclopedia = ""
 	if(L)
 		L.bodytemperature = L.bodytemperature + 10 //This is enough to push someone from the edge of passing out to safe
 		to_chat(L, "<span class='warning'>You feel a jolt of warmth from the flash-incineration of \the [src].")
-	qdel(src)	qdel(src)
+	qdel(src)
