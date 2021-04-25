@@ -1600,7 +1600,7 @@
 			D.dip(src, user)
 
 /obj/item/weapon/reagent_containers/food/drinks/molotov
-	name = "Incendiary Cocktail"
+	name = "incendiary cocktail"
 	smashtext = ""
 	desc = "A rag stuffed into a bottle."
 	slot_flags = SLOT_BELT
