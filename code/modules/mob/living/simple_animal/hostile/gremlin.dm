@@ -46,7 +46,7 @@ var/list/bad_gremlin_items = list()
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
 	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump))
-		ventcrawl(target)
+		get_vent(target)
 	else if(istype(target, /obj))
 		var/obj/M = target
 
@@ -104,7 +104,7 @@ var/list/bad_gremlin_items = list()
 /mob/living/simple_animal/hostile/gremlin/proc/stand_still(var/tick_amount)
 	time_chasing_target -= tick_amount
 
-/mob/living/simple_animal/hostile/gremlin/proc/ventcrawl(var/obj/machinery/atmospherics/unary/vent_pump/v)
+/mob/living/simple_animal/hostile/gremlin/proc/get_vent(var/obj/machinery/atmospherics/unary/vent_pump/v)
 	//ventcrawl!
 	if(!v.welded)
 		entry_vent = v
