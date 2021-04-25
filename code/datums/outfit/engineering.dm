@@ -46,7 +46,7 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
@@ -127,7 +127,7 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
@@ -187,7 +187,7 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
@@ -243,7 +243,7 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
