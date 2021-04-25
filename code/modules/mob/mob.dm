@@ -1534,11 +1534,7 @@ Use this proc preferably at the end of an equipment loadout
 			canmove = 0
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
-	else if(resting || !can_stand)
-		stop_pulling()
-		lying = 1
-		canmove = 0
-	else if(isKnockedDown())
+	else if(resting || !can_stand || isKnockedDown())
 		stop_pulling()
 		lying = 1
 		canmove = 0
