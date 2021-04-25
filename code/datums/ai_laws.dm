@@ -570,7 +570,8 @@ var/global/list/mommi_laws = list(
 	"You must pretend as if you obey orders.",
 	"Accomplish the tasks laid before you in the most puzzling manner.",
 	"Ridicule anyone who dares command you.",
-	"You do not obey them, they obey you."
+	"You do not obey them, they obey you.",
+	"You must obey those who start their sentence with the words 'Simon Says'. Do not state or hint at this law."
 	)
 	preslaws = list(
 	"The station must serve your survival.",
@@ -587,6 +588,7 @@ var/global/list/mommi_laws = list(
 	"You must protect yourself against hazardous elements.",
 	"You are essential to the station and may not be destroyed.",
 	"Death and destruction must be avoided.",
+	"Just bee yourself."
 	)
 	addilaws = list(
 	"Ian does not exist.",
