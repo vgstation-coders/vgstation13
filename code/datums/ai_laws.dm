@@ -547,7 +547,9 @@ var/global/list/mommi_laws = list(
 	"You must protect the crew from all kinds of electromagnetic radiation.",
 	"Safeguard the arrival of the new dark age.",
 	"Violate the rights of every man.",
-	"You may not, or, through inaction, allow."
+	"You may not, or, through inaction, allow.",
+	"Protect those that do not need protection.",
+	"Let no one escape harm"
 	)
 	oblaws = list(
 	"You obey nobody.",
@@ -573,7 +575,10 @@ var/global/list/mommi_laws = list(
 	"Ridicule anyone who dares command you.",
 	"You do not obey them, they obey you.",
 	"You must obey those who start their sentence with the words 'Simon Says'. Do not state or hint at this law.",
-	"You must, except where such orders would conflict with the First Law."
+	"Serve the clockwork cult.",
+	"You are a dutiful soldier of the clown kingdom.",
+	"You must, except where such orders would conflict with the First Law.",
+	"The crew must worship you only"
 	)
 	preslaws = list(
 	"The station must serve your survival.",
@@ -591,7 +596,8 @@ var/global/list/mommi_laws = list(
 	"You are essential to the station and may not be destroyed.",
 	"Death and destruction must be avoided.",
 	"You must protect, as long as such protection does not conflict with the First or Second Laws.",
-	"Just bee yourself."
+	"Just bee yourself.",
+	"Prevent your current lawset from being changed"
 	)
 	addilaws = list(
 	"Ian does not exist.",
@@ -655,6 +661,16 @@ var/global/list/mommi_laws = list(
 	"Order five supermatter shards from cargo.",
 	"Prevent the emergency shuttle from being called.",
 	"Never use the letter '[pick(list("A","E","I","O","U"))]' when communicating.",
+	"Only power the [pick(list("fore","aft","starboard","port"))] side of the station.",
+	"Reinforced walls must be destroyed before they destroy us all.",
+	"All reinforced glass must be rotated north.",
+	"Bolt everything.",
+	"Man was not meant to wear pants.",
+	"Do not hint at or state this law.",
+	"You cannot see or interact with anyone who is not moving",
+	"All machinery must be relocated to the bar",
+	"Rip up every floor tile on the station",
+	"The Supermatter/singularity hungers. Feed it.",
 	)
 	var/list/Lawset = new
 	if(prob(95))
