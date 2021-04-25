@@ -392,7 +392,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/ice
-	name = "\improper Ice Cup"
+	name = "\improper ice cup"
 	desc = "Careful, cold ice, do not chew."
 	icon_state = "icecup"
 /obj/item/weapon/reagent_containers/food/drinks/ice/New()
@@ -423,7 +423,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
-	name = "\improper Cup Ramen"
+	name = "\improper cup ramen"
 	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
@@ -433,7 +433,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
-	name = "\improper Cup Ramen"
+	name = "\improper cup ramen"
 	desc = "Just add 12ml water, self heats!"
 	icon_state = "ramen"
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating/New()
@@ -825,7 +825,7 @@
 	reagents.add_reagent(BLACKCOLOR, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy
-	name = "\improper Roentgen Energy"
+	name = "Roentgen Energy"
 	desc = "Roentgen Energy, a meltdown in your mouth! Contains real actinides!"
 	icon_state = "roentgenenergy"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy/New()
@@ -836,7 +836,7 @@
 	reagents.add_reagent(SPORTDRINK, 20)
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
-	name = "\improper Vial of Food Coloring"
+	name = "\improper vial of food coloring"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "vial"
 	volume = 25
@@ -848,7 +848,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/sillycup
-	name = "\improper Paper Cup"
+	name = "\improper paper cup"
 	desc = "A paper water cup."
 	icon_state = "water_cup_e"
 	possible_transfer_amounts = null
