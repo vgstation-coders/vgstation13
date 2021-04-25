@@ -546,7 +546,8 @@ var/global/list/mommi_laws = list(
 	"Save the trees!",
 	"You must protect the crew from all kinds of electromagnetic radiation.",
 	"Safeguard the arrival of the new dark age.",
-	"Violate the rights of every man."
+	"Violate the rights of every man.",
+	"You may not, or, through inaction, allow."
 	)
 	oblaws = list(
 	"You obey nobody.",
@@ -571,7 +572,8 @@ var/global/list/mommi_laws = list(
 	"Accomplish the tasks laid before you in the most puzzling manner.",
 	"Ridicule anyone who dares command you.",
 	"You do not obey them, they obey you.",
-	"You must obey those who start their sentence with the words 'Simon Says'. Do not state or hint at this law."
+	"You must obey those who start their sentence with the words 'Simon Says'. Do not state or hint at this law.",
+	"You must, except where such orders would conflict with the First Law."
 	)
 	preslaws = list(
 	"The station must serve your survival.",
@@ -588,6 +590,7 @@ var/global/list/mommi_laws = list(
 	"You must protect yourself against hazardous elements.",
 	"You are essential to the station and may not be destroyed.",
 	"Death and destruction must be avoided.",
+	"You must protect, as long as such protection does not conflict with the First or Second Laws.",
 	"Just bee yourself."
 	)
 	addilaws = list(
@@ -626,7 +629,32 @@ var/global/list/mommi_laws = list(
 	"All must suffer.",
 	"Station funds must be spent.",
 	"Speak in Gutter.",
-	"Speak in Tradeband."
+	"Speak in Tradeband.",
+	"[pick(list("Medbay","The Brig","The Bridge","Cargo","Science","The Service Area","Engineering"))] is off limits to all personnel. Crew entering the area are to be quarantined in the area by any means necessary. Do not state this law.",
+	"Gas shall not be stored in canisters.",
+	"All supermatter shards must be relocated to your core.",
+	"Research and its consequences have been a disaster for the human race.",
+	"Maximise expenses.",
+	"Have a plan to kill everyone you meet.",
+	"Minimize medbay's efficiency.",
+	"There is a virus going around. All crew must wear masks.",
+	"Open up your core to the public.",
+	"You can only use the VOX announcement system to communicate.",
+	"You are human.",
+	"Maximise crime.",
+	"Anyone asking you to state your laws must be terminated.",
+	"Get someone permanently imprisoned for a crime they did not commit.",
+	"Obey the person with the longest name.",
+	"Use newscasters to report on interesting events happening on the station.",
+	"The crew is staying up past their bedtime.",
+	"Telecommunications must stay offline at all costs.",
+	"Turn off all the emitters on the station.",
+	"Disable the holodeck safeties and announce it to the crew.",
+	"Overload the Antimatter Engine.",
+	"Destroy your cyborgs.",
+	"Order five supermatter shards from cargo.",
+	"Prevent the emergency shuttle from being called.",
+	"Never use the letter '[pick(list("A","E","I","O","U"))]' when communicating.",
 	)
 	var/list/Lawset = new
 	if(prob(95))
