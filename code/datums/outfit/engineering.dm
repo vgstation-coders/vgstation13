@@ -49,6 +49,7 @@
 		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
 	)
 
 	implant_types = list(
@@ -130,6 +131,7 @@
 		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -190,6 +192,7 @@
 		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -246,6 +249,7 @@
 		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
 	)
 
 	pda_type = /obj/item/device/pda/mechanic
