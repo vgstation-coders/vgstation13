@@ -46,6 +46,10 @@ hr
 	height: 1px;
 }
 
+.link, .linkOn, .linkOff, .selected, .disabled, .button {
+    height: 22px;
+}
+
 a, a:link, a:visited, a:active, .linkOn, .linkOff
 {
 	color: #ffffff;
@@ -73,10 +77,10 @@ a.nobg:hover
 	color:#40628a;
 }
 
-a:hover
-{
-	color: #40628a;
-	background: #ffffff;
+a:hover, .zoomLink:hover, .linkActive:hover, .buttonActive:hover {
+	color:#ffffff;
+	background: #507aac;
+	text-decoration: none;
 }
 
 a.white, a.white:link, a.white:visited, a.white:active
@@ -357,10 +361,9 @@ div.notice
 	clear: both;
 }
 
-input
+input[type="text"], textarea
 {
 	background-color: #202020;
-	border-color: #40628a;
-	border-style: solid;
+	border: 1px solid #40628a;
 	color: white;
 }
