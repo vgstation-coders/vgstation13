@@ -492,14 +492,12 @@ This function restores all organs.
 /mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
 	if(species.flags & RAD_IMMUNE)
 		return
-
 	if(application == RAD_EXTERNAL)
 		lazy_invoke_event(/lazy_event/on_irradiate, list("user" = src, "rads" = rads))
-
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
-			rads = rads/2
+			rads /= 2
+	if(isinsectoid(src))
+		rads /= 2
 	return ..()
 
-/mob/living/carbon/human/insectoid/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
-	..(rads/2, application)
