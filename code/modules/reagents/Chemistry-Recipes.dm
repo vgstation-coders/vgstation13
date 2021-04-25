@@ -92,7 +92,7 @@
 	id = "holy_explosion_potassium"
 	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
 	result_amount = 2.4
-	
+
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
 	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 1)
@@ -729,7 +729,7 @@
 	result_amount = 5
 
 /datum/chemical_reaction/carp_pheromones
-	name = "Carp pheromones"
+	name = "Carp Pheromones"
 	id = CARPPHEROMONES
 	result = CARPPHEROMONES
 	required_reagents = list(CARPOTOXIN = 1, LEPORAZINE = 1, CARBON = 1)
@@ -845,7 +845,7 @@
 
 /datum/chemical_reaction/solidification/clown/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/clown
-	
+
 /datum/chemical_reaction/solidification/phazon
 	name = "Solid Phazon"
 	id = "solidphazon"
