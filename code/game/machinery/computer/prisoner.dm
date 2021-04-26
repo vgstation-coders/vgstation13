@@ -44,6 +44,14 @@
 				<A href='?src=\ref[src];inject5=\ref[C]'>(<font color=red>(5)</font>)</A>
 				<A href='?src=\ref[src];inject10=\ref[C]'>(<font color=red>(10)</font>)</A><BR>
 				********************************<BR>"}
+		for(var/obj/item/weapon/implant/explosive/remote/R in remote_implants)
+			Tr = get_turf(R)
+			if((Tr) && (Tr.z != src.z))
+				continue//Out of range
+			if(!R.implanted)
+				continue
+			
+			dat += {"[R.imp_in.name] | <A href='?src=\ref[src];explode=\ref[R]'><font color=red>Activate explosion</font></A>"}
 		dat += "<HR>Tracking Implants<BR>"
 		for(var/obj/item/weapon/implant/tracking/T in tracking_implants)
 			Tr = get_turf(T)
@@ -64,16 +72,6 @@
 			dat += {"ID: [T.id] | Location: [loc_display]<BR>
 				<A href='?src=\ref[src];warn=\ref[T]'>(<font color=red><i>Message Holder</i></font>)</A> |<BR>
 				********************************<BR>"}
-		if(remote_implants.len)
-			dat += "<HR><font color=red><b>Remote Explosive Implants</b></font><BR>"
-			for(var/obj/item/weapon/implant/explosive/remote/R in remote_implants)
-				Tr = get_turf(R)
-				if((Tr) && (Tr.z != src.z))
-					continue//Out of range
-				if(!R.implanted)
-					continue
-
-				dat += {"[R.imp_in.name] | <A href='?src=\ref[src];explode=\ref[R]'><font color=red>Activate explosion</font></A>"}
 		dat += "<HR><A href='?src=\ref[src];lock=1'>Lock Console</A>"
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "prisoner_implants", "Prisoner Implant Manager System", 400, 500, src)
