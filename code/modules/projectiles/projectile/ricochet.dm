@@ -258,10 +258,6 @@
 					A.bullet_act(src, def_zone)
 					admin_warn(A)
 					bulletdies(A)
-			if(istype(A,/mob/living/silicon/ai))
-				visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name]!</span>")
-				admin_warn(A)
-				bulletdies(A)
 			else
 				visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 				A.bullet_act(src, def_zone)
