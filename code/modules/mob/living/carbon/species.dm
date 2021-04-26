@@ -79,6 +79,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
 	var/tox_mod			// toxin multiplier
+	var/rad_mod			// radiation multiplier
 
 	var/body_temperature = 310.15
 
@@ -1198,9 +1199,9 @@ var/list/has_died_as_golem = list()
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
-	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1
 	tox_mod = 0.5
+	rad_mod = 0.5
 
 	blood_color = "#ebece6"
 	flesh_color = "#9c7f25"
@@ -1247,6 +1248,7 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
+
 
 
 /datum/species/mushroom
