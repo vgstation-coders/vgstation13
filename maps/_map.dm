@@ -103,6 +103,8 @@
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 
+	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+
 	var/list/holodeck_rooms = list(
 		"Basketball Court",
 		"Beach",
