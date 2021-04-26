@@ -1,4 +1,4 @@
-//Makes blueprint items from device analyzers and PDAs with the device analyzer setting
+//Makes blueprint items from device analyzers and PDAs with the device analyser setting
 //Can be loaded with both paper and nanopaper
 
 /obj/machinery/r_n_d/blueprinter

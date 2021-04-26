@@ -57990,11 +57990,11 @@
 "ceN" = (
 /obj/structure/rack,
 /obj/item/weapon/storage/belt,
-/obj/item/device/device_analyzer{
+/obj/item/device/device_analyser{
 	pixel_x = 4;
 	pixel_y = 1
 	},
-/obj/item/device/device_analyzer,
+/obj/item/device/device_analyser,
 /obj/machinery/firealarm{
 	dir = 1;
 	pixel_y = -24
@@ -77373,7 +77373,7 @@
 /area/medical/virology)
 "cNd" = (
 /obj/structure/disposalpipe/segment,
-/obj/machinery/disease2/diseaseanalyzer,
+/obj/machinery/disease2/diseaseanalyser,
 /turf/simulated/floor{
 	icon_state = "whitegreen"
 	},

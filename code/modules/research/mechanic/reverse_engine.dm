@@ -55,8 +55,8 @@
 	if(busy)
 		to_chat(user, "<span class='notice'>The [src] is currently busy, please wait until the current operation is finished.</span>")
 		return
-	if(istype(O, /obj/item/device/device_analyzer))
-		var/obj/item/device/device_analyzer/DA = O
+	if(istype(O, /obj/item/device/device_analyser))
+		var/obj/item/device/device_analyser/DA = O
 		if(DA.loaded_designs && DA.loaded_designs.len)
 			if(DA.loadone)
 				var/list/name_list = list()
@@ -78,7 +78,7 @@
 	if(istype(O, /obj/item/device/pda))
 		var/obj/item/device/pda/PDA = O
 		if(PDA.dev_analys)
-			var/obj/item/device/device_analyzer/DA = PDA.dev_analys
+			var/obj/item/device/device_analyser/DA = PDA.dev_analys
 			for(var/datum/design/loop_design in DA.loaded_designs)
 				AddDesign(loop_design, DA.loaded_designs, user)
 			return 1

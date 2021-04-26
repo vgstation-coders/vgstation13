@@ -7,7 +7,7 @@
 	w_type = RECYK_ELECTRONIC
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	origin_tech = Tc_MAGNETS + "=2"
-	mech_flags = null // So it can be scanned by the Device Analyzer
+	mech_flags = null // So it can be scanned by the Device Analyser
 	clumsy_check = 0
 	advanced_tool_user_check = 0
 	nymph_check = 0

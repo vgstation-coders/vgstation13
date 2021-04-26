@@ -2449,7 +2449,7 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/tool/wrench/socket = 1,
 		/obj/item/weapon/extinguisher/foam = 1,
-		/obj/item/device/device_analyzer = 2,
+		/obj/item/device/device_analyser = 2,
 		)
 	premium = list(
 		/obj/item/clothing/under/rank/chief_engineer = 2,

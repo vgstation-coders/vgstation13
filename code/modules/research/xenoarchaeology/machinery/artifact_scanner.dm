@@ -7,7 +7,7 @@
 	anchored = TRUE
 	density = FALSE
 	plane = ABOVE_OBJ_PLANE
-	var/obj/machinery/artifact_analyzer/analyzer_console = null
+	var/obj/machinery/artifact_analyser/analyser_console = null
 	var/obj/machinery/artifact_harvester/harvester_console = null
 
 /obj/machinery/artifact_scanpad/New()
@@ -15,7 +15,7 @@
 	update_icon()
 
 /obj/machinery/artifact_scanpad/Destroy()
-	analyzer_console = null
+	analyser_console = null
 	harvester_console = null
 	..()
 
@@ -28,7 +28,7 @@
 	if(stat & (NOPOWER|BROKEN))
 		return
 
-	if (analyzer_console?.scan_in_progress)
+	if (analyser_console?.scan_in_progress)
 		icon_state = "xenoarch_scanner1"
 	if (harvester_console?.harvesting > 0)
 		icon_state = "xenoarch_scanner2"

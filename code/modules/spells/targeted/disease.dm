@@ -54,7 +54,7 @@
 	log_admin("[key_name(user)] has death-touched [key_name(target)]. The latter will die in moments.")
 	message_admins("[key_name(user)] has death-touched [key_name(target)] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[target.x];Y=[target.y];Z=[target.z]'>JMP</A>). The latter will die in moments.")
 	var/datum/disease2/disease/S = new ()
-	S.form = "Virus"//Because the form is given away by the Health Analyzer and we don't want to out the vampire right away.
+	S.form = "Virus"//Because the form is given away by the Health Analyser and we don't want to out the vampire right away.
 	S.infectionchance = 100
 	S.infectionchance_base = 100
 	S.stageprob = 0//single-stage

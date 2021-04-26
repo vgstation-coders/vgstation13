@@ -800,7 +800,7 @@ obj/item/weapon/circuitboard/rdserver
 		return
 	if(!Adjacent(user) || user.incapacitated())
 		return
-
+	
 	var/to_spawn = smartfridge_choices[choice]
 	if(src.type == to_spawn)
 		to_chat(user, "<span class = 'notice'>This board is already this type.</span>")
@@ -1179,10 +1179,10 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/scanning_module = 2,
 							/obj/item/weapon/reagent_containers/glass/beaker = 1)
 
-/obj/item/weapon/circuitboard/diseaseanalyzer
+/obj/item/weapon/circuitboard/diseaseanalyser
 	name = "Circuit Board (Disease Analyzer)"
 	desc = "A circuit board used to run a machine that analyzes diseases."
-	build_path = /obj/machinery/disease2/diseaseanalyzer
+	build_path = /obj/machinery/disease2/diseaseanalyser
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
