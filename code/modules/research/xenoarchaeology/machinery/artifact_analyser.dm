@@ -10,7 +10,7 @@ var/anomaly_report_num = 0
 
 //////////////////////////////////////////////////////////////////////////////////
 
-/obj/machinery/artifact_analyser
+/obj/machinery/artifact_analyzer
 	name = "anomaly analyzer"
 	desc = "Studies the emissions of anomalous materials to discover their uses."
 	icon = 'icons/obj/xenoarchaeology.dmi'
@@ -24,42 +24,42 @@ var/anomaly_report_num = 0
 	var/scan_duration = 120
 	var/atom/movable/scanned_atom
 
-/obj/machinery/artifact_analyser/New()
+/obj/machinery/artifact_analyzer/New()
 	..()
 	reconnect_scanner()
 	update_icon()
 
 /obj/machinery/artifact_harvester/Destroy()
 	if (owned_scanner)
-		owned_scanner.analyser_console = null
+		owned_scanner.analyzer_console = null
 		owned_scanner = null
 	..()
 
-/obj/machinery/artifact_analyser/power_change()
+/obj/machinery/artifact_analyzer/power_change()
 	..()
 	update_icon()
 
-/obj/machinery/artifact_analyser/update_icon()
+/obj/machinery/artifact_analyzer/update_icon()
 	icon_state = "[initial(icon_state)][scan_in_progress]"
 	if(owned_scanner)
 		owned_scanner.update_icon()
 
-/obj/machinery/artifact_analyser/proc/reconnect_scanner()
+/obj/machinery/artifact_analyzer/proc/reconnect_scanner()
 	//connect to a nearby scanner pad
 	owned_scanner = locate(/obj/machinery/artifact_scanpad) in get_step(src, dir)
 	if(!owned_scanner)
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
 	if(owned_scanner)
-		owned_scanner.analyser_console = src
+		owned_scanner.analyzer_console = src
 		owned_scanner.desc = "Place anomalies here for scanning. Exotic anomalies may provide data that will be encrypted for use by R&D."
 
-/obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
+/obj/machinery/artifact_analyzer/attack_hand(var/mob/user as mob)
 	if(..())
 		return
 	src.add_fingerprint(user)
 	interact(user)
 
-/obj/machinery/artifact_analyser/interact(mob/user)
+/obj/machinery/artifact_analyzer/interact(mob/user)
 	if(..())
 		return
 	if(stat & (NOPOWER|BROKEN) || get_dist(src, user) > 1)
@@ -83,11 +83,11 @@ var/anomaly_report_num = 0
 	dat += "<br>"
 	dat += "<hr>"
 	dat += "<a href='?src=\ref[src]'>Refresh</a> <a href='?src=\ref[src];close=1'>Close</a>"
-	user << browse(dat, "window=artanalyser;size=450x500")
+	user << browse(dat, "window=artanalyzer;size=450x500")
 	user.set_machine(src)
-	onclose(user, "artanalyser")
+	onclose(user, "artanalyzer")
 
-/obj/machinery/artifact_analyser/process()
+/obj/machinery/artifact_analyzer/process()
 	if(scan_in_progress && world.time > scan_completion_time)
 		alert_noise("beep")
 		//finish scanning
@@ -144,7 +144,7 @@ var/anomaly_report_num = 0
 					score["artifacts"]++
 
 
-/obj/machinery/artifact_analyser/Topic(href, href_list)
+/obj/machinery/artifact_analyzer/Topic(href, href_list)
 	if(..())
 		return
 	if(href_list["begin_scan"])
@@ -188,12 +188,12 @@ var/anomaly_report_num = 0
 
 	if(href_list["close"])
 		usr.unset_machine(src)
-		usr << browse(null, "window=artanalyser")
+		usr << browse(null, "window=artanalyzer")
 
 	updateDialog()
 
 //hardcoded responses, oh well
-/obj/machinery/artifact_analyser/proc/get_scan_info(var/atom/movable/AM)
+/obj/machinery/artifact_analyzer/proc/get_scan_info(var/atom/movable/AM)
 	switch(AM.type)
 		if(/obj/machinery/auto_cloner)
 			return "Automated cloning pod - appears to rely on organic nanomachines with a self perpetuating \

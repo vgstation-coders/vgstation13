@@ -19,7 +19,7 @@
 "u" = (/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/item/stack/sheet/mineral/uranium,/obj/machinery/light{dir = 8},/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
 "v" = (/obj/structure/catwalk,/obj/structure/catwalk,/turf/space,/area/vault/mechclubhouse)
 "w" = (/obj/machinery/washing_machine,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
-"y" = (/obj/item/device/device_analyser/syndicate,/obj/machinery/r_n_d/fabricator/mechanic_fab,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
+"y" = (/obj/item/device/device_analyzer/syndicate,/obj/machinery/r_n_d/fabricator/mechanic_fab,/turf/simulated/floor/mineral/plastic,/area/vault/mechclubhouse)
 "z" = (/obj/item/pod_parts/armor,/obj/structure/catwalk,/obj/structure/catwalk,/obj/structure/table,/turf/space,/area/vault/mechclubhouse)
 "A" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/carpet,/area/vault/mechclubhouse)
 "B" = (/obj/structure/table/glass,/obj/item/pizzabox/mushroom,/turf/simulated/floor/carpet,/area/vault/mechclubhouse)

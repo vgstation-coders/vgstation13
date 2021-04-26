@@ -813,10 +813,10 @@ var/list/uplink_items = list()
 	discounted_cost = 4
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
-/datum/uplink_item/jobspecific/engineering/dev_analyser
+/datum/uplink_item/jobspecific/engineering/dev_analyzer
 	name = "Modified Device Analyzer"
 	desc = "A device analyzer with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
-	item = /obj/item/device/device_analyser/syndicate
+	item = /obj/item/device/device_analyzer/syndicate
 	cost = 9
 	discounted_cost = 6
 	jobs_with_discount = list("Mechanic")

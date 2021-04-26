@@ -70,7 +70,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/obj/item/device/analyzer/atmos_analys = new
 	var/obj/item/device/robotanalyzer/robo_analys = new
 	var/obj/item/device/hailer/integ_hailer = new
-	var/obj/item/device/device_analyser/dev_analys = null
+	var/obj/item/device/device_analyzer/dev_analys = null
 
 	var/MM = null
 	var/DD = null

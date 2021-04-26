@@ -357,7 +357,7 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/weapon/caution, /obj/item/weapon/bananapeel, /obj/item/device/chameleon, /obj/item/weapon/storage/pneumatic, /obj/item/trash/discountchocolate,\
 				/obj/item/weapon/fireaxe, /obj/item/weapon/gun/gatling, /obj/item/weapon/table_parts, /obj/item/tool/wrench/socket, /obj/item/weapon/lighter, /obj/item/weapon/bikehorn/rubberducky,\
 				/obj/item/weapon/lipstick, /obj/item/weapon/stamp/clown, /obj/item/weapon/storage/backpack/holding, /obj/item/clothing/gloves/yellow,\
-				/obj/item/device/aicard, /obj/item/device/analyzer, /obj/item/device/assembly/igniter, /obj/item/device/camera, /obj/item/device/codebreaker, /obj/item/device/device_analyser,\
+				/obj/item/device/aicard, /obj/item/device/analyzer, /obj/item/device/assembly/igniter, /obj/item/device/camera, /obj/item/device/codebreaker, /obj/item/device/device_analyzer,\
 				/obj/item/device/flash, /obj/item/device/flashlight, /obj/item/device/hailer, /obj/item/device/material_synth, /obj/item/device/megaphone, /obj/item/device/paicard,\
 				/obj/item/device/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/soulstone,\
 				/obj/item/device/soundsynth, /obj/item/device/instrument/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items

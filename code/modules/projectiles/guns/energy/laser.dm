@@ -18,7 +18,7 @@
 	desc = "A modified version of the basic laser gun, this one fires less concentrated energy bolts designed for target practice."
 	projectile_type = "/obj/item/projectile/beam/practice"
 	clumsy_check = 0
-	mech_flags = null // So it can be scanned by the Device Analyser
+	mech_flags = null // So it can be scanned by the Device Analyzer
 
 /obj/item/weapon/gun/energy/laser/pistol
 	name = "laser pistol"
@@ -29,7 +29,7 @@
 	projectile_type = /obj/item/projectile/beam/lightlaser
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
-	
+
 /obj/item/weapon/gun/energy/laser/pistol/isHandgun()
 	return TRUE
 

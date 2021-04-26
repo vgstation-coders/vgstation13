@@ -1,4 +1,4 @@
-/obj/machinery/disease2/diseaseanalyser
+/obj/machinery/disease2/diseaseanalyzer
 	name = "disease analyzer"
 	desc = "For analysing pathogenic dishes of sufficient growth."
 	icon = 'icons/obj/virology.dmi'
@@ -21,10 +21,10 @@
 
 	var/mob/scanner = null
 
-/obj/machinery/disease2/diseaseanalyser/New()
+/obj/machinery/disease2/diseaseanalyzer/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/diseaseanalyser,
+		/obj/item/weapon/circuitboard/diseaseanalyzer,
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -34,14 +34,14 @@
 
 	RefreshParts()
 
-/obj/machinery/disease2/diseaseanalyser/RefreshParts()
+/obj/machinery/disease2/diseaseanalyzer/RefreshParts()
 	var/scancount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
 			scancount += SP.rating-1
 	minimum_growth = round((initial(minimum_growth) - (scancount * 6)))
 
-/obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I, var/mob/user)
+/obj/machinery/disease2/diseaseanalyzer/attackby(var/obj/I, var/mob/user)
 	. = ..()
 
 	if(stat & (BROKEN))
@@ -73,7 +73,7 @@
 			else
 				to_chat(user, "<span class='warning'>You must open the dish's lid before it can be analysed. Be sure to wear proper protection first (at least a sterile mask and latex gloves).</span>")
 
-/obj/machinery/disease2/diseaseanalyser/attack_ghost(var/mob/dead/observer/user)
+/obj/machinery/disease2/diseaseanalyzer/attack_ghost(var/mob/dead/observer/user)
 	if(!can_spook())
 		return FALSE
 	if(stat & (BROKEN))
@@ -94,7 +94,7 @@
 		update_icon()
 		flick("analyser_turnoff",src)
 
-/obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user)
+/obj/machinery/disease2/diseaseanalyzer/attack_hand(var/mob/user)
 	. = ..()
 	if(stat & (BROKEN))
 		to_chat(user, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
@@ -173,7 +173,7 @@
 	flick("analyser_turnoff",src)
 	scanner = null
 
-/obj/machinery/disease2/diseaseanalyser/update_icon()
+/obj/machinery/disease2/diseaseanalyzer/update_icon()
 	overlays.len = 0
 	icon_state = "analyser"
 
@@ -197,7 +197,7 @@
 		else
 			overlays += "smalldish-empty"
 
-/obj/machinery/disease2/diseaseanalyser/verb/PrintPaper()
+/obj/machinery/disease2/diseaseanalyzer/verb/PrintPaper()
 	set name = "Print last analysis"
 	set category = "Object"
 	set src in oview(1)
@@ -228,7 +228,7 @@
 		P.pixel_y = -8
 		P.update_icon()
 
-/obj/machinery/disease2/diseaseanalyser/process()
+/obj/machinery/disease2/diseaseanalyzer/process()
 	if(stat & (NOPOWER|BROKEN))
 		scanner = null
 		return
@@ -240,7 +240,7 @@
 		scanner = null
 
 
-/obj/machinery/disease2/diseaseanalyser/AltClick()
+/obj/machinery/disease2/diseaseanalyzer/AltClick()
 	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return ..()
 
@@ -250,7 +250,7 @@
 		dish = null
 		update_icon()
 
-/obj/machinery/disease2/diseaseanalyser/breakdown()
+/obj/machinery/disease2/diseaseanalyzer/breakdown()
 	if (dish)
 		dish.forceMove(loc)
 	dish = null

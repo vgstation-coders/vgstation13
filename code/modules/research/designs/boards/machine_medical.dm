@@ -132,7 +132,7 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/incubator
 
-/datum/design/diseaseanalyser
+/datum/design/diseaseanalyzer
 	name = "Circuit Design (Disease Analyzer)"
 	desc = "Allows for the construction of circuit boards used to build a disease analyzer."
 	id = "diseaseanalyser"
@@ -140,7 +140,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/diseaseanalyser
+	build_path = /obj/item/weapon/circuitboard/diseaseanalyzer
 
 /datum/design/splicer
 	name = "Circuit Design (Disease Splicer)"

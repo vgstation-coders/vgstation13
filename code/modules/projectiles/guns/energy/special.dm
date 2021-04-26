@@ -437,7 +437,7 @@
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/floramut"
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=3"
-	mech_flags = null // So it can be scanned by the Device Analyser
+	mech_flags = null // So it can be scanned by the Device Analyzer
 	modifystate = "floramut"
 	var/charge_tick = 0
 	var/mode = 0 //0 = mutate, 1 = yield boost, 2 = emag-mutate

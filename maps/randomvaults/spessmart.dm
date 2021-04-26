@@ -159,7 +159,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/cloakingcloak = 750,
 /obj/item/weapon/pen/sleepypen = 1200,
 /obj/item/weapon/reagent_containers/spray/chemsprayer = 150,
-/obj/item/device/device_analyser/syndicate = 1800,
+/obj/item/device/device_analyzer/syndicate = 1800,
 
 //No guns sorry
 )

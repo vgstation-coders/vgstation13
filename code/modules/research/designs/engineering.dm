@@ -103,7 +103,7 @@
 	category = "Engineering"
 	build_path = /obj/item/clothing/glasses/scanner/night
 
-/datum/design/device_analyser
+/datum/design/device_analyzer
 	name = "Device Analyzer"
 	desc = "A device for scanning other devices. Meta."
 	id = "deviceanalyser"
@@ -111,7 +111,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
 	category = "Engineering"
-	build_path = /obj/item/device/device_analyser
+	build_path = /obj/item/device/device_analyzer
 
 //Sadly there is no file "trash.dm"
 /*

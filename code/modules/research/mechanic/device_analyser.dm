@@ -1,7 +1,7 @@
 //You use this to scan items and machines to recreate them in a fabricator or the flatpacker
 //You can scan syndicate items, but only with the syndicate version (might be overpowered, so I'll make it expensive)
 
-/obj/item/device/device_analyser
+/obj/item/device/device_analyzer
 	name = "device analyzer"
 	desc = "An electromagnetic scanner used by mechanics. Capable of storing objects and machines as portable designs."
 	icon = 'icons/obj/device.dmi'
@@ -22,12 +22,12 @@
 
 	mech_flags = MECH_SCAN_FAIL
 
-/obj/item/device/device_analyser/attack_self()
+/obj/item/device/device_analyzer/attack_self()
 	..()
 	loadone = !loadone
 	to_chat(usr, "<span class='notice'>You set the Device Analyzer to [loadone ? "transfer one design" : "transfer all designs"] on use.</span>")
 
-/obj/item/device/device_analyser/preattack(var/atom/A, mob/user, proximity_flag) //Hurrah for after-attack
+/obj/item/device/device_analyzer/preattack(var/atom/A, mob/user, proximity_flag) //Hurrah for after-attack
 	/*if(get_turf(src) != get_turf(user)) //we aren't in the same place as our holder, so we have been moved and can ignore scanning
 		return*/
 	if(proximity_flag != 1)
@@ -61,19 +61,19 @@
 	else
 		return
 
-/obj/item/device/device_analyser/syndicate
+/obj/item/device/device_analyzer/syndicate
 	desc = "A suspicious-looking device anaylzer. A thorough examination reveals that it lacks the required Nanotrasen logo, and that the safety features have been disabled."
 	syndi_filter = 0
 	access_avoidance = 1 //we aren't forced to have the access for a machine - perfect for traitors
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_SYNDICATE + "=3"
 
-/obj/item/device/device_analyser/advanced
+/obj/item/device/device_analyzer/advanced
 	name = "advanced device analyzer"
 	desc = "An electromagnetic scanner used by mechanics. This version can skip machine access, as well as having a higher storage capacity."
 	access_avoidance = 1
 	max_designs = 20
 
-/obj/item/device/device_analyser/proc/CanCreateDesign(var/obj/O, mob/user)
+/obj/item/device/device_analyzer/proc/CanCreateDesign(var/obj/O, mob/user)
 	if(!istype(O))
 		return 0
 
