@@ -44,7 +44,7 @@
 	..()
 	if(caught_bees.len == 1)
 		to_chat(user, "<span class='info'>There's only 1 caught [current_species.common_name] in it!</span>")
-		return()
+		return
 	if(caught_bees.len > 0)
 		to_chat(user, "<span class='info'>There's [caught_bees.len] caught [current_species.common_name]\s in it!</span>")
 	else
