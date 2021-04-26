@@ -37,6 +37,8 @@
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman
 
+	survival_gear = /obj/item/weapon/storage/box/survival/plasmaman
+
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
