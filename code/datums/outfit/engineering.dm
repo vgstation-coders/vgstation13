@@ -55,6 +55,15 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/head/hardhat/white,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/head/hardhat/white,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/heads/ce
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/ce
@@ -130,6 +139,15 @@
 		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/head/hardhat,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/head/hardhat,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/engineering
