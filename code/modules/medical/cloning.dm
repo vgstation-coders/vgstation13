@@ -28,6 +28,7 @@
 	id_tag = "clone_pod"
 	var/upgraded = 0 //if fully upgraded with T4 components, it will drastically improve and allow for some stuff
 	var/obj/machinery/computer/cloning/cloning_computer = null
+	var/output_dir //Which direction to try to place our patients onto, should they eject naturally.
 
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
@@ -41,7 +42,7 @@
 	biomass = CLONE_BIOMASS // * 3 - N3X
 
 /obj/machinery/cloning/clonepod/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return ""
+	return "(<a href='?src=\ref[src];set_output_dir=1'>Set Output Direction</a>)"
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -416,14 +417,17 @@
 	add_fingerprint(usr)
 	return
 
-/obj/machinery/cloning/clonepod/proc/go_out(var/exit = loc)
+/obj/machinery/cloning/clonepod/proc/go_out(var/exit)
 	if (locked)
 		return
+
+	if(!exit)
+		exit = output_turf()
 
 	if (mess) //Clean that mess and dump those gibs!
 		mess = FALSE
 		working = FALSE //NOW we're done.
-		gibs(loc)
+		gibs(exit)
 		icon_state = "pod_0"
 		return
 
@@ -434,6 +438,9 @@
 		occupant.client.eye = occupant.client.mob
 		occupant.client.perspective = MOB_PERSPECTIVE
 	occupant.forceMove(exit)
+	var/obj/machinery/conveyor/C = locate() in exit
+	if(C && C.operating != 0)
+		occupant << sound('sound/ambience/powerhouse.ogg') //the ride begins
 	icon_state = "pod_0"
 	eject_wait = FALSE //If it's still set somehow.
 	//do early ejection damage
@@ -576,6 +583,25 @@
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		locked = FALSE
 		go_out()
+
+/obj/machinery/cloning/clonepod/proc/output_turf()
+	if(!output_dir || !isturf(loc))
+		return loc
+
+	var/turf/T = get_step(get_turf(src), output_dir)
+	if(!T || is_blocked_turf(T))
+		return loc
+	return T
+
+/obj/machinery/cloning/clonepod/Topic(href,href_list)
+	if(..())
+		return
+	if(href_list["set_output_dir"])
+		if(!Adjacent(usr))
+			to_chat(usr, "<span class='warning'>Cannot set output location: Out of range.</span>")
+			return 1
+		output_dir = get_dir(src, usr)
+		to_chat(usr, "<span class='notice'>[bicon(src)]Output location set.</span>")
 
 /*
  *	Diskette Box

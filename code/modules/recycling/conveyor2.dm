@@ -247,9 +247,14 @@
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
-					A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
-					step(A,movedir)
-					items_moved++
+					for(var/atom/dest in get_step(src, movedir)) //Should/can this be optimized to not check ALL atoms?
+						if(dest.conveyor_act(A, src))
+							items_moved++
+							break
+					if(A && A.loc == src.loc) //Check that our location didn't check from conveyor_acting on machinery.
+						A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
+						step(A,movedir)
+						items_moved++
 			if(items_moved >= max_moved)
 				break
 
