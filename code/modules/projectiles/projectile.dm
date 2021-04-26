@@ -282,16 +282,10 @@ var/list/impact_master = list()
 			special_collision = PROJECTILE_COLLISION_MISS
 		else
 			if(!custom_impact)
-				if(isAI(target))
-					if(silenced)
-						to_chat(M, "<span class='warning'>You've been shot in by the [src.name]!</span>")
-					else
-						visible_message("<span class='warning'>[A.name] is hit by the [src.name]!</span>")
+				if(silenced)
+					to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
 				else
-					if(silenced)
-						to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
-					else
-						visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
 				M.do_hitmarker(firer)
