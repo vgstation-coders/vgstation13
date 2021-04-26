@@ -475,6 +475,11 @@ obj/item/projectile/bullet/suffocationbullet
 	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
+		if(istype(A,/mob/living/silicon/ai))
+			visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name]!</span>")
+			admin_warn(M)
+			bullet_die()
+		else
 			visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 			M.bullet_act(src, def_zone)
 			admin_warn(M)

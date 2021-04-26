@@ -839,7 +839,12 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		A.bullet_act(src, def_zone)
 		loc = A.loc
 		permutated.Add(A)
-		visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+		if(istype(A,/mob/living/silicon/ai))
+			visible_message("<span class='warning'>\the [A.name] is hit by \the [src.name]!</span>")
+			admin_warn(M)
+			bullet_die()
+		else
+			visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 
 		if(istype(firer, /mob))
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
