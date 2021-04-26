@@ -546,7 +546,7 @@
 	sampled = 0
 
 	update_icon()
-	visible_message("<span class='alert'>\The</span> <span style='font-style:italics;'>[previous_plant]</span> <span class='alert'>has suddenly mutated into</span> <span style='font-style:italics;'>[seed.display_name]!</span>")
+	visible_message("<span class='alert'>The</span> <span class='italics,alert'>[previous_plant]</span> <span class='alert'>has suddenly mutated into</span> <span class='italics,alert'>[seed.display_name]!</span>")
 
 #undef MUTCAT_GOOD
 #undef MUTCAT_BAD
