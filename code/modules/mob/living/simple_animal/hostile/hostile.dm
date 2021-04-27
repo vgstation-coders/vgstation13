@@ -73,6 +73,7 @@
 						entry_vent = null
 						return
 					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
+					LoseAggro()
 					spawn(rand(20,60))
 						var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
 						forceMove(exit_vent)
