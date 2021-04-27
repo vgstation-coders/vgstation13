@@ -98,7 +98,7 @@
 
 	var/damage = get_unarmed_damage(target)
 
-	if(!damage)
+	if(prob(16))
 		if(miss_unarmed_attack(target))
 			return
 
