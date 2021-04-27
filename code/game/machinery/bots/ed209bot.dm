@@ -385,7 +385,7 @@ Auto Patrol: []"},
 							return
 						if (M.handcuffed)
 							return
-						M.handcuffed = new /obj/item/weapon/handcuffs(M)
+						M.handcuffed = new /obj/item/weapon/handcuffs/cyborg/ed209(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
 			if(declare_arrests)
 				var/area/location = get_area(src)

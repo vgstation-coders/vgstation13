@@ -26,16 +26,28 @@
 	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
 		src.remove_mutual_cuff_events(cuffed_mob)
 	. = ..()
-	
+
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
 
 /obj/item/weapon/handcuffs/cyborg
-//This space intentionally left blank
+	name = "3D-printed handcuffs"
+	desc = "A pair of 3D-printed handcuffs, they are designed to break apart once opened to prevent re-usage by criminals."
 
 /obj/item/weapon/handcuffs/cyborg/on_restraint_removal(var/mob/living/carbon/C)
+	visible_message("<span class='warning'>The [src] break apart!</span>")
 	spawn(1)
 		qdel(src)
+
+/obj/item/weapon/handcuffs/cyborg/beepsky
+	name = "Officer Beep O'sky!-brand handcuffs"
+	desc = "A pair of 3D-printed handcuffs, imprinted on them are the words 'You can't outrun a radio'. These are quite brittle, but are designed to break apart upon being opened."
+	restraint_resist_time = 45 SECONDS
+
+/obj/item/weapon/handcuffs/cyborg/ed209
+	name = "ED-209!-brand handcuffs"
+	desc = "A pair of 3D-printed handcuffs, imprinted on it is a stylized depiction of an ED-209. These are a bit tougher than the average 3D-printed object, but are designed to break apart upon being opened."
+	restraint_resist_time = 1 MINUTES
 
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate
