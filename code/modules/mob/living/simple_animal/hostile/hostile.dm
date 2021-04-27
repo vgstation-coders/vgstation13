@@ -59,7 +59,7 @@
 		return 0 //under effects of time magick
 	if(!client || deny_client_move) //Ventcrawling stuff
 		if(entry_vent)
-			if(get_dist(src, entry_vent) <= 1)
+			if(Adjacent(entry_vent))
 				if(entry_vent.network && entry_vent.network.normal_members.len)
 					var/list/vents = list()
 					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
@@ -70,7 +70,7 @@
 						return
 					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
 					if(prob(50))
-						src.visible_message("<span class='notice'>[src] scrambles into the ventillation ducts!</span>")
+						visible_message("<span class='notice'>[src] scrambles into the ventillation ducts!</span>")
 					LoseAggro()
 					spawn(rand(20,60))
 						var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
@@ -83,7 +83,7 @@
 								return
 
 							if(prob(50))
-								src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
+								visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
 							sleep(travel_time)
 
 							if(!exit_vent)
