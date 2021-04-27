@@ -69,6 +69,8 @@
 						entry_vent = null
 						return
 					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
+					if(prob(50))
+						src.visible_message("<span class='notice'>[src] scrambles into the ventillation ducts!</span>")
 					LoseAggro()
 					spawn(rand(20,60))
 						var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
