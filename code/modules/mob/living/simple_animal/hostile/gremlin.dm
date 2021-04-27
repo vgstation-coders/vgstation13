@@ -104,6 +104,14 @@ var/list/bad_gremlin_items = list()
 /mob/living/simple_animal/hostile/gremlin/proc/stand_still(var/tick_amount)
 	time_chasing_target -= tick_amount
 
+/mob/living/simple_animal/hostile/gremlin/verb/ventcrawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Object"
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
+
 /mob/living/simple_animal/hostile/gremlin/proc/get_vent(var/obj/machinery/atmospherics/unary/vent_pump/v)
 	//ventcrawl!
 	if(!v.welded)
