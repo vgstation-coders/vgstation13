@@ -1321,9 +1321,9 @@
 /datum/seed/carrots/diamond
 	name = "diamondcarrot"
 	seed_name = "diamond carrot"
-	display_name = "diamond carrot tree"
+	display_name = "diamond carrots"
 	plant_dmi = 'icons/obj/hydroponics/diamondcarrot.dmi'
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/diamondcarrot)
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond)
 	mutants = null
 	chems = list(NUTRIMENT = list(1,10), DIAMOND = list(1,5))
 
