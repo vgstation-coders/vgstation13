@@ -90,7 +90,7 @@
 		if(applicants.len <= 0)
 			if(i == candidate_checks)
 				//We have found no candidates so far and we are out of applicants.
-				mode.refund_threat(cost)
+				mode.refund_midround_threat(cost)
 				mode.threat_log += "[worldtime2text()]: Rule [name] refunded [cost] (all applications invalid)"
 				mode.executed_rules -= src
 			break
@@ -178,7 +178,7 @@
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))//adding traitors if the antag population is getting low
+	if ((antag_count < max_traitors) && prob(mode.midround_threat_level))//adding traitors if the antag population is getting low
 		return ..()
 	else
 		return 0
@@ -404,8 +404,8 @@
 	required_pop = list(25,25,25,25,25,20,15,15,10,10)
 	required_candidates = 3
 	weight = 10
-	cost = 45
-	requirements = list(101,101,90,60,45,45,45,45,45,45)
+	cost = 35
+	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
 	high_population_requirement = 50
 	my_fac = /datum/faction/revolution
 	logo = "rev-logo"
@@ -452,7 +452,7 @@
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))
+	if ((antag_count < max_traitors) && prob(mode.midround_threat_level))
 		return ..()
 	else
 		return 0
@@ -552,8 +552,8 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/acceptable(var/population=0,var/threat=0)
-	if(mode.threat>50) //We're threatening enough!
-		message_admins("Rejected catbeast ruleset, [mode.threat] threat was over 50.")
+	if(mode.midround_threat>50) //We're threatening enough!
+		message_admins("Rejected catbeast ruleset, [mode.midround_threat] threat was over 50.")
 		return FALSE
 	if(!..())
 		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
@@ -662,7 +662,7 @@
 		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
 			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
 				vents += temp_vent
-	
+
 
 	if (vents.len == 0)
 		message_admins("A suitable vent couldn't be found for alien larva. That's bad.")
@@ -703,7 +703,7 @@
 	required_candidates = 1
 	weight = 1
 	cost = 0
-	requirements = list(5,5,15,15,20,20,20,20,40,70) 
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 	makeBody = FALSE
@@ -748,16 +748,16 @@
 			sleep(150)
 			if(!can_move_shuttle())
 				continue
-		
+
 			sleep(50)	//everyone is off, wait 5 more seconds so people don't get ZAS'd out the airlock
-			if(!can_move_shuttle())	
+			if(!can_move_shuttle())
 				continue
 			if(!transport_shuttle.move_to_dock(centcomdock))
 				message_admins("The transport shuttle couldn't return to centcomm for some reason.")
 				return
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/proc/can_move_shuttle()
-	var/contents = get_contents_in_object(transport_shuttle.linked_area)	
+	var/contents = get_contents_in_object(transport_shuttle.linked_area)
 	if (locate(/mob/living) in contents)
 		return FALSE
 	if (locate(/obj/item/weapon/disk/nuclear) in contents)

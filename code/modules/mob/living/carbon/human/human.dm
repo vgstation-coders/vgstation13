@@ -386,17 +386,17 @@
 	else
 		return if_no_id
 	return
-//repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
+//repurposed proc. Now it combines get_worn_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
 /mob/living/carbon/human/proc/get_visible_name()
 	if( wear_mask && wear_mask.is_hidden_identity())	//Wearing a mask which hides our face, use id-name if possible
-		return get_id_name("Unknown")
+		return get_worn_id_name("Unknown")
 	if( head && head.is_hidden_identity())
-		return get_id_name("Unknown")	//Likewise for hats
+		return get_worn_id_name("Unknown")	//Likewise for hats
 	var/datum/role/vampire/V = isvampire(src)
 	if(V && (/datum/power/vampire/shadow in V.current_powers) && V.ismenacing)
-		return get_id_name("Unknown")
+		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
-	var/id_name = get_id_name("")
+	var/id_name = get_worn_id_name("")
 	if(id_name && (id_name != face_name))
 		return "[face_name] (as [id_name])"
 	return face_name
@@ -409,7 +409,7 @@
 
 //gets name from ID or PDA itself, ID inside PDA doesn't matter
 //Useful when player is being seen by other mobs
-/mob/living/carbon/human/proc/get_id_name(var/if_no_id = "Unknown")
+/mob/living/carbon/human/proc/get_worn_id_name(var/if_no_id = "Unknown")
 	if(wear_id)
 		. = wear_id.get_owner_name_from_ID()
 	if(!.)

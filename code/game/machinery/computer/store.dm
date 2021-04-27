@@ -13,6 +13,7 @@
 		"Food" = list(
 			/datum/storeitem/menu1,
 			/datum/storeitem/menu2,
+			/datum/storeitem/diy_soda,
 			),
 		"Tools" = list(
 			/datum/storeitem/pen,

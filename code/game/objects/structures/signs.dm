@@ -242,10 +242,30 @@
 	desc = "A direction sign, pointing out the direction of the medical bay."
 	icon_state = "direction_med"
 
+/obj/structure/sign/directions/carg
+	name = "Cargo Bay"
+	desc = "A direction sign, pointing out which way Cargo bay is."
+	icon_state = "direction_carg"
+
+/obj/structure/sign/directions/chap
+	name = "Chapel"
+	desc = "A direction sign, pointing out which way Chapel is."
+	icon_state = "direction_chap"
+
 /obj/structure/sign/directions/evac
 	name = "Escape Arm"
 	desc = "A direction sign, pointing out which way escape shuttle dock is."
 	icon_state = "direction_evac"
+
+/obj/structure/sign/directions/podbay
+	name = "Pod Bay"
+	desc = "A direction sign, pointing out where Pod bay is."
+	icon_state = "direction_pod"
+
+/obj/structure/sign/directions/trader
+	name = "Trader dock"
+	desc = "A direction sign, pointing out which way the Trader ship arrives to the station."
+	icon_state = "direction_trad"
 
 /obj/structure/sign/crime
 	name = "CRIME DOES NOT PAY"

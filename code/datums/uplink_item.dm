@@ -633,11 +633,19 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
-	
+
 /datum/uplink_item/jobspecific/command_security/batlinggun
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
 	item = /obj/item/weapon/gun/gatling/batling
+	cost = 18
+	discounted_cost = 12
+	jobs_with_discount = list("Warden", "Head of Security")
+
+/datum/uplink_item/jobspecific/command_security/remoteexplosive
+	name = "Remote Explosive Implants"
+	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room." 
+	item = /obj/item/weapon/storage/box/remeximp
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")
@@ -681,6 +689,14 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical
 	category = "Medical Specials"
+
+/datum/uplink_item/jobspecific/medical/mouser
+	name = "Mouser Pistol"
+	desc = "A pistol that turns unfortunate victims into labrats and stuns them briefly. All of their gear becomes part of their body, and if the mouse dies, the target becomes human once again, fully armed and unharmed."
+	item = /obj/item/weapon/gun/energy/mouser
+	cost = 12
+	discounted_cost = 8
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/medical/wheelchair
 	name = "Syndicate Wheelchair"
@@ -1047,21 +1063,21 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/dart_cartridge
 	cost = 2
 	jobs_exclusive = list("Trader")
-	
+
 /datum/uplink_item/jobspecific/trader/cratesender
 	name = "Modified Crate Sender"
 	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
 	cost = 6
 	jobs_exclusive = list("Trader")
-	
+
 // SYNDICATE COOP
 // Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
 	jobs_excluded = list("Nuclear Operative", CHALLENGER)
-	
+
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"
 	desc = "A Syndicate bundle designed for a team of two agents."
@@ -1073,19 +1089,19 @@ var/list/uplink_items = list()
 	desc = "A closely guarded artifact leveraged from the Vampire Lords.  It possesses an active sample of the SG-VPR-23 strain that is the source of all known cases of vampirism within the galaxy.  This piece is only to be granted to an operative cell that wishes to execute, and accepts the risk, of an SG-VPR-23 outbreak.  It is brittle in its old age, and may only survive one use."
 	item = /obj/item/clothing/mask/stone
 	cost = 60
-	
+
 /datum/uplink_item/syndie_coop/changeling_vial
 	name = "CH-L1-NG Bioweapon Sample"
 	desc = "A securely contained vial of the experimental mutagen 'CH-L1-NG'.  Originally designed as a transhumanist super-soldier serum, the mutagen was reclassified as a bioweapon when research showed that the afflicted would completely dissociate from their identity and loyalties.  Victims of 'CH-L1-NG' were found to be the perfect killing machines to be released upon enemies of the Syndicate."
 	item = /obj/item/changeling_vial
 	cost = 60
-	
+
 /datum/uplink_item/syndie_coop/bloodcult_pamphlet
 	name = "Esoteric Propaganda Pamphlet"
 	desc = "A pamphlet found within the controlled literature archives detailing what appears to be a communication ritual to contact the celestial NRS-1.  Exposure to NRS-1 is known to induce the formation of a hive-like social structure among the afflicted, delusions of grandeur, and collective suicidal tendencies.  An operative cell wishing to weaponize contact with NRS-1 should proceed with extreme caution."
 	item = /obj/item/weapon/bloodcult_pamphlet/oneuse
 	cost = 60
-	
+
 /datum/uplink_item/syndie_coop/codebreaker
 	name = "Codebreaker"
 	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."

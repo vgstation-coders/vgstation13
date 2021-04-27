@@ -137,7 +137,7 @@ var/list/mass_drivers = list()
 	switch(build)
 		if(0) // Loose frame
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin to cut the frame apart...")
 				if(WT.do_weld(user, src, 30) && (build == 0))
 					to_chat(user, "<span class='notice'>You detach the plasteel sheets from each others.</span>")
@@ -167,7 +167,7 @@ var/list/mass_drivers = list()
 					to_chat(user, "<span class='notice'>You de-anchored \the [src]!</span>")
 				return 1
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin to weld \the [src] to the floor...")
 				if(WT.do_weld(user, src, 40) && (build == 1))
 					to_chat(user, "<span class='notice'>You welded \the [src] to the floor.</span>")
@@ -176,7 +176,7 @@ var/list/mass_drivers = list()
 				return 1
 		if(2) // Welded to the floor
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin to unweld \the [src] to the floor...")
 				if(WT.do_weld(user, src, 40) && (build == 2))
 					to_chat(user, "<span class='notice'>You unwelded \the [src] to the floor.</span>")

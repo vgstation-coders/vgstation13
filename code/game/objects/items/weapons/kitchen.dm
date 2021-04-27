@@ -261,7 +261,7 @@
 	if(user.is_in_modules(src))
 		return
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You slice the handle off of \the [src].")
 			WT.playtoolsound(user, 50)

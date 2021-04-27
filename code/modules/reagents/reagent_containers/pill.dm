@@ -311,6 +311,7 @@
 /obj/item/weapon/reagent_containers/pill/random
 	name = "unknown pill"
 	desc = "Dare you enter my chemical realm?"
+	var/hidereagents = FALSE
 	/* Possible choices:
 	Good: Hyperzine, Oxycodone, Doctor's Delight, Leporazine
 	Neutral: Corn Oil, Ryetalyn, Tonio, Space Drugs
@@ -336,21 +337,24 @@
 	var/list/to_spawn = pickweight(possible_combinations)
 	for(var/index in to_spawn)
 		reagents.add_reagent(index, to_spawn[index])
+	if(hidereagents)
+		reagents.add_reagent(BLACKCOLOR, 1)
 
 
 /obj/item/weapon/reagent_containers/pill/random/maintenance
 	flags = FPRINT | NOREACT
+	hidereagents = TRUE
 	possible_combinations = list(
-		list(SYNTHOCARISOL = 10, BICARIDINE = 10) = 2, // = 2 means 2 times as common, = 0.5 means 50% as common
-		list(KELOTANE = 10, DERMALINE = 10) = 2,
-		list(COCAINE = 14),
-		list(TRICORDRAZINE = 30) = 2,
-		list(DOCTORSDELIGHT = 30),
-		list(REZADONE = 7),
-		list(IMIDAZOLINE = 10),
+		list(SYNTHOCARISOL = 10, OPIUM = 10, SPACE_DRUGS = 5) = 2, // = 2 means 2 times as common, = 0.5 means 50% as common
+		list(TANNIC_ACID = 10, KATHALAI = 10, SPACE_DRUGS = 5) = 2,
+		list(COCAINE = 14, COFFEE = 5),
+		list(MEDCOFFEE = 30, VODKATONIC = 5) = 2,
+		list(DOCTORSDELIGHT = 30, WHISKEY = 20),
+		list(REZADONE = 7, HOOCH = 7),
+		list(IMIDAZOLINE = 10, GLASGOW = 2),
 		list(OXYCODONE = 15),
 		list(NUKA_COLA = 15),
-		list(HOLYWATER = 30),
+		list(HOLYWATER = 30, METHYLIN = 10),
 		list(PHAZON = 10),
 		list(LITHOTORCRAZINE = 20, GREYVODKA = 20),
 		list(MINDBREAKER = 10, SPACE_DRUGS = 10) = 3,
@@ -362,7 +366,8 @@
 		list(SUICIDE = 20, DISCOUNT = 30), // makes you vomit a lot
 		list(LIPOZINE = 25), // makes you hungry as hell
 		list(DANS_WHISKEY = 30),
-		list(CRYPTOBIOLIN = 10),
+		list(PHYSOSTIGMINE = 10),
+		list(AMASEC = 10),
 		list(SILENCER = 20),
 		list(ZOMBIEPOWDER = 10),
 		list(NEUROTOXIN = 15),
@@ -372,7 +377,7 @@
 		list(FROSTOIL = 15), // makes you freeze and pass out, but not lethal
 		list(HELL_RAMEN = 2, CONDENSEDCAPSAICIN = 15), // seriously burns your shit up but hopefully doesn't kill. feel free to replace with a reagent that does this better if one is added in the future
 		list(RADIUM = 10),
-		list(IMPEDREZENE = 10),
+		list(HYOSCYAMINE = 10),
 		list(AMINOCYPRINIDOL = 1, NUTRIMENT = 10),
 		list(SPIDERS = 20),
 		list(IRON = 25, URANIUM = 25),
@@ -401,6 +406,29 @@
 		"Special pill only for You", "Test Batch #001 (25 units)", "The Utlimate trip", "Tumor and Cancer (5 units)", "turns you into a slime", "Unfuck me pill", \
 		"Unstable mutagen (0 units)", "VERY FUN DO NOT CONSUME", "Very Healthy!(may cause side effects)", "Wild Ride enhancer", "MORE TAN 1 IS DEADLY", "Oh Fuck My Blood pills", \
 		"Emergency Pain Relief", "Blood Strengthening Pill (10 units)", "Literal Death", "Makes You Into The Captain", "plese send help stuck in chemistry", \
+		"gamer (14.2857 units)", "Eat this pill next to a borg", "DO NOT EAT.. Unless?", "not chloral this time", "Death in 5 minutes", "PILL A (eat together with pill B)",\
+		"Do Not Eat this it is VOMIT", "Imitation MAGIC!", "SUPERHERO PILL", "Experimental Brain Enhancement", "ANTI DO NOT DIE", "VOX KILLER", "A Pill that will make you funnier (40 units)",\
+		"Forbidden Wisdom (7.49999 units)", "HAVE FUN WITH THIS ONE", "man enough?", "I Don't Know What This Does", "Transformation Accelerator, take only one (25 units)",\
+		"Honk Serum (TRUE) (75 units)", "it's probably good", "DO NOT EAT (UNLESS CLOWN) (1 unit)", "EEEK EEK OO! OOO!", "for a pill that turns you into a pill that turns people into pills",\
+		"Get NAked Before You Eat This", "honk enlargement pill(2.30769 units)", "I was stupid", "Sea-Cured Welding Fuel (soothes the nerves)", "Antidote..... for a boring day",\
+		"If you are lonely, sad, and/or depressed, take this (38.5 units)", "Estrogen (50 units)", "Extremely Ironic", "Nothing (25 units)", "Red Pill (New Look, Same Great Product)",\
+		"Perscription Strength Anti-Toxin (Dylobismolanximinalin) (15+15+15+5 units)", "Better than the other pill", "The other", "Ian Pill 2.0", "Spicy Licorice (22 units)",\
+		"pill that duplicates itself", "seccie killer (5u)", "Medical Combat Nanobots (20 units)", "bog", "Vaccine (URhRhXZDdFu) (5 units)", "god juice", "The Powergamer's Choice",\
+		"bluespace extract", "donk-pocket flavored donk-pocket flavored donk-pocket flavored donk-pocket flavored", "expertsexchange", "ground up crackers for poly",\
+		"1u of every element", "JOBBIE JUICE (16.584 units", "33% Kelo 33% Derma (30 units)", "Chillwax+ (15 units)", "Long Lasting Tricordrazane", "Phazon salt (0.25 units)",\
+		"Cinnamon Bicardine (10u)", "Portable Cryo In A Pill With Frost Oil (1oo units)", "melatonin (0.2222222 units)", "Infinite Dexalin Plus+", "goes back in time 5 seconds",\
+		"melts glass", "Stabilized Dermaline (10 units)", "Activated Bicaridine (15u)", "Balls of Steel", "DELCIOUS CANDY (10.2222 units)", "One Weird Trick (Discovered By A HOS)",\
+		"Theoretical Kelotane (9 units)", "Great Value Burn Medicine (10 units)", "do not scan", "Use ONLY for people in critical", "red is test", "Cherry Dex (10)",\
+		"Petritricin (1 units)", "biiiiig tail!", "Imidazolinacusiatethylredoxrazine (8 units)", "Hairgrownium (8.44186 units)", "Beneficial Prions (11 units)",\
+		"I Like To Think This Is Stronger Ryetalyn (2 units)", "hyronalin+hyperzine+nightvision+heal", "put in fire extinguisher", "What is Sec gonna think if they find this?",\
+		"Philosophical Ryetalyn (1 units)", "What's the worst thing that could happen?", "Baked Beans 4.85443 units)", "Eat in front of your friends!", "\"\"\"\"\"\"\"\"Oxycodone\"\"\"\"\"\"\"\" (10 units)",\
+		"Kilotane (10 units)", "Egg Whites (7 units)", "fuck the virologisy", "paranoia", "Anti Anti Toxin (25.7143 units)", " ( units)", "Cures Everything, But Not That",\
+		"count to 5", "OBLIGATORY \"DOCTOR MY X HURTS\" BUT THERE'S ACTUALLY NOTHING WRONG WITH YOU PILL", "Dexalin Plus...Don't Sue Me If Not (10 units)", "you found me!",\
+		"Unforeseen Consequences", "Meme Culture (10 units)", "Vampire Extract (5.5 units)", "Japanese Nanites (1 unit)", "schrodinger's hyperzine (14.99?u)",\
+		"Doctor's Delight (40 units)... with hidden, insidious consequences", "Osseum Regenerator (5 units)", "Soy Milk (50 units)", "Crystal Therapy", "KeloDerm (The Chemical, Not The Mix)",\
+		"THE BEST THING THAT EVER HAPPENED TO YOU", "Accelerating Agent (10 units)", "Defoliant Agent (5 units)", "Universal Solvent (35 units)", "Cure for Racism",\
+		"you werent supposed to find this", "For Experts", "Monkey Juice (10 units)", "test", "Rapid Gene Enhancer (9.6 units)", "Adminordrazine (10 units)", "Babys Day Out",\
+		"Dylovene (13.4328u) + Bicaridine (13.4328u) + Nutriment (1.75278u) + Green Grape Juice (3.39774u) + Tannic acid (6.8396u) + Honey (15.0536u) + Sugar (1.8241u) + Opium (4.62655u) + Allicin (5.39507u) + Blood (5.88667u) + Kelotane (5.97015u) + Dermaline (8.95522u) + Tricordrazine (13.4328u)",\
 		"antiubodies for the disease that makes you scream.", "Xenomicrobes (1 unit)", "Miracle butt heal", "lesser death", "All-Natural", "still fucking hurts doc")] pill"
 	desc = pick(300;"A strange pill found in the depths of maintenance.", "Just what the doctor ordered.", "Hey, look! Free healthcare!", "For best results, take one as close to noon as possible.")
 	icon_state = "pill[rand(20,40)]"

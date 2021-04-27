@@ -27,7 +27,7 @@
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -303,6 +303,9 @@
 
 // Returns TRUE on success
 /obj/machinery/smartfridge/proc/try_insert_item(var/obj/item/O, var/mob/user)
+	if(!allowed(user) && !emagged)
+		to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		return FALSE
 	if(accept_check(O))
 		if(!user.drop_item(O, src))
 			return FALSE
@@ -325,6 +328,9 @@
 
 /obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
 	if(!istype(B))
+		return FALSE
+	if(!allowed(user) && !emagged)
+		to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
 		return FALSE
 	var/objects_loaded = 0
 	for(var/obj/G in B.contents)
@@ -381,6 +387,15 @@
 /obj/machinery/smartfridge/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
+
+/obj/machinery/smartfridge/emag(mob/user)
+	new/obj/effect/effect/sparks(get_turf(src))
+	playsound(loc,"sparks",50,1)
+	emagged = !emagged
+	if(emagged)
+		to_chat(user, "<span class='warning'>You disable the security protocols.</span>")
+	else
+		to_chat(user, "<span class='warning'>You restore the security protocols.</span>")
 
 /*******************
 *   SmartFridge Menu
@@ -468,6 +483,10 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
+
+	if(!allowed(usr) && !emagged) //this explicitly means all topic() options below this line require access
+		to_chat(usr, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		return
 
 	usr.set_machine(src)
 

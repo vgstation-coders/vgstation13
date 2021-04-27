@@ -219,26 +219,26 @@
 		steps += null
 		switch(current_tool)
 			if("weldingtool")
-				steps[steps.len] = list(Co_KEY=/obj/item/weapon/weldingtool,
+				steps[steps.len] = list(Co_KEY=/obj/item/tool/weldingtool,
 							Co_AMOUNT = 3, //requires the weldingtool is on
 							Co_VIS_MSG = "{USER} weld{S} the plates in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} welding the plates in {HOLDER}",
 							Fl_ACTION = "weld the plates",
 							Co_DELAY = 30)
 			if("screwdriver")
-				steps[steps.len] = list(Co_KEY=/obj/item/weapon/screwdriver,
+				steps[steps.len] = list(Co_KEY=/obj/item/tool/screwdriver,
 							Co_VIS_MSG = "{USER} tighten{S} the screws in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} tightening the screws in {HOLDER}",
 							Fl_ACTION = "tighten the screws",
 							Co_DELAY = 30)
 			if("wrench")
-				steps[steps.len] = list(Co_KEY=/obj/item/weapon/wrench,
+				steps[steps.len] = list(Co_KEY=/obj/item/tool/wrench,
 							Co_VIS_MSG = "{USER} secure{S} the bolts in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} securing the bolts in {HOLDER}",
 							Fl_ACTION = "secure the bolts",
 							Co_DELAY = 30)
 			if("wirecutter")
-				steps[steps.len] = list(Co_KEY=/obj/item/weapon/wirecutters,
+				steps[steps.len] = list(Co_KEY=/obj/item/tool/wirecutters,
 							Co_VIS_MSG = "{USER} strip{s} the wiring in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} stripping the wiring in {HOLDER}",
 							Fl_ACTION = "strip the wiring",

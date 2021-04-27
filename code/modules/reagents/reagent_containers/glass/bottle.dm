@@ -102,6 +102,17 @@
 	..()
 	reagents.add_reagent(TOXIN, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide
+	name = "insecticide bottle"
+	desc = "A small bottle of insecticide. Do not pour on insectoid colleagues."
+	icon = 'icons/obj/chemical.dmi'
+	//icon_state = "bottle12"
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
+	..()
+	reagents.add_reagent(INSECTICIDE, 30)
+
+
 /obj/item/weapon/reagent_containers/glass/bottle/charcoal
 	name = "activated charcoal bottle"
 	desc = "A small bottle of activated charcoal. Used for treatment of overdoses."

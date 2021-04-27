@@ -62,7 +62,7 @@
 			return equip_guns(R)
 
 /mob/living/carbon/human/proc/equip_guns(var/datum/role/R)
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag", "lolly_lobber")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser", "lasmusket", "retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag", "lolly_lobber")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -72,6 +72,8 @@
 			new /obj/item/weapon/gun/energy/gun(get_turf(src))
 		if("laser")
 			new /obj/item/weapon/gun/energy/laser(get_turf(src))
+		if("lasmusket")
+			new /obj/item/weapon/gun/energy/lasmusket/preloaded(get_turf(src))
 		if("retro")
 			new /obj/item/weapon/gun/energy/laser/retro(get_turf(src))
 		if("laserak")
@@ -212,7 +214,7 @@
 
 	switch (randomizeswords)
 		if("unlucky") //so the chance to get an unlucky item does't clutter the main pool of swords
-			var/noluck = pick(/obj/item/weapon/kitchen/utensil/knife/plastic, /obj/item/weapon/screwdriver, /obj/item/weapon/wirecutters, /obj/item/toy/foamblade, /obj/item/toy/sword, /obj/item/weapon/shard, /obj/item/weapon/shard/plasma, /obj/abstract/map/spawner/space/drinks, /obj/item/weapon/sord, /obj/item/weapon/melee/training_sword, /obj/item/weapon/macuahuitl, /obj/item/weapon/gavelhammer, /obj/item/weapon/banhammer, /obj/item/weapon/veilrender/vealrender, /obj/item/weapon/bikehorn/baton)
+			var/noluck = pick(/obj/item/weapon/kitchen/utensil/knife/plastic, /obj/item/tool/screwdriver, /obj/item/tool/wirecutters, /obj/item/toy/foamblade, /obj/item/toy/sword, /obj/item/weapon/shard, /obj/item/weapon/shard/plasma, /obj/abstract/map/spawner/space/drinks, /obj/item/weapon/sord, /obj/item/weapon/melee/training_sword, /obj/item/weapon/macuahuitl, /obj/item/weapon/gavelhammer, /obj/item/weapon/banhammer, /obj/item/weapon/veilrender/vealrender, /obj/item/weapon/bikehorn/baton)
 			new noluck(get_turf(src))
 		if("misc")
 			var/miscpick = pick(/obj/item/weapon/scythe, /obj/item/weapon/harpoon, /obj/item/weapon/sword, /obj/item/weapon/sword/executioner, /obj/item/weapon/claymore, /obj/item/weapon/melee/cultblade/nocult, /obj/item/weapon/sword/venom)
@@ -285,17 +287,17 @@
 				new /obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning(get_turf(src))
 		if("saw")
 			if(prob(40))
-				new /obj/item/weapon/circular_saw/plasmasaw(get_turf(src))
+				new /obj/item/tool/circular_saw/plasmasaw(get_turf(src))
 			else
-				new /obj/item/weapon/circular_saw(get_turf(src))
+				new /obj/item/tool/circular_saw(get_turf(src))
 		if("scalpel")
 			if(prob(60))
 				if(prob(50))
-					new /obj/item/weapon/scalpel/laser(get_turf(src))
+					new /obj/item/tool/scalpel/laser(get_turf(src))
 				else
-					new /obj/item/weapon/scalpel/laser/tier2(get_turf(src))
+					new /obj/item/tool/scalpel/laser/tier2(get_turf(src))
 			else
-				new /obj/item/weapon/scalpel(get_turf(src))
+				new /obj/item/tool/scalpel(get_turf(src))
 		if("switchtool")
 			if(prob(40))
 				if(prob(50))
@@ -430,7 +432,7 @@
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 		if("alchemy")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
-	 
+
 	var/receive_absorb = !(locate(/spell/targeted/absorb) in spell_list)
 
 	if(receive_absorb)

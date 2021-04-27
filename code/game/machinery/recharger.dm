@@ -70,6 +70,21 @@
 				return 1
 		else
 			return 1
+	if(iscrowbar(G))
+		if(charging)
+			to_chat(user, "You begin to pry out \the [charging].")
+			if(do_after(user, src, 10))
+				charging.appearance = appearance_backup
+				charging.update_icon()
+				charging.forceMove(loc)
+				charging = null
+				appearance_backup=null
+				G.playtoolsound(src, 50)
+				update_icon()
+				return 1
+		else
+			to_chat(user, "You can't pry anything out of \the [src]!")
+			return 1
 	if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 		return 1
@@ -92,6 +107,10 @@
 		if (istype(G, /obj/item/weapon/gun/energy/staff))
 			to_chat(user, "<span class='notice'>The recharger rejects the magical apparatus.</span>")
 			return 1
+		if (istype(G, /obj/item/weapon/gun/energy/lasmusket))
+			to_chat(user, "<span class='notice'>The makeshift gun lacks a recharge port.</span>")
+			return 1
+
 		if(!user.drop_item(G, src))
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"
 			return 1
@@ -218,6 +237,21 @@
 					has_beeped = TRUE
 			else
 				icon_state = "recharger0"
+		
+		else if(istype(charging, /obj/item/clothing/head/helmet/stun))
+			var/obj/item/clothing/head/helmet/stun/B = charging
+			if(B.bcell)
+				if(B.bcell.give(175*charging_speed_modifier))
+					icon_state = "recharger1"
+					if(!self_powered)
+						use_power(200*charging_speed_modifier)
+				else
+					icon_state = "recharger2"
+					if(!has_beeped)
+						playsound(src, 'sound/machines/charge_finish.ogg', 50)
+					has_beeped = TRUE
+			else
+				icon_state = "recharger0"
 
 		else if(istype(charging, /obj/item/weapon/rcs))
 			var/obj/item/weapon/rcs/rcs = charging
@@ -268,6 +302,20 @@
 
 /obj/machinery/recharger/self_powered	//ideal for the Thunderdome
 	self_powered = 1
+
+/obj/machinery/recharger/kick_act(mob/living/carbon/human/H)
+	. = ..()
+	if(charging)
+		if(prob(25))
+			visible_message("<span class='notice'>\The [charging] pops out of \the [src]!</span>")
+			charging.appearance = appearance_backup
+			charging.update_icon()
+			charging.forceMove(get_turf(src))
+			charging = null
+			if(!self_powered)
+				use_power = 1
+		appearance_backup=null
+		update_icon()
 
 /obj/machinery/recharger/wallcharger
 	name = "wall recharger"

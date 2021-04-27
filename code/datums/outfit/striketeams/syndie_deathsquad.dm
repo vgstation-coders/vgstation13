@@ -23,7 +23,7 @@
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/ert,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/ert,
 	)
 
 	items_to_collect = list(

@@ -363,7 +363,7 @@ var/list/potential_bonus_items = list(
 	new /obj/item/clothing/head/helmet/space/vox/pressure(src)
 	new /obj/item/weapon/storage/belt/utility/full(src)
 	new /obj/item/clothing/glasses/hud/health(src)
-	new /obj/item/weapon/circular_saw(src)
+	new /obj/item/tool/circular_saw(src)
 	new /obj/item/weapon/gun/dartgun/vox/medical(src)
 
 /obj/machinery/vending/raider

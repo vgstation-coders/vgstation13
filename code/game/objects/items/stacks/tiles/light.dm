@@ -52,7 +52,7 @@ var/global/list/lightfloor_colors = list(
 	overlays += color_overlay
 
 /obj/item/stack/tile/light/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O,/obj/item/weapon/crowbar))
+	if(istype(O,/obj/item/tool/crowbar))
 		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 1
 		amount--

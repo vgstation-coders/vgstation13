@@ -60,7 +60,7 @@
 		log_game("SQL ERROR during death reporting. Failed to connect.")
 	else
 		var/datum/DBQuery/query = SSdbcore.NewQuery("INSERT INTO death (name, byondkey, job, special, pod, tod, laname, lakey, gender, bruteloss, fireloss, brainloss, oxyloss, coord) VALUES (:name, :key, :job, :special, :pod, :time, :laname, :lakey, :gender, :bruteloss, :fireloss, :brainloss, :oxyloss, :coord)",
-		list("name" = H.name, "key" = H.key, "job" = H.mind.assigned_job, "special" = H.mind.assigned_role, "pod" = podname, "time" = sqltime, "laname" = laname, "lakey" = lakey, "gender" = "[H.gender]", "bruteloss" = "[H.getBruteLoss()]", "fireloss" = "[H.getFireLoss()]", "brainloss" = "[H.brainloss]", "oxyloss" = "[H.getOxyLoss()]", "coord" = "[coord]"))
+		list("name" = H.name, "key" = H.key, "job" = H.mind.assigned_role, "special" = (H.mind.assigned_role || "no role"), "pod" = podname, "time" = sqltime, "laname" = laname, "lakey" = lakey, "gender" = "[H.gender]", "bruteloss" = "[H.getBruteLoss()]", "fireloss" = "[H.getFireLoss()]", "brainloss" = "[H.brainloss]", "oxyloss" = "[H.getOxyLoss()]", "coord" = "[coord]"))
 		if(!query.Execute())
 			var/err = query.ErrorMsg()
 			log_game("SQL ERROR during death reporting. Error : \[[err]\]\n")

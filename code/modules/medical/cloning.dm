@@ -267,6 +267,12 @@
 		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
 			H.add_spell(new /spell/targeted/oathbreak/)
 
+	// Check for any powers that goes missing after cloning, in case of reviving after ashing
+	if (isvampire(H))
+		var/datum/role/vampire/V = isvampire(H)
+		V.check_vampire_upgrade()
+		V.update_vamp_hud()
+
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
 	if(!upgraded)
@@ -279,7 +285,7 @@
 	H.flavor_text = H.dna.flavor_text
 
 	H.suiciding = FALSE
-	H.name = H.get_visible_name()
+	H.update_name()
 	return TRUE
 
 //Grow clones to maturity then kick them out.  FREELOADERS
@@ -349,7 +355,7 @@
 	go_out()
 	return
 
-/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
 		return FALSE
@@ -451,7 +457,6 @@
 	occupant.updatehealth()
 
 	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
-	occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
 	occupant = null
 	if(biomass > 0)
 		biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass

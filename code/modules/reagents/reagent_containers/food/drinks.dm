@@ -23,7 +23,6 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/viewcontents = 1
 	var/flammable = 0
 	var/flammin = 0
 	var/flammin_color = null
@@ -1140,6 +1139,12 @@
 	name = "cup"
 	desc = "A cup with the American flag emblazoned on it."
 	icon_state = "americup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug
+	name = "Gromit Mug"
+	desc = "Gromit Mug."
+	icon_state = "gromitmug"
 	volume = 30
 
 ///////////////////////////////////////////////Alchohol bottles! -Agouri //////////////////////////

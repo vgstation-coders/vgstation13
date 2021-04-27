@@ -9,6 +9,7 @@
 	icon_state = "0"
 	var/state = 0
 	var/obj/item/weapon/circuitboard/circuit = null
+	var/empproof = FALSE // For type of glass installed
 //	weight = 1.0E8
 
 /obj/structure/computerframe/Destroy()
@@ -358,11 +359,11 @@
 
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
-		var/obj/item/weapon/solder/S = I
+		var/obj/item/tool/solder/S = I
 		if(S.remove_fuel(2,user))
 			solder_improve(user)
 	else if(iswelder(I))
-		var/obj/item/weapon/weldingtool/WT = I
+		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
@@ -416,7 +417,7 @@
 				src.state = 1
 				return 1
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/tool/weldingtool/WT = P
 				to_chat(user, "<span class='notice'>You start welding the frame back into metal.</span>")
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
 					if(gcDestroyed)
@@ -488,8 +489,11 @@
 				new /obj/item/stack/cable_coil(get_turf(src), 5)
 				return 1
 
-			if(istype(P, /obj/item/stack/sheet/glass/glass))
-				var/obj/item/stack/sheet/glass/glass/G = P
+			if(istype(P, /obj/item/stack/sheet/glass))
+				var/obj/item/stack/sheet/glass/G = P
+				if(istype(G, /obj/item/stack/sheet/glass/rglass) || istype(G, /obj/item/stack/sheet/glass/plasmarglass)) // Don't use these
+					to_chat(user, "<span class='warning'>Sheets of glass must not have rods in them!</span>")
+					return
 				if (G.amount < 2)
 					to_chat(user, "<span class='warning'>You need at least 2 sheets of glass for this!</span>")
 					return 1
@@ -497,7 +501,9 @@
 				if(do_after(user, src, 20) && state == 3 && G.amount >= 2)
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					G.use(2)
-					user.visible_message("[user] installs the glass panel onto the frame.", "You install the glass panel onto the frame.", "You hear metallic sounds.")
+					if(istype(G, /obj/item/stack/sheet/glass/plasmaglass)) // For EMP proofing
+						empproof = TRUE
+					user.visible_message("[user] installs the [empproof ? "plasma" : ""] glass panel onto the frame.", "You install the [empproof ? "plasma" : ""] glass panel onto the frame.", "You hear metallic sounds.")
 					src.state = 4
 					src.icon_state = "4"
 
@@ -508,7 +514,11 @@
 				user.visible_message("[user] removes the glass panel from the frame.", "You remove the glass panel from the frame.", "You hear metallic sounds.")
 				src.state = 3
 				src.icon_state = "3"
-				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
+				if(empproof) // Return plasma or normal glass if variable is set or not
+					new /obj/item/stack/sheet/glass/plasmaglass( src.loc, 2 )
+					empproof = FALSE // No glass, set to false
+				else
+					new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
 			if(P.is_screwdriver(user))
 				P.playtoolsound(src, 50)
@@ -536,6 +546,9 @@
 				var/obj/machinery/MA = B
 				if(istype(MA))
 					MA.power_change()
+				if(istype(MA,/obj/machinery/computer))
+					var/obj/machinery/computer/CM = MA
+					CM.empproof = empproof // Transfer status to new item
 				qdel(src)
 				return 1
 	return 0

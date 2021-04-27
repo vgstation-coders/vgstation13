@@ -17,8 +17,8 @@
 //////////////////////////////////////////////////////////////////
 /datum/surgery_step/internal/remove_embryo
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
-		/obj/item/weapon/wirecutters = 75,
+		/obj/item/tool/hemostat = 100,
+		/obj/item/tool/wirecutters = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 	blood_level = 2
@@ -159,8 +159,8 @@
 /datum/surgery_step/internal/fix_organ_robotic //For artificial organs
 	allowed_tools = list(
 		/obj/item/stack/nanopaste = 100,
-		/obj/item/weapon/bonegel = 30,
-		/obj/item/weapon/screwdriver = 70,
+		/obj/item/tool/bonegel = 30,
+		/obj/item/tool/screwdriver = 70,
 		)
 
 	duration = 7 SECONDS
@@ -243,7 +243,7 @@
 
 /datum/surgery_step/internal/detatch_organ
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
+		/obj/item/tool/scalpel = 100,
 		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
@@ -305,8 +305,8 @@
 /datum/surgery_step/internal/remove_organ
 
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
-		/obj/item/weapon/wirecutters = 75,
+		/obj/item/tool/hemostat = 100,
+		/obj/item/tool/wirecutters = 75,
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
@@ -467,7 +467,7 @@
 ////ATTACH ORGAN//////
 /datum/surgery_step/internal/attach_organ
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/tool/FixOVein = 100,
 		/obj/item/stack/cable_coil = 75,
 		)
 

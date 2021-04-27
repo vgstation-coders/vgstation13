@@ -144,7 +144,9 @@ var/datum/blackbox/blackbox = new
 		value = num
 
 /datum/feedback_variable/proc/get_value()
-	return value
+	var/to_copy = value
+	to_copy = replacetext(to_copy, "\"", "") // Get rid of double quotes (") in entries.
+	return to_copy
 
 /datum/feedback_variable/proc/get_variable()
 	return variable

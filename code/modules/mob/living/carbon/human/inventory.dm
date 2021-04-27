@@ -347,7 +347,8 @@
 		update_inv_legcuffed()
 	else
 		return 0
-
+	// Call update_name AFTER the inventory gets updated.
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	if(success)
 		update_hidden_item_icons(W)
 

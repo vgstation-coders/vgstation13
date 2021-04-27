@@ -121,10 +121,17 @@
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/gas/syndicate(src)
-	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 	new /obj/item/weapon/reagent_containers/pill/cyanide(src) //For those who hate fun
 	new /obj/item/weapon/reagent_containers/pill/laststand(src) //HOOOOOO HOOHOHOHOHOHO - N3X
+
+/obj/item/weapon/storage/box/survival/nuke/vox/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_nitrogen(src)
+
+/obj/item/weapon/storage/box/survival/nuke/human/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 
 /obj/item/weapon/storage/box/priority_care
 	name = "priority care parcel"
@@ -369,6 +376,13 @@
 	..()
 	for(var/i = 1 to 5)
 		new /obj/item/weapon/implantcase/chem(src)
+	new /obj/item/weapon/implanter(src)
+	new /obj/item/weapon/implantpad(src)
+
+/obj/item/weapon/storage/box/remeximp/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/implantcase/remote(src)
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
 
@@ -743,6 +757,16 @@
 	..()
 	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+
+/obj/item/weapon/storage/box/antiviral_syringes
+	name = "box of anti-viral syringes"
+	desc = "Contains anti-viral syringes."
+	icon_state = "syringe"
+
+/obj/item/weapon/storage/box/antiviral_syringes/New()
+	..()
+	for (var/i; i < BOX_SPACE; i++)
+		new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
 
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
@@ -1414,3 +1438,19 @@
 	new /obj/item/clothing/suit/armor/hos/surveyor(src)
 	new /obj/item/clothing/head/HoS/surveyor(src)
 	..()
+
+/obj/item/weapon/storage/box/biscuit
+	name = "biscuit box"
+	desc = "Just the right way to start your day."
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "biscuitbox"
+	storage_slots = 6
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/risenshiny")
+	foldable = /obj/item/stack/sheet/cardboard
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type = RECYK_MISC
+
+/obj/item/weapon/storage/box/biscuit/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/snacks/risenshiny(src)

@@ -37,13 +37,13 @@
 	part_sets = list(
 		"Tools"=list(
 		new /obj/item/device/multitool(), \
-		new /obj/item/weapon/weldingtool/empty(), \
-		new /obj/item/weapon/crowbar(), \
-		new /obj/item/weapon/screwdriver(), \
-		new /obj/item/weapon/wirecutters(), \
-		new /obj/item/weapon/wrench(), \
-		new /obj/item/weapon/solder(),\
-		new /obj/item/weapon/wirecutters/clippers(),\
+		new /obj/item/tool/weldingtool/empty(), \
+		new /obj/item/tool/crowbar(), \
+		new /obj/item/tool/screwdriver(), \
+		new /obj/item/tool/wirecutters(), \
+		new /obj/item/tool/wrench(), \
+		new /obj/item/tool/solder(),\
+		new /obj/item/tool/wirecutters/clippers(),\
 		new /obj/item/weapon/minihoe(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
@@ -84,12 +84,12 @@
 		"Medical"=list(
 		new /obj/item/weapon/storage/pill_bottle(),\
 		new /obj/item/weapon/reagent_containers/syringe(), \
-		new /obj/item/weapon/scalpel(), \
-		new /obj/item/weapon/circular_saw(), \
-		new /obj/item/weapon/surgicaldrill(),\
-		new /obj/item/weapon/retractor(),\
-		new /obj/item/weapon/cautery(),\
-		new /obj/item/weapon/hemostat(),\
+		new /obj/item/tool/scalpel(), \
+		new /obj/item/tool/circular_saw(), \
+		new /obj/item/tool/surgicaldrill(),\
+		new /obj/item/tool/retractor(),\
+		new /obj/item/tool/cautery(),\
+		new /obj/item/tool/hemostat(),\
 		),
 		"Ammunition"=list(
 		new /obj/item/ammo_casing/shotgun/blank(), \
@@ -136,7 +136,7 @@
 		new /obj/item/device/rcd/matter/engineering(), \
 		new /obj/item/device/rcd/rpd(),\
 		new /obj/item/device/radio/electropack(), \
-		new /obj/item/weapon/weldingtool/largetank/empty(), \
+		new /obj/item/tool/weldingtool/largetank/empty(), \
 		new /obj/item/weapon/handcuffs(), \
 		new /obj/item/ammo_storage/box/a357(), \
 		new /obj/item/ammo_casing/shotgun(), \

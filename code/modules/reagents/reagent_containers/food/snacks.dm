@@ -1521,12 +1521,24 @@
 /obj/item/weapon/reagent_containers/food/snacks/no_raisin
 	name = "4no raisins"
 	icon_state = "4no_raisins"
-	desc = "Best raisins in the universe. Not sure why."
+	desc = "Best raisins in the universe. They've been FORtified with a number (no.) of nutrients, hence the name."
 	trash = /obj/item/trash/raisins
 
 /obj/item/weapon/reagent_containers/food/snacks/no_raisin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins
+	name = "economy-class raisins"
+	icon_state = "cheap_raisins"
+	desc = "Entire galactic economies have been brought to their knees over raisins just like these. The raisins must flow. He who controls the raisins, controls the universe."
+	//You don't even get trash back!
+
+/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins/New()
+	..()
+	reagents.add_reagent(GRAPEJUICE, 2) //Overall, these are 9x less nutritious than 4no raisins
+	reagents.add_reagent(WATER, 2)
+	reagents.add_reagent(DISCOUNT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/bustanuts
 	name = "Busta-Nuts"
@@ -4677,16 +4689,17 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet
 	name = "\improper Sweet"
-	desc = "Comes in many different and unique flavours! One of the flagship products of the Getmore Chocolate Corp. Not suitable for children aged 0-3. Do not consume around open flames or expose to radiation. Expiration date: 2921."
+	desc = "Comes in many different and unique flavours! One of the flagship products of the Getmore Chocolate Corp. Not suitable for children aged 0-3. Do not consume around open flames or expose to radiation. Flavors may not match the description. Expiration date: 2921."
 	food_flags = FOOD_SWEET
 	icon = 'icons/obj/candymachine.dmi'
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(SUGAR, 2)
+	var/list/possible_reagents=list(NUTRIMENT=5, SUGAR=10, CORNOIL=5, BANANA=15, LIQUIDBUTTER=5, NUTRIMENT=10, CARAMEL=10, LEMONJUICE=10, APPLEJUICE=10, WATERMELONJUICE=10, GRAPEJUICE=10, ORANGEJUICE=10, TOMATOJUICE=10, LIMEJUICE=10, CARROTJUICE=10, BERRYJUICE=10, GGRAPEJUICE=10, POTATO=10, PLUMPHJUICE=10, COCO=10, SPRINKLES=10, NUTRIMENT=20)
 	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorice","\improper apple","\improper cranberry")
+	var/reagent=pick(possible_reagents)
+	reagents.add_reagent(reagent, possible_reagents[reagent])
 	var/variety = rand(1,flavors.len) //MORE SWEETS MAYBE IF YOU SPRITE IT
 	icon_state = "sweet[variety]"
 	name = "[flavors[variety]] sweet"

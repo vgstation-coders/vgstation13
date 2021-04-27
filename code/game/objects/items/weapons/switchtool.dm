@@ -20,14 +20,14 @@
 	var/hmodule = null
 
 	//the colon separates the typepath from the name
-	var/list/obj/item/stored_modules = list("/obj/item/weapon/screwdriver:screwdriver" = null,
-											"/obj/item/weapon/wrench:wrench" = null,
-											"/obj/item/weapon/wirecutters:wirecutters" = null,
-											"/obj/item/weapon/crowbar:crowbar" = null,
+	var/list/obj/item/stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+											"/obj/item/tool/wrench:wrench" = null,
+											"/obj/item/tool/wirecutters:wirecutters" = null,
+											"/obj/item/tool/crowbar:crowbar" = null,
 											"/obj/item/weapon/chisel:chisel" = null,
 											"/obj/item/device/multitool:multitool" = null)
 	var/obj/item/deployed //what's currently in use
-	var/removing_item = /obj/item/weapon/screwdriver //the type of item that lets you take tools out
+	var/removing_item = /obj/item/tool/screwdriver //the type of item that lets you take tools out
 
 /obj/item/weapon/switchtool/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(istype(target, /obj/item/weapon/storage)) //we place automatically
@@ -259,24 +259,24 @@
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
 
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_BIOTECH + "=3"
-	stored_modules = list("/obj/item/weapon/scalpel:scalpel" = null,
-						"/obj/item/weapon/circular_saw:circular saw" = null,
-						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
-						"/obj/item/weapon/cautery:cautery" = null,
-						"/obj/item/weapon/hemostat:hemostat" = null,
-						"/obj/item/weapon/retractor:retractor" = null,
-						"/obj/item/weapon/bonesetter:bone setter" = null,
-						"/obj/item/weapon/FixOVein:fixovein" = null,
-						"/obj/item/weapon/bonegel:bonegel"= null)
+	stored_modules = list("/obj/item/tool/scalpel:scalpel" = null,
+						"/obj/item/tool/circular_saw:circular saw" = null,
+						"/obj/item/tool/surgicaldrill:surgical drill" = null,
+						"/obj/item/tool/cautery:cautery" = null,
+						"/obj/item/tool/hemostat:hemostat" = null,
+						"/obj/item/tool/retractor:retractor" = null,
+						"/obj/item/tool/bonesetter:bone setter" = null,
+						"/obj/item/tool/FixOVein:fixovein" = null,
+						"/obj/item/tool/bonegel:bonegel"= null)
 
 /obj/item/weapon/switchtool/surgery/undeploy(mob/user)
 	playsound(src, undeploy_sound, 10, 1)
 	edit_deploy(0)
-	if(istype(deployed, /obj/item/weapon/scalpel/laser))
-		var/obj/item/weapon/scalpel/laser/L = deployed
+	if(istype(deployed, /obj/item/tool/scalpel/laser))
+		var/obj/item/tool/scalpel/laser/L = deployed
 		L.icon_state += (L.cauterymode) ? "_on" : "_off" //since edit_deploy(0) reverts icon_state to its initial value ("scalpel_laser1(or 2)") which doesn't actually exist
-	else if(istype(deployed, /obj/item/weapon/retractor/manager))
-		var/obj/item/weapon/retractor/manager/M = deployed
+	else if(istype(deployed, /obj/item/tool/retractor/manager))
+		var/obj/item/tool/retractor/manager/M = deployed
 		M.icon_state += "_off"
 	deployed = null
 	overlays.len = 0
@@ -292,10 +292,10 @@
 	item_state = "s_a_k"
 	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
 
-	stored_modules = list("/obj/item/weapon/screwdriver:screwdriver" = null,
-						"/obj/item/weapon/wrench:wrench" = null,
-						"/obj/item/weapon/wirecutters:wirecutters" = null,
-						"/obj/item/weapon/crowbar:crowbar" = null,
+	stored_modules = list("/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/wrench:wrench" = null,
+						"/obj/item/tool/wirecutters:wirecutters" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
 						"/obj/item/weapon/hatchet:hatchet" = null,
@@ -360,7 +360,7 @@
 
 	stored_modules = list(//scalpel and flashlight are available to start and the scalpel is logically a laser one but the basic kind.
 						"/obj/item/device/flashlight:flashlight" = null,
-						"/obj/item/weapon/scalpel/laser:basic laser scalpel" = null)
+						"/obj/item/tool/scalpel/laser:basic laser scalpel" = null)
 
 //Checks the research type and level for the respective field, then adds them all to the stored modules while also filling the slot with that tool.
 /obj/item/weapon/switchtool/holo/add_module(var/obj/item/D, mob/user)
@@ -370,24 +370,24 @@
 		var/datum/tech/disk_tech = T.stored
 		if(istype(disk_tech, /datum/tech/biotech) && disk_tech.level >= 3)
 			if(!(has_tech & BT))
-				stored_modules["/obj/item/weapon/circular_saw:circular saw"] = new /obj/item/weapon/circular_saw(src)
-				stored_modules["/obj/item/weapon/surgicaldrill:surgical drill"] = new /obj/item/weapon/surgicaldrill(src)
-				stored_modules["/obj/item/weapon/cautery/laser:basic laser cautery"] = new /obj/item/weapon/cautery(src)
-				stored_modules["/obj/item/weapon/hemostat:hemostat"] = new /obj/item/weapon/hemostat(src)
-				stored_modules["/obj/item/weapon/retractor:retractor"] = new /obj/item/weapon/retractor(src)
-				stored_modules["/obj/item/weapon/bonesetter:bone setter"] = new /obj/item/weapon/bonesetter(src)
+				stored_modules["/obj/item/tool/circular_saw:circular saw"] = new /obj/item/tool/circular_saw(src)
+				stored_modules["/obj/item/tool/surgicaldrill:surgical drill"] = new /obj/item/tool/surgicaldrill(src)
+				stored_modules["/obj/item/tool/cautery/laser:basic laser cautery"] = new /obj/item/tool/cautery(src)
+				stored_modules["/obj/item/tool/hemostat:hemostat"] = new /obj/item/tool/hemostat(src)
+				stored_modules["/obj/item/tool/retractor:retractor"] = new /obj/item/tool/retractor(src)
+				stored_modules["/obj/item/tool/bonesetter:bone setter"] = new /obj/item/tool/bonesetter(src)
 				to_chat(user, "The holo switchtool has medical designs now!")
 				has_tech |= BT
 				return TRUE
 			alreadyhas = "Biotech"
 		if(istype(disk_tech, /datum/tech/engineering) && disk_tech.level >= 3)
 			if(!(has_tech & ENGI))
-				stored_modules["/obj/item/weapon/screwdriver:screwdriver"] = new /obj/item/weapon/screwdriver(src)
-				stored_modules["/obj/item/weapon/wrench:wrench"] = new /obj/item/weapon/wrench(src)
-				stored_modules["/obj/item/weapon/wirecutters:wirecutters"] = new /obj/item/weapon/wirecutters(src)
-				stored_modules["/obj/item/weapon/crowbar:crowbar"] = new /obj/item/weapon/crowbar(src)
+				stored_modules["/obj/item/tool/screwdriver:screwdriver"] = new /obj/item/tool/screwdriver(src)
+				stored_modules["/obj/item/tool/wrench:wrench"] = new /obj/item/tool/wrench(src)
+				stored_modules["/obj/item/tool/wirecutters:wirecutters"] = new /obj/item/tool/wirecutters(src)
+				stored_modules["/obj/item/tool/crowbar:crowbar"] = new /obj/item/tool/crowbar(src)
 				stored_modules["/obj/item/device/multitool:multitool"] = new /obj/item/device/multitool(src)
-				stored_modules["/obj/item/weapon/weldingtool/experimental:experimental welding tool"] = new /obj/item/weapon/weldingtool/experimental(src)
+				stored_modules["/obj/item/tool/weldingtool/experimental:experimental welding tool"] = new /obj/item/tool/weldingtool/experimental(src)
 				to_chat(user, "The holo switchtool has engineering designs now!")
 				has_tech |= ENGI
 				return TRUE
@@ -506,13 +506,13 @@
 
 //Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, 5 fuel per process().
 //It can be refulled manually, but since it starts active you will blow up welder tanks if deployed and then put to a tank.
-	if(istype(deployed, /obj/item/weapon/weldingtool/experimental))
-		var/obj/item/weapon/weldingtool/experimental/weldingtool = deployed
+	if(istype(deployed, /obj/item/tool/weldingtool/experimental))
+		var/obj/item/tool/weldingtool/experimental/weldingtool = deployed
 		weldingtool.setWelding(1)
 
 /obj/item/weapon/switchtool/holo/undeploy()
-	if(istype(deployed, /obj/item/weapon/weldingtool/experimental))
-		var/obj/item/weapon/weldingtool/experimental/weldingtool = deployed
+	if(istype(deployed, /obj/item/tool/weldingtool/experimental))
+		var/obj/item/tool/weldingtool/experimental/weldingtool = deployed
 		weldingtool.setWelding(0)
 	..()
 	set_light(0)
@@ -521,19 +521,19 @@
 /obj/item/weapon/switchtool/holo/maxed
 	stored_modules = list(
 						"/obj/item/device/flashlight:flashlight" = null,
-						"/obj/item/weapon/scalpel/laser:basic laser scalpel" = null,
-						"/obj/item/weapon/circular_saw:circular saw" = null,
-						"/obj/item/weapon/surgicaldrill:surgical drill" = null,
-						"/obj/item/weapon/cautery/laser:basic laser cautery" = null,
-						"/obj/item/weapon/hemostat:hemostat" = null,
-						"/obj/item/weapon/retractor:retractor" = null,
-						"/obj/item/weapon/bonesetter:bone setter" = null,
-						"/obj/item/weapon/screwdriver:screwdriver" = null,
-						"/obj/item/weapon/wrench:wrench" = null,
-						"/obj/item/weapon/wirecutters:wirecutters" = null,
-						"/obj/item/weapon/crowbar:crowbar" = null,
+						"/obj/item/tool/scalpel/laser:basic laser scalpel" = null,
+						"/obj/item/tool/circular_saw:circular saw" = null,
+						"/obj/item/tool/surgicaldrill:surgical drill" = null,
+						"/obj/item/tool/cautery/laser:basic laser cautery" = null,
+						"/obj/item/tool/hemostat:hemostat" = null,
+						"/obj/item/tool/retractor:retractor" = null,
+						"/obj/item/tool/bonesetter:bone setter" = null,
+						"/obj/item/tool/screwdriver:screwdriver" = null,
+						"/obj/item/tool/wrench:wrench" = null,
+						"/obj/item/tool/wirecutters:wirecutters" = null,
+						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/device/multitool:multitool" = null,
-						"/obj/item/weapon/weldingtool/experimental:experimental welding tool" = null,
+						"/obj/item/tool/weldingtool/experimental:experimental welding tool" = null,
 						"/obj/item/weapon/soap/holo:UV sterilizer" = null,
 						"/obj/item/weapon/shield/energy:energy combat shield" = null,
 						"/obj/item/weapon/melee/energy/sword/activated:energy sword" = null,
@@ -548,30 +548,30 @@
 
 /obj/item/weapon/switchtool/surgery/maxed
 	stored_modules = list(
-						"/obj/item/weapon/scalpel/laser/tier2:scalpel" = null,
-						"/obj/item/weapon/circular_saw/plasmasaw:circular saw" = null,
-						"/obj/item/weapon/surgicaldrill/diamond:surgical drill" = null,
-						"/obj/item/weapon/cautery/laser/tier2:cautery" = null,
-						"/obj/item/weapon/hemostat/pico:hemostat" = null,
-						"/obj/item/weapon/retractor/manager:retractor" = null,
-						"/obj/item/weapon/bonesetter/bone_mender:bone setter" = null,
-						"/obj/item/weapon/FixOVein/clot:fixovein" = null,
-						"/obj/item/weapon/bonegel:bonegel" = null)
+						"/obj/item/tool/scalpel/laser/tier2:scalpel" = null,
+						"/obj/item/tool/circular_saw/plasmasaw:circular saw" = null,
+						"/obj/item/tool/surgicaldrill/diamond:surgical drill" = null,
+						"/obj/item/tool/cautery/laser/tier2:cautery" = null,
+						"/obj/item/tool/hemostat/pico:hemostat" = null,
+						"/obj/item/tool/retractor/manager:retractor" = null,
+						"/obj/item/tool/bonesetter/bone_mender:bone setter" = null,
+						"/obj/item/tool/FixOVein/clot:fixovein" = null,
+						"/obj/item/tool/bonegel:bonegel" = null)
 
 /obj/item/weapon/switchtool/engineering
 	name = "\improper Engineering switchtool"
 	desc = "A switchtool designed specifically to be the perfect companion for an Engineer."
 	stored_modules = list(
-		"/obj/item/weapon/crowbar:crowbar" = null,
-		"/obj/item/weapon/screwdriver:screwdriver" = null,
-		"/obj/item/weapon/weldingtool/hugetank:welding tool" = null,
-		"/obj/item/weapon/wirecutters:wirecutters" = null,
-		"/obj/item/weapon/wrench:wrench" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
+		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/weldingtool/hugetank:welding tool" = null,
+		"/obj/item/tool/wirecutters:wirecutters" = null,
+		"/obj/item/tool/wrench:wrench" = null,
 		"/obj/item/device/multitool:multitool" = null,
 		"/obj/item/stack/cable_coil/persistent:cable coil" = null,
 		"/obj/item/device/t_scanner:T-ray scanner" = null,
 		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
-		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
+		"/obj/item/tool/solder/pre_fueled:soldering iron" = null,
 		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
 		)
 
@@ -579,7 +579,7 @@
 	if(!..())
 		return FALSE
 	if(iswelder(deployed))
-		var/obj/item/weapon/weldingtool/W = deployed
+		var/obj/item/tool/weldingtool/W = deployed
 		W.welding = 1
 		W.status = 1
 	if(istype(deployed, /obj/item/device/t_scanner))
@@ -594,15 +594,15 @@
 
 /obj/item/weapon/switchtool/engineering/mech
 	stored_modules = list(
-		"/obj/item/weapon/crowbar:crowbar" = null,
-		"/obj/item/weapon/screwdriver:screwdriver" = null,
-		"/obj/item/weapon/weldingtool/hugetank/mech:welding tool" = null,
-		"/obj/item/weapon/wirecutters:wirecutters" = null,
-		"/obj/item/weapon/wrench:wrench" = null,
+		"/obj/item/tool/crowbar:crowbar" = null,
+		"/obj/item/tool/screwdriver:screwdriver" = null,
+		"/obj/item/tool/weldingtool/hugetank/mech:welding tool" = null,
+		"/obj/item/tool/wirecutters:wirecutters" = null,
+		"/obj/item/tool/wrench:wrench" = null,
 		"/obj/item/device/multitool:multitool" = null,
 		"/obj/item/stack/cable_coil/persistent:cable coil" = null,
 		"/obj/item/device/t_scanner:T-ray scanner" = null,
 		"/obj/item/device/analyzer/scope:atmospheric analysis scope" = null,
-		"/obj/item/weapon/solder/pre_fueled:soldering iron" = null,
+		"/obj/item/tool/solder/pre_fueled:soldering iron" = null,
 		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
 		)

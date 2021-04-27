@@ -325,7 +325,7 @@ to destroy them and players will be able to make replacements.
 		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
 		if(!t)
 			return
-		var/obj/item/weapon/solder/S = O
+		var/obj/item/tool/solder/S = O
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 50)
@@ -338,7 +338,7 @@ to destroy them and players will be able to make replacements.
 			user.put_in_hands(I)
 		soldering = 0
 	else if(iswelder(O))
-		var/obj/item/weapon/weldingtool/WT = O
+		var/obj/item/tool/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
@@ -795,16 +795,20 @@ obj/item/weapon/circuitboard/rdserver
 		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
-	var/choice = input(usr, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...") in smartfridge_choices
-	if(choice)
-		var/to_spawn = smartfridge_choices[choice]
-		if(src.type == to_spawn)
-			to_chat(user, "<span class = 'notice'>This board is already this type</span>")
-			return
-		if(do_after(user, src, 25))
-			var/spawned = new to_spawn(get_turf(src))
-			visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [spawned]</span>")
-			qdel(src)
+	var/choice = input(user, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...", "Cancel") as null|anything in smartfridge_choices
+	if(!choice)
+		return
+	if(!Adjacent(user) || user.incapacitated())
+		return
+	
+	var/to_spawn = smartfridge_choices[choice]
+	if(src.type == to_spawn)
+		to_chat(user, "<span class = 'notice'>This board is already this type.</span>")
+		return
+	if(do_after(user, src, 25))
+		var/spawned = new to_spawn(get_turf(src))
+		visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [spawned].</span>")
+		qdel(src)
 
 /obj/item/weapon/circuitboard/smartfridge/medbay
 	name = "Circuit Board (Medbay SmartFridge)"

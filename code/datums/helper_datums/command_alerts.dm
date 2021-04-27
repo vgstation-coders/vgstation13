@@ -200,8 +200,22 @@
 
 /datum/command_alert/biohazard_level_5/announce()
 	message = "Confirmed outbreak of level 5 biohazard aboard [station_name()]. All personnel must contain the outbreak."
+	. = ..()
 
-	..()
+/datum/command_alert/blob_defcon_3
+	name = "Biohazard Alert (level 5) DEFCON 3"
+	alert_title = "Biohazard Alert 5 DEFON 3"
+	message = "Accelerated growth of Biohazard Alert Level 5. DEFCON protocol engaged. Code Red is activated."
+
+/datum/command_alert/blob_defcon_2
+	name = "Biohazard Alert (level 5) DEFCON 2"
+	alert_title = "Biohazard Alert 5 DEFON 2"
+	message = "Accelerated growth of Biohazard Alert Level 5. Additional DEFCON provisions engaged. Additional reinforcements available. Cyborg units can switch a new module."
+
+/datum/command_alert/blob_defcon_1
+	name = "Biohazard Alert (level 5) DEFCON 1"
+	alert_title = "Biohazard Alert 5 DEFON 1"
+	message = "Accelerated growth of Biohazard Alert Level 5. Terminal DEFCON provisions engaged. Increased access to all personnel. Additional equipment may be transfered from Communications Consoles."
 
 /// REVS
 

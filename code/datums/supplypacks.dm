@@ -21,6 +21,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/hidden = 0 //Emaggable
 	var/contraband = 0 //Hackable via tools
 	var/group = "Supplies"
+	var/require_holiday = null
 
 /datum/supply_packs/New()
 	manifest += "<ul>"
@@ -517,7 +518,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/collectable/police,
 					/obj/item/clothing/head/collectable/slime,
 					/obj/item/clothing/head/collectable/xenom,
-					/obj/item/clothing/head/collectable/petehat)
+					/obj/item/clothing/head/collectable/petehat,)
 	name = "Collectable hats!"
 	cost = 200
 	containertype = /obj/structure/closet/crate/basic
@@ -527,6 +528,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/randomised/New()
 	manifest += "Contains any [num_contained] of:"
 	..()
+
+/datum/supply_packs/mann_co_key
+	name = "Mann Co. key"
+	cost = 200
+	containertype = /obj/structure/closet/crate/basic
+	contains = list(/obj/item/mann_co_key)
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
+
+/datum/supply_packs/mann_co_crate
+	name = "Mann Co. crate"
+	cost = 200
+	containertype = /obj/structure/mann_co_crate
+	contains = list()
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
 
 /datum/supply_packs/randomised/cheap_hats
 	name = "Cheap hats"
@@ -1837,17 +1856,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/surgery
 	name = "Surgery tools"
-	contains = list(/obj/item/weapon/cautery,
-					/obj/item/weapon/surgicaldrill,
+	contains = list(/obj/item/tool/cautery,
+					/obj/item/tool/surgicaldrill,
 					/obj/item/clothing/mask/breath/medical,
 					/obj/item/weapon/tank/anesthetic,
-					/obj/item/weapon/FixOVein,
-					/obj/item/weapon/hemostat,
-					/obj/item/weapon/scalpel,
-					/obj/item/weapon/bonegel,
-					/obj/item/weapon/retractor,
-					/obj/item/weapon/bonesetter,
-					/obj/item/weapon/circular_saw)
+					/obj/item/tool/FixOVein,
+					/obj/item/tool/hemostat,
+					/obj/item/tool/scalpel,
+					/obj/item/tool/bonegel,
+					/obj/item/tool/retractor,
+					/obj/item/tool/bonesetter,
+					/obj/item/tool/circular_saw)
 	cost = 25
 	containertype = "/obj/structure/closet/crate/secure/medsec"
 	containername = "surgery crate"
@@ -2217,8 +2236,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "exotic fish crate"
 	group = "Hydroponics"
 
-
-
 //farm animals - useless and annoying, but potentially a good source of food
 /datum/supply_packs/cow
 	name = "Cow"
@@ -2282,9 +2299,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/insectcontrol
 	name = "Insect control equipment"
-	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
+					/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
+					/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
 					/obj/item/weapon/reagent_containers/spray/bugzapper,
 					/obj/item/weapon/reagent_containers/spray/bugzapper)
 	cost = 40

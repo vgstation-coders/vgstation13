@@ -10,6 +10,10 @@
 #define AUTH_HEAD 1
 #define AUTH_CAPT 2
 
+#define MEDICAL_SUPPLIES_DEFCON "medical"
+#define ENGINEERING_SUPPLIES_DEFCON "engineering"
+#define WEAPONS_SUPPLIES_DEFCON "weapons"
+
 var/shuttle_call/shuttle_calls[0]
 var/global/ports_open = TRUE
 
@@ -60,6 +64,14 @@ var/list/shuttle_log = list()
 	var/centcomm_message_cooldown = 0
 	var/tmp_alertlevel = 0
 
+	// Blob stuff
+	var/defcon_1_enabled = FALSE
+	var/last_transfer_time = -1 // Game mechanics
+
+	var/last_shipment_time = "Unknown" // IC message on the NanoUI console
+	var/next_shipment_time = "Unknown"
+	var/blob_transfer_delay = 5 MINUTES
+
 	var/status_display_freq = "1435"
 	var/stat_msg1
 	var/stat_msg2
@@ -99,6 +111,23 @@ var/list/shuttle_log = list()
 		if("logout")
 			authenticated = UNAUTH
 			setMenuState(usr,COMM_SCREEN_MAIN)
+
+		// Blob stuff
+		if ("request_supplies")
+			if (!defcon_1_enabled) // Href exploits
+				return FALSE
+			if (world.time < last_transfer_time + blob_transfer_delay)
+				say("Unable to send more supplies at this time. Telecrystals stil re-aligning.")
+				alert_noise("buzz")
+				return FALSE
+			if (!href_list["supplies"]) // No supplies to send, schade
+				return FALSE
+
+			last_transfer_time = world.time
+			last_shipment_time = worldtime2text()
+			next_shipment_time = add_minutes(last_shipment_time, 5)
+			send_supplies(href_list["supplies"])
+
 		// ALART LAVUL
 		if("changeseclevel")
 			setMenuState(usr,COMM_SCREEN_SECLEVEL)
@@ -454,6 +483,10 @@ var/list/shuttle_log = list()
 
 	data["shuttle"]=shuttle
 
+	data["defcon_1_enabled"] = defcon_1_enabled
+	data["last_shipment_time"] = last_shipment_time
+	data["next_shipment_time"] = next_shipment_time
+
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -684,6 +717,84 @@ var/list/shuttle_log = list()
 
 	shuttle_autocall()
 	..()
+
+// -- Blob defcon 1 things
+
+/obj/machinery/computer/communications/proc/send_supplies(var/supplies)
+	// Find a suitable place
+	var/true_dir
+	for (var/direction in cardinal)
+		var/turf/T = get_step(src, dir)
+		if (istype(T, /turf/simulated/floor)) // See if it's an empty space
+			true_dir = T
+			break
+	if (!true_dir)
+		alert_noise("buzz")
+		say("Unable to find suitable place to transfer supplies.")
+		return
+
+	var/turf/T_supplies = get_step(src, true_dir)
+	// Some sparks
+	spark(src, 3)
+	spark(T_supplies, 3)
+
+	switch(supplies)
+		if (MEDICAL_SUPPLIES_DEFCON)
+			new /obj/structure/closet/crate/medical/blob_supplies(T_supplies)
+		if (ENGINEERING_SUPPLIES_DEFCON)
+			new /obj/structure/closet/crate/engi/blob_supplies(T_supplies)
+		if (WEAPONS_SUPPLIES_DEFCON)
+			new /obj/structure/closet/crate/basic/blob_weapons(T_supplies)
+
+// -- Blob supplies crates
+
+/obj/structure/closet/crate/medical/blob_supplies
+	name = "EMERGENCY MEDICAL SUPPLIES"
+	desc = "Not included: field amputations."
+
+/obj/structure/closet/crate/medical/blob_supplies/New()
+	. = ..()
+	var/list/contains = list(/obj/item/weapon/storage/firstaid/regular,
+					/obj/item/weapon/storage/firstaid/fire,
+					/obj/item/weapon/storage/firstaid/toxin,
+					/obj/item/weapon/storage/firstaid/o2,
+					/obj/item/weapon/storage/firstaid/internalbleed,
+					/obj/item/weapon/storage/box/autoinjectors,
+					/obj/item/weapon/storage/box/antiviral_syringes)
+	for (var/item_type in contains)
+		new item_type(src)
+
+/obj/structure/closet/crate/engi/blob_supplies
+	name = "EMERGENCY ENGINEERING SUPPLIES"
+	desc = "Then we will fight it in the dark!"
+
+/obj/structure/closet/crate/engi/blob_supplies/New()
+	. = ..()
+	var/list/contains = list(/obj/item/stack/sheet/metal/bigstack,
+			/obj/item/stack/sheet/glass/glass/bigstack,
+			/obj/item/weapon/storage/toolbox/electrical,
+			/obj/item/weapon/storage/toolbox/mechanical,
+			/obj/item/clothing/gloves/yellow,
+			/obj/item/weapon/cell/high,
+			/obj/item/weapon/cell/high,
+			/obj/item/weapon/cell/high,)
+	for (var/item_type in contains)
+		new item_type(src)
+
+/obj/structure/closet/crate/basic/blob_weapons
+	name = "EMERGENCY WEAPONS SUPPLIES"
+	desc = "Rage, rage against the dying of the light."
+
+/obj/structure/closet/crate/basic/blob_weapons/New()
+	. = ..()
+	var/list/contains = pick(list(/obj/item/weapon/gun/energy/gun,
+			/obj/item/weapon/gun/energy/gun,
+			/obj/item/weapon/gun/energy/gun),
+			list(/obj/item/weapon/gun/energy/gun/nuclear))
+	for (var/item_type in contains)
+		new item_type(src)
+
+// -- Circuit borads
 
 /obj/item/weapon/circuitboard/communications/New()
 	..()

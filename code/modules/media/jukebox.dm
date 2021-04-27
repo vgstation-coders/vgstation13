@@ -210,6 +210,11 @@ var/global/list/loopModeNames=list(
 		linked_account = department_accounts[department]
 	else
 		linked_account = station_account
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	if(MM == 10 && !("halloween" in playlists)) //Checking for jukeboxes with it already
+		playlists["halloween"] = "Halloween"
+	if(MM == 12 && !("christmas" in playlists)) //Checking for jukeboxes with it already
+		playlists["christmas"] = "Christmas Jingles"
 
 /obj/machinery/media/jukebox/Destroy()
 	if(wires)
@@ -817,14 +822,6 @@ var/global/list/loopModeNames=list(
 		"upbeathypedancejam" = "Dance"
 	)
 
-/obj/machinery/media/jukebox/bar/New()
-	..()
-	var/MM = text2num(time2text(world.timeofday, "MM"))
-	if(MM == 10)
-		playlists["halloween"] = "Halloween"
-	if(MM == 12)
-		playlists["christmas"] = "Christmas Jingles"
-
 
 // Relaxing elevator music~
 /obj/machinery/media/jukebox/dj
@@ -997,6 +994,27 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/adminbus/cultify()
 	return
 
+obj/machinery/media/jukebox/holyjuke
+	name = "Holyjuke"
+	desc = "The Pastor's jukebox. You feel a weight being lifted simply by basking in its presence."
+
+	state_base = "holyjuke"
+	icon_state = "holyjuke"
+
+	change_cost = 0
+
+	playlist_id="holy"
+	// Must be defined on your server.
+	playlists=list(
+		"holy" = "Pastor's Paradise"
+	)
+
+/obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
+	// EMAG DOES NOTHING
+	if(istype(W, /obj/item/weapon/card/emag))
+		to_chat(user, "<span class='warning'>A guiltiness fills your heart as a higher power pushes away \the [W]!</span>")
+		return
+	..()
 
 /obj/item/weapon/vinyl
 	name = "nanovinyl"
@@ -1152,3 +1170,8 @@ obj/item/weapon/vinyl/christmas
 	name = "nanovynil - christmas"
 	unformatted = "christmas"
 	formatted = "Christmas Jingles"
+/obj/item/weapon/vinyl/holy
+	name = "nanovinyl - holy"
+	unformatted = "holy"
+	formatted = "Holy"
+	mask = "#8000FF"//purple

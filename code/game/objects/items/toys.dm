@@ -739,7 +739,8 @@
 	name = "whisperphone"
 	desc = "A device used to project your voice. Quietly."
 	icon_state = "megaphone"
-	item_state = "radio"
+	item_state = "megaphone"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1

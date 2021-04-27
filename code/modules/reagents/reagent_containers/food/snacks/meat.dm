@@ -375,3 +375,14 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		C.transferBorers(new_mob)
 		qdel(C)
 		playsound(src, 'sound/effects/evolve.ogg', 100, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman
+	name = "plasmaman meat"
+	desc = "A charred, dry piece of what you think is meant to be meat. It smells burnt."
+	icon_state = "plasmaman_meat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman/New()
+	..()
+	reagents.remove_reagent(NUTRIMENT, 2.5)
+	reagents.add_reagent(PLASMA, 5)
+	bitesize = 1

@@ -48,7 +48,7 @@ var/list/station_holomaps = list()
 	holomap_datum = null
 	..()
 
-/obj/machinery/station_map/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
+/obj/machinery/station_map/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
 	user.visible_message(	"[user] begins to pry out \the [src] from the wall.",
 							"You begin to pry out \the [src] from the wall...")
 	if(do_after(user, src, 40))

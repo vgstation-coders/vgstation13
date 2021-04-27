@@ -242,7 +242,7 @@
 				return
 
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
 				"<span class='notice'>You begin removing \the [src].</span>", \
 				"<span class='warning'>You hear welding noises.</span>")

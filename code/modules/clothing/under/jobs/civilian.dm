@@ -249,3 +249,35 @@
 	_color = "bridgeofficer"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED)
+
+
+
+//Assistant alt-title stuff////////////
+
+/obj/item/clothing/under/color/grey/cadet
+	name = "security cadet uniform"
+	desc = "Jr. Security special forces. Very special."
+	icon_state = "cadet_s"
+	item_state = "cadet_s"
+	_color = "cadet"
+
+/obj/item/clothing/under/color/grey/intern
+	name = "medical intern uniform"
+	desc = "Much more stylish than the insurance broker described."
+	icon_state = "intern_s"
+	item_state = "intern_s"
+	_color = "intern"
+
+/obj/item/clothing/under/color/grey/tech
+	name = "technical assistant uniform"
+	desc = "Technically assisting."
+	icon_state = "tech_s"
+	item_state = "tech_s"
+	_color = "tech"
+
+/obj/item/clothing/under/color/grey/research
+	name = "research assistant uniform"
+	desc = "The tag on the inside has guinea pig scribbled out and 'research ass' written over it."
+	icon_state = "research_s"
+	item_state = "research_s"
+	_color = "research"

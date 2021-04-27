@@ -418,7 +418,7 @@
 		stat(null, text("No Cell Inserted!"))
 
 /mob/living/silicon/robot/proc/show_welding_fuel()
-	var/obj/item/weapon/weldingtool/WT = installed_module(/obj/item/weapon/weldingtool)
+	var/obj/item/tool/weldingtool/WT = installed_module(/obj/item/tool/weldingtool)
 	if(WT)
 		stat(null, text("Welding fuel: [WT.get_fuel()]/[WT.max_fuel]"))
 
@@ -623,7 +623,7 @@
 		if(!getBruteLoss())
 			to_chat(user, "Nothing to fix here!")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0))
 			var/starting_health = health
 			adjustBruteLoss(-30)

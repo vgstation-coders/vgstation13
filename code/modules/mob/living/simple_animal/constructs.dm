@@ -77,7 +77,7 @@
 /mob/living/simple_animal/construct/construct_chat_check(setting)
 	if(!mind)
 		return
-	if(find_active_faction_by_member(mind.GetRole(CULTIST)))
+	if(find_active_faction_by_member(iscultist(src)))
 		return 1
 	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
 		return 1

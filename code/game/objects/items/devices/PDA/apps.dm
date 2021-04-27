@@ -51,21 +51,29 @@ var/global/list/pda_app_menus = list(
 	icon = "pda_clock"
 	var/target = 0
 	var/status = 1			//	0=off 1=on
+	var/lasttimer = 0
 
 /datum/pda_app/alarm/proc/set_alarm(var/await)
 	if(await<=0)
 		return FALSE
-	target = world.time + (await MINUTES)
-	spawn((await MINUTES) + 1 SECONDS)
+	target = world.time + (await SECONDS)
+	lasttimer = await
+	spawn((await SECONDS) + 1 SECONDS)
 		alarm()
 	return TRUE
 
 /datum/pda_app/alarm/proc/alarm()
 	if(!status || world.time < target)
-		return //End the loop if if was disabled or if the target isn't here yet. e.g.: target changed
-	playsound(pda_device, 'sound/machines/chime.ogg', 200, FALSE)
-	sleep(1 SECONDS)
-	alarm()
+		return //End the loop if it was disabled or if the target isn't here yet. e.g.: target changed
+	playsound(pda_device, 'sound/machines/chime.ogg', 40, FALSE, -2)
+	var/mob/living/L = get_holder_of_type(pda_device,/mob/living)
+	if(L)
+		to_chat(usr, "[bicon(pda_device)]<span class='info'>Timer for [lasttimer] seconds has finished. <a href='byond://?src=\ref[pda_device];choice=restartAlarm'>(Restart?)</a></span>")
+
+/datum/pda_app/alarm/proc/restart_alarm()
+	if(!status || world.time < target || lasttimer <= 0)
+		return //End the loop if it was disabled or already active
+	return set_alarm(lasttimer)
 
 /datum/pda_app/light_upgrade
 	name = "PDA Flashlight Enhancer"

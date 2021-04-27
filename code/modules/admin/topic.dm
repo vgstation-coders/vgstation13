@@ -1508,7 +1508,8 @@
 			return
 
 		var/mob/M = locate(href_list["newban"])
-		if(!ismob(M))
+		if(!ismob(M) || !M.ckey)
+			to_chat(usr, "<span class='notice'>There is no mob, or no ckey, to ban. Perhaps the player has ghosted?</span>")
 			return
 
 		// now you can! if(M.client && M.client.holder)	return	//admins cannot be banned. Even if they could, the ban doesn't affect them anyway
@@ -2550,9 +2551,9 @@
 		if(!threatadd)
 			return
 		if(threatadd>0)
-			D.create_threat(threatadd)
+			D.create_midround_threat(threatadd)
 		else
-			D.spend_threat(-threatadd) //Spend a positive value. Negative the negative.
+			D.spend_midround_threat(-threatadd) //Spend a positive value. Negative the negative.
 		D.threat_log += "[worldtime2text()]: Admin [key_name(usr)] adjusted threat by [threatadd]."
 		message_admins("[key_name(usr)] adjusted threat by [threatadd].")
 		check_antagonists()
@@ -3250,6 +3251,12 @@
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TriAI")
+			if("RandomizedLawset")
+				for(var/mob/living/silicon/ai/target in mob_list)
+					to_chat(target,"<span class='danger'>[Gibberish("ERROR! BACKUP FILE CORRUPTED: PLEASE VERIFY INTEGRITY OF LAWSET.",10)]</span>")
+					var/datum/ai_laws/randomize/RLS = new
+					target.laws.inherent = RLS.inherent
+					target.show_laws()
 			if("gravity")
 				if(!(ticker && ticker.mode))
 					to_chat(usr, "Please wait until the game starts!  Not sure how it will work otherwise.")
@@ -5321,6 +5328,18 @@
 					end_credits.customized_star = newstar
 					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
 					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
+
+			if("resetss")
+				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.customized_ss = ""
+					log_admin("[key_name(usr)] reset the current round's screenshot.")
+					message_admins("[key_name_admin(usr)] reset the current round's featured screenshot.")
+			if("setss")
+				var/newss = input(usr,"Please insert a direct image link. The maximum size is 600x600.") as text|null
+				if(newss)
+					end_credits.customized_ss = newss
+					log_admin("[key_name(usr)] forced the current round's featured screenshot to be '[newss]'")
+					message_admins("[key_name_admin(usr)] forced the current round's featured screenshot to be '[newss]'")
 
 			if("resetname")
 				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't

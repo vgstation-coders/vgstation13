@@ -791,6 +791,7 @@ obj/item/clothing/suit/cassock
 	max_combined_w_class = 28
 	storage_slots = 14
 	actions_types = list(/datum/action/item_action/show_wares)
+	allowed = list(/obj/item/weapon/gun/projectile/hecate/hunting)
 
 /datum/action/item_action/show_wares/Trigger()
 	var/obj/item/clothing/suit/storage/trader/T = target

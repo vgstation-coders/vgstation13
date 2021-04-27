@@ -111,7 +111,7 @@
 	O.adjustToxLoss(M.getToxLoss())
 	O.adjustOxyLoss(M.getOxyLoss())
 	O.stat = M.stat
-	O.name = O.get_visible_name()
+	O.update_name()
 //		O.update_icon = 1	//queue a full icon update at next life() call
 	Mo.monkeyizing = 0
 	qdel(M)

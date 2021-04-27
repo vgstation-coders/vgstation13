@@ -200,7 +200,7 @@
 				visible_message("<span class='warning'>With a clatter, [anyitem > 1 ? "some items land" : "an item lands"] at the feet of [user].</span>")
 		return
 	if(health < maxHealth && iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.do_weld(user, src, 30, 5))
 			to_chat(user, "<span class='notice'>You patch up \the [src].</span>")
 			adjust_health(-rand(15,30))

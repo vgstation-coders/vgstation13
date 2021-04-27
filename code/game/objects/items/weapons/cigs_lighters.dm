@@ -248,7 +248,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	//Items with special messages go first
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.is_hot()) //Badasses dont get blinded while lighting their cig with a welding tool
 			light("<span class='notice'>[user] casually lights \his [name] with \the [W], what a badass.</span>")
 
@@ -619,7 +619,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
-	chem_volume = 50 //It's a fat blunt, a really fat blunt
+	chem_volume = 100 //It's a fat blunt, a really fat blunt
 
 /obj/item/clothing/mask/cigarette/blunt/rolled //grown.dm handles reagents for these
 

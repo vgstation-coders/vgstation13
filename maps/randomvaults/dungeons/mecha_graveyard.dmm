@@ -58,7 +58,7 @@
 "bf" = (/obj/effect/decal/cleanable/blood/gibs/robot/limb,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
 "bg" = (/obj/item/weapon/broken_bottle,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 8},/area/vault/mecha_graveyard)
 "bh" = (/obj/machinery/door/airlock/external,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bi" = (/obj/item/weapon/screwdriver,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bi" = (/obj/item/tool/screwdriver,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
 "bj" = (/obj/machinery/mech_bay_recharge_port,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
 "bk" = (/obj/machinery/mech_bay_recharge_floor{icon_state = "recharge_floor_asteroid"},/turf/simulated/floor,/area/vault/mecha_graveyard)
 "bl" = (/obj/machinery/computer/mech_bay_power_console,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)

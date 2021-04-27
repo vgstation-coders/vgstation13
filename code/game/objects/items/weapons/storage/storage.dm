@@ -209,8 +209,10 @@
 	var/col_count = min(7,storage_slots) -1
 	if(col_count < 0)
 		col_count = 6 //Show 7 inventory slots instead of breaking the inventory
-	if (adjusted_contents > 7)
+	if(adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
+	if(adjusted_contents && (adjusted_contents % 7 == 0) && !is_full())
+		row_num++ //If we have a full row of items, but we still have leftover space... Don't collapse the row, so people can still put stuff inside
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
@@ -675,3 +677,9 @@
 	for (var/i in no_storage_slot)
 		if(contents.len && (slot == i))
 			return CANNOT_EQUIP
+
+/obj/item/weapon/storage/proc/is_full()
+	var/sum_w_class = 0 //Given BYOND's horrid memory limit, which is worse for performance: Recalculating this, or storing it in memory? Who knows.
+	for(var/obj/item/I in contents)
+		sum_w_class += I.w_class
+	return (storage_slots && (contents.len >= storage_slots)) || (sum_w_class >= max_combined_w_class)

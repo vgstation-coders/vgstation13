@@ -182,7 +182,10 @@
 	if (chosen_backpack)
 		H.equip_to_slot_or_del(new chosen_backpack(H), slot_back, 1)
 		for (var/item_type in items_to_collect)
-			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+			if (ispath(item_type, /obj/item))
+				H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+			else // More abstract thing
+				new item_type(H.back)
 		// -- Special surival gear for that species
 		if (equip_survival_gear.len)
 
@@ -200,7 +203,10 @@
 		// Special alt-title items
 		if (special_items)
 			for (var/item_type in special_items)
-				H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+				if (ispath(item_type, /obj/item))
+					H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+				else // More abstract thing
+					new item_type(H.back)
 
 	// -- No backbag, let's improvise
 

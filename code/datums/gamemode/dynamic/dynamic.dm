@@ -21,8 +21,14 @@ var/stacking_limit = 90
 	//Threat logging vars
 	var/threat_level = 0//the "threat cap", threat shouldn't normally go above this and is used in ruleset calculations
 	var/starting_threat = 0 //threat_level's initially rolled value. Threat_level isn't changed by many things.
-	var/threat = 0//set at the beginning of the round. Spent by the mode to "purchase" rules.
+	var/threat = 0//set at the beginning of the round. Spent by the mode to "purchase"  roundstart rules.
 	var/list/threat_log = list() //Running information about the threat. Can store text or datum entries.
+
+	// Midround threat
+	var/midround_threat_level = 0
+	var/midround_starting_threat = 0
+	var/midround_threat = 0
+	var/list/midround_threat_log = list()
 
 	var/list/roundstart_rules = list()
 	var/list/latejoin_rules = list()
@@ -64,8 +70,8 @@ var/stacking_limit = 90
 /datum/gamemode/dynamic/AdminPanelEntry()
 	var/dat = list()
 	dat += "Dynamic Mode <a href='?_src_=vars;Vars=\ref[src]'>\[VV\]</A><BR>"
-	dat += "Threat Level: <b>[threat_level]</b><br/>"
-	dat += "Threat to Spend: <b>[threat]</b> <a href='?_src_=holder;adjustthreat=1'>\[Adjust\]</A> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
+	dat += "Threat Level: <b>[threat_level]</b>, in-round injection threat level: <b>[midround_threat_level]</b><br/>"
+	dat += "Threat to Spend: <b>[midround_threat]</b> <a href='?_src_=holder;adjustthreat=1'>\[Adjust\]</A> <a href='?_src_=holder;threatlog=1'>\[View Log\]</a><br/>"
 	dat += "<br/>"
 	dat += "Parameters: centre = [curve_centre_of_round] ; width = [curve_width_of_round].<br/>"
 	dat += "<i>On average, <b>[peaceful_percentage]</b>% of the rounds are more peaceful.</i><br/>"
@@ -123,7 +129,7 @@ var/stacking_limit = 90
 	if(!admin.check_rights(R_ADMIN) && (ticker.current_state != GAME_STATE_FINISHED))
 		return
 
-	var/out = "<TITLE>Threat Log</TITLE><B><font size='3'>Threat Log</font></B><br><B>Starting Threat:</B> [starting_threat]<BR>"
+	var/out = "<TITLE>Threat Log</TITLE><B><font size='3'>Threat Log</font></B><br><B>Starting Threat:</B> [starting_threat], <b>midround</b>: [midround_starting_threat]<BR>"
 
 	for(var/entry in threat_log)
 		if(istext(entry))
@@ -132,13 +138,14 @@ var/stacking_limit = 90
 			var/datum/role/catbeast/C = entry
 			out += "Catbeast threat regenerated/threat_level inflated: [C.threat_generated]/[C.threat_level_inflated]<BR>"
 
-	out += "<B>Remaining threat/threat_level:</B> [threat]/[threat_level]"
+	out += "<B>Remaining threat/threat_level:</B> [threat]/[threat_level]<br/>"
+	out += "<B>Remaining midround threat/threat_level:</B> [midround_threat]/[midround_threat_level]"
 
 	usr << browse(out, "window=threatlog;size=700x500")
 
 /datum/gamemode/dynamic/GetScoreboard()
 
-	dat += "<h2>Dynamic Mode - Threat Level = <font color='red'>[threat_level]%</font></h2><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
+	dat += "<h2>Dynamic Mode - Roundstart Threat = <font color='red'>[threat_level]%</font>, Midround Threat = <font color='red'>[midround_threat_level]%</font></h2><a href='?src=\ref[src];threatlog=1'>\[View Log\]</a>"
 
 	var/rules = list()
 	if (executed_rules.len > 0)
@@ -156,10 +163,10 @@ var/stacking_limit = 90
 		dat += "(extended)"
 	dat += "<HR>"
 	. = ..()
-	send2mainirc("A round of [src.name] has ended - [living_players.len] survivors, [dead_players.len] ghosts.")
-	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts.")
-	send2mainirc("Dynamic mode Threat Level: [starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""], rulesets: [jointext(rules, ", ")].")
-	send2maindiscord("Dynamic mode Threat Level: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, rulesets: [jointext(rules, ", ")]")
+	send2mainirc("A round of [src.name] has ended - [living_players.len] survivors, [dead_players.len] ghosts. Final crew score: [score["crewscore"]] ([score["rating"]])")
+	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts. Final crew score: **[score["crewscore"]] ([score["rating"]])**")
+	send2mainirc("Dynamic mode Roundstart Threat: [starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""], Midround Threat: [midround_starting_threat][(midround_starting_threat!=midround_threat_level)?" ([midround_threat_level])":""], rulesets: [jointext(rules, ", ")].")
+	send2maindiscord("Dynamic mode Roundstart Threat: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, Midround Threat: **[midround_starting_threat][(midround_starting_threat!=midround_threat_level)?" ([midround_threat_level])":""]**, rulesets: [jointext(rules, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
 	distribution_mode = dynamic_chosen_mode
@@ -187,8 +194,8 @@ var/stacking_limit = 90
 	var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
 	midround_injection_cooldown = round(clamp(exp_distribution(midround_injection_cooldown_middle), MIDROUND_DELAY_MIN, MIDROUND_DELAY_MAX))
 
-	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
-	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
+	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font> and <font size='8'>[midround_threat_level]</font> for midround!")
+	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level] and [midround_threat_level]</font> for midround!")
 
 	message_admins("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
@@ -454,8 +461,8 @@ var/stacking_limit = 90
 	if (latejoin_rule)
 		if (!latejoin_rule.repeatable)
 			latejoin_rules = remove_rule(latejoin_rules,latejoin_rule.type)
-		spend_threat(latejoin_rule.cost)
-		threat_log += "[worldtime2text()]: Latejoin [latejoin_rule.name] spent [latejoin_rule.cost]"
+		spend_midround_threat(latejoin_rule.cost)
+		threat_log += "[worldtime2text()]: Latejoin [latejoin_rule.name] spent [latejoin_rule.cost] (midround budget)"
 		dynamic_stats.measure_threat(threat)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
 			var/mob/M = pick(latejoin_rule.assigned)
@@ -473,8 +480,8 @@ var/stacking_limit = 90
 	if (midround_rule)
 		if (!midround_rule.repeatable)
 			midround_rules = remove_rule(midround_rules,midround_rule.type)
-		spend_threat(midround_rule.cost)
-		threat_log += "[worldtime2text()]: Midround [midround_rule.name] spent [midround_rule.cost]"
+		spend_midround_threat(midround_rule.cost)
+		threat_log += "[worldtime2text()]: Midround [midround_rule.name] spent [midround_rule.cost] (midround budget)"
 		dynamic_stats.measure_threat(threat)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
 			message_admins("DYNAMIC MODE: Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
@@ -562,13 +569,13 @@ var/stacking_limit = 90
 			current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
 			current_players[CURRENT_OBSERVERS] = list_observers.Copy()
 			for (var/datum/dynamic_ruleset/midround/rule in midround_rules)
-				if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
+				if (rule.acceptable(living_players.len,midround_threat_level) && midround_threat >= rule.cost)
 					// Classic secret : only autotraitor/minor roles
 					if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 						message_admins("[rule] was refused because we're on classic secret mode.")
 						continue
 					// No stacking : only one round-enter, unless > stacking_limit threat.
-					if (threat < stacking_limit && no_stacking)
+					if (midround_threat < stacking_limit && no_stacking)
 						var/skip_ruleset = 0
 						for (var/datum/dynamic_ruleset/DR in executed_rules)
 							if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
@@ -677,13 +684,13 @@ var/stacking_limit = 90
 	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
-			if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
+			if (rule.acceptable(living_players.len,midround_threat_level) && midround_threat >= rule.cost)
 				// Classic secret : only autotraitor/minor roles
 				if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 					message_admins("[rule] was refused because we're on classic secret mode.")
 					continue
 				// No stacking : only one round-enter, unless > stacking_limit threat.
-				if (threat < stacking_limit && no_stacking)
+				if (midround_threat < stacking_limit && no_stacking)
 					var/skip_ruleset = 0
 					for (var/datum/dynamic_ruleset/DR in executed_rules)
 						if ((DR.flags & HIGHLANDER_RULESET) && (rule.flags & HIGHLANDER_RULESET))
@@ -718,6 +725,18 @@ var/stacking_limit = 90
 //Expend threat, but do not fall below 0.
 /datum/gamemode/dynamic/proc/spend_threat(var/cost)
 	threat = max(threat-cost,0)
+
+// Same as above, but for midround
+/datum/gamemode/dynamic/proc/refund_midround_threat(var/regain)
+	threat = min(midround_threat_level,midround_threat+regain)
+
+/datum/gamemode/dynamic/proc/create_midround_threat(var/gain)
+	midround_threat = min(100, midround_threat+gain)
+	if(midround_threat>midround_threat_level)
+		midround_threat_level = midround_threat
+
+/datum/gamemode/dynamic/proc/spend_midround_threat(var/cost)
+	midround_threat = max(midround_threat-cost,0)
 
 // -- For the purpose of testing & simulation.
 /datum/gamemode/dynamic/proc/simulate_roundstart(var/mob/user = usr)

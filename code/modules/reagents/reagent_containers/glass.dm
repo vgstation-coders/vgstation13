@@ -26,7 +26,7 @@
 		/obj/structure/sink,
 		/obj/structure/centrifuge,
 		/obj/item/weapon/storage,
-		/obj/item/weapon/solder,
+		/obj/item/tool/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
 		/obj/machinery/dna_scannernew,
 		/obj/item/weapon/grenade/chem_grenade,
@@ -108,7 +108,7 @@
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
+	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/tool/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
@@ -250,20 +250,20 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	icon_state = "beakernoreact"
-	starting_materials = list(MAT_GLASS = 500)
-	volume = 50
+	starting_materials = list(MAT_GLASS = 1000)
+	volume = 100
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 200 units."
 	icon_state = "beakernoreactlarge"
-	starting_materials = list(MAT_GLASS = 1500)
-	volume = 100
+	starting_materials = list(MAT_GLASS = 3000)
+	volume = 200
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace

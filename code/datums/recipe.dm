@@ -35,7 +35,7 @@
 
 	var/list/reagents //List of reagents needed and their amount, reagents = list(BERRYJUICE = 5)
 	var/list/reagents_forbidden //List of reagents that will not be transfered to the cooked item if found. reagents_forbidden = list(TOXIN, WATER)
-	var/list/items //List of items needed, items = list(/obj/item/weapon/crowbar, /obj/item/weapon/welder)
+	var/list/items //List of items needed, items = list(/obj/item/tool/crowbar, /obj/item/weapon/welder)
 	var/result //Result of a complete recipe. result = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	var/time = 10 SECONDS //Length of time it takes to complete the recipe. In 10ths of a second
 

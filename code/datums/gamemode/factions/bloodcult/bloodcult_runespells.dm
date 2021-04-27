@@ -513,7 +513,7 @@
 	cult.cult_reminders += text
 	for(var/datum/role/cultist/C in cult.members)
 		var/datum/mind/M = C.antag
-		if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[reminder]</span></span>")
 			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
 			M.store_memory("Cult reminder: [text].")
@@ -528,10 +528,10 @@
 	if(!message)
 		return
 
-	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
+	var/datum/faction/bloodcult = find_active_faction_by_member(iscultist(activator))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
-		if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 			to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
 
 	for(var/mob/dead/observer/O in player_list)
@@ -585,12 +585,12 @@
 			speaker_name = H.real_name
 			L = speech.speaker
 		rendered_message = speech.render_message()
-		var/datum/faction/bloodcult = find_active_faction_by_member(L.mind.GetRole(CULTIST))
+		var/datum/faction/bloodcult = find_active_faction_by_member(iscultist(L))
 		for(var/datum/role/cultist/C in bloodcult.members)
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
-			if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+			if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
@@ -1145,7 +1145,7 @@
 				var/obj/item/weapon/handcuffs/cult/restraints = new(victim)
 				victim.handcuffed = restraints
 				restraints.on_restraint_apply(victim)//a jolt of pain to slow them down
-				restraints.gaoler = converter.mind.GetRole(CULTIST)
+				restraints.gaoler = iscultist(converter)
 				victim.update_inv_handcuffed()	//update handcuff overlays
 
 				if (success == CONVERSION_NOCHOICE)
@@ -2093,7 +2093,7 @@ var/list/blind_victims = list()
 
 	var/list/possible_targets = list()
 	var/list/prisoners = list()
-	var/datum/faction/bloodcult/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
+	var/datum/faction/bloodcult/bloodcult = find_active_faction_by_member(iscultist(activator))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		possible_targets.Add(M.current)

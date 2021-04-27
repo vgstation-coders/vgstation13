@@ -45,7 +45,7 @@
 	desc = "Charred circuit in melted plastic case. Wonder what that used to be..."
 	icon_state = "implant_melted"
 	malfunction = IMPLANT_MALFUNCTION_PERMANENT
-	
+
 /obj/item/weapon/implant/proc/makeunusable(var/probability=50)
 	if(prob(probability))
 		visible_message("<span class='warning'>\The [src] fizzles and sparks!</span>")
@@ -53,7 +53,7 @@
 		desc = "Charred circuit in melted plastic case."
 		icon_state = "implant_melted"
 		malfunction = IMPLANT_MALFUNCTION_PERMANENT
-	
+
 /obj/item/weapon/implant/Destroy()
 	if(part)
 		part.implants.Remove(src)
@@ -147,7 +147,7 @@
 
 /obj/item/weapon/implant/explosive/islegal()
 	return 0
-	
+
 /obj/item/weapon/implant/explosive/handle_removal(var/mob/remover)
 	makeunusable(75)
 
@@ -169,7 +169,62 @@
 /obj/item/weapon/implant/explosive/nuclear/emp_act(severity)
 	return
 
+/obj/item/weapon/implant/explosive/remote
+	name = "chem implant"
+	desc = "Injects \"chemicals\"."
+	icon_state = "implant"
 
+/obj/item/weapon/implant/chem/New()
+	..()
+	remote_implants.Add(src)
+
+/obj/item/weapon/implant/chem/Destroy()
+	remote_implants.Remove(src)
+	..()
+
+/obj/item/weapon/implant/explosive/remote/get_data()
+	var/dat = {"
+<b>Implant Specifications:</b><BR>
+<b>Name:</b> Robust Corp RX-78 Prisoner Intimidation Implant<BR>
+<b>Life:</b> Activates upon remote function.<BR>
+<b>Important Notes:</b> Explodes<BR>
+<HR>
+<b>Implant Details:</b><BR>
+<b>Function:</b> Contains a small, compact, electrically detonated explosive that detonates upon receiving a specially encoded signal.<BR>
+<b>Special Features:</b> Explodes<BR>
+<b>Integrity:</b> Implant will last so long as the subject is alive. However, if the subject suffers from malnutrition,<BR>
+the implant may become unstable and either pre-maturely inject the subject or simply break."}
+	return dat
+
+/obj/item/weapon/implant/explosive/remote/Hear()
+	return
+
+/obj/item/weapon/implant/explosive/remote/hear()
+	return
+
+/obj/item/weapon/implant/explosive/remote/activate()
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return
+	if(iscarbon(imp_in))
+		var/mob/M = imp_in
+
+		message_admins("Remote explosive implant triggered in [M] ([M.key]). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>) ")
+		log_game("Remote explosive implant triggered in [M] ([M.key]).")
+
+		to_chat(M, "You hear a faint *beep*.")
+
+		var/turf/T = get_turf(M)
+
+		M.gib()
+		explosion(T, 1, 1, 3, 4)
+		T.hotspot_expose(3500, 125, surfaces = 1)
+
+		qdel(src)
+
+/obj/item/weapon/implant/explosive/remote/implanted()
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
+	return 1
 
 /obj/item/weapon/implant/chem
 	name = "chem implant"
@@ -355,7 +410,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return
 	log_admin("[key_name(remover)] has removed a greytide implant from [key_name(imp_in)].")
 	R.Drop(FALSE)
-	
+
 	makeunusable(90)
 
 /obj/item/weapon/implant/adrenalin
@@ -507,7 +562,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/compressed/trigger(emote, mob/source as mob)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return 0
-		
+
 	if (src.scanned == null)
 		return 0
 
@@ -640,6 +695,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	else
 		to_chat(H, "<span class = 'notice'>You hear the soothing millennia-old Gregorian chants of the clergy.</span>")
 	return 1
-	
+
 /obj/item/weapon/implant/holy/handle_removal(var/mob/remover)
 	makeunusable(15)
