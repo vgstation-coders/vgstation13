@@ -680,7 +680,7 @@ var/global/list/whitelisted_species = list("Human")
 	//known_languages = list("Muton") //this language doesn't even EXIST
 	eyes = "eyes_s"
 
-	punch_damage = 15
+	punch_damage = 10
 
 	primitive = /mob/living/carbon/monkey // TODO
 
