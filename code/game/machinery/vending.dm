@@ -2563,7 +2563,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/cowboy = 3,
 		/obj/item/clothing/suit/kimono/sakura = 3,
 		/obj/item/clothing/head/widehat_red = 3,
-		/obj/item/clothing/suit/red_suit = 3
+		/obj/item/clothing/suit/red_suit = 3,
+		/obj/item/clothing/suit/banana_suit = 3,
+		/obj/item/clothing/head/banana_hat = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche = AUTO_DROBE_DEFAULT_STOCK,

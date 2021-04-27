@@ -684,3 +684,11 @@
 	desc = "An oversized Donitos promotional plastic donut-shaped hat."
 	icon_state = "donitos_pope"
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/head/banana_hat
+	name = "banana hat"
+	desc = "Ring ring ring ring ring ring ring."
+	icon_state = "banana_hat"
+	item_state = "banana_hat"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR
