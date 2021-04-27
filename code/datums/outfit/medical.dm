@@ -56,6 +56,13 @@
 
 /datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	
+	return ..()
+	
+/datum/outfit/cmo/post_equip_priority(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/straight_jacket, slot_in_backpack)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	H.equip_or_collect(new randomcan, slot_in_backpack)
 	return ..()
 
 // -- Doctor
@@ -160,6 +167,12 @@
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	
+	return ..()
+	
+/datum/outfit/doctor/post_equip_priority(var/mob/living/carbon/human/H)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	H.equip_or_collect(new randomcan, slot_in_backpack)
 	return ..()
 
 // -- Chemist
@@ -218,8 +231,17 @@
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/chemist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/bag/chem] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/weapon/storage/bag/chem] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink] = SURVIVAL_BOX //apparently they like this stuff
 	return ..()
+	
+/datum/outfit/chemist/post_equip_priority(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/weapon/storage/box/chemistry_kit(H.back), slot_in_backpack)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	H.equip_or_collect(new randomcan, slot_in_backpack)
+	return ..()	
+	
+
 
 // -- Paramedic
 
@@ -287,6 +309,14 @@
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
 	return ..()
+	
+/datum/outfit/paramedic/post_equip_priority(var/mob/living/carbon/human/H)
+	for(var/obj/item/weapon/card/id/ID in H.get_body_slots())
+		ID.access += list(access_chemistry,access_genetics,access_virology)
+	to_chat(H,"<span class='danger'>As a special incentive for your arrival, you have been granted chemistry, genetics and virology access.</span>")
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	H.equip_or_collect(new randomcan, slot_in_backpack)
+	return ..()
 
 // -- Geneticist
 
@@ -337,6 +367,12 @@
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/weapon/dnainjector/nofail/remotesay] = SURVIVAL_BOX
+	return ..()
+	
+/datum/outfit/geneticist/post_equip_priority(var/mob/living/carbon/human/H)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	H.equip_or_collect(new randomcan, slot_in_backpack)
 	return ..()
 
 // -- Virologist
@@ -392,5 +428,10 @@
 	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
 
 /datum/outfit/virologist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/virusdish/random] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/weapon/virusdish/random] = SURVIVAL_BOX
+	return ..()
+	
+/datum/outfit/virologist/post_equip_priority(var/mob/living/carbon/human/H)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	H.equip_or_collect(new randomcan, slot_in_backpack)
 	return ..()
