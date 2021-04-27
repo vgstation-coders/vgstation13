@@ -24,7 +24,7 @@
 	warning_low_pressure = 50
 	hazard_low_pressure = 0
 
-	max_hurt_damage = 30 /*It costs 30 points, it should crit in 3 hits.*/
+	punch_damage = 20
 
 	// Same as disposal
 	punch_throw_speed = 1

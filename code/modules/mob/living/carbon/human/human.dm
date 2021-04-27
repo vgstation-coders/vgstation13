@@ -1743,7 +1743,6 @@ mob/living/carbon/human/isincrit()
 	..()
 	if(prob(10))
 		species.punch_damage = rand(1,5)
-	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
 		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
 		var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]

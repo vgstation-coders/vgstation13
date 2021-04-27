@@ -43,7 +43,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/known_languages = list(LANGUAGE_GALACTIC_COMMON)	// Languages that this species innately knows.
 	var/default_language = LANGUAGE_GALACTIC_COMMON				// Default language is used when 'say' is used without modifiers.
 	var/attack_verb = "punches"									// Empty hand hurt intent verb.
-	var/punch_damage = 0										// Extra empty hand attack damage.
+	var/punch_damage = 5										// Extra empty hand attack damage.
 	var/punch_sharpness = 0										// Slicing/cutting force of punches. Independent of the sharpness added by claws.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
@@ -85,8 +85,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint the species leaves if they are not wearing shoes. If we ever get any other than human and vox, maybe this should be explicitly defined for each species.
 
-	// For grays
-	var/max_hurt_damage = 5 // Max melee damage dealt
+
 	var/list/default_mutations = list()
 	var/list/default_blocks = list() // Don't touch.
 	var/list/default_block_names = list() // Use this instead, using the names from setupgame.dm
@@ -610,7 +609,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_GREY)
 	eyes = "grey_eyes_s"
 
-	max_hurt_damage = 3 // From 5 (for humans)
+	punch_damage = 3
 
 	primitive = /mob/living/carbon/monkey/grey
 
@@ -681,7 +680,7 @@ var/global/list/whitelisted_species = list("Human")
 	//known_languages = list("Muton") //this language doesn't even EXIST
 	eyes = "eyes_s"
 
-	max_hurt_damage = 10
+	punch_damage = 15
 
 	primitive = /mob/living/carbon/monkey // TODO
 
@@ -853,7 +852,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_ROOTSPEAK)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	attack_verb = "slashes"
-	punch_damage = 5
+	punch_damage = 10
 	primitive = /mob/living/carbon/monkey/diona
 
 	warning_low_pressure = 50
@@ -1017,7 +1016,7 @@ var/list/has_died_as_golem = list()
 	attack_verb = "claws"
 	flags = NO_PAIN | IS_WHITELISTED | HYPOTHERMIA_IMMUNE
 	anatomy_flags = HAS_LIPS
-	punch_damage = 7
+	punch_damage = 12
 	default_mutations=list(M_HULK,M_CLAWS,M_TALONS)
 	burn_mod = 2
 	brute_mod = 2

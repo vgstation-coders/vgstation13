@@ -128,9 +128,7 @@
 /mob/living/carbon/human/get_unarmed_damage(var/atom/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
-	var/damage = rand(0, S.max_hurt_damage)
-	damage += S.punch_damage
-
+	var/damage = S.punch_damage
 	damage *= get_strength()
 	if(organ_has_mutation(get_active_hand_organ(), M_CLAWS) && !istype(gloves))
 		damage += 3
@@ -140,7 +138,7 @@
 
 		G.on_punch(src, victim)
 
-	return damage
+	return round(damage)
 
 /mob/living/carbon/human/get_unarmed_sharpness(mob/living/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
