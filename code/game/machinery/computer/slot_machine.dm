@@ -4,7 +4,7 @@
 #endif
 
 #define SEVEN		1
-#define DIAMOND		2
+#define DIAMONDS	2
 #define CHERRY		3
 #define HEART		4
 #define MELON		5
@@ -216,7 +216,7 @@
 				C.icon_state = "chicken_white"
 				C.icon_living = "chicken_white"
 				C.icon_dead = "chicken_white_dead"
-			if(DIAMOND)
+			if(DIAMONDS)
 				win_value = 300 * spin_cost //4500$
 			if(CHERRY)
 				win_value = 200 * spin_cost //3000$
@@ -340,7 +340,7 @@
 #undef MINIMUM_MONEY_TO_PLAY
 
 #undef SEVEN
-#undef DIAMOND
+#undef DIAMONDS
 #undef CHERRY
 #undef HEART
 #undef MELON
