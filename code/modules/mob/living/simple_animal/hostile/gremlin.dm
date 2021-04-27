@@ -40,10 +40,6 @@ var/list/bad_gremlin_items = list()
 	var/list/hear_memory = list()
 	var/const/max_hear_memory = 20
 
-	//For ventcrawling
-	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent
-	var/travelling_in_vent = 0
-
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
 	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump))
 		get_vent(target)
@@ -112,12 +108,6 @@ var/list/bad_gremlin_items = list()
 	if(pipe)
 		handle_ventcrawl(pipe)
 
-/mob/living/simple_animal/hostile/gremlin/proc/get_vent(var/obj/machinery/atmospherics/unary/vent_pump/v)
-	//ventcrawl!
-	if(!v.welded)
-		entry_vent = v
-		Goto(get_turf(v),move_to_delay)
-
 /mob/living/simple_animal/hostile/gremlin/CanAttack(atom/new_target)
 	if(bad_gremlin_items.Find(new_target.type))
 		return FALSE
@@ -143,45 +133,6 @@ var/list/bad_gremlin_items = list()
 		if(++time_chasing_target > max_time_chasing_target)
 			LoseTarget()
 			time_chasing_target = 0
-
-	//Ventcrawling stuff from spiderling code
-	if(!client || deny_client_move)
-		if(travelling_in_vent)
-			if(istype(src.loc, /turf))
-				travelling_in_vent = 0
-				entry_vent = null
-		else if(entry_vent)
-			if(get_dist(src, entry_vent) <= 1)
-				if(entry_vent.network && entry_vent.network.normal_members.len)
-					var/list/vents = list()
-					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
-						vents.Add(temp_vent)
-					if(!vents.len)
-						entry_vent = null
-						return
-					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
-					spawn(rand(20,60))
-						var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
-						forceMove(exit_vent)
-						spawn(travel_time)
-
-							if(!exit_vent || exit_vent.welded)
-								forceMove(entry_vent)
-								entry_vent = null
-								return
-
-							if(prob(50))
-								src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
-							sleep(travel_time)
-
-							if(!exit_vent || exit_vent.welded)
-								forceMove(entry_vent)
-								entry_vent = null
-								return
-							forceMove(exit_vent.loc)
-							entry_vent = null
-				else
-					entry_vent = null
 
 	.=..()
 

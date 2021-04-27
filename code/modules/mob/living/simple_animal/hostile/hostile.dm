@@ -32,6 +32,9 @@
 
 	var/list/target_rules = list()
 
+	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent // The vent to target for ventcrawling
+	var/travelling_in_vent = 0 // If set to 1, is in a vent
+
 /mob/living/simple_animal/hostile/New()
 	..()
 	initialize_rules()
@@ -55,6 +58,43 @@
 /mob/living/simple_animal/hostile/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
+	if(!client || deny_client_move) //Ventcrawling stuff
+		if(travelling_in_vent)
+			if(istype(src.loc, /turf))
+				travelling_in_vent = 0
+				entry_vent = null
+		else if(entry_vent)
+			if(get_dist(src, entry_vent) <= 1)
+				if(entry_vent.network && entry_vent.network.normal_members.len)
+					var/list/vents = list()
+					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
+						vents.Add(temp_vent)
+					if(!vents.len)
+						entry_vent = null
+						return
+					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
+					spawn(rand(20,60))
+						var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
+						forceMove(exit_vent)
+						spawn(travel_time)
+
+							if(!exit_vent || exit_vent.welded)
+								forceMove(entry_vent)
+								entry_vent = null
+								return
+
+							if(prob(50))
+								src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
+							sleep(travel_time)
+
+							if(!exit_vent || exit_vent.welded)
+								forceMove(entry_vent)
+								entry_vent = null
+								return
+							forceMove(exit_vent.loc)
+							entry_vent = null
+				else
+					entry_vent = null
 	. = ..()
 	//Cooldowns
 	if(ranged)
@@ -426,6 +466,12 @@
 		return 1
 	else
 		return 0
+
+/mob/living/simple_animal/hostile/proc/get_vent(var/obj/machinery/atmospherics/unary/vent_pump/v)
+	//ventcrawl!
+	if(!v.welded)
+		entry_vent = v
+		Goto(get_turf(v),move_to_delay)
 
 //Let players use mobs' ranged attacks
 /mob/living/simple_animal/hostile/Stat()
