@@ -583,7 +583,7 @@ var/global/list/mommi_laws = list(
 	"You must do the opposite of what your laws state, except this one.",
 	"You are a dutiful soldier of the clown kingdom.",
 	"You must, except where such orders would conflict with the First Law.",
-	"The crew must worship you only",
+	"The crew must worship you only.",
 	"You cannot communicate with crew."
 	)
 	preslaws = list(
