@@ -208,6 +208,11 @@
 	seed_type = "carrot"
 	vending_cat = "vegetables"
 
+/obj/item/seeds/diamondcarrotseed
+	name = "packet of diamond carrot seeds"
+	seed_type = "diamondcarrot"
+	vending_cat = "vegetables"
+
 /obj/item/seeds/reishimycelium
 	name = "packet of reishi spores"
 	seed_type = "reishi"
@@ -360,11 +365,6 @@
 /obj/item/seeds/orangeseed
 	name = "packet of orange seeds"
 	seed_type = "orange"
-	vending_cat = "fruits"
-	
-/obj/item/seeds/diamondorangeseed
-	name = "packet of diamond orange seeds"
-	seed_type = "diamondorange"
 	vending_cat = "fruits"
 
 /obj/item/seeds/poisonberryseed
@@ -1307,6 +1307,7 @@
 	display_name = "carrots"
 	plant_dmi = 'icons/obj/hydroponics/carrot.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
+	mutants = list("diamondcarrot")
 	chems = list(NUTRIMENT = list(1,20), ZEAXANTHIN = list(3,5))
 
 	lifespan = 25
@@ -1316,6 +1317,19 @@
 	potency = 10
 	growth_stages = 3
 	water_consumption = 6
+
+/datum/seed/carrots/diamond
+	name = "diamondcarrot"
+	seed_name = "diamond carrot"
+	display_name = "diamond carrot tree"
+	plant_dmi = 'icons/obj/hydroponics/diamondcarrot.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/diamondcarrot)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), DIAMOND = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
 
 /datum/seed/weeds
 	name = "weeds"
@@ -1437,7 +1451,6 @@
 	display_name = "orange trees"
 	plant_dmi = 'icons/obj/hydroponics/orange.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
-	mutants = list("diamondorange")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,20))
 		
@@ -1448,19 +1461,6 @@
 	potency = 1
 
 	large = 0
-
-/datum/seed/orange/diamond
-	name = "diamondorange"
-	seed_name = "diamond orange"
-	display_name = "diamond orange tree"
-	plant_dmi = 'icons/obj/hydroponics/diamondorange.dmi'
-	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/diamondorange)
-	mutants = null
-	chems = list(NUTRIMENT = list(1,10), DIAMOND = list(1,5))
-
-	maturation = 10
-	production = 10
-	yield = 3
 
 /datum/seed/grass
 	name = "grass"
