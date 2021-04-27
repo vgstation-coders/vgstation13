@@ -687,7 +687,7 @@
 
 /obj/item/clothing/head/banana_hat
 	name = "banana hat"
-	desc = "Ring ring ring ring ring ring ring."
+	desc = "Ring ring ring ring ring ring ring." //BANANA PHONE!
 	icon_state = "banana_hat"
 	item_state = "banana_hat"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
