@@ -361,6 +361,11 @@
 	name = "packet of orange seeds"
 	seed_type = "orange"
 	vending_cat = "fruits"
+	
+/obj/item/seeds/diamondorangeseed
+	name = "packet of diamond orange seeds"
+	seed_type = "diamondorange"
+	vending_cat = "fruits"
 
 /obj/item/seeds/poisonberryseed
 	name = "packet of poison berry seeds"
@@ -1432,9 +1437,10 @@
 	display_name = "orange trees"
 	plant_dmi = 'icons/obj/hydroponics/orange.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
+	mutants = list("diamondorange")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,20))
-
+		
 	lifespan = 60
 	maturation = 6
 	production = 6
@@ -1442,6 +1448,19 @@
 	potency = 1
 
 	large = 0
+
+/datum/seed/orange/diamond
+	name = "diamondorange"
+	seed_name = "diamond orange"
+	display_name = "diamond orange tree"
+	plant_dmi = 'icons/obj/hydroponics/diamondorange.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/diamondorange)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), DIAMOND = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
 
 /datum/seed/grass
 	name = "grass"
