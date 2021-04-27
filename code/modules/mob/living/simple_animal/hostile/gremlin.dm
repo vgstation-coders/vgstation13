@@ -41,7 +41,7 @@ var/list/bad_gremlin_items = list()
 	var/const/max_hear_memory = 20
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
-	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump))
+	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client) // So clients don't do this too
 		get_vent(target)
 	else if(istype(target, /obj))
 		var/obj/M = target
