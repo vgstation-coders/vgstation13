@@ -834,6 +834,16 @@
 
 /datum/chemical_reaction/solidification/uranium/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/uranium
+	
+/datum/chemical_reaction/solidification/diamond
+	name = "Solid Diamond"
+	id = "soliddiamond"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMOND = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/diamond/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/diamond
 
 /datum/chemical_reaction/solidification/clown
 	name = "Solid Bananium"
