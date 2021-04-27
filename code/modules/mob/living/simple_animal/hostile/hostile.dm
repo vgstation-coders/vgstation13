@@ -33,7 +33,6 @@
 	var/list/target_rules = list()
 
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent // The vent to target for ventcrawling
-	var/travelling_in_vent = 0 // If set to 1, is in a vent
 
 /mob/living/simple_animal/hostile/New()
 	..()
@@ -59,11 +58,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(!client || deny_client_move) //Ventcrawling stuff
-		if(travelling_in_vent)
-			if(istype(src.loc, /turf))
-				travelling_in_vent = 0
-				entry_vent = null
-		else if(entry_vent)
+		if(entry_vent)
 			if(get_dist(src, entry_vent) <= 1)
 				if(entry_vent.network && entry_vent.network.normal_members.len)
 					var/list/vents = list()
