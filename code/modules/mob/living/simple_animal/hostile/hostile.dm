@@ -63,7 +63,8 @@
 				if(entry_vent.network && entry_vent.network.normal_members.len)
 					var/list/vents = list()
 					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
-						vents.Add(temp_vent)
+						if(!temp_vent.welded)
+							vents.Add(temp_vent)
 					if(!vents.len)
 						entry_vent = null
 						return
@@ -74,7 +75,7 @@
 						forceMove(exit_vent)
 						spawn(travel_time)
 
-							if(!exit_vent || exit_vent.welded)
+							if(!exit_vent)
 								forceMove(entry_vent)
 								entry_vent = null
 								return
@@ -83,7 +84,7 @@
 								src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
 							sleep(travel_time)
 
-							if(!exit_vent || exit_vent.welded)
+							if(!exit_vent)
 								forceMove(entry_vent)
 								entry_vent = null
 								return
