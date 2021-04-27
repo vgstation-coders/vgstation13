@@ -131,8 +131,7 @@
 	var/damage = rand(0, S.max_hurt_damage)
 	damage += S.punch_damage
 
-	if(mutations.Find(M_HULK))
-		damage += 5
+	damage *= get_strength()
 	if(organ_has_mutation(get_active_hand_organ(), M_CLAWS) && !istype(gloves))
 		damage += 3
 	if(istype(gloves))
@@ -158,9 +157,7 @@
 /mob/living/carbon/human/proc/get_knockout_chance(mob/living/victim)
 	var/base_chance = 8
 
-	base_chance += min(reagents.get_sportiness(),5)
-	if(mutations.Find(M_HULK))
-		base_chance += 12
+	base_chance *= get_strength()
 	if(istype(gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		base_chance += G.bonus_knockout
