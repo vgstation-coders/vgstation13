@@ -92,13 +92,16 @@
 /mob/living/proc/get_armor_modifier(mob/living/target)
 	return 1
 
+/mob/living/proc/get_unarmed_miss_chance(mob/living/target)
+	return 0
+
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
 	if(is_pacified(VIOLENCE_DEFAULT,target))
 		return
 
 	var/damage = get_unarmed_damage(target)
 
-	if(prob(16))
+	if(get_unarmed_miss_chance()) //If it returns a value then the attack misses
 		if(miss_unarmed_attack(target))
 			return
 

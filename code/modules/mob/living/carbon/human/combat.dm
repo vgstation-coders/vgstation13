@@ -125,6 +125,9 @@
 		return HALLOSS
 	return ..()
 
+/mob/living/carbon/human/get_unarmed_miss_chance()
+	return prob(16) // 1 in 6 chance to miss a punch
+
 /mob/living/carbon/human/get_unarmed_damage(var/atom/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
