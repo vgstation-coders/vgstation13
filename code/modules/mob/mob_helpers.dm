@@ -533,7 +533,7 @@ proc/is_blind(A)
 				return TRUE
 			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
 				return TRUE
-			if(isninja(user) && (honorable & HONORABLE_NINJA))
+			if(iscarbon(user) && isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
 			if((iswizard(user) || isapprentice(user) || ismagician(user)) && (user.flags & HONORABLE_NOGUNALLOWED))
 				return TRUE
