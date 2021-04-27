@@ -2079,6 +2079,15 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
+			
+/datum/reagent/diamond
+	name = "Diamond dust"
+	id = DIAMOND
+	description = "An alotrope of carbon, one of the hardest minerals known."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "c4d4e0" //196 212 224
+	density = 3.51
+	specheatcap = 6.57
 
 /datum/reagent/phazon
 	name = "Phazon salt"
