@@ -120,13 +120,15 @@
 	desc = initial(desc)
 	return FALSE
 	
+// find and rectify black-swan type weirdness, i.e. varedit / singuloo unanchoring the engine parts or a push wizard teleporting them away
+// the shuttle should NOT work if one of the heaters has been magicked halfway across the station, so check for it!
 /obj/structure/shuttle/engine/propulsion/DIY/proc/retard_checks()
-	if(!heater)
+	if(!heater) // no point disconnecting if there is no heater
 		return
-	if(!heater.anchored) // uHhhhHh, it's somehow gotten desynchronized, ficksit
+	if(!heater.anchored || anchored) // we've somehow gotten unanchored
 		disconnect()
 		return
-	if(loc != get_step(heater,heater.dir)) // someone is trying to pull a fast one, it's not where it should be
+	if(loc != get_step(heater,heater.dir)) // we're not next to the heater anymore
 		disconnect()
 		return
 		
