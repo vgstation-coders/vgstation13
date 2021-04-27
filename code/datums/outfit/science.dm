@@ -38,6 +38,14 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/rd,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/rd,
+		)
+	)
 
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
@@ -155,6 +163,15 @@
 				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
 			)
 		),
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/toxins

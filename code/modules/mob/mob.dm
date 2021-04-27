@@ -257,6 +257,8 @@
 
 /mob/New()
 	. = ..()
+	original_density = density
+
 	mob_list += src
 
 	if(DEAD == stat)
@@ -1550,7 +1552,7 @@ Use this proc preferably at the end of an equipment loadout
 			setDensity(FALSE)
 			drop_hands()
 		else
-			setDensity(TRUE)
+			setDensity(original_density)
 
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.

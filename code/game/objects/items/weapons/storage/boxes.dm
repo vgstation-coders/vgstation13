@@ -88,6 +88,18 @@
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/plasmaman
+	icon_state = "box_plasmaman"
+	item_state = "box_plasmaman"
+
+/obj/item/weapon/storage/box/survival/plasmaman/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/breath(src)
+	new /obj/item/weapon/tank/emergency_plasma(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+
 /obj/item/weapon/storage/box/survival/engineer
 	icon_state = "box_eva"
 	item_state = "box_eva"
@@ -98,6 +110,18 @@
 		qdel(A)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+
+/obj/item/weapon/storage/box/survival/engineer/plasmaman
+	icon_state = "box_plasmaman"
+	item_state = "box_plasmaman"
+
+/obj/item/weapon/storage/box/survival/engineer/plasmaman/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/breath(src)
+	new /obj/item/weapon/tank/emergency_plasma/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
 /obj/item/weapon/storage/box/survival/ert
@@ -1454,6 +1478,7 @@
 	..()
 	for(var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/food/snacks/risenshiny(src)
+
 /obj/item/weapon/storage/box/chemistry_kit
 	name = "basic chemistry set"
 	desc = "A box containing the basics for chemistry."
@@ -1463,4 +1488,5 @@
 	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer(src)
 	new /obj/item/weapon/electrolyzer(src)
 	new /obj/item/weapon/cell/high(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/plasma(src)
 	..()
