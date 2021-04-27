@@ -558,6 +558,13 @@ var/list/special_fruits = list()
 	potency = 20
 	filling_color = "#FAAD28"
 	plantname = "orange"
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/orange/diamond
+	name = "diamondorange"
+	desc = "Oranges are forever... Wait no."
+	potency = 20
+	filling_color = "#C4D4E0"
+	plantname = "orange"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 	name = "white-beet"
