@@ -107,7 +107,7 @@
 		visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/AttackingTarget()
-	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump))
+	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client)
 		get_vent(target)
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/growth()
