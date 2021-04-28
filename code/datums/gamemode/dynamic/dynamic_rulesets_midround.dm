@@ -701,7 +701,7 @@
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
 	required_pop = list(0,0,10,10,15,15,20,20,20,25)
 	required_candidates = 1
-	weight = 1
+	weight = 3
 	cost = 0
 	requirements = list(5,5,15,15,20,20,20,20,40,70)
 	high_population_requirement = 10
