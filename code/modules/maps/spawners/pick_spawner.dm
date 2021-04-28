@@ -36,15 +36,15 @@
 		var/amount_to_spawn
 		var/possible_spawners = list() //Formatted for pickweight()
 		for(var/obj/abstract/map/spawner/pick_spawner/candidate in map_pickspawners[category])
-			if(!amount_to_spawn)
+			if(!amount_to_spawn) //We are just taking the value for the first spawner we find since we assume it's consistent between all spawners in the category
 				amount_to_spawn = candidate.spawners_to_pick
 			possible_spawners[candidate] = candidate.weight
 
 		for(amount_to_spawn, amount_to_spawn, amount_to_spawn--)
 			var/obj/abstract/map/spawner/pick_spawner/winner = pickweight(possible_spawners)
-			winner.perform_spawn()
-			for(var/obj/abstract/map/spawner/pick_spawner/loser in map_pickspawners[category])
-				qdel(loser) //They automatically remove themselves from our list in their Destroy().
+			winner.perform_spawn() //It automatically removes itself from the list when spawning.
+		for(var/obj/abstract/map/spawner/pick_spawner/loser in map_pickspawners[category])
+			qdel(loser) //They automatically remove themselves from the list in their Destroy().
 
 
 
