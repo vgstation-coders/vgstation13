@@ -29,6 +29,7 @@
 /obj/abstract/map/spawner/pick_spawner/Destroy()
 	if(category && map_pickspawners[category])
 		map_pickspawners[category] -= src
+	..()
 
 //This is called in /datum/subsystem/map/Initialize().
 /proc/spawn_map_pickspawners()
