@@ -168,10 +168,10 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 10
-	cost = 10
-	requirements = list(50,40,30,20,10,10,10,10,10,10)
+	cost = 15
+	requirements = list(50,40,30,20,20,20,20,20,10,10)
 	repeatable = TRUE
-	high_population_requirement = 10
+	high_population_requirement = 15
 	flags = TRAITOR_RULESET
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
@@ -272,8 +272,9 @@
 //                                          //
 //              RAGIN' MAGES                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////1.01 - Disabled because it caused a bit too many wizards in rounds
+//////////////////////////////////////////////
 
+// Single-ghost wizard picked. The faction-generating ragin' mages is disabled.
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages
 	name = "Ragin' Mages"
 	role_category = /datum/role/wizard
@@ -282,8 +283,8 @@
 	required_pop = list(20,20,15,15,15,15,15,10,10,0)
 	required_candidates = 1
 	weight = 5
-	cost = 20
-	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	cost = 30
+	requirements = list(90,90,70,40,30,20,20,20,10,10)
 	high_population_requirement = 50
 	logo = "raginmages-logo"
 	repeatable = TRUE
@@ -442,8 +443,8 @@
 	required_pop = list(15,15,15,15,15,10,10,10,5,5)
 	required_candidates = 1
 	weight = 10
-	cost = 20
-	requirements = list(90,90,60,20,10,10,10,10,10,10)
+	cost = 25
+	requirements = list(90,90,60,30,30,30,20,20,10,10)
 	high_population_requirement = 20
 	logo = "ninja-logo"
 	repeatable = TRUE
