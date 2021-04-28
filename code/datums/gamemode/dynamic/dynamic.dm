@@ -276,10 +276,6 @@ var/stacking_limit = 90
 	var/forced_rules = 0
 
 	for (var/datum/forced_ruleset/forced_rule in forced_roundstart_ruleset)//By checking in this order we allow admins to set up priorities among the forced rulesets.
-		// Admins forcing extended.
-		if (istype(forced_rule, /datum/dynamic_ruleset/roundstart/extended))
-			return forced_rule.execute()
-
 		for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 			if (forced_rule.name == rule.name)
 				rule.candidates = candidates.Copy()
