@@ -324,8 +324,8 @@
 	required_candidates = 5 // Placeholder, see op. cap
 	max_candidates = 5
 	weight = 10
-	cost = 35
-	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
+	cost = 30
+	requirements = list(90, 90, 90, 40, 40, 40, 30, 20, 20, 10)
 	high_population_requirement = 60
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	logo = "nuke-logo"
