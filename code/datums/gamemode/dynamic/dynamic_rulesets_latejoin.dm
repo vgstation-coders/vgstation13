@@ -67,7 +67,7 @@
 //                                          //
 //        RAGIN' MAGES (LATEJOIN)           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////1.01 - Lowered weight from 3 to 2
+//////////////////////////////////////////////
 
 /datum/dynamic_ruleset/latejoin/raginmages
 	name = "Ragin' Mages"
@@ -76,8 +76,8 @@
 	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
 	weight = 5
-	cost = 20
-	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	cost = 30
+	requirements = list(90,90,70,40,30,20,20,20,10,10)
 	high_population_requirement = 40
 	repeatable = TRUE
 
