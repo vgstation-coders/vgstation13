@@ -20,8 +20,8 @@
 	duration = 20
 	projectile_speed = 1
 
-	amt_dam_brute = 20
-	amt_dam_fire = 25
+	amt_dam_brute = 40
+	amt_dam_fire = 45
 
 	var/ex_severe = -1
 	var/ex_heavy = 0
