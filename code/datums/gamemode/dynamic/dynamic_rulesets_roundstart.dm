@@ -546,6 +546,11 @@
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
 
+// 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
+/datum/dynamic_ruleset/roundstart/extended/acceptable(population, threat_level)
+	var/probability = clamp(threat_level, 30, 100)
+	return !prob(probability)
+
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
@@ -662,7 +667,7 @@
 	weight = 10
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
-	high_population_requirement = 10
+	high_population_requirement = 101
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/roundstart/tag_mode/execute()
