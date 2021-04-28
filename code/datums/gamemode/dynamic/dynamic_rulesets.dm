@@ -138,7 +138,7 @@
 				break
 	if(halve_result)
 		result /= 2
-	if (mode.highlander_rulesets_favoured)
+	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
 		result *= ADDITIONAL_RULESET_WEIGHT
 	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
 	return result
