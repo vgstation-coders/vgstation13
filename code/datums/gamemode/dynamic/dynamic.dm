@@ -343,13 +343,13 @@ var/stacking_limit = 90
 		log_admin("DYNAMIC MODE: Rather than extra rulesets, we'll try to draft spicier ones.")
 		for (var/datum/dynamic_ruleset/rule in roundstart_rules)
 			if (rule.flags & HIGHLANDER_RULESET)
-				rule.weight += BASE_RULESET_WEIGHT*extra_rulesets_amount
+				rule.weight += ADDITIONAL_RULESET_WEIGHT*extra_rulesets_amount
 		for (var/datum/dynamic_ruleset/rule in midround_rules)
 			if (rule.flags & HIGHLANDER_RULESET)
-				rule.weight += BASE_RULESET_WEIGHT*extra_rulesets_amount
+				rule.weight += ADDITIONAL_RULESET_WEIGHT*extra_rulesets_amount
 		for (var/datum/dynamic_ruleset/rule in latejoin_rules)
 			if (rule.flags & HIGHLANDER_RULESET)
-				rule.weight += BASE_RULESET_WEIGHT*extra_rulesets_amount
+				rule.weight += ADDITIONAL_RULESET_WEIGHT*extra_rulesets_amount
 		extra_rulesets_amount = 0
 
 	var/i = 0
