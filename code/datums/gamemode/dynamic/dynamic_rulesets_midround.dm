@@ -377,7 +377,7 @@
 	makeBody = FALSE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/acceptable(population, threat_level)
-	max_candidates = max(1, floor(population/25))
+	max_candidates = max(1, round(population/25))
 	return ..()
 
 // -- The offsets are here so that the cone of meteors always meet the station. Blob meteors shouldn't miss the station, else a blob would spawn outside of the main z-level.
