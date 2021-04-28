@@ -47,8 +47,8 @@
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = 10
-	cost = 5
-	requirements = list(40,30,20,10,10,10,10,10,10,10)
+	cost = 10
+	requirements = list(40,30,30,20,10,10,10,10,10,10)
 	high_population_requirement = 10
 	repeatable = TRUE
 	flags = TRAITOR_RULESET
