@@ -574,8 +574,8 @@
 	required_pop = list(20,20,20,15,15,15,15,15,10,10)
 	required_candidates = 5
 	weight = 10
-	cost = 30
-	requirements = list(50,50,50,40,40,30,30,20,10,10)
+	cost = 25
+	requirements = list(90,90,90,30,30,30,30,20,10,10)
 	high_population_requirement = 35
 	var/vox_cap = list(2,2,3,3,4,5,5,5,5,5)
 	logo = "vox-logo"
