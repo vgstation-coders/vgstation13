@@ -543,12 +543,13 @@
 	required_candidates = 0
 	weight = 10
 	cost = 0
-	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
 
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
+	mode.forced_extended = TRUE
 	return TRUE
 
 //////////////////////////////////////////////
