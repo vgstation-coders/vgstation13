@@ -369,12 +369,16 @@
 	weight = 10
 	weekday_rule_boost = list("Tue")
 	cost = 30
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	requirements = list(90,90,90,40,40,40,30,20,20,10)
 	high_population_requirement = 70
 	logo = "blob-logo"
 	flags = HIGHLANDER_RULESET
 
 	makeBody = FALSE
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/blob_storm/acceptable(population, threat_level)
+	max_candidates = max(1, floor(population/25))
+	return ..()
 
 // -- The offsets are here so that the cone of meteors always meet the station. Blob meteors shouldn't miss the station, else a blob would spawn outside of the main z-level.
 
