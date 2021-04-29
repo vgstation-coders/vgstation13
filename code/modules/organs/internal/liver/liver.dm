@@ -75,7 +75,7 @@
 	var/mob/living/carbon/human/diona = owner
 	if(reagent_id != AMMONIA)
 		diona.reagents.remove_reagent(reagent_id, metabolism * efficiency)
-		if(diona.reagents.get_reagent_amount(AMMONIA) < 30)
+		if(diona.reagents.get_reagent_amount(AMMONIA) < 30 && reagent_id != WATER)
 			diona.reagents.add_reagent(AMMONIA, max(metabolism * efficiency * 0.1, 0.1))
 		return
 
