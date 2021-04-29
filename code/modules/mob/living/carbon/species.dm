@@ -852,7 +852,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_ROOTSPEAK)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	attack_verb = "slashes"
-	punch_damage = 10
+	punch_damage = 7
 	primitive = /mob/living/carbon/monkey/diona
 
 	warning_low_pressure = 50
