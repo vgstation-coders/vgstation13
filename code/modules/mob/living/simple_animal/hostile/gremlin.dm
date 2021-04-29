@@ -42,7 +42,7 @@ var/list/bad_gremlin_items = list()
 	var/const/max_hear_memory = 20
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
-	if(istype(target, /obj) && (!istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client)) // If no client, ignore vents
+	if(istype(target, /obj) && (!istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !(client || deny_client_move))) // If no client, ignore vents
 		var/obj/M = target
 
 		tamper(M)
