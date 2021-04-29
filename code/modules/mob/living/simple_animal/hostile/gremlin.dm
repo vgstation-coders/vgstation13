@@ -18,6 +18,7 @@ var/list/bad_gremlin_items = list()
 	maxHealth = 18
 	size = SIZE_SMALL
 	search_objects = 3 //Completely ignore mobs
+	can_ventcrawl = TRUE
 
 	//Tampering is handled by the 'npc_tamper()' obj proc
 	wanted_objects = list(
@@ -41,9 +42,7 @@ var/list/bad_gremlin_items = list()
 	var/const/max_hear_memory = 20
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
-	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client) // So clients don't do this too
-		can_ventcrawl = TRUE
-	else if(istype(target, /obj))
+	if(istype(target, /obj) && (!istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client)) // If no client, ignore vents
 		var/obj/M = target
 
 		tamper(M)

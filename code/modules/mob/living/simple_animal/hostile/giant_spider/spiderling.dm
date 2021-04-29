@@ -34,6 +34,7 @@
 	//status_flags = CANPUSH
 	search_objects = 0
 	wanted_objects = list(/obj/machinery/atmospherics/unary/vent_pump)
+	can_ventcrawl = TRUE
 
 	environment_smash_flags = 0//spiderlings cannot smash tables and windows anymore when getting stomped
 	var/static/list/spider_types = list(/mob/living/simple_animal/hostile/giant_spider, /mob/living/simple_animal/hostile/giant_spider/nurse, /mob/living/simple_animal/hostile/giant_spider/hunter)
@@ -105,10 +106,6 @@
 		target = new_target
 		Aggro()
 		visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
-
-/mob/living/simple_animal/hostile/giant_spider/spiderling/AttackingTarget()
-	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client)
-		can_ventcrawl = TRUE
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/growth()
 	if(isturf(loc) && (client || amount_grown > 0))//player-controlled spiderlings will always eventually mature, others have a 75% chance.
