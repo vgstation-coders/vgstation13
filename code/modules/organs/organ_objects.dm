@@ -318,6 +318,10 @@
 	organ_tag = "liver"
 	organ_type = /datum/organ/internal/liver
 
+/obj/item/organ/internal/liver/diona
+	name = "diona liver"
+	organ_type = /datum/organ/internal/liver/diona
+
 /obj/item/organ/internal/appendix
 	name = "appendix"
 	icon_state = "appendix"

@@ -884,6 +884,16 @@ var/global/list/whitelisted_species = list("Human")
 					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
 					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
 
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver/diona,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+	)
+
 /datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
