@@ -42,7 +42,7 @@ var/list/bad_gremlin_items = list()
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
 	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client) // So clients don't do this too
-		get_vent(target)
+		can_ventcrawl = TRUE
 	else if(istype(target, /obj))
 		var/obj/M = target
 

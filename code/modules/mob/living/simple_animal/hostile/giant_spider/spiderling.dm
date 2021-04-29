@@ -108,7 +108,7 @@
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/AttackingTarget()
 	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !client)
-		get_vent(target)
+		can_ventcrawl = TRUE
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/growth()
 	if(isturf(loc) && (client || amount_grown > 0))//player-controlled spiderlings will always eventually mature, others have a 75% chance.

@@ -32,7 +32,7 @@
 
 	var/list/target_rules = list()
 
-	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent // The vent to target for ventcrawling
+	var/can_ventcrawl = FALSE // If the mob can ventcrawl
 
 /mob/living/simple_animal/hostile/New()
 	..()
@@ -58,15 +58,16 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(!client || deny_client_move) //Ventcrawling stuff
-		if(entry_vent)
-			if(Adjacent(entry_vent))
-				if(entry_vent.network && entry_vent.network.normal_members.len)
+		if(can_ventcrawl && istype(target,/obj/machinery/atmospherics/unary/vent_pump))
+			var/obj/machinery/atmospherics/unary/vent_pump/entry_vent = target
+			if(!entry_vent.welded)
+				Goto(get_turf(entry_vent),move_to_delay)
+				if(Adjacent(entry_vent) && entry_vent.network && entry_vent.network.normal_members.len)
 					var/list/vents = list()
 					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
 						if(!temp_vent.welded)
 							vents.Add(temp_vent)
 					if(!vents.len)
-						entry_vent = null
 						return
 					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
 					if(prob(50))
@@ -79,7 +80,6 @@
 
 							if(!exit_vent)
 								forceMove(entry_vent)
-								entry_vent = null
 								return
 
 							if(prob(50))
@@ -88,12 +88,8 @@
 
 							if(!exit_vent)
 								forceMove(entry_vent)
-								entry_vent = null
 								return
 							forceMove(exit_vent.loc)
-							entry_vent = null
-				else
-					entry_vent = null
 	. = ..()
 	//Cooldowns
 	if(ranged)
@@ -465,12 +461,6 @@
 		return 1
 	else
 		return 0
-
-/mob/living/simple_animal/hostile/proc/get_vent(var/obj/machinery/atmospherics/unary/vent_pump/v)
-	//ventcrawl!
-	if(!v.welded)
-		entry_vent = v
-		Goto(get_turf(v),move_to_delay)
 
 //Let players use mobs' ranged attacks
 /mob/living/simple_animal/hostile/Stat()
