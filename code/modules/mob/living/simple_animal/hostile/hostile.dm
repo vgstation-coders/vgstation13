@@ -60,36 +60,34 @@
 	if(!client || deny_client_move) //Ventcrawling stuff
 		if(can_ventcrawl && istype(target,/obj/machinery/atmospherics/unary/vent_pump))
 			var/obj/machinery/atmospherics/unary/vent_pump/entry_vent = target
-			if(!entry_vent.welded)
-				Goto(get_turf(entry_vent),move_to_delay)
-				if(Adjacent(entry_vent) && entry_vent.network && entry_vent.network.normal_members.len)
-					var/list/vents = list()
-					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
-						if(!temp_vent.welded)
-							vents.Add(temp_vent)
-					if(!vents.len)
-						return
-					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
-					if(prob(50))
-						visible_message("<span class='notice'>[src] scrambles into the ventillation ducts!</span>")
-					LoseAggro()
-					spawn(rand(20,60))
-						var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
-						forceMove(exit_vent)
-						spawn(travel_time)
+			if(Adjacent(entry_vent) && !entry_vent.welded && entry_vent.network && entry_vent.network.normal_members.len)
+				var/list/vents = list()
+				for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
+					if(!temp_vent.welded)
+						vents.Add(temp_vent)
+				if(!vents.len)
+					return
+				var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
+				if(prob(50))
+					visible_message("<span class='notice'>[src] scrambles into the ventillation ducts!</span>")
+				LoseAggro()
+				spawn(rand(20,60))
+					var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
+					forceMove(exit_vent)
+					spawn(travel_time)
 
-							if(!exit_vent)
-								forceMove(entry_vent)
-								return
+						if(!exit_vent)
+							forceMove(entry_vent)
+							return
 
-							if(prob(50))
-								visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
-							sleep(travel_time)
+						if(prob(50))
+							visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
+						sleep(travel_time)
 
-							if(!exit_vent)
-								forceMove(entry_vent)
-								return
-							forceMove(exit_vent.loc)
+						if(!exit_vent)
+							forceMove(entry_vent)
+							return
+						forceMove(exit_vent.loc)
 	. = ..()
 	//Cooldowns
 	if(ranged)
@@ -300,7 +298,10 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
-	UnarmedAttack(target, Adjacent(target))
+	if(can_ventcrawl && istype(target,/obj/machinery/atmospherics/unary/vent_pump))
+		Goto(get_turf(target),move_to_delay)
+	else
+		UnarmedAttack(target, Adjacent(target))
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
