@@ -285,11 +285,12 @@ var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
 // (only one planemaster for everybody, they gain or lose the unique planemaster depending on whether they want the effect or not)
 /obj/abstract/screen/plane_master/noir_master
 	plane = NOIR_BLOOD_PLANE
-	color = list(1,0,0,0,
-				 0,1,0,0,
-				 0,0,1,0,
-				 0,0,0,1)
-	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER
+	color = list("#0000",
+				 "#0000",
+				 "#0000",
+				 "#000F",
+				 "#A110")//turns everything in the plane to the color human blood. unfortunate side effect is the loss of detail on gibs
+	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER//NO_CLIENT_COLOR sadly doesn't prevent the blood itself from turning grey, which is why it has to be recolored with the above matrix
 
 /obj/abstract/screen/plane_master/noir_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
