@@ -44,6 +44,7 @@
 		add_logs(user, src, "missed", admin=1, object=I, addition="intended damage: [power]")
 		if(I.miss_sound)
 			playsound(loc, I.miss_sound, 50)
+		on_dodge(user, I)
 		return FALSE
 	if(I.hitsound)
 		playsound(loc, I.hitsound, 50, 1, -1)

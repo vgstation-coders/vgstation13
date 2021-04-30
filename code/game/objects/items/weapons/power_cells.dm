@@ -222,6 +222,7 @@
 	maxcharge = 1000
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
 	var/charge_rate = 100
+	var/damaged = FALSE
 
 /obj/item/weapon/cell/rad/empty/New()
 	..()
@@ -246,6 +247,28 @@
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
+
+/obj/item/weapon/cell/rad/emp_act(severity)
+	..()
+	switch(rand(3))
+		if(0)
+			charge_rate *= severity*0.3
+			damaged = TRUE
+		if(1)
+			maxcharge *= severity*0.3
+			charge = 0
+		if(2)
+			maxcharge *= severity*0.3
+			charge = 0
+			charge_rate *= severity*0.3
+			damaged = TRUE
+		if(3)
+			return
+
+/obj/item/weapon/cell/rad/examine(mob/user)
+	..()
+	if(damaged)
+		to_chat(user, "<span class='warning'>Seems to be damaged as if it were leaking power, you estimate that it selfcharges [(1-charge_rate/initial(charge_rate))*100]% slower than normal.</span>")
 
 /obj/item/weapon/cell/rad/large
 	name = "PDTG power cell"

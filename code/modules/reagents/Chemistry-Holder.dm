@@ -174,6 +174,9 @@ var/const/INGEST = 2
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
 		src.remove_reagent(current_reagent.id, current_reagent_transfer)
 
+	for(var/datum/reagent/reagent_datum in R.reagent_list) //Wake up all of the reagents in our target, let them know we did stuff
+		reagent_datum.post_transfer(src)
+
 	// Called from add/remove_agent. -- N3X
 	//src.update_total()
 	//R.update_total()
@@ -978,6 +981,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 //written for ethylredoxrazine, but might be fun for turning water into wine or something
 /datum/reagents/proc/convert_some_of_type(var/datum/reagent/convert_from_type, var/datum/reagent/convert_to_type,var/convert_amount)
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
 	var/total_amount_converted = 0
 
 	for(var/datum/reagent/itsareagent in reagent_list)
@@ -988,3 +993,24 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			remove_that_reagent(itsareagent, amount_to_convert)
 	return add_reagent(initial(convert_to_type.id), total_amount_converted)
 
+/datum/reagents/proc/convert_all_to_id(var/reagent_id, var/list/whitelisted_ids)
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
+	if(!reagent_list.len)
+		return
+	if(reagent_list.len == 1)
+		var/datum/reagent/the_one_and_only = reagent_list[1]
+		if(the_one_and_only.id == reagent_id || (the_one_and_only.id in whitelisted_ids)) //work's done
+			return
+
+	var/total_amount_converted = 0
+	for(var/datum/reagent/reagent_datum in reagent_list)
+		if(reagent_datum.id == reagent_id || (reagent_datum.id in whitelisted_ids))
+			continue
+		total_amount_converted += reagent_datum.volume
+		remove_that_reagent(reagent_datum, reagent_datum.volume)
+
+	if(!(my_atom.flags & SILENTCONTAINER))
+		playsound(my_atom, 'sound/effects/bubbles.ogg', 50, 1)
+
+	return add_reagent(reagent_id, total_amount_converted)
