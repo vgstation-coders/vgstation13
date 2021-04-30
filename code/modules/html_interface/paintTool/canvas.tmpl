@@ -26,20 +26,37 @@
 		<div id="infoPanel" class="">
 			<div>
 				<label class="itemLabel">Author: </label><br/>
-				<input id="author" type="text"/>
+				<input
+					id="author"
+					type="text"
+					maxlength="512"
+					onkeyup="sanitizeLength('author', 'authorLengthMeter');"
+				/>
+				<div id="authorLengthMeter">(0/512)</div>
 			</div><br>
 
 			<div>
 				<label class="itemLabel">Title: </label><br/>
-				<input id="title" type="text"/>
+				<input
+					id="title"
+					type="text"
+					maxlength="512"
+					onkeyup="sanitizeLength('title', 'titleLengthMeter');"
+				/>
+				<div id="titleLengthMeter">(0/512)</div>
 			</div><br>
 
 			<div>
 				<label class="itemLabel">Description: </label><br/>
-				<textarea id="description" rows="5"></textarea>
+				<textarea
+					id="description"
+					rows="5"
+					maxlength="1024"
+					onkeyup="sanitizeLength('description', 'descriptionLengthMeter');"
+				></textarea>
+				<div id="descriptionLengthMeter">(0/1024)</div>
 			</div><br>
-
-			<a id="submit" class="button" href="" onclick="setupSubmitLink();">Save Changes</a>
+			<a class="button" onclick="submitData();">Save changes</a>
 		</div>
 
 		<!-- Template import/export panel -->

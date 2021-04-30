@@ -5,9 +5,13 @@
 	var/bitmap_height = 14
 	var/bitmap_width = 14
 
+	var/blank = 1
+
 	var/author = ""
 	var/title = ""
 	var/description = ""
+
+	var/datum/href_multipart_handler/mp_handler
 
 
 	var/list/bitmap = list()
@@ -16,9 +20,11 @@
 /obj/item/mounted/frame/painting/blank/New()
 	..()
 
+	mp_handler = new /datum/href_multipart_handler(src)
+
 	// Blank the painting's contents
 	for (var/i = 0, i < bitmap_height * bitmap_width, i++)
-		bitmap += rgb(255, 255, 255)
+		bitmap += "#ffffff"
 
 	// Setup head
 	var/head = {"
@@ -27,6 +33,7 @@
 		<link rel=\"stylesheet\" type=\"text/css\" href=\"html_interface_icons.css\" />
 		<script src=\"paintTool.js\"></script>
 		<script src=\"canvas.js\"></script>
+		<script src=\"href_multipart_handler.js\"></script>
 	"}
 
 	// Use NT-style UI
@@ -49,7 +56,7 @@
 
 	// Set canvas data (contents, size...)
 	var/bitmap_array = "\[\"[bitmap[1]]\""
-	for (var/i = 2, i < bitmap.len, i++)
+	for (var/i = 2, i <= bitmap.len, i++)
 		bitmap_array += ",\"[bitmap[i]]\""
 	bitmap_array += "]"
 
@@ -80,18 +87,36 @@
 	var/delay = 0
 	delay += send_asset(user.client, "paintTool.js")
 	delay += send_asset(user.client, "canvas.js")
+	delay += send_asset(user.client, "href_multipart_handler.js")
 	delay += send_asset(user.client, "canvas.css")
 	spawn(delay)
 		interface.show(user)
 		interface.callJavaScript("initCanvas", list(paint_init_inputs,canvas_init_inputs), user)
-	world.log << "test"
 
-//TODO ing
 /obj/item/mounted/frame/painting/blank/Topic(href, href_list)
-	world.log << "TESTING!"
-	world.log << href_list["src"]
-	world.log << href_list["bitmap"]
-	world.log << href_list["title"]
-	world.log << href_list["author"]
-	world.log << href_list["description"]
+	world.log << href
+	if (href_list["multipart"])
+		mp_handler.Topic(href, href_list)
+	else
+		//Save and sanitize bitmap
+		bitmap = splittext(url_decode(href_list["bitmap"]), ",")
+		for (var/i; i <= bitmap.len; i++)
+			bitmap[i] = sanitize_hexcolor(bitmap[i])
+
+		//Save and sanitize author, title and description
+		author = copytext(sanitize(url_decode(href_list["author"])), 1, MAX_NAME_LEN)
+		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
+		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
+
+		//Update name and description
+		blank = 0
+		name = (title ? title : "\improper untitled artwork") + (author ? ", by [author]" : "")
+		desc = "The author left the following note: \"<span class='info'>[description]\"</span>"
+
 	return ..()
+
+/obj/item/mounted/frame/painting/blank/proc/render()
+	icon = 'icons/obj/paintings.dmi'
+	icon_state = "item"
+	item_state = "painting"
+	//TODOing

@@ -38,37 +38,37 @@ function toggleHelp(helpButton, helpPanel) {
 
 // Template control
 var currentTemplate = {};
-/* An example template meant for medium sized paintings (14x14)
-	{
-		"rgn":[
-			{"clr":"#ffffff","txt":"Mask"},
-			{"clr":"#ffdddd","txt":"Mask border"},
-			{"clr":"#ff8800","txt":"Hair"},
-			{"clr":"#ee6000","txt":"Hair shade"},
-			{"clr":"#ffff00","txt":"Eyeliner"},
-			{"clr":"#0000ff","txt":"Eyes"},
-			{"clr":"#ff8888","txt":"Nose shade"},
-			{"clr":"#ff0000","txt":"Nose"},
-			{"clr":"#000000","txt":"Background"}
-		],
-		"bmp": [
-			8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-			8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-			8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-			2,2,2,8,8,8,8,8,8,8,2,2,2,8,
-			2,2,2,2,2,8,8,8,2,2,2,2,2,2,
-			2,2,2,2,1,1,1,1,1,2,2,2,2,2,
-			2,2,3,3,1,4,0,4,1,3,3,2,2,2,
-			3,3,3,1,1,5,4,5,1,1,3,3,3,2,
-			3,3,3,1,0,4,0,4,0,1,3,3,3,8,
-			8,8,8,1,0,6,7,6,0,1,8,8,8,8,
-			8,8,8,1,1,0,6,0,1,1,8,8,8,8,
-			8,8,8,8,1,1,1,1,1,8,8,8,8,8,
-			8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-			8,8,8,8,8,8,8,8,8,8,8,8,8,8
-		]
-	}
-;*/
+/* A test template for 14x14 sized paintings
+{
+	"rgn":[
+		{"clr":"#ffffff","txt":"Mask"},
+		{"clr":"#ffdddd","txt":"Mask border"},
+		{"clr":"#ff8800","txt":"Hair"},
+		{"clr":"#ee6000","txt":"Hair shade"},
+		{"clr":"#ffff00","txt":"Eyeliner"},
+		{"clr":"#0000ff","txt":"Eyes"},
+		{"clr":"#ff8888","txt":"Nose shade"},
+		{"clr":"#ff0000","txt":"Nose"},
+		{"clr":"#000000","txt":"Background"}
+	],
+	"bmp": [
+		8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+		8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+		8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+		2,2,2,8,8,8,8,8,8,8,2,2,2,8,
+		2,2,2,2,2,8,8,8,2,2,2,2,2,2,
+		2,2,2,2,1,1,1,1,1,2,2,2,2,2,
+		2,2,3,3,1,4,0,4,1,3,3,2,2,2,
+		3,3,3,1,1,5,4,5,1,1,3,3,3,2,
+		3,3,3,1,0,4,0,4,0,1,3,3,3,8,
+		8,8,8,1,0,6,7,6,0,1,8,8,8,8,
+		8,8,8,1,1,0,6,0,1,1,8,8,8,8,
+		8,8,8,8,1,1,1,1,1,8,8,8,8,8,
+		8,8,8,8,8,8,8,8,8,8,8,8,8,8,
+		8,8,8,8,8,8,8,8,8,8,8,8,8,8
+	]
+}
+*/
 
 function templateMover(id, isTargetToDone) {
 	var item = document.getElementById("tp-" + id);
@@ -206,16 +206,6 @@ function templatePaint(id) {
 }
 
 var src;
-function setupSubmitLink() {
-	var submitLink = "?src=" + src + ";";
-	submitLink += "bitmap=" + encodeURIComponent(bitmap) + ";";
-	submitLink += "author=" + encodeURIComponent(document.getElementById("author")).value + ";";
-	submitLink += "title=" + encodeURIComponent(document.getElementById("title")).value + ";";
-	submitLink += "description=" + encodeURIComponent(document.getElementById("description")).value;
-
-	document.getElementById("submit").href = submitLink;
-}
-
 function initCanvas(paintInitData, canvasInitData) {
 	initPaint(paintInitData);
 	document.getElementById("paintColumn").style.maxWidth = (document.getElementById("canvas").width + 40) +  "px";
@@ -227,6 +217,10 @@ function initCanvas(paintInitData, canvasInitData) {
 	document.getElementById("author").value = canvasInitData.author;
 	document.getElementById("description").value = canvasInitData.description;
 
+	sanitizeLength("author", "authorLengthMeter");
+	sanitizeLength("title", "titleLengthMeter");
+	sanitizeLength("description", "descriptionLengthMeter");
+
 	var paletteButtonPanel = document.getElementById("palette_buttons");
 	var palette = canvasInitData.palette;
 	while (paletteButtonPanel.childElementCount > 0) {
@@ -237,4 +231,26 @@ function initCanvas(paintInitData, canvasInitData) {
 			  '<div onclick="setColor(\'{color}\');" style="background: {color}"></div>\n'
 				.replace("{color}", palette[color]).replace("{color}", palette[color]);
 	}
+}
+
+function sanitizeLength (inputId, meterId) {
+	var input = document.getElementById(inputId);
+
+	if (input.value.length > input.maxLength)
+		input.value = slice(input.value, 0, input.maxLength);
+
+	document.getElementById(meterId).innerHTML = "(" + input.value.length + "/" + input.maxLength + ")";
+}
+
+const MAX_AUTHOR_LENGTH = 512;
+const MAX_TITLE_LENGTH = 512;
+const MAX_DESCRIPTION_LENGTH = 1024;
+
+function submitData() {
+	var content = "bitmap=" + encodeURIComponent(bitmap) + ";";
+	content += "author=" + encodeURIComponent(document.getElementById("author").value.slice(0, MAX_AUTHOR_LENGTH)) + ";";
+	content += "title=" + encodeURIComponent(document.getElementById("title").value.slice(0, MAX_TITLE_LENGTH)) + ";";
+	content += "description=" + encodeURIComponent(document.getElementById("description").value.slice(0, MAX_DESCRIPTION_LENGTH));
+
+	HREFmultipartHandler(src, content);
 }
