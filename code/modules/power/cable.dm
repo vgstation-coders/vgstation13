@@ -198,7 +198,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(istype(W,/obj/item/device/multitool/omnitool) && (loc == user.loc))
 		//unlike a normal multitool, only do this if we're directly on top, otherwise cut as per sharpness
 		report_load(user)
-	else if(W.sharpness >= 1)
+	else if(W.sharpness >= 1 && !W.is_multitool(user))
 		if(shock(user, 50, W.siemens_coefficient))
 			return
 		cut(user, T)
@@ -211,7 +211,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		if(R.loaded)
 			R.loaded.cable_join(src, user)
 			R.is_empty()
-	else if(istype(W, /obj/item/device/multitool))
+	else if(W.is_multitool(user))
 		report_load(user)
 		shock(user, 5, 0.2)
 	else

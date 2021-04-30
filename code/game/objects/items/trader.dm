@@ -1294,7 +1294,7 @@ var/global/list/cloudnine_stuff = list(
 /obj/item/supermatter_shielding/frass
 	name = "\improper F.R.A.S.S. sphere"
 	desc = "Frequency-reticulated anti-supermatter safeguard. A refinement of the S.A.S.S. design that is reusable but dazes its user more. It should prevent you from getting annihilated by supermatter. It looks like a brown marble floating in a vibrating gas inside a glass orb."
-	stunforce = 40
+	stunforce = 30
 	infinite = TRUE
 
 #define HAMSTER_MOVEDELAY 1
