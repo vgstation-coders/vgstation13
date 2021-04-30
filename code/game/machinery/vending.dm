@@ -1886,7 +1886,7 @@ var/global/num_vending_terminals = 1
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
 						"You add cables to \the [src].")
 		if(2) // Circuitboard installed, wired.
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(usr, "You begin to remove the wiring from \the [src].")
 				if(do_after(user, src, 50))
 					new /obj/item/stack/cable_coil(loc,5)
@@ -3147,7 +3147,7 @@ var/global/num_vending_terminals = 1
 		/obj/structure/closet/secure_closet/wonderful = 1,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 1,
 		/obj/structure/closet/crate/shoaljunk = 3,
-		/obj/structure/closet/crate/internals/cloudnine = 2,
+		/obj/structure/closet/crate/internals/cloudnine = 3,
 		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/crate/chest/alcatraz = 3,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,

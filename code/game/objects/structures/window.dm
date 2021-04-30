@@ -377,7 +377,7 @@ var/list/one_way_windows
 		return 1
 
 
-	if(ismultitool(W) && smartwindow)
+	if(W.is_multitool(user) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
 

@@ -89,7 +89,7 @@
 							"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
 							"You add cables to \the [src].")
 			if(2) // Circuitboard installed, wired.
-				if(iswirecutter(W))
+				if(W.is_wirecutter(user))
 					to_chat(usr, "You begin to remove the wiring from \the [src].")
 					if(do_after(user, src, 50))
 						new /obj/item/stack/cable_coil(loc,5)

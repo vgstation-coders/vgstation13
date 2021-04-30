@@ -222,7 +222,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon = 'icons/obj/fish_items.dmi'
 
 /obj/item/weapon/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
-	if(iswirecutter(O))
+	if(O.is_wirecutter(user))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
@@ -232,7 +232,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/attackby(var/obj/item/O, var/mob/user) // extracting the meat from the tail, just makes normal lobster meat
-	if(iswirecutter(O))
+	if(O.is_wirecutter(user))
 		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		qdel(src)

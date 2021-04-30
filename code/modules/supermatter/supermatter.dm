@@ -377,7 +377,7 @@
 /obj/machinery/power/supermatter/attack_hand(mob/user as mob)
 	var/obj/item/clothing/gloves/golden/G = user.get_item_by_slot(slot_gloves)
 	if(istype(G))
-		to_chat(user,"<span class='warning'>Carefully extending a single finger, you gently touch the supermatter.</span>")
+		to_chat(user,"<span class='warning'>Carefully extending a single finger, you nearly touch the supermatter before the gloves stop you -- repulsed by and absorbing some kind of charge.</span>")
 		if(G.siemens_coefficient > -1)
 			G.siemens_coefficient = -1
 			G.icon_state = "golden-awakened"

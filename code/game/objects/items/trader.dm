@@ -1301,9 +1301,9 @@ var/global/list/cloudnine_stuff = list(
 /mob/living/simple_animal/hamster
 	name = "colossal hamster"
 	desc = "Cricetus robustus. Roughly the size of a capybara, this species of hamster was bred to power treadmill engines."
-	icon_state = "capybara"
-	icon_living = "capybara"
-	icon_dead = "capybara-dead"
+	icon_state = "hammy"
+	icon_living = "hammy"
+	icon_dead = "hammy-dead"
 	response_help = "pets"
 	treadmill_speed = 8
 	health = 100
@@ -1346,11 +1346,13 @@ var/global/list/cloudnine_stuff = list(
 		var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 		heart.plane = ABOVE_HUMAN_PLANE
 		flick_overlay(heart, list(M.client), 20)
+		if(!my_wheel)
+			flick("hammy-rest", src)
 		emote("me", EMOTE_AUDIBLE, pick("flattens amicably.","fluffs up.","puffs out her cheeks.","shuts his eyes contentedly."))
 
 /obj/item/clothing/gloves/golden
 	name = "golden gloves"
-	desc = "An impressive fashion statement. Gold is an excellent conductor, meaning these won't help much against shocks. The tag on the inside dares: touch the supermatter."
+	desc = "An impressive fashion statement. Gold is an excellent conductor, meaning these won't help much against shocks. The insides are lined with strange high-tech sacs filled with an unidentified fluid which lubricates the outside. It comes with a cryptic note reading: touch the supermatter."
 	icon_state = "golden"
 	item_state = "yellow"
 	siemens_coefficient = 2
@@ -1373,7 +1375,7 @@ var/global/list/cloudnine_stuff = list(
 		var/obj/effect/airshield/A = new(to_shield)
 		A.owner = src
 		projected += A
-		visible_message("<span class='notice'>[user] deploys \the [A].</span>")
+		visible_message("<span class='notice'>\The [user] deploys \the [A].</span>")
 		return TRUE
 	return FALSE
 
@@ -1430,6 +1432,8 @@ var/list/decelerators = list()
 /obj/item/weapon/am_containment/decelerator/proc/receive_pulse(power)
 	fuel = min(fuel_max, fuel + round(power/100))
 
+#define OMNIMODE_WIRE 0
+#define OMNIMODE_TOOL 1
 /obj/item/device/multitool/omnitool
 	name = "omnitool"
 	desc = "Combining the power of wirecutters and a multitool. For power cables, works as a multitool when you stand on top and use it. It also allows the user to remotely access APCs and air alarms."
@@ -1437,6 +1441,17 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
+	var/mode = OMNIMODE_TOOL
+
+/obj/item/device/multitool/omnitool/attack_self(mob/user)
+	mode = !mode
+	to_chat(user, "<span class='notice'>You toggle the tool into [mode ? "multitool" : "wirecutter"] mode.</span>")
+
+/obj/item/device/multitool/omnitool/is_wirecutter()
+	return !mode
+
+/obj/item/device/multitool/omnitool/is_multitool()
+	return mode
 
 var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 
@@ -1459,6 +1474,9 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	if(!C)
 		return FALSE
 	return get_dist(target,src) <= C.view
+
+#undef OMNIMODE_WIRE
+#undef OMNIMODE_TOOL
 
 //Mystery mob cubes//////////////
 

@@ -527,7 +527,7 @@
 			C.use(10)
 			terminal.connect_to_network()
 
-	else if (iswirecutter(W) && opened && terminal && has_electronics!=2)
+	else if (W.is_wirecutter(user) && opened && terminal && has_electronics!=2)
 		var/turf/T = get_turf(src)
 		if (T.intact)
 			to_chat(user, "<span class='warning'>You must remove the floor plating in front of the APC first.</span>")

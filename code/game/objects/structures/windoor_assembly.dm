@@ -103,7 +103,7 @@ obj/structure/windoor_assembly/Destroy()
 			return
 		created_name = t
 		return
-	
+
 	if(iswelder(W) && (!anchored && !wired && !electronics))
 		var/obj/item/tool/weldingtool/WT = W
 		user.visible_message("[user] dissassembles [src].", "You start to dissassemble [src].")
@@ -165,7 +165,7 @@ obj/structure/windoor_assembly/Destroy()
 				update_name()
 
 	//Removing wire from the assembly. Step 5 undone.
-	if(iswirecutter(W) && (anchored && wired))
+	if(W.is_wirecutter(user) && (anchored && wired))
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] is cutting the wires from [src].", "You start to cut the wires from [src].")
 
