@@ -325,6 +325,7 @@ var/list/tag_suits_list = list()
 	item_state = "overalls"
 	body_parts_covered = FULL_TORSO|LEGS
 	species_fit = list(INSECT_SHAPED)
+	allowed = list (/obj/item/weapon/reagent_containers/spray,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,/obj/item/tool/wirecutters/clippers,/obj/item/weapon/minihoe,/obj/item/weapon/grenade/chem_grenade,/obj/item/device/lightreplacer,/obj/item/device/flashlight,/obj/item/weapon/soap,/obj/item/key/janicart,/obj/item/clothing/gloves,/obj/item/weapon/caution,/obj/item/weapon/mop,/obj/item/weapon/storage/bag/trash)
 
 
 /obj/item/clothing/suit/syndicatefake
