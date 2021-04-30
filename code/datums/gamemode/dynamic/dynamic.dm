@@ -60,6 +60,7 @@ var/stacking_limit = 90
 	var/curve_width_of_round = 1.8
 
 	var/peaceful_percentage = 50
+	var/highlander_rulesets_favoured = 0
 
 	// -- Special tweaks --
 	var/no_stacking = 1
@@ -341,15 +342,7 @@ var/stacking_limit = 90
 	if	(extra_rulesets_amount && prob(50))
 		message_admins("DYNAMIC MODE: Rather than extra rulesets, we'll try to draft spicier ones.")
 		log_admin("DYNAMIC MODE: Rather than extra rulesets, we'll try to draft spicier ones.")
-		for (var/datum/dynamic_ruleset/rule in roundstart_rules)
-			if (rule.flags & HIGHLANDER_RULESET)
-				rule.weight += extra_rulesets_amount
-		for (var/datum/dynamic_ruleset/rule in midround_rules)
-			if (rule.flags & HIGHLANDER_RULESET)
-				rule.weight += extra_rulesets_amount
-		for (var/datum/dynamic_ruleset/rule in latejoin_rules)
-			if (rule.flags & HIGHLANDER_RULESET)
-				rule.weight += extra_rulesets_amount
+		highlander_rulesets_favoured = TRUE
 		extra_rulesets_amount = 0
 
 	var/i = 0

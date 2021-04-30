@@ -46,7 +46,7 @@
 							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
@@ -75,7 +75,7 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
-	weight = 5
+	weight = BASE_RULESET_WEIGHT/2
 	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -116,7 +116,7 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -155,7 +155,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_pop = list(20,20,15,15,15,15,15,0,0,0)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 20
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)
