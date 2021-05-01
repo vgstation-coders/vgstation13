@@ -1623,7 +1623,7 @@
 #include "code\modules\maps\map_objects.dm"
 #include "code\modules\maps\movers.dm"
 #include "code\modules\maps\nests.dm"
-#include "code\modules\maps\spawners\set_spawners.dm"
+#include "code\modules\maps\spawners\pick_spawner.dm"
 #include "code\modules\maps\spawners\spawners.dm"
 #include "code\modules\media\jukebox.dm"
 #include "code\modules\media\machinery.dm"

@@ -44,4 +44,7 @@ var/datum/subsystem/map/SSmap
 	map.map_specific_init()
 	log_startup_progress("Finished map-specific inits in [stop_watch(watch)]s.")
 
+	log_startup_progress("Creating pickspawners...")
+	spawn_map_pickspawners() //this is down here so that it calls after allll the vaults etc are done spawning - if in the future some pickspawners don't fire, it's because this needs moving
+
 	..()
