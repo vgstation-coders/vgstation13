@@ -591,6 +591,18 @@
 		unfolded = null
 	..()
 
+/obj/item/folding_chair/attack(mob/living/M, mob/living/user, def_zone, originator)
+	if(user.is_wearing_item(/obj/item/weapon/storage/belt/champion))
+		force *= 2 //Shitcode! There's no proc where the amount of force can be modified at least temporarily.
+		..()
+		force /= 2
+		return
+	..()
+
+/obj/item/folding_chair/on_attack(atom/attacked, mob/user)
+	hitsound = pick('sound/items/trayhit1.ogg', 'sound/items/trayhit2.ogg')
+	..()
+
 /obj/item/folding_chair/attack_self(mob/user)
 	unfolded.forceMove(user.loc)
 	unfolded.add_fingerprint(user)
