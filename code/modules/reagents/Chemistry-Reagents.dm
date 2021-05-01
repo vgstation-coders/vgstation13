@@ -2093,9 +2093,11 @@
 
 	if(..())
 		return 1
-		
+	
 	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
-
+	if(prob(30))
+		M.audible_scream()
+	
 /datum/reagent/phazon
 	name = "Phazon salt"
 	id = PHAZON
