@@ -557,6 +557,8 @@ var/global/num_vending_terminals = 1
 	R.mini_icon = costly_bicon(item)
 	R.display_color = pick("red", "blue", "green")
 	R.amount = 1
+	if(item.price) // price tagger - only works on new items
+		R.price = item.price
 	if(item.loc != src)
 		item.forceMove(src)
 	product_records += R

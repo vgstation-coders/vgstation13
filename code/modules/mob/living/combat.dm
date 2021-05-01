@@ -100,6 +100,7 @@
 
 	if(!damage)
 		if(miss_unarmed_attack(target))
+			target.on_dodge(src)
 			return
 
 	var/zone = ran_zone(get_unarmed_damage_zone(target))
