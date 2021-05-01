@@ -325,7 +325,7 @@
 	max_candidates = 5
 	weight = BASE_RULESET_WEIGHT
 	cost = 35
-	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
+	requirements = list(90, 90, 80, 40, 40, 40, 30, 20, 20, 10)
 	high_population_requirement = 60
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 	logo = "nuke-logo"
