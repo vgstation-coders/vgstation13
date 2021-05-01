@@ -42,8 +42,12 @@
 	if(!target_zone && !src.stat)
 		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
 		add_logs(user, src, "missed", admin=1, object=I, addition="intended damage: [power]")
+		if(I.miss_sound)
+			playsound(loc, I.miss_sound, 50)
+		on_dodge(user, I)
 		return FALSE
-
+	if(I.hitsound)
+		playsound(loc, I.hitsound, 50, 1, -1)
 	if((user != src) && check_shields(power, I))
 		add_logs(user, src, "shieldbounced", admin=1, object=I, addition="intended damage: [power]")
 		return FALSE

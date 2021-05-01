@@ -302,6 +302,10 @@
 /mob/living/proc/adjust_fire_stacks(add_fire_stacks) //Adjusting the amount of fire_stacks we have on person
 	fire_stacks = clamp(fire_stacks + add_fire_stacks, -20, 20)
 
+//Activates when an attack misses a mob
+/mob/living/proc/on_dodge(var/mob/living/attacker, var/obj/item/attacking_object)
+	return
+
 /mob/living/proc/handle_fire()
 	if((flags & INVULNERABLE) && on_fire)
 		extinguish()
