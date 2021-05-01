@@ -242,8 +242,8 @@ function sanitizeLength (inputId, meterId) {
 	document.getElementById(meterId).innerHTML = "(" + input.value.length + "/" + input.maxLength + ")";
 }
 
-const MAX_AUTHOR_LENGTH = 512;
-const MAX_TITLE_LENGTH = 512;
+const MAX_AUTHOR_LENGTH = 52;
+const MAX_TITLE_LENGTH = 52;
 const MAX_DESCRIPTION_LENGTH = 1024;
 
 function submitData() {
