@@ -121,3 +121,33 @@
 
 /spell/regen_limbs/is_valid_target(var/target, mob/user, options)
 	return(target == user)
+
+/spell/targeted/transfer_reagents
+	name = "Transfer reagents"
+	desc = "Transfer reagents from your system to a tray."
+	abbreviation = "TR"
+
+	spell_flags = WAIT_FOR_CLICK
+	range = 1
+	max_targets = 1
+
+	override_base = "racial"
+	hud_state = "racial_dark"
+
+	charge_max = 20
+
+	invocation_type = SpI_NONE
+
+/spell/targeted/transfer_reagents/cast(var/list/targets, mob/user)
+	..()
+	if(!holder.reagents)
+		to_chat(holder, "<span class='warning'>Uhh that's not gonna work. You don't seem to have reagents!</span>")
+		return 1
+
+	if(holder.reagents.total_volume <= 5)
+		to_chat(holder, "<span class='warning'>You don't have enough reagents in your system!</span>")
+		return 1
+
+	for(var/obj/machinery/portable_atmospherics/hydroponics/target in targets)
+		to_chat(holder, "You carefully grab \the [target] and transfer 5 units from your system to it.")
+		holder.reagents.trans_to(target, 5, log_transfer = TRUE, whodunnit = holder)

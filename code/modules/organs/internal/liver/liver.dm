@@ -4,7 +4,7 @@
 	parent_organ = LIMB_CHEST
 	organ_type = "liver"
 	var/process_accuracy = 10
-	var/efficiency = 1
+	var/efficiency = 1 // efficiency is a weird variable name. Lower number means chemicals stay more time on the organism.
 
 	var/reagent_efficiencies=list(
 		// REAGENT = 2,
@@ -68,7 +68,6 @@
 
 /datum/organ/internal/liver/diona
 	name = "diona liver"
-	efficiency = 0.5 // slower metabolism
 	removed_type = /obj/item/organ/internal/liver/diona
 
 /datum/organ/internal/liver/diona/metabolize_reagent(reagent_id, metabolism)

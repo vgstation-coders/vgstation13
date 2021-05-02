@@ -856,6 +856,8 @@ var/global/list/whitelisted_species = list("Human")
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
 
+	spells = list(/spell/targeted/transfer_reagents)
+
 	warning_low_pressure = 50
 	hazard_low_pressure = -1
 
