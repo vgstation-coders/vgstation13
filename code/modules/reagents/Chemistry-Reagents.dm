@@ -2083,7 +2083,25 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
+			
+/datum/reagent/diamond
+	name = "Diamond dust"
+	id = DIAMONDDUST
+	description = "An allotrope of carbon, one of the hardest minerals known."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "c4d4e0" //196 212 224
+	density = 3.51
+	specheatcap = 6.57
+	
+/datum/reagent/diamond/on_mob_life(var/mob/living/M)
 
+	if(..())
+		return 1
+	
+	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
+	if(prob(30))
+		M.audible_scream()
+	
 /datum/reagent/phazon
 	name = "Phazon salt"
 	id = PHAZON
