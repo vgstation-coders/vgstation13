@@ -884,7 +884,8 @@ var/global/list/whitelisted_species = list("Human")
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
 					You absorb radiation which helps you in a similar way to sunlight. Your rigid, wooden limbs make you incredibly slow.<br>\
 					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
-					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
+					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally.<br>\
+					Your liver is special. It converts a portion of what you ingest into ammonia. You can use your transfer reagents spell to inject plants."
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
