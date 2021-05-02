@@ -21,7 +21,7 @@
 /obj/item/device/fuse_bomb/New()
 	..()
 	if(assembled == 0)
-		name = "fuse bomb assembly"
+		name = "empty fuse bomb assembly"
 		desc = "Just add fire. And fuel."
 		update_icon()
 
@@ -47,6 +47,7 @@
 			assembled = 1
 			to_chat(user, "<span  class='notice'>You've filled the [src] with welding fuel.</span>")
 			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+			name = "fuse bomb assembly"
 			desc = "Just add fire."
 			return
 
