@@ -496,14 +496,6 @@
 		T.holy = 0
 	return
 
-/datum/reagent/blood/on_removal(var/data)
-	if(holder && holder.my_atom)
-		var/mob/living/carbon/human/H = holder.my_atom
-		if(istype(H))
-			if(H.species && H.species.anatomy_flags & NO_BLOOD)
-				return 0
-	return 1
-
 /datum/reagent/blood/reaction_obj(var/obj/O, var/volume)
 	if(..())
 		return 1
