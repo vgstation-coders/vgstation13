@@ -1,25 +1,27 @@
 /datum/custom_painting
-
 	var/parent
 
+	// Array listing all colors, starting from the upper left corner
+	var/list/bitmap = list()
 	var/bitmap_width = 14
 	var/bitmap_height = 14
 
+	// Color that shows up on creation or after cleaning
+	var/base_color = "#ffffff"
+
+	// Position of the lower left corner of the image when rendering the bitmap onto an icon
 	var/offset_x = 0
 	var/offset_y = 0
 
-	var/base_color = "#ffffff"
-
-	var/list/bitmap = list()
-
-	var/datum/href_multipart_handler/mp_handler
+	// UI and JS stuff
 	var/datum/html_interface/interface
+	var/datum/href_multipart_handler/mp_handler
 
 	var/author = ""
 	var/title = ""
 	var/description = ""
 
-/datum/custom_painting/New(var/parent, var/bitmap_width, var/bitmap_height, var/offset_x, var/offset_y, var/base_color=src.base_color)
+/datum/custom_painting/New(parent, bitmap_width, bitmap_height, offset_x=0, offset_y=0, base_color=src.base_color)
 	src.parent = parent
 	src.bitmap_width = bitmap_width
 	src.bitmap_height = bitmap_height
@@ -33,14 +35,26 @@
 
 /datum/custom_painting/Destroy()
 	..()
+	parent = null
+
 	qdel(interface)
 	interface = null
 
 	qdel(mp_handler)
 	mp_handler = null
 
-	qdel(bitmap)
-	bitmap = null
+/datum/custom_painting/proc/Copy()
+	var/datum/custom_painting/copy = new(parent, bitmap_width, bitmap_height, offset_x, offset_y, base_color)
+	copy.author = author
+	copy.title = title
+	copy.description = description
+	copy.bitmap = bitmap.Copy()
+	return copy
+
+/datum/custom_painting/proc/set_parent(parent)
+	src.parent = parent
+	mp_handler.set_parent(parent)
+
 
 /datum/custom_painting/proc/blank_contents()
 	for (var/i = 0, i < bitmap_height * bitmap_width, i++)
@@ -113,7 +127,7 @@
 
 		//Save and sanitize bitmap
 		bitmap = splittext(url_decode(href_list["bitmap"]), ",")
-		for (var/i; i <= bitmap.len; i++)
+		for (var/i = 1; i <= bitmap.len; i++)
 			bitmap[i] = sanitize_hexcolor(bitmap[i])
 
 		//Save and sanitize author, title and description
@@ -121,3 +135,18 @@
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
 		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
 		return TRUE
+
+/datum/custom_painting/proc/render_on(icon/ico, offset_x = src.offset_x, offset_y = src.offset_y)
+	var/x
+	var/y
+	for (var/pixel = 0; pixel < bitmap.len; pixel++)
+		x = pixel % bitmap_width
+		y = (pixel - x)/bitmap_width
+
+		//for DrawBox, (x:1,y:1) is the lower left corner. On bitmap, (x:0,y:0) is the upper left
+		x = 1 + offset_x + x
+		y = 1 + offset_y + bitmap_height - y
+
+		ico.DrawBox(bitmap[pixel + 1], x, y)
+
+	return ico

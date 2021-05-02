@@ -164,9 +164,7 @@ var/global/list/available_paintings = list(
 	add_fingerprint(user)
 
 	//declaring D because otherwise if P gets 'deconstructed' we lose our reference to P.resulting_poster
-	var/obj/structure/painting/P = new(user.loc)
-	P.icon_state = paint
-	P.update_painting()
+	var/obj/structure/painting/P = to_structure(on_wall, user)
 
 	transfer_fingerprints(src, P)
 
@@ -183,6 +181,12 @@ var/global/list/available_paintings = list(
 	playsound(on_wall, 'sound/items/Deconstruct.ogg', 25, 1)
 
 	qdel(src)
+
+/obj/item/mounted/frame/painting/proc/to_structure(turf/on_wall, mob/user)
+	var/obj/structure/painting/P = new /obj/structure/painting(user.loc)
+	P.icon_state = paint
+	P.update_painting()
+	return P
 
 /obj/item/mounted/frame/painting/cultify()
 	new /obj/item/mounted/frame/painting/narsie(loc)
@@ -312,9 +316,7 @@ var/global/list/available_paintings = list(
 
 	add_fingerprint(user)
 
-	var/obj/item/mounted/frame/painting/P = new(loc)
-	P.paint = icon_state
-	P.update_painting()
+	var/obj/item/mounted/frame/painting/P = to_item(user)
 
 	transfer_fingerprints(src, P)
 
@@ -322,6 +324,12 @@ var/global/list/available_paintings = list(
 
 	P.attack_hand(user)
 	qdel(src)
+
+/obj/structure/painting/proc/to_item(mob/user)
+	var/obj/item/mounted/frame/painting/P = new(loc)
+	P.paint = icon_state
+	P.update_painting()
+	return P
 
 /obj/structure/painting/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
