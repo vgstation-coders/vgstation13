@@ -2082,7 +2082,7 @@
 			
 /datum/reagent/diamond
 	name = "Diamond dust"
-	id = DIAMOND
+	id = DIAMONDDUST
 	description = "An allotrope of carbon, one of the hardest minerals known."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "c4d4e0" //196 212 224
