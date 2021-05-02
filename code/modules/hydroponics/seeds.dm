@@ -1325,7 +1325,7 @@
 	plant_dmi = 'icons/obj/hydroponics/diamondcarrot.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond)
 	mutants = null
-	chems = list(NUTRIMENT = list(1,10), DIAMOND = list(1,5))
+	chems = list(NUTRIMENT = list(1,10), DIAMONDDUST = list(1,5))
 
 	maturation = 10
 	production = 10
