@@ -236,6 +236,8 @@
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
 
+#define isNonTimeDataReagent(R) (is_type_in_list(R, list(/datum/reagent/blood, /datum/reagent/citalopram, /datum/reagent/paroxetine, /datum/reagent/incense, /datum/reagent/antipathogenic, /datum/reagent/vaccine)))
+
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
