@@ -132,7 +132,7 @@
 	max_targets = 1
 
 	override_base = "racial"
-	hud_state = "racial_dark"
+	hud_state = "transfer_reagents"
 
 	charge_max = 20
 

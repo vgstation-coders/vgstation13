@@ -320,6 +320,7 @@
 
 /obj/item/organ/internal/liver/diona
 	name = "diona liver"
+	icon_state "liver-diona"
 	organ_type = /datum/organ/internal/liver/diona
 
 /obj/item/organ/internal/appendix
