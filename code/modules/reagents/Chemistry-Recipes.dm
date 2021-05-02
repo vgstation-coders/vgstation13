@@ -839,7 +839,7 @@
 	name = "Solid Diamond"
 	id = "soliddiamond"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMOND = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = 20)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/diamond/product_to_spawn()
