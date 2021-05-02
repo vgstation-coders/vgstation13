@@ -1,3 +1,12 @@
+// Making fuse bombs
+/obj/item/cannonball/attackby(var/obj/item/I, mob/user as mob)
+	if(istype(I, /obj/item/tool/surgicaldrill/diamond))
+		var/obj/item/device/fuse_bomb/F = new /obj/item/device/fuse_bomb
+		F.assembled = 0
+		user.put_in_hands(F)
+		to_chat(user, "<span  class='notice'>You drill a hole in the [src] with the [I].</span>")
+		qdel(src)
+		
 /obj/item/device/fuse_bomb
 	name = "fuse bomb"
 	desc = "fshhhhhhhh BOOM!"
@@ -5,8 +14,16 @@
 	icon_state = "fuse_bomb_5"
 	item_state = "fuse_bomb"
 	flags = FPRINT
+	var/assembled = 2
 	var/fuse_lit = 0
 	var/seconds_left = 5
+
+/obj/item/device/fuse_bomb/New()
+	..()
+	if(assembled == 0)
+		name = "fuse bomb assembly"
+		desc = "Just add fire. And fuel."
+		update_icon()
 
 /obj/item/device/fuse_bomb/admin//spawned by the adminbus, doesn't send an admin message, but the logs are still kept.
 
@@ -19,30 +36,60 @@
 		to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
 	return
 
+/obj/item/device/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
+	if(assembled == 0)
+		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
+			if(target.reagents.total_volume < 200)
+				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
+				return
+			var/obj/structure/reagent_dispensers/fueltank/F = target
+			F.reagents.remove_reagent(FUEL, 200, 1)//Deleting 200 fuel from the welding fuel tank,
+			assembled = 1
+			to_chat(user, "<span  class='notice'>You've filled the [src] with welding fuel.</span>")
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+			desc = "Just add fire."
+			return
+
 /obj/item/device/fuse_bomb/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(!fuse_lit)
-		if(iswelder(W))
-			var/obj/item/tool/weldingtool/WT = W
-			if(WT.isOn())
-				lit(user,W)
-		else if(istype(W, /obj/item/weapon/lighter))
-			var/obj/item/weapon/lighter/L = W
-			if(L.lit)
-				lit(user,W)
-		else if(istype(W, /obj/item/weapon/match))
-			var/obj/item/weapon/match/M = W
-			if(M.lit)
-				lit(user,W)
-		else if(istype(W, /obj/item/candle))
-			var/obj/item/candle/C = W
-			if(C.lit)
-				lit(user,W)
-	else
-		if(iswirecutter(W))
-			fuse_lit = 0
+	if(assembled == 1)
+		if(istype(I, /obj/item/stack/cable_coil))
+			var/obj/item/stack/cable_coil/C = I
+			C.use(1)
+			assembled = 2
+			to_chat(user, "<span  class='notice'>You wire the [src].</span>")
+			name = "fuse bomb"
+			desc = "fshhhhhhhh BOOM!"
 			update_icon()
-			to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
+	else if(assembled == 2)
+		if(!fuse_lit)
+			if(iswelder(W))
+				var/obj/item/tool/weldingtool/WT = W
+				if(WT.isOn())
+					lit(user,W)
+			else if(istype(W, /obj/item/weapon/lighter))
+				var/obj/item/weapon/lighter/L = W
+				if(L.lit)
+					lit(user,W)
+			else if(istype(W, /obj/item/weapon/match))
+				var/obj/item/weapon/match/M = W
+				if(M.lit)
+					lit(user,W)
+			else if(istype(W, /obj/item/candle))
+				var/obj/item/candle/C = W
+				if(C.lit)
+					lit(user,W)
+			else if(iswirecutter(W))
+				assembled = 1
+				to_chat(user, "<span  class='notice'>You remove the fuse from the [src].</span>")
+				name = "fuse bomb assembly"
+				desc = "Just add fire."
+				update_icon()
+		else
+			if(iswirecutter(W))
+				fuse_lit = 0
+				update_icon()
+				to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
 
 
 /obj/item/device/fuse_bomb/proc/lit(mob/user as mob, var/obj/O=null)
@@ -79,7 +126,10 @@
 	qdel(src)
 
 /obj/item/device/fuse_bomb/update_icon()
-	icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
+	if (assembled == 2)
+		icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
+	else
+		icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
 
 /obj/item/device/fuse_bomb/proc/admin_warn(mob/user as mob)
 	var/turf/bombturf = get_turf(src)
