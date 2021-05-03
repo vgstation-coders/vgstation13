@@ -215,9 +215,8 @@
 
 /obj/item/toy/ammo/gun/examine(mob/user)
 	..()
-	if (src.amount_left == 0) {
+	if (src.amount_left == 0)
 		return
-	}
 	to_chat(user, "There [amount_left == 1 ? "is" : "are"] [amount_left] cap\s left.")
 
 /*

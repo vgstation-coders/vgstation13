@@ -32,7 +32,7 @@
 /datum/surgery_step/glue_bone/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] applies some of \the [tool] to the bones in [target]'s [affected.display_name]</span>", \
-		"<span class='notice'>You apply some of \the [var/obj/item/deployed || tool] to the bones in [target]'s [affected.display_name].</span>")
+		"<span class='notice'>You apply some of \the [tool] to the bones in [target]'s [affected.display_name].</span>")
 	affected.stage = 1
 
 /datum/surgery_step/glue_bone/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
