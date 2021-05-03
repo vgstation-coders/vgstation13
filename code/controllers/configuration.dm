@@ -162,7 +162,7 @@
 	var/python_path = "" //Path to the python executable.  Defaults to "python" on windows and "/usr/bin/env python2" on unix
 
 	var/assistantlimit = 0 //enables assistant limiting
-	var/assistantratio = 2 //how many assistants to security members
+	var/assistantratio = 2 //how many assistants to security+command members
 
 	var/emag_energy = -1
 	var/emag_starts_charged = 1

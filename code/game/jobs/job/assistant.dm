@@ -26,12 +26,9 @@
 	if(!config.assistantlimit)
 		return 99
 
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	var/sec_jobs = (officer.current_positions + warden.current_positions + hos.current_positions)
+	var/count = job_master.getCommandPlusSecCount()
 
-	if(sec_jobs > 5)
+	if(count > 5)
 		return 99
 
-	return clamp(sec_jobs * config.assistantratio + xtra_positions, total_positions, 99)
+	return clamp(count * config.assistantratio + xtra_positions, total_positions, 99)

@@ -222,7 +222,7 @@ GATEWAY_DELAY 18000
 ## Remove the # to enable assistant limiting.
 #ASSISTANT_LIMIT
 
-## If you enabled assistant limiting set the ratio of assistants to security members default is 2 assistants to 1 officer
+## If you enabled assistant limiting set the ratio of assistants to security members and command positions. Default is 2 assistants to 1 officer/command
 ASSISTANT_RATIO 2
 
 ## Remove the # to make rounds which end instantly (Rev, Wizard, Malf) to continue until the shuttle is called or the station is nuked.

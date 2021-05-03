@@ -307,12 +307,8 @@ var/global/datum/controller/occupations/job_master
 	// Rejoice, for you have been given a second chance to be a greytider.
 	Debug("DO, Running AC2")
 
-	var/count = 0
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/count = getCommandPlusSecCount()
 	var/datum/job/master_assistant = GetJob("Assistant")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
@@ -320,7 +316,7 @@ var/global/datum/controller/occupations/job_master
 			if(config.assistantlimit)
 				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide ; this block then doesn't get checked.
-						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
+						to_chat(player, "You have been returned to lobby because there's not enough security and command roles to make you an assistant.")
 						player.ready = 0
 						unassigned -= player
 						continue
@@ -338,8 +334,8 @@ var/global/datum/controller/occupations/job_master
 		if (player.ckey in assistant_second_chance)
 			var/assistant_pref = assistant_second_chance[player.ckey]
 			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
-			if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
-				if(count < 5) // And less than 5 seccies...
+			if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec+command...
+				if(count < 5) // And less than 5 online...
 					Debug("AC3: [player] failed the lottery.")
 			if (assistant_pref < player.mind.job_priority)
 				Debug("AC3: got made an assistant as a second chance.")
@@ -382,19 +378,25 @@ var/global/datum/controller/occupations/job_master
 			AssignRole(player, job.title, pref_level = level)
 			return TRUE
 
+/datum/controller/occupations/proc/getCommandPlusSecCount()
+	var/count = 0
+	var/list/jobs_to_check = list()
+	jobs_to_check |= COMMAND_POSITIONS
+	jobs_to_check |= SECURITY_POSITIONS
+	for(var/position in jobs_to_check)
+		var/datum/job/job = GetJob(position)
+		count += job.current_positions
+	return count
+
 // -- Snowflaked proc which can be adjusted to more jobs than assistants if needed.
 /datum/controller/occupations/proc/CheckAssistantCount(var/mob/new_player/player, var/level)
 	//People who wants to be assistants, sure, go on.
-	var/count = 0
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	var/count = getCommandPlusSecCount()
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
 	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (config.assistantratio * count)
 	if(not_enough_sec && (count < 5))
-		Debug("AC1 failed, not enough sec.")
+		Debug("AC1 failed, not enough sec+command.")
 		// Does he want anything else...?
 		for (var/datum/job/J in occupations)
 			if (player.client.prefs.GetJobDepartment(J, level) & J.flag)
