@@ -322,18 +322,18 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 		var/encoded_message = html_encode(speech.message)
 
-		to_chat(src, "You drop words into [host]'s body: <span class='borer2host'>\"[encoded_message]\"</span>")
+		to_chat(src, "You drop words into [host]'s body: <span class='borer'>\"[encoded_message]\"</span>")
 		if(host.transmogged_to)
-			to_chat(host.transmogged_to, "<b>Something speaks within you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+			to_chat(host.transmogged_to, "<b>Something speaks within you:</b> <span class='borer'>\"[encoded_message]\"</span>")
 		else if(hostlimb == LIMB_HEAD)
-			to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+			to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer'>\"[encoded_message]\"</span>")
 		else
-			to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+			to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer'>\"[encoded_message]\"</span>")
 		var/list/borers_in_host = host.get_brain_worms()
 		borers_in_host.Remove(src)
 		if(borers_in_host.len)
 			for(var/I in borers_in_host)
-				to_chat(I, "<b>[truename]</b> speaks from your host's [limb_to_name(hostlimb)]: <span class='borer2host'>\"[encoded_message]\"</span>")
+				to_chat(I, "<b>[truename]</b> speaks from your host's [limb_to_name(hostlimb)]: <span class='borer'>\"[encoded_message]\"</span>")
 
 		var/turf/T = get_turf(src)
 		log_say("[truename] [key_name(src)] (@[T.x],[T.y],[T.z]) -> [host]([key_name(host)]) Borer->Host Speech: [encoded_message]")
@@ -345,7 +345,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
 				if(M.client.holder)
 					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
-				var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[truename]</b> ([controls]) in <b>[host]</b>'s [limb_to_name(hostlimb)]: [encoded_message]</span>"
+				var/rendered="<span class='borer'>Thought-speech, <b>[truename]</b> ([controls]) in <b>[host]</b>'s [limb_to_name(hostlimb)]: [encoded_message]</span>"
 				M.show_message(rendered, 2) //Takes into account blindness and such.
 		return 1
 	else
