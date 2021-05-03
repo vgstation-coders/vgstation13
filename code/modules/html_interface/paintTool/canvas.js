@@ -231,6 +231,7 @@ function initCanvas(paintInitData, canvasInitData) {
 			  '<div onclick="setColor(\'{color}\');" style="background: {color}"></div>\n'
 				.replace("{color}", palette[color]).replace("{color}", palette[color]);
 	}
+	setColor(palette[0]);
 }
 
 function sanitizeLength (inputId, meterId) {

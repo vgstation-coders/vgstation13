@@ -28,8 +28,9 @@
 	..()
 
 /obj/structure/painting/custom/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/weapon/pen))//TODO other tools (crayons, brushes)
-		painting_data.interact(user)
+	var/datum/painting_utensil/p = new(user, W)
+	if (p.palette.len)
+		painting_data.interact(user, p)
 	return ..()
 
 /obj/structure/painting/custom/Topic(href, href_list)
@@ -95,8 +96,10 @@
 	..()
 
 /obj/item/mounted/frame/painting/custom/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/weapon/pen))//TODO other tools (crayons, brushes)
-		painting_data.interact(user)
+	var/datum/painting_utensil/p = new(user, W)
+	if (p.palette.len)
+		painting_data.interact(user, p)
+
 	return ..()
 
 /obj/item/mounted/frame/painting/custom/Topic(href, href_list)
