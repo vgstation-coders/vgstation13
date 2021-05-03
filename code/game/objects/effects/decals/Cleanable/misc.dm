@@ -367,7 +367,7 @@
 /obj/effect/decal/cleanable/salt/proc/checkVamp(var/mob/living/theVamp)
 	if(isvampire(theVamp))
 		var/datum/role/vampire/V = isvampire(theVamp)
-		if(/datum/power/vampire/charisma in V.current_powers)	//He's already a powerful vamp, the check is no longer meta
+		if(locate(/datum/power/vampire/charisma) in V.current_powers)	//He's already a powerful vamp, the check is no longer meta
 			return TRUE
 	return FALSE
 

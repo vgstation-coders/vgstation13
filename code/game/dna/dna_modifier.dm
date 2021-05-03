@@ -168,43 +168,11 @@
 		return
 	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
 		return
-	if(O.locked_to)
-		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
-		if(!istype(category, /datum/locking_category/buckle/bed/roller))
-			return
-	else if(O.anchored)
-		return
-	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
-		return
-	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
-		return
-	if(occupant)
-		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
-		return
-	if(ismanifested(O))
-		to_chat(usr, "<span class='notice'> For some reason, the scanner is unable to read that person's genes.</span>")//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
 
-		return
-	if(isrobot(user))
-		var/mob/living/silicon/robot/robit = usr
-		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
-			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
-			return
 	var/mob/living/L = O
 	if(!istype(L))
 		return
-	for(var/mob/living/carbon/slime/M in range(1,L))
-		if(M.Victim == L)
-			to_chat(usr, "[L.name] will not fit into the DNA Scanner because they have a slime latched onto their head.")
-			return
 
-	if(L == user)
-		visible_message("[user] climbs into \the [src].")
-	else
-		visible_message("[user] places [L] into \the [src].")
-	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
-	if(user.pulling == L)
-		user.stop_pulling()
 	put_in(L)
 
 /obj/machinery/dna_scannernew/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
@@ -254,28 +222,65 @@
 		var/obj/item/weapon/grab/G = item
 		if (!ismob(G.affecting))
 			return
-		if (src.occupant)
-			to_chat(user, "<span class='notice'><B>The scanner is already occupied!</B></span>")
-			return
-		/*if (G.affecting.abiotic())
-			to_chat(user, "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>")
-			return*/
-		if(G.affecting.locked_to)
-			return
-		put_in(G.affecting)
-		src.add_fingerprint(user)
-		qdel(G)
+		if(put_in(G.affecting, user))
+			qdel(G)
 		return 1
 	return ..()
 
-/obj/machinery/dna_scannernew/proc/put_in(var/mob/M)
+/obj/machinery/dna_scannernew/proc/put_in(var/mob/M, var/mob/user)
+	if(!istype(M))
+		return FALSE
+	if(M.locked_to)
+		var/datum/locking_category/category = M.locked_to.get_lock_cat_for(M)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return FALSE
+	else if(M.anchored)
+		return FALSE
+
+	if(ismanifested(M) || !iscarbon(M))
+		if(user)
+			to_chat(user, "<span class='notice'>For some reason, the scanner is unable to read that person's genes.</span>")
+		return
+
+	if(user)
+		if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
+			return
+		if(isrobot(user))
+			var/mob/living/silicon/robot/robit = user
+			if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
+				to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
+				return
+
+	for(var/mob/living/carbon/slime/S in range(1,M))
+		if(S.Victim == M)
+			if(user)
+				to_chat(user, "<span class='warning'>[M] will not fit into \the [src] because they have a slime latched onto their head.</span>")
+			return
+
+	if(occupant)
+		if(user)
+			to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
+		return FALSE
+
+	if(user && user.pulling == M)
+		user.stop_pulling()
+	if(user)
+		add_fingerprint(user)
+	M.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	M.forceMove(src)
 	M.reset_view()
 	src.occupant = M
 	src.icon_state = "scanner_1"
-
 	if(connected)
 		nanomanager.update_uis(connected)
+
+	if(user)
+		if(M == user)
+			visible_message("[user] climbs into \the [src].")
+		else
+			visible_message("[user] places [M] into \the [src].")
+	else
+		visible_message("\the [M] is placed into \the [src].")
 
 	// search for ghosts, if the corpse is empty and the scanner is connected to a cloner
 	for(dir in cardinal)
@@ -293,7 +298,15 @@
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				break
 			break
-	return
+	return TRUE
+
+/obj/machinery/dna_scannernew/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(isliving(AM))
+		var/mob/living/L = AM
+		if(L.lying)
+			if(put_in(L))
+				return TRUE
+	return FALSE
 
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 

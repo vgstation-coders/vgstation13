@@ -102,6 +102,13 @@
 	. = ..()
 	radio = new (src)
 
+/obj/machinery/power/supermatter/shard/New()
+	. = ..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		icon_state = "darkmatter_shard_chad"
+		base_icon_state = "darkmatter_shard_chad"
+		desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You are confident this is literally the best engine on the station, no other engine can compare to the intelligence required to set it up nor the unparalleled power output. All those idiot engineers will set up the Singularity, the TEG, the AME, but they all kneel to those who set up the SME. What are you waiting for? If this doesn't produce enough power to power the station for billions of years then you are doing it wrong.</span>"
+
 /obj/machinery/power/supermatter/initialize()
 	..()
 	set_frequency(frequency) //also broadcasts

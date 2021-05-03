@@ -117,14 +117,13 @@
 						src.client.images += V.cached_images[i]
 					i++
 
-		if (!V || (!(/datum/power/vampire/vision in V.current_powers) && !(/datum/power/vampire/mature in V.current_powers))) // Not a vampire, or a vampire but neither of the spells.
+		if (!V || !V.is_mature_or_has_vision()) // Not a vampire, or a vampire but neither of the spells.
 			change_sight(removing = SEE_MOBS)
-		if (!V || !(/datum/power/vampire/mature in V.current_powers))
+		if (!V || !(locate(/datum/power/vampire/mature) in V.current_powers))
 			change_sight(removing = SEE_TURFS|SEE_OBJS)
 			var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 			if(E)
 				see_in_dark = E.see_in_dark
-
 			see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
 
 		// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
@@ -289,7 +288,7 @@
 		if(ticker && ticker.hardcore_mode) //Hardcore mode: flashing nutrition indicator when starving!
 			if(nutrition < STARVATION_MIN)
 				throw_alert(SCREEN_ALARM_FOOD, /obj/abstract/screen/alert/carbon/food/starving, 5)
-		
+
 		update_pull_icon()
 
 		if(disabilities & NEARSIGHTED)	//This looks meh but saves a lot of memory by not requiring to add var/prescription

@@ -813,11 +813,13 @@ var/global/list/loopModeNames=list(
 		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
+		"funk" = "Funk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance"
 	)

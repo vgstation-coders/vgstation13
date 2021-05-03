@@ -893,3 +893,7 @@ its easier to just keep the beam vertical.
 	return 1
 /atom/proc/setPersistenceAge()
 	return
+
+//Called when a conveyor belt is pointing into us and an atom is coming in.
+/atom/proc/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	return

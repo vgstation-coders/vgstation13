@@ -113,3 +113,15 @@
 	color = rgb(r, g, b)
 	set_light(2, l_color = color)
 	update_icon()
+
+/obj/item/clothing/accessory/glowstick/nanotrasen
+	name = "IAA Identifier"
+	desc = "Provided to Internal Affairs Agents to allow them to distinguish each other during field operations, it emits a subtle green glow."
+	color = rgb(0, 100, 0) //Dark green, this is also pointless because you can't crack it.
+
+/obj/item/clothing/accessory/glowstick/nanotrasen/New()
+	..()
+	set_light(1, 3, "#006400")
+
+/obj/item/clothing/accessory/glowstick/nanotrasen/attack_self(mob/user)
+	return //It automatically glows

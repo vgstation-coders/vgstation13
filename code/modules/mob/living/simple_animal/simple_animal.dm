@@ -836,5 +836,19 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		qdel(src)
 
+/mob/living/simple_animal/isStunned() //Used so that it allows clients to attack in code/_onclick/click.dm
+	if(client)
+		return 0
+	return ..()
+
+/mob/living/simple_animal/isJustStunned() //Used so that it allows clients to move in code/mobules/mob/mob.dm
+	if(client)
+		return 0
+	return ..()
+
+/mob/living/simple_animal/isKnockedDown() //Ditto
+	if(client)
+		return 0
+	return ..()
 
 /datum/locking_category/simple_animal

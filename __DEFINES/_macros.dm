@@ -265,7 +265,7 @@
 
 #define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
+#define isanycultist(H) (islegacycultist(H) || iscultist(H))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 

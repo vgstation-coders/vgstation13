@@ -119,7 +119,6 @@
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
-	H.mutations += M_SOBER
 	H.check_mutations = 1
 
 /datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
@@ -173,6 +172,17 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/chef,
 		),
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/head/chefhat,
+			/obj/item/clothing/suit/chef,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/head/chefhat,
+			/obj/item/clothing/suit/chef,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/chef
@@ -253,6 +263,15 @@
 	alt_title_items_to_collect = list(
 		"Beekeeper" = list(
 			/obj/item/queen_bee = slot_l_store_str,
+		)
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/apron,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/apron,
 		)
 	)
 
@@ -412,6 +431,15 @@
 	items_to_collect = list(
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing = GRASP_LEFT_HAND,
 		/obj/item/weapon/stamp/mime = slot_r_store_str,
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/suspenders,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/suspenders,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/mime
@@ -662,6 +690,19 @@
 		/obj/item/weapon/implant/loyalty,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			"Lawyer" = list(/obj/item/clothing/suit/storage/lawyer/bluejacket),
+			"Bridge Officer" = list(/obj/item/clothing/suit/storage/lawyer/bridgeofficer),
+			"Internal Affairs Agent" = list(/obj/item/clothing/suit/storage/internalaffairs),
+		),
+		/datum/species/plasmaman/ = list(
+			"Lawyer" = list(/obj/item/clothing/suit/storage/lawyer/bluejacket),
+			"Bridge Officer" = list(/obj/item/clothing/suit/storage/lawyer/bridgeofficer),
+			"Internal Affairs Agent" = list(/obj/item/clothing/suit/storage/internalaffairs),
+		)
+	)
+
 	pda_type = /obj/item/device/pda/lawyer
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom
@@ -669,6 +710,11 @@
 /datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
+	equip_accessory(H, /obj/item/clothing/accessory/glowstick/nanotrasen, /obj/item/clothing/under)
+	if(Holiday == APRIL_FOOLS_DAY)
+		if(H.mind.role_alt_title == "Lawyer" || H.mind.role_alt_title == "Bridge Officer") //Lawyers and bridge officers are exempt
+			return
+		H.set_light(1, 4, "#006400") //Dark green, RGB(0,100,0)
 
 // -- Chaplain
 

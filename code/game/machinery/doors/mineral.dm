@@ -352,6 +352,9 @@
 				M.pulling.forceMove(loc)//so we don't stop pulling stuff when moving through cult doors
 		close()
 
+/obj/machinery/door/mineral/cult/attack_construct(var/mob/user)
+	return TryToSwitchState(user)
+
 /obj/machinery/door/mineral/cult/TryToSwitchState(atom/user)
 	if (ismob(user))
 		var/mob/M = user

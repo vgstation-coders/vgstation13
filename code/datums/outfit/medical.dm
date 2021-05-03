@@ -42,6 +42,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/cmo,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/cmo,
+		)
+	)
+
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
 	)
@@ -118,6 +127,19 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			"Emergency Physician" = list(/obj/item/clothing/under/rank/medical),
+			"Surgeon" =  list(/obj/item/clothing/under/rank/medical/blue),
+			"Medical Doctor" = list(/obj/item/clothing/under/rank/medical),
+		),
+		/datum/species/plasmaman/ = list(
+			"Emergency Physician" = list(/obj/item/clothing/under/rank/medical),
+			"Surgeon" =  list(/obj/item/clothing/under/rank/medical/blue),
+			"Medical Doctor" = list(/obj/item/clothing/under/rank/medical),
+		)
 	)
 
 	pda_type = /obj/item/device/pda/medical
@@ -213,6 +235,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/chemist,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/chemist,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/chemist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
@@ -271,13 +302,24 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	items_to_collect = list(
 		/obj/item/device/healthanalyzer = SURVIVAL_BOX,
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/paramedic,
+			/obj/item/clothing/head/soft/paramedic,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/paramedic,
+			/obj/item/clothing/head/soft/paramedic,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/medical
@@ -331,6 +373,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/genetics,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/genetics,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/geneticist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
@@ -381,6 +432,15 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/virologist,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/virologist,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/virologist,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/viro
