@@ -168,10 +168,11 @@
 	if(locked_to)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if(istype(category, /datum/locking_category/gum_stuck) && is_type_in_list(W, list(/obj/item/weapon/chisel, /obj/item/tool/screwdriver)))
-			to_chat(user, "You pry \the [src] loose from \the [locked_to].")
-			locked_to.unlock_atom(src)
-			pixel_y = -10 * PIXEL_MULTIPLIER
-			return
+			if(do_after(user, src, 5 SECONDS))
+				to_chat(user, "You pry \the [src] loose from \the [locked_to].")
+				locked_to.unlock_atom(src)
+				pixel_y = -10 * PIXEL_MULTIPLIER
+				return
 	return ..()
 
 /obj/item/gum/Crossed(mob/living/carbon/human/AM)
