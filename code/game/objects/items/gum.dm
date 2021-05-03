@@ -48,6 +48,8 @@
 	if(!istype(C) || !C.hasmouth())
 		to_chat(C, "<span class='warning'>You have no mouth.</span>")
 		return CANNOT_EQUIP
+	if(C.wear_mask)
+		return CAN_EQUIP_BUT_SLOT_TAKEN
 	return CAN_EQUIP
 
 /obj/item/gum/equipped(mob/M, slot)
