@@ -1737,7 +1737,8 @@ mob/living/carbon/human/isincrit()
 		return FALSE
 	if(pain_numb)
 		return FALSE
-	if(!internal_organs_by_name["brain"])
+	var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
+	if(!sponge || !istype(sponge) || (sponge.status & ORGAN_CUT_AWAY))
 		return FALSE
 	return TRUE
 
