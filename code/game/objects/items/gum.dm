@@ -10,6 +10,7 @@
 	var/replacement_chem_volume = 15
 	var/image/color_overlay
 	var/atom/target = null
+	var/sprite_shrunk = FALSE //I couldn't think of a satisfactory way to check if our transform matrix is minty fresh, so this is used to track if we're shrunk from being stuck to a vending machine
 
 /datum/locking_category/gum_stuck //just a featureless locking_category we use when sticking ourselves to items
 
@@ -75,15 +76,37 @@
 			A.lock_atom(src, /datum/locking_category/gum_stuck)
 			to_chat(user, "<span class='notice'>You stick \the [src] under \the [A].</span>")
 			return 1
-		else if(istype(A, /obj/machinery/vending/) && user.a_intent == I_HURT)
+		else if(istype(A, /obj/machinery/vending/))
 			if(!user.drop_item(src, get_turf(A)))
 				to_chat(user, "<span class='warning'>\The [src] is stuck to your hands!</span>")
 				return
-			pixel_x =  7 * PIXEL_MULTIPLIER
-			pixel_y = -3 * PIXEL_MULTIPLIER
+			pixel_x = ( 7 + rand(-1,1)) * PIXEL_MULTIPLIER
+			pixel_y = (-3 + rand(-1,1)) * PIXEL_MULTIPLIER
+			if(!sprite_shrunk)
+				var/matrix/M = matrix()
+				M.Scale(0.5, 0.5)
+				transform = M //"transform" is our transformation matrix
+				sprite_shrunk = TRUE
 			A.lock_atom(src, /datum/locking_category/gum_stuck)
 			to_chat(user, "<span class='warning'>You stick \the [src] in the coin slot... with malicious intent!</span>")
 			return 1
+	return ..()
+
+/obj/item/gum/attackby(var/obj/item/W, var/mob/user)
+	if(locked_to)
+		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
+		if(istype(category, /datum/locking_category/gum_stuck) && is_type_in_list(W, list(/obj/item/weapon/chisel, /obj/item/tool/screwdriver)))
+			playsound(src, "sound/items/screwdriver.ogg", 10, 1, -1)
+			if(do_after(user, src, 5 SECONDS) && locked_to)
+				to_chat(user, "You pry \the [src] loose from \the [locked_to].")
+				locked_to.unlock_atom(src)
+				if(sprite_shrunk)
+					var/matrix/M = transform
+					M.Scale(2,2)
+					transform = M
+					sprite_shrunk = FALSE
+				pixel_y = -10 * PIXEL_MULTIPLIER
+				return
 	return ..()
 
 /obj/item/gum/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user, flag)
@@ -165,17 +188,6 @@
 	slot_flags = SLOT_MASK
 	wrapped = FALSE
 	update_icon()
-
-/obj/item/gum/attackby(var/obj/item/W, var/mob/user)
-	if(locked_to)
-		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
-		if(istype(category, /datum/locking_category/gum_stuck) && is_type_in_list(W, list(/obj/item/weapon/chisel, /obj/item/tool/screwdriver)))
-			if(do_after(user, src, 5 SECONDS))
-				to_chat(user, "You pry \the [src] loose from \the [locked_to].")
-				locked_to.unlock_atom(src)
-				pixel_y = -10 * PIXEL_MULTIPLIER
-				return
-	return ..()
 
 /obj/item/gum/Crossed(mob/living/carbon/human/AM)
 	if(chewed && !locked_to)
