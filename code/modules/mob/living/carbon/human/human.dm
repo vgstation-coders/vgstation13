@@ -1731,11 +1731,13 @@ mob/living/carbon/human/isincrit()
 			return extractedorgan
 
 /mob/living/carbon/human/feels_pain()
-	if(!species)
+	if(!species) //should really really not happen!!
 		return FALSE
 	if(species.flags & NO_PAIN)
 		return FALSE
 	if(pain_numb)
+		return FALSE
+	if(!internal_organs_by_name["brain"])
 		return FALSE
 	return TRUE
 
