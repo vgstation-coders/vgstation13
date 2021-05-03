@@ -132,7 +132,7 @@
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
 	var/damage = S.punch_damage
-	damage *= get_strength()
+	damage += (get_strength() * S.punch_damage_per_strength)
 	if(organ_has_mutation(get_active_hand_organ(), M_CLAWS) && !istype(gloves))
 		damage += 3
 	if(istype(gloves))
@@ -158,7 +158,7 @@
 /mob/living/carbon/human/proc/get_knockout_chance(mob/living/victim)
 	var/base_chance = 8
 
-	base_chance *= get_strength()
+	base_chance += (get_strength() * 4) //+4% knockout chance per point of strength
 	if(istype(gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		base_chance += G.bonus_knockout
