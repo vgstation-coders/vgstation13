@@ -335,3 +335,297 @@
 
 /mob/living/simple_animal/hostile/hex/cultify()
 	return
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+/mob/living/simple_animal/astral_projection
+	name = "astral projection"
+	real_name = "astral projection"
+	desc = "A fragment of a cultist's soul, freed from the laws of physics."
+	icon = 'icons/mob/mob.dmi'
+	icon_state = "ghost-narsie"
+	icon_living = "ghost-narsie"
+	icon_dead = "ghost-narsie"
+	maxHealth = 1
+	health = 1
+	melee_damage_lower = 0
+	melee_damage_upper = 0
+	minbodytemp = 0
+	maxbodytemp = 4000
+	min_oxy = 0
+	max_co2 = 0
+	max_tox = 0
+	speed = 1
+	stop_automated_movement = TRUE
+	faction = "cult"
+	supernatural = TRUE
+	flying = TRUE
+	mob_property_flags = MOB_SUPERNATURAL
+	speed = 0.5
+	density = 0
+	lockflags = 0
+	canmove = 0
+	blinded = 0
+	anchored = 1
+	flags = HEAR | TIMELESS | INVULNERABLE
+	universal_understand = 1
+	universal_speak = 1
+	plane = GHOST_PLANE
+	layer = GHOST_LAYER
+	invisibility = INVISIBILITY_CULTJAUNT
+	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+	incorporeal_move = INCORPOREAL_GHOST
+	alpha = 127
+
+	var/tangibility = FALSE
+
+	var/mob/living/anchor
+	var/image/incorporeal_appearance
+	var/image/tangible_appearance
+
+	//ghost stuff
+	var/next_poltergeist = 0
+	var/manual_poltergeist_cooldown
+
+/mob/living/simple_animal/astral_projection/New()
+	..()
+	incorporeal_appearance = image('icons/mob/mob.dmi',"blank")
+	tangible_appearance = image('icons/mob/mob.dmi',"blank")
+	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
+	see_in_dark = 100
+
+
+/mob/living/simple_animal/astral_projection/Login()
+	..()
+	client.CAN_MOVE_DIAGONALLY = 1
+
+	//astral projections can identify cultists
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		for(var/datum/role/cultist in cult.members)
+			if(cultist.antag && cultist.antag.current)
+				var/imageloc = cultist.antag.current
+				if(istype(cultist.antag.current.loc,/obj/mecha))
+					imageloc = cultist.antag.current.loc
+				var/hud_icon = cultist.logo_state
+				var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
+				I.pixel_x = 20 * PIXEL_MULTIPLIER
+				I.pixel_y = 20 * PIXEL_MULTIPLIER
+				I.plane = ANTAG_HUD_PLANE
+				client.images += I
+
+
+/mob/living/simple_animal/astral_projection/Destroy()
+	//the projection has ended, let's return to our body
+	if (anchor && anchor.stat != DEAD && client)
+		if (key)
+			anchor.key = key
+	//if our body was somehow already destroyed however, we'll become a shade right here
+	else if(client && veil_thickness > CULT_PROLOGUE)
+		var/turf/T = get_turf(src)
+		if (T)
+			var/mob/living/simple_animal/shade/shade = new (T)
+			playsound(T, 'sound/hallucinations/growl1.ogg', 50, 1)
+			shade.name = "[real_name] the Shade"
+			shade.real_name = "[real_name]"
+			mind.transfer_to(shade)
+			update_faction_icons()
+			to_chat(shade, "<span class='sinister'>It appears your body was unfortunately destroyed. The remains of your soul made their way to your astral projection where they merge together, forming a shade.</span>")
+	..()
+
+/mob/living/simple_animal/astral_projection/death(var/gibbed = FALSE)
+	qdel(src)
+
+/mob/living/simple_animal/astral_projection/rest_action()
+	return
+
+/mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
+	if (!body)
+		return
+
+	anchor = body
+
+	tangible_appearance = body.appearance
+
+	overlays.len = 0
+
+	if (ishuman(body))
+		var/mob/living/carbon/human/H = body
+		overlays += get_human_clothing(body)
+		//overlays += image('icons/mob/mob.dmi',"ghost-narsie-suit")
+		overlays += H.obj_overlays[ID_LAYER]
+		overlays += H.obj_overlays[EARS_LAYER]
+		overlays += H.obj_overlays[GLASSES_LAYER]
+		overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
+		overlays += H.obj_overlays[BELT_LAYER]
+		overlays += H.obj_overlays[BACK_LAYER]
+		overlays += H.obj_overlays[HEAD_LAYER]
+		overlays += H.obj_overlays[HANDCUFF_LAYER]
+
+	incorporeal_appearance = appearance
+
+	key = body.key
+
+	gender = body.gender
+	if(body.mind && body.mind.name)
+		name = body.mind.name
+	else
+		if(body.real_name)
+			name = body.real_name
+		else
+			if(gender == MALE)
+				name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+			else
+				name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+
+	mind = body.mind	//we don't transfer the mind but we keep a reference to it.
+
+
+/mob/living/simple_animal/astral_projection/proc/toggle_tangibility()
+	if (tangibility)
+		density = 0
+		appearance = incorporeal_appearance
+		canmove = 0
+		incorporeal_move = 1
+		flying = 1
+		flags = HEAR | TIMELESS | INVULNERABLE
+		speed = 0.5
+	else
+		density = 1
+		appearance = tangible_appearance
+		canmove = 1
+		incorporeal_move = 0
+		flying = 0
+		flags = HEAR | PROXMOVE
+		speed = 1
+
+	tangibility = !tangibility
+
+// Check for last poltergeist activity.
+/mob/living/simple_animal/astral_projection/proc/can_poltergeist(var/start_cooldown=1)
+	if(isAdminGhost(src))
+		return TRUE
+	if(world.time >= next_poltergeist)
+		if(start_cooldown)
+			start_poltergeist_cooldown()
+		return TRUE
+	return FALSE
+
+/mob/living/simple_animal/astral_projection/proc/start_poltergeist_cooldown()
+	if(isnull(manual_poltergeist_cooldown))
+		next_poltergeist=world.time + global_poltergeist_cooldown
+	else
+		next_poltergeist=world.time + manual_poltergeist_cooldown
+
+/mob/living/simple_animal/astral_projection/proc/reset_poltergeist_cooldown()
+	next_poltergeist=0
+
+
+//saycode
+/mob/living/simple_animal/astral_projection/say(var/message)
+	. = ..(message, "C")
+
+/mob/living/simple_animal/astral_projection/cult_chat_check(setting)
+	if(!mind)
+		return
+	if(find_active_faction_by_member(iscultist(src)))
+		return 1
+	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
+		return 1
+
+#define SPEAK_OVER_GENERAL_CULT_CHAT 0
+#define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
+#define HEAR_CULT_CHAT 2
+
+/mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
+	if(..())
+		return 1
+	if(message_mode == MODE_HEADSET && cult_chat_check(SPEAK_OVER_GENERAL_CULT_CHAT))
+		var/turf/T = get_turf(src)
+		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
+		for(var/mob/M in mob_list)
+			if(M.cult_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
+		return 1
+
+#undef SPEAK_OVER_GENERAL_CULT_CHAT
+#undef SPEAK_OVER_CHANNEL_INTO_CULT_CHAT
+#undef HEAR_CULT_CHAT
+
+
+
+
+//returns an image featuring the mob's uniform and suit with its legs faded out
+/mob/living/simple_animal/astral_projection/proc/get_human_clothing(var/mob/living/carbon/human/body)
+	if (!body)
+		return
+
+	var/image/human_clothes = image('icons/mob/mob.dmi',"blank")
+
+	//couldn't just re-use the code from human/update_icons.dm because we need to manipulate an /icon, not an /image
+	//it's not perfect and won't get the accessories or blood stains but that's good enough for the effect we're trying to get here
+	if(body.w_uniform)
+		var/uniform_icon = 'icons/mob/uniform.dmi'
+		var/uniform_icon_state = "grey_s"
+
+		if(body.w_uniform._color)
+			uniform_icon_state = "[body.w_uniform._color]_s"
+
+		if(((M_FAT in body.mutations) && (body.species.anatomy_flags & CAN_BE_FAT)) || body.species.anatomy_flags & IS_BULKY)
+			if(body.w_uniform.clothing_flags&ONESIZEFITSALL)
+				uniform_icon = 'icons/mob/uniform_fat.dmi'
+
+		if(body.w_uniform.wear_override)
+			uniform_icon = body.w_uniform.wear_override
+
+		var/obj/item/clothing/under/under_uniform = body.w_uniform
+		if(body.species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
+			if(body.species.uniform_icons && has_icon(body.species.uniform_icons, "[body.w_uniform.icon_state]_s"))
+				uniform_icon = body.species.uniform_icons
+
+		if((body.gender == FEMALE) && (body.w_uniform.clothing_flags & GENDERFIT)) //genderfit
+			if(has_icon(uniform_icon, "[body.w_uniform.icon_state]_s_f"))
+				uniform_icon_state = "[body.w_uniform.icon_state]_s_f"
+
+		if(body.w_uniform.icon_override)
+			uniform_icon	= body.w_uniform.icon_override
+
+		var/icon/I_uniform = icon(uniform_icon,uniform_icon_state)
+		var/icon/mask = icon('icons/mob/mob.dmi',"ajourney_mask")
+
+		mask.Blend(I_uniform, ICON_MULTIPLY)
+
+		human_clothes.overlays += image(mask)
+
+	if(body.wear_suit)
+		var/suit_icon = body.wear_suit.icon_override ? body.wear_suit.icon_override : 'icons/mob/suit.dmi'
+		var/suit_icon_state = body.wear_suit.icon_state
+
+		var/datum/species/SP = body.species
+
+		if((((M_FAT in body.mutations) && (SP.anatomy_flags & CAN_BE_FAT)) || (SP.anatomy_flags & IS_BULKY)) && !(body.wear_suit.icon_override))
+			if(body.wear_suit.clothing_flags&ONESIZEFITSALL)
+				suit_icon	= 'icons/mob/suit_fat.dmi'
+				if(SP.name in body.wear_suit.species_fit) //Allows clothes to display differently for multiple species
+					if(SP.fat_wear_suit_icons && has_icon(SP.fat_wear_suit_icons, body.wear_suit.icon_state))
+						suit_icon = SP.wear_suit_icons
+				if((body.gender == FEMALE) && (body.wear_suit.clothing_flags & GENDERFIT)) //genderfit
+					if(has_icon(suit_icon,"[body.wear_suit.icon_state]_f"))
+						suit_icon_state = "[body.wear_suit.icon_state]_f"
+		else
+			if(SP.name in body.wear_suit.species_fit) //Allows clothes to display differently for multiple species
+				if(SP.wear_suit_icons && has_icon(SP.wear_suit_icons, body.wear_suit.icon_state))
+					suit_icon = SP.wear_suit_icons
+			if((gender == FEMALE) && (body.wear_suit.clothing_flags & GENDERFIT)) //genderfit
+				if(has_icon(suit_icon,"[body.wear_suit.icon_state]_f"))
+					suit_icon_state = "[body.wear_suit.icon_state]_f"
+
+		var/icon/I_suit = icon(suit_icon,suit_icon_state)
+		var/icon/mask = icon('icons/mob/mob.dmi',"ajourney_mask")
+
+		mask.Blend(I_suit, ICON_MULTIPLY)
+
+		human_clothes.overlays += image(mask)
+
+	return human_clothes

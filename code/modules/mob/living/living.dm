@@ -1237,6 +1237,10 @@ Thanks.
 
 	if(client.move_delayer.blocked())
 		return
+
+	rest_action()
+
+/mob/living/proc/rest_action()
 	delayNextMove(1)
 	resting = !resting
 	update_canmove()

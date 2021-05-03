@@ -2543,7 +2543,8 @@ var/list/bloodcult_exitportals = list()
 	word3 = /datum/runeword/blood_cult/self
 	page = "Upon use, you will fall asleep, and your soul will float above your body, allowing you to freely move around the Z-Level like a ghost would. However, you cannot talk with other ghosts, or listen to them, or use any of the usual ghost verbs beside re-entering your body. Re-entering your body, or it being moved away from the rune will end the ritual, and you'll wake up after a second or so. You might have to use the rest verb to get back up. As it can be used for any period of time, it's a great, though limited, spying tool. Should your body be destroyed while you were using the rune, attempting to re-enter it will grant you the rest of the ghost verbs and abilities back. "
 	rune_flags = RUNE_STAND
-	var/mob/dead/observer/deafmute/astral = null
+	//var/mob/dead/observer/deafmute/astral = null
+	var/mob/living/simple_animal/astral_projection/astral = null
 	var/cultist_key = ""
 	var/list/restricted_verbs = list()
 
@@ -2552,49 +2553,15 @@ var/list/bloodcult_exitportals = list()
 	R.one_pulse()
 
 	cultist_key = activator.key
-	if (ishuman(activator))
-		activator.sleeping = max(activator.sleeping,2)
-		activator.stat = UNCONSCIOUS
-		activator.resting = 1
-	activator.ajourn = spell_holder
+	//activator.ajourn = spell_holder
 
-	var/list/antag_icons = list()
-	if (activator.client)
-		for (var/image/I in activator.client.images)
-			if (I.plane == ANTAG_HUD_PLANE)
-				antag_icons += image(I,I.loc)
-
-	to_chat(activator, "<span class='notice'>As you recite the invocation, your body falls over the rune, but your consciousness still stands up above it.</span>")
-	astral = activator.ghostize(1,1)
-
-	astral.icon = 'icons/mob/mob.dmi'
-	astral.icon_state = "ghost-narsie"
-	astral.overlays.len = 0
-	if (ishuman(activator))
-		var/mob/living/carbon/human/H = activator
-		astral.overlays += H.obj_overlays[ID_LAYER]
-		astral.overlays += H.obj_overlays[EARS_LAYER]
-		astral.overlays += H.obj_overlays[SUIT_LAYER]
-		astral.overlays += H.obj_overlays[GLASSES_LAYER]
-		astral.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-		astral.overlays += H.obj_overlays[BELT_LAYER]
-		astral.overlays += H.obj_overlays[BACK_LAYER]
-		astral.overlays += H.obj_overlays[HEAD_LAYER]
-		astral.overlays += H.obj_overlays[HANDCUFF_LAYER]
-
-	for (var/V in astral.verbs)//restricting the verbs! all they can do is re-enter their body.
-		if ((copytext("[V]",1,10) == "/mob/dead") && ("[V]" != "/mob/dead/observer/verb/reenter_corpse"))
-			restricted_verbs += V
-			astral.verbs -= V
+	to_chat(activator, "<span class='notice'>As you recite the invocation, you feel your consciousness rise up in the air above your body.</span>")
+	//astral = activator.ghostize(1,1)
+	astral = new(activator.loc)
+	astral.ascend(activator)
 
 	step(astral,NORTH)
 	astral.dir = SOUTH
-	astral.movespeed = 0.375//twice the default ghost move speed
-	astral.see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-
-	if (astral.client)
-		for (var/image/I in antag_icons)
-			astral.client.images += I
 
 	spawn()
 		handle_astral()
@@ -2608,18 +2575,15 @@ var/list/bloodcult_exitportals = list()
 
 /datum/rune_spell/blood_cult/astraljourney/abort(var/cause)
 	if (activator && activator.loc && cultist_key)
-		activator.key = cultist_key
 		to_chat(activator, "<span class='notice'>You reconnect with your body.</span>")
 	else
 		if (astral)
 			to_chat(astral, "<span class='notice'>The ritual somehow lost track of your body. You are now fully disconnected from it, and a fully fledged ghost.</span>")
-			for (var/V in restricted_verbs)//since they're a real ghost now, let's give them back the rest of their verbs.
-				astral.verbs += V
+	qdel(astral)
 	..()
 
 /datum/rune_spell/blood_cult/astraljourney/proc/handle_astral()
-	while(!destroying_self && activator && astral && astral.loc && activator.stat == UNCONSCIOUS && activator.loc == spell_holder.loc)
-		activator.sleeping = max(activator.sleeping,2)
+	while(!destroying_self && activator && activator.stat != DEAD && astral && astral.loc && activator.loc == spell_holder.loc)
 		sleep(10)
 	abort()
 
