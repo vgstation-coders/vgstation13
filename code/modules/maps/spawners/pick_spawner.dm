@@ -60,3 +60,15 @@
 	to_spawn = list(
 		/obj/item/clothing/gloves/yellow
 		)
+		
+/obj/abstract/map/spawner/pick_spawner/yellowgloves/tcomms_storage
+	category = "yellowgloves_tcommsstorage"
+	name = "glubb pickspawner (tcomms_storage)"
+
+/obj/abstract/map/spawner/pick_spawner/yellowgloves/cyborgcharger
+	category = "yellowgloves_cyborgcharger"
+	name = "glubb pickspawner (cyborgcharger)"
+
+/obj/abstract/map/spawner/pick_spawner/yellowgloves/technicalstorage
+	category = "yellowgloves_technicalstorage"
+	name = "glubb pickspawner (technicalstorage)"
