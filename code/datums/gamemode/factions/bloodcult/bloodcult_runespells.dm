@@ -2574,11 +2574,6 @@ var/list/bloodcult_exitportals = list()
 
 
 /datum/rune_spell/blood_cult/astraljourney/abort(var/cause)
-	if (activator && activator.loc && cultist_key)
-		to_chat(activator, "<span class='notice'>You reconnect with your body.</span>")
-	else
-		if (astral)
-			to_chat(astral, "<span class='notice'>The ritual somehow lost track of your body. You are now fully disconnected from it, and a fully fledged ghost.</span>")
 	qdel(astral)
 	..()
 

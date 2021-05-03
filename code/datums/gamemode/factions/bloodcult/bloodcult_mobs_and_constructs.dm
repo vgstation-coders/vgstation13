@@ -387,6 +387,7 @@
 	//ghost stuff
 	var/next_poltergeist = 0
 	var/manual_poltergeist_cooldown
+	var/time_last_speech = 0
 
 /mob/living/simple_animal/astral_projection/New()
 	..()
@@ -421,6 +422,7 @@
 	if (anchor && anchor.stat != DEAD && client)
 		if (key)
 			anchor.key = key
+			to_chat(anchor, "<span class='notice'>You reconnect with your body.</span>")
 	//if our body was somehow already destroyed however, we'll become a shade right here
 	else if(client && veil_thickness > CULT_PROLOGUE)
 		var/turf/T = get_turf(src)
@@ -430,6 +432,7 @@
 			shade.name = "[real_name] the Shade"
 			shade.real_name = "[real_name]"
 			mind.transfer_to(shade)
+			shade.key = key
 			update_faction_icons()
 			to_chat(shade, "<span class='sinister'>It appears your body was unfortunately destroyed. The remains of your soul made their way to your astral projection where they merge together, forming a shade.</span>")
 	..()
@@ -478,6 +481,7 @@
 				name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 			else
 				name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+	real_name = name
 
 	mind = body.mind	//we don't transfer the mind but we keep a reference to it.
 
@@ -524,7 +528,13 @@
 
 //saycode
 /mob/living/simple_animal/astral_projection/say(var/message)
-	. = ..(message, "C")
+	. = ..(message, "[tangibility ? "" : "C"]")
+
+	if(tangibility && ishuman(anchor) && config.voice_noises && world.time>time_last_speech+5 SECONDS)
+		time_last_speech = world.time
+		for(var/mob/O in hearers())
+			if(!O.is_deaf() && O.client)
+				O.client.handle_hear_voice(src)
 
 /mob/living/simple_animal/astral_projection/cult_chat_check(setting)
 	if(!mind)
