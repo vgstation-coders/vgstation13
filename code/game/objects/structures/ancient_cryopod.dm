@@ -92,8 +92,7 @@
 	M.eye_blurry = 15
 
 	var/podname = copytext(sanitize(input(M, "Pick your name","Name") as null|text), 1, 2*MAX_NAME_LEN)
-	M.real_name = podname
-	M.name = podname
+	M.fully_replace_character_name(null,podname)
 
 	message_admins("[key_name_admin(M)] has spawned as a [title] from an ancient cryopod.")
 	log_game("[key_name(M)] has spawned as a [title] from an ancient cryopod.")
