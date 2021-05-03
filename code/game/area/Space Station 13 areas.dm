@@ -1874,6 +1874,7 @@ proc/process_adminbus_teleport_locs()
 	name = "EVA Storage"
 	icon_state = "eva"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	holomap_marker = "eva"
 	jammed=1
 
 /area/storage/secure
