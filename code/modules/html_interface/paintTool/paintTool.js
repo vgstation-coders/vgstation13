@@ -207,12 +207,14 @@ function sanitizeStrength() {
 	paint_strength =  Math.min(Math.max(paint_strength, minPaintStrength), maxPaintStrength);
 }
 
+
+var blendFunction = colorRybBlend;
+
 /**
  * Draw a pixel into the bitmap.
  * Given 'rgb' as an hex string (eg: #AA88FF) and 'a' (alpha) as a 0-1 value, will mix said color
  *  with whatever's on the specified pixel on the bitmap.
  */
-var blendFunction = colorRybBlend;
 function pixelDraw(x, y, rgb, alpha) {
 	//Figure out the pixel index off the x and y
 	let pixel = y * width + x;
@@ -283,7 +285,7 @@ function colorRybBlend(c1, c2, alpha) {
 }
 
 /*---------------------------------------------
-end coloor blends
+end color blends
 */
 
 /**

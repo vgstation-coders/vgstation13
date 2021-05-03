@@ -1,3 +1,27 @@
+#define PENCIL_STRENGTH_MAX 0.15
+#define PENCIL_STRENGTH_MIN 0
+#define BRUSH_STRENGTH_MAX 1
+#define BRUSH_STRENGTH_MIN 0
+
+/datum/painting_utensil
+	var/min_strength = 0
+	var/max_strength = 1
+	var/list/palette = list()
+
+/datum/painting_utensil/New(mob/user, obj/item/held_item = user.get_active_hand())
+	if (istype(held_item, /obj/item/weapon/pen))
+		var/obj/item/weapon/pen/p = held_item
+		max_strength = PENCIL_STRENGTH_MAX
+		min_strength = PENCIL_STRENGTH_MIN
+		palette += p.colour_rgb
+
+	if (istype(held_item, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/c = held_item
+		max_strength = PENCIL_STRENGTH_MAX
+		min_strength = PENCIL_STRENGTH_MIN
+		palette += c.colour
+		palette += c.shadeColour
+
 /datum/custom_painting
 	var/parent
 
@@ -77,21 +101,18 @@
 	// Setup contents
 	interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
 
-/datum/custom_painting/proc/interact(mob/user)
-
-	// Prepare inputs
-	//TODO: tool data(palette, opacity)
+/datum/custom_painting/proc/interact(mob/user, datum/painting_utensil/p)
 	var/paint_init_inputs = json_encode(list(
 		"width" = bitmap_width,
 		"height" = bitmap_height,
 		"bitmap" = bitmap,
-		"minPaintStrength" = 0,
-		"maxPaintStrength" = 1
+		"minPaintStrength" = p.min_strength,
+		"maxPaintStrength" = p.max_strength
 	))
 
 	var/canvas_init_inputs = json_encode(list(
 		"src" = "\ref[parent]",
-		"palette" = list("#000000", "#ffffff", "#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#ff00ff"),
+		"palette" = p.palette, //list("#000000", "#ffffff", "#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#ff00ff"),
 		"title" = title,
 		"author" = author,
 		"description" = description
@@ -119,8 +140,7 @@
 		// Make sure the player can actually paint
 		if(!usr || usr.incapacitated())
 			return
-		var/obj/item/held_item = usr.get_active_hand()
-		if(!istype(held_item, /obj/item/weapon/pen))
+		if(!(new /datum/painting_utensil(usr)).palette.len)
 			//TODO other tools (crayons, brushes)
 			to_chat(usr, "<span class='warning'>You need to be holding a painting utensil in your active hand.</span>")
 			return
@@ -150,3 +170,8 @@
 		ico.DrawBox(bitmap[pixel + 1], x, y)
 
 	return ico
+
+#undef PENCIL_STRENGTH_MAX
+#undef PENCIL_STRENGTH_MIN
+#undef BRUSH_STRENGTH_MAX
+#undef BRUSH_STRENGTH_MIN
