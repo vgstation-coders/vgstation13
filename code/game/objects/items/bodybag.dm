@@ -41,7 +41,7 @@
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
 
-/obj/structure/closet/body_bag/attackby(var/obj/item/W, mob/user as mob)
+/obj/structure/closet/body_bag/attackby(obj/item/W, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
 		if(S.amount<5)

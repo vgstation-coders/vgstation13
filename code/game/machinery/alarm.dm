@@ -1150,7 +1150,7 @@ var/global/list/airalarm_presets = list(
 	return 0
 
 /obj/machinery/alarm/is_in_range(var/mob/user)
-	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+	if((!in_range(src, user) || !istype(loc, /turf)) && !istype(user, /mob/living/silicon))
 		var/obj/item/device/multitool/omnitool/O = user.get_active_hand()
 		if(istype(O))
 			return O.can_connect(src,user)

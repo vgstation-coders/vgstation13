@@ -1333,8 +1333,7 @@ var/global/list/cloudnine_stuff = list(
 		wander = TRUE
 		my_wheel = null
 		return
-	dir = my_wheel.dir
-	my_wheel.Uncross(src)
+	step(src,my_wheel.dir)
 	delayNextMove(HAMSTER_MOVEDELAY)
 	sleep(HAMSTER_MOVEDELAY)
 	hamsterwheel(repeat-1)
@@ -1348,7 +1347,9 @@ var/global/list/cloudnine_stuff = list(
 		flick_overlay(heart, list(M.client), 20)
 		if(!my_wheel)
 			flick("hammy-rest", src)
-		emote("me", EMOTE_AUDIBLE, pick("flattens amicably.","fluffs up.","puffs out her cheeks.","shuts his eyes contentedly."))
+		emote("me", EMOTE_AUDIBLE, pick("flattens amicably.","fluffs up.","puffs out her cheeks.","shuts her eyes contentedly."))
+
+#undef HAMSTER_MOVEDELAY
 
 /obj/item/clothing/gloves/golden
 	name = "golden gloves"
@@ -1455,7 +1456,7 @@ var/list/decelerators = list()
 
 var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 
-/obj/item/device/multitool/omnitool/preattack(atom/target, mob/user , proximity)
+/obj/item/device/multitool/omnitool/preattack(atom/target, mob/user, proximity)
 	if(proximity)
 		return FALSE //immediately continue if in reach
 	if(can_connect(target, user) && is_type_in_list(target.type,omnitoolable))
