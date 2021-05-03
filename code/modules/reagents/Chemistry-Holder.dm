@@ -371,16 +371,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			R.on_mob_life(M)
 	update_total()
 
-/datum/reagents/proc/conditional_update_move(var/atom/A, var/Running = 0)
-	for(var/datum/reagent/R in reagent_list)
-		R.on_move (A, Running)
-	update_total()
-
-/datum/reagents/proc/conditional_update(var/atom/A, )
-	for(var/datum/reagent/R in reagent_list)
-		R.on_update (A)
-	update_total()
-
 /datum/reagents/proc/handle_reactions()
 	if(!my_atom)
 		return //sanity check

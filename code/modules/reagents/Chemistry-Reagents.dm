@@ -192,28 +192,23 @@
 
 	holder.remove_reagent(src.id, custom_plant_metabolism)
 
-/datum/reagent/proc/on_move(var/mob/M)
-	return
-
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)
-	return
-
-//Called when two reagents are mixing
-/datum/reagent/proc/on_merge(var/data)
-	return
-
-/datum/reagent/proc/on_update(var/atom/A)
 	return
 
 /datum/reagent/proc/on_removal(var/data)
 	return 1
 
+//Completely unimplemented as of 2021, commenting out
+///datum/reagent/proc/on_move(var/mob/M)
+//	return
+///datum/reagent/proc/on_merge(var/data)
+///	return
+///datum/reagent/proc/on_update(var/atom/A)
+//	return
+	
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
-
-/datum/reagent/proc/OnTransfer()
-	return
 
 //Called when reagentcontainer A transfers into reagentcontainer B (this /datum/reagent belongs to B, i.e. we are the catchers here)
 /datum/reagent/proc/post_transfer(var/datum/reagents/donor)
@@ -475,16 +470,16 @@
 					else
 						L.infect_disease2(D, 1, notes="(Drank/Injected with infected blood)")
 
-/datum/reagent/blood/on_merge(var/data)
-	if(data["blood_colour"])
-		color = data["blood_colour"]
-	return ..()
-
-/datum/reagent/blood/on_update(var/atom/A)
-	if(data["blood_colour"])
-		color = data["blood_colour"]
-	return ..()
-
+// Was unused as of 2021
+///datum/reagent/blood/on_merge(var/data)
+//	if(data["blood_colour"])
+//		color = data["blood_colour"]
+//	return ..()
+///datum/reagent/blood/on_update(var/atom/A)
+//	if(data["blood_colour"])
+//		color = data["blood_colour"]
+//	return ..()
+	
 /datum/reagent/blood/reaction_turf(var/turf/simulated/T, var/volume) //Splash the blood all over the place
 
 	var/datum/reagent/self = src
