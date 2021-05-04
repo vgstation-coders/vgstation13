@@ -420,7 +420,7 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	else
 		return intents[argument <= 3 && argument >= 0 ? argument : 3]
 
-var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN))
+var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN),list(LIMB_HEAD,LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT))
 /proc/zone_x(argument)
 	if(istext(argument))
 		for(side in zones)
@@ -438,10 +438,7 @@ var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_
 	else return 3
 /proc/zone_text(x,y)
 	if(isnum(x) && isnum(y))
-		if(x == 2)
-			return zones[2][y <= 4 && y >= 0 ? y : 4]
-		else
-			return zones[x <= 1 && x >= 0 ? x : 1][y <= 3 && y >= 0 ? y : 3]
+		return zones[x <= 2 && x >= 0 ? x : 2][y <= 4 && y >= 0 ? y : 4]
 
 //change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)
@@ -486,9 +483,9 @@ var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_
 			if (LIMB_RIGHT_FOOT,LIMB_LEFT_FOOT,LIMB_RIGHT_HAND,LIMB_LEFT_HAND,LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_LEFT_LEG,LIMB_GROIN,LIMB_CHEST,LIMB_HEAD,TARGET_MOUTH,TARGET_EYES)
      			zone_sel.selecting = input
 			if ("up")
-				zone_sel.selecting = zone_text(xVal,xVal == 2 ? (yVal+1) % 5 : (yVal+1) % 4)
+				zone_sel.selecting = zone_text(xVal,(yVal+1) % 5)
 			if ("down")
-				zone_sel.selecting = zone_text(xVal,xVal == 2 ? (yVal+4) % 5 : (yVal+3) % 4)
+				zone_sel.selecting = zone_text(xVal,(yVal+4) % 5)
 			if ("left")
 				zone_sel.selecting = zone_text((xVal+1) % 3,yVal)
 			if ("right")
