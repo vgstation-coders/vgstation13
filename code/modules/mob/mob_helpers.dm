@@ -420,15 +420,15 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN),list(LIMB_HEAD,LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT))
 /proc/zone_x(argument)
 	if(istext(argument))
-	var/i = 0
-		for(var/side in zones)
-			if side.Find(argument)
-			return i
-			i++
+		var/i = 0
+		for(var/list/side in zones)
+			if(side.Find(argument))
+				return i
+				i++
 	return 2
 /proc/zone_y(argument)
 	if(istext(argument))
-		for(var/side in zones)
+		for(var/list/side in zones)
 			if(side.Find(argument))
 				return side.Find(argument)
 	return 3
