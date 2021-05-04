@@ -461,9 +461,16 @@
 /obj/item/cannonball/fuse_bomb/cultify()
 	return
 
-/obj/item/cannonball/fuse_bomb/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	detonation()
+/obj/item/cannonball/fuse_bomb/cannonEffect(var/atom/cTarg)
+	if(assembled == 2 && fuse_lit)
+		detonation()
+	else if(isliving(cTarg))
+		var/mob/living/L = cTarg
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			H.Knockdown(2) //hollow means less stun time
+		else if(L.size == SIZE_TINY)	//splat
+			L.gib()
 
 //Bananium////////
 
