@@ -463,7 +463,7 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 			else
 				hud_used.action_intent.icon_state = "help"
 
-//change a mob's zone_sel. Input the target as a string such as LIMB_HEAD
+//change a mob's zone_sel. Input the target as a string such as LIMB_HEAD (mouth and eyes do not follow this)
 /mob/verb/a_zone_change(input as text)
 	set name = "a-zone"
 	set hidden = 1
