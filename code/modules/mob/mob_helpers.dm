@@ -423,17 +423,20 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 			else
 				return 3
 	else
-		switch(argument)
-			if(0)
-				return I_HELP
-			if(1)
-				return I_DISARM
-			if(2)
-				return I_GRAB
-			else
-				return I_HURT
+		return intents[argument <= 3 ? argument : 3]
 
 var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN))
+/proc/zone_numeric(x,y)
+	if(istext(x) && istext(y))
+		return
+	else if(isnum(x) && isnum(y))
+		switch(x)
+			if(0)
+				return zones[0][y <= 3 ? y : 3]
+			if(1)
+				return zones[1][y <= 3 ? y : 3]
+			else
+				return zones[2][y <= 4 ? y : 4]
 
 //change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)
