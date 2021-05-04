@@ -14,6 +14,11 @@
 	icon_state = "fuse_bomb_5"
 	item_state = "fuse_bomb"
 	flags = FPRINT
+	throwforce = 2
+	throw_speed = 2
+	throw_range = 4	//Lighter than cannonballs, but not too light
+	force = 5
+	adjForce = 10
 	var/assembled = 2
 	var/fuse_lit = 0
 	var/seconds_left = 5
