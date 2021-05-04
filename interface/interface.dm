@@ -106,15 +106,15 @@ Any-Mode: (hotkey doesn't need to be on)
 \tPGDN = activate held object
 \tEND = throw
 \tSHIFT+MMB = point-at
-\t NUMPAD8 = target head
-\t NUMPAD7 = target mouth
-\t NUMPAD9 = target eyes
-\t NUMPAD5 = target chest
-\t NUMPAD2 = target groin
-\t NUMPAD4 = target left arm
-\t NUMPAD6 = target right arm
-\t NUMPAD1 = target left leg
-\t NUMPAD3 = target right leg
+\tNUMPAD8 = target head
+\tNUMPAD7 = target mouth
+\tNUMPAD9 = target eyes
+\tNUMPAD5 = target chest
+\tNUMPAD2 = target groin
+\tNUMPAD4 = target left arm
+\tNUMPAD6 = target right arm
+\tNUMPAD1 = target left leg
+\tNUMPAD3 = target right leg
 
 For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 </font>"}
