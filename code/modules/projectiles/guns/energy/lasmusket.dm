@@ -188,7 +188,7 @@
 			to_chat(user, "You tighten the lens assembly inside \the [src].")
 			W.playtoolsound(src, 50)
 		lens_secure = !lens_secure
-	else if(iswirecutter(W))
+	else if(W.is_wirecutter(user))
 		if(flawless)
 			to_chat(user, "\The [src] is too flawless to dismantle!")
 			return

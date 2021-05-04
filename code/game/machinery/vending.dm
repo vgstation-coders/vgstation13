@@ -1888,7 +1888,7 @@ var/global/num_vending_terminals = 1
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
 						"You add cables to \the [src].")
 		if(2) // Circuitboard installed, wired.
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(usr, "You begin to remove the wiring from \the [src].")
 				if(do_after(user, src, 50))
 					new /obj/item/stack/cable_coil(loc,5)
@@ -3145,17 +3145,16 @@ var/global/num_vending_terminals = 1
 	vend_reply = "Money money money!"
 	icon_state = "voxseed"
 	products = list (
-		/obj/item/vaporizer = 1,
 		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/secure_closet/wonderful = 1,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 1,
-		/obj/machinery/power/antiquesynth = 1,
 		/obj/structure/closet/crate/shoaljunk = 3,
+		/obj/structure/closet/crate/internals/cloudnine = 3,
+		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/crate/chest/alcatraz = 3,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,
 		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 1,
 		/obj/structure/largecrate/secure = 1,
-		/obj/structure/largecrate/secure/magmaw = 1,
 		/obj/structure/largecrate/secure/frankenstein = 1,
 		/obj/item/weapon/mech_expansion_kit = 3,
 		/obj/structure/wetdryvac = 1,
@@ -3171,17 +3170,15 @@ var/global/num_vending_terminals = 1
 		/obj/structure/closet/crate/freezer/bootlegpicnic = 3,
 		)
 	prices = list(
-		/obj/item/vaporizer = 10,
 		/obj/item/weapon/storage/trader_chemistry = 50,
 		/obj/structure/closet/secure_closet/wonderful = 150,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 100,
-		/obj/machinery/power/antiquesynth = 150,
 		/obj/structure/closet/crate/shoaljunk = 100,
+		/obj/structure/closet/crate/internals/cloudnine = 150,
 		/obj/structure/closet/crate/chest/alcatraz = 150,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 100,
 		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 25,
 		/obj/structure/largecrate/secure = 100,
-		/obj/structure/largecrate/secure/magmaw = 100,
 		/obj/structure/largecrate/secure/frankenstein = 100,
 		/obj/item/weapon/mech_expansion_kit = 50,
 		/obj/structure/wetdryvac = 50,

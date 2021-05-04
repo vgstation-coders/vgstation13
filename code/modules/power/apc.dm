@@ -527,7 +527,7 @@
 			C.use(10)
 			terminal.connect_to_network()
 
-	else if (iswirecutter(W) && opened && terminal && has_electronics!=2)
+	else if (W.is_wirecutter(user) && opened && terminal && has_electronics!=2)
 		var/turf/T = get_turf(src)
 		if (T.intact)
 			to_chat(user, "<span class='warning'>You must remove the floor plating in front of the APC first.</span>")
@@ -871,6 +871,14 @@
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 0
 	return 1
+
+/obj/machinery/power/apc/is_in_range(var/mob/user)
+	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		var/obj/item/device/multitool/omnitool/O = user.get_active_hand()
+		if(istype(O))
+			return O.can_connect(src,user)
+		return FALSE
+	return TRUE
 
 /obj/machinery/power/apc/Topic(href, href_list)
 	if(..())

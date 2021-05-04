@@ -31,18 +31,6 @@
 	else
 		return ..()
 
-//Looks like copy/pasted code... I doubt 'need_rebuild' is even used here - Nodrak
-/obj/machinery/shield/proc/update_nearby_tiles()
-	if (!SS_READY(SSair))
-		return 0
-
-	var/T = loc
-
-	if (isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
-
 /obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(!istype(W))
 		return

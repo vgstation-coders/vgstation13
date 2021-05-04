@@ -13,7 +13,7 @@
 		qdel(I)
 		I = null
 		qdel(src)
-	if(iswirecutter(I))
+	if(I.is_wirecutter(user))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
 		I.playtoolsound(user, 50)
 		if(src.loc == user)

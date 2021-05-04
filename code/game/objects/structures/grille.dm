@@ -171,7 +171,7 @@
 					S.dir = get_dir(src, user)
 					return
 		return
-	if(iswirecutter(W))
+	if(W.is_wirecutter(user))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			W.playtoolsound(loc, 100)
 			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
