@@ -410,18 +410,13 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	return 0
 
 //converts intent-strings into numbers and back
-var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 /proc/intent_numeric(argument)
+	var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 	if(istext(argument))
-		switch(argument)
-			if(I_HELP)
-				return 0
-			if(I_DISARM)
-				return 1
-			if(I_GRAB)
-				return 2
-			else
-				return 3
+		for (var/i in intents)
+			if i == argument
+				return indexOf(argument)
+		return 3
 	else
 		return intents[argument <= 3 ? argument : 3]
 
