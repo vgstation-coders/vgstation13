@@ -488,9 +488,9 @@ var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_
 			if ("down")
 				zone_sel.selecting = zone_text(zone_x(zone_sel.selecting),zone_y(zone_sel.selecting))
 			if ("left")
-				zone_sel.selecting = zone_text(zone_x(zone_sel.selecting),zone_y(zone_sel.selecting))
+				zone_sel.selecting = zone_text((zone_x(zone_sel.selecting)+1) % 3,zone_y(zone_sel.selecting))
 			if ("right")
-				zone_sel.selecting = zone_text(zone_x(zone_sel.selecting),zone_y(zone_sel.selecting))
+				zone_sel.selecting = zone_text((zone_x(zone_sel.selecting)+2) % 3,zone_y(zone_sel.selecting))
 		if(old_selecting != zone_sel.selecting)
 			zone_sel.update_icon()
 
