@@ -435,7 +435,7 @@ var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,
 /proc/zone_y(argument)
 	if(istext(argument))
 		if (argument == LIMB_HEAD) //gotta do it again for overlaps
-			return side[2].Find(argument) //same as 'ere
+			return zones[2].Find(argument) //same as 'ere
 		for(var/list/side in zones) //iterate through sub arrays again
 			if(side.Find(argument)) //if anything that isnt heads are found in these lists
 				return side.Find(argument) //bring back the y index
