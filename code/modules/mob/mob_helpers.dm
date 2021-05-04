@@ -433,6 +433,8 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 			else
 				return I_HURT
 
+var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN))
+
 //change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)
 	set name = "a-intent"
@@ -471,8 +473,12 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 	if(zone_sel && zone_sel.selecting)
 		var/old_selecting = zone_sel.selecting
 		switch(input)
-			if (input in list(LIMB_RIGHT_FOOT,LIMB_LEFT_FOOT,LIMB_RIGHT_HAND,LIMB_LEFT_HAND,LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_LEFT_LEG,LIMB_GROIN,LIMB_CHEST,LIMB_HEAD,TARGET_MOUTH,TARGET_EYES)
+			if (LIMB_RIGHT_FOOT,LIMB_LEFT_FOOT,LIMB_RIGHT_HAND,LIMB_LEFT_HAND,LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_LEFT_LEG,LIMB_GROIN,LIMB_CHEST,LIMB_HEAD,TARGET_MOUTH,TARGET_EYES)
      			zone_sel.selecting = input
+			if ("up")
+			if ("down")
+			if ("left")
+			if ("right")
 		if(old_selecting != zone_sel.selecting)
 			zone_sel.update_icon()
 
