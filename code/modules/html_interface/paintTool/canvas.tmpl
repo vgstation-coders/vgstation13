@@ -25,17 +25,6 @@
 		<!-- Info panel -->
 		<div id="infoPanel" class="">
 			<div>
-				<label class="itemLabel">Author: </label><br/>
-				<input
-					id="author"
-					type="text"
-					maxlength="52"
-					onkeyup="sanitizeLength('author', 'authorLengthMeter');"
-				/>
-				<div id="authorLengthMeter">(0/52)</div>
-			</div><br>
-
-			<div>
 				<label class="itemLabel">Title: </label><br/>
 				<input
 					id="title"
@@ -44,6 +33,17 @@
 					onkeyup="sanitizeLength('title', 'titleLengthMeter');"
 				/>
 				<div id="titleLengthMeter">(0/52)</div>
+			</div><br>
+
+			<div>
+				<label class="itemLabel">Author: </label><br/>
+				<input
+					id="author"
+					type="text"
+					maxlength="52"
+					onkeyup="sanitizeLength('author', 'authorLengthMeter');"
+				/>
+				<div id="authorLengthMeter">(0/52)</div>
 			</div><br>
 
 			<div>

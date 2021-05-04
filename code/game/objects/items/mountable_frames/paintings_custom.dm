@@ -31,6 +31,12 @@
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
 		painting_data.interact(user, p)
+
+	if (istype(W, /obj/item/weapon/soap) && do_after(user, src, 20))
+		painting_data.blank_contents()
+		icon = icon(base_icon, base_icon_state)
+		update_painting()
+
 	return ..()
 
 /obj/structure/painting/custom/Topic(href, href_list)
@@ -99,6 +105,13 @@
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
 		painting_data.interact(user, p)
+
+	if (istype(W, /obj/item/weapon/soap))
+		to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
+		if (do_after(user, src, 20))
+			painting_data.blank_contents()
+			rendered_icon = icon(base_icon, base_icon_state)
+			update_painting()
 
 	return ..()
 

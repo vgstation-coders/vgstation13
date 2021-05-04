@@ -81,6 +81,7 @@
 
 
 /datum/custom_painting/proc/blank_contents()
+	bitmap = list()
 	for (var/i = 0, i < bitmap_height * bitmap_width, i++)
 		bitmap += base_color
 
@@ -140,9 +141,13 @@
 		// Make sure the player can actually paint
 		if(!usr || usr.incapacitated())
 			return
+
 		if(!(new /datum/painting_utensil(usr)).palette.len)
 			//TODO other tools (crayons, brushes)
 			to_chat(usr, "<span class='warning'>You need to be holding a painting utensil in your active hand.</span>")
+			return
+
+		if (!do_after(usr, parent, 30))
 			return
 
 		//Save and sanitize bitmap
