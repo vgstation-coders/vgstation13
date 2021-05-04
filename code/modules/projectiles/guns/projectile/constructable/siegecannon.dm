@@ -291,7 +291,7 @@
 			to_chat(user, "<span  class='notice'>You drill a hole in the [src] with the [I].</span>")
 			qdel(src)
 
-//Fuse bomb////////
+//Fuse bomb//////// -Refactored as cannonball by kanef, was originally a device for some reason. Nothing needed to be changed since icon state is the only unique var in that type, and it's set here anyways
 /obj/item/cannonball/fuse_bomb
 	name = "fuse bomb"
 	desc = "fshhhhhhhh BOOM!"
