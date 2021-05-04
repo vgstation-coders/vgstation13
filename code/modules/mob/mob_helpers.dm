@@ -409,13 +409,13 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 	return 0
 
-//converts intent-strings into numbers and back
+//converts intent-strings into numbers and back, refactored by kanef down from switch blocks
 /proc/intent_numeric(argument)
 	var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 	if(istext(argument))
 		for (var/i in intents)
 			if i == argument
-				return indexOf(argument)
+				return intents.indexOf(argument)
 		return 3
 	else
 		return intents[argument <= 3 ? argument : 3]
