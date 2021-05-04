@@ -458,6 +458,10 @@
 /obj/item/cannonball/fuse_bomb/ex_act(severity)//MWAHAHAHA
 	detonation()
 
+/obj/item/cannonball/fuse_bomb/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//consistency
+	..()
+	fuse_burn()
+
 /obj/item/cannonball/fuse_bomb/cultify()
 	return
 
