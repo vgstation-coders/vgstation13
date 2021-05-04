@@ -421,6 +421,8 @@ var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,
 /proc/zone_x(argument)
 	if(istext(argument))
 		var/i = 0
+		if (argument == LIMB_HEAD)
+			return 2
 		for(var/list/side in zones)
 			i++
 			if(side.Find(argument))
