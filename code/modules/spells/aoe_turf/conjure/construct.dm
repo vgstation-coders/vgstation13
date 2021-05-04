@@ -327,7 +327,7 @@
 
 /obj/effect/forcefield/cult/large/Destroy()
 	if (loc)
-		new /obj/effect/red_afterimage(loc,src)
+		new /obj/effect/afterimage/red(loc,src)
 	if (side1)
 		qdel(side1)
 	if (side2)

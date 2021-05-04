@@ -363,6 +363,7 @@
 	flying = TRUE
 	mob_property_flags = MOB_SUPERNATURAL
 	speed = 0.5
+	forced_density = 1
 	density = 0
 	lockflags = 0
 	canmove = 0
@@ -384,6 +385,9 @@
 	var/image/incorporeal_appearance
 	var/image/tangible_appearance
 
+	//sechud stuff
+	var/cardjob = "hudunknown"
+
 	//ghost stuff
 	var/next_poltergeist = 0
 	var/manual_poltergeist_cooldown
@@ -395,6 +399,7 @@
 	tangible_appearance = image('icons/mob/mob.dmi',"blank")
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
 	see_in_dark = 100
+	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 
 
 /mob/living/simple_animal/astral_projection/Login()
@@ -421,6 +426,13 @@
 	//the projection has ended, let's return to our body
 	if (anchor && anchor.stat != DEAD && client)
 		if (key)
+			if (tangibility)
+				spawn()
+					var/obj/effect/afterimage/A = new (loc,anchor,10)
+					A.dir = dir
+					for(var/mob/M in dview(world.view, loc, INVISIBILITY_MAXIMUM))
+						if (M.client)
+							M.playsound_local(loc, get_sfx("disappear_sound"), 75, 0, -2)
 			anchor.key = key
 			to_chat(anchor, "<span class='notice'>You reconnect with your body.</span>")
 	//if our body was somehow already destroyed however, we'll become a shade right here
@@ -435,10 +447,21 @@
 			shade.key = key
 			update_faction_icons()
 			to_chat(shade, "<span class='sinister'>It appears your body was unfortunately destroyed. The remains of your soul made their way to your astral projection where they merge together, forming a shade.</span>")
+	invisibility = 101
+	sleep(20)
 	..()
 
 /mob/living/simple_animal/astral_projection/death(var/gibbed = FALSE)
-	qdel(src)
+	spawn()
+		qdel(src)
+
+/mob/living/simple_animal/astral_projection/start_pulling(var/atom/movable/AM)
+	return
+
+/mob/living/simple_animal/astral_projection/bullet_act(var/obj/item/projectile/P)
+	if (tangibility)
+		death()
+		return PROJECTILE_COLLISION_MISS//the bullet keeps moving past it
 
 /mob/living/simple_animal/astral_projection/rest_action()
 	return
@@ -456,7 +479,6 @@
 	if (ishuman(body))
 		var/mob/living/carbon/human/H = body
 		overlays += get_human_clothing(body)
-		//overlays += image('icons/mob/mob.dmi',"ghost-narsie-suit")
 		overlays += H.obj_overlays[ID_LAYER]
 		overlays += H.obj_overlays[EARS_LAYER]
 		overlays += H.obj_overlays[GLASSES_LAYER]
@@ -482,6 +504,10 @@
 			else
 				name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
 	real_name = name
+
+	var/obj/item/weapon/card/id/card = body.get_id_card()
+	if(card)
+		cardjob = "hud[body.ckey(card.GetJobName())]"
 
 	mind = body.mind	//we don't transfer the mind but we keep a reference to it.
 
@@ -565,13 +591,20 @@
 
 
 
-
+var/list/astral_clothing_cache = list()
 //returns an image featuring the mob's uniform and suit with its legs faded out
 /mob/living/simple_animal/astral_projection/proc/get_human_clothing(var/mob/living/carbon/human/body)
 	if (!body)
 		return
 
+	var/entry = "astral_clothing_[body.w_uniform ? "\ref[body.w_uniform]" : "no-uniforum"]_[body.wear_suit ? "\ref[body.wear_suit]" : "no-suit"]"
+
+	if (entry in astral_clothing_cache)
+		return astral_clothing_cache[entry]
+
 	var/image/human_clothes = image('icons/mob/mob.dmi',"blank")
+
+	var/icon/temp
 
 	//couldn't just re-use the code from human/update_icons.dm because we need to manipulate an /icon, not an /image
 	//it's not perfect and won't get the accessories or blood stains but that's good enough for the effect we're trying to get here
@@ -606,7 +639,10 @@
 
 		mask.Blend(I_uniform, ICON_MULTIPLY)
 
-		human_clothes.overlays += image(mask)
+		if (body.wear_suit)
+			temp = mask
+		else
+			human_clothes.overlays += image(mask)
 
 	if(body.wear_suit)
 		var/suit_icon = body.wear_suit.icon_override ? body.wear_suit.icon_override : 'icons/mob/suit.dmi'
@@ -636,6 +672,12 @@
 
 		mask.Blend(I_suit, ICON_MULTIPLY)
 
-		human_clothes.overlays += image(mask)
+		if (temp)
+			temp.Blend(mask, ICON_OVERLAY)
+			human_clothes.overlays += image(temp)
+		else
+			human_clothes.overlays += image(mask)
+
+	astral_clothing_cache[entry] = human_clothes
 
 	return human_clothes
