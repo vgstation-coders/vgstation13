@@ -415,7 +415,7 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	if(istext(argument))
 		return intents.Find(argument)
 	else
-		return intents[argument <= 3 && argument >= 0 ? argument : 3]
+		return intents[argument <= 4 && argument >= 1 ? argument : 4]
 
 var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN),list(LIMB_HEAD,LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT))
 /proc/zone_x(argument)
@@ -434,7 +434,7 @@ var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,
 	return 3
 /proc/zone_text(x,y)
 	if(isnum(x) && isnum(y))
-		return zones[x <= 2 && x >= 0 ? x : 2][y <= 4 && y >= 0 ? y : 4]
+		return zones[x <= 3 && x >= 1 ? x : 3][y <= 5 && y >= 1 ? y : 5]
 
 //change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)
