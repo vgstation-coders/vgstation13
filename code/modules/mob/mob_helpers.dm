@@ -413,29 +413,21 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 /proc/intent_numeric(argument)
 	var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 	if(istext(argument))
-		for (var/i in intents)
-			if(argument == i)
-				return intents.indexOf(argument)
-		return 3
+		return intents.Find(argument)
 	else
 		return intents[argument <= 3 && argument >= 0 ? argument : 3]
 
 var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN),list(LIMB_HEAD,LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT))
 /proc/zone_x(argument)
-	if(istext(argument))
-		for(var/side in zones)
-			if(argument in side)
-				return zone.indexOf(side)
-		return 2
-	else return 2
+	if(istext(argument) && zone.Find(side))
+		return zone.Find(side)
+	return 2
 /proc/zone_y(argument)
 	if(istext(argument))
 		for(var/side in zones)
-			for(var/z in side)
-				if(argument == z)
-					return side.indexOf(z)
-			return 3
-	else return 3
+			if(side.Find(argument))
+				return side.Find(argument)
+	return 3
 /proc/zone_text(x,y)
 	if(isnum(x) && isnum(y))
 		return zones[x <= 2 && x >= 0 ? x : 2][y <= 4 && y >= 0 ? y : 4]
