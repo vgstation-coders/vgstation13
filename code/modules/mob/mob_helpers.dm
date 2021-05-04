@@ -480,17 +480,19 @@ var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_
 	
 	if(zone_sel && zone_sel.selecting)
 		var/old_selecting = zone_sel.selecting
+		var/xVal = zone_x(zone_sel.selecting)
+		var/yVal = zone_y(zone_sel.selecting)
 		switch(input)
 			if (LIMB_RIGHT_FOOT,LIMB_LEFT_FOOT,LIMB_RIGHT_HAND,LIMB_LEFT_HAND,LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_LEFT_LEG,LIMB_GROIN,LIMB_CHEST,LIMB_HEAD,TARGET_MOUTH,TARGET_EYES)
      			zone_sel.selecting = input
 			if ("up")
-				zone_sel.selecting = zone_text(zone_x(zone_sel.selecting),zone_y(zone_sel.selecting))
+				zone_sel.selecting = zone_text(xVal,xVal == 2 ? (yVal+1) % 5 : (yVal+1) % 4)
 			if ("down")
-				zone_sel.selecting = zone_text(zone_x(zone_sel.selecting),zone_y(zone_sel.selecting))
+				zone_sel.selecting = zone_text(xVal,xVal == 2 ? (yVal+4) % 5 : (yVal+3) % 4)
 			if ("left")
-				zone_sel.selecting = zone_text((zone_x(zone_sel.selecting)+1) % 3,zone_y(zone_sel.selecting))
+				zone_sel.selecting = zone_text((xVal+1) % 3,yVal)
 			if ("right")
-				zone_sel.selecting = zone_text((zone_x(zone_sel.selecting)+2) % 3,zone_y(zone_sel.selecting))
+				zone_sel.selecting = zone_text((xVal+2) % 3,yVal)
 		if(old_selecting != zone_sel.selecting)
 			zone_sel.update_icon()
 
