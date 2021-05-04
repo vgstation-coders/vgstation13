@@ -192,7 +192,7 @@ var/list/mass_drivers = list()
 					build++
 					update_icon()
 		if(3) // Wired
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(user, "You begin to remove the wiring from \the [src].")
 				if(do_after(user, src, 10) && (build == 3))
 					new /obj/item/stack/cable_coil(loc,3)

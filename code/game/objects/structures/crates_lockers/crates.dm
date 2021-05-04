@@ -606,7 +606,7 @@
 			if(user.drop_item(W, src.loc))
 				to_chat(user, "<span class='notice'>You attach [W] to [src].</span>")
 			return
-	else if(iswirecutter(W))
+	else if(W.is_wirecutter(user))
 		if(rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
 			W.playtoolsound(loc, 100)

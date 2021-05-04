@@ -46,7 +46,7 @@
 
 //LOOK AT THIS - ..()??
 /mob/living/simple_animal/crab/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(iswirecutter(O))
+	if(O.is_wirecutter(user))
 		if(stat == DEAD)
 			return ..()
 		if(prob(50))

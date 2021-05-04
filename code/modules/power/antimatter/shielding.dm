@@ -264,7 +264,7 @@ proc/cardinalrange(var/center)
 	w_type = RECYK_METAL
 
 /obj/item/device/am_shielding_container/attackby(var/obj/item/I, var/mob/user)
-	if(ismultitool(I) && isturf(loc))
+	if(I.is_multitool(user) && isturf(loc))
 		if(locate(/obj/machinery/am_shielding/) in loc)
 			to_chat(user, "<span class='warning'>[bicon(src)]There is already an antimatter reactor section there.</span>")
 			return
