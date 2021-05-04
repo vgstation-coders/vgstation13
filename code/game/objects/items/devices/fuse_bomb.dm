@@ -2,10 +2,12 @@
 /obj/item/cannonball/iron/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/tool/surgicaldrill/diamond))
 		to_chat(user, "<span  class='notice'>You begin drilling a hole in the [src] with the [I].</span>")
-		if(do_after(user, src, 10))
+		if(do_after(user, src, 20))
 			var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb
 			F.assembled = 0
-			user.put_in_hands(F)
+			F.name = "empty fuse bomb assembly"
+			F.desc = "Just add fire. And fuel."
+			F.update_icon()
 			to_chat(user, "<span  class='notice'>You drill a hole in the [src] with the [I].</span>")
 			qdel(src)
 		
@@ -24,13 +26,6 @@
 	var/assembled = 2
 	var/fuse_lit = 0
 	var/seconds_left = 5
-
-/obj/item/cannonball/fuse_bomb/New()
-	..()
-	if(assembled == 0)
-		name = "empty fuse bomb assembly"
-		desc = "Just add fire. And fuel."
-		update_icon()
 
 /obj/item/cannonball/fuse_bomb/admin//spawned by the adminbus, doesn't send an admin message, but the logs are still kept.
 
@@ -59,13 +54,13 @@
 			desc = "Just add fire."
 			return
 
-/obj/item/cannonball/fuse_bomb/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/cannonball/fuse_bomb/attackby(obj/item/I as obj, mob/user as mob)
 	..()
 	if(assembled == 1)
 		if(istype(I, /obj/item/stack/cable_coil))
 			var/obj/item/stack/cable_coil/C = I
 			to_chat(user, "<span  class='notice'>You begin wiring the [src].</span>")
-			if(do_after(user, src, 10))
+			if(do_after(user, src, 20))
 				C.use(1)
 				assembled = 2
 				to_chat(user, "<span  class='notice'>You wire the [src].</span>")
@@ -74,30 +69,30 @@
 				update_icon()
 	else if(assembled == 2)
 		if(!fuse_lit)
-			if(iswelder(W))
-				var/obj/item/tool/weldingtool/WT = W
+			if(iswelder(I))
+				var/obj/item/tool/weldingtool/WT = I
 				if(WT.isOn())
-					lit(user,W)
-			else if(istype(W, /obj/item/weapon/lighter))
-				var/obj/item/weapon/lighter/L = W
+					lit(user,I)
+			else if(istype(I, /obj/item/weapon/lighter))
+				var/obj/item/weapon/lighter/L = I
 				if(L.lit)
-					lit(user,W)
-			else if(istype(W, /obj/item/weapon/match))
-				var/obj/item/weapon/match/M = W
+					lit(user,I)
+			else if(istype(I, /obj/item/weapon/match))
+				var/obj/item/weapon/match/M = I
 				if(M.lit)
-					lit(user,W)
-			else if(istype(W, /obj/item/candle))
-				var/obj/item/candle/C = W
+					lit(user,I)
+			else if(istype(I, /obj/item/candle))
+				var/obj/item/candle/C = I
 				if(C.lit)
-					lit(user,W)
-			else if(iswirecutter(W))
+					lit(user,I)
+			else if(iswirecutter(I))
 				assembled = 1
 				to_chat(user, "<span  class='notice'>You remove the fuse from the [src].</span>")
 				name = "fuse bomb assembly"
 				desc = "Just add fire."
 				update_icon()
 		else
-			if(iswirecutter(W))
+			if(iswirecutter(I))
 				fuse_lit = 0
 				update_icon()
 				to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
