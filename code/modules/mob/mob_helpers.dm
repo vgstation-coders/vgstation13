@@ -428,8 +428,8 @@ var/list/zones = list(list(LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_
 		switch(x)
 			if(2)
 				return zones[2][y <= 4 && y >= 0 ? y : 4]
-			if(1)
-				return zones[x <= 1 && x >=0 ? x : 1][y <= 3 && y >= 0 ? y : 3]
+			else
+				return zones[x <= 1 && x >= 0 ? x : 1][y <= 3 && y >= 0 ? y : 3]
 
 //change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)
