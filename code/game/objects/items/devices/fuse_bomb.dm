@@ -1,13 +1,13 @@
 // Making fuse bombs
 /obj/item/cannonball/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/tool/surgicaldrill/diamond))
-		var/obj/item/device/fuse_bomb/F = new /obj/item/device/fuse_bomb
+		var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb
 		F.assembled = 0
 		user.put_in_hands(F)
 		to_chat(user, "<span  class='notice'>You drill a hole in the [src] with the [I].</span>")
 		qdel(src)
 		
-/obj/item/device/fuse_bomb
+/obj/item/cannonball/fuse_bomb
 	name = "fuse bomb"
 	desc = "fshhhhhhhh BOOM!"
 	icon = 'icons/obj/device.dmi'
@@ -18,16 +18,16 @@
 	var/fuse_lit = 0
 	var/seconds_left = 5
 
-/obj/item/device/fuse_bomb/New()
+/obj/item/cannonball/fuse_bomb/New()
 	..()
 	if(assembled == 0)
 		name = "empty fuse bomb assembly"
 		desc = "Just add fire. And fuel."
 		update_icon()
 
-/obj/item/device/fuse_bomb/admin//spawned by the adminbus, doesn't send an admin message, but the logs are still kept.
+/obj/item/cannonball/fuse_bomb/admin//spawned by the adminbus, doesn't send an admin message, but the logs are still kept.
 
-/obj/item/device/fuse_bomb/attack_self(mob/user as mob)
+/obj/item/cannonball/fuse_bomb/attack_self(mob/user as mob)
 	if(!fuse_lit)
 		lit(user)
 	else
@@ -36,7 +36,7 @@
 		to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
 	return
 
-/obj/item/device/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
+/obj/item/cannonball/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
 	if(assembled == 0)
 		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
 			if(target.reagents.total_volume < 200)
@@ -51,7 +51,7 @@
 			desc = "Just add fire."
 			return
 
-/obj/item/device/fuse_bomb/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/cannonball/fuse_bomb/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if(assembled == 1)
 		if(istype(I, /obj/item/stack/cable_coil))
@@ -93,7 +93,7 @@
 				to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
 
 
-/obj/item/device/fuse_bomb/proc/lit(mob/user as mob, var/obj/O=null)
+/obj/item/cannonball/fuse_bomb/proc/lit(mob/user as mob, var/obj/O=null)
 	fuse_lit = 1
 	to_chat(user, "<span class='warning'>You lit the fuse[O ? " with [O]":""]! [seconds_left] seconds till detonation!</span>")
 	admin_warn(user)
@@ -104,7 +104,7 @@
 	update_icon()
 	fuse_burn()
 
-/obj/item/device/fuse_bomb/proc/fuse_burn()
+/obj/item/cannonball/fuse_bomb/proc/fuse_burn()
 	set waitfor = 0
 
 	if(src && src.fuse_lit)
@@ -117,22 +117,22 @@
 			src.detonation()
 	return
 
-/obj/item/device/fuse_bomb/extinguish()
+/obj/item/cannonball/fuse_bomb/extinguish()
 	..()
 	fuse_lit = 0
 	update_icon()
 
-/obj/item/device/fuse_bomb/proc/detonation()
+/obj/item/cannonball/fuse_bomb/proc/detonation()
 	explosion(get_turf(src), -1, 1, 3)
 	qdel(src)
 
-/obj/item/device/fuse_bomb/update_icon()
+/obj/item/cannonball/fuse_bomb/update_icon()
 	if (assembled == 2)
 		icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
 	else
 		icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
 
-/obj/item/device/fuse_bomb/proc/admin_warn(mob/user as mob)
+/obj/item/cannonball/fuse_bomb/proc/admin_warn(mob/user as mob)
 	var/turf/bombturf = get_turf(src)
 	var/area/A = get_area(bombturf)
 
@@ -151,7 +151,7 @@
 	message_admins(log_str, 0, 1)
 	log_game(log_str)
 
-/obj/item/device/fuse_bomb/admin/admin_warn(mob/user as mob)
+/obj/item/cannonball/fuse_bomb/admin/admin_warn(mob/user as mob)
 	var/turf/bombturf = get_turf(src)
 	var/area/A = get_area(bombturf)
 
@@ -169,8 +169,12 @@
 	bombers += log_str
 	log_game(log_str)
 
-/obj/item/device/fuse_bomb/ex_act(severity)//MWAHAHAHA
+/obj/item/cannonball/fuse_bomb/ex_act(severity)//MWAHAHAHA
 	detonation()
 
-/obj/item/device/fuse_bomb/cultify()
+/obj/item/cannonball/fuse_bomb/cultify()
 	return
+
+/obj/item/cannonball/fuse_bomb/throw_impact(atom/hit_atom, var/speed, mob/user)
+	..()
+	detonation()
