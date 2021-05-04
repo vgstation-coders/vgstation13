@@ -1,11 +1,13 @@
 // Making fuse bombs
-/obj/item/cannonball/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/cannonball/iron/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/tool/surgicaldrill/diamond))
-		var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb
-		F.assembled = 0
-		user.put_in_hands(F)
-		to_chat(user, "<span  class='notice'>You drill a hole in the [src] with the [I].</span>")
-		qdel(src)
+		to_chat(user, "<span  class='notice'>You begin drilling a hole in the [src] with the [I].</span>")
+		if(do_after(user, src, 10))
+			var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb
+			F.assembled = 0
+			user.put_in_hands(F)
+			to_chat(user, "<span  class='notice'>You drill a hole in the [src] with the [I].</span>")
+			qdel(src)
 		
 /obj/item/cannonball/fuse_bomb
 	name = "fuse bomb"
@@ -33,12 +35,13 @@
 /obj/item/cannonball/fuse_bomb/admin//spawned by the adminbus, doesn't send an admin message, but the logs are still kept.
 
 /obj/item/cannonball/fuse_bomb/attack_self(mob/user as mob)
-	if(!fuse_lit)
-		lit(user)
-	else
-		fuse_lit = 0
-		update_icon()
-		to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
+	if(assembled == 2)
+		if(!fuse_lit)
+			lit(user)
+		else
+			fuse_lit = 0
+			update_icon()
+			to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
 	return
 
 /obj/item/cannonball/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
@@ -61,12 +64,14 @@
 	if(assembled == 1)
 		if(istype(I, /obj/item/stack/cable_coil))
 			var/obj/item/stack/cable_coil/C = I
-			C.use(1)
-			assembled = 2
-			to_chat(user, "<span  class='notice'>You wire the [src].</span>")
-			name = "fuse bomb"
-			desc = "fshhhhhhhh BOOM!"
-			update_icon()
+			to_chat(user, "<span  class='notice'>You begin wiring the [src].</span>")
+			if(do_after(user, src, 10))
+				C.use(1)
+				assembled = 2
+				to_chat(user, "<span  class='notice'>You wire the [src].</span>")
+				name = "fuse bomb"
+				desc = "fshhhhhhhh BOOM!"
+				update_icon()
 	else if(assembled == 2)
 		if(!fuse_lit)
 			if(iswelder(W))
@@ -135,7 +140,7 @@
 	if (assembled == 2)
 		icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
 	else
-		icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
+		icon_state = "fuse_bomb_1"
 
 /obj/item/cannonball/fuse_bomb/proc/admin_warn(mob/user as mob)
 	var/turf/bombturf = get_turf(src)
