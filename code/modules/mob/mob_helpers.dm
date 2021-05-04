@@ -414,7 +414,7 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 	if(istext(argument))
 		for (var/i in intents)
-			if i == argument
+			if(argument == i)
 				return intents.indexOf(argument)
 		return 3
 	else
@@ -423,15 +423,15 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN),list(LIMB_HEAD,LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT))
 /proc/zone_x(argument)
 	if(istext(argument))
-		for(side in zones)
+		for(var/side in zones)
 			if(argument in side)
 				return zone.indexOf(side)
 		return 2
 	else return 2
 /proc/zone_y(argument)
 	if(istext(argument))
-		for(side in zones)
-			for(z in side)
+		for(var/side in zones)
+			for(var/z in side)
 				if(argument == z)
 					return side.indexOf(z)
 			return 3
@@ -481,7 +481,7 @@ var/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,
 		var/yVal = zone_y(zone_sel.selecting)
 		switch(input)
 			if (LIMB_RIGHT_FOOT,LIMB_LEFT_FOOT,LIMB_RIGHT_HAND,LIMB_LEFT_HAND,LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_LEFT_LEG,LIMB_GROIN,LIMB_CHEST,LIMB_HEAD,TARGET_MOUTH,TARGET_EYES)
-     			zone_sel.selecting = input
+				zone_sel.selecting = input
 			if ("up")
 				zone_sel.selecting = zone_text(xVal,(yVal+4) % 5)
 			if ("down")
