@@ -463,6 +463,23 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 			else
 				hud_used.action_intent.icon_state = "help"
 
+//change a mob's zone_sel. Input the intent as a string such as LIMB_HEAD
+/mob/verb/a_zone_change(input as text)
+	set name = "a-zone"
+	set hidden = 1
+	
+	if(zone_sel && zone_sel.selecting)
+		var/old_selecting = zone_sel.selecting
+		switch(input)
+			if(LIMB_RIGHT_FOOT,LIMB_LEFT_FOOT,LIMB_RIGHT_HAND,LIMB_LEFT_HAND,LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_LEFT_LEG,LIMB_GROIN,LIMB_CHEST,LIMB_HEAD)
+				zone_sel.selecting = input
+			if("mouth")
+				zone_sel.selecting = "mouth"
+			if("eyes")
+				zone_sel.selecting = "eyes"
+		if(old_selecting != zone_sel.selecting)
+			zone_sel.update_icon()
+
 //For hotkeys
 
 /mob/verb/a_kick()
