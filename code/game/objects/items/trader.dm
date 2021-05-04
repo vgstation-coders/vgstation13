@@ -47,6 +47,8 @@
 	display_contents_with_number = TRUE
 	allow_quick_empty = TRUE
 	allow_quick_gather = TRUE
+	icon = 'icons/obj/storage/smallboxes.dmi'
+	icon_state = "box"
 
 /obj/item/weapon/storage/gachabox/New()
 	..()
