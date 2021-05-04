@@ -1529,6 +1529,71 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 #undef OMNIMODE_WIRE
 #undef OMNIMODE_TOOL
 
+/obj/item/wasteos
+	name = "\improper Box of Waste-Os!(TM)"
+	desc = "Now with extra supermatter chunks! An ill-fated breakfast mixup at the cereal factory led to a discovery that you can suspend supermatter in chemical waste. My God, nobody deserves a mixup that bad."
+	w_class = W_CLASS_SMALL
+
+	flags = FPRINT | OPENCONTAINER
+
+/obj/item/wasteos/New()
+	..()
+	create_reagents(60)
+	reagents.add_reagent(CHEMICAL_WASTE, 50)
+
+/obj/item/wasteos/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/reagent_containers/dropper) || istype(I, /obj/item/weapon/reagent_containers/syringe))
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		to_chat(user,"<span class='danger'>\The [I] hits something inside \the [src] and is eradicated!</span>")
+		qdel(I)
+		return
+	if(!reagents.has_reagent(CHEMICAL_WASTE))
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		visible_message("<span class='danger'>The chunks burn through through \the [src]!</span>")
+		var/turf/T = get_turf(src)
+		for(var/i = 1 to 3)
+			new /obj/item/supermatter_splinter(T)
+		qdel(src)
+	else
+		..()
+
+/obj/item/weapon/storage/toolbox/master
+	name = "master toolbox"
+	desc = "The mark of a true artisan engineer. Use in hand to engage the safety grip."
+	icon_state = "toolbox_shiny"
+	item_state = "toolbox_shiny"
+	siemens_coefficient = 0
+
+/obj/item/weapon/storage/toolbox/master/attack_self(mob/user)
+	cant_drop = !cant_drop
+	to_chat(user,"<span class='notice'>You [cant_drop ? "engage" : "disengage"] the safety grip.</span>")
+
+/obj/item/weapon/fireaxe/antimatter
+	name = "antimatter fireaxe"
+	desc = "My God, it's full of stars."
+	flags = FPRINT | TWOHANDABLE
+	var/mols_inhaled = 0
+
+/obj/item/weapon/fireaxe/antimatter/update_wield(mob/user)
+	..()
+	item_state = "fireaxe-antimatter[wielded ? 1 : 0]"
+	force = wielded ? 18 : initial(force) //much less deadly than a matter fireaxe
+	visible_message("<span class='sinister'>\The [src] [wielded ? "in" : "ex"]hales.</span>")
+	var/image/void = image('icons/effects/effects.dmi',src,"bhole3")
+	void.plane = ABOVE_HUMAN_PLANE
+	flick_overlay(void, list(user.client), 1 SECOND)
+	if(user)
+		user.update_inv_hands()
+	var/turf/simulated/S = get_turf(loc)
+	if(!istype(S))
+		return
+	var/datum/gas_mixture/air_contents = S.return_air()
+
+	if(wielded)
+
+	else
+		mols_inhalted = 0
+
 //Mystery mob cubes//////////////
 
 /obj/item/weapon/storage/box/mysterycubes
