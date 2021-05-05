@@ -88,6 +88,12 @@
 		N.antag.current.flavor_text = null
 
 		spawn()
+			if (synd_mind.current.active_genes.len > 0)
+				to_chat(synd_mind.current, "The Syndicate has provided you with a ryetalyn pill to cure your genetic defects. Use it at your own discretion.")
+				var/obj/item/weapon/reagent_containers/pill/ryetalyn/pill = new (synd_mind.current)
+				if (!synd_mind.current.equip_to_slot_or_drop(pill, slot_l_store))
+					synd_mind.current.put_in_hands(pill)
+
 			concrete_outfit.chosen_spec = equip_nuke_loadout(synd_mind.current)
 			concrete_outfit.equip_special_items(synd_mind.current)
 
