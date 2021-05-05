@@ -248,7 +248,8 @@
 		var/confirm = alert("Are you sure you want to [key]? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
 		if(confirm != "Yes")
 			return
-		H.suiciding = 1
+		if(H.mind)
+			H.mind.suiciding = 1
 		H.visible_message("<span class='danger'>[H] holds one arm up and slams \his other arm into \his face! It looks like \he's trying to commit suicide.</span>",)
 		for(var/datum/organ/external/breakthis in H.get_organs(LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_HEAD))
 			H.apply_damage(50, BRUTE, breakthis)

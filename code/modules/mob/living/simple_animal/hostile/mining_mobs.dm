@@ -377,7 +377,7 @@ obj/item/asteroid/basilisk_hide/New()
 		return
 
 	// revive() requires a check for suiciding
-	if (target.suiciding)
+	if (target.mind && target.mind.suiciding)
 		to_chat(user, "<span class='notice'>\The [target] refuses \the [src].</span>")
 		return
 

@@ -420,7 +420,7 @@
 		scantemp = "Error: Mental interface failure."
 		return
 
-	if(subject.suiciding) //We cannot clone this guy because he suicided. Believe it or not, some people who suicide don't know about this. Let's tell them what's wrong.
+	if(subject.mind && subject.mind.suiciding) //We cannot clone this guy because he suicided. Believe it or not, some people who suicide don't know about this. Let's tell them what's wrong.
 		scantemp = "Error: Mental interface failure."
 		if(subject.client)
 			to_chat(subject, "<span class='warning'>Someone is trying to clone your corpse, but you may not be revived as you committed suicide.</span>")

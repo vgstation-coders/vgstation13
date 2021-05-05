@@ -49,7 +49,6 @@
 
 	d.mob_typepath = M.type
 	d.mind_name = M.name
-	d.from_suicide = M.suiciding
 
 	d.damage["BRUTE"] = M.bruteloss
 	d.damage["FIRE"]  = M.fireloss
@@ -67,6 +66,7 @@
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
 			d.mind_name = M.mind.name
+		d.from_suicide = M.mind.suiciding
 	deaths.Add(d)
 
 /datum/stat_collector/proc/add_survivor_stat(var/mob/living/M)

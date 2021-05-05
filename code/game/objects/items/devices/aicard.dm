@@ -103,7 +103,8 @@
 				else
 					flush = 1
 					for(var/mob/living/silicon/ai/A in src)
-						A.suiciding = 1
+						if(A.mind)
+							A.mind.suiciding = 1 //Is this actually intended?
 						to_chat(A, "Your core files are being wiped!")
 						A.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wiped with an [src.name] by [U.name] ([U.ckey])</font>")
 						U.attack_log += text("\[[time_stamp()]\] <font color='red'>Used an [src.name] to wipe [A.name] ([A.ckey])</font>")

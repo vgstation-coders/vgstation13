@@ -66,10 +66,6 @@
 			O.dna = M.dna
 			M.dna = null
 
-		if (M.suiciding)
-			O.suiciding = M.suiciding
-			M.suiciding = null
-
 	for(var/datum/disease/D in M.viruses)
 		O.viruses += D
 		D.affected_mob = O

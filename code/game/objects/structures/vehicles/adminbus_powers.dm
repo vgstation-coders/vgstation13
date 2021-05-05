@@ -201,7 +201,8 @@
 
 	for(var/mob/living/M in orange(src,3))
 		M.revive(1)
-		M.suiciding = 0
+		if(M.mind)
+			M.mind.suiciding = 0
 		to_chat(M, "<span class='notice'>THE ADMINBUS IS LOVE. THE ADMINBUS IS LIFE.</span>")
 		sleep(2)
 	update_rearview()
