@@ -2534,14 +2534,14 @@ var/list/bloodcult_exitportals = list()
 //RUNE XIX
 /datum/rune_spell/blood_cult/astraljourney
 	name = "Astral Journey"
-	desc = "Leave your body so you can go spy on your enemies."
+	desc = "Channel a fragment of your soul into an astral projection so you can spy on the crew and communicate your findings with the rest of the cult."
 	desc_talisman = "Leave your body so you can go spy on your enemies."
 	Act_restriction = CULT_ACT_I
 	invocation = "Fwe'sh mah erl nyag r'ya!"
 	word1 = /datum/runeword/blood_cult/hell
 	word2 = /datum/runeword/blood_cult/travel
 	word3 = /datum/runeword/blood_cult/self
-	page = "Upon use, you will fall asleep, and your soul will float above your body, allowing you to freely move around the Z-Level like a ghost would. However, you cannot talk with other ghosts, or listen to them, or use any of the usual ghost verbs beside re-entering your body. Re-entering your body, or it being moved away from the rune will end the ritual, and you'll wake up after a second or so. You might have to use the rest verb to get back up. As it can be used for any period of time, it's a great, though limited, spying tool. Should your body be destroyed while you were using the rune, attempting to re-enter it will grant you the rest of the ghost verbs and abilities back. "
+	page = "Upon use, your soul will float above your body, allowing you to freely move invisibly around the Z-Level. Words you speak while in this state will be heard by everyone in the cult. You can also become tangible which lets you converse with people and press buttons, but taking any damage while in this state will end the ritual. Your body being moved away from the rune will also end the ritual. Should your body die while you were still using the rune, a shade will form wherever your astral projection stands."
 	rune_flags = RUNE_STAND
 	//var/mob/dead/observer/deafmute/astral = null
 	var/mob/living/simple_animal/astral_projection/astral = null
@@ -2553,7 +2553,6 @@ var/list/bloodcult_exitportals = list()
 	R.one_pulse()
 
 	cultist_key = activator.key
-	//activator.ajourn = spell_holder
 
 	to_chat(activator, "<span class='notice'>As you recite the invocation, you feel your consciousness rise up in the air above your body.</span>")
 	//astral = activator.ghostize(1,1)
@@ -2624,7 +2623,7 @@ var/list/bloodcult_exitportals = list()
 		to_chat(activator, "<span class='warning'>You have the ingredients, now there needs to be a ghost made visible standing above the rune.</span>")
 		qdel(src)
 		return
-	if (ghost.mind && ghost.mind.current && ghost.mind.current.ajourn && (ghost.mind.current.stat != DEAD))
+	if (ghost.mind && ghost.mind.current && (ghost.mind.current.stat != DEAD))
 		to_chat(activator, "<span class='warning'>This ghost still has a breathing body where to return to.</span>")
 		qdel(src)
 		return

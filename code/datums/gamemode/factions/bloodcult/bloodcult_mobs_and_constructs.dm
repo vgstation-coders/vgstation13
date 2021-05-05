@@ -436,7 +436,7 @@
 			anchor.key = key
 			to_chat(anchor, "<span class='notice'>You reconnect with your body.</span>")
 	//if our body was somehow already destroyed however, we'll become a shade right here
-	else if(client && veil_thickness > CULT_PROLOGUE)
+	else if(client)
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/shade = new (T)
@@ -534,8 +534,6 @@
 
 // Check for last poltergeist activity.
 /mob/living/simple_animal/astral_projection/proc/can_poltergeist(var/start_cooldown=1)
-	if(isAdminGhost(src))
-		return TRUE
 	if(world.time >= next_poltergeist)
 		if(start_cooldown)
 			start_poltergeist_cooldown()
