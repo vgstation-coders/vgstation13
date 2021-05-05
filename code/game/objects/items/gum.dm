@@ -12,8 +12,6 @@
 	var/atom/target = null
 	var/sprite_shrunk = FALSE //I couldn't think of a satisfactory way to check if our transform matrix is minty fresh, so this is used to track if we're shrunk from being stuck to a vending machine
 
-/datum/locking_category/gum_stuck //just a featureless locking_category we use when sticking ourselves to items
-
 /obj/item/gum/New()
 	..()
 	flags |= NOREACT //so it doesn't react until you chew it
@@ -63,6 +61,25 @@
 /obj/item/gum/attack(mob/M, mob/user, def_zone)
 	return
 
+/datum/locking_category/gum_stuck/unlock(var/obj/item/gum/G) //This defines a custom locking_category that is only used by gum sticking to things.
+	. = ..()
+	if(istype(G))
+		G.unshrink_self()
+
+/obj/item/gum/proc/shrink_self()
+	if(!sprite_shrunk)
+		var/matrix/M = matrix()
+		M.Scale(0.5, 0.5)
+		transform = M //"transform" is our transformation matrix
+		sprite_shrunk = TRUE
+
+/obj/item/gum/proc/unshrink_self()
+	if(sprite_shrunk)
+		var/matrix/M = transform
+		M.Scale(2, 2)
+		transform = M
+		sprite_shrunk = FALSE
+
 /obj/item/gum/preattack(atom/movable/A, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
@@ -82,11 +99,7 @@
 				return
 			pixel_x = ( 7 + rand(-1,1)) * PIXEL_MULTIPLIER
 			pixel_y = (-3 + rand(-1,1)) * PIXEL_MULTIPLIER
-			if(!sprite_shrunk)
-				var/matrix/M = matrix()
-				M.Scale(0.5, 0.5)
-				transform = M //"transform" is our transformation matrix
-				sprite_shrunk = TRUE
+			shrink_self()
 			A.lock_atom(src, /datum/locking_category/gum_stuck)
 			to_chat(user, "<span class='warning'>You stick \the [src] in the coin slot... with malicious intent!</span>")
 			return 1
@@ -99,12 +112,7 @@
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1, -1)
 			if(do_after(user, src, 5 SECONDS) && locked_to)
 				to_chat(user, "You pry \the [src] loose from \the [locked_to].")
-				locked_to.unlock_atom(src)
-				if(sprite_shrunk)
-					var/matrix/M = transform
-					M.Scale(2,2)
-					transform = M
-					sprite_shrunk = FALSE
+				unlock_from()
 				pixel_y = -10 * PIXEL_MULTIPLIER
 				return
 	return ..()
