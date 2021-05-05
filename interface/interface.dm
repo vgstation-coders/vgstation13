@@ -66,7 +66,7 @@ Hotkey-Mode: (hotkey-mode must be on)
 \tg = cycle-intents-right
 \tu = cycle-target-zone-up
 \tj = cycle-target-zone-down
-\th = cycle-target-zone-left
+\t h = cycle-target-zone-left
 \tk = cycle-target-zone-right
 \t1 = help-intent
 \t2 = disarm-intent
@@ -115,6 +115,10 @@ Any-Mode: (hotkey doesn't need to be on)
 \tNUMPAD6 = target right arm
 \tNUMPAD1 = target left leg
 \tNUMPAD3 = target right leg
+\tCtrl+NUMPAD4 = target left hand
+\tCtrl+NUMPAD6 = target right hand
+\tCtrl+NUMPAD1 = target left foot
+\tCtrl+NUMPAD3 = target right foot
 
 For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 </font>"}
