@@ -387,9 +387,6 @@
 	to_chat(user, "<span class='warning'>You lit the fuse[O ? " with [O]":""]! [seconds_left] seconds till detonation!</span>")
 	admin_warn(user)
 	add_fingerprint(user)
-	if(iscarbon(user))
-		var/mob/living/carbon/C = user
-		C.throw_mode_on()
 	update_icon()
 	fuse_burn()
 
