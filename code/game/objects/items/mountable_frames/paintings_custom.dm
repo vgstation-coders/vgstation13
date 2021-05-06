@@ -32,10 +32,12 @@
 	if (p.palette.len)
 		painting_data.interact(user, p)
 
-	if (istype(W, /obj/item/weapon/soap) && do_after(user, src, 20))
-		painting_data.blank_contents()
-		icon = icon(base_icon, base_icon_state)
-		update_painting()
+	if (istype(W, /obj/item/weapon/soap))
+		to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
+		if (do_after(user, src, 20))
+			painting_data.blank_contents()
+			icon = icon(base_icon, base_icon_state)
+			update_painting()
 
 	return ..()
 
@@ -125,13 +127,12 @@
 /obj/item/mounted/frame/painting/custom/update_painting(render)
 	if (!blank)
 		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", by [painting_data.author]" : "")
-		desc = painting_data.description ? "The author left the following note: \"<span class='info'>[painting_data.description]\"</span>" : "A painting. But what does it mean?"
+		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting. But what does it mean?"
 		if (render)
 			rendered_icon = painting_data.render_on(icon(base_icon, base_icon_state))
 	else
 		name = initial(name)
 		desc = initial(desc)
-
 
 /obj/item/mounted/frame/painting/custom/proc/set_painting_data(datum/custom_painting/painting_data)
 	src.painting_data = painting_data
