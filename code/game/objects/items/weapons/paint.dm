@@ -20,7 +20,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	var/paint_type = ""
 
 /obj/item/weapon/reagent_containers/glass/paint/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is taking \his hand and eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is taking \his hand and eating the [src.name]! It looks like \he's trying to commit suicide!</span>")
 	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/reagent_containers/glass/paint/mop_act(obj/item/weapon/mop/M, mob/user)
@@ -66,6 +66,10 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 /obj/item/weapon/reagent_containers/glass/paint/purple
 	icon_state = "paint_purple"
 	paint_type = "purple"
+
+/obj/item/weapon/reagent_containers/glass/paint/cyan
+	icon_state = "paint_cyan"
+	paint_type = "cyan"
 
 /obj/item/weapon/reagent_containers/glass/paint/black
 	icon_state = "paint_black"
@@ -222,6 +226,11 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 		name = "Purple Paint"
 		color = "#FF00FF"
 		id = "paint_purple"
+
+	cyan
+		name = "Cyan Paint"
+		color = "#00FFFF"
+		id = "paint_cyan"
 
 	black
 		name = "Black Paint"
