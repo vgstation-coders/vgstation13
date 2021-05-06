@@ -366,14 +366,14 @@
 				var/obj/item/candle/C = I
 				if(C.lit)
 					lit(user,I)
-			else if(iswirecutter(I))
+			else if(I.iswirecutter(user))
 				assembled = 1
 				to_chat(user, "<span  class='notice'>You remove the fuse from the [src].</span>")
 				name = "fuse bomb assembly"
 				desc = "Just add fire."
 				update_icon()
 		else
-			if(iswirecutter(I))
+			if(I.iswirecutter(user))
 				fuse_lit = 0
 				update_icon()
 				to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
