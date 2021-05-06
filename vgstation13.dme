@@ -1039,6 +1039,7 @@
 #include "code\game\objects\items\weapons\mop.dm"
 #include "code\game\objects\items\weapons\null_rod.dm"
 #include "code\game\objects\items\weapons\paint.dm"
+#include "code\game\objects\items\weapons\painting_brush.dm"
 #include "code\game\objects\items\weapons\paiwire.dm"
 #include "code\game\objects\items\weapons\peglimb.dm"
 #include "code\game\objects\items\weapons\power_cells.dm"

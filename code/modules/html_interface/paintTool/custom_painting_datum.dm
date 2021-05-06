@@ -22,6 +22,13 @@
 		palette += c.colour
 		palette += c.shadeColour
 
+	if (istype(held_item, /obj/item/weapon/painting_brush))
+		var/obj/item/weapon/painting_brush/b = held_item
+		if (b.paint_color)
+			max_strength = BRUSH_STRENGTH_MAX
+			min_strength = BRUSH_STRENGTH_MIN
+			palette += b.paint_color
+
 /datum/custom_painting
 	var/parent
 
