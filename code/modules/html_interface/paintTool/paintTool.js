@@ -400,11 +400,11 @@ function draw_on_bitmap() {
 		//If the mouse moves too fast, "skipping" pixels, fill the gap by drawing a line
 		// between it and the last recorded position
 		if (previousX > -1 && (Math.abs(previousX - x) > 1 || Math.abs(previousY - y) > 1 )) {
-			lineDraw(previousX, previousY, x, y, paint_color, paint_strength); //TODO get color off drawing tool
+			lineDraw(previousX, previousY, x, y, paint_color, paint_strength);
 		}
 
 		//Draw a pixel wherever we're at
-		pixelDraw(x, y, paint_color, paint_strength); //TODO get color off drawing tool
+		pixelDraw(x, y, paint_color, paint_strength);
 
 		//Record our current position as last recorded
 		previousX = x;
