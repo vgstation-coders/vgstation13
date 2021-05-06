@@ -122,7 +122,7 @@
 		qdel(A)
 	new /obj/item/clothing/mask/breath/vox(src)
 	new /obj/item/weapon/tank/emergency_nitrogen/engi(src)
-  new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
   
 /obj/item/weapon/storage/box/survival/engineer/plasmaman
 	icon_state = "box_plasmaman"
