@@ -134,7 +134,7 @@
 		qdel(A)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_plasma/engi(src)
- 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
 /obj/item/weapon/storage/box/survival/ert
 	icon_state = "box_ERT"
