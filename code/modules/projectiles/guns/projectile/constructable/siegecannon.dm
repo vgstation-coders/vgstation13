@@ -286,7 +286,7 @@
 		if(istype(I, /obj/item/tool/surgicaldrill/diamond))
 			drilltime = 5
 		if(do_after(user, src, drilltime))
-			var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb
+			var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb(src.loc)
 			F.assembled = 0
 			F.name = "empty fuse bomb assembly"
 			F.desc = "Just add fire. And fuel."
