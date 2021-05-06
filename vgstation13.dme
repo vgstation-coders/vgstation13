@@ -1579,6 +1579,7 @@
 #include "code\modules\games\cards\wizard_cards.dm"
 #include "code\modules\games\cards\une\une_cards.dm"
 #include "code\modules\genetics\side_effects.dm"
+#include "code\modules\html_interface\href_multipart_handler.dm"
 #include "code\modules\html_interface\html_interface.dm"
 #include "code\modules\html_interface\html_interface_client.dm"
 #include "code\modules\html_interface\cards\cards.dm"
