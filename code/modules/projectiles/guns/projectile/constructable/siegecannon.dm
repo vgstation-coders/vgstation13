@@ -282,7 +282,10 @@
 /obj/item/cannonball/iron/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/tool/surgicaldrill))
 		to_chat(user, "<span  class='notice'>You begin drilling a hole in the [src] with the [I].</span>")
-		if(do_after(user, src, istype(I, /obj/item/tool/surgicaldrill/diamond) ? 5 : 20)
+		var/drilltime = 20
+		if(istype(I, /obj/item/tool/surgicaldrill/diamond))
+		drilltime = 5
+		if(do_after(user, src, drilltime))
 			var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb
 			F.assembled = 0
 			F.name = "empty fuse bomb assembly"
