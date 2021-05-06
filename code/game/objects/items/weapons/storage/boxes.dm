@@ -1439,6 +1439,14 @@
 	new /obj/item/clothing/head/HoS/surveyor(src)
 	..()
 
+/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set
+	name = "Banana outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set/New()
+	new /obj/item/clothing/suit/banana_suit(src)
+	new /obj/item/clothing/head/banana_hat(src)
+	..()
+
 /obj/item/weapon/storage/box/biscuit
 	name = "biscuit box"
 	desc = "Just the right way to start your day."
