@@ -581,7 +581,7 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/suitdispenser
 	name = "paper- 'Suit Dispenser Manual - How to use them?'"
-	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one bellow this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
+	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one below this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
 
 /obj/item/weapon/paper/diy_soda
 	name = "paper- 'Instructions'"

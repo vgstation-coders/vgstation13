@@ -156,4 +156,5 @@
 	block = LISPBLOCK
 
 /datum/dna/gene/disability/lisp/OnSay(var/mob/M, var/datum/speech/speech)
+	speech.message = replacetext(speech.message,"ss","thh")
 	speech.message = replacetext(speech.message,"s","th")
