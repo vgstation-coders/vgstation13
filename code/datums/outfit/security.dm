@@ -51,6 +51,16 @@
 		/obj/item/weapon/handcuffs = slot_r_store_str,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/armor/hos/jensen,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/armor/hos/jensen,
+		)
+	)
+
+
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
 	)
@@ -231,6 +241,21 @@
 		/obj/item/device/detective_scanner =  slot_belt_str,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			"Forensic Technician" = list(/obj/item/clothing/suit/storage/forensics/blue),
+			"Gumshoe" = list(/obj/item/clothing/suit/storage/det_suit/noir, /obj/item/clothing/head/det_hat/noir),
+			"Private Eye" = list(/obj/item/clothing/suit/storage/det_suit/noir, /obj/item/clothing/head/det_hat/noir),
+			"Detective" = list(/obj/item/clothing/suit/storage/det_suit, /obj/item/clothing/head/det_hat),
+		),
+		/datum/species/plasmaman/ = list(
+			"Forensic Technician" = list(/obj/item/clothing/suit/storage/forensics/blue),
+			"Gumshoe" = list(/obj/item/clothing/suit/storage/det_suit/noir, /obj/item/clothing/head/det_hat/noir),
+			"Private Eye" = list(/obj/item/clothing/suit/storage/det_suit/noir, /obj/item/clothing/head/det_hat/noir),
+			"Detective" = list(/obj/item/clothing/suit/storage/det_suit, /obj/item/clothing/head/det_hat),
+		)
+	)
+
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
 	)
@@ -242,9 +267,7 @@
 /datum/outfit/detective/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.dna.SetSEState(SOBERBLOCK,1)
-	H.mutations += M_SOBER
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
-		H.mutations += M_NOIR
 		H.dna.SetSEState(NOIRBLOCK,1)
 	H.check_mutations = 1
 
@@ -307,6 +330,16 @@
 	items_to_collect = list(
 		/obj/item/weapon/handcuffs = slot_r_store_str,
 	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/armor/hos/jensen,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/armor/hos/jensen,
+		)
+	)
+
 
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,

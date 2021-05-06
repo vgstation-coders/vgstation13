@@ -79,6 +79,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
 	var/tox_mod			// toxin multiplier
+	var/rad_mod			// radiation multiplier
 
 	var/body_temperature = 310.15
 
@@ -855,6 +856,8 @@ var/global/list/whitelisted_species = list("Human")
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
 
+	spells = list(/spell/targeted/transfer_reagents)
+
 	warning_low_pressure = 50
 	hazard_low_pressure = -1
 
@@ -881,7 +884,18 @@ var/global/list/whitelisted_species = list("Human")
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
 					You absorb radiation which helps you in a similar way to sunlight. Your rigid, wooden limbs make you incredibly slow.<br>\
 					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
-					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
+					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally.<br>\
+					Your liver is special. It converts a portion of what you ingest into ammonia. You can use your transfer reagents spell to inject plants."
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver/diona,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+	)
 
 /datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
@@ -1198,9 +1212,9 @@ var/list/has_died_as_golem = list()
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
-	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1
 	tox_mod = 0.5
+	rad_mod = 0.5
 
 	blood_color = "#ebece6"
 	flesh_color = "#9c7f25"
@@ -1247,6 +1261,7 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
+
 
 
 /datum/species/mushroom

@@ -226,7 +226,7 @@
 			qdel(src)
 
 //
-//Robotic Component Analyser, basically a health analyser for robots. Why is this here? FUCKING OLDCODERS
+//Robotic Component Analyzer, basically a health analyzer for robots. Why is this here? FUCKING OLDCODERS
 //
 
 /obj/item/device/robotanalyzer

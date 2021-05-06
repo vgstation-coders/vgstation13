@@ -1,5 +1,7 @@
 /mob/living/silicon/robot/gib(animation = FALSE, meat = TRUE)
 	//robots don't die when gibbed. instead they drop their MMI'd brain
+	if(!isUnconscious())
+		forcesay("-")
 	disconnect_AI()
 	monkeyizing = TRUE
 	canmove = FALSE
@@ -39,7 +41,7 @@
 	if(stat == DEAD)
 		return
 	if(connected_ai)
-		if(connected_ai.explosive_cyborgs) 
+		if(connected_ai.explosive_cyborgs)
 			visible_message("<span class='notice'>You hear a soft beep.</span>")
 			spawn(10)
 				explosion(src.loc, 1, 4, 5, 6)

@@ -12,7 +12,7 @@
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 10
 	var/traitor_threshold = 3
 	var/additional_cost = 5
@@ -113,7 +113,7 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 18
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 	high_population_requirement = 30
@@ -153,7 +153,7 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 15
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
@@ -190,7 +190,7 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
-	weight = 5
+	weight = BASE_RULESET_WEIGHT/2
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -231,7 +231,7 @@
 	enemy_jobs = list("Security Officer","Detective","Warden","Head of Security", "Captain")
 	required_pop = list(25,25,20,20,20,20,15,15,15,5)
 	required_candidates = 4
-	weight = 5
+	weight = BASE_RULESET_WEIGHT/2
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -292,7 +292,7 @@
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
@@ -347,7 +347,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -385,7 +385,7 @@
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 5 //This value is useless, see operative_cap
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 30
 	requirements = list(90, 80, 60, 30, 20, 10, 10, 10, 10, 10)
 	high_population_requirement = 40
@@ -443,7 +443,7 @@
 	job_priority = list("AI","Cyborg")
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 40
 	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 60
@@ -501,7 +501,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
@@ -541,14 +541,20 @@
 	enemy_jobs = list()
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 0
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 0
-	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
+
+// 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
+/datum/dynamic_ruleset/roundstart/extended/acceptable(population, threat_level)
+	var/probability = clamp(threat_level, 30, 100)
+	return !prob(probability)
 
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
+	mode.forced_extended = TRUE
 	return TRUE
 
 //////////////////////////////////////////////
@@ -564,7 +570,7 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 40
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
@@ -617,7 +623,7 @@
 	enemy_jobs = list()
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 10
@@ -658,10 +664,10 @@
 	enemy_jobs = list()
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 10
+	weight = BASE_RULESET_WEIGHT
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
-	high_population_requirement = 10
+	high_population_requirement = 101
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/roundstart/tag_mode/execute()

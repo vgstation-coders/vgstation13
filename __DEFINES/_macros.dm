@@ -186,6 +186,8 @@
 
 #define isvehicle(A) (istype(A, /obj/structure/bed/chair/vehicle))
 
+#define istable(A) (istype(A, /obj/structure/table))
+
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
@@ -236,6 +238,8 @@
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
 
+#define isNonTimeDataReagent(R) (is_type_in_list(R, list( /datum/reagent/citalopram, /datum/reagent/paroxetine)))
+
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
@@ -265,7 +269,7 @@
 
 #define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
+#define isanycultist(H) (islegacycultist(H) || iscultist(H))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 

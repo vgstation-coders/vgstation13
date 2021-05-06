@@ -8,6 +8,7 @@
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
+	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
 	var/w_class = W_CLASS_MEDIUM
@@ -1442,6 +1443,12 @@ var/global/list/image/blood_overlays = list()
 	return FALSE
 
 /obj/item/proc/is_wrench(var/mob/user)
+	return FALSE
+
+/obj/item/proc/is_wirecutter(var/mob/user)
+	return FALSE
+
+/obj/item/proc/is_multitool(var/mob/user)
 	return FALSE
 
 //This proc will be called when the person holding or equipping it talks.

@@ -104,7 +104,7 @@
 	build_path = /obj/item/clothing/glasses/scanner/night
 
 /datum/design/device_analyser
-	name = "Device Analyser"
+	name = "Device Analyzer"
 	desc = "A device for scanning other devices. Meta."
 	id = "deviceanalyser"
 	req_tech = list(Tc_MAGNETS = 3, Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 3)

@@ -377,7 +377,7 @@ var/list/one_way_windows
 		return 1
 
 
-	if(ismultitool(W) && smartwindow)
+	if(W.is_multitool(user) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
 
@@ -577,21 +577,6 @@ var/list/one_way_windows
 	Dir = dir
 	..()
 	update_nearby_tiles()
-
-//This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_icons().
-/obj/structure/window/proc/update_nearby_tiles(var/turf/T)
-
-
-	if(!SS_READY(SSair))
-		return 0
-
-	if(!T)
-		T = get_turf(src)
-
-	if(isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
 
 //This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
 /obj/structure/window/proc/update_nearby_icons(var/turf/T)

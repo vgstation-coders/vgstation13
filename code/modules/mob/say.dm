@@ -165,7 +165,7 @@ var/list/global_deadchat_listeners
 		if(client)
 			var/virgin = 1	//has the text been modified yet?
 			var/temp = winget(client, "input", "text")
-			if(findtextEx(temp, "Say \"", 1, 7) && length(temp) > 5)	//case sensitive means
+			if(findtext(temp, "Say \"", 1, 7) && length(temp) > 5) //NOT case sensitive, because both "say" and "Say" can happen
 
 				temp = replacetext(temp, ";", "")	//general radio
 

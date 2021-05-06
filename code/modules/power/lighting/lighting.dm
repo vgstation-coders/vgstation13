@@ -142,13 +142,14 @@ var/global/list/obj/machinery/light/alllights = list()
 		if(A && !A.requires_power)
 			on = 1
 
-		switch(fitting)
-			if("tube")
-				if(prob(2))
-					broken(1)
-			if("bulb")
-				if(prob(5))
-					broken(1)
+		if (!map.lights_always_ok)
+			switch(fitting)
+				if("tube")
+					if(prob(2))
+						broken(1)
+				if("bulb")
+					if(prob(5))
+						broken(1)
 		spawn(1)
 			update(0)
 
@@ -370,7 +371,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			to_chat(user, "You hit the light!")
 	// attempt to deconstruct / stick weapon into light socket
 	else if(!current_bulb)
-		if(iswirecutter(W)) //If it's a wirecutter take out the wires
+		if(W.is_wirecutter(user)) //If it's a wirecutter take out the wires
 			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")

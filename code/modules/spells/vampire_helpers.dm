@@ -10,7 +10,7 @@
 		world.log << "[src] has vampire spells but isn't a vampire."
 		return 0
 
-	var/fullpower = (/datum/power/vampire/jaunt in vampire.current_powers)
+	var/fullpower = (locate(/datum/power/vampire/jaunt) in vampire.current_powers)
 
 	if(src.stat > max_stat)
 		to_chat(src, "<span class='warning'>You are incapacitated.</span>")
@@ -43,7 +43,7 @@
 	if(restrained())
 		to_chat(src, "<span class ='warning'> You cannot do this while restrained! </span>")
 		return 0
-	if(!(/datum/power/vampire/charisma in V.current_powers)) //Charisma allows implanted targets to be enthralled.
+	if(!(locate(/datum/power/vampire/charisma) in V.current_powers)) //Charisma allows implanted targets to be enthralled.
 		for(var/obj/item/weapon/implant/loyalty/L in H)
 			if(L && L.implanted)
 				implanted = TRUE

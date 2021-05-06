@@ -112,6 +112,7 @@
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
+		adjustFireLoss(damage) //Heal burns equal to the negative value
 		return 0
 
 	var/mob/living/carbon/human/H = src

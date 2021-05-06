@@ -409,7 +409,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192'></a><BR><BR>"
+								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
 							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>

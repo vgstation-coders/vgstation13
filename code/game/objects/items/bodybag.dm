@@ -41,7 +41,7 @@
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
 
-/obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
+/obj/structure/closet/body_bag/attackby(obj/item/W, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
 		if(S.amount<5)
@@ -51,7 +51,7 @@
 		qdel(src)
 	else if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user, maxlength=32)
-	else if(iswirecutter(W))
+	else if(W.is_wirecutter(user))
 		remove_label()
 		to_chat(user, "<span class='notice'>You cut the tag off the bodybag.</span>")
 

@@ -16,7 +16,8 @@
 
 /obj/machinery/light_switch/initialize()
 	add_self_to_holomap()
-	toggle_switch(newstate = 0)
+	if (!map.lights_always_ok)
+		toggle_switch(newstate = 0)
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
@@ -75,7 +76,7 @@
 					buildstage = 2
 					power_change()
 				return
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(user, "You begin cutting the wiring from \the [src].")
 				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)

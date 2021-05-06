@@ -78,7 +78,7 @@
 						to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 						state = WIREDFRAME
 		if(WIREDFRAME)
-			if(iswirecutter(P))
+			if(P.is_wirecutter(user))
 				if(brain)
 					to_chat(user, "Get that brain out of there first!")
 				else

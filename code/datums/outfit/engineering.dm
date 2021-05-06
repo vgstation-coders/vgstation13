@@ -46,13 +46,22 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/head/hardhat/white,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/head/hardhat/white,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/heads/ce
@@ -127,9 +136,18 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/head/hardhat,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/head/hardhat,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -187,7 +205,7 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
@@ -243,7 +261,7 @@
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)

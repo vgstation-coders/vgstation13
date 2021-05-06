@@ -204,6 +204,9 @@
 	attack_verb = list("pinches", "nips at")
 	toolsounds = list('sound/items/Wirecutter.ogg')
 
+/obj/item/tool/wirecutters/is_wirecutter(mob/user)
+	return TRUE
+
 /obj/item/tool/wirecutters/New()
 	. = ..()
 
