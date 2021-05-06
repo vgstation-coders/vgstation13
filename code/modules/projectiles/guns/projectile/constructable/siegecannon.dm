@@ -409,6 +409,10 @@
 	update_icon()
 
 /obj/item/cannonball/fuse_bomb/proc/detonation()
+	explosion(get_turf(src), -1, 0, 4) //buff range to compensate for this somehow breaching
+	qdel(src)
+
+/obj/item/cannonball/fuse_bomb/admin/detonation() //okay, this one can breach if it wants
 	explosion(get_turf(src), -1, 1, 3)
 	qdel(src)
 
