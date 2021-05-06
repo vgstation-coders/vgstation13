@@ -500,7 +500,7 @@
 		var/mob/living/carbon/human/H = user
 		if (isvampire(H))
 			var/datum/role/vampire/V = H.mind.GetRole(VAMPIRE)
-			if (!(/datum/power/vampire/mature in V.current_powers))
+			if (!(locate(/datum/power/vampire/mature) in V.current_powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
 

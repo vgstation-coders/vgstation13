@@ -1,5 +1,5 @@
 /obj/machinery/disease2/diseaseanalyser
-	name = "disease analyser"
+	name = "disease analyzer"
 	desc = "For analysing pathogenic dishes of sufficient growth."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "analyser"
@@ -49,7 +49,7 @@
 		return
 
 	if (scanner)
-		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
+		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyzer.</span>")
 		return
 
 	if(.)
@@ -80,7 +80,7 @@
 		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
 		return
 	if (scanner)
-		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
+		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyzer.</span>")
 		return
 	if(!user.can_poltergeist())
 		to_chat(user, "Your poltergeist abilities are still cooling down.")
@@ -113,7 +113,7 @@
 		return
 
 	if (scanner)
-		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
+		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyzer.</span>")
 		return
 
 	if (!dish)

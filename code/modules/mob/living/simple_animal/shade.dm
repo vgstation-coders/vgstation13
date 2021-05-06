@@ -48,6 +48,9 @@
 /mob/living/simple_animal/shade/Login()
 	..()
 	hud_used.shade_hud()
+	var/datum/role/cultist/C = iscultist(src)
+	if (C)
+		C.update_cult_hud()
 	if (istype(loc, /obj/item/weapon/melee/soulblade))
 		client.CAN_MOVE_DIAGONALLY = 1
 		client.screen += list(
@@ -61,6 +64,8 @@
 	. = ..(message, "C")
 
 /mob/living/simple_animal/shade/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(TRUE)
 	monkeyizing = TRUE
 	canmove = FALSE

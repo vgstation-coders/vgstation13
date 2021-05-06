@@ -187,13 +187,6 @@
 	charge_max = 30
 	charge_counter = 30
 
-/spell/mech/marauder/dash/New()
-	..()
-	hud_state = linked_mech.initial_icon + "-dash"
-
-/spell/mech/marauder/dash/update_spell_icon()
-	hud_state = "[linked_mech.initial_icon]-dash"
-
 /spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
 	if(linked_mech.lock_controls)
 		return FALSE

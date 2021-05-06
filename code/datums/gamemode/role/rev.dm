@@ -70,6 +70,7 @@
 	else
 		maybe_equip(new /obj/item/device/flash/rev(get_turf(mob)))
 	maybe_equip(new /obj/item/weapon/pinpointer/implant)
+	maybe_equip(new /obj/item/device/megaphone)
 
 /datum/role/revolutionary/proc/maybe_equip(obj/item/thing)
 	var/mob/living/carbon/human/mob = antag.current

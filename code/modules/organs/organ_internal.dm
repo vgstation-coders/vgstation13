@@ -82,24 +82,7 @@
 		handle_antibiotics()
 
 		//** Handle the effects of infections
-		var/antibiotics = owner.reagents.get_reagent_amount(SPACEACILLIN)
-
-		if (germ_level > 0 && germ_level < INFECTION_LEVEL_ONE/2 && prob(30))
-			germ_level--
-
-		if (germ_level >= INFECTION_LEVEL_ONE/2)
-			//aiming for germ level to go from ambient to INFECTION_LEVEL_TWO in an average of 15 minutes
-			if(antibiotics < 5 && prob(round(germ_level/6)))
-				germ_level++
-
-		if (germ_level >= INFECTION_LEVEL_TWO)
-			var/datum/organ/external/parent = owner.get_organ(parent_organ)
-			//spread germs
-			if (antibiotics < 5 && parent.germ_level < germ_level && ( parent.germ_level < INFECTION_LEVEL_ONE*2 || prob(30) ))
-				parent.germ_level++
-
-			if (prob(3))	//about once every 30 seconds
-				take_damage(1,silent=prob(30))
+		handle_germs()
 
 		// Process unsuitable transplants. TODO: consider some kind of
 		// immunosuppressant that changes transplant data to make it match.
@@ -126,6 +109,26 @@
 
 		if(cancer_stage)
 			handle_cancer()
+
+/datum/organ/internal/proc/handle_germs()
+	var/antibiotics = owner.reagents.get_reagent_amount(SPACEACILLIN)
+
+	if (germ_level > 0 && germ_level < INFECTION_LEVEL_ONE/2 && prob(30))
+		germ_level--
+
+	if (germ_level >= INFECTION_LEVEL_ONE/2)
+		//aiming for germ level to go from ambient to INFECTION_LEVEL_TWO in an average of 15 minutes
+		if(antibiotics < 5 && prob(round(germ_level/6)))
+			germ_level++
+
+	if (germ_level >= INFECTION_LEVEL_TWO)
+		var/datum/organ/external/parent = owner.get_organ(parent_organ)
+		//spread germs
+		if (antibiotics < 5 && parent.germ_level < germ_level && ( parent.germ_level < INFECTION_LEVEL_ONE*2 || prob(30) ))
+			parent.germ_level++
+
+		if (prob(3))	//about once every 30 seconds
+			take_damage(1,silent=prob(30))
 
 /datum/organ/internal/handle_cancer()
 

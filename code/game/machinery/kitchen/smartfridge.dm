@@ -525,16 +525,6 @@
 
 	src.updateUsrDialog()
 
-/obj/machinery/smartfridge/proc/update_nearby_tiles(var/turf/T)
-    if(!SS_READY(SSair))
-        return 0
-
-    if(!T)
-        T = get_turf(src)
-    if(isturf(T))
-        SSair.mark_for_update(T)
-    return 1
-
 /obj/machinery/smartfridge/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(!istype(mover))
 		return !anchored

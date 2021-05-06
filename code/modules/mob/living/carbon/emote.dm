@@ -231,6 +231,11 @@
 	key_third_person = "blushes"
 	message = "blushes."
 
+/datum/emote/living/carbon/smirk
+	key = "smirk"
+	key_third_person = "smirks"
+	message = "smirks."
+
 /datum/emote/living/carbon/fear
 	key = "fear"
 	key_third_person = "fears"

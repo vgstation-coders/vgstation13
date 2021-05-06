@@ -1,4 +1,6 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
+	if(!isUnconscious())
+		forcesay("-")
 	if(species)
 		species.gib(src)
 		return

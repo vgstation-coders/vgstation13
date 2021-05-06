@@ -147,7 +147,7 @@
 					else
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
-					if(iswirecutter(P))
+					if(P.is_wirecutter(user))
 						P.playtoolsound(src, 50)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
@@ -307,7 +307,7 @@ to destroy them and players will be able to make replacements.
 	//local_fuses = new(src)
 
 /obj/item/weapon/circuitboard/blank/attackby(obj/item/O as obj, mob/user as mob)
-	/*if(ismultitool(O))
+	/*if(O.is_multitool(user))
 		var/boardType = local_fuses.assigned_boards["[local_fuses.localbit]"] //Localbit is an int, but this is an associative list organized by strings
 		if(boardType)
 			if(ispath(boardType))
@@ -800,7 +800,7 @@ obj/item/weapon/circuitboard/rdserver
 		return
 	if(!Adjacent(user) || user.incapacitated())
 		return
-	
+
 	var/to_spawn = smartfridge_choices[choice]
 	if(src.type == to_spawn)
 		to_chat(user, "<span class = 'notice'>This board is already this type.</span>")
@@ -1180,7 +1180,7 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/reagent_containers/glass/beaker = 1)
 
 /obj/item/weapon/circuitboard/diseaseanalyser
-	name = "Circuit Board (Disease Analyser)"
+	name = "Circuit Board (Disease Analyzer)"
 	desc = "A circuit board used to run a machine that analyzes diseases."
 	build_path = /obj/machinery/disease2/diseaseanalyser
 	board_type = MACHINE

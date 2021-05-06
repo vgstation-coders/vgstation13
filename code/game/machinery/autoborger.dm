@@ -23,7 +23,7 @@
 	var/force_borg_module=null
 	var/name_type=NAMETYPE_NORMAL
 	var/enable_namepick=TRUE
-	var/belongstomalf=null //malf AI that owns autoborger
+	var/mob/living/silicon/ai/belongstomalf=null //malf AI that owns autoborger
 
 /obj/machinery/autoborger/New()
 	// On us
@@ -69,22 +69,27 @@
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return
 
-	var/datum/job/job_datum = job_master.GetJob("Cyborg")
-	if((job_datum ? !job_datum.player_old_enough(H.client) : 0) || jobban_isbanned(H, "Cyborg"))
-		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
-		return
-
 	playsound(src, 'sound/items/Welder.ogg', 50, 1)
 	H.audible_scream() // It is painful
 	H.adjustBruteLoss(max(0, 80 - H.getBruteLoss())) // Hurt the human, don't try to kill them though.
 	H.handle_regular_hud_updates() // Make sure they see the pain.
-
 	// Sleep for a couple of ticks to allow the human to see the pain
 	sleep(5)
 
+	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE, malfAI=belongstomalf)
+	if(!R) // The borging failed, due to job ban, player age, or something similar
+		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
+		if (belongstomalf)
+			var/datum/role/malfAI/my_malf = belongstomalf.mind?.GetRole(MALF)
+			if (my_malf)
+				var/datum/faction/malf/faction = my_malf.faction
+				faction.apcs++
+				to_chat(belongstomalf, "<span class='good'>Incompatible lifeform biomass reprocessed into computing power.</span><span class='notice'>You have now one more APC.</span>")
+
+		return
+
 	// Delete the items or they'll all pile up in a single tile and lag
 	// skipnaming disables namepick on New(). It's annoying as fuck on malf.  Later on, we enable or disable namepick.
-	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE, malfAI=belongstomalf)
 	if(R)
 		R.cell.maxcharge = robot_cell_charge
 		R.cell.charge = robot_cell_charge

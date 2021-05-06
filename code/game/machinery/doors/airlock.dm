@@ -1221,7 +1221,7 @@ About the new airlock wires panel:
 					welded = null
 
 				update_icon()
-	else if (ismultitool(I))
+	else if (I.is_multitool(user))
 		if (!operating)
 			if(panel_open)
 				wires.Interact(user)

@@ -393,7 +393,7 @@
 	if( head && head.is_hidden_identity())
 		return get_worn_id_name("Unknown")	//Likewise for hats
 	var/datum/role/vampire/V = isvampire(src)
-	if(V && (/datum/power/vampire/shadow in V.current_powers) && V.ismenacing)
+	if(V && (locate(/datum/power/vampire/shadow) in V.current_powers) && V.ismenacing)
 		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_worn_id_name("")
@@ -1731,11 +1731,14 @@ mob/living/carbon/human/isincrit()
 			return extractedorgan
 
 /mob/living/carbon/human/feels_pain()
-	if(!species)
+	if(!species) //should really really not happen!!
 		return FALSE
 	if(species.flags & NO_PAIN)
 		return FALSE
 	if(pain_numb)
+		return FALSE
+	var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
+	if(!sponge || !istype(sponge) || (sponge.status & ORGAN_CUT_AWAY))
 		return FALSE
 	return TRUE
 

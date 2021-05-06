@@ -45,6 +45,15 @@
 		/obj/item/weapon/gun/energy/gun = GRASP_LEFT_HAND,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/head/caphat,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/head/caphat,
+		)
+	)
+
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
 	)

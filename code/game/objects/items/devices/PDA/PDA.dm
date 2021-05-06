@@ -772,7 +772,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if (cartridge.access_mechanic)
 						dat += {"<h4>Mechanic Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=Device Analyser'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyser</a></li>
+							<li><a href='byond://?src=\ref[src];choice=Device Analyzer'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyzer</a></li>
 							</ul>"}
 
 					if (cartridge.access_medical)
@@ -1936,12 +1936,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_atmos))
 				scanmode = SCANMODE_ATMOS
-		if("Device Analyser")
+		if("Device Analyzer")
 			if(scanmode == SCANMODE_DEVICE)
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_mechanic))
 				if(!dev_analys)
-					dev_analys = new(src) //let's create that device analyser
+					dev_analys = new(src) //let's create that device analyzer
 					dev_analys.cant_drop = 1
 					dev_analys.max_designs = 5
 				scanmode = SCANMODE_DEVICE

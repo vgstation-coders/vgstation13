@@ -81,6 +81,8 @@ mob/proc/remove_internal_organ()
 		return
 	if(!colour_to_apply)
 		colour_to_apply = get_screen_colour()
+	if((M_NOIR in mutations) && client)
+		client.screen += noir_master
 	// We can't compare client.color directly because Byond will force set client.color to null
 	// when assigning the default_colour_matrix to it
 	var/list/colour_initial = (client.color ? client.color : default_colour_matrix)
@@ -533,7 +535,7 @@ proc/is_blind(A)
 				return TRUE
 			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
 				return TRUE
-			if(isninja(user) && (honorable & HONORABLE_NINJA))
+			if(iscarbon(user) && isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
 			if((iswizard(user) || isapprentice(user) || ismagician(user)) && (user.flags & HONORABLE_NOGUNALLOWED))
 				return TRUE

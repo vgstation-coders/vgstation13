@@ -159,7 +159,7 @@
 /datum/disease2/effect/stimulant
 	name = "Adrenaline Extra"
 	desc = "Causes the infected to synthesize artificial adrenaline (Hyperzine)."
-	encyclopedia = "Thankfully the pathogen keeps the production bellow overdose levels."
+	encyclopedia = "Thankfully the pathogen keeps the production below overdose levels."
 	stage = 2
 	badness = EFFECT_DANGER_HELPFUL
 

@@ -65,7 +65,7 @@
 		update_icon()
 		return 1
 
-	if(ismultitool(W) && panel)
+	if(W.is_multitool(user) && panel)
 		mode = !mode
 		to_chat(user, "<span class='notify'>You [mode ? "disable" : "enable"] the lock on \the [src].</span>")
 		return 1

@@ -471,6 +471,9 @@ var/global/num_vending_terminals = 1
 			attack_hand(user)
 		return
 	else if(premium.len > 0 && is_type_in_list(W, accepted_coins))
+		if(is_locking(/datum/locking_category/gum_stuck))
+			to_chat(user, "<span class='warning'>[bicon(src)] Something's blocking the coin slot!</span>")
+			return
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
@@ -557,6 +560,8 @@ var/global/num_vending_terminals = 1
 	R.mini_icon = costly_bicon(item)
 	R.display_color = pick("red", "blue", "green")
 	R.amount = 1
+	if(item.price) // price tagger - only works on new items
+		R.price = item.price
 	if(item.loc != src)
 		item.forceMove(src)
 	product_records += R
@@ -902,6 +907,9 @@ var/global/num_vending_terminals = 1
 	if(href_list["remove_coin"])
 		if(!coin)
 			to_chat(usr, "There is no coin in this machine.")
+			return
+		if(is_locking(/datum/locking_category/gum_stuck))
+			to_chat(usr, "<span class='warning'>[bicon(src)] Something's blocking the coin slot!</span>")
 			return
 
 		coin.forceMove(get_turf(src))
@@ -1886,7 +1894,7 @@ var/global/num_vending_terminals = 1
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
 						"You add cables to \the [src].")
 		if(2) // Circuitboard installed, wired.
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(usr, "You begin to remove the wiring from \the [src].")
 				if(do_after(user, src, 50))
 					new /obj/item/stack/cable_coil(loc,5)
@@ -2532,6 +2540,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/rotten = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/frank = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/mexican = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/clothing/head/beret = 3,
 		/obj/item/clothing/suit/wcoat = 3,
 		/obj/item/clothing/under/suit_jacket = 3,
@@ -3143,17 +3152,16 @@ var/global/num_vending_terminals = 1
 	vend_reply = "Money money money!"
 	icon_state = "voxseed"
 	products = list (
-		/obj/item/vaporizer = 1,
 		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/secure_closet/wonderful = 1,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 1,
-		/obj/machinery/power/antiquesynth = 1,
 		/obj/structure/closet/crate/shoaljunk = 3,
+		/obj/structure/closet/crate/internals/cloudnine = 3,
+		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/crate/chest/alcatraz = 3,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,
 		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 1,
 		/obj/structure/largecrate/secure = 1,
-		/obj/structure/largecrate/secure/magmaw = 1,
 		/obj/structure/largecrate/secure/frankenstein = 1,
 		/obj/item/weapon/mech_expansion_kit = 3,
 		/obj/structure/wetdryvac = 1,
@@ -3169,17 +3177,15 @@ var/global/num_vending_terminals = 1
 		/obj/structure/closet/crate/freezer/bootlegpicnic = 3,
 		)
 	prices = list(
-		/obj/item/vaporizer = 10,
 		/obj/item/weapon/storage/trader_chemistry = 50,
 		/obj/structure/closet/secure_closet/wonderful = 150,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 100,
-		/obj/machinery/power/antiquesynth = 150,
 		/obj/structure/closet/crate/shoaljunk = 100,
+		/obj/structure/closet/crate/internals/cloudnine = 150,
 		/obj/structure/closet/crate/chest/alcatraz = 150,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 100,
 		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 25,
 		/obj/structure/largecrate/secure = 100,
-		/obj/structure/largecrate/secure/magmaw = 100,
 		/obj/structure/largecrate/secure/frankenstein = 100,
 		/obj/item/weapon/mech_expansion_kit = 50,
 		/obj/structure/wetdryvac = 50,
