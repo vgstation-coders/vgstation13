@@ -33,6 +33,9 @@
 		return 0
 	return istype(buffer,typepath)
 
+/obj/item/device/multitool/is_multitool(mob/user)
+	return TRUE
+
 /obj/item/device/multitool/attack_self(var/mob/user)
 	if(!buffer && !clone) // Can't enable cloning without buffer.
 		return

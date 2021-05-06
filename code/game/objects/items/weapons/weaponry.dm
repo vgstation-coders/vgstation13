@@ -184,7 +184,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 			I = null
 			qdel(src)
 
-	else if(iswirecutter(I))
+	else if(I.is_wirecutter(user))
 		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
 
 		user.before_take_item(I)

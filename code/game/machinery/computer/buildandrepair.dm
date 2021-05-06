@@ -481,7 +481,7 @@
 
 				return 1
 		if(3)
-			if(iswirecutter(P))
+			if(P.is_wirecutter(user))
 				P.playtoolsound(src, 50)
 				user.visible_message("[user] unplugs the wires from the frame.", "You unplug the wires from the frame.", "You hear metallic sounds.")
 				src.state = 2

@@ -127,6 +127,9 @@ var/global/list/rad_collectors = list()
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, center) <= range) //Better than using orange() every process.
 			R.receive_pulse(power)
+	for(var/obj/item/weapon/am_containment/decelerator/D in decelerators)
+		if(get_dist(D, center) <= range)
+			D.receive_pulse(power)
 
 //Pulse_strength is multiplied by around 70 (less or more depending on the air tank setup) to get the amount of watts generated
 /obj/machinery/power/rad_collector/proc/receive_pulse(const/pulse_strength)

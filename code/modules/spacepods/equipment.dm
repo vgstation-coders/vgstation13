@@ -169,8 +169,8 @@
 			if(L.code == code)
 				L.toggle_lock()
 
-/obj/item/device/pod_key/attackby(var/obj/O, mob/user)
-	if(ismultitool(O))
+/obj/item/device/pod_key/attackby(var/obj/item/O, mob/user)
+	if(O.is_multitool(user))
 		code = input(user,"Enter a number:","Key Code",code) as num
 		return
 	.=..()

@@ -20,7 +20,7 @@
 	item_state = "apron"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
-	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,/obj/item/tool/wirecutters/clippers,/obj/item/weapon/minihoe)
+	allowed = list (/obj/item/weapon/reagent_containers/spray,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass,/obj/item/tool/wirecutters/clippers,/obj/item/weapon/minihoe,/obj/item/weapon/grenade/chem_grenade,/obj/item/device/lightreplacer,/obj/item/device/flashlight,/obj/item/weapon/soap,/obj/item/key/janicart,/obj/item/clothing/gloves,/obj/item/weapon/caution,/obj/item/weapon/mop,/obj/item/weapon/storage/bag/trash)
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 //Captain

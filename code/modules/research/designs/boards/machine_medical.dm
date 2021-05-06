@@ -133,7 +133,7 @@
 	build_path = /obj/item/weapon/circuitboard/incubator
 
 /datum/design/diseaseanalyser
-	name = "Circuit Design (Disease Analyser)"
+	name = "Circuit Design (Disease Analyzer)"
 	desc = "Allows for the construction of circuit boards used to build a disease analyzer."
 	id = "diseaseanalyser"
 	req_tech = list(Tc_ENGINEERING = 3, Tc_BIOTECH = 3, Tc_PROGRAMMING = 3)

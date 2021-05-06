@@ -320,7 +320,7 @@
 		var/obj/item/I = O
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
-		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
+		if(I.is_wirecutter(user)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				I.playtoolsound(usr, 50)
@@ -879,7 +879,7 @@
 	slot_flags = SLOT_HEAD
 
 /obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
-	if(iswirecutter(I))
+	if(I.is_wirecutter(user))
 		to_chat(user, "<span class='info'>You cut apart the cone into plastic.</span>")
 		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, 2, user)
 		qdel(src)

@@ -10,6 +10,7 @@
 #define LIMB_LEFT_FOOT		"l_foot"
 #define LIMB_RIGHT_FOOT		"r_foot"
 #define TARGET_MOUTH		"mouth"
+#define TARGET_EYES		    "eyes"
 
 #define UNCUFF_LEGS			-1
 #define UNCUFF_BOTH			0

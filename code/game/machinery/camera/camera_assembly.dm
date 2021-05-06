@@ -113,7 +113,7 @@
 							break
 				return
 
-			else if(iswirecutter(W))
+			else if(W.is_wirecutter(user))
 
 				new/obj/item/stack/cable_coil(get_turf(src), 2)
 				W.playtoolsound(src, 50)

@@ -93,7 +93,7 @@
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src.loc)
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded] monkeys worth of material left.</span>")
 	else
-		to_chat(user, "<span class='warning'>The machine needs at least 3 monkeys worth of material to produce a monkey cube. It only has [grinded].</span>")
+		to_chat(user, "<span class='warning'>The machine needs at least [minimum_monkeys] monkey\s worth of material to produce a monkey cube. It only has [grinded].</span>")
 	return
 
 /obj/machinery/monkey_recycler/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob) //copypasted from sleepers
