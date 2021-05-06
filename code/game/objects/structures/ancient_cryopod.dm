@@ -95,7 +95,8 @@
 		M.generate_name()
 	else
 		M.fully_replace_character_name(null,pick(preset_names))
-		mob_rename_self(M,title,"Pick your name")
+	
+	mob_rename_self(M,title,"Pick your name")
 
 	message_admins("[key_name_admin(M)] has spawned as a [title] from an ancient cryopod.")
 	log_game("[key_name(M)] has spawned as a [title] from an ancient cryopod.")
@@ -121,7 +122,6 @@
 		"Quick-Draw Billy"
 	)
 
-
 /datum/cryorole/pirate
 	title = "pirate"
 	outfit_datum = /datum/outfit/special/piratealt
@@ -138,7 +138,8 @@
 	preset_names = list(
 		"Udon Ramenatsu",
 		"Onigiri Wasabishi",
-		"Honda Subaru"
+		"Honda Subaru",
+		"Musashi"
 	)
 
 /datum/cryorole/prisoner
@@ -169,7 +170,10 @@
 	title = "cosmonaut"
 	outfit_datum = /datum/outfit/special/cosmonaut
 	preset_names = list(
-		"placeholder"
+		"Pilot Gagarin",
+		"Commander Laika",
+		"Officer Chernushka",
+		"Pilot Leonov"
 	)
 
 /datum/cryorole/gangster
@@ -179,7 +183,8 @@
 		"Tony Ravioli",
 		"Fabrizio Marinara",
 		"Giovanni Tortellini",
-		"Johnny Shanks"
+		"Johnny Shanks",
+		"Jackie Pott"
 	)
 
 /datum/cryorole/pizzaman
