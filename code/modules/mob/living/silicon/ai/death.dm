@@ -42,7 +42,7 @@
 		callshuttle = 0
 
 	if(callshuttle == 3) //if all three conditions are met
-		shuttle_autocall()
+		shuttle_autocall("All the AIs, comm consoles and boards are destroyed")
 
 	if(explosive && !gibbed && !istype(loc, /obj/machinery/power/apc))
 		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
