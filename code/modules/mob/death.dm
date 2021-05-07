@@ -46,8 +46,11 @@
 			spell_master.on_holder_death(src)
 	if(transmogged_from)
 		transmog_death()
-	if(!living_players.len && world.time > 15 MINUTES) //if nobody is around and alive in the current round and enough time has passed
+	if(!living_players.len && dead_players.len && world.time > 15 MINUTES) //if nobody is around and alive in the current round and enough time has passed
 		shuttle_autocall("All sentient life in the station and nearby system show no signs of life")
+		var/datum/striketeam/ert/response_team = new()
+		response_team.mission = "Attempt to revive or recover all dead life from the station"
+		response_team.trigger_strike()
 
 /mob/proc/transmog_death()
 	var/obj/transmog_body_container/C = transmogged_from
