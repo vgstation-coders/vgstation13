@@ -643,6 +643,12 @@ var/stacking_limit = 90
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
+	
+	if(!living_players.len && dead_players.len && world.time > 15 MINUTES && emergency_shuttle.direction == 0)//if nobody is around and alive in the current round and enough time has passed and the shuttle isnt already coming
+		shuttle_autocall("All sentient life in the station and nearby system show no signs of life")
+		var/datum/striketeam/ert/response_team = new()
+		response_team.mission = "Attempt to revive or recover all dead life from the station"
+		response_team.trigger_strike()
 
 /datum/gamemode/dynamic/proc/GetInjectionChance()
 	var/chance = 0
