@@ -158,7 +158,8 @@
 	preset_names = list(
 		"Naughtius Maximus",
 		"Biggus Dickus",
-		"Marcus Cocceius Firmus"
+		"Marcus Cocceius Firmus",
+		"Incontinentia Buttocks"
 	)
 
 /datum/cryorole/tourist
