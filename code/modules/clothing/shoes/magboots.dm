@@ -110,7 +110,7 @@
 /obj/item/clothing/shoes/magboots/attackby(var/obj/item/O, var/mob/user)
 	..()
 	if(issolder(O) && emagged)
-		var/obj/item/weapon/solder/S = O
+		var/obj/item/tool/solder/S = O
 		if(S.remove_fuel(10,user))
 			O.playtoolsound(user.loc, 25)
 			emagged = FALSE
