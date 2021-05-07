@@ -644,7 +644,7 @@ var/stacking_limit = 90
 					continue
 			dead_players.Add(M)//Players who actually died (and admins who ghosted, would be nice to avoid counting them somehow)
 	
-	if(!living_players.len && dead_players.len && world.time > 15 MINUTES && emergency_shuttle.direction == 0)//if nobody is around and alive in the current round and enough time has passed and the shuttle isnt already coming
+	if(!living_players.len && dead_players.len && world.time > 15 MINUTES && emergency_shuttle.direction == 0 && !sentStrikeTeams(TEAM_ERT))//if nobody is around and alive in the current round and enough time has passed and the shuttle/ERT isnt already coming
 		shuttle_autocall("All sentient life in the station and nearby system show no signs of life")
 		var/datum/striketeam/ert/response_team = new()
 		response_team.mission = "Attempt to revive or recover all dead life from the station"
