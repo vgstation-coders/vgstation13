@@ -9,7 +9,7 @@
 /mob/living/carbon/human/proc/handle_spaghetti_pocket(var/slot,var/chance)
     var/obj/item/I = get_item_by_slot(slot)
     if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti))
-        if(prob(5))
+        if(prob(chance))
             visible_message("<span class='notice'>[src] spills their spaghetti</span>","<span class='notice'>You spill your spaghetti</span>")
             new /obj/effect/decal/cleanable/spaghetti_spill(src.loc)
             playsound(loc, 'sound/effects/splat.ogg', 50, 1)
