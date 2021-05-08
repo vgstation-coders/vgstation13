@@ -6,7 +6,7 @@
     if(get_item_by_slot(slot_r_store))
         handle_spaghetti_pocket(slot_r_store,chance)
 
-/mob/living/carbon/human/proc/handle_spaghetti_pocket(var/slot,var/chance) //Acts on specific pocket - kanef
+/mob/living/carbon/human/proc/handle_spaghetti_pocket(var/slot,var/chance) //Acts on specific pocket -kanef
     var/obj/item/I = get_item_by_slot(slot)
     if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti))
         if(prob(chance))
