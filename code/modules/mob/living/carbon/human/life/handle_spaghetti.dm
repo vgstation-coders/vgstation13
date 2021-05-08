@@ -11,6 +11,7 @@
     if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti))
         if(prob(chance))
             visible_message("<span class='notice'>[src] spills their spaghetti</span>","<span class='notice'>You spill your spaghetti</span>")
+            apply_effect(10, STUTTER)
             new /obj/effect/decal/cleanable/spaghetti_spill(src.loc)
             playsound(loc, 'sound/effects/splat.ogg', 50, 1)
             qdel(I)
