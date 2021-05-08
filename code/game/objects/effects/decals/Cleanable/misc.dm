@@ -201,6 +201,14 @@
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
 
+/obj/effect/decal/cleanable/spaghetti_spill
+	name = "spilled spaghetti"
+	desc = "A result of bursting into treats from awkward situations."
+	density = 0
+	anchored = 1
+	icon = 'icons/effects/tomatodecal.dmi'
+	random_icon_states = list("smashed_spaghetti")
+
 /obj/effect/decal/cleanable/scattered_sand
 	name = "scattered sand"
 	desc = "Now how are you gonna sweep it back up, smartass?"
