@@ -541,7 +541,7 @@
 	enemy_jobs = list()
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 0
-	weight = BASE_RULESET_WEIGHT
+	weight = 0.5*BASE_RULESET_WEIGHT
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
