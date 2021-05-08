@@ -10,7 +10,7 @@
     var/obj/item/I = get_item_by_slot(slot)
     if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti))
         if(prob(chance))
-            visible_message("<span class='notice'>[src] spills their spaghetti</span>","<span class='notice'>You spill your spaghetti</span>")
+            visible_message("<span class='notice'>[src] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
             if (prob(90)) //90% chance to make you stutter what you say for a while, otherwise nothing at all, you spilled your spaghetti
                 apply_effect(10, STUTTER)
             else
