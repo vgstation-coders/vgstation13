@@ -6545,3 +6545,15 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	reagents.add_reagent (NUTRIMENT, 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/sweetroll
+	name = "sweetroll"
+	desc = "While on the station, the chef gives you a sweetroll. Delighted, you take it into maintenance to enjoy, only to be intercepted by a gang of three assistants your age."
+	icon = 'icons/obj/food.dmi'
+	icon_state = "sweetroll"
+	food_flags = FOOD_ANIMAL | FOOD_SWEET | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/sweetroll/New()
+	..()
+	reagents.add_reagent (NUTRIMENT, 2)
+	reagents.add_reagent (SUGAR, 6)
+	bitesize = 2
