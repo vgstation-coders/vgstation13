@@ -122,6 +122,7 @@
 /mob/living/carbon/human/Knockdown(amount)
 	if(M_HULK in mutations)
 		return
+	handle_spaghetti(100)
 	..()
 
 /mob/living/carbon/human/Paralyse(amount)
