@@ -625,6 +625,20 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		mob.adjustBruteLoss(-get_damage)
 		mob.adjustToxLoss(max(1,get_damage * multiplier / 5))
 
+/datum/disease2/effect/spill_spaghetti
+	name = "Spaghetti Syndrom"
+	desc = "Causes spaghetti to spontaneously appear in the user's pockets"
+	encyclopedia = "A keystone of awkward social situations"
+	badness = EFFECT_DANGER_ANNOYING
+	stage = 3
+	chance = 10
+	max_chance = 50
+	multiplier = 5
+	max_multiplier = 10
+
+/datum/disease2/effect/spill_spaghetti/activate(var/mob/living/mob)
+	
+
 
 /datum/disease2/effect/cyborg_limbs
 	name = "Metallica Syndrome"
