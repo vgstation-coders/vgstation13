@@ -2883,7 +2883,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
 
 /datum/recipe/sweetroll
-	reagents = list(MILK = 5, FLOUR = 5, SUGAR = 5)
+	reagents = list(FLOUR = 5, SUGAR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/butter,
