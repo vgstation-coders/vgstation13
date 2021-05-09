@@ -1076,7 +1076,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/emp_act()
 	if(equip_ready)
-		set_ready_state(0)
+		set_ready_state(1)
 		log_message("Disabled.")
 		to_chat(chassis.occupant, "<span class='warning'>Relay shut down.</span>")
 
@@ -1174,7 +1174,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/generator/emp_act()
 	if(equip_ready)
-		set_ready_state(0)
+		set_ready_state(1)
 		log_message("Disabled.")
 		to_chat(chassis.occupant, "<span class='warning'>Generator shut down.</span>")
 
