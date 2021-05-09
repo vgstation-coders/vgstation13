@@ -107,6 +107,13 @@
 	return 1
 
 
+/obj/machinery/atmospherics/unary/cap/heat/process()
+	. = ..()
+	if(node1)
+		animate(src, color = node1.color, time = 2 SECONDS, easing = SINE_EASING)
+	else if (color != "#B4B4B4")
+		animate(src, color = "#B4B4B4", time = 2 SECONDS, easing = SINE_EASING)
+
 /obj/machinery/atmospherics/unary/cap/heat/getNodeType(var/node_id)
 	return PIPE_TYPE_HE
 
