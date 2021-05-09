@@ -9038,6 +9038,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.hallucination += 5	//50% mindbreaker
 
 /datum/reagent/self_replicating
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	var/whitelisted_ids = list()
 
 /datum/reagent/self_replicating/post_transfer(var/datum/reagents/donor)
@@ -9059,6 +9060,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	whitelisted_ids = list(MERCURY)
 
 /datum/reagent/temp_hearer/
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	data = list("stored_phrase" = null)
 
 /datum/reagent/temp_hearer/on_introduced(var/data)
