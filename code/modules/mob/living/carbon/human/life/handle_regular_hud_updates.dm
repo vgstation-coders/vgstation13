@@ -198,7 +198,11 @@
 						healths.icon_state = "health7"
 					else
 						switch(health - halloss)
-							if(100 to INFINITY)
+							if(105 to INFINITY)
+								healths.icon_state = "health0"
+							if(104)
+								healths.icon_state = "health104"
+							if(100 to 103)
 								healths.icon_state = "health0"
 							if(80 to 100)
 								healths.icon_state = "health1"
