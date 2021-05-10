@@ -91,9 +91,12 @@
 	M.confused = 5
 	M.eye_blurry = 15
 
-	var/podname = copytext(sanitize(input(M, "Pick your name","Name") as null|text), 1, 2*MAX_NAME_LEN)
-	M.real_name = podname
-	M.name = podname
+	if(getrandomname)
+		M.generate_name()
+	else
+		M.fully_replace_character_name(null,pick(preset_names))
+	
+	mob_rename_self(M,title,"Pick your name")
 
 	message_admins("[key_name_admin(M)] has spawned as a [title] from an ancient cryopod.")
 	log_game("[key_name(M)] has spawned as a [title] from an ancient cryopod.")
@@ -103,6 +106,8 @@
 /datum/cryorole
 	var/title
 	var/outfit_datum
+	var/preset_names
+	var/getrandomname = FALSE
 
 /datum/cryorole/proc/special_behavior(var/mob/living/carbon/human/M) //for special behavior like giving roles genetic mutations
 	return
@@ -110,42 +115,88 @@
 /datum/cryorole/cowboy
 	title = "cowboy"
 	outfit_datum = /datum/outfit/special/cowboy
+	preset_names = list(
+		"Deadwood Cassidy",
+		"Rick O'Shea",
+		"Loan Ranger",
+		"Quick-Draw Billy"
+	)
 
 /datum/cryorole/pirate
 	title = "pirate"
 	outfit_datum = /datum/outfit/special/piratealt
+	preset_names = list(
+		"Scurvy Sam",
+		"One-Eyed Johnny",
+		"Barnacle Doubloons",
+		"Gary the Pirate"
+	)
 
 /datum/cryorole/samurai
 	title = "samurai"
 	outfit_datum = /datum/outfit/special/samurai
+	preset_names = list(
+		"Udon Ramenatsu",
+		"Onigiri Wasabishi",
+		"Honda Subaru",
+		"Musashi"
+	)
 
 /datum/cryorole/prisoner
 	title = "prisoner"
 	outfit_datum = /datum/outfit/special/prisoneralt
+	preset_names = list(
+		"Tiny",
+		"King Cocaine",
+		"Slim Pickle",
+		"Stranglin' Steve"
+	)
 
 /datum/cryorole/roman
 	title = "roman legionare"
 	outfit_datum = /datum/outfit/special/roman
+	preset_names = list(
+		"Naughtius Maximus",
+		"Biggus Dickus",
+		"Marcus Cocceius Firmus",
+		"Incontinentia Buttocks"
+	)
 
 /datum/cryorole/tourist
 	title = "tourist"
 	outfit_datum = /datum/outfit/special/tourist
+	getrandomname = TRUE
 
 /datum/cryorole/cosmonaut
 	title = "cosmonaut"
 	outfit_datum = /datum/outfit/special/cosmonaut
+	preset_names = list(
+		"Pilot Gagarin",
+		"Commander Laika",
+		"Officer Chernushka",
+		"Pilot Leonov"
+	)
 
 /datum/cryorole/gangster
 	title = "gangster"
 	outfit_datum = /datum/outfit/special/gangster
+	preset_names = list(
+		"Tony Ravioli",
+		"Fabrizio Marinara",
+		"Giovanni Tortellini",
+		"Johnny Shanks",
+		"Jackie Pott"
+	)
 
 /datum/cryorole/pizzaman
 	title = "pizza delivery guy"
 	outfit_datum = /datum/outfit/special/pizzaman
+	getrandomname = TRUE
 
 /datum/cryorole/sportsfan
 	title = "sports fan"
 	outfit_datum = /datum/outfit/special/sports
+	getrandomname = TRUE
 
 /datum/cryorole/sportsfan/special_behavior(var/mob/living/carbon/human/M)
 	if(prob(50))
