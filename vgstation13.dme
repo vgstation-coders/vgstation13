@@ -902,7 +902,6 @@
 #include "code\game\objects\items\devices\does_not_tip.dm"
 #include "code\game\objects\items\devices\flash.dm"
 #include "code\game\objects\items\devices\flashlight.dm"
-#include "code\game\objects\items\devices\fuse_bomb.dm"
 #include "code\game\objects\items\devices\geiger.dm"
 #include "code\game\objects\items\devices\handtv.dm"
 #include "code\game\objects\items\devices\healthanalyzerpro.dm"

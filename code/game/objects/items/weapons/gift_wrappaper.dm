@@ -249,7 +249,7 @@
 //dangerous items
 /obj/item/weapon/winter_gift/special/attack_self(mob/M as mob)
 	var/gift_type = pick(
-		/obj/item/device/fuse_bomb,
+		/obj/item/cannonball/fuse_bomb,
 		/obj/item/weapon/card/emag,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned,
 		/obj/item/weapon/tome_legacy,
@@ -261,8 +261,8 @@
 	I.add_fingerprint(M)
 
 	var/additional_info = ""
-	if(istype(I,/obj/item/device/fuse_bomb))
-		var/obj/item/device/fuse_bomb/B = I
+	if(istype(I,/obj/item/cannonball/fuse_bomb))
+		var/obj/item/cannonball/fuse_bomb/B = I
 		B.fuse_lit = 1
 		B.update_icon()
 		B.fuse_burn()
