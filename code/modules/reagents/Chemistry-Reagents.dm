@@ -9074,6 +9074,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/temp_hearer/proc/parent_heard(var/datum/speech/speech, var/rendered_speech="")
 	if(!data["stored_phrase"])
 		set_phrase(sanitize(speech.message))
+		var/atom/container = holder.my_atom
+		if(container.is_open_container())
+			container.visible_message("<span class='notice'>[bicon(container)] The solution fizzles for a moment.</span>", "You hear something fizzling for a moment.", "<span class='notice'>[bicon(container)] \The [container] replies something, but you can't hear them.</span>")
+			if(!(container.flags & SILENTCONTAINER))
+				playsound(container, 'sound/effects/bubbles.ogg', 20, -3)
 
 /datum/reagent/temp_hearer/proc/set_phrase(var/phrase)
 	data["stored_phrase"] = phrase
@@ -9092,7 +9097,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(!M.isUnconscious())
+	if(!M.isUnconscious() && data["stored_phrase"])
 		to_chat(M, "You hear a voice in your head saying: <span class='bold'>'[data["stored_phrase"]]'</span>.")
 		M.reagents.del_reagent(LOCUTOGEN)
 
