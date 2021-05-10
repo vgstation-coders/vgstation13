@@ -4263,7 +4263,7 @@
 	description = "A chicken before it could become a chicken."
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#FFFACD" //LEMONCHIFFON
+	color = "#ffcd42"
 
 /datum/reagent/drink/gatormix
 	name = "Gator Mix"
