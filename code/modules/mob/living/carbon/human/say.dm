@@ -21,7 +21,7 @@
 
 //	if(dna)
 //		return "[dna.species.say_mod], \"[text]\"";
-
+	handle_spaghetti(20) // 20% chance to spill spaghetti when saying something, if in pockets -kanef
 	return "says, [text]";
 
 // Use this for an override of the spoken verb.

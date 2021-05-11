@@ -625,7 +625,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		mob.adjustBruteLoss(-get_damage)
 		mob.adjustToxLoss(max(1,get_damage * multiplier / 5))
 
-
 /datum/disease2/effect/cyborg_limbs
 	name = "Metallica Syndrome"
 	desc = "Rapidly replaces some organic tissue in the body, causing limbs and other organs to become robotic."
