@@ -1635,8 +1635,7 @@ Thanks.
 		"fire_stacks",
 		"specialsauce",
 		"silent",
-		"is_ventcrawling",
-		"suiciding")
+		"is_ventcrawling")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

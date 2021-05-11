@@ -220,8 +220,8 @@
 
 		log_attack("<span class='danger'>[key_name(src)] has sealed itself via the suicide verb.</span>")
 
-	if(suicide_set)
-		suiciding = TRUE
+	if(suicide_set && mind)
+		mind.suiciding = TRUE
 
 	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
 	death()

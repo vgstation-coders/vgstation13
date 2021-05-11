@@ -104,7 +104,8 @@
 
 /obj/item/potion/healing/imbibe_effect(mob/living/user)
 	user.rejuvenate(1)
-	user.suiciding = 0
+	if(user.mind)
+		user.mind.suiciding = 0
 
 /obj/item/potion/mana
 	name = "potion of mana"
