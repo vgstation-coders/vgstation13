@@ -431,6 +431,7 @@
 #define IRONROT			"ironrot"
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
+#define SPAGHETTI		"spaghetti"
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
 #define DIABEETUSOL		"diabeetusol"

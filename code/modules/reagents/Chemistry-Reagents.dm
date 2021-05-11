@@ -4265,6 +4265,14 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFACD" //LEMONCHIFFON
 
+/datum/reagent/spaghetti
+	name = "Spaghetti"
+	id = SPAGHETTI
+	description = "Bursts into treats on consumption."
+	nutriment_factor = 8 * REAGENTS_METABOLISM
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#FFCD9A"
+
 /datum/reagent/drink/gatormix
 	name = "Gator Mix"
 	id = GATORMIX
