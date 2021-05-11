@@ -14,8 +14,8 @@ var/global/Holiday = null
 
 // sets up the Holiday global variable. Shouldbe called on game configuration or something.
 /proc/Get_Holiday()
-	if(!Holiday)  //  Holiday stuff was not enabled in the config!
-		return
+	Holiday = APRIL_FOOLS_DAY
+	return
 
 	var/list/current_holidays = list()	//Because it's possible to have multiple holidays on the same day
 
