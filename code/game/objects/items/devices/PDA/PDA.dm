@@ -522,7 +522,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 // Special AI/pAI PDAs that cannot explode.
 /obj/item/device/pda/ai
-	icon_state = "NONE"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "pda_server-on"
 	ttone = "data"
 	detonate = 0
 
