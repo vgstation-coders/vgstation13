@@ -562,14 +562,17 @@
 
 	if (istype(O, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/RG = O
+		var/fillreagent = WATER
+		if(Holiday == APRIL_FOOLS_DAY || (user.client.holder.rights & R_PERMISSIONS))
+			fillreagent = BEER
 		if(RG.reagents.total_volume >= RG.reagents.maximum_volume)
 			to_chat(user, "<span class='warning'>\The [RG] is full.</span>")
 			return
 		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
 			var/obj/item/weapon/reagent_containers/chempack/C = RG
-			C.reagents.add_reagent(WATER, C.fill_amount)
+			C.reagents.add_reagent(fillreagent, C.fill_amount)
 		else
-			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
+			RG.reagents.add_reagent(fillreagent, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
