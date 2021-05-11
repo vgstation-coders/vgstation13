@@ -4273,6 +4273,22 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFCD9A"
 
+/datum/reagent/spaghetti/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(prob(80))
+			H.apply_effect(1, STUTTER)
+		else
+			if(prob(50))
+				H.Mute(1)
+			else
+				visible_message("<span class='notice'>[src] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
+				new /obj/effect/decal/cleanable/spaghetti_spill(H.loc)
+            	playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+
 /datum/reagent/drink/gatormix
 	name = "Gator Mix"
 	id = GATORMIX
