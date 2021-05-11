@@ -4286,7 +4286,8 @@
 				H.Mute(1)
 			else
 				H.visible_message("<span class='notice'>[src] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
-				new /obj/effect/decal/cleanable/spaghetti_spill(H.loc)
+				var/turf/T = get_turf(M)
+				new /obj/effect/decal/cleanable/spaghetti_spill(T)
 				playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 /datum/reagent/drink/gatormix
