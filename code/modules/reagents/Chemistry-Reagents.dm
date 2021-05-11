@@ -4287,7 +4287,7 @@
 			else
 				visible_message("<span class='notice'>[src] spills their spaghetti.</span>","<span class='notice'>You spill your spaghetti.</span>")
 				new /obj/effect/decal/cleanable/spaghetti_spill(H.loc)
-            	playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+				playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 /datum/reagent/drink/gatormix
 	name = "Gator Mix"
