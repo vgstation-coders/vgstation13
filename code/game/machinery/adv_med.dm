@@ -379,7 +379,8 @@
 		"tg_diseases_list" = H.viruses,
 		"lung_ruptured" = H.is_lung_ruptured(),
 		"external_organs" = H.organs.Copy(),
-		"internal_organs" = H.internal_organs.Copy()
+		"internal_organs" = H.internal_organs.Copy(),
+		"virus2_data" = H.virus2.Copy(),
 		)
 	return health_data
 
@@ -398,7 +399,33 @@
 			aux = "Dead"
 	dat += text("[]\tHealth %: [] ([])</font><br>", (occ["health"] > 50 ? "<font color='blue'>" : "<font color='red'>"), occ["health"], aux)
 	if(occ["virus_present"])
-		dat += "<font color='red'>Pathogen detected in blood stream.</font><br>"
+		dat += "<font color='red'>[occ["virus_present"]] pathogen(s) detected in blood stream.</font><br>"
+		var/list/virus2 = occ["virus2_data"]
+		// High quality
+		if (efficiency > 2)
+			var/i = 1
+			for (var/id in virus2)
+				var/datum/disease2/disease/D = virus2[id]
+				dat += "Pathogen #[i]: "
+				var/list/effects_text = list()
+				for (var/datum/disease2/effect/E in D.effects)
+					effects_text += effect_code_to_text[E.badness]
+				dat += english_list(effects_text, "UNKNOWN", " - ", " - ", " - ")
+				dat += ". </br/>"
+				i++
+		else // Basic thing
+			var/total_harmful = 0
+			var/total_deadly = 0
+			for (var/id in virus2)
+				var/datum/disease2/disease/D = virus2[id]
+				for (var/datum/disease2/effect/E in D.effects)
+					switch (E.badness)
+						if (EFFECT_DANGER_HARMFUL)
+							total_harmful++
+						if (EFFECT_DANGER_DEADLY)
+							total_deadly++
+			dat += "[total_harmful > 0 ? "<span class='red'>[total_harmful]</span>" : total_harmful] harmful symptom(s) - [total_deadly > 0 ? "<span class='red'>[total_deadly]</span>" : total_deadly] deadly symptom(s). <br/>"
+
 	dat += text("[]\t-Brute Damage %: []</font><br>", (occ["bruteloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["bruteloss"])
 	dat += text("[]\t-Respiratory Damage %: []</font><br>", (occ["oxyloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["oxyloss"])
 	dat += text("[]\t-Toxin Content %: []</font><br>", (occ["toxloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["toxloss"])

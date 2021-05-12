@@ -1015,6 +1015,22 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define EFFECT_DANGER_HARMFUL	"4"
 #define EFFECT_DANGER_DEADLY	"5"
 
+#define EFFECT_DANGER_HELPFUL_TXT "<span class='good'>Helpful</span>"
+#define EFFECT_DANGER_FLAVOR_TXT "Benign"
+#define EFFECT_DANGER_ANNOYING_TXT "Annoyance"
+#define EFFECT_DANGER_HINDERANCE_TXT "<span class='notice'>Hinderance</span>"
+#define EFFECT_DANGER_HARMFUL_TXT "<span class='red'>Harmful</span>"
+#define EFFECT_DANGER_DEADLY_TXT "<span class='danger'>DEADLY</span>"
+
+var/list/effect_code_to_text = list(
+	EFFECT_DANGER_HELPFUL = EFFECT_DANGER_HELPFUL_TXT,
+	EFFECT_DANGER_FLAVOR = EFFECT_DANGER_FLAVOR_TXT,
+	EFFECT_DANGER_ANNOYING = EFFECT_DANGER_ANNOYING_TXT,
+	EFFECT_DANGER_HINDERANCE = EFFECT_DANGER_HINDERANCE_TXT,
+	EFFECT_DANGER_HARMFUL = EFFECT_DANGER_HARMFUL_TXT,
+	EFFECT_DANGER_DEADLY = EFFECT_DANGER_DEADLY_TXT,
+)
+
 #define	ANTIGEN_BLOOD	"blood"
 #define	ANTIGEN_COMMON	"common"
 #define	ANTIGEN_RARE	"rare"
