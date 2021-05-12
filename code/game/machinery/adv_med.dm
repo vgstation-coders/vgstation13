@@ -424,7 +424,7 @@
 							total_harmful++
 						if (EFFECT_DANGER_DEADLY)
 							total_deadly++
-			dat += "[total_harmful > 0 ? "<span class='red'>[total_harmful]</span>" : total_harmful] harmful symptom(s) - [total_deadly > 0 ? "<span class='red'>[total_deadly]</span>" : total_deadly] deadly symptom(s). <br/>"
+			dat += "[total_harmful > 0 ? "<span class='warning'>[total_harmful]</span>" : total_harmful] harmful symptom(s) - [total_deadly > 0 ? "<span class='danger'>[total_deadly]</span>" : total_deadly] deadly symptom(s). <br/>"
 
 	dat += text("[]\t-Brute Damage %: []</font><br>", (occ["bruteloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["bruteloss"])
 	dat += text("[]\t-Respiratory Damage %: []</font><br>", (occ["oxyloss"] < 60 ? "<font color='blue'>" : "<font color='red'>"), occ["oxyloss"])
