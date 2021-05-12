@@ -218,7 +218,7 @@
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
 	if(adjusted_contents && (adjusted_contents % 7 == 0) && !is_full()) //If we have a full row of items, but we still have leftover space... Show our "xtra" icon
 		xtra.invisibility = 0
-		xtra.name = "[max_combined_w_class - get_sum_w_class()] volume remaining."
+		xtra.name = "[max_combined_w_class - get_sum_w_class()] volume remaining. Click here to store items."
 	else
 		xtra.invisibility = 101
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
