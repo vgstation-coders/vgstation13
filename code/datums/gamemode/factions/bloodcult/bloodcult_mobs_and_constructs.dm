@@ -461,6 +461,17 @@
 /mob/living/simple_animal/astral_projection/Life()
 	. = ..()
 
+	if (anchor)
+		var/turf/T = get_turf(anchor)
+		var/turf/U = get_turf(src)
+		if (T.z != U.z)
+			to_chat(src, "<span class='warning'>You cannot sustain the astral projection at such a distance.</span>")
+			death()
+			return
+	else
+		death()
+		return
+
 	//convertibility HUD
 	if (!tangibility && client)
 		client.images -= propension
@@ -689,7 +700,7 @@ var/list/astral_clothing_cache = list()
 			if(SP.name in body.wear_suit.species_fit) //Allows clothes to display differently for multiple species
 				if(SP.wear_suit_icons && has_icon(SP.wear_suit_icons, body.wear_suit.icon_state))
 					suit_icon = SP.wear_suit_icons
-			if((gender == FEMALE) && (body.wear_suit.clothing_flags & GENDERFIT)) //genderfit
+			if((body.gender == FEMALE) && (body.wear_suit.clothing_flags & GENDERFIT)) //genderfit
 				if(has_icon(suit_icon,"[body.wear_suit.icon_state]_f"))
 					suit_icon_state = "[body.wear_suit.icon_state]_f"
 
