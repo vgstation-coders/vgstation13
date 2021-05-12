@@ -553,7 +553,8 @@
 	src.xtra = new /obj/abstract/screen/storage
 	src.xtra.master = src
 	src.xtra.icon_state = "xtra_inv"
-	src.xtra.layer = HUD_ITEM_LAYER
+	src.xtra.layer = HUD_BASE_LAYER
+	src.xtra.alpha = 210
 	orient2hud()
 
 /obj/item/weapon/storage/emp_act(severity)
