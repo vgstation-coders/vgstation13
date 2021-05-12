@@ -338,6 +338,7 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
+var/list/astral_projections = list()
 
 /mob/living/simple_animal/astral_projection
 	name = "astral projection"
@@ -396,6 +397,8 @@
 
 /mob/living/simple_animal/astral_projection/New()
 	..()
+	astral_projections += src
+
 	incorporeal_appearance = image('icons/mob/mob.dmi',"blank")
 	tangible_appearance = image('icons/mob/mob.dmi',"blank")
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
@@ -429,6 +432,7 @@
 
 
 /mob/living/simple_animal/astral_projection/Destroy()
+	astral_projections -= src
 	//the projection has ended, let's return to our body
 	if (anchor && anchor.stat != DEAD && client)
 		if (key)
@@ -502,6 +506,10 @@
 //no pulling stuff around
 /mob/living/simple_animal/astral_projection/start_pulling(var/atom/movable/AM)
 	return
+
+//no dragging shit into disposals and whatnot
+/mob/living/simple_animal/astral_projection/canMouseDrag()
+	return FALSE
 
 //no resting
 /mob/living/simple_animal/astral_projection/rest_action()
