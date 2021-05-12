@@ -496,11 +496,19 @@
 /mob/living/simple_animal/astral_projection/rest_action()
 	return
 
+//and certainly no punching, you're barely more than a ghost
+/mob/living/simple_animal/astral_projection/unarmed_attack_mob(mob/living/target)
+	return
+
 //bullets instantly end us
 /mob/living/simple_animal/astral_projection/bullet_act(var/obj/item/projectile/P)
 	if (tangibility)
 		death()
 		return PROJECTILE_COLLISION_MISS//the bullet keeps moving past it
+
+//so does a suicide attempt
+/mob/living/simple_animal/astral_projection/attempt_suicide(forced = 0, suicide_set = 1)
+	death()
 
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
 	if (!body)
@@ -516,7 +524,7 @@
 
 	if (ishuman(body))
 		var/mob/living/carbon/human/H = body
-		overlays += get_human_clothing(body)
+		overlays += crop_human_suit_and_uniform(body)
 		overlays += H.obj_overlays[ID_LAYER]
 		overlays += H.obj_overlays[EARS_LAYER]
 		overlays += H.obj_overlays[GLASSES_LAYER]
@@ -610,8 +618,8 @@
 
 var/list/astral_clothing_cache = list()
 //returns an image featuring the mob's uniform and suit with its legs faded out
-//might be nice later to make a version of this proc for regular ghosts
-/mob/living/simple_animal/astral_projection/proc/get_human_clothing(var/mob/living/carbon/human/body)
+//might be nice later to make a version of this proc for regular ghosts, but for now cultified ghosts will use it as well
+/proc/crop_human_suit_and_uniform(var/mob/living/carbon/human/body)
 	if (!body)
 		return
 

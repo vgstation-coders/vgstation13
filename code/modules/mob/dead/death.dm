@@ -21,9 +21,9 @@
 				overlays += H.overlays_standing[18]//Head
 				overlays += H.overlays_standing[19]//Handcuffs
 				*/
+				overlays += crop_human_suit_and_uniform(mind.current)
 				overlays += H.obj_overlays[ID_LAYER]
 				overlays += H.obj_overlays[EARS_LAYER]
-				overlays += H.obj_overlays[SUIT_LAYER]
 				overlays += H.obj_overlays[GLASSES_LAYER]
 				overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
 				overlays += H.obj_overlays[BELT_LAYER]
