@@ -171,7 +171,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		holder = perp.hud_list[ID_HUD]
 		if(!holder)
 			continue
-		holder.icon_state = perp.cardjob
+		holder.icon_state = "hud[ckey(perp.cardjob)]"
 		C.images += holder
 
 	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))

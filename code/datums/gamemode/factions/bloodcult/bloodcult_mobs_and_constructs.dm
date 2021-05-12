@@ -379,19 +379,20 @@
 	incorporeal_move = INCORPOREAL_GHOST
 	alpha = 127
 
-	var/tangibility = FALSE
+	var/tangibility = FALSE//keeps track of whether we're in "ghost" form or "slightly less ghost" form
 
-	var/mob/living/anchor
+	var/mob/living/anchor//the cultist's original body
 	var/image/incorporeal_appearance
 	var/image/tangible_appearance
+
+	var/time_last_speech = 0//speech bubble cooldown
 
 	//sechud stuff
 	var/cardjob = "hudunknown"
 
-	//ghost stuff
-	var/next_poltergeist = 0
-	var/manual_poltergeist_cooldown
-	var/time_last_speech = 0
+	//convertibility HUD
+	var/list/propension = list()
+
 
 /mob/living/simple_animal/astral_projection/New()
 	..()
@@ -400,11 +401,16 @@
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
 	see_in_dark = 100
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
-
+	add_spell(new /spell/astral_return, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	add_spell(new /spell/astral_toggle, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /mob/living/simple_animal/astral_projection/Login()
 	..()
 	client.CAN_MOVE_DIAGONALLY = 1
+
+	if (!tangibility)
+		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
+		update_fullscreen_alpha("astralborder", 255, 5)
 
 	//astral projections can identify cultists
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -435,6 +441,7 @@
 							M.playsound_local(loc, get_sfx("disappear_sound"), 75, 0, -2)
 			anchor.key = key
 			to_chat(anchor, "<span class='notice'>You reconnect with your body.</span>")
+			anchor.ajourn = null
 	//if our body was somehow already destroyed however, we'll become a shade right here
 	else if(client)
 		var/turf/T = get_turf(src)
@@ -451,20 +458,49 @@
 	sleep(20)
 	..()
 
+/mob/living/simple_animal/astral_projection/Life()
+	. = ..()
+
+	//convertibility HUD
+	if (!tangibility && client)
+		client.images -= propension
+		propension.len = 0
+
+		for(var/mob/living/carbon/C in range(client.view+DATAHUD_RANGE_OVERHEAD, get_turf(src)))
+			C.update_convertibility()
+			propension += C.hud_list[CONVERSION_HUD]
+
+		client.images += propension
+
 /mob/living/simple_animal/astral_projection/death(var/gibbed = FALSE)
 	spawn()
 		qdel(src)
 
+/mob/living/simple_animal/astral_projection/examine(mob/user)
+	if (!tangibility)
+		if ((user == src) && anchor)
+			to_chat(user, "<span class='notice'>You check yourself to see how others would see you were you tangible:</span>")
+			anchor.examine(user)
+		else if (iscultist(user))
+			to_chat(user, "<span class='notice'>It's an astral projection.</span>")
+		else
+			to_chat(user, "<span class='sinister'>Wait something's not right here.</span>")//it's a g-g-g-g-ghost!
+	else if (anchor)
+		anchor.examine(user)//examining the astral projection alone won't be enough to see through it, although the user might want to make sure they cannot be identified first.
+
+//no pulling stuff around
 /mob/living/simple_animal/astral_projection/start_pulling(var/atom/movable/AM)
 	return
 
+//no resting
+/mob/living/simple_animal/astral_projection/rest_action()
+	return
+
+//bullets instantly end us
 /mob/living/simple_animal/astral_projection/bullet_act(var/obj/item/projectile/P)
 	if (tangibility)
 		death()
 		return PROJECTILE_COLLISION_MISS//the bullet keeps moving past it
-
-/mob/living/simple_animal/astral_projection/rest_action()
-	return
 
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
 	if (!body)
@@ -473,6 +509,8 @@
 	anchor = body
 
 	tangible_appearance = body.appearance
+
+	desc = body.desc
 
 	overlays.len = 0
 
@@ -488,7 +526,6 @@
 		overlays += H.obj_overlays[HEAD_LAYER]
 		overlays += H.obj_overlays[HANDCUFF_LAYER]
 
-	incorporeal_appearance = appearance
 
 	key = body.key
 
@@ -505,9 +542,11 @@
 				name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
 	real_name = name
 
+	incorporeal_appearance = appearance
+
 	var/obj/item/weapon/card/id/card = body.get_id_card()
 	if(card)
-		cardjob = "hud[body.ckey(card.GetJobName())]"
+		cardjob = card.GetJobName()
 
 	mind = body.mind	//we don't transfer the mind but we keep a reference to it.
 
@@ -520,7 +559,12 @@
 		incorporeal_move = 1
 		flying = 1
 		flags = HEAR | TIMELESS | INVULNERABLE
+		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 		speed = 0.5
+		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
+		update_fullscreen_alpha("astralborder", 255, 5)
+		var/obj/effect/afterimage/A = new (loc,anchor,10)
+		A.dir = dir
 	else
 		density = 1
 		appearance = tangible_appearance
@@ -528,31 +572,20 @@
 		incorporeal_move = 0
 		flying = 0
 		flags = HEAR | PROXMOVE
+		see_invisible = SEE_INVISIBLE_CULTJAUNT//still can see some hidden things
 		speed = 1
+		clear_fullscreen("astralborder", animate = 0)
+		alpha = 0
+		animate(src, alpha = 255, time = 10)
+		if (client)
+			client.images -= propension
 
 	tangibility = !tangibility
 
-// Check for last poltergeist activity.
-/mob/living/simple_animal/astral_projection/proc/can_poltergeist(var/start_cooldown=1)
-	if(world.time >= next_poltergeist)
-		if(start_cooldown)
-			start_poltergeist_cooldown()
-		return TRUE
-	return FALSE
-
-/mob/living/simple_animal/astral_projection/proc/start_poltergeist_cooldown()
-	if(isnull(manual_poltergeist_cooldown))
-		next_poltergeist=world.time + global_poltergeist_cooldown
-	else
-		next_poltergeist=world.time + manual_poltergeist_cooldown
-
-/mob/living/simple_animal/astral_projection/proc/reset_poltergeist_cooldown()
-	next_poltergeist=0
-
-
 //saycode
-/mob/living/simple_animal/astral_projection/say(var/message)
-	. = ..(message, "[tangibility ? "" : "C"]")
+/mob/living/simple_animal/astral_projection/say(var/message, bubble_type)
+	. = ..(tangibility ? "[message]" : "..[message]",tangibility ? "" : "C")
+	//adding a few dots before the message when intangible so the message isn't truncated when formated for cult chat
 
 	if(tangibility && ishuman(anchor) && config.voice_noises && world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
@@ -560,37 +593,24 @@
 			if(!O.is_deaf() && O.client)
 				O.client.handle_hear_voice(src)
 
+
+/mob/living/simple_animal/astral_projection/get_message_mode(message)
+	if(!tangibility)
+		return MODE_CULTCHAT//chatting while intangible always sends messages to cult chat
+	else
+		return ..()
+
 /mob/living/simple_animal/astral_projection/cult_chat_check(setting)
 	if(!mind)
 		return
-	if(find_active_faction_by_member(iscultist(src)))
+	if(find_active_faction_by_member(iscultist(src)))//can also use cult chat while tangible when using :x
 		return 1
-	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
-		return 1
-
-#define SPEAK_OVER_GENERAL_CULT_CHAT 0
-#define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
-#define HEAR_CULT_CHAT 2
-
-/mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
-	if(..())
-		return 1
-	if(message_mode == MODE_HEADSET && cult_chat_check(SPEAK_OVER_GENERAL_CULT_CHAT))
-		var/turf/T = get_turf(src)
-		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
-		for(var/mob/M in mob_list)
-			if(M.cult_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
-				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
-		return 1
-
-#undef SPEAK_OVER_GENERAL_CULT_CHAT
-#undef SPEAK_OVER_CHANNEL_INTO_CULT_CHAT
-#undef HEAR_CULT_CHAT
 
 
 
 var/list/astral_clothing_cache = list()
 //returns an image featuring the mob's uniform and suit with its legs faded out
+//might be nice later to make a version of this proc for regular ghosts
 /mob/living/simple_animal/astral_projection/proc/get_human_clothing(var/mob/living/carbon/human/body)
 	if (!body)
 		return

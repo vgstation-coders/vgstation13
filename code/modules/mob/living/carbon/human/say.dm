@@ -98,6 +98,11 @@
 		else
 			return real_name
 
+	if(istype(head, /obj/item/clothing/head/culthood))
+		var/obj/item/clothing/head/culthood/C = head
+		if(C.anon_mode)
+			return "Unknown"
+
 	if(mind) // monkeyhumans exist, don't descriminate
 		var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
 		if(changeling && changeling.mimicing)
