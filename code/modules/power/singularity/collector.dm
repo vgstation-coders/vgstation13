@@ -100,7 +100,7 @@ var/global/list/rad_collectors = list()
 		disconnect_from_network()
 		last_power = 0
 
-/obj/machinery/power/am_control_unit/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+/obj/machinery/power/rad_collector/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(istype,(AM,/obj/item/weapon/tank/plasma))
 		if(!src.anchored || src.P)
 			return FALSE
