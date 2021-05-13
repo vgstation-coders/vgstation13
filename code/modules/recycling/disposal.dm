@@ -89,6 +89,15 @@
 		if(1)
 			qdel(src)
 
+/obj/machinery/disposal/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype,(AM,/obj/item))
+		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
+			return FALSE
+		var/obj/item/I = AM
+		I.forceMove(src)
+		update_icon()
+		return TRUE
+	return FALSE
 
 // attack by item places it in to disposal
 /obj/machinery/disposal/attackby(var/obj/item/I, var/mob/user)
