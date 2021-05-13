@@ -96,7 +96,7 @@
 		if(user)
 			user.visible_message("\The [user] shorts out the lock on the interface on \the [src].","<span class='warning'>You short out the lock.</span>")
 
-/obj/machinery/power/am_control_unit/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+/obj/machinery/power/rust_fuel_injector/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(istype,(AM,/obj/item/weapon/fuel_assembly) && !cur_assembly)
 		if(emergency_insert_ready)
 			cur_assembly = AM
