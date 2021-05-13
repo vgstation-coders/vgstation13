@@ -109,7 +109,7 @@
 	return
 
 /obj/machinery/power/am_control_unit/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if(istype,(AM,/obj/item/weapon/am_containment))
+	if(istype(AM,/obj/item/weapon/am_containment))
 		if(fueljar)
 			return FALSE
 		var/obj/item/weapon/am_containment/AMC = AM
