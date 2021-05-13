@@ -101,7 +101,7 @@ var/global/list/rad_collectors = list()
 		last_power = 0
 
 /obj/machinery/power/rad_collector/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if(istype,(AM,/obj/item/weapon/tank/plasma))
+	if(istype(AM,/obj/item/weapon/tank/plasma))
 		if(!src.anchored || src.P)
 			return FALSE
 		var/obj/item/weapon/tank/plasma/PL = AM

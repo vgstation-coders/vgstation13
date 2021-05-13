@@ -90,7 +90,7 @@
 			qdel(src)
 
 /obj/machinery/disposal/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if(istype,(AM,/obj/item))
+	if(istype(AM,/obj/item))
 		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
 			return FALSE
 		var/obj/item/I = AM
