@@ -108,6 +108,16 @@
 		playsound(src, 'sound/effects/bang.ogg', 50, 1)
 	return
 
+/obj/machinery/power/am_control_unit/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype,(AM,/obj/item/weapon/am_containment))
+		if(fueljar)
+			return FALSE
+		var/obj/item/weapon/am_containment/AMC = AM
+		fueljar = AMC
+		AMC.forceMove(src)
+		message_admins("AME loaded with fuel by a conveyor at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+		return TRUE
+	return FALSE
 
 /obj/machinery/power/am_control_unit/emp_act(severity)
 	switch(severity)
