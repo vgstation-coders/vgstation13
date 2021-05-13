@@ -104,14 +104,12 @@ var/global/list/rnd_machines = list()
 			return FALSE
 
 		var/obj/item/stack/sheet/stack = AM
-		var/amount = round(input("How many sheets do you want to add? (0 - [stack.amount])") as num)//No decimals
 		if(!AM || !AM.loc)
 			return 1
 		if(!(amount > 0))
 			return 1
 	//1 So the autolathe doesn't recycle the stack.
-		if(amount > stack.amount)
-			amount = stack.amount
+		var/amount = stack.amount
 		if(max_material_storage - TotalMaterials() < (amount*stack.perunit))//Can't overfill
 			amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
 
