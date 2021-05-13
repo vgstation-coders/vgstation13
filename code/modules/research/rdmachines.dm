@@ -81,6 +81,8 @@ var/global/list/rnd_machines = list()
 		overlays += image(icon = icon, icon_state = "[base_state]_link")
 
 /obj/machinery/r_n_d/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if (busy || panel_open || disabled)
+		return FALSE
 	if(istype(AM,/obj/item/stack/sheet) && research_flags &TAKESMATIN)
 		var/obj/item/stack/sheet/S = AM
 		var/found = "" //the matID we're compatible with
