@@ -64,7 +64,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		var/obj/item/I = AM
 		if(!I.origin_tech)
 			return FALSE
-		var/list/temp_tech = ConvertReqString2List(O.origin_tech)
+		var/list/temp_tech = ConvertReqString2List(I.origin_tech)
 
 		if(temp_tech.len == 0)
 			return FALSE
