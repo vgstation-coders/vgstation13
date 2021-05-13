@@ -140,7 +140,7 @@ var/global/list/rnd_machines = list()
 		materials.addAmount(found, amount * material.cc_per_sheet)
 		spawn(ANIM_LENGTH)
 			busy = FALSE
-		src.updateUsrDialog()
+			src.updateUsrDialog()
 		return TRUE
 	return FALSE
 
