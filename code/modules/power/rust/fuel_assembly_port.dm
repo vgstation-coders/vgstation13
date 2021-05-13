@@ -13,7 +13,7 @@
 	var/opened = 1 //0=closed, 1=opened
 	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
 
-/obj/machinery/power/rust_fuel_assembly_port/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+/obj/machinery/rust_fuel_assembly_port/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(istype(AM,/obj/item/weapon/fuel_assembly) && !opened)
 		if(cur_assembly)
 			return FALSE
