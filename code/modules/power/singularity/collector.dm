@@ -104,7 +104,7 @@ var/global/list/rad_collectors = list()
 	if(istype,(AM,/obj/item/weapon/tank/plasma))
 		if(!src.anchored || src.P)
 			return FALSE
-		/obj/item/weapon/tank/plasma/PL = AM
+		var/obj/item/weapon/tank/plasma/PL = AM
 		src.P = PL
 		PL.forceMove(src)
 		update_icons()
