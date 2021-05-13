@@ -115,7 +115,7 @@
 		var/obj/item/weapon/am_containment/AMC = AM
 		fueljar = AMC
 		AMC.forceMove(src)
-		message_admins("AME loaded with fuel by [AMC.last_touched ? "[user.real_name] ([user.key])" : "a conveyor"] at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+		message_admins("AME loaded with fuel by [AMC.fingerprintslast ? "[AMC.fingerprintslast.real_name] ([AMC.fingerprintslast.key])" : "a conveyor"] at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 		visible_message("The conveyor loads an [AMC.name] into the [src.name].")
 		return TRUE
 	return FALSE
