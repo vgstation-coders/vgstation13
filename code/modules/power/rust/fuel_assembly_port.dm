@@ -18,8 +18,9 @@
 		if(cur_assembly)
 			return FALSE
 		else
-			cur_assembly = I
-			I.forceMove(src)
+			var/obj/item/weapon/fuel_assembly/FA = AM
+			cur_assembly = FA
+			FA.forceMove(src)
 			icon_state = "port1"
 			return TRUE
 	return FALSE
