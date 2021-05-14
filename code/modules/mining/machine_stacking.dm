@@ -180,6 +180,8 @@
 	update_icon()
 
 /obj/machinery/mineral/stacking_machine/process()
+	var/obj/item/stack/stack
+	var/moved = 0
 	..()
 	moved ++
 	if(moved >= max_moved)
@@ -193,9 +195,6 @@
 	broadcast_status()
 
 /obj/machinery/mineral/stacking_machine/process_inside()
-	var/obj/item/stack/stack
-	var/moved = 0
-
 	if(istype(A, /obj/item/stack))
 		var/obj/item/stack/stackA = A
 
