@@ -203,6 +203,14 @@
 
 	return add_to(O, user)
 
+/obj/machinery/processor/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	var/datum/food_processor_process/P = select_recipe(AM)
+	if (P)
+		visible_message("<span class='notice'>The [A] is put into [src].</span>")
+		A.forceMove(src)
+		return TRUE
+	return FALSE
+
 /obj/machinery/processor/proc/add_to(var/atom/movable/A, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
