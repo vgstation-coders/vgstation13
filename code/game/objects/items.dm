@@ -170,19 +170,23 @@
 /obj/item/proc/suicide_act(mob/user)
 	return
 
+/proc/wclass2text(w_class)
+	switch(w_class)
+		if(W_CLASS_TINY)
+			return "tiny"
+		if(W_CLASS_SMALL)
+			return "small"
+		if(W_CLASS_MEDIUM)
+			return "normal-sized"
+		if(W_CLASS_LARGE)
+			return "bulky"
+		if(W_CLASS_HUGE to INFINITY)
+			return "huge"
+
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
-		switch(w_class)
-			if(W_CLASS_TINY)
-				size = "tiny"
-			if(W_CLASS_SMALL)
-				size = "small"
-			if(W_CLASS_MEDIUM)
-				size = "normal-sized"
-			if(W_CLASS_LARGE)
-				size = "bulky"
-			if(W_CLASS_HUGE to INFINITY)
-				size = "huge"
+		size = wclass2text(w_class)
+
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (gender == PLURAL)
