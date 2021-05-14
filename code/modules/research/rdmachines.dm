@@ -91,13 +91,9 @@ var/global/list/rnd_machines = list()
 			if(M.sheettype==S.type)
 				found = matID
 		if(!found)
-			if(S.materials && research_flags &FAB_RECYCLER)
-				return FALSE //let the autolathe try to do it's thing
 			return FALSE
 		if(allowed_materials && allowed_materials.len)
 			if(!(found in allowed_materials))
-				if(S.materials && research_flags &FAB_RECYCLER)
-					return FALSE //let the autolathe try to do it's thing
 				return FALSE
 
 		if (TotalMaterials() + S.perunit > max_material_storage)
