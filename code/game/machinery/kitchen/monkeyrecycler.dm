@@ -44,6 +44,22 @@
 		return 1
 	process_monkey(O, user)
 
+/obj/machinery/monkey_recycler/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(ismonkey(AM))
+		var/mob/living/carbon/monkey/target = AM
+		if(target.stat == CONSCIOUS && !can_recycle_live)
+			return FALSE
+		if(target.abiotic())
+			return FALSE
+		else
+			qdel(target)
+			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
+			use_power(500)
+			src.grinded++
+			visible_message("<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
+			return TRUE
+	return FALSE
+
 /obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
 	if(istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
