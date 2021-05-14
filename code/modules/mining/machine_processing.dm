@@ -285,11 +285,6 @@
 
 	var/credits = 0 //Amount of money, set to -1 to disable the $ amount showing in the menu (recycling, for example)
 
-/obj/machinery/mineral/processing_unit/Destroy()
-	. = ..()
-	qdel(mover)
-	mover = null
-
 /obj/machinery/mineral/processing_unit/power_change()
 	. = ..()
 	update_icon()
@@ -328,8 +323,6 @@
 	)
 
 	RefreshParts()
-
-	mover = new
 
 	ore = new
 
