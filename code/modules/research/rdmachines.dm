@@ -135,7 +135,7 @@ var/global/list/rnd_machines = list()
 		spawn(ANIM_LENGTH)
 			busy = FALSE
 			src.updateUsrDialog()
-		return TRUE
+			return TRUE
 	return FALSE
 
 /obj/machinery/r_n_d/blob_act()
