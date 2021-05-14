@@ -274,17 +274,12 @@
 	light_range_on = 3
 	light_color = LIGHT_COLOR_ORANGE
 
-	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
-
 	var/frequency = FREQ_DISPOSAL //Same as conveyors
 	var/datum/radio_frequency/radio_connection
 
 	var/datum/materials/ore
 	var/list/recipes[0]
 	var/on = 0 //0 = off, 1 =... oh you know!
-
-	var/in_dir = NORTH
-	var/out_dir = SOUTH
 
 	var/sheets_per_tick = 100
 

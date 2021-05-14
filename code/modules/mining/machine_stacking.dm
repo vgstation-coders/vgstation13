@@ -131,11 +131,6 @@
 //	var/stk_types = list()
 //	var/stk_amt   = list()
 
-	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
-
-	var/in_dir = NORTH
-	var/out_dir = SOUTH
-
 	var/list/stacks = list()
 
 	var/stack_amt = 50 //amount to stack before releassing.
@@ -167,8 +162,6 @@
 	)
 
 	RefreshParts()
-
-	mover = new
 
 	if(ticker)
 		initialize()
@@ -336,8 +329,3 @@
 		//Honestly I didn't expect that to fit in, what, 10 lines of code?
 
 	return ..()
-
-/obj/machinery/mineral/stacking_machine/Destroy()
-	qdel(mover)
-	mover = null
-	. = ..()

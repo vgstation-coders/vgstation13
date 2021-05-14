@@ -7,15 +7,14 @@
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-	var/atom/movable/mover //see ore processing_unit, it's for input/output
 	starting_materials = list() //makes the new empty datum
 	var/coins_per_sheet = 5 //Related to part quality
 	var/newCoins = 0   //how many coins the machine made last run
 	var/processing = 0
 	var/chosen = null //which material will be used to make coins
 	var/coinsToProduce = 10
-	var/in_dir = WEST // Sheets go in
-	var/out_dir = EAST //Coins come out.
+	in_dir = WEST // Sheets go in
+	out_dir = EAST //Coins come out.
 
 /obj/machinery/mineral/mint/New()
 	..()
@@ -229,11 +228,6 @@
 			coinsToProduce = temp_coins
 	src.updateUsrDialog()
 	return
-
-/obj/machinery/mineral/mint/Destroy()
-	qdel(mover)
-	mover = null
-	..()
 
 /obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(..())
