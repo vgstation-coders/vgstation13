@@ -131,6 +131,8 @@
 //	var/stk_types = list()
 //	var/stk_amt   = list()
 
+	allowed_types = list(/obj/item/stack)
+
 	var/list/stacks = list()
 
 	var/stack_amt = 50 //amount to stack before releassing.
@@ -178,38 +180,10 @@
 	update_icon()
 
 /obj/machinery/mineral/stacking_machine/process()
-	var/turf/in_T = get_step(src, in_dir)
-	var/turf/out_T = get_step(src, out_dir)
-
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
-		return
-
-	var/obj/item/stack/stack
-	var/moved = 0
-	for(var/atom/movable/A in in_T.contents)
-		if(A.anchored)
-			continue
-
-		if(istype(A, /obj/item/stack))
-			var/obj/item/stack/stackA = A
-
-			if(!("[stackA.type]" in stacks))
-				stack = new stackA.type(src)
-				stack.amount = stackA.amount
-			else
-				stack = stacks["[stackA.type]"]
-				stack.amount += stackA.amount
-
-			stacks["[stackA.type]"] = stack
-			qdel(stackA)
-		//else if (istype(O, /obj/item/stack/ore/slag))
-		//	qdel(O)
-		else
-			A.forceMove(out_T)
-
-		moved ++
-		if(moved >= max_moved)
-			break
+	..()
+	moved ++
+	if(moved >= max_moved)
+		break
 
 	for(var/typepath in stacks)
 		stack = stacks[typepath]
@@ -217,6 +191,23 @@
 			release_stack(typepath)
 
 	broadcast_status()
+
+/obj/machinery/mineral/stacking_machine/process_inside()
+	var/obj/item/stack/stack
+	var/moved = 0
+
+	if(istype(A, /obj/item/stack))
+		var/obj/item/stack/stackA = A
+
+		if(!("[stackA.type]" in stacks))
+			stack = new stackA.type(src)
+			stack.amount = stackA.amount
+		else
+			stack = stacks["[stackA.type]"]
+			stack.amount += stackA.amount
+
+		stacks["[stackA.type]"] = stack
+		qdel(stackA)
 
 /obj/machinery/mineral/stacking_machine/proc/release_stack(var/typepath, var/forced = 0)
 	if(!(typepath in stacks)) //What, we don't even have this stack
