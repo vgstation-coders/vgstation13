@@ -208,8 +208,8 @@
 		return FALSE
 	var/datum/food_processor_process/P = select_recipe(AM)
 	if (P)
-		visible_message("<span class='notice'>The [A] is put into [src].</span>")
-		A.forceMove(src)
+		visible_message("<span class='notice'>The [AM] is put into [src].</span>")
+		AM.forceMove(src)
 		return TRUE
 	else if(istype(AM,/obj/item/weapon/storage/bag/plants))
 		if(src.processing)
