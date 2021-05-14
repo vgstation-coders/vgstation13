@@ -28,23 +28,8 @@
 	)
 	RefreshParts()
 
-/obj/machinery/mineral/mint/process()
-	if(stat & (NOPOWER|BROKEN)) //It still moves sheets when unbolted otherwise.
-		return 0
-	var/turf/in_T = get_step(src, in_dir)
-	var/turf/out_T = get_step(src, out_dir)
-
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
-		return
-
-	for(var/atom/movable/A in in_T)
-		if(A.anchored)
-			continue
-
-		if(!istype(A, /obj/item/stack/sheet))//Sheets only
-			A.forceMove(out_T)
-			continue
-
+/obj/machinery/mineral/mint/process_inside(atom/movable/A)
+	if(istype(A,/obj/item/stack/sheet)
 		var/obj/item/stack/sheet/O = A
 
 		for(var/sheet_id in materials.storage)
