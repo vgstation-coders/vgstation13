@@ -274,6 +274,8 @@
 	light_range_on = 3
 	light_color = LIGHT_COLOR_ORANGE
 
+	allowed_types = list(/obj/item/stack/ore) //Does nothing for now, functions are a mess in this
+
 	var/frequency = FREQ_DISPOSAL //Same as conveyors
 	var/datum/radio_frequency/radio_connection
 
