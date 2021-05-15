@@ -9,6 +9,9 @@
 	density = 1
 	anchored = 1
 	allowed_types = list(/obj/item)
+	
+	var/selectable_types = list(/obj/item)
+	var/selected_type = /obj/item
 
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
