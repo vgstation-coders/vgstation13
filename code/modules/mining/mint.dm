@@ -29,7 +29,7 @@
 	RefreshParts()
 
 /obj/machinery/mineral/mint/process_inside(atom/movable/A)
-	if(istype(A,/obj/item/stack/sheet)
+	if(istype(A,/obj/item/stack/sheet))
 		var/obj/item/stack/sheet/O = A
 
 		for(var/sheet_id in materials.storage)
