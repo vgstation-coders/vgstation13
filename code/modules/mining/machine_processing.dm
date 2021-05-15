@@ -275,6 +275,7 @@
 	light_color = LIGHT_COLOR_ORANGE
 
 	allowed_types = list(/obj/item/stack/ore) //Does nothing for now, functions are a mess in this
+	max_moved = 100
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors
 	var/datum/radio_frequency/radio_connection
@@ -282,8 +283,6 @@
 	var/datum/materials/ore
 	var/list/recipes[0]
 	var/on = 0 //0 = off, 1 =... oh you know!
-
-	var/sheets_per_tick = 100
 
 	var/credits = 0 //Amount of money, set to -1 to disable the $ amount showing in the menu (recycling, for example)
 
@@ -304,7 +303,7 @@
 	for(var/obj/item/weapon/stock_parts/matter_bin/A in component_parts)
 		i += A.rating
 
-	sheets_per_tick = initial(sheets_per_tick) * (i / 2)
+	max_moved = initial(max_moved) * (i / 2)
 
 	i = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/A in component_parts)
@@ -384,7 +383,7 @@
 			continue
 
 		sheets_this_tick++
-		if(sheets_this_tick >= sheets_per_tick)
+		if(sheets_this_tick >= max_moved)
 			break
 
 		if(!istype(A, /obj/item/stack/ore) || !A.materials) // Check if it's an ore
@@ -423,10 +422,10 @@
 			drop_stack(R.yieldtype, out_T)
 
 			sheets_this_tick++
-			if(sheets_this_tick >= sheets_per_tick)
+			if(sheets_this_tick >= max_moved)
 				break
 
-		if(sheets_this_tick >= sheets_per_tick) //Second one is so it cancels the for loop when the while loop gets broken.
+		if(sheets_this_tick >= max_moved) //Second one is so it cancels the for loop when the while loop gets broken.
 			break
 
 	if(sheets_this_tick) //We produced something this tick, make it take more power.
