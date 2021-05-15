@@ -9,7 +9,7 @@
 	density = 1
 	anchored = 1
 	allowed_types = list(/obj/item)
-	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
 	
 	var/selectable_types = list(/obj/item = "All items")
 
