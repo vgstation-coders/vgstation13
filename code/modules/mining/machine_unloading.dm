@@ -70,6 +70,10 @@
 		if(is_type_in_list(A, allowed_types))
 			var/acted = FALSE
 			for(var/atom/movable/AM in out_T)
+				if(istype(AM,/obj/machinery/mineral/unloading_machine))
+					var/obj/machinery/mineral/unloading_machine/UM = AM
+					if(!is_type_in_list(A,UM.allowed_types))
+						return
 				if(AM.conveyor_act(A))
 					acted = TRUE
 					break
