@@ -135,6 +135,7 @@
 
 	var/list/stacks = list()
 
+	var/obj/item/stack/stack
 	var/stack_amt = 50 //amount to stack before releassing.
 	var/max_moved = 100
 
@@ -180,7 +181,6 @@
 	update_icon()
 
 /obj/machinery/mineral/stacking_machine/process()
-	var/obj/item/stack/stack
 	var/moved = 0
 	..()
 	moved ++
@@ -194,7 +194,7 @@
 
 	broadcast_status()
 
-/obj/machinery/mineral/stacking_machine/process_inside()
+/obj/machinery/mineral/stacking_machine/process_inside(atom/movable/A)
 	if(istype(A, /obj/item/stack))
 		var/obj/item/stack/stackA = A
 

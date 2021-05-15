@@ -9,7 +9,6 @@
 	density = 1
 	anchored = 1
 	allowed_types = list(/obj/item)
-	machine_flags |= MULTITOOL_MENU
 	
 	var/selectable_types = list(/obj/item = "All items")
 	var/selected_type = /obj/item

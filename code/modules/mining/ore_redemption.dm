@@ -45,15 +45,15 @@
 			continue
 
 		if(!is_type_in_list(A, allowed_types))
-			var/obj/structure/ore_box/B = locate() in T
+			var/obj/structure/ore_box/B = locate() in in_T
 			if(B)
 				for(var/O in B.stored_ores)
 					var/amount = B.stored_ores[O]
 					SmeltOreType(O, amount)
 					score["oremined"] += amount
 		else
-			for(i = 0; i < 10; i++)
-				var/obj/item/stack/ore/O = locate() in T
+			for(var/i = 0; i < 10; i++)
+				var/obj/item/stack/ore/O = locate() in in_T
 				if(istype(O,/obj/item/stack/ore/slag))
 					continue //Skip slag for now.
 				if(O)
