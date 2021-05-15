@@ -12,7 +12,6 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU | EJECTNOTDEL
 	
 	var/selectable_types = list(/obj/item = "All items")
-	var/selected_type = /obj/item
 
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
