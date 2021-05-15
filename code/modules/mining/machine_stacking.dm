@@ -132,12 +132,12 @@
 //	var/stk_amt   = list()
 
 	allowed_types = list(/obj/item/stack)
+	max_moved = 100
 
 	var/list/stacks = list()
 
 	var/obj/item/stack/stack
 	var/stack_amt = 50 //amount to stack before releassing.
-	var/max_moved = 100
 
 	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
@@ -181,12 +181,7 @@
 	update_icon()
 
 /obj/machinery/mineral/stacking_machine/process()
-	var/moved = 0
 	..()
-	moved ++
-	if(moved >= max_moved)
-		return
-
 	for(var/typepath in stacks)
 		stack = stacks[typepath]
 		if(stack.amount >= stack_amt)

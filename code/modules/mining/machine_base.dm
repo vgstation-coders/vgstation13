@@ -11,6 +11,7 @@
 	var/in_dir = NORTH
 	var/out_dir = SOUTH
 	var/list/allowed_types = list(/obj/item/stack/sheet) //What does this machine accept?
+	var/max_moved = INFINITY
 
 /obj/machinery/mineral/New()
     . = ..()
@@ -27,7 +28,8 @@
 
 	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
 		return
-
+	
+	var/moved = 0
 	for(var/atom/movable/A in in_T)
 		if(A.anchored)
 			continue
@@ -37,6 +39,9 @@
 			continue
 		
 		process_inside(A)
+		moved ++
+		if(moved >= max_moved)
+			break
 
 /obj/machinery/mineral/proc/process_inside(atom/movable/A) //Base proc, does nothing, handled in subtypes
 	return
