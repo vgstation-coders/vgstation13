@@ -1688,7 +1688,6 @@
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\debug_shit.dm"
 #include "code\modules\mining\machine_base.dm"
-#include "code\modules\mining\machine_input_output_plates.dm"
 #include "code\modules\mining\machine_processing.dm"
 #include "code\modules\mining\machine_stacking.dm"
 #include "code\modules\mining\machine_unloading.dm"

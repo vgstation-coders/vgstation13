@@ -43138,7 +43138,6 @@
 	},
 /area/science/robotics)
 "bEj" = (
-/obj/machinery/mineral/output,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
@@ -56914,13 +56913,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor,
-/area/engineering/mechanics)
-"ccT" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/mineral/output,
 /turf/simulated/floor,
 /area/engineering/mechanics)
 "ccU" = (
@@ -112169,7 +112161,7 @@ bWw
 bXM
 bZl
 caV
-ccT
+ccS
 ceM
 bXM
 chE
