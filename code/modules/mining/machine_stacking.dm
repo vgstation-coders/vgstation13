@@ -120,6 +120,7 @@
 
 /obj/machinery/mineral/stacking_machine
 	name = "stacking machine"
+	desc = "Takes smaller piles of sheets to make bigger ones"
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "stacker"
 	density = 1

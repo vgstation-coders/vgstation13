@@ -2,6 +2,7 @@
 
 /obj/machinery/mineral/mint
 	name = "coin press"
+	desc = "Turns precious sheets into luxurious item tokens. Or small, annoying throwing weapons."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "coinpress0"
 	density = 1

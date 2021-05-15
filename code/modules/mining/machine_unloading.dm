@@ -3,7 +3,7 @@
 
 /obj/machinery/mineral/unloading_machine
 	name = "unloading machine"
-	desc = "Used to unload ore from ore boxes."
+	desc = "Used to unload ore from ore boxes, but generally to put things on conveyors."
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "unloader"
 	density = 1

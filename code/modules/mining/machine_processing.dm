@@ -263,6 +263,7 @@
 
 /obj/machinery/mineral/processing_unit
 	name = "ore processor"
+	desc = "Turns lumpy rocks into completely smooth sheets."
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "furnace_o"
 	density = 1

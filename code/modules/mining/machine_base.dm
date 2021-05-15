@@ -2,7 +2,7 @@
 
 /obj/machinery/mineral/
 	name = "mining machine"
-	desc = "Does non-specific mining_stuff"
+	desc = "Does non-specific mining stuff."
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "unloader"
 	density = 1
