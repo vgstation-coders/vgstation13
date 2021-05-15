@@ -11,7 +11,7 @@
 	allowed_types = list(/obj/item)
 	machine_flags |= MULTITOOL_MENU
 	
-	var/selectable_types = list(/obj/item)
+	var/selectable_types = list(/obj/item = "All items")
 	var/selected_type = /obj/item
 
 /obj/machinery/mineral/unloading_machine/process()
