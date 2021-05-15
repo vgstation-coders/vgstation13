@@ -46,6 +46,10 @@
 
 	if(is_type_in_list(A, allowed_types))
 		for(var/atom/movable/AM in out_T)
+			if(istype(AM,/obj/machinery/mineral/unloading_machine))
+				var/obj/machinery/mineral/unloading_machine/UM = AM
+				if(!is_type_in_list(A,UM.allowed_types))
+					return FALSE
 			if(AM.conveyor_act(A))
 				return TRUE
 		A.forceMove(out_T)
