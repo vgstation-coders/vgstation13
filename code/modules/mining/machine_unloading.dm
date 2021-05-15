@@ -29,4 +29,10 @@
 			continue
 
 		if(is_type_in_list(A, allowed_types))
-			A.forceMove(out_T)
+			var/acted = FALSE
+			for(var/atom/movable/AM in out_T)
+				if(AM.conveyor_act(A))
+					acted = TRUE
+					break
+			if(!acted)
+				A.forceMove(out_T)
