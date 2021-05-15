@@ -10,6 +10,7 @@
 	anchored = 1
 	allowed_types = list(/obj/item)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+	max_moved = 100
 	
 	var/selectable_types = list(/obj/item = "All items")
 
@@ -25,6 +26,17 @@
 	)
 
 	RefreshParts()
+
+/obj/machinery/mineral/unloading_machine/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
+		T += bin.rating
+	max_moved = initial(max_moved) * (T / 3)
+
+	T = 0 //reusing T here because muh RAM.
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+		T += C.rating - 1
+	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)

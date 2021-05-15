@@ -87,6 +87,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/stacking_unit
 
+/datum/design/stacking_unit
+	name = "Circuit Design (Stacking Machine)"
+	desc = "A circuit board used to run a machine that unloads items and ore from one place to another."
+	id = "unloadingmachine"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_MATERIALS = 3, Tc_ENGINEERING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/unloading_machine
+
 /datum/design/coin_press
 	name = "Circuit Design (Coin Press)"
 	desc = "Allows for the construction of circuit boards used to build a coin press."
