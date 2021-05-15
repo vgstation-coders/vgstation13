@@ -2055,12 +2055,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/grey_extract
 	name = "Grey slime extracts"
 	contains = list(/obj/item/slime_extract/grey,
-					/obj/item/slime_extract/grey,
-					/obj/item/slime_extract/grey,
-					/obj/item/slime_extract/grey,
 					/obj/item/slime_extract/grey
 					)
-	cost = 100
+	cost = 200
 	containertype = /obj/structure/closet/crate/sci
 	containername = "gret slime extract crate"
 	access = list(access_science)
