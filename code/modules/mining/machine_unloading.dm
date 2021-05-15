@@ -11,6 +11,8 @@
 	allowed_types = list(/obj/item)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
 	max_moved = 100
+	in_dir = EAST
+	out_dir = WEST
 	
 	var/selectable_types = list(/obj/item = "All items")
 
