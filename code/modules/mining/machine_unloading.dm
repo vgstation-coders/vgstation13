@@ -45,10 +45,10 @@
 		return FALSE
 
 	if(is_type_in_list(A, allowed_types))
-		return check_move(A)
+		return check_move(A,out_T)
 	return FALSE
 
-/obj/machinery/mineral/unloading_machine/proc/check_move(atom/movable/A)
+/obj/machinery/mineral/unloading_machine/proc/check_move(atom/movable/A,turf/out_T)
 	for(var/atom/movable/AM in out_T)
 		if(istype(AM,/obj/machinery/mineral/unloading_machine))
 			var/obj/machinery/mineral/unloading_machine/UM = AM
@@ -75,4 +75,4 @@
 			continue
 
 		if(is_type_in_list(A, allowed_types))
-			check_move(A)
+			check_move(A,out_T)
