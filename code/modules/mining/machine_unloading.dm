@@ -40,6 +40,18 @@
 		T += C.rating - 1
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
+/obj/machinery/mineral/unloading_machine/conveyor_act(atom/movable/A)
+	if(A.anchored)
+		return FALSE
+
+	if(is_type_in_list(A, allowed_types))
+		for(var/atom/movable/AM in out_T)
+			if(AM.conveyor_act(A))
+				return TRUE
+		A.forceMove(out_T)
+		return TRUE
+	return FALSE
+
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
