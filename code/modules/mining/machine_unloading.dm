@@ -41,6 +41,11 @@
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
 /obj/machinery/mineral/unloading_machine/conveyor_act(atom/movable/A)
+	var/turf/out_T = get_step(src, out_dir)
+
+	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+		return
+
 	if(A.anchored)
 		return FALSE
 
