@@ -17,11 +17,17 @@
 /obj/machinery/mineral/New()
     . = ..()
     mover = new
+	if(ticker)
+		initialize()
 
 /obj/machinery/mineral/Destroy()
 	qdel(mover)
 	mover = null
 	. = ..()
+
+/obj/machinery/mineral/stacking_machine/initialize()
+	if(frequency)
+		set_frequency(frequency)
 
 /obj/machinery/mineral/process() //Basic proc for filtering types to act on, otherwise rejects on out_dir
 	var/turf/in_T = get_step(src, in_dir)

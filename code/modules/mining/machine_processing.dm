@@ -331,7 +331,6 @@
 		recipes += new recipe()
 
 	if(ticker && ticker.current_state == 3)
-		initialize()
 		broadcast_status()
 
 /obj/machinery/mineral/processing_unit/initialize()

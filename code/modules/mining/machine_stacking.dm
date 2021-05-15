@@ -166,9 +166,6 @@
 
 	RefreshParts()
 
-	if(ticker)
-		initialize()
-
 /obj/machinery/mineral/stacking_machine/update_icon()
 	if(stat & (NOPOWER | BROKEN))
 		icon_state = "stacker_o"
@@ -253,10 +250,6 @@
 	data["stack_amt"] = stack_amt
 
 	send_signal(data)
-
-/obj/machinery/mineral/stacking_machine/initialize()
-	if(frequency)
-		set_frequency(frequency)
 
 /obj/machinery/mineral/stacking_machine/proc/set_frequency(var/new_frequency)
 	radio_controller.remove_object(src, frequency)

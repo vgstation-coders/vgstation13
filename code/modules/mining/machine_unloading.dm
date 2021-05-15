@@ -13,6 +13,19 @@
 	
 	var/selectable_types = list(/obj/item = "All items")
 
+/obj/machinery/mineral/stacking_machine/New()
+	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/unloading_machine,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+
+	RefreshParts()
+
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
