@@ -2,7 +2,7 @@
 
 /obj/machinery/mineral/
 	name = "mining machine"
-    desc = "Does non-specific mining_stuff"
+	desc = "Does non-specific mining_stuff"
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "unloader"
 	density = 1
@@ -22,7 +22,7 @@
 	. = ..()
 
 /obj/machinery/mineral/process() //Basic proc for filtering types to act on, otherwise rejects on out_dir
-    var/turf/in_T = get_step(src, in_dir)
+	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
 	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
