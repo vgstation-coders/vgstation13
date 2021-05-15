@@ -17,6 +17,7 @@
 		access_virology
 	)
 	starting_materials = list() //Makes the new datum
+	allowed_types = list(/obj/item/stack/ore)
 	var/stack_amt = 50 //Amount to stack before releasing
 	var/obj/item/weapon/card/id/inserted_id
 	var/credits = 0
