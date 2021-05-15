@@ -45,7 +45,7 @@
 		return FALSE
 
 	if(is_type_in_list(A, allowed_types))
-		return check_move()
+		return check_move(A)
 	return FALSE
 
 /obj/machinery/mineral/unloading_machine/proc/check_move(atom/movable/A)
