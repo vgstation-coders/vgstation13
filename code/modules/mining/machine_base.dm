@@ -15,8 +15,8 @@
 	var/frequency = FREQ_DISPOSAL //Same as conveyors
 
 /obj/machinery/mineral/New()
-    . = ..()
-    mover = new
+	. = ..()
+	mover = new
 	if(ticker)
 		initialize()
 
