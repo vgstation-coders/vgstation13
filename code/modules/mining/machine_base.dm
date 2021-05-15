@@ -12,6 +12,7 @@
 	var/out_dir = SOUTH
 	var/list/allowed_types = list(/obj/item/stack/sheet) //What does this machine accept?
 	var/max_moved = INFINITY
+	var/frequency = FREQ_DISPOSAL //Same as conveyors
 
 /obj/machinery/mineral/New()
     . = ..()

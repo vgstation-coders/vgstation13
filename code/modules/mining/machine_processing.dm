@@ -277,7 +277,6 @@
 	allowed_types = list(/obj/item/stack/ore) //Does nothing for now, functions are a mess in this
 	max_moved = 100
 
-	var/frequency = FREQ_DISPOSAL //Same as conveyors
 	var/datum/radio_frequency/radio_connection
 
 	var/datum/materials/ore

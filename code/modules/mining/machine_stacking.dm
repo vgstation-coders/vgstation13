@@ -139,7 +139,6 @@
 	var/obj/item/stack/stack
 	var/stack_amt = 50 //amount to stack before releassing.
 
-	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
 
 /obj/machinery/mineral/stacking_machine/RefreshParts()
