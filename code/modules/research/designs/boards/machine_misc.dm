@@ -88,7 +88,7 @@
 	build_path = /obj/item/weapon/circuitboard/stacking_unit
 
 /datum/design/stacking_unit
-	name = "Circuit Design (Stacking Machine)"
+	name = "Circuit Design (Unloading Machine)"
 	desc = "A circuit board used to run a machine that unloads items and ore from one place to another."
 	id = "unloadingmachine"
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_MATERIALS = 3, Tc_ENGINEERING = 3)
