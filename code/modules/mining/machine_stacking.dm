@@ -185,7 +185,7 @@
 	..()
 	moved ++
 	if(moved >= max_moved)
-		break
+		return
 
 	for(var/typepath in stacks)
 		stack = stacks[typepath]
