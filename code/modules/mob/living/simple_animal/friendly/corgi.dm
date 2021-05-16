@@ -322,7 +322,7 @@
 		if(/obj/item/clothing/head/chefhat,	/obj/item/clothing/head/collectable/chef)
 			name = "Sous chef [real_name]"
 			desc = "Your food will be taste-tested.  All of it."
-			emote_hear = list("eats the food.", "devours the meal", "complains that it's fucking raw!")
+			emote_hear = list("eats the food.", "looks for the lamb sauce.", "complains that it's fucking raw!")
 			valid = 1
 
 		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain)
