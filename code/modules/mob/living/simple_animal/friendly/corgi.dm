@@ -17,9 +17,9 @@
 	maxHealth = 30
 	gender = MALE
 	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-	speak_emote = list("barks", "woofs")
-	emote_hear = list("barks", "woofs", "yaps")
-	emote_see = list("shakes its head", "shivers", "pants")
+	speak_emote = list("barks.", "woofs.")
+	emote_hear = list("barks.", "woofs.", "yaps.")
+	emote_see = list("shakes its head.", "shivers.", "pants.")
 	emote_sound = list("sound/voice/corgibark.ogg")
 	speak_chance = 1
 	turns_per_move = 10
@@ -331,7 +331,7 @@
 		if(/obj/item/clothing/head/kitty, /obj/item/clothing/head/kitty/collectable)
 			name = "Runtime"
 			emote_see = list("coughs up a furball.", "stretches.")
-			emote_hear = list("purrs")
+			emote_hear = list("purrs.")
 			speak = list("Purrr", "Meow!", "MAOOOOOW!", "HISSSSS", "MEEEEEEW")
 			desc = "It's a cute little kitty-cat! Well, he's definitely cute!"
 			valid = 1
@@ -382,7 +382,7 @@
 
 		if(/obj/item/clothing/head/wizard/fake,	/obj/item/clothing/head/wizard,	/obj/item/clothing/head/collectable/wizard)
 			name = "Grandwizard [real_name]"
-			speak = list("Woof!", "Bark!", "EI NATH", "FORTI GY AMA")
+			speak = list("Woof!", "Bark!", "EI NATH!", "FORTI GY AMA!")
 			emote_see = list("casts a dastardly spell!", "curses you with a bark!", "summons a steak into his stomach.")
 			valid = 1
 
@@ -417,7 +417,7 @@
 		if(/obj/item/clothing/head/fedora)
 			name = "Autistic [real_name]"
 			desc = "His paws seem to be covered in what looks like Cheezy Honker dust."
-			emote_hear = list("barks ironicly", "makes you cringe")
+			emote_hear = list("barks ironically.", "makes you cringe.")
 			emote_see = list("unsheathes katana.", "tips fedora.","posts on Mongolian basket-weaving forums.")
 			valid = 1
 
@@ -616,8 +616,8 @@
 
 /mob/living/simple_animal/corgi/Ian/santa
 	name = "Santa's Corgi Helper"
-	emote_hear = list("barks christmas songs", "yaps merrily")
-	emote_see = list("looks for presents", "checks his list")
+	emote_hear = list("barks christmas songs.", "yaps merrily.")
+	emote_see = list("looks for presents.", "checks his list.")
 	desc = "He's very fond of milk and cookies."
 
 /mob/living/simple_animal/corgi/Ian/santa/New()
@@ -727,7 +727,7 @@
 	icon_state = "doby"
 	icon_living = "doby"
 	icon_dead = "doby_dead"
-	spin_emotes = list("prances around","chases her nub of a tail")
+	spin_emotes = list("prances around.","chases her nub of a tail.")
 	is_pet = TRUE
 
 	species_type = /mob/living/simple_animal/corgi/sasha
@@ -747,7 +747,7 @@
 /mob/living/simple_animal/corgi/saint
 	name = "saint corgi"
 	real_name = "saint corgi"
-	desc = "It's a saint bernard corgi mix breed. It has a tiny rescue barrel strapped around his collar to warm up travelers."
+	desc = "It's a saint bernard-corgi mix breed. It has a tiny rescue barrel strapped around his collar to warm up travelers."
 	icon_state = "saint_corgi"
 	icon_living = "saint_corgi"
 	icon_dead = "saint_corgi_dead"
