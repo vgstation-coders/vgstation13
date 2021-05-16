@@ -280,7 +280,7 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
+			slot_ears_str = /obj/item/device/radio/headset/headset_medsec,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
@@ -291,7 +291,7 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 		),
 		/datum/species/plasmaman = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
+			slot_ears_str = /obj/item/device/radio/headset/headset_medsec,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
@@ -301,7 +301,7 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 		/datum/species/vox = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
+			slot_ears_str = /obj/item/device/radio/headset/headset_medsec,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
