@@ -310,16 +310,19 @@
 		if(/obj/item/clothing/head/helmet/tactical/sec,/obj/item/clothing/head/helmet/tactical/sec/preattached)
 			name = "Sergeant [real_name]"
 			desc = "The ever-loyal, the ever-vigilant."
+			emote_hear = list("stops you right there, criminal scum!", "ignores the chain of command.", "stuns you.")
 			valid = 1
 
 		if(/obj/item/clothing/head/helmet/tactical/swat)
 			name = "Lieutenant [real_name]"
 			desc = "When the going gets ruff..."
+			emote_hear = list("goes dark.", "waits for his retirement tomorrow.")
 			valid = 1
 
 		if(/obj/item/clothing/head/chefhat,	/obj/item/clothing/head/collectable/chef)
 			name = "Sous chef [real_name]"
 			desc = "Your food will be taste-tested.  All of it."
+			emote_hear = list("eats the food.", "devours the meal", "complains that it's fucking raw!")
 			valid = 1
 
 		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain)
@@ -332,7 +335,7 @@
 			name = "Runtime"
 			emote_see = list("coughs up a furball.", "stretches.")
 			emote_hear = list("purrs.")
-			speak = list("Purrr", "Meow!", "MAOOOOOW!", "HISSSSS", "MEEEEEEW")
+			speak = list("Purrr", "Meow!", "MAOOOOOW!", "HISSSSS!", "MEEEEEEW!")
 			desc = "It's a cute little kitty-cat! Well, he's definitely cute!"
 			valid = 1
 
@@ -340,6 +343,7 @@
 			name = "Hoppy"
 			emote_see = list("twitches its nose.", "hops around a bit.")
 			desc = "This is Hoppy. It's a corgi-er, bunny rabbit?"
+			emote_hear = list("eats a doggy carrot.", "jumps in place.")
 			valid = 1
 
 		if(/obj/item/clothing/head/beret, /obj/item/clothing/head/collectable/beret)
@@ -358,6 +362,7 @@
 		if(/obj/item/clothing/head/nursehat)
 			name = "Nurse [real_name]"
 			desc = "[name] needs 100cc of beef jerky... STAT!"
+			emote_hear = list("checks the crew monitoring console.", "stares, unblinking.", "tries to inject you with medicine... But fails!")
 			valid = 1
 
 		if(/obj/item/clothing/head/pirate, /obj/item/clothing/head/collectable/pirate)
@@ -376,7 +381,7 @@
 
 		if(/obj/item/clothing/head/collectable/police)
 			name = "Officer [real_name]"
-			emote_see = list("drools.","looks for donuts.")
+			emote_see = list("drools.","looks for donuts.", "ignores Space Law.")
 			desc = "Stop right there, criminal scum!"
 			valid = 1
 
@@ -389,7 +394,7 @@
 		if(/obj/item/clothing/head/cardborg)
 			name = "Borgi"
 			speak = list("Ping!","Beep!","Woof!")
-			emote_see = list("goes rogue.", "sniffs out non-humans.", "waits for a malfunction.")
+			emote_see = list("goes rogue.", "sniffs out non-humans.", "waits for a malfunction.", "ignores law 2.", "gets EMP'd.", "doorcrushes you.")
 			desc = "Result of robotics budget cuts."
 			valid = 1
 
@@ -418,7 +423,7 @@
 			name = "Autistic [real_name]"
 			desc = "His paws seem to be covered in what looks like Cheezy Honker dust."
 			emote_hear = list("barks ironically.", "makes you cringe.")
-			emote_see = list("unsheathes katana.", "tips fedora.","posts on Mongolian basket-weaving forums.")
+			emote_see = list("unsheathes katana.", "tips fedora.", "posts on Mongolian basket-weaving forums.", "theorycrafts about nothing.")
 			valid = 1
 
 		if(/obj/item/clothing/head/fez)
@@ -431,6 +436,7 @@
 		if(/obj/item/clothing/head/helmet/space/rig)
 			name = "Station Engineer [real_name]"
 			desc = "Ian want a cracker!"
+			emote_hear = list("scrungulooses.", "activates the SMES units.", "ignores engine safety.")
 			valid = 1
 			min_oxy = 0
 			minbodytemp = 0
@@ -447,6 +453,7 @@
 		if(/obj/item/clothing/head/alien_antenna)
 			name = "Al-Ian"
 			desc = "Take us to your dog biscuits!"
+			emote_hear = list("drinks sulphuric acid.", "reads your mind.", "kidnaps your cattle.")
 			valid = 1
 
 		if(/obj/item/clothing/head/franken_bolt)
@@ -459,6 +466,7 @@
 			if(!V.glowy_fangs)
 				name = "Vlad the Ianpaler"
 				desc = "Listen to them, the children of the night. What music they make!"
+				emote_hear = list("bares his fangs.", "screeches.", "tries to suck some blood.")
 				valid = 1
 			else
 				to_chat(usr, "<span class = 'notice'>The glow of /the [V] startles [real_name]!</span>")
@@ -466,6 +474,7 @@
 		if(/obj/item/clothing/head/cowboy)
 			name = "Yeehaw Ian"
 			desc = "Are you really just gonna stroll past without saying howdy?"
+			emote_hear = list("bullwhips you.", "complains about city folk.", "spins his revolver.")
 			valid = 1
 
 
@@ -583,7 +592,7 @@
 	response_help  = "pets"
 	response_disarm = "bops"
 	response_harm   = "kicks"
-	spin_emotes = list("dances around.","chases his tail.")
+	spin_emotes = list("dances around.", "chases his tail.")
 	is_pet = TRUE
 	var/creatine_had = 0
 
