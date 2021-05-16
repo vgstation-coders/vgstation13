@@ -322,28 +322,29 @@
 		if(/obj/item/clothing/head/chefhat,	/obj/item/clothing/head/collectable/chef)
 			name = "Sous chef [real_name]"
 			desc = "Your food will be taste-tested.  All of it."
-			emote_hear = list("eats the food.", "looks for the lamb sauce.", "complains that it's fucking raw!")
+			emote_see = list("looks for the lamb sauce.", "eats the food")
+			emote_hear = list("complains that the meal is fucking raw!")
 			valid = 1
 
 		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain)
 			name = "Captain [real_name]"
 			desc = "Probably better than the last captain."
-			emote_hear = list("secures the spare.", "hides the nuke disk.", "assures the crew he is NOT a comdom.")
+			emote_see = list("secures the spare.", "hides the nuke disk.")
+			emote_hear = list("assures the crew he is NOT a comdom.")
 			valid = 1
 
 		if(/obj/item/clothing/head/kitty, /obj/item/clothing/head/kitty/collectable)
 			name = "Runtime"
+			desc = "It's a cute little kitty-cat! Well, he's definitely cute!"
 			emote_see = list("coughs up a furball.", "stretches.")
 			emote_hear = list("purrs.")
 			speak = list("Purrr", "Meow!", "MAOOOOOW!", "HISSSSS!", "MEEEEEEW!")
-			desc = "It's a cute little kitty-cat! Well, he's definitely cute!"
 			valid = 1
 
 		if(/obj/item/clothing/head/rabbitears, /obj/item/clothing/head/collectable/rabbitears)
 			name = "Hoppy"
-			emote_see = list("twitches its nose.", "hops around a bit.")
 			desc = "This is Hoppy. It's a corgi-er, bunny rabbit?"
-			emote_hear = list("eats a doggy carrot.", "jumps in place.")
+			emote_see = list("twitches its nose.", "hops around a bit.", "eats a doggy carrot.", "jumps in place.")
 			valid = 1
 
 		if(/obj/item/clothing/head/beret, /obj/item/clothing/head/collectable/beret)
@@ -356,13 +357,14 @@
 		if(/obj/item/clothing/head/det_hat)
 			name = "Detective [real_name]"
 			desc = "[name] sees through your lies..."
-			emote_see = list("investigates the area.","sniffs around for clues.","searches for scooby snacks.")
+			emote_see = list("investigates the area.", "sniffs around for clues.", "searches for scooby snacks.")
 			valid = 1
 
 		if(/obj/item/clothing/head/nursehat)
 			name = "Nurse [real_name]"
 			desc = "[name] needs 100cc of beef jerky... STAT!"
-			emote_hear = list("checks the crew monitoring console.", "stares, unblinking.", "tries to inject you with medicine... But fails!")
+			emote_see = list("checks the crew monitoring console.", "stares, unblinking.", "tries to inject you with medicine... But fails!")
+			emote_hear = list("asks you to max the suit sensors.")
 			valid = 1
 
 		if(/obj/item/clothing/head/pirate, /obj/item/clothing/head/collectable/pirate)
@@ -381,7 +383,7 @@
 
 		if(/obj/item/clothing/head/collectable/police)
 			name = "Officer [real_name]"
-			emote_see = list("drools.","looks for donuts.", "ignores Space Law.")
+			emote_see = list("drools.", "looks for donuts.", "ignores Space Law.")
 			desc = "Stop right there, criminal scum!"
 			valid = 1
 
@@ -435,8 +437,8 @@
 
 		if(/obj/item/clothing/head/helmet/space/rig)
 			name = "Station Engineer [real_name]"
-			desc = "Ian want a cracker!"
-			emote_hear = list("scrungulooses.", "activates the SMES units.", "ignores engine safety.")
+			desc = "Ian wanna cracker!"
+			emote_see = list("scrungulooses.", "activates the SMES units.", "ignores engine safety.", "accidentally plasmafloods.", "delaminates the Supermatter".)
 			valid = 1
 			min_oxy = 0
 			minbodytemp = 0
@@ -453,12 +455,12 @@
 		if(/obj/item/clothing/head/alien_antenna)
 			name = "Al-Ian"
 			desc = "Take us to your dog biscuits!"
-			emote_hear = list("drinks sulphuric acid.", "reads your mind.", "kidnaps your cattle.")
+			emote_see = list("drinks sulphuric acid.", "reads your mind.", "kidnaps your cattle.")
 			valid = 1
 
 		if(/obj/item/clothing/head/franken_bolt)
 			name = "Corgenstein's monster"
-			desc = "We can rebuild him, we have the technology!"
+			desc = "If I cannot inspire love, I will cause fear! Now fetch me them doggy biscuits."
 			valid = 1
 
 		if(/obj/item/clothing/mask/vamp_fangs)
@@ -474,7 +476,8 @@
 		if(/obj/item/clothing/head/cowboy)
 			name = "Yeehaw Ian"
 			desc = "Are you really just gonna stroll past without saying howdy?"
-			emote_hear = list("bullwhips you.", "complains about city folk.", "spins his revolver.")
+			emote_see = list("bullwhips you.", "spins his revolver.")
+			emote_hear = list("complains about city folk.")
 			valid = 1
 
 
