@@ -438,7 +438,7 @@
 		if(/obj/item/clothing/head/helmet/space/rig)
 			name = "Station Engineer [real_name]"
 			desc = "Ian wanna cracker!"
-			emote_see = list("scrungulooses.", "activates the SMES units.", "ignores engine safety.", "accidentally plasmafloods.", "delaminates the Supermatter".)
+			emote_see = list("scrungulooses.", "activates the SMES units.", "ignores engine safety.", "accidentally plasmafloods.", "delaminates the Supermatter.")
 			valid = 1
 			min_oxy = 0
 			minbodytemp = 0
@@ -447,7 +447,7 @@
 		/*
 		if(/obj/item/clothing/head/hardhat/reindeer)
 			name = "[real_name] the red-nosed Corgi"
-			emote_hear = list("lights the way.", "illuminates the night sky.", "is bullied by the other reindogs. Poor Ian.")
+			emote_see = list("lights the way.", "illuminates the night sky.", "is bullied by the other reindogs. Poor Ian.")
 			desc = "He has a very shiny nose."
 			SetLuminosity(1)
 			valid = 1
