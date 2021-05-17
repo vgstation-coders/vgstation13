@@ -41,11 +41,6 @@
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
 /obj/machinery/mineral/unloading_machine/conveyor_act(atom/movable/A)
-	var/turf/out_T = get_step(src, out_dir)
-
-	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover))
-		return
-
 	if(A.anchored)
 		return FALSE
 
@@ -53,26 +48,26 @@
 		return check_move(A,out_T)
 	return FALSE
 
-/obj/machinery/mineral/unloading_machine/proc/check_move(atom/movable/A,turf/out_T)
-	var/conveyed = FALSE
+/obj/machinery/mineral/unloading_machine/proc/check_move(atom/movable/A)
+	var/turf/out_T = get_step(src, out_dir)
+
 	for(var/atom/movable/AM in out_T)
 		if(istype(AM,/obj/machinery/mineral/unloading_machine))
 			var/obj/machinery/mineral/unloading_machine/UM = AM
 			if(!is_type_in_list(A,UM.allowed_types))
 				return FALSE
 		if(AM.conveyor_act(A))
-			conveyed = TRUE
-			break
-	if(!conveyed)
+			return TRUE
+
+	if(out_T.Cross(mover, out_T) && out_T.Enter(mover))
 		A.forceMove(out_T)
 		return TRUE
 	return FALSE
 
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
-	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover))
 		return
 
 	var/obj/structure/ore_box/BOX = locate(/obj/structure/ore_box, in_T.loc)
@@ -84,4 +79,4 @@
 			continue
 
 		if(is_type_in_list(A, allowed_types))
-			check_move(A,out_T)
+			check_move(A)
