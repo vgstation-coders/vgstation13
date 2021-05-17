@@ -253,7 +253,7 @@
 
 /obj/item/cannonball/iron/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
-	if(isliving(hit_atom))
+	if(isliving(hit_atom) && cannonFired)
 		siegeMob(hit_atom)
 
 /obj/item/cannonball/iron/proc/siegeMachine(var/obj/machinery/M)
@@ -491,11 +491,13 @@
 	adjRange = 50
 	adjSpeed = 1
 	adjForce = 0
+	var/isBouncing = FALSE	//Prevents it bouncing infinitely due to some dark curse of throw_at()
 
 /obj/item/cannonball/bananium/throw_at(atom/target, range, speed, override = 1)
 	if(!cannonFired)
 		..()
-	else
+	else if(!isBouncing)
+		isBouncing = TRUE
 		..(target, 50, 1000, 1, 1)	//Always travels as slow as possible. High speed is to appease throw_at and doesn't translate to any damage
 
 /obj/item/cannonball/bananium/cannonEffect(var/atom/cTarg)
@@ -534,6 +536,7 @@
 			var/turf/simulated/T = get_turf(src)
 			T.wet(800, TURF_WET_LUBE)
 		var/target = get_ranged_target_turf(src, honkDir, 50)
+		isBouncing = FALSE
 		throw_at(target, 50, 1000, 1, 1)
 
 /obj/item/cannonball/bananium/proc/stopBouncing()
