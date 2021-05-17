@@ -300,9 +300,11 @@
 			slot_ears_str = list(
 				"Paramedic" = /obj/item/device/radio/headset/headset_med,
 				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
 			slot_w_uniform_str = list(
 				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
@@ -314,9 +316,11 @@
 			slot_ears_str = list(
 				"Paramedic" = /obj/item/device/radio/headset/headset_med,
 				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
 			slot_w_uniform_str = list(
 				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
