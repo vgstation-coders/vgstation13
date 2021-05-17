@@ -837,7 +837,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		qdel(src)
 
 /mob/living/simple_animal/isStunned() //Used so that it allows clients to attack in code/_onclick/click.dm
-	if(client)
+	if(client && !isUnconscious()) //Don't attack while dead, baka
 		return 0
 	return ..()
 
