@@ -92,6 +92,7 @@
 	selection_color = "#ffeef0"
 	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue, access_surgery)
 	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue, access_surgery)
+	alt_titles = list("Brig Medic")
 	outfit_datum = /datum/outfit/paramedic
 
 /*

@@ -280,8 +280,14 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/paramedic,
@@ -291,8 +297,12 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 		),
 		/datum/species/plasmaman = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
@@ -301,8 +311,12 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 		/datum/species/vox = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
@@ -310,6 +324,7 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
+
 	)
 
 	equip_survival_gear = list(
@@ -339,6 +354,12 @@
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
+
+/datum/outfit/paramedic/pre_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
+	if(H.mind.role_alt_title == "Brig Medic") //Briggies get an implant
+		implant_types += /obj/item/weapon/implant/loyalty
 
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
