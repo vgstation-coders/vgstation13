@@ -14,7 +14,7 @@
 	in_dir = EAST
 	out_dir = WEST
 	
-	var/selectable_types = list(/obj/item = "All items")
+	var/selectable_types = list(/obj/item = "All items") //List of types we can move -kanef
 
 /obj/machinery/mineral/stacking_machine/New()
 	. = ..()
@@ -40,6 +40,7 @@
 		T += C.rating - 1
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
+// Make conveyors work on these too, why not. Also helps with chaining these, and other fun stuff -kanef
 /obj/machinery/mineral/unloading_machine/conveyor_act(atom/movable/A)
 	if(A.anchored)
 		return FALSE
@@ -48,22 +49,30 @@
 		return check_move(A)
 	return FALSE
 
+// Mutual function for both conveyor and process(), as suggested by github user help-maint in a seperate PR to cut down on code -kanef
 /obj/machinery/mineral/unloading_machine/proc/check_move(atom/movable/A)
 	var/turf/out_T = get_step(src, out_dir)
 
+	// Check for another unloading machine in the output tile, can chain these!
 	for(var/atom/movable/AM in out_T)
 		if(istype(AM,/obj/machinery/mineral/unloading_machine))
 			var/obj/machinery/mineral/unloading_machine/UM = AM
-			if(!is_type_in_list(A,UM.allowed_types))
+			// Consistent types throughout
+			// Also check to make sure the direction towards this unloader from another isn't its output dir
+			// Or it causes horrible infinite loops that crash MC
+			if(!is_type_in_list(A,UM.allowed_types) || get_dir(UM,src) == UM.out_dir)
 				return FALSE
+		// Cryo pods, etc work too
 		if(AM.conveyor_act(A))
 			return TRUE
 
+	// Otherwise, just act normal and put stuff on the other side
 	if(out_T.Cross(mover, out_T) && out_T.Enter(mover))
 		A.forceMove(out_T)
 		return TRUE
 	return FALSE
 
+// Couldn't inherit most of this sadly -kanef
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
 
