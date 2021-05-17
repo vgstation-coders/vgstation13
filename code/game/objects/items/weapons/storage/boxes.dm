@@ -501,7 +501,7 @@
 	..()
 	if(src.type == /obj/item/weapon/storage/box/monkeycubes)
 		for(var/i = 1; i <= 6; i++)
-			new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src)
+			new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/(src)
 
 /obj/item/weapon/storage/box/monkeycubes/farwacubes
 	name = "farwa cube box"
