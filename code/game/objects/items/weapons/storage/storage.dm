@@ -20,6 +20,7 @@
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 0 //The number of storage slots in this container.
 	var/obj/abstract/screen/storage/boxes = null
+	var/obj/abstract/screen/storage/xtra = null //This is just an extra space that shows up when we have a full row, but we're not full yet.
 	var/obj/abstract/screen/close/closer = null
 	var/use_to_pickup	//Set this to make it possible to use this item in an inverse way, so you can have the item in your hand and click items on the floor to pick them up.
 	var/display_contents_with_number	//Set this to make the storage item group contents of the same type and display them as a number.
@@ -109,6 +110,7 @@
 
 	user.client.screen += src.boxes
 	user.client.screen += src.closer
+	user.client.screen += src.xtra
 	user.client.screen += src.contents
 	user.s_active = src
 	is_seeing |= user
@@ -122,6 +124,7 @@
 
 	user.client.screen -= src.boxes
 	user.client.screen -= src.closer
+	user.client.screen -= src.xtra
 	user.client.screen -= src.contents
 	user.s_active = null
 	is_seeing -= user
@@ -143,6 +146,7 @@
 			cx = tx
 			cy--
 	src.closer.screen_loc = "[mx+1],[my]"
+	src.xtra.screen_loc = src.closer.screen_loc
 	return
 
 //This proc draws out the inventory and places the items on it. It uses the standard position.
@@ -172,6 +176,7 @@
 				cx = 4
 				cy--
 	src.closer.screen_loc = "[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]"
+	src.xtra.screen_loc = src.closer.screen_loc
 
 /datum/numbered_display
 	var/obj/item/sample_object
@@ -211,8 +216,12 @@
 		col_count = 6 //Show 7 inventory slots instead of breaking the inventory
 	if(adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
-	if(adjusted_contents && (adjusted_contents % 7 == 0) && !is_full())
-		row_num++ //If we have a full row of items, but we still have leftover space... Don't collapse the row, so people can still put stuff inside
+	if(adjusted_contents && (adjusted_contents % 7 == 0) && !is_full()) //If we have a full row of items, but we still have leftover space... Show our "xtra" icon
+		xtra.invisibility = 0
+		var/biggest_w_class_we_can_fit = min(fits_max_w_class, max_combined_w_class - get_sum_w_class())
+		xtra.name = "You may still fit a [wclass2text(biggest_w_class_we_can_fit)] item inside. Click here to store items."
+	else
+		xtra.invisibility = 101
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
@@ -314,11 +323,7 @@
 				to_chat(usr, "<span class='notice'>\The [W] is too big for \the [src].</span>")
 			return 0
 
-	var/sum_w_class = W.w_class
-	for(var/obj/item/I in contents)
-		sum_w_class += I.w_class //Adds up the combined w_classes which will be in the storage item if the item is added to it.
-
-	if(sum_w_class > max_combined_w_class)
+	if(get_sum_w_class() + W.w_class > max_combined_w_class)
 		if(!stop_messages)
 			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
 		return 0
@@ -356,7 +361,6 @@
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 				else if (W.w_class >= W_CLASS_MEDIUM && !stealthy(usr)) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
-
 
 	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
 	update_icon()
@@ -547,6 +551,11 @@
 	src.closer.master = src
 	src.closer.icon_state = "x"
 	src.closer.layer = HUD_ITEM_LAYER
+	src.xtra = new /obj/abstract/screen/storage
+	src.xtra.master = src
+	src.xtra.icon_state = "xtra_inv"
+	src.xtra.layer = HUD_ITEM_LAYER
+	src.xtra.alpha = 210
 	orient2hud()
 
 /obj/item/weapon/storage/emp_act(severity)
@@ -608,6 +617,9 @@
 	if(closer)
 		qdel(closer)
 		closer = null
+	if(xtra)
+		qdel(xtra)
+		xtra = null
 	for(var/atom/movable/AM in contents)
 		qdel(AM)
 	contents = null
@@ -678,8 +690,10 @@
 		if(contents.len && (slot == i))
 			return CANNOT_EQUIP
 
-/obj/item/weapon/storage/proc/is_full()
-	var/sum_w_class = 0 //Given BYOND's horrid memory limit, which is worse for performance: Recalculating this, or storing it in memory? Who knows.
+/obj/item/weapon/storage/proc/get_sum_w_class()
+	. = 0
 	for(var/obj/item/I in contents)
-		sum_w_class += I.w_class
-	return (storage_slots && (contents.len >= storage_slots)) || (sum_w_class >= max_combined_w_class)
+		. += I.w_class
+
+/obj/item/weapon/storage/proc/is_full()
+	return (storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() >= max_combined_w_class)
