@@ -60,8 +60,11 @@
 			var/obj/machinery/mineral/unloading_machine/UM = AM
 			// Consistent types throughout
 			// Also check to make sure the direction towards this unloader from another isn't its output dir
+			// Or hasn't moved the item in this chain before
 			// Or it causes horrible infinite loops that crash MC
 			if(!is_type_in_list(A,UM.allowed_types) || get_dir(UM,src) == UM.out_dir || UM.item_moved == TRUE)
+				// Give feedback to players that this thing cannot be moved right
+				visible_message("<span class='notice'>[src] beeps: Item could not be moved</span>")
 				// If check fails, reset the chain values to false
 				reset_move_check()
 				return FALSE
@@ -82,15 +85,21 @@
 		return TRUE
 	return FALSE
 
-
+// The process used to reset all "are we chaining a move?" checks on each item to false, when done or in failure -kanef
 /obj/machinery/mineral/unloading_machine/proc/reset_move_check()
+	// First, reset it here
 	item_moved = FALSE
+	// Then check the in_dir location for the one behind it in the chain
 	var/turf/in_T = get_step(src, in_dir)
-	for(var/atom/movable/AM in_T)
+	for(var/atom/movable/AM in in_T)
+		// Did we find the unloader?
 		if(istype(AM,/obj/machinery/mineral/unloading_machine))
+			// If so, do the work
 			var/obj/machinery/mineral/unloading_machine/UM = AM
+			// Nothing to reset? Stop here
 			if (!UM.item_moved)
 				return
+			// Otherwise, reset each one recursively, follow logic above
 			UM.reset_move_check()
 	
 // Couldn't inherit most of this sadly -kanef
