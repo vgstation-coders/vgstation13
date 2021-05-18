@@ -15,6 +15,7 @@
 	out_dir = WEST
 	
 	var/selectable_types = list(/obj/item = "All items") //List of types we can move -kanef
+	var/item_moved = FALSE //Variable for loop detection, only used in chaining
 
 /obj/machinery/mineral/stacking_machine/New()
 	. = ..()
@@ -60,18 +61,38 @@
 			// Consistent types throughout
 			// Also check to make sure the direction towards this unloader from another isn't its output dir
 			// Or it causes horrible infinite loops that crash MC
-			if(!is_type_in_list(A,UM.allowed_types) || get_dir(UM,src) == UM.out_dir)
+			if(!is_type_in_list(A,UM.allowed_types) || get_dir(UM,src) == UM.out_dir || UM.item_moved == TRUE)
+				// If check fails, reset the chain values to false
+				reset_move_check()
 				return FALSE
+			else
+				// Otherwise, it's true, this is important for later to detect loops
+				item_moved = TRUE
 		// Cryo pods, etc work too
 		if(AM.conveyor_act(A))
+			if (!item_moved)
+				reset_move_check()
 			return TRUE
-
+	// Call it again for good measure, now that conveyor and unloader checks are done, we don't need this variable outside of chaining
+	if (!item_moved)
+		reset_move_check()
 	// Otherwise, just act normal and put stuff on the other side
 	if(out_T.Cross(mover, out_T) && out_T.Enter(mover))
 		A.forceMove(out_T)
 		return TRUE
 	return FALSE
 
+
+/obj/machinery/mineral/unloading_machine/proc/reset_move_check()
+	item_moved = FALSE
+	var/turf/in_T = get_step(src, in_dir)
+	for(var/atom/movable/AM in_T)
+		if(istype(AM,/obj/machinery/mineral/unloading_machine))
+			var/obj/machinery/mineral/unloading_machine/UM = AM
+			if (!UM.item_moved)
+				return
+			UM.reset_move_check()
+	
 // Couldn't inherit most of this sadly -kanef
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
