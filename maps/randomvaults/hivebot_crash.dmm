@@ -45,7 +45,7 @@
 "aS" = (/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "aT" = (/obj/item/stack/tile/plasteel,/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
 "aU" = (/turf/space,/turf/simulated/shuttle/wall{dir = 8; icon_state = "diagonalWall3"},/area/vault/hive_shuttle)
-"aV" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/hive_shuttle)
+"aV" = (/turf/simulated/shuttle/wall{dir = 1; icon_state = "wall3"},/area/vault/hive_shuttle)
 "aW" = (/obj/item/stack/rods,/obj/item/robot_parts/robot_component/actuator,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
 "aX" = (/obj/structure/girder/displaced,/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
 "aY" = (/obj/item/robot_parts/robot_component/actuator,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/plating/airless,/area/vault/hive_shuttle)
@@ -62,16 +62,16 @@
 "bj" = (/obj/item/robot_parts/robot_component/binary_communication_device,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bk" = (/obj/effect/decal/cleanable/blood/oil/streak,/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bl" = (/obj/structure/rack,/obj/item/robot_parts/robot_component/diagnosis_unit,/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bm" = (/obj/machinery/r_n_d/fabricator/mech,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bn" = (/obj/machinery/mineral/output,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
+"bm" = (/obj/machinery/r_n_d/fabricator/mech{output_dir = 4},/turf/space,/area/vault/hive_shuttle)
+"bn" = (/obj/machinery/r_n_d/fabricator/mech{output_dir = 8},/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bo" = (/obj/item/robot_parts/robot_component/camera,/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bp" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bq" = (/obj/machinery/mineral/output,/obj/item/robot_parts/robot_component/armour,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
+"bq" = (/obj/machinery/r_n_d/fabricator/mech{output_dir = 4},/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "br" = (/obj/item/robot_parts/robot_component/armour,/obj/effect/decal/cleanable/blood/gibs/robot,/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bs" = (/obj/machinery/mineral/output,/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
+"bs" = (/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bt" = (/obj/item/robot_parts/robot_component/armour,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bu" = (/obj/item/robot_parts/robot_component/camera,/obj/item/robot_parts/robot_component/binary_communication_device,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
-"bv" = (/obj/machinery/mineral/output,/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
+"bv" = (/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bw" = (/obj/machinery/computer/rdconsole/robotics,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bx" = (/obj/item/robot_parts/robot_component/binary_communication_device,/obj/structure/rack,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/plasteel{amount = 50},/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "by" = (/obj/structure/rack,/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/device/flash/synthetic,/obj/item/stack/cable_coil,/obj/item/stack/cable_coil,/obj/item/stack/cable_coil,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/obj/item/weapon/cell/super/empty,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
@@ -95,11 +95,10 @@ aaaaaaaaaaaaaPaQaRaSaTaPaaaaaa
 aaaaaaaaaaaUaVaWaXaYaQaVaZaaaa
 aaaaaaaaaaaPbabbbcbdbebfaPaaaa
 aaaaaaaaaaaPbgbhbibjbkblaPaaaa
-aaaaaaaaaaaPbmbnbobpbqbmaPaaaa
-aaaaaaaaaaaPbmbnaSbrbsbmaPaaaa
-aaaaaaaaaaaPbmbnbtbubvbmaPaaaa
+aaaaaaaaaaaPbmbebobpbtbnaPaaaa
+aaaaaaaaaaaPbqbeaSbrbsbnaPaaaa
+aaaaaaaaaaaPbqbebtbubvbnaPaaaa
 aaaaaaaaaaaPbwbebxbybtbzaPaaaa
 aaaaaaaaaaaPaPbAbAbAbAaPaPaaaa
 aaaaaaaaaabBbCbDbDbDbDbEbFaaaa
 "}
-

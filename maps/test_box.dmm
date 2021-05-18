@@ -42022,7 +42022,9 @@
 	},
 /area/science/robotics)
 "bCq" = (
-/obj/machinery/r_n_d/fabricator/mech,
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 2
+	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
@@ -83485,6 +83487,19 @@
 	icon_state = "swall_f5"
 	},
 /area/shuttle/escape_pod5/station)
+"puQ" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 2
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/science/robotics)
 
 (1,1,1) = {"
 aaa
@@ -127565,7 +127580,7 @@ bvu
 bvu
 byS
 bAF
-bCq
+puQ
 bEj
 bFY
 bFY
