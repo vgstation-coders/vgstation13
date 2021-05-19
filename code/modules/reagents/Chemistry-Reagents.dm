@@ -8299,6 +8299,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			else
 				to_chat(M, "<span class='warning'>Your mind breaks apart.</span>")
 				M.hallucination += 200
+	if(M.mind && M.mind.suiciding)
+		M.mind.suiciding = FALSE
+		to_chat(M, "<span class='numb'>Whoah... You feel like this life is worth living after all!</span>")
 
 /datum/reagent/gravy
 	name = "Gravy"
