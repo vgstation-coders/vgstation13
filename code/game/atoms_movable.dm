@@ -731,9 +731,9 @@
 ////////////
 /// HEAR ///
 ////////////
-/atom/movable/proc/addHear()
+/atom/movable/proc/addHear(var/hearer_type = /mob/virtualhearer)
 	flags |= HEAR
-	virtualhearer = new /mob/virtualhearer(src)
+	virtualhearer = new hearer_type(src)
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
