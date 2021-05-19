@@ -388,6 +388,8 @@ var/stacking_limit = 90
 			candidate_rules += chosen_one
 			drafted_rules -= chosen_one
 			spend_threat(chosen_one.cost)
+			if(!chosen_one.choose_candidates())
+				stack_trace("rule [chosen_one] failed to choose candidates despite ready() returning 1.")
 			drafted_rules = trimming_remaining_rules(chosen_one, drafted_rules)
 
 	// Is THE LIST non-empty ?
