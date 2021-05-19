@@ -387,6 +387,7 @@ var/stacking_limit = 90
 			log_admin("DYNAMIC MODE: Picking a [istype(chosen_one, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[chosen_one.name]</font>!")
 			candidate_rules += chosen_one
 			drafted_rules -= chosen_one
+			threat -= chosen_one.cost
 			drafted_rules = trimming_remaining_rules(chosen_one, drafted_rules)
 
 	// Is THE LIST non-empty ?
