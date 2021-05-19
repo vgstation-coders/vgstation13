@@ -69,6 +69,10 @@
 			return 0
 	return 1
 
+// Done via review_applications.
+/datum/dynamic_ruleset/midround/from_ghosts/choose_candidates()
+	return TRUE
+
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
 		return 0

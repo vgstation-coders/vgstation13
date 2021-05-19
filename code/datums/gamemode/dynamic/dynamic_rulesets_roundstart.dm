@@ -336,24 +336,28 @@
 		required_candidates = 1
 	. = ..()
 
-/datum/dynamic_ruleset/roundstart/bloodcult/execute()
-	//if ready() did its job, candidates should have 4 or more members in it
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (!cult)
-		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-
+/datum/dynamic_ruleset/roundstart/bloodcult/choose_candidates()
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	var/cultists = cultist_cap[indice_pop]
-
-	for(var/cultists_number = 1 to cultists)
+	for (var/i = 1 to cultists)
 		if(candidates.len <= 0)
 			break
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/bloodcult/execute()
+	//if ready() did its job, candidates should have 4 or more members in it
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+	var/leader = 1
+	for(var/mob/M in assigned)
 		var/datum/role/cultist/newCultist
-		if (cultists_number == 1) // First of the gang
+		if (leader) // First of the gang
 			newCultist = new /datum/role/cultist/chief
+			leader = 0
 		else
 			newCultist = new
 		newCultist.AssignToRole(M.mind,1)
