@@ -449,7 +449,6 @@ var/stacking_limit = 90
 		threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 		return pick_delay(the_rule)
 
-	spend_threat(the_rule.cost)
 	threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 	if (the_rule.execute())//this should never fail since ready() returned 1
 		executed_rules += the_rule
