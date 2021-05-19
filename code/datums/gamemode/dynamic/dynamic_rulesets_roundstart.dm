@@ -50,7 +50,7 @@
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 2
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
 	cost = 15
 	var/traitor_threshold = 3
 	var/additional_cost = 5
@@ -390,6 +390,7 @@
 	requirements = list(90, 80, 60, 30, 20, 10, 10, 10, 10, 10)
 	high_population_requirement = 40
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
 	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
