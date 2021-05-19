@@ -310,7 +310,8 @@
 		if(/obj/item/clothing/head/helmet/tactical/sec,/obj/item/clothing/head/helmet/tactical/sec/preattached)
 			name = "Sergeant [real_name]"
 			desc = "The ever-loyal, the ever-vigilant."
-			emote_hear = list("stops you right there, criminal scum!", "ignores the chain of command.", "stuns you.")
+			emote_see = list("ignores the chain of command.", "stuns you.")
+			emote_hear = list("stops you right there, criminal scum!")
 			valid = 1
 
 		if(/obj/item/clothing/head/helmet/tactical/swat)
@@ -322,14 +323,14 @@
 		if(/obj/item/clothing/head/chefhat,	/obj/item/clothing/head/collectable/chef)
 			name = "Sous chef [real_name]"
 			desc = "Your food will be taste-tested.  All of it."
-			emote_see = list("looks for the lamb sauce.", "eats the food")
+			emote_see = list("looks for the lamb sauce.", "eats the food.")
 			emote_hear = list("complains that the meal is fucking raw!")
 			valid = 1
 
-		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain)
+		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain, /obj/item/clothing/head/cap)
 			name = "Captain [real_name]"
 			desc = "Probably better than the last captain."
-			emote_see = list("secures the spare.", "hides the nuke disk.")
+			emote_see = list("secures the spare.", "hides the nuke disk.", "abuses his authority.")
 			emote_hear = list("assures the crew he is NOT a comdom.")
 			valid = 1
 
@@ -367,7 +368,7 @@
 			emote_hear = list("asks you to max the suit sensors.")
 			valid = 1
 
-		if(/obj/item/clothing/head/pirate, /obj/item/clothing/head/collectable/pirate)
+		if(/obj/item/clothing/head/pirate, /obj/item/clothing/head/collectable/pirate, /obj/item/clothing/head/hgpiratecap)
 			name = "[pick("Ol'","Scurvy","Black","Rum","Gammy","Bloody","Gangrene","Death","Long-John")] [pick("kibble","leg","beard","tooth","poop-deck","Threepwood","Le Chuck","corsair","Silver","Crusoe")]"
 			desc = "Yaarghh! Thar' be a scurvy dog!"
 			emote_see = list("hunts for treasure.","stares coldly...","gnashes his tiny corgi teeth.")
