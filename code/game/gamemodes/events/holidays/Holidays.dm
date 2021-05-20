@@ -73,7 +73,7 @@ var/global/Holiday = null
 				if(12)
 					current_holidays += OWL_AND_PUSSYCAT_DAY // what a dumb day of observence...but we -do- have costumes already :3
 				if(20)
-					current_holidays += WORLD_BEE_DAY
+					current_holidays += WORLD_BEE_DAY //bzzzzzzzzzzzzzzzzzzzz
 
 		if(6) // Jun
 			switch(DD)
