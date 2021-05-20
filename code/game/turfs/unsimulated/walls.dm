@@ -73,6 +73,8 @@
 	return null
 
 /turf/unsimulated/wall/splashscreen/New()
+	icon = 'icons/titleBerserk.png'
+	return
 	if(SNOW_THEME)
 		icon = 'icons/snowstation.gif' // not in the splashworks file so it doesn't appear in other cases
 		return
