@@ -413,19 +413,16 @@
 	allowed = list(
 		/obj/item/weapon/gun,
 		/obj/item/device/flashlight,
-		/obj/item/device/radio,
-		/obj/item/device/gps,
 		/obj/item/weapon/tank,
 		/obj/item/weapon/melee/baton,
 		/obj/item/weapon/reagent_containers/spray/pepper,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
 		/obj/item/weapon/bikehorn/baton,
-		/obj/item/stack/medical,
-		/obj/item/weapon/reagent_containers/syringe,
-		/obj/item/weapon/reagent_containers/hypospray,
+		/obj/item/weapon/storage/firstaid,
 		/obj/item/device/healthanalyzer,
-		/obj/item/roller,
+		/obj/item/stack/medical,
+		/obj/item/roller
 		/obj/item/weapon/autopsy_scanner/healthanalyzerpro
 	)
 	siemens_coefficient = 0.7
