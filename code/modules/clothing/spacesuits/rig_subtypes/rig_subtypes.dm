@@ -422,8 +422,8 @@
 		/obj/item/weapon/storage/firstaid,
 		/obj/item/device/healthanalyzer,
 		/obj/item/stack/medical,
-		/obj/item/roller
-		/obj/item/weapon/autopsy_scanner/healthanalyzerpro
+		/obj/item/roller,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro,
 	)
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
