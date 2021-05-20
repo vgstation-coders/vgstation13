@@ -60,6 +60,16 @@
 			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
 			clowned = TRUE
 			update_icon()
+
+	if(clowned == FALSE && istype(A,/obj/item/toy/crayon/green))
+		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/clothing/suit/armor/vest/medic/I = (get_turf(src.loc))
+			user.put_in_hands(I)
+			qdel(src)
+			update_icon()
 	..()
 
 /obj/item/clothing/suit/armor/vest/security/decontaminate()
@@ -75,6 +85,13 @@
 /obj/item/clothing/suit/armor/vest/security/clown/New()
 	clowned = TRUE
 	update_icon()
+
+/obj/item/clothing/suit/armor/vest/medic
+	name = "medic armor"
+	desc = "An armored vest that protects against some damage. This one has the markings of a combat medic."
+	icon_state = "armorsecmed"
+	item_state = "armor"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/warden
 	name = "Warden's jacket"
