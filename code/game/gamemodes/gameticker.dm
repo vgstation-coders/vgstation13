@@ -52,6 +52,8 @@ var/datum/controller/gameticker/ticker
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
+	var/oursong = file("sound/music/guts.ogg")
+/*
 	var/oursong = file(pick(
 		"sound/music/space.ogg",
 		"sound/music/traitor.ogg",
@@ -74,7 +76,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/carmenmirandasghost.ogg",
 		"sound/music/twilight.ogg",
 		))
-
+*/
 	if(SNOW_THEME)
 		var/path = "sound/music/xmas/"
 		var/list/filenames = flist(path)
