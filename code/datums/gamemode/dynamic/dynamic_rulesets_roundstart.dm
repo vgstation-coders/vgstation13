@@ -261,6 +261,7 @@
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	persistent = 1
+	flags = HIGHLANDER_RULESET
 //	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
 
