@@ -17,9 +17,9 @@
 	maxHealth = 30
 	gender = MALE
 	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-	speak_emote = list("barks", "woofs")
-	emote_hear = list("barks", "woofs", "yaps")
-	emote_see = list("shakes its head", "shivers", "pants")
+	speak_emote = list("barks.", "woofs.")
+	emote_hear = list("barks.", "woofs.", "yaps.")
+	emote_see = list("shakes its head.", "shivers.", "pants.")
 	emote_sound = list("sound/voice/corgibark.ogg")
 	speak_chance = 1
 	turns_per_move = 10
@@ -310,36 +310,42 @@
 		if(/obj/item/clothing/head/helmet/tactical/sec,/obj/item/clothing/head/helmet/tactical/sec/preattached)
 			name = "Sergeant [real_name]"
 			desc = "The ever-loyal, the ever-vigilant."
+			emote_see = list("ignores the chain of command.", "stuns you.")
+			emote_hear = list("stops you right there, criminal scum!")
 			valid = 1
 
 		if(/obj/item/clothing/head/helmet/tactical/swat)
 			name = "Lieutenant [real_name]"
 			desc = "When the going gets ruff..."
+			emote_hear = list("goes dark.", "waits for his retirement tomorrow.")
 			valid = 1
 
 		if(/obj/item/clothing/head/chefhat,	/obj/item/clothing/head/collectable/chef)
 			name = "Sous chef [real_name]"
 			desc = "Your food will be taste-tested.  All of it."
+			emote_see = list("looks for the lamb sauce.", "eats the food.")
+			emote_hear = list("complains that the meal is fucking raw!")
 			valid = 1
 
-		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain)
+		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain, /obj/item/clothing/head/cap)
 			name = "Captain [real_name]"
 			desc = "Probably better than the last captain."
-			emote_hear = list("secures the spare.", "hides the nuke disk.", "assures the crew he is NOT a comdom.")
+			emote_see = list("secures the spare.", "hides the nuke disk.", "abuses his authority.")
+			emote_hear = list("assures the crew he is NOT a comdom.")
 			valid = 1
 
 		if(/obj/item/clothing/head/kitty, /obj/item/clothing/head/kitty/collectable)
 			name = "Runtime"
-			emote_see = list("coughs up a furball.", "stretches.")
-			emote_hear = list("purrs")
-			speak = list("Purrr", "Meow!", "MAOOOOOW!", "HISSSSS", "MEEEEEEW")
 			desc = "It's a cute little kitty-cat! Well, he's definitely cute!"
+			emote_see = list("coughs up a furball.", "stretches.")
+			emote_hear = list("purrs.")
+			speak = list("Purrr", "Meow!", "MAOOOOOW!", "HISSSSS!", "MEEEEEEW!")
 			valid = 1
 
 		if(/obj/item/clothing/head/rabbitears, /obj/item/clothing/head/collectable/rabbitears)
 			name = "Hoppy"
-			emote_see = list("twitches its nose.", "hops around a bit.")
 			desc = "This is Hoppy. It's a corgi-er, bunny rabbit?"
+			emote_see = list("twitches its nose.", "hops around a bit.", "eats a doggy carrot.", "jumps in place.")
 			valid = 1
 
 		if(/obj/item/clothing/head/beret, /obj/item/clothing/head/collectable/beret)
@@ -352,15 +358,17 @@
 		if(/obj/item/clothing/head/det_hat)
 			name = "Detective [real_name]"
 			desc = "[name] sees through your lies..."
-			emote_see = list("investigates the area.","sniffs around for clues.","searches for scooby snacks.")
+			emote_see = list("investigates the area.", "sniffs around for clues.", "searches for scooby snacks.")
 			valid = 1
 
 		if(/obj/item/clothing/head/nursehat)
 			name = "Nurse [real_name]"
 			desc = "[name] needs 100cc of beef jerky... STAT!"
+			emote_see = list("checks the crew monitoring console.", "stares, unblinking.", "tries to inject you with medicine... But fails!")
+			emote_hear = list("asks you to max the suit sensors.")
 			valid = 1
 
-		if(/obj/item/clothing/head/pirate, /obj/item/clothing/head/collectable/pirate)
+		if(/obj/item/clothing/head/pirate, /obj/item/clothing/head/collectable/pirate, /obj/item/clothing/head/hgpiratecap)
 			name = "[pick("Ol'","Scurvy","Black","Rum","Gammy","Bloody","Gangrene","Death","Long-John")] [pick("kibble","leg","beard","tooth","poop-deck","Threepwood","Le Chuck","corsair","Silver","Crusoe")]"
 			desc = "Yaarghh! Thar' be a scurvy dog!"
 			emote_see = list("hunts for treasure.","stares coldly...","gnashes his tiny corgi teeth.")
@@ -376,20 +384,20 @@
 
 		if(/obj/item/clothing/head/collectable/police)
 			name = "Officer [real_name]"
-			emote_see = list("drools.","looks for donuts.")
+			emote_see = list("drools.", "looks for donuts.", "ignores Space Law.")
 			desc = "Stop right there, criminal scum!"
 			valid = 1
 
 		if(/obj/item/clothing/head/wizard/fake,	/obj/item/clothing/head/wizard,	/obj/item/clothing/head/collectable/wizard)
 			name = "Grandwizard [real_name]"
-			speak = list("Woof!", "Bark!", "EI NATH", "FORTI GY AMA")
+			speak = list("Woof!", "Bark!", "EI NATH!", "FORTI GY AMA!")
 			emote_see = list("casts a dastardly spell!", "curses you with a bark!", "summons a steak into his stomach.")
 			valid = 1
 
 		if(/obj/item/clothing/head/cardborg)
 			name = "Borgi"
 			speak = list("Ping!","Beep!","Woof!")
-			emote_see = list("goes rogue.", "sniffs out non-humans.", "waits for a malfunction.")
+			emote_see = list("goes rogue.", "sniffs out non-humans.", "waits for a malfunction.", "ignores law 2.", "gets EMP'd.", "doorcrushes you.")
 			desc = "Result of robotics budget cuts."
 			valid = 1
 
@@ -417,8 +425,8 @@
 		if(/obj/item/clothing/head/fedora)
 			name = "Autistic [real_name]"
 			desc = "His paws seem to be covered in what looks like Cheezy Honker dust."
-			emote_hear = list("barks ironicly", "makes you cringe")
-			emote_see = list("unsheathes katana.", "tips fedora.","posts on Mongolian basket-weaving forums.")
+			emote_hear = list("barks ironically.", "makes you cringe.")
+			emote_see = list("unsheathes katana.", "tips fedora.", "posts on Mongolian basket-weaving forums.", "theorycrafts about nothing.")
 			valid = 1
 
 		if(/obj/item/clothing/head/fez)
@@ -430,7 +438,8 @@
 
 		if(/obj/item/clothing/head/helmet/space/rig)
 			name = "Station Engineer [real_name]"
-			desc = "Ian want a cracker!"
+			desc = "Ian wanna cracker!"
+			emote_see = list("scrungulooses.", "activates the SMES units.", "ignores engine safety.", "accidentally plasmafloods.", "delaminates the Supermatter.")
 			valid = 1
 			min_oxy = 0
 			minbodytemp = 0
@@ -439,7 +448,7 @@
 		/*
 		if(/obj/item/clothing/head/hardhat/reindeer)
 			name = "[real_name] the red-nosed Corgi"
-			emote_hear = list("lights the way.", "illuminates the night sky.", "is bullied by the other reindogs. Poor Ian.")
+			emote_see = list("lights the way.", "illuminates the night sky.", "is bullied by the other reindogs. Poor Ian.")
 			desc = "He has a very shiny nose."
 			SetLuminosity(1)
 			valid = 1
@@ -447,11 +456,12 @@
 		if(/obj/item/clothing/head/alien_antenna)
 			name = "Al-Ian"
 			desc = "Take us to your dog biscuits!"
+			emote_see = list("drinks sulphuric acid.", "reads your mind.", "kidnaps your cattle.")
 			valid = 1
 
 		if(/obj/item/clothing/head/franken_bolt)
 			name = "Corgenstein's monster"
-			desc = "We can rebuild him, we have the technology!"
+			desc = "If I cannot inspire love, I will cause fear! Now fetch me them doggy biscuits."
 			valid = 1
 
 		if(/obj/item/clothing/mask/vamp_fangs)
@@ -459,6 +469,7 @@
 			if(!V.glowy_fangs)
 				name = "Vlad the Ianpaler"
 				desc = "Listen to them, the children of the night. What music they make!"
+				emote_hear = list("bares his fangs.", "screeches.", "tries to suck some blood.")
 				valid = 1
 			else
 				to_chat(usr, "<span class = 'notice'>The glow of /the [V] startles [real_name]!</span>")
@@ -466,6 +477,8 @@
 		if(/obj/item/clothing/head/cowboy)
 			name = "Yeehaw Ian"
 			desc = "Are you really just gonna stroll past without saying howdy?"
+			emote_see = list("bullwhips you.", "spins his revolver.")
+			emote_hear = list("complains about city folk.")
 			valid = 1
 
 
@@ -583,7 +596,7 @@
 	response_help  = "pets"
 	response_disarm = "bops"
 	response_harm   = "kicks"
-	spin_emotes = list("dances around.","chases his tail.")
+	spin_emotes = list("dances around.", "chases his tail.")
 	is_pet = TRUE
 	var/creatine_had = 0
 
@@ -616,8 +629,8 @@
 
 /mob/living/simple_animal/corgi/Ian/santa
 	name = "Santa's Corgi Helper"
-	emote_hear = list("barks christmas songs", "yaps merrily")
-	emote_see = list("looks for presents", "checks his list")
+	emote_hear = list("barks christmas songs.", "yaps merrily.")
+	emote_see = list("looks for presents.", "checks his list.")
 	desc = "He's very fond of milk and cookies."
 
 /mob/living/simple_animal/corgi/Ian/santa/New()
@@ -727,7 +740,7 @@
 	icon_state = "doby"
 	icon_living = "doby"
 	icon_dead = "doby_dead"
-	spin_emotes = list("prances around","chases her nub of a tail")
+	spin_emotes = list("prances around.","chases her nub of a tail.")
 	is_pet = TRUE
 
 	species_type = /mob/living/simple_animal/corgi/sasha
@@ -747,7 +760,7 @@
 /mob/living/simple_animal/corgi/saint
 	name = "saint corgi"
 	real_name = "saint corgi"
-	desc = "It's a saint bernard corgi mix breed. It has a tiny rescue barrel strapped around his collar to warm up travelers."
+	desc = "It's a saint bernard-corgi mix breed. It has a tiny rescue barrel strapped around his collar to warm up travelers."
 	icon_state = "saint_corgi"
 	icon_living = "saint_corgi"
 	icon_dead = "saint_corgi_dead"
