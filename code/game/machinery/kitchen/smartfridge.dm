@@ -13,6 +13,7 @@
 	idle_power_usage = 5
 	active_power_usage = 100
 	flags = NOREACT
+	source_temperature = T0C + 4
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
 	var/list/datum/fridge_pile/piles = list()
@@ -104,6 +105,16 @@
 	for(var/ac_type in accepted_types)
 		if(istype(O, ac_type))
 			return 1
+
+/obj/machinery/smartfridge/thermal_energy_transfer()
+	return -75 //slow
+
+/obj/machinery/smartfridge/process()
+	if(stat & (NOPOWER|BROKEN) || !anchored)
+		return
+
+	for(var/obj/item/I in contents)
+		I.attempt_heating(src)
 
 /obj/machinery/smartfridge/seeds
 	name = "\improper MegaSeed Servitor"

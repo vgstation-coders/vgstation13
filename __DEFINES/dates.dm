@@ -42,6 +42,7 @@
 #define NEW_YEARS_EVE "New Year's Eve"
 #define FRIDAY_THE_13TH "Friday the 13th"
 #define VG_BIRTHDAY "/vg/station Anniversary"
+#define WORLD_BEE_DAY "World Bee Day"
 
 //timeslots as strings
 #define SLEEPTIME "the morning shift" //3 to 11

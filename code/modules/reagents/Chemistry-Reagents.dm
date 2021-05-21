@@ -206,7 +206,7 @@
 ///	return
 ///datum/reagent/proc/on_update(var/atom/A)
 //	return
-	
+
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 
@@ -479,7 +479,7 @@
 //	if(data["blood_colour"])
 //		color = data["blood_colour"]
 //	return ..()
-	
+
 /datum/reagent/blood/reaction_turf(var/turf/simulated/T, var/volume) //Splash the blood all over the place
 
 	var/datum/reagent/self = src
@@ -2070,7 +2070,7 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
-			
+
 /datum/reagent/diamond
 	name = "Diamond dust"
 	id = DIAMONDDUST
@@ -2079,16 +2079,16 @@
 	color = "c4d4e0" //196 212 224
 	density = 3.51
 	specheatcap = 6.57
-	
+
 /datum/reagent/diamond/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
-	
+
 	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
 	if(prob(30))
 		M.audible_scream()
-	
+
 /datum/reagent/phazon
 	name = "Phazon salt"
 	id = PHAZON
@@ -8299,6 +8299,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			else
 				to_chat(M, "<span class='warning'>Your mind breaks apart.</span>")
 				M.hallucination += 200
+	if(M.mind && M.mind.suiciding)
+		M.mind.suiciding = FALSE
+		to_chat(M, "<span class='numb'>Whoah... You feel like this life is worth living after all!</span>")
 
 /datum/reagent/gravy
 	name = "Gravy"
@@ -9063,6 +9066,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.hallucination += 5	//50% mindbreaker
 
 /datum/reagent/self_replicating
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	var/whitelisted_ids = list()
 
 /datum/reagent/self_replicating/post_transfer(var/datum/reagents/donor)
@@ -9079,9 +9083,51 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Chrysopoeia, the artificial production of gold, was one of the defining ambitions of ancient alchemy. Turns out, all it took was a little plasma. Converts all other reagents into Midazoline, except for Mercury, which will convert Midazoline into itself."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#F7C430" //rgb: 247, 196, 48
-	specheatcap = 0.129
 	density = 19.3
+	specheatcap = 0.129
 	whitelisted_ids = list(MERCURY)
+
+/datum/reagent/temp_hearer/
+	id = EXPLICITLY_INVALID_REAGENT_ID
+	data = list("stored_phrase" = null)
+
+/datum/reagent/temp_hearer/on_introduced(var/data)
+	. = ..()
+	var/obj/item/weapon/reagent_containers/RC = holder.my_atom
+	if(!istype(RC))
+		return
+	if(!RC.virtualhearer)
+		RC.addHear(/mob/virtualhearer/one_time)
+
+/datum/reagent/temp_hearer/proc/parent_heard(var/datum/speech/speech, var/rendered_speech="")
+	if(!data["stored_phrase"])
+		set_phrase(sanitize(speech.message))
+		var/atom/container = holder.my_atom
+		if(container.is_open_container())
+			container.visible_message("<span class='notice'>[bicon(container)] The solution fizzles for a moment.</span>", "You hear something fizzling for a moment.", "<span class='notice'>[bicon(container)] \The [container] replies something, but you can't hear them.</span>")
+			if(!(container.flags & SILENTCONTAINER))
+				playsound(container, 'sound/effects/bubbles.ogg', 20, -3)
+
+/datum/reagent/temp_hearer/proc/set_phrase(var/phrase)
+	data["stored_phrase"] = phrase
+
+/datum/reagent/temp_hearer/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	description = "Sound-activated solution. Permanently stores the first soundwaves it 'hears' into a long polymer chain, which reacts into a crude form of speech into the ears of a live host. Tastes sweet."
+	reagent_state = REAGENT_STATE_LIQUID
+	custom_metabolism = 0.01
+	color = "#8E18A9" //rgb: 142, 24, 169
+	density = 1.58
+	specheatcap = 1.44
+
+/datum/reagent/temp_hearer/locutogen/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(!M.isUnconscious() && data["stored_phrase"])
+		to_chat(M, "You hear a voice in your head saying: <span class='bold'>'[data["stored_phrase"]]'</span>.")
+		M.reagents.del_reagent(LOCUTOGEN)
 
 //////////////////////
 //					//

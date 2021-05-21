@@ -2052,6 +2052,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "robot maintenance equipment crate"
 	group = "Science"
 
+/datum/supply_packs/grey_extract
+	name = "Grey slime extracts"
+	contains = list(/obj/item/slime_extract/grey,
+					/obj/item/slime_extract/grey
+					)
+	cost = 200
+	containertype = /obj/structure/closet/crate/sci
+	containername = "gret slime extract crate"
+	access = list(access_science)
+	group = "Science"
+
 /datum/supply_packs/suspension_gen
 	name = "Suspension field generator"
 	contains = list(/obj/machinery/suspension_gen)

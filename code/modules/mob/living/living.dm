@@ -924,20 +924,20 @@ Thanks.
 			if(istype(B, /obj/structure/bed/guillotine))
 				var/obj/structure/bed/guillotine/G = B
 				if(G.open)
-					G.manual_unbuckle(L)
+					G.manual_unbuckle(L, resisting = TRUE)
 				else
 					L.visible_message("<span class='warning'>\The [L] attempts to dislodge \the [G]'s stocks!</span>",
 									  "<span class='warning'>You attempt to dislodge \the [G]'s stocks (this will take around thirty seconds).</span>",
 									  self_drugged_message="<span class='warning'>You attempt to chew through the wooden stocks of \the [G] (this will take a while).</span>")
 					spawn(0)
-						if(do_after(usr, usr, 300))
+						if(do_after(usr, usr, 30 SECONDS))
 							if(!L.locked_to)
 								return
 							L.visible_message("<span class='danger'>\The [L] dislodges \the [G]'s stocks and climbs out of \the [src]!</span>",\
 								"<span class='notice'>You dislodge \the [G]'s stocks and climb out of \the [G].</span>",\
 								self_drugged_message="<span class='notice'>You successfully chew through the wooden stocks.</span>")
 							G.open = TRUE
-							G.manual_unbuckle(L)
+							G.manual_unbuckle(L, resisting = TRUE)
 							G.update_icon()
 							G.verbs -= /obj/structure/bed/guillotine/verb/open_stocks
 							G.verbs += /obj/structure/bed/guillotine/verb/close_stocks
@@ -952,14 +952,14 @@ Thanks.
 						C.visible_message("<span class='warning'>[C] is trying to forcefully unbuckle!</span>",
 						                   "<span class='warning'>You attempt to forcefully unbuckle (This will take around five seconds).</span>")
 						spawn(0) // I have no idea what this is supposed to actually do but everything else has it so why not
-							if(do_after(C, C, 50))
+							if(do_after(C, C, 5 SECONDS))
 								if(!C.handcuffed || !C.locked_to)
 									return
 								C.visible_message("<span class='danger'>[C] manages to forcefully unbuckle!</span>",
 								                  "<span class='notice'>You successfully forcefully unbuckle.</span>")
 								if(!isalien(C))
 									C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-								B.manual_unbuckle(C)
+								B.manual_unbuckle(C, resisting = TRUE)
 							else
 								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
 					else

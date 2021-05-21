@@ -96,6 +96,17 @@
 		if(user)
 			user.visible_message("\The [user] shorts out the lock on the interface on \the [src].","<span class='warning'>You short out the lock.</span>")
 
+/obj/machinery/power/rust_fuel_injector/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item/weapon/fuel_assembly) && !cur_assembly)
+		if(emergency_insert_ready)
+			cur_assembly = AM
+			AM.forceMove(src)
+			emergency_insert_ready = FALSE
+			nanomanager.update_uis(src)
+			return TRUE
+		return FALSE
+	return FALSE
+
 /obj/machinery/power/rust_fuel_injector/attackby(var/obj/item/W, var/mob/user)
 	if(..())
 		return 1

@@ -90,6 +90,17 @@
 		holding.forceMove(loc)
 		holding = null
 
+/obj/machinery/portable_atmospherics/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if((istype(AM, /obj/item/weapon/tank) && !( src.destroyed )))
+		if (src.holding)
+			return FALSE
+		var/obj/item/weapon/tank/T = AM
+		src.holding = T
+		AM.forceMove(src)
+		update_icon()
+		return TRUE
+	return FALSE
+
 /obj/machinery/portable_atmospherics/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 
 	var/obj/icon = src

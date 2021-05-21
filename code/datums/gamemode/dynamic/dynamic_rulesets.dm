@@ -54,6 +54,7 @@
 /datum/dynamic_ruleset/roundstart/delayed/ // Executed with a 30 seconds delay
 	var/delay = 30 SECONDS
 	var/required_type = /mob/living/carbon/human // No ghosts, new players or silicons allowed.
+	var/assigned_ckeys = list()
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
@@ -70,6 +71,15 @@
 	else
 		var/indice_pop = min(10,round(population/5)+1)
 		return (threat_level >= requirements[indice_pop])
+
+// -- Choosing the candidate(s) for a rule which is otherwise guarenteed to be executed.
+// This generic proc works for a solo candidate.
+// returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
+/datum/dynamic_ruleset/proc/choose_candidates()
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/proc/process()
 	//write here your rule execution code, everything about faction/role spawning/populating.

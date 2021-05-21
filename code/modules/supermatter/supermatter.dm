@@ -135,6 +135,10 @@
 	empulse(get_turf(src), 100, 200, 1)
 	qdel(src)
 
+/obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	Consume(AM)
+	return TRUE
+
 /obj/machinery/power/supermatter/ex_act(severity)
 	switch(severity)
 		if(3.0)
