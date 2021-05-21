@@ -87,7 +87,7 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/stacking_unit
 
-/datum/design/stacking_unit
+/datum/design/unloading_machine
 	name = "Circuit Design (Unloading Machine)"
 	desc = "A circuit board used to run a machine that unloads items and ore from one place to another."
 	id = "unloadingmachine"
