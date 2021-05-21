@@ -9,7 +9,7 @@
 	name = "Syndicate Traitors"
 	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
-							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
@@ -51,7 +51,7 @@
 	name = "Syndicate Challengers"
 	role_category = /datum/role/traitor/challenger
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
-							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 2
 	weight = 1
@@ -118,7 +118,7 @@
 	name = "Changelings"
 	role_category = /datum/role/changeling
 	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
-							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
@@ -169,7 +169,7 @@
 	name = "Vampires"
 	role_category = /datum/role/vampire
 	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
-							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
@@ -318,7 +318,7 @@
 	role_category = /datum/role/cultist
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective",
 							"Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent",
-							"Chief Engineer", "Chief Medical Officer", "Research Director")
+							"Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	enemy_jobs = list("Security Officer","Warden", "Detective","Head of Security", "Captain")
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
@@ -616,7 +616,7 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/delayed/revs
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
-	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent", "Brig Medic")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3

@@ -168,7 +168,7 @@
 	name = "Syndicate Sleeper Agent"
 	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain","Head of Personnel",
-							"Cyborg", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
+							"Cyborg", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT

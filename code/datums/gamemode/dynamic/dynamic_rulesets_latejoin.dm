@@ -43,7 +43,7 @@
 	name = "Syndicate Infiltrator"
 	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security",
-							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
+							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
@@ -145,7 +145,7 @@
 /datum/dynamic_ruleset/latejoin/provocateur
 	name = "Provocateur"
 	role_category = /datum/role/revolutionary
-	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	restricted_from_jobs = list("Merchant", "Brig Medic", "AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
 	required_pop = list(20,20,15,15,15,15,15,0,0,0)
 	required_candidates = 1
