@@ -19,22 +19,26 @@
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 
-/datum/dynamic_ruleset/roundstart/traitor/execute()
+/datum/dynamic_ruleset/roundstart/traitor/choose_candidates()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
 	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		var/datum/role/traitor/newTraitor = new
-		newTraitor.AssignToRole(M.mind,1)
-		newTraitor.Greet(GREET_ROUNDSTART)
-		// Above 3 traitors, we start to cost a bit more.
 		if (i > traitor_threshold)
 			if ((mode.threat > additional_cost))
 				mode.spend_threat(additional_cost)
 			else
 				break
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/traitor/execute()
+	for (var/mob/M in assigned)
+		var/datum/role/traitor/newTraitor = new
+		newTraitor.AssignToRole(M.mind,1)
+		newTraitor.Greet(GREET_ROUNDSTART)
+		// Above 3 traitors, we start to cost a bit more.
 	return 1
 
 //////////////////////////////////////////////
@@ -57,6 +61,21 @@
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 15
 
+// -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
+/datum/dynamic_ruleset/roundstart/challengers/choose_candidates()
+	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
+	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
+	for (var/i = 1 to num_traitors)
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		if (i > traitor_threshold)
+			if ((mode.threat > additional_cost))
+				mode.spend_threat(additional_cost)
+			else
+				break
+	return (assigned.len > 0)
+
 /datum/dynamic_ruleset/roundstart/challengers/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
 	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
@@ -64,20 +83,11 @@
 
 	var/list/double_agents = list()
 
-	for (var/i = 1 to num_traitors)
-		var/mob/M = pick(candidates)
-		assigned += M
-		candidates -= M
+	for (var/mob/M in assigned)
 		var/datum/role/traitor/challenger/newTraitor = new
 		double_agents += newTraitor
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
-		// Above 3 traitors, we start to cost a bit more.
-		if (i > traitor_threshold)
-			if ((mode.threat > additional_cost))
-				mode.spend_threat(additional_cost)
-			else
-				break
 
 	if (double_agents.len > 1)
 		for (var/i = 1 to (double_agents.len - 1))
@@ -117,13 +127,24 @@
 	cost = 18
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 	high_population_requirement = 30
+	var/changeling_threshold = 2
 
-/datum/dynamic_ruleset/roundstart/changeling/execute()
+// -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
+/datum/dynamic_ruleset/roundstart/changeling/choose_candidates()
 	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
 	for (var/i = 1 to num_changelings)
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
+		if (i > changeling_threshold)
+			if ((mode.threat > cost))
+				mode.spend_threat(cost)
+			else
+				break
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/changeling/execute()
+	for (var/mob/M in assigned)
 		var/datum/role/changeling/newChangeling = new
 		newChangeling.AssignToRole(M.mind,1)
 		//Assign to the hivemind faction
@@ -157,23 +178,29 @@
 	cost = 15
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
+	var/vampire_threshold = 2
 
-/datum/dynamic_ruleset/roundstart/vampire/execute()
+// -- Currently a copypaste of traitors. Could be fixed to be less copy & paste.
+/datum/dynamic_ruleset/roundstart/vampire/choose_candidates()
 	var/num_vampires = min(round(mode.roundstart_pop_ready / 10) + 1, candidates.len)
 	for (var/i = 1 to num_vampires)
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
+		// Above 2 vampires, we start to cost a bit more.
+		if (i > vampire_threshold)
+			if ((mode.threat > cost))
+				mode.spend_threat(cost)
+			else
+				break
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/vampire/execute()
+	for (var/mob/M in assigned)
 		var/datum/faction/vampire/fac = ticker.mode.CreateFaction(/datum/faction/vampire, null, 1)
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
-		// Above 2 vampires, we start to cost a bit more.
-		if (i >= 2)
-			if (mode.threat > cost)
-				mode.spend_threat(cost)
-			else
-				break
 	update_faction_icons()
 	return 1
 
@@ -204,10 +231,8 @@
 	return ..()
 
 /datum/dynamic_ruleset/roundstart/wizard/execute()
-	var/mob/M = pick(candidates)
+	var/mob/M = pick(assigned)
 	if (M)
-		assigned += M
-		candidates -= M
 		var/datum/role/wizard/newWizard = new
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
@@ -259,20 +284,25 @@
 		mode.picking_specific_rule(RM,TRUE) //forced
 */
 
+/datum/dynamic_ruleset/roundstart/cwc/choose_candidates()
+	for(var/wizards_number = 1 to total_wizards)
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+	return (assigned.len > 0)
+
 /datum/dynamic_ruleset/roundstart/cwc/execute()
 	var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
 	var/datum/faction/wizard/civilwar/wpf/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
-	for(var/wizards_number = 1 to total_wizards)
-		var/mob/M = pick(candidates)
+	for(var/wizards_number = 1 to assigned.len)
+		var/mob/M = pick(assigned)
 		if (M)
-			assigned += M
-			candidates -= M
 			var/datum/role/wizard/newWizard = new
-			newWizard.AssignToRole(M.mind,1)
 			if(wizards_number % 2)
 				WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
 			else
 				PFW.HandleRecruitedRole(newWizard)
+			newWizard.AssignToRole(M.mind,1)
 			newWizard.Greet(GREET_MIDROUND)
 	return 1
 
@@ -306,24 +336,28 @@
 		required_candidates = 1
 	. = ..()
 
-/datum/dynamic_ruleset/roundstart/bloodcult/execute()
-	//if ready() did its job, candidates should have 4 or more members in it
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (!cult)
-		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-
+/datum/dynamic_ruleset/roundstart/bloodcult/choose_candidates()
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	var/cultists = cultist_cap[indice_pop]
-
-	for(var/cultists_number = 1 to cultists)
+	for (var/i = 1 to cultists)
 		if(candidates.len <= 0)
 			break
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/bloodcult/execute()
+	//if ready() did its job, candidates should have 4 or more members in it
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+	var/leader = 1
+	for(var/mob/M in assigned)
 		var/datum/role/cultist/newCultist
-		if (cultists_number == 1) // First of the gang
+		if (leader) // First of the gang
 			newCultist = new /datum/role/cultist/chief
+			leader = 0
 		else
 			newCultist = new
 		newCultist.AssignToRole(M.mind,1)
@@ -338,6 +372,10 @@
 //                                          //
 //////////////////////////////////////////////
 /*
+
+NB IF UNCOMMENTING : setting `assigned` in execute() should not be done.
+Assign your candidates in choose_candidates() instead.
+
 /datum/dynamic_ruleset/roundstart/cult_legacy
 	name = "Cult (Legacy)"
 	role_category = /datum/role/legacy_cultist
@@ -399,22 +437,25 @@
 		required_candidates = 1
 	. = ..()
 
-/datum/dynamic_ruleset/roundstart/nuclear/execute()
-	//If ready() did its job, candidates should have 5 or more members in it
-	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-	if(!nuclear)
-		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
-
+/datum/dynamic_ruleset/roundstart/nuclear/choose_candidates()
 	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	var/operatives = operative_cap[indice_pop]
 	message_admins("[name]: indice_pop = [indice_pop], operatives = [operatives]")
-	var/leader = 1
 	for(var/operatives_number = 1 to operatives)
 		if(candidates.len <= 0)
 			break
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/nuclear/execute()
+	//If ready() did its job, candidates should have 5 or more members in it
+	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(!nuclear)
+		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
+	var/leader = 1
+	for(var/mob/M in assigned)
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
@@ -450,20 +491,27 @@
 	high_population_requirement = 60
 	flags = HIGHLANDER_RULESET
 
-/datum/dynamic_ruleset/roundstart/malf/execute()
-	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
-	if (!unction)
-		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
-
-	var/mob/M = progressive_job_search() //dynamic_rulesets.dm
+// NB : `M` will never be empty as `ready` made sure we have at least one candidate with malf AI on.
+// This candidate will become an AI upon roundstart, eventually replacing other AIs candidates who do not have the preference.
+// You should `not` perform any null checks on M. M being null is a sign of a problem and should runtime.
+/datum/dynamic_ruleset/roundstart/malf/choose_candidates()
+	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
 	if(M.mind.assigned_role != "AI")
 		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
 			if(player.mind.assigned_role == "AI")
 				//We have located an AI to replace
 				displace_AI(player)
 				message_admins("Displacing AI played by: [key_name(player)].")
-	//There was no AI to displace, we're making one fresh
+
+	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
 	M.mind.assigned_role = "AI"
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/malf/execute()
+	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
+	if (!unction)
+		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
+	var/mob/M = pick(assigned)
 	unction.HandleNewMind(M.mind)
 	var/datum/role/malfAI/MAI = M.mind.GetRole(MALF)
 	MAI.Greet()
@@ -591,11 +639,7 @@
 			head_check++
 	return (head_check >= required_heads)
 
-/datum/dynamic_ruleset/roundstart/delayed/revs/execute()
-	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-	if (!R)
-		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
-
+/datum/dynamic_ruleset/roundstart/delayed/revs/choose_candidates()
 	var/max_canditates = 4
 	for(var/i = 1 to max_canditates)
 		if(candidates.len <= 0)
@@ -603,6 +647,15 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
+		assigned_ckeys += M.ckey
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/roundstart/delayed/revs/execute()
+	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
+	if (!R)
+		R = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
+	for (var/rev_ckey in assigned_ckeys)
+		var/mob/M = find_player_by_ckey(rev_ckey)
 		var/datum/role/revolutionary/leader/lenin = new
 		lenin.AssignToRole(M.mind, 1, 1)
 		R.HandleRecruitedRole(lenin)
@@ -644,9 +697,7 @@
 
 
 /datum/dynamic_ruleset/roundstart/grinch/execute()
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	var/mob/M = pick(assigned)
 	var/datum/role/grinch/G = new
 	G.AssignToRole(M.mind,1)
 	G.Greet(GREET_ROUNDSTART)
@@ -684,9 +735,7 @@
 	init_tag_mode_spawns()
 
 	// Spawn the clown...
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	var/mob/M = pick(assigned)
 	var/datum/role/changeling/changeling_clown/clown = new
 	clown.AssignToRole(M.mind,1)
 	clown.Greet(GREET_ROUNDSTART)

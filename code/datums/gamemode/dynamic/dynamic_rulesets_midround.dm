@@ -69,6 +69,10 @@
 			return 0
 	return 1
 
+// Done via review_applications.
+/datum/dynamic_ruleset/midround/from_ghosts/choose_candidates()
+	return TRUE
+
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
 		return 0
@@ -206,10 +210,14 @@
 		return 0
 	return ..()
 
-/datum/dynamic_ruleset/midround/autotraitor/execute()
+/datum/dynamic_ruleset/midround/autotraitor/choose_candidates()
 	var/mob/M = pick(living_players)
 	assigned += M
 	living_players -= M
+	return (assigned.len > 0)
+
+/datum/dynamic_ruleset/midround/autotraitor/execute()
+	var/mob/M = pick(assigned)
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.OnPostSetup()
@@ -254,11 +262,9 @@
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
 	if (!unction)
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
-	if(!candidates || !candidates.len)
+	if(!assigned || !assigned.len)
 		return 0
-	var/mob/living/silicon/ai/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	var/mob/living/silicon/ai/M = pick(assigned)
 	var/datum/role/malfAI/malf = unction.HandleNewMind(M.mind)
 	malf.OnPostSetup()
 	malf.Greet()

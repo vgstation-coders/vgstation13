@@ -54,9 +54,7 @@
 	flags = TRAITOR_RULESET
 
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	var/mob/M = pick(assigned)
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.Greet(GREET_LATEJOIN)
@@ -93,9 +91,7 @@
 	var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
 	if (!federation)
 		federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
-	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	var/mob/M = pick(assigned)
 	var/datum/role/wizard/newWizard = new
 	newWizard.AssignToRole(M.mind,1)
 	federation.HandleRecruitedRole(newWizard)
@@ -125,12 +121,10 @@
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
-	var/mob/M = pick(candidates)
+	var/mob/M = pick(assigned)
 	if(!latejoinprompt(M,src))
 		message_admins("[M.key] has opted out of becoming a ninja.")
 		return 0
-	assigned += M
-	candidates -= M
 	var/datum/role/ninja/newninja = new
 	newninja.AssignToRole(M.mind,1)
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
@@ -176,8 +170,7 @@
 	return (head_check >= required_heads)
 
 /datum/dynamic_ruleset/latejoin/provocateur/execute()
-	var/mob/M = pick(candidates)
-	assigned += M
+	var/mob/M = pick(assigned)
 	var/antagmind = M.mind
 	var/datum/faction/F = ticker.mode.CreateFaction(/datum/faction/revolution, null, 1)
 	F.forgeObjectives()
