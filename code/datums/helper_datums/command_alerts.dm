@@ -556,7 +556,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Centcom Link Lost"
 	alert_title = "Automated Announcement"
 	alert = 'sound/AI/connection_lost.ogg'
-	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is be unable to be called or recalled until further notice."
+	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is unable to be called or recalled until further notice."
 
 /datum/command_alert/command_link_restored
 	name = "Centcom Link Restored"
