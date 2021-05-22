@@ -256,7 +256,6 @@ var/list/uplink_items = list()
 	desc = "A single grenade containing a pair of incredibly destructive viscerators and a basic flashbang mix on a five second timer. The viscerators will viscerate any non-Syndicate lifeforms in the area with extreme prejudice."
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
-	jobs_excluded = list("Cyborg")
 
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
@@ -365,6 +364,7 @@ var/list/uplink_items = list()
 	desc = "A package of 8 instant-action smoke bombs cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room within seconds. Pairs well with thermal imaging glasses or concealment items."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	cost = 2
+	jobs_exclusive = list("Trader")
 
 /datum/uplink_item/stealthy_tools/decoy_balloon
 	name = "Decoy Balloon"
@@ -527,7 +527,6 @@ var/list/uplink_items = list()
 	desc = "C-4 is plastic explosive of the common variety Composition C. Can be attached to any item or organic to reliably destroy it. Connect a signaler to its wiring to make it remotely detonable even when unplanted. Timer starts at 10 seconds but can be set to any length. Takes a few seconds to apply."
 	item = /obj/item/weapon/c4
 	cost = 4
-	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/sabotage_tools/megaphone
 	name = "Mad Scientist Megaphone"
@@ -770,6 +769,7 @@ var/list/uplink_items = list()
 	cost = 9
 	discounted_cost = 8
 	jobs_with_discount = list("Chemist", "Chief Medical Officer")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/medical/hypozinebottle
 	name = "Lethal Speed Chemical"
@@ -778,6 +778,7 @@ var/list/uplink_items = list()
 	cost = 5
 	discounted_cost = 4
 	jobs_with_discount = list("Chemist", "Medical Doctor", "Chief Medical Officer")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/medical/radgun
 	name = "Radgun"
@@ -1103,34 +1104,32 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"
+	jobs_exclusive = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/dartgun
 	name = "Chemical Dart Gun"
 	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
 	item = /obj/item/weapon/gun/dartgun/vox/raider
 	cost = 16
-	jobs_exclusive = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/dart_cartridge
 	name = "Dart Cartridge"
 	desc = "A spare cartridge to refill your dart gun."
 	item = /obj/item/weapon/dart_cartridge
 	cost = 2
-	jobs_exclusive = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/cratesender
 	name = "Modified Crate Sender"
 	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
 	cost = 6
-	jobs_exclusive = list("Trader")
 
 // SYNDICATE COOP
 // Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
-	jobs_excluded = list("Nuclear Operative", CHALLENGER)
+	jobs_excluded = list("Nuclear Operative", CHALLENGER, "Cyborg")
 
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"
