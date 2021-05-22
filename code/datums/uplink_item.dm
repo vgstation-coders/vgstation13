@@ -83,7 +83,7 @@ var/list/uplink_items = list()
 	if (user.stat || user.restrained())
 		return 0
 
-	if (!( istype(user, /mob/living/carbon/human)))
+	if (!(istype(user, /mob/living/carbon/human) || istype(user, /mob/living/silicon/robot)))
 		return 0
 
 	if(num_in_stock && times_bought >= num_in_stock)
