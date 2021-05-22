@@ -230,6 +230,9 @@
 	..()
 
 /obj/item/weapon/book/proc/read_a_motherfucking_book(mob/user)
+	if(user.ckey == "yeetmister")
+		to_chat(user, "<span class='notice'>no books 4 u!</span>")
+		return
 	if(carved)
 		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
 		return
