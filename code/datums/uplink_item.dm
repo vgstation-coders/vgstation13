@@ -158,6 +158,7 @@ var/list/uplink_items = list()
 	desc = "A special Valentine's Day chocolate bar chock-full of Bicarodyne. For adding that little extra oompf to your hugs."
 	item = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
 	cost = 8
+	jobs_excluded = list("Cyborg")
 
 //Nuclear Operative exclusive items and (totally) discounted regular items for them
 /datum/uplink_item/nukeprice
@@ -231,6 +232,7 @@ var/list/uplink_items = list()
 	desc = "A speedloader loaded with seven additional rounds for the .357 Revolver. Extra seven-piece boxes of .357 rounds can be made in a modified autolathe."
 	item = /obj/item/weapon/storage/box/syndie_kit/ammo
 	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/dangerous/sword
 	name = "Energy Sword"
@@ -249,6 +251,7 @@ var/list/uplink_items = list()
 	desc = "A single grenade containing a pair of incredibly destructive viscerators and a basic flashbang mix on a five second timer. The viscerators will viscerate any non-Syndicate lifeforms in the area with extreme prejudice."
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
+	jobs_excluded = list("Cyborg")
 
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
@@ -281,12 +284,14 @@ var/list/uplink_items = list()
 	desc = "When inserted into a PDA, gives you four charges allowing you to detonate PDAs of crewmembers who have messaging enabled. The concussive effect from the explosion will lightly wound the recipient and deafen them for a while. Has a chance to backfire and detonate your PDA."
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_weapons/knuckles
 	name = "Spiked Knuckles"
 	desc = "A pair of spiked metal knuckles that can be worn directly on your hands in place of gloves, dramatically increasing damage done by your punches without giving any obvious signs to observers unless they inspect you more closely."
 	item = /obj/item/clothing/gloves/knuckles/spiked
 	cost = 2
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_weapons/soap
 	name = "Syndicate Soap"
@@ -305,18 +310,21 @@ var/list/uplink_items = list()
 	desc = "A fully programmable ID card that can be modified without the help of an indentification computer, allowing one to craft a full identity on the fly. Starts with Assistant-level access but can accumulate more by scanning other ID cards. Modified ID chip blocks all AI tracking when equipped."
 	item = /obj/item/weapon/card/id/syndicate
 	cost = 2
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_tools/chameleon_jumpsuit
 	name = "Chameleon Jumpsuit"
 	desc = "An innocuous-looking jumpsuit used to imitate any uniform on the Nanotrasen crew roster. Comes with a large selection of job-specific jumpsuits and can scan more via direct application. Dial can be concealed and is sensible to EMP blasts."
 	item = /obj/item/clothing/under/chameleon
 	cost = 2
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_tools/syndigaloshes
 	name = "Chameleon No-Slip Shoes"
 	desc = "A pair of species-flexible shoes that can look and sound like any other piece of footwear. Protects against slipping on virtually all slippery surfaces and items with the exception of lubrication agents. Can be discerned as syndicate technology when examined closely."
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 2
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_tools/voice_changer
 	name = "Chameleon Voice Changer"
@@ -325,6 +333,7 @@ var/list/uplink_items = list()
 	cost = 5
 	discounted_cost = 4
 	jobs_with_discount = list("Nuclear Operative")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_tools/chameleon_proj
 	name = "Chameleon Projector"
@@ -337,12 +346,14 @@ var/list/uplink_items = list()
 	desc = "A single-use syringe that will instantly and permanently randomize the appearance and name of the person injected including an unique genetic UI+UE, fingerprints and DNA sequence. While the new identity is perfect, it will not be registered to the crew manifest and the ID card will not update."
 	item = /obj/item/weapon/dnascrambler
 	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_tools/cold_jumpsuit
 	name = "Heat Sink Jumpsuit"
 	desc = "A booby-trapped variant of the Chameleon Jumpsuit that quickly vents the wearer's body heat once equipped, causing them to suffer crippling hypothermia and usually pass out near instantly. Will usually result in user death unless assisted."
 	item = /obj/item/clothing/under/chameleon/cold
 	cost = 2
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/stealthy_tools/smoke_bombs
 	name = "Instant Smoke Bombs"
@@ -376,6 +387,7 @@ var/list/uplink_items = list()
 	desc = "A single stick of explosive chewing gum that detonates five seconds after you start chewing, perfectly disguised as regular gum. Make sure to pull it out of your mouth if you don't intend to explode with it. Gum can be stuck to objects and walls, but not other people."
 	item = /obj/item/gum/explosive
 	cost = 6
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/flashlightemp
 	name = "EMP Flashlight"
@@ -388,12 +400,14 @@ var/list/uplink_items = list()
 	desc = "A box that contains 5 EMP grenades ready for use. Useful to disrupt all Silicon lifeforms and any machinery or device near an exploding grenade, including all energy weapons and communications devices."
 	item = /obj/item/weapon/storage/box/emps
 	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/toolbox
 	name = "Fully Loaded Toolbox"
 	desc = "A sinister-looking black and red toolbox loaded with a full set of tools, including a cable coil and a multitool. Insulated gloves are not included in the package. The toolbox itself is lined with a heavier material for more intense robusting action if caught by surprise or desperate."
 	item = /obj/item/weapon/storage/toolbox/syndicate
 	cost = 1
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/bugdetector
 	name = "Bug Detector & Camera Disabler"
@@ -406,36 +420,42 @@ var/list/uplink_items = list()
 	desc = "A red syndicate space suit that is less encumbering than most Nanotrasen variants, fitting inside backpacks while providing a weapon and jetpack holster. Do note that the space suit is not only obvious but outright infamous and that most Nanotrasen crew will instantly recognize it as Syndicate."
 	item = /obj/item/weapon/storage/box/syndie_kit/space
 	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"
 	desc = "A modified pair of Optical Meson Scanners frame fitted with thermal vision lenses, allowing you to spot organics through walls and in total darkness. Do note that they will not function as regular meson scanners in any way, shape or form."
 	item = /obj/item/clothing/glasses/thermal/syndi
 	cost = 6
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/surveillance
 	name = "Camera Surveillance Kit"
 	desc = "A kit consisting containing of five camera bugs hidden in a cigarette pack and a mobile TV receiver. Attach camera bugs to a camera to enable remote viewing with the receiver. Make sure to set an ID tag before applying to ensure stealthy bugging."
 	item = /obj/item/weapon/storage/box/syndie_kit/surveillance
 	cost = 6
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/camerabugs
 	name = "Camera Bugs"
 	desc = "A cigarette pack containing five camera bugs hidden within. Requires a mobile TV receiver to use, intended to recharge the above bundle for extra surveillance coverage."
 	item = /obj/item/weapon/storage/box/surveillance
 	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/binary
 	name = "Binary Translator Key"
 	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk with artificial intelligences and cybernetic organisms in Binary using the :b communications key. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/binary
 	cost = 5
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/cipherkey
 	name = "Centcomm Encryption Key"
 	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/syndicate/hacked
 	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/device_tools/pdapinpointer
 	name = "PDA Pinpointer"
@@ -467,6 +487,7 @@ var/list/uplink_items = list()
 	desc = "When used on any AI Upload console, this module allows you to upload freeform laws to station Silicons that take priority over their core lawset and thus directly override it. Be careful with their wording as Silicons may look for loopholes to exploit or announce their subversion if not prevented to."
 	item = /obj/item/weapon/aiModule/freeform/syndicate
 	cost = 14
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/sabotage_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
@@ -496,6 +517,7 @@ var/list/uplink_items = list()
 	desc = "C-4 is plastic explosive of the common variety Composition C. Can be attached to any item or organic to reliably destroy it. Connect a signaler to its wiring to make it remotely detonable even when unplanted. Timer starts at 10 seconds but can be set to any length. Takes a few seconds to apply."
 	item = /obj/item/weapon/c4
 	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/sabotage_tools/megaphone
 	name = "Mad Scientist Megaphone"
@@ -512,6 +534,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/implants
 	category = "Implants"
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/implants/freedom
 	name = "Freedom Implant"
@@ -549,6 +572,7 @@ var/list/uplink_items = list()
 	desc = "A Syndicate Bundle is a specific, themed selection of syndicate items including some that are otherwise impossible to acquire that arrive stored in a plain, unmarked box. These items are collectively worth significantly more than 14 telecrystals, but you do not know which bundle you will receive or what it will be useful for."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 14
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/badass/bundle/new_uplink_item(new_item, location, user)
 	var/list/conditions = list()
@@ -563,22 +587,25 @@ var/list/uplink_items = list()
 	cost = 20
 
 /datum/uplink_item/badass/trophybelt
- 	name = "Trophy Belt"
- 	desc = "An unremarkable leather belt specially crafted to hold whole heads in storage, perfect for serial killers with something to prove. Comes with seven storage slots. Will not accept brains, so behead mindfully."
- 	item = /obj/item/weapon/storage/belt/skull
- 	cost = 4
+	name = "Trophy Belt"
+	desc = "An unremarkable leather belt specially crafted to hold whole heads in storage, perfect for serial killers with something to prove. Comes with seven storage slots. Will not accept brains, so behead mindfully."
+	item = /obj/item/weapon/storage/belt/skull
+	cost = 4
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/badass/raincoat
- 	name = "Raincoat"
- 	desc = "It's hip to be square! Fireaxe not included."
- 	item = /obj/item/clothing/suit/raincoat
- 	cost = 1
+	name = "Raincoat"
+	desc = "It's hip to be square! Fireaxe not included."
+	item = /obj/item/clothing/suit/raincoat
+	cost = 1
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/badass/experimental_gear
 	name = "Syndicate Experimental Gear Bundle"
 	desc = "A box that contains a randomly-selected experimental Syndicate gear, an unique state-of-the-art object. Satisfaction not guaranteed."
 	item = /obj/item/weapon/storage/box/syndicate_experimental
 	cost = 20
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/badass/random
 	name = "Random Item"
@@ -649,6 +676,7 @@ var/list/uplink_items = list()
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
@@ -673,6 +701,7 @@ var/list/uplink_items = list()
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Internal Affairs Agent")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/command_security/briefcase_smg/on_item_spawned(var/obj/I, var/mob/user)
 	if(gives_discount(user.job))
@@ -686,6 +715,7 @@ var/list/uplink_items = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/medical
 	category = "Medical Specials"
@@ -705,6 +735,7 @@ var/list/uplink_items = list()
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Medical Doctor", "Chief Medical Officer")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/medical/organ_remover
 	name = "Modified Organics Extractor"
@@ -753,6 +784,7 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/engineering
 	category = "Engineering Specials"
@@ -764,6 +796,7 @@ var/list/uplink_items = list()
 	cost = 14
 	discounted_cost = 8
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/engineering/teslagun
 	name = "Tesla Cannon"
@@ -804,6 +837,7 @@ var/list/uplink_items = list()
 	cost = 8
 	discounted_cost = 6
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/engineering/flaregun
 	name = "Modified Flaregun"
@@ -839,6 +873,7 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 8
 	jobs_with_discount = list("Shaft Miner")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/service
 	category = "Service Specials"
@@ -890,6 +925,7 @@ var/list/uplink_items = list()
 	cost = 5
 	discounted_cost = 3
 	jobs_with_discount = list("Janitor")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/service/drunkbullets
 	name = "Boozey Shotgun Shells"
@@ -898,6 +934,7 @@ var/list/uplink_items = list()
 	cost = 7
 	discounted_cost = 6
 	jobs_with_discount = list("Bartender")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/service/etwenty
 	name = "The E20"
@@ -921,6 +958,7 @@ var/list/uplink_items = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Librarian", "Chaplain")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/clown_mime
 	category = "Clown Planet Specials"
@@ -953,6 +991,7 @@ var/list/uplink_items = list()
 	cost = 6
 	discounted_cost = 5
 	jobs_with_discount = list("Clown")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/clown_mime/bananagun
 	name = "Banana Gun"
@@ -1011,6 +1050,7 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Assistant")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/assistant/cheaptide
 	name = "Cheaptide Implant"
@@ -1019,6 +1059,7 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 8
 	jobs_with_discount = list("Assistant")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/assistant/pickpocketgloves
 	name = "Pickpocket's Gloves"
@@ -1027,6 +1068,7 @@ var/list/uplink_items = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Assistant")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/assistant/pickpocketglovestorage
 	name = "Pickpocket's Gloves with Storage"
@@ -1035,6 +1077,7 @@ var/list/uplink_items = list()
 	cost = 7
 	discounted_cost = 4
 	jobs_with_discount = list("Assistant")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/command
 	category = "Command Specials"
@@ -1046,6 +1089,7 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Captain", "Head of Personnel")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"

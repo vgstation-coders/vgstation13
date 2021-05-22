@@ -11,7 +11,7 @@
 	..()
 	share_syndicate_codephrase(antag.current)
 	if(istype(antag.current, /mob/living/silicon))
-		can_be_smooth = FALSE //Can't buy anything
+		equip_syndiborg(antag.current, 20, src)
 		add_law_zero(antag.current)
 		antag.current << sound('sound/voice/AISyndiHack.ogg')
 	else
