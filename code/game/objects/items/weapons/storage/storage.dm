@@ -56,9 +56,7 @@
 /obj/item/weapon/storage/AltClick(mob/user)
 	if(!(in_range(src, user) || is_holder_of(user, src) || distance_interact(user)))
 		return ..()
-	if(user.s_active)
-		user.s_active.close(user)
-	src.show_to(user)
+	show_to(user)
 
 //override to allow certain circumstances of looking inside this item if not holding or adjacent
 //distance interact can let you use storage even inside a mecha (see screen_objects.dm L160)
