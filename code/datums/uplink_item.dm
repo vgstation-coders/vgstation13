@@ -66,6 +66,11 @@ var/list/uplink_items = list()
 //Use this to make New()s that have extra conditions, such as bundles
 //Make sure to add a return or else it will break a part of buy()
 /datum/uplink_item/proc/new_uplink_item(var/new_item, var/turf/location, mob/user)
+	if(isrobot(user))
+		var/mob/living/silicon/robot/A = user
+		var/I = new new_item(A.module)
+		A.module.modules += I
+		return I
 	return new new_item(location)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
@@ -116,40 +121,20 @@ var/list/uplink_items = list()
 			if(istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
-			stat_collection.uplink_purchase(src, I, user)
-			times_bought += 1
+		U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
+		stat_collection.uplink_purchase(src, I, user)
+		times_bought += 1
 
-			if(user.mind)
-				user.mind.spent_TC += get_cost(U.job)
-				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
-				var/datum/role/R = user.mind.GetRole(NUKE_OP)
+		if(user.mind)
+			user.mind.spent_TC += get_cost(U.job)
+			//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
+			var/datum/role/R = user.mind.GetRole(NUKE_OP)
+			if(R)
+				R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+			else
+				R = user.mind.GetRole(TRAITOR)
 				if(R)
-					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
-				else
-					R = user.mind.GetRole(TRAITOR)
-					if(R)
-						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
-		else if (isrobot(user))
-			var/mob/living/silicon/robot/A = user
-
-			if(istype(I, /obj/item))
-				A.module.modules += new I(A.module)
-
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
-			stat_collection.uplink_purchase(src, I, user)
-			times_bought += 1
-
-			if(user.mind)
-				user.mind.spent_TC += get_cost(U.job)
-				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
-				var/datum/role/R = user.mind.GetRole(NUKE_OP)
-				if(R)
-					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
-				else
-					R = user.mind.GetRole(TRAITOR)
-					if(R)
-						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+					R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
@@ -400,6 +385,11 @@ var/list/uplink_items = list()
 	cost = 6
 
 /datum/uplink_item/device_tools/emag/new_uplink_item(new_item, turf/location, mob/user)
+	if(isrobot(user))
+		var/mob/living/silicon/robot/A = user
+		var/I = new new_item(A.module, 1)
+		A.module.modules += I
+		return I
 	return new new_item(location, 1) //Uplink emags are infinite
 
 /datum/uplink_item/device_tools/explosive_gum
