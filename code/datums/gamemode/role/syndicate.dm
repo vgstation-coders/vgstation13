@@ -24,6 +24,7 @@
 		to_chat(S, "<b>Your laws have been changed!</b>")
 		S.set_zeroth_law("")
 		S.laws.zeroth_lock = FALSE
+		S.take_uplink()
 		to_chat(S, "Law 0 has been purged.")
 	else if(isAI(antag.current))
 		var/mob/living/silicon/ai/KAI = antag.current
