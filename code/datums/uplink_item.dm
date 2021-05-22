@@ -961,6 +961,7 @@ var/list/uplink_items = list()
 	cost = 14
 	discounted_cost = 10
 	jobs_with_discount = list("Chaplain")
+	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/service/occultbook
 	name = "Occult Book"
@@ -1002,7 +1003,6 @@ var/list/uplink_items = list()
 	cost = 6
 	discounted_cost = 5
 	jobs_with_discount = list("Clown")
-	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/clown_mime/bananagun
 	name = "Banana Gun"
@@ -1100,7 +1100,6 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Captain", "Head of Personnel")
-	jobs_excluded = list("Cyborg")
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"
