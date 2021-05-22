@@ -310,45 +310,7 @@
 			roles += player.mind.assigned_role
 	return roles
 
-/proc/equip_syndiborg(mob/living/silicon/robot/traitor_mob, var/uses = 20, var/datum/role/traitor/role)
-	if (!istype(traitor_mob))
-		return
-	. = 1
-
-	// find a radio! toolbox(es), backpack, belt, headset
-	var/loc = ""
-	var/list/contents = recursive_type_check(traitor_mob, /obj/item/device)
-	var/obj/item/R = locate(/obj/item/device/radio/borg) in contents //Hide the uplink in the borg radio module
-	if (!R)
-		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you a radio.")
-		. = 0
-	else
-		var/obj/item/device/uplink/hidden/T
-		if (istype(R, /obj/item/device/radio/borg))
-			// generate list of radio freqs
-			var/obj/item/device/radio/borg/target_radio = R
-			var/freq = 1441
-			var/list/freqlist = list()
-			while (freq <= 1489)
-				if (freq < 1451 || freq > 1459)
-					freqlist += freq
-				freq += 2
-				if ((freq % 2) == 0)
-					freq += 1
-			freq = freqlist[rand(1, freqlist.len)]
-
-			T = new(R)
-			T.uses = uses
-			target_radio.hidden_uplink = T
-			target_radio.traitor_frequency = freq
-			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features.")
-			traitor_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).")
-			traitor_mob.mind.total_TC += target_radio.hidden_uplink.uses
-		if (role && T)
-			role.uplink = T
-			T.job = role.name_for_uplink
-
-/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20, var/datum/role/traitor/role)
+/proc/equip_traitor(mob/living/traitor_mob, var/uses = 20, var/datum/role/traitor/role)
 	if (!istype(traitor_mob))
 		return
 	. = 1
