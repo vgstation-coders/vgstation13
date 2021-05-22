@@ -130,6 +130,26 @@ var/list/uplink_items = list()
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
 						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+		else if (isrobot(user))
+			var/mob/living/silicon/robot/A = user
+
+			if(istype(I, /obj/item))
+				A.module.modules += new I(A.module)
+
+			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
+			stat_collection.uplink_purchase(src, I, user)
+			times_bought += 1
+
+			if(user.mind)
+				user.mind.spent_TC += get_cost(U.job)
+				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
+				var/datum/role/R = user.mind.GetRole(NUKE_OP)
+				if(R)
+					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+				else
+					R = user.mind.GetRole(TRAITOR)
+					if(R)
+						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
