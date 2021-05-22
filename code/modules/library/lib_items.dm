@@ -93,6 +93,8 @@
 	..()
 
 /obj/structure/bookcase/attack_hand(var/mob/user as mob)
+	if(mob.ckey == "yeetmister") //sorry no books 4 u
+		return
 	if(contents.len)
 		var/obj/item/weapon/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
 		if(choice)
