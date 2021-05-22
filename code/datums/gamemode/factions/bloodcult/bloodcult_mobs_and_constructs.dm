@@ -447,12 +447,11 @@ var/list/astral_projections = list()
 	if (anchor && anchor.stat != DEAD && client)
 		if (key)
 			if (tangibility)
-				spawn()
-					var/obj/effect/afterimage/A = new (loc,anchor,10)
-					A.dir = dir
-					for(var/mob/M in dview(world.view, loc, INVISIBILITY_MAXIMUM))
-						if (M.client)
-							M.playsound_local(loc, get_sfx("disappear_sound"), 75, 0, -2)
+				var/obj/effect/afterimage/A = new (loc,anchor,10)
+				A.dir = dir
+				for(var/mob/M in dview(world.view, loc, INVISIBILITY_MAXIMUM))
+					if (M.client)
+						M.playsound_local(loc, get_sfx("disappear_sound"), 75, 0, -2)
 			anchor.key = key
 			to_chat(anchor, "<span class='notice'>You reconnect with your body.</span>")
 			anchor.ajourn = null
