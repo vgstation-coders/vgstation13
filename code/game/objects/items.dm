@@ -1392,8 +1392,7 @@ var/global/list/image/blood_overlays = list()
 				temp_contents -= src
 				temp_contents.Insert(temp_index, src)
 				storageobj.contents = temp_contents
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
@@ -1403,8 +1402,7 @@ var/global/list/image/blood_overlays = list()
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 	if(!istype(over_object, /obj/abstract/screen/inventory))
 		return ..()
