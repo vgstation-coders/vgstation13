@@ -392,7 +392,7 @@
 					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[user] slams [M]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
-					log_attack("<font color='red'>[key_name(user)] harmfully tabled [key_name(M)].</font>")
+					add_attacklogs(user, M, "harmfully tabled", admin_warn = FALSE)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
@@ -401,7 +401,7 @@
 				M.Knockdown(5)
 				M.Stun(5)
 				visible_message("<span class='warning'>[user] puts [M] on \the [src].</span>")
-				log_attack("<font color='yellow'>[key_name(user)] stunned [key_name(M)] via tabling.</font>")
+				add_attacklogs(user, M, "harmlessly tabled", admin_warn = FALSE)
 			qdel(W)
 			return
 
