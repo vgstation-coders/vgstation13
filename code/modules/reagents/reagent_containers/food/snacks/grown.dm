@@ -408,7 +408,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
-	desc = "Hmm, needs some processing"
+	desc = "Hmm, needs some processing."
 	filling_color = "#C4C4C4"
 	plantname = "plastic"
 
