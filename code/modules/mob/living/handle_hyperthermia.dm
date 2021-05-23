@@ -3,3 +3,4 @@
 	return FALSE
 /mob/living/carbon/human/undergoing_hyperthermia()
 	return bodytemperature > species.heat_level_1
+	
