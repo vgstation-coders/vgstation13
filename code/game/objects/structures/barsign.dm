@@ -19,16 +19,16 @@ var/list/barsigns = list()
 /datum/barsign/maltesefalcon
 	name = "Maltese Falcon"
 	icon = "maltesefalcon"
-	desc = "Play it again, sam."
+	desc = "Play it again, Sam."
 
 /obj/effect/overlay/custom_barsign
 	name = "Wowee"
-	desc = "Its a error, If you see this"
+	desc = "If you see this, it's an error."
 	vis_flags = VIS_INHERIT_ID|VIS_INHERIT_LAYER|VIS_INHERIT_PLANE
 
 /obj/structure/sign/double/barsign	// The sign is 64x32, so it needs two tiles. ;3
 	name = "--------"
-	desc = "a bar sign"
+	desc = "A bar sign."
 	icon = 'icons/obj/barsigns.dmi'
 	icon_state = "empty"
 	req_access = list(access_bar)
@@ -114,7 +114,7 @@ var/list/barsigns = list()
 		for(var/fuckyou in barsigns)
 			current_preview = barsigns[fuckyou]
 			break
-	
+
 	if(!viscon)
 		viscon = new()
 
@@ -133,14 +133,14 @@ var/list/barsigns = list()
 		var/interval_mode_string = "OFF"
 		if(interval_mode)
 			interval_mode_string = "ON"
-		
+
 		dat += "Screen Filter: <a href=\"?src=\ref[src];set_filter=choose\">[current_filter]</a>"
 		if(current_filter == "Dropshadow")
 			dat += "<a href=\"?src=\ref[src];set_filter=dshadow_color\"><span style='border:1px solid #161616; background-color: [filter_selection["Dropshadow"]["color"]];'>&nbsp;&nbsp;&nbsp;</span></a>"
-		
+
 		dat += "<a href=\"?src=\ref[src];set_filter=[current_filter]\">Apply Filter</a>"
 		dat += "<br><b>Interval Mode:</b><a href=\"?src=\ref[src];interval_mode=1\">[interval_mode_string]</a><br><hr>"
-		
+
 		for(var/i in interval_queue)
 			dat += {"
 					<div style="width:100%; background-color:#1f1c1c; border-style:solid; border-color: #999797">
@@ -153,11 +153,11 @@ var/list/barsigns = list()
 						<a href='?src=\ref[src];delete_block=[i]'>Delete</a>
 					</div>
 					"}
-			
+
 		dat += "<br><a href='?src=\ref[src];add_block=1'>Add Block</a>"
 		dat += "<br><a href=\"?src=\ref[src];apply_settings=custom_screen\">Apply Settings</a>"
 
-				 
+
 	if(current_screen == PREMADE_SCREEN) //PRE-DEFINED SCREEN
 		user << browse_rsc(icon('icons/obj/barsigns.dmi', "[current_preview.icon]"), "cur_barsign.png")
 		dat += {"<div id="fuck" style="width:100%; height:100%; display:flex;">
@@ -187,14 +187,14 @@ var/list/barsigns = list()
 		return
 	if(in_range(src, usr) && isliving(usr) && allowed(usr) || isAdminGhost(usr) || isAI(usr))
 		var/mob/user = usr
-		
+
 		if(href_list["direct_select"])
 			var/picked_name = input(user,"Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
 			if(!picked_name)
 				return
-			
+
 			current_preview = barsigns[picked_name]
-			
+
 		if(href_list["change_img"])
 			var/name_string //ah man i am still unsure if i should be keeping barsigns as a assc list at this point.
 			switch(href_list["change_img"])
@@ -214,7 +214,7 @@ var/list/barsigns = list()
 					current_screen = PREMADE_SCREEN
 				if("custom_screen")
 					current_screen = CUSTOM_SCREEN
-		
+
 
 		if(href_list["apply_settings"])
 			vis_contents.Cut()
@@ -234,7 +234,7 @@ var/list/barsigns = list()
 					if(current_preview.desc)
 						desc = current_preview.desc
 					else
-						desc = "It displays \"[name]\"."					
+						desc = "It displays \"[name]\"."
 				if("custom_screen")
 					icon_state = "kustom"
 					vis_contents += viscon
@@ -251,7 +251,7 @@ var/list/barsigns = list()
 						var/string = interval_queue["1"]["letter_message"]
 						if(string)
 							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;\">[interval_queue["1"]["letter_message"]]</span>"
-		
+
 		if(href_list["set_filter"])
 			switch(href_list["set_filter"])
 				if("choose")
@@ -266,7 +266,7 @@ var/list/barsigns = list()
 				if("dshadow_color")
 					var/colorhex = input(user, "Choose your dropshadow color:", "Sign Color Selection",filter_selection["Dropshadow"]["color"]) as color|null
 					if(colorhex)
-						filter_selection["Dropshadow"]["color"] = colorhex					
+						filter_selection["Dropshadow"]["color"] = colorhex
 				if("Waves")
 					if(viscon.filters.len <= MAX_FILTER_LIMIT)
 						summon_shitty_example_waves()
@@ -275,7 +275,7 @@ var/list/barsigns = list()
 			var/safety = text2num(href_list["delete_block"])
 			if(safety > 1)
 				interval_queue -= interval_queue[safety]
-		
+
 		if(href_list["add_block"])
 			if(interval_queue.len <= MAX_QUEUE_LIMIT)
 				interval_queue["[interval_queue.len+1]"] = list("letter_message" = "BAR",
@@ -290,10 +290,10 @@ var/list/barsigns = list()
 			if(sign_text)
 				var/safety = text2num(href_list["set_message"])
 				if(safety <= MAX_QUEUE_LIMIT)
-					name = sign_text 
+					name = sign_text
 					interval_queue["[safety]"]["letter_message"] = sign_text
 					log_game("[key_name(user)] changed barsign name to [sign_text]")
-		
+
 		if(href_list["set_description"])
 			var/desc_text = copytext(sanitize(input(user, "What would you like to have as the description?", "Custom Barsign Desc", null) as text|null), 1, MAX_NAME_LEN*3)
 			if(desc_text)
@@ -316,7 +316,7 @@ var/list/barsigns = list()
 
 		if(href_list["interval_mode"])
 			interval_mode = !interval_mode
-		
+
 		if(href_list["set_sound"])
 			var/safety = text2num(href_list["set_sound"])
 			if(safety <= MAX_QUEUE_LIMIT)
@@ -330,7 +330,7 @@ var/list/barsigns = list()
 				var/new_soundtone = input("Choose a new sound frequency 12000-55000:", "Sound Tone Menu", interval_queue["[safety]"]["sound_tone"]) as null|num
 				if(new_soundtone)
 					interval_queue["[safety]"]["sound_tone"] = clamp(new_soundtone,12000,55000)
-		
+
 		if(href_list["set_sound_volume"])
 			var/safety = text2num(href_list["set_sound_volume"])
 			if(safety <= MAX_QUEUE_LIMIT)
@@ -346,7 +346,7 @@ var/list/barsigns = list()
 		interval_ticker = 0
 		already_fired = FALSE
 		return
-	
+
 	interval_ticker++
 	var/check_sound = sound_selection["[interval_queue["[interval_ticker]"]["sound_key"]]"]
 	if(check_sound)
@@ -421,7 +421,7 @@ var/list/barsigns = list()
 	sound_selection["Vox Scream"] = 'sound/misc/shriek1.ogg'
 	sound_selection["Bike Horn"] = 'sound/items/bikehorn.ogg'
 
-	
+
 
 #undef PREMADE_SCREEN
 #undef CUSTOM_SCREEN

@@ -105,7 +105,7 @@
 
 /datum/airalarm_preset/human //For humans
 	name = "Human"
-	desc = "Permits Oxygen and Nitrogen"
+	desc = "Permits oxygen and nitrogen."
 	core = TRUE
 	oxygen = list(16, 18, 135, 140)
 	nitrogen = list(-1, -1,  -1,  -1)
@@ -120,7 +120,7 @@
 
 /datum/airalarm_preset/vox //For vox
 	name = "Vox"
-	desc = "Permits Nitrogen only"
+	desc = "Permits nitrogen only."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(16, 18, 135,  140)
@@ -135,7 +135,7 @@
 
 /datum/airalarm_preset/coldroom //Server rooms etc.
 	name = "Coldroom"
-	desc = "For server rooms and freezers"
+	desc = "For server rooms and freezers."
 	core = TRUE
 	oxygen = list(-1, -1, -1, -1)
 	nitrogen = list(-1, -1, -1, -1)
@@ -150,7 +150,7 @@
 
 /datum/airalarm_preset/plasmaman //HONK
 	name = "Plasmaman"
-	desc = "Permits Plasma and Nitrogen only"
+	desc = "Permits plasma and nitrogen only."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, -1, -1)
@@ -165,7 +165,7 @@
 
 /datum/airalarm_preset/vacuum
 	name = "Vacuum"
-	desc = "For rooms to be kept under vacuum"
+	desc = "For rooms to be kept under vacuum."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, 0.5, 1)

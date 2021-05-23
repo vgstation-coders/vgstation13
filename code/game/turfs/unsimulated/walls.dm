@@ -90,7 +90,7 @@
 
 /turf/unsimulated/wall/cult
 	name = "wall"
-	desc = "The patterns engraved on the wall seem to shift as you try to focus on them. You feel sick"
+	desc = "The patterns engraved on the wall seem to shift as you try to focus on them. You feel sick."
 	icon_state = "cult0"
 	opacity = 1
 	density = 1

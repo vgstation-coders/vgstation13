@@ -1241,7 +1241,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/recharger
 	name = "Circuit Board (Recharger)"
-	desc = "A circuit board used to run a machine that replenishes energy weapon charge"
+	desc = "A circuit board used to run a machine that replenishes energy weapon charge."
 	board_type = MACHINE
 	build_path = /obj/machinery/recharger
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
@@ -1411,7 +1411,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/fishtank
 	name = "Circuit Board (Fishtank Filter)"
-	desc = "A circuit board used to run a machine that holds fish"
+	desc = "A circuit board used to run a machine that holds fish."
 	build_path = /obj/machinery/fishtank/tank
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
@@ -1420,7 +1420,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/fishwall
 	name = "Circuit Board (Large Fishtank Filter)"
-	desc = "A circuit board used to run a machine that holds fish and acts as a wall"
+	desc = "A circuit board used to run a machine that holds fish and acts as a wall."
 	build_path = /obj/machinery/fishtank/wall
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
@@ -1429,7 +1429,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/conduction_plate
 	name = "Circuit Board (Conduction Plate)"
-	desc = "A circuit board used to run a machine that can be placed under a fishtank to conduct electricity from electric eels"
+	desc = "A circuit board used to run a machine that can be placed under a fishtank to conduct electricity from electric eels."
 	build_path = /obj/machinery/power/conduction_plate
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
@@ -1438,7 +1438,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/holopad
 	name = "Circuit Board (Holopad)"
-	desc = "A circuit board used to run a machine that allows AIs to project holograms in areas"
+	desc = "A circuit board used to run a machine that allows AIs to project holograms in areas."
 	build_path = /obj/machinery/hologram/holopad
 	board_type = MACHINE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
@@ -1449,7 +1449,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/mind_machine_hub
 	name = "Circuit Board (Mind Machine Hub)"
-	desc = "A circuit board used to run a mind machine hub"
+	desc = "A circuit board used to run a mind machine hub."
 	build_path = /obj/machinery/mind_machine/mind_machine_hub
 	board_type = MACHINE
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
@@ -1463,7 +1463,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/mind_machine_pod
 	name = "Circuit Board (Mind Machine Pod)"
-	desc = "A circuit board used to run a mind machine pod"
+	desc = "A circuit board used to run a mind machine pod."
 	build_path = /obj/machinery/mind_machine/mind_machine_pod
 	board_type = MACHINE
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
@@ -1491,7 +1491,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/suspension_gen
 	name = "Circuit Board (Suspension Field Generator)"
-	desc = "A circuit board used to run a suspension field generator"
+	desc = "A circuit board used to run a suspension field generator."
 	build_path = /obj/machinery/suspension_gen
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;"+ Tc_POWERSTORAGE + "=1;" + Tc_MAGNETS + "=4"

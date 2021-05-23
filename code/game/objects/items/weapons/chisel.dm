@@ -1,6 +1,6 @@
 /obj/item/weapon/chisel
 	name = "chisel"
-	desc = "A tool for engraving"
+	desc = "A tool for engraving."
 
 	icon = 'icons/obj/items.dmi'
 	icon_state = "chisel"

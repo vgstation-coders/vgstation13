@@ -1,6 +1,6 @@
 /obj/item/mounted/frame/light_switch
-	name = "Light Switch Frame"
-	desc = "Wire it up to a wall to create new light switches"
+	name = "light switch frame"
+	desc = "Wire it up to a wall to create new light switches."
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light-p"
 	flags = FPRINT

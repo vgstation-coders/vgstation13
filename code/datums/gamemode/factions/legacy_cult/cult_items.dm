@@ -97,7 +97,7 @@
 
 /obj/item/clothing/head/helmet/space/legacy_cult
 	name = "ancient cult helmet"
-	desc = "A space worthy helmet used by the followers of Nar-Sie"
+	desc = "A space worthy helmet used by the followers of Nar-Sie."
 	icon_state = "culthelmet_old"
 	item_state = "cult_helmet"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)

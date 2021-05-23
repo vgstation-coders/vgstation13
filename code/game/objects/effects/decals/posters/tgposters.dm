@@ -6,7 +6,7 @@
 
 /datum/poster/tg_2//31
 	name = "Atmosia Declaration of Independence"
-	desc = "A relic of a failed rebellion"
+	desc = "A relic of a failed rebellion."
 	icon_state="poster2"
 
 /datum/poster/tg_3//32

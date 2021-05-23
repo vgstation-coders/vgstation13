@@ -329,7 +329,7 @@
 			return
 		else
 			if(!(user.check_rights(R_ADMINBUS)))
-				to_chat(user, "<span class='notice'>Oh you are a god alright, but you don't seem to have your Adminbus driver license!</span>")
+				to_chat(user, "<span class='notice'>You're a god alright, but you don't seem to have your Adminbus driver license!</span>")
 				return
 			user.visible_message(
 				"<span class='notice'>[user] climbs onto \the [src]!</span>",
@@ -514,7 +514,7 @@
 
 /obj/structure/singulo_chain
 	name = "singularity chain"
-	desc = "Admins are above all logic"
+	desc = "Admins are above all logic."
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
 	pixel_x = -WORLD_ICON_SIZE

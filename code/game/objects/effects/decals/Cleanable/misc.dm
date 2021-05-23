@@ -231,7 +231,7 @@
 
 /obj/effect/decal/cleanable/clay_fragments
 	name = "clay fragments"
-	desc = "pieces from a broken clay pot"
+	desc = "Pieces from a broken clay pot."
 	gender = PLURAL
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "clay_fragments"

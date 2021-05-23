@@ -1,6 +1,6 @@
 /obj/item/device/codebreaker
 	name = "code breaker"
-	desc = "Can be used to decipher a Nuclear Bomb's activation code"
+	desc = "Can be used to decipher a Nuclear Bomb's activation code."
 	icon_state = "codebreaker"
 	item_state = "electronic"
 	flags = FPRINT

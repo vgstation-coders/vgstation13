@@ -940,7 +940,7 @@
 
 /obj/item/toy/gasha/snowflake
 	name = "toy snowflake"
-	desc = "What a faggot"
+	desc = "What a faggot."
 	icon_state = "fag"
 
 /obj/item/toy/gasha/shade
@@ -965,7 +965,7 @@
 
 /obj/item/toy/gasha/harvester
 	name = "toy harvester"
-	desc = "Harvesters tend to have a bad habit of violently stabbing anyone they meet"
+	desc = "Harvesters tend to have a bad habit of violently stabbing anyone they meet."
 	icon_state = "harvester"
 
 /obj/item/toy/gasha/narnar
@@ -975,7 +975,7 @@
 
 /obj/item/toy/gasha/quote
 	name = "Robot"
-	desc = "It's a small robot toy"
+	desc = "It's a small robot toy."
 	icon_state = "quote"
 
 /obj/item/toy/gasha/quote/curly
@@ -989,11 +989,11 @@
 
 /obj/item/toy/gasha/mimiga/
 	name = "toy mimiga"
-	desc = "It looks like some sort of rabbit-thing"
+	desc = "It looks like some sort of rabbit-thing."
 	icon_state = ""
 
 /obj/item/toy/gasha/mimiga/sue
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl.'"
+	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl'."
 	icon_state = "sue"
 
 /obj/item/toy/gasha/mimiga/toroko
@@ -1003,7 +1003,7 @@
 	icon_state = "king"
 
 /obj/item/toy/gasha/mimiga/chaco
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl.'"
+	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl'."
 	icon_state = "chaco"
 
 /obj/item/toy/gasha/mario
@@ -1070,7 +1070,7 @@
 
 /obj/item/toy/gasha/borertoy
 	name = "Mini Borer"
-	desc = "Probably not something you should be playing with"
+	desc = "Probably not something you should be playing with."
 	icon_state = "borertoy"
 
 /obj/item/toy/gasha/minislime
@@ -1098,7 +1098,7 @@
 
 /obj/item/toy/gasha/AI/malf
 	name = "Mini Malf"
-	desc = "May be a bad influence for cyborgs"
+	desc = "May be a bad influence for cyborgs."
 	icon_state = "malfAI"
 
 /obj/item/toy/gasha/minibutt/attack_self(mob/user as mob)

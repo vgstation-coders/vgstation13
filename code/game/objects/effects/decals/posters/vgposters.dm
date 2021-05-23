@@ -23,7 +23,7 @@
 	name = "High Effect Engineering"
 	desc = "There are 3 shards and a singularity.  The shards are singing.  The engineers are crying."
 	icon_state="vgposter5"
-	
+
 /datum/poster/vg_6//45
 	name = "Termination Of The Self"
 	desc = "A portrait of a famous philospher who challenged the boundaries of mortality."
@@ -32,7 +32,7 @@
 /datum/poster/vg_7//46
 	name = "Forgotten Dunes"
 	desc = "A famous piece that always seems oddly familiar, yet its name seems to easily slip from memory."
-	icon_state="vgposter7"	
+	icon_state="vgposter7"
 
 //Special poster designs will not appear randomly
 /datum/poster/special/cargoflag
@@ -58,6 +58,6 @@
 
 /datum/poster/special/ninja/anime
 	name = "anime poster"
-	desc = "It's everybody's favorite anime"
+	desc = "It's everybody's favorite anime."
 	icon_state = "animeposter1"
 	poster_designs = list("animeposter1","animeposter2","animeposter3","animeposter4","animeposter5","animeposter6")

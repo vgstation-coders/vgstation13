@@ -1,6 +1,6 @@
 /obj/item/mounted/frame/wreath
 	name = "wreath"
-	desc = "A festive holiday wreath"
+	desc = "A festive holiday wreath."
 	icon = 'icons/obj/christmas.dmi'
 	icon_state = "wreath_bow"
 	flags = FPRINT
@@ -9,13 +9,13 @@
 	w_type = RECYK_METAL
 
 /obj/structure/wreath
-	desc = "A festive holiday wreath"
+	desc = "A festive holiday wreath."
 	icon = 'icons/obj/christmas.dmi'
 	icon_state = "wreath_bow"
 
 /obj/structure/wreath/wreath_bow
 	name = "wreath"
-	desc = "A festive holiday wreath"
+	desc = "A festive holiday wreath."
 	icon_state = "wreath_bow"
 
 /obj/structure/wreath/wreath_bow/attackby(obj/item/W as obj, mob/user as mob)
@@ -41,12 +41,12 @@
 	qdel(src)
 
 /obj/item/mounted/frame/wreath/wreath_nobow
-	desc = "A holiday wreath decked with holly"
+	desc = "A holiday wreath decked with holly."
 	icon_state = "wreath_nobow"
 
 /obj/structure/wreath/wreath_nobow
 	name = "wreath"
-	desc = "A holiday wreath decked with holly"
+	desc = "A holiday wreath decked with holly."
 	icon_state = "wreath_nobow"
 
 /obj/structure/wreath/wreath_nobow/attackby(obj/item/W as obj, mob/user as mob)

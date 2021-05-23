@@ -204,7 +204,7 @@
 // TODO: Remove this snowflake stuff.
 /obj/machinery/door_control/mapped/interogation_room
 	name = "smartglass control"
-	desc = "Toogle smartglass"
+	desc = "Toggle smartglass."
 	id_tag = "InterogationRoomIDTag"
 
 

@@ -521,7 +521,7 @@
 
 /obj/item/weapon/holo/esword
 	name = "energy sword"
-	desc = "May the force be within you. Sorta"
+	desc = "May the force be within you. Sorta."
 	icon_state = "sword0"
 	force = 3.0
 	throw_speed = 1

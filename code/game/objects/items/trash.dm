@@ -271,5 +271,5 @@ var/list/crushed_cans_cache = list()
 
 /obj/item/trash/slag
 	name = "slag"
-	desc = "Electronics burnt to a crisp"
+	desc = "Electronics burnt to a crisp."
 	icon_state = "slag"
