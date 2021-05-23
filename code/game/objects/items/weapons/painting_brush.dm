@@ -31,12 +31,12 @@
 	if(proximity_flag == 0) // not adjacent
 		return
 
-	if(target.reagents)
+	if(target.is_open_container() && target.reagents && !target.reagents.is_empty())
 		//Figure out how much water or cleaner there is
 		var/cleaner_volume = target.reagents.get_reagent_amount(WATER)
 		cleaner_volume += target.reagents.get_reagent_amount(CLEANER) * PAINT_CLEANER_AGENT_MULTIPLIER
 		cleaner_volume += target.reagents.get_reagent_amount("paint_remover") * PAINT_CLEANER_AGENT_MULTIPLIER
-		var/cleaner_percent = min(cleaner_volume > 0 ? target.reagents.total_volume / cleaner_volume : 0, 1)
+		var/cleaner_percent = min(cleaner_volume > 0 ? cleaner_volume / target.reagents.total_volume : 0, 1)
 
 		if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)
 			// Clean up that brush
