@@ -385,8 +385,6 @@ var/list/arcane_pockets = list()
 	var/mob/living/simple_animal/astral_projection/astral = user
 	astral.death()//pretty straightforward isn't it?
 
-
-
 /spell/astral_toggle
 	name = "Toggle Tangibility"
 	desc = "Turn into a visible copy of your body, able to speak and bump into doors. But note that the slightest source of damage will dispel your astral projection altogether."
