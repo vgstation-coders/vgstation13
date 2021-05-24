@@ -244,7 +244,7 @@
 	desc = "A golden cup"
 	name = "golden cup"
 	icon_state = "golden_cup"
-	w_class = W_CLASS_LARGE
+	w_class = W_CLASS_LARGE.
 	force = 14
 	throwforce = 10
 	amount_per_transfer_from_this = 20
@@ -254,7 +254,7 @@
 	siemens_coefficient = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/golden_cup/tournament_26_06_2011
-	desc = "A golden cup. It will be presented to a winner of tournament 26 june and name of the winner will be graved on it."
+	desc = "A golden cup. It will be presented to a winner of tournament 26 June, and name of the winner will be engraved on it."
 
 
 ///////////////////////////////////////////////Drinks
@@ -973,33 +973,33 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
 	..()
 	reagents.add_reagent(SECCOFFEE, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
 	name = "Picomed: White edition"
 	desc = "Good for the body and good for the bones."
 	icon_state = "lifeline_white"
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
 	reagents.add_reagent(MILK, 2)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red
 	name = "Picomed: Red edition"
 	desc = "I need 50ccs of coffee, stat!"
 	icon_state = "lifeline_red"
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
 	reagents.add_reagent(REDTEA, 2)
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo
 	name = "Picomed: Cryo edition"
 	desc = "Remember to strip before consuming."
 	icon_state = "lifeline_cryo"
-	var/list/tubeoverlay = list() 
-	
+	var/list/tubeoverlay = list()
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/on_reagent_change()
 	..()
 	for(var/image/ol in tubeoverlay)
@@ -1009,7 +1009,7 @@
 	var/image/status_overlay = image("icon" = 'icons/obj/drinks.dmi', "icon_state" = "cryoverlay_[remaining]")
 	overlays += status_overlay
 	tubeoverlay += status_overlay
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
@@ -1349,10 +1349,10 @@
 	..()
 	if(Holiday == APRIL_FOOLS_DAY)
 		name = "Bottle of Something"
-		desc = "A bottle filled with something"
+		desc = "A bottle filled with something."
 		reagents.add_reagent(pick(BEER, VOMIT, ZOMBIEPOWDER, SOYSAUCE, KETCHUP, HONEY, BANANA, ABSINTHE, SALTWATER, WATER, BLOOD, LUBE, MUTATIONTOXIN, AMUTATIONTOXIN, GOLD, TRICORDRAZINE, GRAVY), 100)
 	else
-		desc = "A bottle filled with nothing"
+		desc = "A bottle filled with nothing."
 		reagents.add_reagent(NOTHING, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/patron

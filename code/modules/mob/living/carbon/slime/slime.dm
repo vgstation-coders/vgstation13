@@ -668,7 +668,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/weapon/slimepotion2
 	name = "advanced docility potion"
-	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame. This one is meant for adult slimes"
+	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame. This one is meant for adult slimes."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle19"
 	w_class = W_CLASS_TINY
@@ -798,7 +798,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /*
 /obj/item/clothing/under/golem
 	name = "adamantine skin"
-	desc = "a golem's skin"
+	desc = "a golem's skin."
 	icon_state = "golem"
 	item_state = "golem"
 	_color = "golem"
@@ -808,7 +808,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/suit/golem
 	name = "adamantine shell"
-	desc = "a golem's thick outer shell"
+	desc = "a golem's thick outer shell."
 	icon_state = "golem"
 	item_state = "golem"
 	w_class = W_CLASS_LARGE//bulky item
@@ -825,7 +825,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/shoes/golem
 	name = "golem's feet"
-	desc = "sturdy adamantine feet"
+	desc = "sturdy adamantine feet."
 	icon_state = "golem"
 	item_state = null
 	canremove = 0
@@ -834,7 +834,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/mask/gas/golem
 	name = "golem's face"
-	desc = "the imposing face of an adamantine golem"
+	desc = "The imposing face of an adamantine golem."
 	icon_state = "golem"
 	item_state = "golem"
 	canremove = 0
@@ -845,7 +845,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/gloves/golem
 	name = "golem's hands"
-	desc = "strong adamantine hands"
+	desc = "Strong adamantine hands."
 	icon_state = "golem"
 	item_state = null
 	siemens_coefficient = 0
@@ -857,7 +857,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	item_state = "dermal"
 	_color = "dermal"
 	name = "golem's head"
-	desc = "a golem's head"
+	desc = "A golem's head."
 	canremove = 0
 	flags = FPRINT
 	pressure_resistance = 200 * ONE_ATMOSPHERE
@@ -870,7 +870,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 */
 /obj/effect/golem_rune
 	anchored = 1
-	desc = "a strange rune used to create golems. It glows when spirits are nearby."
+	desc = "A strange rune used to create golems. It glows when spirits are nearby."
 	name = "rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
@@ -945,7 +945,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			return
 		if(O.key in has_died_as_golem)
 			if(world.time < has_died_as_golem[O.key] + GOLEM_RESPAWN_TIME)
-				to_chat(O, "<span class='warning'>You have died as a golem too recently. You must wait longer before you can become a golem again.</span>")
+				to_chat(O, "<span class='warning'>You already died as a golem too recently. You must wait longer before you can become a golem again.</span>")
 				return
 		ghosts.Add(O)
 		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")

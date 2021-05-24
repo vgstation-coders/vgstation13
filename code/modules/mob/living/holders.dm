@@ -147,14 +147,14 @@
 
 /obj/item/weapon/holder/animal/cow
 	name = "cow holder"
-	desc = "Pretty heavy"
+	desc = "Pretty heavy!"
 	item_state = "cow"
 
 //CATS
 
 /obj/item/weapon/holder/animal/cat
 	name = "cat holder"
-	desc = "Runtime error"
+	desc = "RUNTIME ERROR"
 	item_state = "cat1"
 
 	update_itemstate_on_twohand = TRUE
@@ -194,7 +194,7 @@
 //SLIMES
 /obj/item/weapon/holder/animal/slime
 	name = "slime holder"
-	desc = "It seeps through your fingers"
+	desc = "It seeps through your fingers."
 
 /obj/item/weapon/holder/animal/slime/proc/unfreeze()
 	var/mob/living/simple_animal/slime/S = stored_mob
@@ -212,7 +212,7 @@
 
 /obj/item/weapon/holder/animal/pillow
 	name = "pillow holder"
-	desc = "Comforbable"
+	desc = "Comfortable."
 	item_state = "pillow"
 	slot_flags = SLOT_HEAD
 	update_itemstate_on_twohand = TRUE

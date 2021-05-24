@@ -12,7 +12,7 @@
 
 /datum/design/recharger
 	name = "Circuit Design (Recharger)"
-	desc = "Allows for the construction of circuit boards used to build Weapon Rechargers"
+	desc = "Allows for the construction of circuit boards used to build Weapon Rechargers."
 	id="recharger"
 	req_tech = list(Tc_POWERSTORAGE = 2, Tc_COMBAT = 2)
 	build_type = IMPRINTER
@@ -43,7 +43,7 @@
 
 /datum/design/condimaster
 	name = "Circuit Design (CondiMaster)"
-	desc = "Allows for the cosntruction of circuit boards used to build CondiMasters"
+	desc = "Allows for the cosntruction of circuit boards used to build CondiMasters."
 	id="condimaster"
 	req_tech = list ("engineering" = 3, "biotech" = 4)
 	build_type = IMPRINTER
@@ -53,7 +53,7 @@
 
 /datum/design/snackbarmachine
 	name = "Circuit Design (SnackBar Machine)"
-	desc = "Allows for the cosntruction of circuit boards used to build SnackBar Machines"
+	desc = "Allows for the cosntruction of circuit boards used to build SnackBar Machines."
 	id="snackbarmachine"
 	req_tech = list ("engineering" = 3, "biotech" = 4)
 	build_type = IMPRINTER
@@ -119,7 +119,7 @@
 
 /datum/design/sorting_machine
 	name = "Circuit Design (Recycling Sorting Machine)"
-	desc = "Allows for the construction of circuit boards used to build a recycling sorting machine"
+	desc = "Allows for the construction of circuit boards used to build a recycling sorting machine."
 	id = "sortingmachine"
 	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
@@ -128,7 +128,7 @@
 
 /datum/design/sorting_machine/destination
 	name = "Circuit Design (Destinations Sorting Machine)"
-	desc = "Allows for the construction of circuit boards used to build a destinations sorting machine"
+	desc = "Allows for the construction of circuit boards used to build a destinations sorting machine."
 	id = "destsortingmachine"
 	build_path = /obj/item/weapon/circuitboard/sorting_machine/destination
 

@@ -22,7 +22,7 @@
 
 /datum/design/atmos_automation
 	name = "Circuit Design (Atmospherics Automation Console)"
-	desc = "Allows for the construction of circuit boards used to build an Atmospherics Automation Console"
+	desc = "Allows for the construction of circuit boards used to build an Atmospherics Automation Console."
 	id = "atmos_automation"
 	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
@@ -53,7 +53,7 @@
 
 /datum/design/powermonitor
 	name = "Circuit Design (Power Monitor)"
-	desc = "Allows for the construction of circuit boards used to build a new power monitor"
+	desc = "Allows for the construction of circuit boards used to build a new power monitor."
 	id = "powermonitor"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
@@ -63,7 +63,7 @@
 
 /datum/design/solarcontrol
 	name = "Circuit Design (Solar Control)"
-	desc = "Allows for the construction of circuit boards used to build a solar control console"
+	desc = "Allows for the construction of circuit boards used to build a solar control console."
 	id = "solarcontrol"
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER
@@ -157,7 +157,7 @@
 
 /datum/design/supermattermonitor
 	name = "Circuit Design (Supermatter Monitor)"
-	desc = "Allows for the construction of circuit boards used to build a supermatter monitoring computer"
+	desc = "Allows for the construction of circuit boards used to build a supermatter monitoring computer."
 	id = "supermattermonitor"
 	req_tech = list(Tc_ENGINEERING = 5)
 	build_type = IMPRINTER

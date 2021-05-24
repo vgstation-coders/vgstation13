@@ -24,7 +24,7 @@
 
 /datum/design/telehub
 	name = "Circuit Design (Teleporter Generator)"
-	desc = "Allows for the construction of circuit boards used to build a Teleporter Generator"
+	desc = "Allows for the construction of circuit boards used to build a Teleporter Generator."
 	id = "telehub"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 3, Tc_BLUESPACE = 3)
 	build_type = IMPRINTER

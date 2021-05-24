@@ -10,7 +10,7 @@
 
 /datum/design/paicard
 	name = "Personal Artificial Intelligence Card"
-	desc = "Allows for the construction of a pAI Card"
+	desc = "Allows for the construction of a pAI Card."
 	id = "paicard"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
@@ -20,7 +20,7 @@
 
 /datum/design/np_dispenser
 	name = "Nano Paper Dispenser"
-	desc = "A machine to create Nano Paper"
+	desc = "A machine to create Nano Paper."
 	id = "np_dispenser"
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_MATERIALS = 2)
 	build_type = PROTOLATHE

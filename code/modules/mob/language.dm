@@ -288,7 +288,7 @@
 
 /datum/language/mouse
 	name = LANGUAGE_MOUSE
-	desc = "Literally just squeaks"
+	desc = "It's literally just squeaks."
 	speech_verb = "squeaks"
 	colour = "say_quote"
 	key = "9"

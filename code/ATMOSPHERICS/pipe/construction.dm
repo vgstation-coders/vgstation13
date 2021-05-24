@@ -57,7 +57,7 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 
 /obj/item/pipe
 	name = "pipe"
-	desc = "A pipe"
+	desc = "A pipe."
 	var/pipe_type = 0
 	//var/pipe_dir = 0
 	var/pipename

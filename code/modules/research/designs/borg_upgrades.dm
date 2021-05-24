@@ -1,6 +1,6 @@
 /datum/design/borg_syndicate_module
 	name = "Cyborg illegal equipment board"
-	desc = "Allows for the construction of illegal upgrades for cyborgs"
+	desc = "Allows for the construction of illegal upgrades for cyborgs."
 	id = "borg_syndicate_module"
 	build_type = MECHFAB
 	req_tech = list(Tc_COMBAT = 4, Tc_SYNDICATE = 3)

@@ -1,6 +1,6 @@
 /spell/targeted/pumpkin_head
 	name = "pass the pumpkin"
-	desc = "whomever you select with this spell is given a carnivorous pumpkin, that will eat the head of whomever is holding it after 60 seconds"
+	desc = "whomever you select with this spell is given a carnivorous pumpkin that will eat the head of whomever is holding it after 60 seconds."
 	abbreviation = "PTP"
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE

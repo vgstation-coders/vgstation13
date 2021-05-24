@@ -115,7 +115,7 @@ var/global/list/boo_phrases_silicon=list(
 
 /spell/targeted/ghost/hide_sprite
 	name = "Hide Sprite"
-	desc = "For filming shit"
+	desc = "For filming shit."
 	hud_state = "hidesprite"
 
 /spell/targeted/ghost/hide_sprite/cast()
@@ -125,7 +125,7 @@ var/global/list/boo_phrases_silicon=list(
 
 /spell/targeted/ghost/haunt
 	name = "Haunt"
-	desc = "Haunt that one guy that killed you"
+	desc = "Haunt that one guy that killed you."
 	hud_state = "haunt"
 
 /spell/targeted/ghost/haunt/cast()

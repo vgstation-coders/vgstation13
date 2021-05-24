@@ -20,7 +20,7 @@
 
 /datum/design/plasmacutter
 	name = "Plasma Torch"
-	desc = "A rock cutter that uses bursts of hot plasma"
+	desc = "A rock cutter that uses bursts of hot plasma."
 	id = "plasmacutter"
 	req_tech = list(Tc_MATERIALS = 4, Tc_PLASMATECH = 3, Tc_ENGINEERING = 3)
 	build_type = PROTOLATHE
@@ -42,7 +42,7 @@
 
 /datum/design/pick_diamond
 	name = "Diamond Pickaxe"
-	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
+	desc = "A pickaxe with a diamond pick head. This is just like Minecraft!"
 	id = "pick_diamond"
 	req_tech = list(Tc_MATERIALS = 6)
 	build_type = PROTOLATHE
@@ -63,7 +63,7 @@
 
 /datum/design/auto_ore
 	name = "Automatic Ore Loader"
-	desc = "Used to automatically pick up ore"
+	desc = "Used to automatically pick up ore."
 	id = "auto_ore"
 	req_tech = list(Tc_MATERIALS = 6, Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
 	build_type = PROTOLATHE

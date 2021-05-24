@@ -19,7 +19,7 @@ Thus, the two variables affect pump operation are set in New():
 	icon_state = "intact_off"
 
 	name = "Volumetric gas pump"
-	desc = "A volumetric pump"
+	desc = "A volumetric pump."
 
 	var/transfer_rate = MAX_TRANSFER_RATE
 

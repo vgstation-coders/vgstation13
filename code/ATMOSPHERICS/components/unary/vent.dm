@@ -2,7 +2,7 @@
 	icon = 'icons/obj/atmospherics/pipe_vent.dmi'
 	icon_state = "base"
 	name = "Vent"
-	desc = "A large air vent"
+	desc = "A large air vent."
 	level = 1
 	var/volume = 500
 	dir = SOUTH

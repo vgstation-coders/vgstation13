@@ -406,7 +406,7 @@ so as to remain in compliance with the most up-to-date laws."
 
 /obj/abstract/screen/alert/robot/reset_self
 	name = "Reset your module"
-	desc = "Click here to reset your module"
+	desc = "Click here to reset your module."
 	icon_state = "module_reset"
 	timeout = 60 SECONDS
 	emph = TRUE

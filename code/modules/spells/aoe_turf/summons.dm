@@ -28,7 +28,7 @@
 
 /spell/aoe_turf/conjure/creature
 	name = "Summon Creature Swarm"
-	desc = "This spell tears the fabric of reality, allowing horrific daemons to spill forth"
+	desc = "This spell tears the fabric of reality, allowing horrific daemons to spill forth."
 	user_type = USER_TYPE_OTHER
 
 	school = "conjuration"

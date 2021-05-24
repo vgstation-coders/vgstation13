@@ -1,6 +1,6 @@
 /datum/design/basic_cell
 	name = "Basic Power Cell"
-	desc = "A basic power cell that holds 1000 units of energy"
+	desc = "A basic power cell that holds 1000 units of energy."
 	id = "basic_cell"
 	req_tech = list(Tc_POWERSTORAGE = 1)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
@@ -10,7 +10,7 @@
 
 /datum/design/high_cell
 	name = "High-Capacity Power Cell"
-	desc = "A power cell that holds 10000 units of energy"
+	desc = "A power cell that holds 10000 units of energy."
 	id = "high_cell"
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
@@ -20,7 +20,7 @@
 
 /datum/design/super_cell
 	name = "Super-Capacity Power Cell"
-	desc = "A power cell that holds 20000 units of energy"
+	desc = "A power cell that holds 20000 units of energy."
 	id = "super_cell"
 	req_tech = list(Tc_POWERSTORAGE = 3, Tc_MATERIALS = 2)
 	reliability_base = 75
@@ -31,7 +31,7 @@
 
 /datum/design/hyper_cell
 	name = "Hyper-Capacity Power Cell"
-	desc = "A power cell that holds 30000 units of energy"
+	desc = "A power cell that holds 30000 units of energy."
 	id = "hyper_cell"
 	req_tech = list(Tc_POWERSTORAGE = 5, Tc_MATERIALS = 4)
 	reliability_base = 70
@@ -42,7 +42,7 @@
 
 /datum/design/ultra_cell
 	name = "Ultra-Capacity Power Cell"
-	desc = "A power cell that holds 50000 units of energy"
+	desc = "A power cell that holds 50000 units of energy."
 	id = "ultra_cell"
 	req_tech = list(Tc_POWERSTORAGE = 8, Tc_MATERIALS = 6)
 	reliability_base = 70
