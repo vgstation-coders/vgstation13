@@ -290,8 +290,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(can_insert(AM))
 		if(src.container)
 			return FALSE
-		if(AM.w_class > W_CLASS_SMALL)
-			return FALSE
+		if(istype(AM,/obj/item))
+			var/obj/item/I = AM
+			if(I.w_class > W_CLASS_SMALL)
+				return FALSE
 		else if(!panel_open)
 			AM.forceMove(src)
 

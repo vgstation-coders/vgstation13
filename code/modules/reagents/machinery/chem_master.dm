@@ -103,8 +103,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(is_type_in_list(AM, accepted_containers))
 		if(src.container)
 			return FALSE
-		if(AM.w_class > W_CLASS_SMALL)
-			return FALSE
+		if(istype(AM,/obj/item))
+			var/obj/item/I = AM
+			if(I.w_class > W_CLASS_SMALL)
+				return FALSE
 		AM.forceMove(src)
 
 		src.container = AM
@@ -114,9 +116,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return TRUE
 
 	else if(istype(B, /obj/item/weapon/storage/pill_bottle))
-		if(windowtype != "chem_master") //Only the chemmaster will accept pill bottles
-			return FALSE
-		if(src.loaded_pill_bottle)
+		if(windowtype != "chem_master" || src.loaded_pill_bottle) //Only the chemmaster will accept pill bottles
 			return FALSE
 		AM.forceMove(src)
 
