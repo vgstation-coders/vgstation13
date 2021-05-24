@@ -99,6 +99,33 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(prob(50))
 		qdel(src)
 
+/obj/machinery/chem_master/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(is_type_in_list(AM, accepted_containers))
+		if(src.container)
+			return FALSE
+		if(AM.w_class > W_CLASS_SMALL)
+			return FALSE
+		AM.forceMove(src)
+
+		src.container = AM
+
+		src.updateUsrDialog()
+		update_icon()
+		return TRUE
+
+	else if(istype(B, /obj/item/weapon/storage/pill_bottle))
+		if(windowtype != "chem_master") //Only the chemmaster will accept pill bottles
+			return FALSE
+		if(src.loaded_pill_bottle)
+			return FALSE
+		AM.forceMove(src)
+
+		src.loaded_pill_bottle = AM
+
+		src.updateUsrDialog()
+		return TRUE
+	return FALSE
+
 /obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 	if(..())
 		return 1
