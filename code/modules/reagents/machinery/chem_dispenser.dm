@@ -298,7 +298,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			AM.forceMove(src)
 
 			container =  AM
-			AM.pixel_x = x_coord_to_nozzle(text2num(params2list(params)["icon-x"]) * PIXEL_MULTIPLIER)
+			//AM.pixel_x = x_coord_to_nozzle(text2num(params2list(params)["icon-x"]) * PIXEL_MULTIPLIER)
 			update_icon()
 
 			nanomanager.update_uis(src) // update all UIs attached to src

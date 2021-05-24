@@ -115,7 +115,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		update_icon()
 		return TRUE
 
-	else if(istype(B, /obj/item/weapon/storage/pill_bottle))
+	else if(istype(AM, /obj/item/weapon/storage/pill_bottle))
 		if(windowtype != "chem_master" || src.loaded_pill_bottle) //Only the chemmaster will accept pill bottles
 			return FALSE
 		AM.forceMove(src)
