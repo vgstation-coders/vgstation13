@@ -67,7 +67,8 @@
 		return TRUE
 	
 	if(seedify(AM, src))
-		return TRUE		
+		return TRUE
+	return FALSE
 
 obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
