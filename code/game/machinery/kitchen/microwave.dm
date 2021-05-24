@@ -95,19 +95,16 @@
 			B.remove_from_storage(G,src)
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				break
-		src.updateUsrDialog()
-
-		return TRUE
 	else if(is_type_in_list(AM,acceptable_items))
 		if (istype(AM,/obj/item/stack) && AM:amount>1)
 			new AM.type (src)
 			AM:use(1)
 		else
 			AM.forceMove(src)
-		return TRUE
 	else
 		return FALSE
 	src.updateUsrDialog()
+	return TRUE
 
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
