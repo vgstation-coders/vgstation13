@@ -80,64 +80,6 @@ var/global/list/rnd_machines = list()
 	if(linked_console)
 		overlays += image(icon = icon, icon_state = "[base_state]_link")
 
-/obj/machinery/r_n_d/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	if (busy || panel_open || disabled)
-		return FALSE
-	if(istype(AM,/obj/item/stack/sheet) && research_flags &TAKESMATIN)
-		var/obj/item/stack/sheet/S = AM
-		var/found = "" //the matID we're compatible with
-		for(var/matID in materials.storage)
-			var/datum/material/M = materials.getMaterial(matID)
-			if(M.sheettype==S.type)
-				found = matID
-		if(!found)
-			return FALSE
-		if(allowed_materials && allowed_materials.len)
-			if(!(found in allowed_materials))
-				return FALSE
-
-		if (TotalMaterials() + S.perunit > max_material_storage)
-			return FALSE
-
-		var/obj/item/stack/sheet/stack = AM
-		if(!AM || !AM.loc)
-			return FALSE
-		//1 So the autolathe doesn't recycle the stack.
-		var/amount = stack.amount
-		if(max_material_storage - TotalMaterials() < (amount*stack.perunit))//Can't overfill
-			amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
-
-		if (!(amount > 0))
-			return FALSE
-
-		if (busy)
-			return FALSE
-
-		busy = TRUE
-
-		if(research_flags & HASMAT_OVER)
-			update_icon()
-			overlays |= image(icon = icon, icon_state = "[base_state]_[stack.name]")
-			if(default_mat_overlays)
-				overlays |= image(icon = icon, icon_state = "autolathe_[stack.name]")
-			spawn(ANIM_LENGTH)
-				overlays -= image(icon = icon, icon_state = "[base_state]_[stack.name]")
-				if(default_mat_overlays)
-					overlays -= image(icon = icon, icon_state = "autolathe_[stack.name]")
-
-		icon_state = "[base_state]"
-		use_power(max(1000, (3750*amount/10)))
-		stack.use(amount)
-		icon_state = "[base_state]"
-
-		var/datum/material/material = materials.getMaterial(found)
-		materials.addAmount(found, amount * material.cc_per_sheet)
-		spawn(ANIM_LENGTH)
-			busy = FALSE
-			src.updateUsrDialog()
-			return TRUE
-	return FALSE
-
 /obj/machinery/r_n_d/blob_act()
 	if (prob(50))
 		qdel(src)
