@@ -36,6 +36,7 @@
 /mob/living/silicon/ai/proc/life_handle_powered_core()
 	var/unblindme = FALSE
 	if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
+		client.show_popup_menus = FALSE
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_LEVEL_TWO
@@ -189,9 +190,9 @@
 		var/damage_taken
 		if(ai_flags & COREFIRERESIST)
 			damage_taken = getToxLoss() + getBruteLoss() + getOxyLoss()
-		else 
+		else
 			damage_taken = getToxLoss() + getFireLoss() + getBruteLoss() + getOxyLoss()
- 
+
 		health = maxHealth - damage_taken
 
 /mob/living/silicon/ai/update_canmove() //If the AI dies, mobs won't go through it anymore
@@ -200,5 +201,5 @@
 /mob/living/silicon/ai/handle_regular_hud_updates()
 	if(malfhacking)
 		throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
-	else 
+	else
 		clear_alert(SCREEN_ALARM_APC_HACKING)
