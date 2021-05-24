@@ -87,6 +87,27 @@
 ********************/
 
 /obj/machinery/microwave/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(holdingitems && holdingitems.len >= limit)
+		return FALSE
+	else if(istype(AM, /obj/item/weapon/storage/bag/plants))
+		var/obj/item/weapon/storage/bag/B = AM
+		for (var/obj/item/weapon/reagent_containers/food/snacks/G in AM.contents)
+			B.remove_from_storage(G,src)
+			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
+				break
+		src.updateUsrDialog()
+
+		return TRUE
+	else if(is_type_in_list(AM,acceptable_items))
+		if (istype(AM,/obj/item/stack) && AM:amount>1)
+			new AM.type (src)
+			AM:use(1)
+		else
+			AM.forceMove(src)
+		return TRUE
+	else
+		return FALSE
+	src.updateUsrDialog()
 
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
