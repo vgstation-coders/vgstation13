@@ -191,7 +191,7 @@ var/global/Holiday = null
 		if(Holiday == XMAS_EVE || Holiday == XMAS)
 			Christmas_Game_Start()
 		if(Holiday == INTERNATIONAL_CLOWN_DAY)
-			Sleep(60)
+			sleep(60)
 			set_security_level("rainbow")
 
 // Nested in the random events loop. Will be triggered every 2 minutes
