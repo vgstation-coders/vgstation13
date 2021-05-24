@@ -241,10 +241,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/golden_cup
-	desc = "A golden cup"
+	desc = "A golden cup."
 	name = "golden cup"
 	icon_state = "golden_cup"
-	w_class = W_CLASS_LARGE.
+	w_class = W_CLASS_LARGE
 	force = 14
 	throwforce = 10
 	amount_per_transfer_from_this = 20
