@@ -190,7 +190,7 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "stickyweb"
 
-/obj/effect/rooting_trap/stickyweb/proc/stick_to(var/atom/A, var/side = null)
+/obj/effect/rooting_trap/stickyweb/stick_to(var/atom/A, var/side = null)
 	var/turf/T = get_turf(A)
 	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
 	. = ..()

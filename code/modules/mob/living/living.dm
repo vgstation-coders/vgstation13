@@ -1235,8 +1235,8 @@ Thanks.
 
 	//unsticking from a rooting trap, such as a sticky web or a blood nail
 	if (istype(L.locked_to, /obj/effect/rooting_trap/))
-		var/obj/effect/overlay/rooting_trap/RT = L.locked_to
-		RT.unstick_attempt()
+		var/obj/effect/rooting_trap/RT = L.locked_to
+		RT.unstick_attempt(L)
 
 /mob/living/verb/lay_down()
 	set name = "Rest"

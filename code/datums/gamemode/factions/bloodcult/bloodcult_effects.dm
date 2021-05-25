@@ -587,7 +587,7 @@ var/bloodstone_backup = 0
 	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
 	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
 
-/obj/effect/rooting_trap/bloodnail/proc/stick_to(var/atom/A, var/side = null)
+/obj/effect/rooting_trap/bloodnail/stick_to(var/atom/A, var/side = null)
 	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
 	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
 	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)

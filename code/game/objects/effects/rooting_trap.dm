@@ -45,9 +45,9 @@
 	return FALSE
 
 /obj/effect/rooting_trap/attack_hand(var/mob/user)
-	unstick_attempt()
+	unstick_attempt(user)
 
-/obj/effect/rooting_trap/proc/unstick_attempt()
+/obj/effect/rooting_trap/proc/unstick_attempt(var/mob/user)
 	if (do_after(user,src,1.5 SECONDS))
 		unstick()
 
