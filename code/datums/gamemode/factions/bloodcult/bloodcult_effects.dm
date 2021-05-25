@@ -50,7 +50,7 @@
 	var/jump_dir = get_dir(T,loc)
 	shadow(loc,T,"sigil_jaunt")
 	spawn(1)
-		new /obj/effect/afterimage/red(T,user)
+		new /obj/effect/red_afterimage(T,user)
 		user.forceMove(loc)
 		sleep(1)
 		new /obj/effect/afterimage/red(loc,user)
@@ -574,4 +574,25 @@ var/bloodstone_backup = 0
 /obj/effect/stun_indicator/singularity_act()
 	return
 
-////////////////////////////////////////////////////////////////
+///////////////////////////////////THROWN DAGGER TRAP////////////////////////////
+
+/obj/effect/rooting_trap/bloodnail
+	name = "blood nail"
+	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "bloodnail"
+
+/obj/effect/rooting_trap/bloodnail/New()
+	..()
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+
+/obj/effect/rooting_trap/bloodnail/proc/stick_to(var/atom/A, var/side = null)
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
+	var/turf/T = get_turf(A)
+	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
+	. = ..()
+	if (.)
+		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")

@@ -840,6 +840,7 @@
 #include "code\game\objects\effects\mines.dm"
 #include "code\game\objects\effects\overlays.dm"
 #include "code\game\objects\effects\portals.dm"
+#include "code\game\objects\effects\rooting_trap.dm"
 #include "code\game\objects\effects\step_triggers.dm"
 #include "code\game\objects\effects\trackers.dm"
 #include "code\game\objects\effects\traps.dm"

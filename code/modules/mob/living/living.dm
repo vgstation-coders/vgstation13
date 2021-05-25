@@ -782,6 +782,8 @@ Thanks.
 	if(!isliving(usr) || usr.special_delayer.blocked())
 		return
 
+	var/turf/T = get_turf(src)
+
 	lazy_invoke_event(/lazy_event/on_resist, list("user" = src))
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
@@ -806,7 +808,7 @@ Thanks.
 	//Getting out of someone's inventory.
 	if(istype(src.loc,/obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.loc
-		forceMove(get_turf(src))
+		forceMove(T)
 		if(istype(H.loc, /mob/living))
 			var/mob/living/Location = H.loc
 			Location.drop_from_inventory(H)
@@ -815,7 +817,7 @@ Thanks.
 		return
 	else if(istype(src.loc, /obj/structure/strange_present))
 		var/obj/structure/strange_present/present = src.loc
-		forceMove(get_turf(src))
+		forceMove(T)
 		qdel(present)
 		playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
@@ -825,7 +827,7 @@ Thanks.
 		if(do_after(src, src, 2 MINUTES))
 			L.visible_message("<span class='danger'>[L] successfully breaks out of [package]!</span>",\
 							  "<span class='notice'>You successfully break out!</span>")
-			forceMove(get_turf(src))
+			forceMove(T)
 			qdel(package)
 			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
@@ -1230,6 +1232,11 @@ Thanks.
 					else
 						CM.simple_message("<span class='warning'>Your attempt to remove \the [HC] was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
+
+	//unsticking from a rooting trap, such as a sticky web or a blood nail
+	if (istype(L.locked_to, /obj/effect/rooting_trap/))
+		var/obj/effect/overlay/rooting_trap/RT = L.locked_to
+		RT.unstick_attempt()
 
 /mob/living/verb/lay_down()
 	set name = "Rest"
