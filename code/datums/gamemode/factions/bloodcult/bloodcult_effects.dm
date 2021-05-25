@@ -50,10 +50,10 @@
 	var/jump_dir = get_dir(T,loc)
 	shadow(loc,T,"sigil_jaunt")
 	spawn(1)
-		new /obj/effect/red_afterimage(T,user)
+		new /obj/effect/afterimage/red(T,user)
 		user.forceMove(loc)
 		sleep(1)
-		new /obj/effect/red_afterimage(loc,user)
+		new /obj/effect/afterimage/red(loc,user)
 		user.forceMove(get_step(loc,jump_dir))
 
 /obj/effect/cult_shortcut/cultify()
@@ -72,38 +72,46 @@
 	return
 
 
-/obj/effect/red_afterimage
+/obj/effect/afterimage
 	icon = null
 	icon_state = null
 	anchored = 1
 	mouse_opacity = 0
+	var/image_color
 
-/obj/effect/red_afterimage/New(var/turf/loc, var/atom/model)
+/obj/effect/afterimage/red
+	image_color = "red"
+
+/obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5)
 	..()
 	if(model)
 		src.appearance = model.appearance
+		invisibility = 0
+		alpha = 255
 		dir = model.dir
-		color = "red"
+		if (image_color)
+			color = image_color
 		layer = NARSIE_GLOW
 		plane = LIGHTING_PLANE
-	animate(src,alpha = 0, time = 5)
-	spawn(5)
+	animate(src,alpha = 0, time = fadout)
+	spawn(fadout)
 		qdel(src)
 
-/obj/effect/red_afterimage/cultify()
+/obj/effect/afterimage/cultify()
 	return
 
-/obj/effect/red_afterimage/ex_act()
+/obj/effect/afterimage/ex_act()
 	return
 
-/obj/effect/red_afterimage/emp_act()
+/obj/effect/afterimage/emp_act()
 	return
 
-/obj/effect/red_afterimage/blob_act()
+/obj/effect/afterimage/blob_act()
 	return
 
-/obj/effect/red_afterimage/singularity_act()
+/obj/effect/afterimage/singularity_act()
 	return
+
 
 ///////////////////////////////////////JAUNT////////////////////////////////////////////////
 //Cultists ride in those when teleporting
@@ -565,3 +573,5 @@ var/bloodstone_backup = 0
 
 /obj/effect/stun_indicator/singularity_act()
 	return
+
+////////////////////////////////////////////////////////////////

@@ -2227,6 +2227,9 @@ mob/proc/on_foot()
 		return 0
 	return 1
 
+/mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
+	return TRUE
+
 /mob/proc/get_personal_ambience()
 	return list()
 
