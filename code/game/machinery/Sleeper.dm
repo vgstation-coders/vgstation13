@@ -534,8 +534,8 @@
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper/mancrowave,
 		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser
 	)
 	setting = "Thermoregulate"
 	available_options = list("Thermoregulate" = 50)
