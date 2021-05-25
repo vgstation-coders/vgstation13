@@ -1090,6 +1090,49 @@ var/list/arcane_tomes = list()
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	mech_flags = MECH_SCAN_FAIL
+	actions_types = list(/datum/action/item_action/toggle_anon)
+	var/anon_mode = FALSE
+
+/obj/item/clothing/head/culthood/attack_self(var/mob/user)
+	if (!iscultist(user))
+		return
+
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (src != H.head)
+			to_chat(user, "<span class='warning'>Put the hood over your head first.</span>")
+			return
+
+	if (ismonkey(user))
+		var/mob/living/carbon/monkey/M = user
+		if (src != M.hat)
+			to_chat(user, "<span class='warning'>Put the hood over your head first.</span>")
+			return
+
+	if(!anon_mode)
+		icon_state = "culthood_anon"
+		body_parts_covered = FULL_HEAD|HIDEHAIR
+		body_parts_visible_override = 0
+		hides_identity = HIDES_IDENTITY_ALWAYS
+		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
+	else
+		icon_state = "culthood"
+		body_parts_covered = EARS|HEAD|HIDEHAIR
+		body_parts_visible_override = FACE
+		hides_identity = HIDES_IDENTITY_DEFAULT
+		to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
+
+	user.update_inv_head()
+	anon_mode = !anon_mode
+
+/obj/item/clothing/head/culthood/unequipped(mob/user, var/from_slot = null)
+	..()
+	icon_state = "culthood"
+	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_visible_override = FACE
+	hides_identity = HIDES_IDENTITY_DEFAULT
+	anon_mode = FALSE
+
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
@@ -1237,6 +1280,10 @@ var/list/arcane_tomes = list()
 	icon_state = "culthood_old"
 	item_state = "culthood_old"
 	species_fit = list()
+	actions_types = list()
+
+/obj/item/clothing/head/culthood/old/attack_self(var/mob/user)
+	return
 
 /obj/item/clothing/suit/cultrobes/old
 	name = "forgotten cult robes"
