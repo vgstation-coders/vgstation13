@@ -218,6 +218,10 @@
 		if(items_transferred == 0 && !is_full())
 			return FALSE
 	else
+		if(isliving(AM))
+			var/mob/living/L = AM
+			if(!L.lying)
+				return FALSE
 		var/datum/food_processor_process/P = select_recipe(AM)
 		if (!P)
 			return FALSE
