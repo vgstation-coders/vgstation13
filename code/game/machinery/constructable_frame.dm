@@ -719,6 +719,9 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit board (Thermal Homeostasis Regulator)"
 	desc = "A circuit board used to run a general purpose kit- err, a medical re-heating apparatus."
 	build_path = /obj/machinery/sleeper/mancrowave
+	req_components = list(
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/biogenerator
 	name = "Circuit Board (Biogenerator)"
