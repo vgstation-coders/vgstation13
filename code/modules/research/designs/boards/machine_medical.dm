@@ -87,6 +87,15 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	build_path = /obj/item/weapon/circuitboard/sleeper
+	
+/datum/design/mancrowave
+	name = "Circuit Design (Mancrowave)"
+	desc = "Allows for the constuction of circuit boards used to build a Thermal Homeostasis Regulator."
+	id = "mancrowave"
+	req_tech = list(Tc_BIOTECH = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	build_path = /obj/item/weapon/circuitboard/sleeper/mancrowave
 
 /datum/design/bioprinter
 	name = "Circuit Design (Bioprinter)"
