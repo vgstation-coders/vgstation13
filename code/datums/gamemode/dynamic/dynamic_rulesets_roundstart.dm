@@ -50,6 +50,7 @@
 /datum/dynamic_ruleset/roundstart/challengers
 	name = "Syndicate Challengers"
 	role_category = /datum/role/traitor/challenger
+	role_category_override = TRAITOR
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
@@ -419,6 +420,7 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/nuclear
 	name = "Nuclear Emergency"
 	role_category = /datum/role/nuclear_operative
+	role_category_override = "Nuke Operative" // this is what is used on the ban page
 	restricted_from_jobs = list("Head of Security", "Captain") //Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
