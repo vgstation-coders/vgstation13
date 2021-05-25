@@ -50,7 +50,7 @@
 	var/jump_dir = get_dir(T,loc)
 	shadow(loc,T,"sigil_jaunt")
 	spawn(1)
-		new /obj/effect/red_afterimage(T,user)
+		new /obj/effect/afterimage/red(T,user)
 		user.forceMove(loc)
 		sleep(1)
 		new /obj/effect/afterimage/red(loc,user)
