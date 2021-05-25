@@ -2,7 +2,7 @@
 
 /obj/item/clothing/suit/storage/wintercoat/slimecoat
 	name = "slime coat"
-	desc = "This does not look like it protects against water very well"
+	desc = "This doesn't look like it protects against water very well."
 	icon_state = "slimecoat"
 	item_state = "slimecoat"
 	species_fit = list(INSECT_SHAPED)

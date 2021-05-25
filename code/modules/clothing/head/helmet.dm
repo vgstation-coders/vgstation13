@@ -13,7 +13,7 @@
 
 /obj/item/clothing/head/helmet/visor
 	name = "visor helmet"
-	desc = "For when you need to protect your face from the backblast of your pepperspray"
+	desc = "For when you need to protect your face from the backblast of your pepperspray."
 	icon_state = "riot_helm"
 	item_state = "riot_helm"
 	species_fit = list(INSECT_SHAPED)
@@ -309,7 +309,7 @@
 
 /obj/item/clothing/head/helmet/chainmail
 	name = "chainmail coif"
-	desc = "chains fashioned together to be a hood to wear over your head"
+	desc = "Chains fashioned together into a hood."
 	icon_state = "chainmail_head"
 	item_state = "chainmail_head"
 	species_fit = list(INSECT_SHAPED)

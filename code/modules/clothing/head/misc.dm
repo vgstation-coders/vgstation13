@@ -356,7 +356,7 @@
 
 /obj/item/clothing/head/bearpelt/real/spare
 	name = "spare bear pelt"
-	desc = "shimmers in the light"
+	desc = "It shimmers in the light"
 	icon_state = "sparebearpelt"
 	item_state = "sparebearpelt"
 	slot_flags = SLOT_ID|SLOT_HEAD

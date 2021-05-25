@@ -18,7 +18,7 @@
 	var/max_shells = 200
 	var/current_shells = 200
 	var/rounds_per_burst = 4
-	
+
 /obj/item/weapon/gun/gatling/New()
 	base_icon_state = icon_state
 	..()
@@ -109,13 +109,13 @@
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6;" + Tc_BIOTECH + "=5"
 	recoil = 0
 	gatlingbullet = /obj/item/projectile/bullet/beegun
-	
+
 /obj/item/weapon/gun/gatling/beegun/hornetgun
 	name = "hornet gun"
-	desc = "Doesn't actually use .22 Hornet cartridges"
+	desc = "Doesn't actually use .22 Hornet cartridges."
 	icon_state = "hornetgun"
 	gatlingbullet = /obj/item/projectile/bullet/beegun/hornet
-	
+
 /obj/item/weapon/gun/gatling/batling
 	name = "batling gun"
 	desc = "Batter up!"
@@ -126,7 +126,7 @@
 	current_shells = 50
 	rounds_per_burst = 5
 	var/list/rigged_shells = list()
-	
+
 /obj/item/weapon/gun/gatling/batling/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/thebaton = W
@@ -135,7 +135,7 @@
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have a cell.</span>")
 				..()
 				return
-			if(!thebaton.bcell.maxcharge > thebaton.hitcost)	
+			if(!thebaton.bcell.maxcharge > thebaton.hitcost)
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have enough charge.</span>")
 				..()
 				return
@@ -150,7 +150,7 @@
 			qdel(W)
 			update_icon()
 	..()
-			
+
 /obj/item/weapon/gun/gatling/batling/process_chambered()
 	if(in_chamber)
 		return 1
@@ -167,13 +167,13 @@
 		new/obj/item/ammo_casing_gatling/batling(get_turf(src))
 		return 1
 	return 0
-	
+
 /obj/item/weapon/gun/gatling/batling/update_icon()
 	if(current_shells)
 		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,20)]"
 	else
-		icon_state = "[base_icon_state]0"	
-	
+		icon_state = "[base_icon_state]0"
+
 /obj/item/ammo_casing_gatling/batling
 	name = "baton casing"
 	desc = "The remains of a stun baton."

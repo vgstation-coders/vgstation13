@@ -336,7 +336,7 @@
 /mob/living/simple_animal/construct/wraith
 	name = "\improper Wraith"
 	real_name = "\improper Wraith"
-	desc = "A wicked bladed shell contraption piloted by a bound spirit"
+	desc = "A wicked bladed shell contraption piloted by a bound spirit."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "floating"
 	icon_living = "floating"
@@ -362,7 +362,7 @@
 /mob/living/simple_animal/construct/builder
 	name = "\improper Artificer"
 	real_name = "\improper Artificer"
-	desc = "A bulbous construct dedicated to building and maintaining The Cult of Nar-Sie's armies"
+	desc = "A bulbous construct dedicated to building and maintaining the Cult of Nar-Sie's armies."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "artificer"
 	icon_living = "artificer"
@@ -425,7 +425,7 @@
 /mob/living/simple_animal/construct/harvester
 	name = "Harvester"
 	real_name = "Harvester"
-	desc = "The promised reward of the livings who follow narsie. Obtained by offering their bodies to the geometer of blood"
+	desc = "The promised reward of the livings who follow Nar-Sie. Obtained by offering their bodies to the geometer of blood."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "harvester"
 	icon_living = "harvester"

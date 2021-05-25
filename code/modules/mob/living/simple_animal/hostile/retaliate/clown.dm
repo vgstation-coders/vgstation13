@@ -1,6 +1,6 @@
 /mob/living/simple_animal/hostile/retaliate/clown
 	name = "clown"
-	desc = "A denizen of clown planet"
+	desc = "A denizen of Clown Planet."
 	icon_state = "clown"
 	icon_living = "clown"
 	icon_dead = "clown_dead"
@@ -10,7 +10,7 @@
 	response_help = "pokes"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
-	speak = list("HONK", "Honk!", "Welcome to clown planet!")
+	speak = list("HONK", "Honk!", "Welcome to Clown Planet!")
 	emote_see = list("honks")
 	speak_chance = 1
 	a_intent = I_HURT

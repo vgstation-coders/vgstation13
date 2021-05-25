@@ -20,7 +20,7 @@ Example of the second method:
 
 /datum/map_element/away_mission/my_shit
 	file_path = "maps/RandomZLevels/fresh_dump.dmm"
-	desc = "This stinks"
+	desc = "This stinks."
 
 ****READ THIS****
   Because a z-level is 500x500 in size, loading an away mission creates 250,000 new turfs - in addition to any additonal mobs and objects.

@@ -69,7 +69,7 @@
 //Health readout module
 /obj/item/rig_module/health_readout
 	name = "articulated spine"
-	desc = "Lets passers by read your health from a distance"
+	desc = "Lets passer-bys read your health from a distance."
 
 /obj/item/rig_module/health_readout/examine_addition(mob/user)
 	if(!ishuman(rig.wearer))

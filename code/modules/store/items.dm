@@ -138,7 +138,7 @@
 /////////////////////////////
 /datum/storeitem/sterilemask
 	name = "Face Mask"
-	desc = "Protects you from both contracting or spreading airborne diseases, at the cost of looking like a Virologist"
+	desc = "Protects you from both contracting or spreading airborne diseases, at the cost of looking like a virologist."
 	typepath = /obj/item/clothing/mask/surgical
 	cost = 5
 

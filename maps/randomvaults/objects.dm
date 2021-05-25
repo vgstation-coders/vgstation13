@@ -809,7 +809,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled
 	name = "acid pie"
-	desc = "Tangy tasting"
+	desc = "Tangy tasting!"
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
 	..()

@@ -24,7 +24,7 @@
 
 /datum/disease2/effect/sleepy
 	name = "Resting Syndrome"
-	desc = "Causes the infected to collapse in random fits of narcolepsy"
+	desc = "Causes the infected to collapse in random fits of narcolepsy."
 	encyclopedia = ""
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE

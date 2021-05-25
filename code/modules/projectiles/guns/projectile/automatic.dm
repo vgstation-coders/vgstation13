@@ -192,7 +192,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw
 	name = "\improper L6 SAW"
-	desc = "A rather traditionally made light machine gun with a pleasantly lacquered wooden pistol grip. Has 'Aussec Armoury- 2531' engraved on the reciever"
+	desc = "A rather traditionally made light machine gun with a pleasantly lacquered wooden pistol grip. It has 'Aussec Armoury- 2531' engraved on the reciever."
 	icon_state = "l6closed100"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	item_state = "l6closedmag"

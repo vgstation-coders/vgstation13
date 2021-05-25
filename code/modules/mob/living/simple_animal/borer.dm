@@ -113,7 +113,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/defected_borer
 	name = "special borer"
 	real_name = "special borer"
-	desc = "A slightly defected, yet incredibly happy little brainslug"
+	desc = "A slightly defected, yet incredibly happy little brainslug."
 	speak_emote = list("borks")
 	emote_hear = list("barks")
 	attacktext = "barks at"
