@@ -16,11 +16,8 @@
 
 /obj/machinery/light_switch/initialize()
 	add_self_to_holomap()
-<<<<<<< HEAD
 	if (!map.lights_always_ok)
 		toggle_switch(newstate = 0)
-=======
->>>>>>> parent of 36dcb31aea (Turns lightswitches off by default. (#28918))
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
