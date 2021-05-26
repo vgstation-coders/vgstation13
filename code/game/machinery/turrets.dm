@@ -256,7 +256,6 @@
 
 	if (src.health <= 0)
 		src.die()
-	return
 
 /obj/machinery/turret/attackby(obj/item/weapon/W, mob/living/user)//I can't believe no one added this before/N
 	user.do_attack_animation(src, W)

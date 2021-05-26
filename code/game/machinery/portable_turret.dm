@@ -297,13 +297,7 @@ Status: []<BR>"},
 /obj/machinery/turret/portable/bullet_act(var/obj/item/projectile/Proj)
 	if(on && Proj.damage > 0)
 		attacked += 5
-
-	src.health -= Proj.damage
-	. = ..()
-	if(prob(45) && Proj.damage > 0)
-		spark(src, 5, FALSE)
-	if (src.health <= 0)
-		src.die() // the death process :(
+	..()
 	if((src.lasercolor == "b") && (src.disabled == 0))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
 			src.disabled = 1
