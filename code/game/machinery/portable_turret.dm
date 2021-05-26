@@ -309,6 +309,7 @@ Status: []<BR>"},
 			on=1
 
 	..()
+	enabled = 1
 
 /obj/machinery/turret/portable/ex_act(severity)
 	if(severity < 3)
