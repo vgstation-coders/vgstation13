@@ -246,6 +246,10 @@ var/list/barsigns = list()
 						desc = "It displays \"[name]\"."					
 				if("custom_screen")
 					icon_state = "kustom"
+					overlays = list()
+					color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
+					color_overlay.color = interval_queue["1"]["background_color"]
+					overlays += color_overlay
 					vis_contents += viscon
 					viscon.maptext_width = 62 //Yeah guess what, it doesn't exit the actual icon
 					viscon.maptext_height = 29
