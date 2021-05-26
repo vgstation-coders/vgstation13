@@ -116,35 +116,12 @@
 /obj/machinery/turret/proc/get_new_target()
 	var/list/new_targets = new
 	var/new_target
-	for(var/mob/M in view(7, src))
-		if(issilicon(M))
-			if(!shootsilicons || istype(M, /mob/living/silicon/ai))
-				continue
-		if(!M.stat && !(M.flags & INVULNERABLE) && M.faction != faction)
-			if(iscarbon(M))
-				var/mob/living/carbon/C = M
-				if(!C.isStunned())
-					new_targets += C
-				if(istype(installed,/obj/item/weapon/gun/energy/gun)) //only shoots them while they're down if set to laser mode
-					var/obj/item/weapon/gun/energy/gun/EG = installed
-					if(EG.mode == 1)
-						new_targets += C
-			else
-				new_targets += M
-
-	for(var/obj/mecha/M in view(7, src)))
-		if(M.occupant)
-			new_targets += M
-
-	// /vg/ vehicles
-	for(var/obj/structure/bed/chair/vehicle/V in view(7, src)))
-		if(V.is_locking_type(/mob/living))
-			new_targets += V
-
+	for(var/atom/movable/AM in view(7, src))
+		if(check_target(AM))
+			new_targets += AM
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
-
 
 /obj/machinery/turret/process()
 	if(stat & (NOPOWER|BROKEN))
