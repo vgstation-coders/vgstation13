@@ -56,7 +56,7 @@ var/list/barsigns = list()
 									"Dropshadow" = list("color" = "#1bf555"),
 										"Waves")
 	var/current_filter = "Nothing"
-	var/list/font_selection = list("Arial","Comic Sans MS","Courier New","Lucida Console","Trebuchet MS","Verdana")
+	var/list/font_selection = list("Arial","Comic Sans MS","Courier New","Georgia","Lucida Console","Trebuchet MS","Verdana")
 	var/current_font = "Arial"
 //Custom Barsign Configurable Shit
 //Basically its a list, each index number is the current tick,
@@ -285,6 +285,7 @@ var/list/barsigns = list()
 															"letter_color" = "#1bf555",
 															"letter_size" = "12",
 															"sound_key" = "Nothing",
+															"font_name" = "Arial"
 															"sound_tone" = 15000,
 															"sound_volume" = 50)
 
@@ -330,7 +331,7 @@ var/list/barsigns = list()
 		if(href_list["set_font"])
 			var/safety = text2num(href_list["set_font"])
 			if(safety <= MAX_QUEUE_LIMIT)
-				current_font = input(user,"Available Sounds", "Sounds", "Cancel") as null|anything in font_selection
+				current_font = input(user,"Available Fonts", "Fonts", "Cancel") as null|anything in font_selection
 				if(current_font)
 					interval_queue["[safety]"]["font_name"] = current_font
 
@@ -361,7 +362,7 @@ var/list/barsigns = list()
 	var/check_sound = sound_selection["[interval_queue["[interval_ticker]"]["sound_key"]]"]
 	if(check_sound)
 		playsound(src, check_sound, interval_queue["[interval_ticker]"]["sound_volume"], 1, frequency = interval_queue["[interval_ticker]"]["sound_tone"])
-	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
+	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;font-family:'interval_queue["[interval_ticker]"]["font_name"]'\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
 	if(interval_ticker >= interval_queue.len)
 		interval_ticker = 0
 
@@ -422,7 +423,7 @@ var/list/barsigns = list()
 	pixel_x = 0
 	pixel_y = 0
 
-//You get actual annoying sounds If its emag'd
+//You get actual annoying sounds and scrambled symbol fonts If its emag'd
 /obj/structure/sign/double/barsign/emag_act(mob/user)
 	sound_selection["Rooster"] = 'sound/misc/6amRooster.wav'
 	sound_selection["Wolf"] = 'sound/misc/6pmWolf.wav'
@@ -430,6 +431,7 @@ var/list/barsigns = list()
 	sound_selection["Female Scream"] = 'sound/misc/femalescream5.ogg'
 	sound_selection["Vox Scream"] = 'sound/misc/shriek1.ogg'
 	sound_selection["Bike Horn"] = 'sound/items/bikehorn.ogg'
+	font_selection += "Wingdings"
 
 	
 
