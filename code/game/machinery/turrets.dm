@@ -6,26 +6,26 @@
 	name = "turret"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "grey_target_prism"
-	var/raised = 0
+	var/raised = 0								// if the turret cover is "open" and the turret is raised
 	var/enabled = 1
 	anchored = 1
-	invisibility = INVISIBILITY_LEVEL_TWO
+	invisibility = INVISIBILITY_LEVEL_TWO		// the turret is invisible if it's inside its cover
 	density = 1
-	var/faction = null //No shooting our buddies!
-	var/shootsilicons = 0 //You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
+	var/faction = null 							//No shooting our buddies!
+	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
 	var/lasers = 0
 	var/lasertype = /obj/item/projectile/beam
-	var/health = 80
-	var/obj/machinery/turretcover/cover = null
+	var/health = 80								// the turret's health
+	var/obj/machinery/turretcover/cover = null	// the cover that is covering this turret
 	var/popping = 0
 	var/wasvalid = 0
-	var/lastfired = 0
-	var/shot_delay = 30 //3 seconds between shots
+	var/lastfired = 0							// 1: if the turret is cooling down from a shot, 0: turret is ready to fire
+	var/shot_delay = 30 						//3 seconds between shots
 	var/fire_twice = 0
 
-	use_power = 1
-	idle_power_usage = 50
-	active_power_usage = 300
+	use_power = 1								// this turret uses and requires power
+	idle_power_usage = 50						// when inactive, this turret takes up constant 50 Equipment power
+	active_power_usage = 300					// when active, this turret takes up constant 300 Equipment power
 //	var/list/targets
 	var/atom/movable/cur_target
 	var/targeting_active = 0
@@ -35,7 +35,6 @@
 /obj/machinery/turret/New()
 //	targets = new
 	..()
-	return
 
 /obj/machinery/turretcover
 	name = "pop-up turret cover"
@@ -310,18 +309,18 @@
 	if(severity < 3)
 		src.die()
 
-/obj/machinery/turret/proc/die()
+/obj/machinery/turret/proc/die() // called when the turret dies, ie, health <= 0
 	src.health = 0
 	setDensity(FALSE)
-	src.stat |= BROKEN
+	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "destroyed_target_prism"
-	if (cover!=null)
-		qdel(cover)
-		cover = null
+	invisibility = 0
 	sleep(3)
 	flick("explosion", src)
-	spawn(13)
-		qdel(src)
+	src.setDensity(TRUE)
+	if (cover!=null) // deletes the cover - no need on keeping it there!
+		qdel(cover)
+		cover = null
 
 /obj/machinery/turretid
 	name = "turret control switchboard"
@@ -671,6 +670,7 @@
 	return
 
 /obj/machinery/turret/Destroy()
+	// deletes its own cover with it
 	if(cover)
 		qdel(cover)
 		cover = null
