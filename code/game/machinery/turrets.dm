@@ -45,9 +45,6 @@
 	density = 0
 	var/obj/machinery/turret/host = null
 
-/obj/machinery/turret/proc/isRaising()
-	return (raising!=0)
-
 /obj/machinery/turret/power_change()
 	if(stat & BROKEN)
 		icon_state = "grey_target_prism"
@@ -153,7 +150,7 @@
 		src.cover.host = src
 	protected_area = get_protected_area()
 	if(!enabled || !protected_area || protected_area.turretTargets.len<=0)
-		if(!isDown() && !isRaising())
+		if(raised && !raising)
 			popDown()
 		return
 	if(!check_target(cur_target)) //if current target fails target check
@@ -165,8 +162,8 @@
 			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
 //		to_chat(world, "[cur_target]")
-		if(!isRaising())
-			if(isDown())
+		if(!raising)
+			if(!raised)
 				popUp()
 				use_power = 2
 			else
@@ -181,10 +178,9 @@
 				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
 				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
-	else if(!isRaising())//else, pop down
-		if(!isDown())
-			popDown()
-			use_power = 1
+	else if(!raising || raised)//else, pop down
+		popDown()
+		use_power = 1
 	return
 
 /obj/machinery/turret/proc/target()
@@ -220,10 +216,6 @@
 	A.process()
 	return
 
-
-/obj/machinery/turret/proc/isDown()
-	return (invisibility!=0)
-
 /obj/machinery/turret/proc/popUp() // pops the turret up
 	if(raising || raised)
 		return
@@ -254,7 +246,6 @@
 	cover.icon_state="turretCover"
 	raised=0
 	invisibility = INVISIBILITY_LEVEL_TWO
-	icon_state="[lasercolor]grey_target_prism"
 
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage

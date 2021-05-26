@@ -455,6 +455,7 @@ Status: []<BR>"},
 	if(disabled)
 		return
 	..()
+	icon_state="[lasercolor]grey_target_prism"
 
 
 /obj/machinery/turret/portable/proc/assess_perp(mob/living/carbon/human/perp as mob)
