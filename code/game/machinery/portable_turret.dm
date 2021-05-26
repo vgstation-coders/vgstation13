@@ -230,8 +230,6 @@ Status: []<BR>"},
 			qdel(src)
 		return
 
-	..()
-
 	if(!on && !raised)
 		if(W.is_wrench(user) && wrenchAnchor(user, W))
 			// This code handles moving the turret around. After all, it's a portable turret!
@@ -273,24 +271,7 @@ Status: []<BR>"},
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 
 	else
-		user.delayNextAttack(10)
-		// if the turret was attacked with the intention of harming it:
-		if (W.force >= 2)
-			src.health -= W.force * 0.5
-			if (src.health <= 0)
-				src.die()
-		// if the force of impact dealt at least 1 damage, the turret gets pissed off
-			playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)
-			if(W.attack_verb && W.attack_verb.len)
-				user.visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W]!</span>", \
-						 "<span class='warning'>You attack \the [src] with \the [W]!</span>", \
-						 "<span class='warning'>You hear a clang!</span>")
-			else
-				user.visible_message("<span class='warning'><B>[user] attacks \the [src] with \the [W]!</span>", \
-						 "<span class='warning'>You attack \the [src] with \the [W]!</span>", \
-						 "<span class='warning'>You hear a clang!</span>")
-			if(on)
-				attacked += 5
+		..()
 
 
 

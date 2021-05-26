@@ -265,10 +265,20 @@
 	playsound(src, 'sound/weapons/smash.ogg', 60, 1)
 	spark(src, 5, FALSE)
 	src.health -= W.force * 0.5
-	visible_message("<span class='danger'>[user] attacked \the [src] with \the [W]!</span>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src] with [W]</font>")
-	if (src.health <= 0)
-		src.die()
+	if(W.attack_verb && W.attack_verb.len)
+		user.visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You attack \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You hear a clang!</span>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[pick(W.attack_verb)] [src] with [W]</font>")
+	else
+		user.visible_message("<span class='warning'><B>[user] attacks \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You attack \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You hear a clang!</span>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src] with [W]</font>")
+	if (W.force >= 2)
+		src.health -= W.force * 0.5
+		if (src.health <= 0)
+			src.die()
 	return
 
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M)
