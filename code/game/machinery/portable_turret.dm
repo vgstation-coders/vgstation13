@@ -16,8 +16,6 @@
 	var/lasercolor = ""		// Something to do with lasertag turrets, blame Sieve for not adding a comment.
 	var/locked = 1			// if the turret's behaviour control access is locked
 
-	var/obj/item/weapon/gun/installed = null		// the type of weapon installed
-
 	var/reqpower = 750 //power used per shot
 
 	shot_delay = 15		// 1.5 seconds between each shot
@@ -41,10 +39,8 @@
 	power_change()
 	cover = new /obj/machinery/turretcover/portable(loc)
 	cover.host = src
-	spawn(10)
-		update_gun()
 
-/obj/machinery/turret/portable/proc/update_gun()
+/obj/machinery/turret/portable/update_gun()
 	if(!installed)// if for some reason the turret has no gun (ie, admin spawned) it resorts to basic taser shots
 		installed = new /obj/item/weapon/gun/energy/taser(src)
 
