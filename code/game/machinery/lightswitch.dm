@@ -17,7 +17,6 @@
 /obj/machinery/light_switch/initialize()
 	add_self_to_holomap()
 	if (!map.lights_always_ok)
-		toggle_switch(newstate = 0)
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
