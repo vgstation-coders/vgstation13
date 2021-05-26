@@ -32,7 +32,6 @@
 	var/attacked = 0		// if set to 1, the turret gets pissed off and shoots at people nearby (unless they have sec access!)
 
 	var/on = 1				// determines if the turret is on
-	var/disabled = 0
 
 	machine_flags = EMAGGABLE | SHUTTLEWRENCH
 
@@ -278,20 +277,20 @@ Status: []<BR>"},
 	if(on && Proj.damage > 0)
 		attacked += 5
 	..()
-	if((src.lasercolor == "b") && (src.disabled == 0))
+	if((src.lasercolor == "b") && (enabled)
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
-			src.disabled = 1
+			enabled = 0
 			qdel (Proj)
 			Proj = null
 			sleep(100)
-			src.disabled = 0
-	if((src.lasercolor == "r") && (src.disabled == 0))
+			enabled = 1
+	if((src.lasercolor == "r") && (enabled))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
-			src.disabled = 1
+			enabled = 0
 			qdel (Proj)
 			Proj = null
 			sleep(100)
-			src.disabled = 0
+			enabled = 1
 	return
 
 /obj/machinery/turret/portable/emp_act(severity)
@@ -447,12 +446,12 @@ Status: []<BR>"},
 
 
 /obj/machinery/turret/portable/popUp() // pops the turret up
-	if(disabled)
+	if(!enabled)
 		return
 	..()
 
 /obj/machinery/turret/portable/popDown() // pops the turret down
-	if(disabled)
+	if(!enabled)
 		return
 	..()
 	icon_state="[lasercolor]grey_target_prism"
@@ -530,7 +529,7 @@ Status: []<BR>"},
 
 
 /obj/machinery/turret/portable/shootAt(var/atom/movable/target) // shoots at a target
-	if(disabled)
+	if(!enabled)
 		return
 
 	if(lasercolor && (istype(target,/mob/living/carbon/human)))
