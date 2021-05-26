@@ -67,12 +67,20 @@ var/list/barsigns = list()
 	var/list/interval_queue = list("1" = list("letter_message" = "BAR",
 											"letter_color" = "#1bf555",
 											"letter_size" = "12",
+											"font_name" = "Arial",
+											"color_r" = 255,
+											"color_g" = 255,
+											"color_b" = 255,
 											"sound_key" = "Nothing",
 											"sound_tone" = 15000,
 											"sound_volume" = 50),
 									"2" = list("letter_message" = "THE BEST",
 											"letter_color" = "#f51b1b",
 											"letter_size" = "12",
+											"font_name" = "Arial",
+											"color_r" = 255,
+											"color_g" = 255,
+											"color_b" = 255,
 											"sound_key" = "Nothing",
 											"sound_tone" = 15000,
 											"sound_volume" = 50))
@@ -123,13 +131,6 @@ var/list/barsigns = list()
 		viscon = new()
 
 	barsign_menu(user)
-
-/obj/structure/sign/double/barsign/update_icon()
-	.=..()
-	overlays = list()
-	color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
-	//color_overlay.color = rgb(color_r,color_g,color_b)
-	overlays += color_overlay
 
 /obj/structure/sign/double/barsign/proc/barsign_menu(mob/user)
 	var/dat
@@ -296,8 +297,11 @@ var/list/barsigns = list()
 				interval_queue["[interval_queue.len+1]"] = list("letter_message" = "BAR",
 															"letter_color" = "#1bf555",
 															"letter_size" = "12",
-															"sound_key" = "Nothing",
 															"font_name" = "Arial",
+															"color_r" = 255,
+															"color_g" = 255,
+															"color_b" = 255,
+															"sound_key" = "Nothing",
 															"sound_tone" = 15000,
 															"sound_volume" = 50)
 
@@ -374,6 +378,10 @@ var/list/barsigns = list()
 	var/check_sound = sound_selection["[interval_queue["[interval_ticker]"]["sound_key"]]"]
 	if(check_sound)
 		playsound(src, check_sound, interval_queue["[interval_ticker]"]["sound_volume"], 1, frequency = interval_queue["[interval_ticker]"]["sound_tone"])
+	overlays = list()
+	color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
+	color_overlay.color = rgb(interval_queue["[interval_ticker]"]["color_r"],interval_queue["[interval_ticker]"]["color_g"],interval_queue["[interval_ticker]"]["color_b"])
+	overlays += color_overlay
 	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;font-family:'interval_queue["[interval_ticker]"]["font_name"]'\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
 	if(interval_ticker >= interval_queue.len)
 		interval_ticker = 0
