@@ -155,6 +155,8 @@
 
 /obj/machinery/turret/process()
 	if(stat & (NOPOWER|BROKEN))
+		// if the turret has no power or is broken, make the turret pop down if it hasn't already
+		popDown()
 		return
 	if(src.cover==null)
 		src.cover = new /obj/machinery/turretcover(src.loc)
