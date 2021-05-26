@@ -54,6 +54,7 @@ var/list/barsigns = list()
 	//Dropshadows are safe, waves... might brutalize clients but they have a v limited amount of filters to use
 	var/list/filter_selection = list("Nothing",
 									"Dropshadow" = list("color" = "#1bf555"),
+									"Ripple",
 										"Waves")
 	var/current_filter = "Nothing"
 	var/list/font_selection = list("Arial","Comic Sans MS","Courier New","Georgia","Lucida Console","Trebuchet MS","Verdana")
@@ -266,6 +267,9 @@ var/list/barsigns = list()
 				if("Dropshadow")
 					if(viscon.filters.len <= MAX_FILTER_LIMIT)
 						viscon.filters += filter(type="drop_shadow", x=0, y=0, size=3, offset=2, color="[filter_selection["Dropshadow"]["color"]]")
+				if("Ripple")
+					if(viscon.filters.len <= MAX_FILTER_LIMIT)
+						viscon.filters += filter(type="ripple", x=0, y=0, size=rand()*2.5+0.5, repeat=rand()*2.5+0.5, radius=rand(), falloff=rand()*2.5+0.5)
 				if("dshadow_color")
 					var/colorhex = input(user, "Choose your dropshadow color:", "Sign Color Selection",filter_selection["Dropshadow"]["color"]) as color|null
 					if(colorhex)
