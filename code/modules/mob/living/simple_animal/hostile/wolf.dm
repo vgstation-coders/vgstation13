@@ -181,7 +181,7 @@
 		if(F.food_flags & FOOD_MEAT) //Any meaty dish goes!
 			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
-			adjust_nutrition(15)
+			adjust_nutrition(25)
 			if(prob(25))
 				if(!pack_alpha)
 					pack_alpha = user
