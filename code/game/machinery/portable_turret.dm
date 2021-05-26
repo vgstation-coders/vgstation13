@@ -16,9 +16,8 @@
 	var/lasercolor = ""		// Something to do with lasertag turrets, blame Sieve for not adding a comment.
 	var/locked = 1			// if the turret's behaviour control access is locked
 
-	var/reqpower = 750 //power used per shot
-
-	shot_delay = 15		// 1.5 seconds between each shot
+	reqpower = 750			// Amount of power per shot
+	shot_delay = 15			// 1.5 seconds between each shot
 
 	var/check_records = 1	// checks if it can use the security records
 	var/criminals = 1		// checks if it can shoot people on arrest
@@ -534,11 +533,6 @@ Status: []<BR>"},
 		if(H.lying)
 			return
 
-	var/turf/T = get_turf(src)
-	var/turf/U = get_turf(target)
-	if (!istype(T) || !istype(U))
-		return
-
 	if (!raised) // the turret has to be raised in order to fire - makes sense, right?
 		return
 
@@ -547,27 +541,7 @@ Status: []<BR>"},
 	else
 		icon_state = "[lasercolor]orange_target_prism"
 
-	use_power(reqpower)
-
-//		 //Shooting Code:
-	playsound(src, installed.fire_sound, 75, 1)
-	var/obj/item/projectile/A
-	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
-		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
-		R.choose_projectile()
-		A = new R.in_chamber.type(loc)
-	else
-		var/obj/item/weapon/gun/energy/E = installed
-		A = new E.projectile_type(loc)
-	A.original = target
-	A.starting = T
-	A.shot_from = installed
-	A.current = T
-	A.yo = U.y - T.y
-	A.xo = U.x - T.x
-	A.OnFired()
-	spawn()
-		A.process()
+	..()
 
 	if(emagged && !last_fired)
 		sleep(5)

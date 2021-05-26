@@ -14,13 +14,14 @@
 	density = 1
 	var/faction = null 							//No shooting our buddies!
 	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
-	var/lasers = 0
 	var/lasertype = /obj/item/projectile/beam
 	var/health = 80								// the turret's health
 	var/obj/machinery/turretcover/cover = null	// the cover that is covering this turret
 	var/raising = 0								// if the turret is currently opening or closing its cover
 	var/wasvalid = 0
 	var/lastfired = 0							// 1: if the turret is cooling down from a shot, 0: turret is ready to fire
+
+	var/reqpower = 350							// Amount of power per shot
 	var/shot_delay = 30 						//3 seconds between shots
 	var/fire_twice = 0
 
@@ -57,8 +58,10 @@
 	else
 		if( powered() )
 			if (src.enabled)
-				if (src.lasers)
-					icon_state = "orange_target_prism"
+				if(istype(installed,/obj/item/weapon/gun/energy/gun))
+					var/obj/item/weapon/gun/energy/gun/EG = installed
+					if(EG.mode = 1)
+						icon_state = "orange_target_prism"
 				else
 					icon_state = "target_prism"
 			else
@@ -71,7 +74,9 @@
 
 /obj/machinery/turret/proc/setState(var/enabled, var/lethal)
 	src.enabled = enabled
-	src.lasers = lethal
+	if(istype(installed,/obj/item/weapon/gun/energy/gun))
+		var/obj/item/weapon/gun/energy/gun/EG = installed
+		EG.mode = lethal
 	src.power_change()
 
 
@@ -199,27 +204,30 @@
 /obj/machinery/turret/proc/shootAt(var/atom/movable/target)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
-	var/fire_sound = 'sound/weapons/Laser.ogg'
-	if (!T || !U)
+	if (!istype(T) || !istype(U))
 		return
-	var/obj/item/projectile/A
-	if (src.lasers)
-		A = new lasertype(loc)
-		use_power(500)
-	else
-		A = new /obj/item/projectile/energy/electrode( loc )
-		fire_sound = 'sound/weapons/Taser.ogg'
-		use_power(200)
+	
+	use_power(reqpower)
 
+	playsound(src, installed.fire_sound, 75, 1)
+	var/obj/item/projectile/A
+	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
+		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
+		R.choose_projectile()
+		A = new R.in_chamber.type(loc)
+	else
+		var/obj/item/weapon/gun/energy/E = installed
+		A = new E.projectile_type(loc)
 	A.original = target
+	A.starting = T
+	A.shot_from = installed
 	A.target = U
 	A.current = T
-	A.starting = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
-	playsound(T, fire_sound, 50, 1)
 	A.OnFired()
-	A.process()
+	spawn()
+		A.process()
 	return
 
 /obj/machinery/turret/proc/popUp() // pops the turret up
@@ -315,7 +323,9 @@
 	switch(severity)
 		if(1)
 			enabled = 0
-			lasers = 0
+			if(istype(installed,/obj/item/weapon/gun/energy/gun))
+				var/obj/item/weapon/gun/energy/gun/EG = installed
+				EG.mode = 0
 			power_change()
 	..()
 
