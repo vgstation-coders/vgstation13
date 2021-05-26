@@ -259,7 +259,7 @@ var/list/barsigns = list()
 						interval_ticker = 0
 						var/string = interval_queue["1"]["letter_message"]
 						if(string)
-							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;font-family:':[interval_queue["1"]["font_name"]'\">[interval_queue["1"]["letter_message"]]</span>"
+							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;font-family:'[interval_queue["1"]["font_name"]]'\">[interval_queue["1"]["letter_message"]]</span>"
 		
 		if(href_list["set_filter"])
 			switch(href_list["set_filter"])
@@ -383,7 +383,7 @@ var/list/barsigns = list()
 	color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
 	color_overlay.color = interval_queue["[interval_ticker]"]["background_color"]
 	overlays += color_overlay
-	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;font-family:'interval_queue["[interval_ticker]"]["font_name"]'\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
+	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;font-family:'[interval_queue["[interval_ticker]"]["font_name"]]'\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
 	if(interval_ticker >= interval_queue.len)
 		interval_ticker = 0
 
