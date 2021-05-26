@@ -89,7 +89,7 @@
 	build_path = /obj/item/weapon/circuitboard/sleeper
 	
 /datum/design/mancrowave
-	name = "Circuit Design (Mancrowave)"
+	name = "Circuit Design (Thermal Homeostasis Regulator)"
 	desc = "Allows for the constuction of circuit boards used to build a Thermal Homeostasis Regulator."
 	id = "mancrowave"
 	req_tech = list(Tc_BIOTECH = 2)
