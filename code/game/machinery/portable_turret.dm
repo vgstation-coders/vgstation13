@@ -412,8 +412,6 @@ Status: []<BR>"},
 	var/new_target
 
 	for(var/mob/living/L in view(7+emagged*5, src))
-		if(L.isDead() || isMoMMI(L))//mommis are always safe
-			continue
 		if(emagged)
 			if(L.isUnconscious())
 				secondarytargets += L //if the turret is emagged, skip all the fancy target picking stuff
@@ -421,15 +419,6 @@ Status: []<BR>"},
 				targets += L  //and focus on murdering everything
 
 		else if(!issilicon(L))
-			if(isanimal(L)) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
-				if(check_anomalies || attacked)
-					if(L.isUnconscious())
-						continue
-					// Ignore lazarus-injected mobs.
-					if(dd_hasprefix(L.faction, "lazarus"))
-						continue
-					targets += L
-
 			if(isalien(L))
 				if(check_anomalies || attacked) // git those fukken xenos
 					if(!L.isUnconscious())
@@ -438,9 +427,6 @@ Status: []<BR>"},
 						secondarytargets += L
 
 			else
-				if(L.isUnconscious() || L.restrained()) // if the perp is handcuffed or dead/dying, no need to bother really
-					continue // move onto next potential victim!
-
 				if(ai) // If it's set to attack all nonsilicons, target them!
 					if(L.lying)
 						secondarytargets += L
@@ -449,22 +435,12 @@ Status: []<BR>"},
 						targets += L
 						continue
 
-				if(ishuman(L)) // if the target is a human, analyze threat level
-					if(assess_perp(L) < PERP_LEVEL_ARREST)
-						continue // if threat level < PERP_LEVEL_ARREST, keep going
-
-				if(ismonkey(L) && !(check_anomalies || attacked))
-					continue // Don't target monkeys or borgs/AIs you dumb shit
-
-				if(isslime(L) && !(check_anomalies || attacked))
-					continue
-
 				if(L.lying) // if the perp is lying down, it's still a target but a less-important target
 					secondarytargets += L
 					continue
 
-				targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
-
+				if(check_target(L))
+					targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
 	if (targets.len) // if there are targets to shoot
 		new_target = pick(targets)
