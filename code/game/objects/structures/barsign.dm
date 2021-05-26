@@ -123,6 +123,13 @@ var/list/barsigns = list()
 
 	barsign_menu(user)
 
+/obj/structure/sign/double/barsign/update_icon()
+	.=..()
+	overlays = list()
+	color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
+	//color_overlay.color = rgb(color_r,color_g,color_b)
+	overlays += color_overlay
+
 /obj/structure/sign/double/barsign/proc/barsign_menu(mob/user)
 	var/dat
 	//SCREEN SELECTION
