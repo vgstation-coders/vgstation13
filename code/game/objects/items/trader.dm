@@ -1568,6 +1568,16 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	cant_drop = !cant_drop
 	to_chat(user,"<span class='notice'>You [cant_drop ? "engage" : "disengage"] the safety grip.</span>")
 
+/obj/item/weapon/antiaxe_kit
+	name = "antimatter axe kit"
+	desc = "A matter inverter from the secret labs of the Cloud IX engineering facility. It will turn your ordinary axe into an antimatter axe."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	flags = FPRINT
+	siemens_coefficient = 0
+	w_class = W_CLASS_SMALL
+
 /obj/item/weapon/fireaxe/antimatter
 	name = "antimatter fireaxe"
 	desc = "My God, it's full of stars."
@@ -1579,6 +1589,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	item_state = "fireaxe-antimatter[wielded ? 1 : 0]"
 	force = wielded ? 18 : initial(force) //much less deadly than a matter fireaxe
 	visible_message("<span class='sinister'>\The [src] [wielded ? "in" : "ex"]hales.</span>")
+	user.delayNextAttack(2 SECONDS)
 	var/image/void = image('icons/effects/effects.dmi',src,"bhole3")
 	void.plane = ABOVE_HUMAN_PLANE
 	flick_overlay(void, list(user.client), 1 SECOND)
@@ -1588,11 +1599,22 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	if(!istype(S))
 		return
 	var/datum/gas_mixture/air_contents = S.return_air()
+	var/zone/Z = S.zone
 
 	if(wielded)
+		if(Z)
+			for(var/turf/T in Z.contents)
+				for(var/obj/effect/fire/F in T)
+					F.extinguish()
+		var/datum/gas_mixture/removed = air_contents.remove_volume(0.25 * CELL_VOLUME)
+		if(removed)
+			if(removed.temperature > T20C)
+				COOL
+
+			env.merge(removed)
 
 	else
-		mols_inhalted = 0
+		mols_inhaled = 0
 
 //Mystery mob cubes//////////////
 
