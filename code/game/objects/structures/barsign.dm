@@ -40,7 +40,7 @@ var/list/barsigns = list()
 	var/current_position = 1
 
 //Custom Barsign Var shit
-	var/obj/effect/overlay/custom_barsign/viscon = 
+	var/obj/effect/overlay/custom_barsign/viscon = null
 	var/image/color_overlay = null
 	var/list/sound_selection = list("Nothing" = null,
 									"bass_drum_1"	= 'sound/items/barsign/bsign_bassdrum_1.ogg',
