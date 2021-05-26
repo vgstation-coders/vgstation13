@@ -241,7 +241,7 @@
 	layer = TURRET_LAYER
 
 /obj/machinery/turret/proc/popDown() // pops the turret down
-	if(raising || raised)
+	if(raising || !raised)
 		return
 	if(stat & BROKEN)
 		return
