@@ -56,6 +56,8 @@ var/list/barsigns = list()
 									"Dropshadow" = list("color" = "#1bf555"),
 										"Waves")
 	var/current_filter = "Nothing"
+	var/list/font_selection = list("Arial","Comic Sans MS","Courier New","Lucida Console","Trebuchet MS","Verdana")
+	var/current_font = "Arial"
 //Custom Barsign Configurable Shit
 //Basically its a list, each index number is the current tick,
 //So you could make a shitty song I guess.
@@ -147,6 +149,7 @@ var/list/barsigns = list()
 						Msg: <a href="?src=\ref[src];set_message=[i]">[interval_queue[i]["letter_message"]]</a>
 						Color: <a href="?src=\ref[src];set_letter_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["letter_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
 						Size: <a href="?src=\ref[src];set_letter_size=[i]">[interval_queue[i]["letter_size"]]</a>
+						Font: <a href="?src=\ref[src];set_font=[i]">[interval_queue[i]["font_name"]]</a>
 						<br>Sound: <a href="?src=\ref[src];set_sound=[i]">[interval_queue[i]["sound_key"]]</a>
 						Sound Tone: <a href="?src=\ref[src];set_sound_tone=[i]">[interval_queue[i]["sound_tone"]]</a>
 						Sound Vol: <a href="?src=\ref[src];set_sound_volume=[i]">[interval_queue[i]["sound_volume"]]</a>
@@ -250,7 +253,7 @@ var/list/barsigns = list()
 						interval_ticker = 0
 						var/string = interval_queue["1"]["letter_message"]
 						if(string)
-							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;\">[interval_queue["1"]["letter_message"]]</span>"
+							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;font-family:'[current_font]'\">[interval_queue["1"]["letter_message"]]</span>"
 		
 		if(href_list["set_filter"])
 			switch(href_list["set_filter"])
@@ -323,6 +326,13 @@ var/list/barsigns = list()
 				var/picked_sound = input(user,"Available Sounds", "Sounds", "Cancel") as null|anything in sound_selection
 				if(picked_sound)
 					interval_queue["[safety]"]["sound_key"] = picked_sound
+
+		if(href_list["set_font"])
+			var/safety = text2num(href_list["set_font"])
+			if(safety <= MAX_QUEUE_LIMIT)
+				current_font = input(user,"Available Sounds", "Sounds", "Cancel") as null|anything in font_selection
+				if(current_font)
+					interval_queue["[safety]"]["font_name"] = current_font
 
 		if(href_list["set_sound_tone"])
 			var/safety = text2num(href_list["set_sound_tone"])
