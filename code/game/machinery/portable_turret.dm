@@ -345,15 +345,73 @@ Status: []<BR>"},
 	if(attacked)
 		attacked--
 
+	if(!check_target(cur_target)) //if current target fails target check
+		if(fire_twice)
+			src.dir = get_dir(src, cur_target)
+			shootAt(cur_target)
+			cur_target = get_new_target()
+		else
+			cur_target = get_new_target()
+	if(cur_target) //if it's found, proceed
+//		to_chat(world, "[cur_target]")
+		if(!raising)
+			if(!raised)
+				popUp()
+				use_power = 2
+			else
+				spawn()
+					if(!targeting_active)
+						targeting_active = 1
+						target()
+						targeting_active = 0
+
+		if(prob(15))
+			if(prob(50))
+				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
+			else
+				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
+	else
+		spawn()
+			popDown()
+
+/obj/machinery/turret/portable/check_target(var/atom/movable/T as mob|obj)
+	if(T)
+		if( isliving(T) )
+			var/mob/living/L = T
+			if(L.isDead() || isMoMMI(L))//mommis are always safe
+				return 0
+			if(!issilicon(L))
+				if(isanimal(L)) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
+					if(check_anomalies || attacked)
+						if(L.isUnconscious())
+							return 0
+						// Ignore lazarus-injected mobs.
+						if(dd_hasprefix(L.faction, "lazarus"))
+							return 0
+						return 1
+
+				if(L.isUnconscious() || L.restrained()) // if the perp is handcuffed or dead/dying, no need to bother really
+					return 0 // move onto next potential victim!
+
+				if(ishuman(L)) // if the target is a human, analyze threat level
+					if(assess_perp(L) < PERP_LEVEL_ARREST)
+						return 0 // if threat level < PERP_LEVEL_ARREST, keep going
+
+				if(ismonkey(L) && !(check_anomalies || attacked))
+					return 0 // Don't target monkeys or borgs/AIs you dumb shit
+
+				if(isslime(L) && !(check_anomalies || attacked))
+					return 0
+
+				return 1 // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee		
+	return 0
+
+/obj/machinery/turret/portable/get_new_target()
 	var/list/targets = list()		   // list of primary targets
 	var/list/secondarytargets = list() // targets that are least important
-
-
-
+	var/new_target
 
 	for(var/mob/living/L in view(7+emagged*5, src))
-		if(L.flags & INVULNERABLE)
-			continue
 		if(L.isDead() || isMoMMI(L))//mommis are always safe
 			continue
 		if(emagged)
@@ -408,38 +466,22 @@ Status: []<BR>"},
 				targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
 
-	if (targets.len>0) // if there are targets to shoot
+	if (targets.len) // if there are targets to shoot
+		new_target = pick(targets)
 
-		var/atom/t = pick(targets) // pick a perp from the list of targets. Targets go first because they are the most important
+	else if(secondarytargets.len) // if there are no primary targets, go for secondary targets
+		new_target = pick(secondarytargets)
 
-		if (istype(t, /mob/living)) // if a mob
-			var/mob/living/M = t // simple typecasting
-			if (M.stat!=2) // if the target is not dead
-				spawn() popUp() // pop the turret up if it's not already up.
-				dir=get_dir(src,M) // even if you can't shoot, follow the target
-				spawn() shootAt(M) // shoot the target, finally
-		if(prob(15))
-			if(prob(50))
-				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
-			else
-				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
+	return new_target
 
-	else if(secondarytargets.len>0) // if there are no primary targets, go for secondary targets
-		var/mob/t = pick(secondarytargets)
-		if (istype(t, /mob/living))
-			if (t.stat!=2)
+/obj/machinery/turret/portable/target()
+	while(src && enabled && !stat && check_target(cur_target))
+		if (istype(cur_target, /mob/living))
+			if (cur_target.stat!=2)
 				spawn() popUp()
 				dir=get_dir(src,t)
 				shootAt(t)
-		if(prob(15))
-			if(prob(50))
-				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
-			else
-				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
-	else
-		spawn()
-			popDown()
-
+	return
 
 /obj/machinery/turret/portable/popUp() // pops the turret up
 	if(!enabled)
