@@ -116,9 +116,15 @@
 /obj/machinery/turret/proc/get_new_target()
 	var/list/new_targets = new
 	var/new_target
-	for(var/atom/movable/AM in view(7, src))
-		if(check_target(AM))
-			new_targets += AM
+	for(var/mob/M in view(7, src))
+		if(check_target(M))
+			new_targets += M
+	for(var/obj/mecha/ME in view(7, src))
+		if(check_target(ME))
+			new_targets += ME
+	for(/obj/structure/bed/chair/vehicle/V in view(7, src))
+		if(check_target(V))
+			new_targets += V
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
