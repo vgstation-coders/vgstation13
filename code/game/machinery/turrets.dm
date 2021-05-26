@@ -87,8 +87,12 @@
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
 			if( !MC.stat )
-				if( !MC.isStunned() || lasers ) //only shoots them while they're down if set to laser mode
+				if( !MC.isStunned() )
 					return 1
+				if(istype(installed,/obj/item/weapon/gun/energy/gun)) //only shoots them while they're down if set to laser mode
+					var/obj/item/weapon/gun/energy/gun/EG = installed
+					if(EG.mode == 1)
+						return 1
 		if(issilicon(T))
 			if(!shootsilicons || istype(T,/mob/living/silicon/ai))
 				return 0
@@ -119,8 +123,12 @@
 		if(!M.stat && !(M.flags & INVULNERABLE) && M.faction != faction)
 			if(iscarbon(M))
 				var/mob/living/carbon/C = M
-				if(!C.isStunned() || lasers) //only shoots them while they're down if set to laser mode
+				if(!C.isStunned())
 					new_targets += C
+				if(istype(installed,/obj/item/weapon/gun/energy/gun)) //only shoots them while they're down if set to laser mode
+					var/obj/item/weapon/gun/energy/gun/EG = installed
+					if(EG.mode == 1)
+						new_targets += C
 			else
 				new_targets += M
 
