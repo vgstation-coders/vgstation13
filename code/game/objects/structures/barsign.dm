@@ -68,9 +68,7 @@ var/list/barsigns = list()
 											"letter_color" = "#1bf555",
 											"letter_size" = "12",
 											"font_name" = "Arial",
-											"color_r" = 255,
-											"color_g" = 255,
-											"color_b" = 255,
+											"background_color" = "#999999",
 											"sound_key" = "Nothing",
 											"sound_tone" = 15000,
 											"sound_volume" = 50),
@@ -78,9 +76,7 @@ var/list/barsigns = list()
 											"letter_color" = "#f51b1b",
 											"letter_size" = "12",
 											"font_name" = "Arial",
-											"color_r" = 255,
-											"color_g" = 255,
-											"color_b" = 255,
+											"background_color" = "#999999",
 											"sound_key" = "Nothing",
 											"sound_tone" = 15000,
 											"sound_volume" = 50))
@@ -157,7 +153,8 @@ var/list/barsigns = list()
 			dat += {"
 					<div style="width:100%; background-color:#1f1c1c; border-style:solid; border-color: #999797">
 						Msg: <a href="?src=\ref[src];set_message=[i]">[interval_queue[i]["letter_message"]]</a>
-						Color: <a href="?src=\ref[src];set_letter_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["letter_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
+						Background Color: <a href="?src=\ref[src];set_bg_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["background_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
+						Letter Color: <a href="?src=\ref[src];set_letter_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["letter_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
 						Size: <a href="?src=\ref[src];set_letter_size=[i]">[interval_queue[i]["letter_size"]]</a>
 						Font: <a href="?src=\ref[src];set_font=[i]">[interval_queue[i]["font_name"]]</a>
 						<br>Sound: <a href="?src=\ref[src];set_sound=[i]">[interval_queue[i]["sound_key"]]</a>
@@ -298,9 +295,7 @@ var/list/barsigns = list()
 															"letter_color" = "#1bf555",
 															"letter_size" = "12",
 															"font_name" = "Arial",
-															"color_r" = 255,
-															"color_g" = 255,
-															"color_b" = 255,
+															"background_color" = "#999999"
 															"sound_key" = "Nothing",
 															"sound_tone" = 15000,
 															"sound_volume" = 50)
@@ -319,6 +314,13 @@ var/list/barsigns = list()
 			if(desc_text)
 				desc = desc_text
 				log_game("[key_name(user)] changed barsign desc to [desc]")
+
+		if(href_list["set_bg_color"])
+			var/safety = text2num(href_list["set_bg_color"])
+			if(safety <= MAX_QUEUE_LIMIT)
+				var/colorhex = input(user, "Choose your background color:", "Sign Color Selection",interval_queue["[safety]"]["background_color"]) as color|null
+				if(colorhex)
+					interval_queue["[safety]"]["background_color"] = colorhex
 
 		if(href_list["set_letter_color"])
 			var/safety = text2num(href_list["set_letter_color"])
@@ -380,7 +382,7 @@ var/list/barsigns = list()
 		playsound(src, check_sound, interval_queue["[interval_ticker]"]["sound_volume"], 1, frequency = interval_queue["[interval_ticker]"]["sound_tone"])
 	overlays = list()
 	color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
-	color_overlay.color = rgb(interval_queue["[interval_ticker]"]["color_r"],interval_queue["[interval_ticker]"]["color_g"],interval_queue["[interval_ticker]"]["color_b"])
+	color_overlay.color = interval_queue["[interval_ticker]"]["background_color"]
 	overlays += color_overlay
 	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;font-family:'interval_queue["[interval_ticker]"]["font_name"]'\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
 	if(interval_ticker >= interval_queue.len)
