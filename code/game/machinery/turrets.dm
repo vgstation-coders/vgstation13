@@ -31,7 +31,6 @@
 //	var/list/targets
 	var/atom/movable/cur_target
 	var/targeting_active = 0
-	var/area/protected_area
 
 
 /obj/machinery/turret/New()
@@ -79,22 +78,8 @@
 		EG.mode = lethal
 	src.power_change()
 
-
-/obj/machinery/turret/proc/get_protected_area()
-	var/area/TP = get_area(src)
-	if(istype(TP) && TP.turret_protected)
-		return TP
-	if(TP && !TP.turret_protected)
-		message_admins("DEBUG: [src] deleted itself because turret_protected var not set on area [TP].")
-		qdel(src)
-	return
-
 /obj/machinery/turret/proc/check_target(var/atom/movable/T as mob|obj)
-	if(T && (T in protected_area.turretTargets))
-		var/area/area_T = get_area(T)
-		if(!area_T || (area_T.type != protected_area.type))
-			protected_area.Exited(T)
-			return 0 //If the guy is somehow not in the turret's area (teleportation), get them out the damn list. --NEO
+	if(T)
 		if( ismob(T) )
 			var/mob/M = T
 			if((M.flags & INVULNERABLE) || M.faction == faction)
@@ -127,7 +112,7 @@
 /obj/machinery/turret/proc/get_new_target()
 	var/list/new_targets = new
 	var/new_target
-	for(var/mob/M in protected_area.turretTargets)
+	for(var/mob/M in view(7, src))
 		if(issilicon(M))
 			if(!shootsilicons || istype(M, /mob/living/silicon/ai))
 				continue
@@ -139,12 +124,12 @@
 			else
 				new_targets += M
 
-	for(var/obj/mecha/M in protected_area.turretTargets)
+	for(var/obj/mecha/M in view(7, src)))
 		if(M.occupant)
 			new_targets += M
 
 	// /vg/ vehicles
-	for(var/obj/structure/bed/chair/vehicle/V in protected_area.turretTargets)
+	for(var/obj/structure/bed/chair/vehicle/V in view(7, src)))
 		if(V.is_locking_type(/mob/living))
 			new_targets += V
 
@@ -161,8 +146,7 @@
 	if(src.cover==null)
 		src.cover = new /obj/machinery/turretcover(src.loc)
 		src.cover.host = src
-	protected_area = get_protected_area()
-	if(!enabled || !protected_area || protected_area.turretTargets.len<=0)
+	if(!enabled)
 		if(raised && !raising)
 			popDown()
 		return
