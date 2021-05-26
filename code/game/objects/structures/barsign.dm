@@ -325,7 +325,7 @@ var/list/barsigns = list()
 		if(href_list["set_letter_color"])
 			var/safety = text2num(href_list["set_letter_color"])
 			if(safety <= MAX_QUEUE_LIMIT)
-				var/colorhex = input(user, "Choose your text color:", "Sign Color Selection",interval_queue["[safety]"]["letter_color"]) as color|null
+				var/colorhex = input(user, "Choose your text color:", "Text Color Selection",interval_queue["[safety]"]["letter_color"]) as color|null
 				if(colorhex)
 					interval_queue["[safety]"]["letter_color"] = colorhex
 
