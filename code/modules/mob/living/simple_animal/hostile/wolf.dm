@@ -15,7 +15,7 @@
 
 #define WOLF_MOVECOST 0
 #define WOLF_STANDCOST 0
-#define WOLF_REGENCOST 5
+#define WOLF_REGENCOST 1
 
 #define MAXALPHADIST 7
 /* TODONE: Pack mentality - Wolves will generally stick around the 'alpha', at least within 6 tiles, unless hunting [x]
