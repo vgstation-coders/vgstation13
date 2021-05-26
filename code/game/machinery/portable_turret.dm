@@ -14,7 +14,6 @@
 	power_channel = EQUIP	// drains power from the EQUIPMENT channel
 
 	var/lasercolor = ""		// Something to do with lasertag turrets, blame Sieve for not adding a comment.
-	var/raising= 0			// if the turret is currently opening or closing its cover
 	var/locked = 1			// if the turret's behaviour control access is locked
 
 	var/obj/item/weapon/gun/installed = null		// the type of weapon installed
@@ -450,38 +449,12 @@ Status: []<BR>"},
 /obj/machinery/turret/portable/popUp() // pops the turret up
 	if(disabled)
 		return
-	if(raising || raised)
-		return
-	if(stat & BROKEN)
-		return
-	invisibility=0
-	raising=1
-	flick("popup",cover)
-	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
-	sleep(5)
-	sleep(5)
-	raising=0
-	cover.icon_state="openTurretCover"
-	raised=1
-	layer = TURRET_LAYER
+	..()
 
 /obj/machinery/turret/portable/popDown() // pops the turret down
 	if(disabled)
 		return
-	if(raising || !raised)
-		return
-	if(stat & BROKEN)
-		return
-	layer = OBJ_LAYER
-	raising=1
-	flick("popdown",cover)
-	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
-	sleep(10)
-	raising=0
-	cover.icon_state="turretCover"
-	raised=0
-	invisibility = INVISIBILITY_LEVEL_TWO
-	icon_state="[lasercolor]grey_target_prism"
+	..()
 
 
 /obj/machinery/turret/portable/proc/assess_perp(mob/living/carbon/human/perp as mob)

@@ -17,7 +17,7 @@
 	var/lasertype = /obj/item/projectile/beam
 	var/health = 80								// the turret's health
 	var/obj/machinery/turretcover/cover = null	// the cover that is covering this turret
-	var/popping = 0
+	var/raising = 0								// if the turret is currently opening or closing its cover
 	var/wasvalid = 0
 	var/lastfired = 0							// 1: if the turret is cooling down from a shot, 0: turret is ready to fire
 	var/shot_delay = 30 						//3 seconds between shots
@@ -45,8 +45,8 @@
 	density = 0
 	var/obj/machinery/turret/host = null
 
-/obj/machinery/turret/proc/isPopping()
-	return (popping!=0)
+/obj/machinery/turret/proc/isRaising()
+	return (raising!=0)
 
 /obj/machinery/turret/power_change()
 	if(stat & BROKEN)
@@ -153,7 +153,7 @@
 		src.cover.host = src
 	protected_area = get_protected_area()
 	if(!enabled || !protected_area || protected_area.turretTargets.len<=0)
-		if(!isDown() && !isPopping())
+		if(!isDown() && !isRaising())
 			popDown()
 		return
 	if(!check_target(cur_target)) //if current target fails target check
@@ -165,7 +165,7 @@
 			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
 //		to_chat(world, "[cur_target]")
-		if(!isPopping())
+		if(!isRaising())
 			if(isDown())
 				popUp()
 				use_power = 2
@@ -181,7 +181,7 @@
 				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
 				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
-	else if(!isPopping())//else, pop down
+	else if(!isRaising())//else, pop down
 		if(!isDown())
 			popDown()
 			use_power = 1
@@ -224,29 +224,37 @@
 /obj/machinery/turret/proc/isDown()
 	return (invisibility!=0)
 
-/obj/machinery/turret/proc/popUp()
-	if ((!isPopping()) || src.popping==-1)
-		invisibility = 0
-		popping = 1
-		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
-		if (src.cover!=null)
-			flick("popup", src.cover)
-			src.cover.icon_state = "openTurretCover"
-		spawn(10)
-			if (popping==1)
-				popping = 0
+/obj/machinery/turret/proc/popUp() // pops the turret up
+	if(raising || raised)
+		return
+	if(stat & BROKEN)
+		return
+	invisibility=0
+	raising=1
+	flick("popup",cover)
+	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
+	sleep(5)
+	sleep(5)
+	raising=0
+	cover.icon_state="openTurretCover"
+	raised=1
+	layer = TURRET_LAYER
 
-/obj/machinery/turret/proc/popDown()
-	if ((!isPopping()) || src.popping==1)
-		popping = -1
-		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
-		if (src.cover!=null)
-			flick("popdown", src.cover)
-			src.cover.icon_state = "turretCover"
-		spawn(10)
-			if (popping==-1)
-				invisibility = INVISIBILITY_LEVEL_TWO
-				popping = 0
+/obj/machinery/turret/proc/popDown() // pops the turret down
+	if(raising || raised)
+		return
+	if(stat & BROKEN)
+		return
+	layer = OBJ_LAYER
+	raising=1
+	flick("popdown",cover)
+	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
+	sleep(10)
+	raising=0
+	cover.icon_state="turretCover"
+	raised=0
+	invisibility = INVISIBILITY_LEVEL_TWO
+	icon_state="[lasercolor]grey_target_prism"
 
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
