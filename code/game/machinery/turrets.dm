@@ -122,7 +122,7 @@
 	for(var/obj/mecha/ME in view(7, src))
 		if(check_target(ME))
 			new_targets += ME
-	for(/obj/structure/bed/chair/vehicle/V in view(7, src))
+	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
 		if(check_target(V))
 			new_targets += V
 	if(new_targets.len)
