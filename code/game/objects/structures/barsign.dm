@@ -285,7 +285,7 @@ var/list/barsigns = list()
 															"letter_color" = "#1bf555",
 															"letter_size" = "12",
 															"sound_key" = "Nothing",
-															"font_name" = "Arial"
+															"font_name" = "Arial",
 															"sound_tone" = 15000,
 															"sound_volume" = 50)
 
