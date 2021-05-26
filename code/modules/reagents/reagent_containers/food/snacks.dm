@@ -6442,6 +6442,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	icon = 'icons/obj/food.dmi'
 	icon_state = "raw_lobster_tail"
 	bitesize = 1 //your eating a raw lobster tail, shell still attatched, you disgusting animal
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/New()
 	..()
@@ -6452,6 +6453,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "The delicious meat of a lobster, an impossible amount of suffering was inflicted to get this."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "raw_lobster_meat"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat/New()
 	..()
@@ -6464,7 +6466,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_deluxe"
 	trash = /obj/item/trash/plate
-
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe/New()
 	..()
@@ -6479,6 +6481,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_simple"
 	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
 
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple/New()
@@ -6492,6 +6495,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A mishmash of mayo and lobster meat shoved onto a roll to make a lobster hot dog."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_roll" //it dont need trash, its a hot dog, lobster edition
+	food_flags = FOOD_MEAT
 
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_roll/New()
@@ -6505,6 +6509,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A glob of lobster meat drenched in butter."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_roll" //it dont need trash, its a hot dog, lobster edition
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter/New()
 	..()
@@ -6517,6 +6522,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_tail_baked"
 	trash = /obj/item/trash/plate
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked/New()
 	..()
@@ -6528,6 +6534,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A mass of claw meat wrapped in dough"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_dumplings"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings/New()
 	..()
@@ -6539,6 +6546,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "Lobster meat wrapped up with rice."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_sushi"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi/New()
 	..()
