@@ -59,7 +59,6 @@ var/list/barsigns = list()
 										"Waves")
 	var/current_filter = "Nothing"
 	var/list/font_selection = list("Arial","Comic Sans MS","Courier New","Georgia","Lucida Console","Trebuchet MS","Verdana")
-	var/current_font = "Arial"
 //Custom Barsign Configurable Shit
 //Basically its a list, each index number is the current tick,
 //So you could make a shitty song I guess.
@@ -260,7 +259,7 @@ var/list/barsigns = list()
 						interval_ticker = 0
 						var/string = interval_queue["1"]["letter_message"]
 						if(string)
-							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;font-family:'[current_font]'\">[interval_queue["1"]["letter_message"]]</span>"
+							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;font-family:':[interval_queue["1"]["font_name"]'\">[interval_queue["1"]["letter_message"]]</span>"
 		
 		if(href_list["set_filter"])
 			switch(href_list["set_filter"])
@@ -349,9 +348,9 @@ var/list/barsigns = list()
 		if(href_list["set_font"])
 			var/safety = text2num(href_list["set_font"])
 			if(safety <= MAX_QUEUE_LIMIT)
-				current_font = input(user,"Available Fonts", "Fonts", "Cancel") as null|anything in font_selection
-				if(current_font)
-					interval_queue["[safety]"]["font_name"] = current_font
+				var/picked_font = input(user,"Available Fonts", "Fonts", "Cancel") as null|anything in font_selection
+				if(picked_font)
+					interval_queue["[safety]"]["font_name"] = picked_font
 
 		if(href_list["set_sound_tone"])
 			var/safety = text2num(href_list["set_sound_tone"])
