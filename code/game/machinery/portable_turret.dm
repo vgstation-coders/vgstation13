@@ -327,14 +327,8 @@ Status: []<BR>"},
 		if (stat & BROKEN) // if the turret is borked
 			qdel(cover) // delete its cover, assuming it has one. Workaround for a pesky little bug
 		else
-
 			src.cover = new /obj/machinery/turretcover/portable(src.loc) // if the turret has no cover and is anchored, give it a cover
 			src.cover.host = src // assign the cover its host, which would be this (src)
-
-	if(stat & (NOPOWER|BROKEN))
-		// if the turret has no power or is broken, make the turret pop down if it hasn't already
-		popDown()
-		return
 
 	if(!on)
 		// if the turret is off, make it pop down
@@ -344,35 +338,8 @@ Status: []<BR>"},
 	last_fired = 0
 	if(attacked)
 		attacked--
-
-	if(!check_target(cur_target)) //if current target fails target check
-		if(fire_twice)
-			src.dir = get_dir(src, cur_target)
-			shootAt(cur_target)
-			cur_target = get_new_target()
-		else
-			cur_target = get_new_target()
-	if(cur_target) //if it's found, proceed
-//		to_chat(world, "[cur_target]")
-		if(!raising)
-			if(!raised)
-				popUp()
-				use_power = 2
-			else
-				spawn()
-					if(!targeting_active)
-						targeting_active = 1
-						target()
-						targeting_active = 0
-
-		if(prob(15))
-			if(prob(50))
-				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
-			else
-				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
-	else
-		spawn()
-			popDown()
+	
+	..()
 
 /obj/machinery/turret/portable/check_target(var/atom/movable/T as mob|obj)
 	if(T)
