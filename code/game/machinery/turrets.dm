@@ -40,7 +40,8 @@
 		update_gun()
 
 /obj/machinery/turret/proc/update_gun()
-	installed = new /obj/item/weapon/gun/energy/gun(src)
+	if(!installed)
+		installed = new /obj/item/weapon/gun/energy/gun(src)
 
 /obj/machinery/turretcover
 	name = "pop-up turret cover"
