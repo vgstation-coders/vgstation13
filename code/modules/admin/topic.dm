@@ -3632,7 +3632,7 @@
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","V")
-				var/answer = alert("Do you want this to be a greater disease or a lesser one?","Greater","Lesser","Custom")
+				var/answer = alert("Do you want this to be a greater disease or a lesser one?","Pathogen Outbreak","Greater","Lesser","Custom")
 				switch (answer)
 					if ("Lesser")
 						new /datum/event/viral_infection
@@ -3647,7 +3647,7 @@
 							existing_pathogen["[dis.real_name()]"] = pathogen
 						var/chosen_pathogen = input(usr, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
 						if (chosen_pathogen)
-							var/datum/disease2/disease/dis = existing_pathogen[chosen_pathogen]
+							var/datum/disease2/disease/dis = disease2_list[existing_pathogen[chosen_pathogen]]
 							spread_disease_among_crew(dis,"Custom Outbreak")
 							message_admins("[key_name_admin(usr)] has triggered a custom virus outbreak.", 1)
 							var/dis_level = clamp(round((dis.get_total_badness()+1)/2),1,8)
