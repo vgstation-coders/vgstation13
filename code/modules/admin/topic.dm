@@ -3643,9 +3643,9 @@
 					if ("Custom")
 						var/list/existing_pathogen = list()
 						for (var/pathogen in disease2_list)
-							var/datum/disease2/disease/dis = disease2_list[chosen_pathogen]
+							var/datum/disease2/disease/dis = disease2_list[pathogen]
 							existing_pathogen["[dis.real_name()]"] = pathogen
-						var/chosen_pathogen = input(C, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
+						var/chosen_pathogen = input(usr, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
 						if (chosen_pathogen)
 							var/datum/disease2/disease/dis = existing_pathogen[chosen_pathogen]
 							spread_disease_among_crew(dis,"Custom Outbreak")

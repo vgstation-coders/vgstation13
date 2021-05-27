@@ -320,7 +320,7 @@ var/global/list/disease2_list = list()
 	if (chosen_form == "infect with an already existing pathogen")
 		var/list/existing_pathogen = list()
 		for (var/pathogen in disease2_list)
-			var/datum/disease2/disease/dis = disease2_list[chosen_pathogen]
+			var/datum/disease2/disease/dis = disease2_list[pathogen]
 			existing_pathogen["[dis.real_name()]"] = pathogen
 		var/chosen_pathogen = input(C, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
 		if (!chosen_pathogen)
@@ -363,7 +363,7 @@ var/global/list/disease2_list = list()
 		D.robustness = input(C, "What will be your pathogen's robustness? (1-100) Lower values mean that infected can carry the pathogen without getting affected by its symptoms.", "Pathogen Robustness", D.infectionchance) as num
 		D.robustness = clamp(D.strength,0,100)
 
-		D.uniqueID = clamp(input(C, "You can specify the 4 number ID for your Pathogen, or just use this randomly generated one.", "Pick a unique ID", rand(0,9999) as num, 0, 9999)
+		D.uniqueID = clamp(input(C, "You can specify the 4 number ID for your Pathogen, or just use this randomly generated one.", "Pick a unique ID", rand(0,9999)) as num, 0, 9999)
 
 		D.subID = rand(0,9999)
 		D.childID = 0
@@ -835,8 +835,8 @@ var/global/list/virusDB = list()
 
 /datum/disease2/disease/proc/real_name()
 	.= "[form] #[add_zero("[uniqueID]", 4)]-[add_zero("[subID]", 4)]"
-	if (ID in virusDB)
-		var/datum/data/record/v = virusDB[ID]
+	if ("[uniqueID]-[subID]" in virusDB)
+		var/datum/data/record/v = virusDB["[uniqueID]-[subID]"]
 		var/nickname = v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
 		. += nickname
 
