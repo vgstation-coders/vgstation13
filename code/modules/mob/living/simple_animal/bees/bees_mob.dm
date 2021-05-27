@@ -9,17 +9,6 @@
 
 #define EXHAUSTION_TO_DIE	300//once reached, the bee will begin to die
 
-/*
-
-> bee mob
-> bee presets
-
-*/
-
-
-//////////////////////BEE MOB///////////////////////////////////////
-
-
 var/bee_mobs_count = 0
 
 /mob/living/simple_animal/bee
