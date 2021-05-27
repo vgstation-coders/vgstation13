@@ -37,17 +37,4 @@
 
 	level = clamp(round((D.get_total_badness()+1)/2),1,8)
 
-	var/list/candidates = list()
-	for(var/mob/living/candidate in player_list)
-		if(candidate.z == STATION_Z && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
-			candidates += candidate
-
-	if(!candidates.len)
-		return
-
-	var/infected = 1 + round(candidates.len/10)
-
-	for (var/i = 1 to infected)
-		var/mob/living/candidate = pick(candidates)
-		candidates -= candidate
-		candidate.infect_disease2(D,1, "Major Outbreak")
+	spread_disease_among_crew(D,"Major Outbreak")
