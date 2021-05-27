@@ -418,12 +418,12 @@ Status: []<BR>"},
 	return new_target
 
 /obj/machinery/turret/portable/target()
-	while(src && enabled && !stat && check_target(cur_target))
-		if (istype(cur_target, /mob/living))
-			if (cur_target.stat!=2)
-				spawn() popUp()
-				dir=get_dir(src, cur_target)
-				shootAt(cur_target)
+	if (istype(cur_target, /mob/living))
+		var/mob/living/L = cur_target
+		if (L.stat!=2)
+			spawn() popUp()
+			dir=get_dir(src, cur_target)
+			shootAt(cur_target)
 	return
 
 /obj/machinery/turret/portable/popUp() // pops the turret up
