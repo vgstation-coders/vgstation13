@@ -443,6 +443,7 @@
 #define MONSTERMASH		"monstermash"
 #define EGGNOG			"eggnog"
 #define FESTIVE_EGGNOG	"festive_eggnog"
+#define TENDIES			"tendies"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

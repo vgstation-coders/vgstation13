@@ -3998,15 +3998,16 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet
-	name = "Chicken Fillet"
-	desc = "This is a fancy word for chicken fingers so that high class people can forget they're eating fried food."
+/obj/item/weapon/reagent_containers/food/snacks/chicken_tenders
+	name = "Chicken Tenders"
+	desc = "A very special meal for a very good boy."
 	icon_state = "tendies"
 	food_flags = FOOD_MEAT
 
-/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet/New()
+/obj/item/weapon/reagent_containers/food/snacks/chicken_tenders/New()
 	..()
 	reagents.add_reagent(CORNOIL, 3)
+	reagents.add_reagent(TENDIES, 3)
 	bitesize = 2
 
 

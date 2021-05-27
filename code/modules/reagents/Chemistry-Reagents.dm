@@ -5278,6 +5278,28 @@
 	// it also makes you hungry because it speeds up your metabolism
 	M.nutrition--
 
+/datum/reagent/tendies
+	name = "Tendies"
+	id = TENDIES
+	description = "Gimme gimme chicken tendies, be they crispy or from Wendys."
+	nutriment_factor = REAGENTS_METABOLISM
+	color = "#AB6F0E" //rgb: 171, 111, 14
+	density = 5
+	specheatcap = 1
+
+/datum/reagent/tendies/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += REM * nutriment_factor
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.job == "Janitor")
+			H.heal_organ_damage(1, 1)
+			H.nutrition += REM * nutriment_factor //Double nutrition
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
