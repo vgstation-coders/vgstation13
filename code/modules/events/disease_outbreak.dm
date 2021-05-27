@@ -1,4 +1,4 @@
-//Cannot actually trigger due to the absence a custom can_start() proc and that's for the better seeing as those diseases are deprecated.
+//Cannot actually trigger due to the absence a custom can_start() proc and isn't spawned anywhere else, and that's for the better seeing as those diseases are deprecated.
 //I'll let someone else take the decision to remove this file altogether.
 
 /datum/event/disease_outbreak

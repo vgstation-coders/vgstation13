@@ -10,7 +10,7 @@ var/global/list/outbreak_level_words=list(
 )	/* 9 */ /*This one is reserved for Blob, we don't use it.*/
 
 /proc/biohazard_alert(var/level)
-	var/datum/command_alert/CA = new /datum/command_alert/biohazard_alert
+	var/datum/command_alert/biohazard_alert/CA = new /datum/command_alert/biohazard_alert
 	if (level)//The initial Blob announcement will have a random level between 4 and 7
 		CA.level_max = level
 		CA.level_min = level
