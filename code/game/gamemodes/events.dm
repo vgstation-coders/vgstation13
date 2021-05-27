@@ -101,7 +101,7 @@
 			spacevine_infestation()
 		if(15)
 			communications_blackout()
-*/
+
 
 /proc/appendicitis()
 	for(var/mob/living/carbon/human/H in living_mob_list)
@@ -331,3 +331,4 @@
 			apc.overload_lighting()
 
 	return
+*/

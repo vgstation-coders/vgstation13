@@ -864,6 +864,12 @@ var/global/list/virusDB = list()
 	r += "<BR><i>last analyzed at: [worldtime2text()]</i>"
 	return r
 
+/datum/disease2/disease/proc/get_total_badness()
+	var/total_badness = 0
+	for(var/datum/disease2/effect/e in effects)
+		total_badness += text2num(e.badness)
+	return total_badness
+
 /datum/disease2/disease/proc/addToDB()
 	if ("[uniqueID]-[subID]" in virusDB)
 		return 0

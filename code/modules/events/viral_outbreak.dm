@@ -1,19 +1,20 @@
 
-datum/event/viral_outbreak
+/datum/event/viral_outbreak
+	var/level = 0
 
 /datum/event/viral_outbreak/can_start(var/list/active_with_role)
 	if(active_with_role["Medical"] > 1)
 		return 25
 	return 0
 
-datum/event/viral_outbreak/setup()
+/datum/event/viral_outbreak/setup()
 	announceWhen = rand(0, 3000)
 	endWhen = announceWhen + 1
 
-datum/event/viral_outbreak/announce()
-	biohazard_alert_major()
+/datum/event/viral_outbreak/announce()
+	biohazard_alert(level)
 
-datum/event/viral_outbreak/start()
+/datum/event/viral_outbreak/start()
 	var/datum/disease2/disease/D = get_random_weighted_disease(WOUTBREAK)
 
 	var/list/anti = list(
@@ -33,6 +34,8 @@ datum/event/viral_outbreak/start()
 	D.origin = "Major Outbreak"
 
 	D.makerandom(list(80,100),list(60,100),anti,bad,src)
+
+	level = clamp(round((D.get_total_badness()+1)/2),1,8)
 
 	var/list/candidates = list()
 	for(var/mob/living/candidate in player_list)

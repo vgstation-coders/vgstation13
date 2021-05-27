@@ -1,4 +1,6 @@
+
 /datum/event/viral_infection
+	var/level = 0
 
 /datum/event/viral_infection/can_start(var/list/active_with_role)
 	if(active_with_role["Medical"] > 1)
@@ -10,7 +12,7 @@
 	endWhen = announceWhen + 1
 
 /datum/event/viral_infection/announce()
-	biohazard_alert_minor()
+	biohazard_alert(level)
 
 /datum/event/viral_infection/start()
 	var/datum/disease2/disease/D = get_random_weighted_disease(WINFECTION)
@@ -32,6 +34,8 @@
 	D.origin = "Minor Outbreak"
 
 	D.makerandom(list(50,90),list(50,90),anti,bad,src)
+
+	level = clamp(round((D.get_total_badness()+1)/2),1,8)
 
 	var/list/candidates = list()
 	for(var/mob/living/candidate in player_list)

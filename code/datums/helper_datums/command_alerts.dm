@@ -44,13 +44,14 @@
 	for(var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
 
-/datum/command_alert/biohazard_alert/minor
-	level_max = 4
-	level_min = 2
+/datum/command_alert/biohazard_organ
+	name = "Organ Failures"
+	alert_title = "Risk of Spontaneous Organ Failure"
+	force_report = 1
 
-/datum/command_alert/biohazard_alert/major
-	level_max = 7
-	level_min = 5
+/datum/command_alert/biohazard_organ/announce()
+	message = "Some of our sensors detected that micro radiations went through parts of [station_name()]. Crew unlucky to have been on their path might experience internal organ damage. Please head over to Medbay should you experience any sudden or unusual sickness."
+	..()
 
 ///////HISS
 
