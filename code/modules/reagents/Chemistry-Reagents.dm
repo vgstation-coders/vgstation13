@@ -5295,7 +5295,7 @@
 	M.nutrition += REM * nutriment_factor
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.job == "Janitor")
+		if(H.mind.assigned_role == "Janitor")
 			H.heal_organ_damage(1, 1)
 			H.nutrition += REM * nutriment_factor //Double nutrition
 
