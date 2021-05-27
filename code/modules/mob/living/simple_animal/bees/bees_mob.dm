@@ -602,7 +602,17 @@ var/bee_mobs_count = 0
 		target = pick(nearbyMobs)
 		target_turf = get_turf(target)
 		if (target)
-			visible_message("<span class='warning'>The bees swarm after [target]!</span>")
+			var common = BEESPECIES_NORMAL
+			if (bee_species)
+				common = bee_species.common_name
+			if(bees.len <= 1)
+				for (var/D in bees)
+					if (istype(D,/datum/bee/queen_bee))
+						common = "queen [common]"
+				visible_message("<span class='warning'>The [common] flies after [target]!</span>")
+
+			else
+				visible_message("<span class='warning'>The [common]s swarm after [target]!</span>")
 
 /mob/living/simple_animal/bee/proc/MoveToTarget()
 	if (!target_turf)
@@ -729,7 +739,7 @@ var/bee_mobs_count = 0
 	if(bees.len <= 0)
 		return
 
-	var common = "bees"
+	var common = BEESPECIES_NORMAL
 	icon_state = ""
 	if (bee_species)
 		icon_state += bee_species.prefix
@@ -777,7 +787,7 @@ var/bee_mobs_count = 0
 
 	else
 		gender = PLURAL
-		name = "swarm of [prefix][common]"
+		name = "swarm of [prefix][common]s"
 
 
 

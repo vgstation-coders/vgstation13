@@ -10,6 +10,7 @@
 	anchored = 0
 	mouse_opacity = 1
 	plane = LYING_MOB_PLANE
+	var/single = 1
 
 /obj/effect/decal/cleanable/bee/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	..()
@@ -32,6 +33,9 @@
 		for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
 			if (corpse != src)
 				corpse.overlays += I
+				if (corpse.single)
+					corpse.name += "s"
+					corpse.single = 0
 				qdel(src)
 				return
 			else
