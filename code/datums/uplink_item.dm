@@ -644,7 +644,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
-	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room." 
+	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room."
 	item = /obj/item/weapon/storage/box/remeximp
 	cost = 18
 	discounted_cost = 12
@@ -861,10 +861,18 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/service/hornetqueen
 	name = "Hornet Queen Packet"
-	desc = "A lethally dangerous hornet queen, providing a very nasty surprise once fully tended for. Place her into an apiary tray and add a few packs of BeezEez along with usual care to obtain the goods. Protective gear won't be enough to shield you reliably from these, so keep a good distance."
+	desc = "A lethally dangerous hornet queen, providing a very nasty surprise once fully tended for. Place her into an apiary tray and add a few packs of BeezEez along with usual care to obtain the goods. The queen will remember you and teach its spawn not to attack you."
 	item = /obj/item/queen_bee/hornet
 	cost = 3
 	discounted_cost = 2
+	jobs_with_discount = list("Botanist")
+
+/datum/uplink_item/jobspecific/service/beenade
+	name = "Bee-Nade"
+	desc = "Over a dozen deadly hornets. The grenade comes equiped with a pheromone spray so the hornets won't attack the one who threw the grenade."
+	item = /obj/item/weapon/grenade/spawnergrenade/beenade
+	cost = 12
+	discounted_cost = 6
 	jobs_with_discount = list("Botanist")
 
 /datum/uplink_item/jobspecific/service/specialsauce

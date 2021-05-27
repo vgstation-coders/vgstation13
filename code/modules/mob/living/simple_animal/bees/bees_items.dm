@@ -14,6 +14,10 @@
 
 #define MAX_BEES_PER_NET	100
 
+////////////////////QUEEN BEE PACKET/////////////////////
+
+////////////REGULAR BEES
+
 /obj/item/queen_bee
 	name = "queen bee packet"
 	desc = "Place her into an apiary so she can get busy."
@@ -28,6 +32,51 @@
 
 /obj/item/queen_bee/initialize()
 	species = bees_species[BEESPECIES_NORMAL]
+
+/obj/item/queen_bee/proc/on_insertion(var/obj/machinery/apiary/A,var/mob/user)
+	return
+
+/////////////////CHILL BUG PACKET
+
+/obj/item/queen_bee/chill
+	name = "chill bug queen packet"
+	desc = "Place her into an apiary so she can get busy. This species is particularly non-violent. Produces wax with calming properties."
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "chill_queen_larvae"
+	w_class = W_CLASS_TINY
+	species = null
+
+/obj/item/queen_bee/chill/New()
+	..()
+	initialize()
+
+/obj/item/queen_bee/chill/initialize()
+	species = bees_species[BEESPECIES_VOX]
+
+/////////////////HORNET PACKET
+
+/obj/item/queen_bee/hornet
+	name = "hornet queen packet"
+	desc = "Place her into an apiary so she can get busy. The queen will remember you and teach its spawn not to attack you. Don't forget to pour some beez-ez as hornets do not pollinate."
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "hornet_queen_larvae"
+	w_class = W_CLASS_TINY
+	species = null
+
+/obj/item/queen_bee/hornet/New()
+	..()
+	initialize()
+
+/obj/item/queen_bee/hornet/initialize()
+	species = bees_species[BEESPECIES_HORNET]
+
+/obj/item/queen_bee/hornet/on_insertion(var/obj/machinery/apiary/A,var/mob/user)
+	if (!A||!user)
+		return
+	A.faction = "\ref[user]"
+
+
+////////////////////BUG NET/////////////////////
 
 /obj/item/weapon/bee_net
 	name = "bug net"
@@ -70,7 +119,7 @@
 			current_species = B.bee_species
 
 		caught = 1
-		if(B.calmed > 0 || (B.state != BEE_OUT_FOR_ENEMIES))
+		if(B.calmed > 0 || (B.intent != BEE_OUT_FOR_ENEMIES))
 			if (!B.bee_species.angery || prob(max(0,100-B.bees.len*5)))
 				for (var/datum/bee/BEES in B.bees)
 					caught_bees.Add(BEES)
@@ -83,11 +132,11 @@
 				B = null
 			else
 				user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name]\s, they don't seem to like it.</span>","<span class='warning'>You swing at some [B.bee_species.common_name]\s, they don't seem to like it.</span>")
-				B.state = BEE_OUT_FOR_ENEMIES
+				B.intent = BEE_OUT_FOR_ENEMIES
 				B.target = user
 		else
 			user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name]\s, they don't seem to like it.</span>","<span class='warning'>The [B.bee_species.common_name]\s are too angry to let themselves get caught.</span>")
-			B.state = BEE_OUT_FOR_ENEMIES
+			B.intent = BEE_OUT_FOR_ENEMIES
 			B.target = user
 	if(!caught)
 		to_chat(user, "<span class='warning'>There are no bugs in front of you!</span>")
@@ -118,10 +167,10 @@
 				var/datum/bee/BEE = pick(caught_bees)
 				caught_bees.Remove(BEE)
 				if (current_species.angery)
-					BEE.state = BEE_OUT_FOR_ENEMIES
+					BEE.intent = BEE_OUT_FOR_ENEMIES
 				B.addBee(BEE)
 			if (current_species.angery)
-				B.state = BEE_OUT_FOR_ENEMIES
+				B.intent = BEE_OUT_FOR_ENEMIES
 				B.target = M
 
 
@@ -131,10 +180,10 @@
 			var/datum/bee/BEE = pick(caught_bees)
 			caught_bees.Remove(BEE)
 			if (current_species.angery)
-				BEE.state = BEE_OUT_FOR_ENEMIES
+				BEE.intent = BEE_OUT_FOR_ENEMIES
 			B.addBee(BEE)
 		if (current_species.angery)
-			B.state = BEE_OUT_FOR_ENEMIES
+			B.intent = BEE_OUT_FOR_ENEMIES
 			B.target = M
 		current_species = null
 	else
