@@ -272,7 +272,7 @@ Status: []<BR>"},
 	if(on && Proj.damage > 0)
 		attacked += 5
 	..()
-	if((src.lasercolor == "b") && (enabled)
+	if((src.lasercolor == "b") && (enabled))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
 			enabled = 0
 			qdel (Proj)
@@ -335,7 +335,7 @@ Status: []<BR>"},
 		popDown()
 		return
 
-	last_fired = 0
+	lastfired = 0
 	if(attacked)
 		attacked--
 	
@@ -422,8 +422,8 @@ Status: []<BR>"},
 		if (istype(cur_target, /mob/living))
 			if (cur_target.stat!=2)
 				spawn() popUp()
-				dir=get_dir(src,t)
-				shootAt(t)
+				dir=get_dir(src, cur_target)
+				shootAt(cur_target)
 	return
 
 /obj/machinery/turret/portable/popUp() // pops the turret up
@@ -528,9 +528,9 @@ Status: []<BR>"},
 
 	..()
 
-	if(emagged && !last_fired)
+	if(emagged && !lastfired)
 		sleep(5)
-		last_fired = 1
+		lastfired = 1
 		shootAt(target)
 	return
 

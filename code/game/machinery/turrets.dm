@@ -59,7 +59,7 @@
 			if (src.enabled)
 				if(istype(installed,/obj/item/weapon/gun/energy/gun))
 					var/obj/item/weapon/gun/energy/gun/EG = installed
-					if(EG.mode = 1)
+					if(EG.mode == 1)
 						icon_state = "orange_target_prism"
 				else
 					icon_state = "target_prism"
