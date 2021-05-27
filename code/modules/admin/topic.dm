@@ -4054,7 +4054,7 @@
 				if(!choice)
 					return
 				var/obj/item/weapon/gun/energy/gun = new choice()
-				var/obj/machinery/porta_turret/Turret = new(get_turf(usr))
+				var/obj/machinery/turret/portable/Turret = new(get_turf(usr))
 				Turret.installed = gun
 				gun.forceMove(Turret)
 				Turret.update_gun()
