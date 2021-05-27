@@ -7,7 +7,7 @@
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "grey_target_prism"
 	var/raised = 0								// if the turret cover is "open" and the turret is raised
-	var/enabled = 
+	var/enabled = 0
 	var/obj/item/weapon/gun/installed = null	// the type of weapon installed
 	anchored = 1
 	invisibility = INVISIBILITY_LEVEL_TWO		// the turret is invisible if it's inside its cover
