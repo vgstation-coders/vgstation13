@@ -8,6 +8,7 @@
 > empty packet of BeezEez
 > honeycomb
 > The Ins and Outs of Apiculture - A Precise Art
+> Deployable Hornet Hive
 
 */
 
@@ -318,5 +319,39 @@
 				</body>
 				</html>
 				"}
+
+/obj/item/deployable_wild_hornet_hive
+	name = "deployable wild hornet hive"
+	desc = "Cannot be picked up anymore once dropped or thrown."
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "hornet_apiary-wild"
+	item_state = "trashbag"
+	w_class = W_CLASS_SMALL
+
+/obj/item/deployable_wild_hornet_hive/proc/spawn_hive()
+	playsound(get_turf(src), 'sound/weapons/hivehand_empty.ogg', 75, 1, -2)
+	new /obj/machinery/apiary/wild/angry/hornet/deployable(get_turf(src))
+	qdel(src)
+
+/obj/item/deployable_wild_hornet_hive/dropped(var/mob/user)
+	..()
+	spawn(1)//no way around it since throwing also drops the item
+	if (isturf(loc) && !throwing)
+		spawn_hive()
+
+/obj/item/deployable_wild_hornet_hive/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
+	if(!proximity_flag)
+		return
+	var/turf/T = get_turf(A)
+	if(!T.density && !T.has_dense_content())
+		forceMove(T)
+		spawn_hive()
+
+
+/obj/item/weapon/melee/soulblade/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+
+/obj/item/deployable_wild_hornet_hive/throw_impact(atom/hit_atom)
+	spawn_hive()
+
 
 #undef MAX_BEES_PER_NET

@@ -687,7 +687,7 @@ var/list/apiaries_list = list()
 
 	cycledelay = 50
 
-	//we'll allow those to start pumping out bees right away
+	//we'll allow those to start pumping out hornets right away
 	queen_bees_inside = 1
 	worker_bees_inside = 20
 
@@ -695,6 +695,10 @@ var/list/apiaries_list = list()
 	wild = 1
 
 	health = 100
+
+/obj/machinery/apiary/wild/angry/hornet/deployable
+	worker_bees_inside = 8//will start producing hornets after a few seconds
+
 
 /obj/machinery/apiary/wild/angry/hornet/New()
 	..()
