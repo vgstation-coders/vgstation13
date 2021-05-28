@@ -668,7 +668,7 @@ var/list/science_goggles_wearers = list()
 			qdel(beam)
 			beam = null
 		return
-	if (ismob(emitter) && emitter:lying)
+	if (ismob(emitter))
 		var/mob/M = emitter
 		if (M.lying)
 			if(beam)
