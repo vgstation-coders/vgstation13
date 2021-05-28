@@ -51,13 +51,8 @@ FLOOR SAFES
 			break
 
 /obj/structure/safe/proc/check_unlocked(var/mob/user, canhear)
-	if (user && canhear)
-		if(tumbler_1_pos == tumbler_1_open || tumbler_2_pos == tumbler_2_open)
-			user.playsound_local(src, 'sound/machines/dial_tick_alt.ogg', 30, 1)
-
 	if(tumbler_1_pos == tumbler_1_open && tumbler_2_pos == tumbler_2_open)
 		if(user)
-			to_chat(user, "<span class='notice'>You open \the [src].</span>")
 			feedback += " <span class='danger'>*[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]*</span>"
 		open = TRUE
 		var/turf/T = get_turf(src)
@@ -143,6 +138,7 @@ FLOOR SAFES
 				if(canhear)
 					if(tumbler_1_pos == tumbler_1_open)
 						feedback += " <span class='bold'>*[pick("tonk", "krunk", "plunk")]*</span>"
+						user.playsound_local(src, 'sound/machines/dial_tick_alt.ogg', 35, 1)
 					else
 						feedback += " <span class='italics'>*[pick("clack", "scrape", "clank")]*</span>"
 				if(tumbler_1_pos == tumbler_2_pos - 37 || tumbler_1_pos == tumbler_2_pos + 35)
@@ -150,6 +146,7 @@ FLOOR SAFES
 					if(canhear)
 						if(tumbler_2_pos == tumbler_2_open)
 							feedback += " <span class='bold'>*[pick("tink", "krink", "plink")]*</span>"
+							user.playsound_local(src, 'sound/machines/dial_tick_alt.ogg', 35, 1)
 						else
 							feedback += " <span class='italics'>*[pick("click", "chink", "clink")]*</span>"
 				check_unlocked(user, canhear)
