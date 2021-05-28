@@ -1455,6 +1455,12 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/is_multitool(var/mob/user)
 	return FALSE
 
+/obj/item/proc/mannequin_equip(var/obj/structure/mannequin/mannequin,var/slot,var/hand_slot)
+	return
+
+/obj/item/proc/mannequin_unequip(var/obj/structure/mannequin/mannequin)
+	return
+
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return

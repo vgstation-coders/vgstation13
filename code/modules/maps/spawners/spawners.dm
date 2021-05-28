@@ -1183,7 +1183,8 @@
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
 		/obj/item/mounted/frame/painting,
 		/obj/item/weapon/aiModule/randomize,
-		/obj/item/weapon/aiModule/core/hogan
+		/obj/item/weapon/aiModule/core/hogan,
+		/obj/item/weapon/storage/pill_bottle/nanofloxacin,
 )
 
 
@@ -1198,7 +1199,10 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/dnainjector/nofail/randompower,
 	/obj/item/weapon/gun/syringe/rapidsyringe,
-	/obj/item/voucher/free_item/medical_safe
+	/obj/item/voucher/free_item/medical_safe,
+	/obj/item/weapon/storage/pill_bottle/nanofloxacin,
+	/obj/item/weapon/gun/portalgun,
+	/obj/item/clothing/glasses/emitter
 )
 
 
@@ -1232,7 +1236,8 @@
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
-	/obj/item/weapon/gun/siren
+	/obj/item/weapon/gun/siren,
+	/obj/item/weapon/gun/portalgun
 )
 
 /obj/abstract/map/spawner/safe/clothing
@@ -1251,7 +1256,8 @@
 	/obj/item/clothing/gloves/anchor_arms,
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
-	/obj/abstract/spawn_all/dredd_gear
+	/obj/abstract/spawn_all/dredd_gear,
+	/obj/item/clothing/glasses/emitter
 )
 
 /obj/abstract/map/spawner/safe/medal

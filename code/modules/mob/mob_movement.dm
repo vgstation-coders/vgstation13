@@ -580,7 +580,9 @@
 		if(mobpulled && secondarypull)
 			mobpulled.start_pulling(secondarypull)
 	else
+		target.StartMoving()
 		step(target, get_dir(target.loc, dest))
+		target.EndMoving()
 	target.add_fingerprint(src)
 
 /mob/proc/movement_delay()
