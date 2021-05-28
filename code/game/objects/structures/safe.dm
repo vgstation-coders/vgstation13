@@ -69,13 +69,11 @@ FLOOR SAFES
 		return 1
 	return 0
 
-
 /obj/structure/safe/proc/decrement(num)
 	num -= 1
 	if(num < 0)
 		num = 71
 	return num
-
 
 /obj/structure/safe/proc/increment(num)
 	num += 1
@@ -83,6 +81,14 @@ FLOOR SAFES
 		num = 0
 	return num
 
+/obj/structure/safe/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(!user.client)
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/structure/safe/update_icon()
 	if(open)
@@ -93,7 +99,7 @@ FLOOR SAFES
 /obj/structure/safe/attack_hand(var/mob/user,params,proximity)
 	if (open)
 		if(alert("Close the safe and reset the dial and tumblers?","Close Safe","Do it","Cancel") == "Do it")
-			if (Adjacent(user) && !user.incapacitated())
+			if (radial_check(user))
 				store()
 				var/turf/T = get_turf(src)
 				playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -102,7 +108,7 @@ FLOOR SAFES
 				open = FALSE
 		return
 
-	recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe",recursive = TRUE))
+	recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, .proc/radial_check, user), recursive = TRUE))
 
 
 /obj/structure/safe/proc/recursive_dial(var/mob/user, var/datum/radial_menu/radial)
@@ -118,7 +124,8 @@ FLOOR SAFES
 	turn_dial(user, task)
 
 	if (!open && Adjacent(user))
-		recursive_dial(user, radial.do_it_again())
+		radial.do_it_again()
+		recursive_dial(user, radial)
 	else
 		radial.finish()
 
@@ -174,7 +181,7 @@ FLOOR SAFES
 		user.drop_item(I, T)
 	else
 		if(istype(I, /obj/item/clothing/accessory/stethoscope))
-			recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe",recursive = TRUE))
+			recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, .proc/radial_check, user), recursive = TRUE))
 
 obj/structure/safe/blob_act()
 	return
