@@ -381,7 +381,7 @@
 	..()
 
 /datum/radial_menu/recursive/dial/proc/update_dial()
-	if (safe.gcDestroyed)
+	if (!safe)
 		return
 	close_button.overlays.len = 0
 	var/image/I = image(icon='icons/obj/safe_radial.dmi',loc=close_button,icon_state="radial_dial",layer = ABOVE_HUD_LAYER+1)

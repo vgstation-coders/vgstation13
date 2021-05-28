@@ -21,6 +21,8 @@ FLOOR SAFES
 	var/dial = 0		//where is the dial pointing?
 	var/storage_capacity = 30
 
+	var/feedback = ""
+
 	var/choices = list(
 		list("Rotate Clockwise", "radial_increment"),
 		list("Rotate Counter-Clockwise", "radial_decrement"),
@@ -49,17 +51,14 @@ FLOOR SAFES
 			break
 
 /obj/structure/safe/proc/check_unlocked(var/mob/user, canhear)
-	if(user && canhear)
-		if(tumbler_1_pos == tumbler_1_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tonk", "krunk", "plunk")] from [src].</span>")
-		if(tumbler_2_pos == tumbler_2_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tink", "krink", "plink")] from [src].</span>")
+	if (user && canhear)
 		if(tumbler_1_pos == tumbler_1_open || tumbler_2_pos == tumbler_2_open)
 			user.playsound_local(src, 'sound/machines/dial_tick_alt.ogg', 30, 1)
+
 	if(tumbler_1_pos == tumbler_1_open && tumbler_2_pos == tumbler_2_open)
 		if(user)
 			to_chat(user, "<span class='notice'>You open \the [src].</span>")
-		visible_message("<b>[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]!</b>")
+			feedback += " <span class='danger'>*[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]*</span>"
 		open = TRUE
 		var/turf/T = get_turf(src)
 		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -138,28 +137,44 @@ FLOOR SAFES
 		if ("Rotate Clockwise")
 			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = increment(dial)
+			feedback = "<span class='notice'>You turn the dial up to [dial * 5].</span>"
 			if(dial == tumbler_1_pos - 1 || dial == tumbler_1_pos + 71)
 				tumbler_1_pos = increment(tumbler_1_pos)
 				if(canhear)
-					to_chat(user, "<span class='notice'>You hear a [pick("clack", "scrape", "clank")] from [src].</span>")
+					if(tumbler_1_pos == tumbler_1_open)
+						feedback += " <span class='bold'>*[pick("tonk", "krunk", "plunk")]*</span>"
+					else
+						feedback += " <span class='italics'>*[pick("clack", "scrape", "clank")]*</span>"
 				if(tumbler_1_pos == tumbler_2_pos - 37 || tumbler_1_pos == tumbler_2_pos + 35)
 					tumbler_2_pos = increment(tumbler_2_pos)
 					if(canhear)
-						to_chat(user, "<span class='notice'>You hear a [pick("click", "chink", "clink")] from [src].</span>")
+						if(tumbler_2_pos == tumbler_2_open)
+							feedback += " <span class='bold'>*[pick("tink", "krink", "plink")]*</span>"
+						else
+							feedback += " <span class='italics'>*[pick("click", "chink", "clink")]*</span>"
 				check_unlocked(user, canhear)
+			to_chat(user, feedback)
 
 		if ("Rotate Counter-Clockwise")
 			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = decrement(dial)
+			feedback = "<span class='notice'>You turn the dial down to [dial * 5].</span>"
 			if(dial == tumbler_1_pos + 1 || dial == tumbler_1_pos - 71)
 				tumbler_1_pos = decrement(tumbler_1_pos)
 				if(canhear)
-					to_chat(user, "<span class='notice'>You hear a [pick("clack", "scrape", "clank")] from [src].</span>")
+					if(tumbler_1_pos == tumbler_1_open)
+						feedback += " <span class='bold'>*[pick("tonk", "krunk", "plunk")]*</span>"
+					else
+						feedback += " <span class='italics'>*[pick("clack", "scrape", "clank")]*</span>"
 				if(tumbler_1_pos == tumbler_2_pos + 37 || tumbler_1_pos == tumbler_2_pos - 35)
 					tumbler_2_pos = decrement(tumbler_2_pos)
 					if(canhear)
-						to_chat(user, "<span class='notice'>You hear a [pick("click", "chink", "clink")] from [src].</span>")
+						if(tumbler_2_pos == tumbler_2_open)
+							feedback += " <span class='bold'>*[pick("tink", "krink", "plink")]*</span>"
+						else
+							feedback += " <span class='italics'>*[pick("click", "chink", "clink")]*</span>"
 				check_unlocked(user, canhear)
+			to_chat(user, feedback)
 
 //Byond randomly breaks radial menus after some time it seems. This workaround will replace the menu without interrupting the player's actions.
 /obj/structure/safe/proc/unclog(var/mob/user, var/datum/radial_menu/radial)
