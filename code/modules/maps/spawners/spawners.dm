@@ -1184,7 +1184,8 @@
 		/obj/item/mounted/frame/painting,
 		/obj/item/weapon/aiModule/randomize,
 		/obj/item/weapon/aiModule/core/hogan,
-		/obj/item/weapon/storage/pill_bottle/nanofloxacin,
+		/obj/item/weapon/gun/portalgun,
+		/obj/item/clothing/glasses/emitter
 )
 
 
@@ -1199,10 +1200,7 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/dnainjector/nofail/randompower,
 	/obj/item/weapon/gun/syringe/rapidsyringe,
-	/obj/item/voucher/free_item/medical_safe,
-	/obj/item/weapon/storage/pill_bottle/nanofloxacin,
-	/obj/item/weapon/gun/portalgun,
-	/obj/item/clothing/glasses/emitter
+	/obj/item/voucher/free_item/medical_safe
 )
 
 
