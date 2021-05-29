@@ -389,13 +389,16 @@
 
 /datum/rcd_schematic/con_window
 	name						= "Build window"
-	icon						= 'icons/obj/doors/door.dmi'
-	icon_state					= "door_closed"
+	icon 						= 'icons/obj/window_grille_spawner.dmi'
+	icon_state 					= "window_grille"
 	category					= "Construction"
 	energy_cost					= 2
 
 	var/list/schematics			= list()
 	var/ready
+
+/datum/rcd_schematic/con_window/borg
+	energy_cost					= 20
 
 /datum/rcd_schematic/con_window/show(var/mob/living/user, close = 0)
 	if(!close)
@@ -619,6 +622,8 @@
 /datum/selection_schematic/window_schematic
 	name			= "window"						//Name of the window for the tooltip.
 	build_type		= /obj/effect/spawner/window	//Type of the window.
+	icon = 'icons/obj/window_grille_spawner.dmi'
+	icon_state = "window_grille"
 
 /datum/selection_schematic/window_schematic/northend
 	name			= "\improper north window"
