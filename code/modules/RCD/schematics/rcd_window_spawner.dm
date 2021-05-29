@@ -13,7 +13,11 @@
         if(!locate(/obj/structure/grille) in loc)
             new /obj/structure/grille(T)
         for(var/direction in dirs)
-            if(locate(/obj/structure/window/reinforced) in loc)
+            var/windowhere = FALSE
+            for(var/obj/structure/window/reinforced/R in loc)
+                if(R.dir == direction)
+                    windowhere = TRUE
+            if(windowhere)
                 continue
             var/obj/structure/window/reinforced/new_window = new /obj/structure/window/reinforced(loc)
             new_window.dir = direction
