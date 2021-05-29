@@ -467,7 +467,7 @@
 
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
-	var/obj/effect/spawner/window/W = new selected.build_type(A)
+	new selected.build_type(A)
 
 /datum/selection_schematic
 	var/name			= "Selection"
