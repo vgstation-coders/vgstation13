@@ -4,7 +4,7 @@
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
 	/datum/rcd_schematic/con_airlock,
-	/datum/rcd_shematic/con_window,
+	/datum/rcd_schematic/con_window,
 	)
 
 

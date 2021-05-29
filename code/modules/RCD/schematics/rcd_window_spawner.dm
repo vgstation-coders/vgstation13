@@ -1,15 +1,15 @@
 /obj/effect/spawner/window
 	name = "window spawner"
 	var/full = FALSE
-    var/list/dirs = list(NORTH,WEST.SOUTH.EAST)
+	var/list/dirs = list(NORTH,WEST.SOUTH,EAST)
 
 /obj/effect/spawner/window/New()
 	..()
 	spawn_window()
 
 /obj/effect/spawner/window/proc/spawn_window()
-	var/turf/T = get_turf(src)
-	if(T && !istype(T,/turf/simulated/wall) && !istype(T,/turf/unsimulated/wall))
+    var/turf/T = get_turf(src)
+    if(T && !istype(T,/turf/simulated/wall) && !istype(T,/turf/unsimulated/wall))
         if(!locate(/obj/structure/grille) in loc)
             new /obj/structure/grille(T)
         for(var/direction in dirs)
@@ -21,7 +21,7 @@
         if(full && !locate(/obj/structure/window/full/reinforced) in loc)
             var/obj/structure/window/reinforced/new_fullwindow = new /obj/structure/window/full/reinforced(loc)
             new_fullwindow.update_nearby_tiles()
-	qdel(src)
+    qdel(src)
 
 /obj/effect/spawner/window/northend
     dirs = list(NORTH)

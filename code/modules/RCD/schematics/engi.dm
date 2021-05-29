@@ -449,7 +449,6 @@
 		var/datum/selection_schematic/airlock_schematic/C = schematics[idx]
 
 		selected = C
-		selected_name = C.name	//Reset the name.
 
 		master.update_options_menu()
 		return 1
