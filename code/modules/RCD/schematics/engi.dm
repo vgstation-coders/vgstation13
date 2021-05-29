@@ -371,6 +371,87 @@
 			D.req_access = selected_access.Copy()
 
 	D.autoclose	= 1
+
+/datum/rcd_schematic/con_window
+	name						= "Build window"
+	icon						= 'icons/obj/doors/door.dmi'
+	icon_state					= "door_closed"
+	category					= "Construction"
+	energy_cost					= 2
+
+	var/list/schematics			= list()
+	var/ready
+
+/datum/rcd_schematic/con_window/show(var/mob/living/user, close = 0)
+	if(!close)
+		user.shown_schematics_background = 1
+		user.hud_used.toggle_show_schematics_display(schematics,1, master)
+	else
+		user.shown_schematics_background = 1
+		user.hud_used.toggle_show_schematics_display(master.schematics["Construction"], 1, master)
+		master.selected = null
+	return 1
+
+/datum/rcd_schematic/con_window/New()
+	. = ..()
+
+	for(var/path in typesof(/datum/selection_schematic/window_schematic))
+		schematics += new path(src)
+	selected = schematics[1]
+
+/datum/rcd_schematic/con_window/Destroy()
+	for(var/datum/selection_schematic/thing in schematics)
+		qdel(thing)
+	schematics = null
+	..()
+
+/datum/rcd_schematic/con_window/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
+	..()
+	show(user)
+/datum/rcd_schematic/con_window/deselect()
+	. = ..()
+	selected = schematics[1]	//Reset the selection.
+
+/*/datum/rcd_schematic/con_window/register_assets()
+	for(var/datum/selection_schematic/airlock_schematic/C in schematics)
+		C.register_icon()
+
+/datum/rcd_schematic/con_window/send_assets(var/client/client)
+	for(var/datum/selection_schematic/airlock_schematic/C in schematics)
+		C.send_icon(client)
+*/
+
+/datum/rcd_schematic/con_window/build_ui()
+	master.interface.updateLayout("<div id='schematic_options'> </div>")
+	master.update_options_menu()
+
+/datum/rcd_schematic/con_window/Topic(var/href, var/href_list)
+	if(href_list["set_selected"])
+		var/idx = clamp(text2num(href_list["set_selected"]), 1, schematics.len)
+		var/datum/selection_schematic/airlock_schematic/C = schematics[idx]
+
+		selected = C
+		selected_name = C.name	//Reset the name.
+
+		master.update_options_menu()
+		return 1
+
+/datum/rcd_schematic/con_window/attack(var/atom/A, var/mob/user)
+	if(!istype(A, /turf))
+		return 1
+
+	to_chat(user, "Building window...")
+
+	if(!master.delay(user, A, 5 SECONDS))
+		return 1
+
+	if(master.get_energy(user) < energy_cost)
+		return 1
+
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+
+	var/obj/effect/spawner/window/W = new selected.build_type(A)
+
 /datum/selection_schematic
 	var/name			= "Selection"
 	var/build_type

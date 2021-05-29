@@ -5,7 +5,7 @@
 
 /obj/effect/spawner/window/New()
 	..()
-	spawn_winodw()
+	spawn_window()
 
 /obj/effect/spawner/window/proc/spawn_window()
 	var/turf/T = get_turf(src)
