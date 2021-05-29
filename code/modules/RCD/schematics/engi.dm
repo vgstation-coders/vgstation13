@@ -518,3 +518,124 @@
 	name			= "\improper Glass Mining Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_mining
 	icon			= 'icons/obj/doors/Doorminingglass.dmi'
+
+// ALL THE WINDOW TYPES.
+/datum/selection_schematic/window_schematic
+	name			= "window"						//Name of the window for the tooltip.
+	build_type		= /obj/effect/spawner/window	//Type of the window.
+
+/datum/selection_schematic/window_schematic/northend
+	name			= "\improper north window"
+	build_type	= /obj/effect/spawner/window/northend
+
+/datum/selection_schematic/window_schematic/eastend
+	name			= "\improper east window"
+	build_type	= /obj/effect/spawner/window/eastend
+
+/datum/selection_schematic/window_schematic/southend
+	name			= "\improper south window"
+	build_type	= /obj/effect/spawner/window/southend
+
+/datum/selection_schematic/window_schematic/westend
+	name			= "\improper west window"
+	build_type	= /obj/effect/spawner/window/westend
+
+/datum/selection_schematic/window_schematic/horizontal
+	name			= "\improper horizontal window"
+	build_type	= /obj/effect/spawner/window/horizontal
+
+/datum/selection_schematic/window_schematic/vertical
+	name			= "\improper vertical window"
+	build_type	= /obj/effect/spawner/window/vertical
+
+/datum/selection_schematic/window_schematic/necorner
+	name			= "\improper northeast window"
+	build_type	= /obj/effect/spawner/window/necorner
+
+/datum/selection_schematic/window_schematic/secorner
+	name			= "\improper southeast window"
+	build_type	= /obj/effect/spawner/window/secorner
+
+/datum/selection_schematic/window_schematic/swcorner
+	name			= "\improper southwest window"
+	build_type	= /obj/effect/spawner/window/swcorner
+
+/datum/selection_schematic/window_schematic/nwcorner
+	name			= "\improper northwest window"
+	build_type	= /obj/effect/spawner/window/nwcorner
+
+/datum/selection_schematic/window_schematic/northcap
+	name			= "\improper north window cap"
+	build_type	= /obj/effect/spawner/window/northcap
+
+/datum/selection_schematic/window_schematic/eastcap
+	name			= "\improper east window cap"
+	build_type	= /obj/effect/spawner/window/eastcap
+
+/datum/selection_schematic/window_schematic/southcap
+	name			= "\improper south window cap"
+	build_type	= /obj/effect/spawner/window/southcap
+
+/datum/selection_schematic/window_schematic/westcap
+	name			= "\improper west window cap"
+	build_type	= /obj/effect/spawner/window/westcap
+
+/datum/selection_schematic/window_schematic/full
+	name			= "\improper full window"
+	build_type	= /obj/effect/spawner/window/full
+
+/datum/selection_schematic/window_schematic/full/northend
+	name			= "\improper full north window"
+	build_type	= /obj/effect/spawner/window/full/northend
+
+/datum/selection_schematic/window_schematic/full/eastend
+	name			= "\improper full east window"
+	build_type	= /obj/effect/spawner/window/full/eastend
+
+/datum/selection_schematic/window_schematic/full/southend
+	name			= "\improper full south window"
+	build_type	= /obj/effect/spawner/window/full/southend
+
+/datum/selection_schematic/window_schematic/full/westend
+	name			= "\improper full west window"
+	build_type	= /obj/effect/spawner/window/full/westend
+
+/datum/selection_schematic/window_schematic/full/horizontal
+	name			= "\improper full horizontal window"
+	build_type	= /obj/effect/spawner/window/full/horizontal
+
+/datum/selection_schematic/window_schematic/full/vertical
+	name			= "\improper full vertical window"
+	build_type	= /obj/effect/spawner/window/full/vertical
+
+/datum/selection_schematic/window_schematic/full/necorner
+	name			= "\improper full northeast window"
+	build_type	= /obj/effect/spawner/window/full/necorner
+
+/datum/selection_schematic/window_schematic/full/secorner
+	name			= "\improper full southeast window"
+	build_type	= /obj/effect/spawner/window/full/secorner
+
+/datum/selection_schematic/window_schematic/full/swcorner
+	name			= "\improper full southwest window"
+	build_type	= /obj/effect/spawner/window/full/swcorner
+
+/datum/selection_schematic/window_schematic/full/nwcorner
+	name			= "\improper full northwest window"
+	build_type	= /obj/effect/spawner/window/full/nwcorner
+
+/datum/selection_schematic/window_schematic/full/northcap
+	name			= "\improper full north window cap"
+	build_type	= /obj/effect/spawner/window/full/northcap
+
+/datum/selection_schematic/window_schematic/full/eastcap
+	name			= "\improper full east window cap"
+	build_type	= /obj/effect/spawner/window/full/eastcap
+
+/datum/selection_schematic/window_schematic/full/southcap
+	name			= "\improper full south window cap"
+	build_type	= /obj/effect/spawner/window/full/southcap
+
+/datum/selection_schematic/window_schematic/full/westcap
+	name			= "\improper full west window cap"
+	build_type	= /obj/effect/spawner/window/full/westcap
