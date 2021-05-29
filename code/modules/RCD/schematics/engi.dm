@@ -627,7 +627,7 @@
 	build_type		= /obj/effect/spawner/window	//Type of the window.
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "grille"
-	overlays = list(image(icon="icons/obj/structures.dmi",icon_state="window")
+	overlays = list(image(icon=src.icon,icon_state="window",dir=NORTH,image(icon=src.icon,icon_state="window",dir=EAST,image(icon=src.icon,icon_state="window",dir=SOUTH,image(icon=src.icon,icon_state="window",dir=WEST)
 
 /datum/selection_schematic/window_schematic/clicked(var/mob/user)
 	master.selected = src
