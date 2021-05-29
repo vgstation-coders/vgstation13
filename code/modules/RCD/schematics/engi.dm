@@ -46,7 +46,7 @@
 			qdel(D)
 			return 0
 	
-	else if(istype(A,/obj/structure/window))
+	else if(istype(A,/obj/structure/window) && !istype(A,/obj/structure/window/reinforced/plasma))
 		var/obj/structure/window/W = A
 		to_chat(user, "Deconstructing \the [W]...")
 		if(master.delay(user, W, 5 SECONDS))
@@ -57,7 +57,7 @@
 			for(var/obj/structure/grille/G in W.loc)
 				qdel(G)
 			for(var/obj/structure/window/WI in W.loc)
-				if(WI != W)
+				if(WI != W && !istype(WI,/obj/structure/window/reinforced/plasma))
 					qdel(WI)
 			qdel(W)
 			return 0
@@ -621,8 +621,8 @@
 /datum/selection_schematic/window_schematic
 	name			= "window"						//Name of the window for the tooltip.
 	build_type		= /obj/effect/spawner/window	//Type of the window.
-	icon = 'icons/obj/window_grille_spawner.dmi'
-	icon_state = "window_grille"
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "grille"
 
 /datum/selection_schematic/window_schematic/clicked(var/mob/user)
 	master.selected = src
