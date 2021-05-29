@@ -197,6 +197,9 @@
 	else
 		qdel(src)
 
+/datum/rune_spell/proc/salt_act(var/turf/T)
+	return
+
 /datum/rune_spell/proc/missing_ingredients_count()
 	var/list/missing_ingredients = ingredients.Copy()
 	var/turf/T = get_turf(spell_holder)
@@ -2415,6 +2418,15 @@ var/list/blind_victims = list()
 /datum/rune_spell/blood_cult/portalentrance/midcast_talisman(var/mob/add_cultist)
 	midcast(add_cultist)
 
+/datum/rune_spell/blood_cult/portalentrance/salt_act(var/turf/T)
+	var/turf/destination = null
+	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
+		if (P.network == network)
+			destination = get_turf(P.spell_holder)
+			new /obj/effect/bloodcult_jaunt/traitor(T,null,destination,null)
+			break
+
+
 //RUNE XVII
 var/list/bloodcult_exitportals = list()
 
@@ -2535,6 +2547,15 @@ var/list/bloodcult_exitportals = list()
 
 	T.attuned_rune = PE.spell_holder
 	T.word_pulse(global_runesets["blood_cult"].words[network])
+
+/datum/rune_spell/blood_cult/portalexit/salt_act(var/turf/T)
+	if (T != spell_holder.loc)
+		var/turf/destination = null
+		for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
+			if (P.network == network)
+				destination = get_turf(P.spell_holder)
+			new /obj/effect/bloodcult_jaunt/traitor(T,null,destination,null)
+			break
 
 //RUNE XVIII
 /datum/rune_spell/blood_cult/pulse

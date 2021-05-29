@@ -17,6 +17,7 @@ var/list/arcane_tomes = list()
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
+	fire_fuel = 3
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -33,6 +34,9 @@ var/list/arcane_tomes = list()
 		qdel(O)
 	talismans = list()
 	..()
+
+/obj/item/weapon/tome/salt_act()
+	ignite()
 
 /obj/item/weapon/tome/suicide_act(mob/living/user)
 	if (iscultist(user))
@@ -332,6 +336,11 @@ var/list/arcane_tomes = list()
 	pixel_x=0
 	pixel_y=0
 
+/obj/item/weapon/talisman/salt_act()
+	if (attuned_rune && attuned_rune.active_spell)
+		attuned_rune.active_spell.salt_act(get_turf(src))
+	ignite()
+
 /obj/item/weapon/talisman/proc/talisman_name()
 	var/datum/rune_spell/blood_cult/instance = spell_type
 	if (blood_text)
@@ -542,6 +551,10 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 	var/checkcult = 1
 
+/obj/item/weapon/melee/cultblade/salt_act()
+	new /obj/item/weapon/melee/cultblade/nocult(loc)
+	qdel(src)
+
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
@@ -681,6 +694,9 @@ var/list/arcane_tomes = list()
 		new /obj/item/soulstone(T)
 	shade = null
 	..()
+
+/obj/item/weapon/melee/soulblade/salt_act()
+	qdel(src)
 
 /obj/item/weapon/melee/soulblade/examine(var/mob/user)
 	..()
@@ -1140,6 +1156,9 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/head/culthood/cultify()
 	return
 
+/obj/item/clothing/head/culthood/salt_act()
+	acid_melt()
+
 ///////////////////////////////////////CULT SHOES////////////////////////////////////////////////
 
 /obj/item/clothing/shoes/cult
@@ -1160,6 +1179,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/shoes/cult/cultify()
 	return
+
+/obj/item/clothing/shoes/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////CULT ROBES////////////////////////////////////////////////
 
@@ -1182,6 +1204,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/cultrobes/cultify()
 	return
+
+/obj/item/clothing/suit/cultrobes/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////CULT BACKPACK (TROPHY RACK)////////////////////////////////////////////////
 
@@ -1222,6 +1247,9 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/storage/backpack/cultpack/cultify()
 	return
 
+/obj/item/weapon/storage/backpack/cultpack/salt_act()
+	acid_melt()
+
 
 ///////////////////////////////////////CULT HELMET////////////////////////////////////////////////
 
@@ -1247,6 +1275,9 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/head/helmet/space/cult/cultify()
 	return
 
+/obj/item/clothing/head/helmet/space/cult/salt_act()
+	acid_melt()
+
 ///////////////////////////////////////CULT ARMOR////////////////////////////////////////////////
 
 /obj/item/clothing/suit/space/cult
@@ -1271,7 +1302,8 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/suit/space/cult/cultify()
 	return
 
-
+/obj/item/clothing/suit/space/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
 
@@ -1356,6 +1388,12 @@ var/list/arcane_tomes = list()
 	new /datum/artifact_postmortem_data(src)
 	..()
 
+/obj/item/weapon/bloodcult_pamphlet/cultify()
+	return
+
+/obj/item/weapon/bloodcult_pamphlet/salt_act()
+	ignite()
+
 //Jaunter: creates a pylon on spawn, lets you teleport to it on use
 /obj/item/weapon/bloodcult_jaunter
 	name = "test jaunter"
@@ -1401,6 +1439,13 @@ var/list/arcane_tomes = list()
 	cup.reagents.add_reagent(BLOOD, 50)
 	for(var/i in 1 to 2)
 		new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer(src)
+
+/obj/item/weapon/storage/cult/cultify()
+	return
+
+/obj/item/weapon/storage/cult/salt_act()
+	acid_melt()
+
 ///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
@@ -1447,6 +1492,12 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/gamer
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/cultify()
+	return
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
 /obj/item/weapon/handcuffs/cult
@@ -1504,7 +1555,11 @@ var/list/arcane_tomes = list()
 	C.pain_shock_stage = max(C.pain_shock_stage, 100)
 	to_chat(C, "<span class='danger'>[pick("It hurts so much!", "You really need some painkillers.", "Dear god, the pain!")]</span>")
 
+/obj/item/weapon/handcuffs/cult/cultify()
+	return
 
+/obj/item/weapon/handcuffs/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 
@@ -1600,3 +1655,9 @@ var/list/arcane_tomes = list()
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 			stored_gear.Remove(slot)
 		qdel(src)
+
+/obj/item/weapon/blood_tesseract/cultify()
+	return
+
+/obj/item/weapon/handcuffs/cult/salt_act()
+	throw_impact()

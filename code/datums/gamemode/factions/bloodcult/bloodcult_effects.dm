@@ -155,10 +155,11 @@
 	var/atom/movable/overlay/landing_animation = null
 	var/landing = 0
 
+	var/force_jaunt = FALSE
 
 /obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup)
 	..()
-	if (!user && !packup)
+	if (!user && !packup && !force_jaunt)
 		qdel(src)
 		return
 	if (user)
@@ -366,7 +367,7 @@
 		sleep(sleeptime)
 
 /obj/effect/bloodcult_jaunt/proc/init_jaunt()
-	if (!rider && packed.len <= 0)
+	if (!rider && packed.len <= 0 && !force_jaunt)
 		qdel(src)
 		return
 	spawn while(loc)
@@ -382,6 +383,8 @@
 /obj/effect/bloodcult_jaunt/proc/bump_target_check()
 	if (loc == target)
 		playsound(loc, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+		if (force_jaunt)
+			playsound(loc, 'sound/effects/convert_failure.ogg', 30, 0, -1)
 		if (rider)
 			rider.forceMove(target)
 			if (ismob(rider))
@@ -415,6 +418,16 @@
 		if (landing_animation)
 			flick("cult_jaunt_land",landing_animation)
 		qdel(src)
+
+/obj/effect/bloodcult_jaunt/traitor
+	invisibility = 0
+	alpha = 200
+	force_jaunt = TRUE
+
+/obj/effect/bloodcult_jaunt/traitor/init_jaunt()
+	animate(src, alpha = 0, time = 3)
+	..()
+
 
 ///////////////////////////////////////BLOODSTONE DEFENSES////////////////////////////////////////////////
 

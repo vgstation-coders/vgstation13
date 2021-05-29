@@ -107,6 +107,12 @@
 	*/
 	//var/list/sprite_sheets_obj = null
 
+/obj/item/acid_melt()
+	if (acidable())
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+		I.desc = "Looks like this was \a [src] some time ago."
+		qdel(src)
+
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 

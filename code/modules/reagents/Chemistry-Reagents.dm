@@ -1111,9 +1111,10 @@
 	id = HOLYWATER
 	description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#0064C8" //rgb: 0, 100, 200
-	custom_metabolism = 2 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
+	color = "#8497A9" //rgb: 52, 59, 63
+	custom_metabolism = 2
 	specheatcap = 4.183
+	alpha = 128
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 
@@ -1139,6 +1140,58 @@
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
+
+/datum/reagent/holysalts
+	name = "Holy Salts"
+	id = HOLYSALTS
+	description = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#C1CCD7" //rgb: 80, 80, 84
+	density = 2.09
+	specheatcap = 1.65
+
+/datum/reagent/holysalts/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+	if(volume >= 1)
+		O.bless()
+
+/datum/reagent/holysalts/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	if(!T.has_dense_content() && volume >= 10 && !(locate(/obj/effect/decal/cleanable/salt/holy) in T))
+		if(!T.density)
+			T.bless()
+			new /obj/effect/decal/cleanable/salt/holy(T)
+
+/datum/reagent/holysalts/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	var/list/borers = M.get_brain_worms()
+	if(borers)
+		for(var/mob/living/simple_animal/borer/B in borers)
+			B.health -= 1
+			to_chat(B, "<span class='warning'>Something in your host's bloodstream burns you!</span>")
+
+/datum/reagent/holysalts/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+	if(volume >= 5)
+		if(istype(M,/mob/living/simple_animal/construct) || istype(M,/mob/living/simple_animal/shade))
+			var/mob/living/simple_animal/C = M
+			C.purge = 3
+			C.adjustBruteLoss(5)
+			C.visible_message("<span class='danger'>The holy salts erode \the [src].</span>")
+
+/datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-3)
+	T.adjust_nutrient(-0.3)
+	T.toxins += 8
+	T.weedlevel -= 2
+	T.pestlevel -= 1
+	if(T.seed && !T.dead)
+		T.health -= 2
+
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -1694,10 +1747,8 @@
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
-		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
-		qdel(O)
+		O.acid_melt()
 	else if(istype(O,/obj/effect/plantsegment))
 		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
 		I.desc = "Looks like these were some [O.name] some time ago."
@@ -4553,8 +4604,7 @@
 /datum/reagent/sodiumchloride/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
-
-	if(volume >= 50 && !(locate(/obj/effect/decal/cleanable/salt) in T))
+	if(!T.has_dense_content() && volume >= 10 && !(locate(/obj/effect/decal/cleanable/salt) in T))
 		if(!T.density)
 			new /obj/effect/decal/cleanable/salt(T)
 
@@ -4714,7 +4764,14 @@
 	id = BLACKPEPPER
 	description = "A powder ground from peppercorns. *AAAACHOOO*"
 	reagent_state = REAGENT_STATE_SOLID
-	//rgb: 0, 0, 0
+	color = "#664C3E" //rgb: 40, 30, 24
+
+
+/datum/reagent/blackpepper/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+	if(!T.has_dense_content() && volume >= 10 && !(locate(/obj/effect/decal/cleanable/pepper) in T))
+		new /obj/effect/decal/cleanable/pepper(T)
 
 /datum/reagent/cinnamon
 	name = "Cinnamon Powder"
