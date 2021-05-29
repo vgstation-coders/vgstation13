@@ -446,7 +446,7 @@
 /datum/rcd_schematic/con_window/Topic(var/href, var/href_list)
 	if(href_list["set_selected"])
 		var/idx = clamp(text2num(href_list["set_selected"]), 1, schematics.len)
-		var/datum/selection_schematic/airlock_schematic/C = schematics[idx]
+		var/datum/selection_schematic/window_schematic/C = schematics[idx]
 
 		selected = C
 
