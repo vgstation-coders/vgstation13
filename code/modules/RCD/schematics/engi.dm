@@ -624,6 +624,9 @@
 	icon = 'icons/obj/window_grille_spawner.dmi'
 	icon_state = "window_grille"
 
+/datum/selection_schematic/window_schematic/clicked(var/mob/user)
+	master.selected = src
+
 /datum/selection_schematic/window_schematic/northend
 	name			= "\improper north window"
 	build_type	= /obj/effect/spawner/window/northend
