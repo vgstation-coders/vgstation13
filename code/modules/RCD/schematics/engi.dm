@@ -45,7 +45,22 @@
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			qdel(D)
 			return 0
+	
+	else if(istype(A,/obj/structure/window))
+		var/obj/structure/window/W = A
+		to_chat(user, "Deconstructing \the [W]...")
+		if(master.delay(user, W, 5 SECONDS))
+			if(master.get_energy(user) < energy_cost)
+				return 1
 
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+			for(var/obj/structure/grille/G in W.loc)
+				qdel(G)
+			for(var/obj/structure/window/WI in W.loc)
+				if(WI != W)
+					qdel(WI)
+			qdel(W)
+			return 0
 	return 1
 
 /datum/rcd_schematic/con_floors
