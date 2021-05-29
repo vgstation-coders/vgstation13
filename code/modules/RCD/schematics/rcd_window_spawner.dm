@@ -1,7 +1,7 @@
 /obj/effect/spawner/window
 	name = "window spawner"
 	var/full = FALSE
-	var/list/dirs = list(NORTH,WEST.SOUTH,EAST)
+	var/list/dirs = list(NORTH,WEST,SOUTH,EAST)
 
 /obj/effect/spawner/window/New()
 	..()
