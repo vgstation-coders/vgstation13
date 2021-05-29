@@ -48,7 +48,7 @@
 	
 	else if(istype(A,/obj/structure/window))
 		var/obj/structure/window/W = A
-		if((is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall))
+		if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
 			return "it cannot deconstruct plasma glass!"
 		to_chat(user, "Deconstructing \the [W]...")
 		if(master.delay(user, W, 5 SECONDS))
