@@ -680,7 +680,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 1)
+	if(volume >= 2)
 		T.wet(800, TURF_WET_LUBE)
 
 /datum/reagent/sodium_polyacrylate
