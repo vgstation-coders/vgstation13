@@ -29,19 +29,31 @@
 	closeToolTip(usr)
 
 /obj/screen/radial/slice/Click(location, control, params)
+	if (!parent)//we're not ready yet
+		return
 	if(usr.client == parent.current_user)
 		if(next_page)
 			parent.next_page()
 		else
-			parent.element_chosen(choice,usr)
+			if (parent.selected_choice && parent.recursion)
+				parent.unclog()
+			else
+				parent.element_chosen(choice,usr)
 
 /obj/screen/radial/center
 	name = "Close Menu"
 	icon_state = "radial_center"
 
 /obj/screen/radial/center/Click(location, control, params)
+	if (!parent)//we're not ready yet
+		return
 	if(usr.client == parent.current_user)
-		parent.finished = TRUE
+		if (parent.finished && parent.recursion)
+			parent.finish()
+		else
+			parent.finished = TRUE
+
+////////////////////////
 
 /datum/radial_menu
 	var/list/choices = list() //List of choice id's
@@ -77,6 +89,38 @@
 	var/hudfix_method = TRUE //TRUE to change anchor to user, FALSE to shift by py_shift
 	var/py_shift = 0
 	var/entry_animation = TRUE
+
+	var/recursion = FALSE
+
+/datum/radial_menu/New(var/mob/user, var/atom/anchor, var/icon_file, var/tooltip_theme, var/radius, var/min_angle)
+	if (user && user.client)
+		current_user = user.client
+	if (anchor)
+		src.anchor = anchor
+	if(icon_file)
+		src.icon_file = icon_file
+	if(tooltip_theme)
+		src.tooltip_theme = tooltip_theme
+	if(radius)
+		src.radius = radius
+	if(min_angle)
+		src.min_angle = min_angle
+
+	current_user.radial_menus += anchor
+
+	close_button = new
+	close_button.parent = src
+	close_button.icon = src.icon_file
+
+/datum/radial_menu/Destroy()
+	Reset()
+	hide()
+	if(custom_check)
+		qdel(custom_check)
+		custom_check = null
+	. = ..()
+
+/////////////////////
 
 //If we swap to vis_contens inventory these will need a redo
 /datum/radial_menu/proc/check_screen_border(mob/user)
@@ -203,20 +247,6 @@
 		if(choices_tooltips[choice_id])
 			E.tooltip_desc = choices_tooltips[choice_id]
 
-/datum/radial_menu/New(var/icon_file, var/tooltip_theme, var/radius, var/min_angle)
-	if(icon_file)
-		src.icon_file = icon_file
-	if(tooltip_theme)
-		src.tooltip_theme = tooltip_theme
-	if(radius)
-		src.radius = radius
-	if(min_angle)
-		src.min_angle = min_angle
-
-	close_button = new
-	close_button.parent = src
-	close_button.icon = src.icon_file
-
 /datum/radial_menu/proc/Reset()
 	choices.Cut()
 	choices_icons.Cut()
@@ -279,12 +309,12 @@
 		current_page = Wrap(current_page + 1,1,pages+1)
 		update_screen_objects()
 
-/datum/radial_menu/proc/show_to(mob/M)
-	if(current_user)
-		hide()
-	if(!M.client || !anchor)
+/datum/radial_menu/proc/show_to()
+	if(!current_user)
 		return
-	current_user = M.client
+	hide()
+	if(!anchor)
+		return
 	//Blank
 	menu_holder = image(icon='icons/effects/effects.dmi',loc=anchor,icon_state="nothing",layer = ABOVE_HUD_LAYER)
 	menu_holder.plane = ABOVE_HUD_PLANE
@@ -304,40 +334,100 @@
 				return
 			else
 				next_check = world.time + check_delay
-		stoplag(1)
+		stoplag()
 
-/datum/radial_menu/Destroy()
-	Reset()
-	hide()
-	if(custom_check)
-		qdel(custom_check)
-		custom_check = null
-	. = ..()
+/////////////////////////////////////////Procs for recursive radial menu, currently used by Safes
+
+/datum/radial_menu/proc/do_it_again()
+	selected_choice = null
+	show_to(current_user)
+	wait()
+	if(!gcDestroyed)
+		if (finished)
+			finish()
+
+//Byond randomly breaks radial menus after some time it seems. This workaround will replace the menu without interrupting the player's actions.
+/datum/radial_menu/proc/unclog()
+	if (current_user && current_user.mob && istype(anchor,/obj/structure/safe))
+		var/obj/structure/safe/S = anchor
+		S.unclog(current_user.mob, src)
+
+/datum/radial_menu/proc/finish()
+	finished = TRUE
+	current_user.radial_menus -= anchor
+	qdel(src)
+
+//////////////////
+
+/datum/radial_menu/recursive
+
+/datum/radial_menu/recursive/dial
+	starting_angle = 90
+	ending_angle = 450
+	radius = 23
+	var/obj/structure/safe/safe
+
+/datum/radial_menu/recursive/dial/New(var/mob/user, var/atom/anchor, var/icon_file, var/tooltip_theme, var/radius, var/min_angle)
+	..()
+	safe = anchor
+	update_dial()
+
+/datum/radial_menu/recursive/dial/Destroy()
+	safe = null
+	..()
+
+/datum/radial_menu/recursive/dial/do_it_again()
+	update_dial()
+	..()
+
+/datum/radial_menu/recursive/dial/proc/update_dial()
+	if (!safe)
+		return
+	close_button.overlays.len = 0
+	var/image/I = image(icon='icons/obj/safe_radial.dmi',loc=close_button,icon_state="radial_dial",layer = ABOVE_HUD_LAYER+1)
+	I.plane = ABOVE_HUD_PLANE
+	var/matrix/dial_matrix = turn(matrix(),safe.dial*5)
+	I.transform = dial_matrix
+	close_button.overlays += I
+
+///////////////////////////////////////////
+
 /*
 	Presents radial menu to user anchored to anchor (or user if the anchor is currently in users screen)
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/recursive = FALSE)
 	if(!user || !anchor || !length(choices))
 		return
 
 	var/client/current_user = user.client
 	if(anchor in current_user.radial_menus)
 		return
-	current_user.radial_menus += anchor //This should probably be done in the menu's New()
 
-	var/datum/radial_menu/menu = new(icon_file, tooltip_theme, radius, min_angle)
+	var/menu_type = choose_radial_menu_type_for_anchor(anchor)
+
+	var/datum/radial_menu/menu = new menu_type(user, anchor, icon_file, tooltip_theme, radius, min_angle)
 
 	if(istype(custom_check))
 		menu.custom_check = custom_check
-	menu.anchor = anchor
+
+	menu.recursion = recursive
 	menu.check_screen_border(user) //Do what's needed to make it look good near borders or on hud
 	menu.set_choices(choices)
-	menu.show_to(user)
+	menu.show_to()
 	menu.wait()
 	if(!menu.gcDestroyed)
+		if (recursive && !menu.finished)
+			return menu
 		var/answer = menu.selected_choice
-		qdel(menu)
-		current_user.radial_menus -= anchor
+		menu.finish()
 		return answer
+
+/proc/choose_radial_menu_type_for_anchor(var/atom/anchor)
+	var/menu_type = /datum/radial_menu
+
+	if (istype(anchor,/obj/structure/safe))
+		menu_type = /datum/radial_menu/recursive/dial
+
+	return menu_type
