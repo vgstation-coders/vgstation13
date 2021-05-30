@@ -96,9 +96,9 @@
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				break
 	else if(is_type_in_list(AM,acceptable_items))
-		if (istype(AM,/obj/item/stack) && AM:amount>1)
+		if (istype(AM,/obj/item/stack) && AM.amount>1)
 			new AM.type (src)
-			AM:use(1)
+			AM.use(1)
 		else
 			AM.forceMove(src)
 	else
