@@ -7,7 +7,7 @@
 "ag" = (/turf/simulated/shuttle/wall{tag = "icon-swall14"; icon_state = "swall14"},/area/awaymission/BMPship3)
 "ah" = (/turf/simulated/shuttle/wall{tag = "icon-swall_s10"; icon_state = "swall_s10"; dir = 2},/area/awaymission/BMPship3)
 "ai" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/engine,/area/awaymission/BMPship3)
-"aj" = (/obj/machinery/porta_turret{dir = 8; emagged = 1; installation = /obj/item/weapon/gun/energy/lasercannon},/turf/simulated/floor/engine,/area/awaymission/BMPship3)
+"aj" = (/obj/machinery/turret/portable{dir = 8; emagged = 1; installation = /obj/item/weapon/gun/energy/lasercannon},/turf/simulated/floor/engine,/area/awaymission/BMPship3)
 "ak" = (/turf/simulated/floor/engine,/area/awaymission/BMPship3)
 "al" = (/turf/simulated/shuttle/wall{tag = "icon-swall3"; icon_state = "swall3"; dir = 2},/area/awaymission/BMPship3)
 "am" = (/obj/machinery/light/small{dir = 8},/turf/simulated/floor/plating,/area/awaymission/BMPship3)
