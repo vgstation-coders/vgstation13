@@ -478,7 +478,7 @@
 	var/build_type
 	var/icon_state
 	var/icon
-	var/list/overlays = list()
+	var/list/overlays 	= list()
 	var/obj/abstract/screen/ourobj
 	var/datum/rcd_schematic/master
 
@@ -629,6 +629,17 @@
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "grille"
 
+/datum/selection_schematic/window_schematic/New()
+	..()
+	overlays += image(icon,icon_state="window",dir=NORTH)
+	overlays += image(icon,icon_state="window",dir=EAST)
+	overlays += image(icon,icon_state="window",dir=SOUTH)
+	overlays += image(icon,icon_state="window",dir=WEST)
+
+/datum/selection_schematic/window_schematic/Destroy()
+	overlays = list()
+	..()
+	
 /datum/selection_schematic/window_schematic/clicked(var/mob/user)
 	master.selected = src
 
