@@ -120,9 +120,20 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			if(!("[department]" in req_console_information))
 				req_console_information += department
 
+/obj/machinery/requests_console/attack_ghost(user as mob)
+	if(..(user))
+		return
+	interact(user)
+	return
+
 /obj/machinery/requests_console/attack_hand(user as mob)
 	if(..(user))
 		return
+	add_fingerprint(user)
+	interact(user)
+	return
+
+/obj/machinery/requests_console/interact(user as mob)
 	var/dat
 	dat = text("<HEAD><TITLE>Requests Console</TITLE></HEAD><H3>[department] Requests Console</H3>")
 	if(!open)
@@ -243,7 +254,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	if(..())
 		return
 	usr.set_machine(src)
-	add_fingerprint(usr)
 
 	if(reject_bad_text(href_list["write"]))
 		dpt = ckey(href_list["write"]) //write contains the string of the receiving department's name
