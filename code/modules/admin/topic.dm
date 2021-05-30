@@ -3628,6 +3628,7 @@
 					for(var/mob/living/M in player_list)
 						var/mob/living/simple_animal/bee/swarm/BEE = new(get_turf(M))
 						BEE.target = M
+						BEE.AttackTarget()
 
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
