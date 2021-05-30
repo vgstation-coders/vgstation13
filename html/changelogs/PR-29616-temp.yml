@@ -1,0 +1,11 @@
+---
+author: DeityLink
+changes:
+  - rscadd: Organ Failure random events now have their own custom command alert instead of using a Biohazard Alert of random level (also more appropriate as there is no outbreak to contain here).
+  - rscadd: "The Biohazard Alert level during a viral infection event or viral outbreak event is now proportional to the actual combined danger of the disease's effects. It can be as low as 1, and all the way to 8 if the combined danger is 15 or 16 which are the highest possible currently (disregarding adminbus). 9 as always is reserved for Blob."
+  - bugfix: "Fixed the admin buttons to \"Toggle a Lights Out\" or a \"Prison Break\"  not using the correct events."
+  - bugfix: "Fixed the admin option to create a new disease using an already existing pathogen displaying IDs only instead of the disease's full name."
+  - bugfix: Fixed Admin-made pathogen not having the ID that was set by its creator.
+  - bugfix: "Fixed the admin \"Trigger a Virus Outbreak\" button not working."
+  - rscadd: "Admins can now trigger a custom outbreak event that will spread a previously prepared pathogen among the crew, and display the usual alert after some time as passed."
+delete-after: true

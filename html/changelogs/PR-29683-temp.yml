@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - tweak: "Increased the layer at which remains appear. They appear now above tables but still below objects. As such they are no longer hidden by things like vents, scrubbers and pipe."
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: kane-f
+changes:
+  - bugfix: Ghosts no longer hide request console alerts
+delete-after: true

@@ -1,0 +1,7 @@
+---
+author: DeityLink
+changes:
+  - rscadd: Added a couple new items to the Safe loot table.
+  - bugfix: Fixed emitter goggles not working on mannequins
+  - bugfix: Fixed glasses mapped onto mannequins not being properly equipped when the map loads
+delete-after: true

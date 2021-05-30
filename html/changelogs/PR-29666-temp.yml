@@ -1,0 +1,5 @@
+---
+author: Allspice
+changes:
+  - bugfix: Re-add NATO alphabet language to deathsquaddies.
+delete-after: true

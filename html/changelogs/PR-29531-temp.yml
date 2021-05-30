@@ -1,0 +1,9 @@
+---
+author: kane-f
+changes:
+  - rscadd: Mineral unloading machines are now buildable from circuit imprinters.
+  - rscadd: "Mineral unloading machines now have 3 matter bins and a capacitor, all upgradable for faster unloading and lower power usage."
+  - rscadd: Mineral unloading machines can now have their directions tweaked with a multitool with ease.
+  - rscadd: Mineral unloading machines work like conveyors on machines on the other end.
+  - tweak: "New common mineral machine item, cutting down a lot of redundant code and variables."
+delete-after: true

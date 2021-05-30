@@ -1,0 +1,7 @@
+---
+author: DeityLink
+changes:
+  - tweak: "Reworked rag smothering to fix a few bugs. The new implementation requires you to target the rag at their mouth with a 1 second delay (a visible warning and SFX play as soon as an attempt is made). Species that do not breath cannot be smothered. People wearing smoke-blocking masks such as gas masks, internals, clown masks, surgical masks or cigarettes (if they're lit) cannot be smothered either. Upon success, all reagents inside the rag will be transferred inside the target (up to 5u)."
+  - bugfix: You no longer try to wipe down people that you are currently smothering or bandaging with a rag.
+  - bugfix: You no longer try to wipe down the Sink when you fill up your rag.
+delete-after: true

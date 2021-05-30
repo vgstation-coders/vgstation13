@@ -1,0 +1,8 @@
+---
+author: DeityLink
+changes:
+  - bugfix: "Fixed humans no longer having bloody hands unless they're wearing gloves."
+  - bugfix: Fixed surgery steps that should bloody your hands no longer doing so.
+  - rscadd: "The Write in Blood verb has been reworked. Both ghosts and humans now have it at all time under the Ghost and IC tab respectively. When using it you will attempt to write on your tile. Ghosts need to be either visible, or the cult must have reached the bloodstone phase. They will look for a blood splatter or footprint in an adjacent tile, if there are several they will get the option of which one to use, along with the source's color hex code. Humans however need blood on their hands or gloves and will use that one. You can preview your message before confirming like when using a crayon. There can be only one doodle per tile, and it carries DNA and color from the source blood. Also unlike the old bloody doodles, those are maptext'd, and can be read without being examined."
+  - rscadd: Punching someone on a limb that is currently bleeding will splash their blood on your hands.
+delete-after: true

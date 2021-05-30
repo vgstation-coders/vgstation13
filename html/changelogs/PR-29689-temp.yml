@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - bugfix: Fixed items removed by monkeys from their backpack having a full-tile hitbox.
+delete-after: true

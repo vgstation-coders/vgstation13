@@ -1,0 +1,5 @@
+---
+author: GreatBigFailure
+changes:
+  - tweak: Egg cartons now have a small chance to come with a non-standard egg.
+delete-after: true

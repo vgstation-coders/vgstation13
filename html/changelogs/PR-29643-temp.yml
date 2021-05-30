@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - bugfix: Fixed soul blades being offset both in the inventory and on the player when stored in the suit slot.
+delete-after: true

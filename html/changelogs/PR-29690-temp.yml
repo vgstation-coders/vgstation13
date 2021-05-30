@@ -1,0 +1,6 @@
+---
+author: DeityLink
+changes:
+  - bugfix: You can no longer convert the same mob several times (should they refuse and get restrained) to get additional progression on the Conversion objective.
+  - tweak: "Converting a mindless monkey (whether still monkey or human) will sacrifice them, leaving behind a coffer with a skull"
+delete-after: true

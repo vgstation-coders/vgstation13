@@ -1,0 +1,5 @@
+---
+author: kane-f
+changes:
+  - rscadd: "Reagant dispensers, chemmaster derivatives, all-in-one grinders, microwaves, processors, seed extractors, biogenerators and xenobotany machines now work with conveyors."
+delete-after: true

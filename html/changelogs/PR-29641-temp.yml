@@ -1,0 +1,5 @@
+---
+author: kafovofa
+changes:
+  - rscadd: Health analyzers highlight their heat reading in red if the target is too hot.
+delete-after: true
