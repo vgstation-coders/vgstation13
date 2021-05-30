@@ -59,6 +59,28 @@ Note: Must be placed within 3 tiles of the R&D Console
 		return TRUE
 	return FALSE
 
+/obj/machinery/r_n_d/destructive_analyzer/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, /obj/item) && !loaded_item && !panel_open)
+		var/obj/item/I = AM
+		if(!I.origin_tech)
+			return FALSE
+		var/list/temp_tech = ConvertReqString2List(I.origin_tech)
+
+		if(temp_tech.len == 0)
+			return FALSE
+
+		busy = 1
+		loaded_item = I
+		I.forceMove(src)
+		flick("d_analyzer_la", src)
+		spawn(10)
+			icon_state = "d_analyzer_l"
+			busy = 0
+			if(linked_console)
+				linked_console.updateUsrDialog()
+			return TRUE
+	return FALSE
+
 /obj/machinery/r_n_d/destructive_analyzer/attackby(var/obj/O, var/mob/user)
 	if(..())
 		return 1
