@@ -630,11 +630,11 @@
 	icon_state = "grille"
 
 /datum/selection_schematic/window_schematic/New()
+	overlays += image(icon,icon_state="rwindow",dir=NORTH)
+	overlays += image(icon,icon_state="rwindow",dir=EAST)
+	overlays += image(icon,icon_state="rwindow",dir=SOUTH)
+	overlays += image(icon,icon_state="rwindow",dir=WEST)
 	..()
-	overlays += image(icon,icon_state="window",dir=NORTH)
-	overlays += image(icon,icon_state="window",dir=EAST)
-	overlays += image(icon,icon_state="window",dir=SOUTH)
-	overlays += image(icon,icon_state="window",dir=WEST)
 
 /datum/selection_schematic/window_schematic/Destroy()
 	overlays = list()
