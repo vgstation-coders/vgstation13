@@ -129,7 +129,7 @@
 /datum/biogen_recipe/leather/belt
 	cost=300
 	id="belt"
-	name="Utility Belt"
+	name="Tool-belt"
 	result=/obj/item/weapon/storage/belt/utility
 
 /datum/biogen_recipe/leather/bandolier
