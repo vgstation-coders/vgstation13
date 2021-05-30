@@ -744,7 +744,7 @@
 /obj/spacepod/taxi
 	name = "taxi pod"
 	icon_state = "pod_taxi"
-	desc = "Brightly coloured to attract attention of potential passengers. Has room for multiple passengers at the expense of weapons"
+	desc = "Brightly coloured to attract attention of potential passengers. Has room for multiple passengers at the expense of weapons."
 	passenger_limit = 3
 	actions_types = list( //Actions to create and hold for the pilot
 		/datum/action/spacepod/pilot/toggle_passengers,

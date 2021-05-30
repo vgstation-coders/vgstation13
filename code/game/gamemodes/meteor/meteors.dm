@@ -184,7 +184,7 @@
 
 /obj/item/projectile/meteor/radioactive
 	name = "radioactive meteor"
-	desc = "The Engineer's bane"
+	desc = "The engineer's bane."
 	icon_state = "medium_radioactive"
 
 /obj/item/projectile/meteor/radioactive/to_bump(atom/a)
@@ -280,21 +280,21 @@
 	name = "apocalyptic meteor"
 	desc = "And behold, a white meteor. And on that meteor..."
 	projectile_speed = 4 //slow, massive, apocalyptic
-	
+
 /obj/item/projectile/meteor/boss/New()
 	..()
 	appearance_flags |= PIXEL_SCALE
 	var/matrix/boss = matrix()
 	boss.Scale(1.5,1.5)
 	transform = boss
-	
+
 /obj/item/projectile/meteor/boss/to_bump(atom/A)
 
 	if(loc == null)
 		return
 
 	explosion(get_turf(src), 7, 14, 28, 32, 0, 1, 0) //adios
-	qdel(src)	
+	qdel(src)
 
 /obj/item/projectile/meteor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pickaxe)) //Yeah, you can totally do that

@@ -1,5 +1,5 @@
 /obj/item/weapon/banhammer
-	desc = "A banhammer"
+	desc = "A banhammer."
 	name = "banhammer"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "toyhammer"
@@ -18,7 +18,7 @@
 
 /obj/item/weapon/sord
 	name = "\improper SORD"
-	desc = "This thing is so unspeakably shitty you are having a hard time even holding it."
+	desc = "This thing is so unspeakably shitty you're having a hard time even holding it."
 	icon_state = "sord"
 	item_state = "sord"
 	flags = FPRINT
@@ -69,7 +69,7 @@
 
 /obj/item/weapon/katana
 	name = "katana"
-	desc = "Woefully underpowered in D20"
+	desc = "Woefully underpowered in D20."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "katana"
 	item_state = null
@@ -454,7 +454,7 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/hammer
 	name = "smithing hammer"
-	desc = "for those with a predeliction for applying concussive maintenance"
+	desc = "for those with a predeliction for applying concussive maintenance."
 	icon = 'icons/obj/blacksmithing/hammer.dmi'
 	icon_state = "hammer"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')

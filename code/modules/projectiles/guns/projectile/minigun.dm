@@ -122,7 +122,7 @@
 
 /obj/item/weapon/gun/gatling/beegun/hornetgun
 	name = "hornet gun"
-	desc = "Doesn't actually use .22 Hornet cartridges"
+	desc = "Doesn't actually use .22 Hornet cartridges."
 	icon_state = "hornetgun"
 	item_state = "hornetgun0"
 	gatlingbullet = /obj/item/projectile/bullet/beegun/hornet

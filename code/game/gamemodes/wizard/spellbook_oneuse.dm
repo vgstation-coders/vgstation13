@@ -522,7 +522,7 @@
 	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
 	spell = null
 	icon_state = "book"
-	desc = "A book of lost and forgotten knowledge"
+	desc = "A book of lost and forgotten knowledge."
 	spellname = "forgotten knowledge"
 
 /obj/item/weapon/spellbook/oneuse/ancient/New()
@@ -539,10 +539,10 @@
 /obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be available at christmas
 	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
 	icon_state = "winter"
-	desc = "A book of festive knowledge"
+	desc = "A book of festive knowledge."
 	spellname = "winter"
 
 /obj/item/weapon/spellbook/oneuse/ancient/winter/recoil(mob/living/carbon/user)
-	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from Santa!</span>")
 	user.gib()
 	qdel(src)

@@ -1,7 +1,7 @@
 /obj/item/weapon/paper_bin/nano
 	name = "Nano paper dispenser"
 	icon = 'icons/obj/bureaucracy.dmi'
-	desc = "This machine dispenses nano paper"
+	desc = "This machine dispenses nano paper."
 	icon_state = "np_dispenser"
 	item_state = "sheet-metal"
 	throwforce = 1

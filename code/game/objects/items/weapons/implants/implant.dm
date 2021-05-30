@@ -342,7 +342,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 /obj/item/weapon/implant/traitor
 	name = "greytide implant"
-	desc = "Greytide Station wide"
+	desc = "Greytide station wide."
 	icon_state = "implant_evil"
 
 /obj/item/weapon/implant/traitor/get_data()

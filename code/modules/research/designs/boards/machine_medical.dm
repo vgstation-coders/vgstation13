@@ -32,7 +32,7 @@
 
 /datum/design/defib_recharger
 	name = "Circuit Design (Defib Recharger)"
-	desc = "Allows for the construction of circuit boards used to build Defib Rechargers"
+	desc = "Allows for the construction of circuit boards used to build Defib Rechargers."
 	id="defib_recharger"
 	req_tech = list(Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 3, Tc_BIOTECH = 4)
 	build_type = IMPRINTER

@@ -131,7 +131,7 @@
 
 /obj/item/clothing/shoes/galoshes
 	name = "galoshes"
-	desc = "Rubber boots"
+	desc = "Rubber boots!"
 	icon_state = "galoshes"
 	permeability_coefficient = 0.05
 	clothing_flags = NOSLIP

@@ -3,7 +3,7 @@
 //generic procs copied from obj/effect/alien
 /obj/effect/spider
 	name = "web"
-	desc = "it's stringy and sticky"
+	desc = "It's stringy and sticky."
 	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 0

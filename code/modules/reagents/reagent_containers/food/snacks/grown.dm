@@ -408,7 +408,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
-	desc = "Hmm, needs some processing"
+	desc = "Hmm, needs some processing."
 	filling_color = "#C4C4C4"
 	plantname = "plastic"
 
@@ -713,7 +713,7 @@ var/list/special_fruits = list()
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
 	name = "diamond carrot"
 	desc = "Carrots are forever... Wait no."
@@ -1047,7 +1047,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant
 	name = "mustard flowers"
-	desc = "A bunch of bright yellow flowers, unrelated to mustard gas"
+	desc = "A bunch of bright yellow flowers, unrelated to the gas."
 	potency = 10
 	filling_color = "#DFE88B"
 	plantname = "mustardplant"
