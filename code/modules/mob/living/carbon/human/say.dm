@@ -1,3 +1,6 @@
+/mob/living/carbon/human
+	var/list/muted_letters = list()
+
 ///mob/living/carbon/human/say(var/message)
 //	..(message)
 
@@ -79,6 +82,9 @@
 		for(var/mob/O in hearers())
 			if(!O.is_deaf() && O.client)
 				O.client.handle_hear_voice(src)
+	if(muted_letters && muted_letters.len)
+		for(var/letter in muted_letters)
+			speech.message = replacetext(speech.message, letter, "_")
 
 
 /mob/living/carbon/human/GetVoice()
