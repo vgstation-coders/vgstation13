@@ -1,5 +1,6 @@
 /mob/living/carbon/human
 	var/list/muted_letters = list()
+	var/muteletter_tries = 3
 
 ///mob/living/carbon/human/say(var/message)
 //	..(message)

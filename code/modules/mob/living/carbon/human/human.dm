@@ -2001,6 +2001,16 @@ mob/living/carbon/human/isincrit()
 	if(muted_letters && muted_letters.len)
 		if(muted_letters.Find(speech.message))
 			muted_letters.remove(speech.message)
+		else if(muteletter_tries)
+			muteletter_tries--
+		else
+			set_muted_letters()
+
+/mob/living/carbon/human/proc/set_muted_letters()
+	muteletter_tries = 3
+	muted_letters = list("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+	for(var/i = 0, i < 6, i++) // Remove 6 letters from the muted, as to help the crew a little
+		muted_letters.pick_n_take()
 
 /mob/living/carbon/human/can_be_infected()
 	return 1
