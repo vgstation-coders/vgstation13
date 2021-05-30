@@ -562,7 +562,7 @@
 				fly_speed += kinetic_acceleration-kinetic_sum
 				kinetic_sum = kinetic_acceleration
 			if(afterimage)
-				new /obj/effect/red_afterimage(loc,src)
+				new /obj/effect/afterimage/red(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -603,7 +603,7 @@
 				fly_speed += kinetic_acceleration
 				kinetic_acceleration = 0
 			if(afterimage)
-				new /obj/effect/red_afterimage(loc,src)
+				new /obj/effect/afterimage/red(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -731,9 +731,9 @@
 ////////////
 /// HEAR ///
 ////////////
-/atom/movable/proc/addHear()
+/atom/movable/proc/addHear(var/hearer_type = /mob/virtualhearer)
 	flags |= HEAR
-	virtualhearer = new /mob/virtualhearer(src)
+	virtualhearer = new hearer_type(src)
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR

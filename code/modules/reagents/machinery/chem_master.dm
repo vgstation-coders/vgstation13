@@ -200,6 +200,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				if(!condi)
 					if(istype(reagent, /datum/reagent/blood))
 						dat += "Blood type: [reagent.data["blood_type"] || "Unknown"]<BR>Blood DNA: [reagent.data["blood_DNA"] || "Unable to determine"]<BR><BR>"
+					else if(reagent.data["stored_phrase"])
+						dat += "The polymer chains currently read: \"[reagent.data["stored_phrase"]]\".<BR><BR>"
 					dat += "Density:<BR>[reagent.density]<BR><BR>Specific heat capacity:<BR>[reagent.specheatcap]<BR><BR><BR>"
 				dat += "<A href='?src=\ref[src];main=1'>(Back)</A>"
 

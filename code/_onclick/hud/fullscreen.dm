@@ -159,6 +159,11 @@
 	layer = HALLUCINATION_LAYER
 	alpha = 0
 
+/obj/abstract/screen/fullscreen/astral_border
+	icon_state = "astraloverlay"
+	layer = HALLUCINATION_LAYER
+	alpha = 0
+
 /obj/abstract/screen/fullscreen/conversion_red
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"

@@ -74,7 +74,7 @@
 /mob/living/simple_animal/construct/say(var/message)
 	. = ..(message, "C")
 
-/mob/living/simple_animal/construct/construct_chat_check(setting)
+/mob/living/simple_animal/construct/cult_chat_check(setting)
 	if(!mind)
 		return
 	if(find_active_faction_by_member(iscultist(src)))
@@ -89,11 +89,11 @@
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	if(..())
 		return 1
-	if(message_mode == MODE_HEADSET && construct_chat_check(SPEAK_OVER_GENERAL_CULT_CHAT))
+	if(message_mode == MODE_HEADSET && cult_chat_check(SPEAK_OVER_GENERAL_CULT_CHAT))
 		var/turf/T = get_turf(src)
 		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
 		for(var/mob/M in mob_list)
-			if(M.construct_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+			if(M.cult_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
 		return 1
 

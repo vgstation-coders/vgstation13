@@ -7,7 +7,7 @@
 
 /datum/artifact_effect/menagerie/New()
 	..()
-	possible_types = existing_typesof(/mob/living) - (existing_typesof_list(blacklisted_mobs) + (existing_typesof(/mob/living/silicon) + /mob/living/simple_animal/scp_173))
+	possible_types = existing_typesof(/mob/living) - (existing_typesof_list(blacklisted_mobs) + (existing_typesof(/mob/living/silicon) + existing_typesof(/mob/living/component) + /mob/living/simple_animal/scp_173))
 
 /datum/artifact_effect/menagerie/DoEffectPulse()
 	if(holder)

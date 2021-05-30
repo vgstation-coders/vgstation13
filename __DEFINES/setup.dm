@@ -741,6 +741,12 @@ SEE_PIXELS	256
 #define BEE_SWARM 4
 #define BEE_BUILDING 5
 
+#define BEE_STING_BLOCK		0
+#define BEE_STING_PIERCE	1
+#define BEE_STING_NORMAL	2
+
+#define MAX_BEES_PER_SWARM	20
+
 //for infestation events
 #define LOC_KITCHEN 0
 #define LOC_ATMOS 1

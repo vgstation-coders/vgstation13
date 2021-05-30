@@ -204,6 +204,20 @@
 		if( ..() )
 			return 1
 
+/obj/machinery/power/port_gen/pacman/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, sheet_path))
+		var/obj/item/stack/addstack = AM
+		var/amount = min((max_sheets - sheets), addstack.amount)
+		if(amount < 1)
+			return FALSE
+		sheets += amount
+		addstack.use(amount)
+		return TRUE
+	else if(!active)
+		if( ..() )
+			return FALSE
+	return FALSE
+
 /obj/machinery/power/port_gen/pacman/attack_hand(mob/user as mob)
 	..()
 	if (!anchored)

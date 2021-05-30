@@ -287,6 +287,8 @@ var/stacking_limit = 90
 				if (rule.ready(TRUE))
 					forced_rules++
 					rule.calledBy = forced_rule.calledBy
+					if (!rule.choose_candidates())
+						stack_trace("rule [rule] failed to choose candidates despite ready() returning 1.")
 
 					message_admins("DYNAMIC MODE: <font size='3'>[rule.name]</font> successfully forced!")
 					log_admin("DYNAMIC MODE: <font size='3'>[rule.name]</font> successfully forced!")
@@ -387,6 +389,9 @@ var/stacking_limit = 90
 			log_admin("DYNAMIC MODE: Picking a [istype(chosen_one, /datum/dynamic_ruleset/roundstart/delayed/) ? " delayed " : ""] ruleset...<font size='3'>[chosen_one.name]</font>!")
 			candidate_rules += chosen_one
 			drafted_rules -= chosen_one
+			spend_threat(chosen_one.cost)
+			if(!chosen_one.choose_candidates())
+				stack_trace("rule [chosen_one] failed to choose candidates despite ready() returning 1.")
 			drafted_rules = trimming_remaining_rules(chosen_one, drafted_rules)
 
 	// Is THE LIST non-empty ?
@@ -435,6 +440,7 @@ var/stacking_limit = 90
 			rule.candidates -= M//removing the assigned players from the candidates for the other rules
 			if (!rule.ready())
 				drafted_rules -= rule//and removing rules that are no longer eligible
+				message_admins("[rule] no longer valid for picking.")
 	return drafted_rules
 
 // -- Executing a rule, which means spawning the traitor, removing the threat cost, etc.
@@ -444,11 +450,9 @@ var/stacking_limit = 90
 	if (istype(the_rule, /datum/dynamic_ruleset/roundstart/delayed/))
 		message_admins("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
 		log_admin("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
-		spend_threat(the_rule.cost)
 		threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 		return pick_delay(the_rule)
 
-	spend_threat(the_rule.cost)
 	threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 	if (the_rule.execute())//this should never fail since ready() returned 1
 		executed_rules += the_rule
@@ -534,6 +538,7 @@ var/stacking_limit = 90
 		new_rule.trim_candidates()
 		if (new_rule.ready(forced))
 			spend_threat(new_rule.cost)
+			new_rule.choose_candidates()
 			threat_log += "[worldtime2text()]: Forced rule [new_rule.name] spent [new_rule.cost]"
 			dynamic_stats.measure_threat(threat)
 			if (new_rule.execute())//this should never fail since ready() returned 1
@@ -606,6 +611,7 @@ var/stacking_limit = 90
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
 					if (rule.ready())
+						rule.choose_candidates()
 						drafted_rules[rule] = rule.get_weight()
 
 			if (drafted_rules.len > 0)
@@ -696,6 +702,7 @@ var/stacking_limit = 90
 		forced_latejoin_rule.trim_candidates()
 		message_admins("Forcing ruleset [forced_latejoin_rule]")
 		if (forced_latejoin_rule.ready(1))
+			forced_latejoin_rule.choose_candidates()
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
 
@@ -720,6 +727,7 @@ var/stacking_limit = 90
 				rule.candidates = list(newPlayer)
 				rule.trim_candidates()
 				if (rule.ready())
+					rule.choose_candidates()
 					drafted_rules[rule] = rule.get_weight()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))

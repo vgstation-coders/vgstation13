@@ -319,3 +319,8 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 		if(I.implanted && istype(I,type))
 			return TRUE
 	return FALSE
+
+/proc/find_player_by_ckey(var/ckey)
+	for (var/mob/M in player_list)
+		if (M.ckey == ckey)
+			return M

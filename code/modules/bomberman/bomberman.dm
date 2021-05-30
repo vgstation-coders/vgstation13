@@ -938,9 +938,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		pencil.y = y+h
 		T = pencil.loc
-		T.maptext = "name"
-		T.maptext_width = 256*PIXEL_MULTIPLIER
-		//T.maptext_y = 20
+		T.maptext = name
+		T.maptext_width = 77
+		T.maptext_y = 10
 
 		qdel(pencil)	//RIP sweet prince
 
@@ -1035,7 +1035,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	var/readied = 0
 	for(var/datum/bomberman_spawn/S in spawns)
 		S.availability = 0
-		S.icon.icon_state = "planner_ready"
+		S.icon.icon_state = "nothing"
 
 		if(!S.player_client)
 			continue
@@ -1145,9 +1145,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	for(var/obj/structure/powerup/P in arena)
 		qdel(P)
 
-	for(var/obj/item/clothing/C in arena)
-		qdel(C)
-
 	for(var/obj/item/organ/external/O in arena)//gibs
 		qdel(O)
 
@@ -1156,6 +1153,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			M.completely_untransmogrify()
 			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
+
+	for(var/obj/item/clothing/C in arena)
+		qdel(C)
 
 	for(var/obj/structure/softwall/W in swalls)
 		qdel(W)
@@ -1376,7 +1376,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	icon_state = "planner"
 	density = 0
 	anchored = 1
-	invisibility = 60
 	var/datum/bomberman_arena/arena = null
 
 /obj/structure/planner/New(turf/loc,var/a)

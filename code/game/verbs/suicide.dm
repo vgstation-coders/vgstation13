@@ -55,6 +55,10 @@
 			to_chat(src, "<span class='sinister'>BUT WHY? I'M SO HAPPY!</span>")
 			return
 
+		if(reagents && reagents.has_reagent(PAROXETINE))
+			to_chat(src, "<span class='numb'>You're too medicated to wanna do that anymore.</span>")
+			return
+
 		var/mob/living/simple_animal/borer/B = has_brain_worms()
 		if(B && B.controlling) //Borer
 			to_chat(src, "<span class='warning'>You cannot commit suicide, your host is clinging to life enough to resist it.</span>")
