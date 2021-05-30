@@ -1581,10 +1581,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		StartMoving()
+		lazy_invoke_event(/lazy_event/on_before_move)
 	dir = direction
-	Facing()
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_face)
+	lazy_invoke_event(/lazy_event/on_after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1604,48 +1604,11 @@ Use this proc preferably at the end of an equipment loadout
 	set hidden = 1
 	return directionface(SOUTH)
 
-/mob/proc/Facing()
-	var/datum/listener
-	for(var/atomToCall in src.callOnFace)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnFace[atomToCall])(src)
-		else
-			src.callOnFace -= atomToCall
-
-
-//this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
-/mob/proc/StartMoving()
-	var/datum/listener
-	for(var/atomToCall in src.callOnStartMove)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnStartMove[atomToCall])(src)
-		else
-			src.callOnStartMove -= atomToCall
-
-
-//this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
-/mob/proc/EndMoving()
-	var/datum/listener
-	for(var/atomToCall in src.callOnEndMove)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnEndMove[atomToCall])(src)
-		else
-			src.callOnEndMove -= atomToCall
-
-
-/mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
-	StartMoving()
-	. = ..()
-	EndMoving()
-
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	StartMoving()
+	lazy_invoke_event(/lazy_event/on_before_move)
 	..()
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0

@@ -107,9 +107,6 @@
 	//SIZE_BIG for big guys
 	//SIZE_HUGE for even bigger guys
 
-	var/list/callOnFace = list()
-	var/list/callOnStartMove = list()
-	var/list/callOnEndMove = list()
 	var/list/pinned = list()            // List of things pinning this creature to walls (see living_defense.dm)
 	var/list/embedded = list()          // Embedded items, since simple mobs don't have organs.
 	var/list/abilities = list()         // For species-derived or admin-given powers.

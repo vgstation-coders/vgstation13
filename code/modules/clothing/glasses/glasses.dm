@@ -494,7 +494,7 @@ var/list/science_goggles_wearers = list()
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
-	invisa_view = 2 
+	invisa_view = 2
 	eyeprot = -2 //prepare for your eyes to get shit on
 
 	glasses_fit = TRUE
@@ -605,7 +605,7 @@ var/list/science_goggles_wearers = list()
 	item_state = "glasses"
 	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_MATERIALS + "=3" + Tc_ANOMALY + "=4"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
-	var/mob/living/emitter
+	var/atom/movable/emitter
 	var/obj/effect/beam/emitter/eyes/beam
 	var/previous_dir
 	var/turf/previous_loc
@@ -614,7 +614,7 @@ var/list/science_goggles_wearers = list()
 	..()
 	if(slot == slot_glasses)
 		emitter = M
-		enable(emitter)
+		enable()
 		processing_objects.Add(src)
 
 /obj/item/clothing/glasses/emitter/unequipped(mob/M, from_slot)
@@ -622,9 +622,20 @@ var/list/science_goggles_wearers = list()
 	previous_dir = null
 	previous_loc = null
 	if(from_slot == slot_glasses)
-		disable(emitter)
+		disable()
 		processing_objects.Remove(src)
 
+/obj/item/clothing/glasses/emitter/mannequin_equip(var/obj/structure/mannequin/mannequin,var/slot,var/hand_slot)
+	if(slot == SLOT_MANNEQUIN_EYES)
+		emitter = mannequin
+		enable()
+		processing_objects.Add(src)
+
+/obj/item/clothing/glasses/emitter/mannequin_unequip(var/obj/structure/mannequin/mannequin)
+	previous_dir = null
+	previous_loc = null
+	disable()
+	processing_objects.Remove(src)
 
 /obj/item/clothing/glasses/emitter/Destroy()
 	disable(emitter)
@@ -633,30 +644,37 @@ var/list/science_goggles_wearers = list()
 	previous_loc = null
 	..()
 
-/obj/item/clothing/glasses/emitter/proc/enable(mob/living/M)
+/obj/item/clothing/glasses/emitter/proc/enable()
 	if (istype(emitter))
-		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
-		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
+		emitter.lazy_register_event(/lazy_event/on_before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.lazy_register_event(/lazy_event/on_after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 	update_emitter()
 
-/obj/item/clothing/glasses/emitter/proc/disable(mob/living/M)
+/obj/item/clothing/glasses/emitter/proc/disable()
 	if (beam)
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.callOnStartMove -= "\ref[src]"
-		emitter.callOnEndMove -= "\ref[src]"
+		emitter.lazy_unregister_event(/lazy_event/on_before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.lazy_unregister_event(/lazy_event/on_after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 		emitter = null
 
 /obj/item/clothing/glasses/emitter/process()
 	update_emitter()
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter()
-	if (!emitter || !isturf(emitter.loc) || emitter.lying)
+	if (!emitter || !isturf(emitter.loc))
 		if (beam)
 			qdel(beam)
 			beam = null
 		return
+	if (ismob(emitter))
+		var/mob/M = emitter
+		if (M.lying)
+			if(beam)
+				qdel(beam)
+				beam = null
+			return
 	if (!beam)
 		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir
@@ -673,8 +691,12 @@ var/list/science_goggles_wearers = list()
 		beam = null
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_end()
-	if (!emitter || !isturf(emitter.loc) || emitter.lying)
+	if (!emitter || !isturf(emitter.loc))
 		return
+	if (ismob(emitter))
+		var/mob/M = emitter
+		if(M.lying)
+			return
 	if (!beam)
 		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir

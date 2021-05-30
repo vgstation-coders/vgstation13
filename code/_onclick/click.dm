@@ -264,7 +264,7 @@
 
 /mob/proc/MiddleShiftClickOn(var/atom/A)
 	A.MiddleShiftClick(src)
-	
+
 /atom/proc/MiddleShiftClick(var/mob/user)
 	user.pointed(src)
 
@@ -388,9 +388,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
-		StartMoving()
-		Facing()
-		EndMoving()
+		lazy_invoke_event(/lazy_event/on_before_move)
+		lazy_invoke_event(/lazy_event/on_face)
+		lazy_invoke_event(/lazy_event/on_after_move)
 		return
 
 	if(abs(dx) < abs(dy))
@@ -404,9 +404,9 @@
 		else
 			change_dir(WEST)
 
-	StartMoving()
-	Facing()
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_before_move)
+	lazy_invoke_event(/lazy_event/on_face)
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 
 // File renamed to mouse.dm?
