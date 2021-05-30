@@ -50,7 +50,7 @@
 	force_report = 1
 
 /datum/command_alert/biohazard_organ/announce()
-	message = "Some of our sensors detected that micro radiations went through parts of [station_name()]. Crew unlucky to have been on their path might experience internal organ damage. Please head over to Medbay should you experience any sudden or unusual sickness."
+	message = "The microdosimetry meter onboard [station_name()] has been tripped by recent cosmic interference. Automated Bragg Curve calculations show a threat of ion implantation in crew members, which may lead to sickness or organ failure. Central Command advises regular health screening of staff displaying symptoms of malaise."
 	..()
 
 ///////HISS
