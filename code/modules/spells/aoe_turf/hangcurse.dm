@@ -38,4 +38,4 @@
 		if(ishuman(T))
 			var/mob/living/carbon/human/H = T
 			H.set_muted_letters()
-			H.visible_message("<span class='sinister'>[L]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>Your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")
+			H.visible_message("<span class='sinister'>[H]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>Your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")

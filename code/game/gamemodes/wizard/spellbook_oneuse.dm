@@ -133,7 +133,7 @@
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		H.set_muted_letters()
-		H.visible_message("<span class='danger'>[L]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>You attempt to read the book and find your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")
+		H.visible_message("<span class='danger'>[H]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>You attempt to read the book and find your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")
 
 /obj/item/weapon/spellbook/oneuse/horsemask
 	spell = /spell/targeted/equip_item/horsemask
