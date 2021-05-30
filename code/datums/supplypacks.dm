@@ -2058,7 +2058,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/slime_extract/grey
 					)
 	cost = 200
-	containertype = /obj/structure/closet/crate/sci
+	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "gret slime extract crate"
 	access = list(access_science)
 	group = "Science"
