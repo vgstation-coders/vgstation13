@@ -628,12 +628,11 @@
 	build_type		= /obj/effect/spawner/window	//Type of the window.
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "grille"
+	var/list/dirs = list(NORTH,EAST,WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/New()
-	overlays += image(icon,icon_state="rwindow",dir=NORTH)
-	overlays += image(icon,icon_state="rwindow",dir=EAST)
-	overlays += image(icon,icon_state="rwindow",dir=SOUTH)
-	overlays += image(icon,icon_state="rwindow",dir=WEST)
+	for(var/d in dirs)
+		overlays += image(icon,icon_state="rwindow",dir=d)
 	..()
 
 /datum/selection_schematic/window_schematic/Destroy()
@@ -646,115 +645,147 @@
 /datum/selection_schematic/window_schematic/northend
 	name			= "\improper north window"
 	build_type	= /obj/effect/spawner/window/northend
+	dirs = list(NORTH)
 
 /datum/selection_schematic/window_schematic/eastend
 	name			= "\improper east window"
 	build_type	= /obj/effect/spawner/window/eastend
+	dirs = list(EAST)
 
 /datum/selection_schematic/window_schematic/southend
 	name			= "\improper south window"
 	build_type	= /obj/effect/spawner/window/southend
+	dirs = list(SOUTH)
 
 /datum/selection_schematic/window_schematic/westend
 	name			= "\improper west window"
 	build_type	= /obj/effect/spawner/window/westend
+	dirs = list(WEST)
 
 /datum/selection_schematic/window_schematic/horizontal
 	name			= "\improper horizontal window"
 	build_type	= /obj/effect/spawner/window/horizontal
+	dirs = list(NORTH,SOUTH)
 
 /datum/selection_schematic/window_schematic/vertical
 	name			= "\improper vertical window"
 	build_type	= /obj/effect/spawner/window/vertical
+	dirs = list(EAST,WEST)
 
 /datum/selection_schematic/window_schematic/necorner
 	name			= "\improper northeast window"
 	build_type	= /obj/effect/spawner/window/necorner
+	dirs = list(NORTH,EAST)
 
 /datum/selection_schematic/window_schematic/secorner
 	name			= "\improper southeast window"
 	build_type	= /obj/effect/spawner/window/secorner
+	dirs = list(EAST,SOUTH)
 
 /datum/selection_schematic/window_schematic/swcorner
 	name			= "\improper southwest window"
 	build_type	= /obj/effect/spawner/window/swcorner
+	dirs = list(WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/nwcorner
 	name			= "\improper northwest window"
 	build_type	= /obj/effect/spawner/window/nwcorner
+	dirs = list(NORTH,WEST)
 
 /datum/selection_schematic/window_schematic/northcap
 	name			= "\improper north window cap"
 	build_type	= /obj/effect/spawner/window/northcap
+	dirs = list(NORTH,EAST,WEST)
 
 /datum/selection_schematic/window_schematic/eastcap
 	name			= "\improper east window cap"
 	build_type	= /obj/effect/spawner/window/eastcap
+	dirs = list(NORTH,EAST,SOUTH)
 
 /datum/selection_schematic/window_schematic/southcap
 	name			= "\improper south window cap"
 	build_type	= /obj/effect/spawner/window/southcap
+	dirs = list(EAST,WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/westcap
 	name			= "\improper west window cap"
 	build_type	= /obj/effect/spawner/window/westcap
+	dirs = list(NORTH,WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/full
 	name			= "\improper full window"
 	build_type	= /obj/effect/spawner/window/full
 
+/datum/selection_schematic/window_schematic/full/New()
+	overlays += image(icon,icon_state="rwindow0")
+	..()
+
 /datum/selection_schematic/window_schematic/full/northend
 	name			= "\improper full north window"
 	build_type	= /obj/effect/spawner/window/full/northend
+	dirs = list(NORTH)
 
 /datum/selection_schematic/window_schematic/full/eastend
 	name			= "\improper full east window"
 	build_type	= /obj/effect/spawner/window/full/eastend
+	dirs = list(EAST)
 
 /datum/selection_schematic/window_schematic/full/southend
 	name			= "\improper full south window"
 	build_type	= /obj/effect/spawner/window/full/southend
+	dirs = list(SOUTH)
 
 /datum/selection_schematic/window_schematic/full/westend
 	name			= "\improper full west window"
 	build_type	= /obj/effect/spawner/window/full/westend
+	dirs = list(WEST)
 
 /datum/selection_schematic/window_schematic/full/horizontal
 	name			= "\improper full horizontal window"
 	build_type	= /obj/effect/spawner/window/full/horizontal
+	dirs = list(NORTH,SOUTH)
 
 /datum/selection_schematic/window_schematic/full/vertical
 	name			= "\improper full vertical window"
 	build_type	= /obj/effect/spawner/window/full/vertical
+	dirs = list(EAST,WEST)
 
 /datum/selection_schematic/window_schematic/full/necorner
 	name			= "\improper full northeast window"
 	build_type	= /obj/effect/spawner/window/full/necorner
+	dirs = list(NORTH,EAST)
 
 /datum/selection_schematic/window_schematic/full/secorner
 	name			= "\improper full southeast window"
 	build_type	= /obj/effect/spawner/window/full/secorner
+	dirs = list(EAST,SOUTH)
 
 /datum/selection_schematic/window_schematic/full/swcorner
 	name			= "\improper full southwest window"
 	build_type	= /obj/effect/spawner/window/full/swcorner
+	dirs = list(WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/full/nwcorner
 	name			= "\improper full northwest window"
 	build_type	= /obj/effect/spawner/window/full/nwcorner
+	dirs = list(NORTH,WEST)
 
 /datum/selection_schematic/window_schematic/full/northcap
 	name			= "\improper full north window cap"
 	build_type	= /obj/effect/spawner/window/full/northcap
+	dirs = list(NORTH,EAST,WEST)
 
 /datum/selection_schematic/window_schematic/full/eastcap
 	name			= "\improper full east window cap"
 	build_type	= /obj/effect/spawner/window/full/eastcap
+	dirs = list(NORTH,EAST,SOUTH)
 
 /datum/selection_schematic/window_schematic/full/southcap
 	name			= "\improper full south window cap"
 	build_type	= /obj/effect/spawner/window/full/southcap
+	dirs = list(EAST,WEST,SOUTH)
 
 /datum/selection_schematic/window_schematic/full/westcap
 	name			= "\improper full west window cap"
 	build_type	= /obj/effect/spawner/window/full/westcap
+	dirs = list(NORTH,WEST,SOUTH)
