@@ -2003,6 +2003,7 @@ mob/living/carbon/human/isincrit()
 			muted_letters.remove(speech.message)
 		else if(muteletter_tries)
 			muteletter_tries--
+			visible_message("<span class='warning'>Letter not found. [muteletter_tries] tries left.</span>")
 		else
 			set_muted_letters()
 
