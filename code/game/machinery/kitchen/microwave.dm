@@ -96,9 +96,11 @@
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				break
 	else if(is_type_in_list(AM,acceptable_items))
-		if (istype(AM,/obj/item/stack) && AM.amount>1)
-			new AM.type (src)
-			AM.use(1)
+		if (istype(AM,/obj/item/stack))
+			var/obj/item/stack/ST = AM
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
 		else
 			AM.forceMove(src)
 	else
@@ -177,12 +179,14 @@
 
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
-		if (istype(O,/obj/item/stack) && O:amount>1)
-			new O.type (src)
-			O:use(1)
-			user.visible_message( \
-				"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
-				"<span class='notice'>You add one of [O] to \the [src].</span>")
+		if (istype(O,/obj/item/stack))
+			var/obj/item/stack/ST = O
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
+				user.visible_message( \
+					"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
+					"<span class='notice'>You add one of [O] to \the [src].</span>")
 		else
 		//	user.before_take_item(O)	//This just causes problems so far as I can tell. -Pete
 			if(user.drop_item(O, src))
