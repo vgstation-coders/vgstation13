@@ -14,7 +14,6 @@
 	density = 1
 	var/faction = null 							//No shooting our buddies!
 	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
-	var/lasertype = /obj/item/projectile/beam
 	var/health = 80								// the turret's health
 	var/obj/machinery/turretcover/cover = null	// the cover that is covering this turret
 	var/raising = 0								// if the turret is currently opening or closing its cover

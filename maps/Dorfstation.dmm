@@ -5532,7 +5532,7 @@
 "nK" = (
 /obj/machinery/turret{
 	dir = 8;
-	lasertype = /obj/item/projectile/beam/heavylaser
+	installed = /obj/item/weapon/gun/energy/laser/cannon
 	},
 /turf/unsimulated/floor{
 	dir = 5;
@@ -5661,7 +5661,7 @@
 "oa" = (
 /obj/machinery/turret{
 	dir = 8;
-	lasertype = /obj/item/projectile/beam/heavylaser
+	installed = /obj/item/weapon/gun/energy/laser/cannon
 	},
 /turf/unsimulated/floor{
 	dir = 6;
