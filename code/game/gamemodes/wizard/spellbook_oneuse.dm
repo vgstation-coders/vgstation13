@@ -123,7 +123,7 @@
 	user.Knockdown(20)
 
 /obj/item/weapon/spellbook/oneuse/hangman
-	spell = /spell/aoe_turf/hagman
+	spell = /spell/aoe_turf/hangman
 	spellname = "hangman"
 	icon_state ="bookknock"
 	desc = "This book has some letters blanked out in the words."
