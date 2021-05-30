@@ -129,7 +129,7 @@
 /datum/biogen_recipe/leather/belt
 	cost=300
 	id="belt"
-	name="Utility Belt"
+	name="Tool-belt"
 	result=/obj/item/weapon/storage/belt/utility
 
 /datum/biogen_recipe/leather/bandolier
@@ -239,7 +239,7 @@
 	cost=35
 	amount_per_unit=10
 	other_amounts=list(5)
-	
+
 /datum/biogen_recipe/misc/plantbgone
 	id="plantbgone"
 	name="Plant-B-Gone"
@@ -247,7 +247,7 @@
 	cost=35
 	amount_per_unit=10
 	other_amounts=list(5)
-	
+
 /datum/biogen_recipe/misc/candle
 	cost=50
 	id="candle"
