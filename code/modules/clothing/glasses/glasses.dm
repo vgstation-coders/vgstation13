@@ -646,8 +646,8 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/enable()
 	if (istype(emitter))
-		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
-		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
+		emitter.lazy_register_event(/lazy_event/on_before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.lazy_register_event(/lazy_event/on_after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 	update_emitter()
 
 /obj/item/clothing/glasses/emitter/proc/disable()
@@ -655,8 +655,8 @@ var/list/science_goggles_wearers = list()
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.callOnStartMove -= "\ref[src]"
-		emitter.callOnEndMove -= "\ref[src]"
+		emitter.lazy_unregister_event(/lazy_event/on_before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.lazy_unregister_event(/lazy_event/on_after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 		emitter = null
 
 /obj/item/clothing/glasses/emitter/process()

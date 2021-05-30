@@ -394,11 +394,11 @@
 	_color =  "jinglebells"
 
 /obj/item/clothing/accessory/jinglebells/pickup(mob/user)
-	user.callOnFace["\ref[src]"] = "jingle"
+	user.lazy_register_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
 	jingle()
 
 /obj/item/clothing/accessory/jinglebells/dropped(mob/user)
-	user.callOnFace -= "\ref[src]"
+	user.lazy_unregister_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
 
 /obj/item/clothing/accessory/jinglebells/proc/jingle()
 	var/turf/T = get_turf(src)

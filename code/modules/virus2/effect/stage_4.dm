@@ -858,8 +858,8 @@
 /datum/disease2/effect/emitter/activate(var/mob/living/mob)
 	if (istype(mob) && !emitter)
 		emitter = mob
-		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
-		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
+		emitter.lazy_register_event(/lazy_event/on_before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.lazy_register_event(/lazy_event/on_after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
@@ -926,8 +926,8 @@
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.callOnStartMove -= "\ref[src]"
-		emitter.callOnEndMove -= "\ref[src]"
+		emitter.lazy_unregister_event(/lazy_event/on_before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.lazy_unregister_event(/lazy_event/on_after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 		emitter = null
 	previous_dir = null
 	previous_loc = null
@@ -1029,7 +1029,7 @@
 	var/list/original_UI = list()
 	var/list/original_SE = list()
 	var/activated = 0
-	
+
 /datum/disease2/effect/dnaspread/activate(var/mob/living/mob)
 	if(!activated)
 		to_chat(mob, "<span class='warning'>You don't feel like yourself..</span>")
@@ -1047,7 +1047,7 @@
 	C.real_name = original_name
 	domutcheck(C)
 	activated = 1
-	
+
 /datum/disease2/effect/dnaspread/deactivate(var/mob/living/mob)
 	activated = 0
 
@@ -1136,7 +1136,7 @@
 	name = "Monkism Syndrome"
 	desc = "Causes the infected to rapidly devolve to a lower form of life."
 	stage = 4
-	badness = EFFECT_DANGER_DEADLY	
+	badness = EFFECT_DANGER_DEADLY
 
 /datum/disease2/effect/monkey/activate(var/mob/living/carbon/human/mob)
 	if(istype(mob))

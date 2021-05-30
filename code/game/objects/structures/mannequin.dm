@@ -662,9 +662,9 @@
 
 
 /obj/structure/mannequin/proc/spin()
-	StartMoving()
+	lazy_invoke_event(/lazy_event/on_before_move)
 	change_dir(turn(dir, 90))
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 /obj/structure/mannequin/verb/rotate_mannequin()
 	set name = "Rotate Mannequin"
