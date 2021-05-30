@@ -402,12 +402,12 @@ var/list/headset_modes = list(
 						handle_render(M,themessage,src)
 				return 1
 		if(MODE_CULTCHAT)
-			if(construct_chat_check(SPEAK_OVER_CHANNEL_INTO_CULT_CHAT))
+			if(cult_chat_check(SPEAK_OVER_CHANNEL_INTO_CULT_CHAT))
 				var/turf/T = get_turf(src)
 				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
 				var/themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				for(var/mob/M in player_list)
-					if(M.construct_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+					if(M.cult_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
 				return 1
 		if(MODE_ANCIENT)
@@ -534,7 +534,7 @@ var/list/headset_modes = list(
 #define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
 #define HEAR_CULT_CHAT 2
 
-/mob/living/construct_chat_check(var/setting = SPEAK_OVER_GENERAL_CULT_CHAT)
+/mob/living/cult_chat_check(var/setting = SPEAK_OVER_GENERAL_CULT_CHAT)
 	if(!mind)
 		return
 	if(setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs

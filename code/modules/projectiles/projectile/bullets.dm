@@ -360,7 +360,7 @@ obj/item/projectile/bullet/suffocationbullet
 	icon_state = "minigun"
 	damage = 30
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
-	
+
 /obj/item/projectile/bullet/baton
 	name = "stun baton"
 	icon = 'icons/obj/projectiles_experimental.dmi'
@@ -375,7 +375,7 @@ obj/item/projectile/bullet/suffocationbullet
 	stutter = 10
 	agony = 10
 	var/rigged = null //if a rigged baton is loaded, it'll fire an explosive burst
-	
+
 /obj/item/projectile/bullet/baton/on_hit(var/atom/target, var/blocked = 0)
 	..()
 	playsound(target.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -390,7 +390,7 @@ obj/item/projectile/bullet/suffocationbullet
 		var/flash_range = light_impact_range
 		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range)
 	qdel(src)
-	
+
 /obj/item/projectile/bullet/osipr
 	name = "\improper OSIPR bullet"
 	icon = 'icons/obj/projectiles_experimental.dmi'
@@ -446,20 +446,25 @@ obj/item/projectile/bullet/suffocationbullet
 	name = "bee"
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "beegun"
-	damage = 5
+	damage = 0
 	damage_type = TOX
 	flag = "bio"
-	var/bug_species = BEESPECIES_NORMAL
-	var/tox = 50
-	var/dam = 2
+	projectile_speed = 1
+	var/bee_type = /mob/living/simple_animal/bee/angry
+	var/angery = 1
+
+/obj/item/projectile/bullet/beegun/chillbug
+	name = "hornet"
+	icon_state = "chillgun"
+	projectile_speed = 0.5
+	bee_type = /mob/living/simple_animal/bee/chillgun
+	angery = 0
 
 /obj/item/projectile/bullet/beegun/hornet
 	name = "hornet"
 	icon_state = "hornetgun"
-	damage = 7
-	bug_species = BEESPECIES_HORNET
-	tox = 25
-	dam = 4
+	projectile_speed = 0.5
+	bee_type = /mob/living/simple_animal/bee/hornetgun
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
@@ -476,7 +481,7 @@ obj/item/projectile/bullet/suffocationbullet
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
+	var/mob/living/simple_animal/bee/BEE = new bee_type(T,null)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
@@ -484,6 +489,14 @@ obj/item/projectile/bullet/suffocationbullet
 		admin_warn(M)
 		BEE.forceMove(M.loc)
 		BEE.target = M
+		BEE.target_turf = M.loc
+		BEE.AttackTarget(TRUE)//let's sting them once
+		if (angery)
+			BEE.MoveToTarget()//then let's immediately start running after them
+		else
+			BEE.target = null
+			BEE.target_turf = null
+
 	bullet_die()
 
 /obj/item/projectile/bullet/APS //Armor-piercing sabot round. Metal rods become this when fired from a railgun.

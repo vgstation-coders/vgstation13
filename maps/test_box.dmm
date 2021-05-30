@@ -42022,7 +42022,9 @@
 	},
 /area/science/robotics)
 "bCq" = (
-/obj/machinery/r_n_d/fabricator/mech,
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 2
+	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
@@ -43138,7 +43140,6 @@
 	},
 /area/science/robotics)
 "bEj" = (
-/obj/machinery/mineral/output,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
@@ -56914,13 +56915,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/turf/simulated/floor,
-/area/engineering/mechanics)
-"ccT" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/machinery/mineral/output,
 /turf/simulated/floor,
 /area/engineering/mechanics)
 "ccU" = (
@@ -83493,6 +83487,19 @@
 	icon_state = "swall_f5"
 	},
 /area/shuttle/escape_pod5/station)
+"puQ" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/machinery/r_n_d/fabricator/mech{
+	output_dir = 2
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/science/robotics)
 
 (1,1,1) = {"
 aaa
@@ -112169,7 +112176,7 @@ bWw
 bXM
 bZl
 caV
-ccT
+ccS
 ceM
 bXM
 chE
@@ -127573,7 +127580,7 @@ bvu
 bvu
 byS
 bAF
-bCq
+puQ
 bEj
 bFY
 bFY

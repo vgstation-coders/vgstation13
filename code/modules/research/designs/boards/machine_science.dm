@@ -40,7 +40,7 @@
 
 /datum/design/rdserver
 	name = "Circuit Design(R&D Server)"
-	desc = "The circuit board for an R&D Server"
+	desc = "The circuit board for an R&D Server."
 	id = "rdserver"
 	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
@@ -50,7 +50,7 @@
 
 /datum/design/mechfab
 	name = "Circuit Design(Exosuit Fabricator)"
-	desc = "The circuit board for an Exosuit Fabricator"
+	desc = "The circuit board for an Exosuit Fabricator."
 	id = "mechfab"
 	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 3)
 	build_type = IMPRINTER
@@ -105,7 +105,7 @@
 
 /datum/design/suspensionfieldgen
 	name = "Circuit Design (Suspension Field Generator)"
-	desc = "The circuit board for a suspension field generator"
+	desc = "The circuit board for a suspension field generator."
 	id = "suspensionfieldgen"
 	req_tech = list(Tc_ENGINEERING = 3, Tc_POWERSTORAGE = 1, Tc_MAGNETS = 4)
 	build_type = IMPRINTER

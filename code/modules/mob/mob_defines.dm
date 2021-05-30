@@ -137,7 +137,7 @@
 	var/knockdown = 0.0
 	var/losebreath = 0.0//Carbon
 	var/nobreath = 0.0//Carbon, but only used for humans so far
-	var/intent = null//Living
+
 	var/shakecamera = 0
 	var/a_intent = I_HELP//Living
 	var/m_int = null//Living

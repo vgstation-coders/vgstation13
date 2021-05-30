@@ -485,6 +485,8 @@
 		return
 	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
+	if(!user.canMouseDrag())
+		return
 
 	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
 		if(istype(dropping, /obj/item))

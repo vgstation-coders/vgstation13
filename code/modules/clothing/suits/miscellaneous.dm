@@ -850,7 +850,7 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/clockwork_robes
 	name = "clockwork robes"
-	desc = "A set of armored robes worn by the followers of Ratvar"
+	desc = "A set of armored robes worn by the followers of Ratvar."
 	icon_state = "clockwork"
 	item_state = "clockwork"
 	species_fit = list(INSECT_SHAPED)
@@ -886,7 +886,7 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/red_suit
 	name = "red suit"
-	desc = "A sleazy looking red suit"
+	desc = "A sleazy looking red suit."
 	icon_state = "red_suit"
 	item_state = "red_suit"
 	body_parts_covered = 0

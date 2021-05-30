@@ -1,7 +1,7 @@
 /mob/living/simple_animal/shade
 	name = "Shade"
 	real_name = "Shade"
-	desc = "A bound spirit"
+	desc = "A bound spirit."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "shade"
 	icon_living = "shade"
@@ -194,7 +194,7 @@
 /mob/living/simple_animal/shade/gondola
 	name = "Gondola Shade"
 	real_name = "Gondola Shade"
-	desc = "A wandering spirit"
+	desc = "A wandering spirit."
 	icon = 'icons/mob/gondola.dmi'
 	icon_state = "gondola_shade"
 	icon_living = "gondola_shade"

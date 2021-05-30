@@ -2,7 +2,7 @@
 
 /obj/machinery/power/emitter
 	name = "emitter"
-	desc = "A heavy duty industrial laser"
+	desc = "A heavy duty industrial laser."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "emitter0"
 	anchored = 0
@@ -31,7 +31,7 @@
 
 /obj/machinery/power/emitter/antique
 	name = "antique emitter"
-	desc = "An old fashioned heavy duty industrial laser"
+	desc = "An old fashioned heavy duty industrial laser."
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()
@@ -366,7 +366,7 @@
 
 /obj/machinery/power/emitter/antique
 	name = "antique emitter"
-	desc = "An old fashioned heavy duty industrial laser"
+	desc = "An old fashioned heavy duty industrial laser."
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()

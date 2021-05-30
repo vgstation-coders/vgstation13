@@ -82,7 +82,7 @@
 
 /mob/living/simple_animal/hostile/necro/animal_ghoul
 	name = "ghoulish animal"
-	desc = "A ghoulish animal"
+	desc = "A ghoulish animal."
 	icon_state = "skelly"
 	icon_living = "skelly"
 	icon_dead = "skelly_dead"
@@ -666,8 +666,8 @@
 #undef RAD_COST
 
 
-/////////////////////////////////////////////////////// 
-///////////////// HEADCRAB ZOMBIES //////////////////// 
+///////////////////////////////////////////////////////
+///////////////// HEADCRAB ZOMBIES ////////////////////
 ///////////////////////////////////////////////////////
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab //Not very useful
@@ -681,7 +681,7 @@
 	canRegenerate = 0
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/obj/item/clothing/mask/facehugger/headcrab/crab //The crab controlling it.
-	
+
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
 	if(host)
@@ -703,10 +703,10 @@
 		else
 			visible_message("<span class='danger'>The headcrab releases it's grasp from [src]!</span>")
 		crab?.escaping = 1
-		crab?.stat = CONSCIOUS 
+		crab?.stat = CONSCIOUS
 		crab?.target = null
 		host = null
-		qdel(src)	
+		qdel(src)
 	else
 		host = new /mob/living/carbon/human
 		host.get_organ(LIMB_HEAD).explode()

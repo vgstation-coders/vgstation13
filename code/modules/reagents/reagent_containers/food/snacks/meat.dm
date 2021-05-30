@@ -96,7 +96,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 	name = "carp fillet"
-	desc = "A fillet of spess carp meat"
+	desc = "A fillet of space carp meat."
 	icon_state = "fishfillet"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/New()
@@ -122,7 +122,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 	name = "xenomeat"
-	desc = "A slab of xeno meat"
+	desc = "A slab of xeno meat."
 	icon_state = "xenomeat"
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat/New()
 	..()

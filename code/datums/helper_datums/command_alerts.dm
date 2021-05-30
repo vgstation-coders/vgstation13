@@ -44,13 +44,14 @@
 	for(var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
 
-/datum/command_alert/biohazard_alert/minor
-	level_max = 4
-	level_min = 2
+/datum/command_alert/biohazard_organ
+	name = "Organ Failures"
+	alert_title = "Risk of Spontaneous Organ Failure"
+	force_report = 1
 
-/datum/command_alert/biohazard_alert/major
-	level_max = 7
-	level_min = 5
+/datum/command_alert/biohazard_organ/announce()
+	message = "The microdosimetry meter onboard [station_name()] has been tripped by recent cosmic interference. Automated Bragg Curve calculations show a threat of ion implantation in crew members, which may lead to sickness or organ failure. Central Command advises regular health screening of staff displaying symptoms of malaise."
+	..()
 
 ///////HISS
 

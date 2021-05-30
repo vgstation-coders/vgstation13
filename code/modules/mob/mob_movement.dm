@@ -481,6 +481,9 @@
 			if(isobserver(mob))
 				var/mob/dead/observer/observer = mob
 				movedelay = observer.movespeed
+			else if (isanimal(mob))
+				var/mob/living/simple_animal/animal = mob
+				movedelay = animal.speed
 			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/T = get_step(mob, direct)
 			var/area/A = get_area(T)

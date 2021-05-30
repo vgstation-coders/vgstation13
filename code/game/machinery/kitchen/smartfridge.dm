@@ -366,6 +366,28 @@
 	if(.)
 		update_nearby_tiles()
 
+/obj/machinery/smartfridge/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if((stat & NOPOWER) || (contents.len >= MAX_N_OF_ITEMS))
+		return FALSE
+	if(accept_check(AM))
+		piles = sortList(piles)
+		AM.forceMove(src)
+		insert_item(AM)
+		return TRUE
+	else if(istype(AM,/obj/item/weapon/storage/bag))
+		var/obj/item/weapon/storage/bag/B = AM
+		var/objects_loaded = 0
+		for(var/obj/G in B.contents)
+			if(!accept_check(G))
+				continue
+			if(!B.remove_from_storage(G, src))
+				continue
+			insert_item(G)
+			objects_loaded++
+		if(objects_loaded)
+			return TRUE			
+	return FALSE
+
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1

@@ -408,7 +408,7 @@
 
 /obj/item/weapon/storage/fancy/cigarettes/shoalsticks
 	name = "\improper 'Shoal Sticks' packet"
-	desc = "A flimsy paper packet covered in unintelligible script, containing six acrid roll-ups"
+	desc = "A flimsy paper packet covered in unintelligible script, containing six acrid roll-ups."
 	icon_state = "SSpacket"
 	item_state = "SSpacket"
 	cigtype = /obj/item/clothing/mask/cigarette/bidi

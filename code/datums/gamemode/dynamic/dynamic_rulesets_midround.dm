@@ -324,6 +324,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear
 	name = "Nuclear Assault"
 	role_category = /datum/role/nuclear_operative
+	role_category_override = "Nuke Operative" // this is what is used on the ban page
 	my_fac = /datum/faction/syndicate/nuke_op/
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
