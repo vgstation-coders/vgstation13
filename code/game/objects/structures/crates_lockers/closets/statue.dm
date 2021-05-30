@@ -1,6 +1,6 @@
 /obj/structure/closet/statue
 	name = "statue"
-	desc = "An incredibly lifelike marble carving"
+	desc = "An incredibly lifelike marble carving."
 	icon = 'icons/obj/statue.dmi'
 	icon_state = "human_male"
 	density = 1
@@ -198,7 +198,7 @@
 	if (user)
 		user.gib()
 	dump_contents()
-	visible_message("<span class='warning'>[src] shatters into pieces!. </span>")
+	visible_message("<span class='warning'>[src] shatters into pieces! </span>")
 	qdel(src)
 
 /obj/structure/closet/statue/container_resist()

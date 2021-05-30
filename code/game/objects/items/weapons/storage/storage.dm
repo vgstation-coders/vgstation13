@@ -41,7 +41,6 @@
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
 	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src) || distance_interact(usr)))
-		orient2hud()
 		show_to(usr)
 		return
 	if(ishuman(usr) || ismonkey(usr) || isrobot(usr) && is_holder_of(usr, src))
@@ -57,10 +56,7 @@
 /obj/item/weapon/storage/AltClick(mob/user)
 	if(!(in_range(src, user) || is_holder_of(user, src) || distance_interact(user)))
 		return ..()
-	orient2hud(user)
-	if(user.s_active)
-		user.s_active.close(user)
-	src.show_to(user)
+	show_to(user)
 
 //override to allow certain circumstances of looking inside this item if not holding or adjacent
 //distance interact can let you use storage even inside a mecha (see screen_objects.dm L160)
@@ -107,6 +103,12 @@
 
 	if(user.s_active)
 		user.s_active.hide_from(user)
+
+	//We re-orient our items every time we want to show them to someone. Technically, this is wasteful, and it would be more efficient to rebuild this only when adding/removing items from us.
+	//However, most of the (thousands of) instances of items being spawned inside containers simply use the unsafe method of directly new()ing the thing into the content list.
+	//This does not use any helpers whatsoever. In fact, according to BYOND docs, it's by design that spawning new items inside us does not call Entered() or leave any trace at all. (thanks BYOND!)
+	//So, if you want to optimize storagecode further... you'd have to hunt down EVERY SINGLE instance of things being spawned inside containers, and make it call handle_item_insertion() instead.
+	orient2hud(user)
 
 	user.client.screen += src.boxes
 	user.client.screen += src.closer
@@ -342,7 +344,7 @@
 /obj/item/weapon/storage/proc/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
 	if(!istype(W))
 		return 0
-	if(usr)
+	if(usr) //WHYYYYY
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
@@ -484,7 +486,6 @@
 				maxloc = maxloc.loc
 
 	if (maxloc == user)
-		orient2hud()
 		show_to(user)
 		src.add_fingerprint(user)
 		return
@@ -556,7 +557,6 @@
 	src.xtra.icon_state = "xtra_inv"
 	src.xtra.layer = HUD_ITEM_LAYER
 	src.xtra.alpha = 210
-	orient2hud()
 
 /obj/item/weapon/storage/emp_act(severity)
 	if(!istype(src.loc, /mob/living))

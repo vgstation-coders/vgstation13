@@ -354,7 +354,7 @@ var/list/arcane_tomes = list()
 		return
 
 	if (!spell_type)
-		to_chat(user, "<span class='info'>This one however seems pretty unremarkable.</span>")
+		to_chat(user, "<span class='info'>This one, however, seems pretty unremarkable.</span>")
 		return
 
 	var/datum/rune_spell/blood_cult/instance = spell_type
@@ -1228,7 +1228,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/head/helmet/space/cult
 	name = "cult helmet"
-	desc = "A space worthy helmet used by the followers of Nar-Sie"
+	desc = "A space worthy helmet used by the followers of Nar-Sie."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthelmet"
 	item_state = "culthelmet"
@@ -1383,7 +1383,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/storage/cult
 	name = "coffer"
-	desc = "A gloomy-looking storage chest"
+	desc = "A gloomy-looking storage chest."
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "cult"
 	item_state = "syringe_kit"

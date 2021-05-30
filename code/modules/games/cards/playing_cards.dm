@@ -289,7 +289,7 @@
 
 /obj/item/toy/singlecard
 	name = "card"
-	desc = "\a card"
+	desc = "\a card."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "singlecard_down"
 	w_class = W_CLASS_TINY

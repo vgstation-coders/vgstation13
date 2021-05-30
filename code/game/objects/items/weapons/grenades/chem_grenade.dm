@@ -548,7 +548,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/timer  //grenade casing with a 5 second timer+ignitor installed. no beakers.
 											// can be configured via a right click verb. can be done before being assembled and after being assembled
 	name = "grenade casing (timer)"
-	desc = "A hand made chemical grenade. This one seems to have a dial on the top"
+	desc = "A hand made chemical grenade. This one seems to have a dial on the top."
 	starting_materials = list(MAT_IRON = 4750, MAT_GLASS = 100)
 	stage = GRENADE_STAGE_ASSEMBLY_INSERTED		//these are marked as 1 because inserting any parts into an empty grenade casing raises the value from 0 to 1
 	path = PATH_STAGE_CONTAINER_INSERTED		//since the act of inserting an assembly hasnt technically occured these two values must be set to 1 to prevent derping

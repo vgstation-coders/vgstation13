@@ -10341,7 +10341,6 @@
 	},
 /area/mine/production)
 "yW" = (
-/obj/machinery/mineral/input,
 /obj/effect/decal/warning_stripes{
 	dir = 2;
 	icon_state = "loading_area";
@@ -10529,7 +10528,10 @@
 	},
 /area/mine/production)
 "zs" = (
-/obj/machinery/mineral/unloading_machine,
+/obj/machinery/mineral/unloading_machine{
+	in_dir = 1;
+	out_dir = 2
+	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -10661,15 +10663,6 @@
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "brown"
-	},
-/area/mine/production)
-"zL" = (
-/obj/machinery/conveyor{
-	id_tag = "mining_internal"
-	},
-/obj/machinery/mineral/output,
-/turf/simulated/floor{
-	icon_state = "floorgrime"
 	},
 /area/mine/production)
 "zM" = (
@@ -11013,31 +11006,10 @@
 	icon_state = "floorgrime"
 	},
 /area/mine/production)
-"AA" = (
-/obj/structure/plasticflaps/mining,
-/obj/machinery/conveyor{
-	dir = 8;
-	id_tag = "mining_external"
-	},
-/obj/machinery/mineral/output,
-/turf/simulated/floor{
-	icon_state = "floorgrime"
-	},
-/area/mine/production)
 "AB" = (
 /obj/machinery/mineral/unloading_machine{
 	icon_state = "unloader-corner"
 	},
-/turf/simulated/floor/plating/airless{
-	icon_state = "asteroidplating"
-	},
-/area/mine/explored)
-"AC" = (
-/obj/machinery/conveyor{
-	dir = 8;
-	id_tag = "mining_external"
-	},
-/obj/machinery/mineral/input,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -65022,7 +64994,7 @@ yb
 vn
 yW
 zs
-zL
+Al
 Ac
 Al
 Aw
@@ -66837,7 +66809,7 @@ uu
 uu
 vp
 up
-AA
+Ax
 up
 pY
 pY
@@ -67441,7 +67413,7 @@ zu
 zM
 uq
 An
-AC
+AD
 qM
 pY
 pY

@@ -2058,7 +2058,7 @@ var/list/blind_victims = list()
 //RUNE XV
 /datum/rune_spell/blood_cult/summoncultist
 	name = "Blood Magnetism"
-	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats"
+	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats."
 	desc_talisman = "Use to begin the Blood Magnetism ritual where you stand."
 	Act_restriction = CULT_ACT_I
 	invocation = "N'ath reth sh'yro eth d'rekkathnor!"
@@ -2402,7 +2402,7 @@ var/list/bloodcult_exitportals = list()
 
 /datum/rune_spell/blood_cult/portalexit
 	name = "Path Exit"
-	desc = "We hope you enjoyed your flight with Air Nar-Sie"//might change it later or not.
+	desc = "We hope you enjoyed your flight with Air Nar-Sie."//might change it later or not.
 	desc_talisman = "Use to immediately jaunt through the Path."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sas'so c'arta forbici!"
@@ -2521,7 +2521,7 @@ var/list/bloodcult_exitportals = list()
 //RUNE XVIII
 /datum/rune_spell/blood_cult/pulse
 	name = "Pulse"
-	desc = "Scramble the circuits of nearby devices"
+	desc = "Scramble the circuits of nearby devices."
 	desc_talisman = "Use to scramble the circuits of nearby devices."
 	Act_restriction = CULT_ACT_I
 	invocation = "Ta'gh fara'qha fel d'amar det!"
@@ -2787,8 +2787,8 @@ var/list/bloodcult_exitportals = list()
 //RUNE XXI
 /datum/rune_spell/blood_cult/stream
 	name = "Stream"
-	desc = "Start or stop streaming on Spess.TV"
-	desc_talisman = "Start or stop streaming on Spess.TV"
+	desc = "Start or stop streaming on Spess.TV."
+	desc_talisman = "Start or stop streaming on Spess.TV."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "L'k' c'mm'nt 'n' s'bscr'b! P'g ch'mp! Kappah!"
 	word1 = /datum/runeword/blood_cult/other

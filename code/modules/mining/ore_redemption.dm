@@ -8,8 +8,6 @@
 	icon_state = "ore_redemption"
 	density = 1
 	anchored = 1.0
-	var/obj/machinery/mineral/input = null
-	var/obj/machinery/mineral/output = null
 	req_one_access = list(
 		access_mining_station,
 		access_chemistry,
@@ -19,19 +17,10 @@
 		access_virology
 	)
 	starting_materials = list() //Makes the new datum
+	allowed_types = list(/obj/item/stack/ore)
 	var/stack_amt = 50 //Amount to stack before releasing
 	var/obj/item/weapon/card/id/inserted_id
 	var/credits = 0
-
-/obj/machinery/mineral/ore_redemption/initialize()
-	for (var/dir in cardinal)
-		src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-		if(src.input)
-			break
-	for (var/dir in cardinal)
-		src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-		if(src.output)
-			break
 
 /obj/machinery/mineral/ore_redemption/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W,/obj/item/weapon/card/id))
@@ -45,12 +34,26 @@
 				inserted_id = I
 
 /obj/machinery/mineral/ore_redemption/process()
-	var/turf/T = get_turf(input)
-	var/i
-	if(T)
-		if(locate(/obj/item/stack/ore) in T)
-			for(i = 0; i < 10; i++)
-				var/obj/item/stack/ore/O = locate() in T
+	var/turf/in_T = get_step(src, in_dir)
+	var/turf/out_T = get_step(src, out_dir)
+
+	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+		return
+
+	for(var/atom/movable/A in in_T)
+		if(A.anchored)
+			continue
+
+		if(!is_type_in_list(A, allowed_types))
+			var/obj/structure/ore_box/B = locate() in in_T
+			if(B)
+				for(var/O in B.stored_ores)
+					var/amount = B.stored_ores[O]
+					SmeltOreType(O, amount)
+					score["oremined"] += amount
+		else
+			for(var/i = 0; i < 10; i++)
+				var/obj/item/stack/ore/O = locate() in in_T
 				if(istype(O,/obj/item/stack/ore/slag))
 					continue //Skip slag for now.
 				if(O)
@@ -58,13 +61,6 @@
 					score["oremined"] += O.amount
 				else
 					break
-		else
-			var/obj/structure/ore_box/B = locate() in T
-			if(B)
-				for(var/O in B.stored_ores)
-					var/amount = B.stored_ores[O]
-					SmeltOreType(O, amount)
-					score["oremined"] += amount
 
 /obj/machinery/mineral/ore_redemption/proc/SmeltMineral(var/obj/item/stack/ore/O)
 	if(O.materials)
@@ -151,7 +147,8 @@
 			var/desired = input("How much?","How much [mat.processed_name] to eject?", materials.storage[release]/mat.cc_per_sheet) as num
 			if(desired==0)
 				return 1
-			var/obj/item/stack/sheet/out = new mat.sheettype(output.loc)
+			var/turf/out_T = get_step(src, out_dir)
+			var/obj/item/stack/sheet/out = new mat.sheettype(out_T.loc)
 			out.redeemed = 1 //Central command will not pay for this mineral stack.
 			out.set_amount(clamp(round(desired), 0, min(materials.storage[release]/mat.cc_per_sheet, out.max_amount)))
 			materials.removeAmount(release, out.amount * mat.cc_per_sheet)

@@ -97,10 +97,10 @@ rcd light flash thingy on matter drain
 	if(!isAI(user))
 		to_chat(user, "<span class'warning'>Only AIs can cast this spell. You shouldn't have this ability.</span>")
 		return 1
-	
+
 /spell/aoe_turf/fortify_core/cast(var/list/targets, var/mob/user)
 	var/mob/living/silicon/ai/A = user
-	var/obj/effect/overlay/ai_shield/shield 
+	var/obj/effect/overlay/ai_shield/shield
 	shield = locate(/obj/effect/overlay/ai_shield) in A.vis_contents
 	if(A.ai_flags & COREFORTIFY)
 		if(shield)
@@ -256,13 +256,13 @@ rcd light flash thingy on matter drain
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	if(!isAI(user))
 		return
-	
+
 	var/mob/living/silicon/ai/A = user
 	A.blackout_active = TRUE
 
 	for(var/obj/machinery/power/apc/apc in power_machines)
 		apc.overload_lighting()
-	
+
 	malf_radio_blackout = TRUE
 	malf_rcd_disable = TRUE
 
@@ -292,8 +292,8 @@ rcd light flash thingy on matter drain
 	//list( "Alert 1" = /datum/command_alert_1, "Alert 5" = /datum/command_alert_5, ...)
 	//Then ask the AI to pick one announcement from the list
 
-	if(alert("Would you like to create your own announcement or use a pre-existing one?","Confirm","Custom","Pre-Existing") == "Custom") 
-		
+	if(alert("Would you like to create your own announcement or use a pre-existing one?","Confirm","Custom","Pre-Existing") == "Custom")
+
 		var/input = input(user, "Please enter anything you want. Anything.", "What?", "") as message|null
 		var/customname = input(user, "Pick a title for the report.", "Title") as text|null
 		if(!input)
@@ -326,7 +326,7 @@ rcd light flash thingy on matter drain
 		for(var/A in possible_announcements)
 			var/datum/command_alert/CA = A
 			choices[initial(CA.name)] = A
-		
+
 		var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in choices
 		if(!chosen_announcement)
 			to_chat(user, "Selection cancelled.")
@@ -341,7 +341,7 @@ rcd light flash thingy on matter drain
 		if(M)
 			if(M.stage < FACTION_ENDGAME)
 				if(announcement.theme && !announcement.stoptheme)
-					ticker.StartThematic(initial(announcement.theme))					
+					ticker.StartThematic(initial(announcement.theme))
 				if(announcement.alertlevel)
 					set_security_level(announcement.alertlevel)
 				if(announcement.stoptheme)
@@ -535,7 +535,7 @@ rcd light flash thingy on matter drain
 /spell/aoe_turf/takeover
 	name = "System Override"
 	panel = MALFUNCTION
-	desc = "Start the victory timer"
+	desc = "Start the victory timer."
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "systemtakeover"

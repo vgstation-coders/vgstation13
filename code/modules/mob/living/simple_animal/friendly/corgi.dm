@@ -520,9 +520,9 @@
 	name = real_name
 	desc = initial(desc)
 	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-	speak_emote = list("barks.", "woofs.")
-	emote_hear = list("barks.", "woofs.", "yaps.")
-	emote_see = list("shakes its head.", "shivers.", "pants.")
+	speak_emote = list("barks", "woofs")
+	emote_hear = list("barks", "woofs", "yaps")
+	emote_see = list("shakes its head", "shivers", "pants")
 	emote_sound = list("sound/voice/corgibark.ogg")
 	min_oxy = initial(min_oxy)
 	minbodytemp = initial(minbodytemp)

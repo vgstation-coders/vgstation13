@@ -18,7 +18,8 @@
 	var/max_shells = 200
 	var/current_shells = 200
 	var/rounds_per_burst = 4
-	
+	var/casing_type = /obj/item/ammo_casing_gatling
+
 /obj/item/weapon/gun/gatling/New()
 	base_icon_state = icon_state
 	..()
@@ -64,7 +65,8 @@
 		current_shells--
 		update_icon()
 		in_chamber = new gatlingbullet()//We create bullets as we are about to fire them. No other way to remove them.
-		new/obj/item/ammo_casing_gatling(get_turf(src))
+		if (casing_type)
+			new casing_type(get_turf(src))
 		return 1
 	return 0
 
@@ -103,19 +105,28 @@
 
 /obj/item/weapon/gun/gatling/beegun
 	name = "bee gun"
-	desc = "The apocalypse hasn't even begun!"//I'm not even sorry
+	desc = "The apocalypse hasn't even bee-gun!"//I'm not even sorry
 	icon_state = "beegun"
 	item_state = "beegun0"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6;" + Tc_BIOTECH + "=5"
 	recoil = 0
 	gatlingbullet = /obj/item/projectile/bullet/beegun
-	
+	casing_type = null
+
+/obj/item/weapon/gun/gatling/beegun/chillgun
+	name = "chill gun"
+	desc = "Rapid chill-pill dispenser"
+	icon_state = "chillgun"
+	item_state = "chillgun0"
+	gatlingbullet = /obj/item/projectile/bullet/beegun/chillbug
+
 /obj/item/weapon/gun/gatling/beegun/hornetgun
 	name = "hornet gun"
-	desc = "Doesn't actually use .22 Hornet cartridges"
+	desc = "Doesn't actually use .22 Hornet cartridges."
 	icon_state = "hornetgun"
+	item_state = "hornetgun0"
 	gatlingbullet = /obj/item/projectile/bullet/beegun/hornet
-	
+
 /obj/item/weapon/gun/gatling/batling
 	name = "batling gun"
 	desc = "Batter up!"
@@ -125,8 +136,9 @@
 	max_shells = 50
 	current_shells = 50
 	rounds_per_burst = 5
+	casing_type = /obj/item/ammo_casing_gatling/batling
 	var/list/rigged_shells = list()
-	
+
 /obj/item/weapon/gun/gatling/batling/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/thebaton = W
@@ -135,7 +147,7 @@
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have a cell.</span>")
 				..()
 				return
-			if(!thebaton.bcell.maxcharge > thebaton.hitcost)	
+			if(!thebaton.bcell.maxcharge > thebaton.hitcost)
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have enough charge.</span>")
 				..()
 				return
@@ -150,7 +162,7 @@
 			qdel(W)
 			update_icon()
 	..()
-			
+
 /obj/item/weapon/gun/gatling/batling/process_chambered()
 	if(in_chamber)
 		return 1
@@ -164,16 +176,17 @@
 		var/obj/item/projectile/bullet/baton/shootbaton = new gatlingbullet()
 		shootbaton.rigged = riggedshot
 		in_chamber = shootbaton
-		new/obj/item/ammo_casing_gatling/batling(get_turf(src))
+		if (casing_type)
+			new casing_type(get_turf(src))
 		return 1
 	return 0
-	
+
 /obj/item/weapon/gun/gatling/batling/update_icon()
 	if(current_shells)
 		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,20)]"
 	else
-		icon_state = "[base_icon_state]0"	
-	
+		icon_state = "[base_icon_state]0"
+
 /obj/item/ammo_casing_gatling/batling
 	name = "baton casing"
 	desc = "The remains of a stun baton."

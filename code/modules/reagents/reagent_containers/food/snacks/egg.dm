@@ -93,7 +93,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/vox
 	name = "green egg"
-	desc = "Looks like it came from some genetically engineered chicken"
+	desc = "Looks like it came from some genetically engineered chicken."
 	icon_state = "egg-vox"
 	can_color = FALSE
 	hatch_type = /mob/living/carbon/monkey/vox

@@ -419,7 +419,7 @@
 
 /obj/item/clothing/accessory/rad_patch
 	name = "radiation detection patch"
-	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation"
+	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation."
 	icon_state = "rad_patch"
 	var/rad_absorbed = 0
 	var/rad_threshold = 45

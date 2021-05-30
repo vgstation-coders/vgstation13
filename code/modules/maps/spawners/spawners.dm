@@ -1121,7 +1121,7 @@
 		/obj/item/weapon/dnainjector/nofail/fat,
 		/obj/item/weapon/dnainjector/nofail/runfast,
 		/obj/item/weapon/dnainjector/nofail/strong,
-		/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet,
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_tenders,
 		/obj/item/clothing/under/shorts/black,
 		/obj/item/clothing/under/shorts/blue,
 		/obj/item/clothing/under/shorts/red,

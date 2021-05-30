@@ -149,7 +149,7 @@
 
 /obj/item/weapon/dice/d20/cursed
 	name = "\improper Mysterious d20"
-	desc = "Something about this dice seems wrong"
+	desc = "Something about this dice seems wrong."
 	var/deactivated = 0 //Eventually the dice runs out of power
 	var/infinite = 0 //dice with 1 will not run out
 	mech_flags = MECH_SCAN_ILLEGAL
