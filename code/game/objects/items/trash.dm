@@ -248,7 +248,8 @@ var/list/crushed_cans_cache = list()
 	throw_speed = 3
 
 /obj/item/trash/soda_cans/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
-	..()
+	name = color
+	..(loc, age, icon_state, null, dir, pixel_x, pixel_y)
 	if(icon_state)
 		if (!(icon_state in crushed_cans_cache))
 			var/icon/I = icon('icons/obj/drinks.dmi',"crushed_can")
@@ -260,14 +261,9 @@ var/list/crushed_cans_cache = list()
 		icon = icon(crushed_cans_cache[icon_state])
 		item_state = icon_state
 
-
 /obj/item/trash/soda_cans/atom2mapsave()
-	color = name//a bit hacky but hey
 	. = ..()
-
-/obj/item/trash/soda_cans/post_mapsave2atom(var/list/L)
-	name = color
-	color = null
+	.["color"] = name//a bit hacky but at least it works
 
 /obj/item/trash/slag
 	name = "slag"
