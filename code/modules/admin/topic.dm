@@ -3534,17 +3534,18 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PB")
 				message_admins("[key_name_admin(usr)] has allowed a prison break", 1)
-				prison_break()
+				new /datum/event/prison_break
 			if("lightsout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","LO")
-				message_admins("[key_name_admin(usr)] has broke a lot of lights", 1)
-				lightsout(1,2)
+				message_admins("[key_name_admin(usr)] has triggered an electrical storm", 1)
+				new /datum/event/electrical_storm
 			if("blackout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BO")
 				message_admins("[key_name_admin(usr)] broke all lights", 1)
-				lightsout(0,0)
+				for(var/obj/machinery/power/apc/apc in power_machines)
+					apc.overload_lighting()
 			if("whiteout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","WO")
@@ -3555,7 +3556,6 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RAD")
 				message_admins("[key_name_admin(usr)] has started a radiation event", 1)
-				//makeAliens()
 				new /datum/event/radiation_storm
 			if("floorlava")
 				if(floorIsLava)
@@ -3633,13 +3633,27 @@
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","V")
-				var/answer = alert("Do you want this to be a greater disease or a lesser one?",,"Greater","Lesser")
-				if(answer=="Lesser")
-					//virus2_lesser_infection()
-					message_admins("[key_name_admin(usr)] has triggered a lesser virus outbreak.", 1)
-				else
-					//virus2_greater_infection()
-					message_admins("[key_name_admin(usr)] has triggered a greater virus outbreak.", 1)
+				var/answer = alert("Do you want this to be a greater disease or a lesser one?","Pathogen Outbreak","Greater","Lesser","Custom")
+				switch (answer)
+					if ("Lesser")
+						new /datum/event/viral_infection
+						message_admins("[key_name_admin(usr)] has triggered a lesser virus outbreak.", 1)
+					if ("Greater")
+						new /datum/event/viral_outbreak
+						message_admins("[key_name_admin(usr)] has triggered a greater virus outbreak.", 1)
+					if ("Custom")
+						var/list/existing_pathogen = list()
+						for (var/pathogen in disease2_list)
+							var/datum/disease2/disease/dis = disease2_list[pathogen]
+							existing_pathogen["[dis.real_name()]"] = pathogen
+						var/chosen_pathogen = input(usr, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
+						if (chosen_pathogen)
+							var/datum/disease2/disease/dis = disease2_list[existing_pathogen[chosen_pathogen]]
+							spread_disease_among_crew(dis,"Custom Outbreak")
+							message_admins("[key_name_admin(usr)] has triggered a custom virus outbreak.", 1)
+							var/dis_level = clamp(round((dis.get_total_badness()+1)/2),1,8)
+							spawn(rand(0,3000))
+								biohazard_alert(dis_level)
 			if("retardify")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
