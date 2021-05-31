@@ -1616,11 +1616,15 @@ var/proccalls = 1
 #define DNA2_BUF_UE 2
 #define DNA2_BUF_SE 4
 
-#define DEFAULT_BLOOD "#A10808"
-#define DEFAULT_FLESH "#FFC896"
-#define ALIEN_BLOOD "#05EE05"
-#define ALIEN_FLESH "#34334B"
-#define ROBOT_OIL "#030303"
+#define DEFAULT_BLOOD	"#A10808"
+#define DEFAULT_FLESH	"#FFC896"
+#define ALIEN_BLOOD		"#05EE05"
+#define ALIEN_FLESH		"#34334B"
+#define ROBOT_OIL		"#030303"
+#define VOX_BLOOD		"#2299FC"
+#define MUSHROOM_BLOOD	"#D3D3D3"
+#define INSECT_BLOOD	"#EBECE6"
+#define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again

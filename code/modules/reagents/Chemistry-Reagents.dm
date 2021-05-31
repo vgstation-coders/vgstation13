@@ -401,13 +401,13 @@
 	var/totally_not_blood = "Tomato Juice"
 
 	switch(color)
-		if ("#2299FC")//Vox
+		if (VOX_BLOOD)//#2299FC
 			totally_not_blood = "Space Lube"
-		if ("#EBECE6")//Insectoid
+		if (INSECT_BLOOD)//#EBECE6
 			totally_not_blood = "Milk"
-		if ("#D3D3D3")//Mushroom
+		if (MUSHROOM_BLOOD)//#D3D3D3
 			totally_not_blood = "Milk"
-		if ("#272727")//Pale
+		if (PALE_BLOOD)//#272727
 			totally_not_blood = "Carbon"
 
 	glass_name = "glass of [totally_not_blood]"
