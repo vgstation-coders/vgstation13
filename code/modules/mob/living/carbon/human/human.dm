@@ -2013,6 +2013,10 @@ mob/living/carbon/human/isincrit()
 	for(var/i = 0, i < keep_amount, i++)
 		pick_n_take(muted_letters)
 
+/mob/living/carbon/human/rejuvenate(animation = 0)
+	muted_letters = list()
+	..()
+
 /mob/living/carbon/human/can_be_infected()
 	return 1
 
