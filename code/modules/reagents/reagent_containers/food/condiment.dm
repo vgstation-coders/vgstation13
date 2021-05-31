@@ -102,7 +102,10 @@
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
 	else if(isfloor(target))
-		transfer(target, user, splashable_units = amount_per_transfer_from_this)
+		if (amount_per_transfer_from_this > 1)
+			transfer(target, user, splashable_units = amount_per_transfer_from_this)
+		else
+			to_chat(user, "<span class='warning'>You have to open the lid at least a bit more to spill condiments on \the [target].</span>")
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
