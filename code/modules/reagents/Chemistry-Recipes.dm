@@ -845,6 +845,16 @@
 /datum/chemical_reaction/solidification/diamond/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/diamond
 
+/datum/chemical_reaction/solidification/diamond
+	name = "Solid Diamond"
+	id = "soliddiamond"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/diamond/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/diamond
+
 /datum/chemical_reaction/solidification/clown
 	name = "Solid Bananium"
 	id = "solidbananium"
@@ -3787,5 +3797,15 @@
 	for(var/datum/reagent/self_replicating/midazoline/R in holder.reagent_list)
 		holder.convert_some_of_type(/datum/reagent/self_replicating/midazoline, /datum/reagent/mercury, R.volume) //Convert ALLL of it, even that last 0.01u (don't leave 0.042857u behind)
 
+<<<<<<< HEAD
+=======
+/datum/chemical_reaction/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	result = LOCUTOGEN
+	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
+	result_amount = 3
+
+>>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

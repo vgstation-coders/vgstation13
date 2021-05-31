@@ -32,7 +32,7 @@
 
 /datum/design/defib_recharger
 	name = "Circuit Design (Defib Recharger)"
-	desc = "Allows for the construction of circuit boards used to build Defib Rechargers"
+	desc = "Allows for the construction of circuit boards used to build Defib Rechargers."
 	id="defib_recharger"
 	req_tech = list(Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 2, Tc_PROGRAMMING = 3, Tc_BIOTECH = 4)
 	build_type = IMPRINTER
@@ -87,6 +87,15 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	build_path = /obj/item/weapon/circuitboard/sleeper
+	
+/datum/design/mancrowave
+	name = "Circuit Design (Thermal Homeostasis Regulator)"
+	desc = "Allows for the constuction of circuit boards used to build a Thermal Homeostasis Regulator."
+	id = "mancrowave"
+	req_tech = list(Tc_BIOTECH = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	build_path = /obj/item/weapon/circuitboard/sleeper/mancrowave
 
 /datum/design/bioprinter
 	name = "Circuit Design (Bioprinter)"

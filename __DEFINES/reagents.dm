@@ -443,6 +443,7 @@
 #define MONSTERMASH		"monstermash"
 #define EGGNOG			"eggnog"
 #define FESTIVE_EGGNOG	"festive_eggnog"
+#define TENDIES			"tendies"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -450,6 +451,8 @@
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
 #define TRINITRINE		"trinitrine"
+#define MIDAZOLINE		"midazoline"
+#define LOCUTOGEN		"locutogen"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"

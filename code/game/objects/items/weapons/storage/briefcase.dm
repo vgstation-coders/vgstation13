@@ -164,10 +164,11 @@
 	if(!released)
 		release(target)
 
-//The bees will attack whoever opens the briefcase
+//The bees will attack whoever opens the briefcase or gets whacked with it
 /obj/item/weapon/storage/briefcase/bees/proc/release(var/mob/user)
 	released = TRUE
 	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
 	var/mob/living/simple_animal/bee/swarm/BEES = new(get_turf(src))
 	BEES.forceMove(user.loc)
 	BEES.target = user
+	BEES.AttackTarget()

@@ -1582,10 +1582,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		StartMoving()
+		lazy_invoke_event(/lazy_event/on_before_move)
 	dir = direction
-	Facing()
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_face)
+	lazy_invoke_event(/lazy_event/on_after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1605,6 +1605,7 @@ Use this proc preferably at the end of an equipment loadout
 	set hidden = 1
 	return directionface(SOUTH)
 
+<<<<<<< HEAD
 /mob/proc/Facing()
 	var/datum/listener
 	for(var/atomToCall in src.callOnFace)
@@ -1661,11 +1662,13 @@ Use this proc preferably at the end of an equipment loadout
 	. = ..()
 	EndMoving()
 
+=======
+>>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	StartMoving()
+	lazy_invoke_event(/lazy_event/on_before_move)
 	..()
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0
@@ -2246,6 +2249,9 @@ mob/proc/on_foot()
 		to_chat(src, "Interference is disrupting the connection with the target mind.")
 		return 0
 	return 1
+
+/mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
+	return TRUE
 
 /mob/proc/get_personal_ambience()
 	return list()

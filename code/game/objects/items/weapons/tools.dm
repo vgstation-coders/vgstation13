@@ -666,7 +666,7 @@
 
 /obj/item/tool/crowbar
 	name = "crowbar"
-	desc = "Used to hit floors"
+	desc = "Used to hit floors."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "crowbar"
 	hitsound = "sound/weapons/toolhit.ogg"
@@ -701,7 +701,7 @@
 
 /obj/item/weapon/conversion_kit
 	name = "\improper Revolver Conversion Kit"
-	desc = "A professional conversion kit used to convert any knock off revolver into the real deal capable of shooting lethal .357 rounds without the possibility of catastrophic failure"
+	desc = "A professional conversion kit used to convert any knock off revolver into the real deal capable of shooting lethal .357 rounds without the possibility of catastrophic failure."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "kit"
 	flags = FPRINT

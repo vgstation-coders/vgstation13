@@ -102,7 +102,7 @@ var/list/global_deadchat_listeners
 /mob/proc/lingcheck()
 	return 0
 
-/mob/proc/construct_chat_check(var/setting)
+/mob/proc/cult_chat_check(var/setting)
 	return 0
 
 /mob/proc/hivecheck()

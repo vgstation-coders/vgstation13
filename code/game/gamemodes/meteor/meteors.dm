@@ -184,7 +184,7 @@
 
 /obj/item/projectile/meteor/radioactive
 	name = "radioactive meteor"
-	desc = "The Engineer's bane"
+	desc = "The engineer's bane."
 	icon_state = "medium_radioactive"
 
 /obj/item/projectile/meteor/radioactive/to_bump(atom/a)

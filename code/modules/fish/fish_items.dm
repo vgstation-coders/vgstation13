@@ -101,7 +101,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/fish
 	name = "fish"
-	desc = "A generic fish"
+	desc = "A generic fish."
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "fish"
 	throwforce = 1
@@ -217,7 +217,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/lobster
 	name = "lobster"
-	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone, its innate anger and hatred is kept intact."
+	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone. Its innate anger and hatred is kept intact."
 	icon_state = "lobster"
 	icon = 'icons/obj/fish_items.dmi'
 
@@ -242,7 +242,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/steamed_lobster_simple_uncracked // a cooked lobster without its shell cracked
 	name = "Steamed Lobster"
-	desc = "A steamed lobster, you can almost hear its screams. Its shell isnt cracked open yet"
+	desc = "A steamed lobster. You can almost hear its screams. Its shell isn't cracked open yet."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_simple"
 
@@ -256,7 +256,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/steamed_lobster_deluxe_uncracked // a cooked lobster without its shell cracked, deluxe edition
 	name = "Steamed Lobster"
-	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred. Its shell isnt cracked open yet" //if anyones got a better desc im all ears
+	desc = "A steamed lobster, served with a side of melted butter and a slice of lemon. You can still feel its hatred. Its shell isn't cracked open yet." //if anyones got a better desc im all ears
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_deluxe"
 

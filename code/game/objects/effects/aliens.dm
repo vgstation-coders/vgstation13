@@ -12,7 +12,7 @@
  */
 /obj/effect/alien
 	name = "alien thing"
-	desc = "theres something alien about this"
+	desc = "There's something alien about this."
 	icon = 'icons/mob/alien.dmi'
 	w_type=NOT_RECYCLABLE
 
@@ -448,7 +448,7 @@
 	MAX_GROWTH_TIME = 3000
 
 /obj/effect/alien/egg
-	desc = "It looks like a weird egg"
+	desc = "It looks like a weird egg."
 	name = "egg"
 	icon_state = "egg_growing"
 	density = 0

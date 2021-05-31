@@ -136,7 +136,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/strike_anywhere
 	name = "strike-anywhere match"
-	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface"
+	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface."
 
 /obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)

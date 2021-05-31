@@ -80,6 +80,9 @@
 		update_icons()
 
 
+/mob/living/carbon/monkey/update_inv_head(var/update_icons=1)
+	update_inv_hat(update_icons)
+
 /mob/living/carbon/monkey/proc/update_inv_hat(var/update_icons=1)
 	if(hat && hat.is_visible())
 		var/t_state = hat.icon_state

@@ -400,7 +400,7 @@
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.callOnFace -= "\ref[src]"
+				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -410,7 +410,7 @@
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.callOnFace -= "\ref[src]"
+			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -596,7 +596,7 @@
 					animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 					watching_mobs |= user
 					user.client.images |= watcher_maps["\ref[user]"]
-					user.callOnFace["\ref[src]"] = "checkPosition"
+					user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
 				switch(veil_thickness)
 					if (CULT_MENDED)
@@ -1482,7 +1482,7 @@ var/list/bloodstone_list = list()
 				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 				watching_mobs |= user
 				user.client.images |= watcher_maps["\ref[user]"]
-				user.callOnFace["\ref[src]"] = "checkPosition"
+				user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 
 /obj/structure/cult/bloodstone/proc/checkPosition()
 	for(var/mob/M in watching_mobs)
@@ -1495,7 +1495,7 @@ var/list/bloodstone_list = list()
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.callOnFace -= "\ref[src]"
+				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -1505,7 +1505,7 @@ var/list/bloodstone_list = list()
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.callOnFace -= "\ref[src]"
+			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user

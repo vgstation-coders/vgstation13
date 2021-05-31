@@ -1392,8 +1392,7 @@ var/global/list/image/blood_overlays = list()
 				temp_contents -= src
 				temp_contents.Insert(temp_index, src)
 				storageobj.contents = temp_contents
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
@@ -1403,8 +1402,7 @@ var/global/list/image/blood_overlays = list()
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 	if(!istype(over_object, /obj/abstract/screen/inventory))
 		return ..()
@@ -1455,6 +1453,15 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/is_multitool(var/mob/user)
 	return FALSE
 
+<<<<<<< HEAD
+=======
+/obj/item/proc/mannequin_equip(var/obj/structure/mannequin/mannequin,var/slot,var/hand_slot)
+	return
+
+/obj/item/proc/mannequin_unequip(var/obj/structure/mannequin/mannequin)
+	return
+
+>>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return

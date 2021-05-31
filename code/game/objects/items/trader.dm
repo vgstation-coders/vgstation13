@@ -1544,7 +1544,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 
 /obj/item/weapon/storage/box/mystery_circuit
 	name = "children's circuitry circus educational toy booster pack"
-	desc = "Ages 6 and up"
+	desc = "Ages 6 and up!"
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "circuit"
 

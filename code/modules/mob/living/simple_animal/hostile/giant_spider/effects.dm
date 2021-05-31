@@ -3,7 +3,7 @@
 //generic procs copied from obj/effect/alien
 /obj/effect/spider
 	name = "web"
-	desc = "it's stringy and sticky"
+	desc = "It's stringy and sticky."
 	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 0
@@ -181,45 +181,20 @@
 		A.forceMove(src.loc)
 	..()
 
+/////////////////////////////////////SPIDER QUEEN STICKY PROJECTILE TRAP////////////////////////////////
 
 //Spawns on top of mobs hit with the queen's web projectile
-/obj/effect/overlay/stickyweb
+/obj/effect/rooting_trap/stickyweb
 	name = "sticky web"
 	desc = "A mess of sticky strings."
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "stickyweb"
-	anchored = 1
-	density = 0
-	plane = ABOVE_HUMAN_PLANE
-	layer = CLOSED_CURTAIN_LAYER
-	var/atom/stuck_to = null
-	var/duration = 10 SECONDS
 
-/obj/effect/overlay/stickyweb/Destroy()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	stuck_to = null
-	..()
-
-/obj/effect/overlay/stickyweb/proc/stick_to(var/atom/A, var/side = null)
+/obj/effect/rooting_trap/stickyweb/stick_to(var/atom/A, var/side = null)
 	var/turf/T = get_turf(A)
 	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
-
-	if(isliving(A) && !isspace(T))//can't nail people down unless there's a turf to nail them to.
-		stuck_to = A
+	. = ..()
+	if (.)
 		visible_message("<span class='warning'>\the sticky ball splatters over \the [A]'s legs, sticking them to \the [T].</span>")
-		lock_atom(A, /datum/locking_category/buckle)
-
-	spawn(duration)
-		qdel(src)
-
-/obj/effect/overlay/stickyweb/attack_hand(var/mob/user)
-	if (do_after(user,src,1.5 SECONDS))
-		unstick()
-
-/obj/effect/overlay/stickyweb/proc/unstick()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	qdel(src)
 
 #undef SPIDERWEB_BRUTE_DIVISOR

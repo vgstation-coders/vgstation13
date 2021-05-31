@@ -57,7 +57,7 @@
 				repair(user)
 				return
 			else
-				to_chat(user, "You fail to repair the pylon")
+				to_chat(user, "You fail to repair the pylon.")
 	attackpylon(user, user.melee_damage_upper)
 
 /obj/structure/cult_legacy/pylon/attackby(obj/item/W as obj, mob/user as mob)
@@ -113,7 +113,7 @@
 /*
 /obj/structure/cult_legacy/pillar
 	name = "Pillar"
-	desc = "This should not exist"
+	desc = "This should not exist."
 	icon_state = "pillar"
 	icon = 'magic_pillar.dmi'
 */

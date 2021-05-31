@@ -438,7 +438,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	anchored = 1
 	canmove = 0
-	intent = I_HURT
+	a_intent = I_HURT
 
 	faction = "spessmart"
 

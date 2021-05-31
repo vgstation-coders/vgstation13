@@ -1121,7 +1121,7 @@
 		/obj/item/weapon/dnainjector/nofail/fat,
 		/obj/item/weapon/dnainjector/nofail/runfast,
 		/obj/item/weapon/dnainjector/nofail/strong,
-		/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet,
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_tenders,
 		/obj/item/clothing/under/shorts/black,
 		/obj/item/clothing/under/shorts/blue,
 		/obj/item/clothing/under/shorts/red,
@@ -1183,7 +1183,9 @@
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
 		/obj/item/mounted/frame/painting,
 		/obj/item/weapon/aiModule/randomize,
-		/obj/item/weapon/aiModule/core/hogan
+		/obj/item/weapon/aiModule/core/hogan,
+		/obj/item/weapon/gun/portalgun,
+		/obj/item/clothing/glasses/emitter
 )
 
 
@@ -1232,7 +1234,8 @@
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
-	/obj/item/weapon/gun/siren
+	/obj/item/weapon/gun/siren,
+	/obj/item/weapon/gun/portalgun
 )
 
 /obj/abstract/map/spawner/safe/clothing
@@ -1251,7 +1254,8 @@
 	/obj/item/clothing/gloves/anchor_arms,
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
-	/obj/abstract/spawn_all/dredd_gear
+	/obj/abstract/spawn_all/dredd_gear,
+	/obj/item/clothing/glasses/emitter
 )
 
 /obj/abstract/map/spawner/safe/medal

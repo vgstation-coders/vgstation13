@@ -95,7 +95,11 @@
 		M.generate_name()
 	else
 		M.fully_replace_character_name(null,pick(preset_names))
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 	mob_rename_self(M,title,"Pick your name")
 
 	message_admins("[key_name_admin(M)] has spawned as a [title] from an ancient cryopod.")

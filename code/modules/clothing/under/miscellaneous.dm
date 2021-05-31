@@ -782,7 +782,7 @@
 
 /obj/item/clothing/under/onesie
 	name = "green christmas onesie"
-	desc = "Festive pyjamas for the comfy crewman"
+	desc = "Festive pyjamas for the comfy crewman."
 	icon_state = "onesiegreen"
 	item_state = "onesiegreen"
 	_color = "onesiegreen"
@@ -910,7 +910,7 @@
 
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
-	desc = "for clowns living in a society"
+	desc = "for clowns living in a society."
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
@@ -919,7 +919,7 @@
 
 /obj/item/clothing/under/skelesuit
 	name = "skeleton suit"
-	desc = "Inside of everyone there is a spooky skinman waiting to escape"
+	desc = "Inside of everyone there is a spooky skinman waiting to escape."
 	icon_state = "skelesuit"
 	item_state = "skelesuit"
 	_color = "skelesuit"

@@ -12,7 +12,8 @@ datum/event/organ_failure/setup()
 	severity = rand(1, 4)
 
 datum/event/organ_failure/announce()
-	biohazard_alert()
+	command_alert(/datum/command_alert/biohazard_organ)
+
 datum/event/organ_failure/start()
 	var/list/candidates = list()	//list of candidate keys
 	for(var/mob/living/carbon/human/G in player_list)

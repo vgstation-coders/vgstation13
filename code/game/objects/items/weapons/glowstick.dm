@@ -95,17 +95,6 @@
 	..()
 	colorchange()
 
-/obj/item/clothing/accessory/glowstick/phazon/pickup(mob/user)
-	user.callOnFace |= "\ref[src]"
-	user.callOnFace["\ref[src]"] = "colorchange"
-
-/obj/item/clothing/accessory/glowstick/phazon/dropped(mob/user)
-	..()
-	user.callOnFace -= "\ref[src]"
-
-/obj/item/clothing/accessory/glowstick/phazon/attack_self()
-	colorchange()
-
 /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange()
 	var/r = rand(0, 255)
 	var/g = rand(0, 255)
@@ -113,6 +102,16 @@
 	color = rgb(r, g, b)
 	set_light(2, l_color = color)
 	update_icon()
+
+/obj/item/clothing/accessory/glowstick/phazon/pickup(mob/user)
+	user.lazy_register_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
+
+/obj/item/clothing/accessory/glowstick/phazon/dropped(mob/user)
+	..()
+	user.lazy_unregister_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
+
+/obj/item/clothing/accessory/glowstick/phazon/attack_self()
+	colorchange()
 
 /obj/item/clothing/accessory/glowstick/nanotrasen
 	name = "IAA Identifier"

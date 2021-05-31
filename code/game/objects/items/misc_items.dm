@@ -75,7 +75,7 @@
 
 /obj/item/gingerbread_egg
 	name = "fresh gingerbread eggsac"
-	desc = "This one's still warm"
+	desc = "This one's still warm."
 	icon_state = "gingerbread_egg"
 	var/candy_delay = 900
 	var/last_candy_time
@@ -105,4 +105,4 @@
 	name = "spring"
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "spring"
-	desc = "A piece of woven metal capable of high elasticity"
+	desc = "A piece of woven metal capable of high elasticity."

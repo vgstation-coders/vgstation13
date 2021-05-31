@@ -123,7 +123,11 @@
 	new /obj/item/clothing/mask/breath/vox(src)
 	new /obj/item/weapon/tank/emergency_nitrogen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/storage/box/survival/engineer/plasmaman
 	icon_state = "box_plasmaman"
 	item_state = "box_plasmaman"
@@ -280,7 +284,7 @@
 
 /obj/item/weapon/storage/box/injectors
 	name = "\improper DNA injectors"
-	desc = "This box contains injectors it seems."
+	desc = "This box contains injectors, it seems."
 	icon_state = "box_injector"
 
 /obj/item/weapon/storage/box/injectors/New()
@@ -351,7 +355,7 @@
 
 /obj/item/weapon/storage/box/emps
 	name = "emp grenades"
-	desc = "A box containing emp grenades."
+	desc = "A box containing EMP grenades."
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/emps/New()
@@ -1023,7 +1027,7 @@
 
 /obj/item/weapon/storage/box/mechfigures
 	name = "box of mech figurines"
-	desc = "An old box of mech figurines"
+	desc = "An old box of mech figurines."
 	icon_state = "box"
 
 /obj/item/weapon/storage/box/mechfigures/New()

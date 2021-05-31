@@ -167,7 +167,7 @@
 
 /obj/item/device/instrument/drum/drum_makeshift
 	name = "makeshift drum"
-	desc = "A crudely built drum that is, in essence, a wooden bowl with a leather sheet stretched taut over its surface. Despite its primitive design, you can extract a rather wide range of pitches and notes from this pile of trash"
+	desc = "A crudely built drum that is, in essence, a wooden bowl with a leather sheet stretched taut over its surface. Despite its primitive design, you can extract a rather wide range of pitches and notes from this pile of trash."
 	icon_state = "drum_makeshift"
 	item_state = "drum_makeshift"
 	w_class = W_CLASS_TINY

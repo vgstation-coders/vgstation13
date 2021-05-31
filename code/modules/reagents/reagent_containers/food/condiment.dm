@@ -204,7 +204,7 @@
 				icon_state = COCO
 			if(MAYO)
 				name = "Mayonaise Jar"
-				desc = "Here be mayo" //placeholder desc
+				desc = "Here be mayo." //placeholder desc
 				icon_state = MAYO
 			else
 				name = "misc condiment bottle"
@@ -212,7 +212,7 @@
 				icon_state = "emptycondiment"
 
 				if(reagents.reagent_list.len == 1)
-					desc = "Looks like it is [reagents.get_master_reagent_name()], but you are not sure."
+					desc = "It looks like [reagents.get_master_reagent_name()], but you're not sure."
 				else
 					desc = "A mixture of various condiments. [reagents.get_master_reagent_name()] is one of them."
 				icon_state = "mixedcondiments"

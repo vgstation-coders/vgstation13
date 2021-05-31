@@ -44,6 +44,8 @@ var/list/apiaries_list = list()
 
 	var/open_for_exile = 0
 
+	var/faction = null
+
 	machine_flags = WRENCHMOVE
 
 /obj/machinery/apiary/New()
@@ -142,14 +144,14 @@ var/list/apiaries_list = list()
 			angry_swarm()
 	return ..()
 
-/obj/machinery/apiary/hitby(AM as mob|obj)
+/obj/machinery/apiary/hitby(var/atom/movable/AM)
 	. = ..()
 	if(.)
 		return
 	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
 	angry_swarm()
 
-/obj/machinery/apiary/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/apiary/attackby(var/obj/item/O, var/mob/user)
 	if(..())
 		return
 	if(istype(O, /obj/item/device/analyzer/plant_analyzer))
@@ -160,6 +162,7 @@ var/list/apiaries_list = list()
 	if(istype(O, /obj/item/queen_bee))
 		var/obj/item/queen_bee/bee_packet = O
 		if(user.drop_item(bee_packet))
+			bee_packet.on_insertion(src,user)
 			nutrilevel = max(15,nutrilevel+15)
 			if (!species || !(queen_bees_inside || worker_bees_inside))
 				species = bee_packet.species
@@ -257,7 +260,7 @@ var/list/apiaries_list = list()
 	if (!species)
 		species = B.species
 	B.home = src
-	B.state = null
+	B.intent = null
 	B.health = B.maxHealth
 	for (var/datum/seed/S in B.pollens)
 		var/potency = round(S.potency)
@@ -475,8 +478,14 @@ var/list/apiaries_list = list()
 				B = new species.bee_type(src)
 				worker_bees_inside--
 			bees_outside_hive.Add(B)
+			B.wild = max(B.wild, wild)
 			B_mob.addBee(B)
-			if (prob(species.aggressiveness) || (toxic > species.toxic_threshold_anger && prob(toxic/1.5)))//if our beehive is full of toxicity, bees will become ANGRY
+			if (faction)
+				B_mob.faction = faction
+			if (B.wild)
+				B_mob.mood_change(BEE_OUT_FOR_ENEMIES)
+				B_mob.update_icon()
+			if (B.wild || (toxic > species.toxic_threshold_anger && prob(toxic/1.5)))//if our beehive is full of toxicity, bees will become ANGRY
 				B_mob.mood_change(BEE_OUT_FOR_ENEMIES)
 			else
 				B_mob.mood_change(BEE_OUT_FOR_PLANTS)
@@ -524,7 +533,7 @@ var/list/apiaries_list = list()
 		W.icon_state = "[prefix][W.icon_state]"
 		for (var/mob/living/simple_animal/bee/B_mob in loc)
 			//The bees that built the hive become its starting population
-			if (B_mob.state == BEE_BUILDING)
+			if (B_mob.intent == BEE_BUILDING)
 				for(var/datum/bee/B in B_mob.bees)
 					W.enterHive(B)
 				qdel(B_mob)
@@ -567,8 +576,6 @@ var/list/apiaries_list = list()
 
 	cycledelay = 100
 
-	//we'll allow those to start pumping out bees right away
-	wild = 1
 	var/health = 100
 
 /obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
@@ -622,6 +629,8 @@ var/list/apiaries_list = list()
 	//we'll allow those to start pumping out bees right away
 	queen_bees_inside = 1
 	worker_bees_inside = 20
+
+	//those bees never stops being angry unless calm'd
 	wild = 1
 
 	health = 100
@@ -658,6 +667,7 @@ var/list/apiaries_list = list()
 			var/turf/T = get_turf(src)
 			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = new species.bee_type(src)
+			B.wild = max(B.wild, wild)
 			worker_bees_inside--
 			bees_outside_hive.Add(B)
 			B_mob.addBee(B)
@@ -677,12 +687,18 @@ var/list/apiaries_list = list()
 
 	cycledelay = 50
 
-	//we'll allow those to start pumping out bees right away
+	//we'll allow those to start pumping out hornets right away
 	queen_bees_inside = 1
 	worker_bees_inside = 20
+
+	//those bees never stops being angry unless calm'd
 	wild = 1
 
 	health = 100
+
+/obj/machinery/apiary/wild/angry/hornet/deployable
+	worker_bees_inside = 8//will start producing hornets after a few seconds
+
 
 /obj/machinery/apiary/wild/angry/hornet/New()
 	..()

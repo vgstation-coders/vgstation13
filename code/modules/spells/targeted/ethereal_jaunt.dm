@@ -126,7 +126,7 @@
 
 /spell/targeted/ethereal_jaunt/jauntgroup
 	name = "Group Jaunt"
-	desc = "This spell allows all people within range to be jaunted along with the user"
+	desc = "This spell allows all people within range to be jaunted along with the user."
 	hud_state = "group_jaunt"
 	user_type = USER_TYPE_OTHER
 
@@ -141,7 +141,7 @@
 
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
-	desc = "This spell allows you to pass through walls"
+	desc = "This spell allows you to pass through walls."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200

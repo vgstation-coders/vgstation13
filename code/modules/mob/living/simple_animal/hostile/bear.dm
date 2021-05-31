@@ -87,7 +87,7 @@
 
 /mob/living/simple_animal/hostile/bear/polarbear
 	name = "space polar bear"
-	desc = "You would think that space would be considered cold enough for regular space bears, well these are adapted for colder climates"
+	desc = "You'd think that space would be considered cold enough for regular space bears, well these are adapted for even colder climates!"
 	icon_state = "polarbear"
 	icon_living = "polarbear"
 	icon_dead = "polarbear_dead"

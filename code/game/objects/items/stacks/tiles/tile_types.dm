@@ -41,7 +41,7 @@
 /obj/item/stack/tile/grass
 	name = "grass tile"
 	singular_name = "grass floor tile"
-	desc = "A patch of grass like they often use on golf courses"
+	desc = "A patch of grass, like they often use on golf courses."
 	icon_state = "tile_grass"
 	w_class = W_CLASS_MEDIUM
 	force = 1.0
@@ -61,7 +61,7 @@
 /obj/item/stack/tile/wood
 	name = "wooden floor tile"
 	singular_name = "wooden floor tile"
-	desc = "an easy to fit wooden floor tile"
+	desc = "An easy to fit wooden floor tile."
 	icon_state = "tile-wood"
 	w_class = W_CLASS_MEDIUM
 	force = 1.0
@@ -118,7 +118,7 @@
 /obj/item/stack/tile/carpet
 	name = "length of carpet"
 	singular_name = "length of carpet"
-	desc = "A piece of carpet. It is the same size as a floor tile"
+	desc = "A piece of carpet. It is the same size as a floor tile."
 	icon_state = "tile-carpet"
 	w_class = W_CLASS_MEDIUM
 	force = 1.0
@@ -149,7 +149,7 @@
 
 obj/item/stack/tile/slime
 	name = "tile of slime"
-	desc = "A flat piece of slime made through xenobiology"
+	desc = "A flat piece of slime made through xenobiology."
 	icon_state = "tile-slime"
 	w_class = W_CLASS_MEDIUM
 	force = 1

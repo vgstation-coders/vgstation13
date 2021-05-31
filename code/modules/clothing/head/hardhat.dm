@@ -24,6 +24,8 @@
 	else
 		kill_light()
 
+	user.update_inv_head()
+
 /obj/item/clothing/head/hardhat/orange
 	icon_state = "hardhat0_orange"
 	item_state = "hardhat0_orange"

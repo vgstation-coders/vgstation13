@@ -20,7 +20,7 @@ Doesn't work on other aliens/AI.*/
 
 /spell/aoe_turf/conjure/alienweeds
 	name = "Plant Weeds"
-	desc = "Plants some alien weeds"
+	desc = "Plants some alien weeds."
 	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_weeds"
@@ -51,7 +51,7 @@ Doesn't work on other aliens/AI.*/
 
 /spell/targeted/alienwhisper
 	name = "Whisper"
-	desc = "Whisper to someone"
+	desc = "Whisper to someone."
 	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_whisper"
@@ -99,7 +99,7 @@ Doesn't work on other aliens/AI.*/
 
 /spell/targeted/alientransferplasma
 	name = "Transfer Plasma"
-	desc = "Transfer your plasma to another alien"
+	desc = "Transfer your plasma to another alien."
 	user_type = USER_TYPE_XENOMORPH
 	panel = "Alien"
 	hud_state = "alien_transfer"

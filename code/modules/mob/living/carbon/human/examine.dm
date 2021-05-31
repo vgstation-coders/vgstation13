@@ -215,7 +215,7 @@
 	msg += "</span>"
 
 	if(show_client_status_on_examine || isAdminGhost(user))
-		if(has_brain() && stat != DEAD)
+		if(has_brain() && stat != DEAD && !ajourn)
 			if(!key)
 				msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep space must have been too much for [t_him]. Any recovery is unlikely.</span>\n"
 			else if(!client)
