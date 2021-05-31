@@ -69,6 +69,7 @@
 	var/hasbeensacrificed = FALSE
 
 	var/miming = null //Toggle for the mime's abilities.
+	var/suiciding = FALSE //Do not allow revives for this person if they have sudoku'd
 
 /datum/mind/New(var/key)
 	src.key = key

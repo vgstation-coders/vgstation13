@@ -248,31 +248,27 @@ var/global/list/obj/machinery/light/alllights = list()
 
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
-
-
 	update_icon()
 	if(on)
-		if(light_range != current_bulb.brightness_range || light_power != current_bulb.brightness_power || light_color != current_bulb.brightness_color)
-			current_bulb.switchcount++
-			if(current_bulb.rigged)
-				if(current_bulb.status == LIGHT_OK && trigger)
+		current_bulb.switchcount++
+		if(current_bulb.rigged)
+			if(current_bulb.status == LIGHT_OK && trigger)
 
-					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-
-					explode()
-			else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
-				if(current_bulb.status == LIGHT_OK && trigger)
-					current_bulb.status = LIGHT_BURNED
-					icon_state = "l[current_bulb.base_state]-burned"
-					on = 0
-					set_light(0)
-			else
-				use_power = 2
-				set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
+				log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+				message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+				explode()
+		else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
+			if(current_bulb.status == LIGHT_OK && trigger)
+				current_bulb.status = LIGHT_BURNED
+				icon_state = "l[current_bulb.base_state]-burned"
+				on = 0
+				kill_light()
+		else
+			use_power = 2
+			set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
 	else
 		use_power = 1
-		set_light(0)
+		kill_light()
 
 	if(current_bulb)
 		active_power_usage = (current_bulb.cost * 10)
@@ -371,7 +367,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			to_chat(user, "You hit the light!")
 	// attempt to deconstruct / stick weapon into light socket
 	else if(!current_bulb)
-		if(iswirecutter(W)) //If it's a wirecutter take out the wires
+		if(W.is_wirecutter(user)) //If it's a wirecutter take out the wires
 			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
@@ -615,8 +611,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	item_state = "c_tube"
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 60)
 	w_type = RECYK_GLASS
-	brightness_range = 6
-	brightness_power = 1.5
+	brightness_range = 5
+	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	cost = 8
 
@@ -655,7 +651,7 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/item/weapon/light/tube/large
 	w_class = W_CLASS_SMALL
 	name = "large light tube"
-	brightness_range = 15
+	brightness_range = 8
 	brightness_power = 4
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
 	cost = 15
@@ -667,8 +663,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	base_state = "bulb"
 	item_state = "contvapour"
 	fitting = "bulb"
-	brightness_range = 3.5
-	brightness_power = 2
+	brightness_range = 4
+	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
 	cost = 5

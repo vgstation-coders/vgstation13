@@ -147,6 +147,7 @@ steam.start() -- spawns the effect
 	desc = "it's a spark what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
+	light_type = LIGHT_SOFT_FLICKER
 
 	var/move_dir = 0
 	var/energy = 0
@@ -156,6 +157,7 @@ steam.start() -- spawns the effect
 	var/turf/T = loc
 	if(istype(T))
 		T.hotspot_expose(1000, 100, surfaces = 1)
+	set_light(1, 1, LIGHT_COLOR_YELLOW)
 
 /obj/effect/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
@@ -957,19 +959,6 @@ steam.start() -- spawns the effect
 	if(air_group)
 		return 0
 	return !density
-
-
-/obj/structure/foamedmetal/proc/update_nearby_tiles()
-
-	if (!SS_READY(SSair))
-		return 0
-
-	var/T = loc
-
-	if (isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
 
 /obj/structure/foamedmetal/New()
 	. = ..()

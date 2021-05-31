@@ -53,10 +53,7 @@
 
 	// Who we eventually hit
 	var/atom/movable/target = null
-
 	var/max_range = INFINITY
-
-
 	var/bumped=0
 	var/stepped=0
 	var/steps=0 // How many steps we've made from the emitter.  Used in infinite loop avoidance.
@@ -64,6 +61,8 @@
 	var/targetContactLoc=null // Where we hit the target (used for target_moved)
 	var/list/sources = list() // Whoever served in emitting this beam. Used in prisms to prevent infinite loops.
 	var/_re_emit = 1 // Re-Emit from master when deleted? Set to 0 to not re-emit.
+
+	moody_light_type = null
 
 /obj/effect/beam/emitter/eyes
 	icon_state = "emitter_double_1"

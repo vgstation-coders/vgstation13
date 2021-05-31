@@ -400,6 +400,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if(species && species.anatomy_flags & NO_BLOOD)
 		reagents.add_reagent(BLOOD, amount, injected.data)
 		reagents.update_total()
+		container.reagents.remove_reagent(BLOOD, amount)
 		return
 
 	var/datum/reagent/blood/our = get_blood(vessel)

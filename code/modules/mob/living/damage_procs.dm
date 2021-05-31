@@ -55,7 +55,7 @@
 
 /mob/living/proc/critlog(curH,prevH) //current health, previous health
 	if(stat == UNCONSCIOUS && curH < 0 && curH > -95.0 && prevH > 0)
-		src.attack_log += ("\[[time_stamp()]\] <font color='red'>Has gone into CRIT!</font>")
+		add_attacklogs(src,null,"has gone into CRIT!")
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)

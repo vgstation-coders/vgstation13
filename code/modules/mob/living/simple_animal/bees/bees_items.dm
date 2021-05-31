@@ -42,6 +42,9 @@
 
 /obj/item/weapon/bee_net/examine(mob/user)
 	..()
+	if(caught_bees.len == 1)
+		to_chat(user, "<span class='info'>There's only 1 caught [current_species.common_name] in it!</span>")
+		return
 	if(caught_bees.len > 0)
 		to_chat(user, "<span class='info'>There's [caught_bees.len] caught [current_species.common_name]\s in it!</span>")
 	else
@@ -56,12 +59,12 @@
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)
 		if (caught_bees.len >= MAX_BEES_PER_NET)
-			to_chat(user, "<span class='warning'>There are too many [current_species.common_name] inside \the [src] already! You have to release some before you can catch more.</span>")
+			to_chat(user, "<span class='warning'>There are too many [current_species.common_name]\s inside \the [src] already! You have to release some before you can catch more.</span>")
 			return
 
 		if (current_species)
 			if (current_species != B.bee_species)
-				to_chat(user, "<span class='warning'>You gotta empty \the [src] of [current_species.common_name] before you can catch [B.bee_species.common_name] with it!</span>")
+				to_chat(user, "<span class='warning'>You gotta empty \the [src] of [current_species.common_name]\s before you can catch [B.bee_species.common_name]\s with it!</span>")
 				return
 		else
 			current_species = B.bee_species
@@ -76,14 +79,14 @@
 					if (B.home)
 						B.home.bees_outside_hive.Remove(BEES)
 				qdel(B)
-				user.visible_message("<span class='notice'>[user] nets some [B.bee_species.common_name].</span>","<span class='notice'>You net up some of the [B.bee_species.common_name].</span>")
+				user.visible_message("<span class='notice'>[user] nets some [B.bee_species.common_name]\s.</span>","<span class='notice'>You net up some of the [B.bee_species.common_name]\s.</span>")
 				B = null
 			else
-				user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name], they don't seem to like it.</span>","<span class='warning'>You swing at some [B.bee_species.common_name], they don't seem to like it.</span>")
+				user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name]\s, they don't seem to like it.</span>","<span class='warning'>You swing at some [B.bee_species.common_name]\s, they don't seem to like it.</span>")
 				B.state = BEE_OUT_FOR_ENEMIES
 				B.target = user
 		else
-			user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name], they don't seem to like it.</span>","<span class='warning'>The [B.bee_species.common_name] are too angry to let themselves get caught.</span>")
+			user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name]\s, they don't seem to like it.</span>","<span class='warning'>The [B.bee_species.common_name]\s are too angry to let themselves get caught.</span>")
 			B.state = BEE_OUT_FOR_ENEMIES
 			B.target = user
 	if(!caught)
@@ -105,7 +108,7 @@
 
 	if (caught_bees.len > 0)
 		if (current_species.angery)
-			to_chat(M, "<span class='warning'>You empty \the [src]. The [current_species.common_name] are furious!</span>")
+			to_chat(M, "<span class='warning'>You empty \the [src]. The [current_species.common_name]\s are furious!</span>")
 		else
 			to_chat(M, "<span class='notice'>You empty \the [src].</span>")
 		//release a few swarms

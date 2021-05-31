@@ -162,7 +162,7 @@
 */
 /obj/item/weapon/cartridge/robotics
 	name = "\improper R.O.B.U.T.T. Cartridge"
-	desc = "Allows you to use your pda as a cyborg analyzer"
+	desc = "Allows you to use your pda as a cyborg analyzer."
 	icon_state = "cart-robo"
 	access_robotics = 1
 

@@ -103,7 +103,7 @@ obj/structure/windoor_assembly/Destroy()
 			return
 		created_name = t
 		return
-	
+
 	if(iswelder(W) && (!anchored && !wired && !electronics))
 		var/obj/item/tool/weldingtool/WT = W
 		user.visible_message("[user] dissassembles [src].", "You start to dissassemble [src].")
@@ -165,7 +165,7 @@ obj/structure/windoor_assembly/Destroy()
 				update_name()
 
 	//Removing wire from the assembly. Step 5 undone.
-	if(iswirecutter(W) && (anchored && wired))
+	if(W.is_wirecutter(user) && (anchored && wired))
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] is cutting the wires from [src].", "You start to cut the wires from [src].")
 
@@ -173,7 +173,7 @@ obj/structure/windoor_assembly/Destroy()
 			if(gcDestroyed)
 				return
 			to_chat(user, "<span class='notice'>You cut \the [name] wires!</span>")
-			new /obj/item/stack/cable_coil(get_turf(user), 1)
+			new /obj/item/stack/cable_coil(get_turf(user), 2)
 			wired = FALSE
 			update_name()
 
@@ -263,15 +263,6 @@ obj/structure/windoor_assembly/Destroy()
 	facing = facing == "l" ? "r":"l"
 	to_chat(usr, "The windoor will now slide to the [facing == "l" ? "left":"right"].")
 	update_icon()
-
-
-/obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if(!SS_READY(SSair))
-		return FALSE
-	var/T = loc
-	if (isturf(T))
-		SSair.mark_for_update(T)
-	return TRUE
 
 /obj/structure/windoor_assembly/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/windoor_assembly/clockwork, BRASS_WINDOOR_GLOW)

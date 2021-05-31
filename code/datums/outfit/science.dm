@@ -238,7 +238,7 @@
 	)
 
 	pda_type = /obj/item/device/pda/roboticist
-	pda_slot = slot_belt
+	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/research
 
 /datum/outfit/roboticist/post_equip(var/mob/living/carbon/human/H)

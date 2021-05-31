@@ -746,7 +746,7 @@
 				</ul>
 				<p><b>Incubation also has a chance to occur in individuals irradiated to dangerous levels, however should an Effect Mutation occur this way, it has been observed that the new effect would have a similar danger to the original one, thankfully.</b></p>
 				<p>At 100% growth, the dish can be removed from the incubator and analyzed.</p>
-				<p>Simply place it on the Analyser and operate it. The process is very quick, but requires you to remain adjacent. After the process is done, the following occurs:</p>
+				<p>Simply place it on the Analyzer and operate it. The process is very quick, but requires you to remain adjacent. After the process is done, the following occurs:</p>
 				<ul>
 				<li>a sticker appears on the dish that you can examine and that lets you check what is the disease's information, such as quick descriptions of its effects or its antigens
 				<li>this information is also added to the Pathogen Database which you can edit, and also give the disease a Nickname or set it's dangerousness.
@@ -757,7 +757,7 @@
 				<p>Among the data stored, the following information is the most important:</p>
 				<ul>
 				<li><b>Strength</b>: This is the antibody concentration required for the body to get rid of the pathogen. Lower values mean the disease will easily be cured with spaceacillin alone.
-				<li><b>Robustness</b>: This is the percentage of the strength at which the stronger effects will start getting muted. The numbers in parenthesis next to it indicate the specific concentrations at which the effects will be muted. So for example, if your body has 50% antibody concentration, and the disease has a Strength of 51%, and a Robustness bellow 90%, you will carry the disease WITHOUT seeing any of its effects yourself.
+				<li><b>Robustness</b>: This is the percentage of the strength at which the stronger effects will start getting muted. The numbers in parenthesis next to it indicate the specific concentrations at which the effects will be muted. So for example, if your body has 50% antibody concentration, and the disease has a Strength of 51%, and a Robustness below 90%, you will carry the disease WITHOUT seeing any of its effects yourself.
 				<li><b>Infection Chance</b>: Whenever there is a window of opportunity for a vector to infect you, and it manages to get through any clothing or other protections due to insufficient sterility, this is the chance percentage that you will be infected by the disease. Additionally, Pathogenic Clouds emitted will travel much further and be more numerous if the Infection chance is high, and infected items will remain infected for a longer duration.
 				<li><b>Progress Speed</b>: The percentage chance that a disease will progress to the next stage after it has been present in a body for long enough.
 				</ul>

@@ -7,6 +7,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines")
+	hitsound = "sound/weapons/whip.ogg"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
 
@@ -49,7 +50,8 @@
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
 		"/obj/item/device/silicate_sprayer",
-		"/obj/item/device/geiger_counter"
+		"/obj/item/device/geiger_counter",
+		"/obj/item/airshield_projector"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
@@ -116,7 +118,8 @@
 		"/obj/item/weapon/rcl",
 		"/obj/item/device/silicate_sprayer",
 		"/obj/item/device/geiger_counter",
-		"/obj/item/weapon/inflatable_dispenser"
+		"/obj/item/weapon/inflatable_dispenser",
+		"/obj/item/airshield_projector"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
@@ -488,3 +491,36 @@
 		"/obj/item/weapon/mop",
 		"/obj/item/weapon/storage/bag/trash")
 
+/obj/item/weapon/storage/belt/leather
+	name = "leather belt"
+	desc = "This belt is of uncommonly good craftsmanship. For some reason, the inside of the buckle reads '18+'."
+	icon_state = "leather"
+	item_state = "leather"
+	storage_slots = 2 //no pouches, no straps, just a waistband
+
+/obj/item/weapon/storage/belt/leather/equipped(mob/living/M, slot)
+	..()
+	if(!istype(M))
+		return
+	if(slot == slot_belt)
+		M.maxHealth += 4
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species)
+				H.species.punch_damage += 4
+		to_chat(M, "<span class='notice'>You feel tough enough to punch a boar in half!</span>")
+		spawn(0) //this is just for the adminwarning - finish unequipping everything before attempting to calculate this
+			if(M.maxHealth == initial(M.maxHealth)+8)
+				message_admins("[key_name(M)] appears to have found some kind of leather belt exploit. What a champ! Give them a pat on the back and tell them to bugreport it after.")
+
+/obj/item/weapon/storage/belt/leather/unequipped(mob/living/M, from_slot)
+	..()
+	if(!istype(M))
+		return
+	if(from_slot == slot_belt)
+		M.maxHealth -= 4
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species)
+				H.species.punch_damage -= 4
+		to_chat(M, "<span class='notice'>You feel like a dress-wearing weakling.</span>")

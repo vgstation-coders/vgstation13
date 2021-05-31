@@ -13,12 +13,17 @@
 	var/chance = 100
 	var/jiggle = 0
 	var/list/to_spawn = list()
+	var/spawn_all = FALSE //If TRUE, will attempt to spawn 1 of each of the items in to_spawn, rather than pick only one.
 
 /obj/abstract/map/spawner/perform_spawn()
-
 	for(amount, amount, amount--)
-		if(prob(chance))
-			CreateItem(pick(to_spawn))
+		if(spawn_all)
+			for(var/obj/thing in to_spawn)
+				if(prob(chance))
+					CreateItem(thing)
+		else
+			if(prob(chance))
+				CreateItem(pick(to_spawn))
 	qdel(src)
 
 /obj/abstract/map/spawner/proc/CreateItem(new_item_type)

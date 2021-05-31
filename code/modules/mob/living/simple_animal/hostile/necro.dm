@@ -377,7 +377,7 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/UnarmedAttack(atom/A) //There's got to be a better way to keep everything together
 	if(A == creator) //Evil necromancy magic means no attacking our creator
-		to_chat(src, "Try as you might, you can't bring yourself to attack [A]")
+		to_chat(src, "Try as you might, you can't bring yourself to attack [A].")
 		return
 	..()
 	if(istype(A, /mob/living/carbon/human))
@@ -431,7 +431,7 @@
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
 					if(prob(5)) //Let's be generous, they'll only get one regen for this
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
@@ -449,7 +449,7 @@
 							holy_modifier += 1
 
 					if(prob(15*holy_modifier)) //Gotta have faith
-						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name] it's working!.</span>")
+						to_chat (user, "<span class='notice'>By [bible.my_rel.deity_name], it's working!</span>")
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
@@ -464,11 +464,11 @@
 			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
-		visible_message("<span class='notice'>\The [src]'s eyes regain focus, the smell of decay vanishing, [host] has come back to their senses!.</span>")
+		visible_message("<span class='notice'>\The [src]'s eyes regain focus, and the smell of decay vanishes. [host] has come back to their senses!</span>")
 		host = null
 		qdel(src)
 	else
-		visible_message("<span class='notice'>\The [src] grumbles for a moment, then begins to decay at an accelerated rate, seems there was nobody left to save.</span>")
+		visible_message("<span class='notice'>\The [src] grumbles for a moment, then begins to decay at an accelerated rate. Seems there was nobody left to save.</span>")
 		dust()
 
 /mob/living/simple_animal/hostile/necro/zombie/rotting
@@ -492,7 +492,7 @@
 	icon_living = "zombie" //The original
 	icon_state = "zombie"
 	icon_dead = "zombie"
-	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttenous"
+	desc = "A reanimated corpse that looks like it has seen better days. This one appears to be quite gluttenous."
 	maxHealth = 150
 	health = 150
 	can_evolve = 0
@@ -615,7 +615,7 @@
 	icon_state = "glowing_one"
 	icon_dead = "glowing_one"
 	icon_living = "glowing_one"
-	desc = "Some poor fool having been caught in an incident involving radiation has now suffered it binding to their very essence."
+	desc = "Some poor fool, having been caught in an incident involving radiation, has now suffered it binding to their very essence."
 
 	health = 200
 	maxHealth = 200

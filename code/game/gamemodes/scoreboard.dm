@@ -402,6 +402,8 @@
 		if(E.client)
 			E.scorestats(completions)
 			winset(E.client, "rpane.round_end", "is-visible=true")
+
+	mode.send2servers()
 	return
 
 /mob/proc/scorestats(var/completions)

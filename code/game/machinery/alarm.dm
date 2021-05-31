@@ -1065,7 +1065,7 @@ var/global/list/airalarm_presets = list(
 
 			if(wiresexposed && !wires.IsAllCut() && iswiretool(W))
 				return attack_hand(user)
-			else if(wiresexposed && wires.IsAllCut() && iswirecutter(W))
+			else if(wiresexposed && wires.IsAllCut() && W.is_wirecutter(user))
 				buildstage = 1
 				update_icon()
 				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
@@ -1148,6 +1148,14 @@ var/global/list/airalarm_presets = list(
 		update_icon()
 		return 1
 	return 0
+
+/obj/machinery/alarm/is_in_range(var/mob/user)
+	if((!in_range(src, user) || !istype(loc, /turf)) && !istype(user, /mob/living/silicon))
+		var/obj/item/device/multitool/omnitool/O = user.get_active_hand()
+		if(istype(O))
+			return O.can_connect(src,user)
+		return FALSE
+	return TRUE
 
 /*
 FIRE ALARM
@@ -1266,11 +1274,11 @@ FIRE ALARM
 	if(wiresexposed)
 		switch(buildstage)
 			if(2)
-				if (ismultitool(W))
+				if (W.is_multitool(user))
 					src.detecting = !( src.detecting )
 					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]connected [src]'s detecting unit.")
 					playsound(src, 'sound/items/healthanalyzer.ogg', 50, 1)
-				if(iswirecutter(W))
+				if(W.is_wirecutter(user))
 					to_chat(user, "You begin to cut the wiring...")
 					W.playtoolsound(src, 50)
 					if (do_after(user, src,  50) && buildstage == 2 && wiresexposed)

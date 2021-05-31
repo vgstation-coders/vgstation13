@@ -64,6 +64,10 @@ Hotkey-Mode: (hotkey-mode must be on)
 \tz = activate held object (or y)
 \tf = cycle-intents-left
 \tg = cycle-intents-right
+\tu = cycle-target-zone-up
+\tj = cycle-target-zone-down
+\t h = cycle-target-zone-left
+\tk = cycle-target-zone-right
 \t1 = help-intent
 \t2 = disarm-intent
 \t3 = grab-intent
@@ -85,6 +89,10 @@ Any-Mode: (hotkey doesn't need to be on)
 \tCtrl+z = activate held object (or Ctrl+y)
 \tCtrl+f = cycle-intents-left
 \tCtrl+g = cycle-intents-right
+\tCtrl+u = cycle-target-zone-up
+\tCtrl+j = cycle-target-zone-down
+\tCtrl+h = cycle-target-zone-left
+\tCtrl+k = cycle-target-zone-right
 \tCtrl+1 = help-intent
 \tCtrl+2 = disarm-intent
 \tCtrl+3 = grab-intent
@@ -98,6 +106,19 @@ Any-Mode: (hotkey doesn't need to be on)
 \tPGDN = activate held object
 \tEND = throw
 \tSHIFT+MMB = point-at
+\tNUMPAD8 = target head
+\tNUMPAD7 = target mouth
+\tNUMPAD9 = target eyes
+\tNUMPAD5 = target chest
+\tNUMPAD2 = target groin
+\tNUMPAD4 = target left arm
+\tNUMPAD6 = target right arm
+\tNUMPAD1 = target left leg
+\tNUMPAD3 = target right leg
+\tCtrl+NUMPAD4 = target left hand
+\tCtrl+NUMPAD6 = target right hand
+\tCtrl+NUMPAD1 = target left foot
+\tCtrl+NUMPAD3 = target right foot
 
 For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 </font>"}

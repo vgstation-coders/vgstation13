@@ -167,6 +167,7 @@
 	life_handle_camera()
 	life_handle_malf()
 	life_handle_power_damage()
+	check_dark_vision()
 
 	is_ai_powered() ? life_handle_powered_core() : life_handle_unpowered_core()
 
@@ -189,9 +190,9 @@
 		var/damage_taken
 		if(ai_flags & COREFIRERESIST)
 			damage_taken = getToxLoss() + getBruteLoss() + getOxyLoss()
-		else 
+		else
 			damage_taken = getToxLoss() + getFireLoss() + getBruteLoss() + getOxyLoss()
- 
+
 		health = maxHealth - damage_taken
 
 /mob/living/silicon/ai/update_canmove() //If the AI dies, mobs won't go through it anymore
@@ -200,5 +201,5 @@
 /mob/living/silicon/ai/handle_regular_hud_updates()
 	if(malfhacking)
 		throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
-	else 
+	else
 		clear_alert(SCREEN_ALARM_APC_HACKING)

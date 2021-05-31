@@ -1635,10 +1635,10 @@ var/proccalls = 1
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 
-#define BEESPECIES_NORMAL	"bees"
-#define BEESPECIES_VOX		"chill bugs"
-#define BEESPECIES_HORNET	"hornets"
-#define BEESPECIES_BLOOD	"hell bugs"
+#define BEESPECIES_NORMAL	"bee"
+#define BEESPECIES_VOX		"chill bug"
+#define BEESPECIES_HORNET	"hornet"
+#define BEESPECIES_BLOOD	"hell bug"
 
 //mob/proc/is_pacified()
 #define VIOLENCE_SILENT		0

@@ -15,7 +15,7 @@
 
 /mob/proc/update_inv_mutual_handcuffed()
 	return
-	
+
 /mob/proc/update_inv_legcuffed()
 	return
 

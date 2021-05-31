@@ -294,7 +294,7 @@ var/list/telesci_warnings = list(
 	/obj/machinery/the_singularitygen,
 	/obj/item/weapon/grenade,
 	/obj/item/device/transfer_valve,
-	/obj/item/device/fuse_bomb,
+	/obj/item/cannonball/fuse_bomb,
 	/obj/item/device/onetankbomb,
 	/obj/machinery/portable_atmospherics/canister
 )

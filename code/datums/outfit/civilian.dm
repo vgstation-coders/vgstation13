@@ -119,7 +119,6 @@
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
-	H.mutations += M_SOBER
 	H.check_mutations = 1
 
 /datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)

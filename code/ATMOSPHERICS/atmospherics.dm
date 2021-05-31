@@ -207,7 +207,7 @@ Pipelines + Other Objects -> Pipe network
 
 // Ditto, but for heat-exchanging pipes.
 /obj/machinery/atmospherics/proc/findConnectingHE(var/direction, var/given_layer = src.piping_layer)
-	for(var/obj/machinery/atmospherics/pipe/simple/heat_exchanging/target in get_step(src,direction))
+	for(var/obj/machinery/atmospherics/target in get_step(src,direction))
 		if(target.initialize_directions_he & get_dir(target,src))
 			if(isConnectable(target, direction, given_layer) && target.isConnectable(src, turn(direction, 180), given_layer))
 				return target

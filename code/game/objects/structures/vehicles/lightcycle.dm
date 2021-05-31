@@ -69,13 +69,13 @@
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSMOB|PASSDOOR
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/lightcycle
-	var/obj/effect/lightribbon/last_ribbon
+	var/obj/lightribbon/last_ribbon
 	var/obj/item/key/lightcycle/summoning_rod = null
 	var/delay_ribbon = 0
 	var/l_color = "#FFFFFF"
 	var/lastdir = null
 	var/lastLASTdir = null
-	
+
 /obj/structure/bed/chair/vehicle/lightcycle/Destroy()
 	if(summoning_rod)
 		summoning_rod.icon_state = initial(summoning_rod.icon_state)
@@ -128,7 +128,7 @@
 		if(last_ribbon)
 			last_ribbon.erase()
 	qdel(src)
-	
+
 
 /obj/structure/bed/chair/vehicle/lightcycle/proc/trigger_movement()
 	while(occupant)
@@ -177,7 +177,7 @@
 		if(delay_ribbon)
 			delay_ribbon--
 		else
-			last_ribbon = new /obj/effect/lightribbon(T,l_color,lastdir,lastLASTdir)
+			last_ribbon = new /obj/lightribbon(T,l_color,lastdir,lastLASTdir)
 			lastLASTdir = lastdir
 			lastdir = dir
 
@@ -223,7 +223,7 @@
 		"[EAST]" = list("x" = 0, "y" = 2 * PIXEL_MULTIPLIER)
 		)
 
-/obj/effect/lightribbon
+/obj/lightribbon
 	name = "light ribbon"
 	desc = "A wall of light ejected from the back of a light cycle."
 	anchored = 1
@@ -233,7 +233,7 @@
 	var/l_color = "#FFFFFF"
 	var/erasing = FALSE
 
-/obj/effect/lightribbon/New(atom/A, var/col, var/currdir, var/lastdir)
+/obj/lightribbon/New(atom/A, var/col, var/currdir, var/lastdir)
 	..(A)
 	if(currdir)
 		if(!lastdir)
@@ -256,14 +256,14 @@
 		icon += l_color
 	set_light(1,5,l_color)
 
-/obj/effect/lightribbon/attackby(obj/item/weapon/W, mob/user)
+/obj/lightribbon/attackby(obj/item/weapon/W, mob/user)
 	if(!(user.locked_to && istype(user.locked_to, /obj/structure/bed/chair/vehicle/lightcycle)))
 		to_chat(user, "\The [src] dissipates as you hit it with \the [W].")
 		erase(src)
 
-/obj/effect/lightribbon/proc/erase() //Used for the safe version when a ribbon is destroyed.
+/obj/lightribbon/proc/erase() //Used for the safe version when a ribbon is destroyed.
 	erasing = TRUE
-	for(var/obj/effect/lightribbon/L in orange(1,src))
+	for(var/obj/lightribbon/L in orange(1,src))
 		if(L.l_color == l_color)
 			if(!L.erasing)
 				spawn(1)
@@ -284,8 +284,7 @@
 	name = "light cycle wreckage"
 	desc = "Awaiting garbage collection."
 
-	
+
 /obj/item/key/lightcycle/temp_ribbons
 	desc = "A strange-looking glowing rod. It's apparently activated by cracking it."
 	delete_ribbons_on_dismount = 1
-	

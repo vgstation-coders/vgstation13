@@ -440,6 +440,7 @@ var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe/leather("Leather wallet",/obj/item/weapon/storage/wallet,			4,	time = 90,),
 	new/datum/stack_recipe/leather("Leather helmet",/obj/item/clothing/head/leather,			3,	time = 90,on_floor = 1),
 	new/datum/stack_recipe/leather("Leather armor",/obj/item/clothing/suit/leather,				6,	time = 90,on_floor = 1),
+	new/datum/stack_recipe/leather("Leather belt",/obj/item/weapon/storage/belt/leather,		3,	time = 60),
 	new/datum/stack_recipe/leather("Leather strip",/obj/item/stack/leather_strip,				1,4,20,time = 2 SECONDS, on_floor = 1),
 	new/datum/stack_recipe/leather("Ammunition Pouch",/obj/item/weapon/storage/bag/ammo_pouch,	4,	time = 4 SECONDS,on_floor = 1),
 	)

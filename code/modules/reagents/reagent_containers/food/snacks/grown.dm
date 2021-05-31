@@ -713,6 +713,13 @@ var/list/special_fruits = list()
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
+	name = "diamond carrot"
+	desc = "Carrots are forever... Wait no."
+	potency = 20
+	filling_color = "#C4D4E0"
+	plantname = "diamondcarrot"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi
 	name = "reishi"

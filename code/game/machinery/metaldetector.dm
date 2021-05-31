@@ -117,7 +117,7 @@
 	if(..(W, user) == 1)
 		return 1 // resolved for click code!
 
-	/*if (iswirecutter(W))
+	/*if (W.is_wirecutter(user))
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)

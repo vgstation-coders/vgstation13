@@ -285,7 +285,8 @@
 	H.real_name = H.dna.real_name
 	H.flavor_text = H.dna.flavor_text
 
-	H.suiciding = FALSE
+	if(H.mind)
+		H.mind.suiciding = FALSE
 	H.update_name()
 	return TRUE
 
@@ -299,7 +300,7 @@
 		return
 
 	if((occupant) && (occupant.loc == src))
-		if((occupant.stat == DEAD) || (occupant.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
+		if((occupant.stat == DEAD) || (occupant.mind && occupant.mind.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
 			locked = FALSE
 			go_out()
 			connected_message("Clone Rejected: Deceased.")

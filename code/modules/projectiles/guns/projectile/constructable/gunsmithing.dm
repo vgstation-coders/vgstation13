@@ -548,7 +548,7 @@
 				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank"
 				update_assembly()
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(user, "You cut the wires out of the capacitor bank.")
 				W.playtoolsound(user, 50)
 				state = "stock_reservoir"

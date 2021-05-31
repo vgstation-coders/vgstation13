@@ -48,6 +48,9 @@
 /mob/living/simple_animal/shade/Login()
 	..()
 	hud_used.shade_hud()
+	var/datum/role/cultist/C = iscultist(src)
+	if (C)
+		C.update_cult_hud()
 	if (istype(loc, /obj/item/weapon/melee/soulblade))
 		client.CAN_MOVE_DIAGONALLY = 1
 		client.screen += list(
@@ -217,8 +220,8 @@
 
 		log_attack("<span class='danger'>[key_name(src)] has sealed itself via the suicide verb.</span>")
 
-	if(suicide_set)
-		suiciding = TRUE
+	if(suicide_set && mind)
+		mind.suiciding = TRUE
 
 	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
 	death()

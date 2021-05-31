@@ -92,8 +92,10 @@
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
 			src.Entered(AM)
+	/*
 	if(opacity)
 		has_opaque_atom = TRUE
+	*/
 
 /turf/ex_act(severity)
 	return 0
@@ -283,11 +285,11 @@
 			A.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
 			for(var/atom/movable/AA in contents_brought)
 				AA.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
-
+/*
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
 		reconsider_lights()
-
+*/
 /turf/proc/is_plating()
 	return 0
 /turf/proc/can_place_cables()
@@ -356,10 +358,10 @@
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
-	var/old_dynamic_lighting = dynamic_lighting
+	//var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
-	var/old_lighting_overlay = lighting_overlay
-	var/old_corners = corners
+	//var/old_lighting_overlay = lighting_overlay
+	//var/old_corners = corners
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
 
@@ -415,6 +417,10 @@
 		W.levelupdate()
 
 		. = W
+		if (SS_READY(SSlighting))
+			if(old_opacity != opacity)
+				for(var/atom/movable/light/L in range(5, src)) //view(world.view, dview_mob))
+					lighting_update_lights |= L
 
 	else
 		//if(zone)
@@ -431,22 +437,18 @@
 		if(SS_READY(SSair))
 			SSair.mark_for_update(src)
 
+		if(istype(W, /turf/space) && W.loc.dynamic_lighting == 0)
+			var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
+			I.plane = LIGHTING_PLANE_MASTER
+			I.blend_mode = BLEND_ADD
+			W.overlays += I
+
 		W.levelupdate()
 
 		. = W
 
-	recalc_atom_opacity()
-	if (SSlighting && SSlighting.initialized)
-		lighting_overlay = old_lighting_overlay
+	if (SS_READY(SSlighting))
 		affecting_lights = old_affecting_lights
-		corners = old_corners
-		if((old_opacity != opacity) || (dynamic_lighting != old_dynamic_lighting) || force_lighting_update)
-			reconsider_lights()
-		if(dynamic_lighting != old_dynamic_lighting)
-			if(dynamic_lighting)
-				lighting_build_overlay()
-			else
-				lighting_clear_overlay()
 
 	if (!ticker)
 		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps

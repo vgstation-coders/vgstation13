@@ -72,6 +72,7 @@
 #define GOLD 			"gold"
 #define SILVER 			"silver"
 #define URANIUM 			"uranium"
+#define DIAMONDDUST		"diamond"
 #define PHAZON 			"phazon"
 #define ALUMINUM 			"aluminum"
 #define SILICON 			"silicon"
@@ -430,6 +431,7 @@
 #define IRONROT			"ironrot"
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
+#define SPAGHETTI		"spaghetti"
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
 #define DIABEETUSOL		"diabeetusol"
@@ -480,6 +482,7 @@
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
+#define MIDAZOLINE		"midazoline"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

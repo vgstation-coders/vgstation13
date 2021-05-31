@@ -622,7 +622,7 @@ Class Procs:
 			else
 				return -1
 
-	if(ismultitool(O) && machine_flags & MULTITOOL_MENU)
+	if(O.is_multitool(user) && machine_flags & MULTITOOL_MENU)
 		update_multitool_menu(user)
 		return 1
 

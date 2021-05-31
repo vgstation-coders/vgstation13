@@ -257,27 +257,27 @@
 /obj/item/clothing/under/color/grey/cadet
 	name = "security cadet uniform"
 	desc = "Jr. Security special forces. Very special."
-	icon_state = "cadet_s"
+	icon_state = "cadet"
 	item_state = "cadet_s"
 	_color = "cadet"
 
 /obj/item/clothing/under/color/grey/intern
 	name = "medical intern uniform"
 	desc = "Much more stylish than the insurance broker described."
-	icon_state = "intern_s"
-	item_state = "intern_s"
+	icon_state = "intern"
+	item_state = "intern"
 	_color = "intern"
 
 /obj/item/clothing/under/color/grey/tech
 	name = "technical assistant uniform"
 	desc = "Technically assisting."
-	icon_state = "tech_s"
-	item_state = "tech_s"
+	icon_state = "tech"
+	item_state = "tech"
 	_color = "tech"
 
 /obj/item/clothing/under/color/grey/research
 	name = "research assistant uniform"
 	desc = "The tag on the inside has guinea pig scribbled out and 'research ass' written over it."
-	icon_state = "research_s"
-	item_state = "research_s"
+	icon_state = "research"
+	item_state = "research"
 	_color = "research"

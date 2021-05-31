@@ -565,6 +565,12 @@ var/global/list/disease2_list = list()
 					if (mob.bodytemperature > 350)
 						to_chat(mob, "<span class='warning'>Your arms are heavy.</span>")
 						fever_warning++
+				if (4)
+					if(ishuman(mob) && mob.bodytemperature > 365)
+						var/mob/living/carbon/human/H = mob
+						to_chat(mob, "<span class='warning'>There's vomit on your sweater already.</span>")
+						H.reagents.add_reagent(SPAGHETTI,20)
+						fever_warning++
 
 
 	ticks += speed

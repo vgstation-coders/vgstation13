@@ -20,12 +20,12 @@
 	duration = 20
 	projectile_speed = 1
 
-	amt_dam_brute = 20
-	amt_dam_fire = 25
+	amt_dam_brute = 40
+	amt_dam_fire = 45
 
 	var/ex_severe = -1
-	var/ex_heavy = 1
-	var/ex_light = 2
+	var/ex_heavy = 0
+	var/ex_light = 3
 	var/ex_flash = 5
 
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)

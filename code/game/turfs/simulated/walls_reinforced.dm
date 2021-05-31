@@ -111,7 +111,7 @@
 	//Deconstruction and reconstruction
 	switch(d_state)
 		if(WALLCOMPLETED)
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				W.playtoolsound(src, 100)
 				src.d_state = WALLCOVEREXPOSED
 				update_icon()

@@ -119,8 +119,8 @@
 	. = ..()
 	. += "<br/>Station takeover: [blobs.len]/[blobwincount]."
 
-/datum/faction/blob_conglomerate/stage(var/stage)
-	switch(stage)
+/datum/faction/blob_conglomerate/stage(var/new_stage)
+	switch(new_stage)
 		if(FACTION_DORMANT)
 			if (!declared)
 				declared = TRUE

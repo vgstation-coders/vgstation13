@@ -270,8 +270,6 @@ obj/item/proc/get_clamped_volume()
 			animation.master = null
 			qdel(animation)
 
-	if(hitsound)
-		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)
 		material_type.on_use(src,attacked, user)
 

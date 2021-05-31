@@ -12,7 +12,7 @@
 	robogibs(loc, virus2)
 
 	if(mind) //To make sure we're gibbing a player, who knows
-		if(!suiciding) //I don't know how that could happen, but you can't be too sure
+		if(!mind.suiciding) //I don't know how that could happen, but you can't be too sure
 			score["deadsilicon"] += 1
 
 	living_mob_list -= src
@@ -73,7 +73,7 @@
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
-		if(!suiciding)
+		if(!mind.suiciding)
 			score["deadsilicon"] += 1
 
 	sql_report_cyborg_death(src)

@@ -511,7 +511,7 @@
 		var/light_amount = 0
 		if(isturf(loc))
 			var/turf/T = loc
-			light_amount = T.get_lumcount() * 10
+			light_amount = T.get_lumcount() 
 
 		growth = clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
 

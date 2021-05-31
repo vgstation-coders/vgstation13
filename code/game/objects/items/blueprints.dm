@@ -468,10 +468,14 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	Turns the area the person is currently in into a shuttle if it meets to certian standards
 		- Is a custom area. No players turning the bar into a shuttle
 		- Has enough engines that are active
-			- 2 engines for every 25 tiles of area.
+			- 2 engines minimum
+			- 1 engine for every 15 tiles of area.
 			- Engines must be of the DIY variety, and have a connected heater.
 		- The point they are facing is outwards on the edge of the area
 */
+
+#define CUSTOM_SHUTTLE_TILES_PER_ENGINE 15 // centralized config thingy. #de[B]ines 4 lyfe, performance forever
+
 
 /obj/item/shuttle_license
 	name = "shuttle verification license"
@@ -496,12 +500,18 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	var/area_size = A.area_turfs.len
 	var/active_engines = 0
 	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in A)
-		if(D.heater && D.anchored)
-			active_engines++
-
-	if(active_engines < 2 || area_size/active_engines > 15) //2 engines per 30 tiles, with a minimum of 2 engines.
+		if(D.anchored)
+			if(D.heater) // it has a heater, great, count it
+				active_engines++
+			else // fix for engines getting their internal state desyncronized from what is actually happening
+				if(D.try_connect())
+					active_engines++
+				else if (D.retard_checks() && D.try_connect())
+					active_engines++
+					
+	if(active_engines < 2 || area_size/active_engines > CUSTOM_SHUTTLE_TILES_PER_ENGINE) // 1 engine per 15 tiles, with a minimum of 2 engines.
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Insufficient engine count.</span>")
-		to_chat(user, "<span class = 'notice'> Active engine count: [active_engines]. Area size: [area_size] meters squared.</span>")
+		to_chat(user, "<span class = 'notice'> Detected [active_engines] of [max(2, Ceiling(area_size/CUSTOM_SHUTTLE_TILES_PER_ENGINE))] engines required for a [area_size] square meter shuttle.<br>1 engine required for every [CUSTOM_SHUTTLE_TILES_PER_ENGINE] square meters, 2 engines minimum.</span>")
 		return
 
 	var/turf/check_turf = get_step(user, user.dir)
@@ -544,3 +554,4 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	message_admins("<span class='notice'>[key_name_admin(user)] has turned [A.name] into a shuttle named [S.name]. [formatJumpTo(get_turf(user))]</span>")
 	log_admin("[key_name(user)]  has turned [A.name] into a shuttle named [S.name].")
 	qdel(src)
+#undef CUSTOM_SHUTTLE_TILES_PER_ENGINE

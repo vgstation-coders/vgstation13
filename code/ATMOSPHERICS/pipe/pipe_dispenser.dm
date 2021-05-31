@@ -76,6 +76,7 @@
 	<li><a href='?src=\ref[src];make=[PIPE_HE_BENT];dir=5'>Bent Pipe</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_JUNCTION];dir=1'>Junction</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_HEAT_EXCHANGE];dir=1'>Heat Exchanger</a></li>
+	<li><a href='?src=\ref[src];make=[PIPE_HE_CAP];dir=1'>Pipe Cap</a></li>
 </ul>
 <b>Insulated pipes:</b>
 <ul>

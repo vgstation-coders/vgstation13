@@ -435,6 +435,7 @@
 	set waitfor = FALSE
 	if(timestopped)
 		return 0 //under effects of time magick
+	check_dark_vision()
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
@@ -1522,6 +1523,12 @@ Use this proc preferably at the end of an equipment loadout
 		return 0
 	return 1
 
+/mob/proc/isKnockedDown() //Check if the mob is knocked down
+	return isUnconscious() || knockdown || paralysis
+
+/mob/proc/isJustStunned() //Some ancient coder (as of 2021) made it so that it checks directly for whether the variable has a positive number, and I'm too afraid of unintended consequences down the line to just change it to isStunned(), so instead you have this half-baked abomination of a barely-used proc just so that player simple_animal mobs can move. You're welcome!
+	return stunned
+
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
 	if (locked_to)
@@ -1530,12 +1537,11 @@ Use this proc preferably at the end of an equipment loadout
 			canmove = 0
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
-
-	else if(isUnconscious() || knockdown || paralysis || resting || !can_stand)
+	else if(resting || !can_stand || isKnockedDown())
 		stop_pulling()
 		lying = 1
 		canmove = 0
-	else if(stunned)
+	else if(isJustStunned())
 //		lying = 0
 		canmove = 0
 	else if(captured)
@@ -1622,6 +1628,7 @@ Use this proc preferably at the end of an equipment loadout
 
 //this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
 /mob/proc/EndMoving()
+	check_dark_vision()
 	var/datum/listener
 	for(var/atomToCall in src.callOnEndMove)
 		listener = locate(atomToCall)
@@ -1630,8 +1637,26 @@ Use this proc preferably at the end of an equipment loadout
 		else
 			src.callOnEndMove -= atomToCall
 
+/mob/proc/check_dark_vision()
+	if (dark_plane && dark_plane.alphas.len)
+		var/max_alpha = 0
+		for (var/key in dark_plane.alphas)
+			max_alpha = max(dark_plane.alphas[key], max_alpha)
+		dark_plane.alpha = max_alpha
+	else
+		dark_plane?.alpha = initial(dark_plane.alpha)
+		
+	if (self_vision)
+		if (isturf(loc))
+			var/turf/T = loc
+			if (T.get_lumcount() > 0)
+				if (self_vision.alpha == self_vision.target_alpha)
+					self_vision.alpha = 0
+			else
+				if (self_vision.alpha != self_vision.target_alpha)
+					self_vision.alpha = self_vision.target_alpha
 
-/mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+/mob/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	StartMoving()
 	. = ..()
 	EndMoving()

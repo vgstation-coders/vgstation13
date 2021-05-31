@@ -38,6 +38,7 @@ Buildable meters
 #define PIPE_HE_MANIFOLD		31
 #define PIPE_HE_MANIFOLD4W      32
 #define PIPE_HEAT_PUMP          33
+#define PIPE_HE_CAP				34
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -160,6 +161,8 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 				src.pipe_type = PIPE_INSUL_MANIFOLD4W
 			else
 				src.pipe_type = PIPE_MANIFOLD4W
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/heat))
+			src.pipe_type = PIPE_HE_CAP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap))
 			src.pipe_type = PIPE_CAP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/thermal_plate))
@@ -227,7 +230,8 @@ var/global/list/pipeID2State = list(
 	"layeradapter",
 	"he_manifold",
 	"he_manifold4w",
-	"heat_pump"
+	"heat_pump",
+	"he_cap"
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -263,7 +267,8 @@ var/global/list/nlist = list( \
 	"pipe alignment adapter",
 	"h/e manifold", \
 	"h/e 4-way manifold", \
-	"thermoelectric cooler"
+	"thermoelectric cooler", \
+	"h/e pipe cap"
 )
 /obj/item/pipe/proc/update()
 
@@ -350,8 +355,8 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return flip|cw|acw
 		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER,PIPE_MTVALVE,PIPE_DTVALVE)
 			return dir|flip|cw
-		if(PIPE_CAP)
-			return flip
+		if(PIPE_CAP, PIPE_HE_CAP)
+			return dir
 	return 0
 
 /obj/item/pipe/proc/get_pdir() //endpoints for regular pipes
@@ -388,6 +393,8 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return get_pipe_dir()
 		if(PIPE_JUNCTION)
 			return dir
+		if(PIPE_HE_CAP)
+			return get_pipe_dir()
 		else
 			return 0
 
@@ -471,6 +478,9 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_CAP)
 			P=new /obj/machinery/atmospherics/unary/cap(src.loc)
+
+		if(PIPE_HE_CAP)
+			P=new /obj/machinery/atmospherics/unary/cap/heat(src.loc)
 
 		if(PIPE_PASSIVE_GATE)		//passive gate
 			P=new /obj/machinery/atmospherics/binary/passive_gate(src.loc)

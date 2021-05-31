@@ -1239,6 +1239,8 @@ Thanks.
 		return
 	delayNextMove(1)
 	resting = !resting
+	// MUST do it immediately! because else it breaks
+	update_transform()
 	update_canmove()
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
 
@@ -1635,8 +1637,7 @@ Thanks.
 		"fire_stacks",
 		"specialsauce",
 		"silent",
-		"is_ventcrawling",
-		"suiciding")
+		"is_ventcrawling")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

@@ -165,6 +165,11 @@
 	. = ..()
 	air_contents.adjust_gas(GAS_NITROGEN, (3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
+/obj/item/weapon/tank/emergency_nitrogen/engi
+	name = "extended-capacity emergency nitrogen tank"
+	icon_state = "emergency_engi"
+	volume = 6
+
 /*
  * Nitrogen
  */

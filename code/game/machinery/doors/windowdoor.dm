@@ -282,7 +282,7 @@
 		return smartwindow
 
 	//If its a multitool and our windoor is smart, open the menu
-	if(ismultitool(I) && smartwindow)
+	if(I.is_multitool(user) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
 

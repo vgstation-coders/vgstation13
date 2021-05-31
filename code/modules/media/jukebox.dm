@@ -813,11 +813,13 @@ var/global/list/loopModeNames=list(
 		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
+		"funk" = "Funk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance"
 	)
@@ -974,7 +976,7 @@ var/global/list/loopModeNames=list(
 	if(popup)
 		popup.close()
 	playing = 0
-	set_light(0)
+	kill_light()
 	icon_state = ""
 	flick("repacking",src)
 	update_music()

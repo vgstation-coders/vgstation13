@@ -25,6 +25,7 @@
 	var/turf/T = src.loc
 	if(level==1)
 		hide(T.intact)
+	kill_light()
 	return
 
 
@@ -57,7 +58,7 @@
 	..()
 
 /obj/machinery/power/terminal/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W) && !master) //Sanity in the rare case something destroys a machine and leaves a terminal
+	if(W.is_wirecutter(user) && !master) //Sanity in the rare case something destroys a machine and leaves a terminal
 		new /obj/item/stack/cable_coil(get_turf(src), 10)
 		qdel(src)
 		return

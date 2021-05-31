@@ -104,7 +104,8 @@
 
 /obj/item/potion/healing/imbibe_effect(mob/living/user)
 	user.rejuvenate(1)
-	user.suiciding = 0
+	if(user.mind)
+		user.mind.suiciding = 0
 
 /obj/item/potion/mana
 	name = "potion of mana"
@@ -160,7 +161,7 @@
 /obj/item/potion/light/imbibe_effect(mob/user)
 	user.set_light(7,10)
 	spawn(5 MINUTES)
-		user.set_light(0)
+		user.kill_light()
 
 /obj/item/potion/light/impact_atom(atom/target)
 	var/list/L = get_all_mobs_in_dview(get_turf(src), ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))

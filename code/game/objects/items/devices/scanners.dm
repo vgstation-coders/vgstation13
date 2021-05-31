@@ -177,7 +177,7 @@ Subject's pulse: ??? BPM"})
 		OX = fake_oxy > 50 ? "<b>[fake_oxy]</b>" : fake_oxy
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
-		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
+		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[(M.health - M.halloss)/M.maxHealth*100]% Healthy"]</span>"
 	if(isanimal(M))
 		to_chat(user, message)//Simple animal, we don't care about anything else.
 		return message
@@ -540,7 +540,7 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && !istype(R,/datum/reagent/citalopram) && !istype(R,/datum/reagent/paroxetine) && !istype(R,/datum/reagent/incense) && !istype(R,/datum/reagent/antipathogenic) && !istype(R,/datum/reagent/vaccine) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
+				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && isnum(R.data) && !isNonTimeDataReagent(R) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else

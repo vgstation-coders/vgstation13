@@ -1,7 +1,7 @@
 
 /obj/machinery/artifact_scanpad
 	name = "anomaly scanner pad"
-	desc = "Build next to an anomaly analyser or exotic particle harvester."
+	desc = "Build next to an anomaly analyzer or exotic particle harvester."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "xenoarch_scanner0"
 	anchored = TRUE

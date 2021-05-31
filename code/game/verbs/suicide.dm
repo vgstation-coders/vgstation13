@@ -1,5 +1,3 @@
-/mob/living/var/suiciding = 0
-
 /mob/living/verb/suicide()
 	set hidden = 1
 
@@ -68,8 +66,8 @@
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
 
-	if(suicide_set)
-		suiciding = 1
+	if(suicide_set && mind)
+		mind.suiciding = 1
 
 	var/obj/item/held_item = get_active_hand()
 
@@ -100,8 +98,8 @@
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
 
-	if(suicide_set)
-		suiciding = 1
+	if(suicide_set && mind)
+		mind.suiciding = 1
 
 	if(!container)
 		visible_message("<span class='danger'>[src]'s brain is growing dull and lifeless. It looks like \he's trying to commit suicide.</span>")
@@ -132,8 +130,8 @@
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
 
-	if(suicide_set)
-		suiciding = 1
+	if(suicide_set && mind)
+		mind.suiciding = 1
 
 	var/obj/item/held_item = get_active_hand()
 	attempt_item_suicide(held_item)
@@ -161,8 +159,8 @@
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
 
-	if(suicide_set)
-		suiciding = 1
+	if(suicide_set && mind)
+		mind.suiciding = 1
 
 	adjustBruteLoss(-(maxHealth - health) + 2*maxHealth) // kill it dead; set our health to -100 instantly
 	updatehealth()
@@ -207,8 +205,8 @@
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
 
-	if(suicide_set)
-		suiciding = 1
+	if(suicide_set && mind)
+		mind.suiciding = 1
 
 	visible_message(pick("<span class='danger'>[src] suddenly starts thrashing around wildly! It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] suddenly starts mauling \himself! It looks like \he's trying to commit suicide.</span>"))
@@ -229,8 +227,8 @@
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
 
-	if(suicide_set)
-		suiciding = 1
+	if(suicide_set && mind)
+		mind.suiciding = 1
 
 	visible_message("<span class='danger'>[src] starts vibrating uncontrollably! It looks like \he's trying to commit suicide.</span>")
 	setOxyLoss(100)
@@ -254,8 +252,8 @@
 
 		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
 
-	if(suicide_set)
-		suiciding = 1
+	if(suicide_set && mind)
+		mind.suiciding = 1
 
 	visible_message(pick("<span class='danger'>[src] suddenly starts thrashing around wildly! It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] suddenly starts mauling \himself! It looks like \he's trying to commit suicide.</span>"))

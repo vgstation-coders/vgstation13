@@ -180,11 +180,13 @@
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
-#define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
+#define islightingoverlay(A) (istype(A, /atom/movable/light))
 
 #define ischair(A) (istype(A, /obj/structure/bed/chair))
 
 #define isvehicle(A) (istype(A, /obj/structure/bed/chair/vehicle))
+
+#define istable(A) (istype(A, /obj/structure/table))
 
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
@@ -222,6 +224,8 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
 
+#define iswallturf(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/simulated/shuttle/wall))
+
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
@@ -235,6 +239,8 @@
 #define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
+
+#define isNonTimeDataReagent(R) (is_type_in_list(R, list( /datum/reagent/citalopram, /datum/reagent/paroxetine)))
 
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
@@ -365,11 +371,6 @@ proc/get_space_area()
 //CPU lag shit
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
-
-#define FOR_DVIEW(type, range, center, invis_flags) \
-	dview_mob.loc = center;           \
-	dview_mob.see_invisible = invis_flags; \
-	for(type in view(range, dview_mob))
 
 //get_turf(): Returns the turf that contains the atom.
 //Example: A fork inside a box inside a locker will return the turf the locker is standing on.

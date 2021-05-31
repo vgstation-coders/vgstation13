@@ -248,3 +248,7 @@
 		to_chat(target, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
 		to_chat(src, "<span class='warning'>Repeat at least every 7 seconds.</span>")
 	target.cpr_time = 1
+
+/mob/living/carbon/human/on_dodge(attacker, attacking_object)
+	if(isninja(src))
+		emote("smirks", message = TRUE)

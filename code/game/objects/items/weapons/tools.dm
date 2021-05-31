@@ -204,6 +204,9 @@
 	attack_verb = list("pinches", "nips at")
 	toolsounds = list('sound/items/Wirecutter.ogg')
 
+/obj/item/tool/wirecutters/is_wirecutter(mob/user)
+	return TRUE
+
 /obj/item/tool/wirecutters/New()
 	. = ..()
 
@@ -233,6 +236,8 @@
 	flags = FPRINT | OPENCONTAINER
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
+	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 	//Amount of OUCH when it's thrown
 	force = 3.0
@@ -473,7 +478,7 @@
 	else
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		set_light(0)
+		kill_light()
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -503,6 +508,7 @@
 			src.damtype = "fire"
 			update_icon()
 			processing_objects.Add(src)
+			set_light(2)
 		else
 			if(user && istype(user))
 				to_chat(user, "<span class='notice'>Need more fuel!</span>")
@@ -514,11 +520,12 @@
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		set_light(0)
+		kill_light()
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
 		src.welding = 0
+		kill_light()
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob

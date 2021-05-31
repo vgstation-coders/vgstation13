@@ -15,7 +15,7 @@
 
 	if(wear_mask)
 		skipface |= check_hidden_head_flags(HIDEFACE)
-	
+
 	if(wear_mask?.is_hidden_identity() || head?.is_hidden_identity())
 		is_gender_visible = 0
 
@@ -181,7 +181,7 @@
 		if(o && o.status & ORGAN_SPLINTED)
 			msg += "<span class='warning'>[t_He] [t_has] a splint on [t_his] [o.display_name]!</span>\n"
 
-	if(suiciding)
+	if(mind && mind.suiciding)
 		msg += "<span class='warning'>[t_He] appear[t_s] to have committed suicide... there is no hope of recovery.</span>\n"
 
 	if(M_DWARF in mutations)

@@ -110,7 +110,7 @@
 			has_electronics &= 2
 		return
 
-	else if (iswirecutter(W) && opened && (has_electronics & 2))
+	else if (W.is_wirecutter(user) && opened && (has_electronics & 2))
 		to_chat(user, "You begin to cut the cables...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 50))

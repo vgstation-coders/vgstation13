@@ -7,6 +7,9 @@
 	level = 2
 	layer = PIPE_LAYER
 	can_be_coloured = 1
+	dir = SOUTH
+	initialize_directions = SOUTH
+	color = "#B4B4B4"
 
 
 /obj/machinery/atmospherics/unary/cap/hide(var/i)
@@ -72,6 +75,47 @@
 	name = "Air supply cap"
 	color=PIPE_COLOR_CYAN
 
+/obj/machinery/atmospherics/unary/cap/heat
+	name = "pipe endcap"
+	desc = "An endcap for pipes"
+	icon = 'icons/obj/pipes.dmi'
+	icon_state = "he_cap"
+
+	can_be_coloured = 0
+
+/obj/machinery/atmospherics/unary/cap/heat/New()
+	..()
+	initialize_directions_he = initialize_directions
+
+/obj/machinery/atmospherics/unary/cap/heat/update_icon()
+	overlays = 0
+	alpha = invisibility ? 128 : 255
+	icon_state = "he_cap"
+
+/obj/machinery/atmospherics/unary/cap/heat/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+	dir = pipe.dir
+	initialize_directions = 0
+	initialize_directions_he = pipe.get_hdir()
+	var/turf/T = loc
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
+	initialize()
+	build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
+	return 1
+
+
+/obj/machinery/atmospherics/unary/cap/heat/process()
+	. = ..()
+	if(node1)
+		animate(src, color = node1.color, time = 2 SECONDS, easing = SINE_EASING)
+	else if (color != "#B4B4B4")
+		animate(src, color = "#B4B4B4", time = 2 SECONDS, easing = SINE_EASING)
+
+/obj/machinery/atmospherics/unary/cap/heat/getNodeType(var/node_id)
+	return PIPE_TYPE_HE
 
 /obj/machinery/atmospherics/unary/cap/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))

@@ -129,7 +129,7 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 				if("I go for the classics")
 					baby.icon_state = "secway-custom-classic"
 				if("A big donut")
-					baby.icon_state = "secway-custom-sprinkes"
+					baby.icon_state = "secway-custom-sprinkles"
 				if("A Rottweiler combat cyborg")
 					baby.icon_state = "secway-custom-rottweiler"
 				if("I'm the head honcho")
@@ -208,7 +208,7 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 
 /obj/structure/bed/chair/vehicle/secway/custom/process()
 	..()
-	if(light && siren)
+	if(light_obj && siren)
 		if(light_color == "#FF0000")
 			light_color = "#0000FF"
 		else

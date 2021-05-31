@@ -129,7 +129,7 @@
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
-		if(!suiciding) //Cowards don't count
+		if(!(mind && mind.suiciding)) //Cowards don't count
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
 	if(ticker && ticker.mode)
 		sql_report_death(src)

@@ -201,7 +201,8 @@
 
 	for(var/mob/living/M in orange(src,3))
 		M.revive(1)
-		M.suiciding = 0
+		if(M.mind)
+			M.mind.suiciding = 0
 		to_chat(M, "<span class='notice'>THE ADMINBUS IS LOVE. THE ADMINBUS IS LIFE.</span>")
 		sleep(2)
 	update_rearview()
@@ -218,7 +219,7 @@
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-on"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
-			lightsource.set_light(0)
+			lightsource.kill_light()
 			if(roadlights == 1 || roadlights == 2)
 				overlays["roadlights"] = null
 			roadlights = 0
@@ -336,7 +337,7 @@
 		if(iscarbon(M))
 			for(var/i = 1 to M.held_items.len)
 				if(M.held_items[i] == null)
-					var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(M)
+					var/obj/item/cannonball/fuse_bomb/admin/B = new /obj/item/cannonball/fuse_bomb/admin(M)
 					spawnedbombs += B
 					if(!M.put_in_hands(B))
 						qdel(B)
@@ -347,7 +348,7 @@
 	for(var/mob/living/carbon/C in passengers)
 		for(var/i = 1 to C.held_items.len)
 			if(C.held_items[i] == null)
-				var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(C)
+				var/obj/item/cannonball/fuse_bomb/admin/B = new /obj/item/cannonball/fuse_bomb/admin(C)
 				spawnedbombs += B
 				if(!C.put_in_hands(B))
 					qdel(B)
@@ -371,7 +372,7 @@
 	var/distributed = 0
 
 	for(var/i=spawnedbombs.len;i>0;i--)
-		var/obj/item/device/fuse_bomb/B = spawnedbombs[i]
+		var/obj/item/cannonball/fuse_bomb/B = spawnedbombs[i]
 		if(B)
 			if(istype(B.loc,/mob/living/carbon))
 				var/mob/living/carbon/C = B.loc

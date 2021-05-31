@@ -1896,7 +1896,7 @@ var/list/blind_victims = list()
 	word3 = /datum/runeword/blood_cult/other
 	rune_flags = RUNE_STAND
 	talisman_uses = 3
-	page = "This rune, which you have to stand above to use, equips your character with cult gear. Namely, Cult Hood, Cult Robes, Cult Shoes, and a Cult Backpack. Wearing cult gear improves your efficiency with a few rituals (see Tools section bellow) on top of granting you very decent armor values. After using the rune, a Blood Tesseract appears in your hand, containing clothes that had to be swapped out because you were already wearing them in your head/suit slots. You can use it to get your clothing back instantly. Lastly, the talisman version has 3 uses, and gets back in your hand after you use the Blood Tesseract. The inventory of your backpack gets always gets transferred upon use. "
+	page = "This rune, which you have to stand above to use, equips your character with cult gear. Namely, Cult Hood, Cult Robes, Cult Shoes, and a Cult Backpack. Wearing cult gear improves your efficiency with a few rituals (see Tools section below) on top of granting you very decent armor values. After using the rune, a Blood Tesseract appears in your hand, containing clothes that had to be swapped out because you were already wearing them in your head/suit slots. You can use it to get your clothing back instantly. Lastly, the talisman version has 3 uses, and gets back in your hand after you use the Blood Tesseract. The inventory of your backpack gets always gets transferred upon use. "
 	var/list/slots_to_store = list(
 		slot_shoes,
 		slot_head,

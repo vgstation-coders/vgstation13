@@ -47,6 +47,8 @@
 	display_contents_with_number = TRUE
 	allow_quick_empty = TRUE
 	allow_quick_gather = TRUE
+	icon = 'icons/obj/storage/smallboxes.dmi'
+	icon_state = "box"
 
 /obj/item/weapon/storage/gachabox/New()
 	..()
@@ -230,7 +232,6 @@ var/global/list/shoal_stuff = list(
 	name = "Alcatraz IV security crate"
 	desc = "It came from Alcatraz IV!"
 
-	//6+6+6=18
 var/global/list/alcatraz_stuff = list(
 	//3 of a kind
 	/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,
@@ -1263,6 +1264,222 @@ var/global/list/alcatraz_stuff = list(
 	if(!istype(F, /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe))
 		return FALSE
 	return TRUE
+
+/obj/structure/closet/crate/internals/cloudnine
+	name = "Cloud IX engineering crate"
+	desc = "The Cloud IX engineering facility hangs in the atmosphere of the eponymous gas giant. But are the workers happy? Nein."
+
+//3+8+4=15
+var/global/list/cloudnine_stuff = list(
+	//3 of a kind
+	/obj/item/airshield_projector,/obj/item/airshield_projector,/obj/item/airshield_projector,
+	//2 of a kind
+	/obj/item/vaporizer,/obj/item/vaporizer,
+	/obj/item/device/multitool/omnitool,/obj/item/device/multitool/omnitool,
+	/obj/item/supermatter_shielding/frass,/obj/item/supermatter_shielding/frass,
+	/mob/living/simple_animal/hamster,/mob/living/simple_animal/hamster,
+	//1 of a kind
+	/obj/item/clothing/gloves/golden,
+	/obj/machinery/power/antiquesynth,
+	/obj/item/weapon/am_containment/decelerator,
+	/obj/structure/largecrate/secure/magmaw,
+	)
+
+/obj/structure/closet/crate/internals/cloudnine/New()
+	..()
+	for(var/i = 1 to 5)
+		if(!cloudnine_stuff.len)
+			return
+		var/path = pick_n_take(cloudnine_stuff)
+		new path(src)
+
+/obj/item/supermatter_shielding/frass
+	name = "\improper F.R.A.S.S. sphere"
+	desc = "Frequency-reticulated anti-supermatter safeguard. A refinement of the S.A.S.S. design that is reusable but dazes its user more. It should prevent you from getting annihilated by supermatter. It looks like a brown marble floating in a vibrating gas inside a glass orb."
+	stunforce = 30
+	infinite = TRUE
+
+#define HAMSTER_MOVEDELAY 1
+/mob/living/simple_animal/hamster
+	name = "colossal hamster"
+	desc = "Cricetus robustus. Roughly the size of a capybara, this species of hamster was bred to power treadmill engines."
+	icon_state = "hammy"
+	icon_living = "hammy"
+	icon_dead = "hammy-dead"
+	response_help = "pets"
+	treadmill_speed = 8
+	health = 100
+	maxHealth = 100
+	min_oxy = 0
+	speak_chance = 2
+	emote_hear = list("squeaks deeply")
+	var/obj/my_wheel
+
+/mob/living/simple_animal/hamster/Life()
+	if(!..())
+		return 0
+	if(!my_wheel && isturf(loc))
+		var/obj/machinery/power/treadmill/T = locate(/obj/machinery/power/treadmill) in loc
+		if(T)
+			wander = FALSE
+			my_wheel = T
+		else
+			wander = TRUE
+	if(my_wheel)
+		hamsterwheel(20)
+
+/mob/living/simple_animal/hamster/proc/hamsterwheel(var/repeat)
+	if(repeat < 1 || stat)
+		return
+	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
+		wander = TRUE
+		my_wheel = null
+		return
+	step(src,my_wheel.dir)
+	delayNextMove(HAMSTER_MOVEDELAY)
+	sleep(HAMSTER_MOVEDELAY)
+	hamsterwheel(repeat-1)
+
+/mob/living/simple_animal/hamster/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	if(M && !isUnconscious() && M.a_intent == I_HELP)
+		M.delayNextAttack(2 SECONDS)
+		var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+		heart.plane = ABOVE_HUMAN_PLANE
+		flick_overlay(heart, list(M.client), 20)
+		if(!my_wheel)
+			flick("hammy-rest", src)
+		emote("me", EMOTE_AUDIBLE, pick("flattens amicably.","fluffs up.","puffs out her cheeks.","shuts her eyes contentedly."))
+
+#undef HAMSTER_MOVEDELAY
+
+/obj/item/clothing/gloves/golden
+	name = "golden gloves"
+	desc = "An impressive fashion statement. Gold is an excellent conductor, meaning these won't help much against shocks. The insides are lined with strange high-tech sacs filled with an unidentified fluid which lubricates the outside. It comes with a cryptic note reading: touch the supermatter."
+	icon_state = "golden"
+	item_state = "yellow"
+	siemens_coefficient = 2
+	permeability_coefficient = 0.05
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+	_color = "golden"
+
+/obj/item/airshield_projector
+	name = "airshield projector"
+	desc = "Exploits Maxwellian Daemons to hold each individual gas particle in place in a defined area. They won't open or close doors for you, though."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "airprojector"
+	var/list/projected = list()
+	var/max_proj = 6
+
+/obj/item/airshield_projector/preattack(atom/target, mob/user , proximity)
+	var/turf/to_shield = get_turf(target)
+	if(projected.len < max_proj && istype(to_shield) && (!locate(/obj/effect/airshield) in to_shield))
+		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
+		var/obj/effect/airshield/A = new(to_shield)
+		A.owner = src
+		projected += A
+		visible_message("<span class='notice'>\The [user] deploys \the [A].</span>")
+		return TRUE
+	return FALSE
+
+//not to be confused with the structure in airshield.dm
+/obj/effect/airshield
+	name = "airshield"
+	desc = "A shield that allows only non-gasses to pass through."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "planner"
+	opacity = FALSE
+	mouse_opacity = FALSE
+	density = FALSE
+	anchored = TRUE
+	plane = ABOVE_HUMAN_PLANE
+	maptext_x = 11
+	maptext_y = 8
+	var/obj/item/airshield_projector/owner
+	var/life = 9
+
+/obj/effect/airshield/New()
+	..()
+	countdown()
+
+/obj/effect/airshield/proc/countdown()
+	maptext = "<span style=\"color:#FF8C00;font-size:12px;\">[life]</span>"
+	spawn(1 SECONDS)
+		life--
+		if(life>0)
+			countdown()
+		else
+			if(owner)
+				owner.projected -= src
+			update_nearby_tiles(loc)
+			qdel(src)
+
+/obj/effect/airshield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover))
+		return ..()
+	return FALSE
+
+var/list/decelerators = list()
+/obj/item/weapon/am_containment/decelerator
+	name = "antimatter decelerator"
+	desc = "Acts as a 'filter' to trap antiparticles emitted by radiation. In function, it can be used to power an antimatter engine and refuel itself with nearby radiation."
+
+/obj/item/weapon/am_containment/decelerator/New()
+	..()
+	decelerators += src
+
+/obj/item/weapon/am_containment/decelerator/Destroy()
+	decelerators -= src
+	..()
+
+/obj/item/weapon/am_containment/decelerator/proc/receive_pulse(power)
+	fuel = min(fuel_max, fuel + round(power/100))
+
+#define OMNIMODE_WIRE 0
+#define OMNIMODE_TOOL 1
+/obj/item/device/multitool/omnitool
+	name = "omnitool"
+	desc = "Combining the power of wirecutters and a multitool. For power cables, works as a multitool when you stand on top and use it. It also allows the user to remotely access APCs and air alarms."
+	icon_state = "omnitool"
+	origin_tech = Tc_ENGINEERING + "=4"
+	sharpness = 1
+	force = 6
+	var/mode = OMNIMODE_TOOL
+
+/obj/item/device/multitool/omnitool/attack_self(mob/user)
+	mode = !mode
+	to_chat(user, "<span class='notice'>You toggle the tool into [mode ? "multitool" : "wirecutter"] mode.</span>")
+
+/obj/item/device/multitool/omnitool/is_wirecutter()
+	return !mode
+
+/obj/item/device/multitool/omnitool/is_multitool()
+	return mode
+
+var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
+
+/obj/item/device/multitool/omnitool/preattack(atom/target, mob/user, proximity)
+	if(proximity)
+		return FALSE //immediately continue if in reach
+	if(can_connect(target, user) && is_type_in_list(target.type,omnitoolable))
+		target.attack_hand(user)
+		return TRUE
+
+/obj/item/device/multitool/omnitool/proc/can_connect(atom/target, mob/user)
+	var/client/C
+	if(user)
+		C = user.client
+	else
+		var/mob/M = loc
+		if(!istype(M))
+			return FALSE
+		C = M.client
+	if(!C)
+		return FALSE
+	return get_dist(target,src) <= C.view
+
+#undef OMNIMODE_WIRE
+#undef OMNIMODE_TOOL
 
 //Mystery mob cubes//////////////
 

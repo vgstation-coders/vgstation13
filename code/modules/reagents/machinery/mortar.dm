@@ -18,6 +18,7 @@
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA,20),
 		/obj/item/stack/sheet/mineral/silver  = list(SILVER,20),
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD,20),
+		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID,10),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL,10),
 		/obj/item/stack/sheet/charcoal        = list("charcoal",20),

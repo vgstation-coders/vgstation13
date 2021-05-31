@@ -330,7 +330,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
 			update_icon()
 
-	if(ismultitool(G) && Adjacent(user))
+	if(G.is_multitool(user) && Adjacent(user))
 		output_dir = get_dir(src, user)
 		to_chat(user, "<span class='notice'>[bicon(src)]Output location set.</span>")
 		return

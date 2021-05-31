@@ -8,6 +8,7 @@
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
+	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
 	var/w_class = W_CLASS_MEDIUM
@@ -169,19 +170,23 @@
 /obj/item/proc/suicide_act(mob/user)
 	return
 
+/proc/wclass2text(w_class)
+	switch(w_class)
+		if(W_CLASS_TINY)
+			return "tiny"
+		if(W_CLASS_SMALL)
+			return "small"
+		if(W_CLASS_MEDIUM)
+			return "normal-sized"
+		if(W_CLASS_LARGE)
+			return "bulky"
+		if(W_CLASS_HUGE to INFINITY)
+			return "huge"
+
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
-		switch(w_class)
-			if(W_CLASS_TINY)
-				size = "tiny"
-			if(W_CLASS_SMALL)
-				size = "small"
-			if(W_CLASS_MEDIUM)
-				size = "normal-sized"
-			if(W_CLASS_LARGE)
-				size = "bulky"
-			if(W_CLASS_HUGE to INFINITY)
-				size = "huge"
+		size = wclass2text(w_class)
+
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (gender == PLURAL)
@@ -1155,7 +1160,7 @@ var/global/list/image/blood_overlays = list()
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		var/obj/effect/decal/cleanable/blueglow/BG
 		BG = had_blood
-		BG.set_light(0)
+		BG.kill_light()
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)
@@ -1442,6 +1447,12 @@ var/global/list/image/blood_overlays = list()
 	return FALSE
 
 /obj/item/proc/is_wrench(var/mob/user)
+	return FALSE
+
+/obj/item/proc/is_wirecutter(var/mob/user)
+	return FALSE
+
+/obj/item/proc/is_multitool(var/mob/user)
 	return FALSE
 
 //This proc will be called when the person holding or equipping it talks.

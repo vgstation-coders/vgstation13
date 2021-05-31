@@ -270,6 +270,14 @@
 	..()
 	reagents.add_reagent(CREATINE, 5)
 
+/obj/item/weapon/reagent_containers/pill/ryetalyn
+	name = "Ryetalyn pill"
+	desc = "Eliminates genetic defects."
+	icon_state = "pill7" //grey oblong
+
+/obj/item/weapon/reagent_containers/pill/ryetalyn/New()
+	..()
+	reagents.add_reagent(RYETALYN, 1)
 
 /obj/item/weapon/storage/pill_bottle/time_release
 	name = "controlled release pill bottle"

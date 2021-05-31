@@ -80,7 +80,7 @@
 /obj/item/device/radio/intercom/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	switch(buildstage)
 		if(3)
-			if(iswirecutter(W) && b_stat && wires.IsAllCut())
+			if(W.is_wirecutter(user) && b_stat && wires.IsAllCut())
 				to_chat(user, "<span class='notice'>You cut out the intercoms wiring and disconnect its electronics.</span>")
 				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10))
@@ -240,12 +240,12 @@
 	src.frequency = copy.frequency
 	src.broadcasting = copy.broadcasting
 	src.listening = copy.listening
-	
+
 /obj/item/device/radio/intercom/AIShiftClick(var/mob/living/silicon/ai/clicker)
 	if(clicker.intercom_clipboard)
 		src.frequency = clicker.intercom_clipboard.frequency
 		src.broadcasting = clicker.intercom_clipboard.broadcasting
-		src.listening = clicker.intercom_clipboard.listening		
+		src.listening = clicker.intercom_clipboard.listening
 
 		src.updateDialog()
 

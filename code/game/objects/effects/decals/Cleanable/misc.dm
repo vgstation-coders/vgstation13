@@ -189,7 +189,7 @@
 	desc = "Seems like this one won't hatch."
 	density = 0
 	anchored = 1
-	//reagent = EGGYOLK (not in yet)
+	reagent = EGG_YOLK
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
 
@@ -200,6 +200,15 @@
 	anchored = 1
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
+
+/obj/effect/decal/cleanable/spaghetti_spill
+	name = "spilled spaghetti"
+	desc = "A result of bursting into treats from awkward situations."
+	density = 0
+	anchored = 1
+	reagent = SPAGHETTI
+	icon = 'icons/effects/tomatodecal.dmi'
+	random_icon_states = list("smashed_spaghetti")
 
 /obj/effect/decal/cleanable/scattered_sand
 	name = "scattered sand"

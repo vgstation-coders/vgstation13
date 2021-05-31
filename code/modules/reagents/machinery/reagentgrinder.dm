@@ -39,6 +39,7 @@ var/global/list/juice_items = list (
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA = 20),
 		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
+		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),

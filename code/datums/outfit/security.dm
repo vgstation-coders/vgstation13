@@ -267,9 +267,7 @@
 /datum/outfit/detective/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.dna.SetSEState(SOBERBLOCK,1)
-	H.mutations += M_SOBER
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
-		H.mutations += M_NOIR
 		H.dna.SetSEState(NOIRBLOCK,1)
 	H.check_mutations = 1
 
