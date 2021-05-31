@@ -125,7 +125,8 @@
 
 		if(R.mug_icon_state)
 			icon_state = R.mug_icon_state
-			item_state = R.mug_icon_state
+			//item_state = R.mug_icon_state
+			//looks like there is none made yet so at least let's not hold an invisible mug
 
 		else
 			mug_reagent_overlay()

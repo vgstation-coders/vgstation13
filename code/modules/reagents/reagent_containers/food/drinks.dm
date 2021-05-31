@@ -1230,6 +1230,13 @@
 	icon_state = "spanishcup"
 	volume = 30
 
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/irelandcup
+	name = "\improper cup"
+	desc = "A cup with the Irish flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "irelandcup"
+	volume = 30
+
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup
 	name = "\improper cup"
 	desc = "A cup with the Uruguayan flag emblazoned on it."
