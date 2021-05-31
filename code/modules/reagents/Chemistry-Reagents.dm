@@ -398,17 +398,19 @@
 		)
 
 /datum/reagent/blood/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
-	var/totally_not_blood = "tomato juice"
+	var/totally_not_blood = "Tomato Juice"
 
 	switch(color)
 		if ("#2299FC")//Vox
-			totally_not_blood = "space lube"
+			totally_not_blood = "Space Lube"
 		if ("#EBECE6")//Insectoid
-			totally_not_blood = "milk"
+			totally_not_blood = "Milk"
 		if ("#D3D3D3")//Mushroom
-			totally_not_blood = "milk"
+			totally_not_blood = "Milk"
+		if ("#272727")//Pale
+			totally_not_blood = "Carbon"
 
-	glass_name = "[totally_not_blood] glass"
+	glass_name = "glass of [totally_not_blood]"
 	glass_desc = "Are you sure this is [totally_not_blood]?"
 	mug_name = "mug of [totally_not_blood]"
 	mug_desc = "Are you sure this is [totally_not_blood]?"
