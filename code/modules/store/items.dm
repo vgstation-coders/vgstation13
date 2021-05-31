@@ -49,7 +49,7 @@
 
 /datum/storeitem/canned_bread
 	name = "Canned Bread"
-	desc = "Best thing since bread."
+	desc = "Best thing since sliced."
 	typepath = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_bread
 	cost = 15
 /datum/storeitem/canned_bread/available_to_user(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
