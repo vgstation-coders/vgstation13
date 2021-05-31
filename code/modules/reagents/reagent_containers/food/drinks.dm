@@ -1170,31 +1170,63 @@
 	..()
 	reagents.add_reagent(KARMOTRINE, 15)
 
-/obj/item/weapon/reagent_containers/food/drinks/britcup
+/obj/item/weapon/reagent_containers/food/drinks/flagmug
+	name = "mug"
+	desc = "A simple mug."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "mug_empty"
+	isGlass = 0
+	amount_per_transfer_from_this = 10
+	volume = 30
+	starting_materials = list(MAT_IRON = 500)
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/on_reagent_change()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
+	else
+		overlays.len = 0
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
 	name = "\improper cup"
 	desc = "A cup with the British flag emblazoned on it."
 	icon = 'icons/obj/cafe.dmi'
 	icon_state = "britcup"
 	volume = 30
 
-/obj/item/weapon/reagent_containers/food/drinks/britcup/on_reagent_change()
-	if (reagents.reagent_list.len > 0)
-		mug_reagent_overlay()
-	else
-		overlays.len = 0
-
-/obj/item/weapon/reagent_containers/food/drinks/americup
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/americup
 	name = "\improper cup"
 	desc = "A cup with the American flag emblazoned on it."
 	icon = 'icons/obj/cafe.dmi'
 	icon_state = "americup"
 	volume = 30
 
-/obj/item/weapon/reagent_containers/food/drinks/americup/on_reagent_change()
-	if (reagents.reagent_list.len > 0)
-		mug_reagent_overlay()
-	else
-		overlays.len = 0
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/francecup
+	name = "\improper cup"
+	desc = "A cup with the French flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "francecup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/italycup
+	name = "\improper cup"
+	desc = "A cup with the Italy flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "italycup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/germancup
+	name = "\improper cup"
+	desc = "A cup with the German flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "germancup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/spanishcup
+	name = "\improper cup"
+	desc = "A cup with the Spanish flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "spanishcup"
+	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/gromitmug
 	name = "\improper Gromit Mug"

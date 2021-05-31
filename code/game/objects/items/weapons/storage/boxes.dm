@@ -188,7 +188,7 @@
 			/obj/item/mounted/poster,
 			/obj/item/weapon/pen/NT,
 			/obj/item/clothing/accessory/medal/participation,
-			/obj/item/weapon/reagent_containers/food/drinks/americup,
+			/obj/item/weapon/reagent_containers/food/drinks/flagmug/americup,
 			/obj/item/weapon/lighter/NT,
 			25;/obj/item/toy/syndicateballoon/ntballoon,
 			25;/obj/item/weapon/reagent_containers/food/snacks/chococoin,
@@ -811,8 +811,10 @@
 
 /obj/item/weapon/storage/box/mugs/New()
 	..()
-	for(var/i=0,i<6,i++)
+	for(var/i=0,i<5,i++)
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(src)
+	var/flagmug = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug))
+	new flagmug(src)
 
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
