@@ -397,6 +397,23 @@
 		"immunity" = null,
 		)
 
+/datum/reagent/blood/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	var/totally_not_blood = "tomato juice"
+
+	switch(color)
+		if ("#2299FC")//Vox
+			totally_not_blood = "space lube"
+		if ("#EBECE6")//Insectoid
+			totally_not_blood = "milk"
+		if ("#D3D3D3")//Mushroom
+			totally_not_blood = "milk"
+
+	glass_name = "[totally_not_blood] glass"
+	glass_desc = "Are you sure this is [totally_not_blood]?"
+	mug_name = "mug of [totally_not_blood]"
+	mug_desc = "Are you sure this is [totally_not_blood]?"
+
+
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
 	var/datum/reagent/blood/self = src
