@@ -87,10 +87,12 @@
 				return
 
 /obj/item/weapon/reagent_containers/glass/rag/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if (target == current_target)
+		current_target = null
+		return	//we are currently either bandaging them or smothering them
+	current_target = null
 	if(!user.is_holding_item(src))
 		return  //we used the rag as a bandage
-	if (target == current_target)
-		return	//we are currently either bandaging them or smothering them
 	if(!proximity_flag)
 		return 0 // Not adjacent
 	if (istype(target,/obj/structure/sink))
