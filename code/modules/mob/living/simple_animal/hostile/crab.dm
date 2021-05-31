@@ -17,8 +17,16 @@
 	maxHealth = 300//So they don't die as quickly
 	health = 300
 
-
 	melee_damage_lower = 10
 	melee_damage_upper = 15
 	attacktext = "snips"
 	attack_sound = 'sound/weapons/toolhit.ogg'
+
+/mob/living/simple_animal/hostile/crab/attackby(obj/item/O, mob/user)
+	if(O.is_wirecutter(user) || istype(O, /obj/item/weapon/pocket_mirror/scissors))
+		if(stat == DEAD)
+			return ..()
+		if(prob(50))
+			to_chat(user, "<span class='danger'>This kills the megamadcrab.</span>")
+			health -= 300
+			death()
