@@ -5,7 +5,7 @@
 	specialization = SSUTILITY
 	abbreviation = "HM"
 
-	charge_max = 150
+	charge_max = 500
 	spell_flags = null
 	invocation = "V_R'_ R_'UG_"
 	invocation_type = SpI_SHOUT
@@ -13,7 +13,7 @@
 	range = 3
 	inner_radius = -1
 
-	cooldown_min = 50
+	cooldown_min = 100
 	var/letters_retained = 12
 	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 4, Sp_POWER = 2)
 
