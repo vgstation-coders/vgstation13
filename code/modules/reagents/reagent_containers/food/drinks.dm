@@ -1244,6 +1244,27 @@
 	icon_state = "argentinacup"
 	volume = 30
 
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/brasilcup
+	name = "\improper cup"
+	desc = "A cup with the Brasilian flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "brasilcup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/uncup
+	name = "\improper cup"
+	desc = "A cup with the United Nations flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "uncup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/eucup
+	name = "\improper cup"
+	desc = "A cup with the European flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "eucup"
+	volume = 30
+
 /obj/item/weapon/reagent_containers/food/drinks/gromitmug
 	name = "\improper Gromit Mug"
 	desc = "Gromit Mug."
