@@ -1605,39 +1605,6 @@ Use this proc preferably at the end of an equipment loadout
 	set hidden = 1
 	return directionface(SOUTH)
 
-<<<<<<< HEAD
-/mob/proc/Facing()
-	var/datum/listener
-	for(var/atomToCall in src.callOnFace)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnFace[atomToCall])(src)
-		else
-			src.callOnFace -= atomToCall
-
-
-//this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
-/mob/proc/StartMoving()
-	var/datum/listener
-	for(var/atomToCall in src.callOnStartMove)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnStartMove[atomToCall])(src)
-		else
-			src.callOnStartMove -= atomToCall
-
-
-//this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
-/mob/proc/EndMoving()
-	check_dark_vision()
-	var/datum/listener
-	for(var/atomToCall in src.callOnEndMove)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnEndMove[atomToCall])(src)
-		else
-			src.callOnEndMove -= atomToCall
-
 /mob/proc/check_dark_vision()
 	if (dark_plane && dark_plane.alphas.len)
 		var/max_alpha = 0
@@ -1646,7 +1613,7 @@ Use this proc preferably at the end of an equipment loadout
 		dark_plane.alpha = max_alpha
 	else
 		dark_plane?.alpha = initial(dark_plane.alpha)
-		
+
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
@@ -1657,13 +1624,6 @@ Use this proc preferably at the end of an equipment loadout
 				if (self_vision.alpha != self_vision.target_alpha)
 					self_vision.alpha = self_vision.target_alpha
 
-/mob/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	StartMoving()
-	. = ..()
-	EndMoving()
-
-=======
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
 	lazy_invoke_event(/lazy_event/on_before_move)

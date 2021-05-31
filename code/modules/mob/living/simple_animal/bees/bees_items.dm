@@ -133,19 +133,11 @@
 				B = null
 			else
 				user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name]\s, they don't seem to like it.</span>","<span class='warning'>You swing at some [B.bee_species.common_name]\s, they don't seem to like it.</span>")
-<<<<<<< HEAD
-				B.state = BEE_OUT_FOR_ENEMIES
-				B.target = user
-		else
-			user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name]\s, they don't seem to like it.</span>","<span class='warning'>The [B.bee_species.common_name]\s are too angry to let themselves get caught.</span>")
-			B.state = BEE_OUT_FOR_ENEMIES
-=======
 				B.intent = BEE_OUT_FOR_ENEMIES
 				B.target = user
 		else
 			user.visible_message("<span class='warning'>[user] swings at some [B.bee_species.common_name]\s, they don't seem to like it.</span>","<span class='warning'>The [B.bee_species.common_name]\s are too angry to let themselves get caught.</span>")
 			B.intent = BEE_OUT_FOR_ENEMIES
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 			B.target = user
 	if(!caught)
 		to_chat(user, "<span class='warning'>There are no bugs in front of you!</span>")

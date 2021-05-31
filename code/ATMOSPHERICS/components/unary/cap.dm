@@ -77,11 +77,7 @@
 
 /obj/machinery/atmospherics/unary/cap/heat
 	name = "pipe endcap"
-<<<<<<< HEAD
-	desc = "An endcap for pipes"
-=======
 	desc = "An endcap for pipes."
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "he_cap"
 

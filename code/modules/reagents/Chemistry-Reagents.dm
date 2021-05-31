@@ -206,11 +206,6 @@
 ///	return
 ///datum/reagent/proc/on_update(var/atom/A)
 //	return
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 
@@ -483,11 +478,6 @@
 //	if(data["blood_colour"])
 //		color = data["blood_colour"]
 //	return ..()
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /datum/reagent/blood/reaction_turf(var/turf/simulated/T, var/volume) //Splash the blood all over the place
 
 	var/datum/reagent/self = src
@@ -2078,7 +2068,7 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
-			
+
 /datum/reagent/diamond
 	name = "Diamond dust"
 	id = DIAMONDDUST
@@ -2087,18 +2077,7 @@
 	color = "c4d4e0" //196 212 224
 	density = 3.51
 	specheatcap = 6.57
-	
-/datum/reagent/diamond/on_mob_life(var/mob/living/M)
 
-<<<<<<< HEAD
-	if(..())
-		return 1
-	
-	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
-	if(prob(30))
-		M.audible_scream()
-	
-=======
 /datum/reagent/diamond
 	name = "Diamond dust"
 	id = DIAMONDDUST
@@ -2117,7 +2096,6 @@
 	if(prob(30))
 		M.audible_scream()
 
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /datum/reagent/phazon
 	name = "Phazon salt"
 	id = PHAZON
@@ -9117,10 +9095,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.hallucination += 5	//50% mindbreaker
 
 /datum/reagent/self_replicating
-<<<<<<< HEAD
-=======
 	id = EXPLICITLY_INVALID_REAGENT_ID
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 	var/whitelisted_ids = list()
 
 /datum/reagent/self_replicating/post_transfer(var/datum/reagents/donor)
@@ -9137,11 +9112,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Chrysopoeia, the artificial production of gold, was one of the defining ambitions of ancient alchemy. Turns out, all it took was a little plasma. Converts all other reagents into Midazoline, except for Mercury, which will convert Midazoline into itself."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#F7C430" //rgb: 247, 196, 48
-<<<<<<< HEAD
-	specheatcap = 0.129
-	density = 19.3
-	whitelisted_ids = list(MERCURY)
-=======
 	density = 19.3
 	specheatcap = 0.129
 	whitelisted_ids = list(MERCURY)
@@ -9187,7 +9157,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(!M.isUnconscious() && data["stored_phrase"])
 		to_chat(M, "You hear a voice in your head saying: <span class='bold'>'[data["stored_phrase"]]'</span>.")
 		M.reagents.del_reagent(LOCUTOGEN)
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 
 //////////////////////
 //					//

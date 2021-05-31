@@ -973,58 +973,28 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
 	..()
 	reagents.add_reagent(SECCOFFEE, 50)
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
 	name = "Picomed: White edition"
 	desc = "Good for the body and good for the bones."
 	icon_state = "lifeline_white"
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
 	reagents.add_reagent(MILK, 2)
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red
 	name = "Picomed: Red edition"
 	desc = "I need 50ccs of coffee, stat!"
 	icon_state = "lifeline_red"
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
 	reagents.add_reagent(REDTEA, 2)
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo
 	name = "Picomed: Cryo edition"
 	desc = "Remember to strip before consuming."
 	icon_state = "lifeline_cryo"
-<<<<<<< HEAD
-	var/list/tubeoverlay = list() 
-	
-=======
 	var/list/tubeoverlay = list()
 
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/on_reagent_change()
 	..()
 	for(var/image/ol in tubeoverlay)
@@ -1034,11 +1004,6 @@
 	var/image/status_overlay = image("icon" = 'icons/obj/drinks.dmi', "icon_state" = "cryoverlay_[remaining]")
 	overlays += status_overlay
 	tubeoverlay += status_overlay
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)

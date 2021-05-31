@@ -557,10 +557,6 @@
 	src.xtra.icon_state = "xtra_inv"
 	src.xtra.layer = HUD_ITEM_LAYER
 	src.xtra.alpha = 210
-<<<<<<< HEAD
-	orient2hud()
-=======
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 
 /obj/item/weapon/storage/emp_act(severity)
 	if(!istype(src.loc, /mob/living))

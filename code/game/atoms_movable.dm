@@ -407,13 +407,7 @@
 			Obstacle.Bumped(src)
 	sound_override = 0
 
-<<<<<<< HEAD
 /atom/movable/proc/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-=======
-// harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
-	lazy_invoke_event(/lazy_event/on_before_move)
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 	if(glide_size_override)
 		glide_size = glide_size_override
 	var/atom/old_loc = loc

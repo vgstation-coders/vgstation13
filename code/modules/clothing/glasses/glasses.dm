@@ -505,10 +505,6 @@ var/list/science_goggles_wearers = list()
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
-<<<<<<< HEAD
-	seedarkness = FALSE
-=======
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 	invisa_view = 2
 	eyeprot = -2 //prepare for your eyes to get shit on
 

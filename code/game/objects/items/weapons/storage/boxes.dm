@@ -123,11 +123,7 @@
 	new /obj/item/clothing/mask/breath/vox(src)
 	new /obj/item/weapon/tank/emergency_nitrogen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> 5573d2af7f5a209dce75e7e4404d9a3d2294022e
 /obj/item/weapon/storage/box/survival/engineer/plasmaman
 	icon_state = "box_plasmaman"
 	item_state = "box_plasmaman"

@@ -39,6 +39,7 @@
 	client.screen |= self_vision
 
 	update_darkness()
+	lazy_register_event(/lazy_event/on_before_move, src, /mob/proc/check_dark_vision)
 
 /mob/proc/update_darkness()
 	if(seedarkness)
