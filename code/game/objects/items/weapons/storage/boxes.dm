@@ -179,6 +179,7 @@
 	..()
 	new /obj/item/weapon/spacecash/c100(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating(src)
+	var/possible_mug = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug))
 	for(var/i in 1 to 3)
 		var/toSpawn = pick(
 			/obj/item/voucher/free_item/donk,
@@ -188,7 +189,7 @@
 			/obj/item/mounted/poster,
 			/obj/item/weapon/pen/NT,
 			/obj/item/clothing/accessory/medal/participation,
-			/obj/item/weapon/reagent_containers/food/drinks/flagmug/americup,
+			possible_mug,
 			/obj/item/weapon/lighter/NT,
 			25;/obj/item/toy/syndicateballoon/ntballoon,
 			25;/obj/item/weapon/reagent_containers/food/snacks/chococoin,
