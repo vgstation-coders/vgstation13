@@ -15,13 +15,22 @@
 
 	cooldown_min = 50
 	var/letters_retained = 12
+	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 4, Sp_POWER = 2)
 
 	hud_state = "wiz_hangman"
 
 /spell/aoe_turf/hangman/empower_spell()
 	spell_levels[Sp_POWER]++
 
-	letters_retained /= 2
+	letters_retained /= 1.5
+
+	switch(spell_levels[Sp_POWER])
+		if(0)
+			name = "Curse of the Hangman"
+		if(1)
+			name = "C__se _f th_ H_ng__n"
+		if(2)
+			name = "C__s_ __ _h_ H__g___"
 	
 	return "The curse will now retain less letters"
 
