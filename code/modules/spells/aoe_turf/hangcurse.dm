@@ -19,6 +19,11 @@
 
 	hud_state = "wiz_hangman"
 
+/spell/aoe_turf/hangman/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Remove more letters from the affecteds' sentences"
+	return ..()
+
 /spell/aoe_turf/hangman/empower_spell()
 	spell_levels[Sp_POWER]++
 
