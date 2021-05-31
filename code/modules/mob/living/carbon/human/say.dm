@@ -1,7 +1,7 @@
 /mob/living/carbon/human
 	var/list/muted_letters = list()
 	var/muteletter_tries = 3
-	var/muteletter_message = ""
+	var/list/muteletters_check = list()
 
 ///mob/living/carbon/human/say(var/message)
 //	..(message)
@@ -85,7 +85,10 @@
 			if(!O.is_deaf() && O.client)
 				O.client.handle_hear_voice(src)
 	if(muted_letters && muted_letters.len)
-		muteletter_message = speech.message
+		muteletters_check = uniquelist(splittext(speech.message,""))
+		for(var/letter in muteletters_check)
+			if(!(letter in muted_letters))
+				muteletters_check.Remove(letter)
 		for(var/letter in muted_letters)
 			speech.message = replacetext(speech.message, letter, "_")
 
