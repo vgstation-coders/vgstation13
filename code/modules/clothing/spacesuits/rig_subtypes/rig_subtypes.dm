@@ -441,6 +441,46 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/soviet
 
+//Adminbus RIGsuit: Trauma Team
+/obj/item/clothing/head/helmet/space/rig/traumateam
+	name = "trauma team helmet"
+	desc = "A spaceworthy helmet designed for high-risk medical work. Protects against radiation, gunfire, and lawsuits."
+	icon_state = "rig0-traumateam"
+	item_state = "traumateam_helm"
+	_color = "traumateam"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 10, laser = 25, energy = 5, bomb = 40, bio = 100, rad = 30)
+	siemens_coefficient = 0.7
+	pressure_resistance = 40 * ONE_ATMOSPHERE
+
+/obj/item/clothing/suit/space/rig/traumateam
+	icon_state = "rig-traumateam"
+	name = "trauma team hardsuit"
+	desc = "A spaceworthy suit designed for high-risk medical work. Protects against radiation, gunfire, and lawsuits."
+	item_state = "traumateam_hardsuit"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 10, laser = 25, energy = 5, bomb = 40, bio = 100, rad = 30)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/storage/firstaid,
+		/obj/item/device/healthanalyzer,
+		/obj/item/stack/medical,
+		/obj/item/roller,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro,
+	)
+	siemens_coefficient = 0.7
+	pressure_resistance = 40 * ONE_ATMOSPHERE
+	head_type = /obj/item/clothing/head/helmet/space/rig/traumateam
+
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
 	name = "deathsquad helmet"
