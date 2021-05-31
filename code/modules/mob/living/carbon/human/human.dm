@@ -1980,24 +1980,30 @@ mob/living/carbon/human/isincrit()
 	else
 		return ..()
 
+/mob/living
+	var/hangman_score = 0 // For round end leaderboards
+
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
 	if(stat)
 		return //Don't bother if we're dead or unconscious
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
+	var/mob/living/H = speech.speaker
 	if(muted_letters && muted_letters.len && length(speech.message) == 1)
 		if(speech.message in muteletters_check)
 			muted_letters.Remove(speech.message)
-			speech.speaker.visible_message("<span class='notice'>[speech.speaker] guessed a correct letter!</span>","<span class='notice'>You guessed a correct letter!</span>")
+			H.visible_message("<span class='notice'>[speech.speaker] guessed a correct letter!</span>","<span class='notice'>You guessed a correct letter!</span>")
+			H.hangman_score++
 		else if(muteletter_tries)
 			muteletter_tries--
 			visible_message("<span class='warning'>Letter not found. [muteletter_tries] tries left.</span>")
+			H.hangman_score--
 		else
 			set_muted_letters(min(0,26-(muted_letters.len+1)))
+			H.hangman_score--
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
-	var/mob/living/H = speech.speaker
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
 		if(isliving(H) && H.mind == mind.faith.religiousLeader)
 			AdjustDizzy(rand(-8,-10))
