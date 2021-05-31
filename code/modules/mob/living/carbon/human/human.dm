@@ -1999,7 +1999,7 @@ mob/living/carbon/human/isincrit()
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
 	if(muted_letters && muted_letters.len && speech.message.len == 1)
-		if(speech.message in H.muteletters_check)
+		if(speech.message in muteletters_check)
 			muted_letters.Remove(speech.message)
 		else if(muteletter_tries)
 			muteletter_tries--
