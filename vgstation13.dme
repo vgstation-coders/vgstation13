@@ -2516,7 +2516,7 @@
 #include "code\modules\spells\aoe_turf\disable_tech.dm"
 #include "code\modules\spells\aoe_turf\fall.dm"
 #include "code\modules\spells\aoe_turf\glare.dm"
-#include "code\modules\spells\aoe_turf\hangman.dm"
+#include "code\modules\spells\aoe_turf\hangcurse.dm"
 #include "code\modules\spells\aoe_turf\knock.dm"
 #include "code\modules\spells\aoe_turf\lightbulb.dm"
 #include "code\modules\spells\aoe_turf\magic_wardrobe.dm"
