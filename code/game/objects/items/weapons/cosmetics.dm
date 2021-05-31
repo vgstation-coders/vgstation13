@@ -580,7 +580,7 @@
 
 /obj/item/weapon/pocket_mirror/scissors/attack(atom/target, mob/user)
 	if(ishuman(target) && target != user)
-		user.visible_message("<span class='warning'>[user] begins changing [target]'s style!</span>")	//Chitin, slime, etc. Can't use the word "hair"
+		user.visible_message("<span class='danger'>[user] begins changing [target]'s style!</span>")	//Chitin, slime, etc. Can't use the word "hair"
 		if(do_after(user, target, 3 SECONDS))
 			handle_hair(user, target)
 	else
