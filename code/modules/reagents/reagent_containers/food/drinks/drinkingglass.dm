@@ -138,7 +138,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/mug_reagent_overlay()
 	overlays.len = 0
-	icon_state ="mug_empty"
+	icon_state = base_icon_state
 	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")
 	filling.icon += mix_color_from_reagents(reagents.reagent_list)
 	filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)

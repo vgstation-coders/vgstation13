@@ -26,6 +26,7 @@
 	var/flammable = 0
 	var/flammin = 0
 	var/flammin_color = null
+	var/base_icon_state = "glassbottle"
 
 /obj/item/weapon/reagent_containers/food/drinks/on_reagent_change()
 	if(gulp_size < 5)
@@ -235,6 +236,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()
+	base_icon_state = icon_state
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Drinks. END
