@@ -1074,7 +1074,7 @@ var/list/cult_spires = list()
 		if(istype(L))
 			L.hotspot_expose(TEMPERATURE_FLAME, 125, surfaces = 1)//we start fires in plasma atmos
 			var/datum/gas_mixture/env = L.return_air()
-			if (env.total_moles > 0)//we cannot manipulate temperature in a vaccum
+			if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
 				if(env.temperature != set_temperature + T0C)
 					var/datum/gas_mixture/removed = env.remove_volume(0.5 * CELL_VOLUME)
 					if(removed)
