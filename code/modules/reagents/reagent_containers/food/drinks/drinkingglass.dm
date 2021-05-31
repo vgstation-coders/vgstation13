@@ -128,7 +128,7 @@
 			item_state = R.mug_icon_state
 
 		else
-			make_reagent_overlay()
+			mug_reagent_overlay()
 	else
 		overlays.len = 0
 		icon_state = "mug_empty"
@@ -136,7 +136,7 @@
 		desc = "A simple mug."
 		return
 
-/obj/item/weapon/reagent_containers/food/drinks/mug/proc/make_reagent_overlay()
+/obj/item/weapon/reagent_containers/food/drinks/proc/mug_reagent_overlay()
 	overlays.len = 0
 	icon_state ="mug_empty"
 	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")

@@ -1173,18 +1173,33 @@
 /obj/item/weapon/reagent_containers/food/drinks/britcup
 	name = "\improper cup"
 	desc = "A cup with the British flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "britcup"
 	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/britcup/on_reagent_change()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
+	else
+		overlays.len = 0
 
 /obj/item/weapon/reagent_containers/food/drinks/americup
 	name = "\improper cup"
 	desc = "A cup with the American flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "americup"
 	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/americup/on_reagent_change()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
+	else
+		overlays.len = 0
 
 /obj/item/weapon/reagent_containers/food/drinks/gromitmug
 	name = "\improper Gromit Mug"
 	desc = "Gromit Mug."
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "gromitmug"
 	volume = 30
 
