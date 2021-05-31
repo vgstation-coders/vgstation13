@@ -85,6 +85,7 @@
 			if(!O.is_deaf() && O.client)
 				O.client.handle_hear_voice(src)
 	if(muted_letters && muted_letters.len)
+		muteletter_tries = 3 //Resets on new thing spoken
 		muteletters_check = uniquelist(splittext(speech.message,""))
 		for(var/letter in muteletters_check)
 			if(!(letter in muted_letters))
