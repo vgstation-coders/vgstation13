@@ -1989,6 +1989,7 @@ mob/living/carbon/human/isincrit()
 	if(muted_letters && muted_letters.len && length(speech.message) == 1)
 		if(speech.message in muteletters_check)
 			muted_letters.Remove(speech.message)
+			speech.speaker.visible_message("<span class='notice'>[speech.speaker] guessed a correct letter!</span>","<span class='notice'>You guessed a correct letter!</span>")
 		else if(muteletter_tries)
 			muteletter_tries--
 			visible_message("<span class='warning'>Letter not found. [muteletter_tries] tries left.</span>")
