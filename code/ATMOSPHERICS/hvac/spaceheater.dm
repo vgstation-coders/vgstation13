@@ -316,7 +316,7 @@
 			var/turf/simulated/L = loc
 			if(istype(L))
 				var/datum/gas_mixture/env = L.return_air()
-				if (env.total_moles > 0)//we cannot manipulate temperature in a vaccum
+				if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
 					if(env.temperature != set_temperature + T0C)
 
 						var/datum/gas_mixture/removed = env.remove_volume(intake_rate * CELL_VOLUME)
