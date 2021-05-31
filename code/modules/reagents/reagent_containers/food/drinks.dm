@@ -215,16 +215,17 @@
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
 	..()
 
-	if(!reagents || reagents.total_volume == 0)
-		to_chat(user, "<span class='info'>\The [src] is empty!</span>")
-	else if (reagents.total_volume <= src.volume/4)
-		to_chat(user, "<span class='info'>\The [src] is almost empty!</span>")
-	else if (reagents.total_volume <= src.volume*0.66)
-		to_chat(user, "<span class='info'>\The [src] is about half full, or about half empty!</span>")
-	else if (reagents.total_volume <= src.volume*0.90)
-		to_chat(user, "<span class='info'>\The [src] is almost full!</span>")
-	else
-		to_chat(user, "<span class='info'>\The [src] is full!</span>")
+	if(is_open_container())
+		if(!reagents || reagents.total_volume == 0)
+			to_chat(user, "<span class='info'>\The [src] is empty!</span>")
+		else if (reagents.total_volume <= src.volume/4)
+			to_chat(user, "<span class='info'>\The [src] is almost empty!</span>")
+		else if (reagents.total_volume <= src.volume*0.66)
+			to_chat(user, "<span class='info'>\The [src] is about half full, or about half empty!</span>")
+		else if (reagents.total_volume <= src.volume*0.90)
+			to_chat(user, "<span class='info'>\The [src] is almost full!</span>")
+		else
+			to_chat(user, "<span class='info'>\The [src] is full!</span>")
 
 /obj/item/weapon/reagent_containers/food/drinks/imbibe(mob/user) //Drink the liquid within
 	if(lit)
@@ -669,14 +670,11 @@
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
+
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
-		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
-		flags |= OPENCONTAINER
-		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
-		playsound(user, pick(open_sounds), 50, 1)
-		overlays += image(icon = icon, icon_state = "soda_open")
-		return
+		return pop_open(user)
 	if (reagents.total_volume > 0)
 		return ..()
 	else if (user.a_intent == I_HURT)
@@ -687,6 +685,13 @@
 		user.put_in_active_hand(crushed_can)
 		playsound(user, 'sound/items/can_crushed.ogg', 75, 1)
 		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/proc/pop_open(var/mob/user)
+	to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+	flags |= OPENCONTAINER
+	src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
+	playsound(user, pick(open_sounds), 50, 1)
+	overlays += image(icon = icon, icon_state = "soda_open")
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola
 	name = "Space Cola"
@@ -834,6 +839,18 @@
 	reagents.add_reagent(COCAINE, 1.4)
 	reagents.add_reagent(URANIUM, 3.6)
 	reagents.add_reagent(SPORTDRINK, 20)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_bread
+	name = "\improper canned bread"
+	desc = "Wow, they have it!"
+	icon_state = "cannedbread"
+	//no actual chemicals in the can
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_bread/pop_open(var/mob/user)
+	. = ..()
+	spawn(0.5 SECONDS)
+		playsound(src, pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 50)
+		new /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread(get_turf(src))
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "\improper vial of food coloring"
