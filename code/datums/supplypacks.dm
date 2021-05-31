@@ -708,14 +708,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
-	contains = list(/obj/item/clothing/suit/space/grey,
-					/obj/item/clothing/head/helmet/space/grey,
-					/obj/item/weapon/tank/oxygen/red,
+	var/list/basic = list(
+		/obj/item/clothing/suit/space/grey,
+		/obj/item/clothing/head/helmet/space/grey,
+	)
+	var/worker = list(/obj/item/clothing/suit/space/rig/grey)
+	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
+	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
+	contains = list(/obj/item/weapon/tank/oxygen/red,
 					/obj/item/clothing/mask/breath)
-	cost = 100
+	cost = 200
 	containertype = /obj/structure/closet/crate/basic
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
+
+/datum/supply_packs/grey_supply/New()
+	selection_from = list(basic, worker, researcher, soldier)
 
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
