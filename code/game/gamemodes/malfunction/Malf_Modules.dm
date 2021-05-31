@@ -58,7 +58,8 @@ rcd light flash thingy on matter drain
 	for(var/obj/machinery/turret/turret in machines)
 		turret.health += 120	//200 Totaldw
 		turret.shot_delay = 15
-		turret.installed = /obj/item/weapon/gun/energy/pulse_rifle
+		qdel(turret.installed)
+		turret.installed = new /obj/item/weapon/gun/energy/pulse_rifle(src)
 		turret.fire_twice = 1
 	to_chat(user, "<span class='warning'>Core defenses upgraded.</span>")
 	user.vis_contents += new /obj/effect/overlay/ai_shield
