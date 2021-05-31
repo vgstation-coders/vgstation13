@@ -1211,7 +1211,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/italycup
 	name = "\improper cup"
-	desc = "A cup with the Italy flag emblazoned on it."
+	desc = "A cup with the Italian flag emblazoned on it."
 	icon = 'icons/obj/cafe.dmi'
 	icon_state = "italycup"
 	volume = 30
@@ -1228,6 +1228,20 @@
 	desc = "A cup with the Spanish flag emblazoned on it."
 	icon = 'icons/obj/cafe.dmi'
 	icon_state = "spanishcup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup
+	name = "\improper cup"
+	desc = "A cup with the Uruguayan flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "uruguaycup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/argentinacup
+	name = "\improper cup"
+	desc = "A cup with the Argentine flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "argentinacup"
 	volume = 30
 
 /obj/item/weapon/reagent_containers/food/drinks/gromitmug
