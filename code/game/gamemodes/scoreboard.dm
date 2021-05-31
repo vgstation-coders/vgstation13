@@ -577,7 +577,7 @@
 	if(score["gunsspawned"] > 0)
 		dat += "<B>Guns Magically Spawned:</B> [score["gunsspawned"]]<BR>"
 	if(score["hangmanrecord"] > 0)
-		dat += "<B>Highest Hangman Score:</B> [score["hangmanname"], [score["hangmanjob"]: [score["hangmanrecord"] ([score["hangmankey"])]<BR>"
+		dat += "<B>Highest Hangman Score:</B> [score["hangmanname"]], [score["hangmanjob"]]: [score["hangmanrecord"]] ([score["hangmankey"]])<BR>"
 	if(score["nukedefuse"] < 30)
 		dat += "<B>Seconds Left on the Nuke When It Was Defused:</B> [score["nukedefuse"]]<BR>"
 	if(score["disease_most"] != null)
