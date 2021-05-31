@@ -2015,6 +2015,7 @@ mob/living/carbon/human/isincrit()
 
 /mob/living/carbon/human/rejuvenate(animation = 0)
 	muted_letters = list()
+	muteletter_tries = 3
 	..()
 
 /mob/living/carbon/human/can_be_infected()
