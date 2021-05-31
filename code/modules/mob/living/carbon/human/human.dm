@@ -2005,12 +2005,12 @@ mob/living/carbon/human/isincrit()
 			muteletter_tries--
 			visible_message("<span class='warning'>Letter not found. [muteletter_tries] tries left.</span>")
 		else
-			set_muted_letters()
+			set_muted_letters(min(0,26-(muted_letters.len+1)))
 
-/mob/living/carbon/human/proc/set_muted_letters()
+/mob/living/carbon/human/proc/set_muted_letters(var/keep_amount)
 	muteletter_tries = 3
 	muted_letters = list("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
-	for(var/i = 0, i < 6, i++) // Remove 6 letters from the muted, as to help the crew a little
+	for(var/i = 0, i < keep_amount, i++)
 		pick_n_take(muted_letters)
 
 /mob/living/carbon/human/can_be_infected()

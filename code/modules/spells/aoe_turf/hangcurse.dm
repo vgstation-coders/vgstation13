@@ -14,8 +14,16 @@
 	inner_radius = -1
 
 	cooldown_min = 50
+	var/letters_retained = 12
 
 	hud_state = "wiz_hangman"
+
+/spell/aoe_turf/hangman/empower_spell()
+	spell_levels[Sp_POWER]++
+
+	letters_retained /= 2
+	
+	return "The curse will now retain less letters"
 
 /spell/aoe_turf/hangman/choose_targets(var/mob/user = usr)
 
@@ -37,5 +45,5 @@
 	for(var/T in targets)
 		if(ishuman(T))
 			var/mob/living/carbon/human/H = T
-			H.set_muted_letters()
+			H.set_muted_letters(letters_retained)
 			H.visible_message("<span class='sinister'>[H]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>Your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")
