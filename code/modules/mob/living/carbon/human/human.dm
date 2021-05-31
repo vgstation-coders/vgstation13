@@ -1998,9 +1998,7 @@ mob/living/carbon/human/isincrit()
 			remove_confused(rand(8, 10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
-	var/speechmessage = speech.message
-	var/messagelength = speechmessage.len
-	if(muted_letters && muted_letters.len && messagelength == 1)
+	if(muted_letters && muted_letters.len && length(speech.message) == 1)
 		if(speech.message in muteletters_check)
 			muted_letters.Remove(speech.message)
 		else if(muteletter_tries)
