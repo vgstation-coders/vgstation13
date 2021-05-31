@@ -15,7 +15,7 @@
 
 	cooldown_min = 50
 
-	hud_state = "blackout"
+	hud_state = "wiz_hangman"
 
 /spell/aoe_turf/hangman/choose_targets(var/mob/user = usr)
 

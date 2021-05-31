@@ -125,7 +125,7 @@
 /obj/item/weapon/spellbook/oneuse/hangman
 	spell = /spell/aoe_turf/hangman
 	spellname = "hangman"
-	icon_state ="bookknock"
+	icon_state ="bookhangman"
 	desc = "This book has some letters blanked out in the words."
 
 /obj/item/weapon/spellbook/oneuse/hangman/recoil(mob/user as mob)
