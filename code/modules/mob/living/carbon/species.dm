@@ -1216,8 +1216,8 @@ var/list/has_died_as_golem = list()
 	tox_mod = 0.5
 	rad_mod = 0.5
 
-	blood_color = "#ebece6"
-	flesh_color = "#9c7f25"
+	blood_color = "#EBECE6"
+	flesh_color = "#9C7F25"
 
 	uniform_icons = 'icons/mob/species/insectoid/uniform.dmi'
 //	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
