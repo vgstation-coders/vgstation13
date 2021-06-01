@@ -1258,6 +1258,13 @@
 	icon_state = "brasilcup"
 	volume = 30
 
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/chilecup
+	name = "\improper cup"
+	desc = "A cup with the Chilean flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "chilecup"
+	volume = 30
+
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/uncup
 	name = "\improper cup"
 	desc = "A cup with the United Nations flag emblazoned on it."
