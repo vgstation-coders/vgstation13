@@ -41,6 +41,7 @@
 		var/self_smother = FALSE
 		if (M == user)
 			self_smother = TRUE//auto-asphyxiation?
+		playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 0, -3)
 		user.visible_message("<span class='warning'>\The [user] puts \a [src] over [self_smother ? "their own mouth" : "\the [M]'s mouth" ]!</span>", "<span class='warning'>You place \the [src] over [self_smother ? "your mouth" : "\the [M]'s mouth" ]!</span>")
 		if(M.reagents && reagents.total_volume)
 			if (do_after(user,H,1 SECONDS))//short, but combined with the time it takes to get grabbed you get enough time to react.
