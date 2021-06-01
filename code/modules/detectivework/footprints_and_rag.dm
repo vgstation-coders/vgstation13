@@ -38,17 +38,9 @@
 	if(user.zone_sel.selecting == "mouth" && ishuman(M))
 		var/mob/living/carbon/human/H = M
 		current_target = H
-		var/can_smother = FALSE
-		for (var/obj/item/weapon/grab/G in H.grabbed_by)
-			if (G.state >= GRAB_AGGRESSIVE)
-				can_smother = TRUE
 		var/self_smother = FALSE
 		if (M == user)
-			can_smother = TRUE//auto-asphyxiation?
-			self_smother = TRUE
-		if(!can_smother)
-			user.visible_message("<span class='warning'>You or someone else needs to grab them aggressively before you can freely place \the [src] other their mouth.</span>")
-			return
+			self_smother = TRUE//auto-asphyxiation?
 		user.visible_message("<span class='warning'>\The [user] puts \a [src] over [self_smother ? "their own mouth" : "\the [M]'s mouth" ]!</span>", "<span class='warning'>You place \the [src] over [self_smother ? "your mouth" : "\the [M]'s mouth" ]!</span>")
 		if(M.reagents && reagents.total_volume)
 			if (do_after(user,H,1 SECONDS))//short, but combined with the time it takes to get grabbed you get enough time to react.
