@@ -608,28 +608,31 @@ var/bloodstone_backup = 0
 		return
 
 	dancers += first_dancer
-	processing_objects.Add(src)
+	//processing_objects.Add(src)
+
+	we_can_dance()
 
 
 /obj/effect/cult_ritual/dance/Destroy()
-	processing_objects.Remove(src)
+	//processing_objects.Remove(src)
 	dancers = list()
 	..()
 
-/obj/effect/cult_ritual/dance/process()
-	for (var/mob/M in dancers)
-		if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
-			dancers -= M
-			continue
-	if (dancers.len <= 0)
-		qdel(src)
-		return
-	spawn()
+/obj/effect/cult_ritual/dance/proc/we_can_dance()
+	while(TRUE)
+		for (var/mob/M in dancers)
+			if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
+				dancers -= M
+				continue
+		if (dancers.len <= 0)
+			qdel(src)
+			return
 		dance_step()
-		sleep(4)
+		sleep(3)
 		dance_step()
-		sleep(4)
+		sleep(3)
 		dance_step()
+		sleep(6)
 
 /obj/effect/cult_ritual/dance/proc/add_dancer(var/mob/dancer)
 	dancers += dancer
@@ -663,11 +666,11 @@ var/bloodstone_backup = 0
 			for (var/mob/M in dancers)
 				spawn()
 					M.dir = SOUTH
-					sleep(1)
+					sleep(0.75)
 					M.dir = EAST
-					sleep(1)
+					sleep(0.75)
 					M.dir = NORTH
-					sleep(1)
+					sleep(0.75)
 					M.dir = WEST
-					sleep(1)
+					sleep(0.75)
 					M.dir = SOUTH
