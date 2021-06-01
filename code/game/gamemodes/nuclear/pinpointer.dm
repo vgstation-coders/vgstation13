@@ -136,7 +136,7 @@ var/list/pinpointerpinpointer_list = list()
 	icon_state = "pinoff"
 	target=null
 	location = null
-	var/list/extra_target_item_options = list()
+	var/list/alternative_item_options = list()
 
 	switch(alert("Please select the mode you want to put the pinpointer in.", "Pinpointer Mode Select", "Location", "Disk Recovery", "Other Signature"))
 		if("Location")
@@ -167,15 +167,15 @@ var/list/pinpointerpinpointer_list = list()
 			switch(alert("Search for item signature or DNA fragment?" , "Signature Mode Select" , "" , "Item" , "DNA"))
 				if("Item")
 					var/list/item_paths[0]
-					for(var/index in potential_theft_objectives)
-						var/list/datumlist = potential_theft_objectives[index]
-						for(var/D in datumlist)
-							var/datum/theft_objective/O = D
-							var/obj/Dtypepath = initial(O.typepath)
-							item_paths[initial(Dtypepath.name)] = Dtypepath
-					// var(var/index in extra_target_item_options)
-
-					// 	item_paths[]
+					if(alternative_item_options.len > 0)
+						item_paths = alternative_item_options
+					else
+						for(var/index in potential_theft_objectives)
+							var/list/datumlist = potential_theft_objectives[index]
+							for(var/D in datumlist)
+								var/datum/theft_objective/O = D
+								var/obj/Dtypepath = initial(O.typepath)
+								item_paths[initial(Dtypepath.name)] = Dtypepath
 					var/targetitem = input("Select item to search for.", "Item Mode Select","") as null|anything in item_paths
 					if(!targetitem)
 						return

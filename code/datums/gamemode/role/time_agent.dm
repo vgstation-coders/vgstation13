@@ -23,15 +23,20 @@
 	var/is_twin = FALSE
 
 /datum/role/time_agent/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
+	..()
 	var/datum/faction/time_agent/timeagent_fac
 	if(!fac)
 		timeagent_fac = new
-		timeagent_fac.addPrimary(src)
+		timeagent_fac.primary_agent = src
 	else if (istype(fac, /datum/faction/time_agent))
 		timeagent_fac = fac
-		timeagent_fac.addEvilTwin(src)
+		if(timeagent_fac.primary_agent)
+			timeagent_fac.eviltwins += src
+		else
+			timeagent_fac.primary_agent = src
 	wikiroute = role_wiki[TIMEAGENT]
 
+/datum/role/time_agent/add_to_faction
 /datum/role/time_agent/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
@@ -322,3 +327,8 @@
 					qdel(P)
 					P = null
 	qdel(target)
+
+/obj/item/weapon/pinpointer/advpinpointer/time_agent
+	alternative_item_options = list(
+
+	)

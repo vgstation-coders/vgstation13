@@ -648,7 +648,7 @@
 
 /datum/outfit/special/prisoner/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
-  
+
 /datum/outfit/special/prisoneralt //no headset + soap
 	outfit_name = "Prisoner Alternative"
 	items_to_spawn = list(
@@ -817,7 +817,7 @@
 		/obj/item/device/timeline_eraser,
 		/obj/item/weapon/gun/projectile/automatic/rewind,
 		/obj/item/device/chronocapture,
-		/obj/item/weapon/pinpointer/advpinpointer,
+		/obj/item/weapon/pinpointer/advpinpointer/time_agent,
 	)
 
 /datum/outfit/special/time_agent/pre_equip(var/mob/living/carbon/human/H)

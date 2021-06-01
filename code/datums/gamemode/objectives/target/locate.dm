@@ -11,11 +11,16 @@
 	return TRUE
 
 /datum/objective/target/locate/find_target()
-	var/list/potential_objects = list("rubber duck" = /obj/item/weapon/bikehorn/rubberducky,
-			"hand teleporter" = /obj/item/weapon/hand_tele,
-			"captains laser pistol" = /obj/item/weapon/gun/energy/laser/captain,
-			"nuclear authentication disk" = /obj/item/weapon/disk/nuclear,
-			"bucket" = /obj/item/weapon/reagent_containers/glass/bucket,
+	var/list/potential_objects = list(/obj/item/weapon/bikehorn/rubberducky,
+			/obj/item/weapon/hand_tele,
+			/obj/item/weapon/gun/energy/laser/captain,
+			/obj/item/weapon/aiModule/freeform/core,
+			/obj/item/weapon/gun/lawgiver,
+			/obj/item/weapon/circuitboard/aiupload,
+			/obj/item/clothing/gloves/yellow,
+			/obj/item/weapon/reagent_containers/hypospray,
+			/obj/item/weapon/disk/nuclear,
+			/obj/item/weapon/reagent_containers/glass/bucket,
 			)
 	potential_objects = shuffle(potential_objects)
 	var/min = object_min - 1
@@ -32,11 +37,12 @@
 	var/explanation = "Locate "
 	if(objects_to_locate.len)
 		if(objects_to_locate.len > 1)
-			for(var/i in objects_to_locate)
+			for(var/obj/i in objects_to_locate)
+				var/name = initial(i.name)
 				if(i != objects_to_locate[objects_to_locate.len])
-					explanation += "\an [i], "
+					explanation += "\an [name], "
 				else
-					explanation += "& \an [i]."
+					explanation += "& \an [name]."
 		else
 			explanation += "\an [objects_to_locate[1]]."
 	else
