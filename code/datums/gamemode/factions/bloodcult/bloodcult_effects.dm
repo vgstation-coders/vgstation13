@@ -596,3 +596,78 @@ var/bloodstone_backup = 0
 	. = ..()
 	if (.)
 		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
+
+///////////////////////////////////CULT DANCE////////////////////////////////////
+//used by the cultdance emote. other cult dances have their own procs
+/obj/effect/cult_ritual/dance
+	var/list/dancers = list()
+
+/obj/effect/cult_ritual/dance/New(var/turf/loc, var/mob/first_dancer)
+	if (!first_dancer)
+		qdel(src)
+		return
+
+	dancers += first_dancer
+	processing_objects.Add(src)
+
+
+/obj/effect/cult_ritual/dance/Destroy()
+	processing_objects.Remove(src)
+	dancers = list()
+	..()
+
+/obj/effect/cult_ritual/dance/process()
+	for (var/mob/M in dancers)
+		if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
+			dancers -= M
+			continue
+	if (dancers.len <= 0)
+		qdel(src)
+		return
+	spawn()
+		dance_step()
+		sleep(4)
+		dance_step()
+		sleep(4)
+		dance_step()
+
+/obj/effect/cult_ritual/dance/proc/add_dancer(var/mob/dancer)
+	dancers += dancer
+
+/obj/effect/cult_ritual/dance/proc/dance_step()
+	var/dance_move = pick("clock","counter","spin")
+	switch(dance_move)
+		if ("clock")
+			for (var/mob/M in dancers)
+				switch (get_dir(src,M))
+					if (NORTHWEST,NORTH)
+						step_to(M, get_step(M,EAST))
+					if (NORTHEAST,EAST)
+						step_to(M, get_step(M,SOUTH))
+					if (SOUTHEAST,SOUTH)
+						step_to(M, get_step(M,WEST))
+					if (SOUTHWEST,WEST)
+						step_to(M, get_step(M,NORTH))
+		if ("counter")
+			for (var/mob/M in dancers)
+				switch (get_dir(src,M))
+					if (NORTHEAST,NORTH)
+						step_to(M, get_step(M,WEST))
+					if (SOUTHEAST,EAST)
+						step_to(M, get_step(M,NORTH))
+					if (SOUTHWEST,SOUTH)
+						step_to(M, get_step(M,EAST))
+					if (NORTHWEST,WEST)
+						step_to(M, get_step(M,SOUTH))
+		if ("spin")
+			for (var/mob/M in dancers)
+				spawn()
+					M.dir = SOUTH
+					sleep(1)
+					M.dir = EAST
+					sleep(1)
+					M.dir = NORTH
+					sleep(1)
+					M.dir = WEST
+					sleep(1)
+					M.dir = SOUTH

@@ -1652,7 +1652,7 @@ var/list/bloodstone_list = list()
 /obj/structure/cult/proc/dance_start()
 	while(timeleft > 0)
 		for (var/mob/M in contributors)
-			if (!iscultist(M) || get_dist(src,M) > 1 || (M.stat != CONSCIOUS))
+			if (!iscultist(M) || get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
 				if (M.client)
 					M.client.images -= progbar
 				contributors.Remove(M)
