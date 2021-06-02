@@ -263,6 +263,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
+	if(isUnconscious())
+		return
+
 	if(!can_be_infected())
 		return
 	var/block = 0
