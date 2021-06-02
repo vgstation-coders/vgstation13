@@ -357,7 +357,7 @@
 
 	message = copytext(message, 1, max_length)
 
-	var/letter_amount = length(replacetext(preference, " ", ""))
+	var/letter_amount = length(replacetext(message, " ", ""))
 	if(!letter_amount) //If there is no text
 		return
 
@@ -371,15 +371,15 @@
 	I.loc = T
 	I.alpha = 180
 
-	user.client.images.Add(I)
-	var/continue_drawing = alert(user, "This is how your message will look. Continue?", "Bloody writings", "Yes", "Cancel")
+	client.images.Add(I)
+	var/continue_drawing = alert(src, "This is how your message will look. Continue?", "Bloody writings", "Yes", "Cancel")
 
-	user.client.images.Remove(I)
+	client.images.Remove(I)
 	animate(I) //Cancel the animation so that the image gets garbage collected
 	I.loc = null
 	qdel(I)
 
-	if(continue_drawing != "Yes" || !Adjacent(T))
+	if(continue_drawing != "Yes" || !Adjacent(T) || !blood_source)
 		return
 
 	//Finally writing our message
@@ -388,6 +388,8 @@
 	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
 	W.add_hiddenprint(src)
 	W.visible_message("<span class='warning'>Invisible fingers crudely paint something in blood on \the [T]...</span>")
+	if(istype(blood_source.blood_DNA,/list))
+		W.blood_DNA |= blood_source.blood_DNA.Copy()
 
 /mob/dead/observer/verb/hide_ghosts()
 	set name = "Hide Ghosts"

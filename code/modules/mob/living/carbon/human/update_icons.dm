@@ -699,11 +699,13 @@ var/global/list/damage_icon_parts = list()
 				var/image/dyn_overlay = gloves.dynamic_overlay["[GLOVES_LAYER]"]
 				O.overlays += dyn_overlay
 
-		if(gloves.blood_DNA && gloves.blood_DNA.len)
-			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
-			bloodsies.color = gloves.blood_color
-			standing.overlays	+= bloodsies
-			O.overlays += bloodsies
+		if (istype(gloves, /obj/item/clothing/gloves))
+			var/obj/item/clothing/gloves/actual_gloves = gloves
+			if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
+				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
+				bloodsies.color = actual_gloves.blood_color
+				standing.overlays	+= bloodsies
+				O.overlays += bloodsies
 		gloves.screen_loc = ui_gloves
 
 		gloves.generate_accessory_overlays(O)
@@ -716,7 +718,7 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_y = species.inventory_offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
 	else
-		if(blood_DNA?.len && bloody_hands_data?.len)
+		if(bloody_hands > 0 && bloody_hands_data?.len)
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = "bloodyhands"
 			O.color = bloody_hands_data["blood_colour"]
