@@ -75,7 +75,19 @@
 	src.enabled = enabled
 	if(istype(installed,/obj/item/weapon/gun/energy/gun))
 		var/obj/item/weapon/gun/energy/gun/EG = installed
-		EG.mode = lethal
+		switch(lethal)
+			if(0)
+				EG.mode = 1
+				EG.charge_cost = 100
+				EG.fire_sound = 'sound/weapons/Laser.ogg'
+				EG.projectile_type = "/obj/item/projectile/beam"
+				EG.modifystate = "energykill"
+			if(1)
+				EG.mode = 0
+				EG.charge_cost = 100
+				EG.fire_sound = 'sound/weapons/Taser.ogg'
+				EG.projectile_type = "/obj/item/projectile/energy/electrode"
+				EG.modifystate = "energystun"
 	src.power_change()
 
 /obj/machinery/turret/proc/check_target(var/atom/movable/T as mob|obj)
@@ -302,7 +314,7 @@
 			enabled = 0
 			if(istype(installed,/obj/item/weapon/gun/energy/gun))
 				var/obj/item/weapon/gun/energy/gun/EG = installed
-				EG.mode = 0
+				setState(0,0)
 			power_change()
 	..()
 
