@@ -46,6 +46,7 @@
 	icon = ourschematic.icon
 	icon_state = ourschematic.icon_state
 	name = ourschematic.name
+	overlays += ourschematic.overlays
 	transform = transform*0.8
 
 /obj/abstract/screen/schematics/Click()
@@ -54,6 +55,7 @@
 
 /obj/abstract/screen/schematics/Destroy()
 	ourschematic = null
+	overlays = list()
 	..()
 
 /obj/abstract/screen/inventory
