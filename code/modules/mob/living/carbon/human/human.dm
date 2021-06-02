@@ -1283,7 +1283,7 @@
 
 	//Blood found, now to write a message
 	var/max_length = 30
-	var/message = stripped_input(src,"Write a message. You will be able to preview it.","Bloody writings", "") as null|text
+	var/message = stripped_input(src,"Write a message. You will be able to preview it.","Bloody writings", "")
 
 	if (!message)
 		return
