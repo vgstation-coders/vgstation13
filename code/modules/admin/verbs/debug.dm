@@ -862,7 +862,7 @@ var/global/blood_virus_spreading_disabled = 0
 	else
 		alert("Invalid mob, needs to be a human.")
 
-/client/proc/cmd_admin_boxify(var/mob/M)
+/client/proc/cmd_admin_boxify(var/mob/living/carbon/M)
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
