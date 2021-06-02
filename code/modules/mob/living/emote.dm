@@ -44,6 +44,27 @@
 	message = "dances around happily."
 	restraint_check = TRUE
 
+/datum/emote/living/dance/cult
+	key = "cultdance"
+	key_third_person = "cultdances"
+	message = "displays the dance of their people."
+	restraint_check = TRUE
+
+/datum/emote/living/dance/cult/can_run_emote(var/mob/user, var/status_check)
+	if (user.occult_muted())
+		return FALSE
+	if (iscultist(user) || istype(user, /mob/living/simple_animal/astral_projection))
+		return TRUE
+	return FALSE
+
+/datum/emote/living/dance/cult/run_emote(mob/living/user, params)
+	. = ..()
+	if (.)
+		for (var/obj/effect/cult_ritual/dance/dance_center in range(1,get_turf(user)))
+			dance_center.add_dancer(user)
+			return
+		new /obj/effect/cult_ritual/dance(get_step(user,user.dir), user)
+
 /datum/emote/living/deathgasp
 	key = "deathgasp"
 	key_third_person = "deathgasps"

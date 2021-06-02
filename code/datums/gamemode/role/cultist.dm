@@ -243,7 +243,7 @@
 		qdel(M.hud_used.cult_Act_display)
 		qdel(M.hud_used.cult_tattoo_display)
 
-/mob/living/carbon/proc/occult_muted()
+/mob/proc/occult_muted()
 	if (checkTattoo(TATTOO_HOLY))
 		return 0
 	if (reagents && reagents.has_reagent(HOLYWATER))
