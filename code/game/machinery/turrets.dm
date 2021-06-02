@@ -676,3 +676,10 @@
 		qdel(cover)
 		cover = null
 	..()
+
+/obj/machinery/turret/centcomm
+	name = "turret"
+
+/obj/machinery/turret/centcomm/update_gun()
+	if(!installed)
+		installed = new /obj/item/weapon/gun/energy/laser/cannon(src)

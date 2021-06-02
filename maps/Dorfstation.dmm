@@ -5530,10 +5530,7 @@
 	},
 /area/centcom/suppy)
 "nK" = (
-/obj/machinery/turret{
-	dir = 8;
-	installed = /obj/item/weapon/gun/energy/laser/cannon
-	},
+/obj/machinery/turret/centcomm{dir = 8},
 /turf/unsimulated/floor{
 	dir = 5;
 	icon_state = "darkred";
@@ -5659,10 +5656,7 @@
 	},
 /area/centcom/suppy)
 "oa" = (
-/obj/machinery/turret{
-	dir = 8;
-	installed = /obj/item/weapon/gun/energy/laser/cannon
-	},
+/obj/machinery/turret/centcomm{dir = 8},
 /turf/unsimulated/floor{
 	dir = 6;
 	icon_state = "darkred";
