@@ -485,7 +485,7 @@
 /obj/item/weapon/pocket_mirror //shamelessly copypasted from [mirror.dm]
 	name = "pocket mirror"
 	desc = "Mirror mirror on the wall, who's the most robust of them all? Touching the mirror will bring out Nanotrasen's state of the art hair modification system."
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/barber.dmi'
 	icon_state = "pocket_mirror"
 	flags = FPRINT
 	w_class = W_CLASS_TINY
@@ -493,46 +493,47 @@
 	var/shattered = 0
 
 /obj/item/weapon/pocket_mirror/attack_self(mob/user)
-	if (shattered)
+	if(shattered)
 		return
 
-	if (ishuman(user))
+	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if (isvampire(H))
 			var/datum/role/vampire/V = H.mind.GetRole(VAMPIRE)
 			if (!(locate(/datum/power/vampire/mature) in V.current_powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
-
-		if (user.hallucinating())
+		if(user.hallucinating())
 			switch(rand(1,100))
-				if (1 to 20)
+				if(1 to 20)
 					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
 					H.Knockdown(4)
 					H.Stun(4)
 					return
-				if (21 to 40)
+				if(21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
 					H.audible_scream()
 					H.dir = turn(H.dir, 180)
 					return
-				if (41 to 50)
+				if(41 to 50)
 					to_chat(H, "<span class='notice'>You don't see anything.</span>")
 					return
 		handle_hair(H)
 
-/obj/item/weapon/pocket_mirror/proc/handle_hair(mob/user)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
-		//gender intentionally left null so speshul snowflakes can cross-hairdress
-		if (species_hair.len)
-			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
-			if (!Adjacent(user) || user.incapacitated())
-				return
-			if (new_style)
-				H.my_appearance.h_style = new_style
-				H.update_hair()
+/obj/item/weapon/pocket_mirror/proc/handle_hair(mob/user, var/mob/living/carbon/human/H = null)
+	if(!H && ishuman(user))
+		H = user
+	if(!H)
+		return
+	var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
+	//gender intentionally left null so speshul snowflakes can cross-hairdress
+	if(species_hair.len)
+		var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
+		if(!Adjacent(user) || user.incapacitated())
+			return
+		if(new_style)
+			H.my_appearance.h_style = new_style
+			H.update_hair()
 
 /obj/item/weapon/pocket_mirror/proc/shatter()
 	if (shattered)
@@ -566,6 +567,25 @@
 		handle_hair(user)
 	else
 		..()
+
+/obj/item/weapon/pocket_mirror/scissors
+	name = "barber scissors"
+	desc = "Scissors designed for cutting and styling hair."
+	icon_state = "barber_scissors"
+	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+
+/obj/item/weapon/pocket_mirror/scissors/shatter()
+	return
+
+/obj/item/weapon/pocket_mirror/scissors/attack(atom/target, mob/user)
+	if(ishuman(target) && target != user)
+		user.visible_message("<span class='danger'>[user] begins changing [target]'s style!</span>")	//Chitin, slime, etc. Can't use the word "hair"
+		if(do_after(user, target, 3 SECONDS))
+			handle_hair(user, target)
+	else
+		..()
+
 
 /obj/item/weapon/nanitecontacts
 	name = "nanite contacts"

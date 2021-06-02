@@ -136,7 +136,7 @@
 "cF" = (/obj/structure/table/woodentable,/obj/item/weapon/paper_bin,/turf/simulated/floor/wood,/area/vault/research)
 "cG" = (/obj/structure/table/woodentable,/obj/item/weapon/pen,/turf/simulated/floor/wood,/area/vault/research)
 "cH" = (/obj/structure/table/woodentable,/obj/item/weapon/storage/box/donkpockets,/turf/simulated/floor/wood,/area/vault/research)
-"cI" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/britcup,/turf/simulated/floor/wood,/area/vault/research)
+"cI" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup,/turf/simulated/floor/wood,/area/vault/research)
 "cJ" = (/obj/item/weapon/reagent_containers/glass/beaker/noreact,/turf/simulated/shuttle/floor4,/area/vault/research)
 "cK" = (/obj/effect/decal/cleanable/cobweb2,/obj/item/weapon/reagent_containers/food/snacks/braincakeslice,/turf/simulated/shuttle/floor4,/area/vault/research)
 "cL" = (/obj/item/weapon/reagent_containers/glass/beaker/large,/obj/structure/sink{dir = 8; pixel_x = -12; pixel_y = 0},/turf/simulated/floor{icon_state = "white"},/area/vault/research)
