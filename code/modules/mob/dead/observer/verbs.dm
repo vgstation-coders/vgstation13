@@ -319,8 +319,8 @@
 
 	//Ok the place is clear, now we need some blood
 	var/list/choices = list()
+	var/i = 1
 	for(var/obj/effect/decal/cleanable/blood/B in range(1,T))
-		var/i = 1
 		if(B.counts_as_blood)
 			if (istype(B,/obj/effect/decal/cleanable/blood/tracks))
 				var/obj/effect/decal/cleanable/blood/tracks/tracks = B
