@@ -1,7 +1,7 @@
 //standardized colors for couches/comfy chairs
 #define CHAIR_BEIGE "#cac3ad"
 #define CHAIR_LIME "#aecf79"
-#define CHAIR_BROWN "#d47f3e"
+#define CHAIR_BROWN "#ae774c"
 #define CHAIR_TEAL "#63e4e4"
 #define CHAIR_BLACK "#81807c"
 #define CHAIR_RED "#e75555"
