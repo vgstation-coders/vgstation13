@@ -72,7 +72,7 @@
 	theme = "endgame"
 
 /datum/command_alert/xenomorph_station_nuke/announce()
-	message = "Hostile lifeforms are continuing to spread unchecked throughout [station_name()], total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized."
+	message = "Hostile lifeforms are continuing to spread unchecked throughout [station_name()], total quarantine failure is now possible. As such, Directive 7-12 has now been authorized."
 	..()
 
 /datum/command_alert/xenomorph_station_unlock
@@ -126,7 +126,7 @@
 	theme = "endgame"
 
 /datum/command_alert/biohazard_station_nuke/announce()
-	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()]."
+	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possible. As such, Directive 7-12 has now been authorized for [station_name()]."
 	..()
 
 /datum/command_alert/biohazard_station_unlock
