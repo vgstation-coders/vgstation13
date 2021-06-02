@@ -45,6 +45,7 @@
 	//It is populated every time we use AddTracks().
 	var/list/steps_to_remake = list()
 
+	var/last_blood_color = DEFAULT_BLOOD //when ghost use those tracks to write, they'll use the most recent blood color added
 
 	var/list/setdirs=list(
 		"1"=0,
@@ -91,6 +92,7 @@
 	if (!counts_as_blood)
 		if (DNA && DNA.len > 0)
 			counts_as_blood = 1
+			last_blood_color = bloodcolor
 			bloodspill_add()
 
 	var/updated=0
