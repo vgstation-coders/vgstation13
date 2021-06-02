@@ -642,6 +642,7 @@ var/bloodstone_backup = 0
 	switch(dance_move)
 		if ("clock")
 			for (var/mob/M in dancers)
+				M.lazy_invoke_event(/lazy_event/on_before_move)
 				switch (get_dir(src,M))
 					if (NORTHWEST,NORTH)
 						step_to(M, get_step(M,EAST))
@@ -651,8 +652,11 @@ var/bloodstone_backup = 0
 						step_to(M, get_step(M,WEST))
 					if (SOUTHWEST,WEST)
 						step_to(M, get_step(M,NORTH))
+				M.lazy_invoke_event(/lazy_event/on_after_move)
+				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
 		if ("counter")
 			for (var/mob/M in dancers)
+				M.lazy_invoke_event(/lazy_event/on_before_move)
 				switch (get_dir(src,M))
 					if (NORTHEAST,NORTH)
 						step_to(M, get_step(M,WEST))
@@ -662,15 +666,22 @@ var/bloodstone_backup = 0
 						step_to(M, get_step(M,EAST))
 					if (NORTHWEST,WEST)
 						step_to(M, get_step(M,SOUTH))
+				M.lazy_invoke_event(/lazy_event/on_after_move)
+				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
 		if ("spin")
 			for (var/mob/M in dancers)
 				spawn()
 					M.dir = SOUTH
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = EAST
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = NORTH
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = WEST
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = SOUTH
+					M.lazy_invoke_event(/lazy_event/on_face)

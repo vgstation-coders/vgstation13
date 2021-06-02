@@ -2377,6 +2377,21 @@
 				usr = M //We probably transformed ourselves
 			show_player_panel(M)
 
+	else if(href_list["makebox"])
+		if(!check_rights(R_SPAWN))
+			return
+
+		var/mob/living/carbon/C = locate(href_list["makebox"])
+		if(!istype(C))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon")
+			return
+
+		var/mob/M = usr.client.cmd_admin_boxify(C)
+		if(M)
+			if(M.client == CLIENT)
+				usr = M //We probably transformed ourselves
+			show_player_panel(M)
+
 	else if(href_list["makecatbeast"])
 		if(!check_rights(R_SPAWN))
 			return
