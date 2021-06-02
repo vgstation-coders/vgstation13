@@ -311,10 +311,7 @@
 /obj/machinery/turret/emp_act(severity)
 	switch(severity)
 		if(1)
-			enabled = 0
-			if(istype(installed,/obj/item/weapon/gun/energy/gun))
-				var/obj/item/weapon/gun/energy/gun/EG = installed
-				setState(0,0)
+			setState(0,0)
 			power_change()
 	..()
 
