@@ -121,15 +121,15 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				req_console_information += department
 
 /obj/machinery/requests_console/attack_ghost(user as mob)
-	..()
+	if(..(user))
+		return
 	interact(user)
-	return
 
 /obj/machinery/requests_console/attack_hand(user as mob)
-	..()
+	if(..(user))
+		return
 	add_fingerprint(user)
 	interact(user)
-	return
 
 /obj/machinery/requests_console/interact(user as mob)
 	var/dat
