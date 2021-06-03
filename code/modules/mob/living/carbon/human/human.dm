@@ -1320,7 +1320,8 @@
 	W.basecolor = doodle_color
 	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
 	W.add_fingerprint(src)
-	W.visible_message("<span class='warning'>[invisibility ? "Invisible fingers" : "\The [src]"] crudely paint[invisibility ? "" : "s"] something in blood on \the [T]...</span>")
+	var/invisible = invisibility || !alpha
+	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
 	W.blood_DNA[doodle_DNA] = doodle_type
 
 	if (actual_gloves)
