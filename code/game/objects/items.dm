@@ -255,7 +255,10 @@
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
 
-/obj/item/attack_paw(mob/user as mob)
+/obj/item/attack_paw(var/mob/user)
+	attack_hand(user)
+
+/*
 	if (istype(loc, /obj/item/weapon/storage))
 		for(var/mob/M in range(1, loc))
 			if (M.s_active == loc)
@@ -276,7 +279,7 @@
 		//user.next_move = max(user.next_move+2,world.time + 2)
 
 	user.put_in_active_hand(src)
-	return
+*/
 
 // Due to storage type consolidation this should get used more now.
 // I have cleaned it up a little, but it could probably use more.  -Sayu
