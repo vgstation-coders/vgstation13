@@ -21,6 +21,7 @@
 				src.forceMove(user)
 				user.put_in_hands(src)
 				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You pick-up the [src]</span>")
+				mouse_opacity = 1
 
 	return
 

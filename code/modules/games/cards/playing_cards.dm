@@ -181,6 +181,7 @@
 		if(over_object == M)
 			M.put_in_hands(src)
 			to_chat(usr, "<span class='notice'>You pick up the deck.</span>")
+			mouse_opacity = 1
 		else if(istype(over_object, /obj/abstract/screen/inventory))
 			var/obj/abstract/screen/inventory/OI = over_object
 
@@ -189,6 +190,7 @@
 				M.put_in_hand(OI.hand_index, src)
 				add_fingerprint(usr)
 				to_chat(usr, "<span class='notice'>You pick up the deck.</span>")
+				mouse_opacity = 1
 
 			return
 	else

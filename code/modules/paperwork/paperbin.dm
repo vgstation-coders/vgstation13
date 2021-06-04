@@ -50,6 +50,7 @@
 						bag.remove_from_storage(src)
 					usr.u_equip(src, 0)
 					usr.put_in_hand(OI.hand_index, src)
+					mouse_opacity = 1
 					src.add_fingerprint(usr)
 
 			else if(istype(over_object,/mob/living)) //We're being dragged on a living mob's sprite...
@@ -60,6 +61,7 @@
 							bag.remove_from_storage(src)
 						usr.put_in_hands(src)
 						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
+						mouse_opacity = 1
 	return ..()
 
 
