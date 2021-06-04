@@ -139,6 +139,11 @@
 					score["dmgestname"] = player.real_name
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
+		if(player.hangman_score > score["hangmanrecord"])
+			score["hangmanrecord"] = player.hangman_score
+			score["hangmanname"] = player.real_name
+			score["hangmanjob"] = player.job
+			score["hangmankey"] = player.key
 
 	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	leaderboard.insert_records(rich_escapes)
@@ -571,6 +576,8 @@
 		dat += "<B>Law Upload Modules Used:</B> [score["lawchanges"]]<BR>"
 	if(score["gunsspawned"] > 0)
 		dat += "<B>Guns Magically Spawned:</B> [score["gunsspawned"]]<BR>"
+	if(score["hangmanrecord"] > 0)
+		dat += "<B>Highest Hangman Score:</B> [score["hangmanname"]], [score["hangmanjob"]]: [score["hangmanrecord"]] ([score["hangmankey"]])<BR>"
 	if(score["nukedefuse"] < 30)
 		dat += "<B>Seconds Left on the Nuke When It Was Defused:</B> [score["nukedefuse"]]<BR>"
 	if(score["disease_most"] != null)
