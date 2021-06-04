@@ -105,24 +105,8 @@
 		critter.pixel_x = pixel_x
 		critter.pixel_y = pixel_y+5
 
-/obj/item/critter_cage/MouseDropFrom(var/over_object)
-	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)))
-		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
-			if(istype(over_object,/obj/abstract/screen/inventory))
-				var/obj/abstract/screen/inventory/OI = over_object
-
-				if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
-					usr.u_equip(src, 0)
-					usr.put_in_hand(OI.hand_index, src)
-					src.add_fingerprint(usr)
-					mouse_opacity = 1
-
-			else if(istype(over_object,/mob/living))
-				if(usr == over_object)
-					if( !usr.get_active_hand() )
-						usr.put_in_hands(src)
-						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
-						mouse_opacity = 1
+/obj/item/critter_cage/MouseDropFrom(atom/over_object)
+	MouseDropPickUp(over_object)
 	return ..()
 
 /obj/item/critter_cage/with_mouse
