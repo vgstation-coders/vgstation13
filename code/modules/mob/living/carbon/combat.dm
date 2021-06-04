@@ -25,10 +25,11 @@
 /mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
 	if(!I || !user)
 		return FALSE
-	var/target_zone = null
+	target_zone = null
 	var/power = I.force
 	if (crit)
 		power *= CRIT_MULTIPLIER
+
 	if(def_zone)
 		target_zone = get_zone_with_miss_chance(def_zone, src)
 	else if(originator)
@@ -37,6 +38,7 @@
 			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
 	else
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
+
 	if(user == src) // Attacking yourself can't miss
 		target_zone = user.zone_sel.selecting
 	if(!target_zone && !src.stat)
