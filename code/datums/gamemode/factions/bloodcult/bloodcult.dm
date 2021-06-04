@@ -280,6 +280,16 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		take_blood(cup, cup.volume)//Up to 60u
 		cup.on_reagent_change()//so we get the reagentsfillings overlay
 		new/obj/item/weapon/skull(coffer)
+	if (ismonkey(src))
+		var/list/skulless_monkeys = list(
+			/mob/living/carbon/monkey/mushroom,
+			/mob/living/carbon/monkey/diona,
+			/mob/living/carbon/monkey/rock,
+			)
+		var/mob/living/carbon/monkey/M = src
+		if (!(M.species_type in skulless_monkeys))
+			take_blood(cup, cup.volume)//Up to 60u
+			new/obj/item/weapon/skull(coffer)
 	if (isslime(src))
 		cup.reagents.add_reagent(SLIMEJELLY, 50)
 	if (isalien(src))//w/e
