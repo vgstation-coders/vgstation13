@@ -97,12 +97,19 @@ var/global/list/blood_list = list()
 	desc = "It looks like a writing in blood."
 	gender = NEUTER
 	icon = 'icons/effects/effects.dmi'
-	icon_state = ""
+	icon_state = "nothing"
+	random_icon_states = list()
 	amount = 0
 	maptext_height = 32
 	maptext_width = 64
 	maptext_x = -16
 	maptext_y = -2
+	var/turf/original_bloodsource//the turf where was the original blood splatter
+	var/original_amount = 0//the amount of blood there was in the original blood splatter
+
+/obj/effect/decal/cleanable/blood/writing/update_icon()
+	..()
+	color = null
 
 
 /obj/effect/decal/cleanable/blood/gibs

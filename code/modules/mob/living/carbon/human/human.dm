@@ -1277,7 +1277,7 @@
 		doodle_color = bloody_hands_data["blood_colour"]
 
 	if (!doodle_color)
-		to_chat(src, "<span class='warning'>There is no blood on your hands or gloves.</span>")
+		to_chat(src, "<span class='warning'>There is no blood on your [actual_gloves ? "gloves" : "hands"].</span>")
 		return
 
 
@@ -1315,6 +1315,19 @@
 	if(continue_drawing != "Yes" || !Adjacent(T))
 		return
 
+	//One last sanity check
+	var/can_still_doodle = FALSE
+	var/obj/item/clothing/gloves/actual_gloves2
+	if (istype(gloves, /obj/item/clothing/gloves))
+		actual_gloves2 = gloves
+		if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
+			can_still_doodle = TRUE
+	if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
+		can_still_doodle = TRUE
+	if(!can_still_doodle)
+		to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
+		return
+
 	//Finally writing our message
 	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 	W.basecolor = doodle_color
@@ -1324,8 +1337,8 @@
 	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
 	W.blood_DNA[doodle_DNA] = doodle_type
 
-	if (actual_gloves)
-		actual_gloves.transfer_blood = max(0,actual_gloves.transfer_blood - 1)
+	if (actual_gloves2)
+		actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
 	else
 		bloody_hands = max(0,bloody_hands - 1)
 	update_inv_gloves()
