@@ -29,6 +29,8 @@
 	var/attack_faction = null //Put a faction string here to have a mob only ever attack a specific faction
 	var/friendly_fire = 0 //If set to 1, they won't hesitate to shoot their target even if a friendly is in the way.
 	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
+	var/hostile_interest = 2 //How long will we wait in the same spot trying to chase something before giving up?
+	var/atom/lastloc //Where we were last time we were moving toward a target.
 
 	var/list/target_rules = list()
 
@@ -236,6 +238,16 @@
 		LoseTarget()
 		return
 
+	if(loc == lastloc)
+		hostile_interest--
+		if(hostile_interest <= 0)
+			LoseTarget()
+			return
+	else
+		hostile_interest = initial(hostile_interest)
+
+	lastloc = loc
+
 	if(isturf(loc))
 		if(target in ListTargets())
 			var/target_distance = get_dist(src,target)
@@ -438,7 +450,8 @@
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
 					 /obj/item/toy/balloon/inflated/decoy,
-					 /obj/machinery/door/airlock)
+					 /obj/machinery/door/airlock,
+					 /obj/machinery/door/firedoor)
 				if(is_type_in_list(A, destructible_objects) && Adjacent(A))
 					if(istype(A, /obj/machinery/door/airlock))
 						var/obj/machinery/door/airlock/AIR = A
