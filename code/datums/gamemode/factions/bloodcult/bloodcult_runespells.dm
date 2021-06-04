@@ -809,6 +809,8 @@
 		to_chat(activator, "<span class='warning'>This tome cannot contain any more talismans.</span>")
 	qdel(src)
 
+var/list/converted_minds = list()
+
 //RUNE V
 /datum/rune_spell/blood_cult/conversion
 	name = "Conversion"
@@ -1019,6 +1021,9 @@
 		if (jobban_isbanned(victim, CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
 
+		if (!victim.mind)
+			acceptance = "Mindless"
+
 		//Players with cult enabled in their preferences will always get converted.
 		//Others get a choice, unless they're cult-banned or have their preferences set to Never (or disconnected), in which case they always die.
 		var/conversion_delay = 100
@@ -1061,6 +1066,10 @@
 				to_chat(activator, "<span class='sinister'>Given how unstable the ritual is becoming, \The [victim] will surely be consumed entirely by it. They weren't meant to become one of us.</span>")
 				to_chat(victim, "<span class='danger'>Except your past actions have displeased us. You will be our snack before the feast begins. \[You are banned from this role\]</span>")
 				success = CONVERSION_BANNED
+			if ("Mindless")
+				conversion.icon_state = "rune_convert_bad"
+				to_chat(activator, "<span class='sinister'>This mindless creature will be sacrificed.</span>")
+				success = CONVERSION_MINDLESS
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
 		sleep(conversion_delay)
@@ -1081,7 +1090,8 @@
 
 		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (victim.mind)
+		if (victim.mind && !(victim.mind in converted_minds))
+			converted_minds += victim.mind
 			if (cult)
 				spawn(5)//waiting half a second to make sure that the sacrifice objective won't designate a victim that just refused conversion
 					cult.stage(CULT_ACT_II)
@@ -1180,6 +1190,14 @@
 				flick("rune_convert_failure",conversion)
 
 				//sacrificed victims have all their stuff stored in a coffer that also contains their skull and a cup of their blood, should they have either
+				victim.boxify(TRUE, FALSE, "cult")
+				abort(RITUALABORT_SACRIFICE)
+
+			if (CONVERSION_MINDLESS)
+
+				conversion.icon_state = ""
+				flick("rune_convert_failure",conversion)
+
 				victim.boxify(TRUE, FALSE, "cult")
 				abort(RITUALABORT_SACRIFICE)
 
