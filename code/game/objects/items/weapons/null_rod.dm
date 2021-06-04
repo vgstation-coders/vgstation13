@@ -61,6 +61,9 @@
 	if(!prox_flag)
 		return
 	if(istype(A, /turf/simulated/floor))
+		if (user.a_intent != I_HELP) //We assume the user is fighting
+			to_chat(user, "<span class='notice'>You swing \the [src] in front of you.</span>")
+			return
 		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)
 		animation.alpha = 0
 		animate(animation, alpha = 255, time = 2)
