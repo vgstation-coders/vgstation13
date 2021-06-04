@@ -134,4 +134,9 @@
 			SSplant.add_plant(neighbor)
 	qdel(src)
 
+/obj/effect/plantsegment/proc/proxDensityChange(atom/atom)
+	var/turf/T = get_turf(atom)
+	if(!T.density && !T.has_dense_content())
+		SSplant.add_plant(src)
+
 #undef NEIGHBOR_REFRESH_TIME
