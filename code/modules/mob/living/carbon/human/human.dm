@@ -1994,7 +1994,7 @@ mob/living/carbon/human/isincrit()
 	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
 	hangman_answer = replacetext(hangman_answer,"?","")
 	hangman_answer = replacetext(hangman_answer,"!","")
-	if(muted_letters && muted_letters.len && length(hangman_answer == 1) // If we're working with a hangman cursed individuel and we only said a letter
+	if(muted_letters && muted_letters.len && length(hangman_answer == 1)) // If we're working with a hangman cursed individuel and we only said a letter
 		if(hangman_answer in muteletters_check) // Correct answer?
 			muted_letters.Remove(hangman_answer) // Baleet it
 			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
