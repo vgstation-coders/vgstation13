@@ -288,6 +288,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			)
 		var/mob/living/carbon/monkey/M = src
 		if (!(M.species_type in skulless_monkeys))
+			take_blood(cup, cup.volume)//Up to 60u
 			new/obj/item/weapon/skull(coffer)
 	if (isslime(src))
 		cup.reagents.add_reagent(SLIMEJELLY, 50)
