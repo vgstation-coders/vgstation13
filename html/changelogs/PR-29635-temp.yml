@@ -1,7 +1,0 @@
----
-author: DeityLink
-changes:
-  - bugfix: Bomberman Spawns no longer invisible to ghosts who had darkness toggled off
-  - bugfix: "Bomberman Arenas no longer have their name in the corner set up incorrectly and showing up as literally just \"name\""
-  - bugfix: Clothing in Bomerman Arenas  no longer remain on the ground after a round.
-delete-after: true

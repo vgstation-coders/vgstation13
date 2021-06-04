@@ -1,7 +1,0 @@
----
-author: DeityLink
-changes:
-  - rscadd: Added a couple more country flag-bearing mugs. Mug boxes such as those included in Cafe Equipment supply crates now include a random one each.
-  - rscadd: Flag Mugs finally appear filled with liquid when some has been poured in them.
-  - imageadd: "Re-did the in-hand icons for mugs, and added some for all flag mugs. Mugs that contain a liquid that has a unique mug sprite no longer appear invisible in-hand, and instead use the default mug sprite."
-delete-after: true

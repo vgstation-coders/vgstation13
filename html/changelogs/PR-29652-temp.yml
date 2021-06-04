@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - bugfix: Fixed mindless Wraiths appearing if you removed an amorphous mask that turns you into a Wraith when reaching the end of an Ethereal Jaunt.
-delete-after: true

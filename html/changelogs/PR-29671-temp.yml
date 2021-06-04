@@ -1,5 +1,0 @@
----
-author: Apogee-dev
-changes:
-  - bugfix: Dynamic now checks alt titles in addition to job titles for protection & restriction from antag roles
-delete-after: true

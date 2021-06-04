@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - bugfix: "Space Heaters and Cult Forges can no longer heat up a room that's in a vacuum, causing mobs to take damage even though there is no molecules with which to exchange temperature."
-delete-after: true

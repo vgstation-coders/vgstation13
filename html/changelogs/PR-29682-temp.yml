@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - tweak: You now need to be on help intent to reveal runes using a null rod. This means that you no longer get extra delay added to your attacks when using one to fight and missing by clicking the floor.
-delete-after: true

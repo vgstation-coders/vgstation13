@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - bugfix: Fixed dead mice still being able to nibble
-delete-after: true

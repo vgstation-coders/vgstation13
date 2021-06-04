@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - bugfix: "When hitting someone with a weapon, should you miss the intended target limb and hit another limb, the chat will now correctly report which limb has been hit."
-delete-after: true

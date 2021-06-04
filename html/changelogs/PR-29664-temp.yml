@@ -1,7 +1,0 @@
----
-author: DeityLink
-changes:
-  - tweak: "Cultists now stop dancing while incapacitated, or when muted by holy water. This includes constructs when they are purged by a null rod."
-  - bugfix: Cultists with the Chameleon gene no longer remain invisible while dancing.
-  - rscadd: "Cultists can now DANCE wherever using say \"*cultdance\". They will dance around the tile in front of them, so for the best looks do it in an open area. If other cultists uses the emote while adjacent to the first cultist's \"dance center\", they will join up and dance in sync. Up to 4 cultists may dance together without bumping into each other (as unlike the sacrifice/bloodstone dance, this one doesn't use forceMove)"
-delete-after: true
