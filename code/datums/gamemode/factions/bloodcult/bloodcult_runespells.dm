@@ -1018,11 +1018,11 @@ var/list/converted_minds = list()
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					if(I.implanted)
 						acceptance = "Implanted"
+		else if (!victim.mind)
+			acceptance = "Mindless"
+
 		if (jobban_isbanned(victim, CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
-
-		if (!victim.mind)
-			acceptance = "Mindless"
 
 		//Players with cult enabled in their preferences will always get converted.
 		//Others get a choice, unless they're cult-banned or have their preferences set to Never (or disconnected), in which case they always die.
