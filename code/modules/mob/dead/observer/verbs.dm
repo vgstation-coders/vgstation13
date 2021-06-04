@@ -287,71 +287,109 @@
 	set name = "Write in blood"
 	set desc = "If the round is sufficiently spooky, write a short message in blood on the floor or a wall. Remember, no IC in OOC or OOC in IC."
 
+	//Some basic checks first
 	if(!(config.cult_ghostwriter))
 		to_chat(src, "<span class='warning'>That verb is not currently permitted.</span>")
 		return
 
-	if (!src.stat)
-		return
-
-	if (usr != src)
-		return 0 //something is terribly wrong
-
-	var/ghosts_can_write
+	var/ghosts_can_write = FALSE
+	//legacy cult
 	var/datum/faction/cult/narsie/C = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
-		ghosts_can_write = 1
+		ghosts_can_write = TRUE
 
+	//new cult
 	if (veil_thickness >= CULT_ACT_III)
-		ghosts_can_write = 1
+		ghosts_can_write = TRUE
+	if (invisibility == 0)
+		ghosts_can_write = TRUE
 
 	if(!ghosts_can_write)
 		to_chat(src, "<span class='warning'>The veil is not thin enough for you to do that.</span>")
 		return
 
+	var/turf/T = get_turf(src)
+	if (!isfloor(T))
+		to_chat(src, "<span class='warning'>You can only doodle over floors.</span>")
+		return
+
+	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
+		to_chat(src, "<span class='warning'>This floor is already filled with writings.</span>")
+		return
+
+	//Ok the place is clear, now we need some blood
 	var/list/choices = list()
-	for(var/obj/effect/decal/cleanable/blood/B in view(1,src))
-		if(B.amount > 0)
-			choices += B
+	var/i = 1
+	for(var/obj/effect/decal/cleanable/blood/B in range(1,T))
+		if(B.counts_as_blood)
+			if (istype(B,/obj/effect/decal/cleanable/blood/tracks))
+				var/obj/effect/decal/cleanable/blood/tracks/tracks = B
+				choices["[i] - [B] (color = [tracks.last_blood_color])"] = B
+			else
+				choices["[i] - [B] (color = [B.basecolor])"] = B
+		i++
 
 	if(!choices.len)
 		to_chat(src, "<span class = 'warning'>There is no blood to use nearby.</span>")
 		return
 
-	var/obj/effect/decal/cleanable/blood/choice = input(src,"What blood would you like to use?") in null|choices
-	var/direction = input(src,"Which way?","Tile selection") as anything in list("Here","North","South","East","West")
-	var/turf/simulated/T = src.loc
-	if (direction != "Here")
-		T = get_step(T,text2dir(direction))
+	var/choice = input(src,"What blood would you like to use?") in null|choices
 
-	if (!istype(T))
-		to_chat(src, "<span class='warning'>You cannot doodle there.</span>")
+	if(!choice || !Adjacent(T))
 		return
 
-	if(!choice || choice.amount == 0 || !(src.Adjacent(choice)))
+	var/obj/effect/decal/cleanable/blood/blood_source = choices[choice]
+
+	if(!blood_source)
 		return
 
-	var/doodle_color = (choice.basecolor) ? choice.basecolor : DEFAULT_BLOOD
-	var/num_doodles = 0
-	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
-		num_doodles++
-	if (num_doodles > 4)
-		to_chat(src, "<span class='warning'>There is no space to write on!</span>")
+	var/doodle_color = (blood_source.basecolor) ? blood_source.basecolor : DEFAULT_BLOOD
+	if (istype(blood_source,/obj/effect/decal/cleanable/blood/tracks))
+		var/obj/effect/decal/cleanable/blood/tracks/tracks = blood_source
+		doodle_color = tracks.last_blood_color
+
+	//Blood found, now to write a message
+	var/max_length = 30
+	var/message = stripped_input(src,"Write a message. You will be able to preview it.","Bloody writings", "")
+
+	if (!message)
 		return
 
-	var/max_length = 50
-	var/message = stripped_input(src,"Write a message. It cannot be longer than [max_length] characters.","Blood writing", "")
+	message = copytext(message, 1, max_length)
 
-	if (message)
-		if (length(message) > max_length)
-			message += "-"
-			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
-		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
-		W.basecolor = doodle_color
-		W.update_icon()
-		W.message = message
-		W.add_hiddenprint(src)
-		W.visible_message("<span class='warning'>Invisible fingers crudely paint something in blood on [T]...</span>")
+	var/letter_amount = length(replacetext(message, " ", ""))
+	if(!letter_amount) //If there is no text
+		return
+
+	//Previewing our message
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	I.maptext_height = 32
+	I.maptext_width = 64
+	I.maptext_x = -16
+	I.maptext_y = -2
+	I.loc = T
+	I.alpha = 180
+
+	client.images.Add(I)
+	var/continue_drawing = alert(src, "This is how your message will look. Continue?", "Bloody writings", "Yes", "Cancel")
+
+	client.images.Remove(I)
+	animate(I) //Cancel the animation so that the image gets garbage collected
+	I.loc = null
+	qdel(I)
+
+	if(continue_drawing != "Yes" || !Adjacent(T) || !blood_source)
+		return
+
+	//Finally writing our message
+	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
+	W.basecolor = doodle_color
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	W.add_hiddenprint(src)
+	W.visible_message("<span class='warning'>Invisible fingers crudely paint something in blood on \the [T]...</span>")
+	if(istype(blood_source.blood_DNA,/list))
+		W.blood_DNA |= blood_source.blood_DNA.Copy()
 
 /mob/dead/observer/verb/hide_ghosts()
 	set name = "Hide Ghosts"

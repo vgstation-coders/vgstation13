@@ -996,7 +996,6 @@
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	update_inv_gloves()	//handles bloody hands overlays and updating
-	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return 1 //we applied blood to the item
 
 /mob/living/carbon/human/add_blood_from_data(var/list/blood_data)
@@ -1012,7 +1011,6 @@
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[blood_data["blood_DNA"]] = blood_data["blood_type"]
 	update_inv_gloves()	//handles bloody hands overlays and updating
-	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return TRUE //we applied blood to the item
 
 /mob/living/carbon/human/clean_blood(var/clean_feet)
@@ -1244,63 +1242,95 @@
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
-/mob/living/carbon/human/proc/bloody_doodle()
+/mob/living/carbon/human/verb/bloody_doodle()
 	set category = "IC"
 	set name = "Write in blood"
-	set desc = "Use blood on your hands to write a short message on the floor or a wall, murder mystery style."
+	set desc = "Use blood on your hands to write a short message on the floor, murder mystery style."
 
-	if (src.stat)
+	if (incapacitated() || isUnconscious())
 		return
 
-	if (!(bloody_hands_data?.len))
+	var/turf/T = get_turf(src)
+	if (!isfloor(T))
+		to_chat(src, "<span class='warning'>You can only doodle over floors.</span>")
 		return
 
-	if (usr != src)
-		return 0 //something is terribly wrong
-
-	if (!bloody_hands)
-		verbs -= /mob/living/carbon/human/proc/bloody_doodle
-
-	if (src.gloves)
-		to_chat(src, "<span class='warning'>Your [src.gloves] are getting in the way.</span>")
-		return
-
-	var/turf/simulated/T = src.loc
-	if (!istype(T)) //to prevent doodling out of mechs and lockers
-		to_chat(src, "<span class='warning'>You cannot reach the floor.</span>")
-		return
-
-	var/direction = input(src,"Which way?","Tile selection") as anything in list("Here","North","South","East","West")
-	if (direction != "Here")
-		T = get_step(T,text2dir(direction))
-	if (!istype(T))
-		to_chat(src, "<span class='warning'>You cannot doodle there.</span>")
-		return
-
-	var/num_doodles = 0
 	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
-		num_doodles++
-	if (num_doodles > 4)
-		to_chat(src, "<span class='warning'>There is no space to write on!</span>")
+		to_chat(src, "<span class='warning'>This floor is already filled with writings.</span>")
 		return
 
-	var/max_length = bloody_hands * 30 //tweeter style
+	var/doodle_color
+	var/doodle_DNA
+	var/doodle_type
+	var/obj/item/clothing/gloves/actual_gloves
 
-	var/message = stripped_input(src,"Write a message. It cannot be longer than [max_length] characters.","Blood writing", "")
+	if (istype(gloves, /obj/item/clothing/gloves))
+		actual_gloves = gloves
+		if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
+			doodle_DNA = pick(actual_gloves.blood_DNA)
+			doodle_type = actual_gloves.blood_DNA[doodle_DNA]
+			doodle_color = actual_gloves.blood_color
 
-	if (message)
-		var/used_blood_amount = round(length(message) / 30, 1)
-		bloody_hands = max(0, bloody_hands - used_blood_amount) //use up some blood
+	if(!actual_gloves && bloody_hands > 0 && bloody_hands_data?.len)
+		doodle_DNA = bloody_hands_data["blood_DNA"]
+		doodle_type = bloody_hands_data["blood_type"]
+		doodle_color = bloody_hands_data["blood_colour"]
 
-		if (length(message) > max_length)
-			message += "-"
-			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
+	if (!doodle_color)
+		to_chat(src, "<span class='warning'>There is no blood on your hands or gloves.</span>")
+		return
 
-		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
-		W.basecolor = (bloody_hands_data["blood_colour"]) ? bloody_hands_data["blood_colour"] : DEFAULT_BLOOD
-		W.update_icon()
-		W.message = message
-		W.add_fingerprint(src)
+
+	//Blood found, now to write a message
+	var/max_length = 30
+	var/message = stripped_input(src,"Write a message. You will be able to preview it.","Bloody writings", "")
+
+	if (!message)
+		return
+
+	message = copytext(message, 1, max_length)
+
+	var/letter_amount = length(replacetext(message, " ", ""))
+	if(!letter_amount) //If there is no text
+		return
+
+	//Previewing our message
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	I.maptext_height = 32
+	I.maptext_width = 64
+	I.maptext_x = -16
+	I.maptext_y = -2
+	I.loc = T
+	I.alpha = 180
+
+	client.images.Add(I)
+	var/continue_drawing = alert(src, "This is how your message will look. Continue?", "Bloody writings", "Yes", "Cancel")
+
+	client.images.Remove(I)
+	animate(I) //Cancel the animation so that the image gets garbage collected
+	I.loc = null
+	qdel(I)
+
+	if(continue_drawing != "Yes" || !Adjacent(T))
+		return
+
+	//Finally writing our message
+	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
+	W.basecolor = doodle_color
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	W.add_fingerprint(src)
+	var/invisible = invisibility || !alpha
+	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
+	W.blood_DNA[doodle_DNA] = doodle_type
+
+	if (actual_gloves)
+		actual_gloves.transfer_blood = max(0,actual_gloves.transfer_blood - 1)
+	else
+		bloody_hands = max(0,bloody_hands - 1)
+	update_inv_gloves()
+
+
 /mob/living/carbon/human/can_inject(var/mob/user, var/error_msg, var/target_zone)
 	. = 1
 	if(!user)

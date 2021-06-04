@@ -6,10 +6,6 @@
 	var/feet_blood_color
 	var/track_blood_type
 
-/obj/item/clothing/gloves
-	var/transfer_blood = 0
-	var/list/bloody_hands_data = list()
-
 /obj/item/clothing/shoes
 	var/track_blood = 0
 
