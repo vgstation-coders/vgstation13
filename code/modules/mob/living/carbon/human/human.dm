@@ -1991,19 +1991,19 @@ mob/living/carbon/human/isincrit()
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	var/mob/living/H = speech.speaker
 	var/hangman_answer = speech.message
-	hangman_answer = replacetext(hangman_answer,".","")
+	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
 	hangman_answer = replacetext(hangman_answer,"?","")
 	hangman_answer = replacetext(hangman_answer,"!","")
-	if(muted_letters && muted_letters.len && length(hangman_answer == 1)
-		if(hangman_answer in muteletters_check)
-			muted_letters.Remove(hangman_answer)
+	if(muted_letters && muted_letters.len && length(hangman_answer == 1) // If we're working with a hangman cursed individuel and we only said a letter
+		if(hangman_answer in muteletters_check) // Correct answer?
+			muted_letters.Remove(hangman_answer) // Baleet it
 			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
-			H.hangman_score++
+			H.hangman_score++ // Add to score
 		else if(muteletter_tries)
-			muteletter_tries--
+			muteletter_tries-- //Reduce the attempts left before...
 			visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
 		else
-			set_muted_letters(min(0,26-(muted_letters.len+1)))
+			set_muted_letters(min(0,26-(muted_letters.len+1))) // It gets scrambled and lengthened!
 			visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
