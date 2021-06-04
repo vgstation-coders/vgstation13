@@ -78,7 +78,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 			busy = 0
 			if(linked_console)
 				linked_console.updateUsrDialog()
-			return TRUE
+		return TRUE
 	return FALSE
 
 /obj/machinery/r_n_d/destructive_analyzer/attackby(var/obj/O, var/mob/user)
