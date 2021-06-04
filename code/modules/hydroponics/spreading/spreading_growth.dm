@@ -136,7 +136,7 @@
 
 /obj/effect/plantsegment/proc/proxDensityChange(atom/atom)
 	var/turf/T = get_turf(atom)
-	if(!T.density && !T.has_dense_content())
+	if(!is_blocked_turf(T))
 		SSplant.add_plant(src)
 
 #undef NEIGHBOR_REFRESH_TIME

@@ -75,8 +75,8 @@
 /obj/effect/biomass/proc/spread()
 	var/location = get_step(src, pick(alldirs))
 
-	if(istype(location, /turf/simulated/floor))
-		var/turf/simulated/floor/Floor = location
+	if(isfloor(location) && Adjacent(location))
+		var/turf/Floor = location
 
 		if(isnull(locate(/obj/effect/biomass) in Floor))
 			if(Floor.Enter(src, loc))
