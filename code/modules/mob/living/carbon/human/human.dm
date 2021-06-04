@@ -1990,18 +1990,21 @@ mob/living/carbon/human/isincrit()
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	var/mob/living/H = speech.speaker
-	if(muted_letters && muted_letters.len && length(speech.message) == 1)
-		if(speech.message in muteletters_check)
-			muted_letters.Remove(speech.message)
-			H.visible_message("<span class='notice'>[speech.speaker] guessed a correct letter!</span>","<span class='notice'>You guessed a correct letter!</span>")
+	var/hangman_answer = speech.message
+	hangman_answer = replacetext(hangman_answer,".","")
+	hangman_answer = replacetext(hangman_answer,"?","")
+	hangman_answer = replacetext(hangman_answer,"!","")
+	if(muted_letters && muted_letters.len && length(hangman_answer == 1)
+		if(hangman_answer in muteletters_check)
+			muted_letters.Remove(hangman_answer)
+			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
 			H.hangman_score++
 		else if(muteletter_tries)
 			muteletter_tries--
-			visible_message("<span class='warning'>Letter not found. [muteletter_tries] tries left.</span>")
-			H.hangman_score--
+			visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
 		else
 			set_muted_letters(min(0,26-(muted_letters.len+1)))
-			H.hangman_score--
+			visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
