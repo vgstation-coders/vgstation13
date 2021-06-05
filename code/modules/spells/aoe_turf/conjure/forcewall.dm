@@ -113,7 +113,7 @@ Unwall fields
 	desc = "You have a REALLY bad feeling about this."
 	anchored = 1.0
 	opacity = 0
-	duration = 300 // How long the wall lasts, in ticks
+	var/duration = 300 // How long the wall lasts, in ticks
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable) // To stop people breaking maps like centcomm or lamprey stuff
 
 /obj/effect/unwall_field/permanent // For future mapping or bus shenanigans
