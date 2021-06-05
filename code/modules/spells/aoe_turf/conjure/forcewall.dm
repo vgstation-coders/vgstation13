@@ -112,17 +112,11 @@
 	desc = "You have a REALLY bad feeling about this."
 	anchored = 1.0
 	opacity = 0
-	var/list/pass_items = list()
+	flow_flags = ON_BORDER
+	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable)
 
-/obj/effect/unwall_field/New()
-	..()
-	for(var/atom/A in loc)
-		if(A.density == 1 && !is_type_in_list(A,list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable)))
-			A.density = 0
-			pass_items.Add(A)
-
-/obj/effect/unwall_field/Destroy()
-	for(var/atom/A in pass_items)
-		A.density = 1
-		pass_items.Remove(A)
-	..()
+/obj/effect/unwall_field/to_bump(atom/A)
+	for(var/atom/B in src.loc)
+		if(is_type_in_list(B,forbidden_passes))
+			return
+	A.forceMove(src.loc)
