@@ -281,7 +281,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 This function restores the subjects blood to max.
 */
 /mob/living/carbon/human/proc/restore_blood()
-	if(!species.anatomy_flags & NO_BLOOD)
+	if(!(species.anatomy_flags & NO_BLOOD))
 		var/blood_volume = vessel.get_reagent_amount(BLOOD)
 		vessel.add_reagent(BLOOD,560.0-blood_volume)
 

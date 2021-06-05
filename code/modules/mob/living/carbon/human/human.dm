@@ -1444,7 +1444,7 @@
 /mob/living/carbon/human/has_eyes()
 	if(internal_organs_by_name["eyes"])
 		var/datum/organ/internal/eyes = internal_organs_by_name["eyes"]
-		if(eyes && istype(eyes) && !eyes.status & ORGAN_CUT_AWAY)
+		if(eyes && istype(eyes) && !(eyes.status & ORGAN_CUT_AWAY))
 			return 1
 	return 0
 /mob/living/carbon/human/singularity_act()
