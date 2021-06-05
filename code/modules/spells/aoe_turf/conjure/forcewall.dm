@@ -32,6 +32,10 @@
 	override_base = "grey"
 	hud_state = "mime_wall"
 
+/*
+Unwall spell, sadly has to be targeted to be any fun to use
+-kanef
+*/
 /spell/targeted/mime_unwall
 	name = "Invisible un-wall"
 	desc = "Create an invisible un-wall on your location, an anomaly allowing the passage of all objects through anything on it"
@@ -98,6 +102,10 @@
 	qdel(src)
 	return
 
+/*
+Unwall fields
+-kanef
+*/
 /obj/effect/unwall_field
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "fuel"
@@ -105,19 +113,22 @@
 	desc = "You have a REALLY bad feeling about this."
 	anchored = 1.0
 	opacity = 0
-	duration = 300
-	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable)
+	duration = 300 // How long the wall lasts, in ticks
+	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable) // To stop people breaking maps like centcomm or lamprey stuff
+
+/obj/effect/unwall_field/permanent // For future mapping or bus shenanigans
+	duration = 0 // Forever
 
 /obj/effect/unwall_field/New()
 	..()
-	if(duration)
+	if(duration) // Wait the duration if any and delete it, if zero, don't
 		spawn(duration)
 			qdel(src)
 
 /obj/effect/unwall_field/to_bump(atom/A)
-	if(ismovable(A))
+	if(ismovable(A)) // For forceMove
 		var/atom/movable/AM = A
-		for(var/atom/B in src.loc)
+		for(var/atom/B in src.loc) // Go through everything, discount passing through forbidden stuff
 			if(is_type_in_list(B,forbidden_passes))
 				return
 		AM.forceMove(src.loc)
