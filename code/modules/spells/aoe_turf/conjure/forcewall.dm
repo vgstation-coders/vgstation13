@@ -42,7 +42,6 @@
 	specialization = SSOFFENSIVE
 
 	school = "mime"
-	duration = 300
 	charge_max = 300
 	cast_sound = null
 	cooldown_min = 2 SECONDS
@@ -59,12 +58,6 @@
 	..()
 	for(var/atom/target in targets)
 		new /obj/effect/unwall_field(target.loc)
-	if(duration)
-		spawn(duration)
-			for(var/atom/target in targets)
-				var/obj/effect/unwall_field/UF = locate(/obj/effect/unwall_field) in target.loc
-				if(UF)
-					qdel(UF)
 	return
 
 /obj/effect/forcefield
@@ -112,7 +105,14 @@
 	desc = "You have a REALLY bad feeling about this."
 	anchored = 1.0
 	opacity = 0
+	duration = 300
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable)
+
+/obj/effect/unwall_field/New()
+	..()
+	if(duration)
+		spawn(duration)
+			qdel(src)
 
 /obj/effect/unwall_field/to_bump(atom/A)
 	if(ismovable(A))
