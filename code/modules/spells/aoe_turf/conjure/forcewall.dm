@@ -117,7 +117,7 @@
 /obj/effect/unwall_field/New()
 	..()
 	for(var/atom/A in loc)
-		if(A.density == 1)
+		if(A.density == 1 && !is_type_in_list(A,list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable)))
 			A.density = 0
 			pass_items.Add(A)
 
