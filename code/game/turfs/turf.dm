@@ -130,7 +130,7 @@
 	if (!mover)
 		return 1
 
-	var/obj/effect/unwall_field/UF = locate(obj/effect/unwall_field) in src //For traitorous mimes
+	var/obj/effect/unwall_field/UF = locate(/obj/effect/unwall_field) in src //For traitorous mimes
 	if(UF)
 		UF.to_bump(mover, 1)
 		return 0
