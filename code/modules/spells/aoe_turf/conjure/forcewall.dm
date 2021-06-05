@@ -112,7 +112,6 @@
 	desc = "You have a REALLY bad feeling about this."
 	anchored = 1.0
 	opacity = 0
-	flow_flags = ON_BORDER
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable)
 
 /obj/effect/unwall_field/to_bump(atom/A)
