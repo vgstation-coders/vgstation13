@@ -116,7 +116,9 @@
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable)
 
 /obj/effect/unwall_field/to_bump(atom/A)
-	for(var/atom/B in src.loc)
-		if(is_type_in_list(B,forbidden_passes))
-			return
-	A.forceMove(src.loc)
+	if(ismovable(A))
+		var/atom/movable/AM = A
+		for(var/atom/B in src.loc)
+			if(is_type_in_list(B,forbidden_passes))
+				return
+		AM.forceMove(src.loc)
