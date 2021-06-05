@@ -38,7 +38,7 @@ Unwall spell, sadly has to be targeted to be any fun to use
 */
 /spell/targeted/mime_unwall
 	name = "Invisible un-wall"
-	desc = "Create an invisible un-wall on your location, an anomaly allowing the passage of all objects through anything on it"
+	desc = "Create an invisible un-wall on a targeted location, an anomaly allowing the passage of all objects through anything on it"
 	school = "mime"
 	abbreviation = "FW"
 	user_type = USER_TYPE_OTHER
