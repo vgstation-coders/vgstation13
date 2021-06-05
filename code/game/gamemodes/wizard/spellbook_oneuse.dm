@@ -117,8 +117,12 @@
 	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
 
 /obj/item/weapon/spellbook/oneuse/forcewall/inverse/attack_self(mob/user as mob)
-	if(FALSE)
-		recoil(user)
+		if(ishuman(user))
+			var/mob/living/carbon/human/M = user
+			if(!issilent(M))
+				recoil(user)
+		else
+			recoil(user)
 	..()
 
 /obj/item/weapon/spellbook/oneuse/knock
