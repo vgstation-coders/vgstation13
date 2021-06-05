@@ -32,6 +32,11 @@
 	override_base = "grey"
 	hud_state = "mime_wall"
 
+/spell/aoe_turf/conjure/forcewall/mime/inverse
+	name = "Invisible un-wall"
+	desc = "Create an invisible un-wall on your location, an anomaly allowing the passage of all objects through anything on it"
+	summon_type = list(/obj/effect/unwall_field)
+
 /obj/effect/forcefield
 	desc = "A space wizard's magic wall."
 	name = "FORCEWALL"
@@ -69,3 +74,25 @@
 	new /obj/effect/forcefield/cult(get_turf(src))
 	qdel(src)
 	return
+
+/obj/effect/unwall_field
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "fuel"
+	name = "invisible un-wall"
+	desc = "You have a REALLY bad feeling about this."
+	anchored = 1.0
+	opacity = 0
+	var/list/pass_items = list()
+
+/obj/effect/unwall_field/New()
+	..()
+	for(var/atom/A in loc)
+		if(A.density == 1)
+			A.density = 0
+			pass_items.Add(A)
+
+/obj/effect/unwall_field/Destroy()
+	for(var/atom/A in pass_items)
+		A.density = 1
+		pass_items.Remove(A)
+	..()
