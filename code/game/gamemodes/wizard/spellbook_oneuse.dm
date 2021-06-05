@@ -111,7 +111,7 @@
 	user.drop_item()
 
 /obj/item/weapon/spellbook/oneuse/forcewall/inverse
-	spell = /spell/aoe_turf/conjure/forcewall/mime/inverse
+	spell = /spell/targeted/mime_unwall
 	spellname = "unwall"
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."

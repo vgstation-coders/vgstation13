@@ -32,10 +32,40 @@
 	override_base = "grey"
 	hud_state = "mime_wall"
 
-/spell/aoe_turf/conjure/forcewall/mime/inverse
+/spell/targeted/mime_unwall
 	name = "Invisible un-wall"
 	desc = "Create an invisible un-wall on your location, an anomaly allowing the passage of all objects through anything on it"
-	summon_type = list(/obj/effect/unwall_field)
+	school = "mime"
+	abbreviation = "FW"
+	user_type = USER_TYPE_OTHER
+	panel = "Mime"
+	specialization = SSOFFENSIVE
+
+	school = "mime"
+	duration = 300
+	charge_max = 300
+	cast_sound = null
+	cooldown_min = 2 SECONDS
+	spell_flags = WAIT_FOR_CLICK
+	range = 1
+	max_targets = 1
+	invocation_type = SpI_EMOTE
+	invocation = "mimes placing their hands on a flat surface, and pushing against it."
+
+	override_base = "grey"
+	hud_state = "mime_wall"
+
+/spell/targeted/mime_unwall/cast(var/list/targets, mob/user)
+	..()
+	for(var/atom/target in targets)
+		new /obj/effect/unwall_field(target.loc)
+	if(duration)
+		spawn(duration)
+			for(var/atom/target in targets)
+				var/obj/effect/unwall_field/UF = locate(/obj/effect/unwall_field) in target.loc
+				if(UF)
+					qdel(UF)
+	return
 
 /obj/effect/forcefield
 	desc = "A space wizard's magic wall."
