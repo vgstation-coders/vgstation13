@@ -110,6 +110,16 @@
 	S.timer = 30
 	user.drop_item()
 
+/obj/item/weapon/spellbook/oneuse/forcewall/inverse
+	spell = /spell/aoe_turf/conjure/forcewall/mime/inverse
+	spellname = "unwall"
+	icon_state ="bookforcewall"
+	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
+
+/obj/item/weapon/spellbook/oneuse/forcewall/inverse/attack_self(mob/user as mob)
+	if(FALSE)
+		recoil(user)
+	..()
 
 /obj/item/weapon/spellbook/oneuse/knock
 	spell = /spell/aoe_turf/knock

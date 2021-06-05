@@ -1000,6 +1000,13 @@ var/list/uplink_items = list()
 	cost = 12
 	jobs_exclusive = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/unwall_spell
+	name = "Invisible Un-Wall Spellbook"
+	desc = "Grants the user the ability to conjure a strange wall allowing the passage of anything through a space regardless of the objects in place. Only real Mimes are capable of learning from this forbidden tome."
+	item = /obj/item/weapon/spellbook/oneuse/forcewall/inverse
+	cost = 12
+	jobs_exclusive = list("Mime")
+
 /datum/uplink_item/jobspecific/clown_mime/punchline
 	name = "Punchline"
 	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
