@@ -75,6 +75,8 @@
 
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
+	var/last_beam_damage = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
