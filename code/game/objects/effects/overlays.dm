@@ -26,7 +26,7 @@
 
 /obj/effect/overlay/beam/New(var/turf/loc, var/lifetime = 10, var/fade = 0, var/src_icon = 'icons/effects/beam.dmi', var/icon_state = "b_beam", var/base_damage = 30)
 	..()
-	alpha = round(255*(loc.last_beam_damage/base_damage))
+	alpha = round(255*(max(1,loc.last_beam_damage)/max(1,base_damage)))
 	icon = src_icon
 	src.icon_state = icon_state
 	spawn if(fade)
