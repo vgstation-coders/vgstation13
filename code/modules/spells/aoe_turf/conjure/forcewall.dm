@@ -61,7 +61,10 @@ Unwall spell, sadly has to be targeted to be any fun to use
 /spell/targeted/mime_unwall/cast(var/list/targets, mob/user)
 	..()
 	for(var/atom/target in targets)
-		new /obj/effect/unwall_field(target.loc)
+		if(isturf(target))
+			new /obj/effect/unwall_field(target)
+		else
+			new /obj/effect/unwall_field(target.loc)
 	return
 
 /obj/effect/forcefield
