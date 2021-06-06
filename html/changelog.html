@@ -73,6 +73,14 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.06.06</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Egun beams now have their alpha reduced proportionally to their damage when they get dispersed by windows.</li>
+				<li class="bugfix">beams no longer lag when firing through a large corridor or into space.</li>
+				<li class="bugfix">Fixed full-tile windows not reducing beam damage. It now does it with the same efficiency as a single directional window.</li>
+				<li class="bugfix">Firing beams straight through a tile featuring directional windows will no longer reduce its damage if the window isn&#39;t oriented toward (or away) from the source of the beam (which means that in most cases, if the beam crosses a tile with a window without intersecting with it, it shouldn&#39;t lose some of its damage)</li>
+			</ul>
 			<h2 class="date">2021.06.05</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1797,35 +1805,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">Added some buffers to the frozen cores entrances, meaning that opening the doors doesn&#39;t instafreeze the entire east station.</li>
 				<li class="rscadd">There are now shutters on all the windows in snaxi atmospherics, allowing users to press a button in the CE&#39;s office to drop them.</li>
 				<li class="bugfix">snaxi TEG vent is facing the correct way</li>
-			</ul>
-			<h2 class="date">2020.12.04</h2>
-			<h3 class="author">Exxion updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Projectile penetration has been somewhat unfucked. Among other things, flamethrowers work again and maxed railguns can again fire more than like 20 tiles.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Now when you pull snowgear out of a snow closet, it will drop a scarf onto the floor too (or go into your hand if you have more than 2 hands)</li>
-				<li class="bugfix">You should now get the boots from a snow closet even if you have less than 2 hands (they fall on the floor)</li>
-			</ul>
-			<h3 class="author">Lakue-Bit updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Enables Blacksmithing recipes for solid plasma sheets.</li>
-				<li class="bugfix">Reduced the chances of higher quality phazon blacksmith stuff disappearing.</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Changed an odd trait of meta maint, where all the doors connecting to offices and departments from maint were part of maint.</li>
-				<li class="rscadd">meta: perma is much nicer now and has more stuff</li>
-				<li class="rscadd">meta: There is now a box of sunglasses in the armory.</li>
-				<li class="rscadd">meta: There are now 2 stacks of glass and 2 stacks of metal in pod bay, along side a welding helmet.</li>
-				<li class="bugfix">meta: Fixed a few rogue &#34;telescience&#34; areas appearing in the main science hall.</li>
-				<li class="bugfix">meta: There is now an APC in the maint above cargo..</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Changed passive vent sprites to be more unique.</li>
-				<li class="imageadd">Changed the sprites for heaters and freezers to better indicate their direction.</li>
 			</ul>
 		</div>
 		<!--
