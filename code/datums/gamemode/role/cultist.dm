@@ -226,7 +226,7 @@
 			tattoos_names = "none"
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
-		if (isshade(M) && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
+		if (isshade(M) && M.hud_used && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
 			if(!M.gui_icons.soulblade_bgLEFT)
 				M.hud_used.shade_hud()
 
