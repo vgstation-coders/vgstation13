@@ -1246,9 +1246,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 //////////////////////////////////
 
 
-//COMMENT IF YOUR DREAMDAEMON VERSION IS BELOW 507.1248
-#define BORDER_USE_TURF_EXIT 1
-
 ////////////////////////
 ////PDA APPS DEFINES////
 ////////////////////////

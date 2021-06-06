@@ -11,7 +11,6 @@ var/world_startup_time
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
 
-#define RECOMMENDED_VERSION 513
 
 var/savefile/panicfile
 
@@ -77,15 +76,7 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
-/*
- * IF YOU HAVE BYOND VERSION BELOW 507.1248 OR ARE ABLE TO WALK THROUGH WINDOORS/BORDER WINDOWS COMMENT OUT
- * #define BORDER_USE_TURF_EXIT
- * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
- */
-#ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < RECOMMENDED_VERSION)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 513.")
-#endif
+
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
@@ -166,7 +157,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		/*if(config.kick_inactive)
 			KickInactiveClients()*/
 
-#undef RECOMMENDED_VERSION
 	return ..()
 
 //world/Topic(href, href_list[])
