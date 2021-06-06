@@ -173,6 +173,8 @@ var/list/one_way_windows
 		healthcheck()
 
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
+	if(istype(mover) && mover.checkpass(PASSGLASS))
+		return 1
 	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
