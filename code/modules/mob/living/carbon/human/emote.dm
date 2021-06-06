@@ -64,6 +64,12 @@
 	message_param = "salutes to %t."
 	restraint_check = TRUE
 
+/datum/emote/living/carbon/human/peace
+	key = "peace"
+	message = "makes a peace sign."
+	message_param = "makes a peace sign to %t."
+	restraint_check = TRUE
+
 /datum/emote/living/carbon/human/shrug
 	key = "shrug"
 	key_third_person = "shrugs"
