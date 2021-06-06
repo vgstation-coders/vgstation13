@@ -336,7 +336,17 @@
 	name = "chicken suit head"
 	desc = "Bkaw!"
 	icon_state = "chickenhead"
-	item_state = "chickensuit"
+	item_state = "chickenhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED)
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+	siemens_coefficient = 2.0
+
+/obj/item/clothing/head/chicken/white
+	name = "white chicken suit head"
+	desc = "Caw!"
+	icon_state = "chickenhead_white"
+	item_state = "chickenhead_white"
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0

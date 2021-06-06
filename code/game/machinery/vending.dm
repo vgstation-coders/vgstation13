@@ -2582,6 +2582,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/glue/temp_glue = 1
 		)
 	premium = list(
+		/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuitwhite = 1,
 		/obj/item/clothing/suit/hgpirate = 3,
 		/obj/item/clothing/head/hgpiratecap = 3,
 		/obj/item/clothing/head/helmet/roman = 3,
