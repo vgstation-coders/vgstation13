@@ -214,3 +214,10 @@
 /turf/space/can_place_cables()
 	var/obj/structure/catwalk/support = locate() in src
 	return !isnull(support)
+
+/turf/space/attack_construct(var/mob/user)
+	if(istype(user,/mob/living/simple_animal/construct/builder))
+		var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
+		S.perform(user, 0, list(src))
+		return 1
+	return 0
