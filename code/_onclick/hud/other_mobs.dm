@@ -214,7 +214,7 @@
 	cult_tattoo_display.screen_loc = ui_cult_tattoos
 	//pulse_atom(cult_tattoo_display)
 
-	if (mymob.client)
+	if (mymob?.client)
 		mymob.client.screen += list(cult_Act_display,cult_tattoo_display)
 
 /datum/hud/proc/pulse_atom(var/obj/abstract/screen/A)
