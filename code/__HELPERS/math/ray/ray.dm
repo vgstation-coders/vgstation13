@@ -2,7 +2,7 @@
 #define RAY_CAST_DEFAULT_MAX_DISTANCE 50
 
 //step size of a raycast, used to calculate one step by multiplying with floored direction vector
-#define RAY_CAST_STEP 0.01
+#define RAY_CAST_STEP 0.25
 
 //used to tell cast() to not have a hit limit (default value of max_hits)
 #define RAY_CAST_UNLIMITED_HITS 0
@@ -21,6 +21,7 @@
 	var/vector/origin //the origin of the ray
 	var/vector/origin_floored //the floored origin vector
 	var/vector/direction //direction of the ray
+	var/original_damage //original damage of the ray when applicable
 
 /ray/proc/toString()
 	return "\[Ray\](\n- origin = " + origin.toString() + "\n- origin_floored = "+ origin_floored.toString() + "\n- direction = " + direction.toString() + "\n- z-level = " + num2text(z) + "\n)"
@@ -191,7 +192,7 @@ var/list/ray_draw_icon_cache = list()
 
 		var/turf/T = locate(point_floored.x, point_floored.y, z)
 
-		var/obj/effect/overlay/beam/I = new (T, lifetime=lifetime, fade=fade, src_icon = icon, icon_state = icon_state)
+		var/obj/effect/overlay/beam/I = new (T, lifetime=lifetime, fade=fade, src_icon = icon, icon_state = icon_state, base_damage = original_damage)
 		I.transform = matrix().Turn(angle)
 		I.pixel_x = pixels.x
 		I.pixel_y = pixels.y
