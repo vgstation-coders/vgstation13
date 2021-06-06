@@ -70,6 +70,27 @@
 	message_param = "makes a peace sign to %t."
 	restraint_check = TRUE
 
+/datum/emote/living/carbon/human/thumbsup
+	key = "thumbup"
+	key_third_person = "thumbsup"
+	message = "makes a thumbs up."
+	message_param = "makes a thumbs up to %t."
+	restraint_check = TRUE
+
+/datum/emote/living/carbon/human/thumbsdown
+	key = "thumbdown"
+	key_third_person = "thumbsdown"
+	message = "makes a thumbs down."
+	message_param = "makes a thumbs down to %t."
+	restraint_check = TRUE
+
+/datum/emote/living/carbon/human/ok
+	key = "ok"
+	key_third_person = "okay"
+	message = "makes an OK sign."
+	message_param = "makes an OK sign to %t."
+	restraint_check = TRUE
+
 /datum/emote/living/carbon/human/shrug
 	key = "shrug"
 	key_third_person = "shrugs"
