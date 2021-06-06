@@ -706,6 +706,9 @@ var/global/list/damage_icon_parts = list()
 				bloodsies.color = actual_gloves.blood_color
 				standing.overlays	+= bloodsies
 				O.overlays += bloodsies
+			else
+				if (actual_gloves.blood_overlay)
+					actual_gloves.overlays.Remove(actual_gloves.blood_overlay)
 		gloves.screen_loc = ui_gloves
 
 		gloves.generate_accessory_overlays(O)
