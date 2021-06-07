@@ -536,6 +536,8 @@
 	if(.)
 		regular_hud_updates()
 
+		standard_damage_overlay_updates()
+
 
 /mob/living/simple_animal/construct/regular_hud_updates()
 	if(fire_alert)

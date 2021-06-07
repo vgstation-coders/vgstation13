@@ -20,6 +20,8 @@
 
 	log_access("Logout: [key_name(src)] ([formatLocation(loc)])")
 
+	clear_fullscreens(FALSE, 0)
+
 	remove_screen_objs() //Used to remove hud elements
 
 	if (src in science_goggles_wearers)

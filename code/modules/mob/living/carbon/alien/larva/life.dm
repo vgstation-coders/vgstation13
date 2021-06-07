@@ -349,16 +349,7 @@
 	else
 		clear_alert(SCREEN_ALARM_FIRE)
 
-	if (client)
-		clear_fullscreens()
-		if(src.eye_blind || src.blinded)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		if(src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-		if(src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		if(src.druggy)
-			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+	standard_damage_overlay_updates()
 
 	if(!isDead())
 		if(machine)
