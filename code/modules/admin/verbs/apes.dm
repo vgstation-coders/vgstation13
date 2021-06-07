@@ -21,7 +21,7 @@ var/ape_mode = APE_MODE_OFF
 	if(ape_mode == APE_MODE_OFF)
 		return
 	ASSERT(client)
-	if(ape_mode == APE_MODE_NEW_PLAYERS && client.account_age >= MINIMUM_NON_SUS_ACCOUNT_AGE)
+	if(ape_mode == APE_MODE_NEW_PLAYERS && client.player_age >= MINIMUM_NON_SUS_ACCOUNT_AGE)
 		return
 	var/mob/monke = monkeyize()
 	ASSERT(monke)
