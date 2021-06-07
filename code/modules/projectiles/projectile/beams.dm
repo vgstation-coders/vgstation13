@@ -13,7 +13,7 @@
 
 var/list/beam_master = list()
 
-#define MAX_BEAM_DISTANCE 100
+#define MAX_BEAM_DISTANCE 50
 
 #define RAY_CAST_REBOUND 1.5
 
@@ -27,6 +27,7 @@ var/list/beam_master = list()
 /ray/beam_ray/New(var/vector/p_origin, var/vector/p_direction, var/obj/item/projectile/beam/fired_beam)
 	..(p_origin, p_direction, fired_beam.starting.z)
 	src.fired_beam = fired_beam
+	original_damage = fired_beam.damage
 
 /ray/beam_ray/Destroy()
 	fired_beam = null
@@ -45,6 +46,8 @@ var/list/beam_master = list()
 
 	if(isnull(A))
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
+
+	T.last_beam_damage = fired_beam.damage
 
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
 		var/ret = fired_beam.to_bump(A)

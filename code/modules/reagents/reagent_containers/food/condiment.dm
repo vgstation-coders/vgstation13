@@ -411,8 +411,6 @@
 	..()
 	reagents.add_reagent(BLACKPEPPER, 50)
 
-/obj/item/weapon/reagent_cont
-
 /obj/item/weapon/reagent_containers/food/condiment/syndisauce
 	name = "Chef Excellence's Special Sauce"
 	desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"

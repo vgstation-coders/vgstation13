@@ -37,10 +37,13 @@ FLOOR SAFES
 	store()
 
 /obj/structure/safe/proc/randomize_tumblers()//avoiding values too close to 0 or 72 to prevent uncrackable safes
-	tumbler_1_open = rand(3, 69)
-	tumbler_2_open = rand(3, 69)
+	tumbler_1_open = rand(0, 71)
+	tumbler_2_open = rand(0, 71)
+	while ((tumbler_2_open == (tumbler_1_open + 36)) || (tumbler_2_open == (tumbler_1_open - 36)))
+		tumbler_2_open = rand(0, 71)
 
 /obj/structure/safe/proc/store()
+	dial = 0
 	tumbler_1_pos = rand(0, 71)
 	tumbler_2_pos = rand(0, 71)
 	var/i = 0
@@ -133,7 +136,7 @@ FLOOR SAFES
 			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = increment(dial)
 			feedback = "<span class='notice'>You turn the dial up to [dial * 5].</span>"
-			if(dial == tumbler_1_pos - 1 || dial == tumbler_1_pos + 71)
+			if(dial == tumbler_1_pos)
 				tumbler_1_pos = increment(tumbler_1_pos)
 				if(canhear)
 					if(tumbler_1_pos == tumbler_1_open)
@@ -141,7 +144,7 @@ FLOOR SAFES
 						user.playsound_local(src, 'sound/machines/dial_tick_alt.ogg', 35, 1)
 					else
 						feedback += " <span class='italics'>*[pick("clack", "scrape", "clank")]*</span>"
-				if(tumbler_1_pos == tumbler_2_pos - 37 || tumbler_1_pos == tumbler_2_pos + 35)
+				if(tumbler_1_pos == tumbler_2_pos - 36 || tumbler_1_pos == tumbler_2_pos + 36)
 					tumbler_2_pos = increment(tumbler_2_pos)
 					if(canhear)
 						if(tumbler_2_pos == tumbler_2_open)
@@ -156,14 +159,14 @@ FLOOR SAFES
 			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
 			dial = decrement(dial)
 			feedback = "<span class='notice'>You turn the dial down to [dial * 5].</span>"
-			if(dial == tumbler_1_pos + 1 || dial == tumbler_1_pos - 71)
+			if(dial == tumbler_1_pos)
 				tumbler_1_pos = decrement(tumbler_1_pos)
 				if(canhear)
 					if(tumbler_1_pos == tumbler_1_open)
 						feedback += " <span class='bold'>*[pick("tonk", "krunk", "plunk")]*</span>"
 					else
 						feedback += " <span class='italics'>*[pick("clack", "scrape", "clank")]*</span>"
-				if(tumbler_1_pos == tumbler_2_pos + 37 || tumbler_1_pos == tumbler_2_pos - 35)
+				if(tumbler_1_pos == tumbler_2_pos + 36 || tumbler_1_pos == tumbler_2_pos - 36)
 					tumbler_2_pos = decrement(tumbler_2_pos)
 					if(canhear)
 						if(tumbler_2_pos == tumbler_2_open)
