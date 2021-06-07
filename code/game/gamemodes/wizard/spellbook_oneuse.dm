@@ -110,14 +110,14 @@
 	S.timer = 30
 	user.drop_item()
 
-/obj/item/weapon/spellbook/oneuse/forcewall/inverse
+/obj/item/weapon/spellbook/oneuse/unwall
 	spell = /spell/targeted/mime_unwall
 	spellname = "unwall"
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
 	disabled_from_bundle = 1
 
-/obj/item/weapon/spellbook/oneuse/forcewall/inverse/attack_self(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/unwall/attack_self(mob/user as mob)
 	if(ishuman(user))
 		var/mob/living/carbon/human/M = user
 		if(!issilent(M))
@@ -125,6 +125,12 @@
 	else
 		recoil(user)
 	..()
+
+/obj/item/weapon/spellbook/oneuse/unwall/recoil(mob/user as mob)
+	..()
+	to_chat(user, "<span class='warning'>You suddenly feel very silent!</span>")
+	user.flash_eyes(visual = 1)
+	user.mind.miming = MIMING_OUT_OF_CURSE
 
 /obj/item/weapon/spellbook/oneuse/knock
 	spell = /spell/aoe_turf/knock
