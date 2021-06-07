@@ -115,6 +115,7 @@
 	spellname = "unwall"
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
+	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/forcewall/inverse/attack_self(mob/user as mob)
 	if(ishuman(user))
