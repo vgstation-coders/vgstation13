@@ -282,6 +282,9 @@
 	H.update_mutantrace()
 	for(var/datum/language/L in R.languages)
 		H.add_language(L.name)
+		if (L == R.default_language)
+			H.default_language = R.default_language
+
 	H.real_name = H.dna.real_name
 	H.flavor_text = H.dna.flavor_text
 
