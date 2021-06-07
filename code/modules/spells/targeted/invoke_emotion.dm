@@ -131,8 +131,9 @@
 		activateInvoker()
 
 /obj/item/weapon/paper/emotion_invoker/on_enter_storage(obj/item/weapon/storage/S)
-	spawn(5)
-		do_teleport(src, curseTarget, 2)
+	if(isActive)
+		spawn(5)
+			do_teleport(src, curseTarget, 2)
 
 /obj/item/weapon/paper/emotion_invoker/proc/activateInvoker()
 	isActive = TRUE
