@@ -457,7 +457,6 @@
 	update_holomap_planes() // But we might need to recalculate it.
 	registered_events = old_registered_events
 	if(density != old_density)
-		to_chat(world, "([x],[y],[z])densityChanged()")
 		densityChanged()
 
 /turf/proc/AddDecal(const/image/decal)
