@@ -1003,7 +1003,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/clown_mime/unwall_spell
 	name = "Invisible Un-Wall Spellbook"
 	desc = "Grants the user the ability to conjure a strange wall allowing the passage of anything through a space regardless of the objects in place. Only real Mimes are capable of learning from this forbidden tome."
-	item = /obj/item/weapon/spellbook/oneuse/forcewall/inverse
+	item = /obj/item/weapon/spellbook/oneuse/unwall
 	cost = 12
 	jobs_exclusive = list("Mime")
 
