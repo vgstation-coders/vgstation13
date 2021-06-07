@@ -27,6 +27,7 @@
 	var/insectoidemote = TRUE
 	var/insectoidrestrictedemote = FALSE
 	var/stat_allowed = CONSCIOUS
+	var/hands_needed = 0//how many hands do you need to perform the emote
 	var/static/list/emote_list = list()
 
 /datum/emote/New()
