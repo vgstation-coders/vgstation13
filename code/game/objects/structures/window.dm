@@ -186,6 +186,8 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		if(istype(mover,/obj/item/projectile/beam))
 			var/obj/item/projectile/beam/B = mover
