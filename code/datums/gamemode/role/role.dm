@@ -342,7 +342,7 @@
 		text += "<img src='logo_[tempstate].png' style='position:relative; top:10px;'/>"
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag ? "[antag.key]" : "(somebody)"]</b> was <b>[antag ? "[antag.name]" : "(someone)"</b> ("
+	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag ? "[antag.key]" : "(somebody)"]</b> was <b>[antag ? "[antag.name]" : "(someone)"]</b> ("
 	if(M)
 		if(!antag.GetRole(id))
 			text += "removed"
