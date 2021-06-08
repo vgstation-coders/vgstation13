@@ -129,7 +129,9 @@
 /obj/item/weapon/spellbook/oneuse/unwall/recoil(mob/user as mob)
 	..()
 	to_chat(user, "<span class='warning'>You suddenly feel very silent!</span>")
-	user.flash_eyes(visual = 1)
+	if(ishuman(user))
+		var/mob/living/carbon/human/M = user
+		M.flash_eyes(visual = 1)
 	user.mind.miming = MIMING_OUT_OF_CURSE
 
 /obj/item/weapon/spellbook/oneuse/knock
