@@ -15,6 +15,7 @@
 	var/ckey=null
 	var/mind=null
 	var/list/languages = list()
+	var/default_language=null
 	var/times_cloned=0
 	var/talkcount
 
@@ -45,6 +46,7 @@
 	new_copy.ckey = ckey
 	new_copy.mind = mind
 	new_copy.languages = languages.Copy()
+	new_copy.default_language = default_language
 	new_copy.times_cloned = times_cloned
 
 	return new_copy
