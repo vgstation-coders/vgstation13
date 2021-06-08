@@ -591,12 +591,12 @@ Assign your candidates in choose_candidates() instead.
 	role_category = null
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_pop = list(0,0,0,0,0,0,0,0,0,0)
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	required_candidates = 0
 	weight = 0.5*BASE_RULESET_WEIGHT
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
-	high_population_requirement = 101
+	high_population_requirement = 10
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
 /datum/dynamic_ruleset/roundstart/extended/acceptable(population, threat_level)
