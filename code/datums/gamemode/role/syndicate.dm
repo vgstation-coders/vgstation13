@@ -146,11 +146,14 @@
 	AppendObjective(/datum/objective/survive)
 	if (assassination_target && assassination_target.antag)
 		var/datum/objective/target/assassinate/kill_target = new(auto_target = FALSE)
-		if(kill_target.set_target(assassination_target.antag))
+		if(kill_target.set_target(assassination_target.antag,TRUE))
 			AppendObjective(kill_target)
 			return
 		else
 			qdel(kill_target)
+	if (assassination_target)
+		message_admins("A Challenger didn't get their assassination target as they should have. [antag] was meant to have [assassination_target.antag] as target.")
+		log_admin("A Challenger didn't get their assassination target as they should have. [antag] was meant to have [assassination_target.antag] as target.")
 	to_chat(antag.current, "<span class='danger'>It would appear that your enemies never in fact made it to the station. Looks like you're safe this time around.</span>")
 	//that should never appear though since the ruleset requires 2 players minimum but you know just in case
 
