@@ -147,11 +147,11 @@
 			if(initial(DR.role_category) == src.role_category)
 				switch (previous_round)
 					if ("one_round_ago")
-						result *= 0.5
+						result *= 0.4
 					if ("two_rounds_ago")
-						result *= 0.75
+						result *= 0.7
 					if ("three_rounds_ago")
-						result *= 0.90
+						result *= 0.9
 
 	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
 		result *= ADDITIONAL_RULESET_WEIGHT
