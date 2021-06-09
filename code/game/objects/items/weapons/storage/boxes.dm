@@ -1111,6 +1111,14 @@
 	new /obj/item/clothing/suit/chickensuit(src)
 	..()
 
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuitwhite
+	name = "White chicken suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuitwhite/New()
+	new	/obj/item/clothing/head/chicken/white(src)
+	new /obj/item/clothing/suit/chickensuit/white(src)
+	..()
+
 /obj/item/weapon/storage/box/smartbox/clothing_box/monkeysuit
 	name = "Monkey suit box"
 
