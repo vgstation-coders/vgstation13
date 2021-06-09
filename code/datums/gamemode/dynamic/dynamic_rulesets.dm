@@ -141,6 +141,14 @@
 			result *= 0.5
 			break
 
+	result = previous_rounds_odds_reduction(result)
+
+	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
+		result *= ADDITIONAL_RULESET_WEIGHT
+	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
+	return result
+
+/datum/dynamic_ruleset/proc/previous_rounds_odds_reduction(var/result)
 	for (var/previous_round in mode.previously_executed_rules)
 		for(var/previous_ruleset in mode.previously_executed_rules[previous_round])
 			var/datum/dynamic_ruleset/DR = previous_ruleset
@@ -152,10 +160,6 @@
 						result *= 0.7
 					if ("three_rounds_ago")
 						result *= 0.9
-
-	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
-		result *= ADDITIONAL_RULESET_WEIGHT
-	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
 	return result
 
 //Return a multiplicative weight. 1 for nothing special.
