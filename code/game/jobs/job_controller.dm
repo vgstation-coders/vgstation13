@@ -448,12 +448,13 @@ var/global/datum/controller/occupations/job_master
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
-			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = job.wage_payout, security_pref = bank_pref_number)
+			var/wage = job.get_wage()
+			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = wage, security_pref = bank_pref_number)
 
 			if (joined_late)
-				latejoiner_allowance += job.wage_payout + round(job.wage_payout/10)
+				latejoiner_allowance += wage + round(wage/10)
 			else
-				station_allowance += job.wage_payout + round(job.wage_payout/10)//overhead of 10%
+				station_allowance += wage + round(wage/10)//overhead of 10%
 
 			if(H.mind)
 				var/remembered_info = ""

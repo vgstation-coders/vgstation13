@@ -126,3 +126,6 @@
 
 	if(src.req_admin_notify)
 		to_chat(M, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
+
+/datum/job/proc/get_wage()
+	return wage_payout
