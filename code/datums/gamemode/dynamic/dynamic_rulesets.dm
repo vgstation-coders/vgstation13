@@ -135,19 +135,24 @@
 	var/result = weight
 	result *= map.ruleset_multiplier(src)
 	result *= weight_time_day()
-	var/halve_result = FALSE
+
 	for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
-		if(DR.role_category == src.role_category) // Same kind of antag.
-			halve_result = TRUE
+		if(DR.role_category == src.role_category) // If the same type of antag is already in this round, reduce the odds
+			result *= 0.5
 			break
-	if(!halve_result)
-		for(var/entry in mode.last_round_executed_rules)
-			var/datum/dynamic_ruleset/DR = entry
+
+	for (var/previous_round in mode.previously_executed_rules)
+		for(var/previous_ruleset in mode.previously_executed_rules[previous_round])
+			var/datum/dynamic_ruleset/DR = previous_ruleset
 			if(initial(DR.role_category) == src.role_category)
-				halve_result = TRUE
-				break
-	if(halve_result)
-		result /= 2
+				switch (previous_round)
+					if ("one_round_ago")
+						result *= 0.5
+					if ("two_rounds_ago")
+						result *= 0.75
+					if ("three_rounds_ago")
+						result *= 0.90
+
 	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
 		result *= ADDITIONAL_RULESET_WEIGHT
 	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
