@@ -159,6 +159,8 @@
 	if(time2text(world.timeofday, "DDD") in weekday_rule_boost)
 		weigh *= 2
 		for(var/i = 1 to requirements.len)
+			if ((i < requirements.len) && (requirements[i+1] == 90))//let's not actually reduce the requirement on low pop.
+				continue
 			requirements[i] = clamp(requirements[i] - 20,10,90)
 		for(var/i = 1 to required_pop.len)
 			required_pop[i] = clamp(required_pop[i] - 5,0,100)
