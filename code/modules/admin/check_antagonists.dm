@@ -27,10 +27,12 @@
 	else
 		dat += "<i>No orphaned roles are currently active.</i>"
 
-	if (last_round_executed_rules.len)
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+
+	if (dynamic_mode?.last_round_executed_rules.len)
 		dat += "<h3><b>Last executed rulesets</b></h3>"
 		dat += "<br/>"
-		for (var/type in last_round_executed_rules)
+		for (var/type in dynamic_mode.last_round_executed_rules)
 			var/datum/dynamic_ruleset/DR = type
 			dat += "- [intial(DR.name)] <br/>"
 		dat += "<br/>"
