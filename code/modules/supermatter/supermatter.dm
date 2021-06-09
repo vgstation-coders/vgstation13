@@ -71,7 +71,6 @@
 	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
 
-	light_color = LIGHT_COLOR_ORANGE
 	light_type = LIGHT_SOFT_FLICKER
 	lighting_flags = IS_LIGHT_SOURCE
 

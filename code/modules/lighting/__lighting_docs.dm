@@ -42,6 +42,7 @@ atom: (lighting_atom.dm)
   - var/light_range; range in tiles of the light, used for calculating falloff
   - var/light_power; multiplier for the brightness of lights
   - var/light_color; hex string representing the RGB colour of the light
+  - var/light_type; define controlling how the light behaves. Current options are soft or flickering.
 
   - var/atom/movable/light/light_obj; light source object for this atom, only present if light_range && light_power
   - var/atom/movable/light/shadow/shadow_obj; wall shadow source object for this atom, with TILE_BOUND to prevent it from bleeding over other walls
@@ -49,6 +50,17 @@ atom: (lighting_atom.dm)
 	NB: this means that the object casts its light twice, one for the people who can see it, another for those who can't.
     NB2: due to additive colour mixing, this means a normal colour would be shifted to white. To prevent this, light atoms have RGB numbers halved.
 	.... when they recombine, we see the original light.
+
+  - var/moody_light_type; light type of the "glowing mask" on top of the atom. This mask is in 'icons/lighting/special.dmi'.
+    use the icon_sate correspondoing to 'overlay[overlay_state]'. Black pixels are not glowing, transparent pixels (0 alpha) emit light.
+	See examples. An object with a non-void moody_light type should not cast light.
+
+  - var/lighting_flags; essentially controlling the behaviour of moody_lights for now.
+    FOLLOW_PIXEL_OFFSET means the moody_light will have the same pixel offset as the atom.
+	NO_LUMINOSITY means the moody_light will only lift byond darkness on the tile it is illuminating (instead of 3 times that)
+	IS_LIGHT_SOURCE is a flag on non-lightbulbs items emitting a large light object.
+	An atom with IS_LIGHT_SOURCE or a moody light will create its light object on startup.
+
 
   - proc/set_light(l_range, l_power, l_color):
 	  - Sets light_range/power/color to non-null args and calls update_light()

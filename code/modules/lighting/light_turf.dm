@@ -30,6 +30,7 @@
 					break
 	return blocks_light
 
+// Must be optimised before being used.
 /turf/proc/door_light_update()
 	var/old_affecting_lights = affecting_lights
 	affecting_lights = list()
