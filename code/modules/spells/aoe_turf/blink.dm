@@ -61,7 +61,7 @@
 /spell/aoe_turf/blink/vamp/choose_targets()
 	var/turfs = ..()
 	for (var/turf/T in turfs)
-		if (T.get_lumcount() * 10 > 2 || T.holy || istype(T, /turf/unsimulated/floor/asteroid))
+		if (T.get_lumcount() > 2 || T.holy || istype(T, /turf/unsimulated/floor/asteroid))
 			turfs -= T
 	return turfs
 

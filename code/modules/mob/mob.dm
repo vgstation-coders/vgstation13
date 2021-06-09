@@ -435,6 +435,7 @@
 	set waitfor = FALSE
 	if(timestopped)
 		return 0 //under effects of time magick
+	check_dark_vision()
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
@@ -1603,6 +1604,25 @@ Use this proc preferably at the end of an equipment loadout
 /mob/verb/southface()
 	set hidden = 1
 	return directionface(SOUTH)
+
+/mob/proc/check_dark_vision()
+	if (dark_plane && dark_plane.alphas.len)
+		var/max_alpha = 0
+		for (var/key in dark_plane.alphas)
+			max_alpha = max(dark_plane.alphas[key], max_alpha)
+		dark_plane.alpha = max_alpha
+	else
+		dark_plane?.alpha = initial(dark_plane.alpha)
+
+	if (self_vision)
+		if (isturf(loc))
+			var/turf/T = loc
+			if (T.get_lumcount() > 0)
+				if (self_vision.alpha == self_vision.target_alpha)
+					self_vision.alpha = 0
+			else
+				if (self_vision.alpha != self_vision.target_alpha)
+					self_vision.alpha = self_vision.target_alpha
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)

@@ -259,6 +259,7 @@
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
+		H.dark_plane["vampire_vision"] = 255
 		H.see_in_dark = 8
 		H.see_invisible = SEE_INVISIBLE_MINIMUM
 
@@ -312,7 +313,7 @@
 		H.color = "#FFFFFF"
 		return FALSE
 
-	if((T.get_lumcount() * 10) <= 2)
+	if((T.get_lumcount()) <= 2)
 		H.alphas["vampire_cloak"] = round((255 * 0.15))
 		if(locate(/datum/power/vampire/shadow) in current_powers)
 			H.color = "#000000"
@@ -373,7 +374,7 @@
 			smitetemp -= 1
 		if(!(locate(/datum/power/vampire/shadow) in current_powers))
 			var/turf/T = get_turf(H)
-			if((T.get_lumcount() * 10) < 2)
+			if((T.get_lumcount()) < 2)
 				smitetemp -= 1
 
 		if(!(locate(/datum/power/vampire/undying) in current_powers))

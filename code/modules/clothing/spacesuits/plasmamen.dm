@@ -13,7 +13,7 @@
 	species_fit = list(PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
-
+	light_range = 4
 	icon_state = "plasmaman_suit"
 	item_state = "plasmaman_suit"
 
@@ -58,9 +58,9 @@
 	on = !on
 	icon_state = "[base_state][on]"
 	if(on)
-		set_light(brightness_on)
+		set_light()
 	else
-		set_light(0)
+		kill_light()
 	user.update_inv_head()
 
 // Tc_ENGINEERING

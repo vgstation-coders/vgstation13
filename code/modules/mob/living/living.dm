@@ -1250,6 +1250,8 @@ Thanks.
 /mob/living/proc/rest_action()
 	delayNextMove(1)
 	resting = !resting
+	// MUST do it immediately! because else it breaks
+	update_transform()
 	update_canmove()
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
 

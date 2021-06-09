@@ -12,6 +12,7 @@
 	possible_transfer_amounts = list(5, 10, 25)
 	volume = 50
 	log_reagents = 1
+	light_range = 3
 	//Merged from bottle.dm - Hinaichigo
 	var/const/duration = 13 //Directly relates to the 'weaken' duration. Lowered by armor (i.e. helmets)
 	var/isGlass = 0 //Whether the 'bottle' is made of glass or not so that milk cartons dont shatter when someone gets hit by it
@@ -19,7 +20,6 @@
 	//Molotov and smashing variables
 	var/molotov = 0 //-1 = can be made into molotov, 0 = can't, 1 = has had rag stuffed into it
 	var/lit = 0
-	var/brightness_lit = 3
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
@@ -975,27 +975,22 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
 	..()
 	reagents.add_reagent(SECCOFFEE, 50)
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
 	name = "Picomed: White edition"
 	desc = "Good for the body and good for the bones."
 	icon_state = "lifeline_white"
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
 	reagents.add_reagent(MILK, 2)
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red
 	name = "Picomed: Red edition"
 	desc = "I need 50ccs of coffee, stat!"
 	icon_state = "lifeline_red"
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
 	reagents.add_reagent(REDTEA, 2)
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo
 	name = "Picomed: Cryo edition"
 	desc = "Remember to strip before consuming."
@@ -1011,7 +1006,6 @@
 	var/image/status_overlay = image("icon" = 'icons/obj/drinks.dmi', "icon_state" = "cryoverlay_[remaining]")
 	overlays += status_overlay
 	tubeoverlay += status_overlay
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/New()
 	..()
 	reagents.add_reagent(MEDCOFFEE, 48)
@@ -1771,9 +1765,9 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/update_brightness(var/mob/user = null)
 	if(lit)
-		set_light(src.brightness_lit)
+		set_light()
 	else
-		set_light(0)
+		kill_light()
 
 //todo: can light cigarettes with
 //todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now

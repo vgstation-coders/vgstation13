@@ -171,7 +171,7 @@
 
 	var/light_available = 5
 	if(T.dynamic_lighting)
-		light_available = T.get_lumcount() * 10
+		light_available = T.get_lumcount()
 
 	if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
 		health -= healthmod

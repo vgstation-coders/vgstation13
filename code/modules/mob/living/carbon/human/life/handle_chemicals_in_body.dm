@@ -34,7 +34,7 @@
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing
 		if(isturf(loc)) //Else, there's considered to be no light
 			var/turf/T = loc
-			light_amount = (T.get_lumcount() * 10) - 5
+			light_amount = (T.get_lumcount()) - 5
 
 		nutrition += light_amount
 		pain_shock_stage -= light_amount
@@ -56,7 +56,7 @@
 		if(isturf(loc))
 			var/turf/T = loc
 			if(T.dynamic_lighting)
-				light_amount = T.get_lumcount() * 10
+				light_amount = T.get_lumcount()
 			else
 				light_amount = 10
 
