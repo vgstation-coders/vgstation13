@@ -27,5 +27,13 @@
 	else
 		dat += "<i>No orphaned roles are currently active.</i>"
 
+	if (last_round_executed_rules.len)
+		dat += "<h3><b>Last executed rulesets</b></h3>"
+		dat += "<br/>"
+		for (var/type in last_round_executed_rules)
+			var/datum/dynamic_ruleset/DR = type
+			dat += "- [intial(DR.name)] <br/>"
+		dat += "<br/>"
+
 	dat += "</body></html>"
 	usr << browse(dat, "window=roundstatus;size=700x500")
