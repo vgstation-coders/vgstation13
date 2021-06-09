@@ -34,7 +34,7 @@
 		dat += "<br/>"
 		for (var/type in dynamic_mode.last_round_executed_rules)
 			var/datum/dynamic_ruleset/DR = type
-			dat += "- [intial(DR.name)] <br/>"
+			dat += "- [initial(DR.name)] <br/>"
 		dat += "<br/>"
 
 	dat += "</body></html>"
