@@ -598,6 +598,23 @@ Assign your candidates in choose_candidates() instead.
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
 
+/datum/dynamic_ruleset/roundstart/extended/get_weight()
+	. = ..()
+	var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/latest_extended_round)
+	if (!length(data))
+		return
+	var/yy = text2num(time2text(world.realtime, "YYYY"))
+	var/mm = text2num(time2text(world.realtime, "MM"))
+	var/dd = text2num(time2text(world.realtime, "DD"))
+	var/ex_yy = text2num(data["latest_extended_yy"])
+	var/ex_mm = text2num(data["latest_extended_mm"])
+	var/ex_dd = text2num(data["latest_extended_dd"])
+	// This is approximate because I don't want to recode bisextile years and all that trash
+	var/delta_days = (yy - ex_yy)*365 + (mm - ex_mm)*31 + (dd - ex_dd)
+	if (delta_days < 3)
+		. *= 0.5
+
+
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
 /datum/dynamic_ruleset/roundstart/extended/acceptable(population, threat_level)
 	var/probability = clamp(threat_level, 30, 100)

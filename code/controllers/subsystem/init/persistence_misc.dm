@@ -182,3 +182,34 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/highscores/proc/clear_records()
 	data = list()
 	fdel(file(file_path))
+
+// -- Extended
+
+/datum/persistence_task/latest_extended_round
+	execute = TRUE
+	name = "Latest extended round"
+	file_path = "data/persistence/latest_extended_round.json"
+
+/datum/persistence_task/latest_extended_round/on_init()
+	data = read_file()
+
+/datum/persistence_task/latest_extended_round/on_shutdown()
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+	if (!istype(dynamic_mode))
+		return
+	var/write_data = FALSE
+	var/list/data = list(
+		"latest_extended_dd" = null,
+		"latest_extended_mm" = null,
+		"latest_extended_yy" = null,
+	)
+	for(var/datum/dynamic_ruleset/roundstart/extened/some_ruleset in dynamic_mode.executed_rules)
+		if (some_ruleset.calledBy)
+			continue
+		write_data = TRUE
+		data["latest_extended_dd"] = time2text(world.realtime, "DD")
+		data["latest_extended_mm"] = time2text(world.realtime, "MM")
+		data["latest_extended_yy"] = time2text(world.realtime, "YYYY")
+		break
+	if (write_data)
+		write_file(data)
