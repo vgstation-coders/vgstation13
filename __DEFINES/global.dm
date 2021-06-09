@@ -28,6 +28,7 @@ var/list/protected_global_vars = list(
 var/round_end_info = ""
 var/round_end_info_no_img = ""
 var/last_round_end_info = ""
+var/list/last_scoreboard_images = list()
 
 //List of ckeys that have de-adminned themselves during this round
 var/global/list/deadmins = list()

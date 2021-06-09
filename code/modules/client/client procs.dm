@@ -275,6 +275,9 @@
 	else if (last_round_end_info)
 		winset(src, "rpane.round_end", "is-visible=false")
 		winset(src, "rpane.last_round_end", "is-visible=true")
+		if (last_scoreboard_images?.len)
+			for(var/i = 1 to last_scoreboard_images.len)
+				src << browse_rsc("<img src='data:image/png;base64,[last_scoreboard_images[i]]'>","logo_[i].png")
 	else
 		winset(src, "rpane.round_end", "is-visible=false")
 		winset(src, "rpane.last_round_end", "is-visible=false")

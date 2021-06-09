@@ -126,17 +126,20 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		log_debug("[name] task found an empty file on [file_path]")
 		return
 	last_round_end_info = to_read["round_info"]
-
+	last_scoreboard_images = to_read["round_images"]
+	if (last_scoreboard_images?.len)
+		for(var/i = 1 to last_scoreboard_images.len)
+			src << browse_rsc("<img src='data:image/png;base64,[last_scoreboard_images[i]]'>","logo_[i].png")
 	for (var/client/C in clients)
 		winset(C, "rpane.round_end", "is-visible=false")
 		winset(C, "rpane.last_round_end", "is-visible=true")
 
 /datum/persistence_task/round_end_data/on_shutdown()
 	if (round_end_info_no_img)
-		data["round_info"] = round_end_info_no_img
-		log_debug("Round end info successfully backed-up for next round.")
-	else
-		log_debug("No round end info found to backup.")
+		//data["round_info"] = round_end_info_no_img
+		data["round_info"] = round_end_info
+	if (round_end_info_no_img)
+		data["round_images"] = last_scoreboard_images
 	write_file(data)
 
 /datum/persistence_task/latest_dynamic_rulesets

@@ -692,8 +692,10 @@
 	if (!client)
 		return
 
-	for(var/i = 1; i <= end_icons.len; i++)
+	last_scoreboard_images = list()
+	for(var/i = 1 to end_icons.len)
 		src << browse_rsc(end_icons[i],"logo_[i].png")
+		last_scoreboard_images += icon2base64(end_icons[i])
 
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
 	popup.set_content(round_end_info)
