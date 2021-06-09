@@ -159,7 +159,7 @@
 	if(time2text(world.timeofday, "DDD") in weekday_rule_boost)
 		weigh *= 2
 		for(var/i = 1 to requirements.len)
-			requirements[i] = clamp(requirements[i] - 10,10,90)
+			requirements[i] = clamp(requirements[i] - 20,10,90)
 		for(var/i = 1 to required_pop.len)
 			required_pop[i] = clamp(required_pop[i] - 5,0,100)
 	if(getTimeslot() in timeslot_rule_boost)
