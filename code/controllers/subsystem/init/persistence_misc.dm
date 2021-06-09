@@ -115,6 +115,30 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		data["YY"] = time2text(world.realtime,"YY")
 		write_file(data)
 
+/datum/persistence_task/round_end_data
+	execute = TRUE
+	name = "Round end information"
+	file_path = "data/persistence/round_end_info.json"
+
+/datum/persistence_task/round_end_data/on_init()
+	var/to_read = read_file()
+	if(!to_read)
+		log_debug("[name] task found an empty file on [file_path]")
+		return
+	last_round_end_info = to_read["round_info"]
+
+	for (var/client/C in clients)
+		winset(C, "rpane.round_end", "is-visible=false")
+		winset(C, "rpane.last_round_end", "is-visible=true")
+
+/datum/persistence_task/round_end_data/on_shutdown()
+	if (round_end_info_no_img)
+		data["round_info"] = round_end_info_no_img
+		log_debug("Round end info successfully backed-up for next round.")
+	else
+		log_debug("No round end info found to backup.")
+	write_file(data)
+
 /datum/persistence_task/latest_dynamic_rulesets
 	execute = TRUE
 	name = "Latest dynamic rulesets"
@@ -161,7 +185,8 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data += records
 	cmp_field = "cash"
 	sortTim(data, /proc/cmp_list_by_element_asc)
-	data.Cut(6) // we only store the top 5
+	if (data.len > 5)
+		data.Cut(6) // we only store the top 5
 	for(var/datum/record/money/record in data)
 		if(record in records)
 			if(data[1] == record)

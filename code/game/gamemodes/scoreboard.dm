@@ -403,15 +403,15 @@
 	to_chat(world, "<b>The crew's final score is:</b>")
 	to_chat(world, "<b><font size='4'>[score["crewscore"]]</font></b>")
 
+	scorestats(completions)
+
 	for(var/mob/E in player_list)
-		if(E.client)
-			E.scorestats(completions)
-			winset(E.client, "rpane.round_end", "is-visible=true")
+		E.display_round_end_scoreboard()
 
 	mode.send2servers()
 	return
 
-/mob/proc/scorestats(var/completions)
+/proc/scorestats(var/completions)
 	var/dat = completions
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
 
@@ -683,21 +683,24 @@
 			var/cash = num2text(entry.cash, 12)
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 
+	round_end_info = dat
+	round_end_info_no_img = remove_images(dat)
+	log_game(round_end_info_no_img)
+	stat_collection.crew_score = score["crewscore"]
+
+/mob/proc/display_round_end_scoreboard()
+	if (!client)
+		return
+
 	for(var/i = 1; i <= end_icons.len; i++)
 		src << browse_rsc(end_icons[i],"logo_[i].png")
 
-	if(!endgame_info_logged) //So the End Round info only gets logged on the first player.
-		endgame_info_logged = 1
-		round_end_info = dat
-		log_game(dat)
-
-		stat_collection.crew_score = score["crewscore"]
-
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
-	popup.set_content(dat)
+	popup.set_content(round_end_info)
 	popup.open()
 
-	return
+	winset(client, "rpane.round_end", "is-visible=true")
+	winset(client, "rpane.last_round_end", "is-visible=false")
 
 /datum/achievement
     var/item
