@@ -69,7 +69,6 @@
 	var/turf/T
 	if (opacity && isturf(loc))
 		T = loc // recalc_atom_opacity() is called later on this
-		//T.reconsider_lights()
 
 	if(materials)
 		qdel(materials)

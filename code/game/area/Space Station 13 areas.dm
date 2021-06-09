@@ -371,7 +371,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/thunderdome
 	name = "honk"
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 
 /area/shuttle/thunderdome/grnshuttle
 	name = "\improper Thunderdome GRN Shuttle"
