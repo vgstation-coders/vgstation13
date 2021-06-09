@@ -203,7 +203,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		"latest_extended_mm" = null,
 		"latest_extended_yy" = null,
 	)
-	for(var/datum/dynamic_ruleset/roundstart/extened/some_ruleset in dynamic_mode.executed_rules)
+	for(var/datum/dynamic_ruleset/roundstart/extended/some_ruleset in dynamic_mode.executed_rules)
 		if (some_ruleset.calledBy)
 			continue
 		write_data = TRUE
