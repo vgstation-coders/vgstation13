@@ -48,7 +48,7 @@
 	if(..())
 		return
 	var/mob/user = usr
-	if (!Adjacent(user))
+	if (!Adjacent(user) || user.incapacitated())
 		usr << browse(null, "window=orebox")
 		return
 	user.set_machine(src)
