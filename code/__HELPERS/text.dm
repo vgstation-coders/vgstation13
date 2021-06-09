@@ -545,11 +545,10 @@ proc/sql_sanitize_text(var/text)
 /proc/tumblrspeech(var/speech)
 	if(!speech)
 		return
-	var/static/regex/hewwo_lowercase = new(@"(<img)[^>]*(>)", "g")
-	//var/static/regex/hewwo_lowercase = new("l|r", "g")
-	//var/static/regex/hewwo_uppercase = new("L|R", "g")
+	var/static/regex/hewwo_lowercase = new("l|r", "g")
+	var/static/regex/hewwo_uppercase = new("L|R", "g")
 	speech = hewwo_lowercase.Replace(speech, "")
-	//speech = hewwo_uppercase.Replace(speech, "")
+	speech = hewwo_uppercase.Replace(speech, "")
 	return speech
 
 /proc/remove_images(var/dat)
