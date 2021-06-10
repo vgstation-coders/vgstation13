@@ -173,6 +173,8 @@ var/list/one_way_windows
 		healthcheck()
 
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(flow_flags & ON_BORDER)
@@ -186,8 +188,6 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
 		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
 			dim_beam(mover)
