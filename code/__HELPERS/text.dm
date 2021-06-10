@@ -547,10 +547,11 @@ proc/sql_sanitize_text(var/text)
 		return
 	var/static/regex/hewwo_lowercase = new("l|r", "g")
 	var/static/regex/hewwo_uppercase = new("L|R", "g")
-	speech = hewwo_lowercase.Replace(speech, "")
-	speech = hewwo_uppercase.Replace(speech, "")
+	speech = hewwo_lowercase.Replace(speech, "w")
+	speech = hewwo_uppercase.Replace(speech, "W")
 	return speech
 
+//Removes all the <img> tags from a string, useful for logs.
 /proc/remove_images(var/dat)
 	if(!dat)
 		return
