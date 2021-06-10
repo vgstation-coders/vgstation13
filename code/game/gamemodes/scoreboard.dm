@@ -685,6 +685,9 @@
 
 	round_end_info = dat
 	round_end_info_no_img = remove_images(dat)
+	last_scoreboard_images = list()
+	for(var/i = 1 to end_icons.len)
+		last_scoreboard_images += iconsouth2base64(end_icons[i])
 	log_game(round_end_info_no_img)
 	stat_collection.crew_score = score["crewscore"]
 
@@ -692,10 +695,8 @@
 	if (!client)
 		return
 
-	last_scoreboard_images = list()
 	for(var/i = 1 to end_icons.len)
 		src << browse_rsc(end_icons[i],"logo_[i].png")
-		last_scoreboard_images += icon2base64(end_icons[i])
 
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
 	popup.set_content(round_end_info)
