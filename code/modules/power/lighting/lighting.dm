@@ -112,7 +112,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	layer = LIGHTBULB_LAYER
 	use_power = 2
 	idle_power_usage = 2
-	active_power_usage = 20
+	active_power_usage = 10
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
 	var/on = 0					// 1 if on, 0 if off
 	var/on_gs = 0
@@ -614,7 +614,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 5
 	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
-	cost = 8
+	cost = 4
 
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
@@ -654,7 +654,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 8
 	brightness_power = 4
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
-	cost = 15
+	cost = 8
 
 /obj/item/weapon/light/bulb
 	name = "light bulb"
@@ -667,7 +667,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
-	cost = 5
+	cost = 2
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/light/bulb/broken
