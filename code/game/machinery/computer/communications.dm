@@ -655,7 +655,7 @@ var/list/shuttle_log = list()
 		emergency_shuttle.recall()
 		var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 		if (istype(dynamic_mode))
-			update_stillborn_rulesets()
+			dynamic_mode.update_stillborn_rulesets()
 		log_game("[key_name(user)] has recalled the shuttle.")
 		message_admins("[key_name_admin(user)] has recalled the shuttle - [formatJumpTo(user)].", 1)
 	return

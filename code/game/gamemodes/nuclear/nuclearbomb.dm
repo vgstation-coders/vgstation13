@@ -239,7 +239,7 @@ var/list/nuclear_bombs = list()
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
 						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 						if (istype(dynamic_mode))
-							update_stillborn_rulesets()
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["safety"])
 					src.safety = !( src.safety )
 					if(safety)
@@ -248,7 +248,7 @@ var/list/nuclear_bombs = list()
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
 						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 						if (istype(dynamic_mode))
-							update_stillborn_rulesets()
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["anchor"])
 
 					if(removal_stage == 5)

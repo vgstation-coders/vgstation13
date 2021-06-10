@@ -161,7 +161,7 @@
 			command_alert(/datum/command_alert/revolutiontoppled)
 			var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 			if (istype(dynamic_mode))
-				update_stillborn_rulesets()
+				dynamic_mode.update_stillborn_rulesets()
 
 // Called on arrivals and emergency shuttle departure.
 /hook_handler/revs
