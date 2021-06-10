@@ -304,6 +304,7 @@ var/stacking_limit = 90
 						return pick_delay(rule)
 
 					if (rule.execute())//this should never fail since ready() returned 1
+						rule.stillborn = IsRoundAboutToEnd()
 						executed_rules += rule
 						if (rule.persistent)
 							current_rules += rule
@@ -457,6 +458,7 @@ var/stacking_limit = 90
 
 	threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 	if (the_rule.execute())//this should never fail since ready() returned 1
+		the_rule.stillborn = IsRoundAboutToEnd()
 		executed_rules += the_rule
 		if (the_rule.persistent)
 			current_rules += the_rule
@@ -471,6 +473,7 @@ var/stacking_limit = 90
 		rule.candidates = player_list.Copy()
 		rule.trim_candidates()
 		if (rule.execute())//this should never fail since ready() returned 1
+			rule.stillborn = IsRoundAboutToEnd()
 			executed_rules += rule
 			if (rule.persistent)
 				current_rules += rule
@@ -489,6 +492,7 @@ var/stacking_limit = 90
 		threat_log += "[worldtime2text()]: Latejoin [latejoin_rule.name] spent [latejoin_rule.cost] (midround budget)"
 		dynamic_stats.measure_threat(threat)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
+			latejoin_rule.stillborn = IsRoundAboutToEnd()
 			var/mob/M = pick(latejoin_rule.assigned)
 			message_admins("DYNAMIC MODE: [key_name(M)] joined the station, and was selected by the <font size='3'>[latejoin_rule.name]</font> ruleset.")
 			log_admin("DYNAMIC MODE: [key_name(M)] joined the station, and was selected by the [latejoin_rule.name] ruleset.")
@@ -508,6 +512,7 @@ var/stacking_limit = 90
 		threat_log += "[worldtime2text()]: Midround [midround_rule.name] spent [midround_rule.cost] (midround budget)"
 		dynamic_stats.measure_threat(threat)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
+			midround_rule.stillborn = IsRoundAboutToEnd()
 			message_admins("DYNAMIC MODE: Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
 			log_admin("DYNAMIC MODE: Injecting some threats...[midround_rule.name]!")
 			dynamic_stats.successful_injection(midround_rule)
@@ -544,6 +549,7 @@ var/stacking_limit = 90
 			threat_log += "[worldtime2text()]: Forced rule [new_rule.name] spent [new_rule.cost]"
 			dynamic_stats.measure_threat(threat)
 			if (new_rule.execute())//this should never fail since ready() returned 1
+				new_rule.stillborn = IsRoundAboutToEnd()
 				message_admins("Making a call to a specific ruleset...<font size='3'>[new_rule.name]</font>!")
 				log_admin("Making a call to a specific ruleset...[new_rule.name]!")
 				executed_rules += new_rule
@@ -882,3 +888,7 @@ var/stacking_limit = 90
 			return
 
 	message_admins("The rule was accepted.")
+
+/datum/gamemode/dynamic/proc/update_stillborn_rulesets()
+	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
+		ruleset.stillborn = IsRoundAboutToEnd()

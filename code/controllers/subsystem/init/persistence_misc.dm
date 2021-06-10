@@ -133,7 +133,9 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		"three_rounds_ago" = dynamic_mode.previously_executed_rules["two_rounds_ago"]
 	)
 	for(var/datum/dynamic_ruleset/some_ruleset in dynamic_mode.executed_rules)
-		if(some_ruleset.calledBy)
+		if(some_ruleset.calledBy)//forced by an admin
+			continue
+		if(some_ruleset.stillborn)//executed near the end of the round
 			continue
 		data["one_round_ago"] |= "[some_ruleset.type]"
 	write_file(data)

@@ -22,6 +22,8 @@
 
 	var/flags = 0
 
+	var/stillborn = FALSE//executed when the round was already about to end
+
 	//for midround polling
 	var/list/applicants = list()
 	var/searching = 0
