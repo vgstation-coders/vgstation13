@@ -654,17 +654,21 @@
 
 	if (hair_style)
 		var/datum/sprite_accessory/hair_style_icon = hair_styles_list[hair_style]
-		var/icon/hair_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "[hair_style_icon.icon_state]_s")
+		var/icon/hair_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_s")
 		if(hair_style_icon.additional_accessories)
-			hair_s.Blend(icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "[hair_style_icon.icon_state]_acc"), ICON_OVERLAY)
+			hair_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_acc"), ICON_OVERLAY)
+		if (species && species.name != "Human")
+			hair_s.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))
 		hair_s.Blend(hair_color, ICON_ADD)
 		O.overlays += hair_s
 
 	if (beard_style)
 		var/datum/sprite_accessory/beard_style_icon = facial_hair_styles_list[beard_style]
-		var/icon/beard_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "[beard_style_icon.icon_state]_s")
+		var/icon/beard_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_s")
 		if(beard_style_icon.additional_accessories)
-			beard_s.Blend(icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "[beard_style_icon.icon_state]_acc"), ICON_OVERLAY)
+			beard_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_acc"), ICON_OVERLAY)
+		if (species && species.name != "Human")
+			beard_s.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))
 		beard_s.Blend(hair_color, ICON_ADD)
 		O.overlays += beard_s
 
