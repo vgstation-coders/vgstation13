@@ -269,6 +269,16 @@
 	//Set map label to correct map name
 	winset(src, "rpane.mapb", "text=\"[map.nameLong]\"")
 
+	if (round_end_info)
+		winset(src, "rpane.round_end", "is-visible=true")
+		winset(src, "rpane.last_round_end", "is-visible=false")
+	else if (last_round_end_info)
+		winset(src, "rpane.round_end", "is-visible=false")
+		winset(src, "rpane.last_round_end", "is-visible=true")
+	else
+		winset(src, "rpane.round_end", "is-visible=false")
+		winset(src, "rpane.last_round_end", "is-visible=false")
+
 	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.

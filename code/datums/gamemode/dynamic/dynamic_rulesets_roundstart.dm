@@ -603,6 +603,9 @@ Assign your candidates in choose_candidates() instead.
 	var/probability = clamp(threat_level, 30, 100)
 	return !prob(probability)
 
+/datum/dynamic_ruleset/roundstart/extended/choose_candidates()
+	return TRUE
+
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
