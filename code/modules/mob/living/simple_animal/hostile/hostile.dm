@@ -457,6 +457,10 @@
 						var/obj/machinery/door/airlock/AIR = A
 						if(!AIR.density || AIR.locked || AIR.welded || AIR.operating)
 							continue
+					if(istype(A, /obj/machinery/door/firedoor))
+						var/obj/machinery/door/firedoor/FIR = A
+						if(!FIR.density || FIR.locked || FIR.welded || FIR.operating)
+							continue
 					UnarmedAttack(A, Adjacent(A))
 	return
 
