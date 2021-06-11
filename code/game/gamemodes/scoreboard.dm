@@ -139,6 +139,11 @@
 					score["dmgestname"] = player.real_name
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
+		if(player.hangman_score > score["hangmanrecord"])
+			score["hangmanrecord"] = player.hangman_score
+			score["hangmanname"] = player.real_name
+			score["hangmanjob"] = player.job
+			score["hangmankey"] = player.key
 
 	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	leaderboard.insert_records(rich_escapes)
@@ -398,15 +403,15 @@
 	to_chat(world, "<b>The crew's final score is:</b>")
 	to_chat(world, "<b><font size='4'>[score["crewscore"]]</font></b>")
 
+	scorestats(completions)
+
 	for(var/mob/E in player_list)
-		if(E.client)
-			E.scorestats(completions)
-			winset(E.client, "rpane.round_end", "is-visible=true")
+		E.display_round_end_scoreboard()
 
 	mode.send2servers()
 	return
 
-/mob/proc/scorestats(var/completions)
+/proc/scorestats(var/completions)
 	var/dat = completions
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
 
@@ -571,6 +576,8 @@
 		dat += "<B>Law Upload Modules Used:</B> [score["lawchanges"]]<BR>"
 	if(score["gunsspawned"] > 0)
 		dat += "<B>Guns Magically Spawned:</B> [score["gunsspawned"]]<BR>"
+	if(score["hangmanrecord"] > 0)
+		dat += "<B>Highest Hangman Score:</B> [score["hangmanname"]], [score["hangmanjob"]]: [score["hangmanrecord"]] ([score["hangmankey"]])<BR>"
 	if(score["nukedefuse"] < 30)
 		dat += "<B>Seconds Left on the Nuke When It Was Defused:</B> [score["nukedefuse"]]<BR>"
 	if(score["disease_most"] != null)
@@ -676,21 +683,27 @@
 			var/cash = num2text(entry.cash, 12)
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 
-	for(var/i = 1; i <= end_icons.len; i++)
+	round_end_info = dat
+	round_end_info_no_img = remove_images(dat)
+	last_scoreboard_images = list()
+	for(var/i = 1 to end_icons.len)
+		last_scoreboard_images += iconsouth2base64(end_icons[i])
+	log_game(round_end_info_no_img)
+	stat_collection.crew_score = score["crewscore"]
+
+/mob/proc/display_round_end_scoreboard()
+	if (!client)
+		return
+
+	for(var/i = 1 to end_icons.len)
 		src << browse_rsc(end_icons[i],"logo_[i].png")
 
-	if(!endgame_info_logged) //So the End Round info only gets logged on the first player.
-		endgame_info_logged = 1
-		round_end_info = dat
-		log_game(dat)
-
-		stat_collection.crew_score = score["crewscore"]
-
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
-	popup.set_content(dat)
+	popup.set_content(round_end_info)
 	popup.open()
 
-	return
+	winset(client, "rpane.round_end", "is-visible=true")
+	winset(client, "rpane.last_round_end", "is-visible=false")
 
 /datum/achievement
     var/item

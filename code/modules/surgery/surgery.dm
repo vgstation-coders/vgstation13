@@ -71,7 +71,7 @@
 		if (ishuman(user) && prob(60))
 			var/mob/living/carbon/human/H = user
 			if (blood_level)
-				H.bloody_hands(target,0)//potentially spreads diseases from them to us, wear latex gloves!
+				H.bloody_hands(target,1)//potentially spreads diseases from them to us, wear latex gloves!
 			if (blood_level > 1)
 				H.bloody_body(target,0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
 

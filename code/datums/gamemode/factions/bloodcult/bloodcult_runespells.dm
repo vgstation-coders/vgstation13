@@ -197,6 +197,9 @@
 	else
 		qdel(src)
 
+/datum/rune_spell/proc/salt_act(var/turf/T)
+	return
+
 /datum/rune_spell/proc/missing_ingredients_count()
 	var/list/missing_ingredients = ingredients.Copy()
 	var/turf/T = get_turf(spell_holder)
@@ -809,6 +812,8 @@
 		to_chat(activator, "<span class='warning'>This tome cannot contain any more talismans.</span>")
 	qdel(src)
 
+var/list/converted_minds = list()
+
 //RUNE V
 /datum/rune_spell/blood_cult/conversion
 	name = "Conversion"
@@ -1016,6 +1021,9 @@
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					if(I.implanted)
 						acceptance = "Implanted"
+		else if (!victim.mind)
+			acceptance = "Mindless"
+
 		if (jobban_isbanned(victim, CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
 
@@ -1061,6 +1069,10 @@
 				to_chat(activator, "<span class='sinister'>Given how unstable the ritual is becoming, \The [victim] will surely be consumed entirely by it. They weren't meant to become one of us.</span>")
 				to_chat(victim, "<span class='danger'>Except your past actions have displeased us. You will be our snack before the feast begins. \[You are banned from this role\]</span>")
 				success = CONVERSION_BANNED
+			if ("Mindless")
+				conversion.icon_state = "rune_convert_bad"
+				to_chat(activator, "<span class='sinister'>This mindless creature will be sacrificed.</span>")
+				success = CONVERSION_MINDLESS
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
 		sleep(conversion_delay)
@@ -1081,7 +1093,8 @@
 
 		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (victim.mind)
+		if (victim.mind && !(victim.mind in converted_minds))
+			converted_minds += victim.mind
 			if (cult)
 				spawn(5)//waiting half a second to make sure that the sacrifice objective won't designate a victim that just refused conversion
 					cult.stage(CULT_ACT_II)
@@ -1180,6 +1193,14 @@
 				flick("rune_convert_failure",conversion)
 
 				//sacrificed victims have all their stuff stored in a coffer that also contains their skull and a cup of their blood, should they have either
+				victim.boxify(TRUE, FALSE, "cult")
+				abort(RITUALABORT_SACRIFICE)
+
+			if (CONVERSION_MINDLESS)
+
+				conversion.icon_state = ""
+				flick("rune_convert_failure",conversion)
+
 				victim.boxify(TRUE, FALSE, "cult")
 				abort(RITUALABORT_SACRIFICE)
 
@@ -2397,6 +2418,15 @@ var/list/blind_victims = list()
 /datum/rune_spell/blood_cult/portalentrance/midcast_talisman(var/mob/add_cultist)
 	midcast(add_cultist)
 
+/datum/rune_spell/blood_cult/portalentrance/salt_act(var/turf/T)
+	var/turf/destination = null
+	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
+		if (P.network == network)
+			destination = get_turf(P.spell_holder)
+			new /obj/effect/bloodcult_jaunt/traitor(T,null,destination,null)
+			break
+
+
 //RUNE XVII
 var/list/bloodcult_exitportals = list()
 
@@ -2517,6 +2547,15 @@ var/list/bloodcult_exitportals = list()
 
 	T.attuned_rune = PE.spell_holder
 	T.word_pulse(global_runesets["blood_cult"].words[network])
+
+/datum/rune_spell/blood_cult/portalexit/salt_act(var/turf/T)
+	if (T != spell_holder.loc)
+		var/turf/destination = null
+		for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
+			if (P.network == network)
+				destination = get_turf(P.spell_holder)
+			new /obj/effect/bloodcult_jaunt/traitor(T,null,destination,null)
+			break
 
 //RUNE XVIII
 /datum/rune_spell/blood_cult/pulse

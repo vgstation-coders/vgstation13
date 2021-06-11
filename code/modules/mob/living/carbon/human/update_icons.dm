@@ -699,11 +699,13 @@ var/global/list/damage_icon_parts = list()
 				var/image/dyn_overlay = gloves.dynamic_overlay["[GLOVES_LAYER]"]
 				O.overlays += dyn_overlay
 
-		if(gloves.blood_DNA && gloves.blood_DNA.len)
-			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
-			bloodsies.color = gloves.blood_color
-			standing.overlays	+= bloodsies
-			O.overlays += bloodsies
+		if (istype(gloves, /obj/item/clothing/gloves))
+			var/obj/item/clothing/gloves/actual_gloves = gloves
+			if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
+				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
+				bloodsies.color = actual_gloves.blood_color
+				standing.overlays	+= bloodsies
+				O.overlays += bloodsies
 		gloves.screen_loc = ui_gloves
 
 		gloves.generate_accessory_overlays(O)
@@ -716,7 +718,7 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_y = species.inventory_offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
 	else
-		if(blood_DNA?.len && bloody_hands_data?.len)
+		if(bloody_hands > 0 && bloody_hands_data?.len)
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = "bloodyhands"
 			O.color = bloody_hands_data["blood_colour"]
@@ -898,11 +900,14 @@ var/global/list/damage_icon_parts = list()
 			if(s_store.dynamic_overlay["[SUIT_STORE_LAYER]"])
 				var/image/dyn_overlay = s_store.dynamic_overlay["[SUIT_STORE_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = (species.inventory_offsets["[slot_s_store]"]["pixel_x"] - initial(s_store.pixel_x)) * PIXEL_MULTIPLIER
-		O.pixel_y = (species.inventory_offsets["[slot_s_store]"]["pixel_y"] - initial(s_store.pixel_y)) * PIXEL_MULTIPLIER
+		O.pixel_x = (species.inventory_offsets["[slot_s_store]"]["pixel_x"]) * PIXEL_MULTIPLIER
+		O.pixel_y = (species.inventory_offsets["[slot_s_store]"]["pixel_y"]) * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_STORE_LAYER)
 		//overlays_standing[SUIT_STORE_LAYER]	= image("icon" = 'icons/mob/belt_mirror.dmi', "icon_state" = "[t_state]")
-		s_store.screen_loc = ui_sstore1		//TODO
+
+		var/x_pixel_offset = initial(s_store.pixel_x)
+		var/y_pixel_offset = initial(s_store.pixel_y)
+		s_store.screen_loc = "WEST+2:[(10+x_pixel_offset)*PIXEL_MULTIPLIER],SOUTH:[(5+y_pixel_offset)*PIXEL_MULTIPLIER]"
 	//else
 		//overlays_standing[SUIT_STORE_LAYER]	= null
 	if(update_icons)

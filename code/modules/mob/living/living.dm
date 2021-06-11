@@ -714,9 +714,9 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
-							M.StartMoving()
+							lazy_invoke_event(/lazy_event/on_before_move)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
-							M.EndMoving()
+							lazy_invoke_event(/lazy_event/on_after_move)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 					else
@@ -1417,9 +1417,9 @@ Thanks.
 					AM.set_glide_size(src.glide_size)
 					if (ismob(AM))
 						var/mob/M = AM
-						M.StartMoving()
+						lazy_invoke_event(/lazy_event/on_before_move)
 						step(M, t)
-						M.EndMoving()
+						lazy_invoke_event(/lazy_event/on_after_move)
 					else
 						step(AM, t)
 				now_pushing = 0

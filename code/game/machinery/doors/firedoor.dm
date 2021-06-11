@@ -135,7 +135,6 @@ var/global/list/alert_overlays_global = list()
 				A.all_doors |= src
 				areas_added |= A
 
-
 /obj/machinery/door/firedoor/initialize()
 	if (twin) // Already paired with something
 		return
@@ -361,6 +360,18 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/attack_animal(var/mob/living/simple_animal/M as mob)
+	M.delayNextAttack(8)
+	if(M.melee_damage_upper == 0)
+		return
+	M.do_attack_animation(src, M)
+	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+					  "<span class='warning'>You smash against \the [src].</span>", \
+					  "You hear twisting metal.")
+	if(prob(33))
+		new /obj/item/firedoor_frame(get_turf(src))
+		qdel(src)
 
 /obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/weapon/C, var/no_reruns = FALSE)
 	if(operating)

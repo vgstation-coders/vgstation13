@@ -573,6 +573,14 @@
 	required_reagents = list(SODIUM = 1, CHLORINE = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/holysalts
+	name = "Holy Salts"
+	id = HOLYSALTS
+	result = HOLYSALTS
+	required_reagents = list(SODIUMCHLORIDE = 1)
+	required_catalysts = list(HOLYWATER = 5)
+	result_amount = 1
+
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
 	id = "flash_powder"

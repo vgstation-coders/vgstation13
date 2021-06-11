@@ -186,16 +186,21 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		if(istype(mover,/obj/item/projectile/beam))
-			var/obj/item/projectile/beam/B = mover
-			B.damage *= disperse_coeff
-			if(B.damage <= 1)
-				B.bullet_die()
+	if(istype(mover) && mover.checkpass(PASSGLASS))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
+		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
+			dim_beam(mover)
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
+
+
+/obj/structure/window/proc/dim_beam(var/obj/item/projectile/beam/B)
+	if(istype(B))
+		B.damage *= disperse_coeff
+		if(B.damage <= 1)
+			B.bullet_die()
+
 
 //Someone threw something at us, please advise
 /obj/structure/window/hitby(var/atom/movable/AM)

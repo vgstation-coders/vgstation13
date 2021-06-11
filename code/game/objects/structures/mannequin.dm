@@ -57,6 +57,7 @@
 	var/trapped_strip = 0//1= Mannequin awakens if you try to strip it or to wrench it.
 	var/chaintrap_range = 0//= Range at which mannequin awakens nearby mannequins when it awakens.
 
+
 /obj/structure/mannequin/New()
 	..()
 
@@ -236,6 +237,7 @@
 		if(!item_in_hand)
 			if(get_held_item_by_index(hand_index))
 				var/obj/item/I = held_items[hand_index]
+				I.mannequin_unequip(src)
 				user.put_in_hands(I)
 				held_items[hand_index] = null
 				to_chat(user, "<span class='info'>You pick up \the [I] from \the [src].</span>")
@@ -243,14 +245,17 @@
 			if(get_held_item_by_index(hand_index))
 				if(user.drop_item(item_in_hand,src))
 					var/obj/item/I = held_items[hand_index]
+					I.mannequin_unequip(src)
 					user.put_in_hands(I)
 					held_items[hand_index] = item_in_hand
+					item_in_hand.mannequin_equip(src,"hands",hand_index)
 					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
 				else
 					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 			else
 				if(user.drop_item(item_in_hand,src))
 					held_items[hand_index] = item_in_hand
+					item_in_hand.mannequin_equip(src,"hands",hand_index)
 					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
 				else
 					to_chat(user, "<span class='warning'>You can't drop that!</span>")
@@ -265,6 +270,7 @@
 		if(!item_in_hand)
 			if(clothing[item_slot])
 				var/obj/item/I = clothing[item_slot]
+				I.mannequin_unequip(src)
 				user.put_in_hands(I)
 				clothing[item_slot] = null
 				add_fingerprint(user)
@@ -274,8 +280,10 @@
 				if(canEquip(user, item_slot,item_in_hand))
 					if(user.drop_item(item_in_hand,src))
 						var/obj/item/I = clothing[item_slot]
+						I.mannequin_unequip(src)
 						user.put_in_hands(I)
 						clothing[item_slot] = item_in_hand
+						item_in_hand.mannequin_equip(src,item_slot)
 						add_fingerprint(user)
 						to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
 					else
@@ -286,6 +294,7 @@
 				if(canEquip(user, item_slot,item_in_hand))
 					if(user.drop_item(item_in_hand,src))
 						clothing[item_slot] = item_in_hand
+						item_in_hand.mannequin_equip(src,item_slot)
 						add_fingerprint(user)
 						to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
 					else
@@ -315,9 +324,11 @@
 	for(var/cloth in clothing)
 		if(clothing[cloth])
 			var/obj/item/cloth_to_drop = clothing[cloth]
+			cloth_to_drop.mannequin_unequip(src)
 			cloth_to_drop.forceMove(loc)
 			clothing[cloth] = null
-	for(var/obj/item_to_drop in held_items)
+	for(var/obj/item/item_to_drop in held_items)
+		item_to_drop.mannequin_unequip(src)
 		item_to_drop.forceMove(loc)
 		held_items -= item_to_drop
 	qdel(src)
@@ -620,7 +631,7 @@
 		SLOT_MANNEQUIN_GLOVES = mapping_gloves,
 		SLOT_MANNEQUIN_EARS = mapping_ears,
 		SLOT_MANNEQUIN_OCLOTHING = mapping_suit,
-		SLOT_MANNEQUIN_EYES = mapping_shoes,
+		SLOT_MANNEQUIN_EYES = mapping_glasses,
 		SLOT_MANNEQUIN_BELT = mapping_belt,
 		SLOT_MANNEQUIN_MASK = mapping_mask,
 		SLOT_MANNEQUIN_HEAD = mapping_hat,
@@ -634,21 +645,26 @@
 			var/obj/item/clothToWear = new mapped_cloth(src)
 			if(canEquip(null, mapped_slot, clothToWear))
 				clothing[mapped_slot] = clothToWear
+				clothToWear.mannequin_equip(src,mapped_slot)
 			else
 				qdel(clothToWear)
 
 	if(mapping_hand_right)
 		var/obj/item/clothToWear = new mapping_hand_right(src)
 		held_items[GRASP_RIGHT_HAND] = clothToWear
+		clothToWear.mannequin_equip(src,"hands",GRASP_RIGHT_HAND)
 	if(mapping_hand_left)
 		var/obj/item/clothToWear = new mapping_hand_left(src)
 		held_items[GRASP_LEFT_HAND] = clothToWear
+		clothToWear.mannequin_equip(src,"hands",GRASP_LEFT_HAND)
 
 	update_icon()
 
 
 /obj/structure/mannequin/proc/spin()
+	lazy_invoke_event(/lazy_event/on_before_move)
 	change_dir(turn(dir, 90))
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 /obj/structure/mannequin/verb/rotate_mannequin()
 	set name = "Rotate Mannequin"

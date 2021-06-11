@@ -86,6 +86,37 @@
 
 	nanomanager.update_uis(src)
 
+/obj/machinery/botany/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item/seeds))
+		if(loaded_seed)
+			return FALSE
+		var/obj/item/seeds/S = AM
+		if(S.seed && S.seed.immutable > 0)
+			return FALSE
+		S.forceMove(src)
+		loaded_seed = AM
+		nanomanager.update_uis(src)
+		return TRUE
+
+	if(istype(AM,/obj/item/weapon/disk/botany))
+		if(loaded_disk)
+			return FALSE
+		var/obj/item/weapon/disk/botany/B = AM
+
+		if(B.genes && B.genes.len)
+			if(!disk_needs_genes)
+				return FALSE
+		else
+			if(disk_needs_genes)
+				return FALSE
+
+		AM.forceMove(src)
+
+		loaded_disk = AM
+		nanomanager.update_uis(src)
+		return TRUE
+	return FALSE
+
 /obj/machinery/botany/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/seeds))
 		if(loaded_seed)

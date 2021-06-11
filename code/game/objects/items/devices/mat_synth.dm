@@ -63,7 +63,8 @@
 							 "gold" = /obj/item/stack/sheet/mineral/gold,
 							 "diamond" = /obj/item/stack/sheet/mineral/diamond,
 							 "plasma" = /obj/item/stack/sheet/mineral/plasma,
-							 "uranium" = /obj/item/stack/sheet/mineral/uranium)
+							 "uranium" = /obj/item/stack/sheet/mineral/uranium,
+							 "plastic" = /obj/item/stack/sheet/mineral/plastic)
 
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"

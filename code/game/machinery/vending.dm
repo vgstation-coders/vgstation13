@@ -2582,6 +2582,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/glue/temp_glue = 1
 		)
 	premium = list(
+		/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuitwhite = 1,
 		/obj/item/clothing/suit/hgpirate = 3,
 		/obj/item/clothing/head/hgpiratecap = 3,
 		/obj/item/clothing/head/helmet/roman = 3,
@@ -3235,7 +3236,7 @@ var/global/num_vending_terminals = 1
 	products = list(
 		/obj/item/weapon/hair_dye = 4,
 		/obj/item/weapon/razor = 4,
-		/obj/item/weapon/pocket_mirror = 4,
+		/obj/item/weapon/pocket_mirror/scissors = 4,
 		/obj/item/clothing/mask/fakemoustache = 4,
 		/obj/item/clothing/under/rank/barber = 4,
 		/obj/item/clothing/head/barber = 4,
@@ -3243,7 +3244,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/gloves/white = 4,
 		)
 	contraband = list(
-		/obj/item/weapon/lipstick/random = 5,
+		/obj/item/weapon/pocket_mirror = 4,
 		)
 	pack = /obj/structure/vendomatpack/barbervend
 

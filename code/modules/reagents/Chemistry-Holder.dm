@@ -535,31 +535,36 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0)
-
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0)
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
+				var/amount_splashed = R.volume+volume_modifier
+				if (amount_override)
+					amount_splashed = amount_override
 				if(ismob(A))
 					if(isanimal(A))
-						R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
+						R.reaction_animal(A, TOUCH, amount_splashed)
 					else
-						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
+						R.reaction_mob(A, TOUCH, amount_splashed)
 				if(isturf(A))
-					R.reaction_turf(A, R.volume+volume_modifier)
+					R.reaction_turf(A, amount_splashed)
 				if(istype(A, /obj))
-					R.reaction_obj(A, R.volume+volume_modifier)
+					R.reaction_obj(A, amount_splashed)
 		if(INGEST)
 			for(var/datum/reagent/R in reagent_list)
+				var/amount_splashed = R.volume+volume_modifier
+				if (amount_override)
+					amount_splashed = amount_override
 				if(ismob(A))
 					if(isanimal(A))
-						R.reaction_animal(A, INGEST, R.volume+volume_modifier)
+						R.reaction_animal(A, INGEST, amount_splashed)
 					else
-						R.reaction_mob(A, INGEST, R.volume+volume_modifier)
+						R.reaction_mob(A, INGEST, amount_splashed)
 				if(isturf(A) && R)
-					R.reaction_turf(A, R.volume+volume_modifier)
+					R.reaction_turf(A, amount_splashed)
 				if(istype(A, /obj) && R)
-					R.reaction_obj(A, R.volume+volume_modifier)
+					R.reaction_obj(A, amount_splashed)
 	return
 
 /datum/reagents/proc/reaction_dropper(var/atom/A, var/volume_modifier=0)

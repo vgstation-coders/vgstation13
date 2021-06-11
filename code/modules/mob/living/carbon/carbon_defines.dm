@@ -27,6 +27,8 @@
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	var/obj/item/device/station_map/displayed_holomap = null
 
+	var/target_zone = null
+
 /mob/living/carbon/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	..()
 	hud_list[CONVERSION_HUD] = image('icons/mob/hud.dmi', src, "hudblank")

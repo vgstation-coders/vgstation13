@@ -77,6 +77,9 @@
 
 	sleep(duration)
 
+	if (target.gcDestroyed)
+		return
+
 	//Begin unjaunting
 	mobloc = get_turf(target)
 	if(mist)
@@ -86,9 +89,12 @@
 	target.delayNextMove(25)
 	target.dir = SOUTH
 	sleep(20)
+	if (target.gcDestroyed)
+		return
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	sleep(5)
-
+	if (target.gcDestroyed)
+		return
 	//Forcemove him onto the tile and make him visible and vulnerable
 	target.forceMove(mobloc)
 	target.invisibility = 0

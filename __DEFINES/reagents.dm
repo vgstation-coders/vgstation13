@@ -151,6 +151,7 @@
 #define BLACKCOLOR 			"blackcolor"
 #define FROSTOIL 			"frostoil"
 #define SODIUMCHLORIDE 			"sodiumchloride"
+#define HOLYSALTS 			"holysalts"
 #define CREATINE 			"creatine"
 #define CARPPHEROMONES 			"carppheromones"
 #define BLACKPEPPER 			"blackpepper"

@@ -127,6 +127,7 @@
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
 		return 0
+	lazy_invoke_event(/lazy_event/on_before_move)
 
 	if(current_tethers && current_tethers.len)
 		for(var/datum/tether/master_slave/T in current_tethers)
@@ -136,6 +137,7 @@
 					break
 				if(get_exact_dist(T.effective_master, NewLoc) > T.tether_distance)
 					change_dir(Dir)
+					lazy_invoke_event(/lazy_event/on_after_move)
 					return 0
 		for(var/datum/tether/equal/restrictive/R in current_tethers)
 			var/atom/movable/AM
@@ -148,9 +150,11 @@
 				break
 			if(get_exact_dist(AM, NewLoc) > R.tether_distance)
 				change_dir(Dir)
+				lazy_invoke_event(/lazy_event/on_after_move)
 				return 0
 	if(timestopped)
 		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
+			lazy_invoke_event(/lazy_event/on_after_move)
 			return 0
 
 	var/can_pull_tether = 0
@@ -158,6 +162,7 @@
 		if(tether.attempt_to_follow(src,NewLoc))
 			can_pull_tether = 1
 		else
+			lazy_invoke_event(/lazy_event/on_after_move)
 			return 0
 
 	if(glide_size_override > 0)
@@ -168,6 +173,7 @@
 		. = ..()
 
 		update_dir()
+		lazy_invoke_event(/lazy_event/on_after_move)
 		return
 
 	//We always split up movements into cardinals for issues with diagonal movements.
@@ -209,6 +215,7 @@
 
 	if(!loc || (loc == oldloc && oldloc != NewLoc))
 		last_move = 0
+		lazy_invoke_event(/lazy_event/on_after_move)
 		return
 
 	update_client_hook(loc)
@@ -227,6 +234,7 @@
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
 	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 /atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
 	var/list/found = ..()
@@ -401,6 +409,7 @@
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	lazy_invoke_event(/lazy_event/on_before_move)
 	if(glide_size_override)
 		glide_size = glide_size_override
 	var/atom/old_loc = loc
@@ -434,6 +443,7 @@
 	var/turf/T = get_turf(destination)
 	if(old_loc && T && old_loc.z != T.z)
 		lazy_invoke_event(/lazy_event/on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
+	lazy_invoke_event(/lazy_event/on_after_move)
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)

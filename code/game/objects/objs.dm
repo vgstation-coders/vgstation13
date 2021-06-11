@@ -317,12 +317,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return qdel(src)
 
 /obj/singularity_pull(S, current_size)
+	lazy_invoke_event(/lazy_event/on_before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
 	else
 		step_towards(src, S)
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"

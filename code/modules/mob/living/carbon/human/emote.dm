@@ -1,6 +1,20 @@
 /datum/emote/living/carbon/human
 	mob_type_allowed_typelist = list(/mob/living/carbon/human)
 
+/datum/emote/living/carbon/human/can_run_emote(var/mob/living/carbon/human/user, var/status_check = TRUE)
+	if (istype(user) && hands_needed > 0)
+		var/available_hands = 0
+		for (var/datum/organ/external/r_hand/right_hand in user.grasp_organs)
+			if (!right_hand.status)
+				available_hands++
+		for (var/datum/organ/external/l_hand/left_hand in user.grasp_organs)
+			if (!left_hand.status)
+				available_hands++
+		if (available_hands < hands_needed)
+			to_chat(user, "<span class='warning'>You don't have enough hands to perform a [key].</span>")
+			return FALSE
+	return ..()
+
 /datum/emote/living/carbon/human/cry
 	key = "cry"
 	key_third_person = "cries"
@@ -31,6 +45,7 @@
 	message_param = "shakes hands with %t."
 	restraint_check = TRUE
 	emote_type = EMOTE_AUDIBLE
+	hands_needed = 1
 
 /datum/emote/living/carbon/human/hug
 	key = "hug"
@@ -63,6 +78,44 @@
 	message = "salutes."
 	message_param = "salutes to %t."
 	restraint_check = TRUE
+
+/datum/emote/living/carbon/human/peace
+	key = "peace"
+	message = "makes a peace sign."
+	message_param = "makes a peace sign to %t."
+	restraint_check = TRUE
+	hands_needed = 1
+
+/datum/emote/living/carbon/human/doublepeace
+	key = "doublepeace"
+	message = "makes a double peace sign."
+	message_param = "makes a double peace sign to %t."
+	restraint_check = TRUE
+	hands_needed = 2
+
+/datum/emote/living/carbon/human/thumbsup
+	key = "thumbup"
+	key_third_person = "thumbsup"
+	message = "makes a thumbs up."
+	message_param = "makes a thumbs up to %t."
+	restraint_check = TRUE
+	hands_needed = 1
+
+/datum/emote/living/carbon/human/thumbsdown
+	key = "thumbdown"
+	key_third_person = "thumbsdown"
+	message = "makes a thumbs down."
+	message_param = "makes a thumbs down to %t."
+	restraint_check = TRUE
+	hands_needed = 1
+
+/datum/emote/living/carbon/human/ok
+	key = "ok"
+	key_third_person = "okay"
+	message = "makes an OK sign."
+	message_param = "makes an OK sign to %t."
+	restraint_check = TRUE
+	hands_needed = 1
 
 /datum/emote/living/carbon/human/shrug
 	key = "shrug"
@@ -230,10 +283,10 @@
 		if(restraint_check && (user.restrained() || user.locked_to))
 			to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
 			return FALSE
-		return TRUE
 	else
 		to_chat(user, "<span class='warning'>You cannot [key] without both your arms.</span>")
 		return FALSE
+	return ..()
 
 /datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)
 	if(!(can_run_emote(user, !ignore_status)))

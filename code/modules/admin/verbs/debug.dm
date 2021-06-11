@@ -850,9 +850,7 @@ var/global/blood_virus_spreading_disabled = 0
 	config.world_style_config = world_style
 	message_admins("The style sheet has been reset by [src.ckey]")
 
-/client/proc/cmd_admin_cluwneize(var/mob/M in mob_list)
-	set category = "Fun"
-	set name = "Make Cluwne"
+/client/proc/cmd_admin_cluwneize(var/mob/M)
 	if(!ticker)
 		alert("Wait until the game starts")
 		return
@@ -861,6 +859,18 @@ var/global/blood_virus_spreading_disabled = 0
 		feedback_add_details("admin_verb","MKCLU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		log_admin("[key_name(src)] has cluwne-ified [M.key].")
 		return M.Cluwneize()
+	else
+		alert("Invalid mob, needs to be a human.")
+
+/client/proc/cmd_admin_boxify(var/mob/living/carbon/M)
+	if(!ticker)
+		alert("Wait until the game starts")
+		return
+	if(iscarbon(M))
+		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a cult coffer.</span>", 1)
+		feedback_add_details("admin_verb","MKBOX") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+		log_admin("[key_name(src)] has box-ified [M.key].")
+		return M.boxify()
 	else
 		alert("Invalid mob, needs to be a human.")
 

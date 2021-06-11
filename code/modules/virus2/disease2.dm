@@ -326,7 +326,7 @@ var/global/list/disease2_list = list()
 		if (!chosen_pathogen)
 			qdel(D)
 			return
-		var/datum/disease2/disease/dis = existing_pathogen[chosen_pathogen]
+		var/datum/disease2/disease/dis = disease2_list[existing_pathogen[chosen_pathogen]]
 		D = dis.getcopy()
 		D.origin = "[D.origin] (Badmin)"
 	else

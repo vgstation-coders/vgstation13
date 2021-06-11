@@ -192,16 +192,6 @@ emp_act
 	if (crit)
 		power *= CRIT_MULTIPLIER
 
-	var/target_zone = null
-	if(def_zone)
-		target_zone = def_zone
-	else if(originator)
-		if(ismob(originator))
-			var/mob/M = originator
-			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
-	else
-		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
-
 	var/datum/organ/external/affecting = get_organ(target_zone)
 	if (!affecting)
 		return FALSE

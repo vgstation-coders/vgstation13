@@ -93,25 +93,17 @@ var/global/list/blood_list = list()
 	base_icon = 'icons/effects/drip.dmi'
 
 /obj/effect/decal/cleanable/blood/writing
-	icon_state = "tracks"
+	name = "bloody writings"
 	desc = "It looks like a writing in blood."
 	gender = NEUTER
-	random_icon_states = list("writing1","writing2","writing3","writing4","writing5")
+	icon = 'icons/effects/effects.dmi'
+	icon_state = ""
 	amount = 0
-	var/message
+	maptext_height = 32
+	maptext_width = 64
+	maptext_x = -16
+	maptext_y = -2
 
-/obj/effect/decal/cleanable/blood/writing/New()
-	..()
-	if(random_icon_states.len)
-		for(var/obj/effect/decal/cleanable/blood/writing/W in loc)
-			random_icon_states.Remove(W.icon_state)
-		icon_state = pick(random_icon_states)
-	else
-		icon_state = "writing1"
-
-/obj/effect/decal/cleanable/blood/writing/examine(mob/user)
-	..()
-	to_chat(user, "It reads: <font color='[basecolor]'>\"[message]\"<font>")
 
 /obj/effect/decal/cleanable/blood/gibs
 	name = "gibs"

@@ -348,7 +348,7 @@
 		mob.last_move_intent = world.time + 10
 		mob.set_glide_size(DELAY2GLIDESIZE(move_delay)) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
-		mob.StartMoving()
+		mob.lazy_invoke_event(/lazy_event/on_before_move)
 		// Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in mob
 		if(Findgrab)
@@ -360,7 +360,7 @@
 					if(M)
 						if ((mob.Adjacent(M) || M.loc == mob.loc))
 							var/turf/T = mob.loc
-							M.StartMoving()
+							M.lazy_invoke_event(/lazy_event/on_before_move)
 							step(mob, Dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
@@ -368,7 +368,7 @@
 									diag = null
 								if ((get_dist(mob, M) > 1 || diag))
 									step(M, get_dir(M.loc, T))
-							M.EndMoving()
+							M.lazy_invoke_event(/lazy_event/on_after_move)
 				else
 					for(var/mob/M in L)
 						M.other_mobs = 1
@@ -376,9 +376,9 @@
 							M.animate_movement = 3
 					for(var/mob/M in L)
 						spawn( 0 )
-							M.StartMoving()
+							M.lazy_invoke_event(/lazy_event/on_before_move)
 							step(M, dir)
-							M.EndMoving()
+							M.lazy_invoke_event(/lazy_event/on_after_move)
 							return
 						spawn( 1 )
 							M.other_mobs = null
@@ -395,8 +395,8 @@
 			mob.last_movement=world.time
 
 		if(mob.dir != old_dir)
-			mob.Facing()
-		mob.EndMoving()
+			mob.lazy_invoke_event(/lazy_event/on_face)
+		mob.lazy_invoke_event(/lazy_event/on_after_move)
 
 /mob/proc/process_confused(var/Dir)
 	if (confused <= 0)
@@ -404,12 +404,12 @@
 	. = TRUE
 	var/old_dir = dir
 	if (confused_intensity == CONFUSED_MAGIC)
-		StartMoving()
+		lazy_invoke_event(/lazy_event/on_before_move)
 		step_rand(src)
-		EndMoving()
+		lazy_invoke_event(/lazy_event/on_after_move)
 		return
 
-	StartMoving()
+	lazy_invoke_event(/lazy_event/on_before_move)
 	switch(Dir)
 		if(NORTH)
 			step(src, pick(NORTHEAST, NORTHWEST))
@@ -427,11 +427,11 @@
 			step(src, pick(SOUTH, EAST))
 		if(SOUTHWEST)
 			step(src, pick(SOUTH, WEST))
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 	last_movement=world.time
 	if(dir != old_dir)
-		Facing()
+		lazy_invoke_event(/lazy_event/on_face)
 
 ///Process_Grab()
 ///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
@@ -513,7 +513,7 @@
 				mob.dir = direct
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
-			mob.lazy_invoke_event(/lazy_event/on_moved, list("mover" = mob))
+			mob.lazy_invoke_event(/lazy_event/on_moved)
 			mob.delayNextMove(movedelay)
 			return 1
 	// Crossed is always a bit iffy
@@ -574,13 +574,15 @@
 		var/mob/mobpulled = target
 		var/atom/movable/secondarypull = mobpulled.pulling
 		mobpulled.stop_pulling()
-		mobpulled.StartMoving()
+		mobpulled.lazy_invoke_event(/lazy_event/on_before_move)
 		step(mobpulled, get_dir(mobpulled.loc, dest))
-		mobpulled.EndMoving()
+		mobpulled.lazy_invoke_event(/lazy_event/on_after_move)
 		if(mobpulled && secondarypull)
 			mobpulled.start_pulling(secondarypull)
 	else
+		target.lazy_invoke_event(/lazy_event/on_before_move)
 		step(target, get_dir(target.loc, dest))
+		target.lazy_invoke_event(/lazy_event/on_after_move)
 	target.add_fingerprint(src)
 
 /mob/proc/movement_delay()

@@ -60860,7 +60860,7 @@
 	pixel_y = -22
 	},
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/drinks/britcup,
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup,
 /obj/item/stack/package_wrap,
 /obj/item/stack/package_wrap,
 /obj/item/stack/package_wrap,

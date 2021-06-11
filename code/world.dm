@@ -10,28 +10,33 @@ var/world_startup_time
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
+	movement_mode = TILE_MOVEMENT_MODE
 
-#define RECOMMENDED_VERSION 513
 
 var/savefile/panicfile
 
 var/datum/early_init/early_init_datum = new
 
+#if AUXTOOLS_DEBUGGER
+var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
+
+/proc/enable_debugging(mode, port) //Hooked by auxtools
+	CRASH("auxtools not loaded")
+
+/proc/auxtools_stack_trace(msg)
+	CRASH(msg)
+#endif
+
 /datum/early_init/New()
 	..()
-	var/extools_path = world.system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
-	if(fexists(extools_path))
-		#if EXTOOLS_DEBUGGER
-		call(extools_path, "debug_initialize")()
-		#endif
-		call(extools_path, "maptick_initialize")()
-		#if EXTOOLS_REFERENCE_TRACKING
-		call(extools_path, "ref_tracking_initialize")()
-		#endif
+	#if AUXTOOLS_DEBUGGER
+	if(fexists(auxtools_path))
+		call(auxtools_path, "auxtools_init")()
+		enable_debugging()
 	else
 		// warn on missing library
-		// extools on linux does not exist and is not in the repository as of yet
-		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
+		warning("There is no auxtools library for this system included with SpacemanDMM. Debugging will not work. Pester them to add one.")
+	#endif
 
 /world/New()
 	world_startup_time = world.timeofday
@@ -72,15 +77,7 @@ var/datum/early_init/early_init_datum = new
 
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
-/*
- * IF YOU HAVE BYOND VERSION BELOW 507.1248 OR ARE ABLE TO WALK THROUGH WINDOORS/BORDER WINDOWS COMMENT OUT
- * #define BORDER_USE_TURF_EXIT
- * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
- */
-#ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < RECOMMENDED_VERSION)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 513.")
-#endif
+
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
@@ -161,7 +158,6 @@ var/datum/early_init/early_init_datum = new
 		/*if(config.kick_inactive)
 			KickInactiveClients()*/
 
-#undef RECOMMENDED_VERSION
 	return ..()
 
 //world/Topic(href, href_list[])
@@ -298,6 +294,10 @@ var/datum/early_init/early_init_datum = new
 
 		else
 			C << link("byond://[world.address]:[world.port]")
+
+	#if AUXTOOLS_DEBUGGER
+	call(auxtools_path, "auxtools_shutdown")()
+	#endif
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()

@@ -41,6 +41,35 @@
 		B += M.rating-1
 	max_seeds=4+B
 
+/obj/machinery/seed_extractor/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	// Emptying a plant bag
+	if (istype(AM,/obj/item/weapon/storage/bag/plants))
+		if(contents.len >= MAX_N_OF_ITEMS)
+			return FALSE
+		var/obj/item/weapon/storage/P = AM
+		for(var/obj/item/seeds/G in P.contents)
+			moveToStorage(G)
+		return TRUE
+
+	// Loading individual seeds into the machine
+	if(istype(AM,/obj/item/seeds))
+		if(contents.len >= MAX_N_OF_ITEMS)
+			return FALSE
+		moveToStorage(AM)
+		updateUsrDialog()
+		return TRUE
+
+	//Grass. //Why isn't this using the nonplant_seed_type functionality?
+	if(istype(AM, /obj/item/stack/tile/grass))
+		var/obj/item/stack/tile/grass/S = AM
+		S.use(1)
+		new /obj/item/seeds/grassseed(loc)
+		return TRUE
+	
+	if(seedify(AM, src))
+		return TRUE
+	return FALSE
+
 obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 	// Emptying a plant bag
