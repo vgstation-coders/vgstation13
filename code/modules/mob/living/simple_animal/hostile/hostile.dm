@@ -459,7 +459,7 @@
 							continue
 					if(istype(A, /obj/machinery/door/firedoor))
 						var/obj/machinery/door/firedoor/FIR = A
-						if(!FIR.density || FIR.locked || FIR.blocked || FIR.operating)
+						if(!FIR.density || FIR.lockdown || FIR.blocked || FIR.operating)
 							continue
 					UnarmedAttack(A, Adjacent(A))
 	return
