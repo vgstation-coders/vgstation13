@@ -973,6 +973,19 @@ window "rpane"
 		text = "Round End Information"
 		command = "RoundEndInformation"
 		group = "rpanemode"
+	elem "last_round_end"
+		type = BUTTON
+		pos = 664,0
+		size = 152x16
+		anchor1 = none
+		anchor2 = none
+		text-color = #ffffff
+		background-color = #808080
+		is-visible = false
+		saved-params = "is-checked"
+		text = "Last Round Information"
+		command = "RoundEndInformation"
+		group = "rpanemode"
 	elem "rpanewindow"
 		type = CHILD
 		pos = 0,0
