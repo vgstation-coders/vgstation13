@@ -1,7 +1,3 @@
-/area/turret_protected
-	name = "Turret Protected Area"
-	turret_protected = 1
-
 /obj/machinery/turret
 	name = "turret"
 	icon = 'icons/obj/turrets.dmi'
