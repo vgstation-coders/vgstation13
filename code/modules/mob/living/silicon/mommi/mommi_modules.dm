@@ -29,6 +29,7 @@
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/device/station_map(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
+	modules += new /obj/item/tool/solder/pre_fueled(src)
 	modules += new /obj/item/borg/fire_shield
 
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil/yellow(src)
