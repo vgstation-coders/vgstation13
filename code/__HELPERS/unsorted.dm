@@ -1167,6 +1167,35 @@ proc/get_mob_with_client_list()
 		else
 			return zone
 
+/proc/limb_define_to_part_define(var/zone)
+	switch(zone)
+		if (LIMB_HEAD)
+			return HEAD
+		if (LIMB_CHEST)
+			return UPPER_TORSO
+		if (LIMB_GROIN)
+			return LOWER_TORSO
+		if (TARGET_MOUTH)
+			return MOUTH
+		if (TARGET_EYES)
+			return EYES
+		if (LIMB_RIGHT_HAND)
+			return HAND_RIGHT
+		if (LIMB_LEFT_HAND)
+			return HAND_LEFT
+		if (LIMB_LEFT_ARM)
+			return ARM_LEFT
+		if (LIMB_RIGHT_ARM)
+			return ARM_RIGHT
+		if (LIMB_LEFT_LEG)
+			return LEG_LEFT
+		if (LIMB_RIGHT_LEG)
+			return LEG_RIGHT
+		if (LIMB_LEFT_FOOT)
+			return FOOT_LEFT
+		if (LIMB_RIGHT_FOOT)
+			return FOOT_RIGHT
+
 /*
 	get_holder_at_turf_level(): Similar to get_turf(), will return the "highest up" holder of this atom, excluding the turf.
 	Example: A fork inside a box inside a locker will return the locker. Essentially, get_just_before_turf().

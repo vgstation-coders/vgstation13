@@ -2193,6 +2193,9 @@ mob/proc/on_foot()
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE
 
+/mob/proc/turn_into_mannequin(var/material = "marble")
+	return FALSE
+
 /mob/proc/get_personal_ambience()
 	return list()
 
