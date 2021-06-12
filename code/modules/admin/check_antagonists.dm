@@ -29,10 +29,10 @@
 
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 
-	if (dynamic_mode?.last_round_executed_rules.len)
+	if (dynamic_mode?.previously_executed_rules.len)
 		dat += "<h3><b>Last executed rulesets</b></h3>"
 		dat += "<br/>"
-		for (var/type in dynamic_mode.last_round_executed_rules)
+		for (var/type in dynamic_mode.previously_executed_rules)
 			var/datum/dynamic_ruleset/DR = type
 			dat += "- [initial(DR.name)] <br/>"
 		dat += "<br/>"
