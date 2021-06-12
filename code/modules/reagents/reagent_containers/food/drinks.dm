@@ -833,9 +833,9 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy/New()
 	..()
 	reagents.add_reagent(CAFFEINE, 5)
-	reagents.add_reagent(COCAINE, 1.4)
-	reagents.add_reagent(URANIUM, 3.6)
-	reagents.add_reagent(SPORTDRINK, 20)
+	reagents.add_reagent(COCAINE, 5)
+	reagents.add_reagent(URANIUM, 15)
+	reagents.add_reagent(SPORTDRINK, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "\improper vial of food coloring"
