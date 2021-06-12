@@ -38,7 +38,6 @@
 					dat += "<h4><b>Two Rounds ago:</b></h4>"
 				if ("three_rounds_ago")
 					dat += "<h4><b>Three Rounds ago:</b></h4>"
-			dat += "<br/>"
 			for(var/previous_ruleset in dynamic_mode.previously_executed_rules[previous_round])
 				var/datum/dynamic_ruleset/DR = previous_ruleset
 				dat += "- [initial(DR.name)] <br/>"
