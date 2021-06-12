@@ -615,7 +615,7 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey/grey
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS | ACID4WATER
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
