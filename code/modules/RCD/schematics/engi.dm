@@ -57,7 +57,8 @@
 
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			for(var/obj/structure/grille/G in W.loc)
-				qdel(G)
+				if(!istype(G,/obj/structure/grille/invulnerable)) // No more breaking out in places like lamprey
+					qdel(G)
 			for(var/obj/structure/window/WI in W.loc)
 				if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
 					continue
