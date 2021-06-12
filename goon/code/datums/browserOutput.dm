@@ -226,7 +226,7 @@ For the main html chat area
 	if (!isicon(icon))
 		return 0
 
-	iconCache[iconKey] << icon(icon, dir = SOUTH)
+	iconCache[iconKey] << icon(icon, dir = SOUTH, frame = 1)
 	var/iconData = iconCache.ExportText(iconKey)
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")

@@ -101,8 +101,6 @@ var/list/uplink_items = list()
 			return 0
 		on_item_spawned(I,user)
 		var/icon/tempimage = icon(I.icon, I.icon_state)
-		end_icons += tempimage
-		var/tempstate = end_icons.len
 
 		var/bundlename = name
 		if(name == "Random Item" || name == "For showing that you are The Boss")
@@ -116,7 +114,7 @@ var/list/uplink_items = list()
 			if(istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
+			U.purchase_log += {"[user] ([user.ckey]) bought <img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name] for [get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
 
@@ -125,11 +123,11 @@ var/list/uplink_items = list()
 				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
 				var/datum/role/R = user.mind.GetRole(NUKE_OP)
 				if(R)
-					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+					R.faction.faction_scoreboard_data += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				else
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
-						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1

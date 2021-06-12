@@ -559,16 +559,6 @@ proc/sql_sanitize_text(var/text)
 	dat = image_finder.Replace(dat, "")
 	return dat
 
-/proc/convert_scoreboard_images_to_base64(var/dat)
-	if(!dat)
-		return
-	if (!last_scoreboard_images?.len)
-		return remove_images(dat)
-	var/static/regex/magic = new(@"(<img src..logo_.*?>)")
-	for (var/i = 1 to last_scoreboard_images.len)
-		dat = magic.Replace(dat, "<img class='icon' src='data:image/png;base64,[last_scoreboard_images[i]]'>")
-	return dat
-
 /proc/nekospeech(var/speech)
 	if(!speech)
 		return
