@@ -58,7 +58,7 @@
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 2
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
 	cost = 15
 	var/traitor_threshold = 3
 	var/additional_cost = 5
