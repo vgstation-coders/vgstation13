@@ -125,8 +125,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if(!to_read)
 		log_debug("[name] task found an empty file on [file_path]")
 		return
-	last_scoreboard_images = to_read["round_images"]
-	last_round_end_info = convert_scoreboard_images_to_base64(to_read["round_info"])
+	last_round_end_info = to_read["round_info"]
 	for (var/client/C in clients)
 		winset(C, "rpane.round_end", "is-visible=false")
 		winset(C, "rpane.last_round_end", "is-visible=true")
@@ -134,8 +133,6 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/round_end_data/on_shutdown()
 	if (round_end_info)
 		data["round_info"] = round_end_info
-	if (last_scoreboard_images?.len)
-		data["round_images"] = last_scoreboard_images
 	write_file(data)
 
 /datum/persistence_task/latest_dynamic_rulesets
