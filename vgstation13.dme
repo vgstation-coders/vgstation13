@@ -1753,6 +1753,7 @@
 #include "code\modules\mob\living\login.dm"
 #include "code\modules\mob\living\logout.dm"
 #include "code\modules\mob\living\say.dm"
+#include "code\modules\mob\living\standard_damage_overlay_updates.dm"
 #include "code\modules\mob\living\carbon\carbon.dm"
 #include "code\modules\mob\living\carbon\carbon_defines.dm"
 #include "code\modules\mob\living\carbon\combat.dm"

@@ -80,6 +80,7 @@
 		return FALSE //under effects of time magick
 	..()
 	regular_hud_updates()
+	standard_damage_overlay_updates()
 	if(isDead())
 		for(var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)

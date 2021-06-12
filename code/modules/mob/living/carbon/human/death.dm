@@ -134,6 +134,7 @@
 	if(ticker && ticker.mode)
 		sql_report_death(src)
 	species.handle_death(src)
+
 	if(become_zombie_after_death && isjusthuman(src))
 		spawn(30 SECONDS)
 			if(!gcDestroyed)

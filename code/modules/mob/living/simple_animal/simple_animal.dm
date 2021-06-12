@@ -595,6 +595,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
+	if (damage > 0)
+		damageoverlaytemp = 20
 	if(skinned())
 		damage = damage * 2
 	if(purge)

@@ -183,14 +183,13 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	if(client)
 		regular_hud_updates()
+		standard_damage_overlay_updates()
 
 /mob/living/simple_animal/borer/regular_hud_updates()
 	if(fire_alert)
 		throw_alert(SCREEN_ALARM_FIRE, fire_alert == 1 ? /obj/abstract/screen/alert/carbon/burn/ice : /obj/abstract/screen/alert/carbon/burn/fire, fire_alert) //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
 	else
 		clear_alert(SCREEN_ALARM_FIRE)
-
-	var/severity = 0
 
 	var/healthpercent = (health/maxHealth)*100
 
@@ -199,24 +198,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			healths.icon_state = "borer_health0"
 		if(75 to 100)
 			healths.icon_state = "borer_health1"
-			severity = 2
 		if(50 to 75)
 			healths.icon_state = "borer_health2"
-			severity = 3
 		if(25 to 50)
 			healths.icon_state = "borer_health3"
-			severity = 4
 		if(1 to 25)
 			healths.icon_state = "borer_health4"
-			severity = 5
 		else
 			healths.icon_state = "borer_health5"
-			severity = 6
-
-	if(severity > 0)
-		overlay_fullscreen("damage", /obj/abstract/screen/fullscreen/brute, severity)
-	else
-		clear_fullscreen("damage")
 
 /mob/living/simple_animal/borer/proc/update_verbs(var/mode)
 	if(verb_holders.len>0)

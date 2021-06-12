@@ -361,6 +361,11 @@
 		wear_id.emp_act(severity)
 	..()
 
+/mob/living/carbon/monkey/adjustBruteLoss(damage)
+	..()
+	if (damage > 0)
+		damageoverlaytemp = 20
+
 /mob/living/carbon/monkey/ex_act(severity)
 	if(flags & INVULNERABLE)
 		return

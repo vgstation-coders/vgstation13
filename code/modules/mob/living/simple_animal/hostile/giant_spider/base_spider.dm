@@ -168,6 +168,7 @@
 			 					a_51,a_52,a_53,a_54)
 
 	regular_hud_updates()
+	standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/giant_spider/regular_hud_updates()
 	if (!client)
