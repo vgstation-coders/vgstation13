@@ -223,6 +223,11 @@ var/stacking_limit = 90
 	return 1
 
 /datum/gamemode/dynamic/proc/read_previous_rounds_rulesets()
+	previously_executed_rules = list(
+		"one_round_ago" = list(),
+		"two_rounds_ago" = list(),
+		"three_rounds_ago" = list()
+	)
 	var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/latest_dynamic_rulesets)
 	if(!length(data))
 		return
