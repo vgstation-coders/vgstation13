@@ -335,11 +335,14 @@
 				flat.Turn(90)
 			var/icon/ded = icon('icons/effects/blood.dmi', "floor1-old")
 			ded.Blend(flat,ICON_OVERLAY)
-			end_icons += ded
+			//end_icons += ded
+
+			text += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(ded)]' style='position:relative; top:10px;'>"
 		else
-			end_icons += flat
-		var/tempstate = end_icons.len
-		text += "<img src='logo_[tempstate].png' style='position:relative; top:10px;'/>"
+			text += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]' style='position:relative; top:10px;'>"
+			//end_icons += flat
+		//var/tempstate = end_icons.len
+		//text += "<img src='logo_[tempstate].png' style='position:relative; top:10px;'/>"
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag ? "[antag.key]" : "(somebody)"]</b> was <b>[antag ? "[antag.name]" : "(someone)"]</b> ("

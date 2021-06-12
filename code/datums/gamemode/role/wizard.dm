@@ -78,9 +78,9 @@
 			. += "<BR>The wizard knew:<BR>"
 			for(var/spell/S in H.spell_list)
 				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-				end_icons += tempimage
-				var/tempstate = end_icons.len
-				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
+				//end_icons += tempimage
+				//var/tempstate = end_icons.len
+				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
 		if(artifacts_bought)
 			bought_nothing = FALSE
 			. += "<BR>Additionally, the wizard brought:<BR>"
