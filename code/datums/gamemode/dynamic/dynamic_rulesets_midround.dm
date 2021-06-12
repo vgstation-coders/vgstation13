@@ -226,6 +226,9 @@
 	newTraitor.AnnounceObjectives()
 	return 1
 
+/datum/dynamic_ruleset/midround/autotraitor/previous_rounds_odds_reduction(var/result)
+	return result
+
 
 //////////////////////////////////////////////
 //                                          //

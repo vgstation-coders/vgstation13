@@ -60,6 +60,9 @@
 	newTraitor.Greet(GREET_LATEJOIN)
 	return 1
 
+/datum/dynamic_ruleset/latejoin/infiltrator/previous_rounds_odds_reduction(var/result)
+	return result
+
 
 //////////////////////////////////////////////
 //                                          //

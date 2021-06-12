@@ -22,6 +22,8 @@
 
 	var/flags = 0
 
+	var/stillborn = FALSE//executed when the round was already about to end
+
 	//for midround polling
 	var/list/applicants = list()
 	var/searching = 0
@@ -135,22 +137,31 @@
 	var/result = weight
 	result *= map.ruleset_multiplier(src)
 	result *= weight_time_day()
-	var/halve_result = FALSE
+
 	for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
-		if(DR.role_category == src.role_category) // Same kind of antag.
-			halve_result = TRUE
+		if(DR.role_category == src.role_category) // If the same type of antag is already in this round, reduce the odds
+			result *= 0.5
 			break
-	if(!halve_result)
-		for(var/entry in mode.last_round_executed_rules)
-			var/datum/dynamic_ruleset/DR = entry
-			if(initial(DR.role_category) == src.role_category)
-				halve_result = TRUE
-				break
-	if(halve_result)
-		result /= 2
+
+	result = previous_rounds_odds_reduction(result)
+
 	if (mode.highlander_rulesets_favoured && (flags & HIGHLANDER_RULESET))
 		result *= ADDITIONAL_RULESET_WEIGHT
 	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
+	return result
+
+/datum/dynamic_ruleset/proc/previous_rounds_odds_reduction(var/result)
+	for (var/previous_round in mode.previously_executed_rules)
+		for(var/previous_ruleset in mode.previously_executed_rules[previous_round])
+			var/datum/dynamic_ruleset/DR = previous_ruleset
+			if(initial(DR.role_category) == src.role_category)
+				switch (previous_round)
+					if ("one_round_ago")
+						result *= 0.4
+					if ("two_rounds_ago")
+						result *= 0.7
+					if ("three_rounds_ago")
+						result *= 0.9
 	return result
 
 //Return a multiplicative weight. 1 for nothing special.

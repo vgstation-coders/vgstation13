@@ -41,6 +41,9 @@
 		// Above 3 traitors, we start to cost a bit more.
 	return 1
 
+/datum/dynamic_ruleset/roundstart/traitor/previous_rounds_odds_reduction(var/result)
+	return result
+
 //////////////////////////////////////////////
 //                                          //
 //               CHALLENGERS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

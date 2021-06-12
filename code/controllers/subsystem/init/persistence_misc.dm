@@ -151,12 +151,16 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if (!istype(dynamic_mode))
 		return
 	var/list/data = list(
-		"latest_rulesets" = list()
+		"one_round_ago" = list(),
+		"two_rounds_ago" = dynamic_mode.previously_executed_rules["one_round_ago"],
+		"three_rounds_ago" = dynamic_mode.previously_executed_rules["two_rounds_ago"]
 	)
 	for(var/datum/dynamic_ruleset/some_ruleset in dynamic_mode.executed_rules)
-		if(some_ruleset.calledBy)
+		if(some_ruleset.calledBy)//forced by an admin
 			continue
-		data["latest_rulesets"] |= "[some_ruleset.type]"
+		if(some_ruleset.stillborn)//executed near the end of the round
+			continue
+		data["one_round_ago"] |= "[some_ruleset.type]"
 	write_file(data)
 
 // This task has a unit test on code/modules/unit_tests/highscores.dm
