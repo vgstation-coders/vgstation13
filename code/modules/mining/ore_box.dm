@@ -47,12 +47,16 @@
 /obj/structure/ore_box/Topic(href, href_list)
 	if(..())
 		return
-	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	var/mob/user = usr
+	if (!Adjacent(user) || user.incapacitated())
+		usr << browse(null, "window=orebox")
+		return
+	user.set_machine(src)
+	add_fingerprint(user)
 	if(href_list["removeall"])
 		dump_everything()
-		to_chat(usr, "<span class='notice'>You empty the box.</span>")
-	src.updateUsrDialog()
+		to_chat(user, "<span class='notice'>You empty the box.</span>")
+	updateUsrDialog()
 	return
 
 /obj/structure/ore_box/proc/dump_everything(var/atom/target)
