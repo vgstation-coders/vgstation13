@@ -834,7 +834,7 @@
 	..()
 	reagents.add_reagent(CAFFEINE, 5)
 	reagents.add_reagent(COCAINE, 5)
-	reagents.add_reagent(COCAINE, 3.6)
+	reagents.add_reagent(RADIUM, 3.6)
 	reagents.add_reagent(URANIUM, 15)
 	reagents.add_reagent(SPORTDRINK, 1.4)
 
