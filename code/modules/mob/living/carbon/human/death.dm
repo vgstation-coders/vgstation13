@@ -131,6 +131,8 @@
 		mind.store_memory("Time of death: [tod]", 0)
 		if(!(mind && mind.suiciding)) //Cowards don't count
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
+	if (dorfpod)
+		dorfpod.scan_body(src)
 	if(ticker && ticker.mode)
 		sql_report_death(src)
 	species.handle_death(src)

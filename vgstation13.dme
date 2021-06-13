@@ -1125,6 +1125,7 @@
 #include "code\game\objects\structures\displaycase.dm"
 #include "code\game\objects\structures\docking_port.dm"
 #include "code\game\objects\structures\door_assembly.dm"
+#include "code\game\objects\structures\dorfpod.dm"
 #include "code\game\objects\structures\electricchair.dm"
 #include "code\game\objects\structures\extinguisher.dm"
 #include "code\game\objects\structures\false_walls.dm"
