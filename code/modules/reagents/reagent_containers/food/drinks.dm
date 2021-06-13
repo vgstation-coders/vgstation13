@@ -834,8 +834,9 @@
 	..()
 	reagents.add_reagent(CAFFEINE, 5)
 	reagents.add_reagent(COCAINE, 5)
+	reagents.add_reagent(COCAINE, 3.6)
 	reagents.add_reagent(URANIUM, 15)
-	reagents.add_reagent(SPORTDRINK, 5)
+	reagents.add_reagent(SPORTDRINK, 1.4)
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "\improper vial of food coloring"
