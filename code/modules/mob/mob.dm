@@ -2123,7 +2123,7 @@ mob/proc/on_foot()
 	if (runescape_pvp)
 		var/area/A = get_area(src)
 		if (!istype(A, /area/maintenance) && !is_type_in_list(A,non_standard_maint_areas))
-			to_chat(src, "<span class='danger'>PvP is forbidden outside of maint!</span>")
+			to_chat(src, "<span class='danger'>You must enter maintenance to attack other players!</span>")
 			return TRUE
 
 	if(status_flags & UNPACIFIABLE)
