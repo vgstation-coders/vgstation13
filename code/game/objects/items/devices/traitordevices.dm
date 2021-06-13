@@ -52,6 +52,7 @@ effective or pretty fucking useless.
 					M.LAssailant = null
 				else
 					M.LAssailant = user
+					M.assaulted_by(user)
 
 			else
 				to_chat(M, "<span class='danger'>You feel a sudden, electric jolt travel through your head.</span>")

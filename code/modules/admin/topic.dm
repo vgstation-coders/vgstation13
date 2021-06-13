@@ -3972,6 +3972,21 @@
 				for(var/i = 1 to choice)
 					world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("togglerunescape")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RS")
+				runescape_pvp = !runescape_pvp
+				if(runescape_pvp)
+					message_admins("[key_name_admin(usr)] has enabled Maint-Only PvP Mechanics.")
+					log_admin("[key_name_admin(usr)] has enabled Maint-Only PvP Mechanics.")
+				else
+					message_admins("[key_name_admin(usr)] has disabled  Maint-Only PvP Mechanics.")
+					log_admin("[key_name_admin(usr)] has disabled Maint-Only PvP Mechanics.")
+					if (ticker && ticker.mode)
+						for (var/entry in ticker.mode.runescape_fighters)
+							var/datum/runescape_fighter_data/the_data = ticker.mode.runescape_fighters[entry]
+							ticker.mode.runescape_fighters -= entry
+							qdel(the_data)
 			if("massbomber")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBM")

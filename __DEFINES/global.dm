@@ -434,3 +434,5 @@ var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit thi
 
 var/list/all_machines = list()
 var/list/machinery_rating_cache = list() // list of type path -> number
+
+var/runescape_pvp = FALSE

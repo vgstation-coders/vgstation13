@@ -1399,6 +1399,7 @@ Thanks.
 				return
 
 			tmob.LAssailant = src
+			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
 		spawn(0)
@@ -1557,6 +1558,10 @@ Thanks.
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return FAILED_THROW
 
+	if(runescape_pvp && is_pacified())
+		to_chat(src, "<span class='warning'>As such, throwing items is also forbidden outside of maint.</span>")
+		return FAILED_THROW
+
 	if(target.type == /obj/abstract/screen)
 		return FAILED_THROW
 
@@ -1592,6 +1597,7 @@ Thanks.
 					M.LAssailant = null
 				else
 					M.LAssailant = usr
+					M.assaulted_by(usr)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null

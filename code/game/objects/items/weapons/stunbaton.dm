@@ -214,6 +214,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
 	if(prob(50))
@@ -243,6 +244,7 @@
 		L.LAssailant = null
 	else
 		L.LAssailant = foundmob
+		L.assaulted_by(foundmob)
 
 /obj/item/weapon/melee/baton/emp_act(severity)
 	if(bcell)

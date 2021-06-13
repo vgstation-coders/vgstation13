@@ -14,6 +14,7 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	user.cell.charge -= 30
 

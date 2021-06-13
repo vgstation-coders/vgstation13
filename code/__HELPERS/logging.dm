@@ -94,6 +94,9 @@
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user_txt][object_txt].[intent_txt][addition_txt]</font>")
 		target.LAssailant = (iscarbon(user) ? user : null)
 
+	if (ismob(user) && ismob(target))
+		target.assaulted_by(user)
+
 	var/log_msg = "<span class='danger'>[user_txt] [what_done] [target_txt][object_txt][intent_txt].</span>[addition_txt] ([formatJumpTo(user, "JMP")])"
 	log_attack(log_msg)
 	if (admin_warn)

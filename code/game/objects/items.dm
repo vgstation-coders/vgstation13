@@ -970,6 +970,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
@@ -1298,6 +1299,7 @@ var/global/list/image/blood_overlays = list()
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE

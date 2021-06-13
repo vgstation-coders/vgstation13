@@ -72,6 +72,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 		src.add_fingerprint(user)
 
 		for(var/mob/O in viewers(M))
@@ -177,6 +178,7 @@
 				target.LAssailant = null
 			else
 				target.LAssailant = user
+				target.assaulted_by(user)
 		return
 	else
 		return ..()
