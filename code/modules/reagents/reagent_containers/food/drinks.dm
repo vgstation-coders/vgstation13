@@ -828,7 +828,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy
 	name = "Roentgen Energy"
-	desc = "Roentgen Energy, a meltdown in your mouth! Contains real actinides!"
+	desc = "Roentgen Energy, a meltdown in your mouth! Contains real actinides! Doesn't really taste great, nor terrible."
 	icon_state = "roentgenenergy"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy/New()
 	..()
