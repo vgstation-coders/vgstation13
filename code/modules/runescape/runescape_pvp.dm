@@ -70,7 +70,7 @@ var/list/non_standard_maint_areas = list(
 	if ("\ref[src]" in ticker.mode.runescape_fighters)
 		var/datum/runescape_fighter_data/the_data = ticker.mode.runescape_fighters["\ref[src]"]
 		if ("\ref[M]" in the_data.victim_refs)
-			if (the_data.victim_refs["\ref[M]"] + 5 MINUTES < world.time)//if we attacked M in the last 5 minutes, do not skull M
+			if (the_data.victim_refs["\ref[M]"] + 5 MINUTES > world.time)//if we attacked M in the last 5 minutes, do not skull M
 				return
 	M.just_fought(src,weak_assault)
 
