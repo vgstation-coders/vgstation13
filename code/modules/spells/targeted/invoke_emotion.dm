@@ -1,3 +1,5 @@
+var/global/list/invoked_emotions = list()
+
 /spell/targeted/invoke_emotion
 	name = "Invoke Emotion"
 	desc = "Summon a cursed document that forces itself to, eventually, be read by your target. Once your message is complete, simply throw the document and it will find its way."
@@ -86,6 +88,10 @@
 	var/forcesHand = 0
 	var/cursePower = 0
 
+/obj/item/weapon/paper/emotion_invoker/New()
+	..()
+	invoked_emotions += src
+
 /obj/item/weapon/paper/emotion_invoker/canfold(mob/user)
 	return FALSE
 
@@ -108,6 +114,7 @@
 
 /obj/item/weapon/paper/emotion_invoker/Destroy()
 	processing_objects.Remove(src)
+	invoked_emotions -= src
 	..()
 
 /obj/item/weapon/paper/emotion_invoker/process()
@@ -117,10 +124,13 @@
 			ashify()
 		if(loc != curseTarget)
 			if(emotionInvoked)
-				new /obj/effect/decal/cleanable/ash(get_turf(src))
-				qdel(src)
+				destroyEmotion()
 			else
 				goToTarget()
+
+/obj/item/weapon/paper/emotion_invoker/proc/destroyEmotion()
+	new /obj/effect/decal/cleanable/ash(get_turf(src))
+	qdel(src)
 
 /obj/item/weapon/paper/emotion_invoker/throw_impact(atom/hit_atom)
 	..()
@@ -159,6 +169,10 @@
 	if(isActive && curseTarget)
 		if(user == curseTarget && !starred)
 			emotionInvoked = TRUE
+	else if(info)
+		message_admins("[key_name(user)] has written on an invoke emotion paper [formatJumpTo(get_turf(src))]!")
+		log_admin("[key_name(user)] wrote on an invoked emotion: [info]")
+
 
 
 
