@@ -2133,21 +2133,23 @@ var/list/non_standard_maint_areas = list(
 	var/skull_timer = 20 MINUTES
 	var/image/skull
 	var/list/victim_refs = list()
+	var/name = "fighter data"
 
-/datum/runescape_fighter_data/New(var/mob/M)
+/datum/runescape_fighter_data/New(var/mob/M,var/first_victim)
 	if (!ticker || !ticker.mode)
 		return
 	if (!M)
 		qdel(src)
 		return
 	holder_ref = "\ref[M]"
+	name = M.name//for easier VV debugging
 	ticker.mode.runescape_fighters[holder_ref] = src
 	skull = image('icons/mob/hud.dmi',M,"runescape_skull")
 	skull.plane = LIGHTING_PLANE
 	skull.layer = NARSIE_GLOW
 	skull.pixel_y = 20 * PIXEL_MULTIPLIER
 	skull.appearance_flags = RESET_COLOR|RESET_ALPHA|TILE_BOUND|RESET_TRANSFORM
-	just_fought()
+	just_fought("\ref[first_victim]")
 
 /datum/runescape_fighter_data/Destroy()
 	for (var/client/C in clients)//just to be sure
@@ -2179,6 +2181,10 @@ var/list/non_standard_maint_areas = list(
 /mob/proc/assaulted_by(var/mob/M,var/weak_assault=FALSE)
 	//might be nice to move the LAssailant stuff here at some point
 
+	if (M == src)
+		return
+
+
 	if (!ticker || !ticker.mode)
 		return
 	if ("\ref[src]" in ticker.mode.runescape_fighters)
@@ -2198,7 +2204,7 @@ var/list/non_standard_maint_areas = list(
 		var/datum/runescape_fighter_data/the_data = ticker.mode.runescape_fighters["\ref[src]"]
 		the_data.just_fought("\ref[M]")
 	else
-		new /datum/runescape_fighter_data(src)
+		new /datum/runescape_fighter_data(src,"\ref[M]")
 
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
