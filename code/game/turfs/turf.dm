@@ -132,11 +132,6 @@
 	if (!mover)
 		return 1
 
-	var/obj/effect/unwall_field/UF = locate(/obj/effect/unwall_field) in src //For traitorous mimes
-	if(UF)
-		UF.to_bump(mover, 1)
-		return 0
-
 	var/list/large_dense = list()
 	//Next, check objects to block entry that are on the border
 	for(var/atom/movable/border_obstacle in src)
