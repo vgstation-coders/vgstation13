@@ -1559,7 +1559,7 @@ Thanks.
 		return FAILED_THROW
 
 	if(runescape_pvp && is_pacified())
-		to_chat(src, "<span class='warning'>As such, throwing items is also forbidden outside of maint.</span>")
+		to_chat(src, "<span class='warning'>As such, throwing items is also forbidden outside of maintenance areas.</span>")
 		return FAILED_THROW
 
 	if(target.type == /obj/abstract/screen)
