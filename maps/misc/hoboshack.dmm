@@ -1,0 +1,518 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"b" = (
+/turf/simulated/wall/mineral/wood,
+/area/vault)
+"c" = (
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"d" = (
+/obj/structure/reagent_dispensers/fueltank,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"h" = (
+/obj/structure/dispenser/oxygen,
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"i" = (
+/turf/unsimulated/mineral/random,
+/area/mine/explored)
+"j" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"l" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"n" = (
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 11
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault)
+"o" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/reagent_containers/food/drinks/beer,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"q" = (
+/obj/structure/rack,
+/obj/item/weapon/pickaxe,
+/obj/item/weapon/pickaxe/shovel,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"r" = (
+/obj/structure/table/woodentable,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/clothing/glasses/scanner/meson,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"s" = (
+/obj/structure/mirror{
+	pixel_y = 32
+	},
+/obj/machinery/atmospherics/unary/vent_pump{
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault)
+"t" = (
+/obj/machinery/power/port_gen/pacman{
+	anchored = 1
+	},
+/obj/structure/cable/yellow{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"u" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
+/turf/simulated/floor/wood/floor_tile,
+/area/vault)
+"v" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"w" = (
+/obj/structure/bed,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/wood/floor_tile,
+/area/vault)
+"x" = (
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"y" = (
+/obj/structure/ore_box,
+/turf/unsimulated/floor/asteroid,
+/area/mine/explored)
+"z" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"A" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"B" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"D" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"E" = (
+/obj/structure/table/woodentable,
+/turf/simulated/floor/wood/floor_tile,
+/area/vault)
+"F" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"G" = (
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"H" = (
+/obj/machinery/atmospherics/unary/tank/air{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"I" = (
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"J" = (
+/obj/structure/bed/chair/wood/normal{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"K" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 1;
+	on = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"L" = (
+/turf/unsimulated/floor/asteroid,
+/area/mine/explored)
+"M" = (
+/obj/structure/closet/cabinet,
+/turf/simulated/floor/wood/floor_tile,
+/area/vault)
+"N" = (
+/obj/structure/table/woodentable,
+/obj/machinery/microwave{
+	pixel_y = 6
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"O" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault)
+"P" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/box/donkpockets,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"Q" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 8;
+	on = 1
+	},
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken4"
+	},
+/area/vault)
+"R" = (
+/obj/structure/toilet{
+	dir = 8
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "showroomfloor"
+	},
+/area/vault)
+"T" = (
+/obj/machinery/door/airlock/silver,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"U" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"V" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"X" = (
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault)
+"Y" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/obj/machinery/door/mineral/wood{
+	name = "Wooden Door"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault)
+"Z" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	req_access_txt = 1
+	},
+/turf/simulated/floor/wood{
+	broken = 1;
+	icon_state = "wood-broken"
+	},
+/area/vault)
+
+(1,1,1) = {"
+i
+i
+i
+i
+i
+i
+i
+i
+i
+i
+i
+i
+"}
+(2,1,1) = {"
+i
+b
+b
+b
+b
+b
+b
+b
+b
+b
+i
+i
+"}
+(3,1,1) = {"
+i
+b
+c
+l
+V
+l
+X
+D
+x
+b
+i
+i
+"}
+(4,1,1) = {"
+i
+b
+d
+I
+b
+q
+F
+J
+x
+U
+L
+i
+"}
+(5,1,1) = {"
+i
+b
+h
+K
+b
+r
+F
+o
+x
+A
+L
+i
+"}
+(6,1,1) = {"
+i
+b
+j
+G
+b
+P
+F
+z
+x
+b
+L
+i
+"}
+(7,1,1) = {"
+i
+b
+H
+t
+b
+N
+j
+I
+I
+T
+L
+i
+"}
+(8,1,1) = {"
+i
+b
+b
+b
+b
+b
+Y
+b
+b
+b
+L
+i
+"}
+(9,1,1) = {"
+i
+b
+s
+O
+B
+Z
+u
+E
+b
+y
+L
+i
+"}
+(10,1,1) = {"
+i
+b
+R
+n
+b
+M
+Q
+w
+v
+y
+L
+i
+"}
+(11,1,1) = {"
+i
+b
+b
+b
+b
+b
+b
+b
+b
+i
+i
+i
+"}
+(12,1,1) = {"
+i
+i
+i
+i
+i
+i
+i
+i
+i
+i
+i
+i
+"}
