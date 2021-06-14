@@ -3986,10 +3986,10 @@
 					log_admin("[key_name_admin(usr)] has disabled Maint-Only PvP Mechanics.")
 					for (var/mob/player in player_list)
 						to_chat(player, "<span class='userdanger'>WARNING: Wilderness mode is now disabled; players can only harm one another anywhere!</span>")
-					if (ticker && ticker.mode)
-						for (var/entry in ticker.mode.runescape_fighters)
-							var/datum/runescape_fighter_data/the_data = ticker.mode.runescape_fighters[entry]
-							ticker.mode.runescape_fighters -= entry
+					if (ticker)
+						for (var/entry in ticker.runescape_skulls)
+							var/datum/runescape_skull_data/the_data = ticker.runescape_skulls[entry]
+							ticker.runescape_skulls -= entry
 							qdel(the_data)
 			if("massbomber")
 				feedback_inc("admin_secrets_fun_used",1)

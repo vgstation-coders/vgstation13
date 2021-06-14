@@ -7,23 +7,23 @@ var/list/non_standard_maint_areas = list(
 	/area/research_outpost/maintstore2
 	)
 
-/datum/runescape_fighter_data
+/datum/runescape_skull_data
 	var/holder_ref
 	var/last_fight
 	var/skull_timer = 20 MINUTES
 	var/image/skull
 	var/list/victim_refs = list()
-	var/name = "fighter data"
+	var/name = "skull data"
 
-/datum/runescape_fighter_data/New(var/mob/M,var/first_victim)
-	if (!ticker || !ticker.mode)
+/datum/runescape_skull_data/New(var/mob/M,var/first_victim)
+	if (!ticker)
 		return
 	if (!M)
 		qdel(src)
 		return
 	holder_ref = "\ref[M]"
 	name = M.name//for easier VV debugging
-	ticker.mode.runescape_fighters[holder_ref] = src
+	ticker.runescape_skulls[holder_ref] = src
 	skull = image('icons/mob/hud.dmi',M,"runescape_skull")
 	skull.plane = LIGHTING_PLANE
 	skull.layer = NARSIE_GLOW
@@ -31,28 +31,28 @@ var/list/non_standard_maint_areas = list(
 	skull.appearance_flags = RESET_COLOR|RESET_ALPHA|TILE_BOUND|RESET_TRANSFORM
 	just_fought(first_victim)
 
-/datum/runescape_fighter_data/Destroy()
+/datum/runescape_skull_data/Destroy()
 	for (var/client/C in clients)//just to be sure
 		C.images -= skull
 	skull = null
 	..()
 
-/datum/runescape_fighter_data/proc/just_fought(var/victim_ref)
+/datum/runescape_skull_data/proc/just_fought(var/victim_ref)
 	last_fight = world.time
 	if (victim_ref)
 		victim_refs[victim_ref] = world.time
 	process()
 
-/datum/runescape_fighter_data/proc/process()
+/datum/runescape_skull_data/proc/process()
 	for (var/client/C in clients)
 		C.images -= skull
 	var/mob/holder = locate(holder_ref)
 	if (!holder || holder.gcDestroyed)
-		ticker.mode.runescape_fighters -= holder_ref
+		ticker.runescape_skulls -= holder_ref
 		qdel(src)
 		return
 	if (world.time >= last_fight + skull_timer)
-		ticker.mode.runescape_fighters -= holder_ref
+		ticker.runescape_skulls -= holder_ref
 	else
 		for (var/client/C in clients)
 			C.images += skull
@@ -65,10 +65,10 @@ var/list/non_standard_maint_areas = list(
 		return
 
 
-	if (!ticker || !ticker.mode)
+	if (!ticker)
 		return
-	if ("\ref[src]" in ticker.mode.runescape_fighters)
-		var/datum/runescape_fighter_data/the_data = ticker.mode.runescape_fighters["\ref[src]"]
+	if ("\ref[src]" in ticker.runescape_skulls)
+		var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
 		if ("\ref[M]" in the_data.victim_refs)
 			if (the_data.victim_refs["\ref[M]"] + 5 MINUTES > world.time)//if we attacked M in the last 5 minutes, do not skull M
 				return
@@ -77,11 +77,11 @@ var/list/non_standard_maint_areas = list(
 /mob/proc/just_fought(var/mob/M,var/weak_assault=FALSE)
 	if (!runescape_pvp || weak_assault)
 		return
-	if (!ticker || !ticker.mode)
+	if (!ticker)
 		return
 
-	if ("\ref[src]" in ticker.mode.runescape_fighters)
-		var/datum/runescape_fighter_data/the_data = ticker.mode.runescape_fighters["\ref[src]"]
+	if ("\ref[src]" in ticker.runescape_skulls)
+		var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
 		the_data.just_fought("\ref[M]")
 	else
-		new /datum/runescape_fighter_data(src,"\ref[M]")
+		new /datum/runescape_skull_data(src,"\ref[M]")

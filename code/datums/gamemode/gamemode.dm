@@ -24,7 +24,6 @@
 	var/votable = TRUE
 	var/list/orphaned_roles = list()
 	var/dat = ""
-	var/list/runescape_fighters = list()
 
 /datum/gamemode/proc/can_start()
 	if(minimum_player_count && minimum_player_count < get_player_count())
@@ -251,10 +250,6 @@
 		F.process()
 	for(var/datum/role/R in orphaned_roles)
 		R.process()
-	if (runescape_pvp)
-		for (var/entry in runescape_fighters)
-			var/datum/runescape_fighter_data/the_data = runescape_fighters[entry]
-			the_data.process()
 
 /datum/gamemode/proc/check_finished()
 	for(var/datum/faction/F in factions)

@@ -37,10 +37,10 @@
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
-	if (runescape_pvp && ticker && ticker.mode)//we died, begone skull
-		if ("\ref[src]" in ticker.mode.runescape_fighters)
-			var/datum/runescape_fighter_data/the_data = ticker.mode.runescape_fighters["\ref[src]"]
-			ticker.mode.runescape_fighters -= "\ref[src]"
+	if (runescape_pvp && ticker)//we died, begone skull
+		if ("\ref[src]" in ticker.runescape_skulls)
+			var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
+			ticker.runescape_skulls -= "\ref[src]"
 			qdel(the_data)
 	if(client)
 		client.color = initial(client.color)
