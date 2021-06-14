@@ -26,18 +26,8 @@
 	..()
 	for(var/mob/living/carbon/human/H in targets)
 		for(var/obj/item/weapon/storage/S in recursive_type_check(H, /obj/item/weapon/storage))
-			var/total_space = S.max_combined_w_class
-			var/occupied_space
-			var/total_available_space
-			for(var/obj/item/o in S.contents)
-				occupied_space += o.w_class
-			if(S.storage_slots)
-				total_available_space = min(total_space - occupied_space, S.storage_slots)
-			else
-				total_available_space = total_space - occupied_space
-			if(total_available_space > 0)
-				for(var/i = 0, i < total_available_space, i++)
-					new /obj/item/toy/singlecard/unflipped(S, newcardname = "[current_card]")
+			while(!S.is_full())
+				new /obj/item/toy/singlecard/unflipped(S, newcardname = "[current_card]")
 		if(!H.get_item_by_slot(slot_l_store))
 			H.l_store = new /obj/item/toy/singlecard/unflipped(newcardname = "[current_card]")
 		if(!H.get_item_by_slot(slot_r_store))
