@@ -62,7 +62,7 @@
 			M.Dizzy(150)
 			M.dizziness = 150
 		for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
-			M.paralysis += 2
+			M.AdjustParalysis(2)
 			M.dizziness += 10
 			M:slurring += 10
 			M.confused += 10
@@ -360,7 +360,7 @@ obj/item/projectile/bullet/suffocationbullet
 	icon_state = "minigun"
 	damage = 30
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
-	
+
 /obj/item/projectile/bullet/baton
 	name = "stun baton"
 	icon = 'icons/obj/projectiles_experimental.dmi'
@@ -375,7 +375,7 @@ obj/item/projectile/bullet/suffocationbullet
 	stutter = 10
 	agony = 10
 	var/rigged = null //if a rigged baton is loaded, it'll fire an explosive burst
-	
+
 /obj/item/projectile/bullet/baton/on_hit(var/atom/target, var/blocked = 0)
 	..()
 	playsound(target.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
@@ -390,7 +390,7 @@ obj/item/projectile/bullet/suffocationbullet
 		var/flash_range = light_impact_range
 		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range)
 	qdel(src)
-	
+
 /obj/item/projectile/bullet/osipr
 	name = "\improper OSIPR bullet"
 	icon = 'icons/obj/projectiles_experimental.dmi'

@@ -216,7 +216,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				log_attack("<font color='red'>[user.name] ([user.ckey]) disarmed [name] ([ckey])</font>")
 				var/randn = rand(1,100)
 				if(randn <= 25)
-					knockdown = 3
+					AdjustKnockdown(3)
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[user] has pushed [src]!</span>")
 					var/obj/item/found = locate(tool_state) in module.modules

@@ -206,7 +206,7 @@
 ///	return
 ///datum/reagent/proc/on_update(var/atom/A)
 //	return
-	
+
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 
@@ -479,7 +479,7 @@
 //	if(data["blood_colour"])
 //		color = data["blood_colour"]
 //	return ..()
-	
+
 /datum/reagent/blood/reaction_turf(var/turf/simulated/T, var/volume) //Splash the blood all over the place
 
 	var/datum/reagent/self = src
@@ -2070,7 +2070,7 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
-			
+
 /datum/reagent/diamond
 	name = "Diamond dust"
 	id = DIAMONDDUST
@@ -2079,16 +2079,16 @@
 	color = "c4d4e0" //196 212 224
 	density = 3.51
 	specheatcap = 6.57
-	
+
 /datum/reagent/diamond/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
-	
+
 	M.adjustBruteLoss(5 * REM) //Not a good idea to eat crystal powder
 	if(prob(30))
 		M.audible_scream()
-	
+
 /datum/reagent/phazon
 	name = "Phazon salt"
 	id = PHAZON
@@ -7614,7 +7614,7 @@
 	if(..())
 		return 1
 
-	M.stunned = 4
+	M.AdjustStunned(4)
 
 /datum/reagent/ethanol/drink/neurotoxin
 	name = "Neurotoxin"
