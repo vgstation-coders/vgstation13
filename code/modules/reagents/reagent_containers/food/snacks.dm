@@ -6705,7 +6705,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	name = "Zam Biscuit"
 	desc = "A sweet biscuit with an exquisite blend of chocolate and acid flavors. The recipe is a mothership secret."
 	icon_state = "zambiscuit"
-	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit/New()
 	..()
