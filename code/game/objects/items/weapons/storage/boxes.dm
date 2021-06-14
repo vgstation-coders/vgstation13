@@ -1533,3 +1533,5 @@
 	new /obj/item/clothing/glasses/scanner/meson(src)
 	new /obj/item/blueprints/construction_permit(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
