@@ -289,7 +289,7 @@
 
 /obj/item/toy/singlecard
 	name = "card"
-	desc = "\a card."
+	desc = "A card."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "singlecard_down"
 	w_class = W_CLASS_TINY
@@ -297,6 +297,9 @@
 	var/obj/item/toy/cards/parentdeck = null
 	var/flipped = TRUE //Cards start flipped so that dealers can deal without having to see the card.
 	pixel_x = -5
+
+/obj/item/toy/singlecard/unflipped //Card that is face-up, just so that it's visible
+	flipped = FALSE
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
 	..(NewLoc)
