@@ -27,6 +27,7 @@ var/datum/subsystem/map/SSmap
 	else
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
+	generate_hoboshacks() //not tying this to vaults since jobs need it
 	for(var/i = 0, i < max_secret_rooms, i++)
 		make_mining_asteroid_secret()
 
