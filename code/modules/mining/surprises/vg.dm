@@ -138,3 +138,8 @@
 	desc = "From within this rich soil, the stone gathers moss."
 
 	file_path = "maps/randomvaults/mining/angie_lair.dmm"
+
+/datum/map_element/hoboshack
+	name = "Space hobo shack"
+
+	file_path = "maps/randomvaults/misc/hoboshack.dmm"
