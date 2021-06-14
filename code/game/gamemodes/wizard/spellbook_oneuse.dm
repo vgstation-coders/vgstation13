@@ -360,7 +360,7 @@
 
 /obj/item/weapon/spellbook/oneuse/timestop/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		user.stunned = 5
+		user.AdjustStunned(5)
 		user.flash_eyes(visual = 1)
 		to_chat(user, "<span class = 'warning'>You have been turned into a statue!</span>")
 		new /obj/structure/closet/statue(user.loc, user) //makes the statue

@@ -62,7 +62,7 @@
 			M.Dizzy(150)
 			M.dizziness = 150
 		for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
-			M.paralysis += 2
+			M.AdjustParalysis(2)
 			M.dizziness += 10
 			M:slurring += 10
 			M.confused += 10
