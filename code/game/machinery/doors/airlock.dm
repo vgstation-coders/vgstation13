@@ -383,8 +383,8 @@ About the new airlock wires panel:
 						src.justzap = 0
 		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
 			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
-			user.halloss += 10
-			user.stunned += 10
+			user.adjustHalLoss(10)
+			user.AdjustStunned(10)
 	..(user)
 
 /obj/machinery/door/airlock/proc/isElectrified()

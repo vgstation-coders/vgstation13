@@ -1523,7 +1523,7 @@ Use this proc preferably at the end of an equipment loadout
 	return 1
 
 /mob/proc/isKnockedDown() //Check if the mob is knocked down
-	return isUnconscious() || knockdown || paralysis
+	return knockdown || paralysis
 
 /mob/proc/isJustStunned() //Some ancient coder (as of 2021) made it so that it checks directly for whether the variable has a positive number, and I'm too afraid of unintended consequences down the line to just change it to isStunned(), so instead you have this half-baked abomination of a barely-used proc just so that player simple_animal mobs can move. You're welcome!
 	return stunned
@@ -1536,7 +1536,7 @@ Use this proc preferably at the end of an equipment loadout
 			canmove = 0
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
-	else if(resting || !can_stand || isKnockedDown())
+	else if(resting || !can_stand || isKnockedDown() || isUnconscious())
 		stop_pulling()
 		lying = 1
 		canmove = 0
