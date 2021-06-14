@@ -6643,7 +6643,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 12)
-	reagents.add_reagent(IMIDAZOLINE, 5)
+	reagents.add_reagent(ALKYSINE, 5)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 4
 
