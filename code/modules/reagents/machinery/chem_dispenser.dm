@@ -286,6 +286,27 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/proc/can_insert(var/obj/item/I)
 	return istype(I, /obj/item/weapon/reagent_containers/glass) || istype(I, /obj/item/weapon/reagent_containers/food/drinks)
 
+/obj/machinery/chem_dispenser/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(can_insert(AM))
+		if(src.container)
+			return FALSE
+		if(istype(AM,/obj/item))
+			var/obj/item/I = AM
+			if(I.w_class > W_CLASS_SMALL)
+				return FALSE
+		else if(!panel_open)
+			AM.forceMove(src)
+
+			container =  AM
+			AM.pixel_x = x_coord_to_nozzle(16) // put in the middle for now
+			update_icon()
+
+			nanomanager.update_uis(src) // update all UIs attached to src
+			return TRUE
+		else
+			return FALSE
+	return FALSE
+
 /obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob, params) //to be worked on
 
 	if(..())

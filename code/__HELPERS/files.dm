@@ -81,6 +81,14 @@
 				warning("Skipping map [potential] as this is no longer the Christmas season.")
 				binary = null
 				continue
+		if(potential == "Dorf Station/")
+			var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+			var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current date
+			if (MM != 8 && DD != 8) // Dwarf fortress release date
+				message_admins("Skipping map [potential] as this is not the release date of Dwarf Fortress.")
+				warning("Skipping map [potential] as this is not the release date of Dwarf Fortress.")
+				binary = null
+				continue
 		if(potential == "Lamprey/") //Available if the station is wrecked enough
 			var/crew_score = score["crewscore"] //So that we can use this in the admin messaging
 			if(crew_score > -20000)

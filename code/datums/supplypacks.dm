@@ -708,14 +708,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
-	contains = list(/obj/item/clothing/suit/space/grey,
-					/obj/item/clothing/head/helmet/space/grey,
-					/obj/item/weapon/tank/oxygen/red,
+	var/list/basic = list(
+		/obj/item/clothing/suit/space/grey,
+		/obj/item/clothing/head/helmet/space/grey,
+	)
+	var/worker = list(/obj/item/clothing/suit/space/rig/grey)
+	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
+	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
+	contains = list(/obj/item/weapon/tank/oxygen/red,
 					/obj/item/clothing/mask/breath)
-	cost = 100
+	cost = 200
 	containertype = /obj/structure/closet/crate/basic
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
+
+/datum/supply_packs/grey_supply/New()
+	selection_from = list(basic, worker, researcher, soldier)
 
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
@@ -2050,6 +2058,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 120
 	containertype = /obj/structure/closet/crate/sci
 	containername = "robot maintenance equipment crate"
+	group = "Science"
+
+/datum/supply_packs/grey_extract
+	name = "Grey slime extracts"
+	contains = list(/obj/item/slime_extract/grey,
+					/obj/item/slime_extract/grey
+					)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/scisec
+	containername = "gret slime extract crate"
+	access = list(access_science)
 	group = "Science"
 
 /datum/supply_packs/suspension_gen

@@ -225,7 +225,7 @@
 		setDensity(FALSE)
 		invisibility = 101
 		kill_count = 0
-		var/obj/effect/overlay/stickyweb/web = new (A.loc)
+		var/obj/effect/rooting_trap/stickyweb/web = new (A.loc)
 		web.stick_to(A)
 		var/mob/living/L = A
 		L.take_overall_damage(damage,0)

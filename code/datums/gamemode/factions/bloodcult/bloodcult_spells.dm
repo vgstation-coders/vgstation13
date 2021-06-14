@@ -363,3 +363,45 @@ var/list/arcane_pockets = list()
 		hud_state = "cult_pocket_full"
 		connected_button.overlays.len = 0
 		connected_button.MouseExited()
+
+
+///////////////////////////////ASTRAL PROJECTION SPELLS/////////////////////////////////////
+
+
+/spell/astral_return
+	name = "Re-enter Body"
+	desc = "End your astral projection and re-awaken inside your body. If used while tangible you might spook on-lookers, so be mindful."
+	user_type = USER_TYPE_CULT
+	hud_state = "astral_return"
+	override_base = "cult"
+	charge_max = 0
+	spell_flags = 0
+	range = 0
+
+/spell/astral_return/choose_targets(var/mob/user = usr)
+	return list(user)
+
+/spell/astral_return/cast(var/list/targets, var/mob/user)
+	var/mob/living/simple_animal/astral_projection/astral = user
+	astral.death()//pretty straightforward isn't it?
+
+/spell/astral_toggle
+	name = "Toggle Tangibility"
+	desc = "Turn into a visible copy of your body, able to speak and bump into doors. But note that the slightest source of damage will dispel your astral projection altogether."
+	user_type = USER_TYPE_CULT
+	charge_max = 50//relatively short, but still there to prevent too much spamming in/out of tangibility
+	hud_state = "astral_toggle"
+	override_base = "cult"
+	spell_flags = 0
+	range = 0
+
+/spell/astral_toggle/choose_targets(var/mob/user = usr)
+	return list(user)
+
+/spell/astral_toggle/cast(var/list/targets, var/mob/user)
+	var/mob/living/simple_animal/astral_projection/astral = user
+	astral.toggle_tangibility()
+	if (astral.tangibility)
+		desc = "Turn back into an invisible projection of your soul."
+	else
+		desc = "Turn into a visible copy of your body, able to speak and bump into doors. But note that the slightest source of damage will dispel your astral projection altogether."

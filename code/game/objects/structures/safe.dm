@@ -12,43 +12,56 @@ FLOOR SAFES
 	icon_state = "safe"
 	anchored = 1
 	density = 1
+	layer = MACHINERY_LAYER
 	var/open = 0		//is the safe open?
 	var/tumbler_1_pos	//the tumbler position- from 0 to 72
 	var/tumbler_1_open	//the tumbler position to open at- 0 to 72
 	var/tumbler_2_pos
 	var/tumbler_2_open
 	var/dial = 0		//where is the dial pointing?
-	var/space = 0		//the combined w_class of everything in the safe
-	var/maxspace = 48	//the maximum combined w_class of stuff in the safe
+	var/storage_capacity = 30
 
+	var/feedback = ""
+
+	var/choices = list(
+		list("Rotate Clockwise", "radial_increment"),
+		list("Rotate Counter-Clockwise", "radial_decrement"),
+		)
 
 /obj/structure/safe/New()
-	tumbler_1_pos = rand(0, 71)
-	tumbler_1_open = rand(2, 71)
-
-	tumbler_2_pos = rand(0, 71)
-	tumbler_2_open = rand(2, 71)
+	..()
+	initialize()
 
 /obj/structure/safe/initialize()
-	for(var/obj/item/I in loc)
-		if(space >= maxspace)
-			return
-		if(I.w_class + space <= maxspace)
-			space += I.w_class
-			I.forceMove(src)
+	randomize_tumblers()
+	store()
 
-/obj/structure/safe/proc/check_unlocked(mob/user as mob, canhear)
-	if(user && canhear)
-		if(tumbler_1_pos == tumbler_1_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tonk", "krunk", "plunk")] from [src].</span>")
-		if(tumbler_2_pos == tumbler_2_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tink", "krink", "plink")] from [src].</span>")
+/obj/structure/safe/proc/randomize_tumblers()//avoiding values too close to 0 or 72 to prevent uncrackable safes
+	tumbler_1_open = rand(3, 69)
+	tumbler_2_open = rand(3, 69)
+
+/obj/structure/safe/proc/store()
+	tumbler_1_pos = rand(0, 71)
+	tumbler_2_pos = rand(0, 71)
+	var/i = 0
+	for(var/obj/item/I in loc)
+		I.forceMove(src)
+		i++
+		if (i >= storage_capacity)
+			break
+
+/obj/structure/safe/proc/check_unlocked(var/mob/user, canhear)
 	if(tumbler_1_pos == tumbler_1_open && tumbler_2_pos == tumbler_2_open)
 		if(user)
-			visible_message("<b>[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]!</b>")
+			feedback += " <span class='danger'>*[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]*</span>"
+		open = TRUE
+		var/turf/T = get_turf(src)
+		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
+		for (var/atom/movable/AM in contents)
+			AM.forceMove(T)
+		icon_state = "[initial(icon_state)]-open"
 		return 1
 	return 0
-
 
 /obj/structure/safe/proc/decrement(num)
 	num -= 1
@@ -56,13 +69,20 @@ FLOOR SAFES
 		num = 71
 	return num
 
-
 /obj/structure/safe/proc/increment(num)
 	num += 1
 	if(num > 71)
 		num = 0
 	return num
 
+/obj/structure/safe/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(!user.client)
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/structure/safe/update_icon()
 	if(open)
@@ -70,99 +90,113 @@ FLOOR SAFES
 	else
 		icon_state = initial(icon_state)
 
-
-/obj/structure/safe/attack_hand(mob/user,params,proximity)
-	user.set_machine(src)
-
-	var/dat = {"<center>
-<a href='?src=\ref[src];open=1'>[open ? "Close" : "Open"] [src]</a> | <a href='?src=\ref[src];decrement=1'>-</a> [dial * 5] <a href='?src=\ref[src];increment=1'>+</a>"}
-	if(open)
-		dat += "<table>"
-		for(var/i = contents.len, i>=1, i--)
-			var/obj/item/P = contents[i]
-			dat += "<tr><td><a href='?src=\ref[src];retrieve=\ref[P]'>[P.name]</a></td></tr>"
-		dat += "</table></center>"
-	user << browse("<html><head><title>[name]</title></head><body>[dat]</body></html>", "window=safe;size=350x300")
-	onclose(user, "safe")
-
-
-/obj/structure/safe/Topic(href, href_list)
-	if(!ishigherbeing(usr))
+/obj/structure/safe/attack_hand(var/mob/user,params,proximity)
+	if (open)
+		if(alert("Close the safe and reset the dial and tumblers?","Close Safe","Do it","Cancel") == "Do it")
+			if (radial_check(user))
+				store()
+				var/turf/T = get_turf(src)
+				playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(T, 'sound/machines/dial_reset.ogg', 50, 1)
+				icon_state = initial(icon_state)
+				open = FALSE
 		return
-	var/mob/living/carbon/human/user = usr
+
+	recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, .proc/radial_check, user), recursive = TRUE))
+
+
+/obj/structure/safe/proc/recursive_dial(var/mob/user, var/datum/radial_menu/radial)
+	if (!radial)
+		return
+
+	var/task = radial.selected_choice
+
+	if (!task || !Adjacent(user))
+		radial.finish()
+		return
+
+	turn_dial(user, task)
+
+	if (!open && Adjacent(user))
+		radial.do_it_again()
+		recursive_dial(user, radial)
+	else
+		radial.finish()
+
+/obj/structure/safe/proc/turn_dial(var/mob/user, var/task)
 	var/canhear = 0
-	if(Adjacent(user) && user.find_held_item_by_type(/obj/item/clothing/accessory/stethoscope))
+	if(user.find_held_item_by_type(/obj/item/clothing/accessory/stethoscope))
 		canhear = 1
 
-	if(href_list["open"])
-		if(check_unlocked())
-			to_chat(user, "<span class='notice'>You [open ? "close" : "open"] [src].</span>")
-			open = !open
-			update_icon()
-			updateUsrDialog()
-			return
-		else
-			to_chat(user, "<span class='notice'>You can't [open ? "close" : "open"] [src], the lock is engaged!</span>")
-			return
-
-	if(href_list["decrement"])
-		dial = decrement(dial)
-		if(dial == tumbler_1_pos + 1 || dial == tumbler_1_pos - 71)
-			tumbler_1_pos = decrement(tumbler_1_pos)
-			if(canhear)
-				to_chat(user, "<span class='notice'>You hear a [pick("clack", "scrape", "clank")] from [src].</span>")
-			if(tumbler_1_pos == tumbler_2_pos + 37 || tumbler_1_pos == tumbler_2_pos - 35)
-				tumbler_2_pos = decrement(tumbler_2_pos)
+	switch (task)
+		if ("Rotate Clockwise")
+			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			dial = increment(dial)
+			feedback = "<span class='notice'>You turn the dial up to [dial * 5].</span>"
+			if(dial == tumbler_1_pos - 1 || dial == tumbler_1_pos + 71)
+				tumbler_1_pos = increment(tumbler_1_pos)
 				if(canhear)
-					to_chat(user, "<span class='notice'>You hear a [pick("click", "chink", "clink")] from [src].</span>")
-			check_unlocked(user, canhear)
-		updateUsrDialog()
-		return
+					if(tumbler_1_pos == tumbler_1_open)
+						feedback += " <span class='bold'>*[pick("tonk", "krunk", "plunk")]*</span>"
+						user.playsound_local(src, 'sound/machines/dial_tick_alt.ogg', 35, 1)
+					else
+						feedback += " <span class='italics'>*[pick("clack", "scrape", "clank")]*</span>"
+				if(tumbler_1_pos == tumbler_2_pos - 37 || tumbler_1_pos == tumbler_2_pos + 35)
+					tumbler_2_pos = increment(tumbler_2_pos)
+					if(canhear)
+						if(tumbler_2_pos == tumbler_2_open)
+							feedback += " <span class='bold'>*[pick("tink", "krink", "plink")]*</span>"
+							user.playsound_local(src, 'sound/machines/dial_tick_alt.ogg', 35, 1)
+						else
+							feedback += " <span class='italics'>*[pick("click", "chink", "clink")]*</span>"
+				check_unlocked(user, canhear)
+			to_chat(user, feedback)
 
-	if(href_list["increment"])
-		dial = increment(dial)
-		if(dial == tumbler_1_pos - 1 || dial == tumbler_1_pos + 71)
-			tumbler_1_pos = increment(tumbler_1_pos)
-			if(canhear)
-				to_chat(user, "<span class='notice'>You hear a [pick("clack", "scrape", "clank")] from [src].</span>")
-			if(tumbler_1_pos == tumbler_2_pos - 37 || tumbler_1_pos == tumbler_2_pos + 35)
-				tumbler_2_pos = increment(tumbler_2_pos)
+		if ("Rotate Counter-Clockwise")
+			playsound(loc, 'sound/machines/dial_tick.ogg', 25, 1)
+			dial = decrement(dial)
+			feedback = "<span class='notice'>You turn the dial down to [dial * 5].</span>"
+			if(dial == tumbler_1_pos + 1 || dial == tumbler_1_pos - 71)
+				tumbler_1_pos = decrement(tumbler_1_pos)
 				if(canhear)
-					to_chat(user, "<span class='notice'>You hear a [pick("click", "chink", "clink")] from [src].</span>")
-			check_unlocked(user, canhear)
-		updateUsrDialog()
-		return
+					if(tumbler_1_pos == tumbler_1_open)
+						feedback += " <span class='bold'>*[pick("tonk", "krunk", "plunk")]*</span>"
+					else
+						feedback += " <span class='italics'>*[pick("clack", "scrape", "clank")]*</span>"
+				if(tumbler_1_pos == tumbler_2_pos + 37 || tumbler_1_pos == tumbler_2_pos - 35)
+					tumbler_2_pos = decrement(tumbler_2_pos)
+					if(canhear)
+						if(tumbler_2_pos == tumbler_2_open)
+							feedback += " <span class='bold'>*[pick("tink", "krink", "plink")]*</span>"
+						else
+							feedback += " <span class='italics'>*[pick("click", "chink", "clink")]*</span>"
+				check_unlocked(user, canhear)
+			to_chat(user, feedback)
 
-	if(href_list["retrieve"])
-		user << browse("", "window=safe") // Close the menu
+//Byond randomly breaks radial menus after some time it seems. This workaround will replace the menu without interrupting the player's actions.
+/obj/structure/safe/proc/unclog(var/mob/user, var/datum/radial_menu/radial)
+	if (radial.selected_choice)
+		turn_dial(user, radial.selected_choice)
+		radial.finish()
+		recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe",recursive = TRUE))
+	else
+		radial.finish()
 
-		var/obj/item/P = locate(href_list["retrieve"]) in src
-		if(open)
-			if(P && in_range(src, user))
-				user.put_in_hands(P)
-				updateUsrDialog()
-
-
-/obj/structure/safe/attackby(obj/item/I as obj, mob/user as mob)
+/obj/structure/safe/attackby(var/obj/item/I, var/mob/user)
 	if(open)
-		if(I.w_class + space <= maxspace)
-			if(user.drop_item(I, src))
-				space += I.w_class
-				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
-				updateUsrDialog()
-			return
-		else
-			to_chat(user, "<span class='notice'>[I] won't fit in [src].</span>")
-			return
+		if (I.is_screwdriver(user))
+			if(alert("Randomize the tumblers' unlocked positions?","Randomize Tumblers","Do it","Cancel") == "Do it")
+				randomize_tumblers()
+				playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+				return
+		var/turf/T = get_turf(src)
+		user.drop_item(I, T)
 	else
 		if(istype(I, /obj/item/clothing/accessory/stethoscope))
-			to_chat(user, "Hold [I] in one of your hands while you manipulate the dial.")
-			return
-
+			recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, .proc/radial_check, user), recursive = TRUE))
 
 obj/structure/safe/blob_act()
 	return
-
 
 obj/structure/safe/ex_act(severity)
 	return

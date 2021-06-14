@@ -85,6 +85,29 @@
 /*******************
 *   Item Adding
 ********************/
+
+/obj/machinery/microwave/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(holdingitems && holdingitems.len >= limit)
+		return FALSE
+	else if(istype(AM, /obj/item/weapon/storage/bag/plants))
+		var/obj/item/weapon/storage/bag/B = AM
+		for (var/obj/item/weapon/reagent_containers/food/snacks/G in AM.contents)
+			B.remove_from_storage(G,src)
+			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
+				break
+	else if(is_type_in_list(AM,acceptable_items))
+		if (istype(AM,/obj/item/stack))
+			var/obj/item/stack/ST = AM
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
+		else
+			AM.forceMove(src)
+	else
+		return FALSE
+	src.updateUsrDialog()
+	return TRUE
+
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
 		if(src.broken == 2 && O.is_screwdriver(user)) // If it's broken and they're using a screwdriver
@@ -156,12 +179,14 @@
 
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
-		if (istype(O,/obj/item/stack) && O:amount>1)
-			new O.type (src)
-			O:use(1)
-			user.visible_message( \
-				"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
-				"<span class='notice'>You add one of [O] to \the [src].</span>")
+		if (istype(O,/obj/item/stack))
+			var/obj/item/stack/ST = O
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
+				user.visible_message( \
+					"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
+					"<span class='notice'>You add one of [O] to \the [src].</span>")
 		else
 		//	user.before_take_item(O)	//This just causes problems so far as I can tell. -Pete
 			if(user.drop_item(O, src))

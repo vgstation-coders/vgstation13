@@ -1,6 +1,6 @@
 /mob/living/clickbot
 	name = "pathfinder"
-	desc = "A small robot. used for traversing derelict stations in search of valuables"
+	desc = "A small robot used for traversing derelict stations in search of valuables."
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "spiderbot-chassis"
 	var/list/path = list()

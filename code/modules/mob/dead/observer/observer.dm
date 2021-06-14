@@ -416,6 +416,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if ("Stay in body")
 				return
 
+	if (istype(src,/mob/living/simple_animal/astral_projection))
+		qdel(src)
+		return
+
 	if(src.health < 0 && stat != DEAD) //crit people
 		succumb_proc(0)
 		ghostize(1)

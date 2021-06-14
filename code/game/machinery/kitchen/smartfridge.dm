@@ -13,6 +13,7 @@
 	idle_power_usage = 5
 	active_power_usage = 100
 	flags = NOREACT
+	source_temperature = T0C + 4
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
 	var/list/datum/fridge_pile/piles = list()
@@ -104,6 +105,16 @@
 	for(var/ac_type in accepted_types)
 		if(istype(O, ac_type))
 			return 1
+
+/obj/machinery/smartfridge/thermal_energy_transfer()
+	return -75 //slow
+
+/obj/machinery/smartfridge/process()
+	if(stat & (NOPOWER|BROKEN) || !anchored)
+		return
+
+	for(var/obj/item/I in contents)
+		I.attempt_heating(src)
 
 /obj/machinery/smartfridge/seeds
 	name = "\improper MegaSeed Servitor"
@@ -354,6 +365,28 @@
 	. = ..()
 	if(.)
 		update_nearby_tiles()
+
+/obj/machinery/smartfridge/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if((stat & NOPOWER) || (contents.len >= MAX_N_OF_ITEMS))
+		return FALSE
+	if(accept_check(AM))
+		piles = sortList(piles)
+		AM.forceMove(src)
+		insert_item(AM)
+		return TRUE
+	else if(istype(AM,/obj/item/weapon/storage/bag))
+		var/obj/item/weapon/storage/bag/B = AM
+		var/objects_loaded = 0
+		for(var/obj/G in B.contents)
+			if(!accept_check(G))
+				continue
+			if(!B.remove_from_storage(G, src))
+				continue
+			insert_item(G)
+			objects_loaded++
+		if(objects_loaded)
+			return TRUE			
+	return FALSE
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())

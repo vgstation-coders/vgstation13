@@ -469,6 +469,17 @@ var/global/list/paper_folding_results = list ( \
 	else
 		return ..()
 
+
+/obj/item/weapon/paper/proc/sudokize(var/color)
+	var/list/sudokus = file2list("data/sudoku.txt")
+	info = "<style>\
+	td{width: 35px;height: 35px;border: 1px solid black;text-align: center;vertical-align: middle;font-family:Verdana, sans;color:[color];font-weight: bold;}\
+	table{border: 3px solid black;}\
+	</style>\
+	<table cellpadding='0' cellspacing='0'>[pick(sudokus)]</table>"
+	updateinfolinks()
+	update_icon()
+
 /*
  * Premade paper
  */

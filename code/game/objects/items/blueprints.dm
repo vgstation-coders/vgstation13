@@ -55,7 +55,7 @@
 these cannot rename rooms that are in by default BUT can rename rooms that are created via blueprints/permit  */
 /obj/item/blueprints/construction_permit
 	name = "construction permit"
-	desc = "An electronic permit designed to register a room for the use of APC and air alarms"
+	desc = "An electronic permit designed to register a room for the use of APC and air alarms."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "permit"
 
@@ -508,7 +508,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 					active_engines++
 				else if (D.retard_checks() && D.try_connect())
 					active_engines++
-					
+
 	if(active_engines < 2 || area_size/active_engines > CUSTOM_SHUTTLE_TILES_PER_ENGINE) // 1 engine per 15 tiles, with a minimum of 2 engines.
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Insufficient engine count.</span>")
 		to_chat(user, "<span class = 'notice'> Detected [active_engines] of [max(2, Ceiling(area_size/CUSTOM_SHUTTLE_TILES_PER_ENGINE))] engines required for a [area_size] square meter shuttle.<br>1 engine required for every [CUSTOM_SHUTTLE_TILES_PER_ENGINE] square meters, 2 engines minimum.</span>")

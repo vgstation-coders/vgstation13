@@ -203,6 +203,32 @@
 
 	return add_to(O, user)
 
+/obj/machinery/processor/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(src.processing || is_full())
+		return FALSE
+	if(istype(AM, /obj/item/weapon/storage/bag/plants))
+		var/obj/item/weapon/storage/bag/plants/bag = AM
+		var/items_transferred = 0
+		for(var/obj/item/item in bag.contents)
+			var/datum/food_processor_process/recipe = select_recipe(item)
+			if (!recipe)
+				continue
+			bag.remove_from_storage(item,src)
+			items_transferred++
+		if(items_transferred == 0 && !is_full())
+			return FALSE
+	else
+		if(isliving(AM))
+			var/mob/living/L = AM
+			if(!L.lying)
+				return FALSE
+		var/datum/food_processor_process/P = select_recipe(AM)
+		if (!P)
+			return FALSE
+		AM.forceMove(src)
+		return TRUE
+	return FALSE
+
 /obj/machinery/processor/proc/add_to(var/atom/movable/A, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
@@ -287,7 +313,7 @@
 /obj/machinery/processor/proc/fill(var/obj/item/weapon/storage/bag/plants/bag, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
-		return
+		return 1
 	var/items_transferred = 0
 	for(var/obj/item/item in bag.contents)
 		if(is_full())
@@ -303,3 +329,4 @@
 		items_transferred++
 	if(items_transferred == 0 && !is_full())
 		to_chat(user, "<span class='warning'>You can't process anything in \the [bag].</span>")
+		return 1

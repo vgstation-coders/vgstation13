@@ -170,19 +170,23 @@
 /obj/item/proc/suicide_act(mob/user)
 	return
 
+/proc/wclass2text(w_class)
+	switch(w_class)
+		if(W_CLASS_TINY)
+			return "tiny"
+		if(W_CLASS_SMALL)
+			return "small"
+		if(W_CLASS_MEDIUM)
+			return "normal-sized"
+		if(W_CLASS_LARGE)
+			return "bulky"
+		if(W_CLASS_HUGE to INFINITY)
+			return "huge"
+
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
-		switch(w_class)
-			if(W_CLASS_TINY)
-				size = "tiny"
-			if(W_CLASS_SMALL)
-				size = "small"
-			if(W_CLASS_MEDIUM)
-				size = "normal-sized"
-			if(W_CLASS_LARGE)
-				size = "bulky"
-			if(W_CLASS_HUGE to INFINITY)
-				size = "huge"
+		size = wclass2text(w_class)
+
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (gender == PLURAL)
@@ -1388,8 +1392,7 @@ var/global/list/image/blood_overlays = list()
 				temp_contents -= src
 				temp_contents.Insert(temp_index, src)
 				storageobj.contents = temp_contents
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
@@ -1399,8 +1402,7 @@ var/global/list/image/blood_overlays = list()
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 	if(!istype(over_object, /obj/abstract/screen/inventory))
 		return ..()
@@ -1450,6 +1452,12 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/is_multitool(var/mob/user)
 	return FALSE
+
+/obj/item/proc/mannequin_equip(var/obj/structure/mannequin/mannequin,var/slot,var/hand_slot)
+	return
+
+/obj/item/proc/mannequin_unequip(var/obj/structure/mannequin/mannequin)
+	return
 
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)

@@ -106,7 +106,7 @@ var/list/station_holomaps = list()
 			watching_mob = user
 			flick("station_map_activate", src)
 			watching_mob.client.images |= holomap_datum.station_map
-			watching_mob.callOnFace["\ref[src]"] = "checkPosition"
+			watching_mob.lazy_register_event(/lazy_event/on_face, src, /obj/machinery/station_map/proc/checkPosition)
 			if(bogus)
 				to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
 			else
@@ -143,7 +143,7 @@ var/list/station_holomaps = list()
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
 				M.client.images -= holomap_datum.station_map
-		watching_mob.callOnFace -= "\ref[src]"
+		watching_mob.lazy_unregister_event(/lazy_event/on_face, src, /obj/machinery/station_map/proc/checkPosition)
 	watching_mob = null
 	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
@@ -417,7 +417,7 @@ var/list/station_holomaps = list()
 				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 				watching_mobs |= user
 				user.client.images |= watcher_maps["\ref[user]"]
-				user.callOnFace["\ref[src]"] = "checkPosition"
+				user.lazy_register_event(/lazy_event/on_face, src, /obj/machinery/station_map/proc/checkPosition)
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
 
@@ -432,7 +432,7 @@ var/list/station_holomaps = list()
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.callOnFace -= "\ref[src]"
+				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/machinery/station_map/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -442,7 +442,7 @@ var/list/station_holomaps = list()
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.callOnFace -= "\ref[src]"
+			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/machinery/station_map/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user

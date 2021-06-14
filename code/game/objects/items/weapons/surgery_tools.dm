@@ -33,7 +33,7 @@
 
 /obj/item/tool/hemostat
 	name = "hemostat"
-	desc = "You think you have seen this before."
+	desc = "You think you've seen this before."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "hemostat"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
@@ -100,7 +100,7 @@
 /*
 /obj/item/tool/cautery/laser/old //unused laser cautery. For the laser scalpel
 	name = "laser cautery"
-	desc = "A laser cautery"
+	desc = "A laser cautery."
 	icon_state = "lasercautery_old"
 	item_state = "laserscalpel2old"
 	force = 12.0

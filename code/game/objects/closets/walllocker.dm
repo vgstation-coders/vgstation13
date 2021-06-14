@@ -20,7 +20,7 @@
 
 /obj/structure/closet/walllocker/emerglocker
 	name = "emergency locker"
-	desc = "A wall mounted locker with emergency supplies"
+	desc = "A wall mounted locker with emergency supplies."
 	var/list/spawnitems = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/clothing/mask/breath,/obj/item/tool/crowbar)
 	var/amount = 3 // spawns each items X times.
 	icon_state = "emerg"
@@ -56,7 +56,7 @@
 
 /obj/structure/closet/walllocker/defiblocker
 	name = "emergency defibrillator locker"
-	desc = "A wall mounted locker with a handheld defibrillator"
+	desc = "A wall mounted locker with a handheld defibrillator."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "medical_wall"
 	icon_opened = "medical_wall_open"

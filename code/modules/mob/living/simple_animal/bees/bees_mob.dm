@@ -8,68 +8,6 @@
 #define BOREDOM_TO_RETURN	30//once reached, the bee will head back to its hive
 
 #define EXHAUSTION_TO_DIE	300//once reached, the bee will begin to die
-#define MAX_BEES_PER_SWARM	20//explicit
-
-/*
-
-> bee corpses
-> bee mob
-> bee presets
-
-*/
-
-//////////////////////BEE CORPSES///////////////////////////////////////
-
-/obj/effect/decal/cleanable/bee
-	name = "dead bee"
-	desc = "This one stung for the last time."
-	gender = PLURAL
-	icon = 'icons/obj/apiary_bees_etc.dmi'
-	icon_state = "bee_dead"
-	anchored = 0
-	mouse_opacity = 1
-	plane = LYING_MOB_PLANE
-
-/obj/effect/decal/cleanable/bee/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
-	..()
-	if (isnum(color) && color > 0)
-		src.icon_state = "bees0"
-		var/failsafe = min(color,30)
-		for (var/i = 1 to failsafe)
-			var/image/I = image(icon,icon_state)
-			I.pixel_x = rand(-10,10)
-			I.pixel_y = rand(-4,4)
-			I.dir = pick(cardinal)
-			overlays += I
-		color = null
-	else
-		var/image/I = image(src.icon,src.icon_state)
-		I.pixel_x = rand(-10,10)
-		I.pixel_y = rand(-4,4)
-		I.dir = pick(cardinal)
-
-		for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
-			if (corpse != src)
-				corpse.overlays += I
-				qdel(src)
-				return
-			else
-				icon_state = "bees0"
-				overlays += I
-
-/obj/effect/decal/cleanable/bee/queen_bee
-	name = "dead queen bee"
-	icon_state = "queen_bee_dead"
-
-/obj/effect/decal/cleanable/bee/atom2mapsave()
-	icon_state = initial(icon_state)
-	if (overlays.len > 0)
-		color = overlays.len//a bit hacky but hey
-	. = ..()
-
-
-//////////////////////BEE MOB///////////////////////////////////////
-
 
 var/bee_mobs_count = 0
 
@@ -83,11 +21,12 @@ var/bee_mobs_count = 0
 	size = SIZE_TINY
 	can_butcher = 0
 
-	var/updateState = 0//if set to 1, the bee mob will check if it should split based on its bee datums' intents
-	var/state = BEE_ROAMING//this controls the bee's current behaviour
+	var/intent_change = 0//if set to 1, the bee mob will check if it should split based on its bee datums' intents
+	var/intent = BEE_ROAMING//this controls the bee's current behaviour
 	var/atom/destination = null
 	var/list/bees = list()
 	var/mob/target = null
+	var/turf/target_turf = null
 	var/current_physical_damage = 0
 	var/current_poison_damage = 0
 	var/obj/machinery/apiary/home = null
@@ -119,6 +58,8 @@ var/bee_mobs_count = 0
 	meat_type = 0
 
 	held_items = list()
+
+///////////////////////////////Basic Procs//////////////////////////////////
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
 	..()
@@ -270,344 +211,149 @@ var/bee_mobs_count = 0
 	if (bees.len <= 0)
 		qdel(src)
 	updateDamage()
-	update_icon()
 
-
-//CUSTOM PROCS
-/mob/living/simple_animal/bee/proc/addBee(var/datum/bee/B)
-	bees.Add(B)
-	B.mob = src
-	home = B.home
-	if (!bee_species)
-		bee_species = B.species
-		min_oxy = bee_species.min_oxy
-		max_oxy = bee_species.max_oxy
-		min_tox = bee_species.min_tox
-		max_tox = bee_species.max_tox
-		min_co2 = bee_species.min_co2
-		max_co2 = bee_species.max_co2
-		min_n2 = bee_species.min_n2
-		max_n2 = bee_species.max_n2
-		minbodytemp = bee_species.minbodytemp
-		maxbodytemp = bee_species.maxbodytemp
-	updateDamage()
-
-/mob/living/simple_animal/bee/proc/updateDamage()
-	if (bees.len <= 0)
-		return
-
-	var/total_brute = 0
-	var/total_toxic = 0
-	for (var/datum/bee/BEE in bees)
-		total_brute += BEE.damage
-		total_toxic += BEE.toxic
-	current_physical_damage = (total_brute/2)*bee_species.damage_coef//1 regular bee = 0.5 brute; 20 regular bees = 10 brute; 20 mutated(2 damage) bees = 20 brute;
-	current_poison_damage = (bees.len + (total_toxic/bees.len)/100)*bee_species.toxic_coef//1 regular bee = 1 tox; 20 regular bees = 20 tox; 20 intoxicated(100 toxic) bees = 40 tox;
-	update_icon()
-
-/mob/living/simple_animal/bee/proc/panic_attack(mob/damagesource)
-	if (!bee_species.angery)
-		return
-
-	for(var/mob/living/simple_animal/bee/B in range(src,3))
-		if (B.state == BEE_SWARM || B.state == BEE_BUILDING || B.calmed > 0)
-			continue
-
-		//only their friends from the same apiary will answer their call. homeless bees will also help each others.
-		if (B.home == home)
-			B.mood_change(BEE_OUT_FOR_ENEMIES,damagesource)
-
-	if (state == BEE_SWARM || state == BEE_BUILDING || calmed > 0)
-		mood_change(BEE_OUT_FOR_ENEMIES,damagesource)
-
-/mob/living/simple_animal/bee/proc/add_plants(var/list/new_plants)
-	if(!new_plants || new_plants.len <= 0) return
-
-	for (var/obj/machinery/portable_atmospherics/hydroponics/new_plant in new_plants)
-		if (!visited_plants.Find(new_plant))
-			visited_plants.Add(new_plant)
 
 ////////////////////////////////LIFE////////////////////////////////////////
 
 /mob/living/simple_animal/bee/Life()
 	if(timestopped)
 		return 0
-
 	..()
-
 	if (!bees || bees.len <= 0)
 		qdel(src)
 		return
-
 	if (!bee_species.slow && !target)
 		walk(src,0)
+	if(stat == DEAD)
+		death()
+		return
+	//Taking damage from high toxicity
+	if (((current_poison_damage - bees.len)/bees.len*100) > bee_species.toxic_threshold_death)
+		if (prob((((current_poison_damage - bees.len)/bees.len*100)-50)*2))
+			adjustBruteLoss(3)
+		if (bees.len <= 0)
+			return
 
-	if(stat != DEAD)
-		//SUFFERING FROM HIGH TOXICITY
-		if (((current_poison_damage - bees.len)/bees.len*100) > bee_species.toxic_threshold_death)
-			if (prob((((current_poison_damage - bees.len)/bees.len*100)-50)*2))
-				adjustBruteLoss(3)
-			if (bees.len <= 0)
-				return
+	//Calming bees
+	var/list/calmers = list(
+		/obj/effect/decal/chemical_puff,
+		/obj/effect/effect/smoke/chem,
+		/obj/effect/effect/water,
+		/obj/effect/effect/foam,
+		/obj/effect/effect/steam,
+		/obj/effect/mist,
+		)
 
-		//SPLITTING THE SWARM DEPENDING ON THEIR INTENT
-		if (updateState)
-			updateState = 0
-			var/list/swarmers = list()
-			var/list/home_goers = list()
-			var/list/pollinaters = list()
-			var/list/fighters = list()
-			var/turf/T = get_turf(src)
+	for(var/this_type in calmers)
+		var/obj/effect/check_effect = locate(this_type) in src.loc
+		if(check_effect && (check_effect.reagents.has_reagent(WATER) || check_effect.reagents.has_reagent(HOLYWATER)))
+			calming()
+			break
 
+	if (calmed > 0)
+		calmed--
+		//Calmed bees will split apart until there's no more than 5 bee per swarm.
+		if(target)
+			target = null
+		if(bees.len > 5)
+			//calm down and spread out a little
+			var/list/bees_to_split = list()
 			for (var/datum/bee/B in bees)
-				if (B.state == BEE_SWARM)
-					swarmers.Add(B)
-				if (B.state == BEE_HEADING_HOME)
-					home_goers.Add(B)
-				if (B.state == BEE_OUT_FOR_PLANTS)
-					pollinaters.Add(B)
-				if (B.state == BEE_OUT_FOR_ENEMIES)
-					fighters.Add(B)
+				if (bees_to_split.len == 0 || prob(33))
+					bees_to_split += B
+					if (bees_to_split.len >= 5)
+						break
+			step_rand(SplitSwarm(bees_to_split,intent))
 
-			if (swarmers.len > 0) // this intent comes from a queen, and thus overrides the intents of every other bee in the swarm
-				mood_change(BEE_SWARM,null,destination)
+		if (!calmed)//wild bees will re-become angry right away
+			for (var/datum/bee/B in bees)
+				if (B.wild)
+					B.intent = BEE_OUT_FOR_ENEMIES
+					intent_change = 1
 
-			if (home_goers.len > 0)
-				if (home_goers.len == bees.len)
-					mood_change(BEE_HEADING_HOME)
+	//A change of intent has been detected among the swarm so we'll split up if needed and re-assess our current main intent
+	if (intent_change)
+		UpdateIntent()
 
-				else
-					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
-					for (var/datum/bee/B in home_goers)
-						B_mob.addBee(B)
-						bees.Remove(B)
-						B_mob.home = home
-						B_mob.updateState = 1
-
-			if (pollinaters.len > 0)
-				if (pollinaters.len == bees.len)
-					mood_change(BEE_OUT_FOR_PLANTS)
-
-				else
-					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
-					for (var/datum/bee/B in pollinaters)
-						B_mob.addBee(B)
-						bees.Remove(B)
-						B_mob.home = home
-						B_mob.updateState = 1
-
-			if (fighters.len > 0)
-				mood_change(BEE_OUT_FOR_ENEMIES)
+	//Making noise
+	if(prob(1))
+		if(prob(50))
+			src.visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
+		playsound(src, 'sound/effects/bees.ogg', min(20 * bees.len, 100), 1)
 
 
-		//CALMING BEES
-		var/list/calmers = list(
-			/obj/effect/decal/chemical_puff,
-			/obj/effect/effect/smoke/chem,
-			/obj/effect/effect/water,
-			/obj/effect/effect/foam,
-			/obj/effect/effect/steam,
-			/obj/effect/mist,
-			)
+	//If there are other bee mobs on our tile we might group up with them
+	for(var/mob/living/simple_animal/bee/B_mob in src.loc)
+		if(B_mob == src)
+			continue
+		//bees don't mix with bees from other hives
+		if(B_mob.home != home)
+			continue
+		//or other species
+		if(B_mob.bee_species != bee_species)
+			continue
+		//no more than 20 bees per swarm to avoid people abusing their damage
+		if(bees.len + B_mob.bees.len > MAX_BEES_PER_SWARM)
+			continue
+		//angry bees will drag other bees along with them
+		if(intent == BEE_OUT_FOR_ENEMIES)
+			if((prob(10) && B_mob.intent == BEE_OUT_FOR_PLANTS) || (prob(60) && B_mob.intent == BEE_OUT_FOR_ENEMIES))
+				MergeSwarms(B_mob)
+		else if((intent == BEE_BUILDING) || (prob(30) && intent != BEE_OUT_FOR_ENEMIES && pollinating <= 0  && B_mob.pollinating <= 0 && intent == B_mob.intent))
+			MergeSwarms(B_mob)
 
-		if (calmed > 0)
-			calmed--
-
-		for(var/this_type in calmers)
-			var/obj/effect/check_effect = locate(this_type) in src.loc
-			if(check_effect && (check_effect.reagents.has_reagent(WATER) || check_effect.reagents.has_reagent(HOLYWATER)))
-				calming()
+	//We might also randomly split up, with increased chance the more bees in the swarm
+	if(bees.len > 1 && pollinating <= 0 && prob(bees.len*2) && intent != BEE_SWARM && intent != BEE_BUILDING && intent != BEE_HEADING_HOME)
+		var/queen = 0
+		for (var/single_B in bees)
+			if (istype(single_B,/datum/bee/queen_bee))
+				queen = 1
 				break
+		if (intent != BEE_ROAMING || !queen)//homeless bees spread out if there's no queen among them
+			step_rand(SplitSwarm(list(pick(bees)),intent))
 
+	///////// Combat ! ////////
 
-	if(stat == CONSCIOUS)
+	if(intent == BEE_OUT_FOR_ENEMIES)
+		target_turf = null
+		if(target && (target in view(src,7)) && target.stat != DEAD)//making sure that we still have our target in sight and breathing
+			target_turf = get_turf(target)
+			wander = 0
+		else//no target? let's find one!
+			FindTarget()
 
-		var/mob/living/carbon/human/M = target
+		if(target_turf)//got a target? let's move toward them now.
+			MoveToTarget()
 
-		//CALMED BEES WON'T REMAIN GROUPED
-		if(calmed > 0)
-			if(target)
-				target = null
-			if(bees.len > 5)
-				//calm down and spread out a little
-				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
-				for (var/i = 1 to rand(1,5))
-					var/datum/bee/B = pick(bees)
-					B_mob.addBee(B)
-					bees.Remove(B)
-					B_mob.calmed = calmed
-					B_mob.state = state
-					B_mob.home = home
-				step_rand(B_mob)
+			if(loc == target_turf)
+				wander = 1
 
-		//ATTACKING TARGET
-		else if(state == BEE_OUT_FOR_ENEMIES && (M in view(src,1)))
-			var/sting_prob = 100
-			if(istype(M))
-				var/obj/item/clothing/worn_suit = M.wear_suit
-				var/obj/item/clothing/worn_helmet = M.head
-				if(worn_suit)
-					var/bio_block = min(worn_suit.armor["bio"],70)
-					var/perm_block = 70-70*worn_suit.permeability_coefficient
-					sting_prob -= max(bio_block,perm_block) // Is your suit sealed? I can't get to 70% of your body.
-				if(worn_helmet)
-					var/bio_block = min(worn_helmet.armor["bio"],30)
-					var/perm_block = 30-30*worn_helmet.permeability_coefficient
-					sting_prob -= max(bio_block,perm_block) // Is your helmet sealed? I can't get to 30% of your body.
-			var/brute_damage = current_physical_damage
-			var/tox_damage = current_poison_damage
-			var/direct = 1 + prob(sting_prob)
-			if (direct < 2)
-				if (prob(bee_species.pierce_chance))
-					brute_damage = brute_damage*bee_species.pierce_damage/100
-					tox_damage = tox_damage*bee_species.pierce_damage/100
-				else
-					direct = 0
-			if (direct)
-				M.apply_damage(current_physical_damage, BRUTE)
-				M.apply_damage(current_poison_damage, TOX)
-				if (direct > 1)
-					M.visible_message("<span class='warning'>\The [src] are stinging \the [M]!</span>", "<span class='warning'>You have been stung by \the [src]!</span>")
-				else
-					M.visible_message("<span class='warning'>\The [src] are stinging \the [M] through their protection!</span>", "<span class='warning'>You have been stung by \the [src] through your protection!</span>")
-				M.flash_pain()
-			else
-				M.visible_message("<span class='notice'>\The [M]'s protection shields them from \the [src]!</span>", "<span class='warning'>Your protection shields you from \the [src]!</span>")
+		//Attacking our current target if it's adjacent
+		if(target in view(src,1))
+			AttackTarget()
 
-		//MAKING NOISE
-		if(prob(1))
-			if(prob(50))
-				src.visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
-			playsound(src, 'sound/effects/bees.ogg', min(20 * bees.len, 100), 1)
+		//bees out for enemies eventually get bored and go back home
+		for (var/datum/bee/B in bees)
+			if (!B.wild)//unless they're "wild"!
+				B.bored++
+				if (B.bored > BOREDOM_TO_RETURN)
+					if (B.home)
+						B.homeCall()
 
+	//////////// Pollinating ! //////////
 
-		//GROUPING WITH OTHER BEES
-		for(var/mob/living/simple_animal/bee/B_mob in src.loc)
-			//sanity check
-			if(B_mob == src)
-				continue
-
-			//bees don't mix with bees from other hives
-			if(B_mob.home != home)
-				continue
-
-			if(B_mob.bee_species != bee_species)
-				continue
-
-			//no more than 20 bees per swarm to avoid people abusing their damage
-			if(bees.len + B_mob.bees.len > MAX_BEES_PER_SWARM)
-				continue
-
-			//angry bees will drag other bees along with them
-			if(state == BEE_OUT_FOR_ENEMIES)
-				if((prob(10) && B_mob.state == BEE_OUT_FOR_PLANTS) || (prob(60) && B_mob.state == BEE_OUT_FOR_ENEMIES))
-					for (var/datum/bee/B in B_mob.bees)
-						addBee(B)
-					B_mob.bees = list()
-					add_plants(B_mob.visited_plants)
-					if(!target)
-						target = B_mob.target
-					qdel(B_mob)
-					updateDamage()
-
-			else if((state == BEE_BUILDING) || (prob(30) && state != BEE_OUT_FOR_ENEMIES && pollinating <= 0  && B_mob.pollinating <= 0 && state == B_mob.state))
-				for (var/datum/bee/B in B_mob.bees)
-					addBee(B)
-				B_mob.bees = list()
-				add_plants(B_mob.visited_plants)
-				qdel(B_mob)
-				updateDamage()
-
-		//SPREADING OUT
-		if(bees.len > 1 && pollinating <= 0 && prob(bees.len*2) && state != BEE_SWARM && state != BEE_BUILDING && state != BEE_HEADING_HOME)
-			var/queen = 0
-			for (var/single_B in bees)
-				if (istype(single_B,/datum/bee/queen_bee))
-					queen = 1
-					break
-			if (state != BEE_ROAMING || !queen)//homeless bees spread out if there's no queen among them
-				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
-				var/datum/bee/B = pick(bees)
-				B_mob.addBee(B)
-				bees.Remove(B)
-				B_mob.calmed = calmed
-				B_mob.mood_change(state,target,home)
-				B_mob.update_icon()
-				B_mob.add_plants(visited_plants)
-				step_rand(B_mob)
-				updateDamage()
-
-		//REACHING FOR MOBS
-		if(state == BEE_OUT_FOR_ENEMIES)
-			var/turf/target_turf = null//we have a target!
-			if(target && (target in view(src,7)) && target.stat != DEAD)
-				target_turf = get_turf(target)
-				wander = 0
-			else//no target? let's find one!
-				target = null
-				var/list/nearbyMobs = list()
-				for(var/mob/living/G in view(src,7))
-					if (G == src) continue
-					if (G.flags & INVULNERABLE) continue
-					/*//Bees will only attack other bees if they're crazy from high toxicity
-					//TODO: Remake/rethink this. Currently they just cascade into killing one another from the same
-					if (istype(G,/mob/living/simple_animal/bee) && (((current_poison_damage - bees.len)/bees.len*100) > 51))
-						var/mob/living/simple_animal/bee/B = G
-						//even then, they won't attack bees from their own hives.
-						if (B.home == home || (home && B.home && B.home.wild && home.wild))
-							continue*/
-					if(istype(G, /mob/living/simple_animal/bee))
-						continue
-					if(istype(G, /mob/living/silicon/robot/mommi)) //Do not bully the crab
-						continue
-					if(istype(G, /mob/living/simple_animal/hostile/lizard) && bee_species.aggressiveness < 50) //natural predator, need to be pretty aggressive to fight them
-						continue
-					if (G.stat != DEAD)
-						nearbyMobs += G
-				if (nearbyMobs.len > 0)
-					target = pick(nearbyMobs)
-					if (target)
-						src.visible_message("<span class='warning'>The bees swarm after [target]!</span>")
-				else
-					for (var/datum/bee/B in bees)
-						B.bored++
-						if (B.bored > BOREDOM_TO_RETURN)
-							if (B.home)
-								if (!B.home.wild)
-									B.homeCall()
-							else
-								mood_change(BEE_ROAMING)
-								for (var/datum/bee/B_single in bees)
-									B_single.bored = 0
-								break
-
-			if(target_turf)//got a target? let's move toward them now.
-				if (bee_species.slow)
-					var/turf/loc_old = loc
-					step_to(src, target_turf)//1 step per Life()
-					if (loc == loc_old)//our path is blocked for whatever reason
-						for (var/datum/bee/B in bees)
-							B.bored++
-							if (B.bored > BOREDOM_TO_RETURN)
-								B.homeCall()
-				else
-					start_walk_to(target, 0, 2)
-
-				if(src.loc == target_turf)
-					wander = 1
-
-		//REACHING FOR FLOWERS
-		if(state == BEE_OUT_FOR_PLANTS && pollinating <= 0)
-			var/turf/target_turf = null
+	if(intent == BEE_OUT_FOR_PLANTS)
+		if (pollinating <= 0)//not yet pollinating
+			target_turf = null
 			if(target_plant && (target_plant in view(src,7)))
 				target_turf = get_turf(target_plant)
 				wander = 0
 			else
 				var/list/nearbyPlants = list()
-				for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(src,2))
+				for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(src,2))//small search radius to more easily control which plants may the bees harvest pollen from
 					if (!H.dead && H.seed && !H.closed_system)
 						nearbyPlants += H
-				nearbyPlants.Remove(visited_plants)
+				nearbyPlants -= visited_plants
 				if (nearbyPlants.len > 0)
 					target_plant = pick(nearbyPlants)
 				else
@@ -624,11 +370,11 @@ var/bee_mobs_count = 0
 							B.fatigue++
 							if (B.fatigue > FATIGUE_TO_RETURN)
 								B.homeCall()
-				if(src.loc == target_turf)
-					visited_plants.Add(target_plant)
+				if(loc == target_turf)
+					add_plants(list(target_plant))
 					pollinating = TIME_TO_POLLINATE
-					target_plant.pollination = DURATION_OF_POLLINATION
-		else if (pollinating > 0)
+					target_plant.pollination = DURATION_OF_POLLINATION//technically the plant gets the benefits immediately
+		else if (pollinating > 0)//currently pollinating
 			pollinating--
 			if (pollinating == 0)
 				for (var/datum/bee/B in bees)
@@ -640,113 +386,285 @@ var/bee_mobs_count = 0
 				target_plant = null
 				wander = 1
 
+//////////////// Going Home ! ////////////////////
 
-		//REACHING FOR HOME
-		if(state == BEE_HEADING_HOME || state == BEE_SWARM)
-			wander = 0
-			var/turf/target_turf = get_turf(home)
-			if(target_turf)
-				if(src.loc == target_turf)
-					if (!home.species || bee_species == home.species)
-						for(var/datum/bee/B in bees)
-							home.enterHive(B)
-						qdel(src)
-					else
-						visible_message("<span class='notice'>A swarm has lost its way.</span>")
-						home = null
-						mood_change(BEE_ROAMING)
-				if (calmed <= 0)
-					step_to(src, target_turf)
-			else
-				visible_message("<span class='notice'>A swarm has lost its way.</span>")
-				home = null
-				mood_change(BEE_ROAMING)
-
-
-		//BEING LOST
-		if(state == BEE_ROAMING)
-			wander = 1
-			for (var/datum/bee/B in bees)
-				B.home = null
+	if(intent == BEE_HEADING_HOME || intent == BEE_SWARM)
+		wander = 0
+		target_turf = get_turf(home)
+		if(target_turf)
+			if(src.loc == target_turf)
+				if (!home.species || bee_species == home.species)
+					for(var/datum/bee/B in bees)
+						home.enterHive(B)
+					qdel(src)
+				else
+					visible_message("<span class='notice'>A swarm has lost its way.</span>")
+					home = null
+					mood_change(BEE_ROAMING)
+			if (calmed <= 0)
+				step_to(src, target_turf)
+		else
+			visible_message("<span class='notice'>A swarm has lost its way.</span>")
 			home = null
-			//if there's a queen among us, let's gather a following
-			var/datum/bee/queen_bee/queen = null
-			var/list/queen_list = list()
-			for (var/D in bees)
-				if (istype(D,/datum/bee/queen_bee))
-					queen_list.Add(D)
-					queen = D
-			if (queen)
-				if (bees.len < MAX_BEES_PER_SWARM)
-					var/turf/T = get_turf(loc)
-					for(var/mob/living/simple_animal/bee/B in range(src,3))
-						if (bee_species == B.bee_species && B.state == BEE_ROAMING && B.loc != T)
-							step_to(B, T)//come closer, the GROUPING segment above should take care of the merging after a moment.
+			mood_change(BEE_ROAMING)
 
-				if (bees.len >= 11)
-				//once there's enough of us, let's find a new home
-					for(var/obj/machinery/apiary/A in range(src,3))
-						if (exile_swarm(A))
-							mood_change(BEE_SWARM,null,A)
-							A.reserve_apiary(src)
-							queen.colonizing = 1
-							update_icon()
-							return
+//////////////// Being Homeless ! ////////////////////
+
+	if(intent == BEE_ROAMING)
+		wander = 1
+		for (var/datum/bee/B in bees)
+			B.home = null
+		home = null
+		//if there's a queen among us, let's gather a following
+		var/datum/bee/queen_bee/queen = null
+		var/list/queen_list = list()
+		for (var/D in bees)
+			if (istype(D,/datum/bee/queen_bee))
+				queen_list.Add(D)
+				queen = D
+		if (queen)//a queen being part of the swarm will keep it alive indefinitely
+			if (bees.len < MAX_BEES_PER_SWARM)
+				var/turf/T = get_turf(loc)
+				for(var/mob/living/simple_animal/bee/B in range(src,3))
+					if (bee_species == B.bee_species && B.intent == BEE_ROAMING && B.loc != T)
+						step_to(B, T)//come closer, the GROUPING segment above should take care of the merging after a moment.
+
+			if (bees.len >= 11)
+			//once there's enough of us, let's find a new home
+				for(var/obj/machinery/apiary/A in range(src,3))
+					if (exile_swarm(A))
+						mood_change(BEE_SWARM,null,A)
+						A.reserve_apiary(src)
+						queen.colonizing = 1
+						update_icon()
+						return
+
+				for (var/datum/bee/queen_bee/QB in queen_list)
+					QB.searching++
+					if (QB.searching>60)
+						//and if there isn't any decent home nearby (after searching for a while)...let's build one!
+						var/list/available_turfs = list()
+						for (var/turf/simulated/floor/T in range(src,2))
+							if(!T.has_dense_content() && !(locate(/obj/structure/wild_apiary) in T))
+								available_turfs.Add(T)
+						if (available_turfs.len>0)
+							building = pick(available_turfs)
+							if (building)
+								mood_change(BEE_BUILDING)
+						break
 
 
-					for (var/datum/bee/queen_bee/QB in queen_list)
-						QB.searching++
-						if (QB.searching>60)
-							//and if there isn't any decent home nearby (after searching for a while)...let's build one!
-							var/list/available_turfs = list()
-							for (var/turf/simulated/floor/T in range(src,2))
-								if(!T.has_dense_content() && !(locate(/obj/structure/wild_apiary) in T))
-									available_turfs.Add(T)
-							if (available_turfs.len>0)
-								building = pick(available_turfs)
-								if (building)
-									mood_change(BEE_BUILDING)
-							break
-
-
-			else
-				for (var/datum/bee/B in bees)
+		else//swarms without a queen will eventually die of exhaustion, unless they're hornets or the produce of infestations
+			for (var/datum/bee/B in bees)
+				if (!B.wild)
 					B.exhaustion++
 					if (B.exhaustion > EXHAUSTION_TO_DIE)
 						adjustBruteLoss(1)
 
-			if (state == BEE_ROAMING && home && home.loc)
-				mood_change(BEE_HEADING_HOME)
+		if (intent == BEE_ROAMING && home && home.loc)
+			mood_change(BEE_HEADING_HOME)
 
 
-		//BUILDING A WILD APIARY
-		if(state == BEE_BUILDING)
-			wander = 0
-			var/datum/bee/queen_bee/queen = null
-			for (var/D in bees)
-				if (istype(D,/datum/bee/queen_bee))
-					queen = D
-			if(queen && building)
-				if (bees.len < MAX_BEES_PER_SWARM)//Gathering some more volunteers.
-					var/turf/T = get_turf(loc)
-					for(var/mob/living/simple_animal/bee/B in range(src,3))
-						if (bee_species == B.bee_species && B.state == BEE_ROAMING && B.loc != T)
-							step_to(B, T)
+	//BUILDING A WILD APIARY
+	if(intent == BEE_BUILDING)
+		wander = 0
+		var/datum/bee/queen_bee/queen = null
+		for (var/D in bees)
+			if (istype(D,/datum/bee/queen_bee))
+				queen = D
+		if(queen && building)
+			if (bees.len < MAX_BEES_PER_SWARM)//Gathering some more volunteers.
+				var/turf/T = get_turf(loc)
+				for(var/mob/living/simple_animal/bee/B in range(src,3))
+					if (bee_species == B.bee_species && B.intent == BEE_ROAMING && B.loc != T)
+						step_to(B, T)
 
-				if (building != loc)
-					step_to(src, building)
-				else
-					var/obj/structure/wild_apiary/W = locate() in building
-					if (W)
-						W.work()
-					else
-						new /obj/structure/wild_apiary(loc,bee_species.prefix)
+			if (building != loc)
+				step_to(src, building)
 			else
-				mood_change(BEE_ROAMING)
+				var/obj/structure/wild_apiary/W = locate() in building
+				if (W)
+					W.work()
+				else
+					new /obj/structure/wild_apiary(loc,bee_species.prefix)
+		else
+			mood_change(BEE_ROAMING)
 
 	update_icon()
 
+///////////////////////////Custom Procs//////////////////////////////////
 
+//Adds a previously created bee datum to our swarm
+/mob/living/simple_animal/bee/proc/addBee(var/datum/bee/B,var/update = TRUE)
+	bees.Add(B)
+	B.mob = src
+	home = B.home
+	if (!bee_species)
+		bee_species = B.species
+		min_oxy = bee_species.min_oxy
+		max_oxy = bee_species.max_oxy
+		min_tox = bee_species.min_tox
+		max_tox = bee_species.max_tox
+		min_co2 = bee_species.min_co2
+		max_co2 = bee_species.max_co2
+		min_n2 = bee_species.min_n2
+		max_n2 = bee_species.max_n2
+		minbodytemp = bee_species.minbodytemp
+		maxbodytemp = bee_species.maxbodytemp
+	if (update)
+		updateDamage()
+
+//updates our damage values and our appearance
+/mob/living/simple_animal/bee/proc/updateDamage()
+	if (bees.len <= 0)
+		return
+
+	var/total_brute = 0
+	var/total_toxic = 0
+	for (var/datum/bee/BEE in bees)
+		total_brute += BEE.damage
+		total_toxic += BEE.toxic
+	current_physical_damage = (total_brute/2)*bee_species.damage_coef//1 regular bee = 0.5 brute; 20 regular bees = 10 brute; 20 mutated(2 damage) bees = 20 brute;
+	current_poison_damage = (bees.len + (total_toxic/bees.len)/100)*bee_species.toxic_coef//1 regular bee = 1 tox; 20 regular bees = 20 tox; 20 intoxicated(100 toxic) bees = 40 tox;
+	update_icon()
+
+//sends all nearby bees too attack an aggressor
+/mob/living/simple_animal/bee/proc/panic_attack(mob/damagesource)
+	if (!bee_species.angery)
+		return
+
+	for(var/mob/living/simple_animal/bee/B in range(src,3))
+		if (B.intent == BEE_SWARM || B.intent == BEE_BUILDING || B.calmed > 0)
+			continue
+		//only their friends from the same apiary will answer their call. homeless bees will also help each others.
+		if (B.home == home)//incidentally this also means ourselves
+			B.mood_change(BEE_OUT_FOR_ENEMIES,damagesource)
+
+//adding a plant to the list of already-pollinated plants so we don't go there again
+/mob/living/simple_animal/bee/proc/add_plants(var/list/new_plants)
+	if(!new_plants || new_plants.len <= 0)
+		return
+	for (var/obj/machinery/portable_atmospherics/hydroponics/new_plant in new_plants)
+		if (!(new_plant in visited_plants))
+			visited_plants += new_plant
+
+//merges the other swarm's bees into ours
+/mob/living/simple_animal/bee/proc/MergeSwarms(var/mob/living/simple_animal/bee/other_swarm)
+	for (var/datum/bee/B in other_swarm.bees)
+		addBee(B)
+	other_swarm.bees = list()
+	add_plants(other_swarm.visited_plants)
+	if(!target)
+		target = other_swarm.target
+	if(!faction)
+		faction = other_swarm.faction
+	qdel(other_swarm)
+	updateDamage()
+
+//create a new swarm from some of our bees (that were previously selected)
+/mob/living/simple_animal/bee/proc/SplitSwarm(var/list/bees_to_split = list(), var/new_intent = BEE_ROAMING)
+	if (bees_to_split.len <= 0)
+		return
+	var/mob/living/simple_animal/bee/new_swarm = new /mob/living/simple_animal/bee(get_turf(src))
+	for (var/datum/bee/B in bees_to_split)
+		new_swarm.addBee(B)
+		bees.Remove(B)
+		new_swarm.calmed = calmed
+		new_swarm.home = home
+		new_swarm.intent = new_intent
+		new_swarm.target = target
+		new_swarm.add_plants(visited_plants)
+		new_swarm.faction = faction
+		new_swarm.updateDamage()
+	updateDamage()
+	return new_swarm
+
+//forget our previous target and try to find a new one
+/mob/living/simple_animal/bee/proc/FindTarget()
+	target = null
+	var/list/nearbyMobs = list()
+	for(var/mob/living/L in view(src,7))
+		if (L == src)
+			continue
+		if (L.flags & INVULNERABLE)
+			continue
+		if(istype(L, /mob/living/simple_animal/bee))
+			continue
+		if(istype(L, /mob/living/silicon/robot/mommi)) //Do not bully the crab
+			continue
+		if(istype(L, /mob/living/simple_animal/hostile/lizard) && !bee_species.wild) //natural predator, need to be pretty aggressive to fight them
+			continue
+		if(faction == "\ref[L]")
+			continue
+		if (L.stat != DEAD)
+			nearbyMobs += L
+	if (nearbyMobs.len > 0)
+		target = pick(nearbyMobs)
+		target_turf = get_turf(target)
+		if (target)
+			var common = BEESPECIES_NORMAL
+			if (bee_species)
+				common = bee_species.common_name
+			if(bees.len <= 1)
+				for (var/D in bees)
+					if (istype(D,/datum/bee/queen_bee))
+						common = "queen [common]"
+				visible_message("<span class='warning'>The [common] flies after [target]!</span>")
+
+			else
+				visible_message("<span class='warning'>The [common]s swarm after [target]!</span>")
+
+/mob/living/simple_animal/bee/proc/MoveToTarget()
+	if (!target_turf)
+		return
+	if (bee_species.slow)
+		step_to(src, target_turf)//1 step per Life()
+	else
+		start_walk_to(target, 0, 2)//fast bees however never stop chasing until their target is either dead or out of sight.
+
+/mob/living/simple_animal/bee/proc/AttackTarget(var/force_pierce = FALSE)
+	if (!target)
+		return
+	if (!Adjacent(target))
+		return
+	var/mob/living/carbon/human/M = target
+	var/sting_prob = 100
+	if(istype(M))
+		var/obj/item/clothing/worn_suit = M.wear_suit
+		var/obj/item/clothing/worn_helmet = M.head
+		if(worn_suit)
+			var/bio_block = min(worn_suit.armor["bio"],70)
+			var/perm_block = 70-70*worn_suit.permeability_coefficient
+			sting_prob -= max(bio_block,perm_block) // Is your suit sealed? I can't get to 70% of your body.
+		if(worn_helmet)
+			var/bio_block = min(worn_helmet.armor["bio"],30)
+			var/perm_block = 30-30*worn_helmet.permeability_coefficient
+			sting_prob -= max(bio_block,perm_block) // Is your helmet sealed? I can't get to 30% of your body.
+	var/brute_damage = current_physical_damage
+	var/tox_damage = current_poison_damage
+	var/sting_quality = BEE_STING_NORMAL
+	if (!prob(sting_prob))
+		if (prob(bee_species.pierce_chance) || force_pierce)
+			sting_quality = BEE_STING_PIERCE
+			brute_damage = brute_damage*bee_species.pierce_damage/100
+			tox_damage = tox_damage*bee_species.pierce_damage/100
+		else
+			sting_quality = BEE_STING_BLOCK
+	switch(sting_quality)
+		if (BEE_STING_BLOCK)
+			M.visible_message("<span class='notice'>\The [M]'s protection shields them from \the [src]!</span>", "<span class='warning'>Your protection shields you from \the [src]!</span>")
+			bee_species.after_sting(sting_quality)
+			return
+		if (BEE_STING_PIERCE)
+			M.visible_message("<span class='warning'>\The [src] are stinging \the [M] through their protection!</span>", "<span class='warning'>You have been stung by \the [src] through your protection!</span>")
+		if (BEE_STING_NORMAL)
+			M.visible_message("<span class='warning'>\The [src] are stinging \the [M]!</span>", "<span class='warning'>You have been stung by \the [src]!</span>")
+	M.apply_damage(current_physical_damage, BRUTE)
+	M.apply_damage(current_poison_damage, TOX)
+	M.flash_pain()
+	bee_species.after_sting(M,sting_quality)//allows species to do extra stuff when a successful sting
+
+//the swarm will navigate to an empty apiary to inhabit (the swarm must include a queen)
 /mob/living/simple_animal/bee/proc/exile_swarm(var/obj/machinery/apiary/A)
 	if (A in apiary_reservation)//another queen has marked this one for herself
 		return 0
@@ -754,21 +672,62 @@ var/bee_mobs_count = 0
 		return 0
 	return 1
 
+//overriding the mood of every bee inside our swarm
 /mob/living/simple_animal/bee/proc/mood_change(var/new_mood,var/new_target=null,var/new_home=null)
 	for(var/datum/bee/B in bees)
-		B.state = new_mood
+		B.intent = new_mood
 		if (new_home)
 			B.home = new_home
-	state = new_mood
+	intent = new_mood
 	if (new_target)
 		target = new_target
 	if (new_home)
 		home = new_home
 
+//will split the swarm, grouping bees depending on what they want to do
+/mob/living/simple_animal/bee/proc/UpdateIntent()
+	intent_change = 0
+	var/list/swarmers = list()
+	var/list/home_goers = list()
+	var/list/pollinaters = list()
+	var/list/fighters = list()
+	var/list/roamers = list()
+	//first let's check what each bee wants to do
+	for (var/datum/bee/B in bees)
+		if (B.intent == BEE_SWARM)
+			swarmers.Add(B)
+		if (B.intent == BEE_HEADING_HOME)
+			home_goers.Add(B)
+		if (B.intent == BEE_OUT_FOR_PLANTS)
+			pollinaters.Add(B)
+		if (B.intent == BEE_OUT_FOR_ENEMIES)
+			fighters.Add(B)
+		if (B.intent == BEE_ROAMING)
+			roamers.Add(B)
+	if (swarmers.len > 0) // this intent comes from a queen, and thus overrides the intents of every other bee in the swarm
+		mood_change(BEE_SWARM,null,destination)
+	else
+		if (home_goers.len > 0)//who wants to go home? obviously only bees that DO have a home can have this intent
+			if (home_goers.len == bees.len)
+				mood_change(BEE_HEADING_HOME)
+			else
+				step_rand(SplitSwarm(home_goers,BEE_HEADING_HOME))
+
+		if (pollinaters.len > 0)//I don't think that can actually happen since they only get that intent when leaving the hive but this might be useful in some edge cases
+			if (pollinaters.len == bees.len)
+				mood_change(BEE_OUT_FOR_PLANTS)
+			else
+				step_rand(SplitSwarm(pollinaters,BEE_OUT_FOR_PLANTS))
+
+		if (fighters.len > 0)//if even one bee wants to fight, the homeless roamers will keep fighting
+			mood_change(BEE_OUT_FOR_ENEMIES)
+
+		else if (roamers.len > 0)//if all the fighters are bored AND homeless we'll calm down and go back to roaming until provoked again
+			mood_change(BEE_ROAMING)
 
 /mob/living/simple_animal/bee/proc/calming()
-	calmed = 6
-	if (state == BEE_OUT_FOR_ENEMIES)
+	calmed = 7
+	if (intent == BEE_OUT_FOR_ENEMIES)
 		src.visible_message("<span class='notice'>The bees calm down!</span>")
 		mood_change(BEE_HEADING_HOME)
 
@@ -780,7 +739,7 @@ var/bee_mobs_count = 0
 	if(bees.len <= 0)
 		return
 
-	var common = "bees"
+	var common = BEESPECIES_NORMAL
 	icon_state = ""
 	if (bee_species)
 		icon_state += bee_species.prefix
@@ -796,7 +755,7 @@ var/bee_mobs_count = 0
 		icon_state += "bees[min(bees.len-queen,10)]"
 
 
-	if (state == BEE_OUT_FOR_ENEMIES)
+	if (intent == BEE_OUT_FOR_ENEMIES)
 		icon_state += "-feral"
 		if (queen)
 			overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state="[bee_species.prefix]queen_bee-feral")
@@ -809,7 +768,7 @@ var/bee_mobs_count = 0
 	//updating name
 	var/prefix = ""
 
-	switch (state)
+	switch (intent)
 		if (BEE_ROAMING)
 			prefix = "homeless "
 		if (BEE_OUT_FOR_ENEMIES)
@@ -828,46 +787,9 @@ var/bee_mobs_count = 0
 
 	else
 		gender = PLURAL
-		name = "swarm of [prefix][common]"
+		name = "swarm of [prefix][common]s"
 
 
-////////////////////////////BEE PRESETS/////////////////////////////////////
-
-/mob/living/simple_animal/bee/adminSpawned/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	var/datum/bee/B = new()
-	addBee(B)
-	update_icon()
-
-/mob/living/simple_animal/bee/adminSpawnedQueen/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	var/datum/bee/queen_bee/B = new()
-	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
-	addBee(B)
-	update_icon()
-
-//BEE-NADE & BEE-ULLET
-/mob/living/simple_animal/bee/angry/New(loc, var/obj/machinery/apiary/new_home, var/spec=BEESPECIES_NORMAL, var/tox=50,var/dam=2)
-	..()
-	var/datum/bee/B = new()
-	B.species = bees_species[spec]
-	B.toxic = tox
-	B.damage = dam
-	addBee(B)
-	mood_change(BEE_OUT_FOR_ENEMIES)
-	updateDamage()
-	update_icon()
-
-//BEE-IEFCASE
-/mob/living/simple_animal/bee/swarm/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	for (var/i = 1 to MAX_BEES_PER_SWARM)
-		var/datum/bee/B = new()
-		B.toxic = 50
-		B.damage = 2
-		addBee(B)
-	mood_change(BEE_OUT_FOR_ENEMIES)
-	update_icon()
 
 #undef TIME_TO_POLLINATE
 #undef DURATION_OF_POLLINATION
@@ -875,5 +797,3 @@ var/bee_mobs_count = 0
 #undef FATIGUE_TO_RETURN
 
 #undef BOREDOM_TO_RETURN
-
-#undef MAX_BEES_PER_SWARM

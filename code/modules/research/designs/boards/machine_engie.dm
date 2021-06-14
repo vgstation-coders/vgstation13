@@ -193,7 +193,7 @@
 
 /datum/design/prism
 	name = "Circuit Design (Optical Prism)"
-	desc = "Allows for the construction of circuit boards used to build an optical Prism"
+	desc = "Allows for the construction of circuit boards used to build an optical prism."
 	id = "prism"
 	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 3)
 	build_type = IMPRINTER

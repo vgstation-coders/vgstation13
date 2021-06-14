@@ -173,7 +173,7 @@ obj/structure/windoor_assembly/Destroy()
 			if(gcDestroyed)
 				return
 			to_chat(user, "<span class='notice'>You cut \the [name] wires!</span>")
-			new /obj/item/stack/cable_coil(get_turf(user), 1)
+			new /obj/item/stack/cable_coil(get_turf(user), 2)
 			wired = FALSE
 			update_name()
 
