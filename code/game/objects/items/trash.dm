@@ -269,3 +269,13 @@ var/list/crushed_cans_cache = list()
 	name = "slag"
 	desc = "Electronics burnt to a crisp."
 	icon_state = "slag"
+
+/obj/item/trash/used_tray
+	name = "dirty tray"
+	icon_state	= "tray_plastic_used"
+	desc = "No nutrition left, just memories."
+
+/obj/item/trash/used_tray2
+	name = "used tray"
+	icon_state	= "tray_plastic2_used"
+	desc = "Whoever said a tray is most useful when it is empty must not have been hungry."

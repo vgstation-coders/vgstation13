@@ -69,6 +69,11 @@
 	desc = "It's got an awful lot of protein for a vegetable."
 	icon_state = "diona_meat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat // Can also be used to make veggie burgers like normal diona meat.
+	name = "nymph meat"
+	desc = "A chunk of meat from a diona nymph. It looks dense and fibrous."
+	icon_state = "nymphmeat"
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	name = "vox meat"
 	desc = "Considering its Avian origin, tastes unsurprisingly like chicken."
