@@ -6568,7 +6568,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit
-	name = "magnetic plump helmet biscuit"
+	name = "special plump helmet biscuit"
 	desc = "This is a finely-prepared plump helmet biscuit. Aside from the usual ingredients of minced plump helmet and well-minced dwarven wheat flour, this particular serving includes a chemical that sticks whoever eats it to the floor, much like magboots."
 	icon_state = "phelmbiscuit"
 	bitesize = 1
