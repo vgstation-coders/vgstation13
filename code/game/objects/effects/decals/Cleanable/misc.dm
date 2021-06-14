@@ -39,6 +39,16 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "flour"
 
+/obj/effect/decal/cleanable/pepper
+	name = "black pepper"
+	desc = "*AAAACHOOO*"
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	reagent = BLACKPEPPER
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "pepper"
+
 /obj/effect/decal/cleanable/greenglow
 	name = "glowing goo"
 	desc = "Jeez. I hope that's not for lunch."
@@ -342,6 +352,25 @@
 	icon_state = "brokendish-persistent"
 
 
+var/list/salts_particle_emitters = list(
+	/obj/effect/rune,
+	/obj/item/weapon/tome,
+	/obj/item/weapon/talisman,
+	/obj/item/weapon/melee/cultblade,
+	/obj/item/weapon/melee/soulblade,
+	/obj/item/clothing/head/culthood,
+	/obj/item/clothing/shoes/cult,
+	/obj/item/clothing/suit/cultrobes,
+	/obj/item/weapon/storage/backpack/cultpack,
+	/obj/item/clothing/head/helmet/space/cult,
+	/obj/item/clothing/suit/space/cult,
+	/obj/item/weapon/bloodcult_pamphlet,
+	/obj/item/weapon/storage/cult,
+	/obj/item/weapon/reagent_containers/food/drinks/cult,
+	/obj/item/weapon/handcuffs/cult,
+	/obj/item/weapon/blood_tesseract
+	)//those atoms will emit particles periodically when salt is placed upon them
+
 /obj/effect/decal/cleanable/salt
 	name = "salt"
 	desc = "Guaranteed to ward off ghouls, ghosts, geists, and low blood pressure."
@@ -350,6 +379,27 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "salt"
 	anchored = 1
+	var/act_delay = 300 SECONDS
+
+/obj/effect/decal/cleanable/salt/New()
+	..()
+	spawn()
+		particleCheck()
+
+	spawn(act_delay)
+		act_delay = 0//stops the recursion of particleCheck()
+		for (var/atom/movable/AM in loc)
+			AM.salt_act()
+
+
+/obj/effect/decal/cleanable/salt/proc/particleCheck()
+	if (loc && !gcDestroyed && act_delay)
+		for (var/atom/movable/AM in loc)
+			if (is_type_in_list(AM, salts_particle_emitters))
+				anim(target = loc, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+				break
+		sleep(rand(1 SECONDS, 3 SECONDS))
+		particleCheck()
 
 /obj/effect/decal/cleanable/salt/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	..()
@@ -384,3 +434,13 @@
 	to_chat(theBorer, "<span class=danger>The salt, it burns!</span>")
 	theBorer.health -= rand(5,25)	//Borers have 20 health
 	theBorer.Stun(50)
+
+/obj/effect/decal/cleanable/salt/holy
+	name = "holy salts"
+	desc = "Blessed salts have been used for centuries as a sacramental."
+	gender = PLURAL
+	reagent = HOLYSALTS
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "holysalt"
+	anchored = 1
+	act_delay = 20 SECONDS

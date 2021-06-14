@@ -75,6 +75,8 @@
 
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
+	var/last_beam_damage = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -362,6 +364,7 @@
 	var/old_corners = corners
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
+	var/old_registered_events = registered_events
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -452,6 +455,7 @@
 		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
+	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
 

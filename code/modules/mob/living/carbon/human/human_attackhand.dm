@@ -263,7 +263,12 @@
 			return M.grab_mob(src)
 
 		if(I_HURT)
-			return M.unarmed_attack_mob(src)
+			var/punch_damage = M.unarmed_attack_mob(src)
+			if (punch_damage)
+				var/punch_zone = get_part_from_limb(M.zone_sel.selecting)
+				if (check_bodypart_bleeding(punch_zone))
+					M.bloody_hands(src,1)
+			return punch_damage
 
 		if(I_DISARM)
 			return M.disarm_mob(src)

@@ -61,6 +61,7 @@
 	. = ..()
 	if(.)
 		regular_hud_updates()
+		standard_damage_overlay_updates()
 	if(!stat && !resting && !locked_to && (ckey == null)) //Behavior mechanisms (om nom :3)
 		if(corgi_status == IDLE)
 			get_target()

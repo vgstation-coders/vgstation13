@@ -551,6 +551,14 @@ proc/sql_sanitize_text(var/text)
 	speech = hewwo_uppercase.Replace(speech, "W")
 	return speech
 
+//Removes all the <img> tags from a string, useful for logs.
+/proc/remove_images(var/dat)
+	if(!dat)
+		return
+	var/static/regex/image_finder = new(@"(<img)[^>]*(>)", "g")
+	dat = image_finder.Replace(dat, "")
+	return dat
+
 /proc/nekospeech(var/speech)
 	if(!speech)
 		return

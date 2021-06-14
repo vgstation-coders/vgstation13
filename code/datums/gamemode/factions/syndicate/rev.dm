@@ -116,7 +116,7 @@
 	for(var/datum/objective/objective in objective_holder.GetObjectives())
 		if(objective.IsFulfilled())
 			remaining_targets--
-			
+
 	if(stage < FACTION_ENDGAME)
 		var/living_revs = 0
 		var/total_valid_living = 0
@@ -159,6 +159,9 @@
 		if(!anyone)
 			stage(FACTION_DEFEATED)
 			command_alert(/datum/command_alert/revolutiontoppled)
+			var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+			if (istype(dynamic_mode))
+				dynamic_mode.update_stillborn_rulesets()
 
 // Called on arrivals and emergency shuttle departure.
 /hook_handler/revs

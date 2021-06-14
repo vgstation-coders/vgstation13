@@ -226,7 +226,7 @@
 			tattoos_names = "none"
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
-		if (isshade(M) && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
+		if (isshade(M) && M.hud_used && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
 			if(!M.gui_icons.soulblade_bgLEFT)
 				M.hud_used.shade_hud()
 
@@ -243,7 +243,7 @@
 		qdel(M.hud_used.cult_Act_display)
 		qdel(M.hud_used.cult_tattoo_display)
 
-/mob/living/carbon/proc/occult_muted()
+/mob/proc/occult_muted()
 	if (checkTattoo(TATTOO_HOLY))
 		return 0
 	if (reagents && reagents.has_reagent(HOLYWATER))

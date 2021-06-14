@@ -107,6 +107,12 @@
 	*/
 	//var/list/sprite_sheets_obj = null
 
+/obj/item/acid_melt()
+	if (acidable())
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+		I.desc = "Looks like this was \a [src] some time ago."
+		qdel(src)
+
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 
@@ -255,28 +261,8 @@
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
 
-/obj/item/attack_paw(mob/user as mob)
-	if (istype(loc, /obj/item/weapon/storage))
-		for(var/mob/M in range(1, loc))
-			if (M.s_active == loc)
-				if (M.client)
-					M.client.screen -= src
-	throwing = FALSE
-	if (loc == user)
-		if(!user.put_in_hand_check(src, user.get_active_hand()))
-			return
-		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(istype(src, /obj/item/clothing) && !src:canremove)
-			return
-		else
-			user.u_equip(src,0)
-	else
-		if(istype(loc, /mob/living))
-			return
-		//user.next_move = max(user.next_move+2,world.time + 2)
-
-	user.put_in_active_hand(src)
-	return
+/obj/item/attack_paw(var/mob/user)
+	attack_hand(user)
 
 // Due to storage type consolidation this should get used more now.
 // I have cleaned it up a little, but it could probably use more.  -Sayu

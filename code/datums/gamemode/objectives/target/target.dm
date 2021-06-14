@@ -58,8 +58,8 @@
 		return TRUE
 	return FALSE
 
-/datum/objective/target/proc/set_target(var/datum/mind/possible_target)
-	if(is_valid_target(possible_target))
+/datum/objective/target/proc/set_target(var/datum/mind/possible_target,var/override = FALSE)
+	if(override || is_valid_target(possible_target))
 		target = possible_target
 		explanation_text = format_explanation()
 		return TRUE

@@ -73,6 +73,206 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.06.12</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the right panel being much smaller than normal (hopefully)</li>
+				<li class="bugfix">You can no longer write in blood as a ghost if the source blood disappeared before you finished writing your message.</li>
+				<li class="bugfix">You can no longer write in blood if there is no blood left on your hands or glove by the time you finish writing your message.</li>
+				<li class="tweak">Ghosts can now only write in blood up to a certain amount of tiles from the original blood source (before they could daisy-chain messages ad nauseam). The max distance depends of the original source&#39;s amount of blood. A drip will only have a radius of 1. Splatters a radius of 2. Gibs a radius of 5. (Same distance as footprints)</li>
+				<li class="tweak">Projectiles now have a 75 percent chance of hitting mobs in cages, as long as the cover is up.</li>
+				<li class="rscadd">Just like artificers can click floors up to 3 tiles away to convert them into cult floors, they can now click space tiles to conjure floors over them. As when done by clicking the spell button, conjuring a tile instead of converting one leads to a longer cooldown.</li>
+				<li class="bugfix">Fixed mapped alien embryos not spawning a dead alien larva. Expect to find a few dead larvas hidden on some maps.</li>
+				<li class="rscadd">All playable mobs now have standardized damage overlays which should help players controlling simple_animals noticing when they&#39;re taking damage.</li>
+				<li class="bugfix">Fixed the brute and oxy damage overlays going away for a second then coming back when dying. Those overlays also now come back instantly when re-entering a corpse.</li>
+				<li class="bugfix">Patched an exploit that allowed players to unload ore boxes using the pop-up window from any distance away or even adjacent but otherwise incapacitated, which apparently allowed a few people to mess with our shaft miner friends.</li>
+				<li class="bugfix">Also fixed ore unloading machines causing all ore boxes in their area to dump everything every second, instead of only those in front of them.</li>
+				<li class="experiment">Dynamic ruleset picking had its pseudo-RNG tweaked to now consider not just the previous round, but all 3 previous rounds, decreasing the odds of a ruleset being picked again in a short timespan. The odds are reduced more if the round was more recent, and if it fired several times in the previous three rounds the odd reductions will stack up. This should help prevent having the same ruleset firing several times in a short timespan.</li>
+				<li class="experiment">Although note that rulesets that fire when the round was already about to end will NOT affect future rounds&#39; ruleset weights.</li>
+				<li class="experiment">Syndicate Traitors, both roundstart, latejoin, and midround, are also always exempt from this weight reduction.</li>
+				<li class="experiment">Primetime rulesets now have lowered threat requirement, which should allow them to actually fire if the pop allows it but the Threat is average. Basically this means that Blob Tuesdays can finally be a thing. Also note that this doesn&#39;t affect low pop (if the threat requirement is 90, it will remain 90 in most cases)</li>
+				<li class="bugfix">The holomap on from the PDA Station Holomap app now properly updates when moving aboard a vehicle.</li>
+				<li class="rscadd">The round end scoreboard now indicates which potions were bought by a wizard.</li>
+				<li class="bugfix">Fixed scoreboard icons either missing or being wrong.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes the mouser fit inside the handgun holster.</li>
+			</ul>
+			<h3 class="author">Jackreturnswithaveangenace updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Fixed an exploitable thing and added dorf mommi spawners to dorf.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Compressed matter implants now only store the activation emote in the memory of the implanter instead of the implanted, as with other traitor implants.</li>
+				<li class="bugfix">RCDs can no longer be used on windows to remove mysterious invulnerable grilles.</li>
+			</ul>
+			<h2 class="date">2021.06.11</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The scoreboard of the previous round can now be checked at any point by clicking the Last Round Information button that is now always available in the top right (until the current round ends)</li>
+			</ul>
+			<h3 class="author">Jackreturnswithaveangenace updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a fully dysfunctional station for dorfmode events. Room for both chilling out in caves and building a functioning station. Includes a derelict ship mapped by BurntDevil.</li>
+			</ul>
+			<h2 class="date">2021.06.09</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added the white chicken suit I sprited back in 2015 and forgot to actually PR all this time. A single costume can be obtained from the AutoDrobe after inserting a coin.</li>
+				<li class="imageadd">Improved the chicken suit and head in-hand icons.</li>
+				<li class="rscadd">Humans have a few new emotes. ok/okay makes an OK sign, thumbup/thumbsup makes a thumbs up, thumbdown/thumbsdown makes a thumbs down, and peace makes a peace sign.</li>
+				<li class="rscadd">Added hand count requirements for those emotes. Having your hands broken or amputated will make you unable to perform them.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">On the most foolish of days of the year, janitors lose their income, toiling for no monetary compensation.</li>
+			</ul>
+			<h2 class="date">2021.06.08</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that caused challengers to spawn with no objectives if their target was the Trader.</li>
+				<li class="rscadd">When cloned you now keep the default language you had when you were scanned.</li>
+			</ul>
+			<h2 class="date">2021.06.07</h2>
+			<h3 class="author">Apogee-dev updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes replicator mommi&#39;s emagged eyes red</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Mature Space Vines (kudzu) will now properly spread when an adjacent door opens or an adjacent wall is dismantled.</li>
+				<li class="bugfix">Fixed Biomass spreading through one-directional windows and firelocks.</li>
+				<li class="bugfix">Fixed a very rare bug (actually I&#39;ve calculated that it had a 4.5 percent chance of occurring which isn&#39;t THAT rare) where the Safe&#39;s tumblers were set in a way that prevented players from ever cracking the Safe open. But this time for real. No really, I&#39;ve tested it with extreme values and all that.</li>
+				<li class="bugfix">Fixed the Atmospheric Alert Computer appearing to be invisible when broken.</li>
+			</ul>
+			<h2 class="date">2021.06.06</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Egun beams now have their alpha reduced proportionally to their damage when they get dispersed by windows.</li>
+				<li class="bugfix">beams no longer lag when firing through a large corridor or into space.</li>
+				<li class="bugfix">Fixed full-tile windows not reducing beam damage. It now does it with the same efficiency as a single directional window.</li>
+				<li class="bugfix">Firing beams straight through a tile featuring directional windows will no longer reduce its damage if the window isn&#39;t oriented toward (or away) from the source of the beam (which means that in most cases, if the beam crosses a tile with a window without intersecting with it, it shouldn&#39;t lose some of its damage)</li>
+				<li class="bugfix">Fixed players losing space parallax upon turning into Shades.</li>
+				<li class="bugfix">Fixed beams not going through windows facing the other way.</li>
+				<li class="bugfix">Fixed beams dealing 0 damage never disappearing.</li>
+			</ul>
+			<h2 class="date">2021.06.05</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed reagent splashing from beakers.</li>
+			</ul>
+			<h2 class="date">2021.06.04</h2>
+			<h3 class="author">Allspice updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Re-add NATO alphabet language to deathsquaddies.</li>
+			</ul>
+			<h3 class="author">Apogee-dev updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Dynamic now checks alt titles in addition to job titles for protection &amp; restriction from antag roles</li>
+				<li class="rscadd">Medic armor vest, made by using a green crayon on a sec vest. Use bleach to return to original skin.</li>
+				<li class="rscadd">Trauma Team hardsuit, currently only available by bus</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Organ Failure random events now have their own custom command alert instead of using a Biohazard Alert of random level (also more appropriate as there is no outbreak to contain here).</li>
+				<li class="rscadd">The Biohazard Alert level during a viral infection event or viral outbreak event is now proportional to the actual combined danger of the disease&#39;s effects. It can be as low as 1, and all the way to 8 if the combined danger is 15 or 16 which are the highest possible currently (disregarding adminbus). 9 as always is reserved for Blob.</li>
+				<li class="bugfix">Fixed the admin buttons to &#34;Toggle a Lights Out&#34; or a &#34;Prison Break&#34;  not using the correct events.</li>
+				<li class="bugfix">Fixed the admin option to create a new disease using an already existing pathogen displaying IDs only instead of the disease&#39;s full name.</li>
+				<li class="bugfix">Fixed Admin-made pathogen not having the ID that was set by its creator.</li>
+				<li class="bugfix">Fixed the admin &#34;Trigger a Virus Outbreak&#34; button not working.</li>
+				<li class="rscadd">Admins can now trigger a custom outbreak event that will spread a previously prepared pathogen among the crew, and display the usual alert after some time as passed.</li>
+				<li class="rscadd">Non-red blood in a drinking glass will now have a fake name slightly more believable than Tomato Juice.</li>
+				<li class="rscadd">Added a couple new items to the Safe loot table.</li>
+				<li class="bugfix">Fixed emitter goggles not working on mannequins</li>
+				<li class="bugfix">Fixed glasses mapped onto mannequins not being properly equipped when the map loads</li>
+				<li class="bugfix">Fixed items removed by monkeys from their backpack having a full-tile hitbox.</li>
+				<li class="bugfix">Fixed humans no longer having bloody hands unless they&#39;re wearing gloves.</li>
+				<li class="bugfix">Fixed surgery steps that should bloody your hands no longer doing so.</li>
+				<li class="rscadd">The Write in Blood verb has been reworked. Both ghosts and humans now have it at all time under the Ghost and IC tab respectively. When using it you will attempt to write on your tile. Ghosts need to be either visible, or the cult must have reached the bloodstone phase. They will look for a blood splatter or footprint in an adjacent tile, if there are several they will get the option of which one to use, along with the source&#39;s color hex code. Humans however need blood on their hands or gloves and will use that one. You can preview your message before confirming like when using a crayon. There can be only one doodle per tile, and it carries DNA and color from the source blood. Also unlike the old bloody doodles, those are maptext&#39;d, and can be read without being examined.</li>
+				<li class="rscadd">Punching someone on a limb that is currently bleeding will splash their blood on your hands.</li>
+				<li class="bugfix">Fixed dead mice still being able to nibble</li>
+				<li class="tweak">Increased the layer at which remains appear. They appear now above tables but still below objects. As such they are no longer hidden by things like vents, scrubbers and pipe.</li>
+				<li class="bugfix">When hitting someone with a weapon, should you miss the intended target limb and hit another limb, the chat will now correctly report which limb has been hit.</li>
+				<li class="bugfix">Bomberman Spawns no longer invisible to ghosts who had darkness toggled off</li>
+				<li class="bugfix">Bomberman Arenas no longer have their name in the corner set up incorrectly and showing up as literally just &#34;name&#34;</li>
+				<li class="bugfix">Clothing in Bomerman Arenas  no longer remain on the ground after a round.</li>
+				<li class="tweak">Reworked rag smothering to fix a few bugs. The new implementation requires you to target the rag at their mouth with a 1 second delay (a visible warning and SFX play as soon as an attempt is made). Species that do not breath cannot be smothered. People wearing smoke-blocking masks such as gas masks, internals, clown masks, surgical masks or cigarettes (if they&#39;re lit) cannot be smothered either. Upon success, all reagents inside the rag will be transferred inside the target (up to 5u).</li>
+				<li class="bugfix">You no longer try to wipe down people that you are currently smothering or bandaging with a rag.</li>
+				<li class="bugfix">You no longer try to wipe down the Sink when you fill up your rag.</li>
+				<li class="tweak">Cultists now stop dancing while incapacitated, or when muted by holy water. This includes constructs when they are purged by a null rod.</li>
+				<li class="bugfix">Cultists with the Chameleon gene no longer remain invisible while dancing.</li>
+				<li class="rscadd">Cultists can now DANCE wherever using say &#34;*cultdance&#34;. They will dance around the tile in front of them, so for the best looks do it in an open area. If other cultists uses the emote while adjacent to the first cultist&#39;s &#34;dance center&#34;, they will join up and dance in sync. Up to 4 cultists may dance together without bumping into each other (as unlike the sacrifice/bloodstone dance, this one doesn&#39;t use forceMove)</li>
+				<li class="tweak">You now need to be on help intent to reveal runes using a null rod. This means that you no longer get extra delay added to your attacks when using one to fight and missing by clicking the floor.</li>
+				<li class="bugfix">Fixed mindless Wraiths appearing if you removed an amorphous mask that turns you into a Wraith when reaching the end of an Ethereal Jaunt.</li>
+				<li class="experiment">Added a new Traitor Botanist uplink item, the Bee-Nade, which has been reworked to in fact spawn hornets that will immediately seek a target when they spawn. They also ignore the one who primed the spawner grenade, just like viscerators do. Cost 16 (Discount 8)</li>
+				<li class="experiment">The Hornet Queen Packet traitor item has been replaced with a Deployable Wild Hornet Hive. Place it, throw it, drop it, but be careful as it cannot be picked up again once deployed. Those behave exactly like those from random events, except they spawn with less hornets inside, giving you a few seconds to get away before they start coming out. Cost 10 (Discount 5)</li>
+				<li class="experiment">The swarm coming out of a Bee Briefcase now performs an attack as soon as it comes out of the briefcase, greatly increasing its lethal power. The TC cost has been slightly adjusted to match its increased lethality. Cost 12 (Discout 6)</li>
+				<li class="experiment">Bees and the likes now attack AFTER moving instead of before. This effectively increases their attack range, and so their dangerousness.</li>
+				<li class="tweak">Bees that spawn from vermin infestations and hornets of all kind now immediately become angry again after their calmed status has expired instead of going back to their hive or to roaming.</li>
+				<li class="rscadd">Bee and Hornet gatling guns bullets no longer deal direct damage, instead they immediately cause the spawned bug to attack once on impact. Said attack is also guaranteed to pierce bio or impermeable armors.</li>
+				<li class="rscadd">Added a chillbug gatling gun. It doesn&#39;t deal damage of course but will inject 1u chillwax into players hit by the projectile.</li>
+				<li class="rscadd">Added both the hornetgun and chillgun to Summon Guns.</li>
+				<li class="bugfix">Bees and the likes can no longer attack through one-sided windows and windoors.</li>
+				<li class="bugfix">Fixed not being able to stomp snails when on harm intent.</li>
+				<li class="bugfix">You can no longer convert the same mob several times (should they refuse and get restrained) to get additional progression on the Conversion objective.</li>
+				<li class="tweak">Converting a mindless monkey (whether still monkey or human) will sacrifice them, leaving behind a coffer with a skull</li>
+				<li class="bugfix">Space Heaters and Cult Forges can no longer heat up a room that&#39;s in a vacuum, causing mobs to take damage even though there is no molecules with which to exchange temperature.</li>
+				<li class="bugfix">Fixed soul blades being offset both in the inventory and on the player when stored in the suit slot.</li>
+				<li class="rscadd">All condiment bottles can have their content spilled over the floor if they are set to transfer 10 or more units. The amount spilled depends of the transferable amount set.</li>
+				<li class="rscadd">Spilling 10 or more units of black pepper over the floor will create a cleanable mess.</li>
+				<li class="imageadd">Tweaked the icons for salt piles and pepper mills.</li>
+				<li class="rscadd">Added Holy Salts, a new reagent that can be easily produced by putting normal table salt in presence of a 5u catalyst of holy water. Just like salt, it will create cleanable piles when 10u of it are spilled over the floor.</li>
+				<li class="rscadd">When salt piles are spawned, they now emit particles when they detect the presence of cult runes (even if concealed), talismans, tomes, and most other cult paraphernelia. After a set amount of time, the runes will be destroyed, the talismans and tomes will burn, and the other objects will break and melt away. The delay is 5 minutes for regular table salt, and 20 seconds for holy salts and starts when the pile is created.</li>
+				<li class="rscadd">When a Path Entrance rune or a talisman attuned to a Path Exit rune is destroyed by a salt pile, a blood jaunt visible for a short duration will zoom toward the corresponding exit, giving the crew a hint as to the location of the Path Exit, and potentially a cult base. The jaunt will make a distinctive noise once it reaches the exit, letting any cultist near it at the time know that their base might be compromised.</li>
+				<li class="rscadd">Added a couple more country flag-bearing mugs. Mug boxes such as those included in Cafe Equipment supply crates now include a random one each.</li>
+				<li class="rscadd">Flag Mugs finally appear filled with liquid when some has been poured in them.</li>
+				<li class="imageadd">Re-did the in-hand icons for mugs, and added some for all flag mugs. Mugs that contain a liquid that has a unique mug sprite no longer appear invisible in-hand, and instead use the default mug sprite.</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">You can now use/work/hit windoors with basic tools again.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds plastic to the derelict MoMMI Material Synth.</li>
+			</ul>
+			<h3 class="author">GreatBigFailure updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Barbervends now sell scissors which allow actual barbering to take place.</li>
+				<li class="rscadd">4 new grey-specific rigsuits, 3 of which are available at cargo.</li>
+				<li class="tweak">Egg cartons now have a small chance to come with a non-standard egg.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Hostile mobs are now able to break open firedoors and will fixate less on things they cannot reach.</li>
+			</ul>
+			<h3 class="author">beesil updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds red comfy chairs, standardizes comfy chair colors to match couches.</li>
+			</ul>
+			<h3 class="author">kafovofa updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Health analyzers highlight their heat reading in red if the target is too hot.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Ghosts no longer hide request console alerts</li>
+				<li class="rscadd">All RCDs are now equipped with modules to transform compressed matter into windows and deconstruct them, unless made of plasma.</li>
+				<li class="rscadd">Reagant dispensers, chemmaster derivatives, all-in-one grinders, microwaves, processors, seed extractors, biogenerators and xenobotany machines now work with conveyors.</li>
+				<li class="rscadd">Mineral unloading machines are now buildable from circuit imprinters.</li>
+				<li class="rscadd">Mineral unloading machines now have 3 matter bins and a capacitor, all upgradable for faster unloading and lower power usage.</li>
+				<li class="rscadd">Mineral unloading machines can now have their directions tweaked with a multitool with ease.</li>
+				<li class="rscadd">Mineral unloading machines work like conveyors on machines on the other end.</li>
+				<li class="tweak">New common mineral machine item, cutting down a lot of redundant code and variables.</li>
+				<li class="rscadd">Wizards have now learned Curse of the Hangman, a spell obscuring the letters in others&#39; spoken words. Cure this by guessing the missing letters, but don&#39;t make mistakes, or it will reset!</li>
+			</ul>
+			<h3 class="author">robintime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="spellcheck">punctuates several flavortexts</li>
+				<li class="spellcheck">&#39;this the reinforced wall&#39; now just says &#39;the reinforced wall&#39;</li>
+			</ul>
 			<h2 class="date">2021.05.30</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -80,6 +280,11 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Players are now properly able to use the resist verb to escape the sticky webs from a Spider Queen&#39;s projectile, or a thrown Blood Dagger. Previously players had to click the trap, now both options are available as intended.</li>
 				<li class="bugfix">Removed Component AI Spiders from the possible mob types that the Menagerie artifact effect can turn you into.</li>
 				<li class="tweak">Removed the extra lightswitch in the bar backroom on Box, and moved the other light switch as well as the Kitchen&#39;s next to the door to their respective backroom, allowing the light to be toggled from either side in both areas.</li>
+				<li class="rscadd">The Safe has had its functionality and UI refreshed a bit. Instead of bringing up an annoying html pop-up, clicking the Safe now brings up a radial menu featuring the safe&#39;s dial at the center and two buttons to rotate it. Immersion! Furthermore the Safe now opens by itself as soon as both tumblers are properly aligned and its contents will immediately appear on top of it. Clicking the safe while it&#39;s open with an item will place said item on top of it, while clicking it with an empty hand will close it, moving the items on top inside it, and randomize the tumblers&#39; positions.</li>
+				<li class="rscadd">You can now use a screwdriver on an open Safe to randomize the tumblers&#39; unlock positions if you want.</li>
+				<li class="tweak">The Safe&#39;s maximum capacity is now 30 items of any w_class, just like crates and closets, instead of its max capacity being limited by the items&#39; combined w_class.</li>
+				<li class="soundadd">The Safe now makes some sounds! A few brand new SFXs have been added.</li>
+				<li class="bugfix">Fixed a very rare bug where the Safe&#39;s tumblers were set in a way that prevented players from ever cracking the Safe open.</li>
 			</ul>
 			<h3 class="author">Jackreturnswithaveangenace updated:</h3>
 			<ul class="changes bgimages16">
@@ -1629,93 +1834,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">jknpj updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Adds the roningasa(rice hat variant) to the bio generator</li>
-			</ul>
-			<h2 class="date">2020.12.10</h2>
-			<h3 class="author">jjpark-kb updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">you no longer get stuck in glued chairs/beds if they get deconstructed/destroyed.</li>
-				<li class="bugfix">baby carp will not grow up if dead</li>
-				<li class="bugfix">fixes the bear trap failing to update icon when set off when an item</li>
-			</ul>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds grass coats to the bio generator</li>
-			</ul>
-			<h2 class="date">2020.12.09</h2>
-			<h3 class="author">Arthurdentistss13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a small memorial to the DDR vault for a former admin who has recently passed away. RIP Shiggypiggy</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Vesta heaters are now 3x more powerful than they were previously, for a total of 30x more powerful. They also make an audible click when shutting off automatically due to heat.</li>
-			</ul>
-			<h3 class="author">PlausibleDeniability updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Created a jingle bell that makes noise like maracas, or attached to shoes to make noise like clown shoes!</li>
-				<li class="rscadd">Created several Christmas onesies, available in the festive supplies crate!</li>
-				<li class="rscadd">Created a blue santa hat to go along with the others!</li>
-				<li class="rscadd">The ugly Christmas sweaters are now animated and have a vox variant!</li>
-			</ul>
-			<h2 class="date">2020.12.07</h2>
-			<h3 class="author">mpowell88 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Fixed catbeast objectives getting redtext if they met the requirements.</li>
-			</ul>
-			<h2 class="date">2020.12.06</h2>
-			<h3 class="author">IThe-TI updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Flipped rtables look like rtables now</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">lithp ith now a roundthart option</li>
-			</ul>
-			<h2 class="date">2020.12.05</h2>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Added some buffers to the frozen cores entrances, meaning that opening the doors doesn&#39;t instafreeze the entire east station.</li>
-				<li class="rscadd">There are now shutters on all the windows in snaxi atmospherics, allowing users to press a button in the CE&#39;s office to drop them.</li>
-				<li class="bugfix">snaxi TEG vent is facing the correct way</li>
-			</ul>
-			<h2 class="date">2020.12.04</h2>
-			<h3 class="author">Exxion updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Projectile penetration has been somewhat unfucked. Among other things, flamethrowers work again and maxed railguns can again fire more than like 20 tiles.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Now when you pull snowgear out of a snow closet, it will drop a scarf onto the floor too (or go into your hand if you have more than 2 hands)</li>
-				<li class="bugfix">You should now get the boots from a snow closet even if you have less than 2 hands (they fall on the floor)</li>
-			</ul>
-			<h3 class="author">Lakue-Bit updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Enables Blacksmithing recipes for solid plasma sheets.</li>
-				<li class="bugfix">Reduced the chances of higher quality phazon blacksmith stuff disappearing.</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Changed an odd trait of meta maint, where all the doors connecting to offices and departments from maint were part of maint.</li>
-				<li class="rscadd">meta: perma is much nicer now and has more stuff</li>
-				<li class="rscadd">meta: There is now a box of sunglasses in the armory.</li>
-				<li class="rscadd">meta: There are now 2 stacks of glass and 2 stacks of metal in pod bay, along side a welding helmet.</li>
-				<li class="bugfix">meta: Fixed a few rogue &#34;telescience&#34; areas appearing in the main science hall.</li>
-				<li class="bugfix">meta: There is now an APC in the maint above cargo..</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Changed passive vent sprites to be more unique.</li>
-				<li class="imageadd">Changed the sprites for heaters and freezers to better indicate their direction.</li>
-			</ul>
-			<h2 class="date">2020.12.03</h2>
-			<h3 class="author">namespace-Memory updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed Suit Up sandbox button breaking inventory UI</li>
-			</ul>
-			<h2 class="date">2020.12.02</h2>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Packed: tightens out some knots so power flowers again</li>
 			</ul>
 		</div>
 		<!--

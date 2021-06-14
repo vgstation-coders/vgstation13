@@ -340,7 +340,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
-	blood_color = "#272727"
+	blood_color = PALE_BLOOD
 	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
@@ -615,7 +615,7 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey/grey
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS | ACID4WATER
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
@@ -758,7 +758,7 @@ var/global/list/whitelisted_species = list("Human")
 	default_mutations = list(M_BEAK, M_TALONS)
 	flags = IS_WHITELISTED | NO_SCAN
 
-	blood_color = "#2299FC"
+	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
@@ -1216,8 +1216,8 @@ var/list/has_died_as_golem = list()
 	tox_mod = 0.5
 	rad_mod = 0.5
 
-	blood_color = "#ebece6"
-	flesh_color = "#9c7f25"
+	blood_color = INSECT_BLOOD
+	flesh_color = "#9C7F25"
 
 	uniform_icons = 'icons/mob/species/insectoid/uniform.dmi'
 //	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
@@ -1288,7 +1288,7 @@ var/list/has_died_as_golem = list()
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")
 
-	blood_color = "#D3D3D3"
+	blood_color = MUSHROOM_BLOOD
 	flesh_color = "#D3D3D3"
 
 	//Copypaste of Dionae

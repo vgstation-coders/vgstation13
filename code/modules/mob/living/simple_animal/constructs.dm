@@ -101,6 +101,15 @@
 #undef SPEAK_OVER_CHANNEL_INTO_CULT_CHAT
 #undef HEAR_CULT_CHAT
 
+
+/mob/living/simple_animal/construct/occult_muted()
+	. = ..()
+	if (.)
+		return 1
+	if (purge > 0)
+		return 1
+	return 0
+
 /mob/living/simple_animal/construct/gib(var/animation = 0, var/meat = 1)
 	if(!isUnconscious())
 		forcesay("-")
@@ -526,6 +535,8 @@
 
 	if(.)
 		regular_hud_updates()
+
+		standard_damage_overlay_updates()
 
 
 /mob/living/simple_animal/construct/regular_hud_updates()

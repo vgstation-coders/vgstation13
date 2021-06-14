@@ -996,7 +996,6 @@
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	update_inv_gloves()	//handles bloody hands overlays and updating
-	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return 1 //we applied blood to the item
 
 /mob/living/carbon/human/add_blood_from_data(var/list/blood_data)
@@ -1012,7 +1011,6 @@
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[blood_data["blood_DNA"]] = blood_data["blood_type"]
 	update_inv_gloves()	//handles bloody hands overlays and updating
-	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return TRUE //we applied blood to the item
 
 /mob/living/carbon/human/clean_blood(var/clean_feet)
@@ -1244,63 +1242,108 @@
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
-/mob/living/carbon/human/proc/bloody_doodle()
+/mob/living/carbon/human/verb/bloody_doodle()
 	set category = "IC"
 	set name = "Write in blood"
-	set desc = "Use blood on your hands to write a short message on the floor or a wall, murder mystery style."
+	set desc = "Use blood on your hands to write a short message on the floor, murder mystery style."
 
-	if (src.stat)
+	if (incapacitated() || isUnconscious())
 		return
 
-	if (!(bloody_hands_data?.len))
+	var/turf/T = get_turf(src)
+	if (!isfloor(T))
+		to_chat(src, "<span class='warning'>You can only doodle over floors.</span>")
 		return
 
-	if (usr != src)
-		return 0 //something is terribly wrong
-
-	if (!bloody_hands)
-		verbs -= /mob/living/carbon/human/proc/bloody_doodle
-
-	if (src.gloves)
-		to_chat(src, "<span class='warning'>Your [src.gloves] are getting in the way.</span>")
-		return
-
-	var/turf/simulated/T = src.loc
-	if (!istype(T)) //to prevent doodling out of mechs and lockers
-		to_chat(src, "<span class='warning'>You cannot reach the floor.</span>")
-		return
-
-	var/direction = input(src,"Which way?","Tile selection") as anything in list("Here","North","South","East","West")
-	if (direction != "Here")
-		T = get_step(T,text2dir(direction))
-	if (!istype(T))
-		to_chat(src, "<span class='warning'>You cannot doodle there.</span>")
-		return
-
-	var/num_doodles = 0
 	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
-		num_doodles++
-	if (num_doodles > 4)
-		to_chat(src, "<span class='warning'>There is no space to write on!</span>")
+		to_chat(src, "<span class='warning'>This floor is already filled with writings.</span>")
 		return
 
-	var/max_length = bloody_hands * 30 //tweeter style
+	var/doodle_color
+	var/doodle_DNA
+	var/doodle_type
+	var/obj/item/clothing/gloves/actual_gloves
 
-	var/message = stripped_input(src,"Write a message. It cannot be longer than [max_length] characters.","Blood writing", "")
+	if (istype(gloves, /obj/item/clothing/gloves))
+		actual_gloves = gloves
+		if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
+			doodle_DNA = pick(actual_gloves.blood_DNA)
+			doodle_type = actual_gloves.blood_DNA[doodle_DNA]
+			doodle_color = actual_gloves.blood_color
 
-	if (message)
-		var/used_blood_amount = round(length(message) / 30, 1)
-		bloody_hands = max(0, bloody_hands - used_blood_amount) //use up some blood
+	if(!actual_gloves && bloody_hands > 0 && bloody_hands_data?.len)
+		doodle_DNA = bloody_hands_data["blood_DNA"]
+		doodle_type = bloody_hands_data["blood_type"]
+		doodle_color = bloody_hands_data["blood_colour"]
 
-		if (length(message) > max_length)
-			message += "-"
-			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
+	if (!doodle_color)
+		to_chat(src, "<span class='warning'>There is no blood on your [actual_gloves ? "gloves" : "hands"].</span>")
+		return
 
-		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
-		W.basecolor = (bloody_hands_data["blood_colour"]) ? bloody_hands_data["blood_colour"] : DEFAULT_BLOOD
-		W.update_icon()
-		W.message = message
-		W.add_fingerprint(src)
+
+	//Blood found, now to write a message
+	var/max_length = 30
+	var/message = stripped_input(src,"Write a message. You will be able to preview it.","Bloody writings", "")
+
+	if (!message)
+		return
+
+	message = copytext(message, 1, max_length)
+
+	var/letter_amount = length(replacetext(message, " ", ""))
+	if(!letter_amount) //If there is no text
+		return
+
+	//Previewing our message
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	I.maptext_height = 32
+	I.maptext_width = 64
+	I.maptext_x = -16
+	I.maptext_y = -2
+	I.loc = T
+	I.alpha = 180
+
+	client.images.Add(I)
+	var/continue_drawing = alert(src, "This is how your message will look. Continue?", "Bloody writings", "Yes", "Cancel")
+
+	client.images.Remove(I)
+	animate(I) //Cancel the animation so that the image gets garbage collected
+	I.loc = null
+	qdel(I)
+
+	if(continue_drawing != "Yes" || !Adjacent(T))
+		return
+
+	//One last sanity check
+	var/can_still_doodle = FALSE
+	var/obj/item/clothing/gloves/actual_gloves2
+	if (istype(gloves, /obj/item/clothing/gloves))
+		actual_gloves2 = gloves
+		if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
+			can_still_doodle = TRUE
+	if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
+		can_still_doodle = TRUE
+	if(!can_still_doodle)
+		to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
+		return
+
+	//Finally writing our message
+	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
+	W.basecolor = doodle_color
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	W.add_fingerprint(src)
+	var/invisible = invisibility || !alpha
+	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
+	W.blood_DNA[doodle_DNA] = doodle_type
+
+	if (actual_gloves2)
+		actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
+	else
+		bloody_hands = max(0,bloody_hands - 1)
+	update_inv_gloves()
+
+
 /mob/living/carbon/human/can_inject(var/mob/user, var/error_msg, var/target_zone)
 	. = 1
 	if(!user)
@@ -1414,7 +1457,7 @@
 /mob/living/carbon/human/has_eyes()
 	if(internal_organs_by_name["eyes"])
 		var/datum/organ/internal/eyes = internal_organs_by_name["eyes"]
-		if(eyes && istype(eyes) && !eyes.status & ORGAN_CUT_AWAY)
+		if(eyes && istype(eyes) && !(eyes.status & ORGAN_CUT_AWAY))
 			return 1
 	return 0
 /mob/living/carbon/human/singularity_act()
@@ -1980,15 +2023,33 @@ mob/living/carbon/human/isincrit()
 	else
 		return ..()
 
+/mob/living
+	var/hangman_score = 0 // For round end leaderboards
+
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
 	if(stat)
 		return //Don't bother if we're dead or unconscious
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
+	var/mob/living/H = speech.speaker
+	var/hangman_answer = speech.message
+	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
+	hangman_answer = replacetext(hangman_answer,"?","")
+	hangman_answer = replacetext(hangman_answer,"!","")
+	if(muted_letters && muted_letters.len && length(hangman_answer == 1)) // If we're working with a hangman cursed individuel and we only said a letter
+		if(hangman_answer in muteletters_check) // Correct answer?
+			muted_letters.Remove(hangman_answer) // Baleet it
+			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
+			H.hangman_score++ // Add to score
+		else if(muteletter_tries)
+			muteletter_tries-- //Reduce the attempts left before...
+			visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
+		else
+			set_muted_letters(min(0,26-(muted_letters.len+1))) // It gets scrambled and lengthened!
+			visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
-	var/mob/living/H = speech.speaker
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
 		if(isliving(H) && H.mind == mind.faith.religiousLeader)
 			AdjustDizzy(rand(-8,-10))
@@ -1998,6 +2059,17 @@ mob/living/carbon/human/isincrit()
 			remove_confused(rand(8, 10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
+
+/mob/living/carbon/human/proc/set_muted_letters(var/keep_amount)
+	muteletter_tries = 3
+	muted_letters = list("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+	for(var/i = 0, i < keep_amount, i++)
+		pick_n_take(muted_letters)
+
+/mob/living/carbon/human/rejuvenate(animation = 0)
+	muted_letters = list()
+	muteletter_tries = 3
+	..()
 
 /mob/living/carbon/human/can_be_infected()
 	return 1

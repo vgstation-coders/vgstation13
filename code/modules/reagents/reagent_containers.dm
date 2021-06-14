@@ -201,7 +201,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
-	reagents.reaction(target, TOUCH)
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount))
 
 	if (amount > 0)
 		if(user)

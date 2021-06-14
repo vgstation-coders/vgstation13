@@ -69,6 +69,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	..()
+	standard_damage_overlay_updates()
 	if(!stat && prob(speak_chance))
 		for(var/mob/M in view())
 			M << 'sound/effects/mousesqueek.ogg'
@@ -263,6 +264,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
+	if(isUnconscious())
+		return
+
 	if(!can_be_infected())
 		return
 	var/block = 0

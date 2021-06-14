@@ -13,7 +13,7 @@
 	max_moved = 100
 	in_dir = EAST
 	out_dir = WEST
-	
+
 	var/selectable_types = list(/obj/item = "All items") //List of types we can move -kanef
 	var/item_moved = FALSE //Variable for loop detection, only used in chaining
 
@@ -101,7 +101,7 @@
 				return
 			// Otherwise, reset each one recursively, follow logic above
 			UM.reset_move_check()
-	
+
 // Couldn't inherit most of this sadly -kanef
 /obj/machinery/mineral/unloading_machine/process()
 	var/turf/in_T = get_step(src, in_dir)
@@ -109,10 +109,9 @@
 	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover))
 		return
 
-	var/obj/structure/ore_box/BOX = locate(/obj/structure/ore_box, in_T.loc)
-	if (BOX)
+	for (var/obj/structure/ore_box/BOX in in_T)
 		BOX.dump_everything(in_T)
-	
+
 	for(var/atom/movable/A in in_T)
 		if(A.anchored)
 			continue

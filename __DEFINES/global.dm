@@ -26,6 +26,8 @@ var/list/protected_global_vars = list(
 
 //Content of the Round End Information window
 var/round_end_info = ""
+var/round_end_info_no_img = ""
+var/last_round_end_info = ""
 
 //List of ckeys that have de-adminned themselves during this round
 var/global/list/deadmins = list()
@@ -247,6 +249,10 @@ var/list/score=list(
 	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
 	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
 	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
+	"hangmanname"	= null, //Player with most correct letter guesses from Curse of the Hangman
+	"hangmanjob"	= null,
+	"hangmanrecord" = 0,
+	"hangmankey"	= null,
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -309,14 +315,10 @@ var/global/list/volunteer_gladiators = list()
 var/global/list/ready_gladiators = list()
 var/global/list/never_gladiators = list()
 
-//icons that appear on the Round End pop-up browser
-var/global/list/end_icons = list()
-
 var/global/list/arena_leaderboard = list()
 var/arena_rounds = 0
 var/arena_top_score = 0
 
-var/endgame_info_logged = 0
 
 var/explosion_newmethod = 1	// 1 = explosions take walls and obstacles into account; 0 = explosions pass through walls and obstacles without any impediments;
 

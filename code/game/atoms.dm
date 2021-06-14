@@ -809,6 +809,12 @@ its easier to just keep the beam vertical.
 /atom/proc/isacidhardened()
 	return FALSE
 
+/atom/proc/salt_act()
+	return
+
+/atom/proc/acid_melt()
+	return
+
 /atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
 	var/turf/curloc = get_turf(src)
 	var/turf/targloc = get_turf(target)

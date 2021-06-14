@@ -153,6 +153,9 @@
 
 /obj/item/weapon/gun/energy/mouser/update_icon()
 	return
+	
+/obj/item/weapon/gun/energy/mouser/isHandgun()
+	return TRUE
 
 /obj/item/weapon/gun/energy/staff/sinterklaas
 	name = "staff of sinterklaas"

@@ -347,6 +347,9 @@
 
 	var/attack_verb_override = "punches"
 
+	var/transfer_blood = 0
+	var/list/bloody_hands_data = list()
+
 /obj/item/clothing/gloves/get_cell()
 	return cell
 

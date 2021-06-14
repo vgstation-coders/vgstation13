@@ -680,16 +680,13 @@ turf/simulated/floor/update_icon()
 			return
 		qdel(P)
 
-
-/turf/simulated/floor/attack_construct(mob/user as mob)
+/turf/simulated/floor/attack_construct(var/mob/user)
 	if(istype(src,/turf/simulated/floor/carpet))
 		return//carpets are cool
 	if(istype(user,/mob/living/simple_animal/construct/builder))
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
 			S.perform(user, 0, list(src))
-			//var/obj/abstract/screen/spell/SS = S.connected_button
-			//SS.update_charge(1)
 			return 1
 	return 0
 

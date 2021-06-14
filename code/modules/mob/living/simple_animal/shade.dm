@@ -47,10 +47,6 @@
 
 /mob/living/simple_animal/shade/Login()
 	..()
-	hud_used.shade_hud()
-	var/datum/role/cultist/C = iscultist(src)
-	if (C)
-		C.update_cult_hud()
 	if (istype(loc, /obj/item/weapon/melee/soulblade))
 		client.CAN_MOVE_DIAGONALLY = 1
 		client.screen += list(
@@ -84,6 +80,7 @@
 		return FALSE //under effects of time magick
 	..()
 	regular_hud_updates()
+	standard_damage_overlay_updates()
 	if(isDead())
 		for(var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)

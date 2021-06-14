@@ -14,12 +14,12 @@
 		if (!P.client.desires_role(role_pref) || jobban_isbanned(P, role_id) || isantagbanned(P) || (role_category_override && jobban_isbanned(P, role_category_override)))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
-		if (P.mind.assigned_role in protected_from_jobs)
+		if ((P.mind.assigned_role && (P.mind.assigned_role in protected_from_jobs)) || (P.mind.role_alt_title && (P.mind.role_alt_title in protected_from_jobs)))
 			var/probability = initial(role_category.protected_traitor_prob)
 			if (prob(probability))
 				candidates.Remove(P)
 			continue
-		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
+		if ((P.mind.assigned_role && (P.mind.assigned_role in restricted_from_jobs)) || (P.mind.role_alt_title && (P.mind.role_alt_title in restricted_from_jobs)))//does their job allow for it?
 			candidates.Remove(P)
 			continue
 		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
@@ -59,6 +59,9 @@
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.Greet(GREET_LATEJOIN)
 	return 1
+
+/datum/dynamic_ruleset/latejoin/infiltrator/previous_rounds_odds_reduction(var/result)
+	return result
 
 
 //////////////////////////////////////////////

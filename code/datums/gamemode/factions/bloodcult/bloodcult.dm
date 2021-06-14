@@ -161,6 +161,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		veil_thickness = CULT_MENDED
 		..()
 		command_alert(/datum/command_alert/bloodstones_broken)
+		var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+		if (istype(dynamic_mode))
+			dynamic_mode.update_stillborn_rulesets()
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
 		for (var/obj/effect/rune/R in rune_set.rune_list)
@@ -280,6 +283,16 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		take_blood(cup, cup.volume)//Up to 60u
 		cup.on_reagent_change()//so we get the reagentsfillings overlay
 		new/obj/item/weapon/skull(coffer)
+	if (ismonkey(src))
+		var/list/skulless_monkeys = list(
+			/mob/living/carbon/monkey/mushroom,
+			/mob/living/carbon/monkey/diona,
+			/mob/living/carbon/monkey/rock,
+			)
+		var/mob/living/carbon/monkey/M = src
+		if (!(M.species_type in skulless_monkeys))
+			take_blood(cup, cup.volume)//Up to 60u
+			new/obj/item/weapon/skull(coffer)
 	if (isslime(src))
 		cup.reagents.add_reagent(SLIMEJELLY, 50)
 	if (isalien(src))//w/e

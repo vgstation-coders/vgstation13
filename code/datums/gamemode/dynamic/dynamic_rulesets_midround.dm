@@ -46,10 +46,10 @@
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
-			if ((M.mind.assigned_role in restricted_from_jobs) || (M.mind.role_alt_title in restricted_from_jobs))//does their job allow for it?
+			if ((M.mind.assigned_role && (M.mind.assigned_role in restricted_from_jobs)) || (M.mind.role_alt_title && (M.mind.role_alt_title in restricted_from_jobs)))//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
-			if ((M.mind.assigned_role in protected_from_jobs) || (M.mind.role_alt_title in protected_from_jobs))
+			if ((M.mind.assigned_role && (M.mind.assigned_role in protected_from_jobs)) || (M.mind.role_alt_title && (M.mind.role_alt_title in protected_from_jobs)))
 				var/probability = initial(role_category.protected_traitor_prob)
 				if (prob(probability))
 					candidates.Remove(M)
@@ -225,6 +225,9 @@
 	newTraitor.ForgeObjectives()
 	newTraitor.AnnounceObjectives()
 	return 1
+
+/datum/dynamic_ruleset/midround/autotraitor/previous_rounds_odds_reduction(var/result)
+	return result
 
 
 //////////////////////////////////////////////

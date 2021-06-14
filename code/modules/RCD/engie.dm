@@ -3,7 +3,8 @@
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock
+	/datum/rcd_schematic/con_airlock,
+	/datum/rcd_schematic/con_window,
 	)
 
 
@@ -35,7 +36,8 @@
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock/borg
+	/datum/rcd_schematic/con_airlock/borg,
+	/datum/rcd_schematic/con_window/borg,
 	)
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/admin
