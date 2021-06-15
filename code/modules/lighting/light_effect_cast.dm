@@ -144,7 +144,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	else
 		icon_state = base_light_color_state
 
-	if (icon_size == "white") // This masks only makes sense if we are casting a white light
+	if (icon_state == "white") // This masks only makes sense if we are casting a white light
 		var/image/I = image(icon)
 		I.layer = HIGHEST_LIGHTING_LAYER
 		I.icon_state = "overlay"
@@ -171,8 +171,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 // We need to mask the light of this second light atom if it leaks outside of what it is supposed to illuminate.
 // Yes, this is stupid. Having two light atoms makes everything extra complicated.
 /atom/movable/light/shadow/cast_shadows()
-	if (icon_size == "white") // This masks only makes sense if we are casting a white light
-
+	if (icon_state != "white") // This masks only makes sense if we are casting a white light
+		return
 	. = ..()
 	var/list/masked_turfs = range(round((light_range-2)/2)) - view(light_range)
 	var/image/I
