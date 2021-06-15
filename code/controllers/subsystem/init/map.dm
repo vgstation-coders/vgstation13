@@ -18,6 +18,7 @@ var/datum/subsystem/map/SSmap
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 
+	generate_hoboshacks() //not tying this to vaults since jobs need it
 	if (!config.skip_vault_generation)
 		var/watch = start_watch()
 		log_startup_progress("Placing random space structures...")
@@ -27,7 +28,6 @@ var/datum/subsystem/map/SSmap
 	else
 		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
-	generate_hoboshacks() //not tying this to vaults since jobs need it
 	for(var/i = 0, i < max_secret_rooms, i++)
 		make_mining_asteroid_secret()
 
