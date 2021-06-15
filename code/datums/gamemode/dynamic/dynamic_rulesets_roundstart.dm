@@ -594,7 +594,7 @@ Assign your candidates in choose_candidates() instead.
 	role_category = null
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_pop = list(0,0,0,0,0,0,0,0,0,0)
+	required_pop = list(30,30,30,30,30,30,30,30,30,30)
 	required_candidates = 0
 	weight = 0.5*BASE_RULESET_WEIGHT
 	cost = 0
