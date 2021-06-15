@@ -6575,5 +6575,5 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit/New()
 	..()
-	reagents.add_reagent(HARDCORES, 3)
+	reagents.add_reagent(SOFTCORES, 3)
 	reagents.add_reagent(NUTRIMENT, 5)

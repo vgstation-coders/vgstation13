@@ -394,7 +394,7 @@
 #define ROACHSHELL		"roach_shell"
 #define GREYVODKA		"grey_vodka"
 #define MEDCORES		"medium cores"
-#define HARDCORES		"hardcores"
+#define SOFTCORES		"softcores"
 #define LITHOTORCRAZINE "lithotorcrazine"
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"

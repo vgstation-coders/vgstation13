@@ -105,7 +105,7 @@ atom/movable/GotoAirflowDest(n)
 /mob/living/carbon/human/check_airflow_movable(n)
 	if(reagents.has_reagent(MEDCORES))
 		return FALSE
-	if(reagents.has_reagent(HARDCORES))
+	if(reagents.has_reagent(SOFTCORES))
 		return FALSE
 	return ..()
 

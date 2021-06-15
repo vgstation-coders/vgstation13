@@ -72,7 +72,7 @@
 		. *= 0.8
 	if(reagents.has_reagent(MEDCORES))
 		. *= MAGBOOTS_SLOWDOWN_HIGH //Chemical magboots, imagine.
-	if(reagents.has_reagent(HARDCORES))
+	if(reagents.has_reagent(SOFTCORES))
 		. *= MAGBOOTS_SLOWDOWN_HIGH
 
 	if(isslimeperson(src))
