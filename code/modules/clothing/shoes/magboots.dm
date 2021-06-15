@@ -164,6 +164,12 @@
 	name = "Paramedic magboots"
 	icon_state = "para_magboots0"
 	base_state = "para_magboots"
+	
+//Trauma Team
+/obj/item/clothing/shoes/magboots/trauma
+	name = "Trauma Team magboots"
+	icon_state = "trauma_magboots0"
+	base_state = "trauma_magboots"
 
 //Death squad
 /obj/item/clothing/shoes/magboots/deathsquad
