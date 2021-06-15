@@ -17,19 +17,21 @@
 	blend_mode = BLEND_ADD
 
 	// Prevent shadows from jerking over walls when walking with a flashlight.
-	animate_movement = 0
+	animate_movement = NO_STEPS
 
 	alpha = 180
 
 	var/current_power = 1
+	var/base_light_color_state = "white"
 	var/atom/movable/holder
 	var/point_angle
 	var/list/affecting_turfs = list()
 	var/list/temp_appearance
 
 /atom/movable/light/shadow
+	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
-	animate_movement = 1
+	animate_movement = SLIDE_STEPS
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder

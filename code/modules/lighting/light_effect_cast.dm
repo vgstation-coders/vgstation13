@@ -4,6 +4,7 @@
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 
+// Shadows over light_range 5 haven't been done yet.
 #define MAX_LIGHT_RANGE 5
 
 var/light_power_multiplier = 5
@@ -134,20 +135,28 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		pixel_x = -(world.icon_size * light_range)
 		pixel_y = -(world.icon_size * light_range)
 
-	icon_state = "white"
+	// This to avoid TILE_BOUND corner light effects while keeping smooth movement for movable light sources
+	// Basically, for movable lights, we always do white square + masking
+	// But for fixed lights, we wall-shadows-only lights do not cast a white square
+	// Probably not the smartest way around this
+	if (holder.lighting_flags & MOVABLE_LIGHT)
+		icon_state = "white"
+	else
+		icon_state = base_light_color_state
 
-	var/image/I = image(icon)
-	I.layer = HIGHEST_LIGHTING_LAYER
-	I.icon_state = "overlay"
-	if(light_type == LIGHT_DIRECTIONAL)
-		var/turf/next_turf = get_step(src, dir)
-		for(var/i = 1 to 3)
-			if(CheckOcclusion(next_turf))
-				I.icon_state = "[I.icon_state]_[i]"
-				break
-			next_turf = get_step(next_turf, dir)
+	if (icon_size == "white") // This masks only makes sense if we are casting a white light
+		var/image/I = image(icon)
+		I.layer = HIGHEST_LIGHTING_LAYER
+		I.icon_state = "overlay"
+		if(light_type == LIGHT_DIRECTIONAL)
+			var/turf/next_turf = get_step(src, dir)
+			for(var/i = 1 to 3)
+				if(CheckOcclusion(next_turf))
+					I.icon_state = "[I.icon_state]_[i]"
+					break
+				next_turf = get_step(next_turf, dir)
 
-	temp_appearance += I
+		temp_appearance += I
 
 // On how many turfs do we cast a shadow ?
 /atom/movable/light/proc/cast_shadows()
@@ -162,6 +171,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 // We need to mask the light of this second light atom if it leaks outside of what it is supposed to illuminate.
 // Yes, this is stupid. Having two light atoms makes everything extra complicated.
 /atom/movable/light/shadow/cast_shadows()
+	if (icon_size == "white") // This masks only makes sense if we are casting a white light
+
 	. = ..()
 	var/list/masked_turfs = range(round((light_range-2)/2)) - view(light_range)
 	var/image/I
@@ -317,8 +328,12 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/proc/update_appearance()
 	overlays = temp_appearance
 	temp_appearance = null
-	var/list/RGB = rgb2num(light_color)
-	color = rgb(round(RGB[1]/2), round(RGB[2]/2), round(RGB[3]/2))
+	// Because movable lights do this two-lights-sources thing
+	if (holder.lighting_flags & MOVABLE_LIGHT)
+		var/list/RGB = rgb2num(light_color)
+		color = rgb(round(RGB[1]/2), round(RGB[2]/2), round(RGB[3]/2))
+	else
+		color = light_color
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
