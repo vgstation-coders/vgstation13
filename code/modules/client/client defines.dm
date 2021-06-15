@@ -97,5 +97,8 @@
 	// Voting & civic duty
 	var/ivoted = FALSE
 
+	// Last Round Scoreboard images have been sent
+	var/received_last_round_images = FALSE
+
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

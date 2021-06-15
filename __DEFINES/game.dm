@@ -40,3 +40,9 @@
 #define SPEECH_MODE_SAY     1
 #define SPEECH_MODE_WHISPER 2
 #define SPEECH_MODE_FINAL   3
+
+#define MINIMUM_NON_SUS_ACCOUNT_AGE 14 // If the connecting account is older than this many days, admins don't get notified
+
+#define APE_MODE_OFF 0 // He has no style
+#define APE_MODE_EVERYONE 1 // He has no grace
+#define APE_MODE_NEW_PLAYERS 2 // This Kong has a funny face

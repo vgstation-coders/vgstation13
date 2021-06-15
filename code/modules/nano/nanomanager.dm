@@ -303,10 +303,13 @@
   * @return nothing
   */
 
-/datum/nanomanager/proc/send_resources(client)
+/datum/nanomanager/proc/send_resources(client/client)
+	set waitfor = FALSE
 	for(var/file in asset_files)
 		world.log << file
 		client << browse_rsc(file)	// send the file to the client
+		if(client.byond_version == 514)
+			sleep(2)
 
  /**
   * Sends a message to the client-side JS of UIs on the object.

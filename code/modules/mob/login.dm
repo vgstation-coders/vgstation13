@@ -70,9 +70,6 @@
 
 	update_action_buttons(TRUE)
 
-	if(round_end_info == "")
-		winset(client, "rpane.round_end", "is-visible=false")
-
 	delayNextMove(0)
 
 	change_sight(adding = (SEE_SELF|SEE_BLACKNESS))

@@ -653,6 +653,9 @@ var/list/shuttle_log = list()
 
 	if(emergency_shuttle.direction != -1 && emergency_shuttle.online) //check that shuttle isn't already heading to centcomm
 		emergency_shuttle.recall()
+		var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+		if (istype(dynamic_mode))
+			dynamic_mode.update_stillborn_rulesets()
 		log_game("[key_name(user)] has recalled the shuttle.")
 		message_admins("[key_name_admin(user)] has recalled the shuttle - [formatJumpTo(user)].", 1)
 	return

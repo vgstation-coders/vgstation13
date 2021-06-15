@@ -1,6 +1,8 @@
 var/bomb_set
 var/obj/item/weapon/disk/nuclear/nukedisk
 
+var/list/nuclear_bombs = list()
+
 /obj/machinery/nuclearbomb
 	name = "\improper Nuclear Fission Explosive"
 	desc = "Uh oh. RUN!!!!"
@@ -24,7 +26,12 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/New()
 	..()
+	nuclear_bombs += src
 	r_code = "[rand(10000, 99999)]"//Creates a random code upon object spawn.
+
+/obj/machinery/nuclearbomb/Destroy()
+	nuclear_bombs -= src
+	..()
 
 /obj/machinery/nuclearbomb/process()
 	if(timing)
@@ -230,12 +237,18 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 						src.icon_state = "nuclearbomb1"
 						bomb_set = 0
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+						if (istype(dynamic_mode))
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["safety"])
 					src.safety = !( src.safety )
 					if(safety)
 						src.timing = 0
 						bomb_set = 0
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+						if (istype(dynamic_mode))
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["anchor"])
 
 					if(removal_stage == 5)

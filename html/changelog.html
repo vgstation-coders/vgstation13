@@ -73,6 +73,61 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.06.14</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Removed the random wall vent hidden under a sign at Packedstation&#39;s Chemistry lab.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where player-controlled zombies could attack while double dead (given that zombies are already dead and when you shoot one enough it becomes double-dead, although this time two negatives don&#39;t turn into a positive)</li>
+				<li class="rscadd">Added a new spell for the ancient spellbook, Card Trick! Guess what someone&#39;s card is and their inventory will completely fill up with the copies of the card!</li>
+				<li class="bugfix">&#34;A card&#34; not &#34;card&#34; description for playing cards.</li>
+			</ul>
+			<h2 class="date">2021.06.12</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the right panel being much smaller than normal (hopefully)</li>
+				<li class="bugfix">You can no longer write in blood as a ghost if the source blood disappeared before you finished writing your message.</li>
+				<li class="bugfix">You can no longer write in blood if there is no blood left on your hands or glove by the time you finish writing your message.</li>
+				<li class="tweak">Ghosts can now only write in blood up to a certain amount of tiles from the original blood source (before they could daisy-chain messages ad nauseam). The max distance depends of the original source&#39;s amount of blood. A drip will only have a radius of 1. Splatters a radius of 2. Gibs a radius of 5. (Same distance as footprints)</li>
+				<li class="tweak">Projectiles now have a 75 percent chance of hitting mobs in cages, as long as the cover is up.</li>
+				<li class="rscadd">Just like artificers can click floors up to 3 tiles away to convert them into cult floors, they can now click space tiles to conjure floors over them. As when done by clicking the spell button, conjuring a tile instead of converting one leads to a longer cooldown.</li>
+				<li class="bugfix">Fixed mapped alien embryos not spawning a dead alien larva. Expect to find a few dead larvas hidden on some maps.</li>
+				<li class="rscadd">All playable mobs now have standardized damage overlays which should help players controlling simple_animals noticing when they&#39;re taking damage.</li>
+				<li class="bugfix">Fixed the brute and oxy damage overlays going away for a second then coming back when dying. Those overlays also now come back instantly when re-entering a corpse.</li>
+				<li class="bugfix">Patched an exploit that allowed players to unload ore boxes using the pop-up window from any distance away or even adjacent but otherwise incapacitated, which apparently allowed a few people to mess with our shaft miner friends.</li>
+				<li class="bugfix">Also fixed ore unloading machines causing all ore boxes in their area to dump everything every second, instead of only those in front of them.</li>
+				<li class="experiment">Dynamic ruleset picking had its pseudo-RNG tweaked to now consider not just the previous round, but all 3 previous rounds, decreasing the odds of a ruleset being picked again in a short timespan. The odds are reduced more if the round was more recent, and if it fired several times in the previous three rounds the odd reductions will stack up. This should help prevent having the same ruleset firing several times in a short timespan.</li>
+				<li class="experiment">Although note that rulesets that fire when the round was already about to end will NOT affect future rounds&#39; ruleset weights.</li>
+				<li class="experiment">Syndicate Traitors, both roundstart, latejoin, and midround, are also always exempt from this weight reduction.</li>
+				<li class="experiment">Primetime rulesets now have lowered threat requirement, which should allow them to actually fire if the pop allows it but the Threat is average. Basically this means that Blob Tuesdays can finally be a thing. Also note that this doesn&#39;t affect low pop (if the threat requirement is 90, it will remain 90 in most cases)</li>
+				<li class="bugfix">The holomap on from the PDA Station Holomap app now properly updates when moving aboard a vehicle.</li>
+				<li class="rscadd">The round end scoreboard now indicates which potions were bought by a wizard.</li>
+				<li class="bugfix">Fixed scoreboard icons either missing or being wrong.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes the mouser fit inside the handgun holster.</li>
+			</ul>
+			<h3 class="author">Jackreturnswithaveangenace updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Fixed an exploitable thing and added dorf mommi spawners to dorf.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Compressed matter implants now only store the activation emote in the memory of the implanter instead of the implanted, as with other traitor implants.</li>
+				<li class="bugfix">RCDs can no longer be used on windows to remove mysterious invulnerable grilles.</li>
+			</ul>
+			<h2 class="date">2021.06.11</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The scoreboard of the previous round can now be checked at any point by clicking the Last Round Information button that is now always available in the top right (until the current round ends)</li>
+			</ul>
+			<h3 class="author">Jackreturnswithaveangenace updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a fully dysfunctional station for dorfmode events. Room for both chilling out in caves and building a functioning station. Includes a derelict ship mapped by BurntDevil.</li>
+			</ul>
 			<h2 class="date">2021.06.09</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1773,203 +1828,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="experiment">Pathogenic Clouds have been vastly optimized. They now merge together instead of stacking on top of one another on a single tile which should prevent the lag from many infected mobs in an enclosed space from increasing exponentially.</li>
-			</ul>
-			<h2 class="date">2020.12.12</h2>
-			<h3 class="author">Lakue-Bit updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Enables in-hands for Excellent Plasma Gladius Sword and gives the obj icon the proper sprite.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">added fannypack accessories, available from biogenerators and for priority assistants</li>
-			</ul>
-			<h3 class="author">jjpark-kb updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Gas miners will now tell you their operating state when examined. No power? On? Broken? the miner will tell you</li>
-			</ul>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds the roningasa(rice hat variant) to the bio generator</li>
-			</ul>
-			<h2 class="date">2020.12.10</h2>
-			<h3 class="author">jjpark-kb updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">you no longer get stuck in glued chairs/beds if they get deconstructed/destroyed.</li>
-				<li class="bugfix">baby carp will not grow up if dead</li>
-				<li class="bugfix">fixes the bear trap failing to update icon when set off when an item</li>
-			</ul>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds grass coats to the bio generator</li>
-			</ul>
-			<h2 class="date">2020.12.09</h2>
-			<h3 class="author">Arthurdentistss13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a small memorial to the DDR vault for a former admin who has recently passed away. RIP Shiggypiggy</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Vesta heaters are now 3x more powerful than they were previously, for a total of 30x more powerful. They also make an audible click when shutting off automatically due to heat.</li>
-			</ul>
-			<h3 class="author">PlausibleDeniability updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Created a jingle bell that makes noise like maracas, or attached to shoes to make noise like clown shoes!</li>
-				<li class="rscadd">Created several Christmas onesies, available in the festive supplies crate!</li>
-				<li class="rscadd">Created a blue santa hat to go along with the others!</li>
-				<li class="rscadd">The ugly Christmas sweaters are now animated and have a vox variant!</li>
-			</ul>
-			<h2 class="date">2020.12.07</h2>
-			<h3 class="author">mpowell88 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Fixed catbeast objectives getting redtext if they met the requirements.</li>
-			</ul>
-			<h2 class="date">2020.12.06</h2>
-			<h3 class="author">IThe-TI updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Flipped rtables look like rtables now</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">lithp ith now a roundthart option</li>
-			</ul>
-			<h2 class="date">2020.12.05</h2>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Added some buffers to the frozen cores entrances, meaning that opening the doors doesn&#39;t instafreeze the entire east station.</li>
-				<li class="rscadd">There are now shutters on all the windows in snaxi atmospherics, allowing users to press a button in the CE&#39;s office to drop them.</li>
-				<li class="bugfix">snaxi TEG vent is facing the correct way</li>
-			</ul>
-			<h2 class="date">2020.12.04</h2>
-			<h3 class="author">Exxion updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Projectile penetration has been somewhat unfucked. Among other things, flamethrowers work again and maxed railguns can again fire more than like 20 tiles.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Now when you pull snowgear out of a snow closet, it will drop a scarf onto the floor too (or go into your hand if you have more than 2 hands)</li>
-				<li class="bugfix">You should now get the boots from a snow closet even if you have less than 2 hands (they fall on the floor)</li>
-			</ul>
-			<h3 class="author">Lakue-Bit updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Enables Blacksmithing recipes for solid plasma sheets.</li>
-				<li class="bugfix">Reduced the chances of higher quality phazon blacksmith stuff disappearing.</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Changed an odd trait of meta maint, where all the doors connecting to offices and departments from maint were part of maint.</li>
-				<li class="rscadd">meta: perma is much nicer now and has more stuff</li>
-				<li class="rscadd">meta: There is now a box of sunglasses in the armory.</li>
-				<li class="rscadd">meta: There are now 2 stacks of glass and 2 stacks of metal in pod bay, along side a welding helmet.</li>
-				<li class="bugfix">meta: Fixed a few rogue &#34;telescience&#34; areas appearing in the main science hall.</li>
-				<li class="bugfix">meta: There is now an APC in the maint above cargo..</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Changed passive vent sprites to be more unique.</li>
-				<li class="imageadd">Changed the sprites for heaters and freezers to better indicate their direction.</li>
-			</ul>
-			<h2 class="date">2020.12.03</h2>
-			<h3 class="author">namespace-Memory updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed Suit Up sandbox button breaking inventory UI</li>
-			</ul>
-			<h2 class="date">2020.12.02</h2>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Packed: tightens out some knots so power flowers again</li>
-			</ul>
-			<h2 class="date">2020.11.30</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Bar signs in ghetto bars no longer require bartender access.</li>
-			</ul>
-			<h2 class="date">2020.11.29</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a bug that caused vox and plasmaman bartenders to not get a service headset.</li>
-			</ul>
-			<h3 class="author">Exxion updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">SDQL can now understand typepaths in variable assignments, comparisons, etc.</li>
-			</ul>
-			<h3 class="author">Manleto updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Changed the law 4 to (maximize profits)</li>
-				<li class="rscdel">Deleted the previous law 4.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Plasmaman mechanics will no longer start without a suit.</li>
-			</ul>
-			<h2 class="date">2020.11.27</h2>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a notification for ghosts who have their corpse enthralled by a vampire.</li>
-			</ul>
-			<h2 class="date">2020.11.26</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Bagelstation: The brig used to have a digital valve connecting it to distro, now it&#39;s a straight pipe instead.</li>
-			</ul>
-			<h3 class="author">PlausibleDeniability updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The Suitlord 9000 has recently received a shipment of colored hoodies, try them out!</li>
-				<li class="rscadd">Created Insectoid sprites for the following uniforms: AutoDrobe, PietyVend, Supply crates and most department lockers</li>
-				<li class="bugfix">There were a few insectoid sprites already in the DMI that didn&#39;t have its species_fit set, now working</li>
-			</ul>
-			<h3 class="author">beesil updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Roidstation, Horizon, and Bagel now all have magic mirrors in their respective wizard dens.</li>
-			</ul>
-			<h2 class="date">2020.11.25</h2>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The mad scientist megaphone user can no longer be tracked on cameras by silicons.</li>
-			</ul>
-			<h2 class="date">2020.11.24</h2>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Ian is a Boy Again</li>
-			</ul>
-			<h2 class="date">2020.11.22</h2>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes the name of the security records board</li>
-				<li class="tweak">Fixes a typo in the ace reporter paper</li>
-			</ul>
-			<h2 class="date">2020.11.21</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Dynamic Mode&#39;s roundstart ruleset rigging badmin tools have been fixed, allowing admin to force all rulesets at once if they so desire.</li>
-				<li class="tweak">Improved Dynamic Mode logging. Should be easier to read and make sense of what happens now.</li>
-			</ul>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Fixes the description of guac</li>
-				<li class="rscadd">Adds modifying intercoms/hand-radios and construction/deconstruction back</li>
-				<li class="bugfix">Fixes modifying intercoms/hand-radios</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now slap someone else in the mouth with a cigarette pack to hand them a cigarette</li>
-				<li class="bugfix">Using a cigarette pack on your mouth no longer transmutes items into generic cigarettes</li>
-			</ul>
-			<h3 class="author">vtlevev1 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Packed: vox outpost has been rewired</li>
-				<li class="rscadd">Packed: minor fixes on the vox outpost, such as missing sinks.</li>
-			</ul>
-			<h2 class="date">2020.11.20</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a bug that caused some windoors to be open at round start when they should have been closed.</li>
-			</ul>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">ironman donuts can be put into donut boxes now.</li>
-				<li class="bugfix">Energy cutting weapons now properly keep firelocks open after a successful cut.</li>
-				<li class="bugfix">Fixes being unable to color things purple with crayons, and a variety of other issues related to the color purple</li>
-				<li class="tweak">Violet paint is now known as Purple paint</li>
 			</ul>
 		</div>
 		<!--

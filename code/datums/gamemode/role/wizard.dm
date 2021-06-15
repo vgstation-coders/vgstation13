@@ -9,6 +9,9 @@
 
 	stat_datum_type = /datum/stat/role/wizard
 
+	var/list/artifacts_bought = list()
+	var/list/potions_bought = list()
+
 /datum/role/wizard/ForgeObjectives()
 	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/wizard)
@@ -78,13 +81,13 @@
 			. += "<BR>The wizard knew:<BR>"
 			for(var/spell/S in H.spell_list)
 				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-				end_icons += tempimage
-				var/tempstate = end_icons.len
-				. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
-		if(artifacts_bought)
+				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+		if(artifacts_bought || potions_bought)
 			bought_nothing = FALSE
 			. += "<BR>Additionally, the wizard brought:<BR>"
 			for(var/entry in artifacts_bought)
+				. += "[entry]<BR>"
+			for(var/entry in potions_bought)
 				. += "[entry]<BR>"
 		if(bought_nothing)
 			. += "The wizard used only the magic of charisma this round."

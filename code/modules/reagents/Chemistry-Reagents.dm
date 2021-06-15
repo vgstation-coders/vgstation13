@@ -7719,7 +7719,7 @@
 	if(..())
 		return 1
 
-	M.stunned = 4
+	M.AdjustStunned(4)
 
 /datum/reagent/ethanol/drink/neurotoxin
 	name = "Neurotoxin"

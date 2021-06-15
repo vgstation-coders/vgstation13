@@ -115,6 +115,26 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		data["YY"] = time2text(world.realtime,"YY")
 		write_file(data)
 
+/datum/persistence_task/round_end_data
+	execute = TRUE
+	name = "Round end information"
+	file_path = "data/persistence/round_end_info.json"
+
+/datum/persistence_task/round_end_data/on_init()
+	var/to_read = read_file()
+	if(!to_read)
+		log_debug("[name] task found an empty file on [file_path]")
+		return
+	last_round_end_info = to_read["round_info"]
+	for (var/client/C in clients)
+		winset(C, "rpane.round_end", "is-visible=false")
+		winset(C, "rpane.last_round_end", "is-visible=true")
+
+/datum/persistence_task/round_end_data/on_shutdown()
+	if (round_end_info)
+		data["round_info"] = round_end_info
+	write_file(data)
+
 /datum/persistence_task/latest_dynamic_rulesets
 	execute = TRUE
 	name = "Latest dynamic rulesets"
@@ -128,12 +148,16 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if (!istype(dynamic_mode))
 		return
 	var/list/data = list(
-		"latest_rulesets" = list()
+		"one_round_ago" = list(),
+		"two_rounds_ago" = dynamic_mode.previously_executed_rules["one_round_ago"],
+		"three_rounds_ago" = dynamic_mode.previously_executed_rules["two_rounds_ago"]
 	)
 	for(var/datum/dynamic_ruleset/some_ruleset in dynamic_mode.executed_rules)
-		if(some_ruleset.calledBy)
+		if(some_ruleset.calledBy)//forced by an admin
 			continue
-		data["latest_rulesets"] |= "[some_ruleset.type]"
+		if(some_ruleset.stillborn)//executed near the end of the round
+			continue
+		data["one_round_ago"] |= "[some_ruleset.type]"
 	write_file(data)
 
 // This task has a unit test on code/modules/unit_tests/highscores.dm
@@ -161,7 +185,8 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	data += records
 	cmp_field = "cash"
 	sortTim(data, /proc/cmp_list_by_element_asc)
-	data.Cut(6) // we only store the top 5
+	if (data.len > 5)
+		data.Cut(6) // we only store the top 5
 	for(var/datum/record/money/record in data)
 		if(record in records)
 			if(data[1] == record)
@@ -182,3 +207,17 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/highscores/proc/clear_records()
 	data = list()
 	fdel(file(file_path))
+
+
+/datum/persistence_task/ape_mode
+	execute = TRUE
+	name = "Ape mode"
+	file_path = "data/persistence/ape_mode.json"
+
+/datum/persistence_task/ape_mode/on_init()
+	data = read_file()
+	if(length(data))
+		ape_mode = data["ape_mode"]
+
+/datum/persistence_task/ape_mode/on_shutdown()
+	write_file(list("ape_mode" = ape_mode))

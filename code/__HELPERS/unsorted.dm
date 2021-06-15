@@ -1827,6 +1827,34 @@ Game Mode config tags:
 	else
 		return null
 
+/proc/IsRoundAboutToEnd()
+	//Is the round even already over?
+	if (ticker.current_state == GAME_STATE_FINISHED)
+		return TRUE
+
+	//Is the shuttle on its way to the station? or to centcomm after having departed from the station?
+	if(emergency_shuttle.online && emergency_shuttle.direction > 0)
+		return TRUE
+
+	//Is a nuke currently ticking down?
+	for (var/obj/machinery/nuclearbomb/the_bomba in nuclear_bombs)
+		if (the_bomba.timing)
+			return TRUE
+
+	//Is reality fucked?
+	if (universe.name in list("Hell Rising", "Supermatter Cascade"))
+		return TRUE
+
+	//Is some faction about to end the round?
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+	if (istype(dynamic_mode))
+		for (var/datum/faction/faction in dynamic_mode.factions)
+			if (faction.stage >= FACTION_ENDGAME)
+				return TRUE
+
+	//All is well
+	return FALSE
+
 //Ported from TG
 /proc/window_flash(client/C, ignorepref = FALSE)
     if(ismob(C))

@@ -627,6 +627,8 @@ Thanks.
 	regenerate_icons()
 	update_canmove()
 
+	clear_fullscreens()
+
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
 

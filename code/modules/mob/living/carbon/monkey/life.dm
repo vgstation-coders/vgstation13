@@ -72,6 +72,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
+		standard_damage_overlay_updates()
 
 	// Grabbing
 	for(var/obj/item/weapon/grab/G in src)

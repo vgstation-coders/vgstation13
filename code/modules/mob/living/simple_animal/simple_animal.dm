@@ -68,6 +68,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	mob_bump_flag = SIMPLE_ANIMAL
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
+	status_flags = CANPUSH //They cannot be conventionally stunned. AIs normally ignore this but stuns used to be able to disable player-controlled ones
 
 	//LETTING SIMPLE ANIMALS ATTACK? WHAT COULD GO WRONG. Defaults to zero so Ian can still be cuddly
 	var/melee_damage_lower = 0
@@ -595,6 +596,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
+	if (damage > 0)
+		damageoverlaytemp = 20
 	if(skinned())
 		damage = damage * 2
 	if(purge)
@@ -835,20 +838,5 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 	else
 		qdel(src)
-
-/mob/living/simple_animal/isStunned() //Used so that it allows clients to attack in code/_onclick/click.dm
-	if(client)
-		return 0
-	return ..()
-
-/mob/living/simple_animal/isJustStunned() //Used so that it allows clients to move in code/mobules/mob/mob.dm
-	if(client)
-		return 0
-	return ..()
-
-/mob/living/simple_animal/isKnockedDown() //Ditto
-	if(client)
-		return 0
-	return ..()
 
 /datum/locking_category/simple_animal

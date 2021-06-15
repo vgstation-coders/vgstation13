@@ -360,7 +360,7 @@
 
 /obj/item/weapon/spellbook/oneuse/timestop/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		user.stunned = 5
+		user.AdjustStunned(5)
 		user.flash_eyes(visual = 1)
 		to_chat(user, "<span class = 'warning'>You have been turned into a statue!</span>")
 		new /obj/structure/closet/statue(user.loc, user) //makes the statue
@@ -532,7 +532,7 @@
 ///// ANCIENT SPELLBOOK /////
 
 /obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise available to purchase, only available via the spellbook bundle
-	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate, /spell/targeted/card)
 	spell = null
 	icon_state = "book"
 	desc = "A book of lost and forgotten knowledge."
