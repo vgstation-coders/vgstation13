@@ -142,4 +142,4 @@
 /datum/map_element/hoboshack
 	name = "Space hobo shack"
 
-	file_path = "maps/randomvaults/misc/hoboshack.dmm"
+	file_path = "maps/misc/hoboshack.dmm"
