@@ -151,7 +151,7 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 	else if(H.species.anatomy_flags & RGBSKINTONE)
 		preview_icon.Blend(rgb(H.my_appearance.r_hair, H.my_appearance.g_hair, H.my_appearance.b_hair), ICON_ADD)
 
-	var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = H.species ? H.species.eyes : "eyes_s")
+	var/icon/eyes_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = H.species ? H.species.eyes : "eyes_s")
 
 	eyes_s.Blend(rgb(H.my_appearance.r_eyes, H.my_appearance.g_eyes, H.my_appearance.b_eyes), ICON_ADD)
 

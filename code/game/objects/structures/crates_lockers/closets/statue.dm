@@ -74,9 +74,10 @@
 	..()
 
 /obj/structure/closet/statue/Destroy()
-	..()
-
 	processing_objects.Remove(src)
+	for (var/atom/A in src)
+		qdel(A)
+	..()
 
 
 /obj/structure/closet/statue/proc/dissolve()
@@ -92,12 +93,13 @@
 	spawn(10)
 		for(var/i=1 to 5)
 			for(var/mob/living/L in contents)
-				L.adjustBruteLoss(60)
-				L.mutations |= M_NOCLONE
+				L.adjustBruteLoss(10)
+				if (L.health <= 0)
+					L.mutations |= M_NOCLONE
 
-				if(ishuman(L) && !(M_HUSK in L.mutations))
-					var/mob/living/carbon/human/H = L
-					H.ChangeToHusk()
+					if(ishuman(L) && !(M_HUSK in L.mutations))
+						var/mob/living/carbon/human/H = L
+						H.ChangeToHusk()
 				sleep(10)
 
 		dump_contents()
