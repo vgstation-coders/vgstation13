@@ -54,7 +54,7 @@
 	name = "Syndicate Challengers"
 	role_category = /datum/role/traitor/challenger
 	role_category_override = TRAITOR
-	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
+	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Detective",
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director", "Brig Medic")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 2
