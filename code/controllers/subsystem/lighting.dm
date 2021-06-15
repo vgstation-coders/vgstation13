@@ -30,7 +30,7 @@ var/init_lights = list()
 
 /datum/subsystem/lighting/Initialize(timeofday)
 	for(var/atom/movable/light/L in init_lights)
-		if(L && !L.gcDestroyed)
+		if(!L.gcDestroyed)
 			L.cast_light()
 	init_lights = null
 	initialized = TRUE
@@ -38,11 +38,9 @@ var/init_lights = list()
 
 
 /datum/subsystem/lighting/fire(resumed=FALSE)
-	if (!resuming)
+	if (!resumed)
 		currentrun_lights   = lighting_update_lights
 		lighting_update_lights   = list()
-
-	resuming = 1
 
 	while (currentrun_lights.len)
 		var/atom/movable/light/L = currentrun_lights[currentrun_lights.len]
@@ -53,9 +51,6 @@ var/init_lights = list()
 
 		if (MC_TICK_CHECK)
 			return
-
-	resuming = 0
-
 
 /datum/subsystem/lighting/Recover()
 	initialized = SSlighting.initialized

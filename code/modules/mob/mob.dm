@@ -1621,8 +1621,7 @@ Use this proc preferably at the end of an equipment loadout
 				if (self_vision.alpha == self_vision.target_alpha)
 					self_vision.alpha = 0
 			else
-				if (self_vision.alpha != self_vision.target_alpha)
-					self_vision.alpha = self_vision.target_alpha
+				self_vision.alpha = self_vision.target_alpha
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)

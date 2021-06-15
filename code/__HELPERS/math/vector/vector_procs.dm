@@ -84,6 +84,6 @@
 				V.x -= sign(V.x)
 				V.y -= sign(V.y)
 			if (1 to 12)
-				steps += new /vector(, sign(V.y))
+				steps += new /vector(0, sign(V.y))
 				V.y -= sign(V.y)
 

@@ -69,7 +69,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSMOB|PASSDOOR
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/lightcycle
-	var/obj/lightribbon/last_ribbon
+	var/obj/effect/lightribbon/last_ribbon
 	var/obj/item/key/lightcycle/summoning_rod = null
 	var/delay_ribbon = 0
 	var/l_color = "#FFFFFF"
@@ -177,7 +177,7 @@
 		if(delay_ribbon)
 			delay_ribbon--
 		else
-			last_ribbon = new /obj/lightribbon(T,l_color,lastdir,lastLASTdir)
+			last_ribbon = new /obj/effect/lightribbon(T,l_color,lastdir,lastLASTdir)
 			lastLASTdir = lastdir
 			lastdir = dir
 
@@ -223,7 +223,7 @@
 		"[EAST]" = list("x" = 0, "y" = 2 * PIXEL_MULTIPLIER)
 		)
 
-/obj/lightribbon
+/obj/effect/lightribbon
 	name = "light ribbon"
 	desc = "A wall of light ejected from the back of a light cycle."
 	anchored = 1
@@ -233,7 +233,7 @@
 	var/l_color = "#FFFFFF"
 	var/erasing = FALSE
 
-/obj/lightribbon/New(atom/A, var/col, var/currdir, var/lastdir)
+/obj/effect/lightribbon/New(atom/A, var/col, var/currdir, var/lastdir)
 	..(A)
 	if(currdir)
 		if(!lastdir)
@@ -256,14 +256,14 @@
 		icon += l_color
 	set_light(1,5,l_color)
 
-/obj/lightribbon/attackby(obj/item/weapon/W, mob/user)
+/obj/effect/lightribbon/attackby(obj/item/weapon/W, mob/user)
 	if(!(user.locked_to && istype(user.locked_to, /obj/structure/bed/chair/vehicle/lightcycle)))
 		to_chat(user, "\The [src] dissipates as you hit it with \the [W].")
 		erase(src)
 
-/obj/lightribbon/proc/erase() //Used for the safe version when a ribbon is destroyed.
+/obj/effect/lightribbon/proc/erase() //Used for the safe version when a ribbon is destroyed.
 	erasing = TRUE
-	for(var/obj/lightribbon/L in orange(1,src))
+	for(var/obj/effect/lightribbon/L in orange(1,src))
 		if(L.l_color == l_color)
 			if(!L.erasing)
 				spawn(1)

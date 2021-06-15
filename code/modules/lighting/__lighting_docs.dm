@@ -3,7 +3,7 @@ BS12 object based lighting system
 */
 
 /*
-Changes from Gonlights / TG DAL:
+Changes from Goonlights / TG DAL:
   -	Lighting is done using objects instead of subareas.
   - Animated transitions. (currently, alpha flickering)
   - Full colours with mixing.
@@ -24,7 +24,7 @@ Changes from Gonlights / TG DAL:
 		- Byond obscurity is binary. Either the full tile is rendered to the client, or they will see an opaque black square.
 		- Byond obscurity is "lifted" using the light obj's "luminosity" variable.
 		- This luminosity is set higher than light_range.
-		- Indeed, in a turf is not "seen" by any lights - out of range of all light sources, the player will be blind and not see the lights, even though they are in range.
+		- Indeed, if a turf is not "seen" by any lights - out of range of all light sources, the player will be blind and not see the lights, even though they are in range.
 		- In other words, you can't see the light if it can't see you.
 		- Once byond darkness is lifted, a dark plane of "Europa obscurity" is lifted.
 		- In complete darkness, the players can lift byond darkness by their built-in "seeindark" var.
@@ -74,7 +74,7 @@ turf: (lighting_turf.dm)
   - var/list/affecting_lights; list of light sources that are shining onto this turf
 
   - proc/get_lumcount(var/minlum = 0, var/maxlum = 10)
-  	  - Returns an integber according to the amount of lums on a turf's overlay (also averages them)
+  	  - Returns an integer according to the amount of lums on a turf's overlay (also averages them)
   	  - With default arguments (based on the fact that 0 = pitch black and 10 = full bright), it will return .5 for a 50% lit tile.
 	  - To be checked for bugs.
 */

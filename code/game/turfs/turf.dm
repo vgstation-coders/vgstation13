@@ -356,16 +356,12 @@
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
-	//var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
-	//var/old_lighting_overlay = lighting_overlay
-	//var/old_corners = corners
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
 	var/old_registered_events = registered_events
 
 	var/old_holomap = holomap_data
-//	to_chat(world, "Replacing [src.type] with [N]")
 
 	if(connections)
 		connections.erase_all()
