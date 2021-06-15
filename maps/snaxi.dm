@@ -25,7 +25,7 @@
 			},
 		/datum/zLevel/mining,
 		)
-	enabled_jobs = list(/datum/job/trader)
+	enabled_jobs = list(/datum/job/trader,/datum/job/hobo)
 
 	event_blacklist = list(/datum/event/radiation_storm,/datum/event/carp_migration,/datum/event/rogue_drone,/datum/event/immovable_rod,
 						/datum/event/meteor_wave,/datum/event/meteor_shower,/datum/event/thing_storm/meaty_gore,/datum/event/thing_storm/blob_shower,

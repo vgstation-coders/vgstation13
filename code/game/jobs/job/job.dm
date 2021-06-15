@@ -50,7 +50,7 @@
 	var/list/species_whitelist = list() //If this list isn't empty, job is only available to species in this list
 
 	var/must_be_map_enabled = 0	//If 1, this job only appears on maps on which it's enabled (its type must be in the map's "enabled_jobs" list)
-								//Example:      enabled_jobs = list(/datum/job/trader) //Enable "trader" job for this map
+								//Example:      enabled_jobs = list(/datum/job/trader,/datum/job/hobo) //Enable "trader" job for this map
 
 	var/no_crew_manifest = 0 //If 1, don't inject players with this job into the crew manifest
 	var/no_starting_money = 0 //If 1, don't start with a bank account or money

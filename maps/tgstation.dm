@@ -24,8 +24,7 @@
 			name = "spacePirateShip" ;
 			},
 		)
-	enabled_jobs = list(/datum/job/trader)
-	enabled_jobs = list(/datum/job/hobo)
+	enabled_jobs = list(/datum/job/trader,/datum/job/hobo)
 
 	load_map_elements = list(
 	/datum/map_element/dungeon/holodeck
