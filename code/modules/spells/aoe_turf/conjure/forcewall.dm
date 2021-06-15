@@ -128,12 +128,10 @@ Unwall fields
 		spawn(duration)
 			qdel(src)
 
-/obj/effect/unwall_field/to_bump(atom/A)
-	if(ismovable(A)) // For forceMove
-		var/atom/movable/AM = A
-		if(is_type_in_list(src.loc,forbidden_passes))
+/obj/effect/unwall_field/to_bump(atom/movable/A)
+	if(is_type_in_list(src.loc,forbidden_passes))
+		return
+	for(var/atom/B in src.loc) // Go through everything, discount passing through forbidden stuff
+		if(is_type_in_list(B,forbidden_passes))
 			return
-		for(var/atom/B in src.loc) // Go through everything, discount passing through forbidden stuff
-			if(is_type_in_list(B,forbidden_passes))
-				return
-		AM.forceMove(src.loc)
+	A.forceMove(src.loc)
