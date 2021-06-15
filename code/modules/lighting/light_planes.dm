@@ -6,13 +6,13 @@
 
 /obj/abstract/screen/plane/New(var/client/C)
 	..()
-	if(istype(C)) C.screen += src
+	if(istype(C))
+		C.screen += src
 	verbs.Cut()
 
 /obj/abstract/screen/plane/master
 	icon = 'icons/mob/screen1.dmi'
 	appearance_flags = NO_CLIENT_COLOR | PLANE_MASTER | RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
-	//list(null,null,null,"#0000","#000F")
 	color = LIGHTING_PLANEMASTER_COLOR  // Completely black.
 	plane = LIGHTING_PLANE_MASTER
 	mouse_opacity = 0

@@ -336,15 +336,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/proc/CheckOcclusion(var/turf/T)
 	if(!istype(T))
 		return 0
-
-	if(T.opacity)
-		return 1
-
-	for(var/obj/machinery/door/D in T)
-		if(D.opacity)
-			return 1
-
-	return 0
+	return T.check_blocks_light()
 
 // -- This is the UGLY part.
 

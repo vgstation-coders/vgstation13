@@ -1,4 +1,4 @@
-// Destroys and removes a light; replaces previous system's kill_light().
+// Destroys and removes a light
 /atom/proc/kill_light()
 	if(light_obj)
 		qdel(light_obj)
@@ -6,7 +6,6 @@
 	if (shadow_obj)
 		qdel(shadow_obj)
 		shadow_obj = null
-	return
 
 // Updates all appropriate lighting values and then applies all changed values
 // to the objects light_obj overlay atom.
