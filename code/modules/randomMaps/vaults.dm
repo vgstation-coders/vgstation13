@@ -98,7 +98,9 @@
 /proc/generate_hoboshacks()
 	var/list/list_of_shacks = get_map_element_objects(/datum/map_element/hoboshack)
 
-	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, rand(1,3), filter_function=/proc/asteroid_can_be_placed)
+	var/shack_number = rand(1,3)
+
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, shack_number, filter_function=/proc/asteroid_can_be_placed)
 
 	message_admins("<span class='info'>Loaded [result] out of [shack_number] space hobo shacks.</span>")
 
