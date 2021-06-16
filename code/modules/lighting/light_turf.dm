@@ -10,7 +10,7 @@
 		blocks_light = -1
 
 /turf/proc/get_lumcount()
-	affecting_lights = affecting_lights & view(src)
+	affecting_lights &= view(src)
 	if(lumcount == -1)
 		lumcount = 0
 		for(var/atom/movable/light/thing in affecting_lights)
