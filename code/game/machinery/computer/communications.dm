@@ -256,7 +256,7 @@ var/list/shuttle_log = list()
 				if(response == "Yes")
 					recall_shuttle(usr)
 					if(!isobserver(usr))
-						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)]."
+						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)] ([usr.x-WORLD_X_OFFSET[usr.z]], [usr.y-WORLD_Y_OFFSET[usr.z]], [usr.z])."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -590,7 +590,7 @@ var/list/shuttle_log = list()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	if(!isobserver(user))
-		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)]."
+		shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)] ([usr.x-WORLD_X_OFFSET[usr.z]], [usr.y-WORLD_Y_OFFSET[usr.z]], [usr.z])."
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
