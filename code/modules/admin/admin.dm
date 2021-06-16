@@ -895,7 +895,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
 			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=togglerunescape'>Toggle Maint-Only PvP Mechanics</A><BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapepvp'>Toggle Maint-Only PvP</A><BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapeskull'>Toggle Skull icon appearing over aggressors</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>

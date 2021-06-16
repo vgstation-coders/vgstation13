@@ -445,7 +445,7 @@ var/datum/controller/gameticker/ticker
 		nanocoins_rates = (rand(1,30))/10
 
 	//runescape skull updates
-	if (runescape_pvp)
+	if (runescape_skull_display)
 		for (var/entry in runescape_skulls)
 			var/datum/runescape_skull_data/the_data = runescape_skulls[entry]
 			the_data.process()
