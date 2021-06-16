@@ -404,16 +404,9 @@ var/stacking_limit = 90
 
 	// Is THE LIST non-empty ?
 	if (candidate_rules.len > 0)
-		var/datum/dynamic_ruleset/roundstart/extended/stendo = (locate(/datum/dynamic_ruleset/roundstart/extended) in candidate_rules)
-		// eggstanded
-		if (stendo)
-			if (executing_roundstart_rule(stendo))
-				return 1
-			else
-				candidate_rules =- stendo
-
 		for (var/datum/dynamic_ruleset/roundstart/DR in candidate_rules)
 			executing_roundstart_rule(DR)
+		return 1
 	else
 		message_admins("DYNAMIC MODE: The mode failed to pick a first ruleset. The round will begin without any roles assigned.")
 		log_admin("DYNAMIC MODE: The mode failed to pick a first ruleset. The round will begin without any roles assigned.")
