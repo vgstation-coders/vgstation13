@@ -539,7 +539,7 @@
 	if(!hobostart.len || hobostart.len < 9)
 		generate_hoboshack()
 	//find a viable mouse candidate
-	var/mob/living/carbon/human/hobo = Humanize(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10:"Unathi"))
+	var/mob/living/carbon/human/hobo = Humanize(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
 	hobo.forceMove(pick(hobostart))
 	var/datum/outfit/hobo/hobo_outfit = new
 	hobo_outfit.equip(hobo)
