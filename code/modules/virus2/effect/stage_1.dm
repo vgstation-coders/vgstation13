@@ -179,7 +179,7 @@
 /datum/disease2/effect/radresist
 	name = "Hyronalinism"
 	desc = "Causes the infected to synthesize Hyronalin."
-	encyclopedia = "The effect can trigger up to 10 times in total, and only when radiations are detected in the infected."
+	encyclopedia = "The effect can trigger up to 10 times in total, and only when radiation is detected in the infected."
 	stage = 1
 	chance = 10
 	max_chance = 40
