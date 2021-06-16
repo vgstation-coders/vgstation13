@@ -45,7 +45,6 @@ var/const/CLOWN				=(1<<11)
 var/const/MIME				=(1<<12)
 var/const/ASSISTANT			=(1<<13)
 var/const/TRADER			=(1<<14)
-var/const/HOBO				=(1<<15)
 
 var/list/command_positions = list(
 	"Captain",
