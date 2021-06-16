@@ -75,7 +75,7 @@ var/list/non_standard_maint_areas = list(
 	M.just_fought(src,weak_assault)
 
 /mob/proc/just_fought(var/mob/M,var/weak_assault=FALSE)
-	if (!runescape_skulls || weak_assault)
+	if (!runescape_skull_display || weak_assault)
 		return
 	if (!ticker)
 		return
