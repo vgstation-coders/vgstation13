@@ -2603,7 +2603,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/clownsuit = 3,
 		/obj/item/clothing/mask/gas/oni = 3,
 		/obj/item/clothing/head/helmet/samurai = 3,
-		/obj/item/clothing/suit/armor/samurai = 3
+		/obj/item/clothing/suit/armor/samurai = 3,
+		/obj/item/toy/syndicateballoon/green = 1
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
