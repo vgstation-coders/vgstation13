@@ -152,3 +152,6 @@
 
 /obj/effect/landmark/vox_locker
 	name = "vox_locker"
+
+/obj/effect/landmark/hobostart
+	name = "hobostart"

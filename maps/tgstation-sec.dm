@@ -25,7 +25,7 @@
 			name = "spacePirateShip" ;
 			},
 		)
-	enabled_jobs = list(/datum/job/trader,/datum/job/hobo)
+	enabled_jobs = list(/datum/job/trader)
 	disabled_jobs = list(
 		/datum/job/hos,
 		/datum/job/warden,

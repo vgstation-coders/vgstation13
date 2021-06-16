@@ -24,7 +24,7 @@
 			name = "spacePirateShip" ;
 			},
 		)
-	enabled_jobs = list(/datum/job/trader,/datum/job/hobo)
+	enabled_jobs = list(/datum/job/trader)
 
 	event_blacklist = list(/datum/event/carp_migration,/datum/event/rogue_drone,/datum/event/immovable_rod,
 						/datum/event/meteor_wave,/datum/event/meteor_shower,/datum/event/thing_storm/meaty_gore,/datum/event/thing_storm/blob_shower,

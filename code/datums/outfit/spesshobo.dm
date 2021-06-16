@@ -3,7 +3,6 @@
 /datum/outfit/hobo
 
 	outfit_name = "Space Hobo"
-	associated_job = /datum/job/hobo
 
 	backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
@@ -17,8 +16,8 @@
 			slot_w_uniform_str = /obj/item/clothing/under/color/grey,
 			slot_shoes_str = /obj/item/clothing/shoes/magboots,
 			slot_belt_str = /obj/item/device/radio,
-            slot_wear_suit_str = /obj/item/clothing/suit/space,
-            slot_head_str = /obj/item/clothing/head/helmet/space,
+            slot_wear_suit_str = /obj/item/clothing/suit/space/ghettorig,
+            slot_head_str = /obj/item/clothing/head/helmet/space/ghetto,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox = list(
@@ -49,5 +48,4 @@
 	)
 
 	pda_type = null
-	associated_job = /datum/job/hobo
 	id_type = /obj/item/weapon/card/id/vox
