@@ -59,10 +59,7 @@
 	updateUsrDialog()
 	return
 
-/obj/structure/ore_box/proc/dump_everything(var/atom/target)
-	if (target == null)
-		target = get_turf(src)
-
+/obj/structure/ore_box/proc/dump_everything()
 	for(var/ore_id in stored_ores)
 		var/amount = stored_ores[ore_id]
 		if(amount > 0)
