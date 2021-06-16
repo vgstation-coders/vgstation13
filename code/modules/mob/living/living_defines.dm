@@ -84,3 +84,5 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/image/pathogen
 	var/datum/immune_system/immune_system
+
+	var/life_tick = 0      // The amount of life ticks that have processed on this mob.

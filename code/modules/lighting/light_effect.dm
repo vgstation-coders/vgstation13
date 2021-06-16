@@ -28,6 +28,8 @@
 	var/list/affecting_turfs = list()
 	var/list/temp_appearance
 
+	var/light_swallowed = 0
+
 /atom/movable/light/shadow
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND

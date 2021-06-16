@@ -37,6 +37,12 @@ var/light_power_multiplier = 5
 	light_range = min(MAX_LIGHT_RANGE, light_range)
 	light_color = (holder.light_color || light_color)
 
+	if (light_swallowed > 0)
+		light_range = 1
+		light_power = 1
+		if (light_type != LIGHT_DIRECTIONAL)
+			light_type = LIGHT_SOFT_FLICKER
+
 	if(light_type == LIGHT_SOFT_FLICKER)
 		alpha = initial(alpha)
 		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)

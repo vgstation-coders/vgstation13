@@ -98,13 +98,14 @@
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
+	lazy_invoke_event(/lazy_event/on_life, list("L" = src, "life_tick" = life_tick))
 	return 1
 
 // Apply connect damage
 /mob/living/beam_connect(var/obj/effect/beam/B)
 	..()
 	last_beamchecks["\ref[B]"]=world.time
-
+lazy_invoke_event
 /mob/living/beam_disconnect(var/obj/effect/beam/B)
 	..()
 	apply_beam_damage(B)
