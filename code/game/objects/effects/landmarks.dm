@@ -89,6 +89,9 @@
 		if("grinchstart")
 			grinchstart += loc
 
+		if("hobostart")
+			hobostart += loc
+
 		if("voxstart")
 			voxstart += loc
 
