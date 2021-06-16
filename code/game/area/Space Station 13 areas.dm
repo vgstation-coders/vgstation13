@@ -1144,121 +1144,93 @@ proc/process_adminbus_teleport_locs()
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
+	jammed = SUPER_JAMMED
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
-
+	jammed = 0
 
 /area/holodeck/source_plating
 	name = "\improper Holodeck - Off"
 	icon_state = "Holodeck"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_emptycourt
 	name = "\improper Holodeck - Empty Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_boxingcourt
 	name = "\improper Holodeck - Boxing Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_basketball
 	name = "\improper Holodeck - Basketball Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_thunderdomecourt
 	name = "\improper Holodeck - Thunderdome Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_beach
 	name = "\improper Holodeck - Beach"
 	icon_state = "Holodeck" // Lazy.
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_burntest
 	name = "\improper Holodeck - Atmospheric Burn Test"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_wildlife
 	name = "\improper Holodeck - Wildlife Simulation"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_meetinghall
 	name = "\improper Holodeck - Meeting Hall"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_theatre
 	name = "\improper Holodeck - Theatre"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_picnicarea
 	name = "\improper Holodeck - Picnic Area"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_snowfield
 	name = "\improper Holodeck - Snow Field"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_desert
 	name = "\improper Holodeck - Desert"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_space
 	name = "\improper Holodeck - Space"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_firingrange
 	name = "\improper Holodeck - Firing Range"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_wildride
 	name = "\improper Holodeck - Wild Ride"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_chess
 	name = "\improper Holodeck - Chess Board"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_maze
 	name = "\improper Holodeck - Maze"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_dining
 	name = "\improper Holodeck - Dining Hall"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_lasertag
 	name = "\improper Holodeck - Laser Tag Arena"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_zoo
 	name = "\improper Holodeck - Zoo"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_ragecage
 	name = "\improper Holodeck - Rage Cage"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_panic
 	name = "\improper Holodeck - Panic Bunker"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_medieval
 	name = "\improper Holodeck - Medieval Times"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_checkers
 	name = "\improper Holodeck - Checkers"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_gym
 	name = "\improper Holodeck - Gym"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_catnip
 	name = "\improper Holodeck - Club Catnip"
-	jammed=SUPER_JAMMED
 
+/area/holodeck/source_olympics_demo_a
+	name = "\improper Holodeck - Demo A"
+
+/area/holodeck/source_olympics_demo_b
+	name = "\improper Holodeck - Demo B"
 
 //Engineering
 

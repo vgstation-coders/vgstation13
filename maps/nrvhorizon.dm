@@ -33,28 +33,6 @@
 	load_map_elements = list(
 	/datum/map_element/dungeon/holodeck_3x3
 	)
-	holodeck_rooms = list(
-		"Basketball Court",
-		"Beach",
-		"Boxing Court",
-		"Desert",
-		"Dining Hall",
-		"Empty Court",
-		"Firing Range",
-		"Gym",
-		"Meeting Hall",
-		"Panic Bunker",
-		"Picnic Area",
-		"Snow Field",
-		"Theatre",
-		"Thunderdome Court",
-		"Wild Ride",
-		"Zoo"
-	)
-	emagged_holodeck_rooms = list(
-		"Begin Atmospheric Burn Simulation",
-		"Begin Wildlife Simulation"
-	)
 	has_engines = TRUE
 
 	holomap_offset_x = list(0,0,0,86,0,0,0,)
