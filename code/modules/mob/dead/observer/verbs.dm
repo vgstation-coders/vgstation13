@@ -525,9 +525,9 @@
 	if(!can_reenter_corpse)
 		to_chat(src, "<span class='warning'>You must have had presence on this plane to become this.</span>")
 		return
-	//if(!config.respawn_as_hobo)
-	//	to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled..</span>")
-	//	return
+	if(!config.respawn_as_hobo)
+		to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled.</span>")
+		return
 
 	var/timedifference = world.time - client.time_died_as_mouse
 	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
