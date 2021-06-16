@@ -178,7 +178,7 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	var/players = player_list.len
-	var/shack_amount = max(players/10,3)
+	var/shack_amount = min(players/10,3)
 	generate_hoboshacks(shack_amount) //not tying this to vaults since jobs need it
 	job_master.DivideOccupations() //Distribute jobs
 	var/can_continue = src.mode.Setup()//Setup special modes
