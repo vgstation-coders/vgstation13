@@ -8520,6 +8520,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#FFA500"
 	custom_metabolism = 0.1
 
+/datum/reagent/softcores
+	name = "softcores"
+	id = SOFTCORES
+	description = "Lesser known than its cheaper cousin in the popular snack 'mag-bites', softcores have all the benefits of chemical magnetism without the heart-stopping side effects."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#ff5100"
+	custom_metabolism = 0.1
+
 //Plant-specific reagents
 
 /datum/reagent/kelotane/tannic_acid
