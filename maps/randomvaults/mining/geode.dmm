@@ -1,0 +1,33 @@
+"a" = (/turf/unsimulated/mineral/random/high_chance,/area)
+"c" = (/obj/item/stack/ore/telecrystal{pixel_x = 5; pixel_y = 5},/obj/item/stack/ore/telecrystal{pixel_x = -5; pixel_y = 5},/obj/item/stack/ore/telecrystal,/turf/unsimulated/floor/asteroid/underground,/area)
+"e" = (/obj/item/stack/ore/diamond,/turf/unsimulated/floor/asteroid/underground,/area)
+"j" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid/underground,/area)
+"y" = (/obj/item/stack/ore/telecrystal,/turf/unsimulated/floor/asteroid/underground,/area)
+"z" = (/turf/unsimulated/floor/asteroid/underground,/area)
+"D" = (/obj/structure/crystal,/turf/unsimulated/mineral/snow,/area)
+"E" = (/obj/item/stack/ore/diamond{pixel_x = 3; pixel_y = 3},/obj/item/stack/ore/diamond,/turf/unsimulated/floor/asteroid/underground,/area)
+"O" = (/turf/unsimulated/mineral/snow,/area)
+"X" = (/obj/item/stack/ore/telecrystal,/obj/item/stack/ore/telecrystal{pixel_x = 5; pixel_y = 10},/turf/unsimulated/floor/asteroid/underground,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaOaaa
+aaaaaaaaaaaOOOaOOaaa
+aaaaaaaaaaaaOaOOaaaa
+aaaaaaaaaaaOaaaaaaaa
+aaaaaaaaaaaaaOaaaaaa
+aaaaaaaOaaaaaOOaOaaa
+aaaaaaaaaOOOaOOOaaaa
+aaaaaaaaODzOOaOaaaaa
+aaaaaaaOOjcjeOaaaaaa
+aaaaaaOjjzzzzDOaaaaa
+aaaaaaODEzzzyjDaaaaa
+aaaOaaOyjzzzjzOaaaaa
+aaaaaaaOzXjyeDaaaaaa
+aaaaaaaaOjOjOaaaaaaa
+aaaaOaaaaOOOaaaaaaaa
+aaOOaOaaaaaaaaaaaaaa
+aaaOaaaaaaaaaaaaOaaa
+aaaaaaaaaaaaaaaOaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaOaaaaaaaaaaaa
+"}
