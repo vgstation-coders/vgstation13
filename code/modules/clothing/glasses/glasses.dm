@@ -625,13 +625,13 @@ var/list/science_goggles_wearers = list()
 		disable()
 		processing_objects.Remove(src)
 
-/obj/item/clothing/glasses/emitter/mannequin_equip(var/obj/structure/mannequin/mannequin,var/slot,var/hand_slot)
+/obj/item/clothing/glasses/emitter/mannequin_equip(var/atom/movable/mannequin,var/slot,var/hand_slot)//can be either a static structure or an hostile mob
 	if(slot == SLOT_MANNEQUIN_EYES)
 		emitter = mannequin
 		enable()
 		processing_objects.Add(src)
 
-/obj/item/clothing/glasses/emitter/mannequin_unequip(var/obj/structure/mannequin/mannequin)
+/obj/item/clothing/glasses/emitter/mannequin_unequip(var/atom/movable/mannequin)
 	previous_dir = null
 	previous_loc = null
 	disable()

@@ -18,7 +18,7 @@
 			},
 		/datum/zLevel/space{
 			name = "spaceEmpty" ;
-			}			
+			}
 		)
 	enabled_jobs = list(/datum/job/trader)
 
@@ -31,7 +31,7 @@
 
 	center_x = 222
 	center_y = 262
-	
+
 //All security airlocks have randomized wires
 /obj/machinery/door/airlock/glass_security/New()
 	.=..()
@@ -40,6 +40,11 @@
 /obj/machinery/door/airlock/security/New()
 	.=..()
 	wires = new /datum/wires/airlock/secure(src)
+
+/datum/map/active/map_equip(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+	H.equip_or_collect(new /obj/item/weapon/storage/box/dorf(H.back), slot_in_backpack)
 
 ////////////////////////////////////////////////////////////////
 #include "dorfstation.dmm"

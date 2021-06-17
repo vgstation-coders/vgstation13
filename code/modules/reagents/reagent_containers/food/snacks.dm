@@ -6578,6 +6578,17 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	reagents.add_reagent (SUGAR, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit
+	name = "special plump helmet biscuit"
+	desc = "This is a finely-prepared plump helmet biscuit. Aside from the usual ingredients of minced plump helmet and well-minced dwarven wheat flour, this particular serving includes a chemical that sticks whoever eats it to the floor, much like magboots."
+	icon_state = "phelmbiscuit"
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit/New()
+	..()
+	reagents.add_reagent(SOFTCORES, 3)
+	reagents.add_reagent(NUTRIMENT, 5)
+
 //You have now entered the ayy food zone
 
 /obj/item/weapon/reagent_containers/food/snacks/zamdinner1
