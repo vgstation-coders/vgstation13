@@ -6726,3 +6726,20 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	reagents.add_reagent(SUGAR, 2)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 3
+
+//You have now exited the ayy food zone. Thanks for visiting.
+
+/obj/item/weapon/reagent_containers/food/snacks/dionaroast
+	name = "Diona Roast"
+	desc = "A slow cooked diona nymph. Very nutricious, and surprisingly tasty!"
+	trash = /obj/item/trash/plate
+	icon_state = "dionaroast"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/dionaroast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(BLACKPEPPER, 1)
+	reagents.add_reagent(SODIUMCHLORIDE, 1)
+	reagents.add_reagent(CORNOIL, 1)
+	bitesize = 3
