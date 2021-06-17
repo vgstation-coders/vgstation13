@@ -81,9 +81,7 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 		var/image/copy = image(icon=A.icon,icon_state=A.icon_state,layer=A.layer,dir=dir)
 		initialimage[copy] = A.layer
 
-	var/list/layers = plane_layer_sort(A.underlays)
-	layers += initialimage
-	layers += plane_layer_sort(A.overlays)
+	var/list/layers = plane_layer_sort(list(A))
 
 	if(cache!=0) // If cache is NOT disabled
 		// Create a hash value to represent this specific flattened icon

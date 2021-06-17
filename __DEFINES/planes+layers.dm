@@ -245,7 +245,8 @@ What is the naming convention for planes or layers?
 // returns a list with the objects sorted depending on their layer, with the lowest objects being the first in the list and the highest objects being last
 /proc/plane_layer_sort(var/list/to_sort)
 	var/list/sorted = list()
-	for(var/current_atom in to_sort)
+	var/list/ready_to_sort = plane_layer_list(to_sort)
+	for(var/current_atom in ready_to_sort)
 		var/compare_index
 		for(compare_index = sorted.len, compare_index > 0, --compare_index) // count down from the length of the list to zero.
 			var/atom/compare_atom = sorted[compare_index] // compare to the next object down the list.
@@ -255,6 +256,16 @@ What is the naming convention for planes or layers?
 				break
 		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
 	return sorted // return the sorted list.
+
+/proc/plane_layer_list(var/list/to_list)//fetches the overlays
+	var/list/listed = list()
+	for(var/current_atom in to_list)
+		listed += current_atom
+		for(var/sub_atom in plane_layer_list(current_atom:overlays))
+			listed += sub_atom
+		for(var/sub_atom in plane_layer_list(current_atom:underlays))
+			listed += sub_atom
+	return listed
 
 
 /obj/abstract/screen/plane_master
