@@ -6731,7 +6731,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/dionaroast
 	name = "Diona Roast"
-	desc = "A slow cooked diona nymph. Very nutricious, and surprisingly tasty!"
+	desc = "A slow cooked diona nymph. Very nutritious, and surprisingly tasty!"
 	trash = /obj/item/trash/plate
 	icon_state = "dionaroast"
 	food_flags = FOOD_MEAT
