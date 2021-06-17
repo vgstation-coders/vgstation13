@@ -54,6 +54,7 @@ var/list/exception = list(
 	)
 
 proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
+	to_chat(world,"getFlatIcon().")
 
 
 	var/hash = "" // Hash of overlay combination

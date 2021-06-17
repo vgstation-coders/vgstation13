@@ -307,6 +307,7 @@
 	blinder.decon_path = type
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
+	to_chat(world,"camera_get_icon().")
 	var/atoms[] = list()
 	for(var/turf/T in turfs)
 		atoms.Add(T)
@@ -317,7 +318,7 @@
 
 	var/icon/res = get_base_photo_icon()
 
-	for(var/atom/A in plane_layer_sort(atoms))
+	for(var/atom/A in atoms)
 
 		CHECK_TICK
 		var/icon/img = getFlatIcon(A,A.dir,0)
