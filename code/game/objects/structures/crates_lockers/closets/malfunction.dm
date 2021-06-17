@@ -12,7 +12,7 @@
 		/obj/item/clothing/head/helmet/space/nasavoid,
 		/obj/item/clothing/suit/space/nasavoid,
 		/obj/item/clothing/shoes/magboots/nasavoid,
-		/obj/item/weapon/crowbar,
+		/obj/item/tool/crowbar,
 		/obj/item/weapon/cell,
 		/obj/item/device/multitool,
 	)

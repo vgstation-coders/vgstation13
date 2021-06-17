@@ -98,7 +98,7 @@
 		if(integrity>=100)
 			to_chat(user, "<span class='warning'>[src] doesn't need to be repaired!</span>")
 			return
-		var/obj/item/weapon/solder/S = W
+		var/obj/item/tool/solder/S = W
 		if(!S.remove_fuel(4,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -219,6 +219,7 @@
 			update_on()
 
 		// Radiation
+		emitted_harvestable_radiation(get_turf(src), 50, range = 10)	//Transmitters apply 51 rad doses to nearby humans so we're using that.
 		for(var/mob/living/carbon/M in view(src,3))
 			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) ) //Distance/rads: 1 = 27, 2 = 21, 3 = 19
 			M.apply_radiation(round(rads*count_rad_wires()/2),RAD_EXTERNAL)

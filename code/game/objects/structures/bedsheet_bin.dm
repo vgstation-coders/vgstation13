@@ -167,7 +167,7 @@ LINEN BINS
 		if(anchored)
 			to_chat(user, "<span class='warning'>\The [src] is still secured to whatever surface it is on. Unsecure it first!</span>")
 			return
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		if(W.remove_fuel(2,user))
 			to_chat(user, "<span class='notice'>You break \the [src] down into a pile of rods.</span>")
 			new /obj/item/stack/rods(get_turf(src),rand(3,5))

@@ -154,9 +154,9 @@ proc/age2agedescription(age)
 
 proc/RoundHealth(health)
 	switch(health)
-		if(100 to INFINITY)
+		if(99 to INFINITY)
 			return "health100"
-		if(70 to 100)
+		if(70 to 99)
 			return "health80"
 		if(50 to 70)
 			return "health60"
@@ -319,3 +319,8 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 		if(I.implanted && istype(I,type))
 			return TRUE
 	return FALSE
+
+/proc/find_player_by_ckey(var/ckey)
+	for (var/mob/M in player_list)
+		if (M.ckey == ckey)
+			return M

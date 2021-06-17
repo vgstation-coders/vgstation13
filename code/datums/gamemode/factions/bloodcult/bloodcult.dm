@@ -53,7 +53,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	Nar-Sie's goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
-	hud_icons = list("cult-logo")
+	hud_icons = list("cult-chief-logo", "cult-logo")
 	var/list/bloody_floors = list()
 	//var/target_change = FALSE
 	//var/change_cooldown = 0
@@ -161,6 +161,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		veil_thickness = CULT_MENDED
 		..()
 		command_alert(/datum/command_alert/bloodstones_broken)
+		var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+		if (istype(dynamic_mode))
+			dynamic_mode.update_stillborn_rulesets()
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
 		for (var/obj/effect/rune/R in rune_set.rune_list)
@@ -280,6 +283,16 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		take_blood(cup, cup.volume)//Up to 60u
 		cup.on_reagent_change()//so we get the reagentsfillings overlay
 		new/obj/item/weapon/skull(coffer)
+	if (ismonkey(src))
+		var/list/skulless_monkeys = list(
+			/mob/living/carbon/monkey/mushroom,
+			/mob/living/carbon/monkey/diona,
+			/mob/living/carbon/monkey/rock,
+			)
+		var/mob/living/carbon/monkey/M = src
+		if (!(M.species_type in skulless_monkeys))
+			take_blood(cup, cup.volume)//Up to 60u
+			new/obj/item/weapon/skull(coffer)
 	if (isslime(src))
 		cup.reagents.add_reagent(SLIMEJELLY, 50)
 	if (isalien(src))//w/e
@@ -626,7 +639,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/total_accumulated = 0
 	var/total_needed = amount_needed
 	if (!tribute && iscultist(user))
-		var/datum/role/cultist/mycultist = user.mind.GetRole(CULTIST)
+		var/datum/role/cultist/mycultist = iscultist(user)
 		if (mycultist in blood_communion)
 			communion = 1
 			amount_needed = max(1,round(amount_needed * 4 / 5))//saving 20% blood
@@ -906,8 +919,20 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/list/places_to_spawn = list()
 	for (var/i = 1 to 4)
 		for (var/j = 10; j > 0; j--)
-			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
-			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
+			/*
+			the value of i governs which corner of the map the bloodstone will try to spawn in.
+			from 1 to 4, the corners will be selected in this order: North-West, South-East, North-East, South-West
+
+			the higher j, the further away from the center of the map will the bloodstone be. it tries 10 times per bloodstone, and searches each time closer to the center
+			*/
+			var/coordX = map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 )
+			var/coordY = map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 )
+
+			var/turf/T = get_turf(pick(range(j*3,locate(coordX,coordY,map.zMainStation))))
+			if (!T)
+				message_admins("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
+				log_admin("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
+			else if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
 				//Adding some blacklisted areas, specifically solars
 				if (!istype(T.loc,/area/solar) && is_type_in_list(T.loc,the_station_areas))
 					places_to_spawn += T
@@ -923,8 +948,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		if (!B.loc)
 			qdel(B)
-			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
-			log_admin("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			message_admins("Blood Cult: !ERROR! A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			log_admin("Blood Cult: !ERROR! A blood stone was somehow spawned in nullspace. It has been destroyed.")
 
 /*	prepare_cult_holomap
 	returns: the initialized cult holomap

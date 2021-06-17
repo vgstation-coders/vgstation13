@@ -14,6 +14,7 @@
 	penetration_dampening = 1
 	cracked_base = "fcrack"
 	is_fulltile = TRUE
+	disperse_coeff = 0.95
 
 /obj/structure/window/full/New(loc)
 
@@ -27,6 +28,7 @@
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
 	if(istype(mover) && mover.checkpass(PASSGLASS))
+		dim_beam(mover)
 		return 1
 	return 0
 
@@ -114,6 +116,7 @@
 	penetration_dampening = 3
 	d_state = WINDOWSECURE
 	reinforced = 1
+	disperse_coeff = 0.8
 
 /obj/structure/window/full/reinforced/loose
 	anchored = 0
@@ -129,6 +132,7 @@
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
 	penetration_dampening = 5
+	disperse_coeff = 0.75
 
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
@@ -147,6 +151,7 @@
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
+	disperse_coeff = 0.6
 
 /obj/structure/window/full/reinforced/plasma/loose
 	anchored = 0

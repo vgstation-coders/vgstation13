@@ -113,7 +113,7 @@
 			state = 2
 			update_icon()
 
-	else if(iswirecutter(W) && state == 1) //Removing support struts, stage 1 to 0 (normal girder)
+	else if(W.is_wirecutter(user) && state == 1) //Removing support struts, stage 1 to 0 (normal girder)
 		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] starts removing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start removing \the [src]'s internal support struts.</span>")

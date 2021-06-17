@@ -40,7 +40,7 @@
 
 /datum/design/apc_board
 	name = "Circuit Design (Power Control Module)"
-	desc = "Allows for the construction of circuit boards used to build a new APC"
+	desc = "Allows for the construction of circuit boards used to build a new APC."
 	id = "apc_board"
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER
@@ -50,7 +50,7 @@
 
 /datum/design/station_map
 	name = "Circuit Design (Station Holomap)"
-	desc = "Allows for the construction of circuit boards used to build a station holomap"
+	desc = "Allows for the construction of circuit boards used to build a station holomap."
 	id = "station_map"
 	req_tech = list(Tc_MAGNETS = 2, Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER

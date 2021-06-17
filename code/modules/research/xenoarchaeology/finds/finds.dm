@@ -340,11 +340,11 @@
 
 /datum/find/tool/spawn_item()
 	if(prob(25))
-		return new /obj/item/weapon/wrench
+		return new /obj/item/tool/wrench
 	else if(prob(25))
-		return new /obj/item/weapon/crowbar
+		return new /obj/item/tool/crowbar
 	else
-		return new /obj/item/weapon/screwdriver
+		return new /obj/item/tool/screwdriver
 
 /datum/find/tool/additional_description(var/obj/item/I)
 	I.desc += "[pick("It doesn't look safe.",\

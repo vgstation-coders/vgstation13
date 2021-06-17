@@ -1,7 +1,7 @@
 <!--
 Title: Vote UI
 Used in File(s): \code\controllers\voting.dm
---> 
+-->
 <style type='text/css'>
 	p {
 		white-space: normal;
@@ -40,6 +40,11 @@ Used in File(s): \code\controllers\voting.dm
 			</div>
 		</div>
 	{{/for}}
+	<div class = "item">
+		<div class = "itemContent">
+			{{:helper.link('Cancel your vote', null, { 'vote' : 'cancel_vote'})}}
+		</div>
+	</div>
 	{{if data.admin == 1}}
 		<div class = "item">
 			<div class="itemContent">

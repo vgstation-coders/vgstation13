@@ -68,6 +68,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	mob_bump_flag = SIMPLE_ANIMAL
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
+	status_flags = CANPUSH //They cannot be conventionally stunned. AIs normally ignore this but stuns used to be able to disable player-controlled ones
 
 	//LETTING SIMPLE ANIMALS ATTACK? WHAT COULD GO WRONG. Defaults to zero so Ian can still be cuddly
 	var/melee_damage_lower = 0
@@ -125,6 +126,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
+
 /mob/living/simple_animal/New()
 	..()
 	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
@@ -134,6 +136,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		real_name = name
 
 	animal_count[src.type]++
+
+/mob/living/simple_animal/Destroy()
+	if (stat != DEAD)
+		animal_count[src.type]--//dealing with mobs getting deleted while still alive
+	..()
 
 /mob/living/simple_animal/Login()
 	if(src && src.client)
@@ -174,12 +181,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			icon_state = icon_living
 			src.resurrect()
 			stat = CONSCIOUS
+			animal_count[src.type]++//re-added to the count
 			setDensity(TRUE)
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
 		return 0
-
 
 	if(health < 1 && stat != DEAD)
 		death()
@@ -195,7 +202,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
+	update_canmove()
+
 	handle_jitteriness()
+	jitteriness = max(0, jitteriness - 1)
 
 	//Eyes
 	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
@@ -230,11 +240,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
-					StartMoving()
+					lazy_invoke_event(/lazy_event/on_before_move)
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
-					EndMoving()
+					lazy_invoke_event(/lazy_event/on_after_move)
 
 	handle_automated_speech()
 
@@ -586,6 +596,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
+	if (damage > 0)
+		damageoverlaytemp = 20
 	if(skinned())
 		damage = damage * 2
 	if(purge)
@@ -826,6 +838,5 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 	else
 		qdel(src)
-
 
 /datum/locking_category/simple_animal

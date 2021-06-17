@@ -39,6 +39,22 @@
 		new /obj/item/bluespace_crystal(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
 
+/obj/item/weapon/storage/gachabox
+	name = "wholesale capsule kit"
+	can_only_hold = list(/obj/item/weapon/capsule)
+	storage_slots = 60
+	max_combined_w_class = ARBITRARILY_LARGE_NUMBER
+	display_contents_with_number = TRUE
+	allow_quick_empty = TRUE
+	allow_quick_gather = TRUE
+	icon = 'icons/obj/storage/smallboxes.dmi'
+	icon_state = "box"
+
+/obj/item/weapon/storage/gachabox/New()
+	..()
+	for(var/amount = 1 to 60)
+		new /obj/item/weapon/capsule(src)
+
 /obj/structure/closet/secure_closet/wonderful
 	name = "wonderful wardrobe"
 	desc = "Stolen from Space Narnia."
@@ -52,7 +68,6 @@
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
-	/obj/item/clothing/shoes/clown_shoes/advanced,
 	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
 	/obj/item/clothing/shoes/magboots/magnificent,
 	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee, /obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/hos, /obj/item/clothing/suit/space/plasmaman/security/hos, /obj/item/clothing/head/helmet/space/plasmaman/security/hop, /obj/item/clothing/suit/space/plasmaman/security/hop),
@@ -81,6 +96,7 @@
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
 	..()
+	new /obj/item/clothing/shoes/clown_shoes/advanced(src)
 	for(var/amount = 1 to 10)
 		var/wonder_clothing = pick_n_take(wonder_whitelist)
 		if(islist(wonder_clothing))
@@ -182,11 +198,40 @@
 		return
 	..()
 
+//15+3+8 = 26
+var/global/list/shoal_stuff = list(
+	//5 of a kind
+	/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,
+	//3 of a kind
+	/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,
+	//1 of a kind
+	/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+	/obj/item/weapon/vinyl/echoes,
+	/obj/item/fish_eggs/seadevil,
+	/obj/structure/bed/therapy,
+	/obj/item/weapon/grenade/station/discount,
+	/obj/item/device/crank_charger/generous,
+	/obj/item/weapon/storage/gachabox,
+	/obj/item/weapon/storage/bluespace_crystal,
+)
+/obj/structure/closet/crate/shoaljunk
+	name = "Shoal junk crate"
+	desc = "What? It fell off a spacetruck."
+
+/obj/structure/closet/crate/shoaljunk/New()
+	..()
+	for(var/i = 1 to 9)
+		if(!shoal_stuff.len)
+			return
+		var/path = pick_n_take(shoal_stuff)
+		new path(src)
+
 /obj/structure/closet/crate/chest/alcatraz
 	name = "Alcatraz IV security crate"
 	desc = "It came from Alcatraz IV!"
 
-	//6+6+6=18
 var/global/list/alcatraz_stuff = list(
 	//3 of a kind
 	/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,
@@ -201,22 +246,95 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/clothing/accessory/bangerboy,
 	/obj/item/key/security/spare,
 	/obj/item/weapon/ram_kit,
-	/obj/item/device/vampirehead,)
+	/obj/item/device/vampirehead,
+	/obj/item/weapon/storage/lockbox/unlockable/peace,
+	/obj/item/clothing/head/helmet/stun,
+	/obj/item/weapon/secway_kit,
+	)
 
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	for(var/i = 1 to 6)
+	for(var/i = 1 to 7)
 		if(!alcatraz_stuff.len)
 			return
 		var/path = pick_n_take(alcatraz_stuff)
 		new path(src)
+
+/obj/item/clothing/head/helmet/stun
+	name = "stun helmet"
+	desc = "For the experimental program of deploying armless security officers. Its complex wiring is known to block out psychic powers and 5G signals."
+	icon_state = "helmetstun"
+	light_power = 2.5
+	light_range = 4
+	light_color = LIGHT_COLOR_ORANGE
+	mech_flags = MECH_SCAN_FAIL
+	var/obj/item/weapon/cell/bcell
+
+/obj/item/clothing/head/helmet/stun/New()
+	..()
+	bcell = new(src)
+	bcell.charge = bcell.maxcharge
+	update_icon()
+
+/obj/item/clothing/head/helmet/stun/Destroy()
+	if (bcell)
+		qdel(bcell)
+		bcell = null
+
+	return ..()
+
+/obj/item/clothing/head/helmet/stun/get_cell()
+	return bcell
+
+/obj/item/clothing/head/helmet/stun/examine(mob/user)
+	..()
+	if(bcell)
+		to_chat(user, "<span class='info'>The helmet is [round(bcell.percent())]% charged.</span>")
+
+/obj/item/clothing/head/helmet/stun/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	if(!..() || !ishuman(M))
+		return CANNOT_EQUIP
+	if(clumsy_check(M))
+		to_chat(M, "<span class='warning'>You get stunned trying to don \the [src].</span>")
+		return CANNOT_EQUIP
+	var/mob/living/carbon/human/C = M
+	if(!C.head)
+		return CAN_EQUIP
+	if(C.head.canremove)
+		return CAN_EQUIP_BUT_SLOT_TAKEN
+	return CAN_EQUIP
+
+/obj/item/clothing/head/helmet/stun/proc/use(var/amount)
+	if(!bcell || bcell.charge < amount)
+		return FALSE
+	bcell.use(amount)
+	return TRUE
+
+#define STUN_HELMET_STRENGTH 10
+/obj/item/clothing/head/helmet/stun/bite_action(mob/target)
+	if(!isliving(loc) || !isliving(target) || !use(STUN_HELMET_STRENGTH**2))
+		return FALSE
+	var/mob/living/user = loc
+	var/mob/living/L = target
+	if(iscarbon(target))
+		var/mob/living/carbon/C = L
+		if(C.check_shields(0,src))
+			return FALSE
+		L.apply_effect(STUN_HELMET_STRENGTH, STUTTER)
+	playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	L.Knockdown(STUN_HELMET_STRENGTH)
+	L.Stun(STUN_HELMET_STRENGTH)
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
+	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
+	log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
+	return TRUE
 
 /obj/item/clothing/accessory/bangerboy
 	name = "\improper Banger Boy Advance"
 	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to trigger them for early detonation. Straps nicely onto security armor."
 	icon_state = "bangerboy"
 	mech_flags = MECH_SCAN_FAIL
-	var/obj/item/weapon/screwdriver/S
+	var/obj/item/tool/screwdriver/S
 
 /obj/item/clothing/accessory/bangerboy/New()
 	..()
@@ -242,7 +360,7 @@ var/global/list/alcatraz_stuff = list(
 	name = "donutgiver"
 	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
 	icon_state = "donutgiver"
-	item_state = "helmet_donuts"
+	item_state = "donutgiver"
 	species_fit = list(INSECT_SHAPED)
 	flags = HEAR | FPRINT
 	var/dna_profile = null
@@ -475,7 +593,8 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/key/security/spare/New()
 	..()
-	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station")
+	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station",
+		 "Snow Station", "NRV Horizon", "Synergy Station", "Lamprey Station")
 	map_names -= map.nameLong
 	home_map = pick(map_names)
 
@@ -984,7 +1103,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
 	if(iswelder(W))
 		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
-		var/obj/item/weapon/weldingtool/WT=W
+		var/obj/item/tool/weldingtool/WT=W
 		if(WT.do_weld(user, src, 10 SECONDS, 5))
 			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
 			qdel(src)
@@ -1056,6 +1175,311 @@ var/global/list/alcatraz_stuff = list(
 					living_mover.put_in_hands(I)
 				to_chat(mover,"<span class='good'>\The [src] dispenses a reward!</span>")
 
+#define AT_SEED 0
+#define AT_PLANTED 1
+#define AT_SAPLING 2
+#define AT_MATURE 3
+#define AT_FLOWERING 4
+
+/obj/structure/ammotree
+	name = "ammo tree seed"
+	desc = "The seed of an ammo tree. A gene-modified plant that was developed to synthesize metals. <B>If it was rammed in with enough force, you could get it to grow.</B>"
+	icon = 'icons/obj/flora/big_pots.dmi'
+	icon_state = "ammotree-0"
+	density = FALSE
+	anchored = FALSE
+	pixel_x = -16
+	plane = ABOVE_HUMAN_PLANE
+	var/state = AT_SEED
+
+/obj/structure/ammotree/attackby(obj/item/I, mob/user)
+	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
+		state = AT_PLANTED
+		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
+		processing_objects += src
+	else
+		..()
+	update_icon()
+
+/obj/structure/ammotree/attack_hand(mob/user)
+	if(state != AT_FLOWERING)
+		return
+	visible_message("<span class='notice>[user] picks some ammo fruit from \the [src].</span>")
+	state = AT_MATURE
+	update_icon()
+	processing_objects += src
+	playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
+	for(var/i = 1 to 4)
+		new /obj/item/ammofruit(user.loc)
+
+/obj/structure/ammotree/update_icon()
+	icon_state = "ammotree-[state]"
+	switch(state)
+		if(AT_PLANTED)
+			name = "strange pot"
+			desc = "Something is clearly putting down roots below."
+		if(AT_SAPLING)
+			name = "ammo tree sapling"
+			desc = "An ammo tree sapling. It looks thin enough to snap like a twig."
+		if(AT_MATURE)
+			name = "ammo tree"
+			desc = "A gene-modified plant that was developed to synthesize metals."
+
+/obj/structure/ammotree/process()
+	if(state >= AT_FLOWERING)
+		processing_objects -= src
+		return
+	if(prob(1))
+		state++
+		update_icon()
+
+/obj/item/ammofruit
+	name = "ammofruit"
+	desc = "Not edible. Feed it into your local ammolathe."
+	icon = 'icons/obj/ammo.dmi'
+	icon_state = "ammofruit"
+	w_class = W_CLASS_SMALL
+
+/obj/item/ammofruit/New()
+	..()
+	pixel_x = rand(-3,3)
+	pixel_y = rand(-3,3)
+	materials = new /datum/materials(src)
+	materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL*2)
+	if(prob(25))
+		if(prob(60))
+			materials.addAmount(MAT_PLASMA,CC_PER_SHEET_MISC*2)
+			name = "dragonbreath ammofruit"
+			icon_state = "ammofruit_plasma"
+		else
+			materials.addAmount(MAT_GLASS,CC_PER_SHEET_GLASS)
+			materials.addAmount(MAT_PLASTIC,CC_PER_SHEET_MISC)
+			materials.addAmount(MAT_WOOD, CC_PER_SHEET_MISC)
+			name = "gunstock ammofruit"
+			icon_state = "ammofruit_glass"
+	else
+		materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL)
+
+/obj/item/ammofruit/recyclable(var/obj/machinery/r_n_d/fabricator/F)
+	if(!istype(F, /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe))
+		return FALSE
+	return TRUE
+
+/obj/structure/closet/crate/internals/cloudnine
+	name = "Cloud IX engineering crate"
+	desc = "The Cloud IX engineering facility hangs in the atmosphere of the eponymous gas giant. But are the workers happy? Nein."
+
+//3+8+4=15
+var/global/list/cloudnine_stuff = list(
+	//3 of a kind
+	/obj/item/airshield_projector,/obj/item/airshield_projector,/obj/item/airshield_projector,
+	//2 of a kind
+	/obj/item/vaporizer,/obj/item/vaporizer,
+	/obj/item/device/multitool/omnitool,/obj/item/device/multitool/omnitool,
+	/obj/item/supermatter_shielding/frass,/obj/item/supermatter_shielding/frass,
+	/mob/living/simple_animal/hamster,/mob/living/simple_animal/hamster,
+	//1 of a kind
+	/obj/item/clothing/gloves/golden,
+	/obj/machinery/power/antiquesynth,
+	/obj/item/weapon/am_containment/decelerator,
+	/obj/structure/largecrate/secure/magmaw,
+	)
+
+/obj/structure/closet/crate/internals/cloudnine/New()
+	..()
+	for(var/i = 1 to 5)
+		if(!cloudnine_stuff.len)
+			return
+		var/path = pick_n_take(cloudnine_stuff)
+		new path(src)
+
+/obj/item/supermatter_shielding/frass
+	name = "\improper F.R.A.S.S. sphere"
+	desc = "Frequency-reticulated anti-supermatter safeguard. A refinement of the S.A.S.S. design that is reusable but dazes its user more. It should prevent you from getting annihilated by supermatter. It looks like a brown marble floating in a vibrating gas inside a glass orb."
+	stunforce = 30
+	infinite = TRUE
+
+#define HAMSTER_MOVEDELAY 1
+/mob/living/simple_animal/hamster
+	name = "colossal hamster"
+	desc = "Cricetus robustus. Roughly the size of a capybara, this species of hamster was bred to power treadmill engines."
+	icon_state = "hammy"
+	icon_living = "hammy"
+	icon_dead = "hammy-dead"
+	response_help = "pets"
+	treadmill_speed = 8
+	health = 100
+	maxHealth = 100
+	min_oxy = 0
+	speak_chance = 2
+	emote_hear = list("squeaks deeply")
+	var/obj/my_wheel
+
+/mob/living/simple_animal/hamster/Life()
+	if(!..())
+		return 0
+	if(!my_wheel && isturf(loc))
+		var/obj/machinery/power/treadmill/T = locate(/obj/machinery/power/treadmill) in loc
+		if(T)
+			wander = FALSE
+			my_wheel = T
+		else
+			wander = TRUE
+	if(my_wheel)
+		hamsterwheel(20)
+
+/mob/living/simple_animal/hamster/proc/hamsterwheel(var/repeat)
+	if(repeat < 1 || stat)
+		return
+	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
+		wander = TRUE
+		my_wheel = null
+		return
+	step(src,my_wheel.dir)
+	delayNextMove(HAMSTER_MOVEDELAY)
+	sleep(HAMSTER_MOVEDELAY)
+	hamsterwheel(repeat-1)
+
+/mob/living/simple_animal/hamster/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	if(M && !isUnconscious() && M.a_intent == I_HELP)
+		M.delayNextAttack(2 SECONDS)
+		var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+		heart.plane = ABOVE_HUMAN_PLANE
+		flick_overlay(heart, list(M.client), 20)
+		if(!my_wheel)
+			flick("hammy-rest", src)
+		emote("me", EMOTE_AUDIBLE, pick("flattens amicably.","fluffs up.","puffs out her cheeks.","shuts her eyes contentedly."))
+
+#undef HAMSTER_MOVEDELAY
+
+/obj/item/clothing/gloves/golden
+	name = "golden gloves"
+	desc = "An impressive fashion statement. Gold is an excellent conductor, meaning these won't help much against shocks. The insides are lined with strange high-tech sacs filled with an unidentified fluid which lubricates the outside. It comes with a cryptic note reading: touch the supermatter."
+	icon_state = "golden"
+	item_state = "yellow"
+	siemens_coefficient = 2
+	permeability_coefficient = 0.05
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+	_color = "golden"
+
+/obj/item/airshield_projector
+	name = "airshield projector"
+	desc = "Exploits Maxwellian Daemons to hold each individual gas particle in place in a defined area. They won't open or close doors for you, though."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "airprojector"
+	var/list/projected = list()
+	var/max_proj = 6
+
+/obj/item/airshield_projector/preattack(atom/target, mob/user , proximity)
+	var/turf/to_shield = get_turf(target)
+	if(projected.len < max_proj && istype(to_shield) && (!locate(/obj/effect/airshield) in to_shield))
+		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
+		var/obj/effect/airshield/A = new(to_shield)
+		A.owner = src
+		projected += A
+		visible_message("<span class='notice'>\The [user] deploys \the [A].</span>")
+		return TRUE
+	return FALSE
+
+//not to be confused with the structure in airshield.dm
+/obj/effect/airshield
+	name = "airshield"
+	desc = "A shield that allows only non-gasses to pass through."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "planner"
+	opacity = FALSE
+	mouse_opacity = FALSE
+	density = FALSE
+	anchored = TRUE
+	plane = ABOVE_HUMAN_PLANE
+	maptext_x = 11
+	maptext_y = 8
+	var/obj/item/airshield_projector/owner
+	var/life = 9
+
+/obj/effect/airshield/New()
+	..()
+	countdown()
+
+/obj/effect/airshield/proc/countdown()
+	maptext = "<span style=\"color:#FF8C00;font-size:12px;\">[life]</span>"
+	spawn(1 SECONDS)
+		life--
+		if(life>0)
+			countdown()
+		else
+			if(owner)
+				owner.projected -= src
+			update_nearby_tiles(loc)
+			qdel(src)
+
+/obj/effect/airshield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover))
+		return ..()
+	return FALSE
+
+var/list/decelerators = list()
+/obj/item/weapon/am_containment/decelerator
+	name = "antimatter decelerator"
+	desc = "Acts as a 'filter' to trap antiparticles emitted by radiation. In function, it can be used to power an antimatter engine and refuel itself with nearby radiation."
+
+/obj/item/weapon/am_containment/decelerator/New()
+	..()
+	decelerators += src
+
+/obj/item/weapon/am_containment/decelerator/Destroy()
+	decelerators -= src
+	..()
+
+/obj/item/weapon/am_containment/decelerator/proc/receive_pulse(power)
+	fuel = min(fuel_max, fuel + round(power/100))
+
+#define OMNIMODE_WIRE 0
+#define OMNIMODE_TOOL 1
+/obj/item/device/multitool/omnitool
+	name = "omnitool"
+	desc = "Combining the power of wirecutters and a multitool. For power cables, works as a multitool when you stand on top and use it. It also allows the user to remotely access APCs and air alarms."
+	icon_state = "omnitool"
+	origin_tech = Tc_ENGINEERING + "=4"
+	sharpness = 1
+	force = 6
+	var/mode = OMNIMODE_TOOL
+
+/obj/item/device/multitool/omnitool/attack_self(mob/user)
+	mode = !mode
+	to_chat(user, "<span class='notice'>You toggle the tool into [mode ? "multitool" : "wirecutter"] mode.</span>")
+
+/obj/item/device/multitool/omnitool/is_wirecutter()
+	return !mode
+
+/obj/item/device/multitool/omnitool/is_multitool()
+	return mode
+
+var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
+
+/obj/item/device/multitool/omnitool/preattack(atom/target, mob/user, proximity)
+	if(proximity)
+		return FALSE //immediately continue if in reach
+	if(can_connect(target, user) && is_type_in_list(target.type,omnitoolable))
+		target.attack_hand(user)
+		return TRUE
+
+/obj/item/device/multitool/omnitool/proc/can_connect(atom/target, mob/user)
+	var/client/C
+	if(user)
+		C = user.client
+	else
+		var/mob/M = loc
+		if(!istype(M))
+			return FALSE
+		C = M.client
+	if(!C)
+		return FALSE
+	return get_dist(target,src) <= C.view
+
+#undef OMNIMODE_WIRE
+#undef OMNIMODE_TOOL
 
 //Mystery mob cubes//////////////
 
@@ -1120,7 +1544,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/weapon/storage/box/mystery_circuit
 	name = "children's circuitry circus educational toy booster pack"
-	desc = "Ages 6 and up"
+	desc = "Ages 6 and up!"
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "circuit"
 
@@ -1130,7 +1554,7 @@ var/global/list/alcatraz_stuff = list(
 	for(var/i = 1 to 3)
 		var/boosterPack = pick(legalCircuits)
 		new boosterPack(src)
-	new /obj/item/weapon/solder(src)
+	new /obj/item/tool/solder(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker/sulphuric(src)
 	new /obj/item/weapon/paper/permissionslip(src)
 
@@ -1166,6 +1590,7 @@ var/global/list/alcatraz_stuff = list(
 		/obj/item/stack/sheet/bone = 50,
 		/obj/item/stack/sheet/mineral/sandstone = 50,
 		/obj/item/stack/sheet/brass = 35,
+		/obj/item/stack/sheet/ralloy = 35,
 		/obj/item/stack/sheet/mineral/gingerbread = 25,
 		/obj/item/stack/sheet/animalhide/xeno = 10,
 		/obj/item/stack/sheet/animalhide/human = 20,

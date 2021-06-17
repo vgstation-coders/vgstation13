@@ -22,7 +22,7 @@
 		Port Status:
 	</div>
 	<div class="itemContent">
-		{{:data.portConnected ? '<span class="good">Connected</span>' : '<span class="average">Disconnected</span>'}}
+ 		{{:data.portConnected ? '<span class="good">Connected to external port</span>' : '<span class="average">Disconnected from external port</span>'}}
 	</div>
 </div>
 
@@ -81,3 +81,15 @@
 	</div>
 </div>
 
+<div class="item">
+	<div class="itemLabel">
+		Target:
+	</div>
+	<div class="itemContent">
+		{{if data.holdingTank}}
+			Holding tank
+		{{else}}
+			Atmos
+		{{/if}}
+	</div>
+</div>

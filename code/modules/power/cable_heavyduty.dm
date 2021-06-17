@@ -15,7 +15,7 @@
 	if(T.intact)
 		return
 
-	if(iswirecutter(W))
+	if(W.is_wirecutter(user))
 		to_chat(user, "<span class='notice'>These cables are too tough to be cut with those [W.name].</span>")
 		return
 	else if(W.type == /obj/item/stack/cable_coil)

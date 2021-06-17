@@ -517,7 +517,7 @@
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
 	var/obj/item/device/rcd/mech/RCD
-	var/obj/item/weapon/wrench/socket/sock
+	var/obj/item/tool/wrench/socket/sock
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
@@ -602,7 +602,7 @@
 	if(T)
 		set_ready_state(0)
 		chassis.use_power(energy_drain)
-		do_teleport(chassis, T, 4)
+		do_teleport(chassis, T)
 		do_after_cooldown()
 	return
 
@@ -1074,6 +1074,12 @@
 		log_message("Deactivated.")
 		to_chat(chassis.occupant, "<span class='notice'>Relay disabled.</span>")
 
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/emp_act()
+	if(equip_ready)
+		set_ready_state(1)
+		log_message("Disabled.")
+		to_chat(chassis.occupant, "<span class='warning'>Relay shut down.</span>")
+
 /spell/mech/tesla
 	name = "Tesla Energy Relay"
 	desc = "Wirelessly drains energy from any available power channel in area. The performance index is quite low."
@@ -1165,6 +1171,12 @@
 			set_ready_state(1)
 			log_message("Deactivated.")
 	return
+
+/obj/item/mecha_parts/mecha_equipment/generator/emp_act()
+	if(equip_ready)
+		set_ready_state(1)
+		log_message("Disabled.")
+		to_chat(chassis.occupant, "<span class='warning'>Generator shut down.</span>")
 
 /obj/item/mecha_parts/mecha_equipment/generator/get_equip_info()
 	var/output = ..()
@@ -1437,7 +1449,7 @@
 		return
 	for(var/obj/item/I in mech_switchtool.switchtool.stored_modules)
 		if(iswelder(I))
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/tool/weldingtool/W = I
 			if(W.reagents.total_volume <= W.max_fuel-10)
 				W.reagents.add_reagent(FUEL, 10)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
@@ -1447,7 +1459,7 @@
 				C.add(5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
 		else if(issolder(I))
-			var/obj/item/weapon/solder/S = I
+			var/obj/item/tool/solder/S = I
 			if(S.reagents.total_volume < S.max_fuel-5)
 				S.reagents.add_reagent(SACID, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)

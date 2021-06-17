@@ -278,8 +278,8 @@
 				for(var/mob/M in observers)
 					if(!M.client || isantagbanned(M) || jobban_isbanned(M, CULTIST) || M.client.is_afk())
 						continue
-					if (M.mind && M.mind.GetRole(CULTIST))
-						var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+					if (iscultist(M))
+						var/datum/role/cultist/cultist = iscultist(M)
 						if (cultist.second_chance)
 							to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
@@ -400,7 +400,7 @@
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.callOnFace -= "\ref[src]"
+				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -410,7 +410,7 @@
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.callOnFace -= "\ref[src]"
+			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -596,7 +596,7 @@
 					animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 					watching_mobs |= user
 					user.client.images |= watcher_maps["\ref[user]"]
-					user.callOnFace["\ref[src]"] = "checkPosition"
+					user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
 				switch(veil_thickness)
 					if (CULT_MENDED)
@@ -720,7 +720,7 @@
 		blade.shade = shadeMob
 		shadeMob.status_flags |= GODMODE
 		shadeMob.canmove = 0
-		var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+		var/datum/role/cultist/cultist = iscultist(M)
 		cultist.second_chance = 0
 		shadeMob.real_name = M.mind.name
 		shadeMob.name = "[shadeMob.real_name] the Shade"
@@ -921,7 +921,7 @@ var/list/cult_spires = list()
 		return
 
 	var/mob/living/carbon/human/H = user
-	var/datum/role/cultist/C = H.mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(H)
 
 	var/list/available_tattoos = list("tier1","tier2","tier3")
 	for (var/tattoo in C.tattoos)
@@ -1074,14 +1074,15 @@ var/list/cult_spires = list()
 		if(istype(L))
 			L.hotspot_expose(TEMPERATURE_FLAME, 125, surfaces = 1)//we start fires in plasma atmos
 			var/datum/gas_mixture/env = L.return_air()
-			if(env.temperature != set_temperature + T0C)
-				var/datum/gas_mixture/removed = env.remove_volume(0.5 * CELL_VOLUME)
-				if(removed)
-					var/heat_capacity = removed.heat_capacity()
-					if(heat_capacity)
-						if(removed.temperature < set_temperature + T0C)
-							removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000)
-				env.merge(removed)
+			if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
+				if(env.temperature != set_temperature + T0C)
+					var/datum/gas_mixture/removed = env.remove_volume(0.5 * CELL_VOLUME)
+					if(removed)
+						var/heat_capacity = removed.heat_capacity()
+						if(heat_capacity)
+							if(removed.temperature < set_temperature + T0C)
+								removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000)
+					env.merge(removed)
 		if(!istype(loc,/turf/space))
 			for (var/mob/living/carbon/M in view(src,3))
 				M.bodytemperature += (6-round(M.get_cult_power()/30))/((get_dist(src,M)+1))//cult gear reduces the heat buildup
@@ -1482,7 +1483,7 @@ var/list/bloodstone_list = list()
 				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 				watching_mobs |= user
 				user.client.images |= watcher_maps["\ref[user]"]
-				user.callOnFace["\ref[src]"] = "checkPosition"
+				user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 
 /obj/structure/cult/bloodstone/proc/checkPosition()
 	for(var/mob/M in watching_mobs)
@@ -1495,7 +1496,7 @@ var/list/bloodstone_list = list()
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.callOnFace -= "\ref[src]"
+				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -1505,7 +1506,7 @@ var/list/bloodstone_list = list()
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.callOnFace -= "\ref[src]"
+			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -1652,7 +1653,7 @@ var/list/bloodstone_list = list()
 /obj/structure/cult/proc/dance_start()
 	while(timeleft > 0)
 		for (var/mob/M in contributors)
-			if (!iscultist(M) || get_dist(src,M) > 1 || (M.stat != CONSCIOUS))
+			if (!iscultist(M) || get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
 				if (M.client)
 					M.client.images -= progbar
 				contributors.Remove(M)
@@ -1679,6 +1680,7 @@ var/list/bloodstone_list = list()
 	switch(dance_move)
 		if ("clock")
 			for (var/mob/M in contributors)
+				M.lazy_invoke_event(/lazy_event/on_before_move)
 				switch (get_dir(src,M))
 					if (NORTHWEST,NORTH)
 						M.forceMove(get_step(M,EAST))
@@ -1692,8 +1694,11 @@ var/list/bloodstone_list = list()
 					if (SOUTHWEST,WEST)
 						M.forceMove(get_step(M,NORTH))
 						M.dir = NORTH
+				M.lazy_invoke_event(/lazy_event/on_after_move)
+				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
 		if ("counter")
 			for (var/mob/M in contributors)
+				M.lazy_invoke_event(/lazy_event/on_before_move)
 				switch (get_dir(src,M))
 					if (NORTHEAST,NORTH)
 						M.forceMove(get_step(M,WEST))
@@ -1707,15 +1712,22 @@ var/list/bloodstone_list = list()
 					if (NORTHWEST,WEST)
 						M.forceMove(get_step(M,SOUTH))
 						M.dir = SOUTH
+				M.lazy_invoke_event(/lazy_event/on_after_move)
+				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
 		if ("spin")
 			for (var/mob/M in contributors)
 				spawn()
 					M.dir = SOUTH
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = EAST
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = NORTH
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = WEST
+					M.lazy_invoke_event(/lazy_event/on_face)
 					sleep(0.75)
 					M.dir = SOUTH
+					M.lazy_invoke_event(/lazy_event/on_face)

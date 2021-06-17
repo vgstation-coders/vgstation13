@@ -136,7 +136,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/strike_anywhere
 	name = "strike-anywhere match"
-	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface"
+	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface."
 
 /obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)
@@ -248,7 +248,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	//Items with special messages go first
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.is_hot()) //Badasses dont get blinded while lighting their cig with a welding tool
 			light("<span class='notice'>[user] casually lights \his [name] with \the [W], what a badass.</span>")
 
@@ -619,7 +619,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
-	chem_volume = 50 //It's a fat blunt, a really fat blunt
+	chem_volume = 100 //It's a fat blunt, a really fat blunt
 
 /obj/item/clothing/mask/cigarette/blunt/rolled //grown.dm handles reagents for these
 
@@ -840,7 +840,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
@@ -920,7 +920,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return

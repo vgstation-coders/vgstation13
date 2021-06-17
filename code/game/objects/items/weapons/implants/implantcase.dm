@@ -93,6 +93,15 @@
 	imp = new /obj/item/weapon/implant/chem(src)
 	..()
 
+/obj/item/weapon/implantcase/remote
+	name = "Glass Case- 'Chem'"
+	desc = "A case containing a \"chemical\" implant."
+	icon_state = "implantcase-b"
+
+/obj/item/weapon/implantcase/remote/New()
+	imp = new /obj/item/weapon/implant/explosive/remote(src)
+	..()
+
 
 /obj/item/weapon/implantcase/loyalty
 	name = "Glass Case- 'Loyalty'"

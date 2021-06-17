@@ -66,10 +66,6 @@
 			O.dna = M.dna
 			M.dna = null
 
-		if (M.suiciding)
-			O.suiciding = M.suiciding
-			M.suiciding = null
-
 	for(var/datum/disease/D in M.viruses)
 		O.viruses += D
 		D.affected_mob = O
@@ -111,7 +107,7 @@
 	O.adjustToxLoss(M.getToxLoss())
 	O.adjustOxyLoss(M.getOxyLoss())
 	O.stat = M.stat
-	O.name = O.get_visible_name()
+	O.update_name()
 //		O.update_icon = 1	//queue a full icon update at next life() call
 	Mo.monkeyizing = 0
 	qdel(M)

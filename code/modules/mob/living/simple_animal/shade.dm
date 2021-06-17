@@ -1,11 +1,11 @@
 /mob/living/simple_animal/shade
 	name = "Shade"
 	real_name = "Shade"
-	desc = "A bound spirit"
+	desc = "A bound spirit."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "shade"
 	icon_living = "shade"
-	icon_dead = "shade_dead"
+	icon_dead = "shade"
 	maxHealth = 50
 	health = 50
 	speak_emote = list("hisses")
@@ -47,7 +47,6 @@
 
 /mob/living/simple_animal/shade/Login()
 	..()
-	hud_used.shade_hud()
 	if (istype(loc, /obj/item/weapon/melee/soulblade))
 		client.CAN_MOVE_DIAGONALLY = 1
 		client.screen += list(
@@ -61,6 +60,8 @@
 	. = ..(message, "C")
 
 /mob/living/simple_animal/shade/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(TRUE)
 	monkeyizing = TRUE
 	canmove = FALSE
@@ -79,6 +80,7 @@
 		return FALSE //under effects of time magick
 	..()
 	regular_hud_updates()
+	standard_damage_overlay_updates()
 	if(isDead())
 		for(var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)
@@ -189,7 +191,7 @@
 /mob/living/simple_animal/shade/gondola
 	name = "Gondola Shade"
 	real_name = "Gondola Shade"
-	desc = "A wandering spirit"
+	desc = "A wandering spirit."
 	icon = 'icons/mob/gondola.dmi'
 	icon_state = "gondola_shade"
 	icon_living = "gondola_shade"
@@ -215,8 +217,8 @@
 
 		log_attack("<span class='danger'>[key_name(src)] has sealed itself via the suicide verb.</span>")
 
-	if(suicide_set)
-		suiciding = TRUE
+	if(suicide_set && mind)
+		mind.suiciding = TRUE
 
 	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
 	death()

@@ -25,8 +25,8 @@
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/tool/solder) && bullet_marks)
+		var/obj/item/tool/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		S.playtoolsound(loc, 100)

@@ -20,5 +20,5 @@
 /spell/targeted/flesh_to_stone/cast(var/list/targets, mob/user)
 	..()
 	for(var/mob/living/target in targets)
-		new /obj/structure/closet/statue(target.loc, target) //makes the statue
-	return
+		if (!target.turn_into_mannequin())//we try to turn them into marble mannequins, but if they're not compatible we'll use the old statue type
+			new /obj/structure/closet/statue(target.loc, target)

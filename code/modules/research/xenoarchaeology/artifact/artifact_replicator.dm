@@ -48,7 +48,7 @@
 		/obj/item/device/flash,
 		/obj/item/device/multitool,
 		/obj/item/device/camera,
-		/obj/item/weapon/crowbar/red,
+		/obj/item/tool/crowbar/red,
 		/obj/item/weapon/lighter/zippo,
 		/obj/item/weapon/pickaxe,
 		/obj/item/weapon/pickaxe/shovel,

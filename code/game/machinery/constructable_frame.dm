@@ -147,7 +147,7 @@
 					else
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
-					if(iswirecutter(P))
+					if(P.is_wirecutter(user))
 						P.playtoolsound(src, 50)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
@@ -307,7 +307,7 @@ to destroy them and players will be able to make replacements.
 	//local_fuses = new(src)
 
 /obj/item/weapon/circuitboard/blank/attackby(obj/item/O as obj, mob/user as mob)
-	/*if(ismultitool(O))
+	/*if(O.is_multitool(user))
 		var/boardType = local_fuses.assigned_boards["[local_fuses.localbit]"] //Localbit is an int, but this is an associative list organized by strings
 		if(boardType)
 			if(ispath(boardType))
@@ -325,7 +325,7 @@ to destroy them and players will be able to make replacements.
 		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
 		if(!t)
 			return
-		var/obj/item/weapon/solder/S = O
+		var/obj/item/tool/solder/S = O
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 50)
@@ -338,7 +338,7 @@ to destroy them and players will be able to make replacements.
 			user.put_in_hands(I)
 		soldering = 0
 	else if(iswelder(O))
-		var/obj/item/weapon/weldingtool/WT = O
+		var/obj/item/tool/weldingtool/WT = O
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
@@ -719,6 +719,9 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit board (Thermal Homeostasis Regulator)"
 	desc = "A circuit board used to run a general purpose kit- err, a medical re-heating apparatus."
 	build_path = /obj/machinery/sleeper/mancrowave
+	req_components = list(
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/biogenerator
 	name = "Circuit Board (Biogenerator)"
@@ -795,16 +798,20 @@ obj/item/weapon/circuitboard/rdserver
 		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
-	var/choice = input(usr, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...") in smartfridge_choices
-	if(choice)
-		var/to_spawn = smartfridge_choices[choice]
-		if(src.type == to_spawn)
-			to_chat(user, "<span class = 'notice'>This board is already this type</span>")
-			return
-		if(do_after(user, src, 25))
-			var/spawned = new to_spawn(get_turf(src))
-			visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [spawned]</span>")
-			qdel(src)
+	var/choice = input(user, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...", "Cancel") as null|anything in smartfridge_choices
+	if(!choice)
+		return
+	if(!Adjacent(user) || user.incapacitated())
+		return
+
+	var/to_spawn = smartfridge_choices[choice]
+	if(src.type == to_spawn)
+		to_chat(user, "<span class = 'notice'>This board is already this type.</span>")
+		return
+	if(do_after(user, src, 25))
+		var/spawned = new to_spawn(get_turf(src))
+		visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [spawned].</span>")
+		qdel(src)
 
 /obj/item/weapon/circuitboard/smartfridge/medbay
 	name = "Circuit Board (Medbay SmartFridge)"
@@ -1176,7 +1183,7 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/reagent_containers/glass/beaker = 1)
 
 /obj/item/weapon/circuitboard/diseaseanalyser
-	name = "Circuit Board (Disease Analyser)"
+	name = "Circuit Board (Disease Analyzer)"
 	desc = "A circuit board used to run a machine that analyzes diseases."
 	build_path = /obj/machinery/disease2/diseaseanalyser
 	board_type = MACHINE
@@ -1237,7 +1244,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/recharger
 	name = "Circuit Board (Recharger)"
-	desc = "A circuit board used to run a machine that replenishes energy weapon charge"
+	desc = "A circuit board used to run a machine that replenishes energy weapon charge."
 	board_type = MACHINE
 	build_path = /obj/machinery/recharger
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
@@ -1304,6 +1311,16 @@ obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (Stacking Machine)"
 	desc = "A circuit board used to run a machine that stacks mineral sheets."
 	build_path = /obj/machinery/mineral/stacking_machine
+	board_type = MACHINE
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
+	req_components = list(  //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
+							/obj/item/weapon/stock_parts/matter_bin = 3,
+							/obj/item/weapon/stock_parts/capacitor = 1)
+
+/obj/item/weapon/circuitboard/unloading_machine
+	name = "Circuit Board (Unloading Machine)"
+	desc = "A circuit board used to run a machine that unloads items and ore from one place to another."
+	build_path = /obj/machinery/mineral/unloading_machine
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
 	req_components = list(  //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
@@ -1407,7 +1424,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/fishtank
 	name = "Circuit Board (Fishtank Filter)"
-	desc = "A circuit board used to run a machine that holds fish"
+	desc = "A circuit board used to run a machine that holds fish."
 	build_path = /obj/machinery/fishtank/tank
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
@@ -1416,7 +1433,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/fishwall
 	name = "Circuit Board (Large Fishtank Filter)"
-	desc = "A circuit board used to run a machine that holds fish and acts as a wall"
+	desc = "A circuit board used to run a machine that holds fish and acts as a wall."
 	build_path = /obj/machinery/fishtank/wall
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
@@ -1425,7 +1442,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/conduction_plate
 	name = "Circuit Board (Conduction Plate)"
-	desc = "A circuit board used to run a machine that can be placed under a fishtank to conduct electricity from electric eels"
+	desc = "A circuit board used to run a machine that can be placed under a fishtank to conduct electricity from electric eels."
 	build_path = /obj/machinery/power/conduction_plate
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
@@ -1434,7 +1451,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/holopad
 	name = "Circuit Board (Holopad)"
-	desc = "A circuit board used to run a machine that allows AIs to project holograms in areas"
+	desc = "A circuit board used to run a machine that allows AIs to project holograms in areas."
 	build_path = /obj/machinery/hologram/holopad
 	board_type = MACHINE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
@@ -1445,7 +1462,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/mind_machine_hub
 	name = "Circuit Board (Mind Machine Hub)"
-	desc = "A circuit board used to run a mind machine hub"
+	desc = "A circuit board used to run a mind machine hub."
 	build_path = /obj/machinery/mind_machine/mind_machine_hub
 	board_type = MACHINE
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
@@ -1459,7 +1476,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/mind_machine_pod
 	name = "Circuit Board (Mind Machine Pod)"
-	desc = "A circuit board used to run a mind machine pod"
+	desc = "A circuit board used to run a mind machine pod."
 	build_path = /obj/machinery/mind_machine/mind_machine_pod
 	board_type = MACHINE
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
@@ -1487,7 +1504,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/suspension_gen
 	name = "Circuit Board (Suspension Field Generator)"
-	desc = "A circuit board used to run a suspension field generator"
+	desc = "A circuit board used to run a suspension field generator."
 	build_path = /obj/machinery/suspension_gen
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;"+ Tc_POWERSTORAGE + "=1;" + Tc_MAGNETS + "=4"

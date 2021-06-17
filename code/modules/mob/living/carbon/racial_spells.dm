@@ -121,3 +121,39 @@
 
 /spell/regen_limbs/is_valid_target(var/target, mob/user, options)
 	return(target == user)
+
+/spell/targeted/transfer_reagents
+	name = "Fertilize"
+	desc = "Taps into your internal nutrient storage to fertilize a plant."
+	abbreviation = "TR"
+
+	spell_flags = WAIT_FOR_CLICK
+	range = 1
+	max_targets = 1
+
+	override_base = "racial"
+	hud_state = "transfer_reagents"
+
+	charge_max = 20
+
+	invocation_type = SpI_NONE
+
+/spell/targeted/transfer_reagents/is_valid_target(target, mob/user, options)
+	if(!istype(target, /obj/machinery/portable_atmospherics/hydroponics))
+		to_chat(holder, "<span class='warning'>That's neither soil nor an hydroponic tray!</span>")
+		return FALSE
+	return TRUE
+
+/spell/targeted/transfer_reagents/cast(var/list/targets, mob/user)
+	..()
+	if(!holder.reagents)
+		to_chat(holder, "<span class='warning'>Uhh that's not gonna work. You don't seem to have reagents!</span>")
+		CRASH("[holder] tried to cast [name] but has no reagents!")
+
+	if(holder.reagents.total_volume <= 5)
+		to_chat(holder, "<span class='warning'>You don't have enough reagents in your system!</span>")
+		return 1
+
+	for(var/obj/machinery/portable_atmospherics/hydroponics/target in targets)
+		to_chat(holder, "You secrete some nutritional sap from your fingertips and let it fall into \the [target].")
+		holder.reagents.trans_to(target, 5, log_transfer = TRUE, whodunnit = holder)

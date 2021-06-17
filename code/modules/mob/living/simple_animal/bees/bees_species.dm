@@ -8,8 +8,6 @@
 
 //QUEEN BUG PACKET
 
-//BUG CORPSES
-
 //TYPES FOR CASUAL SPAWNS
 
 //the framework will be expanded later for bugs other than bees, ones that don't have queens, hives...
@@ -72,7 +70,10 @@
 	var/pierce_chance = 0//100 = always pierce through protection
 	var/pierce_damage = 0//100 = deals 100 of the damage if pierce procs
 
-	var/aggressiveness = 0//100 = always aggressive when coming out of hive
+	var/wild = 0	//wild bees will be angry all the time and never get exhausted
+
+/datum/bee_species/proc/after_sting(var/mob/living/L, var/sting_quality)
+	return
 
 //////////////////////////////////////==================================================================================================================================
 //             VOX BEES             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +107,6 @@
 	damage_coef = 0
 	toxic_coef = 0
 
-/////////////////BUG DATUM
 /datum/bee/chill
 	corpse = /obj/effect/decal/cleanable/bee/chill
 
@@ -114,7 +114,6 @@
 	..()
 	species = bees_species[BEESPECIES_VOX]
 
-/////////////////QUEEN BUG DATUM
 /datum/bee/queen_bee/chill
 	corpse = /obj/effect/decal/cleanable/bee/queen_bee/chill
 
@@ -122,51 +121,10 @@
 	..()
 	species = bees_species[BEESPECIES_VOX]
 
-/////////////////QUEEN BUG PACKET
-/obj/item/queen_bee/chill
-	name = "chill bug queen packet"
-	desc = "Place her into an apiary so she can get busy. This species is particularly non-violent. Produces wax with calming properties."
-	icon = 'icons/obj/apiary_bees_etc.dmi'
-	icon_state = "chill_queen_larvae"
-	w_class = W_CLASS_TINY
-	species = null
-
-/obj/item/queen_bee/chill/New()
-	..()
-	initialize()
-
-/obj/item/queen_bee/chill/initialize()
-	species = bees_species[BEESPECIES_VOX]
-
-/////////////////BUG CORPSES
-/obj/effect/decal/cleanable/bee/chill
-	name = "dead chill bug"
-	desc = "This one stung for the last time."
-	icon_state = "chill_bee_dead"
-
-/obj/effect/decal/cleanable/bee/queen_bee/chill
-	name = "dead chill bug queen"
-	icon_state = "chill_queen_bee_dead"
-
-/////////////////TYPES FOR CASUAL SPAWNS
-/mob/living/simple_animal/bee/adminSpawned_chill/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
-
-/mob/living/simple_animal/bee/adminSpawned_chill/initialize()
-	var/datum/bee/chill/B = new()
-	addBee(B)
-	update_icon()
-
-/mob/living/simple_animal/bee/adminSpawnedQueen_chill/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
-
-/mob/living/simple_animal/bee/adminSpawnedQueen_chill/initialize()
-	var/datum/bee/queen_bee/chill/B = new()
-	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
-	addBee(B)
-	update_icon()
+//can only occur when fired from a chillgun
+/datum/bee_species/chill/after_sting(var/mob/living/L, var/sting_quality)
+	if (L.reagents)
+		L.reagents.add_reagent(CHILLWAX,1)
 
 
 //////////////////////////////////////==================================================================================================================================
@@ -197,9 +155,8 @@
 	pierce_chance = 20
 	pierce_damage = 40
 
-	aggressiveness = 100
+	wild = 1
 
-/////////////////BUG DATUM
 /datum/bee/hornet
 	corpse = /obj/effect/decal/cleanable/bee/hornet
 
@@ -207,7 +164,6 @@
 	..()
 	species = bees_species[BEESPECIES_HORNET]
 
-/////////////////QUEEN BUG DATUM
 /datum/bee/queen_bee/hornet
 	corpse = /obj/effect/decal/cleanable/bee/queen_bee/hornet
 
@@ -215,48 +171,3 @@
 	..()
 	species = bees_species[BEESPECIES_HORNET]
 
-/////////////////QUEEN BUG PACKET
-/obj/item/queen_bee/hornet
-	name = "hornet queen packet"
-	desc = "Place her into an apiary so she can get busy. Why would you do that though? It's a terrible idea!"
-	icon = 'icons/obj/apiary_bees_etc.dmi'
-	icon_state = "hornet_queen_larvae"
-	w_class = W_CLASS_TINY
-	species = null
-
-/obj/item/queen_bee/hornet/New()
-	..()
-	initialize()
-
-/obj/item/queen_bee/hornet/initialize()
-	species = bees_species[BEESPECIES_HORNET]
-
-/////////////////BUG CORPSES
-/obj/effect/decal/cleanable/bee/hornet
-	name = "dead hornet"
-	desc = "This one stung for the last time."
-	icon_state = "hornet_bee_dead"
-
-/obj/effect/decal/cleanable/bee/queen_bee/hornet
-	name = "dead hornet queen"
-	icon_state = "hornet_queen_bee_dead"
-
-/////////////////TYPES FOR CASUAL SPAWNS
-/mob/living/simple_animal/bee/adminSpawned_hornet/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
-
-/mob/living/simple_animal/bee/adminSpawned_hornet/initialize()
-	var/datum/bee/hornet/B = new()
-	addBee(B)
-	update_icon()
-
-/mob/living/simple_animal/bee/adminSpawnedQueen_hornet/New(loc, var/obj/machinery/apiary/new_home)
-	..()
-	initialize()
-
-/mob/living/simple_animal/bee/adminSpawnedQueen_hornet/initialize()
-	var/datum/bee/queen_bee/hornet/B = new()
-	B.colonizing = 1//so it can start a colony if someone places it in an empty hive
-	addBee(B)
-	update_icon()

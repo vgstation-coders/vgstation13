@@ -447,7 +447,7 @@ var/list/camera_messages = list()
 
 	return null
 
-/obj/machinery/camera/proc/weld(var/obj/item/weapon/weldingtool/WT, var/mob/user)
+/obj/machinery/camera/proc/weld(var/obj/item/tool/weldingtool/WT, var/mob/user)
 
 
 	if(busy)

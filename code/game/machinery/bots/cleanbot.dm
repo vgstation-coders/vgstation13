@@ -175,7 +175,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 	decay_oldtargets()
 
-	if (!screwloose && !oddbutton & prob(5))
+	if (!screwloose && !oddbutton && prob(5))
 		visible_message("<span class='notice'>[src] makes an excited beeping booping sound!</span>")
 
 	if (screwloose && prob(5))

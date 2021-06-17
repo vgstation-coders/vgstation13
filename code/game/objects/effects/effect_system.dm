@@ -958,19 +958,6 @@ steam.start() -- spawns the effect
 		return 0
 	return !density
 
-
-/obj/structure/foamedmetal/proc/update_nearby_tiles()
-
-	if (!SS_READY(SSair))
-		return 0
-
-	var/T = loc
-
-	if (isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
-
 /obj/structure/foamedmetal/New()
 	. = ..()
 	update_nearby_tiles()

@@ -68,6 +68,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
 	var/large = 1					// Is the plant large? For clay pots.
+	var/list/mutation_log = list() // Who did what
 
 /datum/seed/New()
 	..()
@@ -255,7 +256,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 //Random mutations moved to hydroponics_mutations.dm!
 
 //Mutates a specific trait/set of traits. Used by the Bioballistic Delivery System.
-/datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode)
+/datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode, var/mob/user)
 
 	if(!gene || !gene.values || immutable > 0)
 		return
@@ -397,6 +398,15 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					spread 				= max(gene.values[3], spread)
 					harvest_repeat 		= max(gene.values[4], harvest_repeat)
 					yield				= round(mix(gene.values[5], yield,		rand(40, 60)/100), 0.1)
+
+	var/text = "([timestamp()]) Plant engineered by [key_name(usr)], mode: [mode] (cf __DEFINES/hydroponics.dm). |"
+	text += " Plant is now [carnivorous ? "carnivorous" : "NO LONGER carnivorous."] |"
+	text += " Plant is now [thorny ? "thorny" : "NO LONGER thorny."] |"
+	text += " Plant chems: "
+	for (var/chemical in chems)
+		text += "[chemical], vol: [chems[chemical][1]], potency: [chems[chemical][2]]."
+
+	mutation_log += text
 
 //Returns a list of the desired trait values.
 /datum/seed/proc/get_gene(var/genetype)
@@ -656,6 +666,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.biolum_colour =        biolum_colour
 	new_seed.alter_temp = 			alter_temp
 	new_seed.plant_dmi =			plant_dmi
+	new_seed.mutation_log =			mutation_log
+	new_seed.mutation_log += "([timestamp()]) Diverged from seed with uid: [uid]."
 
 	ASSERT(istype(new_seed)) //something happened... oh no...
 	return new_seed

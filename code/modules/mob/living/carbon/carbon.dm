@@ -40,9 +40,10 @@
 
 			if(m_intent == "run")
 				burn_calories(HUNGER_FACTOR / 20)
-		//update_minimap()
-		if (displayed_holomap)
-			displayed_holomap.update_holomap()
+
+/mob/living/carbon/proc/update_holomaps()
+	if (displayed_holomap)
+		displayed_holomap.update_holomap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
 	M.unarmed_attack_mob(src)
@@ -112,6 +113,7 @@
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
+		adjustFireLoss(damage) //Heal burns equal to the negative value
 		return 0
 
 	var/mob/living/carbon/human/H = src

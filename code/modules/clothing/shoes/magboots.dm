@@ -14,6 +14,7 @@
 	var/stomp_boot = "magboot"
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
+	var/emagged = FALSE
 
 	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
 
@@ -70,7 +71,7 @@
 	if((clothing_flags & MAGPULSE) && victim.lying && T == victim.loc && !istype(T, /turf/space)) //To stomp on somebody, you have to be on the same tile as them. You can't be in space, and they have to be lying
 		//NUCLEAR MAGBOOT STUMP INCOMING (it takes 3 seconds)
 
-		user.visible_message("<span class='danger'>\The [user] slowly raises \his [stomp_boot] above the lying [victim.name], preparing to stomp on \him.</span>")
+		user.visible_message("<span class='danger'>\The [user] slowly raises \his [stomp_boot] above the lying [victim], preparing to stomp on \him.</span>")
 		togglemagpulse(user)
 
 		if(do_after(user, src, stomp_delay))
@@ -96,8 +97,33 @@
 	..()
 	return
 
+/obj/item/clothing/shoes/magboots/emag_act(var/mob/user)
+	emagged = TRUE
+	new/obj/effect/effect/sparks(get_turf(src))
+	playsound(loc,"sparks",50,1)
+	clothing_flags &= ~(NOSLIP | MAGPULSE)
+	slowdown = SHACKLE_SHOES_SLOWDOWN
+	icon_state = "[base_state]1"
+	to_chat(user, "<span class='danger'>You override the mag-pulse traction system!</span>")
+	user.update_inv_shoes()	//so our mob-overlays update
+
+/obj/item/clothing/shoes/magboots/attackby(var/obj/item/O, var/mob/user)
+	..()
+	if(issolder(O) && emagged)
+		var/obj/item/tool/solder/S = O
+		if(S.remove_fuel(10,user))
+			O.playtoolsound(user.loc, 25)
+			emagged = FALSE
+			slowdown = NO_SLOWDOWN
+			icon_state = "[base_state]0"
+			to_chat(user, "<span class='notice'>You restore the mag-pulse traction system.</span>")
+			user.update_inv_shoes()	//so our mob-overlays update
+
 /obj/item/clothing/shoes/magboots/togglemagpulse(var/mob/user = usr)
 	if(user.isUnconscious())
+		return
+	if(emagged)
+		to_chat(user, "<span class='warning'>The mag-pulse traction system cannot be turned off!</span>")
 		return
 	if(clothing_flags & MAGPULSE)
 		clothing_flags &= ~(NOSLIP | MAGPULSE)
@@ -162,6 +188,9 @@
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	mag_slow = MAGBOOTS_SLOWDOWN_LOW
+
+/obj/item/clothing/shoes/magboots/syndie/emag_act() // not emaggable
+	return
 
 //Captain
 /obj/item/clothing/shoes/magboots/captain

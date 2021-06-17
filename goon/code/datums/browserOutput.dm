@@ -221,6 +221,16 @@ For the main html chat area
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")
 
+//same as above but only saves the South icon_state, used to display the players on last round's scoreboard.
+/proc/iconsouth2base64(var/icon/icon, var/iconKey = "misc")
+	if (!isicon(icon))
+		return 0
+
+	iconCache[iconKey] << icon(icon, dir = SOUTH, frame = 1)
+	var/iconData = iconCache.ExportText(iconKey)
+	var/list/partial = splittext(iconData, "{")
+	return replacetext(copytext(partial[2], 3, -5), "\n", "")
+
 /proc/bicon(var/obj)
 	if (!obj)
 		return

@@ -251,6 +251,18 @@ var/paperwork_library
 		return style.Format(text,src,user,P)
 
 /obj/item/weapon/pen/suicide_act(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/reagent/blood/B = get_blood(H.vessel)
+		if(B)
+			for(var/obj/item/weapon/paper/P in recursive_type_check(user, /obj/item/weapon/paper))
+				if(P.info) //clean paper only
+					continue
+				P.sudokize(B.data["blood_colour"])
+				H.vessel.remove_reagent(BLOOD, 15)
+				to_chat(viewers(user), "<span class='danger'>[user] is stabbing \himself with \the [src.name] and pouring their soul into \the [P]! It looks like they're trying to commit sudoku.</span>")
+				return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
+
 	to_chat(viewers(user), "<span class='danger'>[user] is jamming the [src.name] into \his ear! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 

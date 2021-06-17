@@ -585,7 +585,7 @@ Auto Patrol: []"},
 
 		if(ED209_BUILD_STEP_WELD)
 			if( iswelder(W) )
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
 					build_step++
 					name = "shielded frame assembly"

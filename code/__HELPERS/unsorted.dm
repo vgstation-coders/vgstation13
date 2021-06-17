@@ -1167,6 +1167,35 @@ proc/get_mob_with_client_list()
 		else
 			return zone
 
+/proc/limb_define_to_part_define(var/zone)
+	switch(zone)
+		if (LIMB_HEAD)
+			return HEAD
+		if (LIMB_CHEST)
+			return UPPER_TORSO
+		if (LIMB_GROIN)
+			return LOWER_TORSO
+		if (TARGET_MOUTH)
+			return MOUTH
+		if (TARGET_EYES)
+			return EYES
+		if (LIMB_RIGHT_HAND)
+			return HAND_RIGHT
+		if (LIMB_LEFT_HAND)
+			return HAND_LEFT
+		if (LIMB_LEFT_ARM)
+			return ARM_LEFT
+		if (LIMB_RIGHT_ARM)
+			return ARM_RIGHT
+		if (LIMB_LEFT_LEG)
+			return LEG_LEFT
+		if (LIMB_RIGHT_LEG)
+			return LEG_RIGHT
+		if (LIMB_LEFT_FOOT)
+			return FOOT_LEFT
+		if (LIMB_RIGHT_FOOT)
+			return FOOT_RIGHT
+
 /*
 	get_holder_at_turf_level(): Similar to get_turf(), will return the "highest up" holder of this atom, excluding the turf.
 	Example: A fork inside a box inside a locker will return the locker. Essentially, get_just_before_turf().
@@ -1216,21 +1245,21 @@ proc/get_mob_with_client_list()
 //Quick type checks for some tools
 var/global/list/common_tools = list(
 /obj/item/stack/cable_coil,
-/obj/item/weapon/wrench,
-/obj/item/weapon/weldingtool,
-/obj/item/weapon/screwdriver,
-/obj/item/weapon/wirecutters,
+/obj/item/tool/wrench,
+/obj/item/tool/weldingtool,
+/obj/item/tool/screwdriver,
+/obj/item/tool/wirecutters,
 /obj/item/device/multitool,
-/obj/item/weapon/crowbar)
+/obj/item/tool/crowbar)
 
 /proc/is_surgery_tool(obj/item/W as obj)
 	return (	\
-	istype(W, /obj/item/weapon/scalpel)			||	\
-	istype(W, /obj/item/weapon/hemostat)		||	\
-	istype(W, /obj/item/weapon/retractor)		||	\
-	istype(W, /obj/item/weapon/cautery)			||	\
-	istype(W, /obj/item/weapon/bonegel)			||	\
-	istype(W, /obj/item/weapon/bonesetter)
+	istype(W, /obj/item/tool/scalpel)			||	\
+	istype(W, /obj/item/tool/hemostat)		||	\
+	istype(W, /obj/item/tool/retractor)		||	\
+	istype(W, /obj/item/tool/cautery)			||	\
+	istype(W, /obj/item/tool/bonegel)			||	\
+	istype(W, /obj/item/tool/bonesetter)
 	)
 
 //check if mob is lying down on something we can operate him on.
@@ -1826,6 +1855,34 @@ Game Mode config tags:
 		return M.mind.key
 	else
 		return null
+
+/proc/IsRoundAboutToEnd()
+	//Is the round even already over?
+	if (ticker.current_state == GAME_STATE_FINISHED)
+		return TRUE
+
+	//Is the shuttle on its way to the station? or to centcomm after having departed from the station?
+	if(emergency_shuttle.online && emergency_shuttle.direction > 0)
+		return TRUE
+
+	//Is a nuke currently ticking down?
+	for (var/obj/machinery/nuclearbomb/the_bomba in nuclear_bombs)
+		if (the_bomba.timing)
+			return TRUE
+
+	//Is reality fucked?
+	if (universe.name in list("Hell Rising", "Supermatter Cascade"))
+		return TRUE
+
+	//Is some faction about to end the round?
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+	if (istype(dynamic_mode))
+		for (var/datum/faction/faction in dynamic_mode.factions)
+			if (faction.stage >= FACTION_ENDGAME)
+				return TRUE
+
+	//All is well
+	return FALSE
 
 //Ported from TG
 /proc/window_flash(client/C, ignorepref = FALSE)

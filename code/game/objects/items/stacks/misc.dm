@@ -83,7 +83,7 @@
 
 /obj/item/stack/rods/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 
 		if(amount < 2)
 			to_chat(user, "<span class='warning'>You need at least two rods to do this.</span>")

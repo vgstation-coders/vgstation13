@@ -65,7 +65,7 @@
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
-		if(!suiciding) //Cowards don't count
+		if(!mind.suiciding) //Cowards don't count
 			score["deadaipenalty"] += 1
 
 	return ..(gibbed)

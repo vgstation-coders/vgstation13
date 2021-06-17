@@ -17,7 +17,7 @@
 
 /obj/item/weapon/gun/projectile/deagle
 	name = "desert eagle"
-	desc = "A robust handgun that uses .50 AE ammo"
+	desc = "A robust handgun that uses .50 AE ammo."
 	icon_state = "deagle"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -46,7 +46,7 @@
 
 /obj/item/weapon/gun/projectile/gyropistol
 	name = "gyrojet pistol"
-	desc = "A bulky pistol designed to fire self propelled rounds"
+	desc = "A bulky pistol designed to fire self propelled rounds."
 	icon_state = "gyropistol"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -88,8 +88,8 @@
 	..()
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""][chambered ? "" : "-e"]"
 	return
-	
-	
+
+
 /obj/item/weapon/gun/projectile/pistol/NT22
 	name = "\improper NT-22 pistol"
 	desc = "A tiny pocket gun with the logo of the Corp laser-engraved on the slide. Uses .22LR rounds."
@@ -263,7 +263,7 @@
 
 /obj/item/weapon/gun/projectile/luger
 	name = "\improper Luger P08"
-	desc = "The wrath of the SS"
+	desc = "The wrath of the SS."
 	icon_state = "p08"
 	max_shells = 8
 	origin_tech = "combat=2;materials=2"

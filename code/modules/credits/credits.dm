@@ -11,6 +11,7 @@ var/global/datum/credits/end_credits = new
 	var/director = "Pomf Chicken Productions"
 	var/list/producers = list()
 	var/star = ""
+	var/ss = ""
 	var/list/disclaimers = list()
 	var/list/datum/episode_name/episode_names = list()
 
@@ -20,10 +21,12 @@ var/global/datum/credits/end_credits = new
 	var/cast_string = ""
 	var/disclaimers_string = ""
 	var/star_string = ""
+	var/ss_string = ""
 
-	//If any of the following four are modified, the episode is considered "not a rerun".
+	//If any of the following five are modified, the episode is considered "not a rerun".
 	var/customized_name = ""
 	var/customized_star = ""
+	var/customized_ss = ""
 	var/rare_episode_name = FALSE
 	var/theme = "NT"
 
@@ -32,28 +35,28 @@ var/global/datum/credits/end_credits = new
 	var/js_args = list()
 
 	var/change_credits_song = 1 //If positive, will change the credits song based on criteria
-	var/audio_link = "http://ss13.moe/media/m2/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
+	var/audio_link = "http://ss13.moe/media/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
 	var/list/classic_roundend_jingles = list(
-		"http://ss13.moe/media/m2/source/roundend/jingleclassic/bangindonk.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jingleclassic/apcdestroyed.mp3"
+		"http://ss13.moe/media/source/roundend/jingleclassic/bangindonk.mp3",
+		"http://ss13.moe/media/source/roundend/jingleclassic/apcdestroyed.mp3"
 		)
 	var/list/new_roundend_jingles = list(
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/FTLvictory.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/bayojingle.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/calamitytrigger.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/castlevania.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/duckgame.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/gameoveryeah.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/marioworld.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/megamanX.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/rayman.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/slugmissioncomplete.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/soniclevelcomplete.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/tfvictory.mp3"
+		"http://ss13.moe/media/source/roundend/jinglenew/FTLvictory.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/bayojingle.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/calamitytrigger.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/castlevania.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/duckgame.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/gameoveryeah.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/marioworld.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/megamanX.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/rayman.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/slugmissioncomplete.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/soniclevelcomplete.mp3",
+		"http://ss13.moe/media/source/roundend/jinglenew/tfvictory.mp3"
 		)
 
 /datum/credits/proc/is_rerun()
-	if(customized_name != "" || customized_star != "" || rare_episode_name == TRUE || theme != initial(theme))
+	if(customized_name != "" || customized_star != "" || customized_ss !="" || rare_episode_name == TRUE || theme != initial(theme))
 		return FALSE
 	else
 		return TRUE
@@ -89,9 +92,10 @@ var/global/datum/credits/end_credits = new
 	finalize_name()
 	finalize_episodestring()
 	finalize_starstring()
+	finalize_ssstring()
 	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
 
-	var/scrollytext = episode_string + cast_string + disclaimers_string
+	var/scrollytext = ss_string + episode_string + cast_string + disclaimers_string
 	var/splashytext = producers_string + star_string
 
 	js_args = list(scrollytext, splashytext, theme, scroll_speed, splash_time) //arguments for the makeCredits function back in the javascript
@@ -193,7 +197,7 @@ var/global/datum/credits/end_credits = new
 	var/episode_count_data = SSpersistence_misc.read_data(/datum/persistence_task/round_count)
 	var/episodenum = episode_count_data[season]
 	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
-	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
+	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name] ... [customized_ss]")
 
 /datum/credits/proc/finalize_disclaimerstring()
 	disclaimers_string = "<div class='disclaimers'>"
@@ -239,6 +243,11 @@ var/global/datum/credits/end_credits = new
 		return
 	star_string = "<h1>Starring<br>[customized_star != "" ? customized_star : star]</h1><br>%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
 
+/datum/credits/proc/finalize_ssstring()
+	if(customized_ss == "" && ss == "")
+		return
+	ss_string = "<div align='center'><div style='max-height:600px;overflow:hidden;max-width:600px;padding-bottom:20px;'><img src='[customized_ss]' style='max-height:600px;max-width:600px;'></div></div>"
+
 /datum/credits/proc/draft_caststring()
 	cast_string = "<h1>CAST:</h1><br><h2>(in order of appearance)</h2><br>"
 	cast_string += "<table class='crewtable'>"
@@ -270,11 +279,11 @@ var/global/datum/credits/end_credits = new
 /datum/credits/proc/determine_round_end_song()
 	var/list/candidates = list()
 	if(ticker.station_was_nuked)
-		candidates += pick("http://ss13.moe/media/m2/source/roundend/credits/RA2_Blow_It_Up.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_Falling_Instrumental.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
+		candidates += pick("http://ss13.moe/media/source/roundend/credits/RA2_Blow_It_Up.mp3",
+						"http://ss13.moe/media/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
+						"http://ss13.moe/media/source/roundend/credits/Julee_Cruise_Falling_Instrumental.mp3",
+						"http://ss13.moe/media/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
+						"http://ss13.moe/media/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
 
 	if(candidates.len)
 		audio_link = pick(candidates)

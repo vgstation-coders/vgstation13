@@ -150,11 +150,11 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/plantbgone/New()
 	..()
-	reagents.add_reagent(PLANTBGONE, 100)
+	reagents.add_reagent(PLANTBGONE, 250)
 
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
@@ -162,11 +162,11 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/bugzapper/New()
 	..()
-	reagents.add_reagent(TOXIN, 100)
+	reagents.add_reagent(INSECTICIDE, 250)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer

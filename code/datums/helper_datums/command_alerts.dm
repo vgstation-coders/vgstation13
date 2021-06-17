@@ -44,13 +44,14 @@
 	for(var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
 
-/datum/command_alert/biohazard_alert/minor
-	level_max = 4
-	level_min = 2
+/datum/command_alert/biohazard_organ
+	name = "Organ Failures"
+	alert_title = "Risk of Spontaneous Organ Failure"
+	force_report = 1
 
-/datum/command_alert/biohazard_alert/major
-	level_max = 7
-	level_min = 5
+/datum/command_alert/biohazard_organ/announce()
+	message = "The microdosimetry meter onboard [station_name()] has been tripped by recent cosmic interference. Automated Bragg Curve calculations show a threat of ion implantation in crew members, which may lead to sickness or organ failure. Central Command advises regular health screening of staff displaying symptoms of malaise."
+	..()
 
 ///////HISS
 
@@ -200,8 +201,22 @@
 
 /datum/command_alert/biohazard_level_5/announce()
 	message = "Confirmed outbreak of level 5 biohazard aboard [station_name()]. All personnel must contain the outbreak."
+	. = ..()
 
-	..()
+/datum/command_alert/blob_defcon_3
+	name = "Biohazard Alert (level 5) DEFCON 3"
+	alert_title = "Biohazard Alert 5 DEFON 3"
+	message = "Accelerated growth of Biohazard Alert Level 5. DEFCON protocol engaged. Code Red is activated."
+
+/datum/command_alert/blob_defcon_2
+	name = "Biohazard Alert (level 5) DEFCON 2"
+	alert_title = "Biohazard Alert 5 DEFON 2"
+	message = "Accelerated growth of Biohazard Alert Level 5. Additional DEFCON provisions engaged. Additional reinforcements available. Cyborg units can switch a new module."
+
+/datum/command_alert/blob_defcon_1
+	name = "Biohazard Alert (level 5) DEFCON 1"
+	alert_title = "Biohazard Alert 5 DEFON 1"
+	message = "Accelerated growth of Biohazard Alert Level 5. Terminal DEFCON provisions engaged. Increased access to all personnel. Additional equipment may be transfered from Communications Consoles."
 
 /// REVS
 
@@ -542,7 +557,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Centcom Link Lost"
 	alert_title = "Automated Announcement"
 	alert = 'sound/AI/connection_lost.ogg'
-	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is be unable to be called or recalled until further notice."
+	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is unable to be called or recalled until further notice."
 
 /datum/command_alert/command_link_restored
 	name = "Centcom Link Restored"

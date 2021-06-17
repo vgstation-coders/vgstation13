@@ -49,7 +49,7 @@
 		var/datum/role/vampire/V = isvampire(H)
 
 		if(V && isReligiousLeader(user)) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
-			if(/datum/power/vampire/mature in V.current_powers)
+			if(locate(/datum/power/vampire/mature) in V.current_powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 					V.nullified = min(5, V.nullified + 2)
@@ -61,6 +61,9 @@
 	if(!prox_flag)
 		return
 	if(istype(A, /turf/simulated/floor))
+		if (user.a_intent != I_HELP) //We assume the user is fighting
+			to_chat(user, "<span class='notice'>You swing \the [src] in front of you.</span>")
+			return
 		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)
 		animation.alpha = 0
 		animate(animation, alpha = 255, time = 2)
@@ -87,7 +90,7 @@
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
 		if(ishuman(user)) //Typecasting, only humans can be vampires
 			var/datum/role/vampire/V = isvampire(user)
-			if(V && !(/datum/power/vampire/undying in V.current_powers))
+			if(V && !(locate(/datum/power/vampire/undying) in V.current_powers))
 				V.smitecounter += 60
 				to_chat(user, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
 
@@ -291,7 +294,7 @@
 
 /obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
 	..()
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if(istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
 		if(do_after(user, src, 30))
 			new /obj/item/weapon/nullrod/mosinnagant/obrez(get_turf(src))
@@ -311,7 +314,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
 /obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
-    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+    if (istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
         return
     else
         return ..()

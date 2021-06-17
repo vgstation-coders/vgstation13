@@ -318,7 +318,7 @@
 
 
 
-/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
 	if(!..())
 		return
 
@@ -360,6 +360,11 @@
 	if(wear_id)
 		wear_id.emp_act(severity)
 	..()
+
+/mob/living/carbon/monkey/adjustBruteLoss(damage)
+	..()
+	if (damage > 0)
+		damageoverlaytemp = 20
 
 /mob/living/carbon/monkey/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -561,3 +566,52 @@
 
 /mob/living/carbon/monkey/can_be_infected()
 	return 1
+
+/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble")
+	if (greaterform != "Human")
+		return FALSE
+
+	var/turf/T = get_turf(src)
+	var/obj/structure/mannequin/new_mannequin
+
+	var/list/mannequin_clothing = list(
+		SLOT_MANNEQUIN_ICLOTHING,
+		SLOT_MANNEQUIN_FEET,
+		SLOT_MANNEQUIN_GLOVES,
+		SLOT_MANNEQUIN_EARS,
+		SLOT_MANNEQUIN_OCLOTHING,
+		SLOT_MANNEQUIN_EYES,
+		SLOT_MANNEQUIN_BELT,
+		SLOT_MANNEQUIN_MASK,
+		SLOT_MANNEQUIN_HEAD,
+		SLOT_MANNEQUIN_BACK,
+		SLOT_MANNEQUIN_ID,
+		)
+
+	mannequin_clothing[SLOT_MANNEQUIN_ICLOTHING] = uniform
+	mannequin_clothing[SLOT_MANNEQUIN_HEAD] = hat
+	mannequin_clothing[SLOT_MANNEQUIN_EYES] = glasses
+	mannequin_clothing[SLOT_MANNEQUIN_MASK] = wear_mask
+	mannequin_clothing[SLOT_MANNEQUIN_BACK] = back
+
+	var/list/mannequin_held_items = list(null, null)
+
+	for (var/i = 1 to mannequin_held_items.len)
+		var/obj/O = held_items[i]
+		if (O)
+			drop_item(O,T,TRUE)
+			mannequin_held_items[i] = O
+
+	for (var/obj/O in get_all_slots())
+		drop_item(O,T,TRUE)
+
+	switch (material)
+		if ("marble")
+			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+		if ("wood")
+			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+
+	if (new_mannequin)
+		return TRUE
+	return FALSE
+

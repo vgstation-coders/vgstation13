@@ -11,7 +11,9 @@
 	- items_to_collect: items to put in the backbag
 		The associative key is for when to put it if we have no backbag.
 		Use GRASP_LEFT_HAND and GRASP_RIGHT_HAND if it goes to the hands, but slot_x_str if it goes to a slot on the person.
+		Use nothing if you want it to drop on the ground.
 	- alt_title_items_to_collect: for when you want special items based on job title.
+	- race_items_to_collect: for when you want special items based on the race of the mob.
 	- implant_types: the implants we give to the mob.
 	- special_snowflakes: for the edge cases where you need a manual proc.
 	- pda_slot/pda_type/id_type: for the ID and PDA of the mob.
@@ -62,6 +64,7 @@
 
 	var/list/items_to_collect = list()
 	var/list/alt_title_items_to_collect = list()
+	var/list/race_items_to_collect = list()
 
 	var/list/implant_types = list()
 
@@ -176,18 +179,28 @@
 
 	// -- The (wo)man has a backpack, let's put stuff in them
 	var/special_items
+	var/my_species = H.species.type // This temporary var is necessary.
+	var/list/other_items_to_collect = list()
+	for (var/thing in race_items_to_collect[my_species])
+		if (ispath(thing))
+			other_items_to_collect += thing
+		else // String = list of things for that alt-title
+			if (thing == H.mind.role_alt_title)
+				for (var/type in race_items_to_collect[my_species][thing])
+					other_items_to_collect += type
+
 	if (H.mind)
 		special_items = alt_title_items_to_collect[H.mind.role_alt_title]
 
 	if (chosen_backpack)
 		H.equip_to_slot_or_del(new chosen_backpack(H), slot_back, 1)
-		for (var/item_type in items_to_collect)
-			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+		for (var/item_type in (items_to_collect + other_items_to_collect))
+			if (ispath(item_type, /obj/item))
+				H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+			else // More abstract thing
+				new item_type(H.back)
 		// -- Special surival gear for that species
 		if (equip_survival_gear.len)
-
-			var/my_species = H.species.type // This temporary var is necessary.
-
 			if (ispath(equip_survival_gear[my_species]))
 				var/path = equip_survival_gear[my_species]
 				H.equip_or_collect(new path(H.back), slot_in_backpack)
@@ -200,7 +213,10 @@
 		// Special alt-title items
 		if (special_items)
 			for (var/item_type in special_items)
-				H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+				if (ispath(item_type, /obj/item))
+					H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+				else // More abstract thing
+					new item_type(H.back)
 
 	// -- No backbag, let's improvise
 

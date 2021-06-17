@@ -10,8 +10,9 @@
 		if(O.is_organic() && O.is_existing())
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
+	var/prevhealth = health
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
-
+	critlog(health,prevhealth)
 	if((maxHealth - total_burn) < config.health_threshold_dead)
 		death(FALSE)
 		ChangeToHusk()
@@ -121,6 +122,7 @@
 /mob/living/carbon/human/Knockdown(amount)
 	if(M_HULK in mutations)
 		return
+	handle_spaghetti(100)
 	..()
 
 /mob/living/carbon/human/Paralyse(amount)
@@ -279,7 +281,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 This function restores the subjects blood to max.
 */
 /mob/living/carbon/human/proc/restore_blood()
-	if(!species.anatomy_flags & NO_BLOOD)
+	if(!(species.anatomy_flags & NO_BLOOD))
 		var/blood_volume = vessel.get_reagent_amount(BLOOD)
 		vessel.add_reagent(BLOOD,560.0-blood_volume)
 
@@ -491,11 +493,12 @@ This function restores all organs.
 /mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
 	if(species.flags & RAD_IMMUNE)
 		return
-
 	if(application == RAD_EXTERNAL)
 		lazy_invoke_event(/lazy_event/on_irradiate, list("user" = src, "rads" = rads))
-
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
-			rads = rads/2
+			rads /= 2
+	if(species.rad_mod)
+		rads *= species.rad_mod
 	return ..()
+

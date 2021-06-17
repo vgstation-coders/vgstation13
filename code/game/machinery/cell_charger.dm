@@ -157,11 +157,11 @@
 	steps = list(
 					//1
 					list(Co_DESC="The cabling is messily strewn throughout.",
-						Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
+						Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
 							Co_START_MSG = "{USER} begin{s} adjusting the wiring in {HOLDER}...",
 							Co_VIS_MSG = "{USER} adjust{s} the wiring in {HOLDER}.",
 							Co_DELAY = 50),
-						Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
+						Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wirecutters,
 					 		Co_VIS_MSG = "{USER} remove{s} the cables from {HOLDER}.")
 						),
 					//2
@@ -169,7 +169,7 @@
 						Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
 							Co_VIS_MSG = "{USER} add{s} the cables to {HOLDER}.",
 							Co_AMOUNT = 5),
-						Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
+						Co_BACKSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 					 		Co_VIS_MSG = "{USER} remove{s} the rod from {HOLDER}.",
 							Co_AMOUNT = 3,
 					 		Co_START_MSG = "{USER} begin{s} slicing through {HOLDER}'s metal rod...",

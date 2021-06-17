@@ -177,7 +177,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	if(!istype(user))
 		return 0
 
-	if(user.head && istype(user.head,/obj/item/clothing/head/tinfoil))
+	if(user.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
 		return 1
 
 	return 0

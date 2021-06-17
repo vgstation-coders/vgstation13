@@ -37,6 +37,7 @@
 #define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
+#define CHIEF_CULTIST "chief cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
 #define NUKE_OP_LEADER "nuclear operative leader"
@@ -190,6 +191,7 @@
 #define CONVERSION_NOCHOICE	0
 #define CONVERSION_ACCEPT	1
 #define CONVERSION_BANNED	2
+#define CONVERSION_MINDLESS	3
 
 #define CONVERTIBLE_ALWAYS	1
 #define CONVERTIBLE_CHOICE	2
@@ -268,3 +270,6 @@
 #define SYNDICATE_CANCELED	2
 
 #define DOUBLE_AGENT_TC_REWARD	5
+
+#define BASE_RULESET_WEIGHT 10
+#define ADDITIONAL_RULESET_WEIGHT 1.4

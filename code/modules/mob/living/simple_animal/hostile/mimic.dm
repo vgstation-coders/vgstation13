@@ -353,30 +353,30 @@ var/global/list/crate_mimic_disguises = list(\
 
 var/global/list/item_mimic_disguises = list(
 	"default" = list(/obj/item/alien_embryo, /obj/item/ammo_storage, /obj/item/device/chameleon, /obj/item/toy/crossbow, /obj/item/toy/waterflower, /obj/item/weapon/banhammer/admin,\
-				/obj/item/weapon/beach_ball, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/hand_labeler, /obj/item/weapon/soap, /obj/item/weapon/crowbar,\
+				/obj/item/weapon/beach_ball, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/hand_labeler, /obj/item/weapon/soap, /obj/item/tool/crowbar,\
 				/obj/item/weapon/caution, /obj/item/weapon/bananapeel, /obj/item/device/chameleon, /obj/item/weapon/storage/pneumatic, /obj/item/trash/discountchocolate,\
-				/obj/item/weapon/fireaxe, /obj/item/weapon/gun/gatling, /obj/item/weapon/table_parts, /obj/item/weapon/wrench/socket, /obj/item/weapon/lighter, /obj/item/weapon/bikehorn/rubberducky,\
+				/obj/item/weapon/fireaxe, /obj/item/weapon/gun/gatling, /obj/item/weapon/table_parts, /obj/item/tool/wrench/socket, /obj/item/weapon/lighter, /obj/item/weapon/bikehorn/rubberducky,\
 				/obj/item/weapon/lipstick, /obj/item/weapon/stamp/clown, /obj/item/weapon/storage/backpack/holding, /obj/item/clothing/gloves/yellow,\
 				/obj/item/device/aicard, /obj/item/device/analyzer, /obj/item/device/assembly/igniter, /obj/item/device/camera, /obj/item/device/codebreaker, /obj/item/device/device_analyser,\
 				/obj/item/device/flash, /obj/item/device/flashlight, /obj/item/device/hailer, /obj/item/device/material_synth, /obj/item/device/megaphone, /obj/item/device/paicard,\
 				/obj/item/device/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/soulstone,\
 				/obj/item/device/soundsynth, /obj/item/device/instrument/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
 
-	"medbay" = list(/obj/item/weapon/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/weapon/surgicaldrill, /obj/item/weapon/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
-				/obj/item/weapon/bonesetter, /obj/item/weapon/autopsy_scanner, /obj/item/weapon/FixOVein, /obj/item/stack/medical/ointment, /obj/item/weapon/storage/firstaid,\
+	"medbay" = list(/obj/item/tool/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/tool/surgicaldrill, /obj/item/tool/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
+				/obj/item/tool/bonesetter, /obj/item/weapon/autopsy_scanner, /obj/item/tool/FixOVein, /obj/item/stack/medical/ointment, /obj/item/weapon/storage/firstaid,\
 				/obj/item/weapon/gun/syringe/rapidsyringe, /obj/item/weapon/storage/firstaid/fire, /obj/item/weapon/storage/firstaid/o2, /obj/item/weapon/storage/firstaid/toxin,\
-				/obj/item/weapon/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/waterballoon, /obj/item/weapon/coin/clown,\
+				/obj/item/tool/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/waterballoon, /obj/item/weapon/coin/clown,\
 				/obj/item/weapon/dice/d4, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d20, /obj/item/weapon/gun/gravitywell, /obj/item/weapon/harpoon), //Medbay and some common items
 
 	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome_legacy,\
-				/obj/item/weapon/crowbar, /obj/item/weapon/storage/fancy/donut_box, /obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/pneumatic, /obj/item/weapon/gun/gatling,\
+				/obj/item/tool/crowbar, /obj/item/weapon/storage/fancy/donut_box, /obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/pneumatic, /obj/item/weapon/gun/gatling,\
 				/obj/item/weapon/handcuffs, /obj/item/weapon/melee/energy/sword/green, /obj/item/clothing/gloves/yellow, /obj/item/weapon/gun/osipr, /obj/item/weapon/gun/energy/staff/animate,\
 				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/laser/cannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
 				/obj/item/weapon/melee/legacy_cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
 
 	"bar" = (existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
 
-	"emergency" = list(/obj/item/clothing/mask/breath, /obj/item/weapon/tank/jetpack/oxygen, /obj/item/weapon/tank/emergency_oxygen, /obj/item/weapon/tank/air, /obj/item/weapon/crowbar,\
+	"emergency" = list(/obj/item/clothing/mask/breath, /obj/item/weapon/tank/jetpack/oxygen, /obj/item/weapon/tank/emergency_oxygen, /obj/item/weapon/tank/air, /obj/item/tool/crowbar,\
 					/obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack/security, /obj/item/device/maracas, /obj/item/device/multitool,\
 					/obj/item/clothing/gloves/yellow, /obj/item/weapon/hand_tele, /obj/item/weapon/card/id/captains_spare, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/gun/portalgun), //Focus on breath masks, jetpacks/oxygen tanks and generally useful stuff
 

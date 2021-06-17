@@ -89,6 +89,15 @@
 		if(1)
 			qdel(src)
 
+/obj/machinery/disposal/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item))
+		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
+			return FALSE
+		var/obj/item/I = AM
+		I.forceMove(src)
+		update_icon()
+		return TRUE
+	return FALSE
 
 // attack by item places it in to disposal
 /obj/machinery/disposal/attackby(var/obj/item/I, var/mob/user)
@@ -119,7 +128,7 @@
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/tool/weldingtool/W = I
 			to_chat(user, "You start slicing the floorweld off the disposal unit.")
 			if(W.do_weld(user, src,20, 0))
 				if(gcDestroyed)
@@ -475,6 +484,8 @@
 	if(user.restrained() || !user.canmove || user.incapacitated())
 		return
 	if(!Adjacent(user) || !user.Adjacent(dropping))
+		return
+	if(!user.canMouseDrag())
 		return
 
 	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
@@ -962,7 +973,7 @@
 		return
 	src.add_fingerprint(user)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the disposal pipe.")
 		if(W.do_weld(user, src, 3 SECONDS, 0))
 			if(gcDestroyed)
@@ -1461,7 +1472,7 @@
 		return
 	src.add_fingerprint(user)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the disposal pipe.")
 		if(W.do_weld(user, src, 3 SECONDS))
 			if(gcDestroyed)
@@ -1608,7 +1619,7 @@
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && mode==1)
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		to_chat(user, "You start slicing the floorweld off the disposal outlet.")
 		if(W.do_weld(user, src, 20, 0))
 			if(gcDestroyed)

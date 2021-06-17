@@ -94,7 +94,7 @@
 	else
 		icon_state = "emitter-off"
 
-/obj/machinery/rust/gyrotron/weldToFloor(var/obj/item/weapon/weldingtool/WT, var/mob/user)
+/obj/machinery/rust/gyrotron/weldToFloor(var/obj/item/tool/weldingtool/WT, var/mob/user)
 	if(emitting)
 		to_chat(user, "<span class='warning'>Turn \the [src] off first!</span>")
 		return -1

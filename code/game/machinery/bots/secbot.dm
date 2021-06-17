@@ -435,7 +435,7 @@ Auto Patrol: []"},
 /obj/item/weapon/secbot_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if((iswelder(W)) && (!src.build_step))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
 			src.overlays += image('icons/obj/aibots.dmi', "hs_hole")
@@ -643,16 +643,16 @@ Auto Patrol: []"},
 		/obj/item/weapon/bananapeel,
 		/obj/item/weapon/soap,
 		/obj/item/weapon/bikehorn,
-		/obj/item/weapon/wrench,
-		/obj/item/weapon/screwdriver,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/solder,
-		/obj/item/weapon/scalpel,
-		/obj/item/weapon/surgicaldrill,
-		/obj/item/weapon/circular_saw,
-		/obj/item/weapon/bonesetter,
+		/obj/item/tool/wrench,
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wirecutters,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/solder,
+		/obj/item/tool/scalpel,
+		/obj/item/tool/surgicaldrill,
+		/obj/item/tool/circular_saw,
+		/obj/item/tool/bonesetter,
 		/obj/item/weapon/match,
 		/obj/item/weapon/lighter,
 		/obj/item/weapon/kitchen,
@@ -690,7 +690,7 @@ Auto Patrol: []"},
 /obj/item/weapon/secbot_assembly/britsky/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if((iswelder(W)) && (!src.build_step))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
 			src.overlays += image('icons/obj/aibots.dmi', "bhs_hole")

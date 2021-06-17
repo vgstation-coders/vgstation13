@@ -8,9 +8,7 @@
 #define SSAIR_FIRST_PART SSAIR_TILES //The first part to be processed.
 #define SSAIR_LAST_PART  SSAIR_ZONE  //The last part to be processed.
 
-#define SSAIR_PROCESS_UPDATE SSAIR_TILES, SSAIR_DEFERRED, SSAIR_ZONE //The lists corresponding to these parts are cleared when processed.
-                                                                     //In other words, these are only processed each time they are marked for an update.
-                                                                     //The default behavior is not clearing the list, meaning the corresponding objects are processed every tick.
+#define SSAIR_PROCESS_KEEP SSAIR_EDGES, SSAIR_HOTSPOT //The lists for these parts are kept between ticks. Any parts not included here are wiped each tick.
 
 var/datum/subsystem/air/SSair
 var/tick_multiplier = 2
@@ -164,13 +162,10 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		timer = world.tick_usage
 
 		if(!resumed)
+			currentrun = processing_parts[currentpart]
 			switch(currentpart)
-				if(SSAIR_PROCESS_UPDATE)
-					currentrun = processing_parts[currentpart]
-					processing_parts[currentpart] = list()
-				else
-					currentrun = processing_parts[currentpart]
-					currentrun = currentrun.Copy() //Thanks, list aliasing
+				if(SSAIR_PROCESS_KEEP)
+					currentrun = currentrun.Copy()
 
 		process_part(currentpart)
 
@@ -185,9 +180,9 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 /datum/subsystem/air/proc/process_part(part = currentpart) //This whole proc is pretty disgusting, but I don't want to fuck EVERYTHING up at the same time. Rewrite later, maybe.
 	var/list/currentrun = src.currentrun //Accessing a proc var is faster than acccessing an object var. In the unlikely event Lummox ever fixes this, delete this line.
 
-	#define LOOP_DECLARATION(iter_type, iterator) for(var/iter_type/iterator;currentrun.len && !(MC_TICK_CHECK) && (iterator = currentrun[currentrun.len]);currentrun.len--)
+	#define LOOP_DECLARATION(iter_type, iterator) var/iter_type/iterator; while(currentrun.len && !(MC_TICK_CHECK) && (iterator = currentrun[currentrun.len]) && currentrun.len--)
 		//The loop declaration is a macro so it can be duplicated without just copying+pasting. This removes the need for the following switch() to be evaluated every iteration.
-		//It also contains EXTREME quantities of bullshit in order to have all the checks and list manipulation built in. I strongly recommend you don't actually read it.
+		//It's a huge mess in order to have all the checks and list manipulation built in. It's a bit slower than it would be if it were just copypasted due to the extra &&s, but only a bit.
 
 	switch(part)
 		if(SSAIR_TILES)
@@ -334,7 +329,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	#endif
 	if(T.needs_air_update)
 		return
-	processing_parts[SSAIR_TILES] |= T
+	processing_parts[SSAIR_TILES] += T
 	#ifdef ZASDBG
 	T.overlays += mark
 	#endif

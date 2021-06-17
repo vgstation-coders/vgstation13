@@ -13,7 +13,7 @@
 
 /obj/structure/flora/attackby(var/obj/item/I, var/mob/user, params)
 	if(shovelaway && isshovel(I))
-		to_chat(user,"<span class='notice'>You clear away \the [src]</span>")
+		to_chat(user,"<span class='notice'>You clear away \the [src].</span>")
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		qdel(src)
 		return 1
@@ -541,7 +541,7 @@
 //and now these defines
 /obj/structure/flora/rock
 	name = "rock"
-	desc = "a rock"
+	desc = "A rock."
 	icon_state = "rock1"
 	icon = 'icons/obj/flora/rocks.dmi'
 	anchored = 1

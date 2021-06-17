@@ -32,6 +32,19 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 100
 	clothing_flags = BLOCK_GAS_SMOKE_EFFECT
+	can_flip = 1
+
+/obj/item/clothing/mask/surgical/black
+	name = "black face mask"
+	desc = "A sober mask designed to help prevent the spread of diseases."
+	icon_state = "sterile_black"
+	item_state = "sterile_black"
+
+/obj/item/clothing/mask/surgical/colorful
+	name = "colorful face mask"
+	desc = "A clowny mask designed to help prevent the spread of diseases."
+	icon_state = "sterile_colorful"
+	item_state = "sterile_colorful"
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"

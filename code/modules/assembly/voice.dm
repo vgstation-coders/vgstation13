@@ -43,7 +43,7 @@
 
 
 /obj/item/device/assembly/voice/attackby(obj/item/W, mob/user)
-	if(ismultitool(W))
+	if(W.is_multitool(user))
 		muted = !muted
 
 		if(muted)

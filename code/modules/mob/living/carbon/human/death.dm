@@ -1,4 +1,6 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
+	if(!isUnconscious())
+		forcesay("-")
 	if(species)
 		species.gib(src)
 		return
@@ -127,11 +129,14 @@
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
-		if(!suiciding) //Cowards don't count
+		if(!(mind && mind.suiciding)) //Cowards don't count
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
+	if (dorfpod)
+		dorfpod.scan_body(src)
 	if(ticker && ticker.mode)
 		sql_report_death(src)
 	species.handle_death(src)
+
 	if(become_zombie_after_death && isjusthuman(src))
 		spawn(30 SECONDS)
 			if(!gcDestroyed)

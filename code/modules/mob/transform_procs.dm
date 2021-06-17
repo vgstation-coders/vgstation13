@@ -72,7 +72,6 @@
 			Mo.dna.SetSEValueRange(MONKEYBLOCK, 0xDAC, 0xFFF)
 	if(isliving(src))
 		var/mob/living/L = src
-		Mo.suiciding = L.suiciding
 		Mo.take_overall_damage(L.getBruteLoss() + L.getCloneLoss(), L.getFireLoss())
 		Mo.setToxLoss(L.getToxLoss())
 		Mo.setOxyLoss(L.getOxyLoss())
@@ -180,6 +179,7 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
+		return FALSE
 	if(!skipnaming)
 		spawn()
 			O.Namepick()

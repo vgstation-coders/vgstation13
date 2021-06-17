@@ -171,7 +171,7 @@ datum/hSB/Topic(href, href_list)
 				var/obj/item/weapon/storage/hsb = new/obj/item/weapon/storage/toolbox/mechanical
 				for(var/obj/item/device/radio/T in hsb)
 					qdel(T)
-				new/obj/item/weapon/crowbar (hsb)
+				new/obj/item/tool/crowbar (hsb)
 				hsb.forceMove(usr.loc)
 			if("hsbmedkit")
 				var/obj/item/weapon/storage/firstaid/hsb = new/obj/item/weapon/storage/firstaid/regular

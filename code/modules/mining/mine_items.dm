@@ -263,7 +263,7 @@ proc/move_mining_shuttle()
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
-	desc = "A rock cutter that uses bursts of hot plasma"
+	desc = "A rock cutter that uses bursts of hot plasma."
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	toolsounds = list('sound/items/Welder.ogg')
@@ -635,7 +635,7 @@ proc/move_mining_shuttle()
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		if(W.welding && !stat)
 			if(stance != HOSTILE_STANCE_IDLE)
 				to_chat(user, "<span class='warning'>\The [src] is moving around too much to repair!</span>")

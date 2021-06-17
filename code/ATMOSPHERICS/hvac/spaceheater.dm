@@ -162,7 +162,7 @@
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
 		if(iswelder(I))
-			var/obj/item/weapon/weldingtool/WT = I
+			var/obj/item/tool/weldingtool/WT = I
 			if(WT.is_hot()) //Badasses dont get blinded while lighting their !!campfire!! with a welding tool
 				light("<span class='notice'>[user] casually lights \the [name] with \the [I], what a badass.</span>")
 		else if(istype(I, /obj/item/weapon/lighter/zippo))
@@ -316,27 +316,28 @@
 			var/turf/simulated/L = loc
 			if(istype(L))
 				var/datum/gas_mixture/env = L.return_air()
-				if(env.temperature != set_temperature + T0C)
+				if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
+					if(env.temperature != set_temperature + T0C)
 
-					var/datum/gas_mixture/removed = env.remove_volume(intake_rate * CELL_VOLUME)
+						var/datum/gas_mixture/removed = env.remove_volume(intake_rate * CELL_VOLUME)
 
-//					to_chat(world, "got [transfer_moles] moles at [removed.temperature]")
+	//					to_chat(world, "got [transfer_moles] moles at [removed.temperature]")
 
-					if(removed)
+						if(removed)
 
-						var/heat_capacity = removed.heat_capacity()
-//						to_chat(world, "heating ([heat_capacity])")
-						if(heat_capacity) // Added check to avoid divide by zero (oshi-) runtime errors -- TLE
-							if(removed.temperature < set_temperature + T0C)
-								removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
-							else
-								removed.temperature = max(removed.temperature - heating_power/heat_capacity, TCMB)
-							drain_powersource(heating_power)
+							var/heat_capacity = removed.heat_capacity()
+	//						to_chat(world, "heating ([heat_capacity])")
+							if(heat_capacity) // Added check to avoid divide by zero (oshi-) runtime errors -- TLE
+								if(removed.temperature < set_temperature + T0C)
+									removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
+								else
+									removed.temperature = max(removed.temperature - heating_power/heat_capacity, TCMB)
+								drain_powersource(heating_power)
 
-//						to_chat(world, "now at [removed.temperature]")
+	//						to_chat(world, "now at [removed.temperature]")
 
-					env.merge(removed)
-					afterheat(L.return_air())
+						env.merge(removed)
+						afterheat(L.return_air())
 
 			 if(!istype(loc,/turf/space))
 			 	for (var/mob/living/carbon/M in view(src,light_range_on))

@@ -64,7 +64,7 @@
 		if(skipping < 3)
 			var/fullpath = path+binary
 			if(copytext(fullpath,-4,0) == ".dmb")
-				all_maps[potential] = path + binary
+				all_maps[copytext(potential,1,length(potential))] = path + binary // Makes key not have / at end, looks better in lists
 			else
 				binary = null
 				continue
@@ -74,15 +74,19 @@
 			binary = null
 			continue
 		if(potential == "Snow Taxi/")
-			var/list/http[] = world.Export("http://api.openweathermap.org/data/2.5/weather?id=5128581&APPID=449d31cebb806dfdb8c3d0a682591983&units=imperial")
-			var/temperature = 90
-			if(http && http.len && ("CONTENT" in http))
-				var/String = file2text(http["CONTENT"])
-				var/tempPos = findtext(String, "\"temp_min\":")+11
-				temperature = text2num(copytext(String, tempPos, tempPos+4))
-			if(temperature > 40)
-				message_admins("Skipping map [potential] due to it being too hot outside. Ideal temp is below 40F, found [temperature].")
-				warning("Skipping map [potential] due to  it being too hot outside. Ideal temp is below 40F, found [temperature].")
+			var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+			var/allowed_months = list(1, 2, 7, 12)
+			if (!(MM in allowed_months))
+				message_admins("Skipping map [potential] as this is no longer the Christmas season.")
+				warning("Skipping map [potential] as this is no longer the Christmas season.")
+				binary = null
+				continue
+		if(potential == "Dorf Station/")
+			var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+			var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current date
+			if (MM != 8 && DD != 8) // Dwarf fortress release date
+				message_admins("Skipping map [potential] as this is not the release date of Dwarf Fortress.")
+				warning("Skipping map [potential] as this is not the release date of Dwarf Fortress.")
 				binary = null
 				continue
 		if(potential == "Lamprey/") //Available if the station is wrecked enough
@@ -107,7 +111,7 @@
 		if(!binary)
 			warning("Map folder [path] does not contain a valid byond binary, skipping.")
 		else
-			maps[potential] = path + binary
+			maps[copytext(potential,1,length(potential))] = path + binary // Makes key not have / at end, looks better in lists
 			binary = null
 		recursion_limit--
 	var/list/maplist = get_list_of_keys(maps)

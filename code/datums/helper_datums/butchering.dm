@@ -214,6 +214,8 @@
 /datum/butchering_product/skin/monkey
 	result = /obj/item/stack/sheet/animalhide/monkey
 
+/datum/butchering_product/skin/wolf
+	result = /obj/item/clothing/head/wolfpelt
 //--------------Spider legs-------
 
 /datum/butchering_product/spider_legs
@@ -346,6 +348,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 	/mob/living/simple_animal/rabbit					= list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot),
 	/mob/living/simple_animal/snail						= list(/datum/butchering_product/snail_carapace),
+	/mob/living/simple_animal/hostile/wolf				= list(/datum/butchering_product/skin/wolf, TEETH_LOTS),
 
 	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
 	/mob/living/carbon/human/unathi						= list(TEETH_LOTS, /datum/butchering_product/skin/lizard/lots),

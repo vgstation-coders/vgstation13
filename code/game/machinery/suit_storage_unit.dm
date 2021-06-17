@@ -46,6 +46,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/atmos
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots/atmos
+	req_access = list(access_atmospherics)
 
 /obj/machinery/suit_storage_unit/prison
 	name = "Prisoner Suit Storage Unit"
@@ -61,6 +62,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/engineer
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_engine_equip)
 
 /obj/machinery/suit_storage_unit/elite
 	name = "Advanced Suit Storage Unit"
@@ -68,6 +70,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/engineer/elite
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots/elite
+	req_access = list(access_ce)
 
 /obj/machinery/suit_storage_unit/mining
 	name = "Miners Suit Storage Unit"
@@ -75,6 +78,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/mining
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_mining)
 
 /obj/machinery/suit_storage_unit/excavation
 	name = "Excavation Suit Storage Unit"
@@ -82,6 +86,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/arch
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_science)
 
 /obj/machinery/suit_storage_unit/ror
 	name = "Survivor's Suit Storage Unit"
@@ -96,6 +101,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/security
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_security)
 
 /obj/machinery/suit_storage_unit/captain
 	name = "Command Suit Storage Unit"
@@ -104,6 +110,7 @@
 	helmet_type = null
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/magboots/captain
+	req_access = list(access_captain)
 
 /obj/machinery/suit_storage_unit/medical
 	name = "Medical Suit Storage Unit"
@@ -111,6 +118,7 @@
 	suit_type = /obj/item/clothing/suit/space/rig/medical
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+	req_access = list(access_medical)
 
 /obj/machinery/suit_storage_unit/medical/empty
 	isopen = 1
@@ -184,6 +192,12 @@
 		else
 			return
 
+/obj/machinery/suit_storage_unit/emag_act(var/mob/user)
+	emagged = TRUE
+	new/obj/effect/effect/sparks(get_turf(src))
+	playsound(loc,"sparks",50,1)
+	to_chat(user, "<span class='danger'>You short out the locking mechanism, dumping the contents</span>")
+	dump_everything()
 
 /obj/machinery/suit_storage_unit/attack_hand(mob/user as mob)
 	var/dat
@@ -191,7 +205,12 @@
 		return
 	if(stat & NOPOWER)
 		return
-	if(panel_open) //The maintenance panel is open. Time for some shady stuff
+	if(emagged)
+
+		dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
+			<font color='maroon'><B>Unit locking and storage system is shorted. Please call for a qualified individual to perform maintenance.</font></B><BR><BR>"}
+		dat+= text("<HR><A href='?src=\ref[];mach_close=suit_storage_unit'>Close control panel</A>", user)
+	else if(panel_open) //The maintenance panel is open. Time for some shady stuff
 
 		dat += {"<HEAD><TITLE>Suit storage unit: Maintenance panel</TITLE></HEAD>
 			<Font color ='black'><B>Maintenance panel controls</B></font><HR>
@@ -423,6 +442,9 @@
 		return
 	if(isopen)
 		return
+	if(!allowed(user))
+		to_chat(user, "<span class='red'>Access denied.</span>")
+		return
 	islocked = !islocked
 	return
 
@@ -596,14 +618,15 @@
 	updateUsrDialog()
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
-	if((stat & BROKEN) && issolder(I))
-		var/obj/item/weapon/solder/S = I
+	if(((stat & BROKEN) || emagged) && issolder(I))
+		var/obj/item/tool/solder/S = I
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 100)
 		if(do_after(user, src,40))
 			S.playtoolsound(loc, 100)
 			stat &= !BROKEN
+			emagged = FALSE
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
 	if((stat & NOPOWER) && iscrowbar(I) && !islocked)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)

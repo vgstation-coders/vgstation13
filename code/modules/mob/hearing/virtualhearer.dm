@@ -44,6 +44,9 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	mob_hearers -= attached
 	attached = null
 
+// NOTE: Almost nothing actually uses this proc.
+// Most forms of speech, such as get_hearers_in_view(), simply call Hear() directly in our attached atom.
+// If you want to actually override this proc somewhere... you're screwed lol
 /mob/virtualhearer/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(attached)
 		attached.Hear(arglist(args))
@@ -71,13 +74,18 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 		sight = copying
 	if(adding)
 		sight |= adding
-		if(adding & (SEE_TURFS | SEE_MOBS | SEE_OBJS))
+		if((sight != oldsight) && (adding & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
 			sight &= ~SEE_BLACKNESS
 	if(removing)
 		sight &= ~removing
-		if(removing & (SEE_TURFS | SEE_MOBS | SEE_OBJS))
+		if((sight != oldsight) && (removing & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
 			sight |= SEE_BLACKNESS
 	if(sight != oldsight)
 		var/mob/virtualhearer/VH = mob_hearers[src]
 		if(VH)
 			VH.sight = sight
+
+// This subtype does nothing by itself. Since overriding Hear() in a virtualhearer subtype is impossible (see comment above),
+// the only reason this subtype exists is so other procs can explicitly check its type and know to delete it themselves.
+// Currently, this type is given by /datum/reagent/temp_hearer/on_introduced() and removed by /obj/item/weapon/reagent_containers/Hear().
+/mob/virtualhearer/one_time

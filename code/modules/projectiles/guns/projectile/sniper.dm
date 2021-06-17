@@ -76,6 +76,9 @@
 	actions_types = list(/datum/action/item_action/toggle_wielding)
 
 /obj/item/weapon/gun/projectile/hecate/hunting/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
+	if(ishuman(atarget))
+		P.stun = 0
+		P.weaken = 0
 	if(isanimal(atarget))
 		P.damage *= 6
 

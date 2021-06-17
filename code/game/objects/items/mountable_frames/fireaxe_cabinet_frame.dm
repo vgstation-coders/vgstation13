@@ -1,6 +1,6 @@
 /obj/item/mounted/frame/fireaxe_cabinet_frame
 	name = "fireaxe cabinet frame"
-	desc = "Used for building fireaxe cabinets"
+	desc = "Used for building fireaxe cabinets."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "fireaxe_assembly"
 	flags = FPRINT

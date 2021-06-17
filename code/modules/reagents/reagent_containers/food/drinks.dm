@@ -23,10 +23,10 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/viewcontents = 1
 	var/flammable = 0
 	var/flammin = 0
 	var/flammin_color = null
+	var/base_icon_state = "glassbottle"
 
 /obj/item/weapon/reagent_containers/food/drinks/on_reagent_change()
 	if(gulp_size < 5)
@@ -236,13 +236,14 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()
+	base_icon_state = icon_state
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Drinks. END
 ////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/golden_cup
-	desc = "A golden cup"
+	desc = "A golden cup."
 	name = "golden cup"
 	icon_state = "golden_cup"
 	w_class = W_CLASS_LARGE
@@ -255,7 +256,7 @@
 	siemens_coefficient = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/golden_cup/tournament_26_06_2011
-	desc = "A golden cup. It will be presented to a winner of tournament 26 june and name of the winner will be graved on it."
+	desc = "A golden cup. It will be presented to a winner of tournament 26 June, and name of the winner will be engraved on it."
 
 
 ///////////////////////////////////////////////Drinks
@@ -276,7 +277,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/flour
-	name = "flour sack"
+	name = "\improper flour sack"
 	desc = "A big bag of flour. Good for baking!"
 	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "flour"
@@ -393,7 +394,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/ice
-	name = "Ice Cup"
+	name = "\improper ice cup"
 	desc = "Careful, cold ice, do not chew."
 	icon_state = "icecup"
 /obj/item/weapon/reagent_containers/food/drinks/ice/New()
@@ -424,7 +425,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
-	name = "Cup Ramen"
+	name = "\improper cup ramen"
 	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
@@ -434,7 +435,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
-	name = "Cup Ramen"
+	name = "\improper cup ramen"
 	desc = "Just add 12ml water, self heats!"
 	icon_state = "ramen"
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating/New()
@@ -588,7 +589,7 @@
 	A.desc += " It also smells like a toddler." //This is required
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot
-	name = "\improper Discount Dan's Noodle Soup"
+	name = "Discount Dan's Noodle Soup"
 	desc = "Discount Dan is proud to introduce his own take on noodle soups, with this on the go treat! Simply pull the tab, and a self heating mechanism activates!"
 	icon_state = "ramen"
 	var/list/ddname = list("Discount Deng's Quik-Noodles - Sweet and Sour Lo Mein Flavor","Frycook Dan's Quik-Noodles - Curly Fry Ketchup Hoedown Flavor","Rabatt Dan's Snabb-Nudlar - Inkokt Lax Sm?rg?sbord Smak","Discount Deng's Quik-Noodles - Teriyaki TVP Flavor","Sconto Danilo's Quik-Noodles - Italian Strozzapreti Lunare Flavor")
@@ -603,7 +604,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_ramen
-	name = "\improper Discount Dan's Noodle Soup"
+	name = "Discount Dan's Noodle Soup"
 	desc = "Discount Dan is proud to introduce his own take on noodle soups, with this on the go treat! Simply pull the tab, and a self heating mechanism activates!"
 	icon_state = "ramen"
 	var/list/ddname = list("Discount Deng's Quik-Noodles - Sweet and Sour Lo Mein Flavor","Frycook Dan's Quik-Noodles - Curly Fry Ketchup Hoedown Flavor","Rabatt Dan's Snabb-Nudlar - Inkokt Lax Sm?rg?sbord Smak","Discount Deng's Quik-Noodles - Teriyaki TVP Flavor","Sconto Danilo's Quik-Noodles - Italian Strozzapreti Lunare Flavor")
@@ -628,7 +629,7 @@
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_sauce
-	name = "\improper Discount Dan's Special Sauce"
+	name = "Discount Dan's Special Sauce"
 	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
 	icon_state = "discount_sauce"
 	volume = 3
@@ -826,7 +827,7 @@
 	reagents.add_reagent(BLACKCOLOR, 5)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy
-	name = "\improper Roentgen Energy"
+	name = "Roentgen Energy"
 	desc = "Roentgen Energy, a meltdown in your mouth! Contains real actinides!"
 	icon_state = "roentgenenergy"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/roentgen_energy/New()
@@ -837,7 +838,7 @@
 	reagents.add_reagent(SPORTDRINK, 20)
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
-	name = "Vial of Food Coloring"
+	name = "\improper vial of food coloring"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "vial"
 	volume = 25
@@ -849,7 +850,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/sillycup
-	name = "Paper Cup"
+	name = "\improper paper cup"
 	desc = "A paper water cup."
 	icon_state = "water_cup_e"
 	possible_transfer_amounts = null
@@ -975,10 +976,51 @@
 	..()
 	reagents.add_reagent(SECCOFFEE, 50)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
+	name = "Picomed: White edition"
+	desc = "Good for the body and good for the bones."
+	icon_state = "lifeline_white"
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white/New()
+	..()
+	reagents.add_reagent(MEDCOFFEE, 48)
+	reagents.add_reagent(MILK, 2)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red
+	name = "Picomed: Red edition"
+	desc = "I need 50ccs of coffee, stat!"
+	icon_state = "lifeline_red"
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red/New()
+	..()
+	reagents.add_reagent(MEDCOFFEE, 48)
+	reagents.add_reagent(REDTEA, 2)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo
+	name = "Picomed: Cryo edition"
+	desc = "Remember to strip before consuming."
+	icon_state = "lifeline_cryo"
+	var/list/tubeoverlay = list()
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/on_reagent_change()
+	..()
+	for(var/image/ol in tubeoverlay)
+		overlays -= ol
+		tubeoverlay -= ol
+	var/remaining = Ceiling(reagents.total_volume/reagents.maximum_volume*100,20)
+	var/image/status_overlay = image("icon" = 'icons/obj/drinks.dmi', "icon_state" = "cryoverlay_[remaining]")
+	overlays += status_overlay
+	tubeoverlay += status_overlay
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/New()
+	..()
+	reagents.add_reagent(MEDCOFFEE, 48)
+	reagents.add_reagent(LEPORAZINE, 1)
+	reagents.add_reagent(FROSTOIL, 1)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
-	name = "bear arms beer"
-	desc = "Crack open a bear at the end of a long shift."
+	name = "Bear Arms Beer"
+	desc = "Crack open a Bear at the end of a long shift."
 	icon_state = "bearbeer"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/New()
 	..()
@@ -1037,7 +1079,7 @@
 	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_shaker
-	name = "\improper discount shaker"
+	name = "\improper Discount Shaker"
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
 	origin_tech = Tc_MATERIALS + "=1"
@@ -1059,7 +1101,7 @@
 	reagents.add_reagent(new_reagent, rand(50,100))
 
 /obj/item/weapon/reagent_containers/food/drinks/plastic
-	name = "plastic bottle"
+	name = "\improper plastic bottle"
 	desc = "Remember to recycle."
 	icon_state = "plasticbottle"
 	origin_tech = Tc_MATERIALS + "=1"
@@ -1069,7 +1111,7 @@
 	amount_per_transfer_from_this = 10
 
 /obj/item/weapon/reagent_containers/food/drinks/plastic/water
-	name = "water bottle"
+	name = "\improper water bottle"
 	desc = "Chemically enhanced mineral water."
 	icon_state = "waterbottle"
 
@@ -1078,13 +1120,13 @@
 	reagents.add_reagent(WATER, volume)
 
 /obj/item/weapon/reagent_containers/food/drinks/plastic/water/small
-	name = "small water bottle"
+	name = "\improper small water bottle"
 	icon_state = "waterbottle_small"
 	volume = 50
 	amount_per_transfer_from_this = 5
 
 /obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater
-	name = "soda water bottle"
+	name = "\improper Soda Water bottle"
 	desc = "Good ole carbonated water."
 	icon_state = "sodawaterbottle"
 
@@ -1093,7 +1135,7 @@
 	reagents.add_reagent(SODAWATER, volume)
 
 /obj/item/weapon/reagent_containers/food/drinks/plastic/cola
-	name = "space cola bottle"
+	name = "\improper Space Cola bottle"
 	desc = "During hard times, place your trust in mega corporations, and their sponsored drinks."
 	icon_state = "colaplasticbottle"
 
@@ -1102,26 +1144,26 @@
 	reagents.add_reagent(COLA, volume)
 
 /obj/item/weapon/reagent_containers/food/drinks/flask
-	name = "Captain's Flask"
+	name = "\improper Captain's flask"
 	desc = "A metal flask belonging to the captain."
 	icon_state = "flask"
 	origin_tech = Tc_MATERIALS + "=1"
 	volume = 60
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/detflask
-	name = "Detective's Flask"
+	name = "\improper Detective's flask"
 	desc = "A metal flask with a leather band and golden badge belonging to the detective."
 	icon_state = "detflask"
 	volume = 60
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/barflask
-	name = "flask"
+	name = "\improper flask"
 	desc = "For those who can't be bothered to hang out at the bar to drink."
 	icon_state = "barflask"
 	volume = 60
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/ancient
-	name = "ancient flask"
+	name = "\improper ancient flask"
 	desc = "A flask recovered from the asteroid. How old is it?"
 	icon_state = "oldflask"
 	mech_flags = MECH_SCAN_FAIL
@@ -1130,16 +1172,118 @@
 	..()
 	reagents.add_reagent(KARMOTRINE, 15)
 
-/obj/item/weapon/reagent_containers/food/drinks/britcup
-	name = "cup"
+/obj/item/weapon/reagent_containers/food/drinks/flagmug
+	name = "mug"
+	desc = "A simple mug."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "mug_empty"
+	isGlass = 0
+	amount_per_transfer_from_this = 10
+	volume = 30
+	starting_materials = list(MAT_IRON = 500)
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/on_reagent_change()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
+	else
+		overlays.len = 0
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
+	name = "\improper cup"
 	desc = "A cup with the British flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "britcup"
 	volume = 30
 
-/obj/item/weapon/reagent_containers/food/drinks/americup
-	name = "cup"
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/americup
+	name = "\improper cup"
 	desc = "A cup with the American flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "americup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/francecup
+	name = "\improper cup"
+	desc = "A cup with the French flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "francecup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/italycup
+	name = "\improper cup"
+	desc = "A cup with the Italian flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "italycup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/germancup
+	name = "\improper cup"
+	desc = "A cup with the German flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "germancup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/spanishcup
+	name = "\improper cup"
+	desc = "A cup with the Spanish flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "spanishcup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/irelandcup
+	name = "\improper cup"
+	desc = "A cup with the Irish flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "irelandcup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/uruguaycup
+	name = "\improper cup"
+	desc = "A cup with the Uruguayan flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "uruguaycup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/argentinacup
+	name = "\improper cup"
+	desc = "A cup with the Argentine flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "argentinacup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/brasilcup
+	name = "\improper cup"
+	desc = "A cup with the Brasilian flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "brasilcup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/chilecup
+	name = "\improper cup"
+	desc = "A cup with the Chilean flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "chilecup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/uncup
+	name = "\improper cup"
+	desc = "A cup with the United Nations flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "uncup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/eucup
+	name = "\improper cup"
+	desc = "A cup with the European flag emblazoned on it."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "eucup"
+	volume = 30
+
+/obj/item/weapon/reagent_containers/food/drinks/gromitmug
+	name = "\improper Gromit Mug"
+	desc = "Gromit Mug."
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "gromitmug"
 	volume = 30
 
 ///////////////////////////////////////////////Alchohol bottles! -Agouri //////////////////////////
@@ -1303,10 +1447,10 @@
 	..()
 	if(Holiday == APRIL_FOOLS_DAY)
 		name = "Bottle of Something"
-		desc = "A bottle filled with something"
+		desc = "A bottle filled with something."
 		reagents.add_reagent(pick(BEER, VOMIT, ZOMBIEPOWDER, SOYSAUCE, KETCHUP, HONEY, BANANA, ABSINTHE, SALTWATER, WATER, BLOOD, LUBE, MUTATIONTOXIN, AMUTATIONTOXIN, GOLD, TRICORDRAZINE, GRAVY), 100)
 	else
-		desc = "A bottle filled with nothing"
+		desc = "A bottle filled with nothing."
 		reagents.add_reagent(NOTHING, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/patron
@@ -1469,7 +1613,7 @@
 	reagents.add_reagent(LIMEJUICE, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka
-	name = "Greyshirt vodka"
+	name = "Greyshirt Vodka"
 	desc = "Experts spent a long time squatting around a mixing bench to bring you this."
 	icon_state = "grey_vodka"
 	vending_cat = "spirits"

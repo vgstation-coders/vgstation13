@@ -52,6 +52,7 @@
 	item_state = "armor"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	var/clowned = FALSE //so clowns can deface this item
+	var/medic = FALSE //for medic vest
 
 /obj/item/clothing/suit/armor/vest/security/attackby(var/obj/item/A, mob/user)
 	if(clowned == FALSE && istype(A,/obj/item/toy/crayon/rainbow))
@@ -60,20 +61,46 @@
 			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
 			clowned = TRUE
 			update_icon()
+
+	if(clowned == FALSE && istype(A,/obj/item/toy/crayon/green))
+		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
+			medic = TRUE
+			update_icon()
 	..()
 
 /obj/item/clothing/suit/armor/vest/security/decontaminate()
 	..()
+	if(medic)
+		medic = FALSE
 	if(clowned)
 		clowned = FALSE
-		update_icon()
+	update_icon()
 
 /obj/item/clothing/suit/armor/vest/security/update_icon()
-	icon_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
-	item_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
+	if(medic)
+		name = "medic armor"
+		desc = "An armored vest that protects against some damage. This one has the markings of a combat medic."
+		icon_state = "armorsecmed"
+		item_state = "armor"
+	else if(clowned)
+		name = "clown armor"
+		desc = "An armored vest that protects against some damage. This one has been subject to the artistic whims of a clown. Honk."
+		icon_state = "armorsecc"
+		item_state = "armorc"
+	else
+		name = "security armor"
+		desc = "An armored vest that protects against some damage. This one has a Nanotrasen corporate security badge."
+		icon_state = "armorsec"
+		item_state = "armor"
 
 /obj/item/clothing/suit/armor/vest/security/clown/New()
 	clowned = TRUE
+	update_icon()
+
+/obj/item/clothing/suit/armor/vest/security/medic/New()
+	medic = TRUE
 	update_icon()
 
 /obj/item/clothing/suit/armor/vest/warden

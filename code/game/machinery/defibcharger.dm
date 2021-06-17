@@ -83,7 +83,7 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 		return
 	return(..())
 
-/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(..())
 		if(charging)
 			charging.forceMove(src.loc)

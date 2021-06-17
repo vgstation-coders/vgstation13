@@ -13,7 +13,7 @@
 
 var/list/beam_master = list()
 
-#define MAX_BEAM_DISTANCE 100
+#define MAX_BEAM_DISTANCE 50
 
 #define RAY_CAST_REBOUND 1.5
 
@@ -27,6 +27,7 @@ var/list/beam_master = list()
 /ray/beam_ray/New(var/vector/p_origin, var/vector/p_direction, var/obj/item/projectile/beam/fired_beam)
 	..(p_origin, p_direction, fired_beam.starting.z)
 	src.fired_beam = fired_beam
+	original_damage = fired_beam.damage
 
 /ray/beam_ray/Destroy()
 	fired_beam = null
@@ -45,6 +46,8 @@ var/list/beam_master = list()
 
 	if(isnull(A))
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
+
+	T.last_beam_damage = fired_beam.damage
 
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
 		var/ret = fired_beam.to_bump(A)
@@ -108,9 +111,9 @@ var/list/beam_master = list()
 
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state)
+			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color)
 		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state)
+			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color)
 
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
@@ -249,7 +252,7 @@ var/list/beam_master = list()
 				M.LAssailant = firer_mob
 	else
 		..()
-		
+
 /obj/item/projectile/beam/lightning/process()
 	icon_state = "lightning"
 	var/first = 1 //So we don't make the overlay in the same tile as the firer
@@ -909,10 +912,22 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		for(var/datum/reagent/R in reagents.reagent_list)
 			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))//so here we're just doubling our quantity of reagents from 10 to 20
 		if(istype(A, /mob))
-			var/splash_verb = pick("douses","completely soaks","drenches","splashes")
-			A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
-								"<span class='warning'>\The [src] [splash_verb] you!</span>")
-			splash_sub(reagents, get_turf(A), reagents.total_volume/2)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
+			if(firer.zone_sel.selecting == TARGET_MOUTH && def_zone == LIMB_HEAD && ishuman(A)) //if aiming at head and is humanoid
+				var/mob/living/carbon/human/victim = A
+				if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
+					victim.visible_message("<span class='warning'>[A] swallows \the [src]!</span>",
+										"<span class='warning'>You swallow \the [src]!</span>")
+					reagents.trans_to(A, reagents.total_volume) //20% chance to get in mouth and in system, if mouth targeting was possible at all with projectiles this chance should be scrapped
+					has_splashed = TRUE //guess we arent stacking with the splash
+					return 1
+				else
+					A.visible_message("<span class='warning'>\The [src] gets blocked from [A]'s mouth!</span>",
+									"<span class='warning'>\The [src] gets blocked from your mouth!</span>")//just block mouth, no turf splash
+			else
+				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
+				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
+									"<span class='warning'>\The [src] [splash_verb] you!</span>")
+				splash_sub(reagents, get_turf(A), reagents.total_volume/2)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
 		else
 			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
 		splash_sub(reagents, A, reagents.total_volume)//and 10 more on the atom itself

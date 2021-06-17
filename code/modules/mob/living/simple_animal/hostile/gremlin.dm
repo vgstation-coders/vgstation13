@@ -18,6 +18,7 @@ var/list/bad_gremlin_items = list()
 	maxHealth = 18
 	size = SIZE_SMALL
 	search_objects = 3 //Completely ignore mobs
+	can_ventcrawl = TRUE
 
 	//Tampering is handled by the 'npc_tamper()' obj proc
 	wanted_objects = list(
@@ -41,7 +42,7 @@ var/list/bad_gremlin_items = list()
 	var/const/max_hear_memory = 20
 
 /mob/living/simple_animal/hostile/gremlin/AttackingTarget()
-	if(istype(target, /obj))
+	if(istype(target, /obj) && (!istype(target, /obj/machinery/atmospherics/unary/vent_pump) && !(client || deny_client_move))) // If no client, ignore vents
 		var/obj/M = target
 
 		tamper(M)
@@ -97,6 +98,14 @@ var/list/bad_gremlin_items = list()
 
 /mob/living/simple_animal/hostile/gremlin/proc/stand_still(var/tick_amount)
 	time_chasing_target -= tick_amount
+
+/mob/living/simple_animal/hostile/gremlin/verb/ventcrawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Object"
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
 
 /mob/living/simple_animal/hostile/gremlin/CanAttack(atom/new_target)
 	if(bad_gremlin_items.Find(new_target.type))

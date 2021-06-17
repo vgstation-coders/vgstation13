@@ -80,12 +80,13 @@
 			return 1
 		var/datum/role/cultist/cultist
 		if(iscultist(M))
-			cultist = M.mind.GetRole(CULTIST)
+			cultist = iscultist(M)
 			if (cultist.deconversion)
 				to_chat(user,"<span class='warning'>There is already a deconversion attempt undergoing!</span>")
 				return 1
 			else
 				to_chat(M,"<span class='userdanger'>They are trying to deconvert you!</span>")
+				cultist.deconversion = 1//arbitrary non-null value to prevent deconversion-shade spam, will get replaced with a /datum/deconversion_ritual 5 seconds later
 
 		if (do_after(user, M, 5 SECONDS))
 			if(cultist)
@@ -101,6 +102,8 @@
 				else
 					to_chat(user,"<span class='warning'>In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
 				user.visible_message("<span class='warning'>...but nothing unusual happens.</span>")
+		else
+			cultist.deconversion = null//deconversion attempt got interrupted, you can now try again
 		return 1
 	if (!my_rel.leadsThisReligion(user)) //The user is not the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
@@ -156,7 +159,7 @@
 	if(ishuman(M)) //Only humans can be vampires or cultists.
 		var/mob/living/carbon/human/H = M
 		V = isvampire(M)
-		if(V && (/datum/power/vampire/mature in V.current_powers) && my_rel.leadsThisReligion(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
+		if(V && (locate(/datum/power/vampire/mature) in V.current_powers) && my_rel.leadsThisReligion(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
 			to_chat(H, "<span class='warning'>[my_rel.deity_name]'s power nullifies your own!</span>")
 			if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 				V.nullified = min(5, V.nullified + 2)
@@ -210,7 +213,7 @@
 		var/mob/living/carbon/human/H = user
 		var/datum/role/vampire/V = isvampire(H)
 		var/datum/role/cultist/C = isanycultist(H)
-		if(V && (!(/datum/power/vampire/undying in V.current_powers))) //We are a Vampire, we aren't very smart
+		if(V && (!(locate(/datum/power/vampire/undying) in V.current_powers))) //We are a Vampire, we aren't very smart
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
 			V.smitecounter += 10
 		if(C) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
@@ -262,7 +265,7 @@
 	var/mob/target
 	deconvertee.overlays += image('icons/effects/effects.dmi',src,"deconversion")
 	playsound(deconvertee, 'sound/effects/deconversion_start.ogg', 50, 0, -4)
-	cultist = deconvertee.mind.GetRole(CULTIST)
+	cultist = iscultist(deconvertee)
 	cultist.deconversion = src
 
 	deconvertee.eye_blurry = max(deconvertee.eye_blurry, 10)

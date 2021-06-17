@@ -41,7 +41,21 @@
 	if(is_locking_type(/mob, /datum/locking_category/plantsegment))
 		var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
 		unlock_atom(V)
+
+	lazy_unregister_event(/lazy_event/on_before_move, src, /obj/effect/plantsegment/proc/before_moving)
+	lazy_unregister_event(/lazy_event/on_after_move, src, /obj/effect/plantsegment/proc/after_moving)
+	before_moving()
 	..()
+
+/obj/effect/plantsegment/proc/before_moving()
+	for(var/direc in cardinal)
+		var/turf/T = get_step(src, direc)
+		T.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
+
+/obj/effect/plantsegment/proc/after_moving()
+	for(var/direc in cardinal)
+		var/turf/T = get_step(src, direc)
+		T.lazy_register_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
 
 /obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
 	..()
@@ -76,6 +90,10 @@
 	if(start_fully_mature)
 		health = max_health
 		mature_time = 0
+
+	lazy_register_event(/lazy_event/on_before_move, src, /obj/effect/plantsegment/proc/before_moving)
+	lazy_register_event(/lazy_event/on_after_move, src, /obj/effect/plantsegment/proc/after_moving)
+	after_moving()
 
 	spawn(1) // Plants will sometimes be spawned in the turf adjacent to the one they need to end up in, for the sake of correct dir/etc being set.
 		SSplant.add_plant(src)
@@ -162,7 +180,7 @@
 		set_light(0)
 
 /obj/effect/plantsegment/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
 		if(sampled)
 			to_chat(user, "<span class='warning'>\The [src] has already been sampled recently.</span>")
 			return

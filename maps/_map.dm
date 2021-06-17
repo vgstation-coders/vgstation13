@@ -103,6 +103,8 @@
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 
+	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+
 	var/list/holodeck_rooms = list(
 		"Basketball Court",
 		"Beach",
@@ -181,6 +183,10 @@
 var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()
+
+//Set map-specific conditions here
+/datum/map/proc/map_specific_conditions(var/condition)
+	return 1
 
 //For any map-specific UI, like AI jumps
 /datum/map/proc/special_ui(var/obj/abstract/screen/S, mob/user)

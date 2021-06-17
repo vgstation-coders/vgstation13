@@ -4,7 +4,6 @@ var/global/datum/controller/vote/vote = new()
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
 
-
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
 
@@ -235,8 +234,7 @@ var/global/datum/controller/vote/vote = new()
 			if("map")
 				if(.)
 					chosen_map = ismapvote[.]
-					var/mapname = .
-					watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
+					watchdog.chosen_map = .
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 					//testing("Vote picked [chosen_map]")
 
@@ -251,27 +249,33 @@ var/global/datum/controller/vote/vote = new()
 		log_game("Rebooting due to restart vote")
 		world.Reboot()
 
-/datum/controller/vote/proc/submit_vote(var/ckey, var/vote)
+/datum/controller/vote/proc/submit_vote(var/mob/user, var/vote)
+	var/mob_ckey = user.ckey
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
+		if (mob_ckey in voted)
+			to_chat(user, "<span class='warning'>You may only vote once.</span>")
+			return 0
+		if (isnum(vote) && (1>vote) || (vote > choices.len))
+			to_chat(user, "<span class='warning'>Illegal vote.</span>")
+			return 0
 		if(mode == "map")
-			if(!usr.client.holder)
-				var/mob/M = usr
-				if(isnewplayer(M))
+			if(!user.client.holder)
+				if(isnewplayer(user))
 					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 					return 0
-				if(isobserver(M))
-					var/mob/dead/observer/O = M
+				if(isobserver(user))
+					var/mob/dead/observer/O = user
 					if(O.started_as_observer)
 						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 						return 0
-		if(current_votes[ckey])
-			choices[choices[current_votes[ckey]]]--
-		if(vote && 1<=vote && vote<=choices.len)
-			voted += usr.ckey
+		if(current_votes[mob_ckey])
+			choices[choices[current_votes[mob_ckey]]]--
+		if(vote && vote != "cancel_vote")
+			voted += mob_ckey
 			choices[choices[vote]]++	//check this
-			current_votes[ckey] = vote
+			current_votes[mob_ckey] = vote
 			return vote
 	return 0
 
@@ -443,6 +447,15 @@ var/global/datum/controller/vote/vote = new()
 	if(!usr || !usr.client)
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
+		if ("cancel_vote")
+			var/mob_ckey = usr.ckey
+			if (!(mob_ckey in voted))
+				return
+			voted -= mob_ckey
+			choices[choices[current_votes[mob_ckey]]]--
+			current_votes[mob_ckey] = null
+			src.updateFor(usr.client)
+			return 0
 		if("cancel")
 			if(usr.client.holder)
 				reset()
@@ -469,7 +482,7 @@ var/global/datum/controller/vote/vote = new()
 			if(usr.client.holder)
 				initiate_vote("custom",usr.key)
 		else
-			submit_vote(usr.ckey, round(text2num(href_list["vote"])))
+			submit_vote(usr, round(text2num(href_list["vote"])))
 	usr.vote()
 
 

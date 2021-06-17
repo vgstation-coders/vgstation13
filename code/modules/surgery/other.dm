@@ -8,7 +8,7 @@
 /datum/surgery_step/fix_vein
 	priority = 2
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/tool/FixOVein = 100,
 		/obj/item/stack/cable_coil = 75,
 		)
 
@@ -46,7 +46,7 @@
 		affected.wounds -= W
 		affected.update_damages()
 	if (ishuman(user) && prob(40))
-		user:bloody_hands(target, 0)
+		user:bloody_hands(target, 1)
 
 /datum/surgery_step/fix_vein/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -65,7 +65,7 @@
 /datum/surgery_step/fix_dead_tissue		//Debridement
 	priority = 2
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
+		/obj/item/tool/scalpel = 100,
 		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,

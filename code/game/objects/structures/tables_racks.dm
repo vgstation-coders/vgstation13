@@ -385,21 +385,23 @@
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
-					G.affecting.forceMove(loc)
+					M.forceMove(loc)
 					if (prob(15))
 						M.Knockdown(5)
 						M.Stun(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
-					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
+					visible_message("<span class='warning'>[user] slams [M]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
+					add_attacklogs(user, M, "harmfully tabled", admin_warn = FALSE)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.forceMove(loc)
-				G.affecting.Knockdown(5)
-				G.affecting.Stun(5)
-				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
+				M.forceMove(loc)
+				M.Knockdown(5)
+				M.Stun(5)
+				visible_message("<span class='warning'>[user] puts [M] on \the [src].</span>")
+				add_attacklogs(user, M, "harmlessly tabled", admin_warn = FALSE)
 			qdel(W)
 			return
 
@@ -600,7 +602,7 @@
 				return
 
 	else if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.isOn())
 			to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
 			if(WT.do_weld(user, src, 50, 0))

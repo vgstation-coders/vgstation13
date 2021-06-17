@@ -86,6 +86,15 @@
 // atom/movable/mover: the movable itself.
 /lazy_event/on_moved
 
+// Called right before an /atom/movable attempts to move or change dir.
+/lazy_event/on_before_move
+
+// Called right after an /atom/movable attempts to move or change dir..
+/lazy_event/on_after_move
+
+// Called when an /atom/movable attempts to change dir.
+/lazy_event/on_face
+
 // Called whenever a datum is destroyed.
 // Currently, as an optimization, only /atom/movable invokes this but
 // it can be changed to /datum if the need arises.

@@ -46,7 +46,7 @@
 		wires.Interact(user)
 
 /obj/machinery/particle_accelerator/control_box/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool))
+	if(istype(I,/obj/item/tool/wirecutters)||istype(I,/obj/item/device/multitool))
 		attack_hand(user)
 	..()
 

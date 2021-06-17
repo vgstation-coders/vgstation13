@@ -39,7 +39,7 @@
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/tool/weldingtool/WT = P
 				if(WT.do_weld(user, src, 2 SECONDS, 0))
 					if(gcDestroyed || state != NOCIRCUITBOARD)
 						return
@@ -78,7 +78,7 @@
 						to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 						state = WIREDFRAME
 		if(WIREDFRAME)
-			if(iswirecutter(P))
+			if(P.is_wirecutter(user))
 				if(brain)
 					to_chat(user, "Get that brain out of there first!")
 				else
@@ -100,6 +100,9 @@
 				var/obj/item/device/mmi/prison = P
 				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
+					return
+				if(!map.map_specific_conditions(ROBOT_CHECK))
+					to_chat(user, "<span class='warning'>The station prevents you from kickstarting the tyranny of the AI!</span>")
 					return
 				if(prison.brainmob.stat == DEAD)
 					to_chat(user, "<span class='warning'>Sticking a dead [P] into the frame would sort of defeat the purpose.</span>")
@@ -299,7 +302,7 @@ That prevents a few funky behaviors.
 							else if (C.contents.len)
 								to_chat(U, "<span class='danger'>ERROR:</span> Artificial intelligence detected on terminal.")
 							else if (!T.occupant)
-								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")		
+								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")
 	else
 		to_chat(U, "<span class='danger'>ERROR:</span> AI flush is in progress, cannot execute transfer protocol.")
 	return

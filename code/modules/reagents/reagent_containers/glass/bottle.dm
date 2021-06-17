@@ -102,6 +102,17 @@
 	..()
 	reagents.add_reagent(TOXIN, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide
+	name = "insecticide bottle"
+	desc = "A small bottle of insecticide. Do not pour on insectoid colleagues."
+	icon = 'icons/obj/chemical.dmi'
+	//icon_state = "bottle12"
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
+	..()
+	reagents.add_reagent(INSECTICIDE, 30)
+
+
 /obj/item/weapon/reagent_containers/glass/bottle/charcoal
 	name = "activated charcoal bottle"
 	desc = "A small bottle of activated charcoal. Used for treatment of overdoses."
@@ -490,7 +501,7 @@ var/datum/disease2/disease/wizarditis = null
 
 /obj/item/weapon/reagent_containers/glass/bottle/pacid
 	name = "Polytrinic Acid Bottle"
-	desc = "A small bottle. Contains a small amount of Polytrinic Acid"
+	desc = "A small bottle. Contains a small amount of polytrinic acid."
 	icon = 'icons/obj/chemical.dmi'
 	//icon_state = "bottle17"
 
@@ -642,6 +653,24 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/robustharvest/New()
 	..()
 	reagents.add_reagent(ROBUSTHARVEST, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide
+	name = "Insecticide Bottle"
+	desc = "A bottle of highly toxic insecticide. There's a small, almost unreadable label warning against consumption."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
+	..()
+	reagents.add_reagent(INSECTICIDE, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/plantbgone
+	name = "Plant-B-Gone Bottle"
+	desc = "A bottle of broad spectrum herbicide. A small decal shows a diona nymph with a no symbol on top."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/plantbgone/New()
+	..()
+	reagents.add_reagent(PLANTBGONE, 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/carbon/New()
 	..()

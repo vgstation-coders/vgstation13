@@ -201,7 +201,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
-	reagents.reaction(target, TOUCH)
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount))
 
 	if (amount > 0)
 		if(user)
@@ -379,3 +379,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.heating(A.thermal_energy_transfer(), temperature)
 		if(user)
 			to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")
+
+/obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
+	. = ..()
+	for(var/datum/reagent/temp_hearer/R in reagents.reagent_list)
+		R.parent_heard(speech, rendered_speech)
+	//We have to check for a /mob/virtualhearer/one_time here, and kill it ourselves. This is fairly bad OOP.
+	if(virtualhearer && istype(virtualhearer, /mob/virtualhearer/one_time))
+		removeHear()

@@ -69,7 +69,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 		if(JUKE_TRANSMIT)
 			J.rad_pulse()
 			interference = 1
-			sleep(50)
+			sleep(3 SECONDS)
 			interference = 0
 		if(JUKE_CONFIG)
 			playsound(J.loc, pick(static_list), 100, 1)

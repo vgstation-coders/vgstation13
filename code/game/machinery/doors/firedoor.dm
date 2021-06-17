@@ -135,7 +135,6 @@ var/global/list/alert_overlays_global = list()
 				A.all_doors |= src
 				areas_added |= A
 
-
 /obj/machinery/door/firedoor/initialize()
 	if (twin) // Already paired with something
 		return
@@ -250,8 +249,8 @@ var/global/list/alert_overlays_global = list()
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 /obj/machinery/door/firedoor/CtrlClick(mob/user)
-	if(isAdminGhost(user))
-		attack_ai(user,TRUE)
+	if(isrobot(user) || isAdminGhost(user))
+		attack_ai(user, TRUE)
 	else
 		..()
 
@@ -294,7 +293,7 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	if(iswelder(C))
-		var/obj/item/weapon/weldingtool/W = C
+		var/obj/item/tool/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
 			user.visible_message("<span class='attack'>\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
@@ -361,6 +360,18 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/attack_animal(var/mob/living/simple_animal/M as mob)
+	M.delayNextAttack(8)
+	if(M.melee_damage_upper == 0)
+		return
+	M.do_attack_animation(src, M)
+	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+					  "<span class='warning'>You smash against \the [src].</span>", \
+					  "You hear twisting metal.")
+	if(prob(33))
+		new /obj/item/firedoor_frame(get_turf(src))
+		qdel(src)
 
 /obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/weapon/C, var/no_reruns = FALSE)
 	if(operating)
@@ -667,6 +678,8 @@ var/global/list/alert_overlays_global = list()
 		drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
 		qdel(src)
 
+/obj/machinery/door/firedoor/AICtrlClick(mob/user)
+	attack_ai(user,TRUE)
 
 //Removed pending a fix for atmos issues caused by full tile firelocks.
 /*

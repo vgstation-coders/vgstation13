@@ -19,16 +19,16 @@ var/list/barsigns = list()
 /datum/barsign/maltesefalcon
 	name = "Maltese Falcon"
 	icon = "maltesefalcon"
-	desc = "Play it again, sam."
+	desc = "Play it again, Sam."
 
 /obj/effect/overlay/custom_barsign
 	name = "Wowee"
-	desc = "Its a error, If you see this"
+	desc = "If you see this, it's an error."
 	vis_flags = VIS_INHERIT_ID|VIS_INHERIT_LAYER|VIS_INHERIT_PLANE
 
 /obj/structure/sign/double/barsign	// The sign is 64x32, so it needs two tiles. ;3
 	name = "--------"
-	desc = "a bar sign"
+	desc = "A bar sign."
 	icon = 'icons/obj/barsigns.dmi'
 	icon_state = "empty"
 	req_access = list(access_bar)
@@ -41,6 +41,7 @@ var/list/barsigns = list()
 
 //Custom Barsign Var shit
 	var/obj/effect/overlay/custom_barsign/viscon = null
+	var/image/color_overlay = null
 	var/list/sound_selection = list("Nothing" = null,
 									"bass_drum_1"	= 'sound/items/barsign/bsign_bassdrum_1.ogg',
 									"bass_drum_2"	= 'sound/items/barsign/bsign_bassdrum_2.ogg',
@@ -54,8 +55,10 @@ var/list/barsigns = list()
 	//Dropshadows are safe, waves... might brutalize clients but they have a v limited amount of filters to use
 	var/list/filter_selection = list("Nothing",
 									"Dropshadow" = list("color" = "#1bf555"),
+									"Ripple",
 										"Waves")
 	var/current_filter = "Nothing"
+	var/list/font_selection = list("Arial","Comic Sans MS","Courier New","Georgia","Lucida Console","Trebuchet MS","Verdana")
 //Custom Barsign Configurable Shit
 //Basically its a list, each index number is the current tick,
 //So you could make a shitty song I guess.
@@ -63,12 +66,16 @@ var/list/barsigns = list()
 	var/list/interval_queue = list("1" = list("letter_message" = "BAR",
 											"letter_color" = "#1bf555",
 											"letter_size" = "12",
+											"font_name" = "Arial",
+											"background_color" = "#999999",
 											"sound_key" = "Nothing",
 											"sound_tone" = 15000,
 											"sound_volume" = 50),
 									"2" = list("letter_message" = "THE BEST",
 											"letter_color" = "#f51b1b",
 											"letter_size" = "12",
+											"font_name" = "Arial",
+											"background_color" = "#999999",
 											"sound_key" = "Nothing",
 											"sound_tone" = 15000,
 											"sound_volume" = 50))
@@ -114,7 +121,7 @@ var/list/barsigns = list()
 		for(var/fuckyou in barsigns)
 			current_preview = barsigns[fuckyou]
 			break
-	
+
 	if(!viscon)
 		viscon = new()
 
@@ -133,31 +140,33 @@ var/list/barsigns = list()
 		var/interval_mode_string = "OFF"
 		if(interval_mode)
 			interval_mode_string = "ON"
-		
+
 		dat += "Screen Filter: <a href=\"?src=\ref[src];set_filter=choose\">[current_filter]</a>"
 		if(current_filter == "Dropshadow")
 			dat += "<a href=\"?src=\ref[src];set_filter=dshadow_color\"><span style='border:1px solid #161616; background-color: [filter_selection["Dropshadow"]["color"]];'>&nbsp;&nbsp;&nbsp;</span></a>"
-		
+
 		dat += "<a href=\"?src=\ref[src];set_filter=[current_filter]\">Apply Filter</a>"
 		dat += "<br><b>Interval Mode:</b><a href=\"?src=\ref[src];interval_mode=1\">[interval_mode_string]</a><br><hr>"
-		
+
 		for(var/i in interval_queue)
 			dat += {"
 					<div style="width:100%; background-color:#1f1c1c; border-style:solid; border-color: #999797">
 						Msg: <a href="?src=\ref[src];set_message=[i]">[interval_queue[i]["letter_message"]]</a>
-						Color: <a href="?src=\ref[src];set_letter_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["letter_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
+						Background Color: <a href="?src=\ref[src];set_bg_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["background_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
+						Letter Color: <a href="?src=\ref[src];set_letter_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["letter_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
 						Size: <a href="?src=\ref[src];set_letter_size=[i]">[interval_queue[i]["letter_size"]]</a>
+						Font: <a href="?src=\ref[src];set_font=[i]">[interval_queue[i]["font_name"]]</a>
 						<br>Sound: <a href="?src=\ref[src];set_sound=[i]">[interval_queue[i]["sound_key"]]</a>
 						Sound Tone: <a href="?src=\ref[src];set_sound_tone=[i]">[interval_queue[i]["sound_tone"]]</a>
 						Sound Vol: <a href="?src=\ref[src];set_sound_volume=[i]">[interval_queue[i]["sound_volume"]]</a>
 						<a href='?src=\ref[src];delete_block=[i]'>Delete</a>
 					</div>
 					"}
-			
+
 		dat += "<br><a href='?src=\ref[src];add_block=1'>Add Block</a>"
 		dat += "<br><a href=\"?src=\ref[src];apply_settings=custom_screen\">Apply Settings</a>"
 
-				 
+
 	if(current_screen == PREMADE_SCREEN) //PRE-DEFINED SCREEN
 		user << browse_rsc(icon('icons/obj/barsigns.dmi', "[current_preview.icon]"), "cur_barsign.png")
 		dat += {"<div id="fuck" style="width:100%; height:100%; display:flex;">
@@ -187,14 +196,14 @@ var/list/barsigns = list()
 		return
 	if(in_range(src, usr) && isliving(usr) && allowed(usr) || isAdminGhost(usr) || isAI(usr))
 		var/mob/user = usr
-		
+
 		if(href_list["direct_select"])
 			var/picked_name = input(user,"Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
 			if(!picked_name)
 				return
-			
+
 			current_preview = barsigns[picked_name]
-			
+
 		if(href_list["change_img"])
 			var/name_string //ah man i am still unsure if i should be keeping barsigns as a assc list at this point.
 			switch(href_list["change_img"])
@@ -214,7 +223,7 @@ var/list/barsigns = list()
 					current_screen = PREMADE_SCREEN
 				if("custom_screen")
 					current_screen = CUSTOM_SCREEN
-		
+
 
 		if(href_list["apply_settings"])
 			vis_contents.Cut()
@@ -234,9 +243,13 @@ var/list/barsigns = list()
 					if(current_preview.desc)
 						desc = current_preview.desc
 					else
-						desc = "It displays \"[name]\"."					
+						desc = "It displays \"[name]\"."
 				if("custom_screen")
 					icon_state = "kustom"
+					overlays = list()
+					color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
+					color_overlay.color = interval_queue["1"]["background_color"]
+					overlays += color_overlay
 					vis_contents += viscon
 					viscon.maptext_width = 62 //Yeah guess what, it doesn't exit the actual icon
 					viscon.maptext_height = 29
@@ -250,8 +263,7 @@ var/list/barsigns = list()
 						interval_ticker = 0
 						var/string = interval_queue["1"]["letter_message"]
 						if(string)
-							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;\">[interval_queue["1"]["letter_message"]]</span>"
-		
+							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;font-family:'[interval_queue["1"]["font_name"]]'\">[interval_queue["1"]["letter_message"]]</span>"
 		if(href_list["set_filter"])
 			switch(href_list["set_filter"])
 				if("choose")
@@ -263,10 +275,13 @@ var/list/barsigns = list()
 				if("Dropshadow")
 					if(viscon.filters.len <= MAX_FILTER_LIMIT)
 						viscon.filters += filter(type="drop_shadow", x=0, y=0, size=3, offset=2, color="[filter_selection["Dropshadow"]["color"]]")
+				if("Ripple")
+					if(viscon.filters.len <= MAX_FILTER_LIMIT)
+						viscon.filters += filter(type="ripple", x=0, y=0, size=rand()*2.5+0.5, repeat=rand()*2.5+0.5, radius=rand(), falloff=rand()*2.5+0.5)
 				if("dshadow_color")
 					var/colorhex = input(user, "Choose your dropshadow color:", "Sign Color Selection",filter_selection["Dropshadow"]["color"]) as color|null
 					if(colorhex)
-						filter_selection["Dropshadow"]["color"] = colorhex					
+						filter_selection["Dropshadow"]["color"] = colorhex
 				if("Waves")
 					if(viscon.filters.len <= MAX_FILTER_LIMIT)
 						summon_shitty_example_waves()
@@ -275,12 +290,14 @@ var/list/barsigns = list()
 			var/safety = text2num(href_list["delete_block"])
 			if(safety > 1)
 				interval_queue -= interval_queue[safety]
-		
+
 		if(href_list["add_block"])
 			if(interval_queue.len <= MAX_QUEUE_LIMIT)
 				interval_queue["[interval_queue.len+1]"] = list("letter_message" = "BAR",
 															"letter_color" = "#1bf555",
 															"letter_size" = "12",
+															"font_name" = "Arial",
+															"background_color" = "#999999",
 															"sound_key" = "Nothing",
 															"sound_tone" = 15000,
 															"sound_volume" = 50)
@@ -290,20 +307,27 @@ var/list/barsigns = list()
 			if(sign_text)
 				var/safety = text2num(href_list["set_message"])
 				if(safety <= MAX_QUEUE_LIMIT)
-					name = sign_text 
+					name = sign_text
 					interval_queue["[safety]"]["letter_message"] = sign_text
 					log_game("[key_name(user)] changed barsign name to [sign_text]")
-		
+
 		if(href_list["set_description"])
 			var/desc_text = copytext(sanitize(input(user, "What would you like to have as the description?", "Custom Barsign Desc", null) as text|null), 1, MAX_NAME_LEN*3)
 			if(desc_text)
 				desc = desc_text
 				log_game("[key_name(user)] changed barsign desc to [desc]")
 
+		if(href_list["set_bg_color"])
+			var/safety = text2num(href_list["set_bg_color"])
+			if(safety <= MAX_QUEUE_LIMIT)
+				var/colorhex = input(user, "Choose your background color:", "Sign Color Selection",interval_queue["[safety]"]["background_color"]) as color|null
+				if(colorhex)
+					interval_queue["[safety]"]["background_color"] = colorhex
+
 		if(href_list["set_letter_color"])
 			var/safety = text2num(href_list["set_letter_color"])
 			if(safety <= MAX_QUEUE_LIMIT)
-				var/colorhex = input(user, "Choose your text color:", "Sign Color Selection",interval_queue["[safety]"]["letter_color"]) as color|null
+				var/colorhex = input(user, "Choose your text color:", "Text Color Selection",interval_queue["[safety]"]["letter_color"]) as color|null
 				if(colorhex)
 					interval_queue["[safety]"]["letter_color"] = colorhex
 
@@ -316,7 +340,7 @@ var/list/barsigns = list()
 
 		if(href_list["interval_mode"])
 			interval_mode = !interval_mode
-		
+
 		if(href_list["set_sound"])
 			var/safety = text2num(href_list["set_sound"])
 			if(safety <= MAX_QUEUE_LIMIT)
@@ -324,13 +348,20 @@ var/list/barsigns = list()
 				if(picked_sound)
 					interval_queue["[safety]"]["sound_key"] = picked_sound
 
+		if(href_list["set_font"])
+			var/safety = text2num(href_list["set_font"])
+			if(safety <= MAX_QUEUE_LIMIT)
+				var/picked_font = input(user,"Available Fonts", "Fonts", "Cancel") as null|anything in font_selection
+				if(picked_font)
+					interval_queue["[safety]"]["font_name"] = picked_font
+
 		if(href_list["set_sound_tone"])
 			var/safety = text2num(href_list["set_sound_tone"])
 			if(safety <= MAX_QUEUE_LIMIT)
 				var/new_soundtone = input("Choose a new sound frequency 12000-55000:", "Sound Tone Menu", interval_queue["[safety]"]["sound_tone"]) as null|num
 				if(new_soundtone)
 					interval_queue["[safety]"]["sound_tone"] = clamp(new_soundtone,12000,55000)
-		
+
 		if(href_list["set_sound_volume"])
 			var/safety = text2num(href_list["set_sound_volume"])
 			if(safety <= MAX_QUEUE_LIMIT)
@@ -346,12 +377,16 @@ var/list/barsigns = list()
 		interval_ticker = 0
 		already_fired = FALSE
 		return
-	
+
 	interval_ticker++
 	var/check_sound = sound_selection["[interval_queue["[interval_ticker]"]["sound_key"]]"]
 	if(check_sound)
 		playsound(src, check_sound, interval_queue["[interval_ticker]"]["sound_volume"], 1, frequency = interval_queue["[interval_ticker]"]["sound_tone"])
-	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
+	overlays = list()
+	color_overlay = image('icons/obj/barsigns.dmi', icon_state = "kustoverlay")
+	color_overlay.color = interval_queue["[interval_ticker]"]["background_color"]
+	overlays += color_overlay
+	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;font-family:'[interval_queue["[interval_ticker]"]["font_name"]]'\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
 	if(interval_ticker >= interval_queue.len)
 		interval_ticker = 0
 
@@ -412,7 +447,7 @@ var/list/barsigns = list()
 	pixel_x = 0
 	pixel_y = 0
 
-//You get actual annoying sounds If its emag'd
+//You get actual annoying sounds and scrambled symbol fonts If its emag'd
 /obj/structure/sign/double/barsign/emag_act(mob/user)
 	sound_selection["Rooster"] = 'sound/misc/6amRooster.wav'
 	sound_selection["Wolf"] = 'sound/misc/6pmWolf.wav'
@@ -420,8 +455,9 @@ var/list/barsigns = list()
 	sound_selection["Female Scream"] = 'sound/misc/femalescream5.ogg'
 	sound_selection["Vox Scream"] = 'sound/misc/shriek1.ogg'
 	sound_selection["Bike Horn"] = 'sound/items/bikehorn.ogg'
+	font_selection += "Wingdings"
 
-	
+
 
 #undef PREMADE_SCREEN
 #undef CUSTOM_SCREEN

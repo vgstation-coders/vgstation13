@@ -64,7 +64,7 @@
 
 /datum/design/stasisbeaker
 	name = "Stasis Beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	id = "stasisbeaker_small"
 	req_tech = list(Tc_BLUESPACE = 3, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
@@ -75,7 +75,7 @@
 
 /datum/design/stasisbeaker_large
 	name = "Large Stasis Beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 200 units."
 	id = "stasisbeaker_large"
 	req_tech = list(Tc_BLUESPACE = 4, Tc_MATERIALS = 6)
 	build_type = PROTOLATHE

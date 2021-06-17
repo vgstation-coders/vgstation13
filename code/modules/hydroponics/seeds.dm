@@ -208,6 +208,11 @@
 	seed_type = "carrot"
 	vending_cat = "vegetables"
 
+/obj/item/seeds/diamondcarrotseed
+	name = "packet of diamond carrot seeds"
+	seed_type = "diamondcarrot"
+	vending_cat = "vegetables"
+
 /obj/item/seeds/reishimycelium
 	name = "packet of reishi spores"
 	seed_type = "reishi"
@@ -578,7 +583,7 @@
 	plant_dmi = 'icons/obj/hydroponics/deathberry.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/deathberries)
-	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5))
+	chems = list(NUTRIMENT = list(1), SOLANINE = list(3,3), CORIAMYRTIN = list(1,5), CYTISINE = list(1))
 
 	yield = 3
 	potency = 50
@@ -756,7 +761,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris)
 	mutants = list("ambrosiadeus")
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
 
 	lifespan = 60
 	maturation = 6
@@ -778,7 +783,7 @@
 	production = 6
 	yield = 6
 	potency = 5
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5), SPIRITBREAKER = list(10))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SPIRITBREAKER = list(10))
 
 
 /datum/seed/ambrosia/deus
@@ -788,7 +793,7 @@
 	plant_dmi = 'icons/obj/hydroponics/ambrosiadeus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus)
 	mutants = null
-	chems = list(NUTRIMENT = list(1), OPIUM = list(1,8), CYTISINE = list(1), COCAINE = list(1,10,1), MESCALINE = list(1,10))
+	chems = list(NUTRIMENT = list(1), PHYTOCARISOL = list(1,8), KATHALAI = list(1,8), COCAINE = list(1,10,1), MESCALINE = list(1,10))
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
@@ -1302,6 +1307,7 @@
 	display_name = "carrots"
 	plant_dmi = 'icons/obj/hydroponics/carrot.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
+	mutants = list("diamondcarrot")
 	chems = list(NUTRIMENT = list(1,20), ZEAXANTHIN = list(3,5))
 
 	lifespan = 25
@@ -1311,6 +1317,19 @@
 	potency = 10
 	growth_stages = 3
 	water_consumption = 6
+
+/datum/seed/carrots/diamond
+	name = "diamondcarrot"
+	seed_name = "diamond carrot"
+	display_name = "diamond carrots"
+	plant_dmi = 'icons/obj/hydroponics/diamondcarrot.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), DIAMONDDUST = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
 
 /datum/seed/weeds
 	name = "weeds"
@@ -1434,7 +1453,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,20))
-
+		
 	lifespan = 60
 	maturation = 6
 	production = 6

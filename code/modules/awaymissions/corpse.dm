@@ -289,8 +289,8 @@
 	corpsemask = list(/obj/item/clothing/mask/cigarette/cigar, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas/swat, /obj/item/clothing/mask/balaclava)
 	corpsehelmet = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/head/cap, /obj/item/clothing/head/helmet/tactical, /obj/item/clothing/head/HoS/dermal, /obj/item/clothing/head/helmet/siren, /obj/item/clothing/head/collectable/petehat, /obj/item/clothing/head/hardhat/red, /obj/item/clothing/head/welding, /obj/item/clothing/head/collectable/welding)
 	corpsebelt = list(/obj/item/weapon/gun/energy/laser/retro/ancient, /obj/item/weapon/storage/belt/utility/full, /obj/item/weapon/storage/belt/utility/chief/full, /obj/item/weapon/storage/belt/slim, /obj/item/weapon/storage/belt/security, /obj/item/weapon/gun/energy/gun, /obj/item/weapon/sword, /obj/item/weapon/pickaxe, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/telebaton)
-	corpsepocket1 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
-	corpsepocket2 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
+	corpsepocket1 = list(/obj/item/device/radio/off, /obj/item/tool/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
+	corpsepocket2 = list(/obj/item/device/radio/off, /obj/item/tool/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
 	corpseback = list(/obj/item/weapon/fireaxe, /obj/item/weapon/storage/backpack/clown, /obj/item/weapon/storage/backpack/security, /obj/item/weapon/storage/backpack/captain, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack)
 	corpseidaccess = "Captain"
 
@@ -475,7 +475,7 @@
 	corpsehelmet = /obj/item/clothing/head/surgery/green
 	corpseuniform = /obj/item/clothing/under/rank/medical/green
 	corpsesuit = /obj/item/clothing/suit/storage/labcoat
-	corpsepocket1 = /obj/item/weapon/scalpel
+	corpsepocket1 = /obj/item/tool/scalpel
 	corpseshoes = /obj/item/clothing/shoes/leather
 	corpseid = 1
 	corpseidjob = "Surgeon"

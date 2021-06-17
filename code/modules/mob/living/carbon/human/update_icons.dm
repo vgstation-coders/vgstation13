@@ -284,16 +284,16 @@ var/global/list/damage_icon_parts = list()
 	if(has_head)
 		//Eyes
 		if(!skeleton)
-			var/icon/eyes = new/icon('icons/mob/human_face.dmi', species.eyes)
+			var/icon/eyes = new/icon('icons/mob/hair_styles.dmi', species.eyes)
 			eyes.Blend(rgb(my_appearance.r_eyes, my_appearance.g_eyes, my_appearance.b_eyes), ICON_ADD)
 			stand_icon.Blend(eyes, ICON_OVERLAY)
 
 		//Mouth	(lipstick!)
 		if(lip_style)
-			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
+			stand_icon.Blend(new/icon('icons/mob/hair_styles.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
 		if(eye_style)
-			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "eyeshadow_[eye_style]_light_s"), ICON_OVERLAY)
+			stand_icon.Blend(new/icon('icons/mob/hair_styles.dmi', "eyeshadow_[eye_style]_light_s"), ICON_OVERLAY)
 
 
 	//Underwear
@@ -330,7 +330,7 @@ var/global/list/damage_icon_parts = list()
 		return
 
 	//base icons
-	var/icon/face_standing	= new /icon('icons/mob/human_face.dmi',"bald_s")
+	var/icon/face_standing	= new /icon('icons/mob/hair_styles.dmi',"bald_s")
 	//to_chat(world, "Maskheadhair? [check_hidden_head_flags(MASKHEADHAIR)]")
 	var/hair_suffix = check_hidden_head_flags(MASKHEADHAIR) ? "s2" : "s" // s2 = cropped icon
 
@@ -425,8 +425,8 @@ var/global/list/damage_icon_parts = list()
 			O.underlays	+= "coldfirevox_s"
 
 	//Cultist tattoos
-	if (mind && mind.GetRole(CULTIST))
-		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	if (iscultist(src))
+		var/datum/role/cultist/C = iscultist(src)
 		add_image = 1
 		for (var/T in C.tattoos)
 			var/datum/cult_tattoo/tattoo = C.tattoos[T]
@@ -699,11 +699,16 @@ var/global/list/damage_icon_parts = list()
 				var/image/dyn_overlay = gloves.dynamic_overlay["[GLOVES_LAYER]"]
 				O.overlays += dyn_overlay
 
-		if(gloves.blood_DNA && gloves.blood_DNA.len)
-			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
-			bloodsies.color = gloves.blood_color
-			standing.overlays	+= bloodsies
-			O.overlays += bloodsies
+		if (istype(gloves, /obj/item/clothing/gloves))
+			var/obj/item/clothing/gloves/actual_gloves = gloves
+			if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
+				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
+				bloodsies.color = actual_gloves.blood_color
+				standing.overlays	+= bloodsies
+				O.overlays += bloodsies
+			else
+				if (actual_gloves.blood_overlay)
+					actual_gloves.overlays.Remove(actual_gloves.blood_overlay)
 		gloves.screen_loc = ui_gloves
 
 		gloves.generate_accessory_overlays(O)
@@ -716,7 +721,7 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_y = species.inventory_offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
 	else
-		if(blood_DNA?.len && bloody_hands_data?.len)
+		if(bloody_hands > 0 && bloody_hands_data?.len)
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = "bloodyhands"
 			O.color = bloody_hands_data["blood_colour"]
@@ -898,11 +903,14 @@ var/global/list/damage_icon_parts = list()
 			if(s_store.dynamic_overlay["[SUIT_STORE_LAYER]"])
 				var/image/dyn_overlay = s_store.dynamic_overlay["[SUIT_STORE_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = (species.inventory_offsets["[slot_s_store]"]["pixel_x"] - initial(s_store.pixel_x)) * PIXEL_MULTIPLIER
-		O.pixel_y = (species.inventory_offsets["[slot_s_store]"]["pixel_y"] - initial(s_store.pixel_y)) * PIXEL_MULTIPLIER
+		O.pixel_x = (species.inventory_offsets["[slot_s_store]"]["pixel_x"]) * PIXEL_MULTIPLIER
+		O.pixel_y = (species.inventory_offsets["[slot_s_store]"]["pixel_y"]) * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_STORE_LAYER)
 		//overlays_standing[SUIT_STORE_LAYER]	= image("icon" = 'icons/mob/belt_mirror.dmi', "icon_state" = "[t_state]")
-		s_store.screen_loc = ui_sstore1		//TODO
+
+		var/x_pixel_offset = initial(s_store.pixel_x)
+		var/y_pixel_offset = initial(s_store.pixel_y)
+		s_store.screen_loc = "WEST+2:[(10+x_pixel_offset)*PIXEL_MULTIPLIER],SOUTH:[(5+y_pixel_offset)*PIXEL_MULTIPLIER]"
 	//else
 		//overlays_standing[SUIT_STORE_LAYER]	= null
 	if(update_icons)
@@ -1321,7 +1329,7 @@ var/global/list/damage_icon_parts = list()
 //	if (gender == FEMALE)	g = "f"
 
 	//base icons
-	var/icon/face_lying		= new /icon('icons/mob/human_face.dmi',"bald_l")
+	var/icon/face_lying		= new /icon('icons/mob/hair_styles.dmi',"bald_l")
 
 	if(my_appearance.f_style)
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[my_appearance.f_style]
@@ -1339,15 +1347,15 @@ var/global/list/damage_icon_parts = list()
 
 	//Eyes
 	// Note: These used to be in update_face(), and the fact they're here will make it difficult to create a disembodied head
-	var/icon/eyes_l = new/icon('icons/mob/human_face.dmi', "eyes_l")
+	var/icon/eyes_l = new/icon('icons/mob/hair_styles.dmi', "eyes_l")
 	eyes_l.Blend(rgb(my_appearance.r_eyes, my_appearance.g_eyes, my_appearance.b_eyes), ICON_ADD)
 	face_lying.Blend(eyes_l, ICON_OVERLAY)
 
 	if(lip_style)
-		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
+		face_lying.Blend(new/icon('icons/mob/hair_styles.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
 
 	if(eye_style)
-		face_lying.Blend(new/icon('icons/mob/human_face.dmi', "eyeshadow_[eye_style]_light_l"), ICON_OVERLAY)
+		face_lying.Blend(new/icon('icons/mob/hair_styles.dmi', "eyeshadow_[eye_style]_light_l"), ICON_OVERLAY)
 
 	var/image/face_lying_image = new /image(icon = face_lying)
 	return face_lying_image

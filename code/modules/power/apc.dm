@@ -527,7 +527,7 @@
 			C.use(10)
 			terminal.connect_to_network()
 
-	else if (iswirecutter(W) && opened && terminal && has_electronics!=2)
+	else if (W.is_wirecutter(user) && opened && terminal && has_electronics!=2)
 		var/turf/T = get_turf(src)
 		if (T.intact)
 			to_chat(user, "<span class='warning'>You must remove the floor plating in front of the APC first.</span>")
@@ -556,7 +556,7 @@
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
 	else if (iswelder(W) && opened && has_electronics==0 && !terminal)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the APC frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
@@ -600,6 +600,9 @@
 			if (opened==2)
 				opened = 1
 			update_icon()
+	else if(istype(W, /obj/item/weapon/kitchen/utensil/fork) && opened) // Sticking fork in open APC shocks you
+		to_chat(user, "<span class='warning'>That was really, really dumb of you.</span>") // Why would you even do this
+		shock(user, 75, W.siemens_coefficient)
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
@@ -607,7 +610,7 @@
 				&& !opened \
 				&& ( \
 					(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) \
-					|| istype(W,/obj/item/weapon/crowbar) \
+					|| istype(W,/obj/item/tool/crowbar) \
 				) \
 				&& prob(20) )
 			user.do_attack_animation(src, W)
@@ -868,6 +871,14 @@
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 0
 	return 1
+
+/obj/machinery/power/apc/is_in_range(var/mob/user)
+	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		var/obj/item/device/multitool/omnitool/O = user.get_active_hand()
+		if(istype(O))
+			return O.can_connect(src,user)
+		return FALSE
+	return TRUE
 
 /obj/machinery/power/apc/Topic(href, href_list)
 	if(..())
@@ -1390,6 +1401,15 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(shorted || (!cell && !charging))
 		return FALSE
+	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
+		siemenspassed = 0.7
+	//Process the shocking via powernet
+	if(terminal)
+		if(electrocute_mob(user, terminal.get_powernet(), terminal, siemenspassed))
+			spark(src)
+			return TRUE
+		else
+			return FALSE
 	return ..()
 
 /obj/machinery/power/apc/npc_tamper_act(mob/living/L)
@@ -1397,6 +1417,14 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		togglePanelOpen(null, L)
 	if(wires)
 		wires.npc_tamper(L)
+
+/obj/machinery/power/apc/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && allowed(user))
+		locked = !locked
+		to_chat(user, "You [locked ? "" : "un"]lock \the [src] interface.")
+		update_icon()
+	return ..()
+
 
 
 #undef APC_UPDATE_ICON_COOLDOWN

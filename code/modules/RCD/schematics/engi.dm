@@ -45,7 +45,27 @@
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			qdel(D)
 			return 0
+	
+	else if(istype(A,/obj/structure/window))
+		var/obj/structure/window/W = A
+		if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
+			return "it cannot deconstruct plasma glass!"
+		to_chat(user, "Deconstructing \the [W]...")
+		if(master.delay(user, W, 5 SECONDS))
+			if(master.get_energy(user) < energy_cost)
+				return 1
 
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+			for(var/obj/structure/grille/G in W.loc)
+				if(!istype(G,/obj/structure/grille/invulnerable)) // No more breaking out in places like lamprey
+					qdel(G)
+			for(var/obj/structure/window/WI in W.loc)
+				if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
+					continue
+				if(WI != W)
+					qdel(WI)
+			qdel(W)
+			return 0
 	return 1
 
 /datum/rcd_schematic/con_floors
@@ -371,11 +391,95 @@
 			D.req_access = selected_access.Copy()
 
 	D.autoclose	= 1
+
+/datum/rcd_schematic/con_window
+	name						= "Build window"
+	icon 						= 'icons/obj/window_grille_spawner.dmi'
+	icon_state 					= "window_grille"
+	category					= "Construction"
+	energy_cost					= 2
+
+	var/list/schematics			= list()
+	var/ready
+
+/datum/rcd_schematic/con_window/borg
+	energy_cost					= 20
+
+/datum/rcd_schematic/con_window/show(var/mob/living/user, close = 0)
+	if(!close)
+		user.shown_schematics_background = 1
+		user.hud_used.toggle_show_schematics_display(schematics,1, master)
+	else
+		user.shown_schematics_background = 1
+		user.hud_used.toggle_show_schematics_display(master.schematics["Construction"], 1, master)
+		master.selected = null
+	return 1
+
+/datum/rcd_schematic/con_window/New()
+	. = ..()
+
+	for(var/path in typesof(/datum/selection_schematic/window_schematic))
+		schematics += new path(src)
+	selected = schematics[1]
+
+/datum/rcd_schematic/con_window/Destroy()
+	for(var/datum/selection_schematic/thing in schematics)
+		qdel(thing)
+	schematics = null
+	..()
+
+/datum/rcd_schematic/con_window/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
+	..()
+	show(user)
+/datum/rcd_schematic/con_window/deselect()
+	. = ..()
+	selected = schematics[1]	//Reset the selection.
+
+/*/datum/rcd_schematic/con_window/register_assets()
+	for(var/datum/selection_schematic/airlock_schematic/C in schematics)
+		C.register_icon()
+
+/datum/rcd_schematic/con_window/send_assets(var/client/client)
+	for(var/datum/selection_schematic/airlock_schematic/C in schematics)
+		C.send_icon(client)
+*/
+
+/datum/rcd_schematic/con_window/build_ui()
+	master.interface.updateLayout("<div id='schematic_options'> </div>")
+	master.update_options_menu()
+
+/datum/rcd_schematic/con_window/Topic(var/href, var/href_list)
+	if(href_list["set_selected"])
+		var/idx = clamp(text2num(href_list["set_selected"]), 1, schematics.len)
+		var/datum/selection_schematic/window_schematic/C = schematics[idx]
+
+		selected = C
+
+		master.update_options_menu()
+		return 1
+
+/datum/rcd_schematic/con_window/attack(var/atom/A, var/mob/user)
+	if(!istype(A, /turf))
+		return 1
+
+	to_chat(user, "Building window...")
+
+	if(!master.delay(user, A, 5 SECONDS))
+		return 1
+
+	if(master.get_energy(user) < energy_cost)
+		return 1
+
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
+
+	new selected.build_type(A)
+
 /datum/selection_schematic
 	var/name			= "Selection"
 	var/build_type
 	var/icon_state
 	var/icon
+	var/list/overlays 	= list()
 	var/obj/abstract/screen/ourobj
 	var/datum/rcd_schematic/master
 
@@ -518,3 +622,171 @@
 	name			= "\improper Glass Mining Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_mining
 	icon			= 'icons/obj/doors/Doorminingglass.dmi'
+
+// ALL THE WINDOW TYPES.
+/datum/selection_schematic/window_schematic
+	name			= "window"						//Name of the window for the tooltip.
+	build_type		= /obj/effect/spawner/window	//Type of the window.
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "grille"
+	var/list/dirs = list(NORTH,EAST,WEST,SOUTH)
+
+/datum/selection_schematic/window_schematic/New()
+	for(var/d in dirs)
+		overlays += image(icon,icon_state="rwindow",dir=d)
+	..()
+
+/datum/selection_schematic/window_schematic/Destroy()
+	overlays = list()
+	..()
+	
+/datum/selection_schematic/window_schematic/clicked(var/mob/user)
+	master.selected = src
+
+/datum/selection_schematic/window_schematic/northend
+	name			= "\improper north window"
+	build_type	= /obj/effect/spawner/window/northend
+	dirs = list(NORTH)
+
+/datum/selection_schematic/window_schematic/eastend
+	name			= "\improper east window"
+	build_type	= /obj/effect/spawner/window/eastend
+	dirs = list(EAST)
+
+/datum/selection_schematic/window_schematic/southend
+	name			= "\improper south window"
+	build_type	= /obj/effect/spawner/window/southend
+	dirs = list(SOUTH)
+
+/datum/selection_schematic/window_schematic/westend
+	name			= "\improper west window"
+	build_type	= /obj/effect/spawner/window/westend
+	dirs = list(WEST)
+
+/datum/selection_schematic/window_schematic/horizontal
+	name			= "\improper horizontal window"
+	build_type	= /obj/effect/spawner/window/horizontal
+	dirs = list(NORTH,SOUTH)
+
+/datum/selection_schematic/window_schematic/vertical
+	name			= "\improper vertical window"
+	build_type	= /obj/effect/spawner/window/vertical
+	dirs = list(EAST,WEST)
+
+/datum/selection_schematic/window_schematic/necorner
+	name			= "\improper northeast window"
+	build_type	= /obj/effect/spawner/window/necorner
+	dirs = list(NORTH,EAST)
+
+/datum/selection_schematic/window_schematic/secorner
+	name			= "\improper southeast window"
+	build_type	= /obj/effect/spawner/window/secorner
+	dirs = list(EAST,SOUTH)
+
+/datum/selection_schematic/window_schematic/swcorner
+	name			= "\improper southwest window"
+	build_type	= /obj/effect/spawner/window/swcorner
+	dirs = list(WEST,SOUTH)
+
+/datum/selection_schematic/window_schematic/nwcorner
+	name			= "\improper northwest window"
+	build_type	= /obj/effect/spawner/window/nwcorner
+	dirs = list(NORTH,WEST)
+
+/datum/selection_schematic/window_schematic/northcap
+	name			= "\improper north window cap"
+	build_type	= /obj/effect/spawner/window/northcap
+	dirs = list(NORTH,EAST,WEST)
+
+/datum/selection_schematic/window_schematic/eastcap
+	name			= "\improper east window cap"
+	build_type	= /obj/effect/spawner/window/eastcap
+	dirs = list(NORTH,EAST,SOUTH)
+
+/datum/selection_schematic/window_schematic/southcap
+	name			= "\improper south window cap"
+	build_type	= /obj/effect/spawner/window/southcap
+	dirs = list(EAST,WEST,SOUTH)
+
+/datum/selection_schematic/window_schematic/westcap
+	name			= "\improper west window cap"
+	build_type	= /obj/effect/spawner/window/westcap
+	dirs = list(NORTH,WEST,SOUTH)
+
+/datum/selection_schematic/window_schematic/full
+	name			= "\improper full window"
+	build_type	= /obj/effect/spawner/window/full
+
+/datum/selection_schematic/window_schematic/full/New()
+	overlays += image(icon,icon_state="rwindow0")
+	..()
+
+/datum/selection_schematic/window_schematic/full/northend
+	name			= "\improper full north window"
+	build_type	= /obj/effect/spawner/window/full/northend
+	dirs = list(NORTH)
+
+/datum/selection_schematic/window_schematic/full/eastend
+	name			= "\improper full east window"
+	build_type	= /obj/effect/spawner/window/full/eastend
+	dirs = list(EAST)
+
+/datum/selection_schematic/window_schematic/full/southend
+	name			= "\improper full south window"
+	build_type	= /obj/effect/spawner/window/full/southend
+	dirs = list(SOUTH)
+
+/datum/selection_schematic/window_schematic/full/westend
+	name			= "\improper full west window"
+	build_type	= /obj/effect/spawner/window/full/westend
+	dirs = list(WEST)
+
+/datum/selection_schematic/window_schematic/full/horizontal
+	name			= "\improper full horizontal window"
+	build_type	= /obj/effect/spawner/window/full/horizontal
+	dirs = list(NORTH,SOUTH)
+
+/datum/selection_schematic/window_schematic/full/vertical
+	name			= "\improper full vertical window"
+	build_type	= /obj/effect/spawner/window/full/vertical
+	dirs = list(EAST,WEST)
+
+/datum/selection_schematic/window_schematic/full/necorner
+	name			= "\improper full northeast window"
+	build_type	= /obj/effect/spawner/window/full/necorner
+	dirs = list(NORTH,EAST)
+
+/datum/selection_schematic/window_schematic/full/secorner
+	name			= "\improper full southeast window"
+	build_type	= /obj/effect/spawner/window/full/secorner
+	dirs = list(EAST,SOUTH)
+
+/datum/selection_schematic/window_schematic/full/swcorner
+	name			= "\improper full southwest window"
+	build_type	= /obj/effect/spawner/window/full/swcorner
+	dirs = list(WEST,SOUTH)
+
+/datum/selection_schematic/window_schematic/full/nwcorner
+	name			= "\improper full northwest window"
+	build_type	= /obj/effect/spawner/window/full/nwcorner
+	dirs = list(NORTH,WEST)
+
+/datum/selection_schematic/window_schematic/full/northcap
+	name			= "\improper full north window cap"
+	build_type	= /obj/effect/spawner/window/full/northcap
+	dirs = list(NORTH,EAST,WEST)
+
+/datum/selection_schematic/window_schematic/full/eastcap
+	name			= "\improper full east window cap"
+	build_type	= /obj/effect/spawner/window/full/eastcap
+	dirs = list(NORTH,EAST,SOUTH)
+
+/datum/selection_schematic/window_schematic/full/southcap
+	name			= "\improper full south window cap"
+	build_type	= /obj/effect/spawner/window/full/southcap
+	dirs = list(EAST,WEST,SOUTH)
+
+/datum/selection_schematic/window_schematic/full/westcap
+	name			= "\improper full west window cap"
+	build_type	= /obj/effect/spawner/window/full/westcap
+	dirs = list(NORTH,WEST,SOUTH)

@@ -79,6 +79,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
 	var/tox_mod			// toxin multiplier
+	var/rad_mod			// radiation multiplier
 
 	var/body_temperature = 310.15
 
@@ -339,7 +340,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
-	blood_color = "#272727"
+	blood_color = PALE_BLOOD
 	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
@@ -614,7 +615,7 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey/grey
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS | ACID4WATER
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
@@ -757,7 +758,7 @@ var/global/list/whitelisted_species = list("Human")
 	default_mutations = list(M_BEAK, M_TALONS)
 	flags = IS_WHITELISTED | NO_SCAN
 
-	blood_color = "#2299FC"
+	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
@@ -855,6 +856,8 @@ var/global/list/whitelisted_species = list("Human")
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
 
+	spells = list(/spell/targeted/transfer_reagents)
+
 	warning_low_pressure = 50
 	hazard_low_pressure = -1
 
@@ -881,7 +884,18 @@ var/global/list/whitelisted_species = list("Human")
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
 					You absorb radiation which helps you in a similar way to sunlight. Your rigid, wooden limbs make you incredibly slow.<br>\
 					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
-					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
+					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally.<br>\
+					Your liver is special. It converts a portion of what you ingest into ammonia. You can use your transfer reagents spell to inject plants."
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver/diona,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+	)
 
 /datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
@@ -1198,12 +1212,12 @@ var/list/has_died_as_golem = list()
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
-	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1
 	tox_mod = 0.5
+	rad_mod = 0.5
 
-	blood_color = "#ebece6"
-	flesh_color = "#9c7f25"
+	blood_color = INSECT_BLOOD
+	flesh_color = "#9C7F25"
 
 	uniform_icons = 'icons/mob/species/insectoid/uniform.dmi'
 //	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
@@ -1249,6 +1263,7 @@ var/list/has_died_as_golem = list()
 	H.default_gib()
 
 
+
 /datum/species/mushroom
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
@@ -1273,7 +1288,7 @@ var/list/has_died_as_golem = list()
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")
 
-	blood_color = "#D3D3D3"
+	blood_color = MUSHROOM_BLOOD
 	flesh_color = "#D3D3D3"
 
 	//Copypaste of Dionae

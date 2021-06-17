@@ -51,7 +51,7 @@
 		layer = OPEN_CURTAIN_LAYER
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W))
+	if(W.is_wirecutter(user))
 		W.playtoolsound(loc, 50)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You cut \the [src] down.</span>")

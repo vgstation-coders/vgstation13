@@ -77,6 +77,9 @@
 
 	sleep(duration)
 
+	if (target.gcDestroyed)
+		return
+
 	//Begin unjaunting
 	mobloc = get_turf(target)
 	if(mist)
@@ -86,9 +89,12 @@
 	target.delayNextMove(25)
 	target.dir = SOUTH
 	sleep(20)
+	if (target.gcDestroyed)
+		return
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	sleep(5)
-
+	if (target.gcDestroyed)
+		return
 	//Forcemove him onto the tile and make him visible and vulnerable
 	target.forceMove(mobloc)
 	target.invisibility = 0
@@ -126,7 +132,7 @@
 
 /spell/targeted/ethereal_jaunt/jauntgroup
 	name = "Group Jaunt"
-	desc = "This spell allows all people within range to be jaunted along with the user"
+	desc = "This spell allows all people within range to be jaunted along with the user."
 	hud_state = "group_jaunt"
 	user_type = USER_TYPE_OTHER
 
@@ -141,7 +147,7 @@
 
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
-	desc = "This spell allows you to pass through walls"
+	desc = "This spell allows you to pass through walls."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200

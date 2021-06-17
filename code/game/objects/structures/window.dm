@@ -186,16 +186,21 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		if(istype(mover,/obj/item/projectile/beam))
-			var/obj/item/projectile/beam/B = mover
-			B.damage *= disperse_coeff
-			if(B.damage <= 1)
-				B.bullet_die()
+	if(istype(mover) && mover.checkpass(PASSGLASS))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
+		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
+			dim_beam(mover)
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
+
+
+/obj/structure/window/proc/dim_beam(var/obj/item/projectile/beam/B)
+	if(istype(B))
+		B.damage *= disperse_coeff
+		if(B.damage <= 1)
+			B.bullet_die()
+
 
 //Someone threw something at us, please advise
 /obj/structure/window/hitby(var/atom/movable/AM)
@@ -377,7 +382,7 @@ var/list/one_way_windows
 		return 1
 
 
-	if(ismultitool(W) && smartwindow)
+	if(W.is_multitool(user) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
 
@@ -463,7 +468,7 @@ var/list/one_way_windows
 					return
 
 				if(iswelder(W))
-					var/obj/item/weapon/weldingtool/WT = W
+					var/obj/item/tool/weldingtool/WT = W
 					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
 					if(WT.do_weld(user, src, 40, 1) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
@@ -490,7 +495,7 @@ var/list/one_way_windows
 			return
 
 		if(iswelder(W) && !d_state)
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
 			if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Ditto above
@@ -577,21 +582,6 @@ var/list/one_way_windows
 	Dir = dir
 	..()
 	update_nearby_tiles()
-
-//This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_icons().
-/obj/structure/window/proc/update_nearby_tiles(var/turf/T)
-
-
-	if(!SS_READY(SSair))
-		return 0
-
-	if(!T)
-		T = get_turf(src)
-
-	if(isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
 
 //This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
 /obj/structure/window/proc/update_nearby_icons(var/turf/T)

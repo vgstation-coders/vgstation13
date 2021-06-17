@@ -45,14 +45,16 @@
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.on_holder_death(src)
 	if(transmogged_from)
-		var/obj/transmog_body_container/C = transmogged_from
-		var/mob/living/L = C.contained_mob
-		transmogrify()
-		L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
-		if(istype(L))
-			L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
-			L.updatehealth()
-		return
+		transmog_death()
+
+/mob/proc/transmog_death()
+	var/obj/transmog_body_container/C = transmogged_from
+	var/mob/living/L = C.contained_mob
+	transmogrify()
+	L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
+	if(istype(L))
+		L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
+		L.updatehealth()
 
 //This proc should be used when you're restoring a guy to life. It will remove him from the dead mob list, and add him to the living mob list. It will also remove any verbs
 //that his dead body has

@@ -5,7 +5,7 @@
 		for(var/areapath in typesof(/area/hallway))
 			var/area/A = locate(areapath)
 			for(var/turf/simulated/floor/F in A.contents)
-				if(!is_blocked_turf(F))
+				if(!is_blocked_turf(F) && !(locate(/obj/effect/plantsegment) in F))
 					turfs += F
 
 		if(turfs.len) //Pick a turf to spawn at if we can

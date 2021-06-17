@@ -44,7 +44,7 @@
 "U" = (/turf/unsimulated/wall/rock/ice,/area)
 "V" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/vox{icon_state = "dark"},/area)
 "W" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{dir = 8},/turf/simulated/wall,/area)
-"X" = (/obj/machinery/vending/tool{contraband = list(/obj/item/weapon/weldingtool/hugetank = 2, /obj/item/clothing/gloves/yellow/vox = 2); name = "Outpost YouTool"},/obj/machinery/alarm/vox{alarm_frequency = 1331; dir = 8; pixel_x = 25},/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/vox{icon_state = "dark"},/area)
+"X" = (/obj/machinery/vending/tool{contraband = list(/obj/item/tool/weldingtool/hugetank = 2, /obj/item/clothing/gloves/yellow/vox = 2); name = "Outpost YouTool"},/obj/machinery/alarm/vox{alarm_frequency = 1331; dir = 8; pixel_x = 25},/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/vox{icon_state = "dark"},/area)
 "Y" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/vox{icon_state = "dark"},/area)
 "Z" = (/obj/structure/reagent_dispensers/fueltank,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/vox{icon_state = "dark"},/area)
 
