@@ -56,6 +56,8 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 		if (!data[3] || data[3] == "body_m_s")//this fixes human bodies always facing south
 			add = icon(data[2], dir = data[4], frame = 1, moving = 0)
 		else
+			if (!data[2] && data[1])
+				data[2] = data[1]:icon
 			//making sure that our icon can turn
 			var/dir = data[4]
 			if (dir != SOUTH) // south-facing atoms shouldn't pose any problem
