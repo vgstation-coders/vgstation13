@@ -1284,7 +1284,7 @@ var/global/list/common_tools = list(
 
 	//if we failed when trying to use a table or roller bed, let's at least check if it was a valid surgery step
 	if (too_bad)
-		if (do_surgery(M,user,I,SURGERY_SUCCESS_NEVER))
+		if (do_surgery(M,U,I,SURGERY_SUCCESS_NEVER))
 			return 1
 
 	return 0
