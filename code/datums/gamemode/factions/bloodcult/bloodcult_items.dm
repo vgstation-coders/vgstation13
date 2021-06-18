@@ -1317,6 +1317,10 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/head/culthood/old/attack_self(var/mob/user)
 	return
 
+/obj/item/clothing/head/culthood/old/unequipped(mob/user, var/from_slot = null)
+	..()
+	icon_state = "culthood_old"
+
 /obj/item/clothing/suit/cultrobes/old
 	name = "forgotten cult robes"
 	icon_state = "cultrobes_old"
