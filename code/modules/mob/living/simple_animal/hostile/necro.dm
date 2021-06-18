@@ -671,9 +671,9 @@
 ///////////////////////////////////////////////////////
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab //Not very useful
-	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
-	icon_living = "zombie_turned"
-	icon_dead = "zombie_turned"
+	icon_state = "zombie_headcrab"
+	icon_living = "zombie_headcrab"
+	icon_dead = "zombie_headcrab"
 	desc = "A human that is under control of a headcrab. Better stay away unless you want to become one too."
 	maxHealth = 75
 	health = 75
@@ -682,6 +682,12 @@
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 	var/obj/item/clothing/mask/facehugger/headcrab/crab //The crab controlling it.
 
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
+	..()
+	if (!Victim)
+		icon_state = "zombie_headcrab_clothed"
+		icon_living = "zombie_headcrab_clothed"
+		icon_dead = "zombie_headcrab_clothed"
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
 	if(host)
@@ -710,12 +716,12 @@
 		crab?.stat = CONSCIOUS
 		crab?.target = null
 		host = null
-		qdel(src)
 	else
-		host = new /mob/living/carbon/human
+		host = new /mob/living/carbon/human(get_turf(src))
 		host.get_organ(LIMB_HEAD).explode()
+		host = null
 		visible_message("<span class='danger'>The [src] collapses weakly!</span>")  //There was not a host.
-		qdel(src)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/say(message, bubble_type)
 	return ..(reverse_text(message))
