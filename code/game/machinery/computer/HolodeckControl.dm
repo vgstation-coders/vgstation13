@@ -84,15 +84,6 @@
 	light_color = LIGHT_COLOR_CYAN
 	var/datum/map_element/map_element_type // If null, New() tries to get one from the map's datum
 										   // Set it if you want to source rooms from a different holodeck
-
-/obj/machinery/computer/HolodeckControl/New()
-	..()
-	if(isnull(map_element_type))
-		for(var/entry in map.load_map_elements)
-			if(ispath(entry, /datum/map_element/dungeon/holodeck))
-				map_element_type = entry
-				break
-
 /obj/machinery/computer/HolodeckControl/olympics
 	map_element_type = /datum/map_element/dungeon/holodeck/olympics
 
@@ -250,6 +241,11 @@
 /obj/machinery/computer/HolodeckControl/New()
 	..()
 	linkedholodeck = locate(/area/holodeck/alphadeck)
+	if(isnull(map_element_type))
+		for(var/entry in map.load_map_elements)
+			if(ispath(entry, /datum/map_element/dungeon/holodeck))
+				map_element_type = entry
+				break
 
 //This could all be done better, but it works for now.
 /obj/machinery/computer/HolodeckControl/Destroy()
