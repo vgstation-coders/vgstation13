@@ -21,7 +21,7 @@ var/global/gourmonger_saturation = 0
 	environment_smash_flags = SMASH_CONTAINERS
 	wanted_objects = list(/obj/item/weapon/reagent_containers/food/snacks)
 	meat_amount = 1
-	speed = 0.7	//Able to just barely outrun them -- How are these fat fucks able to move so fast?
+	speed = 2	//Able to just barely outrun them -- How are these fat fucks able to move so fast?
 	min_oxy = 0	//I dunno it breathes food or something. Makes the shard room usable.
 	max_co2 = 0
 	var/hangry = FALSE	//True = loose
