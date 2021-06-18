@@ -1265,6 +1265,7 @@
 #include "code\game\verbs\who.dm"
 #include "code\js\byjax.dm"
 #include "code\js\menus.dm"
+#include "code\libs\Get Flat Icon\Get Flat Icon Deluxe.dm"
 #include "code\libs\Get Flat Icon\Get Flat Icon.dm"
 #include "code\libs\IconProcs\IconProcs.dm"
 #include "code\libs\s_html\hexadecimal.dm"

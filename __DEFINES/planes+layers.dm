@@ -242,37 +242,6 @@ What is the naming convention for planes or layers?
 	plane = initial(plane)
 	layer = initial(layer)
 
-// returns a list with the objects sorted depending on their layer, with the lowest objects being the first in the list and the highest objects being last
-/proc/plane_layer_sort(var/atom_to_sort)
-	to_chat(world,"plane_layer_sort().")
-	var/list/sorted = list()
-	var/list/ready_to_sort = plane_layer_list(atom_to_sort)
-	for(var/current_atom in ready_to_sort)
-		var/compare_index
-		for(compare_index = sorted.len, compare_index > 0, --compare_index) // count down from the length of the list to zero.
-			var/atom/compare_atom = sorted[compare_index] // compare to the next object down the list.
-			if (compare_atom.plane != FLOAT_PLANE) // it's an overlay, always place it above
-				if(compare_atom.plane < current_atom:plane) // is this object below our current atom?
-					break
-				else if((compare_atom.plane == current_atom:plane) && (compare_atom.layer <= current_atom:layer))	// is this object below our current atom?
-					break
-		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
-	return sorted // return the sorted list.
-
-/proc/plane_layer_list(var/list/to_list)//fetches the overlays
-	var/list/listed = list()
-	for(var/current_atom in to_list)
-		for(var/sub_atom in plane_layer_list(current_atom:underlays))
-			listed += sub_atom
-			to_chat(world,"Adding [sub_atom] to underlays with plane:[sub_atom:plane] and layer:[sub_atom:layer].")
-		listed += current_atom
-		to_chat(world,"Adding [current_atom] with plane:[current_atom:plane] and layer:[current_atom:layer].")
-		for(var/sub_atom in plane_layer_list(current_atom:overlays))
-			listed += sub_atom
-			to_chat(world,"Adding [sub_atom] to overlays with plane:[sub_atom:plane] and layer:[sub_atom:layer].")
-	return listed
-
-
 /obj/abstract/screen/plane_master
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER,CENTER"
