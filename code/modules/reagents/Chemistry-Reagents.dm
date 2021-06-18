@@ -5214,6 +5214,17 @@
 	id = MANNITOL
 	description = "The only medicine a <B>REAL MAN</B> needs."
 
+/datum/reagent/discount/mannitol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(5))
+		if(prob(90))
+			to_chat(M, "<span class='notice'>[pick("You feel enlightened.", "You can think clearly.", "Your mind is stabilizing.")].")
+		else
+			M.say(pick("Oranges.", "How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", "im sure this pr is good and all and i havent read the description but im leaving my thumbs down that wont change anything because i cant trust anything from shrek coder", "It has been fun seeing /tg/ going downhill for the last year, thank god bee exists", "I hurt myself today"))
+
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
 	id = IRRADIATEDBEANS
