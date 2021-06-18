@@ -309,7 +309,7 @@
 // have your item's MouseDropFrom call this if mouse-dropping is the default way of picking up your item, such as a paper bin or a deck of card
 /obj/item/proc/MouseDropPickUp(atom/over_object)
 	var/mob/user = usr
-	if(!ishigherbeing(user) || user.incapacitated())
+	if(user.incapacitated() || (!ishigherbeing(user) && !isrobot(user)))
 		return
 	if(Adjacent(user) || is_holder_of(user, src))
 		if(!istype(user, /mob/living/carbon/slime) && !istype(user, /mob/living/simple_animal))
