@@ -183,7 +183,11 @@
 	user.delayNextAttack(10)
 
 /obj/structure/inflatable/attack_animal(var/mob/living/simple_animal/M)
-	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))
+	var/damage_dealt = rand(M.melee_damage_lower, M.melee_damage_upper)
+	if (!damage_dealt)
+		user.visible_message("<span class='notice'>\The [user] nuzzles \the [src].</span>")
+		return 1
+	if(take_damage(damage_dealt))
 		M.visible_message("<span class='danger'>[M] tears open \the [src]!</span>")
 	else
 		M.visible_message("<span class='danger'>[M] [M.attacktext] \the [src]!</span>")
