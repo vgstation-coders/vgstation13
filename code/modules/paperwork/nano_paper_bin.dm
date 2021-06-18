@@ -14,15 +14,9 @@
 	fire_fuel = 1
 
 
-/obj/item/weapon/paper_bin/nano/MouseDropFrom(mob/user as mob)
-	if(user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
-		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
-			if( !usr.get_active_hand() )		//if active hand is empty
-				src.forceMove(user)
-				user.put_in_hands(src)
-				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You pick-up the [src]</span>")
-
-	return
+/obj/item/weapon/paper_bin/nano/MouseDropFrom(atom/over_object)
+	MouseDropPickUp(over_object)
+	return ..()
 
 
 /obj/item/weapon/paper_bin/nano/attack_paw(mob/user as mob)

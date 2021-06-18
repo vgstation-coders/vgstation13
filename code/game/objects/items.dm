@@ -312,6 +312,37 @@
 /obj/item/proc/on_found(mob/wearer, mob/finder)
 	return
 
+// have your item's MouseDropFrom call this if mouse-dropping is the default way of picking up your item, such as a paper bin or a deck of card
+/obj/item/proc/MouseDropPickUp(atom/over_object)
+	var/mob/user = usr
+	if(user.incapacitated() || (!ishigherbeing(user) && !isrobot(user)))
+		return
+	if(Adjacent(user) || is_holder_of(user, src))
+		if(!istype(user, /mob/living/carbon/slime) && !istype(user, /mob/living/simple_animal))
+			if(istype(over_object,/obj/abstract/screen/inventory)) //We're being dragged into the user's UI...
+				var/obj/abstract/screen/inventory/OI = over_object
+
+				if(OI.hand_index && user.put_in_hand_check(src, OI.hand_index))
+					if(istype(loc, /obj/item/weapon/storage))
+						var/obj/item/weapon/storage/bag = loc
+						bag.remove_from_storage(src)
+					user.u_equip(src, 0)
+					user.put_in_hand(OI.hand_index, src)
+					mouse_opacity = 1
+					src.add_fingerprint(user)
+
+			else if(istype(over_object,/mob/living)) //We're being dragged on a living mob's sprite...
+				if(user == over_object) //It's the user!
+					if( !user.get_active_hand() )		//if active hand is empty
+						if(istype(loc, /obj/item/weapon/storage))
+							var/obj/item/weapon/storage/bag = loc
+							bag.remove_from_storage(src)
+						user.put_in_hands(src)
+						user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
+						mouse_opacity = 1
+	else
+		to_chat(user, "<span class='warning'>You can't reach it from here.</span>")
+
 // called after an item is placed in an equipment slot
 // user is mob that equipped it
 // slot uses the slot_X defines found in setup.dm
