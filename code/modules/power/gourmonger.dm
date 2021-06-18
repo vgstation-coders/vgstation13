@@ -302,35 +302,37 @@ var/global/gourmonger_saturation = 0
 		if(Adjacent(T))
 			forceMove(T)
 
-/mob/living/simple_animal/hostile/gourmonger/proc/chargeThrough(var/turf/cT)
-	if(istype(cT, /turf/simulated/wall))
-		cT.dismantle_wall(1)
-	for(var/obj/machinery/M in cT.contents)	//All these just mimic what machinery does on tool use
-		if(!M.density)
-			continue
-		if(istype(M, /obj/machinery/door/airlock))
-			var/obj/machinery/door/airlock/A = M
-			A.bashed_in(src)
-		gourThroughMachine(M)
-	for(var/obj/structure/S in cT.contents)
-		if(S.density)
-			S.ex_act(1)	//Safest way to do this, probably
-	for(var/mob/living/L in cT.contents)
-		if(L == src)
-			continue
-		gourThroughMob(L)
+//			Commenting this out due to popular acclaim
+//
+//	/mob/living/simple_animal/hostile/gourmonger/proc/chargeThrough(var/turf/cT)
+//	if(istype(cT, /turf/simulated/wall))
+//		cT.dismantle_wall(1)
+//	for(var/obj/machinery/M in cT.contents)	//All these just mimic what machinery does on tool use
+//		if(!M.density)
+//			continue
+//		if(istype(M, /obj/machinery/door/airlock))
+//			var/obj/machinery/door/airlock/A = M
+//			A.bashed_in(src)
+//		gourThroughMachine(M)
+//	for(var/obj/structure/S in cT.contents)
+//		if(S.density)
+//			S.ex_act(1)	//Safest way to do this, probably
+//	for(var/mob/living/L in cT.contents)
+//		if(L == src)
+//			continue
+//		gourThroughMob(L)
 
-/mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMachine(var/obj/machinery/M)
-	for(var/mob/living/L in M.contents)
-		L.forceMove(M.loc)
-	if(M.machine_flags & CROWDESTROY)
-		M.dropFrame()
-		M.spillContents()
-		qdel(M)
-	else if(M.wrenchable())
-		M.state = 0
-		M.anchored = FALSE
-		M.power_change()
+//	/mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMachine(var/obj/machinery/M)
+//	for(var/mob/living/L in M.contents)
+//		L.forceMove(M.loc)
+//	if(M.machine_flags & CROWDESTROY)
+//		M.dropFrame()
+//		M.spillContents()
+//		qdel(M)
+//	else if(M.wrenchable())
+//		M.state = 0
+//		M.anchored = FALSE
+//		M.power_change()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMob(var/mob/living/L)
 	if(ishuman(L))
