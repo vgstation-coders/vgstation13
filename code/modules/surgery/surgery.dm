@@ -124,7 +124,7 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool, var/success_overri
 			if(canuse == -1)
 				sleep_fail = 1
 			if(canuse && S.is_valid_mutantrace(M) && !(M in S.doing_surgery))
-				if(!can_operate(M, user))
+				if(!can_operate(M, user))//never give the tool as 3rd arg here or you might cause an infinite loop
 					return 1
 				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] started by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Started surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
