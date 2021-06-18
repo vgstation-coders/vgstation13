@@ -690,8 +690,12 @@
 	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/death(var/gibbed = FALSE)
+	if(transmogged_from) // we're not a real zombie!
+		..(gibbed)
+		return
+	..(gibbed)
 	if(host)
-		host.loc = get_turf(src)
+		host.forceMove(get_turf(src))
 		if(mind)
 			mind.transfer_to(host)
 			var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
