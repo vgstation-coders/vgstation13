@@ -12,13 +12,12 @@ var/global/gourmonger_saturation = 0
 	icon_living = "gourmonger"
 	icon_dead = "gourmonger"	//This shouldn't happen
 	faction = "gourmonger"
-	health = 40
-	maxHealth = 40
+	health = 60
+	maxHealth = 60
 	melee_damage_lower = 5
 	melee_damage_upper = 10	//The rads are the real danger
 	stat_attack = DEAD	//So it attacks corpses.
 	search_objects = 1	//Searches objects but doesn't ignore people. The ignoring before hanger is in its CanAttack()
-	environment_smash_flags = SMASH_CONTAINERS
 	wanted_objects = list(/obj/item/weapon/reagent_containers/food/snacks)
 	meat_amount = 1
 	speed = 2	//Able to just barely outrun them -- How are these fat fucks able to move so fast?
@@ -138,7 +137,7 @@ var/global/gourmonger_saturation = 0
 
 /mob/living/simple_animal/hostile/gourmonger/proc/radBurst(var/radVal)
 	emitted_harvestable_radiation(get_turf(src), radVal, 8)
-	for(var/mob/living/L in view(get_turf(src), 5))
+	for(var/mob/living/L in view(get_turf(src), 2))
 		L.apply_radiation(radVal/25, RAD_EXTERNAL)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/glowCheck() //Visible indicator of how close to splitting they are
