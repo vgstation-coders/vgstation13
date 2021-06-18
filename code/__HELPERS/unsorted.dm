@@ -1266,16 +1266,27 @@ var/global/list/common_tools = list(
 /proc/can_operate(mob/living/carbon/M, mob/U)
 	if(U == M)
 		return 0
+	var/too_bad = FALSE
 	if((ishuman(M) || isslime(M)) && M.lying)
 		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
 			return 1
 		if(iscultist(U) && locate(/obj/structure/cult/altar, M.loc))
 			return 1
-		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
-			return 1
+		if(locate(/obj/structure/bed/roller, M.loc))
+			too_bad = TRUE
+			if (prob(75))
+				return 1
 		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
-		if(T && !T.flipped && prob(66))
+		if(T && !T.flipped)
+			too_bad = TRUE
+			if (prob(66))
+				return 1
+
+	//if we failed when trying to use a table or roller bed, let's at least check if it was a valid surgery step
+	if (too_bad)
+		if (do_surgery(M,user,I,SURGERY_SUCCESS_NEVER))
 			return 1
+
 	return 0
 
 /*
