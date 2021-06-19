@@ -248,7 +248,7 @@
 			if(!A.anchored)
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
 					for(var/atom/dest in get_step(src, movedir)) //Should/can this be optimized to not check ALL atoms?
-						if(dest.conveyor_act(A, src))
+						if(Adjacent(dest) && dest.conveyor_act(A, src))
 							items_moved++
 							break
 					if(A && A.loc == src.loc) //Check that our location didn't check from conveyor_acting on machinery.
