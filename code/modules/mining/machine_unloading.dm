@@ -85,7 +85,7 @@
 		spawn(1)//smooth animation
 			step(AM,dir)
 		for(var/atom/movable/receptacle in T)
-			if (receptacle.conveyor_act(AM))
+			if (Adjacent(receptacle) && receptacle.conveyor_act(AM))
 				continue
 		i++
 		if (i >= max_moved)
