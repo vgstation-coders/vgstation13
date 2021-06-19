@@ -149,7 +149,8 @@
 		if(!usr || usr.incapacitated())
 			return
 
-		if(!(new /datum/painting_utensil(usr)).palette.len)
+		var /datum/painting_utensil/pu = new /datum/painting_utensil(usr)
+		if(!pu.palette.len)
 			//TODO other tools (crayons, brushes)
 			to_chat(usr, "<span class='warning'>You need to be holding a painting utensil in your active hand.</span>")
 			return

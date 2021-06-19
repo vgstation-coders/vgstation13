@@ -1,3 +1,15 @@
+/*
+* Acts as a color picker:
+* Use it on a reagent container and it takes on the mix's color. Use it on a canvas and you can paint with said color.
+* Side note: canvas does not support alpha colors, meaning brush ignores reagent colors' alpha, which result in weird looking colors sometimes
+*
+* Clean the brush by dipping it in water/space cleaner/paint cleaner
+* A minimum percent of cleaning reagent out of total is needed, stronger cleaners require lower percentage.
+*	eg: 5u water 5u blood won't be good for cleaning, but 9u water 1u blood will, and 5u cleaner 5u blood will too
+* (made up units see PAINT_CLEANER_THRESHOLD and PAINT_CLEANER_AGENT_MULTIPLIER for actual units instead)
+*
+*/
+
 /obj/item/weapon/painting_brush
 	// Graphics stuff
 	desc = "Horse hair on a stick, with a space age twist. Paint won't dry or run out on this"
