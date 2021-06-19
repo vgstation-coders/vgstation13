@@ -17,7 +17,6 @@
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
 
-
 /obj/structure/painting/custom/New()
 	..()
 	src.painting_data = new(src, painting_width, painting_height, painting_offset_x, painting_offset_y, base_color)
@@ -162,6 +161,8 @@
 	painting_width = 24
 	painting_offset_x = 4
 	painting_offset_y = 9
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 /obj/structure/painting/custom/landscape
 	icon_state = "blank_landscape"
@@ -170,6 +171,8 @@
 	painting_width = 24
 	painting_offset_x = 4
 	painting_offset_y = 9
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 // Blank portrait canvas
 /obj/item/mounted/frame/painting/custom/portrait
@@ -178,6 +181,8 @@
 	painting_width = 14
 	painting_offset_x = 9
 	painting_offset_y = 3
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 /obj/structure/painting/custom/portrait
 	icon_state = "blank_portrait"
@@ -186,6 +191,8 @@
 	painting_width = 14
 	painting_offset_x = 9
 	painting_offset_y = 3
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 3)
 
 // Large blank canvas
 /obj/item/mounted/frame/painting/custom/large
@@ -194,6 +201,8 @@
 	painting_width = 24
 	painting_offset_x = 4
 	painting_offset_y = 3
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
 
 /obj/structure/painting/custom/large
 	icon_state = "blank_large"
@@ -202,3 +211,5 @@
 	painting_width = 24
 	painting_offset_x = 4
 	painting_offset_y = 3
+	// Material data
+	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
