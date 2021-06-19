@@ -4,7 +4,7 @@
 "is" = (/obj/structure/dispenser/oxygen,/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "iu" = (/obj/effect/decal/warning_stripes{dir = 8; icon_state = "loading_area"; tag = "icon-loading_area (WEST)"},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
 "kz" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{req_access_txt = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"kI" = (/obj/structure/safe,/obj/abstract/map/spawner/safe/food,/obj/abstract/map/spawner/safe/clothing,/obj/abstract/map/spawner/safe/medal,/turf/simulated/floor/wood/floor_tile,/area/shack)
+"kI" = (/obj/structure/safe,/obj/abstract/map/spawner/safe/medical,/obj/abstract/map/spawner/safe/food,/turf/simulated/floor/wood/floor_tile,/area/shack)
 "kW" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
 "li" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "lF" = (/turf/simulated/wall/mineral/wood,/area/shack)
