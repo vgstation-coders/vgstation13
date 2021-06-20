@@ -421,36 +421,42 @@
 	if(butchery)
 		msg += "<span class='warning'>[butchery]</span>\n"
 
-	if(istype(user) && user.hasHUD(HUD_SECURITY))
-		var/perpname = get_identification_name(get_face_name())
-		var/criminal = "None"
+	if(istype(user))
+		if(user.hasHUD(HUD_SECURITY))
+			var/perpname = get_identification_name(get_face_name())
+			var/criminal = "None"
 
-		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
-		if(sec_record)
-			criminal = sec_record.fields["criminal"]
+			var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
+			if(sec_record)
+				criminal = sec_record.fields["criminal"]
 
-			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
-<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
+				msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
+	<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
+				if(!isjustobserver(user))
+					msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
+				msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
+
+		if(user.hasHUD(HUD_MEDICAL))
+			var/perpname = get_identification_name(get_face_name())
+			var/medical = "None"
+
+			var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+			if(gen_record)
+				medical = gen_record.fields["p_stat"]
+
+			msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
+				<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
+			for (var/ID in virus2)
+				if (ID in virusDB)
+					var/datum/data/record/v = virusDB[ID]
+					msg += "<br><span class='warning'>[v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""] detected in subject.</span>\n"
 			if(!isjustobserver(user))
-				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
-			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
+				msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 
-	if(istype(user) && user.hasHUD(HUD_MEDICAL))
-		var/perpname = get_identification_name(get_face_name())
-		var/medical = "None"
-
-		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
-		if(gen_record)
-			medical = gen_record.fields["p_stat"]
-
-		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
-			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
-		for (var/ID in virus2)
-			if (ID in virusDB)
-				var/datum/data/record/v = virusDB[ID]
-				msg += "<br><span class='warning'>[v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""] detected in subject.</span>\n"
-		if(!isjustobserver(user))
-			msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
+		if(isjustobserver(user))
+			var/mob/dead/observer/O = user
+			if(O.antagHUD && mind && mind.antag_roles.len)
+				msg += "<a href='?src=\ref[src];purchaselog=`'>\[Show antag purchase log\]</a>\n"
 
 	if(flavor_text && can_show_flavor_text())
 		msg += "[print_flavor_text()]\n"
