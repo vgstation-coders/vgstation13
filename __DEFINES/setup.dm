@@ -1652,6 +1652,8 @@ var/proccalls = 1
 #define VIOLENCE_DEFAULT	1
 #define VIOLENCE_GUN		2
 
+#define MAX_SHEET_STACK_AMOUNT	50
+
 // Used to determine which HUD is in use
 #define HUD_NONE 0
 #define HUD_MEDICAL 1
