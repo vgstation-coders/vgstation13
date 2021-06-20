@@ -39,7 +39,9 @@
 	spawn()
 		src.teleport(M)
 */
-/obj/effect/portal/Crossed(AM as mob|obj)
+/obj/effect/portal/Crossed(AM as mob|obj,var/no_tp=0)
+	if(no_tp)
+		return
 	spawn()
 		teleport(AM)
 

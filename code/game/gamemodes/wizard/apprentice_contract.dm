@@ -172,7 +172,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	if(!ghost)
 		chosen_setup = null
 		polling_ghosts = FALSE
-		kill_light()
+		set_light(0)
 		visible_message("<span class='notice'>\The [src] stops glowing.</span>")
 		nanomanager.update_uis(src)
 		return
@@ -181,6 +181,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	apprentice.setGender(forced_apprentice_gender || pick(MALE,FEMALE))
 	apprentice.randomise_appearance_for(apprentice.gender)
 	apprentice.ckey = ghost.ckey
+
 	chosen_setup.give_spells(apprentice)
 
 	var/datum/faction/wizard_contract/contract_faction = find_active_faction_by_typeandmember(/datum/faction/wizard_contract, null, owner)
@@ -198,7 +199,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 		name_wizard(apprentice, "Wizard's Apprentice")
 	update_faction_icons()
 	visible_message("<span class='notice'>\The [src] folds back on itself as the apprentice appears!</span>")
-	kill_light()
+	set_light(0)
 	consumed = TRUE
 	nanomanager.close_uis(src)
 	update_icon()

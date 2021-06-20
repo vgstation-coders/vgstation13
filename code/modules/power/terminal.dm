@@ -25,7 +25,6 @@
 	var/turf/T = src.loc
 	if(level==1)
 		hide(T.intact)
-	kill_light()
 	return
 
 

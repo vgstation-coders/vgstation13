@@ -206,6 +206,7 @@
 ///	return
 ///datum/reagent/proc/on_update(var/atom/A)
 //	return
+
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 
@@ -497,6 +498,7 @@
 //	if(data["blood_colour"])
 //		color = data["blood_colour"]
 //	return ..()
+
 /datum/reagent/blood/reaction_turf(var/turf/simulated/T, var/volume) //Splash the blood all over the place
 
 	var/datum/reagent/self = src
@@ -2138,15 +2140,6 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
-
-/datum/reagent/diamond
-	name = "Diamond dust"
-	id = DIAMONDDUST
-	description = "An allotrope of carbon, one of the hardest minerals known."
-	reagent_state = REAGENT_STATE_SOLID
-	color = "c4d4e0" //196 212 224
-	density = 3.51
-	specheatcap = 6.57
 
 /datum/reagent/diamond
 	name = "Diamond dust"
@@ -6739,7 +6732,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(islightingoverlay(X))//since there's one on every turf
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -6781,7 +6774,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(islightingoverlay(X))//since there's one on every turf
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -8850,7 +8843,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return
 	var/atom/A =  holder.my_atom
 	A.light_color = initial_color
-	A.kill_light()
+	A.set_light(0)
 
 /datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
@@ -8862,7 +8855,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.set_light(light_intensity)
 		spawn(volume * 10)
 			M.light_color = init_color
-			M.kill_light()
+			M.set_light(0)
 
 /datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -8873,7 +8866,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	T.set_light(light_intensity)
 	spawn(volume * 10)
 		T.light_color = init_color
-		T.kill_light()
+		T.set_light(0)
 
 /datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -8884,7 +8877,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	O.set_light(light_intensity)
 	spawn(volume * 10)
 		O.light_color = init_color
-		O.kill_light()
+		O.set_light(0)
 
 /datum/reagent/mucus
 	name = "Mucus"
