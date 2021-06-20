@@ -689,24 +689,26 @@
 
 //Grey spacesuit
 
+// The line of code that made items under the helmet visible has been removed. While an interesting idea, it tended to cause clipping on side sprites.
+
 /obj/item/clothing/head/helmet/space/grey
-	name = "grey pressure helmet"
+	name = "explorer pressure helmet"
 	icon_state = "grey-fishbowl-helm"
 	item_state = "grey-fishbowl-helm"
-	desc = "A strange globe-like structure. Despite looking like a decent glare would break it, it is surprisingly durable. Enough thinking room for a Grey."
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
+	desc = "A Grey explorer's pressure helmet. It has plenty of room for planning an atmospheric reentry. Zounds!"
+	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	body_parts_covered = FULL_HEAD|IGNORE_INV
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/space/grey
-	name = "grey pressure suit"
+	name = "explorer pressure suit"
 	icon_state = "grey-pressure-suit"
 	item_state = "grey-pressure-suit"
-	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
+	desc = "An outdated pressure suit that was once standard issue for spacefaring Grey explorers. It's compact enough to be stored in a bag."
+	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
+	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)
 	species_fit = list(GREY_SHAPED)
 
