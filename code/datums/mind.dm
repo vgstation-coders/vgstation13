@@ -223,7 +223,7 @@
 				for(var/entry in W.potions_bought)
 					out += "[entry]<BR>"
 	
-	usr << browse(out, "window=role_purchase_log[src];size=500x300")
+	usr << browse(out, "window=role_purchase_log[src];size=300x500")
 
 /datum/mind/proc/get_faction_list()
 	var/list/all_factions = list()
