@@ -2938,3 +2938,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
+
+//You have now exited the ayy food zone. Thanks for visiting.
+
+/datum/recipe/dionaroast
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, CORNOIL = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/apple
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/dionaroast
