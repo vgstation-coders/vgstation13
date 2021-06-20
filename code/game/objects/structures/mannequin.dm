@@ -688,6 +688,9 @@
 			I.pixel_y = clothing_offset_y
 		else
 			icon = 'icons/mob/mannequin.dmi'
+	else
+		I.pixel_x = clothing_offset_x
+		I.pixel_y = clothing_offset_y
 	overlays += I
 	qdel(O)
 

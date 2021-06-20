@@ -146,6 +146,8 @@
 	var/obj/item/weapon/light/bulb/flashbulb = null
 	var/start_with_bulb = TRUE
 
+	var/see_ghosts = FALSE
+
 /obj/item/device/camera/New(var/empty = FALSE)
 	..()
 	if(empty == TRUE)
@@ -167,6 +169,7 @@
 	icon_on = "sepia-camera"
 	icon_off = "sepia-camera_off"
 	mech_flags = MECH_SCAN_FAIL
+	see_ghosts = TRUE
 
 
 /obj/item/device/camera/examine(mob/user)
@@ -306,40 +309,19 @@
 	blinder.mech_flags = mech_flags
 	blinder.decon_path = type
 
-/obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
-	var/atoms[] = list()
+/obj/item/device/camera/proc/camera_get_icon_deluxe(list/turfs, turf/center)
+	var/list/datas = list()
 	for(var/turf/T in turfs)
-		atoms.Add(T)
-		for(var/atom/movable/A in T)
-			if(A.invisibility)
-				continue
-			atoms.Add(A)
+		datas += get_turf_image_datas(T,src)
+
+	var/sorted_data = sort_image_datas(datas)
 
 	var/icon/res = get_base_photo_icon()
 
-	for(var/atom/A in plane_layer_sort(atoms))
-
-		CHECK_TICK
-		var/icon/img = getFlatIcon(A,A.dir,0)
-		if(istype(A, /mob/living) && A:lying)
-			img.Turn(A:lying)
-
-		var/offX = 1 + (photo_size-1)*WORLD_ICON_SIZE/2 + (A.x - center.x) * WORLD_ICON_SIZE + A.pixel_x
-		var/offY = 1 + (photo_size-1)*WORLD_ICON_SIZE/2 + (A.y - center.y) * WORLD_ICON_SIZE + A.pixel_y
-
-		if(istype(A, /atom/movable))
-			offX += A:step_x
-			offY += A:step_y
-
-		res.Blend(img, blendMode2iconMode(A.blend_mode), offX, offY)
-
-		if(istype(A, /obj/item/blueprints/primary))
-			blueprints = 1
-
+	var/icon/img = getFlatIconDeluxe(sorted_data, center, (photo_size-1)/2)
+	res.Blend(img,ICON_OVERLAY)
 
 	return res
-
-
 
 /obj/item/device/camera/proc/camera_get_assassination_results(turf/the_turf)
 	if (assassination_objectives.len > 0)
@@ -465,7 +447,7 @@
 	var/icon/temp = get_base_photo_icon()
 
 	temp.Blend("#000", ICON_OVERLAY)
-	temp.Blend(camera_get_icon(turfs, target), ICON_OVERLAY)
+	temp.Blend(camera_get_icon_deluxe(turfs, target), ICON_OVERLAY)
 
 	if(!issilicon(user))
 		printpicture(user, temp, mobs, flag)
