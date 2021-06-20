@@ -33,7 +33,7 @@
 /atom/movable/light/shadow
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
-	animate_movement = SLIDE_STEPS
+	animate_movement = 1
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
