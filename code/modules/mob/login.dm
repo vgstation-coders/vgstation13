@@ -62,6 +62,7 @@
 	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
 	client.screen += clickmaster_dummy // honestly fuck you lummox
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
+	create_lighting_planes()
 
 	regular_hud_updates()
 
@@ -114,6 +115,7 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
+
 
 	if(iscluwnebanned(src) && (timeofdeath > 0 || !iscluwne(src)))
 		log_admin("Cluwnebanned player [key_name(src)] attempted to join and was kicked.")

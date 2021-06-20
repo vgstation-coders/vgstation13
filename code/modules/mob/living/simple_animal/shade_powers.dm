@@ -149,7 +149,7 @@
 	for (var/atom/A in T)
 		if (A == SB)
 			continue
-		if (istype(A,/atom/movable/lighting_overlay))
+		if (islightingoverlay(A))
 			continue
 		if (ismob(A))
 			var/mob/M = A
@@ -160,7 +160,7 @@
 			if (!istype(A, /obj/item/weapon/storage))
 				my_targets += A
 	for (var/atom/A in get_step(T,dir))
-		if (istype(A,/atom/movable/lighting_overlay))
+		if (islightingoverlay(A))
 			continue
 		if (ismob(A))
 			var/mob/M = A

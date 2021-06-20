@@ -403,7 +403,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "nazi"
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	color_on = "#FF2222"
+	light_color = "#FF2222"
 
 /obj/item/clothing/suit/space/rig/nazi
 	name = "nazi hardsuit"
@@ -618,9 +618,9 @@
 	item_state = "ghettorig[on]"
 
 	if(on)
-		set_light(brightness_on)
+		set_light(light_range)
 	else
-		set_light(0)
+		kill_light()
 
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"
@@ -678,5 +678,5 @@
 	item_state = "arch_helm"
 	_color = "arch"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
-	color_on = "#81F9C6" //Aquamarine. A combination of the colors from the lamp and rail light.
+	light_color = "#81F9C6" //Aquamarine. A combination of the colors from the lamp and rail light.
 	species_fit = list(INSECT_SHAPED)

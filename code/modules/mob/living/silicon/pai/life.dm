@@ -4,7 +4,7 @@
 
 	if (src.stat == 2)
 		return
-
+	check_dark_vision()
 	handle_regular_status_updates()
 	regular_hud_updates()
 	if(src.secHUD)

@@ -54,6 +54,11 @@
 #define LIGHT_COLOR_GREEN      "#64C864" //Bright but quickly dissipating neon green. rgb(100, 200, 100)
 #define LIGHT_COLOR_BLUE       "#6496FA" //Cold, diluted blue. rgb(100, 150, 250)
 
+#define LIGHT_COLOR_APC_RED		"#FF0000"
+#define LIGHT_COLOR_APC_GREEN	"#00FF00"
+#define LIGHT_COLOR_APC_BLUE	"#0000FF"
+#define LIGHT_COLOR_APC_YELLOW	"#FFFF00"
+
 #define LIGHT_COLOR_CYAN       "#7DE1E1" //Diluted cyan. rgb(125, 225, 225)
 #define LIGHT_COLOR_PINK       "#E17DE1" //Diluted, mid-warmth pink. rgb(225, 125, 225)
 #define LIGHT_COLOR_YELLOW     "#E1E17D" //Dimmed yellow, leaning kaki. rgb(225, 225, 125)
@@ -73,3 +78,45 @@
 #define LIGHT_EMPTY  1
 #define LIGHT_BROKEN 2
 #define LIGHT_BURNED 3
+
+#define FOR_DVIEW(type, range, center, invis_flags) \
+	dview_mob.loc = center; \
+	dview_mob.see_invisible = invis_flags; \
+	for(type in view(range, dview_mob))
+
+#define END_FOR_DVIEW dview_mob.loc = null
+
+//Lighting types.
+#define LIGHT_SOFT             "soft"
+#define LIGHT_SOFT_FLICKER     "soft-flicker"
+#define LIGHT_DIRECTIONAL      "directional"
+
+// Lighting temperatures.
+#define COLOUR_LTEMP_CANDLE        rgb(255, 147, 41)
+#define COLOUR_LTEMP_40W_TUNGSTEN  rgb(255, 197, 143)
+#define COLOUR_LTEMP_100W_TUNGSTEN rgb(255, 214, 170)
+#define COLOUR_LTEMP_HALOGEN       rgb(255, 241, 224)
+#define COLOUR_LTEMP_CARBON_ARC    rgb(255, 250, 244)
+#define COLOUR_LTEMP_HIGHNOON      rgb(255, 255, 251)
+#define COLOUR_LTEMP_SUNLIGHT      rgb(255, 255, 255)
+#define COLOUR_LTEMP_SKY_OVERCAST  rgb(201, 226, 255)
+#define COLOUR_LTEMP_SKY_CLEAR     rgb(64, 156, 255)
+#define COLOUR_LTEMP_FLURO_WARM    rgb(255, 244, 229)
+#define COLOUR_LTEMP_FLURO         rgb(244, 255, 250)
+#define COLOUR_LTEMP_FLURO_COOL    rgb(212, 235, 255)
+#define COLOUR_LTEMP_FLURO_FULL    rgb(255, 244, 242)
+#define COLOUR_LTEMP_FLURO_GROW    rgb(255, 239, 247)
+#define COLOUR_LTEMP_BLACKLIGHT    rgb(167, 0, 255)
+
+// Alpha levels
+
+#define MINIMUM_ALPHA_DARK_PLANE 10
+#define HUMAN_TARGET_ALPHA 20
+
+#define SUNGLASSES_TARGET_ALPHA 5
+
+// Lighting flags, see `code/modules/lighting/__lighting_docs.dm`
+#define FOLLOW_PIXEL_OFFSET 1
+#define NO_LUMINOSITY 2
+#define IS_LIGHT_SOURCE 4
+#define MOVABLE_LIGHT 8

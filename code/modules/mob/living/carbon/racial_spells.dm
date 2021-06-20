@@ -3,7 +3,7 @@
 /spell/swallow_light	//Grue
 	name = "Swallow Light"
 	abbreviation = "SL"
-	desc = "Create a void of darkness around yourself."
+	desc = "Extinguish all lights around you."
 	panel = "Racial Abilities"
 	override_base = "racial"
 	hud_state = "racial_dark"
@@ -16,12 +16,23 @@
 	still_recharging_msg = "<span class='notice'>You're still regaining your strength.</span>"
 
 /spell/swallow_light/cast(list/targets, mob/user)
-	user.set_light(8,-20)
+	user.lazy_register_event(/lazy_event/on_moved, user, /mob/living/proc/absorb_lights_moving)
+	user.lazy_register_event(/lazy_event/on_life, user, /mob/living/proc/absorb_lights_living)
 	playsound(user, cast_sound, 50, 1)
 	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_GRUE)
 
+/mob/living/proc/absorb_lights_moving(var/atom/movable/mover)
+	for (var/atom/movable/light/L in view(src, 4)) // 4 range view
+		L.light_swallowed = 3
+
+/mob/living/proc/absorb_lights_living(var/mob/living/L, var/life_tick)
+	if (life_tick % 2)
+		return
+	for (var/atom/movable/light/light in view(src, 4)) // 4 range view
+		light.light_swallowed = 3
+
 /spell/swallow_light/stop_casting(list/targets, mob/user)
-	user.set_light(0)
+	user.kill_light()
 	playsound(user, null, 50, channel = CHANNEL_GRUE)
 
 /spell/swallow_light/choose_targets(mob/user = usr)

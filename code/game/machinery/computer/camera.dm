@@ -147,8 +147,11 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	network = list(CAMERANET_THUNDER, CAMERANET_COURTROOM, CAMERANET_SPESSTV)
 	density = 0
 	circuit = null
-
-	light_color = null
+	moody_light_type = /atom/movable/light/moody/statusdisplay
+	lighting_flags = FOLLOW_PIXEL_OFFSET
+	light_color = "#ffffff"
+	light_power = 1
+	light_range = 1
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv
 	name = "low-latency Spess.TV CRT monitor"
@@ -157,6 +160,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	icon_state = "crt"
 	network = list(CAMERANET_SPESSTV)
 	density = TRUE
+	moody_light_type = null
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/is_operational()
 	return TRUE
