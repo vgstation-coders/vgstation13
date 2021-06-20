@@ -152,8 +152,10 @@
 			return
 	return
 
-/obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/user)
+/obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/living/user)
 	..()
+	if (!isliving(user))
+		return
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)

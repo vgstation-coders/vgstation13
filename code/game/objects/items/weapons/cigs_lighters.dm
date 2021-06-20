@@ -239,8 +239,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return source_temperature
 	return 0
 
-/obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/clothing/mask/cigarette/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	..()
+	if (!isliving(user))
+		return
 
 	if(lit) //The cigarette is already lit
 		to_chat(user, "<span class='warning'>\The [src] is already lit.</span>")
