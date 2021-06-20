@@ -74,7 +74,7 @@
 	var/in_darkness = 0
 	if(istype(T, /turf/simulated)) //Simulated turfs only
 		var/turf/simulated/sim = T
-		if(!sim.affecting_lights || !sim.affecting_lights.len) //Check if lights are affecting us (otherwise darkness, obviously)
+		if(!sim.get_lumcount()) //Check if lights are affecting us (otherwise darkness, obviously)
 			in_darkness = 1
 
 	//Humans can observe SCP-173. If a single human observes him, he's observed for everyone

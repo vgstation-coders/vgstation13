@@ -356,7 +356,6 @@
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
-	var/old_affecting_lights = affecting_lights
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
 	var/old_registered_events = registered_events
@@ -441,9 +440,6 @@
 		W.levelupdate()
 
 		. = W
-
-	if (SS_READY(SSlighting))
-		affecting_lights = old_affecting_lights
 
 	if (!ticker)
 		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps

@@ -71,7 +71,6 @@ atom: (lighting_atom.dm)
 
 
 turf: (lighting_turf.dm)
-  - var/list/affecting_lights; list of light sources that are shining onto this turf
 
   - proc/get_lumcount(var/minlum = 0, var/maxlum = 10)
   	  - Returns an integer according to the amount of lums on a turf's overlay (also averages them)

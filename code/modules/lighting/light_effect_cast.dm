@@ -57,7 +57,6 @@ var/light_power_multiplier = 5
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
 			T.lumcount = -1
-			T.affecting_lights -= src
 		affecting_turfs.Cut()
 		return
 
@@ -287,8 +286,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.layer = LIGHTING_LAYER
 	//and add it to the lights overlays
 	temp_appearance += I
-	for(var/turf/T in affecting_turfs)
-		T.affecting_lights |= src
 
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return

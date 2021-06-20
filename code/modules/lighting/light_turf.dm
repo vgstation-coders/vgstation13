@@ -1,6 +1,5 @@
 /turf/var/blocks_light = -1              // Whether or not this turf occludes light based on turf opacity and contents. See check_blocks_light().
 /turf/var/lumcount = -1
-/turf/var/list/affecting_lights = list() // Non-assoc list of all lighting overlays applied to this turf.
 
 // Flags the turf to recalc blocks_light next call since opacity has changed.
 /turf/set_opacity()
@@ -10,9 +9,11 @@
 		blocks_light = -1
 
 /turf/proc/get_lumcount()
-	affecting_lights &= view(src)
+	var/list/affecting_lights = list()
 	if(lumcount == -1)
 		lumcount = 0
+		for (var/atom/movable/light/L in view(src))
+			affecting_lights += L
 		for(var/atom/movable/light/thing in affecting_lights)
 			lumcount += max(thing.light_range + 2 - get_dist(thing, src),0)
 		lumcount = clamp(lumcount,0,10)
@@ -30,13 +31,6 @@
 					blocks_light = 1
 					break
 	return blocks_light
-
-// Must be optimised before being used.
-/turf/proc/door_light_update()
-	var/old_affecting_lights = affecting_lights
-	affecting_lights = list()
-	for(var/atom/movable/light/L in old_affecting_lights)
-		L.cast_light()
 
 // Returns a list of occluding corners based on the angle of the light to the turf
 // as well as the available edges of clear space around the turf. Calculated and
