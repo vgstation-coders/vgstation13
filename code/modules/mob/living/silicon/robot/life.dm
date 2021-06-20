@@ -5,7 +5,8 @@
 		return
 
 	blinded = FALSE
-
+	check_dark_vision()
+	
 	//Status updates, death etc.
 	clamp_values()
 	handle_regular_status_updates()
@@ -32,7 +33,7 @@
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
-	
+
 	if(locked_to_z)
 		check_locked_zlevel()
 

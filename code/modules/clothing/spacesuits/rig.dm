@@ -15,8 +15,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
 	allowed = list(/obj/item/device/flashlight)
 	light_power = 1.7
-	var/brightness_on = 4 //Luminosity when on. If modified, do NOT run update_brightness() directly
-	var/color_on = null //Color when on.
+	light_range = 4
 	var/on = 0 //Remember to run update_brightness() when modified, otherwise disasters happen
 	var/no_light = 0 //Disables the helmet light when set to 1. Make sure to run check_light() if this is updated
 	_color = "engineering" //Determines used sprites: rig[on]-[_color]. Use update_icon() directly to update the sprite. NEEDS TO BE SET CORRECTLY FOR HELMETS
@@ -81,10 +80,10 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 	if(on)
 		processing_objects.Add(src)
-		set_light(brightness_on,null,color_on)
+		set_light()
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/clothing/head/helmet/space/rig/update_icon()

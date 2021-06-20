@@ -345,7 +345,7 @@ var/list/global_singularity_pool
 	//var/ngrabbed=0
 	//Note on June 27, 2019. Apparently it IS being used, so... go wild!
 	for(var/atom/X in orange(grav_pull, src))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+		if(islightingoverlay(X))//since there's one on every turf
 			continue
 		if (current_size > 11 && X.type == /turf/unsimulated/wall/supermatter) // galaxy end ongoing
 			continue
@@ -757,7 +757,7 @@ var/list/global_singularity_pool
 
 /obj/machinery/singularity/deadchat_controlled/proc/eat_no_pull() //Copied from proc/eat() and altered
 	for(var/atom/X in orange(consume_range, src))
-		if(X.type == /atom/movable/lighting_overlay)
+		if(islightingoverlay(X))
 			continue
 		if(current_size > 11 && X.type == /turf/unsimulated/wall/supermatter)
 			continue

@@ -75,7 +75,7 @@
 	var/l_color = "#FFFFFF"
 	var/lastdir = null
 	var/lastLASTdir = null
-	
+
 /obj/structure/bed/chair/vehicle/lightcycle/Destroy()
 	if(summoning_rod)
 		summoning_rod.icon_state = initial(summoning_rod.icon_state)
@@ -128,7 +128,7 @@
 		if(last_ribbon)
 			last_ribbon.erase()
 	qdel(src)
-	
+
 
 /obj/structure/bed/chair/vehicle/lightcycle/proc/trigger_movement()
 	while(occupant)
@@ -284,8 +284,7 @@
 	name = "light cycle wreckage"
 	desc = "Awaiting garbage collection."
 
-	
+
 /obj/item/key/lightcycle/temp_ribbons
 	desc = "A strange-looking glowing rod. It's apparently activated by cracking it."
 	delete_ribbons_on_dismount = 1
-	

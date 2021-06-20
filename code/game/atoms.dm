@@ -52,6 +52,16 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	// Lighting flags
+	var/lighting_flags
+	var/moody_light_type
+
+/atom/New()
+	. = ..()
+	// Light effects
+	if (moody_light_type || lighting_flags & IS_LIGHT_SOURCE)
+		set_light()
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -164,6 +174,12 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	if(light_obj)
+		qdel(light_obj)
+		light_obj = null
+	if(shadow_obj)
+		qdel(shadow_obj)
+		shadow_obj = null
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)

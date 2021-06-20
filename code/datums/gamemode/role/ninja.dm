@@ -184,12 +184,12 @@
 				if(locate(/obj/machinery/door/airlock) in T)
 					continue
 				if(get_dist(H,T)<5)
-					if(T.get_lumcount() * 10 > 2)
+					if(T.get_lumcount() > 2)
 						close_bright_grounds += T
 					else
 						close_dark_grounds += T
 					continue
-				if(T.get_lumcount() * 10 > 2)
+				if(T.get_lumcount() > 2)
 					bright_grounds += T
 					continue
 
