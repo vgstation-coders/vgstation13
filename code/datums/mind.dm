@@ -201,7 +201,7 @@
 		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
 		return
 
-	var/out = {"<TITLE>Items bought for [name][(current&&(current.real_name!=name))?" (as [current.real_name])":""]</TITLE><BR>"}
+	var/out = {"<TITLE>Role purchase log</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<BR>Assigned job: [assigned_role]<hr>"}
 	for(var/datum/role/R in antag_roles)
 		if(R.uplink_items_bought)
 			out += "Uplink items bought:<BR>"
@@ -223,7 +223,7 @@
 				for(var/entry in W.potions_bought)
 					out += "[entry]<BR>"
 	
-	usr << browse(out, "window=role_panel[src];size=500x300")
+	usr << browse(out, "window=role_purchase_log[src];size=500x300")
 
 /datum/mind/proc/get_faction_list()
 	var/list/all_factions = list()
