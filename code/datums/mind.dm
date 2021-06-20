@@ -188,8 +188,9 @@
 			var/datum/role/R = antag_roles[role]
 			out += R.GetMemory(src, TRUE)//allowing edits
 
+	out += "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a>"
 	var/antaglen = antag_roles.len
-	out += antaglen ? "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a><br><a href='?src=\ref[src];show_purchases=1'>(show purchase log)</a>" : ""
+	out += antaglen ? "<br><a href='?src=\ref[src];show_purchases=1'>(show purchase log)</a>" : ""
 
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
