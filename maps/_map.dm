@@ -105,36 +105,6 @@
 
 	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
 
-	var/list/holodeck_rooms = list(
-		"Basketball Court",
-		"Beach",
-		"Boxing Court",
-		"Checkers Court",
-		"Chess Board",
-		"Desert",
-		"Dining Hall",
-		"Empty Court",
-		"Firing Range",
-		"Gym",
-		"Laser Tag Arena",
-		"Maze",
-		"Meeting Hall",
-		"Panic Bunker",
-		"Picnic Area",
-		"Snow Field",
-		"Theatre",
-		"Thunderdome Court",
-		"Wild Ride",
-		"Zoo"
-	)
-	var/list/emagged_holodeck_rooms = list(
-		"Begin Atmospheric Burn Simulation" = "Ensure the holodeck is empty before testing.",
-		"Begin Wildlife Simulation" = "Ensure the holodeck is empty before testing.",
-		"Club Catnip" = "Ensure the holodeck is empty before testing.",
-		"Combat Arena" = "Safety protocols disabled - weapons are not for recreation.",
-		"Medieval Tournament" = "Safety protocols disabled - weapons are not for recreation.",
-	)
-
 /datum/map/New()
 	. = ..()
 
