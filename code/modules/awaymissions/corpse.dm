@@ -83,6 +83,10 @@
 		M.dna.unique_enzymes = md5(M.real_name)
 
 		M.dna.SetUIState(DNA_UI_GENDER, M.gender != MALE, 1)
+		if (M.gender == FEMALE && prob(95))//We're in the future and women can get beards through genetics, so we're keeping a small chance of dead bearded women
+			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, M.species.name)
+			var/beard = species_facial_hair.Find("Shaved")
+			M.dna.SetUIValueRange(DNA_UI_BEARD_STYLE, beard, species_facial_hair.len,1)
 
 		M.dna.UpdateUI()
 		M.UpdateAppearance()
