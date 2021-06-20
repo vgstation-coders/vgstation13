@@ -296,8 +296,14 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
 		var/turf/T = get_step(target_turf, d)
-		if(CheckOcclusion(T) && (T in view(light_range, src)))
-			blocking_dirs |= d
+		if(CheckOcclusion(T))
+			// Two different smoothing regimes depending on direct illumination or illumination though a shadow.
+			var/list/view_turf = view(src)
+			if (target_turf in view_turf)
+				if (T in view_turf)
+					blocking_dirs |= d
+			else
+				blocking_dirs |= d
 
 	// The "edge" of the light, with images consisting of directional sprites from wall_lighting.dmi "pushed" in the correct direction.
 	var/image/I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))

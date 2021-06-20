@@ -61,7 +61,6 @@
 	for(var/thing in affecting_turfs)
 		var/turf/T = thing
 		T.lumcount = -1
-		T.affecting_lights -= src
 	affecting_turfs.Cut()
 	. = ..()
 
