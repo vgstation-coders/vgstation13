@@ -202,16 +202,16 @@
 		return
 
 	var/out = {"<TITLE>Role purchase log</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<BR>Assigned job: [assigned_role]<hr>"}
+	if(current.spell_list)
+		out += "Known spells:<BR>"
+		for(var/spell/S in current.spell_list)
+			var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+			out += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
 	for(var/datum/role/R in antag_roles)
 		if(R.uplink_items_bought)
 			out += "Uplink items bought:<BR>"
 			for(var/entry in R.uplink_items_bought)
 				out += "[entry]<BR>"
-		if(current.spell_list)
-			out += "Known spells:<BR>"
-			for(var/spell/S in current.spell_list)
-				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-				out += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
 		if(istype(R,/datum/role/wizard))
 			var/datum/role/wizard/W = R
 			if(W.artifacts_bought)
