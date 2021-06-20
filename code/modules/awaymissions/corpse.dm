@@ -24,7 +24,7 @@
 	var/corpsepocket1 = null
 	var/corpsepocket2 = null
 	var/corpseback = null
-	var/corpseid = 0     //Just set to 1 if you want them to have an ID
+	var/corpseid = 0	 //Just set to 1 if you want them to have an ID
 	var/corpseidjob = null // Needs to be in quotes, such as "Clown" or "Chef." This just determines what the ID reads as, not their access
 	var/corpseidaccess = null //This is for access. See access.dm for which jobs give what access. Again, put in quotes. Use "Captain" if you want it to be all access.
 	var/corpseidicon = null //For setting it to be a gold, silver, centcomm etc ID
@@ -234,6 +234,7 @@
 	corpseid = 1
 	corpseidjob = "Operative"
 	corpseidaccess = "Syndicate"
+	corpseidicon = "syndie"
 
 
 
@@ -250,23 +251,24 @@
 	corpseid = 1
 	corpseidjob = "Operative"
 	corpseidaccess = "Syndicate"
-
+	corpseidicon = "syndie"
 
 
 /obj/effect/landmark/corpse/syndicateexec
-    name = "Syndicate Executive"
-    corpseuniform = /obj/item/clothing/under/syndicate/executive
-    corpsesuit = /obj/item/clothing/suit/storage/syndicateexec
-    corpseshoes = /obj/item/clothing/shoes/swat
-    corpsehelmet = /obj/item/clothing/head/beret/centcom
-    corpseid = 1
-    corpseidjob = "Executive"
-    corpseidaccess = "Syndicate"
+	name = "Syndicate Executive"
+	corpseuniform = /obj/item/clothing/under/syndicate/executive
+	corpsesuit = /obj/item/clothing/suit/storage/syndicateexec
+	corpseshoes = /obj/item/clothing/shoes/swat
+	corpsehelmet = /obj/item/clothing/head/beret/centcom
+	corpseid = 1
+	corpseidjob = "Executive"
+	corpseidaccess = "Syndicate"
+	corpseidicon = "syndie"
 
 /obj/effect/landmark/corpse/syndicateexec/space
-    corpsesuit =  /obj/item/clothing/suit/space/rig/syndicate_elite
-    corpsemask = /obj/item/clothing/mask/gas/syndicate
-    corpseback = /obj/item/weapon/tank/jetpack/oxygen
+	corpsesuit =  /obj/item/clothing/suit/space/rig/syndicate_elite
+	corpsemask = /obj/item/clothing/mask/gas/syndicate
+	corpseback = /obj/item/weapon/tank/jetpack/oxygen
 
 
 
@@ -344,6 +346,7 @@
 	corpseid = 1
 	corpseidjob = "Cargo Technician"
 	corpseidaccess = "Cargo Technician"
+	corpseidicon = "cargo"
 
 /obj/effect/landmark/corpse/miner
 	name = "Shaft Miner"
@@ -355,6 +358,7 @@
 	corpseid = 1
 	corpseidjob = "Shaft Miner"
 	corpseidaccess = "Shaft Miner"
+	corpseidicon = "cargo"
 
 /obj/effect/landmark/corpse/miner/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/mining
@@ -371,6 +375,7 @@
 	corpseid = 1
 	corpseidjob = "Clown"
 	corpseidaccess = "Clown"
+	corpseidicon = "clown"
 
 /obj/effect/landmark/corpse/mime
 	name = "Mime"
@@ -383,6 +388,7 @@
 	corpseid = 1
 	corpseidjob = "Mime"
 	corpseidaccess = "Mime"
+	corpseidicon = "mime"
 
 /obj/effect/landmark/corpse/janitor
 	name = "Janitor"
@@ -422,6 +428,7 @@
 	corpseid = 1
 	corpseidjob = "Internal Affairs Agent"
 	corpseidaccess = "Internal Affairs Agent"
+	corpseidicon = "centcom"
 
 /obj/effect/landmark/corpse/internalaffairsagent/lawyer
 	name = "Lawyer"
@@ -429,6 +436,7 @@
 	corpsesuit = /obj/item/clothing/suit/storage/lawyer/bluejacket
 	corpseshoes = /obj/item/clothing/shoes/leather
 	corpseidjob = "Lawyer"
+	corpseidicon = "centcom"
 
 /obj/effect/landmark/corpse/internalaffairsagent/bridgeofficer
 	name = "Bridge Officer"
@@ -437,6 +445,7 @@
 	corpsegloves = /obj/item/clothing/gloves/white
 	corpsehelmet = /obj/item/clothing/head/soft/bridgeofficer
 	corpseidjob = "Bridge Officer"
+	corpseidicon = "centcom"
 
 /obj/effect/landmark/corpse/chaplain
 	name = "Chaplain"
@@ -460,6 +469,7 @@
 	corpseid = 1
 	corpseidjob = "Quartermaster"
 	corpseidaccess = "Quartermaster"
+	corpseidicon = "cargo"
 
 /obj/effect/landmark/corpse/doctor
 	name = "Doctor"
@@ -472,6 +482,7 @@
 	corpseid = 1
 	corpseidjob = "Medical Doctor"
 	corpseidaccess = "Medical Doctor"
+	corpseidicon = "medical"
 
 /obj/effect/landmark/corpse/surgeon
 	name = "Surgeon"
@@ -484,6 +495,7 @@
 	corpseid = 1
 	corpseidjob = "Surgeon"
 	corpseidaccess = "Medical Doctor"
+	corpseidicon = "medical"
 
 /obj/effect/landmark/corpse/chemist
 	name = "Chemist"
@@ -495,6 +507,7 @@
 	corpseid = 1
 	corpseidjob = "Chemist"
 	corpseidaccess = "Chemist"
+	corpseidicon = "medical"
 
 /obj/effect/landmark/corpse/geneticist
 	name = "Geneticist"
@@ -507,6 +520,7 @@
 	corpseid = 1
 	corpseidjob = "Geneticist"
 	corpseidaccess = "Geneticist"
+	corpseidicon = "medical"
 
 /obj/effect/landmark/corpse/virologist
 	name = "Virologist"
@@ -520,6 +534,7 @@
 	corpseid = 1
 	corpseidjob = "Geneticist"
 	corpseidaccess = "Geneticist"
+	corpseidicon = "medical"
 
 /obj/effect/landmark/corpse/paramedic
 	name = "Paramedic"
@@ -533,6 +548,7 @@
 	corpseid = 1
 	corpseidjob = "Paramedic"
 	corpseidaccess = "Paramedic"
+	corpseidicon = "medical"
 
 /obj/effect/landmark/corpse/paramedic/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/medical
@@ -550,6 +566,7 @@
 	corpseid = 1
 	corpseidjob = "Chief Medical Officer"
 	corpseidaccess = "Chief Medical Officer"
+	corpseidicon = "CMO"
 
 /obj/effect/landmark/corpse/engineer
 	name = "Engineer"
@@ -563,6 +580,7 @@
 	corpseid = 1
 	corpseidjob = "Station Engineer"
 	corpseidaccess = "Station Engineer"
+	corpseidicon = "engineering"
 
 /obj/effect/landmark/corpse/engineer/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/engineer
@@ -580,6 +598,7 @@
 	corpseid = 1
 	corpseidjob = "Atmospheric Technician"
 	corpseidaccess = "Atmospheric Technician"
+	corpseidicon = "engineering"
 
 /obj/effect/landmark/corpse/atmostech/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/atmos
@@ -597,6 +616,7 @@
 	corpseid = 1
 	corpseidjob = "Mechanic"
 	corpseidaccess = "Mechanic"
+	corpseidicon = "engineering"
 
 /obj/effect/landmark/corpse/chiefengineer
 	name = "Chief Engineer"
@@ -610,6 +630,7 @@
 	corpseid = 1
 	corpseidjob = "Chief Engineer"
 	corpseidaccess = "Chief Engineer"
+	corpseidicon = "CE"
 
 /obj/effect/landmark/corpse/chiefengineer/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/engineer/elite
@@ -626,6 +647,7 @@
 	corpseid = 1
 	corpseidjob = "Scientist"
 	corpseidaccess = "Scientist"
+	corpseidicon = "research"
 
 /obj/effect/landmark/corpse/xenoarchaeologist
 	name = "Xenoarchaeologist"
@@ -637,6 +659,7 @@
 	corpseid = 1
 	corpseidjob = "Xenoarchaeologist"
 	corpseidaccess = "Scientist"
+	corpseidicon = "research"
 
 /obj/effect/landmark/corpse/xenoarchaeologist/space
 	corpsesuit = /obj/item/clothing/suit/space/anomaly
@@ -663,6 +686,7 @@
 	corpseid = 1
 	corpseidjob = "Roboticist"
 	corpseidaccess = "Roboticist"
+	corpseidicon = "research"
 
 /obj/effect/landmark/corpse/researchdirector
 	name = "Research Director"
@@ -674,6 +698,7 @@
 	corpseid = 1
 	corpseidjob = "Research Director"
 	corpseidaccess = "Research Director"
+	corpseidicon = "RD"
 
 /obj/effect/landmark/corpse/securityofficer
 	name = "Security Officer"
@@ -690,6 +715,7 @@
 	corpseid = 1
 	corpseidjob = "Security Officer"
 	corpseidaccess = "Security Officer"
+	corpseidicon = "security"
 
 /obj/effect/landmark/corpse/securityofficer/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/security
@@ -709,6 +735,7 @@
 	corpseid = 1
 	corpseidjob = "Detective"
 	corpseidaccess = "Detective"
+	corpseidicon = "security"
 
 /obj/effect/landmark/corpse/headofsecurity
 	name = "Head of Security"
@@ -725,6 +752,7 @@
 	corpseid = 1
 	corpseidjob = "Head of Security"
 	corpseidaccess = "Head of Security"
+	corpseidicon = "HoS"
 
 /obj/effect/landmark/corpse/headofsecurity/rig
 	corpsesuit = /obj/item/clothing/suit/space/rig/security
@@ -743,6 +771,7 @@
 	corpseid = 1
 	corpseidjob = "Head of Personnel"
 	corpseidaccess = "Head of Personnel"
+	corpseidicon = "silver"
 
 /obj/effect/landmark/corpse/captain
 	name = "Captain"
@@ -759,6 +788,7 @@
 	corpseid = 1
 	corpseidjob = "Captain"
 	corpseidaccess = "Captain"
+	corpseidicon = "gold"
 
 /obj/effect/landmark/corpse/captain/rig
 	corpseback = /obj/item/weapon/tank/oxygen
@@ -774,6 +804,7 @@
 	corpseidjob = "Waifu"
 	corpseidaccess = "Assistant"
 	corpsegender = G_FEMALE
+	corpseidicon = "clown"
 
 /obj/effect/landmark/corpse/waifu/secfu //bodybag sold separately.
 	corpseuniform = /obj/item/clothing/under/securityskirt/elite
@@ -791,6 +822,7 @@
 	corpseidjob = "Waifu"
 	corpseidaccess = "Security Officer"
 	corpsegender = G_FEMALE
+	corpseidicon = "clown"
 
 /////////////////Non-Crew (but still playable at roundstart)//////////////////////
 
@@ -806,6 +838,7 @@
 	corpseid = 1
 	corpseidjob = "Trader"
 	corpseidaccess = "Trader"
+	corpseidicon = "trader"
 
 /obj/effect/landmark/corpse/trader/powergaming
 	corpsehelmet = /obj/item/clothing/head/helmet/siren
@@ -842,6 +875,7 @@
 	corpseid = 1
 	corpseidjob = "Bridge Officer"
 	corpseidaccess = "Captain"
+	corpseidicon = "centcom"
 
 /obj/effect/landmark/corpse/commander
 	name = "Commander"
@@ -857,6 +891,7 @@
 	corpseid = 1
 	corpseidjob = "Commander"
 	corpseidaccess = "Captain"
+	corpseidicon = "gold"
 
 /////////////////Simple-Mob Corpses/////////////////////
 
