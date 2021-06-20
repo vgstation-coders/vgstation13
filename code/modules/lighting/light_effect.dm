@@ -133,6 +133,6 @@
 	. = TRUE
 	for (var/vector/step in steps)
 		current_turf = current_turf.get_translated_turf(step)
-		if (CheckOcclusion(current_turf))
+		if (CHECK_OCCLUSION(current_turf))
 			. = FALSE
 			return

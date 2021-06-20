@@ -154,7 +154,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		if(light_type == LIGHT_DIRECTIONAL)
 			var/turf/next_turf = get_step(src, dir)
 			for(var/i = 1 to 3)
-				if(CheckOcclusion(next_turf))
+				if(CHECK_OCCLUSION(next_turf))
 					I.icon_state = "[I.icon_state]_[i]"
 					break
 				next_turf = get_step(next_turf, dir)
@@ -168,7 +168,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		return
 
 	for(var/turf/T in view(light_range, src))
-		if(CheckOcclusion(T))
+		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
 
 /atom/movable/light/proc/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
@@ -296,7 +296,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
 		var/turf/T = get_step(target_turf, d)
-		if(CheckOcclusion(T))
+		if(CHECK_OCCLUSION(T))
 			blocking_dirs |= d
 
 	// The "edge" of the light, with images consisting of directional sprites from wall_lighting.dmi "pushed" in the correct direction.
