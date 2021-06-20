@@ -189,8 +189,7 @@
 			out += R.GetMemory(src, TRUE)//allowing edits
 
 	out += "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a>"
-	var/antaglen = antag_roles.len
-	out += antaglen ? "<br><a href='?src=\ref[src];show_purchases=1'>(show purchase log)</a>" : ""
+	out += antag_roles.len ? "<br><a href='?src=\ref[src];show_purchases=1'>(show purchase log)</a>" : ""
 
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
@@ -202,7 +201,7 @@
 		return
 
 	var/out = {"<TITLE>Role purchase log</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<BR>Assigned job: [assigned_role]<hr>"}
-	if(current.spell_list)
+	if(current.spell_list && current.spell_list.len)
 		out += "Known spells:<BR>"
 		for(var/spell/S in current.spell_list)
 			var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
