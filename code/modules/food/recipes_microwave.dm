@@ -850,7 +850,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/buchedenoel
 
 /datum/recipe/popoutcake
-	reagents = list("milk" = 15, "flour" = 45)
+	reagents = list(MILK = 15, FLOUR = 45)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
@@ -2948,3 +2948,14 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/dionaroast
+
+/datum/recipe/gourmongercube
+	reagents = list(PLASMA = 10, NUTRIMENT = 50)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger
