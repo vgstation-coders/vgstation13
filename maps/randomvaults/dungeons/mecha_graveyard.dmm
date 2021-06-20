@@ -1,127 +1,2569 @@
-"aa" = (/turf/space/transit/north,/area)
-"ab" = (/turf/space/transit/west,/area)
-"ac" = (/turf/space/transit/east,/area)
-"ad" = (/obj/effect/step_trigger/thrower/north{affect_ghosts = 1; name = "north_shuttle"; tiles = 0},/turf/space/transit/north,/area)
-"ae" = (/turf/space,/area)
-"af" = (/obj/effect/step_trigger/thrower/west{affect_ghosts = 1; name = "west_shuttle"; tiles = 0},/turf/space/transit/west,/area)
-"ag" = (/obj/effect/step_trigger/thrower/east{affect_ghosts = 1; name = "east_shuttle"; tiles = 0},/turf/space/transit/east,/area)
-"ah" = (/turf/simulated/wall,/area/vault/mecha_graveyard)
-"ai" = (/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aj" = (/turf/unsimulated/mineral/random,/area/vault/mecha_graveyard)
-"ak" = (/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"al" = (/obj/item/stack/rods,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"am" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"an" = (/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"ao" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"ap" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aq" = (/obj/effect/decal/cleanable/blood/gibs/robot/limb,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"ar" = (/obj/item/stack/ore/glass,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"as" = (/obj/effect/decal/mecha_wreckage/graveyard_ripley,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"at" = (/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"au" = (/obj/item/stack/ore/iron,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"av" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"aw" = (/obj/effect/decal/mecha_wreckage/graveyard_ripley,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"ax" = (/obj/structure/girder,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"ay" = (/obj/structure/girder,/obj/item/stack/rods,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"az" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 1},/area/vault/mecha_graveyard)
-"aA" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 5},/area/vault/mecha_graveyard)
-"aB" = (/obj/effect/decal/cleanable/blood/gibs/robot/down,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aC" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"aD" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
-"aE" = (/obj/machinery/status_display{pixel_y = 32},/obj/effect/decal/mecha_wreckage/durand,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"aF" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 4},/area/vault/mecha_graveyard)
-"aG" = (/obj/item/stack/sheet/plasteel,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aH" = (/obj/effect/decal/mecha_wreckage/marauder,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aI" = (/obj/item/mecha_parts/mecha_equipment/repair_droid,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"aJ" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"aK" = (/obj/item/stack/ore/slag,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aL" = (/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aM" = (/obj/effect/decal/mecha_wreckage/durand,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aN" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 10},/area/vault/mecha_graveyard)
-"aO" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"},/area/vault/mecha_graveyard)
-"aP" = (/obj/effect/decal/mecha_wreckage/gygax,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"aQ" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aR" = (/obj/structure/grille/broken,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aS" = (/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"aT" = (/obj/effect/decal/cleanable/blood/oil,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"aU" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/item/weapon/broken_pipe_tomahawk,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 4},/area/vault/mecha_graveyard)
-"aV" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/unsimulated/floor/asteroid/plating,/area/vault/mecha_graveyard)
-"aW" = (/obj/effect/decal/cleanable/blood/gibs/robot/up,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aX" = (/obj/item/broken_device,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"aY" = (/obj/structure/hanging_lantern{dir = 4},/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 9},/area/vault/mecha_graveyard)
-"aZ" = (/obj/structure/reagent_dispensers/fueltank,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"ba" = (/obj/structure/ore_box,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 8},/area/vault/mecha_graveyard)
-"bb" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/mecha_graveyard)
-"bc" = (/obj/effect/decal/remains/human,/turf/simulated/floor/airless{icon_state = "damaged5"},/area/vault/mecha_graveyard)
-"bd" = (/obj/effect/decal/mecha_wreckage/graveyard_clarke,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"be" = (/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/vault/mecha_graveyard)
-"bf" = (/obj/effect/decal/cleanable/blood/gibs/robot/limb,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bg" = (/obj/item/weapon/broken_bottle,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 8},/area/vault/mecha_graveyard)
-"bh" = (/obj/machinery/door/airlock/external,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bi" = (/obj/item/tool/screwdriver,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bj" = (/obj/machinery/mech_bay_recharge_port,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bk" = (/obj/machinery/mech_bay_recharge_floor{icon_state = "recharge_floor_asteroid"},/turf/simulated/floor,/area/vault/mecha_graveyard)
-"bl" = (/obj/machinery/computer/mech_bay_power_console,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bm" = (/obj/item/clothing/glasses/scanner/meson,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"bn" = (/obj/structure/girder/displaced,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
-"bo" = (/obj/item/clothing/shoes/galoshes/broken,/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/vault/mecha_graveyard)
-"bp" = (/obj/machinery/mineral/unloading_machine,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bq" = (/obj/machinery/conveyor{dir = 4; id_tag = "mining_west"},/obj/item/stack/sheet/plasteel,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"br" = (/obj/machinery/conveyor{dir = 4; id_tag = "mining_west"},/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bs" = (/obj/item/weapon/shard,/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/vault/mecha_graveyard)
-"bt" = (/obj/item/weapon/shard{icon_state = "small"},/turf/space,/area)
-"bu" = (/obj/structure/lattice,/turf/space,/area)
-"bv" = (/obj/docking_port/destination/vault/mecha_graveyard{dir = 2},/obj/machinery/door/airlock/external,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
-"bw" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/space,/area)
-"bx" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/item/weapon/shard,/turf/space,/area)
-"by" = (/obj/structure/lattice,/obj/structure/girder,/turf/space,/area)
-"bz" = (/obj/effect/step_trigger/thrower{affect_ghosts = 1; name = "thrower_throwdown"; stopper = 0; tiles = 0},/turf/space/transit/south,/area)
-"bA" = (/turf/space/transit/south,/area)
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aa" = (
+/turf/space/transit/north,
+/area)
+"ab" = (
+/turf/space/transit/west,
+/area)
+"ac" = (
+/turf/space/transit/east,
+/area)
+"ad" = (
+/obj/effect/step_trigger/thrower/north{
+	affect_ghosts = 1;
+	name = "north_shuttle";
+	tiles = 0
+	},
+/turf/space/transit/north,
+/area)
+"ae" = (
+/turf/space,
+/area)
+"af" = (
+/obj/effect/step_trigger/thrower/west{
+	affect_ghosts = 1;
+	name = "west_shuttle";
+	tiles = 0
+	},
+/turf/space/transit/west,
+/area)
+"ag" = (
+/obj/effect/step_trigger/thrower/east{
+	affect_ghosts = 1;
+	name = "east_shuttle";
+	tiles = 0
+	},
+/turf/space/transit/east,
+/area)
+"ah" = (
+/turf/simulated/wall,
+/area/vault/mecha_graveyard)
+"ai" = (
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aj" = (
+/turf/unsimulated/mineral/random,
+/area/vault/mecha_graveyard)
+"ak" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"al" = (
+/obj/item/stack/rods,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"am" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"an" = (
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"ao" = (
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"ap" = (
+/obj/structure/hanging_lantern{
+	dir = 1
+	},
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aq" = (
+/obj/effect/decal/cleanable/blood/gibs/robot/limb,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"ar" = (
+/obj/item/stack/ore/glass,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"as" = (
+/obj/effect/decal/mecha_wreckage/graveyard_ripley,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"at" = (
+/obj/effect/decal/cleanable/soot,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"au" = (
+/obj/item/stack/ore/iron,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"av" = (
+/obj/structure/hanging_lantern,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"aw" = (
+/obj/effect/decal/mecha_wreckage/graveyard_ripley,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"ax" = (
+/obj/structure/girder,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"ay" = (
+/obj/structure/girder,
+/obj/item/stack/rods,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"az" = (
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"aA" = (
+/turf/unsimulated/floor/airless{
+	dir = 5;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"aB" = (
+/obj/effect/decal/cleanable/blood/gibs/robot/down,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aC" = (
+/obj/effect/decal/cleanable/ash,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"aD" = (
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/unsimulated/floor/asteroid{
+	icon_state = "asteroid_dug"
+	},
+/area/vault/mecha_graveyard)
+"aE" = (
+/obj/machinery/status_display{
+	pixel_y = 32
+	},
+/obj/effect/decal/mecha_wreckage/durand,
+/obj/effect/decal/cleanable/soot,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"aF" = (
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"aG" = (
+/obj/item/stack/sheet/plasteel,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aH" = (
+/obj/effect/decal/mecha_wreckage/marauder,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aI" = (
+/obj/item/mecha_parts/mecha_equipment/repair_droid,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"aJ" = (
+/obj/effect/decal/cleanable/blood/gibs/robot,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"aK" = (
+/obj/item/stack/ore/slag,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aL" = (
+/obj/effect/decal/cleanable/soot,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aM" = (
+/obj/effect/decal/mecha_wreckage/durand,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aN" = (
+/turf/unsimulated/floor/airless{
+	dir = 10;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"aO" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"aP" = (
+/obj/effect/decal/mecha_wreckage/gygax,
+/obj/effect/decal/cleanable/soot,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"aQ" = (
+/obj/effect/decal/cleanable/ash,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aR" = (
+/obj/structure/grille/broken,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aS" = (
+/obj/structure/hanging_lantern{
+	dir = 8
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"aT" = (
+/obj/effect/decal/cleanable/blood/oil,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"aU" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/obj/item/weapon/broken_pipe_tomahawk,
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"aV" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/unsimulated/floor/asteroid/plating,
+/area/vault/mecha_graveyard)
+"aW" = (
+/obj/effect/decal/cleanable/blood/gibs/robot/up,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aX" = (
+/obj/item/broken_device,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"aY" = (
+/obj/structure/hanging_lantern{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	dir = 9;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"aZ" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"ba" = (
+/obj/structure/ore_box,
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"bb" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced,
+/obj/structure/window/full/reinforced,
+/turf/simulated/floor/plating,
+/area/vault/mecha_graveyard)
+"bc" = (
+/obj/effect/decal/remains/human,
+/turf/simulated/floor/airless{
+	icon_state = "damaged5"
+	},
+/area/vault/mecha_graveyard)
+"bd" = (
+/obj/effect/decal/mecha_wreckage/graveyard_clarke,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"be" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/vault/mecha_graveyard)
+"bf" = (
+/obj/effect/decal/cleanable/blood/gibs/robot/limb,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bg" = (
+/obj/item/weapon/broken_bottle,
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area/vault/mecha_graveyard)
+"bh" = (
+/obj/machinery/door/airlock/external,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bi" = (
+/obj/item/tool/screwdriver,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bj" = (
+/obj/machinery/mech_bay_recharge_port,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bk" = (
+/obj/machinery/mech_bay_recharge_floor{
+	icon_state = "recharge_floor_asteroid"
+	},
+/turf/simulated/floor,
+/area/vault/mecha_graveyard)
+"bl" = (
+/obj/machinery/computer/mech_bay_power_console,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bm" = (
+/obj/item/clothing/glasses/scanner/meson,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"bn" = (
+/obj/structure/girder/displaced,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mecha_graveyard)
+"bo" = (
+/obj/item/clothing/shoes/galoshes/broken,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/vault/mecha_graveyard)
+"bp" = (
+/obj/machinery/mineral/unloading_machine{
+	dir = 4
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bq" = (
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "mining_west"
+	},
+/obj/item/stack/sheet/plasteel,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"br" = (
+/obj/machinery/conveyor{
+	dir = 4;
+	id_tag = "mining_west"
+	},
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bs" = (
+/obj/item/weapon/shard,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidplating"
+	},
+/area/vault/mecha_graveyard)
+"bt" = (
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/turf/space,
+/area)
+"bu" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"bv" = (
+/obj/docking_port/destination/vault/mecha_graveyard{
+	dir = 2
+	},
+/obj/machinery/door/airlock/external,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/mecha_graveyard)
+"bw" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/turf/space,
+/area)
+"bx" = (
+/obj/item/weapon/shard{
+	icon_state = "medium"
+	},
+/obj/item/weapon/shard,
+/turf/space,
+/area)
+"by" = (
+/obj/structure/lattice,
+/obj/structure/girder,
+/turf/space,
+/area)
+"bz" = (
+/obj/effect/step_trigger/thrower{
+	affect_ghosts = 1;
+	name = "thrower_throwdown";
+	stopper = 0;
+	tiles = 0
+	},
+/turf/space/transit/south,
+/area)
+"bA" = (
+/turf/space/transit/south,
+/area)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-abababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacac
-ababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacac
-ababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacac
-abababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacac
-ababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacacacac
-ababababababababaaaaaaaaadadadadadadadadadadadadadadadadadadadadadadadaaaaaaaaacacacacacac
-ababababababababababadadadaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeadadaaaaacacacacacacac
-abababababababababafafaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeagagacacacacacacacac
-ababababababababafafaeaeaeaeaeaeaeahahahaiaiaiaiajajajajaeaeaeaeaeaeaeaeagagacacacacacacac
-ababababababababafaeaeaeaeaeaeaeaeakakahaiaiaiaiajajajajaeaeaeaeaeaeaeaeaeagacacacacacacac
-abababababababafafaeaeaeaeaeaeaealaiamahaiaiaianajajajajajajajajaeaeaeaeaeagacacacacacacac
-abababababababafaeaeaeaeaeaeaeaiaiaiaoapaiaiananananajajajajajajaeaeaeaeaeagacacacacacacac
-abababababababafaeaeaeaeaeaiaiaiaqaiaiaiaiaiararanananasajajajajajajajaeaeagacacacacacacac
-abababababababafaeaeaeaeaiaiaiaiaiaiaialaiaianaranatanauanananananaiaiaeaeagacacacacacacac
-abababababababafaeaeaeaeaiaiakaiaiaiaiaiaiajanauauanararanananauanaiaiaeaeagacacacacacacac
-abababababababafaeaeaeaiaiaiakavaiaiaiaiajajajajawauararanauanaraoaiaiaeaeagacacacacacacac
-ababababababafafaeaeaeaxaiayahahahazaAaBaiajajajajauanaCanaDanananananaeaeagacacacacacacac
-ababababababafaeaeaeaiaiazaiaEakakakaFaiaiaGajajajanaianarananananananaeaeagacacacacacacac
-ababababababafaeaeaeaHaiamaIakakaJamaFalaiakajajaKaiaiaiaLaiaiaianajaeaeaeagacacacacacacac
-ababababababafaeaeaeaiaMaNaOakakaPakaFaiaiaiaiaQaiaiaiaiaiaiaiaiajajaeaeaeagacacacacacacac
-ababababababafaeaeaeaeaiaiaRahahaSaTaUaVaiaWakaXaiaYahahahaiaiaiaeaeaeaeaeagacacacacacacac
-ababababababafaeaeaeaeaeaxaialaGaxaZaiaialaiakaiakbabbbcbdaiaeaeaeaeaeaeaeagacacacacacacac
-ababababababafaeaeaeaeaeaeaiaiaiahbebebebeaiakaibfbgbhaTbiaeaeaeaeaeaeaeaeagacacacacacacac
-ababababababafaeaeaeaeaeaeaeaeaeaebebjbkblaiakaibmaNbnalaoaeaeaeaeaeaeaeaeagacacacacacacac
-ababababababafafaeaeaeaeaeaeaeaeaebebobebeakaWaibpbqbrbnaiaeaeaeaeaeaeaeaeagacacacacacacac
-abababababababafafaeaeaeaeaeaeaeaeaeaealaiakaiaiaibebsaebtaeaeaeaeaeaeaeaeagacacacacacacac
-ababababababababafaeaeaeaeaeaeaeaeaebuaiahahbvahaxbububwaebxaeaeaeaeaeaeaeagacacacacacacac
-ababababababababafafaeaeaeaeaeaeaeaebuaeaeaeaeaeaeaebuaebtaeaeaeaeaeaeagagagacacacacacacac
-abababababababababafaeaeaeaeaeaeaeaebuaeaeaeaeaeaeaebuaeaeaeaeaeaeaeaeagacacacacacacacacac
-abababababababababafaeaeaeaeaeaeaeaebuaeaeaeaeaeaeaebyaeaeaeaeaeaeagagagacacacacacacacacac
-abababababababababafafaeaeaeaeaeaeaebuaeaeaeaeaeaeaebuaeaeaeaebzbzagacacacacacacacacacacac
-ababababababababababafaeaeaeaeaeaeaebyaeaeaeaeaeaeaebuaeaeaeaebzbAbAbAacacacacacacacacacac
-ababababababababababafafaeaeaeaeaeaebubuaeaeaeaeaebubuaeaeaeaebzbAbAbAacacacacacacacacacac
-abababababababababababbzaeaeaeaeaeaeaebuaeaeaeaeaebuaeaeaeaebzbzbAbAbAbAacacacacacacacacac
-ababababababababababbAbzbzbzaeaeaeaeaebububybubububuaeaeaeaebzbAbAbAbAbAacacacacacacacacac
-ababababababababababbAbAbAbzbzaeaeaeaeaeaeaeaeaeaeaeaeaeaebzbzbAbAbAbAbAbAbAacacacacacacac
-ababababababababababbAbAbAbAbzbzbzbzbzbzbzbzbzbzbzbzbzbzbzbzbAbAbAbAbAbAbAbAacacacacacacac
-abababababababbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAacacacacacacac
-ababababababbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAacacacacacac
-ababababababbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAacacacac
-abababbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAacacacac
-abababbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAacac
-abababbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAac
-bAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbAbA
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+"}
+(2,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+"}
+(3,1,1) = {"
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+"}
+(4,1,1) = {"
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+bA
+bA
+bA
+"}
+(5,1,1) = {"
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+bA
+bA
+bA
+"}
+(6,1,1) = {"
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+bA
+bA
+bA
+"}
+(7,1,1) = {"
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+af
+af
+af
+af
+af
+af
+af
+af
+af
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(8,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+ab
+ab
+ab
+ab
+af
+af
+af
+af
+af
+af
+af
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+af
+af
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(9,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+ab
+af
+af
+af
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+af
+af
+af
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(10,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ab
+af
+af
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+af
+af
+af
+af
+ab
+ab
+ab
+ab
+ab
+ab
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(11,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+af
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ai
+aH
+ai
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+af
+af
+af
+ab
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(12,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ai
+ax
+ai
+ai
+aM
+ai
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+af
+bz
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(13,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ad
+ae
+ae
+ae
+ae
+ae
+ae
+ai
+ai
+ai
+ai
+az
+am
+aN
+ai
+ax
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(14,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+ae
+ae
+ai
+ai
+ai
+ai
+ay
+ai
+aI
+aO
+aR
+ai
+ai
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(15,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+ae
+ae
+ai
+ai
+ak
+ak
+ah
+aE
+ak
+ak
+ah
+al
+ai
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(16,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+ae
+ai
+ai
+ai
+ai
+av
+ah
+ak
+ak
+ak
+ah
+aG
+ai
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(17,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+al
+ai
+aq
+ai
+ai
+ai
+ah
+ak
+aJ
+aP
+aS
+ax
+ah
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(18,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ah
+ak
+ai
+ai
+ai
+ai
+ai
+ai
+az
+ak
+am
+ak
+aT
+aZ
+be
+be
+be
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(19,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ah
+ak
+am
+ao
+ai
+ai
+ai
+ai
+aA
+aF
+aF
+aF
+aU
+ai
+be
+bj
+bo
+ae
+bu
+bu
+bu
+bu
+bu
+by
+bu
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(20,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ah
+ah
+ah
+ap
+ai
+al
+ai
+ai
+aB
+ai
+al
+ai
+aV
+ai
+be
+bk
+be
+al
+ai
+ae
+ae
+ae
+ae
+ae
+bu
+bu
+bu
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(21,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ai
+ai
+ai
+ai
+ai
+ai
+ai
+aj
+ai
+ai
+ai
+ai
+ai
+al
+be
+bl
+be
+ai
+ah
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bu
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(22,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ai
+ai
+ai
+ai
+ai
+ai
+aj
+aj
+aj
+aG
+ak
+ai
+aW
+ai
+ai
+ai
+ak
+ak
+ah
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+by
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(23,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ai
+ai
+ai
+an
+ar
+an
+an
+aj
+aj
+aj
+aj
+ai
+ak
+ak
+ak
+ak
+aW
+ai
+bv
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bu
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(24,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ai
+ai
+an
+an
+ar
+ar
+au
+aj
+aj
+aj
+aj
+aQ
+aX
+ai
+ai
+ai
+ai
+ai
+ah
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bu
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(25,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+aj
+aj
+aj
+an
+an
+an
+au
+aw
+aj
+aj
+aK
+ai
+ai
+ak
+bf
+bm
+bp
+ai
+ax
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bu
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(26,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+aj
+aj
+aj
+an
+an
+at
+an
+au
+au
+an
+ai
+ai
+aY
+ba
+bg
+aN
+bq
+be
+bu
+ae
+ae
+ae
+ae
+ae
+bu
+bu
+bu
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(27,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+aj
+aj
+aj
+aj
+an
+an
+ar
+ar
+an
+ai
+ai
+ai
+ah
+bb
+bh
+bn
+br
+bs
+bu
+bu
+bu
+by
+bu
+bu
+bu
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(28,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+aj
+aj
+aj
+aj
+as
+au
+ar
+ar
+aC
+an
+ai
+ai
+ah
+bc
+aT
+al
+bn
+ae
+bw
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(29,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+aj
+aj
+aj
+an
+an
+an
+an
+ar
+aL
+ai
+ah
+bd
+bi
+ao
+ai
+bt
+ae
+bt
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(30,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+aj
+aj
+aj
+an
+an
+au
+aD
+an
+ai
+ai
+ai
+ai
+ae
+ae
+ae
+ae
+bx
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(31,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+aj
+aj
+aj
+an
+an
+an
+an
+an
+ai
+ai
+ai
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bz
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(32,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+aj
+aj
+aj
+an
+au
+ar
+an
+an
+ai
+ai
+ai
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bz
+bz
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(33,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+ae
+ae
+aj
+an
+an
+ao
+an
+an
+an
+aj
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+bz
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(34,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ae
+ae
+ae
+ae
+ae
+ae
+aj
+ai
+ai
+ai
+an
+an
+aj
+aj
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ag
+ag
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(35,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ad
+ae
+ae
+ae
+ae
+ae
+aj
+ai
+ai
+ai
+an
+an
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ag
+ac
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(36,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ad
+ag
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ag
+ag
+ag
+ac
+ac
+ac
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(37,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ag
+ag
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ae
+ag
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(38,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ac
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ag
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(39,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+bA
+bA
+bA
+bA
+"}
+(40,1,1) = {"
+aa
+aa
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+bA
+bA
+bA
+"}
+(41,1,1) = {"
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+bA
+bA
+bA
+"}
+(42,1,1) = {"
+aa
+aa
+aa
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+bA
+"}
+(43,1,1) = {"
+aa
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+bA
+"}
+(44,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
+bA
+"}
+(45,1,1) = {"
+aa
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+ac
+bA
 "}
