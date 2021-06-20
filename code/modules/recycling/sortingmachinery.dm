@@ -149,15 +149,25 @@
 	//testing("[src] FUCKING BUMPED BY \a [AM]")
 
 	if(istype(AM, /obj))
-		var/obj/O = AM
-		O.forceMove(src)
+		receive_atom(AM)
 	else if(istype(AM, /mob))
-		var/mob/M = AM
-		M.forceMove(src)
-	//src.flush() This spams audio like fucking crazy.
-	// Instead, we queue up for the next process.
-	doFlushIn=5 // Ticks, adjust if delay is too long or too short
+		receive_atom(AM)
+
+
+/obj/machinery/disposal/deliveryChute/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item))
+		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
+			return FALSE
+		receive_atom(AM)
+		return TRUE
+	return FALSE
+
+
+/obj/machinery/disposal/deliveryChute/proc/receive_atom(var/atom/movable/AM)
+	AM.forceMove(src)
+	doFlushIn = 5
 	num_contents++
+
 
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1

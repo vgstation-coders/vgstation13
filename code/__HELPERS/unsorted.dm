@@ -1167,6 +1167,35 @@ proc/get_mob_with_client_list()
 		else
 			return zone
 
+/proc/limb_define_to_part_define(var/zone)
+	switch(zone)
+		if (LIMB_HEAD)
+			return HEAD
+		if (LIMB_CHEST)
+			return UPPER_TORSO
+		if (LIMB_GROIN)
+			return LOWER_TORSO
+		if (TARGET_MOUTH)
+			return MOUTH
+		if (TARGET_EYES)
+			return EYES
+		if (LIMB_RIGHT_HAND)
+			return HAND_RIGHT
+		if (LIMB_LEFT_HAND)
+			return HAND_LEFT
+		if (LIMB_LEFT_ARM)
+			return ARM_LEFT
+		if (LIMB_RIGHT_ARM)
+			return ARM_RIGHT
+		if (LIMB_LEFT_LEG)
+			return LEG_LEFT
+		if (LIMB_RIGHT_LEG)
+			return LEG_RIGHT
+		if (LIMB_LEFT_FOOT)
+			return FOOT_LEFT
+		if (LIMB_RIGHT_FOOT)
+			return FOOT_RIGHT
+
 /*
 	get_holder_at_turf_level(): Similar to get_turf(), will return the "highest up" holder of this atom, excluding the turf.
 	Example: A fork inside a box inside a locker will return the locker. Essentially, get_just_before_turf().
@@ -1234,19 +1263,30 @@ var/global/list/common_tools = list(
 	)
 
 //check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M, mob/U)
+/proc/can_operate(mob/living/carbon/M, mob/U, var/obj/item/tool) // tool arg only needed if you actually intend to perform surgery (and not for instance, just do an autopsy)
 	if(U == M)
 		return 0
+	var/too_bad = FALSE
 	if((ishuman(M) || isslime(M)) && M.lying)
 		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
 			return 1
 		if(iscultist(U) && locate(/obj/structure/cult/altar, M.loc))
 			return 1
-		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
-			return 1
+		if(locate(/obj/structure/bed/roller, M.loc))
+			too_bad = TRUE
+			if (prob(75))
+				return 1
 		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
-		if(T && !T.flipped && prob(66))
+		if(T && !T.flipped)
+			too_bad = TRUE
+			if (prob(66))
+				return 1
+
+	//if we failed when trying to use a table or roller bed, let's at least check if it was a valid surgery step
+	if (too_bad && tool)
+		if (do_surgery(M,U,tool,SURGERY_SUCCESS_NEVER))
 			return 1
+
 	return 0
 
 /*

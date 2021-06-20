@@ -15,6 +15,12 @@
 			/datum/storeitem/menu2,
 			/datum/storeitem/diy_soda,
 			),
+		"ZAM!" = list(
+			/datum/storeitem/zambiscuits,
+			/datum/storeitem/zamdinner3,
+			/datum/storeitem/zamdinner2,
+			/datum/storeitem/zamdinner1,
+			),
 		"Tools" = list(
 			/datum/storeitem/pen,
 			/datum/storeitem/wrapping_paper,

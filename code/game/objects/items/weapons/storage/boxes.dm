@@ -1521,3 +1521,17 @@
 	new /obj/item/weapon/cell/high(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker/large/plasma(src)
 	..()
+
+/obj/item/weapon/storage/box/dorf
+	name = "dwarven equipment box"
+	desc = "Contains all the things a hardened dwarf needs to survive."
+	icon_state = "dorf"
+
+/obj/item/weapon/storage/box/dorf/New()
+	..()
+	new /obj/item/weapon/pickaxe(src)
+	new /obj/item/clothing/glasses/scanner/meson(src)
+	new /obj/item/blueprints/construction_permit(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)

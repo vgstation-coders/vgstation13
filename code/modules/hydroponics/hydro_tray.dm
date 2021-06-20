@@ -56,6 +56,9 @@
 	// Seed details/line data.
 	var/datum/seed/seed = null // The currently planted seed
 
+/obj/machinery/portable_atmospherics/hydroponics/loose
+	anchored = FALSE
+
 /obj/machinery/portable_atmospherics/hydroponics/New()
 	..()
 	create_reagents(200)

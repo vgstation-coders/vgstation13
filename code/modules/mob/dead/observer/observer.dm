@@ -388,7 +388,11 @@ Works together with spawning an observer, noted above.
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
 		ghost.attack_log += src.attack_log // Keep our attack logs.
-		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
+		var/timetocheck = timeofdeath
+		if (isbrain(src))
+			var/mob/living/carbon/brain/brainmob = src
+			timetocheck = brainmob.timeofhostdeath
+		ghost.timeofdeath = timetocheck //BS12 EDIT
 		ghost.key = key
 		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
 			ghost.verbs -= /mob/dead/observer/verb/toggle_antagHUD	// Poor guys, don't know what they are missing!

@@ -70,7 +70,7 @@
 
 	if(reagents.has_reagent(NUKA_COLA))
 		. *= 0.8
-	if(reagents.has_reagent(MEDCORES))
+	if(reagents.has_any_reagents(CORES))
 		. *= MAGBOOTS_SLOWDOWN_HIGH //Chemical magboots, imagine.
 
 	if(isslimeperson(src))

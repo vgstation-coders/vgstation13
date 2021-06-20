@@ -122,10 +122,15 @@ var/global/list/rnd_machines = list()
 				if (materials.storage[matID] == 0) // No materials of this type
 					continue
 				var/datum/material/M = materials.getMaterial(matID)
-				var/obj/item/stack/sheet/sheet = new M.sheettype(src.loc)
+				var/obj/item/stack/sheet/sheet = new M.sheettype(loc)
 				if(sheet)
 					var/available_num_sheets = round(materials.storage[matID]/sheet.perunit)
 					if(available_num_sheets>0)
+						while (available_num_sheets > MAX_SHEET_STACK_AMOUNT)
+							available_num_sheets -= MAX_SHEET_STACK_AMOUNT
+							var/obj/item/stack/sheet/bonus_sheet = new M.sheettype(loc)
+							bonus_sheet.amount = MAX_SHEET_STACK_AMOUNT
+							materials.removeAmount(matID, MAX_SHEET_STACK_AMOUNT * sheet.perunit)
 						sheet.amount = available_num_sheets
 						materials.removeAmount(matID, sheet.amount * sheet.perunit)
 					else

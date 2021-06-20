@@ -200,6 +200,33 @@
 	cost = 60
 
 /////////////////////////////
+// ZAM! (Grey Food)
+/////////////////////////////
+/datum/storeitem/zambiscuits
+	name = "Zam Biscuits"
+	desc = "All biscuits are fresh from mothership labs. Do not share with human friends."
+	typepath = /obj/item/weapon/storage/pill_bottle/zambiscuits
+	cost = 40
+
+/datum/storeitem/zamdinner3
+	name = "Zam Spider Slider Delight"
+	desc = "The elimination of an infestation has created a surplus of spider meat. Do not share with human friends."
+	typepath = /obj/item/weapon/reagent_containers/food/snacks/zamdinner3
+	cost = 50
+
+/datum/storeitem/zamdinner2
+	name = "Zam Mothership Stew"
+	desc = "This old stew from mothership vats is very nutricious to slurp and burp! Do not share with human friends."
+	typepath = /obj/item/weapon/reagent_containers/food/snacks/zamdinner2
+	cost = 60
+
+/datum/storeitem/zamdinner1
+	name = "Zam Steak and Nettles"
+	desc = "This imitation of human steak has received good marks from test subjects. Do not share with human friends."
+	typepath = /obj/item/weapon/reagent_containers/food/snacks/zamdinner1
+	cost = 70
+
+/////////////////////////////
 // Holiday Special Items!
 /////////////////////////////
 /datum/storeitem/valentinechocolatebar
