@@ -1263,19 +1263,30 @@ var/global/list/common_tools = list(
 	)
 
 //check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M, mob/U)
+/proc/can_operate(mob/living/carbon/M, mob/U, var/obj/item/tool) // tool arg only needed if you actually intend to perform surgery (and not for instance, just do an autopsy)
 	if(U == M)
 		return 0
+	var/too_bad = FALSE
 	if((ishuman(M) || isslime(M)) && M.lying)
 		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
 			return 1
 		if(iscultist(U) && locate(/obj/structure/cult/altar, M.loc))
 			return 1
-		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
-			return 1
+		if(locate(/obj/structure/bed/roller, M.loc))
+			too_bad = TRUE
+			if (prob(75))
+				return 1
 		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
-		if(T && !T.flipped && prob(66))
+		if(T && !T.flipped)
+			too_bad = TRUE
+			if (prob(66))
+				return 1
+
+	//if we failed when trying to use a table or roller bed, let's at least check if it was a valid surgery step
+	if (too_bad && tool)
+		if (do_surgery(M,U,tool,SURGERY_SUCCESS_NEVER))
 			return 1
+
 	return 0
 
 /*
