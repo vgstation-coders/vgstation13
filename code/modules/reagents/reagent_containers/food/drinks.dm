@@ -131,6 +131,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		//The reagents in the bottle splash all over the target, thanks for the idea Nodrak
 		if(src.reagents)
@@ -173,6 +174,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		if(reagents.total_volume)
 			if (ishuman(M))

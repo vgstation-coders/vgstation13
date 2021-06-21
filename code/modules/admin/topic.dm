@@ -3972,6 +3972,35 @@
 				for(var/i = 1 to choice)
 					world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("togglerunescapepvp")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RSPVP")
+				runescape_pvp = !runescape_pvp
+				if(runescape_pvp)
+					message_admins("[key_name_admin(usr)] has enabled Maint-Only PvP.")
+					log_admin("[key_name_admin(usr)] has enabled Maint-Only PvP.")
+					for (var/mob/player in player_list)
+						to_chat(player, "<span class='userdanger'>WARNING: Wilderness mode is now enabled; players can only harm one another in maintenance areas!</span>")
+				else
+					message_admins("[key_name_admin(usr)] has disabled  Maint-Only PvP.")
+					log_admin("[key_name_admin(usr)] has disabled Maint-Only PvP.")
+					for (var/mob/player in player_list)
+						to_chat(player, "<span class='userdanger'>WARNING: Wilderness mode is now disabled; players can only harm one another anywhere!</span>")
+			if("togglerunescapeskull")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RSSKL")
+				runescape_skull_display = !runescape_skull_display
+				if(runescape_skull_display)
+					message_admins("[key_name_admin(usr)] has enabled Skull icons appearing over aggressors.")
+					log_admin("[key_name_admin(usr)] has enabled Skull icon appearing over aggressors.")
+				else
+					message_admins("[key_name_admin(usr)] has disabled Skull icon appearing over aggressors.")
+					log_admin("[key_name_admin(usr)] has disabled Skull icon appearing over aggressors.")
+					if (ticker)
+						for (var/entry in ticker.runescape_skulls)
+							var/datum/runescape_skull_data/the_data = ticker.runescape_skulls[entry]
+							ticker.runescape_skulls -= entry
+							qdel(the_data)
 			if("massbomber")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBM")

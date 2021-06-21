@@ -1073,6 +1073,7 @@ Use this proc preferably at the end of an equipment loadout
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
+				M.assaulted_by(usr, TRUE)
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -2119,6 +2120,12 @@ mob/proc/on_foot()
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if (runescape_pvp)
+		var/area/A = get_area(src)
+		if (!istype(A, /area/maintenance) && !is_type_in_list(A,non_standard_maint_areas))
+			to_chat(src, "<span class='danger'>You must enter maintenance to attack other players!</span>")
+			return TRUE
+
 	if(status_flags & UNPACIFIABLE)
 		return FALSE
 

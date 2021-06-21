@@ -169,6 +169,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	if(inuse)
 		return 0

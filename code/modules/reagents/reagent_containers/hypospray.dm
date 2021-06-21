@@ -70,6 +70,7 @@
 				M.LAssailant = null
 			else
 				M.LAssailant = user
+				M.assaulted_by(user)
 
 			var/trans = reagents.trans_to(M, amount_per_transfer_from_this)
 			to_chat(user, "<span class='notice'>[trans] units injected. [reagents.total_volume] units remaining in [src].</span>")

@@ -160,6 +160,7 @@
 			src.LAssailant = null
 		else
 			src.LAssailant = M
+			assaulted_by(M)
 
 /*
 	Ear and eye protection

@@ -79,6 +79,7 @@
 		LAssailant = null
 	else
 		LAssailant = M
+		assaulted_by(M)
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
 	return
 
@@ -176,6 +177,7 @@
 		LAssailant = null
 	else
 		LAssailant = M
+		assaulted_by(M)
 	log_attack("[src.name] ([src.ckey]) kicked by [M.name] ([M.ckey])")
 
 /mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)

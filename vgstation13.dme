@@ -2488,6 +2488,7 @@
 #include "code\modules\research\xenoarchaeology\tools\tools_excdrill.dm"
 #include "code\modules\research\xenoarchaeology\tools\tools_locater.dm"
 #include "code\modules\research\xenoarchaeology\tools\tools_pickaxe.dm"
+#include "code\modules\runescape\runescape_pvp.dm"
 #include "code\modules\scripting\Errors.dm"
 #include "code\modules\scripting\IDE.dm"
 #include "code\modules\scripting\Options.dm"

@@ -29,6 +29,8 @@ var/datum/controller/gameticker/ticker
 	var/datum/religion/chap_rel 			// Official religion of chappy
 	var/list/datum/religion/religions = list() // Religion(s) in the game
 
+	var/list/runescape_skulls = list() // Keeping track of the runescape skulls that appear over mobs when enabled
+
 	var/random_players = 0 	// if set to nonzero, ALL players who latejoin or declare-ready join will have random appearances/genders
 
 	var/hardcore_mode = 0	//If set to nonzero, hardcore mode is enabled (current hardcore mode features: damage from hunger)
@@ -442,6 +444,12 @@ var/datum/controller/gameticker/ticker
 	if(world.time > nanocoins_lastchange)
 		nanocoins_lastchange = world.time + rand(3000,15000)
 		nanocoins_rates = (rand(1,30))/10
+
+	//runescape skull updates
+	if (runescape_skull_display)
+		for (var/entry in runescape_skulls)
+			var/datum/runescape_skull_data/the_data = runescape_skulls[entry]
+			the_data.process()
 
 	/*emergency_shuttle.process()*/
 	watchdog.check_for_update()

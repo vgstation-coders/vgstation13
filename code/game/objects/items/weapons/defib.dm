@@ -120,6 +120,7 @@
 			target.LAssailant = null
 		else
 			target.LAssailant = user
+			target.assaulted_by(user)
 	playsound(src,'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()
