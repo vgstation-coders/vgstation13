@@ -564,3 +564,20 @@
 		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
 	else
 		..()
+
+///////////////////////////////////////////////////////////
+
+/obj/item/weapon/coin/pomf
+	material="pomf"
+	name = "pomf coin"
+	desc = "A platinum coin featuring the effigy of a white chicken. Few know of its true value. Fewer still can make use of it."
+	icon_state = "coin_pomf"
+	credits = 2525
+	siemens_coefficient = 1
+	melt_temperature=1768+T0C
+	force = 4
+	throwforce = 4
+
+/obj/item/pomf_egg
+
+///////////////////////////////////////////////////////////
