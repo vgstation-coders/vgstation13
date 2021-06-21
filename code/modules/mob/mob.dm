@@ -1487,6 +1487,8 @@ Use this proc preferably at the end of an equipment loadout
 				for(var/atom/A in listed_turf)
 					if(!A.mouse_opacity && !A.name)
 						continue
+					if (istype(A, /atom/movable/light))
+						continue
 					if(A.invisibility > see_invisible)
 						continue
 					statpanel(listed_turf.name, null, A)
