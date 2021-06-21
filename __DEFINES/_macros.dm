@@ -334,6 +334,9 @@
 
 #define isspace(A) (A.type == /area)
 
+// This might look silly. But it saves you up to 2 procs calls and a contents search. When you do thousands of it, it adds up.
+#define CHECK_OCCLUSION(T) (T?.blocks_light > 0 || CheckOcclusion(T))
+
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
 proc/get_space_area()
