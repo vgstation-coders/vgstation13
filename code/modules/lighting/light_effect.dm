@@ -89,8 +89,8 @@
 // Moves the light overlay to the holder's turf and updates bleeding values accordingly.
 /atom/movable/light/proc/follow_holder()
 	for (var/turf/T in view(src, light_range))
-		if (target_turf.shadow_atom == "\ref[src]")
-			target_turf.shadow_atom = null
+		if (T.shadow_atom == "\ref[src]")
+			T.shadow_atom = null
 	if(lighting_update_lights)
 		if(holder && holder.loc)
 			follow_holder_dir()
