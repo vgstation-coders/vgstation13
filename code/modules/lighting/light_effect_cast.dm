@@ -42,6 +42,7 @@ var/light_power_multiplier = 5
 		light_power = 1
 		if (light_type != LIGHT_DIRECTIONAL)
 			light_type = LIGHT_SOFT_FLICKER
+		light_swallowed--
 
 	if(light_type == LIGHT_SOFT_FLICKER)
 		alpha = initial(alpha)
@@ -305,6 +306,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
+	I.alpha = max(0, alpha - round(get_dist(target_turf, src)*25))
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
