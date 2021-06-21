@@ -578,6 +578,15 @@
 	force = 4
 	throwforce = 4
 
-/obj/item/pomf_egg
+/obj/item/weapon/coin/pumf
+	material="pumf"
+	name = "pumf coin"
+	desc = "A slade coin featuring the effigy of an angry chicken. If you come into its possession that means you've been a naughty boy, whatever you've been doing stop it."
+	icon_state = "coin_pumf"
+	credits = -2525 // that's probably a very bad idea but I want to see what happens
+	siemens_coefficient = 1
+	melt_temperature=9999+T0C
+	force = 4
+	throwforce = 4
 
 ///////////////////////////////////////////////////////////
