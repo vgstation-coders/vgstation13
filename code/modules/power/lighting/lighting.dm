@@ -473,6 +473,12 @@ var/global/list/obj/machinery/light/alllights = list()
 		M.do_attack_animation(src, M)
 		for(var/mob/O in viewers(src))
 			O.show_message("<span class='attack'>[M.name] smashed the light!</span>", 1, "You hear a tinkle of breaking glass", 2)
+		if (isspider(M))
+			var/datum/faction/spider_infestation/infestation = find_active_faction_by_type(/datum/faction/spider_infestation)
+			if (infestation)
+				var/datum/objective/spider/S = locate() in infestation.objective_holder.objectives
+				if (S)
+					S.broken_lights++
 		broken()
 	return
 // attack with hand - remove tube/bulb

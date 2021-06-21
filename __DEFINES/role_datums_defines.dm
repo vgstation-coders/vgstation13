@@ -18,6 +18,7 @@
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
 #define PLAGUEMICE "plague mice invasion"
+#define SPIDERINFESTATION "spider infestation"
 #define SPIDERCLAN "spider clan"
 #define XENOMORPH_HIVE "alien hivemind"
 //-------
@@ -68,6 +69,7 @@
 #define CATBEAST "loose catbeast"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
+#define GIANTSPIDER "giant spider"
 #define STREAMER "streamer"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"
