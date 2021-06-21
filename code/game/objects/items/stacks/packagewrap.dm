@@ -203,11 +203,15 @@
 	w_class = W_CLASS_GIANT //Someone was going to find a way to exploit this some day
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
+	var/syndie = 0 //so disposals can route syndie packages
 
 /obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()
 	w_class = W_CLASS_GIANT
-	if(istype(target,/obj/structure/closet/crate) || ishuman(target) || istype(target, /mob/living/simple_animal/hostile/mimic/crate))
+	if(ishuman(target))
+		icon_state = "deliverycrate"
+		syndie = 1
+	if(istype(target,/obj/structure/closet/crate) || istype(target, /mob/living/simple_animal/hostile/mimic/crate))
 		icon_state = "deliverycrate"
 	else if(istype(target,/obj/structure/vendomatpack))
 		icon_state = "deliverypack"
