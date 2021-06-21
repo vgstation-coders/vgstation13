@@ -120,7 +120,8 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 		data[GFI_DX_NAME] = to_sort:name
 	if (parent?.len)
 		data[GFI_DX_ATOM] = parent[GFI_DX_ATOM] // the first entry always has to be the top level atom so we can track things like mobs lying down or their position
-		data[GFI_DX_DIR] = parent[GFI_DX_DIR]
+		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connections use custom dirs
+			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
 			data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
 		//child layer always overwrites
