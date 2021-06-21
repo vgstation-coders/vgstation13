@@ -189,6 +189,8 @@ var/global/list/crate_mimic_disguises = list(\
 /mob/living/simple_animal/hostile/mimic/crate/attackby(obj/W, mob/user)
 	if(angry) //If we're angry - proceed as normal
 		return ..()
+	else if(istype(W, /obj/item/stack/package_wrap))
+		return
 	else
 		return attack_hand(user) //If we're hidden - attempt to open (same as a normal crate)
 

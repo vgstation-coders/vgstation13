@@ -26,6 +26,7 @@
 		)
 
 	var/list/wrappable_big_stuff = list(
+		/mob/living/simple_animal/hostile/mimic/crate,
 		/obj/structure/closet,
 		/obj/structure/vendomatpack,
 		/obj/structure/stackopacks
@@ -43,7 +44,7 @@
 		return 0//proceed as normally (put wrap in box)
 	else
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
-	
+
 
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
 	var/atom/movable/target = attacked
@@ -87,6 +88,10 @@
 		if(istype(target,/obj/structure/closet))
 			var/obj/structure/closet/C = target
 			if(C.opened)
+				return
+		if(istype(target, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/M = target
+			if(M.angry)
 				return
 		if(amount >= 3)
 			var/obj/item/P = new bigpath(get_turf(target.loc),target)
@@ -202,7 +207,7 @@
 /obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()
 	w_class = W_CLASS_GIANT
-	if(istype(target,/obj/structure/closet/crate) || ishuman(target))
+	if(istype(target,/obj/structure/closet/crate) || ishuman(target) || istype(target, /mob/living/simple_animal/hostile/mimic/crate))
 		icon_state = "deliverycrate"
 	else if(istype(target,/obj/structure/vendomatpack))
 		icon_state = "deliverypack"
