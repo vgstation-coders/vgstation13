@@ -293,6 +293,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 /atom/movable/light/proc/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	var/targ_dir = get_dir(target_turf, src)
+	if (!(target_turf in view(src)))
+		targ_dir = turn(targ_dir, 180) // Shortest path a light beam can take if directly blocked from sight
 	// CHECK: may not actually smoothout that well.
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
@@ -307,7 +309,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
 	I.alpha = 180
-	target_turf.shadow = "\ref[src]"
+	target_turf.shadow_atom = "\ref[src]"
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
@@ -344,7 +346,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	return FALSE
 
 /atom/movable/light/shadow/is_valid_turf(var/turf/target_turf)
-	return !(target_turf.shadow)
+	return !(target_turf.shadow_atom)
 
 // -- "moody lights", small glow overlays for APCs, etc
 // They do not cast shadows nor have to do a colour averaging.
