@@ -307,6 +307,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
 	I.alpha = 180
+	target_turf.shadow = "\ref[src]"
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
@@ -343,7 +344,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	return FALSE
 
 /atom/movable/light/shadow/is_valid_turf(var/turf/target_turf)
-	return TRUE
+	return !(target_turf.shadow)
 
 // -- "moody lights", small glow overlays for APCs, etc
 // They do not cast shadows nor have to do a colour averaging.
