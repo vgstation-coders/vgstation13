@@ -598,10 +598,6 @@
 			for(var/mob/living/M in O.contents)
 				if(istype(M, /mob/living/simple_animal/hostile/mimic/crate))
 					hasmob = 0
-				if (istype(O, /obj/item/delivery/large))
-					var/obj/item/delivery/large/P = O
-					if(P.syndie)
-						hasmob = 0
 				else if(M && M.stat != 2)
 					hasmob = 1
 
