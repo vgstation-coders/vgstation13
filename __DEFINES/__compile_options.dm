@@ -21,7 +21,7 @@
 // packedstation.dm
 //#define MAP_OVERRIDE 3
 // roidstation.dm
-#define MAP_OVERRIDE 4
+//#define MAP_OVERRIDE 4
 // test_box.dm:
 //#define MAP_OVERRIDE 5
 // test_tiny.dm:
