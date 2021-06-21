@@ -1430,6 +1430,17 @@ var/global/floorIsLava = 0
 	if(istype(H))
 		H.regenerate_icons()
 
+/datum/admins/proc/ashInvokedEmotions()
+	set category = "Admin"
+	set name = "Ash Invoked Emotions"
+	set desc = "Ashes all paper from the 'invoke emotions' wizard spell. Emergency porn purge."
+	if(alert("Are you sure you want to ash all invoked emotions?", "Invoked Emotions Panic", "Yes", "No") != "No")
+		var/numEmot = 0
+		for(var/obj/item/weapon/paper/emotion_invoker/EI in invoked_emotions)
+			EI.destroyEmotion()
+			numEmot++
+		message_admins("<span class='notice'>[numEmot] invoked emotions ashed.</span>")
+
 //
 //
 //ALL DONE
