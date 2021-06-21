@@ -407,7 +407,6 @@ var/datum/controller/gameticker/ticker
 						//No injection
 					else
 						data_core.manifest_inject(new_character)
-				player.FuckUpGenes(new_character)
 				qdel(player)
 
 

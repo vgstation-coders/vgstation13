@@ -347,14 +347,6 @@
 	mind.transfer_to(cluwne)
 	qdel(src)
 
-
-/mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
-	// 20% of players have bad genetic mutations.
-	if(prob(20))
-		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
-		if(prob(10)) // 10% of those have a good mut.
-			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
-
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -464,7 +456,6 @@
 			else
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
-			FuckUpGenes(character)
 		else
 			character.Robotize()
 	qdel(src)
