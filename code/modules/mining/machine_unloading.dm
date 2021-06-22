@@ -10,16 +10,14 @@
 	anchored = 1
 	allowed_types = list(/obj/item)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
-	max_moved = 100
+	max_moved = 25//as many items as conveyors can move
 	in_dir = EAST
 	out_dir = WEST
-	
-	var/selectable_types = list(/obj/item = "All items") //List of types we can move -kanef
-	var/item_moved = FALSE //Variable for loop detection, only used in chaining
+	var/list/to_unload = list()
 
-/obj/machinery/mineral/stacking_machine/New()
+/obj/machinery/mineral/unloading_machine/New()
 	. = ..()
-
+	overlays += image(icon, src, "unloader-overlay", ABOVE_OBJ_LAYER, dir)
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/unloading_machine,
 		/obj/item/weapon/stock_parts/matter_bin,
@@ -27,95 +25,152 @@
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/capacitor
 	)
-
 	RefreshParts()
+	in_dir = reverse_direction(dir)
+	out_dir = dir
 
 /obj/machinery/mineral/unloading_machine/RefreshParts()
-	var/T = 0
+	var/parts_rating = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
-		T += bin.rating
-	max_moved = initial(max_moved) * (T / 3)
-
-	T = 0 //reusing T here because muh RAM.
+		parts_rating += bin.rating
+	max_moved = round(initial(max_moved) * (parts_rating / 3))//up to 25 items unloaded per process by default. All the way up to 100.
+	parts_rating = 0
 	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
-		T += C.rating - 1
-	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
+		parts_rating += C.rating - 1
+	idle_power_usage = initial(idle_power_usage) - (parts_rating * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
-// Make conveyors work on these too, why not. Also helps with chaining these, and other fun stuff -kanef
-/obj/machinery/mineral/unloading_machine/conveyor_act(atom/movable/A)
-	if(A.anchored)
-		return FALSE
+/obj/machinery/mineral/unloading_machine/multitool_topic(mob/user, list/href_list, obj/item/device/multitool/P)
+	if("changedir" in href_list)
+		var/changingdir = text2num(href_list["changedir"])
+		changingdir = clamp(changingdir, 1, 2)
+		var/newdir = input("This will rotate the entire machine. Which direction should the ore [(changingdir == 1) ? "enter" : "exit"] from?", name, "North") as null|anything in list("North", "South", "East", "West")
+		if(!newdir)
+			return 1
+		newdir = text2dir(newdir)
+		if (changingdir == 1)
+			dir = reverse_direction(newdir)
+		else
+			dir = newdir
+		in_dir = reverse_direction(dir)
+		out_dir = dir
+		return MT_UPDATE
+	return ..()
 
-	if(is_type_in_list(A, allowed_types))
-		return check_move(A)
-	return FALSE
-
-// Mutual function for both conveyor and process(), as suggested by github user help-maint in a seperate PR to cut down on code -kanef
-/obj/machinery/mineral/unloading_machine/proc/check_move(atom/movable/A)
-	var/turf/out_T = get_step(src, out_dir)
-
-	// Check for another unloading machine in the output tile, can chain these!
-	for(var/atom/movable/AM in out_T)
-		if(istype(AM,/obj/machinery/mineral/unloading_machine))
-			var/obj/machinery/mineral/unloading_machine/UM = AM
-			// Consistent types throughout
-			// Also check to make sure the direction towards this unloader from another isn't its output dir
-			// Or hasn't moved the item in this chain before
-			// Or it causes horrible infinite loops that crash MC
-			if(!is_type_in_list(A,UM.allowed_types) || get_dir(UM,src) == UM.out_dir || UM.item_moved == TRUE)
-				// Give feedback to players that this thing cannot be moved right
-				visible_message("<span class='notice'>[src] beeps: Item could not be moved</span>")
-				// If check fails, reset the chain values to false
-				reset_move_check()
-				return FALSE
-			else
-				// Otherwise, it's true, this is important for later to detect loops
-				item_moved = TRUE
-		// Cryo pods, etc work too
-		if(AM.conveyor_act(A))
-			if (!item_moved)
-				reset_move_check()
-			return TRUE
-	// Call it again for good measure, now that conveyor and unloader checks are done, we don't need this variable outside of chaining
-	if (!item_moved)
-		reset_move_check()
-	// Otherwise, just act normal and put stuff on the other side
-	if(out_T.Cross(mover, out_T) && out_T.Enter(mover))
-		A.forceMove(out_T)
-		return TRUE
-	return FALSE
-
-// The process used to reset all "are we chaining a move?" checks on each item to false, when done or in failure -kanef
-/obj/machinery/mineral/unloading_machine/proc/reset_move_check()
-	// First, reset it here
-	item_moved = FALSE
-	// Then check the in_dir location for the one behind it in the chain
-	var/turf/in_T = get_step(src, in_dir)
-	for(var/atom/movable/AM in in_T)
-		// Did we find the unloader?
-		if(istype(AM,/obj/machinery/mineral/unloading_machine))
-			// If so, do the work
-			var/obj/machinery/mineral/unloading_machine/UM = AM
-			// Nothing to reset? Stop here
-			if (!UM.item_moved)
-				return
-			// Otherwise, reset each one recursively, follow logic above
-			UM.reset_move_check()
-	
-// Couldn't inherit most of this sadly -kanef
 /obj/machinery/mineral/unloading_machine/process()
-	var/turf/in_T = get_step(src, in_dir)
+	var/turf/T = get_step(src,reverse_direction(dir))
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover))
-		return
-
-	var/obj/structure/ore_box/BOX = locate(/obj/structure/ore_box, in_T.loc)
-	if (BOX)
-		BOX.dump_everything(in_T)
-	
-	for(var/atom/movable/A in in_T)
+	for(var/atom/movable/A in T)
 		if(A.anchored)
 			continue
-
 		if(is_type_in_list(A, allowed_types))
-			check_move(A)
+			playsound(loc, 'sound/machines/door_open.ogg',50,1)
+			new /obj/effect/unloader_grabber(loc, src)
+			break
+
+	for (var/obj/structure/ore_box/box_to_unload in T)
+		if (Adjacent(box_to_unload) && box_to_unload.stored_ores?.len)
+			playsound(loc, 'sound/machines/door_close.ogg',50,1)
+			flick("unloader-unload", src)
+			box_to_unload.dump_everything()
+
+	if (to_unload?.len)
+		unload()
+
+/obj/machinery/mineral/unloading_machine/proc/unload()
+	var/turf/T = get_step(src,dir)
+	var/i = 1
+	for (var/atom/movable/AM in to_unload)
+		to_unload -= AM
+		AM.forceMove(loc)
+		spawn(1)//smooth animation
+			step(AM,dir)
+		for(var/atom/movable/receptacle in T)
+			if (Adjacent(receptacle) && receptacle.conveyor_act(AM))
+				continue
+		i++
+		if (i >= max_moved)
+			break
+
+////////////////////////////Why have a separate effect do the grabbing you ask? Because it looks nice that's why.
+/obj/effect/unloader_grabber
+	icon = 'icons/obj/machines/mining_machines.dmi'
+	icon_state = "grabber-extend"
+	anchored = 1
+	density = 0
+	mouse_opacity = 0
+	var/obj/machinery/mineral/unloading_machine/unloader
+	var/image/stack_of_items
+
+/obj/effect/unloader_grabber/Destroy()
+	if (stack_of_items)
+		qdel(stack_of_items)
+		stack_of_items = null
+	unloader = null
+	if (loc)
+		for (var/atom/movable/AM in contents)
+			AM.forceMove(loc)
+	else
+		for (var/atom/movable/AM in contents)
+			qdel(AM)
+	..()
+
+/obj/effect/unloader_grabber/New(turf/loc, var/obj/machinery/mineral/unloading_machine/source)
+	if (!source)
+		qdel(src)
+		return
+
+	unloader = source
+	dir = unloader.dir
+	stack_of_items = image('icons/effects/effects.dmi',src,"nothing")
+
+	switch(dir)
+		if(NORTH)
+			pixel_y = -12
+		if(SOUTH)
+			pixel_y = 12
+		if(EAST)
+			pixel_x = -12
+		if(WEST)
+			pixel_x = 12
+
+	spawn(5)
+		if (gcDestroyed)
+			return
+		if (unloader.gcDestroyed)
+			qdel(src)
+			return
+		icon_state = "grabber-retract-3"
+		for (var/atom/movable/AM in get_step(src,reverse_direction(dir)))
+			if (Adjacent(AM) && is_type_in_list(AM, unloader.allowed_types))
+				stack_of_items.overlays +=  image(AM.icon,src,AM.icon_state)
+				AM.forceMove(src)
+
+		stack_of_items.pixel_x = pixel_x
+		stack_of_items.pixel_y = pixel_y
+		overlays += stack_of_items
+		sleep(1)
+		icon_state = "grabber-retract-2"
+		overlays.len = 0
+		if (pixel_x)
+			stack_of_items.pixel_x += -4 * sgn(pixel_x)
+		if (pixel_y)
+			stack_of_items.pixel_y += -4 * sgn(pixel_y)
+		overlays += stack_of_items
+		sleep(1)
+		icon_state = "grabber-retract-1"
+		overlays.len = 0
+		if (pixel_x)
+			stack_of_items.pixel_x += -4 * sgn(pixel_x)
+		if (pixel_y)
+			stack_of_items.pixel_y += -4 * sgn(pixel_y)
+		overlays += stack_of_items
+		sleep(1)
+		if (gcDestroyed)
+			return
+		if (unloader.gcDestroyed)
+			qdel(src)
+			return
+		for (var/atom/movable/AM in contents)
+			unloader.to_unload += AM
+			AM.forceMove(unloader)
+		qdel(src)

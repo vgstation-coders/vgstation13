@@ -235,6 +235,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		B.reagents.trans_to(M, inject_amount)
 

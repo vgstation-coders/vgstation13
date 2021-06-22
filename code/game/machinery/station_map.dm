@@ -227,7 +227,7 @@ var/list/station_holomaps = list()
 			if (prob(25))
 				set_broken()
 
-//Portable holomaps, currently AI/Borg/MoMMI only
+//Portable holomaps, used by Ghosts, Silicons, and PDA (using the Station Holomap app)
 /obj/item/device/station_map
 	name					= "portable station holomap"
 	desc					= "A virtual map of the surrounding station."

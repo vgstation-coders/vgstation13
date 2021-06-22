@@ -764,6 +764,8 @@ var/global/list/alcatraz_stuff = list(
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
+
 
 	if(!iscarbon(M))
 		return

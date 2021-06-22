@@ -53,8 +53,23 @@ var/list/exception = list(
 	/obj/machinery/atmospherics/unary/tank
 	)
 
-proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
+// returns a list with of the atom's own icon as well as its overlays, sorted by plane and layers, with the lowest being the first in the list and the highest objects being last
+/proc/plane_layer_sort(var/list/to_sort)
+	var/list/sorted = list()
+	for(var/current_atom in to_sort)
+		var/compare_index
+		for(compare_index = sorted.len, compare_index > 0, --compare_index) // count down from the length of the list to zero.
+			var/atom/compare_atom = sorted[compare_index] // compare to the next object down the list.
+			if (compare_atom:plane != FLOAT_PLANE && current_atom:plane == FLOAT_PLANE) // it's an overlay, always place it above
+				break
+			if(compare_atom.plane < current_atom:plane) // is this object below our current atom?
+				break
+			else if((compare_atom.plane == current_atom:plane) && (compare_atom.layer <= current_atom:layer))	// is this object below our current atom?
+				break
+		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
+	return sorted // return the sorted list.
 
+proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override cache, 0 = ignore cache	//exact = 1 means the atom won't be rotated if it's a lying mob/living/carbon
 
 	var/hash = "" // Hash of overlay combination
 
@@ -72,6 +87,7 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 		else
 			dir = 2//ugly fix for atoms showing invisible on pictures if they don't have a 4-directional icon_state sprite and their dir isn't south(2)
 
+
 	var/list/initialimage = list()
 	// Add the atom's icon itself
 	if(A.icon)
@@ -81,9 +97,7 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 		var/image/copy = image(icon=A.icon,icon_state=A.icon_state,layer=A.layer,dir=dir)
 		initialimage[copy] = A.layer
 
-	var/list/layers = plane_layer_sort(A.underlays)
-	layers += initialimage
-	layers += plane_layer_sort(A.overlays)
+	var/list/layers = plane_layer_sort(list(A))
 
 	if(cache!=0) // If cache is NOT disabled
 		// Create a hash value to represent this specific flattened icon
@@ -112,13 +126,24 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	var/addY1
 	var/addY2
 
+
 	for(var/I in layers)
+		if (!I:icon && !I:icon_state) // no icon nor icon_state? we're probably not meant to draw that. Possibly a blank icon while we're only interested in its overlays.
+			continue
+
 		var/layerdir = I:dir //We want overlays/underlays to use their correct directional icon state
 		if(I == A || !layerdir)
 			layerdir = dir
+		var/icon_file = I:icon
+		if (!icon_file)
+			icon_file = A.icon
+		var/icon_state = I:icon_state
+		if (!icon_state)
+			if (A.icon_state && I:icon && (A.icon_state in icon_states(I:icon)))
+				icon_state = A.icon_state
 
-		add = icon(I:icon || A.icon
-		         , I:icon_state || (I:icon && (A.icon_state in icon_states(I:icon)) && A.icon_state)
+		add = icon(icon_file
+		         , icon_state
 		         , layerdir
 		         , 1
 		         , 0)

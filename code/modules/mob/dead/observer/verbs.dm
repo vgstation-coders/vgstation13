@@ -320,13 +320,25 @@
 	//Ok the place is clear, now we need some blood
 	var/list/choices = list()
 	var/i = 1
+	var/writings_blood_amount = 0
+	var/turf/original_bloodsource
+
 	for(var/obj/effect/decal/cleanable/blood/B in range(1,T))
 		if(B.counts_as_blood)
-			if (istype(B,/obj/effect/decal/cleanable/blood/tracks))
+			if (istype(B,/obj/effect/decal/cleanable/blood/writing))//this prevents ghosts from making an infinite chain of messages
+				var/obj/effect/decal/cleanable/blood/writing/writings = B
+				if (writings.original_bloodsource && max(0,round(cheap_pythag(T.x - writings.original_bloodsource.x, T.y - writings.original_bloodsource.y))) <= writings.original_amount)
+					writings_blood_amount = writings.original_amount
+					original_bloodsource = writings.original_bloodsource
+					choices["[i] - [B] (color = [B.basecolor])"] = B
+			else if (istype(B,/obj/effect/decal/cleanable/blood/tracks))
 				var/obj/effect/decal/cleanable/blood/tracks/tracks = B
 				choices["[i] - [B] (color = [tracks.last_blood_color])"] = B
+				original_bloodsource = get_turf(B)
 			else
 				choices["[i] - [B] (color = [B.basecolor])"] = B
+				writings_blood_amount = B.amount
+				original_bloodsource = get_turf(B)
 		i++
 
 	if(!choices.len)
@@ -379,7 +391,11 @@
 	I.loc = null
 	qdel(I)
 
-	if(continue_drawing != "Yes" || !Adjacent(T) || !blood_source)
+	if(continue_drawing != "Yes" || !Adjacent(T))
+		return
+
+	if(blood_source.gcDestroyed)
+		to_chat(src, "<span class = 'warning'>The blood source you selected has been removed before you had time to finish your message.</span>")
 		return
 
 	//Finally writing our message
@@ -387,6 +403,8 @@
 	W.basecolor = doodle_color
 	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
 	W.add_hiddenprint(src)
+	W.original_amount = writings_blood_amount
+	W.original_bloodsource = original_bloodsource
 	W.visible_message("<span class='warning'>Invisible fingers crudely paint something in blood on \the [T]...</span>")
 	if(istype(blood_source.blood_DNA,/list))
 		W.blood_DNA |= blood_source.blood_DNA.Copy()

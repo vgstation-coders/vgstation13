@@ -62,7 +62,7 @@
 			M.Dizzy(150)
 			M.dizziness = 150
 		for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
-			M.paralysis += 2
+			M.AdjustParalysis(2)
 			M.dizziness += 10
 			M:slurring += 10
 			M.confused += 10
@@ -917,6 +917,7 @@ obj/item/projectile/bullet/suffocationbullet
 	icon_state = null
 	damage = 25
 	fire_sound = null
+	embed = 0
 
 /obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
 	if (..(target, blocked))

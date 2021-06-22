@@ -39,7 +39,7 @@ var/stacking_limit = 90
 	var/list/candidates = list()
 	var/list/current_rules = list()
 	var/list/executed_rules = list()
-	var/list/last_round_executed_rules = list()
+	var/list/previously_executed_rules = list()
 	var/list/rules_text = list()
 
 	var/list/living_players = list()
@@ -222,22 +222,29 @@ var/stacking_limit = 90
 
 	return 1
 
-/datum/gamemode/dynamic/proc/read_last_round_rulesets()
+/datum/gamemode/dynamic/proc/read_previous_rounds_rulesets()
+	previously_executed_rules = list(
+		"one_round_ago" = list(),
+		"two_rounds_ago" = list(),
+		"three_rounds_ago" = list()
+	)
 	var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/latest_dynamic_rulesets)
 	if(!length(data))
 		return
-	var/list/last_round_rulesets_text = data["latest_rulesets"]
-	if(!length(last_round_rulesets_text))
-		return
-	var/list/last_round_rulesets = list()
-	for(var/entry in last_round_rulesets_text)
-		var/entry_path = text2path(entry)
-		if(entry_path) // It's possible that a ruleset that existed last round doesn't exist anymore
-			last_round_rulesets += entry_path
-	last_round_executed_rules = last_round_rulesets
+
+	for (var/entries in data)
+		var/previous_rulesets_text = data[entries]
+		if(!length(previous_rulesets_text))
+			return
+		var/list/previous_rulesets = list()
+		for(var/entry in previous_rulesets_text)
+			var/entry_path = text2path(entry)
+			if(entry_path) // It's possible that a ruleset that existed last round doesn't exist anymore
+				previous_rulesets += entry_path
+		previously_executed_rules[entries] = previous_rulesets
 
 /datum/gamemode/dynamic/Setup()
-	read_last_round_rulesets()
+	read_previous_rounds_rulesets()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
@@ -302,6 +309,7 @@ var/stacking_limit = 90
 						return pick_delay(rule)
 
 					if (rule.execute())//this should never fail since ready() returned 1
+						rule.stillborn = IsRoundAboutToEnd()
 						executed_rules += rule
 						if (rule.persistent)
 							current_rules += rule
@@ -396,16 +404,9 @@ var/stacking_limit = 90
 
 	// Is THE LIST non-empty ?
 	if (candidate_rules.len > 0)
-		var/datum/dynamic_ruleset/roundstart/extended/stendo = (locate(/datum/dynamic_ruleset/roundstart/extended) in candidate_rules)
-		// eggstanded
-		if (stendo)
-			if (executing_roundstart_rule(stendo))
-				return 1
-			else
-				candidate_rules =- stendo
-
 		for (var/datum/dynamic_ruleset/roundstart/DR in candidate_rules)
 			executing_roundstart_rule(DR)
+		return 1
 	else
 		message_admins("DYNAMIC MODE: The mode failed to pick a first ruleset. The round will begin without any roles assigned.")
 		log_admin("DYNAMIC MODE: The mode failed to pick a first ruleset. The round will begin without any roles assigned.")
@@ -455,6 +456,7 @@ var/stacking_limit = 90
 
 	threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 	if (the_rule.execute())//this should never fail since ready() returned 1
+		the_rule.stillborn = IsRoundAboutToEnd()
 		executed_rules += the_rule
 		if (the_rule.persistent)
 			current_rules += the_rule
@@ -469,6 +471,7 @@ var/stacking_limit = 90
 		rule.candidates = player_list.Copy()
 		rule.trim_candidates()
 		if (rule.execute())//this should never fail since ready() returned 1
+			rule.stillborn = IsRoundAboutToEnd()
 			executed_rules += rule
 			if (rule.persistent)
 				current_rules += rule
@@ -487,6 +490,7 @@ var/stacking_limit = 90
 		threat_log += "[worldtime2text()]: Latejoin [latejoin_rule.name] spent [latejoin_rule.cost] (midround budget)"
 		dynamic_stats.measure_threat(threat)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
+			latejoin_rule.stillborn = IsRoundAboutToEnd()
 			var/mob/M = pick(latejoin_rule.assigned)
 			message_admins("DYNAMIC MODE: [key_name(M)] joined the station, and was selected by the <font size='3'>[latejoin_rule.name]</font> ruleset.")
 			log_admin("DYNAMIC MODE: [key_name(M)] joined the station, and was selected by the [latejoin_rule.name] ruleset.")
@@ -506,6 +510,7 @@ var/stacking_limit = 90
 		threat_log += "[worldtime2text()]: Midround [midround_rule.name] spent [midround_rule.cost] (midround budget)"
 		dynamic_stats.measure_threat(threat)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
+			midround_rule.stillborn = IsRoundAboutToEnd()
 			message_admins("DYNAMIC MODE: Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
 			log_admin("DYNAMIC MODE: Injecting some threats...[midround_rule.name]!")
 			dynamic_stats.successful_injection(midround_rule)
@@ -542,6 +547,7 @@ var/stacking_limit = 90
 			threat_log += "[worldtime2text()]: Forced rule [new_rule.name] spent [new_rule.cost]"
 			dynamic_stats.measure_threat(threat)
 			if (new_rule.execute())//this should never fail since ready() returned 1
+				new_rule.stillborn = IsRoundAboutToEnd()
 				message_admins("Making a call to a specific ruleset...<font size='3'>[new_rule.name]</font>!")
 				log_admin("Making a call to a specific ruleset...[new_rule.name]!")
 				executed_rules += new_rule
@@ -880,3 +886,7 @@ var/stacking_limit = 90
 			return
 
 	message_admins("The rule was accepted.")
+
+/datum/gamemode/dynamic/proc/update_stillborn_rulesets()
+	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
+		ruleset.stillborn = IsRoundAboutToEnd()

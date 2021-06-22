@@ -20,12 +20,10 @@
 	var/ai_completions = ""
 	for(var/mob/living/silicon/ai/ai in mob_list)
 		var/icon/flat = getFlatIcon(ai)
-		end_icons += flat
-		var/tempstate = end_icons.len
 		if(ai.stat != 2)
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
+			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
 		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
+			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
 		ai_completions += "<br>[ai.write_laws()]"
 
 		if (ai.connected_robots.len)
@@ -40,23 +38,18 @@
 		if(!robo)
 			continue
 		var/icon/flat = getFlatIcon(robo)
-		end_icons += flat
-		var/tempstate = end_icons.len
 		if (!robo.connected_ai)
 			if (robo.stat != 2)
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
+				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
 			else
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
+				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
 		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
+			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
 		ai_completions += "<br>[robo.write_laws()]"
 
 	for(var/mob/living/silicon/pai/pAI in mob_list)
-		var/icon/flat
-		flat = getFlatIcon(pAI)
-		end_icons += flat
-		var/tempstate = end_icons.len
-		ai_completions += {"<br><b><img src="logo_[tempstate].png"> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
+		var/icon/flat = getFlatIcon(pAI)
+		ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
 
 	if (ai_completions)
 		completions += "<h2>Silicons Laws</h2>"
@@ -685,18 +678,12 @@
 
 	round_end_info = dat
 	round_end_info_no_img = remove_images(dat)
-	last_scoreboard_images = list()
-	for(var/i = 1 to end_icons.len)
-		last_scoreboard_images += iconsouth2base64(end_icons[i])
 	log_game(round_end_info_no_img)
 	stat_collection.crew_score = score["crewscore"]
 
 /mob/proc/display_round_end_scoreboard()
 	if (!client)
 		return
-
-	for(var/i = 1 to end_icons.len)
-		src << browse_rsc(end_icons[i],"logo_[i].png")
 
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
 	popup.set_content(round_end_info)

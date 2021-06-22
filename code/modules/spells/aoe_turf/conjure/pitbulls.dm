@@ -15,7 +15,6 @@
 	invocation = "GR'T W'TH K'DS"
 	invocation_type = SpI_SHOUT
 	spell_flags = NEEDSCLOTHES
-	override_icon = 'icons/mob/animal.dmi'
 	hud_state = "pitbull"
 	cast_sound = 'sound/voice/pitbullbark.ogg'
 	quicken_price = Sp_BASE_PRICE

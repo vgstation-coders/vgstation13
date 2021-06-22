@@ -28,7 +28,6 @@ var/list/protected_global_vars = list(
 var/round_end_info = ""
 var/round_end_info_no_img = ""
 var/last_round_end_info = ""
-var/list/last_scoreboard_images = list()
 
 //List of ckeys that have de-adminned themselves during this round
 var/global/list/deadmins = list()
@@ -316,9 +315,6 @@ var/global/list/volunteer_gladiators = list()
 var/global/list/ready_gladiators = list()
 var/global/list/never_gladiators = list()
 
-//icons that appear on the Round End pop-up browser
-var/global/list/end_icons = list()
-
 var/global/list/arena_leaderboard = list()
 var/arena_rounds = 0
 var/arena_top_score = 0
@@ -434,3 +430,6 @@ var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit thi
 
 var/list/all_machines = list()
 var/list/machinery_rating_cache = list() // list of type path -> number
+
+var/runescape_pvp = FALSE
+var/runescape_skull_display = FALSE

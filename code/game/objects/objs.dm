@@ -332,6 +332,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
 	return 0
 
+/obj/proc/shouldReInitOnMultitoolLink(var/mob/user, var/obj/buffer, var/list/context)
+	return FALSE
+
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
 
@@ -370,12 +373,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 0
 
 	// Cloning stuff goes here.
-	if(P.clone && P.buffer) // Cloning is on.
-		if(!canClone(P.buffer))
+	var/obj/machinery/bufRef = P.buffer?.get();
+	if(P.clone && bufRef) // Cloning is on.
+		if(!canClone(bufRef))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
 			return
 
-		if(!clone(P.buffer))
+		if(!clone(bufRef))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
 			return
 
@@ -404,19 +408,19 @@ a {
 "}
 	dat += multitool_menu(user,P)
 	if(P)
-		if(P.buffer)
+		if(bufRef)
 			var/id = null
-			if(istype(P.buffer, /obj/machinery/telecomms))
-				var/obj/machinery/telecomms/buffer = P.buffer//Casting is better than using colons
+			if(istype(bufRef, /obj/machinery/telecomms))
+				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
 				id = buffer.id
-			else if(P.buffer.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
-				id = P.buffer:id_tag//sadly, : is needed
+			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = bufRef:id_tag//sadly, : is needed
 
-			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
+			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
 
-			dat += linkMenu(P.buffer)
+			dat += linkMenu(bufRef)
 
-			if(P.buffer)
+			if(bufRef)
 				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
 			dat += "</p>"
 		else

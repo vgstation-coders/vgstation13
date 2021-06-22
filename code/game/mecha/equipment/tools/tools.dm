@@ -213,6 +213,7 @@
 					M.LAssailant = null
 				else
 					M.LAssailant = chassis.occupant
+					M.assaulted_by(chassis.occupant)
 			log_message("Drilled through [target]")
 			occupant_message("<span class='red'><b>You drill into \the [target].</b></span>")
 			chassis.visible_message("<span class='red'><b>[chassis] drills into \the [target]!</b></span>", "You hear a drill breaking something.")

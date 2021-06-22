@@ -174,25 +174,8 @@
 		update_icon()
 
 /obj/item/toy/cards/MouseDropFrom(atom/over_object)
-	var/mob/M = usr
-	if(!ishigherbeing(usr) || usr.incapacitated())
-		return
-	if(Adjacent(usr) || is_holder_of(usr, src))
-		if(over_object == M)
-			M.put_in_hands(src)
-			to_chat(usr, "<span class='notice'>You pick up the deck.</span>")
-		else if(istype(over_object, /obj/abstract/screen/inventory))
-			var/obj/abstract/screen/inventory/OI = over_object
-
-			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
-				M.u_equip(src, 0)
-				M.put_in_hand(OI.hand_index, src)
-				add_fingerprint(usr)
-				to_chat(usr, "<span class='notice'>You pick up the deck.</span>")
-
-			return
-	else
-		to_chat(usr, "<span class='warning'>You can't reach it from here.</span>")
+	MouseDropPickUp(over_object)
+	return ..()
 
 ////////////////////////////
 /////////CARD HANDS/////////
@@ -289,7 +272,7 @@
 
 /obj/item/toy/singlecard
 	name = "card"
-	desc = "\a card."
+	desc = "A card."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "singlecard_down"
 	w_class = W_CLASS_TINY
@@ -297,6 +280,9 @@
 	var/obj/item/toy/cards/parentdeck = null
 	var/flipped = TRUE //Cards start flipped so that dealers can deal without having to see the card.
 	pixel_x = -5
+
+/obj/item/toy/singlecard/unflipped //Card that is face-up, just so that it's visible
+	flipped = FALSE
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
 	..(NewLoc)

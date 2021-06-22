@@ -226,6 +226,9 @@
 	newTraitor.AnnounceObjectives()
 	return 1
 
+/datum/dynamic_ruleset/midround/autotraitor/previous_rounds_odds_reduction(var/result)
+	return result
+
 
 //////////////////////////////////////////////
 //                                          //
@@ -648,6 +651,40 @@
 
 //////////////////////////////////////////////
 //                                          //
+//          SPIDER INFESTATION              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation
+	name = "Spider Infestation"
+	role_category = /datum/role/giant_spider
+	//no enemy jobs, it's just a bunch of spiders
+	//might change later if they actually happen to stomp the crew but that seems pretty unlikely
+	required_candidates = 1
+	max_candidates = 12 // max amount of spiderlings spawned by a spider infestation random event
+	weight = BASE_RULESET_WEIGHT
+	cost = 25
+	requirements = list(90,80,60,40,30,20,10,10,10,10)
+	high_population_requirement = 50
+	flags = MINOR_RULESET
+	my_fac = /datum/faction/spider_infestation
+	logo = "spider-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation/generate_ruleset_body(var/mob/applicant)
+	var/datum/faction/spider_infestation/active_fac = find_active_faction_by_type(my_fac)
+	if (!active_fac.invasion)
+		active_fac.SetupSpawn()
+	var/mob/living/simple_animal/hostile/giant_spider/spiderling/new_spider = new (active_fac.invasion)
+	new_spider.key = applicant.key
+	return new_spider
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()
+
+//////////////////////////////////////////////
+//                                          //
 //             XENOMORPHS                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
@@ -693,10 +730,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/execute()
-	..()
-
 
 //////////////////////////////////////////////
 //                                          //

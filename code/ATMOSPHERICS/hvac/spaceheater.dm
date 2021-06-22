@@ -152,8 +152,10 @@
 			return
 	return
 
-/obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/user)
+/obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/living/user)
 	..()
+	if (!isliving(user))
+		return
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
@@ -168,7 +170,14 @@
 		else if(istype(I, /obj/item/weapon/lighter/zippo))
 			var/obj/item/weapon/lighter/zippo/Z = I
 			if(Z.is_hot())
-				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] with \the [I]. Damn, that's cool.</span>")
+				if (clumsy_check(user) && (prob(50)))
+					light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] </span><span class='danger'>as well as themselves</span><span class='rose'> with \the [I]. Damn, that's cool.</span>")
+					user.adjust_fire_stacks(0.5)
+					user.on_fire = 1
+					user.update_icon = 1
+					playsound(user.loc, 'sound/effects/bamf.ogg', 50, 0)
+				else
+					light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] with \the [I]. Damn, that's cool.</span>")
 		else if(istype(I, /obj/item/weapon/lighter))
 			var/obj/item/weapon/lighter/L = I
 			if(L.is_hot())

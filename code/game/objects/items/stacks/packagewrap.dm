@@ -43,7 +43,7 @@
 		return 0//proceed as normally (put wrap in box)
 	else
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
-	
+
 
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
 	var/atom/movable/target = attacked
@@ -119,6 +119,7 @@
 				H.LAssailant = null
 			else
 				H.LAssailant = user
+				H.assaulted_by(user)
 			log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to wrap [H.name] ([H.ckey])</font>")
 			use(2)
 			return 1

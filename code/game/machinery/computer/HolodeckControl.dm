@@ -1,10 +1,72 @@
+#define HOLODECK_INDEX_AREA 1 // The first entry in the association for emagged_rooms is the source area for the room
+#define HOLODECK_INDEX_DESC 2 // The second is its description. Old code.
+
 /datum/map_element/dungeon/holodeck
 	name = "holodeck"
 	file_path = "maps/misc/holodeck.dmm"
+	var/list/rooms = list(
+		"Basketball Court" = /area/holodeck/source_basketball,
+		"Beach" = /area/holodeck/source_beach,
+		"Boxing Court" = /area/holodeck/source_boxingcourt,
+		"Checkers Court" = /area/holodeck/source_checkers,
+		"Chess Board" = /area/holodeck/source_chess,
+		"Desert" = /area/holodeck/source_desert,
+		"Dining Hall" = /area/holodeck/source_dining,
+		"Empty Court" = /area/holodeck/source_emptycourt,
+		"Firing Range" = /area/holodeck/source_firingrange,
+		"Gym" = /area/holodeck/source_gym,
+		"Laser Tag Arena" = /area/holodeck/source_lasertag,
+		"Maze" = /area/holodeck/source_maze,
+		"Meeting Hall" = /area/holodeck/source_meetinghall,
+		"Panic Bunker" = /area/holodeck/source_panic,
+		"Picnic Area" = /area/holodeck/source_picnicarea,
+		"Snow Field" = /area/holodeck/source_snowfield,
+		"Theatre" = /area/holodeck/source_theatre,
+		"Thunderdome Court" = /area/holodeck/source_thunderdomecourt,
+		"Wild Ride" = /area/holodeck/source_wildride,
+		"Zoo" = /area/holodeck/source_zoo,
+	)
 
-/datum/map_element/dungeon/holodeck_3x3
+	var/list/emagged_rooms = list(
+		"Begin Atmospheric Burn Simulation" = list(/area/holodeck/source_burntest, "Ensure the holodeck is empty before testing."),
+		"Begin Wildlife Simulation" = list(/area/holodeck/source_wildlife, "Ensure the holodeck is empty before testing."),
+		"Club Catnip" = list(/area/holodeck/source_catnip, "Ensure the holodeck is empty before testing."),
+		"Combat Arena" = list(/area/holodeck/source_ragecage, "Safety protocols disabled - weapons are not for recreation."),
+		"Medieval Tournament" = list(/area/holodeck/source_medieval, "Safety protocols disabled - weapons are not for recreation.")
+	)
+/datum/map_element/dungeon/holodeck/holodeck_3x3
 	name = "small holodeck"
 	file_path = "maps/misc/holodeck_3x3.dmm"
+	rooms = list(
+		"Basketball Court" = /area/holodeck/source_basketball,
+		"Beach" = /area/holodeck/source_beach,
+		"Boxing Court" = /area/holodeck/source_boxingcourt,
+		"Desert" = /area/holodeck/source_desert,
+		"Dining Hall" = /area/holodeck/source_dining,
+		"Empty Court" = /area/holodeck/source_emptycourt,
+		"Firing Range" = /area/holodeck/source_firingrange,
+		"Gym" = /area/holodeck/source_gym,
+		"Meeting Hall" = /area/holodeck/source_meetinghall,
+		"Panic Bunker" = /area/holodeck/source_panic,
+		"Picnic Area" = /area/holodeck/source_picnicarea,
+		"Snow Field" = /area/holodeck/source_snowfield,
+		"Theatre" = /area/holodeck/source_theatre,
+		"Thunderdome Court" = /area/holodeck/source_thunderdomecourt,
+		"Wild Ride" = /area/holodeck/source_wildride,
+		"Zoo" = /area/holodeck/source_zoo,
+	)
+	emagged_rooms = list(
+		"Begin Atmospheric Burn Simulation" = list(/area/holodeck/source_burntest, "Ensure the holodeck is empty before testing."),
+		"Begin Wildlife Simulation" = list(/area/holodeck/source_wildlife, "Ensure the holodeck is empty before testing."),
+	)
+
+/datum/map_element/dungeon/holodeck/olympics
+	name = "olympics holodeck"
+	file_path = "maps/misc/holodeck_olympics.dmm"
+	rooms = list(
+		"Demo A" = /area/holodeck/source_olympics_demo_a,
+		"Demo B" = /area/holodeck/source_olympics_demo_b,
+	)
 
 /obj/machinery/computer/HolodeckControl
 	name = "Holodeck Control Computer"
@@ -20,12 +82,16 @@
 	var/list/connected_holopeople = list()
 	var/maximum_holopeople = 4
 	light_color = LIGHT_COLOR_CYAN
+	var/datum/map_element/map_element_type // If null, New() tries to get one from the map's datum
+										   // Set it if you want to source rooms from a different holodeck
+/obj/machinery/computer/HolodeckControl/olympics
+	map_element_type = /datum/map_element/dungeon/holodeck/olympics
 
-/obj/machinery/computer/HolodeckControl/attack_ai(var/mob/user as mob)
+/obj/machinery/computer/HolodeckControl/attack_ai(mob/user)
 	add_hiddenprint(user)
 	return attack_hand(user)
 
-/obj/machinery/computer/HolodeckControl/attack_paw(var/mob/user as mob)
+/obj/machinery/computer/HolodeckControl/attack_paw(mob/user)
 	return
 
 /obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
@@ -59,14 +125,22 @@
 		H.name = capitalize(pick(N))
 		H.real_name = H.name
 
-/obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
+/obj/machinery/computer/HolodeckControl/proc/find_holodeck_datum()
+	for(var/datum/map_element in map_elements)
+		if(map_element.type == map_element_type)
+			return map_element
+	return null
 
-	if(..())
+
+/obj/machinery/computer/HolodeckControl/proc/ui_text(mob/user)
+	var/dat = list({"<B>Holodeck Control System</B><BR>"})
+	. = dat
+
+	var/datum/map_element/dungeon/holodeck/holodeck_datum = find_holodeck_datum()
+	if(isnull(holodeck_datum))
+		dat += "Internal error. Please contact a system administrator."
 		return
-	user.set_machine(src)
-	var/dat
 
-	dat += list({"<B>Holodeck Control System</B><BR>"})
 	if(isobserver(user))
 		if(holopeople_enabled)
 			dat += "<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"
@@ -78,16 +152,15 @@
 		dat += "<A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram (Admin)\]</font></A><HR>"
 
 	dat += "<hr>Current Loaded Programs:<br>"
-	for(var/room in map.holodeck_rooms)
-		dat += "<a href='?src=\ref[src];[url_encode(room)]=1'>(([room]))</a><br>"
+	for(var/room in holodeck_datum.rooms)
+		dat += "<a href='?src=\ref[src];load=[url_encode(room)]'>(([room]))</a><br>"
 
-//	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
 	if(emagged)
-		for(var/room in map.emagged_holodeck_rooms)
-			var/description = map.emagged_holodeck_rooms[room]
-			dat += "<a href=?src=\ref[src];[url_encode(room)]=1'>(<font color=red>[room]</font>)</a><br>"
+		for(var/room in holodeck_datum.emagged_rooms)
+			var/description = holodeck_datum.emagged_rooms[room][HOLODECK_INDEX_DESC]
+			dat += "<a href='?src=\ref[src];load=[url_encode(room)]'>(<font color=red>[room]</font>)</a><br>"
 			dat += "[description]<br><br>"
 		if(issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
@@ -95,13 +168,16 @@
 	else
 		if(issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
+		dat += "<BR>Safety Protocols are <font color=green> ENABLED </font><BR>"
 
+/obj/machinery/computer/HolodeckControl/attack_hand(mob/user)
+	if(..())
+		return
 
-		dat += {"<BR>
-			Safety Protocols are <font color=green> ENABLED </font><BR>"}
+	user.set_machine(src)
+	var/dat = ui_text(user)
 	user << browse(jointext(dat, null), "window=computer;size=400x500")
 	onclose(user, "computer")
-	return
 
 /obj/machinery/computer/HolodeckControl/Topic(href, href_list)
 	usr.set_machine(src)
@@ -118,163 +194,38 @@
 
 	if(..())
 		return 1
-	else
-		if(href_list["Empty Court"])
-			target = locate(/area/holodeck/source_emptycourt)
-			if(target)
-				loadProgram(target)
+	if(href_list["load"])
+		var/datum/map_element/dungeon/holodeck/holodeck_datum = find_holodeck_datum()
+		var/room_name = href_list["load"]
+		var/target_area = holodeck_datum.rooms[room_name]
+		if(!target_area && emagged)
+			target_area = holodeck_datum.emagged_rooms[room_name][HOLODECK_INDEX_AREA]
+		target = locate(target_area)
+		if(target)
+			loadProgram(target)
+	else if(href_list["turnoff"])
+		target = locate(/area/holodeck/source_plating)
+		if(target)
+			loadProgram(target)
 
-		else if(href_list["Boxing Court"])
-			target = locate(/area/holodeck/source_boxingcourt)
-			if(target)
-				loadProgram(target)
+	else if(href_list["AIoverride"])
+		if(!issilicon(usr))
+			return
+		emagged = !emagged
+		if(emagged)
+			message_admins("[key_name_admin(usr)] overrode the holodeck's safeties")
+			log_game("[key_name(usr)] overrode the holodeck's safeties")
+			visible_message("<span class='warning'>Warning: Holodeck safeties overriden. Please contact Nanotrasen maintenance and cease all operation if you are not source of that command.</span>")
+		else
+			message_admins("[key_name_admin(usr)] restored the holodeck's safeties")
+			log_game("[key_name(usr)] restored the holodeck's safeties")
+			visible_message("<span class='notice'>Holodeck safeties have been restored. Simulation programs are now safe to use again.</span>")
 
-		else if(href_list["Panic Bunker"])
-			target = locate(/area/holodeck/source_panic)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Gym"])
-			target = locate(/area/holodeck/source_gym)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Medieval Tournament"])
-			target = locate(/area/holodeck/source_medieval)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Club Catnip"])
-			target = locate(/area/holodeck/source_catnip)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Checkers Court"])
-			target = locate(/area/holodeck/source_checkers)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Basketball Court"])
-			target = locate(/area/holodeck/source_basketball)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Thunderdome Court"])
-			target = locate(/area/holodeck/source_thunderdomecourt)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Beach"])
-			target = locate(/area/holodeck/source_beach)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Desert"])
-			target = locate(/area/holodeck/source_desert)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Picnic Area"])
-			target = locate(/area/holodeck/source_picnicarea)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Snow Field"])
-			target = locate(/area/holodeck/source_snowfield)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Theatre"])
-			target = locate(/area/holodeck/source_theatre)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Meeting Hall"])
-			target = locate(/area/holodeck/source_meetinghall)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Firing Range"])
-			target = locate(/area/holodeck/source_firingrange)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Wild Ride"])
-			target = locate(/area/holodeck/source_wildride)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Chess Board"])
-			target = locate(/area/holodeck/source_chess)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Maze"])
-			target = locate(/area/holodeck/source_maze)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Dining Hall"])
-			target = locate(/area/holodeck/source_dining)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Laser Tag Arena"])
-			target = locate(/area/holodeck/source_lasertag)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Zoo"])
-			target = locate(/area/holodeck/source_zoo)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["turnoff"])
-			target = locate(/area/holodeck/source_plating)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Begin Atmospheric Burn Simulation"])
-			if(!emagged)
-				return
-			target = locate(/area/holodeck/source_burntest)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Combat Arena"])
-			if(!emagged)
-				return
-			target = locate(/area/holodeck/source_ragecage)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["Begin Wildlife Simulation"])
-			if(!emagged)
-				return
-			target = locate(/area/holodeck/source_wildlife)
-			if(target)
-				loadProgram(target)
-
-		else if(href_list["AIoverride"])
-			if(!issilicon(usr))
-				return
-			emagged = !emagged
-			if(emagged)
-				message_admins("[key_name_admin(usr)] overrode the holodeck's safeties")
-				log_game("[key_name(usr)] overrode the holodeck's safeties")
-				visible_message("<span class='warning'>Warning: Holodeck safeties overriden. Please contact Nanotrasen maintenance and cease all operation if you are not source of that command.</span>")
-			else
-				message_admins("[key_name_admin(usr)] restored the holodeck's safeties")
-				log_game("[key_name(usr)] restored the holodeck's safeties")
-				visible_message("<span class='notice'>Holodeck safeties have been restored. Simulation programs are now safe to use again.</span>")
-
-		src.add_fingerprint(usr)
+	src.add_fingerprint(usr)
 	src.updateUsrDialog()
-	return
 
-/obj/machinery/computer/HolodeckControl/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/HolodeckControl/attackby(obj/item/weapon/W, mob/user)
 	..() //This still allows items to unrez even if the computer is deconstructed
-	return
 
 /obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
 	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
@@ -290,6 +241,11 @@
 /obj/machinery/computer/HolodeckControl/New()
 	..()
 	linkedholodeck = locate(/area/holodeck/alphadeck)
+	if(isnull(map_element_type))
+		for(var/entry in map.load_map_elements)
+			if(ispath(entry, /datum/map_element/dungeon/holodeck))
+				map_element_type = entry
+				break
 
 //This could all be done better, but it works for now.
 /obj/machinery/computer/HolodeckControl/Destroy()
@@ -677,8 +633,6 @@
 		icon_state = "auth_off"
 
 /obj/machinery/readybutton/proc/begin_event()
-
-
 	eventstarted = 1
 
 	for(var/obj/structure/window/reinforced/holo/W in currentarea)
@@ -686,3 +640,6 @@
 
 	for(var/mob/M in currentarea)
 		to_chat(M, "FIGHT!")
+
+#undef HOLODECK_INDEX_AREA
+#undef HOLODECK_INDEX_DESC

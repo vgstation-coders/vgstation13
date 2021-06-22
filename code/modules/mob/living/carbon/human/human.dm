@@ -622,6 +622,9 @@
 		if (!t1 || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		med_record.add_comment(t1)
+	else if (href_list["purchaselog"])
+		if(mind)
+			mind.role_purchase_log()
 	else if (href_list["listitems"])
 		var/mob/M = usr
 		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
@@ -1277,7 +1280,7 @@
 		doodle_color = bloody_hands_data["blood_colour"]
 
 	if (!doodle_color)
-		to_chat(src, "<span class='warning'>There is no blood on your hands or gloves.</span>")
+		to_chat(src, "<span class='warning'>There is no blood on your [actual_gloves ? "gloves" : "hands"].</span>")
 		return
 
 
@@ -1315,6 +1318,19 @@
 	if(continue_drawing != "Yes" || !Adjacent(T))
 		return
 
+	//One last sanity check
+	var/can_still_doodle = FALSE
+	var/obj/item/clothing/gloves/actual_gloves2
+	if (istype(gloves, /obj/item/clothing/gloves))
+		actual_gloves2 = gloves
+		if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
+			can_still_doodle = TRUE
+	if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
+		can_still_doodle = TRUE
+	if(!can_still_doodle)
+		to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
+		return
+
 	//Finally writing our message
 	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 	W.basecolor = doodle_color
@@ -1324,8 +1340,8 @@
 	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
 	W.blood_DNA[doodle_DNA] = doodle_type
 
-	if (actual_gloves)
-		actual_gloves.transfer_blood = max(0,actual_gloves.transfer_blood - 1)
+	if (actual_gloves2)
+		actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
 	else
 		bloody_hands = max(0,bloody_hands - 1)
 	update_inv_gloves()
@@ -2098,3 +2114,84 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/make_meat(location)
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
+
+
+/mob/living/carbon/human/turn_into_mannequin(var/material = "marble")
+	var/list/valid_mannequin_species = list(
+		"Human",
+		"Voc",
+		"Manifested",
+		)
+	if (!(species.name in valid_mannequin_species))
+		return FALSE
+
+	var/turf/T = get_turf(src)
+	var/obj/structure/mannequin/new_mannequin
+
+	var/list/mannequin_clothing = list(
+		SLOT_MANNEQUIN_ICLOTHING,
+		SLOT_MANNEQUIN_FEET,
+		SLOT_MANNEQUIN_GLOVES,
+		SLOT_MANNEQUIN_EARS,
+		SLOT_MANNEQUIN_OCLOTHING,
+		SLOT_MANNEQUIN_EYES,
+		SLOT_MANNEQUIN_BELT,
+		SLOT_MANNEQUIN_MASK,
+		SLOT_MANNEQUIN_HEAD,
+		SLOT_MANNEQUIN_BACK,
+		SLOT_MANNEQUIN_ID,
+		)
+
+	mannequin_clothing[SLOT_MANNEQUIN_ICLOTHING] = w_uniform
+	mannequin_clothing[SLOT_MANNEQUIN_OCLOTHING] = wear_suit
+	mannequin_clothing[SLOT_MANNEQUIN_HEAD] = head
+	mannequin_clothing[SLOT_MANNEQUIN_MASK] = wear_mask
+	mannequin_clothing[SLOT_MANNEQUIN_BACK] = back
+	mannequin_clothing[SLOT_MANNEQUIN_ID] = wear_id
+	mannequin_clothing[SLOT_MANNEQUIN_BELT] = belt
+	mannequin_clothing[SLOT_MANNEQUIN_GLOVES] = gloves
+	mannequin_clothing[SLOT_MANNEQUIN_FEET] = shoes
+	mannequin_clothing[SLOT_MANNEQUIN_EARS] = ears
+	mannequin_clothing[SLOT_MANNEQUIN_EYES] = glasses
+
+	var/list/mannequin_held_items = list(null, null)
+
+	for (var/i = 1 to mannequin_held_items.len)
+		var/obj/O = held_items[i]
+		if (O)
+			drop_item(O,T,TRUE)
+			mannequin_held_items[i] = O
+
+	for (var/obj/O in get_all_slots())
+		drop_item(O,T,TRUE)
+
+	switch (species.name)
+		if ("Human","Manifested")
+			if (is_fat())
+				switch (material)
+					if ("marble")
+						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					if ("wood")
+						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+			else if (gender == FEMALE)
+				switch (material)
+					if ("marble")
+						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					if ("wood")
+						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+			else
+				switch (material)
+					if ("marble")
+						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					if ("wood")
+						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+		if ("Vox")
+			switch (material)
+				if ("marble")
+					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+				if ("wood")
+					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+
+	if (new_mannequin)
+		return TRUE
+	return FALSE

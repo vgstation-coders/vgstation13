@@ -146,7 +146,7 @@
 /obj/item/tool/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
 		return ..()
-	if(can_operate(M, user))
+	if(can_operate(M, user, src))
 		return ..()
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD)
 		return ..()
@@ -361,7 +361,7 @@
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
-		if(can_operate(M, user))
+		if(can_operate(M, user, src))
 			if(do_surgery(M, user, src))
 				return
 		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]

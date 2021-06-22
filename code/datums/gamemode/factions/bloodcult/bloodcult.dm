@@ -161,6 +161,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		veil_thickness = CULT_MENDED
 		..()
 		command_alert(/datum/command_alert/bloodstones_broken)
+		var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+		if (istype(dynamic_mode))
+			dynamic_mode.update_stillborn_rulesets()
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
 		for (var/obj/effect/rune/R in rune_set.rune_list)

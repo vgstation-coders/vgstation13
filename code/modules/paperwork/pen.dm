@@ -150,7 +150,7 @@ var/paperwork_library
 		t = replacetext(t, "\[time\]", "[worldtime2text()]")
 
 		// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
-		
+
 		t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
 		t = replacetext(t, "\[/table\]", "</td></tr></table>")
 		t = replacetext(t, "\[row\]", "</td><tr>")
@@ -310,6 +310,7 @@ var/paperwork_library
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 	if(reagents && reagents.total_volume)
 		reagents.trans_to(M,50)
 

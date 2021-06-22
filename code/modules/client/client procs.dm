@@ -279,6 +279,9 @@
 		winset(src, "rpane.round_end", "is-visible=false")
 		winset(src, "rpane.last_round_end", "is-visible=false")
 
+	if (runescape_pvp)
+		to_chat(src, "<span class='userdanger'>WARNING: Wilderness mode is enabled; players can only harm one another in maintenance areas!</span>")
+
 	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
@@ -415,7 +418,7 @@
 		qdel(query_age)
 	if(!isnum(player_age))
 		player_age = 0
-	if(age < 14)
+	if(age < MINIMUM_NON_SUS_ACCOUNT_AGE)
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
 	testing("[src]/[ckey(key)] logged in with age of [age]/[player_age]/[Joined]")

@@ -528,7 +528,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Anomaly Alert"
 
 /datum/command_alert/bluespace_anomaly/New(impact_area_name)
-	message = "Bluespace anomaly detected in the vicinity of [station_name()]. [impact_area_name || "An unknown area"] has been affected."
+	message = "Bluespace anomaly detected aboard [station_name()]. [impact_area_name ? "Areas somewhere in the vicinity of [impact_area_name] have" : "An unknown area has"] been affected."
 	..()
 
 //////////POWER DISABLED
