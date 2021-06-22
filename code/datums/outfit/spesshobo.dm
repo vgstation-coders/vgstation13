@@ -48,4 +48,4 @@
 	)
 
 	pda_type = null
-	id_type = /obj/item/weapon/card/id/vox
+	id_type = /obj/item/weapon/card/id/hobo
