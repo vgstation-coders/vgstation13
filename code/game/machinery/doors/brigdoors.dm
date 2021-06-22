@@ -173,6 +173,7 @@
 	if(..())
 		return
 	if(!src.allowed(usr))
+		to_chat(usr, "<span class='warning'>Access denied.</span>")
 		return
 
 	usr.set_machine(src)
