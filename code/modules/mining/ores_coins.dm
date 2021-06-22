@@ -581,7 +581,7 @@
 /obj/item/weapon/coin/pumf
 	material="pumf"
 	name = "pumf coin"
-	desc = "A slade coin featuring the effigy of an angry chicken. If you come into its possession that means you've been a naughty boy, whatever you've been doing stop it."
+	desc = "A slade coin featuring the effigy of an angry chicken. If it comes into your possession that means you've been a naughty boy. Whatever you've been doing stop it."
 	icon_state = "coin_pumf"
 	credits = -2525 // that's probably a very bad idea but I want to see what happens
 	siemens_coefficient = 1
