@@ -188,6 +188,9 @@ var/global/list/crate_mimic_disguises = list(\
 
 /mob/living/simple_animal/hostile/mimic/crate/attackby(obj/W, mob/user)
 	if(angry) //If we're angry - proceed as normal
+		if(istype(W, /obj/item/stack/package_wrap))
+			to_chat(user, "<span class='warning'>You can't wrap \the [src] while it's angry!</span>")
+			return
 		return ..()
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
@@ -442,6 +445,14 @@ var/global/list/item_mimic_disguises = list(
 /mob/living/simple_animal/hostile/mimic/crate/item/death(var/gibbed = FALSE)
 	copied_object = meat_type //Without this line, mimics would spawn items they're disguised as. Since they're relatively weak and can appear as gatling guns, this is required!
 	..(gibbed)
+
+/mob/living/simple_animal/hostile/mimic/crate/item/attackby(obj/W, mob/user)
+	if(angry) //If we're angry - proceed as normal
+		return ..()
+	else if(istype(W, /obj/item/stack/package_wrap))
+		return attack_hand(user) //Less chill than crate mimics
+	else
+		return attack_hand(user)
 
 /mob/living/simple_animal/hostile/mimic/crate/item/attack_hand(mob/user)
 	if(angry)
