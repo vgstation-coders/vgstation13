@@ -725,7 +725,7 @@
  */
 /obj/item/toy/gooncode
 	name = "Goonecode"
-	desc = "The holy grail of all programmers. It seems a bit leaky."
+	desc = "The holy grail of all programmers...or at least it was at some point. It looks like it has fully leaked out."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
