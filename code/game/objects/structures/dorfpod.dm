@@ -183,7 +183,7 @@ var/obj/structure/dorfpod/center/dorfpod
 		H.add_language(L.name)
 		if (L == R.default_language)
 			H.default_language = R.default_language
-	H.attack_log = R.attack_log.Copy()
+	H.attack_log = R.attack_log
 	H.real_name = H.dna.real_name
 	H.flavor_text = H.dna.flavor_text
 
