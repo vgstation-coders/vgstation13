@@ -203,7 +203,23 @@ var/list/shop_prices = list( //Cost in space credits
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
-var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - typesof(/obj/item/clothing/head/helmet/space/rig) - list(/obj/item/clothing/suit/space/rig/engineer/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
+
+var/list/clothing_types_blacklist = list(
+	/obj/item/clothing/suit/space/ert,
+	/obj/item/clothing/head/helmet/space/ert,
+	/obj/item/clothing/head/helmet/space/rig,
+	/obj/item/clothing/mask/facehugger,
+	)
+
+var/list/clothing_blacklist = list(
+	/obj/item/clothing/suit/space/rig/engineer/elite,
+	/obj/item/clothing/suit/space/rig/deathsquad,
+	/obj/item/clothing/suit/space/rig/wizard,
+	/obj/item/clothing/mask/stone/infinite,
+	/obj/item/clothing/suit/armor/laserproof/advanced,
+	)
+
+var/list/clothing = list ()
 var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket
@@ -750,7 +766,13 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	amount = 6
 
 /obj/abstract/map/spawner/supermarket/clothing/New()
-	if(!clothing_prices.len)
+	if (!clothing.len)
+		clothing = existing_typesof(/obj/item/clothing)
+		for (var/clothing_type in clothing_types_blacklist)
+			clothing -= typesof(clothing_type)
+		for (var/clothing_type in clothing_blacklist)
+			clothing -= clothing_type
+	if (!clothing_prices.len)
 		for(var/C in clothing)
 			clothing_prices[C] = 150
 	to_spawn = clothing_prices
