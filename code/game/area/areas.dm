@@ -9,8 +9,6 @@ var/area/space_area
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
 	var/list/area_turfs
-	var/turret_protected = 0
-	var/list/turretTargets = list()
 	plane = ABOVE_LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
@@ -455,22 +453,7 @@ var/area/space_area
 		if(narrator)
 			narrator.Crossed(M)
 
-	if(turret_protected)
-		if(isliving(Obj))
-			turretTargets |= Obj
-		else if(istype(Obj, /obj/mecha))
-			var/obj/mecha/Mech = Obj
-			if(Mech.occupant)
-				turretTargets |= Mech
-		// /vg/ vehicles
-		else if(istype(Obj, /obj/structure/bed/chair/vehicle))
-			turretTargets |= Obj
-		return 1
-
 /area/Exited(atom/movable/Obj)
-	if(turret_protected)
-		if(Obj in turretTargets)
-			turretTargets -= Obj
 	..()
 
 /area/proc/subjectDied(target)

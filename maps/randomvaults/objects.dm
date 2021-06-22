@@ -431,7 +431,7 @@
 	. = ..()
 	name = "\improper AI Satellite APC"
 
-/obj/machinery/porta_turret/AIvault
+/obj/machinery/turret/portable/AIvault
 	req_access = list(access_ai_upload)
 	check_records = 1
 	criminals = 1
@@ -440,7 +440,7 @@
 	check_anomalies = 1
 	ai = 1
 
-/obj/machinery/porta_turret/AIvault/New()
+/obj/machinery/turret/portable/AIvault/New()
 	installed = new/obj/item/weapon/gun/energy/laser/retro/ancient(src)
 	..()
 	if(prob(25))
@@ -872,5 +872,6 @@
 
 /obj/machinery/turret/russian
 	faction = "russian"
-	lasers = 1
-	lasertype = /obj/item/projectile/beam/heavylaser
+
+/obj/machinery/turret/russian/New()
+	installed = new /obj/item/weapon/gun/energy/laser(src)
