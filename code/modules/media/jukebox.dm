@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -843,6 +843,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
+		"idm" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -876,6 +877,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
+		"idm" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -1098,6 +1100,10 @@ obj/machinery/media/jukebox/holyjuke
 	name = "nanovinyl - folk"
 	unformatted = "folk"
 	formatted = "Folk"
+/obj/item/weapon/vinyl/idm
+	name = "nanovinyl - 90's IDM"
+	unformatted = "idm"
+	formatted = "90's IDM"
 /obj/item/weapon/vinyl/jazz
 	name = "nanovinyl - jazz & swing"
 	unformatted = "jazzswing"
