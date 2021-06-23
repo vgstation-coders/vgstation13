@@ -104,7 +104,7 @@
 			max_number = 2
 		if(VERM_GREMTIDE)
 			spawn_types = /mob/living/simple_animal/hostile/gremlin/greytide
-			vermstring = "greymlins"
+			vermstring = "gremlin assistants"
 			max_number = 3
 		if(VERM_CRABS)
 			spawn_types = list(/mob/living/simple_animal/crab, /mob/living/simple_animal/crab/kickstool, /mob/living/simple_animal/crab/snowy)
