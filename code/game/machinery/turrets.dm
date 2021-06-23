@@ -87,7 +87,7 @@
 	src.power_change()
 
 /obj/machinery/turret/proc/check_target(var/atom/movable/T as mob|obj)
-	if(T)
+	if(T && (T in view(7,src)))
 		if( ismob(T) )
 			var/mob/M = T
 			if((M.flags & INVULNERABLE) || M.faction == faction)
