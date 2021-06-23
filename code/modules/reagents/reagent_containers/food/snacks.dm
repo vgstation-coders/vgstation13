@@ -3661,7 +3661,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/danbeans
-	name = "tin of dan's style beans"
+	name = "tin of Dan's style beans"
 	desc = "I spilled danbeans all over myself while watching Pods 2 on the holoroom and a Grey Assistant shouted 'this diona eatin beans' and everyone laughed."
 	icon_state = "danbeans"
 
