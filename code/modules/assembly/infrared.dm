@@ -101,7 +101,7 @@
 			T = holder.loc
 		else if (holder.master && isturf(holder.loc.loc)) //or in an assembly rigging something that's on the floor?
 			T = holder.loc.loc
-	else if(ismovable(loc) && isturf(loc.loc)) // or in a grenade on the floor/wired item? (can it even activate grenades without igniters?)
+	else if(isobj(loc) && isturf(loc.loc)) // or in a grenade on the floor/wired item? (can it even activate grenades without igniters?)
 		T = loc.loc
 	if(T)
 		if(!beam)
