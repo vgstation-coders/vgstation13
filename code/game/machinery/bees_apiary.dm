@@ -2,6 +2,9 @@
 
 #define MAX_BEES_PER_HIVE	40
 #define EXILE_RESTRICTION	200
+#define APIARY_WILDERNESS_NONE		0	// a regular apiary
+#define APIARY_WILDERNESS_WILD		1	// can only harvest its content by breaking it, but bees will come outside to pollinate flowers as normal
+#define APIARY_WILDERNESS_DANGER	2	// can only harvest its content by breaking it, and all bees that come outside will be angry
 
 /*
 
@@ -38,7 +41,7 @@ var/list/apiaries_list = list()
 
 	var/obj/item/weapon/reagent_containers/glass/consume = null
 
-	var/wild = 0
+	var/wild = APIARY_WILDERNESS_NONE
 
 	var/datum/bee_species/species = null
 
@@ -157,7 +160,7 @@ var/list/apiaries_list = list()
 	if(istype(O, /obj/item/device/analyzer/plant_analyzer))
 		to_chat(user, "<span class='warning'>That's not a plant you dummy. You can get basic info about \the [src] by simply examining it.</span>")
 		return
-	if (wild)
+	if (wild != APIARY_WILDERNESS_NONE)
 		return
 	if(istype(O, /obj/item/queen_bee))
 		var/obj/item/queen_bee/bee_packet = O
@@ -478,7 +481,8 @@ var/list/apiaries_list = list()
 				B = new species.bee_type(src)
 				worker_bees_inside--
 			bees_outside_hive.Add(B)
-			B.wild = max(B.wild, wild)
+			if (wild == APIARY_WILDERNESS_DANGER)
+				B.wild = 1 // out for blood!
 			B_mob.addBee(B)
 			if (faction)
 				B_mob.faction = faction
@@ -578,6 +582,9 @@ var/list/apiaries_list = list()
 
 	var/health = 100
 
+	//Cannot normally harvest the apiary other than by breaking it
+	wild = APIARY_WILDERNESS_WILD
+
 /obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
 	. = ..()
 	if(P.damage && P.damtype != HALLOSS)
@@ -630,8 +637,9 @@ var/list/apiaries_list = list()
 	queen_bees_inside = 1
 	worker_bees_inside = 20
 
-	//those bees never stops being angry unless calm'd
-	wild = 1
+	//Cannot normally harvest the apiary other than by breaking it
+	//Those bees never stops being angry unless calm'd
+	wild = APIARY_WILDERNESS_DANGER
 
 	health = 100
 
@@ -667,7 +675,8 @@ var/list/apiaries_list = list()
 			var/turf/T = get_turf(src)
 			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = new species.bee_type(src)
-			B.wild = max(B.wild, wild)
+			//those bees never stops being angry unless calm'd
+			B.wild = 1
 			worker_bees_inside--
 			bees_outside_hive.Add(B)
 			B_mob.addBee(B)
@@ -691,8 +700,9 @@ var/list/apiaries_list = list()
 	queen_bees_inside = 1
 	worker_bees_inside = 20
 
-	//those bees never stops being angry unless calm'd
-	wild = 1
+	//Cannot normally harvest the apiary other than by breaking it
+	//Those bees never stops being angry unless calm'd
+	wild = APIARY_WILDERNESS_DANGER
 
 	health = 100
 
@@ -712,3 +722,6 @@ var/list/apiaries_list = list()
 
 #undef MAX_BEES_PER_HIVE
 #undef EXILE_RESTRICTION
+#undef APIARY_WILDERNESS_NONE
+#undef APIARY_WILDERNESS_WILD
+#undef APIARY_WILDERNESS_DANGER
