@@ -449,10 +449,8 @@ var/global/list/item_mimic_disguises = list(
 /mob/living/simple_animal/hostile/mimic/crate/item/attackby(obj/W, mob/user)
 	if(angry) //If we're angry - proceed as normal
 		return ..()
-	else if(istype(W, /obj/item/stack/package_wrap))
-		return attack_hand(user) //Less chill than crate mimics
 	else
-		return attack_hand(user)
+		return attack_hand(user) //can't wrap these
 
 /mob/living/simple_animal/hostile/mimic/crate/item/attack_hand(mob/user)
 	if(angry)
