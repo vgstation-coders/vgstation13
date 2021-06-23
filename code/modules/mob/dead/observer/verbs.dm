@@ -536,8 +536,6 @@
 		to_chat(src, "<span class='warning'>You may only spawn again as this role more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
 		return
 
-	if(!hobostart.len || hobostart.len < 9)
-		generate_hoboshack()
 	//find a viable mouse candidate
 	var/mob/living/carbon/human/hobo = Humanize(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
 	hobo.forceMove(pick(hobostart))
