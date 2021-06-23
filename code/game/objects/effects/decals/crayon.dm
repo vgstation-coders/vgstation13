@@ -4,6 +4,10 @@
 	icon = 'icons/obj/rune.dmi'
 	reagent = COLORFUL_REAGENT
 	persistence_type = null //todo
+	maptext_height = 32
+	maptext_width = 64
+	maptext_x = -16
+	maptext_y = -2
 
 /obj/effect/decal/cleanable/crayon/New(loc,age,icon_state,color,dir,pixel_x,pixel_y,main = "#FFFFFF",shade = "#000000",var/type = "rune")
 	..()
