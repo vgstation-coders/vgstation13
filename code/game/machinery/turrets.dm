@@ -72,13 +72,13 @@
 	if(istype(installed,/obj/item/weapon/gun/energy/gun))
 		var/obj/item/weapon/gun/energy/gun/EG = installed
 		switch(lethal)
-			if(0)
+			if(1)
 				EG.mode = 1
 				EG.charge_cost = 100
 				EG.fire_sound = 'sound/weapons/Laser.ogg'
 				EG.projectile_type = "/obj/item/projectile/beam"
 				EG.modifystate = "energykill"
-			if(1)
+			if(0)
 				EG.mode = 0
 				EG.charge_cost = 100
 				EG.fire_sound = 'sound/weapons/Taser.ogg'
