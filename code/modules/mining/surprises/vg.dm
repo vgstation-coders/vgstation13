@@ -84,6 +84,26 @@
 
 	flags = CONTIGUOUS_WALLS | CONTIGUOUS_FLOORS
 
+/datum/map_element/mining_surprise/geode
+	name="Geode"
+	file_path = "maps/randomvaults/mining/geode.dmm"
+
+/datum/map_element/mining_surprise/crashed_tradeship
+	name="Crashed Tradeship"
+	file_path = "maps/randomvaults/mining/crashed_tradeship.dmm"
+
+/datum/map_element/mining_surprise/crashed_pod
+	name="Crashed Pod"
+	file_path = "maps/randomvaults/mining/crashed_pod.dmm"
+
+/datum/map_element/mining_surprise/digsite
+	name="Abandoned Digsite"
+	file_path = "maps/randomvaults/mining/abandoned_digsite.dmm"
+
+/datum/map_element/mining_surprise/forge
+	name="Abandoned Forge"
+	file_path = "maps/randomvaults/mining/abandoned_forge.dmm"
+
 /mining_surprise/alien_nest
 	name="Hidden Nest"
 	floortypes = list(
