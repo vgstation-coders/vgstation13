@@ -3098,6 +3098,31 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/offcolorcheesewheel
+	name = "off-color cheese wheel"
+	desc = "Something's wrong with this one. Is it rotting? Can cheese even rot?" //It can, but we're asking about spesscheese
+	icon_state = "offcolorcheesewheel"
+	filling_color = "#7493AD"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/offcolorcheesewedge
+	slices_num = 5
+	storage_slots = 3
+	w_class = W_CLASS_MEDIUM
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/offcolorcheesewheel/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(OFFCOLORCHEESE, 60) //seems like a lot of food but in effect is less nutritious than a normal cheese wheel, a normal wheel has 20 nutriment-worth, this has 14 nutriment-worth
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/offcolorcheesewedge
+	name = "off-color cheese wedge"
+	desc = "Oh god it looks even worse on the inside. What the hell happened to this cheese?"
+	icon_state = "offcolorcheesewedge"
+	filling_color = "#7493AD"
+	bitesize = 2
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake
 	name = "Birthday Cake"
 	desc = "Happy Birthday..."
@@ -3633,6 +3658,19 @@
 /obj/item/weapon/reagent_containers/food/snacks/beans/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/danbeans
+	name = "tin of dan's style beans"
+	desc = "I spilled danbeans all over myself while watching Pods 2 on the holoroom and a Grey Assistant shouted 'this diona eatin beans' and everyone laughed"
+	icon_state = "danbeans"
+
+/obj/item/weapon/reagent_containers/food/snacks/danbeans/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(IRRADIATEDBEANS, 30)
+	reagents.add_reagent(REFRIEDBEANS, 30)
+	reagents.add_reagent(MUTATEDBEANS, 30) //seems like a lot of food, but in effect is as much nutrition as 2 Nutriment-worth per bean type so the danbeans end with 10 Nutriment worth of food, at the cost of being very toxic.
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/benedict
