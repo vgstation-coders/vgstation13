@@ -415,7 +415,7 @@
 
 /datum/asset/simple/other_fonts
 	assets = list(
-		"Inkfree.ttf"  = 'html/fonts/Inkfree.ttf',
+		"BLOODY.TTF"  = 'html/fonts/BLOODY.TTF',
 	)
 
 /datum/asset/simple/tgui

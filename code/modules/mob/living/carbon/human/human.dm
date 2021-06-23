@@ -1299,7 +1299,7 @@
 
 	//Previewing our message
 	var/image/I = image(icon = null)
-	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	I.maptext_height = 32
 	I.maptext_width = 64
 	I.maptext_x = -16
@@ -1334,7 +1334,7 @@
 	//Finally writing our message
 	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 	W.basecolor = doodle_color
-	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	W.add_fingerprint(src)
 	var/invisible = invisibility || !alpha
 	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
