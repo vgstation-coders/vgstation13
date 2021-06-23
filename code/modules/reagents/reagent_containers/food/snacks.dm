@@ -3662,7 +3662,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/danbeans
 	name = "tin of dan's style beans"
-	desc = "I spilled danbeans all over myself while watching Pods 2 on the holoroom and a Grey Assistant shouted 'this diona eatin beans' and everyone laughed"
+	desc = "I spilled danbeans all over myself while watching Pods 2 on the holoroom and a Grey Assistant shouted 'this diona eatin beans' and everyone laughed."
 	icon_state = "danbeans"
 
 /obj/item/weapon/reagent_containers/food/snacks/danbeans/New()
@@ -3670,7 +3670,7 @@
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(IRRADIATEDBEANS, 30)
 	reagents.add_reagent(REFRIEDBEANS, 30)
-	reagents.add_reagent(MUTATEDBEANS, 30) //seems like a lot of food, but in effect is as much nutrition as 2 Nutriment-worth per bean type so the danbeans end with 10 Nutriment worth of food, at the cost of being very toxic.
+	reagents.add_reagent(MUTATEDBEANS, 30) //seems like a lot of food, but in effect is as much nutrition as 2 Nutriment-worth per bean type so the danbeans end with 10 Nutriment worth of food, at the cost of being toxic.
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/benedict
