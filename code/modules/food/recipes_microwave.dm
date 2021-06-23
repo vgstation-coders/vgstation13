@@ -695,7 +695,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/beans
 	
 /datum/recipe/danbeans
-	reagents = list(UNSTABLEMUTAGEN = 5, CORNOIL = 5, RADIUM = 5)
+	reagents = list(MUTAGEN = 10, CORNOIL = 10, RADIUM = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/beans)
 	result = /obj/item/weapon/reagent_containers/food/snacks/danbeans
 
