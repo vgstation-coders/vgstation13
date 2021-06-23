@@ -100,6 +100,10 @@
 	name="Abandoned Digsite"
 	file_path = "maps/randomvaults/mining/abandoned_digsite.dmm"
 
+/datum/map_element/mining_surprise/forge
+	name="Abandoned Forge"
+	file_path = "maps/randomvaults/mining/abandoned_forge.dmm"
+
 /mining_surprise/alien_nest
 	name="Hidden Nest"
 	floortypes = list(
