@@ -29,6 +29,10 @@ var/datum/subsystem/map/SSmap
 
 	for(var/i = 0, i < max_secret_rooms, i++)
 		make_mining_asteroid_secret()
+	
+	var/shack_number = rand(1,3)
+	for(var/i = 0, i < shack_number, i++)
+		generate_hoboshack()
 
 	log_startup_progress("Calling post on zLevels, letting them know they can do zlevel specific stuff...")
 	var/watch_prim = start_watch()

@@ -2819,6 +2819,15 @@ var/list/the_station_areas = list (
 
 /area/maintenance/engine
 	name = "Engine"
+
+/area/shack
+	name = "abandoned shack"
+	requires_power = 0
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
 // BEGIN Horizon
 /area/hallway/primary/foreport
 	name = "Fore Port"
