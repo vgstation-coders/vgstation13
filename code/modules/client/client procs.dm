@@ -492,6 +492,8 @@
 	vote.interface.sendAssets(src)
 	var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
 	send_asset_list(src, E.assets)
+	var/datum/asset/simple/F = new/datum/asset/simple/other_fonts()
+	send_asset_list(src, F.assets)
 
 /proc/get_role_desire_str(var/rolepref)
 	switch(rolepref & ROLEPREF_VALMASK)
