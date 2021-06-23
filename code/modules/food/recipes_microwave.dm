@@ -693,6 +693,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/beans
+	
+/datum/recipe/danbeans
+	reagents = list(UNSTABLEMUTAGEN = 5, CORNOIL = 5, RADIUM = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/beans)
+	result = /obj/item/weapon/reagent_containers/food/snacks/danbeans
 
 /datum/recipe/hotdog
 	reagents = list(KETCHUP = 5)
@@ -2150,6 +2155,11 @@
 	reagents = list(MILK = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chococoin
+
+/datum/recipe/offcolorcheese
+	reagents = list(COLORFUL_REAGENT = 10) //wanted to use paint but can't find paint as a reagent proper and am not sure if the microwave can handle it
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/offcolorcheesewheel
 
 /datum/recipe/claypot//it just works
 	reagents = list(WATER = 10)
