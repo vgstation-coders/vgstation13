@@ -18,7 +18,6 @@
 	var/code = 30
 	var/frequency = 1457
 	var/delay = 0
-	var/datum/wires/connected = null
 	var/datum/radio_frequency/radio_connection
 	var/deadman = 0
 
@@ -157,14 +156,6 @@
 				if(S)
 					S.pulse(0)
 	return 0*/
-
-
-/obj/item/device/assembly/signaler/pulse(var/radio = 0)
-	if(src.connected && src.wires)
-		connected.Pulse(src)
-	else
-		return ..(radio)
-
 
 /obj/item/device/assembly/signaler/receive_signal(datum/signal/signal)
 	if(!signal)
