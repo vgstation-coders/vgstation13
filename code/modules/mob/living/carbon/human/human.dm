@@ -2026,7 +2026,7 @@ mob/living/carbon/human/isincrit()
 /mob/living
 	var/hangman_score = 0 // For round end leaderboards
 
-/mob/living/carbon/human/proc/DormantGenes(var/badGeneProb = 2, var/goodGeneProb = 0, var/chanceForGoodIfBad = 10, var/chanceForBadIfGood = 0) // default values are those used on roundstart/latejoin
+/mob/living/carbon/human/proc/RandomGenes(var/badGeneProb = 2, var/chanceForGoodIfBad = 10, var/goodGeneProb = 0, var/chanceForBadIfGood = 0) // default values are those used on roundstart/latejoin
 	if(prob(badGeneProb))
 		dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
 		if(prob(chanceForGoodIfBad))
@@ -2036,6 +2036,8 @@ mob/living/carbon/human/isincrit()
 		dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 		if(prob(chanceForBadIfGood))
 			dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
+
+	check_mutations = 1
 
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
