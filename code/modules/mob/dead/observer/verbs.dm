@@ -528,12 +528,14 @@
 	if(!config.respawn_as_hobo)
 		to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled.</span>")
 		return
-
 	var/timedifference = world.time - client.time_died_as_mouse
 	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
 		var/timedifference_text
 		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
 		to_chat(src, "<span class='warning'>You may only spawn again as this role more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
+		return
+	if(hoboamount == hobostart.len)
+		to_chat(src, "<span class='warning'>The world has enough of these as is.</span>")
 		return
 
 	//find a viable mouse candidate
@@ -546,6 +548,7 @@
 	// somewhat taken from CEV eris
 	to_chat(hobo, "<b>The ID you wear likely not even your own. At least as far as you can remember. But this chunk of plastic still can be a rare oddity that can change your character. Find a way to stay out of trouble, and survive. Though this does not mean you have no home, as the asteroid is your home. Whatever planet you may have come from is now a distant memory.</b>")
 	to_chat(hobo, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
+	hoboamount++
 
 /mob/dead/observer/verb/pai_signup()
 	set name = "Sign up as pAI"
