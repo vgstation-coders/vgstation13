@@ -86,7 +86,7 @@
 "dh" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_s10"},/area/shuttle/lightship/start)
 "dj" = (/obj/structure/closet/emcloset,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "dk" = (/obj/machinery/light{dir = 1},/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"dl" = (/obj/machinery/vending/engineering,/turf/simulated/floor{dir = 9; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
+"dl" = (/obj/machinery/vending/engineering{req_access = null},/turf/simulated/floor{dir = 9; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dm" = (/obj/structure/table,/obj/item/stack/sheet/plasteel{amount = 50},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dn" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dp" = (/obj/structure/table,/obj/item/device/radio{pixel_y = 6},/obj/item/device/radio{pixel_x = 6; pixel_y = 4},/obj/item/device/radio{pixel_x = -6; pixel_y = 4},/obj/item/device/radio,/obj/machinery/light{dir = 1},/turf/simulated/floor{dir = 5; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
@@ -137,6 +137,7 @@
 "eI" = (/obj/structure/table/reinforced,/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 10},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 0},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 5},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 15},/obj/machinery/light{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "whitered"},/area/shuttle/lightship/start)
 "eM" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/machinery/door/poddoor{id_tag = "lightship_shutter_window"; name = "Hull Window Shutters"},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "eR" = (/turf/simulated/floor{dir = 1; icon_state = "whiteredcorner"},/area/shuttle/lightship/start)
+"eS" = (/obj/machinery/newscaster{pixel_x = 32},/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "eT" = (/obj/machinery/computer/shuttle_control/lightship,/turf/simulated/floor{dir = 4; icon_state = "whiteredcorner"},/area/shuttle/lightship/start)
 "eU" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/machinery/door/poddoor{id_tag = "lightship_shutter_window"; name = "Hull Window Shutters"},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "eV" = (/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
@@ -267,19 +268,18 @@
 "iE" = (/obj/structure/closet/crate/critter,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "iF" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/shuttle/lightship/start)
 "iG" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/shuttle/lightship/start)
-"jt" = (/obj/machinery/newscaster{dir = 4; pixel_x = -28},/turf/simulated/floor{dir = 1; icon_state = "whiteredcorner"},/area/shuttle/lightship/start)
+"js" = (/obj/machinery/newscaster{dir = 4; pixel_x = -28},/turf/simulated/floor{dir = 1; icon_state = "whiteredcorner"},/area/shuttle/lightship/start)
 "jv" = (/turf/space,/area/shuttle/lightship/start)
 "jz" = (/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall2"; tag = "icon-swall2"},/area/shuttle/lightship/start)
-"rx" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"rG" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{one_way = 1},/obj/machinery/door/poddoor{id_tag = "lightship_shutter_window"; name = "Hull Window Shutters"},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"up" = (/obj/machinery/newscaster{pixel_x = 32},/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/shuttle/lightship/start)
+"nU" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{one_way = 1},/obj/machinery/door/poddoor{id_tag = "lightship_shutter_window"; name = "Hull Window Shutters"},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "uW" = (/obj/docking_port/shuttle,/obj/machinery/door/airlock/external{id_tag = "lightship_doorbolts"},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
-"wT" = (/obj/machinery/newscaster{pixel_x = 32},/turf/simulated/floor/wood,/area/shuttle/lightship/start)
 "xR" = (/obj/machinery/computer/rdconsole/pod{name = "Lightspeed Ship R&D Console"},/turf/simulated/floor{icon_state = "whitepurple"},/area/shuttle/lightship/start)
-"yK" = (/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "Ek" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "EW" = (/obj/structure/table/glass,/obj/item/clothing/mask/surgical,/obj/item/weapon/switchtool/surgery{pixel_x = 5; pixel_y = 10},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
+"FX" = (/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
+"IU" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "Sq" = (/obj/abstract/map/spawner/assistant,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
+"Sv" = (/obj/machinery/newscaster{pixel_x = 32},/turf/simulated/floor/wood,/area/shuttle/lightship/start)
 "SS" = (/obj/machinery/door/airlock/external{id_tag = "lightship_doorbolts"},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "UG" = (/obj/docking_port/destination/lightship/start{dir = 2},/turf/space,/area)
 "UZ" = (/turf/simulated/floor{dir = 4; icon_state = "warnwhite"},/area/shuttle/lightship/start)
@@ -288,7 +288,7 @@
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaUGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaabaehNhRhNhNhNhNhNhNhNhNhNhNdhaaaaaajzuWSSjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaagacahdUajdjalamanaoapaqararhAaaaaaaawhkUZrGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaagacahdUajdjalamanaoapaqararhAaaaaaaawhkUZnUaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaagacatdUdUdUdUdUdUdUauavaraqhAaaaaaahAaxUZhAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaagafhNivhNhNhNhNivhNhNhNhNhNiAaaaLhNiFixixiFcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaabyaLiFaFaFaFaFhAaHaHbIaJaHhAaLiAikhUhUhUilhXcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -298,11 +298,11 @@ aaaLiFiAbsbtbubvbwhAbxgRgRbAbBgSbDhIbFhAcBdBdBdTdHhAezfHfUcddKivcLaaaaaaaaaaaaaa
 aahXhNiAbNhyhyhyeDhPgIgIgIgIgIhohphphqhAbWhyhyhycagScchycecfcghXiFhNcLaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aLiFhNiAckclfBfBcohzhEhEhEhEhEhGcwgUcyhAdzhyhyhycDgMcFcIEWcIcJhXhNhNiFeteMivhNhNcLaaaaaaaaaaaaaaaa
 hXhNhNhQhNhNgkhNhNivhNhNhNivgkiFhNhNhNiAcPcQcRdAcThGcVhycXhycYhAdadbdcesfdhXhNhNiFdKhNivhNhNhNdhaa
-gSyKdkgSdldmdnaddpeBdrdrdrhAfndudvdwdxhPdzfmfpdAuphAdDcIhycIdFgSdbeugKeueshPdJdMdLdMdNhAdPdQdRgSaa
-ibdUdUibdVdWfBaZdYdZdrdrdrhAeXfqhyfFfagMeuehiiejekhAeleoeoeoepgMeuesaieseugMevgagagaexhAjthyeAipaa
+gSFXdkgSdldmdnaddpeBdrdrdrhAfndudvdwdxhPdzfmfpdAeShAdDcIhycIdFgSdbeugKeueshPdJdMdLdMdNhAdPdQdRgSaa
+ibdUdUibdVdWfBaZdYdZdrdrdrhAeXfqhyfFfagMeuehiiejekhAeleoeoeoepgMeuesaieseugMevgagagaexhAjshyeAipaa
 dKdUdUdKdVbmeEeFeGeHdrdrdrhAeIhyhyhyfahXhNhNhPhNhNhQhNgMhPhNhNhNhNhNhNhNhNiAhyfVfVfVhyhPeREkeTeUaa
 ibdUdUibdVbreVeVeWeBdrdrdrhAeXeYhyfnfagMhphphphpffhAfhhUfRhUhUgMfnfqakfqfngMfrfsfsfsftfueRhyfvfEaa
-hGrxfyhGfzfAfBfCfDdZdrdrdrhAfFfGfGfIfJhPhphpfMfNwThAfOfRhUfRfShGfqiCfWfnfXhPfZxRgbhWgchGgegfgghGaa
+hGIUfyhGfzfAfBfCfDdZdrdrdrhAfFfGfGfIfJhPhphpfMfNSvhAfOfRhUfRfShGfqiCfWfnfXhPfZxRgbhWgchGgegfgghGaa
 hXhNhNhQhNhNgMhNhNiFhNhNhNiFgkivhNhNhNiAgogpgqfNhqgSgthUfRhUgvhAgxgyasZqgAhXhNhNivdKhNiFhNhNhNiGaa
 iuivhNiAgHgIgIgIhyhygRgRgRbAgRgSgTgUgVhAhpgpgWhphpbShUfRhUfRhahXhNhNiveteMiFhNhNiGaaaaaaaaaaaaaaaa
 aahXhNiAhghhhihjhkhPhmhmhmhmhmhohphphqhAhrhphphphthGhvhvhwhahahXivhNiGjvaaaaaaaaaaaaaaaaaaaaaaaaaa
