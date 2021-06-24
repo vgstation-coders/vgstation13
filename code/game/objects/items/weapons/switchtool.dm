@@ -46,12 +46,12 @@
 	else
 		if(!proximity_flag)
 			return
-			
+
 		var/turf/T
 		if(isturf(target.loc))
 			T = target.loc
 		else
-			return 
+			return
 
 		var/success = FALSE
 		for(var/obj/item/I in T)
@@ -515,7 +515,7 @@
 		var/obj/item/tool/weldingtool/experimental/weldingtool = deployed
 		weldingtool.setWelding(0)
 	..()
-	set_light(0)
+	kill_light()
 
 //switchtools maxed out intended for testing/spawning and maybe as loot. Don't forget to add any more tools added to these lists later
 /obj/item/weapon/switchtool/holo/maxed

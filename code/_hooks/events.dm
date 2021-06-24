@@ -199,6 +199,12 @@
 // newloc: atom it is entering
 /lazy_event/on_exited
 
+//Called when living calls a life() tick
+// Arguments:
+// mob/living/L: thing that ticker
+// life_ticks: the amounts of lifetick processed
+/lazy_event/on_life
+
 
 /datum
 	/// Associative list of type path -> list(),

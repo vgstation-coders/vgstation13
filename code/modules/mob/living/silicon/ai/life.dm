@@ -168,6 +168,7 @@
 	life_handle_camera()
 	life_handle_malf()
 	life_handle_power_damage()
+	check_dark_vision()
 
 	is_ai_powered() ? life_handle_powered_core() : life_handle_unpowered_core()
 

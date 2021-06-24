@@ -1379,7 +1379,7 @@
 		occupant = null
 		icon_state = initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
-			set_light(0)
+			kill_light()
 		dir = dir_in
 		if(G)
 			G.hud_off()

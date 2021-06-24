@@ -41,7 +41,7 @@
 
 	//Quality = switchcount for created bulbs. Higher switchcount = higher chance to burn out on switch.
 	//Efficiency = multiplied by autolathe base glass for lights
-	var/prod_quality = 30 
+	var/prod_quality = 30
 	var/prod_eff = 1.5
 
 	//Options for advanced replacer, put in the base type for sanity purposes
@@ -137,9 +137,9 @@
 		data["waste"]["amount"]++
 
 	data["resources"] = list(
-		"glass" = glass, 
-		"glass_max" = glass_max, 
-		"cardboard" = cardboard, 
+		"glass" = glass,
+		"glass_max" = glass_max,
+		"cardboard" = cardboard,
 		"cardboard_max" = cardboard_max)
 
 	data["settings"] = list(
@@ -214,11 +214,11 @@
 						to_chat(usr, "<span class='notice'>\The [src] constructs a new waste container.</span>")
 						attack_self(usr)
 					return 1
-		
+
 	if(href_list["recycle"])
 		recycle_waste()
 		return 1
-		
+
 	if(href_list["settings"])
 		switch(href_list["settings"])
 			if("shape")
@@ -244,7 +244,7 @@
 			return 1
 		recharge(usr)
 		return 1
-	
+
 	if(href_list["dump"])
 		if(!istype(src, /obj/item/device/lightreplacer/borg))
 			return 1

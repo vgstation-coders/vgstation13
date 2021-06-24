@@ -14,7 +14,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "glow_stone_active"
 	icon_living = "glow_stone_active"
-	plane = LIGHTING_PLANE
+	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHTBULB_LAYER
 	health = 5
 	maxHealth = 5
@@ -101,7 +101,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	flick("glow_stone_deactivate", src)
 	spawn(10)
 		playsound(src, 'sound/weapons/orb_deactivate.ogg', 50,1)
-		set_light(0)
+		kill_light()
 		new/obj/item/weapon/glow_orb(get_turf(src))
 		qdel(src)
 		return

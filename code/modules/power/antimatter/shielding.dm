@@ -32,6 +32,12 @@ proc/cardinalrange(var/center)
 	var/mapped = 0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
 	var/getting_blobbed = 0
 
+	lighting_flags = IS_LIGHT_SOURCE
+	light_power = 0
+	light_range = 1
+	light_color = LIGHT_COLOR_HALOGEN
+	light_type = LIGHT_SOFT_FLICKER
+
 // Stupidly easy way to use it in maps
 /obj/machinery/am_shielding/map
 	mapped = 1
@@ -189,6 +195,10 @@ proc/cardinalrange(var/center)
 	else if(processing)
 		shutdown_core()
 
+	if (control_unit && control_unit.active)
+		set_light(1, 1)
+	else
+		kill_light()
 
 /obj/machinery/am_shielding/attackby(obj/item/W, mob/user)
 	if(!istype(W) || !user)

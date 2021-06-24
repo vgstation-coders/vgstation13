@@ -15,7 +15,11 @@
 
 	change_sight(adding = SEE_TURFS)
 	player_list |= src
-
+	create_lighting_planes()
+	if (client.byond_version == 514 && client.byond_build < 1555)
+		to_chat(src, {"<span class='userdanger'>Your client version is known to have a client-side bug affecting transform matrices.</span>
+		<span class='danger'>Some animations may not display correctly.</span>
+		It is recommended that you <a href='http://www.byond.com'>update it</a>."})
 /*
 	var/list/watch_locations = list()
 	for(var/obj/effect/landmark/landmark in landmarks_list)

@@ -60,6 +60,8 @@
 					user.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 					user.see_in_dark = 8
 					user.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+					user.seedarkness = FALSE
+					user.update_darkness()
 					to_chat(user, "\blue The walls suddenly disappear.")
 				user.dna.mutantrace = "shadow"
 				user.update_mutantrace()

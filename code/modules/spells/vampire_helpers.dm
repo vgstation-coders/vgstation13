@@ -29,7 +29,7 @@
 		return 0
 	if(check_holy(src))
 		var/turf/T = get_turf(src)
-		if((T.get_lumcount() * 10) > 2)
+		if((T.get_lumcount()) > 2)
 			to_chat(src, "<span class='warning'>This ground has been blessed and illuminated, suppressing your abilities.</span>")
 			return 0
 		if (fullpower)

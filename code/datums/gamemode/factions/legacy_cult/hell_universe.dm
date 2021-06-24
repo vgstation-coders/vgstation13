@@ -103,13 +103,6 @@ In short:
 			T.underlays += "hell01"
 		CHECK_TICK
 
-	for(var/datum/lighting_corner/C in global.all_lighting_corners)
-		if (!C.active)
-			continue
-
-		C.update_lumcount(0.5, 0, 0)
-		CHECK_TICK
-
 /datum/universal_state/hell/proc/MiscSet()
 	for (var/obj/machinery/firealarm/alm in machines)
 		if (!(alm.stat & BROKEN))

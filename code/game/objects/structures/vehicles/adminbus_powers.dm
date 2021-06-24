@@ -219,7 +219,7 @@
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-on"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
-			lightsource.set_light(0)
+			lightsource.kill_light()
 			if(roadlights == 1 || roadlights == 2)
 				overlays["roadlights"] = null
 			roadlights = 0

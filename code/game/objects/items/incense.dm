@@ -146,7 +146,7 @@
 	breathed_at_least_once.Cut()
 	attack_verb = unlit_attack_verb
 	update_icon()
-	set_light(0)
+	kill_light()
 	if (istype(loc,/obj/item/weapon/thurible))
 		var/obj/item/weapon/thurible/T = loc
 		T.update_icon()

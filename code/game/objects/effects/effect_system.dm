@@ -147,6 +147,7 @@ steam.start() -- spawns the effect
 	desc = "it's a spark what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
+	light_type = LIGHT_SOFT_FLICKER
 
 	var/move_dir = 0
 	var/energy = 0
@@ -156,6 +157,7 @@ steam.start() -- spawns the effect
 	var/turf/T = loc
 	if(istype(T))
 		T.hotspot_expose(1000, 100, surfaces = 1)
+	set_light(1, 1, LIGHT_COLOR_YELLOW)
 
 /obj/effect/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir

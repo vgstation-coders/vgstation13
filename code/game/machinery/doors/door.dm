@@ -419,7 +419,7 @@ var/list/all_doors = list()
 	update_freelok_sight()
 	return 1
 
-/obj/machinery/door/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/machinery/door/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_tiles(T)
