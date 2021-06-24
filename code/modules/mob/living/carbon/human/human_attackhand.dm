@@ -267,8 +267,11 @@
 		if(I_HURT)
 			var/punch_damage = M.unarmed_attack_mob(src)
 			if (punch_damage)
-				var/punch_zone = get_part_from_limb(M.zone_sel.selecting)
-				if (check_bodypart_bleeding(punch_zone))
+				var/punch_zone = M.zone_sel.selecting
+				if (punch_zone == TARGET_EYES || punch_zone == TARGET_MOUTH)
+					punch_zone = LIMB_HEAD
+				var/datum/organ/external/limb = organs_by_name[punch_zone]
+				if(limb.status & ORGAN_BLEEDING)
 					M.bloody_hands(src,1)
 			return punch_damage
 
