@@ -301,6 +301,8 @@
 	return
 
 /obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(air_group || (height==0))
 		return 1
 	if(istype(mover,/obj/item/projectile))
@@ -346,6 +348,8 @@
 	return 1
 
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	if(flow_flags & ON_BORDER)

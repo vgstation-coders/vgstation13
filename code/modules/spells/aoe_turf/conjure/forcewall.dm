@@ -32,6 +32,40 @@
 	override_base = "grey"
 	hud_state = "mime_wall"
 
+/*
+Unwall spell, sadly has to be targeted to be any fun to use
+-kanef
+*/
+/spell/targeted/mime_unwall
+	name = "Invisible un-wall"
+	desc = "Create an invisible un-wall on a targeted location, an anomaly allowing the passage of all objects through anything on it."
+	school = "mime"
+	abbreviation = "FW"
+	user_type = USER_TYPE_OTHER
+	panel = "Mime"
+	specialization = SSOFFENSIVE
+
+	school = "mime"
+	charge_max = 300
+	cast_sound = null
+	cooldown_min = 2 SECONDS
+	spell_flags = WAIT_FOR_CLICK
+	range = 1
+	max_targets = 1
+	invocation_type = SpI_EMOTE
+	invocation = "mimes placing their hands on a flat surface, and pushing against it."
+
+	override_base = "grey"
+	hud_state = "mime_wall"
+
+/spell/targeted/mime_unwall/cast(var/list/targets, mob/user)
+	..()
+	for(var/atom/target in targets)
+		if(isturf(target))
+			new /obj/effect/unwall_field(target)
+		else
+			new /obj/effect/unwall_field(target.loc)
+
 /obj/effect/forcefield
 	desc = "A space wizard's magic wall."
 	name = "FORCEWALL"
@@ -69,3 +103,34 @@
 	new /obj/effect/forcefield/cult(get_turf(src))
 	qdel(src)
 	return
+
+/*
+Unwall fields
+-kanef
+*/
+/obj/effect/unwall_field
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "fuel"
+	name = "invisible un-wall"
+	desc = "You have a REALLY bad feeling about this."
+	anchored = 1.0
+	opacity = 0
+	var/duration = 300 // How long the wall lasts, in ticks
+	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable) // To stop people breaking maps like centcomm or lamprey stuff
+
+/obj/effect/unwall_field/permanent // For future mapping or bus shenanigans
+	duration = 0 // Forever
+
+/obj/effect/unwall_field/New()
+	..()
+	if(duration) // Wait the duration if any and delete it, if zero, don't
+		spawn(duration)
+			qdel(src)
+
+/obj/effect/unwall_field/to_bump(atom/movable/A)
+	if(is_type_in_list(src.loc,forbidden_passes))
+		return
+	for(var/atom/B in src.loc) // Go through everything, discount passing through forbidden stuff
+		if(is_type_in_list(B,forbidden_passes))
+			return
+	A.forceMove(src.loc)

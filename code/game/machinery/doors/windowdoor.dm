@@ -105,6 +105,8 @@
 		close()
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return TRUE
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
@@ -119,6 +121,8 @@
 	return !density || (dir != to_dir) || check_access(ID)
 
 /obj/machinery/door/window/Uncross(atom/movable/mover, turf/target)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return TRUE
 	if(flow_flags & ON_BORDER) //but it will always be on border tho
