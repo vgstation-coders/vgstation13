@@ -538,6 +538,10 @@
 		to_chat(src, "<span class='warning'>The world has enough of these as is.</span>")
 		return
 
+	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
+	if(response != "Yeah!")
+		return  //Hit the wrong key...again.
+	
 	//find a viable mouse candidate
 	var/mob/living/carbon/human/hobo = new(pick(hobostart))
 	hobo.key = src.key
