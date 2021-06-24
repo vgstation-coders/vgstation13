@@ -522,7 +522,7 @@
 /mob/dead/observer/verb/become_hobo()
 	set name = "Become Space Hobo"
 	set category = "Ghost"
-	if(!can_reenter_corpse)
+	if(!(mind && mind.current && can_reenter_corpse) && mind.current.key && copytext(mind.current.key,1,2)!="@")
 		to_chat(src, "<span class='warning'>You must have had presence on this plane to become this.</span>")
 		return
 	if(!config.respawn_as_hobo)
@@ -537,9 +537,10 @@
 		return
 
 	//find a viable mouse candidate
-	var/mob/living/carbon/human/hobo = Humanize(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
-	hobo.forceMove(pick(hobostart))
-	var/datum/outfit/hobo/hobo_outfit = new
+	var/mob/living/carbon/human/hobo = new(pick(hobostart))
+	hobo.key = src.key
+	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
+	var/datum/outfit/special/with_id/hobo/hobo_outfit = new
 	hobo_outfit.equip(hobo)
 	to_chat(hobo, "<B>You are a Space Hobo.</B>")
 	// somewhat taken from CEV eris
