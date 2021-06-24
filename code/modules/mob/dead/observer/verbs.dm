@@ -522,7 +522,7 @@
 /mob/dead/observer/verb/become_hobo()
 	set name = "Become Space Hobo"
 	set category = "Ghost"
-	if(!(mind && mind.current && can_reenter_corpse) && mind.current.key && copytext(mind.current.key,1,2)!="@")
+	if(!(mind && mind.current && can_reenter_corpse) || (mind.current.key && copytext(mind.current.key,1,2)!="@"))
 		to_chat(src, "<span class='warning'>You must have had presence on this plane to become this.</span>")
 		return
 	if(!config.respawn_as_hobo)
