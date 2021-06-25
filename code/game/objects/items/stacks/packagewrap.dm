@@ -22,10 +22,12 @@
 		/obj/item/weapon/winter_gift,
 		/obj/item/weapon/storage/evidencebag,
 		/obj/item/weapon/storage/backpack/holding,
-		/obj/item/weapon/legcuffs/bolas
+		/obj/item/weapon/legcuffs/bolas,
+		/mob/living/simple_animal/hostile/mimic/crate/item
 		)
 
 	var/list/wrappable_big_stuff = list(
+		/mob/living/simple_animal/hostile/mimic/crate,
 		/obj/structure/closet,
 		/obj/structure/vendomatpack,
 		/obj/structure/stackopacks
@@ -87,6 +89,10 @@
 		if(istype(target,/obj/structure/closet))
 			var/obj/structure/closet/C = target
 			if(C.opened)
+				return
+		if(istype(target, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/MC = target
+			if(MC.angry)
 				return
 		if(amount >= 3)
 			var/obj/item/P = new bigpath(get_turf(target.loc),target)
@@ -157,6 +163,9 @@
 /obj/item/delivery/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
+		if(istype(AM, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/MC = AM
+			MC.anger()
 	..()
 
 /obj/item/delivery/attack_self(mob/user as mob)
@@ -203,7 +212,7 @@
 /obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()
 	w_class = W_CLASS_GIANT
-	if(istype(target,/obj/structure/closet/crate) || ishuman(target))
+	if(istype(target,/obj/structure/closet/crate) || istype(target, /mob/living/simple_animal/hostile/mimic/crate) || ishuman(target))
 		icon_state = "deliverycrate"
 	else if(istype(target,/obj/structure/vendomatpack))
 		icon_state = "deliverypack"
@@ -215,6 +224,9 @@
 /obj/item/delivery/large/Destroy()
 	for(var/atom/movable/AM in contents)
 		AM.forceMove(get_turf(src))
+		if(istype(AM, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/MC = AM
+			MC.anger()
 	..()
 
 /obj/item/delivery/large/attack_paw(mob/user as mob)
