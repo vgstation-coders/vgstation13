@@ -131,6 +131,8 @@ var/global/list/facial_hair_styles_female_list	= list()
 	// New stuff
 	var/species = "Human"
 
+	var/list/dormant_genes = list()
+
 // Make a copy of this strand.
 // USE THIS WHEN COPYING STUFF OR YOU'LL GET CORRUPTION!
 /datum/dna/proc/Clone()
@@ -149,8 +151,11 @@ var/global/list/facial_hair_styles_female_list	= list()
 	new_dna.UpdateSE()
 	return new_dna
 
-/datum/dna/proc/GiveRandomSE(var/notflags = 0, var/flags = 0, var/genetype = -1)
-	SetSEState(pick(query_genes(notflags,flags,genetype)), 1)
+/datum/dna/proc/GiveRandomSE(var/notflags = 0, var/flags = 0, var/genetype = -1, var/dormant = FALSE)
+	var/chosen_gene = pick(query_genes(notflags,flags,genetype))
+	if (dormant)
+		dormant_genes += "[chosen_gene]"
+	SetSEState(chosen_gene, 1)
 
 ///////////////////////////////////////
 // UNIQUE IDENTITY

@@ -456,7 +456,7 @@
 			else
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
-			character.RandomGenes(2,10,0,0) // 2% chance of getting a bad gene, in which case they also get 10% chance of getting a good gene
+			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		else
 			character.Robotize()
 	qdel(src)
