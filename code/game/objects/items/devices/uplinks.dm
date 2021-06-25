@@ -14,6 +14,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	var/show_description = null
 	var/active = 0
 	var/job = null
+	var/list/roles = list()
 
 /obj/item/device/uplink/New()
 	..()
@@ -53,9 +54,12 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	return FALSE
 
 //Let's build a menu!
-/obj/item/device/uplink/proc/generate_menu(mob/user as mob)
+/obj/item/device/uplink/proc/generate_menu(var/mob/user)
 	if(!job)
 		job = user.mind.assigned_role
+		roles = list()
+		for (var/datum/role/role in user.mind.antag_roles)
+			roles += role.id
 
 	var/dat = list()
 	dat += "<B>[src.welcome]</B><BR>"
