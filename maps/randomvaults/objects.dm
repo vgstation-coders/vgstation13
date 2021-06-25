@@ -463,10 +463,6 @@
 	network = list()
 	cameranet.removeCamera(src)
 
-/obj/machinery/power/monitor/old
-	icon_state = "powerold"
-	light_color = LIGHT_COLOR_BLUE
-
 /obj/effect/landmark/corpse/engineer/old
 	generate_random_mob_name = 1
 	mutantrace = "Skellington"

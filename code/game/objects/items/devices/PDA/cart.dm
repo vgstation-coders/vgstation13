@@ -44,7 +44,7 @@
 	var/datum/data/record/active3 = null //Security
 
 	// -- Various crimes against object oriented programming
-	var/obj/machinery/power/monitor/powmonitor = null // Power Monitor
+	var/obj/machinery/computer/powermonitor/powmonitor = null // Power Monitor
 	var/list/powermonitors = list()
 	var/obj/machinery/computer/station_alert/alertmonitor = null // Alert Monitor
 	var/list/alertmonitors = list()
@@ -367,7 +367,7 @@ Code:
 			var/powercount = 0
 			var/found = 0
 
-			for(var/obj/machinery/power/monitor/pMon in power_machines)
+			for(var/obj/machinery/computer/powermonitor/pMon in power_machines)
 				if(!(pMon.stat & (NOPOWER|BROKEN)))
 					var/turf/T = get_turf(src)
 					if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.

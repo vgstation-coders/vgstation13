@@ -200,8 +200,6 @@
 	if(istype(O, /obj/item/weapon/card/shuttle_pass))
 		use_pass(O, user)
 
-	return ..()
-
 /obj/machinery/computer/shuttle_control/attack_hand(mob/user as mob)
 	if(..(user))
 		return

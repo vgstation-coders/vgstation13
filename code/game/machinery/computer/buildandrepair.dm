@@ -185,7 +185,7 @@
 /obj/item/weapon/circuitboard/powermonitor
 	name = "Circuit board (Power Monitor)"  //name fixed 250810
 	desc = "A circuit board for running a computer used for monitoring power generation, load and demand."
-	build_path = /obj/machinery/power/monitor
+	build_path = /obj/machinery/computer/powermonitor
 /obj/item/weapon/circuitboard/olddoor
 	name = "Circuit board (DoorMex)"
 	desc = "A circuit board for running a very outdated computer used for opening doors."
