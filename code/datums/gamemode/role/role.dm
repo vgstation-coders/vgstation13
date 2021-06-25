@@ -50,9 +50,6 @@
 
 	var/plural_name = null
 
-	// job override to allow for specific uplink items. Used by Elite Syndicate Strike Team members.
-	var/job_for_uplink = null
-
 	// Various flags and things.
 	var/flags = 0
 
@@ -547,7 +544,6 @@
 	id = SYNDIESQUADIE
 	special_role = SYNDIESQUADIE
 	logo_state = "elite-logo"
-	job_for_uplink = SYNDIESQUADIE
 
 //________________________________________________
 
