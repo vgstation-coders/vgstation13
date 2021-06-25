@@ -5173,7 +5173,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
-
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
@@ -5316,7 +5317,8 @@
 	description = "Looks like a skeleton got stuck in the production line."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-
+	nutriment_factor = REAGENTS_METABOLISM
+	
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
