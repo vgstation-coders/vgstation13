@@ -123,7 +123,7 @@
 /datum/role/traitor/GetScoreboard()
 	. = ..()
 	if(can_be_smooth)
-		if(uplink_items_bought)
+		if(uplink_items_bought?.len)
 			. += "The traitor bought:<BR>"
 			for(var/entry in uplink_items_bought)
 				. += "[entry]<BR>"
