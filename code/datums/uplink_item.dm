@@ -40,6 +40,8 @@ var/list/uplink_items = list()
 	var/list/jobs_with_discount = list() //Jobs in this list get the discount price.
 	var/list/jobs_exclusive = list() //If empty, does nothing. If not empty, ONLY jobs in this list can buy this item.
 	var/list/jobs_excluded = list() //Jobs in this list cannot buy this item at all.
+	var/list/roles_exclusive = list() //If empty, does nothing. If not empty, ONLY roles in this list can buy this item.
+	var/list/roles_excluded = list() //Roles in this list cannot buy this item at all.
 
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
@@ -62,6 +64,18 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
+/datum/uplink_item/proc/available_for_role(var/list/roles)
+	if (roles_exclusive.len)
+		for (var/role in roles_exclusive)
+			if (role in roles)
+				return TRUE
+		return FALSE
+	else
+		for (var/role in roles_excluded)
+			if (role in roles)
+				return FALSE
+		return TRUE
+
 //This will get called that is essentially a New() by default.
 //Use this to make New()s that have extra conditions, such as bundles
 //Make sure to add a return or else it will break a part of buy()
@@ -71,6 +85,14 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
+		return
+	if(!available_for_role(U.roles))
+		var/dat = ""
+		for (var/role in roles_exclusive)
+			if (dat)
+				dat+= ", "
+			dat += role
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their role! (Role: [dat]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
@@ -595,6 +617,8 @@ var/list/uplink_items = list()
 				continue
 			if(!I.available_for_job(U.job))
 				continue
+			if(!I.available_for_role(U.roles))
+				continue
 			if(I.get_cost(U.job, 0.5) > U.uses)
 				continue
 			possible_items += I
@@ -1089,7 +1113,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
-	jobs_excluded = list("Nuclear Operative", CHALLENGER)
+	roles_exclusive = list(TRAITOR)
 
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"
