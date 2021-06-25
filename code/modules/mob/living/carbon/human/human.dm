@@ -1245,6 +1245,11 @@
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
+#define BLOODOODLE_NOSOURCE	0
+#define BLOODOODLE_HANDS	1
+#define BLOODOODLE_GLOVES	2
+#define BLOODOODLE_BLEEDING	2
+
 /mob/living/carbon/human/verb/bloody_doodle()
 	set category = "IC"
 	set name = "Write in blood"
@@ -1266,18 +1271,40 @@
 	var/doodle_DNA
 	var/doodle_type
 	var/obj/item/clothing/gloves/actual_gloves
+	var/blood_source = BLOODOODLE_NOSOURCE
 
+	//blood on your gloves?
 	if (istype(gloves, /obj/item/clothing/gloves))
 		actual_gloves = gloves
 		if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
 			doodle_DNA = pick(actual_gloves.blood_DNA)
 			doodle_type = actual_gloves.blood_DNA[doodle_DNA]
 			doodle_color = actual_gloves.blood_color
+			blood_source = BLOODOODLE_GLOVES
 
+	//blood on your hands?
 	if(!actual_gloves && bloody_hands > 0 && bloody_hands_data?.len)
 		doodle_DNA = bloody_hands_data["blood_DNA"]
 		doodle_type = bloody_hands_data["blood_type"]
 		doodle_color = bloody_hands_data["blood_colour"]
+		blood_source = BLOODOODLE_HANDS
+
+	//are your own hands bleeding you wannabe cultist?
+	var/datum/organ/external/right_hand = organs_by_name[LIMB_RIGHT_HAND]
+	var/datum/organ/external/left_hand = organs_by_name[LIMB_LEFT_HAND]
+	if (!doodle_color && !actual_gloves)
+		if ((!(right_hand.status & ORGAN_DESTROYED) && (right_hand.status & ORGAN_BLEEDING)) || (!(left_hand.status & ORGAN_DESTROYED) && (left_hand.status & ORGAN_BLEEDING)))
+			if (dna)
+				doodle_DNA = dna.unique_enzymes
+				doodle_type = dna.b_type
+			if (species)
+				if (species.anatomy_flags & NO_BLOOD)
+					to_chat(src, "<span class='warning'>There is no blood to use coming out of your wounds.</span>")
+					return
+				doodle_color = species.blood_color
+			else
+				doodle_color = DEFAULT_BLOOD
+			blood_source = BLOODOODLE_BLEEDING
 
 	if (!doodle_color)
 		to_chat(src, "<span class='warning'>There is no blood on your [actual_gloves ? "gloves" : "hands"].</span>")
@@ -1323,12 +1350,23 @@
 	var/obj/item/clothing/gloves/actual_gloves2
 	if (istype(gloves, /obj/item/clothing/gloves))
 		actual_gloves2 = gloves
-		if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
-			can_still_doodle = TRUE
-	if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
-		can_still_doodle = TRUE
+	switch(blood_source)
+		if (BLOODOODLE_HANDS)
+			if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
+				can_still_doodle = TRUE
+		if (BLOODOODLE_GLOVES)
+			if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
+				can_still_doodle = TRUE
+		if (BLOODOODLE_BLEEDING)
+			if (!actual_gloves2)
+				if ((!(right_hand.status & ORGAN_DESTROYED) && (right_hand.status & ORGAN_BLEEDING)) || (!(left_hand.status & ORGAN_DESTROYED) && (left_hand.status & ORGAN_BLEEDING)))
+					can_still_doodle = TRUE
+
 	if(!can_still_doodle)
-		to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
+		if (blood_source == BLOODOODLE_BLEEDING)
+			to_chat(src, "<span class='warning'>Your hands are no longer bleeding.</span>")
+		else
+			to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
 		return
 
 	//Finally writing our message
@@ -1340,11 +1378,20 @@
 	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
 	W.blood_DNA[doodle_DNA] = doodle_type
 
-	if (actual_gloves2)
-		actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
-	else
-		bloody_hands = max(0,bloody_hands - 1)
+	switch(blood_source)
+		if (BLOODOODLE_HANDS)
+			bloody_hands = max(0,bloody_hands - 1)
+		if (BLOODOODLE_GLOVES)
+			actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
+		if (BLOODOODLE_BLEEDING)
+			if (vessel)
+				vessel.remove_reagent(BLOOD, 1)
 	update_inv_gloves()
+
+#undef BLOODOODLE_NOSOURCE
+#undef BLOODOODLE_HANDS
+#undef BLOODOODLE_GLOVES
+#undef BLOODOODLE_BLEEDING
 
 
 /mob/living/carbon/human/can_inject(var/mob/user, var/error_msg, var/target_zone)
