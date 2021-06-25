@@ -52,7 +52,7 @@
 		<script src="powerChart.js"></script>
 	"}
 
-	src.interface = new/datum/html_interface/nanotrasen(src, "Power Monitoring", 420, 600, head)
+	interface = new/datum/html_interface/nanotrasen(src, "Power Monitoring", 420, 600, head)
 
 	var/obj/structure/cable/attached = null
 	var/turf/T = loc
@@ -113,7 +113,7 @@
 
 //Needs to be overriden because else it will use the shitty set_machine().
 /obj/machinery/power/monitor/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
-	return hclient.client.mob.html_mob_check(src.type)
+	return hclient.client.mob.html_mob_check(type)
 
 /obj/machinery/power/monitor/interact(mob/user)
 	var/delay = 0
@@ -135,7 +135,7 @@
 	else
 		if (stat & NOPOWER)
 			spawn(rand(0, 15))
-				src.icon_state = "c_unpowered"
+				icon_state = "c_unpowered"
 		else
 			icon_state = initial(icon_state)
 
@@ -144,15 +144,15 @@
 	if(I.is_screwdriver(user) && circuit)
 		I.playtoolsound(loc, 50)
 		if(do_after(user,src,20))
-			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
+			var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
 			var/obj/item/weapon/circuitboard/M = new circuit( A )
 			A.circuit = M
 			A.anchored = 1
 			for (var/obj/C in src)
-				C.forceMove(src.loc)
-			if (src.stat & BROKEN)
+				C.forceMove(loc)
+			if (stat & BROKEN)
 				user.show_message("<span class=\"info\">The broken glass falls out.</span>")
-				new /obj/item/weapon/shard( src.loc )
+				new /obj/item/weapon/shard( loc )
 				A.state = 3
 				A.icon_state = "3"
 			else
@@ -162,8 +162,8 @@
 
 			qdel(src)
 	else
-		src.attack_hand(user)
-	return
+		..()
+	
 
 /obj/machinery/power/monitor/process()
 	if(stat & (BROKEN|NOPOWER) || !powernet)
@@ -184,9 +184,9 @@
 
 	interface.callJavaScript("pushPowerData", list(load(), avail(), powernet.viewload))
 
-	// src.next_process == 0 is in place to make it update the first time around, then wait until someone watches
-	if ((!src.next_process || src.interface.isUsed()) && world.time >= src.next_process)
-		src.next_process = world.time + 30
+	// next_process == 0 is in place to make it update the first time around, then wait until someone watches
+	if ((!next_process || interface.isUsed()) && world.time >= next_process)
+		next_process = world.time + 30
 
 		interface.updateContent("totPower", "[avail()] W")
 		interface.updateContent("totLoad", "[num2text(powernet.viewload,10)] W")
@@ -222,6 +222,6 @@
 				tbl += "</tr>"
 
 		tbl = jointext(tbl,"")
-		src.interface.updateContent("APCTable", tbl)
+		interface.updateContent("APCTable", tbl)
 
 #undef POWER_MONITOR_HIST_SIZE
