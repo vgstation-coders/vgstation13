@@ -50,9 +50,6 @@
 
 	var/plural_name = null
 
-	// role name assigned to the antag's potential uplink
-	var/name_for_uplink = null
-
 	// Various flags and things.
 	var/flags = 0
 
