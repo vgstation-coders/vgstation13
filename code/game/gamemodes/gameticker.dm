@@ -407,7 +407,7 @@ var/datum/controller/gameticker/ticker
 						//No injection
 					else
 						data_core.manifest_inject(new_character)
-				player.FuckUpGenes(new_character)
+				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
 
 
