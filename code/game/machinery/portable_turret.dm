@@ -342,7 +342,7 @@ Status: []<BR>"},
 	..()
 
 /obj/machinery/turret/portable/check_target(var/atom/movable/T as mob|obj)
-	if(T)
+	if(T && (T in view(7+emagged*5,src)))
 		if( isliving(T) )
 			var/mob/living/L = T
 			if(L.isDead() || isMoMMI(L))//mommis are always safe
