@@ -135,7 +135,7 @@
 	req_access = null
 	circuit = "/obj/item/weapon/circuitboard/shuttle_control"
 
-	machine_flags = EMAGGABLE | SCREWTOGGLE
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE 
 
 	light_color = LIGHT_COLOR_BLUE
 

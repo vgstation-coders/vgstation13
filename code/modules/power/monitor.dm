@@ -2,21 +2,19 @@
 
 // the power monitoring computer
 // for the moment, just report the status of all APCs in the same powernet
-/obj/machinery/power/monitor
+/obj/machinery/computer/powermonitor
 	name = "Power Monitoring Computer"
 	desc = "It monitors power levels across the station."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "power"
 
+	circuit = "/obj/item/weapon/circuitboard/powermonitor"
+
 	use_auto_lights = 1
-	light_range_on = 3
+	light_range_on = 2
 	light_power_on = 1
 	light_color = LIGHT_COLOR_YELLOW
 
-	//computer stuff
-	density = 1
-	anchored = 1.0
-	var/circuit = /obj/item/weapon/circuitboard/powermonitor
 	use_power = 1
 	idle_power_usage = 300
 	active_power_usage = 300
@@ -28,7 +26,7 @@
 	var/list/supply_hist[0]
 	var/list/load_hist[0]
 
-/obj/machinery/power/monitor/New()
+/obj/machinery/computer/powermonitor/New()
 	..()
 
 	for(var/i = 1 to POWER_MONITOR_HIST_SIZE) //The chart doesn't like lists with null.
@@ -64,7 +62,7 @@
 
 	init_ui()
 
-/obj/machinery/power/monitor/proc/init_ui()
+/obj/machinery/computer/powermonitor/proc/init_ui()
 	var/dat = {"
 		<div id="operatable">
 			<canvas id="powerChart" style="width: 261px;"><!--261px is as much as possible.-->
@@ -93,17 +91,17 @@
 
 	interface.updateContent("content", dat)
 
-/obj/machinery/power/monitor/attack_ai(mob/user)
+/obj/machinery/computer/powermonitor/attack_ai(mob/user)
 	. = attack_hand(user)
 
-/obj/machinery/power/monitor/Destroy()
+/obj/machinery/computer/powermonitor/Destroy()
 	..()
 	html_machines -= src
 
 	qdel(interface)
 	interface = null
 
-/obj/machinery/power/monitor/attack_hand(mob/user)
+/obj/machinery/computer/powermonitor/attack_hand(mob/user)
 	. = ..()
 	if(.)
 		interface.hide(user)
@@ -111,11 +109,12 @@
 
 	interact(user)
 
+
 //Needs to be overriden because else it will use the shitty set_machine().
-/obj/machinery/power/monitor/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
+/obj/machinery/computer/powermonitor/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
 	return hclient.client.mob.html_mob_check(type)
 
-/obj/machinery/power/monitor/interact(mob/user)
+/obj/machinery/computer/powermonitor/interact(mob/user)
 	var/delay = 0
 	delay += send_asset(user.client, "Chart.js")
 	delay += send_asset(user.client, "powerChart.js")
@@ -128,7 +127,7 @@
 		for(var/i = 1 to POWER_MONITOR_HIST_SIZE)
 			interface.callJavaScript("pushPowerData", list(demand_hist[i], supply_hist[i], load_hist[i]), user)
 
-/obj/machinery/power/monitor/power_change()
+/obj/machinery/computer/powermonitor/power_change()
 	..()
 	if(stat & BROKEN)
 		icon_state = "broken"
@@ -140,7 +139,7 @@
 			icon_state = initial(icon_state)
 
 //copied from computer.dm
-/obj/machinery/power/monitor/attackby(obj/item/I as obj, mob/user as mob)
+/obj/machinery/computer/powermonitor/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_screwdriver(user) && circuit)
 		I.playtoolsound(loc, 50)
 		if(do_after(user,src,20))
@@ -165,7 +164,7 @@
 		..()
 	
 
-/obj/machinery/power/monitor/process()
+/obj/machinery/computer/powermonitorprocess()
 	if(stat & (BROKEN|NOPOWER) || !powernet)
 		interface.executeJavaScript("setDisabled()")
 		return
