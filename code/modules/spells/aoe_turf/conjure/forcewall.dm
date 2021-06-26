@@ -115,6 +115,8 @@ Unwall fields
 	desc = "You have a REALLY bad feeling about this."
 	anchored = 1.0
 	opacity = 0
+	density = TRUE
+	flow_flags = ON_BORDER
 	var/duration = 300 // How long the wall lasts, in ticks
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable) // To stop people breaking maps like centcomm or lamprey stuff
 
@@ -127,7 +129,7 @@ Unwall fields
 		spawn(duration)
 			qdel(src)
 
-/obj/effect/unwall_field/to_bump(atom/movable/A)
+/obj/effect/unwall_field/Bumped(atom/movable/A)
 	if(is_type_in_list(src.loc,forbidden_passes))
 		return
 	for(var/atom/B in src.loc) // Go through everything, discount passing through forbidden stuff
