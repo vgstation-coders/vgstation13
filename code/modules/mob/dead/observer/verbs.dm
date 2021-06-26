@@ -375,7 +375,7 @@
 
 	//Previewing our message
 	var/image/I = image(icon = null)
-	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	I.maptext_height = 32
 	I.maptext_width = 64
 	I.maptext_x = -16
@@ -401,7 +401,7 @@
 	//Finally writing our message
 	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 	W.basecolor = doodle_color
-	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	W.add_hiddenprint(src)
 	W.original_amount = writings_blood_amount
 	W.original_bloodsource = original_bloodsource
