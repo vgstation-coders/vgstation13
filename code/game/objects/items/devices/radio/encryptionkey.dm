@@ -102,6 +102,9 @@
 /obj/item/device/encryptionkey/syndicate/hacked
 	name = "Standard Encryption Key"
 	desc = "An encryption key for a radio headset.  Has no special codes in it. Looks more sophisticated than usual."
+	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1)
+	
+/obj/item/device/encryptionkey/syndicate/uplink
 	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1, "Syndicate" = 1)
 	syndie = 1
 
