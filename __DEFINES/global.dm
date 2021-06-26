@@ -151,6 +151,7 @@ var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cu
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
 
+var/hoboamount = 0
 var/suspend_alert = 0
 
 var/Debug = 0	// global debug switch
