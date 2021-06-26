@@ -430,8 +430,8 @@ var/list/uplink_items = list()
 	cost = 5
 
 /datum/uplink_item/device_tools/cipherkey
-	name = "Centcomm Encryption Key"
-	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Screwdriver to replace encryption keys not included."
+	name = "Syndicate Encryption Key"
+	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Access to the Syndicate radio channel is also granted. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/syndicate/hacked
 	cost = 4
 
