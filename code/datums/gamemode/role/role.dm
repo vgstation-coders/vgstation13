@@ -327,7 +327,7 @@
 	else
 		var/icon/flat = getFlatIcon(M, SOUTH, 0, 1)
 		if(M.stat == DEAD)
-			if (!istype(M, /mob/living/carbon/brain))
+			if (ishuman(M) || ismonkey(M))
 				flat.Turn(90)
 			var/icon/ded = icon('icons/effects/blood.dmi', "floor1-old")
 			ded.Blend(flat,ICON_OVERLAY)

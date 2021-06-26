@@ -150,6 +150,10 @@ var/list/uplink_items = list()
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
 						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
+					else
+						R = user.mind.GetRole(CHALLENGER)
+						if(R)
+							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
