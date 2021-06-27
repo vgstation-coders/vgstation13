@@ -234,6 +234,11 @@
 	targetvendomat = /obj/machinery/vending/telecomms
 	icon_state = "telecomms"
 
+/obj/structure/vendomatpack/zamsnax
+	name = "Zam Snax recharge pack"
+	targetvendomat = /obj/machinery/vending/zamsnax
+	icon_state = "ZAMsnax"
+
 //////EMPTY PACKS//////
 
 /obj/item/emptyvendomatpack

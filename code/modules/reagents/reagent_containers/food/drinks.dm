@@ -568,6 +568,17 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/zam_h1breeze
+	name = "Zam H1 Breeze"
+	desc = "The mothership has synthesized a refreshing cold breeze in a bottle!" // It is not wise to chug this whole drink.
+	icon_state = "Zam_H1Breeze"
+/obj/item/weapon/reagent_containers/food/drinks/zam_h1breeze/New()
+	..()
+	reagents.add_reagent(FROSTOIL, 25)
+	reagents.add_reagent(HYDROGEN, 15)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink
 	name = "Mann's Drink"
 	desc = "The only thing a <B>REAL MAN</B> needs."
@@ -1028,6 +1039,66 @@
 	..()
 	reagents.add_reagent(BEER, 30)
 	reagents.add_reagent(HYPERZINE, rand(3,5))
+
+// Here be ayy canned drinks
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash
+	name = "Zam Sulphuric Splash"
+	desc = "Taste the splashy tang! The flavor will melt your taste buds."
+	icon_state = "Zam_SulphuricSplash"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash/New()
+	..()
+	reagents.add_reagent(LEMONJUICE, 25)
+	reagents.add_reagent(SACID, 15)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz
+	name = "Zam Formic Fizz"
+	desc = "Sulphuric Splash is for brainless minions. This is a REAL Grey's drink."
+	icon_state = "Zam_FormicFizz"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz/New()
+	..()
+	reagents.add_reagent(LIMEJUICE, 25)
+	reagents.add_reagent(FORMIC_ACID, 15)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder
+	name = "Zam Tannic Thunder"
+	desc = "Humans and lightweights may find this beverage agreeable if they dislike the stronger acids." // This is supposed to be a way to heal burns caused by consuming the more acidic drinks. But humans take brute damage from ingesting acid for some reason?
+	icon_state = "Zam_TannicThunder"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder/New()
+	..()
+	reagents.add_reagent(ORANGEJUICE, 25)
+	reagents.add_reagent(TANNIC_ACID, 15)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea
+	name = "Zam Trusty Tea"
+	desc = "All trusty tea is made with real opok juice. Zam's honor!" // It'll use berry juice until opok juice exists. The tea is a lie...
+	icon_state = "Zam_TrustyTea"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea/New()
+	..()
+	reagents.add_reagent(ACIDTEA, 30)
+	reagents.add_reagent(BERRYJUICE, 5)
+	reagents.add_reagent(CAFFEINE, 5)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza
+	name = "Zam Polytrinic Palooza"
+	desc = "This drink has been banned in all mothership controlled territories. Consume at your own risk."
+	icon_state = "Zam_PolytrinicPalooza"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza/New()
+	..()
+	reagents.add_reagent(HOOCH, 20)
+	reagents.add_reagent(PACID, 10)
+	reagents.add_reagent(MINDBREAKER, 5)
+	reagents.add_reagent(COCAINE, 5)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 //////////////////////////drinkingglass and shaker//
 //Note by Darem: This code handles the mixing of drinks. New drinks go in three places: In Chemistry-Reagents.dm (for the drink
