@@ -6753,18 +6753,24 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	reagents.add_reagent(SACID, 3)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped
+/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
 	name = "Zam Moon Cheese"
-	desc = "Unfortunately the moon is not made of cheese, but this tasty snack is!"
-	icon_state = "zam_mooncheese_wrapped"
+	desc = "It gives off an artificial and bitter smell, but tastes much like a normal piece of sharp cheddar."
 	food_flags = FOOD_ANIMAL
-	wrapped = 1
+	icon_state = "zam_mooncheese"
+	wrapped = 0
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SODIUMCHLORIDE, 1)
-	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped
+	name = "Zam Moon Cheese"
+	desc = "Unfortunately the moon is not made of cheese, but this tasty snack is!"
+	icon_state = "zam_mooncheese_wrapped"
+	wrapped = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/attack_self(mob/user)
 	if(wrapped)
@@ -6774,23 +6780,27 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/proc/Unwrap(mob/user)
 	icon_state = "zam_mooncheese"
-	desc = "It gives off an artificial and bitter smell, but tastes much like a normal piece of sharp cheddar."
 	to_chat(user, "<span class='notice'>You peel the wrapping off the cheese.")
 	wrapped = 0
 
-
-/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider
 	name = "Zam Spider Slider"
-	desc = "A self-heating acidic slider for Grey laborers on salaries too humble to afford the full meal."
-	icon_state = "zam_spiderslider_wrapped"
+	desc = "A moderately processed acidic spider slider. Nutriment dense, despite its tiny size."
 	food_flags = FOOD_MEAT
-	wrapped = 1
+	icon_state = "zam_spiderslider"
+	wrapped = 0
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(SACID, 3)
-	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped
+	name = "Zam Spider Slider"
+	desc = "A self-heating acidic slider for Grey laborers on salaries too humble to afford the full meal."
+	icon_state = "zam_spiderslider_wrapped"
+	wrapped = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/attack_self(mob/user)
 	if(wrapped)
@@ -6802,7 +6812,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/proc/Unwrap(mob/user)
 	icon_state = "zam_spiderslider"
-	desc = "A moderately processed acidic spider slider. Nutriment dense, despite its tiny size."
 	to_chat(user, "<span class='notice'>You tear the tab open and remove the slider from the packaging. Despite supposedly being self-heating, it's barely warm.")
 	wrapped = 0
 
