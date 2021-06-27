@@ -6779,6 +6779,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/proc/Unwrap(mob/user)
+	desc = "It gives off an artificial and bitter smell, but tastes much like a normal piece of sharp cheddar."
+	food_flags = FOOD_ANIMAL
 	icon_state = "zam_mooncheese"
 	to_chat(user, "<span class='notice'>You peel the wrapping off the cheese.")
 	wrapped = 0
@@ -6811,6 +6813,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/proc/Unwrap(mob/user)
+	desc = "A moderately processed acidic spider slider. Nutriment dense, despite its tiny size."
+	food_flags = FOOD_MEAT
 	icon_state = "zam_spiderslider"
 	to_chat(user, "<span class='notice'>You tear the tab open and remove the slider from the packaging. Despite supposedly being self-heating, it's barely warm.")
 	wrapped = 0
