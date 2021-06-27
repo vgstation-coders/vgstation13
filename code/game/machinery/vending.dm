@@ -3616,6 +3616,7 @@ var/global/num_vending_terminals = 1
 	product_slogans = list(
 		"Do you still hunger? Try Zam microwave meals, now available at all cargo merchandise computers.",
 		"Tell your human friends to try Tannic Thunder, Nitro Freeze, and Moon Cheese.",
+		"Humans! Buy some NotRaisins for a bite of something new. Acid purified!",
 		"Zam is your friend far from home.",
 		"Life is short between cloning cycles. Enjoy some Zam!",
 		"The mothership is always watching.",

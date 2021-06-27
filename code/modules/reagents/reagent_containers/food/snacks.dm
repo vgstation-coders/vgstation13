@@ -6743,14 +6743,13 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_notraisins
 	name = "Zam NotRaisins"
-	desc = "Dried blecher berries! A minimally processed bitter treat for a Grey." // Hopefully one day blecher berries will be a real thing in the code.
+	desc = "Dried blecher berries! A minimally processed bitter treat from the mothership's hydroponics labs." // Hopefully one day blecher berries will be a real thing in the code.
 	trash = /obj/item/trash/zam_notraisins
 	icon_state = "zam_notraisins"
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_notraisins/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SACID, 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
