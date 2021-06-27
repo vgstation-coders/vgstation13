@@ -214,46 +214,25 @@ var/global/maint_all_access = 0
 	//maint access for all during radstorm, or when enabled via keycard
 	if(maint_all_access && check_access_list(list(access_maint_tunnels)))
 		return 1
-	//bonus sec access on some alert levels
-	if (security_level > 0)
+	//sec gets basic department access on Code Red or Delta
+	if (security_level > 1)
 		if (can_access(M.GetAccess(),list(access_security)))
-			switch(security_level)
-				if(SEC_LEVEL_BLUE)//basic department access
-					if(check_access_list(list(access_medical,access_science,access_engine,access_cargo)))
-						return 1
-				if(SEC_LEVEL_RED)//full department access minus command & heads
-					if(check_access_list(get_all_accesses() - get_region_accesses(5) - access_ce - access_rd - access_cmo - access_hos))
-						return 1
-				if(SEC_LEVEL_DELTA)//total access
-					return 1
+			if(check_access_list(list(access_medical,access_science,access_engine_equip,access_mailsorting)))
+				return 1
 	return ..(M)
 
 /obj/machinery/door/window/allowed(mob/M)
-	//bonus sec access on some alert levels
-	if (security_level > 0)
+	//sec gets basic department access on Code Red or Delta
+	if (security_level > 1)
 		if (can_access(M.GetAccess(),list(access_security)))
-			switch(security_level)
-				if(SEC_LEVEL_BLUE)//basic department access
-					if(check_access_list(list(access_medical,access_science,access_engine_equip,access_mailsorting)))
-						return 1
-				if(SEC_LEVEL_RED)//full department access minus command & heads
-					if(check_access_list(get_all_accesses() - get_region_accesses(5) - access_ce - access_rd - access_cmo - access_hos))
-						return 1
-				if(SEC_LEVEL_DELTA)//total access
-					return 1
+			if(check_access_list(list(access_medical,access_science,access_engine_equip,access_mailsorting)))
+				return 1
 	return ..(M)
 
 /obj/machinery/access_button/allowed(mob/M)
-	//bonus sec access on some alert levels
-	if (security_level > 0)
+	//sec gets basic department access on Code Red or Delta
+	if (security_level > 1)
 		if (can_access(M.GetAccess(),list(access_security)))
-			switch(security_level)
-				if(SEC_LEVEL_BLUE)//basic department access
-					if(check_access_list(list(access_medical,access_science,access_engine_equip,access_mailsorting)))
-						return 1
-				if(SEC_LEVEL_RED)//full department access minus command & heads
-					if(check_access_list(get_all_accesses() - get_region_accesses(5) - access_ce - access_rd - access_cmo - access_hos))
-						return 1
-				if(SEC_LEVEL_DELTA)//total access
-					return 1
+			if(check_access_list(list(access_medical,access_science,access_engine_equip,access_mailsorting)))
+				return 1
 	return ..(M)
