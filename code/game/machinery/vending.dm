@@ -3615,7 +3615,7 @@ var/global/num_vending_terminals = 1
 	desc = "A relatively new vending machine with snacks for Grey crewmembers, sponsored by labs located on the elusive mothership."
 	product_slogans = list(
 		"Do you still hunger? Try Zam microwave meals, now available at all cargo merchandise computers.",
-		"Tell your human friends to try Tannic Thunder, H1 Breeze, and Moon Cheese.",
+		"Tell your human friends to try Tannic Thunder, Nitro Freeze, and Moon Cheese.",
 		"Zam is your friend far from home.",
 		"Life is short between cloning cycles. Enjoy some Zam!",
 		"The mothership is always watching.",
@@ -3638,7 +3638,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 8,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
-		/obj/item/weapon/reagent_containers/food/drinks/zam_h1breeze = 4,
+		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 4,
 		)
 	contraband = list(
 		/obj/item/weapon/storage/pill_bottle/zambiscuits = 2,
@@ -3654,7 +3654,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 35,
-		/obj/item/weapon/reagent_containers/food/drinks/zam_h1breeze = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 100,
 		)

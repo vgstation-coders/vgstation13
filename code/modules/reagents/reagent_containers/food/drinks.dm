@@ -568,14 +568,14 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/reagent_containers/food/drinks/zam_h1breeze
-	name = "Zam H1 Breeze"
-	desc = "The mothership has synthesized a refreshing cold breeze in a bottle!" // It is not wise to chug this whole drink.
-	icon_state = "Zam_H1Breeze"
-/obj/item/weapon/reagent_containers/food/drinks/zam_h1breeze/New()
+/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze
+	name = "Zam Nitro Freeze"
+	desc = "The mothership has synthesized the coldest of cold drinks! Can your brain handle the freeze?" // It is not wise to chug this whole drink.
+	icon_state = "Zam_NitroFreeze"
+/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze/New()
 	..()
 	reagents.add_reagent(FROSTOIL, 25)
-	reagents.add_reagent(HYDROGEN, 15)
+	reagents.add_reagent(NITROGEN, 15)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
