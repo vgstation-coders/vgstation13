@@ -279,3 +279,11 @@ var/list/crushed_cans_cache = list()
 	name = "used tray"
 	icon_state	= "tray_plastic2_used"
 	desc = "Whoever said a tray is most useful when it is empty must not have been hungry."
+
+/obj/item/trash/zam_notraisins
+	name = "zam notraisins"
+	icon_state	= "zam_notraisins_rubbish"
+
+/obj/item/trash/zam_sliderwrapper
+	name = "zam slider wrapper"
+	icon_state	= "zam_spiderslider_wrapper"
