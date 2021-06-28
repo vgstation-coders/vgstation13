@@ -546,6 +546,7 @@
 	var/mob/living/carbon/human/hobo = new(pick(hobostart))
 	hobo.key = src.key
 	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
+	hobo.generate_name()
 	var/datum/outfit/special/with_id/hobo/hobo_outfit = new
 	hobo_outfit.equip(hobo)
 	to_chat(hobo, "<B>You are a Space Hobo.</B>")

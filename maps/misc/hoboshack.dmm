@@ -23,7 +23,7 @@
 "wm" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/door/mineral/wood{name = "Wooden Door"},/turf/simulated/floor/wood/floor_tile,/area/shack)
 "wq" = (/obj/machinery/door/window{dir = 2},/obj/machinery/door/window{dir = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "wK" = (/obj/structure/table/woodentable,/obj/item/weapon/storage/box/donkpockets,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/obj/item/weapon/storage/wallet/random,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"yp" = (/obj/machinery/computer/stacking_unit{stacker_tag = "shack_stacker"},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
+"yp" = (/obj/machinery/computer/smelting{smelter_tag = "shack_smelter"},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
 "zr" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/machinery/portable_atmospherics/canister/nitrogen,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "zH" = (/turf/simulated/wall/r_rock/porous,/area/shack)
 "Bt" = (/obj/machinery/power/port_gen/pacman{anchored = 1},/obj/structure/cable/yellow{d2 = 8; icon_state = "0-8"},/obj/item/stack/sheet/mineral/plasma{amount = 30},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
@@ -35,13 +35,13 @@
 "Fz" = (/obj/structure/mirror{pixel_y = 32},/obj/machinery/atmospherics/unary/vent_pump{on = 1},/turf/simulated/floor{icon_state = "showroomfloor"},/area/shack)
 "Gw" = (/obj/structure/toilet{dir = 8},/obj/machinery/light/small{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "showroomfloor"},/area/shack)
 "Gx" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/effect/decal/cleanable/generic,/obj/item/blueprints/construction_permit,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Hg" = (/obj/machinery/mineral/stacking_machine{id_tag = "shack_stacker"; in_dir = 4; out_dir = 8},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
+"Hg" = (/obj/structure/forge,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
 "Kr" = (/turf/unsimulated/mineral/random,/area/mine/explored)
 "Lo" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "LR" = (/turf/unsimulated/floor/asteroid,/area/mine/explored)
 "Od" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "QD" = (/obj/structure/table/woodentable,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/clothing/glasses/scanner/meson,/obj/item/clothing/glasses/scanner/meson,/obj/item/clothing/glasses/scanner/meson,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
-"Rz" = (/obj/machinery/computer/smelting{smelter_tag = "shack_smelter"},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
+"Rz" = (/obj/item/anvil,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
 "Ta" = (/obj/machinery/mineral/processing_unit{id_tag = "shack_smelter"; in_dir = 4; out_dir = 8},/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/mine/explored)
 "Ts" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "Tw" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
@@ -61,8 +61,8 @@ KrzHwklFlFlFlFlFsElFlFKr
 KrzHkzYnQDwKmQlFEHlQlFKr
 KrlFTwWDZuZunowmcuZKlFKr
 KrlFrNuXkWpCXLlFkIvplFKr
-KrlFFyFyFyFyuPlFlFOdlFKr
-KrlFlFCplilFwqlFypRzBFKr
-LRDsHgiuTaiuDsDsDsDsDsLR
+KrlFFyFyHgRzuPlFlFOdlFKr
+KrlFlFCplilFwqlFypBFBFKr
+LRDsDsDsTaiuDsDsDsDsDsLR
 LRLRLRLRLRLRLRLRLRLRLRLR
 "}
