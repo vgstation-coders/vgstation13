@@ -362,6 +362,9 @@
 /obj/item/stack/ore/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
 	if(temperature)
+		var/list/recipes = list()
+		for(var/recipe in typesof(/datum/smelting_recipe) - /datum/smelting_recipe)
+			recipes += new recipe()
 		for(var/datum/smelting_recipe/R in recipes)
 			while(R.checkIngredients(materials)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
