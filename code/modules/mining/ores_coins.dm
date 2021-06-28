@@ -371,6 +371,7 @@
 					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
 
 				drop_stack(R.yieldtype,loc)
+				qdel(src)
 
 /*****************************Coin********************************/
 
