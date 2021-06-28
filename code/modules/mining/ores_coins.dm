@@ -359,6 +359,19 @@
 	else
 		return ..()
 
+/obj/item/stack/ore/attempt_heating(atom/A, mob/user)
+	var/temperature = A.is_hot()
+	if(temperature)
+		var/datum/materials/ore = new
+		ore.addFrom(src.materials,FALSE)
+		for(var/datum/smelting_recipe/R in recipes)
+			while(R.checkIngredients(ore)) //While we have materials for this
+				for(var/ore_id in R.ingredients)
+					ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
+					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+
+				drop_stack(R.yieldtype,loc)
+
 /*****************************Coin********************************/
 
 /obj/item/weapon/coin

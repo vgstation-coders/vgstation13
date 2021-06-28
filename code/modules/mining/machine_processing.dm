@@ -413,7 +413,7 @@
 	var/sheets_this_tick = 0
 
 	for(var/datum/smelting_recipe/R in recipes)
-		while(R.checkIngredients(src)) //While we have materials for this
+		while(R.checkIngredients(ore)) //While we have materials for this
 			for(var/ore_id in R.ingredients)
 				ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
 				score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
