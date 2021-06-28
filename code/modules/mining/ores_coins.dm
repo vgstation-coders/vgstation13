@@ -361,18 +361,17 @@
 
 /obj/item/stack/ore/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
-	if(temperature)
+	if(temperature && temperature > melt_temperature)
 		var/list/recipes = list()
 		for(var/recipe in typesof(/datum/smelting_recipe) - /datum/smelting_recipe)
 			recipes += new recipe()
 		for(var/datum/smelting_recipe/R in recipes)
 			while(R.checkIngredients(materials)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
-					if(temperature > R.ingredients[ore_id].melt_temperature)
-						materials.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
-						score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
-						drop_stack(R.yieldtype,loc)
-						qdel(src)
+					materials.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
+					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+					drop_stack(R.yieldtype,loc)
+					qdel(src)
 
 /*****************************Coin********************************/
 
