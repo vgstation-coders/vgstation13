@@ -367,8 +367,9 @@
 		for(var/datum/smelting_recipe/R in recipes)
 			while(R.checkIngredients(ore)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
-					ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
-					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+					if(temperature > R.ingredients[ore_id].melt_temperature)
+						ore.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
+						score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
 
 				drop_stack(R.yieldtype,loc)
 				qdel(src)
