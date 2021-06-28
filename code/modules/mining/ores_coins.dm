@@ -370,8 +370,11 @@
 				for(var/ore_id in R.ingredients)
 					materials.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
 					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
-					drop_stack(R.yieldtype,loc)
-					qdel(src)
+					if(istype(loc,/obj/structure/forge))
+						drop_stack(R.yieldtype,loc.loc)
+					else
+						drop_stack(R.yieldtype,loc)
+		qdel(src)
 
 /*****************************Coin********************************/
 
