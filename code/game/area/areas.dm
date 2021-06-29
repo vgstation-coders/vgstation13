@@ -9,7 +9,7 @@ var/area/space_area
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
 	var/list/area_turfs
-	plane = ABOVE_LIGHTING_PLANE
+	plane = MAPPING_AREA_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
