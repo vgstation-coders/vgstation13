@@ -33,7 +33,7 @@ BLIND     // can't see anything
 
 /obj/item/clothing/glasses/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
-	if(!istype(H) || stored_glasses || !glasses_fit)
+	if(!istype(H) || stored_glasses || !glasses_fit || slot == slot_l_store || slot == slot_r_store)
 		return ..()
 	if(slot != slot_glasses)
 		return CANNOT_EQUIP
