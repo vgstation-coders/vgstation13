@@ -49,6 +49,7 @@
 	var/last_honk_time = 0
 	var/vary_pitch = 1
 	var/can_honk_baton = 1
+	var/next_honk = 0
 
 /obj/item/weapon/bikehorn/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
@@ -60,7 +61,9 @@
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
-	honk()
+	if (world.time > next_honk)
+		honk()
+		next_honk = world.time + 2 SECONDS
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
 	//hitsound takes care of that
