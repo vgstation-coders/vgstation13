@@ -59,6 +59,9 @@
 	if(honk())
 		add_fingerprint(user)
 
+/obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
+	honk()
+
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
 	//hitsound takes care of that
 	//if(proximity_flag && istype(target, /mob)) //for honking in the chest
