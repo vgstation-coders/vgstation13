@@ -207,7 +207,7 @@ proc/move_mining_shuttle()
 	var/has_slime = 0
 	var/excavation_amount = 100
 
-/obj/item/weapon/pickaxe/slime_act(primarytype), mob/user)
+/obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
 	if(primarytype == /mob/living/carbon/slime/oil)
 		if(has_slime)
 			to_chat(user, "It already has \a [W] at its point.")
