@@ -1089,6 +1089,7 @@ var/static/list/valid_cultpower_slots = list(
 
 	I.pixel_y = 16 * PIXEL_MULTIPLIER
 	I.plane = ANTAG_HUD_PLANE
+	I.appearance_flags |= RESET_COLOR|RESET_ALPHA
 
 	//inspired from the rune color matrix because boy am I proud of it
 	animate(I, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 2)//9

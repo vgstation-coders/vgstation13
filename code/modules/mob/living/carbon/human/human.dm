@@ -1438,6 +1438,19 @@
 				break
 	return id
 
+/mob/living/carbon/human/update_perception()
+	if(client && client.darkness_planemaster)
+		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+		if(E)
+			E.update_perception(src)
+
+		for(var/ID in virus2)
+			var/datum/disease2/disease/D = virus2[ID]
+			for (var/datum/disease2/effect/catvision/catvision in D.effects)
+				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
+					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
+					break
+
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!
