@@ -85,7 +85,7 @@
 	throwforce = 12.0
 	var/has_slime = 0
 
-/obj/item/weapon/wrench/socket/attackby(obj/item/W, mob/user)
+/obj/item/tool/wrench/socket/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/slime_extract/bluespace))
 		if(has_slime)
 			to_chat(user, "\the [src] already has \a [W] inside it's head.")

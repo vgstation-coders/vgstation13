@@ -513,6 +513,12 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		Uses--
 		qdel(O)
 
+//perform individual slime_act() stuff on children overriding the method here
+/obj/item/slime_extract/afterattack(var/atom/target, mob/user, proximity)
+	if(!proximity)
+		return
+	target.slime_act(primarytpe,user)
+
 /obj/item/slime_extract/New()
 	..()
 	var/datum/reagents/R = new/datum/reagents(100)

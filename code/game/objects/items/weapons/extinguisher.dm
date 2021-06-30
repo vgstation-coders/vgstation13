@@ -82,8 +82,8 @@
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
 
-/obj/item/weapon/extinguisher/foam/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/slime_extract/blue))
+/obj/item/weapon/extinguisher/foam/slime_act(primarytype, mob/user)
+	if(primarytype == /mob/living/carbon/slime/blue)
 		if(has_slime)
 			to_chat(user, "This extinguisher already has \a [W] attached.")
 			return
@@ -92,7 +92,6 @@
 			to_chat(user, "You attach \the [W] to the extinguisher's funnel.")
 			qdel(W)
 			return
-	..()
 
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
