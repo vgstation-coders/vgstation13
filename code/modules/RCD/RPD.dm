@@ -142,22 +142,22 @@
 /obj/item/device/rcd/rpd/slime_act(primarytype, mob/user)
 	if(primarytype == /mob/living/carbon/slime/metal)
 		if(has_metal_slime)
-			to_chat(user, "It already has \a [W] attached.")
+			to_chat(user, "It already has a slime extract attached.")
 			return FALSE
 		else
 			has_metal_slime=1
 			verbs += /obj/item/device/rcd/rpd/proc/multilayer
-			to_chat(user, "You jam \the [W] into the RPD's fabricator.")
+			to_chat(user, "You jam the slime extract into the RPD's fabricator.")
 			return TRUE
 
 	if(primarytype == /mob/living/carbon/slime/yellow)
 		if(has_yellow_slime)
-			to_chat(user, "It already has \a [W] attached.")
+			to_chat(user, "It already has a slime extract attached.")
 			return FALSE
 		else
 			has_yellow_slime=1
 			verbs += /obj/item/device/rcd/rpd/proc/autowrench
-			to_chat(user, "You jam \the [W] into the RPD's output nozzle.")
+			to_chat(user, "You jam the slime extract into the RPD's output nozzle.")
 			return TRUE
 
 /obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)

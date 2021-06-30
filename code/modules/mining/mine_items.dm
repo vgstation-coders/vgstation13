@@ -210,11 +210,11 @@ proc/move_mining_shuttle()
 /obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
 	if(primarytype == /mob/living/carbon/slime/oil)
 		if(has_slime)
-			to_chat(user, "It already has \a [W] at its point.")
+			to_chat(user, "It already has a slime extract at its point.")
 			return FALSE
 		else
 			has_slime=1
-			to_chat(user, "You mold \the [W] around the tip of \the [src].")
+			to_chat(user, "You mold the slime extract around the tip of \the [src].")
 			return TRUE
 	
 /obj/item/weapon/pickaxe/hammer
