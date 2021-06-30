@@ -140,7 +140,7 @@
 		return selected.Topic(href, href_list)
 
 /obj/item/device/rcd/rpd/slime_act(primarytype, mob/user)
-	if(primarytype == /mob/living/carbon/slime/metal))
+	if(primarytype == /mob/living/carbon/slime/metal)
 		if(has_metal_slime)
 			to_chat(user, "It already has \a [W] attached.")
 			return FALSE
@@ -150,7 +150,7 @@
 			to_chat(user, "You jam \the [W] into the RPD's fabricator.")
 			return TRUE
 
-	if(primarytype == /mob/living/carbon/slime/yellow))
+	if(primarytype == /mob/living/carbon/slime/yellow)
 		if(has_yellow_slime)
 			to_chat(user, "It already has \a [W] attached.")
 			return FALSE

@@ -404,7 +404,7 @@
 		return ..()
 
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
-	if(primarytype == /mob/living/carbon/slime/green))
+	if(primarytype == /mob/living/carbon/slime/green)
 		if(has_slime)
 			to_chat(user, "\the [src] already has \a [O] inside.")
 			return FALSE

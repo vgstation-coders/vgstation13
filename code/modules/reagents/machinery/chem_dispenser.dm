@@ -339,7 +339,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			return
 
 /obj/machinery/chem_dispenser/slime_act(primarytype,/mob/user)
-	if(primarytype == /mob/living/carbon/slime/black))
+	if(primarytype == /mob/living/carbon/slime/black)
 		if(has_slime)
 			to_chat(user, "There's already slime in the tank!")
 			return FALSE

@@ -136,7 +136,7 @@
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
 
 /obj/item/weapon/reagent_containers/spray/pepper/slime_act(primarytype, mob/user)
-	if(primarytype == /mob/living/carbon/slime/orange))
+	if(primarytype == /mob/living/carbon/slime/orange)
 		if(has_slime)
 			to_chat(user, "The bottle already has \a [W] inside.")
 			return FALSE
