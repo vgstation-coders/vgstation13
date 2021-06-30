@@ -27,8 +27,11 @@
 
 /datum/organ/internal/eyes/tajaran
 	name = "feline eyes"
-	see_in_dark=8
+	see_in_dark=9
 	removed_type = /obj/item/organ/internal/eyes/tajaran
+
+/datum/organ/internal/eyes/tajaran/update_perception(var/mob/living/carbon/human/M)
+	M.client.darkness_planemaster.alpha = 100
 
 /datum/organ/internal/eyes/grey
 	name = "huge eyes"
@@ -60,7 +63,7 @@
 
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"
-	see_in_dark = 8
+	see_in_dark = 9
 	removed_type = /obj/item/organ/internal/eyes/mushroom
 	var/dark_mode = FALSE
 
