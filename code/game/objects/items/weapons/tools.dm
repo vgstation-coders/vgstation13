@@ -89,10 +89,11 @@
 	if(primarytype == /mob/living/carbon/slime/bluespace)
 		if(has_slime)
 			to_chat(user, "\the [src] already has \a [W] inside it's head.")
+			return FALSE
 		else
 			has_slime=1
 			to_chat(user, "You shove \the [W] inside \the [src]'s head.")
-			qdel(W)
+			return TRUE
 
 /*
  * Screwdriver

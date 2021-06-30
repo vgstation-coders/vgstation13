@@ -211,10 +211,11 @@ proc/move_mining_shuttle()
 	if(primarytype == /mob/living/carbon/slime/oil))
 		if(has_slime)
 			to_chat(user, "It already has \a [W] at its point.")
+			return FALSE
 		else
 			has_slime=1
 			to_chat(user, "You mold \the [W] around the tip of \the [src].")
-			qdel(W)
+			return TRUE
 	
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"

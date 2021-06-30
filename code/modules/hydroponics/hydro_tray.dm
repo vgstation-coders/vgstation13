@@ -407,10 +407,11 @@
 	if(primarytype == /mob/living/carbon/slime/green))
 		if(has_slime)
 			to_chat(user, "\the [src] already has \a [O] inside.")
+			return FALSE
 		else
 			has_slime=1
 			to_chat(user, "You attach \the [O] to \the [src]'s internal mechanisms.")
-			qdel(O)
+			return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 

@@ -86,10 +86,11 @@
 	if(primarytype == /mob/living/carbon/slime/blue)
 		if(has_slime)
 			to_chat(user, "This extinguisher already has \a [W] attached.")
+			return FALSE
 		else
 			has_slime=1
 			to_chat(user, "You attach \the [W] to the extinguisher's funnel.")
-			qdel(W)
+			return TRUE
 
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
