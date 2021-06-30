@@ -52,7 +52,6 @@
 	icon_state = "foam_extinguisher0"
 	item_state = "foam_extinguisher"
 	sprite_name = "foam_extinguisher"
-	var/has_slime = 0
 
 /proc/pack_check(mob/user, var/obj/item/weapon/extinguisher/E) //Checks the user for a nonempty chempack.
 	var/mob/living/M = user

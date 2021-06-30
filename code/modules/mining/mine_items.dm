@@ -204,7 +204,6 @@ proc/move_mining_shuttle()
 	toolsounds = list('sound/weapons/Genhit.ogg')
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
-	var/has_slime = 0
 	var/excavation_amount = 100
 
 /obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)

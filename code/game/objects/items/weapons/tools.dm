@@ -83,7 +83,6 @@
 	w_class = W_CLASS_LARGE //big shit, to balance its power
 	force = 15.0
 	throwforce = 12.0
-	var/has_slime = 0
 
 /obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
 	if(primarytype == /mob/living/carbon/slime/bluespace)

@@ -44,7 +44,6 @@
 		SACID,
 		TUNGSTEN
 		)
-	var/has_slime = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 /*

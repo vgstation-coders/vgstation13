@@ -45,6 +45,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
+	// Does this item have a slime installed?
+	var/has_slime = 0
+
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
 	return FALSE

@@ -42,7 +42,6 @@
 	var/closed_system          // If set, the tray will attempt to take atmos from a pipe.
 	var/force_update           // Set this to bypass the cycle time check.
 	var/skip_aging = 0		   // Don't advance age for the next N cycles.
-	var/has_slime = 0		   // Green slime extract applied; plants don't age.
 	var/pollination = 0
 	var/bees = 0				//Are the trays currently affected by the bees' pollination?
 
