@@ -42,11 +42,7 @@
 /datum/emote/spin/run_emote(mob/user)
 	. = ..()
 	if(.)
-		var/prev_dir = user.dir
-		for(var/i in list(1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8))
-			user.dir = i
-			sleep(1)
-		user.dir = prev_dir
+		user.speen()
 
 /datum/emote/me
 	key = "me"
