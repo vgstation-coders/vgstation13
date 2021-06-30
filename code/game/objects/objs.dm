@@ -321,8 +321,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/slime_act(primarytype, mob/user)
 	if(has_slime)
-			to_chat(user, "\the [src] already has a slime extract attached.")
-			return FALSE
+		to_chat(user, "\the [src] already has a slime extract attached.")
+		return FALSE
 
 /obj/singularity_pull(S, current_size)
 	lazy_invoke_event(/lazy_event/on_before_move)
