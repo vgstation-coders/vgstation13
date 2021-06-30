@@ -517,7 +517,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/slime_extract/afterattack(var/atom/target, mob/user, proximity)
 	if(!proximity)
 		return
-	target.slime_act(primarytype,user)
+	if(target.slime_act(primarytype,user))
+		qdel(src)
 
 /obj/item/slime_extract/New()
 	..()
