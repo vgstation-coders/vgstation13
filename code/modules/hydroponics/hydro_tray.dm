@@ -403,14 +403,11 @@
 		return ..()
 
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
+	..()
 	if(primarytype == /mob/living/carbon/slime/green)
-		if(has_slime)
-			to_chat(user, "\the [src] already has a slime extract inside.")
-			return FALSE
-		else
-			has_slime=1
-			to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
-			return TRUE
+		has_slime=1
+		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
+		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 

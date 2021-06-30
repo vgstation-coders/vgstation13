@@ -207,14 +207,11 @@ proc/move_mining_shuttle()
 	var/excavation_amount = 100
 
 /obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
+	..()
 	if(primarytype == /mob/living/carbon/slime/oil)
-		if(has_slime)
-			to_chat(user, "It already has a slime extract at its point.")
-			return FALSE
-		else
-			has_slime=1
-			to_chat(user, "You mold the slime extract around the tip of \the [src].")
-			return TRUE
+		has_slime=1
+		to_chat(user, "You mold the slime extract around the tip of \the [src].")
+		return TRUE
 	
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"
