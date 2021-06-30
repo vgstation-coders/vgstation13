@@ -135,18 +135,15 @@
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
 
-/obj/item/weapon/reagent_containers/spray/pepper/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/slime_extract/orange))
+/obj/item/weapon/reagent_containers/spray/pepper/slime_act(primarytype, mob/user)
+	if(primarytype == /mob/living/carbon/slime/orange))
 		if(has_slime)
 			to_chat(user, "The bottle already has \a [W] inside.")
-			return
 		else
 			has_slime=1
 			reagents.add_reagent(CONDENSEDCAPSAICIN, 40)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
 			to_chat(user, "You drop \the [W] down into the spray canister, and liquid capsaicin swells up to the brim.")
 			qdel(W)
-			return
-	..()
 
 /obj/item/weapon/reagent_containers/spray/pepper/make_puff(var/atom/target, var/mob/user)
 	if(has_slime)

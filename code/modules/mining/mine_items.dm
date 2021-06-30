@@ -207,17 +207,14 @@ proc/move_mining_shuttle()
 	var/has_slime = 0
 	var/excavation_amount = 100
 
-/obj/item/weapon/pickaxe/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/slime_extract/oil))
+/obj/item/weapon/pickaxe/slime_act(primarytype), mob/user)
+	if(primarytype == /mob/living/carbon/slime/oil))
 		if(has_slime)
 			to_chat(user, "It already has \a [W] at its point.")
-			return
 		else
 			has_slime=1
 			to_chat(user, "You mold \the [W] around the tip of \the [src].")
 			qdel(W)
-			return
-	..()
 	
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"
