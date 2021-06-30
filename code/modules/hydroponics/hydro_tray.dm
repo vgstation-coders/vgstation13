@@ -399,20 +399,18 @@
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
-
-	else if(istype(O, /obj/item/slime_extract/green))
 		
+	else
+		return ..()
+
+/obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
+	if(primarytype == /mob/living/carbon/human/slime/green))
 		if(has_slime)
 			to_chat(user, "\the [src] already has \a [O] inside.")
-			return
 		else
 			has_slime=1
 			to_chat(user, "You attach \the [O] to \the [src]'s internal mechanisms.")
 			qdel(O)
-			return
-		
-	else
-		return ..()
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 

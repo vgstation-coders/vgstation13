@@ -139,30 +139,24 @@
 	if (selected)
 		return selected.Topic(href, href_list)
 
-/obj/item/device/rcd/rpd/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/slime_extract/metal))
+/obj/item/device/rcd/rpd/slime_act(primarytype, mob/user)
+	if(primarytype == /mob/living/carbon/slime/metal))
 		if(has_metal_slime)
 			to_chat(user, "It already has \a [W] attached.")
-			return
 		else
 			has_metal_slime=1
 			verbs += /obj/item/device/rcd/rpd/proc/multilayer
 			to_chat(user, "You jam \the [W] into the RPD's fabricator.")
 			qdel(W)
-			return
 
-	if(istype(W, /obj/item/slime_extract/yellow))
+	if(primarytype == /mob/living/carbon/slime/yellow))
 		if(has_yellow_slime)
 			to_chat(user, "It already has \a [W] attached.")
-			return
 		else
 			has_yellow_slime=1
 			verbs += /obj/item/device/rcd/rpd/proc/autowrench
 			to_chat(user, "You jam \the [W] into the RPD's output nozzle.")
 			qdel(W)
-			return
-
-	..()
 
 /obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)
 	if(!selected)
