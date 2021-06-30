@@ -85,8 +85,8 @@
 	throwforce = 12.0
 	var/has_slime = 0
 
-/obj/item/tool/wrench/socket/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/slime_extract/bluespace))
+/obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
+	if(primarytype == /mob/living/carbon/slime/bluespace)
 		if(has_slime)
 			to_chat(user, "\the [src] already has \a [W] inside it's head.")
 			return
@@ -95,7 +95,7 @@
 			to_chat(user, "You shove \the [W] inside \the [src]'s head.")
 			qdel(W)
 			return
-	..()
+
 /*
  * Screwdriver
  */
