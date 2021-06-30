@@ -226,8 +226,6 @@
 	if(is_holder_of(user, src) && !user.incapacitated())
 		mode = !mode
 		var/freq = 30000 + mode * 25000
-		//playsound(src,'sound/misc/click.ogg',30,1,-3, 0, 1, FALSE, freq)
-		///playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE)
 		user.playsound_local(user, 'sound/misc/click.ogg', 30, mode, freq, 0, 0, 0)
 		to_chat(user,"<span class='notice'>You flick the toggle into the [mode ? "SWEEPER" : "HUNTER"] position.</span>")
 		if(!mode)
