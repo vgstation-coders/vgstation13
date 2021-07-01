@@ -12,6 +12,7 @@
 	noghostspin = 0
 	can_have_carts = FALSE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/gokart
+	explodes_fueltanks = TRUE
 
 /obj/structure/bed/chair/vehicle/gokart/getMovementDelay()
 	. = ..()

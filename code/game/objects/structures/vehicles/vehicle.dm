@@ -60,6 +60,7 @@
 	var/list/datum/action/vehicle_actions = list()
 
 	var/headlights = FALSE
+	var/explodes_fueltanks = FALSE
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
