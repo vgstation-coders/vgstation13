@@ -38,6 +38,10 @@ cons:
 #define GFI_DX_PIXEL_X	9	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
 #define GFI_DX_PIXEL_Y	10	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
 #define GFI_DX_NAME		11	// Used to identify the human damage layer and apply the proper blood color
+#define GFI_DX_COORD_X	12	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
+#define GFI_DX_COORD_Y	13	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
+
+#define GFI_DX_MAX		13	// Remember to keep this updated should you need to keep track of more variables
 
 proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 
@@ -95,8 +99,8 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 			add.Blend(rgba, ICON_MULTIPLY)
 
 		// Blend the overlay into the flattened icon
-		var/atom/pos = data[GFI_DX_ATOM]
-		flat.Blend(add,blendMode2iconMode(pos.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(pos.x-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(pos.y-center.y+radius))
+		var/atom/atom = data[GFI_DX_ATOM]
+		flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_X]-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_Y]-center.y+radius))
 
 	return flat
 
@@ -104,7 +108,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 
 // to_sort might be either an atom or an image, returns its image data relative to its parent if there is one
 /proc/get_image_data(var/to_sort,var/list/parent)
-	var/data[11]
+	var/data[GFI_DX_MAX]
 	data[GFI_DX_ATOM] = to_sort
 	data[GFI_DX_ICON] = to_sort:icon
 	data[GFI_DX_STATE] = to_sort:icon_state
@@ -118,9 +122,14 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 	data[GFI_DX_NAME] = ""
 	if (isatom(to_sort))
 		data[GFI_DX_NAME] = to_sort:name
+		data[GFI_DX_COORD_X] = to_sort:x
+		data[GFI_DX_COORD_Y] = to_sort:y
 	if (parent?.len)
-		data[GFI_DX_ATOM] = parent[GFI_DX_ATOM] // the first entry always has to be the top level atom so we can track things like mobs lying down or their position
-		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connections use custom dirs
+		var/atom/parent_atom = parent[GFI_DX_ATOM]
+		data[GFI_DX_ATOM] = parent_atom // the first entry always has to be the top level atom so we can track things like mobs lying down or their position
+		data[GFI_DX_COORD_X] = parent_atom:x
+		data[GFI_DX_COORD_Y] = parent_atom:y
+		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connection overlays use custom dirs
 			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
 			data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
@@ -197,3 +206,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 #undef GFI_DX_PIXEL_X
 #undef GFI_DX_PIXEL_Y
 #undef GFI_DX_NAME
+#undef GFI_DX_COORD_X
+#undef GFI_DX_COORD_Y
+
+#undef GFI_DX_MAX
