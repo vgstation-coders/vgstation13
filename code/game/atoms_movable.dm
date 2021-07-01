@@ -1195,10 +1195,11 @@
 	current_tick = 1
 
 
-/atom/movable/proc/speen()
+/atom/movable/proc/speen(times = 4)
 	set waitfor = FALSE
 	var/prev_dir = dir
-	for(var/i in list(1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8))
-		change_dir(i)
-		sleep(1)
+	for(var/i in 1 to times)
+		for(var/new_dir in cardinal)
+			change_dir(new_dir)
+			sleep(1)
 	dir = prev_dir
