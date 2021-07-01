@@ -1202,4 +1202,4 @@
 		for(var/new_dir in cardinal)
 			change_dir(new_dir)
 			sleep(1)
-	dir = prev_dir
+	change_dir(prev_dir)
