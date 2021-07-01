@@ -31,7 +31,7 @@
 						  <a href='?src=\ref[src];send_message=\ref[TR]'>Send message</a><br/>
 						  <a href='?src=\ref[src];get_log=\ref[TR]'>Show exosuit log</a> |
 						  <a style='color: #A66300;' href='?src=\ref[src];lockdown=\ref[TR]'>(Toggle Lockdown)</a> |
-						  <a style='color: #f00;' href='?src=\ref[src];shock=\ref[TR]'>(Detonate Beacon)</a><br>"}
+						  <a style='color: #f00;' href='?src=\ref[src];shock=\ref[TR]'>(Overload Beacon)</a><br>"}
 
 	if(screen==1)
 
