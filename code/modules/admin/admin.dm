@@ -691,7 +691,9 @@ var/global/floorIsLava = 0
 				if (mode.forced_latejoin_rule)
 					dat += {"<A href='?src=\ref[src];f_dynamic_latejoin_clear=1'>-> [mode.forced_latejoin_rule.name] <-</A><br>"}
 			dat += "<A href='?src=\ref[src];f_dynamic_midround=1'>(Execute Midround Ruleset!)</A><br>"
+		dat += "Rulesets are <A href='?src=\ref[src];toggle_rulesets=1'>[admin_disable_rulesets ? "DISABLED" : "ENABLED"]</A><br>"
 		dat += "<hr/>"
+	dat += "Random Events are <A href='?src=\ref[src];toggle_events=1'>[admin_disable_events ? "DISABLED" : "ENABLED"]</A><br>"
 
 	dat += {"
 		<hr />
