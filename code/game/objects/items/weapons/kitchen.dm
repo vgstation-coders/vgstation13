@@ -96,6 +96,10 @@
 	if(!istype(M) || !istype(user))
 		return ..()
 
+	if(can_operate(M, user, src))
+		if(do_surgery(M, user, src))
+			return
+
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
