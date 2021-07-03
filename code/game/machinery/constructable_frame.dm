@@ -299,7 +299,7 @@ to destroy them and players will be able to make replacements.
 	"recharger"=/obj/item/weapon/circuitboard/recharger,
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
 	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
-	"electric oven"=/obj/item/weapon/circuitboard/oven,)
+	"Ez-bake oven"=/obj/item/weapon/circuitboard/cooking,)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -1404,6 +1404,17 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/capacitor = 2,
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/cooking
+	name = "circuit board (Ez-bake FUN oven)"
+	desc = "A circuit board for an Ez-bake FUN oven."
+	board_type = MACHINE
+	build_path = /obj/machinery/cooking
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+						/obj/item/weapon/stock_parts/capacitor = 2,
+						/obj/item/weapon/stock_parts/micro_laser = 3,
+						/obj/item/weapon/stock_parts/console_screen = 1)						
 
 /obj/item/weapon/circuitboard/medal_printer
 	name = "Circuit board (Medal Printer)"
