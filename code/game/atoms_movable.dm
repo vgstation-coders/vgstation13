@@ -1193,3 +1193,13 @@
 	target = get_turf(target_loc)
 
 	current_tick = 1
+
+
+/atom/movable/proc/speen(times = 4)
+	set waitfor = FALSE
+	var/prev_dir = dir
+	for(var/i in 1 to times)
+		for(var/new_dir in cardinal)
+			change_dir(new_dir)
+			sleep(1)
+	change_dir(prev_dir)

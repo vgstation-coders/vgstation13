@@ -29,7 +29,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSMOB|PASSDOOR
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/firebird
-
+	explodes_fueltanks = TRUE
 	var/datum/effect/effect/system/trail/firebird/ion_trail
 
 /obj/structure/bed/chair/vehicle/firebird/New()
@@ -60,12 +60,6 @@
 
 /obj/structure/bed/chair/vehicle/firebird/handle_layer()
 	return
-
-/obj/structure/bed/chair/vehicle/firebird/to_bump(var/atom/obstacle)
-	if(throwing)
-		return ..()
-	else
-		return obstacle.bumped_by_firebird(src) //Yep
 
 /obj/structure/bed/chair/vehicle/firebird/santa
 	name = "magic snowmobile"

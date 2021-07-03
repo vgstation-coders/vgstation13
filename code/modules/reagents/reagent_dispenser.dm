@@ -194,9 +194,13 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
-	visible_message("<span class='danger'>\the [F] crashes into \the [src]!</span>")
-	explode()
+/obj/structure/reagent_dispensers/fueltank/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle))
+		var/obj/structure/bed/chair/vehicle/car = AM
+		if(car.explodes_fueltanks)
+			visible_message("<span class='danger'>\The [car] crashes into \the [src]!</span>")
+			explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
 	if (reagents.total_volume > 500)
