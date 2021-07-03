@@ -208,6 +208,15 @@ var/datum/controller/gameticker/ticker
 	create_characters() //Create player characters and transfer them
 	collect_minds()
 	equip_characters()
+
+	for(var/mob/living/carbon/human/player in player_list)
+		switch(player.mind.assigned_role)
+			if("MODE","Mobile MMI","Trader")
+				//No injection
+			else
+				player.update_icons()
+				data_core.manifest_inject(player)
+
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
@@ -402,11 +411,6 @@ var/datum/controller/gameticker/ticker
 				if(player.mind.assigned_role=="Mobile MMI")
 					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				var/mob/living/carbon/human/new_character = player.create_character()
-				switch(new_character.mind.assigned_role)
-					if("MODE","Mobile MMI","Trader")
-						//No injection
-					else
-						data_core.manifest_inject(new_character)
 				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
 
