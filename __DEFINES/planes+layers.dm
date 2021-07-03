@@ -309,3 +309,28 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	screen |= ghost_planemaster
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
+
+
+// DARKNESS PLANEMASTER
+// One planemaster for each client, which they gain during mob/login()
+/obj/abstract/screen/plane_master/darkness_planemaster
+	plane = LIGHTING_PLANE
+
+	blend_mode    = BLEND_MULTIPLY
+
+/obj/abstract/screen/plane_master/darkness_planemaster_dummy
+	alpha = 0
+	appearance_flags = 0
+	plane = LIGHTING_PLANE
+
+/client/proc/initialize_darkness_planemaster()
+	if(darkness_planemaster)
+		screen -= darkness_planemaster
+		qdel(darkness_planemaster)
+	if(darkness_planemaster_dummy)
+		screen -= darkness_planemaster_dummy
+		qdel(darkness_planemaster_dummy)
+	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
+	screen |= darkness_planemaster
+	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
+	screen |= darkness_planemaster_dummy

@@ -118,4 +118,5 @@
 					I.pixel_x = 20 * PIXEL_MULTIPLIER
 					I.pixel_y = 20 * PIXEL_MULTIPLIER
 					I.plane = ANTAG_HUD_PLANE
+					I.appearance_flags |= RESET_COLOR|RESET_ALPHA
 					R.antag.current.client.images += I

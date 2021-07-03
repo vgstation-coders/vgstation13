@@ -433,6 +433,9 @@
 
 /mob/proc/Life()
 	set waitfor = FALSE
+
+	update_perception()
+
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
@@ -442,7 +445,6 @@
 	for (var/time in crit_rampup)
 		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
 			crit_rampup -= time
-	return
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
 	if(N.chained)
@@ -1927,6 +1929,9 @@ mob/proc/on_foot()
 		see_in_dark = see_in_dark_override
 	if(see_invisible_override)
 		see_invisible = see_invisible_override
+
+/mob/proc/update_perception()
+	return
 
 /mob/actual_send_to_future(var/duration)
 	var/init_blinded = blinded
