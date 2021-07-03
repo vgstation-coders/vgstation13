@@ -37,13 +37,13 @@ cons:
 #define GFI_DX_ALPHA	8	// The image's alpha, or that of its parent if said parent's alpha isn't 255
 #define GFI_DX_PIXEL_X	9	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
 #define GFI_DX_PIXEL_Y	10	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
-#define GFI_DX_NAME		11	// Used to identify the human damage layer and apply the proper blood color
-#define GFI_DX_COORD_X	12	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
-#define GFI_DX_COORD_Y	13	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
+#define GFI_DX_COORD_X	11	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
+#define GFI_DX_COORD_Y	12	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
 
-#define GFI_DX_MAX		13	// Remember to keep this updated should you need to keep track of more variables
+#define GFI_DX_MAX		12	// Remember to keep this updated should you need to keep track of more variables
 
-proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
+
+proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0)
 
 	var/icon/flat = icon('icons/effects/224x224.dmi',"empty") // Final flattened icon
 	var/icon/add // Icon of overlay being added
@@ -51,6 +51,13 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 	for(var/data in image_datas)
 		if (!data[GFI_DX_ICON] && !data[GFI_DX_STATE]) // no icon nor icon_state? we're probably not meant to draw that. Possibly a blank icon while we're only interested in its overlays.
 			continue
+
+		if (override_dir) // looks like we're getting some reference pics for an ID picture, let's ignore held items
+			if(data[GFI_DX_NAME] == "hand layer" || data[GFI_DX_NAME] == "1" || data[GFI_DX_NAME] == "2")
+				to_chat(world, "ignoring held item")
+				continue
+			data[GFI_DX_DIR] = override_dir
+
 		CHECK_TICK
 
 		if (!data[GFI_DX_STATE] || data[GFI_DX_STATE] == "body_m_s")//this fixes human bodies always facing south
@@ -74,18 +81,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 			         , 1
 			         , 0)
 
-		if(data[GFI_DX_NAME] == "damage layer")
-			if(ishuman(data[GFI_DX_ATOM]))
-				var/mob/living/carbon/human/H = data[GFI_DX_ATOM]
-				for(var/datum/organ/external/O in H.organs)
-					if(!(O.status & ORGAN_DESTROYED))
-						if(O.damage_state == "00")
-							continue
-						var/icon/DI
-						DI = H.get_damage_icon_part(O.damage_state, O.icon_name, (H.species.blood_color == DEFAULT_BLOOD ? "" : H.species.blood_color))
-						add.Blend(DI,ICON_OVERLAY)
-
-		if(iscarbon(data[GFI_DX_ATOM]))
+		if(!override_dir && iscarbon(data[GFI_DX_ATOM]))
 			var/mob/living/carbon/C = data[1]
 			if(C.lying && !isalienadult(C))//because adult aliens have their own resting sprite
 				add.Turn(90)
@@ -100,7 +96,11 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 
 		// Blend the overlay into the flattened icon
 		var/atom/atom = data[GFI_DX_ATOM]
-		flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_X]-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_Y]-center.y+radius))
+		if (center)
+			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_X]-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_Y]-center.y+radius))
+		else // if there is no center that means we're probably dealing with a single atom, so we only care about the pixel offset
+			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X],1+data[GFI_DX_PIXEL_Y])
+
 
 	return flat
 
@@ -119,7 +119,6 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 	data[GFI_DX_ALPHA] = to_sort:alpha
 	data[GFI_DX_PIXEL_X] = to_sort:pixel_x
 	data[GFI_DX_PIXEL_Y] = to_sort:pixel_y
-	data[GFI_DX_NAME] = ""
 	if (isatom(to_sort))
 		data[GFI_DX_NAME] = to_sort:name
 		data[GFI_DX_COORD_X] = to_sort:x
@@ -205,8 +204,8 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 #undef GFI_DX_ALPHA
 #undef GFI_DX_PIXEL_X
 #undef GFI_DX_PIXEL_Y
-#undef GFI_DX_NAME
 #undef GFI_DX_COORD_X
 #undef GFI_DX_COORD_Y
 
 #undef GFI_DX_MAX
+
