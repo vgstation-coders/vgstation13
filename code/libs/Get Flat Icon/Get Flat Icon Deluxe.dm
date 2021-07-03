@@ -52,9 +52,8 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 		if (!data[GFI_DX_ICON] && !data[GFI_DX_STATE]) // no icon nor icon_state? we're probably not meant to draw that. Possibly a blank icon while we're only interested in its overlays.
 			continue
 
-		if (override_dir) // looks like we're getting some reference pics for an ID picture, let's ignore held items
-			if(data[GFI_DX_NAME] == "hand layer" || data[GFI_DX_NAME] == "1" || data[GFI_DX_NAME] == "2")
-				to_chat(world, "ignoring held item")
+		if (override_dir) // looks like we're getting some reference pics for an ID picture, let's ignore some of the items
+			if(data[GFI_DX_STATE] == "plasticbag" || data[GFI_DX_STATE] == "bookVirologyGuide")
 				continue
 			data[GFI_DX_DIR] = override_dir
 
@@ -101,7 +100,6 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 		else // if there is no center that means we're probably dealing with a single atom, so we only care about the pixel offset
 			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X],1+data[GFI_DX_PIXEL_Y])
 
-
 	return flat
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +118,6 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 	data[GFI_DX_PIXEL_X] = to_sort:pixel_x
 	data[GFI_DX_PIXEL_Y] = to_sort:pixel_y
 	if (isatom(to_sort))
-		data[GFI_DX_NAME] = to_sort:name
 		data[GFI_DX_COORD_X] = to_sort:x
 		data[GFI_DX_COORD_Y] = to_sort:y
 	if (parent?.len)
