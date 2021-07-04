@@ -59,7 +59,7 @@
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
 	rockets.pixel_x = -64 * PIXEL_MULTIPLIER
 	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
-	rockets.plane = LIGHTING_PLANE
+	rockets.plane = ABOVE_LIGHTING_PLANE
 	rockets.layer = ABOVE_LIGHTING_LAYER
 	intrinsic_spells = list(
 							new /spell/mech/marauder/thrusters(src),

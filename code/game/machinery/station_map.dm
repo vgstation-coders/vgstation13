@@ -80,7 +80,7 @@ var/list/station_holomaps = list()
 	holomap_datum.initialize_holomap(T)
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[original_zLevel]"])
-	small_station_map.plane = LIGHTING_PLANE
+	small_station_map.plane = ABOVE_LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
 
 	floor_markings = image('icons/turf/overlays.dmi', "station_map")
@@ -395,7 +395,7 @@ var/list/station_holomaps = list()
 	holomap_datum.initialize_holomap()
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
-	small_station_map.plane = LIGHTING_PLANE
+	small_station_map.plane = ABOVE_LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
 
 	update_icon()
@@ -452,7 +452,7 @@ var/list/station_holomaps = list()
 	if(!(stat & (NOPOWER|BROKEN)))
 		if(!small_station_map)
 			small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
-			small_station_map.plane = LIGHTING_PLANE
+			small_station_map.plane = ABOVE_LIGHTING_PLANE
 			small_station_map.layer = ABOVE_LIGHTING_LAYER
 		small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"]
 		small_station_map.pixel_x = WORLD_ICON_SIZE/2

@@ -30,7 +30,7 @@
 	density = 0
 
 	layer = ABOVE_LIGHTING_LAYER
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 
 	animate_movement = 0
 

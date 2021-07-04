@@ -92,7 +92,7 @@
 
 /obj/effect/rune/salt_act()
 	var/turf/T = get_turf(src)
-	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_break", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	if (active_spell)
 		active_spell.salt_act(T)
 	qdel(src)
