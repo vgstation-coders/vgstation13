@@ -2826,7 +2826,7 @@ var/list/the_station_areas = list (
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
-	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 // BEGIN Horizon
 /area/hallway/primary/foreport
