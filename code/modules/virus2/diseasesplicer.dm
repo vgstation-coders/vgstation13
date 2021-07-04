@@ -188,14 +188,14 @@
 
 	if(scanning || splicing)
 		var/image/splicer_glass = image(icon,"splicer_glass")
-		splicer_glass.plane = LIGHTING_PLANE
+		splicer_glass.plane = ABOVE_LIGHTING_PLANE
 		splicer_glass.layer = ABOVE_LIGHTING_LAYER
 		splicer_glass.blend_mode = BLEND_ADD
 		overlays += splicer_glass
 
 	if (memorybank)
 		var/image/buffer_light = image(icon,"splicer_buffer")
-		buffer_light.plane = LIGHTING_PLANE
+		buffer_light.plane = ABOVE_LIGHTING_PLANE
 		buffer_light.layer = ABOVE_LIGHTING_LAYER
 		overlays += buffer_light
 

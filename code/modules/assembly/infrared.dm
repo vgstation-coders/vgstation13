@@ -78,7 +78,7 @@
 	if(on && visible)
 		var/image/I = image(icon = icon, icon_state = "infrared_on", dir = dir)
 		I.layer = ABOVE_LIGHTING_LAYER
-		I.plane = LIGHTING_PLANE
+		I.plane = ABOVE_LIGHTING_PLANE
 		attached_overlays["infrared_on"] = I
 		overlays += attached_overlays["infrared_on"]
 

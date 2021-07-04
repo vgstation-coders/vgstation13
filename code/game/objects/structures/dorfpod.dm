@@ -16,7 +16,7 @@ var/obj/structure/dorfpod/center/dorfpod
 	..()
 	set_light(3, 2)
 	var/image/I = image(icon,"[icon_state]-lights")
-	I.plane = LIGHTING_PLANE
+	I.plane = ABOVE_LIGHTING_PLANE
 	I.layer = ABOVE_LIGHTING_LAYER
 	overlays += I
 
