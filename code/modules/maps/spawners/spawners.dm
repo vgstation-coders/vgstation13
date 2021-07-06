@@ -1256,7 +1256,7 @@
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
 	/obj/abstract/spawn_all/dredd_gear,
-	/obj/item/clothing/glasses/emitter,
+	/obj/item/clothing/glasses/emitter
 )
 
 /obj/abstract/map/spawner/safe/medal
