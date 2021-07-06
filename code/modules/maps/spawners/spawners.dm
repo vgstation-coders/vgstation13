@@ -591,7 +591,8 @@
 		/obj/structure/bed/chair/vehicle/wheelchair/multi_people,
 		/obj/item/stack/package_wrap/syndie,
 		/obj/item/weapon/storage/toolbox/syndicate,
-		/obj/item/weapon/switchtool/swiss_army_knife
+		/obj/item/weapon/switchtool/swiss_army_knife,
+		/obj/item/clothing/accessory/wristwatch
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -1255,7 +1256,7 @@
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
 	/obj/abstract/spawn_all/dredd_gear,
-	/obj/item/clothing/glasses/emitter
+	/obj/item/clothing/glasses/emitter,
 )
 
 /obj/abstract/map/spawner/safe/medal
