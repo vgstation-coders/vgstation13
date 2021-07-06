@@ -1409,6 +1409,7 @@
 #include "code\modules\clothing\accessories\spesstv.dm"
 #include "code\modules\clothing\accessories\storage.dm"
 #include "code\modules\clothing\accessories\tactical_light.dm"
+#include "code\modules\clothing\accessories\wristwatch.dm"
 #include "code\modules\clothing\back\cape.dm"
 #include "code\modules\clothing\glasses\glasses.dm"
 #include "code\modules\clothing\glasses\hud.dm"

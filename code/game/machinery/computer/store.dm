@@ -45,6 +45,7 @@
 			/datum/storeitem/sterilemask,
 			/datum/storeitem/sterilemask_black,
 			/datum/storeitem/sterilemask_colorful,
+			/datum/storeitem/wristwatch,
 			/datum/storeitem/robotnik_labcoat,
 			/datum/storeitem/robotnik_jumpsuit,
 			),

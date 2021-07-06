@@ -165,6 +165,12 @@
 	typepath = /obj/item/clothing/mask/surgical/colorful
 	cost = 20
 
+/datum/storeitem/wristwatch
+	name = "Wristwatch"
+	desc = "A wristwatch with a red leather strap. Can be fit on your uniform."
+	typepath = /obj/item/clothing/accessory/wristwatch
+	cost = 50
+
 /datum/storeitem/robotnik_labcoat
 	name = "Robotnik's Research Labcoat"
 	desc = "Join the empire and display your hatred for woodland animals."
