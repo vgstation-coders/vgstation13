@@ -162,6 +162,7 @@
 
 /datum/outfit/striketeam/nukeops/post_equip(var/mob/living/carbon/human/H)
 	..()
+	equip_accessory(H, /obj/item/clothing/accessory/wristwatch/black, /obj/item/clothing/under)
 	var/obj/item/device/radio/R = H.ears
 	R.set_frequency(SYND_FREQ)
 	if(H.mind.GetRole(NUKE_OP_LEADER))

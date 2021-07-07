@@ -592,7 +592,8 @@
 		/obj/item/stack/package_wrap/syndie,
 		/obj/item/weapon/storage/toolbox/syndicate,
 		/obj/item/weapon/switchtool/swiss_army_knife,
-		/obj/item/clothing/accessory/wristwatch
+		/obj/item/clothing/accessory/wristwatch,
+		/obj/item/clothing/accessory/wristwatch/black,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -1186,7 +1187,8 @@
 		/obj/item/weapon/aiModule/randomize,
 		/obj/item/weapon/aiModule/core/hogan,
 		/obj/item/weapon/gun/portalgun,
-		/obj/item/clothing/glasses/emitter
+		/obj/item/clothing/glasses/emitter,
+		/obj/item/clothing/accessory/wristwatch/gold
 )
 
 
@@ -1256,7 +1258,8 @@
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
 	/obj/abstract/spawn_all/dredd_gear,
-	/obj/item/clothing/glasses/emitter
+	/obj/item/clothing/glasses/emitter,
+	/obj/item/clothing/accessory/wristwatch/gold,
 )
 
 /obj/abstract/map/spawner/safe/medal
