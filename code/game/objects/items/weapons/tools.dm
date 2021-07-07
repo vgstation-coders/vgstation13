@@ -223,6 +223,15 @@
 		return
 	else
 		..()
+
+/obj/item/tool/wirecutters/scissors
+	name = "scissors"
+	desc = "This cuts paper."
+	icon_state = "scissors"
+
+/obj/item/tool/wirecutters/scissors/New()
+	. = ..()
+	icon_state = "scissors"
 /*
  * Welding Tool
  */
