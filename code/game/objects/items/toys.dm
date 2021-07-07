@@ -1822,3 +1822,11 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
+
+/obj/item/toy/foam_hand
+	name = "\improper NanoTrasen foam hand"
+	desc = "A simple balloon."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "foam_hand"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	w_class = W_CLASS_LARGE

@@ -499,3 +499,23 @@
 	desc = "This little pin proves the holder takes their civic duty very seriously."
 	icon_state = "voting_pin"
 	_color = "voting_pin"
+
+
+/obj/item/clothing/accessory/ribbon_medal
+	name = "bronze medal"
+	desc = "Even though you were late to the party, you were still the life of it."
+	icon_state = "bronze_medal"
+	_color = "bronze_medal"
+
+/obj/item/clothing/accessory/ribbon_medal/silver
+	name = "silver medal"
+	desc = "Of all the losers, you're the number one loser. No one lost ahead of you."
+	icon_state = "silver_medal"
+	_color = "silver_medal"
+
+/obj/item/clothing/accessory/ribbon_medal/gold
+	name = "gold medal"
+	desc = "You won! Congratulations! You've put in a lot of effort and it paid off. Good job."
+	icon_state = "gold_medal"
+	_color = "gold_medal"
+
