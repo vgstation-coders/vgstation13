@@ -61,7 +61,7 @@
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
-	if (world.time > next_honk)
+	if (isliving(AM) && world.time > next_honk)
 		honk()
 		next_honk = world.time + 2 SECONDS
 
