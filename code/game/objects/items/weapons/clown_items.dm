@@ -63,7 +63,7 @@
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
 	if (isliving(AM) && world.time > next_honk)
 		honk()
-		next_honk = world.time + 2 SECONDS
+		next_honk = world.time + honk_delay
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
 	//hitsound takes care of that
