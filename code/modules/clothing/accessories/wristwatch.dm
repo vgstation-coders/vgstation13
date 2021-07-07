@@ -94,6 +94,8 @@
 		to_chat(usr, "<span class='notice'>The time is [worldtime2text(world.time, TRUE)].</span>")
 
 /obj/item/clothing/accessory/wristwatch/gold
+	name = "golden wristwatch"
+	desc = "A wristwatch worth a captain's paycheck."
 	icon = 'icons/obj/watches/goldwatch.dmi'
 	icon_state = "goldwatch"
 	item_state = "goldwatch"
@@ -101,6 +103,8 @@
 	luminescent = FALSE
 
 /obj/item/clothing/accessory/wristwatch/black
+	name = "black wristwatch"
+	desc = "A sleek black wristwatch with a luminescent dial and hands."
 	icon = 'icons/obj/watches/wristwatch_black.dmi'
 	icon_state = "wristwatch_black"
 	item_state = "wristwatch_black"
