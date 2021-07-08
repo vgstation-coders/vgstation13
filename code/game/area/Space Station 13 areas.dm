@@ -1149,6 +1149,9 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Holodeck Alpha"
 	jammed = 0
 
+/area/holodeck/dungeon_holodeck_alpha
+	name = "\improper Holodeck Alpha"
+
 /area/holodeck/source_plating
 	name = "\improper Holodeck - Off"
 	icon_state = "Holodeck"
