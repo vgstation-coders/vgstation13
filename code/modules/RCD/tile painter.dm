@@ -15,14 +15,14 @@
 	schematics = list(/datum/rcd_schematic/clear_decals)
 
 /obj/item/device/rcd/tile_painter/New()
-	schematics += typesof(/datum/rcd_schematic/tile)
+	schematics += typesof(/datum/rcd_schematic/tile) - /datum/rcd_schematic/tile/emagged
 	. = ..()
 
 /obj/item/device/rcd/tile_painter/emag_act(var/mob/emagger)
 	emagged = 1
 	spark(src, 5, FALSE)
 	to_chat(emagger, "<span class='warning'>You short out the selection circuitry in the [src].</span>")
-	var/datum/rcd_schematic/tile/emagged/schematic = new /datum/rcd_schematic/tile/emagged
+	var/datum/rcd_schematic/tile/emagged/schematic = new /datum/rcd_schematic/tile/emagged(src)
 	schematics = list(schematic)
 	selected = schematic
 	
