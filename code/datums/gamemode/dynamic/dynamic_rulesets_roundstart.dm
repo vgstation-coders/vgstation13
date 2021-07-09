@@ -299,11 +299,14 @@
 /datum/dynamic_ruleset/roundstart/cwc/execute()
 	var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
 	var/datum/faction/wizard/civilwar/wpf/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
-	var/wizards_number = 1
 	for(var/mob/M in assigned)
 		var/datum/role/wizard/newWizard = new
-		if(wizards_number % 2)
-			WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
+		if (WPF.members.len < PFW.members.len)
+			WPF.HandleRecruitedRole(newWizard)
+		else if (WPF.members.len > PFW.members.len)
+			PFW.HandleRecruitedRole(newWizard)
+		else if(prob(50))
+			WPF.HandleRecruitedRole(newWizard)
 		else
 			PFW.HandleRecruitedRole(newWizard)
 		newWizard.AssignToRole(M.mind,1)
