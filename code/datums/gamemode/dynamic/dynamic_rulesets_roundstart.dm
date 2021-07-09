@@ -311,7 +311,6 @@
 			PFW.HandleRecruitedRole(newWizard)
 		newWizard.AssignToRole(M.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
-		wizards_number++
 	return 1
 
 //////////////////////////////////////////////
