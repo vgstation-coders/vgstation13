@@ -49,8 +49,8 @@
 /proc/send_prayer_to_admins(var/msg,var/sound,var/type,var/key,var/jumploc)
 	var/admin_number_afk = 0
 	for(var/client/C in admins)
-		if((R_ADMIN|R_MOD) & X.holder.rights)
-			if(X.is_afk())
+		if((R_ADMIN|R_MOD) & C.holder.rights)
+			if(C.is_afk())
 				admin_number_afk++
 		if(C.prefs.toggles & CHAT_PRAYER)
 			C.output_to_special_tab(msg)
