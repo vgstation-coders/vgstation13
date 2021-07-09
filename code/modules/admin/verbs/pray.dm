@@ -47,10 +47,16 @@
 	send_prayer_to_admins(msg, 'sound/effects/inception.ogg', "Syndicate", key_name(Sender, 1), get_turf(Sender))
 
 /proc/send_prayer_to_admins(var/msg,var/sound,var/type,var/key,var/jumploc)
+	var/admin_number_afk = 0
 	for(var/client/C in admins)
+		if((R_ADMIN|R_MOD) & X.holder.rights)
+			if(X.is_afk())
+				admin_number_afk++
 		if(C.prefs.toggles & CHAT_PRAYER)
 			C.output_to_special_tab(msg)
 			C << sound
+
+	var/admin_number_present = admins.len - admin_number_afk
 	if(admin_number_present <= 0)
 		if(!admin_number_afk)
 			send2adminirc("[uppertext(type)] [key]: [msg] - No admins online")
