@@ -239,7 +239,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 //why the fuck doesnt the thing show as orange
 	var/admin_msg = "Receiving '[sentname]' to <b>[centcomm_dpt]</b> via secure connection..."
 	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: [admin_msg] <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
-	send_prayer_to_admins(admin_msg, sound/effects/fax.ogg, "Centcomm Fax", key_name(Sender, 1), get_turf(Sender))
+	send_prayer_to_admins(msg, admin_msg, sound/effects/fax.ogg, "Centcomm Fax", key_name(Sender, 1), get_turf(Sender))
 
 	for (var/obj/machinery/faxmachine/fax in allfaxes)
 		if (fax.z == CENTCOMM_Z)
@@ -247,7 +247,6 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 			P.name = "[sentname]"
 			P.info = "[sent.info]"
 			playsound(fax.loc, "sound/effects/fax.ogg", 50, 1)
-
 
 /proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)
 
