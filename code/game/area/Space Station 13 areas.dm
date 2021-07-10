@@ -94,6 +94,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/holomap_marker = null
 	var/list/holomap_filter = list()
 
+	var/lights_always_start_on = FALSE
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -1045,6 +1047,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Dormitories"
 	icon_state = "Sleep"
 	shuttle_can_crush = FALSE
+	lights_always_start_on = TRUE
 
 /area/crew_quarters/toilet
 	name = "\improper Dormitory Toilets"
@@ -1099,6 +1102,7 @@ proc/process_adminbus_teleport_locs()
 /area/crew_quarters/theatre
 	name = "\improper Theatre"
 	icon_state = "Theatre"
+	lights_always_start_on = FALSE
 
 /area/library
 	name = "\improper Library"
@@ -1828,6 +1832,7 @@ proc/process_adminbus_teleport_locs()
 /area/storage/primary
 	name = "Primary Tool Storage"
 	icon_state = "primarystorage"
+	lights_always_start_on = TRUE
 
 /area/storage/autolathe
 	name = "Autolathe Storage"
@@ -2118,6 +2123,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper MoMMI Nest"
 	icon_state = "yellow"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	lights_always_start_on = TRUE
 
 /area/construction/supplyshuttle
 	name = "\improper Supply Shuttle"
