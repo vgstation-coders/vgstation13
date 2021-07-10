@@ -283,6 +283,10 @@
 		icon_state = "tele1"
 		set_light(3, l_color = "#FFAA00")
 
+/obj/machinery/teleport/hub/attack_ghost(var/mob/user)
+	if (engaged)
+		spawn()
+			teleport(user)
 
 /obj/machinery/teleport/hub/Crossed(AM as mob|obj)
 	if(AM == src)
