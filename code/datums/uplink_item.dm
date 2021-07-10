@@ -866,6 +866,9 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Shaft Miner")
 
+/datum/uplink_item/jobspecific/cargo/mastertrainer/new_uplink_item(var/new_item, var/turf/location, mob/user)
+	return new new_item(location, user)
+
 /datum/uplink_item/jobspecific/service
 	category = "Service Specials"
 
