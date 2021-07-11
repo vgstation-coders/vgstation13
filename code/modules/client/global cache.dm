@@ -378,6 +378,13 @@
 		"href_multipart_handler.js" =  'code/modules/html_interface/href_multipart_handler.js'
 	)
 
+/datum/asset/simple/paint_tool
+	assets = list(
+		"paintTool.js" = 'code/modules/html_interface/paintTool/paintTool.js',
+		"canvas.js" =  'code/modules/html_interface/paintTool/canvas.js',
+		"canvas.css" =  'code/modules/html_interface/paintTool/canvas.css',
+		"checkerboard.png" =  'code/modules/html_interface/paintTool/checkerboard.png'
+	)
 /datum/asset/simple/emoji_list
 	assets = list(
 		"emoji-happy.png"		=	'icons/pda_icons/emoji/happy.png',
