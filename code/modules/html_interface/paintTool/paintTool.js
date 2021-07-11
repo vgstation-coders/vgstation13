@@ -21,7 +21,7 @@
  *              This will be where the user will draw and see the result. It's width and height attributes
  *               should be a multiple of 'Width' and 'Height', or you'll get some visual artifacts.
  *
- *  - 'Tool Strength': An <input> with id="paint_strength". It's value must be between 1 and 0 inclusive, and
+ *  - 'Tool Strength': An <input> with id="paint_opacity". It's value must be between 1 and 0 inclusive, and
  *                      represents the color's "alpha value", aka how much of an effect it has in changing a
  *                      pixel's color.
  *
@@ -64,11 +64,11 @@
  * Useful if placing buttons to increase/decrease the tool strenght, rather than modifying it directly.
  *
  *
- * --- hexToRgb(hex), rgbToHex(r, g, b) ---
+ * --- hexToRgba(hex), rgbaToHex(r, g, b) ---
  *
  * Helper functions to deal with rgb/hex conversions.
- * 'hexToRgb(hex)' takes eg. an "#aa88ff" string and returns an {r:170, g:136, b:255} object.
- * 'rgbToHex(r, g, b)' takes three integers ranging from 0 to 255 and returns the corresponding string, eg. "#aa88ff"
+ * 'hexToRgba(hex)' takes eg. an "#aa88ff" string and returns an {r:170, g:136, b:255} object.
+ * 'rgbaToHex(r, g, b)' takes three integers ranging from 0 to 255 and returns the corresponding string, eg. "#aa88ff"
  */
 
 //Canvas and context for the player to draw in
@@ -91,9 +91,13 @@ var is_mouse_down = false;
 
 //Color and tool data
 var paint_color = "#000000";
-var paint_strength = 0.5;
+var paint_opacity = 0.5;
 var minPaintStrength = 0;
 var maxPaintStrength = 1;
+
+// Milliseconds to wait since we last moved the mouse in ordder to draw.
+// Ensures all browsers draw lines with the same opacity, instead of letting those that check more often drawing darker lines
+const PAINT_TOOL_MOVEMENT_THROTTLE = 10;
 
 /**
  * Initialize the script
@@ -133,63 +137,65 @@ function initPaint(initData) {
 /**
  * Sets the current color to the specified color, updating the "selected color" display
  */
-function setColor(color) {
+function setPaintColor(color) {
 	paint_color = color;
-	document.getElementById("current_color").style["background"] = color;
+}
+
+function getPaintColor() {
+	return paint_color;
+}
+
+function setOpacity(opacity) {
+	paint_opacity = isNaN(opacity) ? 0 : opacity;
+	paint_opacity = Math.round(paint_opacity*100)/100;
+	paint_opacity =  Math.min(Math.max(paint_opacity, minPaintStrength), maxPaintStrength);
+	return paint_opacity;
+}
+
+function getOpacity() {
+	return paint_opacity;
 }
 
 /**
- * Sets the tool strength to the value on the id="paint_strength" input, and sanitizes the result
+ * Convert hex to RGBA objects.
+ * Helper function, converts an hex string (eg: #AA88FF or #AA88FFFF) to an
+ * {r:170, g:136, b:255, a:255} object.
+ * If the alpha component is missing it'll be treated as FF
  */
-function setStrength() {
-	var strengthInput = document.getElementById("paint_strength");
-	paint_strength = parseFloat(strengthInput.value, 10);
-	sanitizeStrength();
-	strengthInput.value = paint_strength;
-}
+function hexToRgba(hex) {
+	//Pad with alpha component if missing
+	hex = hex.slice(1);
+	if (hex.length < 8) hex += "FF";
 
-/**
- * Changes the tool's strength by the specified amount, and sanitizes the result
- */
-function changeStrength(diff) {
-	var strengthInput = document.getElementById("paint_strength");
-	paint_strength = parseFloat(strengthInput.value, 10);
-	paint_strength += diff;
-	sanitizeStrength();
-	strengthInput.value = paint_strength;
-}
-
-/**
- * Convert hex to RGB objects.
- * Helper function, converts an hex string (eg: #AA88FF) to an {r:170, g:136, b:255} object.
- */
-function hexToRgb(hex) {
 	//Get rid of '#'
-	hex = parseInt(hex.slice(1), 16);
+	hex = parseInt(hex, 16);
 
 	//Bitwise magic
 	return {
-		r: (hex >> 16) & 255,
-		g: (hex >> 8) & 255,
-		b: hex & 255
+		r: (hex >> 24) & 255,
+		g: (hex >> 16) & 255,
+		b: (hex >> 8) & 255,
+		a: hex & 255
 	};
 }
 
 /**
- * Convert RGB to hex.
- * Helper function, converts {r, g, b} objects (eg: {r:170, g:136, b:255}) to an hex string (eg: #AA88FF).
+ * Convert RGBA to hex.
+ * Helper function, converts {r, g, b, a} objects (eg: {r:170, g:136, b:255, r:170}) to an
+ * hex string (eg: #AA88FFAA).
+ * If the alpha component is FF, it will be omitted on the hex
  */
-function rgbToHex(rgb) {
-	for (k in rgb) {
+function rgbaToHex(rgba) {
+	for (k in rgba) {
 		//Convert to hex value
-		rgb[k] = Math.round(rgb[k]).toString(16);
+		rgba[k] = Math.round(rgba[k]).toString(16);
 
 		//Pad with 0 if needed
-		rgb[k] = rgb[k].length > 1 ? rgb[k] : "0" + rgb[k];
+		rgba[k] = rgba[k].length > 1 ? rgba[k] : "0" + rgba[k];
 	}
 
 	//Put it together
-	return "#" + rgb.r + rgb.g + rgb.b
+	return "#" + rgba.r + rgba.g + rgba.b + (rgba.a != "ff" ? rgba.a : "")
 }
 
 /*
@@ -197,37 +203,26 @@ function rgbToHex(rgb) {
  *
  */
 
-/**
- * Sanitizes tool strength. Turns NaNs to 0, rounds the value to the second decimal and clamps it to
- *  the min and max values
- */
-function sanitizeStrength() {
-	paint_strength = isNaN(paint_strength) ? 0 : paint_strength;
-	paint_strength = Math.round(paint_strength*100)/100;
-	paint_strength =  Math.min(Math.max(paint_strength, minPaintStrength), maxPaintStrength);
-}
-
-
 var blendFunction = colorRybBlend;
 
 /**
  * Draw a pixel into the bitmap.
- * Given 'rgb' as an hex string (eg: #AA88FF) and 'a' (alpha) as a 0-1 value, will mix said color
+ * Given 'rgba' as an hex string (eg: #AA88FF) and 'a' (alpha) as a 0-1 value, will mix said color
  *  with whatever's on the specified pixel on the bitmap.
  */
-function pixelDraw(x, y, rgb, alpha) {
+function pixelDraw(x, y, rgba, alpha) {
 	//Figure out the pixel index off the x and y
 	let pixel = y * width + x;
 
 	//Convert to numeric values
-	rgb = hexToRgb(rgb);
-	let orgb = hexToRgb(bitmap[pixel]);
+	rgba = hexToRgba(rgba);
+	let orgba = hexToRgba(bitmap[pixel]);
 
 	//Mix both color values
-	rgb = blendFunction(rgb, orgb, alpha);
+	rgba = blendFunction(rgba, orgba, alpha);
 
 	//Save result into bitmap
-	bitmap[pixel] = rgbToHex(rgb);
+	bitmap[pixel] = rgbaToHex(rgba);
 }
 
 
@@ -277,7 +272,10 @@ function colorOverlayBlend(c1, c2, alpha) {
 function colorRybBlend(c1, c2, alpha) {
 	var c1Ryb = rgbToRyb(c1);
 	var c2Ryb = rgbToRyb(c2);
-	var resultRyb = {r:0, y:0, b:0};
+	var resultRyb = {r:0, y:0, b:0, a:c2Ryb.a};
+
+	alpha *= c1Ryb.a / 255.0;
+
 	resultRyb.r = Math.round(alpha * c1Ryb.r + (1-alpha) * c2Ryb.r);
 	resultRyb.y = Math.round(alpha * c1Ryb.y + (1-alpha) * c2Ryb.y);
 	resultRyb.b = Math.round(alpha * c1Ryb.b + (1-alpha) * c2Ryb.b);
@@ -298,7 +296,7 @@ end color blends
  */
 function rgbToRyb(rgb) {
 	// Soon-to-be result
-	var ryb = {r:0, y:0, b:0};
+	var ryb = {r:0, y:0, b:0, a:rgb.a};
 
 	// Make a copy of the input to work on
 	var tmpRgb = {r: rgb.r, g: rgb.g, b: rgb.b};
@@ -341,7 +339,7 @@ function rgbToRyb(rgb) {
  */
 function rybToRgb(ryb) {
 	// Soon-to-be result
-	var rgb = {r:0, g:0, b:0};
+	var rgb = {r:0, g:0, b:0, a:ryb.a};
 
 	// Make a copy of the input to work on
 	var tmpRyb = {r: ryb.r, y: ryb.y, b: ryb.b};
@@ -386,13 +384,15 @@ function rybToRgb(ryb) {
  * Gets called whenever the mouse either moves within the canvas or is released from being
  *  pressed down (eg. single clicks)
  */
+
+var lastMove = 0;
 function draw_on_bitmap() {
 	//If the mouse is pressed down and inside the canvas...
 	if (is_mouse_down
 		&& event.offsetX > 0 && event.offsetX < canvas.width
-		&& event.offsetY > 0 && event.offsetY < canvas.height)
+		&& event.offsetY > 0 && event.offsetY < canvas.height
+		&& (Date.now() - lastMove) > PAINT_TOOL_MOVEMENT_THROTTLE)
 	{
-
 		//Translate mouse position to bitmap position
 		var x = Math.floor(width * event.offsetX/canvas.width);
 		var y = Math.floor(height * event.offsetY/canvas.height);
@@ -400,15 +400,18 @@ function draw_on_bitmap() {
 		//If the mouse moves too fast, "skipping" pixels, fill the gap by drawing a line
 		// between it and the last recorded position
 		if (previousX > -1 && (Math.abs(previousX - x) > 1 || Math.abs(previousY - y) > 1 )) {
-			lineDraw(previousX, previousY, x, y, paint_color, paint_strength);
+			lineDraw(previousX, previousY, x, y, paint_color, paint_opacity);
 		}
 
 		//Draw a pixel wherever we're at
-		pixelDraw(x, y, paint_color, paint_strength);
+		pixelDraw(x, y, paint_color, paint_opacity);
 
 		//Record our current position as last recorded
 		previousX = x;
 		previousY = y;
+
+		// Record the time of our last movement, for throttling
+		lastMove = Date.now();
 
 		//Update the UI
 		display_bitmap();
