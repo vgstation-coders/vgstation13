@@ -235,11 +235,11 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 	var/dat = {"
 	<head><head><style>
 		.manifest {border-collapse:collapse;}
-		.manifest td, th {border:1px solid [monochrome?"black":"#DEF; background-color:white; color:black"]; padding:.25em}
-		.manifest th {height: 2em; [monochrome?"border-top-width: 3px":"background-color: #48C; color:white"]}
-		.manifest tr.head th { [monochrome?"border-top-width: 1px":"background-color: #488;"] }
+		.manifest td, th {border:1px solid #DEF; background-color:white; color:black; padding:.25em}
+		.manifest th {height: 2em; background-color: #48C; color:white}
+		.manifest tr.head th {background-color: #488}
 		.manifest td:first-child {text-align:right}
-		.manifest tr.alt td {[monochrome?"border-top-width: 2px":"background-color: #DEF"]}
+		.manifest tr.alt td {background-color: #DEF}
 	</style></head>
 	<table class="manifest" width='350px'>
 	<tr class='head'><th>Rank</th><th>Quantity</th></tr>
@@ -279,56 +279,56 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 
 	if(heads.len > 0)
 		dat += "<tr><th colspan=3>Heads</th></tr>"
-		for(name in heads)
+		for(var/job in heads)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	if(sec.len > 0)
 		dat += "<tr><th colspan=3>Security</th></tr>"
-		for(name in sec)
+		for(var/job in sec)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	if(eng.len > 0)
 		dat += "<tr><th colspan=3>Engineering</th></tr>"
-		for(name in eng)
+		for(var/job in eng)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	if(med.len > 0)
 		dat += "<tr><th colspan=3>Medical</th></tr>"
-		for(name in med)
+		for(var/job in med)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	if(sci.len > 0)
 		dat += "<tr><th colspan=3>Science</th></tr>"
-		for(name in sci)
+		for(var/job in sci)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	if(cgo.len > 0)
 		dat += "<tr><th colspan=3>Cargo</th></tr>"
-		for(name in cgo)
+		for(var/job in cgo)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	if(civ.len > 0)
 		dat += "<tr><th colspan=3>Civilian</th></tr>"
-		for(name in civ)
+		for(var/job in civ)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	// misc guys
 	if(misc.len > 0)
 		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
-		for(name in misc)
+		for(var/job in misc)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
 	if(bot.len > 0)
 		dat += "<tr><th colspan=3>Silicon</th></tr>"
-		for(name in bot)
+		for(var/job in bot)
 			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
 			color = !color
 
