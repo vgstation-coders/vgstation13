@@ -10,8 +10,23 @@
 
 	sparky				= 0
 
+	var/emagged 		= 0
+
 	schematics = list(/datum/rcd_schematic/clear_decals)
 
 /obj/item/device/rcd/tile_painter/New()
-	schematics += typesof(/datum/rcd_schematic/tile)
+	schematics += typesof(/datum/rcd_schematic/tile) - /datum/rcd_schematic/tile/emagged
 	. = ..()
+
+/obj/item/device/rcd/tile_painter/emag_act(var/mob/emagger)
+	emagged = 1
+	spark(src, 5, FALSE)
+	to_chat(emagger, "<span class='warning'>You short out the selection circuitry in the [src].</span>")
+	var/datum/rcd_schematic/tile/emagged/schematic = new /datum/rcd_schematic/tile/emagged(src)
+	schematics = list(schematic)
+	selected = schematic
+	
+/obj/item/device/rcd/tile_painter/attack_self(var/mob/user)
+	if(!emagged)
+		return ..()
+	to_chat(user, "<span class='warning'>You press the button on the [src], but nothing seems to happen.</span>")

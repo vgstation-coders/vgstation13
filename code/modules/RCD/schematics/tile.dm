@@ -648,6 +648,20 @@ var/global/list/paint_variants = list(
 	)
 )
 
+/datum/paint_info/emagged
+	icon  = 'icons/turf/floors.dmi'
+	icon_state = "css"
+	name	   = "missing texture"
+
+/datum/rcd_schematic/tile/emagged
+	name				= "ERROR"
+
+/datum/rcd_schematic/tile/emagged/New()
+	selection = new /datum/paint_info/emagged
+	..()
+
+
+
 #undef PAINT_ALL
 #undef PAINT_FLOOR
 #undef PAINT_PLATING
