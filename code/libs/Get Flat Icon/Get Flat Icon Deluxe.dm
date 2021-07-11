@@ -43,7 +43,7 @@ cons:
 #define GFI_DX_MAX		12	// Remember to keep this updated should you need to keep track of more variables
 
 
-proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0)
+proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE)
 
 	var/icon/flat = icon('icons/effects/224x224.dmi',"empty") // Final flattened icon
 	var/icon/add // Icon of overlay being added
@@ -52,9 +52,22 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 		if (!data[GFI_DX_ICON] && !data[GFI_DX_STATE]) // no icon nor icon_state? we're probably not meant to draw that. Possibly a blank icon while we're only interested in its overlays.
 			continue
 
-		if (override_dir) // looks like we're getting some reference pics for an ID picture, let's ignore some of the items
-			if(data[GFI_DX_STATE] == "plasticbag" || data[GFI_DX_STATE] == "bookVirologyGuide")
+		if (ignore_spawn_items)
+			// looks like we're getting some reference pics for an ID picture, let's ignore the items held on spawn
+			var/list/icon_states_to_ignore = list(
+				"plasticbag",
+				"bookVirologyGuide",
+				"firstaid",
+				"clipboard",
+				"handdrill",
+				"toolbox_blue",
+				"briefcase-centcomm",
+				"thurible",
+				)
+			if(data[GFI_DX_STATE] in icon_states_to_ignore)
 				continue
+
+		if (override_dir)
 			data[GFI_DX_DIR] = override_dir
 
 		CHECK_TICK
