@@ -32,7 +32,7 @@
 		var/obj/item/weapon/photo/id/photo_id = O
 		if (photo_id.four_sides)
 			if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
-				if (authenticated && (screen == 3.0) && active1)
+				if (user && !user.incapacitated() && Adjacent(user) && photo_id && (photo_id == user.get_active_hand()) && authenticated && (screen == 3.0) && active1)
 					active1.fields["photo"] = photo_id.four_sides
 					visible_message("<span class='notice'>[bicon(src)] Database updated.</span>")
 					playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
