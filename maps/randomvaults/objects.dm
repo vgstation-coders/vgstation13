@@ -431,7 +431,7 @@
 	. = ..()
 	name = "\improper AI Satellite APC"
 
-/obj/machinery/porta_turret/AIvault
+/obj/machinery/turret/portable/AIvault
 	req_access = list(access_ai_upload)
 	check_records = 1
 	criminals = 1
@@ -440,7 +440,7 @@
 	check_anomalies = 1
 	ai = 1
 
-/obj/machinery/porta_turret/AIvault/New()
+/obj/machinery/turret/portable/AIvault/New()
 	installed = new/obj/item/weapon/gun/energy/laser/retro/ancient(src)
 	..()
 	if(prob(25))
@@ -462,10 +462,6 @@
 	..()
 	network = list()
 	cameranet.removeCamera(src)
-
-/obj/machinery/power/monitor/old
-	icon_state = "powerold"
-	light_color = LIGHT_COLOR_BLUE
 
 /obj/effect/landmark/corpse/engineer/old
 	generate_random_mob_name = 1
@@ -809,7 +805,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled
 	name = "acid pie"
-	desc = "Tangy tasting"
+	desc = "Tangy tasting!"
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
 	..()
@@ -872,5 +868,6 @@
 
 /obj/machinery/turret/russian
 	faction = "russian"
-	lasers = 1
-	lasertype = /obj/item/projectile/beam/heavylaser
+
+/obj/machinery/turret/russian/New()
+	installed = new /obj/item/weapon/gun/energy/laser(src)

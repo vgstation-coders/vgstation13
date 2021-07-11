@@ -17,6 +17,7 @@ var/list/arcane_tomes = list()
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
+	fire_fuel = 3
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -33,6 +34,9 @@ var/list/arcane_tomes = list()
 		qdel(O)
 	talismans = list()
 	..()
+
+/obj/item/weapon/tome/salt_act()
+	ignite()
 
 /obj/item/weapon/tome/suicide_act(mob/living/user)
 	if (iscultist(user))
@@ -170,6 +174,7 @@ var/list/arcane_tomes = list()
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	if(!istype(M))
 		return
@@ -332,6 +337,11 @@ var/list/arcane_tomes = list()
 	pixel_x=0
 	pixel_y=0
 
+/obj/item/weapon/talisman/salt_act()
+	if (attuned_rune && attuned_rune.active_spell)
+		attuned_rune.active_spell.salt_act(get_turf(src))
+	ignite()
+
 /obj/item/weapon/talisman/proc/talisman_name()
 	var/datum/rune_spell/blood_cult/instance = spell_type
 	if (blood_text)
@@ -354,7 +364,7 @@ var/list/arcane_tomes = list()
 		return
 
 	if (!spell_type)
-		to_chat(user, "<span class='info'>This one however seems pretty unremarkable.</span>")
+		to_chat(user, "<span class='info'>This one, however, seems pretty unremarkable.</span>")
 		return
 
 	var/datum/rune_spell/blood_cult/instance = spell_type
@@ -542,6 +552,10 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 	var/checkcult = 1
 
+/obj/item/weapon/melee/cultblade/salt_act()
+	new /obj/item/weapon/melee/cultblade/nocult(loc)
+	qdel(src)
+
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
@@ -681,6 +695,9 @@ var/list/arcane_tomes = list()
 		new /obj/item/soulstone(T)
 	shade = null
 	..()
+
+/obj/item/weapon/melee/soulblade/salt_act()
+	qdel(src)
 
 /obj/item/weapon/melee/soulblade/examine(var/mob/user)
 	..()
@@ -1090,12 +1107,58 @@ var/list/arcane_tomes = list()
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	mech_flags = MECH_SCAN_FAIL
+	actions_types = list(/datum/action/item_action/toggle_anon)
+	var/anon_mode = FALSE
+
+/obj/item/clothing/head/culthood/attack_self(var/mob/user)
+	if (!iscultist(user))
+		return
+
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (src != H.head)
+			to_chat(user, "<span class='warning'>Put the hood over your head first.</span>")
+			return
+
+	if (ismonkey(user))
+		var/mob/living/carbon/monkey/M = user
+		if (src != M.hat)
+			to_chat(user, "<span class='warning'>Put the hood over your head first.</span>")
+			return
+
+	if(!anon_mode)
+		icon_state = "culthood_anon"
+		body_parts_covered = FULL_HEAD|HIDEHAIR
+		body_parts_visible_override = 0
+		hides_identity = HIDES_IDENTITY_ALWAYS
+		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
+	else
+		icon_state = "culthood"
+		body_parts_covered = EARS|HEAD|HIDEHAIR
+		body_parts_visible_override = FACE
+		hides_identity = HIDES_IDENTITY_DEFAULT
+		to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
+
+	user.update_inv_head()
+	anon_mode = !anon_mode
+
+/obj/item/clothing/head/culthood/unequipped(mob/user, var/from_slot = null)
+	..()
+	icon_state = "culthood"
+	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_visible_override = FACE
+	hides_identity = HIDES_IDENTITY_DEFAULT
+	anon_mode = FALSE
+
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
 
 /obj/item/clothing/head/culthood/cultify()
 	return
+
+/obj/item/clothing/head/culthood/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////CULT SHOES////////////////////////////////////////////////
 
@@ -1118,6 +1181,9 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/shoes/cult/cultify()
 	return
 
+/obj/item/clothing/shoes/cult/salt_act()
+	acid_melt()
+
 ///////////////////////////////////////CULT ROBES////////////////////////////////////////////////
 
 /obj/item/clothing/suit/cultrobes
@@ -1139,6 +1205,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/cultrobes/cultify()
 	return
+
+/obj/item/clothing/suit/cultrobes/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////CULT BACKPACK (TROPHY RACK)////////////////////////////////////////////////
 
@@ -1179,13 +1248,16 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/storage/backpack/cultpack/cultify()
 	return
 
+/obj/item/weapon/storage/backpack/cultpack/salt_act()
+	acid_melt()
+
 
 ///////////////////////////////////////CULT HELMET////////////////////////////////////////////////
 
 
 /obj/item/clothing/head/helmet/space/cult
 	name = "cult helmet"
-	desc = "A space worthy helmet used by the followers of Nar-Sie"
+	desc = "A space worthy helmet used by the followers of Nar-Sie."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthelmet"
 	item_state = "culthelmet"
@@ -1203,6 +1275,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/head/helmet/space/cult/cultify()
 	return
+
+/obj/item/clothing/head/helmet/space/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////CULT ARMOR////////////////////////////////////////////////
 
@@ -1228,7 +1303,8 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/suit/space/cult/cultify()
 	return
 
-
+/obj/item/clothing/suit/space/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
 
@@ -1237,6 +1313,14 @@ var/list/arcane_tomes = list()
 	icon_state = "culthood_old"
 	item_state = "culthood_old"
 	species_fit = list()
+	actions_types = list()
+
+/obj/item/clothing/head/culthood/old/attack_self(var/mob/user)
+	return
+
+/obj/item/clothing/head/culthood/old/unequipped(mob/user, var/from_slot = null)
+	..()
+	icon_state = "culthood_old"
 
 /obj/item/clothing/suit/cultrobes/old
 	name = "forgotten cult robes"
@@ -1287,12 +1371,16 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
-	var/datum/role/cultist/chief/newCultist = new
-	newCultist.AssignToRole(user.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 		cult.OnPostSetup()
+	var/datum/role/cultist/newCultist
+	if (cult.members.len > 0)
+		newCultist = new /datum/role/cultist()
+	else
+		newCultist = new /datum/role/cultist/chief()
+	newCultist.AssignToRole(user.mind,1)
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_PAMPHLET)
@@ -1304,6 +1392,12 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/bloodcult_pamphlet/oneuse/Destroy()
 	new /datum/artifact_postmortem_data(src)
 	..()
+
+/obj/item/weapon/bloodcult_pamphlet/cultify()
+	return
+
+/obj/item/weapon/bloodcult_pamphlet/salt_act()
+	ignite()
 
 //Jaunter: creates a pylon on spawn, lets you teleport to it on use
 /obj/item/weapon/bloodcult_jaunter
@@ -1332,7 +1426,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/storage/cult
 	name = "coffer"
-	desc = "A gloomy-looking storage chest"
+	desc = "A gloomy-looking storage chest."
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "cult"
 	item_state = "syringe_kit"
@@ -1350,6 +1444,13 @@ var/list/arcane_tomes = list()
 	cup.reagents.add_reagent(BLOOD, 50)
 	for(var/i in 1 to 2)
 		new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer(src)
+
+/obj/item/weapon/storage/cult/cultify()
+	return
+
+/obj/item/weapon/storage/cult/salt_act()
+	acid_melt()
+
 ///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
@@ -1396,6 +1497,12 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/reagent_containers/food/drinks/cult/gamer
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/cultify()
+	return
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
 /obj/item/weapon/handcuffs/cult
@@ -1453,7 +1560,11 @@ var/list/arcane_tomes = list()
 	C.pain_shock_stage = max(C.pain_shock_stage, 100)
 	to_chat(C, "<span class='danger'>[pick("It hurts so much!", "You really need some painkillers.", "Dear god, the pain!")]</span>")
 
+/obj/item/weapon/handcuffs/cult/cultify()
+	return
 
+/obj/item/weapon/handcuffs/cult/salt_act()
+	acid_melt()
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 
@@ -1495,7 +1606,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	qdel(src)
 
 /obj/item/weapon/blood_tesseract/examine(var/mob/user)
@@ -1506,7 +1617,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/attack_self(var/mob/living/user)
 	if (iscultist(user))
 		//Alright so we'll discard cult gear and equip the stuff stored inside.
-		anim(target = user, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_tesseract", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+		anim(target = user, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_tesseract", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 		user.u_equip(src)
 		if (remaining)
 			remaining.forceMove(get_turf(user))
@@ -1549,3 +1660,9 @@ var/list/arcane_tomes = list()
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 			stored_gear.Remove(slot)
 		qdel(src)
+
+/obj/item/weapon/blood_tesseract/cultify()
+	return
+
+/obj/item/weapon/handcuffs/cult/salt_act()
+	throw_impact()

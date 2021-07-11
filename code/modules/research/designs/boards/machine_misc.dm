@@ -12,7 +12,7 @@
 
 /datum/design/recharger
 	name = "Circuit Design (Recharger)"
-	desc = "Allows for the construction of circuit boards used to build Weapon Rechargers"
+	desc = "Allows for the construction of circuit boards used to build Weapon Rechargers."
 	id="recharger"
 	req_tech = list(Tc_POWERSTORAGE = 2, Tc_COMBAT = 2)
 	build_type = IMPRINTER
@@ -43,7 +43,7 @@
 
 /datum/design/condimaster
 	name = "Circuit Design (CondiMaster)"
-	desc = "Allows for the cosntruction of circuit boards used to build CondiMasters"
+	desc = "Allows for the cosntruction of circuit boards used to build CondiMasters."
 	id="condimaster"
 	req_tech = list ("engineering" = 3, "biotech" = 4)
 	build_type = IMPRINTER
@@ -53,7 +53,7 @@
 
 /datum/design/snackbarmachine
 	name = "Circuit Design (SnackBar Machine)"
-	desc = "Allows for the cosntruction of circuit boards used to build SnackBar Machines"
+	desc = "Allows for the cosntruction of circuit boards used to build SnackBar Machines."
 	id="snackbarmachine"
 	req_tech = list ("engineering" = 3, "biotech" = 4)
 	build_type = IMPRINTER
@@ -87,6 +87,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/stacking_unit
 
+/datum/design/unloading_machine
+	name = "Circuit Design (Unloading Machine)"
+	desc = "A circuit board used to run a machine that unloads items and ore from one place to another."
+	id = "unloadingmachine"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_MATERIALS = 3, Tc_ENGINEERING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/unloading_machine
+
 /datum/design/coin_press
 	name = "Circuit Design (Coin Press)"
 	desc = "Allows for the construction of circuit boards used to build a coin press."
@@ -119,7 +129,7 @@
 
 /datum/design/sorting_machine
 	name = "Circuit Design (Recycling Sorting Machine)"
-	desc = "Allows for the construction of circuit boards used to build a recycling sorting machine"
+	desc = "Allows for the construction of circuit boards used to build a recycling sorting machine."
 	id = "sortingmachine"
 	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
@@ -128,7 +138,7 @@
 
 /datum/design/sorting_machine/destination
 	name = "Circuit Design (Destinations Sorting Machine)"
-	desc = "Allows for the construction of circuit boards used to build a destinations sorting machine"
+	desc = "Allows for the construction of circuit boards used to build a destinations sorting machine."
 	id = "destsortingmachine"
 	build_path = /obj/item/weapon/circuitboard/sorting_machine/destination
 

@@ -175,6 +175,9 @@
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
 
+/datum/action/item_action/toggle_anon
+	name = "Toggle Anonymity"
+
 /datum/action/item_action/activate_siren
 	name = "Activate Siren"
 

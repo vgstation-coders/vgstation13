@@ -19,7 +19,7 @@
 ///////MEND ROOTS///////
 /datum/surgery_step/tooth_replace/mend_roots
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/tool/FixOVein = 100,
 		/obj/item/stack/cable_coil = 50,
 		)
 
@@ -113,8 +113,8 @@
 ///////SET JAWS///////
 /datum/surgery_step/tooth_extract/set_jaws
 	allowed_tools = list(
-		/obj/item/weapon/bonesetter = 100,
-		/obj/item/weapon/wrench = 75,
+		/obj/item/tool/bonesetter = 100,
+		/obj/item/tool/wrench = 75,
 		)
 
 	duration = 6 SECONDS
@@ -144,8 +144,8 @@
 	///////EXTRACT TOOTH///////
 /datum/surgery_step/tooth_extract/pull_tooth
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
-		/obj/item/weapon/wirecutters = 50,
+		/obj/item/tool/hemostat = 100,
+		/obj/item/tool/wirecutters = 50,
 		/obj/item/device/assembly/mousetrap = 10,	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
 
@@ -191,8 +191,8 @@
 ///////RESET JAWS///////
 /datum/surgery_step/tooth_extract/reset
 	allowed_tools = list(
-		/obj/item/weapon/bonesetter = 100,
-		/obj/item/weapon/wrench = 75,
+		/obj/item/tool/bonesetter = 100,
+		/obj/item/tool/wrench = 75,
 		)
 
 	duration = 6 SECONDS

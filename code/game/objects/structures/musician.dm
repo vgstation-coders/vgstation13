@@ -346,6 +346,8 @@
 
 /obj/structure/piano/New()
 	..()
+	if (isobj(loc))//we probably spawned inside a supply crate
+		anchored = FALSE
 	song = new("piano", src)
 
 /obj/structure/piano/random/New()

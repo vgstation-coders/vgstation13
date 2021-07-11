@@ -28,6 +28,11 @@
 			return
 	//end vampire code
 
+	if(M.head && istype(M.head,/obj/item/clothing/head))
+		var/obj/item/clothing/head/H = M.head
+		if(H.bite_action(src))
+			return //Head slot item overrode the bite
+
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)*dam_check
 
@@ -74,6 +79,7 @@
 		LAssailant = null
 	else
 		LAssailant = M
+		assaulted_by(M)
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
 	return
 
@@ -171,6 +177,7 @@
 		LAssailant = null
 	else
 		LAssailant = M
+		assaulted_by(M)
 	log_attack("[src.name] ([src.ckey]) kicked by [M.name] ([M.ckey])")
 
 /mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)
@@ -258,7 +265,15 @@
 			return M.grab_mob(src)
 
 		if(I_HURT)
-			return M.unarmed_attack_mob(src)
+			var/punch_damage = M.unarmed_attack_mob(src)
+			if (punch_damage)
+				var/punch_zone = M.zone_sel.selecting
+				if (punch_zone == TARGET_EYES || punch_zone == TARGET_MOUTH)
+					punch_zone = LIMB_HEAD
+				var/datum/organ/external/limb = organs_by_name[punch_zone]
+				if(limb.status & ORGAN_BLEEDING)
+					M.bloody_hands(src,1)
+			return punch_damage
 
 		if(I_DISARM)
 			return M.disarm_mob(src)

@@ -354,8 +354,7 @@
 	if(is_type_in_list(S, illegalSwap) || is_type_in_list(S, illegalSwap))
 		MT = MINDMACHINE_SHIELDED
 	if((ishigherbeing(S)) || (ismonkey(S)))
-		var/mob/living/carbon/T = S
-		if(T.is_wearing_item(/obj/item/clothing/head/tinfoil))
+		if(S.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
 			MT = MINDMACHINE_SHIELDED
 	if(S == occupantOne)
 		mindTypeOne = MT
@@ -728,7 +727,7 @@
 				connectedHub.connectTwo = null
 	..()
 
-/obj/machinery/mind_machine/mind_machine_pod/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/mind_machine/mind_machine_pod/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>[occupant] is inside the [src]!</span>")
 		return FALSE

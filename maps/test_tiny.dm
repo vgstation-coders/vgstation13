@@ -16,6 +16,8 @@
 
 	load_map_elements = list(/datum/map_element/dungeon/holodeck)
 
+	lights_always_ok = TRUE
+
 ////////////////////////////////////////////////////////////////
 #include "test_tiny.dmm"
 #endif

@@ -49,9 +49,7 @@
 /datum/href_multipart_handler/Destroy()
 	..()
 	parent = null
-
-/datum/href_multipart_handler/proc/set_parent(parent)
-	src.parent = parent
+	parts = null
 
 /datum/href_multipart_handler/Topic(href, href_list)
 	if(href_list["multipart"])

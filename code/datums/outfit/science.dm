@@ -38,6 +38,14 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/rd,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/rd,
+		)
+	)
 
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
@@ -157,6 +165,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/toxins
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/research
@@ -221,7 +238,7 @@
 	)
 
 	pda_type = /obj/item/device/pda/roboticist
-	pda_slot = slot_belt
+	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/research
 
 /datum/outfit/roboticist/post_equip(var/mob/living/carbon/human/H)

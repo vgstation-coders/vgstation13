@@ -167,7 +167,7 @@
 
 /obj/item/device/instrument/drum/drum_makeshift
 	name = "makeshift drum"
-	desc = "A crudely built drum that is, in essence, a wooden bowl with a leather sheet stretched taut over its surface. Despite its primitive design, you can extract a rather wide range of pitches and notes from this pile of trash"
+	desc = "A crudely built drum that is, in essence, a wooden bowl with a leather sheet stretched taut over its surface. Despite its primitive design, you can extract a rather wide range of pitches and notes from this pile of trash."
 	icon_state = "drum_makeshift"
 	item_state = "drum_makeshift"
 	w_class = W_CLASS_TINY
@@ -188,7 +188,7 @@
 	decondrop = 2 //determines how many parts to drop if deconstructed
 
 /obj/item/device/instrument/drum/drum_makeshift/attackby(obj/item/I,mob/user,params)
-	if(iswirecutter(I)) //wirecutters disassembles drums and bongos and gives you proper drops based on [decondrop] defined above
+	if(I.is_wirecutter(user)) //wirecutters disassembles drums and bongos and gives you proper drops based on [decondrop] defined above
 		I.playtoolsound(loc, 50)
 		visible_message("<span class='notice'>[user] cuts the leather face off \the [src] with \the [I]. </span>")
 		for (var/i = 1 to decondrop)

@@ -551,7 +551,7 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/weapon/wirecutters) )
+	else if(istype(W,/obj/item/tool/wirecutters) )
 		if(!string_attached)
 			..()
 			return
@@ -564,3 +564,29 @@
 		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
 	else
 		..()
+
+///////////////////////////////////////////////////////////
+
+/obj/item/weapon/coin/pomf
+	material="pomf"
+	name = "pomf coin"
+	desc = "A platinum coin featuring the effigy of a white chicken. Few know of its true value. Fewer still can make use of it."
+	icon_state = "coin_pomf"
+	credits = 2525
+	siemens_coefficient = 1
+	melt_temperature=1768+T0C
+	force = 4
+	throwforce = 4
+
+/obj/item/weapon/coin/pumf
+	material="pumf"
+	name = "pumf coin"
+	desc = "A slade coin featuring the effigy of an angry chicken. If it comes into your possession that means you've been a naughty boy. Whatever you've been doing stop it."
+	icon_state = "coin_pumf"
+	credits = -2525 // that's probably a very bad idea but I want to see what happens
+	siemens_coefficient = 1
+	melt_temperature=9999+T0C
+	force = 4
+	throwforce = 4
+
+///////////////////////////////////////////////////////////

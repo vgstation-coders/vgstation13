@@ -241,6 +241,9 @@ RESPAWN_AS_MOMMI
 ## Uncomment this to disallow spawning as a mouse.
 #NO_RESPAWN_AS_MOUSE
 
+## Uncomment this to disallow spawning as a space hobo.
+#NO_RESPAWN_AS_HOBO
+
 ##Remove the # to let ghosts spin chairs
 #GHOST_INTERACTION
 

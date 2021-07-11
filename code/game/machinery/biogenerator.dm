@@ -129,7 +129,7 @@
 /datum/biogen_recipe/leather/belt
 	cost=300
 	id="belt"
-	name="Utility Belt"
+	name="Tool-belt"
 	result=/obj/item/weapon/storage/belt/utility
 
 /datum/biogen_recipe/leather/bandolier
@@ -161,6 +161,12 @@
 	id="gadget"
 	name="Gadget Bag"
 	result=/obj/item/weapon/storage/bag/gadgets
+
+/datum/biogen_recipe/leather/slime
+	cost=350
+	id="slime"
+	name="Slime Bag"
+	result=/obj/item/weapon/storage/bag/xenobio
 
 /datum/biogen_recipe/leather/plants
 	cost=350
@@ -239,7 +245,7 @@
 	cost=35
 	amount_per_unit=10
 	other_amounts=list(5)
-	
+
 /datum/biogen_recipe/misc/plantbgone
 	id="plantbgone"
 	name="Plant-B-Gone"
@@ -247,7 +253,7 @@
 	cost=35
 	amount_per_unit=10
 	other_amounts=list(5)
-	
+
 /datum/biogen_recipe/misc/candle
 	cost=50
 	id="candle"
@@ -400,6 +406,44 @@
 		return
 	return ..()
 
+/obj/machinery/biogenerator/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, /obj/item/weapon/reagent_containers/glass))
+		var/obj/item/weapon/reagent_containers/glass/G = AM
+		if(beaker|| panel_open || G.w_class > W_CLASS_SMALL)
+			return FALSE
+		else
+			G.forceMove(src)
+			beaker = G
+			updateUsrDialog()
+	else if(processing)
+		return FALSE
+	else if(istype(AM, /obj/item/weapon/storage/bag/plants))
+		var/i = 0
+		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
+			i++
+		if(i >= 20)
+			return FALSE
+		else
+			var/obj/item/weapon/storage/bag/B = AM
+			for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in AM.contents)
+				B.remove_from_storage(G,src)
+				i++
+				if(i >= 20)
+					break
+
+	else if(istype(AM, /obj/item/weapon/reagent_containers/food/snacks/grown))
+		var/i = 0
+		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
+			i++
+		if(i >= 20)
+			return FALSE
+		else
+			AM.forceMove(src)
+	else
+		return FALSE
+	update_icon()
+	return TRUE
+
 /obj/machinery/biogenerator/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
 		return 1
@@ -447,7 +491,7 @@
 	update_icon()
 	return
 
-/obj/machinery/biogenerator/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/biogenerator/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(beaker)
 		to_chat(user, "<span class='warning'>A beaker is loaded, you cannot deconstruct \the [src].</span>")
 		return FALSE

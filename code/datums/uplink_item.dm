@@ -40,6 +40,8 @@ var/list/uplink_items = list()
 	var/list/jobs_with_discount = list() //Jobs in this list get the discount price.
 	var/list/jobs_exclusive = list() //If empty, does nothing. If not empty, ONLY jobs in this list can buy this item.
 	var/list/jobs_excluded = list() //Jobs in this list cannot buy this item at all.
+	var/list/roles_exclusive = list() //If empty, does nothing. If not empty, ONLY roles in this list can buy this item.
+	var/list/roles_excluded = list() //Roles in this list cannot buy this item at all.
 
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
@@ -62,6 +64,18 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
+/datum/uplink_item/proc/available_for_role(var/list/roles)
+	if (roles_exclusive.len)
+		for (var/role in roles_exclusive)
+			if (role in roles)
+				return TRUE
+		return FALSE
+	else
+		for (var/role in roles_excluded)
+			if (role in roles)
+				return FALSE
+		return TRUE
+
 //This will get called that is essentially a New() by default.
 //Use this to make New()s that have extra conditions, such as bundles
 //Make sure to add a return or else it will break a part of buy()
@@ -71,6 +85,14 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
+		return
+	if(!available_for_role(U.roles))
+		var/dat = ""
+		for (var/role in roles_exclusive)
+			if (dat)
+				dat+= ", "
+			dat += role
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their role! (Role: [dat]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
@@ -101,8 +123,6 @@ var/list/uplink_items = list()
 			return 0
 		on_item_spawned(I,user)
 		var/icon/tempimage = icon(I.icon, I.icon_state)
-		end_icons += tempimage
-		var/tempstate = end_icons.len
 
 		var/bundlename = name
 		if(name == "Random Item" || name == "For showing that you are The Boss")
@@ -116,7 +136,7 @@ var/list/uplink_items = list()
 			if(istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
+			U.purchase_log += {"[user] ([user.ckey]) bought <img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name] for [get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
 
@@ -125,11 +145,15 @@ var/list/uplink_items = list()
 				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
 				var/datum/role/R = user.mind.GetRole(NUKE_OP)
 				if(R)
-					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+					R.faction.faction_scoreboard_data += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 				else
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
-						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
+					else
+						R = user.mind.GetRole(CHALLENGER)
+						if(R)
+							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
@@ -597,6 +621,8 @@ var/list/uplink_items = list()
 				continue
 			if(!I.available_for_job(U.job))
 				continue
+			if(!I.available_for_role(U.roles))
+				continue
 			if(I.get_cost(U.job, 0.5) > U.uses)
 				continue
 			possible_items += I
@@ -633,11 +659,19 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
-	
+
 /datum/uplink_item/jobspecific/command_security/batlinggun
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
 	item = /obj/item/weapon/gun/gatling/batling
+	cost = 18
+	discounted_cost = 12
+	jobs_with_discount = list("Warden", "Head of Security")
+
+/datum/uplink_item/jobspecific/command_security/remoteexplosive
+	name = "Remote Explosive Implants"
+	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room."
+	item = /obj/item/weapon/storage/box/remeximp
 	cost = 18
 	discounted_cost = 12
 	jobs_with_discount = list("Warden", "Head of Security")
@@ -681,6 +715,14 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical
 	category = "Medical Specials"
+
+/datum/uplink_item/jobspecific/medical/mouser
+	name = "Mouser Pistol"
+	desc = "A pistol that turns unfortunate victims into labrats and stuns them briefly. All of their gear becomes part of their body, and if the mouse dies, the target becomes human once again, fully armed and unharmed."
+	item = /obj/item/weapon/gun/energy/mouser
+	cost = 12
+	discounted_cost = 8
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/medical/wheelchair
 	name = "Syndicate Wheelchair"
@@ -798,8 +840,8 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/dev_analyser
-	name = "Modified Device Analyser"
-	desc = "A device analyser with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
+	name = "Modified Device Analyzer"
+	desc = "A device analyzer with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
 	item = /obj/item/device/device_analyser/syndicate
 	cost = 9
 	discounted_cost = 6
@@ -839,16 +881,24 @@ var/list/uplink_items = list()
 	name = "Briefcase Full of Bees"
 	desc = "A briefcase containing twenty angry bees. Will deliver the bee payload when first opened, functions as a normal briefcase after this initial swarm. The bees do not discriminate on targets, so either get someone else to open the briefcase for you or run."
 	item = /obj/item/weapon/storage/briefcase/bees
-	cost = 5
-	discounted_cost = 4
+	cost = 12
+	discounted_cost = 6
 	jobs_with_discount = list("Botanist")
 
-/datum/uplink_item/jobspecific/service/hornetqueen
-	name = "Hornet Queen Packet"
-	desc = "A lethally dangerous hornet queen, providing a very nasty surprise once fully tended for. Place her into an apiary tray and add a few packs of BeezEez along with usual care to obtain the goods. Protective gear won't be enough to shield you reliably from these, so keep a good distance."
-	item = /obj/item/queen_bee/hornet
-	cost = 3
-	discounted_cost = 2
+/datum/uplink_item/jobspecific/service/hornethive
+	name = "Deployable Wild Hornet Hive"
+	desc = "A portable hive that starts producing deadly hornets once thrown or dropped, be careful! Best hidden in maintenance or someone's backroom to give them time to multiply."
+	item = /obj/item/deployable_wild_hornet_hive
+	cost = 10
+	discounted_cost = 5
+	jobs_with_discount = list("Botanist")
+
+/datum/uplink_item/jobspecific/service/beenade
+	name = "Bee-Nade"
+	desc = "Over a dozen deadly hornets. The grenade comes equiped with a pheromone spray so the hornets won't attack the one who threw the grenade."
+	item = /obj/item/weapon/grenade/spawnergrenade/beenade
+	cost = 16
+	discounted_cost = 8
 	jobs_with_discount = list("Botanist")
 
 /datum/uplink_item/jobspecific/service/specialsauce
@@ -976,6 +1026,13 @@ var/list/uplink_items = list()
 	cost = 12
 	jobs_exclusive = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/unwall_spell
+	name = "Invisible Un-Wall Spellbook"
+	desc = "Grants the user the ability to conjure a strange wall allowing the passage of anything through a space regardless of the objects in place. Only real Mimes are capable of learning from this forbidden tome."
+	item = /obj/item/weapon/spellbook/oneuse/unwall
+	cost = 12
+	jobs_exclusive = list("Mime")
+
 /datum/uplink_item/jobspecific/clown_mime/punchline
 	name = "Punchline"
 	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
@@ -1047,21 +1104,21 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/dart_cartridge
 	cost = 2
 	jobs_exclusive = list("Trader")
-	
+
 /datum/uplink_item/jobspecific/trader/cratesender
 	name = "Modified Crate Sender"
 	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
 	cost = 6
 	jobs_exclusive = list("Trader")
-	
+
 // SYNDICATE COOP
 // Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
-	jobs_excluded = list("Nuclear Operative", CHALLENGER)
-	
+	roles_exclusive = list(TRAITOR)
+
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"
 	desc = "A Syndicate bundle designed for a team of two agents."
@@ -1073,19 +1130,19 @@ var/list/uplink_items = list()
 	desc = "A closely guarded artifact leveraged from the Vampire Lords.  It possesses an active sample of the SG-VPR-23 strain that is the source of all known cases of vampirism within the galaxy.  This piece is only to be granted to an operative cell that wishes to execute, and accepts the risk, of an SG-VPR-23 outbreak.  It is brittle in its old age, and may only survive one use."
 	item = /obj/item/clothing/mask/stone
 	cost = 60
-	
+
 /datum/uplink_item/syndie_coop/changeling_vial
 	name = "CH-L1-NG Bioweapon Sample"
 	desc = "A securely contained vial of the experimental mutagen 'CH-L1-NG'.  Originally designed as a transhumanist super-soldier serum, the mutagen was reclassified as a bioweapon when research showed that the afflicted would completely dissociate from their identity and loyalties.  Victims of 'CH-L1-NG' were found to be the perfect killing machines to be released upon enemies of the Syndicate."
 	item = /obj/item/changeling_vial
 	cost = 60
-	
+
 /datum/uplink_item/syndie_coop/bloodcult_pamphlet
 	name = "Esoteric Propaganda Pamphlet"
 	desc = "A pamphlet found within the controlled literature archives detailing what appears to be a communication ritual to contact the celestial NRS-1.  Exposure to NRS-1 is known to induce the formation of a hive-like social structure among the afflicted, delusions of grandeur, and collective suicidal tendencies.  An operative cell wishing to weaponize contact with NRS-1 should proceed with extreme caution."
 	item = /obj/item/weapon/bloodcult_pamphlet/oneuse
 	cost = 60
-	
+
 /datum/uplink_item/syndie_coop/codebreaker
 	name = "Codebreaker"
 	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."

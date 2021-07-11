@@ -72,6 +72,10 @@ var/global/Holiday = null
 					return //go no further, this is the one
 				if(12)
 					current_holidays += OWL_AND_PUSSYCAT_DAY // what a dumb day of observence...but we -do- have costumes already :3
+				if(20)
+					current_holidays += WORLD_BEE_DAY //bzzzzzzzzzzzzzzzzzzzz
+				if(24)
+					current_holidays += INTERNATIONAL_CLOWN_DAY //honk
 
 		if(6) // Jun
 			switch(DD)
@@ -186,6 +190,9 @@ var/global/Holiday = null
 		to_chat(world, "<h4>Happy [Holiday] Everybody!</h4>")
 		if(Holiday == XMAS_EVE || Holiday == XMAS)
 			Christmas_Game_Start()
+		if(Holiday == INTERNATIONAL_CLOWN_DAY)
+			sleep(600)
+			set_security_level("rainbow")
 
 // Nested in the random events loop. Will be triggered every 2 minutes
 /proc/Holiday_Random_Event()

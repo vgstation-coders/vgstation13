@@ -1,7 +1,7 @@
 /proc/DecidePrayerGod(var/mob/H)
 	if(!H || !H.mind)
 		return "a voice"
-	if(H.mind.GetRole(CULTIST))
+	if(iscultist(H))
 		return "Nar-Sie"
 	else if(H.mind.faith) // The user has a faith
 		var/datum/religion/R = H.mind.faith
@@ -1016,7 +1016,7 @@
 		return FALSE
 
 	var/obj/item/weapon/grenade/flashbang/F = preacher.held_items[held_banger]
-	var/obj/item/weapon/screwdriver/S = subject.held_items[held_screwdriver]
+	var/obj/item/tool/screwdriver/S = subject.held_items[held_screwdriver]
 
 	if (F.det_time != 50) // The timer isn't properly set
 		to_chat(preacher, "<span class='warning'>The timer in the flashbang isn't properly set up. Set it to 5 seconds.</span>")
@@ -1408,7 +1408,7 @@
 
 /datum/religion/esports/equip_chaplain(mob/living/carbon/human/H)
 	var/turf/here = get_turf(H)
-	new /obj/item/weapon/crowbar/red(here)
+	new /obj/item/tool/crowbar/red(here)
 	var/obj/item/clothing/head/donitos_pope/pope_hat = new(here)
 	H.equip_to_appropriate_slot(pope_hat, override=TRUE)
 	var/obj/structure/closet/crate/flatpack/tv_pack1 = new(here)

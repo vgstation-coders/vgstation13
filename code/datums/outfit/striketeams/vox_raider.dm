@@ -30,7 +30,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/pressure,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/full,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
-			slot_l_store_str = /obj/item/weapon/circular_saw,
+			slot_l_store_str = /obj/item/tool/circular_saw,
 			ACCESORY_ITEM = /obj/item/weapon/gun/dartgun/vox/medical,
 		)
 	)

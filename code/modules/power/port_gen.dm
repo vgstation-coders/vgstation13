@@ -1,7 +1,7 @@
 //Baseline portable generator. Has all the default handling. Not intended to be used on it's own (since it generates unlimited power).
 /obj/machinery/power/port_gen
 	name = "Portable Generator"
-	desc = "A portable generator for emergency backup power"
+	desc = "A portable generator for emergency backup power."
 	icon = 'icons/obj/power.dmi'
 	icon_state = "portgen1"
 	density = 1
@@ -167,7 +167,7 @@
 	emp_act(1)
 	return 1
 
-/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I) //don't like the copy/paste, but the proc has special handling in the middle so we need it
+/obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user, obj/item/tool/crowbar/I) //don't like the copy/paste, but the proc has special handling in the middle so we need it
 	if(..())
 		while ( sheets > 0 )
 			var/obj/item/stack/sheet/G = new sheet_path(src.loc)
@@ -203,6 +203,20 @@
 	else if(!active)
 		if( ..() )
 			return 1
+
+/obj/machinery/power/port_gen/pacman/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, sheet_path))
+		var/obj/item/stack/addstack = AM
+		var/amount = min((max_sheets - sheets), addstack.amount)
+		if(amount < 1)
+			return FALSE
+		sheets += amount
+		addstack.use(amount)
+		return TRUE
+	else if(!active)
+		if( ..() )
+			return FALSE
+	return FALSE
 
 /obj/machinery/power/port_gen/pacman/attack_hand(mob/user as mob)
 	..()

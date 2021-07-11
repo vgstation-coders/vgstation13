@@ -58,7 +58,7 @@ code\game\\dna\genes\goon_powers.dm
 
 /spell/targeted/genetic/mutate
 	name = "Mutate"
-	desc = "This spell causes you to turn into a hulk and gain laser vision for a short while."
+	desc = "This spell causes you to turn into a hulk for a short while."
 	abbreviation = "MU"
 	specialization = SSUTILITY
 
@@ -67,11 +67,11 @@ code\game\\dna\genes\goon_powers.dm
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	invocation = "BIRUZ BENNAR"
 	invocation_type = SpI_SHOUT
-	message = "<span class='notice'>You feel strong! You feel a pressure building behind your eyes!</span>"
+	message = "<span class='notice'>You feel strong!</span>"
 	range = 0
 	max_targets = 1
 
-	mutations = list(M_LASER, M_HULK)
+	mutations = list(M_HULK)
 	duration = 300
 	cooldown_min = 300 //25 deciseconds reduction per rank
 

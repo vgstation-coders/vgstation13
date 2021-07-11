@@ -72,6 +72,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
+		standard_damage_overlay_updates()
 
 	// Grabbing
 	for(var/obj/item/weapon/grab/G in src)
@@ -81,9 +82,9 @@
 
 		if(prob(33) && canmove && isturf(loc) && !pulledby && !(grabbed_by?.len)) //won't move if being pulled
 
-			StartMoving()
+			lazy_invoke_event(/lazy_event/on_before_move)
 			step(src, pick(cardinal))
-			EndMoving()
+			lazy_invoke_event(/lazy_event/on_after_move)
 
 		if(prob(1))
 			passive_emote()

@@ -40,7 +40,6 @@
 
 	var/role_alt_title
 
-	var/datum/job/assigned_job
 	var/job_priority // How much did we want the job we ended up having? Used for assistant rerolls.
 
 	var/datum/religion/faith
@@ -70,6 +69,7 @@
 	var/hasbeensacrificed = FALSE
 
 	var/miming = null //Toggle for the mime's abilities.
+	var/suiciding = FALSE //Do not allow revives for this person if they have sudoku'd
 
 /datum/mind/New(var/key)
 	src.key = key
@@ -189,10 +189,41 @@
 			out += R.GetMemory(src, TRUE)//allowing edits
 
 	out += "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a>"
+	out += antag_roles.len ? "<br><a href='?src=\ref[src];show_purchases=1'>(show purchase log)</a>" : ""
 
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
 	usr << browse(out, "window=role_panel[src];size=700x500")
+
+/datum/mind/proc/role_purchase_log()
+	if(!ticker || !ticker.mode)
+		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
+		return
+
+	var/out = {"<TITLE>Role purchase log</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<BR>Assigned job: [assigned_role]<hr>"}
+	if(current.spell_list && current.spell_list.len)
+		out += "Known spells:<BR>"
+		for(var/spell/S in current.spell_list)
+			var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+			out += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+	for(var/role in antag_roles)
+		var/datum/role/R = antag_roles[role]
+		if(R.uplink_items_bought)
+			out += "Uplink items bought:<BR>"
+			for(var/entry in R.uplink_items_bought)
+				out += "[entry]<BR>"
+		if(istype(R,/datum/role/wizard))
+			var/datum/role/wizard/W = R
+			if(W.artifacts_bought)
+				out += "Artifacts bought:<BR>"
+				for(var/entry in W.artifacts_bought)
+					out += "[entry]<BR>"
+			if(W.potions_bought)
+				out += "Potions bought:<BR>"
+				for(var/entry in W.potions_bought)
+					out += "[entry]<BR>"
+	
+	usr << browse(out, "window=role_purchase_log[src];size=300x500")
 
 /datum/mind/proc/get_faction_list()
 	var/list/all_factions = list()
@@ -210,6 +241,9 @@
 	return all_factions
 
 /datum/mind/Topic(href, href_list)
+	if (href_list["show_purchases"])
+		role_purchase_log()
+	
 	if(!check_rights(R_ADMIN))
 		return
 	if (href_list["job_edit"])

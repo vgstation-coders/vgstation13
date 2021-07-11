@@ -197,7 +197,7 @@
 			qdel(src)
 
 		if( iswelder(W) )
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(WT.welding )
 				if(!mineral)
 					T.ChangeTurf(/turf/simulated/wall)
@@ -301,7 +301,7 @@
 		qdel(src)
 
 	if( iswelder(W) )
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if( WT.remove_fuel(0,user) )
 			var/turf/T = get_turf(src)
 			T.ChangeTurf(/turf/simulated/wall)

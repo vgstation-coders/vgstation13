@@ -19,6 +19,7 @@
 	G.synch()
 	target.LAssailant = src
 	target.grabbed_by(src)
+	target.assaulted_by(src)
 
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 	visible_message("<span class='warning'>[src] grabs [target] passively!</span>")
@@ -100,6 +101,7 @@
 
 	if(!damage)
 		if(miss_unarmed_attack(target))
+			target.on_dodge(src)
 			return
 
 	var/zone = ran_zone(get_unarmed_damage_zone(target))

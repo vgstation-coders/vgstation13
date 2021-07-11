@@ -89,7 +89,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
 	/client/proc/artifacts_panel,
-	/client/proc/climate_panel
+	/client/proc/climate_panel,
+	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -132,6 +133,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/deadchat_singularity,
 	/client/proc/view_all_rods,
 	/client/proc/add_centcomm_order,
+	/client/proc/apes,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances

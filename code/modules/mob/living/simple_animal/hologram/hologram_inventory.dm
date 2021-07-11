@@ -8,16 +8,19 @@
 		head = null
 		success = 1
 		update_inv_head()
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	if (W == w_uniform)
 		w_uniform = null
 		success = 1
 		update_inv_w_uniform()
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	if (W == wear_suit)
 		wear_suit = null
 		success = 1
 		update_inv_wear_suit()
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	else
-		..()
+		success = ..()
 
 	if(success)
 		if (W)
@@ -30,7 +33,7 @@
 			if(W)
 				W.reset_plane_and_layer()
 
-	return
+	return success
 
 /mob/living/simple_animal/hologram/advanced/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
 	if(!istype(W))

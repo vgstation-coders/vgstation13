@@ -217,7 +217,7 @@
 		qdel(src)
 		return
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin slicing through \the [src].")
 			WT.playtoolsound(user, 50)

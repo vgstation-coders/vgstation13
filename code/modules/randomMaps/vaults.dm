@@ -95,6 +95,13 @@
 
 	message_admins("<span class='info'>Loaded [result] out of [surprise_number] mining surprises.</span>")
 
+/proc/generate_hoboshack()
+	var/list/list_of_shacks = get_map_element_objects(/datum/map_element/hoboshack)
+
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed)
+
+	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
+
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
 	var/list/dimensions = E.get_dimensions()
 	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])

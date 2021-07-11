@@ -39,6 +39,7 @@ var/global/list/juice_items = list (
 		/obj/item/stack/sheet/mineral/clown   = list(BANANA = 20),
 		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
+		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
@@ -113,7 +114,7 @@ var/global/list/juice_items = list (
 		return -1
 	return ..()
 
-/obj/machinery/reagentgrinder/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/reagentgrinder/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(beaker)
 		to_chat(user, "You can't do that while \the [src] has a beaker loaded!")
 		return FALSE
@@ -188,6 +189,60 @@ var/global/list/juice_items = list (
 	holdingitems += O
 	src.updateUsrDialog()
 	return 0
+
+/obj/machinery/reagentgrinder/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if (istype(AM,/obj/item/weapon/reagent_containers/glass) || \
+		istype(AM,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) || \
+		istype(AM,/obj/item/weapon/reagent_containers/food/drinks/shaker))
+
+		if (beaker || panel_open)
+			return FALSE
+		var/obj/item/O = AM
+		if (O.w_class > W_CLASS_SMALL)
+			return FALSE
+		else
+			AM.forceMove(src)
+
+			src.beaker =  AM
+
+			update_icon()
+			src.updateUsrDialog()
+			return TRUE
+
+	var/sum_w_class = 0
+	for(var/obj/item/I in holdingitems)
+		sum_w_class += I.w_class
+
+	//Fill machine with bags
+	if(istype(AM, /obj/item/weapon/storage/bag/plants)||istype(AM, /obj/item/weapon/storage/bag/chem))
+		var/obj/item/weapon/storage/bag/B = AM
+		var/items_transferred = 0
+		for(var/obj/item/G in B.contents)
+			if(sum_w_class + G.w_class > max_combined_w_class)
+				break
+			B.remove_from_storage(G,src)
+			holdingitems += G
+			sum_w_class += G.w_class
+			items_transferred++
+
+		src.updateUsrDialog()
+		if(!items_transferred)
+			return FALSE
+		return TRUE
+
+	if (!is_type_in_list(AM, blend_items) && !is_type_in_list(AM, juice_items))
+		return FALSE
+
+	if(istype(AM,/obj/item))
+		var/obj/item/O = AM
+		if(sum_w_class + O.w_class >= max_combined_w_class)
+			return FALSE
+
+	AM.forceMove(src)
+
+	holdingitems += AM
+	src.updateUsrDialog()
+	return TRUE
 
 /obj/machinery/reagentgrinder/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

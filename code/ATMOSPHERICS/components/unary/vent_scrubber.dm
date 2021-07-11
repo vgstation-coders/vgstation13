@@ -384,7 +384,7 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>Now welding the scrubber.</span>")
 		if (WT.do_weld(user, src, 20, 1))
 			if(gcDestroyed)

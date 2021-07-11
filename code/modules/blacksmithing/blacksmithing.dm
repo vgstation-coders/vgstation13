@@ -86,7 +86,7 @@
 	if(user)
 		to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
 	if(iswelder(A) && user)
-		var/obj/item/weapon/weldingtool/W = A
+		var/obj/item/tool/weldingtool/W = A
 		if(!W.do_weld(user, src, 4 SECONDS/(temperature/material_type.melt_temperature), 5))
 			return
 	else if(user && !do_after(user, A, 4 SECONDS/(temperature/material_type.melt_temperature)))

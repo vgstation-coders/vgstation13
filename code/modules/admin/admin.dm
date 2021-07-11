@@ -104,6 +104,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
 			<A href='?src=\ref[src];makecatbeast=\ref[M]'>Make Catbeast</A> |
 			<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
+			<A href='?src=\ref[src];makebox=\ref[M]'>Make Box</A> |
 			<A href='?src=\ref[src];Assplode=\ref[M]'>Assplode</A> |
 			<A href='?src=\ref[src];DealBrainDam=\ref[M]'>Deal brain damage</A> |
 		"}
@@ -849,7 +850,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
 			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
+			<A href='?src=\ref[src];secretsfun=lightsout'>Trigger an Electrical Storm (breaks some lights)</A><BR>
 			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
@@ -861,6 +862,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
+			<A href='?src=\ref[src];secretsfun=RandomizedLawset'>Give the AIs a randomly generated Lawset.</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
 			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
@@ -869,6 +871,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchoff'>Flip all (ALL Z-LEVELS) light switches to off (Lags briefly)</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on (Lags briefly)</A><BR>
 			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
@@ -893,11 +897,15 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
 			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapepvp'>Toggle Maint-Only PvP</A><BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapeskull'>Toggle Skull icon appearing over aggressors</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
@@ -1428,6 +1436,17 @@ var/global/floorIsLava = 0
 	if(istype(H))
 		H.regenerate_icons()
 
+/datum/admins/proc/ashInvokedEmotions()
+	set category = "Admin"
+	set name = "Ash Invoked Emotions"
+	set desc = "Ashes all paper from the 'invoke emotions' wizard spell. Emergency porn purge."
+	if(alert("Are you sure you want to ash all invoked emotions?", "Invoked Emotions Panic", "Yes", "No") != "No")
+		var/numEmot = 0
+		for(var/obj/item/weapon/paper/emotion_invoker/EI in invoked_emotions)
+			EI.destroyEmotion()
+			numEmot++
+		message_admins("<span class='notice'>[numEmot] invoked emotions ashed.</span>")
+
 //
 //
 //ALL DONE
@@ -1542,6 +1561,13 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		return
 
 	var/dat = "<center><B>Credits Panel</B></center><hr>"
+	dat += "<center><B>Screenshot:</b></center>"
+	dat += "Chosen Screenshot: [end_credits.customized_ss && end_credits.ss] <A href='?src=\ref[src];credits=setss'>(Set Link)</A> "
+	if(end_credits.customized_ss != "" && !end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=resetss'>(Reset)</A> "
+	if(!end_credits.drafted)
+		dat += "<span style='color:red'><br>The round isn't over, so the featured screenshot can still be set. Screenshots do not generate automatically.</span>"
+	dat += "<hr>"
 	dat += "<center><B>Star Of The Show:</b></center>"
 	dat += "Chosen Star: [end_credits.customized_star == "" && end_credits.star == "" ? "(Will Select Automatically)" : end_credits.customized_star || end_credits.star] <A href='?src=\ref[src];credits=setstartext'>(Set Plaintext)</A> <A href='?src=\ref[src];credits=setstarmob'>(Set Mob From List)</A> "
 	if(end_credits.customized_star != "" && !end_credits.drafted)

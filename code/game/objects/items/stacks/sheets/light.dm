@@ -14,7 +14,7 @@
 	max_amount = 60
 
 /obj/item/stack/light_w/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O,/obj/item/weapon/wirecutters))
+	if(istype(O,/obj/item/tool/wirecutters))
 		var/obj/item/stack/cable_coil/CC = new/obj/item/stack/cable_coil(user.loc)
 		CC.amount = 2
 		amount--

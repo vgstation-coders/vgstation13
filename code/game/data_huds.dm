@@ -164,6 +164,16 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
+
+	for(var/mob/living/simple_animal/astral_projection/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+		if(!check_HUD_visibility(perp, M))
+			continue
+		holder = perp.hud_list[ID_HUD]
+		if(!holder)
+			continue
+		holder.icon_state = "hud[ckey(perp.cardjob)]"
+		C.images += holder
+
 	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(perp, M))
 			continue
@@ -200,7 +210,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 
 		var/perpname = perp.get_face_name()
 		if(lowertext(perpname) == "unknown" || !perpname)
-			perpname = perp.get_id_name("Unknown")
+			perpname = perp.get_worn_id_name("Unknown")
 		if(perpname)
 			var/datum/data/record/R = find_record("name", perpname, data_core.security)
 			if(R)

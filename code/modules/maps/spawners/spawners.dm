@@ -13,12 +13,17 @@
 	var/chance = 100
 	var/jiggle = 0
 	var/list/to_spawn = list()
+	var/spawn_all = FALSE //If TRUE, will attempt to spawn 1 of each of the items in to_spawn, rather than pick only one.
 
 /obj/abstract/map/spawner/perform_spawn()
-
 	for(amount, amount, amount--)
-		if(prob(chance))
-			CreateItem(pick(to_spawn))
+		if(spawn_all)
+			for(var/obj/thing in to_spawn)
+				if(prob(chance))
+					CreateItem(thing)
+		else
+			if(prob(chance))
+				CreateItem(pick(to_spawn))
 	qdel(src)
 
 /obj/abstract/map/spawner/proc/CreateItem(new_item_type)
@@ -180,7 +185,6 @@
 		/obj/machinery/monkey_recycler,
 		/obj/machinery/photocopier,
 		/obj/machinery/pipedispenser,
-		/obj/machinery/porta_turret,
 		/obj/machinery/power/am_control_unit,
 		/obj/machinery/power/emitter,
 		/obj/machinery/power/generator,
@@ -200,6 +204,7 @@
 		/obj/machinery/telecomms/allinone,
 		/obj/machinery/teleport/station,
 		/obj/machinery/the_singularitygen,
+		/obj/machinery/turret/portable,
 		/obj/machinery/vending/dinnerware,
 		/obj/machinery/vending/engineering,
 		/obj/machinery/vending/plasmaresearch,
@@ -248,11 +253,11 @@
 		/obj/item/stack/cable_coil/random,
 		/obj/item/weapon/camera_assembly,
 		/obj/item/weapon/cell,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/screwdriver,
-		/obj/item/weapon/wrench,
+		/obj/item/tool/crowbar,
+		/obj/item/tool/weldingtool,
+		/obj/item/tool/wirecutters,
+		/obj/item/tool/screwdriver,
+		/obj/item/tool/wrench,
 		/obj/item/weapon/extinguisher,
 		/obj/item/weapon/hand_labeler,
 		/obj/item/weapon/light/bulb,
@@ -303,7 +308,7 @@
 		/obj/item/device/flashlight,
 		/obj/item/device/flashlight/lantern,
 		/obj/item/device/flashlight/flare,
-		/obj/item/weapon/weldingtool/largetank,
+		/obj/item/tool/weldingtool/largetank,
 		/obj/item/device/gps,
 		/obj/item/device/gps/science,
 		/obj/item/device/gps/engineering,
@@ -535,7 +540,7 @@
 		/obj/item/weapon/mop,
 		/obj/item/weapon/newspaper,
 		/obj/item/weapon/pen,
-		/obj/item/weapon/scalpel,
+		/obj/item/tool/scalpel,
 		/obj/item/weapon/shard,
 		/obj/item/weapon/stool,
 		/obj/item/weapon/reagent_containers/blood/OMinus,
@@ -577,7 +582,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/syndicake,
 		/obj/item/weapon/reagent_containers/food/snacks/tofurkey,
 		/obj/item/device/radio/headset/headset_earmuffs,
-		/obj/item/weapon/solder/pre_fueled,
+		/obj/item/tool/solder/pre_fueled,
 		/obj/item/weapon/storage/box/smokebombs,
 		/obj/item/weapon/storage/box/wind,
 		/obj/item/weapon/storage/box/foam,
@@ -733,7 +738,7 @@
 		/obj/item/device/rcd,
 		/obj/item/stack/rcd_ammo,
 		/obj/item/device/rcd/matter/rsf,
-		/obj/item/weapon/weldingtool/hugetank,
+		/obj/item/tool/weldingtool/hugetank,
 		/obj/item/weapon/tank/plasma,
 		/obj/item/gun_part/silencer,
 		/obj/item/weapon/storage/backpack/holding,
@@ -1116,7 +1121,7 @@
 		/obj/item/weapon/dnainjector/nofail/fat,
 		/obj/item/weapon/dnainjector/nofail/runfast,
 		/obj/item/weapon/dnainjector/nofail/strong,
-		/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet,
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_tenders,
 		/obj/item/clothing/under/shorts/black,
 		/obj/item/clothing/under/shorts/blue,
 		/obj/item/clothing/under/shorts/red,
@@ -1176,7 +1181,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/potentham,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-		/obj/item/mounted/frame/painting
+		/obj/item/mounted/frame/painting,
+		/obj/item/weapon/aiModule/randomize,
+		/obj/item/weapon/aiModule/core/hogan,
+		/obj/item/weapon/gun/portalgun,
+		/obj/item/clothing/glasses/emitter
 )
 
 
@@ -1225,7 +1234,8 @@
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
-	/obj/item/weapon/gun/siren
+	/obj/item/weapon/gun/siren,
+	/obj/item/weapon/gun/portalgun
 )
 
 /obj/abstract/map/spawner/safe/clothing
@@ -1244,7 +1254,8 @@
 	/obj/item/clothing/gloves/anchor_arms,
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
-	/obj/abstract/spawn_all/dredd_gear
+	/obj/abstract/spawn_all/dredd_gear,
+	/obj/item/clothing/glasses/emitter
 )
 
 /obj/abstract/map/spawner/safe/medal

@@ -28,6 +28,7 @@
 	flying = 1
 	treadmill_speed = 0 //It floats!
 	mutations = list(M_NO_SHOCK)
+	see_in_dark = 9
 
 	mob_property_flags = MOB_CONSTRUCT
 	mob_swap_flags = HUMAN|SIMPLE_ANIMAL|SLIME|MONKEY
@@ -63,6 +64,17 @@
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
+/mob/living/simple_animal/construct/update_perception()
+	if(client)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
+			client.darkness_planemaster.alpha = 180
+		client.color = list(
+					1,0,0,0,
+					0,1.3,0,0,
+	 				0,0,1.3,0,
+		 			0,-0.3,-0.3,1,
+		 			0,0,0,0)
 
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
@@ -74,10 +86,10 @@
 /mob/living/simple_animal/construct/say(var/message)
 	. = ..(message, "C")
 
-/mob/living/simple_animal/construct/construct_chat_check(setting)
+/mob/living/simple_animal/construct/cult_chat_check(setting)
 	if(!mind)
 		return
-	if(find_active_faction_by_member(mind.GetRole(CULTIST)))
+	if(find_active_faction_by_member(iscultist(src)))
 		return 1
 	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
 		return 1
@@ -89,11 +101,11 @@
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	if(..())
 		return 1
-	if(message_mode == MODE_HEADSET && construct_chat_check(SPEAK_OVER_GENERAL_CULT_CHAT))
+	if(message_mode == MODE_HEADSET && cult_chat_check(SPEAK_OVER_GENERAL_CULT_CHAT))
 		var/turf/T = get_turf(src)
 		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
 		for(var/mob/M in mob_list)
-			if(M.construct_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+			if(M.cult_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
 		return 1
 
@@ -101,7 +113,18 @@
 #undef SPEAK_OVER_CHANNEL_INTO_CULT_CHAT
 #undef HEAR_CULT_CHAT
 
+
+/mob/living/simple_animal/construct/occult_muted()
+	. = ..()
+	if (.)
+		return 1
+	if (purge > 0)
+		return 1
+	return 0
+
 /mob/living/simple_animal/construct/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -203,7 +226,7 @@
 			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
-		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 		update_icons()
 	else
@@ -271,7 +294,7 @@
 	if (hurt <= (maxHealth/3) && (!damage || damage <= damageblock))//when cracks start to appear
 		if (A)
 			visible_message("<span class='danger'>\The [A] bounces harmlessly off of \the [src]'s shell. </span>")
-		anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = LIGHTING_PLANE)
+		anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE)
 		playsound(src, 'sound/items/metal_impact.ogg', 25)
 		return TRUE
 	return FALSE
@@ -334,7 +357,7 @@
 /mob/living/simple_animal/construct/wraith
 	name = "\improper Wraith"
 	real_name = "\improper Wraith"
-	desc = "A wicked bladed shell contraption piloted by a bound spirit"
+	desc = "A wicked bladed shell contraption piloted by a bound spirit."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "floating"
 	icon_living = "floating"
@@ -346,7 +369,6 @@
 	attacktext = "slashes"
 	speed = 1
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
-	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
 
@@ -360,7 +382,7 @@
 /mob/living/simple_animal/construct/builder
 	name = "\improper Artificer"
 	real_name = "\improper Artificer"
-	desc = "A bulbous construct dedicated to building and maintaining The Cult of Nar-Sie's armies"
+	desc = "A bulbous construct dedicated to building and maintaining the Cult of Nar-Sie's armies."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "artificer"
 	icon_living = "artificer"
@@ -423,7 +445,7 @@
 /mob/living/simple_animal/construct/harvester
 	name = "Harvester"
 	real_name = "Harvester"
-	desc = "The promised reward of the livings who follow narsie. Obtained by offering their bodies to the geometer of blood"
+	desc = "The promised reward of the livings who follow Nar-Sie. Obtained by offering their bodies to the geometer of blood."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "harvester"
 	icon_living = "harvester"
@@ -457,7 +479,7 @@
 /mob/living/simple_animal/construct/update_icons()
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
-	var/overlay_plane = LIGHTING_PLANE
+	var/overlay_plane = ABOVE_LIGHTING_PLANE
 	if(layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
@@ -524,6 +546,8 @@
 
 	if(.)
 		regular_hud_updates()
+
+		standard_damage_overlay_updates()
 
 
 /mob/living/simple_animal/construct/regular_hud_updates()

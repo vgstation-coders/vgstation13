@@ -1875,7 +1875,7 @@ obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/
 	brainmob.container = src
 
 obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
+	if(istype(W,/obj/item/tool/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(0)
@@ -1895,7 +1895,7 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		else
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
 
-	else if(istype(W,/obj/item/weapon/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
+	else if(istype(W,/obj/item/tool/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(1)

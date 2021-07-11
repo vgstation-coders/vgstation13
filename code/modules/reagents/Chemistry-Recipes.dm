@@ -92,10 +92,10 @@
 	id = "holy_explosion_potassium"
 	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
 	result_amount = 2.4
-	
+
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
-	playsound('sound/misc/holyhandgrenade.ogg', 100, 1)
+	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 1)
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
@@ -182,7 +182,7 @@
 	result_amount = 3
 
 /datum/chemical_reaction/anti_toxin
-	name = "Anti-Toxin (Dylovene)"
+	name = "Dylovene"
 	id = ANTI_TOXIN
 	result = ANTI_TOXIN
 	required_reagents = list(SILICON = 1, POTASSIUM = 1, NITROGEN = 1)
@@ -573,6 +573,14 @@
 	required_reagents = list(SODIUM = 1, CHLORINE = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/holysalts
+	name = "Holy Salts"
+	id = HOLYSALTS
+	result = HOLYSALTS
+	required_reagents = list(SODIUMCHLORIDE = 1)
+	required_catalysts = list(HOLYWATER = 5)
+	result_amount = 1
+
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
 	id = "flash_powder"
@@ -729,7 +737,7 @@
 	result_amount = 5
 
 /datum/chemical_reaction/carp_pheromones
-	name = "Carp pheromones"
+	name = "Carp Pheromones"
 	id = CARPPHEROMONES
 	result = CARPPHEROMONES
 	required_reagents = list(CARPOTOXIN = 1, LEPORAZINE = 1, CARBON = 1)
@@ -835,6 +843,37 @@
 /datum/chemical_reaction/solidification/uranium/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/uranium
 
+/datum/chemical_reaction/solidification/diamond
+	name = "Solid Diamond"
+	id = "soliddiamond"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/diamond/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/diamond
+
+/datum/chemical_reaction/solidification/clown
+	name = "Solid Bananium"
+	id = "solidbananium"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, BANANA = 20)
+	required_catalysts = list(PHAZON = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/clown/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/clown
+
+/datum/chemical_reaction/solidification/phazon
+	name = "Solid Phazon"
+	id = "solidphazon"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PHAZON = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/phazon/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/phazon
+
 /datum/chemical_reaction/solidification/plasteel
 	name = "Solid Plasteel"
 	id = "solidplasteel"
@@ -939,7 +978,7 @@
 
 /datum/chemical_reaction/fixoveinmake/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/FixOVein(location)
+	new /obj/item/tool/FixOVein(location)
 	qdel(holder.my_atom)
 
 /datum/chemical_reaction/bonegelmake
@@ -952,7 +991,7 @@
 
 /datum/chemical_reaction/bonegelmake/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/bonegel(location)
+	new /obj/item/tool/bonegel(location)
 	qdel(holder.my_atom)
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -3457,6 +3496,20 @@
 	required_reagents = list(SPACE_DRUGGS = 1, AMATOXIN = 1, PSILOCYBIN = 1, KARMOTRINE = 2)
 	result_amount = 5
 
+/datum/chemical_reaction/gravsingulo
+	name = "Gravitational Singulo"
+	id = GRAVSINGULO
+	result = GRAVSINGULO
+	required_reagents = list(SINGULO = 1, KARMOTRINE = 4)
+	result_amount = 1
+
+/datum/chemical_reaction/gravsingularitea
+	name = "Gravitational Singularitea"
+	id = GRAVSINGULARITEA
+	result = GRAVSINGULARITEA
+	required_reagents = list(SINGULARITEA = 1, KARMOTRINE = 4)
+	result_amount = 1
+
 /datum/chemical_reaction/lemonlime
 	name = "Lemon Lime"
 	id = LEMON_LIME
@@ -3555,6 +3608,41 @@
 	for(var/i=1 to created_volume)
 		new /mob/living/simple_animal/mouse/common(location)
 
+/datum/chemical_reaction/aminomician
+	name = "Aminomician"
+	id = AMINOMICIAN
+	result = AMINOMICIAN
+	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/synthcorgi
+	name = "Synthcorgi"
+	id = "synthcorgi"
+	result = null
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIAN = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthcorgi/on_reaction(var/datum/reagents/holder, var/created_volume)
+	set waitfor = FALSE //makes sleep() work like spawn()
+	if(ishuman(holder.my_atom))
+		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
+		var/mob/living/carbon/human/H = holder.my_atom
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
+		H.emote("me",1,"winces slightly.")
+		sleep(rand(10 SECONDS, 20 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
+		H.emote("me",1,"winces painfully.")
+		H.adjustToxLoss(1)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
+		H.apply_damage(2*created_volume, BRUTE, LIMB_CHEST)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		H.vomit(instant = TRUE) //mouse spawning continues below
+	var/location = get_turf(holder.my_atom)
+	for(var/i=1 to created_volume)
+		new /mob/living/simple_animal/corgi/puppy(location)
+
 /datum/chemical_reaction/aminocyprinidol
 	name = "Aminocyprinidol"
 	id = AMINOCYPRINIDOL
@@ -3624,7 +3712,7 @@
 	name = "Ectoplasm"
 	id = ECTOPLASM
 	result = ECTOPLASM
-	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3, FROSTOIL = 1)
+	required_reagents = list(AMINOMICIAN = 1, FROSTOIL = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthskeleton
@@ -3682,6 +3770,37 @@
 	var/L = get_turf(holder.my_atom)
 	new /mob/living/simple_animal/hostile/ginger/gingerboneman(L)
 	qdel(holder.my_atom)
+
+/datum/chemical_reaction/midazoline
+	name = "Midazoline"
+	id = MIDAZOLINE
+	result = MIDAZOLINE
+	required_reagents = list(SACIDS = 1, CLONEXADONE = 1, GOLD = 1)
+	result_amount = 1 //This effectively just changes the amount of gold powder you get from electrolyzing
+
+/datum/chemical_reaction/midazoline/required_condition_check(datum/reagents/holder)
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/mineral/plasma) in holder.my_atom.contents)
+	return 0
+
+/datum/chemical_reaction/midazoline_dissolve
+	name = "Midazoline-to-Mercury"
+	id = "midazoline2mercury"
+	result = MERCURY
+	required_reagents = list(MIDAZOLINE = 0.1, MERCURY = 0.1)
+	result_amount = 0.2
+
+/datum/chemical_reaction/midazoline_dissolve/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	for(var/datum/reagent/self_replicating/midazoline/R in holder.reagent_list)
+		holder.convert_some_of_type(/datum/reagent/self_replicating/midazoline, /datum/reagent/mercury, R.volume) //Convert ALLL of it, even that last 0.01u (don't leave 0.042857u behind)
+
+/datum/chemical_reaction/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	result = LOCUTOGEN
+	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
+	result_amount = 3
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

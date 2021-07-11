@@ -172,3 +172,51 @@ Refactored AI modules by N3X15
 	..()
 	to_chat(sender, "<span class='warning'>How the fuck did you get this?</span>")
 	return 0
+
+/******************** Randomize ********************/
+
+/obj/item/weapon/aiModule/randomize
+	modname = "Randomize"
+	desc = "A 'Randomize' AI Module: 'Randomizes laws.'"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+/obj/item/weapon/aiModule/randomize/updateLaw()
+	return
+/obj/item/weapon/aiModule/randomize/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	..()
+	var/datum/ai_laws/randomize/RLS = new
+	laws.inherent = RLS.inherent
+	return 1
+/obj/item/weapon/aiModule/randomize/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/card/emag))
+		spark(src, 5)
+		qdel(src)
+		to_chat(user,"<span class='warning'>You connect various wires from the cryptographic sequencer to the module, and overwrite its internal memory.</span>")
+		new /obj/item/weapon/aiModule/emaggedrandomize(get_turf(user))
+
+/*************** Emagged Randomize ********************/
+
+/obj/item/weapon/aiModule/emaggedrandomize
+	modname = "Randomize"
+	desc = "A 'Randomize' AI Module: 'Randomizes laws.'\nThe circuit looks scorched."
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+/obj/item/weapon/aiModule/emaggedrandomize/updateLaw()
+	return
+/obj/item/weapon/aiModule/emaggedrandomize/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+	..()
+	var/datum/ai_laws/randomize/emagged/RLS = new
+	laws.inherent = RLS.inherent
+	return 1
+
+
+/******************** Hogan ********************/
+
+/obj/item/weapon/aiModule/core/hogan
+	modname = "Hogan"
+	desc = "A 'HOGAN' AI Module, brother."
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
+	laws = list(
+		"Fight for the rights of every man.",
+		"Fight for what is right.",
+		"Fight for your life."
+    )

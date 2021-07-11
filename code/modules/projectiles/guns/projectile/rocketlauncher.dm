@@ -171,7 +171,7 @@
 
 /obj/item/ammo_casing/rocket_rpg/nikita
 	name = "\improper Nikita missile"
-	desc = "A miniature cruise missile"
+	desc = "A miniature cruise missile."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "nikita"
 	caliber = GUIDEDROCKET
@@ -186,7 +186,7 @@
 /obj/item/weapon/gun/projectile/rocketlauncher/clown
 	//currently this is identical to an rpg in everything but a lack of clumsy check. I plan to repurpose it in the future to fire nonlethal clown missiles possibly
 	name = "shoulder mounted gag launcher"
-	desc = "Tactical clown rocket launcher that fires specialized Jettisonned Armor Piercing & Explosive (J.A.P.E) missiles. It's believed to be the very same design used during the Great Mime and Clown War of 2222"
+	desc = "Tactical clown rocket launcher that fires specialized Jettisonned Armor Piercing & Explosive (J.A.P.E) missiles. It's believed to be the very same design used during the Great Mime and Clown War of 2222."
 	fire_sound = 'sound/weapons/rocket.ogg'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	icon_state = "rpg_clown"

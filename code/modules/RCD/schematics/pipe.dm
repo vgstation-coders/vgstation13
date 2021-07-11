@@ -680,6 +680,13 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= PIPE_HE_MANIFOLD4W
 	pipe_type	= PIPE_BINARY
 
+/datum/rcd_schematic/pipe/he_cap
+	name		= "Pipe Cap"
+	category	= "Heat Exchange"
+
+	pipe_id		= PIPE_HE_CAP
+	pipe_type	= PIPE_UNARY
+
 //INSULATED PIPES.
 
 /datum/rcd_schematic/pipe/insulated

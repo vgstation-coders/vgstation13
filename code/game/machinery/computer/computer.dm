@@ -8,6 +8,7 @@
 	active_power_usage = 300
 	var/obj/item/weapon/circuitboard/circuit = null //if circuit==null, computer can't disassembly
 	var/processing = 0
+	var/empproof = FALSE // For plasma glass builds
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
 
 	use_auto_lights = 1
@@ -38,7 +39,7 @@
 	return 1
 
 /obj/machinery/computer/emp_act(severity)
-	if(prob(20/severity))
+	if(prob(20/severity) && !empproof) // Don't EMP if proofed
 		set_broken()
 	..()
 
@@ -103,6 +104,8 @@
 	update_icon()
 
 /obj/machinery/computer/proc/set_broken()
+	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
+		return
 	stat |= BROKEN
 	update_icon()
 
@@ -120,11 +123,16 @@
 			CC.forceMove(A)
 		A.circuit = CC
 		A.anchored = 1
+		A.empproof = empproof // Transfer status
 		for (var/obj/C in src)
 			C.forceMove(src.loc)
 		if (src.stat & BROKEN)
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
-			new /obj/item/weapon/shard(loc)
+			if(empproof) // Return plasma or normal glass shard if variable is set or not
+				new /obj/item/weapon/shard/plasma(loc)
+				A.empproof = FALSE // Since there's no type of glass now
+			else
+				new /obj/item/weapon/shard(loc)
 			A.state = 3
 			A.icon_state = "3"
 		else

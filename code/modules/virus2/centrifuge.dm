@@ -134,11 +134,11 @@
 			icon_state = "centrifuge_moving"
 			set_light(2,2)
 			var/image/centrifuge_light = image(icon,"centrifuge_light")
-			centrifuge_light.plane = LIGHTING_PLANE
+			centrifuge_light.plane = ABOVE_LIGHTING_PLANE
 			centrifuge_light.layer = ABOVE_LIGHTING_LAYER
 			overlays += centrifuge_light
 			var/image/centrifuge_glow = image(icon,"centrifuge_glow")
-			centrifuge_glow.plane = LIGHTING_PLANE
+			centrifuge_glow.plane = ABOVE_LIGHTING_PLANE
 			centrifuge_glow.layer = ABOVE_LIGHTING_LAYER
 			centrifuge_glow.blend_mode = BLEND_ADD
 			overlays += centrifuge_glow
@@ -148,13 +148,13 @@
 		switch (special)
 			if (CENTRIFUGE_LIGHTSPECIAL_BLINKING)
 				var/image/centrifuge_light = image(icon,"centrifuge_special_update")
-				centrifuge_light.plane = LIGHTING_PLANE
+				centrifuge_light.plane = ABOVE_LIGHTING_PLANE
 				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += centrifuge_light
 				special = CENTRIFUGE_LIGHTSPECIAL_ON
 			if (CENTRIFUGE_LIGHTSPECIAL_ON)
 				var/image/centrifuge_light = image(icon,"centrifuge_special")
-				centrifuge_light.plane = LIGHTING_PLANE
+				centrifuge_light.plane = ABOVE_LIGHTING_PLANE
 				centrifuge_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += centrifuge_light
 

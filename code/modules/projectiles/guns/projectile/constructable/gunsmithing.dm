@@ -29,7 +29,7 @@
 /obj/item/weapon/cylinder_assembly/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding \the [src] together.")
 		if(WT.do_weld(user, src, 30))
 			to_chat(user, "You weld \the [src] together.")
@@ -71,6 +71,16 @@
 			user.put_in_hands(I)
 		else
 			new /obj/item/weapon/gun_assembly(get_turf(src.loc), "stock_reservoir_assembly")
+		qdel(src)
+		qdel(W)
+	if(istype(W, /obj/item/device/crank_charger))
+		to_chat(user, "You loosely affix \the [W] to \the [src].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "stock_crank_assembly")
+			user.put_in_hands(I)
+		else
+			new /obj/item/weapon/gun_assembly(get_turf(src.loc), "stock_crank_assembly")
 		qdel(src)
 		qdel(W)
 	if(istype(W, /obj/item/pipe))
@@ -156,7 +166,7 @@
 			C.use(5)
 			qdel(src)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the metal blades together.")
 		if(WT.do_weld(user, src, 30))
 			to_chat(user, "You weld the metal blades together.")
@@ -165,15 +175,52 @@
 			w_class = W_CLASS_MEDIUM
 			complete = 1
 
+/obj/item/weapon/lens_assembly
+	name = "lens assembly"
+	desc = "A set of focusing lenses mounted on metal rails."
+	icon = 'icons/obj/weaponsmithing.dmi'
+	icon_state = "lens_assembly"
+	var/plasma = 0
+	var/durability = 100 //After a certain number of shots, the lenses will degrade and will need to be replaced.
+
+/obj/item/weapon/lens_assembly/plasma
+	name = "durable lens assembly"
+	desc = "A set of focusing lenses mounted on metal rails. These ones are made of plasma glass."
+	icon_state = "lens_assembly_plasma"
+	plasma = 1
+	durability = 200
+
 /obj/item/weapon/rail_assembly
 	name = "rail assembly"
 	desc = "A set of metal rails."
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "rail_assembly"
+	var/plasma = 0
 	var/durability = 100 //After a certain number of shots, the rails will degrade and will need to be replaced.
 	var/stage = 0
 
 /obj/item/weapon/rail_assembly/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/stack/sheet/glass))
+		var/obj/item/stack/sheet/glass/C = W
+
+		if(istype(C, /obj/item/stack/sheet/glass/plasmaglass))
+			plasma = 1
+
+		if(C.amount<5)
+			to_chat(user, "You don't have enough glass to make a lens assembly.")
+			return
+		else if(user.drop_item(src) && C.use(5))
+			if(plasma)
+				var/obj/item/weapon/lens_assembly/plasma/I = new (get_turf(user))
+				user.put_in_hands(I)
+			else
+				var/obj/item/weapon/lens_assembly/I = new (get_turf(user))
+				user.put_in_hands(I)
+			to_chat(user, "You add focusing lenses to \the [src].")
+			qdel(src)
+		else //failsafe
+			to_chat(user, "You are unable to make a lens assembly.")
+
 	if(istype(W, /obj/item/weapon/newspaper))
 		to_chat(user, "You add \the [W] to \the [src] as padding.")
 		stage = 1
@@ -316,6 +363,20 @@
 			desc = "It looks like it could be some type of gun. It seems to be missing an ignition source."
 			icon_state = "stock_reservoir_barrel"
 			w_class = W_CLASS_LARGE
+
+		if("stock_crank_assembly")
+			name = "gun stock"
+			desc = "A metal gun stock. There is a crank charger loosely fitted to it."
+			icon_state = "stock_crank_assembly"
+		if("stock_crank")
+			name = "gun stock"
+			desc = "A metal gun stock. It seems to be missing a triggering mechanism."
+			icon_state = "stock_crank_assembly"
+		if("lasmusket_assembly")
+			name = "gun assembly"
+			desc = "It looks like it could be some type of gun. The triggering mechanism is unsecured."
+			icon_state = "lasmusket_assembly"
+
 		if("blunderbuss_assembly")
 			name = "gun assembly"
 			desc = "It looks like it could be some type of gun. The firing mechanism doesn't seem to be securely tightened."
@@ -413,6 +474,14 @@
 			user.put_in_hands(I)
 			state = "stock_capacitorbank"
 			update_assembly()
+		if("stock_crank_assembly")
+			to_chat(user, "You detach the crank charger from \the [src].")
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/metal_gun_stock/I = new (get_turf(src.loc))
+			var/obj/item/device/crank_charger/Q = new (get_turf(src.loc))
+			user.put_in_hands(I)
+			user.put_in_hands(Q)
+			qdel(src)
 
 /obj/item/weapon/gun_assembly/attackby(obj/item/weapon/W, mob/user)
 	switch(state)
@@ -446,7 +515,7 @@
 //BLUNDERBUSS BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_reservoir_barrel_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the barrel to \the [src].")
 				if(WT.do_weld(user, src, 30, 0))
 					to_chat(user, "You weld the barrel to \the [src].")
@@ -479,7 +548,7 @@
 				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank"
 				update_assembly()
-			if(iswirecutter(W))
+			if(W.is_wirecutter(user))
 				to_chat(user, "You cut the wires out of the capacitor bank.")
 				W.playtoolsound(user, 50)
 				state = "stock_reservoir"
@@ -499,7 +568,7 @@
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the barrel to \the [src].")
 				if(WT.do_weld(user, src, 30, 0))
 					to_chat(user, "You weld the barrel to \the [src].")
@@ -553,7 +622,7 @@
 //BLAST CANNON BEGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_pipe_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the bent pipe to \the [src].")
 				if(WT.do_weld(user, src, 30))
 					to_chat(user, "You weld the bent pipe to \the [src].")
@@ -569,7 +638,7 @@
 //SUBSPACE TUNNELER BEGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_ansible_assembly")
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the subspace ansible onto \the [src].")
 				if(WT.do_weld(user, src, 30, 0))
 					to_chat(user, "You weld the subspace ansible onto \the [src].")
@@ -612,6 +681,37 @@
 				qdel(src)
 //SUBSPACE TUNNELER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//LASERMUSKET BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		if("stock_crank_assembly")
+			if(W.is_wrench(user))
+				to_chat(user, "You tighten the bolts securing \the [src]'s crank charger.")
+				W.playtoolsound(src, 50)
+				state = "stock_crank"
+				update_assembly()
+		if("stock_crank")
+			if(W.is_wrench(user))
+				to_chat(user, "You loosen the bolts securing \the [src]'s crank charger.")
+				W.playtoolsound(src, 50)
+				state = "stock_crank_assembly"
+				update_assembly()
+			if(istype(W, /obj/item/mounted/frame/light_switch) || istype(W, /obj/item/mounted/frame/access_button) || istype(W, /obj/item/mounted/frame/driver_button))
+				to_chat(user, "You attach \the [W] to \the [src].")
+				state = "lasmusket_assembly"
+				update_assembly()
+				qdel(W)
+		if("lasmusket_assembly")
+			if(W.is_screwdriver(user))
+				to_chat(user, "You secure \the [src]'s triggering mechanism.")
+				W.playtoolsound(src, 50)
+				if(src.loc == user)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/gun/energy/lasmusket/I = new (get_turf(user))
+					user.put_in_hands(I)
+				else
+					new /obj/item/weapon/gun/energy/lasmusket(get_turf(src.loc))
+				qdel(src)
+//LASERMUSKET END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GUN ASSEMBLY END/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -621,7 +721,7 @@
 
 
 //TOMAHAWK BEGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/obj/item/weapon/wrench_wired
+/obj/item/tool/wrench_wired
 	name = "wired wrench"
 	desc = "A wrench with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 	icon = 'icons/obj/weaponsmithing.dmi'
@@ -641,7 +741,7 @@
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	var/metal_assembly = 0
 
-/obj/item/weapon/wrench_wired/proc/update_wired_wrench_assembly()
+/obj/item/tool/wrench_wired/proc/update_wired_wrench_assembly()
 	if(metal_assembly)
 		name = "tomahawk assembly"
 		desc = "A makeshift handaxe with a fine blade of strong metal. The blade doesn't look very secure."
@@ -651,23 +751,23 @@
 		desc = "A wrench with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 		icon_state = "wrench"
 
-/obj/item/weapon/wrench_wired/attack_self(mob/user as mob)
+/obj/item/tool/wrench_wired/attack_self(mob/user as mob)
 	if(metal_assembly)
 		to_chat(user, "You remove the metal blade from \the [src].")
-		new /obj/item/weapon/wrench_wired(get_turf(src.loc))
+		new /obj/item/tool/wrench_wired(get_turf(src.loc))
 		new /obj/item/weapon/metal_blade(get_turf(src.loc))
 		qdel(src)
 	else
 		to_chat(user, "You unwrap the cable cuffs from around \the [src].")
-		new /obj/item/weapon/wrench(get_turf(src.loc))
+		new /obj/item/tool/wrench(get_turf(src.loc))
 		new /obj/item/weapon/handcuffs/cable(get_turf(src.loc))
 		qdel(src)
 
-/obj/item/weapon/wrench_wired/attackby(obj/item/weapon/W, mob/user)
+/obj/item/tool/wrench_wired/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(metal_assembly)
 		if(iswelder(W))
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			to_chat(user, "You begin welding the blade to \the [src].")
 			if(WT.do_weld(user, src, 30, 0))
 				to_chat(user, "You weld the blade to \the [src].")
@@ -702,6 +802,7 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "wheelchair_assembly"
 	var/cannon_assembly = 0
+	var/siege_assembly = FALSE
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/proc/update_wheelchair_assembly()
 	if(cannon_assembly)
@@ -727,15 +828,32 @@
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/attackby(obj/item/weapon/W, mob/user)
-	if(cannon_assembly)
+	if(siege_assembly)
+		if(istype(W, /obj/item/stack/sheet/plasteel))
+			var/obj/item/stack/sheet/PS = W
+			if(do_after(user, src, 3 SECONDS))
+				if(PS.use(10))	//Heavy duty
+					to_chat(user, "<span class='notice'>You reinforce the [src]'s barrel.</span>")
+					var/obj/structure/siege_cannon/SC = new /obj/structure/siege_cannon(loc)
+					SC.dir = dir
+					qdel(src)
+	if(cannon_assembly && !siege_assembly)
 		if(istype(W, /obj/item/device/assembly/igniter))
 			to_chat(user, "You attach \the [W] to \the [src].")
 			var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/I = new (get_turf(src.loc))
 			I.dir = dir
 			qdel(src)
 			qdel(W)
+		if(istype(W, /obj/item/weapon/barricade_kit))
+			var/obj/item/weapon/barricade_kit/BK = W
+			if(!BK.kit_uses >= 3)
+				return
+			if(do_after(user, src, 3 SECONDS))
+				to_chat(user, "<span class='notice'>You create a wooden frame for the [src].</span>")
+				siege_assembly = TRUE
+				qdel(BK)
 	else if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the barrel onto \the [src].")
 		if(WT.do_weld(user, src, 80, 0))
 			to_chat(user, "You weld the barrel onto \the [src].")
@@ -759,7 +877,7 @@
 		/obj/item/taperoll/syndie,
 		/obj/item/device/label_roll,
 		/obj/item/weapon/glue,
-		/obj/item/weapon/bonegel,
+		/obj/item/tool/bonegel,
 		/obj/item/stack/package_wrap,
 		/obj/item/stack/medical/bruise_pack/bandaid,
 		)

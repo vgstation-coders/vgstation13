@@ -6,7 +6,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 /obj/item/weapon/reagent_containers/glass/paint
 	desc = "A bucket containing paint."
 	name = "paint bucket"
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "paint_neutral"
 	item_state = "paintcan"
 	starting_materials = list(MAT_IRON = 200)

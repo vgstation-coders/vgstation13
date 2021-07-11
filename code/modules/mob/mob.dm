@@ -257,6 +257,8 @@
 
 /mob/New()
 	. = ..()
+	original_density = density
+
 	mob_list += src
 
 	if(DEAD == stat)
@@ -431,12 +433,18 @@
 
 /mob/proc/Life()
 	set waitfor = FALSE
+
+	update_perception()
+
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
-	return
+
+	for (var/time in crit_rampup)
+		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
+			crit_rampup -= time
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
 	if(N.chained)
@@ -453,7 +461,7 @@
 			narsimage.mouse_opacity = 0
 		if(!narglow) //Create narglow
 			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", NARSIE_GLOW, 1)
-			narglow.plane = LIGHTING_PLANE
+			narglow.plane = ABOVE_LIGHTING_PLANE
 			narglow.mouse_opacity = 0
 /* Animating narsie works like shit thanks to fucking byond
 		if(!N.old_x || !N.old_y)
@@ -518,7 +526,7 @@
 	if((R.z == T_mob.z) && (get_dist(R,T_mob) <= (R.consume_range+10)) && !(R in view(T_mob)))
 		if(!riftimage)
 			riftimage = image('icons/obj/rift.dmi',T_mob,"rift", SUPER_PORTAL_LAYER, 1)
-			riftimage.plane = LIGHTING_PLANE
+			riftimage.plane = ABOVE_LIGHTING_PLANE
 			riftimage.mouse_opacity = 0
 
 		var/new_x = WORLD_ICON_SIZE * (R.x - T_mob.x) + R.pixel_x
@@ -1067,6 +1075,7 @@ Use this proc preferably at the end of an equipment loadout
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
+				M.assaulted_by(usr, TRUE)
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1455,7 +1464,7 @@ Use this proc preferably at the end of an equipment loadout
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
 			stat("Instances:", "[world.contents.len]")
-			stat("Internal tick usage:", "[internal_tick_usage]")
+			stat("Map CPU:", "[world.map_cpu]")
 
 			stat(null)
 			if(Master)
@@ -1516,6 +1525,12 @@ Use this proc preferably at the end of an equipment loadout
 		return 0
 	return 1
 
+/mob/proc/isKnockedDown() //Check if the mob is knocked down
+	return knockdown || paralysis
+
+/mob/proc/isJustStunned() //Some ancient coder (as of 2021) made it so that it checks directly for whether the variable has a positive number, and I'm too afraid of unintended consequences down the line to just change it to isStunned(), so instead you have this half-baked abomination of a barely-used proc just so that player simple_animal mobs can move. You're welcome!
+	return stunned
+
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
 	if (locked_to)
@@ -1524,12 +1539,11 @@ Use this proc preferably at the end of an equipment loadout
 			canmove = 0
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
-
-	else if(isUnconscious() || knockdown || paralysis || resting || !can_stand)
+	else if(resting || !can_stand || isKnockedDown() || isUnconscious())
 		stop_pulling()
 		lying = 1
 		canmove = 0
-	else if(stunned)
+	else if(isJustStunned())
 //		lying = 0
 		canmove = 0
 	else if(captured)
@@ -1546,7 +1560,7 @@ Use this proc preferably at the end of an equipment loadout
 			setDensity(FALSE)
 			drop_hands()
 		else
-			setDensity(TRUE)
+			setDensity(original_density)
 
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
@@ -1570,10 +1584,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		StartMoving()
+		lazy_invoke_event(/lazy_event/on_before_move)
 	dir = direction
-	Facing()
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_face)
+	lazy_invoke_event(/lazy_event/on_after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1593,48 +1607,11 @@ Use this proc preferably at the end of an equipment loadout
 	set hidden = 1
 	return directionface(SOUTH)
 
-/mob/proc/Facing()
-	var/datum/listener
-	for(var/atomToCall in src.callOnFace)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnFace[atomToCall])(src)
-		else
-			src.callOnFace -= atomToCall
-
-
-//this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
-/mob/proc/StartMoving()
-	var/datum/listener
-	for(var/atomToCall in src.callOnStartMove)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnStartMove[atomToCall])(src)
-		else
-			src.callOnStartMove -= atomToCall
-
-
-//this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
-/mob/proc/EndMoving()
-	var/datum/listener
-	for(var/atomToCall in src.callOnEndMove)
-		listener = locate(atomToCall)
-		if(listener)
-			call(listener,src.callOnEndMove[atomToCall])(src)
-		else
-			src.callOnEndMove -= atomToCall
-
-
-/mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
-	StartMoving()
-	. = ..()
-	EndMoving()
-
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	StartMoving()
+	lazy_invoke_event(/lazy_event/on_before_move)
 	..()
-	EndMoving()
+	lazy_invoke_event(/lazy_event/on_after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0
@@ -1953,6 +1930,9 @@ mob/proc/on_foot()
 	if(see_invisible_override)
 		see_invisible = see_invisible_override
 
+/mob/proc/update_perception()
+	return
+
 /mob/actual_send_to_future(var/duration)
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
@@ -2145,6 +2125,12 @@ mob/proc/on_foot()
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if (runescape_pvp)
+		var/area/A = get_area(src)
+		if (!istype(A, /area/maintenance) && !is_type_in_list(A,non_standard_maint_areas))
+			to_chat(src, "<span class='danger'>You must enter maintenance to attack other players!</span>")
+			return TRUE
+
 	if(status_flags & UNPACIFIABLE)
 		return FALSE
 
@@ -2211,17 +2197,16 @@ mob/proc/on_foot()
 		//to_chat(world, "[target] has psy resist")
 		to_chat(src, "The target mind is resisting!")
 		return 0
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		if(H.is_wearing_item(/obj/item/clothing/head/tinfoil, slot_head))
-			to_chat(src, "Interference is disrupting the connection with the target mind.")
-			return 0
-	if(ismartian(target))
-		var/mob/living/carbon/complex/martian/MR = target
-		if(MR.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian, /obj/item/clothing/head/tinfoil), slot_head))
-			to_chat(src, "Interference is disrupting the connection with the target mind.")
-			return 0
+	if(target.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian,/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+		to_chat(src, "Interference is disrupting the connection with the target mind.")
+		return 0
 	return 1
+
+/mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
+	return TRUE
+
+/mob/proc/turn_into_mannequin(var/material = "marble")
+	return FALSE
 
 /mob/proc/get_personal_ambience()
 	return list()

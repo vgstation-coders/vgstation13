@@ -135,7 +135,7 @@ var/global/mulebot_count = 0
 		if(user.drop_item(C, src))
 			cell = C
 			updateDialog()
-	else if((istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
+	else if((istype(I,/obj/item/tool/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
 		attack_hand(user)
 	else if(I.is_screwdriver(user) && user.a_intent != I_HURT)
 		if(locked)

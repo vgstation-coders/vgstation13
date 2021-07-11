@@ -4,7 +4,7 @@
 #endif
 
 #define SEVEN		1
-#define DIAMOND		2
+#define DIAMOND	2
 #define CHERRY		3
 #define HEART		4
 #define MELON		5

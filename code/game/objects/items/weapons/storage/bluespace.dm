@@ -52,7 +52,7 @@
 	qdel(H)
 	qdel(src)
 	var/datum/zLevel/ourzLevel = map.zLevels[user.z]
-	if(ourzLevel.bluespace_jammed)
+	if(ourzLevel.bluespace_jammed && !is_on_shuttle(usr))
 		//Stop breaking into centcomm via dungeons you shits
 		message_admins("[key_name_admin(user)] detonated [H] and [src], creating an explosion.")
 		log_game("[key_name(user)] detonated [H] and [src], creating an explosion.")

@@ -44,7 +44,7 @@
 	var/datum/data/record/active3 = null //Security
 
 	// -- Various crimes against object oriented programming
-	var/obj/machinery/power/monitor/powmonitor = null // Power Monitor
+	var/obj/machinery/computer/powermonitor/powmonitor = null // Power Monitor
 	var/list/powermonitors = list()
 	var/obj/machinery/computer/station_alert/alertmonitor = null // Alert Monitor
 	var/list/alertmonitors = list()
@@ -162,7 +162,7 @@
 */
 /obj/item/weapon/cartridge/robotics
 	name = "\improper R.O.B.U.T.T. Cartridge"
-	desc = "Allows you to use your pda as a cyborg analyzer"
+	desc = "Allows you to use your pda as a cyborg analyzer."
 	icon_state = "cart-robo"
 	access_robotics = 1
 
@@ -367,7 +367,7 @@ Code:
 			var/powercount = 0
 			var/found = 0
 
-			for(var/obj/machinery/power/monitor/pMon in power_machines)
+			for(var/obj/machinery/computer/powermonitor/pMon in power_machines)
 				if(!(pMon.stat & (NOPOWER|BROKEN)))
 					var/turf/T = get_turf(src)
 					if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
@@ -388,13 +388,13 @@ Code:
 			else
 				menu = "<h4><img src=pda_power.png> [powmonitor] </h4><BR>"
 				var/list/L = list()
-				for(var/obj/machinery/power/terminal/term in powmonitor.powernet.nodes)
+				for(var/obj/machinery/power/terminal/term in powmonitor.connected_powernet.nodes)
 					if(istype(term.master, /obj/machinery/power/apc))
 						var/obj/machinery/power/apc/A = term.master
 						L += A
 
 
-				menu += {"<PRE>Total power: [powmonitor.powernet.avail] W<BR>Total load:  [num2text(powmonitor.powernet.viewload,10)] W<BR>
+				menu += {"<PRE>Total power: [powmonitor.connected_powernet.avail] W<BR>Total load:  [num2text(powmonitor.connected_powernet.viewload,10)] W<BR>
 					<FONT SIZE=-1>"}
 				if(L.len > 0)
 					menu += "Area                           Eqp./Lgt./Env.  Load   Cell<HR>"

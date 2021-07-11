@@ -120,6 +120,7 @@
 			target.LAssailant = null
 		else
 			target.LAssailant = user
+			target.assaulted_by(user)
 	playsound(src,'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()
@@ -149,8 +150,8 @@
 		if(!target.has_brain())
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
 			return
-		if(target.suiciding)
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
+		if(target.mind && target.mind.suiciding)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Unrecoverable nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
 			return
 		if(istype(target.wear_suit,/obj/item/clothing/suit/armor) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(95)) //75 ? Let's stay realistic here
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")

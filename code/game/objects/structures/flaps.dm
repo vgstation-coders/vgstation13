@@ -29,7 +29,7 @@
 		anchored = !anchored
 		return 1
 	else if (iswelder(I) && anchored == 0)
-		var/obj/item/weapon/weldingtool/WT = I
+		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(0, user))
 			new /obj/item/stack/sheet/mineral/plastic (src.loc,10)
 			qdel(src)

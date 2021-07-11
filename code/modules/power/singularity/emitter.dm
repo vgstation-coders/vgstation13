@@ -2,7 +2,7 @@
 
 /obj/machinery/power/emitter
 	name = "emitter"
-	desc = "A heavy duty industrial laser"
+	desc = "A heavy duty industrial laser."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "emitter0"
 	anchored = 0
@@ -31,7 +31,7 @@
 
 /obj/machinery/power/emitter/antique
 	name = "antique emitter"
-	desc = "An old fashioned heavy duty industrial laser"
+	desc = "An old fashioned heavy duty industrial laser."
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()
@@ -148,13 +148,13 @@
 
 	if(powered && get_powernet() && avail(active_power_usage) && active)
 		var/image/emitterbeam = image(icon,"emitter-beam")
-		emitterbeam.plane = LIGHTING_PLANE
+		emitterbeam.plane = ABOVE_LIGHTING_PLANE
 		emitterbeam.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterbeam
 
 	if(locked)
 		var/image/emitterlock = image(icon,"emitter-lock")
-		emitterlock.plane = LIGHTING_PLANE
+		emitterlock.plane = ABOVE_LIGHTING_PLANE
 		emitterlock.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterlock
 
@@ -366,7 +366,7 @@
 
 /obj/machinery/power/emitter/antique
 	name = "antique emitter"
-	desc = "An old fashioned heavy duty industrial laser"
+	desc = "An old fashioned heavy duty industrial laser."
 	icon_state = "emitter"
 
 /obj/machinery/power/emitter/antique/update_icon()

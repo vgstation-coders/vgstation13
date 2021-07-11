@@ -210,7 +210,7 @@
 		emagged = 0
 		return 0
 
-/obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
 		return FALSE
@@ -525,7 +525,7 @@
 			if(CANCER_STAGE_METASTASIS to INFINITY)
 				e_cancer = "Metastatic Tumor:"
 
-		if(!AN && !open && !infected && !e_cancer & !imp)
+		if(!AN && !open && !infected && !e_cancer && !imp)
 			AN = "None:"
 		if(e.status & ORGAN_DESTROYED)
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td><font color='red'>Not Found</font></td>"

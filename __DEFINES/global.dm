@@ -26,6 +26,8 @@ var/list/protected_global_vars = list(
 
 //Content of the Round End Information window
 var/round_end_info = ""
+var/round_end_info_no_img = ""
+var/last_round_end_info = ""
 
 //List of ckeys that have de-adminned themselves during this round
 var/global/list/deadmins = list()
@@ -119,6 +121,7 @@ var/airtunnel_bottom = 72 // default
 var/list/monkeystart = list()
 var/list/wizardstart = list()
 var/list/grinchstart = list()
+var/list/hobostart = list()
 var/list/newplayer_start = list()
 var/list/latejoin = list()
 var/list/assistant_latejoin = list()
@@ -148,6 +151,7 @@ var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cu
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
 
+var/hoboamount = 0
 var/suspend_alert = 0
 
 var/Debug = 0	// global debug switch
@@ -247,6 +251,10 @@ var/list/score=list(
 	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
 	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
 	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
+	"hangmanname"	= null, //Player with most correct letter guesses from Curse of the Hangman
+	"hangmanjob"	= null,
+	"hangmanrecord" = 0,
+	"hangmankey"	= null,
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -309,14 +317,10 @@ var/global/list/volunteer_gladiators = list()
 var/global/list/ready_gladiators = list()
 var/global/list/never_gladiators = list()
 
-//icons that appear on the Round End pop-up browser
-var/global/list/end_icons = list()
-
 var/global/list/arena_leaderboard = list()
 var/arena_rounds = 0
 var/arena_top_score = 0
 
-var/endgame_info_logged = 0
 
 var/explosion_newmethod = 1	// 1 = explosions take walls and obstacles into account; 0 = explosions pass through walls and obstacles without any impediments;
 
@@ -421,10 +425,13 @@ var/list/variables_not_to_be_copied = list(
 )
 
 //Item lists
-var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible,/obj/item/clothing/accessory/tie/bolo)
 
 //Observers
 var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit this to reduce the poltergeist cooldown globally
 
 var/list/all_machines = list()
 var/list/machinery_rating_cache = list() // list of type path -> number
+
+var/runescape_pvp = FALSE
+var/runescape_skull_display = FALSE

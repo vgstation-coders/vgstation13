@@ -55,7 +55,7 @@
 
 /mob/living/simple_animal/hostile/ginger/gingerfatman
 	name = "gingerfat man"
-	desc = "Over frosted"
+	desc = "Over frosted."
 	icon_state = "gingerfatman"
 	icon_living = "gingerfatman"
 	icon_dead = "gingerfatman_dead"
@@ -71,7 +71,7 @@
 
 /mob/living/simple_animal/hostile/ginger/gingerknightman
 	name = "gingerknight man"
-	desc = "Full of honor and calories"
+	desc = "Full of honor and calories."
 	icon_state = "gingerknightman"
 	icon_living = "gingerknightman"
 	icon_dead = "gingerknightman_dead"
@@ -105,7 +105,7 @@
 
 /mob/living/simple_animal/hostile/ginger/gingerbomination
 	name = "gingerbomination man"
-	desc = "Stale dough and frosting holds loose, pale heaps of flesh together. The tiniest spark of the man he once was still trembles in his eyes. Although not entirely sentient he is at the very least aware and awake. This poor creature has a pretty crumby life."
+	desc = "Stale dough and frosting holds loose, pale heaps of flesh together. The tiniest spark of the man he once was still trembles in his eyes. Although not entirely sentient, he is, at the very least, aware and awake. This poor creature has a pretty crumby life."
 	icon_state = "gingerbominationman"
 	icon_living = "gingerbominationman"
 	icon_dead = "gingerbominationman_dead"

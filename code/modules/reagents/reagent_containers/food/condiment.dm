@@ -65,6 +65,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		if(reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST)
@@ -101,6 +102,11 @@
 			return
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
+	else if(isfloor(target))
+		if (amount_per_transfer_from_this > 1)
+			transfer(target, user, splashable_units = amount_per_transfer_from_this)
+		else
+			to_chat(user, "<span class='warning'>You have to open the lid at least a bit more to spill condiments on \the [target].</span>")
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
@@ -161,6 +167,10 @@
 				name = "pepper mill"
 				desc = "Often used to flavor food or make people sneeze."
 				icon_state = "peppermillsmall"
+			if(HOLYSALTS)
+				name = "holy salts"
+				desc = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
+				icon_state = "holysalts"
 			if(CORNOIL)
 				name = "corn oil"
 				desc = "A delicious oil used in cooking. Made from corn."
@@ -204,7 +214,7 @@
 				icon_state = COCO
 			if(MAYO)
 				name = "Mayonaise Jar"
-				desc = "Here be mayo" //placeholder desc
+				desc = "Here be mayo." //placeholder desc
 				icon_state = MAYO
 			else
 				name = "misc condiment bottle"
@@ -212,7 +222,7 @@
 				icon_state = "emptycondiment"
 
 				if(reagents.reagent_list.len == 1)
-					desc = "Looks like it is [reagents.get_master_reagent_name()], but you are not sure."
+					desc = "It looks like [reagents.get_master_reagent_name()], but you're not sure."
 				else
 					desc = "A mixture of various condiments. [reagents.get_master_reagent_name()] is one of them."
 				icon_state = "mixedcondiments"
@@ -373,18 +383,29 @@
 	name = "salt shaker"
 	desc = "Salt. From space oceans, presumably."
 	icon_state = "saltshakersmall"
-	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
+	possible_transfer_amounts = list(1, 10, 50)
 	amount_per_transfer_from_this = 1
 
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker/New()
 	..()
 	reagents.add_reagent(SODIUMCHLORIDE, 50)
 
+/obj/item/weapon/reagent_containers/food/condiment/holysalts
+	name = "holy salts"
+	desc = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
+	icon_state = "holysalts"
+	possible_transfer_amounts = list(1, 10, 50)
+	amount_per_transfer_from_this = 10
+
+/obj/item/weapon/reagent_containers/food/condiment/holysalts/New()
+	..()
+	reagents.add_reagent(HOLYSALTS, 50)
+
 /obj/item/weapon/reagent_containers/food/condiment/peppermill
 	name = "pepper mill"
 	desc = "Often used to flavor food or make people sneeze."
 	icon_state = "peppermillsmall"
-	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
+	possible_transfer_amounts = list(1, 10, 50)
 	amount_per_transfer_from_this = 1
 
 /obj/item/weapon/reagent_containers/food/condiment/peppermill/New()

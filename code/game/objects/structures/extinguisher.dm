@@ -80,7 +80,7 @@
 		icon_state = "extinguisher_empty"
 
 
-/obj/structure/extinguisher_cabinet/proc/weld(var/obj/item/weapon/weldingtool/WE, var/mob/user)
+/obj/structure/extinguisher_cabinet/proc/weld(var/obj/item/tool/weldingtool/WE, var/mob/user)
 	if(!istype(WE))
 		return
 	if(has_extinguisher)

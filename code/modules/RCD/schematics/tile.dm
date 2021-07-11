@@ -371,6 +371,9 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
+
+		// Misc
+		new /datum/paint_info/decal(DIR_ONE, "olympics")
 	),
 	"Gray" = list(
 		new /datum/paint_info(DIR_ONE,		"floor"),

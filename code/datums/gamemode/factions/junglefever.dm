@@ -28,7 +28,7 @@
 	var/alive = FALSE
 	for(var/datum/role/R in members)
 		var/mob/M = R.antag.current
-		if(M && M.stat && isbadmonkey(M))
+		if(M && !M.isDead() && isbadmonkey(M))
 			alive = TRUE
 	if(!alive && stage >= FACTION_ENDGAME)
 		stage(FACTION_DEFEATED)

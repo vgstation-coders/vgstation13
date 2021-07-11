@@ -105,6 +105,8 @@
 		close()
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return TRUE
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
@@ -119,6 +121,8 @@
 	return !density || (dir != to_dir) || check_access(ID)
 
 /obj/machinery/door/window/Uncross(atom/movable/mover, turf/target)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return TRUE
 	if(flow_flags & ON_BORDER) //but it will always be on border tho
@@ -248,7 +252,7 @@
 	visible_message("<span class='warning'>\The [M.name] [M.attacktext] against \the [name].</span>", 1)
 	take_damage(M.melee_damage_upper)
 
-/obj/machinery/door/window/attackby(obj/item/weapon/I, mob/living/user)
+/obj/machinery/door/window/attackby(obj/item/I, mob/living/user)
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
 		user.visible_message("[user] is removing \the [electronics.name] from \the [name].", "You start to remove \the [electronics.name] from \the [name].")
@@ -282,12 +286,12 @@
 		return smartwindow
 
 	//If its a multitool and our windoor is smart, open the menu
-	if(ismultitool(I) && smartwindow)
+	if(I.is_multitool(user) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
 
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
-	if(density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
+	if(density && istype(I, /obj/item) && !istype(I, /obj/item/weapon/card))
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)

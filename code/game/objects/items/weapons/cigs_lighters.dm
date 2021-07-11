@@ -136,7 +136,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/strike_anywhere
 	name = "strike-anywhere match"
-	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface"
+	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface."
 
 /obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)
@@ -239,8 +239,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return source_temperature
 	return 0
 
-/obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/clothing/mask/cigarette/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	..()
+	if (!isliving(user))
+		return
 
 	if(lit) //The cigarette is already lit
 		to_chat(user, "<span class='warning'>\The [src] is already lit.</span>")
@@ -248,14 +250,21 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	//Items with special messages go first
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.is_hot()) //Badasses dont get blinded while lighting their cig with a welding tool
 			light("<span class='notice'>[user] casually lights \his [name] with \the [W], what a badass.</span>")
 
 	else if(istype(W, /obj/item/weapon/lighter/zippo))
 		var/obj/item/weapon/lighter/zippo/Z = W
 		if(Z.is_hot())
-			light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \his [name] with \the [W]. Damn, that's cool.</span>")
+			if (clumsy_check(user) && (prob(50)))
+				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \his [name] </span><span class='danger'>as well as themselves</span><span class='rose'> with \the [W]. Damn, that's cool.</span>")
+				user.adjust_fire_stacks(0.5)
+				user.on_fire = 1
+				user.update_icon = 1
+				playsound(user.loc, 'sound/effects/bamf.ogg', 50, 0)
+			else
+				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \his [name] with \the [W]. Damn, that's cool.</span>")
 
 	else if(istype(W, /obj/item/weapon/lighter))
 		var/obj/item/weapon/lighter/L = W
@@ -619,7 +628,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
-	chem_volume = 50 //It's a fat blunt, a really fat blunt
+	chem_volume = 100 //It's a fat blunt, a really fat blunt
 
 /obj/item/clothing/mask/cigarette/blunt/rolled //grown.dm handles reagents for these
 
@@ -840,7 +849,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
@@ -920,7 +929,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(!fuel || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return

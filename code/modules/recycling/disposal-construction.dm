@@ -248,7 +248,7 @@
 			if(competing_pipe())
 				to_chat(user, "There is already a [nicetype] at that location.")
 				return
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/tool/weldingtool/W = I
 			to_chat(user, "Welding the [nicetype] in place.")
 			if(W.do_weld(user,src,20,0))
 				if(gcDestroyed || !W.isOn())

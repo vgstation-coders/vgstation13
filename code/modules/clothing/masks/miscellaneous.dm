@@ -198,7 +198,7 @@ obj/item/clothing/mask/joy
 /obj/item/clothing/mask/vamp_fangs/New()
 	..()
 	glow_fangs = image("icon" = 'icons/mob/mask.dmi',"icon_state" = "fangs_glow", "layer" = ABOVE_LIGHTING_LAYER)
-	glow_fangs.plane = LIGHTING_PLANE
+	glow_fangs.plane = ABOVE_LIGHTING_PLANE
 
 /obj/item/clothing/mask/vamp_fangs/equipped(mob/M, var/slot)
 	..()

@@ -15,9 +15,7 @@
 			var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
 			if(W)
 				var/icon/tempimage = icon(I.icon, I.icon_state)
-				end_icons += tempimage
-				var/tempstate = end_icons.len
-				W.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
+				W.artifacts_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name]<BR>"}
 
 /datum/spellbook_artifact/proc/can_buy(var/mob/user)
 	return TRUE

@@ -41,3 +41,14 @@
 #define PROJREACT_OBJS		4//structures, machines and items
 #define PROJREACT_MOBS		8//all mobs
 #define PROJREACT_BLOB		16//blob
+
+#define CRIT_CHANCE_RANGED 2
+#define CRIT_CHANCE_MELEE 15
+
+#define CRIT_MULTIPLIER 3
+
+#define MAX_DAMAGE_FOR_RAMPUP_MELEE 80
+#define MAX_PROB_RAMPUP_MELEE 45
+
+#define MAX_DAMAGE_FOR_RAMPUP_DIST 80
+#define MAX_PROB_RAMPUP_DIST 10

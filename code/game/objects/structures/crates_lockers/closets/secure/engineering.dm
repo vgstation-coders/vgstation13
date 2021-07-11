@@ -37,6 +37,7 @@
 		/obj/item/weapon/storage/belt/utility/chief,
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/weapon/card/debit/preferred/department/engineering,
+		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
@@ -71,7 +72,7 @@
 /obj/structure/closet/secure_closet/engineering_welding/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/head/welding = 3,
-		/obj/item/weapon/weldingtool/largetank = 3,
+		/obj/item/tool/weldingtool/largetank = 3,
 	)
 
 /obj/structure/closet/secure_closet/engineering_personal
@@ -134,7 +135,7 @@
 		/obj/item/clothing/mask/gas,
 		/obj/item/taperoll/atmos,
 		/obj/item/pipe_planner,
-		/obj/item/weapon/wrench/socket,
+		/obj/item/tool/wrench/socket,
 		/obj/item/weapon/gun/projectile/flare,
 		/obj/item/ammo_storage/box/flare,
 		/obj/item/device/rcd/rpd,

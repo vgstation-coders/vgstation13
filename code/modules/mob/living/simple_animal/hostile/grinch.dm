@@ -44,9 +44,9 @@
 		back = null
 		success = 1
 		update_inv_back()
-
+		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 	else
-		..()
+		success = ..()
 
 	if(success)
 		if (W)
@@ -59,7 +59,7 @@
 			if(W)
 				W.reset_plane_and_layer()
 
-	return
+	return success
 
 /mob/living/simple_animal/hostile/gremlin/grinch/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
 	if(!istype(W))
@@ -165,14 +165,6 @@
 	if(update_icons)
 		update_icons()
 
-
-/mob/living/simple_animal/hostile/gremlin/grinch/verb/ventcrawl()
-	set name = "Crawl through Vent"
-	set desc = "Enter an air vent and crawl through the pipe system."
-	set category = "Object"
-	var/pipe = start_ventcrawl()
-	if(pipe)
-		handle_ventcrawl(pipe)
 
 // -- Clearing of refs
 /mob/living/simple_animal/hostile/gremlin/grinch/Destroy()

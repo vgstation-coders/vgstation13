@@ -366,9 +366,9 @@
 
 /mob/living/simple_animal/hostile/mechahitler/death(var/gibbed = FALSE)
 	set waitfor = 0
+	say("Eva, auf wiedersehen!")
 	..(TRUE)
 	dir = 2
-	say("Eva, auf wiedersehen!")
 	ranged = 0
 	sleep(10)
 	var/turf/eloc = get_turf(loc)

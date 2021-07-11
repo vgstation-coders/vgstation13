@@ -57,7 +57,7 @@
 	name_override = list(
 		/obj/machinery/portable_atmospherics/canister = "Cold Plasma Canister"
 	)
-	extra_requirements = "Filled with over 1000 kPa of plasma bellow 2K."
+	extra_requirements = "Filled with over 1000 kPa of plasma below 2K."
 	worth = 1300
 
 /datum/centcomm_order/department/engineering/cold_canister/ExtraChecks(var/obj/machinery/portable_atmospherics/canister/C)

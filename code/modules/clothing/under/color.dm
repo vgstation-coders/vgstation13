@@ -33,6 +33,7 @@
 
 /obj/item/clothing/under/color/grey
 	name = "grey jumpsuit"
+	icon = 'icons/obj/clothing/assistant.dmi'
 	icon_state = "grey"
 	item_state = "gy_suit"
 	_color = "grey"

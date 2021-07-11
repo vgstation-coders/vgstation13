@@ -1508,7 +1508,8 @@
 			return
 
 		var/mob/M = locate(href_list["newban"])
-		if(!ismob(M))
+		if(!ismob(M) || !M.ckey)
+			to_chat(usr, "<span class='notice'>There is no mob, or no ckey, to ban. Perhaps the player has ghosted?</span>")
 			return
 
 		// now you can! if(M.client && M.client.holder)	return	//admins cannot be banned. Even if they could, the ban doesn't affect them anyway
@@ -2376,6 +2377,21 @@
 				usr = M //We probably transformed ourselves
 			show_player_panel(M)
 
+	else if(href_list["makebox"])
+		if(!check_rights(R_SPAWN))
+			return
+
+		var/mob/living/carbon/C = locate(href_list["makebox"])
+		if(!istype(C))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon")
+			return
+
+		var/mob/M = usr.client.cmd_admin_boxify(C)
+		if(M)
+			if(M.client == CLIENT)
+				usr = M //We probably transformed ourselves
+			show_player_panel(M)
+
 	else if(href_list["makecatbeast"])
 		if(!check_rights(R_SPAWN))
 			return
@@ -2550,9 +2566,9 @@
 		if(!threatadd)
 			return
 		if(threatadd>0)
-			D.create_threat(threatadd)
+			D.create_midround_threat(threatadd)
 		else
-			D.spend_threat(-threatadd) //Spend a positive value. Negative the negative.
+			D.spend_midround_threat(-threatadd) //Spend a positive value. Negative the negative.
 		D.threat_log += "[worldtime2text()]: Admin [key_name(usr)] adjusted threat by [threatadd]."
 		message_admins("[key_name(usr)] adjusted threat by [threatadd].")
 		check_antagonists()
@@ -3250,6 +3266,12 @@
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TriAI")
+			if("RandomizedLawset")
+				for(var/mob/living/silicon/ai/target in mob_list)
+					to_chat(target,"<span class='danger'>[Gibberish("ERROR! BACKUP FILE CORRUPTED: PLEASE VERIFY INTEGRITY OF LAWSET.",10)]</span>")
+					var/datum/ai_laws/randomize/RLS = new
+					target.laws.inherent = RLS.inherent
+					target.show_laws()
 			if("gravity")
 				if(!(ticker && ticker.mode))
 					to_chat(usr, "Please wait until the game starts!  Not sure how it will work otherwise.")
@@ -3527,28 +3549,40 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PB")
 				message_admins("[key_name_admin(usr)] has allowed a prison break", 1)
-				prison_break()
+				new /datum/event/prison_break
 			if("lightsout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","LO")
-				message_admins("[key_name_admin(usr)] has broke a lot of lights", 1)
-				lightsout(1,2)
+				message_admins("[key_name_admin(usr)] has triggered an electrical storm", 1)
+				new /datum/event/electrical_storm
 			if("blackout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BO")
 				message_admins("[key_name_admin(usr)] broke all lights", 1)
-				lightsout(0,0)
+				for(var/obj/machinery/power/apc/apc in power_machines)
+					apc.overload_lighting()
 			if("whiteout")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","WO")
 				for(var/obj/machinery/light/L in alllights)
 					L.fix()
 				message_admins("[key_name_admin(usr)] fixed all lights", 1)
+			if("switchoff")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","WO")
+				for(var/obj/machinery/light_switch/LS in all_machines)
+					LS.toggle_switch(0)
+				message_admins("[key_name_admin(usr)] switched off all lights", 1)
+			if("switchon")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","WO")
+				for(var/obj/machinery/light_switch/LS in all_machines)
+					LS.toggle_switch(1)
+				message_admins("[key_name_admin(usr)] switched on all lights", 1)
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RAD")
 				message_admins("[key_name_admin(usr)] has started a radiation event", 1)
-				//makeAliens()
 				new /datum/event/radiation_storm
 			if("floorlava")
 				if(floorIsLava)
@@ -3621,17 +3655,32 @@
 					for(var/mob/living/M in player_list)
 						var/mob/living/simple_animal/bee/swarm/BEE = new(get_turf(M))
 						BEE.target = M
+						BEE.AttackTarget()
 
 			if("virus")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","V")
-				var/answer = alert("Do you want this to be a greater disease or a lesser one?",,"Greater","Lesser")
-				if(answer=="Lesser")
-					//virus2_lesser_infection()
-					message_admins("[key_name_admin(usr)] has triggered a lesser virus outbreak.", 1)
-				else
-					//virus2_greater_infection()
-					message_admins("[key_name_admin(usr)] has triggered a greater virus outbreak.", 1)
+				var/answer = alert("Do you want this to be a greater disease or a lesser one?","Pathogen Outbreak","Greater","Lesser","Custom")
+				switch (answer)
+					if ("Lesser")
+						new /datum/event/viral_infection
+						message_admins("[key_name_admin(usr)] has triggered a lesser virus outbreak.", 1)
+					if ("Greater")
+						new /datum/event/viral_outbreak
+						message_admins("[key_name_admin(usr)] has triggered a greater virus outbreak.", 1)
+					if ("Custom")
+						var/list/existing_pathogen = list()
+						for (var/pathogen in disease2_list)
+							var/datum/disease2/disease/dis = disease2_list[pathogen]
+							existing_pathogen["[dis.real_name()]"] = pathogen
+						var/chosen_pathogen = input(usr, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
+						if (chosen_pathogen)
+							var/datum/disease2/disease/dis = disease2_list[existing_pathogen[chosen_pathogen]]
+							spread_disease_among_crew(dis,"Custom Outbreak")
+							message_admins("[key_name_admin(usr)] has triggered a custom virus outbreak.", 1)
+							var/dis_level = clamp(round((dis.get_total_badness()+1)/2),1,8)
+							spawn(rand(0,3000))
+								biohazard_alert(dis_level)
 			if("retardify")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
@@ -3935,6 +3984,35 @@
 				for(var/i = 1 to choice)
 					world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("togglerunescapepvp")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RSPVP")
+				runescape_pvp = !runescape_pvp
+				if(runescape_pvp)
+					message_admins("[key_name_admin(usr)] has enabled Maint-Only PvP.")
+					log_admin("[key_name_admin(usr)] has enabled Maint-Only PvP.")
+					for (var/mob/player in player_list)
+						to_chat(player, "<span class='userdanger'>WARNING: Wilderness mode is now enabled; players can only harm one another in maintenance areas!</span>")
+				else
+					message_admins("[key_name_admin(usr)] has disabled  Maint-Only PvP.")
+					log_admin("[key_name_admin(usr)] has disabled Maint-Only PvP.")
+					for (var/mob/player in player_list)
+						to_chat(player, "<span class='userdanger'>WARNING: Wilderness mode is now disabled; players can only harm one another anywhere!</span>")
+			if("togglerunescapeskull")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RSSKL")
+				runescape_skull_display = !runescape_skull_display
+				if(runescape_skull_display)
+					message_admins("[key_name_admin(usr)] has enabled Skull icons appearing over aggressors.")
+					log_admin("[key_name_admin(usr)] has enabled Skull icon appearing over aggressors.")
+				else
+					message_admins("[key_name_admin(usr)] has disabled Skull icon appearing over aggressors.")
+					log_admin("[key_name_admin(usr)] has disabled Skull icon appearing over aggressors.")
+					if (ticker)
+						for (var/entry in ticker.runescape_skulls)
+							var/datum/runescape_skull_data/the_data = ticker.runescape_skulls[entry]
+							ticker.runescape_skulls -= entry
+							qdel(the_data)
 			if("massbomber")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBM")
@@ -4047,7 +4125,7 @@
 				if(!choice)
 					return
 				var/obj/item/weapon/gun/energy/gun = new choice()
-				var/obj/machinery/porta_turret/Turret = new(get_turf(usr))
+				var/obj/machinery/turret/portable/Turret = new(get_turf(usr))
 				Turret.installed = gun
 				gun.forceMove(Turret)
 				Turret.update_gun()
@@ -5321,6 +5399,18 @@
 					end_credits.customized_star = newstar
 					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
 					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
+
+			if("resetss")
+				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.customized_ss = ""
+					log_admin("[key_name(usr)] reset the current round's screenshot.")
+					message_admins("[key_name_admin(usr)] reset the current round's featured screenshot.")
+			if("setss")
+				var/newss = input(usr,"Please insert a direct image link. The maximum size is 600x600.") as text|null
+				if(newss)
+					end_credits.customized_ss = newss
+					log_admin("[key_name(usr)] forced the current round's featured screenshot to be '[newss]'")
+					message_admins("[key_name_admin(usr)] forced the current round's featured screenshot to be '[newss]'")
 
 			if("resetname")
 				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't

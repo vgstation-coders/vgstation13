@@ -144,7 +144,7 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
+#define iswelder(A) istype(A, /obj/item/tool/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
 
@@ -154,7 +154,7 @@
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 
-#define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
+#define iswirecutter(A) istype(A, /obj/item/tool/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
@@ -168,11 +168,11 @@
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
-#define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
+#define iscrowbar(A) istype(A, /obj/item/tool/crowbar)
 
-#define issolder(A) istype(A, /obj/item/weapon/solder)
+#define issolder(A) istype(A, /obj/item/tool/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
+#define issocketwrench(A) istype(A, /obj/item/tool/wrench/socket)
 
 #define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
 
@@ -186,9 +186,13 @@
 
 #define isvehicle(A) (istype(A, /obj/structure/bed/chair/vehicle))
 
+#define istable(A) (istype(A, /obj/structure/table))
+
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
+
+#define isfullwindow(A) (istype(A, /obj/structure/window/full))
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
@@ -236,6 +240,8 @@
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
 
+#define isNonTimeDataReagent(R) (is_type_in_list(R, list( /datum/reagent/citalopram, /datum/reagent/paroxetine)))
+
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
@@ -265,7 +271,7 @@
 
 #define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
+#define isanycultist(H) (islegacycultist(H) || iscultist(H))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 

@@ -6,12 +6,14 @@
 	//See code/datums/helper_datums/butchering.dm
 	init_butchering_list()
 
-	clear_fullscreens()
-
+	clear_fullscreens(TRUE)
 	handle_symptom_on_death()
 	..()
+	standard_damage_overlay_updates()
 
 /mob/living/gib(animation = FALSE, meat = TRUE)
+	if(!isUnconscious())
+		forcesay("-")
 	death(1)
 	monkeyizing = 1
 	canmove = 0

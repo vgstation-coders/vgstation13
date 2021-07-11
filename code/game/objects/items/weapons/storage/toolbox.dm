@@ -22,7 +22,7 @@
 	storage_slots = 14
 	max_combined_w_class = 28
 	/*fits_ignoring_w_class = list(
-		"/obj/item/weapon/weldingtool/hugetank",
+		"/obj/item/tool/weldingtool/hugetank",
 		"/obj/item/device/rcd/matter/engineering",
 		"/obj/item/device/rcd/rpd",
 		"/obj/item/device/rcd/tile_painter",
@@ -53,7 +53,7 @@
 
 /obj/item/weapon/storage/toolbox/emergency/New()
 	..()
-	new /obj/item/weapon/crowbar/red(src)
+	new /obj/item/tool/crowbar/red(src)
 	new /obj/item/weapon/extinguisher/mini(src)
 	var/lighting = pick( //emergency lighting yay
 		20;/obj/item/device/flashlight,
@@ -73,12 +73,12 @@
 
 /obj/item/weapon/storage/toolbox/mechanical/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
 	new /obj/item/device/analyzer(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/wirecutters(src)
 
 /obj/item/weapon/storage/toolbox/electrical
 	name = "electrical toolbox"
@@ -88,10 +88,10 @@
 /obj/item/weapon/storage/toolbox/electrical/New()
 	..()
 	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
-	new /obj/item/weapon/crowbar(src)
+	new /obj/item/tool/crowbar(src)
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/stack/cable_coil(src,30,color)
 	if(prob(5))
@@ -109,12 +109,12 @@
 /obj/item/weapon/storage/toolbox/syndicate/New()
 	..()
 	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
 	new /obj/item/stack/cable_coil(src,30,color)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/multitool(src)
 
 /obj/item/weapon/storage/toolbox/robotics
@@ -124,9 +124,9 @@
 	..()
 	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
 	new /obj/item/device/robotanalyzer(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/stack/cable_coil(src,30,color)

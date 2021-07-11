@@ -198,10 +198,10 @@
 /obj/item/weapon/robot_module/standard/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
-	modules += new /obj/item/weapon/wrench(src)
+	modules += new /obj/item/tool/wrench(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/device/taperecorder(src)
@@ -250,7 +250,7 @@
 /obj/item/weapon/robot_module/medical/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/device/antibody_scanner(src)
@@ -259,15 +259,15 @@
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
 	modules += new /obj/item/weapon/reagent_containers/syringe(src)
 	modules += new /obj/item/weapon/storage/bag/chem(src)
-	modules += new /obj/item/weapon/scalpel(src)
-	modules += new /obj/item/weapon/hemostat(src)
-	modules += new /obj/item/weapon/retractor(src)
-	modules += new /obj/item/weapon/circular_saw(src)
-	modules += new /obj/item/weapon/cautery(src)
-	modules += new /obj/item/weapon/bonegel(src)
-	modules += new /obj/item/weapon/bonesetter(src)
-	modules += new /obj/item/weapon/FixOVein(src)
-	modules += new /obj/item/weapon/surgicaldrill(src)
+	modules += new /obj/item/tool/scalpel(src)
+	modules += new /obj/item/tool/hemostat(src)
+	modules += new /obj/item/tool/retractor(src)
+	modules += new /obj/item/tool/circular_saw(src)
+	modules += new /obj/item/tool/cautery(src)
+	modules += new /obj/item/tool/bonegel(src)
+	modules += new /obj/item/tool/bonesetter(src)
+	modules += new /obj/item/tool/FixOVein(src)
+	modules += new /obj/item/tool/surgicaldrill(src)
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/robot_rack/bed(src)
@@ -318,15 +318,15 @@
 /obj/item/weapon/robot_module/engineering/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher(src)
 	modules += new /obj/item/weapon/extinguisher/foam(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
-	modules += new /obj/item/weapon/weldingtool/largetank(src)
-	modules += new /obj/item/weapon/screwdriver(src)
-	modules += new /obj/item/weapon/wrench(src)
-	modules += new /obj/item/weapon/wirecutters(src)
+	modules += new /obj/item/tool/weldingtool/largetank(src)
+	modules += new /obj/item/tool/screwdriver(src)
+	modules += new /obj/item/tool/wrench(src)
+	modules += new /obj/item/tool/wirecutters(src)
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/t_scanner(src)
 	modules += new /obj/item/device/analyzer(src)
@@ -369,7 +369,7 @@
 /obj/item/weapon/robot_module/security/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
 	modules += new /obj/item/weapon/handcuffs/cyborg(src)
@@ -403,7 +403,7 @@
 /obj/item/weapon/robot_module/janitor/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/weapon/storage/bag/trash(src)
@@ -450,7 +450,7 @@
 /obj/item/weapon/robot_module/butler/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/gripper/service(src)
 	modules += new /obj/item/weapon/pen/robopen(src)
@@ -492,7 +492,7 @@
 /obj/item/weapon/robot_module/miner/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
@@ -524,7 +524,7 @@
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	fix_modules()
 
 /obj/item/weapon/robot_module/syndicate/blitzkrieg
@@ -536,7 +536,7 @@
 /obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
 	..()
 
-	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
+	modules += new /obj/item/tool/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
 	modules += new /obj/item/robot_rack/ammo/a12mm(src)
@@ -597,13 +597,13 @@
 /obj/item/weapon/robot_module/combat/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/tool/crowbar(src)
 	modules += new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
 	modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
 	modules += new /obj/item/borg/combat/shield(src)
 	modules += new /obj/item/borg/combat/mobility(src)
-	modules += new /obj/item/weapon/wrench(src) //Is a combat machine really going to be stopped by a chair?
+	modules += new /obj/item/tool/wrench(src) //Is a combat machine really going to be stopped by a chair?
 	emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
 
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")

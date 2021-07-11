@@ -6,7 +6,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000)
 	category = "Surgery"
-	build_path = /obj/item/weapon/scalpel/laser
+	build_path = /obj/item/tool/scalpel/laser
 
 /datum/design/laserscalpel2
 	name = "High Precision Laser Scalpel"
@@ -16,7 +16,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 500)
 	category = "Surgery"
-	build_path = /obj/item/weapon/scalpel/laser/tier2
+	build_path = /obj/item/tool/scalpel/laser/tier2
 
 /datum/design/incisionmanager
 	name = "Surgical Incision Manager"
@@ -26,7 +26,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_URANIUM = 250, MAT_SILVER = 500)
 	category = "Surgery"
-	build_path = /obj/item/weapon/retractor/manager
+	build_path = /obj/item/tool/retractor/manager
 
 /datum/design/pico_grasper
 	name = "Precision Grasper"
@@ -36,7 +36,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 80)
 	category = "Surgery"
-	build_path = /obj/item/weapon/hemostat/pico
+	build_path = /obj/item/tool/hemostat/pico
 
 /datum/design/plasmasaw
 	name = "Plasma Saw"
@@ -46,7 +46,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_PLASMA = 500)
 	category = "Surgery"
-	build_path = /obj/item/weapon/circular_saw/plasmasaw
+	build_path = /obj/item/tool/circular_saw/plasmasaw
 
 /datum/design/bonemender
 	name = "Bone Mender"
@@ -56,7 +56,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_GOLD = 500, MAT_SILVER = 250)
 	category = "Surgery"
-	build_path = /obj/item/weapon/bonesetter/bone_mender
+	build_path = /obj/item/tool/bonesetter/bone_mender
 
 /datum/design/clot
 	name = "Capillary Laying Operation Tool"
@@ -66,7 +66,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 8000, MAT_SILVER = 1000)
 	category = "Surgery"
-	build_path = /obj/item/weapon/FixOVein/clot
+	build_path = /obj/item/tool/FixOVein/clot
 
 /datum/design/diamond_surgicaldrill
 	name = "Diamond Surgical Drill"
@@ -76,7 +76,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_DIAMOND = 800)
 	category = "Surgery"
-	build_path = /obj/item/weapon/surgicaldrill/diamond
+	build_path = /obj/item/tool/surgicaldrill/diamond
 
 /datum/design/switchtool
 	name = "Surgeon's Switchtool"

@@ -347,6 +347,9 @@
 
 	var/attack_verb_override = "punches"
 
+	var/transfer_blood = 0
+	var/list/bloody_hands_data = list()
+
 /obj/item/clothing/gloves/get_cell()
 	return cell
 
@@ -389,6 +392,9 @@
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
 	var/gave_out_gifts = FALSE //for snowman animation
+
+/obj/item/clothing/head/proc/bite_action(mob/target)
+	return
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE

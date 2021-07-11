@@ -82,7 +82,7 @@
 		. = list()
 		for(var/obj/item/clothing/accessory/accessory in accessories)
 			. += "[bicon(accessory)] \a [accessory]"
-		return " It has [english_list(.)]."
+		return " It has [counted_english_list(.)]."
 
 /obj/item/clothing/accessory/pinksquare
 	name = "pink square"
@@ -117,6 +117,13 @@
 	desc = "A neosilk clip-on tie. This one is disgusting."
 	icon_state = "horribletie"
 	_color = "horribletie"
+	accessory_exclusion = TIE
+
+/obj/item/clothing/accessory/tie/bolo
+	name = "bolo tie"
+	desc = "Feels more like a millstone."
+	icon_state = "bolotie"
+	_color = "bolotie"
 	accessory_exclusion = TIE
 
 /obj/item/clothing/accessory/stethoscope
@@ -387,11 +394,11 @@
 	_color =  "jinglebells"
 
 /obj/item/clothing/accessory/jinglebells/pickup(mob/user)
-	user.callOnFace["\ref[src]"] = "jingle"
+	user.lazy_register_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
 	jingle()
 
 /obj/item/clothing/accessory/jinglebells/dropped(mob/user)
-	user.callOnFace -= "\ref[src]"
+	user.lazy_unregister_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
 
 /obj/item/clothing/accessory/jinglebells/proc/jingle()
 	var/turf/T = get_turf(src)
@@ -412,7 +419,7 @@
 
 /obj/item/clothing/accessory/rad_patch
 	name = "radiation detection patch"
-	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation"
+	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation."
 	icon_state = "rad_patch"
 	var/rad_absorbed = 0
 	var/rad_threshold = 45
@@ -492,3 +499,23 @@
 	desc = "This little pin proves the holder takes their civic duty very seriously."
 	icon_state = "voting_pin"
 	_color = "voting_pin"
+
+
+/obj/item/clothing/accessory/ribbon_medal
+	name = "bronze medal"
+	desc = "Even though you were late to the party, you were still the life of it."
+	icon_state = "bronze_medal"
+	_color = "bronze_medal"
+
+/obj/item/clothing/accessory/ribbon_medal/silver
+	name = "silver medal"
+	desc = "Of all the losers, you're the number one loser. No one lost ahead of you."
+	icon_state = "silver_medal"
+	_color = "silver_medal"
+
+/obj/item/clothing/accessory/ribbon_medal/gold
+	name = "gold medal"
+	desc = "You won! Congratulations! You've put in a lot of effort and it paid off. Good job."
+	icon_state = "gold_medal"
+	_color = "gold_medal"
+

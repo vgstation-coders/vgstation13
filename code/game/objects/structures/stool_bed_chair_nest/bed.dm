@@ -10,7 +10,7 @@
 	sheet_type = /obj/item/stack/sheet/metal
 	sheet_amt = 1
 	var/mob_lock_type = /datum/locking_category/buckle/bed
-	var/buckle_range = 0 // The distance a spessman needs to be within in order
+	var/buckle_range = 1 // The distance a spessman needs to be within in order
 						 // to be able to use the buckle_in_out verb
 /obj/structure/bed/New()
 	..()
