@@ -551,6 +551,138 @@ proc/sql_sanitize_text(var/text)
 	speech = hewwo_uppercase.Replace(speech, "W")
 	return speech
 
+/proc/piratespeech(var/speech)
+	if(!speech)
+		return
+
+	var/static/regex/cannon_lowercase = new("gun", "g")
+	var/static/regex/cannon_uppercase = new("Gun", "g")
+	var/static/regex/cannon_allcaps = new("GUN", "g")
+
+	var/static/regex/locker_lowercase = new("heaven", "g")
+	var/static/regex/locker_uppercase = new("Heaven", "g")
+	var/static/regex/locker_allcaps = new("HEAVEN", "g")
+
+	var/static/regex/aye_middle = new(" I ", "g")
+	var/static/regex/aye_start = new("I ", "g")
+
+	var/static/regex/aye_lowercase = new("yes", "g")
+	var/static/regex/aye_uppercase = new("Yes", "g")
+	var/static/regex/aye_allcaps = new("YES", "g")
+
+	var/static/regex/argh_lowercase = new("are", "g")
+	var/static/regex/argh_uppercase = new("Are", "g")
+	var/static/regex/argh_allcaps = new("ARE", "g")
+
+	var/static/regex/yarh_lowercase = new("yeah", "g")
+	var/static/regex/yarh_uppercase = new("Yeah", "g")
+	var/static/regex/yarh_allcaps = new("YEAH", "g")
+
+	var/static/regex/cap_lowercase = new("captain", "g")
+	var/static/regex/cap_uppercase = new("Captain", "g")
+	var/static/regex/cap_allcaps = new("CAPTAIN", "g")
+
+	var/static/regex/hos_lowercase = new("hos", "g")
+	var/static/regex/hos_uppercase = new("HoS", "g")
+	var/static/regex/hos_allcaps = new("HOS", "g")
+
+	var/static/regex/hop_lowercase = new("hop", "g")
+	var/static/regex/hop_uppercase = new("HoP", "g")
+	var/static/regex/hop_allcaps = new("HOP", "g")
+
+	var/static/regex/ai_lowercase = new("ai", "g")
+	var/static/regex/ai_uppercase = new("Ai", "g")
+	var/static/regex/ai_allcaps = new("AI", "g")
+
+	var/static/regex/treasure_lowercase = new("money", "g")
+	var/static/regex/treasure_uppercase = new("Money", "g")
+	var/static/regex/treasure_allcaps = new("MONEY", "g")
+
+	var/static/regex/matey_lowercase = new("friend", "g")
+	var/static/regex/matey_uppercase = new("Friend", "g")
+	var/static/regex/matey_allcaps = new("FRIEND", "g")
+
+	var/static/regex/vessel_lowercase = new("station", "g")
+	var/static/regex/vessel_uppercase = new("Station", "g")
+	var/static/regex/vessel_allcaps = new("STATION", "g")
+
+	var/static/regex/rowboat_lowercase = new("shuttle", "g")
+	var/static/regex/rowboat_uppercase = new("Shuttle", "g")
+	var/static/regex/rowboat_allcaps = new("SHUTTLE", "g")
+
+	var/static/regex/sails_lowercase = new("engine", "g")
+	var/static/regex/sails_uppercase = new("Engine", "g")
+	var/static/regex/sails_allcaps = new("ENGINE", "g")
+
+	var/static/regex/sea_lowercase = new("space", "g")
+	var/static/regex/sea_uppercase = new("Space", "g")
+	var/static/regex/sea_allcaps = new("SPACE", "g")
+
+	speech = cannon_lowercase.Replace(speech, "cannon")
+	speech = cannon_uppercase.Replace(speech, "Cannon")
+	speech = cannon_allcaps.Replace(speech, "CANNON")
+
+	speech = locker_lowercase.Replace(speech, "davy jones' locker")
+	speech = locker_uppercase.Replace(speech, "Davy Jones' locker")
+	speech = locker_allcaps.Replace(speech, "DAVY JONES' LOCKER")
+
+	speech = aye_middle.Replace(speech, "aye ")
+	speech = aye_start.Replace(speech, "Aye ")
+
+	speech = aye_lowercase.Replace(speech, "aye")
+	speech = aye_uppercase.Replace(speech, "Aye")
+	speech = aye_allcaps.Replace(speech, "AYE")
+
+	speech = argh_lowercase.Replace(speech, "argh")
+	speech = argh_uppercase.Replace(speech, "Argh")
+	speech = argh_allcaps.Replace(speech, "ARGH")
+
+	speech = yarh_lowercase.Replace(speech, "yarh")
+	speech = yarh_uppercase.Replace(speech, "Yarh")
+	speech = yarh_allcaps.Replace(speech, "YARH")
+
+	speech = cap_lowercase.Replace(speech, "cap'n")
+	speech = cap_uppercase.Replace(speech, "Cap'n")
+	speech = cap_allcaps.Replace(speech, "CAP'N")
+
+	speech = hos_lowercase.Replace(speech, "first mate")
+	speech = hos_uppercase.Replace(speech, "First Mate")
+	speech = hos_allcaps.Replace(speech, "FIRST MATE")
+
+	speech = hop_lowercase.Replace(speech, "crewmaster")
+	speech = hop_uppercase.Replace(speech, "Crewmaster")
+	speech = hop_allcaps.Replace(speech, "CREWMASTER")
+
+	speech = ai_lowercase.Replace(speech, "navigator")
+	speech = ai_uppercase.Replace(speech, "Navigator")
+	speech = ai_allcaps.Replace(speech, "NAVIGATOR")
+
+	speech = treasure_lowercase.Replace(speech, "treasure")
+	speech = treasure_uppercase.Replace(speech, "Treasure")
+	speech = treasure_allcaps.Replace(speech, "TREASURE")
+
+	speech = matey_lowercase.Replace(speech, "matey")
+	speech = matey_uppercase.Replace(speech, "Matey")
+	speech = matey_allcaps.Replace(speech, "MATEY")
+
+	speech = vessel_lowercase.Replace(speech, "vessel")
+	speech = vessel_uppercase.Replace(speech, "Vessel")
+	speech = vessel_allcaps.Replace(speech, "VESSEL")
+
+	speech = rowboat_lowercase.Replace(speech, "rowboat")
+	speech = rowboat_uppercase.Replace(speech, "Rowboat")
+	speech = rowboat_allcaps.Replace(speech, "ROWBOAT")
+
+	speech = sails_lowercase.Replace(speech, "sails")
+	speech = sails_uppercase.Replace(speech, "Sails")
+	speech = sails_allcaps.Replace(speech, "SAILS")
+
+	speech = sea_lowercase.Replace(speech, "sea")
+	speech = sea_uppercase.Replace(speech, "Sea")
+	speech = sea_allcaps.Replace(speech, "SEA")
+
+	return speech
+
 //Removes all the <img> tags from a string, useful for logs.
 /proc/remove_images(var/dat)
 	if(!dat)
