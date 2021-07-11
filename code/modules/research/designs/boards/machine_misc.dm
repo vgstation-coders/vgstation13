@@ -190,3 +190,14 @@
 	desc = "Allows for the construction of circuit boards used to build a booze dispenser."
 	id = "booze_dispenser"
 	build_path = /obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser
+
+
+/datum/design/teleconsole
+	name = "Circuit Design (Photo Booth)"
+	desc = "Allows for the construction of circuit boards used to build a teleporter control console."
+	id = "teleconsole"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BLUESPACE = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/teleporter

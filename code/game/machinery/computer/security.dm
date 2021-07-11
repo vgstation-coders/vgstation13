@@ -23,11 +23,20 @@
 
 	light_color = LIGHT_COLOR_RED
 
-/obj/machinery/computer/secure_data/attackby(obj/item/O as obj, user as mob)
+/obj/machinery/computer/secure_data/attackby(obj/item/O as obj, var/mob/living/user)
 	if(istype(O, /obj/item/weapon/card/id) && !scan)
 		if(usr.drop_item(O, src))
 			scan = O
 			to_chat(user, "You insert \the [O].")
+	if (istype(user) && authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 3.0) && active1)
+		var/obj/item/weapon/photo/id/photo_id = O
+		if (photo_id.four_sides)
+			if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
+				if (user && !user.incapacitated() && Adjacent(user) && photo_id && (photo_id == user.get_active_hand()) && authenticated && (screen == 3.0) && active1)
+					active1.fields["photo"] = photo_id.four_sides
+					visible_message("<span class='notice'>[bicon(src)] Database updated.</span>")
+					playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
+					updateUsrDialog()
 	..()
 
 /obj/machinery/computer/secure_data/attack_ai(mob/user as mob)
