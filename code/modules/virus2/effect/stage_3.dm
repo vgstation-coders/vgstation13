@@ -818,7 +818,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 
 /datum/disease2/effect/toothdecay/activate(var/mob/living/mob)
 	if (!count)
-		to_chat(mob, "<span class='warning'>You feel like you could use a bottle o' rhum.</span>")
+		to_chat(mob, "<span class='warning'>[pick("You feel like you could use a bottle o' rhum.","You feel like kidnapping the princess of Canada.")]</span>")
 		affect_voice_active = 1
 	if (ishuman(mob))
 		var/mob/living/carbon/human/H = mob
