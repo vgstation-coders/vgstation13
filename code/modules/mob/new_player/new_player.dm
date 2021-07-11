@@ -174,12 +174,9 @@
 		create_cluwne()
 
 	if(href_list["predict"])
-		var/dat = {"<html><body>
-		<h4>High Job Preferences</h4>"}
-		dat += job_master.display_prediction()
-
-		src << browse(dat, "window=manifest;size=400x420;can_close=1")
+		ViewPrediction()
 		return 1
+
 	if(href_list["manifest"])
 		ViewManifest()
 
@@ -655,9 +652,14 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.Namepick()
 	return new_character
 
+/mob/new_player/proc/ViewPrediction()
+	var/dat = {"<html><body>
+	<h4>High Job Preferences</h4>"}
+	dat += job_master.display_prediction()
+
+	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	
 /mob/new_player/proc/ViewManifest()
-
-
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
 	dat += data_core.get_manifest(OOC = 1)
