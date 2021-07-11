@@ -702,6 +702,15 @@ var/list/jersey_numbers = list()
 	for(var/obj/item/clothing/accessory/holomap_chip/HC in T.accessories)
 		HC.togglemap()
 
+/datum/action/item_action/target_appearance/check_watch
+	name = "Check the Time"
+
+/datum/action/item_action/target_appearance/check_watch/Trigger()
+	var/obj/item/clothing/accessory/wristwatch/W = target
+	if(!istype(W))
+		return
+	W.check_watch()
+
 /obj/item/clothing/under/rank/New()
 	. = ..()
 	sensor_mode = pick(0, 1, 2, 3)
