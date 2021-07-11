@@ -10,6 +10,7 @@
 	dir = SOUTH
 	initialize_directions = SOUTH
 	color = "#B4B4B4"
+	update_icon_ready = 1
 
 
 /obj/machinery/atmospherics/unary/cap/hide(var/i)
@@ -21,7 +22,9 @@
 	overlays = 0
 	alpha = invisibility ? 128 : 255
 	icon_state = "cap"
-	return
+
+	if (node1)
+		color = node1.color
 
 /obj/machinery/atmospherics/unary/cap/visible
 	level = 2
