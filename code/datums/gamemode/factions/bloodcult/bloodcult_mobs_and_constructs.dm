@@ -282,7 +282,7 @@
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
-
+	setupglow(rgb(255,255,255))
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 

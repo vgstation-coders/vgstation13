@@ -395,7 +395,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				someone_in_earshot=1
 				break
 
-	if(someone_in_earshot)
+	if(someone_in_earshot && !istype(loc, /obj/item/device/mobcapsule))
 		if(rand(0,200) < speak_chance)
 			var/mode = pick(
 			speak.len;      1,
