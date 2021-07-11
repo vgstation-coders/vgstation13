@@ -3,7 +3,11 @@
  *  here are applied there too.
 */
 /obj/structure/painting/custom
+
+	desc = "What to draw?"
+
 	var/blank = TRUE
+	var/protectedByGlass = FALSE
 	var/datum/custom_painting/painting_data
 
 	// Where to render the custom painting. Make sure it matches the icon state!
@@ -27,16 +31,36 @@
 	..()
 
 /obj/structure/painting/custom/attackby(obj/item/W, mob/user)
+	// Painting
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.palette.len)
-		painting_data.interact(user, p)
+		if (protectedByGlass)
+			to_chat(usr, "<span class='warning'>\the [name]'s glass cover stops you from painting on it.</span>")
+		else
+			painting_data.interact(user, p)
 
-	if (istype(W, /obj/item/weapon/soap))
+	// Cleaning
+	if (istype(W, /obj/item/weapon/soap) && !protectedByGlass)
 		to_chat(usr, "<span class='warning'>You start cleaning \the [name].</span>")
 		if (do_after(user, src, 20))
 			painting_data.blank_contents()
 			icon = icon(base_icon, base_icon_state)
 			update_painting()
+
+	// Protecting with glass
+	if (istype(W, /obj/item/stack/sheet/glass/glass) && !protectedByGlass)
+		var/obj/item/stack/sheet/glass/glass/GS = W
+		GS.use(1)
+		protectedByGlass = TRUE
+		update_painting()
+		to_chat(usr, "<span class='warning'>You cover \the [name] with a glass sheet.</span>")
+
+	if (W.is_screwdriver(user) && protectedByGlass)
+		var/obj/item/stack/sheet/glass/glass/G = new(user.loc, 1)
+		G.forceMove(user.loc)
+		protectedByGlass = FALSE
+		update_painting()
+		to_chat(usr, "<span class='warning'>You screw off \the [name]'s glass cover .</span>")
 
 	return ..()
 
@@ -56,6 +80,7 @@
 	else
 		name = initial(name)
 		desc = initial(desc)
+	desc += protectedByGlass ? "\n A glass sheet protects it from would-be-vandals" : ""
 
 /obj/structure/painting/custom/proc/set_painting_data(datum/custom_painting/painting_data)
 	src.painting_data = painting_data
@@ -68,6 +93,7 @@
 	P.base_icon = base_icon
 	P.base_icon_state = base_icon_state
 	P.blank = blank
+	P.protectedByGlass = protectedByGlass
 	P.update_painting()
 	return P
 
@@ -80,6 +106,8 @@
 /obj/item/mounted/frame/painting/custom
 	var/blank = TRUE
 	var/datum/custom_painting/painting_data
+
+	var/protectedByGlass = FALSE
 
 	// Icon to render our painting data on
 	var/base_icon = 'icons/obj/paintings.dmi'
@@ -126,7 +154,7 @@
 /obj/item/mounted/frame/painting/custom/update_painting(render)
 	if (!blank)
 		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", by [painting_data.author]" : "")
-		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting. But what does it mean?"
+		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
 		if (render)
 			rendered_icon = painting_data.render_on(icon(base_icon, base_icon_state))
 	else
@@ -145,6 +173,7 @@
 	P.base_icon = base_icon
 	P.base_icon_state = base_icon_state
 	P.blank = blank
+	P.protectedByGlass = protectedByGlass
 	P.update_painting()
 	return P
 
