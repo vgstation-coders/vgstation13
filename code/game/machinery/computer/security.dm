@@ -23,12 +23,12 @@
 
 	light_color = LIGHT_COLOR_RED
 
-/obj/machinery/computer/secure_data/attackby(obj/item/O as obj, user as mob)
+/obj/machinery/computer/secure_data/attackby(obj/item/O as obj, var/mob/living/user)
 	if(istype(O, /obj/item/weapon/card/id) && !scan)
 		if(usr.drop_item(O, src))
 			scan = O
 			to_chat(user, "You insert \the [O].")
-	if (authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 3.0) && active1)
+	if (istype(user) && authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 3.0) && active1)
 		var/obj/item/weapon/photo/id/photo_id = O
 		if (photo_id.four_sides)
 			if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")

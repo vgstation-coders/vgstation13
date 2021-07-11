@@ -141,8 +141,8 @@
 	return
 
 
-/obj/machinery/computer/med_data/attackby(var/obj/item/O, var/mob/user)
-	if (authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 4.0) && active1)
+/obj/machinery/computer/med_data/attackby(var/obj/item/O, var/mob/living/user)
+	if (istype(user) && authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 4.0) && active1)
 		var/obj/item/weapon/photo/id/photo_id = O
 		if (photo_id.four_sides)
 			if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
