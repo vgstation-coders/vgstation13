@@ -226,12 +226,55 @@ function initCanvas(paintInitData, canvasInitData) {
 	while (paletteButtonPanel.childElementCount > 0) {
 		paletteButtonPanel.removeChild(paletteButtonPanel.firstChild);
 	}
+
 	for (color in palette) {
 		paletteButtonPanel.innerHTML +=
-			  '<div onclick="setColor(\'{color}\');" style="background: {color}"></div>\n'
-				.replace("{color}", palette[color]).replace("{color}", palette[color]);
+			  '<div onclick="setColor(\'' + palette[color] + '\');" style="background-image:' +  generateColorPaletteBackgroundStyle(palette[color]) + '; background-image:' +  generateColorPaletteBackgroundStyle(palette[color], true) + '"></div>\n';
 	}
 	setColor(palette[0]);
+}
+
+function generateColorPaletteBackgroundStyle (color, ieMode) {
+	let colorOpaque = hexToRgba(color);
+	colorOpaque.a = 255;
+	colorOpaque = rgbaToHex(colorOpaque);
+
+	// Stupid IE has to use this
+	if (ieMode) {
+		let ocolor = hexToRgba(color);
+		return "-ms-linear-gradient(-45deg, " + colorOpaque + " 0%, " + colorOpaque + " 25%, rgba(" + ocolor.r + "," + ocolor.g + "," + ocolor.b + "," + ocolor.a/255.0 + ") 26%), url(checkerboard.png)";
+	} else {
+		// Sane browsers use this line
+		return "linear-gradient(135deg, " + colorOpaque + " 0%, 25%, " + color + " 26%), url(checkerboard.png)";
+	}
+}
+
+function setColor(color){
+	setPaintColor(color);
+	updateSelectedColorDisplay(color, getOpacity())
+}
+
+function updateSelectedColorDisplay (color, alpha) {
+	color = hexToRgba(color);
+	color.a = ((color.a/255.0) * alpha) * 255
+	color = rgbaToHex(color)
+	document.getElementById("current_color").style["background-image"] = generateColorPaletteBackgroundStyle(color);
+	document.getElementById("current_color").style["background-image"] = generateColorPaletteBackgroundStyle(color, true);
+}
+
+
+function changeStrength(diff) {
+	var strengthInput = document.getElementById("paint_strength");
+	paint_strength = parseFloat(strengthInput.value, 10);
+	paint_strength += diff;
+	strengthInput.value = setOpacity(paint_strength);
+	updateSelectedColorDisplay(getPaintColor(), strengthInput.value);
+}
+
+function setStrength() {
+	var strengthInput = document.getElementById("paint_strength");
+	strengthInput.value = setOpacity(parseFloat(strengthInput.value, 10));
+	updateSelectedColorDisplay(getPaintColor(), strengthInput.value);
 }
 
 function sanitizeLength (inputId, meterId) {

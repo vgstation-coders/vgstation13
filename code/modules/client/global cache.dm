@@ -398,7 +398,8 @@ var/list/asset_datums = list()
 	assets = list(
 		"paintTool.js" = 'code/modules/html_interface/paintTool/paintTool.js',
 		"canvas.js" =  'code/modules/html_interface/paintTool/canvas.js',
-		"canvas.css" =  'code/modules/html_interface/paintTool/canvas.css'
+		"canvas.css" =  'code/modules/html_interface/paintTool/canvas.css',
+		"checkerboard.png" =  'code/modules/html_interface/paintTool/checkerboard.png'
 	)
 
 /datum/asset/simple/util

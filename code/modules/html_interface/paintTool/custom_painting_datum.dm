@@ -132,6 +132,7 @@
 	delay += send_asset(user.client, "canvas.js")
 	delay += send_asset(user.client, "href_multipart_handler.js")
 	delay += send_asset(user.client, "canvas.css")
+	delay += send_asset(user.client, "checkerboard.png")
 	spawn(delay)
 		interface.show(user)
 		interface.callJavaScript("initCanvas", list(paint_init_inputs,canvas_init_inputs), user)

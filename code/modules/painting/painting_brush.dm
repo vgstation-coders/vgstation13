@@ -44,7 +44,7 @@
 		return
 
 	if(target.is_open_container() && target.reagents && !target.reagents.is_empty())
-		//Figure out how much water or cleaner there is
+		// Figure out how much water or cleaner there is
 		var/cleaner_volume = target.reagents.get_reagent_amount(WATER)
 		cleaner_volume += target.reagents.get_reagent_amount(CLEANER) * PAINT_CLEANER_AGENT_MULTIPLIER
 		cleaner_volume += target.reagents.get_reagent_amount("paint_remover") * PAINT_CLEANER_AGENT_MULTIPLIER
@@ -56,7 +56,8 @@
 			to_chat(user, "<span class='notice'>You clean \the [name] in \the [target.name].</span>")
 		else
 			// Take the reagent mix's color
-			paint_color = mix_color_from_reagents(target.reagents.reagent_list)
+			var/list/paint_color_rgb = rgb2num(mix_color_from_reagents(target.reagents.reagent_list))
+			paint_color = rgb(paint_color_rgb[1], paint_color_rgb[2], paint_color_rgb[3], mix_alpha_from_reagents(target.reagents.reagent_list))
 			to_chat(user, "<span class='notice'>You dip \the [name] in \the [target.name].</span>")
 		update_icon()
 
