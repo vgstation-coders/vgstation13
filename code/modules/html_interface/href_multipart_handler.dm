@@ -53,6 +53,9 @@
 /datum/href_multipart_handler/proc/set_parent(parent)
 	src.parent = parent
 
+/datum/href_multipart_handler/proc/set_parent(parent)
+	src.parent = parent
+
 /datum/href_multipart_handler/Topic(href, href_list)
 	if(href_list["multipart"])
 		// Initialize the list to the size specified by 'multipart-total'
