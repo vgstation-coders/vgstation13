@@ -748,6 +748,10 @@
 	I.layer = 0
 	overlays += I
 
+/obj/machinery/photobooth/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>You can perform an Alt-Click to change the background on the ID photos.</span>")
+
 /obj/machinery/photobooth/Uncross(var/atom/movable/mover, var/turf/target)
 	if(target) //Are we doing a manual check to see
 		if(get_dir(loc, target) == SOUTH)
