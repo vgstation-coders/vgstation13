@@ -1807,6 +1807,27 @@
 		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
 		dynamic_mode_options(usr)
 
+	else if(href_list["toggle_rulesets"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		admin_disable_rulesets = !admin_disable_rulesets
+		log_admin("[key_name(usr)] toggled Dynamic rulesets <b>[admin_disable_rulesets ? "OFF" : "ON"]</b>.")
+		message_admins("[key_name(usr)] toggled Dynamic rulesets <b>[admin_disable_rulesets ? "OFF" : "ON"]</b>.")
+		Game()
+
+	else if(href_list["toggle_events"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		admin_disable_events = !admin_disable_events
+		log_admin("[key_name(usr)] toggled random events <b>[admin_disable_events ? "OFF" : "ON"]</b>.")
+		message_admins("[key_name(usr)] toggled random events <b>[admin_disable_events ? "OFF" : "ON"]</b>.")
+		Game()
+
 	else if(href_list["no_stacking"])
 		if(!check_rights(R_ADMIN))
 			return

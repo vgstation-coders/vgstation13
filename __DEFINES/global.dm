@@ -71,6 +71,9 @@ var/eventchance = 10 //% per 5 mins
 var/event = 0
 var/hadevent = 0
 var/blobevent = 0
+
+var/admin_disable_rulesets = FALSE
+var/admin_disable_events = FALSE
 	///////////////
 var/starticon = null
 var/midicon = null

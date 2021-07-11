@@ -7,6 +7,12 @@ var/list/event_last_fired = list()
 
 	var/minutes_passed = world.time/600
 	var/roundstart_delay = 50
+
+	if (admin_disable_events)
+		message_admins("A random event was prevented from firing by admins.")
+		log_admin("A random event was prevented from firing by admins.")
+		return
+
 	if(minutes_passed < roundstart_delay) //Self-explanatory
 		message_admins("Too early to trigger random event, aborting.")
 		return
