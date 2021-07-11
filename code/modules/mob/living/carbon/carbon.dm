@@ -173,6 +173,15 @@
 		hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
+	if (src != M)
+		// we assume that they use their hands to shake us from our torso
+		var/block = 0
+		var/bleeding = 0
+		if (M.check_contact_sterility(HANDS) || check_contact_sterility(FULL_TORSO))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(FULL_TORSO))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(M,block,bleeding)
 	if (src.health >= config.health_threshold_crit)
 		if(src == M && istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src

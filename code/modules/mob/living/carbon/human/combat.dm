@@ -36,13 +36,13 @@
 		var/datum/organ/external/S = target.get_organ(src.zone_sel.selecting)
 		var/shushcooldown = 10 SECONDS
 		if(!istype(S))
-			return
+			return 0
 
 		if(src.zone_sel.selecting == "mouth" && !(S.status & ORGAN_DESTROYED) && ishuman(target) && !(T.check_body_part_coverage(MOUTH)) && last_shush + shushcooldown <= world.time)
 			last_shush = world.time
 			T.forcesay("-")
 			visible_message("<span class='danger'>[src] places a hand over [target]'s mouth!</span>")
-			return
+			return 1
 
 	if(target.disarmed_by(src))
 		return
@@ -50,7 +50,7 @@
 	if(prob(40)) //40% miss chance
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>[src] has attempted to disarm [target]!</span>")
-		return
+		return 0
 
 	do_attack_animation(target, src)
 
@@ -59,7 +59,7 @@
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		visible_message("<span class='danger'>[src] has pushed [target]!</span>")
 		add_logs(src, target, "pushed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
-		return
+		return 1
 
 	var/talked = 0
 
@@ -73,6 +73,7 @@
 		target.drop_item()
 		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+	return 1
 
 /mob/living/carbon/human/proc/get_organ_species(organ)
 	var/datum/organ/external/OE
@@ -173,13 +174,25 @@
 	return 1
 
 /mob/living/carbon/human/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	if (ishuman(target))
+		var/mob/living/carbon/human/H = target
+		H.attack_hand_contact_diseases(src,organ)
+	else if (target.can_be_infected())
+		var/touch_zone = get_part_from_limb(zone_sel.selecting)
+		var/block = 0
+		var/bleeding = 0
+		if ( target.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if ( target.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(touch_zone))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(target,block,bleeding)
+
 	var/knockout_chance = get_knockout_chance(target)
 
 	show_combat_stat("Knockout chance: [knockout_chance]")
 	if(prob(knockout_chance))
 		visible_message("<span class='danger'>[src] has knocked down \the [target]!</span>")
 		target.apply_effect(2, WEAKEN, armor)
-
 
 	//Hand transplants increase punch damage
 	//However, arm transplants are needed to send people flying through punches
