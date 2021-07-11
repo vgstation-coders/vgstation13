@@ -155,8 +155,8 @@ var/list/sent_strike_teams = list()
 				new_commando.update_action_buttons_icon()
 
 				greet_commando(new_commando)
-		log_admin("The [striketeam_name] called by [user_key_name] has been created with [team_composition.len] member[team_composition.len > 1 "s":""] and is now preparing at [T.loc].")
-		message_admins("<span class='notice'>The [striketeam_name] called by [user_key_name] has been created with [team_composition.len] member[team_composition.len > 1 "s":""] and is now preparing at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.</span>")
+		log_admin("The [striketeam_name] called by [user_key_name] has been created with [team_composition.len] member[team_composition.len > 1 ? "s":""] and is now preparing at [T.loc].")
+		message_admins("<span class='notice'>The [striketeam_name] called by [user_key_name] has been created with [team_composition.len] member[team_composition.len > 1 ? "s":""] and is now preparing at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.</span>")
 		extras()
 
 /datum/striketeam/proc/create_commando(var/obj/spawn_location,var/leader_selected=0,var/mob_key = "")
