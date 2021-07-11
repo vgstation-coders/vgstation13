@@ -119,7 +119,7 @@
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
-	H.check_mutations = 1
+	genemutcheck(H, SOBERBLOCK)
 
 /datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser] = SURVIVAL_BOX
