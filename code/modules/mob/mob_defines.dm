@@ -287,5 +287,3 @@
 	var/old_assigned_role // If they ghosted, what role did they have?
 
 	var/list/crit_rampup = list() // Of the form timestamp/damage
-
-	var/list/datum/speech_filter/speech_filters = list()

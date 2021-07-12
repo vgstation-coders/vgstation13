@@ -25,6 +25,8 @@
 
 	var/genetype = GENETYPE_BAD
 
+	var/datum/speech_filter/speech_filter
+
 /**
 * Is the gene active in this mob's DNA?
 */
@@ -70,6 +72,7 @@
 * Called when the mob says shit
 */
 /datum/dna/gene/proc/OnSay(var/mob/M, var/datum/speech/message)
+	message = speech_filter.FilterSpeech(message)
 
 /**
 * Called after the mob runs update_icons.

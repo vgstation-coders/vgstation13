@@ -191,15 +191,7 @@
 /datum/dna/gene/disability/chav/New()
 	..()
 	block = CHAVBLOCK
-
-/datum/dna/gene/disability/chav/activate(var/mob/M)
-	if(..(M))
-		M.speech_filters += new /datum/speech_filter/chav
-
-/datum/dna/gene/disability/chav/deactivate(var/mob/M, var/connected, var/flags)
-	if(..(M,connected,flags) && M.speech_filters)
-		M.speech_filters.Remove(typesof(/datum/speech_filter/chav))
-
+	speech_filter = new /datum/speech_filter/chav
 
 // WAS: /datum/bioEffect/swedish
 /datum/dna/gene/disability/swedish
