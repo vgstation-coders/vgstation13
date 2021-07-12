@@ -27,8 +27,8 @@
 
 	for (var/R in typesof(/datum/religion))
 		var/datum/religion/rel = new R
-		if(istype(R,/datum/religion/self))
-			R.keys += "[H]" // So we can have our own name work as a key
+		if(istype(rel,/datum/religion/self))
+			rel.keys += "[H]" // So we can have our own name work as a key
 		for (var/key in (rel.keys + rel.deity_names + rel.deity_name))
 			if (lowertext(new_religion) == lowertext(key))
 				rel.equip_chaplain(H) // We do the misc things related to the religion
