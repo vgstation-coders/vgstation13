@@ -72,7 +72,8 @@
 * Called when the mob says shit
 */
 /datum/dna/gene/proc/OnSay(var/mob/M, var/datum/speech/speech)
-	speech.message = speech_filter.FilterSpeech(speech.message)
+	if(speech_filter)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 
 /**
 * Called after the mob runs update_icons.
