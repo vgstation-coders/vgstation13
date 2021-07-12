@@ -1568,3 +1568,28 @@
 /datum/religion/cornholio/equip_chaplain(var/mob/living/carbon/human/H)
 	H.reagents.add_reagent(HYPERZINE,10) // settle down, beavis
 	H.reagents.add_reagent(SUGAR,10)
+
+/datum/religion/schizo
+	name = "Schizophrenia"
+	deity_name = "The voices inside your head"
+	bible_name = "The Madman's Ramblings"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Schizo"
+	female_adept = "Schizo"
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
+	keys = list("schizophrenia", "schizo", "meds", "ss13g", "the thread", "shapka", "wesley willis", "time cube")
+	bookstyle = "Scrapbook"
+
+/datum/religion/schizo/equip_chaplain(var/mob/living/carbon/human/H)
+	H.reagents.add_reagent(MINDBREAKER,10)
+	H.reagents.add_reagent(SPACE_DRUGS,10)
+
+/datum/religion/troll
+	name = "Trolling"
+	deity_names = list("Le Master Trolle","Stgggs")
+	bible_name = "Trolling: A art"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Troll"
+	female_adept = "Troll"
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
+	keys = list("troll","trolls","trolling","a little trolling","grief","griff","griffon","doing a little trolling","ruse","prank","lulz","raids")
