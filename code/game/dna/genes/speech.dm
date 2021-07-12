@@ -76,3 +76,33 @@
 		text       = copytext(text, 1, expr.index) + repl + copytext(text, expr.index + length(expr.match))
 		expr.index = expr.index + length(repl)
 	return text
+
+/////////////////////////////
+// ALL THE SPEECH FILTERS NOW
+/////////////////////////////
+
+// TAJARANS
+/datum/speech_filter/tajaran
+	expressions = list()
+
+/datum/speech_filter/tajaran/New()
+	// Combining all the worst shit the world has ever offered.
+
+	// Note: Comes BEFORE other stuff.
+	// Trying to remember all the stupid fucking furry memes is hard
+	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger)\\b",
+		list(
+			"silly rabbit",
+			"sandwich", // won't work too well with plurals OH WELL
+			"recolor",
+			"party pooper"
+		)
+	)
+	addWordReplacement("me","meow")
+	addWordReplacement("I","meow") // Should replace with player's first name.
+	addReplacement("fuck","yiff")
+	addReplacement("shit","scat")
+	addReplacement("scratch","scritch")
+	addWordReplacement("(help|assist)\\smeow","kill meow") // help me(ow) -> kill meow
+	addReplacement("god","gosh")
+	addWordReplacement("(ass|butt)", "rump")

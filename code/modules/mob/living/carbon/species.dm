@@ -145,6 +145,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/species_intro //What intro you're given when you become this species.
 	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
+	var/list/datum/speech_filter/speech_filters = list()
+
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -167,6 +169,8 @@ var/global/list/whitelisted_species = list("Human")
 	H.invisibility = 101
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
+	for(var/datum/speech_filter in speech_filters)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 	if(H.dna)
 		if(length(speech.message) >= 2)
 			for(var/gene_type in H.active_genes)
@@ -528,8 +532,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	flesh_color = "#AFA59E"
 
-	var/datum/speech_filter/speech_filter = new
-
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
@@ -545,26 +547,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/tajaran/New()
 	..()
-	// Combining all the worst shit the world has ever offered.
-
-	// Note: Comes BEFORE other stuff.
-	// Trying to remember all the stupid fucking furry memes is hard
-	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger)\\b",
-		list(
-			"silly rabbit",
-			"sandwich", // won't work too well with plurals OH WELL
-			"recolor",
-			"party pooper"
-		)
-	)
-	speech_filter.addWordReplacement("me","meow")
-	speech_filter.addWordReplacement("I","meow") // Should replace with player's first name.
-	speech_filter.addReplacement("fuck","yiff")
-	speech_filter.addReplacement("shit","scat")
-	speech_filter.addReplacement("scratch","scritch")
-	speech_filter.addWordReplacement("(help|assist)\\smeow","kill meow") // help me(ow) -> kill meow
-	speech_filter.addReplacement("god","gosh")
-	speech_filter.addWordReplacement("(ass|butt)", "rump")
+	speech_filters += new datum/speech_filter/tajaran
 
 /datum/species/tajaran/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
@@ -593,10 +576,6 @@ var/global/list/whitelisted_species = list("Human")
 			speech.message = pick("GOD, PLEASE", "NO, GOD", "AGGGGGGGH") + " "
 
 		speech.message += pick("KILL ME", "END MY SUFFERING", "I CAN'T DO THIS ANYMORE")
-
-		return ..()
-
-	speech.message = speech_filter.FilterSpeech(speech.message)
 	return ..()
 
 /datum/species/tajaran/gib(mob/living/carbon/human/H)
