@@ -485,7 +485,7 @@
 	bible_name = "Kojiki"
 	male_adept = "Kannushi"
 	female_adept = "Shrine Maiden"
-	keys = list("shinto", "shintoism", "anime", "weeaboo", "japan", "japanese" "waifu")
+	keys = list("shinto", "shintoism", "anime", "weeaboo", "japan", "japanese", "waifu")
 
 /datum/religion/shintoism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/kimono(H), slot_wear_suit)
