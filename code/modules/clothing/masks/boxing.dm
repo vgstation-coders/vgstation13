@@ -14,8 +14,8 @@
 	speech_filter = new datum/speech_filter/luchador
 
 /obj/item/clothing/mask/luchador/affect_speech(var/datum/speech/speech, var/mob/living/L)
-	var/message=speech.message
 	..()
+	var/message=speech.message
 	message = uppertext(message)	//Things end up looking better this way (no mixed cases), and it fits the macho wrestler image.
 	if(prob(25))
 		message += " OLE!"
