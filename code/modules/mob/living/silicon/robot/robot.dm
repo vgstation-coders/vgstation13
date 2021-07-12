@@ -1002,7 +1002,7 @@
 			return FALSE
 	return TRUE
 
-/mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
+/mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = ABOVE_LIGHTING_PLANE)
 	overlays.Cut()
 	update_fire()
 	if(!stat && cell != null)

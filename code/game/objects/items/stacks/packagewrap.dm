@@ -208,6 +208,7 @@
 	w_class = W_CLASS_GIANT //Someone was going to find a way to exploit this some day
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
+	var/syndie = 0 //so disposals can route syndie packages
 
 /obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()

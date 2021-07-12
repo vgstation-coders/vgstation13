@@ -13,6 +13,16 @@
 		if(slip_n_slide(M))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+	if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+		var/obj/structure/bed/chair/vehicle/gokart/kart = AM
+		var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
+		var/tiles_to_slip = rand(round(potency/20, 1), round(potency/10, 1))
+		kart.speen()
+		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+		spawn()
+			for(var/i in 1 to tiles_to_slip)
+				step(kart, left_or_right)
+				sleep(1)
 
 /datum/locking_category/banana_peel
 
@@ -49,6 +59,7 @@
 	var/last_honk_time = 0
 	var/vary_pitch = 1
 	var/can_honk_baton = 1
+	var/next_honk = 0
 
 /obj/item/weapon/bikehorn/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
@@ -58,6 +69,11 @@
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
 	if(honk())
 		add_fingerprint(user)
+
+/obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
+	if (isliving(AM) && world.time > next_honk)
+		honk()
+		next_honk = world.time + honk_delay
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
 	//hitsound takes care of that

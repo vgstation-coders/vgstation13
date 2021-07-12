@@ -112,6 +112,19 @@
 					return 1
 	return ..()
 
+/obj/structure/closet/body_bag/olympics/New()
+	..()
+	var/mob/living/carbon/human/torso = new
+	torso.resting = TRUE
+	for(var/datum/organ/external/limb in torso.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_LEFT_ARM, LIMB_RIGHT_ARM))
+		var/obj/limb_obj = limb.droplimb(override = TRUE, no_explode = TRUE, spawn_limb = TRUE, display_message = FALSE)
+		limb_obj.forceMove(src)
+	var/obj/heart = torso.remove_internal_organ(torso, torso.get_heart(), torso.get_organ(LIMB_CHEST))
+	heart.forceMove(get_turf(src))
+	var/datum/organ/external/head = torso.organs_by_name[LIMB_HEAD]
+	head.droplimb(override = TRUE, no_explode = TRUE, spawn_limb = FALSE, display_message = FALSE)
+	torso.forceMove(src)
+
 //Cryobag (statis bag) below, not currently functional it seems
 
 /obj/item/bodybag/cryobag

@@ -185,23 +185,24 @@ What is the naming convention for planes or layers?
 	#define GRAVITYGRID_LAYER 			8
 	#define SNOW_OVERLAY_LAYER			9
 	#define HORIZON_EXHAUST_LAYER		10
+	#define POINTER_LAYER 				11
 
 #define GHOST_PLANE 			-3			// Ghosts show up under lighting, HUD etc.
 
 	#define GHOST_LAYER 				1
 
-#define LIGHTING_PLANE 			-2
-
-	#define LIGHTBULB_LAYER 			0
-	#define POINTER_LAYER 				1
-	#define LIGHTING_LAYER 				2
-	#define ABOVE_LIGHTING_LAYER 		3
-	#define SUPERMATTER_WALL_LAYER 		4
-	#define SUPER_PORTAL_LAYER			5
-	#define NARSIE_GLOW 				6
+#define LIGHTING_PLANE 			-2	// Don't put anything other than lighting_overlays in there please
+	#define LIGHTING_LAYER 				0
 
 #define ABOVE_LIGHTING_PLANE	-1
-	#define MAPPING_AREA_LAYER			999
+	#define ABOVE_LIGHTING_LAYER		0
+	#define SUPERMATTER_WALL_LAYER 		1
+	#define SUPER_PORTAL_LAYER			2
+	#define NARSIE_GLOW 				3
+
+
+
+	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
 #define BASE_PLANE 				0		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
@@ -309,3 +310,28 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	screen |= ghost_planemaster
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
+
+
+// DARKNESS PLANEMASTER
+// One planemaster for each client, which they gain during mob/login()
+/obj/abstract/screen/plane_master/darkness_planemaster
+	plane = LIGHTING_PLANE
+
+	blend_mode    = BLEND_MULTIPLY
+
+/obj/abstract/screen/plane_master/darkness_planemaster_dummy
+	alpha = 0
+	appearance_flags = 0
+	plane = LIGHTING_PLANE
+
+/client/proc/initialize_darkness_planemaster()
+	if(darkness_planemaster)
+		screen -= darkness_planemaster
+		qdel(darkness_planemaster)
+	if(darkness_planemaster_dummy)
+		screen -= darkness_planemaster_dummy
+		qdel(darkness_planemaster_dummy)
+	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
+	screen |= darkness_planemaster
+	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
+	screen |= darkness_planemaster_dummy

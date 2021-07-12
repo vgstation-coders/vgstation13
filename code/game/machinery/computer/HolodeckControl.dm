@@ -84,7 +84,10 @@
 	light_color = LIGHT_COLOR_CYAN
 	var/datum/map_element/map_element_type // If null, New() tries to get one from the map's datum
 										   // Set it if you want to source rooms from a different holodeck
+	var/area/alpha_area = /area/holodeck/alphadeck // This is the area of the on-station holodeck, where the rooms will be loaded into.
+
 /obj/machinery/computer/HolodeckControl/olympics
+	alpha_area = /area/holodeck/dungeon_holodeck_alpha
 	map_element_type = /datum/map_element/dungeon/holodeck/olympics
 
 /obj/machinery/computer/HolodeckControl/attack_ai(mob/user)
@@ -240,7 +243,7 @@
 
 /obj/machinery/computer/HolodeckControl/New()
 	..()
-	linkedholodeck = locate(/area/holodeck/alphadeck)
+	linkedholodeck = locate(alpha_area)
 	if(isnull(map_element_type))
 		for(var/entry in map.load_map_elements)
 			if(ispath(entry, /datum/map_element/dungeon/holodeck))

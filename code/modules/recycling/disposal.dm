@@ -598,6 +598,10 @@
 			for(var/mob/living/M in O.contents)
 				if(istype(M, /mob/living/simple_animal/hostile/mimic/crate))
 					continue
+				if (istype(O, /obj/item/delivery/large))
+					var/obj/item/delivery/large/P = O
+					if(P.syndie)
+						continue //route syndie-wrapped mobs normally
 				else if(M && M.stat != DEAD)
 					hasmob = 1
 

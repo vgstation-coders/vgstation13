@@ -92,9 +92,13 @@
 	return 1
 
 /datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
+	if (admin_disable_rulesets && !forced)
+		message_admins("Dynamic Mode: [name] was prevented from firing by admins.")
+		log_admin("Dynamic Mode: [name] was prevented from firing by admins.")
+		return FALSE
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 // Returns TRUE if there is enough pop to execute this ruleset
 /datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE)

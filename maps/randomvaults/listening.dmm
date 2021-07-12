@@ -38,7 +38,7 @@
 "aL" = (/obj/machinery/power/solar/panel{id_tag = "synd_listening_post_solar"},/obj/structure/cable,/turf/simulated/floor/airless{icon_state = "solarpanel"},/area/vault/listening)
 "aM" = (/obj/structure/rack,/obj/item/weapon/storage/belt/utility,/obj/item/device/flashlight,/obj/item/device/radio/off,/obj/item/device/radio/off,/obj/machinery/light/small,/turf/simulated/floor/plating,/area/vault/listening)
 "aN" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/weapon/storage/toolbox/syndicate,/turf/simulated/floor/plating,/area/vault/listening)
-"aO" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc/no_alerts/vault_listening{pixel_y = -24},/obj/machinery/power/monitor,/turf/simulated/floor/plating,/area/vault/listening)
+"aO" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc/no_alerts/vault_listening{pixel_y = -24},/obj/machinery/computer/powermonitor,/turf/simulated/floor/plating,/area/vault/listening)
 "aP" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/machinery/power/battery/smes/vault_listening,/obj/machinery/light/small,/turf/simulated/floor/plating,/area/vault/listening)
 "aQ" = (/obj/machinery/door/airlock/glass_engineering{name = "Engineering"},/turf/simulated/floor/plating,/area/vault/listening)
 "aR" = (/obj/structure/toilet{dir = 4},/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/listening)

@@ -108,6 +108,7 @@
 		new /obj/item/weapon/kitchen/utensil/knife/large(), \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/device/taperecorder(), \
+		new /obj/item/tool/wirecutters/scissors(), \
 		new /obj/item/weapon/chisel(), \
 		new /obj/item/weapon/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \

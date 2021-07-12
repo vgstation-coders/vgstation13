@@ -320,8 +320,10 @@
 			return 1
 	return 0
 
-/obj/structure/table/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
-	destroy()
+/obj/structure/table/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+		destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
@@ -778,8 +780,10 @@ obj/structure/table/plastic
 		return 1
 	return !density
 
-/obj/structure/rack/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
-	destroy()
+/obj/structure/rack/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+		destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_wrench(user) && can_disassemble())

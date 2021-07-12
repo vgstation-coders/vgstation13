@@ -396,7 +396,7 @@ var/list/salts_particle_emitters = list(
 	if (loc && !gcDestroyed && act_delay)
 		for (var/atom/movable/AM in loc)
 			if (is_type_in_list(AM, salts_particle_emitters))
-				anim(target = loc, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+				anim(target = loc, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 				break
 		sleep(rand(1 SECONDS, 3 SECONDS))
 		particleCheck()

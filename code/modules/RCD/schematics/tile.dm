@@ -371,6 +371,9 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
+
+		// Misc
+		new /datum/paint_info/decal(DIR_ONE, "olympics")
 	),
 	"Gray" = list(
 		new /datum/paint_info(DIR_ONE,		"floor"),
@@ -644,6 +647,20 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info(DIR_ONE,		"solarpanel")
 	)
 )
+
+/datum/paint_info/emagged
+	icon  = 'icons/turf/floors.dmi'
+	icon_state = "css"
+	name	   = "missing texture"
+
+/datum/rcd_schematic/tile/emagged
+	name				= "ERROR"
+
+/datum/rcd_schematic/tile/emagged/New()
+	selection = new /datum/paint_info/emagged
+	..()
+
+
 
 #undef PAINT_ALL
 #undef PAINT_FLOOR

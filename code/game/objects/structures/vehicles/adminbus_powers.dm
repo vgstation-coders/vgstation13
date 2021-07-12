@@ -213,7 +213,7 @@
 	if(lightpower == roadlights)
 		return
 	var/image/roadlights_image = image(icon,"roadlights", ABOVE_LIGHTING_LAYER)
-	roadlights_image.plane = LIGHTING_PLANE
+	roadlights_image.plane = ABOVE_LIGHTING_PLANE
 	switch(lightpower)
 		if(0)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-on"

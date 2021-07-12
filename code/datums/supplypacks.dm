@@ -28,9 +28,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	for(var/path in contains)
 		if(!path)
 			continue
-		var/atom/movable/AM = new path()
-		manifest += "<li>[AM.name]</li>"
-		qdel(AM)
+		var/atom/movable/AM = path
+		manifest += "<li>[initial(AM.name)]</li>"
 	manifest += "</ul>"
 
 // Called after a crate containing the items specified by this datum is created

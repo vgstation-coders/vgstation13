@@ -73,6 +73,108 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.07.12</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added wristwatches to the game, a new uniform accessory. Their hands move in real time on their sprite, and you can click it to get the current station time down to the second. Can be purchased from the merch computer at the Cargo Lobby.</li>
+				<li class="rscadd">They can also extremely rarely be found from maintenance loot spawners, and tourists coming out of Ancient Cryopods have one equipped as a reference to the old long-time layering glitch that caused their right arm to appear to wear a red strap.</li>
+				<li class="rscadd">Captains spawn with a unique golden wristwatch. Although there is a small chance of getting another one from the Vault&#39;s safe.</li>
+				<li class="rscadd">There is also a sleek black variant that can be rarely found from maint spawners. Nuclear Operatives spawn equipped with those, as time is of the essence in their field.</li>
+				<li class="rscadd">Finally a pocket watch variant can be dug up frome house/dwellings digsites on the asteroid. Let your local xenoarchaeologist know if you&#39;re interested in getting one.</li>
+				<li class="imageadd">Special thanks to terrel for providing the gold, black, and pocket watch sprites.</li>
+				<li class="rscadd">Added a new machine, the Photo Booth. Can be entered by just walking inside from the front, clicking it while inside will buckle you in there for a few seconds, then after a few seconds an ID photo will pop out of the machine. There will be at least one on each map, until then you can build them from R&amp;D. You can also Alt Click the booth to select one of several backgrounds.</li>
+				<li class="rscadd">ID Photo are a new subtype of photos. Just like regular photos you can write on them, use them on newscasters, but more importantly, when using them on a Security or Medical Records computer open on a given entry, you can scan the photo on the computer to update the entry&#39;s photo. Until now, new records created at a Security Computer were damned to never have any picture, this changes at last!</li>
+				<li class="rscadd">Added scissors. They&#39;re basically just wirecutters with a different sprite. You can print them at an autolathe from the Misc Tools category. You can use them (or any type of wirecutter) on an ID photo to split it into 4 regular photos. Those individual photos CANNOT be used to update records.</li>
+				<li class="bugfix">Fixed the same player being picked several times at once to be a wizard during Civil War of Casters, and ending up with more Spell Books at their disposal while other players get cucked out of their antag roll.</li>
+			</ul>
+			<h2 class="date">2021.07.11</h2>
+			<h3 class="author">Apogee-dev updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Removed robotics access from the Scientist job.</li>
+				<li class="tweak">Removed access requirements from the mechfab.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Hobo shacks are now hidden on the minimap.</li>
+				<li class="rscadd">Added some admin buttons allowing them to manually toggle off random events or dynamic rulesets. Both rulesets and events can still be forced manually by admins while the toggle is off.</li>
+				<li class="tweak">The Research Outposts airlocks on box, roid, and metaclub, all feature a second large dual-port vent, which should cut down by half the time it takes for the air to cycle.</li>
+				<li class="rscadd">Box&#39;s Research Outpost&#39;s scrubber loop now actually filter the O2 and N2 back into their tanks at the Research Outpost Atmospherics instead of just throwing it into space.</li>
+				<li class="tweak">Moved the O2 Canister in the Mining Outpost&#39;s airlock back a room so it stops getting ZAS&#39;d outside.</li>
+				<li class="bugfix">RPD Mass Coloration now works properly with pipe end-caps.</li>
+				<li class="bugfix">Fixed Security/Medical Record Pictures of non-humans having them look like humans.</li>
+				<li class="bugfix">Fixed splashing full reagent containers on reagent dispensers. Botanists and Virologists rejoice.</li>
+				<li class="bugfix">Ghosts can once again click Portals and engaged teleporter HUBs to use them.</li>
+				<li class="tweak">A few areas will now always have their lights on at roundstart. Specifically the Bar (crew quarters in general), the Primary Tool Storage, and the MoMMI nest.</li>
+				<li class="bugfix">The mobs coming out of a Master Trainer Belt&#39;s capsules finally ignore the agent who bought the belt as intended.</li>
+				<li class="tweak">Mobs in capsules no longer have a chance to perform their random emotes or say their random lines. Rogue Drones in capsules also no longer emit sparks randomly.</li>
+				<li class="bugfix">Fixed Hex spawned by the Master Trainer Belt having invisible lights</li>
+				<li class="bugfix">You no longer share contact diseases with someone after a punch or disarm that missed.</li>
+				<li class="bugfix">Biting and Kicking can now properly transmit contact diseases, checking sterility on your feet instead of your hands in the case of kicking, and bypassing bleeding checks (and sterility checks on your own face) in the case of biting, which means that you can now bite people to transmit them your own (or get their) blood-only diseases (still needs to pass the sterility check on the target as well as the infection chance roll though). This applies to monkeys as well since they always attack by biting, but not to mice whose teeth aren&#39;t quite big enough.</li>
+				<li class="bugfix">Fixed the borer development lab&#39;s airlocks being called borer devolopment.</li>
+			</ul>
+			<h3 class="author">bathosbathtime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bartenders and detectives no longer spawn with their inactive genetic defects activated</li>
+			</ul>
+			<h3 class="author">gurfan updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now emag tile painters.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Blacksmithing forges can now smelt ores, one pile at a time. (except plasma, the fuel)</li>
+				<li class="tweak">Ingredients checking now only looks for the material datum instead of the entire parent ore processor object, for more flexibility.</li>
+				<li class="rscadd">Bikehorns now go off when you step on them.</li>
+				<li class="rscadd">Centcomm and syndicate console messages as well as faxes are now logged, and sent to non-playing admins along with prayers.</li>
+			</ul>
+			<h2 class="date">2021.07.07</h2>
+			<h3 class="author">robintime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">vox now have their own special player sounds</li>
+			</ul>
+			<h2 class="date">2021.07.05</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bunch of effects such as emitter beams, pointer arrows, and asteroid lanterns not being properly visible.</li>
+			</ul>
+			<h2 class="date">2021.07.04</h2>
+			<h3 class="author">robintime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="spellcheck">corgis no longer have periods in their says verbs and other related shit</li>
+				<li class="spellcheck">added two periods</li>
+			</ul>
+			<h2 class="date">2021.07.03</h2>
+			<h3 class="author">Apogee-dev updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Mech Beacon &#34;self-destruct&#34; changed to &#34;overload&#34;</li>
+				<li class="bugfix">Mech Beacons no longer delete themselves when overloaded, which would prevent further beacons from being attached</li>
+				<li class="bugfix">Mobs trapped in syndie packaging are now shipped normally instead of being sent back to deliveries.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed overlays not appearing in a right place on pictures when photographing moving mobs or objects.</li>
+				<li class="bugfix">Fixed the AI Hologram not appearing properly or not changing direction when its icon is changed to the appearance of a crew member.</li>
+				<li class="tweak">The player appearance on medical and security records now actually matches what the players looked like at round start.</li>
+				<li class="bugfix">Fixed eye ghetto surgery when using a fork.</li>
+				<li class="bugfix">Fixed certain types of glasses such as mesons or science goggles not fitting inside pockets.</li>
+				<li class="experiment">Giant Spider vision has been reworked, fixing transparency issues among other things.</li>
+				<li class="experiment">Catulism Syndrom (stage 3) now actually provides much improved vision in the dark. Tajarans also benefit from it by default. Incidentally, so can other human species should they have tajaran eyes implanted through surgery.</li>
+				<li class="experiment">Mushroom people also see better in the dark by default, but not quite as good as Tajarans, however their genetic spell now lets them switch to a different mode of perception that let&#39;s them see even better in dark areas than lit ones.</li>
+				<li class="experiment">Lastly Constructs can also see a bit better in the dark, although with a red tinge.</li>
+				<li class="rscadd">Animals with wings can now use the flap and aflap emotes.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Energy shotguns now have a loaded chamber indicator light and audibly click when switching modes</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Space Hobos now generate names.</li>
+				<li class="rscadd">Hobo shacks now have an anvil and forge, for blacksmithing with materials.</li>
+				<li class="rscadd">Space Hobos are now equipped with mesons and pickaxes.</li>
+				<li class="rscdel">Removed stacking machine from hobo shacks.</li>
+				<li class="rscdel">Mesons and pickaxes removed from hobo shacks.</li>
+			</ul>
 			<h2 class="date">2021.06.30</h2>
 			<h3 class="author">help-maint updated:</h3>
 			<ul class="changes bgimages16">
@@ -1703,152 +1805,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">GreatBigFailure updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">The tradervend now has access to several lootboxes, sponsored by EA. It&#39;s in the game.</li>
-			</ul>
-			<h2 class="date">2021.01.21</h2>
-			<h3 class="author">Dacendeth updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Barrels now do the same damage as most other structures when thrown.</li>
-			</ul>
-			<h3 class="author">Irradiation updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You (and mobs) can now break barrels.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Banana peels now slip you further based on potency</li>
-			</ul>
-			<h2 class="date">2021.01.20</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">New antag role! &#34;Syndicate Challengers&#34;. Roughly based on the old double-agents game mode. Remember to update your preferences to try it out.</li>
-				<li class="rscadd">Challengers are fairly similar to traitors in that they have an uplink, some TCs, even code words, however their single objective is to assassinate another challenger aboard the station, henceforth there&#39;s always at least 2 of them tasked with killing each others. When there are more than 2 challengers, their assassination orders are chained so that the first one hunts the second one, the second one hunts the third one, etc, until the last one who hunts the first one. Once an assassination has been successfully carried out and reported to the Syndicate, you take on your victim&#39;s target (unless it was you in which case no more objectives are given) and receive 5 additional TCs.</li>
-				<li class="rscadd">For a successful assassination to be permanently secured by the Syndicate, you must take a photo of your victim&#39;s dead (crit is enough) body, severed head, or brain, and publish it on any newscaster channel for all the crew to see their dead body. You can use any channel, but you may want to use your victim&#39;s ID to create one so as to keep the crew guessing as to your identity, or send the message with another stolen ID to send security on a red herring.</li>
-				<li class="experiment">This variant on traitor puts the emphasis on robustness and direct confrontation between traitors, but the Syndicate doesn&#39;t care how the deed is performed so long as the kill is reported. Once it has, your victim&#39;s own assassination objective is forever marked as failed even if they get revived and their target dies later.</li>
-				<li class="experiment">Cult conversions have been reworked! Details below.</li>
-				<li class="experiment">The sounds produced by conversion runes can now only be heard by those who have a line of sight to the rune.</li>
-				<li class="experiment">Automatic boxing now only happens to cult-banned players.</li>
-				<li class="experiment">Refusing conversion now restrains you with ghastly bindings that hinders your movements through pain. It takes 1 minute to resist out of those.</li>
-				<li class="experiment">Loyalty Implants no longer slow down conversions, but instead force-refuse them.</li>
-				<li class="rscdel">Setting your cult preferences to Never no longer auto-refuses conversions (you now always get the choice) but still displays your preferences as such to Seer users.</li>
-				<li class="rscadd">Non-cultists restrained by ghastly bindings show up on the altar&#39;s cult roster, and are valid Blood Magnetism targets (for both summoning and rejoining)</li>
-				<li class="rscadd">The pain induced by ghastly bindings fades over time, but gets reset when their victim travels through the veil (Path or Blood Magnetism runes)</li>
-				<li class="rscadd">The cultist who performed the conversion that restrained someone will instantly be informed should the bindings get removed. The bindings also remove themselves should another conversion attempt succeed.</li>
-				<li class="tweak">Cultists no longer resist Loyalty Implanters, instead the implant pops out 10 seconds later.</li>
-				<li class="tweak">All loyalty implanted cultists also get informed that they have 10 seconds before their implant pops out when Act 2 begins.</li>
-				<li class="rscadd">Added holy implants. Can be ordered at cargo. Implanted cultists become unable to perform any ritual or use any cult spells. They also become unable to travel through the veil (Path Runes or Blood Magnetism) or be affected by Fervor. However they are destroyed upon conversion so they cannot be used preemptively unlike loyalty implants.</li>
-				<li class="tweak">Cultists with holy water in their body will also suffer from those impediments.</li>
-				<li class="experiment">Cult deconversions are a thing once again 2 years and a half later. They work as such, first have the cultist (or suspected cultist) take a sip of holy water (splashing them from the flask also works, or giving them a holy wafer to eat, etc). Immediately after slap them with a bible on help intent (the target needs to have over 20hp or it won&#39;t work). Everyone can do it, not just chaplains. If the target wasn&#39;t a cultist, nothing unusual happens. Otherwise they will be knockdown and given the choice to abandon the cult or resist. In both cases after 10 seconds, they take 10 brute damage, and a pair of red shades appear. If they accepted the deconversion, those shades will immediately start attacking them, otherwise if they resisted the shades will attack the one who attempted the deconversion, and other nearby non-cultists.</li>
-				<li class="experiment">If a chaplain performed the deconversion with a bible of their religion, those red shades have 20hp and deal 5 damage, making them about as much of an inconvenience as blob spores. Otherwise they will be as strong as regular shades.</li>
-				<li class="rscadd">Bibles, Holy Water, Incense, and Thuribles are now available from Cargo as Religious Paraphernelia under Supplies.</li>
-				<li class="tweak">Cult mobs spawned by bloodstones no longer stand still for a while before attacking non-cultists, they instead immediately give chase once they spawn.</li>
-				<li class="tweak">Blood Communion tattoo now also gives a small buff to blood regen.</li>
-				<li class="bugfix">Fixed Confusion runes sometimes causing people to remain blinded forever when they time-out.</li>
-				<li class="bugfix">Fixed deculted players still having cult UI elements on their screen</li>
-				<li class="bugfix">Fixed splashing mobs with a holy water flask applying the equivalent of half the flask&#39;s current volume to them instead of only the 5u being spent.</li>
-				<li class="bugfix">Fixed the holy water flask having wrong in-hand sprites when facing some directions.</li>
-				<li class="bugfix">Using a soulstone on a cultist shade as a non-cultist now properly decults the shade.</li>
-				<li class="rscadd">De-culted players now get a message specifying exactly what they remember about the cult, generally only the player who converted them.</li>
-				<li class="rscadd">Cultists can now use altars as operating tables with the same efficiency as if they were using an actual operating table. Furthermore, Blood Daggers can now be used as ghetto scalpels and circular saws, and Talismans can be used as ghetto hemostats.</li>
-			</ul>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds the changeling vial, stone mask, and the cult pamphlet to the traitor uplink for traitors that want to work together.</li>
-				<li class="tweak">Cyborg examine text upon death is more useful</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The science department has developed a new weather control device to deploy on Snaxi.</li>
-				<li class="rscadd">Fatsos can now wear the default wintercoat, as well as the security and warden versions.</li>
-				<li class="bugfix">Hard rock walls on Snaxi are now less pointy</li>
-				<li class="tweak">Snaxi brig has been overhauled. It&#39;s less chokepointy.</li>
-				<li class="bugfix">Fixed a bug where random bloodstones could sometimes spawn off station randomly as long as it was still on Z-1 (for example, in the caves on Snaxi or in the Vox outpost on Roid)</li>
-				<li class="rscadd">There are now vaults to discover on the Snaxi outer reaches.</li>
-				<li class="rscdel">Converted the old Santa cabin and construction site on Snaxi into random vaults.</li>
-				<li class="tweak">Wolves won&#39;t lose nutrition until tamed, and tamed wolves will lose nutrition much slower.</li>
-				<li class="rscadd">Feral wolves will always attack, whereas pliable wolves are much easier to tame.</li>
-			</ul>
-			<h3 class="author">PlausibleDeniability updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The HoS has a new outfit in their closet</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Banana peels are now more slippery, meaning you can slide a few tiles forward if you walk into one.</li>
-				<li class="tweak">Cultists now unlock the Forge at Act 1. Additionally, they may now use spells which were previously limited to Act 2 and 3.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Box northern maintenance has been tweaked and slimmed down slightly.</li>
-				<li class="tweak">Changelings will gain their victims&#39; memories when absorbing people</li>
-			</ul>
-			<h2 class="date">2021.01.18</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed unintended wage increases that resulted from station department wages not being counted when splitting the allowance, leading to higher and higher wage increases the less players there are online.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Voting on server polls now gives you a neat little pin for the next round you join.</li>
-				<li class="bugfix">Catbeast language actually works now, and uses the key `:+`.</li>
-				<li class="bugfix">The &#34;Check-Known-Language&#34; panel now work, and will change the default language you are speaking.</li>
-				<li class="bugfix">Using the &#34;reset&#34; link will revert your currently spoken language to the default for your species.</li>
-				<li class="bugfix">The verb &#34;Set-Default-Language&#34; works again. Use &#34;`Set-Default-Language Galatic-Common`&#34; (or any language name) to speak it as your default. You can use the space key to autocomplete the name of the language. Using &#34;Set-Default-Language&#34; with no parameter will revert your currently spoken language to the default for your species.</li>
-			</ul>
-			<h2 class="date">2021.01.17</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Silicons now speak with their own voice sounds.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Request Consoles can send announcements again.</li>
-			</ul>
-			<h2 class="date">2021.01.15</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Snaxi xenobiology is now wider, has standard 3x3 cells, more centralized machines, and a protolathe window.</li>
-				<li class="tweak">Snaxi now has some snowmobiles by each station instead of just inside the garage, to make traversing stations a little smoother.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The xenomorph event has been reworked into a dynamic ruleset.</li>
-				<li class="rscadd">Xenomorphs now have several milestones that they can hit as they continue to grow, with different events based on their progress.</li>
-			</ul>
-			<h2 class="date">2021.01.14</h2>
-			<h3 class="author">Blithering updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Donutgiver now has its own icon</li>
-			</ul>
-			<h3 class="author">KingofHONK updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Demotion chips now spawn in departmental heads of staff lockers!</li>
-			</ul>
-			<h3 class="author">Kromkar updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added the Black Site Prism vault</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The research director&#39;s locker now contains steel-toed derbys, for when you need to kick the deconstructive analyzer but also look formal for a presentation.</li>
-			</ul>
-			<h3 class="author">PJB3005 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Xenoarch analysis machines do not require cooling anymore.</li>
-				<li class="tweak">Box (and meta) outpost has been reworked significantly to merge the chemistry and anomaly lab, changing xenobotany and the dorms in the process. Also has a cafetaria now!</li>
-				<li class="rscadd">Adds a new &#34;recall&#34; artifact effect. No, it does not recall the shuttle.</li>
-			</ul>
-			<h3 class="author">beesil updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">box station is now for chicken</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Prisoners now spawn with black beanies.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">SPS units will make combine sounds again.</li>
-				<li class="tweak">Prisoners can no longer be requested by security. They will now be sent rarely by central command when there are at least two active security members.</li>
 			</ul>
 		</div>
 		<!--
