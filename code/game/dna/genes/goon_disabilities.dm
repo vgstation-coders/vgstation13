@@ -110,22 +110,13 @@
 /datum/dna/gene/disability/elvis/New()
 	..()
 	block = ELVISBLOCK
+	speech_filter = new /datum/speech_filter/elvis
 
 /datum/dna/gene/disability/elvis/OnSay(var/mob/M, var/datum/speech/speech)
 	if(prob(5))
 		M.visible_message("<b>[M]</b> [pick("rambles to themselves.","begins talking to themselves.")]")
 		return 1
-	speech.message = replacetext(speech.message,"im not","I ain't")
-	speech.message = replacetext(speech.message,"i'm not","I aint")
-	speech.message = replacetext(speech.message," girl ",pick(" honey "," baby "," baby doll "))
-	speech.message = replacetext(speech.message," man ",pick(" son "," buddy "," brother ", " pal ", " friendo "))
-	speech.message = replacetext(speech.message,"out of","outta")
-	speech.message = replacetext(speech.message,"thank you","thank you, thank you very much")
-	speech.message = replacetext(speech.message,"what are you","whatcha")
-	speech.message = replacetext(speech.message,"yes",pick("sure", "yea"))
-	speech.message = replacetext(speech.message,"faggot","square")
-	speech.message = replacetext(speech.message,"muh valids","my kicks")
-	speech.message = replacetext(speech.message," vox "," bird ")
+	..()
 
 /datum/dna/gene/disability/elvis/OnMobLife(var/mob/M)
 	switch(pick(1,2))

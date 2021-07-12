@@ -233,3 +233,20 @@
 	AddWordReplacement("cunt","privates")
 	AddReplacement("dick","jerk")
 	AddWordReplacement("vagina","privates")
+
+// WHOA MAMA
+/datum/speech_filter/elvis
+	expressions = list()
+
+/datum/speech_filter/elvis/New()
+	AddWordReplacement("im not","I ain't")
+	AddWordReplacement("i'm not","I aint")
+	AddPickReplacement("girl",list("honey","baby","baby doll"))
+	AddPickReplacement("man",list("son","buddy","brother", "pal", "friendo"))
+	AddWordReplacement("out of","outta")
+	AddWordReplacement("thank you","thank you, thank you very much")
+	AddWordReplacement("what are you","whatcha")
+	AddPickReplacement("yes",list("sure", "yea"))
+	AddWordReplacement("faggot","square")
+	AddWordReplacement("muh valids","my kicks")
+	AddWordReplacement("vox"," bird ")
