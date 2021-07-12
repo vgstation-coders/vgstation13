@@ -145,7 +145,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/species_intro //What intro you're given when you become this species.
 	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
-	var/datum/speech_filter/speechfilter
+	var/datum/speech_filter/speech_filter
 
 /datum/species/New()
 	..()
@@ -169,7 +169,7 @@ var/global/list/whitelisted_species = list("Human")
 	H.invisibility = 101
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = speechfilter.FilterSpeech(speech.message)
+	speech.message = speech_filter.FilterSpeech(speech.message)
 	if(H.dna)
 		if(length(speech.message) >= 2)
 			for(var/gene_type in H.active_genes)
@@ -396,7 +396,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/unathi/New()
 	..()
-	speechfilter = new /datum/speech_filter/unathi
+	speech_filter = new /datum/speech_filter/unathi
 
 /datum/species/unathi/gib(mob/living/carbon/human/H)
 	..()
@@ -546,7 +546,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/tajaran/New()
 	..()
-	speechfilter = new /datum/speech_filter/tajaran
+	speech_filter = new /datum/speech_filter/tajaran
 
 /datum/species/tajaran/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
@@ -1227,7 +1227,7 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid/New()
 	..()
-	speechfilter = new /datum/speech_filter/insectoid
+	speech_filter = new /datum/speech_filter/insectoid
 
 /datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
 	var/sounds = rand(2,3)
