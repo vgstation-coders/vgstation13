@@ -11,7 +11,7 @@
 
 /obj/item/clothing/mask/luchador/New()
 	..()
-	speech_filter = new datum/speech_filter/luchador
+	speech_filter = new /datum/speech_filter/luchador
 
 /obj/item/clothing/mask/luchador/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	..()
