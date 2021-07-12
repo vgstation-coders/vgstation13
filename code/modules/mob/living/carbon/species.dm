@@ -396,7 +396,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/unathi/New()
 	..()
-	speechfilter = new /datum/speech_filter/plasmaman
+	speechfilter = new /datum/speech_filter/unathi
 
 /datum/species/unathi/gib(mob/living/carbon/human/H)
 	..()

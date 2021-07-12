@@ -107,11 +107,11 @@
 	addReplacement("god","gosh")
 	addWordReplacement("(ass|butt)", "rump")
 
-// PLASMEMES
-/datum/speech_filter/plasmaman
+// LIZARDS-SS-S
+/datum/speech_filter/unathi
 	expressions = list()
 
-/datum/speech_filter/plasmaman/New()
+/datum/speech_filter/unathi/New()
 	addReplacement("s", "s-s") //not using stutter("s") because it likes adding more s's.
 	addReplacement("s-ss-s", "ss-ss") //asshole shows up as ass-sshole
 
