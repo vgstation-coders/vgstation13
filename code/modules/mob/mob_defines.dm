@@ -288,4 +288,4 @@
 
 	var/list/crit_rampup = list() // Of the form timestamp/damage
 
-	var/datum/speech_filter/speech_filters = list()
+	var/list/datum/speech_filter/speech_filters = list()

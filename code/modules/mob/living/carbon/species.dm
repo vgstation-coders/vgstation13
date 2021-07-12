@@ -169,8 +169,7 @@ var/global/list/whitelisted_species = list("Human")
 	H.invisibility = 101
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	for(var/datum/speech_filter in speechfilter)
-		speech.message = speech_filter.FilterSpeech(speech.message)
+	speech.message = speechfilter.FilterSpeech(speech.message)
 	if(H.dna)
 		if(length(speech.message) >= 2)
 			for(var/gene_type in H.active_genes)
