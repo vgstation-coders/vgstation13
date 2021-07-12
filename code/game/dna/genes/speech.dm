@@ -122,6 +122,31 @@
 /datum/speech_filter/insectoid/New()
 	addReplacement("s", "z") //stolen from plasman code if it borks.
 
+// HONK
+/datum/speech_filter/cluwne
+	expressions = list()
+
+/datum/speech_filter/cluwne/New()
+	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
+	list(
+		"honker",
+		"fun police",
+		"unfun",
+	))
+	// HELP THEY'RE KILLING ME
+	// FINALLY THEY'RE TICKLING ME
+	var/tickle_prefixes="\\b(kill+|murder|beat|wound|hurt|harm)"
+	addReplacement("[tickle_prefixes]ing","tickling")
+	addReplacement("[tickle_prefixes]ed", "tickled")
+	addReplacement(tickle_prefixes,       "tickle")
+
+	addReplacement("h\[aei\]lp\\s+me","end my show")
+	addReplacement("h\[aei\]lp\\s+him","end his show")
+	addReplacement("h\[aei\]lp\\s+her","end her show")
+	addReplacement("h\[aei\]lp\\s+them","end their show")
+	addReplacement("h\[aei\]lp\\s+(\[^\\s\]+)","end $1's show")
+	addReplacement("^h\[aei\]lp.*","END THE SHOW")
+
 // CHAVS, INNIT
 /datum/speech_filter/chav
 	expressions = list()
