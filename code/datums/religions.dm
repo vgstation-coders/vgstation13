@@ -971,14 +971,14 @@
 	female_adept = "Komrade"
 	keys = list("communism", "socialism", "commie")
 
-/datum/religion/marxistleninism
-	name = "Marxist-Leninism"
+/datum/religion/marxismleninism
+	name = "Marxism-Leninism"
 	deity_names = list("Vladimir Lenin", "Josef Stalin", "Chairman Mao", "Kim-Il Sung", "Fidel Castro")
 	bible_name = "Our Immediate Task" // lenin wrote it, i dunno
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Komrade"
 	female_adept = "Komrade"
-	keys = list("russia", "mother russia", "motherland", "lenin", "stalin")
+	keys = list("russia", "mother russia", "motherland", "lenin", "stalin", "tankie", "north korea", "best korea", "kim jong-il", "kim jong-un")
 
 /datum/religion/communism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
@@ -1517,8 +1517,8 @@
 
 /datum/religion/degenerate
 	name = "Degeneracy"
-	deity_name = "Mai Waifu"
-	bible_name = "Boku No Pico"
+	deity_names = list("Mai Waifu","Shadman")
+	bible_name = ("Boku No Pico","Bible Black","Metamorphosis #177013")
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Degenerate"
 	female_adept = "Degenerate"
@@ -1562,4 +1562,9 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Cornholio"
 	female_adept = "Cornholio"
-	keys = list("cornholio", "tp", "toilet paper", "bunghole", "the great cornholio", "beavis")
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
+	keys = list("cornholio", "tp", "toilet paper", "bunghole", "beavis")
+
+/datum/religion/cornholio/equip_chaplain(var/mob/living/carbon/human/H)
+	H.reagents.add_reagent(HYPERZINE,10) // settle down, beavis
+	H.reagents.add_reagent(SUGAR,10)
