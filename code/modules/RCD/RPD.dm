@@ -184,7 +184,8 @@
 				busy  = TRUE // Busy to prevent switching schematic while it's in use.
 				our_schematic.set_layer(layer)
 				if(layer != 5 )
-					spawn(-1) our_schematic.attack(A, user)
+					spawn(-1)
+						our_schematic.attack(A, user)
 				else
 					var/t = our_schematic.attack(A, user)
 					if(!t) // No errors
