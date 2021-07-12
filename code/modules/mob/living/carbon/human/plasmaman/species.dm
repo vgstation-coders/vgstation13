@@ -41,7 +41,7 @@
 
 /datum/species/plasmaman/New()
 	..()
-	speech_filters += new datum/speech_filter/plasmaman
+	speech_filters += new /datum/speech_filter/plasmaman
 
 // -- Outfit datums --
 /datum/species/plasmaman/final_equip(var/mob/living/carbon/human/H)
