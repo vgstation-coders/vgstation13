@@ -42,7 +42,7 @@
 		if(species.flags & IS_PLANT)
 			if(nutrition > 500)
 				nutrition = 500
-			if(light_amount >= 3 && !reagents.has_any_reagents(list(HYPERZINE,PLANTBGONE)) //If there's enough light, you do not have hyperzine in body, and you don't have plant-b-gone inside you, heal
+			if(light_amount >= 3 && !reagents.has_any_reagents(list(HYPERZINE,PLANTBGONE))) //If there's enough light, you do not have hyperzine in body, and you don't have plant-b-gone inside you, heal
 				adjustBruteLoss(-(light_amount))
 				adjustToxLoss(-(light_amount))
 				adjustOxyLoss(-(light_amount))
