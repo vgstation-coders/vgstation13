@@ -121,3 +121,33 @@
 
 /datum/speech_filter/insectoid/New()
 	addReplacement("s", "z") //stolen from plasman code if it borks.
+
+// CHAVS, INNIT
+/datum/speech_filter/chav
+	expressions = list()
+
+/datum/speech_filter/chav/New()
+	// Now, finally regex
+	addReplacement("dick","prat")
+	addReplacement("comdom","knob'ead")
+	addReplacement("looking at","gawpin' at")
+	addReplacement("great","bangin'")
+	addReplacement("man","mate")
+	addPickReplacement("friend",list("mate","bruv","bledrin"))
+	addReplacement("what","wot")
+	addReplacement("drink","wet")
+	addReplacement("get","giz")
+	addReplacement("what","wot")
+	addReplacement("no thanks","wuddent fukken do one")
+	addReplacement("i don't know","wot mate")
+	addReplacement("no","naw")
+	addReplacement("robust","chin")
+	addWordReplacement("hi","how what how")
+	addReplacement("hello","sup bruv")
+	addReplacement("kill","bang")
+	addReplacement("murder","bang")
+	addReplacement("windows","windies")
+	addReplacement("window","windy")
+	addReplacement("break","do")
+	addReplacement("your","yer")
+	addReplacement("security","coppers")

@@ -192,31 +192,14 @@
 	..()
 	block = CHAVBLOCK
 
-/datum/dna/gene/disability/chav/OnSay(var/mob/M, var/datum/speech/speech)
-	// THIS ENTIRE THING BEGS FOR REGEX
-	speech.message = replacetext(speech.message,"dick","prat")
-	speech.message = replacetext(speech.message,"comdom","knob'ead")
-	speech.message = replacetext(speech.message,"looking at","gawpin' at")
-	speech.message = replacetext(speech.message,"great","bangin'")
-	speech.message = replacetext(speech.message,"man","mate")
-	speech.message = replacetext(speech.message,"friend",pick("mate","bruv","bledrin"))
-	speech.message = replacetext(speech.message,"what","wot")
-	speech.message = replacetext(speech.message,"drink","wet")
-	speech.message = replacetext(speech.message,"get","giz")
-	speech.message = replacetext(speech.message,"what","wot")
-	speech.message = replacetext(speech.message,"no thanks","wuddent fukken do one")
-	speech.message = replacetext(speech.message,"i don't know","wot mate")
-	speech.message = replacetext(speech.message,"no","naw")
-	speech.message = replacetext(speech.message,"robust","chin")
-	speech.message = replacetext(speech.message," hi ","how what how")
-	speech.message = replacetext(speech.message,"hello","sup bruv")
-	speech.message = replacetext(speech.message,"kill","bang")
-	speech.message = replacetext(speech.message,"murder","bang")
-	speech.message = replacetext(speech.message,"windows","windies")
-	speech.message = replacetext(speech.message,"window","windy")
-	speech.message = replacetext(speech.message,"break","do")
-	speech.message = replacetext(speech.message,"your","yer")
-	speech.message = replacetext(speech.message,"security","coppers")
+/datum/dna/gene/disability/chav/activate(var/mob/M)
+	if(..(M))
+		M.species.speech_filters += new datum/speech_filter/chav
+
+/datum/dna/gene/disability/chav/deactivate(var/mob/M, var/connected, var/flags)
+	if(..(M,connected,flags) && M.species && M.species.speech_filters)
+		M.species.speech_filters.Remove(typesof(/datum/speech_filter/chav))
+
 
 // WAS: /datum/bioEffect/swedish
 /datum/dna/gene/disability/swedish
