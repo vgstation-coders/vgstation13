@@ -395,9 +395,9 @@ var/global/list/whitelisted_species = list("Human")
 	wear_suit_icons = 'icons/mob/species/unathi/suit.dmi'
 
 
-/datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
-	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+/datum/species/unathi/New()
+	..()
+	speech_filters += new datum/speech_filter/plasmaman
 
 /datum/species/unathi/gib(mob/living/carbon/human/H)
 	..()
@@ -1221,14 +1221,14 @@ var/list/has_died_as_golem = list()
 		"brain" =    /datum/organ/internal/brain,
 		"eyes" =     /datum/organ/internal/eyes/compound/
 		)
-/datum/species/insectoid/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", "z") //stolen from plasman code if it borks.
-	..()
 
 	species_intro = "You are an Insectoid.<br>\
 					Your body is highly resistant to the initial effects of radiation exposure, and you'll be better able to defend against toxic chemicals. <br>\
 					However, your body is more susceptible to heat than that of other species. Resilient though you may be, heat and flame are your biggest concern."
 
+/datum/species/insectoid/New()
+	..()
+	speech_filters += new datum/speech_filter/insectoid
 
 /datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
 	var/sounds = rand(2,3)

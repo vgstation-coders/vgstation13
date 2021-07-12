@@ -106,3 +106,18 @@
 	addWordReplacement("(help|assist)\\smeow","kill meow") // help me(ow) -> kill meow
 	addReplacement("god","gosh")
 	addWordReplacement("(ass|butt)", "rump")
+
+// PLASMEMES
+/datum/speech_filter/plasmaman
+	expressions = list()
+
+/datum/speech_filter/plasmaman/New()
+	addReplacement("s", "s-s") //not using stutter("s") because it likes adding more s's.
+	addReplacement("s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+
+// INZECTOIDZ
+/datum/speech_filter/insectoid
+	expressions = list()
+
+/datum/speech_filter/insectoid/New()
+	addReplacement("s", "z") //stolen from plasman code if it borks.
