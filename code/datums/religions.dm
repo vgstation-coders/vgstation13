@@ -380,7 +380,7 @@
 
 // The list of all religions spacemen have designed, so far.
 /datum/religion/default
-	keys = list("christianity", "christ", "christian", "space jesus", "spessjesus")
+	keys = list("christianity", "christ", "christian", "spessjesus")
 	converts_everyone = TRUE
 	symbolstyle = 2
 	bookstyle = "Bible"
@@ -391,7 +391,7 @@
 	bible_name = "The Holy Bible"
 	male_adept = "Bishop"
 	female_adept = "Bishop"
-	keys = list("catholic", "jesus", "jesus christ", "catholicism", "roman catholicism", "pope")
+	keys = list("catholic", "jesus", "catholicism", "roman catholicism", "pope")
 	symbolstyle = 2
 	bookstyle = "Bible"
 
@@ -431,7 +431,7 @@
 	bible_name = "The Satanic Bible" //What I found on Google, ergo the truth
 	male_adept = "Magister"
 	female_adept = "Magistera"
-	keys = list("satan", "evil", "satanism", "bad")
+	keys = list("evil", "satanism", "bad")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	bookstyle = "Burning"
 
@@ -439,7 +439,7 @@
 	name = "Esoteric order of Dagon"
 	deity_name = "Cthulhu" //I hope it's spelt correctly
 	bible_names = list("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
-	keys = list("cthulhu", "old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
+	keys = list("old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
 	symbolstyle = 5
 	bookstyle = "Necronomicon" //also "Unaussprechlichen Kulten" "Ithaqua"
 
@@ -447,7 +447,7 @@
 	name = "Brotherhood of The Yellow Sign" //I'm fed up with people think I worship Dagon. We're moving out.
 	deity_name = "Hastur"
 	bible_name = "The King in Yellow" //The name of the titular fictional play in the 1895 book by Robert Chambers
-	keys = list("hastur","yellow sign","king in yellow","brotherhood of the yellow sign")
+	keys = list("yellow sign","king in yellow","brotherhood of the yellow sign")
 	bookstyle = "The King in Yellow"
 
 /datum/religion/islam
@@ -456,7 +456,7 @@
 	bible_name = "The Quran"
 	male_adept = "Imam"
 	female_adept = "Imam"
-	keys = list("islam", "muslim", "allah", "allah akbar", "allahu akbar", "moslem")
+	keys = list("islam", "muslim", "allah akbar", "allahu akbar", "moslem")
 	symbolstyle = 4
 	bookstyle = "Koran"
 
@@ -466,7 +466,7 @@
 	bible_name = "Barkley: Shut Up and Jam - Gaiden"
 	male_adept = "Master of Slam"
 	female_adept = "Mistress of Slam"
-	keys = list("slam", "bball", "basketball", "basket ball", "barkley", "charles barkley", "michael jordan", "lebron james", "vidgame", "B.L.O.O.D.M.O.S.E.S.", "chaos dunk")
+	keys = list("slam", "bball", "basketball", "basket ball", "barkley", "michael jordan", "lebron james", "vidgame", "B.L.O.O.D.M.O.S.E.S.", "chaos dunk")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vale
 
 /datum/religion/slam/equip_chaplain(var/mob/living/carbon/human/H)
@@ -489,7 +489,7 @@
 	bible_names = list("The Vedas", "The Mahabharata")
 	male_adept = "Guru"
 	female_adept = "Guru"
-	keys = list("hindu", "hinduism", "india", "designated")
+	keys = list("hindu", "hinduism", "india", "designated", "designated shitting streets", "poo in loo")
 
 /datum/religion/buddism
 	name = "Buddism"
@@ -497,7 +497,7 @@
 	bible_name = "The Tripitaka"
 	male_adept = "Monk"
 	female_adept = "Monk"
-	keys = list("buddha", "buddhism")
+	keys = list("buddhism")
 
 /datum/religion/bahai
 	name = "Baha'i Faith"
@@ -615,7 +615,7 @@
 	bible_names = list("The Biography of L. Ron Hubbard", "Dianetics")
 	male_adept = "OT III"
 	female_adept = "OT III"
-	keys = list("scientology", "dianetics", "john travola", "tom cruise", "beck")
+	keys = list("scientology", "dianetics", "john travolta", "tom cruise", "beck")
 	symbolstyle = 8
 	bookstyle = "Scientology"
 
@@ -625,7 +625,7 @@
 	bible_name = "The Principia Discordia"
 	male_adept = "Episkopos"
 	female_adept = "Episkopos"
-	keys = list("discordianism", "eris")
+	keys = list("discordianism")
 
 /datum/religion/rastafarianism
 	name = "rastafarianism"
@@ -649,7 +649,7 @@
 	bible_name = "Cult of Rome"
 	male_adept = "Pontifex"
 	female_adept = "Pontifex"
-	keys = list("latin", "rome", "roma", "roman", "caesar")
+	keys = list("latin", "roman", "caesar")
 	bookstyle = "Torah"
 
 /datum/religion/latin/equip_chaplain(var/mob/living/carbon/human/H)
@@ -669,7 +669,7 @@
 	bible_names = list("The Book of Lorgar", "The Book of Magnus")
 	male_adept = "Apostate Preacher"
 	female_adept = "Apostate Preacher"
-	keys = list("chaos", "khorne", "khorneholio", "blood for the blood god", "tzeentch", "just as planned")
+	keys = list("chaos", "khorneholio", "blood for the blood god", "just as planned")
 	bookstyle = "Burning"
 
 /datum/religion/imperium
@@ -678,7 +678,7 @@
 	bible_names = list("An Uplifting Primer", "Codex Astartes", "Codex Hereticus")
 	male_adept = "Confessor"
 	female_adept = "Prioress"
-	keys = list("imperium", "imperial cult", "god emperor of mankind", "emprah", "emps")
+	keys = list("imperium", "imperial cult", "emprah", "emps")
 
 /datum/religion/imperium/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/helmet/knight/interrogator(H), slot_head)
@@ -712,7 +712,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
+	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", "shitcurity", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "8chan", "tumblr", "9gag", "kekistan", "top kek", "topkek", "s4s")
 	convert_method = "standing both next to a table."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
@@ -841,7 +841,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Veterinarian"
 	female_adept = "Veterinarian"
-	keys = list("ianism", "ian", "dog", "puppy", "doggo", "pupper", "bork", "arf", "woof")
+	keys = list("ianism", "dog", "puppy", "doggo", "pupper", "bork", "arf", "woof")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
 	symbolstyle = 9
 	bookstyle = "Ianism"
@@ -856,7 +856,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Trial Admin"
 	female_adept = "Trial Admin"
-	keys = list("adminism", "admintology", "admin", "admins", "adminhelp", "adminbus", "admeme")
+	keys = list("adminism", "admintology", "admin", "admins", "adminhelp", "ahelp", "bwoink", "adminbus", "admeme")
 
 /datum/religion/coding
 	name = "Coding"
@@ -910,7 +910,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Atmospheric Technician"
 	female_adept = "Atmospheric Technician"
-	keys = list("busta", "bustatime", "zas", "airflow", "hardcore", "hardcores")
+	keys = list("busta", "zas", "airflow", "hardcore", "hardcores")
 
 /datum/religion/busta/equip_chaplain(var/mob/living/carbon/human/H)
 	if(!(M_HARDCORE in H.mutations))
@@ -969,7 +969,16 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Komrade"
 	female_adept = "Komrade"
-	keys = list("communism", "socialism", "commie", "russia", "mother russia", "motherland")
+	keys = list("communism", "socialism", "commie")
+
+/datum/religion/marxistleninism
+	name = "Marxist-Leninism"
+	deity_names = list("Vladimir Lenin", "Josef Stalin", "Chairman Mao", "Kim-Il Sung", "Fidel Castro")
+	bible_name = "Our Immediate Task" // lenin wrote it, i dunno
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Komrade"
+	female_adept = "Komrade"
+	keys = list("russia", "mother russia", "motherland", "lenin", "stalin")
 
 /datum/religion/communism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
@@ -997,22 +1006,22 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Senator"
 	female_adept = "Senator"
-	keys = list("freedom", "america", "muhrica", "usa", "jebus", "freedums", "1A", "1st amendment", "first amendment")
+	keys = list("freedom", "america", "muhrica", "usa", "jebus", "freedums", "1A", "1st amendment", "first amendment", "shart in mart", "do americans really", "amerifat", "le american bear")
 
 /datum/religion/america/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/libertyhat(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/libertycoat(H), slot_wear_suit)
 
-/datum/religion/nazism
-	name = "Nazism"
-	deity_name = "Adolf Hitler"
+/datum/religion/fascism
+	name = "Fascism" // something more broad than just the nazis
+	deity_name = ("Adolf Hitler", "Benito Mussolini", "Oswald Mosley")
 	bible_name = "Mein Kampf"
 	male_adept = "Feldbischof" //No seriously, that's a thing, look it up
 	female_adept = "Feldbischof"
-	keys = list("fascism", "nazi", "national socialism", "nazism", "fuhrer", "hitler", "mussolini", "reich")
+	keys = list("nazi", "national socialism", "nazism", "fuhrer", "hitler", "mussolini", "reich")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
-/datum/religion/nazism/equip_chaplain(var/mob/living/carbon/human/H)
+/datum/religion/fascism/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/naziofficer(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/officercoat(H), slot_wear_suit)
 
@@ -1022,7 +1031,7 @@
 	bible_name = "Space Law"
 	male_adept = "Nanotrasen Officer"
 	female_adept = "Nanotrasen Officer"
-	keys = list("security", "space law", "law", "nanotrasen", "centcomm", "secoff", "spesslaw")
+	keys = list("space law", "law", "nanotrasen", "centcomm", "secoff", "spesslaw")
 	convert_method = "performing a ritual with a flashbang and a screwdriver. You need to hold the flashbang, with its timer set to 5 seconds, your convert needs to hold the screwdriver and have a free empty hand."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 
@@ -1209,7 +1218,7 @@
 	bible_name =  "Honkmothers Coloring Book"
 	male_adept = "Co-Clown"
 	female_adept = "Co-Clown"
-	keys = list("honk", "clown", "honkmother")
+	keys = list("honk", "clown")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 	bookstyle = "Honk"
 
@@ -1297,7 +1306,7 @@
 	bible_name = "Mercy For Animals"
 	male_adept = "Animal Rights Activist"
 	female_adept = "Animal Rights Activist"
-	keys = list("vegan","vegetarian","veganism","vegetarianism", "animals", "animal rights")
+	keys = list("vegan", "vegetarian", "vegetarianism", "animals", "animal rights")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/leafy
 
 /datum/religion/vegan/equip_chaplain(var/mob/living/carbon/human/H)
@@ -1320,7 +1329,7 @@
 	bible_name = "The Joy of Painting"
 	male_adept = "Painter"
 	female_adept = "Painter"
-	keys = list("art", "bob ross", "happy little trees", "happy little clouds")
+	keys = list("art", "happy little trees", "happy little clouds")
 	bookstyle = "Scrapbook"
 
 /datum/religion/art/equip_chaplain(var/mob/living/carbon/human/H)
@@ -1335,7 +1344,7 @@
 	bible_name = "Cleanliness - Next to Godliness"
 	male_adept = "Janitor"
 	female_adept = "Janitor"
-	keys = list("clean","cleaning","Mr. Clean","janitor", "janny")
+	keys = list("clean", "cleaning", "janitor", "janny", "doing it for free")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vapor
 
 /datum/religion/clean/equip_chaplain(var/mob/living/carbon/human/H)
@@ -1350,7 +1359,7 @@
 	bible_name = "The Dokument"
 	male_adept = "Kommando"
 	female_adept = "Kommando"
-	keys = list("murdercube","murderkube", "murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea", "dakka")
+	keys = list("murdercube","murderkube", "murder/k/ube","forgotten weapons", "gun", "guns", "ammo", "trigger discipline", "ave nex alea", "dakka", "2A", "2nd amendment", "second amendment")
 	convert_method = "performing a ritual with a gun. The convert needs to be in good health and unafraid of being shot."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/dense
 	bookstyle = "The Dokument"
@@ -1403,7 +1412,7 @@
 	bible_name = "Guide to Robuttics"
 	male_adept = "Roboticist"
 	female_adept = "Roboticist"
-	keys = list("buttbot", "butt bot", "butt", "ass", "poo", "server crash", "comms spam")
+	keys = list("butt bot", "butt", "ass", "poo", "server crash", "comms spam")
 
 /datum/religion/buttbot/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/butt(H), slot_head)
@@ -1432,7 +1441,7 @@
 	bible_name = "Spess.TV End User License Agreement"
 	male_adept = "Donitos Pope"
 	female_adept = "Donitos Priestess"
-	keys = list("gaming", "esport", "esports", "e-sports", "electronic sports", "donitos", "geometer")
+	keys = list("gaming", "esport", "esports", "electronic sports", "donitos", "geometer")
 	convert_method = "having others hold a bag of Donitos, while you do the same."
 	bookstyle = "Creeper"
 
@@ -1522,24 +1531,24 @@
 
 /datum/religion/egypt
 	name = "Kemetism"
-	deity_names = list("Osiris", "Anubis", "Ra", "Horus", "Kek")
+	deity_names = list("Osiris", "Anubis", "Ra", "Horus", "Kek", "Thoth")
 	bible_name = "The Pyramid Texts"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Hem-Netjer"
 	female_adept = "Hemet-Netjer"
-	keys = list("kemetism", "egypt", "egyptian", "kangz", "we wuz kangz", "hotep")
+	keys = list("kemetism", "egypt", "egyptian", "kangz", "we wuz kangz", "hotep", "shadilay")
 
 /datum/religion/egypt/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/pharaoh(H), slot_head)
 
 /datum/religion/anprim
 	name = "Primitivism"
-	deity_name = "Grug"
+	deity_names = ("Grug","Ted Kaczynski")
 	bible_name = "Industrial Society and Its Future"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Primitive"
 	female_adept = "Primitive"
-	keys = list("anarcho-primitivism", "primitivism", "anprim", "primitive", "grug")
+	keys = list("anarcho-primitivism", "primitivism", "anprim", "primitive", "grug", "unabomber")
 	bookstyle = "Scrapbook"
 
 /datum/religion/anprim/equip_chaplain(var/mob/living/carbon/human/H)
