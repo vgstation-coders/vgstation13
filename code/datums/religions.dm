@@ -395,6 +395,26 @@
 	symbolstyle = 2
 	bookstyle = "Bible"
 
+/datum/religion/orthodoxy
+	name = "Orthodox Christianity"
+	deity_name = "Jesus Christ"
+	bible_name = "The Holy Bible"
+	male_adept = "Patriarch"
+	female_adept = "Matriarch"
+	keys = list("orthodox", "orthodoxy")
+	symbolstyle = 2
+	bookstyle = "Bible"
+
+/datum/religion/protestant
+	name = "Protestant Christianity"
+	deity_name = "Jesus Christ"
+	bible_name = "The 95 Theses" // martin luthers thing
+	male_adept = "Reverend" // anglican one, i dunno
+	female_adept = "Reverend"
+	keys = list("protestant", "protestantism", "martin luther", "luther", "lutheranism", "evangelical", "baptist", "prod", "methodist", "quaker", "anglicanism", "church of england", "presybterianism")
+	symbolstyle = 2
+	bookstyle = "Bible"
+
 /datum/religion/catholic/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/mitre(H), slot_head)
 
@@ -478,6 +498,14 @@
 	male_adept = "Monk"
 	female_adept = "Monk"
 	keys = list("buddha", "buddhism")
+
+/datum/religion/bahai
+	name = "Baha'i Faith"
+	deity_name = "Baha'u'llah" // founder
+	bible_name = "Kitab-i-Aqdas"
+	male_adept = "Baha'i Worshipper" // they have no priests or something
+	female_adept = "Baha'i Worshipper"
+	keys = list("bahai","bahai faith")
 
 /datum/religion/shintoism
 	name = "Shintoism"
@@ -1517,3 +1545,12 @@
 /datum/religion/anprim/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/under/shorts/black, slot_w_uniform)
 	H.equip_or_collect(new /obj/item/clothing/suit/unathi/mantle(H), slot_wear_suit)
+
+/datum/religion/cornholio
+	name = "Cornholism"
+	deity_name = "The Great Cornholio"
+	bible_name = "Teachings of the Bunghole"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Cornholio"
+	female_adept = "Cornholio"
+	keys = list("cornholio", "tp", "toilet paper", "bunghole", "the great cornholio", "beavis")
