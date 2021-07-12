@@ -200,7 +200,7 @@
 	addReplacement("dumb","smart")
 	addWordReplacement("awful","great")
 	addPickReplacement("gay",list("nice","ok","alright"))
-	addWordReplacement("\\b(horrible|terrifying)",list("fun","pleasant","lovely","wonderful")
+	addWordReplacement("\\b(horrible|terrifying)",list("fun","pleasant","lovely","wonderful"))
 	addWordReplacement("terrible","terribly fun")
 	addWordReplacement("gross","cool")
 	addWordReplacement("disgusting","amazing")
