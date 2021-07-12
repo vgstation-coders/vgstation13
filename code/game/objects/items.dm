@@ -1482,7 +1482,8 @@ var/global/list/image/blood_overlays = list()
 
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
-	speech.message = speech_filter.FilterSpeech(speech.message)
+	if(speech_filter)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 	return
 
 /obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
