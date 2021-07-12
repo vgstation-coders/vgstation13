@@ -90,7 +90,7 @@
 
 	// Note: Comes BEFORE other stuff.
 	// Trying to remember all the stupid fucking furry memes is hard
-	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger)\\b",
+	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|shitcurity)",
 		list(
 			"silly rabbit",
 			"sandwich", // won't work too well with plurals OH WELL
@@ -104,8 +104,8 @@
 	addReplacement("shit","scat")
 	addReplacement("scratch","scritch")
 	addWordReplacement("(help|assist)\\smeow","kill meow") // help me(ow) -> kill meow
-	addReplacement("god","gosh")
-	addWordReplacement("(ass|butt)", "rump")
+	addReplacement("god",list("gosh","golly"))
+	addPickReplacement("(ass|butt)", list("rump", "tush", "behind", "rear"))
 
 // LIZARDS-SS-S
 /datum/speech_filter/unathi
@@ -127,7 +127,7 @@
 	expressions = list()
 
 /datum/speech_filter/cluwne/New()
-	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
+	addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|faggot|security|shitcurity)",
 	list(
 		"honker",
 		"fun police",
@@ -157,25 +157,28 @@
 	addReplacement("comdom","knob'ead")
 	addReplacement("looking at","gawpin' at")
 	addReplacement("great","bangin'")
-	addReplacement("man","mate")
-	addPickReplacement("friend",list("mate","bruv","bledrin"))
+	addWordReplacement("man","mate")
+	addPickReplacement("friend",list("mate","bruv","bledrin","fam"))
 	addReplacement("what","wot")
 	addReplacement("drink","wet")
-	addReplacement("get","giz")
+	addWordReplacement("get","giz")
 	addReplacement("what","wot")
 	addReplacement("no thanks","wuddent fukken do one")
-	addReplacement("i don't know","wot mate")
-	addReplacement("no","naw")
+	addReplacement("\\b(don't know|dunno)","don't bleedin knaw")
+	addReplacement("\\b(isn't|ain't)\\sit","innit")
+	addPickReplacement("\\b(very|absolutely|completely|utterly|totally)",list("well","right","proper"))
+	addPickReplacement("\\b(retard|dumbass|idiot|moron)",list("spastic","spazzer","mong","bell-end"))
+	addWordReplacement("no","naw")
 	addReplacement("robust","chin")
 	addWordReplacement("hi","how what how")
 	addReplacement("hello","sup bruv")
-	addReplacement("kill","bang")
-	addReplacement("murder","bang")
+	addWordReplacement("\\b(murder|kill)","bang")
 	addReplacement("windows","windies")
 	addReplacement("window","windy")
-	addReplacement("break","do")
-	addReplacement("your","yer")
-	addReplacement("security","coppers")
+	addWordReplacement("break","do")
+	addWordReplacement("your","yer")
+	addWordReplacement("\\b(sec|security|shitcurity)","coppers")
+	//addReplacement("?",", innit?")
 
 // BORK BORK BORK
 /datum/speech_filter/swedish
@@ -183,6 +186,7 @@
 
 /datum/speech_filter/swedish/New()
 	addReplacement("w","v")
+	addReplacement("\\b(ow|oh|ou|oa|au)","er")
 
 // How nice
 /datum/speech_filter/smile
@@ -213,26 +217,29 @@
 	AddReplacement("whore","lady")
 	AddWordReplacement("nerd","smart guy")
 	AddWordReplacement("moron","fun person")
-	AddWordReplacement("IT'S LOOSE","EVERYTHING IS FINE")
+	AddWordReplacement("\\b(SINGULOOSE|PLASMAFLOOD|PLASMAFLUBB)","PERFECTLY NORMAL STATION")
+	AddWordReplacement("IT'S \\b(ROGUE|LOOSE)","EVERYTHING IS FINE")
+	AddWordReplacement("\\b(ROGUE|ROUGE|LOOSE)","FINE")
 	AddWordReplacement("rape","hug fight")
 	AddWordReplacement("idiot","genius")
 	AddReplacement("fat","thin")
 	AddWordReplacement("beer","water with ice")
 	AddWordReplacement("drink","water")
-	AddWordReplacement("feminist","empowered woman")
-	AddWordReplacement("i hate you","you're mean")
+	AddWordReplacement("\\b(feminist|feminazi|SJW|social justice warrior)","empowered woman")
+	AddWordReplacement("\\b(fuck you|i hate you|kill yourself|go die)","you're mean")
 	AddWordReplacement("nigger","african american")
-	AddWordReplacement("jew","jewish")
-	AddReplacement("shit","shiz")
-	AddReplacement("crap","poo")
+	AddWordReplacement("faggot","effeminate male")
+	AddPickReplacement("fag", list("fig", "friend"))
+	AddWordReplacement("tranny","felinid")
+	AddWordReplacement("trannies","felinids")
+	AddReplacement("\\b(shit|crap)","poo")
 	AddReplacement("slut","tease")
 	AddReplacement("ass","butt")
-	AddWordReplacement("damn","dang")
-	AddReplacement("fuck","")
-	AddWordReplacement("penis","privates")
-	AddWordReplacement("cunt","privates")
+	AddWordReplacement("damn",list("darn","dang"))
+	AddReplacement("hell","heck")
+	AddReplacement("fuck","gently caress")
+	AddWordReplacement("\\b(penis|cunt|vagina)","privates")
 	AddReplacement("dick","jerk")
-	AddWordReplacement("vagina","privates")
 
 // WHOA MAMA
 /datum/speech_filter/elvis
@@ -242,11 +249,13 @@
 	AddWordReplacement("im not","I ain't")
 	AddWordReplacement("i'm not","I aint")
 	AddPickReplacement("girl",list("honey","baby","baby doll"))
-	AddPickReplacement("man",list("son","buddy","brother", "pal", "friendo"))
+	AddPickReplacement("man",list("son", "buddy", "brother", "pal", "friendo"))
 	AddWordReplacement("out of","outta")
-	AddWordReplacement("thank you","thank you, thank you very much")
+	AddWordReplacement("\\b(thank you|thanks)","thank you, thank you very much")
 	AddWordReplacement("what are you","whatcha")
-	AddPickReplacement("yes",list("sure", "yea"))
-	AddWordReplacement("faggot","square")
-	AddWordReplacement("muh valids","my kicks")
-	AddWordReplacement("vox"," bird ")
+	AddWordReplacement("what do you","whaddya")
+	AddPickReplacement("yes",list("sure", "yea", "sure thing", "that's right"))
+	AddWordReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|shitcurity|faggot)","square")
+	AddWordReplacement("valids","kicks")
+	AddReplacement("\\b(v|p)ox","bird")
+	AddReplacement("\\b(insect|insectoid)","bug")
