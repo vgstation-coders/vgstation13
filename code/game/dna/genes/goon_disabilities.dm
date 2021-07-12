@@ -92,52 +92,10 @@
 /datum/dna/gene/disability/smile/New()
 	..()
 	block = SMILEBLOCK
+	speech_filter = new /datum/speech_filter/smile
 
 /datum/dna/gene/disability/smile/OnSay(var/mob/M, var/datum/speech/speech)
-	//Time for a friendly game of SS13
-	speech.message = replacetext(speech.message,"stupid","smart")
-	speech.message = replacetext(speech.message,"retard","genius")
-	speech.message = replacetext(speech.message,"unrobust","robust")
-	speech.message = replacetext(speech.message,"dumb","smart")
-	speech.message = replacetext(speech.message,"awful","great")
-	speech.message = replacetext(speech.message,"gay",pick("nice","ok","alright"))
-	speech.message = replacetext(speech.message,"horrible","fun")
-	speech.message = replacetext(speech.message,"terrible","terribly fun")
-	speech.message = replacetext(speech.message,"terrifying","wonderful")
-	speech.message = replacetext(speech.message,"gross","cool")
-	speech.message = replacetext(speech.message,"disgusting","amazing")
-	speech.message = replacetext(speech.message,"loser","winner")
-	speech.message = replacetext(speech.message,"useless","useful")
-	speech.message = replacetext(speech.message,"oh god","cheese and crackers")
-	speech.message = replacetext(speech.message,"jesus","gee wiz")
-	speech.message = replacetext(speech.message,"weak","strong")
-	speech.message = replacetext(speech.message,"kill","hug")
-	speech.message = replacetext(speech.message,"murder","tease")
-	speech.message = replacetext(speech.message,"ugly","beutiful")
-	speech.message = replacetext(speech.message,"douchbag","nice guy")
-	speech.message = replacetext(speech.message,"whore","lady")
-	speech.message = replacetext(speech.message,"nerd","smart guy")
-	speech.message = replacetext(speech.message,"moron","fun person")
-	speech.message = replacetext(speech.message,"IT'S LOOSE","EVERYTHING IS FINE")
-	speech.message = replacetext(speech.message,"rape","hug fight")
-	speech.message = replacetext(speech.message,"idiot","genius")
-	speech.message = replacetext(speech.message,"fat","thin")
-	speech.message = replacetext(speech.message,"beer","water with ice")
-	speech.message = replacetext(speech.message,"drink","water")
-	speech.message = replacetext(speech.message,"feminist","empowered woman")
-	speech.message = replacetext(speech.message,"i hate you","you're mean")
-	speech.message = replacetext(speech.message,"nigger","african american")
-	speech.message = replacetext(speech.message,"jew","jewish")
-	speech.message = replacetext(speech.message,"shit","shiz")
-	speech.message = replacetext(speech.message,"crap","poo")
-	speech.message = replacetext(speech.message,"slut","tease")
-	speech.message = replacetext(speech.message,"ass","butt")
-	speech.message = replacetext(speech.message,"damn","dang")
-	speech.message = replacetext(speech.message,"fuck","")
-	speech.message = replacetext(speech.message,"penis","privates")
-	speech.message = replacetext(speech.message,"cunt","privates")
-	speech.message = replacetext(speech.message,"dick","jerk")
-	speech.message = replacetext(speech.message,"vagina","privates")
+	..()
 	if(prob(30))
 		speech.message += " check your privilege."
 
@@ -206,7 +164,7 @@
 
 /datum/dna/gene/disability/swedish/OnSay(var/mob/M, var/datum/speech/speech)
 	// svedish!
-	speech.message = replacetext(speech.message,"w","v")
+	..()
 	if(prob(30))
 		speech.message += " Bork[pick("",", bork",", bork, bork")]!"
 
