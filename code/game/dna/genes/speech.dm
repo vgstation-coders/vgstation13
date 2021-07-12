@@ -267,7 +267,7 @@
 	addWordReplacement("captain", "CAPITÁN")
 	addWordReplacement("station", "ESTACIÓN")
 	addWordReplacement("sir", "SEÑOR")
-	addWordReplacement("the ", "el")
+	addPickReplacement("the", list("el","la"))
 	addWordReplacement("my", "mi")
 	addWordReplacement("is", "es")
 	addWordReplacement("it's", "es")
