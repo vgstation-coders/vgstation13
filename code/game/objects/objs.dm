@@ -45,6 +45,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
+	// Does this item have a slime installed?
+	var/has_slime = 0
+
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
 	return FALSE
@@ -315,6 +318,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/shuttle_act(datum/shuttle/S)
 	return qdel(src)
+
+/obj/slime_act(primarytype, mob/user)
+	if(has_slime)
+		to_chat(user, "\the [src] already has a slime extract attached.")
+		return FALSE
 
 /obj/singularity_pull(S, current_size)
 	lazy_invoke_event(/lazy_event/on_before_move)
