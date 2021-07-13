@@ -699,3 +699,12 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/potassium/New()
 	..()
 	reagents.add_reagent(POTASSIUM, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/carppheromones
+	name = "Carp Pheromones Bottle"
+	desc = "A bottle filled with pheromones. It smells awful. A small decal shows a space carp giving a thumbs... err... fins up."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/carppheromones/New()
+	..()
+	reagents.add_reagent(CARPPHEROMONES, 30)
