@@ -476,6 +476,8 @@ var/list/headset_modes = list(
 
 	if(reagents.has_any_reagents(HYPERZINES))
 		speech.message = replacetext(speech.message," ","") // motor mouth
+		speech.message = replacetext(speech.message,",","") // motor mouth
+		speech.message = replacetext(speech.message,";","") // motor mouth
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)
