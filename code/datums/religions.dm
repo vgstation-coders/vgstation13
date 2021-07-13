@@ -712,7 +712,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", "shitcurity", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "8chan", "tumblr", "9gag", "kekistan", "top kek", "topkek", "s4s")
+	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", "shitcurity", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "8chan", "tumblr", "9gag", "kekistan", "top kek", "topkek", "s4s", "[s4s]", "/b/", "/b/tard", "/pol/")
 	convert_method = "standing both next to a table."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
@@ -1218,7 +1218,7 @@
 	bible_name =  "Honkmothers Coloring Book"
 	male_adept = "Co-Clown"
 	female_adept = "Co-Clown"
-	keys = list("honk", "clown")
+	keys = list("honk", "clown", "shoe snatchin willy", "slip", "banana", "bananas", "slipping", "shoe snatching")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 	bookstyle = "Honk"
 
@@ -1593,16 +1593,16 @@
 	male_adept = "Troll"
 	female_adept = "Troll"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
-	keys = list("troll", "trolls", "trolling", "a little trolling", "grief", "griff", "griffon", "doing a little trolling", "ruse", "prank", "lulz", "raids")
+	keys = list("troll", "trolls", "trolling", "a little trolling", "grief", "griff", "griffon", "doing a little trolling", "ruse", "prank", "lulz", "raids", "/i/nsurgent", "/i/nsurgency", "habbo hotel", "habbo", "pools closed")
 
 /datum/religion/pomf
 	name = "Pomfism"
 	deity_name = "Pomf"
 	bible_name = "The Book of Pomf"
 	bible_type = /obj/item/weapon/storage/bible/booze
-	male_adept = "Adept of Pomf"
-	female_adept = "Adeptess of Pomf"
-	keys = list("pomf", "pomf123", "chicken", "chikun", "pomf chicken", "d3athrow", "badclown", "sylveon", "eevee", "beevee")
+	male_adept = "Chicken Farmer"
+	female_adept = "Chicken Farmer"
+	keys = list("pomf", "pomf123", "chicken", "chikun", "pomf chicken", "d3athrow", "badclown", "sylveon", "eevee", "beevee", "/vg/station", "/vg/station13", "pomfcoin")
 
 /datum/religion/pomf/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/chicken/white(H), slot_head)
