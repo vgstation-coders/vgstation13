@@ -1699,7 +1699,7 @@
 		return FALSE
 	
 	// Everything is ok : begin the conversion
-	if(subject.active_hand = GRASP_RIGHT_HAND)
+	if(subject.active_hand == GRASP_RIGHT_HAND)
 		preacher.zone_sel.selecting = LIMB_RIGHT_HAND
 	else
 		preacher.zone_sel.selecting = LIMB_LEFT_HAND
