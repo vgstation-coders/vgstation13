@@ -558,7 +558,7 @@
 	desc = "Drymate brand space carp baby cubes, shipped from F1SH-1NG. Just add water!"
 	icon_state = "spacecarpcubebox"
 
-/obj/item/weapon/storage/box/monkeycubes/mousecubes/New()
+/obj/item/weapon/storage/box/monkeycubes/spacecarpcube/New()
 	..()
 	for(var/i = 1; i <= 5; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube(src)
