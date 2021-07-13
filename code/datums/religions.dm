@@ -1664,3 +1664,51 @@
 
 	convert(subject, preacher)
 	return TRUE
+
+/datum/religion/fightclub
+	name = "Fight Club"
+	deity_names = "Tyler Durden"
+	bible_name = "The Rules of Fight Club"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Tyler Durden" // spoilers?
+	female_adept = "Tyler Durden"
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vale
+	//its some caustic thing in the movie but we dont have that chem
+	convert_method = "splashing sulphuric acid on the convert's hand. You must be holding the container, and your convert must have an empty active hand."
+	keys = list("fight club", "rules 1 and 2")
+
+/datum/religion/fightclub/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/held_beaker = preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers)
+	if(!held_beaker)
+		to_chat(preacher, "<span class='warning'>You need to hold a beaker to begin the conversion.</span>")
+		return FALSE
+
+	var/obj/item/weapon/reagent_containers/B = held_beaker
+	if(B.reagents.get_master_reagent_name() != SACID)
+		to_chat(preacher, "<span class='warning'>Your beaker needs sulphuric acid in it!.</span>")
+		return FALSE
+
+	if(!subject.put_in_hand_check(B, subject.active_hand))
+		to_chat(preacher, "<span class='warning'>Your subject needs an empty active hand.</span>")
+		return FALSE
+
+	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+	
+	// Everything is ok : begin the conversion
+	if(subject.active_hand = GRASP_RIGHT_HAND)
+		preacher.zone_sel.selecting = LIMB_RIGHT_HAND
+	else
+		preacher.zone_sel.selecting = LIMB_LEFT_HAND
+	splash_sub(B.reagents, subject, 5, preacher)
+	preacher.grab_mob(subject)
+	if(do_after(preacher, subject, 10 SECONDS))
+		subject.visible_message("<span class='notice'>\The [subject] has accepted the initiation. He's now a full-fledged follower of [deity_name].</span>")
+
+		convert(subject, preacher)
+		return TRUE
+	subject.visible_message("<span class='notice'>\The [subject] pulled away before the initiation could finish. What a wuss.</span>")
+	return FALSE
