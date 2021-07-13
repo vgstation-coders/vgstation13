@@ -324,7 +324,7 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[HAIR_LAYER]
 
 	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
-	if( !head_organ || (head_organ.status & ORGAN_DESTROYED) )
+	if( !head_organ || (head_organ.status & ORGAN_DESTROYED) || head_organ.disfigured)
 		if(update_icons)
 			update_icons()
 		return
