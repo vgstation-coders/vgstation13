@@ -1014,7 +1014,7 @@
 
 /datum/religion/fascism
 	name = "Fascism" // something more broad than just the nazis
-	deity_name = ("Adolf Hitler", "Benito Mussolini", "Oswald Mosley")
+	deity_names = ("Adolf Hitler", "Benito Mussolini")
 	bible_name = "Mein Kampf"
 	male_adept = "Feldbischof" //No seriously, that's a thing, look it up
 	female_adept = "Feldbischof"
@@ -1578,22 +1578,12 @@
 	male_adept = "Schizo"
 	female_adept = "Schizo"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
-	keys = list("schizophrenia", "schizo", "meds", "ss13g", "the thread", "shapka", "wesley willis", "time cube", "timecube", "tranny metaclub", "lifeweb")
+	keys = list("schizophrenia", "schizo", "meds", "ss13g", "the thread", "wesley willis", "time cube", "timecube", "lifeweb")
 	bookstyle = "Scrapbook"
 
 /datum/religion/schizo/equip_chaplain(var/mob/living/carbon/human/H)
 	H.reagents.add_reagent(MINDBREAKER,10)
 	H.reagents.add_reagent(SPACE_DRUGS,10)
-
-/datum/religion/troll
-	name = "Trolling"
-	deity_names = list("Le Master Trolle","Stgggs","George Melons","ACKFlags") //ACKFlags was the GNAA founder
-	bible_name = "Trolling: A art"
-	bible_type = /obj/item/weapon/storage/bible/booze
-	male_adept = "Troll"
-	female_adept = "Troll"
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
-	keys = list("troll", "trolls", "trolling", "a little trolling", "grief", "griff", "griffon", "doing a little trolling", "ruse", "prank", "lulz", "raids", "/i/nsurgent", "/i/nsurgency", "habbo hotel", "habbo", "pools closed")
 
 /datum/religion/pomf
 	name = "Pomfism"
@@ -1602,7 +1592,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Chicken Farmer"
 	female_adept = "Chicken Farmer"
-	keys = list("pomf", "pomf123", "chicken", "chikun", "pomf chicken", "d3athrow", "badclown", "sylveon", "eevee", "beevee", "/vg/station", "/vg/station13", "pomfcoin")
+	keys = list("pomf", "pomf123", "chicken", "chikun", "pomf chicken", "d3athrow", "badclown", "/vg/station", "/vg/station13", "pomfcoin")
 
 /datum/religion/pomf/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/chicken/white(H), slot_head)
