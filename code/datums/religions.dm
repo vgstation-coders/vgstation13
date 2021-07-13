@@ -708,7 +708,7 @@
 /datum/religion/retard
 	name = "Retardation"
 	deity_name = "Brian Damag" //Ha
-	bible_names = list("Woody's Got Wood: The Aftermath", "War of the Cocks", "Sweet Bro and Hella Jef: Expanded Edition", "The Book of Pomf")
+	bible_names = list("Woody's Got Wood: The Aftermath", "War of the Cocks", "Sweet Bro and Hella Jef: Expanded Edition")
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
@@ -1593,3 +1593,22 @@
 	female_adept = "Troll"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 	keys = list("troll","trolls","trolling","a little trolling","grief","griff","griffon","doing a little trolling","ruse","prank","lulz","raids")
+
+/datum/religion/pomf
+	name = "Pomfism"
+	deity_name = "Pomf"
+	bible_name = "The Book of Pomf"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Adept of Pomf"
+	female_adept = "Adeptess of Pomf"
+	keys = list("pomf", "pomf123", "chicken", "chikun", "pomf chicken", "d3athrow", "badclown", "sylveon", "eevee", "beevee")
+
+/datum/religion/bombs
+	name = "Cuban Petism"
+	deity_name = "Cuban Pete"
+	bible_name = "Guide to Toxins"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Plasma Researcher"
+	female_adept = "Plasma Researcher"
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
+	keys = list("bomb", "bombs", "toxins", "maxcap", "dudebombs", "dude bombs lmao", "rhumba beat", "chik chikky boom", "ttv", "tank transfer valve")
