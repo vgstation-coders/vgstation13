@@ -1517,8 +1517,8 @@
 
 /datum/religion/degenerate
 	name = "Degeneracy"
-	deity_names = list("Mai Waifu","Shadman")
-	bible_names = list("Boku No Pico","Bible Black","Metamorphosis #177013")
+	deity_names = list("Mai Waifu","Shadman","The Librarian")
+	bible_names = list("Boku No Pico","Bible Black","Metamorphosis #177013","The Lusty Xenomorph Maid")
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Degenerate"
 	female_adept = "Degenerate"
