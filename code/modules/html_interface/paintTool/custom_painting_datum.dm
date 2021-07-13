@@ -3,6 +3,14 @@
 #define BRUSH_STRENGTH_MAX 1
 #define BRUSH_STRENGTH_MIN 0
 
+
+
+/*
+ * PAINTING UTENSIL DATUM
+ *
+ * Add any items that can be used to it's New() so it is properly converted into the right data
+ *
+*/
 /datum/painting_utensil
 	var/min_strength = 0
 	var/max_strength = 1
@@ -22,12 +30,27 @@
 		palette += c.colour
 		palette += c.shadeColour
 
+	if (istype(held_item, /obj/item/weapon/hair_dye))
+		var/obj/item/weapon/hair_dye/h = held_item
+		max_strength = PENCIL_STRENGTH_MAX
+		min_strength = PENCIL_STRENGTH_MIN
+		palette += rgb(h.color_r, h.color_g, h.color_b)
+
 	if (istype(held_item, /obj/item/weapon/painting_brush))
 		var/obj/item/weapon/painting_brush/b = held_item
 		if (b.paint_color)
 			max_strength = BRUSH_STRENGTH_MAX
 			min_strength = BRUSH_STRENGTH_MIN
 			palette += b.paint_color
+
+/*
+* CUSTOM PAINTING DATUM
+*
+* Add this to any object you should be able to paint on, setting said object as this datum's parent, either through New()
+* or set_parent() if moving this datum to a different object
+*
+* Call interact() when the user starts painting
+*/
 
 /datum/custom_painting
 	var/parent
