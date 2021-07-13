@@ -44,6 +44,7 @@
 #define VG_BIRTHDAY "/vg/station Anniversary"
 #define WORLD_BEE_DAY "World Bee Day"
 #define INTERNATIONAL_CLOWN_DAY "International Clown Day"
+#define SPACE_ASSHOLE "St. Space Asshole's Day"
 
 //timeslots as strings
 #define SLEEPTIME "the morning shift" //3 to 11
