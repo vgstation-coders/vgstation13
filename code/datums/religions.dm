@@ -1615,8 +1615,51 @@
 	male_adept = "Plasma Researcher"
 	female_adept = "Plasma Researcher"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
+	convert_method = "performing a ritual with an IED casing that only needs cable coils to be completed. You need to be holding the IED, and your convert needs to be holding the cable coil."
 	keys = list("bomb", "bombs", "toxins", "maxcap", "dudebombs", "dude bombs lmao", "rhumba beat", "chik chikky boom", "ttv", "tank transfer valve")
 
 /datum/religion/bombs/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/sombrero(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/poncho(H), slot_wear_suit)
+
+/datum/religion/bombs/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/held_ied = preacher.find_held_item_by_type(/obj/item/weapon/grenade/iedcasing)
+	if(!held_ied)
+		to_chat(preacher, "<span class='warning'>You need to hold an IED to begin the conversion.</span>")
+		return FALSE
+
+	var/held_cable = subject.find_held_item_by_type(/obj/item/weapon/stack/cable_coil)
+	if (!held_cable)
+		to_chat(preacher, "<span class='warning'>The subject needs to hold a cable to begin the conversion.</span>")
+		return FALSE
+	
+	var/obj/item/weapon/grenade/iedcasing/F = preacher.held_items[held_ied]
+	var/obj/item/stack/cable_coil/S = subject.held_items[held_cable]
+
+	if (F.assembled > 1)
+		to_chat(preacher, "<span class='warning'>Your IED needs to not be wired yet!</span>")
+		return FALSE
+
+	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	preacher.u_equip(F)
+
+	// Everything is ok : begin the conversion
+	if (!subject.put_in_hands(F))
+		subject.visible_message("<span class='warning'>\The [subject] accepted conversion, but didn't manage to pick up the IED. How embarassing.</span>")
+		return FALSE
+	
+	// Assemble the nade!
+	F.attackby(S, subject)
+	sleep(0.1 SECONDS)
+	F.attack_self(subject)
+	
+	subject.visible_message("<span class='notice'>\The [subject] masterfully assembled the mistake. He's now a full-fledged follower of [deity_name].</span>")
+	to_chat(subject, "<span class='danger'>Now ditch that bomb, dumbass!</span>")
+
+	convert(subject, preacher)
+	return TRUE
