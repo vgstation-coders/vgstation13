@@ -431,7 +431,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/device_tools/cipherkey
 	name = "Syndicate Encryption Key"
-	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Access to the Syndicate radio channel is also granted. Screwdriver to replace encryption keys not included."
+	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Access to the Syndicate radio channel is also granted. Use :t to speak over the syndicate channel. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/syndicate/hacked
 	cost = 4
 
