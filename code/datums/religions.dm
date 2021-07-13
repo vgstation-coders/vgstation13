@@ -1522,7 +1522,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Degenerate"
 	female_adept = "Degenerate"
-	keys = list("degeneracy", "catgirls", "felinids", "tajaran", "tajarans", "catbeasts", "catbeast", "furry", "furries", "furry fandom")
+	keys = list("degeneracy", "catgirls", "felinids", "tajaran", "tajarans", "catbeasts", "catbeast", "furry", "furries", "furry fandom", "skyrat", "vorestation", "citadel")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/degenerate/equip_chaplain(var/mob/living/carbon/human/H)
