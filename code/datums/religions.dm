@@ -1565,8 +1565,9 @@
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 	keys = list("cornholio", "tp", "toilet paper", "bunghole", "beavis")
 
+//TODO: some conversion ceremony with surgical drills to make stigmatas from lake titticaca
 /datum/religion/cornholio/equip_chaplain(var/mob/living/carbon/human/H)
-	H.reagents.add_reagent(HYPERZINE,10) // settle down, beavis
+	H.reagents.add_reagent(COFFEE,10) // settle down, beavis
 	H.reagents.add_reagent(SUGAR,10)
 
 /datum/religion/schizo
@@ -1577,7 +1578,7 @@
 	male_adept = "Schizo"
 	female_adept = "Schizo"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
-	keys = list("schizophrenia", "schizo", "meds", "ss13g", "the thread", "shapka", "wesley willis", "time cube")
+	keys = list("schizophrenia", "schizo", "meds", "ss13g", "the thread", "shapka", "wesley willis", "time cube", "timecube", "tranny metaclub", "lifeweb")
 	bookstyle = "Scrapbook"
 
 /datum/religion/schizo/equip_chaplain(var/mob/living/carbon/human/H)
@@ -1586,13 +1587,13 @@
 
 /datum/religion/troll
 	name = "Trolling"
-	deity_names = list("Le Master Trolle","Stgggs")
+	deity_names = list("Le Master Trolle","Stgggs","George Melons","ACKFlags") //ACKFlags was the GNAA founder
 	bible_name = "Trolling: A art"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Troll"
 	female_adept = "Troll"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
-	keys = list("troll","trolls","trolling","a little trolling","grief","griff","griffon","doing a little trolling","ruse","prank","lulz","raids")
+	keys = list("troll", "trolls", "trolling", "a little trolling", "grief", "griff", "griffon", "doing a little trolling", "ruse", "prank", "lulz", "raids")
 
 /datum/religion/pomf
 	name = "Pomfism"
@@ -1616,7 +1617,7 @@
 	female_adept = "Plasma Researcher"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/novaflowers
 	convert_method = "performing a ritual with an IED casing that only needs cable coils to be completed. You need to be holding the IED, and your convert needs to be holding the cable coil."
-	keys = list("bomb", "bombs", "toxins", "maxcap", "dudebombs", "dude bombs lmao", "rhumba beat", "chik chikky boom", "ttv", "tank transfer valve")
+	keys = list("bomb", "bombs", "bomber", "bomberman", "toxins", "maxcap", "dudebombs", "dude bombs lmao", "rhumba beat", "maracas", "chik chikky boom", "ttv", "tank transfer valve")
 
 /datum/religion/bombs/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/sombrero(H), slot_head)
