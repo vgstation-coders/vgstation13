@@ -1681,7 +1681,7 @@
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/vale
 	//its some caustic thing in the movie but we dont have that chem
 	convert_method = "splashing sulphuric acid on the convert's hand. You must be holding the container, and your convert must have an empty active hand."
-	keys = list("fight club", "rules 1 and 2")
+	keys = list("fight club", "rules 1 and 2", "fight", "fights", "fighting", "rage cage")
 
 /datum/religion/fightclub/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/held_beaker = preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers)
