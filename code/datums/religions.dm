@@ -1593,7 +1593,7 @@
 /datum/religion/conspiracy
 	name = "Conspiracy Theorist"
 	deity_names = list("Alex Jones", "David Icke", "Q")
-	bible_names = "The Info Wars"
+	bible_name = "The Info Wars"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Truthseeker"
 	female_adept = "Truthseeker"
