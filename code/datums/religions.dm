@@ -1590,6 +1590,20 @@
 	H.dna.SetSEState(HALLUCINATIONBLOCK, 1)
 	domutcheck(H, null, 1)
 
+/datum/religion/conspiracy
+	name = "Conspiracy Theorist"
+	deity_names = list("Alex Jones", "David Icke", "Q")
+	bible_names = "The Info Wars"
+	bible_type = /obj/item/weapon/storage/bible/booze
+	male_adept = "Truthseeker"
+	female_adept = "Truthseeker"
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
+	keys = list("conspiracy", "conspiracies", "qanon", "nwo", "illuminati", "deus ex", "jc denton", "chemtrails", "gay frogs", "5g", "wwg1wga")
+	bookstyle = "Scrapbook"
+
+/datum/religion/conspiracy/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/tinfoil(H), slot_head)
+
 /datum/religion/pomf
 	name = "Pomfism"
 	deity_name = "Pomf"
