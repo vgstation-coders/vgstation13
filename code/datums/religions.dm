@@ -1522,7 +1522,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Degenerate"
 	female_adept = "Degenerate"
-	keys = list("degeneracy", "catgirls", "felinids", "tajaran", "tajarans", "catbeasts", "catbeast", "furry", "furries", "furry fandom", "skyrat", "vorestation", "citadel")
+	keys = list("degeneracy", "catgirls", "felinids", "tajaran", "tajarans", "catbeasts", "catbeast", "furry", "furries", "furry fandom")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/degenerate/equip_chaplain(var/mob/living/carbon/human/H)
@@ -1579,7 +1579,7 @@
 	male_adept = "Schizo"
 	female_adept = "Schizo"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
-	keys = list("schizophrenia", "schizo", "meds", "ss13g", "the thread", "wesley willis", "time cube", "timecube", "lifeweb")
+	keys = list("schizophrenia", "schizo", "meds", "wesley willis", "time cube", "timecube")
 	bookstyle = "Scrapbook"
 
 /datum/religion/schizo/equip_chaplain(var/mob/living/carbon/human/H)
