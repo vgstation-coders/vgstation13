@@ -1582,7 +1582,6 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Schizo"
 	female_adept = "Schizo"
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	keys = list("schizophrenia", "schizo", "meds", "wesley willis", "time cube", "timecube")
 	bookstyle = "Scrapbook"
 
@@ -1594,7 +1593,6 @@
 	name = "Conspiracy Theorist"
 	deity_names = list("Alex Jones", "David Icke", "Q")
 	bible_name = "The Info Wars"
-	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Truthseeker"
 	female_adept = "Truthseeker"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
