@@ -1567,8 +1567,9 @@
 
 //TODO: some conversion ceremony with surgical drills to make stigmatas from lake titticaca
 /datum/religion/cornholio/equip_chaplain(var/mob/living/carbon/human/H)
-	H.reagents.add_reagent(COFFEE,10) // settle down, beavis
-	H.reagents.add_reagent(SUGAR,10)
+	H.dna.SetSEState(TWITCHBLOCK, 1) // settle down, beavis
+	H.dna.SetSEState(LOUDBLOCK, 1)
+	domutcheck(H, null, 1)
 
 /datum/religion/schizo
 	name = "Schizophrenia"
@@ -1582,8 +1583,8 @@
 	bookstyle = "Scrapbook"
 
 /datum/religion/schizo/equip_chaplain(var/mob/living/carbon/human/H)
-	H.reagents.add_reagent(MINDBREAKER,10)
-	H.reagents.add_reagent(SPACE_DRUGS,10)
+	H.dna.SetSEState(HALLUCINATIONBLOCK, 1)
+	domutcheck(H, null, 1)
 
 /datum/religion/pomf
 	name = "Pomfism"
