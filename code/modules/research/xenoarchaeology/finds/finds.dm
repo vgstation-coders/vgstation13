@@ -251,7 +251,7 @@
 	anomaly_factor = 0
 
 /datum/find/coin/spawn_item()
-	var/choice = pick(subtypesof(/obj/item/weapon/coin))
+	var/choice = pick(subtypesof(/obj/item/weapon/coin) - /obj/item/weapon/coin/pomf - /obj/item/weapon/coin/pumf)
 	var/obj/item/I = new choice
 	item_type = I.name
 	return I
