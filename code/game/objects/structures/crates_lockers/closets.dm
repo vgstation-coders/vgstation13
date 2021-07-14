@@ -488,7 +488,7 @@
 		return 0
 	if(istype(O, /obj/structure/closet))
 		return 0
-	if(move_them)//We've already checked for ajacency so it's fine to use forceMove, it also guarrantees that they won't bump into us?
+	if(move_them)//We've already checked for adjacency so it's fine to use forceMove, it also guarrantees that they won't bump into us?
 		O.forceMove(user.loc)
 		sleep(1)
 		O.forceMove(src.loc)
