@@ -1582,6 +1582,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Schizo"
 	female_adept = "Schizo"
+	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	keys = list("schizophrenia", "schizo", "meds", "wesley willis", "time cube", "timecube")
 	bookstyle = "Scrapbook"
 
@@ -1595,9 +1596,7 @@
 	bible_name = "The Info Wars"
 	male_adept = "Truthseeker"
 	female_adept = "Truthseeker"
-	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	keys = list("conspiracy", "conspiracies", "qanon", "nwo", "illuminati", "deus ex", "jc denton", "chemtrails", "gay frogs", "5g", "wwg1wga")
-	bookstyle = "Scrapbook"
 
 /datum/religion/conspiracy/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/tinfoil(H), slot_head)
