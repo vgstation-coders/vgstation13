@@ -552,7 +552,7 @@
 	bible_name = "The Eddas"
 	male_adept = "Godi"
 	female_adept = "Godi"
-	keys = list("norse", "german pagan", "viking", "odin", "odinism", "wotan", "wotanism")
+	keys = list("norse", "german pagan", "viking", "odinism", "wotan", "wotanism")
 
 /datum/religion/obesity
 	name = "Church of Corpulence"
@@ -566,6 +566,8 @@
 /datum/religion/obesity/equip_chaplain(var/mob/living/carbon/human/H)
 	H.reagents.add_reagent(NUTRIMENT, 40)
 	H.overeatduration = 600
+	H.dna.SetSEState(FATBLOCK, 1)
+	domutcheck(H, null, 1)
 
 /datum/religion/obesity/convert(var/mob/living/preacher, var/mob/living/subject, var/can_renounce = TRUE)
 	. = ..()
@@ -1593,7 +1595,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Chicken Farmer"
 	female_adept = "Chicken Farmer"
-	keys = list("pomf", "chicken", "chikun", "pomf chicken", "pomfcoin")
+	keys = list("pomf", "pomf123", "chicken", "chikun", "d3athrow", "/vg/station", "/vg/station13", "pomf chicken", "pomfcoin")
 
 /datum/religion/pomf/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/chicken/white(H), slot_head)
