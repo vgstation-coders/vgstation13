@@ -1547,7 +1547,7 @@
 
 /datum/religion/anprim
 	name = "Primitivism"
-	deity_names = ("Grug","Ted Kaczynski")
+	deity_names = list("Grug","Ted Kaczynski")
 	bible_name = "Industrial Society and Its Future"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Primitive"
@@ -1673,7 +1673,7 @@
 
 /datum/religion/fightclub
 	name = "Fight Club"
-	deity_names = "Tyler Durden"
+	deity_name = "Tyler Durden"
 	bible_name = "The Rules of Fight Club"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Tyler Durden" // spoilers?
