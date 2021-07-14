@@ -136,3 +136,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube
 	name = "lab mouse cube"
 	contained_mob = /mob/living/simple_animal/mouse/balbc
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube
+	name = "space carp baby cube"
+	contained_mob = /mob/living/simple_animal/hostile/carp/baby
