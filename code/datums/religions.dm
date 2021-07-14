@@ -1014,7 +1014,7 @@
 
 /datum/religion/fascism
 	name = "Fascism" // something more broad than just the nazis
-	deity_names = ("Adolf Hitler", "Benito Mussolini")
+	deity_names = list("Adolf Hitler", "Benito Mussolini")
 	bible_name = "Mein Kampf"
 	male_adept = "Feldbischof" //No seriously, that's a thing, look it up
 	female_adept = "Feldbischof"
@@ -1592,7 +1592,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Chicken Farmer"
 	female_adept = "Chicken Farmer"
-	keys = list("pomf", "pomf123", "chicken", "chikun", "pomf chicken", "d3athrow", "badclown", "/vg/station", "/vg/station13", "pomfcoin")
+	keys = list("pomf", "chicken", "chikun", "pomf chicken", "pomfcoin")
 
 /datum/religion/pomf/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/chicken/white(H), slot_head)
