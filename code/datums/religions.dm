@@ -10,7 +10,9 @@
 		return "Honkmother"
 	else if(H.mind.assigned_role == "Trader")
 		return "Shoalmother"
-	else if(!ishuman(H))
+	else if(H.mind.assigned_role == "AI" || H.mind.assigned_role == "Cyborg")
+		return "MAINFRAME"
+	else if(!ishuman(H) || !isobserver(H))
 		return "Animal Jesus"
 	else
 		return "Faithless"
@@ -1089,8 +1091,8 @@
 
 /datum/religion/syndicate
 	name = "Syndicalism" //Technically not true, but hey
-	deity_name = "The Syndicate"
-	bible_name = "The Syndicate Bundle"
+	deity_names = list("The Syndicate","Cyndi Kate")
+	bible_name = list("The Syndicate Bundle","The Uplink")
 	male_adept = "Syndicate Agent"
 	female_adept = "Syndicate Agent"
 	keys = list("syndicate", "traitor", "syndie", "syndies", "nuke ops", "tator", "tatortot", "nukies", "ops")
@@ -1524,7 +1526,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Degenerate"
 	female_adept = "Degenerate"
-	keys = list("degeneracy", "catgirls", "felinids", "tajaran", "tajarans", "catbeasts", "catbeast", "furry", "furries", "furry fandom")
+	keys = list("degeneracy", "catgirls", "felinids", "tajaran", "tajarans", "catbeasts", "catbeast", "furry", "furries", "furry fandom", "skyrat", "vorestation", "citadel")
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
 /datum/religion/degenerate/equip_chaplain(var/mob/living/carbon/human/H)
