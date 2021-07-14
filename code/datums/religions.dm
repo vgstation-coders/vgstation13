@@ -1092,7 +1092,7 @@
 /datum/religion/syndicate
 	name = "Syndicalism" //Technically not true, but hey
 	deity_names = list("The Syndicate","Cyndi Kate")
-	bible_name = list("The Syndicate Bundle","The Uplink")
+	bible_names = list("The Syndicate Bundle","The Uplink")
 	male_adept = "Syndicate Agent"
 	female_adept = "Syndicate Agent"
 	keys = list("syndicate", "traitor", "syndie", "syndies", "nuke ops", "tator", "tatortot", "nukies", "ops")
