@@ -488,8 +488,10 @@
 		return 0
 	if(istype(O, /obj/structure/closet))
 		return 0
-	if(move_them)
-		step_towards(O, src.loc)
+	if(move_them)//We've already checked for ajacency so it's fine to use forceMove, it also guarrantees that they won't bump into us?
+		O.forceMove(user.loc)
+		sleep(1)
+		O.forceMove(src.loc)
 	if(show_message && user != O)
 		user.show_viewers("<span class='danger'>[user] stuffs [O] into [src]!</span>")
 	src.add_fingerprint(user)
