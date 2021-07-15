@@ -140,6 +140,20 @@
 	onclose(user, "med_rec")
 	return
 
+
+/obj/machinery/computer/med_data/attackby(var/obj/item/O, var/mob/living/user)
+	if (istype(user) && authenticated && istype(O, /obj/item/weapon/photo/id) && (screen == 4.0) && active1)
+		var/obj/item/weapon/photo/id/photo_id = O
+		if (photo_id.four_sides)
+			if (alert("Do you want to update the records with this ID photo?",,"Yes","No") == "Yes")
+				if (user && !user.incapacitated() && Adjacent(user) && photo_id && (photo_id == user.get_active_hand()) && authenticated && (screen == 4.0) && active1)
+					active1.fields["photo"] = photo_id.four_sides
+					visible_message("<span class='notice'>[bicon(src)] Database updated.</span>")
+					playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
+					updateUsrDialog()
+
+	..()
+
 /obj/machinery/computer/med_data/proc/pathogen_dat(var/datum/data/record/v)
 	var/dat = {"<center><b>GNAv2 [v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""]</b></center>
 	<br><b>Nickname:</b> <A href='?src=\ref[src];field=vir_nickname;edit_vir=\ref[v]'>[v.fields["nickname"] ? "[v.fields["nickname"]]" : "(input)"]</A>

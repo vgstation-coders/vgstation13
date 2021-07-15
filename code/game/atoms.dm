@@ -524,6 +524,9 @@ its easier to just keep the beam vertical.
 /atom/proc/emag_act()
 	return
 
+/atom/proc/slime_act()
+	return
+
 /atom/proc/supermatter_act(atom/source, severity)
 	qdel(src)
 	return 1

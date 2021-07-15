@@ -720,7 +720,7 @@
 
 /datum/outfit/special/prisoner/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
-  
+
 /datum/outfit/special/prisoneralt //no headset + soap
 	outfit_name = "Prisoner Alternative"
 	items_to_spawn = list(
@@ -827,6 +827,10 @@
 
 /datum/outfit/special/tourist/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
+
+/datum/outfit/special/tourist/post_equip(var/mob/living/carbon/human/H)
+	..()
+	equip_accessory(H, /obj/item/clothing/accessory/wristwatch, /obj/item/clothing/under)
 
 /datum/outfit/special/cosmonaut
 	outfit_name = "Cosmonaut"

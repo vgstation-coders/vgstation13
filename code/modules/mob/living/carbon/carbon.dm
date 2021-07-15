@@ -628,11 +628,14 @@
 	if (toucher == touched)
 		return
 	if(virus2.len)
+		var/list/symptom_types = list()
 		for(var/I in virus2)
 			var/datum/disease2/disease/D = virus2[I]
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
-					E.on_touch(src, toucher, touched, touch_type)
+					if (!(E.type in symptom_types))
+						symptom_types += E.type
+						E.on_touch(src, toucher, touched, touch_type)
 
 /mob/living/carbon/proc/check_handcuffs()
 	return handcuffed || istype(locked_to, /obj/structure/bed/nest)

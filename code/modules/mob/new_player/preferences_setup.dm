@@ -505,6 +505,7 @@
 	else
 		clothes_s = new /icon(uniform_dmi, "tourist_s")
 		clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
+		clothes_s.Blend(new /icon('icons/mob/clothing_accessories.dmi', "wristwatch"), ICON_UNDERLAY)
 		clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 
 	if(disabilities & NEARSIGHTED)

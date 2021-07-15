@@ -356,7 +356,6 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
-
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/tool/solder/S = I

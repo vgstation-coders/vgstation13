@@ -204,9 +204,15 @@ proc/move_mining_shuttle()
 	toolsounds = list('sound/weapons/Genhit.ogg')
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
-
 	var/excavation_amount = 100
 
+/obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/oil)
+		has_slime=1
+		to_chat(user, "You mold the slime extract around the tip of \the [src].")
+		return TRUE
+	
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"
 	//icon_state = "sledgehammer" Waiting on sprite
@@ -309,8 +315,10 @@ proc/move_mining_shuttle()
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+			return
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+			return
 
 	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
 		var/obj/item/stack/sheet/mineral/plasma/A = target
@@ -319,8 +327,11 @@ proc/move_mining_shuttle()
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+			return
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+			return
+	..()
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
 	..()
