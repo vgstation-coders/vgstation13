@@ -26,7 +26,7 @@
 	flag = SCIENTIST
 	department_flag = MEDSCI
 	faction = "Station"
-	total_positions = 3
+	total_positions = 5
 	spawn_positions = 3
 	supervisors = "the research director"
 	wage_payout = 55
@@ -43,8 +43,8 @@
 	flag = XENOARCH
 	department_flag = MEDSCI
 	faction = "Station"
-	total_positions = 3
-	spawn_positions = 3
+	total_positions = 2
+	spawn_positions = 2
 	supervisors = "the research director"
 	wage_payout = 55
 	selection_color = "#ffeeff"
