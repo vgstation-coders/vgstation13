@@ -992,6 +992,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(do_after(user, src,10))
 					to_chat(user, "<span class='notice'>You pry off the [src]!.</span>")
 					new /obj/item/mounted/frame/newscaster(loc)
+					EjectPhoto(user)
 					qdel(src)
 					return
 
