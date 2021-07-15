@@ -59,7 +59,7 @@
 	return TRUE
 
 /mob/living/carbon/critlog(curH,prevH)
-	. == ..()
+	. = ..()
 	if (.)
 		var/do_we_care_about_it = mind != null
 		if(curH <= config.health_threshold_crit && prevH > config.health_threshold_crit)
