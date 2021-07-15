@@ -53,9 +53,11 @@
 	return 1
 
 
-/mob/living/proc/critlog(curH,prevH) //current health, previous health
-	if(stat == UNCONSCIOUS && curH < 0 && curH > -95.0 && prevH > 0)
-		add_attacklogs(src,null,"has gone into CRIT!")
+/mob/living/proc/critlog(curH,prevH)
+	var/do_we_care_about_it = mind != null
+	if(curH <= 0 && prevH > 0)
+		if (curH > -95)
+			add_attacklogs(src,null,"has gone into CRIT!", admin_warn = do_we_care_about_it)
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
