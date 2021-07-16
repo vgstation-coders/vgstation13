@@ -10,9 +10,14 @@
 
 	starting_materials = list(MAT_WOOD = 5*CC_PER_SHEET_MISC)
 	var/mob_lock_type = /datum/locking_category/buckle/closet/coffin
+	var/mob/living/mob_inside_thats_buckled = null
 
 
 /obj/structure/closet/coffin/Destroy()
+	if (mob_inside_thats_buckled)
+		if (loc)
+			mob_inside_thats_buckled.forceMove(loc)
+	mob_inside_thats_buckled = null
 	new /obj/item/stack/sheet/wood(loc,3) //This will result in 3 dropped if destroyed, or 5 if deconstructed
 	if (is_locking(mob_lock_type)) //if someone is strapped in and this gets destroyed make them visible again
 		var/mob/locked = get_locked(mob_lock_type)[1]
@@ -29,12 +34,6 @@
 /datum/locking_category/buckle/closet/coffin
 	flags = LOCKED_SHOULD_LIE
 
-/obj/structure/closet/coffin/attack_hand(mob/user)
-	if (src.opened && has_locked_mobs())
-		to_chat(user, "<span class='warning'>You cannot close the lid while somebody is buckled into the coffin.</span>")
-		return
-	..()
-	handle_user_visibility()
 
 /obj/structure/closet/coffin/proc/has_locked_mobs()
 	if (!is_locking(mob_lock_type))
@@ -42,28 +41,51 @@
 	var/mob/locked = get_locked(mob_lock_type)[1]
 	return locked //no need to try to move if you are strapped in
 
-/obj/structure/closet/coffin/AltClick(mob/user)
-	handle_buckle(user)
+/obj/structure/closet/coffin/MouseDropTo(atom/movable/O, mob/user, var/needs_opened = 1, var/show_message = 1, var/move_them = 1)
+	if (is_locking(mob_lock_type))
+		return 0
+	. = ..()
+	if (. && isliving(O))
+		buckle_mob(O, user)
 
-/obj/structure/closet/coffin/proc/handle_buckle(var/mob/user) //needs src.opened otherwise bugs might occur because closet eats the items when its closed
-	if (src.opened && is_locking(mob_lock_type)) //only unbuckle if you are buckled in in the first place
-		manual_unbuckle(user)
-		setDensity(FALSE) //this is needed for some reason
+/obj/structure/closet/coffin/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if (opened && !is_locking(mob_lock_type))
 		return
-	var/mob/closet_dweller = locate() in src.loc
-	if (src.opened && closet_dweller) //buckle only the mob inside the closet
-		buckle_mob(closet_dweller, user)
+	if (!opened && !mob_inside_thats_buckled)
+		return
+	if (!isliving(usr))
+		return
+	var/mob/living/user = usr
+	if (user.incapacitated() || !Adjacent(user) || !over_location.Adjacent(user))
+		return
 
-/obj/structure/closet/coffin/proc/handle_user_visibility() //after each open/close action assert the correct user visibility
-	if (!is_locking(mob_lock_type))
-		return
-	var/mob/locked = get_locked(mob_lock_type)[1]
-	if (src.opened)
-		locked.alphas["coffin_invis"] = 255
-		locked.handle_alpha()
-	else
-		locked.alphas["coffin_invis"] = 1
-		locked.handle_alpha()
+	if (!opened)
+		open(user)
+
+	var/mob/living/occupant = get_locked(mob_lock_type)[1]
+
+	if (manual_unbuckle(user))
+		setDensity(FALSE)
+		occupant.forceMove(over_location)
+
+/obj/structure/closet/coffin/open(mob/user)
+	. = ..()
+	if (. && mob_inside_thats_buckled && (mob_inside_thats_buckled.loc == loc))
+		buckle_mob(mob_inside_thats_buckled, user, FALSE)
+	mob_inside_thats_buckled = null
+
+/obj/structure/closet/coffin/close(mob/user)
+	if(!opened)
+		return 0
+	if(!can_close())
+		return 0
+
+	if (is_locking(mob_lock_type))
+		var/mob/living/occupant = get_locked(mob_lock_type)[1]
+		unlock_atom(occupant)
+		mob_inside_thats_buckled = occupant
+
+	return ..()
 
 /obj/structure/closet/coffin/relaymove(mob/user)
 	if (has_locked_mobs())
@@ -102,7 +124,7 @@
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 		return TRUE
 
-/obj/structure/closet/coffin/proc/buckle_mob(mob/M, mob/user)
+/obj/structure/closet/coffin/proc/buckle_mob(mob/M, mob/user, var/messages = TRUE)
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
 		return
 
@@ -126,24 +148,21 @@
 		to_chat(user, "<span class='warning'>The [M] is too squishy to buckle in.</span>")
 		return
 
-	if(M == user)
-		user.stop_pulling() // stop pulling whatever you are pulling if you buckle yourself in
-		M.visible_message(\
-			"<span class='notice'>\The [M] buckles in!</span>",\
-			"You buckle yourself to [src].",\
-			"You hear metal clanking.")
-	else
-		M.visible_message(\
-			"<span class='notice'>\The [M] is buckled in to [src] by [user.name]!</span>",\
-			"You are buckled in to [src] by [user.name].",\
-			"You hear metal clanking.")
+	if (messages)
+		if(M == user)
+			user.stop_pulling() // stop pulling whatever you are pulling if you buckle yourself in
+			M.visible_message(\
+				"<span class='notice'>\The [M] buckles in!</span>",\
+				"You buckle yourself to [src].",\
+				"You hear metal clanking.")
+		else
+			M.visible_message(\
+				"<span class='notice'>\The [M] is buckled in to [src] by [user.name]!</span>",\
+				"You are buckled in to [src] by [user.name].",\
+				"You hear metal clanking.")
 
-	playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
+		playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
 	add_fingerprint(user)
-
-	if (!M.alphas["coffin_invis"])
-		M.alphas.Add("coffin_invis")
-		M.alphas["coffin_invis"] = 255
 
 	lock_atom(M, mob_lock_type)
 	if(M.pulledby) //start pulling the coffin if somebody was pulling the person inside before
