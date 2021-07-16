@@ -975,7 +975,11 @@
 	female_adept = "Komrade"
 	keys = list("communism", "socialism", "commie")
 
-/datum/religion/marxismleninism
+/datum/religion/communism/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
+
+/datum/religion/tankie
 	name = "Marxism-Leninism"
 	deity_names = list("Vladimir Lenin", "Josef Stalin", "Chairman Mao", "Kim-Il Sung", "Fidel Castro")
 	bible_name = "Our Immediate Task" // lenin wrote it, i dunno
@@ -984,7 +988,7 @@
 	female_adept = "Komrade"
 	keys = list("russia", "mother russia", "motherland", "lenin", "stalin", "tankie", "north korea", "best korea", "kim jong-il", "kim jong-un")
 
-/datum/religion/communism/equip_chaplain(var/mob/living/carbon/human/H)
+/datum/religion/tankie/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
 
@@ -1583,7 +1587,7 @@
 	male_adept = "Schizo"
 	female_adept = "Schizo"
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
-	keys = list("schizophrenia", "schizo", "meds", "wesley willis", "time cube", "timecube")
+	keys = list("schizophrenia", "schizo", "meds", "/ss13g/", "the thread", "wesley willis", "time cube", "timecube")
 	bookstyle = "Scrapbook"
 
 /datum/religion/schizo/equip_chaplain(var/mob/living/carbon/human/H)
