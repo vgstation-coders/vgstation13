@@ -138,5 +138,5 @@
 	contained_mob = /mob/living/simple_animal/mouse/balbc
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube
-	name = "space carp baby cube"
+	name = "space carp cube"
 	contained_mob = /mob/living/simple_animal/hostile/carp/baby
