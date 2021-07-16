@@ -116,6 +116,10 @@
 		var/tp = text2num(href_list["tp"])
 		time += tp
 		time = min(max(round(time), 0), 600)
+	
+	if(href_list["toggle_mode"])
+		repeat = !repeat
+		return
 
 	if(href_list["close"])
 		usr << browse(null, "window=timer")
