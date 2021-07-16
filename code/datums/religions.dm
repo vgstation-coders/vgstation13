@@ -716,7 +716,7 @@
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Retard"
 	female_adept = "Retard"
-	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", "shitcurity", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "8chan", "tumblr", "9gag", "kekistan", "top kek", "topkek", "s4s", "[s4s]", "/b/", "/b/tard", "/pol/")
+	keys = list("lol", "wtf", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", "shitcurity", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "8chan", "tumblr", "9gag", "kekistan", "top kek", "topkek", "s4s", "\[s4s\]", "/b/", "/b/tard", "/pol/")
 	convert_method = "standing both next to a table."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/banana
 
@@ -1635,7 +1635,7 @@
 		to_chat(preacher, "<span class='warning'>You need to hold an IED to begin the conversion.</span>")
 		return FALSE
 
-	var/held_cable = subject.find_held_item_by_type(/obj/item/weapon/stack/cable_coil)
+	var/held_cable = subject.find_held_item_by_type(/obj/item/stack/cable_coil)
 	if (!held_cable)
 		to_chat(preacher, "<span class='warning'>The subject needs to hold a cable to begin the conversion.</span>")
 		return FALSE
