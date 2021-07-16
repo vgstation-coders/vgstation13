@@ -479,7 +479,7 @@ var/datum/controller/gameticker/ticker
 				feedback_set("map vote choices", options)
 
 			else
-				var/list/maps = get_maps()
+				var/list/maps = get_votable_maps()
 				var/list/choices=list()
 				for(var/key in maps)
 					choices.Add(key)
