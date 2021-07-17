@@ -58,8 +58,9 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	if(!job)
 		job = user.mind.assigned_role
 		roles = list()
-		for (var/datum/role/role in user.mind.antag_roles)
-			roles += role.id
+		for (var/role in user.mind.antag_roles)
+			var/datum/role/R = user.mind.antag_roles[role]
+			roles += R.id
 
 	var/dat = list()
 	dat += "<B>[src.welcome]</B><BR>"
