@@ -1,6 +1,3 @@
-/mob  // TODO: rewrite as obj.
-	var/mob/zshadow/shadow
-
 /mob/zshadow
 	plane = OVER_OPENSPACE_PLANE
 	name = "shadow"
@@ -27,9 +24,9 @@
 	sync_icon(L)
 
 /mob/Destroy()
-	if(shadow)
-		qdel(shadow)
-		shadow = null
+	if(zshadow)
+		qdel(zshadow)
+		zshadow = null
 	. = ..()
 
 /mob/zshadow/examine(mob/user, distance, infix, suffix)
@@ -59,8 +56,8 @@
 	overlays = M.overlays
 	transform = M.transform
 	dir = M.dir
-	if(shadow)
-		shadow.sync_icon(src)
+	if(zshadow)
+		zshadow.sync_icon(src)
 
 /mob/living/Move()
 	. = ..()
@@ -77,15 +74,15 @@
 	if(isturf(M.loc))
 		var/turf/simulated/open/OS = GetAbove(src)
 		while(OS && istype(OS))
-			if(!M.shadow)
-				M.shadow = new /mob/zshadow(M)
-			M.shadow.forceMove(OS)
-			M = M.shadow
+			if(!M.zshadow)
+				M.zshadow = new /mob/zshadow(M)
+			M.zshadow.forceMove(OS)
+			M = M.zshadow
 			OS = GetAbove(M)
 	// The topmost level does not need a shadow!
-	if(M.shadow)
-		qdel(M.shadow)
-		M.shadow = null
+	if(M.zshadow)
+		qdel(M.zshadow)
+		M.zshadow = null
 
 //
 // Handle cases where the owner mob might have changed its icon or overlays.
@@ -93,20 +90,20 @@
 
 /mob/living/update_icons()
 	. = ..()
-	if(shadow)
-		shadow.sync_icon(src)
+	if(zshadow)
+		zshadow.sync_icon(src)
 
 // WARNING - the true carbon/human/update_icons does not call ..(), therefore we must sideways override this.
 // But be careful, we don't want to screw with that proc.  So lets be cautious about what we do here.
 /mob/living/carbon/human/update_icons()
 	. = ..()
-	if(shadow)
-		shadow.sync_icon(src)
+	if(zshadow)
+		zshadow.sync_icon(src)
 
 /mob/set_dir(new_dir)
 	. = ..()
-	if(shadow)
-		shadow.set_dir(new_dir)
+	if(zshadow)
+		zshadow.set_dir(new_dir)
 
 // Transfer messages about what we are doing to upstairs
 //mob/visible_message(var/message, var/self_message, var/blind_message)
@@ -114,8 +111,8 @@
 //apparently it's okay to do this even though mob/visible_message is in mob.dm
 /mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0, var/range = 7)
 	. = ..()
-	if(shadow)
-		shadow.visible_message(message, self_message, blind_message)
+	if(zshadow)
+		zshadow.visible_message(message, self_message, blind_message)
 
 // This shows when someone is typing. We do not use this on /vg/.
 /*/mob/set_typing_indicator(var/state)
