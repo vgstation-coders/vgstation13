@@ -121,7 +121,7 @@ var/list/obj/machinery/flasher/flashers = list()
 
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if ((M.glide_size > 2.4615386) && (src.anchored))
+		if ((M.glide_size > GLIDE_SIZE_OF_A_WALKING_HUMAN) && (src.anchored))
 			src.flash()
 
 /obj/machinery/flasher/portable/attackby(obj/item/weapon/W as obj, mob/user as mob)

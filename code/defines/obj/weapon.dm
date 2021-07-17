@@ -853,7 +853,7 @@
 	if(armed)
 		if(istype(AM, /mob/living/carbon) && !istype(AM, /mob/living/carbon/brain))
 			var/mob/living/carbon/C = AM
-			if(C.m_intent != "walk")
+			if(C.glide_size > GLIDE_SIZE_OF_A_WALKING_HUMAN)
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
 				message_admins("[C] triggered the explosive wet floor sign at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 				log_game("[C] triggered the explosive wet floor sign at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
