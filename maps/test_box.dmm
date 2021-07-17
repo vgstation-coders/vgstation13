@@ -71411,6 +71411,9 @@
 "cDs" = (
 /obj/structure/table,
 /obj/machinery/reagentgrinder,
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 5
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -71871,9 +71874,13 @@
 /area/science/xenobiology)
 "cEf" = (
 /obj/structure/table,
-/obj/item/stack/sheet/mineral/plasma{
-	amount = 5
+/obj/item/weapon/storage/box/monkeycubes/spacecarpcube{
+	name = "space carp cube box"
 	},
+/obj/item/weapon/storage/box/monkeycubes/spacecarpcube{
+	name = "space carp cube box"
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/carppheromones,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
