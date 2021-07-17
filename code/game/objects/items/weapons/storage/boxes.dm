@@ -554,8 +554,8 @@
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube(src)
 
 /obj/item/weapon/storage/box/monkeycubes/spacecarpcube
-	name = "space carp baby cube box"
-	desc = "Drymate brand space carp baby cubes, shipped from F1SH-1NG. Just add water!"
+	name = "space carp cube box"
+	desc = "Drymate brand space carp cubes, shipped from F1SH-1NG. Just add water!"
 	icon_state = "spacecarpcubebox"
 
 /obj/item/weapon/storage/box/monkeycubes/spacecarpcube/New()
