@@ -49,13 +49,13 @@
 "aW" = (/turf/unsimulated/wall,/area/centcom/evac)
 "aX" = (/turf/unsimulated/floor/grass,/area/centcom/evac)
 "aY" = (/obj/effect/decal/cleanable/crayon/fuckyou,/turf/unsimulated/wall,/area/centcom/evac)
-"aZ" = (/obj/structure/closet/secure_closet/hydroponics,/obj/item/device/radio/headset/headset_service,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/reagent_containers/glass/bucket,/obj/item/weapon/wirecutters/clippers,/turf/simulated/floor/wood,/area/crew_quarters/bar)
+"aZ" = (/obj/structure/closet/secure_closet/hydroponics,/obj/item/device/radio/headset/headset_service,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/weapon/reagent_containers/glass/bucket,/obj/item/tool/wirecutters/clippers,/turf/simulated/floor/wood,/area/crew_quarters/bar)
 "ba" = (/obj/machinery/portable_atmospherics/hydroponics,/obj/machinery/computer/security/telescreen/entertainment{pixel_x = 32},/turf/simulated/floor/wood,/area/crew_quarters/bar)
 "bb" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/crew_quarters/bar)
 "bc" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/crew_quarters/bar)
 "bd" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/crew_quarters/bar)
 "be" = (/obj/structure/flora/tree/pine,/turf/simulated/floor/plating/snow/cold,/area)
-"bf" = (/turf/simulated/floor/plating/snow/concrete,/area)
+"bf" = (/turf/simulated/floor/engine/concrete,/area)
 "bg" = (/obj/structure/flora/tree/dead,/turf/simulated/floor/plating/snow,/area)
 "bh" = (/obj/machinery/floodlight/on,/turf/unsimulated/floor/grass,/area/centcom/evac)
 "bi" = (/obj/machinery/portable_atmospherics/hydroponics,/obj/machinery/light{dir = 4},/turf/simulated/floor/wood,/area/crew_quarters/bar)
@@ -82,7 +82,7 @@
 "bD" = (/obj/effect/landmark/start{name = "AI"},/turf/simulated/floor,/area/crew_quarters/bar)
 "bE" = (/obj/structure/closet/secure_closet/medical1,/obj/machinery/light{dir = 8},/obj/machinery/atmospherics/binary/volume_pump{dir = 1; name = "Emergency Vacuum Pump"},/turf/simulated/floor,/area/crew_quarters/bar)
 "bF" = (/obj/machinery/atmospherics/unary/cryo_cell,/turf/simulated/floor,/area/crew_quarters/bar)
-"bG" = (/obj/machinery/camera{c_tag = "Medbay Cryogenics"},/obj/machinery/light{dir = 4},/obj/structure/table/reinforced,/obj/item/weapon/crowbar,/obj/item/weapon/wrench{pixel_x = 5; pixel_y = -5},/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,/obj/item/weapon/reagent_containers/spray/cleaner,/turf/simulated/floor,/area/crew_quarters/bar)
+"bG" = (/obj/machinery/camera{c_tag = "Medbay Cryogenics"},/obj/machinery/light{dir = 4},/obj/structure/table/reinforced,/obj/item/tool/crowbar,/obj/item/tool/wrench{pixel_x = 5; pixel_y = -5},/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,/obj/item/weapon/reagent_containers/spray/cleaner,/turf/simulated/floor,/area/crew_quarters/bar)
 "bH" = (/obj/structure/extinguisher_cabinet,/turf/simulated/wall,/area/crew_quarters/bar)
 "bI" = (/obj/machinery/chem_dispenser/mapping,/turf/simulated/floor,/area/crew_quarters/bar)
 "bJ" = (/obj/item/weapon/reagent_containers/glass/beaker/large,/obj/item/weapon/reagent_containers/glass/beaker/large,/obj/item/weapon/reagent_containers/glass/beaker/large,/turf/simulated/floor,/area/crew_quarters/bar)
@@ -98,9 +98,9 @@
 "bT" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor,/area/crew_quarters/bar)
 "bU" = (/obj/structure/stairs/north,/turf/simulated/floor,/area/crew_quarters/bar)
 "bV" = (/obj/structure/ladder,/turf/simulated/floor,/area/crew_quarters/bar)
-"bW" = (/obj/machinery/r_n_d/destructive_analyzer,/obj/machinery/light{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
-"bX" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
-"bY" = (/obj/machinery/r_n_d/fabricator/protolathe,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
+"bW" = (/obj/machinery/r_n_d/destructive_analyzer,/obj/machinery/light{dir = 8},/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
+"bX" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
+"bY" = (/obj/machinery/r_n_d/fabricator/protolathe,/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
 "bZ" = (/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,/turf/simulated/floor,/area/crew_quarters/bar)
 "ca" = (/obj/machinery/recharger/defibcharger/wallcharger{pixel_x = 5; pixel_y = -28},/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor,/area/crew_quarters/bar)
 "cb" = (/obj/machinery/computer/rdconsole/core,/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
@@ -109,11 +109,11 @@
 "ce" = (/obj/item/weapon/reagent_containers/glass/beaker,/obj/item/weapon/reagent_containers/glass/beaker,/obj/item/weapon/reagent_containers/glass/beaker,/turf/simulated/floor,/area/crew_quarters/bar)
 "cf" = (/obj/effect/decal/warning_stripes{icon_state = "unloading"},/turf/simulated/floor,/area/crew_quarters/bar)
 "cg" = (/obj/item/device/radio/intercom{name = "Station Intercom (General)"; pixel_y = -29},/obj/machinery/light,/obj/machinery/sleeper/mancrowave,/turf/simulated/floor,/area/crew_quarters/bar)
-"ch" = (/obj/machinery/firealarm{dir = 1; pixel_y = -24},/obj/machinery/sleep_console/mancrowave_console,/turf/simulated/floor,/area/crew_quarters/bar)
-"ci" = (/obj/machinery/newscaster{pixel_x = -27; pixel_y = 1},/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical{pixel_x = 2; pixel_y = 3},/obj/item/weapon/storage/toolbox/mechanical{pixel_x = -2; pixel_y = -1},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor,/area/crew_quarters/bar)
-"cj" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor,/area/crew_quarters/bar)
+"ch" = (/obj/machinery/firealarm{dir = 1; pixel_y = -24},/obj/machinery/sleeper/mancrowave,/turf/simulated/floor,/area/crew_quarters/bar)
+"ci" = (/obj/machinery/newscaster{pixel_x = -27; pixel_y = 1},/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical{pixel_x = 2; pixel_y = 3},/obj/item/weapon/storage/toolbox/mechanical{pixel_x = -2; pixel_y = -1},/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor,/area/crew_quarters/bar)
+"cj" = (/obj/effect/decal/warning_stripes{dir = 1; icon_state = "warning"; tag = "icon-warning (NORTH)"},/turf/simulated/floor,/area/crew_quarters/bar)
 "ck" = (/obj/machinery/light,/turf/simulated/floor,/area/crew_quarters/bar)
-"cl" = (/obj/docking_port/destination/arrival/station{dir = 2},/turf/simulated/floor/plating/snow/concrete,/area)
+"cl" = (/obj/docking_port/destination/arrival/station{dir = 2},/turf/simulated/floor/engine/concrete,/area)
 "cm" = (/obj/structure/radial_gen/movable/snow_nature/snow_grass,/turf/simulated/floor/plating/snow/cold,/area)
 "cn" = (/turf/simulated/wall/r_wall,/area)
 "co" = (/turf/simulated/shuttle/wall,/area/shuttle/arrival/station)
@@ -202,7 +202,6 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
-
 (1,1,2) = {"
 ababababababababababababababababababababababababababababababababababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 abacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacabaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -265,7 +264,6 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
-
 (1,1,3) = {"
 atatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatataaaaauauauauauauauauauauauau
 atavavavavavavavavavavavavavavavavavavavavavavawawawawawawawawawawawawawawawawawawawawawawataaaaauaxaxaxaxayaxaxaxaxaxau
@@ -328,7 +326,6 @@ atavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavav
 atavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavavataaaaaaaaaaaaaaaaaaaaaaaaaaaa
 atatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatataaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
-
 (1,1,4) = {"
 atatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatatataaaaaaaaaaaaaaaaaaaaaaaaaaaa
 atczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczczataaaaaaaaaaaaaaaaaaaaaaaaaaaa
