@@ -657,7 +657,7 @@
 			if(prob(15))
 				to_chat(mob, "<span class='warning'>You feel [pick("that you don't have enough mana.", "that the winds of magic are gone.", "an urge to summon familiar.")]</span>")
 		if (30 to INFINITY)
-			if(prob(3))
+			if(prob(20))
 				var/list/possible_invocations = list(
 					"By Merlins beard!",
 					"Feel the power of the Dark Side!",
