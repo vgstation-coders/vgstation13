@@ -799,7 +799,7 @@
 	if(mob.reagents.has_reagent(IRON))
 		return
 
-	var/intensity = 1 + (intensity > 10) + (intensity > 20)
+	var/intensity = 1 + (count > 10) + (count > 20)
 	if (prob(20))
 		to_chat(mob, "<span class='warning'>You feel a [intensity < 3 ? "slight" : "powerful"] shock course through your body.</span>")
 	for(var/obj/M in orange(3 * intensity,mob))
