@@ -769,7 +769,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/X=new /obj/effect/overlay/beam(T, current_timer, 1)
+		var/obj/effect/overlay/beam/X=new /obj/effect/overlay/beam(T, current_timer, 1, base_damage = 1)
 		X.BeamSource=src
 		current_timer += increment
 		if((N+64>(length+16)) && (N+WORLD_ICON_SIZE<=(length+16)))
