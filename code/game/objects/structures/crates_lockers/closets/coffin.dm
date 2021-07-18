@@ -25,6 +25,23 @@
 		locked.handle_alpha()
 	..()
 
+/obj/structure/closet/coffin/lock_atom(atom/movable/AM)
+	. = ..()
+	if(!.)
+		return
+	if(ismob(AM))
+		var/mob/dude = AM
+		dude.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
+
+/obj/structure/closet/coffin/unlock_atom(var/atom/movable/AM)
+	if(current_glue_state != GLUE_STATE_NONE && ismob(AM))
+		return FALSE
+	. = ..()
+	if(.)
+		if(ismob(AM))
+			var/mob/dude = AM
+			dude.clear_alert(SCREEN_ALARM_BUCKLE)
+
 /obj/structure/closet/coffin/update_icon()
 	if(!opened)
 		icon_state = icon_closed
