@@ -2799,15 +2799,26 @@
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon")
 			return
 
-		if(!H.put_in_hands( new /obj/item/weapon/reagent_containers/food/snacks/cookie(H)))
-			log_admin("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
-			message_admins("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
+		var/answer = alert("Give them a Cookie? A Pomf Coin? Or a Pumf Coin?","Spawn Cookie","Cookie","Pomf","Pumf")
+		var/spawntype = /obj/item/weapon/reagent_containers/food/snacks/cookie
+		var/feedback = "You received the <b>best cookie</b>!"
+		if (answer == "Pomf")
+			spawntype = /obj/item/weapon/coin/pomf
+			feedback = "You were rewarded with a most precious pomf coin. Keep it preciously, or use it wisely."
+		else if (answer == "Pumf")
+			spawntype = /obj/item/weapon/coin/pumf
+			feedback = "You have greatly angered the gods, and their grudge toward you has been crystalized into a damned pumf coin."
+
+		if(!H.put_in_hands( new spawntype(H)))
+			log_admin("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
+			message_admins("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			return
 
-		log_admin("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
-		message_admins("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
+		log_admin("[key_name(H)] got their [answer], spawned by [key_name(src.owner)]")
+		message_admins("[key_name(H)] got their [answer], spawned by [key_name(src.owner)]")
 		feedback_inc("admin_cookies_spawned",1)
-		to_chat(H, "<span class='notice'>Your prayers have been answered!! You received the <b>best cookie</b>!</span>")
+
+		to_chat(H, "<span class='notice'>Your prayers have been answered!! [feedback]</span>")
 
 	else if(href_list["addcancer"])
 		if(!check_rights(R_ADMIN|R_FUN))
