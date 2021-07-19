@@ -106,7 +106,7 @@
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
-/datum/shuttle/proc/initialize()
+/datum/shuttle/initialize()
 	. = INIT_SUCCESS
 	src.docking_ports = list()
 	src.docking_ports_aboard = list()

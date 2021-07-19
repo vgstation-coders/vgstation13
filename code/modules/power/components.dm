@@ -153,7 +153,7 @@
 	if(!C || !C.get_powernet())
 		return 0
 
-	C.powernet.add_component(src)
+	C.powernet.add_connection(src)
 	connected=1
 	return 1
 
@@ -306,7 +306,7 @@
 	if(!cable || !cable.get_powernet())
 		return 0
 
-	cable.powernet.add_component(src)
+	cable.powernet.add_connection(src)
 	connected=1
 	return 1
 
