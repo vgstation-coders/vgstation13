@@ -78,6 +78,8 @@
 	var/crit_chance = CRIT_CHANCE_RANGED
 	var/crit_chance_melee = CRIT_CHANCE_MELEE
 
+	var/datum/speech_filter/speech_filter
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -1480,6 +1482,8 @@ var/global/list/image/blood_overlays = list()
 
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(speech_filter)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 	return
 
 /obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
