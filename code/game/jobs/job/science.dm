@@ -36,8 +36,6 @@
 
 /datum/job/xenoarchaeologist
 	title = "Xenoarchaeologist"
-	flag = XENOARCH
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
@@ -53,8 +51,6 @@
 
 datum/job/xenobiologist
 	title = "Xenobiologist"
-	flag = XENOBIO
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
