@@ -511,8 +511,7 @@
 		.manifest tr.alt td {background-color: #DEF}
 		.manifest tr.striked td {background-color: #AAA}
 		.manifest tr.request td {background-color: #FAA}
-	</style></head><body><center>
-Round Duration: [round(hours)]h [round(mins)]m<br>"}
+	</style></head><body><center>Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
 			dat += "<font color='red'><b>The station has been evacuated.</b></font><br>"
@@ -523,9 +522,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(!countprio)
 		dat += "<a style='color:red' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a><br>"
-	dat += "Choose from the following open positions:<br>
-			<table class="manifest" width='480px'>
-			<tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th><th>Requested?</th></tr>"
+	dat += "Choose from the following open positions:<br><table class='manifest' width='480px'><tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th><th>Requested?</th></tr>"
 	var/countprio = 0
 	var/color = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
