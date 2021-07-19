@@ -349,17 +349,6 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 			if(jobs[job] == JOB_PREF_HIGH)
 				crystal_ball[job] += 1
 
-/datum/controller/occupations/proc/flags_to_job(var/flags, var/department)
-	var/list/searchable_jobs = typesof(/datum/job) - /datum/job
-	for(var/path in searchable_jobs)
-		var/datum/job/J = path
-		if(initial(J.department_flag) != department)
-			continue
-		if(initial(J.flag) != flags)
-			continue
-		return initial(J.title)
-	return null //Still nothing? Null it is
-
 /*
 We can't just insert in HTML into the nanoUI so we need the raw data to play with.
 Instead of creating this list over and over when someone leaves their PDA open to the page
