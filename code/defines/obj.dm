@@ -342,22 +342,12 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 	for(var/mob/new_player/player in player_list)
 		if(!player.ready)
 			continue
-		//Prefs are only stored as a bitflag, so we have to look up the job name.
-		//Only one of these should have a value
 
-		var/J = null
-		if(player.client.prefs.job_engsec_high)
-			J = flags_to_job(player.client.prefs.job_engsec_high,ENGSEC)
-		else if(player.client.prefs.job_medsci_high)
-			J = flags_to_job(player.client.prefs.job_medsci_high,MEDSCI)
-		else if(player.client.prefs.job_civilian_high)
-			J = flags_to_job(player.client.prefs.job_civilian_high,CIVILIAN)
-		else
-			continue //They don't have a high pref!
+		var/list/jobs = player.client.prefs.jobs
 
-		if(!J)
-			continue //sanity
-		crystal_ball[J] += 1
+		for(var/job in jobs)
+			if(jobs[job] == JOB_PREF_HIGH)
+				crystal_ball[job] += 1
 
 /datum/controller/occupations/proc/flags_to_job(var/flags, var/department)
 	var/list/searchable_jobs = typesof(/datum/job) - /datum/job

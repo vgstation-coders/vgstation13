@@ -184,7 +184,7 @@ var/global/datum/controller/occupations/job_master
 		if(flag && !player.client.desires_role(job.title))
 			Debug("FOC flag failed, Player: [player], Flag: [flag], ")
 			continue
-		if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
+		if(player.client.prefs.jobs[job.title] == level)
 			Debug("FOC pass, Player: [player], Level:[level]")
 			candidates += player
 	return candidates
@@ -280,7 +280,7 @@ var/global/datum/controller/occupations/job_master
 
 	// Loop through all levels from high to low
 	var/list/shuffledoccupations = shuffle(occupations)
-	for(var/level = 1 to 3)
+	for(var/level = 3; level > 0; level--)
 		//Check the head jobs first each level
 		CheckHeadPositions(level)
 
@@ -350,7 +350,7 @@ var/global/datum/controller/occupations/job_master
 	final_pass: //this is a loop label
 		for(var/mob/new_player/player in unassigned)
 			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
-				for(var/level = 1 to 3)
+				for(var/level = 3; level > 0; level--)
 					for(var/datum/job/job in shuffledoccupations)
 						if(job.current_positions) //already someone in this job title
 							continue
@@ -373,7 +373,7 @@ var/global/datum/controller/occupations/job_master
 		Debug("DO player not old enough, Player: [player], Job:[job.title]")
 		return FALSE
 	// If the player wants that job on this level, then try give it to him.
-	if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
+	if(player.client.prefs.jobs[job.title] == level)
 		if (job.title == "Assistant" && !CheckAssistantCount(player, level))
 			return FALSE
 		// If the job isn't filled
@@ -397,7 +397,7 @@ var/global/datum/controller/occupations/job_master
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
 		for (var/datum/job/J in occupations)
-			if (player.client.prefs.GetJobDepartment(J, level) & J.flag)
+			if (player.client.prefs.jobs[J.title] == level)
 				Debug("AC1 failed, but other job slots for [player]. Adding them to the list of backup assistant slots.")
 				assistant_second_chance[player.ckey] = level
 				return FALSE
@@ -572,14 +572,15 @@ var/global/datum/controller/occupations/job_master
 			if(!job.player_old_enough(player.client))
 				level6++
 				continue
-			if(player.client.prefs.GetJobDepartment(job, 1) & job.flag)
-				level1++
-			else if(player.client.prefs.GetJobDepartment(job, 2) & job.flag)
-				level2++
-			else if(player.client.prefs.GetJobDepartment(job, 3) & job.flag)
-				level3++
-			else
-				level4++ //not selected
+			switch(player.client.prefs.jobs[job.title])
+				if(JOB_PREF_LOW)
+					level1++
+				if(JOB_PREF_MED)
+					level2++
+				if(JOB_PREF_HIGH)
+					level3++
+				else
+					level4++ //not selected
 
 		tmp_str += "HIGH=[level1]|MEDIUM=[level2]|LOW=[level3]|NEVER=[level4]|BANNED=[level5]|YOUNG=[level6]|-"
 		feedback_add_details("job_preferences",tmp_str)

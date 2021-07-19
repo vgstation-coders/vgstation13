@@ -528,7 +528,7 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/malf/proc/displace_AI(var/mob/new_player/old_AI)
 	old_AI.mind.assigned_role = null
 	var/list/shuffledoccupations = shuffle(job_master.occupations)
-	for(var/level = 1 to 3)
+	for(var/level = 3; level > 0; level--)
 		if(old_AI.mind.assigned_role)
 			break
 		for(var/datum/job/job in shuffledoccupations)
