@@ -39,6 +39,30 @@
 	icon_state = "fitnesslifter"
 	density = 1
 	anchored = 1
+	var/busy = 0
+
+/obj/structure/stacklifter/attackby(obj/item/P as obj, mob/user as mob)
+	if(P.is_wrench(user))
+		P.playtoolsound(loc, 50)
+		anchored = !anchored
+		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
+	else if(iswelder(P))
+		var/obj/item/tool/weldingtool/WT = P
+		if(!WT.remove_fuel(1,user))
+			return
+		else
+			busy = TRUE
+			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
+
+			user.visible_message("[user] dissassembles the weight machine.", "You start to dissassemble the weight machine.")
+			if (do_after(user, src, 40))
+				if (!src || !WT.isOn())
+					busy = FALSE
+					return
+				new /obj/item/stack/sheet/plasteel(loc, 2)
+				qdel(src)
+			busy = FALSE
+		return
 
 /obj/structure/stacklifter/attack_hand(mob/user, params, proximity)
 	if(!proximity)
@@ -78,6 +102,30 @@
 	icon_state = "fitnessweight"
 	density = 1
 	anchored = 1
+	var/busy = 0
+
+/obj/structure/weightlifter/attackby(obj/item/P as obj, mob/user as mob)
+	if(P.is_wrench(user))
+		P.playtoolsound(loc, 50)
+		anchored = !anchored
+		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
+	else if(iswelder(P))
+		var/obj/item/tool/weldingtool/WT = P
+		if(!WT.remove_fuel(1,user))
+			return
+		else
+			busy = TRUE
+			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
+
+			user.visible_message("[user] dissassembles the weight machine.", "You start to dissassemble the weight machine.")
+			if (do_after(user, src, 40))
+				if (!src || !WT.isOn())
+					busy = FALSE
+					return
+				new /obj/item/stack/sheet/plasteel(loc, 2)
+				qdel(src)
+			busy = FALSE
+		return
 
 /obj/structure/weightlifter/attack_hand(mob/user as mob, params, proximity)
 	if(!proximity)
