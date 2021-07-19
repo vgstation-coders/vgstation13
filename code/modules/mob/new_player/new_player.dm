@@ -493,8 +493,25 @@
 	var/mins = (mills % 36000) / 600
 	var/hours = mills / 36000
 
+	var/list/heads = new()
+	var/list/sec = new()
+	var/list/eng = new()
+	var/list/med = new()
+	var/list/sci = new()
+	var/list/cgo = new()
+	var/list/civ = new()
+	var/list/misc = new()
 
-	var/dat = {"<html><body><center>
+	var/dat = {"<html><head><style>
+		.manifest {border-collapse:collapse;}
+		.manifest td, th {border:1px solid #DEF; background-color:white; color:black; padding:.25em}
+		.manifest th {height: 2em; background-color: #48C; color:white}
+		.manifest tr.head th {background-color: #488}
+		.manifest td:first-child {text-align:right}
+		.manifest tr.alt td {background-color: #DEF}
+		.manifest tr.striked td {background-color: #AAA}
+		.manifest tr.request td {background-color: #FAA}
+	</style></head><body><center>
 Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
@@ -504,32 +521,200 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		if(emergency_shuttle.direction == 1 && emergency_shuttle.alert == 1) // Crew transfer initiated
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
-	dat += "Choose from the following open positions:<br>"
+	if(!countprio)
+		dat += "<a style='color:red' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a><br>"
+	dat += "Choose from the following open positions:<br>
+			<table class="manifest" width='480px'>
+			<tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th><th>Requested?</th></tr>"
 	var/countprio = 0
+	var/color = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
+			var/department = 0
+			if(job in command_positions)
+				heads[job] = active
+				department = 1
+			if(job in security_positions)
+				sec[job] = active
+				department = 1
+			if(job in engineering_positions)
+				eng[job] = active
+				department = 1
+			if(job in medical_positions)
+				med[job] = active
+				department = 1
+			if(job in science_positions)
+				sci[job] = active
+				department = 1
+			if(job in cargo_positions)
+				cgo[job] = active
+				department = 1
+			if(job in civilian_positions)
+				civ[job] = active
+				department = 1
+			if(!department && !(job in heads))
+				misc[job] = active
+	
+	if(heads.len > 0)
+		dat += "<tr><th colspan=4>Heads</th></tr>"
+		for(var/job in heads)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>heads[job]</s></td><td></td><br>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>heads[job]</s></td><td></td><br>"
 					continue
 
 			if(job.priority)
 				countprio++
-				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>heads[job]</td><td>Yes!</td><br>"
 			else
-				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
-	if(!countprio)
-		dat += "<a style='color:red' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a><br>"
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>heads[job]</td><td>No</td><br>"
+			color = !color
+
+	if(sec.len > 0)
+		dat += "<tr><th colspan=4>Security</th></tr>"
+		for(var/job in sec)
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>sec[job]</s></td><td></td><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>sec[job]</s></td><td></td><br>"
+					continue
+
+			if(job.priority)
+				countprio++
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>sec[job]</td><td>Yes!</td><br>"
+			else
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>sec[job]</td><td>No</td><br>"
+			color = !color
+
+	if(eng.len > 0)
+		dat += "<tr><th colspan=4>Engineering</th></tr>"
+		for(var/job in eng)
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>eng[job]</s></td><td></td><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>eng[job]</s></td><td></td><br>"
+					continue
+
+			if(job.priority)
+				countprio++
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>eng[job]</td><td>Yes!</td><br>"
+			else
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>eng[job]</td><td>No</td><br>"
+			color = !color
+
+	if(med.len > 0)
+		dat += "<tr><th colspan=4>Medical</th></tr>"
+		for(var/job in med)
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>med[job]</s></td><td></td><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>med[job]</s></td><td></td><br>"
+					continue
+
+			if(job.priority)
+				countprio++
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>med[job]</td><td>Yes!</td><br>"
+			else
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>med[job]</td><td>No</td><br>"
+			color = !color
+
+	if(sci.len > 0)
+		dat += "<tr><th colspan=4>Science</th></tr>"
+		for(var/job in sci)
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>sci[job]</s></td><td></td><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>sci[job]</s></td><td></td><br>"
+					continue
+
+			if(job.priority)
+				countprio++
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>sci[job]</td><td>Yes!</td><br>"
+			else
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>sci[job]</td><td>No</td><br>"
+			color = !color
+
+	if(cgo.len > 0)
+		dat += "<tr><th colspan=4>Cargo</th></tr>"
+		for(var/job in cgo)
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>cgo[job]</s></td><td></td><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>cgo[job]</s></td><td></td><br>"
+					continue
+
+			if(job.priority)
+				countprio++
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>cgo[job]</td><td>Yes!</td><br>"
+			else
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>cgo[job]</td><td>No</td><br>"
+			color = !color
+
+	if(civ.len > 0)
+		dat += "<tr><th colspan=4>Civilian</th></tr>"
+		for(var/job in civ)
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>civ[job]</s></td><td></td><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>civ[job]</s></td><td></td><br>"
+					continue
+
+			if(job.priority)
+				countprio++
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[civ[job]</td><td>Yes!</td><br>"
+			else
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>civ[job]</td><td>No</td><br>"
+			color = !color
+
+	// misc guys
+	if(misc.len > 0)
+		dat += "<tr><th colspan=4>Miscellaneous</th></tr>"
+		for(var/job in misc)
+			if(job.species_whitelist.len)
+				if(!job.species_whitelist.Find(client.prefs.species))
+					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>misc[job]</s></td><td></td><br>"
+					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>misc[job]</s></td><td></td><br>"
+					continue
+
+			if(job.priority)
+				countprio++
+				dat += "<tr class='request'><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>misc[job]</td><td>Yes!</td><br>"
+			else
+				dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>misc[job]</td><td>No</td><br>"
+			color = !color
+
+	dat += "</table>"
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
+	src << browse(dat, "window=latechoices;size=480x640;can_close=1")
 
 
 /mob/new_player/proc/create_character()
