@@ -81,8 +81,9 @@
  * Helper proc to log attacks or similar events between two mobs.
  */
 /proc/add_attacklogs(var/mob/user, var/mob/target, var/what_done, var/object = null, var/addition = null, var/admin_warn = TRUE)
-	var/user_txt = (user ? "[user][user.ckey ? " ([user.ckey])" : ""]" : "\<NULL USER\>")
-	var/target_txt = (target ? ismob(target) ? "[target][target.ckey ? " ([target.ckey])" : ""]" : "[target]" : "\<NULL TARGET\>")
+	ASSERT(istype(user))
+	var/user_txt = "[user][user.ckey ? " ([user.ckey])" : " (no key)"]"
+	var/target_txt = (target ? ismob(target) ? "[target][target.ckey ? " ([target.ckey])" : " (no key)"]" : "[target]" : "")
 	var/object_txt = (object ? " with \the [object]" : "")
 	var/intent_txt = (user ? " (INTENT: [uppertext(user.a_intent)])" : "")
 	var/addition_txt = (addition ? " ([addition])" : "")
