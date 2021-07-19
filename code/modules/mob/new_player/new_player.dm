@@ -561,7 +561,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	
 	if(heads.len > 0)
 		dat += "<tr><th colspan=4>Heads</th></tr>"
-		for(var/job in heads)
+		for(var/datum/job/job in heads)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>heads[job]</s></td><td></td><br>"
@@ -580,7 +580,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(sec.len > 0)
 		dat += "<tr><th colspan=4>Security</th></tr>"
-		for(var/job in sec)
+		for(var/datum/job/job in sec)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>sec[job]</s></td><td></td><br>"
@@ -599,7 +599,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(eng.len > 0)
 		dat += "<tr><th colspan=4>Engineering</th></tr>"
-		for(var/job in eng)
+		for(var/datum/job/job in eng)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>eng[job]</s></td><td></td><br>"
@@ -618,7 +618,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(med.len > 0)
 		dat += "<tr><th colspan=4>Medical</th></tr>"
-		for(var/job in med)
+		for(var/datum/job/job in med)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>med[job]</s></td><td></td><br>"
@@ -637,7 +637,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(sci.len > 0)
 		dat += "<tr><th colspan=4>Science</th></tr>"
-		for(var/job in sci)
+		for(var/datum/job/job in sci)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>sci[job]</s></td><td></td><br>"
@@ -656,7 +656,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(cgo.len > 0)
 		dat += "<tr><th colspan=4>Cargo</th></tr>"
-		for(var/job in cgo)
+		for(var/datum/job/job in cgo)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>cgo[job]</s></td><td></td><br>"
@@ -675,7 +675,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(civ.len > 0)
 		dat += "<tr><th colspan=4>Civilian</th></tr>"
-		for(var/job in civ)
+		for(var/datum/job/job in civ)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>civ[job]</s></td><td></td><br>"
@@ -695,7 +695,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	// misc guys
 	if(misc.len > 0)
 		dat += "<tr><th colspan=4>Miscellaneous</th></tr>"
-		for(var/job in misc)
+		for(var/datum/job/job in misc)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>([job.current_positions])</s></td><td><s>misc[job]</s></td><td></td><br>"
