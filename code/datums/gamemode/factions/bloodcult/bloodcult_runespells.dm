@@ -1965,6 +1965,13 @@ var/list/blind_victims = list()
 		if(istype(user_slot, /obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = user_slot
 			S.close(activator)
+		if(istype(user_slot, /obj/item/clothing/suit/storage))
+			var/obj/item/clothing/suit/storage/S = user_slot
+			S.hold.close(activator)
+		if(istype(user_slot, /obj/item/clothing/under))
+			var/obj/item/clothing/under/U = user_slot
+			for (var/obj/item/clothing/accessory/storage/S in U.accessories)
+				S.hold.close(activator)
 		activator.u_equip(user_slot)
 		user_slot.forceMove(BT)
 
