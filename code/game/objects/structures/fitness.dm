@@ -42,6 +42,9 @@
 	var/busy = 0
 
 /obj/structure/stacklifter/attackby(obj/item/P as obj, mob/user as mob)
+	if(in_use)
+		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
+		return
 	if(P.is_wrench(user))
 		P.playtoolsound(loc, 50)
 		anchored = !anchored
@@ -105,6 +108,9 @@
 	var/busy = 0
 
 /obj/structure/weightlifter/attackby(obj/item/P as obj, mob/user as mob)
+	if(in_use)
+		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
+		return
 	if(P.is_wrench(user))
 		P.playtoolsound(loc, 50)
 		anchored = !anchored
