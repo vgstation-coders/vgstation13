@@ -16,6 +16,20 @@
 	var/fuel_max = 1000//Lets try this for now
 	var/stability = 100//TODO: add all the stability things to this so its not very safe if you keep hitting in on things
 	var/exploded = 0
+	var/gauge_offset = 0
+
+/obj/item/weapon/am_containment/New()
+	..()
+	update_icon()
+
+/obj/item/weapon/am_containment/update_icon()
+	overlays.len = 0
+
+	var/fullness = round((fuel/fuel_max) * 8)
+
+	var/image/I = image(icon, src, "gauge_[fullness]")
+	I.pixel_x = gauge_offset
+	overlays += I
 
 /obj/item/weapon/am_containment/proc/boom()
 	var/percent = 0
@@ -44,14 +58,17 @@
 	if(fuel < wanted)
 		wanted = fuel
 	fuel -= wanted
+	update_icon()
 	return wanted
 
 /obj/item/weapon/am_containment/big
 	icon_state = "jar_big"
 	fuel = 10000
 	fuel_max = 10000
+	gauge_offset = 2
 
 /obj/item/weapon/am_containment/huge
 	icon_state = "jar_huge"
 	fuel = 30000
 	fuel_max = 30000
+	gauge_offset = 6
