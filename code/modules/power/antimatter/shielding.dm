@@ -58,7 +58,7 @@ proc/cardinalrange(var/center)
 				var/old_state = AMS.icon_state
 				AMS.update_icon()
 				if (old_state != AMS.icon_state)
-					playsound(T, 'sound/effects/sparks1.ogg', 15, 0, 0)
+					playsound(T, 'sound/effects/sparks1.ogg', 25, 0, 0)
 					anim(target = T, a_icon = icon, flick_anim = "change", lay = ABOVE_LIGHTING_LAYER, plane = ABOVE_LIGHTING_PLANE)
 					sleep(1)
 

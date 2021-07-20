@@ -360,7 +360,7 @@
 		"siliconUser" = istype(user, /mob/living/silicon),
 	)
 
-	ui = nanomanager.get_open_ui(user, src, ui_key, ui, data, force_open)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
 		ui = new(user, src, ui_key, "ame.tmpl", "Antimatter Control Unit", 500, data["siliconUser"] ? 465 : 390)
@@ -389,8 +389,6 @@
 		usr.unset_machine()
 		return
 
-	usr << browse(null, "window=AMcontrol") // fuck nano. Anyway this forces the window to close and open again, prompting it to properly update its info.
-
 	if(href_list["togglestatus"])
 		toggle_power()
 		message_admins("AME toggled [active?"on":"off"] by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
@@ -418,8 +416,7 @@
 	if(href_list["refreshstability"])
 		check_core_stability()
 
-	spawn(1)
-		updateDialog()
+	updateDialog()
 	return 1
 
 /obj/machinery/power/am_control_unit/npc_tamper_act(mob/living/L)
