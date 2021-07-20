@@ -140,11 +140,11 @@
 		"Default" = list(
 			slot_ears_str = list(
 				"Anomalist" = /obj/item/device/radio/headset/headset_sci,
-				"Xenoarcheologist" = /obj/item/device/radio/headset/headset_sci,
+				"Xenoarchaeologist" = /obj/item/device/radio/headset/headset_sci,
 			),
 			slot_w_uniform_str = list(
 				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
-				"Xenoarcheologist" = /obj/item/clothing/under/rank/xenoarch,
+				"Xenoarchaeologist" = /obj/item/clothing/under/rank/xenoarch,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/science,
@@ -152,11 +152,11 @@
 		/datum/species/plasmaman = list(
 			slot_ears_str = list(
 				"Anomalist" = /obj/item/device/radio/headset/headset_sci,
-				"Xenoarcheologist" = /obj/item/device/radio/headset/headset_sci,
+				"Xenoarchaeologist" = /obj/item/device/radio/headset/headset_sci,
 			),
 			slot_w_uniform_str = list(
 				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
-				"Xenoarcheologist" = /obj/item/clothing/under/rank/xenoarch,
+				"Xenoarchaeologist" = /obj/item/clothing/under/rank/xenoarch,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/science,
@@ -166,11 +166,11 @@
 		/datum/species/vox = list(
 			slot_ears_str = list(
                 "Anomalist" = /obj/item/device/radio/headset/headset_sci,
-                "Xenoarcheologist" = /obj/item/device/radio/headset/headset_sci,
+                "Xenoarchaeologist" = /obj/item/device/radio/headset/headset_sci,
             ),
 			slot_w_uniform_str = list(
 				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
-				"Xenoarcheologist" = /obj/item/clothing/under/rank/xenoarch,
+				"Xenoarchaeologist" = /obj/item/clothing/under/rank/xenoarch,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science,
