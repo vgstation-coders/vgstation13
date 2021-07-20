@@ -317,6 +317,37 @@
 	. = ..()
 	reagents.add_reagent(VIRUSFOOD, 1000)
 
+
+/obj/structure/reagent_dispensers/sulfacid
+	name = "\improper Sulfuric Acid Tank"
+	desc = "A tank filled with sulfuric acid."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "sulfacidtank"
+	amount_per_transfer_from_this = 50
+	anchored = TRUE
+	density = FALSE
+
+/obj/structure/reagent_dispensers/sulfacid/New()
+	. = ..()
+	reagents.add_reagent(SACID, 1000)
+
+/obj/structure/reagent_dispensers/sulfacid/attackby(var/obj/item/W, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if(issolder(W))
+		var/obj/item/tool/solder/S = W
+		if(S.reagents.get_reagent_amount() >= S.max_fuel) // Already filled.
+			to_chat(user, "<span class='notice'>\The [S] is already full!</span>")
+			return
+
+		reagents.trans_to(S, S.max_fuel)
+		S.update_icon()
+		to_chat(user, "<span class='notice'>Solder refilled.</span>")
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		return 1
+
 /obj/structure/reagent_dispensers/corn_oil_tank
 	name = "oil vat"
 	desc = "The greasiest place on the station, outside the captain's backroom."
