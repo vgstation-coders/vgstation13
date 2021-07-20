@@ -225,7 +225,7 @@
 
 /obj/item/weapon/paper/amelab5
 	name = "paper- 'Fifth Report'"
-	info = "The anomalist has started their experiments on the engine, they brought various devices and machines I do not recognize. Regardless, their radiations their tools emit seem to have a positive effect on the power output. Looks like we're on the verge of a technological breakthrough!"
+	info = "The anomalist has started their experiments on the engine, they brought various devices and machines I do not recognize. Regardless, their radiations their tools emit seem to have a positive effect on the power output. Looks like we're on the verge of a technological breakthrough! With the last deliveries we also ordered a portable SMES kit. If we can export enough surplus energy we might not only earn ourselves a bonus, but also prove the commercial applications of the enhanced AME."
 
 /obj/item/weapon/paper/amelab6
 	name = "paper- 'Sixth Report'"
@@ -252,6 +252,15 @@
 		toppaper = P
 
 	update_icon()
+
+/obj/item/weapon/disk/shuttle_coords/vault/amelab
+	name = "Experimental AME Lab shuttle destination disk"
+	desc = "This satellite could be repurposed as a comfortable hang-out. Although we might want to keep the lab properly sealed."
+	destination = /obj/docking_port/destination/vault/amelab
+
+/obj/docking_port/destination/vault/amelab
+	areaname = "Nanotrasen Experimental AME Lab"
+
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
