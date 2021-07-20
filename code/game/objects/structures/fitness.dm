@@ -41,6 +41,9 @@
 	anchored = 1
 	var/busy = 0
 
+/obj/structure/stacklifter/proc/can_disassemble()
+	return TRUE
+
 /obj/structure/stacklifter/attackby(obj/item/P as obj, mob/user as mob)
 	if(in_use)
 		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
@@ -49,7 +52,7 @@
 		P.playtoolsound(loc, 50)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
-	else if(iswelder(P))
+	else if(iswelder(P) && can_disassemble())
 		var/obj/item/tool/weldingtool/WT = P
 		if(!WT.remove_fuel(1,user))
 			return
@@ -107,6 +110,9 @@
 	anchored = 1
 	var/busy = 0
 
+/obj/structure/weightlifter/proc/can_disassemble()
+	return TRUE
+
 /obj/structure/weightlifter/attackby(obj/item/P as obj, mob/user as mob)
 	if(in_use)
 		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
@@ -115,7 +121,7 @@
 		P.playtoolsound(loc, 50)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
-	else if(iswelder(P))
+	else if(iswelder(P) && can_disassemble())
 		var/obj/item/tool/weldingtool/WT = P
 		if(!WT.remove_fuel(1,user))
 			return

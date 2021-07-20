@@ -474,57 +474,11 @@
 /obj/structure/rack/holo/can_disassemble()
 	return FALSE
 
-/obj/structure/stacklifter/holo/attackby(obj/item/P as obj, mob/user as mob)
-	if(in_use)
-		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
-		return
-	if(P.is_wrench(user))
-		P.playtoolsound(loc, 50)
-		anchored = !anchored
-		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
-	else if(iswelder(P))
-		var/obj/item/tool/weldingtool/WT = P
-		if(!WT.remove_fuel(1,user))
-			return
-		else
-			busy = TRUE
-			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
+/obj/structure/stacklifter/holo/can_disassemble()
+	return FALSE
 
-			user.visible_message("[user] dissassembles the weight machine.", "You start to dissassemble the weight machine.")
-			if (do_after(user, src, 40))
-				if (!src || !WT.isOn())
-					busy = FALSE
-					return
-				visible_message("\The [src] fades away!")
-				qdel(src)
-			busy = FALSE
-		return
-
-/obj/structure/weightlifter/holo/attackby(obj/item/P as obj, mob/user as mob)
-	if(in_use)
-		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
-		return
-	if(P.is_wrench(user))
-		P.playtoolsound(loc, 50)
-		anchored = !anchored
-		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
-	else if(iswelder(P))
-		var/obj/item/tool/weldingtool/WT = P
-		if(!WT.remove_fuel(1,user))
-			return
-		else
-			busy = TRUE
-			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-
-			user.visible_message("[user] dissassembles the weight machine.", "You start to dissassemble the weight machine.")
-			if (do_after(user, src, 40))
-				if (!src || !WT.isOn())
-					busy = FALSE
-					return
-				visible_message("\The [src] fades away!")
-				qdel(src)
-			busy = FALSE
-		return
+/obj/structure/weightlifter/holo/can_disassemble()
+	return FALSE
 
 /obj/item/weapon/holo
 	damtype = HALLOSS
