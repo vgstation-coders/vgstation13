@@ -14,7 +14,7 @@ proc/cardinalrange(var/center)
 
 	//icon = 'icons/obj/machines/antimatter.dmi'
 	icon = 'icons/obj/machines/new_ame.dmi'
-	icon_state = "shield"
+	icon_state = "part"
 	anchored = 1
 	density = 1
 	dir = 1
@@ -22,6 +22,8 @@ proc/cardinalrange(var/center)
 	idle_power_usage = 0
 	active_power_usage = 0
 	mech_flags = MECH_SCAN_FAIL
+
+	light_color = "#00FFFF"
 
 	var/obj/machinery/power/am_control_unit/control_unit = null
 	var/processing = 0//To track if we are in the update list or not, we need to be when we are damaged and if we ever
@@ -46,6 +48,19 @@ proc/cardinalrange(var/center)
 	link_control(AMC)
 	machines -= src
 	power_machines += src
+	update_icon()
+	playsound(src, 'sound/effects/sparks4.ogg', 30, 0, 0)
+	anim(target = loc, a_icon = icon, flick_anim = "deploy", lay = ABOVE_LIGHTING_LAYER, plane = ABOVE_LIGHTING_PLANE)
+	spawn(3) // delay for nicer animation
+		for (var/direction in alldirs)
+			var/turf/T = get_step(loc, direction)
+			for (var/obj/machinery/am_shielding/AMS in T)
+				var/old_state = AMS.icon_state
+				AMS.update_icon()
+				if (old_state != AMS.icon_state)
+					playsound(T, 'sound/effects/sparks1.ogg', 15, 0, 0)
+					anim(target = T, a_icon = icon, flick_anim = "change", lay = ABOVE_LIGHTING_LAYER, plane = ABOVE_LIGHTING_PLANE)
+					sleep(1)
 
 /obj/machinery/am_shielding/proc/link_control(var/obj/machinery/power/am_control_unit/AMC)
 	if(!istype(AMC))
@@ -158,36 +173,35 @@ proc/cardinalrange(var/center)
 
 /obj/machinery/am_shielding/update_icon()
 	overlays.len = 0
-	coredirs = 0
 	dirs = 0
+
+	if(core_check())
+		icon_state = "core[control_unit && control_unit.active]"
+		if (control_unit && control_unit.active)
+			var/image/I = image(icon = icon, icon_state = "core_overlay")
+			I.plane = ABOVE_LIGHTING_PLANE
+			I.layer = ABOVE_LIGHTING_LAYER
+			overlays += I
+			set_light(1.4,1)
+		else
+			set_light(0)
+		if(!processing)
+			setup_core()
+		return
+	else if(processing)
+		set_light(0)
+		shutdown_core()
+
 	for(var/direction in alldirs)
 		var/turf/T = get_step(loc, direction)
 		for(var/obj/machinery/machine in T)
-			// Detect cores
-			if((istype(machine, /obj/machinery/am_shielding) && machine:control_unit == control_unit && machine:processing))
-				coredirs |= direction
-
 			// Detect cores, shielding, and control boxen.
 			if(direction in cardinal)
 				if((istype(machine, /obj/machinery/am_shielding) && machine:control_unit == control_unit) || (istype(machine, /obj/machinery/power/am_control_unit) && machine == control_unit))
 					dirs |= direction
 
-	// If we're next to a core, set the prefix.
-	var/prefix = ""
-	var/icondirs=dirs
+	icon_state = "shield_[dirs]"
 
-	if(coredirs)
-		prefix="core"
-
-	// Set our overlay
-	icon_state = "[prefix]shield_[icondirs]"
-
-	if(core_check())
-		overlays += image(icon = icon, icon_state = "core[control_unit && control_unit.active]")
-		if(!processing)
-			setup_core()
-	else if(processing)
-		shutdown_core()
 
 
 /obj/machinery/am_shielding/attackby(obj/item/W, mob/user)
@@ -251,15 +265,15 @@ proc/cardinalrange(var/center)
 /obj/item/device/am_shielding_container
 	name = "packaged antimatter reactor section"
 	desc = "A small storage unit containing an antimatter reactor section.  To use place near an antimatter control unit or deployed antimatter reactor section and use a multitool to activate this package."
-	icon = 'icons/obj/machines/antimatter.dmi'
-	icon_state = "box"
+	icon = 'icons/obj/machines/new_ame.dmi'
+	icon_state = "part"
 	item_state = "electronic"
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
 	throwforce = 5
 	throw_speed = 1
-	throw_range = 2
+	throw_range = 5
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL*2)
 	w_type = RECYK_METAL
 

@@ -84,7 +84,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/produce_power()
-	playsound(src, 'sound/effects/bang.ogg', 25, 1)
+	playsound(src, 'sound/effects/explosionsmallfar.ogg', 25, 1)
 	var/core_power = reported_core_efficiency//Effectively how much fuel we can safely deal with
 	if(core_power <= 0)
 		return 0//Something is wrong
@@ -264,11 +264,13 @@
 /obj/machinery/power/am_control_unit/proc/toggle_power()
 	active = !active
 	if(active)
+		playsound(src, 'sound/effects/fall.ogg', 50, 1)
 		use_power = 2
-		visible_message("The [src.name] starts up.")
+		visible_message("[bicon(src)] The [src.name] starts up.")
 	else
+		playsound(src, 'sound/effects/fall2.ogg', 50, 1)
 		use_power = 1
-		visible_message("The [src.name] shuts down.")
+		visible_message("[bicon(src)] The [src.name] shuts down.")
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
 		AMS.update_icon()
 	update_icon()
@@ -387,14 +389,14 @@
 		usr.unset_machine()
 		return
 
+	usr << browse(null, "window=AMcontrol") // fuck nano. Anyway this forces the window to close and open again, prompting it to properly update its info.
+
 	if(href_list["togglestatus"])
 		toggle_power()
 		message_admins("AME toggled [active?"on":"off"] by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-		return 1
 
 	if(href_list["refreshicons"])
 		update_shield_icons = 2 // Fuck it
-		return 1
 
 	if(href_list["ejectjar"])
 		if(fueljar)
@@ -403,22 +405,21 @@
 			fueljar = null
 			//fueljar.control_unit = null currently it does not care where it is
 			//update_icon() when we have the icon for it
-		return 1
 
 	if(href_list["set_strength"])
 		var/newval = input("Enter new injection strength") as num|null
 		if(isnull(newval))
+			updateDialog()
 			return
 		fuel_injection=newval
 		fuel_injection=max(1,fuel_injection)
 		message_admins("AME injection strength set to [fuel_injection] by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-		return 1
 
 	if(href_list["refreshstability"])
 		check_core_stability()
-		return 1
 
-	updateDialog()
+	spawn(1)
+		updateDialog()
 	return 1
 
 /obj/machinery/power/am_control_unit/npc_tamper_act(mob/living/L)
