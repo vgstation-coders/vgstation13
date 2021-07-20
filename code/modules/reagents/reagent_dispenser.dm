@@ -319,8 +319,8 @@
 
 
 /obj/structure/reagent_dispensers/sulfacid
-	name = "\improper Sulfuric Acid Tank"
-	desc = "A tank filled with sulfuric acid."
+	name = "\improper Sulfuric Acid Dispenser"
+	desc = "A dispender of sulfuric acid."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "sulfacidtank"
 	amount_per_transfer_from_this = 50
