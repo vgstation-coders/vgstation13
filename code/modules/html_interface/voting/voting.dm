@@ -233,7 +233,7 @@ var/global/datum/controller/vote/vote = new()
 			if("map")
 				if(.)
 					chosen_map = "maps/voting/" + ismapvote[.] + "/vgstation13.dmb"
-					watchdog.chosen_map = .
+					watchdog.chosen_map = ismapvote[.]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 					//testing("Vote picked [chosen_map]")
 
