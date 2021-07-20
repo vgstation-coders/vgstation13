@@ -1,7 +1,6 @@
 /obj/machinery/power/am_control_unit
 	name = "antimatter control unit"
 	desc = "This device injects antimatter into connected shielding units. Wrench the device to set it up."
-	//icon = 'icons/obj/machines/antimatter.dmi'
 	icon = 'icons/obj/machines/new_ame.dmi'
 	icon_state = "control"
 	var/icon_mod = "on" // on, critical, or fuck
@@ -115,6 +114,8 @@
 		var/obj/item/weapon/am_containment/AMC = AM
 		var/mob/last_touched = AMC.fingerprintslast
 		fueljar = AMC
+		overlays += "control-[AMC.icon_state]"
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		AMC.forceMove(src)
 		message_admins("AME loaded with fuel by [last_touched ? "[last_touched.real_name] ([last_touched.key])" : "a conveyor"] at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 		visible_message("The conveyor loads an [AMC.name] into the [src.name].")
@@ -208,6 +209,8 @@
 			to_chat(user, "<span class='warning'>There is already a [fueljar] inside!</span>")
 			return
 		fueljar = W
+		overlays += "control-[W.icon_state]"
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(user.client)
 			user.client.screen -= W
 		user.u_equip(W,1)
@@ -401,6 +404,8 @@
 			message_admins("AME fuel jar ejected by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 			fueljar.forceMove(src.loc)
 			fueljar = null
+			overlays.len = 0
+			playsound(src, 'sound/machines/click.ogg', 50, 1)
 			//fueljar.control_unit = null currently it does not care where it is
 			//update_icon() when we have the icon for it
 

@@ -12,7 +12,6 @@ proc/cardinalrange(var/center)
 	name = "antimatter reactor section"
 	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."
 
-	//icon = 'icons/obj/machines/antimatter.dmi'
 	icon = 'icons/obj/machines/new_ame.dmi'
 	icon_state = "part"
 	anchored = 1

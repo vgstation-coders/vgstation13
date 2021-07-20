@@ -1,8 +1,10 @@
 /obj/item/weapon/am_containment
 	name = "antimatter containment jar"
 	desc = "Holds antimatter. A few of these could blow an entire 21st-century lunar installation."
-	icon = 'icons/obj/machines/antimatter.dmi'
+	icon = 'icons/obj/machines/new_ame.dmi'
 	icon_state = "jar"
+	item_state = "am_jar"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	density = 0
 	anchored = 0
 	force = 8
@@ -50,6 +52,6 @@
 	fuel_max = 10000
 
 /obj/item/weapon/am_containment/huge
-	icon_state = "jar_big"
+	icon_state = "jar_huge"
 	fuel = 30000
 	fuel_max = 30000
