@@ -14,6 +14,7 @@
 	layer = BLOB_CORE_LAYER
 	var/core_warning_delay = 0
 	var/previous_health = 200
+	var/no_ghosts_allowed = FALSE
 
 	icon_new = "core"
 	icon_classic = "blob_core"
@@ -25,7 +26,7 @@
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
-	if(!asleep && icon_size == 64)
+	if (!asleep && icon_size == 64)
 		if(!no_morph && new_overmind)
 			flick("core_spawn",src)
 		else
@@ -132,7 +133,7 @@
 			to_chat(usr, "<span class='warning'>Looks like someone applied first. First arrived, first served. Better luck next time.</span>")
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
-	if (initial(asleep))
+	if (no_ghosts_allowed)
 		to_chat(user, "<span class='warning'>This [src] cannot be controlled by ghosts.</span>")
 		return
 	if (!overmind)
