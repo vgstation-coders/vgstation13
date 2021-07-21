@@ -51,11 +51,25 @@
 /datum/dna/gene/basic/stealth/chameleon/New()
 	block = CHAMELEONBLOCK
 
+/datum/dna/gene/basic/stealth/chameleon/activate(var/mob/M, var/connected, var/flags)
+	..()
+	M.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	return 1
+
+/datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
+	if(!..())
+		return 0
+	M.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	return 1
+
+/datum/dna/gene/basic/stealth/chameleon/proc/mob_moved(var/mob/mover)
+	mover.alphas["chameleon_stealth"] = round(255 * 0.80)
+
 /datum/dna/gene/basic/stealth/chameleon/OnMobLife(var/mob/M)
 	if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
 		M.alphas["chameleon_stealth"] = max(M.alphas["chameleon_stealth"] - 25, 0)
 	else
-		M.alphas["chameleon_stealth"] = round(255 * 0.80)
+		mob_moved(M)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 

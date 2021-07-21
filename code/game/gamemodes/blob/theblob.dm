@@ -55,7 +55,6 @@ var/list/blob_overminds = list()
 		looks = newlook
 	update_looks()
 	blobs += src
-	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
 	if(icon_size == 64)
@@ -76,7 +75,6 @@ var/list/blob_overminds = list()
 		A.blob_act(0,src)
 
 	blob_tiles_grown_total++
-	return
 
 
 /obj/effect/blob/Destroy()
@@ -415,6 +413,10 @@ var/list/blob_looks_player = list(//Options available to players
 	luminosity = 2
 	health = 21
 	layer = BLOB_BASE_LAYER
+
+/obj/effect/blob/normal/New(turf/loc,newlook = null,no_morph = 0)
+	dir = pick(cardinal)
+	..()
 
 /obj/effect/blob/normal/Delete()
 	..()

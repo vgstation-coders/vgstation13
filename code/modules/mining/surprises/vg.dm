@@ -15,10 +15,10 @@
 	not_next_to=list()
 
 	decorations=list(
-		/obj/item/weapon/screwdriver=2,
-		/obj/item/weapon/crowbar=2,
+		/obj/item/tool/screwdriver=2,
+		/obj/item/tool/crowbar=2,
 		/obj/item/stack/metal=1,
-		/obj/item/weapon/wrench=2
+		/obj/item/tool/wrench=2
 	)
 
 /layout_rule/place_adjacent/workbench/wooden
@@ -84,6 +84,26 @@
 
 	flags = CONTIGUOUS_WALLS | CONTIGUOUS_FLOORS
 
+/datum/map_element/mining_surprise/geode
+	name="Geode"
+	file_path = "maps/randomvaults/mining/geode.dmm"
+
+/datum/map_element/mining_surprise/crashed_tradeship
+	name="Crashed Tradeship"
+	file_path = "maps/randomvaults/mining/crashed_tradeship.dmm"
+
+/datum/map_element/mining_surprise/crashed_pod
+	name="Crashed Pod"
+	file_path = "maps/randomvaults/mining/crashed_pod.dmm"
+
+/datum/map_element/mining_surprise/digsite
+	name="Abandoned Digsite"
+	file_path = "maps/randomvaults/mining/abandoned_digsite.dmm"
+
+/datum/map_element/mining_surprise/forge
+	name="Abandoned Forge"
+	file_path = "maps/randomvaults/mining/abandoned_forge.dmm"
+
 /mining_surprise/alien_nest
 	name="Hidden Nest"
 	floortypes = list(
@@ -138,3 +158,13 @@
 	desc = "From within this rich soil, the stone gathers moss."
 
 	file_path = "maps/randomvaults/mining/angie_lair.dmm"
+
+/datum/map_element/hoboshack
+	name = "Space hobo shack"
+
+	file_path = "maps/misc/hoboshack.dmm"
+
+/datum/map_element/hoboshack/type1
+	name = "Space hobo shack"
+
+	file_path = "maps/misc/hoboshack.dmm"

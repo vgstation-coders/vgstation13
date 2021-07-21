@@ -61,7 +61,7 @@
 		return ..()
 	else if(broken)
 		if(issolder(W))
-			var/obj/item/weapon/solder/S = W
+			var/obj/item/tool/solder/S = W
 			if(!S.remove_fuel(4,user))
 				return
 			S.playtoolsound(loc, 100)
@@ -84,7 +84,7 @@
 		update_icon()
 	else
 		if(iswelder(W))
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
 			welded =! welded

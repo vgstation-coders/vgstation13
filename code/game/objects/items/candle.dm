@@ -111,7 +111,7 @@
 
 /obj/item/candle/holo/attackby(obj/item/weapon/W, mob/user)
 	var/list/choices = list("red","blue","purple","green","yellow")
-	if(ismultitool(W))
+	if(W.is_multitool(user))
 		wax = input("What color would do you want?","Color Selection") as anything in choices
 		update_icon()
 	..()

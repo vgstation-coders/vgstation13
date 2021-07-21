@@ -110,7 +110,7 @@
 			has_electronics &= 2
 		return
 
-	else if (iswirecutter(W) && opened && (has_electronics & 2))
+	else if (W.is_wirecutter(user) && opened && (has_electronics & 2))
 		to_chat(user, "You begin to cut the cables...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 50))
@@ -131,7 +131,7 @@
 		return
 
 	else if (iswelder(W) && opened && !has_electronics)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You start welding the compressor frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if(gcDestroyed)

@@ -328,6 +328,7 @@ var/runedec = 0 // Rune cap ?
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 	if(isobserver(M))
 		if(M.invisibility != 0)
 			M.invisibility = 0

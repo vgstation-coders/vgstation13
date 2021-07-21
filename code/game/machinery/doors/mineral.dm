@@ -163,7 +163,7 @@
 
 /obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			TemperatureAct(100)
 	return ..()
@@ -351,6 +351,9 @@
 			if (M.pulling && loc)
 				M.pulling.forceMove(loc)//so we don't stop pulling stuff when moving through cult doors
 		close()
+
+/obj/machinery/door/mineral/cult/attack_construct(var/mob/user)
+	return TryToSwitchState(user)
 
 /obj/machinery/door/mineral/cult/TryToSwitchState(atom/user)
 	if (ismob(user))

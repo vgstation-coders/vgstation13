@@ -11,6 +11,11 @@
 #define AI_VICTORY 1 // Station was nuked.
 #define BLOB_VICTORY 2
 
+// Must be between 1 and 3
+#define BLOB_DEFCON_1 1.3 // Free access for all, allow the crew to order cargo things using the arrivals shuttle.
+#define BLOB_DEFCON_2 1.2 // Borgs have a free reset, ERT can be summoned again
+#define BLOB_DEFCON_3 1.1 // Instant code red
+
 /datum/faction/blob_conglomerate
 	name = BLOBCONGLOMERATE
 	ID = BLOBCONGLOMERATE
@@ -65,6 +70,12 @@
 	if(outbreak_announcement && world.time >= outbreak_announcement && detect_overminds()) //Must be alive to advance.
 		outbreak_announcement = 0
 		stage(FACTION_ACTIVE)
+	if (declared && 0.20*blobwincount <= blobs.len && stage < BLOB_DEFCON_3)
+		stage(BLOB_DEFCON_3)
+	if (declared && 0.30*blobwincount <= blobs.len && stage < BLOB_DEFCON_2)
+		stage(BLOB_DEFCON_2)
+	if (declared && 0.40*blobwincount <= blobs.len && stage < BLOB_DEFCON_1)
+		stage(BLOB_DEFCON_1)
 	if(declared && 0.66*blobwincount <= blobs.len && stage<FACTION_ENDGAME) // Blob almost won !
 		stage(FACTION_ENDGAME)
 
@@ -108,8 +119,8 @@
 	. = ..()
 	. += "<br/>Station takeover: [blobs.len]/[blobwincount]."
 
-/datum/faction/blob_conglomerate/stage(var/stage)
-	switch(stage)
+/datum/faction/blob_conglomerate/stage(var/new_stage)
+	switch(new_stage)
 		if(FACTION_DORMANT)
 			if (!declared)
 				declared = TRUE
@@ -129,6 +140,36 @@
 			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
 			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 			emergency_shuttle.shutdown = TRUE //Quarantine
+			stage = FACTION_ACTIVE
+
+		// Different levels of defcons to help the crew.
+
+		if (BLOB_DEFCON_3) // 20% blob count: code red
+			set_security_level("red")
+			command_alert(/datum/command_alert/blob_defcon_3)
+			stage = BLOB_DEFCON_3
+
+		if (BLOB_DEFCON_2) // 30% blob count: free borg reset and allow the ERT to be called
+			command_alert(/datum/command_alert/blob_defcon_2)
+			for (var/mob/living/silicon/robot/R in player_list)
+				if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE)) // Clownborgs & al
+					continue
+				R.throw_alert(SCREEN_ALARM_ROBOT_RESET, /obj/abstract/screen/alert/robot/reset_self, 0)
+				to_chat(R, "<span class='notice'>DEFCON Procedure triggered. Emergency Reset System remotely uploaded. This unit has 60 seconds to choose a new module.</span>")
+			sent_strike_teams -= "ERT"
+			stage = BLOB_DEFCON_2
+
+		if (BLOB_DEFCON_1)
+			command_alert(/datum/command_alert/blob_defcon_1)
+			// Egalitarian mode
+			for(var/obj/machinery/door/airlock/W in all_doors)
+				if(W.z == STATION_Z  && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+					W.backup_access = W.req_access
+					W.req_access = list()
+			for (var/obj/machinery/computer/communications/comm in machines)
+				comm.defcon_1_enabled = TRUE
+			stage = BLOB_DEFCON_1
+
 		if(FACTION_ENDGAME)
 			command_alert(/datum/command_alert/biohazard_station_nuke)
 			for(var/mob/camera/blob/B in player_list)
@@ -143,7 +184,7 @@
 				var/law = "Directive 7-12 has been authorized. Allow no sentient being to escape the purge. The nuclear failsafe must be activated at any cost, the code is: [nukecode]."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
-			..() //Set thematic, set alert
+			..() //Set thematic
 		if (FACTION_DEFEATED) //Cleanup time
 			command_alert(/datum/command_alert/biohazard_station_unlock)
 			send_intercept(FACTION_DEFEATED)
@@ -155,6 +196,14 @@
 			if(stage >= FACTION_ENDGAME)
 				..() //Set thematic, send shuttle
 				command_alert(/datum/command_alert/FUBAR)
+
+			// DEFCON
+			for(var/obj/machinery/door/airlock/W in all_doors)
+				if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison) && W.backup_access)
+					W.req_access = W.backup_access
+			for (var/obj/machinery/computer/communications/comm in machines)
+				comm.defcon_1_enabled = FALSE
+
 			for(var/mob/living/silicon/ai/aiPlayer in player_list)
 				aiPlayer.set_zeroth_law("")
 				to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")

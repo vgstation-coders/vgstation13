@@ -373,6 +373,11 @@
 /datum/asset/simple/power_chart
 	assets = list("powerChart.js" = 'code/modules/power/powerChart.js')
 
+/datum/asset/simple/util
+	assets = list(
+		"href_multipart_handler.js" =  'code/modules/html_interface/href_multipart_handler.js'
+	)
+
 /datum/asset/simple/emoji_list
 	assets = list(
 		"emoji-happy.png"		=	'icons/pda_icons/emoji/happy.png',
@@ -406,6 +411,11 @@
 		"fa-solid-900.woff"   = 'html/font-awesome/webfonts/fa-solid-900.woff',
 		"font-awesome.css"    = 'html/font-awesome/css/all.min.css',
 		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
+	)
+
+/datum/asset/simple/other_fonts
+	assets = list(
+		"BLOODY.TTF"  = 'html/fonts/BLOODY.TTF',
 	)
 
 /datum/asset/simple/tgui

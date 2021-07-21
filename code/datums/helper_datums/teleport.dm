@@ -1,6 +1,9 @@
 //wrapper
 /proc/do_teleport(ateleatom, adestination, aprecision=FALSE, afteleport=TRUE, aeffectin=null, aeffectout=null, asoundin=null, asoundout=null, aijamming=FALSE)
-	new /datum/teleport/instant/science(arglist(args))
+	if (isobserver(ateleatom)) // ghosts teleport without making sounds nor sparks
+		new /datum/teleport/instant(ateleatom, adestination, aprecision, afteleport, aeffectin, aeffectout, null, null, aijamming)
+	else
+		new /datum/teleport/instant/science(arglist(args))
 	return
 
 /datum/teleport
@@ -192,6 +195,9 @@
 	return TRUE
 
 /datum/teleport/instant/science/teleportChecks(var/ignore_jamming = FALSE)
+	if(istype(teleatom, /obj/effect/effect/sparks)) // Don't teleport sparks or the server dies
+		return FALSE
+
 	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE

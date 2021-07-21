@@ -183,6 +183,11 @@
 	minimal_access = list(access_janitor, access_maint_tunnels)
 	outfit_datum = /datum/outfit/janitor
 
+/datum/job/janitor/get_wage()
+	if(Holiday == APRIL_FOOLS_DAY)
+		return 0 //They do it for free
+	return ..()
+
 //More or less assistants
 /datum/job/librarian
 	title = "Librarian"

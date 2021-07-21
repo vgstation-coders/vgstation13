@@ -31,9 +31,31 @@
 			pixel_y = PixelY
 		sleep(picked_up_speed)
 
-/obj/item/projectile/rocket/to_bump(var/atom/A)
+// -- Random critz
+/obj/item/projectile/rocket/become_crit()
+	exdev += 2
+	exheavy += 2
+	exlight += 2
 	..()
-	explosion(A, exdev, exheavy, exlight, exflash)
+
+/obj/item/projectile/rocket/calculate_falloff(var/atom/impact)
+	var/dist_falloff = get_dist(firer, impact) - 5
+	var/total_falloff = clamp((1 - dist_falloff/15), 0.5, 1) // No rampup + more distance for firing
+	return total_falloff
+
+/obj/item/projectile/rocket/do_falloff(var/total_falloff)
+	. = ..()
+	exdev = Floor(total_falloff*exdev)
+	exheavy = Floor(total_falloff*exheavy)
+	exlight = Floor(total_falloff*exlight)
+	exflash = Floor(total_falloff*exflash)
+	emheavy = Floor(total_falloff*emheavy)
+	emlight = Floor(total_falloff*emlight)
+
+/obj/item/projectile/rocket/to_bump(var/atom/A)
+	var/A_turf = get_turf(A)
+	..()
+	explosion(A_turf, exdev, exheavy, exlight, exflash)
 	if(!gcDestroyed)
 		qdel(src)
 

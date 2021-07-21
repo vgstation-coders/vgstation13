@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6 {color: #a4bad6;}
 h1.alert, h2.alert {color: #a4bad6;}
 
 a {color: #397ea5;}
-a:visited {color: #7c00e6;}
+a:visited {color: #b76ff5;}
 
 .motd {color: #98971a;}
 .motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #98971a;}
@@ -27,6 +27,7 @@ a:visited {color: #7c00e6;}
 .admin {color: #5975da;}
 .adminmod {color: #8f5e2e;}
 .modooc {color: #ffffff;}
+.maroon {color: #c52943;}
 
 .deadsay {color: #e2c1ff;}
 .cult {color: #aa1c1c;}
@@ -45,6 +46,8 @@ a:visited {color: #7c00e6;}
 .engradio {color: #f37746;}
 .medradio {color: #57b8f0;}
 .sciradio {color: #c68cfa;}
+.serradio {color: #c09461;}
+.supradio {color: #b4760a;}
 .binaryradio {color: #bdbdbd}
 .mommiradio {color: #9c9fc9;}
 
@@ -65,6 +68,8 @@ a:visited {color: #7c00e6;}
 .whisper {color:#cccccc;}
 
 .newscaster {color: #c05d5d;}
+
+.recruit {color: #986cdb; font-weight: bold; font-style: italic;}
 
 #newMessages {background: #222222; color: #cccccc;}
 #ping {background: #222222;}

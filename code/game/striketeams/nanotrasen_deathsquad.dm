@@ -48,6 +48,10 @@
 		leader_name = new_commando.real_name
 		concrete_outfit.is_leader = TRUE
 	concrete_outfit.equip(new_commando)
+
+	new_commando.add_language(LANGUAGE_DEATHSQUAD)
+	new_commando.default_language = all_languages[LANGUAGE_DEATHSQUAD]
+
 	return new_commando
 
 /datum/striketeam/deathsquad/greet_commando(var/mob/living/carbon/human/H)

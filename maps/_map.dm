@@ -103,35 +103,7 @@
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 
-	var/list/holodeck_rooms = list(
-		"Basketball Court",
-		"Beach",
-		"Boxing Court",
-		"Checkers Court",
-		"Chess Board",
-		"Desert",
-		"Dining Hall",
-		"Empty Court",
-		"Firing Range",
-		"Gym",
-		"Laser Tag Arena",
-		"Maze",
-		"Meeting Hall",
-		"Panic Bunker",
-		"Picnic Area",
-		"Snow Field",
-		"Theatre",
-		"Thunderdome Court",
-		"Wild Ride",
-		"Zoo"
-	)
-	var/list/emagged_holodeck_rooms = list(
-		"Begin Atmospheric Burn Simulation" = "Ensure the holodeck is empty before testing.",
-		"Begin Wildlife Simulation" = "Ensure the holodeck is empty before testing.",
-		"Club Catnip" = "Ensure the holodeck is empty before testing.",
-		"Combat Arena" = "Safety protocols disabled - weapons are not for recreation.",
-		"Medieval Tournament" = "Safety protocols disabled - weapons are not for recreation.",
-	)
+	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
 
 /datum/map/New()
 	. = ..()
@@ -181,6 +153,10 @@
 var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()
+
+//Set map-specific conditions here
+/datum/map/proc/map_specific_conditions(var/condition)
+	return 1
 
 //For any map-specific UI, like AI jumps
 /datum/map/proc/special_ui(var/obj/abstract/screen/S, mob/user)

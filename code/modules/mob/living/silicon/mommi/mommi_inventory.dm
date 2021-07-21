@@ -53,6 +53,7 @@
 		head_state = null
 		// Update the MoMMI's head inventory icons
 		update_inv_head()
+	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
 
 // Override the default /mob version since we only have one hand slot.
 /mob/living/silicon/robot/mommi/put_in_active_hand(var/obj/item/W)

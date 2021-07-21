@@ -123,7 +123,7 @@
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
 	name = "pepperspray"
-	desc = "Manufactured by UhangInc, used to blind and down an opponent quickly."
+	desc = "A pepper spray manufactured by UhangInc, used to blind and down an opponent quickly."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "pepperspray"
 	item_state = "pepperspray"
@@ -133,6 +133,19 @@
 /obj/item/weapon/reagent_containers/spray/pepper/New()
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
+
+/obj/item/weapon/reagent_containers/spray/pepper/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/orange)
+		has_slime=1
+		reagents.add_reagent(CONDENSEDCAPSAICIN, 40)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
+		to_chat(user, "You drop the slime extract down into the spray canister, and liquid capsaicin swells up to the brim.")
+		return TRUE
+
+/obj/item/weapon/reagent_containers/spray/pepper/make_puff(var/atom/target, var/mob/user)
+	if(has_slime)
+		reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
+	..()
 
 // Luminol
 /obj/item/weapon/reagent_containers/spray/luminol
@@ -150,11 +163,11 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/plantbgone/New()
 	..()
-	reagents.add_reagent(PLANTBGONE, 100)
+	reagents.add_reagent(PLANTBGONE, 250)
 
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
@@ -162,11 +175,11 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 100
+	volume = 250
 
 /obj/item/weapon/reagent_containers/spray/bugzapper/New()
 	..()
-	reagents.add_reagent(TOXIN, 100)
+	reagents.add_reagent(INSECTICIDE, 250)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer

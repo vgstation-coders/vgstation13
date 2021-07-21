@@ -78,7 +78,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if(M_REGEN in mutations)
 					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
-				if (iscultist(src) && (mind.GetRole(CULTIST) in blood_communion))//cultists that take on the blood communion tattoo get a slight blood regen bonus
+				if (iscultist(src) && (iscultist(src) in blood_communion))//cultists that take on the blood communion tattoo get a slight blood regen bonus
 					if(M_REGEN in mutations)
 						B.volume += 0.6
 					else
@@ -185,21 +185,32 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 		//Bleeding out
 		var/blood_max = 0
+		var/blood_factor = 1
 		for(var/datum/organ/external/temp in organs)
 			if(!(temp.status & ORGAN_BLEEDING) || temp.status & (ORGAN_ROBOT|ORGAN_PEG))
 				continue
+
 			for(var/datum/wound/W in temp.wounds) if(W.bleeding())
 				blood_max += W.damage / 4
+
 			if(temp.status & ORGAN_DESTROYED && !(temp.status & ORGAN_GAUZED) && !temp.amputated)
 				blood_max += 20 //Yer missing a fucking limb.
+
 			if (temp.open)
 				blood_max += 2 //Yer stomach is cut open
+
 			blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
+
 			if(lying)
-				blood_max = blood_max * 0.7
-			/*if(reagents.has_reagent(INAPROVALINE))
-				blood_max = blood_max * 0.7*/
-		drip(blood_max)
+				blood_factor -= 0.3
+
+			if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
+				blood_factor += 0.3
+
+			if(reagents.has_reagent(INAPROVALINE))
+				blood_factor -= 0.3
+
+		drip(blood_max * blood_factor)
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
@@ -389,6 +400,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if(species && species.anatomy_flags & NO_BLOOD)
 		reagents.add_reagent(BLOOD, amount, injected.data)
 		reagents.update_total()
+		container.reagents.remove_reagent(BLOOD, amount)
 		return
 
 	var/datum/reagent/blood/our = get_blood(vessel)

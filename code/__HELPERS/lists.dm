@@ -30,6 +30,35 @@
 
 		return "[output][and_text][input[index]]"
 
+//Returns a counted list of atom names in plain english as a string
+/proc/counted_english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
+	var/list/names = uniquenamelist(input) // First, get the items to list
+	var/uniquetotal = names.len // And the amount
+	var/namecount = 0 // Variable for how often an item occurs
+	var/currentName = "" // Current name worked with in loop
+	
+	if (!uniquetotal) // If the list of names is empty
+		return "[nothing_text]" // Return "nothing"
+	else if (uniquetotal == 1) // If there is only one item
+		namecount = count_by_name(input, names[1]) // Count how many of this item occurs
+		currentName = namecount == 1 ? "\a [names[1]]" : "[names[1]]\s" // Make it say "an item" or "x items" if singular or plural
+		return "[namecount == 1 ? "" : namecount] [currentName]" // Return this
+	else // If more than one item
+		var/output = "" // Output string to work on
+		var/index = 1 // Loop index
+		while (index < uniquetotal) // While in loop
+			if (index == uniquetotal - 1) // If second to last element
+				comma_text = final_comma_text // Remove the comma
+
+			namecount = count_by_name(input, names[index]) // Count as before
+			currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s" // And make grammatically correct
+			output += "[namecount == 1 ? "" : namecount] [currentName][comma_text]" // And put together as before, with comma this time
+			index++ // Iterate
+
+		namecount = count_by_name(input, names[index]) // Count again on last one
+		currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s" // Singular or plural
+		return "[output][and_text][namecount == 1 ? "" : namecount] [currentName]" // Put "and" before very last item in list
+
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
 	if(istype(L))
@@ -245,6 +274,14 @@
 			K += item
 	return K
 
+//Return a list with no duplicate names
+/proc/uniquenamelist(var/list/atom/L)
+	var/list/K = list()
+	for(var/atom/item in L)
+		if(!(item.name in K))
+			K += item.name
+	return K
+
 //for sorting clients or mobs by ckey
 /proc/sortKey(list/L, order=1)
 	return sortTim(L, order >= 0 ? /proc/cmp_ckey_asc : /proc/cmp_ckey_dsc)
@@ -315,6 +352,13 @@
 	var/i = 0
 	for(var/T in L)
 		if(istype(T, type))
+			i++
+	return i
+
+/proc/count_by_name(var/list/atom/L, name)
+	var/i = 0
+	for(var/atom/T in L)
+		if(T.name == name)
 			i++
 	return i
 

@@ -42,7 +42,6 @@
 	var/closed_system          // If set, the tray will attempt to take atmos from a pipe.
 	var/force_update           // Set this to bypass the cycle time check.
 	var/skip_aging = 0		   // Don't advance age for the next N cycles.
-
 	var/pollination = 0
 	var/bees = 0				//Are the trays currently affected by the bees' pollination?
 
@@ -51,8 +50,13 @@
 	var/internal_light = 1
 	var/light_on = 0
 
+	var/key_name_last_user = ""
+
 	// Seed details/line data.
 	var/datum/seed/seed = null // The currently planted seed
+
+/obj/machinery/portable_atmospherics/hydroponics/loose
+	anchored = FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/New()
 	..()
@@ -197,6 +201,7 @@
 		return 0
 
 	add_fingerprint(user)
+	key_name_last_user = key_name(user)
 
 	if (istype(O, /obj/item/seeds))
 
@@ -214,10 +219,10 @@
 			switch(S.seed.spread)
 				if(1)
 					var/turf/T = get_turf(src)
-					msg_admin_attack("[key_name(user)] has planted a creeper packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+					msg_admin_attack("[key_name(user)] has planted a creeper packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a> ([bad_stuff()])")
 				if(2)
 					var/turf/T = get_turf(src)
-					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a> ([bad_stuff()])")
 			if(S.seed.exude_gasses && S.seed.exude_gasses.len)
 				add_gamelogs(user, "planted a packet exuding [english_list(S.seed.exude_gasses)]", tp_link = TRUE)
 
@@ -299,7 +304,7 @@
 			C.being_potted = FALSE
 		return
 
-	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	else if(is_type_in_list(O, list(/obj/item/tool/wirecutters, /obj/item/tool/scalpel)))
 
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
@@ -393,9 +398,16 @@
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
-
+		
 	else
 		return ..()
+
+/obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/green)
+		has_slime=1
+		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
+		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 
@@ -583,5 +595,17 @@
 	if((usr.incapacitated() || !Adjacent(usr)))
 		return
 	close_lid()
+
+// See no evil, hear no evil. Returns all the potentially bad things on a hydroponic tray.
+/obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
+	var/list/things = list()
+	if (seed.thorny)
+		things += "thorny"
+	if (seed.carnivorous)
+		things += "carnivorous"
+	for (var/chemical_id in seed.chems)
+		if (chemical_id in reagents_to_log)
+			things += chemical_id
+	return english_list(things, "nothing")
 
 /datum/locking_category/hydro_tray

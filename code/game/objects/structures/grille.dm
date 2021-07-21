@@ -20,7 +20,7 @@
 	if(!anchored)
 		to_chat(user, "Its screws are loose.")
 	if(broken) //We're not going to bother with the damage
-		to_chat(user, "It has been completely smashed apart, only a few rods are still holding together")
+		to_chat(user, "It has been completely smashed apart! Only a few rods are still holding together.")
 
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
@@ -171,7 +171,7 @@
 					S.dir = get_dir(src, user)
 					return
 		return
-	if(iswirecutter(W))
+	if(W.is_wirecutter(user))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			W.playtoolsound(loc, 100)
 			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
@@ -278,7 +278,7 @@
 /obj/structure/grille/cult //Used to get rid of those ugly fucking walls everywhere while still blocking air
 
 	name = "cult grille"
-	desc = "A matrix built out of an unknown material, with some sort of force field blocking air around it"
+	desc = "A matrix built out of an unknown material, with some sort of force field blocking air around it."
 	icon_state = "grillecult"
 	health = 40 //Make it strong enough to avoid people breaking in too easily
 

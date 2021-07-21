@@ -109,18 +109,18 @@
 	if(!vote)
 		return
 	var/winner
-	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Input New") == "Preexisting")
+	if(vote.choices.len && alert(usr,"Pick existing choice?", "Rig", "Preexisting", "Add a new option") == "Preexisting")
 		winner = input(usr,"Choose a result.","Choose a result.", vote.choices[1]) as null|anything in vote.choices
 		if(!winner)
 			return
 		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	else
 		if(vote.ismapvote)
-			winner = input(usr,"Pick a map, choose a duplicate and pomf will hurt you.") as text|anything|null in vote.allmaps
-			var/path = vote.allmaps[winner]
-			if(!path)
-				to_chat(usr,"<span class='warning'>You must specify a path to rig a mapvote!</span>")
+			var/all_maps = get_all_maps()
+			winner = input(usr, "Pick a map.") as null|anything in all_maps
+			if(!winner)
 				return
+			var/path = all_maps[winner]
 			vote.ismapvote[winner] = path
 			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
 		else

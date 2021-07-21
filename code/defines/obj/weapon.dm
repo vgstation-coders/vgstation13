@@ -75,35 +75,6 @@
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/weapon/soap
-	name = "soap"
-	desc = "A cheap bar of soap. Doesn't smell."
-	gender = PLURAL
-	icon = 'icons/obj/items.dmi'
-	icon_state = "soap"
-	w_class = W_CLASS_TINY
-	siemens_coefficient = 0 //no conduct
-	throwforce = 0
-	throw_speed = 4
-	throw_range = 20
-	flags = FPRINT | NO_ATTACK_MSG
-
-/obj/item/weapon/soap/nanotrasen
-	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
-	icon_state = "soapnt"
-
-/obj/item/weapon/soap/deluxe
-	desc = "A deluxe Waffle Co. brand bar of soap. Smells of condoms."
-	icon_state = "soapdeluxe"
-
-/obj/item/weapon/soap/syndie
-	desc = "An untrustworthy bar of soap. Smells of fear."
-	icon_state = "soapsyndie"
-
-/obj/item/weapon/soap/holo
-	name = "UV sterilizer"
-	desc = "This shouldn't exist."
-
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
 	desc = "A tube... of cardboard."
@@ -349,12 +320,12 @@
 		var/obj/item/I = O
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
-		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
+		if(I.is_wirecutter(user)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				I.playtoolsound(usr, 50)
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
-				var /obj/item/stack/cable_coil/S = new /obj/item/weapon/screwdriver(user.loc)
+				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(user.loc)
 				C.amount = 10
 				C._color = cable_color
 				C.icon_state = "coil_[C._color]"
@@ -908,7 +879,7 @@
 	slot_flags = SLOT_HEAD
 
 /obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
-	if(iswirecutter(I))
+	if(I.is_wirecutter(user))
 		to_chat(user, "<span class='info'>You cut apart the cone into plastic.</span>")
 		drop_stack(/obj/item/stack/sheet/mineral/plastic, user.loc, 2, user)
 		qdel(src)
@@ -1123,6 +1094,14 @@
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "ectoplasm"
 	w_type = RECYK_BIOLOGICAL
+
+
+/obj/item/weapon/ectoplasm/New(turf/loc, var/alt_color)
+	..()
+	if (alt_color)
+		var/icon/color_icon = icon(icon,"[icon_state]_blank")
+		color_icon.Blend(alt_color, ICON_ADD)
+		icon = color_icon
 
 /////////Random shit////////
 

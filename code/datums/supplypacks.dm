@@ -21,15 +21,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/hidden = 0 //Emaggable
 	var/contraband = 0 //Hackable via tools
 	var/group = "Supplies"
+	var/require_holiday = null
 
 /datum/supply_packs/New()
 	manifest += "<ul>"
 	for(var/path in contains)
 		if(!path)
 			continue
-		var/atom/movable/AM = new path()
-		manifest += "<li>[AM.name]</li>"
-		qdel(AM)
+		var/atom/movable/AM = path
+		manifest += "<li>[initial(AM.name)]</li>"
 	manifest += "</ul>"
 
 // Called after a crate containing the items specified by this datum is created
@@ -517,7 +517,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/collectable/police,
 					/obj/item/clothing/head/collectable/slime,
 					/obj/item/clothing/head/collectable/xenom,
-					/obj/item/clothing/head/collectable/petehat)
+					/obj/item/clothing/head/collectable/petehat,)
 	name = "Collectable hats!"
 	cost = 200
 	containertype = /obj/structure/closet/crate/basic
@@ -527,6 +527,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/randomised/New()
 	manifest += "Contains any [num_contained] of:"
 	..()
+
+/datum/supply_packs/mann_co_key
+	name = "Mann Co. key"
+	cost = 200
+	containertype = /obj/structure/closet/crate/basic
+	contains = list(/obj/item/mann_co_key)
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
+
+/datum/supply_packs/mann_co_crate
+	name = "Mann Co. crate"
+	cost = 200
+	containertype = /obj/structure/mann_co_crate
+	contains = list()
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
 
 /datum/supply_packs/randomised/cheap_hats
 	name = "Cheap hats"
@@ -689,14 +707,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
-	contains = list(/obj/item/clothing/suit/space/grey,
-					/obj/item/clothing/head/helmet/space/grey,
-					/obj/item/weapon/tank/oxygen/red,
+	var/list/basic = list(
+		/obj/item/clothing/suit/space/grey,
+		/obj/item/clothing/head/helmet/space/grey,
+	)
+	var/worker = list(/obj/item/clothing/suit/space/rig/grey)
+	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
+	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
+	contains = list(/obj/item/weapon/tank/oxygen/red,
 					/obj/item/clothing/mask/breath)
-	cost = 100
+	cost = 200
 	containertype = /obj/structure/closet/crate/basic
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
+
+/datum/supply_packs/grey_supply/New()
+	selection_from = list(basic, worker, researcher, soldier)
 
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
@@ -1606,6 +1632,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_engine)
 	group = "Engineering"
 
+/datum/supply_packs/engine/amrcontainment/big
+	name = "Large Antimatter Containment Jar"
+	contains = list(/obj/item/weapon/am_containment/big)
+	cost = 200	//10x the fuel, 10x the cost + 50 for convenience
+	containername = "Large antimatter containment jar crate"
+
 /datum/supply_packs/rust_gyrotron
 	contains = list(/obj/machinery/rust/gyrotron)
 	name = "R-UST Mk. 7 gyrotron"
@@ -1788,6 +1820,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
+/datum/supply_packs/gourmonger
+	name = "dehydrated gourmonger"
+	contains = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger)
+	cost = 75
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Gourmonger Crate"
+	access = list(access_engine_equip)
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
@@ -1822,17 +1863,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/surgery
 	name = "Surgery tools"
-	contains = list(/obj/item/weapon/cautery,
-					/obj/item/weapon/surgicaldrill,
+	contains = list(/obj/item/tool/cautery,
+					/obj/item/tool/surgicaldrill,
 					/obj/item/clothing/mask/breath/medical,
 					/obj/item/weapon/tank/anesthetic,
-					/obj/item/weapon/FixOVein,
-					/obj/item/weapon/hemostat,
-					/obj/item/weapon/scalpel,
-					/obj/item/weapon/bonegel,
-					/obj/item/weapon/retractor,
-					/obj/item/weapon/bonesetter,
-					/obj/item/weapon/circular_saw)
+					/obj/item/tool/FixOVein,
+					/obj/item/tool/hemostat,
+					/obj/item/tool/scalpel,
+					/obj/item/tool/bonegel,
+					/obj/item/tool/retractor,
+					/obj/item/tool/bonesetter,
+					/obj/item/tool/circular_saw)
 	cost = 25
 	containertype = "/obj/structure/closet/crate/secure/medsec"
 	containername = "surgery crate"
@@ -2016,6 +2057,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 120
 	containertype = /obj/structure/closet/crate/sci
 	containername = "robot maintenance equipment crate"
+	group = "Science"
+
+/datum/supply_packs/grey_extract
+	name = "Grey slime extracts"
+	contains = list(/obj/item/slime_extract/grey,
+					/obj/item/slime_extract/grey
+					)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/scisec
+	containername = "gret slime extract crate"
+	access = list(access_science)
 	group = "Science"
 
 /datum/supply_packs/suspension_gen
@@ -2202,8 +2254,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "exotic fish crate"
 	group = "Hydroponics"
 
-
-
 //farm animals - useless and annoying, but potentially a good source of food
 /datum/supply_packs/cow
 	name = "Cow"
@@ -2267,9 +2317,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/insectcontrol
 	name = "Insect control equipment"
-	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
+					/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
+					/obj/item/weapon/reagent_containers/glass/bottle/insecticide,
 					/obj/item/weapon/reagent_containers/spray/bugzapper,
 					/obj/item/weapon/reagent_containers/spray/bugzapper)
 	cost = 40

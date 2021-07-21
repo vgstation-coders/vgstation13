@@ -726,6 +726,9 @@ steam.start() -- spawns the effect
 /obj/effect/effect/foam/fire
 	name = "fire supression foam"
 	icon_state = "mfoam"
+	
+/obj/effect/effect/foam/fire/enhanced
+	lowest_temperature = 16
 
 /obj/effect/effect/foam/New(loc, var/ismetal=0)
 	. = ..(loc)
@@ -957,19 +960,6 @@ steam.start() -- spawns the effect
 	if(air_group)
 		return 0
 	return !density
-
-
-/obj/structure/foamedmetal/proc/update_nearby_tiles()
-
-	if (!SS_READY(SSair))
-		return 0
-
-	var/T = loc
-
-	if (isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
 
 /obj/structure/foamedmetal/New()
 	. = ..()

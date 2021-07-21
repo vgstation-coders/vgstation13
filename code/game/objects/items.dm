@@ -8,6 +8,7 @@
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
+	var/miss_sound = 'sound/weapons/punchmiss.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
 	var/w_class = W_CLASS_MEDIUM
@@ -74,6 +75,11 @@
 	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
 	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much.
 
+	var/crit_chance = CRIT_CHANCE_RANGED
+	var/crit_chance_melee = CRIT_CHANCE_MELEE
+
+	var/datum/speech_filter/speech_filter
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -102,6 +108,12 @@
 	Works similarly to worn sprite_sheets, except the alternate sprites are used when the clothing/refit_for_species() proc is called.
 	*/
 	//var/list/sprite_sheets_obj = null
+
+/obj/item/acid_melt()
+	if (acidable())
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(loc)
+		I.desc = "Looks like this was \a [src] some time ago."
+		qdel(src)
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -166,19 +178,23 @@
 /obj/item/proc/suicide_act(mob/user)
 	return
 
+/proc/wclass2text(w_class)
+	switch(w_class)
+		if(W_CLASS_TINY)
+			return "tiny"
+		if(W_CLASS_SMALL)
+			return "small"
+		if(W_CLASS_MEDIUM)
+			return "normal-sized"
+		if(W_CLASS_LARGE)
+			return "bulky"
+		if(W_CLASS_HUGE to INFINITY)
+			return "huge"
+
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
-		switch(w_class)
-			if(W_CLASS_TINY)
-				size = "tiny"
-			if(W_CLASS_SMALL)
-				size = "small"
-			if(W_CLASS_MEDIUM)
-				size = "normal-sized"
-			if(W_CLASS_LARGE)
-				size = "bulky"
-			if(W_CLASS_HUGE to INFINITY)
-				size = "huge"
+		size = wclass2text(w_class)
+
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (gender == PLURAL)
@@ -247,28 +263,8 @@
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
 
-/obj/item/attack_paw(mob/user as mob)
-	if (istype(loc, /obj/item/weapon/storage))
-		for(var/mob/M in range(1, loc))
-			if (M.s_active == loc)
-				if (M.client)
-					M.client.screen -= src
-	throwing = FALSE
-	if (loc == user)
-		if(!user.put_in_hand_check(src, user.get_active_hand()))
-			return
-		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(istype(src, /obj/item/clothing) && !src:canremove)
-			return
-		else
-			user.u_equip(src,0)
-	else
-		if(istype(loc, /mob/living))
-			return
-		//user.next_move = max(user.next_move+2,world.time + 2)
-
-	user.put_in_active_hand(src)
-	return
+/obj/item/attack_paw(var/mob/user)
+	attack_hand(user)
 
 // Due to storage type consolidation this should get used more now.
 // I have cleaned it up a little, but it could probably use more.  -Sayu
@@ -317,6 +313,37 @@
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
 /obj/item/proc/on_found(mob/wearer, mob/finder)
 	return
+
+// have your item's MouseDropFrom call this if mouse-dropping is the default way of picking up your item, such as a paper bin or a deck of card
+/obj/item/proc/MouseDropPickUp(atom/over_object)
+	var/mob/user = usr
+	if(user.incapacitated() || (!ishigherbeing(user) && !isrobot(user)))
+		return
+	if(Adjacent(user) || is_holder_of(user, src))
+		if(!istype(user, /mob/living/carbon/slime) && !istype(user, /mob/living/simple_animal))
+			if(istype(over_object,/obj/abstract/screen/inventory)) //We're being dragged into the user's UI...
+				var/obj/abstract/screen/inventory/OI = over_object
+
+				if(OI.hand_index && user.put_in_hand_check(src, OI.hand_index))
+					if(istype(loc, /obj/item/weapon/storage))
+						var/obj/item/weapon/storage/bag = loc
+						bag.remove_from_storage(src)
+					user.u_equip(src, 0)
+					user.put_in_hand(OI.hand_index, src)
+					mouse_opacity = 1
+					src.add_fingerprint(user)
+
+			else if(istype(over_object,/mob/living)) //We're being dragged on a living mob's sprite...
+				if(user == over_object) //It's the user!
+					if( !user.get_active_hand() )		//if active hand is empty
+						if(istype(loc, /obj/item/weapon/storage))
+							var/obj/item/weapon/storage/bag = loc
+							bag.remove_from_storage(src)
+						user.put_in_hands(src)
+						user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
+						mouse_opacity = 1
+	else
+		to_chat(user, "<span class='warning'>You can't reach it from here.</span>")
 
 // called after an item is placed in an equipment slot
 // user is mob that equipped it
@@ -976,6 +1003,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
@@ -1304,6 +1332,7 @@ var/global/list/image/blood_overlays = list()
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
@@ -1360,7 +1389,7 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
 
-/obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
+/obj/item/proc/recyclable(var/obj/machinery/r_n_d/fabricator/F) //Called by RnD machines, for added object-specific sanity.
 	return TRUE
 
 /obj/item/proc/on_mousedrop_to_inventory_slot()
@@ -1384,8 +1413,7 @@ var/global/list/image/blood_overlays = list()
 				temp_contents -= src
 				temp_contents.Insert(temp_index, src)
 				storageobj.contents = temp_contents
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
@@ -1395,8 +1423,7 @@ var/global/list/image/blood_overlays = list()
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src
-
-				storageobj.orient2hud(usr)
+				storageobj.refresh_all()
 				return
 	if(!istype(over_object, /obj/abstract/screen/inventory))
 		return ..()
@@ -1441,8 +1468,22 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/is_wrench(var/mob/user)
 	return FALSE
 
+/obj/item/proc/is_wirecutter(var/mob/user)
+	return FALSE
+
+/obj/item/proc/is_multitool(var/mob/user)
+	return FALSE
+
+/obj/item/proc/mannequin_equip(var/obj/structure/mannequin/mannequin,var/slot,var/hand_slot)
+	return
+
+/obj/item/proc/mannequin_unequip(var/obj/structure/mannequin/mannequin)
+	return
+
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(speech_filter)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 	return
 
 /obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)

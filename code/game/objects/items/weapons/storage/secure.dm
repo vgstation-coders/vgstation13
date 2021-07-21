@@ -101,7 +101,7 @@
 	message = text("[]", src.code)
 	if (!src.locked)
 		message = "*****"
-		dat += {"<HR><br/>>[message]<BR>\n
+	dat += {"<HR><br/>>[message]<BR>\n
 		<A href='?src=\ref[src];type=1'>1</A>-<A href='?src=\ref[src];type=2'>2</A>-<A href='?src=\ref[src];type=3'>3</A><BR>\n
 		<A href='?src=\ref[src];type=4'>4</A>-<A href='?src=\ref[src];type=5'>5</A>-<A href='?src=\ref[src];type=6'>6</A><BR>\n
 		<A href='?src=\ref[src];type=7'>7</A>-<A href='?src=\ref[src];type=8'>8</A>-<A href='?src=\ref[src];type=9'>9</A><BR>\n
@@ -189,9 +189,9 @@
 
 /obj/item/weapon/storage/secure/briefcase/update_icon()
 	if(locked || emagged)
-		item_state = "secure-g"
-	else
 		item_state = "secure-r"
+	else
+		item_state = "secure-g"
 
 	if(ismob(loc))
 		var/mob/M = loc

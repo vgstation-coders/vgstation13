@@ -62,6 +62,7 @@
 		if(user.drop_item(I, src))
 			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
 			held_item = I
+			reagents.handle_reactions()
 			update_icon()
 
 
@@ -70,6 +71,7 @@
 		to_chat(user, "<span class = 'notice'>You remove \the [held_item] from \the [src].</span>")
 		user.put_in_hands(held_item)
 		held_item = null
+		reagents.handle_reactions()
 		update_icon()
 
 /obj/item/weapon/reagent_containers/glass/jar/examine(mob/user)
@@ -78,7 +80,7 @@
 		to_chat(user, "<span class = 'info'>It has \a [held_item] floating within.</span>")
 		to_chat(user, "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[held_item]'>Take a closer look.</a></span>")
 
-/obj/item/weapon/reagent_containers/glass/jar/recyclable()
+/obj/item/weapon/reagent_containers/glass/jar/recyclable(var/obj/machinery/r_n_d/fabricator/F)
 	if(held_item)
 		return FALSE
 	return TRUE

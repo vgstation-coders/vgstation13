@@ -264,6 +264,7 @@
 	..()
 
 /obj/machinery/door/airlock/uranium/proc/radiate()
+	emitted_harvestable_radiation(get_turf(src), 3, range = 5)
 	for(var/mob/living/L in range (3,src))
 		L.apply_radiation(15,RAD_EXTERNAL)
 	return
@@ -382,8 +383,8 @@ About the new airlock wires panel:
 						src.justzap = 0
 		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
 			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
-			user.halloss += 10
-			user.stunned += 10
+			user.adjustHalLoss(10)
+			user.AdjustStunned(10)
 	..(user)
 
 /obj/machinery/door/airlock/proc/isElectrified()
@@ -1212,7 +1213,7 @@ About the new airlock wires panel:
 
 	if (iswelder(I))
 		if (density && !operating)
-			var/obj/item/weapon/weldingtool/WT = I
+			var/obj/item/tool/weldingtool/WT = I
 			if (WT.remove_fuel(0, user))
 				if (!welded)
 					welded = 1
@@ -1220,7 +1221,7 @@ About the new airlock wires panel:
 					welded = null
 
 				update_icon()
-	else if (ismultitool(I))
+	else if (I.is_multitool(user))
 		if (!operating)
 			if(panel_open)
 				wires.Interact(user)
@@ -1367,6 +1368,8 @@ About the new airlock wires panel:
 		wires.SignalIndex(AIRLOCK_WIRE_ONOPEN)
 
 /obj/machinery/door/airlock/Uncross(atom/movable/mover)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this, especially because of that thing below -kanef
+		return 1
 	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE
 		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
 		return 0

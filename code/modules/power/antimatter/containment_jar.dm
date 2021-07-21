@@ -43,3 +43,13 @@
 		wanted = fuel
 	fuel -= wanted
 	return wanted
+
+/obj/item/weapon/am_containment/big
+	icon_state = "jar_big"
+	fuel = 10000
+	fuel_max = 10000
+
+/obj/item/weapon/am_containment/huge
+	icon_state = "jar_big"
+	fuel = 30000
+	fuel_max = 30000

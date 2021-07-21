@@ -13,6 +13,18 @@
 	var/opened = 1 //0=closed, 1=opened
 	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
 
+/obj/machinery/rust_fuel_assembly_port/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item/weapon/fuel_assembly) && !opened)
+		if(cur_assembly)
+			return FALSE
+		else
+			var/obj/item/weapon/fuel_assembly/FA = AM
+			cur_assembly = FA
+			FA.forceMove(src)
+			icon_state = "port1"
+			return TRUE
+	return FALSE
+
 /obj/machinery/rust_fuel_assembly_port/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I,/obj/item/weapon/fuel_assembly) && !opened)
 		if(cur_assembly)

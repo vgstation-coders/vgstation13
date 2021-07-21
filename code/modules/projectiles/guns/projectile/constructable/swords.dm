@@ -235,6 +235,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		B.reagents.trans_to(M, inject_amount)
 
@@ -265,7 +266,7 @@
 
 /obj/item/weapon/sword/executioner/attackby(obj/item/weapon/W, mob/user)
 	if(iswelder(W) && !complete)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the metal blade onto \the [src].")
 		if(WT.do_weld(user, src, 30))
 			to_chat(user, "You weld the metal blade onto \the [src].")

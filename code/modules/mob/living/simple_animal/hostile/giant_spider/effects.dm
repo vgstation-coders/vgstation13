@@ -3,7 +3,7 @@
 //generic procs copied from obj/effect/alien
 /obj/effect/spider
 	name = "web"
-	desc = "it's stringy and sticky"
+	desc = "It's stringy and sticky."
 	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 0
@@ -35,7 +35,7 @@
 	var/damage = (W.is_hot() || W.is_sharp()) ? (W.force) : (W.force / SPIDERWEB_BRUTE_DIVISOR)
 
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			damage = 15
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -77,6 +77,7 @@
 		healthcheck()
 
 /obj/effect/spider/stickyweb
+	layer = BELOW_TABLE_LAYER
 	icon_state = "stickyweb1"
 
 /obj/effect/spider/stickyweb/New()
@@ -94,7 +95,7 @@
 		if(prob(50))
 			to_chat(mover, "<span class='warning'>You get stuck in \the [src] for a moment.</span>")
 			return 0
-	else if(istype(mover, /obj/item/projectile))
+	else if(istype(mover, /obj/item/projectile) && !istype(mover, /obj/item/projectile/web))
 		return prob(30)
 	return 1
 
@@ -179,5 +180,21 @@
 	for(var/atom/movable/A in contents)
 		A.forceMove(src.loc)
 	..()
+
+/////////////////////////////////////SPIDER QUEEN STICKY PROJECTILE TRAP////////////////////////////////
+
+//Spawns on top of mobs hit with the queen's web projectile
+/obj/effect/rooting_trap/stickyweb
+	name = "sticky web"
+	desc = "A mess of sticky strings."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "stickyweb"
+
+/obj/effect/rooting_trap/stickyweb/stick_to(var/atom/A, var/side = null)
+	var/turf/T = get_turf(A)
+	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
+	. = ..()
+	if (.)
+		visible_message("<span class='warning'>\the sticky ball splatters over \the [A]'s legs, sticking them to \the [T].</span>")
 
 #undef SPIDERWEB_BRUTE_DIVISOR

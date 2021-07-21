@@ -225,7 +225,7 @@
 // Manifold
 /////////////////////////////////
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold
-	icon = 'icons/obj/pipe-item.dmi'
+	icon = 'icons/obj/pipes/heat.dmi'
 	icon_state = "he_manifold"
 	var/obj/machinery/atmospherics/node3
 	radiation_capacity = 24000
@@ -302,7 +302,7 @@
 // 4-Way Manifold
 /////////////////////////////////
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/he_manifold4w
-	icon = 'icons/obj/pipe-item.dmi'
+	icon = 'icons/obj/pipes/heat.dmi'
 	icon_state = "he_manifold4w"
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4

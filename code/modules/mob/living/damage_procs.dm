@@ -34,6 +34,7 @@
 	return damage_done
 
 
+
 /mob/living/proc/apply_damages(var/brute = 0, var/burn = 0, var/tox = 0, var/oxy = 0, var/clone = 0, var/halloss = 0, var/def_zone = null, var/blocked = 0)
 	if(blocked >= 100)
 		return 0
@@ -51,6 +52,21 @@
 		apply_damage(halloss, HALLOSS, def_zone, blocked)
 	return 1
 
+
+/mob/living/proc/critlog(curH,prevH)
+	if (istype(loc, /obj/machinery/cloning/clonepod))
+		return FALSE // Mob probably just spawned
+	return TRUE
+
+/mob/living/carbon/critlog(curH,prevH)
+	. = ..()
+	if (.)
+		var/do_we_care_about_it = mind != null
+		if(curH <= config.health_threshold_crit && prevH > config.health_threshold_crit)
+			if (curH <= config.health_threshold_dead)
+				add_attacklogs(src,null,"took so much damage they became DEAD before even being in crit!", admin_warn = do_we_care_about_it)
+			else
+				add_attacklogs(src,null,"has gone into CRIT!", admin_warn = do_we_care_about_it)
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)

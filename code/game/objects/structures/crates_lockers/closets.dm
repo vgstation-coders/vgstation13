@@ -442,7 +442,7 @@
 			return 0
 
 		if(iswelder(W) && canweld())
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
@@ -458,7 +458,7 @@
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(iswelder(W) && canweld())
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
@@ -488,8 +488,10 @@
 		return 0
 	if(istype(O, /obj/structure/closet))
 		return 0
-	if(move_them)
-		step_towards(O, src.loc)
+	if(move_them)//We've already checked for adjacency so it's fine to use forceMove, it also guarrantees that they won't bump into us?
+		O.forceMove(user.loc)
+		sleep(1)
+		O.forceMove(src.loc)
 	if(show_message && user != O)
 		user.show_viewers("<span class='danger'>[user] stuffs [O] into [src]!</span>")
 	src.add_fingerprint(user)
@@ -648,7 +650,7 @@
 		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
 			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //Scrying or astral travel, fuck them.
 				return
-		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
+		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 
 // -- Vox raiders.

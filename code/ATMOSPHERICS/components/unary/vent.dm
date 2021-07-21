@@ -2,7 +2,7 @@
 	icon = 'icons/obj/atmospherics/pipe_vent.dmi'
 	icon_state = "base"
 	name = "Vent"
-	desc = "A large air vent"
+	desc = "A large air vent."
 	level = 1
 	var/volume = 500
 	dir = SOUTH
@@ -102,7 +102,7 @@
 
 /obj/machinery/atmospherics/unary/vent/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>Now welding the vent.</span>")
 		if (WT.do_weld(user, src, 20, 1))
 			if(gcDestroyed)

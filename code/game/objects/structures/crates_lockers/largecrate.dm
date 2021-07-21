@@ -73,6 +73,7 @@
 		for(var/i = 1 to num)
 			new /mob/living/simple_animal/hostile/lizard(loc)
 		new /mob/living/simple_animal/hostile/lizard/frog(loc)
+		new /mob/living/simple_animal/hostile/lizard/frog(loc)
 	..()
 
 /obj/structure/largecrate/porcelain/attackby(obj/item/weapon/W as obj, mob/user as mob)

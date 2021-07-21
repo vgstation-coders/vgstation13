@@ -12,6 +12,7 @@
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
 	recoil = 1
+	kick_fire_chance = 5
 	var/ammo_type = "/obj/item/ammo_casing/a357"
 	var/list/loaded = list()
 	var/max_shells = 7 //only used by guns with no magazine
@@ -258,7 +259,7 @@
 		return ..()
 	if (loaded.len || stored_magazine || refuse.len)
 		if (load_method == SPEEDLOADER)
-			if(!gun_flags & CHAMBERSPENT)
+			if(!(gun_flags & CHAMBERSPENT))
 				var/obj/item/ammo_casing/AC = loaded[1]
 				loaded -= AC
 				AC.forceMove(user.loc)

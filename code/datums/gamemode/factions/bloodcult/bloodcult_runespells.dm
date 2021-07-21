@@ -41,7 +41,7 @@
 			newangle += 360
 	var/matrix/M1 = matrix()
 	var/matrix/M2 = turn(M1.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
-	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE, trans = M2)
+	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = ABOVE_LIGHTING_PLANE, trans = M2)
 
 
 /datum/rune_spell //Abstract base. Includes channeled and instant use runes.
@@ -196,6 +196,9 @@
 		qdel(spell_holder)
 	else
 		qdel(src)
+
+/datum/rune_spell/proc/salt_act(var/turf/T)
+	return
 
 /datum/rune_spell/proc/missing_ingredients_count()
 	var/list/missing_ingredients = ingredients.Copy()
@@ -513,10 +516,14 @@
 	cult.cult_reminders += text
 	for(var/datum/role/cultist/C in cult.members)
 		var/datum/mind/M = C.antag
-		if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[reminder]</span></span>")
 			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
 			M.store_memory("Cult reminder: [text].")
+
+	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
+		to_chat(A, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
+		to_chat(A, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
 
 	for(var/mob/dead/observer/O in player_list)
 		to_chat(O, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
@@ -528,11 +535,14 @@
 	if(!message)
 		return
 
-	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
+	var/datum/faction/bloodcult = find_active_faction_by_member(iscultist(activator))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
-		if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 			to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
+
+	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
+		to_chat(A, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
 
 	for(var/mob/dead/observer/O in player_list)
 		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
@@ -585,13 +595,15 @@
 			speaker_name = H.real_name
 			L = speech.speaker
 		rendered_message = speech.render_message()
-		var/datum/faction/bloodcult = find_active_faction_by_member(L.mind.GetRole(CULTIST))
+		var/datum/faction/bloodcult = find_active_faction_by_member(iscultist(L))
 		for(var/datum/role/cultist/C in bloodcult.members)
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
-			if (M.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+			if (iscultist(M.current))//failsafe for cultist brains put in MMIs
 				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+		for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
+			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
@@ -800,6 +812,8 @@
 		to_chat(activator, "<span class='warning'>This tome cannot contain any more talismans.</span>")
 	qdel(src)
 
+var/list/converted_minds = list()
+
 //RUNE V
 /datum/rune_spell/blood_cult/conversion
 	name = "Conversion"
@@ -1007,6 +1021,9 @@
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					if(I.implanted)
 						acceptance = "Implanted"
+		else if (!victim.mind)
+			acceptance = "Mindless"
+
 		if (jobban_isbanned(victim, CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
 
@@ -1052,6 +1069,10 @@
 				to_chat(activator, "<span class='sinister'>Given how unstable the ritual is becoming, \The [victim] will surely be consumed entirely by it. They weren't meant to become one of us.</span>")
 				to_chat(victim, "<span class='danger'>Except your past actions have displeased us. You will be our snack before the feast begins. \[You are banned from this role\]</span>")
 				success = CONVERSION_BANNED
+			if ("Mindless")
+				conversion.icon_state = "rune_convert_bad"
+				to_chat(activator, "<span class='sinister'>This mindless creature will be sacrificed.</span>")
+				success = CONVERSION_MINDLESS
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
 		sleep(conversion_delay)
@@ -1072,7 +1093,8 @@
 
 		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (victim.mind)
+		if (victim.mind && !(victim.mind in converted_minds))
+			converted_minds += victim.mind
 			if (cult)
 				spawn(5)//waiting half a second to make sure that the sacrifice objective won't designate a victim that just refused conversion
 					cult.stage(CULT_ACT_II)
@@ -1145,7 +1167,7 @@
 				var/obj/item/weapon/handcuffs/cult/restraints = new(victim)
 				victim.handcuffed = restraints
 				restraints.on_restraint_apply(victim)//a jolt of pain to slow them down
-				restraints.gaoler = converter.mind.GetRole(CULTIST)
+				restraints.gaoler = iscultist(converter)
 				victim.update_inv_handcuffed()	//update handcuff overlays
 
 				if (success == CONVERSION_NOCHOICE)
@@ -1171,6 +1193,14 @@
 				flick("rune_convert_failure",conversion)
 
 				//sacrificed victims have all their stuff stored in a coffer that also contains their skull and a cup of their blood, should they have either
+				victim.boxify(TRUE, FALSE, "cult")
+				abort(RITUALABORT_SACRIFICE)
+
+			if (CONVERSION_MINDLESS)
+
+				conversion.icon_state = ""
+				flick("rune_convert_failure",conversion)
+
 				victim.boxify(TRUE, FALSE, "cult")
 				abort(RITUALABORT_SACRIFICE)
 
@@ -1212,7 +1242,7 @@
 	pixel_x = -WORLD_ICON_SIZE/2
 	pixel_y = -WORLD_ICON_SIZE/2
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	mouse_opacity = 0
 
 /obj/effect/cult_ritual/conversion/proc/Die()
@@ -1265,7 +1295,7 @@
 	qdel(src)
 
 /datum/rune_spell/blood_cult/stun/cast_touch(var/mob/M)
-	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
 	if (prob(15))//for old times' sake
@@ -1301,7 +1331,7 @@
 	pixel_x = -WORLD_ICON_SIZE/2
 	pixel_y = -WORLD_ICON_SIZE/2
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	mouse_opacity = 0
 	var/stun_duration = 5
 
@@ -1375,7 +1405,7 @@ var/list/blind_victims = list()
 	pixel_x = -WORLD_ICON_SIZE/2
 	pixel_y = -WORLD_ICON_SIZE/2
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	mouse_opacity = 0
 	var/duration = 5
 	var/hallucination_radius=25
@@ -1420,7 +1450,7 @@ var/list/blind_victims = list()
 				continue
 			to_chat(C, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
 			shadow(C,T)//shadow trail moving from the spell_holder to the victim
-			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 			if (!(C in blind_victims))
 				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/confusion_border)//victims DO still get blinded for a second
 				C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
@@ -1484,7 +1514,7 @@ var/list/blind_victims = list()
 							C.clear_fullscreen("blindblack", animate = 0)
 							C.clear_fullscreen("blindborder", animate = 0)
 							C.clear_fullscreen("blindblind", animate = 0)
-							anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+							anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
@@ -1553,7 +1583,7 @@ var/list/blind_victims = list()
 
 /datum/rune_spell/blood_cult/hide/cast(var/effect_range = rune_effect_range,var/size='icons/effects/480x480.dmi')
 	var/turf/T = get_turf(spell_holder)
-	var/atom/movable/overlay/animation = anim(target = T, a_icon = size, a_icon_state = "rune_conceal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*effect_range, offY = -WORLD_ICON_SIZE*effect_range, plane = LIGHTING_PLANE)
+	var/atom/movable/overlay/animation = anim(target = T, a_icon = size, a_icon_state = "rune_conceal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*effect_range, offY = -WORLD_ICON_SIZE*effect_range, plane = ABOVE_LIGHTING_PLANE)
 	animation.alpha = 0
 	animate(animation, alpha = 255, time = 2)
 	animate(alpha = 0, time = 3)
@@ -1623,7 +1653,7 @@ var/list/blind_victims = list()
 	for(var/obj/structure/cult/concealed/S in range(effect_range,T))//only concealed structures trigger the effect
 		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)
 		if (dist <= effect_range+0.5)
-			anim(target = S, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = LIGHTING_PLANE)
+			anim(target = S, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = ABOVE_LIGHTING_PLANE)
 			for(var/mob/living/L in viewers(S))
 				if (iscultist(L))
 					continue
@@ -1641,7 +1671,7 @@ var/list/blind_victims = list()
 		var/dist = cheap_pythag(R.x - T.x, R.y - T.y)
 		if (dist <= effect_range+0.5)
 			if (R.reveal())//only hidden runes trigger the effect
-				anim(target = R, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = LIGHTING_PLANE)
+				anim(target = R, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = ABOVE_LIGHTING_PLANE)
 				for(var/mob/living/L in viewers(R))
 					if (iscultist(L))
 						continue
@@ -1718,7 +1748,7 @@ var/list/blind_victims = list()
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_reveal"
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	mouse_opacity = 0
 	flags = PROXMOVE
 	var/mob/living/victim = null
@@ -1726,7 +1756,7 @@ var/list/blind_victims = list()
 
 /obj/effect/cult_ritual/reveal/Destroy()
 	victim = null
-	anim(target = loc, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_reveal-stop", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+	anim(target = loc, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_reveal-stop", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	..()
 
 /obj/effect/cult_ritual/reveal/New(var/turf/loc,var/mob/living/vic=null,var/dur=2)
@@ -1896,7 +1926,7 @@ var/list/blind_victims = list()
 	word3 = /datum/runeword/blood_cult/other
 	rune_flags = RUNE_STAND
 	talisman_uses = 3
-	page = "This rune, which you have to stand above to use, equips your character with cult gear. Namely, Cult Hood, Cult Robes, Cult Shoes, and a Cult Backpack. Wearing cult gear improves your efficiency with a few rituals (see Tools section bellow) on top of granting you very decent armor values. After using the rune, a Blood Tesseract appears in your hand, containing clothes that had to be swapped out because you were already wearing them in your head/suit slots. You can use it to get your clothing back instantly. Lastly, the talisman version has 3 uses, and gets back in your hand after you use the Blood Tesseract. The inventory of your backpack gets always gets transferred upon use. "
+	page = "This rune, which you have to stand above to use, equips your character with cult gear. Namely, Cult Hood, Cult Robes, Cult Shoes, and a Cult Backpack. Wearing cult gear improves your efficiency with a few rituals (see Tools section below) on top of granting you very decent armor values. After using the rune, a Blood Tesseract appears in your hand, containing clothes that had to be swapped out because you were already wearing them in your head/suit slots. You can use it to get your clothing back instantly. Lastly, the talisman version has 3 uses, and gets back in your hand after you use the Blood Tesseract. The inventory of your backpack gets always gets transferred upon use. "
 	var/list/slots_to_store = list(
 		slot_shoes,
 		slot_head,
@@ -1914,7 +1944,7 @@ var/list/blind_victims = list()
 		qdel(src)
 		return
 
-	anim(target = activator, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+	anim(target = activator, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 
 	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
 	if (istype (spell_holder,/obj/item/weapon/talisman))
@@ -1935,6 +1965,13 @@ var/list/blind_victims = list()
 		if(istype(user_slot, /obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = user_slot
 			S.close(activator)
+		if(istype(user_slot, /obj/item/clothing/suit/storage))
+			var/obj/item/clothing/suit/storage/S = user_slot
+			S.hold.close(activator)
+		if(istype(user_slot, /obj/item/clothing/under))
+			var/obj/item/clothing/under/U = user_slot
+			for (var/obj/item/clothing/accessory/storage/S in U.accessories)
+				S.hold.close(activator)
 		activator.u_equip(user_slot)
 		user_slot.forceMove(BT)
 
@@ -2020,7 +2057,7 @@ var/list/blind_victims = list()
 					continue
 			if(L.stat != DEAD && iscultist(L))
 				playsound(L, 'sound/effects/fervor.ogg', 50, 0, -2)
-				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = LIGHTING_PLANE, direction = L.dir)
+				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = L.dir)
 				L.oxyloss = 0
 				L.halloss = 0
 				L.paralysis = 0
@@ -2049,7 +2086,7 @@ var/list/blind_victims = list()
 //RUNE XV
 /datum/rune_spell/blood_cult/summoncultist
 	name = "Blood Magnetism"
-	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats"
+	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats."
 	desc_talisman = "Use to begin the Blood Magnetism ritual where you stand."
 	Act_restriction = CULT_ACT_I
 	invocation = "N'ath reth sh'yro eth d'rekkathnor!"
@@ -2093,7 +2130,7 @@ var/list/blind_victims = list()
 
 	var/list/possible_targets = list()
 	var/list/prisoners = list()
-	var/datum/faction/bloodcult/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
+	var/datum/faction/bloodcult/bloodcult = find_active_faction_by_member(iscultist(activator))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		possible_targets.Add(M.current)
@@ -2388,12 +2425,21 @@ var/list/blind_victims = list()
 /datum/rune_spell/blood_cult/portalentrance/midcast_talisman(var/mob/add_cultist)
 	midcast(add_cultist)
 
+/datum/rune_spell/blood_cult/portalentrance/salt_act(var/turf/T)
+	var/turf/destination = null
+	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
+		if (P.network == network)
+			destination = get_turf(P.spell_holder)
+			new /obj/effect/bloodcult_jaunt/traitor(T,null,destination,null)
+			break
+
+
 //RUNE XVII
 var/list/bloodcult_exitportals = list()
 
 /datum/rune_spell/blood_cult/portalexit
 	name = "Path Exit"
-	desc = "We hope you enjoyed your flight with Air Nar-Sie"//might change it later or not.
+	desc = "We hope you enjoyed your flight with Air Nar-Sie."//might change it later or not.
 	desc_talisman = "Use to immediately jaunt through the Path."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sas'so c'arta forbici!"
@@ -2509,10 +2555,19 @@ var/list/bloodcult_exitportals = list()
 	T.attuned_rune = PE.spell_holder
 	T.word_pulse(global_runesets["blood_cult"].words[network])
 
+/datum/rune_spell/blood_cult/portalexit/salt_act(var/turf/T)
+	if (T != spell_holder.loc)
+		var/turf/destination = null
+		for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
+			if (P.network == network)
+				destination = get_turf(P.spell_holder)
+			new /obj/effect/bloodcult_jaunt/traitor(T,null,destination,null)
+			break
+
 //RUNE XVIII
 /datum/rune_spell/blood_cult/pulse
 	name = "Pulse"
-	desc = "Scramble the circuits of nearby devices"
+	desc = "Scramble the circuits of nearby devices."
 	desc_talisman = "Use to scramble the circuits of nearby devices."
 	Act_restriction = CULT_ACT_I
 	invocation = "Ta'gh fara'qha fel d'amar det!"
@@ -2534,16 +2589,16 @@ var/list/bloodcult_exitportals = list()
 //RUNE XIX
 /datum/rune_spell/blood_cult/astraljourney
 	name = "Astral Journey"
-	desc = "Leave your body so you can go spy on your enemies."
+	desc = "Channel a fragment of your soul into an astral projection so you can spy on the crew and communicate your findings with the rest of the cult."
 	desc_talisman = "Leave your body so you can go spy on your enemies."
 	Act_restriction = CULT_ACT_I
 	invocation = "Fwe'sh mah erl nyag r'ya!"
 	word1 = /datum/runeword/blood_cult/hell
 	word2 = /datum/runeword/blood_cult/travel
 	word3 = /datum/runeword/blood_cult/self
-	page = "Upon use, you will fall asleep, and your soul will float above your body, allowing you to freely move around the Z-Level like a ghost would. However, you cannot talk with other ghosts, or listen to them, or use any of the usual ghost verbs beside re-entering your body. Re-entering your body, or it being moved away from the rune will end the ritual, and you'll wake up after a second or so. You might have to use the rest verb to get back up. As it can be used for any period of time, it's a great, though limited, spying tool. Should your body be destroyed while you were using the rune, attempting to re-enter it will grant you the rest of the ghost verbs and abilities back. "
+	page = "Upon use, your soul will float above your body, allowing you to freely move invisibly around the Z-Level. Words you speak while in this state will be heard by everyone in the cult. You can also become tangible which lets you converse with people, but taking any damage while in this state will end the ritual. Your body being moved away from the rune will also end the ritual. Should your body die while you were still using the rune, a shade will form wherever your astral projection stands."
 	rune_flags = RUNE_STAND
-	var/mob/dead/observer/deafmute/astral = null
+	var/mob/living/simple_animal/astral_projection/astral = null
 	var/cultist_key = ""
 	var/list/restricted_verbs = list()
 
@@ -2552,49 +2607,15 @@ var/list/bloodcult_exitportals = list()
 	R.one_pulse()
 
 	cultist_key = activator.key
-	if (ishuman(activator))
-		activator.sleeping = max(activator.sleeping,2)
-		activator.stat = UNCONSCIOUS
-		activator.resting = 1
-	activator.ajourn = spell_holder
 
-	var/list/antag_icons = list()
-	if (activator.client)
-		for (var/image/I in activator.client.images)
-			if (I.plane == ANTAG_HUD_PLANE)
-				antag_icons += image(I,I.loc)
-
-	to_chat(activator, "<span class='notice'>As you recite the invocation, your body falls over the rune, but your consciousness still stands up above it.</span>")
-	astral = activator.ghostize(1,1)
-
-	astral.icon = 'icons/mob/mob.dmi'
-	astral.icon_state = "ghost-narsie"
-	astral.overlays.len = 0
-	if (ishuman(activator))
-		var/mob/living/carbon/human/H = activator
-		astral.overlays += H.obj_overlays[ID_LAYER]
-		astral.overlays += H.obj_overlays[EARS_LAYER]
-		astral.overlays += H.obj_overlays[SUIT_LAYER]
-		astral.overlays += H.obj_overlays[GLASSES_LAYER]
-		astral.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-		astral.overlays += H.obj_overlays[BELT_LAYER]
-		astral.overlays += H.obj_overlays[BACK_LAYER]
-		astral.overlays += H.obj_overlays[HEAD_LAYER]
-		astral.overlays += H.obj_overlays[HANDCUFF_LAYER]
-
-	for (var/V in astral.verbs)//restricting the verbs! all they can do is re-enter their body.
-		if ((copytext("[V]",1,10) == "/mob/dead") && ("[V]" != "/mob/dead/observer/verb/reenter_corpse"))
-			restricted_verbs += V
-			astral.verbs -= V
+	to_chat(activator, "<span class='notice'>As you recite the invocation, you feel your consciousness rise up in the air above your body.</span>")
+	//astral = activator.ghostize(1,1)
+	astral = new(activator.loc)
+	astral.ascend(activator)
+	activator.ajourn = src
 
 	step(astral,NORTH)
 	astral.dir = SOUTH
-	astral.movespeed = 0.375//twice the default ghost move speed
-	astral.see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-
-	if (astral.client)
-		for (var/image/I in antag_icons)
-			astral.client.images += I
 
 	spawn()
 		handle_astral()
@@ -2607,19 +2628,11 @@ var/list/bloodcult_exitportals = list()
 
 
 /datum/rune_spell/blood_cult/astraljourney/abort(var/cause)
-	if (activator && activator.loc && cultist_key)
-		activator.key = cultist_key
-		to_chat(activator, "<span class='notice'>You reconnect with your body.</span>")
-	else
-		if (astral)
-			to_chat(astral, "<span class='notice'>The ritual somehow lost track of your body. You are now fully disconnected from it, and a fully fledged ghost.</span>")
-			for (var/V in restricted_verbs)//since they're a real ghost now, let's give them back the rest of their verbs.
-				astral.verbs += V
+	qdel(astral)
 	..()
 
 /datum/rune_spell/blood_cult/astraljourney/proc/handle_astral()
-	while(!destroying_self && activator && astral && astral.loc && activator.stat == UNCONSCIOUS && activator.loc == spell_holder.loc)
-		activator.sleeping = max(activator.sleeping,2)
+	while(!destroying_self && activator && activator.stat != DEAD && astral && astral.loc && activator.loc == spell_holder.loc)
 		sleep(10)
 	abort()
 
@@ -2665,7 +2678,7 @@ var/list/bloodcult_exitportals = list()
 		to_chat(activator, "<span class='warning'>You have the ingredients, now there needs to be a ghost made visible standing above the rune.</span>")
 		qdel(src)
 		return
-	if (ghost.mind && ghost.mind.current && ghost.mind.current.ajourn && (ghost.mind.current.stat != DEAD))
+	if (ghost.mind && ghost.mind.current && (ghost.mind.current.stat != DEAD))
 		to_chat(activator, "<span class='warning'>This ghost still has a breathing body where to return to.</span>")
 		qdel(src)
 		return
@@ -2820,8 +2833,8 @@ var/list/bloodcult_exitportals = list()
 //RUNE XXI
 /datum/rune_spell/blood_cult/stream
 	name = "Stream"
-	desc = "Start or stop streaming on Spess.TV"
-	desc_talisman = "Start or stop streaming on Spess.TV"
+	desc = "Start or stop streaming on Spess.TV."
+	desc_talisman = "Start or stop streaming on Spess.TV."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "L'k' c'mm'nt 'n' s'bscr'b! P'g ch'mp! Kappah!"
 	word1 = /datum/runeword/blood_cult/other

@@ -40,7 +40,7 @@
 		icon_state = "morgue3" // no mobs at all, but objects inside
 		return
 	for(var/mob/living/body in inside)
-		if(body && body.client && !body.suiciding)
+		if(body && body.client && !(body.mind && body.mind.suiciding))
 			icon_state = "morgue4" // clone that mofo
 			return
 	icon_state = "morgue2" // dead no-client mob

@@ -112,5 +112,4 @@ var/datum/subsystem/more_init/SSmore_init
 						DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
 
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
-	spawn(1)
-		qdel(H)
+	qdel(H)

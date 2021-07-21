@@ -33,7 +33,7 @@
 
 /obj/structure/mirror/proc/vampire_check(mob/living/user, mob/living/carbon/human/target)
 	var/datum/role/vampire/V = isvampire(target)
-	if(V && !(/datum/power/vampire/mature in V.current_powers))
+	if(V && !(locate(/datum/power/vampire/mature) in V.current_powers))
 		to_chat(user, "<span class='notice'>You don't see anything in \the [src].</span>")
 		return FALSE
 	return TRUE
@@ -143,7 +143,7 @@
 			icon_state = "mirror"
 			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
-	else if(istype(I, /obj/item/weapon/crowbar))
+	else if(istype(I, /obj/item/tool/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))

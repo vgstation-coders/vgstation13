@@ -49,9 +49,14 @@
 
 	if(ismob(banned_mob))
 		ckey = banned_mob.ckey
+		if (!ckey && banned_mob.mind)
+			ckey = ckey(banned_mob.mind.key)
 		if(banned_mob.client)
 			computerid = banned_mob.client.computer_id
 			ip = banned_mob.client.address
+		else
+			computerid = banned_mob.computer_id
+			ip = banned_mob.lastKnownIP
 	else if(banckey)
 		ckey = ckey(banckey)
 

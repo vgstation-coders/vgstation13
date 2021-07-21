@@ -113,7 +113,7 @@
 				-> causes the apparition of a hostile cult simple animal.
 				-> the spawned animals become stronger the more this object is created
 
-		* /red_afterimage
+		* /afterimage/red
 			-> afterimage left behind by a dashing juggernaut
 
 		* /bloodcult_jaunt

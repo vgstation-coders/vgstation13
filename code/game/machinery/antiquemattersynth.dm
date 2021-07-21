@@ -12,7 +12,7 @@ list("category" = "resources", "name" = "iron foam grenade", "path" = /obj/item/
 list("category" = "resources", "name" = "camera assembly", "path" = /obj/item/weapon/camera_assembly, "cost" = 100),
 
 
-list("category" = "tools", "name" = "socket wrench", "path" = /obj/item/weapon/wrench/socket, "cost" = 1000), //One gigawatt
+list("category" = "tools", "name" = "socket wrench", "path" = /obj/item/tool/wrench/socket, "cost" = 1000), //One gigawatt
 list("category" = "tools", "name" = "foam extinguisher", "path" = /obj/item/weapon/extinguisher/foam, "cost" = 1000),
 list("category" = "tools", "name" = "empty O2 tank", "path" = /obj/item/weapon/tank/oxygen/empty, "cost" = 1000),
 list("category" = "tools", "name" = "empty plasma tank", "path" = /obj/item/weapon/tank/plasma/empty, "cost" = 1000),

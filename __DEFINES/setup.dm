@@ -608,6 +608,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
+#define ALWAYS_CRIT 65536
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
 
@@ -740,6 +741,12 @@ SEE_PIXELS	256
 #define BEE_SWARM 4
 #define BEE_BUILDING 5
 
+#define BEE_STING_BLOCK		0
+#define BEE_STING_PIERCE	1
+#define BEE_STING_NORMAL	2
+
+#define MAX_BEES_PER_SWARM	20
+
 //for infestation events
 #define LOC_KITCHEN 0
 #define LOC_ATMOS 1
@@ -810,6 +817,9 @@ SEE_PIXELS	256
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 #define ORGAN_MALFUNCTIONING 8192
 
+#define SURGERY_SUCCESS_NORMAL 0
+#define SURGERY_SUCCESS_ALWAYS 1
+#define SURGERY_SUCCESS_NEVER  2
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -1239,9 +1249,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 //////////////////////////////////
 
 
-//COMMENT IF YOUR DREAMDAEMON VERSION IS BELOW 507.1248
-#define BORDER_USE_TURF_EXIT 1
-
 ////////////////////////
 ////PDA APPS DEFINES////
 ////////////////////////
@@ -1358,6 +1365,7 @@ var/proccalls = 1
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
 #define CHANNEL_STARMAN				1025
+#define CHANNEL_CRITSOUNDS			1026
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
@@ -1608,11 +1616,15 @@ var/proccalls = 1
 #define DNA2_BUF_UE 2
 #define DNA2_BUF_SE 4
 
-#define DEFAULT_BLOOD "#A10808"
-#define DEFAULT_FLESH "#FFC896"
-#define ALIEN_BLOOD "#05EE05"
-#define ALIEN_FLESH "#34334B"
-#define ROBOT_OIL "#030303"
+#define DEFAULT_BLOOD	"#A10808"
+#define DEFAULT_FLESH	"#FFC896"
+#define ALIEN_BLOOD		"#05EE05"
+#define ALIEN_FLESH		"#34334B"
+#define ROBOT_OIL		"#030303"
+#define VOX_BLOOD		"#2299FC"
+#define MUSHROOM_BLOOD	"#D3D3D3"
+#define INSECT_BLOOD	"#EBECE6"
+#define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1633,15 +1645,17 @@ var/proccalls = 1
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 
-#define BEESPECIES_NORMAL	"bees"
-#define BEESPECIES_VOX		"chill bugs"
-#define BEESPECIES_HORNET	"hornets"
-#define BEESPECIES_BLOOD	"hell bugs"
+#define BEESPECIES_NORMAL	"bee"
+#define BEESPECIES_VOX		"chill bug"
+#define BEESPECIES_HORNET	"hornet"
+#define BEESPECIES_BLOOD	"hell bug"
 
 //mob/proc/is_pacified()
 #define VIOLENCE_SILENT		0
 #define VIOLENCE_DEFAULT	1
 #define VIOLENCE_GUN		2
+
+#define MAX_SHEET_STACK_AMOUNT	50
 
 // Used to determine which HUD is in use
 #define HUD_NONE 0

@@ -102,6 +102,7 @@
 				M.LAssailant = null
 			else
 				M.LAssailant = user
+				M.assaulted_by(user)
 		target.overlays += image('icons/obj/assemblies.dmi', "plastic-explosive2")
 		to_chat(user, "Bomb has been planted. Timer counting down from [timer].")
 		spawn(timer*10)

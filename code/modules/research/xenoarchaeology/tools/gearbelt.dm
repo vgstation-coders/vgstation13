@@ -26,10 +26,10 @@
 		"/obj/item/weapon/storage/bag/clipboard",
 		"/obj/item/weapon/anodevice",
 		"/obj/item/clothing/glasses",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/wrench",
 		"/obj/item/weapon/storage/box/excavation",
 		"/obj/item/weapon/anobattery",
-		"/obj/item/weapon/weldingtool",
+		"/obj/item/tool/weldingtool",
 		"/obj/item/device/xenoarch_scanner",
 		"/obj/item/device/ano_scanner",
 		"/obj/item/device/artifact_finder")

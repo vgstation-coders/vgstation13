@@ -44,6 +44,9 @@
 		if(!living_ais && stage<MALF_CHOOSING_NUKE)
 			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
+			var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+			if (istype(dynamic_mode))
+				dynamic_mode.update_stillborn_rulesets()
 			return
 		if(apcs >= 3 && can_malf_ai_takeover())
 			AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.

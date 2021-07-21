@@ -168,3 +168,17 @@ proc/adjust_RGB(var/color, var/red, var/green, var/blue)
 		return TRUE
 	else
 		return FALSE
+
+//returns the number of direction a given icon_state has, or 0 if it's not 1, 4 or 8 (such as in the case of an animated state)
+//should be accurate most of the time, but no guarrantees
+/proc/get_icon_dir_count(icon, icon_state)
+	var/iconKey = "misc"
+	iconCache[iconKey] << icon(icon,icon_state)
+	var/haystack = "[iconCache.ExportText(iconKey)]"
+	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAAAg"))//yeah I found those patterns by reading strings of icons converted to base64
+		return 1
+	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAABA"))
+		return 4
+	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAABg"))
+		return 8
+	return 0

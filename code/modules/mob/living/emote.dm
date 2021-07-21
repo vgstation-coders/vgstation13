@@ -44,6 +44,27 @@
 	message = "dances around happily."
 	restraint_check = TRUE
 
+/datum/emote/living/dance/cult
+	key = "cultdance"
+	key_third_person = "cultdances"
+	message = "displays the dance of their people."
+	restraint_check = TRUE
+
+/datum/emote/living/dance/cult/can_run_emote(var/mob/user, var/status_check)
+	if (user.occult_muted())
+		return FALSE
+	if (iscultist(user) || istype(user, /mob/living/simple_animal/astral_projection))
+		return TRUE
+	return FALSE
+
+/datum/emote/living/dance/cult/run_emote(mob/living/user, params)
+	. = ..()
+	if (.)
+		for (var/obj/effect/cult_ritual/dance/dance_center in range(1,get_turf(user)))
+			dance_center.add_dancer(user)
+			return
+		new /obj/effect/cult_ritual/dance(get_step(user,user.dir), user)
+
 /datum/emote/living/deathgasp
 	key = "deathgasp"
 	key_third_person = "deathgasps"
@@ -87,6 +108,18 @@
 		var/mob/living/L = user
 		L.sleeping += 10 // You can't faint when you're asleep.
 
+var/list/animals_with_wings = list(
+	/mob/living/simple_animal/parrot,
+	/mob/living/simple_animal/bee,
+	/mob/living/simple_animal/penguin,
+	/mob/living/simple_animal/chick,
+	/mob/living/simple_animal/chicken,
+	/mob/living/simple_animal/hostile/retaliate/cockatrice,
+	/mob/living/simple_animal/hostile/scarybat,
+	/mob/living/simple_animal/hostile/bigroach,
+	/mob/living/simple_animal/hostile/viscerator,
+	)
+
 /datum/emote/living/flap
 	key = "flap"
 	key_third_person = "flaps"
@@ -102,6 +135,8 @@
 
 /datum/emote/living/flap/can_run_emote(var/mob/user, var/status_check)
 	if (isMoMMI(user))
+		return TRUE
+	if (is_type_in_list(user,animals_with_wings))
 		return TRUE
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user

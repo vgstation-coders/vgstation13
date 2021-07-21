@@ -19,7 +19,7 @@
 			W.playtoolsound(src, 50)
 
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "Now welding the [src]...")
 		if (WT.do_weld(user, src, 20, 0))
 			if(gcDestroyed)

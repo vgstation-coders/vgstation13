@@ -29,6 +29,10 @@ var/datum/subsystem/map/SSmap
 
 	for(var/i = 0, i < max_secret_rooms, i++)
 		make_mining_asteroid_secret()
+	
+	var/shack_number = rand(1,3)
+	for(var/i = 0, i < shack_number, i++)
+		generate_hoboshack()
 
 	log_startup_progress("Calling post on zLevels, letting them know they can do zlevel specific stuff...")
 	var/watch_prim = start_watch()
@@ -43,5 +47,8 @@ var/datum/subsystem/map/SSmap
 	log_startup_progress("Starting map-specific inits...")
 	map.map_specific_init()
 	log_startup_progress("Finished map-specific inits in [stop_watch(watch)]s.")
+
+	log_startup_progress("Creating pickspawners...")
+	spawn_map_pickspawners() //this is down here so that it calls after allll the vaults etc are done spawning - if in the future some pickspawners don't fire, it's because this needs moving
 
 	..()

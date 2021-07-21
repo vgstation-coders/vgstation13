@@ -36,6 +36,7 @@
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
+	species_type = /mob/living/simple_animal/hostile/wolf
 
 	speed = 1
 	health = 75
@@ -295,11 +296,11 @@
 
 		if(health < maxHealth/2)
 			if(nutrition >= WOLF_REGENCOST)
-				health += rand(1,3)
+				health += 3
 				adjust_nutrition(-WOLF_REGENCOST)
 		else
-			if(hunger_status >= WOLF_WELLFED)
-				health += 1
+			if((hunger_status >= WOLF_WELLFED) && (health < maxHealth))
+				health += min(3,maxHealth-health)
 				adjust_nutrition(-WOLF_REGENCOST)
 
 /mob/living/simple_animal/hostile/wolf/proc/handle_hunger()

@@ -8,8 +8,8 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "tube-construct-stage1"
 	anchored = 1
-	plane = LIGHTING_PLANE
-	layer = LIGHTBULB_LAYER
+	plane = OBJ_PLANE
+	layer = ABOVE_DOOR_LAYER
 	var/stage = 1
 	var/fixture_type = "tube"
 	var/sheets_refunded = 2
@@ -93,8 +93,8 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "bulb-construct-stage1"
 	anchored = 1
-	plane = LIGHTING_PLANE
-	layer = LIGHTBULB_LAYER
+	plane = OBJ_PLANE
+	layer = ABOVE_DOOR_LAYER
 	stage = 1
 	fixture_type = "bulb"
 	sheets_refunded = 1
@@ -108,8 +108,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "ltube1"
 	desc = "A lighting fixture."
 	anchored = 1
-	plane = LIGHTING_PLANE
-	layer = LIGHTBULB_LAYER
+	plane = OBJ_PLANE
+	layer = ABOVE_DOOR_LAYER
 	use_power = 2
 	idle_power_usage = 2
 	active_power_usage = 20
@@ -142,13 +142,14 @@ var/global/list/obj/machinery/light/alllights = list()
 		if(A && !A.requires_power)
 			on = 1
 
-		switch(fitting)
-			if("tube")
-				if(prob(2))
-					broken(1)
-			if("bulb")
-				if(prob(5))
-					broken(1)
+		if (!map.lights_always_ok)
+			switch(fitting)
+				if("tube")
+					if(prob(2))
+						broken(1)
+				if("bulb")
+					if(prob(5))
+						broken(1)
 		spawn(1)
 			update(0)
 
@@ -370,7 +371,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			to_chat(user, "You hit the light!")
 	// attempt to deconstruct / stick weapon into light socket
 	else if(!current_bulb)
-		if(iswirecutter(W)) //If it's a wirecutter take out the wires
+		if(W.is_wirecutter(user)) //If it's a wirecutter take out the wires
 			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
@@ -472,6 +473,12 @@ var/global/list/obj/machinery/light/alllights = list()
 		M.do_attack_animation(src, M)
 		for(var/mob/O in viewers(src))
 			O.show_message("<span class='attack'>[M.name] smashed the light!</span>", 1, "You hear a tinkle of breaking glass", 2)
+		if (isspider(M))
+			var/datum/faction/spider_infestation/infestation = find_active_faction_by_type(/datum/faction/spider_infestation)
+			if (infestation)
+				var/datum/objective/spider/S = locate() in infestation.objective_holder.objectives
+				if (S)
+					S.broken_lights++
 		broken()
 	return
 // attack with hand - remove tube/bulb

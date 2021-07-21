@@ -1,0 +1,151 @@
+/datum/next_map
+	var/name = "Name" // MUST be the same as /datum/map/var/nameLong
+	var/path = "Folder name" // MUST be the name of the folder inside maps/voting that contains the dmb
+	var/min_players = 0
+	var/max_players = 999
+	var/is_enabled = TRUE // If FALSE, it doesn't show up during the vote but can be rigged
+
+/datum/next_map/proc/is_votable()
+	if(clients.len < min_players)
+		var/msg = "Skipping map [name] due to not enough players. min = [min_players] || max = [max_players]"
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	if(clients.len > max_players)
+		var/msg = "Skipping map [name] due to too many players. min = [min_players] || max = [max_players]"
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return TRUE
+
+/datum/next_map/bagel
+	name = "Bagelstation"
+	path = "Bagelstation"
+	var/bagel_requirement = 17
+	is_enabled = FALSE
+
+/datum/next_map/bagel/is_votable()
+	if(score["bagelscooked"] < bagel_requirement)
+		var/msg = "Skipping map [name], fewer than [bagel_requirement] bagels made."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
+/datum/next_map/box
+	name = "Box Station"
+	path = "Box Station"
+
+/datum/next_map/castle
+	name = "Castle Station"
+	path = "Castle Station"
+
+/datum/next_map/castle/is_votable()
+	if(!ticker.revolutionary_victory)
+		var/msg = "Skipping map [name], revolutionaries have not won."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
+/datum/next_map/deff
+	name = "Defficiency"
+	path = "Defficiency"
+	min_players = 30
+
+/datum/next_map/dorf
+	name = "DorfStation"
+	path = "Dorf"
+
+/datum/next_map/dorf/is_votable()
+	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
+	var/DD = text2num(time2text(world.timeofday, "DD")) // get the current date
+	if (MM != 8 && DD != 8) // Dwarf fortress release date
+		var/msg = "Skipping map [name] as this is not the release date of Dwarf Fortress."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
+/datum/next_map/lamprey
+	name = "Lamprey Station"
+	path = "Lamprey"
+	is_enabled = FALSE
+
+/datum/next_map/lamprey/is_votable()
+	var/crew_score = score["crewscore"] // So that we can use this in the admin messaging
+	if(crew_score > -20000)
+		var/msg = "Skipping map [name], station requires lower than -20000 score (is [crew_score])."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
+/datum/next_map/lowfat_bagel
+	name = "Lowfat Bagel"
+	path = "lowfatbagel"
+	min_players = 25
+
+/datum/next_map/metaclub
+	name = "Meta Club"
+	path = "Metaclub"
+	min_players = 24
+
+/datum/next_map/packed
+	name = "Packed Station"
+	path = "Packed Station"
+	min_players = 45
+	max_players = 60
+
+/datum/next_map/roid
+	name = "Asteroid Station"
+	path = "RoidStation"
+	min_players = 25
+
+/datum/next_map/snaxi
+	name = "Snow Station"
+	path = "Snow Taxi"
+	min_players = 30
+
+/datum/next_map/snaxi/is_votable()
+	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
+	var/allowed_months = list(1, 2, 7, 12)
+	if (!(MM in allowed_months))
+		var/msg = "Skipping map [name] as this is no longer the Christmas season."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	return ..()
+
+/datum/next_map/synergy
+	name = "Synergy Station"
+	path = "Synergy"
+
+/datum/next_map/xoq
+	name = "noitatS xoq"
+	path = "xoq"
+	is_enabled = FALSE
+
+/proc/get_votable_maps()
+	var/list/votable_maps = list()
+	for(var/map_path in subtypesof(/datum/next_map))
+		var/datum/next_map/candidate = new map_path
+		if(candidate.is_enabled && candidate.is_votable())
+			votable_maps += candidate.name
+			votable_maps[candidate.name] = candidate.path
+
+	var/list/maplist = get_list_of_keys(votable_maps)
+	var/msg = "A map vote was initiated with these options: [english_list(maplist)]."
+	send2maindiscord(msg)
+	send2mainirc(msg)
+	send2ickdiscord(config.kill_phrase) // This the magic kill phrase
+
+	return votable_maps
+
+/proc/get_all_maps()
+	var/list/all_maps = list()
+	for(var/map_path in subtypesof(/datum/next_map))
+		var/datum/next_map/map = new map_path
+		all_maps += map.name
+		all_maps[map.name] = map.path
+	return all_maps

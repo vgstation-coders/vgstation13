@@ -36,6 +36,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	var/list/attached_overlays = list()
 	var/obj/item/device/assembly_holder/holder = null
 	var/cooldown = 0//To prevent spam
+	var/datum/wires/connected = null
 	var/wires = WIRE_RECEIVE | WIRE_PULSE
 
 	var/const/WIRE_RECEIVE = 1			//Allows Pulsed(0) to call Activate()
@@ -228,7 +229,9 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 
 /obj/item/device/assembly/pulse(var/radio = 0)
-	if(istype(holder, /obj/item/device/assembly_frame))
+	if(src.connected && src.wires)
+		connected.Pulse(src)
+	else if(istype(holder, /obj/item/device/assembly_frame))
 		var/obj/item/device/assembly_frame/AB = holder
 
 		AB.receive_pulse(src)

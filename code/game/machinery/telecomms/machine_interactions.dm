@@ -24,7 +24,7 @@
 		if(integrity >= TELECOMMS_MAX_INTEGRITY)
 			to_chat(user, "It's not damaged.")
 			return
-		var/obj/item/weapon/solder/S = W
+		var/obj/item/tool/solder/S = W
 		if (!S.remove_fuel(2, user))
 			to_chat(user, "You need more fuel.")
 			return
@@ -59,7 +59,8 @@
 	// You need a multitool to use this, or be silicon
 	if(!issilicon(user))
 		// istype returns false if the value is null
-		if(!ismultitool(user.get_active_hand()))
+		var/obj/item/I = user.get_active_hand()
+		if(!I.is_multitool(user))
 			return
 
 	if(stat & (BROKEN|NOPOWER))

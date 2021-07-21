@@ -58,20 +58,18 @@
 
 	client.reset_screen()				//remove hud items just in case
 	hud_used = new /datum/hud(src)
-	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
 	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
 	client.screen += clickmaster_dummy // honestly fuck you lummox
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
+	client.initialize_darkness_planemaster()
+	update_perception()
 
 	regular_hud_updates()
 
 	update_antag_huds()
 
 	update_action_buttons(TRUE)
-
-	if(round_end_info == "")
-		winset(client, "rpane.round_end", "is-visible=false")
 
 	delayNextMove(0)
 

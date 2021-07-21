@@ -314,7 +314,7 @@
 		return -1
 	return ..()
 
-/obj/machinery/recharge_station/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/recharge_station/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='notice'>You can't do that while this charger is occupied.</span>")
 		return 0

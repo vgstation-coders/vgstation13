@@ -56,6 +56,17 @@
 
 	nanomanager.update_uis(src)
 
+/obj/machinery/anomaly/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, /obj/item/weapon/reagent_containers/glass))
+		if(held_container)
+			return FALSE
+		playsound(loc, 'sound/machines/click.ogg', 50, 1)
+		AM.forceMove(src)
+		held_container = AM
+		nanomanager.update_uis(src)
+		return TRUE
+	return FALSE
+
 /obj/machinery/anomaly/attack_hand(var/mob/user)
 	ui_interact(user)
 

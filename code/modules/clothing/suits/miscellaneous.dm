@@ -390,16 +390,21 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = FULL_TORSO|FEET
 	species_fit = list(INSECT_SHAPED)
 
-
 /obj/item/clothing/suit/chickensuit
-	name = "Chicken Suit"
+	name = "chicken suit"
 	desc = "A suit made long ago by the ancient empire KFC."
 	icon_state = "chickensuit"
 	item_state = "chickensuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	siemens_coefficient = 2.0
 
+/obj/item/clothing/suit/chickensuit/white
+	name = "white chicken suit"
+	desc = "Silky smooth. The feathers of legend...could it be..."
+	icon_state = "chickensuit_white"
+	item_state = "chickensuit_white"
 
 /obj/item/clothing/suit/monkeysuit
 	name = "Monkey Suit"
@@ -791,6 +796,7 @@ obj/item/clothing/suit/cassock
 	max_combined_w_class = 28
 	storage_slots = 14
 	actions_types = list(/datum/action/item_action/show_wares)
+	allowed = list(/obj/item/weapon/gun/projectile/hecate/hunting)
 
 /datum/action/item_action/show_wares/Trigger()
 	var/obj/item/clothing/suit/storage/trader/T = target
@@ -849,7 +855,7 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/clockwork_robes
 	name = "clockwork robes"
-	desc = "A set of armored robes worn by the followers of Ratvar"
+	desc = "A set of armored robes worn by the followers of Ratvar."
 	icon_state = "clockwork"
 	item_state = "clockwork"
 	species_fit = list(INSECT_SHAPED)
@@ -885,19 +891,25 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/red_suit
 	name = "red suit"
-	desc = "A sleazy looking red suit"
+	desc = "A sleazy looking red suit."
 	icon_state = "red_suit"
 	item_state = "red_suit"
 	body_parts_covered = 0
 	species_fit = list(INSECT_SHAPED)
 
-obj/item/clothing/suit/poncho
+/obj/item/clothing/suit/poncho
 	name = "poncho"
 	desc = "A wooly poncho. Smells of beans."
 	icon_state = "poncho"
 	item_state = "poncho"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
+/obj/item/clothing/suit/banana_suit
+	name = "banana suit"
+	desc = "Peanut butter jelly time!"
+	icon_state = "banana_suit"
+	item_state = "banana_suit"
+	body_parts_covered = FULL_TORSO|ARMS|LEGS|HIDEJUMPSUIT
 
 //BOMBER VEST
 //The whole "bump into people to detonate it, it's the only way" part is intentional, just run into them already

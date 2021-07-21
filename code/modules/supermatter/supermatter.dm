@@ -102,6 +102,13 @@
 	. = ..()
 	radio = new (src)
 
+/obj/machinery/power/supermatter/shard/New()
+	. = ..()
+	if(Holiday == APRIL_FOOLS_DAY)
+		icon_state = "darkmatter_shard_chad"
+		base_icon_state = "darkmatter_shard_chad"
+		desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You are confident this is literally the best engine on the station, no other engine can compare to the intelligence required to set it up nor the unparalleled power output. All those idiot engineers will set up the Singularity, the TEG, the AME, but they all kneel to those who set up the SME. What are you waiting for? If this doesn't produce enough power to power the station for billions of years then you are doing it wrong.</span>"
+
 /obj/machinery/power/supermatter/initialize()
 	..()
 	set_frequency(frequency) //also broadcasts
@@ -127,6 +134,10 @@
 	explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 	empulse(get_turf(src), 100, 200, 1)
 	qdel(src)
+
+/obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	Consume(AM)
+	return TRUE
 
 /obj/machinery/power/supermatter/ex_act(severity)
 	switch(severity)
@@ -368,6 +379,15 @@
 
 
 /obj/machinery/power/supermatter/attack_hand(mob/user as mob)
+	var/obj/item/clothing/gloves/golden/G = user.get_item_by_slot(slot_gloves)
+	if(istype(G))
+		to_chat(user,"<span class='warning'>Carefully extending a single finger, you nearly touch the supermatter before the gloves stop you -- repulsed by and absorbing some kind of charge.</span>")
+		if(G.siemens_coefficient > -1)
+			G.siemens_coefficient = -1
+			G.icon_state = "golden-awakened"
+			G.desc = "Gloves imbued with the power of the supermatter. They absorb electrical shocks to heal the wearer."
+			to_chat(user, "<span class='good'>Some of the power of the supermatter remains trapped in the gloves, changing their properties!</span>")
+		return
 	user.visible_message("<span class=\"warning\">\The [user] reaches out and touches \the [src], inducing a resonance... \his body starts to glow and bursts into flames before flashing into ash.</span>",\
 		"<span class=\"danger\">You reach out and touch \the [src]. Everything starts burning and all you can hear is ringing. Your last thought is \"That was not a wise decision.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")

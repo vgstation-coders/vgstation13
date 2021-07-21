@@ -63,7 +63,7 @@ var/global/list/igniters = list()
 
 /obj/machinery/igniter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(iswelder(W) && src.assembly)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin to cut \the [src] off the floor...</span>")
 		if (WT.do_weld(user, src, 40, 0))
 			user.visible_message( \

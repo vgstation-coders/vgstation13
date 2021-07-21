@@ -61,3 +61,13 @@
 		if(result == BLOCKED)
 			return BLOCKED
 	return result
+
+/atom/proc/update_nearby_tiles(var/turf/T)
+	if(!SS_READY(SSair))
+		return 0
+
+	if(!T)
+		T = get_turf(src)
+	if(isturf(T))
+		SSair.mark_for_update(T)
+	return 1

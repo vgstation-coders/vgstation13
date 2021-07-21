@@ -1,11 +1,11 @@
 /mob/living/simple_animal/hostile/shade
 	name = "red shade"
 	real_name = "red shade"
-	desc = "A vengeful spirit"
+	desc = "A vengeful spirit."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "red shade"
 	icon_living = "red shade"
-	icon_dead = "shade_dead"
+	icon_dead = "shade"
 	maxHealth = 20
 	health = 20
 	speak_chance = 33
@@ -59,6 +59,8 @@
 	alpha = 255
 
 /mob/living/simple_animal/hostile/shade/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(TRUE)
 	monkeyizing = TRUE
 	canmove = FALSE

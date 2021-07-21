@@ -265,7 +265,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 					user.update_inv_hands()
 				return
 		if(2)
-			if (iswirecutter(W))
+			if (W.is_wirecutter(user))
 				stage = 3
 				primed = 1
 				to_chat(user, "<span class='notice'>You reroute the connections within \the [src].</span>")
@@ -277,7 +277,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				user.update_inv_hands()
 				return
 		if(3)
-			if (ismultitool(W))
+			if (W.is_multitool(user))
 				if (safety == 0)
 					to_chat(user, "<span class='warning'>You activate the manual safety override of \the [src]!</span>")
 					to_chat(user, "<span class='warning'>The bolts for the auxiliary chamber of \the [src] have been exposed!</span>")

@@ -105,7 +105,7 @@
 
 /datum/airalarm_preset/human //For humans
 	name = "Human"
-	desc = "Permits Oxygen and Nitrogen"
+	desc = "Permits oxygen and nitrogen."
 	core = TRUE
 	oxygen = list(16, 18, 135, 140)
 	nitrogen = list(-1, -1,  -1,  -1)
@@ -120,7 +120,7 @@
 
 /datum/airalarm_preset/vox //For vox
 	name = "Vox"
-	desc = "Permits Nitrogen only"
+	desc = "Permits nitrogen only."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(16, 18, 135,  140)
@@ -135,7 +135,7 @@
 
 /datum/airalarm_preset/coldroom //Server rooms etc.
 	name = "Coldroom"
-	desc = "For server rooms and freezers"
+	desc = "For server rooms and freezers."
 	core = TRUE
 	oxygen = list(-1, -1, -1, -1)
 	nitrogen = list(-1, -1, -1, -1)
@@ -150,7 +150,7 @@
 
 /datum/airalarm_preset/plasmaman //HONK
 	name = "Plasmaman"
-	desc = "Permits Plasma and Nitrogen only"
+	desc = "Permits plasma and nitrogen only."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, -1, -1)
@@ -165,7 +165,7 @@
 
 /datum/airalarm_preset/vacuum
 	name = "Vacuum"
-	desc = "For rooms to be kept under vacuum"
+	desc = "For rooms to be kept under vacuum."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, 0.5, 1)
@@ -1065,7 +1065,7 @@ var/global/list/airalarm_presets = list(
 
 			if(wiresexposed && !wires.IsAllCut() && iswiretool(W))
 				return attack_hand(user)
-			else if(wiresexposed && wires.IsAllCut() && iswirecutter(W))
+			else if(wiresexposed && wires.IsAllCut() && W.is_wirecutter(user))
 				buildstage = 1
 				update_icon()
 				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
@@ -1149,6 +1149,14 @@ var/global/list/airalarm_presets = list(
 		return 1
 	return 0
 
+/obj/machinery/alarm/is_in_range(var/mob/user)
+	if((!in_range(src, user) || !istype(loc, /turf)) && !istype(user, /mob/living/silicon))
+		var/obj/item/device/multitool/omnitool/O = user.get_active_hand()
+		if(istype(O))
+			return O.can_connect(src,user)
+		return FALSE
+	return TRUE
+
 /*
 FIRE ALARM
 */
@@ -1214,6 +1222,8 @@ FIRE ALARM
 	return ..()
 
 /obj/machinery/firealarm/CtrlClick(var/mob/user)
+	if (!(user.dexterity_check())) // Squeak
+		return
 	if(user.incapacitated() || (!in_range(src, user) && !issilicon(user)))
 		return
 	else
@@ -1264,11 +1274,11 @@ FIRE ALARM
 	if(wiresexposed)
 		switch(buildstage)
 			if(2)
-				if (ismultitool(W))
+				if (W.is_multitool(user))
 					src.detecting = !( src.detecting )
 					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]connected [src]'s detecting unit.")
 					playsound(src, 'sound/items/healthanalyzer.ogg', 50, 1)
-				if(iswirecutter(W))
+				if(W.is_wirecutter(user))
 					to_chat(user, "You begin to cut the wiring...")
 					W.playtoolsound(src, 50)
 					if (do_after(user, src,  50) && buildstage == 2 && wiresexposed)
@@ -1353,6 +1363,9 @@ FIRE ALARM
 
 /obj/machinery/firealarm/attack_hand(mob/user as mob)
 	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
+		return
+
+	if (!(user.dexterity_check())) // No squeaks or moos allowed.
 		return
 
 	if (buildstage != 2)
@@ -1579,6 +1592,11 @@ var/global/list/firealarms = list() //shrug
 	if(wires)
 		wires.npc_tamper(L)
 
-
+/obj/machinery/alarm/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && allowed(user))
+		locked = !locked
+		to_chat(user, "You [locked ? "" : "un"]lock \the [src] interface.")
+		update_icon()
+	return ..()
 
 #undef CHECKED_GAS

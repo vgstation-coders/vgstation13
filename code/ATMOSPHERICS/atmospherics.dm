@@ -207,7 +207,7 @@ Pipelines + Other Objects -> Pipe network
 
 // Ditto, but for heat-exchanging pipes.
 /obj/machinery/atmospherics/proc/findConnectingHE(var/direction, var/given_layer = src.piping_layer)
-	for(var/obj/machinery/atmospherics/pipe/simple/heat_exchanging/target in get_step(src,direction))
+	for(var/obj/machinery/atmospherics/target in get_step(src,direction))
 		if(target.initialize_directions_he & get_dir(target,src))
 			if(isConnectable(target, direction, given_layer) && target.isConnectable(src, turn(direction, 180), given_layer))
 				return target
@@ -319,7 +319,7 @@ Pipelines + Other Objects -> Pipe network
 	var/datum/gas_mixture/env_air = loc.return_air()
 	add_fingerprint(user)
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		if(istype(W, /obj/item/weapon/wrench/socket) && istype(src, /obj/machinery/atmospherics/pipe))
+		if(istype(W, /obj/item/tool/wrench/socket) && istype(src, /obj/machinery/atmospherics/pipe))
 			to_chat(user, "<span class='warning'>You begin to open the pressure release valve on the pipe...</span>")
 			if(!do_after(user, src, 50) || !loc)
 				return
@@ -327,8 +327,10 @@ Pipelines + Other Objects -> Pipe network
 			user.visible_message("[user] vents \the [src].",
 								"You have vented \the [src].",
 								"You hear a ratchet.")
+			var/obj/item/tool/wrench/socket/thewrench = W
 			var/datum/gas_mixture/internal_removed = int_air.remove_volume(starting_volume)
-			env_air.merge(internal_removed)
+			if(!thewrench.has_slime)
+				env_air.merge(internal_removed)
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")
 			return 1

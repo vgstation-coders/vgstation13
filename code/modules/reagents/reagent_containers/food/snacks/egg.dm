@@ -93,7 +93,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/vox
 	name = "green egg"
-	desc = "Looks like it came from some genetically engineered chicken"
+	desc = "Looks like it came from some genetically engineered chicken."
 	icon_state = "egg-vox"
 	can_color = FALSE
 	hatch_type = /mob/living/carbon/monkey/vox
@@ -161,3 +161,30 @@ var/snail_egg_count = 0
 /obj/item/weapon/reagent_containers/food/snacks/egg/snail/Destroy()
 	snail_egg_count--
 	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf
+	name = "pomf egg"
+	desc = "An ordinary egg. Yep. Definitely. But where's that voice coming from?"
+	icon_state = "egg"
+	hatch_type = /mob/living/simple_animal/chicken/pomf
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf/examine(var/mob/user)
+	..()
+	spawn(30)
+		var/list/egg_speak = list(
+			"let me out",
+			"it's cramped in here",
+			"throw it",
+			"fulfill your destiny",
+			)
+		to_chat(user,"<span class='sinister'>...[pick(egg_speak)]...</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf/throw_impact(atom/hit_atom)
+	new hatch_type(loc)
+	playsound(loc, 'sound/items/egg_squash.ogg', 50, 1)
+	playsound(loc, 'sound/voice/chicken.ogg', 50, 1)
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf/can_consume(mob/living/carbon/eater, mob/user)
+	to_chat(user,"<span class='warning'>The shell is too hard for your teeth. Is that really an egg?</span>")
+	return FALSE

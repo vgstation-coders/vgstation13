@@ -198,6 +198,10 @@ var/list/infected_contact_mobs = list()
 			if (O && !istype(src, /mob/living/simple_animal/mouse/plague))
 				O.total_infections++
 			plague.update_hud_icons()
+			for(var/datum/role/plague_mouse/M in plague.members)
+				var/datum/mind/mouse_mind = M.antag
+				mouse_mind.store_memory(D.get_info(), forced = 1)
+				mouse_mind.store_memory("<hr>")
 		//----------------
 
 		for (var/obj/item/device/pda/p in contents)
@@ -356,3 +360,21 @@ var/list/infected_items = list()
 		if("eyes")
 			part = EYES
 	return part
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/proc/spread_disease_among_crew(var/datum/disease2/disease/D, var/reason = "4noraisin")
+	var/list/candidates = list()
+	for(var/mob/living/candidate in player_list)
+		if(candidate.z == STATION_Z && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
+			candidates += candidate
+
+	if(!candidates.len)
+		return
+
+	var/infected = 1 + round(candidates.len/10)
+
+	for (var/i = 1 to infected)
+		var/mob/living/candidate = pick(candidates)
+		candidates -= candidate
+		candidate.infect_disease2(D,1, reason)

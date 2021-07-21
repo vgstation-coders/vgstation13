@@ -13,15 +13,24 @@ var/global/list/obj/item/beacon/beacons = list()
 
 /obj/item/beacon/New()
 	..()
+	frequency = format_frequency(sanitize_frequency(frequency))
 	beacons += src
 
 /obj/item/beacon/Destroy()
 	..()
 	beacons -= src
 
+/obj/item/beacon/examine(mob/user)
+	..()
+	to_chat(user,"<span class='notice'>The frequency of the [src] is set to [frequency].</span>")
+
 /obj/item/beacon/attack_self(mob/user as mob)
 	..()
-	var/newfreq = input(user, "Input a new frequency for the beacon", "Frequency", null) as num
+	var/newfreq = input(user, "Input a new frequency for the beacon", "Frequency", null) as null|num
+	if(!src.Adjacent(user))
+		return
+	if(usr.restrained() || usr.lying || usr.stat)
+		return 0
 	if(!newfreq)
 		return
 	frequency = format_frequency(sanitize_frequency(newfreq))

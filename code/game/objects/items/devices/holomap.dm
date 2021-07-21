@@ -88,7 +88,7 @@
 		W.playtoolsound(src, 50)
 		return 1
 
-	if (ismultitool(W) && panel)
+	if (W.is_multitool(user) && panel)
 		hacked = !hacked
 		to_chat(user, "<span class='notify'>You [hacked ? "disable" : "enable"] the lock on \the [src].</span>")
 		return 1

@@ -635,7 +635,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(!M)
 			return
 		M.revive(0)
-		M.suiciding = 0
+		if(M.mind)
+			M.mind.suiciding = 0
 
 		log_admin("[key_name(usr)] healed / revived [key_name(M)]")
 		message_admins("<span class='warning'>Admin [key_name_admin(usr)] healed / revived [key_name_admin(M)]!</span>", 1)

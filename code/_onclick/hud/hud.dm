@@ -20,6 +20,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 	var/obj/abstract/screen/lingchemdisplay
 	var/obj/abstract/screen/vampire_blood_display // /vg/
+	var/obj/abstract/screen/spider_food_display // /vg/
+	var/obj/abstract/screen/spiderling_growth_display // /vg/
+	var/obj/abstract/screen/spider_queen_counter // /vg/
 	var/obj/abstract/screen/countdown_display // /vg/
 	var/obj/abstract/screen/cult_Act_display // /vg/
 	var/obj/abstract/screen/cult_tattoo_display // /vg/
@@ -194,7 +197,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		return FALSE
 	if(!mymob.client)
 		return FALSE
-
+	if(!mymob.gui_icons)
+		mymob.gui_icons = new /datum/ui_icons(src)
 
 	var/ui_style
 	var/ui_color
@@ -234,6 +238,10 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		borer_hud()
 	else if(isconstruct(mymob))
 		construct_hud()
+	else if(isshade(mymob))
+		shade_hud()
+	else if(isspider(mymob))
+		spider_hud()
 	else if(ispAI(mymob))
 		pai_hud()
 	else if(ismartian(mymob))
@@ -242,6 +250,10 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		hologram_hud()
 	else if(isgrinch(mymob))
 		grinch_hud()
+
+	var/datum/role/cultist/C = iscultist(mymob)
+	if (C)
+		C.update_cult_hud()
 
 	if(isliving(mymob))
 		var/obj/abstract/screen/using

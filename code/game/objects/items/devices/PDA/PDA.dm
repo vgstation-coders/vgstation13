@@ -522,7 +522,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 // Special AI/pAI PDAs that cannot explode.
 /obj/item/device/pda/ai
-	icon_state = "NONE"
+	icon = 'icons/obj/machines/telecomms.dmi'
+	icon_state = "pda_server-on"
 	ttone = "data"
 	detonate = 0
 
@@ -772,7 +773,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if (cartridge.access_mechanic)
 						dat += {"<h4>Mechanic Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=Device Analyser'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyser</a></li>
+							<li><a href='byond://?src=\ref[src];choice=Device Analyzer'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyzer</a></li>
 							</ul>"}
 
 					if (cartridge.access_medical)
@@ -1591,9 +1592,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if("setAlarm")
 			var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
 			if(app)
-				var/nutime = round(input("How long before the alarm triggers, in minutes?", "Alarm", 1) as num)
+				var/nutime = round(input("How long before the alarm triggers, in seconds?", "Alarm", 1) as num)
 				if(app.set_alarm(nutime))
-					to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [nutime] minute timer.</span>")
+					to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [nutime] second timer.</span>")
+		if("restartAlarm")
+			var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
+			if(app && app.restart_alarm())
+				to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [app.lasttimer] second timer.</span>")
+				no_refresh = 1
 		if("101")//PDA_APP_RINGER
 			mode = PDA_APP_RINGER
 		if("toggleDeskRinger")
@@ -1931,12 +1937,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_atmos))
 				scanmode = SCANMODE_ATMOS
-		if("Device Analyser")
+		if("Device Analyzer")
 			if(scanmode == SCANMODE_DEVICE)
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_mechanic))
 				if(!dev_analys)
-					dev_analys = new(src) //let's create that device analyser
+					dev_analys = new(src) //let's create that device analyzer
 					dev_analys.cant_drop = 1
 					dev_analys.max_designs = 5
 				scanmode = SCANMODE_DEVICE
@@ -2140,7 +2146,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								difficulty += P.cartridge.access_manifest * 2
 							else
 								difficulty += 2
-							
+
 							if(P.hidden_uplink)
 								U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
 								U << browse(null, "window=pda")

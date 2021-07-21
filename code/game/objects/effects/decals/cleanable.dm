@@ -175,33 +175,6 @@ var/list/infected_cleanables = list()
 	if(amount > 0)
 		add_blood_to(perp, amount)
 
-//With "mouse_opacity = 0", this kinda makes no sense.
-//And also, the bloody hands thing does not work properly.
-//
-//obj/effect/decal/cleanable/attack_hand(mob/living/carbon/human/user)
-//	..()
-//	if (amount && istype(user))
-//		add_fingerprint(user)
-//		if (user.gloves)
-//			return
-//		var/taken = rand(1,amount)
-//		amount -= taken
-//		to_chat(user, "<span class='notice'>You get some of \the [src] on your hands.</span>")
-//
-//		user.bloody_hands(src, taken)
-//		user.hand_blood_color = basecolor
-//		user.update_inv_gloves(1)
-
-//		if(transfers_dna)
-//			if (!user.blood_DNA)
-//				user.blood_DNA = list()
-//			user.blood_DNA |= blood_DNA.Copy()
-//		user.add_blood()
-//		user.bloody_hands += taken
-//		user.hand_blood_color = basecolor
-//		user.update_inv_gloves(1)
-//		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
-//
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1
 

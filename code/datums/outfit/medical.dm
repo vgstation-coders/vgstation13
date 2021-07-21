@@ -42,6 +42,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/cmo,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/cmo,
+		)
+	)
+
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
 	)
@@ -55,7 +64,11 @@
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
 
 /datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	items_to_collect[randomcan] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/clothing/suit/straight_jacket] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 
 // -- Doctor
@@ -120,6 +133,19 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			"Emergency Physician" = list(/obj/item/clothing/under/rank/medical),
+			"Surgeon" =  list(/obj/item/clothing/under/rank/medical/blue),
+			"Medical Doctor" = list(/obj/item/clothing/under/rank/medical),
+		),
+		/datum/species/plasmaman/ = list(
+			"Emergency Physician" = list(/obj/item/clothing/under/rank/medical),
+			"Surgeon" =  list(/obj/item/clothing/under/rank/medical/blue),
+			"Medical Doctor" = list(/obj/item/clothing/under/rank/medical),
+		)
+	)
+
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
@@ -159,7 +185,10 @@
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
+	items_to_collect[randomcan] = GRASP_RIGHT_HAND
 	return ..()
 
 // -- Chemist
@@ -213,12 +242,26 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/chemist,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/chemist,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/chemist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/chemist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/bag/chem] = GRASP_LEFT_HAND
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	items_to_collect[/obj/item/weapon/storage/bag/chem] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink] = SURVIVAL_BOX //apparently they like this stuff
+	items_to_collect[/obj/item/weapon/storage/box/chemistry_kit] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
+	items_to_collect[randomcan] = GRASP_LEFT_HAND
 	return ..()
 
 // -- Paramedic
@@ -237,8 +280,14 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/paramedic,
@@ -248,8 +297,14 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 		),
 		/datum/species/plasmaman = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
@@ -258,8 +313,14 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 		/datum/species/vox = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
@@ -267,25 +328,46 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
+
 	)
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	items_to_collect = list(
 		/obj/item/device/healthanalyzer = SURVIVAL_BOX,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/paramedic,
+			/obj/item/clothing/head/soft/paramedic,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/paramedic,
+			/obj/item/clothing/head/soft/paramedic,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
+/datum/outfit/paramedic/pre_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
+	if(H.mind.role_alt_title == "Brig Medic") //Briggies get an implant
+		implant_types += /obj/item/weapon/implant/loyalty
+
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/tool/FixOVein/clot] = GRASP_RIGHT_HAND
 	return ..()
 
 // -- Geneticist
@@ -331,12 +413,27 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/genetics,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/genetics,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/geneticist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	var/obj/item/weapon/dnainjector/nofail/randominjector = pick(/obj/item/weapon/dnainjector/nofail/remotesay, /obj/item/weapon/dnainjector/nofail/runfast, /obj/item/weapon/dnainjector/nofail/strong)
+	items_to_collect[randomcan] = GRASP_RIGHT_HAND
+	items_to_collect[randominjector] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/weapon/dnainjector/nofail/remotesay] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 
 // -- Virologist
@@ -361,6 +458,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/virologist,
 			slot_s_store_str = /obj/item/device/flashlight/pen,
+			slot_wear_mask_str =  /obj/item/clothing/mask/surgical,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
@@ -382,6 +480,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/virologist,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/virologist,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/viro
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
@@ -391,5 +498,7 @@
 	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
 
 /datum/outfit/virologist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/virusdish/random] = GRASP_LEFT_HAND
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	items_to_collect[randomcan] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/weapon/virusdish/random] = SURVIVAL_BOX
 	return ..()

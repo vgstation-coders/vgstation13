@@ -63,7 +63,7 @@
 	var/computer_id = null
 	var/lastattacker = null
 	var/lastattacked = null
-	var/attack_log = list( )
+	var/list/attack_log = list()
 	var/already_placed = 0.0
 	var/obj/machine
 	var/other_mobs = null
@@ -107,9 +107,6 @@
 	//SIZE_BIG for big guys
 	//SIZE_HUGE for even bigger guys
 
-	var/list/callOnFace = list()
-	var/list/callOnStartMove = list()
-	var/list/callOnEndMove = list()
 	var/list/pinned = list()            // List of things pinning this creature to walls (see living_defense.dm)
 	var/list/embedded = list()          // Embedded items, since simple mobs don't have organs.
 	var/list/abilities = list()         // For species-derived or admin-given powers.
@@ -137,7 +134,7 @@
 	var/knockdown = 0.0
 	var/losebreath = 0.0//Carbon
 	var/nobreath = 0.0//Carbon, but only used for humans so far
-	var/intent = null//Living
+
 	var/shakecamera = 0
 	var/a_intent = I_HELP//Living
 	var/m_int = null//Living
@@ -210,8 +207,8 @@
 			statpanel("[P.panel]","",P)
 	*/
 
-//The last mob/living/carbon to push/drag/grab this mob (mostly used by slimes friend recognition)
-	var/mob/living/carbon/LAssailant = null
+//The last mob/living/carbon to push/drag/grab/harm this mob
+	var/mob/LAssailant = null
 
 //Wizard mode, but can be used in other modes thanks to the brand new "Give Spell" badmin button
 	var/list/spell/spell_list = list()
@@ -286,4 +283,7 @@
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
+	var/original_density = 1
 	var/old_assigned_role // If they ghosted, what role did they have?
+
+	var/list/crit_rampup = list() // Of the form timestamp/damage

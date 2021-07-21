@@ -198,7 +198,9 @@ mob/verb/test()
 			if (hclient.is_loaded)
 				hclient.client << output(list2params(arguments), "browser_\ref[src].browser:[func]")
 	else
-		for (var/client in src.clients) if (src.clients[client]) src.callJavaScript(func, arguments, src.clients[client])
+		for (var/client in src.clients)
+			if (src.clients[client])
+				src.callJavaScript(func, arguments, src.clients[client])
 
 /datum/html_interface/proc/updateLayout(nlayout)
 	src.layout = nlayout

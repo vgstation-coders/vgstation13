@@ -15,10 +15,11 @@ mob/living/carbon/proc/dream()
 		"chickens","the oven","euphoria","space god","farting","bones burning","flesh evaporating","distant worlds","skeletons",
 		"voices everywhere","death","a traitor","dark allyways","darkness","a catastrophe","a gun","freezing","a ruined station","plasma fires",
 		"an abandoned laboratory","The Syndicate","blood","falling","flames","ice","the cold","an operating table","a war","red men","malfunctioning robots",
-		"a ship full of spiders","valids","hardcore","your mom","lewd","explosions","broken bones","clowns everywhere","features","a crash","a skrell","a unathi","a tajaran",
+		"valids","hardcore","your mom","lewd","explosions","broken bones","clowns everywhere","features","a crash","a skrell","a unathi","a tajaran",
 		"a vox","a plasmaman","a skellington","a diona","the derelict","the end of the world","the thunderdome","a ship full of dead clowns","a chicken with godlike powers",
 		"a red bus that drives through space","an alien artifact","the mechanic","a newspaper","an insectoid","a slime","a slime person","a mushroom person",
 		"the Cult of Nar-Sie","the Wizard Federation","an impossibly gigantic lamprey floating through space, bending reality as it goes","a sword that talks",
+		"an eclipse","a sandwich so tall that it pierces the heavens","things you people wouldn't believe","attack ships on fire off the shoulder of Orion","C-beams glittering in the dark near the Tannhäuser Gate",
 		)
 	spawn(0)
 		for(var/i = rand(1,4),i > 0, i--)

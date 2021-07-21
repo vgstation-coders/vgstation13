@@ -174,12 +174,9 @@
 		create_cluwne()
 
 	if(href_list["predict"])
-		var/dat = {"<html><body>
-		<h4>High Job Preferences</h4>"}
-		dat += job_master.display_prediction()
-
-		src << browse(dat, "window=manifest;size=400x420;can_close=1")
+		ViewPrediction()
 		return 1
+
 	if(href_list["manifest"])
 		ViewManifest()
 
@@ -347,14 +344,6 @@
 	mind.transfer_to(cluwne)
 	qdel(src)
 
-
-/mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
-	// 20% of players have bad genetic mutations.
-	if(prob(20))
-		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
-		if(prob(10)) // 10% of those have a good mut.
-			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
-
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -464,7 +453,7 @@
 			else
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
-			FuckUpGenes(character)
+			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		else
 			character.Robotize()
 	qdel(src)
@@ -663,9 +652,14 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.Namepick()
 	return new_character
 
+/mob/new_player/proc/ViewPrediction()
+	var/dat = {"<html><body>
+	<h4>High Job Preferences</h4>"}
+	dat += job_master.display_prediction()
+
+	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	
 /mob/new_player/proc/ViewManifest()
-
-
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
 	dat += data_core.get_manifest(OOC = 1)

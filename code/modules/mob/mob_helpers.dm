@@ -81,6 +81,8 @@ mob/proc/remove_internal_organ()
 		return
 	if(!colour_to_apply)
 		colour_to_apply = get_screen_colour()
+	if((M_NOIR in mutations) && client)
+		client.screen += noir_master
 	// We can't compare client.color directly because Byond will force set client.color to null
 	// when assigning the default_colour_matrix to it
 	var/list/colour_initial = (client.color ? client.color : default_colour_matrix)
@@ -407,29 +409,42 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 	return 0
 
-//converts intent-strings into numbers and back
-var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
+//converts intent-strings into numbers and back, refactored by kanef down from switch blocks
 /proc/intent_numeric(argument)
-	if(istext(argument))
-		switch(argument)
-			if(I_HELP)
-				return 0
-			if(I_DISARM)
-				return 1
-			if(I_GRAB)
-				return 2
-			else
-				return 3
+	var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT) //this was originally outside of the proc, not used anywhere and had no reason to be, previously unused
+	if(istext(argument))//switches on text or numerical input to do 2 different things
+		return intents.Find(argument) //Find() returns the index of the argument specified, if any. dunno what it defaults to, probably 0
 	else
-		switch(argument)
-			if(0)
-				return I_HELP
-			if(1)
-				return I_DISARM
-			if(2)
-				return I_GRAB
-			else
-				return I_HURT
+		return intents[argument <= 4 && argument >= 1 ? argument : 4] //ternary operator bounds checking yeeeeee, theres something in list helpers for this but whatever
+
+
+//this is used in 3 different procs, sadly couldnt be function specific, 2d matrix array cus it makes more sense like that sorta, left to right, top to bottom -kanef
+var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT_LEG,LIMB_LEFT_FOOT),list(TARGET_EYES,LIMB_HEAD,TARGET_MOUTH,LIMB_CHEST,LIMB_GROIN),list(LIMB_HEAD,LIMB_RIGHT_ARM,LIMB_RIGHT_HAND,LIMB_RIGHT_LEG,LIMB_RIGHT_FOOT))
+//gets the "side" of body or x coordinate
+/proc/zone_x(argument)
+	if(istext(argument)) //this MUST be text
+		var/i = 0 //time to iterate
+		if (argument == LIMB_HEAD) //head is in all 3 lists, default to middle one
+			return 2
+		for(var/list/side in zones) //time to for loop them instead of an awful long switch block
+			i++ //increment, start at one because BYOND lists hate 0
+			if(side.Find(argument)) //if it's in a sublist
+				return i //break out with the list index its in, Find() is not easy with matrices
+	return 2 //default to middle if nothing
+//and now for the limb on a particular side or "y"
+/proc/zone_y(argument)
+	if(istext(argument))
+		if (argument == LIMB_HEAD) //gotta do it again for overlaps
+			return zones[2].Find(argument) //same as 'ere
+		for(var/list/side in zones) //iterate through sub arrays again
+			if(side.Find(argument)) //if anything that isnt heads are found in these lists
+				return side.Find(argument) //bring back the y index
+	return 3 //otherwise get the middle one
+//text from an XY coord on the matrix
+/proc/zone_text(x,y)
+	//BOTH must be nums
+	if(isnum(x) && isnum(y))
+		return zones[x <= 3 && x >= 1 ? x : 3][y <= 5 && y >= 1 ? y : 5]//bounds checking the 3x5 matrix, bring back the text stored
 
 //change a mob's act-intent. Input the intent as a string such as I_HELP or use "right"/"left
 /mob/verb/a_intent_change(input as text)
@@ -460,6 +475,32 @@ var/list/intents = list(I_HELP,I_DISARM,I_GRAB,I_HURT)
 				hud_used.action_intent.icon_state = "harm"
 			else
 				hud_used.action_intent.icon_state = "help"
+
+//change a mob's zone_sel. Input the target as a string such as LIMB_HEAD -kanef
+/mob/verb/a_zone_change(input as text)
+	//same declaration as intent function, which this is based on
+	set name = "a-zone"
+	set hidden = 1
+	
+	//standard type check
+	if(zone_sel && zone_sel.selecting)
+		var/old_selecting = zone_sel.selecting //same as in click function for icon updates
+		var/xVal = zone_x(zone_sel.selecting) //shorthand because the stuff below looked so ugly
+		var/yVal = zone_y(zone_sel.selecting) //see above
+		//still a switch because its not just limb names, also cycling for hotkeys
+		switch(input)
+			if (LIMB_RIGHT_FOOT,LIMB_LEFT_FOOT,LIMB_RIGHT_HAND,LIMB_LEFT_HAND,LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_LEFT_LEG,LIMB_GROIN,LIMB_CHEST,LIMB_HEAD,TARGET_MOUTH,TARGET_EYES)
+				zone_sel.selecting = input //parse limb names as normal, like in numpad
+			if ("up") //cycling up
+				zone_sel.selecting = zone_text(xVal,(yVal+4) % 5) //modulo it backwards on Y on base 5
+			if ("down") //cycling down
+				zone_sel.selecting = zone_text(xVal,(yVal+1) % 5) //modulo it forwards on Y on base 5
+			if ("left") //cycling left
+				zone_sel.selecting = zone_text((xVal+2) % 3,yVal) //modulo it backwards on X on base 3
+			if ("right") //cycling right
+				zone_sel.selecting = zone_text((xVal+1) % 3,yVal) //modulo it forwards on X on base 3
+		if(old_selecting != zone_sel.selecting)
+			zone_sel.update_icon() //update icon, like in click function
 
 //For hotkeys
 
@@ -533,7 +574,7 @@ proc/is_blind(A)
 				return TRUE
 			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
 				return TRUE
-			if(isninja(user) && (honorable & HONORABLE_NINJA))
+			if(iscarbon(user) && isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
 			if((iswizard(user) || isapprentice(user) || ismagician(user)) && (user.flags & HONORABLE_NOGUNALLOWED))
 				return TRUE

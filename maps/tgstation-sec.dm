@@ -95,6 +95,12 @@
 		return FALSE
 	return ..()
 
+/datum/map/active/map_specific_conditions(condition)
+	switch(condition)
+		if(ROBOT_CHECK) //Cannot build robots on Castle
+			return 0
+	return ..()
+
 ////////////////////////////////////////////////////////////////
 #include "tgstation-sec.dmm"
 #endif

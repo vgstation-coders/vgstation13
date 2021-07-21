@@ -19,5 +19,4 @@
 	if(!adjacency_flag)
 		return
 
-	//Holy water flasks only splash 5u instead of the whole contents
-	transfer(target, user, can_send = TRUE, can_receive = TRUE, splashable_units = 5)
+	transfer(target, user, splashable_units = amount_per_transfer_from_this)

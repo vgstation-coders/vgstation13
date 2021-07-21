@@ -26,7 +26,7 @@
 
 /obj/item/weapon/circuitboard/airlock/attackby(obj/item/W as obj, mob/user as mob)
 	if(issolder(W))
-		var/obj/item/weapon/solder/S = W
+		var/obj/item/tool/solder/S = W
 		if(icon_state == "door_electronics_smoked")
 			if(!S.remove_fuel(4,user))
 				return

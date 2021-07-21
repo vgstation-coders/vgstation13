@@ -26,6 +26,8 @@ var/const/GENETICIST		=(1<<5)
 var/const/VIROLOGIST		=(1<<6)
 //var/const/PSYCHIATRIST		=(1<<7)
 var/const/PARAMEDIC			=(1<<7)
+var/const/XENOARCH			=(1<<9)
+var/const/XENOBIO			=(1<<10)
 
 
 var/const/CIVILIAN			=(1<<2)
@@ -75,6 +77,8 @@ var/list/medical_positions = list(
 var/list/science_positions = list(
 	"Research Director",
 	"Scientist",
+	"Xenoarchaeologist",
+	"Xenobiologist",
 	"Geneticist",	//Part of both medical and science
 	"Roboticist",
 	"Mechanic"

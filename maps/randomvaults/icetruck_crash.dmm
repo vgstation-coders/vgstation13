@@ -11,7 +11,7 @@
 "k" = (/obj/effect/landmark/corpse/doctor,/obj/item/weapon/folder/white,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "l" = (/obj/effect/decal/cleanable/campfire,/obj/item/toy/gasha/snowflake,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "m" = (/obj/effect/landmark/corpse/scientist,/obj/item/weapon/lighter,/obj/item/weapon/lipstick/purple,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"n" = (/obj/item/weapon/crowbar,/turf/unsimulated/floor/snow,/area/vault/icetruck)
+"n" = (/obj/item/tool/crowbar,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "o" = (/obj/item/weapon/extinguisher/foam,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "p" = (/obj/item/stack/ore/diamond,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "q" = (/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,/turf/unsimulated/floor/snow,/area/vault/icetruck)

@@ -296,7 +296,7 @@
 	.=..()
 
 	switch(id)
-		if(TOXIN)
+		if(TOXIN, INSECTICIDE)
 			if(method != INGEST)
 				death(gore = 0)
 		if(MUTAGEN)

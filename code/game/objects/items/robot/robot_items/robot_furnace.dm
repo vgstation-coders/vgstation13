@@ -67,7 +67,7 @@
 			sleep(1) //Small delay between each ore so the animation plays and your immulshions don't get ruined.
 
 		for(var/datum/smelting_recipe/R in recipes)
-			while(R.checkIngredients(src)) //While we have materials for this
+			while(R.checkIngredients(ore)) //While we have materials for this
 				for(var/ore_id in R.ingredients)
 					ore.removeAmount(ore_id, R.ingredients[ore_id])
 					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard

@@ -283,6 +283,14 @@
 	else
 		. = ..()
 
+/obj/item/weapon/storage/lockbox/unlockable/peace
+	name = "semi-secure lockbox (pax implants)"
+
+/obj/item/weapon/storage/lockbox/unlockable/peace/New()
+	..()
+	for(var/i = 1 to 5)
+		new/obj/item/weapon/implantcase/peace(src)
+
 /obj/item/weapon/storage/lockbox/coinbox
 	name = "coinbox"
 	desc = "A secure container for the profits of a vending machine."

@@ -75,6 +75,8 @@
 	var/obj/abstract/screen/plane_master/parallax_spacemaster/parallax_spacemaster = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster/ghost_planemaster = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/ghost_planemaster_dummy = null
+	var/obj/abstract/screen/plane_master/ghost_planemaster/darkness_planemaster = null
+	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/darkness_planemaster_dummy = null
 
 	// This gets set by goonchat.
 	var/encoding = "1252"
@@ -96,6 +98,9 @@
 
 	// Voting & civic duty
 	var/ivoted = FALSE
+
+	// Last Round Scoreboard images have been sent
+	var/received_last_round_images = FALSE
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

@@ -17,7 +17,7 @@
 	gender = MALE
 
 	corpse = /obj/effect/landmark/corpse/surgeon
-	items_to_drop = list(/obj/item/weapon/circular_saw/plasmasaw)
+	items_to_drop = list(/obj/item/tool/circular_saw/plasmasaw)
 
 /mob/living/simple_animal/hostile/humanoid/surgeon/boss
 	name = "Doctor Peter Holden"
@@ -56,7 +56,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton
 	name = "\improper Skeletal Surgeon"
-	desc = "He won't be pushed around any longer"
+	desc = "He won't be pushed around any longer!"
 	icon = 'icons/mob/surgeon.dmi'
 	icon_state = "skelesurgeon"
 	icon_living = "skelesurgeon"
@@ -98,7 +98,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/morph //morph mask version
 	name = "\improper Skeletal giant"
-	desc = "A giant and imposing skeleton"
+	desc = "A giant and imposing skeleton."
 	icon_state = "skelegiant"
 	icon_living = "skelegiant"
 	icon_dying = "skelegiant_death"

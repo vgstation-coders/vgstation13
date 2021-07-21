@@ -29,8 +29,12 @@
 	var/attack_faction = null //Put a faction string here to have a mob only ever attack a specific faction
 	var/friendly_fire = 0 //If set to 1, they won't hesitate to shoot their target even if a friendly is in the way.
 	var/armor_modifier = 1 //The higher this is, the more effect armor has on melee attacks
+	var/hostile_interest = 2 //How long will we wait in the same spot trying to chase something before giving up?
+	var/atom/lastloc //Where we were last time we were moving toward a target.
 
 	var/list/target_rules = list()
+
+	var/can_ventcrawl = FALSE // If the mob can ventcrawl
 
 /mob/living/simple_animal/hostile/New()
 	..()
@@ -55,6 +59,37 @@
 /mob/living/simple_animal/hostile/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
+	if(!client || deny_client_move) //Ventcrawling stuff
+		if(can_ventcrawl && istype(target,/obj/machinery/atmospherics/unary/vent_pump))
+			var/obj/machinery/atmospherics/unary/vent_pump/entry_vent = target
+			if(Adjacent(entry_vent) && !entry_vent.welded && entry_vent.network && entry_vent.network.normal_members.len)
+				var/list/vents = list()
+				for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
+					if(!temp_vent.welded)
+						vents.Add(temp_vent)
+				if(!vents.len)
+					return
+				var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
+				if(prob(50))
+					visible_message("<span class='notice'>[src] scrambles into the ventillation ducts!</span>")
+				LoseAggro()
+				spawn(rand(20,60))
+					var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
+					forceMove(exit_vent)
+					spawn(travel_time)
+
+						if(!exit_vent)
+							forceMove(entry_vent)
+							return
+
+						if(prob(50))
+							visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
+						sleep(travel_time)
+
+						if(!exit_vent)
+							forceMove(entry_vent)
+							return
+						forceMove(exit_vent.loc)
 	. = ..()
 	//Cooldowns
 	if(ranged)
@@ -203,6 +238,16 @@
 		LoseTarget()
 		return
 
+	if(loc == lastloc)
+		hostile_interest--
+		if(hostile_interest <= 0)
+			LoseTarget()
+			return
+	else
+		hostile_interest = initial(hostile_interest)
+
+	lastloc = loc
+
 	if(isturf(loc))
 		if(target in ListTargets())
 			var/target_distance = get_dist(src,target)
@@ -265,7 +310,10 @@
 		return 1
 
 /mob/living/simple_animal/hostile/proc/AttackingTarget()
-	UnarmedAttack(target, Adjacent(target))
+	if(can_ventcrawl && istype(target,/obj/machinery/atmospherics/unary/vent_pump))
+		Goto(get_turf(target),move_to_delay)
+	else
+		UnarmedAttack(target, Adjacent(target))
 
 /mob/living/simple_animal/hostile/proc/Aggro()
 	vision_range = aggro_vision_range
@@ -305,12 +353,12 @@
 
 	var/target_turf = get_turf(ttarget)
 	if(rapid)
-		sleep(1)
-		TryToShoot(target_turf, ttarget)
-		sleep(3)
-		TryToShoot(target_turf, ttarget)
-		sleep(3)
-		TryToShoot(target_turf, ttarget)
+		spawn()
+			TryToShoot(target_turf, ttarget)
+			sleep(1)
+			TryToShoot(target_turf, ttarget)
+			sleep(1)
+			TryToShoot(target_turf, ttarget)
 	else
 		TryToShoot(target_turf, ttarget)
 
@@ -327,24 +375,28 @@
 		if(casingtype)
 			new casingtype(get_turf(src),1)// empty casing
 
-/mob/living/simple_animal/hostile/proc/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
-	if(target == start)
+/mob/living/simple_animal/hostile/proc/Shoot(var/atom/target_turf, var/atom/start, var/mob/user, var/bullet = 0)
+	if(target_turf == start)
 		return 0
-	if(!istype(target, /turf))
+	if(!istype(target_turf, /turf))
 		return 0
+	var/atom/original_atom
+	if (!target)
+		original_atom = target_turf
+	else
+		original_atom = target
 
 	//Friendly Fire check (don't bother if the mob is controlled by a player)
 	if(!friendly_fire && !ckey)
 		var/obj/item/projectile/friendlyCheck/fC = new /obj/item/projectile/friendlyCheck(user.loc)
 		fC.current = target
 		var/turf/T = get_turf(user)
-		var/turf/U = get_turf(target)
-		fC.original = target
-		fC.target = U
+		fC.original = original_atom
+		fC.target = target_turf
 		fC.current = T
 		fC.starting = T
-		fC.yo = target.y - start.y
-		fC.xo = target.x - start.x
+		fC.yo = target_turf.y - start.y
+		fC.xo = target_turf.x - start.x
 
 		var/atom/potentialImpact = fC.process()
 		if(potentialImpact && !CanAttack(potentialImpact))
@@ -361,16 +413,15 @@
 	if(projectilesound)
 		playsound(user, projectilesound, 100, 1)
 
-	A.current = target
+	A.current = target_turf
 
 	var/turf/T = get_turf(src)
-	var/turf/U = get_turf(target)
-	A.original = target
-	A.target = U
+	A.original = original_atom
+	A.target = target_turf
 	A.current = T
 	A.starting = T
-	A.yo = target.y - start.y
-	A.xo = target.x - start.x
+	A.yo = target_turf.y - start.y
+	A.xo = target_turf.x - start.x
 	spawn()
 		A.OnFired()
 		A.process()
@@ -402,11 +453,16 @@
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
 					 /obj/item/toy/balloon/inflated/decoy,
-					 /obj/machinery/door/airlock)
+					 /obj/machinery/door/airlock,
+					 /obj/machinery/door/firedoor)
 				if(is_type_in_list(A, destructible_objects) && Adjacent(A))
 					if(istype(A, /obj/machinery/door/airlock))
 						var/obj/machinery/door/airlock/AIR = A
 						if(!AIR.density || AIR.locked || AIR.welded || AIR.operating)
+							continue
+					if(istype(A, /obj/machinery/door/firedoor))
+						var/obj/machinery/door/firedoor/FIR = A
+						if(!FIR.density || FIR.blocked || FIR.operating)
 							continue
 					UnarmedAttack(A, Adjacent(A))
 	return

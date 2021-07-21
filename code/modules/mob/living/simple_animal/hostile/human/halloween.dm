@@ -200,12 +200,12 @@
 	var/list/close_mobs = list()
 	var/list/dist_mobs = list()
 	for(var/mob/living/carbon/C in oview(1, src))
-		if(C.vampire_affected() < 0)
+		if(C.vampire_affected() <= 0)
 			continue
 		if(istype(C))
 			close_mobs |= C
 	for(var/mob/living/carbon/C in oview(3, src))
-		if(C.vampire_affected() < 0)
+		if(C.vampire_affected() <= 0)
 			continue
 		if(istype(C))
 			dist_mobs |= C
@@ -247,7 +247,7 @@
 			var/mob/living/carbon/human/H = C
 			if(H.earprot())
 				continue
-		if(C.vampire_affected() < 0)
+		if(C.vampire_affected() <= 0)
 			continue
 		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
@@ -601,7 +601,7 @@
 	switch(spell)
 		if(1) //Mass Hallucination
 			for(var/mob/living/carbon/human/H in victims)
-				if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+				if(H.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
 					continue
 				if(M_PSY_RESIST in H.mutations)
 					continue

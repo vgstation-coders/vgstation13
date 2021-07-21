@@ -99,6 +99,26 @@
 	slot_flags = SLOT_BACK
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 
+/obj/item/weapon/tank/emergency_plasma
+	name = "emergency plasma tank"
+	desc = "Used for emergencies. Contains very little plasma, so try to conserve it until you actually need it."
+	icon_state = "emergencyp"
+	flags = FPRINT
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_SMALL
+	force = 4.0
+	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
+	volume = 2
+
+/obj/item/weapon/tank/emergency_plasma/New()
+	. = ..()
+	air_contents.adjust_gas(GAS_PLASMA, (3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
+
+/obj/item/weapon/tank/emergency_plasma/engi
+	name = "extended-capacity emergency plasma tank"
+	icon_state = "emergency_engip"
+	volume = 6
+
 /*
  * Emergency Oxygen
  */
@@ -144,6 +164,11 @@
 /obj/item/weapon/tank/emergency_nitrogen/New()
 	. = ..()
 	air_contents.adjust_gas(GAS_NITROGEN, (3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
+
+/obj/item/weapon/tank/emergency_nitrogen/engi
+	name = "extended-capacity emergency nitrogen tank"
+	icon_state = "emergency_engi"
+	volume = 6
 
 /*
  * Nitrogen

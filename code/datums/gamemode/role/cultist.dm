@@ -226,7 +226,7 @@
 			tattoos_names = "none"
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
-		if (isshade(M) && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
+		if (isshade(M) && M.hud_used && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
 			if(!M.gui_icons.soulblade_bgLEFT)
 				M.hud_used.shade_hud()
 
@@ -243,7 +243,7 @@
 		qdel(M.hud_used.cult_Act_display)
 		qdel(M.hud_used.cult_tattoo_display)
 
-/mob/living/carbon/proc/occult_muted()
+/mob/proc/occult_muted()
 	if (checkTattoo(TATTOO_HOLY))
 		return 0
 	if (reagents && reagents.has_reagent(HOLYWATER))
@@ -414,3 +414,14 @@
 
 			message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 			log_narspeak("[key_name(usr)] Voice of Nar-Sie (privately to [mob.real_name]): [message]")
+
+/datum/role/cultist/chief
+	id = CHIEF_CULTIST
+	name = "Chief cultist"
+	logo_state = "cult-chief-logo"
+
+/datum/role/cultist/chief/Greet(var/greeting,var/custom)
+	. = ..()
+	if (greeting)
+		to_chat(antag.current, "<span class='notice'>You are the chief cultist. You have been chosen by Nar-Sie to lead this cult to victory. Coordinate with your fellow acolytes, establish a plan, construct a base. Tear down the veil.</span>")
+		to_chat(antag.current, "<span class='notice'>You may speak with your fellow cultists by using ':x'.</span>")

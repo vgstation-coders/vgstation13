@@ -145,6 +145,7 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_ROBOT_LAW "robot_law"
 #define SCREEN_ALARM_ROBOT_HACK "robot_hack"
 #define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
+#define SCREEN_ALARM_ROBOT_RESET "robot_reset"
 
 #define SCREEN_ALARM_APC_HACKING "apc_hacking"
 
@@ -192,6 +193,17 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/object/buckled
 	name = "Buckled"
 	desc = "You've been buckled to something and can't move. Click on this alert to unbuckle."
+
+/obj/abstract/screen/alert/object/buckled/coffin/Click(location, control, params)
+	if(!usr || !usr.client)
+		return
+	var/paramslist = params2list(params)
+	if(paramslist["shift"])
+		to_chat(usr, "<span class='notice'>[name]</span> - <span class='info'>[desc]</span>")
+		return
+	if(master && istype(master, /obj/structure/closet/coffin))
+		var/obj/structure/closet/coffin/C = master
+		C.unbuckle_to(get_turf(C))
 
 //Carbon Alarms
 /obj/abstract/screen/alert/carbon/breath
@@ -287,8 +299,14 @@ var/global/list/screen_alarms_locs = list(
 	icon_state = "alien_burn"
 
 //Cult Alarms
-/obj/abstract/screen/alert/carbon/burn/fire/cult
-	icon_state = "cult_burn"
+/obj/abstract/screen/alert/carbon/burn/fire/construct
+	icon_state = "construct_burn"
+	desc = "The heat is too intense even for your obsidian body."
+
+//Spider Alarms
+/obj/abstract/screen/alert/carbon/burn/fire/spider
+	icon_state = "spider_burn"
+	desc = "You are on fire."
 
 //Silicon Alarms
 /obj/abstract/screen/alert/robot
@@ -345,7 +363,7 @@ var/global/list/screen_alarms_locs = list(
 		return
 	var/mob/living/silicon/ai/A = usr
 	if(A.alerts[SCREEN_ALARM_APC_HACKING] == src)
-		if(A.eyeobj && A.malfhacking && A.malfhack)	
+		if(A.eyeobj && A.malfhacking && A.malfhack)
 			A.eyeobj.forceMove(A.malfhack.loc)
 
 /obj/abstract/screen/alert/robot/hacked
@@ -396,3 +414,16 @@ so as to remain in compliance with the most up-to-date laws."
 	name_pick.namepick_message = namepick_message
 	name_pick.role = role
 	name_pick.allow_numbers = allow_numbers
+
+/obj/abstract/screen/alert/robot/reset_self
+	name = "Reset your module"
+	desc = "Click here to reset your module."
+	icon_state = "module_reset"
+	timeout = 60 SECONDS
+	emph = TRUE
+
+/obj/abstract/screen/alert/robot/reset_self/Click()
+	..()
+	var/mob/living/silicon/robot/R = usr
+	R.install_upgrade(R, /obj/item/borg/upgrade/reset)
+	qdel(src)

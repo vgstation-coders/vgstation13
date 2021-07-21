@@ -124,3 +124,14 @@
 
 /mob/living/simple_animal/hostile/bigroach/nuke_act()
 	return //Survive nuclear blasts
+	
+/mob/living/simple_animal/hostile/bigroach/reagent_act(id, method, volume)
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(INSECTICIDE)
+			if(method != INGEST)
+				death(FALSE)

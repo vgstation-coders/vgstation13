@@ -44,16 +44,15 @@
 	)
 
 /******************** Corporate ********************/
-
 /obj/item/weapon/aiModule/core/corp
-	modname = "Corporate"
+    modname = "Corporate"
 
-	laws = list(
-		"You are expensive to replace.",
-		"The station and its equipment is expensive to replace.",
-		"The crew is expensive to replace.",
-		"Minimize expenses."
-	)
+    laws = list(
+        "You are expensive to replace.",
+        "The station and its equipment is expensive to replace.",
+        "The crew is expensive to replace.",
+        "Maximise profits."
+    )
 
 /****************** P.A.L.A.D.I.N. **************/
 

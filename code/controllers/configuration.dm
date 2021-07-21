@@ -64,6 +64,7 @@
 	var/respawn_delay=30
 	var/respawn_as_mommi = 0
 	var/respawn_as_mouse = 1
+	var/respawn_as_hobo = 1
 	var/guest_jobban = 1
 	var/usewhitelist = 0
 	var/kick_inactive = 0				//force disconnect for inactive players
@@ -381,6 +382,9 @@
 
 				if ("no_respawn_as_mouse")
 					config.respawn_as_mouse = 0
+
+				if ("no_respawn_as_hobo")
+					config.respawn_as_hobo = 0
 
 				if ("servername")
 					config.server_name = value
