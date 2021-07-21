@@ -16,7 +16,7 @@
 		icon_state = "rigframe_1"
 		desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. The wiring is installed, but not secure."
 	else if(buildstate == "wired_secure")
-		icon_state = "rigframe_1"
+		icon_state = "rigframe_2"
 		desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. Though the wiring is secure, it lacks a power source."
 	else if(buildstate == "cell")
 		icon_state = "rigframe_2"
@@ -57,8 +57,9 @@
 		if(buildstate == "wired_secure")
 			P.forceMove(src)
 			cell = P
-			buildstate = "cell"
 			to_chat(user, "You insert \the [P] into \the [src].")
+			playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
+			buildstate = "cell"
 			update_icon()
 		else if(cell)
 			to_chat(user, "There's already a cell installed!")
@@ -71,8 +72,9 @@
 		var/obj/item/device/rigparts/R = W
 		if(buildstate == "cell")
 			result = R.result
-			buildstate = "plate"
 			to_chat(user, "You install \the [R] onto \the [src].")
+			playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
+			buildstate = "plate"
 			update_icon()
 			qdel(R)
 		else if(buildstate == "plate")
