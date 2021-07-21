@@ -218,10 +218,12 @@ var/list/inserted_datadisk_cache = list()
 
 /obj/machinery/disk_duplicator/Destroy()
 	if (disk_source)
-		qdel(disk_source)
+		if (disk_source.loc == src)
+			qdel(disk_source)
 		disk_source = null
 	if (disk_dest)
-		qdel(disk_dest)
+		if (disk_dest.loc == src)
+			qdel(disk_dest)
 		disk_dest = null
 	..()
 
