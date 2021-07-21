@@ -17,7 +17,7 @@
 	var/copy_duration = 10
 	var/copy_progress = 0
 
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EMAGGABLE
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
 
 	pass_flags = PASSTABLE
 
@@ -226,18 +226,10 @@ var/list/inserted_datadisk_cache = list()
 	..()
 
 /obj/machinery/disk_duplicator/crowbarDestroy(var/mob/user)
-	copy_progress = 0
-	if (disk_source)
-		if (copy_progress && prob(10))
-			new /obj/item/weapon/disk(loc) // small chance of corrupting the inserted disk if you force the ejection during a copy
-		else
-			disk_source.forceMove(loc)
-		disk_source = null
-	if (disk_dest)
-		disk_dest.forceMove(loc)
-		disk_dest = null
-	update_icon()
-	..()
+	if(copy_progress)
+		to_chat(user, "You can't do that while \the [src] is copying a disk!")
+		return FALSE
+	return ..()
 
 /obj/machinery/disk_duplicator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(disk_source || disk_dest)
