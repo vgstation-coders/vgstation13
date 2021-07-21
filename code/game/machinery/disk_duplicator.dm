@@ -27,6 +27,7 @@
 		/obj/item/weapon/circuitboard/disk_duplicator,
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/scanning_module,
 		/obj/item/weapon/stock_parts/capacitor
 	)
 	RefreshParts()
@@ -37,13 +38,17 @@
 		break
 	var/T1 = 1
 	var/T2 = 1
-	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts) // Better micro laser AND manipulator reduce copy duration
-		T1 += ML.rating
+	var/T3 = 1
+	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+		T1 = 2*ML.rating
 		break
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
-		T2 += M.rating
+		T2 = 2*M.rating
 		break
-	copy_duration = (10 - max(1,min(T1,T2)))
+	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+		T3 = 2*SM.rating
+		break
+	copy_duration = (10 - max(1,min(T1,T2,T3))) // Better scanning module, micro laser AND manipulator reduce copy duration
 
 /obj/machinery/disk_duplicator/examine(var/mob/user)
 	..()
@@ -106,6 +111,7 @@
 			disk_source = W
 			visible_message("<span class='notice'>\The [user] adds \the [W] to \the [src].</span>","<span class='notice'>You add \the [W] to \the [src].</span>")
 			playsound(loc, 'sound/machines/click.ogg', 50, 1)
+	update_icon()
 
 
 /obj/machinery/disk_duplicator/attack_hand(var/mob/user)
@@ -197,10 +203,10 @@ var/list/inserted_datadisk_cache = list()
 		icon_state = "duplicator2"
 		if (!(disk_source.icon_state in inserted_datadisk_cache))
 			var/icon/cropped_disk = icon('icons/obj/storage/datadisks.dmi',disk_source.icon_state)
-			cropped_disk.Crop(17,17,22,19)
 			cropped_disk.Turn(180)
+			cropped_disk.Crop(11,14,16,16)
 			var/icon/final_icon = icon('icons/effects/32x32.dmi',"blank")
-			final_icon.Blend(cropped_disk,ICON_OVERLAY,17,17)
+			final_icon.Blend(cropped_disk,ICON_OVERLAY,14,17)
 			inserted_datadisk_cache[disk_source.icon_state] = final_icon
 		overlays += inserted_datadisk_cache[disk_source.icon_state]
 
@@ -220,13 +226,12 @@ var/list/inserted_datadisk_cache = list()
 	..()
 
 /obj/machinery/disk_duplicator/crowbarDestroy(var/mob/user)
-	if(..())
-		if (disk_source)
-			disk_source.forceMove(loc)
-			disk_source = null
-		if (disk_dest)
-			disk_source.forceMove(loc)
-			disk_source = null
+	if (disk_source)
+		disk_source.forceMove(loc)
+		disk_source = null
+	if (disk_dest)
+		disk_source.forceMove(loc)
+		disk_source = null
 
 /obj/machinery/disk_duplicator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(disk_source || disk_dest)
