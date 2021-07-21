@@ -826,6 +826,26 @@ var/global/list/alcatraz_stuff = list(
 	else
 		return FALSE
 
+/obj/structure/closet/crate/medical/yantar
+	name = "Yantar security crate"
+	desc = "From the forbidden 'X' laboratory focused on medical research."
+	has_lock_type = null
+
+var/global/list/yantar_stuff = list(
+	//1 of a kind
+	/obj/item/weapon/storage/trader_chemistry,
+	/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer,
+	/obj/structure/largecrate/secure/frankenstein,
+	)
+
+/obj/structure/closet/crate/medical/yantar/New()
+	..()
+	for(var/i = 1 to 3)
+		if(!yantar_stuff.len)
+			return
+		var/path = pick_n_take(yantar_stuff)
+		new path(src)
+
 /obj/item/weapon/card/id/vox/extra
 	name = "Spare trader ID"
 	desc = "A worn looking ID with access to the tradepost, able to be set once for aspiring traders."
