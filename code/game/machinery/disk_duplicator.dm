@@ -227,11 +227,15 @@ var/list/inserted_datadisk_cache = list()
 
 /obj/machinery/disk_duplicator/crowbarDestroy(var/mob/user)
 	if (disk_source)
-		disk_source.forceMove(loc)
+		if (copy_progress && prob(10))
+			new /obj/item/weapon/disk(loc) // small chance of corrupting the inserted disk if you force the ejection during a copy
+		else
+			disk_source.forceMove(loc)
 		disk_source = null
 	if (disk_dest)
 		disk_source.forceMove(loc)
 		disk_source = null
+	..()
 
 /obj/machinery/disk_duplicator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(disk_source || disk_dest)
