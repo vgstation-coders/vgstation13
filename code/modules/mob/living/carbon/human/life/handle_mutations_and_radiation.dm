@@ -109,7 +109,7 @@
 			Necrosis - After Limb mutation
 			Glowing slightly green - Extremely rare, practically terminal, glowing increases with radiation level
 		600
-			Ghoulification if extremely lucky - We're talking 1 in 1000
+			Ghoulification if lucky - We're talking 1 in 100
 
 		For anything affecting internal or external organs, if it's robotic, exempt them.
 		*/
@@ -164,7 +164,7 @@
 				if(organ_to_damage.len)
 					var/datum/organ/internal/victim = pick(organ_to_damage)
 					if(istype(victim, /datum/organ/internal/brain))
-						adjustBrainLoss(rand(1,4)*major_rad_multiplier)
+						adjustBrainLoss(rand(1,4))
 					else
 						victim.take_damage(rand(1,5)*rad_multiplier,silent = 0)
 			if(prob(0.5*major_rad_multiplier))
@@ -271,9 +271,9 @@
 					to_chat(src, "<span class = 'blob'>You start glowing!</span>")
 					species.flags |= RAD_GLOW
 		if(rad_tick > RADDOSEFATAL)
-			if(prob(0.01*extreme_rad_multiplier))
+			if(prob(0.1*extreme_rad_multiplier))
 				//Ghoulification
-				if(prob(5*getBrainLoss())) //Ferality
+				if(prob(.5*getBrainLoss())) //Ferality, 50% to go feral at 100 brain damage
 					to_chat(src, "[pick("<span class = 'notice'>You feel yourself fading away.","<span class = 'danger'>You try to keep a hold of what you once were, but your mind shatters as you sink into the darkness.","<span class = 'notice'>You are no more. All that is left is a twisted husk of your former self, and it hungers.")]</span>")
 					var/mob/living/simple_animal/hostile/necro/zombie/to_spawn
 					if(species.flags & RAD_GLOW && prob(20*extreme_rad_multiplier))
