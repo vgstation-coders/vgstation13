@@ -104,13 +104,17 @@
 
 /obj/item/weapon/disk
 	name = "Corrupted Data Disk"
-	desc = "The data on this disk has decayed, and cannot be read by any computer anymore."
+	desc = "The data on this disk has decayed, and cannot be read by any computer anymore. Can still be used by duplicator as if it were a blank disk."
 	icon = 'icons/obj/datadisks.dmi'
 	icon_state = "disk"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/datadisks.dmi', "right_hand" = 'icons/mob/in-hand/right/datadisks.dmi')
 	w_class = W_CLASS_TINY
 	w_type = RECYK_ELECTRONIC
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
+
+/obj/item/weapon/disk/blank
+	name = "Blank Data Disk"
+	desc = "An empty data disk, to be used with a disk duplicator."
 
 /obj/item/weapon/disk/hdd
 	name = "Hard Disk Drive"
