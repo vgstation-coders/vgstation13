@@ -1820,15 +1820,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
-/datum/supply_packs/rigsuit_frames
-	name = "Rigsuit frames"
+/datum/supply_packs/hardsuit_frames
+	name = "Hardsuit frames"
 	contains = list(/obj/item/device/rigframe,
 					/obj/item/device/rigframe,
 					/obj/item/device/rigframe)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/scisec
 	access = list(access_robotics)
-	containername = "rigsuit frame crate"
+	containername = "hardsuit frame crate"
 	group = "Engineering"
 
 /datum/supply_packs/gourmonger
