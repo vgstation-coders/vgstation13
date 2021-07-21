@@ -98,9 +98,9 @@
 	desc = "When installed, allows for onlookers to see the health of a person wearing a rigsuit."
 	id = "rigsuit_health"
 	req_tech = list(Tc_PROGRAMMING = 3)
-	build_type = IMPRINTER
-	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_SILVER = 150)
+	build_type = MECHFAB
+	category = "Hardsuit_Upgrades"
+	materials = list(MAT_GLASS = 2000, MAT_SILVER = 150)
 	build_path = /obj/item/rig_module/health_readout
 
 /datum/design/rigsuit_autorefill
@@ -108,9 +108,9 @@
 	desc = "When installed, the user's internals are replenished from the atmosphere they reside within."
 	id = "rigsuit_autorefill"
 	req_tech = list(Tc_PROGRAMMING = 3)
-	build_type = IMPRINTER
-	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_SILVER = 150)
+	build_type = MECHFAB
+	category = "Hardsuit_Upgrades"
+	materials = list(MAT_GLASS = 2000, MAT_SILVER = 150)
 	build_path = /obj/item/rig_module/tank_refiller
 
 /datum/design/rigsuit_gottagofast
@@ -118,9 +118,9 @@
 	desc = "When installed, the module makes use of internal power supplies to optimize rigsuit joints, for better maneuverability."
 	id = "rigsuit_lube"
 	req_tech = list(Tc_PROGRAMMING = 3)
-	build_type = IMPRINTER
-	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_SILVER = 150)
+	build_type = MECHFAB
+	category = "Hardsuit_Upgrades"
+	materials = list(MAT_GLASS = 2000, MAT_SILVER = 150)
 	build_path = /obj/item/rig_module/speed_boost
 
 /datum/design/rigsuit_plasmaproof
@@ -128,9 +128,9 @@
 	desc = "When installed and activated, ensures that the suit is now resistant to plasma contamination."
 	id = "rigsuit_plasma"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_PLASMATECH = 4)
-	build_type = IMPRINTER
-	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_SILVER = 1000, MAT_PLASMA = 1000)
+	build_type = MECHFAB
+	category = "Hardsuit_Upgrades"
+	materials = list(MAT_GLASS = 2000, MAT_SILVER = 1000, MAT_PLASMA = 1000)
 	build_path = /obj/item/rig_module/plasma_proof
 
 /datum/design/rigsuit_empshield
@@ -138,9 +138,9 @@
 	desc = "When installed and activated, the suit is protected from EMPs but at the cost of additional cell charge depending on the severity."
 	id = "rigsuit_empshield"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_POWERSTORAGE = 3, Tc_MAGNETS = 3)
-	build_type = IMPRINTER
-	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
+	build_type = MECHFAB
+	category = "Hardsuit_Upgrades"
+	materials = list(MAT_GLASS = 2000, MAT_GOLD = 2000)
 	build_path = /obj/item/rig_module/emp_shield
 
 /datum/design/rigsuit_radshield
@@ -148,9 +148,9 @@
 	desc = "When installed and activated, the suit protects the wearer from incoming radiation until its collectors are full."
 	id = "rigsuit_radshield"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 4, Tc_POWERSTORAGE = 3, Tc_PLASMATECH = 2)
-	build_type = IMPRINTER
-	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 1000)
+	build_type = MECHFAB
+	category = "Hardsuit_Upgrades"
+	materials = list(MAT_GLASS = 2000, MAT_PLASMA = 1000)
 	build_path = /obj/item/rig_module/rad_shield
 
 /datum/design/rigsuit_radshield_adv
@@ -158,7 +158,7 @@
 	desc = "An improved version of the R.A.D. featuring a higher capacity. When installed and activated, the suit protects the wearer from incoming radiation until its collectors are full."
 	id = "rigsuit_radshield"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 6, Tc_POWERSTORAGE = 4, Tc_PLASMATECH = 3)
-	build_type = IMPRINTER
-	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 1000, MAT_PLASMA = 1000)
+	build_type = MECHFAB
+	category = "Hardsuit_Upgrades"
+	materials = list(MAT_GLASS = 2000, MAT_GOLD = 1000, MAT_PLASMA = 1000)
 	build_path = /obj/item/rig_module/rad_shield/adv
