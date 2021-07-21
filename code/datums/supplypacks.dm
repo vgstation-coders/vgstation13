@@ -1814,14 +1814,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 
 /datum/supply_packs/suit_modification_station
-	name = "suit modification station"
+	name = "Suit modification station"
 	contains = list()
 	cost = 200
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
+/datum/supply_packs/rigsuit_frames
+	name = "Rigsuit frames"
+	contains = list(/obj/item/device/rigframe,
+					/obj/item/device/rigframe,
+					/obj/item/device/rigframe)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/scisec
+	access = list(access_robotics)
+	containername = "rigsuit frame crate"
+	group = "Engineering"
+
 /datum/supply_packs/gourmonger
-	name = "dehydrated gourmonger"
+	name = "Dehydrated gourmonger"
 	contains = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger)
 	cost = 75
 	containertype = /obj/structure/closet/crate/secure/engisec
