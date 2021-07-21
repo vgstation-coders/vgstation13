@@ -6,6 +6,16 @@
 	var/is_enabled = TRUE // If FALSE, it doesn't show up during the vote but can be rigged
 
 /datum/next_map/proc/is_votable()
+	if(!fexists("maps/voting/"+path))
+		var/msg = "Skipping map [name] because the folder [path] does not exist."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	if(!fexists("maps/voting/"+path+"/vgstation13.dmb"))
+		var/msg = "Skipping map [name] because the file [path]/vgstation13.dmb does not exist."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
 	if(clients.len < min_players)
 		var/msg = "Skipping map [name] due to not enough players. min = [min_players] || max = [max_players]"
 		message_admins(msg)
