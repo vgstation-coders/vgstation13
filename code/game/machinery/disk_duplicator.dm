@@ -233,8 +233,8 @@ var/list/inserted_datadisk_cache = list()
 			disk_source.forceMove(loc)
 		disk_source = null
 	if (disk_dest)
-		disk_source.forceMove(loc)
-		disk_source = null
+		disk_dest.forceMove(loc)
+		disk_dest = null
 	..()
 
 /obj/machinery/disk_duplicator/wrenchAnchor(var/mob/user, var/obj/item/I)
