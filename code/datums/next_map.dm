@@ -104,8 +104,7 @@
 /datum/next_map/packed
 	name = "Packed Station"
 	path = "Packed Station"
-	min_players = 45
-	max_players = 60
+	max_players = 10
 
 /datum/next_map/roid
 	name = "Asteroid Station"
