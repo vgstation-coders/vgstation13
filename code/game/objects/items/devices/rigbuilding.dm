@@ -127,10 +127,6 @@
 	name = "Atmospherics hardsuit parts kit"
 	result = /obj/item/clothing/suit/space/rig/atmos
 
-/obj/item/device/rigparts/engineering/elite
-	name = "Advanced hardsuit parts kit"
-	result = /obj/item/clothing/suit/space/rig/engineer/elite
-
 /obj/item/device/rigparts/mining
 	name = "Mining hardsuit parts kit"
 	result = /obj/item/clothing/suit/space/rig/mining
