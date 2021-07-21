@@ -2350,6 +2350,7 @@
 #include "code\modules\research\designs\borg_upgrades.dm"
 #include "code\modules\research\designs\data.dm"
 #include "code\modules\research\designs\engineering.dm"
+#include "code\modules\research\designs\hardsuit_kits.dm"
 #include "code\modules\research\designs\medals.dm"
 #include "code\modules\research\designs\medical.dm"
 #include "code\modules\research\designs\mining.dm"

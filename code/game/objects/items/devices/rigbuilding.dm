@@ -116,7 +116,6 @@
 	desc = "A set of plates, seals, and servos, ready for installation into a hardsuit frame."
 	icon_state = "modkit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
-	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 	var/result = /obj/item/clothing/suit/space/rig
 
 /obj/item/device/rigparts/engineering
