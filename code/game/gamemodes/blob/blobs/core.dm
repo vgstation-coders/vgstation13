@@ -132,6 +132,9 @@
 			to_chat(usr, "<span class='warning'>Looks like someone applied first. First arrived, first served. Better luck next time.</span>")
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
+	if (initial(asleep))
+		to_chat(user, "<span class='warning'>This [src] cannot be controlled by ghosts.</span>")
+		return
 	if (!overmind)
 		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
 		if(confirm)

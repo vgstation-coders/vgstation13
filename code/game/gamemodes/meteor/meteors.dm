@@ -324,9 +324,13 @@
 	icon_state = "meteorblob"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -16 * PIXEL_MULTIPLIER
+	var/did_blob_stuff = FALSE
 
 /obj/item/projectile/meteor/blob/to_bump(atom/A)
 	if(!loc)
+		return
+
+	if (did_blob_stuff) // we already bumped into something and are probably in the process of deleting ourselves
 		return
 
 	if(ismob(A))
@@ -358,6 +362,8 @@
 		do_blob_stuff(loc)
 	else
 		do_blob_stuff(T)
+
+	did_blob_stuff = TRUE
 
 	qdel(src)
 
@@ -405,12 +411,13 @@ var/list/blob_candidates = list()
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
+	log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
+	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))
 		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
 	else
 		new/obj/effect/blob/core(T, no_morph = 1)
-	log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
-	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
+	blob_candidate = null
 
 //It's a tool to debug and test stuff, ok? Pls don't hand them out to players unless you just want to set the world on fire.
 /obj/item/weapon/meteor_gun
