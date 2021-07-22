@@ -104,7 +104,7 @@
 
 /obj/item/weapon/disk
 	name = "Corrupted Data Disk"
-	desc = "The data on this disk has decayed, and cannot be read by any computer anymore. Can still be used by duplicator as if it were a blank disk."
+	desc = "The data on this disk has decayed, and cannot be read by any computer anymore. Can still be used by a duplicator as if it were a blank disk."
 	icon = 'icons/obj/datadisks.dmi'
 	icon_state = "disk"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/datadisks.dmi', "right_hand" = 'icons/mob/in-hand/right/datadisks.dmi')
