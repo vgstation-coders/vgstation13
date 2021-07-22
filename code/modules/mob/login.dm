@@ -63,6 +63,7 @@
 	client.screen += clickmaster_dummy // honestly fuck you lummox
 	client.initialize_ghost_planemaster() //We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
 	client.initialize_darkness_planemaster()
+	client.initialize_hackview_planemaster()
 	update_perception()
 
 	regular_hud_updates()

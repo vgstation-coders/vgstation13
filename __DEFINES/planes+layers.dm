@@ -70,9 +70,9 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define PLATING_PLANE 			-20
+#define PLATING_PLANE 			-21
 
-#define ABOVE_PLATING_PLANE		-19
+#define ABOVE_PLATING_PLANE		-20
 
 	#define CATWALK_LAYER				2
 	#define DISPOSALS_PIPE_LAYER		3
@@ -82,14 +82,18 @@ What is the naming convention for planes or layers?
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
 
-#define FLOOR_PLANE 			-18
+#define FLOOR_PLANE 			-19
 
-#define BELOW_TURF_PLANE 		-17 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
+#define BELOW_TURF_PLANE 		-18 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
 	#define CORNER_LAYER 				2
 	#define SIDE_LAYER					3
 
-#define TURF_PLANE				-16
+#define TURF_PLANE				-17
 	#define MAPPING_TURF_LAYER			-999
+
+#define HACKVIEW_PLANE			-16
+	#define HACKVIEW_TURF_LAYER			1
+	#define HACKVIEW_STRUCTURE_LAYER 	2
 
 #define ABOVE_TURF_PLANE 		-15			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
@@ -335,3 +339,26 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	screen |= darkness_planemaster
 	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
 	screen |= darkness_planemaster_dummy
+
+
+/obj/abstract/screen/plane_master/hackview_planemaster
+	plane = HACKVIEW_PLANE
+	alpha = 0
+
+/obj/abstract/screen/plane_master/hackview_planemaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite, or at least i think it does
+	alpha = 0
+	appearance_flags = 0
+	plane = HACKVIEW_PLANE
+
+/client/proc/initialize_hackview_planemaster()
+	if(hackview_planemaster)
+		screen -= hackview_planemaster
+		qdel(hackview_planemaster)
+	if(hackview_planemaster_dummy)
+		screen -= hackview_planemaster_dummy
+		qdel(hackview_planemaster_dummy)
+	hackview_planemaster = new /obj/abstract/screen/plane_master/hackview_planemaster
+	hackview_planemaster_dummy = new /obj/abstract/screen/plane_master/hackview_planemaster_dummy
+	screen |= hackview_planemaster
+	screen |= hackview_planemaster_dummy

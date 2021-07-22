@@ -58,6 +58,11 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else
 		icon_regular_floor = icon_state
 
+	var/image/hackview_image = image('icons/turf/floors.dmi', src, "malfview", HACKVIEW_TURF_LAYER)
+	hackview_image.override = 1
+	hackview_image.plane = HACKVIEW_PLANE
+	overlays += hackview_image
+
 /turf/simulated/floor/Destroy()
 	//No longer phazon, not a teleport destination
 	if(material=="phazon")

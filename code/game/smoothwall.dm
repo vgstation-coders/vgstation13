@@ -94,6 +94,11 @@
 	// WE NEED TO TELL ALL OUR FRIENDS ABOUT THIS SCANDAL
 	relativewall_neighbours()
 
+	var/image/hackview_image = image('icons/turf/walls.dmi',src, "malfview[src.junction]", HACKVIEW_TURF_LAYER)
+	hackview_image.override = 1
+	hackview_image.plane = HACKVIEW_PLANE
+	overlays += hackview_image
+
 /turf/simulated/wall/Destroy()
 	remove_rot()
 	var/temploc = src.loc

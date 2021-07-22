@@ -64,7 +64,7 @@
 	var/datum/chatOutput/chatOutput
 
 		////////////
-		//PARALLAX//
+		//PARALLAX+OTHER PLANEMASTERS//
 		////////////
 	var/list/parallax = list()
 	var/list/parallax_movable = list()
@@ -77,6 +77,9 @@
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/ghost_planemaster_dummy = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster/darkness_planemaster = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/darkness_planemaster_dummy = null
+	var/obj/abstract/screen/plane_master/hackview_planemaster/hackview_planemaster = null
+	var/obj/abstract/screen/plane_master/hackview_planemaster_dummy/hackview_planemaster_dummy = null
+
 
 	// This gets set by goonchat.
 	var/encoding = "1252"
