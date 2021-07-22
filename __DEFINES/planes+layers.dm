@@ -93,7 +93,8 @@ What is the naming convention for planes or layers?
 
 #define HACKVIEW_PLANE			-16
 	#define HACKVIEW_TURF_LAYER			1
-	#define HACKVIEW_STRUCTURE_LAYER 	2
+	#define HACKVIEW_GRILLE_LAYER		2
+	#define HACKVIEW_STRUCTURE_LAYER 	3
 
 #define ABOVE_TURF_PLANE 		-15			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
@@ -344,11 +345,13 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 /obj/abstract/screen/plane_master/hackview_planemaster
 	plane = HACKVIEW_PLANE
 	alpha = 0
+	mouse_opacity = 0
 
 /obj/abstract/screen/plane_master/hackview_planemaster_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite, or at least i think it does
 	alpha = 0
 	appearance_flags = 0
+	mouse_opacity = 0
 	plane = HACKVIEW_PLANE
 
 /client/proc/initialize_hackview_planemaster()

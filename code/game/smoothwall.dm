@@ -59,6 +59,9 @@
 /turf/simulated/wall/relativewall()
 	junction = findSmoothingNeighbors()
 	icon_state = "[walltype][junction]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
+	overlays -= hackview_image
+	hackview_image.icon_state = "malfview[junction]"
+	overlays += hackview_image
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
 /atom/proc/relativewall_neighbours(var/at=null)
@@ -94,10 +97,7 @@
 	// WE NEED TO TELL ALL OUR FRIENDS ABOUT THIS SCANDAL
 	relativewall_neighbours()
 
-	var/image/hackview_image = image('icons/turf/walls.dmi',src, "malfview[src.junction]", HACKVIEW_TURF_LAYER)
-	hackview_image.override = 1
-	hackview_image.plane = HACKVIEW_PLANE
-	overlays += hackview_image
+	initialize_hackview_image()
 
 /turf/simulated/wall/Destroy()
 	remove_rot()

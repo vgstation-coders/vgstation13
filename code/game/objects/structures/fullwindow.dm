@@ -20,6 +20,7 @@
 
 	..(loc)
 	flow_flags |= ON_BORDER
+	initialize_hackview_image()
 
 /obj/structure/window/full/Uncross(atom/movable/O as mob|obj, target as turf)
 
@@ -51,6 +52,9 @@
 					if(abs(x-W.x)-abs(y-W.y)) 	//Doesn't count windows, placed diagonally to src
 						junction |= get_dir(src,W)
 		icon_state = "[base_state][junction]"
+		overlays -= hackview_image
+		hackview_image.icon_state = "[icon_state]_malfview"
+		overlays += hackview_image
 		return
 
 /obj/structure/window/full/verb/set_direction() //Full windows get this because it's possible for them to face diagonally

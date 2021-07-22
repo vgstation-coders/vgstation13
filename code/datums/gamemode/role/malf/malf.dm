@@ -34,33 +34,23 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 
 /datum/action/malfview
-	name = "toggle hackervision"
+	name = "toggle hackermode"
 	desc = "sick hacking!"
 	icon_icon = 'icons/mob/screen_spells.dmi'
-	button_icon_state = "vamp_cheatdeath2"
+	button_icon_state = "hackermode"
 
 /datum/action/malfview/Trigger()
+	var/mob/living/silicon/ai/malf = owner
+	if(!malf.client)
+		return
+	if(malf.hackermode)
+		malf.hackermode = FALSE
+		owner.client.hackview_planemaster.alpha = 0
+	else
+		malf.hackermode = TRUE
+		owner.client.hackview_planemaster.alpha = 255
 
-	owner.client.hackview_planemaster.alpha = 255
-
-
-/*
-	var/list/new_images = list()
-	if(owner.client)
-		if(istype(t, /turf/simulated/wall))
-			var/image/new_wall = image(icon = 'icons/turf/walls.dmi', loc = t, icon_state = "malfview[t.junction]")
-			new_wall.override = 1
-			m.ai.client.images += new_wall
-		if(istype(t, /turf/simulated/floor))
-			var/image/new_floor = image(icon = 'icons/turf/floors.dmi', loc = t, icon_state = "malfview")
-			new_floor.override = 1
-			m.ai.client.images += new_floor
-
-*/
 	Remove(owner)
-
-
-
 
 
 

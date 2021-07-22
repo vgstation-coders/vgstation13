@@ -32,6 +32,7 @@
 	..()
 	if(ticker)
 		cameranet.updateVisibility(src)
+	
 
 // EFFECTS
 
