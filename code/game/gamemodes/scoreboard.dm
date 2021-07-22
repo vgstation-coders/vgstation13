@@ -291,22 +291,23 @@
 		if (isolated_antibodies[antigen] == 1)
 			score["disease_vaccine"] += "[antigen]"
 			if (antigen in blood_antigens)
-				score["disease_vaccine_score"] += 10
+				score["disease_vaccine_score"] += 40
 			else if (antigen in common_antigens)
-				score["disease_vaccine_score"] += 30
+				score["disease_vaccine_score"] += 120
 			else if (antigen in rare_antigens)
-				score["disease_vaccine_score"] += 50
+				score["disease_vaccine_score"] += 200
 			else if (antigen in alien_antigens)
-				score["disease_vaccine_score"] += 100
+				score["disease_vaccine_score"] += 400
 		else
 			score["disease_vaccine"] += "-"
 
-	if (score["disease_vaccine_score"] == 580)
-		score["disease_vaccine_score"] = 1000
+	if (score["disease_vaccine_score"] == 2320)
+		score["disease_vaccine_score"] = 3000 // panacea bonus
 
 	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
 	//--Science--
+	var/slimes = score["slimes"] * 20 //How many slimes were harvested
 	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
 
 
@@ -340,6 +341,7 @@
 	score["crewscore"] += escapoints
 	score["crewscore"] += meals
 	score["crewscore"] += time
+	score["crewscore"] += slimes
 	score["crewscore"] += artifacts
 	//score["crewscore"] += beneficialpoints
 	score["crewscore"] += score["disease_vaccine_score"]
@@ -531,6 +533,7 @@
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Isolated Vaccines:</B> [score["disease_vaccine"]] ([score["disease_vaccine_score"]] Points)<BR>
 	<B>Extracted Symptoms:</B> [score["disease_extracted"]] ([score["disease_effects"]] Points)<BR>
+	<B>Harvested Slimes:</B> [score["slimes"]] ([score["slimes"] * 20] Points)<BR><BR>
 	<B>Analyzed & Activated Large Artifacts:</B> [score["artifacts"]] ([score["artifacts"] * 400] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
