@@ -160,18 +160,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/preview_background = null
 	var/list/background_options = list("Black", "White", "Tile")
 
-		//Jobs, uses bitflags
-	var/job_civilian_high = 0
-	var/job_civilian_med = 0
-	var/job_civilian_low = 0
-
-	var/job_medsci_high = 0
-	var/job_medsci_med = 0
-	var/job_medsci_low = 0
-
-	var/job_engsec_high = 0
-	var/job_engsec_med = 0
-	var/job_engsec_low = 0
+	var/list/jobs = list()
 
 	//Keeps track of preferrence for not getting any wanted jobs
 	var/alternate_option = RETURN_TO_LOBBY
@@ -458,36 +447,14 @@ var/const/MAX_SAVE_SLOTS = 16
 	return dat
 
 /datum/preferences/proc/getPrefLevelText(var/datum/job/job)
-	if(GetJobDepartment(job, 1) & job.flag)
-		return "High"
-	else if(GetJobDepartment(job, 2) & job.flag)
-		return "Medium"
-	else if(GetJobDepartment(job, 3) & job.flag)
-		return "Low"
-	else
-		return "NEVER"
-
-/datum/preferences/proc/getPrefLevelUpOrDown(var/datum/job/job, var/inc)
-	if(GetJobDepartment(job, 1) & job.flag)
-		if(inc)
-			return "NEVER"
-		else
-			return "Medium"
-	else if(GetJobDepartment(job, 2) & job.flag)
-		if(inc)
+	switch(jobs[job.title])
+		if(JOB_PREF_HIGH)
 			return "High"
-		else
-			return "Low"
-	else if(GetJobDepartment(job, 3) & job.flag)
-		if(inc)
+		if(JOB_PREF_MED)
 			return "Medium"
-		else
-			return "NEVER"
-	else
-		if(inc)
+		if(JOB_PREF_LOW)
 			return "Low"
-		else
-			return "High"
+	return "NEVER"
 
 /datum/preferences/proc/SetChoices(mob/user, limit = 17, list/splitJobs = list("Chief Engineer", "AI"), widthPerColumn = 295, height = 620)
 	if(!job_master)
@@ -502,20 +469,18 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	var/HTML = "<link href='./common.css' rel='stylesheet' type='text/css'><body>"
 	HTML += {"<script type='text/javascript'>function setJobPrefRedirect(level, rank) { window.location.href='?_src_=prefs;preference=job;task=input;level=' + level + ';text=' + encodeURIComponent(rank); return false; }
-			function mouseDown(event,levelup,leveldown,rank){
+			function mouseDown(event,rank){
 				return false;
 				}
 
-			function mouseUp(event,levelup,leveldown,rank){
+			function mouseUp(event,rank){
 				if(event.button == 0 || event.button == 1)
 					{
-					//alert("left click " + levelup + " " + rank);
 					setJobPrefRedirect(1, rank);
 					return false;
 					}
 				if(event.button == 2)
 					{
-					//alert("right click " + leveldown + " " + rank);
 					setJobPrefRedirect(0, rank);
 					return false;
 					}
@@ -575,52 +540,28 @@ var/const/MAX_SAVE_SLOTS = 16
 
 		HTML += "</td><td width='40%'>"
 
+		var/prefLevelLabel = "NEVER"
+		var/prefLevelColor = "red"
 
-
-		var/prefLevelLabel = "ERROR"
-		var/prefLevelColor = "pink"
-		var/prefUpperLevel = -1
-		var/prefLowerLevel = -1
-
-		if(GetJobDepartment(job, 1) & job.flag)
-			prefLevelLabel = "High"
-			prefLevelColor = "slateblue"
-			prefUpperLevel = 4
-			prefLowerLevel = 2
-		else if(GetJobDepartment(job, 2) & job.flag)
-			prefLevelLabel = "Medium"
-			prefLevelColor = "green"
-			prefUpperLevel = 1
-			prefLowerLevel = 3
-		else if(GetJobDepartment(job, 3) & job.flag)
-			prefLevelLabel = "Low"
-			prefLevelColor = "orange"
-			prefUpperLevel = 2
-			prefLowerLevel = 4
+		if(job.species_whitelist.len && !job.species_whitelist.Find(src.species))
+			prefLevelLabel = "Unavailable"
+			prefLevelColor = "gray"
+		else if(job.species_blacklist.Find(src.species))
+			prefLevelLabel = "Unavailable"
+			prefLevelColor = "gray"
 		else
-			prefLevelLabel = "NEVER"
-			prefLevelColor = "red"
-			prefUpperLevel = 3
-			prefLowerLevel = 1
+			switch(jobs[job.title])
+				if(JOB_PREF_HIGH)
+					prefLevelLabel = "High"
+					prefLevelColor = "slateblue"
+				if(JOB_PREF_MED)
+					prefLevelLabel = "Medium"
+					prefLevelColor = "green"
+				if(JOB_PREF_LOW)
+					prefLevelLabel = "Low"
+					prefLevelColor = "orange"
 
-		if(job.species_whitelist.len)
-			if(!job.species_whitelist.Find(src.species))
-				prefLevelLabel = "Unavailable"
-				prefLevelColor = "gray"
-				prefUpperLevel = 0
-				prefLowerLevel = 0
-		else if(job.species_blacklist.len)
-			if(job.species_blacklist.Find(src.species))
-				prefLevelLabel = "Unavailable"
-				prefLevelColor = "gray"
-				prefUpperLevel = 0
-				prefLowerLevel = 0
-
-		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");' oncontextmenu='javascript:return mouseDown(event,[prefUpperLevel],[prefLowerLevel], \"[rank]\");'>"
-
-
-		//if(job.alt_titles)
-			//HTML += "</a></td></tr><tr bgcolor='[lastJob.selection_color]'><td width='60%' align='center'><a>&nbsp</a></td><td><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">\[[GetPlayerAltTitle(job)]\]</a></td></tr>"
+		HTML += "<a class='white' onmouseup='javascript:return mouseUp(event, \"[rank]\");' oncontextmenu='javascript:return mouseDown(event, \"[rank]\");'>"
 		HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
 		HTML += "</a></td></tr>"
 
@@ -781,7 +722,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	if(job.title != new_title)
 		player_alt_titles[job.title] = new_title
 
-/datum/preferences/proc/SetJob(mob/user, role, inc)
+/datum/preferences/proc/SetJob(mob/user, role, increase)
 	var/datum/job/job = job_master.GetJob(role)
 	if(!job)
 		user << browse(null, "window=mob_occupation")
@@ -804,182 +745,31 @@ var/const/MAX_SAVE_SLOTS = 16
 			to_chat(user, "<span class='notice'>Only the following species can have this job: [allowed_species]. Your species is ([src.species]).</span>")
 			return
 
-	if(inc == null)
-		if(GetJobDepartment(job, 1) & job.flag)
-			SetJobDepartment(job, 1)
-		else if(GetJobDepartment(job, 2) & job.flag)
-			SetJobDepartment(job, 2)
-		else if(GetJobDepartment(job, 3) & job.flag)
-			SetJobDepartment(job, 3)
-		else//job = Never
-			SetJobDepartment(job, 4)
+	var/new_value = jobs[job.title]
+	if(increase)
+		new_value += 1
+		if(new_value > JOB_PREF_HIGH)
+			new_value = JOB_PREF_NEVER
 	else
-		inc = text2num(inc)
-		var/desiredLevel = getPrefLevelUpOrDown(job,inc)
-		while(getPrefLevelText(job) != desiredLevel)
-			if(GetJobDepartment(job, 1) & job.flag)
-				SetJobDepartment(job, 1)
-			else if(GetJobDepartment(job, 2) & job.flag)
-				SetJobDepartment(job, 2)
-			else if(GetJobDepartment(job, 3) & job.flag)
-				SetJobDepartment(job, 3)
-			else//job = Never
-				SetJobDepartment(job, 4)
+		new_value -= 1
+		if(new_value < JOB_PREF_NEVER)
+			new_value = JOB_PREF_HIGH
 
-		/*if(level < 4)
-			to_chat(world,"setting [job] to [level+1]")
-			SetJobDepartment(job,level+1)
-		else
-			to_chat(world,"setting [job] to 1");SetJobDepartment(job,1)
-*/
+	// If setting a job to high,
+	// set any other job that is currently high to med
+	if(new_value == JOB_PREF_HIGH)
+		for(var/some_job in jobs)
+			if(jobs[some_job] == JOB_PREF_HIGH)
+				jobs[some_job] = JOB_PREF_MED
+	else if(new_value == JOB_PREF_NEVER)
+		jobs -= job.title
+	else
+		jobs[job.title] = new_value
 	SetChoices(user)
 	return 1
+
 /datum/preferences/proc/ResetJobs()
-	job_civilian_high = 0
-	job_civilian_med = 0
-	job_civilian_low = 0
-
-	job_medsci_high = 0
-	job_medsci_med = 0
-	job_medsci_low = 0
-
-	job_engsec_high = 0
-	job_engsec_med = 0
-	job_engsec_low = 0
-
-/datum/preferences/proc/GetJobDepartment(var/datum/job/job, var/level)
-	if(!job || !level)
-		return 0
-	switch(job.department_flag)
-		if(CIVILIAN)
-			switch(level)
-				if(1)
-					return job_civilian_high
-				if(2)
-					return job_civilian_med
-				if(3)
-					return job_civilian_low
-		if(MEDSCI)
-			switch(level)
-				if(1)
-					return job_medsci_high
-				if(2)
-					return job_medsci_med
-				if(3)
-					return job_medsci_low
-		if(ENGSEC)
-			switch(level)
-				if(1)
-					return job_engsec_high
-				if(2)
-					return job_engsec_med
-				if(3)
-					return job_engsec_low
-	return 0
-
-/datum/preferences/proc/SetJobDepartment(var/datum/job/job, var/level)
-	if(!job || !level)
-		return 0
-	switch(level)
-		if(1)//Only one of these should ever be active at once so clear them all here
-			job_civilian_high = 0
-			job_medsci_high = 0
-			job_engsec_high = 0
-			return 1
-		if(2)//Set current highs to med, then reset them
-			job_civilian_med |= job_civilian_high
-			job_medsci_med |= job_medsci_high
-			job_engsec_med |= job_engsec_high
-
-			job_civilian_high = 0
-			job_medsci_high = 0
-			job_engsec_high = 0
-
-	switch(job.department_flag)
-		if(CIVILIAN)
-			switch(level)
-				if(2)
-					job_civilian_high = job.flag
-					job_civilian_med &= ~job.flag
-				if(3)
-					job_civilian_med |= job.flag
-					job_civilian_low &= ~job.flag
-				else
-					job_civilian_low |= job.flag
-		if(MEDSCI)
-			switch(level)
-				if(2)
-					job_medsci_high = job.flag
-					job_medsci_med &= ~job.flag
-				if(3)
-					job_medsci_med |= job.flag
-					job_medsci_low &= ~job.flag
-				else
-					job_medsci_low |= job.flag
-		if(ENGSEC)
-			switch(level)
-				if(2)
-					job_engsec_high = job.flag
-					job_engsec_med &= ~job.flag
-				if(3)
-					job_engsec_med |= job.flag
-					job_engsec_low &= ~job.flag
-				else
-					job_engsec_low |= job.flag
-	return 1
-
-
-/datum/preferences/proc/SetDepartmentFlags(datum/job/job, level, new_flags)	//Sets a department's preference flags (job_medsci_high, job_engsec_med - those variables) to 'new_flags'.
-																		//First argument can either be a job, or the department's flag (ENGSEC, MISC, ...)
-																		//Second argument can be either text ("high", "MEDIUM", "LoW") or number (1-high, 2-med, 3-low)
-
-																		//NOTE: If you're not sure what you're doing, be careful when using this proc.
-
-	//Determine department flag
-	var/d_flag
-	if(istype(job))
-		d_flag = job.department_flag
-	else
-		d_flag = job
-
-	//Determine department level
-	var/d_level
-	if(istext(level))
-		switch(lowertext(level))
-			if("high")
-				d_level = 1
-			if("med", "medium")
-				d_level = 2
-			if("low")
-				d_level = 3
-	else
-		d_level = level
-
-	switch(d_flag)
-		if(CIVILIAN)
-			switch(d_level)
-				if(1) //high
-					job_civilian_high = new_flags
-				if(2) //med
-					job_civilian_med = new_flags
-				if(3) //low
-					job_civilian_low = new_flags
-		if(MEDSCI)
-			switch(d_level)
-				if(1) //high
-					job_medsci_high = new_flags
-				if(2) //med
-					job_medsci_med = new_flags
-				if(3) //low
-					job_medsci_low = new_flags
-		if(ENGSEC)
-			switch(d_level)
-				if(1) //high
-					job_engsec_high = new_flags
-				if(2) //med
-					job_engsec_med = new_flags
-				if(3) //low
-					job_engsec_low = new_flags
+	jobs.Cut()
 
 /datum/preferences/proc/SetRole(var/mob/user, var/list/href_list)
 	var/role_id = href_list["role_id"]
@@ -1049,7 +839,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						SetPlayerAltTitle(job, choice)
 						SetChoices(user)
 			if("input")
-				SetJob(user, href_list["text"], href_list["level"])
+				SetJob(user, href_list["text"], href_list["level"] == "1")
 			else
 				SetChoices(user)
 		return 1
@@ -1212,24 +1002,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 					for(var/datum/job/job in job_master.occupations)
 						if(job.species_blacklist.Find(species)) //If new species is in a job's blacklist
-							for(var/i = 1 to 3)
-								var/F = GetJobDepartment(job, i)
-
-								F &= ~job.flag //Disable that job in our preferences
-								SetDepartmentFlags(job, i, F)
-
+							jobs -= job.title
 							to_chat(usr, "<span class='info'>Your new species ([species]) is blacklisted from [job.title].</span>")
 
 						if(job.species_whitelist.len) //If the job has a species whitelist
 							if(!job.species_whitelist.Find(species)) //And it doesn't include our new species
-								for(var/i = 1 to 3)
-									var/F = GetJobDepartment(job, i)
-
-									if(F & job.flag)
-										to_chat(usr, "<span class='info'>Your new species ([species]) can't be [job.title]. Your preferences have been adjusted.</span>")
-
-									F &= ~job.flag //Disable that job in our preferences
-									SetDepartmentFlags(job, i, F)
+								if(jobs.Remove(job.title))
+									to_chat(usr, "<span class='info'>Your new species ([species]) can't be [job.title]. Your preferences have been adjusted.</span>")
 
 				if("language")
 					var/list/new_languages = list("None")
