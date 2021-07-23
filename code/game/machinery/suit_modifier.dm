@@ -166,6 +166,7 @@
 	lock_atom(guy)
 	var/obj/item/clothing/suit/space/chosen_job = input(guy, "What kind of paint do you wish to apply?") as null|anything in filter_suit_list(guy, suit_list)
 	if(!chosen_job || activated || guy.incapacitated() || guy.loc != loc)
+		unlock_atom(guy)
 		return
 	var/obj/item/clothing/suit/space/chosen_suit = suit_list[chosen_job][SUIT_INDEX]
 	var/obj/item/clothing/head/helmet/space/plasmaman/chosen_helmet = suit_list[chosen_job][HELMET_INDEX]
