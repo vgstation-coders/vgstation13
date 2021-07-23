@@ -117,7 +117,7 @@
 	icon_state ="bookHydroponicsPodPeople"
 	item_state = "book5"
 	author = "Farmer John"
-	title = "The Human Harvest - From seed to market"
+	title = "Growing Dionae and YOU! A book on growing your new best friends!"
 	dat = {"<html>
 				<head>
 				<style>
