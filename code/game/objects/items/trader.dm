@@ -224,7 +224,7 @@ var/global/list/shoal_stuff = list(
 
 /obj/structure/closet/crate/shoaljunk/New()
 	..()
-	for(var/i = 1 to 9)
+	for(var/i = 1 to 10)
 		if(!shoal_stuff.len)
 			return
 		var/path = pick_n_take(shoal_stuff)
