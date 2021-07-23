@@ -71,6 +71,8 @@
 	var/miming = null //Toggle for the mime's abilities.
 	var/suiciding = FALSE //Do not allow revives for this person if they have sudoku'd
 
+	var/list/activeUIs = list()
+
 /datum/mind/New(var/key)
 	src.key = key
 
@@ -222,7 +224,7 @@
 				out += "Potions bought:<BR>"
 				for(var/entry in W.potions_bought)
 					out += "[entry]<BR>"
-	
+
 	usr << browse(out, "window=role_purchase_log[src];size=300x500")
 
 /datum/mind/proc/get_faction_list()
@@ -243,7 +245,7 @@
 /datum/mind/Topic(href, href_list)
 	if (href_list["show_purchases"])
 		role_purchase_log()
-	
+
 	if(!check_rights(R_ADMIN))
 		return
 	if (href_list["job_edit"])
