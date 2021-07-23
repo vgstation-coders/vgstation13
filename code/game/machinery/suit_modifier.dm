@@ -13,7 +13,7 @@
 
 #define SUIT_INDEX 1
 #define HELMET_INDEX 2
-
+#define ACCESS_REQUIREMENT_INDEX 3
 /obj/machinery/suit_modifier
 	name = "spacesuit modification station"
 	desc = "A man-sized machine, akin to a coffin, meant to install modifications into a worn spacesuit."
@@ -56,7 +56,8 @@
 			continue
 		if(!ispath(head, helmet_base_path))
 			continue
-		.[associated_job.title] = list(suit, head)
+		. += associated_job.title
+		.[associated_job.title] = list(suit, head, associated_job.get_access())
 
 /obj/machinery/suit_modifier/New()
 	..()
@@ -150,11 +151,20 @@
 	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
 	new /obj/effect/effect/smoke(get_turf(src))
 
+/proc/filter_suit_list(mob/living/carbon/human/guy, list/suit_list)
+	var/guy_access = guy.GetAccess()
+	var/list/filtered_suit_list = list()
+	for(var/entry in suit_list)
+		if(can_access(guy_access, suit_list[entry][ACCESS_REQUIREMENT_INDEX]))
+			filtered_suit_list += entry
+			filtered_suit_list[entry] = list(suit_list[entry][SUIT_INDEX], suit_list[entry][HELMET_INDEX])
+	return filtered_suit_list
+
 /obj/machinery/suit_modifier/proc/process_suit_paint(mob/living/carbon/human/guy, list/suit_list)
 	if(activated)
 		return
 	lock_atom(guy)
-	var/obj/item/clothing/suit/space/chosen_job = input(guy, "What kind of paint do you wish to apply?") as null|anything in suit_list
+	var/obj/item/clothing/suit/space/chosen_job = input(guy, "What kind of paint do you wish to apply?") as null|anything in filter_suit_list(guy, suit_list)
 	if(!chosen_job || activated || guy.incapacitated() || guy.loc != loc)
 		return
 	var/obj/item/clothing/suit/space/chosen_suit = suit_list[chosen_job][SUIT_INDEX]
@@ -219,3 +229,4 @@
 
 #undef SUIT_INDEX
 #undef HELMET_INDEX
+#undef ACCESS_REQUIREMENT_INDEX
