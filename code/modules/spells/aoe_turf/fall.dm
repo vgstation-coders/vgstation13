@@ -186,6 +186,9 @@ var/global/list/falltempoverlays = list()
 		falltempoverlays -= everything
 		everything.ignoreinvert = initial(everything.ignoreinvert)
 		everything.timestopped = 0
+		if (ismob(everything))
+			var/mob/M = everything
+			M.update_canmove()
 	affected.len = 0
 
 /mob/var/image/fallimage
