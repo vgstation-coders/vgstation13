@@ -652,12 +652,12 @@
 
 	switch(count)
 		if (10 to 30)
-			if(prob(3))
+			if(prob(10))
 				mob.say(pick("You shall not pass!", "Expeliarmus!", "By Merlins beard!", "Feel the power of the Dark Side!"))
-			if(prob(5))
+			if(prob(15))
 				to_chat(mob, "<span class='warning'>You feel [pick("that you don't have enough mana.", "that the winds of magic are gone.", "an urge to summon familiar.")]</span>")
 		if (30 to INFINITY)
-			if(prob(3))
+			if(prob(20))
 				var/list/possible_invocations = list(
 					"By Merlins beard!",
 					"Feel the power of the Dark Side!",
@@ -759,7 +759,7 @@
 										B.transfer_identity(C)
 								target.gib()
 
-			if(prob(3) && count >= 60)
+			if(count >= 60)
 				spawn_wizard_clothes(mob)
 
 			if(prob(5))
