@@ -25,6 +25,7 @@
 	var/has_electronics = 0
 	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
+	var/is_wooden = null //used in dismantling cabinet-type closets
 	var/obj/item/weapon/circuitboard/airlock/electronics
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
@@ -58,7 +59,10 @@
 	has_lock_type = /obj/structure/closet/secure_closet/basic
 
 /obj/structure/closet/proc/canweld()
-	return 1
+	if(is_wooden)
+		return 0
+	else
+		return 1
 
 /obj/structure/closet/initialize()
 	..()
@@ -448,6 +452,16 @@
 			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
+			if(has_electronics)
+				dump_electronics()
+			qdel(src)
+			return
+
+		if((istype(W, /obj/item/tool/crowbar)) && is_wooden)
+			var/obj/item/tool/crowbar/WT = W
+			materials.makeSheets(src)
+			for(var/mob/M in viewers(src))
+				M.show_message("<span class='notice'>\The [src] has been dismantled by [user] with \the [WT].</span>", 1)
 			if(has_electronics)
 				dump_electronics()
 			qdel(src)
