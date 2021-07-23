@@ -79,10 +79,7 @@
 
 /obj/item/clothing/description_accessories()
 	if(accessories.len)
-		. = list()
-		for(var/obj/item/clothing/accessory/accessory in accessories)
-			. += "[bicon(accessory)] \a [accessory]"
-		return " It has [counted_english_list(.)]."
+		return " It has [counted_english_list(accessories)]."
 
 /obj/item/clothing/accessory/pinksquare
 	name = "pink square"
