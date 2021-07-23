@@ -40,6 +40,9 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 
+	if(asleep)
+		return
+
 	if(icon_size == 64)
 	//	anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 150)
 		for(var/mob/M in viewers(src))
