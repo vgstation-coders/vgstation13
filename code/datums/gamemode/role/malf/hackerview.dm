@@ -9,18 +9,17 @@
 	var/image/hackview_image
 	var/hackview_icon
 	var/hackview_icon_state
-	var/hackview_layer = HACKVIEW_TURF_LAYER
 
 /turf/proc/initialize_hackview_image()
-	hackview_image = image(hackview_icon, src, hackview_icon_state, hackview_layer)
+	hackview_image = image(hackview_icon, src, hackview_icon_state)
 	hackview_image.override = TRUE
-	hackview_image.plane = HACKVIEW_PLANE
+	hackview_image.plane = HACKVIEW_TURF_PLANE
 	overlays += hackview_image
 
 /obj/structure/proc/initialize_hackview_image()
 	hackview_image = image(hackview_icon, src, hackview_icon_state, hackview_layer)
 	hackview_image.override = TRUE
-	hackview_image.plane = HACKVIEW_PLANE
+	hackview_image.plane = HACKVIEW_STRUCTURE_PLANE
 	overlays += hackview_image
 
 //////////////////////////
@@ -34,9 +33,9 @@
 	hackview_icon_state = "malfview"
 
 /turf/simulated/wall/initialize_hackview_image()
-	var/image/hackview_image = image(hackview_icon, src, "[hackview_icon_state][src.junction]", HACKVIEW_TURF_LAYER)
+	hackview_image = image(hackview_icon, src, "[hackview_icon_state][src.junction]")
 	hackview_image.override = 1
-	hackview_image.plane = HACKVIEW_PLANE
+	hackview_image.plane = HACKVIEW_TURF_PLANE
 	overlays += hackview_image
 
 /obj/structure/grille

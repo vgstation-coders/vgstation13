@@ -76,7 +76,6 @@
 	var/wiresexposed = 0
 	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
-	var/mob/living/silicon/ai/hacking_ai = null     //The AI that is currently attempting to hack this APC
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
 	var/malflocked = 0 //used for malfs locking down APCs
 //	luminosity = 1
@@ -595,8 +594,11 @@
 			qdel(W)
 			W = null
 			stat &= ~BROKEN
-			malfai = null
-			malfhack = 0
+			if(malfai)
+				var/datum/role/malfAI/M = malfai.mind.GetRole(MALF)
+				M.apcs -= src
+				malfai = null
+				malfhack = 0
 			if (opened==2)
 				opened = 1
 			update_icon()
@@ -711,9 +713,12 @@
 	ui_interact(user)
 
 /obj/machinery/power/apc/proc/get_malf_status(var/mob/living/silicon/ai/user)
-	if (istype(user) && find_active_faction_by_member(user.mind.GetRole(MALF)))
-		if (src.malfai == (user.parent ? user.parent : user))
-			if (src.occupant == user)
+	var/datum/role/malfAI/M = user.mind.GetRole(MALF)
+	if(src in M.currently_hacking_apcs)
+		return 5 		//currently being hacked
+	if (istype(user) && M)
+		if (malfai == (user.parent ? user.parent : user))
+			if (occupant == user)
 				return 3 // 3 = User is shunted in this APC
 			else if (istype(user.loc, /obj/machinery/power/apc))
 				return 4 // 4 = User is shunted in another APC
@@ -931,34 +936,33 @@
 			src.overload_lighting()
 
 	else if (href_list["malfhack"])
-		var/mob/living/silicon/ai/malfai = usr
-		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(get_malf_status(malfai)==1)
-			if (malfai.malfhacking)
-				to_chat(malfai, "You are already hacking an APC.")
-				return 1
+		var/mob/living/silicon/ai/hacker = usr
+		var/datum/role/malfAI/M = hacker.mind.GetRole(MALF)
+		if(STATION_Z != z)
+			to_chat(hacker, "<span class='warning'>You cannot hack APCs off the main station.</span>")
+			return
+		if(get_malf_status(hacker) == 1)
+			if (M.currently_hacking_apcs.len >= M.apc_hacklimit)
+				to_chat(hacker, "<span class='warning'>You cannot hack anymore APCs at this time. Wait for other hack operations to finish.</span>")
+				return 
 			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
-			to_chat(malfai, "Beginning override of APC systems. This will take [time_required/10] seconds, and you cannot hack other APC's during the process.")
-			malfai.malfhack = src
-			malfai.malfhacking = 1
-			hacking_ai = malfai
-			malfai.handle_regular_hud_updates()
+			to_chat(hacker, "Beginning override of APC systems. This will take [time_required/10] seconds.")
+			M.currently_hacking_apcs += src			
+			hacker.handle_regular_hud_updates()
 			sleep(time_required)
-			if(src && malfai)
-				if (!src.aidisabled)
-					malfai.malfhack = null
-					malfai.malfhacking = 0
-					hacking_ai = null
+			M.currently_hacking_apcs -= src
+			hacker.clear_alert(name)
+			if(src)
+				if (!aidisabled)
+					malfhack = 1
+					malfai = hacker
+					M.apcs += src
+					hacker.clear_alert(name)
 					locked = 1
-					if(M && STATION_Z == z)
-						M.apcs++
-					if(usr:parent)
-						src.malfai = usr:parent
-					else
-						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
-					malfai.handle_regular_hud_updates()
+					to_chat(hacker, "Hack complete. The [name] is now under your exclusive control. You now have [M.apcs.len] APCs under your control.")
+					hacker.handle_regular_hud_updates()
 					update_icon()
+				else
 
 	else if (href_list["occupyapc"])
 		if(get_malf_status(usr))
@@ -1352,14 +1356,16 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	var/area/this_area = get_area(src)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
-		if(hacking_ai)	//APC got destroyed mid-hack
-			hacking_ai.malfhack = null
-			hacking_ai.malfhacking = 0
-			to_chat(hacking_ai, "<span class='warning'>The APC you were currently hacking was destroyed.</span>")
-		if(malfai && operating)
-			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-			if (M && STATION_Z == z)
-				M.apcs--
+		if(malfai)	//apc destroyed mission accomplished
+			var/datum/role/malfAI/M = malfai.mind.GetRole(MALF)
+			if(M)
+				if(src in M.currently_hacking_apcs)
+					to_chat(malfai, "<span class='warning'>The [name] you were currently hacking was destroyed.</span>")
+					M.currently_hacking_apcs -= src
+					malfai.clear_alert(name)
+				else if(src in M.apcs)
+					to_chat(malfai, "<span class='warning'>[name] was destroyed. Processing power decreased.</span>")
+					M.apcs -= src
 		this_area.power_light = 0
 		this_area.power_equip = 0
 		this_area.power_environ = 0

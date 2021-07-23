@@ -199,7 +199,12 @@
 	return FALSE
 
 /mob/living/silicon/ai/handle_regular_hud_updates()
-	if(malfhacking)
-		throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
-	else
-		clear_alert(SCREEN_ALARM_APC_HACKING)
+	var/datum/role/malfAI/M = mind.GetRole(MALF)
+	if(!M)
+		return ..()
+	for(var/obj/machinery/power/apc/A in M.currently_hacking_apcs)	//throw an alert for any APCs being hacked
+		var/obj/abstract/screen/alert/robot/apc_hacking/new_alert = throw_alert(A.name, /obj/abstract/screen/alert/robot/apc_hacking)
+		if(new_alert && istype(new_alert))
+			new_alert.desc = "You are currently hacking the [A.name]. Click this alert to jump to the APC."
+			new_alert.apc = A
+

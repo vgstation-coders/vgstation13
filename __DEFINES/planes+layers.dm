@@ -70,9 +70,9 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define PLATING_PLANE 			-21
+#define PLATING_PLANE 			-22
 
-#define ABOVE_PLATING_PLANE		-20
+#define ABOVE_PLATING_PLANE		-21
 
 	#define CATWALK_LAYER				2
 	#define DISPOSALS_PIPE_LAYER		3
@@ -82,21 +82,18 @@ What is the naming convention for planes or layers?
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
 
-#define FLOOR_PLANE 			-19
+#define FLOOR_PLANE 			-20
 
-#define BELOW_TURF_PLANE 		-18 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
+#define BELOW_TURF_PLANE 		-19 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
 	#define CORNER_LAYER 				2
 	#define SIDE_LAYER					3
 
-#define TURF_PLANE				-17
+#define TURF_PLANE				-18
 	#define MAPPING_TURF_LAYER			-999
 
-#define HACKVIEW_PLANE			-16
-	#define HACKVIEW_TURF_LAYER			1
-	#define HACKVIEW_GRILLE_LAYER		2
-	#define HACKVIEW_STRUCTURE_LAYER 	3
+#define HACKVIEW_TURF_PLANE			-17
 
-#define ABOVE_TURF_PLANE 		-15			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
+#define ABOVE_TURF_PLANE 		-16			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define HOLOMAP_LAYER				1
 	#define RUNE_LAYER					2
@@ -119,11 +116,11 @@ What is the naming convention for planes or layers?
 	#define CREEPER_LAYER				19
 	#define WEED_LAYER					420
 
-#define NOIR_BLOOD_PLANE 		-14		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
+#define NOIR_BLOOD_PLANE 		-15		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
 
-#define HIDING_MOB_PLANE 		-13			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
+#define HIDING_MOB_PLANE 		-14			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
 
-#define OBJ_PLANE 				-12			// For objects which appear below humans.
+#define OBJ_PLANE 				-13			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER			0
 	#define TABLE_LAYER					0.5
@@ -141,6 +138,10 @@ What is the naming convention for planes or layers?
 	#define CLOSED_DOOR_LAYER  			11
 	#define ABOVE_DOOR_LAYER			12
 	#define CHAIR_LEG_LAYER				13
+
+#define HACKVIEW_STRUCTURE_PLANE	-12
+	#define HACKVIEW_GRILLE_LAYER		1
+	#define HACKVIEW_STRUCTURE_LAYER 	2
 
 #define LYING_MOB_PLANE			-11			// other mobs that are lying down.
 
@@ -342,26 +343,48 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	screen |= darkness_planemaster_dummy
 
 
-/obj/abstract/screen/plane_master/hackview_planemaster
-	plane = HACKVIEW_PLANE
+/obj/abstract/screen/plane_master/hackview_turf_planemaster
+	plane = HACKVIEW_TURF_PLANE
 	alpha = 0
 	mouse_opacity = 0
 
-/obj/abstract/screen/plane_master/hackview_planemaster_dummy
+/obj/abstract/screen/plane_master/hackview_turf_planemaster_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite, or at least i think it does
 	alpha = 0
 	appearance_flags = 0
 	mouse_opacity = 0
-	plane = HACKVIEW_PLANE
+	plane = HACKVIEW_TURF_PLANE
+
+/obj/abstract/screen/plane_master/hackview_structure_planemaster
+	plane = HACKVIEW_STRUCTURE_PLANE
+	alpha = 0
+	mouse_opacity = 0
+
+/obj/abstract/screen/plane_master/hackview_structure_planemaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite, or at least i think it does
+	alpha = 0
+	appearance_flags = 0
+	mouse_opacity = 0
+	plane = HACKVIEW_STRUCTURE_PLANE
 
 /client/proc/initialize_hackview_planemaster()
-	if(hackview_planemaster)
-		screen -= hackview_planemaster
-		qdel(hackview_planemaster)
-	if(hackview_planemaster_dummy)
-		screen -= hackview_planemaster_dummy
-		qdel(hackview_planemaster_dummy)
-	hackview_planemaster = new /obj/abstract/screen/plane_master/hackview_planemaster
-	hackview_planemaster_dummy = new /obj/abstract/screen/plane_master/hackview_planemaster_dummy
-	screen |= hackview_planemaster
-	screen |= hackview_planemaster_dummy
+	if(hackview_turf_planemaster)
+		screen -= hackview_turf_planemaster
+		qdel(hackview_turf_planemaster)
+	if(hackview_turf_planemaster_dummy)
+		screen -= hackview_turf_planemaster_dummy
+		qdel(hackview_turf_planemaster_dummy)
+	if(hackview_structure_planemaster)
+		screen -= hackview_structure_planemaster
+		qdel(hackview_structure_planemaster)
+	if(hackview_structure_planemaster_dummy)
+		screen -= hackview_structure_planemaster_dummy
+		qdel(hackview_structure_planemaster_dummy)
+	hackview_turf_planemaster = new /obj/abstract/screen/plane_master/hackview_turf_planemaster
+	hackview_turf_planemaster_dummy = new /obj/abstract/screen/plane_master/hackview_turf_planemaster_dummy
+	hackview_structure_planemaster = new /obj/abstract/screen/plane_master/hackview_structure_planemaster
+	hackview_structure_planemaster_dummy = new /obj/abstract/screen/plane_master/hackview_structure_planemaster_dummy
+	screen |= hackview_turf_planemaster
+	screen |= hackview_turf_planemaster_dummy
+	screen |= hackview_structure_planemaster
+	screen |= hackview_structure_planemaster_dummy
