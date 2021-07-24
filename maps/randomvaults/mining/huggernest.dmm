@@ -32,7 +32,7 @@
 "Q" = (/obj/item/weapon/shard,/obj/item/stack/rods,/obj/effect/alien/weeds,/obj/effect/alien/egg,/turf/simulated/floor{dir = 1; icon_state = "damaged4"},/area/asteroid)
 "R" = (/obj/structure/bed/nest,/obj/effect/gibspawner/human,/turf/simulated/floor/plating,/area/asteroid)
 "S" = (/obj/effect/gibspawner/xeno,/obj/effect/alien/weeds,/turf/unsimulated/floor/asteroid,/area/asteroid)
-"T" = (/obj/effect/alien/weeds,/obj/effect/decal/mecha_wreckage/gygax,/turf/simulated/floor,/area/asteroid)
+"T" = (/obj/effect/alien/weeds,/obj/effect/decal/mecha_wreckage/ripley,/turf/simulated/floor,/area/asteroid)
 "U" = (/obj/effect/alien/weeds,/obj/item/stack/sheet/animalhide/xeno{amount = 10},/obj/structure/rack,/obj/item/xenos_claw,/turf/simulated/floor/plating,/area/asteroid)
 "V" = (/obj/structure/closet/emcloset,/obj/effect/alien/weeds,/turf/simulated/floor/plating,/area/asteroid)
 "W" = (/obj/effect/alien/weeds,/obj/effect/alien/egg,/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/asteroid)
