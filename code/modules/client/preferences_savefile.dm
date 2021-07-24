@@ -324,7 +324,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	organ_data["liver"] = preference_list["liver"]
 
 	alternate_option	= text2num(preference_list["alternate_option"])
-	jobs = json_decode(preference_list["jobs"])
+	if(preference_list["jobs"] && preference_list["jobs"] != "")
+		jobs = json_decode(preference_list["jobs"])
 
 	metadata			= sanitize_text(metadata, initial(metadata))
 	real_name			= reject_bad_name(real_name)
