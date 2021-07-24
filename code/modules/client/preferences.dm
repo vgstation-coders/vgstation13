@@ -761,6 +761,7 @@ var/const/MAX_SAVE_SLOTS = 16
 		for(var/some_job in jobs)
 			if(jobs[some_job] == JOB_PREF_HIGH)
 				jobs[some_job] = JOB_PREF_MED
+		jobs[job.title] = new_value
 	else if(new_value == JOB_PREF_NEVER)
 		jobs -= job.title
 	else
