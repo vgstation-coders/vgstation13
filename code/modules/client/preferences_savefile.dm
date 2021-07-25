@@ -326,7 +326,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	alternate_option	= text2num(preference_list["alternate_option"])
 	if(preference_list["jobs"] && preference_list["jobs"] != "")
 		jobs = json_decode(preference_list["jobs"])
-
+	else
+		jobs = list()
 	metadata			= sanitize_text(metadata, initial(metadata))
 	real_name			= reject_bad_name(real_name)
 
