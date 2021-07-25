@@ -161,6 +161,7 @@
 #include "code\_onclick\hud\screen_alarms.dm"
 #include "code\_onclick\hud\screen_objects.dm"
 #include "code\_onclick\hud\spell_screen_objects.dm"
+#include "code\_onclick\mindUI\example.dm"
 #include "code\_onclick\mindUI\mindUI.dm"
 #include "code\ATMOSPHERICS\atmospherics.dm"
 #include "code\ATMOSPHERICS\burstpipe.dm"
