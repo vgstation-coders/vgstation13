@@ -5,6 +5,8 @@
 
 	A mind can store several separate mind_uis, think of each one as its own menu/pop-up, that in turns contains a list of /obj/mind_ui_element,
 	or other /datum/mind_ui that
+
+	* mind datums and their elements should avoid holding references to atoms in the real world.
 */
 
 
@@ -26,6 +28,7 @@ var/list/mind_ui_ID2type = list()
 	for (var/mind_ui in activeUIs)
 		var/datum/mind_ui/ui = activeUIs[mind_ui]
 		ui.SendToClient()
+	ReLoginUIFailsafe() // Makes sure we're not missing an UI whose requirements were given somehow before the mob had a mind
 
 /datum/mind/proc/RemoveAllUIs() // Removes all mind uis from client.screen, called on mob/Logout()
 	for (var/mind_ui in activeUIs)
@@ -48,6 +51,11 @@ var/list/mind_ui_ID2type = list()
 		var/datum/mind_ui/ui = activeUIs[ui_ID]
 		ui.Hide()
 
+/datum/mind/proc/UpdateUIScreenLoc()
+	for (var/mind_ui in activeUIs)
+		var/datum/mind_ui/ui = activeUIs[mind_ui]
+		ui.UpdateUIScreenLoc()
+
 //////////////////////MOB SHORTCUT PROCS////////////////////////
 
 /mob/proc/ResendAllUIs()
@@ -65,6 +73,17 @@ var/list/mind_ui_ID2type = list()
 /mob/proc/HideUI(var/ui_ID)
 	if (mind)
 		mind.HideUI(ui_ID)
+
+/mob/proc/UpdateUIScreenLoc()
+	if (mind)
+		mind.UpdateUIScreenLoc()
+
+/mob/proc/UpdateUIElementIcon(var/element_type)
+	if (client)
+		var/obj/abstract/mind_ui_element/element = locate(element_type) in client.screen
+		if (element)
+			element.UpdateIcon()
+
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -87,25 +106,23 @@ var/list/mind_ui_ID2type = list()
 
 	var/visible = TRUE
 
+	var/display_with_parent = FALSE
+
 /datum/mind_ui/New(var/datum/mind/M)
 	if (!istype(M))
 		qdel(src)
 		return
 	mind = M
+	mind.activeUIs[uniqueID] = src
 	..()
 	for (var/element_type in element_types_to_spawn)
 		elements += new element_type(null, src)
 	for (var/ui_type in sub_uis_to_spawn)
 		var/datum/mind_ui/child = new ui_type(mind)
 		subUIs += child
-		mind.activeUIs[child.uniqueID] = child
 		child.parent = src
 	SendToClient()
-	Initialize()
 
-
-// Stuff the UI does when first created
-/datum/mind_ui/proc/Initialize()
 
 // Send every element to the client, called on Login() and when the UI is first added to a mind
 /datum/mind_ui/proc/SendToClient()
@@ -113,6 +130,9 @@ var/list/mind_ui_ID2type = list()
 		var/mob/M = mind.current
 		if (!M.client)
 			return
+
+		if (!Valid()) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
+			Hide()
 
 		for (var/obj/abstract/mind_ui_element/element in elements)
 			mind.current.client.screen |= element
@@ -132,6 +152,9 @@ var/list/mind_ui_ID2type = list()
 	visible = TRUE
 	for (var/obj/abstract/mind_ui_element/element in elements)
 		element.Appear()
+	for (var/datum/mind_ui/child in subUIs)
+		if (child.display_with_parent)
+			child.Display()
 
 /datum/mind_ui/proc/Hide()
 	visible = FALSE
@@ -146,10 +169,13 @@ var/list/mind_ui_ID2type = list()
 	for (var/obj/abstract/mind_ui_element/element in elements)
 		element.Hide()
 
-/*
-	Closes the root parent by default.
-		* levels: can be specified to only close parents up to [levels] levels above.
-*/
+/datum/mind_ui/proc/Valid()
+	return TRUE
+
+/datum/mind_ui/proc/UpdateUIScreenLoc()
+	for (var/obj/abstract/mind_ui_element/element in elements)
+		element.UpdateUIScreenLoc()
+
 /datum/mind_ui/proc/HideParent(var/levels=0)
 	if (levels <= 0)
 		var/datum/mind_ui/ancestor = GetAncestor()
@@ -165,9 +191,6 @@ var/list/mind_ui_ID2type = list()
 				break
 		to_hide.Hide()
 
-/*
-	Returns the uppermost UI
-*/
 /datum/mind_ui/proc/GetAncestor()
 	if (parent)
 		return parent.GetAncestor()
@@ -181,8 +204,10 @@ var/list/mind_ui_ID2type = list()
 ////////////////////////////////////////////////////////////////////
 
 /obj/abstract/mind_ui_element
-	mouse_opacity = 0
+	mouse_opacity = 1
 	plane = HUD_PLANE
+
+	var/base_icon_state
 
 	var/datum/mind_ui/parent = null
 	var/element_flags = 0	// PROCESSING
@@ -195,11 +220,11 @@ var/list/mind_ui_ID2type = list()
 		qdel(src)
 		return
 	..()
+	base_icon_state = icon_state
 	parent = P
-	screen_loc = GetScreenLoc()
+	UpdateUIScreenLoc()
 
 /obj/abstract/mind_ui_element/hoverable
-	mouse_opacity = 1
 
 /obj/abstract/mind_ui_element/hoverable/MouseEntered(location,control,params)
 	StartHovering()
@@ -208,14 +233,39 @@ var/list/mind_ui_ID2type = list()
 	StopHovering()
 
 /obj/abstract/mind_ui_element/hoverable/proc/StartHovering()
+	icon_state = "[base_icon_state]-hover"
 
 /obj/abstract/mind_ui_element/hoverable/proc/StopHovering()
-
-/obj/abstract/mind_ui_element/proc/GetScreenLoc()
-	return "[parent.x][offset_x ? ":[offset_x]" : ""],[parent.y][offset_y ? ":[offset_y]" : ""]"
+	icon_state = "[base_icon_state]"
 
 /obj/abstract/mind_ui_element/proc/Appear()
 	invisibility = 0
+	UpdateIcon()
 
 /obj/abstract/mind_ui_element/proc/Hide()
 	invisibility = 101
+
+/obj/abstract/mind_ui_element/proc/GetUser()
+	ASSERT(parent && parent.mind && parent.mind.current)
+	return parent.mind.current
+
+/obj/abstract/mind_ui_element/proc/UpdateUIScreenLoc()
+	screen_loc = "[parent.x][offset_x ? ":[offset_x]" : ""],[parent.y][offset_y ? ":[offset_y]" : ""]"
+
+/obj/abstract/mind_ui_element/proc/UpdateIcon()
+	return
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					 RE-LOGIN FAILSAFE							  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind/proc/ReLoginUIFailsafe() // Checks that the mob isn't missing a given UI for some reason, called by ResendAllUIs() on mob/living/Login()
+	var/mob/M = current
+	if (!current)
+		return
+	if(istype(M.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
+		if (!("Adminbus" in activeUIs))
+			DisplayUI("Adminbus")

@@ -139,6 +139,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define DATAHUD_RANGE_OVERHEAD	7	//how many tiles away from the edge of the client's view do the HUD icons start appearing
 									//necessary due to them only being updated on Life()
 
+#define ADMINBUS_MAX_CAPACITY	16
+
 //WEIGHT CLASSES
 #define W_CLASS_TINY 1
 #define W_CLASS_SMALL 2
