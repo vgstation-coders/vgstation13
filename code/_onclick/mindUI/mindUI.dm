@@ -215,7 +215,7 @@ var/list/mind_ui_ID2type = list()
 	var/offset_x = 0
 	var/offset_y = 0
 
-/obj/abstract/mind_ui_element/New(loc/turf, var/datum/mind_ui/P)
+/obj/abstract/mind_ui_element/New(turf/loc, var/datum/mind_ui/P)
 	if (!istype(P))
 		qdel(src)
 		return
