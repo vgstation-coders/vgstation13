@@ -188,9 +188,6 @@
 /obj/machinery/computer/telescience/attack_paw(mob/user)
 	to_chat(user, "You are too primitive to use this computer.")
 
-/obj/machinery/computer/telescience/attack_ai(mob/user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/telescience/attack_hand(mob/user)
 	ui_interact(user)
 

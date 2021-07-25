@@ -50,9 +50,6 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 			scancount += SP.rating-1
 	cooldown_time = initial(cooldown_time) - 300*scancount
 
-/obj/machinery/faxmachine/attack_ai(mob/user as mob)
-	return attack_hand(user)
-
 /obj/machinery/faxmachine/attack_paw(mob/user as mob)
 	return attack_hand(user)
 

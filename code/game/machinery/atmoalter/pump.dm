@@ -98,10 +98,6 @@
 /obj/machinery/portable_atmospherics/pump/return_air()
 	return air_contents
 
-/obj/machinery/portable_atmospherics/pump/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/portable_atmospherics/pump/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)
 

@@ -943,7 +943,7 @@
 			return
 		if(get_malf_status(hacker) == 1)
 			if (M.currently_hacking_apcs.len >= M.apc_hacklimit)
-				to_chat(hacker, "<span class='warning'>You cannot hack anymore APCs at this time. Wait for other hack operations to finish.</span>")
+				to_chat(hacker, "<span class='warning'>You cannot hack any more APCs at this time. Wait for other hack operations to finish.</span>")
 				return 
 			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
 			to_chat(hacker, "Beginning override of APC systems. This will take [time_required/10] seconds.")
@@ -1257,6 +1257,10 @@
 		update()
 	else if (last_ch != charging)
 		queue_icon_update()
+
+	if(malfai && cell.charge > 0 && !aidisabled)
+		var/datum/role/malfAI/M = malfai.mind.GetRole(MALF)
+		M.processing_power += 0.25
 
 // val 0=off, 1=off(auto) 2=on 3=on(auto)
 // on 0=off, 1=on, 2=autooff

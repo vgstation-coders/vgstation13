@@ -35,10 +35,6 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/computer/security_alerts/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/security_alerts/attack_ghost(mob/user as mob)
 	ui_interact(user)
 

@@ -40,10 +40,6 @@
 
 	RefreshParts()
 
-/obj/machinery/photocopier/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/photocopier/attack_paw(mob/user)
 	return attack_hand(user)
 

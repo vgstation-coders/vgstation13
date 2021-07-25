@@ -400,10 +400,6 @@ var/list/shuttle_log = list()
 			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
 	return 1
 
-/obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/communications/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)
 

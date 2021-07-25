@@ -39,10 +39,6 @@
 					updateUsrDialog()
 	..()
 
-/obj/machinery/computer/secure_data/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/secure_data/attack_paw(mob/user as mob)
 	return attack_hand(user)
 

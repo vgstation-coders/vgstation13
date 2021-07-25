@@ -90,9 +90,6 @@
 	alpha_area = /area/holodeck/dungeon_holodeck_alpha
 	map_element_type = /datum/map_element/dungeon/holodeck/olympics
 
-/obj/machinery/computer/HolodeckControl/attack_ai(mob/user)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/HolodeckControl/attack_paw(mob/user)
 	return

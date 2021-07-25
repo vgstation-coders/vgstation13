@@ -180,9 +180,6 @@
 			healthstring = "ERROR"
 		return healthstring
 
-/obj/machinery/cloning/clonepod/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
 /obj/machinery/cloning/clonepod/attack_paw(mob/user as mob)
 	return attack_hand(user)
 /obj/machinery/cloning/clonepod/attack_hand(mob/user as mob)

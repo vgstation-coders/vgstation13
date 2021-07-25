@@ -172,6 +172,7 @@ Class Procs:
 /obj/machinery/New()
 	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
+	initialize_malfhack_abilities()
 	//if(ticker) initialize()
 	return ..()
 
@@ -385,7 +386,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|AIDISABLE))
 		return 1
 	if(href_list["close"])
 		return
@@ -418,9 +419,15 @@ Class Procs:
 		// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
 		if(user.client && user.client.eye == user)
-			return src.attack_hand(user)
+			return attack_hand(user)
+	else if(isAI(user))
+		var/mob/living/silicon/ai/A = user
+		if(A.hackermode)
+			return hack_interact(A)	
+		else
+			return attack_hand(user)
 	else
-		return src.attack_hand(user)
+		return attack_hand(user)
 
 /obj/machinery/attack_ghost(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -434,7 +441,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
-	if(stat & (NOPOWER|BROKEN|MAINT))
+	if(stat & (NOPOWER|BROKEN|MAINT|AIDISABLE))
 		return 1
 
 	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
@@ -772,4 +779,4 @@ Class Procs:
 			scan = null
 
 /obj/machinery/proc/is_operational()
-	return !(stat & (NOPOWER|BROKEN|MAINT))
+	return !(stat & (NOPOWER|BROKEN|MAINT|AIDISABLE))

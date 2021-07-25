@@ -46,9 +46,6 @@ var/global/list/atmos_controllers = list()
 		/area/security/gas_chamber
 	)
 
-/obj/machinery/computer/atmoscontrol/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/attack_paw(var/mob/user as mob)
 	return interact(user)

@@ -314,9 +314,6 @@
 		if(items_moved >= max_items_moved)
 			break
 
-/obj/machinery/sorting_machine/attack_ai(mob/user)
-	interact(user)
-
 /obj/machinery/sorting_machine/attack_hand(mob/user)
 	interact(user)
 

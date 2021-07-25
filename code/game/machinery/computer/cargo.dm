@@ -137,9 +137,6 @@ For vending packs, see vending_packs.dm*/
 	..()
 
 
-/obj/machinery/computer/supplycomp/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/supplycomp/proc/check_restriction(mob/user)
 	if(!user)
@@ -475,10 +472,6 @@ For vending packs, see vending_packs.dm*/
 
 /obj/machinery/computer/ordercomp/initialize()
 	reconnect_database()
-
-/obj/machinery/computer/ordercomp/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/ordercomp/attack_hand(var/mob/user as mob)
 	if(..())

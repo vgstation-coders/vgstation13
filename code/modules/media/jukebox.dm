@@ -222,9 +222,6 @@ var/global/list/loopModeNames=list(
 		wires = null
 	..()
 
-/obj/machinery/media/jukebox/attack_ai(var/mob/user)
-	attack_hand(user)
-
 /obj/machinery/media/jukebox/attack_paw(var/mob/user)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")

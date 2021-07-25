@@ -472,6 +472,7 @@
 #include "code\datums\gamemode\role\wizard.dm"
 #include "code\datums\gamemode\role\wizard_apprentice.dm"
 #include "code\datums\gamemode\role\malf\hackerview.dm"
+#include "code\datums\gamemode\role\malf\hacking.dm"
 #include "code\datums\gamemode\role\malf\malf.dm"
 #include "code\datums\helper_datums\butchering.dm"
 #include "code\datums\helper_datums\command_alerts.dm"

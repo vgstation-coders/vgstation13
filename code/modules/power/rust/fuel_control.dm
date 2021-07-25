@@ -43,8 +43,6 @@
 				var/list/targetlist = fuel_injectors[Injector.stage]
 				targetlist.Add(Injector)*/
 
-/obj/machinery/computer/rust_fuel_control/attack_ai(mob/user)
-	attack_hand(user)
 
 /obj/machinery/computer/rust_fuel_control/attack_hand(mob/user)
 	add_fingerprint(user)

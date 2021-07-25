@@ -12,8 +12,6 @@ var/const/max_assembly_amount = 300
 	var/locked = 0
 	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
 
-/obj/machinery/rust_fuel_compressor/attack_ai(mob/user)
-	attack_hand(user)
 
 /obj/machinery/rust_fuel_compressor/attack_hand(mob/user)
 	add_fingerprint(user)

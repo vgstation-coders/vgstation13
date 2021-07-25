@@ -93,9 +93,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	deactivateAll()
 	..()
 
-/obj/machinery/computer/crew/attack_ai(mob/user)
-	attack_hand(user)
-
 /obj/machinery/computer/crew/attack_hand(mob/user)
 	. = ..()
 	if(.)

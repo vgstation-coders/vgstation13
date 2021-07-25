@@ -727,10 +727,6 @@
 			turn_on()
 
 
-/obj/machinery/bot/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	src.attack_hand(user)
-
 
 /obj/machinery/bot/cultify()
 	if(src.flags & INVULNERABLE)

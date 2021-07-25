@@ -124,11 +124,6 @@
 /obj/machinery/door_timer/proc/timeset(var/seconds)
 	timeleft = seconds
 
-//Allows AIs to use door_timer, see human attack_hand function below
-/obj/machinery/door_timer/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 
 //Allows humans to use door_timer
 //Opens dialog window when someone clicks on door timer

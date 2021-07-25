@@ -101,9 +101,6 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/ghetto
 	req_access = null
 
-/obj/structure/sign/double/barsign/attack_ai(mob/user)
-	return attack_hand(user)
-
 /obj/structure/sign/double/barsign/attack_ghost(mob/user)
 	attack_hand(user)
 

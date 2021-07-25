@@ -215,9 +215,6 @@
 	playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 	take_damage(tforce)
 
-/obj/machinery/door/window/attack_ai(mob/user)
-	add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/door/window/attack_ghost(mob/user)
 	if(isAdminGhost(user))

@@ -225,10 +225,6 @@
 
 	interact(user)
 
-/obj/machinery/power/port_gen/pacman/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	interact(user)
-
 /obj/machinery/power/port_gen/pacman/attack_paw(mob/user as mob)
 	interact(user)
 

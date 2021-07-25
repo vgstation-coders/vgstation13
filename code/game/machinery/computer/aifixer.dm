@@ -22,10 +22,6 @@
 		return
 	return ..()
 
-/obj/machinery/computer/aifixer/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/aifixer/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
 

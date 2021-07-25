@@ -99,8 +99,6 @@
 
 	interface.updateContent("content", dat)
 
-/obj/machinery/computer/powermonitor/attack_ai(mob/user)
-	. = attack_hand(user)
 
 /obj/machinery/computer/powermonitor/Destroy()
 	..()

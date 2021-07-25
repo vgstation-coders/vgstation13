@@ -38,12 +38,6 @@
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/device/radio/intercom/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	add_fingerprint(user)
-	spawn (0)
-		attack_self(user)
-
 /obj/item/device/radio/intercom/attack_paw(mob/user as mob)
 	return attack_hand(user)
 

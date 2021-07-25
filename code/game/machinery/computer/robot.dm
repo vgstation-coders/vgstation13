@@ -28,10 +28,6 @@
 		return
 	say(message)
 
-/obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
 	return attack_hand(user)
 

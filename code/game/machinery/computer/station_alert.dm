@@ -38,15 +38,6 @@
 		A.send_firealert(src)
 		A.send_poweralert(src)
 
-/obj/machinery/computer/station_alert/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
-		return
-	interact(user)
-	return
-
-
 /obj/machinery/computer/station_alert/attack_hand(mob/user)
 	add_fingerprint(user)
 	if(stat & (BROKEN|NOPOWER))

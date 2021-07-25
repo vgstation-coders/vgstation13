@@ -227,6 +227,8 @@
 	if(isAdminGhost(user))
 		user.set_machine(src)
 		interact(user)
+		return
+	..()
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
 	user.set_machine(src)

@@ -119,9 +119,6 @@
 /obj/machinery/computer/merch/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/computer/merch/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
 
 /obj/machinery/computer/merch/proc/make_div(var/store_ID, var/mob/user)
 	var/datum/storeitem/SI = centcomm_store.items["[store_ID]"]

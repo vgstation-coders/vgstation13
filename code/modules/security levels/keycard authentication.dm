@@ -29,8 +29,10 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	authenticators += src
 
 /obj/machinery/keycard_auth/attack_ai(mob/user as mob)
-	to_chat(user, "<span class='notice'>The station AI is not to interact with these devices.</span>")
-	return
+	if(ismalf(user))
+		..()
+	else
+		to_chat(user, "<span class='notice'>The station AI is not to interact with these devices.</span>")
 
 /obj/machinery/keycard_auth/attack_paw(mob/user as mob)
 	to_chat(user, "<span class='notice'>You are too primitive to use this device.</span>")

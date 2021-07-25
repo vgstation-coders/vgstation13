@@ -418,7 +418,6 @@
 		remove_dead(user)
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_ai(mob/user as mob)
-
 	return //Until we find something smart for you to do, please steer clear. Thanks
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_robot(mob/user as mob)

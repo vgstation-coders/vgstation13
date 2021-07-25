@@ -215,11 +215,6 @@
 	update_icon()
 	return
 
-// ai as human but can't flush
-/obj/machinery/disposal/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	ui_interact(user)
-
 // human interact with machine
 /obj/machinery/disposal/attack_hand(mob/user as mob)
 	if(user && user.loc == src)

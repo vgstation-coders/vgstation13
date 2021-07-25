@@ -38,10 +38,6 @@
 	// If no scanner was found, it will return null
 	return optablef
 
-/obj/machinery/computer/operating/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/operating/attack_paw(user as mob)
 	return attack_hand(user)
 

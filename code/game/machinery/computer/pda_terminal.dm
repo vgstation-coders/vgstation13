@@ -61,9 +61,6 @@
 	nanomanager.update_uis(src)
 	attack_hand(user)
 
-/obj/machinery/computer/pda_terminal/attack_ai(var/mob/user)
-	return attack_hand(user)
-
 /obj/machinery/computer/pda_terminal/attack_paw(var/mob/user)
 	return attack_hand(user)
 

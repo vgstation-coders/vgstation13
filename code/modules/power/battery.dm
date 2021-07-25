@@ -177,11 +177,6 @@ var/global/list/battery_online =	list(
 	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
 		update_icon()
 
-/obj/machinery/power/battery/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	add_fingerprint(user)
-	ui_interact(user)
-
 /obj/machinery/power/battery/attack_hand(mob/user)
 	add_fingerprint(user)
 	ui_interact(user)

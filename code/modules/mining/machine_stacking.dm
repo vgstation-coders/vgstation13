@@ -18,10 +18,6 @@
 	if(ticker)
 		initialize()
 
-/obj/machinery/computer/stacking_unit/attack_ai(mob/user)
-	add_hiddenprint(user)
-	interact(user)
-
 /obj/machinery/computer/stacking_unit/attack_hand(mob/user)
 	add_fingerprint(user)
 	interact(user)

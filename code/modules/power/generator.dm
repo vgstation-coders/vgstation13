@@ -322,8 +322,6 @@
 	if (operable())
 		add_avail(last_gen)
 
-/obj/machinery/power/generator/attack_ai(mob/user)
-	return attack_hand(user)
 
 /obj/machinery/power/generator/attack_hand(mob/user)
 	. = ..()

@@ -6,7 +6,7 @@
 
 	var/list/apcs = list()
 	var/list/currently_hacking_apcs = list()		//any apc's currently being hacked
-	var/apc_hacklimit = 1							//how many apc's can be hacked at a time
+	var/apc_hacklimit = 2							//how many apc's can be hacked at a time
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 0
 
@@ -39,11 +39,6 @@ When you feel you have enough APCs under your control, you may begin the takeove
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
 
 
-/datum/role/malfAI/process()
-	processing_power += apcs.len
-
-
-
 /datum/action/malfview
 	name = "toggle hackermode"
 	desc = "sick hacking!"
@@ -64,6 +59,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		malf.overlay_fullscreen("hackoverlay", /obj/abstract/screen/fullscreen/hackview_border)
 		owner.client.hackview_turf_planemaster.alpha = 255
 		owner.client.hackview_structure_planemaster.alpha = 255
+
 
 
 

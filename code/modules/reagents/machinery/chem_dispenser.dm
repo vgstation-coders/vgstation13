@@ -345,10 +345,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		to_chat(user, "You throw the slime into the dispenser's tank.")
 		return TRUE
 
-/obj/machinery/chem_dispenser/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/chem_dispenser/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
