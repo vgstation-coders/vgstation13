@@ -246,10 +246,10 @@
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if(head_organ)
-				head_organ.explode()
-			else
-				user.gib()
+		if(head_organ)
+			head_organ.explode()
+		else
+			user.gib()
 	else
 		user.gib()
 	new /obj/item/pipe(get_turf(src))
