@@ -459,6 +459,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/brewer/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_BURNLOSS|SUICIDE_ACT_TOXLOSS)
+
 /obj/machinery/chem_dispenser/brewer/mapping
 	max_energy = 100
 	energy = 100
@@ -547,7 +552,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
-/obj/machinery/chem_dispenser/soda_dispenser/suicide_act(mob/living/user)
+/obj/machinery/chem_dispenser/booze_dispenser/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and drowning his sorrows! It looks like \he's trying to commit suicide.</span>")
 	playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
 	return(SUICIDE_ACT_TOXLOSS)
