@@ -140,9 +140,6 @@ var/list/obj/machinery/flasher/flashers = list()
 			user.show_message(text("<span class='warning'>[src] is now secured.</span>"))
 			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
 
-/obj/machinery/flasher_button/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/flasher_button/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

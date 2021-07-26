@@ -245,10 +245,6 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			update_icon()
 	return ..()
 
-/obj/machinery/newscaster/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/newscaster/attack_hand(mob/user as mob)            //########### THE MAIN BEEF IS HERE! And in the proc below this...############
 
 	if(buildstage != 1)

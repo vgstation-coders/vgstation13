@@ -119,9 +119,6 @@
 	..()
 	attack_hand(user)
 
-/obj/machinery/meter/attack_ai(var/mob/user)
-	attack_hand(user)
-
 /obj/machinery/meter/attack_ghost(var/mob/user)
 	attack_hand(user)
 

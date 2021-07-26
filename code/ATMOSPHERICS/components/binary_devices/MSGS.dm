@@ -89,7 +89,7 @@
 
 /obj/machinery/atmospherics/binary/msgs/process()
 	. = ..()
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN | MALFLOCKED))
 		return
 
 	//Output handling, stolen from pump code.
@@ -193,9 +193,6 @@
 	interface.show(user)
 	updateUsrDialog()
 
-/obj/machinery/atmospherics/binary/msgs/attack_ai(var/mob/user)
-	. = attack_hand(user)
-
 /obj/machinery/atmospherics/binary/msgs/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
 	if(.)
@@ -215,7 +212,7 @@
 	if((update_flags & MSGS_INPUT) != on)
 		update = 1
 
-	if((update_flags & MSGS_ON) != !(stat & (NOPOWER | BROKEN)))
+	if((update_flags & MSGS_ON) != !(stat & (NOPOWER | BROKEN | MALFLOCKED)))
 		update = 1
 
 	var/pressure = air.return_pressure() // null ref error here.
@@ -233,7 +230,7 @@
 	if(node2)
 		overlays += image(icon = icon, icon_state = "node-2")
 
-	if(!(stat & (NOPOWER | BROKEN)))
+	if(!(stat & (NOPOWER | BROKEN | MALFLOCKED)))
 
 		overlays += image(icon = icon, icon_state = "o-[i]")
 

@@ -26,10 +26,6 @@
 		if(istype(scrubber))
 			connectedscrubbers += scrubber
 
-/obj/machinery/computer/area_atmos/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/area_atmos/attack_paw(var/mob/user as mob)
 	return src.attack_hand(user)
 

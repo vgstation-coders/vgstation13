@@ -637,10 +637,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/machinery/vending/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
 	var/micon = !isnull(P.mini_icon) ? "<td class='fridgeIcon cropped'>[P.mini_icon]</td>" : ""
 	var/dat = {"[micon]<FONT color = '[P.display_color]'><B>[P.product_name]</B>:

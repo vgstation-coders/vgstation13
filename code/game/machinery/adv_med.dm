@@ -289,10 +289,6 @@
 /obj/machinery/bodyscanner/attack_paw(mob/user)
 	return attack_hand(user)
 
-/obj/machinery/bodyscanner/attack_ai(mob/user)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/bodyscanner/attack_hand(mob/user)
 	if(..())
 		return

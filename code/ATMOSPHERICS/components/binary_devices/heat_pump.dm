@@ -79,11 +79,6 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 /obj/machinery/atmospherics/binary/heat_pump/attack_hand(mob/user)
 	toggle_status(user)
 
-
-/obj/machinery/atmospherics/binary/heat_pump/attack_ai(mob/user)
-	toggle_status(user)
-
-
 /obj/machinery/atmospherics/binary/heat_pump/toggle_status(mob/user)
 	if(issilicon(user))
 		add_hiddenprint(user)

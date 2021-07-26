@@ -70,11 +70,6 @@
 	qdel(installed)
 	..()
 
-
-/obj/machinery/turret/portable/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/turret/portable/attack_hand(mob/user as mob)
 	. = ..()
 	if (.)
@@ -736,7 +731,6 @@ Status: []<BR>"},
 	machine_flags = SHUTTLEWRENCH
 
 /obj/machinery/turretcover/portable/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
 	return host.attack_ai(user)
 
 /obj/machinery/turretcover/portable/attackby(obj/item/W as obj, mob/user as mob)

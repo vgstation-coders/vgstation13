@@ -22,10 +22,6 @@ var/list/doppler_arrays = list()
 /obj/machinery/computer/bhangmeter/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/computer/bhangmeter/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/computer/bhangmeter/attack_hand(mob/user as mob)
 	//user.set_machine(src)
 	ui_interact(user)

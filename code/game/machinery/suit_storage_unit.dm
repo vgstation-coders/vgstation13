@@ -734,12 +734,6 @@
 	updateUsrDialog()
 	return
 
-
-/obj/machinery/suit_storage_unit/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
-
-
 /obj/machinery/suit_storage_unit/attack_paw(mob/user as mob)
 	to_chat(user, "<span class='notice'>The console controls are far too complicated for your tiny brain!</span>")
 	return

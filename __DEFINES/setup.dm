@@ -530,7 +530,8 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define MAINT		8		// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
 #define FORCEDISABLE 32 	//disabled by grid check event, only used on SMES units
-#define AIDISABLE 64		//disabled by a malf AI
+#define MALFLOCKED 	64		//disabled by a malf AI
+#define ELECTRIFIED 128		//electrified
 
 //bitflags for door switches.
 #define OPEN	1

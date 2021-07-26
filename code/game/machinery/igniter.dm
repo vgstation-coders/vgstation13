@@ -156,10 +156,6 @@ var/global/list/igniters = list()
 	do_spark()
 	..(severity)
 
-/obj/machinery/ignition_switch/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
 /obj/machinery/ignition_switch/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 

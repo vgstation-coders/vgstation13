@@ -4,7 +4,8 @@
 /obj/machinery
 	var/mob/living/silicon/ai/malf_owner = null
 	var/hack_abilities = list(
-		/datum/malfhack_ability/disable
+		/datum/malfhack_ability/disable,
+		/datum/malfhack_ability/electrify
 	)
 
 /obj/machinery/proc/initialize_malfhack_abilities()
@@ -51,29 +52,34 @@
 		var/list/choices = list()
 		for(var/datum/malfhack_ability/A in hack_abilities)
 			var/icon_to_display = A.toggled ? A.icon_toggled : A.icon
-			var/list/C = list(list(A.name, A.icon, A.desc))
+			var/list/C = list(list(A.name, icon_to_display, A.desc))
 			choices += C
 			choice_to_ability[A.name] = A
 		var/choice = show_radial_menu(malf,loc,choices)
 		var/datum/malfhack_ability/A = choice_to_ability[choice]
 		if(!A)
-			to_chat(world, "ability in radial not found")
+			return
 		else 
 			A.activate()
-
-/obj/machinery/proc/malf_hack(var/mob/living/silicon/ai/malf)
-
-
-
 
 
 /datum/malfhack_ability/disable
 	name = "Toggle On/Off"
-	desc = "Turn this machine On/Off"
+	desc = "Disable/Enable this machine."
 	icon = "radial_off"
-	icon_toggled =  = "radial_on"
+	icon_toggled = "radial_on"
 
 /datum/malfhack_ability/disable/activate()
-	toggled ? stat &= ~AIDISABLE : stat |= AIDISABLE
+	toggled ? (machine.stat &= ~MALFLOCKED) : (machine.stat |= MALFLOCKED)
+	toggled = !toggled
+
+/datum/malfhack_ability/electrify
+	name = "Electrify"
+	desc = "Electrify/Unelectrify this machine."
+	icon = "radial_zap"
+	icon_toggled = "radial_unzap"
+
+/datum/malfhack_ability/electrify/activate()
+	toggled ? (machine.stat &= ~ELECTRIFIED) : (machine.stat |= ELECTRIFIED)
 	toggled = !toggled
 

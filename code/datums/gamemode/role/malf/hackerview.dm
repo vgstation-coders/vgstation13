@@ -34,7 +34,7 @@
 
 /turf/simulated/wall/initialize_hackview_image()
 	hackview_image = image(hackview_icon, src, "[hackview_icon_state][src.junction]")
-	hackview_image.override = 1
+	hackview_image.override = TRUE
 	hackview_image.plane = HACKVIEW_TURF_PLANE
 	overlays += hackview_image
 

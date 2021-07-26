@@ -105,9 +105,6 @@ var/list/barsigns = list()
 	attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_ai(mob/user)
-	var/mob/living/silicon/ai/A = user
-	if(istype(A) && A.hackermode)
-		return hack_interact(A)
 	return attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user)

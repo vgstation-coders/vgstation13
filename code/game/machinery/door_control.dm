@@ -35,9 +35,8 @@
 	machine_flags = EMAGGABLE | MULTITOOL_MENU
 
 /obj/machinery/door_control/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
 	if(wires & 2)
-		return src.attack_hand(user)
+		..()
 	else
 		to_chat(user, "Error, no route to host.")
 
@@ -127,10 +126,6 @@
 
 /obj/machinery/door_control/npc_tamper_act(mob/living/L)
 	attack_hand(L)
-
-/obj/machinery/driver_button/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
 
 /obj/machinery/driver_button/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
