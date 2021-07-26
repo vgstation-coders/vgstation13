@@ -132,7 +132,9 @@
 		user.IgniteMob()
 		return SUICIDE_ACT_FIRELOSS
 	else if (sharpness >= 1)
-		user.visible_message("<span class='danger'>[user] is slitting \his wrists with \the [src]! It looks like \he's trying to commit suicide.</span>")
+		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return SUICIDE_ACT_BRUTELOSS

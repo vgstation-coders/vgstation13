@@ -167,12 +167,6 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/tool/scalpel/suicide_act(mob/living/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (SUICIDE_ACT_BRUTELOSS)
-
 
 /obj/item/tool/scalpel/laser
 	name = "basic laser scalpel"
