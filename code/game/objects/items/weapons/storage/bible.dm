@@ -19,7 +19,7 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
-/obj/item/weapon/storage/bible/suicide_act(mob/living/user)
+/obj/item/weapon/storage/bible/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
 	user.emote("fart")
 	sleep(1 SECONDS) //Wait for it

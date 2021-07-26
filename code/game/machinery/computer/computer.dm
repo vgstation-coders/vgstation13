@@ -109,7 +109,7 @@
 	stat |= BROKEN
 	update_icon()
 
-/obj/machinery/computer/suicide_act(mob/living/user)
+/obj/machinery/computer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src] screen! It looks like \he's trying to commit suicide.</span>")
 	stat |= BROKEN
 	update_icon()

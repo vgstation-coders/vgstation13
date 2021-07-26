@@ -30,7 +30,7 @@
 	shade = null//just to be sure
 	..()
 
-/obj/item/soulstone/suicide_act(mob/living/user)
+/obj/item/soulstone/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swallows \the [src] and begins to choke on it! [shade ? "It looks like they are trying to commit suicide" : ""].</span>")
 	user.drop_from_inventory(src)
 	if (ishuman(user))

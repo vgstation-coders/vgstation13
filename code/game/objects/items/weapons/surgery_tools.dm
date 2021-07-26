@@ -13,7 +13,7 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 
-/obj/item/tool/retractor/suicide_act(mob/living/user)
+/obj/item/tool/retractor/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -55,7 +55,7 @@
 	toolspeed = 0.5
 
 
-/obj/item/tool/hemostat/suicide_act(mob/living/user)
+/obj/item/tool/hemostat/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -78,7 +78,7 @@
 	heat_production = 500
 	source_temperature = TEMPERATURE_HOTMETAL
 
-/obj/item/tool/cautery/suicide_act(mob/living/user)
+/obj/item/tool/cautery/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -139,7 +139,7 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 	toolspeed = 0.1 //It's near instant like the mining one.
 
-/obj/item/tool/surgicaldrill/suicide_act(mob/living/user)
+/obj/item/tool/surgicaldrill/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [src.name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is pressing [src.name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
 	return (SUICIDE_ACT_BRUTELOSS)
@@ -298,7 +298,7 @@
 	heat_production = 3000
 	source_temperature = TEMPERATURE_PLASMA
 
-/obj/item/tool/circular_saw/suicide_act(mob/living/user)
+/obj/item/tool/circular_saw/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is sawing \his head in two with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -313,7 +313,7 @@
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
 
-/obj/item/tool/bonegel/suicide_act(mob/living/user)
+/obj/item/tool/bonegel/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")//Don't eat glue kids.
 
 	return (SUICIDE_ACT_TOXLOSS)

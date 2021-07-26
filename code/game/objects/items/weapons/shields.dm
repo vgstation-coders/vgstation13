@@ -20,7 +20,7 @@
 	attack_verb = list("shoves", "bashes")
 	var/cooldown = 0 //shield bash cooldown. based on world.time
 
-/obj/item/weapon/shield/riot/suicide_act(mob/living/user)
+/obj/item/weapon/shield/riot/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his face into the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -98,7 +98,7 @@
 	attack_verb = list("shoves", "bashes")
 	var/active = 0
 
-/obj/item/weapon/shield/energy/suicide_act(mob/living/user)
+/obj/item/weapon/shield/energy/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] to their head and activating it! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 

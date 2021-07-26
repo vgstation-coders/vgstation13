@@ -480,7 +480,7 @@
 		if(l.apply_radiation(rads, RAD_EXTERNAL))
 			visible_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>", "<span class=\"warning\">The unearthly ringing subsides and you notice you have fresh radiation burns.</span>")
 
-/obj/machinery/power/supermatter/suicide_act(mob/living/user)
+/obj/machinery/power/supermatter/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] suicidally slams \himself head first into the [src], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash, never to be seen again.</span>")
 	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 	Consume(user)

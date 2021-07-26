@@ -39,7 +39,7 @@
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
 
-/obj/item/weapon/reagent_containers/syringe/suicide_act(mob/living/user)
+/obj/item/weapon/reagent_containers/syringe/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 

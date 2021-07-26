@@ -205,7 +205,7 @@ var/list/one_way_windows
 		if(B.damage <= 1)
 			B.bullet_die()
 
-/obj/structure/window/suicide_act(mob/living/user)
+/obj/structure/window/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src]! It looks like \he's trying to commit suicide.</span>")
 	attack_generic(user,10)
 	return(SUICIDE_ACT_BRUTELOSS)

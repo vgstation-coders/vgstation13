@@ -38,7 +38,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/tome/salt_act()
 	ignite()
 
-/obj/item/weapon/tome/suicide_act(mob/living/user)
+/obj/item/weapon/tome/suicide_act(var/mob/living/user)
 	if (iscultist(user))
 		anim(target = user, a_icon = 'icons/obj/cult.dmi', a_icon_state = "build", lay = BELOW_OBJ_LAYER, plane = OBJ_PLANE, sleeptime = 20)
 		user.Stun(10)
@@ -351,7 +351,7 @@ var/list/arcane_tomes = list()
 	else
 		return "\[blank\]"
 
-/obj/item/weapon/talisman/suicide_act(mob/living/user)
+/obj/item/weapon/talisman/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swallows \a [src] and appears to be choking on it! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_OXYLOSS)
 
@@ -559,7 +559,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
-/obj/item/weapon/melee/cultblade/suicide_act(mob/living/user)
+/obj/item/weapon/melee/cultblade/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -709,7 +709,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/soulblade/cultify()
 	return
 
-/obj/item/weapon/melee/soulblade/suicide_act(mob/living/user)
+/obj/item/weapon/melee/soulblade/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] stabs \his stomach open with \the [src]! [shade ? "It looks like they're trying to commit suicide" : "The gem above the handle begins to glow..."].</span>")
 	if(shade || !iscarbon(user))
 		return (SUICIDE_ACT_BRUTELOSS)
@@ -1021,7 +1021,7 @@ var/list/arcane_tomes = list()
 			S.update_icon()
 	..()
 
-/obj/item/weapon/melee/blood_dagger/suicide_act(mob/living/user)
+/obj/item/weapon/melee/blood_dagger/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his throat with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 

@@ -126,7 +126,7 @@
 			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
 // Generalising these for all items
-/obj/item/suicide_act(mob/living/user)
+/obj/item/suicide_act(var/mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 		user.IgniteMob()

@@ -224,7 +224,7 @@
 			T.attackby(W,user)
 		qdel(src)
 
-/obj/structure/falsewall/suicide_act(mob/living/user)
+/obj/structure/falsewall/suicide_act(var/mob/living/user)
 	if(density)
 		attack_hand(user)
 		sleep(15)
@@ -328,7 +328,7 @@
 		T.attackby(W,user)
 		qdel(src)
 
-/obj/structure/falserwall/suicide_act(mob/living/user)
+/obj/structure/falserwall/suicide_act(var/mob/living/user)
 	if(density)
 		attack_hand(user)
 		sleep(15)

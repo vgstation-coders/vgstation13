@@ -315,7 +315,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 //SUICIDE_ACT_TOXLOSS = 4
 //SUICIDE_ACT_OXYLOSS = 8
 //Output a creative message and then return the damagetype done
-/obj/proc/suicide_act(mob/living/user)
+/obj/proc/suicide_act(var/mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
 		user.IgniteMob()

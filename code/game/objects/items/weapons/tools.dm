@@ -116,7 +116,7 @@
 	attack_verb = list("stabs")
 	toolsounds = list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')
 
-/obj/item/tool/screwdriver/suicide_act(mob/living/user)
+/obj/item/tool/screwdriver/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</span>"))
 	return(SUICIDE_ACT_BRUTELOSS)
@@ -282,7 +282,7 @@
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
 	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
 
-/obj/item/tool/weldingtool/suicide_act(mob/living/user)
+/obj/item/tool/weldingtool/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -696,7 +696,7 @@
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Crowbar.ogg')
 
-/obj/item/tool/crowbar/suicide_act(mob/living/user)
+/obj/item/tool/crowbar/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -706,7 +706,7 @@
 	icon_state = "red_crowbar"
 	item_state = "crowbar_red"
 
-/obj/item/tool/crowbar/red/suicide_act(mob/living/user)
+/obj/item/tool/crowbar/red/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 

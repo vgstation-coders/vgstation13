@@ -21,7 +21,7 @@
 /obj/item/weapon/melee/defibrillator/New()
 	return ..()
 
-/obj/item/weapon/melee/defibrillator/suicide_act(mob/living/user)
+/obj/item/weapon/melee/defibrillator/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='warning'>[user] is putting the live paddles on \his chest! It looks like \he's trying to commit suicide.</span>")
 	playsound(src,'sound/items/defib.ogg',50,1)
 	return (SUICIDE_ACT_FIRELOSS)

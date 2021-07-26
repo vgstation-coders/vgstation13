@@ -240,7 +240,7 @@
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
 
-/obj/item/device/rcd/rpd/suicide_act(var/mob/user)
+/obj/item/device/rcd/rpd/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is building pipes inside \himself! It looks like \he's trying to commit suicide!</span>")
 	playsound(src, 'sound/items/Deconstruct.ogg', 75, 1)
 	if(ishuman(user))

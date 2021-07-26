@@ -787,7 +787,7 @@ Suit and assorted
 		message += " Your teleport is inactive, just like a no-warp trap room in Aincrad.</span>"
 	to_chat(user, "[message]")
 
-/obj/item/weapon/katana/hesfast/suicide_act(mob/living/user)
+/obj/item/weapon/katana/hesfast/suicide_act(var/mob/living/user)
 	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit [pick("seppuku","sudoku","harikari","crossword puzzle")].</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 

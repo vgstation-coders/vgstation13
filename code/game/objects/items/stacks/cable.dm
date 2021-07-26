@@ -38,7 +38,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	attack_verb = list("whips", "lashes", "disciplines", "flogs")
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 
-/obj/item/stack/cable_coil/suicide_act(mob/living/user)
+/obj/item/stack/cable_coil/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 

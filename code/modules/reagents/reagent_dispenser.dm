@@ -180,7 +180,7 @@
 			explode()
 	return ..()
 
-/obj/structure/reagent_dispensers/fueltank/suicide_act(mob/living/user)
+/obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_TOXLOSS)
 
@@ -233,7 +233,7 @@
 	. = ..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 1000)
 
-/obj/structure/reagent_dispensers/peppertank/suicide_act(mob/living/user)
+/obj/structure/reagent_dispensers/peppertank/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his head underneath the dispenser nozzle and spraying the contents! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_BRUTELOSS)
 
@@ -288,7 +288,7 @@
 	. = ..()
 	reagents.add_reagent(BEER, 1000)
 
-/obj/structure/reagent_dispensers/beerkeg/suicide_act(mob/living/user)
+/obj/structure/reagent_dispensers/beerkeg/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the keg nozzle and drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_TOXLOSS)
 
@@ -368,7 +368,7 @@
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 
-/obj/structure/reagent_dispensers/silicate/suicide_act(mob/living/user)
+/obj/structure/reagent_dispensers/silicate/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_TOXLOSS)
 
@@ -382,7 +382,7 @@
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
 
-/obj/structure/reagent_dispensers/degreaser/suicide_act(mob/living/user)
+/obj/structure/reagent_dispensers/degreaser/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and heavily drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_TOXLOSS)
 

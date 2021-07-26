@@ -254,7 +254,7 @@
 		// Delete ourselves.
 		qdel(src)
 
-/obj/item/device/transfer_valve/suicide_act(var/mob/user)
+/obj/item/device/transfer_valve/suicide_act(var/mob/living/user)
 	if (valve_open || !tank_one || !tank_two || simulate_merge() < 1) //no explosion with no tanks or dev, dummy
 		tank_one.forceMove(get_turf(src))
 		tank_one = null
