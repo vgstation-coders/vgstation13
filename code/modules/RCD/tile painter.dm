@@ -25,6 +25,10 @@
 	var/datum/rcd_schematic/tile/emagged/schematic = new /datum/rcd_schematic/tile/emagged(src)
 	schematics = list(schematic)
 	selected = schematic
+
+/obj/item/device/rcd/tile_painter/suicide_act(var/mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is spraying tile paint into \his mouth! It looks like \he's trying to commit suicide!</span>")
+	return (SUICIDE_ACT_TOXLOSS)
 	
 /obj/item/device/rcd/tile_painter/attack_self(var/mob/user)
 	if(!emagged)
