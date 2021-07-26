@@ -152,7 +152,7 @@
 
 /obj/item/weapon/grown/novaflower/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (SUICIDE_ACT_BURNLOSS|SUICIDE_ACT_TOXLOSS)
+	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS)
 
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
