@@ -86,7 +86,7 @@
 					var/obj/item/I = chosen_item
 					put_in_hands(I)
 				return
-		else //Failed that too, go for normal 
+		//Failed that too, go for normal stuff
 			if(Holiday == APRIL_FOOLS_DAY)
 				visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
 			else
