@@ -316,7 +316,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 //SUICIDE_ACT_OXYLOSS = 8
 //Output a creative message and then return the damagetype done
 /obj/proc/suicide_act(mob/user)
-	return
+	if (sharpness >= 1)
+		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+	if (force >= 10)
+		user.visible_message("<span class='danger'>[user] strikes his head onto the \the [src]! It looks like \he's trying to commit suicide.</span>")
+	if (is_hot())
+		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_FIRELOSS
+	return SUICIDE_ACT_BRUTELOSS
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)

@@ -125,6 +125,17 @@
 		if(HIDES_IDENTITY_DEFAULT)
 			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
+// Generalising these for all items
+/obj/item/suicide_act(mob/user)
+	if (sharpness >= 1)
+		user.visible_message("<span class='danger'>[user] is slitting \his wrists with \the [src]! It looks like \he's trying to commit suicide.</span>")
+	if (force >= 10)
+		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+	if (is_hot())
+		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_FIRELOSS
+	return SUICIDE_ACT_BRUTELOSS
+
 /obj/item/ex_act(severity)
 	switch(severity)
 		if(1.0)
