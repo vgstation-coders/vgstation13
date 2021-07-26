@@ -456,7 +456,7 @@ var/const/MAX_SAVE_SLOTS = 16
 			return "Low"
 	return "NEVER"
 
-/datum/preferences/proc/SetChoices(mob/user, limit = 17, list/splitJobs = list("Chief Engineer", "AI"), widthPerColumn = 295, height = 620)
+/datum/preferences/proc/SetChoices(mob/user, limit = 15, list/splitJobs = list("Chief Engineer", "Head of Security"), widthPerColumn = 295, height = 620)
 	if(!job_master)
 		return
 
