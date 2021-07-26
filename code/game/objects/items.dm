@@ -127,15 +127,22 @@
 
 // Generalising these for all items
 /obj/item/suicide_act(var/mob/living/user)
-	if (is_hot())
+	if (is_sharp())
+		if(w_class == W_CLASS_LARGE)
+			to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
+							"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
+		else
+			to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+		if(sharpness_flags & HOT_EDGE)
+			return(SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_BRUTELOSS)
+		else
+			return SUICIDE_ACT_BRUTELOSS
+	else if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 		user.IgniteMob()
 		return SUICIDE_ACT_FIRELOSS
-	else if (sharpness >= 1)
-		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-		return SUICIDE_ACT_BRUTELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS

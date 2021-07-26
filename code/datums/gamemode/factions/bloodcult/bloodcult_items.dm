@@ -559,10 +559,6 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
-/obj/item/weapon/melee/cultblade/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with \the [src]! It looks like \he's trying to commit suicide.</span>")
-	return (SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/melee/cultblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
 	if(!checkcult)
 		return ..()

@@ -59,10 +59,6 @@
 /obj/item/weapon/claymore/IsShield()
 	return 1
 
-/obj/item/weapon/claymore/suicide_act(var/mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/claymore/cultify()
 	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()

@@ -282,10 +282,6 @@
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
 	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
 
-/obj/item/tool/weldingtool/suicide_act(var/mob/living/user)
-	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_OXYLOSS)
-
 /obj/item/tool/weldingtool/New()
 	. = ..()
 	create_reagents(max_fuel)
