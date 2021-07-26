@@ -56,7 +56,7 @@
 		else if(H.mind.faith.name == "Islam")
 			message_say = "ALLAHU AKBAR!"
 		else if(H.mind.faith.deity_name)
-			message_say = "FOR [H.mind.faith.deity_name]!"
+			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
 
 	user.say(message_say)
 	target = user
