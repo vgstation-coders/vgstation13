@@ -13,7 +13,7 @@
 	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
 
-/obj/item/weapon/phone/suicide_act(mob/user)
+/obj/item/weapon/phone/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -60,7 +60,7 @@
 	throw_range = 20
 	var/potency = 20
 
-/obj/item/weapon/bananapeel/suicide_act(mob/user)
+/obj/item/weapon/bananapeel/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -448,7 +448,7 @@
 	anchored = TRUE
 	icon_state = "beartrap1"
 
-/obj/item/weapon/beartrap/suicide_act(mob/user)
+/obj/item/weapon/beartrap/suicide_act(mob/living/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
@@ -1001,7 +1001,7 @@
 	melt_temperature=MELTPOINT_STEEL
 	attack_verb = list("whips", "lashes", "disciplines", "tickles")
 
-/obj/item/weapon/wire/suicide_act(mob/user)
+/obj/item/weapon/wire/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_OXYLOSS)
 

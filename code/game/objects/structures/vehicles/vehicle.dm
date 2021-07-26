@@ -383,7 +383,7 @@
 	if(health <= 0)
 		die()
 
-/obj/structure/bed/chair/vehicle/suicide_act(mob/user)
+/obj/structure/bed/chair/vehicle/suicide_act(mob/living/user)
 	if(occupant == user)
 		to_chat(viewers(user), "<span class='danger'>[user] is licking the keyhole of the [src]! It looks like \he's trying to commit suicide.</span>")
 		return(SUICIDE_ACT_FIRELOSS)

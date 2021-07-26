@@ -16,7 +16,7 @@
 	var/list/fluff_transformations = list() //does it have any special transformations only accessible to it? Should only be subtypes of /obj/item/weapon/nullrod
 	var/fluff_pickup = "pulverize"
 
-/obj/item/weapon/nullrod/suicide_act(mob/user)
+/obj/item/weapon/nullrod/suicide_act(mob/living/user)
 	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 

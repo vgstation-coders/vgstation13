@@ -72,7 +72,7 @@
 	src.icon_state = pick("shrapnellarge", "shrapnelmedium", "shrapnelsmall")
 	return
 
-/obj/item/weapon/shard/suicide_act(mob/user)
+/obj/item/weapon/shard/suicide_act(mob/living/user)
 		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the shard of glass! It looks like \he's trying to commit suicide.</span>", \
 							"<span class='danger'>[user] is slitting \his throat with the shard of glass! It looks like \he's trying to commit suicide.</span>"))
 		return (SUICIDE_ACT_BRUTELOSS)

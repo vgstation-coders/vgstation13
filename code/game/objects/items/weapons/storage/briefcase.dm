@@ -19,7 +19,7 @@
 /obj/item/weapon/storage/briefcase/biogen
 	desc = "Smells faintly of potato."
 
-/obj/item/weapon/storage/briefcase/suicide_act(mob/user)
+/obj/item/weapon/storage/briefcase/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'><b>[user] is smashing \his head inside the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 

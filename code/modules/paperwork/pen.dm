@@ -250,7 +250,7 @@ var/paperwork_library
 	else
 		return style.Format(text,src,user,P)
 
-/obj/item/weapon/pen/suicide_act(mob/user)
+/obj/item/weapon/pen/suicide_act(mob/living/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/reagent/blood/B = get_blood(H.vessel)

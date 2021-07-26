@@ -21,7 +21,7 @@
 /obj/item/weapon/melee/baton/get_cell()
 	return bcell
 
-/obj/item/weapon/melee/baton/suicide_act(mob/user)
+/obj/item/weapon/melee/baton/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_FIRELOSS)
 

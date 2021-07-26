@@ -351,7 +351,7 @@ var/list/arcane_tomes = list()
 	else
 		return "\[blank\]"
 
-/obj/item/weapon/talisman/suicide_act(mob/user)
+/obj/item/weapon/talisman/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swallows \a [src] and appears to be choking on it! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_OXYLOSS)
 
@@ -559,7 +559,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
-/obj/item/weapon/melee/cultblade/suicide_act(mob/user)
+/obj/item/weapon/melee/cultblade/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -1021,7 +1021,7 @@ var/list/arcane_tomes = list()
 			S.update_icon()
 	..()
 
-/obj/item/weapon/melee/blood_dagger/suicide_act(mob/user)
+/obj/item/weapon/melee/blood_dagger/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his throat with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 

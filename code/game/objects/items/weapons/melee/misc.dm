@@ -13,7 +13,7 @@
 	origin_tech = Tc_COMBAT + "=4"
 	attack_verb = list("flogs", "whips", "lashes", "disciplines")
 
-/obj/item/weapon/melee/chainofcommand/suicide_act(mob/user)
+/obj/item/weapon/melee/chainofcommand/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_OXYLOSS)
 

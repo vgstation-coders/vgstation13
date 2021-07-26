@@ -18,7 +18,7 @@
 /obj/item/weapon/sword/weaponcraft
 	var/obj/item/weapon/reagent_containers/hypospray/hypo = null
 
-/obj/item/weapon/sword/suicide_act(mob/user)
+/obj/item/weapon/sword/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 

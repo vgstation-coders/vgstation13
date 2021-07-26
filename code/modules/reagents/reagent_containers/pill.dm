@@ -150,7 +150,7 @@
 	..()
 	reagents.add_reagent(CYANIDE, 50)
 
-/obj/item/weapon/reagent_containers/pill/cyanide/suicide_act(mob/user)
+/obj/item/weapon/reagent_containers/pill/cyanide/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] bites onto a [src.name] and swallows it! It looks like \he's trying to commit suicide.</span>")
 	var/mob/living/carbon/C = user
 	C.adjustToxLoss(500)//the maximum damage that a 50u cyanide pill could deal. Guarrantees an instant death.

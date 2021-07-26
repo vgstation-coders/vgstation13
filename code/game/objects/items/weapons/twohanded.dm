@@ -78,7 +78,7 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/fireaxe/suicide_act(mob/user)
+/obj/item/weapon/fireaxe/suicide_act(mob/living/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
 		return (SUICIDE_ACT_BRUTELOSS)
 
@@ -288,7 +288,7 @@
 		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
 		qdel(src)
 
-/obj/item/weapon/bloodlust/suicide_act(mob/user)
+/obj/item/weapon/bloodlust/suicide_act(mob/living/user)
 	. = (SUICIDE_ACT_OXYLOSS)
 	user.visible_message("<span class='danger'>[user] is putting \his neck between \the [src]s blades! It looks like \he's trying to commit suicide.</span>")
 	spawn(2 SECONDS) //Adds drama.

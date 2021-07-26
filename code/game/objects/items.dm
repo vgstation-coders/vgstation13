@@ -126,9 +126,10 @@
 			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
 // Generalising these for all items
-/obj/item/suicide_act(mob/user)
+/obj/item/suicide_act(mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+		user.IgniteMob()
 		return SUICIDE_ACT_FIRELOSS
 	else if (sharpness >= 1)
 		user.visible_message("<span class='danger'>[user] is slitting \his wrists with \the [src]! It looks like \he's trying to commit suicide.</span>")
