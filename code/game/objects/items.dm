@@ -128,7 +128,7 @@
 // Generalising these for all items
 /obj/item/suicide_act(var/mob/living/user)
 	if (is_sharp())
-		if(w_class == W_CLASS_LARGE)
+		if(w_class >= W_CLASS_MEDIUM)
 			to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
 							"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
 		else
