@@ -322,13 +322,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return SUICIDE_ACT_FIRELOSS
 	else if (sharpness >= 1)
 		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
 	else if (force >= 10)
 		if (prob(50))
 			playsound(user, 'sound/items/trayhit1.ogg', 50, 1)
 		else
 			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
-		user.visible_message("<span class='danger'>[user] strikes his head onto the \the [src]! It looks like \he's trying to commit suicide.</span>")
-	return SUICIDE_ACT_BRUTELOSS
+		user.visible_message("<span class='danger'>[user] strikes his head on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)

@@ -135,9 +135,10 @@
 		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+		return SUICIDE_ACT_BRUTELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-	return SUICIDE_ACT_BRUTELOSS
+		return SUICIDE_ACT_BRUTELOSS
 
 /obj/item/ex_act(severity)
 	switch(severity)
