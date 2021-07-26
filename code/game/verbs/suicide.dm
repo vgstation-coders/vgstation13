@@ -74,7 +74,7 @@
 
 	var/obj/item/held_item = get_active_hand()
 	if(!held_item)
-		var/obj/item/held_item = get_inactive_hand()
+		held_item = get_inactive_hand()
 	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for stuff nearby
 		var/list/obj/nearbystuff = list()
 		for(var/obj/O in adjacent_atoms(src))
