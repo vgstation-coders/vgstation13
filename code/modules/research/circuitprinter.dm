@@ -110,3 +110,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/hide_own_reagents()
 	return TRUE
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the imprinter nozzle and turning the machine on! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)

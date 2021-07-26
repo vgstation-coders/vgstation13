@@ -323,6 +323,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	else if (sharpness >= 1)
 		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
 	else if (force >= 10)
+		if (prob(50))
+			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
+		else
+			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
 		user.visible_message("<span class='danger'>[user] strikes his head onto the \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return SUICIDE_ACT_BRUTELOSS
 
