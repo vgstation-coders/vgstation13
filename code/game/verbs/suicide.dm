@@ -87,15 +87,15 @@
 					put_in_hands(I)
 				return
 		//Failed that too, go for normal stuff
-			if(Holiday == APRIL_FOOLS_DAY)
-				visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
-			else
-				visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
-									"<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
-									"<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
-									"<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
-			adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
-			updatehealth()
+		if(Holiday == APRIL_FOOLS_DAY)
+			visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
+		else
+			visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
+								"<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
+								"<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
+								"<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
+		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+		updatehealth()
 
 /mob/living/carbon/brain/attempt_suicide(forced = 0, suicide_set = 1)
 
