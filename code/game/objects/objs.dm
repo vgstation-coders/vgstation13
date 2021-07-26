@@ -308,6 +308,16 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/interact(mob/user)
 	return
 
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/obj/proc/suicide_act(mob/user)
+	return
+
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
 		return

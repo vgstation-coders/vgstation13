@@ -168,16 +168,6 @@
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
 
-//user: The mob that is suiciding
-//damagetype: The type of damage the item will inflict on the user
-//SUICIDE_ACT_BRUTELOSS = 1
-//SUICIDE_ACT_FIRELOSS = 2
-//SUICIDE_ACT_TOXLOSS = 4
-//SUICIDE_ACT_OXYLOSS = 8
-//Output a creative message and then return the damagetype done
-/obj/item/proc/suicide_act(mob/user)
-	return
-
 /proc/wclass2text(w_class)
 	switch(w_class)
 		if(W_CLASS_TINY)

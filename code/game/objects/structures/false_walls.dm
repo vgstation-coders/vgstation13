@@ -224,6 +224,15 @@
 			T.attackby(W,user)
 		qdel(src)
 
+/obj/structure/falsewall/suicide_act(mob/user)
+	if(density)
+		attack_hand(user)
+		sleep(15)
+	user.forceMove(get_turf(src))
+	attack_hand(user)
+	to_chat(viewers(user), "<span class='danger'>[user] is crushing \himself with the [src]! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)
+
 /*
  * False R-Walls
  */
@@ -319,6 +328,14 @@
 		T.attackby(W,user)
 		qdel(src)
 
+/obj/structure/falserwall/suicide_act(mob/user)
+	if(density)
+		attack_hand(user)
+		sleep(15)
+	user.forceMove(get_turf(src))
+	attack_hand(user)
+	to_chat(viewers(user), "<span class='danger'>[user] is crushing \himself with the [src]! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /*
  * Uranium Falsewalls

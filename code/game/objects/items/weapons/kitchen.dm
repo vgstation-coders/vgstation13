@@ -278,12 +278,6 @@
 			qdel(src)
 			return
 
-/obj/item/weapon/kitchen/utensil/knife/large/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"
 	desc = "The unearthly energies that once powered this blade are now dormant."

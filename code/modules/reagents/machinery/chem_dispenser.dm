@@ -127,6 +127,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	else
 		recharged -= 1
 
+/obj/machinery/chem_dispenser/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and fills it with a lethal mixture! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS|SUICIDE_ACT_FIRELOSS)
+
 /obj/machinery/chem_dispenser/ex_act(severity)
 	switch(severity)
 		if(1.0)

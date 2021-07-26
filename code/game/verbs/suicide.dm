@@ -10,12 +10,11 @@
 	to_chat(src, "<span class='warning'>You can't commit suicide!</span>")
 	return 0
 
-//Attempt to perform suicide with an item in our hand
+//Attempt to perform suicide with an item nearby or in-hand
 //Return 0 if the suicide failed, return 1 if successful. Returning 1 does not perform the default suicide afterwards
-/mob/living/proc/attempt_item_suicide(var/obj/item/suicide_item)
-
-	if(suicide_item) //We need the item to be there to begin, otherwise abort
-		var/damagetype = suicide_item.suicide_act(src)
+/mob/living/proc/attempt_object_suicide(var/obj/suicide_object)
+	if(suicide_object) //We need the item to be there to begin, otherwise abort
+		var/damagetype = suicide_object.suicide_act(src)
 		if(damagetype)
 			var/damage_mod = count_set_bitflags(damagetype) // How many damage types are to be applied
 
@@ -74,17 +73,27 @@
 		mind.suiciding = 1
 
 	var/obj/item/held_item = get_active_hand()
-
-	if(!attempt_item_suicide(held_item)) //Failed to perform a special item suicide, go for normal stuff
-		if(Holiday == APRIL_FOOLS_DAY)
-			visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
-		else
-			visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
-								 "<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
-								 "<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
-								 "<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
-		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
-		updatehealth()
+	if(!held_item)
+		var/obj/item/held_item = get_inactive_hand()
+	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for stuff nearby
+		var/list/obj/nearbystuff = list()
+		for(var/obj/O in adjacent_atoms(src))
+			nearbystuff += O
+		var/obj/chosen_item = pick(nearbystuff)
+		if(attempt_object_suicide(chosen_item)) 
+			if(istype(chosen_item,/obj/item))
+				var/obj/item/I = chosen_item
+				I.put_in_hands(src)
+		else //Failed that too, go for normal 
+			if(Holiday == APRIL_FOOLS_DAY)
+				visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
+			else
+				visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
+									"<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
+									"<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
+									"<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
+			adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
+			updatehealth()
 
 /mob/living/carbon/brain/attempt_suicide(forced = 0, suicide_set = 1)
 
@@ -138,9 +147,9 @@
 		mind.suiciding = 1
 
 	var/obj/item/held_item = get_active_hand()
-	attempt_item_suicide(held_item)
+	attempt_object_suicide(held_item)
 
-	if(!attempt_item_suicide(held_item)) //Failed to perform a special item suicide, go for normal stuff
+	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for normal stuff
 		visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
 							 "<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
 							 "<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \

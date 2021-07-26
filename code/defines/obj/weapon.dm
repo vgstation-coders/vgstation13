@@ -62,7 +62,7 @@
 
 /obj/item/weapon/bananapeel/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
-	return(SUICIDE_ACT_OXYLOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/corncob
 	name = "corn cob"

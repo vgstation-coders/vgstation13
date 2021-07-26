@@ -226,6 +226,10 @@ Class Procs:
 			qdel(pulse2)
 	..()
 
+/obj/machinery/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_FIRELOSS)
+
 /obj/machinery/ex_act(severity)
 	switch(severity)
 		if(1.0)
