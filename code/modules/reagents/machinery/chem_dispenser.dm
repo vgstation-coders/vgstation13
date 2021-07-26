@@ -128,7 +128,29 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		recharged -= 1
 
 /obj/machinery/chem_dispenser/suicide_act(mob/living/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and fills it with a lethal mixture! It looks like \he's trying to commit suicide.</span>")
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it with a lethal mixture! It looks like \he's trying to commit suicide.</span>")
+	playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+	var/list/reagants_to_add = list(PACID, SACID, MINDBREAKER, IMPEDREZENE, LUBE)
+	if(prob(10))
+		user.reagents.add_reagent(pick(reagents_to_add),25)
+	if(prob(10)) //smoke
+		user.reagents.add_reagent(SUGAR,5)
+		user.reagents.add_reagent(POTASSIUM,5)
+		user.reagents.add_reagent(PHOSPHORUS,5)
+	if(prob(10)) //boom
+		user.reagents.add_reagent(POTASSIUM,50)
+		user.reagents.add_reagent(WATER,50)
+	if(prob(10)) //emp
+		user.reagents.add_reagent(IRON,25)
+		user.reagents.add_reagent(URANIUM,25)
+	if(prob(10)) //fire
+		user.reagents.add_reagent(ALUMINIUM,5)
+		user.reagents.add_reagent(PLASMA,5)
+		user.reagents.add_reagent(SACID,5)
+	if(prob(10)) //flash
+		user.reagents.add_reagent(ALUMINIUM,5)
+		user.reagents.add_reagent(POTASSIUM,5)
+		user.reagents.add_reagent(SULFUR,5)
 	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/machinery/chem_dispenser/ex_act(severity)
@@ -466,6 +488,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/soda_dispenser/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
+	playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_TOXLOSS)
+
 /obj/machinery/chem_dispenser/soda_dispenser/mapping
 	max_energy = 100
 	energy = 100
@@ -520,6 +547,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 	RefreshParts()
 
+/obj/machinery/chem_dispenser/soda_dispenser/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and drowning his sorrows! It looks like \he's trying to commit suicide.</span>")
+	playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_TOXLOSS)
+
 /obj/machinery/chem_dispenser/booze_dispenser/mapping
 	max_energy = 100
 	energy = 100
@@ -551,6 +583,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/condiment/update_icon()
 	return //no overlays for this one, it takes special inputs
+
+/obj/machinery/chem_dispenser/condiment/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth under the nozzles of the [src] and filling it! It looks like \he's trying to commit suicide.</span>")
+	playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
+	return(SUICIDE_ACT_TOXLOSS)
 
 #undef FORMAT_DISPENSER_NAME
 
