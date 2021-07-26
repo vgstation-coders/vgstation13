@@ -150,6 +150,10 @@
 		to_chat(user, "<span class='warning'>The [name] burns your bare hand!</span>")
 		user.adjustFireLoss(rand(1,5))
 
+/obj/item/weapon/grown/novaflower/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_BURNLOSS|SUICIDE_ACT_TOXLOSS)
+
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
 	desc = "It's probably <B>not</B> wise to touch it with bare hands..."
@@ -191,6 +195,10 @@
 /obj/item/weapon/grown/nettle/changePotency(newValue) //-QualityVan
 	potency = newValue
 	force = round((5+potency/5), 1)
+
+/obj/item/weapon/grown/nettle/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
 
 /obj/item/weapon/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
