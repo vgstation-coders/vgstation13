@@ -254,6 +254,51 @@
 		// Delete ourselves.
 		qdel(src)
 
+/obj/item/device/transfer_valve/suicide_act(var/mob/user)
+	. = (SUICIDE_ACT_BRUTELOSS)
+	if (valve_open || (!tank_one && !tank_two) || simulate_merge() < 1) //no explosion with no tanks or dev, dummy
+		tank_one.forceMove(get_turf(src))
+		tank_one = null
+		tank_two.forceMove(get_turf(src))
+		tank_two = null
+		update_icon()
+		to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src]! It looks like \he's trying to commit suicide!</span>")
+		return .
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
+	var/message_say = "FOR NO RAISIN!"
+
+	if(issyndicate(user))
+		message_say = "FOR THE SYNDICATE!"
+	else if(ischangeling(user))
+		message_say = "FOR THE HIVE!"
+	else if(isanycultist(user))
+		message_say = "FOR NAR-SIE!"
+	else if(isrev(user))
+		message_say = "FOR THE CAUSE!"
+	else if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		// jobs
+		if(H.mind.assigned_role == "Clown")
+			message_say = "FOR THE HONKMOTHER!"
+		else if(H.mind.assigned_role == "Assistant")
+			message_say = "FOR THE GREYTIDE!"
+		else if(H.mind.assigned_role == "Janitor")
+			message_say = "I DO IT FOR FREE!"
+		else if(H.mind.assigned_role == "Cargo Technician" || H.mind.assigned_role == "Quartermaster")
+			message_say = "FOR CARGONIA!"
+		else if(H.mind.assigned_role == "Trader")
+			message_say = "FOR THE SHOAL!"
+		// faiths
+		else if(H.mind.faith.name == "Islam")
+			message_say = "ALLAHU AKBAR!"
+		else if(H.mind.faith.deity_name)
+			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
+
+	user.say(message_say)
+	target = user
+	toggle_valve(user)
+	explode(get_turf(user))
+	return .
 
 /obj/item/device/transfer_valve/blob_act()
 	toggle_valve()
