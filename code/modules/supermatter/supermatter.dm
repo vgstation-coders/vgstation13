@@ -483,7 +483,7 @@
 /obj/machinery/power/supermatter/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] suicidally slams \himself head first into the [src], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash, never to be seen again.</span>")
 	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
-	Consume(AM)
+	Consume(user)
 	return SUICIDE_ACT_CUSTOM
 
 /obj/machinery/power/supermatter/blob_act()
