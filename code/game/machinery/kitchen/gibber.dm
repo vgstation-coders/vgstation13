@@ -191,6 +191,12 @@ obj/machinery/gibber/New()
 	update_icon()
 	return
 
+/obj/machinery/gibber/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \himself inside the [src] and turning it on! It looks like \he's trying to commit suicide.</span>")
+	user.forceMove(src)
+	src.occupant = user
+	startgibbing(user)
+	return SUICIDE_ACT_CUSTOM
 
 /obj/machinery/gibber/proc/startgibbing(var/mob/user)
 	if(src.operating)
