@@ -37,7 +37,7 @@
 			updatehealth()
 			return 1
 
-/mob/living/carbon/human/attempt_suicide(forced = 0, suicide_set = 1)
+/mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
 
@@ -122,43 +122,6 @@
 
 	death(0)
 
-/mob/living/carbon/monkey/attempt_suicide(forced = 0, suicide_set = 1)
-
-	if(!forced)
-		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
-
-		if(confirm != "Yes")
-			return
-
-		if(stat != CONSCIOUS)
-			to_chat(src, "<span class='warning'>You can't commit suicide in this state!</span>")
-			return
-
-		var/mob/living/simple_animal/borer/B = has_brain_worms()
-		if(B && B.controlling) //Borer
-			to_chat(src, "<span class='warning'>You cannot commit suicide, your host is clinging to life enough to resist it.</span>")
-			return
-
-		if(!canmove || restrained())
-			to_chat(src, "<span class='warning'>You can't commit suicide whilst restrained!</span>")
-			return
-
-		log_attack("<font color='red'>[key_name(src)] has committed suicide via the suicide verb.</font>")
-
-	if(suicide_set && mind)
-		mind.suiciding = 1
-
-	var/obj/item/held_item = get_active_hand()
-	attempt_object_suicide(held_item)
-
-	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for normal stuff
-		visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
-							 "<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
-							 "<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
-							 "<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
-		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
-		updatehealth()
-
 //All silicons work basically the same when it comes to dying, so suicide is universal
 /mob/living/silicon/attempt_suicide(forced = 0, suicide_set = 1)
 
@@ -205,6 +168,10 @@
 	card.removePersonality()
 	visible_message("<span class='notice'>[src] flashes a message on its screen, \"Wiping core files. Please acquire a new personality to continue using pAI device functions.\"</span>")
 	death(0)
+
+/mob/living/carbon/alien/attempt_suicide(forced = 0, suicide_set = 1)
+	to_chat(src, "<span class='warning'>You can't commit suicide!</span>")
+	return 0
 
 /mob/living/carbon/alien/humanoid/attempt_suicide(forced = 0, suicide_set = 1)
 
