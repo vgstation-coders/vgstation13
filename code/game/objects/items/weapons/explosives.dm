@@ -48,7 +48,7 @@
 			message_say = "FOR THE GREYTIDE!"
 		else if(H.mind.assigned_role == "Janitor")
 			message_say = "I DO IT FOR FREE!"
-		else if(H.mind.assigned_role == "Cargo Technician" || H.assigned_role == "Quartermaster")
+		else if(H.mind.assigned_role == "Cargo Technician" || H.mind.assigned_role == "Quartermaster")
 			message_say = "FOR CARGONIA!"
 		else if(H.mind.assigned_role == "Trader")
 			message_say = "FOR THE SHOAL!"

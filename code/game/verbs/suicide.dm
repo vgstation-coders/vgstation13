@@ -83,7 +83,7 @@
 		if(attempt_object_suicide(chosen_item)) 
 			if(istype(chosen_item,/obj/item))
 				var/obj/item/I = chosen_item
-				I.put_in_hands(src)
+				put_in_hands(I)
 		else //Failed that too, go for normal 
 			if(Holiday == APRIL_FOOLS_DAY)
 				visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
