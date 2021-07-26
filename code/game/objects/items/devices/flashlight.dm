@@ -247,6 +247,16 @@
 		return source_temperature
 	return 0
 
+/obj/item/device/flashlight/flare/suicide_act(mob/user)
+	if(!on)
+		Light(user)
+	to_chat(viewers(user), "<span class='danger'>[user] is swallowing a lit flare! It looks like \he's trying to commit suicide.</span>")
+	qdel(src)
+	if(!fuel)
+		return (SUICIDE_ACT_TOXLOSS)
+	user.IgniteMob()
+	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_FIRELOSS)
+
 /obj/item/device/flashlight/flare/ever_bright/New()
 	. = ..()
 	fuel = INFINITY
