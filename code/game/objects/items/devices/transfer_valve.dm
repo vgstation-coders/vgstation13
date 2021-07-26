@@ -255,15 +255,14 @@
 		qdel(src)
 
 /obj/item/device/transfer_valve/suicide_act(var/mob/user)
-	. = (SUICIDE_ACT_BRUTELOSS)
-	if (valve_open || (!tank_one && !tank_two) || simulate_merge() < 1) //no explosion with no tanks or dev, dummy
+	if (valve_open || !tank_one || !tank_two || simulate_merge() < 1) //no explosion with no tanks or dev, dummy
 		tank_one.forceMove(get_turf(src))
 		tank_one = null
 		tank_two.forceMove(get_turf(src))
 		tank_two = null
 		update_icon()
 		to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src]! It looks like \he's trying to commit suicide!</span>")
-		return .
+		return(SUICIDE_ACT_BRUTELOSS)
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	var/message_say = "FOR NO RAISIN!"
 
@@ -295,10 +294,8 @@
 			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
 
 	user.say(message_say)
-	target = user
 	toggle_valve(user)
-	explode(get_turf(user))
-	return .
+	return SUICIDE_ACT_CUSTOM
 
 /obj/item/device/transfer_valve/blob_act()
 	toggle_valve()
