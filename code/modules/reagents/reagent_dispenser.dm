@@ -180,6 +180,10 @@
 			explode()
 	return ..()
 
+/obj/structure/reagent_dispensers/fueltank/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_TOXLOSS)
+
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
 
@@ -228,6 +232,10 @@
 /obj/structure/reagent_dispensers/peppertank/New()
 	. = ..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 1000)
+
+/obj/structure/reagent_dispensers/peppertank/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his head underneath the dispenser nozzle and spraying the contents! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_BRUTELOSS)
 
 /obj/structure/reagent_dispensers/water_cooler
 	name = "Water-Cooler"
@@ -279,6 +287,10 @@
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
 	reagents.add_reagent(BEER, 1000)
+
+/obj/structure/reagent_dispensers/beerkeg/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the keg nozzle and drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/beerkeg/wrenchable()
 	return 1
@@ -356,6 +368,10 @@
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 
+/obj/structure/reagent_dispensers/silicate/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_TOXLOSS)
+
 /obj/structure/reagent_dispensers/degreaser
 	name = "ethanol tank"
 	desc = "A tank filled with ethanol, used in the degreasing of engines."
@@ -365,6 +381,10 @@
 /obj/structure/reagent_dispensers/degreaser/New()
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
+
+/obj/structure/reagent_dispensers/degreaser/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and heavily drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/spooktank
 	name = "spooktank"
