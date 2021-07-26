@@ -247,7 +247,7 @@
 		return source_temperature
 	return 0
 
-/obj/item/device/flashlight/flare/suicide_act(mob/user)
+/obj/item/device/flashlight/flare/suicide_act(mob/living/user)
 	if(!on)
 		Light(user)
 	to_chat(viewers(user), "<span class='danger'>[user] is swallowing a lit flare! It looks like \he's trying to commit suicide.</span>")
