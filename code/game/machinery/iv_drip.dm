@@ -177,7 +177,7 @@
 	src.update_icon()
 
 /obj/machinery/iv_drip/attack_ai(mob/living/user)
-	attack_hand(user)
+	return
 
 /obj/machinery/iv_drip/verb/toggle_mode()
 	set name = "Toggle Mode"

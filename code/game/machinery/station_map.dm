@@ -124,7 +124,10 @@ var/list/station_holomaps = list()
 	add_hiddenprint(user)
 	flick("station_map_activate", src)
 
-/obj/machinery/station_map/attack_ai(var/mob/living/silicon/robot/user)
+/obj/machinery/station_map/attack_ai(var/mob/living/silicon/user)
+	var/mob/living/silicon/ai/A = user
+	if(istype(A) && A.hackermode)
+		return hack_interact(A)
 	user.station_holomap.toggleHolomap(user, isAI(user))
 
 /obj/machinery/station_map/process()

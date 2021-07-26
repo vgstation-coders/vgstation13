@@ -59,8 +59,11 @@ var/list/obj/machinery/flasher/flashers = list()
 			user.visible_message("<span class='warning'>[user] has connected the [src]'s flashbulb!</span>", "<span class='warning'>You connect the [src]'s flashbulb!</span>")
 
 //Let the AI trigger them directly.
-/obj/machinery/flasher/attack_ai()
+/obj/machinery/flasher/attack_ai(var/mob/user)
 	if (src.anchored)
+		var/mob/living/silicon/ai/A = user
+		if(istype(A) && A.hackermode)
+			return hack_interact(A)
 		return src.flash()
 	else
 		return

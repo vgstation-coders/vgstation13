@@ -50,8 +50,13 @@
 	return
 
 /obj/machinery/ai_slipper/attack_ai(mob/user as mob)
-	src.add_hiddenprint(user)
+	add_hiddenprint(user)
 	if(stat & (NOPOWER|BROKEN))
+		return
+
+	var/mob/living/silicon/ai/A 
+	if(istype(A) && A.hackermode)
+		hack_interact(A)
 		return
 
 	user.set_machine(src)

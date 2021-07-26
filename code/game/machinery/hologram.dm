@@ -72,6 +72,8 @@ var/const/HOLOPAD_MODE = 0
 /obj/machinery/hologram/holopad/attack_ai(mob/living/silicon/ai/user)
 	if (!istype(user))
 		return
+	if(user.hackermode)
+		return hack_interact(user)
 	/*There are pretty much only three ways to interact here.
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/

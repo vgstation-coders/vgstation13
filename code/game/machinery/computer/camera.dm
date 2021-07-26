@@ -58,7 +58,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	else
 		var/mob/living/silicon/ai/A = user
 		if(istype(A) && A.hackermode)
-			malf_hack(A)
+			hack_interact(a)
 		else 
 			to_chat(user, "You have your built-in camera systems for this!") //currently too buggy to allow AI to use camera computers
 	return //attack_hand(user)
