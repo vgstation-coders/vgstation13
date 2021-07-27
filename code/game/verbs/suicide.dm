@@ -58,16 +58,18 @@
 		else if(H.mind.faith.deity_name)
 			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
 		// jobs
-		else if(H.mind.assigned_role == "Clown")
-			message_say = "FOR THE HONKMOTHER!"
-		else if(H.mind.assigned_role == "Assistant")
-			message_say = "FOR THE GREYTIDE!"
-		else if(H.mind.assigned_role == "Janitor")
-			message_say = "I DO IT FOR FREE!"
-		else if(H.mind.assigned_role == "Cargo Technician" || H.mind.assigned_role == "Quartermaster")
-			message_say = "FOR CARGONIA!"
-		else if(H.mind.assigned_role == "Trader")
-			message_say = "FOR THE SHOAL!"
+		else
+			switch(H.mind.assigned_role)
+				if("Clown")
+					message_say = "FOR THE HONKMOTHER!"
+				if("Assistant")
+					message_say = "FOR THE GREYTIDE!"
+				if("Janitor")
+					message_say = "I DO IT FOR FREE!"
+				if("Cargo Technician" || "Quartermaster")
+					message_say = "FOR CARGONIA!"
+				if("Trader")
+					message_say = "FOR THE SHOAL!"
 
 	if(custom_message)
 		message_say = "FOR [uppertext(custom_message)]!"
