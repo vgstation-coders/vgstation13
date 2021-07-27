@@ -1162,7 +1162,7 @@ obj/machinery/media/jukebox/holyjuke
 	name = "nanovinyl - dance"
 	unformatted = "upbeathypedancejam"
 	formatted = "Dance"
-/obj/item/weapon/vinyl/slugger
+/obj/item/weapon/vinyl/vidya
 	name = "nanovynil - vidya"
 	unformatted = "vidya"
 	formatted = "Video Games"
