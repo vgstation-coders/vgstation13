@@ -153,9 +153,9 @@
 			message_say = "FOR THE SHOAL!"
 
 	if(custom_message)
-		message_say = "FOR [custom_message]!"
+		message_say = "FOR [uppertext(custom_message)]!"
 	user.say(message_say)
-	toggle_valve(user)
+	attack_self(user)
 	return SUICIDE_ACT_CUSTOM
 
 /obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)

@@ -62,7 +62,7 @@
 			message_say = "FOR THE SHOAL!"
 
 	if(custom_message)
-		message_say = "FOR [custom_message]!"
+		message_say = "FOR [uppertext(custom_message)]!"
 	user.say(message_say)
 	target = user
 	explode(get_turf(user))

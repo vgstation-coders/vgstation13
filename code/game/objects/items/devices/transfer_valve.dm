@@ -297,7 +297,7 @@
 			message_say = "FOR THE SHOAL!"
 
 	if(custom_message)
-		message_say = "FOR [custom_message]!"
+		message_say = "FOR [uppertext(custom_message)]!"
 	user.say(message_say)
 	toggle_valve(user)
 	return SUICIDE_ACT_CUSTOM
