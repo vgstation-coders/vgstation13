@@ -965,7 +965,7 @@ obj/item/clothing/suit/cassock
 	
 	user.handle_suicide_bomb_cause()
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
-	explosion(H, 1, 3, 6)
+	explosion(user, 1, 3, 6)
 	message_admins("[user] has detonated \the [src]!")
 	qdel(src) //Just in case
 	return SUICIDE_ACT_CUSTOM
