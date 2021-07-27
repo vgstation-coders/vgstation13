@@ -29,8 +29,8 @@
 /obj/item/weapon/c4/suicide_act(var/mob/living/user)
 	. = (SUICIDE_ACT_BRUTELOSS)
 	
-	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	target = user
 	explode(get_turf(user))
 	return .

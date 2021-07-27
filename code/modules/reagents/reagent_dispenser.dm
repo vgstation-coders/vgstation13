@@ -181,6 +181,13 @@
 	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
+	var/obj/item/tool/weldingtool/welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
+	if(welder)
+		user.handle_suicide_bomb_cause()
+		to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
+		welder.welding = TRUE
+		welder.afterattack(src,user,1)
+		return(SUICIDE_ACT_BRUTELOSS)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_TOXLOSS)
 
