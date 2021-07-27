@@ -959,6 +959,17 @@ obj/item/clothing/suit/cassock
 	if(active)
 		to_chat(user, "<span class='danger'>It appears to be active. RUN!</span>")
 
+/obj/item/clothing/suit/bomber_vest/suicide_act(var/mob/living/user)
+	if (!active) //no explosion with no active vest, dummy
+		return
+	
+	user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
+	explosion(H, 1, 3, 6)
+	message_admins("[H] has detonated \the [src]!")
+	qdel(src) //Just in case
+	return SUICIDE_ACT_CUSTOM
+
 /obj/item/clothing/suit/bomber_vest/proc/detonate(list/arguments)
 	var/mob/living/carbon/human/H = loc
 	var/whitelist = arguments["has been touched by"]
