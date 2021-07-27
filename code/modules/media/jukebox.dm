@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -821,6 +821,7 @@ var/global/list/loopModeNames=list(
 		"rock" = "Rock",
 		"shoegaze" = "Shoegaze",
 		"security" = "Security",
+		"vidya" = "Video Games",
 		"upbeathypedancejam" = "Dance"
 	)
 
@@ -852,6 +853,7 @@ var/global/list/loopModeNames=list(
 		"shoegaze" = "Shoegaze",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
+		"vidya" = "Video Games",
 		"thunderdome" = "Thunderdome"
 	)
 
@@ -887,6 +889,7 @@ var/global/list/loopModeNames=list(
 		"shuttle" = "Shuttle",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
+		"vidya" = "Video Games",
 		"thunderdome" = "Thunderdome",
 		"emagged" ="Syndicate Mix",
 		"shuttle"= "Shuttle",
@@ -1159,6 +1162,11 @@ obj/machinery/media/jukebox/holyjuke
 	name = "nanovinyl - dance"
 	unformatted = "upbeathypedancejam"
 	formatted = "Dance"
+/obj/item/weapon/vinyl/slugger
+	name = "nanovynil - vidya"
+	unformatted = "vidya"
+	formatted = "Video Games"
+	mask = "##0096FF"
 /obj/item/weapon/vinyl/scotland
 	name = "nanovinyl - highlander"
 	desc = "Oh no."
