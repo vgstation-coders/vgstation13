@@ -37,6 +37,42 @@
 			updatehealth()
 			return 1
 
+/mob/living/proc/handle_suicide_bomb_cause()
+	var/custom_message = input(src, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
+	
+	var/message_say = "FOR NO RAISIN!"
+
+	if(issyndicate(src))
+		message_say = "FOR THE SYNDICATE!"
+	else if(ischangeling(src))
+		message_say = "FOR THE HIVE!"
+	else if(isanycultist(src))
+		message_say = "FOR NAR-SIE!"
+	else if(isrev(src))
+		message_say = "FOR THE CAUSE!"
+	else if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		// faiths
+		if(H.mind.faith.name == "Islam")
+			message_say = "ALLAHU AKBAR!"
+		else if(H.mind.faith.deity_name)
+			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
+		// jobs
+		else if(H.mind.assigned_role == "Clown")
+			message_say = "FOR THE HONKMOTHER!"
+		else if(H.mind.assigned_role == "Assistant")
+			message_say = "FOR THE GREYTIDE!"
+		else if(H.mind.assigned_role == "Janitor")
+			message_say = "I DO IT FOR FREE!"
+		else if(H.mind.assigned_role == "Cargo Technician" || H.mind.assigned_role == "Quartermaster")
+			message_say = "FOR CARGONIA!"
+		else if(H.mind.assigned_role == "Trader")
+			message_say = "FOR THE SHOAL!"
+
+	if(custom_message)
+		message_say = "FOR [uppertext(custom_message)]!"
+	say(message_say)
+
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
