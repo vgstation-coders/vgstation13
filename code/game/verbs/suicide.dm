@@ -75,9 +75,19 @@
 	var/obj/item/held_item = get_active_hand()
 	if(!held_item)
 		held_item = get_inactive_hand()
-	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for stuff nearby
+	if(!attempt_object_suicide(held_item)) //Failed to perform a special item suicide, go for stuff in front of us
 		var/list/obj/nearbystuff = list()
-		for(var/obj/O in adjacent_atoms(src))
+		for(var/obj/O in get_step(loc,dir))
+			nearbystuff += O
+		while(nearbystuff.len)
+			var/obj/chosen_item = pick_n_take(nearbystuff)
+			if(attempt_object_suicide(chosen_item)) 
+				if(istype(chosen_item,/obj/item))
+					var/obj/item/I = chosen_item
+					put_in_hands(I)
+				return
+		nearbystuff = list()
+		for(var/obj/O in adjacent_atoms(src)) //Failed that too, check anything around us
 			nearbystuff += O
 		while(nearbystuff.len)
 			var/obj/chosen_item = pick_n_take(nearbystuff)
