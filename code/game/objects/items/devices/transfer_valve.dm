@@ -263,6 +263,9 @@
 		update_icon()
 		to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src]! It looks like \he's trying to commit suicide!</span>")
 		return(SUICIDE_ACT_BRUTELOSS)
+	
+	var/custom_message = input(user, "Enter a cause to dedicate this to, if any.", "For what cause?") as null|text
+	
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	var/message_say = "FOR NO RAISIN!"
 
@@ -276,8 +279,13 @@
 		message_say = "FOR THE CAUSE!"
 	else if(ishuman(user))
 		var/mob/living/carbon/human/H = user
+		// faiths
+		if(H.mind.faith.name == "Islam")
+			message_say = "ALLAHU AKBAR!"
+		else if(H.mind.faith.deity_name)
+			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
 		// jobs
-		if(H.mind.assigned_role == "Clown")
+		else if(H.mind.assigned_role == "Clown")
 			message_say = "FOR THE HONKMOTHER!"
 		else if(H.mind.assigned_role == "Assistant")
 			message_say = "FOR THE GREYTIDE!"
@@ -287,12 +295,9 @@
 			message_say = "FOR CARGONIA!"
 		else if(H.mind.assigned_role == "Trader")
 			message_say = "FOR THE SHOAL!"
-		// faiths
-		else if(H.mind.faith.name == "Islam")
-			message_say = "ALLAHU AKBAR!"
-		else if(H.mind.faith.deity_name)
-			message_say = "FOR [uppertext(H.mind.faith.deity_name)]!"
 
+	if(custom_message)
+		message_say = "FOR [custom_message]!"
 	user.say(message_say)
 	toggle_valve(user)
 	return SUICIDE_ACT_CUSTOM
