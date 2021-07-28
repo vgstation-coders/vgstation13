@@ -655,6 +655,7 @@
 #include "code\game\machinery\cryo.dm"
 #include "code\game\machinery\defibcharger.dm"
 #include "code\game\machinery\deployable.dm"
+#include "code\game\machinery\disk_duplicator.dm"
 #include "code\game\machinery\door_control.dm"
 #include "code\game\machinery\doppler_array.dm"
 #include "code\game\machinery\emancipation.dm"

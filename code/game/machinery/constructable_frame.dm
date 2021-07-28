@@ -299,6 +299,7 @@ to destroy them and players will be able to make replacements.
 	"recharger"=/obj/item/weapon/circuitboard/recharger,
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
 	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
+	"data"=/obj/item/weapon/circuitboard/disk_duplicator,
 	"Ez-bake oven"=/obj/item/weapon/circuitboard/cooking,)
 	var/soldering = 0 //Busy check
 
@@ -1548,3 +1549,16 @@ obj/item/weapon/circuitboard/rdserver
 		/obj/item/weapon/stock_parts/matter_bin = 1,
 		/obj/item/weapon/stock_parts/capacitor = 2,
 	)
+
+/obj/item/weapon/circuitboard/disk_duplicator
+	name = "Circuit Board (Disk Duplicator)"
+	desc = "A circuit board used to read and duplicate data disks inside a duplicator."
+	build_path = /obj/machinery/disk_duplicator
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=2;"+ Tc_PROGRAMMING + "=2" + Tc_MAGNETS + "=2"
+	req_components = list (
+		/obj/item/weapon/stock_parts/micro_laser = 1,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/scanning_module = 1,
+		/obj/item/weapon/stock_parts/capacitor = 1,
+		)
