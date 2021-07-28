@@ -75,7 +75,10 @@ var/datum/controller/gameticker/ticker
 		"sound/music/Lou_Reed_-_Satellite_of_Love.ogg",
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
-		"sound/music/twilight.ogg",
+		"sound/music/twilight.ogg", 
+		"sound/music/tintin.ogg",
+		"sound/music/clouds.s3m", // why was this even removed back in 2013, unused since then btw
+		"sound/music/wire_-_tintin_on_the_moon.xm" // yes, tracker music works perfectly somehow, thank god
 		))
 
 	if(SNOW_THEME)
