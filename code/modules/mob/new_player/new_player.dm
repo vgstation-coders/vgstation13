@@ -553,14 +553,9 @@
 	if(highprior.len > 0)
 		dat += "<tr><th class='reqhead' colspan=3>High Priority Jobs</th></tr>"
 		for(var/datum/job/job in highprior)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='reqalt'" : " class='request'"]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[highprior[job]]</td></tr>"
 			color = !color
@@ -570,14 +565,9 @@
 	if(heads.len > 0)
 		dat += "<tr><th colspan=3>Heads</th></tr>"
 		for(var/datum/job/job in heads)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[heads[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[heads[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[heads[job]]</td></tr>"
 			color = !color
@@ -585,14 +575,9 @@
 	if(sec.len > 0)
 		dat += "<tr><th colspan=3>Security</th></tr>"
 		for(var/datum/job/job in sec)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sec[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sec[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[sec[job]]</td></tr>"
 			color = !color
@@ -600,14 +585,9 @@
 	if(eng.len > 0)
 		dat += "<tr><th colspan=3>Engineering</th></tr>"
 		for(var/datum/job/job in eng)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[eng[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[eng[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[eng[job]]</td></tr>"
 			color = !color
@@ -615,14 +595,9 @@
 	if(med.len > 0)
 		dat += "<tr><th colspan=3>Medical</th></tr>"
 		for(var/datum/job/job in med)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[med[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[med[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[med[job]]</td></tr>"
 			color = !color
@@ -630,14 +605,9 @@
 	if(sci.len > 0)
 		dat += "<tr><th colspan=3>Science</th></tr>"
 		for(var/datum/job/job in sci)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sci[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sci[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[sci[job]]</td></tr>"
 			color = !color
@@ -645,14 +615,9 @@
 	if(cgo.len > 0)
 		dat += "<tr><th colspan=3>Cargo</th></tr>"
 		for(var/datum/job/job in cgo)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[cgo[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[cgo[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[cgo[job]]</td></tr>"
 			color = !color
@@ -660,14 +625,9 @@
 	if(civ.len > 0)
 		dat += "<tr><th colspan=3>Civilian</th></tr>"
 		for(var/datum/job/job in civ)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[civ[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[civ[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[civ[job]]</td></tr>"
 			color = !color
@@ -676,14 +636,9 @@
 	if(misc.len > 0)
 		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
 		for(var/datum/job/job in misc)
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[misc[job]]</s></td></tr>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[misc[job]]</s></td></tr>"
-					continue
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
 
 			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[misc[job]]</td></tr>"
 			color = !color
