@@ -555,7 +555,7 @@
 		for(var/datum/job/job in highprior)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -572,7 +572,7 @@
 		for(var/datum/job/job in heads)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[heads[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[heads[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -587,7 +587,7 @@
 		for(var/datum/job/job in sec)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sec[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sec[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -602,7 +602,7 @@
 		for(var/datum/job/job in eng)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[eng[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[eng[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -617,7 +617,7 @@
 		for(var/datum/job/job in med)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[med[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[med[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -632,7 +632,7 @@
 		for(var/datum/job/job in sci)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sci[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[sci[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -647,7 +647,7 @@
 		for(var/datum/job/job in cgo)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[cgo[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[cgo[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -662,7 +662,7 @@
 		for(var/datum/job/job in civ)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[civ[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[civ[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
@@ -678,7 +678,7 @@
 		for(var/datum/job/job in misc)
 			if(job.species_whitelist.len)
 				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[misc[job]]</s></td></tr>"
+					dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[misc[job]]</s></td></tr>"
 					continue
 			if(job.species_blacklist.len)
 				if(job.species_blacklist.Find(client.prefs.species))
