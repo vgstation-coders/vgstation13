@@ -538,25 +538,26 @@
 			if(job.title in command_positions)
 				heads[job] = active
 				department = 1
-			if(job.title in security_positions && !(job.title in command_positions))
+				continue
+			if(job.title in security_positions)
 				sec[job] = active
 				department = 1
-			if(job.title in engineering_positions && !(job.title in command_positions))
+			if(job.title in engineering_positions)
 				eng[job] = active
 				department = 1
-			if(job.title in medical_positions && !(job.title in command_positions))
+			if(job.title in medical_positions)
 				med[job] = active
 				department = 1
-			if(job.title in science_positions && !(job.title in command_positions))
+			if(job.title in science_positions)
 				sci[job] = active
 				department = 1
-			if(job.title in cargo_positions && !(job.title in command_positions))
+			if(job.title in cargo_positions)
 				cgo[job] = active
 				department = 1
-			if(job.title in civilian_positions && !(job.title in command_positions))
+			if(job.title in civilian_positions)
 				civ[job] = active
 				department = 1
-			if(!department && !(job in heads))
+			if(!department)
 				misc[job] = active
 	
 	if(highprior.len > 0)
