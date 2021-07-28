@@ -64,7 +64,12 @@ var/datum/controller/gameticker/ticker
 	for(var/filename in filenames)
 		if(copytext(filename, length(filename)) == "/")
 			filenames -= filename
-	login_music = file("[path][pick(filenames)]")
+	if (map.nameShort == "lamprey")
+		login_music = file("sound/music/lampreytheme.ogg")
+	else if (map.nameShort == "dorf")
+		login_music = file("sound/music/b12_combined_start.ogg")
+	else
+		login_music = file("[path][pick(filenames)]")
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
