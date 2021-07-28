@@ -522,8 +522,6 @@
 		if(emergency_shuttle.direction == 1 && emergency_shuttle.alert == 1) // Crew transfer initiated
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
-	//if(!countprio)
-	//	dat += "<a style='color:red' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a><br>"
 	dat += "Choose from the following open positions:<br><table class='manifest' width='480px'><tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th></tr>"
 	var/color = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
@@ -574,6 +572,8 @@
 
 			dat += "<tr[color ? " class='reqalt'" : " class='request'"]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>highprior[job]</td><br>"
 			color = !color
+	else
+		dat += "<tr><th style='color.red' colspan=3><a style='color:white' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a></th></tr>"
 
 	if(heads.len > 0)
 		dat += "<tr><th colspan=3>Heads</th></tr>"
