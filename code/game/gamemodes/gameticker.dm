@@ -59,7 +59,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/space.ogg",
 		"sound/music/traitor.ogg",
 		"sound/music/space_oddity.ogg",
-		"sound/music/title1.ogg",
+		"sound/music/title1.mod", // converted to original format, only lost 100kb of 700 sadly
 		"sound/music/title2.ogg",
 		"sound/music/title3.ogg",
 		"sound/music/clown.ogg",
@@ -78,7 +78,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/twilight.ogg", 
 		"sound/music/tintin.ogg",
 		"sound/music/clouds.s3m", // why was this even removed back in 2013, unused since then btw
-		"sound/music/wire_-_tintin_on_the_moon.xm" // yes, tracker music works perfectly somehow, thank god
+		"sound/music/wire_-_tintin_on_the_moon.xm", // yes, tracker music works perfectly somehow, thank god
 		))
 
 	if(SNOW_THEME)
