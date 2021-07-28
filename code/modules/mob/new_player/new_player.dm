@@ -535,27 +535,25 @@
 			if(job.priority)
 				highprior[job] = active
 				department = 1
-				continue
-			if(job.title in command_positions)
+			else if(job.title in command_positions)
 				heads[job] = active
 				department = 1
-				continue
-			if(job.title in security_positions)
+			else if(job.title in security_positions)
 				sec[job] = active
 				department = 1
-			if(job.title in engineering_positions)
+			else if(job.title in engineering_positions)
 				eng[job] = active
 				department = 1
-			if(job.title in medical_positions)
+			else if(job.title in medical_positions)
 				med[job] = active
 				department = 1
-			if(job.title in science_positions)
+			else if(job.title in science_positions)
 				sci[job] = active
 				department = 1
-			if(job.title in cargo_positions)
+			else if(job.title in cargo_positions)
 				cgo[job] = active
 				department = 1
-			if(job.title in civilian_positions)
+			else if(job.title in civilian_positions)
 				civ[job] = active
 				department = 1
 			if(!department)
