@@ -3639,11 +3639,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 8,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
-		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 4,
 		)
 	contraband = list(
 		/obj/item/weapon/storage/pill_bottle/zambiscuits = 2,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 4,
+		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 30,
 		)
 	prices = list(
