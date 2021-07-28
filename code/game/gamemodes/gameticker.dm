@@ -55,10 +55,12 @@ var/datum/controller/gameticker/ticker
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
-	if(SNOW_THEME)
-		var/path = "sound/music/xmas/"
+	var/path = "sound/music/login/"
+	if(Holiday == APRIL_FOOLS_DAY)
+		path = "sound/music/aprilfools/"
+	else if(SNOW_THEME)
+		path = "sound/music/xmas/"
 	else
-		var/path = "sound/music/login/"
 		var/list/filenames = flist(path)
 		for(var/filename in filenames)
 			if(copytext(filename, length(filename)) == "/")
