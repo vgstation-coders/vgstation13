@@ -55,41 +55,15 @@ var/datum/controller/gameticker/ticker
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
-	var/oursong = file(pick(
-		"sound/music/space.ogg",
-		"sound/music/traitor.ogg",
-		"sound/music/space_oddity.ogg",
-		"sound/music/title1.mod", // converted to original format, only lost 100kb of 700 sadly
-		"sound/music/title2.ogg",
-		"sound/music/title3.ogg",
-		"sound/music/clown.ogg",
-		"sound/music/robocop.ogg",
-		"sound/music/street_cleaner_robocop.ogg",
-		"sound/music/gaytony.ogg",
-		"sound/music/rocketman.ogg",
-		"sound/music/2525.ogg",
-		"sound/music/moonbaseoddity.ogg",
-		"sound/music/whatisthissong.ogg",
-		"sound/music/space_asshole.ogg",
-		"sound/music/starman.ogg",
-		"sound/music/Lou_Reed_-_Satellite_of_Love.ogg",
-		"sound/music/dawsonschristian.ogg",
-		"sound/music/carmenmirandasghost.ogg",
-		"sound/music/twilight.ogg", 
-		"sound/music/tintin.ogg",
-		"sound/music/clouds.s3m", // why was this even removed back in 2013, unused since then btw
-		"sound/music/wire_-_tintin_on_the_moon.xm", // yes, tracker music works perfectly somehow, thank god
-		))
-
 	if(SNOW_THEME)
 		var/path = "sound/music/xmas/"
+	else
+		var/path = "sound/music/login/"
 		var/list/filenames = flist(path)
 		for(var/filename in filenames)
 			if(copytext(filename, length(filename)) == "/")
 				filenames -= filename
 		login_music = file("[path][pick(filenames)]")
-	else
-		login_music = fcopy_rsc(oursong)
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
