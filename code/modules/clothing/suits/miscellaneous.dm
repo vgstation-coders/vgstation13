@@ -963,8 +963,9 @@ obj/item/clothing/suit/cassock
 	if (!active) //no explosion with no active vest, dummy
 		return
 	
-	user.handle_suicide_bomb_cause()
+	var/message_say = user.handle_suicide_bomb_cause()
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
+	user.say(message_say)
 	explosion(user, 1, 3, 6)
 	message_admins("[user] has detonated \the [src]!")
 	qdel(src) //Just in case

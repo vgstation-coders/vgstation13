@@ -73,7 +73,7 @@
 
 	if(custom_message)
 		message_say = "FOR [uppertext(custom_message)]!"
-	say(message_say)
+	return message_say
 
 /mob/living/carbon/attempt_suicide(forced = 0, suicide_set = 1)
 
