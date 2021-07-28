@@ -531,32 +531,23 @@
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
-			var/department = 0
 			if(job.priority)
 				highprior[job] = active
-				department = 1
 			else if(job.title in command_positions)
 				heads[job] = active
-				department = 1
 			else if(job.title in security_positions)
 				sec[job] = active
-				department = 1
 			else if(job.title in engineering_positions)
 				eng[job] = active
-				department = 1
 			else if(job.title in medical_positions)
 				med[job] = active
-				department = 1
 			else if(job.title in science_positions)
 				sci[job] = active
-				department = 1
 			else if(job.title in cargo_positions)
 				cgo[job] = active
-				department = 1
 			else if(job.title in civilian_positions)
 				civ[job] = active
-				department = 1
-			if(!department)
+			else
 				misc[job] = active
 	
 	if(highprior.len > 0)
