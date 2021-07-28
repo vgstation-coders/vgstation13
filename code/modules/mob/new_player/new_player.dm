@@ -535,6 +535,7 @@
 			if(job.priority)
 				highprior[job] = active
 				department = 1
+				continue
 			if(job.title in command_positions)
 				heads[job] = active
 				department = 1
