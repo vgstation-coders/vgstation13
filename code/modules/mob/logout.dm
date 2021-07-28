@@ -22,6 +22,8 @@
 
 	clear_fullscreens(FALSE, 0)
 
+	RemoveAllUIs() // Removes mind UIs
+
 	remove_screen_objs() //Used to remove hud elements
 
 	if (src in science_goggles_wearers)

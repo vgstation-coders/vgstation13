@@ -204,6 +204,7 @@ var/datum/controller/gameticker/ticker
 
 	gamestart_time = world.time / 10
 
+	init_mind_ui()
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
 	collect_minds()
