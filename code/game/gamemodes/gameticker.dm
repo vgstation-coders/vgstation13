@@ -60,12 +60,11 @@ var/datum/controller/gameticker/ticker
 		path = "sound/music/aprilfools/"
 	else if(SNOW_THEME)
 		path = "sound/music/xmas/"
-	else
-		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
-				filenames -= filename
-		login_music = file("[path][pick(filenames)]")
+	var/list/filenames = flist(path)
+	for(var/filename in filenames)
+		if(copytext(filename, length(filename)) == "/")
+			filenames -= filename
+	login_music = file("[path][pick(filenames)]")
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
