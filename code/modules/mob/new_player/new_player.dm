@@ -523,7 +523,7 @@
 		if(emergency_shuttle.direction == 1 && emergency_shuttle.alert == 1) // Crew transfer initiated
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
-	dat += "Choose from the following open positions:<br><table class='manifest' width='480px'><tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th></tr>"
+	dat += "Choose from the following open positions:<br><table class='manifest' width='320px'><tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th></tr>"
 	var/color = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
@@ -699,7 +699,7 @@
 
 	dat += "</table>"
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=480x640;can_close=1")
+	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
 /mob/new_player/proc/create_character()
