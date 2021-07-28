@@ -1533,6 +1533,9 @@ Use this proc preferably at the end of an equipment loadout
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
+	if (timestopped)
+		return 0 // update_canmove() is called on all affected mobs right as the timestop ends
+
 	if (locked_to)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (category && ~category.flags & LOCKED_CAN_LIE_AND_STAND)
