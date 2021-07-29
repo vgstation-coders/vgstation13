@@ -148,12 +148,16 @@
 	icon_state = "backgroundLEFT"
 	layer = MIND_UI_BACK
 	offset_y = -117
+	var/list/grad_images_small = list() // we keep those alive so we don't have to create new images every times
+	var/list/grad_images_large = list()
 
 /obj/abstract/mind_ui_element/blob_point_gauge/UpdateIcon()
 	var/mob/camera/blob/M = GetUser()
 	if(!istype(M))
 		return
 	overlays.len = 0
+
+	// gauge
 
 	var/image/gauge = image('icons/ui/blob/18x200.dmi', src, "points")
 	var/matrix/gauge_matrix = matrix()
@@ -162,6 +166,42 @@
 	gauge.layer = MIND_UI_BUTTON
 	gauge.pixel_y = round(-79 + 100 * (M.blob_points/M.max_blob_points))
 	overlays += gauge
+
+	// graduations
+
+	var/list/small_grads = list()
+	small_grads |= grad_images_small
+	var/list/large_grads = list()
+	large_grads |= grad_images_large
+
+	for (var/i = 0, i < M.max_blob_points, i += 5) // a small 1px stripe every 5 points
+		if (small_grads.len)
+			var/image/I = pick(small_grads)
+			I.pixel_y = round(21 + (i * 200 / M.max_blob_points))
+			overlays += I
+			small_grads -= I
+		else
+			var/image/grad = image('icons/ui/blob/32x32.dmi', src, "grad_small")
+			grad.pixel_y = round(21 + (i * 200 / M.max_blob_points))
+			grad.layer = MIND_UI_BUTTON + 0.5
+			overlays += grad
+			grad_images_small += grad
+
+	for (var/i = 0, i < M.max_blob_points, i += BLOBATTCOST) // a small 1px stripe every 15 points (or however much it costs to expand)
+		if (large_grads.len)
+			var/image/I = pick(large_grads)
+			I.pixel_y = round(21 + (i * 200 / M.max_blob_points))
+			overlays += I
+			large_grads -= I
+		else
+			var/image/grad = image('icons/ui/blob/32x32.dmi', src, "grad_large")
+			grad.pixel_y = round(21 + (i * 200 / M.max_blob_points))
+			grad.layer = MIND_UI_BUTTON + 0.5
+			overlays += grad
+			grad_images_large += grad
+
+	// cover and number display
+
 	var/image/cover = image(icon, src, "coverLEFT")
 	cover.layer = MIND_UI_FRONT
 	cover.maptext = "[M.blob_points]"
@@ -467,6 +507,8 @@
 		return
 	overlays.len = 0
 
+	// health gauge
+
 	var/gauge_state = "health"
 	if (round(M.blob_core.health) <= 66)
 		gauge_state = "healthcrit"
@@ -478,6 +520,21 @@
 	gauge.pixel_x = 3
 	gauge.pixel_y = round(-79 + 100 * (M.blob_core.health/M.blob_core.maxhealth))
 	overlays += gauge
+
+	// objective completion
+
+	var/datum/faction/blob_conglomerate/conglomerate = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	if (conglomerate)
+		var/image/goal = image('icons/ui/blob/18x200.dmi', src, "goal")
+		var/matrix/goal_matrix = matrix()
+		goal_matrix.Scale(1,blobs.len/conglomerate.blobwincount)
+		goal.transform = goal_matrix
+		goal.layer = MIND_UI_BUTTON
+		goal.pixel_y = round(-79 + 100 * (blobs.len/conglomerate.blobwincount))
+		overlays += goal
+
+	// cover and number display
+
 	var/image/cover = image(icon, src, "coverRIGHT")
 	cover.layer = MIND_UI_FRONT
 	cover.maptext = "[M.blob_core.health]"

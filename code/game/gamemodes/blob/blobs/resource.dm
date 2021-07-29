@@ -47,8 +47,8 @@
 	resource_delay = world.time + (8 SECONDS)
 
 	if(overmind)
-	/*	if(blob_looks[looks] == 64)
-			anim(target = loc, a_icon = icon, flick_anim = "resourcepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)*/
+		if(blob_looks[looks] == 64)
+			anim(target = loc, a_icon = icon, flick_anim = "resourcepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)
 		overmind.add_points(1)
 
 	return 1

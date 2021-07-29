@@ -96,7 +96,7 @@
 	if(!spawning)//no expanding on the first Life() tick
 
 		if(icon_size == 64)
-		//	anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
+			anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
 			for(var/mob/M in viewers(src))
 				M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 

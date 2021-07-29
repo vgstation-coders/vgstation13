@@ -426,7 +426,7 @@ var/list/blob_looks_player = list(//Options available to players
 
 /obj/effect/blob/normal/Delete()
 	..()
-/*
+/*	// Sadly having hundreds of blobs create overlays every few seconds is proving quite laggy
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
 	if(icon_size == 64)
