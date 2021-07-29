@@ -236,7 +236,6 @@ What is the naming convention for planes or layers?
 	#define MIND_UI_BACK 				10
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
-	#define MIND_UI_FRONT 				12
 
 #define ABOVE_HUD_PLANE 		6		// For being above the Head-Up Display
 
