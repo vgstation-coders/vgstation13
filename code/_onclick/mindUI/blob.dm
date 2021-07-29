@@ -123,6 +123,7 @@
 	x = "LEFT"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/blob_point_gauge,
+		/obj/abstract/mind_ui_element/blob_points_count,
 		/obj/abstract/mind_ui_element/blob_mini/normal,
 		/obj/abstract/mind_ui_element/blob_mini/strong,
 		/obj/abstract/mind_ui_element/blob_mini/res,
@@ -194,25 +195,39 @@
 			overlays += I
 			large_grads -= I
 		else
-			var/image/grad = image('icons/ui/blob/32x32.dmi', src, "grad_large")
+			var/image/grad = image('icons/ui/blob/32x32.dmi', src, "grad_big")
 			grad.pixel_y = round(21 + (i * 200 / M.max_blob_points))
 			grad.layer = MIND_UI_BUTTON + 0.5
 			overlays += grad
 			grad_images_large += grad
 
-	// cover and number display
+	// cover
 
 	var/image/cover = image(icon, src, "coverLEFT")
 	cover.layer = MIND_UI_FRONT
-	cover.maptext = "[M.blob_points]"
-	cover.maptext_y = 20
-	if(M.blob_points >= 100)
-		cover.maptext_x = 1
-	else if(M.blob_points >= 10)
-		cover.maptext_x = 4
-	else
-		cover.maptext_x = 7
 	overlays += cover
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/blob_points_count
+	icon = 'icons/ui/blob/21x242.dmi'
+	icon_state = ""
+	layer = MIND_UI_FRONT+1
+	mouse_opacity = 0
+
+/obj/abstract/mind_ui_element/blob_points_count/UpdateIcon()
+	var/mob/camera/blob/M = GetUser()
+	if(!istype(M))
+		return
+	overlays.len = 0
+	overlays += String2Image("[M.blob_points]")
+	if(M.blob_points >= 100)
+		offset_x = 0
+	else if(M.blob_points >= 10)
+		offset_x = 3
+	else
+		offset_x = 6
+	UpdateUIScreenLoc()
 
 //------------------------------------------------------------
 
@@ -481,6 +496,8 @@
 	x = "RIGHT"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/blob_health_gauge,
+		/obj/abstract/mind_ui_element/blob_health_count,
+		/obj/abstract/mind_ui_element/blob_goal_gauge,
 		/obj/abstract/mind_ui_element/hoverable/blob_power/blob_psionic,
 		/obj/abstract/mind_ui_element/hoverable/blob_power/blob_rally,
 		/obj/abstract/mind_ui_element/hoverable/blob_call,
@@ -507,8 +524,6 @@
 		return
 	overlays.len = 0
 
-	// health gauge
-
 	var/gauge_state = "health"
 	if (round(M.blob_core.health) <= 66)
 		gauge_state = "healthcrit"
@@ -521,8 +536,50 @@
 	gauge.pixel_y = round(-79 + 100 * (M.blob_core.health/M.blob_core.maxhealth))
 	overlays += gauge
 
-	// objective completion
+	var/image/cover = image(icon, src, "coverRIGHT")
+	cover.layer = MIND_UI_FRONT
+	overlays += cover
 
+/obj/abstract/mind_ui_element/blob_health_gauge/Click()
+	var/mob/camera/blob/M = GetUser()
+	if(!istype(M))
+		return
+	if (M.blob_core)
+		M.forceMove(M.blob_core.loc)
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/blob_health_count
+	icon = 'icons/ui/blob/21x242.dmi'
+	icon_state = ""
+	layer = MIND_UI_FRONT+1
+	mouse_opacity = 0
+
+/obj/abstract/mind_ui_element/blob_health_count/UpdateIcon()
+	var/mob/camera/blob/M = GetUser()
+	if(!istype(M) || !M.blob_core)
+		return
+	overlays.len = 0
+	overlays += String2Image("[M.blob_core.health]")
+	if(M.blob_core.health >= 100)
+		offset_x = 3
+	else if(M.blob_core.health >= 10)
+		offset_x = 6
+	else
+		offset_x = 9
+	UpdateUIScreenLoc()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/blob_goal_gauge
+	name = "Goal Progression"
+	icon = 'icons/ui/blob/21x242.dmi'
+	icon_state = ""
+	layer = MIND_UI_BACK
+	offset_y = -117
+
+/obj/abstract/mind_ui_element/blob_goal_gauge/UpdateIcon()
+	overlays.len = 0
 	var/datum/faction/blob_conglomerate/conglomerate = find_active_faction_by_type(/datum/faction/blob_conglomerate)
 	if (conglomerate)
 		var/image/goal = image('icons/ui/blob/18x200.dmi', src, "goal")
@@ -532,27 +589,7 @@
 		goal.layer = MIND_UI_BUTTON
 		goal.pixel_y = round(-79 + 100 * (blobs.len/conglomerate.blobwincount))
 		overlays += goal
-
-	// cover and number display
-
-	var/image/cover = image(icon, src, "coverRIGHT")
-	cover.layer = MIND_UI_FRONT
-	cover.maptext = "[M.blob_core.health]"
-	cover.maptext_y = 21
-	if(M.blob_core.health >= 100)
-		cover.maptext_x = 4
-	else if(M.blob_core.health >= 10)
-		cover.maptext_x = 7
-	else
-		cover.maptext_x = 10
-	overlays += cover
-
-/obj/abstract/mind_ui_element/blob_health_gauge/Click()
-	var/mob/camera/blob/M = GetUser()
-	if(!istype(M))
-		return
-	if (M.blob_core)
-		M.forceMove(M.blob_core.loc)
+		name = "Goal Progression = [round(1000*blobs.len/conglomerate.blobwincount)/10]%"
 
 
 //------------------------------------------------------------

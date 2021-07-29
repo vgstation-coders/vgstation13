@@ -31,7 +31,7 @@
 
 	if(icon_size == 64)
 		flick("factorypulse",src)
-		anim(target = loc, a_icon = icon, flick_anim = "sporepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)
+		anim(target = loc, a_icon = icon, flick_anim = "sporepulse", sleeptime = 15, lay = layer+0.5, offX = -16, offY = -16, alph = 220, plane = BLOB_PLANE)
 		spawn(10)
 			new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 	else

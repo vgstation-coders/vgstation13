@@ -260,6 +260,18 @@ var/list/mind_ui_ID2type = list()
 /obj/abstract/mind_ui_element/proc/UpdateIcon()
 	return
 
+/obj/abstract/mind_ui_element/proc/String2Image(var/string) // only supports numbers right now
+	if (!string)
+		return image('icons/ui/16x16.dmi',"")
+
+	var/image/result = image('icons/ui/16x16.dmi',"")
+	for (var/i = 1 to length(string))
+		var/image/I = image('icons/ui/16x16.dmi',copytext(string,i,i+1))
+		I.pixel_x = (i - 1) * 6
+		result.overlays += I
+	return result
+
+
 
 ////////////////////////////////////////////////////////////////////
 //																  //
