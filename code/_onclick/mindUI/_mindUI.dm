@@ -104,8 +104,6 @@ var/list/mind_ui_ID2type = list()
 	var/list/element_types_to_spawn = list()
 	var/list/sub_uis_to_spawn = list()
 
-	var/visible = TRUE
-
 	var/display_with_parent = FALSE
 
 /datum/mind_ui/New(var/datum/mind/M)
@@ -115,14 +113,16 @@ var/list/mind_ui_ID2type = list()
 	mind = M
 	mind.activeUIs[uniqueID] = src
 	..()
-	for (var/element_type in element_types_to_spawn)
-		elements += new element_type(null, src)
+	SpawnElements()
 	for (var/ui_type in sub_uis_to_spawn)
 		var/datum/mind_ui/child = new ui_type(mind)
 		subUIs += child
 		child.parent = src
 	SendToClient()
 
+/datum/mind_ui/proc/SpawnElements()
+	for (var/element_type in element_types_to_spawn)
+		elements += new element_type(null, src)
 
 // Send every element to the client, called on Login() and when the UI is first added to a mind
 /datum/mind_ui/proc/SendToClient()
@@ -131,7 +131,7 @@ var/list/mind_ui_ID2type = list()
 		if (!M.client)
 			return
 
-		if (!Valid()) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
+		if (!Valid() || display_with_parent) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
 			Hide()
 
 		for (var/obj/abstract/mind_ui_element/element in elements)
@@ -149,7 +149,6 @@ var/list/mind_ui_ID2type = list()
 
 // Makes every element visible
 /datum/mind_ui/proc/Display()
-	visible = TRUE
 	for (var/obj/abstract/mind_ui_element/element in elements)
 		element.Appear()
 	for (var/datum/mind_ui/child in subUIs)
@@ -157,7 +156,6 @@ var/list/mind_ui_ID2type = list()
 			child.Display()
 
 /datum/mind_ui/proc/Hide()
-	visible = FALSE
 	HideChildren()
 	HideElements()
 
@@ -197,6 +195,10 @@ var/list/mind_ui_ID2type = list()
 	else
 		return src
 
+/datum/mind_ui/proc/GetUser()
+	ASSERT(mind && mind.current)
+	return mind.current
+
 ////////////////////////////////////////////////////////////////////
 //																  //
 //							 UI ELEMENT							  //
@@ -204,6 +206,9 @@ var/list/mind_ui_ID2type = list()
 ////////////////////////////////////////////////////////////////////
 
 /obj/abstract/mind_ui_element
+	name = "Undefined UI Element"
+	icon = 'icons/ui/32x32.dmi'
+	icon_state = ""
 	mouse_opacity = 1
 	plane = HUD_PLANE
 
@@ -261,11 +266,17 @@ var/list/mind_ui_ID2type = list()
 //					 RE-LOGIN FAILSAFE							  //
 //																  //
 ////////////////////////////////////////////////////////////////////
-
-/datum/mind/proc/ReLoginUIFailsafe() // Checks that the mob isn't missing a given UI for some reason, called by ResendAllUIs() on mob/living/Login()
+ // Checks that the mob isn't missing a given UI for some reason, called by ResendAllUIs() on mob/living/Login()
+ // I mean, really this should never happen under normal circumstances but if for example someone placed a Test Dummy inside an adminbus
+ // before they had a mind, their UI would fail to initialize, and this proc makes sure that whoever then takes control of it, won't be lacking the UI.
+ // This isn't necessary for all UI (such as those displayed after interacting with an object), but preferable for some (such as those tied to the player's roles, species, or vehicle)
+/datum/mind/proc/ReLoginUIFailsafe()
 	var/mob/M = current
 	if (!current)
 		return
 	if(istype(M.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 		if (!("Adminbus" in activeUIs))
 			DisplayUI("Adminbus")
+	if(isovermind(M))
+		if (!("Blob" in activeUIs))
+			DisplayUI("Blob")

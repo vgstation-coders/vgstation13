@@ -46,7 +46,7 @@
 	if(!manual_remove && overmind)
 		to_chat(overmind,"<span class='warning'>A factory blob that you had created has been destroyed.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
-		overmind.update_specialblobs()
+		overmind.DisplayUI("Blob Top Panel")
 	..()
 
 /obj/effect/blob/factory/update_icon(var/spawnend = 0)

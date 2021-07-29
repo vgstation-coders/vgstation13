@@ -69,7 +69,6 @@
 		if(istype(BC.stat_datum, /datum/stat/faction/blob))
 			var/datum/stat/faction/blob/BS = BC.stat_datum
 			BS.built_structures.shields++
-	return
 
 /mob/camera/blob/verb/create_resource()
 	set category = "Blob"
@@ -93,7 +92,7 @@
 		return
 
 	for(var/obj/effect/blob/resource/blob in orange(4, T))
-		to_chat(src, "There is a resource blob nearby, move more than 4 tiles away from it!")
+		to_chat(src, "There is a resource blob [get_dist(src,blob)] tiles away, move more than 4 tiles away from it!")
 		return
 
 	if(!can_buy(BLOBRESCOST))
@@ -105,13 +104,12 @@
 	if(R)
 		R.overmind = src
 		special_blobs += R
-		update_specialblobs()
+		DisplayUI("Blob")
 		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
 			var/datum/faction/blob_conglomerate/BC = mind.faction
 			if(istype(BC.stat_datum, /datum/stat/faction/blob))
 				var/datum/stat/faction/blob/BS = BC.stat_datum
 				BS.built_structures.resgens++
-	return
 
 /mob/camera/blob/proc/create_core()
 	set category = "Blob"
@@ -135,7 +133,7 @@
 		return
 
 	for(var/obj/effect/blob/core/blob in orange(15))
-		to_chat(src, "There is another core blob nearby, move more than 15 tiles away from it!")
+		to_chat(src, "There is another core blob [get_dist(src,blob)] tiles away, move more than 15 tiles away from it!")
 		return
 	var/number_of_cores = blob_cores.len
 	var/cost = BLOBCOREBASECOST+(BLOBCORECOSTINC*(number_of_cores-1))
@@ -147,13 +145,14 @@
 
 	B.change_to(/obj/effect/blob/core, src, TRUE)
 
+	DisplayUI("Blob")
+
 	if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
 		var/datum/faction/blob_conglomerate/BC = mind.faction
 		if(istype(BC.stat_datum, /datum/stat/faction/blob))
 			var/datum/stat/faction/blob/BS = BC.stat_datum
 			BS.built_structures.cores++
 
-	return
 
 /mob/camera/blob/verb/create_node()
 	set category = "Blob"
@@ -177,7 +176,7 @@
 		return
 
 	for(var/obj/effect/blob/node/blob in orange(5, T))
-		to_chat(src, "There is another node nearby, move more than 5 tiles away from it!")
+		to_chat(src, "There is another node [get_dist(src,blob)] tiles away, move more than 5 tiles away from it!")
 		return
 
 	if(!can_buy(BLOBNODCOST))
@@ -189,14 +188,13 @@
 	if(N)
 		N.overmind = src
 		special_blobs += N
-		update_specialblobs()
 		max_blob_points += BLOBNDPOINTINC
+		DisplayUI("Blob")
 		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
 			var/datum/faction/blob_conglomerate/BC = mind.faction
 			if(istype(BC.stat_datum, /datum/stat/faction/blob))
 				var/datum/stat/faction/blob/BS = BC.stat_datum
 				BS.built_structures.nodes++
-	return
 
 
 /mob/camera/blob/verb/create_factory()
@@ -220,7 +218,7 @@
 		return
 
 	for(var/obj/effect/blob/factory/blob in orange(7, T))
-		to_chat(src, "There is a factory blob nearby, move more than 7 tiles away from it!")
+		to_chat(src, "There is a factory blob [get_dist(src,blob)] tiles away, move more than 7 tiles away from it!")
 		return
 
 	if(!can_buy(BLOBFACCOST))
@@ -231,13 +229,12 @@
 	if(F)
 		F.overmind = src
 		special_blobs += F
-		update_specialblobs()
+		DisplayUI("Blob")
 		if(mind && istype(mind.faction, /datum/faction/blob_conglomerate))
 			var/datum/faction/blob_conglomerate/BC = mind.faction
 			if(istype(BC.stat_datum, /datum/stat/faction/blob))
 				var/datum/stat/faction/blob/BS = BC.stat_datum
 				BS.built_structures.factories++
-	return
 
 
 /mob/camera/blob/verb/revert()
@@ -260,7 +257,6 @@
 
 	B.manual_remove = 1
 	B.Delete()
-	return
 
 /mob/camera/blob/verb/callblobs()
 	set category = "Blob"
@@ -275,6 +271,7 @@
 
 	var/they_exist = 0
 	for(var/mob/camera/blob/O in blob_overminds)
+		playsound_local(O,'sound/effects/ping_warning.ogg',50,0)
 		if(O != src)
 			they_exist++
 			to_chat(O,"<span class='notice'>[src] is calling for your attention!</span> <b><a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></b>")
@@ -283,8 +280,6 @@
 		to_chat(src,"<span class='notice'>...[they_exist] overmind\s heard your call!</span>")
 	else
 		to_chat(src,"<span class='notice'>...but no one heard you!</span>")
-
-	return
 
 
 /mob/camera/blob/verb/expand_blob_power()
@@ -317,7 +312,6 @@
 
 	delayNextAttack(5)
 	OB.expand(T, 0) //Doesn't give source because we don't care about passive restraint
-	return
 
 
 /mob/camera/blob/verb/rally_spores_power()
@@ -344,7 +338,6 @@
 		if(isturf(BS.loc) && get_dist(BS, T) <= 35)
 			BS.LoseTarget()
 			BS.Goto(pick(surrounding_turfs), BS.move_to_delay)
-	return
 
 /mob/camera/blob/verb/telepathy_power()
 	set category = "Blob"
@@ -369,3 +362,4 @@
 /mob/camera/blob/proc/restrain_blob()
 	restrain_blob = !restrain_blob
 	to_chat(src,"<span class='notice'>You will [restrain_blob ? "now" : "not"] restrain your blobs from passively spreading into walls.</span>")
+	DisplayUI("Blob Left Panel")

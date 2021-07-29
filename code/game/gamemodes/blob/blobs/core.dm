@@ -27,14 +27,20 @@
 	processing_objects.Add(src)
 	creator = C
 	if (!asleep && icon_size == 64)
-		if(!no_morph && new_overmind)
-			flick("core_spawn",src)
+		if(new_overmind)
+			if (!no_morph)
+				flick("core_spawn",src)
 		else
 			icon_state = "cerebrate"
-			flick("morph_core",src)
+			icon_new = "cerebrate"
+			if (!no_morph)
+				flick("morph_core",src)
 	playsound(src, get_sfx("gib"),50,1)
 	if(!overmind && !asleep)
-		create_overmind(new_overmind)
+		if (new_overmind)
+			create_overmind(new_overmind)
+		else
+			recruit_overmind()
 	point_rate = new_rate
 	last_resource_collection = world.time
 	..(loc, looks)
@@ -182,11 +188,11 @@
 
 	if (icon_state == "cerebrate")
 		icon_state = "core"
+		icon_new = "core"
 		flick("morph_cerebrate",src)
 
 	B.special_blobs += src
-	B.hud_used.blob_hud()
-	B.update_specialblobs()
+	B.DisplayUI("Blob")
 
 	if(!B.blob_core.creator)//If this core is the first of its lineage (created by game mode/event/admins, instead of another overmind) it gets to choose its looks.
 		var/new_name = "Blob Overmind ([rand(1, 999)])"
@@ -211,8 +217,6 @@
 		B.name = new_name
 		B.real_name = new_name
 		B.mind.name = new_name
-		B.gui_icons.blob_spawncore.icon_state = ""
-		B.gui_icons.blob_spawncore.name = ""
 		for(var/mob/camera/blob/O in blob_overminds)
 			if(O != B)
 				to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
