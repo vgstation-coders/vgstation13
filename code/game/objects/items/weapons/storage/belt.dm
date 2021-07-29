@@ -36,6 +36,7 @@
 		"/obj/item/tool/wirecutters",
 		"/obj/item/tool/wrench",
 		"/obj/item/device/multitool",
+		"/obj/item/weapon/switchtool",
 		"/obj/item/device/flashlight",
 		"/obj/item/stack/cable_coil",
 		"/obj/item/device/t_scanner",
@@ -51,7 +52,8 @@
 		"/obj/item/device/device_analyser",
 		"/obj/item/device/silicate_sprayer",
 		"/obj/item/device/geiger_counter",
-		"/obj/item/airshield_projector"
+		"/obj/item/airshield_projector",
+		"/obj/item/clothing/gloves"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
