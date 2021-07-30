@@ -351,11 +351,6 @@
 
 	var/turf/T = get_turf(A)
 
-	for(var/atom/AT in T)
-		AT.blob_act(1)
-
-	T.blob_act(1)
-
 	var/obj/effect/blob/is_there_a_blob = (locate(/obj/effect/blob) in T)
 
 	if(penetration && !is_there_a_blob)
@@ -368,6 +363,11 @@
 			pixel_x = PixelX
 			pixel_y = PixelY
 			return
+
+	for(var/atom/AT in T)
+		AT.blob_act(1)
+
+	T.blob_act(1)
 
 	if(is_there_a_blob)
 		do_blob_stuff(loc)
