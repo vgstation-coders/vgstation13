@@ -359,16 +359,15 @@
 	var/obj/effect/blob/is_there_a_blob = (locate(/obj/effect/blob) in T)
 
 	if(penetration && !is_there_a_blob)
-		if((penetration > 0) && (penetration < A.penetration_dampening))	//if the obstacle is too resistant, we don't go through it.
-			penetration = 0
-		penetration = max(0, penetration - A.penetration_dampening)
+		if(penetration >= A.penetration_dampening)	//if the obstacle is too resistant, we don't go through it.
+			penetration = max(0, penetration - A.penetration_dampening)
 
-		new/obj/effect/blob/shield(T, no_morph = 1) // if the bullet goes through, we leave a strong blob on it
-		forceMove(T)
-		update_pixel()
-		pixel_x = PixelX
-		pixel_y = PixelY
-		return
+			new/obj/effect/blob/shield(T, no_morph = 1) // if the meteor goes through, we leave a strong blob on it to prevent sudden airflow
+			forceMove(T)
+			update_pixel()
+			pixel_x = PixelX
+			pixel_y = PixelY
+			return
 
 	if(is_there_a_blob)
 		do_blob_stuff(loc)
