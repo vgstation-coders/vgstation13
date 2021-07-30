@@ -370,7 +370,10 @@
 	T.blob_act(1)
 
 	if(is_there_a_blob)
-		do_blob_stuff(loc)
+		if (loc)
+			do_blob_stuff(loc)
+		else
+			do_blob_stuff(get_step(T,dir))
 	else
 		do_blob_stuff(T)
 
@@ -424,8 +427,8 @@ var/list/blob_candidates = list()
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
-	log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
-	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
+	log_admin("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
+	message_admins("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))
 		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
 	else
