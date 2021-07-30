@@ -328,6 +328,8 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
+	if (flags & INVULNERABLE)
+		return
 	var/blood = 0
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))

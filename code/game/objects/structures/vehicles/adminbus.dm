@@ -458,6 +458,9 @@
 	visible_message("<span class='warning'>The bus withstands the explosion with no damage.</span>")
 	return
 
+/obj/structure/bed/chair/vehicle/adminbus/blob_act()
+	return
+
 /obj/structure/bed/chair/vehicle/adminbus/cultify()
 	return
 
