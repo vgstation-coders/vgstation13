@@ -334,7 +334,7 @@
 		return
 
 	if(ismob(A))
-		src.forceMove(A.loc)
+		forceMove(A.loc)
 		A.blob_act()
 		return
 
@@ -358,6 +358,18 @@
 
 	var/obj/effect/blob/is_there_a_blob = (locate(/obj/effect/blob) in T)
 
+	if(penetration && !is_there_a_blob)
+		if((penetration > 0) && (penetration < A.penetration_dampening))	//if the obstacle is too resistant, we don't go through it.
+			penetration = 0
+		penetration = max(0, penetration - A.penetration_dampening)
+
+		new/obj/effect/blob/shield(T, no_morph = 1) // if the bullet goes through, we leave a strong blob on it
+		forceMove(T)
+		update_pixel()
+		pixel_x = PixelX
+		pixel_y = PixelY
+		return
+
 	if(is_there_a_blob)
 		do_blob_stuff(loc)
 	else
@@ -374,6 +386,7 @@
 	name = "Blob Node"
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteornode"
+	penetration = 10
 
 /obj/item/projectile/meteor/blob/node/do_blob_stuff(var/turf/T)
 	new/obj/effect/blob/node(T, no_morph = 1)
@@ -384,6 +397,7 @@ var/list/blob_candidates = list()
 	name = "Blob Core"
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteorcore"
+	penetration = 20
 	var/client/blob_candidate = null
 	var/could_reenter_corpse = FALSE
 
