@@ -409,6 +409,8 @@
 			totally_not_blood = "Milk"
 		if (PALE_BLOOD)//#272727
 			totally_not_blood = "Carbon"
+		if (GHOUL_BLOOD)//#7FFF00
+			totally_not_blood = "Lime Juice"
 
 	glass_name = "glass of [totally_not_blood]"
 	glass_desc = "Are you sure this is [totally_not_blood]?"
