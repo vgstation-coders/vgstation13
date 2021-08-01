@@ -70,7 +70,7 @@
 /datum/next_map/dorf/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) // get the current date
-	if (MM != 8 && DD != 8) // Dwarf fortress release date
+	if(!(MM == 8 && DD == 8)) // Dwarf fortress release date
 		var/msg = "Skipping map [name] as this is not the release date of Dwarf Fortress."
 		message_admins(msg)
 		warning(msg)
