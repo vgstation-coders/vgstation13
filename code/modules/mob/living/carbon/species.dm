@@ -1050,7 +1050,7 @@ var/list/has_died_as_golem = list()
 	brute_mod = 0.8
 	move_speed_multiplier = 2
 
-	blood_color = "#7FFF00"
+	blood_color = GHOUL_BLOOD
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
 
