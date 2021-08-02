@@ -424,6 +424,12 @@
 					to_chat(user, "<span class='notice'>You may not climb into \the [src] while its door is closed.</span>")
 					return
 
+/obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD(var/mob/user)
+	user.DisplayUI("Adminbus")
+
+/obj/structure/bed/chair/vehicle/adminbus/proc/remove_HUD(var/mob/M)
+	M.HideUI("Adminbus")
+
 /obj/structure/bed/chair/vehicle/adminbus/proc/update_rearview()
 	if(occupant)
 		occupant.UpdateUIElementIcon(/obj/abstract/mind_ui_element/adminbus_top_panel)
@@ -641,15 +647,19 @@
 	. = ..()
 	if (isliving(AM))
 		var/mob/living/M = AM
+		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		M.flags |= INVULNERABLE
-		M.DisplayUI("Adminbus")
+		bus.add_HUD(M)
+		M.lazy_register_event(/lazy_event/on_living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
 /datum/locking_category/adminbus/unlock(var/atom/movable/AM)
 	. = ..()
 	if (isliving(AM))
 		var/mob/living/M = AM
-		M.HideUI("Adminbus")
+		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		M.flags &= ~INVULNERABLE
+		bus.remove_HUD(M)
+		M.lazy_unregister_event(/lazy_event/on_living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
 /obj/structure/bed/chair/vehicle/adminbus/acidable()
 	return 0

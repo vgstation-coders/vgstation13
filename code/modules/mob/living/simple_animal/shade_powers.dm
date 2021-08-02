@@ -16,6 +16,7 @@
 	if (!istype(loc, /obj/item/weapon/melee/soulblade))
 		return
 	DisplayUI("Soulblade")
+	lazy_register_event(/lazy_event/on_living_login, src, /mob/living/simple_animal/shade/proc/add_HUD)
 	if (client)
 		client.CAN_MOVE_DIAGONALLY = 1
 		client.screen += list(
@@ -43,12 +44,16 @@
 			healths2,
 			)
 	HideUI("Soulblade")
+	lazy_unregister_event(/lazy_event/on_living_login, src, /mob/living/simple_animal/shade/proc/add_HUD)
 	for(var/spell/soulblade/spell_to_remove in spell_list)
 		remove_spell(spell_to_remove)
 
 	var/datum/role/cultist/C = iscultist(src)
 	if (C)
 		C.logo_state = "cult-logo"
+
+/mob/living/simple_animal/shade/proc/add_HUD(var/mob/user)
+	DisplayUI("Soulblade")
 
 /spell/soulblade
 	panel = "Cult"
