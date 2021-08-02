@@ -55,38 +55,21 @@ var/datum/controller/gameticker/ticker
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
-	var/oursong = file(pick(
-		"sound/music/space.ogg",
-		"sound/music/traitor.ogg",
-		"sound/music/space_oddity.ogg",
-		"sound/music/title1.ogg",
-		"sound/music/title2.ogg",
-		"sound/music/title3.ogg",
-		"sound/music/clown.ogg",
-		"sound/music/robocop.ogg",
-		"sound/music/street_cleaner_robocop.ogg",
-		"sound/music/gaytony.ogg",
-		"sound/music/rocketman.ogg",
-		"sound/music/2525.ogg",
-		"sound/music/moonbaseoddity.ogg",
-		"sound/music/whatisthissong.ogg",
-		"sound/music/space_asshole.ogg",
-		"sound/music/starman.ogg",
-		"sound/music/Lou_Reed_-_Satellite_of_Love.ogg",
-		"sound/music/dawsonschristian.ogg",
-		"sound/music/carmenmirandasghost.ogg",
-		"sound/music/twilight.ogg",
-		))
-
-	if(SNOW_THEME)
-		var/path = "sound/music/xmas/"
-		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
-				filenames -= filename
-		login_music = file("[path][pick(filenames)]")
+	var/path = "sound/music/login/"
+	if(Holiday == APRIL_FOOLS_DAY)
+		path = "sound/music/aprilfools/"
+	else if(SNOW_THEME)
+		path = "sound/music/xmas/"
+	var/list/filenames = flist(path)
+	for(var/filename in filenames)
+		if(copytext(filename, length(filename)) == "/")
+			filenames -= filename
+	if (map.nameShort == "lamprey")
+		login_music = file("sound/music/lampreytheme.ogg")
+	else if (map.nameShort == "dorf")
+		login_music = file("sound/music/b12_combined_start.ogg")
 	else
-		login_music = fcopy_rsc(oursong)
+		login_music = file("[path][pick(filenames)]")
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
