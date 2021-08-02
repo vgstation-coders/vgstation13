@@ -65,6 +65,8 @@
 
 /spell/soulblade/after_cast(list/targets)
 	..()
+	var/obj/item/weapon/melee/soulblade/SB = holder.loc
+	SB.blood = max(0,SB.blood-blood_cost)
 	var/mob/shade = holder
 	shade.DisplayUI("Soulblade")
 
