@@ -31,7 +31,7 @@
 
 	if(icon_size == 64)
 		flick("factorypulse",src)
-		anim(target = loc, a_icon = icon, flick_anim = "sporepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)
+		anim(target = loc, a_icon = icon, flick_anim = "sporepulse", sleeptime = 15, lay = layer+0.5, offX = -16, offY = -16, alph = 220, plane = BLOB_PLANE)
 		spawn(10)
 			new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 	else
@@ -46,7 +46,7 @@
 	if(!manual_remove && overmind)
 		to_chat(overmind,"<span class='warning'>A factory blob that you had created has been destroyed.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
-		overmind.update_specialblobs()
+		overmind.DisplayUI("Blob Top Panel")
 	..()
 
 /obj/effect/blob/factory/update_icon(var/spawnend = 0)

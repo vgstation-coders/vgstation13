@@ -60,7 +60,7 @@ var/list/blob_overminds = list()
 	time_since_last_pulse = world.time
 
 	if(icon_size == 64)
-		if(!asleep && spawning && !no_morph)
+		if(!asleep && spawning && !no_morph && !istype(src, /obj/effect/blob/core))
 			icon_state = initial(icon_state) + "_spawn"
 			spawn(10)
 				spawning = 0//for sprites
@@ -426,7 +426,7 @@ var/list/blob_looks_player = list(//Options available to players
 
 /obj/effect/blob/normal/Delete()
 	..()
-/*
+/*	// Sadly having hundreds of blobs create overlays every few seconds is proving quite laggy
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
 	if(icon_size == 64)
