@@ -65,7 +65,8 @@
 
 /spell/soulblade/after_cast(list/targets)
 	..()
-	DisplayUI("Soulblade")
+	var/mob/shade = holder
+	shade.DisplayUI("Soulblade")
 
 
 /////////////////////////////

@@ -116,4 +116,4 @@
 		spawn(blade.movespeed)
 			move_delay = 0
 
-	M.DisplayUI("Soulblade")
+	controller.DisplayUI("Soulblade")

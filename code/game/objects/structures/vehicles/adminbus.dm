@@ -641,7 +641,6 @@
 	. = ..()
 	if (isliving(AM))
 		var/mob/living/M = AM
-		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		M.flags |= INVULNERABLE
 		M.DisplayUI("Adminbus")
 
@@ -649,7 +648,6 @@
 	. = ..()
 	if (isliving(AM))
 		var/mob/living/M = AM
-		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		M.HideUI("Adminbus")
 		M.flags &= ~INVULNERABLE
 
