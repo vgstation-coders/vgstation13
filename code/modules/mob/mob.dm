@@ -62,7 +62,6 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
-	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
@@ -230,24 +229,6 @@
 			if(client)
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
-		if (isshade(src) && gui_icons)
-			if(gui_icons.soulblade_bgLEFT)
-				qdel(gui_icons.soulblade_bgLEFT)
-				if(client)
-					client.screen -= gui_icons.soulblade_bgLEFT
-				gui_icons.soulblade_bgLEFT = null
-			if(gui_icons.soulblade_bloodbar)
-				qdel(gui_icons.soulblade_bloodbar)
-				if(client)
-					client.screen -= gui_icons.soulblade_bloodbar
-				gui_icons.soulblade_bloodbar = null
-			if(gui_icons.soulblade_coverLEFT)
-				qdel(gui_icons.soulblade_coverLEFT)
-				if(client)
-					client.screen -= gui_icons.soulblade_coverLEFT
-				gui_icons.soulblade_coverLEFT = null
-
-
 
 /mob/proc/cultify()
 	return
