@@ -100,7 +100,7 @@ Attach to transfer valve and open. BOOM.
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
-	var/obj/effect/effect/foam/fire/W = locate() in contents
+	var/obj/effect/foam/fire/W = locate() in contents
 	if(istype(W))
 		return 0
 	if(fire_protection > world.time-300)
@@ -237,7 +237,7 @@ Attach to transfer valve and open. BOOM.
 					continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
-				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
+				var/obj/effect/foam/fire/W = locate() in enemy_tile
 				if(istype(W))
 					firelevel -= 3
 					continue

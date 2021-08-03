@@ -7,12 +7,12 @@
 	item_state = "flashbang"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	var/datum/effect/effect/system/smoke_spread/bad/smoke
+	var/datum/effect/system/smoke_spread/bad/smoke
 	mech_flags = null
 
 /obj/item/weapon/grenade/smokebomb/New()
 	..()
-	smoke = new /datum/effect/effect/system/smoke_spread/bad
+	smoke = new /datum/effect/system/smoke_spread/bad
 	smoke.attach(src)
 
 /obj/item/weapon/grenade/smokebomb/Destroy()

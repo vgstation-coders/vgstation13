@@ -149,7 +149,7 @@
 /obj/machinery/suit_modifier/proc/finished_animation()
 	suit_overlay.icon_state = null
 	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
-	new /obj/effect/effect/smoke(get_turf(src))
+	new /obj/effect/smoke(get_turf(src))
 
 /proc/filter_suit_list(mob/living/carbon/human/guy, list/suit_list)
 	var/guy_access = guy.GetAccess()

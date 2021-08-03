@@ -272,7 +272,7 @@ var/list/virusdishes = list()
 		last_cloud_time = world.time
 		var/list/L = list()
 		L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
-		new /obj/effect/effect/pathogen_cloud/core(get_turf(src), last_openner, virus_copylist(L), FALSE)
+		new /obj/effect/pathogen_cloud/core(get_turf(src), last_openner, virus_copylist(L), FALSE)
 
 
 /obj/item/weapon/virusdish/random
@@ -370,7 +370,7 @@ var/list/virusdishes = list()
 			var/list/L = list()
 			L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
 			while (strength > 0)
-				new /obj/effect/effect/pathogen_cloud/core(get_turf(src), user, virus_copylist(L), FALSE)
+				new /obj/effect/pathogen_cloud/core(get_turf(src), user, virus_copylist(L), FALSE)
 				strength -= 40
 	qdel(src)
 
@@ -429,7 +429,7 @@ var/list/virusdishes = list()
 	desc = "A disk for storing the structure of a pathogen's Glycol Nucleic Acid pertaining to a specific symptom."
 	icon = 'icons/obj/datadisks.dmi'
 	icon_state = "disk_virus"
-	var/datum/disease2/effect/effect = null
+	var/datum/disease2/effect = null
 	var/stage = 1
 
 /obj/item/weapon/disk/disease/premade/New()
