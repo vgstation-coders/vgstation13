@@ -1627,6 +1627,7 @@ var/proccalls = 1
 #define MUSHROOM_BLOOD	"#D3D3D3"
 #define INSECT_BLOOD	"#EBECE6"
 #define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
+#define GHOUL_BLOOD		"#7FFF00"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
