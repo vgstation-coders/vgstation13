@@ -50,7 +50,7 @@
 
 /obj/machinery/bodyscanner/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)) && occupant)
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)) && occupant)
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
@@ -104,7 +104,7 @@
 	for(var/obj/OO in src)
 		OO.forceMove(loc)
 	add_fingerprint(user)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -174,7 +174,7 @@
 	for(var/obj/O in src)
 		qdel(O)
 	src.add_fingerprint(usr)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -238,7 +238,7 @@
 	update_icon()
 	src.add_fingerprint(user)
 	qdel(G)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
 		set_light(light_range_on, light_power_on)
 	return
 
@@ -275,7 +275,7 @@
 
 
 /obj/machinery/bodyscanner/process()
-	if (stat & (BROKEN | NOPOWER | MAINT | EMPED))
+	if (stat & (BROKEN | NOPOWER | MAINT | EMPED | FORCEDISABLE))
 		use_power = 0
 		return
 	if (occupant)

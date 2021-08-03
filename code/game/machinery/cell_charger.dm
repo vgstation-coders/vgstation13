@@ -51,7 +51,7 @@
 /obj/machinery/cell_charger/proc/updateicon()
 	icon_state = "ccharger[charging ? 1 : 0]"
 
-	if(charging && !(stat & (BROKEN|NOPOWER)) )
+	if(charging && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)) )
 		var/newlevel = 	round(charging.percent() * 4.0 / 99)
 //		to_chat(world, "nl: [newlevel]")
 
@@ -125,7 +125,7 @@
 	. = ..()
 
 /obj/machinery/cell_charger/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(charging)
 		charging.emp_act(severity)
@@ -134,7 +134,7 @@
 
 /obj/machinery/cell_charger/process()
 //	to_chat(world, "ccpt [charging] [stat]")
-	if(!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
+	if(!charging || (stat & (BROKEN|NOPOWER|FORCEDISABLE)) || !anchored)
 		return
 
 	if(charging.give(transfer_rate*transfer_rate_coeff * (transfer_efficiency+transfer_efficiency_bonus) * (emagged ? 0.25 : 1)))//Inefficiency (Joule effect + other shenanigans)  //Lose most of it if emagged

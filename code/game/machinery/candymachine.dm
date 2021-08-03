@@ -14,7 +14,7 @@
 	use_power = 0
 
 /obj/machinery/sweet/attackby(var/obj/O as obj, var/mob/user as mob)
-	if (stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return ..()
 
 	if(istype(O, /obj/item/weapon/coin/pomf))

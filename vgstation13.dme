@@ -516,6 +516,7 @@
 #include "code\datums\wires\rnd_wires.dm"
 #include "code\datums\wires\robot.dm"
 #include "code\datums\wires\transmitter.dm"
+#include "code\datums\wires\universal.dm"
 #include "code\datums\wires\vending.dm"
 #include "code\datums\wires\wires.dm"
 #include "code\defines\byondtools.dm"

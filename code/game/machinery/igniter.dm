@@ -30,7 +30,7 @@ var/global/list/igniters = list()
 	return
 
 /obj/machinery/igniter/process()	//ugh why is this even in process()?
-	if (src.on && !(stat & NOPOWER) )
+	if (src.on && !(stat & (NOPOWER|FORCEDISABLE)) )
 		var/turf/location = src.loc
 		if (isturf(location))
 			location.hotspot_expose(1000,500,1,surfaces=0)
@@ -52,7 +52,7 @@ var/global/list/igniters = list()
 	..()
 
 /obj/machinery/igniter/power_change()
-	if(!( stat & NOPOWER) )
+	if(!( stat & (FORCEDISABLE|NOPOWER)) )
 		icon_state = "igniter[src.on]"
 	else
 		icon_state = "igniter0"
@@ -150,7 +150,7 @@ var/global/list/igniters = list()
 	return 1
 
 /obj/machinery/sparker/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	do_spark()
@@ -164,7 +164,7 @@ var/global/list/igniters = list()
 
 /obj/machinery/ignition_switch/attack_hand(mob/user as mob)
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(active)
 		return

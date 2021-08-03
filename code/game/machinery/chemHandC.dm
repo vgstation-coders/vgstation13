@@ -60,7 +60,7 @@
 			icon_state = "[initial(icon_state)]_off"
 
 /obj/machinery/chemheater/process()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(held_container && heating)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)

@@ -913,12 +913,12 @@
 		var/which = text2num(href_list["changeBlockLabel"])
 		var/datum/block_label/label = labels[which]
 		var/text = copytext(sanitize(input(usr, "New Label:", "Edit Label", label.name) as text|null),1,MAX_NAME_LEN)
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(text) //you can color the tab without a label, sure why not
 			label.name = text
 		var/newcolor = input("Select Tab Color", "Edit Label", label.color) as color
-		if(!Adjacent(usr) || usr.incapacitated() || (stat & (BROKEN | NOPOWER | EMPED)))
+		if(!Adjacent(usr) || usr.incapacitated() || (stat & (FORCEDISABLE | BROKEN | NOPOWER | EMPED)))
 			return
 		if(newcolor)
 			label.color = newcolor

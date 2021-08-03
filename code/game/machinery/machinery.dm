@@ -386,7 +386,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (BROKEN|NOPOWER|MALFLOCKED))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return 1
 	if(href_list["close"])
 		return
@@ -441,7 +441,7 @@ Class Procs:
 	return src.attack_hand(user)
 
 /obj/machinery/attack_hand(mob/user as mob, var/ignore_brain_damage = 0)
-	if(stat & (NOPOWER|BROKEN|MAINT))
+	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return 1
 
 	if(user.lying || (user.stat && !canGhostRead(user))) // Ghost read-only
@@ -449,12 +449,6 @@ Class Procs:
 
 	if(istype(user,/mob/dead/observer))
 		return 0
-
-	if(stat & ELECTRIFIED)
-		shock(user, 100)
-	
-	if((stat & MALFLOCKED))
-		return 1
 
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")

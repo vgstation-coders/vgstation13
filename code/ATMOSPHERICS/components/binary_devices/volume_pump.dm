@@ -37,7 +37,7 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/volume_pump/update_icon(var/adjacent_procd)
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
-	else if(stat & MALFLOCKED)
+	else if(stat & FORCEDISABLE)
 		icon_state = "intact_malflocked"
 	else if (pump_stalled)
 		icon_state="intact_stalled"

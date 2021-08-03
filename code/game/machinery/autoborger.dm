@@ -36,7 +36,7 @@
 
 /obj/machinery/autoborger/update_icon()
 	..()
-	if(stat & (BROKEN|NOPOWER) || cooldown_time > world.time)
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE) || cooldown_time > world.time)
 		icon_state = "separator-AO0"
 	else
 		icon_state = initial(icon_state)
@@ -60,7 +60,7 @@
 			AM.forceMove(src.loc)
 
 /obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(cooldown_state)
 		return

@@ -27,7 +27,7 @@ var/list/doppler_arrays = list()
 	ui_interact(user)
 
 /obj/machinery/computer/bhangmeter/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if(user.client)
@@ -105,7 +105,7 @@ var/list/doppler_arrays = list()
 	onclose(user, "bhangmeter")
 	return
 /obj/machinery/computer/bhangmeter/proc/sense_explosion(var/x0, var/y0, var/z0, var/devastation_range, var/heavy_impact_range, var/light_impact_range, var/took, cap = 0, var/verbose = 1)
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(z != z0)
 		return

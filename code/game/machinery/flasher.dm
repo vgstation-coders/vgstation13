@@ -111,7 +111,7 @@ var/list/obj/machinery/flasher/flashers = list()
 
 
 /obj/machinery/flasher/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if(prob(75/severity))
@@ -149,7 +149,7 @@ var/list/obj/machinery/flasher/flashers = list()
 
 /obj/machinery/flasher_button/attack_hand(mob/user as mob)
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(active)
 		return

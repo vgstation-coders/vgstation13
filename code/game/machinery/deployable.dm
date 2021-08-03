@@ -70,7 +70,7 @@
 			take_damage(25)
 
 /obj/machinery/deployable/barrier/emp_act(var/severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(prob(50/severity))
 		anchored = !anchored

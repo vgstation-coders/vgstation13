@@ -28,7 +28,7 @@
 
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
 	if(node1)
-		if(on && !(stat & NOPOWER))
+		if(on && !(stat & (NOPOWER|FORCEDISABLE)))
 			icon_state = "hon"
 		else
 			icon_state = "hoff"
@@ -49,7 +49,7 @@
 	. = ..()
 	injecting = 0
 
-	if(!on || stat & NOPOWER)
+	if(!on || stat & (FORCEDISABLE|NOPOWER))
 		return
 
 	if(air_contents.temperature > 0)

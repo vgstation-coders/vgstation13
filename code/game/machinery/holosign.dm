@@ -29,14 +29,14 @@ var/list/obj/machinery/holosign/holosigns = list()
 	..()
 
 /obj/machinery/holosign/proc/toggle(var/active)
-	if (stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	lit = active
 	update_icon()
 
 /obj/machinery/holosign/update_icon()
 	overlays.len = 0
-	if(!lit || (stat & (NOPOWER|BROKEN)))
+	if(!lit || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		set_light(0)
 		return
 	if(!overlay)
@@ -125,7 +125,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 /obj/machinery/holosign_switch/attack_hand(mob/user as mob)
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	src.add_fingerprint(usr)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	add_fingerprint(user)
 
@@ -154,7 +154,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 
 /obj/machinery/holosign_switch/update_icon()
 	overlays.len = 0
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		icon_state = "light-p"
 	else
 		icon_state = active ? "light1" : "light0"

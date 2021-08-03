@@ -529,9 +529,9 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define POWEROFF	4		// unused
 #define MAINT		8		// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
-#define FORCEDISABLE 32 	//disabled by grid check event, only used on SMES units
-#define MALFLOCKED 	64		//disabled by a malf AI
-#define ELECTRIFIED 128		//electrified
+#define FORCEDISABLE 32 	//disabled either via wire pulse, grid check, or malf ai
+#define NOAICONTROL 	64		//ai control disable
+
 
 //bitflags for door switches.
 #define OPEN	1

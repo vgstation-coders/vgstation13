@@ -42,15 +42,15 @@ air2.volume
 /obj/machinery/atmospherics/binary/pump/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
-	else if(stat & MALFLOCKED)
-		icon_state = "intact_malflocked"
+	else if(stat & FORCEDISABLE)
+		icon_state = "intact_FORCEDISABLE"
 	else if(node1 && node2)
 		icon_state = "intact_[on?("on"):("off")]"
 	..()
 
 /obj/machinery/atmospherics/binary/pump/process()
 	. = ..()
-	if((stat & (NOPOWER|BROKEN|MALFLOCKED)) || !on)
+	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || !on)
 		return
 
 	var/output_starting_pressure = air2.return_pressure()
@@ -206,7 +206,7 @@ air2.volume
 /obj/machinery/atmospherics/binary/pump/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if (!W.is_wrench(user))
 		return ..()
-	if (!(stat & NOPOWER) && on)
+	if (!(stat & (NOPOWER|FORCEDISABLE)) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")
 		return 1
 	return ..()

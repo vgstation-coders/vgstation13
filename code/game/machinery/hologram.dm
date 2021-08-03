@@ -87,7 +87,7 @@ var/const/HOLOPAD_MODE = 0
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
-	if(!(stat & NOPOWER) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it.
+	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.eyeobj.loc == src.loc)//If the projector has power and client eye is on it.
 		if(!holo)//If there is not already a hologram.
 			create_holo(user)//Create one.
 			src.visible_message("A holographic image of [user] flicks to life right before your eyes!")
@@ -158,7 +158,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/process()
 	if(holo)//If there is a hologram.
 		if(master && !master.stat && master.client && master.eyeobj)//If there is an AI attached, it's not incapacitated, it has a client, and the client eye is centered on the projector.
-			if(!(stat & NOPOWER))//If the  machine has power.
+			if(!(stat & (FORCEDISABLE|NOPOWER)))//If the  machine has power.
 				if((HOLOPAD_MODE == 0 && (get_dist(master.eyeobj, src) <= holo_range)))
 					return 1
 

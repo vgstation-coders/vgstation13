@@ -40,7 +40,7 @@ Filter types:
 /obj/machinery/atmospherics/trinary/filter/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "hintact_off"
-	else if(stat & MALFLOCKED)
+	else if(stat & FORCEDISABLE)
 		icon_state = "hintact_malflocked"
 	else if(node2 && node3 && node1)
 		icon_state = "hintact_[on?("on"):("off")]"
@@ -203,7 +203,7 @@ Filter types:
 	..(adjacent_procd)
 	if(stat & NOPOWER)
 		icon_state = "hintactm_off"
-	else if(stat & MALFLOCKED)
+	else if(stat & FORCEDISABLE)
 		icon_state = "hintactm_malflocked"
 	else if(!(node2 && node3 && node1))
 		on = 0

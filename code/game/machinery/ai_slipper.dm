@@ -28,7 +28,7 @@
 	src.power_change()
 
 /obj/machinery/ai_slipper/attackby(obj/item/weapon/W, mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE)
 		return
 	if(istype(user, /mob/living/silicon) || isAdminGhost(user))
 		src.add_hiddenprint(user)
@@ -51,7 +51,7 @@
 
 /obj/machinery/ai_slipper/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	var/mob/living/silicon/ai/A 
@@ -81,7 +81,7 @@
 
 /obj/machinery/ai_slipper/AIShiftClick(mob/user as mob)
 	src.add_hiddenprint(user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(src.cooldown_on)
 		to_chat(user, "It's still on cooldown!")

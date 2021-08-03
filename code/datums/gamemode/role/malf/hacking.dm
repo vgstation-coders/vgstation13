@@ -4,8 +4,7 @@
 /obj/machinery
 	var/mob/living/silicon/ai/malf_owner = null
 	var/hack_abilities = list(
-		/datum/malfhack_ability/disable,
-		/datum/malfhack_ability/electrify
+		/datum/malfhack_ability/disable
 	)
 
 /obj/machinery/proc/initialize_malfhack_abilities()
@@ -70,16 +69,6 @@
 	icon_toggled = "radial_on"
 
 /datum/malfhack_ability/disable/activate()
-	toggled ? (machine.stat &= ~MALFLOCKED) : (machine.stat |= MALFLOCKED)
-	toggled = !toggled
-
-/datum/malfhack_ability/electrify
-	name = "Electrify"
-	desc = "Electrify/Unelectrify this machine."
-	icon = "radial_zap"
-	icon_toggled = "radial_unzap"
-
-/datum/malfhack_ability/electrify/activate()
-	toggled ? (machine.stat &= ~ELECTRIFIED) : (machine.stat |= ELECTRIFIED)
+	toggled ? (machine.stat &= ~FORCEDISABLE) : (machine.stat |= FORCEDISABLE)
 	toggled = !toggled
 

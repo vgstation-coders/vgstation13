@@ -70,7 +70,7 @@
 
 /obj/machinery/door_control/attack_hand(mob/user as mob)
 	src.add_fingerprint(usr)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	if(!allowed(user) && (wires & 1))
@@ -114,12 +114,12 @@
 						M.close()
 						return
 	spawn(15)
-		if(!(stat & NOPOWER))
+		if(!(stat & (FORCEDISABLE|NOPOWER)))
 			icon_state = "doorctrl0"
 
 /obj/machinery/door_control/power_change()
 	..()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "doorctrl-p"
 	else
 		icon_state = "doorctrl0"
@@ -158,7 +158,7 @@
 /obj/machinery/driver_button/attack_hand(mob/user as mob)
 	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	src.add_fingerprint(usr)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(active)
 		return
