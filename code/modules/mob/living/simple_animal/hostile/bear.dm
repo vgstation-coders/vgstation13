@@ -75,7 +75,7 @@
 	melee_damage_upper=35
 
 /mob/living/simple_animal/hostile/bear/panda/get_butchering_products()
-	return list(/datum/butchering_product/skin/bear/brownbear, /datum/butchering_product/teeth/lots) // we need a panda pelt !
+	return list(/datum/butchering_product/skin/bear/panda, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/hostile/bear/brownbear
 	name = "brown bear"

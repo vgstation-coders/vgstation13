@@ -195,6 +195,9 @@
 /datum/butchering_product/skin/bear/brownbear
 	result = /obj/item/clothing/head/bearpelt/brown/real
 
+/datum/butchering_product/skin/bear/panda
+	result = /obj/item/clothing/head/bearpelt/panda
+
 /datum/butchering_product/skin/bear/polarbear
 	result = /obj/item/clothing/head/bearpelt/polar
 
