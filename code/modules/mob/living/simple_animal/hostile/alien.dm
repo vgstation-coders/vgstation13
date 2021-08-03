@@ -42,6 +42,9 @@ var/list/nest_locations = list()
 	var/turf/last_loc = null
 	var/acid = 200
 
+/mob/living/simple_animal/hostile/alien/get_butchering_products()
+	return list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, /datum/butchering_product/teeth/bunch)
+
 /mob/living/simple_animal/hostile/alien/Life()
 	. = ..()
 	if(!.)
