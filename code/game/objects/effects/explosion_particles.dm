@@ -17,8 +17,7 @@
 	return
 
 /datum/effect/system/expl_particles
-	var/number = 10
-	var/turf/location
+	number = 10
 	var/total_particles = 0
 
 /datum/effect/system/expl_particles/proc/set_up(n = 10, loca)
@@ -53,9 +52,6 @@
 	spawn (10)
 		src.forceMove(null)
 	return
-
-/datum/effect/system/explosion
-	var/turf/location
 
 /datum/effect/system/explosion/proc/set_up(loca)
 	if(istype(loca, /turf/))
