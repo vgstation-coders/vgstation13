@@ -429,7 +429,7 @@ var/list/virusdishes = list()
 	desc = "A disk for storing the structure of a pathogen's Glycol Nucleic Acid pertaining to a specific symptom."
 	icon = 'icons/obj/datadisks.dmi'
 	icon_state = "disk_virus"
-	var/datum/disease2/effect = null
+	var/datum/disease2/effect/effect = null
 	var/stage = 1
 
 /obj/item/weapon/disk/disease/premade/New()
