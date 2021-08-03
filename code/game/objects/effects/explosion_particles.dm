@@ -1,10 +1,8 @@
 /obj/effect/expl_particles
 	name = "explosive particles"
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "explosion_particle"
 	opacity = 1
 	anchored = 1
-	mouse_opacity = 0
 
 /obj/effect/expl_particles/New()
 	..()

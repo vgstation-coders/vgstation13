@@ -540,10 +540,9 @@ proc/move_mining_shuttle()
 /obj/effect/resonance
 	name = "resonance field"
 	desc = "A resonating field that significantly damages anything inside of it when the field eventually ruptures."
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "shield1"
 	plane = ABOVE_HUMAN_PLANE
-	mouse_opacity = 0
+	mouse_opacity = 1
 	var/resonance_damage = 30
 	var/creator = null
 

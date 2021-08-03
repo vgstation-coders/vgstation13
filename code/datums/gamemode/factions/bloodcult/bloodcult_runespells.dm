@@ -560,7 +560,6 @@
 
 /obj/effect/cult_ritual/cult_communication
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_communication"
 	pixel_y = 8
 	alpha = 200
@@ -1745,11 +1744,9 @@ var/list/blind_victims = list()
 
 /obj/effect/cult_ritual/reveal
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_reveal"
 	layer = NARSIE_GLOW
 	plane = ABOVE_LIGHTING_PLANE
-	mouse_opacity = 0
 	flags = PROXMOVE
 	var/mob/living/victim = null
 	var/duration = 2
@@ -2304,12 +2301,10 @@ var/list/blind_victims = list()
 
 /obj/effect/cult_ritual/feet_portal
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_rejoin"
 	pixel_y = -10
 	layer = ABOVE_OBJ_LAYER
 	plane = OBJ_PLANE
-	mouse_opacity = 0
 	flags = PROXMOVE
 	var/mob/living/caster = null
 	var/turf/source = null
@@ -2824,7 +2819,6 @@ var/list/bloodcult_exitportals = list()
 
 /obj/effect/cult_ritual/resurrect
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_resurrect"
 	layer = SHADOW_LAYER
 	plane = ABOVE_HUMAN_PLANE
