@@ -20,14 +20,14 @@
 	number = 10
 	var/total_particles = 0
 
-/datum/effect/system/expl_particles/proc/set_up(n = 10, loca)
+/datum/effect/system/expl_particles/set_up(n = 10, loca)
 	number = n
 	if(istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/expl_particles/proc/start()
+/datum/effect/system/expl_particles/start()
 	var/i = 0
 	for(i=0, i<src.number, i++)
 		spawn(0)
@@ -53,13 +53,13 @@
 		src.forceMove(null)
 	return
 
-/datum/effect/system/explosion/proc/set_up(loca)
+/datum/effect/system/explosion/set_up(loca)
 	if(istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/explosion/proc/start()
+/datum/effect/system/explosion/start()
 	new/obj/effect/explosion( location )
 	var/datum/effect/system/expl_particles/P = new/datum/effect/system/expl_particles()
 	P.set_up(10,location)

@@ -82,6 +82,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	holder = atom
 
 /datum/effect/system/proc/start() //why is this here? it neither overrides nor does anything else
+//well now it does, since refactoring, previous commentor
 
 /obj/effect/canSingulothPull(var/obj/machinery/singularity/singulo)
 	return 0
