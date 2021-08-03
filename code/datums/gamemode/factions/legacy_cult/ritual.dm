@@ -25,6 +25,7 @@ var/runedec = 0 // Rune cap ?
 
 	var/summoning = 0
 	var/list/summonturfs = list()
+	mouse_opacity = 1 //So we can actually click these
 
 /obj/effect/rune_legacy/New()
 	..()

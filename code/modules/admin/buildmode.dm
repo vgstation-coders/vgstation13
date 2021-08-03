@@ -34,6 +34,7 @@
 /obj/effect/bmode//Cleaning up the tree a bit
 	density = 1
 	anchored = 1
+	mouse_opacity = 1 //So we can actually click these
 	layer = HUD_ITEM_LAYER
 	plane = HUD_PLANE
 	dir = NORTH
