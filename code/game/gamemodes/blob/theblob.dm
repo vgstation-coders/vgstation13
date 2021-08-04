@@ -338,7 +338,7 @@ var/list/blob_looks_player = list(//Options available to players
 		return
 	if(istype(T, /turf/space) && prob(75))
 		if (source && manual)
-			source.add_points(round(BLOBATTCOST/3))
+			source.add_points(round(2*BLOBATTCOST/3))
 		return
 	if(!T)
 		var/list/dirs = cardinal.Copy()
