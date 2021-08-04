@@ -153,6 +153,34 @@
 	cable_power_change()
 	..(severity)
 
+/obj/machinery/media/transmitter/broadcast/proc/lose_integrity(var/damage)
+	integrity = max(0, integrity - damage)
+	update_icon()
+
+/obj/machinery/media/transmitter/broadcast/emp_act(severity)
+	switch(severity)
+		if (1)
+			lose_integrity(75)
+		if (2)
+			lose_integrity(50)
+	..()
+
+/obj/machinery/media/transmitter/broadcast/ex_act(severity)
+	switch(severity)
+		if (1)
+			if (prob(75))
+				qdel(src)
+			else
+				lose_integrity(100)
+		if (2)
+			lose_integrity(80)
+		if (3)
+			lose_integrity(40)
+
+/obj/machinery/media/transmitter/broadcast/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		lose_integrity(Proj.get_damage())
+
 /obj/machinery/media/transmitter/broadcast/examine(mob/user)
 	..()
 	if (integrity <= 75)
@@ -253,11 +281,8 @@
 
 	// Checks heat from the environment and applies any integrity damage
 	var/datum/gas_mixture/environment = loc.return_air()
-	switch(environment.temperature)
-		if(T0C to (T20C + 20))
-			integrity = clamp(integrity, 0, 100)
-		if((T20C + 20) to INFINITY)
-			integrity = max(0, integrity - 1)
+	if(environment.temperature > (T20C + 20))
+		lose_integrity(1)
 
 /obj/machinery/media/transmitter/broadcast/linkWith(var/mob/user, var/obj/O, var/list/context)
 	if(istype(O,/obj/machinery/media) && !is_type_in_list(O,list(/obj/machinery/media/transmitter,/obj/machinery/media/receiver)))
