@@ -381,30 +381,30 @@ var/list/admin_verbs_mod = list(
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
 		/proc/generateMiniMaps,
-		/client/proc/maprender
-		/client/proc/cmd_admin_rejuvenate
-		/datum/admins/proc/show_role_panel
-		/client/proc/print_jobban_old
-		/client/proc/print_jobban_old_filter
-		/client/proc/forceEvent
-		///client/proc/break_all_air_groups
-		///client/proc/regroup_all_air_groups
-		///client/proc/kill_pipe_processing
-		///client/proc/kill_air_processing
-		///client/proc/disable_communication
-		///client/proc/disable_movement
-		/client/proc/Zone_Info
-		/client/proc/Test_ZAS_Connection
-		/client/proc/SDQL2_query
-		/client/proc/check_sim_unsim
-		/client/proc/start_line_profiling
-		/client/proc/stop_line_profiling
-		/client/proc/show_line_profiling
-		/client/proc/check_wires
-		/client/proc/check_pipes
+		/client/proc/maprender,
+		/client/proc/cmd_admin_rejuvenate,
+		/datum/admins/proc/show_role_panel,
+		/client/proc/print_jobban_old,
+		/client/proc/print_jobban_old_filter,
+		/client/proc/forceEvent,
+		///client/proc/break_all_air_groups,
+		///client/proc/regroup_all_air_groups,
+		///client/proc/kill_pipe_processing,
+		///client/proc/kill_air_processing,
+		///client/proc/disable_communication,
+		///client/proc/disable_movement,
+		/client/proc/Zone_Info,
+		/client/proc/Test_ZAS_Connection,
+		/client/proc/SDQL2_query,
+		/client/proc/check_sim_unsim,
+		/client/proc/start_line_profiling,
+		/client/proc/stop_line_profiling,
+		/client/proc/show_line_profiling,
+		/client/proc/check_wires,
 		#if UNIT_TESTS_ENABLED
-		/client/proc/unit_test_panel
+		/client/proc/unit_test_panel,
 		#endif
+		/client/proc/check_pipes
 		)
 	if (isobserver(mob))
 		mob.verbs -= /mob/dead/observer/verb/toggle_antagHUD
