@@ -53,7 +53,7 @@
 
 			message_admins("Admin logout: [key_name(src)]")
 			if(available_admins == 0) // Apparently the admin logging out is no longer an admin at this point, so we have to check this towards 0 and not towards 1. Awell.
-				send2adminirc("[key_name(src, showantag = FALSE)] logged out - no more admins online.")
+				send2adminirc("[key_name(src, showantag = FALSE)] logged out - no more non-AFK admins online. - [admin_number_afk] AFK.")
 				send2admindiscord("[key_name(src, showantag = FALSE)] logged out. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 
 	lazy_invoke_event(/lazy_event/on_logout, list("user" = src))
