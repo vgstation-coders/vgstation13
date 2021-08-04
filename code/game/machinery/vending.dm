@@ -1069,7 +1069,7 @@ var/global/num_vending_terminals = 1
 		flick(src.icon_vend,src)
 	R.amount--
 	src.updateUsrDialog()
-	visible_message("\The [src.name] whirrs as it vends", "You hear a whirr")
+	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
 			new R.product_path(get_turf(src))
