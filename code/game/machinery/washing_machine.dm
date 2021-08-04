@@ -321,9 +321,15 @@
 	. = ..()
 
 	if(stat & (NOPOWER))
-		to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
-		for(var/atom/movable/O in contents)
-			O.forceMove(loc)
+		switch(wash_state)
+			if (5,8)
+				to_chat(user, "<span class='warning'>\The [src] is busy.</span>")
+			if (1,2,3,4,6,7)
+				to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
+				wash_state = 1
+				for(var/atom/movable/O in contents)
+					O.forceMove(loc)
+				update_icon()
 		return
 
 	if(.)
