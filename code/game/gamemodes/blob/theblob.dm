@@ -382,7 +382,7 @@ var/list/blob_looks_player = list(//Options available to players
 		if(!source || !source.restrain_blob)
 			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.
 		if (source && manual)
-			source.add_points(round(BLOBATTCOST/3))
+			source.add_points(round(2*BLOBATTCOST/3))
 		B.manual_remove = 1
 		B.Delete()
 
