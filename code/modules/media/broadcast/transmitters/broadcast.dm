@@ -153,8 +153,22 @@
 	cable_power_change()
 	..(severity)
 
+/obj/machinery/media/transmitter/broadcast/examine(mob/user)
+	..()
+	if (integrity <= 75)
+		to_chat(user,"<span class='warning'>The [src] appears damaged. A solder can be used to repair it.</span>")
+
 /obj/machinery/media/transmitter/broadcast/update_icon()
 	overlays = 0
+	switch(integrity)
+		if (0 to 25)
+			icon_state = "broadcaster damaged3"
+		if (25 to 50)
+			icon_state = "broadcaster damaged2"
+		if (50 to 75)
+			icon_state = "broadcaster damaged1"
+		if (75 to 100)
+			icon_state = "broadcaster"
 	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on)
@@ -237,13 +251,13 @@
 
 				env.add_thermal_energy(energy_to_add)
 
-		// Checks heat from the environment and applies any integrity damage
-		var/datum/gas_mixture/environment = loc.return_air()
-		switch(environment.temperature)
-			if(T0C to (T20C + 20))
-				integrity = clamp(integrity, 0, 100)
-			if((T20C + 20) to INFINITY)
-				integrity = max(0, integrity - 1)
+	// Checks heat from the environment and applies any integrity damage
+	var/datum/gas_mixture/environment = loc.return_air()
+	switch(environment.temperature)
+		if(T0C to (T20C + 20))
+			integrity = clamp(integrity, 0, 100)
+		if((T20C + 20) to INFINITY)
+			integrity = max(0, integrity - 1)
 
 /obj/machinery/media/transmitter/broadcast/linkWith(var/mob/user, var/obj/O, var/list/context)
 	if(istype(O,/obj/machinery/media) && !is_type_in_list(O,list(/obj/machinery/media/transmitter,/obj/machinery/media/receiver)))
