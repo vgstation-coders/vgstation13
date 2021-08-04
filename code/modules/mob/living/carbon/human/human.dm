@@ -2286,7 +2286,7 @@ mob/living/carbon/human/isincrit()
 			return list(/datum/butchering_product/teeth/human)
 		if ("Tajaran")
 			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
-
+	return list()
 		/*	Missing Sprites, pls contribute
 
 		if ("Vox")
