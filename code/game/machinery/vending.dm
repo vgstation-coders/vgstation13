@@ -209,7 +209,7 @@ var/global/num_vending_terminals = 1
 	return ..()
 
 /obj/machinery/vending/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if(user.incapacitated() || user.lying)
@@ -324,7 +324,7 @@ var/global/num_vending_terminals = 1
 		qdel(src)
 
 /obj/machinery/vending/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	switch(severity)
 		if(1.0)
@@ -689,7 +689,7 @@ var/global/num_vending_terminals = 1
 			return null
 
 /obj/machinery/vending/proc/TurnOff(var/ticks) //Turn off for a while. 10 ticks = 1 second
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	stat |= NOPOWER
@@ -704,7 +704,7 @@ var/global/num_vending_terminals = 1
 	if(stat & (BROKEN))
 		src.icon_state = "[initial(icon_state)]-broken"
 		return
-	else if (stat & (NOPOWER))
+	else if (stat & (NOPOWER|FORCEDISABLE))
 		src.icon_state = "[initial(icon_state)]-off"
 	else
 		src.icon_state = "[initial(icon_state)]"
@@ -744,7 +744,7 @@ var/global/num_vending_terminals = 1
 		to_chat(user, "<span class='notice'>The glass in \the [src] is broken, it refuses to work.</span>")
 		return
 
-	if(stat & (NOPOWER))
+	if(stat & (NOPOWER|FORCEDISABLE))
 		to_chat(user, "<span class='notice'>\The [src] is dark and unresponsive.</span>")
 		return
 
@@ -1079,7 +1079,7 @@ var/global/num_vending_terminals = 1
 		src.updateUsrDialog()
 
 /obj/machinery/vending/process()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	if(!src.active)
@@ -1098,7 +1098,7 @@ var/global/num_vending_terminals = 1
 		src.throw_item()
 
 /obj/machinery/vending/proc/speak(var/message)
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 
 	if (!message)

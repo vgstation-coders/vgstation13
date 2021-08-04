@@ -55,7 +55,7 @@
 /obj/machinery/mob_printer/proc/canSpawn()
 	if(!use_power)
 		return !building //Can be varedited to not need power.
-	return !(stat & NOPOWER) && !building
+	return !(stat & (FORCEDISABLE|NOPOWER)) && !building
 
 /obj/machinery/mob_printer/proc/make_mob(var/mob/dead/observer/user)
 	building = TRUE

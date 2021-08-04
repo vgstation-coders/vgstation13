@@ -121,7 +121,7 @@
 			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to heat right now.</span>")
 
 /obj/machinery/chemheater/AltClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER) && user.dexterity_check()))
+	if(!user.incapacitated() && Adjacent(user) && !(stat & (FORCEDISABLE|NOPOWER) && user.dexterity_check()))
 		toggle()
 		return
 	return ..()
@@ -201,7 +201,7 @@
 			icon_state = "[initial(icon_state)]_off"
 
 /obj/machinery/chemcooler/process()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(held_container && cooling)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
@@ -265,7 +265,7 @@
 			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to cool right now.</span>")
 
 /obj/machinery/chemcooler/AltClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER) && user.dexterity_check()))
+	if(!user.incapacitated() && Adjacent(user) && !(stat & (NOPOWER|FORCEDISABLE) && user.dexterity_check()))
 		toggle()
 		return
 	return ..()

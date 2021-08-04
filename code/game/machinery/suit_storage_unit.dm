@@ -156,7 +156,7 @@
 
 /obj/machinery/suit_storage_unit/update_icon()
 	overlays.len = 0
-	if((stat & NOPOWER) || (stat & BROKEN))
+	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 		icon_state = "suitstorage-off"
 		if(department != "null")
 			overlays += openimage
@@ -209,7 +209,7 @@
 	var/dat
 	if(..())
 		return
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(emagged)
 
@@ -596,7 +596,7 @@
 	if (!isopen)
 		to_chat(usr, "<span class='red'>The unit's doors are shut.</span>")
 		return
-	if ((stat & NOPOWER) || (stat & BROKEN))
+	if ((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 		to_chat(usr, "<span class='red'>The unit is not operational.</span>")
 		return
 	if ( (occupant) || (helmet) || (suit) || boots )
@@ -634,13 +634,13 @@
 			stat &= !BROKEN
 			emagged = FALSE
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
-	if((stat & NOPOWER) && iscrowbar(I) && !islocked)
+	if((stat & (FORCEDISABLE|NOPOWER)) && iscrowbar(I) && !islocked)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You begin prying the equipment out of the suit storage unit</span>")
 		if(do_after(user, src,20))
 			dump_everything()
 			update_icon()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(..())
 		return 1
@@ -651,7 +651,7 @@
 		if (!isopen)
 			to_chat(usr, "<span class='red'>The unit's doors are shut.</span>")
 			return
-		if ((stat & NOPOWER) || (stat & BROKEN))
+		if ((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 			to_chat(usr, "<span class='red'>The unit is not operational.</span>")
 			return
 		if ( (occupant) || (helmet) || (suit) || boots) //Unit needs to be absolutely empty

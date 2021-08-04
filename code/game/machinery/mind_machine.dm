@@ -397,7 +397,7 @@
 	flyTally(occupantOne)
 	flyTally(occupantTwo)
 	for(var/prog in 1 to 40/manipRating) //Counts up 5 to 10 seconds, checks if we lost power each time and ruins your day if so. Otherwise just for UI progress bar
-		if(stat & NOPOWER)
+		if(stat & (FORCEDISABLE|NOPOWER))
 			malfSwap = TRUE
 		if(!connectOne.Adjacent(src) || !connectTwo.Adjacent(src))
 			malfSwap = TRUE

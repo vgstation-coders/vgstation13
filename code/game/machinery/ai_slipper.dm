@@ -28,7 +28,7 @@
 	src.power_change()
 
 /obj/machinery/ai_slipper/attackby(obj/item/weapon/W, mob/user)
-	if(stat & (NOPOWER|BROKEN|FORCEDISABLE)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 	if(istype(user, /mob/living/silicon) || isAdminGhost(user))
 		src.add_hiddenprint(user)

@@ -70,7 +70,7 @@
 
 /obj/machinery/recharge_station/process()
 	process_upgrade()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
 
 	if(src.occupant)
@@ -90,7 +90,7 @@
 		upgrade_finished = -1
 		return
 	var/mob/living/silicon/robot/R = occupant
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		to_chat(R, "<span class='warning'>Upgrade interrupted due to power failure, movement lock is released.</span>")
 		upgrading = 0
 		upgrade_finished = -1
@@ -183,7 +183,7 @@
 	return
 
 /obj/machinery/recharge_station/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	if(occupant)
@@ -192,7 +192,7 @@
 	..(severity)
 
 /obj/machinery/recharge_station/proc/build_icon()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		icon_state = "borgcharger"
 	else
 		if(src.occupant)
@@ -277,7 +277,7 @@
 	return
 
 /obj/machinery/recharge_station/proc/mob_enter(mob/living/R)
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE) || !anchored)
 		return
 	if (R.stat == 2 || !R.canmove)
 		//Whoever had it so that a borg with a dead cell can't enter this thing should be shot. --NEO

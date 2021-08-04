@@ -20,7 +20,7 @@
 	volume = 2000
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 

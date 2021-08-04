@@ -73,7 +73,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 // timed process
 /obj/machinery/status_display/process()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		remove_display()
 		return
 	if(spookymode)
@@ -93,7 +93,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 		if(user.stat)
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #408)</span>")
 			return
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
 
@@ -125,7 +125,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 				mode = MODE_CARGO_TIMER
 
 /obj/machinery/status_display/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	set_picture("ai_bsod")
@@ -381,7 +381,7 @@ var/global/list/status_display_images = list(
 		if(user.stat)
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #408)</span>")
 			return
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
 		if(A.hackermode)
@@ -395,7 +395,7 @@ var/global/list/status_display_images = list(
 			src.set_picture(status_display_images[new_icon])
 
 /obj/machinery/ai_status_display/process()
-	if(stat & NOPOWER)
+	if(stat & (NOPOWER|FORCEDISABLE))
 		overlays.len = 0
 		return
 	if(spookymode)
@@ -406,7 +406,7 @@ var/global/list/status_display_images = list(
 	update()
 
 /obj/machinery/ai_status_display/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 	set_picture("ai_bsod")

@@ -138,7 +138,7 @@
 	return new_target
 
 /obj/machinery/turret/process()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		// if the turret has no power or is broken, make the turret pop down if it hasn't already
 		popDown()
 		return

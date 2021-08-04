@@ -206,7 +206,7 @@ air2.volume
 /obj/machinery/atmospherics/binary/pump/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if (!W.is_wrench(user))
 		return ..()
-	if (!(stat & (NOPOWER|FORCEDISABLE)) && on)
+	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")
 		return 1
 	return ..()

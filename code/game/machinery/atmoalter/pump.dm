@@ -32,7 +32,7 @@
 	return
 
 /obj/machinery/portable_atmospherics/pump/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		..(severity)
 		return
 

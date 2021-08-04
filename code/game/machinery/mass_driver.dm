@@ -61,7 +61,7 @@ var/list/mass_drivers = list()
 	</ul>"}
 
 /obj/machinery/mass_driver/proc/drive(amount)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	use_power(500*power)
 	var/O_limit = 0
@@ -84,7 +84,7 @@ var/list/mass_drivers = list()
 	return
 
 /obj/machinery/mass_driver/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	drive()
 	..(severity)

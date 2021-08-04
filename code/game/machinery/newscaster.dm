@@ -181,7 +181,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		icon_state = "newscaster_0"
 		return
 
-	if((stat & NOPOWER) || (stat & BROKEN))
+	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
 		icon_state = "newscaster_off"
 		if(stat & BROKEN) //If the thing is smashed, add crack overlay on top of the unpowered sprite.
 			overlays.Cut()

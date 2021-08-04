@@ -780,4 +780,4 @@ Class Procs:
 			scan = null
 
 /obj/machinery/proc/is_operational()
-	return !(stat & (NOPOWER|BROKEN|MAINT|MALFLOCKED))
+	return !(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))

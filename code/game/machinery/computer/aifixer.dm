@@ -14,7 +14,7 @@
 
 /obj/machinery/computer/aifixer/attackby(I as obj, user as mob)
 	if(istype(I, /obj/item/device/aicard))
-		if(stat & (NOPOWER|BROKEN))
+		if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			to_chat(user, "This terminal isn't functioning right now, get it working!")
 			return
 		var/obj/item/card = I
@@ -108,7 +108,7 @@
 	..()
 	overlays = 0
 	// Broken / Unpowered
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 
 	if (occupant)
