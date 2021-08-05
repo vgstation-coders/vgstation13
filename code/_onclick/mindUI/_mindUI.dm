@@ -28,7 +28,6 @@ var/list/mind_ui_ID2type = list()
 	for (var/mind_ui in activeUIs)
 		var/datum/mind_ui/ui = activeUIs[mind_ui]
 		ui.SendToClient()
-	ReLoginUIFailsafe() // Makes sure we're not missing an UI whose requirements were given somehow before the mob had a mind
 
 /datum/mind/proc/RemoveAllUIs() // Removes all mind uis from client.screen, called on mob/Logout()
 	for (var/mind_ui in activeUIs)
@@ -144,8 +143,7 @@ var/list/mind_ui_ID2type = list()
 		if (!M.client)
 			return
 
-		for (var/obj/abstract/mind_ui_element/element in elements)
-			mind.current.client.screen -= element
+		mind.current.client.screen -= elements
 
 // Makes every element visible
 /datum/mind_ui/proc/Display()
@@ -270,25 +268,3 @@ var/list/mind_ui_ID2type = list()
 		I.pixel_x = (i - 1) * 6
 		result.overlays += I
 	return result
-
-
-
-////////////////////////////////////////////////////////////////////
-//																  //
-//					 RE-LOGIN FAILSAFE							  //
-//																  //
-////////////////////////////////////////////////////////////////////
- // Checks that the mob isn't missing a given UI for some reason, called by ResendAllUIs() on mob/living/Login()
- // I mean, really this should never happen under normal circumstances but if for example someone placed a Test Dummy inside an adminbus
- // before they had a mind, their UI would fail to initialize, and this proc makes sure that whoever then takes control of it, won't be lacking the UI.
- // This isn't necessary for all UI (such as those displayed after interacting with an object), but preferable for some (such as those tied to the player's roles, species, or vehicle)
-/datum/mind/proc/ReLoginUIFailsafe()
-	var/mob/M = current
-	if (!current)
-		return
-	if(istype(M.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-		if (!("Adminbus" in activeUIs))
-			DisplayUI("Adminbus")
-	if(isovermind(M))
-		if (!("Blob" in activeUIs))
-			DisplayUI("Blob")

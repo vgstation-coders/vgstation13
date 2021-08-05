@@ -26,10 +26,15 @@
 /mob/camera/blob/New()
 	blob_overminds += src
 	..()
+	lazy_register_event(/lazy_event/on_living_login, src, /mob/camera/blob/proc/add_HUD)
 
 /mob/camera/blob/Destroy()
 	blob_overminds -= src
+	lazy_unregister_event(/lazy_event/on_living_login, src, /mob/camera/blob/proc/add_HUD)
 	..()
+
+/mob/camera/blob/proc/add_HUD(var/mob/user)
+	DisplayUI("Blob")
 
 /mob/camera/blob/Login()
 	..()
