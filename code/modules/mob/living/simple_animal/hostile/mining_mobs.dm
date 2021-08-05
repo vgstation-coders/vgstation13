@@ -108,6 +108,9 @@
 	flag = "energy"
 	temperature = 50
 
+/mob/living/simple_animal/hostile/asteroid/basilisk/get_butchering_products()
+	return list(/datum/butchering_product/skin/basilisk)
+
 /mob/living/simple_animal/hostile/asteroid/basilisk/GiveTarget(var/new_target)
 	target = new_target
 	if(target != null)
@@ -280,6 +283,9 @@ obj/item/asteroid/basilisk_hide/New()
 	minimum_distance = 3
 	pass_flags = PASSTABLE
 	hostile_interest = 15 //Very persistent
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/get_butchering_products()
+	return list(/datum/butchering_product/hivelord_core)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
 	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
@@ -482,6 +488,9 @@ obj/item/asteroid/basilisk_hide/New()
 		new /obj/effect/goliath_tentacle/original(tturf)
 		ranged_cooldown = ranged_cooldown_cap
 	return
+
+/mob/living/simple_animal/hostile/asteroid/goliath/get_butchering_products()
+	return list(/datum/butchering_product/skin/goliath, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/hostile/asteroid/goliath/adjustBruteLoss(var/damage)
 	ranged_cooldown--

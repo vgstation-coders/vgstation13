@@ -33,6 +33,9 @@
 	supernatural = 1
 	held_items = list()
 
+/mob/living/simple_animal/hostile/creature/get_butchering_products()
+	return list(/datum/butchering_product/teeth/lots)
+
 /mob/living/simple_animal/hostile/creature/cult/CanAttack(var/atom/the_target)
 	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS
 	if(ismob(the_target))
