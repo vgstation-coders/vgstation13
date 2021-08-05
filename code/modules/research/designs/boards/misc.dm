@@ -156,7 +156,7 @@
 /datum/design/rigsuit_radshield_adv
 	name = "Circut Design (Rigsuit high capacity radiation absorption device)"
 	desc = "An improved version of the R.A.D. featuring a higher capacity. When installed and activated, the suit protects the wearer from incoming radiation until its collectors are full."
-	id = "rigsuit_radshield"
+	id = "rigsuit_radshield_adv"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 6, Tc_POWERSTORAGE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
 	category = "Misc"
