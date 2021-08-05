@@ -42,6 +42,7 @@
 		client.media.stop_music()
 
 	if(admin_datums[src.ckey])
+		message_admins("Admin logout: [key_name(src)]")
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
 			var/admins_number = admins.len
 			var/admin_number_afk = 0
@@ -51,9 +52,8 @@
 
 			var/available_admins = admins_number - admin_number_afk
 
-			message_admins("Admin logout: [key_name(src)]")
 			if(available_admins == 0) // Apparently the admin logging out is no longer an admin at this point, so we have to check this towards 0 and not towards 1. Awell.
-				send2adminirc("[key_name(src, showantag = FALSE)] logged out - no more admins online.")
+				send2adminirc("[key_name(src, showantag = FALSE)] logged out - no more non-AFK admins online. - [admin_number_afk] AFK.")
 				send2admindiscord("[key_name(src, showantag = FALSE)] logged out. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 
 	lazy_invoke_event(/lazy_event/on_logout, list("user" = src))
