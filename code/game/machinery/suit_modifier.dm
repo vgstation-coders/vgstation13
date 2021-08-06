@@ -109,9 +109,10 @@
 	if(H.loc == loc)
 		var/obj/worn_suit = H.get_item_by_slot(slot_wear_suit)
 		if(istype(worn_suit, /obj/item/clothing/suit/space/rig))
+			var/obj/item/clothing/suit/space/rig/worn_rig = worn_suit
 			if(!modules_to_install.len && !cell)
-				if(H.a_intent == I_HURT)
-					say("Preparing module uninstallation subroutines...", class = "binaryradio")
+				if(worn_rig.modules.len)
+					say("Installed modules detected.", class = "binaryradio")
 					process_module_removal(H)
 					return
 				say("No upgrade available.", class = "binaryradio")
@@ -242,6 +243,7 @@
 		// if we have something that's not a rig_module here we have a problem
 		var/obj/item/rig_module/RM = input(H, "Choose an upgrade to remove from [R].", R) as null|anything in R.modules
 		if(!RM|| !H.Adjacent(src) || H.incapacitated())
+			unlock_atom(H)
 			return
 		working_animation()
 		say("Uninstalling [RM] from \the [R].", class = "binaryradio")
