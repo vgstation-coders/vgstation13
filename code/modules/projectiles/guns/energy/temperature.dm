@@ -136,7 +136,6 @@
 	dat += "<FONT color=[powercostcolor]><B>[powercost]</B></FONT>"
 
 /obj/item/weapon/gun/energy/temperature/examine(mob/user)
-	desc = "A gun that changes the body temperature of its targets.")
 	to_chat(user, "Current output temperature: <FONT color=[tempcolor]><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F) </FONT>")
 	if(temperature > 500)
 		to_chat(user, "<FONT color=red><B>SEARING!!</B></FONT>")
