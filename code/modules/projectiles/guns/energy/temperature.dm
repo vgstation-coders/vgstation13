@@ -97,6 +97,7 @@
 		else
 			temperature = target_temperature
 		update_icon()
+		update_desc()
 
 		if (istype(loc, /mob/living/carbon))
 			var /mob/living/carbon/M = loc
@@ -108,6 +109,7 @@
 	if(power_supply)
 		power_supply.give(50)
 		update_icon()
+		update_desc()
 	return
 
 /obj/item/weapon/gun/energy/temperature/proc/update_dat()
@@ -134,6 +136,25 @@
 	dat += "<BR>"
 	dat += "Power cost: "
 	dat += "<FONT color=[powercostcolor]><B>[powercost]</B></FONT>"
+
+/obj/item/weapon/gun/energy/temperature/proc/update_desc()
+	desc = "A gun that changes the body temperature of its targets."
+	desc += "<BR>"
+	desc += "Current output temperature: "
+	if(temperature > 500)
+		desc += "<FONT color=red><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F) </FONT>"
+		desc += "<FONT color=red><B>SEARING!!</B></FONT>"
+	else if(temperature > (T0C + 50))
+		desc += "<FONT color=red><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
+	else if(temperature > (T0C - 50))
+		desc += "<FONT color=black><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
+	else
+		desc += "<FONT color=blue><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
+	desc += "<BR>"
+	desc += "Target output temperature: [target_temperature]"
+	desc += "<BR>"
+	desc += "Power cost: "
+	desc += "<FONT color=[powercostcolor]><B>[powercost]</B></FONT>"
 
 /obj/item/weapon/gun/energy/temperature/proc/update_temperature()
 	switch(temperature)

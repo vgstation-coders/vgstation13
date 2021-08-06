@@ -498,7 +498,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(enhanced == 1)
 			to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
 			return ..()
-		to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
+		to_chat(user, "You apply the enhancer to \the [src]. It now has triple the amount of uses.")
 		Uses = 3
 		enhanced = 1
 		qdel(O)
@@ -508,7 +508,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(Uses == 0)
 			to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
 			return ..()
-		to_chat(user, "You splash the Slime Resurrection Serum onto the extract causing it to quiver and come to life.")
+		to_chat(user, "You splash the Slime Resurrection Serum onto \the [src] causing it to quiver and come to life.")
 		new primarytype(get_turf(src))
 		Uses--
 		qdel(O)
@@ -641,7 +641,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "bottle19"
 	w_class = W_CLASS_TINY
 
-	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+/obj/item/weapon/slimepotion/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
 			to_chat(user, "<span class='warning'>The potion only works on baby slimes!</span>")
 			return ..()
@@ -649,14 +649,14 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			to_chat(user, "<span class='warning'>Only baby slimes can be tamed!</span>")
 			return..()
 		if(M.stat)
-			to_chat(user, "<span class='warning'>The slime is dead!</span>")
+			to_chat(user, "<span class='warning'>The [M] is dead!</span>")
 			return..()
 		var/mob/living/simple_animal/slime/pet = new /mob/living/simple_animal/slime(M.loc)
 		pet.icon_state = "[M.colour] baby slime"
 		pet.icon_living = "[M.colour] baby slime"
 		pet.icon_dead = "[M.colour] baby slime dead"
 		pet.colour = "[M.colour]"
-		to_chat(user, "You feed the slime the potion, removing its powers and calming it.")
+		to_chat(user, "You feed \the [M] the potion, removing its powers and calming it.")
 		if(M.mind)
 			M.mind.transfer_to(pet)
 		qdel (M)
@@ -680,19 +680,19 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "bottle19"
 	w_class = W_CLASS_TINY
 
-	attack(mob/living/carbon/slime/adult/M as mob, mob/user as mob)
+/obj/item/weapon/slimepotion2/attack(mob/living/carbon/slime/adult/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/slime/adult))//If target is not a slime.
 			to_chat(user, "<span class='warning'>The potion only works on adult slimes!</span>")
 			return ..()
 		if(M.stat)
-			to_chat(user, "<span class='warning'>The slime is dead!</span>")
+			to_chat(user, "<span class='warning'>The [M] is dead!</span>")
 			return..()
 		var/mob/living/simple_animal/slime/adult/pet = new /mob/living/simple_animal/slime/adult(M.loc)
 		pet.icon_state = "[M.colour] adult slime"
 		pet.icon_living = "[M.colour] adult slime"
 		pet.icon_dead = "[M.colour] baby slime dead"
 		pet.colour = "[M.colour]"
-		to_chat(user, "You feed the slime the potion, removing its powers and calming it.")
+		to_chat(user, "You feed \the [M] the potion, removing its powers and calming it.")
 		if(M.mind)
 			M.mind.transfer_to(pet)
 		qdel (M)
@@ -716,7 +716,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "bottle16"
 	w_class = W_CLASS_TINY
 
-	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+/obj/item/weapon/slimesteroid/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
 			to_chat(user, "<span class='warning'>The steroid only works on baby slimes!</span>")
 			return ..()
@@ -724,13 +724,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			to_chat(user, "<span class='warning'>Only baby slimes can use the steroid!</span>")
 			return..()
 		if(M.stat)
-			to_chat(user, "<span class='warning'>The slime is dead!</span>")
+			to_chat(user, "<span class='warning'>The [M] is dead!</span>")
 			return..()
 		if(M.cores == 3)
-			to_chat(user, "<span class='warning'>The slime already has the maximum amount of extract!</span>")
+			to_chat(user, "<span class='warning'>The [M] already has the maximum amount of extract!</span>")
 			return..()
 
-		to_chat(user, "You feed the slime the steroid. It now has triple the amount of extract.")
+		to_chat(user, "You feed \the [M] the steroid. It now has triple the amount of extract.")
 		M.cores = 3
 		qdel (src)
 
@@ -748,13 +748,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(user, "<span class='warning'>The steroid only works on slimes!</span>")
 		return ..()
 	if(M.stat)
-		to_chat(user, "<span class='warning'>The slime is dead!</span>")
+		to_chat(user, "<span class='warning'>The [M] is dead!</span>")
 		return..()
 	if(M.amount_grown == 10)
-		to_chat(user, "<span class='warning'>The slime has already fed enough!</span>")
+		to_chat(user, "<span class='warning'>The [M] has already fed enough!</span>")
 		return..()
 
-	to_chat(user, "You feed the slime the nutrient. It now appears ready to grow.")
+	to_chat(user, "You feed \the [M] the nutrient. It now appears ready to grow.")
 	M.amount_grown = 10
 
 	if (Uses > 0)
@@ -784,15 +784,15 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(user, "<span class='warning'>Only baby slimes can be duplicated!</span>")
 		return ..()
 	if(M.stat)//dunno if this should be allowed but i think it's probably better this way
-		to_chat(user, "<span class='warning'>That slime is dead!</span>")
+		to_chat(user, "<span class='warning'>The [M] is dead!</span>")
 		return ..()
 
-	to_chat(user, "You splash the cloning juice onto the slime.")
+	to_chat(user, "You splash the cloning juice onto \the [M].")
 
 	var/mob/living/carbon/slime/S = new M.primarytype // don't let's start
-	S.tame = M.tame
-	S.forceMove(get_turf(M))
-	qdel(src)
+	S.tame = M.tame // this is the worst part
+	S.forceMove(get_turf(M)) // could believe for all the world
+	qdel(src) // that you're my precious little girl
 
 /obj/item/weapon/slimeres
 	name = "slime resurrection serum"
