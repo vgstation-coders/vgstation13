@@ -80,6 +80,7 @@
 	speak_emote = list("screams")
 	emote_hear = list("screams")
 	emote_see = list("screams")
+	emote_sound = male_scream_sound
 	friendly = "bites"
 	canRegenerate = 1
 	minRegenTime = 30 //It's just a crab, might as well give it quick regen

@@ -520,7 +520,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	if(target.slime_act(primarytype,user))
 		if (Uses > 0)
 			Uses -= 1
-		if(Uses == 0)
+		if (Uses == 0)
 			qdel(src)
 
 /obj/item/slime_extract/New()
