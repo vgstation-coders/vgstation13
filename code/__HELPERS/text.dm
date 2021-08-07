@@ -701,3 +701,13 @@ proc/sql_sanitize_text(var/text)
 	speech = nya_uppercase.Replace(speech, "NY")
 	speech = nya_Ny.Replace(speech, "Ny")
 	return speech
+
+/proc/count_matches(haystack, needle)
+	var/last_index = 0
+	var/count = 0
+	do
+		last_index = findtext(haystack, needle, last_index+1)
+		if(last_index)
+			count++
+	while(last_index)
+	return count
