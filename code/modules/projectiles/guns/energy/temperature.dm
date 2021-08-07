@@ -17,6 +17,7 @@
 
 	var/powercost = ""
 	var/powercostcolor = ""
+	var/tempcolor = ""
 
 	var/emagged = 0			//ups the temperature cap from 500 to 1000, targets hit by beams over 500 Kelvin will burst into flames
 	var/dat = ""
@@ -68,18 +69,23 @@
 		if(0 to 100)
 			charge_cost = 300
 			powercost = "High"
+			tempcolor = "blue"
 		if(100 to 250)
 			charge_cost = 180
 			powercost = "Medium"
+			tempcolor = "green"
 		if(251 to 300)
 			charge_cost = 90
 			powercost = "Low"
+			tempcolor = "black"
 		if(301 to 400)
 			charge_cost = 180
 			powercost = "Medium"
+			tempcolor = "yellow"
 		if(401 to 1000)
 			charge_cost = 300
 			powercost = "High"
+			tempcolor = "red"
 	switch(powercost)
 		if("High")
 			powercostcolor = "orange"
@@ -113,15 +119,9 @@
 /obj/item/weapon/gun/energy/temperature/proc/update_dat()
 	dat = ""
 	dat += "Current output temperature: "
+	dat += "<FONT color=[tempcolor]><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F) </FONT>"
 	if(temperature > 500)
-		dat += "<FONT color=red><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F) </FONT>"
 		dat += "<FONT color=red><B>SEARING!!</B></FONT>"
-	else if(temperature > (T0C + 50))
-		dat += "<FONT color=red><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
-	else if(temperature > (T0C - 50))
-		dat += "<FONT color=black><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
-	else
-		dat += "<FONT color=blue><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
 	dat += "<BR>"
 	dat += "Target output temperature: "	//might be string idiocy, but at least it's easy to read
 	dat += "<A href='?src=\ref[src];temp=-100'>-</A> "
@@ -134,6 +134,14 @@
 	dat += "<BR>"
 	dat += "Power cost: "
 	dat += "<FONT color=[powercostcolor]><B>[powercost]</B></FONT>"
+
+/obj/item/weapon/gun/energy/temperature/examine(mob/user)
+	..()
+	to_chat(user, "Current output temperature: <FONT color=[tempcolor]><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F) </FONT>")
+	if(temperature > 500)
+		to_chat(user, "<FONT color=red><B>SEARING!!</B></FONT>")
+	to_chat(user, "Target output temperature: [target_temperature]")
+	to_chat(user, "Power cost: <FONT color=[powercostcolor]><B>[powercost]</B></FONT>")
 
 /obj/item/weapon/gun/energy/temperature/proc/update_temperature()
 	switch(temperature)
