@@ -244,6 +244,7 @@
 		var/obj/item/rig_module/RM = input(H, "Choose an upgrade to remove from [R].", R) as null|anything in R.modules
 		if(!RM|| !H.Adjacent(src) || H.incapacitated())
 			unlock_atom(H)
+			activated = FALSE
 			return
 		working_animation()
 		say("Uninstalling [RM] from \the [R].", class = "binaryradio")
