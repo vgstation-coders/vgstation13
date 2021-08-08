@@ -244,7 +244,6 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/DivideOccupations()
 	//Setup new player list and get the jobs list
 	Debug("Running DO")
-	SetupOccupations()
 
 	//Holder for Triumvirate is stored in the ticker, this just processes it
 	if(ticker)
