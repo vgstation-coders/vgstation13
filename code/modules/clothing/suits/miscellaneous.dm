@@ -820,6 +820,9 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/mino/vinesafe
 
+/obj/item/clothing/suit/mino/vinseafe/vine_protected()
+	return TRUE
+
 /obj/item/clothing/suit/kimono
 	name = "kimono"
 	desc = "A traditional Japanese kimono."

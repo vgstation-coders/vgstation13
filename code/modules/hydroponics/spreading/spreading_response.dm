@@ -171,7 +171,6 @@
 /obj/effect/plantsegment/proc/grab_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !Adjacent(victim)|| !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment))
 		return
-		return
 	var/can_grab = 1
 	if(istype(victim, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = victim
@@ -185,10 +184,9 @@
 		lock_atom(victim, /datum/locking_category/plantsegment)
 
 /obj/effect/plantsegment/proc/is_protected(var/mob/living/carbon/human/H)
-	if(!istype(H))
+	var/obj/clothing/suit/S = H.wear_suit
+	if(!istype(H) || !istype(S))
 		return FALSE 
-	if(istype(H.wear_suit, /obj/item/clothing/suit/mino/vinesafe))
-		return TRUE
-	return FALSE
+	return S.vine_protected()
 
 /datum/locking_category/plantsegment
