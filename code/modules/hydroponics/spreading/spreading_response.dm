@@ -184,7 +184,7 @@
 		lock_atom(victim, /datum/locking_category/plantsegment)
 
 /obj/effect/plantsegment/proc/is_protected(var/mob/living/carbon/human/H)
-	var/obj/clothing/suit/S = H.wear_suit
+	var/obj/item/clothing/suit/S = H.wear_suit
 	if(!istype(H) || !istype(S))
 		return FALSE 
 	return S.vine_protected()
