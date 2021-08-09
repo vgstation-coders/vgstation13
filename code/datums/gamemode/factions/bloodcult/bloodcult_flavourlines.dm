@@ -1,3 +1,5 @@
+// TODO (UPHEAVAL PART 1) : do a pass on those
+
 var/list/failure_lines_by_dept = list(
 	COMMAND_POSITIONS = list(
 		"You have failed to lead them. You would have failed to follow." = 3,

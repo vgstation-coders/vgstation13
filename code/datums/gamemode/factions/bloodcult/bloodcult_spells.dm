@@ -132,9 +132,8 @@ var/list/uristrune_cache = list()
 		var/i = 1
 		for(var/blood_spell in subtypesof(/datum/rune_spell/blood_cult))
 			var/datum/rune_spell/blood_cult/instance = blood_spell
-			if(initial(instance.Act_restriction) <= veil_thickness)
-				available_runes.Add("\Roman[i]-[initial(instance.name)]")
-				available_runes["\Roman[i]-[initial(instance.name)]"] = instance
+			available_runes.Add("\Roman[i]-[initial(instance.name)]")
+			available_runes["\Roman[i]-[initial(instance.name)]"] = instance
 			i++
 		if(tome.state == TOME_CLOSED)
 			tome.icon_state = "tome-open"

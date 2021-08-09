@@ -89,18 +89,15 @@ var/list/arcane_tomes = list()
 			<a href='byond://?src=\ref[src];page=[PAGE_FOREWORD]'><label> * </label> <li> Foreword</a> </li>"}
 
 	var i = 1
-	for(var/subtype in subtypesof(/datum/rune_spell/blood_cult))
-		var/datum/rune_spell/blood_cult/instance = subtype
-		if (initial(instance.Act_restriction) <= veil_thickness)
-			dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
-			if (i == current_page)
-				var/datum/runeword/word1 = initial(instance.word1)
-				var/datum/runeword/word2 = initial(instance.word2)
-				var/datum/runeword/word3 = initial(instance.word3)
-				page_data = {"<div align="center"><b>\Roman[i]<br>[initial(instance.name)]</b><br><i>[initial(word1.english)], [initial(word2.english)], [word3 ? "[initial(word3.english)]" : "<any>"]</i></div><br>"}
-				page_data += initial(instance.page)
-		else
-			dat += "<label> \Roman[i] </label> <li>  __________ </li>"
+	for(var/subtype in subtypesof(/datum/rune_spell))
+		var/datum/rune_spell/instance = subtype
+		dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
+		if (i == current_page)
+			var/datum/rune_word/word1 = initial(instance.word1)
+			var/datum/rune_word/word2 = initial(instance.word2)
+			var/datum/rune_word/word3 = initial(instance.word3)
+			page_data = {"<div align="center"><b>\Roman[i]<br>[initial(instance.name)]</b><br><i>[initial(word1.english)], [initial(word2.english)], [word3 ? "[initial(word3.english)]" : "<any>"]</i></div><br>"}
+			page_data += initial(instance.page)
 		i++
 
 	dat += {"<a href='byond://?src=\ref[src];page=[PAGE_LORE1]'><label> * </label> <li>  about this tome and our goal </li></a>
@@ -276,7 +273,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/tome/AltClick(var/mob/user)
 	var/list/choices = list()
-	var/datum/rune_spell/blood_cult/instance
+	var/datum/rune_spell/instance
 	var/list/choice_to_talisman = list()
 	var/image/talisman_image
 	for(var/obj/item/weapon/talisman/T in talismans)
@@ -343,7 +340,7 @@ var/list/arcane_tomes = list()
 	ignite()
 
 /obj/item/weapon/talisman/proc/talisman_name()
-	var/datum/rune_spell/blood_cult/instance = spell_type
+	var/datum/rune_spell/instance = spell_type
 	if (blood_text)
 		return "\[blood message\]"
 	if (instance)
@@ -367,7 +364,7 @@ var/list/arcane_tomes = list()
 		to_chat(user, "<span class='info'>This one, however, seems pretty unremarkable.</span>")
 		return
 
-	var/datum/rune_spell/blood_cult/instance = spell_type
+	var/datum/rune_spell/instance = spell_type
 
 	if (iscultist(user) || isobserver(user))
 		if (attuned_rune)
@@ -392,7 +389,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/talisman/attack(var/mob/living/target, var/mob/living/user)
 	if(iscultist(user) && spell_type)
-		var/datum/rune_spell/blood_cult/instance = spell_type
+		var/datum/rune_spell/instance = spell_type
 		if (initial(instance.touch_cast))
 			new spell_type(user, src, "touch", target)
 			qdel(src)
@@ -445,7 +442,7 @@ var/list/arcane_tomes = list()
 		to_chat(user, "<span class='warning'>Cannot imbue a talisman that has been written on.</span>")
 		return
 
-	var/datum/rune_spell/blood_cult/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
+	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
 	if(initial(spell.talisman_absorb) == RUNE_CANNOT)//placing a talisman on a Conjure Talisman rune to try and fax it
 		user.drop_item(src)
 		src.forceMove(get_turf(R))
@@ -462,10 +459,6 @@ var/list/arcane_tomes = list()
 			to_chat(user, "<span class='warning'>There is no power in those runes. \The [src] isn't reacting to it.</span>")
 			return
 
-		if (initial(spell.Act_restriction) > veil_thickness)
-			to_chat(user, "<span class='danger'>The veil is still too thick for \the [src] to draw power from this rune.</span>")
-			return
-
 		//blood markings
 		overlays += image(icon,"talisman-[R.word1.icon_state]a")
 		overlays += image(icon,"talisman-[R.word2.icon_state]a")
@@ -479,21 +472,19 @@ var/list/arcane_tomes = list()
 		uses = initial(spell.talisman_uses)
 
 		var/talisman_interaction = initial(spell.talisman_absorb)
-		var/datum/rune_spell/blood_cult/active_spell = R.active_spell
+		var/datum/rune_spell/active_spell = R.active_spell
 		if(!istype(R))
 			return
 		if (active_spell)//some runes may change their interaction type dynamically (ie: Path Exit runes)
 			talisman_interaction = active_spell.talisman_absorb
-			if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
-				var/datum/rune_spell/blood_cult/portalentrance/entrance = active_spell
+			if (istype(active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/entrance = active_spell
 				if (entrance.network)
-					var/datum/runeset/rune_set = global_runesets["blood_cult"]
-					word_pulse(rune_set.words[entrance.network])
-			else if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
-				var/datum/rune_spell/blood_cult/portalentrance/exit = active_spell
+					word_pulse(rune_words[entrance.network])
+			else if (istype(active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalentrance/exit = active_spell
 				if (exit.network)
-					var/datum/runeset/rune_set = global_runesets["blood_cult"]
-					word_pulse(rune_set.words[exit.network])
+					word_pulse(rune_words[exit.network])
 
 		switch(talisman_interaction)
 			if (RUNE_CAN_ATTUNE)
@@ -508,7 +499,7 @@ var/list/arcane_tomes = list()
 				message_admins("Error! ([key_name(user)]) managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
 				return
 
-/obj/item/weapon/talisman/proc/word_pulse(var/datum/runeword/W)
+/obj/item/weapon/talisman/proc/word_pulse(var/datum/rune_word/W)
 	var/image/I1 = image(icon,"talisman-[W.icon_state]a")
 	animate(I1, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5, loop = -1)
 	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)

@@ -112,15 +112,6 @@
 
 #define MALF_CHOOSING_NUKE	4
 
-#define CULT_MENDED		-1
-#define CULT_PROLOGUE	0
-#define CULT_ACT_I		1
-#define CULT_ACT_II		2
-#define CULT_ACT_III	3
-#define CULT_ACT_IV		4
-#define CULT_EPILOGUE	5
-
-
 //////////////////////////////////CULT STUFF////////////////////////////////////
 
 #define BLOODCOST_TARGET_BLEEDER	"bleeder"

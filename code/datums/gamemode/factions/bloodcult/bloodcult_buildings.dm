@@ -598,47 +598,7 @@
 					user.client.images |= watcher_maps["\ref[user]"]
 					user.register_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
-				switch(veil_thickness)
-					if (CULT_MENDED)
-						to_chat(user, "...nothing but silence...")
-					if (CULT_PROLOGUE)
-						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>How interesting...</span></span>")
-					if (CULT_ACT_I)
-						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The conversion rune is <span class='danger'>Join Blood Self</span>, but you now have many new runes at your disposal to help you in your task, therefore I recommend you first summon an Arcane Tome to easily scribe them. The rune that conjures a tome is <span class='danger'>See Blood Hell</span>.</span></span>")
-					if (CULT_ACT_II)
-						var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-						if (cult)
-							var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
-							if (O && !O.IsFulfilled())
-								if (!O.sacrifice_target || !O.sacrifice_target.loc)//if there's no target or its body was destroyed, immediate reroll
-									replace_target()
-									return
-								else
-									var/turf/T = get_turf(O.sacrifice_target)
-									var/datum/shuttle/S = is_on_shuttle(T)
-									if ((T.z == CENTCOMM_Z) && (emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S)))
-										to_chat(user,"<b>\The [O.sacrifice_target] has fled the station along with the rest of the crew. Unless we can bring them back in time with a Path rune or sacrifice him where he stands, it's over.</b>")
-										return
-									else if (T.z != STATION_Z)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
-										var/choice = alert(user,"The target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
-										if (choice == "Yes")
-											replace_target(user)
-											return
-									else
-										to_chat(user,"<b>\The [O.sacrifice_target] is in [get_area_name(O, 1)].</b>")
-						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>To perform the sacrifice, you'll have to forge a cult blade first. It doesn't matter if the target is alive of not, lay their body down on the altar and plant the blade on their stomach. Next, touch the altar to perform the next step of the ritual. The more of you, the quicker it will be done.</span></span>")
-					if (CULT_ACT_III)
-						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>The crew is now aware of our presence, prepare to draw blood. Your priority is to spill as much blood as you can all over the station, bloody trails left by foot steps count toward this goal. How you obtain the blood, I leave to your ambition, but remember that if the crew destroys every blood stones, you will be doomed.</span></span>")
-					if (CULT_ACT_IV)
-						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>One of the blood stones has become my anchor in this plane, you can touch any other stone to locate it. Touch the anchor to perform the Tear Reality ritual before the crew breaks it.</span></span>")
-					if (CULT_EPILOGUE)
-						to_chat(user, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>Remarkable work, [user.real_name], I greatly enjoyed observing this game. Your work is over now, but I may have more in store for you in the future. In the meanwhile, bask in your victory.</span></span>")
-				/* TODO: I'll finish that up someday
-				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000"><ul>"}
-				dat += {"</ul></body>"}
-				user << browse("<TITLE>Nar-Sie's Tips</TITLE>[dat]", "window=narsietips;size=500x300")
-				onclose(user, "narsietips")
-				*/
+				// TODO (UPHEAVAL PART 1) : Let cultists talk to admins just like a comms console do, but also have some tips
 			if ("Conjure Soul Gem")
 				altar_task = ALTARTASK_GEM
 				update_icon()
@@ -793,12 +753,7 @@
 		var/turf/T = loc
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (cult)
-			if (emergency_shuttle.direction == 2) // Going to centcomm
-				cult.minor_victory()
-			else
-				cult.stage(CULT_ACT_III,T)
-		else
+		if (!cult)
 			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 		qdel(src)
 

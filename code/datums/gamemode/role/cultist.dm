@@ -180,55 +180,6 @@
 /datum/role/cultist/proc/update_cult_hud()
 	var/mob/M = antag?.current
 	if(M && M.client && M.hud_used)
-		if(!M.hud_used.cult_Act_display)
-			M.hud_used.cult_hud()
-		if (!(M.hud_used.cult_Act_display in M.client.screen))
-			M.client.screen += list(M.hud_used.cult_Act_display,M.hud_used.cult_tattoo_display)
-		M.hud_used.cult_Act_display.overlays.len = 0
-		M.hud_used.cult_tattoo_display.overlays.len = 0
-		var/current_act = max(-1,min(5,veil_thickness))
-		var/image/I_act = image('icons/mob/screen1_cult.dmi',"act")
-		I_act.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_Act_display.overlays += I_act
-		var/image/I_tattoos = image('icons/mob/screen1_cult.dmi',"tattoos")
-		I_tattoos.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_tattoo_display.overlays += I_tattoos
-
-		var/image/I_act_indicator = image('icons/mob/screen1_cult.dmi',"[current_act]")
-		if (current_act == CULT_MENDED)
-			I_act_indicator.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_Act_display.overlays += I_act_indicator
-
-		var/image/I_arrow = image('icons/mob/screen1_cult.dmi',"[current_act]a")
-		I_arrow.appearance_flags |= RESET_COLOR
-		M.hud_used.cult_Act_display.overlays += I_arrow
-		switch (current_act)
-			if (CULT_MENDED)
-				M.hud_used.cult_Act_display.name = "..."
-			if (CULT_PROLOGUE)
-				M.hud_used.cult_Act_display.name = "Prologue: The Reunion"
-			if (CULT_ACT_I)
-				M.hud_used.cult_Act_display.name = "Act I: The Followers"
-			if (CULT_ACT_II)
-				M.hud_used.cult_Act_display.name = "Act II: The Sacrifice"
-			if (CULT_ACT_III)
-				M.hud_used.cult_Act_display.name = "Act III: The Blood Bath"
-			if (CULT_ACT_IV)
-				M.hud_used.cult_Act_display.name = "Act IV: The Tear in Reality"
-			if (CULT_EPILOGUE)
-				M.hud_used.cult_Act_display.name = "Epilogue: The Feast"
-		var/tattoos_names = ""
-		var/i = 0
-		for (var/T in tattoos)
-			var/datum/cult_tattoo/tattoo = tattoos[T]
-			if (tattoo)
-				M.hud_used.cult_tattoo_display.overlays += image('icons/mob/screen1_cult.dmi',"t_[tattoo.icon_state]")
-				tattoos_names += "[i ? ", " : ""][tattoo.name]"
-				i++
-		if (!tattoos_names)
-			tattoos_names = "none"
-		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
-
 		if (isshade(M))
 			if (istype(M.loc,/obj/item/weapon/melee/soulblade))
 				M.DisplayUI("Soulblade")
@@ -237,31 +188,22 @@
 				M.client.screen -= list(M.healths2)
 
 /datum/role/cultist/proc/remove_cult_hud()
-	var/mob/M = antag?.current
-	if(M && M.client && M.hud_used)
-		qdel(M.hud_used.cult_Act_display)
-		qdel(M.hud_used.cult_tattoo_display)
-
-/mob/proc/occult_muted()
-	if (checkTattoo(TATTOO_HOLY))
-		return 0
-	if (reagents && reagents.has_reagent(HOLYWATER))
-		return 1
-	if (is_implanted(/obj/item/weapon/implant/holy))
-		return 1
-	return 0
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
 	var/unholy = H.checkTattoo(TATTOO_HOLY)
-	var/current_act = clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
 	if (reagent_id == INCENSE_HAREBELLS)
 		if (unholy)
 			H.eye_blurry = max(H.eye_blurry, 3)
 			return
 		else
+			H.eye_blurry = max(H.eye_blurry, 12)
+			H.Dizzy(12)
+			H.stuttering = max(H.stuttering, 12)
+			H.Jitter(12)
+		/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 			switch (current_act)
 				if (CULT_MENDED)
 					H.dust()
@@ -310,6 +252,7 @@
 						H.confused = 6
 					H.adjustOxyLoss(20)
 					H.adjustToxLoss(10)
+					*/
 
 /datum/role/cultist/handle_splashed_reagent(var/reagent_id)//also proc'd when holy water is drinked or ingested in any way
 	var/mob/living/carbon/human/H = antag.current
@@ -323,6 +266,8 @@
 			if (unholy)
 				to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
 			else
+				to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
+				/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 				switch (current_act)
 					if (CULT_MENDED)
 						to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
@@ -339,11 +284,17 @@
 					if (CULT_EPILOGUE)
 						to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
 
+				*/
 	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
 		if (unholy)
 			H.eye_blurry = max(H.eye_blurry, 3)
 			return
 		else
+			H.eye_blurry = max(H.eye_blurry, 12)
+			H.Dizzy(12)
+			H.stuttering = max(H.stuttering, 12)
+			H.Jitter(12)
+			/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 			switch (current_act)
 				if (CULT_MENDED)
 					H.dust()
@@ -392,6 +343,7 @@
 						H.confused = 6
 					H.adjustOxyLoss(20)
 					H.adjustToxLoss(10)
+			*/
 
 /datum/role/cultist/chief
 	id = CHIEF_CULTIST

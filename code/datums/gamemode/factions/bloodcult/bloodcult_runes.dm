@@ -1,4 +1,6 @@
 
+var/list/runes = list()
+var/list/rune_appearances_cache = list()
 
 /obj/effect/rune //Abstract, currently only supports blood as a reagent without some serious overriding.
 	name = "rune"
@@ -15,10 +17,9 @@
 	var/animated = 0
 
 	//A rune is made of up to 3 words.
-	var/runeset_identifier = "base"
-	var/datum/runeword/word1
-	var/datum/runeword/word2
-	var/datum/runeword/word3
+	var/datum/rune_word/word1
+	var/datum/rune_word/word2
+	var/datum/rune_word/word3
 
 	//An image we'll show to the AI instead of the rune
 	var/image/blood_image
@@ -47,10 +48,16 @@
 		if(AI.client)
 			AI.client.images += blood_image
 
-	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
-	rune_set.rune_list.Add(src)
+	runes += src
 
-	..()
+	//adding to holomaps
+	var/datum/holomap_marker/holomarker = new()
+	holomarker.id = HOLOMAP_MARKER_CULT_RUNE
+	holomarker.filter = HOLOMAP_FILTER_CULT
+	holomarker.x = src.x
+	holomarker.y = src.y
+	holomarker.z = src.z
+	holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]"] = holomarker
 
 
 /obj/effect/rune/Destroy()
@@ -72,8 +79,10 @@
 		active_spell.abort()
 		active_spell = null
 
-	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
-	rune_set.rune_list.Remove(src)
+	runes -= src
+
+	//removing from holomaps
+	holomap_markers -= HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]"
 
 	..()
 
@@ -116,7 +125,7 @@
 /obj/effect/rune/update_icon()
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	if(spell) // && initial(spell.Act_restriction) <= veil_thickness) Add to bloodcult
+	if(spell)
 		animated = 1
 	else
 		animated = 0
@@ -154,7 +163,7 @@
 	else
 		animate(src)
 
-/obj/effect/rune/proc/make_iconcache(var/datum/runeword/word, var/datum/reagent/blood/blood, var/animated) //For caching rune icons
+/obj/effect/rune/proc/make_iconcache(var/datum/rune_word/word, var/datum/reagent/blood/blood, var/animated) //For caching rune icons
 	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
 	if (!blood)
 		blood = new
@@ -385,26 +394,6 @@
 			if(istype(V))
 				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
 
-/////////////////////////BLOOD CULT RUNES//////////////////////
-
-/obj/effect/rune/blood_cult
-	desc = "A strange collection of symbols drawn in blood."
-	runeset_identifier = "blood_cult"
-
-/obj/effect/rune/blood_cult/New()
-	..()
-	var/datum/holomap_marker/holomarker = new()
-	holomarker.id = HOLOMAP_MARKER_CULT_RUNE
-	holomarker.filter = HOLOMAP_FILTER_CULT
-	holomarker.x = src.x
-	holomarker.y = src.y
-	holomarker.z = src.z
-	holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]"] = holomarker
-
-/obj/effect/rune/blood_cult/Destroy()
-	..()
-	holomap_markers -= HOLOMAP_MARKER_CULT_RUNE+"_\ref[src]" //Add to blood cult rune
-
 /obj/effect/rune/blood_cult/attackby(obj/I, mob/user)
 	..()
 	if(isholyweapon(I))
@@ -473,18 +462,15 @@
 	if(can_read_rune(user) || isobserver(user))
 		var/datum/rune_spell/blood_cult/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
 		if(rune_name)
-			if (initial(rune_name.Act_restriction) <= veil_thickness)
-				to_chat(user, initial(rune_name.desc))
-				if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
-					var/datum/rune_spell/blood_cult/portalentrance/PE = active_spell
-					if (PE.network)
-						to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
-				if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
-					var/datum/rune_spell/blood_cult/portalexit/PE = active_spell
-					if (PE.network)
-						to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
-			else
-				to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+			to_chat(user, initial(rune_name.desc))
+			if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
+				var/datum/rune_spell/blood_cult/portalentrance/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
+			if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
+				var/datum/rune_spell/blood_cult/portalexit/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
 
 	//"Cult" chaplains can read the words, but they have to figure out the spell themselves. Also has a chance to trigger a taunt from Nar-Sie.
 	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))
@@ -522,7 +508,7 @@
 	var/newrune = FALSE
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
-		var/datum/runeword/rune_typecast = word
+		var/datum/rune_word/rune_typecast = word
 		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.//WHYYYYYYYYYYY
 			rune = new /obj/effect/rune/blood_cult(T)
 			newrune = TRUE
