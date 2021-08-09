@@ -880,6 +880,14 @@ var/list/uplink_items = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Botanist")
 
+/datum/uplink_item/jobspecific/service/vinesuit
+	name = "Space Vietnam Grass Coat"
+	desc = "This inconspicuous grass coat was woven from kudzu fibers for guerilla missions in Space Vietnam. While wearing the coat, space vines won't entangle, bite, or otherwise harm you."
+	item = 	/obj/item/clothing/suit/mino/vinesafe
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Botanist")
+
 /datum/uplink_item/jobspecific/service/beecase
 	name = "Briefcase Full of Bees"
 	desc = "A briefcase containing twenty angry bees. Will deliver the bee payload when first opened, functions as a normal briefcase after this initial swarm. The bees do not discriminate on targets, so either get someone else to open the briefcase for you or run."

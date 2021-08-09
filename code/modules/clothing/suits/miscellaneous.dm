@@ -818,6 +818,8 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = ARMS|FULL_TORSO|IGNORE_INV
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/suit/mino/vinesafe
+
 /obj/item/clothing/suit/kimono
 	name = "kimono"
 	desc = "A traditional Japanese kimono."
