@@ -187,7 +187,7 @@
 	return FALSE
 
 /mob/living/carbon/human/vine_protected()
-	if(!wear_suit || !istype(wear_suit))
+	if(!wear_suit)
 		return FALSE
 	return S.vine_protected()
 
