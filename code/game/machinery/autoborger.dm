@@ -129,7 +129,7 @@
 	cooldown_state = 1
 	update_icon()
 
-/obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H,var/deleteItems=FALSE,var/skipnaming=FALSE,var/malfAI=null)
+/obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
 	return H.Robotize(deleteItems,skipnaming,malfAI)
 
 /obj/machinery/autoborger/process()
@@ -222,5 +222,5 @@
 	name = "Autimatic Crab Factory 5000"
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, silent crab comes out'. Human must be lying down and alive. Has to cooldown between each use."
 	
-/obj/machinery/autoborger/mommi/do_transform(var/mob/living/carbon/human/H)
-	return H.MoMMIfy()
+/obj/machinery/autoborger/mommi/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
+	return H.MoMMIfy(deleteItems,skipnaming,malfAI)
