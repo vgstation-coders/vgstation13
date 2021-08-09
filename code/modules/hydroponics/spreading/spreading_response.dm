@@ -171,7 +171,6 @@
 /obj/effect/plantsegment/proc/grab_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !Adjacent(victim)|| !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment))
 		return
-		return
 	var/can_grab = 1
 	if(istype(victim, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = victim
