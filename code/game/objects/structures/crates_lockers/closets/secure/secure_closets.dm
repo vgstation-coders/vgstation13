@@ -17,6 +17,18 @@
 	health = 200
 	var/id_tag = null
 
+/obj/structure/closet/secure_closet/cabinet
+	icon_state = "cabinetsecure_locked"
+	icon_closed = "cabinetsecure"
+	icon_locked = "cabinetsecure_locked"
+	icon_opened = "cabinetsecure_open"
+	icon_broken = "cabinetsecure_broken"
+	icon_off = "cabinetsecure_broken"
+	has_lockless_type = /obj/structure/closet/cabinet/basic
+	is_wooden = TRUE
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
+
 /obj/structure/closet/secure_closet/basic
 	has_lockless_type = /obj/structure/closet/basic
 
@@ -82,17 +94,17 @@
 		for(var/mob/O in viewers(user, 3))
 			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
 		update_icon()
-	else
-		if(iswelder(W))
-			var/obj/item/tool/weldingtool/WT = W
-			if(!WT.remove_fuel(1,user))
-				return
-			welded =! welded
-			update_icon()
-			visible_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
-		if(W.is_screwdriver(user) && !locked && has_lockless_type)
-			remove_lock(user)
+	else if(iswelder(W) && canweld())
+		var/obj/item/tool/weldingtool/WT = W
+		if(!WT.remove_fuel(1,user))
 			return
+		welded =! welded
+		update_icon()
+		visible_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+	else if(W.is_screwdriver(user) && !locked && has_lockless_type)
+		remove_lock(user)
+		return
+	else
 		togglelock(user)
 
 /obj/structure/closet/secure_closet/relaymove(mob/user)

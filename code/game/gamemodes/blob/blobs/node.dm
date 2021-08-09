@@ -29,9 +29,9 @@
 	blob_nodes -= src
 	if(!manual_remove && overmind)
 		to_chat(overmind,"<span class='warning'>A node blob that you had created has been destroyed.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
-		overmind.special_blobs -= src
-		overmind.update_specialblobs()
 	if(overmind)
+		overmind.special_blobs -= src
+		overmind.DisplayUI("Blob")
 		overmind.max_blob_points -= BLOBNDPOINTINC
 	processing_objects.Remove(src)
 	..()
@@ -40,8 +40,11 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 
+	if(asleep)
+		return
+
 	if(icon_size == 64)
-	//	anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 150)
+		anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = layer+0.5, offX = -16, offY = -16, alph = 150, plane = BLOB_PLANE)
 		for(var/mob/M in viewers(src))
 			M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 

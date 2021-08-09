@@ -234,7 +234,16 @@
 	name = "\improper Slime Extract Storage"
 	desc = "A refrigerated storage unit for slime extracts."
 
-	accepted_types = list(/obj/item/slime_extract)
+	accepted_types = list(
+		/obj/item/slime_extract,
+		/obj/item/weapon/slimepotion,
+		/obj/item/weapon/slimepotion2,
+		/obj/item/weapon/slimesteroid,
+		/obj/item/weapon/slimesteroid2,
+		/obj/item/weapon/slimenutrient,
+		/obj/item/weapon/slimedupe,
+		/obj/item/weapon/slimeres
+	)
 
 /obj/machinery/smartfridge/extract/New()
 	. = ..()

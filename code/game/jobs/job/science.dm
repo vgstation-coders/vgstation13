@@ -1,7 +1,5 @@
 /datum/job/rd
 	title = "Research Director"
-	flag = RD
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -23,8 +21,6 @@
 
 /datum/job/scientist
 	title = "Scientist"
-	flag = SCIENTIST
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 5
 	spawn_positions = 3
@@ -40,8 +36,6 @@
 
 /datum/job/xenoarchaeologist
 	title = "Xenoarchaeologist"
-	flag = XENOARCH
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
@@ -57,8 +51,6 @@
 
 datum/job/xenobiologist
 	title = "Xenobiologist"
-	flag = XENOBIO
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
@@ -73,8 +65,6 @@ datum/job/xenobiologist
 
 /datum/job/roboticist
 	title = "Roboticist"
-	flag = ROBOTICIST
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2

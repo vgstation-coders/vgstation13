@@ -200,3 +200,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/photobooth
+
+/datum/design/disk_duplicator
+	name = "Circuit Design (Disk Duplicator)"
+	desc = "Allows for the construction of circuit boards used to build a disk duplicator."
+	id = "disk_duplicator"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_ENGINEERING = 2, Tc_MAGNETS = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/disk_duplicator

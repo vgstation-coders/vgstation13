@@ -80,6 +80,24 @@
 	speak_emote = list("screams")
 	emote_hear = list("screams")
 	emote_see = list("screams")
+	emote_sound = list(
+		'sound/misc/malescream1.ogg',
+		'sound/misc/malescream2.ogg',
+		'sound/misc/malescream3.ogg',
+		'sound/misc/malescream4.ogg',
+		'sound/misc/malescream5.ogg',
+		'sound/misc/wilhelm.ogg', 
+		'sound/misc/goofy.ogg',
+		'sound/misc/femalescream1.ogg',
+		'sound/misc/femalescream2.ogg',
+		'sound/misc/femalescream3.ogg',
+		'sound/misc/femalescream4.ogg',
+		'sound/misc/femalescream5.ogg',
+		'sound/misc/shriek1.ogg',
+		'sound/misc/hiss1.ogg',
+		'sound/misc/hiss2.ogg',
+		'sound/misc/hiss3.ogg'
+	)
 	friendly = "bites"
 	canRegenerate = 1
 	minRegenTime = 30 //It's just a crab, might as well give it quick regen

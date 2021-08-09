@@ -26,7 +26,7 @@
 	if(!manual_remove && overmind)
 		to_chat(overmind,"<span class='warning'>You lost a resource blob.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
-		overmind.update_specialblobs()
+		overmind.DisplayUI("Blob Top Panel")
 	..()
 
 /obj/effect/blob/resource/Pulse(var/pulse = 0, var/origin_dir = 0)
@@ -36,7 +36,7 @@
 			to_chat(B,"<span class='notice'>You take control of the resource blob.</span>")
 			overmind = B
 			B.special_blobs += src
-			B.update_specialblobs()
+			B.DisplayUI("Blob Top Panel")
 			update_icon()
 	..()
 
@@ -47,8 +47,8 @@
 	resource_delay = world.time + (8 SECONDS)
 
 	if(overmind)
-	/*	if(blob_looks[looks] == 64)
-			anim(target = loc, a_icon = icon, flick_anim = "resourcepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)*/
+		if(icon_size == 64)
+			anim(target = loc, a_icon = icon, flick_anim = "resourcepulse", sleeptime = 15, lay = layer+0.5, offX = -16, offY = -16, alph = 220, plane = BLOB_PLANE)
 		overmind.add_points(1)
 
 	return 1

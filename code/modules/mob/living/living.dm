@@ -361,6 +361,9 @@
 /mob/living/proc/setMaxHealth(var/newMaxHealth)
 	maxHealth = newMaxHealth
 
+/mob/living/proc/get_butchering_products()
+	return list()
+
 // ++++ROCKDTBEN++++ MOB PROCS //END
 
 

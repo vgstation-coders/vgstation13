@@ -939,7 +939,8 @@ var/global/list/loopModeNames=list(
 	icon_state = ""
 	light_color = LIGHT_COLOR_BLUE
 	luminosity = 0
-	plane = EFFECTS_PLANE
+	plane = ABOVE_HUMAN_PLANE
+	layer = ABOVE_OBJ_LAYER
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 
@@ -994,6 +995,12 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/adminbus/cultify()
 	return
+
+/obj/machinery/media/jukebox/superjuke/adminbus/singularity_act()
+	return 0
+
+/obj/machinery/media/jukebox/superjuke/adminbus/singularity_pull()
+	return 0
 
 obj/machinery/media/jukebox/holyjuke
 	name = "Holyjuke"

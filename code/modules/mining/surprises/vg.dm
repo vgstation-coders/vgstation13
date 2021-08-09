@@ -104,54 +104,9 @@
 	name="Abandoned Forge"
 	file_path = "maps/randomvaults/mining/abandoned_forge.dmm"
 
-/mining_surprise/alien_nest
-	name="Hidden Nest"
-	floortypes = list(
-		/turf/unsimulated/floor/asteroid=100
-	)
-
-	walltypes = list(
-		/turf/unsimulated/mineral/random/high_chance=1
-	)
-
-	spawntypes = list(
-		/obj/item/clothing/mask/facehugger				=4,
-		/obj/mecha/working/ripley/mining				=1
-	)
-	fluffitems = list(
-		/obj/effect/decal/remains/human                 = 5,
-		/obj/effect/decal/cleanable/blood/xeno          = 5,
-		/obj/effect/decal/mecha_wreckage/ripley			= 1
-	)
-	complex_max_size=6
-	room_size_max=7
-
-	var/const/eggs_left=10 // Per complex
-	var/turf/weeds[0] // Turfs with weeds.
-	postProcessComplex()
-		..()
-		var/list/all_floors=list()
-		for(var/surprise_room/room in rooms)
-			var/list/w_cand=room.GetTurfs(TURF_FLOOR)
-			all_floors |= w_cand
-			var/egged=0
-			while(w_cand.len>0)
-				var/turf/weed_turf = pick(w_cand)
-				w_cand -= weed_turf
-				if(weed_turf.density)
-					continue
-				if(locate(/obj/effect/alien) in weed_turf)
-					continue
-				if(weed_turf && !egged)
-					new /obj/effect/alien/weeds/node(weed_turf)
-					weeds += weed_turf
-					break
-
-		for(var/e=0;e<eggs_left;e++)
-			var/turf/egg_turf = pick(all_floors)
-			if(egg_turf && !(locate(/obj/effect/alien) in egg_turf))
-				new /obj/effect/alien/egg(egg_turf)
-
+/datum/map_element/mining_surprise/aliens
+	name="Alien Hive"
+	file_path = "maps/randomvaults/mining/huggernest.dmm"
 
 /datum/map_element/mining_surprise/angie
 	name = "Angie's lair"

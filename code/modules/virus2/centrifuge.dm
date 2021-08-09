@@ -546,6 +546,7 @@
 	visible_message("\The [src] prints a growth dish.")
 	spawn(10)
 		var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
+		dish.pixel_y = -7
 		dish.contained_virus = D.getcopy()
 		dish.contained_virus.infectionchance = dish.contained_virus.infectionchance_base
 		dish.update_icon()

@@ -1,7 +1,5 @@
 /datum/job/trader
 	title = "Trader"
-	flag = TRADER
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 3
 	spawn_positions = 3

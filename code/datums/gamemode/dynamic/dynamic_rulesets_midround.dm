@@ -65,7 +65,7 @@
 // (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs(TRUE))
+		if(!check_enemy_jobs(TRUE,TRUE))
 			return 0
 	return 1
 
