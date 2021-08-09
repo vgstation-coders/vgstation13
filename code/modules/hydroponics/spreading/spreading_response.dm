@@ -189,6 +189,6 @@
 /mob/living/carbon/human/vine_protected()
 	if(!wear_suit)
 		return FALSE
-	return S.vine_protected()
+	return wear_suit.vine_protected()
 
 /datum/locking_category/plantsegment
