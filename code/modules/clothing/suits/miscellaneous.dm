@@ -818,9 +818,7 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = ARMS|FULL_TORSO|IGNORE_INV
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
-/obj/item/clothing/suit/mino/vinesafe
-
-/obj/item/clothing/suit/mino/vinseafe/vine_protected()
+/obj/item/clothing/suit/mino/vinesafe/vine_protected()
 	return TRUE
 
 /obj/item/clothing/suit/kimono
