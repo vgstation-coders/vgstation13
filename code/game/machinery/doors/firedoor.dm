@@ -580,7 +580,7 @@ var/global/list/alert_overlays_global = list()
 			update_icon()
 
 /obj/machinery/door/firedoor/proc/latetoggle()
-	if(operating || stat & NOPOWER || !nextstate)
+	if(operating || stat & (FORCEDISABLE|NOPOWER) || !nextstate)
 		return
 
 	switch(nextstate)

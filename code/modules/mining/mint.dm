@@ -49,7 +49,7 @@
 
 /obj/machinery/mineral/mint/attack_hand(mob/user)
 	add_fingerprint(user)
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		if(user.machine == src)
 			user.unset_machine(src)
 		return

@@ -251,7 +251,7 @@
 	reconnect()
 
 /obj/machinery/power/generator/proc/operable()
-	return circ1 && circ2 && anchored && !(stat & (BROKEN|NOPOWER))
+	return circ1 && circ2 && anchored && !(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 
 /obj/machinery/power/generator/update_icon()
 	overlays = 0

@@ -23,7 +23,7 @@
 	add_fingerprint(user)
 	if(!(iscrowbar(C) || (istype(C, /obj/item/weapon/fireaxe) && C.wielded == 1) ))
 		return
-	if(density && (stat & NOPOWER) && !operating)
+	if(density && (stat & (FORCEDISABLE|NOPOWER)) && !operating)
 		operating = 1
 		spawn(-1)
 			flick("shutterc0", src)

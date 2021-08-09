@@ -1364,7 +1364,7 @@ About the new airlock wires panel:
 	// </worry>
 
 	.=..()
-	if(. && !(stat & (NOPOWER) || !src.arePowerSystemsOn())) //It opened, and there's power
+	if(. && !(stat & (FORCEDISABLE|NOPOWER) || !src.arePowerSystemsOn())) //It opened, and there's power
 		wires.SignalIndex(AIRLOCK_WIRE_ONOPEN)
 
 /obj/machinery/door/airlock/Uncross(atom/movable/mover)

@@ -23,7 +23,7 @@
 	interact(user)
 
 /obj/machinery/computer/stacking_unit/interact(mob/user)
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
 
 	if(!stacker_data)
@@ -90,7 +90,7 @@
 	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/computer/stacking_unit/receive_signal(datum/signal/signal)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER|BROKEN))
 		return
 
 	if(!signal.data["tag"] || signal.data["tag"] != stacker_tag)
@@ -163,7 +163,7 @@
 	RefreshParts()
 
 /obj/machinery/mineral/stacking_machine/update_icon()
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		icon_state = "stacker_o"
 	else
 		icon_state = "stacker"
@@ -253,7 +253,7 @@
 	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/mineral/stacking_machine/receive_signal(var/datum/signal/signal)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE | NOPOWER|BROKEN))
 		return
 
 	if(!signal.data["tag"] || signal.data["tag"] != id_tag)

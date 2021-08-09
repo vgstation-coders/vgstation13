@@ -53,7 +53,7 @@
 	game.emag_act(user)
 
 /obj/machinery/computer/arcade/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		..(severity)
 		return
 	game.emp_act(severity)
@@ -71,7 +71,7 @@
 
 /obj/machinery/computer/arcade/kick_act()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
 	game.kick_act()
