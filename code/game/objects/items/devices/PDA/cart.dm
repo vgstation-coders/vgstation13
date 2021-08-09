@@ -368,7 +368,7 @@ Code:
 			var/found = 0
 
 			for(var/obj/machinery/computer/powermonitor/pMon in power_machines)
-				if(!(pMon.stat & (NOPOWER|BROKEN)))
+				if(!(pMon.stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 					var/turf/T = get_turf(src)
 					if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
 						if(!found)
@@ -418,7 +418,7 @@ Code:
 			var/found = 0
 
 			for(var/obj/machinery/computer/station_alert/aMon in machines)
-				if(!(aMon.stat & (NOPOWER|BROKEN)))
+				if(!(aMon.stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 					var/turf/T = get_turf(src)
 					if(T.z == aMon.z)//the application may only detect station alert computers on its Z-level.
 						if(!found)

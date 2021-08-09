@@ -8,7 +8,7 @@
 	light_color = LIGHT_COLOR_CYAN
 
 	attackby(var/obj/item/weapon/card/W as obj, var/mob/user as mob)
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			return
 		..()
 		if ((!( istype(W, /obj/item/weapon/card) ) || !( ticker ) || emergency_shuttle.location != 1 || !( user )))

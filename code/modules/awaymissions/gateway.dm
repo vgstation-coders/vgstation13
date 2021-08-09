@@ -58,7 +58,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 
 
 obj/machinery/gateway/centerstation/process()
-	if(stat & (NOPOWER))
+	if(stat & (NOPOWER|FORCEDISABLE))
 		if(active)
 			toggleoff()
 		return

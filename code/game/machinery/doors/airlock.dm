@@ -365,7 +365,7 @@ About the new airlock wires panel:
 // You can find code for the airlock wires in the wire datum folder.
 
 /obj/machinery/door/airlock/denied()
-	if (arePowerSystemsOn() && !(stat & (NOPOWER | BROKEN)))
+	if (arePowerSystemsOn() && !(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		..()
 
 /obj/machinery/door/airlock/bump_open(mob/living/user as mob) //Airlocks now zap you when you 'bump' them open when they're electrified. --NeoFite
@@ -1099,7 +1099,7 @@ About the new airlock wires panel:
 			if (shock(user, 100))
 				user.delayNextAttack(10)
 	//Basically no open panel, not opening already, door has power, area has power, door isn't bolted
-	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN)) && !locked)
+	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN|FORCEDISABLE)) && !locked)
 		..(user)
 
 /obj/machinery/door/airlock/attack_alien(mob/living/carbon/alien/humanoid/user)
@@ -1111,7 +1111,7 @@ About the new airlock wires panel:
 		return
 	if(locked || welded || jammed)
 		to_chat(user, "<span class='notice'>The airlock won't budge!</span>")
-	else if(arePowerSystemsOn() && !(stat & NOPOWER))
+	else if(arePowerSystemsOn() && !(stat & (NOPOWER|FORCEDISABLE)))
 		to_chat(user, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
 		visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
 						"<span class='notice'>You hear groaning metal and overworked motors.</span>")
@@ -1141,7 +1141,7 @@ About the new airlock wires panel:
 	else
 		shake(1,8)
 		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
-		if(arePowerSystemsOn() && !(stat & NOPOWER))
+		if(arePowerSystemsOn() && !(stat & (FORCEDISABLE|NOPOWER)))
 			if(level_of_door_opening < 2)
 				return
 			if(M.client)
@@ -1240,7 +1240,7 @@ About the new airlock wires panel:
 			beingcrowbarred = 1 //derp, Agouri
 		else
 			beingcrowbarred = 0
-		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.panel_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
+		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.panel_open && (!src.arePowerSystemsOn() || stat & (FORCEDISABLE|NOPOWER)) && !src.locked) )
 			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
@@ -1249,7 +1249,7 @@ About the new airlock wires panel:
 				revert(user,null)
 				qdel(src)
 				return
-		else if(arePowerSystemsOn() && !(stat & NOPOWER))
+		else if(arePowerSystemsOn() && !(stat & (FORCEDISABLE|NOPOWER)))
 			to_chat(user, "<span class='notice'>The airlock's motors resist your efforts to force it.</span>")
 		else if(locked)
 			to_chat(user, "<span class='notice'>The airlock's bolts prevent it from being forced.</span>")
@@ -1344,7 +1344,7 @@ About the new airlock wires panel:
 	if((operating && !forced) || locked || welded)
 		return 0
 	if(!forced)
-		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
+		if( !arePowerSystemsOn() || (stat & (FORCEDISABLE|NOPOWER)) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
 			return 0
 	for(var/obj/O in loc) //A redundant check that exists in the parent
 		if (O.blocks_doors()) //But it exists in the parent because it also affects firelocks.

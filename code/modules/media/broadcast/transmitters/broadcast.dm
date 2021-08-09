@@ -121,7 +121,7 @@
 		if(!istype(user.get_active_hand(), /obj/item/device/multitool))
 			return
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		return
 
 	var/screen = {"
@@ -143,7 +143,7 @@
 
 
 /obj/machinery/media/transmitter/broadcast/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		..(severity)
 		return
 	cable_power_change()
@@ -151,7 +151,7 @@
 
 /obj/machinery/media/transmitter/broadcast/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on)
 		overlays += image(icon = icon, icon_state = "broadcaster on")
@@ -207,7 +207,7 @@
 	return !wires.IsIndexCut(TRANS_RAD_ONE) + !wires.IsIndexCut(TRANS_RAD_TWO)
 
 /obj/machinery/media/transmitter/broadcast/process()
-	if(stat & (NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN) || wires.IsIndexCut(TRANS_POWER))
 		return
 	if(on && anchored)
 		if(integrity<=0 || count_rad_wires()==0) //Shut down if too damaged OR if no rad wires

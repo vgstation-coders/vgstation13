@@ -54,7 +54,7 @@
 		out += "has been shorted.<br>"
 	else
 		out += "is [locked ? "locked" : "unlocked"].<br>"
-	if(stat & NOPOWER || state != 2)
+	if(stat & (FORCEDISABLE|NOPOWER) || state != 2)
 		out += "It seems to be powered down.<br>"
 	else if(injecting)
 		out += "It's actively injecting fuel.<br>"
@@ -66,7 +66,7 @@
 
 /obj/machinery/power/rust_fuel_injector/process()
 	if(injecting)
-		if(stat & (BROKEN|NOPOWER))
+		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			stop_injecting()
 		else
 			inject()
@@ -134,7 +134,7 @@
 	. = ..()
 	if(.)
 		return
-	if(stat & NOPOWER || state != 2)
+	if(stat & (FORCEDISABLE|NOPOWER) || state != 2)
 		to_chat(user, "<span class='warning'>It's completely unresponsive.</span>")
 		return
 	ui_interact(user)
@@ -166,7 +166,7 @@
 	if(..())
 		return 1
 
-	if (stat & NOPOWER || locked || state != 2)
+	if (stat & (FORCEDISABLE|NOPOWER) || locked || state != 2)
 		return 1
 
 	if(href_list["modify_tag"])

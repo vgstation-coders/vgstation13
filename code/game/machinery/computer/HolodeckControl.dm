@@ -97,7 +97,7 @@
 /obj/machinery/computer/HolodeckControl/proc/spawn_holoperson(mob/dead/observer/user)
 	if (!istype(user) || user.stat != DEAD )
 		return
-	if(stat & (NOPOWER|BROKEN|MAINT))
+	if(stat & (NOPOWER|BROKEN|MAINT|FORCEDISABLE))
 		return
 	if(!ticker || ticker.current_state != GAME_STATE_PLAYING)
 		to_chat(user, "<span class='notice'>You can't do this until the game has started.</span>")

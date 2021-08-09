@@ -46,7 +46,7 @@
 		return
 	add_fingerprint(user)
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		return
 
 	updatemodules()
@@ -95,7 +95,7 @@
 
 /obj/machinery/computer/operating/update_icon()
 	..()
-	if(!(stat & (BROKEN | NOPOWER)))
+	if(!(stat & (FORCEDISABLE |BROKEN | NOPOWER)))
 		updatemodules()
 		if(!isnull(src.optable) && (src.optable.check_victim()))
 			src.victim = src.optable.victim

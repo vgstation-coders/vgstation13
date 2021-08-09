@@ -40,7 +40,7 @@
 
 /obj/machinery/computer/station_alert/attack_hand(mob/user)
 	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	interact(user)
 	return
@@ -120,7 +120,7 @@
 
 
 /obj/machinery/computer/station_alert/process()
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "atmos0"
 		return
 	else if(stat & BROKEN)

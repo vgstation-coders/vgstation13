@@ -36,7 +36,7 @@ var/list/pda_multicasters = list()
 	..()
 
 /obj/machinery/pda_multicaster/update_icon()
-	if(stat & (BROKEN|NOPOWER|EMPED))
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED))
 		icon_state = "pda_server-nopower"
 	else
 		icon_state = "pda_server-[on ? "on" : "off"]"
@@ -52,7 +52,7 @@ var/list/pda_multicasters = list()
 	update_icon()
 
 /obj/machinery/pda_multicaster/proc/check_status()
-	return !(stat&(BROKEN|NOPOWER|EMPED))&&on
+	return !(stat&(FORCEDISABLE|BROKEN|NOPOWER|EMPED))&&on
 
 /obj/machinery/pda_multicaster/proc/update_PDAs(var/turn_off)
 	for(var/obj/item/device/pda/pda in contents)

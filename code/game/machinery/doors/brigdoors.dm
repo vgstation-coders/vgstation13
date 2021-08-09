@@ -59,7 +59,7 @@
 // if it's less than 0, open door, reset timer
 // update the door_timer window and the icon
 /obj/machinery/door_timer/process()
-	if((stat & (NOPOWER|BROKEN)) || !timing)
+	if((stat & (FORCEDISABLE|NOPOWER|BROKEN)) || !timing)
 		return
 	if(timeleft <= 0)
 		timer_end() // open doors, reset timer, clear status screen
@@ -78,7 +78,7 @@
 // open/closedoor checks if door_timer has power, if so it checks if the
 // linked door is open/closed (by density) then opens it/closes it.
 /obj/machinery/door_timer/proc/timer_start()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return 0
 
 	for(var/obj/machinery/door/window/brigdoor/door in targets)
@@ -98,7 +98,7 @@
 
 
 /obj/machinery/door_timer/proc/timer_end()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return 0
 
 	for(var/obj/machinery/door/window/brigdoor/door in targets)
@@ -191,7 +191,7 @@
 // if BROKEN, display blue screen of death icon AI uses
 // if timing=true, run update display function
 /obj/machinery/door_timer/update_icon()
-	if(stat & (NOPOWER))
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "frame"
 		return
 	if(stat & (BROKEN))

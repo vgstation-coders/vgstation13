@@ -516,7 +516,7 @@ var/list/shuttle_log = list()
 	icon_state = "[emagged ? "[initial_icon]-emag" : "[initial_icon]"]"
 	if(stat & BROKEN)
 		icon_state = "[initial_icon]b"
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "[initial_icon]0"
 
 

@@ -7,7 +7,7 @@ For vending packs, see vending_packs.dm*/
 
 // returns an associate list of information needed for cargo consoles.  returns 0 if ID or account is missing
 
-#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
+#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER|FORCEDISABLE))
 #define MENTION_DB_OFFLINE to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
 #define USE_ACCOUNT_ON_ID acc_info["account"] = user.get_worn_id_account(0, user)
 #define USE_CARGO_ACCOUNT acc_info["account"] = department_accounts["Cargo"]

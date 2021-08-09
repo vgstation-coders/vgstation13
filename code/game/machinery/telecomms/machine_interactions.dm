@@ -63,7 +63,7 @@
 		if(!I.is_multitool(user))
 			return
 
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	var/dat

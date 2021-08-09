@@ -197,6 +197,9 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	if(stat & BROKEN)
 		to_chat(user, "<span class = 'warning'>\The [src] is broken!</span>")
 		return
+	if(stat & FORCEDISABLE)
+		to_chat(user, "<span class = 'warning'>\The [src] is unresponsive!</span>")
+		return
 	if(istype(O, /obj/item/weapon/paper))
 		if(!tofax)
 			if(user.drop_item(O, src))
@@ -251,7 +254,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 
 		if(centcomm || F.department == dpt )
-			if(! (F.stat & (BROKEN|NOPOWER) ) )
+			if(! (F.stat & (BROKEN|NOPOWER|FORCEDISABLE) ) )
 
 				flick("faxreceive", F)
 

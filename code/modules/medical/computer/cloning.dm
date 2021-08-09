@@ -523,7 +523,7 @@
 /obj/machinery/computer/cloning/update_icon()
 	..()
 	overlays = 0
-	if(!(stat & (NOPOWER | BROKEN)))
+	if(!(stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		if(scanner && scanner.occupant)
 			overlays += image(icon = icon, icon_state = "cloning-scan")
 		if(pod1 && pod1.occupant)

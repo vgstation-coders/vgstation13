@@ -12,7 +12,7 @@ var/global/no_pin_for_debit = TRUE
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		if(from_z > -1 && DB.z != from_z)
 			continue
-		if((DB.stat & NOPOWER) || !DB.activated )
+		if((DB.stat & (FORCEDISABLE|NOPOWER)) || !DB.activated )
 			continue
 		var/datum/money_account/acct = DB.get_account(account_number)
 		if(!acct)
@@ -120,7 +120,7 @@ var/global/no_pin_for_debit = TRUE
 /obj/proc/charge_flow_verify_security(var/obj/machinery/account_database/linked_db, var/obj/item/weapon/card/card, var/mob/user, var/datum/money_account/account, var/debit_requires_pin)
 	if(!account)
 		if(linked_db)
-			if(!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
+			if(!linked_db.activated || linked_db.stat & (FORCEDISABLE|BROKEN|NOPOWER))
 				to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 				return CARD_CAPTURE_FAILURE_NO_CONNECTION
 			account = linked_db.get_account(card.associated_account_number)
@@ -217,7 +217,7 @@ var/global/no_pin_for_debit = TRUE
 	// To keep track of the user just so we can can cancel if they move.
 	var/authorized = ""
 	// For debit cards.
-	if(!linked_db || !linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
+	if(!linked_db || !linked_db.activated || linked_db.stat & (FORCEDISABLE|BROKEN|NOPOWER))
 		// The account database has to avaiable, active, and not broken.
 		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 		return CARD_CAPTURE_FAILURE_NO_CONNECTION

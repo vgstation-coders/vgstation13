@@ -22,7 +22,7 @@
 	return "beeps, [text]"
 
 /obj/machinery/computer/robotics/proc/speak(var/message)
-	if(stat & NOPOWER)	//sanity
+	if(stat & (NOPOWER|FORCEDISABLE))	//sanity
 		return
 	if (!message)
 		return
@@ -290,7 +290,7 @@
 /obj/machinery/computer/robotics/update_icon()
 	..()
 
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 
 	if (cyborg_detonation_time != 0 && cyborg_detonation_time > world.time)

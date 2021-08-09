@@ -45,7 +45,7 @@ TODO: literally every alarm but SPS alarms.
 
 /obj/machinery/computer/security_alerts/update_icon(var/showalert = FALSE)
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		overlays.Cut()
 		return
 	else
@@ -57,7 +57,7 @@ TODO: literally every alarm but SPS alarms.
 
 
 /obj/machinery/computer/security_alerts/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER)) 
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE)) 
 		return
 
 	if(!ui) 
@@ -97,7 +97,7 @@ TODO: literally every alarm but SPS alarms.
 	onclose(user, "security_alert")
 
 /obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
 		return 

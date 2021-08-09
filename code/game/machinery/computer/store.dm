@@ -144,7 +144,7 @@
 	interact(user)
 
 /obj/machinery/computer/merch/interact(mob/user)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(user.stat || user.restrained() || !allowed(user))
 		return
@@ -172,7 +172,7 @@
 
 	if(stat & BROKEN)
 		icon_state = "comm_logsb"
-	else if(stat & NOPOWER)
+	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "comm_logs0"
 	else
 		icon_state = initial(icon_state)

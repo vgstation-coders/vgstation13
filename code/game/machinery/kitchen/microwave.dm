@@ -355,7 +355,7 @@
 ************************************/
 
 /obj/machinery/microwave/proc/cook()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(operating)
 		return
@@ -454,7 +454,7 @@
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
-		if (stat & (NOPOWER|BROKEN))
+		if (stat & (NOPOWER|BROKEN|FORCEDISABLE))
 			return 0
 		use_power(500)
 		sleep(10/speed_multiplier)
@@ -554,7 +554,7 @@
 	return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return ..()
 	if(!anchored)
 		return ..()

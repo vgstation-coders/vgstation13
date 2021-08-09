@@ -49,7 +49,7 @@
 	log_admin("[key_name(user)] generated an ion law using a LOIC remote.")
 
 	for (var/obj/machinery/computer/communications/C in machines)
-		if(! (C.stat & (BROKEN|NOPOWER) ) )
+		if(! (C.stat & (FORCEDISABLE|BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
 			P.name = "'[command_name()] Update.'"
 			P.info = "Station Time: <B>[worldtime2text()]</B><br><br>Malicious Interference with standard AI-Subsystems detected.<br><br>Signal traced to <B>[get_area(src).name]</B>. Investigation recommended."

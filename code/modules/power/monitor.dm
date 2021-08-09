@@ -150,14 +150,14 @@
 	if(stat & BROKEN)
 		icon_state = "broken"
 	else
-		if (stat & NOPOWER)
+		if (stat & (FORCEDISABLE|NOPOWER))
 			spawn(rand(0, 15))
 				icon_state = "c_unpowered"
 		else
 			icon_state = initial(icon_state)
 
 /obj/machinery/computer/powermonitor/process()
-	if(stat & (BROKEN|NOPOWER) || !connected_powernet)
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER) || !connected_powernet)
 		interface.executeJavaScript("setDisabled()")
 		return
 

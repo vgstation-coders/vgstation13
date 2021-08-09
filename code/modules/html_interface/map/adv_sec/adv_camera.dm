@@ -15,7 +15,7 @@
 	if (src.z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	adv_camera.show(user, (current ? current.z : z))
 	if(current && current.can_use())
@@ -28,7 +28,7 @@
 		if(user.machine == src)
 			user.machine = null
 		return null
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return null
 	user.reset_view(current)
 	return 1
