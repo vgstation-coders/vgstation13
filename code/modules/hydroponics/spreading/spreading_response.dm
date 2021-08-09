@@ -187,8 +187,9 @@
 	return FALSE
 
 /mob/living/carbon/human/vine_protected()
-	if(!wear_suit)
+	var/obj/item/clothing/suit/S = wear_suit
+	if(!S || !istype(S))
 		return FALSE
-	return wear_suit.vine_protected()
+	return S.vine_protected()
 
 /datum/locking_category/plantsegment
