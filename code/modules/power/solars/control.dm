@@ -47,7 +47,7 @@
 		icon_state = "solarb"
 		return
 
-	if(stat & NOPOWER)
+	if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "solar0"
 		return
 
@@ -65,7 +65,7 @@
 	lastgen = gen
 	gen = 0
 
-	if(stat & (NOPOWER | BROKEN))
+	if(stat & (NOPOWER | BROKEN | FORCEDISABLE))
 		return
 
 	if(track == 1 && nexttime < world.time && trackdir * trackrate)
@@ -112,7 +112,7 @@
 
 // called by solar tracker when sun position changes (somehow, that's not supposed to be in process)
 /obj/machinery/power/solar/control/proc/tracker_update(angle)
-	if(track != TRACK_AUTOMATIC || stat & (NOPOWER | BROKEN))
+	if(track != TRACK_AUTOMATIC || stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
 
 	cdir = angle
@@ -121,7 +121,7 @@
 	updateDialog()
 
 /obj/machinery/power/solar/control/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 
 	if (!src.Adjacent(user))

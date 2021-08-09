@@ -635,7 +635,7 @@
 	if(surplus() < active_power_usage)
 		powered = 0
 
-	if(powered && stat & NOPOWER)
+	if(powered && stat & (NOPOWER)
 		stat &= ~NOPOWER
 		update_icon()
 	else if (!powered && !(stat & NOPOWER))
@@ -643,7 +643,7 @@
 		update_icon()
 
 /obj/machinery/power/magtape_deck/update_icon()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		icon_state = "[initial(icon_state)]0"
 	else
 		icon_state = "[initial(icon_state)]1"
@@ -709,7 +709,7 @@
 		encrypted_codephrase += new_char //Then adds it to the codephrase
 
 /obj/machinery/power/magtape_deck/syndicate/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(speech.speaker && !speech.frequency)
 		if(findtext(speech.message, codephrase))
@@ -720,7 +720,7 @@
 				new /obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment(get_turf(src))
 
 /obj/machinery/power/magtape_deck/syndicate/attack_hand(mob/user)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	say(encrypted_codephrase)
 

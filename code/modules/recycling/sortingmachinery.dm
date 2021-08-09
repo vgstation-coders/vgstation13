@@ -288,7 +288,7 @@
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
 /obj/machinery/sorting_machine/process()
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		return
 
 	var/turf/in_T = get_step(src, input_dir)
@@ -426,7 +426,7 @@
 	return A.w_type && (types[A.w_type] in selected_types)
 
 /obj/machinery/sorting_machine/recycling/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		if(user.machine == src)
 			usr.unset_machine()
 		return
@@ -473,7 +473,7 @@
 	RefreshParts()
 
 /obj/machinery/sorting_machine/destination/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
+	if(stat & (BROKEN | NOPOWER | FORCEDISABLE))
 		if(user.machine == src)
 			usr.unset_machine()
 		return

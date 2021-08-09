@@ -39,7 +39,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	return
 
 /obj/machinery/keycard_auth/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		to_chat(user, "<span class='notice'>This device is not powered.</span>")
 		return
 	if(isID(W) || isPDA(W))
@@ -78,7 +78,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	authenticators -= src
 
 /obj/machinery/keycard_auth/attack_hand(mob/user as mob)
-	if(user.stat || stat & (NOPOWER|BROKEN))
+	if(user.stat || stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		to_chat(user, "<span class='notice'>This device is not powered.</span>")
 		return
 	if(busy)
@@ -122,7 +122,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(busy)
 		to_chat(usr, "<span class='notice'>This device is busy.</span>")
 		return
-	if(usr.stat || stat & (BROKEN|NOPOWER))
+	if(usr.stat || stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		to_chat(usr, "<span class='notice'>This device is without power.</span>")
 		return
 	if(href_list["triggerevent"])
@@ -161,7 +161,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		KA.receive_request(src)
 
 /obj/machinery/keycard_auth/proc/receive_request(var/obj/machinery/keycard_auth/source)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	event_source = source
 	busy = 1

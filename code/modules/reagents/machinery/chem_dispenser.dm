@@ -94,7 +94,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 */
 
 /obj/machinery/chem_dispenser/proc/recharge()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	var/oldenergy = energy
 	energy = min(energy + rechargerate, max_energy)
@@ -153,7 +153,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
   * @return nothing
   */
 /obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained())
 		return
@@ -215,7 +215,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return 0 // don't update UIs attached to this object
 
 	if(href_list["amount"])
@@ -271,7 +271,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return 1
 
 /obj/machinery/chem_dispenser/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (FORCEDISABLE|NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
@@ -547,7 +547,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 #undef FORMAT_DISPENSER_NAME
 
 /obj/machinery/chem_dispenser/npc_tamper_act(mob/living/L)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return 0
 
 	var/amount = rand(1,25)

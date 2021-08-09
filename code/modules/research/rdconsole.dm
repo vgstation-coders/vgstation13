@@ -232,7 +232,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/proc/deconstruct_item(mob/user)
 	if(!linked_destroy || linked_destroy.busy || !linked_destroy.loaded_item)
 		return
-	if(isLocked() || (linked_destroy.stat & (NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN)))
+	if(isLocked() || (linked_destroy.stat & (FORCEDISABLE|NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		return
 	linked_destroy.busy = 1
 	screen = 0.1
@@ -664,7 +664,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	<div class=\"header\">[jointext(options," || ")]</div><hr />"}
 
 /obj/machinery/computer/rdconsole/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
 	user.set_machine(src)

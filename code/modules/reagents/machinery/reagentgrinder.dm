@@ -289,7 +289,7 @@ var/global/list/juice_items = list (
 	[processing_chamber]<br>
 	[beaker_contents]<hr>
 	"}
-		if (is_beaker_ready && !is_chamber_empty && !(stat & (NOPOWER|BROKEN)))
+		if (is_beaker_ready && !is_chamber_empty && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)))
 
 			dat += {"<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>
 				<A href='?src=\ref[src];action=juice'>Juice the reagents</a><BR><BR>"}
@@ -331,7 +331,7 @@ var/global/list/juice_items = list (
 	update_icon()
 
 /obj/machinery/reagentgrinder/AltClick(mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return ..()
 	if(!anchored)
 		return ..()
@@ -429,7 +429,7 @@ var/global/list/juice_items = list (
 
 /obj/machinery/reagentgrinder/proc/juice()
 	power_change()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(inuse)
 		return
@@ -463,7 +463,7 @@ var/global/list/juice_items = list (
 
 /obj/machinery/reagentgrinder/proc/grind()
 	power_change()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
 	if(inuse)
 		return

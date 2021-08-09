@@ -83,7 +83,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	return newKey
 
 /obj/machinery/message_server/proc/is_functioning()
-	return !disabled && !(stat & (BROKEN|NOPOWER))
+	return !disabled && !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 
 /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "")
 	pda_msgs += new/datum/data_pda_msg(recipient,sender,message)
@@ -106,7 +106,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	update_icon()
 
 /obj/machinery/message_server/update_icon()
-	if(stat & (BROKEN|NOPOWER))
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		icon_state = "pda_server-nopower"
 	else if (disabled)
 		icon_state = "pda_server-off"
