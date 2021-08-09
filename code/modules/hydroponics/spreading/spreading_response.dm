@@ -188,7 +188,7 @@
 
 /mob/living/carbon/human/vine_protected()
 	var/obj/item/clothing/suit/S = wear_suit
-	if(!S || !istype(S))
+	if(!istype(S))
 		return FALSE
 	return S.vine_protected()
 
