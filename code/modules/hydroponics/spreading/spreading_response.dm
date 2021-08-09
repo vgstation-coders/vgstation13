@@ -40,7 +40,7 @@
 		return
 	if(!istype(victim))
 		return
-	if(is_protected(victim))
+	if(vine_protected(victim))
 		return
 	var/cuts = 0
 	for(var/datum/organ/external/Ex in victim.organs) //hahaha shit this is probably going to MINCE people
@@ -62,7 +62,7 @@
 		return
 	if(!istype(victim))
 		return
-	if(is_protected(victim))
+	if(vine_protected(victim))
 		return
 	if(victim.get_exposed_body_parts() && prob(chance))
 		if(seed.chems && seed.chems.len)
@@ -75,7 +75,7 @@
 	// http://i.imgur.com/Xt6rM4P.png
 	if(!seed || !seed.carnivorous || !prob(chance))
 		return
-	if(is_protected(victim))
+	if(vine_protected(victim))
 		return
 	if(victim.stat != DEAD)
 		to_chat(victim, "<span class='danger'>\The [src] horribly twist and mangle your body!</span>")
@@ -97,7 +97,7 @@
 	last_special = world.time
 
 /obj/effect/plantsegment/proc/do_chem_inject(var/mob/living/carbon/human/victim, var/chance)
-	if(is_protected(victim))
+	if(vine_protected(victim))
 		return
 	if(seed.chems && seed.chems.len && istype(victim) && victim.stat != DEAD)
 		to_chat(victim, "<span class='danger'>You feel something seeping into your skin!</span>")
@@ -162,7 +162,7 @@
 /obj/effect/plantsegment/proc/entangle_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment)) //How much of this is actually necessary, I wonder
 		return
-	if(is_protected(victim))
+	if(vine_protected(victim))
 		return
 	lock_atom(victim, /datum/locking_category/plantsegment)
 	if(victim.stat != DEAD)
@@ -176,16 +176,17 @@
 		var/mob/living/carbon/human/H = victim
 		if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.clothing_flags & NOSLIP))
 			can_grab = 0
-		if(is_protected(victim))
+		if(vine_protected(victim))
 			can_grab = 0
 	if(can_grab)
 		src.visible_message("<span class='danger'>Tendrils lash out from \the [src] and drag \the [victim] in!</span>")
 		victim.forceMove(src.loc)
 		lock_atom(victim, /datum/locking_category/plantsegment)
 
-/obj/effect/plantsegment/proc/is_protected(var/mob/living/carbon/human/H)
-	if(!istype(H))
-		return FALSE 
+/mob/living/proc/vine_protected()
+	return FALSE
+
+/mob/living/carbon/human/vine_protected()
 	var/obj/item/clothing/suit/S = H.wear_suit
 	if(!istype(S))
 		return FALSE
