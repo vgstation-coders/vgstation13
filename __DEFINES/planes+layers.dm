@@ -167,6 +167,7 @@ What is the naming convention for planes or layers?
 
 #define BLOB_PLANE 				-5			// For Blobs, which are above humans.
 
+	#define BLOB_ROOTS_LAYER			-1
 	#define BLOB_BASE_LAYER				0
 	#define BLOB_SHIELD_LAYER			1
 	#define BLOB_RESOURCE_LAYER			2
@@ -231,6 +232,10 @@ What is the naming convention for planes or layers?
 	#define HUD_ITEM_LAYER 				2
 	#define HUD_ABOVE_ITEM_LAYER 		3
 	#define ABOVE_HUD_LAYER 			4
+
+	#define MIND_UI_BACK 				10
+	#define MIND_UI_BUTTON 				11
+	#define MIND_UI_FRONT 				12
 
 #define ABOVE_HUD_PLANE 		6		// For being above the Head-Up Display
 

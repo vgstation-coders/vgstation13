@@ -23,7 +23,7 @@
 "zr" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
 "zH" = (/turf/simulated/wall/r_rock/porous,/area/shack)
 "Bt" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden,/obj/effect/decal/cleanable/generic,/turf/simulated/floor/wood/floor_tile,/area/shack)
-"BF" = (/obj/machinery/light/small{dir = 8},/obj/item/anvil,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
+"BF" = (/obj/machinery/light/small{dir = 8},/obj/item/anvil,/obj/item/weapon/reagent_containers/glass/bucket/water_filled,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
 "Cp" = (/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)
 "Ds" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating{icon_state = "asteroidplating"},/area/shack)
 "EH" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/weapon/reagent_containers/food/drinks/beer,/obj/item/toy/cards,/turf/simulated/floor/plating{icon_state = "asteroidfloor"},/area/shack)

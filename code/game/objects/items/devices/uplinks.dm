@@ -279,10 +279,6 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	if(hidden_uplink)
 		hidden_uplink.trigger(user)
 
-/obj/item/device/radio/uplink/attackby(var/obj/I, var/mob/user)
-	if(hidden_uplink && hidden_uplink.refund(user, I))
-		return
-	..()
 
 /obj/item/device/radio/uplink/nukeops/New()
 	..()

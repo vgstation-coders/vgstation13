@@ -49,11 +49,6 @@
 	..()
 	if (istype(loc, /obj/item/weapon/melee/soulblade))
 		client.CAN_MOVE_DIAGONALLY = 1
-		client.screen += list(
-			gui_icons.soulblade_bgLEFT,
-			gui_icons.soulblade_coverLEFT,
-			gui_icons.soulblade_bloodbar,
-			)
 	to_chat(src,"<span class='notice'>To be understood by non-cult speaking humans, use :1.</span>")
 
 /mob/living/simple_animal/shade/say(var/message)
@@ -146,7 +141,7 @@
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
-	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used && gui_icons && gui_icons.soulblade_bloodbar)
+	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used)
 		var/obj/item/weapon/melee/soulblade/SB = loc
 		if(healths2)
 			switch(SB.health)
@@ -156,12 +151,8 @@
 					healths2.icon_state = "blade_notok"
 				if(36 to INFINITY)
 					healths2.icon_state = "blade_ok"
-		var/matrix/M = matrix()
-		M.Scale(1,SB.blood/SB.maxblood)
-		var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER
-		hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
-		hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[SB.blood]"
+
+		DisplayUI("Soulblade")
 
 	if(client && hud_used && healths)
 		switch(health)

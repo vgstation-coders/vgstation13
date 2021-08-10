@@ -226,16 +226,13 @@
 			tattoos_names = "none"
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
-		if (isshade(M) && M.hud_used && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
-			if(!M.gui_icons.soulblade_bgLEFT)
-				M.hud_used.shade_hud()
-
-			M.client.screen += list(
-				M.gui_icons.soulblade_bgLEFT,
-				M.gui_icons.soulblade_coverLEFT,
-				M.gui_icons.soulblade_bloodbar,
-				M.healths2,
-				)
+		if (isshade(M))
+			M.hud_used.shade_hud()
+			if (istype(M.loc,/obj/item/weapon/melee/soulblade))
+				M.DisplayUI("Soulblade")
+				M.client.screen += list(
+					M.healths2,
+					)
 
 /datum/role/cultist/proc/remove_cult_hud()
 	var/mob/M = antag?.current

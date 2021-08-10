@@ -1,7 +1,5 @@
 /datum/job/hos
 	title = "Head of Security"
-	flag = HOS
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -31,8 +29,6 @@
 
 /datum/job/warden
 	title = "Warden"
-	flag = WARDEN
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -46,8 +42,6 @@
 
 /datum/job/detective
 	title = "Detective"
-	flag = DETECTIVE
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -62,8 +56,6 @@
 
 /datum/job/officer
 	title = "Security Officer"
-	flag = OFFICER
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 5
 	spawn_positions = 5

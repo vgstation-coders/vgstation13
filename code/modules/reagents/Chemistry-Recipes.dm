@@ -236,8 +236,8 @@
 	name = "Sulphuric Acid"
 	id = SACID
 	result = SACID
-	required_reagents = list(SULFUR = 2, OXYGEN = 3, WATER = 2)
-	result_amount = 2
+	required_reagents = list(SULFUR = 1, OXYGEN = 3, WATER = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/thermite
 	name = "Thermite"

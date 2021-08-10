@@ -441,6 +441,9 @@
 		return FALSE
 	..()
 
+/mob/living/simple_animal/rabbit/get_butchering_products()
+	return list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot)
+
 /mob/living/simple_animal/rabbit/update_icon()
 	icon_state = "[body_type]_[colour]"
 	icon_living = "[body_type]_[colour]"

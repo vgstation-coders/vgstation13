@@ -139,6 +139,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define DATAHUD_RANGE_OVERHEAD	7	//how many tiles away from the edge of the client's view do the HUD icons start appearing
 									//necessary due to them only being updated on Life()
 
+#define ADMINBUS_MAX_CAPACITY	16
+
 //WEIGHT CLASSES
 #define W_CLASS_TINY 1
 #define W_CLASS_SMALL 2
@@ -1625,6 +1627,7 @@ var/proccalls = 1
 #define MUSHROOM_BLOOD	"#D3D3D3"
 #define INSECT_BLOOD	"#EBECE6"
 #define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
+#define GHOUL_BLOOD		"#7FFF00"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again

@@ -474,6 +474,11 @@
 /obj/structure/rack/holo/can_disassemble()
 	return FALSE
 
+/obj/structure/stacklifter/holo/can_disassemble()
+	return FALSE
+
+/obj/structure/weightlifter/holo/can_disassemble()
+	return FALSE
 
 /obj/item/weapon/holo
 	damtype = HALLOSS

@@ -134,6 +134,11 @@
 // mob/user: The mob that's logging out.
 /lazy_event/on_logout
 
+// Called by mob/living/Login().
+// Arguments:
+// mob/user: The living mob that's logging in.
+/lazy_event/on_living_login
+
 // Called whenever a mob takes damage.
 // Truthy return values will prevent the damage.
 // Arguments:
