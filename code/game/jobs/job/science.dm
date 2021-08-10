@@ -43,7 +43,7 @@
 	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
-	access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
 	alt_titles = list("Anomalist")
 
@@ -58,7 +58,7 @@ datum/job/xenobiologist
 	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
-	access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
 
 	outfit_datum = /datum/outfit/xenobiologist
