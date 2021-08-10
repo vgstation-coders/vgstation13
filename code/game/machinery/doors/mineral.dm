@@ -254,6 +254,11 @@
 	var/close_delay = 100
 	soundeffect = 'sound/effects/attackblob.ogg'
 
+/obj/machinery/door/mineral/resin/SpecialAccess(var/atom/user)
+	if (isalien(user))
+		return TRUE
+	return FALSE
+
 /obj/machinery/door/mineral/resin/TryToSwitchState(atom/user)
 	if(isalien(user) && !operating)
 		add_fingerprint(user)
@@ -343,6 +348,11 @@
 		playsound(loc, 'sound/effects/stone_crumble.ogg', 100, 1)
 	anim(location = loc,target = loc.loc,a_icon = 'icons/obj/doors/doorcult.dmi', flick_anim = "cultdoor_breakdown")
 	..()
+
+/obj/machinery/door/mineral/cult/SpecialAccess(var/atom/user)
+	if (isanycultist(user))
+		return TRUE
+	return FALSE
 
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)
 	if (!density && !operating && !(locate(/mob/living) in loc))
