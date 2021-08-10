@@ -255,8 +255,10 @@
 	soundeffect = 'sound/effects/attackblob.ogg'
 
 /obj/machinery/door/mineral/resin/SpecialAccess(var/atom/user)
-	if (isalien(user))
-		return TRUE
+	if (ismob(user))
+		var/mob/M = user
+		if (isalien(M))
+			return TRUE
 	return FALSE
 
 /obj/machinery/door/mineral/resin/TryToSwitchState(atom/user)
@@ -350,8 +352,10 @@
 	..()
 
 /obj/machinery/door/mineral/cult/SpecialAccess(var/atom/user)
-	if (isanycultist(user))
-		return TRUE
+	if (ismob(user))
+		var/mob/M = user
+		if (isanycultist(M))
+			return TRUE
 	return FALSE
 
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)
