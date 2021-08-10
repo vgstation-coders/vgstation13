@@ -2,6 +2,7 @@
 /*
 
 * /proc/prepare_cult_holomap
+* /datum/station_holomap/cult/initialize_holomap
 * /obj/item/proc/get_cult_power
 * /mob/proc/get_cult_power
 * /mob/proc/occult_muted
@@ -32,6 +33,9 @@
 			I.overlays += markerImage
 	return I
 
+/datum/station_holomap/cult/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null, var/cursor_icon = "bloodstone-here")
+	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
+	cursor = image('icons/holomap_markers.dmi', cursor_icon)
 
 /obj/item/proc/get_cult_power()
 	return 0

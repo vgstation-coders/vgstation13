@@ -109,7 +109,7 @@ var/list/uristrune_cache = list()
 			to_chat(user, "<span class='warning'>Without reading the tome, you have trouble continuing to draw the arcane words.</span>")
 			return 0
 		else
-			var/datum/runeword/blood_cult/instance
+			var/datum/rune_word/instance
 			if(!rune)
 				instance = initial(spell.word1)
 			else if (rune.word1.type != initial(spell.word1))
@@ -143,7 +143,7 @@ var/list/uristrune_cache = list()
 			tome.state = TOME_OPEN
 		var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
 		spell = available_runes[spell_name]
-		var/datum/runeword/blood_cult/instance
+		var/datum/rune_word/instance
 		if(!rune)
 			instance = initial(spell.word1)
 		else if (rune.word1.type != initial(spell.word1))

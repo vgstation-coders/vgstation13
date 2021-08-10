@@ -709,7 +709,6 @@
 		var/datum/role/cultist/newCultist = cult.HandleRecruitedMind(shadeMob.mind, TRUE)
 		newCultist.Greet(GREET_SOULBLADE)
 		newCultist.conversion.Add("altar")
-		cult_risk()//risk of exposing the cult early if too many soul blades created
 
 
 /obj/structure/cult/altar/dance_start()//This is executed at the end of the sacrifice ritual
@@ -788,7 +787,8 @@ var/list/cult_spires = list()
 	..()
 	cult_spires.Add(src)
 	set_light(1)
-	stage = clamp(veil_thickness, 1, 3)
+	//TODO (UPHEAVAL PART 2) appearance changes with cult score
+	stage = 1
 	flick("spire[stage]-spawn",src)
 	spawn(10)
 		update_stage()
@@ -1280,6 +1280,7 @@ var/list/cult_spires = list()
 		if (3)
 			takeDamage(20)
 
+/*
 var/list/bloodstone_list = list()
 
 /obj/structure/cult/bloodstone
@@ -1466,10 +1467,6 @@ var/list/bloodstone_list = list()
 
 			watching_mobs -= user
 
-/datum/station_holomap/cult/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null, var/cursor_icon = "bloodstone-here")
-	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
-	cursor = image('icons/holomap_markers.dmi', cursor_icon)
-
 /obj/structure/cult/bloodstone/update_icon()
 	icon_state = "bloodstone-0"
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -1579,6 +1576,7 @@ var/list/bloodstone_list = list()
 			takeDamage(50)
 		if (3)
 			takeDamage(10)
+*/
 
 /obj/structure/cult/proc/safe_space()
 	for(var/turf/T in range(5,src))

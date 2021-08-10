@@ -436,7 +436,7 @@ var/list/rune_appearances_cache = list()
 
 	if(active_spell)//rune is already channeling a spell? let's see if we can interact with it somehow.
 		if(talisman_trigger)
-			var/datum/rune_spell/blood_cult/active_spell_typecast = active_spell
+			var/datum/rune_spell/active_spell_typecast = active_spell
 			if(!istype(active_spell_typecast))
 				return
 			active_spell_typecast.midcast_talisman(user)
@@ -460,15 +460,15 @@ var/list/rune_appearances_cache = list()
 	..()
 
 	if(can_read_rune(user) || isobserver(user))
-		var/datum/rune_spell/blood_cult/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
+		var/datum/rune_spell/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
 		if(rune_name)
 			to_chat(user, initial(rune_name.desc))
-			if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
-				var/datum/rune_spell/blood_cult/portalentrance/PE = active_spell
+			if (istype(active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/PE = active_spell
 				if (PE.network)
 					to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
-			if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
-				var/datum/rune_spell/blood_cult/portalexit/PE = active_spell
+			if (istype(active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalexit/PE = active_spell
 				if (PE.network)
 					to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
 

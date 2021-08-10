@@ -20,21 +20,6 @@ var/list/rune_words_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","
 		rune_words[new_word.english] = new_word
 	rune_words_initialized = 1
 
-//for now we're not calling it anywhere, but should we want to randomize words again later, that's what that proc is for.
-/proc/randomize_rune_words()
-	var/list/available_rnwords = rune_words_rune
-	var/list/available_icons = rune_words_icons
-	for(var/datum/rune_word/rune_word in rune_words)
-		var/picked_rnword = pick(available_rnwords)
-		var/picked_icon = pick(available_icons)
-		rune_word.rune = picked_rnword
-		rune_word.icon_state = picked_icon
-		available_rnwords.Remove(picked_rnword)
-		available_icons.Remove(picked_icon)
-
-	for (var/obj/effect/rune/rune in rune_list)
-		rune.update_icon()
-
 /datum/rune_word/travel
 	english		= "travel"
 	rune		= "ire"
