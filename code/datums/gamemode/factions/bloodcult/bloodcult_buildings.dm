@@ -474,41 +474,36 @@
 			if ("Sacrifice")
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (cult)
-					var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
-					if (O && is_locking(lock_type))
-						var/mob/victim = get_locked(lock_type)[1]
-						if (victim == O.sacrifice_target || (victim.mind && victim.mind == O.sacrifice_mind))
-							altar_task = ALTARTASK_SACRIFICE
-							timeleft = 30
-							timetotal = timeleft
-							update_icon()
-							contributors.Add(user)
-							update_progbar()
-							if (user.client)
-								user.client.images |= progbar
-							var/image/I = image('icons/obj/cult.dmi',"build")
-							I.pixel_y = 8
-							src.overlays += I
-							if (!user.checkTattoo(TATTOO_SILENT))
-								if (prob(5))
-									user.say("Let me show you the dance of my people!","C")
+					if (is_locking(lock_type))
+						altar_task = ALTARTASK_SACRIFICE
+						timeleft = 30
+						timetotal = timeleft
+						update_icon()
+						contributors.Add(user)
+						update_progbar()
+						if (user.client)
+							user.client.images |= progbar
+						var/image/I = image('icons/obj/cult.dmi',"build")
+						I.pixel_y = 8
+						src.overlays += I
+						if (!user.checkTattoo(TATTOO_SILENT))
+							if (prob(5))
+								user.say("Let me show you the dance of my people!","C")
+							else
+								user.say("Barhah hra zar'garis!","C")
+						if (user.client)
+							user.client.images |= progbar
+						safe_space()
+						for(var/mob/M in range(src,40))
+							if (M.z == z && M.client)
+								if (get_dist(M,src)<=20)
+									M.playsound_local(src, get_sfx("explosion"), 50, 1)
+									shake_camera(M, 2, 1)
 								else
-									user.say("Barhah hra zar'garis!","C")
-							if (user.client)
-								user.client.images |= progbar
-							safe_space()
-							for(var/mob/M in range(src,40))
-								if (M.z == z && M.client)
-									if (get_dist(M,src)<=20)
-										M.playsound_local(src, get_sfx("explosion"), 50, 1)
-										shake_camera(M, 2, 1)
-									else
-										M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-										shake_camera(M, 1, 1)
-							spawn()
-								dance_start()
-						else
-							to_chat(user, "<span class='sinister'>This isn't the One.</span>")
+									M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
+									shake_camera(M, 1, 1)
+						spawn()
+							dance_start()
 
 	else if (blade)
 		blade.forceMove(loc)
@@ -614,26 +609,6 @@
 					update_icon()
 					var/obj/item/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
-
-/obj/structure/cult/altar/proc/replace_target(var/mob/user)
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (cult)
-		var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
-		if (O && !O.IsFulfilled())
-			if (O.replace_target(user))
-				for(var/datum/role/cultist/C in cult.members)
-					var/mob/M = C.antag.current
-					if (M && iscultist(M))
-						to_chat(M,"<b>A new target has been assigned. [O.explanation_text]</b>")
-						if (M == O.sacrifice_target)
-							to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie.</b>")
-						to_chat(M,"<b>Should the target's body be annihilated, or should they flee the station, you may commune with Nar-Sie at an altar to have him designate a new target.</b>")
-			else
-				for(var/datum/role/cultist/C in cult.members)
-					var/mob/M = C.antag.current
-					if (M && iscultist(M))
-						to_chat(M,"<b>There are no elligible targets aboard the station, how did you guys even manage that one?</b>")//if there's literally no humans aboard the station
-						to_chat(M,"<b>There needs to be humans aboard the station, cultist or not, for a target to be selected.</b>")
 
 /obj/structure/cult/altar/noncultist_act(var/mob/user)//Non-cultists can still remove blades planted on altars.
 	if(is_locking(lock_type))
@@ -749,7 +724,6 @@
 			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
-		var/turf/T = loc
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (!cult)
@@ -807,7 +781,7 @@ var/list/cult_spires = list()
 	..()
 
 /obj/structure/cult/spire/proc/upgrade()
-	var/new_stage = clamp(veil_thickness, 1, 3)
+	var/new_stage = clamp(stage, 1, 3)
 	if (new_stage>stage)
 		stage = new_stage
 		alpha = 255

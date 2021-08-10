@@ -69,13 +69,6 @@
 				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 				return
 
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			if (cult)
-				var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
-				if (O && (M == O.sacrifice_target || (M.mind && M.mind == O.sacrifice_mind)))
-					to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
-					return
-
 			var/datum/soul_capture/capture_datum = new()
 			capture_datum.init_datum(user, M, src)
 			qdel(capture_datum)

@@ -3960,16 +3960,7 @@
 						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						return
-					if("Bloodstones raised")
-						command_alert(/datum/command_alert/bloodstones_raised)
-						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
-						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
-						return
-					if("Bloodstones destroyed")
-						command_alert(/datum/command_alert/bloodstones_broken)
-						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodsontes Alert (destroyed).")
-						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodsontes Aler (destroyed).")
-						return
+					//TODO (UPHEAVAL PART 2) think of fake alerts too
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")

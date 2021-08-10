@@ -285,10 +285,6 @@ var/list/all_depts_list = list(
 	for (var/list/dept in all_depts_list)
 		if ((victim_job in dept) && (converter_job in dept))
 			valid_lines += failure_lines_same_dept
-	// Act
-	if (veil_thickness >= CULT_ACT_III)
-		valid_lines += failure_lines_thin_veil
-
 	if(victim.mind && victim.mind.assigned_role == "Chaplain")
 		var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 		var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
@@ -348,10 +344,6 @@ var/list/all_depts_list = list(
 	for (var/list/dept in all_depts_list)
 		if ((victim_job in dept) && (converter_job in dept))
 			valid_lines += acceptance_lines_same_dept
-
-	// Act
-	if (veil_thickness >= CULT_ACT_III)
-		valid_lines += acceptance_lines_thin_veil
 
 	var/chosen_line = pickweight(valid_lines)
 	to_chat(victim, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[chosen_line]</span>")

@@ -53,5 +53,4 @@
 
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_rune_words()
-	AppendObjective(/datum/objective/bloodcult_reunion)
 	..()

@@ -54,8 +54,7 @@ var/global/list/narsie_list = list()
 		if(narnar)
 			narsie_spawn_animation()
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
-
-		if (emergency_shuttle && !cult)//in case of Cult 3.0, the round will end after about 5 minutes
+		if (emergency_shuttle)
 			emergency_shuttle.incall()
 			emergency_shuttle.can_recall = 0
 			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)

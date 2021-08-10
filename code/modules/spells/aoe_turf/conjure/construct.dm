@@ -459,11 +459,9 @@
 	var/turf/T = R.loc
 	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
 	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
-	var/datum/runeset/rune_set = global_runesets["blood_cult"]
-	write_rune_word(R.loc, rune_set.words["travel"])
-	write_rune_word(R.loc, rune_set.words["self"])
-	write_rune_word(R.loc, rune_set.words["other"])
+	write_full_rune(R.loc, /datum/rune_spell/portalentrance)
 	R.one_pulse()
+	R.trigger(user)
 
 /spell/aoe_turf/conjure/path_exit
 	name = "Path Entrance"
@@ -498,11 +496,9 @@
 	var/turf/T = R.loc
 	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
 	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
-	var/datum/runeset/rune_set = global_runesets["blood_cult"]
-	write_rune_word(R.loc, rune_set.words["travel"])
-	write_rune_word(R.loc, rune_set.words["other"])
-	write_rune_word(R.loc, rune_set.words["self"])
+	write_full_rune(R.loc, /datum/rune_spell/portalexit)
 	R.one_pulse()
+	R.trigger(user)
 
 
 /obj/effect/artificer_underlay

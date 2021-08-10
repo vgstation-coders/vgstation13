@@ -6,22 +6,21 @@
 	if(!word1 || !word2 || !word3)
 		return
 	for(var/subtype in subtypesof(/datum/rune_spell))
-		for(var/runespell in subtypesof(runeset))
-			var/datum/rune_spell/instance = runespell
-			if(word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
-				switch (use)
-					if ("ritual")
-						return new runespell(user, spell_holder, use)
-					if ("examine")
-						return instance
-					if ("walk")
-						if (initial(instance.walk_effect))
-							return new runespell(user, spell_holder, use)
-						else
-							return null
-					if ("imbue")
-						return runespell
-				return new runespell(user, spell_holder, use)
+		var/datum/rune_spell/instance = subtype
+		if(word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
+			switch (use)
+				if ("ritual")
+					return new subtype(user, spell_holder, use)
+				if ("examine")
+					return instance
+				if ("walk")
+					if (initial(instance.walk_effect))
+						return new subtype(user, spell_holder, use)
+					else
+						return null
+				if ("imbue")
+					return subtype
+			return new subtype(user, spell_holder, use)
 	return null
 
 
@@ -1341,9 +1340,9 @@ var/list/blind_victims = list()
 			else
 				I_turf = image(icon = 'icons/turf/floors.dmi', loc = U, icon_state = "cult")
 				//if it's a floor, give it a chance to have some runes written on top
-				if (uristrune_cache.len > 0 && prob(7))
-					var/lookup = pick(uristrune_cache)//finally a good use for that cache
-					var/icon/I = uristrune_cache[lookup]
+				if (rune_appearances_cache.len > 0 && prob(7))
+					var/lookup = pick(rune_appearances_cache)//finally a good use for that cache
+					var/icon/I = rune_appearances_cache[lookup]
 					I_turf.overlays.Add(I)
 			hallucinated_turfs.Add(I_turf)
 
@@ -2271,8 +2270,8 @@ var/list/blind_victims = list()
 
 	var/image/I_network
 	var/lookup = "[W.icon_state]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
-	if (lookup in uristrune_cache)
-		var/icon/I = uristrune_cache[lookup]
+	if (lookup in rune_appearances_cache)
+		var/icon/I = rune_appearances_cache[lookup]
 		I_network = image(I)
 	else
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
@@ -2391,8 +2390,8 @@ var/list/bloodcult_exitportals = list()
 
 	var/image/I_network
 	var/lookup = "[W.icon_state]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
-	if (lookup in uristrune_cache)
-		var/icon/I = uristrune_cache[lookup]
+	if (lookup in rune_appearances_cache)
+		var/icon/I = rune_appearances_cache[lookup]
 		I_network = image(I)
 	else
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")

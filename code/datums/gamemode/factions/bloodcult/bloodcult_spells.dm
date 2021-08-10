@@ -1,11 +1,12 @@
-var/list/uristrune_cache = list()
 
 /spell/cult
 	panel = "Cult"
 	override_base = "cult"
 	user_type = USER_TYPE_CULT
 
-/spell/cult/trace_rune //Abstract, base for all blood-based rune systems
+////////////////////BLOOD CULT DRAW RUNE////////////////////////
+
+/spell/cult/trace_rune
 	name = "Trace Rune"
 	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
 	hud_state = "cult_word"
@@ -21,52 +22,17 @@ var/list/uristrune_cache = list()
 	cast_delay = 15
 
 	var/list/data = list()
-	var/runeset_identifier = null
-	var/datum/runeword/word = null
+	var/datum/rune_word/word = null
 	var/obj/effect/rune/rune = null
 	var/datum/rune_spell/spell = null
 	var/continue_drawing = 0
 	var/blood_cost = 1
 
+
 /spell/cult/trace_rune/choose_targets(var/mob/user = usr)
 	return list(user)
 
 /spell/cult/trace_rune/before_channel(mob/user)
-	if(continue_drawing) //Resets the current spell (tome selection) if continue_drawing is not 1.
-		continue_drawing = 0
-	else
-		spell = null
-	return 0
-
-/spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
-	return ..()
-	//Each variant of rune is handled in their respective class.
-
-/spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
-	if(rune)
-		if(rune.word1 && rune.word2 && rune.word3)
-			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
-			return
-		else if(rune.runeset_identifier != runeset_identifier)
-			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
-			return
-	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
-	if(write_rune_word(get_turf(user), rune_set.words[word], data["blood"], caster = user) == RUNE_WRITE_CONTINUE)
-		continue_drawing = 1
-
-		perform(user) //Recursion for drawing runes in a row with tome.
-
-////////////////////BLOOD CULT DRAW RUNE////////////////////////
-
-/spell/cult/trace_rune/blood_cult
-	name = "Trace Rune"
-	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
-
-	cast_delay = 15
-
-	runeset_identifier = "blood_cult"
-
-/spell/cult/trace_rune/blood_cult/before_channel(mob/user)
 	if(continue_drawing) //Resets the current spell (tome selection) if continue_drawing is not 1.
 		continue_drawing = 0
 	else
@@ -81,8 +47,7 @@ var/list/uristrune_cache = list()
 		to_chat(user,"<span class='danger'>You find yourself unable to focus your mind on the words of Nar-Sie.</span>")
 	return muted
 
-/spell/cult/trace_rune/blood_cult/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
-
+/spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
 	if(block)     //Part of class spell, gets reset back to 0 after done casting. Prevents spamming.
 		return 0
 	block = 1
@@ -130,8 +95,8 @@ var/list/uristrune_cache = list()
 	else if(tome) //Else if they want to begin starting to draw with the help of a tome, grab all the available runes they can draw
 		var/list/available_runes = list()
 		var/i = 1
-		for(var/blood_spell in subtypesof(/datum/rune_spell/blood_cult))
-			var/datum/rune_spell/blood_cult/instance = blood_spell
+		for(var/blood_spell in subtypesof(/datum/rune_spell))
+			var/datum/rune_spell/instance = blood_spell
 			available_runes.Add("\Roman[i]-[initial(instance.name)]")
 			available_runes["\Roman[i]-[initial(instance.name)]"] = instance
 			i++
@@ -164,8 +129,7 @@ var/list/uristrune_cache = list()
 
 
 	else //Otherwise they want to begin drawing each word manually
-		var/datum/runeset/rune_set = global_runesets[runeset_identifier]
-		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in rune_set.words
+		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in rune_words_english
 	if (!word)
 		return 0
 
@@ -183,21 +147,16 @@ var/list/uristrune_cache = list()
 				"<span class='warning'>You hear some chanting.</span>")
 
 	if(!user.checkTattoo(TATTOO_SILENT))
-		var/datum/runeset/rune_set = global_runesets[runeset_identifier]
-		var/datum/runeword/rune_word = rune_set.words[word]
+		var/datum/rune_word/rune_word = rune_words[word]
 		user.whisper("...[rune_word.rune]...")
 	return ..()
 
-/spell/cult/trace_rune/blood_cult/cast(var/list/targets, var/mob/living/carbon/user)
+/spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
 	if(rune)
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return
-		else if(rune.runeset_identifier != runeset_identifier)
-			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
-			return
-	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
-	if(write_rune_word(get_turf(user), rune_set.words[word], data["blood"], caster = user) == RUNE_WRITE_CONTINUE)
+	if(write_rune_word(get_turf(user), rune_words[word], data["blood"], caster = user) == RUNE_WRITE_CONTINUE)
 		continue_drawing = 1
 		perform(user) //Recursion for drawing runes in a row with tome.
 	else

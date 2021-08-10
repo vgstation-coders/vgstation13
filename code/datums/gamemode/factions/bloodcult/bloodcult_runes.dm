@@ -138,8 +138,8 @@ var/list/rune_appearances_cache = list()
 	if (word3)
 		lookup += "-[word3.icon_state]-[animated]-[blood3.data["blood_colour"]]"
 
-	if (lookup in uristrune_cache)
-		icon = uristrune_cache[lookup]
+	if (lookup in rune_appearances_cache)
+		icon = rune_appearances_cache[lookup]
 	else
 		var/icon/I1 = icon('icons/effects/uristrunes.dmi', "")
 		if (word1)
@@ -156,7 +156,7 @@ var/list/rune_appearances_cache = list()
 		I.Blend(I2, ICON_OVERLAY)
 		I.Blend(I3, ICON_OVERLAY)
 		icon = I
-		uristrune_cache[lookup] = I
+		rune_appearances_cache[lookup] = I
 
 	if(animated)
 		idle_pulse()
@@ -168,8 +168,8 @@ var/list/rune_appearances_cache = list()
 	if (!blood)
 		blood = new
 	var/lookupword = "[word.icon_state]-[animated]-[blood.data["blood_colour"]]"
-	if(lookupword in uristrune_cache)
-		I = uristrune_cache[lookupword]
+	if(lookupword in rune_appearances_cache)
+		I = rune_appearances_cache[lookupword]
 	else
 		I.Blend(icon('icons/effects/uristrunes.dmi', word.icon_state), ICON_OVERLAY)
 		var/finalblood = blood.data["blood_colour"]
@@ -508,10 +508,8 @@ var/list/rune_appearances_cache = list()
 	var/newrune = FALSE
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
-		var/datum/rune_word/rune_typecast = word
-		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.//WHYYYYYYYYYYY
-			rune = new /obj/effect/rune/blood_cult(T)
-			newrune = TRUE
+		rune = new /obj/effect/rune/blood_cult(T)
+		newrune = TRUE
 
 	if (rune.word1 && rune.word2 && rune.word3)
 		return RUNE_WRITE_CANNOT
@@ -615,3 +613,13 @@ var/list/rune_appearances_cache = list()
 		qdel(rune)
 		return null
 	return word_erased
+
+
+/proc/write_full_rune(var/turf/T, var/spell_type, var/datum/reagent/blood/source, var/mob/caster = null)
+	if (!spell_type)
+		return
+
+	var/datum/rune_spell/instance = spell_type
+	write_rune_word(T, rune_words[initial(instance.word1)], source, caster)
+	write_rune_word(T, rune_words[initial(instance.word2)], source, caster)
+	write_rune_word(T, rune_words[initial(instance.word3)], source, caster)
