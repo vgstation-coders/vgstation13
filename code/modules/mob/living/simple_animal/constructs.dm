@@ -146,24 +146,25 @@
 			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 			init_language = default_language
 			if(iswizard(creator) || isapprentice(creator))
-				construct_color = rgb(157, 1, 196)
+				construct_color = rgb(157, 1, 196) // WIZARDS -> purple
+				faction = "wizard" // so they get along with other wizard mobs
 			else
-				construct_color = rgb(0, 153, 255)
+				construct_color = rgb(0, 153, 255) // CREW -> blue
 		else
 
 			var/datum/role/streamer/streamer_role = creator.mind.GetRole(STREAMER)
 			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
 				if(streamer_role.followers.len == 0 && streamer_role.subscribers.len == 0) //No followers and subscribers, use normal cult colors.
-					construct_color = rgb(235,0,0)
+					construct_color = rgb(235,0,0) // STREAMER (no subs) -> RED
 				else
-					construct_color = rgb(30,255,30)
+					construct_color = rgb(30,255,30) // STREAMER (with subs) -> GREEN
 			else
 				construct_color = rgb(235,0,0)
 	else if (istype(creator, /mob/living/simple_animal/shade))//shade beacon
 		if (iscultist(creator))
-			construct_color = rgb(235,0,0)
+			construct_color = rgb(235,0,0) // CULTIST -> red
 		else
-			construct_color = rgb(0, 153, 255)
+			construct_color = rgb(0, 153, 255) // CREW -> blue
 	update_icons()
 
 /mob/living/simple_animal/construct/Login()
