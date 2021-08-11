@@ -5727,7 +5727,7 @@
 					var/choice = alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No")
 					if (choice != "Yes")
 						return FALSE
-				M.mind.faith.action_renounce.Remove(M)
+				M.verbs -= /mob/proc/renounce_faith
 				M.mind.faith.renounce(M) // Bypass checks
 
 				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
