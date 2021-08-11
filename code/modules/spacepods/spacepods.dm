@@ -30,7 +30,7 @@
 	var/obj/item/weapon/cell/battery
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
-	var/datum/effect/effect/system/trail/space_trail/ion_trail
+	var/datum/effect/system/trail/space_trail/ion_trail
 	var/use_internal_tank = 0
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
@@ -74,7 +74,7 @@
 	battery = new /obj/item/weapon/cell/high()
 	add_cabin()
 	add_airtank()
-	src.ion_trail = new /datum/effect/effect/system/trail/space_trail()
+	src.ion_trail = new /datum/effect/system/trail/space_trail()
 	src.ion_trail.set_up(src)
 	src.ion_trail.start()
 	src.use_internal_tank = 1

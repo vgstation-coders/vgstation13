@@ -959,7 +959,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	..()
 	var/turf/T = get_turf(A)
 	explosion(T,0,0,5)
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(3, 0, T)
 	smoke.start()
 	return 1

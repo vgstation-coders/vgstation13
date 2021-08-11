@@ -1,6 +1,6 @@
 var/list/pathogen_clouds = list()
 
-/obj/effect/effect/pathogen_cloud
+/obj/effect/pathogen_cloud
 	name = "pathogenic cloud"
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = ""
@@ -22,7 +22,7 @@ var/list/pathogen_clouds = list()
 	var/modified = FALSE
 	var/moving = TRUE
 
-/obj/effect/effect/pathogen_cloud/New(var/turf/loc, var/mob/sourcemob, var/list/virus, var/isCarrier = TRUE)
+/obj/effect/pathogen_cloud/New(var/turf/loc, var/mob/sourcemob, var/list/virus, var/isCarrier = TRUE)
 	..()
 	if (!loc || !virus || virus.len <= 0)
 		qdel(src)
@@ -44,7 +44,7 @@ var/list/pathogen_clouds = list()
 	spawn (lifetime)
 		qdel(src)
 
-/obj/effect/effect/pathogen_cloud/Destroy()
+/obj/effect/pathogen_cloud/Destroy()
 	if (pathogen)
 		for (var/mob/L in science_goggles_wearers)
 			if (L.client)
@@ -57,7 +57,7 @@ var/list/pathogen_clouds = list()
 	target = null
 	..()
 
-/obj/effect/effect/pathogen_cloud/core/New(var/turf/loc, var/mob/sourcemob, var/list/virus)
+/obj/effect/pathogen_cloud/core/New(var/turf/loc, var/mob/sourcemob, var/list/virus)
 	..()
 	if (!loc || !virus || virus.len <= 0)
 		return
@@ -78,7 +78,7 @@ var/list/pathogen_clouds = list()
 
 				//If we come across other pathogenic clouds, we absorb their diseases that we don't have, then delete those clouds
 				//This should prevent mobs breathing in hundreds of clouds at once
-				for (var/obj/effect/effect/pathogen_cloud/other_C in src.loc)
+				for (var/obj/effect/pathogen_cloud/other_C in src.loc)
 					if (!other_C.core)
 						for (var/ID in other_C.viruses)
 							if (!(ID in viruses))
@@ -87,7 +87,7 @@ var/list/pathogen_clouds = list()
 								modified = TRUE
 						qdel(other_C)
 
-				var/obj/effect/effect/pathogen_cloud/C = new /obj/effect/effect/pathogen_cloud(src.loc, source, viruses, sourceIsCarrier)
+				var/obj/effect/pathogen_cloud/C = new /obj/effect/pathogen_cloud(src.loc, source, viruses, sourceIsCarrier)
 				C.core = FALSE
 				C.modified = modified
 				C.moving = FALSE
@@ -98,7 +98,7 @@ var/list/pathogen_clouds = list()
 					step_rand(src)
 				sleep (1 SECONDS)
 			else
-				for (var/obj/effect/effect/pathogen_cloud/core/other_C in src.loc)
+				for (var/obj/effect/pathogen_cloud/core/other_C in src.loc)
 					if (!other_C.moving)
 						for (var/ID in other_C.viruses)
 							if (!(ID in viruses))

@@ -884,6 +884,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	name = "rune"
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "golem"
+	mouse_opacity = 1 //So we can actually click these
 	plane = ABOVE_TURF_PLANE
 	layer = RUNE_LAYER
 	var/list/mob/dead/observer/ghosts[0]

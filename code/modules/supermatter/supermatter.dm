@@ -68,7 +68,7 @@
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
+	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
 
 /obj/machinery/power/supermatter/airflow_hit(atom/A)

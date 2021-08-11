@@ -505,7 +505,7 @@ var/list/shuttle_log = list()
 		emagged = 1
 		if(user)
 			to_chat(user, "Syndicate routing data uploaded!")
-		new/obj/effect/effect/sparks(get_turf(src))
+		new/obj/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
 		authenticated = AUTH_CAPT
 		setMenuState(usr,COMM_SCREEN_MAIN)
