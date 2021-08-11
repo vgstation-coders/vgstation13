@@ -227,12 +227,11 @@
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
 		if (isshade(M))
-			M.hud_used.shade_hud()
 			if (istype(M.loc,/obj/item/weapon/melee/soulblade))
 				M.DisplayUI("Soulblade")
-				M.client.screen += list(
-					M.healths2,
-					)
+				M.client.screen |= list(M.healths2)
+			else
+				M.client.screen -= list(M.healths2)
 
 /datum/role/cultist/proc/remove_cult_hud()
 	var/mob/M = antag?.current
