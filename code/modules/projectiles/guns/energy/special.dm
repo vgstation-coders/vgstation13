@@ -47,8 +47,11 @@
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/gun/energy/ionrifle/sawnoff/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
-	if(prob(25))
-		empulse(get_turf(src), 2, 4) //fails to fire and goes off in our hands, otherwise normal shooty
+	if(prob(25)) //fails to fire and goes off in our hands, otherwise normal shooty
+		afterattack(user, user)	//will this work?
+		afterattack(user, user)	//it will. we call it twice, for twice the FUN
+		playsound(user, fire_sound, 50, 1)
+		user.visible_message("<span class='danger'>The [src] goes off!</span>", "<span class='danger'>The [src] goes off in your face!</span>")
 		return
 	..()
 
