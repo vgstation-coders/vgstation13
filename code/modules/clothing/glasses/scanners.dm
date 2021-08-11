@@ -160,7 +160,7 @@
 	name = "optical material scanner"
 	desc = "Allows one to see the original layout of the pipe and cable network."
 	icon_state = "material"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	// vision_flags = SEE_OBJS
