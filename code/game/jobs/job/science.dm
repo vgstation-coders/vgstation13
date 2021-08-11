@@ -28,7 +28,7 @@
 	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
-	access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
 	alt_titles = list("Plasma Researcher", "Research Botanist")
 
@@ -43,7 +43,7 @@
 	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
-	access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
 	alt_titles = list("Anomalist")
 
@@ -58,7 +58,7 @@ datum/job/xenobiologist
 	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
-	access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
 
 	outfit_datum = /datum/outfit/xenobiologist
@@ -71,7 +71,7 @@ datum/job/xenobiologist
 	supervisors = "research director"
 	wage_payout = 55
 	selection_color = "#ffeeff"
-	access = list(access_robotics, access_tech_storage, access_morgue, access_science) //As a job that handles so many corpses, it makes sense for them to have morgue access.
+	access = list(access_rnd, access_robotics, access_tech_storage, access_morgue, access_science) //As a job that handles so many corpses, it makes sense for them to have morgue access.
 	minimal_access = list(access_robotics, access_tech_storage, access_morgue, access_science) //As a job that handles so many corpses, it makes sense for them to have morgue access.
 	alt_titles = list("Biomechanical Engineer","Mechatronic Engineer")
 
