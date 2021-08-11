@@ -109,7 +109,12 @@
 	if(H.loc == loc)
 		var/obj/worn_suit = H.get_item_by_slot(slot_wear_suit)
 		if(istype(worn_suit, /obj/item/clothing/suit/space/rig))
+			var/obj/item/clothing/suit/space/rig/worn_rig = worn_suit
 			if(!modules_to_install.len && !cell)
+				if(worn_rig.modules.len)
+					say("Installed modules detected.", class = "binaryradio")
+					process_module_removal(H)
+					return
 				say("No upgrade available.", class = "binaryradio")
 				return
 			process_module_installation(H)
@@ -220,6 +225,34 @@
 			R.cell = cell
 			cell = null
 	finished_animation()
+	unlock_atom(H)
+	R.initialize_suit()
+	use_power = 1
+	activated = FALSE
+
+/obj/machinery/suit_modifier/proc/process_module_removal(var/mob/living/carbon/human/H)
+	if(activated)
+		return
+	lock_atom(H)
+	activated = TRUE
+	use_power = 2
+	activation_animation()
+	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+	R.deactivate_suit()
+	if(R.modules.len)
+		// if we have something that's not a rig_module here we have a problem
+		var/obj/item/rig_module/RM = input(H, "Choose an upgrade to remove from [R].", R) as null|anything in R.modules
+		if(!RM|| !H.Adjacent(src) || H.incapacitated())
+			unlock_atom(H)
+			activated = FALSE
+			return
+		working_animation()
+		say("Uninstalling [RM] from \the [R].", class = "binaryradio")
+		if(do_after(H, src, 5 SECONDS, needhand = FALSE))
+			R.modules.Remove(RM)
+			RM.rig = null
+			RM.forceMove(get_turf(src))
+		finished_animation()
 	unlock_atom(H)
 	R.initialize_suit()
 	use_power = 1
