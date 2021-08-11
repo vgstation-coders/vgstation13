@@ -64,6 +64,9 @@
 	retreat_distance = 25
 	minimum_distance = 25
 
+/mob/living/simple_animal/hostile/deer/get_butchering_products()
+	return list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head)
+
 /mob/living/simple_animal/hostile/deer/Life()
 	..()
 	if(isDead())
@@ -122,7 +125,8 @@
 			icon_state = "[icon_dead][(our_head.amount) ? "" : "_headless"]"
 
 /mob/living/simple_animal/hostile/deer/cultify()
-	new /mob/living/simple_animal/hostile/deer/flesh(get_turf(src))
+	var/mob/living/simple_animal/hostile/deer/flesh/fleshy_deer = new(get_turf(src))
+	fleshy_deer.dir = dir
 	qdel(src)
 
 /mob/living/simple_animal/hostile/deer/flesh
@@ -133,6 +137,9 @@
 	canRegenerate = 1
 	maxRegenTime = 150
 	minRegenTime = 60
+
+/mob/living/simple_animal/hostile/deer/flesh/get_butchering_products()
+	return list(/datum/butchering_product/deer_head)
 
 /mob/living/simple_animal/hostile/deer/flesh/cultify()
 	return

@@ -197,8 +197,6 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		return FALSE
 	if(!mymob.client)
 		return FALSE
-	if(!mymob.gui_icons)
-		mymob.gui_icons = new /datum/ui_icons(src)
 
 	var/ui_style
 	var/ui_color

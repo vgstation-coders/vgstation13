@@ -95,6 +95,9 @@
 					alpha_challenger.challenge(src)
 					challenge(alpha_challenger)
 
+/mob/living/simple_animal/hostile/wolf/get_butchering_products()
+	return list(/datum/butchering_product/skin/wolf, /datum/butchering_product/teeth/lots)
+
 /mob/living/simple_animal/hostile/wolf/CanAttack(var/atom/the_target)
 	//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
 	var/list/target_prox = view(the_target, vision_range)

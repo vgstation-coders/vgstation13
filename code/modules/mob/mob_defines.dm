@@ -159,7 +159,6 @@
 	var/seer = 0 // Legacy Cult
 
 	var/datum/hud/hud_used = null
-	var/datum/ui_icons/gui_icons = null
 
 	var/list/grabbed_by = list()
 	var/list/requests = list()

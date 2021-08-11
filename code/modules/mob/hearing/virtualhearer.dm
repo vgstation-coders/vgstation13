@@ -68,18 +68,21 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 /mob/virtualhearer/blob_act()
 	return
 
+/mob/virtualhearer/update_canmove()
+	return 1 // the default canmove value of virtualhearers
+
 /mob/proc/change_sight(adding, removing, copying)
 	var/oldsight = sight
 	if(copying)
 		sight = copying
-	if(adding)
-		sight |= adding
-		if((sight != oldsight) && (adding & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
-			sight &= ~SEE_BLACKNESS
 	if(removing)
 		sight &= ~removing
 		if((sight != oldsight) && (removing & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
 			sight |= SEE_BLACKNESS
+	if(adding)
+		sight |= adding
+		if((sight != oldsight) && (adding & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
+			sight &= ~SEE_BLACKNESS
 	if(sight != oldsight)
 		var/mob/virtualhearer/VH = mob_hearers[src]
 		if(VH)

@@ -335,7 +335,7 @@
 	name = "Biolobulin Effect"
 	desc = "Converts the infected's pores of their palm to begin synthesizing a gelatenous substance, that explodes upon reaching a high velocity."
 	stage = 4
-	badness = EFFECT_DANGER_HELPFUL
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/orbweapon/activate(var/mob/living/mob)
 	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus

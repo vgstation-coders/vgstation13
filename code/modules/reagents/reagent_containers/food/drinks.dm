@@ -575,8 +575,8 @@
 	icon_state = "Zam_NitroFreeze"
 /obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze/New()
 	..()
-	reagents.add_reagent(FROSTOIL, 25)
-	reagents.add_reagent(NITROGEN, 15)
+	reagents.add_reagent(NITROGEN, 25)
+	reagents.add_reagent(FROSTOIL, 15)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 

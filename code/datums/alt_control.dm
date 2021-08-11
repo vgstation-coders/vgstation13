@@ -116,9 +116,4 @@
 		spawn(blade.movespeed)
 			move_delay = 0
 
-	var/matrix/M = matrix()
-	M.Scale(1,blade.blood/blade.maxblood)
-	var/total_offset = (60 + (100*(blade.blood/blade.maxblood))) * PIXEL_MULTIPLIER
-	controller.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
-	controller.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-	controller.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blade.blood]"
+	controller.DisplayUI("Soulblade")

@@ -73,6 +73,9 @@
 			return
 	return ..()
 
+/mob/living/simple_animal/hostile/retaliate/cluwne/get_butchering_products()
+	return list(/datum/butchering_product/teeth/bunch)
+
 /mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	var/currenthealth = health
 	..()

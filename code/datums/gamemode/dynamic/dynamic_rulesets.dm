@@ -101,7 +101,7 @@
 	return TRUE
 
 // Returns TRUE if there is enough pop to execute this ruleset
-/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE)
+/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE, var/midround = FALSE)
 	var/enemies_count = 0
 	if (dead_dont_count)
 		for (var/mob/M in mode.living_players)
@@ -122,7 +122,11 @@
 
 	pop_and_enemies += enemies_count // Enemies count twice
 
-	var/threat = round(mode.threat_level/10)
+	var/threat = 0
+	if(midround)
+		threat = mode.midround_threat_level != 100 ? round(mode.midround_threat_level/10)+1 : 10
+	else
+		threat = mode.threat_level != 100 ? round(mode.threat_level/10)+1 : 10
 	if (enemies_count < required_enemies[threat] && !map.ignore_enemy_requirement(src))
 		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
 		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")

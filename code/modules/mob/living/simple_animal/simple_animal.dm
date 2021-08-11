@@ -565,12 +565,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	setDensity(FALSE)
 
 	animal_count[src.type]--
-	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
-		var/list/L = animal_butchering_products[src.species_type]
-		src.butchering_drops = list()
+	var/list/animal_butchering_products = get_butchering_products()
+	if(!src.butchering_drops && animal_butchering_products.len > 0) //If we already created a list of butchering drops, don't create another one
+		butchering_drops = list()
 
-		for(var/butchering_type in L)
-			src.butchering_drops += new butchering_type
+		for(var/butchering_type in animal_butchering_products)
+			butchering_drops += new butchering_type
 
 	..(gibbed)
 

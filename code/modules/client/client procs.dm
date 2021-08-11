@@ -563,6 +563,9 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			for(var/obj/item/clothing/accessory/holomap_chip/HC in U.accessories)
 				HC.update_holomap()
 
+	if(mob)
+		mob.UpdateUIScreenLoc()
+
 /client/verb/SwapSides()
 	set name = "swapsides"
 	set hidden = 1

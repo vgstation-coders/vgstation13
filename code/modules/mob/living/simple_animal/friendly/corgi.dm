@@ -271,6 +271,9 @@
 	else
 		..()
 
+/mob/living/simple_animal/corgi/get_butchering_products()
+	return list(/datum/butchering_product/skin/corgi, /datum/butchering_product/teeth/few)
+
 /mob/living/simple_animal/corgi/proc/place_on_head(obj/item/item_to_add)
 	if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 		item_to_add.afterattack(src,usr,1)
