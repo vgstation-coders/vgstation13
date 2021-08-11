@@ -42,12 +42,12 @@
 /obj/item/weapon/gun/energy/ionrifle/sawnoff
 	name = "sawn-off ion rifle"
 	desc = "A modified ion weapon designed to unreliably disable mechanical threats"
-	//icon_state = "sawnshotgun"
-	//item_state = "sawnshotgun"
+	icon_state = "sawnionrifle"
+	item_state = "sawnionrifle"
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 
-/obj/item/weapon/gun/energy/ionrifle/sawnoff/Fire()
+/obj/item/weapon/gun/energy/ionrifle/sawnoff/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(prob(25))
 		empulse(get_turf(src), 2, 4) //fails to fire and goes off in our hands, otherwise normal shooty
 		return
