@@ -1,4 +1,7 @@
-/mob/zshadow
+// ZSHADOW MOB
+// Inferior to vis_contents and just plain broken, so removed
+
+/*/mob/zshadow
 	plane = OVER_OPENSPACE_PLANE
 	name = "shadow"
 	desc = "Z-level shadow"
@@ -63,7 +66,7 @@
 	. = ..()
 	check_shadow()
 
-/mob/living/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+/mob/living/forceMove()
 	. = ..()
 	check_shadow()
 
@@ -115,7 +118,7 @@
 		zshadow.visible_message(message, self_message, blind_message)
 
 // This shows when someone is typing. We do not use this on /vg/.
-/*/mob/set_typing_indicator(var/state)
+/mob/set_typing_indicator(var/state)
 	var/old_typing = src.typing
 	. = ..()
 	if(shadow && old_typing != src.typing)

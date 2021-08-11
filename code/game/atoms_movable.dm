@@ -49,7 +49,7 @@
 	var/list/tether_slaves
 	var/list/current_tethers
 	var/obj/shadow/shadow
-	var/mob/zshadow/zshadow
+	//var/mob/zshadow/zshadow
 
 	var/ignore_blocking = 0
 
