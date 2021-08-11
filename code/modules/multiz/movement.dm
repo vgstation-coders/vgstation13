@@ -184,7 +184,7 @@
 		return FALSE
 
 	var/turf/below = GetBelow(src)
-	if((locate(/obj/structure/disposalpipe/up) in below) || locate(/obj/machinery/atmospherics/pipe/zpipe/up in below))
+	if((locate(/obj/structure/disposalpipe/up) in below) || (locate(/obj/machinery/atmospherics/pipe/zpipe/up) in below))
 		return FALSE
 
 /mob/living/simple_animal/parrot/can_fall() // Poly can fly.
