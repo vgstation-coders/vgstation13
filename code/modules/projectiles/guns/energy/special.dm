@@ -43,7 +43,6 @@
 	name = "sawn-off ion rifle"
 	desc = "A modified ion weapon designed to unreliably disable mechanical threats"
 	icon_state = "sawnionrifle"
-	item_state = "sawnionrifle"
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 
