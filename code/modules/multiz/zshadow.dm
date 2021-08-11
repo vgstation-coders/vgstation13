@@ -36,12 +36,12 @@
 	return owner.examine(user, distance, infix, suffix)
 
 // This is the hear version used on Polaris. Keeping it here for reference.
-/*/mob/zshadow/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "", var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
+/mob/zshadow/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "", var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
 	if(speaker && speaker.z != src.z)
 		return // Only relay speech on our acutal z, otherwise we might relay sounds that were themselves relayed up!
 	if(isliving(owner))
 		verb += " from above"
-	return owner.hear_say(message, verb, language, alt_name, italics, speaker, speech_sound, sound_vol)*/
+	return owner.hear_say(message, verb, language, alt_name, italics, speaker, speech_sound, sound_vol)
 
 /mob/zshadow/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker && speech.speaker.z != src.z)
