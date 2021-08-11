@@ -2,29 +2,29 @@
 // parent class for pipes //
 ////////////////////////////
 obj/machinery/atmospherics/pipe/zpipe
-		icon = 'icons/obj/structures.dmi'
-		icon_state = "up"
+	icon = 'icons/obj/pipes.dmi'
+	icon_state = "down"
 
-		name = "upwards pipe"
-		desc = "A pipe segment to connect upwards."
+	name = "upwards pipe"
+	desc = "A pipe segment to connect upwards."
 
-		volume = 70
+	volume = 70
 
-		dir = SOUTH
-		initialize_directions = SOUTH
+	dir = SOUTH
+	initialize_directions = SOUTH
 
-		// node1 is the connection on the same Z
-		// node2 is the connection on the other Z
+	// node1 is the connection on the same Z
+	// node2 is the connection on the other Z
 
-		var/minimum_temperature_difference = 300
-		var/thermal_conductivity = 0 //WALL_HEAT_TRANSFER_COEFFICIENT No
+	var/minimum_temperature_difference = 300
+	var/thermal_conductivity = 0 //WALL_HEAT_TRANSFER_COEFFICIENT No
 
-		var/maximum_pressure = 70*ONE_ATMOSPHERE
-		var/fatigue_pressure = 55*ONE_ATMOSPHERE
-		alert_pressure = 55*ONE_ATMOSPHERE
+	var/maximum_pressure = 70*ONE_ATMOSPHERE
+	var/fatigue_pressure = 55*ONE_ATMOSPHERE
+	alert_pressure = 55*ONE_ATMOSPHERE
 
 
-		level = 1
+	level = 1
 
 obj/machinery/atmospherics/pipe/zpipe/New()
 	..()
@@ -116,11 +116,9 @@ obj/machinery/atmospherics/pipe/zpipe/disconnect(obj/machinery/atmospherics/refe
 // the elusive up pipe //
 /////////////////////////
 obj/machinery/atmospherics/pipe/zpipe/up
-		icon = 'icons/obj/structures.dmi'
-		icon_state = "up"
-
-		name = "upwards pipe"
-		desc = "A pipe segment to connect upwards."
+	icon_state = "up"
+	name = "upwards pipe"
+	desc = "A pipe segment to connect upwards."
 
 obj/machinery/atmospherics/pipe/zpipe/up/initialize()
 	normalize_dir()
@@ -153,11 +151,9 @@ obj/machinery/atmospherics/pipe/zpipe/up/initialize()
 ///////////////////////
 
 obj/machinery/atmospherics/pipe/zpipe/down
-		icon = 'icons/obj/structures.dmi'
-		icon_state = "down"
-
-		name = "downwards pipe"
-		desc = "A pipe segment to connect downwards."
+	icon_state = "down"
+	name = "downwards pipe"
+	desc = "A pipe segment to connect downwards."
 
 obj/machinery/atmospherics/pipe/zpipe/down/initialize()
 	normalize_dir()
@@ -189,7 +185,7 @@ obj/machinery/atmospherics/pipe/zpipe/down/initialize()
 ///////////////////////
 
 obj/machinery/atmospherics/pipe/zpipe/up/scrubbers
-	icon_state = "up-scrubbers"
+	icon_state = "up"
 	name = "upwards scrubbers pipe"
 	desc = "A scrubbers pipe segment to connect upwards."
 	//connect_types = CONNECT_TYPE_SCRUBBER
@@ -198,7 +194,7 @@ obj/machinery/atmospherics/pipe/zpipe/up/scrubbers
 	color = PIPE_COLOR_RED
 
 obj/machinery/atmospherics/pipe/zpipe/up/supply
-	icon_state = "up-supply"
+	icon_state = "up"
 	name = "upwards supply pipe"
 	desc = "A supply pipe segment to connect upwards."
 	//connect_types = CONNECT_TYPE_SUPPLY
@@ -207,7 +203,7 @@ obj/machinery/atmospherics/pipe/zpipe/up/supply
 	color = PIPE_COLOR_BLUE
 
 obj/machinery/atmospherics/pipe/zpipe/down/scrubbers
-	icon_state = "down-scrubbers"
+	icon_state = "down"
 	name = "downwards scrubbers pipe"
 	desc = "A scrubbers pipe segment to connect downwards."
 	//connect_types = CONNECT_TYPE_SCRUBBER
@@ -216,7 +212,7 @@ obj/machinery/atmospherics/pipe/zpipe/down/scrubbers
 	color = PIPE_COLOR_RED
 
 obj/machinery/atmospherics/pipe/zpipe/down/supply
-	icon_state = "down-supply"
+	icon_state = "down"
 	name = "downwards supply pipe"
 	desc = "A supply pipe segment to connect downwards."
 	//connect_types = CONNECT_TYPE_SUPPLY
