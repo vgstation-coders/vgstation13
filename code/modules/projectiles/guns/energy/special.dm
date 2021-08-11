@@ -29,7 +29,7 @@
 			user.visible_message("<span class='danger'>The [src] goes off!</span>", "<span class='danger'>The [src] goes off in your face!</span>")
 			return
 		if(do_after(user, src, 30))	//STEALTHY EYYYYY
-			var/obj/item/weapon/gun/energy/ionrifle/sawnoff/itssmallnow = new /obj/item/weapon/gun/projectile/shotgun/ionrifle/sawnoff(src.loc)
+			var/obj/item/weapon/gun/energy/ionrifle/sawnoff/itssmallnow = new /obj/item/weapon/gun/energy/ionrifle/sawnoff(src.loc)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
 			if(istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
@@ -49,7 +49,7 @@
 
 /obj/item/weapon/gun/energy/ionrifle/sawnoff/Fire()
 	if(prob(25))
-		empulse(src.get_turf(), 2, 4) //fails to fire and goes off in our hands, otherwise normal shooty
+		empulse(get_turf(src), 2, 4) //fails to fire and goes off in our hands, otherwise normal shooty
 		return
 	..()
 
