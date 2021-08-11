@@ -125,9 +125,6 @@ var/global/list/igniters = list()
 
 /obj/machinery/sparker/attack_ai(var/mob/user)
 	if (src.anchored)
-		var/mob/living/silicon/ai/A = user
-		if(istype(A) && A.hackermode)
-			return hack_interact()
 		return do_spark()
 	else
 		return

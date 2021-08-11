@@ -56,11 +56,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		else
 			to_chat(user, "You need to get closer to the computer first.")
 	else
-		var/mob/living/silicon/ai/A = user
-		if(istype(A) && A.hackermode)
-			hack_interact(A)
-		else 
-			to_chat(user, "You have your built-in camera systems for this!") //currently too buggy to allow AI to use camera computers
+		to_chat(user, "You have your built-in camera systems for this!") //currently too buggy to allow AI to use camera computers
 	return //attack_hand(user)
 
 

@@ -229,8 +229,6 @@
 		return
 	if (!src.can_use())
 		return
-	if(user.hackermode)
-		hack_interact(user)
 	user.eyeobj.forceMove(get_turf(src))
 
 

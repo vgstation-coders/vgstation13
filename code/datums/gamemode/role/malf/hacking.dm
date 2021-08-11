@@ -1,8 +1,8 @@
-#define MACHINE_HACK_TIME 3 SECONDS
+#define MACHINE_HACK_TIME 5 SECONDS
 
 
 /obj/machinery
-	var/mob/living/silicon/ai/malf_owner = null
+	var/list/malf_owners = list()
 	var/hack_abilities = list(
 		/datum/malfhack_ability/disable
 	)
@@ -13,6 +13,33 @@
 		initialized_abilities += new ability(src)
 		hack_abilities = initialized_abilities
 
+/obj/machinery/AIRightClick(var/mob/user)
+	var/mob/living/silicon/ai/A = user
+	if(istype(A))
+		hack_interact(user)
+
+
+/obj/effect/hack_overlay
+	name = "hax particles"
+	icon = 'icons/effects/malf.dmi'
+	icon_state = ""
+	opacity = 0
+	mouse_opacity = 0
+	invisibility = 101
+	throwforce = 0
+	var/image/particleimg 
+	
+
+/obj/effect/hack_overlay/New(var/turf/loc, var/mob/living/silicon/ai/malf, var/obj/machinery/machine)
+	particleimg = image('icons/effects/malf.dmi',src,"hacking")
+	particleimg.plane = HUD_PLANE
+	particleimg.layer = UNDER_HUD_LAYER
+	particleimg.appearance_flags = RESET_COLOR|RESET_ALPHA
+	machine.vis_contents += src
+	malf.client.images |= particleimg
+
+/obj/effect/hack_overlay/proc/set_icon(var/newstate)
+	particleimg.icon_state = newstate
 
 /datum/malfhack_ability
 	var/name = "HACK"						//ability name (must be unique)
@@ -34,7 +61,7 @@
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!M)		//this shouldn't happen
 		return
-	if(malf_owner != malf && !(stat & (BROKEN|NOPOWER)))
+	if(malf in malf_owners && !(stat & (BROKEN|NOPOWER)))
 		if(src in M.currently_hacking_machines)
 			to_chat(malf, "<span class='warning'>You are already taking control of this machine.</span>")
 			return
@@ -42,10 +69,11 @@
 //			to_chat(malf, "<span class='warning'>You cannot hack any more machines at this time. Hack more APCs to increase your limit.</span>")
 //			return
 		M.currently_hacking_machines += src
-		//TODO- visual indicator that the machine is being hacked
+		var/obj/effect/hack_overlay/overlay = new /obj/effect/hack_overlay(get_turf(src), malf, src)
 		sleep(MACHINE_HACK_TIME)
+		overlay.set_icon("hacked")
 		M.currently_hacking_machines -= src
-		malf_owner = malf
+		malf_owners += malf
 	else 
 		var/list/choice_to_ability = list()
 		var/list/choices = list()
@@ -71,4 +99,7 @@
 /datum/malfhack_ability/disable/activate()
 	toggled ? (machine.stat &= ~FORCEDISABLE) : (machine.stat |= FORCEDISABLE)
 	toggled = !toggled
+	machine.update_icon()
+
+
 

@@ -61,9 +61,6 @@ var/list/obj/machinery/flasher/flashers = list()
 //Let the AI trigger them directly.
 /obj/machinery/flasher/attack_ai(var/mob/user)
 	if (src.anchored)
-		var/mob/living/silicon/ai/A = user
-		if(istype(A) && A.hackermode)
-			return hack_interact(A)
 		return src.flash()
 	else
 		return

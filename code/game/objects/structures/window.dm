@@ -50,7 +50,6 @@ var/list/one_way_windows
 	if(one_way)
 		one_way = !one_way
 		toggle_one_way()
-	initialize_hackview_image()
 
 
 /obj/structure/window/proc/update_oneway_nearby_clients()

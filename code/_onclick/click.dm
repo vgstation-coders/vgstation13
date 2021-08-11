@@ -95,6 +95,9 @@
 	if(modifiers["ctrl"])
 		CtrlClickOn(A)
 		return
+	if(modifiers["right"])
+		RightClickOn(A)
+		return
 
 	if(attempt_crawling(A))
 		return
@@ -296,6 +299,16 @@
 /atom/movable/CtrlClick(var/mob/user)
 	if(Adjacent(user))
 		user.start_pulling(src)
+
+/*
+	Right Click
+*/
+
+/mob/proc/RightClickOn(var/atom/A)
+	A.RightClick()
+
+/atom/proc/RightClick(var/mob/user)
+	return
 
 
 /*

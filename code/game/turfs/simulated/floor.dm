@@ -57,7 +57,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
-	initialize_hackview_image()
 	
 /turf/simulated/floor/Destroy()
 	//No longer phazon, not a teleport destination

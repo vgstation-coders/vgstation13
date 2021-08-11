@@ -45,6 +45,9 @@
 		else
 			MiddleClickOn(A)
 			return
+	if(modifiers["right"])
+		RightClickOn(A)
+		return
 	if(modifiers["shift"])
 		ShiftClickOn(A)
 		return
@@ -101,6 +104,9 @@
 	A.AIAltClick(src)
 /mob/living/silicon/ai/MiddleShiftClickOn(var/atom/A)
 	A.AIMiddleShiftClick(src)
+/mob/living/silicon/ai/RightClickOn(var/atom/A)
+	A.AIRightClick(src)
+
 
 /*
 	The following criminally helpful code is just the previous code cleaned up;
@@ -114,6 +120,9 @@
 	return
 
 /atom/proc/AICtrlClick()
+	return
+
+/atom/proc/AIRightClick()
 	return
 
 /obj/machinery/power/apc/AICtrlClick() // turns off APCs.

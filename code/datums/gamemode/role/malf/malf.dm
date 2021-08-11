@@ -23,8 +23,6 @@
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()
 		malfAI.show_laws()
-		var/datum/action/malfview/malfview_action = new()
-		malfview_action.Grant(malfAI)
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
 			faction.HandleRecruitedMind(R.mind)
@@ -39,26 +37,6 @@ When you feel you have enough APCs under your control, you may begin the takeove
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
 
 
-/datum/action/malfview
-	name = "toggle hackermode"
-	desc = "sick hacking!"
-	icon_icon = 'icons/mob/screen_spells.dmi'
-	button_icon_state = "hackermode"
-
-/datum/action/malfview/Trigger()
-	var/mob/living/silicon/ai/malf = owner
-	if(!malf.client)
-		return
-	if(malf.hackermode)
-		malf.hackermode = FALSE
-		malf.clear_fullscreen("hackoverlay", animate = 1)
-		owner.client.hackview_turf_planemaster.alpha = 0
-		owner.client.hackview_structure_planemaster.alpha = 0
-	else
-		malf.hackermode = TRUE
-		malf.overlay_fullscreen("hackoverlay", /obj/abstract/screen/fullscreen/hackview_border)
-		owner.client.hackview_turf_planemaster.alpha = 255
-		owner.client.hackview_structure_planemaster.alpha = 255
 
 
 

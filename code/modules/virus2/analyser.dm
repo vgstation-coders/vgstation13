@@ -214,7 +214,7 @@
 		to_chat(usr, "<span class='notice'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return
 	if(stat & (FORCEDISABLE))
-		to_chat(user, "<span class='notice'>\The [src] is unresponsive.</span>")
+		to_chat(usr, "<span class='notice'>\The [src] is unresponsive.</span>")
 		return
 	if(stat & (NOPOWER))
 		to_chat(usr, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")

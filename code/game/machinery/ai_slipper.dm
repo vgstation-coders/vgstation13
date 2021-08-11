@@ -54,11 +54,6 @@
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return
 
-	var/mob/living/silicon/ai/A 
-	if(istype(A) && A.hackermode)
-		hack_interact(A)
-		return
-
 	user.set_machine(src)
 	var/area/this_area = get_area(src)
 	var/t = "<TT><B>Foam Dispenser</B> ([this_area.name])<HR>"

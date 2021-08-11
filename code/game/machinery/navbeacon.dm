@@ -134,9 +134,6 @@ var/list/navbeacons = list()
 
 /obj/machinery/navbeacon/attack_ai(var/mob/user)
 	add_hiddenprint(user)
-	var/mob/living/silicon/ai/A = user
-	if(istype(A) && A.hackermode)
-		return hack_interact(A)
 	interact(user, 1)
 
 /obj/machinery/navbeacon/attack_paw()

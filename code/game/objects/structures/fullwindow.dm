@@ -15,12 +15,12 @@
 	cracked_base = "fcrack"
 	is_fulltile = TRUE
 	disperse_coeff = 0.95
+	var/junction = 0 //Will be used to determine from which side the window is connected to other windows
 
 /obj/structure/window/full/New(loc)
 
 	..(loc)
 	flow_flags |= ON_BORDER
-	initialize_hackview_image()
 
 /obj/structure/window/full/Uncross(atom/movable/O as mob|obj, target as turf)
 
@@ -45,16 +45,12 @@
 	spawn()
 		if(!src)
 			return
-		var/junction = 0 //Will be used to determine from which side the window is connected to other windows
 		if(anchored)
 			for(var/obj/structure/window/full/W in orange(src, 1))
 				if(W.anchored && W.density) //Only counts anchored, not-destroyed full-tile windows.
 					if(abs(x-W.x)-abs(y-W.y)) 	//Doesn't count windows, placed diagonally to src
 						junction |= get_dir(src,W)
 		icon_state = "[base_state][junction]"
-		overlays -= hackview_image
-		hackview_image.icon_state = "[icon_state]_malfview"
-		overlays += hackview_image
 		return
 
 /obj/structure/window/full/verb/set_direction() //Full windows get this because it's possible for them to face diagonally

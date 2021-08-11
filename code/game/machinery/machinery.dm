@@ -420,12 +420,6 @@ Class Procs:
 		// This is to stop robots from using cameras to remotely control machines.
 		if(user.client && user.client.eye == user)
 			return attack_hand(user)
-	else if(isAI(user))
-		var/mob/living/silicon/ai/A = user
-		if(A.hackermode)
-			return hack_interact(A)	
-		else
-			return attack_hand(user)
 	else
 		return attack_hand(user)
 

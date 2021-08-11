@@ -99,9 +99,6 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 		var/mob/living/silicon/ai/A = user
 
-		if(A.hackermode)
-			return hack_interact(A)
-
 		var/choice = input(A, "Select a mode for [src].", "Status display") in list("Blank", "Emergency shuttle timer", "Text message", "Picture", "Supply shuttle timer")
 
 		switch(choice)
@@ -384,8 +381,6 @@ var/global/list/status_display_images = list(
 		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
-		if(A.hackermode)
-			return hack_interact(A)
 			
 		var/new_icon = input(A, "Load an image to be desplayed on [src].", "AI status display") in status_display_images
 

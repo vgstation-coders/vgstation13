@@ -195,9 +195,6 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/attack_ai(var/mob/user)
 	add_hiddenprint(user)
-	var/mob/living/silicon/ai/A = user
-	if(istype(A) && A.hackermode)
-		return hack_interact(A)
 	user.set_machine(src)
 	interact(user, 1)
 

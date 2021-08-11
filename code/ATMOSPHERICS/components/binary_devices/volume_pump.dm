@@ -47,7 +47,7 @@ Thus, the two variables affect pump operation are set in New():
 
 /obj/machinery/atmospherics/binary/volume_pump/process()
 	. = ..()
-	if((stat & (NOPOWER|BROKEN|MALFLOCKED)) || !on || transfer_rate < 1)
+	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || !on || transfer_rate < 1)
 		return
 
 // Pump mechanism just won't do anything if the pressure is too high/too low
