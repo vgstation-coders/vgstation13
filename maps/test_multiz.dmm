@@ -119,7 +119,7 @@
 "co" = (/turf/simulated/shuttle/wall,/area/shuttle/arrival/station)
 "cp" = (/obj/docking_port/shuttle,/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/shuttle/arrival/station)
 "cq" = (/obj/structure/table/reinforced,/obj/item/weapon/card/id/captains_spare,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
-"cr" = (/obj/structure/table/reinforced,/obj/item/clothing/suit/space/rig/atmos,/obj/item/clothing/head/helmet/space/rig/atmos,/obj/item/clothing/mask/breath,/obj/item/weapon/tank/oxygen,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
+"cr" = (/obj/structure/table/reinforced,/obj/item/clothing/suit/space/rig/atmos,/obj/item/clothing/mask/breath,/obj/item/weapon/tank/oxygen,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "cs" = (/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "ct" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
 "cu" = (/obj/structure/bed/chair{dir = 1},/obj/effect/landmark{name = "JoinLate"},/turf/simulated/shuttle/floor,/area/shuttle/arrival/station)
