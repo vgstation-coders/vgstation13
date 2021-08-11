@@ -77,6 +77,7 @@
 	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
+	var/mob/living/silicon/ai/currently_hacking_ai = null
 	var/malflocked = 0 //used for malfs locking down APCs
 //	luminosity = 1
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
@@ -1360,16 +1361,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	var/area/this_area = get_area(src)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
-		if(malfai)	//apc destroyed mission accomplished
-			var/datum/role/malfAI/M = malfai.mind.GetRole(MALF)
-			if(M)
-				if(src in M.currently_hacking_apcs)
-					to_chat(malfai, "<span class='warning'>The [name] you were currently hacking was destroyed.</span>")
-					M.currently_hacking_apcs -= src
-					malfai.clear_alert(name)
-				else if(src in M.apcs)
-					to_chat(malfai, "<span class='warning'>[name] was destroyed. Processing power decreased.</span>")
-					M.apcs -= src
+		clear_malf()
 		this_area.power_light = 0
 		this_area.power_equip = 0
 		this_area.power_environ = 0

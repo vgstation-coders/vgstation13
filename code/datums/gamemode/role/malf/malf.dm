@@ -8,7 +8,8 @@
 	var/list/currently_hacking_apcs = list()		//any apc's currently being hacked
 	var/apc_hacklimit = 2							//how many apc's can be hacked at a time
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
-	var/processing_power = 0
+	var/processing_power = 50
+	var/max_processing_power = 200
 
 /datum/role/malfAI/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -17,12 +18,11 @@
 
 	if(istype(antag.current,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/malfAI = antag.current
-		malfAI.add_spell(new /spell/aoe_turf/module_picker, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
-		malfAI.add_spell(new /spell/aoe_turf/takeover, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 		malfAI.laws_sanity_check()
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()
 		malfAI.show_laws()
+		malfAI.DisplayUI("Malf")
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
 			faction.HandleRecruitedMind(R.mind)
@@ -38,7 +38,13 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 
 
+/datum/role/malfAI/process()
+	if(apcs.len != 0)
+		add_power(apcs.len * 0.2)
 
+/datum/role/malfAI/proc/add_power(var/amount)
+	processing_power = clamp(amount + processing_power, 0, max_processing_power)
+	antag.DisplayUI("Malf")
 
 
 

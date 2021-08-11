@@ -1,5 +1,5 @@
 #define MACHINE_HACK_TIME 5 SECONDS
-
+#define APC_HACK_TIME 7 SECONDS
 
 /obj/machinery
 	var/list/malf_owners = list()
@@ -59,36 +59,47 @@
 
 /obj/machinery/proc/hack_interact(var/mob/living/silicon/ai/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
-	if(!M)		//this shouldn't happen
+	if(!istype(M) || !istype(malf))		
 		return
-	if(malf in malf_owners && !(stat & (BROKEN|NOPOWER)))
-		if(src in M.currently_hacking_machines)
-			to_chat(malf, "<span class='warning'>You are already taking control of this machine.</span>")
-			return
-//		if(M.currently_hacking_machines.len >= M.apcs.len)
-//			to_chat(malf, "<span class='warning'>You cannot hack any more machines at this time. Hack more APCs to increase your limit.</span>")
-//			return
-		M.currently_hacking_machines += src
-		var/obj/effect/hack_overlay/overlay = new /obj/effect/hack_overlay(get_turf(src), malf, src)
-		sleep(MACHINE_HACK_TIME)
-		overlay.set_icon("hacked")
-		M.currently_hacking_machines -= src
-		malf_owners += malf
-	else 
-		var/list/choice_to_ability = list()
-		var/list/choices = list()
-		for(var/datum/malfhack_ability/A in hack_abilities)
-			var/icon_to_display = A.toggled ? A.icon_toggled : A.icon
-			var/list/C = list(list(A.name, icon_to_display, A.desc))
-			choices += C
-			choice_to_ability[A.name] = A
-		var/choice = show_radial_menu(malf,loc,choices)
-		var/datum/malfhack_ability/A = choice_to_ability[choice]
-		if(!A)
-			return
-		else 
-			A.activate()
+	if(!(stat & (BROKEN|NOPOWER)))
+		if(malf in malf_owners)
+			hack_radial(malf) 
+		else
+			take_control(malf)
 
+
+/obj/machinery/proc/take_control(var/mob/living/silicon/ai/malf)
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
+	if(!istype(M) || !istype(malf))		
+		return
+	if(src in M.currently_hacking_machines)
+		to_chat(malf, "<span class='warning'>You are already taking control of the [src].</span>")
+		return
+//	if(M.currently_hacking_machines.len >= M.apcs.len)
+//		to_chat(malf, "<span class='warning'>You cannot hack any more machines at this time. Hack more APCs to increase your limit.</span>")
+//		return
+	M.currently_hacking_machines += src
+	var/obj/effect/hack_overlay/overlay = new /obj/effect/hack_overlay(null, malf, src)
+	sleep(MACHINE_HACK_TIME)
+	overlay.set_icon("hacked")
+	M.currently_hacking_machines -= src
+	malf_owners += malf
+
+/obj/machinery/proc/hack_radial(var/mob/living/silicon/ai/malf)
+	var/list/choice_to_ability = list()
+	var/list/choices = list()
+	for(var/datum/malfhack_ability/A in hack_abilities)
+		var/icon_to_display = A.toggled ? A.icon_toggled : A.icon
+		var/list/C = list(list(A.name, icon_to_display, A.desc))
+		choices += C
+		choice_to_ability[A.name] = A
+	var/choice = show_radial_menu(malf,loc,choices)
+	var/datum/malfhack_ability/A = choice_to_ability[choice]
+	if(!A)
+		return
+	else 
+		A.activate()
+	
 
 /datum/malfhack_ability/disable
 	name = "Toggle On/Off"

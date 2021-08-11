@@ -34,6 +34,7 @@
 		..()
 
 /datum/faction/malf/process()
+	..()
 	if (stage >= FACTION_ENDGAME)
 		var/living_ais = 0
 		for (var/datum/role/R in members)
