@@ -106,7 +106,7 @@
 				showrift(H,1)
 		if(2)
 			// send the time agent specifically to the past, future, and stop time on him for 30 sec or so
-			return
+			H.timeslip += 30
 		if(3)
 			switch(pick(list(1,2)))
 				if(1)
