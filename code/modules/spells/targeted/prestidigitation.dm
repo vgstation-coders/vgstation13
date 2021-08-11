@@ -14,7 +14,7 @@
 /spell/targeted/spark/cast(var/list/targets, mob/user)
 	for(var/A in targets)
 		var/turf/T = get_turf(A)
-		var/obj/effect/effect/sparks/S = new /obj/effect/effect/sparks(T)
+		var/obj/effect/sparks/S = new /obj/effect/sparks(T)
 		S.start()
 
 /spell/targeted/clean

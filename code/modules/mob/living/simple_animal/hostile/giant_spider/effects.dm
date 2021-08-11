@@ -4,7 +4,6 @@
 /obj/effect/spider
 	name = "web"
 	desc = "It's stringy and sticky."
-	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 0
 	var/health = 15
@@ -187,7 +186,7 @@
 /obj/effect/rooting_trap/stickyweb
 	name = "sticky web"
 	desc = "A mess of sticky strings."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "stickyweb"
 
 /obj/effect/rooting_trap/stickyweb/stick_to(var/atom/A, var/side = null)

@@ -215,10 +215,10 @@
 
 	var/static/list/smokes_n_mists = list(
 		/obj/effect/decal/chemical_puff,
-		/obj/effect/effect/smoke,
-		/obj/effect/effect/water,
-		/obj/effect/effect/foam,
-		/obj/effect/effect/steam,
+		/obj/effect/smoke,
+		/obj/effect/water,
+		/obj/effect/foam,
+		/obj/effect/steam,
 		/obj/effect/mist,
 		)
 

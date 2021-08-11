@@ -69,7 +69,6 @@ Unwall spell, sadly has to be targeted to be any fun to use
 /obj/effect/forcefield
 	desc = "A space wizard's magic wall."
 	name = "FORCEWALL"
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "m_shield"
 	anchored = 1.0
 	opacity = 0
@@ -109,7 +108,6 @@ Unwall fields
 -kanef
 */
 /obj/effect/unwall_field
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "fuel"
 	name = "invisible un-wall"
 	desc = "You have a REALLY bad feeling about this."
@@ -117,6 +115,7 @@ Unwall fields
 	opacity = 0
 	density = TRUE
 	flow_flags = ON_BORDER
+	mouse_opacity = 1
 	var/duration = 300 // How long the wall lasts, in ticks
 	var/static/list/forbidden_passes = list(/turf/unsimulated/wall,/turf/simulated/wall/invulnerable,/obj/structure/grille/invulnerable) // To stop people breaking maps like centcomm or lamprey stuff
 

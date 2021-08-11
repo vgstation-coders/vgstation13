@@ -66,7 +66,7 @@
 	var/viewalerts = FALSE
 	var/modtype = "Default"
 	var/jetpack = FALSE
-	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
+	var/datum/effect/system/ion_trail_follow/ion_trail = null
 	var/jeton = FALSE
 
 	var/modulelock = FALSE

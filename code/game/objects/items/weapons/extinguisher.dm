@@ -191,7 +191,7 @@
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
-				var/obj/effect/effect/water/spray/W = new /obj/effect/effect/water/spray/( get_turf(src))
+				var/obj/effect/water/spray/W = new /obj/effect/water/spray/( get_turf(src))
 				var/ccolor = mix_color_from_reagents(R.reagent_list)
 				if(ccolor)
 					W.color = ccolor
@@ -273,11 +273,11 @@
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
-				var/obj/effect/effect/foam/fire/W
+				var/obj/effect/foam/fire/W
 				if(has_slime)
-					W=new /obj/effect/effect/foam/fire/enhanced(get_turf(src),R)
+					W=new /obj/effect/foam/fire/enhanced(get_turf(src),R)
 				else
-					W = new /obj/effect/effect/foam/fire(get_turf(src),R)
+					W = new /obj/effect/foam/fire(get_turf(src),R)
 				var/turf/my_target = pick(the_targets)
 				if(!W || !src)
 					return
@@ -301,9 +301,9 @@
 								atm.molten=0
 								atm.solidify()
 
-					var/obj/effect/effect/foam/fire/F = locate() in oldturf
+					var/obj/effect/foam/fire/F = locate() in oldturf
 					if(!istype(F) && oldturf != get_turf(src))
-						F = new /obj/effect/effect/foam/fire( get_turf(oldturf) , W.reagents)
+						F = new /obj/effect/foam/fire( get_turf(oldturf) , W.reagents)
 					if(W.loc == my_target)
 						break
 					sleep(2)

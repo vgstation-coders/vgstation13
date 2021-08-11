@@ -344,7 +344,6 @@
 
 /obj/effect/summoning
 	name = "summoning"
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "summoning"
 	mouse_opacity = 1
 	density = 0

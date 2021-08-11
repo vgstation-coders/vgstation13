@@ -202,7 +202,7 @@
 			if(!target_ground && close_bright_grounds.len) //Final: whatever is left
 				target_ground = pick(close_bright_grounds)
 			if(target_ground)
-				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+				var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 				smoke.set_up(3, 0, get_turf(H))
 				smoke.start()
 				H.say("[activate_message]")

@@ -3,10 +3,8 @@
 //Effects spawned by rune spells
 
 /obj/effect/cult_ritual
-	icon = 'icons/effects/effects.dmi'
 	icon_state = ""
 	anchored = 1
-	mouse_opacity = 0
 
 /obj/effect/cult_ritual/cultify()
 	return
@@ -592,7 +590,6 @@ var/bloodstone_backup = 0
 /obj/effect/rooting_trap/bloodnail
 	name = "blood nail"
 	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "bloodnail"
 
 /obj/effect/rooting_trap/bloodnail/New()

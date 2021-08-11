@@ -9,6 +9,8 @@
 	layer = RUNE_LAYER
 	plane = ABOVE_TURF_PLANE
 
+	mouse_opacity = 1 //So we can actually click these
+
 	//Whether the rune is pulsating
 	var/animated = 0
 
