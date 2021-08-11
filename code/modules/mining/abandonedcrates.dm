@@ -3,9 +3,9 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 /obj/structure/closet/crate/secure/loot
 	name = "abandoned crate"
 	desc = "What could be inside?"
-	icon_state = "securecrate"
-	icon_opened = "securecrateopen"
-	icon_closed = "securecrate"
+	icon_state = "rustysecurecrate"
+	icon_opened = "rustysecurecrateopen"
+	icon_closed = "rustysecurecrate"
 	var/code = null
 	var/lastattempt = null
 	var/attempts = 3

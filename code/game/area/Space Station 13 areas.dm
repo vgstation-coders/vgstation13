@@ -94,6 +94,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/holomap_marker = null
 	var/list/holomap_filter = list()
 
+	var/lights_always_start_on = FALSE
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -553,7 +555,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/centcom/suppy
 	name = "\improper Centcom Supply Shuttle"
-	turret_protected = 1
 
 /area/centcom/ferry
 	name = "\improper Centcom Transport Shuttle"
@@ -1054,6 +1055,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Dormitories"
 	icon_state = "Sleep"
 	shuttle_can_crush = FALSE
+	lights_always_start_on = TRUE
 
 /area/crew_quarters/toilet
 	name = "\improper Dormitory Toilets"
@@ -1108,6 +1110,7 @@ proc/process_adminbus_teleport_locs()
 /area/crew_quarters/theatre
 	name = "\improper Theatre"
 	icon_state = "Theatre"
+	lights_always_start_on = FALSE
 
 /area/library
 	name = "\improper Library"
@@ -1152,121 +1155,96 @@ proc/process_adminbus_teleport_locs()
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
+	jammed = SUPER_JAMMED
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
+	jammed = 0
 
+/area/holodeck/dungeon_holodeck_alpha
+	name = "\improper Holodeck Alpha"
 
 /area/holodeck/source_plating
 	name = "\improper Holodeck - Off"
 	icon_state = "Holodeck"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_emptycourt
 	name = "\improper Holodeck - Empty Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_boxingcourt
 	name = "\improper Holodeck - Boxing Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_basketball
 	name = "\improper Holodeck - Basketball Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_thunderdomecourt
 	name = "\improper Holodeck - Thunderdome Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_beach
 	name = "\improper Holodeck - Beach"
 	icon_state = "Holodeck" // Lazy.
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_burntest
 	name = "\improper Holodeck - Atmospheric Burn Test"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_wildlife
 	name = "\improper Holodeck - Wildlife Simulation"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_meetinghall
 	name = "\improper Holodeck - Meeting Hall"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_theatre
 	name = "\improper Holodeck - Theatre"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_picnicarea
 	name = "\improper Holodeck - Picnic Area"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_snowfield
 	name = "\improper Holodeck - Snow Field"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_desert
 	name = "\improper Holodeck - Desert"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_space
 	name = "\improper Holodeck - Space"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_firingrange
 	name = "\improper Holodeck - Firing Range"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_wildride
 	name = "\improper Holodeck - Wild Ride"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_chess
 	name = "\improper Holodeck - Chess Board"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_maze
 	name = "\improper Holodeck - Maze"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_dining
 	name = "\improper Holodeck - Dining Hall"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_lasertag
 	name = "\improper Holodeck - Laser Tag Arena"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_zoo
 	name = "\improper Holodeck - Zoo"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_ragecage
 	name = "\improper Holodeck - Rage Cage"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_panic
 	name = "\improper Holodeck - Panic Bunker"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_medieval
 	name = "\improper Holodeck - Medieval Times"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_checkers
 	name = "\improper Holodeck - Checkers"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_gym
 	name = "\improper Holodeck - Gym"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_catnip
 	name = "\improper Holodeck - Club Catnip"
-	jammed=SUPER_JAMMED
 
+/area/holodeck/source_olympics_demo_a
+	name = "\improper Holodeck - Demo A"
+
+/area/holodeck/source_olympics_demo_b
+	name = "\improper Holodeck - Demo B"
 
 //Engineering
 
@@ -1865,6 +1843,7 @@ proc/process_adminbus_teleport_locs()
 /area/storage/primary
 	name = "Primary Tool Storage"
 	icon_state = "primarystorage"
+	lights_always_start_on = TRUE
 
 /area/storage/autolathe
 	name = "Autolathe Storage"
@@ -2155,6 +2134,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper MoMMI Nest"
 	icon_state = "yellow"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	lights_always_start_on = TRUE
 
 /area/construction/supplyshuttle
 	name = "\improper Supply Shuttle"
@@ -2204,6 +2184,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "storage"
 
 /area/turret_protected/
+	name = "Turret Protected Area"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
 
@@ -2855,6 +2836,15 @@ var/list/the_station_areas = list (
 
 /area/maintenance/engine
 	name = "Engine"
+
+/area/shack
+	name = "abandoned shack"
+	requires_power = 0
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 // BEGIN Horizon
 /area/hallway/primary/foreport
 	name = "Fore Port"

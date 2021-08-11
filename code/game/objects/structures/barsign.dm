@@ -394,6 +394,7 @@ var/list/barsigns = list()
 	Cleans up the object for the emp/cult shit if interval mode on
 */
 /obj/structure/sign/double/barsign/proc/clean_me_up()
+	overlays.Cut()
 	vis_contents.Cut()
 	if(interval_mode)
 		processing_objects -= src

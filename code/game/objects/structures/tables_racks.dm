@@ -301,6 +301,8 @@
 	return
 
 /obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(air_group || (height==0))
 		return 1
 	if(istype(mover,/obj/item/projectile))
@@ -318,8 +320,10 @@
 			return 1
 	return 0
 
-/obj/structure/table/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
-	destroy()
+/obj/structure/table/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+		destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
@@ -346,6 +350,8 @@
 	return 1
 
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	if(flow_flags & ON_BORDER)
@@ -774,8 +780,10 @@ obj/structure/table/plastic
 		return 1
 	return !density
 
-/obj/structure/rack/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
-	destroy()
+/obj/structure/rack/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+		destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_wrench(user) && can_disassemble())

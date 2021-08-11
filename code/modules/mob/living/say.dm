@@ -263,10 +263,10 @@ var/list/headset_modes = list(
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
 		//is tator
 		for(var/T in syndicate_code_phrase)
-			rendered_message = replacetext(rendered_message, T, "<b style='color: red;'>[T]</b>")
+			rendered_message = replacetext(html_decode(rendered_message), T, "<b style='color: red;'>[html_encode(T)]</b>")
 
 		for(var/T in syndicate_code_response)
-			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
+			rendered_message = replacetext(html_decode(rendered_message), T, "<i style='color: red;'>[html_encode(T)]</i>")
 
 	//AI mentions
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
@@ -473,6 +473,11 @@ var/list/headset_modes = list(
 
 	if(stuttering || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)) )
 		speech.message = stutter(speech.message)
+
+	if(reagents.has_any_reagents(HYPERZINES))
+		speech.message = replacetext(speech.message," ","") // motor mouth
+		speech.message = replacetext(speech.message,",","") // motor mouth
+		speech.message = replacetext(speech.message,";","") // motor mouth
 
 /mob/living/proc/get_speech_flags(var/message_mode)
 	switch(message_mode)

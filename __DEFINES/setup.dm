@@ -817,6 +817,9 @@ SEE_PIXELS	256
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 #define ORGAN_MALFUNCTIONING 8192
 
+#define SURGERY_SUCCESS_NORMAL 0
+#define SURGERY_SUCCESS_ALWAYS 1
+#define SURGERY_SUCCESS_NEVER  2
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -1651,6 +1654,8 @@ var/proccalls = 1
 #define VIOLENCE_SILENT		0
 #define VIOLENCE_DEFAULT	1
 #define VIOLENCE_GUN		2
+
+#define MAX_SHEET_STACK_AMOUNT	50
 
 // Used to determine which HUD is in use
 #define HUD_NONE 0

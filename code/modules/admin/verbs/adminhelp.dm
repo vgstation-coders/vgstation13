@@ -22,6 +22,10 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	msg = trim_left(trim_right(sanitize(copytext(msg,1,MAX_MESSAGE_LEN))))
 	if(!msg)
 		return
+	//sanity check, do it twice
+	if(prefs.muted & MUTE_ADMINHELP)
+		to_chat(src, "<span class='red'>Error: Admin-PM: You cannot send adminhelps (Muted).</span>")
+		return
 	if(src.handle_spam_prevention(msg,MUTE_ADMINHELP))
 		return
 	var/original_msg = msg

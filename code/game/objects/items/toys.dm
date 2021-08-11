@@ -99,6 +99,13 @@
 	item_state = "syndballoon"
 	w_class = W_CLASS_LARGE
 
+/obj/item/toy/syndicateballoon/green
+    name = "green balloon"
+    desc = "it is just a balloon that is green"
+    icon_state = "greenballoon"
+    item_state = "greenballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+
 /obj/item/toy/syndicateballoon/ntballoon
     name = "nanotrasen balloon"
     desc = "There is a tag on the back that reads \"LUV NT!<3!\"."
@@ -112,6 +119,7 @@
     icon_state = "byondballoon"
     item_state = "byondballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+
 /*
  * Fake telebeacon
  */
@@ -717,7 +725,7 @@
  */
 /obj/item/toy/gooncode
 	name = "Goonecode"
-	desc = "The holy grail of all programmers. It seems a bit leaky."
+	desc = "The holy grail of all programmers...or at least it was at some point. It looks like it has fully leaked out."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
@@ -1814,3 +1822,11 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
+
+/obj/item/toy/foam_hand
+	name = "\improper NanoTrasen foam hand"
+	desc = "A simple balloon."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "foam_hand"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	w_class = W_CLASS_LARGE

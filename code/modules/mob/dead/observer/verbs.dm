@@ -375,7 +375,7 @@
 
 	//Previewing our message
 	var/image/I = image(icon = null)
-	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	I.maptext_height = 32
 	I.maptext_width = 64
 	I.maptext_x = -16
@@ -401,7 +401,7 @@
 	//Finally writing our message
 	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 	W.basecolor = doodle_color
-	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	W.add_hiddenprint(src)
 	W.original_amount = writings_blood_amount
 	W.original_bloodsource = original_bloodsource
@@ -518,6 +518,42 @@
 					break
 	else
 		to_chat(src, "<span class='warning'>Unable to find any MoMMI Spawners ready to build a MoMMI in the universe. Please try again.</span>")
+
+/mob/dead/observer/verb/become_hobo()
+	set name = "Become Space Hobo"
+	set category = "Ghost"
+	if(!(mind && mind.current && can_reenter_corpse) || (mind.current.key && copytext(mind.current.key,1,2)!="@"))
+		to_chat(src, "<span class='warning'>You must have had presence on this plane to become this.</span>")
+		return
+	if(!config.respawn_as_hobo)
+		to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled.</span>")
+		return
+	var/timedifference = world.time - client.time_died_as_mouse
+	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
+		var/timedifference_text
+		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
+		to_chat(src, "<span class='warning'>You may only spawn again as this role more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
+		return
+	if(hoboamount == hobostart.len)
+		to_chat(src, "<span class='warning'>The world has enough of these as is.</span>")
+		return
+
+	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
+	if(response != "Yeah!")
+		return  //Hit the wrong key...again.
+	
+	//find a viable mouse candidate
+	var/mob/living/carbon/human/hobo = new(pick(hobostart))
+	hobo.key = src.key
+	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
+	hobo.generate_name()
+	var/datum/outfit/special/with_id/hobo/hobo_outfit = new
+	hobo_outfit.equip(hobo)
+	to_chat(hobo, "<B>You are a Space Hobo.</B>")
+	// somewhat taken from CEV eris
+	to_chat(hobo, "<b>The ID you wear likely not even your own. At least as far as you can remember. But this chunk of plastic still can be a rare oddity that can change your character. Find a way to stay out of trouble, and survive. Though this does not mean you have no home, as the asteroid is your home. Whatever planet you may have come from is now a distant memory.</b>")
+	to_chat(hobo, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
+	hoboamount++
 
 /mob/dead/observer/verb/pai_signup()
 	set name = "Sign up as pAI"

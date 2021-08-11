@@ -174,6 +174,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
 	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburger
 
+/datum/recipe/veggieburgernymph
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph
+
 /datum/recipe/avocadoburger
 	reagents = list(FLOUR = 5)
 	items = list(
@@ -2889,3 +2894,57 @@
 		/obj/item/weapon/reagent_containers/food/snacks/butter,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sweetroll
+
+// You have now entered the Ayy food zone
+
+/datum/recipe/greytvdinner1
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner1
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
+
+/datum/recipe/greytvdinner2
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner2
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2
+
+/datum/recipe/greytvdinner3
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner3
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3
+
+/datum/recipe/greygreens
+	reagents = list(SOYSAUCE = 10)
+	items = list(
+		/obj/item/weapon/grown/nettle,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greygreens
+
+/datum/recipe/stuffedpitcher
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
+
+/datum/recipe/nymphsperil
+	reagents = list(RICE = 10, CORNOIL = 5, SACID = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
+
+//You have now exited the ayy food zone. Thanks for visiting.
+
+/datum/recipe/dionaroast
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, CORNOIL = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/apple
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/dionaroast

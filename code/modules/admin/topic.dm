@@ -1807,6 +1807,27 @@
 		message_admins("[key_name(usr)] set 'forced_extended' to [dynamic_forced_extended].")
 		dynamic_mode_options(usr)
 
+	else if(href_list["toggle_rulesets"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+
+		admin_disable_rulesets = !admin_disable_rulesets
+		log_admin("[key_name(usr)] toggled Dynamic rulesets <b>[admin_disable_rulesets ? "OFF" : "ON"]</b>.")
+		message_admins("[key_name(usr)] toggled Dynamic rulesets <b>[admin_disable_rulesets ? "OFF" : "ON"]</b>.")
+		Game()
+
+	else if(href_list["toggle_events"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		admin_disable_events = !admin_disable_events
+		log_admin("[key_name(usr)] toggled random events <b>[admin_disable_events ? "OFF" : "ON"]</b>.")
+		message_admins("[key_name(usr)] toggled random events <b>[admin_disable_events ? "OFF" : "ON"]</b>.")
+		Game()
+
 	else if(href_list["no_stacking"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2778,15 +2799,26 @@
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon")
 			return
 
-		if(!H.put_in_hands( new /obj/item/weapon/reagent_containers/food/snacks/cookie(H)))
-			log_admin("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
-			message_admins("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
+		var/answer = alert("Give them a Cookie? A Pomf Coin? Or a Pumf Coin?","Spawn Cookie","Cookie","Pomf","Pumf")
+		var/spawntype = /obj/item/weapon/reagent_containers/food/snacks/cookie
+		var/feedback = "You received the <b>best cookie</b>!"
+		if (answer == "Pomf")
+			spawntype = /obj/item/weapon/coin/pomf
+			feedback = "You were rewarded with a most precious pomf coin. Keep it preciously, or use it wisely."
+		else if (answer == "Pumf")
+			spawntype = /obj/item/weapon/coin/pumf
+			feedback = "You have greatly angered the gods, and their grudge toward you has been crystalized into a damned pumf coin."
+
+		if(!H.put_in_hands( new spawntype(H)))
+			log_admin("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
+			message_admins("[key_name(H)] has their hands full, so they did not receive their [answer], spawned by [key_name(src.owner)].")
 			return
 
-		log_admin("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
-		message_admins("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
+		log_admin("[key_name(H)] got their [answer], spawned by [key_name(src.owner)]")
+		message_admins("[key_name(H)] got their [answer], spawned by [key_name(src.owner)]")
 		feedback_inc("admin_cookies_spawned",1)
-		to_chat(H, "<span class='notice'>Your prayers have been answered!! You received the <b>best cookie</b>!</span>")
+
+		to_chat(H, "<span class='notice'>Your prayers have been answered!! [feedback]</span>")
 
 	else if(href_list["addcancer"])
 		if(!check_rights(R_ADMIN|R_FUN))
@@ -3567,6 +3599,18 @@
 				for(var/obj/machinery/light/L in alllights)
 					L.fix()
 				message_admins("[key_name_admin(usr)] fixed all lights", 1)
+			if("switchoff")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","WO")
+				for(var/obj/machinery/light_switch/LS in all_machines)
+					LS.toggle_switch(0)
+				message_admins("[key_name_admin(usr)] switched off all lights", 1)
+			if("switchon")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","WO")
+				for(var/obj/machinery/light_switch/LS in all_machines)
+					LS.toggle_switch(1)
+				message_admins("[key_name_admin(usr)] switched on all lights", 1)
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RAD")
@@ -3972,6 +4016,35 @@
 				for(var/i = 1 to choice)
 					world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("togglerunescapepvp")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RSPVP")
+				runescape_pvp = !runescape_pvp
+				if(runescape_pvp)
+					message_admins("[key_name_admin(usr)] has enabled Maint-Only PvP.")
+					log_admin("[key_name_admin(usr)] has enabled Maint-Only PvP.")
+					for (var/mob/player in player_list)
+						to_chat(player, "<span class='userdanger'>WARNING: Wilderness mode is now enabled; players can only harm one another in maintenance areas!</span>")
+				else
+					message_admins("[key_name_admin(usr)] has disabled  Maint-Only PvP.")
+					log_admin("[key_name_admin(usr)] has disabled Maint-Only PvP.")
+					for (var/mob/player in player_list)
+						to_chat(player, "<span class='userdanger'>WARNING: Wilderness mode is now disabled; players can only harm one another anywhere!</span>")
+			if("togglerunescapeskull")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RSSKL")
+				runescape_skull_display = !runescape_skull_display
+				if(runescape_skull_display)
+					message_admins("[key_name_admin(usr)] has enabled Skull icons appearing over aggressors.")
+					log_admin("[key_name_admin(usr)] has enabled Skull icon appearing over aggressors.")
+				else
+					message_admins("[key_name_admin(usr)] has disabled Skull icon appearing over aggressors.")
+					log_admin("[key_name_admin(usr)] has disabled Skull icon appearing over aggressors.")
+					if (ticker)
+						for (var/entry in ticker.runescape_skulls)
+							var/datum/runescape_skull_data/the_data = ticker.runescape_skulls[entry]
+							ticker.runescape_skulls -= entry
+							qdel(the_data)
 			if("massbomber")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BBM")
@@ -4084,7 +4157,7 @@
 				if(!choice)
 					return
 				var/obj/item/weapon/gun/energy/gun = new choice()
-				var/obj/machinery/porta_turret/Turret = new(get_turf(usr))
+				var/obj/machinery/turret/portable/Turret = new(get_turf(usr))
 				Turret.installed = gun
 				gun.forceMove(Turret)
 				Turret.update_gun()

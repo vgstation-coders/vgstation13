@@ -14,28 +14,30 @@
 	layer = BLOB_CORE_LAYER
 	var/core_warning_delay = 0
 	var/previous_health = 200
+	var/no_ghosts_allowed = FALSE
 
 	icon_new = "core"
 	icon_classic = "blob_core"
 
 
 /obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0)
-	looks = newlook
+	if (looks == "new")
+		looks = newlook
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
-	if(icon_size == 64)
+	if (!asleep && icon_size == 64)
 		if(!no_morph && new_overmind)
 			flick("core_spawn",src)
 		else
 			icon_state = "cerebrate"
 			flick("morph_core",src)
 	playsound(src, get_sfx("gib"),50,1)
-	if(!overmind)
+	if(!overmind && !asleep)
 		create_overmind(new_overmind)
 	point_rate = new_rate
 	last_resource_collection = world.time
-	..(loc, newlook)
+	..(loc, looks)
 
 /obj/effect/blob/core/Destroy()
 	blob_cores -= src
@@ -81,6 +83,9 @@
 	if(health < maxhealth)
 		health = min(maxhealth, health + 1)
 		update_icon()
+
+	if(asleep)
+		return
 
 	if(!spawning)//no expanding on the first Life() tick
 
@@ -128,12 +133,15 @@
 			to_chat(usr, "<span class='warning'>Looks like someone applied first. First arrived, first served. Better luck next time.</span>")
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
+	if (no_ghosts_allowed)
+		to_chat(user, "<span class='warning'>This [src] cannot be controlled by ghosts.</span>")
+		return
 	if (!overmind)
 		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
 		if(confirm)
 			if(!overmind)
 				create_overmind(user.client)
-			else	
+			else
 				to_chat(user, "<span class='warning'>Someone has already taken control of this core.</span>")
 
 /obj/effect/blob/core/proc/create_overmind(var/client/new_overmind)

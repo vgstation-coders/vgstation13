@@ -42,7 +42,6 @@
 	var/closed_system          // If set, the tray will attempt to take atmos from a pipe.
 	var/force_update           // Set this to bypass the cycle time check.
 	var/skip_aging = 0		   // Don't advance age for the next N cycles.
-
 	var/pollination = 0
 	var/bees = 0				//Are the trays currently affected by the bees' pollination?
 
@@ -55,6 +54,9 @@
 
 	// Seed details/line data.
 	var/datum/seed/seed = null // The currently planted seed
+
+/obj/machinery/portable_atmospherics/hydroponics/loose
+	anchored = FALSE
 
 /obj/machinery/portable_atmospherics/hydroponics/New()
 	..()
@@ -396,9 +398,16 @@
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
-
+		
 	else
 		return ..()
+
+/obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/green)
+		has_slime=1
+		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
+		return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 

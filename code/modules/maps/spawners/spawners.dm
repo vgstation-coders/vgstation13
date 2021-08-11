@@ -185,7 +185,6 @@
 		/obj/machinery/monkey_recycler,
 		/obj/machinery/photocopier,
 		/obj/machinery/pipedispenser,
-		/obj/machinery/porta_turret,
 		/obj/machinery/power/am_control_unit,
 		/obj/machinery/power/emitter,
 		/obj/machinery/power/generator,
@@ -205,6 +204,7 @@
 		/obj/machinery/telecomms/allinone,
 		/obj/machinery/teleport/station,
 		/obj/machinery/the_singularitygen,
+		/obj/machinery/turret/portable,
 		/obj/machinery/vending/dinnerware,
 		/obj/machinery/vending/engineering,
 		/obj/machinery/vending/plasmaresearch,
@@ -591,7 +591,9 @@
 		/obj/structure/bed/chair/vehicle/wheelchair/multi_people,
 		/obj/item/stack/package_wrap/syndie,
 		/obj/item/weapon/storage/toolbox/syndicate,
-		/obj/item/weapon/switchtool/swiss_army_knife
+		/obj/item/weapon/switchtool/swiss_army_knife,
+		/obj/item/clothing/accessory/wristwatch,
+		/obj/item/clothing/accessory/wristwatch/black,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -1185,7 +1187,8 @@
 		/obj/item/weapon/aiModule/randomize,
 		/obj/item/weapon/aiModule/core/hogan,
 		/obj/item/weapon/gun/portalgun,
-		/obj/item/clothing/glasses/emitter
+		/obj/item/clothing/glasses/emitter,
+		/obj/item/clothing/accessory/wristwatch/gold
 )
 
 
@@ -1255,7 +1258,8 @@
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
 	/obj/abstract/spawn_all/dredd_gear,
-	/obj/item/clothing/glasses/emitter
+	/obj/item/clothing/glasses/emitter,
+	/obj/item/clothing/accessory/wristwatch/gold,
 )
 
 /obj/abstract/map/spawner/safe/medal

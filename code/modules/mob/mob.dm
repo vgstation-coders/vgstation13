@@ -433,6 +433,9 @@
 
 /mob/proc/Life()
 	set waitfor = FALSE
+
+	update_perception()
+
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
@@ -442,7 +445,6 @@
 	for (var/time in crit_rampup)
 		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
 			crit_rampup -= time
-	return
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
 	if(N.chained)
@@ -459,7 +461,7 @@
 			narsimage.mouse_opacity = 0
 		if(!narglow) //Create narglow
 			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", NARSIE_GLOW, 1)
-			narglow.plane = LIGHTING_PLANE
+			narglow.plane = ABOVE_LIGHTING_PLANE
 			narglow.mouse_opacity = 0
 /* Animating narsie works like shit thanks to fucking byond
 		if(!N.old_x || !N.old_y)
@@ -524,7 +526,7 @@
 	if((R.z == T_mob.z) && (get_dist(R,T_mob) <= (R.consume_range+10)) && !(R in view(T_mob)))
 		if(!riftimage)
 			riftimage = image('icons/obj/rift.dmi',T_mob,"rift", SUPER_PORTAL_LAYER, 1)
-			riftimage.plane = LIGHTING_PLANE
+			riftimage.plane = ABOVE_LIGHTING_PLANE
 			riftimage.mouse_opacity = 0
 
 		var/new_x = WORLD_ICON_SIZE * (R.x - T_mob.x) + R.pixel_x
@@ -1073,6 +1075,7 @@ Use this proc preferably at the end of an equipment loadout
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
+				M.assaulted_by(usr, TRUE)
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1927,6 +1930,9 @@ mob/proc/on_foot()
 	if(see_invisible_override)
 		see_invisible = see_invisible_override
 
+/mob/proc/update_perception()
+	return
+
 /mob/actual_send_to_future(var/duration)
 	var/init_blinded = blinded
 	var/init_eye_blind = eye_blind
@@ -2119,6 +2125,12 @@ mob/proc/on_foot()
 				alphas.Remove(source_define)
 
 /mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if (runescape_pvp)
+		var/area/A = get_area(src)
+		if (!istype(A, /area/maintenance) && !is_type_in_list(A,non_standard_maint_areas))
+			to_chat(src, "<span class='danger'>You must enter maintenance to attack other players!</span>")
+			return TRUE
+
 	if(status_flags & UNPACIFIABLE)
 		return FALSE
 

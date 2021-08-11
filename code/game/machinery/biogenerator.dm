@@ -162,6 +162,12 @@
 	name="Gadget Bag"
 	result=/obj/item/weapon/storage/bag/gadgets
 
+/datum/biogen_recipe/leather/slime
+	cost=350
+	id="slime"
+	name="Slime Bag"
+	result=/obj/item/weapon/storage/bag/xenobio
+
 /datum/biogen_recipe/leather/plants
 	cost=350
 	id="plants"

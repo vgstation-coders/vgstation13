@@ -18,6 +18,22 @@
 	return ..()
 
 /mob/living/carbon/monkey/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	var/datum/organ/external/S = organ
+	if (organ)
+		S = organ
+	else
+		S = target.get_organ(zone_sel.selecting)
+	var/touch_zone = FULL_TORSO
+	if (!(!S || S.status & ORGAN_DESTROYED))
+		touch_zone = S.body_part
+	var/block = 0
+	var/bleeding = 0
+	// biting causes the check to consider that both sides are bleeding, allowing for blood-only disease transmission through biting.
+	if (target.check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+		block = 1
+	bleeding = 1 // monkeys always bite
+	share_contact_diseases(target,block,bleeding)
+
 	if(iscarbon(target))
 		for(var/datum/disease/D in viruses)
 

@@ -84,6 +84,13 @@
 	force = 15.0
 	throwforce = 12.0
 
+/obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/bluespace)
+		has_slime=1
+		to_chat(user, "You shove the slime extract inside \the [src]'s head.")
+		return TRUE
+
 /*
  * Screwdriver
  */
@@ -146,7 +153,7 @@
 /obj/item/tool/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
 		return ..()
-	if(can_operate(M, user))
+	if(can_operate(M, user, src))
 		return ..()
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD)
 		return ..()
@@ -223,6 +230,15 @@
 		return
 	else
 		..()
+
+/obj/item/tool/wirecutters/scissors
+	name = "scissors"
+	desc = "This cuts paper."
+	icon_state = "scissors"
+
+/obj/item/tool/wirecutters/scissors/New()
+	. = ..()
+	icon_state = "scissors"
 /*
  * Welding Tool
  */
@@ -361,7 +377,7 @@
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
-		if(can_operate(M, user))
+		if(can_operate(M, user, src))
 			if(do_surgery(M, user, src))
 				return
 		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]

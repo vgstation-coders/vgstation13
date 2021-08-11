@@ -226,6 +226,7 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 			target.LAssailant = null
 		else
 			target.LAssailant = user
+			target.assaulted_by(user)
 	if(admin)
 		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 

@@ -108,6 +108,18 @@
 		var/mob/living/L = user
 		L.sleeping += 10 // You can't faint when you're asleep.
 
+var/list/animals_with_wings = list(
+	/mob/living/simple_animal/parrot,
+	/mob/living/simple_animal/bee,
+	/mob/living/simple_animal/penguin,
+	/mob/living/simple_animal/chick,
+	/mob/living/simple_animal/chicken,
+	/mob/living/simple_animal/hostile/retaliate/cockatrice,
+	/mob/living/simple_animal/hostile/scarybat,
+	/mob/living/simple_animal/hostile/bigroach,
+	/mob/living/simple_animal/hostile/viscerator,
+	)
+
 /datum/emote/living/flap
 	key = "flap"
 	key_third_person = "flaps"
@@ -123,6 +135,8 @@
 
 /datum/emote/living/flap/can_run_emote(var/mob/user, var/status_check)
 	if (isMoMMI(user))
+		return TRUE
+	if (is_type_in_list(user,animals_with_wings))
 		return TRUE
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user

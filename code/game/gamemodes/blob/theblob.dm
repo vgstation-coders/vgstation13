@@ -45,6 +45,8 @@ var/list/blob_overminds = list()
 	var/manual_remove = 0
 	var/icon_size = 64
 
+	var/asleep = FALSE
+
 /obj/effect/blob/blob_act()
 	return
 
@@ -55,11 +57,10 @@ var/list/blob_overminds = list()
 		looks = newlook
 	update_looks()
 	blobs += src
-	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
 	if(icon_size == 64)
-		if(spawning && !no_morph)
+		if(!asleep && spawning && !no_morph)
 			icon_state = initial(icon_state) + "_spawn"
 			spawn(10)
 				spawning = 0//for sprites
@@ -76,7 +77,6 @@ var/list/blob_overminds = list()
 		A.blob_act(0,src)
 
 	blob_tiles_grown_total++
-	return
 
 
 /obj/effect/blob/Destroy()
@@ -404,6 +404,9 @@ var/list/blob_looks_player = list(//Options available to players
 	qdel(src)
 
 /obj/effect/blob/proc/update_health()
+	if(asleep && (health < maxhealth))
+		for (var/obj/effect/blob/B in range(7,src))
+			B.asleep = FALSE
 	if(!dying && (health <= 0))
 		dying = 1
 		if(get_turf(src))
@@ -415,6 +418,11 @@ var/list/blob_looks_player = list(//Options available to players
 	luminosity = 2
 	health = 21
 	layer = BLOB_BASE_LAYER
+
+/obj/effect/blob/normal/New(turf/loc,newlook = null,no_morph = 0)
+	if (!asleep)
+		dir = pick(cardinal)
+	..()
 
 /obj/effect/blob/normal/Delete()
 	..()

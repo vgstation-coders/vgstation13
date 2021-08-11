@@ -83,6 +83,8 @@
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
 
 /obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if((flow_flags & ON_BORDER) && (mover.dir == dir))
@@ -91,6 +93,8 @@
 	return 1
 
 /obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)

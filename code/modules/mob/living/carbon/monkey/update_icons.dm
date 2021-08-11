@@ -67,7 +67,7 @@
 		if(!t_state)
 			t_state = uniform.icon_state
 
-		var/image/I = image(icon = 'icons/mob/monkey.dmi', icon_state = t_state)
+		var/image/I = image("icon" = ((uniform.icon_override) ? uniform.icon_override : 'icons/mob/monkey.dmi'), "icon_state" = "[t_state]")
 		if(uniform.dynamic_overlay)
 			if(uniform.dynamic_overlay["[UNIFORM_LAYER]"])
 				var/image/dyn_overlay = uniform.dynamic_overlay["[UNIFORM_LAYER]"]
@@ -83,11 +83,11 @@
 /mob/living/carbon/monkey/update_inv_head(var/update_icons=1)
 	update_inv_hat(update_icons)
 
-/mob/living/carbon/monkey/proc/update_inv_hat(var/update_icons=1)
+/mob/living/carbon/monkey/proc/update_inv_hat(var/update_icons=1, var/pixel_y_adjustment = 0)
 	if(hat && hat.is_visible())
 		var/t_state = hat.icon_state
 
-		var/image/I = image(icon = 'icons/mob/monkey_head.dmi', icon_state = t_state)
+		var/image/I = image("icon" = ((hat.icon_override) ? hat.icon_override : 'icons/mob/monkey_head.dmi'), "icon_state" = "[t_state]", pixel_y = pixel_y_adjustment)
 		if(hat.dynamic_overlay)
 			if(hat.dynamic_overlay["[HEAD_LAYER]"])
 				var/image/dyn_overlay = hat.dynamic_overlay["[HEAD_LAYER]"]
@@ -99,45 +99,17 @@
 	if(update_icons)
 		update_icons()
 
-/mob/living/carbon/monkey/diona/update_inv_hat(var/update_icons=1)//needed for pixel_y adjustment
-	if(hat && hat.is_visible())
-		var/t_state = hat.icon_state
+/mob/living/carbon/monkey/diona/update_inv_hat()
+	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
 
-		var/image/I = image(icon = 'icons/mob/monkey_head.dmi', icon_state = t_state, pixel_y = -7 * PIXEL_MULTIPLIER)
-		if(hat.dynamic_overlay)
-			if(hat.dynamic_overlay["[HEAD_LAYER]"])
-				var/image/dyn_overlay = hat.dynamic_overlay["[HEAD_LAYER]"]
-				I.overlays += dyn_overlay
-		overlays_standing[M_HAT_LAYER]	= I
-		hat.screen_loc = ui_monkey_hat
-	else
-		overlays_standing[M_HAT_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-/mob/living/carbon/monkey/vox/update_inv_hat(var/update_icons=1)//Sorry for the copypaste
-	if(hat && hat.is_visible())
-		var/t_state = hat.icon_state
-
-		var/image/I = image(icon = 'icons/mob/monkey_head.dmi', icon_state = t_state, pixel_y = -12 * PIXEL_MULTIPLIER)
-		if(hat.dynamic_overlay)
-			if(hat.dynamic_overlay["[HEAD_LAYER]"])
-				var/image/dyn_overlay = hat.dynamic_overlay["[HEAD_LAYER]"]
-				I.overlays += dyn_overlay
-		overlays_standing[M_HAT_LAYER]	= I
-		hat.screen_loc = ui_monkey_hat
-	else
-		overlays_standing[M_HAT_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-
+/mob/living/carbon/monkey/vox/update_inv_hat()
+	..(pixel_y_adjustment = -12 * PIXEL_MULTIPLIER)
 
 /mob/living/carbon/monkey/update_inv_glasses(var/update_icons=1)
 	if(glasses && glasses.is_visible())
 		var/t_state = glasses.icon_state
 
-		var/image/I = image("icon" = 'icons/mob/monkey_eyes.dmi', "icon_state" = t_state)
+		var/image/I = image("icon" = ((glasses.icon_override) ? glasses.icon_override : 'icons/mob/monkey_eyes.dmi'), "icon_state" = "[t_state]")
 		if(glasses.dynamic_overlay)
 			if(glasses.dynamic_overlay["[GLASSES_LAYER]"])
 				var/image/dyn_overlay = glasses.dynamic_overlay["[GLASSES_LAYER]"]
@@ -150,10 +122,10 @@
 		update_icons()
 
 
-/mob/living/carbon/monkey/update_inv_wear_mask(var/update_icons=1)
+/mob/living/carbon/monkey/update_inv_wear_mask(var/update_icons=1, var/pixel_y_adjustment = 0)
 	if( wear_mask && istype(wear_mask, /obj/item/clothing/mask) && wear_mask.is_visible())
 
-		var/image/I = image("icon" = 'icons/mob/monkey.dmi', "icon_state" = "[wear_mask.icon_state]")
+		var/image/I	= image("icon" = ((wear_mask.icon_override) ? wear_mask.icon_override : 'icons/mob/monkey.dmi'), "icon_state" = "[wear_mask.icon_state]", pixel_y = pixel_y_adjustment)
 		if(wear_mask.dynamic_overlay)
 			if(wear_mask.dynamic_overlay["[FACEMASK_LAYER]"])
 				var/image/dyn_overlay = wear_mask.dynamic_overlay["[FACEMASK_LAYER]"]
@@ -165,35 +137,11 @@
 	if(update_icons)
 		update_icons()
 
-/mob/living/carbon/monkey/diona/update_inv_wear_mask(var/update_icons=1)//needed for pixel_y adjustment
-	if( wear_mask && istype(wear_mask, /obj/item/clothing/mask) && wear_mask.is_visible())
+/mob/living/carbon/monkey/diona/update_inv_wear_mask()
+	..(pixel_y_adjustment = -7 * PIXEL_MULTIPLIER)
 
-		var/image/I = image(icon = 'icons/mob/monkey.dmi', icon_state = "[wear_mask.icon_state]", pixel_y = -7 * PIXEL_MULTIPLIER)
-		if(wear_mask.dynamic_overlay)
-			if(wear_mask.dynamic_overlay["[FACEMASK_LAYER]"])
-				var/image/dyn_overlay = wear_mask.dynamic_overlay["[FACEMASK_LAYER]"]
-				I.overlays += dyn_overlay
-		overlays_standing[M_MASK_LAYER]	= I
-		wear_mask.screen_loc = ui_monkey_mask
-	else
-		overlays_standing[M_MASK_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
-/mob/living/carbon/monkey/vox/update_inv_wear_mask(var/update_icons=1)//Sorry for the copypaste
-	if( wear_mask && istype(wear_mask, /obj/item/clothing/mask) && wear_mask.is_visible())
-
-		var/image/I = image(icon = 'icons/mob/monkey.dmi', icon_state = "[wear_mask.icon_state]", pixel_y = -12 * PIXEL_MULTIPLIER)
-		if(wear_mask.dynamic_overlay)
-			if(wear_mask.dynamic_overlay["[FACEMASK_LAYER]"])
-				var/image/dyn_overlay = wear_mask.dynamic_overlay["[FACEMASK_LAYER]"]
-				I.overlays += dyn_overlay
-		overlays_standing[M_MASK_LAYER]	= I
-		wear_mask.screen_loc = ui_monkey_mask
-	else
-		overlays_standing[M_MASK_LAYER]	= null
-	if(update_icons)
-		update_icons()
+/mob/living/carbon/monkey/vox/update_inv_wear_mask()
+	..(pixel_y_adjustment = -12 * PIXEL_MULTIPLIER)
 
 /mob/living/carbon/monkey/update_inv_hand(index, var/update_icons = 1)
 	switch(index)
@@ -242,9 +190,10 @@
 	if(update_icons)
 		update_icons()
 
-/mob/living/carbon/monkey/update_inv_back(var/update_icons=1)
+/mob/living/carbon/monkey/update_inv_back(var/update_icons=1, var/pixel_y_adjustment = 0)
+	
 	if(back && back.is_visible())
-		var/image/I = image("icon" = 'icons/mob/back.dmi', "icon_state" = "[back.icon_state]")
+		var/image/I = image("icon" = 'icons/mob/back.dmi', "icon_state" = "[back.icon_state]", pixel_y = pixel_y_adjustment)
 		if(back.dynamic_overlay)
 			if(back.dynamic_overlay["[BACK_LAYER]"])
 				var/image/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
@@ -256,34 +205,11 @@
 	if(update_icons)
 		update_icons()
 
-/mob/living/carbon/monkey/diona/update_inv_back(var/update_icons=1)//needed for pixel_y adjustment
-	if(back && back.is_visible())
-		var/image/I = image(icon = 'icons/mob/back.dmi', icon_state = "[back.icon_state]", pixel_y = -5 * PIXEL_MULTIPLIER)
-		if(back.dynamic_overlay)
-			if(back.dynamic_overlay["[BACK_LAYER]"])
-				var/image/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
-				I.overlays += dyn_overlay
-		overlays_standing[M_BACK_LAYER]	= I
-		back.screen_loc = ui_monkey_back
-	else
-		overlays_standing[M_BACK_LAYER]	= null
-	if(update_icons)
-		update_icons()
+/mob/living/carbon/monkey/diona/update_inv_back()//needed for pixel_y adjustment
+	..(pixel_y_adjustment = -5 * PIXEL_MULTIPLIER)
 
-/mob/living/carbon/monkey/vox/update_inv_back(var/update_icons=1)//Sorry for the copypaste
-	if(back && back.is_visible())
-		var/image/I = image(icon = 'icons/mob/back.dmi', icon_state = "[back.icon_state]", pixel_y = -5 * PIXEL_MULTIPLIER)
-		if(back.dynamic_overlay)
-			if(back.dynamic_overlay["[BACK_LAYER]"])
-				var/image/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
-				I.overlays += dyn_overlay
-		overlays_standing[M_BACK_LAYER]	= I
-		back.screen_loc = ui_monkey_back
-	else
-		overlays_standing[M_BACK_LAYER]	= null
-	if(update_icons)
-		update_icons()
-
+/mob/living/carbon/monkey/vox/update_inv_back()//Sorry for the copypaste
+	..(pixel_y_adjustment = -5 * PIXEL_MULTIPLIER)
 
 /mob/living/carbon/monkey/update_inv_handcuffed(var/update_icons=1)
 	if(handcuffed && handcuffed.is_visible())

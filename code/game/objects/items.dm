@@ -78,6 +78,8 @@
 	var/crit_chance = CRIT_CHANCE_RANGED
 	var/crit_chance_melee = CRIT_CHANCE_MELEE
 
+	var/datum/speech_filter/speech_filter
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -311,6 +313,37 @@
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
 /obj/item/proc/on_found(mob/wearer, mob/finder)
 	return
+
+// have your item's MouseDropFrom call this if mouse-dropping is the default way of picking up your item, such as a paper bin or a deck of card
+/obj/item/proc/MouseDropPickUp(atom/over_object)
+	var/mob/user = usr
+	if(user.incapacitated() || (!ishigherbeing(user) && !isrobot(user)))
+		return
+	if(Adjacent(user) || is_holder_of(user, src))
+		if(!istype(user, /mob/living/carbon/slime) && !istype(user, /mob/living/simple_animal))
+			if(istype(over_object,/obj/abstract/screen/inventory)) //We're being dragged into the user's UI...
+				var/obj/abstract/screen/inventory/OI = over_object
+
+				if(OI.hand_index && user.put_in_hand_check(src, OI.hand_index))
+					if(istype(loc, /obj/item/weapon/storage))
+						var/obj/item/weapon/storage/bag = loc
+						bag.remove_from_storage(src)
+					user.u_equip(src, 0)
+					user.put_in_hand(OI.hand_index, src)
+					mouse_opacity = 1
+					src.add_fingerprint(user)
+
+			else if(istype(over_object,/mob/living)) //We're being dragged on a living mob's sprite...
+				if(user == over_object) //It's the user!
+					if( !user.get_active_hand() )		//if active hand is empty
+						if(istype(loc, /obj/item/weapon/storage))
+							var/obj/item/weapon/storage/bag = loc
+							bag.remove_from_storage(src)
+						user.put_in_hands(src)
+						user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
+						mouse_opacity = 1
+	else
+		to_chat(user, "<span class='warning'>You can't reach it from here.</span>")
 
 // called after an item is placed in an equipment slot
 // user is mob that equipped it
@@ -970,6 +1003,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
@@ -1298,6 +1332,7 @@ var/global/list/image/blood_overlays = list()
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
@@ -1447,6 +1482,8 @@ var/global/list/image/blood_overlays = list()
 
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(speech_filter)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 	return
 
 /obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)

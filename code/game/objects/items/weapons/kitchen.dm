@@ -96,6 +96,10 @@
 	if(!istype(M) || !istype(user))
 		return ..()
 
+	if(can_operate(M, user, src))
+		if(do_surgery(M, user, src))
+			return
+
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
@@ -348,6 +352,7 @@
 				H.LAssailant = null
 			else
 				H.LAssailant = user
+				H.assaulted_by(user)
 			qdel(H)
 		return TRUE
 
@@ -382,6 +387,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	var/t = user.zone_sel.selecting
 	if (t == LIMB_HEAD)
@@ -471,6 +477,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		if(prob(15))
 			M.Knockdown(3)

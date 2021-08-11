@@ -58,12 +58,11 @@
 		G.fields["m_stat"]		= "Stable"
 		G.fields["sex"]			= H.gender
 		G.fields["species"]		= H.get_species()
-		G.fields["photo"]		= get_id_photo(H)
+
 		if(H.gen_record && !jobban_isbanned(H, "Records"))
 			G.fields["notes"] = H.gen_record
 		else
 			G.fields["notes"] = "No notes found."
-		general += G
 
 		//Medical Record
 		var/datum/data/record/M = new()
@@ -108,9 +107,22 @@
 		L.fields["b_dna"]		= H.dna.unique_enzymes
 		L.fields["enzymes"]		= H.dna.SE // Used in respawning
 		L.fields["identity"]	= H.dna.UI // "
-		L.fields["image"]		= getFlatIcon(H)	//This is god-awful
+
+		H.regenerate_icons() // ensuring that we don't end up with bald default-species humans before taking their picture
+
+		var/icon/I = icon('icons/effects/32x32.dmi', "blank")
+		var/icon/result = icon(I, "")
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
+		result.Crop(1,1,32,32)
+
+		G.fields["photo"]		= result
+		L.fields["image"]		= result
+
+		general += G
 		locked += L
-	return
 
 
 proc/get_id_photo(var/mob/living/carbon/human/H)
@@ -208,6 +220,14 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_open"), ICON_OVERLAY)
 		if("Scientist")
 			clothes_s = new /icon('icons/mob/uniform.dmi', "toxinswhite_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_tox_open"), ICON_OVERLAY)
+		if("Xenoarchaeologist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "xenoarch")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_tox_open"), ICON_OVERLAY)
+		if("Xenobiologist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "xenobio")
 			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
 			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_tox_open"), ICON_OVERLAY)
 		if("Chemist")

@@ -256,7 +256,7 @@ atom/movable/GotoAirflowDest(n)
 	var/groin_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_GROIN,"melee"))
 	apply_damage(groin_damage, BRUTE, LIMB_GROIN, 0, 0, used_weapon = "Airflow")
 
-	if((head_damage + chest_damage + groin_damage) > 15)
+	if(!(species.anatomy_flags & NO_BLOOD) && (head_damage + chest_damage + groin_damage) > 15)
 		var/turf/T = get_turf(src)
 		T.add_blood(src)
 		bloody_body(src)

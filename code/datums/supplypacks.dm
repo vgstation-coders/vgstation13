@@ -28,9 +28,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	for(var/path in contains)
 		if(!path)
 			continue
-		var/atom/movable/AM = new path()
-		manifest += "<li>[AM.name]</li>"
-		qdel(AM)
+		var/atom/movable/AM = path
+		manifest += "<li>[initial(AM.name)]</li>"
 	manifest += "</ul>"
 
 // Called after a crate containing the items specified by this datum is created
@@ -2587,3 +2586,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Telecommunications Parts stack of packs"
 	group = "Vending Machine packs"
 
+/datum/supply_packs/zamsnax
+	name = "Zam Snax stack of packs"
+	contains = list(/obj/structure/vendomatpack/zamsnax,
+					/obj/structure/vendomatpack/zamsnax)
+	cost = 25
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Zam Snax stack of packs"
+	group = "Vending Machine packs"

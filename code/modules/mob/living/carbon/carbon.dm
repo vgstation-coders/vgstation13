@@ -173,6 +173,15 @@
 		hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
+	if (src != M)
+		// we assume that they use their hands to shake us from our torso
+		var/block = 0
+		var/bleeding = 0
+		if (M.check_contact_sterility(HANDS) || check_contact_sterility(FULL_TORSO))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(FULL_TORSO))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(M,block,bleeding)
 	if (src.health >= config.health_threshold_crit)
 		if(src == M && istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src
@@ -619,11 +628,14 @@
 	if (toucher == touched)
 		return
 	if(virus2.len)
+		var/list/symptom_types = list()
 		for(var/I in virus2)
 			var/datum/disease2/disease/D = virus2[I]
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
-					E.on_touch(src, toucher, touched, touch_type)
+					if (!(E.type in symptom_types))
+						symptom_types += E.type
+						E.on_touch(src, toucher, touched, touch_type)
 
 /mob/living/carbon/proc/check_handcuffs()
 	return handcuffed || istype(locked_to, /obj/structure/bed/nest)

@@ -60,6 +60,7 @@
 	var/list/datum/action/vehicle_actions = list()
 
 	var/headlights = FALSE
+	var/explodes_fueltanks = FALSE
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
@@ -421,8 +422,8 @@
 	if(!.)
 		return
 
-	AM.pixel_x -= offsets["[dir]"]["x"]
-	AM.pixel_y -= offsets["[dir]"]["y"]
+	AM.pixel_x = initial(AM.pixel_x)
+	AM.pixel_y = initial(AM.pixel_y)
 
 	last_dir = null
 

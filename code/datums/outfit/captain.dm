@@ -65,5 +65,6 @@
 
 /datum/outfit/captain/post_equip(var/mob/living/carbon/human/H)
 	..()
-	equip_accessory(H, /obj/item/clothing/accessory/medal/gold/captain, /obj/item/clothing/under)
+	equip_accessory(H, /obj/item/clothing/accessory/medal/gold/captain, /obj/item/clothing/under, 5)
+	equip_accessory(H, /obj/item/clothing/accessory/wristwatch/gold, /obj/item/clothing/under, 5)
 	to_chat(world, "<b>[H.real_name] is the captain!</b>")

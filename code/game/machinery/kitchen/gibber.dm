@@ -254,6 +254,7 @@ obj/machinery/gibber/New()
 		src.occupant.LAssailant = null
 	else
 		src.occupant.LAssailant = user
+		occupant.assaulted_by(user)
 
 	src.occupant.death(1)
 	src.occupant.ghostize(0)

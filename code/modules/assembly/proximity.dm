@@ -3,6 +3,10 @@
 #define VALUE_REMAINING_TIME "Remaining time"
 #define VALUE_DEFAULT_TIME "Default time"
 #define VALUE_TIMING "Timing"
+#define VALUE_PROXMODE "Mode"
+
+#define PROXMODE_CONSTANT "Constant pulsing"
+#define PROXMODE_ENTER "Pulse on entry and exit"
 
 /var/global/list/prox_sensor_ignored_types = list \
 (
@@ -33,12 +37,16 @@
 
 	var/range = 2
 
+	var/constant_pulse = TRUE
+	var/in_proximity = FALSE
+
 	accessible_values = list(\
 		VALUE_SCANNING = "scanning;"+VT_NUMBER,\
 		VALUE_SCAN_RANGE = "range;"+VT_NUMBER+";1;5",\
 		VALUE_REMAINING_TIME = "time;"+VT_NUMBER,\
 		VALUE_DEFAULT_TIME = "default_time;"+VT_NUMBER,\
-		VALUE_TIMING = "timing;"+VT_NUMBER)
+		VALUE_TIMING = "timing;"+VT_NUMBER,\
+		VALUE_PROXMODE = "mode;"+VT_NUMBER)
 
 /obj/item/device/assembly/prox_sensor/activate()
 	if(!..())
@@ -84,9 +92,21 @@
 
 /obj/item/device/assembly/prox_sensor/process()
 	if(scanning)
-		var/turf/mainloc = get_turf(src)
-		for(var/mob/living/A in range(range,mainloc))
-			if (A.move_speed < 12)
+		if(constant_pulse || !in_proximity)
+			var/turf/mainloc = get_turf(src)
+			for(var/mob/living/A in range(range,mainloc))
+				if (A.move_speed < 12)
+					in_proximity = TRUE
+					sense()
+		else
+			var/turf/mainloc = get_turf(src)
+			var/still_in_proximity = FALSE
+			for(var/mob/living/A in range(range,mainloc))
+				if (A.move_speed < 12)
+					still_in_proximity = TRUE
+					break
+			if(!still_in_proximity)
+				in_proximity = FALSE
 				sense()
 
 	if(timing && (time >= 0))
@@ -143,6 +163,7 @@
 	dat += {"<BR><A href='?src=\ref[src];scanning=1'>[scanning?"Armed":"Unarmed"]</A> (Movement sensor active when armed!)
 		<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>
 		<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
+		<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [constant_pulse ? PROXMODE_CONSTANT : PROXMODE_ENTER]</A>
 		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
 	user << browse(dat, "window=prox")
 	onclose(user, "prox")
@@ -177,6 +198,10 @@
 
 	if(href_list["set_default_time"])
 		default_time = time
+	
+	if(href_list["toggle_mode"])
+		constant_pulse = !constant_pulse
+		return
 
 	if(href_list["close"])
 		usr << browse(null, "window=prox")

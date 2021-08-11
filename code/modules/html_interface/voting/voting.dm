@@ -38,7 +38,6 @@ var/global/datum/controller/vote/vote = new()
 	var/list/current_votes = list()
 	var/list/discarded_choices = list()
 	var/list/ismapvote
-	var/list/allmaps
 	var/chosen_map
 	name               = "datum"
 	var/datum/html_interface/nanotrasen/vote/interface
@@ -233,8 +232,8 @@ var/global/datum/controller/vote/vote = new()
 					init_shift_change(null, 1)
 			if("map")
 				if(.)
-					chosen_map = ismapvote[.]
-					watchdog.chosen_map = .
+					chosen_map = "maps/voting/" + ismapvote[.] + "/vgstation13.dmb"
+					watchdog.chosen_map = ismapvote[.]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 					//testing("Vote picked [chosen_map]")
 
@@ -316,7 +315,7 @@ var/global/datum/controller/vote/vote = new()
 					choices.Add(option)
 			if("map")
 				question = "What should the next map be?"
-				var/list/maps = get_maps()
+				var/list/maps = get_votable_maps()
 				for(var/key in maps)
 					choices.Add(key)
 				if(!choices.len)

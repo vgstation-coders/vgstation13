@@ -175,7 +175,7 @@
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				to_chat(user, "<span class='notice'>You fill \the [src]] to the brim.</span>")
 				break
-		src.updateUsrDialog()
+		updateUsrDialog()
 
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
@@ -187,12 +187,14 @@
 				user.visible_message( \
 					"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
 					"<span class='notice'>You add one of [O] to \the [src].</span>")
-		else
-		//	user.before_take_item(O)	//This just causes problems so far as I can tell. -Pete
-			if(user.drop_item(O, src))
-				user.visible_message( \
-					"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
-					"<span class='notice'>You add \the [O] to \the [src].</span>")
+				updateUsrDialog()
+				return 1
+		if(user.drop_item(O, src))
+			user.visible_message( \
+				"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
+				"<span class='notice'>You add \the [O] to \the [src].</span>")
+			updateUsrDialog()
+			return 1
 	else if(is_type_in_list(O,accepts_reagents_from))
 		if (!O.reagents)
 			return 1
@@ -208,7 +210,7 @@
 	else
 		to_chat(user, "<span class='warning'>You have no idea what you can cook with this [O].</span>")
 		return 1
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/microwave/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

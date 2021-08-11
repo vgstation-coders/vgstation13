@@ -174,6 +174,7 @@ var/list/arcane_tomes = list()
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	if(!istype(M))
 		return
@@ -1317,6 +1318,10 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/head/culthood/old/attack_self(var/mob/user)
 	return
 
+/obj/item/clothing/head/culthood/old/unequipped(mob/user, var/from_slot = null)
+	..()
+	icon_state = "culthood_old"
+
 /obj/item/clothing/suit/cultrobes/old
 	name = "forgotten cult robes"
 	icon_state = "cultrobes_old"
@@ -1601,7 +1606,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	qdel(src)
 
 /obj/item/weapon/blood_tesseract/examine(var/mob/user)
@@ -1612,7 +1617,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/attack_self(var/mob/living/user)
 	if (iscultist(user))
 		//Alright so we'll discard cult gear and equip the stuff stored inside.
-		anim(target = user, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_tesseract", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+		anim(target = user, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_tesseract", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 		user.u_equip(src)
 		if (remaining)
 			remaining.forceMove(get_turf(user))

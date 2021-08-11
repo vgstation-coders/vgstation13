@@ -81,6 +81,13 @@
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
 
+/obj/item/weapon/extinguisher/foam/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/blue)
+		has_slime=1
+		to_chat(user, "You attach the slime extract to the extinguisher's funnel.")
+		return TRUE
+
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
 		return
@@ -98,7 +105,6 @@
 				W.playtoolsound(src, 100)
 				flags &= ~OPENCONTAINER
 		return
-
 	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/storage/evidencebag))
 		if(W.is_open_container())
 			return //We're probably trying to fill it
@@ -267,7 +273,11 @@
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
-				var/obj/effect/effect/foam/fire/W = new /obj/effect/effect/foam/fire( get_turf(src) , R)
+				var/obj/effect/effect/foam/fire/W
+				if(has_slime)
+					W=new /obj/effect/effect/foam/fire/enhanced(get_turf(src),R)
+				else
+					W = new /obj/effect/effect/foam/fire(get_turf(src),R)
 				var/turf/my_target = pick(the_targets)
 				if(!W || !src)
 					return

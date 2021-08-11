@@ -190,3 +190,13 @@
 	desc = "Allows for the construction of circuit boards used to build a booze dispenser."
 	id = "booze_dispenser"
 	build_path = /obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser
+
+/datum/design/photobooth
+	name = "Circuit Design (Photo Booth)"
+	desc = "Allows for the construction of circuit boards used to build a photo booth."
+	id = "photobooth"
+	req_tech = list(Tc_PROGRAMMING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/photobooth

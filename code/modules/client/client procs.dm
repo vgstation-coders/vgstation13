@@ -279,6 +279,9 @@
 		winset(src, "rpane.round_end", "is-visible=false")
 		winset(src, "rpane.last_round_end", "is-visible=false")
 
+	if (runescape_pvp)
+		to_chat(src, "<span class='userdanger'>WARNING: Wilderness mode is enabled; players can only harm one another in maintenance areas!</span>")
+
 	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
@@ -489,6 +492,8 @@
 	vote.interface.sendAssets(src)
 	var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
 	send_asset_list(src, E.assets)
+	var/datum/asset/simple/F = new/datum/asset/simple/other_fonts()
+	send_asset_list(src, F.assets)
 
 /proc/get_role_desire_str(var/rolepref)
 	switch(rolepref & ROLEPREF_VALMASK)
@@ -622,5 +627,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	if(prefs.hear_voicesound)
 		if(issilicon(origin))
 			mob.playsound_local(get_turf(origin), get_sfx("voice-silicon"),50,1)
+		if(isvox(origin))
+			mob.playsound_local(get_turf(origin), get_sfx("voice-vox"),50,0)
 		else
 			mob.playsound_local(get_turf(origin), get_sfx("voice-human"),50,1)

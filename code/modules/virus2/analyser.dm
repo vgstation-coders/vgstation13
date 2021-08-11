@@ -137,7 +137,7 @@
 
 	spawn (1)
 		var/image/I = image(icon,"analyser_light")
-		I.plane = LIGHTING_PLANE
+		I.plane = ABOVE_LIGHTING_PLANE
 		I.layer = ABOVE_LIGHTING_LAYER
 		overlays += I
 

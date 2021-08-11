@@ -476,14 +476,15 @@
 							"silver",
 							"centcom_old",
 							"centcom",
-							"security",
-							"medical",
 							"HoS",
-							"research",
-							"engineering",
 							"CMO",
 							"RD",
 							"CE",
+							"security",
+							"medical",
+							"research",
+							"engineering",
+							"cargo",
 							"clown",
 							"mime",
 							"trader",
@@ -494,6 +495,7 @@
 							"ERT_security",
 							"ERT_engineering",
 							"ERT_medical",
+							"ERT_empty",
 						)
 						var/choice = input(user, "Select the appearance for this card.", "Choose.") in appearances
 						if(!Adjacent(user))
@@ -733,6 +735,15 @@
 	icon_state = "trader"
 	access = list(access_trade)
 	base_access = list(access_trade)
+
+/obj/item/weapon/card/id/hobo
+	name = "worn ID"
+	desc = "A worn ID card, long since of any use. The only thing others may use to recognise you. It shows signs of wear and the photo is almost unrecognizable."
+	registered_name = "traveler"
+	assignment = "visitor"
+	icon_state = "trader"
+	access = list()
+	base_access = list()
 
 /obj/item/weapon/card/id/tunnel_clown
 	name = "Tunnel Clown ID card"

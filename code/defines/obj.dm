@@ -220,16 +220,26 @@
 We don't care about names, DNA, accounts, activity, any of that. We're just gonna loop through high job prefs.*/
 
 /datum/controller/occupations/proc/display_prediction()
+	var/list/heads = new()
+	var/list/sec = new()
+	var/list/eng = new()
+	var/list/med = new()
+	var/list/sci = new()
+	var/list/cgo = new()
+	var/list/civ = new()
+	var/list/bot = new()
+	var/list/misc = new()
 	predict_manifest()
 	if(!crystal_ball.len)
 		return "No prediction has been made!" //This only gets shown the first time ever. If everyone unreadies it's blank.
 	var/dat = {"
-	<head><style>
-	{border-collapse:collapse;}
-	td, th {border:1px solid "#DEF; background-color:white; color:black"; padding:.25em}
-	th {height: 2em; "background-color: #48C; color:white";}
-	tr.head th {"background-color: #488";}
-	tr.alt td {"background-color: #DEF"]}
+	<head><head><style>
+		.manifest {border-collapse:collapse;}
+		.manifest td, th {border:1px solid #DEF; background-color:white; color:black; padding:.25em}
+		.manifest th {height: 2em; background-color: #48C; color:white}
+		.manifest tr.head th {background-color: #488}
+		.manifest td:first-child {text-align:right}
+		.manifest tr.alt td {background-color: #DEF}
 	</style></head>
 	<table class="manifest" width='350px'>
 	<tr class='head'><th>Rank</th><th>Quantity</th></tr>
@@ -239,8 +249,90 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 	for(var/job in crystal_ball)
 		if(!crystal_ball[job])
 			continue //If 0, skip
-		dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
-		color = !color
+		var/department = 0
+		if(job in command_positions)
+			heads[job] = crystal_ball[job]
+			department = 1
+		if(job in security_positions)
+			sec[job] = crystal_ball[job]
+			department = 1
+		if(job in engineering_positions)
+			eng[job] = crystal_ball[job]
+			department = 1
+		if(job in medical_positions)
+			med[job] = crystal_ball[job]
+			department = 1
+		if(job in science_positions)
+			sci[job] = crystal_ball[job]
+			department = 1
+		if(job in cargo_positions)
+			cgo[job] = crystal_ball[job]
+			department = 1
+		if(job in civilian_positions)
+			civ[job] = crystal_ball[job]
+			department = 1
+		if(job in nonhuman_positions)
+			bot[job] = crystal_ball[job]
+			department = 1
+		if(!department && !(job in heads))
+			misc[job] = crystal_ball[job]
+
+	if(heads.len > 0)
+		dat += "<tr><th colspan=3>Heads</th></tr>"
+		for(var/job in heads)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	if(sec.len > 0)
+		dat += "<tr><th colspan=3>Security</th></tr>"
+		for(var/job in sec)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	if(eng.len > 0)
+		dat += "<tr><th colspan=3>Engineering</th></tr>"
+		for(var/job in eng)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	if(med.len > 0)
+		dat += "<tr><th colspan=3>Medical</th></tr>"
+		for(var/job in med)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	if(sci.len > 0)
+		dat += "<tr><th colspan=3>Science</th></tr>"
+		for(var/job in sci)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	if(cgo.len > 0)
+		dat += "<tr><th colspan=3>Cargo</th></tr>"
+		for(var/job in cgo)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	if(civ.len > 0)
+		dat += "<tr><th colspan=3>Civilian</th></tr>"
+		for(var/job in civ)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	// misc guys
+	if(misc.len > 0)
+		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
+		for(var/job in misc)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	if(bot.len > 0)
+		dat += "<tr><th colspan=3>Silicon</th></tr>"
+		for(var/job in bot)
+			dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+			color = !color
+
+	dat += "</table>"
 
 	return dat
 
@@ -250,33 +342,12 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 	for(var/mob/new_player/player in player_list)
 		if(!player.ready)
 			continue
-		//Prefs are only stored as a bitflag, so we have to look up the job name.
-		//Only one of these should have a value
 
-		var/J = null
-		if(player.client.prefs.job_engsec_high)
-			J = flags_to_job(player.client.prefs.job_engsec_high,ENGSEC)
-		else if(player.client.prefs.job_medsci_high)
-			J = flags_to_job(player.client.prefs.job_medsci_high,MEDSCI)
-		else if(player.client.prefs.job_civilian_high)
-			J = flags_to_job(player.client.prefs.job_civilian_high,CIVILIAN)
-		else
-			continue //They don't have a high pref!
+		var/list/jobs = player.client.prefs.jobs
 
-		if(!J)
-			continue //sanity
-		crystal_ball[J] += 1
-
-/datum/controller/occupations/proc/flags_to_job(var/flags, var/department)
-	var/list/searchable_jobs = typesof(/datum/job) - /datum/job
-	for(var/path in searchable_jobs)
-		var/datum/job/J = path
-		if(initial(J.department_flag) != department)
-			continue
-		if(initial(J.flag) != flags)
-			continue
-		return initial(J.title)
-	return null //Still nothing? Null it is
+		for(var/job in jobs)
+			if(jobs[job] == JOB_PREF_HIGH)
+				crystal_ball[job] += 1
 
 /*
 We can't just insert in HTML into the nanoUI so we need the raw data to play with.

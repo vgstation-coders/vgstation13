@@ -146,7 +146,7 @@
 	if(. && heal_target)
 		heal_target.health = min(heal_target.maxHealth, heal_target.health + round(heal_target.maxHealth/10))
 		heal_target.update_icons()
-		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 		move_ray()
 		process_construct_hud(src)
 
@@ -282,14 +282,14 @@
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
-
+	setupglow(rgb(255,255,255))
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 
 /mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
-	var/overlay_plane = LIGHTING_PLANE
+	var/overlay_plane = ABOVE_LIGHTING_PLANE
 	if(layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE

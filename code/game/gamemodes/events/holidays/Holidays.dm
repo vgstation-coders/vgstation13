@@ -115,6 +115,8 @@ var/global/Holiday = null
 					current_holidays += SMILING_DAY
 				if(16)
 					current_holidays += BOSS_DAY
+				if(25)
+					current_holidays += SPACE_ASSHOLE
 				if(31)
 					current_holidays += HALLOWEEN
 

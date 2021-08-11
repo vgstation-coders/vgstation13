@@ -1077,6 +1077,17 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph // Alternate recipe using nymph meat
+	name = "veggie burger"
+	desc = "Technically vegetarian."
+	icon_state = "veggieburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/roburger
 	name = "roburger"
 	desc = "The lettuce is the only organic component. Beep."
@@ -6577,3 +6588,249 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(SOFTCORES, 3)
 	reagents.add_reagent(NUTRIMENT, 5)
+
+//You have now entered the ayy food zone
+
+/obj/item/weapon/reagent_containers/food/snacks/zamdinner1
+	name = "Zam Steak and Nettles"
+	icon_state	= "box_tvdinner1"
+	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	food_flags = FOOD_MEAT
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/zamdinner1/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 7)
+	reagents.add_reagent(SACID, 4)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/zamdinner2
+	name = "Zam Mothership Stew"
+	icon_state	= "box_tvdinner2"
+	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/zamdinner2/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SACID, 3)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zamdinner3
+	name = "Zam Spider Slider Delight"
+	icon_state	= "box_tvdinner3"
+	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	food_flags = FOOD_MEAT
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/reagent_containers/food/snacks/zamdinner3/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(SACID, 3)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
+	name = "Steak and Nettles"
+	desc = "The Zam research division still doesn't know where the steak's grill marks come from."
+	trash = /obj/item/trash/used_tray
+	icon = 'icons/obj/food.dmi'
+	icon_state = "tvdinner_1"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 14)
+	reagents.add_reagent(DOCTORSDELIGHT, 5)
+	reagents.add_reagent(SACID, 4)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2
+	name = "Mothership Stew"
+	desc = "This microwaved version isn't quite as scrumptious as home cooking on the mothership, but it's palatable."
+	trash = /obj/item/trash/used_tray
+	icon = 'icons/obj/food.dmi'
+	icon_state = "tvdinner_2"
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(ALKYSINE, 5)
+	reagents.add_reagent(SACID, 4)
+	bitesize = 4
+
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3
+	name = "Spider Slider Delight"
+	desc = "Despite extensive processing, there's definitely at least one spider hair still in it."
+	trash = /obj/item/trash/used_tray
+	icon_state = "tvdinner_3"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(ANTI_TOXIN, 5)
+	reagents.add_reagent(SACID, 3)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/greygreens
+	name = "Grey Greens"
+	desc = "A dish beloved by Greys since first contact, acidic vegetables seasoned with soy sauce."
+	trash = /obj/item/trash/used_tray2
+	icon_state = "greygreens"
+
+/obj/item/weapon/reagent_containers/food/snacks/greygreens/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SOYSAUCE, 10)
+	reagents.add_reagent(FORMIC_ACID, 4)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
+	name = "Stuffed Pitcher"
+	desc = "A delicious Grey alternative to a stuffed pepper. Very acidic."
+	trash = /obj/item/trash/used_tray2
+	icon_state = "stuffedpitcher"
+	food_flags = FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(FORMIC_ACID, 6)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/nymphsperil
+	name = "Nymph's Peril"
+	desc = "A diona nymph steamed in sulphuric acid then stuffed with fried rice. Ruthlessly delicious!"
+	trash = /obj/item/trash/used_tray2
+	icon_state = "yahireatsbugs"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/nymphsperil/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(SACID, 5)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit
+	name = "Zam Biscuit"
+	desc = "A sweet biscuit with an exquisite blend of chocolate and acid flavors. The recipe is a mothership secret."
+	icon_state = "zambiscuit"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(HYRONALIN, 3)
+	reagents.add_reagent(COCO, 2)
+	reagents.add_reagent(SUGAR, 2)
+	reagents.add_reagent(SACID, 4)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical
+	name = "Radical Zam Biscuit"
+	desc = "This Zam biscuit is oddly warm to the touch and glows faintly. It's probably not safe for consumption..." // Despite the warning, I'm sure someone will eat it.
+	icon_state = "zambiscuit_radical"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(MUTAGEN, 4)
+	reagents.add_reagent(URANIUM, 3)
+	reagents.add_reagent(SACID, 4)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins
+	name = "Zam NotRaisins"
+	desc = "Dried blecher berries! A minimally processed bitter treat from the mothership's hydroponics labs." // Hopefully one day blecher berries will be a real thing in the code.
+	trash = /obj/item/trash/zam_notraisins
+	icon_state = "zam_notraisins"
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
+	name = "Zam Moon Cheese"
+	desc = "It gives off an artificial and bitter smell, but tastes much like a normal piece of sharp cheddar."
+	food_flags = FOOD_ANIMAL
+	icon_state = "zam_mooncheese"
+	wrapped = 0
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(SODIUMCHLORIDE, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped
+	name = "Zam Moon Cheese"
+	desc = "Unfortunately the moon is not made of cheese, but this tasty snack is!"
+	icon_state = "zam_mooncheese_wrapped"
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/proc/Unwrap(mob/user)
+	desc = "It gives off an artificial and bitter smell, but tastes much like a normal piece of sharp cheddar."
+	food_flags = FOOD_ANIMAL
+	icon_state = "zam_mooncheese"
+	to_chat(user, "<span class='notice'>You peel the wrapping off the cheese.")
+	wrapped = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider
+	name = "Zam Spider Slider"
+	desc = "A moderately processed acidic spider slider. Nutriment dense, despite its tiny size."
+	food_flags = FOOD_MEAT
+	icon_state = "zam_spiderslider"
+	wrapped = 0
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(SACID, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped
+	name = "Zam Spider Slider"
+	desc = "A self-heating acidic slider for Grey laborers on salaries too humble to afford the full meal."
+	icon_state = "zam_spiderslider_wrapped"
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+		spawn()
+			new /obj/item/trash/zam_sliderwrapper(get_turf(src))
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/proc/Unwrap(mob/user)
+	desc = "A moderately processed acidic spider slider. Nutriment dense, despite its tiny size."
+	food_flags = FOOD_MEAT
+	icon_state = "zam_spiderslider"
+	to_chat(user, "<span class='notice'>You tear the tab open and remove the slider from the packaging. Despite supposedly being self-heating, it's barely warm.")
+	wrapped = 0
+
+//You have now exited the ayy food zone. Thanks for visiting.
+
+/obj/item/weapon/reagent_containers/food/snacks/dionaroast
+	name = "Diona Roast"
+	desc = "A slow cooked diona nymph. Very nutritious, and surprisingly tasty!"
+	trash = /obj/item/trash/plate
+	icon_state = "dionaroast"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/dionaroast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(BLACKPEPPER, 1)
+	reagents.add_reagent(SODIUMCHLORIDE, 1)
+	reagents.add_reagent(CORNOIL, 1)
+	bitesize = 3

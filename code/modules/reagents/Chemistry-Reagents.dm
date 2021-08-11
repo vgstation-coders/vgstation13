@@ -5169,7 +5169,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
-
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
@@ -5216,6 +5217,15 @@
 	description = "You can almost taste the lead sheet behind it!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 1 * REAGENTS_METABOLISM
+	
+/datum/reagent/irradiatedbeans/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(5))
+		M.apply_radiation(2, RAD_INTERNAL)
 
 /datum/reagent/toxicwaste
 	name = "Toxic Waste"
@@ -5225,6 +5235,14 @@
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
+	
+/datum/reagent/toxicwaste/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(20))
+		M.adjustToxLoss(1)
 
 /datum/reagent/refriedbeans
 	name = "Re-Fried Beans"
@@ -5232,6 +5250,7 @@
 	description = "Mmm.."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 1 * REAGENTS_METABOLISM
 
 /datum/reagent/mutatedbeans
 	name = "Mutated Beans"
@@ -5239,6 +5258,15 @@
 	description = "Mutated flavor."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 1 * REAGENTS_METABOLISM
+	
+/datum/reagent/mutatedbeans/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(10))
+		M.adjustToxLoss(1)
 
 /datum/reagent/beff
 	name = "Beff"
@@ -5246,6 +5274,7 @@
 	description = "What's beff? Find out!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
 
 /datum/reagent/horsemeat
 	name = "Horse Meat"
@@ -5253,6 +5282,7 @@
 	description = "Tastes excellent in lasagna."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 3 * REAGENTS_METABOLISM
 
 /datum/reagent/moonrocks
 	name = "Moon Rocks"
@@ -5260,6 +5290,14 @@
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	
+/datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(15))
+		M.adjustBruteLoss(2) //Brute damage since it hates the human skeleton
 
 /datum/reagent/offcolorcheese
 	name = "Off-Color Cheese"
@@ -5267,6 +5305,7 @@
 	description = "American Cheese."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = REAGENTS_METABOLISM
 
 /datum/reagent/bonemarrow
 	name = "Bone Marrow"
@@ -5274,13 +5313,26 @@
 	description = "Looks like a skeleton got stuck in the production line."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-
+	nutriment_factor = REAGENTS_METABOLISM
+	
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
 	description = "That green isn't organic."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+
+/datum/reagent/greenramen/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(prob(5))
+		M.adjustToxLoss(1)
+	
+	if(prob(5))
+		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage 
 
 /datum/reagent/glowingramen
 	name = "Glowing Ramen Noodles"
@@ -5288,6 +5340,15 @@
 	description = "That glow 'aint healthy."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+
+/datum/reagent/glowingramen/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	
+	if(prob(10))
+		M.apply_radiation(1, RAD_INTERNAL)
 
 /datum/reagent/deepfriedramen
 	name = "Deep Fried Ramen Noodles"
@@ -5295,6 +5356,7 @@
 	description = "Ramen, deep fried."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	nutriment_factor = 2 * REAGENTS_METABOLISM
 
 /datum/reagent/peptobismol
 	name = "Peptobismol"
@@ -9426,3 +9488,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(prob(5))
 		to_chat(M,"<span class='warning'>[pick("You feel fuller.", "You no longer feel snackish.")]</span>")
 		M.reagents.add_reagent(NUTRIMENT, 2)
+
+/datum/reagent/dsyrup
+	name = "Delightful Mix"
+	id = DSYRUP
+	description = "This syrupy stuff is everyone's favorite tricord additive."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#571212" //like a dark red
+	density = 1.00 //basically water
+	specheatcap = 4.184

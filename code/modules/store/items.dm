@@ -22,6 +22,9 @@
 	else
 		new typepath(merchcomp.loc)
 
+//If this returns FALSE, then the button simply will not appear for the user in question.
+/datum/storeitem/proc/available_to_user(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
+	return TRUE
 
 /////////////////////////////
 // Food
@@ -43,6 +46,14 @@
 	desc = "A fun and tasty chemical experiment for the curious child! Vials and beakers included."
 	typepath = /obj/item/weapon/storage/box/diy_soda
 	cost = 45
+
+/datum/storeitem/canned_bread
+	name = "Canned Bread"
+	desc = "Best thing since sliced."
+	typepath = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_bread
+	cost = 15
+/datum/storeitem/canned_bread/available_to_user(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
+	return(isskrell(user) || Holiday == APRIL_FOOLS_DAY)
 
 /////////////////////////////
 // Tools
@@ -154,6 +165,12 @@
 	typepath = /obj/item/clothing/mask/surgical/colorful
 	cost = 20
 
+/datum/storeitem/wristwatch
+	name = "Wristwatch"
+	desc = "A wristwatch with a red leather strap. Can be fit on your uniform."
+	typepath = /obj/item/clothing/accessory/wristwatch
+	cost = 50
+
 /datum/storeitem/robotnik_labcoat
 	name = "Robotnik's Research Labcoat"
 	desc = "Join the empire and display your hatred for woodland animals."
@@ -198,6 +215,33 @@
 	desc = "A cage where to keep tiny animals safe. Fit with a drinking bottle that can be refilled.."
 	typepath = /obj/item/critter_cage
 	cost = 60
+
+/////////////////////////////
+// ZAM! (Grey Food)
+/////////////////////////////
+/datum/storeitem/zambiscuits
+	name = "Zam Biscuits"
+	desc = "All biscuits are fresh from mothership labs. Do not share with human friends."
+	typepath = /obj/item/weapon/storage/pill_bottle/zambiscuits
+	cost = 40
+
+/datum/storeitem/zamdinner3
+	name = "Zam Spider Slider Delight"
+	desc = "The elimination of an infestation has created a surplus of spider meat. Do not share with human friends."
+	typepath = /obj/item/weapon/reagent_containers/food/snacks/zamdinner3
+	cost = 50
+
+/datum/storeitem/zamdinner2
+	name = "Zam Mothership Stew"
+	desc = "This old stew from mothership vats is very nutricious to slurp and burp! Do not share with human friends."
+	typepath = /obj/item/weapon/reagent_containers/food/snacks/zamdinner2
+	cost = 60
+
+/datum/storeitem/zamdinner1
+	name = "Zam Steak and Nettles"
+	desc = "This imitation of human steak has received good marks from test subjects. Do not share with human friends."
+	typepath = /obj/item/weapon/reagent_containers/food/snacks/zamdinner1
+	cost = 70
 
 /////////////////////////////
 // Holiday Special Items!

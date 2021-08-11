@@ -29,6 +29,8 @@ var/datum/controller/gameticker/ticker
 	var/datum/religion/chap_rel 			// Official religion of chappy
 	var/list/datum/religion/religions = list() // Religion(s) in the game
 
+	var/list/runescape_skulls = list() // Keeping track of the runescape skulls that appear over mobs when enabled
+
 	var/random_players = 0 	// if set to nonzero, ALL players who latejoin or declare-ready join will have random appearances/genders
 
 	var/hardcore_mode = 0	//If set to nonzero, hardcore mode is enabled (current hardcore mode features: damage from hunger)
@@ -48,6 +50,7 @@ var/datum/controller/gameticker/ticker
 
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
+
 
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
@@ -205,6 +208,15 @@ var/datum/controller/gameticker/ticker
 	create_characters() //Create player characters and transfer them
 	collect_minds()
 	equip_characters()
+
+	for(var/mob/living/carbon/human/player in player_list)
+		switch(player.mind.assigned_role)
+			if("MODE","Mobile MMI","Trader")
+				//No injection
+			else
+				player.update_icons()
+				data_core.manifest_inject(player)
+
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
@@ -399,12 +411,7 @@ var/datum/controller/gameticker/ticker
 				if(player.mind.assigned_role=="Mobile MMI")
 					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				var/mob/living/carbon/human/new_character = player.create_character()
-				switch(new_character.mind.assigned_role)
-					if("MODE","Mobile MMI","Trader")
-						//No injection
-					else
-						data_core.manifest_inject(new_character)
-				player.FuckUpGenes(new_character)
+				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
 
 
@@ -442,6 +449,12 @@ var/datum/controller/gameticker/ticker
 		nanocoins_lastchange = world.time + rand(3000,15000)
 		nanocoins_rates = (rand(1,30))/10
 
+	//runescape skull updates
+	if (runescape_skull_display)
+		for (var/entry in runescape_skulls)
+			var/datum/runescape_skull_data/the_data = runescape_skulls[entry]
+			the_data.process()
+
 	/*emergency_shuttle.process()*/
 	watchdog.check_for_update()
 
@@ -466,7 +479,7 @@ var/datum/controller/gameticker/ticker
 				feedback_set("map vote choices", options)
 
 			else
-				var/list/maps = get_maps()
+				var/list/maps = get_votable_maps()
 				var/list/choices=list()
 				for(var/key in maps)
 					choices.Add(key)

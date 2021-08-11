@@ -89,6 +89,9 @@
 		if("grinchstart")
 			grinchstart += loc
 
+		if("hobostart")
+			hobostart += loc
+
 		if("voxstart")
 			voxstart += loc
 
@@ -155,3 +158,6 @@
 
 /obj/effect/landmark/vox_locker
 	name = "vox_locker"
+
+/obj/effect/landmark/hobostart
+	name = "hobostart"

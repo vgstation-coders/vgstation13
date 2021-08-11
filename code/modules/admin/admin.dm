@@ -683,7 +683,6 @@ var/global/floorIsLava = 0
 				for(var/datum/forced_ruleset/rule in forced_roundstart_ruleset)
 					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
 				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
-			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>Dynamic mode options</A><br/>"
 		else
 			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
 			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
@@ -691,7 +690,9 @@ var/global/floorIsLava = 0
 				if (mode.forced_latejoin_rule)
 					dat += {"<A href='?src=\ref[src];f_dynamic_latejoin_clear=1'>-> [mode.forced_latejoin_rule.name] <-</A><br>"}
 			dat += "<A href='?src=\ref[src];f_dynamic_midround=1'>(Execute Midround Ruleset!)</A><br>"
+		dat += "Rulesets are <A href='?src=\ref[src];toggle_rulesets=1'>[admin_disable_rulesets ? "DISABLED" : "ENABLED"]</A><br>"
 		dat += "<hr/>"
+	dat += "Random Events are <A href='?src=\ref[src];toggle_events=1'>[admin_disable_events ? "DISABLED" : "ENABLED"]</A><br>"
 
 	dat += {"
 		<hr />
@@ -871,6 +872,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchoff'>Flip all (ALL Z-LEVELS) light switches to off (Lags briefly)</A><BR>
+			<A href='?src=\ref[src];secretsfun=switchon'>Flip all (ALL Z-LEVELS) light switches to on (Lags briefly)</A><BR>
 			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
@@ -895,11 +898,15 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
 			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapepvp'>Toggle Maint-Only PvP</A><BR>
+			<A href='?src=\ref[src];secretsfun=togglerunescapeskull'>Toggle Skull icon appearing over aggressors</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
@@ -1429,6 +1436,17 @@ var/global/floorIsLava = 0
 
 	if(istype(H))
 		H.regenerate_icons()
+
+/datum/admins/proc/ashInvokedEmotions()
+	set category = "Admin"
+	set name = "Ash Invoked Emotions"
+	set desc = "Ashes all paper from the 'invoke emotions' wizard spell. Emergency porn purge."
+	if(alert("Are you sure you want to ash all invoked emotions?", "Invoked Emotions Panic", "Yes", "No") != "No")
+		var/numEmot = 0
+		for(var/obj/item/weapon/paper/emotion_invoker/EI in invoked_emotions)
+			EI.destroyEmotion()
+			numEmot++
+		message_admins("<span class='notice'>[numEmot] invoked emotions ashed.</span>")
 
 //
 //

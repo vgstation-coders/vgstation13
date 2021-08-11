@@ -72066,7 +72066,7 @@
 /turf/simulated/floor,
 /area/engineering/break_room)
 "cEA" = (
-/obj/machinery/power/monitor,
+/obj/machinery/computer/powermonitor,
 /obj/structure/cable{
 	d2 = 8;
 	icon_state = "0-8"
@@ -81366,7 +81366,7 @@
 /turf/simulated/floor,
 /area/engineering/supermatter_room)
 "cUO" = (
-/obj/machinery/power/monitor,
+/obj/machinery/computer/powermonitor,
 /obj/structure/cable{
 	d2 = 2;
 	icon_state = "0-2";

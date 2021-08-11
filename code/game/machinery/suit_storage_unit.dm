@@ -64,6 +64,13 @@
 	boot_type = /obj/item/clothing/shoes/magboots
 	req_access = list(access_engine_equip)
 
+/obj/machinery/suit_storage_unit/engie/empty
+	isopen = 1
+	suit_type = null
+	helmet_type = null
+	mask_type = null
+	boot_type = null
+
 /obj/machinery/suit_storage_unit/elite
 	name = "Advanced Suit Storage Unit"
 	department = "ce"
@@ -133,6 +140,12 @@
 	helmet_type = /obj/item/clothing/head/bomb_hood
 	mask_type = /obj/item/clothing/mask/gas
 	boot_type = /obj/item/clothing/shoes/jackboots
+
+/obj/machinery/suit_storage_unit/trauma_team
+	name = "Trauma Suit Storage Unit"
+	suit_type = /obj/item/clothing/suit/space/rig/traumateam
+	mask_type = /obj/item/clothing/mask/gas
+	boot_type = /obj/item/clothing/shoes/magboots/trauma
 
 /obj/machinery/suit_storage_unit/New()
 	. = ..()

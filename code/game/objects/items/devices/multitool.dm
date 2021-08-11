@@ -25,19 +25,20 @@
 	melt_temperature		= MELTPOINT_SILICON
 	origin_tech				= Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 	// VG: We dun changed dis so we can link simple machines. - N3X
-	var/obj/machinery/buffer // simple machine buffer for device linkage
+	var/datum/weakref/buffer // simple machine buffer for device linkage
 	var/clone				= 0 // If this is on cloning will happen, this is handled in machinery code.
 
 /obj/item/device/multitool/proc/IsBufferA(var/typepath)
-	if(!buffer)
+	var/obj/machinery/bufRef = buffer?.get()
+	if(!bufRef)
 		return 0
-	return istype(buffer,typepath)
+	return istype(bufRef,typepath)
 
 /obj/item/device/multitool/is_multitool(mob/user)
 	return TRUE
 
 /obj/item/device/multitool/attack_self(var/mob/user)
-	if(!buffer && !clone) // Can't enable cloning without buffer.
+	if(!buffer?.get() && !clone) // Can't enable cloning without buffer.
 		return
 
 	clone = !clone
@@ -48,7 +49,14 @@
 
 /obj/item/device/multitool/examine(var/mob/user)
 	. = ..()
-	to_chat(user, "<span class='notice'>Cloning is [clone ? "enabled" : "disabled"].</span>")
+
+	if (buffer?.get())
+		to_chat(user, "<span class='notice'>Cloning is [clone ? "enabled" : "disabled"].</span>")
+
+/obj/item/device/multitool/proc/setBuffer(var/obj/newBuf)
+	// Combined with the weakref nullcheck in examine(), this implicitly makes it so that cloning is disabled when the object is GC'd.
+	buffer = newBuf == null ? null : makeweakref(newBuf)
+	clone = FALSE
 
 /obj/item/device/multitool/attack(mob/M as mob, mob/user as mob)
 	if(ishuman(M))

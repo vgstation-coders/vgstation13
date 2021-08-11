@@ -16,7 +16,7 @@ var/obj/structure/dorfpod/center/dorfpod
 	..()
 	set_light(3, 2)
 	var/image/I = image(icon,"[icon_state]-lights")
-	I.plane = LIGHTING_PLANE
+	I.plane = ABOVE_LIGHTING_PLANE
 	I.layer = ABOVE_LIGHTING_LAYER
 	overlays += I
 
@@ -93,6 +93,7 @@ var/obj/structure/dorfpod/center/dorfpod
 	R.name=R.dna.real_name
 	R.types=DNA2_BUF_UI|DNA2_BUF_UE|DNA2_BUF_SE
 	R.languages = subject.languages.Copy()
+	R.attack_log = subject.attack_log.Copy()
 	R.default_language = subject.default_language
 	R.times_cloned = subject.times_cloned
 	R.talkcount = subject.talkcount
@@ -182,7 +183,7 @@ var/obj/structure/dorfpod/center/dorfpod
 		H.add_language(L.name)
 		if (L == R.default_language)
 			H.default_language = R.default_language
-
+	H.attack_log = R.attack_log
 	H.real_name = H.dna.real_name
 	H.flavor_text = H.dna.flavor_text
 

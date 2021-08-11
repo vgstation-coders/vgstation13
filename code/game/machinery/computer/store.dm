@@ -14,6 +14,13 @@
 			/datum/storeitem/menu1,
 			/datum/storeitem/menu2,
 			/datum/storeitem/diy_soda,
+			/datum/storeitem/canned_bread,
+			),
+		"ZAM!" = list(
+			/datum/storeitem/zambiscuits,
+			/datum/storeitem/zamdinner3,
+			/datum/storeitem/zamdinner2,
+			/datum/storeitem/zamdinner1,
 			),
 		"Tools" = list(
 			/datum/storeitem/pen,
@@ -38,6 +45,7 @@
 			/datum/storeitem/sterilemask,
 			/datum/storeitem/sterilemask_black,
 			/datum/storeitem/sterilemask_colorful,
+			/datum/storeitem/wristwatch,
 			/datum/storeitem/robotnik_labcoat,
 			/datum/storeitem/robotnik_jumpsuit,
 			),
@@ -76,7 +84,7 @@
 
 	refresh_ui()
 
-/obj/machinery/computer/merch/proc/refresh_ui()
+/obj/machinery/computer/merch/proc/refresh_ui(var/mob/user)
 
 	var/dat = {"<tbody id="StoreTable">"}
 
@@ -87,7 +95,7 @@
 			<th><h2>[category_name]</h2></th>
 			"}
 		for(var/store_item in category_items)
-			dat += make_div(store_item)
+			dat += make_div(store_item, user)
 
 		dat += "</table>"
 
@@ -115,10 +123,12 @@
 	src.add_hiddenprint(user)
 	return attack_hand(user)
 
-/obj/machinery/computer/merch/proc/make_div(var/store_ID)
+/obj/machinery/computer/merch/proc/make_div(var/store_ID, var/mob/user)
 	var/datum/storeitem/SI = centcomm_store.items["[store_ID]"]
 	if(SI.stock == 0)
 		return "<tr><td><i>[SI.name] (SOLD OUT)</i></td></tr>"
+	else if(user && !SI.available_to_user(user))
+		return
 	else
 		. = "<tr><td><A href='?src=\ref[src];choice=buy;chosen_item=[store_ID]'>[SI.name] ([!(SI.cost) ? "free" : "[SI.cost]$"])"
 		if(SI.stock != -1)
@@ -133,7 +143,7 @@
 		interface.hide(user)
 		return
 
-	refresh_ui()
+	refresh_ui(user)
 	interact(user)
 
 /obj/machinery/computer/merch/interact(mob/user)
@@ -158,7 +168,7 @@
 			else
 				to_chat(usr, "[bicon(src)]<span class='notice'>Transaction complete! Enjoy your product.</span>")
 
-	src.refresh_ui()
+	src.refresh_ui(usr)
 	return
 
 /obj/machinery/computer/merch/update_icon()

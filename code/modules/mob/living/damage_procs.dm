@@ -53,9 +53,20 @@
 	return 1
 
 
-/mob/living/proc/critlog(curH,prevH) //current health, previous health
-	if(stat == UNCONSCIOUS && curH < 0 && curH > -95.0 && prevH > 0)
-		add_attacklogs(src,null,"has gone into CRIT!")
+/mob/living/proc/critlog(curH,prevH)
+	if (istype(loc, /obj/machinery/cloning/clonepod))
+		return FALSE // Mob probably just spawned
+	return TRUE
+
+/mob/living/carbon/critlog(curH,prevH)
+	. = ..()
+	if (.)
+		var/do_we_care_about_it = mind != null
+		if(curH <= config.health_threshold_crit && prevH > config.health_threshold_crit)
+			if (curH <= config.health_threshold_dead)
+				add_attacklogs(src,null,"took so much damage they became DEAD before even being in crit!", admin_warn = do_we_care_about_it)
+			else
+				add_attacklogs(src,null,"has gone into CRIT!", admin_warn = do_we_care_about_it)
 
 
 /mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
