@@ -8,8 +8,7 @@ obj/machinery/atmospherics/trinary
 	var/datum/gas_mixture/air2
 	var/datum/gas_mixture/air3
 
-	var/obj/machinery/atmospherics/node1
-	var/obj/machinery/atmospherics/node2
+	/*For node 1-2, see atmospherics.dm*/
 	var/obj/machinery/atmospherics/node3
 
 	var/datum/pipe_network/network1

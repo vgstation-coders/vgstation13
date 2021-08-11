@@ -43,6 +43,9 @@ Pipelines + Other Objects -> Pipe network
 	plane = ABOVE_TURF_PLANE
 	layer = PIPE_LAYER
 	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
+	//We brought this down to the atmospherics level. You don't need to use it for most pipes, but it's used for some things like machineries!
+	var/obj/machinery/atmospherics/node1
+	var/obj/machinery/atmospherics/node2
 
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
 
@@ -354,7 +357,7 @@ Pipelines + Other Objects -> Pipe network
 		L.ventcrawl_layer = src.piping_layer
 
 /obj/machinery/atmospherics/relaymove(mob/living/user, direction)
-	if(!(direction & initialize_directions)) //can't go in a way we aren't connecting to
+	if(user.loc != src || !(direction & initialize_directions)) //can't go in a way we aren't connecting to
 		return
 
 	var/obj/machinery/atmospherics/target_move = findConnecting(direction, user.ventcrawl_layer)
@@ -390,6 +393,8 @@ Pipelines + Other Objects -> Pipe network
 	user.canmove = 0
 	spawn(1)
 		user.canmove = 1
+	ventcrawl_to(user,findConnecting(direction, user.ventcrawl_layer),direction)
+	//For ventcrawl_to, see multiz/ventcrawl.dm
 
 /obj/machinery/atmospherics/proc/can_crawl_through()
 	return 1

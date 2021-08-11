@@ -211,6 +211,7 @@ var/list/admin_verbs_debug = list(
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif
+	/client/proc/update_all_open_spaces,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,

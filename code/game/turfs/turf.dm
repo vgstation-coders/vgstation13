@@ -416,7 +416,8 @@
 			SSair.mark_for_update(src)
 
 		W.levelupdate()
-
+		W.update_icon(1)
+		W.post_change() //What to do after changing the turf. Handles stuff like zshadow updates.
 		. = W
 
 	else
