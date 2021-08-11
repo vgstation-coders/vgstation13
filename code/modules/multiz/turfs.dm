@@ -73,13 +73,19 @@
 * Update icon and overlays of open space to be that of the turf below, plus any visible objects on that turf.
 */
 /turf/simulated/open/update_icon()
+	var/alpha_to_subtract = 255
+	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-
+		alpha_to_subtract /= 2
+	
 	if(!bottom || bottom == src)
 		return
 	vis_contents += bottom
+	var/image/overimage = image("icon" = 'icons/effects/32x32.dmi', "icon_state" = "black")
+	overimage.alpha = 255 - alpha_to_subtract
+	overlays += overimage
 
 //This segment of code copied directly from space.dm
 
