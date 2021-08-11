@@ -328,7 +328,5 @@
 					P = null
 	qdel(target)
 
-/obj/item/weapon/pinpointer/advpinpointer/time_agent
-	alternative_item_options = list(
-
-	)
+/obj/item/weapon/pinpointer/advpinpointer/time_agent/New()
+	item_paths["Jump Charge"] = /obj/item/device/jump_charge
