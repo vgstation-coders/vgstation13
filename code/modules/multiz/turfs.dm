@@ -88,6 +88,17 @@
 	overimage.alpha = 255 - alpha_to_subtract
 	overlays.Add(overimage)
 
+/turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	overlays.Cut()
+	vis_contents.Cut()
+	..()
+
+/turf/simulated/wall/New()
+	..()
+	var/turf/simulated/open/OS = GetAbove(src)
+	if(OS)
+	OS.ChangeTurf(/turf/simulated/floor/plating)
+
 //This segment of code copied directly from space.dm
 
 /turf/simulated/open/canBuildCatwalk()
