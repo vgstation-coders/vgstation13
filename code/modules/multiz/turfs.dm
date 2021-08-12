@@ -73,10 +73,10 @@
 * Update icon and overlays of open space to be that of the turf below, plus any visible objects on that turf.
 */
 /turf
-	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE
+	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE|VIS_INHERIT_ID
 	
 /atom/movable
-	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE
+	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE|VIS_INHERIT_ID
 
 /obj/effect/open_overlay
 	name = "open overlay"
