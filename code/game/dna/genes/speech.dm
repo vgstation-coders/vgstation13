@@ -234,7 +234,7 @@
 	addReplacement("\\b(shit|crap)","poo")
 	addReplacement("slut","tease")
 	addReplacement("ass","butt")
-	addWordReplacement("damn",list("darn","dang"))
+	addPickReplacement("damn",list("darn","dang"))
 	addReplacement("hell","heck")
 	addReplacement("fuck","gently caress")
 	addWordReplacement("\\b(penis|cunt|vagina)","privates")
