@@ -196,7 +196,7 @@
 /mob/living/carbon/human/can_fall() // Jetpacks help too
 	if(istype(back, /obj/item/weapon/tank/jetpack))
 		var/obj/item/weapon/tank/jetpack/J = back
-		if(((!check_drift) || (check_drift && J.stabilization_on)) && (!lying) && (J.allow_thrust(0.01, src)))
+		if(((!lying) && (J.allow_thrust(0.01, src)))
 			return FALSE
 	return TRUE
 
