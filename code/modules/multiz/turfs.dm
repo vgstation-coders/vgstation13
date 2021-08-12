@@ -17,11 +17,7 @@
 // Open Space - "empty" turf that lets stuff fall thru it to the layer below
 //
 
-/obj/abstract/screen/plane_master/darkness_planemaster
-	render_target = "multiZ"
-
 /turf/simulated/open
-	render_source = "multiZ"
 	name = "open space"
 	icon = 'icons/turf/space.dmi'
 	icon_state = ""
