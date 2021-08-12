@@ -1,7 +1,7 @@
-// ZSHADOW MOB
-// Inferior to vis_contents and just plain broken, so removed
+/atom/movable
+	var/mob/zshadow/zshadow
 
-/*/mob/zshadow
+/mob/zshadow
 	plane = OVER_OPENSPACE_PLANE
 	name = "shadow"
 	desc = "Z-level shadow"
@@ -24,7 +24,7 @@
 		return
 	..() // I'm cautious about this, but its the right thing to do.
 	owner = L
-	sync_icon(L)
+	//sync_icon(L)
 
 /mob/Destroy()
 	if(zshadow)
@@ -36,12 +36,12 @@
 	return owner.examine(user, distance, infix, suffix)
 
 // This is the hear version used on Polaris. Keeping it here for reference.
-/mob/zshadow/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "", var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
+/*/mob/zshadow/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "", var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
 	if(speaker && speaker.z != src.z)
 		return // Only relay speech on our acutal z, otherwise we might relay sounds that were themselves relayed up!
 	if(isliving(owner))
 		verb += " from above"
-	return owner.hear_say(message, verb, language, alt_name, italics, speaker, speech_sound, sound_vol)
+	return owner.hear_say(message, verb, language, alt_name, italics, speaker, speech_sound, sound_vol)*/
 
 /mob/zshadow/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker && speech.speaker.z != src.z)
@@ -50,7 +50,7 @@
 		//Wow, because of how our language.dm is formatted I think it would be quite troublesome to add "from above" here.
 		owner.Hear(speech, rendered_speech)
 
-/mob/zshadow/proc/sync_icon(var/mob/M)
+/*/mob/zshadow/proc/sync_icon(var/mob/M)
 	name = M.name
 	icon = M.icon
 	icon_state = M.icon_state
@@ -60,7 +60,7 @@
 	transform = M.transform
 	dir = M.dir
 	if(zshadow)
-		zshadow.sync_icon(src)
+		zshadow.sync_icon(src)*/
 
 /mob/living/Move()
 	. = ..()
@@ -91,7 +91,7 @@
 // Handle cases where the owner mob might have changed its icon or overlays.
 //
 
-/mob/living/update_icons()
+/*/mob/living/update_icons()
 	. = ..()
 	if(zshadow)
 		zshadow.sync_icon(src)
@@ -101,7 +101,7 @@
 /mob/living/carbon/human/update_icons()
 	. = ..()
 	if(zshadow)
-		zshadow.sync_icon(src)
+		zshadow.sync_icon(src)*/
 
 /mob/set_dir(new_dir)
 	. = ..()
@@ -118,7 +118,7 @@
 		zshadow.visible_message(message, self_message, blind_message)
 
 // This shows when someone is typing. We do not use this on /vg/.
-/mob/set_typing_indicator(var/state)
+/*/mob/set_typing_indicator(var/state)
 	var/old_typing = src.typing
 	. = ..()
 	if(shadow && old_typing != src.typing)
