@@ -83,6 +83,8 @@
 	if(!bottom || bottom == src)
 		return
 	vis_contents += bottom
+	if(istype(bottom,/turf/space))
+		return
 	var/image/overimage = image(icon = 'icons/effects/32x32.dmi', icon_state = "black", layer = ABOVE_LIGHTING_LAYER)
 	overimage.plane = ABOVE_LIGHTING_PLANE
 	overimage.alpha = 255 - alpha_to_subtract
