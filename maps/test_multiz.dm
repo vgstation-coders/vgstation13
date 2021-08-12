@@ -13,8 +13,13 @@
 	movementJammed = 1
 	base_turf = /turf/unsimulated/floor/asteroid/air
 
-/datum/zLevel/sky
+/datum/zLevel/upper
 	name = "above ground level"
+	movementJammed = 1
+	base_turf = /turf/simulated/open
+
+/datum/zLevel/sky
+	name = "sky"
 	movementJammed = 1
 	base_turf = /turf/simulated/open
 
@@ -30,6 +35,7 @@
 		/datum/zLevel/centcomm,
 		/datum/zLevel/subterranean,
 		/datum/zLevel/surface,
+		/datum/zlevel/upper,
 		/datum/zLevel/sky
 		)
 
