@@ -29,7 +29,7 @@
 		if(src.damage < 0)
 			src.damage = 0
 
-	handle_toxins()
+		handle_toxins()
 
 /datum/organ/internal/liver/proc/handle_toxins()
 	//High toxins levels are dangerous
