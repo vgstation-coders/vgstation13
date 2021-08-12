@@ -193,6 +193,12 @@
 /mob/living/simple_animal/hostile/carp/can_fall() // So can carp apparently.
 	return FALSE
 
+/obj/structure/bed/chair/vehicle/firebird/can_fall() // And the firebird, obligatory.
+	return FALSE
+
+/obj/structure/bed/chair/vehicle/adminbus/can_fall() // And the sacred bus
+	return FALSE
+
 /mob/living/carbon/human/can_fall() // Jetpacks help too
 	if(istype(back, /obj/item/weapon/tank/jetpack))
 		var/obj/item/weapon/tank/jetpack/J = back
