@@ -52,10 +52,10 @@
 
 /mob/zshadow/proc/sync_icon(var/mob/M)
 	name = M.name
-	vis_contents += M
-	var/darkened = image(M.icon,src,M.icon_state,src.layer,M.dir)
-	darkened.color = "#848484"
-	darkened.override = TRUE
+	icon = M.icon
+	icon_state = M.icon_state
+	color = "#848484"
+	overlays = M.overlays
 	transform = M.transform
 	dir = M.dir
 	if(zshadow)
@@ -79,6 +79,8 @@
 			if(!M.zshadow)
 				M.zshadow = new /mob/zshadow(M)
 			M.zshadow.forceMove(OS)
+			M.zshadow.transform = M.transform
+			M.zshadow.dir = M.dir
 			M = M.zshadow
 			OS = GetAbove(M)
 	// The topmost level does not need a shadow!
