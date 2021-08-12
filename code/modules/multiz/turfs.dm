@@ -17,7 +17,11 @@
 // Open Space - "empty" turf that lets stuff fall thru it to the layer below
 //
 
+/obj/abstract/screen/plane_master/darkness_planemaster
+	render_target = "multiZ"
+
 /turf/simulated/open
+	render_source = "multiZ"
 	name = "open space"
 	icon = 'icons/turf/space.dmi'
 	icon_state = ""
@@ -73,10 +77,10 @@
 * Update icon and overlays of open space to be that of the turf below, plus any visible objects on that turf.
 */
 /turf
-	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE|VIS_INHERIT_ID
+	vis_flags = VIS_INHERIT_ID
 	
 /atom/movable
-	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE|VIS_INHERIT_ID
+	vis_flags = VIS_INHERIT_ID
 
 /obj/effect/open_overlay
 	name = "open overlay"
@@ -98,11 +102,7 @@
 		return
 	var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
 	overimage.alpha = 255 - alpha_to_subtract
-	vis_contents += get_turf(bottom)
-	for(var/i = SPACE_BACKGROUND_PLANE; i < BASE_PLANE; i++)
-		for(var/atom/thing in get_turf(bottom))
-			if(thing.plane == i)
-				vis_contents += thing
+	vis_contents += bottom
 	vis_contents.Add(overimage)
 
 /turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
