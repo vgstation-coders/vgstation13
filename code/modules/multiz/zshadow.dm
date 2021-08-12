@@ -24,7 +24,7 @@
 		return
 	..() // I'm cautious about this, but its the right thing to do.
 	owner = L
-	//sync_icon(L)
+	sync_icon(L)
 
 /mob/Destroy()
 	if(zshadow)
@@ -50,19 +50,18 @@
 		//Wow, because of how our language.dm is formatted I think it would be quite troublesome to add "from above" here.
 		owner.Hear(speech, rendered_speech)
 
-/*/mob/zshadow/proc/sync_icon(var/mob/M)
+/mob/zshadow/proc/sync_icon(var/mob/M)
 	name = M.name
-	icon = M.icon
-	icon_state = M.icon_state
-	//color = M.color
-	color = "#848484"
-	overlays = M.overlays
+	vis_contents += M
+	var/darkened = image(M.icon,src,M.icon_state,src.layer,M.dir)
+	darkened.color = "#848484"
+	darkened.override = TRUE
 	transform = M.transform
 	dir = M.dir
 	if(zshadow)
-		zshadow.sync_icon(src)*/
+		zshadow.sync_icon(src)
 
-/mob/living/Move()
+/mob/living/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	. = ..()
 	check_shadow()
 
@@ -91,7 +90,7 @@
 // Handle cases where the owner mob might have changed its icon or overlays.
 //
 
-/*/mob/living/update_icons()
+/mob/living/update_icons()
 	. = ..()
 	if(zshadow)
 		zshadow.sync_icon(src)
@@ -101,7 +100,7 @@
 /mob/living/carbon/human/update_icons()
 	. = ..()
 	if(zshadow)
-		zshadow.sync_icon(src)*/
+		zshadow.sync_icon(src)
 
 /mob/set_dir(new_dir)
 	. = ..()
