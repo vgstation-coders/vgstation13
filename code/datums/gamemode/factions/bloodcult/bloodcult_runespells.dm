@@ -287,7 +287,7 @@
 
 	var/list/choices = list(
 		list("Altar", "radial_altar", "The nexus of a cult base. Has many uses. More runes will also become usable after the first altar has been raised."),
-		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act."),
+		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
 		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
 	)
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
@@ -2538,9 +2538,9 @@ var/list/bloodcult_exitportals = list()
 
 //RUNE XX
 /datum/rune_spell/resurrect
-	name = "Resurrect"
-	desc = "Create a strong body for your fallen allies to inhabit."
-	desc_talisman = "Create a strong body for your fallen allies to inhabit."
+	name = "Reincarn"
+	desc = "Provide shades with a replica of their original body."
+	desc_talisman = "Provide shades with a replica of their original body."
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
 	word1 = /datum/rune_word/blood
 	word2 = /datum/rune_word/join
@@ -2551,44 +2551,23 @@ var/list/bloodcult_exitportals = list()
 	    any piece of Meat (obtainable in many ways)\
 	    a Ghost made visible (which can be done by hitting one with your Arcane Tome, after using the Seer rune)\
 		It is recommended that multiple cultists participate in this ritual, or that a stockpile of blood be used, since each participating cultists will pay 5u of blood per second, until 300u of blood is paid in total. The resurrected's cultist body has the properties of the Manifested Ghost tattoo by default."
-	ingredients = list(
-		/obj/item/weapon/skull,
-		/obj/effect/decal/cleanable/ash,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
-		)
 	cost_upkeep = 5
 	remaining_cost = 300
 	var/obj/effect/cult_ritual/resurrect/husk = null
-	var/mob/dead/ghost = null
+	var/mob/living/simple_animal/shade/shade = null
 
 /datum/rune_spell/resurrect/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	if (missing_ingredients_count())
-		return
-
-	ghost = locate(/mob/dead) in R.loc
-	if (!ghost)
-		to_chat(activator, "<span class='warning'>You have the ingredients, now there needs to be a ghost made visible standing above the rune.</span>")
+	shade = locate(/mob/living/simple_animal/shade) in R.loc
+	if (!shade)
+		to_chat(activator, "<span class='warning'>There needs to be a shade standing above the rune.</span>")
 		qdel(src)
 		return
-	if (ghost.mind && ghost.mind.current && (ghost.mind.current.stat != DEAD))
-		to_chat(activator, "<span class='warning'>This ghost still has a breathing body where to return to.</span>")
-		qdel(src)
-		return
-	if (ghost.invisibility != 0)
-		to_chat(activator, "<span class='warning'>You have the ingredients, but the ghost needs to be drawn onto our plane first. You already have the tools to do so.</span>")
-		qdel(src)
-		return
-
-	//ingredients found? check. ghost in place and visible? check, let's go!
-	for (var/atom/A in ingredients_found)
-		qdel(A)
 
 	husk = new (R.loc)
-	ghost.incorporeal_move = 0
-	ghost.forceMove(husk)
+	shade.forceMove(husk)
 
 	contributors.Add(activator)
 	update_progbar()
@@ -2615,10 +2594,8 @@ var/list/bloodcult_exitportals = list()
 
 /datum/rune_spell/resurrect/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
-	if (ghost)
-		ghost.incorporeal_move = 1
-		if (husk && husk.loc)
-			ghost.loc = husk.loc
+	if (shade)
+		shade.loc = husk.loc
 	if (husk)
 		qdel(husk)
 	if (spell_holder.loc && (!cause || cause != RITUALABORT_MISSING))
@@ -2668,37 +2645,47 @@ var/list/bloodcult_exitportals = list()
 
 /datum/rune_spell/resurrect/proc/success()
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
-	if (ghost && husk)
-		var/mob/living/carbon/human/manifested/vessel = new (spell_holder.loc)
-		vessel.name = ghost.name
-		vessel.real_name = ghost.real_name
-		vessel.ckey = ghost.ckey
+	var/resurrector = activator.real_name
+	if (shade && husk)
+		shade.loc = husk.loc
+		var/mob/M = shade.reset_body()
 		qdel(husk)
 
-		vessel.my_appearance.r_hair = 90
-		vessel.my_appearance.g_hair = 90
-		vessel.my_appearance.b_hair = 90
-		vessel.my_appearance.r_facial = 90
-		vessel.my_appearance.g_facial = 90
-		vessel.my_appearance.b_facial = 90
-		vessel.my_appearance.r_eyes = 255
-		vessel.my_appearance.g_eyes = 0
-		vessel.my_appearance.b_eyes = 0
-		vessel.status_flags &= ~GODMODE
-		vessel.regenerate_icons()
-		//Let's not forget to make them cultists as well
-		var/datum/role/cultist/newCultist = new
-		newCultist.AssignToRole(vessel.mind,1)
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (!cult)
-			cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-		cult.HandleRecruitedRole(newCultist)
-		newCultist.OnPostSetup()
-		newCultist.Greet(GREET_RESURRECT)
-		newCultist.conversion["resurrected"] = activator
+		var/datum/role/cultist/newCultist = iscultist(M)
+		if (!newCultist)
+			newCultist = new
+			newCultist.AssignToRole(M.mind,1)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (!cult)
+				cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+			cult.HandleRecruitedRole(newCultist)
+			newCultist.OnPostSetup()
+			newCultist.Greet(GREET_RESURRECT)
+			newCultist.conversion["resurrected"] = resurrector
+
+		if (ishuman(M))
+			var/mob/living/carbon/human/vessel = M
+			vessel.my_appearance.r_hair = 240
+			vessel.my_appearance.g_hair = 198
+			vessel.my_appearance.b_hair = 183
+			vessel.my_appearance.r_facial = 240
+			vessel.my_appearance.g_facial = 198
+			vessel.my_appearance.b_facial = 183
+			vessel.my_appearance.r_eyes = 187
+			vessel.my_appearance.g_eyes = 21
+			vessel.my_appearance.b_eyes = 21
+			vessel.my_appearance.s_tone = 45 // super duper albino
+
+			// purely cosmetic tattoos. giving cultists some way to have tattoos until they get reworked
+			newCultist.tattoos[TATTOO_POOL] = new /datum/cult_tattoo/bloodpool()
+			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
+			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
+
+		M.regenerate_icons()
+
 	else
 		for(var/mob/living/L in contributors)
-			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the soul of the ghost appears to have vanished.</span>")
+			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the shade appears to have vanished.</span>")
 
 
 	for(var/mob/living/L in contributors)

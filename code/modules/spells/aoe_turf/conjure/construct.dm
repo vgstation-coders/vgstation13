@@ -410,7 +410,7 @@
 		return 1
 	var/list/choices = list(
 		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
-		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos."),
+		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
 		list("Forge", "radial_forge", "Enables the forging of cult blades and armor, as well as new construct shells. Raise the temperature of nearby creatures."),
 	)
 	var/structure = show_radial_menu(user,T,choices,'icons/obj/cult_radial3.dmi',"radial-cult")

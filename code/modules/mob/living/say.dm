@@ -549,8 +549,10 @@ var/list/headset_modes = list(
 	var/datum/role/cultist/culto = iscultist(src)
 	if (culto)
 		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
-			if (checkTattoo(TATTOO_CHAT) || istype(culto, /datum/role/cultist/chief))
-				return 1
+			var/turf/T = get_turf(src)
+			for (var/obj/structure/cult/spire/S in cult_spires)
+				if (isturf(S.loc) && S.z == T.z) // Spires need to not be concealed and on the same Z Level.
+					return 1
 		if(setting == HEAR_CULT_CHAT)
 			return 1
 

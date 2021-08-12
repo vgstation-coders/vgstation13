@@ -31,6 +31,7 @@
 	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	antag.store_memory("A couple of runes appear clearly in your mind:")
 	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
 	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
@@ -77,6 +78,7 @@
 	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/role/cultist/process()
 	..()
@@ -155,16 +157,11 @@
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
-	var/unholy = H.checkTattoo(TATTOO_HOLY)
 	if (reagent_id == INCENSE_HAREBELLS)
-		if (unholy)
-			H.eye_blurry = max(H.eye_blurry, 3)
-			return
-		else
-			H.eye_blurry = max(H.eye_blurry, 12)
-			H.Dizzy(12)
-			H.stuttering = max(H.stuttering, 12)
-			H.Jitter(12)
+		H.eye_blurry = max(H.eye_blurry, 12)
+		H.Dizzy(12)
+		H.stuttering = max(H.stuttering, 12)
+		H.Jitter(12)
 		/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 			switch (current_act)
 				if (CULT_MENDED)
@@ -220,14 +217,10 @@
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
-	var/unholy = H.checkTattoo(TATTOO_HOLY)
 	if (reagent_id == HOLYWATER)
 		if (holywarning_cooldown <= 0)
 			holywarning_cooldown = 5
-			if (unholy)
-				to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
-			else
-				to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
+			to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
 				/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 				switch (current_act)
 					if (CULT_MENDED)
@@ -247,14 +240,10 @@
 
 				*/
 	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
-		if (unholy)
-			H.eye_blurry = max(H.eye_blurry, 3)
-			return
-		else
-			H.eye_blurry = max(H.eye_blurry, 12)
-			H.Dizzy(12)
-			H.stuttering = max(H.stuttering, 12)
-			H.Jitter(12)
+		H.eye_blurry = max(H.eye_blurry, 12)
+		H.Dizzy(12)
+		H.stuttering = max(H.stuttering, 12)
+		H.Jitter(12)
 			/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
 			switch (current_act)
 				if (CULT_MENDED)

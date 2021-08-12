@@ -472,6 +472,16 @@
 							playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 							update_icon()
 			if ("Sacrifice")
+				// First we'll check for any blockers around it since we'll dance using forceMove to allow up to 8 dancers without them bumping into each others
+				// Of course this means that walls and objects placed AFTER the start of the dance can be crossed by dancing but that's good enough.
+				for (var/turf/T in orange(1,src))
+					if (T.density)
+						to_chat(user, "<span class='warning'>The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
+						return
+					var/atom/A = T.has_dense_content()
+					if (A && !ismob(A)) // mobs get a free pass
+						to_chat(user, "<span class='warning'>\The [A] would hinder the ritual. Either move it or use an altar located in a more spacious area.</span>")
+						return
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (cult)
 					if (is_locking(lock_type))
@@ -493,7 +503,6 @@
 								user.say("Barhah hra zar'garis!","C")
 						if (user.client)
 							user.client.images |= progbar
-						safe_space()
 						for(var/mob/M in range(src,40))
 							if (M.z == z && M.client)
 								if (get_dist(M,src)<=20)
@@ -704,6 +713,14 @@
 			blade.shade = new_shade
 			blade.update_icon()
 			blade = null
+			for(var/mob/living/L in dview(world.view, loc, INVISIBILITY_MAXIMUM))
+				if (L.client)
+					L.playsound_local(loc, 'sound/effects/convert_failure.ogg', 75, 0, -4)
+			playsound(loc, get_sfx("soulstone"), 50,1)
+			var/obj/effect/cult_ritual/conversion/anim = new(loc)
+			anim.icon_state = ""
+			flick("rune_convert_refused",anim)
+			anim.Die()
 
 			if (!iscultist(new_shade))
 				var/datum/role/cultist/newCultist = new
@@ -759,7 +776,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/spire/New()
 	..()
-	cult_spires.Add(src)
+	cult_spires += src
 	set_light(1)
 	//TODO (UPHEAVAL PART 2) appearance changes with cult score
 	stage = 1
@@ -776,7 +793,7 @@ var/list/cult_spires = list()
 	holomap_markers[HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"] = holomarker
 
 /obj/structure/cult/spire/Destroy()
-	cult_spires.Remove(src)
+	cult_spires -= src
 	holomap_markers -= HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"
 	..()
 
@@ -845,6 +862,9 @@ var/list/cult_spires = list()
 	if (!.)
 		return
 
+	// For now spires work as cult telecomms relay. Might give them another role later, maybe soul gem production instead of altars
+
+	/*
 	if (!ishuman(user))
 		to_chat(user,"<span class='warning'>Only humans can bear the arcane markings granted by this [name].</span>")
 		return
@@ -912,6 +932,7 @@ var/list/cult_spires = list()
 			if (available_tattoos.len > 0)
 				cultist_act(user)
 			break
+	*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                       //Spawned from the Raise Structure rune. Available from Act II

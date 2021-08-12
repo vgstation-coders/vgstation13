@@ -60,8 +60,6 @@ var/static/list/valid_cultpower_slots = list(
 	return power
 
 /mob/proc/occult_muted()
-	if (checkTattoo(TATTOO_HOLY))
-		return 0
 	if (reagents && reagents.has_reagent(HOLYWATER))
 		return 1
 	for(var/obj/item/weapon/implant/holy/I in src)
