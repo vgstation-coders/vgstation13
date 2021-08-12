@@ -129,7 +129,7 @@
 "cy" = (/obj/structure/radial_gen/movable/snow_nature/snow_forest,/turf/simulated/floor/plating/snow/cold,/area)
 "cz" = (/turf/simulated/open,/area)
 "cA" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor,/area/crew_quarters/bar)
-"cB" = (/obj/effect/landmark/map_data{height = 4},/turf/simulated/floor/plating,/area)
+"cB" = (/obj/effect/landmark/map_data{height = 5},/turf/simulated/floor/plating,/area)
 "cC" = (/obj/machinery/light{dir = 8},/turf/simulated/floor,/area/crew_quarters/bar)
 "cD" = (/obj/structure/window/reinforced,/turf/simulated/floor,/area/crew_quarters/bar)
 "cE" = (/obj/machinery/light{dir = 4},/turf/simulated/floor,/area/crew_quarters/bar)
