@@ -161,11 +161,11 @@
 			if(prob(10))
 				switch(pick(list(1,2,3)))
 					if(1)
-						H.attempt_past_send(5 SECONDS, TRUE)
+						attempt_past_send(5 SECONDS, TRUE)
 					if(2)
-						H.attempt_future_send(5 SECONDS, TRUE)
+						attempt_future_send(5 SECONDS, TRUE)
 					else
-						timestop(H, 5 SECONDS, 1, TRUE)
+						timestop(src, 5 SECONDS, 1, TRUE)
 /*
 		// Increase germ_level regularly
 		if(prob(40))

@@ -136,8 +136,9 @@
 
 			eviltwinrecruiter.request_player()
 		if(5 to INFINITY)
-			time_elapsed += 30
-			var/datum/organ/internal/teleorgan = pick(H.internal_organs)
+			// time_elapsed += 30
+			// var/datum/organ/internal/teleorgan = pick(H.internal_organs)
+			return
 
 /datum/role/time_agent/proc/recruiter_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
