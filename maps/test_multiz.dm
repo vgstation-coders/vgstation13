@@ -35,7 +35,7 @@
 		/datum/zLevel/centcomm,
 		/datum/zLevel/subterranean,
 		/datum/zLevel/surface,
-		/datum/zlevel/upper,
+		/datum/zLevel/upper,
 		/datum/zLevel/sky
 		)
 
