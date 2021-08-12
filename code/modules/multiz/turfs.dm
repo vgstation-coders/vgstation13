@@ -72,8 +72,22 @@
 /**
 * Update icon and overlays of open space to be that of the turf below, plus any visible objects on that turf.
 */
+/turf
+	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE
+	
+/atom/movable
+	vis_flags = VIS_INHERIT_LAYER|VIS_INHERIT_PLANE
+
+/obj/effect/open_overlay
+	name = "open overlay"
+	desc = "The darkness of the abyss below"
+	icon = 'icons/effects/32x32.dmi'
+	icon_state = "black"
+	layer = ABOVE_LIGHTING_LAYER
+	plane = ABOVE_LIGHTING_PLANE
+	
 /turf/simulated/open/update_icon()
-	var/alpha_to_subtract = 255
+	var/alpha_to_subtract = 127
 	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
@@ -82,13 +96,14 @@
 	
 	if(!bottom || bottom == src)
 		return
-	vis_contents += bottom
-	if(istype(bottom,/turf/space))
-		return
-	var/image/overimage = image(icon = 'icons/effects/32x32.dmi', icon_state = "black", layer = ABOVE_LIGHTING_LAYER)
-	overimage.plane = ABOVE_LIGHTING_PLANE
+	var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
 	overimage.alpha = 255 - alpha_to_subtract
-	overlays.Add(overimage)
+	vis_contents += get_turf(bottom)
+	for(var/i = SPACE_BACKGROUND_PLANE; i < BASE_PLANE; i++)
+		for(var/atom/thing in get_turf(bottom))
+			if(thing.plane == i)
+				vis_contents += thing
+	vis_contents.Add(overimage)
 
 /turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	overlays.Cut()
