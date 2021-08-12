@@ -118,6 +118,7 @@
 					generate_ion_law()
 					generate_ion_law()
 					command_alert(/datum/command_alert/ion_storm)
+					empulse(H.loc, 4, 10)
 					// also maybe make the AI actively malicious to time travellers
 		if(4)
 			eviltwinrecruiter = new(src)
@@ -135,7 +136,8 @@
 
 			eviltwinrecruiter.request_player()
 		if(5 to INFINITY)
-			return
+			time_elapsed += 30
+			var/datum/organ/internal/teleorgan = pick(H.internal_organs)
 
 /datum/role/time_agent/proc/recruiter_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
