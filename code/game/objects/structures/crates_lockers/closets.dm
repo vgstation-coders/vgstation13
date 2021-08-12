@@ -73,7 +73,7 @@
 		spawn_contents()
 	else
 		//haha, so you'd like to initialize twice huh? you got some explaining to do kid.
-		message_admins("[src] at ([L.x],[L.y],[L.z]) tried to initialize at time = [world.time] despite having already initialized at time = [time_initialized_at]")
+		message_admins("[src] at ([x],[y],[z]) tried to initialize at time = [world.time] despite having already initialized at time = [time_initialized_at]")
 		ASSERT(!time_initialized_at)
 		return
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
