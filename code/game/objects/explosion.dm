@@ -137,19 +137,19 @@ var/explosion_shake_message_cooldown = 0
 /proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
-	var/x0 = epicenter.x
-	var/y0 = epicenter.y
-	var/z0 = epicenter.z
+	var/x0 = offcenter.x
+	var/y0 = offcenter.y
+	//var/z0 = offcenter.z
 	
-	for(var/turf/T in spiral_block(epicenter,max_range,1))
+	for(var/turf/T in spiral_block(offcenter,max_range,1))
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
 		var/_dist = dist
 		var/pushback = 0
 
 		if(explosion_newmethod)	//Realistic explosions that take obstacles into account
 			var/turf/Trajectory = T
-			while(Trajectory != epicenter)
-				Trajectory = get_step_towards(Trajectory,epicenter)
+			while(Trajectory != offcenter)
+				Trajectory = get_step_towards(Trajectory,offcenter)
 				if(Trajectory.density && Trajectory.explosion_block)
 					dist += Trajectory.explosion_block
 
@@ -176,21 +176,21 @@ var/explosion_shake_message_cooldown = 0
 			continue
 
 		for(var/atom/movable/A in T.contents)
-			if(T != epicenter && !A.anchored && A.last_explosion_push != explosion_time)
+			if(T != offcenter && !A.anchored && A.last_explosion_push != explosion_time)
 				A.last_explosion_push = explosion_time
 				//world.log << "FOUND [A] NOT ANCHORED AT [T] ([T.x],[T.y])"
 				var/max_dist = _dist+(pushback)
 				var/max_count = pushback
-				var/turf/throwT = get_step_away(A,epicenter,max_dist)
+				var/turf/throwT = get_step_away(A,offcenter,max_dist)
 				for(var/i = 1 to max_count)
-					var/turf/newT = get_step_away(throwT, epicenter, max_dist)
+					var/turf/newT = get_step_away(throwT, offcenter, max_dist)
 					if(!newT || newT == 0 || !isturf(newT))
 						break
 					throwT = newT
 				if(!isturf(throwT))
 					//world.log << "FUCK OUR TURF IS BAD"
 					continue
-				//world.log << "FOUND [throwT] ([throwT.x],[throwT.y]) using get_step_away([epicenter](([epicenter.x],[epicenter.y])),[A],[pushback])"
+				//world.log << "FOUND [throwT] ([throwT.x],[throwT.y]) using get_step_away([offcenter](([offcenter.x],[offcenter.y])),[A],[pushback])"
 				//if(istype(throwT, /turf/space))
 				if(ismob(A))
 					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
