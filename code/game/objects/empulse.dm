@@ -32,7 +32,7 @@
 			//Double check for client
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
-				if(M_turf && M_turf.z == epicenter.z)
+				if(M_turf && (M_turf.z == epicenter.z || HasAbove(epicenter.z) || HasBelow(epicenter.z)))
 					var/dist = cheap_pythag(M_turf.x - x0, M_turf.y - y0)
 					if(dist <= round(heavy_range + world.view - 2, 1))
 						M << 'sound/effects/EMPulse.ogg'
