@@ -177,3 +177,28 @@
 /turf/simulated/open/is_space()
 	var/turf/below = GetBelow(src)
 	return !below || below.is_space()
+
+/turf/simulated/floor/glass/New(loc)
+	..(loc)
+	if(get_base_turf(src.z) == /turf/simulated/open)
+		icon_state = ""
+		plane = OPENSPACE_PLANE_START
+		layer = 0
+		update_icon()
+
+/turf/simulated/floor/glass/update_icon()
+	..()
+	if(get_base_turf(src.z) == /turf/simulated/open)
+		var/alpha_to_subtract = 127
+		overlays.Cut()
+		vis_contents.Cut()
+		var/turf/bottom
+		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+			alpha_to_subtract /= 2
+		
+		if(!bottom || bottom == src)
+			return
+		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
+		overimage.alpha = 255 - alpha_to_subtract
+		vis_contents += bottom
+		vis_contents.Add(overimage)
