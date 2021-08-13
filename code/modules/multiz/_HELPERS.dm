@@ -156,9 +156,11 @@ What's NOT ported?
 			if(GetBelow(upturf) != epicenter)
 				upturf = GetBelow(upturf)
 				spiraled_turfs += spiral_block(upturf, cube ? max_range : i + (max_range - upcount), inward, draw_red)
+				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - upcount)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
 			if(GetAbove(upturf) != epicenter)
 				downturf = GetAbove(downturf)
 				spiraled_turfs += spiral_block(downturf, cube ? max_range : i + (max_range - downcount), inward, draw_red)
+				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - downcount)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
 		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
 	else
 		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
@@ -166,9 +168,11 @@ What's NOT ported?
 			if(HasAbove(upturf.z))
 				upturf = GetAbove(upturf)
 				spiraled_turfs += spiral_block(upturf, cube ? max_range : max_range - i, inward, draw_red)
+				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [upturf.loc.name] ([upturf.x],[upturf.y],[upturf.z])")
 			if(HasBelow(downturf.z))
 				downturf = GetBelow(downturf)
 				spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, inward, draw_red)
+				log_debug("Spiralling block of size [cube ? max_range : i + (max_range - i)] in [downturf.loc.name] ([downturf.x],[downturf.y],[downturf.z])")
 
 	return spiraled_turfs
 
@@ -190,7 +194,9 @@ What's NOT ported?
 		var/turf/upcenter = GetAbove(offcenter)
 		if(upcenter.z > epicenter.z)
 			explosion_destroy(epicenter, upcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)
+			log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [upcenter.loc.name] ([upcenter.x],[upcenter.y],[upcenter.z])")
 	if(HasBelow(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/downcenter = GetBelow(offcenter)
 		if(downcenter.z < epicenter.z)
 			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)
+			log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [downcenter.loc.name] ([downcenter.x],[downcenter.y],[downcenter.z])")
