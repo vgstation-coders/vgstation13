@@ -117,7 +117,7 @@ var/explosion_shake_message_cooldown = 0
 		var/y0 = epicenter.y
 		var/z0 = epicenter.z
 
-		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range)
+		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time)
 
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
@@ -134,7 +134,7 @@ var/explosion_shake_message_cooldown = 0
 
 	return 1
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range)
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
 	var/x0 = epicenter.x

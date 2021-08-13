@@ -178,8 +178,8 @@ What's NOT ported?
 	if(HasAbove(epicenter) && devastation_range >= 1 && heavy_impact_range >= 1 && light_impact_range >= 1 && flash_range >= 1)
 		offcenter = GetAbove(offcenter)
 		if(offcenter.z > epicenter.z)
-			explosion_destroy(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2)
+			explosion_destroy(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
 	if(HasBelow(epicenter) && devastation_range >= 1 && heavy_impact_range >= 1 && light_impact_range >= 1 && flash_range >= 1)
 		offcenter = GetBelow(offcenter)
 		if(offcenter.z < epicenter.z)
-			explosion_destroy(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2)*/
+			explosion_destroy(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explostion_time)*/
