@@ -143,8 +143,8 @@ What's NOT ported?
 	var/turf/upturf = epicenter
 	var/turf/downturf = epicenter
 	if(inward)
-		var/upcount = 0
-		var/downcount = 0
+		var/upcount = 1
+		var/downcount = 1
 		for(var/i = 1, i < max_range, i--)
 			if(hasAbove(upturf))
 				upturf = GetAbove(upturf)
@@ -152,12 +152,14 @@ What's NOT ported?
 			if(HasAbove(downturf))
 				downturf = GetBelow(downturf)
 				downcount++
+		for(var/i = 1, i < max_range, i--)
+			if(GetBelow(upturf) != epicenter)
+				upturf = GetBelow(upturf)
+				spiraled_turfs += spiral_block(upturf, i + (max_range - upcount), inward, draw_red)
+			if(GetAbove(upturf) != epicenter)
+				downturf = GetAbove(downturf)
+				spiraled_turfs += spiral_block(downturf, i + (max_range - downcount), inward, draw_red)
 		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red=0)
-		/*for(var/i = 1, i < max_range, i--)
-			upturf = GetBelow(upturf)
-			spiraled_turfs += spiral_block(upturf, i, inward, draw_red)
-			downturf = GetAbove(downturf)
-			spiraled_turfs += spiral_block(downturf, i, inward, draw_red)*/
 	else
 		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red=0)
 		for(var/i = 1, i < max_range, i--)
