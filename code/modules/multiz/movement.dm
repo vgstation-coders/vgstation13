@@ -239,6 +239,11 @@
 		return FALSE
 	return falling_atom.fall_impact(src)
 
+// Function handling going over open spaces, pre-extension to normal throw hit checks
+/atom/movable/proc/hit_check(var/speed, mob/user)
+	if(isopenspace(get_turf(src)))
+		src.fall()
+	. = ..()
 
 // Actually process the falling movement and impacts.
 /atom/movable/proc/handle_fall(var/turf/landing)
