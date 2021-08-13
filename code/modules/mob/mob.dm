@@ -391,22 +391,23 @@
 	if(world.time>resethearers)
 		sethearing()
 	var/atom/location = get_holder_at_turf_level(src) || get_turf(src)
-	//for(var/z0 in GetOpenConnectedZlevels(location))
-		//if(z0 - location.z <= range || location.z - z0 <= range)
-	for(var/mob/virtualhearer/hearer in viewers(range, location))
-		var/mob/M
-		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
-			var/obj/machinery/hologram/holopad/holo = hearer.attached
-			if(holo.master)
-				M = holo.master
-		if(istype(hearer.attached, /mob))
-			M = hearer.attached
-		if(M)
-			if(M.client)
-				var/client/C = M.client
-				if(get_turf(src) in C.ObscuredTurfs)
-					continue
-		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
+	var/turf/T_loc = get_turf(location)
+	for(var/z0 in GetOpenConnectedZlevels(location))
+		if(z0 - T_loc.z <= range || T_loc.z - z0 <= range)
+			for(var/mob/virtualhearer/hearer in viewers(range, locate(T_Loc.x,T_loc.y,z0)))
+				var/mob/M
+				if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+					var/obj/machinery/hologram/holopad/holo = hearer.attached
+					if(holo.master)
+						M = holo.master
+				if(istype(hearer.attached, /mob))
+					M = hearer.attached
+				if(M)
+					if(M.client)
+						var/client/C = M.client
+						if(get_turf(src) in C.ObscuredTurfs)
+							continue
+				hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
 	for(var/mob/M in mob_list)
