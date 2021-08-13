@@ -328,9 +328,9 @@ var/global/resethearers = 0
 	if(!T)
 		return
 
-	for(var/turf/OT in GetConnectedZlevels(T))
-		if(OT.z - T.z <= R || T.z - OT.z <= R)
-			for(var/mob/virtualhearer/VH in hearers(R, OT))
+	for(var/z0 in GetConnectedZlevels(T.z))
+		if(z0 - T.z <= R || T.z - z0 <= R)
+			for(var/mob/virtualhearer/VH in hearers(R, locate(T.x,T.y,z0))
 				var/can_hear = 1
 				if(istype(VH.attached, /mob))			//The virtualhearer is attached to a mob.
 					var/mob/M = VH.attached
