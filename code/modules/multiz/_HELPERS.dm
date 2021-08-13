@@ -159,9 +159,9 @@ What's NOT ported?
 			if(GetAbove(upturf) != epicenter)
 				downturf = GetAbove(downturf)
 				spiraled_turfs += spiral_block(downturf, cube ? max_range : i + (max_range - downcount), inward, draw_red)
-		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red)
+		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
 	else
-		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red)
+		spiraled_turfs += spiral_block(epicenter,max_range,inward,draw_red)
 		for(var/i = 1, i < max_range, i++)
 			if(HasAbove(upturf.z))
 				upturf = GetAbove(upturf)
