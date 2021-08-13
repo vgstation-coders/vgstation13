@@ -479,7 +479,7 @@
 						to_chat(user, "<span class='warning'>The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
 						return
 					var/atom/A = T.has_dense_content()
-					if (A && !ismob(A)) // mobs get a free pass
+					if (A && (A != src) && !ismob(A)) // mobs get a free pass
 						to_chat(user, "<span class='warning'>\The [A] would hinder the ritual. Either move it or use an altar located in a more spacious area.</span>")
 						return
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -503,6 +503,7 @@
 								user.say("Barhah hra zar'garis!","C")
 						if (user.client)
 							user.client.images |= progbar
+							/*
 						for(var/mob/M in range(src,40))
 							if (M.z == z && M.client)
 								if (get_dist(M,src)<=20)
@@ -511,6 +512,7 @@
 								else
 									M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
 									shake_camera(M, 1, 1)
+									*/
 						spawn()
 							dance_start()
 
@@ -741,11 +743,6 @@
 			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
-
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (!cult)
-			message_admins("Blood Cult: A sacrifice was completed...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
-		qdel(src)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM

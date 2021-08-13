@@ -400,7 +400,7 @@ var/list/rune_appearances_cache = list()
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return
-	if(istype(I, /obj/item/weapon/tome) || istype(I, /obj/item/weapon/melee/cultblade) || istype(I, /obj/item/weapon/melee/soulblade))
+	if(istype(I, /obj/item/weapon/tome) || istype(I, /obj/item/weapon/melee/cultblade) || istype(I, /obj/item/weapon/melee/soulblade) || istype(I, /obj/item/weapon/melee/blood_dagger))
 		trigger(user)
 	if(istype(I, /obj/item/weapon/talisman))
 		var/obj/item/weapon/talisman/T = I

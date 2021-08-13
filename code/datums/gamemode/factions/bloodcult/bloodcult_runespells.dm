@@ -2538,7 +2538,7 @@ var/list/bloodcult_exitportals = list()
 
 //RUNE XX
 /datum/rune_spell/resurrect
-	name = "Reincarn"
+	name = "Reincarnation"
 	desc = "Provide shades with a replica of their original body."
 	desc_talisman = "Provide shades with a replica of their original body."
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
@@ -2650,7 +2650,7 @@ var/list/bloodcult_exitportals = list()
 		shade.loc = husk.loc
 		var/mob/M = shade.reset_body()
 		qdel(husk)
-
+		playsound(M, 'sound/effects/spawn.ogg', 50, 0, 0)
 		var/datum/role/cultist/newCultist = iscultist(M)
 		if (!newCultist)
 			newCultist = new
@@ -2665,21 +2665,23 @@ var/list/bloodcult_exitportals = list()
 
 		if (ishuman(M))
 			var/mob/living/carbon/human/vessel = M
-			vessel.my_appearance.r_hair = 240
-			vessel.my_appearance.g_hair = 198
-			vessel.my_appearance.b_hair = 183
-			vessel.my_appearance.r_facial = 240
-			vessel.my_appearance.g_facial = 198
-			vessel.my_appearance.b_facial = 183
+			vessel.my_appearance.r_hair = 218
+			vessel.my_appearance.g_hair = 148
+			vessel.my_appearance.b_hair = 123
+			vessel.my_appearance.r_facial = 218
+			vessel.my_appearance.g_facial = 148
+			vessel.my_appearance.b_facial = 123
 			vessel.my_appearance.r_eyes = 187
 			vessel.my_appearance.g_eyes = 21
 			vessel.my_appearance.b_eyes = 21
 			vessel.my_appearance.s_tone = 45 // super duper albino
 
-			// purely cosmetic tattoos. giving cultists some way to have tattoos until they get reworked
+			// purely cosmetic tattoos. giving cultists some way to have tattoos until those get reworked
 			newCultist.tattoos[TATTOO_POOL] = new /datum/cult_tattoo/bloodpool()
 			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
 			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
+
+			vessel.equip_or_collect(new /obj/item/clothing/under/rags(vessel), slot_w_uniform)
 
 		M.regenerate_icons()
 
@@ -2710,6 +2712,10 @@ var/list/bloodcult_exitportals = list()
 	layer = SHADOW_LAYER
 	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
+
+/obj/effect/cult_ritual/resurrect/New(turf/loc)
+	..()
+	overlays += "summoning"
 
 //RUNE XXI
 /datum/rune_spell/stream
