@@ -46,9 +46,9 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 
 /proc/GetOpenConnectedZlevels(z)
 	. = list(z)
-	for(var/level = z, (HasBelow(level) && istype(GetBelow(level),/turf/simulated/open)), level--)
+	for(var/level = z, (HasBelow(level) && isopenspace(GetBelow(level)), level--)
 		. |= level-1
-	for(var/level = z, (HasAbove(level) && istype(GetAbove(level),/turf/simulated/open)), level++)
+	for(var/level = z, (HasAbove(level) && isopenspace(GetAbove(level)), level++)
 		. |= level+1
 
 /proc/AreOpenConnectedZLevels(var/zA, var/zB)
