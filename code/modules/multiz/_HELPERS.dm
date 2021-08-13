@@ -138,7 +138,7 @@ What's NOT ported?
 	return L*/
 
 // BEGIN /VG/ CODE
-/proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/inward=0,var/draw_red=0)
+/proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/inward=0,var/draw_red=0,var/cube=1)
 	var/list/spiraled_turfs = list()
 	var/turf/upturf = epicenter
 	var/turf/downturf = epicenter
@@ -155,19 +155,19 @@ What's NOT ported?
 		for(var/i = 1, i < max_range, i--)
 			if(GetBelow(upturf) != epicenter)
 				upturf = GetBelow(upturf)
-				spiraled_turfs += spiral_block(upturf, i + (max_range - upcount), inward, draw_red)
+				spiraled_turfs += spiral_block(upturf, cube ? max_range : i + (max_range - upcount), inward, draw_red)
 			if(GetAbove(upturf) != epicenter)
 				downturf = GetAbove(downturf)
-				spiraled_turfs += spiral_block(downturf, i + (max_range - downcount), inward, draw_red)
+				spiraled_turfs += spiral_block(downturf, cube ? max_range : i + (max_range - downcount), inward, draw_red)
 		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red=0)
 	else
 		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red=0)
 		for(var/i = 1, i < max_range, i--)
 			if(hasAbove(upturf))
 				upturf = GetAbove(upturf)
-				spiraled_turfs += spiral_block(upturf, max_range - i, inward, draw_red)
+				spiraled_turfs += spiral_block(upturf, cube ? max_range : max_range - i, inward, draw_red)
 			if(HasAbove(downturf))
 				downturf = GetBelow(downturf)
-				spiraled_turfs += spiral_block(downturf, max_range - i, inward, draw_red)
+				spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, inward, draw_red)
 
 	return spiraled_turfs
