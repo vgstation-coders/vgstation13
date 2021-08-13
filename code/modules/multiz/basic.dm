@@ -46,9 +46,9 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 
 /proc/GetOpenConnectedZlevels(var/atom/atom)
 	. = list(atom.z)
-	for(var/level = atom.z, (HasBelow(level.z) && isopenspace(GetBelow(level))), level--)
+	for(var/level = atom.z, (HasBelow(level) && isopenspace(GetBelow(locate(atom.x,atom.y,level)))), level--)
 		. |= level-1
-	for(var/level = atom.z, (HasAbove(level.z) && isopenspace(GetAbove(level))), level++)
+	for(var/level = atom.z, (HasAbove(level) && isopenspace(GetAbove(locate(atom.x,atom.y,level)))), level++)
 		. |= level+1
 
 /proc/AreOpenConnectedZLevels(var/zA, var/zB)
