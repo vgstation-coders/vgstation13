@@ -434,17 +434,14 @@ obj/effect/bmode/buildholder/New()
 			if(istype(object,/turf) && pa.Find("left") && !pa.Find("alt") && !pa.Find("ctrl") )
 				var/turf/T = object
 				if(istype(T,get_base_turf(T.z)))
-					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/floor)
 					log_admin("[key_name(usr)] made a floor at [formatJumpTo(T)]")
 					return
 				else if(istype(T,/turf/simulated/floor))
-					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall)
 					log_admin("[key_name(usr)] made a wall at [formatJumpTo(T)]")
 					return
 				else if(istype(T,/turf/simulated/wall))
-					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall/r_wall)
 					log_admin("[key_name(usr)] made an rwall at [formatJumpTo(T)]")
 					return
