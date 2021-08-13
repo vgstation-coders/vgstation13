@@ -173,13 +173,12 @@ What's NOT ported?
 	return spiraled_turfs
 
 // Halves above and below, as per suggestion by deity on how to handle multi-z explosions
-/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
-	..(epicenter,offcenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time)
+/proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
 	if(HasAbove(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/upcenter = GetAbove(offcenter)
 		if(upcenter.z > epicenter.z)
-			explosion_destroy(epicenter, upcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
+			explosion_destroy(epicenter, upcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)
 	if(HasBelow(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/downcenter = GetBelow(offcenter)
 		if(downcenter.z < epicenter.z)
-			explosion_destroy(epicenter, downcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
+			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)

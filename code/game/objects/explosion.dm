@@ -204,6 +204,8 @@ var/explosion_shake_message_cooldown = 0
 
 		CHECK_TICK
 
+	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
+
 proc/secondaryexplosion(turf/epicenter, range)
 	for(var/turf/tile in trange(range, epicenter))
 		tile.ex_act(2)
