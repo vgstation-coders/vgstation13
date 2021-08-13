@@ -1,4 +1,7 @@
-/atom/movable
+// MOB ZSHADOWS
+// An attempt at relaying speech and visuals from mobs below, now entirely commented out due to being inferior to using vis_contents and a modified hearers check
+
+/*/atom/movable
 	var/mob/zshadow/zshadow
 
 /mob/zshadow
@@ -36,12 +39,12 @@
 	return owner.examine(user, distance, infix, suffix)
 
 // This is the hear version used on Polaris. Keeping it here for reference.
-/*/mob/zshadow/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "", var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
+/mob/zshadow/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "", var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
 	if(speaker && speaker.z != src.z)
 		return // Only relay speech on our acutal z, otherwise we might relay sounds that were themselves relayed up!
 	if(isliving(owner))
 		verb += " from above"
-	return owner.hear_say(message, verb, language, alt_name, italics, speaker, speech_sound, sound_vol)*/
+	return owner.hear_say(message, verb, language, alt_name, italics, speaker, speech_sound, sound_vol)
 
 /mob/zshadow/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker && speech.speaker.z != src.z)
@@ -119,7 +122,7 @@
 		zshadow.visible_message(message, self_message, blind_message)
 
 // This shows when someone is typing. We do not use this on /vg/.
-/*/mob/set_typing_indicator(var/state)
+/mob/set_typing_indicator(var/state)
 	var/old_typing = src.typing
 	. = ..()
 	if(shadow && old_typing != src.typing)
