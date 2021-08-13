@@ -117,68 +117,7 @@ var/explosion_shake_message_cooldown = 0
 		var/y0 = epicenter.y
 		var/z0 = epicenter.z
 
-		for(var/turf/T in spiral_block(epicenter,max_range,1))
-			var/dist = cheap_pythag(T.x - x0, T.y - y0)
-			var/_dist = dist
-			var/pushback = 0
-
-			if(explosion_newmethod)	//Realistic explosions that take obstacles into account
-				var/turf/Trajectory = T
-				while(Trajectory != epicenter)
-					Trajectory = get_step_towards(Trajectory,epicenter)
-					if(Trajectory.density && Trajectory.explosion_block)
-						dist += Trajectory.explosion_block
-
-					for (var/obj/machinery/door/D in Trajectory.contents)
-						if(D.density && D.explosion_block)
-							dist += D.explosion_block
-
-					for (var/obj/effect/forcefield/F in Trajectory.contents)
-						dist += F.explosion_block
-
-					for (var/obj/effect/energy_field/E in Trajectory.contents)
-						dist += E.explosion_block
-
-			if(dist < devastation_range)
-				dist = 1
-				pushback = 5
-			else if(dist < heavy_impact_range)
-				dist = 2
-				pushback = 3
-			else if(dist < light_impact_range)
-				dist = 3
-				pushback = 1
-			else
-				continue
-
-			for(var/atom/movable/A in T.contents)
-				if(T != epicenter && !A.anchored && A.last_explosion_push != explosion_time)
-					A.last_explosion_push = explosion_time
-					//world.log << "FOUND [A] NOT ANCHORED AT [T] ([T.x],[T.y])"
-					var/max_dist = _dist+(pushback)
-					var/max_count = pushback
-					var/turf/throwT = get_step_away(A,epicenter,max_dist)
-					for(var/i = 1 to max_count)
-						var/turf/newT = get_step_away(throwT, epicenter, max_dist)
-						if(!newT || newT == 0 || !isturf(newT))
-							break
-						throwT = newT
-					if(!isturf(throwT))
-						//world.log << "FUCK OUR TURF IS BAD"
-						continue
-					//world.log << "FOUND [throwT] ([throwT.x],[throwT.y]) using get_step_away([epicenter](([epicenter.x],[epicenter.y])),[A],[pushback])"
-					//if(istype(throwT, /turf/space))
-					if(ismob(A))
-						to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
-
-					A.throw_at(throwT,pushback+2,500)
-					//else A.GotoExplosionThrowDest(throwT, 50)
-					//world.log << "THROWING [A] AT [throwT]"
-				A.ex_act(dist)
-
-			T.ex_act(dist)
-
-			CHECK_TICK
+		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range)
 
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
@@ -194,6 +133,76 @@ var/explosion_shake_message_cooldown = 0
 		sleep(8)
 
 	return 1
+
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range)
+	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
+
+	var/x0 = epicenter.x
+	var/y0 = epicenter.y
+	var/z0 = epicenter.z
+	
+	for(var/turf/T in spiral_block(epicenter,max_range,1))
+		var/dist = cheap_pythag(T.x - x0, T.y - y0)
+		var/_dist = dist
+		var/pushback = 0
+
+		if(explosion_newmethod)	//Realistic explosions that take obstacles into account
+			var/turf/Trajectory = T
+			while(Trajectory != epicenter)
+				Trajectory = get_step_towards(Trajectory,epicenter)
+				if(Trajectory.density && Trajectory.explosion_block)
+					dist += Trajectory.explosion_block
+
+				for (var/obj/machinery/door/D in Trajectory.contents)
+					if(D.density && D.explosion_block)
+						dist += D.explosion_block
+
+				for (var/obj/effect/forcefield/F in Trajectory.contents)
+					dist += F.explosion_block
+
+				for (var/obj/effect/energy_field/E in Trajectory.contents)
+					dist += E.explosion_block
+
+		if(dist < devastation_range)
+			dist = 1
+			pushback = 5
+		else if(dist < heavy_impact_range)
+			dist = 2
+			pushback = 3
+		else if(dist < light_impact_range)
+			dist = 3
+			pushback = 1
+		else
+			continue
+
+		for(var/atom/movable/A in T.contents)
+			if(T != epicenter && !A.anchored && A.last_explosion_push != explosion_time)
+				A.last_explosion_push = explosion_time
+				//world.log << "FOUND [A] NOT ANCHORED AT [T] ([T.x],[T.y])"
+				var/max_dist = _dist+(pushback)
+				var/max_count = pushback
+				var/turf/throwT = get_step_away(A,epicenter,max_dist)
+				for(var/i = 1 to max_count)
+					var/turf/newT = get_step_away(throwT, epicenter, max_dist)
+					if(!newT || newT == 0 || !isturf(newT))
+						break
+					throwT = newT
+				if(!isturf(throwT))
+					//world.log << "FUCK OUR TURF IS BAD"
+					continue
+				//world.log << "FOUND [throwT] ([throwT.x],[throwT.y]) using get_step_away([epicenter](([epicenter.x],[epicenter.y])),[A],[pushback])"
+				//if(istype(throwT, /turf/space))
+				if(ismob(A))
+					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
+
+				A.throw_at(throwT,pushback+2,500)
+				//else A.GotoExplosionThrowDest(throwT, 50)
+				//world.log << "THROWING [A] AT [throwT]"
+			A.ex_act(dist)
+
+		T.ex_act(dist)
+
+		CHECK_TICK
 
 proc/secondaryexplosion(turf/epicenter, range)
 	for(var/turf/tile in trange(range, epicenter))
