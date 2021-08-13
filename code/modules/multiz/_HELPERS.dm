@@ -173,13 +173,13 @@ What's NOT ported?
 	return spiraled_turfs
 
 // Halves above and below, as per suggestion by deity on how to handle multi-z explosions
-/*/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range)
-	..(epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range)
-	if(HasAbove(epicenter) && devastation_range >= 1 && heavy_impact_range >= 1 && light_impact_range >= 1 && flash_range >= 1)
-		offcenter = GetAbove(offcenter)
-		if(offcenter.z > epicenter.z)
-			explosion_destroy(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
-	if(HasBelow(epicenter) && devastation_range >= 1 && heavy_impact_range >= 1 && light_impact_range >= 1 && flash_range >= 1)
-		offcenter = GetBelow(offcenter)
-		if(offcenter.z < epicenter.z)
-			explosion_destroy(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explostion_time)*/
+/*/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
+	..(epicenter,offcenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time)
+	if(HasAbove(offcenter) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
+		var/turf/upcenter = GetAbove(offcenter)
+		if(upcenter.z > epicenter.z)
+			explosion_destroy(epicenter, upcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
+	if(HasBelow(offcenter) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
+		var/turf/downcenter = GetBelow(offcenter)
+		if(downcenter.z < epicenter.z)
+			explosion_destroy(epicenter, downcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)*/
