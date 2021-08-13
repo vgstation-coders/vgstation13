@@ -431,7 +431,6 @@ obj/effect/bmode/buildholder/New()
 	var/turf/RT = get_turf(object)
 	switch(buildmode)
 		if(1)
-			var/base_turf = get_base_turf()
 			if(istype(object,/turf) && pa.Find("left") && !pa.Find("alt") && !pa.Find("ctrl") )
 				var/turf/T = object
 				if(istype(T,get_base_turf(T.z)))
