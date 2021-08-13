@@ -45,10 +45,11 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 	return zA == zB || (zB in GetConnectedZlevels(zA))
 
 /proc/GetOpenConnectedZlevels(var/atom/atom)
-	. = list(atom.z)
-	for(var/level = atom.z, (HasBelow(level) && isopenspace(GetBelow(locate(atom.x,atom.y,level)))), level--)
+	var/turf/turf = get_turf(atom)
+	. = list(turf.z)
+	for(var/level = turf.z, (HasBelow(level) && isopenspace(GetBelow(locate(turf.x,turf.y,level)))), level--)
 		. |= level-1
-	for(var/level = atom.z, (HasAbove(level) && isopenspace(GetAbove(locate(atom.x,atom.y,level)))), level++)
+	for(var/level = turf.z, (HasAbove(level) && isopenspace(GetAbove(locate(turf.x,turf.y,level)))), level++)
 		. |= level+1
 
 /proc/AreOpenConnectedZLevels(var/zA, var/zB)

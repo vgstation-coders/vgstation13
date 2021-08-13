@@ -392,9 +392,14 @@
 		sethearing()
 	var/atom/location = get_holder_at_turf_level(src) || get_turf(src)
 	var/turf/T_loc = get_turf(location)
-	for(var/z0 in GetOpenConnectedZlevels(T_loc))
+	for(var/z0 in GetOpenConnectedZlevels(location))
 		if(z0 - T_loc.z <= range || T_loc.z - z0 <= range)
-			for(var/mob/virtualhearer/hearer in viewers(range, locate(T_loc.x,T_loc.y,z0)))
+			var/atom/thing_to_see
+			if(z0 == T_loc.z)
+				thing_to_see = location
+			else
+				thing_to_see = locate(T_loc.x,T_loc.y,z0)
+			for(var/mob/virtualhearer/hearer in viewers(range, thing_to_see))
 				var/mob/M
 				if(istype(hearer.attached, /obj/machinery/hologram/holopad))
 					var/obj/machinery/hologram/holopad/holo = hearer.attached
