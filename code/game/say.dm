@@ -328,7 +328,7 @@ var/global/resethearers = 0
 	if(!T)
 		return
 
-	for(var/z0 in GetOpenConnectedZlevels(T.z))
+	for(var/z0 in GetOpenConnectedZlevels(T))
 		if(z0 - T.z <= R || T.z - z0 <= R)
 			for(var/mob/virtualhearer/VH in hearers(R, locate(T.x,T.y,z0)))
 				var/can_hear = 1
