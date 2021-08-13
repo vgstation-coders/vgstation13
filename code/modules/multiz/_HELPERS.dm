@@ -145,14 +145,14 @@ What's NOT ported?
 	if(inward)
 		var/upcount = 1
 		var/downcount = 1
-		for(var/i = 1, i < max_range, i--)
-			if(HasAbove(upturf))
+		for(var/i = 1, i < max_range, i++)
+			if(HasAbove(upturf.z))
 				upturf = GetAbove(upturf)
 				upcount++
-			if(HasBelow(downturf))
+			if(HasBelow(downturf.z))
 				downturf = GetBelow(downturf)
 				downcount++
-		for(var/i = 1, i < max_range, i--)
+		for(var/i = 1, i < max_range, i++)
 			if(GetBelow(upturf) != epicenter)
 				upturf = GetBelow(upturf)
 				spiraled_turfs += spiral_block(upturf, cube ? max_range : i + (max_range - upcount), inward, draw_red)
@@ -162,24 +162,24 @@ What's NOT ported?
 		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red=0)
 	else
 		spiraled_turfs += spiral_block(epicenter,max_range,inward=0,draw_red=0)
-		for(var/i = 1, i < max_range, i--)
-			if(HasAbove(upturf))
+		for(var/i = 1, i < max_range, i++)
+			if(HasAbove(upturf.z))
 				upturf = GetAbove(upturf)
 				spiraled_turfs += spiral_block(upturf, cube ? max_range : max_range - i, inward, draw_red)
-			if(HasBelow(downturf))
+			if(HasBelow(downturf.z))
 				downturf = GetBelow(downturf)
 				spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, inward, draw_red)
 
 	return spiraled_turfs
 
 // Halves above and below, as per suggestion by deity on how to handle multi-z explosions
-/*/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
+/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
 	..(epicenter,offcenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time)
-	if(HasAbove(offcenter) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
+	if(HasAbove(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/upcenter = GetAbove(offcenter)
 		if(upcenter.z > epicenter.z)
 			explosion_destroy(epicenter, upcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
-	if(HasBelow(offcenter) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
+	if(HasBelow(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/downcenter = GetBelow(offcenter)
 		if(downcenter.z < epicenter.z)
-			explosion_destroy(epicenter, downcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)*/
+			explosion_destroy(epicenter, downcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
