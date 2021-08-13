@@ -117,6 +117,8 @@ var/explosion_shake_message_cooldown = 0
 		var/y0 = epicenter.y
 		var/z0 = epicenter.z
 
+
+		log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z])")
 		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time)
 
 		var/took = stop_watch(watch)
