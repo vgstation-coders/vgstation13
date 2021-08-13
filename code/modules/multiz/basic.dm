@@ -45,10 +45,10 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 	return zA == zB || (zB in GetConnectedZlevels(zA))
 
 /proc/GetOpenConnectedZlevels(var/atom/atom)
-	. = list(z)
-	for(var/level = z, (HasBelow(level.z) && isopenspace(GetBelow(level))), level--)
+	. = list(atom.z)
+	for(var/level = atom.z, (HasBelow(level.z) && isopenspace(GetBelow(level))), level--)
 		. |= level-1
-	for(var/level = z, (HasAbove(level.z) && isopenspace(GetAbove(level))), level++)
+	for(var/level = atom.z, (HasAbove(level.z) && isopenspace(GetAbove(level))), level++)
 		. |= level+1
 
 /proc/AreOpenConnectedZLevels(var/zA, var/zB)
