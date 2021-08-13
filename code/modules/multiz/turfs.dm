@@ -42,11 +42,6 @@
 	..()
 	mover.fall()
 
-// Called when thrown object lands on this turf.
-/*/turf/simulated/open/hitby(var/atom/movable/AM, var/speed)
-	. = ..()
-	AM.fall()*/
-
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
 	below = GetBelow(src)
