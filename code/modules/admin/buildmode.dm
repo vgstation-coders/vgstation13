@@ -431,18 +431,20 @@ obj/effect/bmode/buildholder/New()
 	var/turf/RT = get_turf(object)
 	switch(buildmode)
 		if(1)
+			var/base_turf = get_base_turf()
 			if(istype(object,/turf) && pa.Find("left") && !pa.Find("alt") && !pa.Find("ctrl") )
-				if(istype(object,get_base_turf(T.z)))
+				var/turf/T = object
+				if(istype(T,get_base_turf(T.z)))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/floor)
 					log_admin("[key_name(usr)] made a floor at [formatJumpTo(T)]")
 					return
-				else if(istype(object,/turf/simulated/floor))
+				else if(istype(T,/turf/simulated/floor))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall)
 					log_admin("[key_name(usr)] made a wall at [formatJumpTo(T)]")
 					return
-				else if(istype(object,/turf/simulated/wall))
+				else if(istype(T,/turf/simulated/wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall/r_wall)
 					log_admin("[key_name(usr)] made an rwall at [formatJumpTo(T)]")
