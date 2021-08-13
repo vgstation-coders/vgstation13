@@ -166,7 +166,7 @@ What's NOT ported?
 			if(hasAbove(upturf))
 				upturf = GetAbove(upturf)
 				spiraled_turfs += spiral_block(upturf, cube ? max_range : max_range - i, inward, draw_red)
-			if(HasAbove(downturf))
+			if(HasBelow(downturf))
 				downturf = GetBelow(downturf)
 				spiraled_turfs += spiral_block(downturf, cube ? max_range : max_range - i, inward, draw_red)
 
