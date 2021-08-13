@@ -390,7 +390,7 @@
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = 7)
 	if(world.time>resethearers)
 		sethearing()
-	var/location = get_holder_at_turf_level(src) || get_turf(src)
+	var/atom/location = get_holder_at_turf_level(src) || get_turf(src)
 	for(var/z0 in GetConnectedZlevels(location.z))
 		if(z0 - location.z <= range || location.z - z0 <= range)
 			for(var/mob/virtualhearer/VH in viewers(range, locate(location.x,location.y,z0)))
