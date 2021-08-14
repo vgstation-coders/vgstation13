@@ -90,7 +90,7 @@ var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/
 
 		for(var/z0 in GetOpenConnectedZlevels(turf_source))
 			if (player_turf && turf_source && player_turf.z == z0)
-				if(get_dist(player_turf, turf_source) <= Dist && (z0 - T.z <= Dist || T.z - z0 <= Dist))
+				if(get_dist(player_turf, turf_source) <= Dist && (z0 - player_turf.z <= Dist || player_turf.z - z0 <= Dist))
 					player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel,wait)
 
 var/const/FALLOFF_SOUNDS = 1
