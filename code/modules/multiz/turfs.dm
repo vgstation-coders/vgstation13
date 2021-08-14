@@ -77,9 +77,6 @@
 /atom/movable/lighting_overlay
 	vis_flags = VIS_HIDE
 
-/obj/effect/overlay/gas_overlay
-	vis_flags = VIS_HIDE
-
 /obj/effect/open_overlay
 	name = "open overlay"
 	desc = "The darkness of the abyss below"
