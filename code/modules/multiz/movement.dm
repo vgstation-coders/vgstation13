@@ -199,7 +199,12 @@
 /obj/structure/bed/chair/vehicle/adminbus/can_fall() // And the sacred bus
 	return FALSE
 
+/mob/can_fall() // Obviously, flight stops falling
+	if(flying)
+		return FALSE
+
 /mob/living/carbon/human/can_fall() // Jetpacks help too
+	..()
 	if(istype(back, /obj/item/weapon/tank/jetpack))
 		var/obj/item/weapon/tank/jetpack/J = back
 		if(!lying && (J.allow_thrust(0.01, src)))
