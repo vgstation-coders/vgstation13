@@ -71,7 +71,7 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 	//Inputs: The moving atom (optional), target turf, "height" and air group
 	//Outputs: Boolean if can pass.
 
-	return (!density || !height || air_group)
+	return (!density || !height || air_group || flow_flags & ON_BORDER)
 
 /turf/CanPass(atom/movable/mover, turf/target, height=1.5,air_group=0)
 	if(!target) return 0

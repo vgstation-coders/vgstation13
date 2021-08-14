@@ -268,8 +268,20 @@
 	if(!Move(landing))
 		return 1
 
+	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
 	// Detect if we made a silent landing.
-	if(locate(/obj/structure/stairs) in landing)
+	if(down_stairs)
+		if(src.dir == down_stairs.dir)
+			// This is hackish but whatever.
+			var/turf/target = get_step(GetBelow(src), down_stairs.dir)
+			var/turf/source = loc
+			if(target.Enter(src, source))
+				src.loc = target
+				target.Entered(src, source)
+				if(isliving(src))
+					var/mob/living/L = src
+					if(L.pulling)
+						L.pulling.forceMove(target)
 		return 1
 
 	if(isopenspace(oldloc))
