@@ -203,7 +203,7 @@
 	if(flying)
 		return FALSE
 
-/mob/proc/stop_flying() // So flying mobs fall right after they stop
+/mob/proc/stop_flying(var/anim = 1) // So flying mobs fall right after they stop
 	flying = 0
 	fall()
 

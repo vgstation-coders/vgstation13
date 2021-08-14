@@ -228,11 +228,11 @@
 	if(anim)
 		animate(src, pixel_y = pixel_y + 8 * PIXEL_MULTIPLIER, 10, 1, ELASTIC_EASING)
 
-/mob/living/simple_animal/cockroach/proc/stop_flying(var/anim = 1)
+/mob/living/simple_animal/cockroach/stop_flying(var/anim = 1)
 	speed = initial(speed)
 	icon_state = icon_living
 
-	stop_flying()
+	..(anim)
 	speak_chance = initial(speak_chance)
 	turns_per_move = initial(turns_per_move)
 
