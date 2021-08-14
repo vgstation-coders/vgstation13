@@ -621,7 +621,7 @@
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
 	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
-	if (M)
+	if (M && M != user)
 		return M.attackby(W,user)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		to_chat(user,"<span class='warning'>\The [W] cannot be rigged onto \the [src].</span>")
