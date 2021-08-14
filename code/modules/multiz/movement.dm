@@ -267,6 +267,12 @@
 	for(var/atom/A in landing)
 		if(!A.CanPass(src, src.loc, 1, 0))
 			return FALSE
+	
+	// Super matter dusting things falling on them
+	var/obj/machinery/power/supermatter/SM = locate(/obj/machinery/power/supermatter) in landing
+	if(SM)
+		SM.consume(src)
+	
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
 
 	// Now lets move there!
