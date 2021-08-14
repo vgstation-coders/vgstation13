@@ -204,7 +204,8 @@
 		return FALSE
 
 /mob/living/carbon/human/can_fall() // Jetpacks help too
-	..()
+	if(flying)
+		return FALSE
 	if(istype(back, /obj/item/weapon/tank/jetpack))
 		var/obj/item/weapon/tank/jetpack/J = back
 		if(!lying && (J.allow_thrust(0.01, src)))
