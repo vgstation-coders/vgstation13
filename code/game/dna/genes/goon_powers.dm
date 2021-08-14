@@ -478,7 +478,7 @@
 			var/prevLayer = target.layer
 			target.plane = EFFECTS_PLANE
 			
-			flying = 1
+			target.flying = 1
 			for(var/i=0, i<duration, i++)
 				step(target, target.dir)
 				if(i < 5)
@@ -487,7 +487,7 @@
 					target.pixel_y -= 8 * PIXEL_MULTIPLIER
 				sleep(1)
 			target.pixel_y = 0
-			flying = 0
+			target.flying = 0
 
 			if (M_FAT in target.mutations && prob(66))
 				target.visible_message("<span class='warning'><b>[target.name]</b> crashes due to their heavy weight!</span>")
