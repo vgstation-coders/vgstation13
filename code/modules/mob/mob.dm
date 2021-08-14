@@ -394,7 +394,7 @@
 	var/turf/T_loc = get_turf(location) // For getting the .z var, atoms don't have this by default
 	var/list/found_Zs = GetOpenConnectedZlevels(location) // Saves constantly calling it
 	for(var/z0 in found_Zs)
-		if(!found_Zs.len || z0 - T_loc.z <= range || T_loc.z - z0 <= range) // So we can get in with an empty list
+		if(!found_Zs.len || abs(z0 - T_loc.z) <= range) // So we can get in with an empty list
 			var/atom/thing_to_see
 			if(!found_Zs.len || z0 == T_loc.z) // Now this is why we need the empty list
 				thing_to_see = location // Put that holder thingy to work, like the original version of this function did

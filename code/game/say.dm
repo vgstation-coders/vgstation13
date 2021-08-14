@@ -329,7 +329,7 @@ var/global/resethearers = 0
 		return
 
 	for(var/z0 in GetOpenConnectedZlevels(T))
-		if(z0 - T.z <= R || T.z - z0 <= R)
+		if(abs(z0 - T.z) <= R)
 			for(var/mob/virtualhearer/VH in hearers(R, locate(T.x,T.y,z0)))
 				var/can_hear = 1
 				if(istype(VH.attached, /mob))			//The virtualhearer is attached to a mob.
