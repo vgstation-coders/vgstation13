@@ -14,6 +14,7 @@
 	name = "alien thing"
 	desc = "There's something alien about this."
 	icon = 'icons/mob/alien.dmi'
+	mouse_opacity = 1
 	w_type=NOT_RECYCLABLE
 
 /*
