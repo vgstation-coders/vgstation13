@@ -73,7 +73,11 @@
 /atom/movable
 	vis_flags = VIS_INHERIT_ID
 
+// Hides these from vis_contents due to how glitchy they are with it
 /atom/movable/lighting_overlay
+	vis_flags = VIS_HIDE
+
+/obj/effect/overlay/gas_overlay
 	vis_flags = VIS_HIDE
 
 /obj/effect/open_overlay
