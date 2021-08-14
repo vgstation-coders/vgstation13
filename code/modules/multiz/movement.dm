@@ -203,6 +203,10 @@
 	if(flying)
 		return FALSE
 
+/mob/proc/stop_flying() // So flying mobs fall right after they stop
+	flying = 0
+	fall()
+
 /mob/living/carbon/human/can_fall() // Jetpacks help too
 	if(flying)
 		return FALSE

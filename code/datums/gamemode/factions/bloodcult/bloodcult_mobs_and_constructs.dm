@@ -618,7 +618,7 @@ var/list/astral_projections = list()
 		appearance = tangible_appearance
 		canmove = 1
 		incorporeal_move = 0
-		flying = 0
+		stop_flying()
 		flags = HEAR | PROXMOVE
 		see_invisible = SEE_INVISIBLE_CULTJAUNT//still can see some hidden things
 		speed = 1

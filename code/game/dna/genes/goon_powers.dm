@@ -487,7 +487,7 @@
 					target.pixel_y -= 8 * PIXEL_MULTIPLIER
 				sleep(1)
 			target.pixel_y = 0
-			target.flying = 0
+			target.stop_flying()
 
 			if (M_FAT in target.mutations && prob(66))
 				target.visible_message("<span class='warning'><b>[target.name]</b> crashes due to their heavy weight!</span>")
