@@ -86,9 +86,9 @@ What's NOT ported?
  * Euclidean follows suit for the proper formula
  */
 /proc/get_z_dist(atom/Loc1 as turf|mob|obj,atom/Loc2 as turf|mob|obj)
-	var/dx = Loc1.x - Loc2.x
-	var/dy = Loc1.y - Loc2.y
-	var/dz = Loc1.z - Loc2.z
+	var/dx = abs(Loc1.x - Loc2.x)
+	var/dy = abs(Loc1.y - Loc2.y)
+	var/dz = abs(Loc1.z - Loc2.z)
 
 	return max(dx,dy,dz)
 
