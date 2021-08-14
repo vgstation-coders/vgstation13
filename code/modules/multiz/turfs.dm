@@ -190,7 +190,6 @@
 	..()
 	if(get_base_turf(src.z) == /turf/simulated/open)
 		var/alpha_to_subtract = 127
-		overlays.Cut()
 		vis_contents.Cut()
 		var/turf/bottom
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
