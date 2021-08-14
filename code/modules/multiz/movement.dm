@@ -268,17 +268,17 @@
 		if(!A.CanPass(src, src.loc, 1, 0))
 			return FALSE
 	
-	// Super matter dusting things falling on them
-	var/obj/machinery/power/supermatter/SM = locate(/obj/machinery/power/supermatter) in landing
-	if(SM)
-		SM.consume(src)
-	
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
 
 	// Now lets move there!
 	if(!Move(landing))
 		return 1
 
+	// Super matter dusting things falling on them
+	var/obj/machinery/power/supermatter/SM = locate(/obj/machinery/power/supermatter) in landing
+	if(SM)
+		SM.consume(src)
+	
 	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
 	// Detect if we made a silent landing.
 	if(down_stairs)
