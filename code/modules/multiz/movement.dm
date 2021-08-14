@@ -274,10 +274,10 @@
 	if(!Move(landing))
 		return 1
 
-	// Super matter dusting things falling on them
+	// Supermatter dusting things falling on them
 	var/obj/machinery/power/supermatter/SM = locate(/obj/machinery/power/supermatter) in landing
 	if(SM)
-		SM.consume(src)
+		SM.Consume(src)
 	
 	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
 	// Detect if we made a silent landing.
