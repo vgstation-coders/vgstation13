@@ -78,6 +78,25 @@ What's NOT ported?
 		return 1
 	return 0
 
+/proc/get_z_dist_euclidian(atom/Loc1 as turf|mob|obj,atom/Loc2 as turf|mob|obj)
+	var/dx = Loc1.x - Loc2.x
+	var/dy = Loc1.y - Loc2.y
+	var/dy = Loc1.z - Loc2.z
+
+	var/dist = sqrt(dx**2 + dy**2 + dz**2)
+
+	return dist
+
+/**
+ * Get Distance, Squared
+ *
+ * Because sqrt is slow, this returns the z distance squared, which skips the sqrt step.
+ *
+ * Use to compare distances. Used in component mobs.
+ */
+/proc/get_z_dist_squared(var/atom/a, var/atom/b)
+	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((b.z-a.z)**2)
+
 /* Polaris methods for getting hearers. Necessary? Not sure
 
 /proc/get_mobs_or_objects_in_view(var/R, var/atom/source, var/include_mobs = 1, var/include_objects = 1)
