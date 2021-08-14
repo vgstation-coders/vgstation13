@@ -388,32 +388,32 @@
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = 7)
-    if(world.time>resethearers)
-        sethearing()
-    var/atom/location = get_holder_at_turf_level(src) || get_turf(src)
-    var/turf/T_loc = get_turf(location)
-	var/list/found_Zs = GetOpenConnectedZlevels(location)
-    for(var/z0 in found_Zs)
-        if(!found_Zs.len || z0 - T_loc.z <= range || T_loc.z - z0 <= range)
-            var/atom/thing_to_see
-            if(!T_loc || z0 == T_loc.z)
-                thing_to_see = location
-            else
-                thing_to_see = locate(T_loc.x,T_loc.y,z0)
-            for(var/mob/virtualhearer/hearer in viewers(range, thing_to_see))
-                var/mob/M
-                if(istype(hearer.attached, /obj/machinery/hologram/holopad))
-                    var/obj/machinery/hologram/holopad/holo = hearer.attached
-                    if(holo.master)
-                        M = holo.master
-                if(istype(hearer.attached, /mob))
-                    M = hearer.attached
-                if(M)
-                    if(M.client)
-                        var/client/C = M.client
-                        if(get_turf(src) in C.ObscuredTurfs)
-                            continue
-                hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
+	if(world.time>resethearers)
+		sethearing()
+	var/atom/location = get_holder_at_turf_level(src) || get_turf(src) // Holders are nicer than turfs, I guess
+	var/turf/T_loc = get_turf(location) // For getting the .z var, atoms don't have this by default
+	var/list/found_Zs = GetOpenConnectedZlevels(location) // Saves constantly calling it
+	for(var/z0 in found_Zs)
+		if(!found_Zs.len || z0 - T_loc.z <= range || T_loc.z - z0 <= range) // So we can get in with an empty list
+			var/atom/thing_to_see
+			if(!found_Zs.len || z0 == T_loc.z) // Now this is why we need the empty list
+				thing_to_see = location // Put that holder thingy to work, like the original version of this function did
+			else
+				thing_to_see = locate(T_loc.x,T_loc.y,z0) // If not on the same zlevel as it, just do it on turfs, location goes there if all else fails anyways.
+			for(var/mob/virtualhearer/hearer in viewers(range, thing_to_see)) // Rest is self explanatory from here
+				var/mob/M
+				if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+					var/obj/machinery/hologram/holopad/holo = hearer.attached
+					if(holo.master)
+						M = holo.master
+				if(istype(hearer.attached, /mob))
+					M = hearer.attached
+				if(M)
+					if(M.client)
+						var/client/C = M.client
+						if(get_turf(src) in C.ObscuredTurfs)
+							continue
+				hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
 	for(var/mob/M in mob_list)
