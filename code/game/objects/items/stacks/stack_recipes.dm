@@ -146,6 +146,12 @@
 		return 0
 	return 1
 
+/datum/stack_recipe/chair/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
+	var/obj/structure/bed/chair/new_chair = R
+	if (istype(new_chair))
+		new_chair.handle_layer()
+	return R
+
 /datum/stack_recipe/conveyor_frame/can_build_here(var/mob/usr, var/turf/T)
 	if(on_floor && (istype(T, /turf/space)))
 		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
