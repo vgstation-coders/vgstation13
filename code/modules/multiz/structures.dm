@@ -191,7 +191,7 @@
 		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 		"<span class='notice'>You dissasemble \the [src].</span>")
-		new material(get_turf(src), 4)
+		new /obj/item/stack/sheet/metal(get_turf(src), 4)
 		qdel(src)
 	
 	if(W.is_wrench(user))	
@@ -220,12 +220,12 @@
 				"<span class='notice'>You finish installing step plates to \the [src].</span>")
 				switch(dir)
 					if(NORTH)
-						var/obj/structure/stairs = new /obj/structure/stairs/north(loc)
+						new /obj/structure/stairs/north(loc)
 					if(EAST)
-						var/obj/structure/stairs = new /obj/structure/stairs/east(loc)
+						new /obj/structure/stairs/east(loc)
 					if(SOUTH)
-						var/obj/structure/stairs = new /obj/structure/stairs/south(loc)
+						new /obj/structure/stairs/south(loc)
 					if(WEST)
-						var/obj/structure/stairs = new /obj/structure/stairs/west(loc)
+						new /obj/structure/stairs/west(loc)
 				qdel(src)
 			return
