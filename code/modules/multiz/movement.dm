@@ -352,17 +352,24 @@
 
 // Called by CheckFall when we actually hit something.  Oof
 /atom/movable/proc/fall_impact(var/atom/hit_atom)
-	last_fall = 0
-	zs_fallen = 0
 	// Repeating area get for gravity stuff
 	var/area/area = get_area(src)
 	if(area && area.gravity > 0.5)
 		visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
 	else
 		visible_message("\The [src] drops from above onto \the [hit_atom]!", "You hear something drop onto \the [hit_atom].")
+	for(var/atom/movable/AM in hit_atom.contents)
+		AM.fall_act(src,src.w_class)
+	last_fall = 0
+	zs_fallen = 0
+
+/obj/item/fall_impact(var/atom/hit_atom)
+	for(var/atom/movable/AM in hit_atom.contents)
+		AM.fall_act(src,src.w_class)
+	..()
 
 // Take damage from falling and hitting the ground
-/mob/living/carbon/human/fall_impact(var/turf/landing)
+/mob/living/fall_impact(var/turf/landing)
 	// Repeating area get for gravity stuff
 	var/area/area = get_area(src)
 	if(area && area.gravity > 0.333)
@@ -370,6 +377,8 @@
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
 			"You hear something slam into \the [landing].")
 		if(area.gravity > 0.667)
+			for(var/atom/movable/AM in hit_atom.contents)
+				AM.fall_act(src,src.w_class)
 			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 			// Bases at ten and scales with the number of Z levels fallen
 			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
@@ -413,9 +422,7 @@
 			var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
 			// Anything on the same tile as the landing tile is gonna have a bad day.
 			for(var/mob/living/L in hit_atom.contents)
-				L.visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
-				L.adjustBruteLoss(rand(3*damage, 5*damage))
-				L.AdjustKnockdown(((6 * min(zs_fallen,10)) * area.gravity))
+				L.fall_act(src)
 
 			// Now to hurt the mech.
 			take_damage(rand(damage, 3*damage))
@@ -430,3 +437,25 @@
 			to_chat(occupant, "<span class='warning'>\The [src] softly drops down onto \the [hit_atom]!</span>")
 	last_fall = 0
 	zs_fallen = 0
+
+// Opposite of fall_impact, called when something is dropped on someone
+/atom/movable/proc/fall_act(var/atom/hitting_atom)
+	return
+
+/mob/living/fall_act(var/atom/hitting_atom)
+	var/area/area = get_area(src)
+	if(area)
+		if(ismecha(hitting_atom))
+			visible_message("<span class='danger'>\The [hitting_atom] crushes \the [src] as it lands on them!</span>")
+			var/damage = ((10 * min(hitting_atom.zs_fallen,5)) * area.gravity)
+			adjustBruteLoss(rand(3*damage, 5*damage))
+			AdjustKnockdown(((6 * min(hitting_atom.zs_fallen,10)) * area.gravity))
+		else if isitem(hitting_atom)
+			var/obj/item/I = hitting_atom
+			var/damage = (((I.throwforce * min(hitting_atom.zs_fallen,5)) * area.gravity) * I.w_class)
+			adjustBruteLoss(rand(damage, 2*damage))
+			AdjustKnockdown((((2 * min(hitting_atom.zs_fallen,5)) * area.gravity)) * I.w_class)
+			if(I.w_class == W_CLASS_GIANT)
+				Gib(1)
+
+			
