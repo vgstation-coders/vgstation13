@@ -4,6 +4,8 @@
 #define PIPE_TRINARY 3
 #define PIPE_TRIN_M  4
 #define PIPE_UNARY   5
+#define PIPE_Z_UP_BINARY   6
+#define PIPE_Z_DOWN_BINARY   7
 
 //UTILITIES.
 
@@ -239,7 +241,7 @@
 // Rule of thumb: scrolling is clockwise.
 /datum/rcd_schematic/pipe/proc/get_dirs()
 	switch(pipe_type)
-		if(PIPE_UNARY)
+		if(PIPE_UNARY||PIPE_Z_UP_BINARY||PIPE_Z_DOWN_BINARY)
 			. = list(NORTH, EAST, SOUTH, WEST)
 
 		if(PIPE_TRINARY)
@@ -304,6 +306,20 @@
 			. += "<br/>"
 			. += render_dir_image(NORTHWEST, "East North West")
 			. += render_dir_image(SOUTHWEST, "South East North")
+
+		if(PIPE_Z_UP_BINARY)
+			. += render_dir_image(NORTH, "North to Up")
+			. += render_dir_image(EAST, "East to Up")
+			. += "<br/>"
+			. += render_dir_image(SOUTH, "South to Up")
+			. += render_dir_image(WEST, "West to Up")
+
+		if(PIPE_Z_DOWN_BINARY)
+			. += render_dir_image(NORTH, "North to Down")
+			. += render_dir_image(EAST, "East to Down")
+			. += "<br/>"
+			. += render_dir_image(SOUTH, "South to Down")
+			. += render_dir_image(WEST, "West to Down")
 
 	. += "</div>"
 
@@ -486,6 +502,18 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= PIPE_SIMPLE_BENT
 	pipe_type	= PIPE_BENT
+
+/datum/rcd_schematic/pipe/z_up
+	name		= "Up Pipe"
+
+	pipe_id		= PIPE_Z_UP
+	pipe_type	= PIPE_Z_UP_BINARY
+
+/datum/rcd_schematic/pipe/z_down
+	name		= "Down Pipe"
+
+	pipe_id		= PIPE_Z_DOWN
+	pipe_type	= PIPE_Z_DOWN_BINARY
 
 /datum/rcd_schematic/pipe/manifold
 	name		= "Manifold"
