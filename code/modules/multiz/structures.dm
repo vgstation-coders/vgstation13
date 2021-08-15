@@ -212,7 +212,7 @@
 				return ..() // ?
 			user.visible_message("<span class='notice'>[user] starts installing step plates to \the [src].</span>", \
 			"<span class='notice'>You start installing step plates to \the [src].</span>")
-			if(do_after(user, src, construction_length))
+			if(do_after(user, src, 80))
 				if(S.amount < 4) //User being tricky
 					return
 				S.use(2)
@@ -227,8 +227,5 @@
 						var/obj/structure/stairs = new /obj/structure/stairs/south(loc)
 					if(WEST)
 						var/obj/structure/stairs = new /obj/structure/stairs/west(loc)
-				if(X)
-					X.add_hiddenprint(user)
-					X.add_fingerprint(user)
 				qdel(src)
 			return
