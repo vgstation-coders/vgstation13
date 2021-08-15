@@ -1,9 +1,9 @@
 //
-// Controller handling icon updates of open space turfs
+// Controller handling fall updates of open space turfs
 //
 
 //var/global/open_space_initialised = FALSE not necessary, we have initialized as a var
-/*/var/global/datum/subsystem/open_space/OS_controller = null
+/var/global/datum/subsystem/open_space/OS_controller = null
 /var/global/image/over_OS_darkness = image('icons/turf/open_space.dmi', "black_open")
 
 /datum/subsystem/open_space
@@ -20,7 +20,7 @@
 /datum/controller/process/open_space/New()
 	//. = ..()
 	name = "openspace"
-	schedule_interval = world.tick_lag // every second
+	schedule_interval = 0.1 SECONDS // every second
 	start_delay = 30 SECONDS
 	OS_controller = src
 	over_OS_darkness.plane = OVER_OPENSPACE_PLANE
@@ -56,7 +56,7 @@
 /datum/subsystem/open_space/proc/update_turf(var/turf/T)
 	for(var/atom/movable/A in T)
 		A.fall()
-	T.update_icon()
+	//T.update_icon()
 
 /datum/subsystem/open_space/proc/add_turf(var/turf/T, var/recursive = 0)
 	ASSERT(isturf(T))
@@ -100,6 +100,7 @@
 			// log_debug("[T] ([T.x],[T.y],[T.z]) queued for update for [src].Exited([AM])")
 			OS_controller.add_turf(T, 1)
 
+/*
 /obj/update_icon()
 	. = ..()
 	if(OS_controller && OS_controller.initialized && !invisibility && isturf(loc))
