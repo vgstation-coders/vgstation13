@@ -696,10 +696,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
 
+/turf/simulated/floor/asteroid/create_floor_tile()
+	return
+
 /turf/simulated/floor/asteroid/New()
 	..()
-	qdel(floor_tile)
-	floor_tile = null
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
