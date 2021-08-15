@@ -444,7 +444,7 @@
 		if(ismecha(hitting_atom))
 			var/damage = ((10 * min(hitting_atom.zs_fallen,5)) * area.gravity)
 			adjustBruteLoss(rand(3*damage, 5*damage))
-			AdjustKnockdown((6 * min(hitting_atom.zs_fallen,10)) * area.gravity)
+			AdjustKnockdown(damage / 2)
 		else if(isitem(hitting_atom))
 			var/obj/item/I = hitting_atom
 			var/damage = (((I.throwforce * min(hitting_atom.zs_fallen,5)) * area.gravity) * I.w_class)
@@ -460,5 +460,5 @@
 			if(hitting_atom.density)
 				damage *= 3
 			adjustBruteLoss(rand(damage, 2*damage))
-			AdjustKnockdown(damage)
+			AdjustKnockdown(damage / 2)
 			
