@@ -143,8 +143,9 @@
 /obj/structure/stairs/Uncross(atom/movable/A)
 	if(A.dir == dir)
 		var/turf/simulated/open/above = GetAbove(turf)
-		if(!above && world.time % 10) // No spamming this message
-			to_chat(user, "<span class='warning'>There is nowhere above to go.</span>")
+		if(!above) // No spamming this message
+			if(world.time % 10)
+				to_chat(user, "<span class='warning'>There is nowhere above to go.</span>")
 			return
 		// This is hackish but whatever.
 		var/turf/target = get_step(above, dir)
