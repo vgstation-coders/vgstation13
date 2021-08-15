@@ -17,7 +17,7 @@
 	var/tmp/last_object //Polaris has this. Almost certainly used because their processing datums have automatic crash logging.
 
 
-/datum/controller/process/open_space/New()
+/*/datum/controller/process/open_space/New()
 	//. = ..()
 	name = "openspace"
 	schedule_interval = 0.1 SECONDS // every second
@@ -29,11 +29,11 @@
 
 	// Pre-process open space once once before the round starts. Wait 20 seconds so other stuff has time to finish.
 	spawn(200)
-		doWork(1)
+		doWork(1)*/
 
-/datum/controller/process/open_space/copyStateFrom(var/datum/controller/process/open_space/other)
+/*/datum/controller/process/open_space/copyStateFrom(var/datum/controller/process/open_space/other)
 	. = ..()
-	OS_controller = src
+	OS_controller = src*/
 
 /datum/subsystem/open_space/stat_entry(msg)
 	msg += "OS: [turfs_to_process.len]"
