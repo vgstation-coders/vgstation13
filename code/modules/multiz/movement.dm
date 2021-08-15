@@ -451,9 +451,14 @@
 			adjustBruteLoss(rand(damage, 2*damage))
 			AdjustKnockdown(((2 * min(hitting_atom.zs_fallen,5)) * area.gravity) * I.w_class)
 			if(I.w_class == W_CLASS_GIANT)
-				Gib(1)
+				gib()
 		else if(istype(hitting_atom,/obj/machinery/power/supermatter))
 			var/obj/machinery/power/supermatter/SM = hitting_atom
 			SM.Consume(src)
-
+		else if(istype(hitting_atom,/obj/machinery/))
+			var/damage = ((3 * min(hitting_atom.zs_fallen,5)) * area.gravity)
+			if(hitting_atom.density)
+				damage *= 3
+			adjustBruteLoss(rand(damage, 2*damage))
+			AdjustKnockdown(damage)
 			
