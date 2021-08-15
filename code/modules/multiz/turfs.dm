@@ -104,6 +104,7 @@
 	vis_contents += bottom
 	if(!istype(bottom,/turf/space)) // Space below us
 		vis_contents.Add(overimage)
+		icon_state = "" // Remove any previous space stuff, if any
 	else
 		// We space background now, forget the vis contentsing of it
 		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
