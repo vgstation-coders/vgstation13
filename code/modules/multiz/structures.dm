@@ -215,7 +215,7 @@
 			if(do_after(user, src, 80))
 				if(S.amount < 4) //User being tricky
 					return
-				S.use(2)
+				S.use(4)
 				user.visible_message("<span class='notice'>[user] finishes installing step plates to \the [src].</span>", \
 				"<span class='notice'>You finish installing step plates to \the [src].</span>")
 				switch(dir)
