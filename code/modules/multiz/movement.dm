@@ -350,27 +350,32 @@
 /atom/movable/proc/fall_impact(var/atom/hit_atom)
 	last_fall = 0
 	zs_fallen = 0
-	visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
+	// Repeating area get for gravity stuff
+	var/area/area = get_area(src)	
+	if(area && area.gravity > 0.5)
+		visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
 
 // Take damage from falling and hitting the ground
 /mob/living/carbon/human/fall_impact(var/turf/landing)
-	visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
-		"<span class='danger'>You fall off and hit \the [landing]!</span>", \
-		"You hear something slam into \the [landing].")
-	playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)
-	// Bases at ten and scales with the number of Z levels fallen
-	// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
-	var/damage = ((10 * zs_fallen) * area.gravity)
-	apply_damage(rand(0, damage), BRUTE, LIMB_HEAD)
-	apply_damage(rand(0, damage), BRUTE, LIMB_CHEST)
-	apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_LEG)
-	apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_LEG)
-	apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
-	apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
-	AdjustKnockdown(4)
-	updatehealth()
+	var/area/area = get_area(src)	
+	if(area && area.gravity > 0.3)
+		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
+			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
+			"You hear something slam into \the [landing].")
+		if(area.gravity > 0.6)
+			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
+			// Bases at ten and scales with the number of Z levels fallen
+			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
+			var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
+			apply_damage(rand(0, damage), BRUTE, LIMB_HEAD)
+			apply_damage(rand(0, damage), BRUTE, LIMB_CHEST)
+			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_LEG)
+			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_LEG)
+			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
+			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
+			AdjustKnockdown(((3 * zs_fallen) * area.gravity))
+			updatehealth()
 	last_fall = 0
 	zs_fallen = 0
 
