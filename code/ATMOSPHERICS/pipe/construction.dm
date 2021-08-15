@@ -280,7 +280,7 @@ var/global/list/nlist = list( \
 	"thermoelectric cooler", \
 	"h/e pipe cap", \
 	"up pipe", \
-	"down pipe", \
+	"down pipe"
 )
 /obj/item/pipe/proc/update()
 
