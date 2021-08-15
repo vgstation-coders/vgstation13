@@ -40,6 +40,9 @@ What is the naming convention for planes or layers?
 	Make sure to use the name of your object before the _LAYER or _PLANE, eg: [NAME_OF_YOUR_OBJECT HERE]_LAYER or [NAME_OF_YOUR_OBJECT HERE]_PLANE
 	Also, as it's a define, it is standard practice to use capital letters for the variable so people know this.
 
+Why is FLOAT_PLANE added to a bunch of these?
+	So that it renders nicely when in vis_contents, such as below turfs in multi Z, though there are some bad exceptions like gas overlays, noted below.
+
 */
 
 
@@ -187,6 +190,8 @@ What is the naming convention for planes or layers?
 	#define SNOW_OVERLAY_LAYER			9
 	#define HORIZON_EXHAUST_LAYER		10
 	#define POINTER_LAYER 				11
+
+#define GAS_PLANE 				-4					// Gas overlays really hate being in anything except vis_contents when FLOAT_PLANE'D, don't ask
 
 #define GHOST_PLANE 			(-3 + FLOAT_PLANE)			// Ghosts show up under lighting, HUD etc.
 
