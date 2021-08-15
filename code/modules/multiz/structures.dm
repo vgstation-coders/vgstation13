@@ -126,6 +126,7 @@
 	name = "Stairs"
 	desc = "Stairs leading to another deck.  Not too useful if the gravity goes out."
 	icon = 'icons/obj/stairs.dmi'
+	icon_state = "stairs"
 	density = 0
 	opacity = 0
 	anchored = 1
@@ -177,3 +178,57 @@
 /obj/structure/stairs/west
 	dir = WEST
 	bound_width = 64
+
+/obj/structure/stairs_frame
+	name = "Stair frame"
+	desc = "Frames of stairs that are supposed to lead to another deck.  Not too useful in any case."
+	icon = 'icons/obj/stairs.dmi'
+	icon_state = "stairframe"
+	density = 0
+
+/obj/structure/stairs_frame/attackby(obj/item/W as obj, mob/user as mob)
+	if(W.is_wirecutter(user))
+		W.playtoolsound(src, 100)
+		user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
+		"<span class='notice'>You dissasemble \the [src].</span>")
+		new material(get_turf(src), 2)
+		qdel(src)
+	
+	if(W.is_wrench(user))	
+		user.visible_message("<span class='warning'>[user] [anchored ? "unanchors" : "anchors"] \the [src].</span>", \
+		"<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
+		add_hiddenprint(user)
+		add_fingerprint(user)
+		anchored = !anchored
+		update_icon()
+	
+	else if(istype(W, /obj/item/stack/sheet/metal))
+		var/obj/item/stack/sheet/metal/S = W
+		if(!anchored)
+			to_chat(user, "<span class='warning'>The [src] must be anchored first!.</span>")
+			return
+		else
+			if(S.amount < 2)
+				return ..() // ?
+			user.visible_message("<span class='notice'>[user] starts installing step plates to \the [src].</span>", \
+			"<span class='notice'>You start installing step plates to \the [src].</span>")
+			if(do_after(user, src, construction_length))
+				if(S.amount < 2) //User being tricky
+					return
+				S.use(2)
+				user.visible_message("<span class='notice'>[user] finishes installing step plates to \the [src].</span>", \
+				"<span class='notice'>You finish installing step plates to \the [src].</span>")
+				switch(dir)
+					if(NORTH)
+						var/obj/structure/stairs = new /obj/structure/stairs/north(loc)
+					if(EAST)
+						var/obj/structure/stairs = new /obj/structure/stairs/east(loc)
+					if(SOUTH)
+						var/obj/structure/stairs = new /obj/structure/stairs/south(loc)
+					if(WEST)
+						var/obj/structure/stairs = new /obj/structure/stairs/west(loc)
+				if(X)
+					X.add_hiddenprint(user)
+					X.add_fingerprint(user)
+				qdel(src)
+			return
