@@ -503,18 +503,6 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= PIPE_SIMPLE_BENT
 	pipe_type	= PIPE_BENT
 
-/datum/rcd_schematic/pipe/z_up
-	name		= "Up Pipe"
-
-	pipe_id		= PIPE_Z_UP
-	pipe_type	= PIPE_Z_UP_BINARY
-
-/datum/rcd_schematic/pipe/z_down
-	name		= "Down Pipe"
-
-	pipe_id		= PIPE_Z_DOWN
-	pipe_type	= PIPE_Z_DOWN_BINARY
-
 /datum/rcd_schematic/pipe/manifold
 	name		= "Manifold"
 

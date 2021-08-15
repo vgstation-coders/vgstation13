@@ -213,6 +213,18 @@ obj/machinery/atmospherics/pipe/zpipe/down/supply
 	//icon_connect_type = "-supply"
 	color = PIPE_COLOR_BLUE
 
+/datum/rcd_schematic/pipe/z_up
+	name		= "Up Pipe"
+
+	pipe_id		= PIPE_Z_UP
+	pipe_type	= PIPE_Z_UP_BINARY
+
+/datum/rcd_schematic/pipe/z_down
+	name		= "Down Pipe"
+
+	pipe_id		= PIPE_Z_DOWN
+	pipe_type	= PIPE_Z_DOWN_BINARY
+
 // Disposal Pipes
 
 ///// Z-Level stuff
