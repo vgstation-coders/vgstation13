@@ -455,7 +455,7 @@
 		else if(istype(hitting_atom,/obj/machinery/power/supermatter))
 			var/obj/machinery/power/supermatter/SM = hitting_atom
 			SM.Consume(src)
-		else if(istype(hitting_atom,/obj/machinery/))
+		else if(is_type_in_list(hitting_atom,list(/obj/machinery,/obj/structure)))
 			var/damage = ((3 * min(hitting_atom.zs_fallen,5)) * area.gravity)
 			if(hitting_atom.density)
 				damage *= 3
