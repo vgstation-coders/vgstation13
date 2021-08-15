@@ -354,6 +354,8 @@
 	var/area/area = get_area(src)	
 	if(area && area.gravity > 0.5)
 		visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
+	else
+		visible_message("\The [src] drops from above onto \the [hit_atom]!", "You hear something drop onto \the [hit_atom].")
 
 // Take damage from falling and hitting the ground
 /mob/living/carbon/human/fall_impact(var/turf/landing)
@@ -374,8 +376,12 @@
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_LEG)
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
-			AdjustKnockdown(((3 * zs_fallen) * area.gravity))
-			updatehealth()
+		AdjustKnockdown(((3 * zs_fallen) * area.gravity))
+		updatehealth()
+	else
+		visible_message("\The [src] drops from above and onto \the [landing].", \
+			"You fall off and land on the \the [landing].", \
+			"You hear something drop onto \the [landing].")
 	last_fall = 0
 	zs_fallen = 0
 
@@ -408,3 +414,5 @@
 	if(istype(hit_atom, /turf/simulated/floor))
 		var/turf/simulated/floor/ground = hit_atom
 		ground.break_tile()
+	last_fall = 0
+	zs_fallen = 0
