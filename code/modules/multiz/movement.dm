@@ -121,9 +121,6 @@
 ////////////////////////////
 
 
-
-//FALLING STUFF
-
 //Holds fall checks that should not be overriden by children
 /atom/movable/proc/fall()
 	if(!isturf(loc))
@@ -255,6 +252,9 @@
 		src.fall()
 	. = ..()
 
+/atom
+	var/last_fall = 0 // Zero if we were grounded, otherwise use world time delay stuff
+
 // Actually process the falling movement and impacts.
 /atom/movable/proc/handle_fall(var/turf/landing)
 	var/turf/oldloc = loc
@@ -267,6 +267,7 @@
 	// Supermatter dusting things falling on them
 	var/obj/machinery/power/supermatter/SM = locate(/obj/machinery/power/supermatter) in landing
 	if(SM)
+		forceMove(SM.loc)
 		SM.Consume(src)
 
 	// See if something in turf below prevents us from falling into it.
@@ -276,6 +277,13 @@
 	
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
 
+	// No gravity in space, apparently.
+	var/area/area = get_area(src)
+	if(!area.gravity || last_fall + (0.4 * area.gravity) > world.time) //Polaris uses a proc, has_gravity(), for this
+		return
+	
+	last_fall = world.time
+	
 	// Now lets move there!
 	if(!Move(landing))
 		return 1
@@ -318,10 +326,12 @@
 // If the falling atom will hit you hard, call fall_impact() and return its result.
 /atom/proc/CheckFall(var/atom/movable/falling_atom)
 	if(density && !(flags & ON_BORDER))
+		last_fall = 0
 		return falling_atom.fall_impact(src)
 
 // By default all turfs are gonna let you hit them regardless of density.
 /turf/CheckFall(var/atom/movable/falling_atom)
+	last_fall = 0
 	return falling_atom.fall_impact(src)
 
 // Obviously you can't really hit open space.
