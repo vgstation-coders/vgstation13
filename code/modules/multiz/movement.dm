@@ -281,10 +281,11 @@
 	if(!area.gravity)
 		return
 	// Now lets move there, with a gravity based delay!
-	sleep(2 / area.gravity)
-	if(!Move(landing))
-		return 1
-	
+	var/could_land = TRUE
+	spawn(2 / area.gravity)
+		if(!Move(landing))
+			could_land = FALSE
+		
 	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
 	// Detect if we made a silent landing.
 	if(down_stairs)
@@ -315,7 +316,7 @@
 
 	// If none of them stopped us, then hit the turf itself
 	landing.CheckFall(src)
-
+	return could_land
 
 // ## THE FALLING PROCS ###
 
