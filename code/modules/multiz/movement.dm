@@ -151,7 +151,7 @@
 		// or normal movement so other move behavior can continue.
 		var/mob/M = src
 		var/is_client_moving = (ismob(M) && M.client && M.client.moving)
-		spawn(0)
+		spawn(2 / area.gravity)
 			if(is_client_moving) M.client.moving = 1
 			handle_fall(below)
 			if(is_client_moving) M.client.moving = 0
@@ -276,15 +276,9 @@
 	
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
 
-	// Sanity checking once again to stop divide by zero
-	var/area/area = get_area(src)
-	if(!area.gravity)
-		return
-	// Now lets move there, with a gravity based delay!
-	var/could_land = TRUE
-	spawn(2 / area.gravity)
-		if(!Move(landing))
-			could_land = FALSE
+	// Now lets move there!
+	if(!Move(landing))
+		return 1
 		
 	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
 	// Detect if we made a silent landing.
@@ -316,7 +310,6 @@
 
 	// If none of them stopped us, then hit the turf itself
 	landing.CheckFall(src)
-	return could_land
 
 // ## THE FALLING PROCS ###
 
