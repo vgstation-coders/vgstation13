@@ -187,11 +187,25 @@
 		layer = 0
 		update_icon()
 
+/obj/effect/open_overlay/glass
+	name = "glass open overlay"
+	desc = "The window over the darkness of the abyss below"
+	icon = 'icons/turf/overlays.dmi'
+	icon_state = ""
+	layer = 0
+	plane = BASE_PLANE
+	
+/obj/effect/open_overlay/glass/damage
+	name = "glass open overlay cracks"
+	desc = "The dent in the window over the darkness of the abyss below"
+	icon = 'icons/obj/structures.dmi'
+
 /turf/simulated/floor/glass/update_icon()
 	..()
 	if(get_base_turf(src.z) == /turf/simulated/open)
 		var/alpha_to_subtract = 127
 		vis_contents.Cut()
+		overlays.Cut()
 		var/turf/bottom
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 			alpha_to_subtract /= 2
@@ -202,3 +216,14 @@
 		overimage.alpha = 255 - alpha_to_subtract
 		vis_contents += bottom
 		vis_contents.Add(overimage)
+		var/obj/effect/open_overlay/glass/overglass = new /obj/effect/open_overlay/glass
+		overglass.icon_state = glass_state
+		vis_contents.Add(overglass)
+		var/obj/effect/open_overlay/glass/overdamage = new /obj/effect/open_overlay/glass/damage
+		overdamage.icon_state = icon_state
+		vis_contents.Add(overdamage)
+		
+/turf/simulated/floor/glass/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	vis_contents.Cut()
+	overlays.Cut()
+	..()
