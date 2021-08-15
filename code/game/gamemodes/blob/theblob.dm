@@ -18,6 +18,7 @@ var/list/blob_overminds = list()
 	opacity = 0
 	anchored = 1
 	penetration_dampening = 17
+	mouse_opacity = 1
 	var/health = 20
 	var/maxhealth = 20
 	var/health_timestamp = 0

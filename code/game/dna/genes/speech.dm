@@ -104,7 +104,7 @@
 	addReplacement("shit","scat")
 	addReplacement("scratch","scritch")
 	addWordReplacement("(help|assist)\\smeow","kill meow") // help me(ow) -> kill meow
-	addReplacement("god",list("gosh","golly"))
+	addPickReplacement("god",list("gosh","golly"))
 	addPickReplacement("(ass|butt)", list("rump", "tush", "behind", "rear"))
 
 // LIZARDS-SS-S
@@ -234,7 +234,7 @@
 	addReplacement("\\b(shit|crap)","poo")
 	addReplacement("slut","tease")
 	addReplacement("ass","butt")
-	addWordReplacement("damn",list("darn","dang"))
+	addPickReplacement("damn",list("darn","dang"))
 	addReplacement("hell","heck")
 	addReplacement("fuck","gently caress")
 	addWordReplacement("\\b(penis|cunt|vagina)","privates")

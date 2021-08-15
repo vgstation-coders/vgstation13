@@ -432,18 +432,16 @@ obj/effect/bmode/buildholder/New()
 	switch(buildmode)
 		if(1)
 			if(istype(object,/turf) && pa.Find("left") && !pa.Find("alt") && !pa.Find("ctrl") )
-				if(istype(object,/turf/space))
-					var/turf/T = object
+				var/turf/T = object
+				if(istype(T,get_base_turf(T.z)))
 					T.ChangeTurf(/turf/simulated/floor)
 					log_admin("[key_name(usr)] made a floor at [formatJumpTo(T)]")
 					return
-				else if(istype(object,/turf/simulated/floor))
-					var/turf/T = object
+				else if(istype(T,/turf/simulated/floor))
 					T.ChangeTurf(/turf/simulated/wall)
 					log_admin("[key_name(usr)] made a wall at [formatJumpTo(T)]")
 					return
-				else if(istype(object,/turf/simulated/wall))
-					var/turf/T = object
+				else if(istype(T,/turf/simulated/wall))
 					T.ChangeTurf(/turf/simulated/wall/r_wall)
 					log_admin("[key_name(usr)] made an rwall at [formatJumpTo(T)]")
 					return
@@ -455,7 +453,7 @@ obj/effect/bmode/buildholder/New()
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
-					T.ChangeTurf(/turf/space)
+					T.ChangeTurf(get_base_turf(T.z))
 					log_admin("[key_name(usr)] removed flooring at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/wall/r_wall))

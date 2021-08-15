@@ -8,6 +8,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "glowshroomf"
 	layer = BELOW_TABLE_LAYER
+	mouse_opacity = 1
 	var/endurance = 30
 	var/potency = 30
 	var/delay = 1200

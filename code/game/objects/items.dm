@@ -1151,7 +1151,9 @@ var/global/list/image/blood_overlays = list()
 	I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
 	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 
-	blood_overlays[type] = image(I)
+	var/image/img = image(I)
+	img.name = "blood_overlay"
+	blood_overlays[type] = img
 
 /obj/item/apply_luminol()
 	if(!..())
