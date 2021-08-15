@@ -359,7 +359,7 @@
 	else
 		visible_message("\The [src] drops from above onto \the [hit_atom]!", "You hear something drop onto \the [hit_atom].")
 	for(var/atom/movable/AM in hit_atom.contents)
-		AM.fall_act(src,src.w_class)
+		AM.fall_act(src)
 	last_fall = 0
 	zs_fallen = 0
 
@@ -373,7 +373,7 @@
 			"You hear something slam into \the [landing].")
 		if(area.gravity > 0.667)
 			for(var/atom/movable/AM in hit_atom.contents)
-				AM.fall_act(src,src.w_class)
+				AM.fall_act(src)
 			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 			// Bases at ten and scales with the number of Z levels fallen
 			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
