@@ -377,7 +377,7 @@
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
 			log_debug("[src] has taken [src.getBruteLoss()] damage after falling [zs_fallen] z levels with a gravity of [area.gravity] Gs!")
-		AdjustKnockdown(((3 * zs_fallen) * area.gravity))
+		AdjustKnockdown(((3 * min(zs_fallen,10)) * area.gravity))
 		updatehealth()
 	else
 		visible_message("\The [src] drops from above and onto \the [landing].", \
@@ -405,13 +405,13 @@
 		if(occupant)
 			to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
 
-		if(area && area.gravity > 0.5)
+		if(area.gravity > 0.5)
 			// Anything on the same tile as the landing tile is gonna have a bad day.
 			for(var/mob/living/L in hit_atom.contents)
 				L.visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
 				var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
 				L.adjustBruteLoss(rand(3*damage, 5*damage))
-				L.AdjustKnockdown(((6 * zs_fallen) * area.gravity))
+				L.AdjustKnockdown(((6 * min(zs_fallen,10)) * area.gravity))
 
 			// Now to hurt the mech.
 			take_damage(rand(damage, 3*damage))
