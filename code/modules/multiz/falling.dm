@@ -107,6 +107,7 @@
 	zs_fallen = 0
 
 /obj/machinery/power/supermatter/fall_impact(var/atom/hit_atom)
+    ..()
     Consume(hit_atom)
 
 // Opposite of fall_impact, called when something is dropped on someone
