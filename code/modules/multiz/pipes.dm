@@ -130,14 +130,13 @@ obj/machinery/atmospherics/pipe/zpipe/up/initialize()
 				node1_dir = direction
 
 	node1 = findConnecting(node1_dir)
-	//warning("You forgot to come back and make zpipes check layer in initialization!")
 
 	var/turf/above = GetAbove(src)
 	if(above)
 		for(var/obj/machinery/atmospherics/target in above)
 			if(target.initialize_directions && istype(target, /obj/machinery/atmospherics/pipe/zpipe/down))
-				/*CHECK LAYER HERE*/
-				node2 = target
+				if(target.piping_layer == src.piping_layer || target.pipe_flags & ALL_LAYER)
+					node2 = target
 
 
 	var/turf/T = src.loc			// hide if turf is not intact
@@ -167,8 +166,8 @@ obj/machinery/atmospherics/pipe/zpipe/down/initialize()
 	if(below)
 		for(var/obj/machinery/atmospherics/target in below)
 			if(target.initialize_directions && istype(target, /obj/machinery/atmospherics/pipe/zpipe/up))
-				//Check layer
-				node2 = target
+				if(target.piping_layer == src.piping_layer || target.pipe_flags & ALL_LAYER)
+					node2 = target
 
 
 	var/turf/T = src.loc			// hide if turf is not intact
