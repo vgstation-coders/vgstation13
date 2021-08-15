@@ -3,7 +3,7 @@
 //
 
 //var/global/open_space_initialised = FALSE not necessary, we have initialized as a var
-/var/global/datum/subsystem/open_space/OS_controller = null
+/*/var/global/datum/subsystem/open_space/OS_controller = null
 /var/global/image/over_OS_darkness = image('icons/turf/open_space.dmi', "black_open")
 
 /datum/subsystem/open_space
@@ -16,7 +16,7 @@
 	var/list/turfs_to_process_old = null	// List of turfs currently being updated.
 	var/tmp/last_object //Polaris has this. Almost certainly used because their processing datums have automatic crash logging.
 
-/*
+
 /datum/controller/process/open_space/New()
 	//. = ..()
 	name = "openspace"
@@ -29,11 +29,11 @@
 
 	// Pre-process open space once once before the round starts. Wait 20 seconds so other stuff has time to finish.
 	spawn(200)
-		doWork(1)*/
+		doWork(1)
 
-/*/datum/controller/process/open_space/copyStateFrom(var/datum/controller/process/open_space/other)
+/datum/controller/process/open_space/copyStateFrom(var/datum/controller/process/open_space/other)
 	. = ..()
-	OS_controller = src*/
+	OS_controller = src
 
 /datum/subsystem/open_space/stat_entry(msg)
 	msg += "OS: [turfs_to_process.len]"
@@ -109,7 +109,7 @@
 			OS_controller.add_turf(T, 1)
 
 // Ouch... this is painful. But is there any other way?
-/* - No for now
+// - No for now
 /obj/New()
 	. = ..()
 	if(open_space_initialised && !invisibility)
@@ -117,7 +117,7 @@
 		if(isopenspace(T))
 			// log_debug("[T] ([T.x],[T.y],[T.z]) queued for update for [src]New()")
 			OS_controller.add_turf(T, 1)
-*/
+
 
 // Just as New() we probably should hook Destroy() If we can think of something more efficient, lets hear it.
 /obj/Destroy()
@@ -126,6 +126,7 @@
 		if(isopenspace(T))
 			OS_controller.add_turf(T, 1)
 	. = ..() // Important that this be at the bottom, or we will have been moved to nullspace.
+*/
 
 // Debug verbs.
 /client/proc/update_all_open_spaces()
