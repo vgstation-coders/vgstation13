@@ -406,10 +406,10 @@
 			to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
 
 		if(area.gravity > 0.5)
+			var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
 			// Anything on the same tile as the landing tile is gonna have a bad day.
 			for(var/mob/living/L in hit_atom.contents)
 				L.visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
-				var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
 				L.adjustBruteLoss(rand(3*damage, 5*damage))
 				L.AdjustKnockdown(((6 * min(zs_fallen,10)) * area.gravity))
 
