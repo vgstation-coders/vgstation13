@@ -276,18 +276,22 @@
 	for(var/atom/A in landing)
 		if(!A.CanPass(src, src.loc, 1, 0))
 			return FALSE
-	
+
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
 
 	// Repeating area get for gravity stuff
 	var/area/area = get_area(src)
-	if(!area.gravity || last_fall + (0.4 / area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+	if(!area.gravity)
 		return
-	
+	if(last_fall + (0.4 / area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+		spawn(4 / area.gravity) // spawn() for this amount of time because it's REALLY important or else there's extreme lag
+			fall() // Repeat the call
+		return
+
 	// Now lets move there!
 	if(!Move(landing))
 		return 1
-		
+
 	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
 	// Detect if we made a silent landing.
 	if(down_stairs)
@@ -351,7 +355,7 @@
 	last_fall = 0
 	zs_fallen = 0
 	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)	
+	var/area/area = get_area(src)
 	if(area && area.gravity > 0.5)
 		visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
 	else
@@ -360,7 +364,7 @@
 // Take damage from falling and hitting the ground
 /mob/living/carbon/human/fall_impact(var/turf/landing)
 	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)	
+	var/area/area = get_area(src)
 	if(area && area.gravity > 0.333)
 		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
@@ -399,7 +403,7 @@
 
 /obj/mecha/fall_impact(var/atom/hit_atom)
 	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)	
+	var/area/area = get_area(src)
 	if(area && area.gravity > 0.25)
 		// Tell the pilot that they just dropped down with a superheavy mecha.
 		if(occupant)
