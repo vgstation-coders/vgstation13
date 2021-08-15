@@ -718,7 +718,7 @@
 
 	var/area/A = loc
 	if(istype(A))
-		return A.has_gravity
+		return A.gravity
 
 	return 1
 

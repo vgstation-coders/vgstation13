@@ -38,7 +38,7 @@
 		return 0
 
 	var/area/area = get_area(src)
-	if(direction == UP && area.has_gravity)
+	if(direction == UP && area.gravity)
 		var/obj/structure/lattice/lattice = locate() in destination.contents
 		if(lattice)
 			var/pull_up_time = max(5 SECONDS + (src.movement_delay() * 10), 1)
@@ -139,7 +139,7 @@
 
 	// No gravity in space, apparently.
 	var/area/area = get_area(src)
-	if(!area.has_gravity) //Polaris uses a proc, has_gravity(), for this
+	if(!area.gravity) //Polaris uses a proc, has_gravity(), for this
 		return
 
 	/*if(throwing)  This was causing odd behavior where things wouldn't stop.
