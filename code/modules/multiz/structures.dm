@@ -146,10 +146,10 @@
 			var/turf/simulated/open/above = GetAbove(turf)
 			if(!above) // No spamming this message
 				if(world.time % 10)
-					to_chat(user, "<span class='warning'>There is nowhere above to go.</span>")
+					to_chat(A, "<span class='warning'>There is nowhere above to go.</span>")
 				return
 		// This is hackish but whatever.
-		var/turf/target = get_step(above, dir)
+		var/turf/target = get_step(GetAbove(), dir)
 		var/turf/source = A.loc
 		if(target.Enter(A, source))
 			A.loc = target
