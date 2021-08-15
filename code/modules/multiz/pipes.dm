@@ -129,11 +129,8 @@ obj/machinery/atmospherics/pipe/zpipe/up/initialize()
 			if (!node1_dir)
 				node1_dir = direction
 
-	for(var/obj/machinery/atmospherics/target in get_step(src,node1_dir))
-		if(target.initialize_directions & get_dir(target,src))
-			/*CHECK LAYER HERE*/
-			node1 = target
-		warning("You forgot to come back and make zpipes check layer in initialization!")
+	node1 = findConnecting(node1_dir)
+	//warning("You forgot to come back and make zpipes check layer in initialization!")
 
 	var/turf/above = GetAbove(src)
 	if(above)
@@ -164,10 +161,7 @@ obj/machinery/atmospherics/pipe/zpipe/down/initialize()
 			if (!node1_dir)
 				node1_dir = direction
 
-	for(var/obj/machinery/atmospherics/target in get_step(src,node1_dir))
-		if(target.initialize_directions & get_dir(target,src))
-			//Check layer
-			node1 = target
+	node1 = findConnecting(node1_dir)
 
 	var/turf/below = GetBelow(src)
 	if(below)
