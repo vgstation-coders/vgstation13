@@ -44,11 +44,11 @@ What is the naming convention for planes or layers?
 
 
 
-#define CLICKCATCHER_PLANE (-99 + FLOAT_PLANE)
-#define SPACE_BACKGROUND_PLANE (-98 + FLOAT_PLANE)
-#define SPACE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 1 + FLOAT_PLANE) // -97
-#define SPACE_DUST_PLANE (SPACE_PARALLAX_PLANE + 1 + FLOAT_PLANE) // -96
-#define ABOVE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 3 + FLOAT_PLANE) // -95
+#define CLICKCATCHER_PLANE -99
+#define SPACE_BACKGROUND_PLANE -98
+#define SPACE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 1) // -97
+#define SPACE_DUST_PLANE (SPACE_PARALLAX_PLANE + 1) // -96
+#define ABOVE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 3) // -95
 
 /*
 	from stddef.dm, planes & layers built into byond.
@@ -207,16 +207,16 @@ What is the naming convention for planes or layers?
 
 #define BASE_PLANE 				(0 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	(1 + FLOAT_PLANE)
+#define MISC_HUD_MARKERS_PLANE	1
 
-#define ANTAG_HUD_PLANE		 	(2 + FLOAT_PLANE)
+#define ANTAG_HUD_PLANE		 	2
 
-#define STATIC_PLANE 			(3 + FLOAT_PLANE)		// For AI's static.
+#define STATIC_PLANE 			3		// For AI's static.
 
 	#define STATIC_LAYER				1
 	#define REACTIVATE_CAMERA_LAYER		2
 
-#define FULLSCREEN_PLANE		(4 + FLOAT_PLANE)		// for fullscreen overlays that do not cover the hud.
+#define FULLSCREEN_PLANE		4		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 		0
 	#define DAMAGE_HUD_LAYER 			1
@@ -225,7 +225,7 @@ What is the naming convention for planes or layers?
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				(5 + FLOAT_PLANE)		// For the Head-Up Display
+#define HUD_PLANE 				5		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 			0
 	#define HUD_BASE_LAYER		 		1
@@ -237,7 +237,7 @@ What is the naming convention for planes or layers?
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
 
-#define ABOVE_HUD_PLANE 		(6 + FLOAT_PLANE)		// For being above the Head-Up Display
+#define ABOVE_HUD_PLANE 		6		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()
