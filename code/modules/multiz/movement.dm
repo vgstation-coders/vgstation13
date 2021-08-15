@@ -280,7 +280,7 @@
 
 	// Repeating area get for gravity stuff
 	var/area/area = get_area(src)
-	if(!area.gravity || last_fall + (0.4 / area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+	if(!area.gravity || last_fall + (0.4 * area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
 		return
 	
 	last_fall = world.time
