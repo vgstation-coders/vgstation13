@@ -518,7 +518,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "start"
 	requires_power = 0
 	dynamic_lighting = 0
-	has_gravity = 1
+	gravity = 1
 	flags = NO_PERSISTENCE //hmmm I wonder if someone can fuck with this
 
 // === end remove
