@@ -3,6 +3,7 @@
 //
 
 //var/global/open_space_initialised = FALSE not necessary, we have initialized as a var
+/*
 /var/global/datum/subsystem/open_space/OS_controller = null
 /var/global/image/over_OS_darkness = image('icons/turf/open_space.dmi', "black_open")
 
@@ -17,7 +18,7 @@
 	var/tmp/last_object //Polaris has this. Almost certainly used because their processing datums have automatic crash logging.
 
 
-/*/datum/controller/process/open_space/New()
+/datum/controller/process/open_space/New()
 	//. = ..()
 	name = "openspace"
 	schedule_interval = 0.1 SECONDS // every second
@@ -29,11 +30,11 @@
 
 	// Pre-process open space once once before the round starts. Wait 20 seconds so other stuff has time to finish.
 	spawn(200)
-		doWork(1)*/
+		doWork(1)
 
-/*/datum/controller/process/open_space/copyStateFrom(var/datum/controller/process/open_space/other)
+/datum/controller/process/open_space/copyStateFrom(var/datum/controller/process/open_space/other)
 	. = ..()
-	OS_controller = src*/
+	OS_controller = src
 
 /datum/subsystem/open_space/stat_entry(msg)
 	msg += "OS: [turfs_to_process.len]"
@@ -100,7 +101,7 @@
 			// log_debug("[T] ([T.x],[T.y],[T.z]) queued for update for [src].Exited([AM])")
 			OS_controller.add_turf(T, 1)
 
-/*
+
 /obj/update_icon()
 	. = ..()
 	if(OS_controller && OS_controller.initialized && !invisibility && isturf(loc))
@@ -133,12 +134,14 @@
 /client/proc/update_all_open_spaces()
 	set category = "Debug"
 	set name = "Update open spaces"
-	set desc = "On multi-z maps, force all open space turfs to update_icon"
+	set desc = "On multi-z maps, force all open space turfs to update_icon and make their items fall"
 
 	if (!holder)
 		return
 
 	for(var/turf/simulated/open/O in world)
 		O.update_icon()
+		for(var/atom/movable/A in O)
+			A.fall()
 
 	message_admins("Admin [key_name_admin(usr)] forced open spaces to update.")
