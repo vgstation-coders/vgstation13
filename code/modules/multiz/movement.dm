@@ -372,7 +372,7 @@
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
 			"You hear something slam into \the [landing].")
 		if(area.gravity > 0.667)
-			for(var/atom/movable/AM in hit_atom.contents)
+			for(var/atom/movable/AM in landing.contents)
 				AM.fall_act(src)
 			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 			// Bases at ten and scales with the number of Z levels fallen
@@ -417,6 +417,7 @@
 			var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
 			// Anything on the same tile as the landing tile is gonna have a bad day.
 			for(var/mob/living/L in hit_atom.contents)
+				visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
 				L.fall_act(src)
 
 			// Now to hurt the mech.
@@ -441,10 +442,9 @@
 	var/area/area = get_area(src)
 	if(area)
 		if(ismecha(hitting_atom))
-			visible_message("<span class='danger'>\The [hitting_atom] crushes \the [src] as it lands on them!</span>")
 			var/damage = ((10 * min(hitting_atom.zs_fallen,5)) * area.gravity)
 			adjustBruteLoss(rand(3*damage, 5*damage))
-			AdjustKnockdown(((6 * min(hitting_atom.zs_fallen,10)) * area.gravity))
+			AdjustKnockdown((6 * min(hitting_atom.zs_fallen,10)) * area.gravity)
 		else if isitem(hitting_atom)
 			var/obj/item/I = hitting_atom
 			var/damage = (((I.throwforce * min(hitting_atom.zs_fallen,5)) * area.gravity) * I.w_class)
