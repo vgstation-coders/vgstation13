@@ -276,40 +276,45 @@
 	
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
 
-	// Now lets move there!
-	if(!Move(landing))
-		return 1
-	
-	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
-	// Detect if we made a silent landing.
-	if(down_stairs)
-		if(src.dir == down_stairs.dir)
-			// This is hackish but whatever.
-			var/turf/target = get_step(GetBelow(src), down_stairs.dir)
-			var/turf/source = loc
-			if(target.Enter(src, source))
-				src.loc = target
-				target.Entered(src, source)
-				if(isliving(src))
-					var/mob/living/L = src
-					if(L.pulling)
-						L.pulling.forceMove(target)
-		return 1
-
-	if(isopenspace(oldloc))
-		oldloc.visible_message("\The [src] falls down through \the [oldloc]!", "You hear something falling through the air.")
-
-	// If the turf has density, we give it first dibs
-	if (landing.density && landing.CheckFall(src))
+	// Sanity checking once again to stop divide by zero
+	var/area/area = get_area(src)
+	if(!area.gravity)
 		return
+	// Now lets move there, with a gravity based delay!
+	spawn(2 / area.gravity)
+		if(!Move(landing))
+			return 1
+		
+		var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
+		// Detect if we made a silent landing.
+		if(down_stairs)
+			if(src.dir == down_stairs.dir)
+				// This is hackish but whatever.
+				var/turf/target = get_step(GetBelow(src), down_stairs.dir)
+				var/turf/source = loc
+				if(target.Enter(src, source))
+					src.loc = target
+					target.Entered(src, source)
+					if(isliving(src))
+						var/mob/living/L = src
+						if(L.pulling)
+							L.pulling.forceMove(target)
+			return 1
 
-	// First hit objects in the turf!
-	for(var/atom/movable/A in landing)
-		if(A != src && A.CheckFall(src))
+		if(isopenspace(oldloc))
+			oldloc.visible_message("\The [src] falls down through \the [oldloc]!", "You hear something falling through the air.")
+
+		// If the turf has density, we give it first dibs
+		if (landing.density && landing.CheckFall(src))
 			return
 
-	// If none of them stopped us, then hit the turf itself
-	landing.CheckFall(src)
+		// First hit objects in the turf!
+		for(var/atom/movable/A in landing)
+			if(A != src && A.CheckFall(src))
+				return
+
+		// If none of them stopped us, then hit the turf itself
+		landing.CheckFall(src)
 
 
 // ## THE FALLING PROCS ###
