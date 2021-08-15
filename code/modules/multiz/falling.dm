@@ -112,13 +112,13 @@
 
 // Opposite of fall_impact, called when something is dropped on someone
 /atom/movable/proc/fall_act(var/atom/hitting_atom)
+	return
+
+/mob/living/fall_act(var/atom/hitting_atom)
 	var/area/area = get_area(src)
 	var/gravity = 1
 	if(area)
 		gravity = area.gravity
-
-/mob/living/fall_act(var/atom/hitting_atom)
-	..()
 	if(ismecha(hitting_atom))
 		var/damage = ((10 * min(hitting_atom.zs_fallen,5)) * gravity)
 		adjustBruteLoss(rand(3*damage, 5*damage))
