@@ -284,9 +284,6 @@
 	if(!area.gravity || last_fall + (0.4 / area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
 		return
 	
-	last_fall = world.time
-	zs_fallen++
-
 	// Now lets move there!
 	if(!Move(landing))
 		return 1
@@ -309,6 +306,9 @@
 
 	if(isopenspace(oldloc))
 		oldloc.visible_message("\The [src] falls down through \the [oldloc]!", "You hear something falling through the air.")
+
+	last_fall = world.time
+	zs_fallen++
 
 	// If the turf has density, we give it first dibs
 	if (landing.density && landing.CheckFall(src))
@@ -376,6 +376,7 @@
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_LEG)
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
+			log_debug("[src] has taken [src.getBruteLoss()] damage after falling [zs_fallen] z levels with a gravity of [area.gravity] Gs!")
 		AdjustKnockdown(((3 * zs_fallen) * area.gravity))
 		updatehealth()
 	else
