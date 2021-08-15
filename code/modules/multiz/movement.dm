@@ -118,6 +118,13 @@
 /atom/proc/can_prevent_fall(var/atom/movable/mover, var/turf/coming_from)
 	return (!CanPass(mover, coming_from))
 
+/atom/proc/get_gravity()
+	var/area/A = get_area(src)
+	if(istype(A))
+		return A.gravity
+
+	return 1
+
 ////////////////////////////
 
 //FALLING STUFF

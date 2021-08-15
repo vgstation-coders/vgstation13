@@ -24,9 +24,7 @@
 
 // Called by CheckFall when we actually hit something.  Oof
 /atom/movable/proc/fall_impact(var/atom/hit_atom)
-	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)
-	if(area && area.gravity > 0.5)
+	if(get_gravity() > 0.5)
 		visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
 	else
 		visible_message("\The [src] drops from above onto \the [hit_atom]!", "You hear something drop onto \the [hit_atom].")
@@ -37,19 +35,18 @@
 
 // Take damage from falling and hitting the ground
 /mob/living/fall_impact(var/turf/landing)
-	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)
-	if(area && area.gravity > 0.333)
+	var/gravity = get_gravity()
+	if(gravity > 0.5)
 		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
 			"You hear something slam into \the [landing].")
-		if(area.gravity > 0.667)
+		if(gravity > 0.667)
 			for(var/atom/movable/AM in landing.contents)
 				AM.fall_act(src)
 			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 			// Bases at ten and scales with the number of Z levels fallen
 			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
-			var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
+			var/damage = ((10 * min(zs_fallen,5)) * gravity)
 			apply_damage(rand(0, damage), BRUTE, LIMB_HEAD)
 			apply_damage(rand(0, damage), BRUTE, LIMB_CHEST)
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_LEG)
@@ -57,7 +54,7 @@
 			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
 			log_debug("[src] has taken [src.getBruteLoss()] damage after falling [zs_fallen] z levels with a gravity of [area.gravity] Gs!")
-		AdjustKnockdown(((3 * min(zs_fallen,10)) * area.gravity))
+		AdjustKnockdown((3 * min(zs_fallen,10)) * gravity)
 		updatehealth()
 	else
 		visible_message("\The [src] drops from above and onto \the [landing].", \
@@ -78,15 +75,14 @@
 	return ..()
 
 /obj/mecha/fall_impact(var/atom/hit_atom)
-	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)
-	if(area && area.gravity > 0.25)
+	var/gravity = get_gravity()
+	if(gravity > 0.25)
 		// Tell the pilot that they just dropped down with a superheavy mecha.
 		if(occupant)
 			to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
 
-		if(area.gravity > 0.5)
-			var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
+		if(gravity > 0.5)
+			var/damage = ((10 * min(zs_fallen,5)) * gravity)
 			// Anything on the same tile as the landing tile is gonna have a bad day.
 			for(var/mob/living/L in hit_atom.contents)
 				visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
@@ -115,10 +111,7 @@
 	return
 
 /mob/living/fall_act(var/atom/hitting_atom)
-	var/area/area = get_area(src)
-	var/gravity = 1
-	if(area)
-		gravity = area.gravity
+	var/gravity = get_gravity()
 	if(ismecha(hitting_atom))
 		var/damage = ((10 * min(hitting_atom.zs_fallen,5)) * gravity)
 		adjustBruteLoss(rand(3*damage, 5*damage))
