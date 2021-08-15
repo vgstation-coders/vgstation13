@@ -363,11 +363,6 @@
 	last_fall = 0
 	zs_fallen = 0
 
-/obj/item/fall_impact(var/atom/hit_atom)
-	for(var/atom/movable/AM in hit_atom.contents)
-		AM.fall_act(src,src.w_class)
-	..()
-
 // Take damage from falling and hitting the ground
 /mob/living/fall_impact(var/turf/landing)
 	// Repeating area get for gravity stuff
