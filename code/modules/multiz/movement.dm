@@ -255,6 +255,7 @@
 
 /atom
 	var/last_fall = 0 // Zero if we were grounded, otherwise use world time delay stuff
+	var/zs_fallen = 0 // Gets reset if it hits something, for fall damage
 
 // Actually process the falling movement and impacts.
 /atom/movable/proc/handle_fall(var/turf/landing)
@@ -280,11 +281,12 @@
 
 	// Repeating area get for gravity stuff
 	var/area/area = get_area(src)
-	if(!area.gravity || last_fall + (0.4 * area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+	if(!area.gravity || last_fall + (0.4 / area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
 		return
 	
 	last_fall = world.time
-	
+	zs_fallen++
+
 	// Now lets move there!
 	if(!Move(landing))
 		return 1
@@ -327,12 +329,10 @@
 // If the falling atom will hit you hard, call fall_impact() and return its result.
 /atom/proc/CheckFall(var/atom/movable/falling_atom)
 	if(density && !(flags & ON_BORDER))
-		last_fall = 0
 		return falling_atom.fall_impact(src)
 
 // By default all turfs are gonna let you hit them regardless of density.
 /turf/CheckFall(var/atom/movable/falling_atom)
-	last_fall = 0
 	return falling_atom.fall_impact(src)
 
 // Obviously you can't really hit open space.
@@ -348,6 +348,8 @@
 
 // Called by CheckFall when we actually hit something.  Oof
 /atom/movable/proc/fall_impact(var/atom/hit_atom)
+	last_fall = 0
+	zs_fallen = 0
 	visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
 
 // Take damage from falling and hitting the ground
@@ -356,7 +358,11 @@
 		"<span class='danger'>You fall off and hit \the [landing]!</span>", \
 		"You hear something slam into \the [landing].")
 	playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
-	var/damage = 15 // Because wounds heal rather quickly, 15 should be enough to discourage jumping off but not be enough to ruin you, at least for the first time.
+	// Repeating area get for gravity stuff
+	var/area/area = get_area(src)
+	// Bases at ten and scales with the number of Z levels fallen
+	// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
+	var/damage = ((10 * zs_fallen) * area.gravity)
 	apply_damage(rand(0, damage), BRUTE, LIMB_HEAD)
 	apply_damage(rand(0, damage), BRUTE, LIMB_CHEST)
 	apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_LEG)
@@ -365,6 +371,8 @@
 	apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
 	AdjustKnockdown(4)
 	updatehealth()
+	last_fall = 0
+	zs_fallen = 0
 
 /obj/mecha/handle_fall(var/turf/landing)
 	// First things first, break any lattice
