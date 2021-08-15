@@ -191,7 +191,7 @@
 		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 		"<span class='notice'>You dissasemble \the [src].</span>")
-		new material(get_turf(src), 2)
+		new material(get_turf(src), 4)
 		qdel(src)
 	
 	if(W.is_wrench(user))	
@@ -208,12 +208,12 @@
 			to_chat(user, "<span class='warning'>The [src] must be anchored first!.</span>")
 			return
 		else
-			if(S.amount < 2)
+			if(S.amount < 4)
 				return ..() // ?
 			user.visible_message("<span class='notice'>[user] starts installing step plates to \the [src].</span>", \
 			"<span class='notice'>You start installing step plates to \the [src].</span>")
 			if(do_after(user, src, construction_length))
-				if(S.amount < 2) //User being tricky
+				if(S.amount < 4) //User being tricky
 					return
 				S.use(2)
 				user.visible_message("<span class='notice'>[user] finishes installing step plates to \the [src].</span>", \
