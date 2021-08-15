@@ -151,7 +151,7 @@
 		// or normal movement so other move behavior can continue.
 		var/mob/M = src
 		var/is_client_moving = (ismob(M) && M.client && M.client.moving)
-		spawn(2 / area.gravity)
+		spawn(0)
 			if(is_client_moving) M.client.moving = 1
 			handle_fall(below)
 			if(is_client_moving) M.client.moving = 0
