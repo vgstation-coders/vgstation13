@@ -34,7 +34,7 @@
 	interact(user)
 
 /obj/machinery/pipedispenser/interact(mob/user)
-	var/multi_z_dat = map.multiZ ? {"
+	var/multi_z_dat = map.multiz ? {"
 <b>Multi-floor pipes:</b>
 <ul>
 	<li><a href='?src=\ref[src];make=[PIPE_Z_UP];dir=1'>Up Pipe</a></li>
