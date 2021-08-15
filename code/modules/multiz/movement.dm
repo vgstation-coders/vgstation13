@@ -361,11 +361,11 @@
 /mob/living/carbon/human/fall_impact(var/turf/landing)
 	// Repeating area get for gravity stuff
 	var/area/area = get_area(src)	
-	if(area && area.gravity > 0.3)
+	if(area && area.gravity > 0.333)
 		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
 			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
 			"You hear something slam into \the [landing].")
-		if(area.gravity > 0.6)
+		if(area.gravity > 0.667)
 			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
 			// Bases at ten and scales with the number of Z levels fallen
 			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
@@ -398,22 +398,31 @@
 	return ..()
 
 /obj/mecha/fall_impact(var/atom/hit_atom)
-	// Tell the pilot that they just dropped down with a superheavy mecha.
-	if(occupant)
-		to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
+	// Repeating area get for gravity stuff
+	var/area/area = get_area(src)	
+	if(area && area.gravity > 0.25)
+		// Tell the pilot that they just dropped down with a superheavy mecha.
+		if(occupant)
+			to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
 
-	// Anything on the same tile as the landing tile is gonna have a bad day.
-	for(var/mob/living/L in hit_atom.contents)
-		L.visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
-		L.adjustBruteLoss(rand(70, 100))
-		L.AdjustKnockdown(8)
+		if(area && area.gravity > 0.5)
+			// Anything on the same tile as the landing tile is gonna have a bad day.
+			for(var/mob/living/L in hit_atom.contents)
+				L.visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
+				var/damage = ((10 * min(zs_fallen,5)) * area.gravity)
+				L.adjustBruteLoss(rand(3*damage, 5*damage))
+				L.AdjustKnockdown(((6 * zs_fallen) * area.gravity))
 
-	// Now to hurt the mech.
-	take_damage(rand(15, 30))
+			// Now to hurt the mech.
+			take_damage(rand(damage, 3*damage))
 
-	// And hurt the floor.
-	if(istype(hit_atom, /turf/simulated/floor))
-		var/turf/simulated/floor/ground = hit_atom
-		ground.break_tile()
+			// And hurt the floor.
+			if(istype(hit_atom, /turf/simulated/floor))
+				var/turf/simulated/floor/ground = hit_atom
+				ground.break_tile()
+	else
+		// Tell the pilot that they just plopped lightly onto the low-gravity ground with a superheavy mecha.
+		if(occupant)
+			to_chat(occupant, "<span class='warning'>\The [src] softly drops down onto \the [hit_atom]!</span>")
 	last_fall = 0
 	zs_fallen = 0
