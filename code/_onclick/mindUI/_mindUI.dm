@@ -133,7 +133,7 @@ var/list/mind_ui_ID2type = list()
 		if (!M.client)
 			return
 
-		if (!Valid() || !display_with_parent)
+		if (!Valid() || !display_with_parent) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
 			Hide()
 
 		for (var/obj/abstract/mind_ui_element/element in elements)
