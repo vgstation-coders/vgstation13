@@ -285,6 +285,9 @@ var/list/mind_ui_ID2type = list()
 	var/moving = FALSE
 	var/icon/movement
 
+/obj/abstract/mind_ui_element/hoverable/movable/AltClick(mob/user) // Alt+Click defaults to reset the offset
+	ResetLoc()
+
 /obj/abstract/mind_ui_element/hoverable/movable/MouseDown(location, control, params)
 	if (!movement)
 		var/icon/I = new(icon, icon_state)
@@ -367,11 +370,20 @@ var/list/mind_ui_ID2type = list()
 
 	//and calculate the offset between the two, which we can then add to either the element or the whole UI
 	if (move_whole_ui)
-		var/datum/mind_ui/P = parent
-		P.offset_x += dest_x_val - start_x_val
-		P.offset_y += dest_y_val - start_y_val
-		P.UpdateUIScreenLoc()
+		parent.offset_x += dest_x_val - start_x_val
+		parent.offset_y += dest_y_val - start_y_val
+		parent.UpdateUIScreenLoc()
 	else
 		offset_x += dest_x_val - start_x_val
 		offset_y += dest_y_val - start_y_val
+		UpdateUIScreenLoc()
+
+/obj/abstract/mind_ui_element/hoverable/movable/proc/ResetLoc()
+	if (move_whole_ui)
+		parent.offset_x = 0
+		parent.offset_y = 0
+		parent.UpdateUIScreenLoc()
+	else
+		offset_x = initial(offset_x)
+		offset_y = initial(offset_y)
 		UpdateUIScreenLoc()
