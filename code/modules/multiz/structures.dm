@@ -142,14 +142,11 @@
 
 /obj/structure/stairs/Uncross(atom/movable/A)
 	if(A.dir == dir)
-		for(var/turf/turf in locs)
-			var/turf/simulated/open/above = GetAbove(turf)
-			if(!above) // No spamming this message
-				if(world.time % 10)
-					to_chat(A, "<span class='warning'>There is nowhere above to go.</span>")
-				return
-		// This is hackish but whatever.
-		var/turf/target = get_step(GetAbove(), dir)
+		var/turf/simulated/open/above = GetAbove(A)
+		if(!above || !istype(above))
+			return
+		// This is hackish, but if we use normal forceMove() it ignores things on the turf above and in front in the way.
+		var/turf/target = get_step(above, dir)
 		var/turf/source = A.loc
 		if(target.Enter(A, source))
 			A.loc = target
@@ -206,7 +203,6 @@
 		add_hiddenprint(user)
 		add_fingerprint(user)
 		anchored = !anchored
-		update_icon()
 	
 	else if(istype(W, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
