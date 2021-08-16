@@ -9,9 +9,9 @@
 	req_admin_notify = 1
 	access = list() 			//See get_access()
 	minimal_access = list() 	//See get_access()
+    alt_titles = list("Judge")					
 	minimal_player_age = 30
 	species_whitelist = list("Human")
-
 	outfit_datum = /datum/outfit/captain
 
 /datum/job/captain/get_access()
@@ -48,5 +48,6 @@
 			            access_crematorium, access_kitchen, access_cargo, access_cargo_bot, access_mailsorting, access_qm, access_hydroponics, access_lawyer,
 			            access_theatre, access_chapel_office, access_library, access_science, access_mining, access_heads_vault, access_mining_station,
 			            access_clown, access_mime, access_hop, access_RC_announce, access_keycard_auth, access_gateway)
+	alt_titles = list("Judge")					
 
 	outfit_datum = /datum/outfit/hop
