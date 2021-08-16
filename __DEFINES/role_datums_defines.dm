@@ -29,6 +29,7 @@
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
 #define GREYTIDE_FAC "Greytide mindlink"
 #define WIZARD_CONTRACT "wizard contract"
+#define TIMEAGENCY "time agency"
 // Role IDs
 #define TRAITOR "traitor"
 #define CHALLENGER "challenger"
@@ -67,6 +68,8 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
+#define TIMEAGENT "time agent"
+#define TIMEAGENTTWIN "time agent twin"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define GIANTSPIDER "giant spider"
