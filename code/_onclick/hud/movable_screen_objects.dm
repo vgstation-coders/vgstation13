@@ -64,7 +64,7 @@
 	else
 		. = world.view
 
-/obj/abstract/proc/encode_screen_X(X)
+/obj/abstract/screen/movable/proc/encode_screen_X(X)
 	var/view = get_view_size()
 	if(X > view+1)
 		. = "EAST-[view*2 + 1-X]"
@@ -73,7 +73,7 @@
 	else
 		. = "CENTER"
 
-/obj/abstract/proc/decode_screen_X(X)
+/obj/abstract/screen/movable/proc/decode_screen_X(X)
 	//Find EAST/WEST implementations
 	var/view = get_view_size()
 	if(findtext(X,"EAST-"))
@@ -89,7 +89,7 @@
 	else if(findtext(X,"CENTER"))
 		. = view+1
 
-/obj/abstract/proc/encode_screen_Y(Y)
+/obj/abstract/screen/movable/proc/encode_screen_Y(Y)
 	var/view = get_view_size()
 	if(Y > view+1)
 		. = "NORTH-[view*2 + 1-Y]"
@@ -98,7 +98,7 @@
 	else
 		. = "CENTER"
 
-/obj/abstract/proc/decode_screen_Y(Y)
+/obj/abstract/screen/movable/proc/decode_screen_Y(Y)
 	var/view = get_view_size()
 	if(findtext(Y,"NORTH-"))
 		var/num = text2num(copytext(Y,7)) //Trim NORTH-
