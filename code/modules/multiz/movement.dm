@@ -287,11 +287,11 @@
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
 
 	// Repeating area get for gravity stuff
-	var/area/area = get_area(src)
-	if(!area.gravity)
+	var/gravity = get_gravity()
+	if(!gravity)
 		return
-	if(last_fall + (0.4 / area.gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
-		spawn(4 / area.gravity) // spawn() for this amount of time because it's REALLY important or else there's extreme lag
+	if(last_fall + (0.4 / gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+		spawn(4 / gravity) // spawn() for this amount of time because it's REALLY important or else there's extreme lag
 			fall() // Repeat the call
 		return
 

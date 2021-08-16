@@ -40,7 +40,7 @@
 
 /turf/simulated/open/Entered(var/atom/movable/mover)
 	..()
-	spawn(4 / area.gravity) // Delay for gravity to kick in
+	spawn(4 / get_gravity()) // Delay for gravity to kick in
 		fall()
 
 /turf/simulated/open/proc/update()
