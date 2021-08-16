@@ -140,7 +140,7 @@ proc/process_adminbus_teleport_locs()
 			adminbusteleportlocs += AR.name
 			adminbusteleportlocs[AR.name] = AR
 
-	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
+	sortTim(adminbusteleportlocs, /proc/cmp_text_asc)
 
 
 /*-----------------------------------------------------------------------------*/
