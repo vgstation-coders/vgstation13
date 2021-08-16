@@ -54,7 +54,7 @@
 			return 0
 
 	for(var/atom/A in destination)
-		if(!A.CanPass(src, start, 1.5, 0))
+		if(!A.Cross(src, start, 1.5, 0))
 			to_chat(src, "<span class='warning'>\The [A] blocks you.</span>")
 			return 0
 	if(!Move(destination))
@@ -116,7 +116,7 @@
 
 //If atom stands under open space, it can prevent fall, or not
 /atom/proc/can_prevent_fall(var/atom/movable/mover, var/turf/coming_from)
-	return (!CanPass(mover, coming_from))
+	return (!Cross(mover, coming_from))
 
 /atom/proc/get_gravity()
 	var/area/A = get_area(src)
@@ -281,7 +281,7 @@
 
 	// See if something in turf below prevents us from falling into it.
 	for(var/atom/A in landing)
-		if(!A.CanPass(src, src.loc, 1, 0))
+		if(!A.Cross(src, src.loc, 1, 0))
 			return FALSE
 
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
