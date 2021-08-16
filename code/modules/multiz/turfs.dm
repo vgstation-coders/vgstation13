@@ -40,7 +40,8 @@
 
 /turf/simulated/open/Entered(var/atom/movable/mover)
 	..()
-	mover.fall()
+	spawn(4 / area.gravity) // Delay for gravity to kick in
+		fall()
 
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
@@ -85,7 +86,7 @@
 	name = "open overlay"
 	desc = "The darkness of the abyss below"
 	icon = 'icons/effects/32x32.dmi'
-	icon_state = "black"
+	icon_state = "white"
 	layer = ABOVE_LIGHTING_LAYER
 	plane = ABOVE_LIGHTING_PLANE
 	
@@ -101,6 +102,7 @@
 		return
 	var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
 	overimage.alpha = 255 - alpha_to_subtract
+	overimage.color = rgb(0,0,0,overimage.alpha)
 	vis_contents += bottom
 	if(!istype(bottom,/turf/space)) // Space below us
 		vis_contents.Add(overimage)
