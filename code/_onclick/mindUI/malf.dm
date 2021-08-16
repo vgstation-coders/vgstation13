@@ -28,11 +28,6 @@
 	display_with_parent = TRUE
    	
 
-/datum/mind_ui/malf_top_panel/SpawnElements()
-	var/obj/abstract/mind_ui_element/hoverable/malf_power/test/E =  new /obj/abstract/mind_ui_element/hoverable/malf_power/test(null, src)
-	elements += E
-	E.UpdateUIScreenLoc()
-
 /datum/mind_ui/malf_top_panel/proc/SortPowers()
 	var/space_size = 40		//32 px icon, 8 px spacer
 	var/new_offset = (space_size * Floor(elements.len / 2, 1))*-1
@@ -44,55 +39,37 @@
 		new_offset += space_size
 
 /obj/abstract/mind_ui_element/hoverable/malf_power
-	name = "MALF AI POWER"
-	icon = 'icons/ui/malf/32x32.dmi'
+	name = "BROKEN POWER"
+	icon = 'icons/ui/malf/32x48.dmi'
 	layer = MIND_UI_BUTTON
-	var/required_power 
+	var/datum/malf_module/active/module
 	var/initial_name
 
-/obj/abstract/mind_ui_element/hoverable/malf_power/New()
+/obj/abstract/mind_ui_element/hoverable/malf_power/New(turf/loc, var/datum/mind_ui/P, var/datum/malf_module/M)
 	..()
+	icon_state = M.icon_state
+	base_icon_state = M.icon_state
+	name = M.name
+	module = M
 	initial_name = name
 
 /obj/abstract/mind_ui_element/hoverable/malf_power/Click()
-	var/mob/living/silicon/ai/A = GetUser()
-	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
-	if(!istype(A) || !istype(M))
-		return FALSE
-	if(M.processing_power >= required_power)
-		M.add_power(-required_power)
-		return TRUE
-	return TRUE
+	module.activate()
 
 /obj/abstract/mind_ui_element/hoverable/malf_power/UpdateIcon()
 	var/mob/living/silicon/ai/A = GetUser()
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return
-	if (M.processing_power >= required_power)
+	if (M.processing_power >= module.activate_cost)
 		color = null
 	else
 		color = grayscale
-	name = "[initial_name] (cost = [required_power] points)"
+	name = "[initial_name] (cost = [module.activate_cost] points)"
 
 /obj/abstract/mind_ui_element/hoverable/malf_power/StartHovering()
 	if (color == null)
 		..()
-
-/obj/abstract/mind_ui_element/hoverable/malf_power/test
-	base_icon_state = "placeholder"
-	icon_state = "placeholder"
-	required_power = 10
-
-/obj/abstract/mind_ui_element/hoverable/malf_power/test/Click()
-	if(!..())
-		return
-	var/obj/abstract/mind_ui_element/hoverable/malf_power/test/E = new /obj/abstract/mind_ui_element/hoverable/malf_power/test/(null, parent)
-	parent.elements += E
-	var/datum/mind_ui/malf_top_panel/M = parent
-	M.SortPowers()
-	parent.SendToClient()
-	parent.Display()
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -189,13 +166,25 @@
 	icon = 'icons/ui/malf/22x64.dmi'
 	icon_state = "techtab"
 	layer = MIND_UI_BACK
+	offset_y = -88
 	var/opened = FALSE
 
 
 /obj/abstract/mind_ui_element/hoverable/malf_tech_tab/Click()
 	var/datum/mind_ui/malf_tech_window/techtree = locate() in parent.subUIs
 	if(techtree)
-		opened ? techtree.Hide() : techtree.Display()
+		if(opened)
+			icon_state = "techtab"
+			base_icon_state = "techtab"
+			offset_x = 0 
+			UpdateUIScreenLoc()
+			techtree.Hide()
+		else
+			icon_state = "techtabopena"
+			base_icon_state = "techtabopen"
+			offset_x = -256
+			UpdateUIScreenLoc()
+			techtree.Display()		
 		opened = !opened
 		
 	
@@ -221,7 +210,6 @@
 	name = "Tech Window Background"
 	icon = 'icons/ui/malf/256x256.dmi'
 	icon_state = "background"
-	offset_x = -112
 	offset_y = -112
 	layer = MIND_UI_BACK
 

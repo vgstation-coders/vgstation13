@@ -16,10 +16,12 @@
 	var/choice
 	var/next_page = FALSE
 	var/tooltip_desc
+	var/locked = FALSE
 
 /obj/screen/radial/slice/MouseEntered(location, control, params)
 	. = ..()
-	icon_state = "radial_slice_focus"
+	if(!locked)
+		icon_state = "radial_slice_focus"
 	if(tooltip_desc)
 		openToolTip(usr,src,params,title = src.name,content = tooltip_desc,theme = parent.tooltip_theme)
 
@@ -29,7 +31,7 @@
 	closeToolTip(usr)
 
 /obj/screen/radial/slice/Click(location, control, params)
-	if (!parent)//we're not ready yet
+	if (!parent || locked)
 		return
 	if(usr.client == parent.current_user)
 		if(next_page)
@@ -39,6 +41,14 @@
 				parent.unclog()
 			else
 				parent.element_chosen(choice,usr)
+
+/obj/screen/radial/slice/proc/Unlock()
+	locked = FALSE
+	color = null
+
+/obj/screen/radial/slice/proc/Lock()
+	locked = TRUE
+	color = grayscale
 
 /obj/screen/radial/center
 	name = "Close Menu"
@@ -59,6 +69,7 @@
 	var/list/choices = list() //List of choice id's
 	var/list/choices_icons = list() //choice_id -> icon
 	var/list/choices_values = list() //choice_id -> choice
+	var/list/choices_locked = list() //choice_id -> choice locked
 	var/list/choices_tooltips = list() //choice_id -> tooltip
 	var/list/page_data = list() //list of choices per page
 
@@ -106,7 +117,8 @@
 	if(min_angle)
 		src.min_angle = min_angle
 
-	current_user.radial_menus += anchor
+	current_user.radial_menu_anchors += anchor
+	current_user.radial_menus += src
 
 	close_button = new
 	close_button.parent = src
@@ -246,6 +258,8 @@
 			push(E.overlays,choices_icons[choice_id])
 		if(choices_tooltips[choice_id])
 			E.tooltip_desc = choices_tooltips[choice_id]
+		if(choices_locked[choice_id] == TRUE)
+			E.Lock()
 
 /datum/radial_menu/proc/Reset()
 	choices.Cut()
@@ -291,6 +305,10 @@
 		if(E.len > 3) // Radial's replacement for the actual name. Currently only used for talismans.
 			choice_name = E[4]
 			choices_values[id] = choice_name
+
+		if(E.len > 4) // is the choice locked or not
+			var/choice_locked = E[5]
+			choices_locked[id] = choice_locked
 
 	setup_menu()
 
@@ -354,7 +372,7 @@
 
 /datum/radial_menu/proc/finish()
 	finished = TRUE
-	current_user.radial_menus -= anchor
+	current_user.radial_menu_anchors -= anchor
 	qdel(src)
 
 //////////////////
@@ -397,13 +415,18 @@
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/recursive = FALSE)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/recursive = FALSE, var/close_other_menus)
 	if(!user || !anchor || !length(choices))
 		return
 
 	var/client/current_user = user.client
-	if(anchor in current_user.radial_menus)
+
+	if(anchor in current_user.radial_menu_anchors)
 		return
+
+	if(close_other_menus)	
+		for(var/datum/radial_menu/R in current_user.radial_menus)
+			R.finish()
 
 	var/menu_type = choose_radial_menu_type_for_anchor(anchor)
 

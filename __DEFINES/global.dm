@@ -417,7 +417,7 @@ var/cyborg_detonation_time = 0
 
 
 //Radial menus currently existing in the world.
-var/global/list/radial_menus = list()
+var/global/list/radial_menu_anchors = list()
 
 // Copying atoms is stupid and this is a stupid solution
 var/list/variables_not_to_be_copied = list(

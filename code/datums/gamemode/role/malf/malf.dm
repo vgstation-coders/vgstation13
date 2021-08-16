@@ -10,6 +10,10 @@
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 50
 	var/max_processing_power = 200
+	var/list/purchased_modules = list()				//modules (upgrades) purchased
+
+	//fuck radials
+	var/list/ability_name_to_price = list()
 
 /datum/role/malfAI/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -23,6 +27,15 @@
 		laws.malfunction()
 		malfAI.show_laws()
 		malfAI.DisplayUI("Malf")
+
+		new /datum/malf_module/active/coreshield(antag.current)
+
+		var/list/abilities = subtypesof(/datum/malfhack_ability)
+		
+		for(var/A in abilities)
+			var/datum/malfhack_ability/M = new A
+			ability_name_to_price[M.name] = M.cost
+			qdel(M)
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
 			faction.HandleRecruitedMind(R.mind)
@@ -45,11 +58,19 @@ Once done, you will be able to interface with all systems, notably the onboard n
 /datum/role/malfAI/proc/add_power(var/amount)
 	processing_power = clamp(amount + processing_power, 0, max_processing_power)
 	antag.DisplayUI("Malf")
+	update_radial_locks()
 
-
-
-
-
+//Update lock/unlock status for any open radial menus
+/datum/role/malfAI/proc/update_radial_locks()
+	var/list/open_radials = antag.current.client.radial_menus
+	for(var/datum/radial_menu/menu in open_radials)
+		for(var/obj/screen/radial/slice/S in menu.elements)
+			if(!istype(S))
+				continue
+			if(processing_power >= ability_name_to_price[S.name])
+				S.Unlock()
+			else
+				S.Lock()
 
 
 ////////////////////////////////////////////////

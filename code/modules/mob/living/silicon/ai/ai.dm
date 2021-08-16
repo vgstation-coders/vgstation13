@@ -536,8 +536,16 @@ var/list/ai_list = list()
 	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
-	if((ai_flags & COREFORTIFY) && Proj.damage_type == BURN)
-		return PROJECTILE_COLLISION_DEFAULT // Does nothing
+	if((ai_flags & COREFORTIFY) && istype(Proj, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/P = Proj
+//		P.damage = P.damage / 2
+//		P.rebound(src)
+//		visible_message("<span class='danger'>\The [P] gets reflected by \the [src]'s firewall!</span>")
+		visible_message("<span class='danger'>\The [P] is blocked by \the [src]'s firewall!</span>")
+		anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE)
+		playsound(src, 'sound/items/metal_impact.ogg', 25)
+//		return PROJECTILE_COLLISION_REBOUND
+		return PROJECTILE_COLLISION_BLOCKED
 	..(Proj)
 	updatehealth()
 	return PROJECTILE_COLLISION_DEFAULT

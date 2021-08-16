@@ -203,6 +203,8 @@ Class Procs:
 */
 	component_parts = null
 
+	qdel(hack_overlay)
+
 	..()
 
 /obj/machinery/projectile_check()
@@ -213,6 +215,7 @@ Class Procs:
 	return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
+	malf_disrupt(MALF_DISRUPT_TIME)
 	if(use_power && stat == 0)
 		use_power(7500/severity)
 
@@ -421,6 +424,8 @@ Class Procs:
 		if(user.client && user.client.eye == user)
 			return attack_hand(user)
 	else
+		if(stat & NOAICONTROL)
+			return
 		return attack_hand(user)
 
 /obj/machinery/attack_ghost(mob/user as mob)

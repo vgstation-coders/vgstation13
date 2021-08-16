@@ -27,6 +27,12 @@
 	var/atom/movable/cur_target
 	var/targeting_active = 0
 
+	hack_abilities = list(
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/oneuse/turret_upgrade,
+		/datum/malfhack_ability/oneuse/turret_pulse
+	)
+
 
 /obj/machinery/turret/New()
 //	targets = new
@@ -51,12 +57,16 @@
 	if(stat & BROKEN)
 		icon_state = "grey_target_prism"
 	else
-		if( powered() )
-			if (src.enabled)
+		if( powered() )	
+			if (src.enabled && !(stat & FORCEDISABLE))
 				if(istype(installed,/obj/item/weapon/gun/energy/gun))
 					var/obj/item/weapon/gun/energy/gun/EG = installed
 					if(EG.mode == 1)
 						icon_state = "orange_target_prism"
+					else
+						icon_state = "target_prism"
+				else if(istype(installed,/obj/item/weapon/gun/energy/pulse_rifle/destroyer))
+					icon_state = "blue_target_prism"
 				else
 					icon_state = "target_prism"
 			else
@@ -378,7 +388,7 @@
 	return
 
 /obj/machinery/turretid/attackby(obj/item/weapon/W, mob/user)
-	if(stat & BROKEN)
+	if(stat & (BROKEN|FORCEDISABLE))
 		return
 	if(issilicon(user))
 		return attack_hand(user)
@@ -499,7 +509,9 @@
 	update_icons()
 
 /obj/machinery/turretid/proc/update_icons()
-	if(enabled && !emagged) //Emagged turret controls are always disguised as disabled
+	if(stat & (BROKEN|FORCEDISABLE))
+		icon_state = "turretid_off"
+	else if(enabled && !emagged) //Emagged turret controls are always disguised as disabled
 		if(lethal)
 			icon_state = "turretid_lethal"
 		else
@@ -688,3 +700,9 @@
 /obj/machinery/turret/centcomm/update_gun()
 	if(!installed)
 		installed = new /obj/item/weapon/gun/energy/laser/cannon(src)
+
+/obj/machinery/turretcover/hack_interact(var/mob/living/silicon/ai/malf)
+	host.hack_interact(malf)
+
+/obj/machinery/turretcover/malf_disrupt(var/duration, var/bypassafter = FALSE)
+	return

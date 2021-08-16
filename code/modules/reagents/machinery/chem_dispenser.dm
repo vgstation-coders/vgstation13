@@ -45,6 +45,10 @@
 		TUNGSTEN
 		)
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	hack_abilities = list(
+		/datum/malfhack_ability/dump_dispenser_energy,
+		/datum/malfhack_ability/toggle/disable
+	)
 
 /*
 USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY

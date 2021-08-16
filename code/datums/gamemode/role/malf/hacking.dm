@@ -1,10 +1,15 @@
 #define MACHINE_HACK_TIME 5 SECONDS
 #define APC_HACK_TIME 7 SECONDS
+#define MALF_DISRUPT_TIME 10 SECONDS
 
 /obj/machinery
-	var/list/malf_owners = list()
+	var/obj/effect/hack_overlay/hack_overlay
+	var/mob/living/silicon/ai/malf_owner
+	var/malf_hack_time = MACHINE_HACK_TIME
+	var/malf_disrupted = FALSE
+	var/aicontrolbypass = FALSE
 	var/hack_abilities = list(
-		/datum/malfhack_ability/disable
+		/datum/malfhack_ability/toggle/disable
 	)
 
 /obj/machinery/proc/initialize_malfhack_abilities()
@@ -18,6 +23,13 @@
 	if(istype(A))
 		hack_interact(user)
 
+/obj/machinery/proc/disable_AI_control()
+	if(aicontrolbypass)
+		return
+	else
+		stat |= NOAICONTROL
+		if(malf_owner)
+			malf_disrupt(MALF_DISRUPT_TIME, TRUE)
 
 /obj/effect/hack_overlay
 	name = "hax particles"
@@ -36,81 +48,109 @@
 	particleimg.layer = UNDER_HUD_LAYER
 	particleimg.appearance_flags = RESET_COLOR|RESET_ALPHA
 	machine.vis_contents += src
+	machine.hack_overlay = src
 	malf.client.images |= particleimg
 
 /obj/effect/hack_overlay/proc/set_icon(var/newstate)
 	particleimg.icon_state = newstate
-
-/datum/malfhack_ability
-	var/name = "HACK"						//ability name (must be unique)
-	var/desc = "This does something."	//ability description
-	var/icon = "radial_off"				//icon to display in the radial
-	var/icon_toggled = "radial_on"
-	
-	var/toggled = FALSE		
-
-	var/obj/machinery/machine 
-
-/datum/malfhack_ability/New(var/obj/machinery/M)
-	machine = M
-
-/datum/malfhack_ability/proc/activate()
-	return
 
 /obj/machinery/proc/hack_interact(var/mob/living/silicon/ai/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))		
 		return
 	if(!(stat & (BROKEN|NOPOWER)))
-		if(malf in malf_owners)
-			hack_radial(malf) 
+		if(malf == malf_owner)
+			if(!malf_disrupted)
+				hack_radial(malf) 
 		else
 			take_control(malf)
 
 
+/obj/machinery/proc/malf_disrupt(var/duration, var/bypassafter = FALSE)
+	if(malf_disrupted || !malf_owner)
+		return
+	hack_overlay.set_icon("disrupted")
+	malf_disrupted = TRUE
+	spawn(duration)
+		if(bypassafter)
+			aicontrolbypass = TRUE
+			stat &= ~NOAICONTROL
+		malf_disrupted = FALSE
+		set_hack_overlay_icon("hacked")
+
 /obj/machinery/proc/take_control(var/mob/living/silicon/ai/malf)
+	if(!malfhack_valid(malf))
+		return
+	if(!start_malfhack(malf))
+		to_chat(malf, "<span class='warning'>An unexpected error occured.</span>")
+		return
+	sleep(malf_hack_time)
+	set_malf_owner(malf)
+	if(stat & NOAICONTROL)	//ai control wire was cut before hack could complete
+		malf_disrupt(MALF_DISRUPT_TIME, TRUE)
+	else
+		set_hack_overlay_icon("hacked")
+
+/obj/machinery/proc/malfhack_valid(var/mob/living/silicon/ai/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))		
-		return
+		to_chat(malf, "<span class='warning'>You are not a malfunctioning AI.</span>")
+		return FALSE
 	if(src in M.currently_hacking_machines)
 		to_chat(malf, "<span class='warning'>You are already taking control of the [src].</span>")
-		return
-//	if(M.currently_hacking_machines.len >= M.apcs.len)
-//		to_chat(malf, "<span class='warning'>You cannot hack any more machines at this time. Hack more APCs to increase your limit.</span>")
-//		return
-	M.currently_hacking_machines += src
-	var/obj/effect/hack_overlay/overlay = new /obj/effect/hack_overlay(null, malf, src)
-	sleep(MACHINE_HACK_TIME)
-	overlay.set_icon("hacked")
-	M.currently_hacking_machines -= src
-	malf_owners += malf
+		return FALSE
+	if(M.currently_hacking_machines.len >= M.apcs.len)
+		to_chat(malf, "<span class='warning'>You cannot hack any more machines at this time. Hack more APCs to increase your limit.</span>")
+		return FALSE
+	return TRUE
 
+/obj/machinery/proc/start_malfhack(var/mob/living/silicon/ai/malf)
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
+	if(!istype(M) || !istype(malf))
+		return
+	new /obj/effect/hack_overlay(null, malf, src)
+	M.currently_hacking_machines += src
+	return TRUE
+
+
+/obj/machinery/proc/set_hack_overlay_icon(var/newstate)
+	hack_overlay.set_icon(newstate)
+
+/obj/machinery/proc/set_malf_owner(var/mob/living/silicon/ai/malf)
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
+	if(!istype(M) || !istype(malf))
+		return
+	M.currently_hacking_machines -= src
+	malf_owner = malf
+	return TRUE
+
+//Generate the radial for this machine.
 /obj/machinery/proc/hack_radial(var/mob/living/silicon/ai/malf)
 	var/list/choice_to_ability = list()
 	var/list/choices = list()
 	for(var/datum/malfhack_ability/A in hack_abilities)
 		var/icon_to_display = A.toggled ? A.icon_toggled : A.icon
-		var/list/C = list(list(A.name, icon_to_display, A.desc))
+		var/name_to_display = A.name
+		var/locked = FALSE
+		if(!A.check_available(malf))
+			name_to_display = A.locked_name
+			locked = TRUE
+		else if(!A.check_cost(malf))
+			locked = TRUE
+		var/list/C = list(list(A.name, icon_to_display, A.desc, name_to_display, locked))
 		choices += C
 		choice_to_ability[A.name] = A
-	var/choice = show_radial_menu(malf,loc,choices)
+	var/choice = show_radial_menu(user=malf,anchor=src,choices=choices, icon_file='icons/obj/malf_radial.dmi',tooltip_theme="radial-malf",close_other_menus=TRUE)
 	var/datum/malfhack_ability/A = choice_to_ability[choice]
 	if(!A)
 		return
 	else 
-		A.activate()
+		A.activate(malf)
+
+
+/obj/machinery/atmospherics/hack_interact(var/mob/living/silicon/ai/malf)
+	return
+
+/obj/machinery/portable_atmospherics/hack_interact(mob/living/silicon/ai/malf)
+	return
 	
-
-/datum/malfhack_ability/disable
-	name = "Toggle On/Off"
-	desc = "Disable/Enable this machine."
-	icon = "radial_off"
-	icon_toggled = "radial_on"
-
-/datum/malfhack_ability/disable/activate()
-	toggled ? (machine.stat &= ~FORCEDISABLE) : (machine.stat |= FORCEDISABLE)
-	toggled = !toggled
-	machine.update_icon()
-
-
-

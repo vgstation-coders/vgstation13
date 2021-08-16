@@ -26,7 +26,7 @@
 	malfhack = null
 
 /mob/living/silicon/ai/proc/life_handle_power_damage()
-	if(aiRestorePowerRoutine != 0 || ai_flags & COREFORTIFY)
+	if(aiRestorePowerRoutine != 0)
 		// Lost power
 		adjustOxyLoss(1)
 	else
@@ -162,8 +162,10 @@
 
 	if(ai_flags & COREFORTIFY)
 		brute_damage_modifier = 0.25
+		burn_damage_modifier = 0.25
 	else
 		brute_damage_modifier = 1
+		burn_damage_modifier = 1
 
 	life_handle_camera()
 	life_handle_malf()
