@@ -65,6 +65,8 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 	else
 		. = get_step(ref, dir)
 
+// This is old, and deprecated by Cross()
+
 /*/atom/proc/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	//Purpose: Determines if the object (or airflow) can pass this atom.
 	//Called by: Movement, airflow.
