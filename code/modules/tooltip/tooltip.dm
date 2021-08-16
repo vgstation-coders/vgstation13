@@ -44,7 +44,7 @@ Notes:
 
 
 /datum/tooltip/proc/show(atom/movable/thing, params = null, title = null, content = null, theme = "default", special = "none")
-	if (!thing || !params || (!title && !content) || !src.owner || !isnum(world.icon_size))
+	if (!thing || (!title && !content) || !src.owner || !isnum(world.icon_size))
 		return 0
 	if (!src.init)
 		//Initialize some vars

@@ -159,6 +159,10 @@
 		)
 	display_with_parent = TRUE
 
+/datum/mind_ui/malf_right_panel/New()
+	..()
+	Hide()
+
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/hoverable/malf_tech_tab
@@ -174,16 +178,10 @@
 	var/datum/mind_ui/malf_tech_window/techtree = locate() in parent.subUIs
 	if(techtree)
 		if(opened)
-			icon_state = "techtab"
-			base_icon_state = "techtab"
-			offset_x = 0 
-			UpdateUIScreenLoc()
+			MoveUIElement(-256, offset_y, 3)
 			techtree.Hide()
 		else
-			icon_state = "techtabopena"
-			base_icon_state = "techtabopen"
-			offset_x = -256
-			UpdateUIScreenLoc()
+			MoveUIElement(256, offset_y, 3)
 			techtree.Display()		
 		opened = !opened
 		
@@ -201,8 +199,10 @@
 	x = "RIGHT"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/malf_tech_background,
+		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/coreshield
 		)
 	display_with_parent = FALSE
+
 
 //------------------------------------------------------------
 
@@ -213,4 +213,76 @@
 	offset_y = -112
 	layer = MIND_UI_BACK
 
+/obj/abstract/mind_ui_element/malf_tech_background/Appear()
+	..()
+	MoveUIElement(0, offset_y, 3)
+	
+/obj/abstract/mind_ui_element/malf_tech_background/Hide()
+	MoveUIElement(256, offset_y, 3)
+	..()
+	
+
 //------------------------------------------------------------
+
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade
+	name = "BROKEN UPGRADE"
+	desc = "This is a description."
+	icon = 'icons/ui/malf/32x32.dmi'
+	layer = MIND_UI_BUTTON
+	var/module_type
+	var/purchased = FALSE
+	var/visible_offset_x = 0
+	var/cost
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/Click()
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(!istype(A) || !istype(M))
+		return
+	if (M.processing_power >= cost)
+		M.add_power(-cost)
+		purchased = TRUE
+		UpdateIcon()
+		new module_type(A)
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/UpdateIcon()
+	var/mob/living/silicon/ai/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(!istype(A) || !istype(M))
+		return
+	if (purchased)
+		icon_state = "[base_icon_state]-purchased"
+		return
+	else if (M.processing_power >= cost)
+		color = null
+	else
+		color = grayscale
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/StartHovering()
+	if (color == null && !purchased)
+		..()
+		openToolTip(GetUser(),src,null,title = name,content = desc,theme = "radial-malf")
+	
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/StopHovering()
+	..()
+	closeToolTip(GetUser())
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/Appear()
+	..()
+	MoveUIElement(visible_offset_x, offset_y, 3)
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/Hide()
+	MoveUIElement(visible_offset_x + 256, offset_y, 3)
+	..()
+
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/coreshield
+	name = "Firewall"
+	desc = "Deploy a firewall to reduce damage to your core and make it immune to lasers."
+	icon_state = "placeholder"
+	module_type = /datum/malf_module/active/coreshield
+	cost = 20
+	visible_offset_x = -100

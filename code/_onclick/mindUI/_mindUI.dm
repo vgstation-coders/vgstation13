@@ -268,3 +268,15 @@ var/list/mind_ui_ID2type = list()
 		I.pixel_x = (i - 1) * 6
 		result.overlays += I
 	return result
+
+
+/obj/abstract/mind_ui_element/proc/MoveUIElement(var/new_x = 0, var/new_y = 0, var/duration)
+	var/image/ui_image = image(icon, src, icon_state, ABOVE_HUD_LAYER)
+	var/mob/U = GetUser()
+	U.client.images |= ui_image
+	animate(ui_image, pixel_x = new_x - offset_x, pixel_y = new_y - offset_y,  time = duration)
+	spawn(duration)
+		offset_x = new_x
+		offset_y = new_y
+		UpdateUIScreenLoc()
+		U.client.images -= ui_image

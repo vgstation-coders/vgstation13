@@ -3,7 +3,6 @@
 	var/desc = "This does something."
 	var/icon_state = "placeholder"
 
-	var/cost
 	var/mob/living/silicon/ai/malf 
 
 /datum/malf_module/New(var/mob/living/silicon/ai/A)
@@ -42,8 +41,7 @@
 	name = "Firewall"
 	desc = "Deploy a firewall to reduce damage to your core."
 	icon_state = "firewall"
-
-	cost = 10
+	activate_cost = 5
 
 
 /datum/malf_module/active/coreshield/on_purchase()
