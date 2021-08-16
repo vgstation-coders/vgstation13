@@ -145,12 +145,11 @@
 		var/turf/simulated/open/above = GetAbove(A)
 		if(!above || !istype(above))
 			return
-		// This is hackish, but if we use normal forceMove() it ignores things on the turf above and in front in the way.
+		// This is hackish but whatever
 		var/turf/target = get_step(above, dir)
 		var/turf/source = A.loc
 		if(target.Enter(A, source))
-			A.loc = target
-			target.Entered(A, source)
+			A.forceMove(target)
 			if(isliving(A))
 				var/mob/living/L = A
 				if(L.pulling)
