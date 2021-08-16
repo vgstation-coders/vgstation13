@@ -41,7 +41,7 @@
 /turf/simulated/open/Entered(var/atom/movable/mover)
 	..()
 	spawn(4 / get_gravity()) // Delay for gravity to kick in
-		fall()
+		mover.fall()
 
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
