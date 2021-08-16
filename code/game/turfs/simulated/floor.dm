@@ -49,8 +49,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 
 /turf/simulated/floor/New()
-	..()
 	create_floor_tile()
+	..()
 	if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
 		icon_regular_floor = "floor"
 	else
