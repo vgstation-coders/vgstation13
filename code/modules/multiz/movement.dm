@@ -152,7 +152,8 @@
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
 		return
-	if(last_fall + (0.4 / gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+	// Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+	if(!locate(/obj/structure/stairs) in landing || last_fall + (0.4 / gravity) > world.time)
 		spawn(4 / gravity) // spawn() for this amount of time because it's REALLY important or else there's extreme lag
 			fall() // Repeat the call
 		return

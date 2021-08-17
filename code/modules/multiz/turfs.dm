@@ -43,6 +43,11 @@
 	spawn(4 / get_gravity()) // Delay for gravity to kick in
 		mover.fall()
 
+/turf/simulated/open/has_gravity()
+	if(locate(/obj/structure/catwalk) in src)
+		return get_gravity()
+	return 0
+
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
 	below = GetBelow(src)
