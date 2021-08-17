@@ -1,7 +1,7 @@
 ////////////////////////////
 // parent class for pipes //
 ////////////////////////////
-obj/machinery/atmospherics/pipe/zpipe
+/obj/machinery/atmospherics/pipe/zpipe
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "down"
 
@@ -26,7 +26,7 @@ obj/machinery/atmospherics/pipe/zpipe
 
 	level = 1
 
-obj/machinery/atmospherics/pipe/zpipe/New()
+/obj/machinery/atmospherics/pipe/zpipe/New()
 	..()
 	switch(dir)
 		if(SOUTH)
@@ -51,13 +51,13 @@ obj/machinery/atmospherics/pipe/zpipe/New()
 		invisibility = i ? 101 : 0
 	update_icon()
 
-obj/machinery/atmospherics/pipe/zpipe/process()
+/obj/machinery/atmospherics/pipe/zpipe/process()
 	if(!parent) //This should cut back on the overhead calling build_network thousands of times per cycle
 		..()
 	else
 		. = PROCESS_KILL
 
-obj/machinery/atmospherics/pipe/zpipe/check_pressure(pressure)
+/obj/machinery/atmospherics/pipe/zpipe/check_pressure(pressure)
 	var/datum/gas_mixture/environment = loc.return_air()
 
 	var/pressure_difference = pressure - environment.return_pressure()
@@ -72,7 +72,7 @@ obj/machinery/atmospherics/pipe/zpipe/check_pressure(pressure)
 
 	else return 1
 
-obj/machinery/atmospherics/pipe/zpipe/proc/burst()
+/obj/machinery/atmospherics/pipe/zpipe/proc/burst()
 	src.visible_message("<span class='warning'>\The [src] bursts!</span>");
 	playsound(src.loc, 'sound/effects/bang.ogg', 25, 1)
 	var/datum/effect/system/smoke_spread/smoke = new
@@ -80,27 +80,27 @@ obj/machinery/atmospherics/pipe/zpipe/proc/burst()
 	smoke.start()
 	qdel(src) // NOT qdel.
 
-obj/machinery/atmospherics/pipe/zpipe/proc/normalize_dir()
+/obj/machinery/atmospherics/pipe/zpipe/proc/normalize_dir()
 	if(dir == (NORTH|SOUTH))
 		set_dir(NORTH)
 	else if(dir == (EAST|WEST))
 		set_dir(EAST)
 
-obj/machinery/atmospherics/pipe/zpipe/Destroy()
+/obj/machinery/atmospherics/pipe/zpipe/Destroy()
 	if(node1)
 		node1.disconnect(src)
 	if(node2)
 		node2.disconnect(src)
 	..()
 
-obj/machinery/atmospherics/pipe/zpipe/pipeline_expansion()
+/obj/machinery/atmospherics/pipe/zpipe/pipeline_expansion()
 	return list(node1, node2)
 
-obj/machinery/atmospherics/pipe/zpipe/update_icon()
+/obj/machinery/atmospherics/pipe/zpipe/update_icon()
 	//color = pipe_color
 	return
 
-obj/machinery/atmospherics/pipe/zpipe/disconnect(obj/machinery/atmospherics/reference)
+/obj/machinery/atmospherics/pipe/zpipe/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe))
 			qdel(parent)
@@ -115,12 +115,12 @@ obj/machinery/atmospherics/pipe/zpipe/disconnect(obj/machinery/atmospherics/refe
 /////////////////////////
 // the elusive up pipe //
 /////////////////////////
-obj/machinery/atmospherics/pipe/zpipe/up
+/obj/machinery/atmospherics/pipe/zpipe/up
 	icon_state = "up"
 	name = "upwards pipe"
 	desc = "A pipe segment to connect upwards."
 
-obj/machinery/atmospherics/pipe/zpipe/up/initialize()
+/obj/machinery/atmospherics/pipe/zpipe/up/initialize()
 	normalize_dir()
 	var/node1_dir
 
@@ -166,12 +166,12 @@ obj/machinery/atmospherics/pipe/zpipe/up/initialize()
 // and the down pipe //
 ///////////////////////
 
-obj/machinery/atmospherics/pipe/zpipe/down
+/obj/machinery/atmospherics/pipe/zpipe/down
 	icon_state = "down"
 	name = "downwards pipe"
 	desc = "A pipe segment to connect downwards."
 
-obj/machinery/atmospherics/pipe/zpipe/down/initialize()
+/obj/machinery/atmospherics/pipe/zpipe/down/initialize()
 	normalize_dir()
 	var/node1_dir
 
@@ -217,7 +217,7 @@ obj/machinery/atmospherics/pipe/zpipe/down/initialize()
 // supply/scrubbers  //
 ///////////////////////
 
-obj/machinery/atmospherics/pipe/zpipe/up/scrubbers
+/obj/machinery/atmospherics/pipe/zpipe/up/scrubbers
 	icon_state = "up"
 	name = "upwards scrubbers pipe"
 	desc = "A scrubbers pipe segment to connect upwards."
@@ -226,7 +226,7 @@ obj/machinery/atmospherics/pipe/zpipe/up/scrubbers
 	//icon_connect_type = "-scrubbers"
 	color = PIPE_COLOR_RED
 
-obj/machinery/atmospherics/pipe/zpipe/up/supply
+/obj/machinery/atmospherics/pipe/zpipe/up/supply
 	icon_state = "up"
 	name = "upwards supply pipe"
 	desc = "A supply pipe segment to connect upwards."
@@ -235,7 +235,21 @@ obj/machinery/atmospherics/pipe/zpipe/up/supply
 	//icon_connect_type = "-supply"
 	color = PIPE_COLOR_BLUE
 
-obj/machinery/atmospherics/pipe/zpipe/down/scrubbers
+/obj/machinery/atmospherics/pipe/zpipe/up/scrubbers/visible
+	level = LEVEL_ABOVE_FLOOR
+
+/obj/machinery/atmospherics/pipe/zpipe/up/scrubbers/hidden
+	level = LEVEL_BELOW_FLOOR
+	alpha=128
+
+/obj/machinery/atmospherics/pipe/zpipe/up/supply/visible
+	level = LEVEL_ABOVE_FLOOR
+
+/obj/machinery/atmospherics/pipe/zpipe/up/supply/hidden
+	level = LEVEL_BELOW_FLOOR
+	alpha=128
+
+/obj/machinery/atmospherics/pipe/zpipe/down/scrubbers
 	icon_state = "down"
 	name = "downwards scrubbers pipe"
 	desc = "A scrubbers pipe segment to connect downwards."
@@ -244,7 +258,7 @@ obj/machinery/atmospherics/pipe/zpipe/down/scrubbers
 	//icon_connect_type = "-scrubbers"
 	color = PIPE_COLOR_RED
 
-obj/machinery/atmospherics/pipe/zpipe/down/supply
+/obj/machinery/atmospherics/pipe/zpipe/down/supply
 	icon_state = "down"
 	name = "downwards supply pipe"
 	desc = "A supply pipe segment to connect downwards."
@@ -252,6 +266,20 @@ obj/machinery/atmospherics/pipe/zpipe/down/supply
 	layer = 2.39
 	//icon_connect_type = "-supply"
 	color = PIPE_COLOR_BLUE
+
+/obj/machinery/atmospherics/pipe/zpipe/down/scrubbers/visible
+	level = LEVEL_ABOVE_FLOOR
+
+/obj/machinery/atmospherics/pipe/zpipe/down/scrubbers/hidden
+	level = LEVEL_BELOW_FLOOR
+	alpha=128
+
+/obj/machinery/atmospherics/pipe/zpipe/down/supply/visible
+	level = LEVEL_ABOVE_FLOOR
+
+/obj/machinery/atmospherics/pipe/zpipe/down/supply/hidden
+	level = LEVEL_BELOW_FLOOR
+	alpha=128
 
 // Disposal Pipes
 
