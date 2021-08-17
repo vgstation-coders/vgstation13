@@ -90,12 +90,18 @@ What's NOT ported?
 	var/dy = abs(Loc1.y - Loc2.y)
 	var/dz = abs(Loc1.z - Loc2.z)
 
+	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
+		dz = 0
+
 	return max(dx,dy,dz)
 
 /proc/get_z_dist_euclidian(atom/Loc1, atom/Loc2)
 	var/dx = Loc1.x - Loc2.x
 	var/dy = Loc1.y - Loc2.y
 	var/dz = Loc1.z - Loc2.z
+
+	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
+		dz = 0
 
 	return sqrt(dx**2 + dy**2 + dz**2)
 
@@ -107,7 +113,12 @@ What's NOT ported?
  * Use to compare distances. Used in component mobs.
  */
 /proc/get_z_dist_squared(var/atom/a, var/atom/b)
-	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((b.z-a.z)**2)
+	var/dz = b.z-a.z
+
+	if(!AreConnectedZLevels(a.z, b.z))
+		dz = 0
+
+	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((dz)**2)
 
 /* Polaris methods for getting hearers. Necessary? Not sure
 
