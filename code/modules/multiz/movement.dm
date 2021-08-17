@@ -129,10 +129,14 @@
 
 //FALLING STUFF
 /atom
+	var/fall_lock = FALSE // Stops fall() being called during gravity spawn delay
 	var/zs_fallen = 0 // Gets reset if it hits something, for fall damage
 
 //Holds fall checks that should not be overriden by children
 /atom/movable/proc/fall()
+	if(fall_lock)
+		return
+
 	if(!isturf(loc))
 		return
 
@@ -154,7 +158,9 @@
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
 		return
+	fall_lock = TRUE
 	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
+		fall_lock = FALSE
 		
 		// We're in a new loc most likely, so check all this again
 		below = GetBelow(src)

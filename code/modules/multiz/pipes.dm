@@ -142,6 +142,26 @@ obj/machinery/atmospherics/pipe/zpipe/up/initialize()
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(!T.is_plating())
 
+/obj/machinery/atmospherics/pipe/zpipe/up/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+	dir = pipe.dir
+	initialize_directions = pipe.get_pipe_dir()
+	var/turf/T = loc
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
+	initialize(1)
+	if(!node1&&!node2)
+		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
+		return 0
+	update_icon()
+	build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
+	if (node2)
+		node2.initialize()
+		node2.build_network()
+	return 1
+
 ///////////////////////
 // and the down pipe //
 ///////////////////////
@@ -172,6 +192,26 @@ obj/machinery/atmospherics/pipe/zpipe/down/initialize()
 
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(!T.is_plating())
+
+/obj/machinery/atmospherics/pipe/zpipe/down/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+	dir = pipe.dir
+	initialize_directions = pipe.get_pipe_dir()
+	var/turf/T = loc
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
+	initialize(1)
+	if(!node1&&!node2)
+		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
+		return 0
+	update_icon()
+	build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
+	if (node2)
+		node2.initialize()
+		node2.build_network()
+	return 1
 
 ///////////////////////
 // supply/scrubbers  //
