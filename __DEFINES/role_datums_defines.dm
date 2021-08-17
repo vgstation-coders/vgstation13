@@ -21,6 +21,7 @@
 #define SPIDERINFESTATION "spider infestation"
 #define SPIDERCLAN "spider clan"
 #define XENOMORPH_HIVE "alien hivemind"
+#define JUSTICE_DEPARTMENT "justice department"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -75,6 +76,7 @@
 #define PRISONER "prisoner"
 #define CLOWN_LING "clown ling"
 #define TAG_MIME "tag mime"
+#define JUDGE "judge"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
