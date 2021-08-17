@@ -138,13 +138,23 @@
 	if(!below)
 		return
 
+	var/turf/bottom = null
+	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+	
+	if(istype(bottom,/turf/space))
+		return
+
 	var/turf/T = loc
 	if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
 		return
 
+	var/gravity = get_gravity()
 	// No gravity in space, apparently.
-	var/area/area = get_area(src)
-	if(!area.gravity) //Polaris uses a proc, has_gravity(), for this
+	if(!gravity) //Polaris uses a proc, has_gravity(), for this
+		return
+	if(last_fall + (0.4 / gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
+		spawn(4 / gravity) // spawn() for this amount of time because it's REALLY important or else there's extreme lag
+			fall() // Repeat the call
 		return
 
 	/*if(throwing)  This was causing odd behavior where things wouldn't stop.
@@ -285,15 +295,6 @@
 			return FALSE
 
 	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
-
-	// Repeating area get for gravity stuff
-	var/gravity = get_gravity()
-	if(!gravity)
-		return
-	if(last_fall + (0.4 / gravity) > world.time) // Now we use last_fall to get a delay of 4 ticks divided by the gravity.
-		spawn(4 / gravity) // spawn() for this amount of time because it's REALLY important or else there's extreme lag
-			fall() // Repeat the call
-		return
 
 	// Now lets move there!
 	if(!Move(landing))
