@@ -226,7 +226,12 @@
 		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
 		overimage.alpha = 255 - alpha_to_subtract
 		vis_contents += bottom
-		vis_contents.Add(overimage)
+		if(!istype(bottom,/turf/space)) // Space below us
+			vis_contents.Add(overimage)
+			icon_state = "" // Remove any previous space stuff, if any
+		else
+			// We space background now, forget the vis contentsing of it
+			icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 		var/obj/effect/open_overlay/glass/overglass = new /obj/effect/open_overlay/glass
 		overglass.icon_state = glass_state
 		vis_contents.Add(overglass)
