@@ -484,6 +484,7 @@
 /obj/structure/bed/chair/comfy/couch/turn/inward/lime
 	color = CHAIR_LIME
 /obj/structure/bed/chair/comfy/couch/turn/outward/lime
+	color = CHAIR_LIME
 
 // #ae774c brown
 /obj/structure/bed/chair/comfy/couch/left/brown
