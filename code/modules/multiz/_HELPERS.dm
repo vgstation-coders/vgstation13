@@ -91,7 +91,7 @@ What's NOT ported?
 	var/dz = abs(Loc1.z - Loc2.z)
 
 	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
-		dz = 0
+		return INFINITY
 
 	return max(dx,dy,dz)
 
@@ -101,7 +101,7 @@ What's NOT ported?
 	var/dz = Loc1.z - Loc2.z
 
 	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
-		dz = 0
+		return INFINITY
 
 	return sqrt(dx**2 + dy**2 + dz**2)
 
@@ -113,10 +113,8 @@ What's NOT ported?
  * Use to compare distances. Used in component mobs.
  */
 /proc/get_z_dist_squared(var/atom/a, var/atom/b)
-	var/dz = b.z-a.z
-
 	if(!AreConnectedZLevels(a.z, b.z))
-		dz = 0
+		return INFINITY
 
 	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((dz)**2)
 
