@@ -128,6 +128,8 @@
 ////////////////////////////
 
 //FALLING STUFF
+/atom
+	var/zs_fallen = 0 // Gets reset if it hits something, for fall damage
 
 //Holds fall checks that should not be overriden by children
 /atom/movable/proc/fall()
@@ -140,7 +142,7 @@
 
 	var/turf/bottom = null
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-	
+
 	if(istype(bottom,/turf/space))
 		return
 
@@ -152,26 +154,40 @@
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
 		return
-	// Now we use last_fall to get a delay of 4 ticks divided by the gravity.
-	if(!locate(/obj/structure/stairs) in below || last_fall + (0.4 / gravity) > world.time)
-		spawn(4 / gravity) // spawn() for this amount of time because it's REALLY important or else there's extreme lag
-			fall() // Repeat the call
-		return
+	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
+		
+		// We're in a new loc most likely, so check all this again
+		below = GetBelow(src)
+		if(!below)
+			return
+	
+		bottom = null
+		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+	
+		if(istype(bottom,/turf/space))
+			return
+		T = loc
+		if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
+			return
+	
+		gravity = get_gravity()
+		if(!gravity)
+			return
 
-	/*if(throwing)  This was causing odd behavior where things wouldn't stop.
-		return*/
-
-	if(can_fall())
-		// We spawn here to let the current move operation complete before we start falling. fall() is normally called from
-		// Entered() which is part of Move(), by spawn()ing we let that complete.  But we want to preserve if we were in client movement
-		// or normal movement so other move behavior can continue.
-		var/mob/M = src
-		var/is_client_moving = (ismob(M) && M.client && M.client.moving)
-		spawn(0)
-			if(is_client_moving) M.client.moving = 1
-			handle_fall(below)
-			if(is_client_moving) M.client.moving = 0
-		// TODO - handle fall on damage!
+		/*if(throwing)  This was causing odd behavior where things wouldn't stop.
+			return*/
+	
+		if(can_fall())
+			// We spawn here to let the current move operation complete before we start falling. fall() is normally called from
+			// Entered() which is part of Move(), by spawn()ing we let that complete.  But we want to preserve if we were in client movement
+			// or normal movement so other move behavior can continue.
+			var/mob/M = src
+			var/is_client_moving = (ismob(M) && M.client && M.client.moving)
+			spawn(0)
+				if(is_client_moving) M.client.moving = 1
+				handle_fall(below)
+				if(is_client_moving) M.client.moving = 0
+			// TODO - handle fall on damage!
 
 //For children to override
 /atom/movable/proc/can_fall()
@@ -271,10 +287,6 @@
 		src.fall()
 	. = ..()
 
-/atom
-	var/last_fall = 0 // Zero if we were grounded, otherwise use world time delay stuff
-	var/zs_fallen = 0 // Gets reset if it hits something, for fall damage
-
 // Actually process the falling movement and impacts.
 /atom/movable/proc/handle_fall(var/turf/landing)
 	var/turf/oldloc = loc
@@ -309,7 +321,6 @@
 	if(isopenspace(oldloc))
 		oldloc.visible_message("\The [src] falls down through \the [oldloc]!", "You hear something falling through the air.")
 
-	last_fall = world.time
 	zs_fallen++
 
 	// If the turf has density, we give it first dibs

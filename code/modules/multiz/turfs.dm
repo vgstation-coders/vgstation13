@@ -40,8 +40,7 @@
 
 /turf/simulated/open/Entered(var/atom/movable/mover)
 	..()
-	spawn(4 / get_gravity()) // Delay for gravity to kick in
-		mover.fall()
+	mover.fall()
 
 /turf/simulated/open/has_gravity()
 	if(locate(/obj/structure/catwalk) in src)

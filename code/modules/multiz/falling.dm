@@ -30,7 +30,6 @@
 		visible_message("\The [src] drops from above onto \the [hit_atom]!", "You hear something drop onto \the [hit_atom].")
 	for(var/atom/movable/AM in hit_atom.contents)
 		AM.fall_act(src)
-	last_fall = 0
 	zs_fallen = 0
 
 // Take damage from falling and hitting the ground
@@ -60,7 +59,6 @@
 		visible_message("\The [src] drops from above and onto \the [landing].", \
 			"You fall off and land on the \the [landing].", \
 			"You hear something drop onto \the [landing].")
-	last_fall = 0
 	zs_fallen = 0
 
 /obj/mecha/handle_fall(var/turf/landing)
@@ -99,7 +97,6 @@
 		// Tell the pilot that they just plopped lightly onto the low-gravity ground with a superheavy mecha.
 		if(occupant)
 			to_chat(occupant, "<span class='warning'>\The [src] softly drops down onto \the [hit_atom]!</span>")
-	last_fall = 0
 	zs_fallen = 0
 
 /obj/machinery/power/supermatter/fall_impact(var/atom/hit_atom)
