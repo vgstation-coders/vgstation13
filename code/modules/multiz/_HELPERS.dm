@@ -116,7 +116,7 @@ What's NOT ported?
 	if(!AreConnectedZLevels(a.z, b.z))
 		return INFINITY
 
-	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((dz)**2)
+	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((b.z-a.z)**2)
 
 /* Polaris methods for getting hearers. Necessary? Not sure
 
