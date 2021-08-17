@@ -9,6 +9,7 @@
 	var/health = 15
 	gender = NEUTER
 	w_type=NOT_RECYCLABLE
+	mouse_opacity = 1
 
 //similar to weeds, but only barfed out by nurses manually
 /obj/effect/spider/ex_act(severity)
