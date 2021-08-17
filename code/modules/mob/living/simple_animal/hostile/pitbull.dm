@@ -58,7 +58,7 @@
 	faction_original = faction
 	faction = ""
 	friends_temp = friends.Copy()
-	friends.Cut()
+	friends = list()
 	treacherous = TRUE
 
 /mob/living/simple_animal/hostile/pitbull/proc/Calmdown()
