@@ -13,7 +13,7 @@
 			key = mind.key // Force the ghost in here
 	if(Owner)
 		faction = "necro"
-		friends.Add(Owner)
+		friends += makeweakref(Owner)
 		creator = Owner
 		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")

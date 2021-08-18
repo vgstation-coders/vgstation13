@@ -212,7 +212,7 @@ proc/move_mining_shuttle()
 		has_slime=1
 		to_chat(user, "You mold the slime extract around the tip of \the [src].")
 		return TRUE
-	
+
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"
 	//icon_state = "sledgehammer" Waiting on sprite
@@ -823,7 +823,7 @@ proc/move_mining_shuttle()
 				M.revive(refreshbutcher = refreshes_drops)
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
-					H.friends += user
+					H.friends += makeweakref(user)
 
 					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
 					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
@@ -965,16 +965,12 @@ proc/move_mining_shuttle()
 	update_icon()
 
 /obj/item/device/mobcapsule/proc/take_contents(mob/user)
-	for(var/mob/living/simple_animal/AM in src.loc)
-		if(istype(AM))
-			var/mob/living/simple_animal/M = AM
-			var/mob/living/simple_animal/hostile/H = M
-			if(!istype(H))
-				continue
-			for(var/things in H.friends)
-				if(capsuleowner in H.friends)
-					if(insert(AM, user) == -1) //Limit reached
-						break
+	for(var/mob/living/simple_animal/hostile/AM in loc)
+		for(var/datum/weakref/things in AM.friends)
+			var/mob/M = things.get()
+			if(capsuleowner == M)
+				if(insert(AM, user) == -1) //Limit reached
+					break
 
 /**********************Mining Scanner**********************/
 
