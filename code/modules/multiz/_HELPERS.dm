@@ -2,6 +2,7 @@
 Permission for its use was obtained on 11/12/2017 from Neerti in the Polaris Discord. */
 
 #define isopenspace(A) istype(A, /turf/simulated/open)
+#define isvisiblespace(A) is_type_in_list(A, list(/turf/simulated/open, /turf/simulated/floor/glass))
 #define OPENSPACE_PLANE_START -23
 #define OPENSPACE_PLANE_END -8
 #define OPENSPACE_PLANE -25
