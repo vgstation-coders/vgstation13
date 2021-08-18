@@ -98,7 +98,7 @@
 
 /datum/role/vampire/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/dat = ..()
-	dat += "  - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"
+	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"
 	return dat
 
 /datum/role/vampire/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
