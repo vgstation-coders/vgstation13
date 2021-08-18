@@ -82,10 +82,6 @@
 /atom/movable/lighting_overlay
 	vis_flags = VIS_HIDE
 
-// Space is eternal
-/turf/space
-	vis_flags = VIS_HIDE
-
 /obj/effect/open_overlay
 	name = "open overlay"
 	desc = "The darkness of the abyss below"
@@ -110,10 +106,6 @@
 	vis_contents += bottom
 	if(!istype(bottom,/turf/space)) // Space below us
 		vis_contents.Add(overimage)
-		icon_state = "" // Remove any previous space stuff, if any
-	else
-		// We space background now, forget the vis contentsing of it
-		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 
 /turf/simulated/open/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	overlays.Cut()
