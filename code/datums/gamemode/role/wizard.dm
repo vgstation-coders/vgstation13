@@ -6,6 +6,8 @@
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
 	greets = list(GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND)
+	default_admin_voice = "Wizard Federation"
+	admin_voice_style = "notice"
 
 	stat_datum_type = /datum/stat/role/wizard
 

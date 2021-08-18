@@ -12,6 +12,8 @@
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
 	playlist = "nukesquad"
+	default_admin_voice = "The spirit of Revolution!"
+	admin_voice_style = "secradio"
 	var/discovered = 0
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)

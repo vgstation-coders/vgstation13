@@ -54,6 +54,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
 	hud_icons = list("cult-chief-logo", "cult-logo")
+	default_admin_voice = "<span class='danger'>Nar-Sie</span>" // Nar-Sie's name always appear in red in the chat, makes it stand out.
+	admin_voice_style = "sinister"
+	admin_voice_say = "murmurs..."
 	var/list/bloody_floors = list()
 	//var/target_change = FALSE
 	//var/change_cooldown = 0
@@ -84,25 +87,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	dat += "<br><a href='?src=\ref[src];cult_mindspeak_global=1'>Voice of Nar-Sie</a>"
 	dat += "<br><a href='?src=\ref[src];cult_progress=1'>(debug) Cult Progression Skip</a>"
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
 	..()
-	if (href_list["cult_mindspeak_global"])
-		var/message = input("What message shall we send?",
-                    "Voice of Nar-Sie",
-                    "")
-		for (var/datum/role/R in members)
-			if (R.antag?.current && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
-				to_chat(R.antag.current, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
-
-		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[message]</span></span>")
-
-		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [message]")
 	if (href_list["cult_progress"])
 		if (alert(usr, "Skip to the next Act?","Cult Progression Skip","Yes","No") == "No")
 			return

@@ -11,6 +11,8 @@
 	logo_state = "nuke-logo"
 	hud_icons = list("nuke-logo","nuke-logo-leader")
 	playlist = "nukesquad"
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "syndradio"
 
 	var/datum/outfit/striketeam/nukeops/our_outfit = /datum/outfit/striketeam/nukeops
 

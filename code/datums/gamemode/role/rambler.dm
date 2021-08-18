@@ -5,6 +5,8 @@
 	special_role = RAMBLER
 	logo_state = "rambler-logo"
 	wikiroute = ROLE_MINOR
+	default_admin_voice = "Xavier"
+	admin_voice_style = "rose"
 	var/remaining_vows = 3
 
 /datum/role/rambler/OnPostSetup(var/laterole = FALSE)

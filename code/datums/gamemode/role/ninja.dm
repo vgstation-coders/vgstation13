@@ -10,6 +10,8 @@
 	disallow_job = TRUE
 	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
+	default_admin_voice = "Spider Clan"
+	admin_voice_style = "bold"
 
 	stat_datum_type = /datum/stat/role/ninja
 
@@ -65,6 +67,7 @@
 	return dat
 
 /datum/role/ninja/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
 	if(href_list["toggleweeb"])
 		if(href_list["toggleweeb"]=="ninja")
 			equip_ninja(antag.current)

@@ -5,6 +5,8 @@
 	required_pref = VOXRAIDER
 	disallow_job = TRUE
 	logo_state = "vox-logo"
+	default_admin_voice = "Vox Shoal"
+	admin_voice_style = "vox"
 
 /datum/role/vox_raider/OnPostSetup()
 	.=..()
