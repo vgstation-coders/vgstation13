@@ -31,7 +31,7 @@
 	var/output_dir //Which direction to try to place our patients onto, should they eject naturally.
 
 
-	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | MULTITOOL_MENU
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
