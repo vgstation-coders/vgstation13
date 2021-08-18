@@ -36,6 +36,7 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "time_anomaly"
 	anchored = 1
+	mouse_opacity = 1
 	var/last_effect
 
 /obj/effect/time_anomaly/New()
