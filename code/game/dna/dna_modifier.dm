@@ -68,7 +68,7 @@
 	var/mob/living/carbon/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/injector_cooldown = 150 //Used by attachment
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	var/obj/machinery/computer/connected
 	var/last_message // Used by go_out()
 
