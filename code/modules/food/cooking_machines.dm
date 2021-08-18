@@ -362,7 +362,7 @@ var/global/ingredientLimit = 10
 	
 /obj/machinery/cooking/cerealmaker/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
 	cookTime = initial(cookTime)-(10 * T) //150 ticks minus 10 ticks per every tier level, T4s make it 60 ticks.
 
