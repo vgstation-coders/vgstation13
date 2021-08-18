@@ -152,6 +152,14 @@ var/list/gravpults = list()
 /obj/structure/deathsquad_gravpult/proc/launch()
 	if (!mech)
 		return
+
+	hud_off()
+
+	if(!isemptylist(mech.search_contents_for(/obj/item/weapon/disk/nuclear)))
+		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
+		to_chat(user, "<span class='warning'>\The [src]'s gravpult won't launch you because the nuclear authentification disk that you are carrying would interfere with the Mech Teleporter. Those who carry it must reach the station by shuttle.</span>")
+		return
+
 	var/obj/machinery/door/poddoor/D = locate() in get_step(loc,WEST)
 	if (!D)
 		return
@@ -164,7 +172,6 @@ var/list/gravpults = list()
 	mech.set_control_lock(1)
 	mech.set_control_lock(0,50)
 
-	hud_off()
 	//opening the portal
 	new /obj/effect/overlay/mechaportal(locate(x-portal_dist,y,z),world.maxx - TRANSITIONEDGE - rand(10,20),aim+1,map.zMainStation)
 	sleep(10)
