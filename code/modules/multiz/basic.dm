@@ -49,9 +49,9 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 	if (!turf)
 		return list()
 	. = list(turf.z)
-	for(var/level = turf.z, (HasBelow(level) && is_type_in_list(GetBelow(locate(turf.x,turf.y,level)), list(/turf/simulated/open, /turf/simulated/floor/glass)), level--)
+	for(var/level = turf.z, HasBelow(level) && is_type_in_list(GetBelow(locate(turf.x,turf.y,level)), list(/turf/simulated/open, /turf/simulated/floor/glass)), level--)
 		. |= level-1
-	for(var/level = turf.z, (HasAbove(level) && is_type_in_list(GetAbove(locate(turf.x,turf.y,level)), list(/turf/simulated/open, /turf/simulated/floor/glass)), level++)
+	for(var/level = turf.z, HasAbove(level) && is_type_in_list(GetAbove(locate(turf.x,turf.y,level)), list(/turf/simulated/open, /turf/simulated/floor/glass)), level++)
 		. |= level+1
 
 /proc/AreOpenConnectedZLevels(var/zA, var/zB)
