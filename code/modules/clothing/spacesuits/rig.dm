@@ -204,6 +204,9 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	for(var/obj/item/rig_module/M in modules)
 		M.examine_addition(user)
 
+/obj/item/clothing/suit/space/rig/get_cell()
+	return cell
+
 /obj/item/clothing/suit/space/rig/equipped(mob/living/carbon/human/user, var/slot)
 	if(slot == slot_wear_suit)
 		wearer = user
