@@ -79,8 +79,9 @@
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/dynamic_ruleset/proc/choose_candidates()
 	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	if (istype(M))
+		assigned += M
+		candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/proc/process()
