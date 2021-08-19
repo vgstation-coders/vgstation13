@@ -5,7 +5,7 @@
 	special_role = RAMBLER
 	logo_state = "rambler-logo"
 	wikiroute = ROLE_MINOR
-	default_admin_voice = "Xavier"
+	default_admin_voice = "Chief Master Guru"
 	admin_voice_style = "rose"
 	var/remaining_vows = 3
 

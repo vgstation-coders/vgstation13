@@ -5,7 +5,7 @@
 	name = MADMONKEY
 	ID = MADMONKEY
 	logo_state = "monkey-logo"
-	default_admin_voice = "big monkey in the sky"
+	default_admin_voice = "Monkey King"
 	admin_voice_style = "rough"
 
 	initroletype = /datum/role/madmonkey

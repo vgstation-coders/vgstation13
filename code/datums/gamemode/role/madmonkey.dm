@@ -33,7 +33,7 @@
 	special_role = MADMONKEY
 	logo_state = "monkey-logo"
 	greets = list(GREET_MASTER,GREET_DEFAULT,GREET_CUSTOM)
-	default_admin_voice = "big monkey in the sky"
+	default_admin_voice = "Monkey King"
 	admin_voice_style = "rough"
 	var/countdown = 60
 

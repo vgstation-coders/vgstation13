@@ -5,7 +5,7 @@
 	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
 	logo_state = "rev-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_MIDROUND,GREET_LATEJOIN,GREET_CONVERTED,GREET_PROVOC_CONVERTED,GREET_REVSQUAD_CONVERTED,GREET_ADMINTOGGLE)
-	default_admin_voice = "The spirit of Revolution!"
+	default_admin_voice = "Union Boss"
 	admin_voice_style = "secradio"
 
 // The ticker current state check is because revs are created, at roundstart, in the cuck cube.
