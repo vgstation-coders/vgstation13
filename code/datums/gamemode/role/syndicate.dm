@@ -143,10 +143,14 @@
 
 /datum/role/traitor/challenger/ForgeObjectives()
 	AppendObjective(/datum/objective/survive)
+
 	if (assassination_target && assassination_target.antag)
 		var/datum/objective/target/assassinate/kill_target = new(auto_target = FALSE)
 		if(kill_target.set_target(assassination_target.antag,TRUE))
-			AppendObjective(kill_target)
+			to_chat(antag.current, "<span class='danger'>Your target's identity will be revealed to you in ONE MINUTE.</span>")
+			spawn(60 SECONDS)
+				AppendObjective(kill_target)
+				to_chat(antag.current, "<b>New Objective</b>: [kill_target.explanation_text]<br>")
 			return
 		else
 			qdel(kill_target)
