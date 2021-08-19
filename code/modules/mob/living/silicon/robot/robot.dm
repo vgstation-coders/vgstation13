@@ -741,7 +741,7 @@
 			C.brute_damage = cell.brute_damage
 			C.install()
 			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
 		else
 			user.drop_item(W, src)
 			cell = W
@@ -753,7 +753,7 @@
 			C.brute_damage = cell.brute_damage
 			C.install()
 			if(can_diagnose())
-				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+				to_chat(src, "<span class='info' style=\"font-family:Courier\">New power source installed. Type: [cell.name]. Charge: [cell.charge] out of [cell.maxcharge].</span>")
 		updateicon()
 
 	else if(iswiretool(W))
