@@ -57,7 +57,29 @@
 
 // Custom Meals ////////////////////////////////////////////////
 
+
+/obj/item/trash/plate
+	name = "plate"
+	icon_state = "plate"
+	var/clean = FALSE
+
+/obj/item/trash/plate/clean
+	icon_state = "cleanplate"
+	desc = "Clean enough to eat on, probably."
+	clean = TRUE
+
+/obj/item/trash/plate/update_icon()
+	if(clean)
+		icon_state = "cleanplate"
+	else
+		icon_state = "plate"
+
 /obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
+	if(istype(I,/obj/item/weapon/soap))
+		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
+		clean = TRUE
+		update_icon()
+		return TRUE
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now
 			to_chat(user, "<span class='warning'>That's already got a plate!</span>")
@@ -136,7 +158,7 @@
 			if(src.fullyCustom && SC.fullyCustom)
 				to_chat(user, "<span class='warning'>You slap yourself on the back of the head for thinking that stacking plates is an interesting dish.</span>")
 				return
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+		if(!recursiveFood && !fullyCustom && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>[pick("As uniquely original as that idea is, you can't figure out how to perform it.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 			return
 		if(!user.drop_item(I, src))

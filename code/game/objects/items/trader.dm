@@ -65,6 +65,9 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
+	is_wooden = TRUE
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
@@ -91,7 +94,8 @@
 	/obj/item/device/radio/headset/headset_earmuffs,
 	/obj/item/clothing/under/vault13,
 	list(/obj/item/clothing/head/leather/xeno, /obj/item/clothing/suit/leather/xeno),
-	/obj/item/clothing/accessory/rabbit_foot
+	/obj/item/clothing/accessory/rabbit_foot,
+	/obj/item/clothing/accessory/wristwatch/black
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
@@ -206,6 +210,7 @@ var/global/list/shoal_stuff = list(
 	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,
 	//3 of a kind
 	/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,
+	/obj/item/clothing/accessory/wristwatch/black,/obj/item/clothing/accessory/wristwatch/black,/obj/item/clothing/accessory/wristwatch/black,
 	//1 of a kind
 	/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
 	/obj/item/weapon/vinyl/echoes,
@@ -222,7 +227,7 @@ var/global/list/shoal_stuff = list(
 
 /obj/structure/closet/crate/shoaljunk/New()
 	..()
-	for(var/i = 1 to 9)
+	for(var/i = 1 to 10)
 		if(!shoal_stuff.len)
 			return
 		var/path = pick_n_take(shoal_stuff)
@@ -1388,7 +1393,7 @@ var/global/list/cloudnine_stuff = list(
 /obj/effect/airshield
 	name = "airshield"
 	desc = "A shield that allows only non-gasses to pass through."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "planner"
 	opacity = FALSE
 	mouse_opacity = FALSE

@@ -135,14 +135,14 @@
 
 	race_items_to_collect = list(
 		/datum/species/vox/ = list(
-			"Emergency Physician" = list(/obj/item/clothing/under/rank/medical),
-			"Surgeon" =  list(/obj/item/clothing/under/rank/medical/blue),
-			"Medical Doctor" = list(/obj/item/clothing/under/rank/medical),
+			"Emergency Physician" = /obj/item/clothing/suit/storage/fr_jacket,
+			"Surgeon" =  /obj/item/clothing/suit/storage/labcoat,
+			"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
 		),
 		/datum/species/plasmaman/ = list(
-			"Emergency Physician" = list(/obj/item/clothing/under/rank/medical),
-			"Surgeon" =  list(/obj/item/clothing/under/rank/medical/blue),
-			"Medical Doctor" = list(/obj/item/clothing/under/rank/medical),
+			"Emergency Physician" = /obj/item/clothing/suit/storage/fr_jacket,
+			"Surgeon" =  /obj/item/clothing/suit/storage/labcoat,
+			"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
 		)
 	)
 

@@ -105,6 +105,16 @@ var/list/pinpointerpinpointer_list = list()
 	var/turf/location = null
 	watches_nuke = FALSE
 	pinpointable = FALSE
+	var/list/item_paths = list()
+
+/obj/item/weapon/pinpointer/advpinpointer/New()
+	for(var/index in potential_theft_objectives)
+		var/list/datumlist = potential_theft_objectives[index]
+		for(var/D in datumlist)
+			var/datum/theft_objective/O = D
+			var/obj/Dtypepath = initial(O.typepath)
+			item_paths[initial(Dtypepath.name)] = Dtypepath
+
 
 /obj/item/weapon/pinpointer/advpinpointer/attack_self()
 	if(!active)
@@ -165,13 +175,6 @@ var/list/pinpointerpinpointer_list = list()
 			mode = 2
 			switch(alert("Search for item signature or DNA fragment?" , "Signature Mode Select" , "" , "Item" , "DNA"))
 				if("Item")
-					var/list/item_paths[0]
-					for(var/index in potential_theft_objectives)
-						var/list/datumlist = potential_theft_objectives[index]
-						for(var/D in datumlist)
-							var/datum/theft_objective/O = D
-							var/obj/Dtypepath = initial(O.typepath)
-							item_paths[initial(Dtypepath.name)] = Dtypepath
 					var/targetitem = input("Select item to search for.", "Item Mode Select","") as null|anything in item_paths
 					if(!targetitem)
 						return
@@ -343,9 +346,9 @@ var/list/pinpointerpinpointer_list = list()
 	var/turf/this_pos = get_turf(src)
 	target = null
 	for(var/mob/living/dude in living_mob_list)
-		if(dude.z != this_pos.z || dude.stat == DEAD || !dude.is_implanted(/obj/item/weapon/implant/loyalty))
-			continue
 		var/turf/dude_pos = get_turf(dude)
+		if(dude_pos.z != this_pos.z || dude.stat == DEAD || !dude.is_implanted(/obj/item/weapon/implant/loyalty))
+			continue
 		var/distance = abs(cheap_pythag(this_pos.x - dude_pos.x, this_pos.y - dude_pos.y))
 		if(distance < closest_distance)
 			closest_distance = distance

@@ -1,10 +1,8 @@
 /obj/effect/expl_particles
 	name = "explosive particles"
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "explosion_particle"
 	opacity = 1
 	anchored = 1
-	mouse_opacity = 0
 
 /obj/effect/expl_particles/New()
 	..()
@@ -17,18 +15,17 @@
 	return
 
 /datum/effect/system/expl_particles
-	var/number = 10
-	var/turf/location
+	number = 10
 	var/total_particles = 0
 
-/datum/effect/system/expl_particles/proc/set_up(n = 10, loca)
+/datum/effect/system/expl_particles/set_up(n = 10, loca)
 	number = n
 	if(istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/expl_particles/proc/start()
+/datum/effect/system/expl_particles/start()
 	var/i = 0
 	for(i=0, i<src.number, i++)
 		spawn(0)
@@ -54,22 +51,19 @@
 		src.forceMove(null)
 	return
 
-/datum/effect/system/explosion
-	var/turf/location
-
-/datum/effect/system/explosion/proc/set_up(loca)
+/datum/effect/system/explosion/set_up(loca)
 	if(istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/explosion/proc/start()
+/datum/effect/system/explosion/start()
 	new/obj/effect/explosion( location )
 	var/datum/effect/system/expl_particles/P = new/datum/effect/system/expl_particles()
 	P.set_up(10,location)
 	P.start()
 	spawn(5)
-		var/datum/effect/effect/system/smoke_spread/S = new/datum/effect/effect/system/smoke_spread()
+		var/datum/effect/system/smoke_spread/S = new/datum/effect/system/smoke_spread()
 		S.set_up(5,0,location,null)
 		S.start()
 /*

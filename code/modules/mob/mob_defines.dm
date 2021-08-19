@@ -94,6 +94,8 @@
 	var/confused_intensity = 0 //Carbon
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
+	var/teleportitis = 0	//Carbon
+	var/timeslip = 0	//Carbon
 	var/lying = 0
 	var/lying_prev = 0
 	var/canmove = 1
@@ -158,7 +160,6 @@
 	var/seer = 0 // Legacy Cult
 
 	var/datum/hud/hud_used = null
-	var/datum/ui_icons/gui_icons = null
 
 	var/list/grabbed_by = list()
 	var/list/requests = list()

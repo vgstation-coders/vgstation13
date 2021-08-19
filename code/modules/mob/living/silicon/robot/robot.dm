@@ -66,7 +66,7 @@
 	var/viewalerts = FALSE
 	var/modtype = "Default"
 	var/jetpack = FALSE
-	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
+	var/datum/effect/system/ion_trail_follow/ion_trail = null
 	var/jeton = FALSE
 
 	var/modulelock = FALSE
@@ -93,7 +93,7 @@
 	var/last_tase_timeofday
 	var/last_high_damage_taken_timeofday
 
-/mob/living/silicon/robot/New(loc, var/malfAI = null)
+/mob/living/silicon/robot/New(loc, var/mob/living/silicon/ai/malfAI = null)
 	ident = rand(1, 999)
 	updatename(modtype)
 
@@ -176,6 +176,11 @@
 		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: Link to [src] established.</span>")
 		lawsync()
 		lawupdate = TRUE
+		var/datum/role/malfAI/malf_role = new_AI.mind.GetRole(MALF)
+		if (malf_role)
+			var/datum/faction/malf/malf_faction = malf_role.faction
+			ASSERT(malf_faction && mind)
+			malf_faction.HandleNewMind(mind)
 	else
 		lawupdate = FALSE
 

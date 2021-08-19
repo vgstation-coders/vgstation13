@@ -398,6 +398,12 @@
 	icon_state = "polarbearpelt"
 	item_state = "polarbearpelt"
 
+/obj/item/clothing/head/bearpelt/panda
+	name = "panda pelt hat"
+	desc = "Makes you want to chew on bamboo sticks."
+	icon_state = "pandbearpelt"
+	item_state = "pandbearpelt"
+
 /obj/item/clothing/head/wolfpelt
 	name = "wolf pelt hat"
 	desc = "Atop your head is one wolf."

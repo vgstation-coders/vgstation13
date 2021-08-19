@@ -77,7 +77,7 @@
 	// TODO: Break all pipes/wires? //Maybe not, N3X.
 
 	spawnBrokenPieces(src)
-	ChangeTurf(/turf/space)
+	ChangeTurf(get_base_turf(src.z))
 
 /turf/simulated/floor/glass/proc/spawnBrokenPieces(var/turf/T)
 	new shardtype(T, sheetamount)

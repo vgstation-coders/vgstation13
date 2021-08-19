@@ -11,6 +11,12 @@
 /datum/dna/gene/basic/nobreath/New()
 	block = NOBREATHBLOCK
 
+/datum/dna/gene/basic/nobreath/activate(var/mob/M)
+	..()
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.toxins_alert = 0 // deactivates the alert potentially set by lungs for breathing toxic gas
+
 /datum/dna/gene/basic/grant_spell/remoteview
 	name = "Remote Viewing"
 	activation_messages = list("Your mind expands.")

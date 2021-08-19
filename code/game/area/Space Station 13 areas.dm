@@ -140,7 +140,7 @@ proc/process_adminbus_teleport_locs()
 			adminbusteleportlocs += AR.name
 			adminbusteleportlocs[AR.name] = AR
 
-	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
+	sortTim(adminbusteleportlocs, /proc/cmp_text_asc)
 
 
 /*-----------------------------------------------------------------------------*/
@@ -176,6 +176,14 @@ proc/process_adminbus_teleport_locs()
 /area/dojo
 	name = "\improper Spider Clan Dojo"
 	icon_state = "dojo"
+	requires_power = 0
+	dynamic_lighting = 0
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
+
+/area/timevoid
+	name = "\improper Void Between Timelines"
+	icon_state = "time_void"
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE

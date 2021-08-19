@@ -361,6 +361,9 @@
 /mob/living/proc/setMaxHealth(var/newMaxHealth)
 	maxHealth = newMaxHealth
 
+/mob/living/proc/get_butchering_products()
+	return list()
+
 // ++++ROCKDTBEN++++ MOB PROCS //END
 
 
@@ -1860,7 +1863,7 @@ Thanks.
 
 /mob/living/proc/breath_airborne_diseases_from_clouds()
 	for(var/turf/T in range(1, src))
-		for(var/obj/effect/effect/pathogen_cloud/cloud in T.contents)
+		for(var/obj/effect/pathogen_cloud/cloud in T.contents)
 			if (!cloud.sourceIsCarrier || cloud.source != src || cloud.modified)
 				if (Adjacent(cloud))
 					for (var/ID in cloud.viruses)
@@ -1879,7 +1882,7 @@ Thanks.
 				strength += V.infectionchance
 			strength = round(strength/airborne_viruses.len)
 			while (strength > 0)//stronger viruses create more clouds at once
-				new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
+				new /obj/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
 				strength -= 40
 
 /mob/living/proc/handle_virus_updates()

@@ -3,6 +3,7 @@
 	//var/global/list/decals = list()
 	layer = DECAL_LAYER
 	plane = ABOVE_TURF_PLANE
+	mouse_opacity = 1 //So we can actually click these
 
 /obj/effect/decal/New()
 	..()

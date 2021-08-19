@@ -328,6 +328,8 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
+	if (flags & INVULNERABLE)
+		return
 	var/blood = 0
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
@@ -1894,18 +1896,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"my_appearance.r_hair",
-		"my_appearance.g_hair",
-		"my_appearance.b_hair",
-		"my_appearance.h_style",
-		"my_appearance.r_facial",
-		"my_appearance.g_facial",
-		"my_appearance.b_facial",
-		"my_appearance.f_style",
-		"my_appearance.r_eyes",
-		".my_appearance.g_eyes",
-		".my_appearance.b_eyes",
-		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",
@@ -1945,8 +1935,10 @@ mob/living/carbon/human/isincrit()
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
-	if(vessel)
-		vessel.send_to_past(duration)
+	 if(vessel)
+	 	vessel.send_to_past(duration)
+	if(my_appearance)
+		my_appearance.send_to_past(duration)
 
 	updatehealth()
 
@@ -2189,11 +2181,10 @@ mob/living/carbon/human/isincrit()
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
 
-
 /mob/living/carbon/human/turn_into_mannequin(var/material = "marble")
 	var/list/valid_mannequin_species = list(
 		"Human",
-		"Voc",
+		"Vox",
 		"Manifested",
 		)
 	if (!(species.name in valid_mannequin_species))
@@ -2269,3 +2260,48 @@ mob/living/carbon/human/isincrit()
 	if (new_mannequin)
 		return TRUE
 	return FALSE
+
+/mob/living/carbon/human/get_butchering_products()
+	if (!species)
+		return list()
+
+	switch (species.name)
+		if ("Human","Manifested")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/human)
+		if ("Unathi")
+			return list(/datum/butchering_product/teeth/lots, /datum/butchering_product/skin/lizard/lots)
+		if ("Skrell")
+			return list(/datum/butchering_product/teeth/lots)
+		if ("Skellington")
+			return list(/datum/butchering_product/teeth/human)
+		if ("Tajaran")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
+	return list()
+		/*	Missing Sprites, pls contribute
+
+		if ("Vox")
+			return list(
+		if ("Diona")
+			return list(
+		if ("Skeletal Vox")
+			return list(
+		if ("Plasmaman")
+			return list(
+		if ("Muton")
+			return list(
+		if ("Grey")
+			return list(
+		if ("Golem")
+			return list(
+		if ("Grue")
+			return list(
+		if ("Slime")
+			return list(
+		if ("Insectoid")
+			return list(
+		if ("Mushroom")
+			return list(
+		if ("Undead")
+			return list(
+
+		*/

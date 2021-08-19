@@ -2,7 +2,7 @@
 /obj/effect/rooting_trap
 	name = "trap"
 	desc = "How did you get trapped in that? Try resisting."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "energynet"
 	w_type=NOT_RECYCLABLE
 	anchored = 1

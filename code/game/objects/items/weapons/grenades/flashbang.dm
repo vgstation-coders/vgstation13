@@ -159,13 +159,13 @@ atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var
 			to_chat(M, "<span class='warning'>Your ears start to ring!</span>")
 	M.update_icons()
 
-/obj/effect/effect/smoke/flashbang
+/obj/effect/smoke/flashbang
 	name = "illumination"
 	time_to_live = 10
 	opacity = 0
 	icon_state = "sparks"
 
-/obj/effect/effect/smoke/flashbang/New()
+/obj/effect/smoke/flashbang/New()
 	..()
 	set_light(15)
 

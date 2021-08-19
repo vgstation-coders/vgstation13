@@ -167,6 +167,8 @@
 	if(locked_to && prob(amount * 5))
 		detach()
 
+/mob/living/simple_animal/hostile/frog/get_butchering_products()
+	return list(/datum/butchering_product/frog_leg)
 
 /mob/living/simple_animal/hostile/frog/centurion
 	name = "hopper centurion"

@@ -338,7 +338,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "zambiscuits"
 	storage_slots = 3
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit", "/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical")
 
 /obj/item/weapon/storage/pill_bottle/zambiscuits/New()
 	..()

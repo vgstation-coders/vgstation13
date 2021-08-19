@@ -187,7 +187,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	switch(part)
 		if(SSAIR_TILES)
 			LOOP_DECLARATION(turf, T)
-				if(T.c_airblock(T) & ZONE_BLOCKED)
+				if(T.c_airblock(T) == ZONE_BLOCKED) //== instead of & because if it's also AIR_BLOCKED, it doesn't need to be deferred since it's just going to rebuild the zone.
 					processing_parts[SSAIR_DEFERRED] += T
 					continue
 

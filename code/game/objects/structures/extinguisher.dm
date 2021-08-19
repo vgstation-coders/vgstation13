@@ -12,8 +12,12 @@
 	has_extinguisher = null
 	opened = 1
 
-/obj/structure/extinguisher_cabinet/New()
+/obj/structure/extinguisher_cabinet/New(loc, var/ndir)
 	..()
+	if(ndir)
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE)
+		pixel_y = (ndir & 3)? (ndir == 1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : 0
+		dir = ndir
 	update_icon()
 
 /obj/structure/extinguisher_cabinet/attackby(obj/item/O, mob/user)

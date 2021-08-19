@@ -100,7 +100,7 @@
 		return 1
 
 	var/turf/simulated/floor/T = A
-	to_chat(user, "Building wall")
+	to_chat(user, "Building wall...")
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
 	if(master.delay(user, A, 2 SECONDS))
 		if(master.get_energy(user) < energy_cost)

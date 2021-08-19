@@ -791,10 +791,10 @@
 			to_chat(user, "<span class='warning'>\The [current_mob] is already using the booth currently.</span>")
 		return
 	var/turf/T = get_turf(src)
-	if (T != user.loc)
+	current_mob = locate() in T
+	if (!current_mob)
 		to_chat(user, "<span class='notice'>You must enter the booth from the front before you can take a picture of yourself.</span>")
 		return
-	current_mob = user
 	lock_atom(current_mob, /datum/locking_category/photobooth)
 	anim(target = src, a_icon = icon, flick_anim = "photobooth-flash", sleeptime = 40, plane = ABOVE_HUMAN_PLANE, lay = OPEN_CURTAIN_LAYER)
 	playsound(T, "rustle", 50, 1, -2)

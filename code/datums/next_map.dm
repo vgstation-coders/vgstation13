@@ -6,6 +6,16 @@
 	var/is_enabled = TRUE // If FALSE, it doesn't show up during the vote but can be rigged
 
 /datum/next_map/proc/is_votable()
+	if(!fexists("maps/voting/"+path))
+		var/msg = "Skipping map [name] because the folder [path] does not exist."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
+	if(!fexists("maps/voting/"+path+"/vgstation13.dmb"))
+		var/msg = "Skipping map [name] because the file [path]/vgstation13.dmb does not exist."
+		message_admins(msg)
+		warning(msg)
+		return FALSE
 	if(clients.len < min_players)
 		var/msg = "Skipping map [name] due to not enough players. min = [min_players] || max = [max_players]"
 		message_admins(msg)
@@ -60,7 +70,7 @@
 /datum/next_map/dorf/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) // get the current date
-	if (MM != 8 && DD != 8) // Dwarf fortress release date
+	if(!(MM == 8 && DD == 8)) // Dwarf fortress release date
 		var/msg = "Skipping map [name] as this is not the release date of Dwarf Fortress."
 		message_admins(msg)
 		warning(msg)
@@ -94,8 +104,7 @@
 /datum/next_map/packed
 	name = "Packed Station"
 	path = "Packed Station"
-	min_players = 45
-	max_players = 60
+	max_players = 10
 
 /datum/next_map/roid
 	name = "Asteroid Station"

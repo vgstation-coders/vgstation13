@@ -77,28 +77,6 @@
 
 
 	////////SOUL BLADE HUD ELEMENTS////////
-	mymob.gui_icons.soulblade_bgLEFT = new /obj/abstract/screen
-	mymob.gui_icons.soulblade_bgLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
-	mymob.gui_icons.soulblade_bgLEFT.icon_state = "backgroundLEFT"
-	mymob.gui_icons.soulblade_bgLEFT.name = "Blood"
-	mymob.gui_icons.soulblade_bgLEFT.layer = HUD_BASE_LAYER
-	mymob.gui_icons.soulblade_bgLEFT.screen_loc = ui_blob_bgLEFT
-
-	mymob.gui_icons.soulblade_coverLEFT = new /obj/abstract/screen
-	mymob.gui_icons.soulblade_coverLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
-	mymob.gui_icons.soulblade_coverLEFT.icon_state = "coverLEFT"
-	mymob.gui_icons.soulblade_coverLEFT.name = "Blood"
-	mymob.gui_icons.soulblade_coverLEFT.layer = HUD_ABOVE_ITEM_LAYER
-	mymob.gui_icons.soulblade_coverLEFT.screen_loc = ui_blob_bgLEFT
-	mymob.gui_icons.soulblade_coverLEFT.maptext_x = 1
-	mymob.gui_icons.soulblade_coverLEFT.maptext_y = 126*PIXEL_MULTIPLIER
-
-	mymob.gui_icons.soulblade_bloodbar = new /obj/abstract/screen
-	mymob.gui_icons.soulblade_bloodbar.icon = 'icons/mob/screen1_shade_bars.dmi'
-	mymob.gui_icons.soulblade_bloodbar.icon_state = "blood"
-	mymob.gui_icons.soulblade_bloodbar.name = "Blood"
-	mymob.gui_icons.soulblade_bloodbar.screen_loc = ui_blob_powerbar
-
 	mymob.healths2 = new /obj/abstract/screen
 	mymob.healths2.icon = 'icons/mob/screen1_shade.dmi'
 	mymob.healths2.icon_state = "blade_ok"

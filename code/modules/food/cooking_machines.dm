@@ -114,6 +114,12 @@ var/global/ingredientLimit = 10
 	if(cooks_in_reagents)
 		return TRUE
 
+/obj/machinery/cooking/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+		T += M.rating-1
+	cookTime = initial(cookTime)-(25 * T) //150 ticks minus 25 ticks per every laser tier, T4s make it 75 ticks.
+
 // Interactions ////////////////////////////////////////////////
 
 /obj/machinery/cooking/examine(mob/user)
@@ -299,7 +305,13 @@ var/global/ingredientLimit = 10
 	icon_state = "mixer_off"
 	icon_state_on = "mixer_on"
 	cookSound = 'sound/machines/juicer.ogg'
+	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
 
+/obj/machinery/cooking/candy/RefreshParts()						
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		T += M.rating-1
+	cookTime = initial(cookTime)-(10 * T) //150 ticks minus 10 ticks per every tier level, T4s make it 60 ticks.
 
 /obj/machinery/cooking/candy/validateIngredient(var/obj/item/I)
 	. = ..()
@@ -346,6 +358,13 @@ var/global/ingredientLimit = 10
 	icon_state = "cereal_off"
 	icon_state_on = "cereal_on"
 	foodChoices = null
+	machine_flags = WRENCHMOVE | FIXED2WORK | SCREWTOGGLE | CROWDESTROY
+	
+/obj/machinery/cooking/cerealmaker/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		T += M.rating-1
+	cookTime = initial(cookTime)-(10 * T) //150 ticks minus 10 ticks per every tier level, T4s make it 60 ticks.
 
 /obj/machinery/cooking/cerealmaker/validateIngredient(var/obj/item/I)
 	. = ..()

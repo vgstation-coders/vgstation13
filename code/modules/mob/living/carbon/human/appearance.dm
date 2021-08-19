@@ -225,3 +225,21 @@
 	update_hair()
 	update_body()
 	check_dna()
+
+/datum/human_appearance/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"r_hair",
+		"g_hair",
+		"b_hair",
+		"h_style",
+		"r_facial",
+		"g_facial",
+		"b_facial",
+		"f_style",
+		"r_eyes",
+		"g_eyes",
+		"b_eyes",
+		"s_tone"
+)
+	reset_vars_after_duration(resettable_vars, duration)
