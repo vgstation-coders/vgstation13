@@ -225,6 +225,15 @@
 
 /obj/effect/blob/core/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
+
+		if (looks == "AME_new")
+			icon_state = "core"
+			var/hurt_percentage = round((health * 100) / maxhealth)
+			if (hurt_percentage < 25)
+				icon_state = "core_fuck"
+			else if (hurt_percentage < 50)
+				icon_state = "core_critical"
+
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
@@ -239,3 +248,20 @@
 					update_icon()
 
 			..()
+
+
+/obj/effect/blob/update_icon(var/spawnend = 0)
+	if(icon_size == 64)
+		if(health < maxhealth)
+			var/hurt_percentage = round((health * 100) / maxhealth)
+			var/hurt_icon
+			switch(hurt_percentage)
+				if(0 to 25)
+					hurt_icon = "hurt_100"
+				if(26 to 50)
+					hurt_icon = "hurt_75"
+				if(51 to 75)
+					hurt_icon = "hurt_50"
+				else
+					hurt_icon = "hurt_25"
+			overlays += image(icon,hurt_icon)
