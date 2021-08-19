@@ -173,7 +173,8 @@
 		for(var/atom/A in T) //Check to see if there's anything solid on the tape's turf (it's possible to build on it)
 			if(A.density)
 				return
-		M:forceMove(T)
+		if (T) // no sending mobs into nullspace!
+			M:forceMove(T)
 
 /obj/item/tape/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(!density)
