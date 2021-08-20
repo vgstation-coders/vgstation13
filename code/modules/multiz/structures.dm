@@ -163,23 +163,23 @@
 // type paths to make mapping easier.
 /obj/structure/stairs/north
 	dir = NORTH
-	bound_height = 64
-	bound_y = -32
-	pixel_y = -32
+	bound_height = 2 * WORLD_ICON_SIZE
+	bound_y = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 
 /obj/structure/stairs/south
 	dir = SOUTH
-	bound_height = 64
+	bound_height = 2 * WORLD_ICON_SIZE
 
 /obj/structure/stairs/east
 	dir = EAST
-	bound_width = 64
-	bound_x = -32
-	pixel_x = -32
+	bound_width = 2 * WORLD_ICON_SIZE
+	bound_x = -WORLD_ICON_SIZE
+	pixel_x = -WORLD_ICON_SIZE
 
 /obj/structure/stairs/west
 	dir = WEST
-	bound_width = 64
+	bound_width = 2 * WORLD_ICON_SIZE
 
 /obj/structure/stairs_frame
 	name = "Stair frame"
