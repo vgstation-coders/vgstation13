@@ -3,6 +3,8 @@
 	id = WIZAPP_MASTER
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
+	default_admin_voice = "Wizard Federation"
+	admin_voice_style = "notice"
 
 /datum/role/wizard_apprentice
 	name = "wizard's apprentice"

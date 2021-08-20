@@ -10,6 +10,8 @@
 	id = TIMEAGENTTWIN
 	var/datum/role/time_agent/erase_target = null
 	is_twin = TRUE
+	default_admin_voice = "The Agency"
+	admin_voice_style = "notice"
 
 
 /datum/role/time_agent/eviltwin/Greet(var/greeting,var/custom)

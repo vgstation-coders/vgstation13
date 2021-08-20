@@ -8,6 +8,8 @@
 	required_pref = ROLE_MINOR
 	wikiroute = ROLE_MINOR
 	logo_state = "prisoner-logo"
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "secradio"
 
 	var/moneyBonus = 100
 

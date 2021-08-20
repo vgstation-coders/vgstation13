@@ -5,6 +5,8 @@
 	required_pref = ROLE_MINOR
 	wikiroute = ROLE_MINOR
 	logo_state = "catbeast-logo"
+	default_admin_voice = "Kingston"
+	admin_voice_style = "tajaran"
 	var/ticks_survived = 0
 	var/list/areas_defiled = list()
 	var/current_disease_tier = 1

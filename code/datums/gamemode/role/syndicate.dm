@@ -4,6 +4,8 @@
 	required_pref = TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = TRAITOR
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "syndradio"
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 	var/obj/item/device/uplink/hidden/uplink//so we keep track of where the uplink they spawn with ends up
 
@@ -88,6 +90,7 @@
 	return dat
 
 /datum/role/traitor/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
 	if(href_list["giveuplink"])
 		equip_traitor(antag.current, 20, src)
 	if(href_list["telecrystalsSet"])
@@ -201,6 +204,8 @@
 	required_pref = NUKE_OP
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "syndradio"
 
 /datum/role/nuclear_operative/leader
 	name = NUKE_OP_LEADER
