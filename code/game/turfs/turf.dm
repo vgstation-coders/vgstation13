@@ -116,7 +116,7 @@
 		for(var/obj/obstacle in src)
 			/*if(ismob(mover) && mover:client)
 				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
-			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
+			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target && !(target in obstacle.locs))
 				/*if(ismob(mover) && mover:client)
 					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
 				mover.to_bump(obstacle, 1)
