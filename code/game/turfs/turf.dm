@@ -116,7 +116,9 @@
 		for(var/obj/obstacle in src)
 			/*if(ismob(mover) && mover:client)
 				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
-			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target && !(target in obstacle.locs))
+			if(obstacle in target) //If target is a turf and obstacle is a multitile object so that it covers target as well.
+				continue
+			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
 				/*if(ismob(mover) && mover:client)
 					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
 				mover.to_bump(obstacle, 1)
