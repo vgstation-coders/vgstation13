@@ -142,6 +142,11 @@
 
 /obj/structure/stairs/Uncross(atom/movable/A)
 	if(A.dir == dir)
+		return 0
+	return 1
+
+/obj/structure/stairs/to_bump(atom/movable/A)
+	if(A.dir == dir)
 		var/turf/simulated/open/above = GetAbove(A)
 		if(!above || !istype(above))
 			return
@@ -154,8 +159,6 @@
 				var/mob/living/L = A
 				if(L.pulling)
 					L.pulling.forceMove(target)
-		return 0
-	return 1
 
 /obj/structure/stairs/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
