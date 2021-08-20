@@ -47,7 +47,7 @@
 	icon_state = "rig_grey_soldier"
 	item_state = "rig_grey_soldier"
 	slowdown = HARDSUIT_SLOWDOWN_MED
-	armor = list(melee = 40, bullet = 15, laser = 50, energy = 30, bomb = 30, bio = 100, rad = 20)
+	armor = list(melee = 40, bullet = 15, laser = 50, energy = 15, bomb = 30, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/gun/energy/laser)
 	head_type = /obj/item/clothing/head/helmet/space/rig/grey/soldier
 
