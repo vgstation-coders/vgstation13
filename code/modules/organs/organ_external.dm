@@ -1825,9 +1825,6 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ
 
 				overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
 
-	if(brainmob && brainmob.client)
-		brainmob.client.screen.len = null //clear the hud
-
 	if(H && istype(H))
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
 		if(B)
