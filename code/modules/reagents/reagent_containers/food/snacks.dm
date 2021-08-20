@@ -6683,7 +6683,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SOYSAUCE, 10)
-	reagents.add_reagent(FORMIC_ACID, 4)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
@@ -6696,7 +6695,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(FORMIC_ACID, 6)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
