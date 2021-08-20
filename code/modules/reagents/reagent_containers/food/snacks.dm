@@ -2030,7 +2030,7 @@
 		reagents.add_reagent(NUTRIMENT, 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
-	name = "Vegetable soup"
+	name = "Avocado Soup"
 	desc = "May be served either hot or cold."
 	icon_state = "avocadosoup"
 	trash = /obj/item/trash/snack_bowl
@@ -2039,7 +2039,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/avocadosoup/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(WATER, 5)
+	reagents.add_reagent(LIMEJUICE, 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/hotchili
