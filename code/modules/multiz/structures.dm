@@ -145,7 +145,7 @@
 		return 0
 	return 1
 
-/obj/structure/stairs/to_bump(atom/movable/A)
+/obj/structure/stairs/Bumped(atom/movable/A)
 	if(A.dir == dir)
 		var/turf/simulated/open/above = GetAbove(A)
 		if(!above || !istype(above))
