@@ -215,6 +215,10 @@
 		if(!anchored)
 			to_chat(user, "<span class='warning'>The [src] must be anchored first!.</span>")
 			return
+		var/turf/simulated/open/above = GetAbove(src)
+		if(!above || !isopenspace(above))
+			to_chat(user, "<span class='warning'>The [src] must have an open space above it!.</span>")
+			return
 		else
 			if(S.amount < 4)
 				return ..() // ?
@@ -228,9 +232,9 @@
 				"<span class='notice'>You finish installing step plates to \the [src].</span>")
 				switch(dir)
 					if(NORTH)
-						new /obj/structure/stairs/north(loc)
+						new /obj/structure/stairs/north(get_step(loc,NORTH))
 					if(EAST)
-						new /obj/structure/stairs/east(loc)
+						new /obj/structure/stairs/east(get_step(loc,EAST))
 					if(SOUTH)
 						new /obj/structure/stairs/south(loc)
 					if(WEST)
