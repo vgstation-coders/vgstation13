@@ -140,8 +140,12 @@
 		if(!istype(above))
 			above.ChangeTurf(/turf/simulated/open)
 
-/obj/structure/stairs/Uncross(atom/movable/A)
-	if(A.dir == dir)
+// Handles if we can go up these stairs for Move()
+/obj/structure/stairs/Uncross(atom/movable/mover, turf/target)
+	// Needs to have a target elsewhere in move to return true, for some reason runtimes without the ?
+	if(target?.z != z)
+		return 1
+	if(mover.dir == dir)
 		return 0
 	return 1
 
@@ -154,11 +158,11 @@
 		var/turf/target = get_step(above, dir)
 		var/turf/source = A.loc
 		if(target.Enter(A, source))
-			A.forceMove(target)
+			A.Move(target)
 			if(isliving(A))
 				var/mob/living/L = A
 				if(L.pulling)
-					L.pulling.forceMove(target)
+					L.pulling.Move(target)
 
 /obj/structure/stairs/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
