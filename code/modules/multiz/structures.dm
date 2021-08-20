@@ -167,6 +167,46 @@
 /obj/structure/stairs/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
 
+/obj/structure/stairs/attackby(obj/item/W as obj, mob/user as mob)
+	/*if(W.is_wrench(user))
+		user.visible_message("<span class='warning'>[user] begins to [anchored ? "unanchor" : "anchor"] \the [src].</span>", \
+		"<span class='notice'>You begin to [anchored ? "unanchor" : "anchor"] \the [src].</span>")
+		if(do_after(user, src, 50))
+			user.visible_message("<span class='warning'>[user] [anchored ? "unanchors" : "anchors"] \the [src].</span>", \
+			"<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
+			add_hiddenprint(user)
+			add_fingerprint(user)
+			anchored = !anchored*/
+
+	//Deconstruction
+	if(iswelder(W))
+		var/obj/item/tool/weldingtool/WT = W
+		if(WT.remove_fuel(1, user))
+			user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s step plates.</span>", \
+			"<span class='notice'>You begin slicing through \the [src]'s step plates.</span>", \
+			"<span class='warning'>You hear welding noises.</span>")
+			playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			if(do_after(user, src, 100))
+				if(!istype(src))
+					return
+				playsound(src, 'sound/items/Welder.ogg', 100, 1)
+				user.visible_message("<span class='warning'>[user] slices through \the [src]'s step plates.</span>", \
+				"<span class='notice'>You slice through \the [src]'s step plates.</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+				var/obj/structure/stairs_frame/SF = null
+				switch(dir)
+					if(NORTH)
+						SF = new /obj/structure/stairs_frame(get_step(loc,SOUTH))
+					if(EAST)
+						SF = new /obj/structure/stairs_frame(get_step(loc,WEST))
+					if(SOUTH)
+						SF = new /obj/structure/stairs_frame(loc)
+					if(WEST)
+						SF = new /obj/structure/stairs_frame(loc)
+				SF.dir = dir
+				SF.anchored = anchored
+				qdel(src)
+
 // type paths to make mapping easier.
 /obj/structure/stairs/north
 	dir = NORTH
