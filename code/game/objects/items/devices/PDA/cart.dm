@@ -169,6 +169,7 @@
 /obj/item/weapon/cartridge/signal
 	name = "\improper Generic signaler cartridge"
 	desc = "A data cartridge with an integrated radio signaler module."
+	radio_type = /obj/item/radio/integrated/signal
 
 /obj/item/weapon/cartridge/signal/toxins
 	name = "\improper Signal Ace 2"
