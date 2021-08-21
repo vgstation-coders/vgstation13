@@ -112,14 +112,14 @@
 /obj/item/weapon/holder/animal/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype(W, /obj/item/offhand))
 		for(var/mob/M in contents)
-			M.attack_self(user)
+			M.attack_hand(user)
 		return
 	for(var/mob/M in contents)
 		M.attackby(W,user)
 
 /obj/item/weapon/holder/animal/attack_self(var/mob/user)
 	for(var/mob/M in contents)
-		M.attack_self(user)
+		M.attack_hand(user)
 
 //MICE
 
