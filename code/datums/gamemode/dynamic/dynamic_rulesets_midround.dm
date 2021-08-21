@@ -852,3 +852,21 @@
 		return FALSE
 	return TRUE
 
+//////////////////////////////////////////////
+//                                          //
+//         JUDGE                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/judge
+	name = "Judge"
+	role_category = /datum/role/judge
+	my_fac = /datum/faction/justice
+	required_pop = list(101,101,101,101,101,101,101,101,101,101)
+	required_candidates = 1
+	max_candidates = 5
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(10,10,10,10,10,10,10,10,10,10)
+	logo = "gun-logo"
+	repeatable = TRUE

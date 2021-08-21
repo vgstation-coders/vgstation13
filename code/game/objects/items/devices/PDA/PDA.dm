@@ -224,6 +224,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if (cartridge)
 		cartridge.initialize()
 
+/obj/item/device/pda/ert
+	name = "ERT PDA"
+	default_cartridge = /obj/item/weapon/cartridge/security
+	icon_state = "pda-ert"
+
 /obj/item/device/pda/medical
 	name = "Medical PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
