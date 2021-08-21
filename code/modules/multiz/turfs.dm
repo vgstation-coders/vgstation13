@@ -239,3 +239,19 @@
 	vis_contents.Cut()
 	overlays.Cut()
 	..()
+
+// Debug verbs.
+/client/proc/update_all_open_spaces()
+	set category = "Debug"
+	set name = "Update open spaces"
+	set desc = "On multi-z maps, force all open space turfs to update_icon and make their items fall"
+
+	if (!holder)
+		return
+
+	for(var/turf/simulated/open/O in world)
+		O.update_icon()
+		for(var/atom/movable/A in O)
+			A.fall()
+
+	message_admins("Admin [key_name_admin(usr)] forced open spaces to update.")

@@ -2,7 +2,7 @@
 //Contents: Ladders, Stairs.//
 //////////////////////////////
 
-/obj/structure/ladder
+/obj/structure/z_ladder
 	name = "ladder"
 	desc = "A ladder. You can climb it up and down."
 	icon_state = "ladder01"
@@ -12,22 +12,22 @@
 	anchored = 1
 
 	var/allowed_directions = DOWN
-	var/obj/structure/ladder/target_up
-	var/obj/structure/ladder/target_down
+	var/obj/structure/z_ladder/target_up
+	var/obj/structure/z_ladder/target_down
 
 	var/const/climb_time = 2 SECONDS
 
-/obj/structure/ladder/initialize()
+/obj/structure/z_ladder/initialize()
 	// the upper will connect to the lower
 	if(allowed_directions & DOWN) //we only want to do the top one, as it will initialize the ones before it.
-		for(var/obj/structure/ladder/L in GetBelow(src))
+		for(var/obj/structure/z_ladder/L in GetBelow(src))
 			if(L.allowed_directions & UP)
 				target_down = L
 				L.target_up = src
 				return
 	update_icon()
 
-/obj/structure/ladder/Destroy()
+/obj/structure/z_ladder/Destroy()
 	if(target_down)
 		target_down.target_up = null
 		target_down = null
@@ -36,15 +36,14 @@
 		target_up = null
 	return ..()
 
-/obj/structure/ladder/attackby(obj/item/C as obj, mob/user as mob)
+/obj/structure/z_ladder/attackby(obj/item/C as obj, mob/user as mob)
 	attack_hand(user)
-	return
 
-/obj/structure/ladder/attack_hand(var/mob/M)
+/obj/structure/z_ladder/attack_hand(var/mob/M)
 	if(!M.may_climb_ladders(src))
 		return
 
-	var/obj/structure/ladder/target_ladder = getTargetLadder(M)
+	var/obj/structure/z_ladder/target_ladder = getTargetLadder(M)
 	if(!target_ladder)
 		return
 	if(!M.Move(get_turf(src)))
@@ -62,12 +61,12 @@
 	if(do_after(M, src, climb_time))
 		climbLadder(M, target_ladder)
 
-/obj/structure/ladder/attack_ghost(var/mob/M)
+/obj/structure/z_ladder/attack_ghost(var/mob/M)
 	var/target_ladder = getTargetLadder(M)
 	if(target_ladder)
 		M.forceMove(get_turf(target_ladder))
 
-/obj/structure/ladder/proc/getTargetLadder(var/mob/M)
+/obj/structure/z_ladder/proc/getTargetLadder(var/mob/M)
 	if((!target_up && !target_down) || (target_up && !istype(target_up.loc, /turf) || (target_down && !istype(target_down.loc,/turf))))
 		to_chat(M, "<span class='notice'>\The [src] is incomplete and can't be climbed.</span>")
 		return
@@ -100,7 +99,7 @@
 /mob/observer/ghost/may_climb_ladders(var/ladder)
 	return TRUE
 
-/obj/structure/ladder/proc/climbLadder(var/mob/M, var/target_ladder)
+/obj/structure/z_ladder/proc/climbLadder(var/mob/M, var/target_ladder)
 	var/turf/T = get_turf(target_ladder)
 	for(var/atom/A in T)
 		if(!A.Cross(M, M.loc, 1.5, 0))
@@ -108,22 +107,22 @@
 			return FALSE
 	return M.Move(T)
 
-/obj/structure/ladder/Cross(obj/mover, turf/source, height, airflow)
+/obj/structure/z_ladder/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
 
-/obj/structure/ladder/update_icon()
+/obj/structure/z_ladder/update_icon()
 	icon_state = "ladder[!!(allowed_directions & UP)][!!(allowed_directions & DOWN)]"
 
-/obj/structure/ladder/up
+/obj/structure/z_ladder/up
 	allowed_directions = UP
 	icon_state = "ladder10"
 
-/obj/structure/ladder/updown
+/obj/structure/z_ladder/updown
 	allowed_directions = UP|DOWN
 	icon_state = "ladder11"
 
 /obj/structure/stairs
-	name = "Stairs"
+	name = "\improper stairs"
 	desc = "Stairs leading to another deck.  Not too useful if the gravity goes out."
 	icon = 'icons/obj/stairs.dmi'
 	icon_state = "stairs"
@@ -166,17 +165,6 @@
 	return airflow || !density
 
 /obj/structure/stairs/attackby(obj/item/W as obj, mob/user as mob)
-	/*if(W.is_wrench(user))
-		user.visible_message("<span class='warning'>[user] begins to [anchored ? "unanchor" : "anchor"] \the [src].</span>", \
-		"<span class='notice'>You begin to [anchored ? "unanchor" : "anchor"] \the [src].</span>")
-		if(do_after(user, src, 50))
-			user.visible_message("<span class='warning'>[user] [anchored ? "unanchors" : "anchors"] \the [src].</span>", \
-			"<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
-			add_hiddenprint(user)
-			add_fingerprint(user)
-			anchored = !anchored*/
-
-	//Deconstruction
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
@@ -227,7 +215,7 @@
 	bound_width = 2 * WORLD_ICON_SIZE
 
 /obj/structure/stairs_frame
-	name = "Stair frame"
+	name = "\improper stair frame"
 	desc = "Frames of stairs that are supposed to lead to another deck.  Not too useful in any case."
 	icon = 'icons/obj/stairs.dmi'
 	icon_state = "stairframe"

@@ -79,6 +79,7 @@ What's NOT ported?
 		return 1
 	return 0
 
+// BEGIN /VG/ CODE
 /**
  * Z-Distance functions
  *
@@ -119,66 +120,6 @@ What's NOT ported?
 
 	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((b.z-a.z)**2)
 
-/* Polaris methods for getting hearers. Necessary? Not sure
-
-/proc/get_mobs_or_objects_in_view(var/R, var/atom/source, var/include_mobs = 1, var/include_objects = 1)
-
-	var/turf/T = get_turf(source)
-	var/list/hear = list()
-
-	if(!T)
-		return hear
-
-	var/list/range = hear(R, T)
-
-	for(var/I in range)
-		if(ismob(I))
-			hear |= recursive_content_check(I, hear, 3, 1, 0, include_mobs, include_objects)
-			if(include_mobs)
-				var/mob/M = I
-				if(M.client)
-					hear += M
-		else if(istype(I,/obj/))
-			hear |= recursive_content_check(I, hear, 3, 1, 0, include_mobs, include_objects)
-			var/obj/O = I
-			if(O.show_messages && include_objects)
-				hear += I
-
-	return hear
-
-// Will recursively loop through an atom's contents and check for mobs, then it will loop through every atom in that atom's contents.
-// It will keep doing this until it checks every content possible. This will fix any problems with mobs, that are inside objects,
-// being unable to hear people due to being in a box within a bag.
-
-/proc/recursive_content_check(var/atom/O,  var/list/L = list(), var/recursion_limit = 3, var/client_check = 1, var/sight_check = 1, var/include_mobs = 1, var/include_objects = 1, var/ignore_show_messages = 0)
-
-	if(!recursion_limit)
-		return L
-
-	for(var/I in O.contents)
-
-		if(ismob(I))
-			if(!sight_check || isInSight(I, O))
-				L |= recursive_content_check(I, L, recursion_limit - 1, client_check, sight_check, include_mobs, include_objects)
-				if(include_mobs)
-					if(client_check)
-						var/mob/M = I
-						if(M.client)
-							L |= M
-					else
-						L |= I
-
-		else if(istype(I,/obj/))
-			var/obj/check_obj = I
-			if(ignore_show_messages || check_obj.show_messages)
-				if(!sight_check || isInSight(I, O))
-					L |= recursive_content_check(I, L, recursion_limit - 1, client_check, sight_check, include_mobs, include_objects)
-					if(include_objects)
-						L |= I
-
-	return L*/
-
-// BEGIN /VG/ CODE
 /proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/inward=0,var/draw_red=0,var/cube=1)
 	var/list/spiraled_turfs = list()
 	var/turf/upturf = epicenter
