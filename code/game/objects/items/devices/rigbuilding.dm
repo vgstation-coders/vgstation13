@@ -41,7 +41,7 @@
 
 	else if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
-		if(buildstate != 0)
+		if(buildstate != RIG_EMPTY)
 			to_chat(user, "It's already wired!")
 			return
 		else if(C.use(5))
@@ -55,17 +55,20 @@
 			return
 
 	else if(istype(W, /obj/item/tool/wirecutters))
-		if(buildstate == 1)
+		if(buildstate == RIG_WIRED)
 			to_chat(user, "You secure the wiring in \the [src].")
 			W.playtoolsound(src, 50)
 			buildstate = RIG_WIRED_SECURE
 			update_icon()
-		else
+		else if (buildstate >= RIG_WIRED_SECURE)
+			to_chat(user, "The wiring is already secure!")
 			return
+		else
+			to_chat(user, "There are no wires to secure.")
 
 	else if(istype(W, /obj/item/weapon/cell))
 		var/obj/item/weapon/cell/P = W
-		if(buildstate == 2)
+		if(buildstate == RIG_WIRED_SECURE)
 			if(!user.drop_item(W))
 				to_chat(user, "You can't drop \the [P]!")
 				return
@@ -75,7 +78,7 @@
 			playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
 			buildstate = RIG_CELL
 			update_icon()
-		else if(buildstate >= 3)
+		else if(buildstate >= RIG_CELL)
 			to_chat(user, "There's already a cell installed!")
 			return
 		else
@@ -84,14 +87,14 @@
 
 	else if(istype(W, /obj/item/device/rigparts))
 		var/obj/item/device/rigparts/R = W
-		if(buildstate == 3)
+		if(buildstate == RIG_CELL)
 			result = R.result
 			to_chat(user, "You install \the [R] onto \the [src].")
 			playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
 			buildstate = RIG_PLATE
 			update_icon()
 			qdel(R)
-		else if(buildstate >= 4)
+		else if(buildstate == RIG_PLATE)
 			to_chat(user, "There's already plating on \the [src].")
 			return
 		else
@@ -99,7 +102,7 @@
 			return
 
 	else if(W.is_screwdriver(user))
-		if(buildstate == 4)
+		if(buildstate == RIG_PLATE)
 			to_chat(user, "You secure the plating on \the [src].")
 			W.playtoolsound(src, 50)
 			result = new result(get_turf(src.loc))
