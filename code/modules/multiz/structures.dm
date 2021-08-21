@@ -149,20 +149,18 @@
 		return 0
 	return 1
 
+// And now the actual going, fail uncross to move up, hence bumped()
 /obj/structure/stairs/Bumped(atom/movable/A)
 	if(A.dir == dir)
 		var/turf/simulated/open/above = GetAbove(A)
 		if(!above || !istype(above))
 			return
-		// This is hackish but whatever
 		var/turf/target = get_step(above, dir)
-		var/turf/source = A.loc
-		if(target.Enter(A, source))
-			A.Move(target)
-			if(isliving(A))
-				var/mob/living/L = A
-				if(L.pulling)
-					L.pulling.Move(target)
+		A.Move(target)
+		if(isliving(A))
+			var/mob/living/L = A
+			if(L.pulling)
+				L.pulling.Move(target)
 
 /obj/structure/stairs/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
