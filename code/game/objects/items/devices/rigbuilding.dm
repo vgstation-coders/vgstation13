@@ -1,31 +1,33 @@
 /obj/item/device/rigframe
 	name = "Hardsuit frame"
-	desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear."
+	desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. The wiring on this frame has not yet been installed."
 	icon_state = "rigframe_0"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 	w_class = W_CLASS_LARGE
-	var/buildstate = 0
+	var/buildstate = RIG_EMPTY
 	var/obj/item/weapon/cell/cell = null
 	var/obj/item/clothing/suit/space/rig/result = null //changes based on which kit you use
 
 /obj/item/device/rigframe/update_icon()
-	if(buildstate == 0)
-		icon_state = "rigframe_0"
-	else if(buildstate == "wired")
-		icon_state = "rigframe_1"
-		desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. The wiring is installed, but not secure."
-	else if(buildstate == "wired_secure")
-		icon_state = "rigframe_2"
-		desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. Though the wiring is secure, it lacks a power source."
-	else if(buildstate == "cell")
-		icon_state = "rigframe_2"
-		desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. This frame is ready to recieve its plating."
-	else if(buildstate == "plate")
-		icon_state = "rigframe_3"
-		desc = "A nearly-complete hardsuit frame. The plates are installed, but not yet fastened. You couldn't wear it without it falling apart around you."
-	else
-		icon_state = "rigframe_0" // shouldn't happen
+	switch(buildstate)
+		if(RIG_EMPTY)
+			icon_state = "rigframe_0"
+			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. The wiring on this frame has not yet been installed."
+		if(RIG_WIRED)
+			icon_state = "rigframe_1"
+			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. The wiring is installed, but not secure."
+		if(RIG_WIRED_SECURE)
+			icon_state = "rigframe_2"
+			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. Though the wiring is secure, it lacks a power source."
+		if(RIG_CELL)
+			icon_state = "rigframe_2"
+			desc = "An incomplete hardsuit frame, lacking all sealing and armor plating. Its unfinished state makes it impossible to actually wear. This frame is ready to recieve its plating."
+		if(RIG_PLATE)
+			icon_state = "rigframe_3"
+			desc = "A nearly-complete hardsuit frame. The plates are installed, but not yet fastened. You couldn't wear it without it falling apart around you."
+		else
+			icon_state = "rigframe_0" // shouldn't happen
 
 /obj/item/device/rigframe/Destroy()
 	qdel(cell)
@@ -39,29 +41,41 @@
 
 	else if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
-		if(buildstate == 0)
-			if(C.amount < 5)
-				to_chat(user, "You don't have enough cable to wire \the [src].")
-				return
-			to_chat(user, "You install the wires in \the [src].")
-			C.use(5)
-			playsound(user, 'sound/items/zip.ogg', 50, 1)
-			buildstate = "wired"
-			update_icon()
-		else
+		if(buildstate != 0)
 			to_chat(user, "It's already wired!")
 			return
+		else if(C.use(5))
+			to_chat(user, "You install the wires in \the [src].")
+			playsound(user, 'sound/items/zip.ogg', 50, 1)
+			buildstate = RIG_WIRED
+			update_icon()
+			return
+		else
+			to_chat(user, "You don't have enough cable to wire \the [src].")
+			return
 
-	else if(istype(W, /obj/item/weapon/cell) && user.drop_item(W, src))
+	else if(istype(W, /obj/item/tool/wirecutters))
+		if(buildstate == 1)
+			to_chat(user, "You secure the wiring in \the [src].")
+			W.playtoolsound(src, 50)
+			buildstate = RIG_WIRED_SECURE
+			update_icon()
+		else
+			return
+
+	else if(istype(W, /obj/item/weapon/cell))
 		var/obj/item/weapon/cell/P = W
-		if(buildstate == "wired_secure")
+		if(buildstate == 2)
+			if(!user.drop_item(W))
+				to_chat(user, "You can't drop \the [P]!")
+				return
 			P.forceMove(src)
 			cell = P
 			to_chat(user, "You insert \the [P] into \the [src].")
 			playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
-			buildstate = "cell"
+			buildstate = RIG_CELL
 			update_icon()
-		else if(cell)
+		else if(buildstate >= 3)
 			to_chat(user, "There's already a cell installed!")
 			return
 		else
@@ -70,31 +84,22 @@
 
 	else if(istype(W, /obj/item/device/rigparts))
 		var/obj/item/device/rigparts/R = W
-		if(buildstate == "cell")
+		if(buildstate == 3)
 			result = R.result
 			to_chat(user, "You install \the [R] onto \the [src].")
 			playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
-			buildstate = "plate"
+			buildstate = RIG_PLATE
 			update_icon()
 			qdel(R)
-		else if(buildstate == "plate")
+		else if(buildstate >= 4)
 			to_chat(user, "There's already plating on \the [src].")
 			return
 		else
 			to_chat(user, "You can't install \the [R] yet.")
 			return
 
-	else if(istype(W, /obj/item/tool/wirecutters))
-		if(buildstate == "wired")
-			to_chat(user, "You secure the wiring in \the [src].")
-			W.playtoolsound(src, 50)
-			buildstate = "wired_secure"
-			update_icon()
-		else
-			return
-
 	else if(W.is_screwdriver(user))
-		if(buildstate == "plate")
+		if(buildstate == 4)
 			to_chat(user, "You secure the plating on \the [src].")
 			W.playtoolsound(src, 50)
 			result = new result(get_turf(src.loc))

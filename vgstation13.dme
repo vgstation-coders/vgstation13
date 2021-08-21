@@ -58,6 +58,7 @@
 #include "__DEFINES\rcd.dm"
 #include "__DEFINES\reagents.dm"
 #include "__DEFINES\research_levels.dm"
+#include "__DEFINES\rigbuilding.dm"
 #include "__DEFINES\role_datums_defines.dm"
 #include "__DEFINES\rust_g.dm"
 #include "__DEFINES\security.dm"
