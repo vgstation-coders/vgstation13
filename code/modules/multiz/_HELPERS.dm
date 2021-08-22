@@ -4,14 +4,6 @@
 #define OPENSPACE_PLANE_END -8
 #define OPENSPACE_PLANE -25
 #define OVER_OPENSPACE_PLANE -7
-//#define QDELETED(X) (!X || X.gc_destroyed)  Polaris has this
-
-/obj/effect/landmark/map_data
-	name = "Unknown"
-	desc = "An unknown location."
-	invisibility = 101
-
-	var/height = 1     ///< The number of Z-Levels in the map.
 
 /turf/proc/is_space()
 	return 0
