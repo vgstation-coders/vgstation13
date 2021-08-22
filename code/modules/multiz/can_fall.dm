@@ -2,6 +2,9 @@
 /obj/mecha/can_fall()
 	return TRUE
 
+/obj/mecha/working/clarke/can_fall()
+	return FALSE
+
 /obj/item/pipe/can_fall()
 	. = ..()
 
@@ -39,6 +42,16 @@
 		var/obj/item/weapon/tank/jetpack/J = back
 		if(!lying && (J.allow_thrust(0.01, src)))
 			return FALSE
+	return TRUE
+
+/mob/living/silicon/robot/can_fall() // Jetpacks help too
+	if(flying)
+		return FALSE
+	if(module)
+		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
+			if(J && istype(J, /obj/item/weapon/tank/jetpack))
+				if(J.allow_thrust(0.01, src))
+					return FALSE
 	return TRUE
 
 // Check if this atom prevents things standing on it from falling. Return TRUE to allow the fall.
