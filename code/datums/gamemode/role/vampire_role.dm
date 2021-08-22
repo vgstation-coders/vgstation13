@@ -135,7 +135,7 @@
 
 	AppendObjective(/datum/objective/acquire_blood)
 
-	AppendObjective(/datum/objective/target/delayed/assassinate)
+	AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 
 	AppendObjective(/datum/objective/target/steal)
 

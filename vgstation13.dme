@@ -438,7 +438,6 @@
 #include "code\datums\gamemode\objectives\ninja\stealsake.dm"
 #include "code\datums\gamemode\objectives\target\assassinate.dm"
 #include "code\datums\gamemode\objectives\target\debrain.dm"
-#include "code\datums\gamemode\objectives\target\delayedassassinate.dm"
 #include "code\datums\gamemode\objectives\target\erase.dm"
 #include "code\datums\gamemode\objectives\target\harm.dm"
 #include "code\datums\gamemode\objectives\target\killorexile.dm"

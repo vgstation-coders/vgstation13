@@ -28,7 +28,7 @@
 		AppendObjective(/datum/objective/target/killsilicons)
 	else
 		if(prob(70))
-			AppendObjective(/datum/objective/target/delayed/assassinate)
+			AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 		else
 			AppendObjective(/datum/objective/target/skulls)
 
