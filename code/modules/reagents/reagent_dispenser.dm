@@ -356,6 +356,34 @@
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 
+/obj/structure/reagent_dispensers/sacid
+	name = "\improper Sulphuric Acid Dispenser"
+	desc = "A dispenser of sulphuric acid."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "sacidtank"
+	amount_per_transfer_from_this = 50
+
+/obj/structure/reagent_dispensers/sacid/New()
+	. = ..()
+	reagents.add_reagent(SACID, 1000)
+
+/obj/structure/reagent_dispensers/sacid/attackby(var/obj/item/W, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if(issolder(W))
+		var/obj/item/tool/solder/S = W
+		if(S.reagents.get_reagent_amount() >= S.max_fuel) // Already filled.
+			to_chat(user, "<span class='notice'>\The [S] is already full!</span>")
+			return
+
+		reagents.trans_to(S, S.max_fuel)
+		S.update_icon()
+		to_chat(user, "<span class='notice'>Solder refilled.</span>")
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		return 1
+
 /obj/structure/reagent_dispensers/degreaser
 	name = "ethanol tank"
 	desc = "A tank filled with ethanol, used in the degreasing of engines."
