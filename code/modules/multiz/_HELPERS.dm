@@ -12,7 +12,6 @@
 	invisibility = 101
 
 	var/height = 1     ///< The number of Z-Levels in the map.
-	var/turf/edge_type ///< What the map edge should be formed with. (null = world.turf)
 
 /turf/proc/is_space()
 	return 0
