@@ -1,6 +1,3 @@
-/* Multi-Z code was ported from Polaris, which operates under the AGPL v3 license.
-Permission for its use was obtained on 11/12/2017 from Neerti in the Polaris Discord. */
-
 #define isopenspace(A) istype(A, /turf/simulated/open)
 #define isvisiblespace(A) is_type_in_list(A, list(/turf/simulated/open, /turf/simulated/floor/glass))
 #define OPENSPACE_PLANE_START -23
@@ -26,43 +23,6 @@ Permission for its use was obtained on 11/12/2017 from Neerti in the Polaris Dis
 /atom/proc/set_dir(new_dir) //We should probably use this for our whole codebase for shadows. If z-shadow isn't working I may have to implement it widely.
 	. = new_dir != dir
 	dir = new_dir
-
-/* PORT NOTES
-- Removed scaling with magboots / robots (pending discussion)
-- We appear to already tell universe on turf change so I removed turf changed handling (see Polaris turf/ChangeTurf) which required their observer datum, instead
-see turfs/turf.dm ChangeTurf()
-- We handle building lattices and plating differently, see turfs.dm
-- We don't have edge blending, but that's mostly for grass stuff anyway.
-- We have scrapped connect type. We'll let you connect any two pipes on the same layer. Also note Polaris has no layered piping.
-- Polaris uses some different hearing with hear_say, hear_quote, hear_radio. Hopefully our Hear() covers it!
-- Our pipes don't seem to use pipe_color, see update_icon
-- Converted OS Controller into a subsystem (see subsystem.dm)
-- When Bay/Polaris ported our ventcrawling, they adapted the relaymove in pipes into a proc ventcrawl_to. Now we've adapted to use that proc.
-- Rather than try to implement audible_message from Polaris (a whole rabbithole of helper procs), converted them to visible_message
-- Ported post_change() for turfs
-- At 384 and 386 in process.dm we manually add to world.log, Polaris has logging procs (log_to_dd) that I didn't port
-- Commented a log_runtime call at 365 for similar reasons
-- MultiZAS: airflow between Z levels was merely a define and type changes away from working (ZAS/ConnectionManager.dm)
-
-What's NOT ported?
-- Elevators (modules/turbolift/)
-- Powernet across Z levels?
-*/
-
-/*/turf/simulated/proc/update_icon_edge()
-	if(edge_blending_priority)
-		for(var/checkdir in cardinal)
-			var/turf/simulated/T = get_step(src, checkdir)
-			if(istype(T) && T.edge_blending_priority && edge_blending_priority < T.edge_blending_priority && icon_state != T.icon_state)
-				var/cache_key = "[T.get_edge_icon_state()]-[checkdir]"
-				if(!turf_edge_cache[cache_key])
-					var/image/I = image(icon = 'icons/turf/outdoors_edge.dmi', icon_state = "[T.get_edge_icon_state()]-edge", dir = checkdir)
-					I.plane = 0
-					turf_edge_cache[cache_key] = I
-				overlays += turf_edge_cache[cache_key]
-
-/turf/simulated/proc/get_edge_icon_state()
-	return icon_state*/
 
 // Called after turf replaces old one
 /turf/proc/post_change()

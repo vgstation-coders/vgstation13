@@ -2071,6 +2071,7 @@
 #include "code\modules\mob\new_player\poll.dm"
 #include "code\modules\mob\new_player\preferences_setup.dm"
 #include "code\modules\mob\new_player\sprite_accessories.dm"
+#include "code\modules\multiz\_docs.dm"
 #include "code\modules\multiz\_HELPERS.dm"
 #include "code\modules\multiz\basic.dm"
 #include "code\modules\multiz\falling.dm"
