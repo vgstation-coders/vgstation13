@@ -91,6 +91,9 @@
 	if(!Adjacent(ladder))
 		to_chat(src, "<span class='warning'>You need to be next to \the [ladder] to start climbing.</span>")
 		return FALSE
+	if(!held_items.len)
+		to_chat(src, "<span class='warning'>You do not have hands to grab \the [ladder].</span>")
+		return FALSE
 	if(incapacitated())
 		to_chat(src, "<span class='warning'>You are physically unable to climb \the [ladder].</span>")
 		return FALSE
