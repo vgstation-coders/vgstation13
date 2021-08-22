@@ -760,19 +760,23 @@ var/global/list/obj/machinery/light/alllights = list()
 	rigged = 1
 	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER
 
+/obj/item/weapon/light/attack_self(var/mob/user)
+	if(user.a_intent == I_HURT)
+		to_chat(user, "<span class='warning'>You clench \the [src] in your hand, crushing it.</span>")
+		shatter()
+
 // called after an attack with a light item
 // shatter light, unless it was an attempt to put it in a light socket
 // now only shatter if the intent was harm
 
-/obj/item/weapon/light/afterattack(atom/target, mob/user)
+/obj/item/weapon/light/afterattack(var/atom/target, var/mob/user)
+	if (!user.Adjacent(target))
+		return
 	if(istype(target, /obj/machinery/light))
 		return
 	if(user.a_intent != I_HURT)
 		return
-	if (user.Adjacent(target))
-		to_chat(user, "<span class='warning'>\The [src] shatters as you swing it against \the [target].</span>")
-	else
-		to_chat(user, "<span class='warning'>You clench \the [src] in your hand, crushing it.</span>")
+	to_chat(user, "<span class='warning'>\The [src] shatters as you whack it against \the [target].</span>")
 	shatter()
 
 /obj/item/weapon/light/proc/shatter(verbose = TRUE)
