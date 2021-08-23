@@ -21,7 +21,7 @@ mob/living/carbon/var
 	hal_crit = 0
 
 mob/living/carbon/proc/handle_hallucinations()
-	if(handling_hal)
+	if(handling_hal || isUnconscious())
 		return
 	handling_hal = 1
 	while(hallucination > 20)
@@ -256,8 +256,7 @@ mob/living/carbon/proc/handle_hallucinations()
 						if(4)
 							to_chat(src, "<span class='warning'>Your joints feel very stiff.</span>")
 						if(5)
-							if (!isUnconscious())
-								say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
+							say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
 						if(6)
 							to_chat(src, "Your skin feels loose.")
 						if(7)
