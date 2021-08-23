@@ -126,7 +126,7 @@
 
 /obj/structure/stairs
 	name = "\improper stairs"
-	desc = "Stairs leading to another deck.  Not too useful if the gravity goes out."
+	desc = "Stairs leading to another deck."
 	icon = 'icons/obj/stairs.dmi'
 	icon_state = "stairs"
 	density = 0
@@ -219,7 +219,7 @@
 
 /obj/structure/stairs_frame
 	name = "\improper stair frame"
-	desc = "Frames of stairs that are supposed to lead to another deck.  Not too useful in any case."
+	desc = "Frames of stairs that are supposed to lead to another deck."
 	icon = 'icons/obj/stairs.dmi'
 	icon_state = "stairframe"
 	density = 0
