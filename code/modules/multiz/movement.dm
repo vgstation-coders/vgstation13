@@ -49,7 +49,7 @@
 			else
 				to_chat(src, "<span class='warning'>You gave up on pulling yourself up.</span>")
 				return 0
-		else
+		else if(!flying)
 			to_chat(src, "<span class='warning'>Gravity stops you from moving upward.</span>")
 			return 0
 
@@ -76,7 +76,7 @@
 		to_chat(src, "<span class='notice'>There is nothing of interest in this direction.</span>")
 
 /mob/proc/can_ztravel()
-	return 0
+	return flying
 
 /mob/dead/observer/can_ztravel()
 	return 1
@@ -87,6 +87,14 @@
 
 	if(Process_Spacemove())
 		return 1
+	
+	if(flying)
+		return 1
+
+	if(istype(back, /obj/item/weapon/tank/jetpack)) // Finally, jetpacks allow it
+		var/obj/item/weapon/tank/jetpack/J = back
+		if(!lying && (J.allow_thrust(0.01, src)))
+			return 1
 
 /*  This would be really easy to implement but let's talk about if we WANT it.
 
@@ -102,6 +110,15 @@
 	if(Process_Spacemove()) //Checks for active jetpack
 		return 1
 
+	if(flying)
+		return 1
+	
+	if(module) // Finally, jetpacks allow it
+		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
+			if(J && istype(J, /obj/item/weapon/tank/jetpack))
+				if(J.allow_thrust(0.01, src))
+					return 1
+	
 /* Same as above, hull scaling discussion pending
 
 	for(var/turf/simulated/T in trange(1,src)) //Robots get "magboots"
