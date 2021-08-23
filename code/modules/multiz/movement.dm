@@ -42,18 +42,32 @@
 		if(ishuman(src)) // Weird way to handle jetpack stuff
 			var/mob/living/carbon/human/H = src
 			if(istype(H.back, /obj/item/weapon/tank/jetpack)) // Finally, jetpacks allow it
-			var/obj/item/weapon/tank/jetpack/J = H.back
-			if(!H.lying && (J.allow_thrust(0.01, src)))
-				for(var/atom/A in destination)
-					if(!A.Cross(src, start, 1.5, 0))
-						to_chat(src, "<span class='warning'>\The [A] blocks you.</span>")
+				var/obj/item/weapon/tank/jetpack/J = H.back
+				if(!H.lying && (J.allow_thrust(0.01, src)))
+					for(var/atom/A in destination)
+						if(!A.Cross(src, start, 1.5, 0))
+							to_chat(src, "<span class='warning'>\The [A] blocks you.</span>")
+							return 0
+					if(!Move(destination))
 						return 0
-				if(!Move(destination))
-					return 0
-				return 1
+					return 1
+
+		if(isrobot(src)) // Weird way to handle jetpack stuff, robot edition
+			var/mob/living/silicon/robot/R = src
+			if(R.module) // Finally, jetpacks allow it
+				for(var/obj/item/weapon/tank/jetpack/J in R.module.modules)
+					if(J && istype(J, /obj/item/weapon/tank/jetpack))
+						if(J.allow_thrust(0.01, src))
+							for(var/atom/A in destination)
+								if(!A.Cross(src, start, 1.5, 0))
+									to_chat(src, "<span class='warning'>\The [A] blocks you.</span>")
+									return 0
+							if(!Move(destination))
+								return 0
+							return 1
 		
 		var/obj/structure/lattice/lattice = locate() in destination.contents
-		if(lattice && held_items.len && size != SIZE_TINY) // we need hands and to be big enough
+		if(lattice && held_items.len && size != SIZE_TINY) // We need hands and to be big enough
 			var/pull_up_time = max(5 SECONDS + (src.movement_delay() * 10), 1)
 			to_chat(src, "<span class='notice'>You grab \the [lattice] and start pulling yourself upward...</span>")
 			destination.visible_message("<span class='notice'>You hear something climbing up \the [lattice].</span>")
