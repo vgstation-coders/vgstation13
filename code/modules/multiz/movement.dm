@@ -61,7 +61,7 @@
 		return 0
 	return 1
 
-/mob/observer/zMove(direction)
+/mob/dead/observer/zMove(direction)
 	var/turf/destination = (direction == UP) ? GetAbove(src) : GetBelow(src)
 	if(destination)
 		forceMove(destination)
@@ -78,7 +78,7 @@
 /mob/proc/can_ztravel()
 	return 0
 
-/mob/observer/can_ztravel()
+/mob/dead/observer/can_ztravel()
 	return 1
 
 /mob/living/carbon/human/can_ztravel()
