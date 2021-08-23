@@ -166,6 +166,7 @@
 #include "code\_onclick\mindUI\_mindUI.dm"
 #include "code\_onclick\mindUI\adminbus.dm"
 #include "code\_onclick\mindUI\blob.dm"
+#include "code\_onclick\mindUI\bloodcult_runes.dm"
 #include "code\_onclick\mindUI\soulblade.dm"
 #include "code\ATMOSPHERICS\atmospherics.dm"
 #include "code\ATMOSPHERICS\burstpipe.dm"

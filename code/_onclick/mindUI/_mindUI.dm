@@ -231,8 +231,12 @@ var/list/mind_ui_ID2type = list()
 	UpdateUIScreenLoc()
 
 /obj/abstract/mind_ui_element/proc/Appear()
-	invisibility = 0
-	UpdateIcon()
+	if (invisibility)
+		invisibility = 0
+		UpdateIcon(TRUE)
+	else
+		invisibility = 0
+		UpdateIcon()
 
 /obj/abstract/mind_ui_element/proc/Hide()
 	invisibility = 101
@@ -244,7 +248,7 @@ var/list/mind_ui_ID2type = list()
 /obj/abstract/mind_ui_element/proc/UpdateUIScreenLoc()
 	screen_loc = "[parent.x]:[offset_x + parent.offset_x],[parent.y]:[offset_y+parent.offset_y]"
 
-/obj/abstract/mind_ui_element/proc/UpdateIcon()
+/obj/abstract/mind_ui_element/proc/UpdateIcon(var/appear = FALSE)
 	return
 
 /obj/abstract/mind_ui_element/proc/String2Image(var/string) // only supports numbers right now
