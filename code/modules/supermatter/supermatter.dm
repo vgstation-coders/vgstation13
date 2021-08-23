@@ -125,6 +125,7 @@
 
 /obj/machinery/power/supermatter/proc/explode()
 	has_exploded++
+	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
 		if(!istype(universe,/datum/universal_state/supermatter_cascade))
 			var/turf/turff = get_turf(src)
@@ -133,7 +134,6 @@
 			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 			empulse(turff, 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
-		var/turf/T = get_turf(src)
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
 		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
 
@@ -143,11 +143,11 @@
 
 /obj/machinery/power/supermatter/shard/explode()
 	has_exploded++
+	var/turf/T = get_turf(src)
 	if (has_exploded <= 1)
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 		empulse(get_turf(src), 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
-		var/turf/T = get_turf(src)
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
 		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
 	qdel(src)
