@@ -130,12 +130,6 @@
 		return
 	..()
 
-/turf/unsimulated/wall/New()
-	..()
-	var/turf/simulated/open/OS = GetAbove(src)
-	if(OS)
-		OS.ChangeTurf(/turf/simulated/floor/plating)
-
 /turf/unsimulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
