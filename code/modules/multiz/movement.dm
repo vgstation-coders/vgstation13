@@ -140,5 +140,3 @@
 	for(var/turf/simulated/T in trange(1,src)) //Robots get "magboots"
 		if(T.density)
 			return 1*/
-
-// TODO - Leshana Experimental
