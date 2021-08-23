@@ -1,128 +1,152 @@
-// ## THE FALLING PROCS ###
 
-// Called on everything that falling_atom might hit. Return 1 if you're handling it so handle_fall() will stop checking.
-// If you're soft and break the fall gently, just return 1
-// If the falling atom will hit you hard, call fall_impact() and return its result.
-/atom/proc/CheckFall(var/atom/movable/falling_atom)
-	if(density && !(flags & ON_BORDER))
-		return falling_atom.fall_impact(src)
+////////////////////////////
 
-// By default all turfs are gonna let you hit them regardless of density.
-/turf/CheckFall(var/atom/movable/falling_atom)
-	return falling_atom.fall_impact(src)
+//FALLING STUFF
 
-// Obviously you can't really hit open space.
-/turf/simulated/open/CheckFall(var/atom/movable/falling_atom)
-	// Don't need to print this, the open space it falls into will print it for us!
-	// visible_message("\The [falling_atom] falls from above through \the [src]!", "You hear a whoosh of displaced air.")
-	return 0
+//If atom stands under open space, it can prevent fall, or not
+/atom/proc/can_prevent_fall(var/atom/movable/mover, var/turf/coming_from)
+	return (!Cross(mover, coming_from))
 
-// We return 1 without calling fall_impact in order to provide a soft landing. So nice.
-// Note this really should never even get this far
-/obj/structure/stairs/CheckFall(var/atom/movable/falling_atom)
+/atom/proc/get_gravity()
+	var/area/A = get_area(src)
+	if(istype(A))
+		return A.gravity
+
 	return 1
 
-// Called by CheckFall when we actually hit something.  Oof
-/atom/movable/proc/fall_impact(var/atom/hit_atom)
-	if(get_gravity() > 0.5)
-		visible_message("\The [src] falls from above and slams into \the [hit_atom]!", "You hear something slam into \the [hit_atom].")
-	else
-		visible_message("\The [src] drops from above onto \the [hit_atom]!", "You hear something drop onto \the [hit_atom].")
-	for(var/atom/movable/AM in hit_atom.contents)
-		AM.fall_act(src)
-	zs_fallen = 0
+/atom
+	var/fall_lock = FALSE // Stops fall() being called during gravity spawn delay
+	var/zs_fallen = 0 // Gets reset if it hits something, for fall damage
 
-// Take damage from falling and hitting the ground
-/mob/living/fall_impact(var/turf/landing)
+//Holds fall checks that should not be overriden by children
+/atom/movable/proc/fall()
+	if(fall_lock)
+		return
+
+	if(!isturf(loc))
+		return
+
+	var/turf/below = GetBelow(src)
+	if(!below)
+		return
+
+	var/turf/bottom = null
+	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+
+	if(istype(bottom,/turf/space))
+		return
+
+	var/turf/T = loc
+	if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
+		return
+
 	var/gravity = get_gravity()
-	if(gravity > 0.5)
-		visible_message("<span class='warning'>\The [src] falls from above and slams into \the [landing]!</span>", \
-			"<span class='danger'>You fall off and hit \the [landing]!</span>", \
-			"You hear something slam into \the [landing].")
-		if(gravity > 0.667)
-			for(var/atom/movable/AM in landing.contents)
-				AM.fall_act(src)
-			playsound(loc, "sound/effects/pl_fallpain.ogg", 25, 1, -1)
-			// Bases at ten and scales with the number of Z levels fallen
-			// Because wounds heal rather quickly, 10 should be enough to discourage jumping off 1 ledge but not be enough to ruin you, at least for the first time.
-			var/damage = ((10 * min(zs_fallen,5)) * gravity)
-			apply_damage(rand(0, damage), BRUTE, LIMB_HEAD)
-			apply_damage(rand(0, damage), BRUTE, LIMB_CHEST)
-			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_LEG)
-			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_LEG)
-			apply_damage(rand(0, damage), BRUTE, LIMB_LEFT_ARM)
-			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
-			log_debug("[src] has taken [src.getBruteLoss()] damage after falling [zs_fallen] z levels with a gravity of [gravity] Gs!")
-		AdjustKnockdown((3 * min(zs_fallen,10)) * gravity)
-		updatehealth()
-	else
-		visible_message("\The [src] drops from above and onto \the [landing].", \
-			"You fall off and land on the \the [landing].", \
-			"You hear something drop onto \the [landing].")
-	zs_fallen = 0
+	// No gravity in space, apparently.
+	if(!gravity) //Polaris uses a proc, has_gravity(), for this
+		return
+	fall_lock = TRUE
+	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
+		fall_lock = FALSE
+		
+		// We're in a new loc most likely, so check all this again
+		below = GetBelow(src)
+		if(!below)
+			return
+	
+		bottom = null
+		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+	
+		if(istype(bottom,/turf/space))
+			return
+		T = loc
+		if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
+			return
+	
+		gravity = get_gravity()
+		if(!gravity)
+			return
 
-/obj/mecha/handle_fall(var/turf/landing)
-	// First things first, break any lattice
-	var/obj/structure/lattice/lattice = locate(/obj/structure/lattice, loc)
-	if(lattice)
-		// Lattices seem a bit too flimsy to hold up a massive exosuit.
-		lattice.visible_message("<span class='danger'>\The [lattice] collapses under the weight of \the [src]!</span>")
-		qdel(lattice)
+		/*if(throwing)  This was causing odd behavior where things wouldn't stop.
+			return*/
+	
+		if(can_fall())
+			// We spawn here to let the current move operation complete before we start falling. fall() is normally called from
+			// Entered() which is part of Move(), by spawn()ing we let that complete.  But we want to preserve if we were in client movement
+			// or normal movement so other move behavior can continue.
+			var/mob/M = src
+			var/is_client_moving = (ismob(M) && M.client && M.client.moving)
+			spawn(0)
+				if(is_client_moving) M.client.moving = 1
+				handle_fall(below)
+				if(is_client_moving) M.client.moving = 0
+			// TODO - handle fall on damage!
 
-	// Then call parent to have us actually fall
-	return ..()
+//For children to override
+/atom/movable/proc/can_fall()
+	if(anchored)
+		return FALSE
+	return TRUE
 
-/obj/mecha/fall_impact(var/atom/hit_atom)
-	var/gravity = get_gravity()
-	if(gravity > 0.25)
-		// Tell the pilot that they just dropped down with a superheavy mecha.
-		if(occupant)
-			to_chat(occupant, "<span class='warning'>\The [src] crashed down onto \the [hit_atom]!</span>")
+/obj/effect/can_fall()
+	return FALSE
 
-		if(gravity > 0.5)
-			var/damage = ((10 * min(zs_fallen,5)) * gravity)
-			// Anything on the same tile as the landing tile is gonna have a bad day.
-			for(var/mob/living/L in hit_atom.contents)
-				visible_message("<span class='danger'>\The [src] crushes \the [L] as it lands on them!</span>")
-				L.fall_act(src)
+/obj/effect/decal/cleanable/can_fall()
+	return TRUE
 
-			// Now to hurt the mech.
-			take_damage(rand(damage, 3*damage))
+// These didn't fall anyways but better to nip this now just incase.
+/atom/movable/lighting_overlay/can_fall()
+	return FALSE
 
-			// And hurt the floor.
-			if(istype(hit_atom, /turf/simulated/floor))
-				var/turf/simulated/floor/ground = hit_atom
-				ground.break_tile()
-	else
-		// Tell the pilot that they just plopped lightly onto the low-gravity ground with a superheavy mecha.
-		if(occupant)
-			to_chat(occupant, "<span class='warning'>\The [src] softly drops down onto \the [hit_atom]!</span>")
-	zs_fallen = 0
+// Function handling going over open spaces, pre-extension to normal throw hit checks
+/atom/movable/hit_check(var/speed, mob/user)
+	if(isopenspace(get_turf(src)))
+		src.fall()
+	. = ..()
 
-/obj/machinery/power/supermatter/fall_impact(var/atom/hit_atom)
-	..()
-	Consume(hit_atom)
+// Actually process the falling movement and impacts.
+/atom/movable/proc/handle_fall(var/turf/landing)
+	var/turf/oldloc = loc
 
-// Opposite of fall_impact, called when something is dropped on someone
-/atom/movable/proc/fall_act(var/atom/hitting_atom)
-	return
+	// Check if there is anything in our turf we are standing on to prevent falling.
+	for(var/obj/O in loc)
+		if(!O.CanFallThru(src, landing))
+			return FALSE
 
-/mob/living/fall_act(var/atom/hitting_atom)
-	var/gravity = get_gravity()
-	if(ismecha(hitting_atom))
-		var/damage = ((10 * min(hitting_atom.zs_fallen,5)) * gravity)
-		adjustBruteLoss(rand(3*damage, 5*damage))
-		AdjustKnockdown(damage / 2)
-	else if(isitem(hitting_atom))
-		var/obj/item/I = hitting_atom
-		var/damage = (((I.throwforce * min(hitting_atom.zs_fallen,5)) * gravity) * I.w_class)
-		adjustBruteLoss(rand(damage, 2*damage))
-		AdjustKnockdown(((2 * min(hitting_atom.zs_fallen,5)) * gravity) * I.w_class)
-		if(I.w_class == W_CLASS_GIANT)
-			gib()
-	else if(is_type_in_list(hitting_atom,list(/obj/machinery,/obj/structure)))
-		var/damage = ((3 * min(hitting_atom.zs_fallen,5)) * gravity)
-		if(hitting_atom.density)
-			damage *= 3
-		adjustBruteLoss(rand(damage, 2*damage))
-		AdjustKnockdown(damage / 2)
+	// Supermatter dusting things falling on them
+	var/obj/machinery/power/supermatter/SM = locate(/obj/machinery/power/supermatter) in landing
+	if(SM)
+		forceMove(SM.loc)
+		SM.Consume(src)
+
+	// See if something in turf below prevents us from falling into it.
+	for(var/atom/A in landing)
+		if(!A.Cross(src, src.loc, 1, 0))
+			return FALSE
+
+	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
+
+	// Now lets move there!
+	if(!Move(landing))
+		return 1
+
+	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
+	// Detect if we made a silent landing.
+	if(down_stairs)
+		return 1
+
+	if(isopenspace(oldloc))
+		oldloc.visible_message("\The [src] falls down through \the [oldloc]!", "You hear something falling through the air.")
+
+	zs_fallen++
+
+	// If the turf has density, we give it first dibs
+	if (landing.density && landing.CheckFall(src))
+		return
+
+	// First hit objects in the turf!
+	for(var/atom/movable/A in landing)
+		if(A != src && A.CheckFall(src))
+			return
+
+	// If none of them stopped us, then hit the turf itself
+	landing.CheckFall(src)
