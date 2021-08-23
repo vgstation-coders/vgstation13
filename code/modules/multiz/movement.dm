@@ -63,8 +63,8 @@
 				if(R.module) // Finally, jetpacks allow it
 					for(var/obj/item/weapon/tank/jetpack/J in R.module.modules)
 						if(!J || !istype(J, /obj/item/weapon/tank/jetpack) || !J.allow_thrust(0.01, src))
-								to_chat(src, "<span class='warning'>Gravity stops you from moving upward.</span>")
-								return 0
+							to_chat(src, "<span class='warning'>Gravity stops you from moving upward.</span>")
+							return 0
 			else
 				to_chat(src, "<span class='warning'>Gravity stops you from moving upward.</span>")
 				return 0
