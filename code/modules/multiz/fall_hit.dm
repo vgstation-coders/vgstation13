@@ -54,7 +54,6 @@
 			apply_damage(rand(0, damage), BRUTE, LIMB_RIGHT_ARM)
 			log_debug("[src] has taken [src.getBruteLoss()] damage after falling [zs_fallen] z levels with a gravity of [gravity] Gs!")
 		AdjustKnockdown((3 * min(zs_fallen,10)) * gravity)
-		updatehealth()
 	else
 		visible_message("\The [src] drops from above and onto \the [landing].", \
 			"You fall off and land on the \the [landing].", \
