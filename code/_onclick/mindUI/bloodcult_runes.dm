@@ -6,6 +6,7 @@
 	mouse_opacity = 1
 	var/word = ""
 	var/hovering = FALSE
+	var/image/word_overlay
 
 /obj/abstract/mind_ui_element/hoverable/rune_word/Appear()
 	..()
@@ -16,11 +17,18 @@
 /obj/abstract/mind_ui_element/hoverable/rune_word/Hide()
 	mouse_opacity = 0
 	overlays.len = 0
+	if (word_overlay)
+		animate(word_overlay, alpha = 0, time = 2)
+		overlays += word_overlay
 	icon_state = "blank"
 	if (word)
 		flick("rune_hide",src)
 	spawn(10)
 		..()
+
+/obj/abstract/mind_ui_element/hoverable/rune_close/Click()
+	var/mob/living/carbon/C = GetUser()
+
 
 /obj/abstract/mind_ui_element/hoverable/rune_word/UpdateIcon(var/appear = FALSE)
 	overlays.len = 0
@@ -43,17 +51,17 @@
 			if (H.species)
 				blood_color = H.species.blood_color
 		var/datum/rune_word/W = rune_words[word]
-		var/image/rune_blood = image('icons/effects/deityrunes.dmi',src,word)
+		word_overlay = image('icons/effects/deityrunes.dmi',src,word)
 		var/image/rune_tear = image('icons/effects/deityrunes.dmi',src,"[word]-tear")
-		rune_blood.color = blood_color
+		word_overlay.color = blood_color
 		rune_tear.color = "black"
-		rune_blood.overlays += rune_tear
-		rune_blood.pixel_x = W.offset_x
-		rune_blood.pixel_y = W.offset_y
+		word_overlay.overlays += rune_tear
+		word_overlay.pixel_x = W.offset_x
+		word_overlay.pixel_y = W.offset_y
 		if (appear)
-			rune_blood.alpha = 0
-			animate(rune_blood, alpha = 255, time = 2)
-		overlays += rune_blood
+			word_overlay.alpha = 0
+			animate(word_overlay, alpha = 255, time = 5)
+		overlays += word_overlay
 
 /obj/abstract/mind_ui_element/hoverable/rune_word/StartHovering()
 	hovering = TRUE
@@ -100,6 +108,7 @@
 /obj/abstract/mind_ui_element/hoverable/rune_close
 	name = "Hide UI"
 	icon_state = "return"
+	var/hovering = FALSE
 
 /obj/abstract/mind_ui_element/hoverable/rune_close/StartHovering()
 	hovering = TRUE
@@ -125,8 +134,76 @@
 	offset_x = -61
 	offset_y = 19
 
-/obj/abstract/mind_ui_element/hoverable/test_hello/Click()
-	flick("hello-click",src)
-	to_chat(GetUser(), "[bicon(src)] Hello World!")
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_blood
+	name = "Blood"
+	word = "blood"
+	offset_x = -37
+	offset_y = 52
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_join
+	name = "Join"
+	word = "join"
+	offset_x = 0
+	offset_y = 64
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_hell
+	name = "Hell"
+	word = "hell"
+	offset_x = 37
+	offset_y = 52
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_destroy
+	name = "Destroy"
+	word = "destroy"
+	offset_x = 61
+	offset_y = 19
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_technology
+	name = "Technology"
+	word = "technology"
+	offset_x = 61
+	offset_y = -19
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_self
+	name = "Self"
+	word = "self"
+	offset_x = 37
+	offset_y = -52
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_see
+	name = "See"
+	word = "see"
+	offset_x = 0
+	offset_y = -64
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_other
+	name = "Other"
+	word = "other"
+	offset_x = -37
+	offset_y = -52
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/rune_word/rune_hide
+	name = "Hide"
+	word = "hide"
+	offset_x = -61
+	offset_y = -19
 
 //------------------------------------------------------------

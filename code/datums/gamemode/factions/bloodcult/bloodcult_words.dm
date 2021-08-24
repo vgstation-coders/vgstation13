@@ -11,8 +11,8 @@ var/list/rune_words_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","
 	var/icon		= 'icons/effects/uristrunes.dmi'
 	var/icon_state	= ""
 	var/color//used by path rune markers
-	var/offset_x	=
-	var/offset_y	=
+	var/offset_x	= 0
+	var/offset_y	= 0
 
 /proc/initialize_rune_words()
 	if (rune_words_initialized)
@@ -84,7 +84,7 @@ var/list/rune_words_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","
 	icon_state	= "rune-128"
 	color 		= "fuchsia"
 	offset_x	= 10
-	offset_y	= -10
+	offset_y	= -11
 
 /datum/rune_word/other
 	english		= "other"

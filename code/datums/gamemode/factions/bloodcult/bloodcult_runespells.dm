@@ -38,6 +38,7 @@
 	var/can_conceal = 0			//If set to 1, concealing the rune will not abort the spell. (example: Path Exit)
 	var/rune_flags = null 		//If set to RUNE_STAND (or 1), the user will need to stand right above the rune to use cast the spell
 	var/walk_effect = 0 //If set to 1, procs Added() when step over
+	var/custom_rune	= FALSE // Prevents the rune's normal UpdateIcon() from firing.
 
 	//Optional (These vars aren't used by default rune code, but many runes make use of them, so set them up as you need, the comments below are suggestions)
 	var/cost_invoke = 0						//Blood cost upon cast
@@ -95,6 +96,10 @@
 
 /datum/rune_spell/proc/pre_cast()
 	if(istype(spell_holder,/obj/effect/rune))
+		var/obj/effect/rune/R = spell_holder
+		R.cast_word(R.word1)
+		R.cast_word(R.word2)
+		R.cast_word(R.word3)
 		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
 		else
@@ -1342,8 +1347,8 @@ var/list/blind_victims = list()
 				//if it's a floor, give it a chance to have some runes written on top
 				if (rune_appearances_cache.len > 0 && prob(7))
 					var/lookup = pick(rune_appearances_cache)//finally a good use for that cache
-					var/icon/I = rune_appearances_cache[lookup]
-					I_turf.overlays.Add(I)
+					var/image/I = rune_appearances_cache[lookup]
+					I_turf.overlays += I
 			hallucinated_turfs.Add(I_turf)
 
 	//now let's round up our victims: any non-cultist with an unobstructed line of sight to the rune/talisman will be affected
@@ -2269,24 +2274,23 @@ var/list/blind_victims = list()
 	I_stone.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 
 	var/image/I_network
-	var/lookup = "[W.icon_state]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
+	var/lookup = "[W.english]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
 	if (lookup in rune_appearances_cache)
-		var/icon/I = rune_appearances_cache[lookup]
-		I_network = image(I)
+		I_network = image(rune_appearances_cache[lookup])
 	else
-		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-		I = R.make_iconcache(W,null,0)
-		I_network = image(I)
+		I_network = image('icons/effects/deityrunes.dmi',src,W.english)
+		I_network.color = DEFAULT_BLOOD
 	I_network.plane = relative_plane_to_plane(ABOVE_TURF_PLANE,spell_holder.plane)
 	I_network.layer = BLOOD_LAYER
-	I_network.transform /= 2
-	I_network.pixel_y = -3
+	I_network.transform /= 1.5
+	I_network.pixel_x = round(W.offset_x*0.75)
+	I_network.pixel_y = -3 + round(W.offset_y*0.75)
 
+	spell_holder.overlays.len = 0
 	spell_holder.overlays += I_crystals
 	spell_holder.overlays += I_stone
 	spell_holder.overlays += I_network
-
-	spell_holder.icon = initial(spell_holder.icon)
+	custom_rune = TRUE
 
 	to_chat(activator, "<span class='notice'>This rune will now let you travel through the \"[network]\" Path.</span>")
 
@@ -2389,24 +2393,23 @@ var/list/bloodcult_exitportals = list()
 	I_stone.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 
 	var/image/I_network
-	var/lookup = "[W.icon_state]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
+	var/lookup = "[W.english]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
 	if (lookup in rune_appearances_cache)
-		var/icon/I = rune_appearances_cache[lookup]
-		I_network = image(I)
+		I_network = image(rune_appearances_cache[lookup])
 	else
-		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-		I = R.make_iconcache(W,null,0)
-		I_network = image(I)
+		I_network = image('icons/effects/deityrunes.dmi',src,W.english)
+		I_network.color = DEFAULT_BLOOD
 	I_network.plane = relative_plane_to_plane(ABOVE_TURF_PLANE,spell_holder.plane)
 	I_network.layer = BLOOD_LAYER
-	I_network.transform /= 2
-	I_network.pixel_y = -3
+	I_network.transform /= 1.5
+	I_network.pixel_x = round(W.offset_x*0.75)
+	I_network.pixel_y = -3 + round(W.offset_y*0.75)
 
+	spell_holder.overlays.len = 0
 	spell_holder.overlays += I_crystals
 	spell_holder.overlays += I_stone
 	spell_holder.overlays += I_network
-
-	spell_holder.icon = initial(spell_holder.icon)
+	custom_rune = TRUE
 
 	to_chat(activator, "<span class='notice'>This rune will now serve as a destination for the \"[network]\" Path.</span>")
 

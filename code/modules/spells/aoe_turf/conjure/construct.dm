@@ -436,7 +436,7 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 1
-	summon_type = list(/obj/effect/rune/blood_cult)
+	summon_type = list(/obj/effect/rune)
 
 	override_base = "cult"
 	hud_state = "const_entrance"
@@ -473,7 +473,7 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 1
-	summon_type = list(/obj/effect/rune/blood_cult)
+	summon_type = list(/obj/effect/rune)
 
 	override_base = "cult"
 	hud_state = "const_exit"

@@ -434,7 +434,7 @@ var/list/arcane_tomes = list()
 		T.talismans.Remove(src)
 	qdel(src)
 
-/obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/blood_cult/R)
+/obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/R)
 	if (!user || !R)
 		return
 

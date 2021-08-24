@@ -6,7 +6,7 @@ var/list/rune_appearances_cache = list()
 	name = "rune"
 	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
-	icon = 'icons/effects/uristrunes.dmi'
+	icon = 'icons/effects/deityrunes.dmi'
 	icon_state = ""
 	layer = RUNE_LAYER
 	plane = ABOVE_TURF_PLANE
@@ -15,6 +15,7 @@ var/list/rune_appearances_cache = list()
 
 	//Whether the rune is pulsating
 	var/animated = 0
+	var/activated = 0 // how many times the rune was activated. goes back to 0 if a word is erased.
 
 	//A rune is made of up to 3 words.
 	var/datum/rune_word/word1
@@ -67,9 +68,15 @@ var/list/rune_appearances_cache = list()
 	qdel(blood_image)
 	blood_image = null
 
-	word1 = null
-	word2 = null
-	word3 = null
+	if (word1)
+		erase_word(word1.english,blood1)
+		word1 = null
+	if (word2)
+		erase_word(word2.english,blood2)
+		word2 = null
+	if (word3)
+		erase_word(word3.english,blood3)
+		word3 = null
 
 	blood1 = null
 	blood2 = null
@@ -88,15 +95,44 @@ var/list/rune_appearances_cache = list()
 
 /obj/effect/rune/examine(var/mob/user)
 	..()
-	var/datum/rune_spell/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
-
-	//By default everyone can read a rune, so add extra functionality in child classes if that is not wanted.
 	if(can_read_rune(user) || isobserver(user))
+		var/datum/rune_spell/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
 		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""][word2 ? " [word2.rune]" : ""][word3 ? " [word3.rune]" : ""]</i>. [rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
+		if(rune_name)
+			to_chat(user, initial(rune_name.desc))
+			if (istype(active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
+			if (istype(active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalexit/PE = active_spell
+				if (PE.network)
+					to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
 
+	//"Cult" chaplains can read the words, but they have to figure out the spell themselves. Also has a chance to trigger a taunt from Nar-Sie.
+	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))
+		var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
+		var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
+		if (religion_name in cult_blood_chaplain)
+			to_chat(user, "<span class='info'>It reads: <i>[word1.rune] [word2.rune] [word3.rune]</i>. What spell was that already?...</span>")
+			if (prob(5))
+				spawn(50)
+					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
+							"Your toys won't get you much further",\
+							"Bitter that you weren't chosen?",\
+							"I dig your style, but I crave for your blood.",\
+							"Shall we gamble then? Obviously blood is the only acceptable bargaining chip")].</span></span>")
+
+		//RIP Velard
+		else if (religion_name in cult_clock_chaplain)
+			to_chat(user, "<span class='info'>It reads a bunch of stupid shit.</span>")
+			if (prob(5))
+				spawn(50)
+					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
+							"Oh just fuck off",)].</span></span>")
 
 /obj/effect/rune/proc/can_read_rune(var/mob/user) //Overload for specific criteria.
-	return 1
+	return iscultist(user)
 
 /obj/effect/rune/cultify()
 	return
@@ -107,6 +143,31 @@ var/list/rune_appearances_cache = list()
 	if (active_spell)
 		active_spell.salt_act(T)
 	qdel(src)
+
+/obj/effect/rune/proc/write_word(var/word,var/datum/reagent/blood/blood)
+	if (!word)
+		return
+	var/turf/T = get_turf(src)
+	var/write_color = DEFAULT_BLOOD
+	if (blood && blood.data["blood_colour"])
+		write_color = blood.data["blood_colour"]
+	anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "[word]-write", lay = layer+0.1, col = write_color, plane = plane)
+
+/obj/effect/rune/proc/erase_word(var/word,var/datum/reagent/blood/blood)
+	if (!word)
+		return
+	var/turf/T = get_turf(src)
+	var/erase_color = DEFAULT_BLOOD
+	if (blood && blood.data["blood_colour"])
+		erase_color = blood.data["blood_colour"]
+	anim(target = T, a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "[word]-erase", lay = layer+0.1, col = erase_color, plane = plane)
+
+/obj/effect/rune/proc/cast_word(var/word)
+	if (!word)
+		return
+	var/atom/movable/overlay/A = anim(target = get_turf(src), a_icon = 'icons/effects/deityrunes.dmi', a_icon_state = "[word]-tear", lay = layer+0.1, plane = plane)
+	animate(A,color = "black",time = 5)
+	animate(alpha = "black",time = 5)
 
 /obj/effect/rune/ex_act(var/severity)
 	switch (severity)
@@ -122,47 +183,78 @@ var/list/rune_appearances_cache = list()
 /obj/effect/rune/blob_act()
 	return
 
-/obj/effect/rune/update_icon()
+/obj/effect/rune/update_icon(var/draw_up_to = 3)
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	if(spell)
+	if (spell && initial(spell.custom_rune))
+		return
+
+	overlays.len = 0
+
+	if(spell && activated)
 		animated = 1
+		draw_up_to = 3
 	else
 		animated = 0
 
 	var/lookup = ""
 	if (word1)
-		lookup += "[word1.icon_state]-[animated]-[blood1.data["blood_colour"]]"
-	if (word2)
-		lookup += "-[word2.icon_state]-[animated]-[blood2.data["blood_colour"]]"
-	if (word3)
-		lookup += "-[word3.icon_state]-[animated]-[blood3.data["blood_colour"]]"
+		lookup += "[word1.english]-[animated]-[blood1.data["blood_colour"]]"
+	if (word2 && draw_up_to >= 2)
+		lookup += "-[word2.english]-[animated]-[blood2.data["blood_colour"]]"
+	if (word3 && draw_up_to >= 3)
+		lookup += "-[word3.english]-[animated]-[blood3.data["blood_colour"]]"
 
+	var/image/rune_render
 	if (lookup in rune_appearances_cache)
-		icon = rune_appearances_cache[lookup]
+		rune_render = image(rune_appearances_cache[lookup])
 	else
-		var/icon/I1 = icon('icons/effects/uristrunes.dmi', "")
+		var/image/I1 = image('icons/effects/deityrunes.dmi',src,"")
 		if (word1)
-			I1 = make_iconcache(word1,blood1,animated)
-		var/icon/I2 = icon('icons/effects/uristrunes.dmi', "")
-		if (word2)
-			I2 = make_iconcache(word2,blood2,animated)
-		var/icon/I3 = icon('icons/effects/uristrunes.dmi', "")
-		if (word3)
-			I3 = make_iconcache(word3,blood3,animated)
+			I1.icon_state = word1.english
+			if (blood1.data["blood_colour"])
+				I1.color = blood1.data["blood_colour"]
+		var/image/I2 = image('icons/effects/deityrunes.dmi',src,"")
+		if (word2 && draw_up_to >= 2)
+			I2.icon_state = word2.english
+			if (blood2.data["blood_colour"])
+				I2.color = blood2.data["blood_colour"]
+		var/image/I3 = image('icons/effects/deityrunes.dmi',src,"")
+		if (word3 && draw_up_to >= 3)
+			I3.icon_state = word3.english
+			if (blood3.data["blood_colour"])
+				I3.color = blood3.data["blood_colour"]
 
-		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-		I.Blend(I1, ICON_OVERLAY)
-		I.Blend(I2, ICON_OVERLAY)
-		I.Blend(I3, ICON_OVERLAY)
-		icon = I
-		rune_appearances_cache[lookup] = I
+		rune_render = image('icons/effects/deityrunes.dmi',src,"")
+		rune_render.overlays += I1
+		rune_render.overlays += I2
+		rune_render.overlays += I3
+
+		if(animated)
+			if (word1)
+				var/image/I =  image('icons/effects/deityrunes.dmi',src,"[word1.english]-tear")
+				I.color = "black"
+				I.appearance_flags = RESET_COLOR
+				rune_render.overlays += I
+			if (word2)
+				var/image/I =  image('icons/effects/deityrunes.dmi',src,"[word2.english]-tear")
+				I.color = "black"
+				I.appearance_flags = RESET_COLOR
+				rune_render.overlays += I
+			if (word3)
+				var/image/I =  image('icons/effects/deityrunes.dmi',src,"[word3.english]-tear")
+				I.color = "black"
+				I.appearance_flags = RESET_COLOR
+				rune_render.overlays += I
+
+		rune_appearances_cache[lookup] = rune_render
+	overlays += rune_render
 
 	if(animated)
 		idle_pulse()
 	else
 		animate(src)
-
+/*
 /obj/effect/rune/proc/make_iconcache(var/datum/rune_word/word, var/datum/reagent/blood/blood, var/animated) //For caching rune icons
 	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
 	if (!blood)
@@ -211,6 +303,7 @@ var/list/rune_appearances_cache = list()
 
 		I.MapColors(0.5,0,0,0,0.5,0,0,0,0.5)//we'll darken that color a bit
 	return I
+*/
 
 /obj/effect/rune/proc/idle_pulse()
 	//This masterpiece of a color matrix stack produces a nice animation no matter which color the rune is.
@@ -249,9 +342,6 @@ var/list/rune_appearances_cache = list()
 			idle_pulse()
 		else
 			animate(src)
-
-/obj/effect/rune/attackby(obj/I, mob/user)
-	..()
 
 
 /obj/effect/rune/Crossed(var/atom/movable/mover)
@@ -294,107 +384,7 @@ var/list/rune_appearances_cache = list()
 	bleeding = user.check_bodypart_bleeding(HANDS)
 	user.assume_contact_diseases(virus2,src,block,bleeding)
 
-/obj/effect/rune/proc/trigger(var/mob/living/user)
-	user.delayNextAttack(5)
-
-	if(!iscultist(user))
-		to_chat(user, "<span class='danger'>You can't mouth the arcane scratchings without fumbling over them.</span>")
-		return
-
-	if(iscarbon(user))
-		var/mob/living/carbon/C = user
-		if (C.occult_muted())
-			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
-			return
-
-
-	if(!user.checkTattoo(TATTOO_SILENT))
-		if(user.is_wearing_item(/obj/item/clothing/mask/muzzle, slot_wear_mask))
-			to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")
-			return
-
-		if(user.is_mute())
-			to_chat(user, "<span class='danger'>You don't have the ability to perform rituals without voicing the incantations. There has to be some way...</span>")
-			return
-
-	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
-		return fizzle(user)
-
-	add_hiddenprint(user)
-
-	if (active_spell)
-		active_spell.midcast(user)
-		return
-
-	reveal()
-
-	active_spell = get_rune_spell(user, src, "ritual", word1, word2, word3)
-
-	if (!active_spell)
-		return fizzle(user)
-	else if (active_spell.destroying_self)
-		active_spell = null
-
-/obj/effect/rune/proc/fizzle(var/mob/living/user)
-	var/silent = user.checkTattoo(TATTOO_SILENT)
-	if(!silent)
-		user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP","I'F ON'Y I 'AD 'TAB' E"))
-	one_pulse()
-	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
-	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
-	"<span class='warning'>You hear a faint fizzle.</span>")
-
-/obj/effect/rune/proc/conceal()
-	if(active_spell && !active_spell.can_conceal)
-		active_spell.abort(RITUALABORT_CONCEAL)
-	animate(src, alpha = 0, time = 5)
-	spawn(6)
-		invisibility=INVISIBILITY_OBSERVER
-		alpha = 127
-
-/obj/effect/rune/proc/reveal() //Returns 1 if rune was revealed from a invisible state.
-	if(invisibility != 0)
-		alpha = 0
-		invisibility=0
-		animate(src, alpha = 255, time = 5)
-		one_pulse()
-		conceal_cooldown = 1
-		spawn(100)
-			if (src && loc)
-				conceal_cooldown = 0
-		return 1
-	return 0
-
-/obj/effect/rune/proc/manage_diseases(var/datum/reagent/blood/source)
-	virus2 = list()
-
-	if (blood1)
-		blood1.data["virus2"] = virus_copylist(source.data["virus2"])
-		var/list/datum/disease2/disease/blood1_diseases = blood1.data["virus2"]
-		for (var/ID in blood1_diseases)
-			var/datum/disease2/disease/V = blood1_diseases[ID]
-			if(istype(V))
-				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
-	if (blood2)
-		blood2.data["virus2"] = virus_copylist(source.data["virus2"])
-		var/list/datum/disease2/disease/blood2_diseases = blood2.data["virus2"]
-		for (var/ID in blood2_diseases)
-			if (ID in virus2)
-				continue
-			var/datum/disease2/disease/V = blood2_diseases[ID]
-			if(istype(V))
-				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
-	if (blood3)
-		blood3.data["virus2"] = virus_copylist(source.data["virus2"])
-		var/list/datum/disease2/disease/blood3_diseases = blood3.data["virus2"]
-		for (var/ID in blood3_diseases)
-			if (ID in virus2)
-				continue
-			var/datum/disease2/disease/V = blood3_diseases[ID]
-			if(istype(V))
-				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
-
-/obj/effect/rune/blood_cult/attackby(obj/I, mob/user)
+/obj/effect/rune/attackby(obj/I, mob/user)
 	..()
 	if(isholyweapon(I))
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
@@ -407,7 +397,7 @@ var/list/rune_appearances_cache = list()
 		T.imbue(user,src)
 	return
 
-/obj/effect/rune/blood_cult/trigger(var/mob/living/user, var/talisman_trigger=0)
+/obj/effect/rune/proc/trigger(var/mob/living/user, var/talisman_trigger=0)
 	user.delayNextAttack(5)
 
 	if(!iscultist(user))
@@ -450,52 +440,87 @@ var/list/rune_appearances_cache = list()
 
 	if (!active_spell)
 		return fizzle(user)
-	else if (active_spell.destroying_self)
-		active_spell = null
+	else
+		activated++
+		if (active_spell.destroying_self)
+			active_spell = null
+		if (!gcDestroyed && (activated == 1))
+			update_icon() // begin pulsing
 
-/obj/effect/rune/blood_cult/can_read_rune(var/mob/user) //Overload for specific criteria.
-	return iscultist(user)
+/obj/effect/rune/proc/fizzle(var/mob/living/user)
+	var/silent = user.checkTattoo(TATTOO_SILENT)
+	if(!silent)
+		user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP","I'F ON'Y I 'AD 'TAB' E"))
+	one_pulse()
+	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
+	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
+	"<span class='warning'>You hear a faint fizzle.</span>")
 
-/obj/effect/rune/blood_cult/examine(var/mob/user)
-	..()
+/obj/effect/rune/proc/conceal()
+	if(active_spell && !active_spell.can_conceal)
+		active_spell.abort(RITUALABORT_CONCEAL)
+	alpha = 0
+	if (word1)
+		erase_word(word1.english,blood1)
+	if (word2)
+		erase_word(word2.english,blood2)
+	if (word3)
+		erase_word(word3.english,blood3)
+	spawn(6)
+		invisibility=INVISIBILITY_OBSERVER
+		alpha = 127
 
-	if(can_read_rune(user) || isobserver(user))
-		var/datum/rune_spell/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
-		if(rune_name)
-			to_chat(user, initial(rune_name.desc))
-			if (istype(active_spell,/datum/rune_spell/portalentrance))
-				var/datum/rune_spell/portalentrance/PE = active_spell
-				if (PE.network)
-					to_chat(user, "<span class='info'>This entrance was attuned to the <b>[PE.network]</b> path.</span>")
-			if (istype(active_spell,/datum/rune_spell/portalexit))
-				var/datum/rune_spell/portalexit/PE = active_spell
-				if (PE.network)
-					to_chat(user, "<span class='info'>This exit was attuned to the <b>[PE.network]</b> path.</span>")
+/obj/effect/rune/proc/reveal() //Returns 1 if rune was revealed from a invisible state.
+	if(invisibility != 0)
+		invisibility=0
+		if (!(active_spell?.custom_rune))
+			overlays.len = 0
+			if (word1)
+				write_word(word1.english,blood1)
+			if (word2)
+				write_word(word2.english,blood2)
+			if (word3)
+				write_word(word3.english,blood3)
+			spawn(8)
+				alpha = 255
+				update_icon()
+		conceal_cooldown = 1
+		spawn(100)
+			if (src && loc)
+				conceal_cooldown = 0
+		return 1
+	return 0
 
-	//"Cult" chaplains can read the words, but they have to figure out the spell themselves. Also has a chance to trigger a taunt from Nar-Sie.
-	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))
-		var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
-		var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
-		if (religion_name in cult_blood_chaplain)
-			to_chat(user, "<span class='info'>It reads: <i>[word1.rune] [word2.rune] [word3.rune]</i>. What spell was that already?...</span>")
-			if (prob(5))
-				spawn(50)
-					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
-							"Your toys won't get you much further",\
-							"Bitter that you weren't chosen?",\
-							"I dig your style, but I crave for your blood.",\
-							"Shall we gamble then? Obviously blood is the only acceptable bargaining chip")].</span></span>")
+/obj/effect/rune/proc/manage_diseases(var/datum/reagent/blood/source)
+	virus2 = list()
 
-		//RIP Velard
-		else if (religion_name in cult_clock_chaplain)
-			to_chat(user, "<span class='info'>It reads a bunch of stupid shit.</span>")
-			if (prob(5))
-				spawn(50)
-					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
-							"Oh just fuck off",)].</span></span>")
+	if (blood1)
+		blood1.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood1_diseases = blood1.data["virus2"]
+		for (var/ID in blood1_diseases)
+			var/datum/disease2/disease/V = blood1_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
+	if (blood2)
+		blood2.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood2_diseases = blood2.data["virus2"]
+		for (var/ID in blood2_diseases)
+			if (ID in virus2)
+				continue
+			var/datum/disease2/disease/V = blood2_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
+	if (blood3)
+		blood3.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood3_diseases = blood3.data["virus2"]
+		for (var/ID in blood3_diseases)
+			if (ID in virus2)
+				continue
+			var/datum/disease2/disease/V = blood3_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
 
-
-/proc/write_rune_word(var/turf/T, var/word = null, var/datum/reagent/blood/source, var/mob/caster = null)
+/proc/write_rune_word(var/turf/T, var/datum/rune_word/word = null, var/datum/reagent/blood/source, var/mob/caster = null)
 	if (!word)
 		return RUNE_WRITE_CANNOT
 
@@ -508,7 +533,7 @@ var/list/rune_appearances_cache = list()
 	var/newrune = FALSE
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
-		rune = new /obj/effect/rune/blood_cult(T)
+		rune = new /obj/effect/rune(T)
 		newrune = TRUE
 
 	if (rune.word1 && rune.word2 && rune.word3)
@@ -519,6 +544,8 @@ var/list/rune_appearances_cache = list()
 			log_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
 			message_admins("BLOODCULT: [key_name(caster)] has created a new rune at [formatJumpTo(T)].")
 		rune.add_hiddenprint(caster)
+
+	rune.write_word(word.english,source)
 
 	if (!rune.word1)
 		rune.word1 = word
@@ -537,6 +564,8 @@ var/list/rune_appearances_cache = list()
 			rune.blood1.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
 			rune.blood1.data["virus2"] = virus_copylist(source.data["virus2"])
+		spawn (8)
+			rune.update_icon(1)
 
 	else if (!rune.word2)
 		rune.word2 = word
@@ -555,6 +584,8 @@ var/list/rune_appearances_cache = list()
 			rune.blood2.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
 			rune.blood2.data["virus2"] = virus_copylist(source.data["virus2"])
+		spawn (8)
+			rune.update_icon(2)
 
 	else if (!rune.word3)
 		rune.word3 = word
@@ -573,14 +604,14 @@ var/list/rune_appearances_cache = list()
 			rune.blood3.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
 			rune.blood3.data["virus2"] = virus_copylist(source.data["virus2"])
+		spawn (8)
+			rune.update_icon(3)
 
 	rune.manage_diseases(source)
 
-	rune.update_icon()
 	if (rune.blood3)
 		return RUNE_WRITE_COMPLETE
 	return RUNE_WRITE_CONTINUE
-
 
 /proc/erase_rune_word(var/turf/T)
 	var/obj/effect/rune/rune = locate() in T
@@ -590,6 +621,7 @@ var/list/rune_appearances_cache = list()
 	var/word_erased
 
 	if(rune.word3)
+		rune.erase_word(rune.word3.english, rune.blood3)
 		word_erased = rune.word3.rune
 		rune.word3 = null
 		rune.blood3 = null
@@ -599,11 +631,13 @@ var/list/rune_appearances_cache = list()
 			rune.active_spell = null
 			rune.overlays.len = 0
 	else if(rune.word2)
+		rune.erase_word(rune.word2.english, rune.blood2)
 		word_erased = rune.word2.rune
 		rune.word2 = null
 		rune.blood2 = null
 		rune.update_icon()
 	else if(rune.word1)
+		rune.erase_word(rune.word1.english, rune.blood1)
 		word_erased = rune.word1.rune
 		rune.word1 = null
 		rune.blood1 = null
@@ -612,6 +646,7 @@ var/list/rune_appearances_cache = list()
 		message_admins("Error! Trying to erase a word from a rune with no words!")
 		qdel(rune)
 		return null
+	rune.activated = 0
 	return word_erased
 
 
