@@ -435,30 +435,36 @@ obj/effect/bmode/buildholder/New()
 				var/turf/T = object
 				if(istype(T,get_base_turf(T.z)))
 					T.ChangeTurf(/turf/simulated/floor)
+					message_admins("<span class=`notice`>[key_name(usr)] made a floor at [formatJumpTo(T)]<span>")
 					log_admin("[key_name(usr)] made a floor at [formatJumpTo(T)]")
 					return
 				else if(istype(T,/turf/simulated/floor))
 					T.ChangeTurf(/turf/simulated/wall)
+					message_admins("<span class=`notice`>[key_name(usr)] made a wall at [formatJumpTo(T)]<span>")
 					log_admin("[key_name(usr)] made a wall at [formatJumpTo(T)]")
 					return
 				else if(istype(T,/turf/simulated/wall))
 					T.ChangeTurf(/turf/simulated/wall/r_wall)
+					message_admins("<span class=`notice`>[key_name(usr)] made an rwall at [formatJumpTo(T)]<span>")
 					log_admin("[key_name(usr)] made an rwall at [formatJumpTo(T)]")
 					return
 			else if(pa.Find("right"))
 				if(istype(object,/turf/simulated/wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/floor)
+					message_admins("<span class=`notice`>[key_name(usr)] removed a wall at [formatJumpTo(T)]<span>")
 					log_admin("[key_name(usr)] removed a wall at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
 					T.ChangeTurf(get_base_turf(T.z))
+					message_admins("<span class=`notice`>[key_name(usr)] removed flooring at [formatJumpTo(T)]<span>")
 					log_admin("[key_name(usr)] removed flooring at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/wall/r_wall))
 					var/turf/T = object
 					T.ChangeTurf(/turf/simulated/wall)
+					message_admins("<span class=`notice`>[key_name(usr)] downgraded an rwall at [formatJumpTo(T)]<span>")
 					log_admin("[key_name(usr)] downgraded an rwall at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/obj))
@@ -466,8 +472,10 @@ obj/effect/bmode/buildholder/New()
 					return
 			else if(istype(object,/turf) && pa.Find("alt") && pa.Find("left"))
 				new/obj/machinery/door/airlock(get_turf(object))
+				message_admins("<span class=`notice`>[key_name(usr)] made an airlock at [formatJumpTo(RT)]<span>")
 				log_admin("[key_name(usr)] made an airlock at [formatJumpTo(RT)]")
 			else if(istype(object,/turf) && pa.Find("ctrl") && pa.Find("left"))
+				message_admins("<span class=`notice`>[key_name(usr)] made a window at [formatJumpTo(RT)]<span>")
 				log_admin("[key_name(usr)] made a window at [formatJumpTo(RT)]")
 				switch(holder.builddir.dir)
 					if(NORTH)
@@ -624,6 +632,7 @@ obj/effect/bmode/buildholder/New()
 						if(istype(A))
 							A.appearance = holder.buildmode.copycat.appearance
 							A.dir = holder.builddir.dir
+					message_admins("<span class=`notice`>[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]<span>")
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
 					if(ispath(holder.buildmode.objholder,/turf)) //Handle turf changing
@@ -637,8 +646,10 @@ obj/effect/bmode/buildholder/New()
 						var/obj/A = new holder.buildmode.objholder (get_turf(object))
 						if(istype(A))
 							A.dir = holder.builddir.dir
+					message_admins("<span class=`notice`>[key_name(usr)] made a [holder.buildmode.objholder] at [formatJumpTo(RT)]<span>")
 					log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at [formatJumpTo(RT)]")
 			else if(pa.Find("right"))
+				message_admins("<span class=`notice`>[key_name(usr)] deleted a [object] at [formatJumpTo(RT)]<span>")
 				log_admin("[key_name(usr)] deleted a [object] at [formatJumpTo(RT)]")
 				if(isobj(object))
 					qdel(object)
@@ -710,11 +721,13 @@ obj/effect/bmode/buildholder/New()
 			if(pa.Find("left"))
 				if(!istype(object, /atom/movable))
 					return
+				message_admins("<span class=`notice`>[key_name(usr)] is selecting [object] for throwing at [formatJumpTo(RT)]<span>")
 				log_admin("[key_name(usr)] is selecting [object] for throwing at [formatJumpTo(RT)]")
 				holder.throw_atom = object
 			if(pa.Find("right"))
 				if(holder.throw_atom)
 					holder.throw_atom.throw_at(object, 10, 1)
+					message_admins("<span class=`notice`> is throwing a [holder.throw_atom] at [object] - [formatJumpTo(RT)]<span>")
 					log_admin("[key_name(usr)] is throwing a [holder.throw_atom] at [object] - [formatJumpTo(RT)]")
 
 /proc/easyTypeSelector()
