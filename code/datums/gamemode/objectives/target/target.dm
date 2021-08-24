@@ -29,7 +29,7 @@
 /datum/objective/target/proc/PostDelay() // reveals the target
 	target = delayed_target
 	explanation_text = format_explanation()
-	owner.current.playsound_local(owner.loc, 'sound/machines/twobeep.ogg', 75, 0)
+	owner.current.playsound_local(owner.current.loc, 'sound/machines/twobeep.ogg', 75, 0)
 	to_chat(owner.current, "<span class='userdanger'>Target Revealed</span>: <b>[explanation_text]</b>")
 
 /datum/objective/target/proc/find_target()
