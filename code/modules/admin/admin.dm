@@ -1345,7 +1345,7 @@ var/global/floorIsLava = 0
 		new chosen(usr.loc)
 
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
-	message_admins("<span class='notice'>[key_name(usr)] spawned [chosen] at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[A.x];Y=[A.y];Z=[A.z]'>([A.x],[A.y],[A.z])</a></span>")
+	message_admins("<span class='notice'>[key_name(usr)] spawned [chosen] at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[usr.x];Y=[usr.y];Z=[usr.z]'>([usr.x],[usr.y],[usr.z])</a></span>")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/show_role_panel(var/mob/M in mob_list)
