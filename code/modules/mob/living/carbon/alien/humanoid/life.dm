@@ -125,7 +125,7 @@
 				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				// Handle chem smoke effect  -- Doohl
-				for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
+				for(var/obj/effect/smoke/chem/smoke in view(1, src))
 					if(smoke.reagents.total_volume)
 						smoke.reagents.reaction(src, INGEST)
 						spawn(5)

@@ -1368,6 +1368,8 @@ About the new airlock wires panel:
 		wires.SignalIndex(AIRLOCK_WIRE_ONOPEN)
 
 /obj/machinery/door/airlock/Uncross(atom/movable/mover)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this, especially because of that thing below -kanef
+		return 1
 	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE
 		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
 		return 0

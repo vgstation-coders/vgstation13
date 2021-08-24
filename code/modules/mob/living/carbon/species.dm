@@ -145,6 +145,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/species_intro //What intro you're given when you become this species.
 	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
+	var/datum/speech_filter/speech_filter
+
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -167,6 +169,8 @@ var/global/list/whitelisted_species = list("Human")
 	H.invisibility = 101
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
+	if(speech_filter)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 	if(H.dna)
 		if(length(speech.message) >= 2)
 			for(var/gene_type in H.active_genes)
@@ -391,9 +395,9 @@ var/global/list/whitelisted_species = list("Human")
 	wear_suit_icons = 'icons/mob/species/unathi/suit.dmi'
 
 
-/datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
-	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+/datum/species/unathi/New()
+	..()
+	speech_filter = new /datum/speech_filter/unathi
 
 /datum/species/unathi/gib(mob/living/carbon/human/H)
 	..()
@@ -528,8 +532,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	flesh_color = "#AFA59E"
 
-	var/datum/speech_filter/speech_filter = new
-
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
@@ -545,26 +547,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/tajaran/New()
 	..()
-	// Combining all the worst shit the world has ever offered.
-
-	// Note: Comes BEFORE other stuff.
-	// Trying to remember all the stupid fucking furry memes is hard
-	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger)\\b",
-		list(
-			"silly rabbit",
-			"sandwich", // won't work too well with plurals OH WELL
-			"recolor",
-			"party pooper"
-		)
-	)
-	speech_filter.addWordReplacement("me","meow")
-	speech_filter.addWordReplacement("I","meow") // Should replace with player's first name.
-	speech_filter.addReplacement("fuck","yiff")
-	speech_filter.addReplacement("shit","scat")
-	speech_filter.addReplacement("scratch","scritch")
-	speech_filter.addWordReplacement("(help|assist)\\smeow","kill meow") // help me(ow) -> kill meow
-	speech_filter.addReplacement("god","gosh")
-	speech_filter.addWordReplacement("(ass|butt)", "rump")
+	speech_filter = new /datum/speech_filter/tajaran
 
 /datum/species/tajaran/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
@@ -593,10 +576,6 @@ var/global/list/whitelisted_species = list("Human")
 			speech.message = pick("GOD, PLEASE", "NO, GOD", "AGGGGGGGH") + " "
 
 		speech.message += pick("KILL ME", "END MY SUFFERING", "I CAN'T DO THIS ANYMORE")
-
-		return ..()
-
-	speech.message = speech_filter.FilterSpeech(speech.message)
 	return ..()
 
 /datum/species/tajaran/gib(mob/living/carbon/human/H)
@@ -1071,7 +1050,7 @@ var/list/has_died_as_golem = list()
 	brute_mod = 0.8
 	move_speed_multiplier = 2
 
-	blood_color = "#7FFF00"
+	blood_color = GHOUL_BLOOD
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
 
@@ -1242,14 +1221,14 @@ var/list/has_died_as_golem = list()
 		"brain" =    /datum/organ/internal/brain,
 		"eyes" =     /datum/organ/internal/eyes/compound/
 		)
-/datum/species/insectoid/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", "z") //stolen from plasman code if it borks.
-	..()
 
 	species_intro = "You are an Insectoid.<br>\
 					Your body is highly resistant to the initial effects of radiation exposure, and you'll be better able to defend against toxic chemicals. <br>\
 					However, your body is more susceptible to heat than that of other species. Resilient though you may be, heat and flame are your biggest concern."
 
+/datum/species/insectoid/New()
+	..()
+	speech_filter = new /datum/speech_filter/insectoid
 
 /datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
 	var/sounds = rand(2,3)

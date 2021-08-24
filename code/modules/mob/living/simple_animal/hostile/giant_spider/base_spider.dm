@@ -121,6 +121,9 @@
 		return
 	.=..()
 
+/mob/living/simple_animal/hostile/giant_spider/get_butchering_products()
+	return list(/datum/butchering_product/spider_legs)
+
 //Can we actually attack a possible target?
 /mob/living/simple_animal/hostile/giant_spider/CanAttack(var/atom/the_target)
 	if(istype(the_target,/obj/machinery/light))
@@ -153,12 +156,21 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	. = ..()
+
+	regular_hud_updates()
+	standard_damage_overlay_updates()
+
+/mob/living/simple_animal/hostile/giant_spider/update_perception()
 	if(client)
-		client.color = list(0.8,0,0,1,
-							0,0.8,0,1,
-	 						0,0,0.8,1,
-		 					0.2,0.2,0.2,0.5,
-		 					0.15,0.15,0.15,0)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_ADD
+			client.darkness_planemaster.alpha = 100
+		client.color = list(
+					1,0,0,0,
+					0,1,0,0,
+	 				0,0,1,0,
+		 			0,0,-0.1,1,
+		 			0,0,0,0)
 
 		if(a_matrix_testing_override)
 			client.color = list(a_11,a_12,a_13,a_14,
@@ -166,9 +178,6 @@
 		 						a_31,a_32,a_33,a_34,
 			 					a_41,a_42,a_43,a_44,
 			 					a_51,a_52,a_53,a_54)
-
-	regular_hud_updates()
-	standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/giant_spider/regular_hud_updates()
 	if (!client)

@@ -28,6 +28,7 @@
 	flying = 1
 	treadmill_speed = 0 //It floats!
 	mutations = list(M_NO_SHOCK)
+	see_in_dark = 9
 
 	mob_property_flags = MOB_CONSTRUCT
 	mob_swap_flags = HUMAN|SIMPLE_ANIMAL|SLIME|MONKEY
@@ -63,6 +64,17 @@
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
+/mob/living/simple_animal/construct/update_perception()
+	if(client)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
+			client.darkness_planemaster.alpha = 180
+		client.color = list(
+					1,0,0,0,
+					0,1.3,0,0,
+	 				0,0,1.3,0,
+		 			0,-0.3,-0.3,1,
+		 			0,0,0,0)
 
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
@@ -134,24 +146,25 @@
 			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 			init_language = default_language
 			if(iswizard(creator) || isapprentice(creator))
-				construct_color = rgb(157, 1, 196)
+				construct_color = rgb(157, 1, 196) // WIZARDS -> purple
+				faction = "wizard" // so they get along with other wizard mobs
 			else
-				construct_color = rgb(0, 153, 255)
+				construct_color = rgb(0, 153, 255) // CREW -> blue
 		else
 
 			var/datum/role/streamer/streamer_role = creator.mind.GetRole(STREAMER)
 			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
 				if(streamer_role.followers.len == 0 && streamer_role.subscribers.len == 0) //No followers and subscribers, use normal cult colors.
-					construct_color = rgb(235,0,0)
+					construct_color = rgb(235,0,0) // STREAMER (no subs) -> RED
 				else
-					construct_color = rgb(30,255,30)
+					construct_color = rgb(30,255,30) // STREAMER (with subs) -> GREEN
 			else
 				construct_color = rgb(235,0,0)
 	else if (istype(creator, /mob/living/simple_animal/shade))//shade beacon
 		if (iscultist(creator))
-			construct_color = rgb(235,0,0)
+			construct_color = rgb(235,0,0) // CULTIST -> red
 		else
-			construct_color = rgb(0, 153, 255)
+			construct_color = rgb(0, 153, 255) // CREW -> blue
 	update_icons()
 
 /mob/living/simple_animal/construct/Login()
@@ -214,7 +227,7 @@
 			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
-		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 		update_icons()
 	else
@@ -282,7 +295,7 @@
 	if (hurt <= (maxHealth/3) && (!damage || damage <= damageblock))//when cracks start to appear
 		if (A)
 			visible_message("<span class='danger'>\The [A] bounces harmlessly off of \the [src]'s shell. </span>")
-		anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = LIGHTING_PLANE)
+		anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE)
 		playsound(src, 'sound/items/metal_impact.ogg', 25)
 		return TRUE
 	return FALSE
@@ -357,7 +370,6 @@
 	attacktext = "slashes"
 	speed = 1
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
-	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
 
@@ -468,7 +480,7 @@
 /mob/living/simple_animal/construct/update_icons()
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
-	var/overlay_plane = LIGHTING_PLANE
+	var/overlay_plane = ABOVE_LIGHTING_PLANE
 	if(layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE

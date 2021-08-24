@@ -79,8 +79,9 @@
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/dynamic_ruleset/proc/choose_candidates()
 	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	if (istype(M))
+		assigned += M
+		candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/proc/process()
@@ -92,12 +93,16 @@
 	return 1
 
 /datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
+	if (admin_disable_rulesets && !forced)
+		message_admins("Dynamic Mode: [name] was prevented from firing by admins.")
+		log_admin("Dynamic Mode: [name] was prevented from firing by admins.")
+		return FALSE
 	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 // Returns TRUE if there is enough pop to execute this ruleset
-/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE)
+/datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE, var/midround = FALSE)
 	var/enemies_count = 0
 	if (dead_dont_count)
 		for (var/mob/M in mode.living_players)
@@ -118,7 +123,11 @@
 
 	pop_and_enemies += enemies_count // Enemies count twice
 
-	var/threat = round(mode.threat_level/10)
+	var/threat = 0
+	if(midround)
+		threat = mode.midround_threat_level != 100 ? round(mode.midround_threat_level/10)+1 : 10
+	else
+		threat = mode.threat_level != 100 ? round(mode.threat_level/10)+1 : 10
 	if (enemies_count < required_enemies[threat] && !map.ignore_enemy_requirement(src))
 		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
 		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")

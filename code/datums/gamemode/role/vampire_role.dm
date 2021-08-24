@@ -196,6 +196,7 @@
 		target.LAssailant = null
 	else
 		target.LAssailant = assailant
+		target.assaulted_by(assailant)
 	while(do_mob(assailant, target, 5 SECONDS))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")

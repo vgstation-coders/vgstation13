@@ -1,8 +1,6 @@
 /datum/job/ai
 	title = "AI"
-	flag = AI
 	info_flag = JINFO_SILICON
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 0
 	spawn_positions = 1
@@ -21,9 +19,7 @@
 
 /datum/job/cyborg
 	title = "Cyborg"
-	flag = CYBORG
 	info_flag = JINFO_SILICON
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 0
 	spawn_positions = 2
@@ -38,9 +34,7 @@
 
 /datum/job/mommi
 	title = "Mobile MMI"
-	flag = MOMMI
 	info_flag = JINFO_SILICON
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 0
 	spawn_positions = 2

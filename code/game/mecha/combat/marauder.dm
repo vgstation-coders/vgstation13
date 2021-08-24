@@ -16,7 +16,7 @@
 	var/smoke_ready = 1
 	var/smoke_cooldown = 100
 	var/dash_cooldown = 30
-	var/datum/effect/effect/system/smoke_spread/smoke_system = new
+	var/datum/effect/system/smoke_spread/smoke_system = new
 	var/image/rockets = null
 	operation_req_access = list(access_cent_specops)
 	wreckage = /obj/effect/decal/mecha_wreckage/marauder
@@ -59,7 +59,7 @@
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
 	rockets.pixel_x = -64 * PIXEL_MULTIPLIER
 	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
-	rockets.plane = LIGHTING_PLANE
+	rockets.plane = ABOVE_LIGHTING_PLANE
 	rockets.layer = ABOVE_LIGHTING_LAYER
 	intrinsic_spells = list(
 							new /spell/mech/marauder/thrusters(src),

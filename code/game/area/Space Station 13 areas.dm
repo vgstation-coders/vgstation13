@@ -94,6 +94,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/holomap_marker = null
 	var/list/holomap_filter = list()
 
+	var/lights_always_start_on = FALSE
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -138,7 +140,7 @@ proc/process_adminbus_teleport_locs()
 			adminbusteleportlocs += AR.name
 			adminbusteleportlocs[AR.name] = AR
 
-	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
+	sortTim(adminbusteleportlocs, /proc/cmp_text_asc)
 
 
 /*-----------------------------------------------------------------------------*/
@@ -174,6 +176,14 @@ proc/process_adminbus_teleport_locs()
 /area/dojo
 	name = "\improper Spider Clan Dojo"
 	icon_state = "dojo"
+	requires_power = 0
+	dynamic_lighting = 0
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
+
+/area/timevoid
+	name = "\improper Void Between Timelines"
+	icon_state = "time_void"
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
@@ -545,7 +555,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/centcom/suppy
 	name = "\improper Centcom Supply Shuttle"
-	turret_protected = 1
 
 /area/centcom/ferry
 	name = "\improper Centcom Transport Shuttle"
@@ -1046,6 +1055,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Dormitories"
 	icon_state = "Sleep"
 	shuttle_can_crush = FALSE
+	lights_always_start_on = TRUE
 
 /area/crew_quarters/toilet
 	name = "\improper Dormitory Toilets"
@@ -1100,6 +1110,7 @@ proc/process_adminbus_teleport_locs()
 /area/crew_quarters/theatre
 	name = "\improper Theatre"
 	icon_state = "Theatre"
+	lights_always_start_on = FALSE
 
 /area/library
 	name = "\improper Library"
@@ -1149,6 +1160,9 @@ proc/process_adminbus_teleport_locs()
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
 	jammed = 0
+
+/area/holodeck/dungeon_holodeck_alpha
+	name = "\improper Holodeck Alpha"
 
 /area/holodeck/source_plating
 	name = "\improper Holodeck - Off"
@@ -1829,6 +1843,7 @@ proc/process_adminbus_teleport_locs()
 /area/storage/primary
 	name = "Primary Tool Storage"
 	icon_state = "primarystorage"
+	lights_always_start_on = TRUE
 
 /area/storage/autolathe
 	name = "Autolathe Storage"
@@ -2119,6 +2134,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper MoMMI Nest"
 	icon_state = "yellow"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	lights_always_start_on = TRUE
 
 /area/construction/supplyshuttle
 	name = "\improper Supply Shuttle"
@@ -2168,6 +2184,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "storage"
 
 /area/turret_protected/
+	name = "Turret Protected Area"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
 
@@ -2819,6 +2836,15 @@ var/list/the_station_areas = list (
 
 /area/maintenance/engine
 	name = "Engine"
+
+/area/shack
+	name = "abandoned shack"
+	requires_power = 0
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 // BEGIN Horizon
 /area/hallway/primary/foreport
 	name = "Fore Port"

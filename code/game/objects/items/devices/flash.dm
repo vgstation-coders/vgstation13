@@ -50,6 +50,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	if(!clown_check(user))
 		return

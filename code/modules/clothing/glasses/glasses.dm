@@ -34,7 +34,7 @@ BLIND     // can't see anything
 
 /obj/item/clothing/glasses/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
-	if(!istype(H) || stored_glasses || !glasses_fit)
+	if(!istype(H) || stored_glasses || !glasses_fit || slot == slot_l_store || slot == slot_r_store)
 		return ..()
 	if(slot != slot_glasses)
 		return CANNOT_EQUIP
@@ -111,7 +111,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 
 	glasses_fit = TRUE
@@ -172,7 +172,7 @@ var/list/science_goggles_wearers = list()
 		for (var/mob/living/L in infected_contact_mobs)
 			if (L.pathogen)
 				M.client.images |= L.pathogen
-		for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+		for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 			if (C.pathogen)
 				M.client.images |= C.pathogen
 		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
@@ -186,7 +186,7 @@ var/list/science_goggles_wearers = list()
 		M.client.images -= I.pathogen
 	for (var/mob/living/L in infected_contact_mobs)
 		M.client.images -= L.pathogen
-	for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+	for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 		M.client.images -= C.pathogen
 	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 		M.client.images -= C.pathogen

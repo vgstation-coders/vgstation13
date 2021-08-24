@@ -66,7 +66,7 @@
 
 /obj/machinery/computer/shuttle/emag(mob/user as mob)
 	if(!emagged)
-		new/obj/effect/effect/sparks(get_turf(src))
+		new/obj/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
 		var/choice = "Cancel"
 		if(user)

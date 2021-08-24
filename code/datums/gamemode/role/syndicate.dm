@@ -123,7 +123,7 @@
 /datum/role/traitor/GetScoreboard()
 	. = ..()
 	if(can_be_smooth)
-		if(uplink_items_bought)
+		if(uplink_items_bought?.len)
 			. += "The traitor bought:<BR>"
 			for(var/entry in uplink_items_bought)
 				. += "[entry]<BR>"
@@ -136,7 +136,6 @@
 /datum/role/traitor/challenger
 	name = CHALLENGER
 	id = CHALLENGER
-	name_for_uplink = CHALLENGER
 	required_pref = CHALLENGER
 	wikiroute = CHALLENGER
 	logo_state = "synd-logo"

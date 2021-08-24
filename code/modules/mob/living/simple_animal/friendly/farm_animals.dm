@@ -287,6 +287,10 @@
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
+/mob/living/simple_animal/chicken/pomf
+	name = "Pomf chicken"
+	body_color = "white"
+
 #define BOX_GROWTH_BAR 200
 /mob/living/simple_animal/hostile/retaliate/box
 	name = "box"
@@ -436,6 +440,9 @@
 	if(timestopped)
 		return FALSE
 	..()
+
+/mob/living/simple_animal/rabbit/get_butchering_products()
+	return list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot)
 
 /mob/living/simple_animal/rabbit/update_icon()
 	icon_state = "[body_type]_[colour]"

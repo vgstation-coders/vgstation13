@@ -37,9 +37,13 @@ cons:
 #define GFI_DX_ALPHA	8	// The image's alpha, or that of its parent if said parent's alpha isn't 255
 #define GFI_DX_PIXEL_X	9	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
 #define GFI_DX_PIXEL_Y	10	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
-#define GFI_DX_NAME		11	// Used to identify the human damage layer and apply the proper blood color
+#define GFI_DX_COORD_X	11	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
+#define GFI_DX_COORD_Y	12	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
 
-proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
+#define GFI_DX_MAX		12	// Remember to keep this updated should you need to keep track of more variables
+
+
+proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE)
 
 	var/icon/flat = icon('icons/effects/224x224.dmi',"empty") // Final flattened icon
 	var/icon/add // Icon of overlay being added
@@ -47,6 +51,25 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 	for(var/data in image_datas)
 		if (!data[GFI_DX_ICON] && !data[GFI_DX_STATE]) // no icon nor icon_state? we're probably not meant to draw that. Possibly a blank icon while we're only interested in its overlays.
 			continue
+
+		if (ignore_spawn_items)
+			// looks like we're getting some reference pics for an ID picture, let's ignore the items held on spawn
+			var/list/icon_states_to_ignore = list(
+				"plasticbag",
+				"bookVirologyGuide",
+				"firstaid",
+				"clipboard",
+				"handdrill",
+				"toolbox_blue",
+				"briefcase-centcomm",
+				"thurible",
+				)
+			if(data[GFI_DX_STATE] in icon_states_to_ignore)
+				continue
+
+		if (override_dir)
+			data[GFI_DX_DIR] = override_dir
+
 		CHECK_TICK
 
 		if (!data[GFI_DX_STATE] || data[GFI_DX_STATE] == "body_m_s")//this fixes human bodies always facing south
@@ -70,18 +93,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 			         , 1
 			         , 0)
 
-		if(data[GFI_DX_NAME] == "damage layer")
-			if(ishuman(data[GFI_DX_ATOM]))
-				var/mob/living/carbon/human/H = data[GFI_DX_ATOM]
-				for(var/datum/organ/external/O in H.organs)
-					if(!(O.status & ORGAN_DESTROYED))
-						if(O.damage_state == "00")
-							continue
-						var/icon/DI
-						DI = H.get_damage_icon_part(O.damage_state, O.icon_name, (H.species.blood_color == DEFAULT_BLOOD ? "" : H.species.blood_color))
-						add.Blend(DI,ICON_OVERLAY)
-
-		if(iscarbon(data[GFI_DX_ATOM]))
+		if(!override_dir && iscarbon(data[GFI_DX_ATOM]))
 			var/mob/living/carbon/C = data[1]
 			if(C.lying && !isalienadult(C))//because adult aliens have their own resting sprite
 				add.Turn(90)
@@ -95,16 +107,19 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 			add.Blend(rgba, ICON_MULTIPLY)
 
 		// Blend the overlay into the flattened icon
-		var/atom/pos = data[GFI_DX_ATOM]
-		flat.Blend(add,blendMode2iconMode(pos.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(pos.x-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(pos.y-center.y+radius))
+		var/atom/atom = data[GFI_DX_ATOM]
+		if (center)
+			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_X]-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_Y]-center.y+radius))
+		else // if there is no center that means we're probably dealing with a single atom, so we only care about the pixel offset
+			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X],1+data[GFI_DX_PIXEL_Y])
 
 	return flat
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // to_sort might be either an atom or an image, returns its image data relative to its parent if there is one
-/proc/get_image_data(var/to_sort,var/list/parent)
-	var/data[11]
+/proc/get_image_data(var/to_sort,var/list/parent, var/is_underlay = FALSE)
+	var/data[GFI_DX_MAX]
 	data[GFI_DX_ATOM] = to_sort
 	data[GFI_DX_ICON] = to_sort:icon
 	data[GFI_DX_STATE] = to_sort:icon_state
@@ -115,16 +130,55 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 	data[GFI_DX_ALPHA] = to_sort:alpha
 	data[GFI_DX_PIXEL_X] = to_sort:pixel_x
 	data[GFI_DX_PIXEL_Y] = to_sort:pixel_y
-	data[GFI_DX_NAME] = ""
 	if (isatom(to_sort))
-		data[GFI_DX_NAME] = to_sort:name
+		data[GFI_DX_COORD_X] = to_sort:x
+		data[GFI_DX_COORD_Y] = to_sort:y
 	if (parent?.len)
-		data[GFI_DX_ATOM] = parent[GFI_DX_ATOM] // the first entry always has to be the top level atom so we can track things like mobs lying down or their position
-		data[GFI_DX_DIR] = parent[GFI_DX_DIR]
+		var/atom/parent_atom = parent[GFI_DX_ATOM]
+		data[GFI_DX_ATOM] = parent_atom // the first entry always has to be the top level atom so we can track things like mobs lying down or their position
+		data[GFI_DX_COORD_X] = parent_atom:x
+		data[GFI_DX_COORD_Y] = parent_atom:y
+		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connection overlays use custom dirs
+			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
-			data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
+			if (is_underlay)
+				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] - 0.1
+			else
+				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
 		//child layer always overwrites
-		data[GFI_DX_COLOR] = parent[GFI_DX_COLOR]
+		if (data[GFI_DX_ICON] == 'icons/effects/blood.dmi')
+			var/blood_color
+			if (ishuman(parent_atom)) // uh oh, it's a human covered in blood, gotta find the correct blood color
+				var/mob/living/carbon/human/H = parent_atom
+				switch (data[GFI_DX_STATE])
+					if ("uniformblood")
+						if (H.w_uniform)
+							blood_color = H.w_uniform.blood_color
+					if ("armorblood","suitblood","coatblood")
+						if (H.wear_suit)
+							blood_color = H.wear_suit.blood_color
+					if ("helmetblood")
+						if (H.head)
+							blood_color = H.head.blood_color
+					if ("maskblood")
+						if (H.wear_mask)
+							blood_color = H.wear_mask.blood_color
+					if ("shoeblood")
+						if (H.shoes)
+							blood_color = H.shoes.blood_color
+					if ("bloodyhands")
+						if (H.gloves)
+							blood_color = H.gloves.blood_color
+						else
+							if (H.bloody_hands_data?.len)
+								blood_color = H.bloody_hands_data["blood_colour"]
+							else
+								blood_color = DEFAULT_BLOOD
+			data[GFI_DX_COLOR] = blood_color
+		else if (isitem(parent_atom) && (to_sort:name == "blood_overlay")) // just a blood-covered item
+			data[GFI_DX_COLOR] = to_sort:color
+		else
+			data[GFI_DX_COLOR] = parent[GFI_DX_COLOR]
 		if (parent[GFI_DX_ALPHA] != 255)
 			data[GFI_DX_ALPHA] = parent[GFI_DX_ALPHA]
 		data[GFI_DX_PIXEL_X] += parent[GFI_DX_PIXEL_X]
@@ -132,16 +186,16 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 	return data
 
 // fetches the image data of to_sort, as well as those of its overlays and underlays
-/proc/get_content_image_datas(var/to_sort,var/list/parent)
+/proc/get_content_image_datas(var/to_sort,var/list/parent, var/is_underlay = FALSE)
 	var/content_data = list()
-	var/list/my_data = get_image_data(to_sort,parent)
+	var/list/my_data = get_image_data(to_sort,parent, is_underlay)
 	if (!my_data)
 		return
 	content_data = list(my_data)
 	var/list/underlays = to_sort:underlays
 	var/list/overlays = to_sort:overlays
 	for (var/underlay in underlays)
-		var/list/L = get_content_image_datas(underlay,my_data)
+		var/list/L = get_content_image_datas(underlay,my_data, is_underlay = TRUE)
 		if (L)
 			content_data += L
 	for (var/overlay in overlays)
@@ -195,4 +249,8 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0)
 #undef GFI_DX_ALPHA
 #undef GFI_DX_PIXEL_X
 #undef GFI_DX_PIXEL_Y
-#undef GFI_DX_NAME
+#undef GFI_DX_COORD_X
+#undef GFI_DX_COORD_Y
+
+#undef GFI_DX_MAX
+

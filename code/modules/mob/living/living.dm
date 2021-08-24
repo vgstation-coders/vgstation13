@@ -362,6 +362,9 @@ lazy_invoke_event
 /mob/living/proc/setMaxHealth(var/newMaxHealth)
 	maxHealth = newMaxHealth
 
+/mob/living/proc/get_butchering_products()
+	return list()
+
 // ++++ROCKDTBEN++++ MOB PROCS //END
 
 
@@ -1402,6 +1405,7 @@ Thanks.
 				return
 
 			tmob.LAssailant = src
+			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
 		spawn(0)
@@ -1560,6 +1564,10 @@ Thanks.
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return FAILED_THROW
 
+	if(runescape_pvp && is_pacified())
+		to_chat(src, "<span class='warning'>As such, throwing items is also forbidden outside of maintenance areas.</span>")
+		return FAILED_THROW
+
 	if(target.type == /obj/abstract/screen)
 		return FAILED_THROW
 
@@ -1595,6 +1603,7 @@ Thanks.
 					M.LAssailant = null
 				else
 					M.LAssailant = usr
+					M.assaulted_by(usr)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
@@ -1857,7 +1866,7 @@ Thanks.
 
 /mob/living/proc/breath_airborne_diseases_from_clouds()
 	for(var/turf/T in range(1, src))
-		for(var/obj/effect/effect/pathogen_cloud/cloud in T.contents)
+		for(var/obj/effect/pathogen_cloud/cloud in T.contents)
 			if (!cloud.sourceIsCarrier || cloud.source != src || cloud.modified)
 				if (Adjacent(cloud))
 					for (var/ID in cloud.viruses)
@@ -1876,7 +1885,7 @@ Thanks.
 				strength += V.infectionchance
 			strength = round(strength/airborne_viruses.len)
 			while (strength > 0)//stronger viruses create more clouds at once
-				new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
+				new /obj/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
 				strength -= 40
 
 /mob/living/proc/handle_virus_updates()

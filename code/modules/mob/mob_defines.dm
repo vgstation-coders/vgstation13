@@ -63,7 +63,7 @@
 	var/computer_id = null
 	var/lastattacker = null
 	var/lastattacked = null
-	var/attack_log = list( )
+	var/list/attack_log = list()
 	var/already_placed = 0.0
 	var/obj/machine
 	var/other_mobs = null
@@ -94,6 +94,8 @@
 	var/confused_intensity = 0 //Carbon
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
+	var/teleportitis = 0	//Carbon
+	var/timeslip = 0	//Carbon
 	var/lying = 0
 	var/lying_prev = 0
 	var/canmove = 1
@@ -158,7 +160,6 @@
 	var/seer = 0 // Legacy Cult
 
 	var/datum/hud/hud_used = null
-	var/datum/ui_icons/gui_icons = null
 
 	var/list/grabbed_by = list()
 	var/list/requests = list()
@@ -207,8 +208,8 @@
 			statpanel("[P.panel]","",P)
 	*/
 
-//The last mob/living/carbon to push/drag/grab this mob (mostly used by slimes friend recognition)
-	var/mob/living/carbon/LAssailant = null
+//The last mob/living/carbon to push/drag/grab/harm this mob
+	var/mob/LAssailant = null
 
 //Wizard mode, but can be used in other modes thanks to the brand new "Give Spell" badmin button
 	var/list/spell/spell_list = list()

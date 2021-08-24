@@ -708,8 +708,8 @@ var/stacking_limit = 90
 		forced_latejoin_rule.trim_candidates()
 		message_admins("Forcing ruleset [forced_latejoin_rule]")
 		if (forced_latejoin_rule.ready(1))
-			forced_latejoin_rule.choose_candidates()
-			picking_latejoin_rule(list(forced_latejoin_rule))
+			if (forced_latejoin_rule.choose_candidates())
+				picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
 
 	else if (!latejoin_injection_cooldown && injection_attempt())
@@ -733,8 +733,8 @@ var/stacking_limit = 90
 				rule.candidates = list(newPlayer)
 				rule.trim_candidates()
 				if (rule.ready())
-					rule.choose_candidates()
-					drafted_rules[rule] = rule.get_weight()
+					if (rule.choose_candidates())
+						drafted_rules[rule] = rule.get_weight()
 
 		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
 			var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)

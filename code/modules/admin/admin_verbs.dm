@@ -89,7 +89,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
 	/client/proc/artifacts_panel,
-	/client/proc/climate_panel
+	/client/proc/climate_panel,
+	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -380,7 +381,30 @@ var/list/admin_verbs_mod = list(
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
 		/proc/generateMiniMaps,
-		/client/proc/maprender
+		/client/proc/maprender,
+		/client/proc/cmd_admin_rejuvenate,
+		/datum/admins/proc/show_role_panel,
+		/client/proc/print_jobban_old,
+		/client/proc/print_jobban_old_filter,
+		/client/proc/forceEvent,
+		///client/proc/break_all_air_groups,
+		///client/proc/regroup_all_air_groups,
+		///client/proc/kill_pipe_processing,
+		///client/proc/kill_air_processing,
+		///client/proc/disable_communication,
+		///client/proc/disable_movement,
+		/client/proc/Zone_Info,
+		/client/proc/Test_ZAS_Connection,
+		/client/proc/SDQL2_query,
+		/client/proc/check_sim_unsim,
+		/client/proc/start_line_profiling,
+		/client/proc/stop_line_profiling,
+		/client/proc/show_line_profiling,
+		/client/proc/check_wires,
+		#if UNIT_TESTS_ENABLED
+		/client/proc/unit_test_panel,
+		#endif
+		/client/proc/check_pipes
 		)
 	if (isobserver(mob))
 		mob.verbs -= /mob/dead/observer/verb/toggle_antagHUD
@@ -777,6 +801,18 @@ var/list/admin_verbs_mod = list(
 			return
 		log_admin("[src] deadminned themself.")
 		message_admins("[src] deadminned themself.")
+		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
+			var/admins_number = admins.len
+			var/admin_number_afk = 0
+			for(var/client/X in admins)
+				if(X.is_afk())
+					admin_number_afk++
+
+			var/available_admins = admins_number - admin_number_afk
+
+			if(available_admins == 0) // Apparently the admin logging out is no longer an admin at this point, so we have to check this towards 0 and not towards 1. Awell.
+				send2adminirc("[key_name(src, showantag = FALSE)] deadminned themself - no more non-AFK admins online. - [admin_number_afk] AFK.")
+				send2admindiscord("[key_name(src, showantag = FALSE)] deadminned themself. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 		deadmin()
 		verbs += /client/proc/readmin
 		deadmins += ckey

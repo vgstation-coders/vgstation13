@@ -285,6 +285,7 @@
 		"YOUR TIME HAS NOT COME, YET.",\
 		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 	playsound(src, get_sfx("soulstone"), 50,1)
+	H.dropBorers()
 	switch(raisetype)
 		if(RAISE_TYPE_ZOMBIE)
 			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), user, H)

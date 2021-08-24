@@ -156,13 +156,13 @@
 
 	if(powered && get_powernet() && avail(active_power_usage) && active)
 		var/image/emitterbeam = image(icon,"emitter-beam")
-		emitterbeam.plane = LIGHTING_PLANE
+		emitterbeam.plane = ABOVE_LIGHTING_PLANE
 		emitterbeam.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterbeam
 
 	if(locked)
 		var/image/emitterlock = image(icon,"emitter-lock")
-		emitterlock.plane = LIGHTING_PLANE
+		emitterlock.plane = ABOVE_LIGHTING_PLANE
 		emitterlock.layer = ABOVE_LIGHTING_LAYER
 		overlays += emitterlock
 

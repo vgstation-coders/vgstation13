@@ -565,7 +565,7 @@
 	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
 		if(T.density) //no wallsmoke pls
 			continue
-		var/datum/effect/effect/system/smoke_spread/bad/smoke = new /datum/effect/effect/system/smoke_spread/bad()
+		var/datum/effect/system/smoke_spread/bad/smoke = new /datum/effect/system/smoke_spread/bad()
 		smoke.set_up(5, 0, T)
 		smoke.start()
 	qdel(src)
@@ -725,7 +725,7 @@
  */
 /obj/item/toy/gooncode
 	name = "Goonecode"
-	desc = "The holy grail of all programmers. It seems a bit leaky."
+	desc = "The holy grail of all programmers...or at least it was at some point. It looks like it has fully leaked out."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
@@ -1822,3 +1822,11 @@ var/list/living_balloons = list()
 	name = "\improper Trader action figure"
 	icon_state = "trader"
 	toysay = "Shiny rock for nuke, good trade yes?"
+
+/obj/item/toy/foam_hand
+	name = "\improper NanoTrasen foam hand"
+	desc = "A simple balloon."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "foam_hand"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	w_class = W_CLASS_LARGE

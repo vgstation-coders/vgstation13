@@ -1069,7 +1069,7 @@ var/global/num_vending_terminals = 1
 		flick(src.icon_vend,src)
 	R.amount--
 	src.updateUsrDialog()
-	visible_message("\The [src.name] whirrs as it vends", "You hear a whirr")
+	visible_message("\The [src.name] whirrs as it vends.", "You hear a whirr.")
 	spawn(vend_delay)
 		if(!R.custom)
 			new R.product_path(get_turf(src))
@@ -2824,7 +2824,7 @@ var/global/num_vending_terminals = 1
 		emagged = 1
 		overlays = 0
 		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-		dangerlay.plane = LIGHTING_PLANE
+		dangerlay.plane = ABOVE_LIGHTING_PLANE
 		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
@@ -2856,7 +2856,7 @@ var/global/num_vending_terminals = 1
 	emagged = 1
 	overlays = 0
 	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-	dangerlay.plane = LIGHTING_PLANE
+	dangerlay.plane = ABOVE_LIGHTING_PLANE
 	overlays_vending[2] = dangerlay
 	update_icon()
 
@@ -2907,7 +2907,7 @@ var/global/num_vending_terminals = 1
 		emagged = 1
 		overlays = 0
 		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-		dangerlay.plane = LIGHTING_PLANE
+		dangerlay.plane = ABOVE_LIGHTING_PLANE
 		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
@@ -2940,7 +2940,7 @@ var/global/num_vending_terminals = 1
 	emagged = 1
 	overlays = 0
 	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-	dangerlay.plane = LIGHTING_PLANE
+	dangerlay.plane = ABOVE_LIGHTING_PLANE
 	overlays_vending[2] = dangerlay
 	update_icon()
 
@@ -3609,3 +3609,58 @@ var/global/num_vending_terminals = 1
 		/obj/item/binoculars = 2,
 		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
 		)
+
+/obj/machinery/vending/zamsnax
+	name = "\improper Zam Snax"
+	desc = "A relatively new vending machine with snacks for Grey crewmembers, sponsored by labs located on the elusive mothership."
+	product_slogans = list(
+		"Do you still hunger? Try Zam microwave meals, now available at all cargo merchandise computers.",
+		"Tell your human friends to try Tannic Thunder, Nitro Freeze, and Moon Cheese.",
+		"Humans! Buy some NotRaisins for a bite of something new. Acid purified!",
+		"Zam is your friend far from home.",
+		"Life is short between cloning cycles. Enjoy some Zam!",
+		"The mothership is always watching.",
+		"Zam products are superior.",
+		"Slurp and burp!",
+		"Why Dan when you could Zam?",
+		"All products are approved by Administrators."
+	)
+	product_ads = list(
+		"Glory to the mothership, and all hail the chairman!"
+	)
+	vend_reply = "The mothership provides."
+	icon_state = "ZamSnax"
+	products = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash = 8,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 8,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 8,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
+		)
+	contraband = list(
+		/obj/item/weapon/storage/pill_bottle/zambiscuits = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 4,
+		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 4,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 30,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash = 16,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 16,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea = 16,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder = 20,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 16,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 20,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 30,
+		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 35,
+		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 20,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 100,
+		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza = 2,
+		)
+
+	pack = /obj/structure/vendomatpack/zamsnax

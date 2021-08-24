@@ -174,12 +174,9 @@
 		create_cluwne()
 
 	if(href_list["predict"])
-		var/dat = {"<html><body>
-		<h4>High Job Preferences</h4>"}
-		dat += job_master.display_prediction()
-
-		src << browse(dat, "window=manifest;size=400x420;can_close=1")
+		ViewPrediction()
 		return 1
+
 	if(href_list["manifest"])
 		ViewManifest()
 
@@ -347,14 +344,6 @@
 	mind.transfer_to(cluwne)
 	qdel(src)
 
-
-/mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
-	// 20% of players have bad genetic mutations.
-	if(prob(20))
-		H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD)
-		if(prob(10)) // 10% of those have a good mut.
-			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
-
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -464,7 +453,7 @@
 			else
 				AnnounceArrival(character, rank)
 				CallHook("Arrival", list("character" = character, "rank" = rank))
-			FuckUpGenes(character)
+			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		else
 			character.Robotize()
 	qdel(src)
@@ -504,9 +493,28 @@
 	var/mins = (mills % 36000) / 600
 	var/hours = mills / 36000
 
+	var/list/highprior = new()
+	var/list/heads = new()
+	var/list/sec = new()
+	var/list/eng = new()
+	var/list/med = new()
+	var/list/sci = new()
+	var/list/cgo = new()
+	var/list/civ = new()
+	var/list/misc = new()
 
-	var/dat = {"<html><body><center>
-Round Duration: [round(hours)]h [round(mins)]m<br>"}
+	var/dat = {"<html><head><style>
+		.manifest {border-collapse:collapse;}
+		.manifest td, th {border:1px solid #DEF; background-color:white; color:black; padding:.25em}
+		.manifest th {height: 2em; background-color: #48C; color:white}
+		.manifest tr.head th {background-color: #488}
+		.manifest td:first-child {text-align:right}
+		.manifest tr.alt td {background-color: #DEF}
+		.manifest tr.striked td {background-color: #999}
+		.manifest tr.request td {background-color: #F99}
+		.manifest th.reqhead td {background-color: #844}
+		.manifest tr.reqalt td {background-color: #FCC}
+		</style></head><body><center>Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
 			dat += "<font color='red'><b>The station has been evacuated.</b></font><br>"
@@ -515,32 +523,129 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		if(emergency_shuttle.direction == 1 && emergency_shuttle.alert == 1) // Crew transfer initiated
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
-	dat += "Choose from the following open positions:<br>"
-	var/countprio = 0
+	dat += "Choose from the following open positions:<br><table class='manifest' width='320px'><tr class='head'><th>Rank</th><th>Quantity</th><th>Active</th></tr>"
+	var/color = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
 			// Only players with the job assigned and AFK for less than 10 minutes count as active
 			for(var/mob/M in player_list) if(M.mind && M.client && M.mind.assigned_role == job.title && M.client.inactivity <= 10 * 60 * 10)
 				active++
-			if(job.species_whitelist.len)
-				if(!job.species_whitelist.Find(client.prefs.species))
-					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
-					continue
-			if(job.species_blacklist.len)
-				if(job.species_blacklist.Find(client.prefs.species))
-					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
-					continue
-
 			if(job.priority)
-				countprio++
-				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
+				highprior[job] = active
+			else if(job.title in command_positions)
+				heads[job] = active
+			else if(job.title in security_positions)
+				sec[job] = active
+			else if(job.title in engineering_positions)
+				eng[job] = active
+			else if(job.title in medical_positions)
+				med[job] = active
+			else if(job.title in science_positions)
+				sci[job] = active
+			else if(job.title in cargo_positions)
+				cgo[job] = active
+			else if(job.title in civilian_positions)
+				civ[job] = active
 			else
-				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
-	if(!countprio)
-		dat += "<a style='color:red' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a><br>"
+				misc[job] = active
+	
+	if(highprior.len > 0)
+		dat += "<tr><th class='reqhead' colspan=3>High Priority Jobs</th></tr>"
+		for(var/datum/job/job in highprior)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='reqalt'" : " class='request'"]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[highprior[job]]</td></tr>"
+			color = !color
+	else
+		dat += "<tr><th class='reqhead' colspan=3><a style='color:white' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a></th></tr>"
+
+	if(heads.len > 0)
+		dat += "<tr><th colspan=3>Heads</th></tr>"
+		for(var/datum/job/job in heads)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[heads[job]]</td></tr>"
+			color = !color
+
+	if(sec.len > 0)
+		dat += "<tr><th colspan=3>Security</th></tr>"
+		for(var/datum/job/job in sec)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[sec[job]]</td></tr>"
+			color = !color
+
+	if(eng.len > 0)
+		dat += "<tr><th colspan=3>Engineering</th></tr>"
+		for(var/datum/job/job in eng)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[eng[job]]</td></tr>"
+			color = !color
+
+	if(med.len > 0)
+		dat += "<tr><th colspan=3>Medical</th></tr>"
+		for(var/datum/job/job in med)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[med[job]]</td></tr>"
+			color = !color
+
+	if(sci.len > 0)
+		dat += "<tr><th colspan=3>Science</th></tr>"
+		for(var/datum/job/job in sci)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[sci[job]]</td></tr>"
+			color = !color
+
+	if(cgo.len > 0)
+		dat += "<tr><th colspan=3>Cargo</th></tr>"
+		for(var/datum/job/job in cgo)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[cgo[job]]</td></tr>"
+			color = !color
+
+	if(civ.len > 0)
+		dat += "<tr><th colspan=3>Civilian</th></tr>"
+		for(var/datum/job/job in civ)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[civ[job]]</td></tr>"
+			color = !color
+
+	// misc guys
+	if(misc.len > 0)
+		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
+		for(var/datum/job/job in misc)
+			if((job.species_whitelist.len && !job.species_whitelist.Find(client.prefs.species)) || (job.species_blacklist.len && job.species_blacklist.Find(client.prefs.species)))
+				dat += "<tr class='striked'><td><s>[job.title]</s></td><td><s>[job.current_positions]</s></td><td><s>[highprior[job]]</s></td></tr>"
+				continue
+
+			dat += "<tr[color ? " class='alt'" : ""]><td><a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title]</a></td><td>[job.current_positions]</td><td>[misc[job]]</td></tr>"
+			color = !color
+
+	dat += "</table>"
 	dat += "</center>"
-	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
+	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
 /mob/new_player/proc/create_character()
@@ -663,9 +768,14 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.Namepick()
 	return new_character
 
+/mob/new_player/proc/ViewPrediction()
+	var/dat = {"<html><body>
+	<h4>High Job Preferences</h4>"}
+	dat += job_master.display_prediction()
+
+	src << browse(dat, "window=manifest;size=370x420;can_close=1")
+	
 /mob/new_player/proc/ViewManifest()
-
-
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
 	dat += data_core.get_manifest(OOC = 1)

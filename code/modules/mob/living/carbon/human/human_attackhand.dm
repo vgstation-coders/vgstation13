@@ -72,6 +72,7 @@
 			contract_disease(D,1,0)
 
 	apply_damage(damage, BRUTE, affecting)
+	attack_hand_contact_diseases(M, affecting, FALSE, TRUE)
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='red'>bit [src.name] ([src.ckey]) for [damage] damage</font>")
 	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bitten by [M.name] ([M.ckey]) for [damage] damage</font>")
@@ -79,6 +80,7 @@
 		LAssailant = null
 	else
 		LAssailant = M
+		assaulted_by(M)
 	log_attack("[M.name] ([M.ckey]) bitten by [src.name] ([src.ckey])")
 	return
 
@@ -155,6 +157,7 @@
 		M.say(pick("Take that!", "Taste the pain!"))
 
 	apply_damage(damage, BRUTE, affecting)
+	attack_hand_contact_diseases(M, affecting, TRUE)
 
 	if(!stomping) //Kicking somebody while holding them with a grab sends the victim flying
 		var/obj/item/weapon/grab/G = M.get_inactive_hand()
@@ -176,7 +179,28 @@
 		LAssailant = null
 	else
 		LAssailant = M
+		assaulted_by(M)
 	log_attack("[src.name] ([src.ckey]) kicked by [M.name] ([M.ckey])")
+
+/mob/living/carbon/human/proc/attack_hand_contact_diseases(var/mob/living/carbon/human/M, var/datum/organ/external/affecting_override = null, var/kick = FALSE, var/bite = FALSE)
+	var/datum/organ/external/S
+	if (affecting_override)
+		S = affecting_override
+	else
+		S = get_organ(M.zone_sel.selecting)
+	if (!(!S || S.status & ORGAN_DESTROYED))
+		var/touch_zone = S.body_part
+		var/used_bodypart = HANDS
+		if (kick)
+			used_bodypart = FEET
+		var/block = 0
+		var/bleeding = 0
+		// biting causes the check to consider that both sides are bleeding, allowing for blood-only disease transmission through biting.
+		if ((!bite && M.check_contact_sterility(used_bodypart)) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+			block = 1
+		if ((bite || M.check_bodypart_bleeding(used_bodypart)) && (bite || check_bodypart_bleeding(touch_zone)))//both sides have to be bleeding to allow for blood infections
+			bleeding = 1
+		share_contact_diseases(M,block,bleeding)
 
 /mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)
 	//M.delayNextAttack(10)
@@ -194,17 +218,6 @@
 	if((M != src) && check_shields(0, M))
 		visible_message("<span class='borange'>[M] attempts to touch [src]!</span>")
 		return 0
-
-	var/datum/organ/external/S = src.get_organ(M.zone_sel.selecting)
-	if (!(!S || S.status & ORGAN_DESTROYED))
-		var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
-		var/block = 0
-		var/bleeding = 0
-		if (M.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
-			block = 1
-		if (M.check_bodypart_bleeding(HANDS) && check_bodypart_bleeding(touch_zone))//both sides have to be bleeding to allow for blood infections
-			bleeding = 1
-		share_contact_diseases(M,block,bleeding)
 
 	// CHEATER CHECKS
 	if(M.mind)
@@ -257,21 +270,31 @@
 				help_shake_act(M)
 				return 1
 			else if(ishuman(M))
+				attack_hand_contact_diseases(M)
 				M.perform_cpr(src)
 
 		if(I_GRAB)
+			attack_hand_contact_diseases(M)
 			return M.grab_mob(src)
 
 		if(I_HURT)
 			var/punch_damage = M.unarmed_attack_mob(src)
-			if (punch_damage)
-				var/punch_zone = get_part_from_limb(M.zone_sel.selecting)
-				if (check_bodypart_bleeding(punch_zone))
+			if (punch_damage >= 0)
+				var/punch_zone = M.zone_sel.selecting
+				if (punch_zone == TARGET_EYES || punch_zone == TARGET_MOUTH)
+					punch_zone = LIMB_HEAD
+				var/datum/organ/external/limb = organs_by_name[punch_zone]
+				if(limb.status & ORGAN_BLEEDING)
 					M.bloody_hands(src,1)
-			return punch_damage
+				return punch_damage
+			else // dodged
+				return 0
 
 		if(I_DISARM)
-			return M.disarm_mob(src)
+			var/disarm_attempt = M.disarm_mob(src)
+			if (disarm_attempt)
+				attack_hand_contact_diseases(M)
+			return disarm_attempt
 	return
 
 /mob/living/carbon/human/proc/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, inrange, params)

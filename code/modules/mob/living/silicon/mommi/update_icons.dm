@@ -16,7 +16,7 @@
 // Update the MoMMI's visual icon
 // This is called whenever a major change to the MoMMI's visual appearance is made
 // i.e when they change their icon_state, open their cover, get emagged, toggle their parking break, or put on a hat
-/mob/living/silicon/robot/mommi/updateicon(overlay_layer = ABOVE_LIGHTING_LAYER, overlay_plane = LIGHTING_PLANE)
+/mob/living/silicon/robot/mommi/updateicon(overlay_layer = ABOVE_LIGHTING_LAYER, overlay_plane = ABOVE_LIGHTING_PLANE)
 	overlays.Cut()
 
 	if(base_icon)
@@ -34,7 +34,7 @@
 			eyes.plane = overlay_plane
 			eyes.layer = overlay_layer
 		else
-			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
+			eyes.plane = ABOVE_LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
 		overlays += eyes
 
 		if(anchored) //anchored, really?

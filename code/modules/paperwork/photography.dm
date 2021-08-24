@@ -4,7 +4,9 @@
  *		Silicon Camera
  *		Camera Film
  *		Photos
+ * 		ID Photos
  *		Photo Albums
+ *		Photo Booth
  */
 
 /*
@@ -96,6 +98,40 @@
 	if(!usr.isUnconscious() && Adjacent(usr))
 		name = "photo[(n_name ? text("- '[n_name]'") : null)]"
 	add_fingerprint(usr)
+
+/*
+ * ID Photo
+ */
+/obj/item/weapon/photo/id
+	name = "ID photo"
+	desc = "An ID photo. It can be used to update the records database."
+	icon_state = "photo_id"
+	var/icon/four_sides	// a 4-direction icon of the mob
+	var/background = "white"
+
+/obj/item/weapon/photo/id/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(iswirecutter(W))
+		var/turf/T = get_turf(src)
+		for (var/direction in cardinal)
+			var/obj/item/weapon/photo/P = new/obj/item/weapon/photo(T)
+			var/icon/side = icon('icons/effects/32x32.dmi', background)
+			if (four_sides)
+				var/icon/side_mob = icon(four_sides, dir = direction)
+				side.Blend(side_mob, ICON_OVERLAY)
+			var/icon/small_img = icon(side)
+			var/icon/ic = icon('icons/obj/items.dmi',"photo")
+			small_img.Scale(8, 8)
+			ic.Blend(small_img,ICON_OVERLAY, 13, 13)
+			P.icon = ic
+			P.img = side
+			P.info = info
+			P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+			P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+			P.photo_size = 1
+		playsound(T, 'sound/items/poster_ripped.ogg', 30, 1)
+		qdel(src)
+		return
+	..()
 
 
 /*
@@ -673,3 +709,166 @@
 		R.connected_ai.aicamera.aipictures |= R.aicamera.aipictures
 		R.aicamera.aipictures = R.connected_ai.aicamera.aipictures
 		to_chat(R, "<span class='notice'>Photo database synced with [R.connected_ai.name].</span>")
+
+
+/*
+ * Photo Booth
+ */
+/obj/machinery/photobooth
+	name = "photo booth"
+	desc = "Come get your picture!"
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "photobooth"
+	density = TRUE
+	anchored = TRUE
+	ghost_read=0
+	ghost_write=0
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	use_power = 1
+	idle_power_usage = 10
+	active_power_usage = 10
+	var/background = "white"
+	var/photo_power_usage = 1000
+	var/icon/photo
+	var/mob/living/current_mob
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/photobooth,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor
+	) // capacitors for the flash, scanning_modules for the processing of the image, matter bin for the ink
+
+/obj/machinery/photobooth/New()
+	..()
+	var/image/I = image(icon, src, "photobooth_overlay")
+	I.plane = ABOVE_HUMAN_PLANE
+	I.layer = 0
+	overlays += I
+
+/obj/machinery/photobooth/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>You can perform an Alt-Click to change the background on the ID photos.</span>")
+
+/obj/machinery/photobooth/Uncross(var/atom/movable/mover, var/turf/target)
+	if(target) //Are we doing a manual check to see
+		if(get_dir(loc, target) == SOUTH)
+			return 1
+	else if(mover.dir == SOUTH) //Or are we using move code
+		return 1
+	return 0
+
+/obj/machinery/photobooth/Cross(atom/movable/mover, turf/target, height = 0)
+	if(get_dir(loc, target) == SOUTH || get_dir(loc, mover) == SOUTH)
+		return 1
+	return 0
+
+/obj/machinery/photobooth/AltClick()
+	if (!isliving(usr) || !Adjacent(usr))
+		return
+	var/mob/living/user = usr
+	var/new_background = input(user, "Choose a photo background", "Photo Booth") as null|anything in list(
+		"white",
+		"black",
+		"flowers",
+		"fire",
+		"space",
+		"balloons",
+		"nanotrasen_dark",
+		"nanotrasen_light",
+		)
+	if (new_background)
+		background = new_background
+		to_chat(user, "<span class='notice'>You set the photo background to \"[background]\"</span>")
+
+/obj/machinery/photobooth/attack_hand(var/mob/living/user)
+	if (!isliving(user))
+		return
+	if (current_mob)
+		if (current_mob != user)
+			to_chat(user, "<span class='warning'>\The [current_mob] is already using the booth currently.</span>")
+		return
+	var/turf/T = get_turf(src)
+	current_mob = locate() in T
+	if (!current_mob)
+		to_chat(user, "<span class='notice'>You must enter the booth from the front before you can take a picture of yourself.</span>")
+		return
+	lock_atom(current_mob, /datum/locking_category/photobooth)
+	anim(target = src, a_icon = icon, flick_anim = "photobooth-flash", sleeptime = 40, plane = ABOVE_HUMAN_PLANE, lay = OPEN_CURTAIN_LAYER)
+	playsound(T, "rustle", 50, 1, -2)
+	spawn(17)
+		playsound(T, "polaroid", 75, 1, -3)
+		photo = capture_mob(current_mob)
+		sleep(16)
+		if (!current_mob.gcDestroyed)
+			unlock_atom(current_mob)
+		sleep(16)
+		anim(target = src, a_icon = icon, flick_anim = "photobooth-print", sleeptime = 30, plane = ABOVE_HUMAN_PLANE, lay = WINDOOR_LAYER)
+		playsound(T, "sound/effects/fax.ogg", 50, 1)
+		sleep(10)
+		if (!current_mob.gcDestroyed)
+			print_photo(current_mob)
+		current_mob = null
+
+/obj/machinery/photobooth/proc/capture_mob(var/mob/living/L)
+	if (!L || L.gcDestroyed)
+		return
+	var/icon/I = icon('icons/effects/32x32.dmi', "blank")
+	var/icon/result = icon(I, "")
+	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = SOUTH),  "", dir = SOUTH)
+	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = NORTH),  "", dir = NORTH)
+	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = EAST),  "", dir = EAST)
+	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = WEST),  "", dir = WEST)
+	result.Crop(1,1,32,32)
+	return result
+
+/obj/machinery/photobooth/proc/print_photo(var/mob/living/L)
+	var/turf/T = get_turf(src)
+	var/obj/item/weapon/photo/id/P = new/obj/item/weapon/photo/id(T)
+	P.pixel_x = 8 * PIXEL_MULTIPLIER
+	P.pixel_y = 0
+	P.background = background
+	P.plane = ABOVE_HUMAN_PLANE
+	P.layer = CLOSED_CURTAIN_LAYER
+	var/icon/result =  icon('icons/effects/70x70.dmi', "photo_id")
+	var/icon/bground = icon('icons/effects/32x32.dmi', background)
+	result.Blend(bground,ICON_OVERLAY,3,37)
+	result.Blend(bground,ICON_OVERLAY,37,37)
+	result.Blend(bground,ICON_OVERLAY,37,3)
+	result.Blend(bground,ICON_OVERLAY,3,3)
+	if (photo)
+		var/icon/side_south = icon(photo, dir = SOUTH)
+		result.Blend(side_south,ICON_OVERLAY,3,37)
+		var/icon/side_north = icon(photo, dir = NORTH)
+		result.Blend(side_north,ICON_OVERLAY,37,37)
+		var/icon/side_east = icon(photo, dir = EAST)
+		result.Blend(side_east,ICON_OVERLAY,3,3)
+		var/icon/side_west = icon(photo, dir = WEST)
+		result.Blend(side_west,ICON_OVERLAY,37,3)
+
+		bground.Blend(photo, ICON_OVERLAY)
+		P.four_sides = bground
+
+	var/icon/small_img = icon(result)
+	var/icon/ic = icon('icons/obj/items.dmi',"photo_id")
+	small_img.Scale(15, 15)
+	ic.Blend(small_img,ICON_OVERLAY, 10, 10)
+	P.icon = ic
+	P.img = result
+	if (photo && L)
+		var/mob_detail = "You can see \a [L] on the photo.[(3*L.health) < (L.maxHealth/4) ? " They look hurt.":""]"
+		for(var/obj/item/I in L.held_items)
+			var/item_count = 0
+
+			switch(item_count)
+				if(0)
+					mob_detail += " They are holding \a [I]"
+				else
+					mob_detail += " and \a [I]."
+
+			item_count++
+		P.info = mob_detail
+
+/datum/locking_category/photobooth

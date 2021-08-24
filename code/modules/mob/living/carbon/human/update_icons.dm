@@ -324,7 +324,7 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[HAIR_LAYER]
 
 	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
-	if( !head_organ || (head_organ.status & ORGAN_DESTROYED) )
+	if( !head_organ || (head_organ.status & ORGAN_DESTROYED) || head_organ.disfigured)
 		if(update_icons)
 			update_icons()
 		return
@@ -377,9 +377,10 @@ var/global/list/damage_icon_parts = list()
 	if(M_FAT in mutations)
 		fat = "fat"
 
-	var/image/standing	= image("icon" = 'icons/effects/genetics.dmi')
 	overlays -= obj_overlays[MUTATIONS_LAYER]
 	var/obj/abstract/Overlays/O = obj_overlays[MUTATIONS_LAYER]
+	O.icon = 'icons/effects/genetics.dmi'
+	O.icon_state = ""
 	O.overlays.len = 0
 	O.underlays.len = 0
 
@@ -392,37 +393,22 @@ var/global/list/damage_icon_parts = list()
 			continue
 		var/underlay=gene.OnDrawUnderlays(src,g,fat)
 		if(underlay)
-			//standing.underlays += underlay
-			O.underlays += underlay
+			O.underlays += image('icons/effects/genetics.dmi', underlay)
 			add_image = 1
 	for(var/mut in mutations)
 		switch(mut)
-			/*if(M_RESIST_COLD)
-				standing.underlays	+= "fire[fat]_s"
-				add_image = 1
-			if(M_RESIST_HEAT)
-				standing.underlays	+= "cold[fat]_s"
-				add_image = 1
-			if(TK)
-				standing.underlays	+= "telekinesishead[fat]_s"
-				add_image = 1
-			*/
 			if(M_LASER)
-				//standing.overlays += image(icon = standing.icon, icon_state = "lasereyes_s")
-				O.overlays += image(icon = O.icon, icon_state = "lasereyes_s")
+				O.overlays += image('icons/effects/genetics.dmi', "lasereyes_s")
 				add_image = 1
 	if((M_RESIST_COLD in mutations) && (M_RESIST_HEAT in mutations))
 		if(!(src.species.name == "Vox") && !(src.species.name == "Skeletal Vox"))
-			//standing.underlays	-= "cold[fat]_s"
-			//standing.underlays	-= "fire[fat]_s"
-			//standing.underlays	+= "coldfire[fat]_s"
-			O.underlays	-= "cold[fat]_s"
-			O.underlays	-= "fire[fat]_s"
-			O.underlays	+= "coldfire[fat]_s"
+			O.underlays	-= image('icons/effects/genetics.dmi', "cold[fat]_s")
+			O.underlays	-= image('icons/effects/genetics.dmi', "fire[fat]_s")
+			O.underlays	+= image('icons/effects/genetics.dmi', "coldfire[fat]_s")
 		else if((src.species.name == "Vox") || (src.species.name == "Skeletal Vox"))
-			O.underlays -= "coldvox_s"
-			O.underlays	-= "firevox_s"
-			O.underlays	+= "coldfirevox_s"
+			O.underlays -= image('icons/effects/genetics.dmi', "coldvox_s")
+			O.underlays	-= image('icons/effects/genetics.dmi', "firevox_s")
+			O.underlays	+= image('icons/effects/genetics.dmi', "coldfirevox_s")
 
 	//Cultist tattoos
 	if (iscultist(src))
@@ -436,12 +422,7 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += I
 
 	if(add_image)
-		O.icon = standing
-		O.icon_state = standing.icon_state
 		obj_to_plane_overlay(O,MUTATIONS_LAYER)
-		//overlays_standing[MUTATIONS_LAYER]	= standing
-	//else
-		//overlays_standing[MUTATIONS_LAYER]	= null
 	if(update_icons)
 		update_icons()
 

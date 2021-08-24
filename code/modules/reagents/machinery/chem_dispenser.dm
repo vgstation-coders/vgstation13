@@ -44,7 +44,6 @@
 		SACID,
 		TUNGSTEN
 		)
-
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 /*
@@ -308,7 +307,6 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	return FALSE
 
 /obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob, params) //to be worked on
-
 	if(..())
 		return 1
 
@@ -338,6 +336,14 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		else
 			to_chat(user, "You can't add \a [D] to the machine while the panel is open.")
 			return
+
+/obj/machinery/chem_dispenser/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/black)
+		has_slime=1
+		dispensable_reagents.Add(DSYRUP)
+		to_chat(user, "You throw the slime into the dispenser's tank.")
+		return TRUE
 
 /obj/machinery/chem_dispenser/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)

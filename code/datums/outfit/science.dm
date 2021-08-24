@@ -61,6 +61,141 @@
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
 
 
+// -- Xenobiologist
+
+/datum/outfit/xenobiologist
+
+	outfit_name = "Xenobiologist"
+	associated_job = /datum/job/xenobiologist
+
+	backpack_types = list(
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_tox,
+		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/tox,
+	)
+
+	items_to_spawn = list(
+		"Default" = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_sci,
+			slot_w_uniform_str = /obj/item/clothing/under/rank/xenobio,
+			slot_l_store_str = /obj/item/weapon/storage/bag/xenobio,
+			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/science,
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+		),
+		/datum/species/plasmaman = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_sci,
+			slot_w_uniform_str = /obj/item/clothing/under/rank/xenobio,
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/science,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/science,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_l_store_str = /obj/item/weapon/storage/bag/xenobio,
+		),
+		/datum/species/vox = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_sci,
+			slot_w_uniform_str = /obj/item/clothing/under/rank/xenobio,
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_l_store_str = /obj/item/weapon/storage/bag/xenobio,
+		),
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		)
+	)
+
+	pda_type = /obj/item/device/pda/toxins
+	pda_slot = slot_belt
+	id_type = /obj/item/weapon/card/id/research
+
+/datum/outfit/xenobiologist/post_equip(var/mob/living/carbon/human/H)
+	..()
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+
+
+
+// -- Xenoarchaeologist
+
+/datum/outfit/xenoarchaeologist
+
+	outfit_name = "Xenoarchaeologist"
+	associated_job = /datum/job/xenoarchaeologist
+
+	backpack_types = list(
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_tox,
+		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/tox,
+	)
+
+	items_to_spawn = list(
+		"Default" = list(
+			slot_ears_str = list(
+				"Anomalist" = /obj/item/device/radio/headset/headset_sci,
+				"Xenoarchaeologist" = /obj/item/device/radio/headset/headset_sci,
+			),
+			slot_w_uniform_str = list(
+				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
+				"Xenoarchaeologist" = /obj/item/clothing/under/rank/xenoarch,
+			),
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/science,
+		),
+		/datum/species/plasmaman = list(
+			slot_ears_str = list(
+				"Anomalist" = /obj/item/device/radio/headset/headset_sci,
+				"Xenoarchaeologist" = /obj/item/device/radio/headset/headset_sci,
+			),
+			slot_w_uniform_str = list(
+				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
+				"Xenoarchaeologist" = /obj/item/clothing/under/rank/xenoarch,
+			),
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/science,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/science,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+		),
+		/datum/species/vox = list(
+			slot_ears_str = list(
+                "Anomalist" = /obj/item/device/radio/headset/headset_sci,
+                "Xenoarchaeologist" = /obj/item/device/radio/headset/headset_sci,
+            ),
+			slot_w_uniform_str = list(
+				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
+				"Xenoarchaeologist" = /obj/item/clothing/under/rank/xenoarch,
+			),
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+		),
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/science,
+		)
+	)
+
+	pda_type = /obj/item/device/pda/toxins
+	pda_slot = slot_belt
+	id_type = /obj/item/weapon/card/id/research
+
+/datum/outfit/xenoarchaeologist/post_equip(var/mob/living/carbon/human/H)
+	..()
+	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+
 // -- Scientist
 
 /datum/outfit/scientist
@@ -80,87 +215,55 @@
 			slot_ears_str = list(
 				"Scientist" = /obj/item/device/radio/headset/headset_sci,
 				"Plasma Researcher" = /obj/item/device/radio/headset/headset_sci,
-				"Xenobiologist" = /obj/item/device/radio/headset/headset_sci,
-				"Anomalist" = /obj/item/device/radio/headset/headset_sci,
-				"Xenoarcheologist" = /obj/item/device/radio/headset/headset_sci,
 				"Research Botanist" = /obj/item/device/radio/headset/headset_servsci,
 			),
 			slot_w_uniform_str = list(
 				"Scientist" = /obj/item/clothing/under/rank/scientist,
 				"Plasma Researcher" =  /obj/item/clothing/under/rank/plasmares,
-				"Xenobiologist" = /obj/item/clothing/under/rank/xenobio,
-				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
-				"Xenoarcheologist" = /obj/item/clothing/under/rank/xenoarch,
 				"Research Botanist" = /obj/item/clothing/under/rank/scientist,
-			),
-			slot_gloves_str = list(
-				"Research Botanist" = /obj/item/clothing/gloves/botanic_leather,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/science,
-			slot_s_store_str = list(
-				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
-			),
-			slot_l_store_str = list(
-				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
+			slot_gloves_str = list(
+				"Research Botanist" = /obj/item/clothing/gloves/botanic_leather,
 			)
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = list(
 				"Scientist" = /obj/item/device/radio/headset/headset_sci,
 				"Plasma Researcher" = /obj/item/device/radio/headset/headset_sci,
-				"Xenobiologist" = /obj/item/device/radio/headset/headset_sci,
-				"Anomalist" = /obj/item/device/radio/headset/headset_sci,
-				"Xenoarcheologist" = /obj/item/device/radio/headset/headset_sci,
 				"Research Botanist" = /obj/item/device/radio/headset/headset_servsci,
 			),
 			slot_w_uniform_str = list(
 				"Scientist" = /obj/item/clothing/under/rank/scientist,
 				"Plasma Researcher" =  /obj/item/clothing/under/rank/plasmares,
-				"Xenobiologist" = /obj/item/clothing/under/rank/xenobio,
-				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
-				"Xenoarcheologist" = /obj/item/clothing/under/rank/xenoarch,
 				"Research Botanist" = /obj/item/clothing/under/rank/scientist,
-			),
-			slot_gloves_str = list(
-				"Research Botanist" = /obj/item/clothing/gloves/botanic_leather,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/science,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/science,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_l_store_str = list(
-				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
-				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
+			slot_gloves_str = list(
+				"Research Botanist" = /obj/item/clothing/gloves/botanic_leather,
 			)
 		),
 		/datum/species/vox = list(
 			slot_ears_str = list(
                 "Scientist" = /obj/item/device/radio/headset/headset_sci,
                 "Plasma Researcher" = /obj/item/device/radio/headset/headset_sci,
-                "Xenobiologist" = /obj/item/device/radio/headset/headset_sci,
-                "Anomalist" = /obj/item/device/radio/headset/headset_sci,
-                "Xenoarcheologist" = /obj/item/device/radio/headset/headset_sci,
                 "Research Botanist" = /obj/item/device/radio/headset/headset_servsci,
             ),
 			slot_w_uniform_str = list(
 				"Scientist" = /obj/item/clothing/under/rank/scientist,
 				"Plasma Researcher" =  /obj/item/clothing/under/rank/plasmares,
-				"Xenobiologist" = /obj/item/clothing/under/rank/xenobio,
-				"Anomalist" =  /obj/item/clothing/under/rank/anomalist,
-				"Xenoarcheologist" = /obj/item/clothing/under/rank/xenoarch,
 				"Research Botanist" = /obj/item/clothing/under/rank/scientist,
-			),
-			slot_gloves_str = list(
-				"Research Botanist" = /obj/item/clothing/gloves/botanic_leather,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
-			slot_l_store_str = list(
-				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
-				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
+			slot_gloves_str = list(
+				"Research Botanist" = /obj/item/clothing/gloves/botanic_leather,
 			)
 		),
 	)
@@ -181,6 +284,7 @@
 /datum/outfit/scientist/post_equip(var/mob/living/carbon/human/H)
 	..()
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+
 
 // -- Roboticist
 

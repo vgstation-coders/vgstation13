@@ -171,9 +171,11 @@ var/list/infected_cleanables = list()
 	color = adjust_brightness(color, -50)
 	amount = 0
 
-/obj/effect/decal/cleanable/Crossed(mob/living/carbon/human/perp)
-	if(amount > 0)
-		add_blood_to(perp, amount)
+/obj/effect/decal/cleanable/Crossed(atom/movable/A)
+	if(ishuman(A))
+		var/mob/living/carbon/human/perp = A
+		if(amount > 0 && perp.on_foot())
+			add_blood_to(perp, amount)
 
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1

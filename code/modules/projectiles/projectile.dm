@@ -185,6 +185,7 @@ var/list/impact_master = list()
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
+				M.assaulted_by(firer)
 		else
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
@@ -195,6 +196,7 @@ var/list/impact_master = list()
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
+				M.assaulted_by(firer)
 	else
 		M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN/(no longer exists)</b> shot <b>UNKNOWN/(no longer exists)</b> with a <b>[type]</b>"
 		msg_admin_attack("UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]. Wait what the fuck?")
@@ -293,6 +295,7 @@ var/list/impact_master = list()
 					M.LAssailant = null
 				else
 					M.LAssailant = firer
+					M.assaulted_by(firer)
 
 	if(!A)
 		return 1
@@ -308,6 +311,7 @@ var/list/impact_master = list()
 						BM.LAssailant = null
 				else
 					BM.LAssailant = firer
+					BM.assaulted_by(firer)
 
 	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
 

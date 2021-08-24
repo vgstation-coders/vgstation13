@@ -97,6 +97,9 @@
 	hat = null
 	glasses = null
 
+/mob/living/carbon/monkey/get_butchering_products()
+	return list(/datum/butchering_product/skin/monkey, /datum/butchering_product/teeth/few)
+
 /mob/living/carbon/monkey/abiotic()
 	for(var/obj/item/I in held_items)
 		if(I.abstract)

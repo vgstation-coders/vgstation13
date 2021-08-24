@@ -117,6 +117,9 @@
 	react_to_touch(M)
 	M.delayNextAttack(2 SECONDS)
 
+/mob/living/simple_animal/cat/get_butchering_products()
+	return list(/datum/butchering_product/skin/cat)
+
 /mob/living/simple_animal/cat/proc/react_to_touch(mob/M)
 	if(M && !isUnconscious())
 		switch(M.a_intent)

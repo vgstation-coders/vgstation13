@@ -194,6 +194,17 @@ var/global/list/screen_alarms_locs = list(
 	name = "Buckled"
 	desc = "You've been buckled to something and can't move. Click on this alert to unbuckle."
 
+/obj/abstract/screen/alert/object/buckled/coffin/Click(location, control, params)
+	if(!usr || !usr.client)
+		return
+	var/paramslist = params2list(params)
+	if(paramslist["shift"])
+		to_chat(usr, "<span class='notice'>[name]</span> - <span class='info'>[desc]</span>")
+		return
+	if(master && istype(master, /obj/structure/closet/coffin))
+		var/obj/structure/closet/coffin/C = master
+		C.unbuckle_to(get_turf(C))
+
 //Carbon Alarms
 /obj/abstract/screen/alert/carbon/breath
 	name = "Suffocating"

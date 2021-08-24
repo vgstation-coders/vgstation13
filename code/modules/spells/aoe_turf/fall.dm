@@ -186,6 +186,9 @@ var/global/list/falltempoverlays = list()
 		falltempoverlays -= everything
 		everything.ignoreinvert = initial(everything.ignoreinvert)
 		everything.timestopped = 0
+		if (ismob(everything))
+			var/mob/M = everything
+			M.update_canmove()
 	affected.len = 0
 
 /mob/var/image/fallimage
@@ -247,3 +250,4 @@ var/global/list/falltempoverlays = list()
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
 		else
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
+		qdel(caster)

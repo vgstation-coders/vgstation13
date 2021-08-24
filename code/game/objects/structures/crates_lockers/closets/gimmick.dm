@@ -4,11 +4,14 @@
 	icon_state = "cabinet_closed"
 	icon_closed = "cabinet_closed"
 	icon_opened = "cabinet_open"
+	is_wooden = TRUE
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 3
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
 
-/obj/structure/closet/cabinet/canweld()
-	return 0
+/obj/structure/closet/cabinet/basic
+	has_lock_type = /obj/structure/closet/secure_closet/cabinet
 
 /obj/structure/closet/cabinet/snow
 	name = "snow gear cabinet"

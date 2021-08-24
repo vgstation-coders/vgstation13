@@ -885,7 +885,7 @@ var/list/cult_spires = list()
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 	var/image/I_spire = image('icons/obj/cult_64x64.dmi',"spire[stage]-light")
-	I_spire.plane = LIGHTING_PLANE
+	I_spire.plane = ABOVE_LIGHTING_PLANE
 	I_spire.layer = NARSIE_GLOW
 	overlays += I_base
 	overlays += I_spire
@@ -969,14 +969,14 @@ var/list/cult_spires = list()
 			var/datum/cult_tattoo/new_tattoo = T
 			C.tattoos[new_tattoo.name] = new_tattoo
 
-			anim(target = loc, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_send", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+			anim(target = loc, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_send", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 			spawn (3)
 				C.update_cult_hud()
 				new_tattoo.getTattoo(H)
-				anim(target = H, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+				anim(target = H, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 				sleep(1)
 				H.update_mutations()
-				var/atom/movable/overlay/tattoo_markings = anim(target = H, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[new_tattoo.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+				var/atom/movable/overlay/tattoo_markings = anim(target = H, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[new_tattoo.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 				animate(tattoo_markings, alpha = 0, time = 30)
 
 			available_tattoos -= "tier[new_tattoo.tier]"
@@ -1061,7 +1061,7 @@ var/list/cult_spires = list()
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 	var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-	I_lave.plane = LIGHTING_PLANE
+	I_lave.plane = ABOVE_LIGHTING_PLANE
 	I_lave.layer = NARSIE_GLOW
 	I_lave.blend_mode = BLEND_ADD
 	overlays += I_base
@@ -1112,11 +1112,11 @@ var/list/cult_spires = list()
 						forger = null
 						template = null
 					else
-						anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-work", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+						anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-work", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 						playsound(L, 'sound/effects/forge.ogg', 50, 0, -4)
 						forging.overlays.len = 0
 						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")
-						I.plane = LIGHTING_PLANE
+						I.plane = ABOVE_LIGHTING_PLANE
 						I.layer = NARSIE_GLOW
 						I.blend_mode = BLEND_ADD
 						I.alpha = (timeleft/timetotal)*255
@@ -1161,7 +1161,7 @@ var/list/cult_spires = list()
 		I_base.layer = BELOW_PROJECTILE_LAYER
 		I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 		var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-		I_lave.plane = LIGHTING_PLANE
+		I_lave.plane = ABOVE_LIGHTING_PLANE
 		I_lave.layer = NARSIE_GLOW
 		I_lave.blend_mode = BLEND_ADD
 		overlays += I_base
@@ -1262,7 +1262,7 @@ var/list/cult_spires = list()
 	..()
 	icon_state = i_forge
 	var/image/I = image('icons/obj/cult_64x64.dmi',"[i_forge]-mask")
-	I.plane = LIGHTING_PLANE
+	I.plane = ABOVE_LIGHTING_PLANE
 	I.layer = NARSIE_GLOW
 	I.blend_mode = BLEND_ADD
 	overlays += I

@@ -50,9 +50,6 @@
 
 	var/plural_name = null
 
-	// role name assigned to the antag's potential uplink
-	var/name_for_uplink = null
-
 	// Various flags and things.
 	var/flags = 0
 
@@ -109,6 +106,8 @@
 	var/list/greets = list(GREET_DEFAULT,GREET_CUSTOM)
 
 	var/wikiroute
+	var/threat_generated = 0
+	var/threat_level_inflated = 0
 
 	var/list/current_powers = list()
 	var/list/available_powers = list()		//holds instances of each power
@@ -330,7 +329,7 @@
 	else
 		var/icon/flat = getFlatIcon(M, SOUTH, 0, 1)
 		if(M.stat == DEAD)
-			if (!istype(M, /mob/living/carbon/brain))
+			if (ishuman(M) || ismonkey(M))
 				flat.Turn(90)
 			var/icon/ded = icon('icons/effects/blood.dmi', "floor1-old")
 			ded.Blend(flat,ICON_OVERLAY)
@@ -521,6 +520,19 @@
 // What do they display on the player StatPanel ?
 /datum/role/proc/StatPanel()
 	return ""
+
+/datum/role/proc/increment_threat(var/amount)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(!istype(D))
+		return //It's not dynamic!
+	threat_generated += amount
+	if(D.midround_threat >= D.midround_threat_level)
+		D.create_midround_threat(amount)
+		if(!threat_level_inflated) //Our first time raising the cap
+			D.threat_log += "[worldtime2text()]: [name] started increasing the threat cap."
+		threat_level_inflated += amount
+	else
+		D.refund_midround_threat(amount)
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

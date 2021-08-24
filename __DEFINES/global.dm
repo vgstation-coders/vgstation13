@@ -71,6 +71,9 @@ var/eventchance = 10 //% per 5 mins
 var/event = 0
 var/hadevent = 0
 var/blobevent = 0
+
+var/admin_disable_rulesets = FALSE
+var/admin_disable_events = FALSE
 	///////////////
 var/starticon = null
 var/midicon = null
@@ -121,6 +124,7 @@ var/airtunnel_bottom = 72 // default
 var/list/monkeystart = list()
 var/list/wizardstart = list()
 var/list/grinchstart = list()
+var/list/hobostart = list()
 var/list/newplayer_start = list()
 var/list/latejoin = list()
 var/list/assistant_latejoin = list()
@@ -137,6 +141,7 @@ var/list/prisonsecuritywarp = list()	//prison security goes to these
 var/list/prisonwarped = list()	//list of players already warped
 var/list/blobstart = list()
 var/list/ninjastart = list()
+var/list/timeagentstart = list()
 var/list/prisonerstart = list()
 var/list/voxstart = list() //Vox raider spawn points
 var/list/voxlocker = list() //Vox locker spawn points
@@ -150,6 +155,7 @@ var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cu
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
 
+var/hoboamount = 0
 var/suspend_alert = 0
 
 var/Debug = 0	// global debug switch
@@ -224,6 +230,7 @@ var/list/score=list(
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
+	"slimes"     	 = 0, //How many slimes were harvested
 	"artifacts"      = 0, //How many large artifacts were analyzed and activated
 	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
 	"disease_vaccine"	= null, //Which many vaccine antibody isolated
@@ -430,3 +437,6 @@ var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit thi
 
 var/list/all_machines = list()
 var/list/machinery_rating_cache = list() // list of type path -> number
+
+var/runescape_pvp = FALSE
+var/runescape_skull_display = FALSE

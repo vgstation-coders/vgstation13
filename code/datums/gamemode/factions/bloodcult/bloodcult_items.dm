@@ -174,6 +174,7 @@ var/list/arcane_tomes = list()
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	if(!istype(M))
 		return
@@ -847,13 +848,8 @@ var/list/arcane_tomes = list()
 					blood = min(100,blood+5)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 
-			if (shade && shade.hud_used && shade.gui_icons && shade.gui_icons.soulblade_bloodbar)
-				var/matrix/MAT = matrix()
-				MAT.Scale(1,blood/maxblood)
-				var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
-				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = MAT
-				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-				shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blood]"
+			if (shade)
+				shade.DisplayUI("Soulblade")
 
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
@@ -1605,7 +1601,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	qdel(src)
 
 /obj/item/weapon/blood_tesseract/examine(var/mob/user)
@@ -1616,7 +1612,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/attack_self(var/mob/living/user)
 	if (iscultist(user))
 		//Alright so we'll discard cult gear and equip the stuff stored inside.
-		anim(target = user, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_tesseract", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+		anim(target = user, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_tesseract", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 		user.u_equip(src)
 		if (remaining)
 			remaining.forceMove(get_turf(user))

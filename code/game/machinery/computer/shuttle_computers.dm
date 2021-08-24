@@ -135,7 +135,7 @@
 	req_access = null
 	circuit = "/obj/item/weapon/circuitboard/shuttle_control"
 
-	machine_flags = EMAGGABLE | SCREWTOGGLE
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE 
 
 	light_color = LIGHT_COLOR_BLUE
 
@@ -200,14 +200,14 @@
 	if(istype(O, /obj/item/weapon/card/shuttle_pass))
 		use_pass(O, user)
 
-	return ..()
+	..()
 
 /obj/machinery/computer/shuttle_control/attack_hand(mob/user as mob)
 	if(..(user))
 		return
 
 	user.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	var/shuttle_name = "Unknown shuttle"
 	var/dat
 
@@ -298,7 +298,7 @@
 		return
 
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(href_list["move"])
 		if(!shuttle)
 			to_chat(usr, "<span class = 'warning'>No shuttle detected.</span>")
@@ -325,7 +325,7 @@
 		shuttle.travel_to(selected_port, src, usr)
 
 		selected_port = null
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["link_to_port"])
 		if(!shuttle)
 			return
@@ -350,7 +350,7 @@
 		if(S)
 			S.link_to_shuttle(shuttle)
 			to_chat(usr, "Successfully linked [capitalize(shuttle.name)] to the port.")
-			return src.updateUsrDialog()
+			return updateUsrDialog()
 		to_chat(usr, "No docking ports found.")
 
 	if(href_list["select"])
@@ -362,7 +362,7 @@
 			return
 
 		selected_port = A
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["link_to_shuttle"])
 		if(!allowed(usr))
 			to_chat(usr, "<span class='red'>Access denied.</span>")
@@ -402,7 +402,7 @@
 			else
 				link_to(L[choice])
 			to_chat(usr, "Successfully linked [src] to [capitalize(S.name)]!")
-			src.updateUsrDialog()
+			updateUsrDialog()
 
 	if(href_list["custom_coord"])
 		switch(href_list["custom_coord"])
@@ -415,7 +415,7 @@
 			if("a")
 				custom_rot=input("Enter rotation angle", "Course Plotting", custom_rot) as num
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 
 	if(href_list["process_custom_coord"])
 		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
@@ -440,7 +440,7 @@
 
 			to_chat(usr, "Destination calculated!")
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 
 	if(href_list["admin_link_to_shuttle"])
 		if(!isAdminGhost(usr))
@@ -490,7 +490,7 @@
 		else
 			shuttle.lockdown = 0
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["admin_toggle_select_all"])
 		if(!isAdminGhost(usr))
 			to_chat(usr, "You must be an admin for this")
@@ -503,7 +503,7 @@
 			allow_selecting_all = 1
 			to_chat(usr, "Now selecting from all existing docking ports.")
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["admin_reset"])
 		if(!isAdminGhost(usr))
 			to_chat(usr, "You must be an admin for this")
@@ -523,7 +523,7 @@
 			allow_silicons = 1
 			to_chat(usr, "Silicons may now use [src] again.")
 
-		src.updateUsrDialog()
+		updateUsrDialog()
 	if(href_list["disk"])
 		if(!disk) //No disk inserted - grab one from user's hand
 			var/obj/item/weapon/disk/shuttle_coords/D = usr.get_active_hand()
@@ -536,7 +536,7 @@
 			if(disk.destination == selected_port)
 				selected_port = null
 			disk = null
-			src.updateUsrDialog()
+			updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
 	if(!shuttle)
@@ -552,13 +552,13 @@
 	if(disk)
 		//An old disk is already inserted.
 		to_chat(user, "<span class='warning'>The old [disk.name] pops out of the disk slot!</span>")
-		disk.forceMove(src.loc)
+		disk.forceMove(loc)
 		disk = null
 
 	if(user.drop_item(SC, src))
 		disk = SC
 		to_chat(user, "<span class='info'>You insert \the [SC] into \the [src].</span>")
-		src.updateUsrDialog()
+		updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/proc/use_pass(obj/item/weapon/card/shuttle_pass/P, mob/user)
 	if(!istype(P))
@@ -585,12 +585,12 @@
 	shuttle = S
 	if(add_to_list)
 		shuttle.control_consoles |= src
-	src.req_access = shuttle.req_access
-	src.updateUsrDialog()
+	req_access = shuttle.req_access
+	updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/emag(mob/user as mob)
 	..()
-	src.req_access = list()
+	req_access = list()
 	if(user)
 		to_chat(user, "You disable the console's access requirement.")
 

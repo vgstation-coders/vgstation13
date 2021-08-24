@@ -65,7 +65,7 @@
 // (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
-		if(!check_enemy_jobs(TRUE))
+		if(!check_enemy_jobs(TRUE,TRUE))
 			return 0
 	return 1
 
@@ -519,6 +519,44 @@
 
 //////////////////////////////////////////////
 //                                          //
+//               TIME AGENT                 //
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent
+	name = "time agent anomaly"
+	role_category = /datum/role/time_agent
+	required_candidates = 1
+	weight = 4
+	cost = 10
+	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
+	logo = "time-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if (antag_count < max_traitors)
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
+	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
+	if (!agency)
+		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	agency.HandleRecruitedRole(newagent)
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if(required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+
+//////////////////////////////////////////////
+//                                          //
 //               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
@@ -651,6 +689,40 @@
 
 //////////////////////////////////////////////
 //                                          //
+//          SPIDER INFESTATION              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation
+	name = "Spider Infestation"
+	role_category = /datum/role/giant_spider
+	//no enemy jobs, it's just a bunch of spiders
+	//might change later if they actually happen to stomp the crew but that seems pretty unlikely
+	required_candidates = 1
+	max_candidates = 12 // max amount of spiderlings spawned by a spider infestation random event
+	weight = BASE_RULESET_WEIGHT
+	cost = 25
+	requirements = list(90,80,60,40,30,20,10,10,10,10)
+	high_population_requirement = 50
+	flags = MINOR_RULESET
+	my_fac = /datum/faction/spider_infestation
+	logo = "spider-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation/generate_ruleset_body(var/mob/applicant)
+	var/datum/faction/spider_infestation/active_fac = find_active_faction_by_type(my_fac)
+	if (!active_fac.invasion)
+		active_fac.SetupSpawn()
+	var/mob/living/simple_animal/hostile/giant_spider/spiderling/new_spider = new (active_fac.invasion)
+	new_spider.key = applicant.key
+	return new_spider
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/spider_infestation/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+	new_role.Greet(GREET_DEFAULT)
+	new_role.AnnounceObjectives()
+
+//////////////////////////////////////////////
+//                                          //
 //             XENOMORPHS                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
@@ -696,10 +768,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/execute()
-	..()
-
 
 //////////////////////////////////////////////
 //                                          //

@@ -76,7 +76,7 @@
 	secondary = 1
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/datum/effect/effect/system/reagents_explosion/e = new()
+	var/datum/effect/system/reagents_explosion/e = new()
 	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
@@ -236,8 +236,8 @@
 	name = "Sulphuric Acid"
 	id = SACID
 	result = SACID
-	required_reagents = list(SULFUR = 2, OXYGEN = 3, WATER = 2)
-	result_amount = 2
+	required_reagents = list(SULFUR = 1, OXYGEN = 3, WATER = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/thermite
 	name = "Thermite"
@@ -547,7 +547,7 @@
 	alert_admins = ALERT_AMOUNT_ONLY
 
 /datum/chemical_reaction/nitroglycerin/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/datum/effect/effect/system/reagents_explosion/e = new()
+	var/datum/effect/system/reagents_explosion/e = new()
 	e.set_up(round (created_volume/2, 1), holder.my_atom, 0, 0)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
@@ -648,7 +648,7 @@
 /datum/chemical_reaction/chemsmoke/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		var/datum/effect/system/smoke_spread/chem/S = new /datum/effect/system/smoke_spread/chem
 		S.attach(location)
 		S.set_up(holder, 10, 0, location)
 		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
@@ -669,7 +669,7 @@
 	holder.isolate_reagent(CHLORAMINE)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		var/datum/effect/system/smoke_spread/chem/S = new /datum/effect/system/smoke_spread/chem
 		S.attach(location)
 		S.set_up(holder, 5, 0, location)
 		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
@@ -1034,7 +1034,7 @@
 		for(var/mob/M in viewers(5, location))
 			to_chat(M, "<span class='warning'>The solution spews out foam!</span>")
 
-		var/datum/effect/effect/system/foam_spread/s = new()
+		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 0)
 		s.start()
 	holder.clear_reagents()
@@ -1053,7 +1053,7 @@
 		for(var/mob/M in viewers(5, location))
 			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
 
-		var/datum/effect/effect/system/foam_spread/s = new()
+		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 1)
 		s.start()
 
@@ -1071,7 +1071,7 @@
 		for(var/mob/M in viewers(5, location))
 			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
 
-		var/datum/effect/effect/system/foam_spread/s = new()
+		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 2)
 		s.start()
 
@@ -2605,6 +2605,13 @@
 	required_reagents = list(LIMEJUICE = 1, TOMATOJUICE = 1, ORANGEJUICE = 1, CREAM = 1, TRICORDRAZINE = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/doctor_delight_from_syrup
+	name = "The Dector's Delight from pre-mix"
+	id= "p_doctordelight"
+	result = DOCTORSDELIGHT
+	required_reagents = list(DSYRUP = 1, TRICORDRAZINE = 1)
+	result_amount = 2
+	
 /datum/chemical_reaction/irish_cream
 	name = "Irish Cream"
 	id = IRISHCREAM
@@ -3557,7 +3564,7 @@
 
 /datum/chemical_reaction/diy_soda/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(holder.get_reagent_amount(DIY_SODA) == 90) //apparently this gets called AFTER the reaction is done reacting
-		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(holder.my_atom))
+		var/obj/effect/smoke/S = new /obj/effect/smoke(get_turf(holder.my_atom))
 		S.time_to_live = 5 //unusually short smoke
 		//We don't need to start up the system because we only want to smoke one tile.
 

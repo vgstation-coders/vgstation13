@@ -40,6 +40,8 @@ var/list/uplink_items = list()
 	var/list/jobs_with_discount = list() //Jobs in this list get the discount price.
 	var/list/jobs_exclusive = list() //If empty, does nothing. If not empty, ONLY jobs in this list can buy this item.
 	var/list/jobs_excluded = list() //Jobs in this list cannot buy this item at all.
+	var/list/roles_exclusive = list() //If empty, does nothing. If not empty, ONLY roles in this list can buy this item.
+	var/list/roles_excluded = list() //Roles in this list cannot buy this item at all.
 
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
@@ -62,6 +64,18 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/available_for_job(var/user_job)
 	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
+/datum/uplink_item/proc/available_for_role(var/list/roles)
+	if (roles_exclusive.len)
+		for (var/role in roles_exclusive)
+			if (role in roles)
+				return TRUE
+		return FALSE
+	else
+		for (var/role in roles_excluded)
+			if (role in roles)
+				return FALSE
+		return TRUE
+
 //This will get called that is essentially a New() by default.
 //Use this to make New()s that have extra conditions, such as bundles
 //Make sure to add a return or else it will break a part of buy()
@@ -71,6 +85,14 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
+		return
+	if(!available_for_role(U.roles))
+		var/dat = ""
+		for (var/role in roles_exclusive)
+			if (dat)
+				dat+= ", "
+			dat += role
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their role! (Role: [dat]) ([formatJumpTo(get_turf(U))])")
 		return
 	U.uses -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
@@ -128,6 +150,10 @@ var/list/uplink_items = list()
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
 						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
+					else
+						R = user.mind.GetRole(CHALLENGER)
+						if(R)
+							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
 		U.interact(user)
 
 		return 1
@@ -430,8 +456,8 @@ var/list/uplink_items = list()
 	cost = 5
 
 /datum/uplink_item/device_tools/cipherkey
-	name = "Centcomm Encryption Key"
-	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Screwdriver to replace encryption keys not included."
+	name = "Syndicate Encryption Key"
+	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Access to the Syndicate radio channel is also granted. Use :t to speak over the syndicate channel. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/syndicate/hacked
 	cost = 4
 
@@ -594,6 +620,8 @@ var/list/uplink_items = list()
 			if(I == src)
 				continue
 			if(!I.available_for_job(U.job))
+				continue
+			if(!I.available_for_role(U.roles))
 				continue
 			if(I.get_cost(U.job, 0.5) > U.uses)
 				continue
@@ -838,6 +866,9 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Shaft Miner")
 
+/datum/uplink_item/jobspecific/cargo/mastertrainer/new_uplink_item(var/new_item, var/turf/location, mob/user)
+	return new new_item(location, user)
+
 /datum/uplink_item/jobspecific/service
 	category = "Service Specials"
 
@@ -847,6 +878,14 @@ var/list/uplink_items = list()
 	item = /obj/item/seeds/ambrosiacruciatusseed
 	cost = 6
 	discounted_cost = 2
+	jobs_with_discount = list("Botanist")
+
+/datum/uplink_item/jobspecific/service/vinesuit
+	name = "Space Vietnam Grass Coat"
+	desc = "This inconspicuous grass coat was woven from kudzu fibers for guerilla missions in Space Vietnam. While wearing the coat, space vines won't entangle, bite, or otherwise harm you."
+	item = 	/obj/item/clothing/suit/mino/vinesafe
+	cost = 6
+	discounted_cost = 4
 	jobs_with_discount = list("Botanist")
 
 /datum/uplink_item/jobspecific/service/beecase
@@ -998,6 +1037,13 @@ var/list/uplink_items = list()
 	cost = 12
 	jobs_exclusive = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/unwall_spell
+	name = "Invisible Un-Wall Spellbook"
+	desc = "Grants the user the ability to conjure a strange wall allowing the passage of anything through a space regardless of the objects in place. Only real Mimes are capable of learning from this forbidden tome."
+	item = /obj/item/weapon/spellbook/oneuse/unwall
+	cost = 12
+	jobs_exclusive = list("Mime")
+
 /datum/uplink_item/jobspecific/clown_mime/punchline
 	name = "Punchline"
 	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
@@ -1049,8 +1095,8 @@ var/list/uplink_items = list()
 	name = "Pocket Satellite"
 	desc = "A grenade which, when detonated in space, creates a circular station with radius 7. The station is loaded with self-powered computers, useful gear, and machinery as well as a teleporter beacon. Anyone right under it when it unfolds is crushed."
 	item = /obj/item/weapon/grenade/station
-	cost = 20
-	discounted_cost = 14
+	cost = 12
+	discounted_cost = 8
 	jobs_with_discount = list("Captain", "Head of Personnel")
 
 /datum/uplink_item/jobspecific/trader
@@ -1082,7 +1128,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
-	jobs_excluded = list("Nuclear Operative", CHALLENGER)
+	roles_exclusive = list(TRAITOR)
 
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"

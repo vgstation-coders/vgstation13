@@ -84,6 +84,13 @@
 	force = 15.0
 	throwforce = 12.0
 
+/obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/bluespace)
+		has_slime=1
+		to_chat(user, "You shove the slime extract inside \the [src]'s head.")
+		return TRUE
+
 /*
  * Screwdriver
  */
@@ -223,6 +230,15 @@
 		return
 	else
 		..()
+
+/obj/item/tool/wirecutters/scissors
+	name = "scissors"
+	desc = "This cuts paper."
+	icon_state = "scissors"
+
+/obj/item/tool/wirecutters/scissors/New()
+	. = ..()
+	icon_state = "scissors"
 /*
  * Welding Tool
  */

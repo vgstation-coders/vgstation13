@@ -86,18 +86,11 @@
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
 
-/turf/New()
+/turf/initialize()
 	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-	for(var/atom/movable/AM as mob|obj in src)
-		spawn( 0 )
-			src.Entered(AM)
-	/*
-	if(opacity)
-		has_opaque_atom = TRUE
-	*/
 
 /turf/ex_act(severity)
 	return 0

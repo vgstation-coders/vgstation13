@@ -23,7 +23,9 @@
 /obj/machinery/light_switch/initialize()
 	add_self_to_holomap()
 	if (!map.lights_always_ok)
-		toggle_switch(newstate = 0)
+		var/area/A = get_area(src)
+		if (!A.lights_always_start_on)
+			toggle_switch(newstate = 0)
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	var/area/this_area = get_area(src)
@@ -41,7 +43,7 @@
 /obj/machinery/light_switch/proc/updateicon()
 	if(!overlay)
 		overlay = image(icon, "light1-overlay")
-		overlay.plane = LIGHTING_PLANE
+		overlay.plane = ABOVE_LIGHTING_PLANE
 		overlay.layer = ABOVE_LIGHTING_LAYER
 
 	overlays.Cut()

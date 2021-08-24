@@ -328,6 +328,8 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
+	if (flags & INVULNERABLE)
+		return
 	var/blood = 0
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
@@ -622,6 +624,9 @@
 		if (!t1 || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		med_record.add_comment(t1)
+	else if (href_list["purchaselog"])
+		if(mind)
+			mind.role_purchase_log()
 	else if (href_list["listitems"])
 		var/mob/M = usr
 		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
@@ -1242,6 +1247,11 @@
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
+#define BLOODOODLE_NOSOURCE	0
+#define BLOODOODLE_HANDS	1
+#define BLOODOODLE_GLOVES	2
+#define BLOODOODLE_BLEEDING	2
+
 /mob/living/carbon/human/verb/bloody_doodle()
 	set category = "IC"
 	set name = "Write in blood"
@@ -1263,18 +1273,40 @@
 	var/doodle_DNA
 	var/doodle_type
 	var/obj/item/clothing/gloves/actual_gloves
+	var/blood_source = BLOODOODLE_NOSOURCE
 
+	//blood on your gloves?
 	if (istype(gloves, /obj/item/clothing/gloves))
 		actual_gloves = gloves
 		if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
 			doodle_DNA = pick(actual_gloves.blood_DNA)
 			doodle_type = actual_gloves.blood_DNA[doodle_DNA]
 			doodle_color = actual_gloves.blood_color
+			blood_source = BLOODOODLE_GLOVES
 
+	//blood on your hands?
 	if(!actual_gloves && bloody_hands > 0 && bloody_hands_data?.len)
 		doodle_DNA = bloody_hands_data["blood_DNA"]
 		doodle_type = bloody_hands_data["blood_type"]
 		doodle_color = bloody_hands_data["blood_colour"]
+		blood_source = BLOODOODLE_HANDS
+
+	//are your own hands bleeding you wannabe cultist?
+	var/datum/organ/external/right_hand = organs_by_name[LIMB_RIGHT_HAND]
+	var/datum/organ/external/left_hand = organs_by_name[LIMB_LEFT_HAND]
+	if (!doodle_color && !actual_gloves)
+		if ((!(right_hand.status & ORGAN_DESTROYED) && (right_hand.status & ORGAN_BLEEDING)) || (!(left_hand.status & ORGAN_DESTROYED) && (left_hand.status & ORGAN_BLEEDING)))
+			if (dna)
+				doodle_DNA = dna.unique_enzymes
+				doodle_type = dna.b_type
+			if (species)
+				if (species.anatomy_flags & NO_BLOOD)
+					to_chat(src, "<span class='warning'>There is no blood to use coming out of your wounds.</span>")
+					return
+				doodle_color = species.blood_color
+			else
+				doodle_color = DEFAULT_BLOOD
+			blood_source = BLOODOODLE_BLEEDING
 
 	if (!doodle_color)
 		to_chat(src, "<span class='warning'>There is no blood on your [actual_gloves ? "gloves" : "hands"].</span>")
@@ -1296,7 +1328,7 @@
 
 	//Previewing our message
 	var/image/I = image(icon = null)
-	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	I.maptext_height = 32
 	I.maptext_width = 64
 	I.maptext_x = -16
@@ -1320,28 +1352,48 @@
 	var/obj/item/clothing/gloves/actual_gloves2
 	if (istype(gloves, /obj/item/clothing/gloves))
 		actual_gloves2 = gloves
-		if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
-			can_still_doodle = TRUE
-	if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
-		can_still_doodle = TRUE
+	switch(blood_source)
+		if (BLOODOODLE_HANDS)
+			if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
+				can_still_doodle = TRUE
+		if (BLOODOODLE_GLOVES)
+			if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
+				can_still_doodle = TRUE
+		if (BLOODOODLE_BLEEDING)
+			if (!actual_gloves2)
+				if ((!(right_hand.status & ORGAN_DESTROYED) && (right_hand.status & ORGAN_BLEEDING)) || (!(left_hand.status & ORGAN_DESTROYED) && (left_hand.status & ORGAN_BLEEDING)))
+					can_still_doodle = TRUE
+
 	if(!can_still_doodle)
-		to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
+		if (blood_source == BLOODOODLE_BLEEDING)
+			to_chat(src, "<span class='warning'>Your hands are no longer bleeding.</span>")
+		else
+			to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
 		return
 
 	//Finally writing our message
 	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 	W.basecolor = doodle_color
-	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Ink Free';" align="center" valign="top">[message]</span>"}
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
 	W.add_fingerprint(src)
 	var/invisible = invisibility || !alpha
 	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
 	W.blood_DNA[doodle_DNA] = doodle_type
 
-	if (actual_gloves2)
-		actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
-	else
-		bloody_hands = max(0,bloody_hands - 1)
+	switch(blood_source)
+		if (BLOODOODLE_HANDS)
+			bloody_hands = max(0,bloody_hands - 1)
+		if (BLOODOODLE_GLOVES)
+			actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
+		if (BLOODOODLE_BLEEDING)
+			if (vessel)
+				vessel.remove_reagent(BLOOD, 1)
 	update_inv_gloves()
+
+#undef BLOODOODLE_NOSOURCE
+#undef BLOODOODLE_HANDS
+#undef BLOODOODLE_GLOVES
+#undef BLOODOODLE_BLEEDING
 
 
 /mob/living/carbon/human/can_inject(var/mob/user, var/error_msg, var/target_zone)
@@ -1387,6 +1439,19 @@
 			if(id)
 				break
 	return id
+
+/mob/living/carbon/human/update_perception()
+	if(client && client.darkness_planemaster)
+		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+		if(E)
+			E.update_perception(src)
+
+		for(var/ID in virus2)
+			var/datum/disease2/disease/D = virus2[ID]
+			for (var/datum/disease2/effect/catvision/catvision in D.effects)
+				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
+					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
+					break
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
@@ -1831,18 +1896,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"my_appearance.r_hair",
-		"my_appearance.g_hair",
-		"my_appearance.b_hair",
-		"my_appearance.h_style",
-		"my_appearance.r_facial",
-		"my_appearance.g_facial",
-		"my_appearance.b_facial",
-		"my_appearance.f_style",
-		"my_appearance.r_eyes",
-		".my_appearance.g_eyes",
-		".my_appearance.b_eyes",
-		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",
@@ -1882,8 +1935,10 @@ mob/living/carbon/human/isincrit()
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
-	if(vessel)
-		vessel.send_to_past(duration)
+	 if(vessel)
+	 	vessel.send_to_past(duration)
+	if(my_appearance)
+		my_appearance.send_to_past(duration)
 
 	updatehealth()
 
@@ -1927,6 +1982,7 @@ mob/living/carbon/human/isincrit()
 	return TRUE
 
 /mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+	dropBorers()
 	if(crabzombie)
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
 		T.virus2 = virus_copylist(virus2)
@@ -2026,6 +2082,19 @@ mob/living/carbon/human/isincrit()
 /mob/living
 	var/hangman_score = 0 // For round end leaderboards
 
+/mob/living/carbon/human/proc/DormantGenes(var/badGeneProb = 2, var/chanceForGoodIfBad = 10, var/goodGeneProb = 0, var/chanceForBadIfGood = 0) // default values are those used on roundstart/latejoin
+	if(prob(badGeneProb))
+		dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD, dormant = TRUE)
+		if(prob(chanceForGoodIfBad))
+			dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD, dormant = TRUE)
+
+	if(prob(goodGeneProb))
+		dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD, dormant = TRUE)
+		if(prob(chanceForBadIfGood))
+			dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD, dormant = TRUE)
+
+
+
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
 	if(stat)
@@ -2037,7 +2106,7 @@ mob/living/carbon/human/isincrit()
 	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
 	hangman_answer = replacetext(hangman_answer,"?","")
 	hangman_answer = replacetext(hangman_answer,"!","")
-	if(muted_letters && muted_letters.len && length(hangman_answer == 1)) // If we're working with a hangman cursed individuel and we only said a letter
+	if(muted_letters && muted_letters.len && length(hangman_answer) == 1) // If we're working with a hangman cursed individuel and we only said a letter
 		if(hangman_answer in muteletters_check) // Correct answer?
 			muted_letters.Remove(hangman_answer) // Baleet it
 			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
@@ -2112,11 +2181,10 @@ mob/living/carbon/human/isincrit()
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
 
-
 /mob/living/carbon/human/turn_into_mannequin(var/material = "marble")
 	var/list/valid_mannequin_species = list(
 		"Human",
-		"Voc",
+		"Vox",
 		"Manifested",
 		)
 	if (!(species.name in valid_mannequin_species))
@@ -2192,3 +2260,48 @@ mob/living/carbon/human/isincrit()
 	if (new_mannequin)
 		return TRUE
 	return FALSE
+
+/mob/living/carbon/human/get_butchering_products()
+	if (!species)
+		return list()
+
+	switch (species.name)
+		if ("Human","Manifested")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/human)
+		if ("Unathi")
+			return list(/datum/butchering_product/teeth/lots, /datum/butchering_product/skin/lizard/lots)
+		if ("Skrell")
+			return list(/datum/butchering_product/teeth/lots)
+		if ("Skellington")
+			return list(/datum/butchering_product/teeth/human)
+		if ("Tajaran")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
+	return list()
+		/*	Missing Sprites, pls contribute
+
+		if ("Vox")
+			return list(
+		if ("Diona")
+			return list(
+		if ("Skeletal Vox")
+			return list(
+		if ("Plasmaman")
+			return list(
+		if ("Muton")
+			return list(
+		if ("Grey")
+			return list(
+		if ("Golem")
+			return list(
+		if ("Grue")
+			return list(
+		if ("Slime")
+			return list(
+		if ("Insectoid")
+			return list(
+		if ("Mushroom")
+			return list(
+		if ("Undead")
+			return list(
+
+		*/

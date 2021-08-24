@@ -17,9 +17,9 @@
 	maxHealth = 30
 	gender = MALE
 	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-	speak_emote = list("barks.", "woofs.")
-	emote_hear = list("barks.", "woofs.", "yaps.")
-	emote_see = list("shakes its head.", "shivers.", "pants.")
+	speak_emote = list("barks", "woofs")
+	emote_hear = list("barks", "woofs", "yaps")
+	emote_see = list("shakes its head", "shivers", "pants")
 	emote_sound = list("sound/voice/corgibark.ogg")
 	speak_chance = 1
 	turns_per_move = 10
@@ -183,7 +183,7 @@
 /mob/living/simple_animal/corgi/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/newspaper))
 		if(!stat)
-			user.visible_message("<span class='notice'>[user] baps [name] on the nose with the rolled up [O]</span>")
+			user.visible_message("<span class='notice'>[user] baps [name] on the nose with the rolled up [O].</span>")
 			spawn(0)
 				emote("me", 1, "whines.")
 				for(var/i in list(1,2,4,8,4,2,1,2))
@@ -271,6 +271,9 @@
 	else
 		..()
 
+/mob/living/simple_animal/corgi/get_butchering_products()
+	return list(/datum/butchering_product/skin/corgi, /datum/butchering_product/teeth/few)
+
 /mob/living/simple_animal/corgi/proc/place_on_head(obj/item/item_to_add)
 	if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 		item_to_add.afterattack(src,usr,1)
@@ -281,7 +284,7 @@
 			to_chat(usr, "<span class='warning'>You can't put more than one hat on [src]!</span>")
 		return
 	if(!item_to_add)
-		usr.visible_message("<span class='notice'>[usr] pets [src]</span>","<span class='notice'>You rest your hand on [src]'s head for a moment.</span>")
+		usr.visible_message("<span class='notice'>[usr] pets [src].</span>","<span class='notice'>You rest your hand on [src]'s head for a moment.</span>")
 		return
 
 

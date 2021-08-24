@@ -251,7 +251,7 @@
 	anomaly_factor = 0
 
 /datum/find/coin/spawn_item()
-	var/choice = pick(subtypesof(/obj/item/weapon/coin))
+	var/choice = pick(subtypesof(/obj/item/weapon/coin) - /obj/item/weapon/coin/pomf - /obj/item/weapon/coin/pumf)
 	var/obj/item/I = new choice
 	item_type = I.name
 	return I
@@ -1083,6 +1083,21 @@
 
 /datum/find/supershard/spawn_item()
 	return new /obj/item/supermatter_splinter
+
+/datum/find/pocketwatch
+	find_ID = ARCHAEO_POCKETWATCH
+	apply_prefix = FALSE
+	apply_material_decorations = TRUE
+	apply_image_decorations = TRUE
+	anomaly_factor = 1 // image decorations mean +1
+	responsive_reagent = IRON
+
+/datum/find/pocketwatch/spawn_item()
+	if(prob(5))
+		anomaly_factor++
+		return new /obj/item/pocketwatch/luna_dial
+	else
+		return new /obj/item/pocketwatch
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Strange rocks

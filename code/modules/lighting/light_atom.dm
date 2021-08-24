@@ -13,7 +13,10 @@
 	if(istype(T))
 		T.blocks_light = -1
 		for(var/atom/movable/light/L in range(world.view, T)) //view(world.view, dview_mob))
-			L.cast_light()
+			if (world.cpu > 10)
+				lighting_update_lights |= L
+			else
+				L.cast_light()
 
 /atom/proc/copy_light(var/atom/other)
 	light_range = other.light_range

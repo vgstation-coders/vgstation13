@@ -413,6 +413,11 @@
 		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
 	)
 
+/datum/asset/simple/other_fonts
+	assets = list(
+		"BLOODY.TTF"  = 'html/fonts/BLOODY.TTF',
+	)
+
 /datum/asset/simple/tgui
 	assets = list(
 		"tgui.bundle.js" = 'tgui/packages/tgui/public/tgui.bundle.js',

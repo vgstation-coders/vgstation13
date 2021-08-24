@@ -84,7 +84,10 @@
 	light_color = LIGHT_COLOR_CYAN
 	var/datum/map_element/map_element_type // If null, New() tries to get one from the map's datum
 										   // Set it if you want to source rooms from a different holodeck
+	var/area/alpha_area = /area/holodeck/alphadeck // This is the area of the on-station holodeck, where the rooms will be loaded into.
+
 /obj/machinery/computer/HolodeckControl/olympics
+	alpha_area = /area/holodeck/dungeon_holodeck_alpha
 	map_element_type = /datum/map_element/dungeon/holodeck/olympics
 
 /obj/machinery/computer/HolodeckControl/attack_ai(mob/user)
@@ -240,7 +243,7 @@
 
 /obj/machinery/computer/HolodeckControl/New()
 	..()
-	linkedholodeck = locate(/area/holodeck/alphadeck)
+	linkedholodeck = locate(alpha_area)
 	if(isnull(map_element_type))
 		for(var/entry in map.load_map_elements)
 			if(ispath(entry, /datum/map_element/dungeon/holodeck))
@@ -404,10 +407,11 @@
 /turf/simulated/floor/holofloor/grass
 	name = "lush Grass"
 	icon_state = "grass1"
+
+/turf/simulated/floor/holofloor/grass/create_floor_tile()
 	floor_tile = new/obj/item/stack/tile/grass
 
 /turf/simulated/floor/holofloor/grass/New()
-	floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
 	icon_state = "grass[pick("1","2","3","4")]"
 	..()
 	spawn(4)
@@ -471,6 +475,11 @@
 /obj/structure/rack/holo/can_disassemble()
 	return FALSE
 
+/obj/structure/stacklifter/holo/can_disassemble()
+	return FALSE
+
+/obj/structure/weightlifter/holo/can_disassemble()
+	return FALSE
 
 /obj/item/weapon/holo
 	damtype = HALLOSS

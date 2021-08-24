@@ -61,7 +61,7 @@
 	src = null
 
 	//If the chemicals are in a smoke cloud, do not let the chemicals "penetrate" into the mob's system (balance station 13) -- Doohl
-	if(self.holder && !istype(self.holder.my_atom, /obj/effect/effect/smoke/chem))
+	if(self.holder && !istype(self.holder.my_atom, /obj/effect/smoke/chem))
 		if(method == TOUCH)
 
 			var/chance = 1
@@ -227,10 +227,6 @@
 		"tick")
 
 	reset_vars_after_duration(resettable_vars, duration, TRUE)
-
-	spawn(duration + 1)
-		var/datum/reagents/R = holder
-		R.reagent_list.Add(src)
 
 /datum/reagent/Destroy()
 	if(istype(holder))
@@ -408,6 +404,8 @@
 			totally_not_blood = "Milk"
 		if (PALE_BLOOD)//#272727
 			totally_not_blood = "Carbon"
+		if (GHOUL_BLOOD)//#7FFF00
+			totally_not_blood = "Piccolyn"
 
 	glass_name = "glass of [totally_not_blood]"
 	glass_desc = "Are you sure this is [totally_not_blood]?"
@@ -2083,7 +2081,7 @@
 
 	if(T.is_wet())
 		T.dry(TURF_WET_LUBE) //Cleans water or lube
-		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(T)
+		var/obj/effect/smoke/S = new /obj/effect/smoke(T)
 		S.time_to_live = 10 //unusually short smoke
 		//We don't need to start up the system because we only want to smoke one tile.
 
@@ -5180,7 +5178,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
-
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
@@ -5323,7 +5322,8 @@
 	description = "Looks like a skeleton got stuck in the production line."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-
+	nutriment_factor = REAGENTS_METABOLISM
+	
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
@@ -9469,7 +9469,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	custom_metabolism = 0.25
 
 /datum/reagent/incense/dense/OnDisperse(var/turf/location)
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(2, 0, location) //Make 2 drifting clouds of smoke, direction
 	smoke.start()
 
@@ -9497,3 +9497,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(prob(5))
 		to_chat(M,"<span class='warning'>[pick("You feel fuller.", "You no longer feel snackish.")]</span>")
 		M.reagents.add_reagent(NUTRIMENT, 2)
+
+/datum/reagent/dsyrup
+	name = "Delightful Mix"
+	id = DSYRUP
+	description = "This syrupy stuff is everyone's favorite tricord additive."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#571212" //like a dark red
+	density = 1.00 //basically water
+	specheatcap = 4.184

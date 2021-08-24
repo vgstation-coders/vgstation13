@@ -1,14 +1,17 @@
 //wrapper
 /proc/do_teleport(ateleatom, adestination, aprecision=FALSE, afteleport=TRUE, aeffectin=null, aeffectout=null, asoundin=null, asoundout=null, aijamming=FALSE)
-	new /datum/teleport/instant/science(arglist(args))
+	if (isobserver(ateleatom)) // ghosts teleport without making sounds nor sparks
+		new /datum/teleport/instant(ateleatom, adestination, aprecision, afteleport, aeffectin, aeffectout, null, null, aijamming)
+	else
+		new /datum/teleport/instant/science(arglist(args))
 	return
 
 /datum/teleport
 	var/atom/movable/teleatom //atom to teleport
 	var/atom/destination //destination to teleport to
 	var/precision = FALSE //teleport precision
-	var/datum/effect/effect/system/effectin //effect to show right before teleportation
-	var/datum/effect/effect/system/effectout //effect to show right after teleportation
+	var/datum/effect/system/effectin //effect to show right before teleportation
+	var/datum/effect/system/effectout //effect to show right after teleportation
 	var/soundin //soundfile to play before teleportation
 	var/soundout //soundfile to play after teleportation
 	var/force_teleport = TRUE //if false, teleport will use Move() proc (dense objects will prevent teleportation)
@@ -60,7 +63,7 @@
 
 	//custom effects must be properly set up first for instant-type teleports
 	//optional
-/datum/teleport/proc/setEffects(datum/effect/effect/system/aeffectin=null,datum/effect/effect/system/aeffectout=null)
+/datum/teleport/proc/setEffects(datum/effect/system/aeffectin=null,datum/effect/system/aeffectout=null)
 	effectin = istype(aeffectin) ? aeffectin : null
 	effectout = istype(aeffectout) ? aeffectout : null
 	return TRUE
@@ -85,7 +88,7 @@
 /datum/teleport/proc/teleportChecks()
 	return TRUE
 
-/datum/teleport/proc/playSpecials(atom/location,datum/effect/effect/system/effect,sound)
+/datum/teleport/proc/playSpecials(atom/location,datum/effect/system/effect,sound)
 	if(location)
 		if(effect)
 			spawn(-1)
@@ -168,9 +171,9 @@
 
 /datum/teleport/instant/science
 
-/datum/teleport/instant/science/setEffects(datum/effect/effect/system/aeffectin,datum/effect/effect/system/aeffectout)
+/datum/teleport/instant/science/setEffects(datum/effect/system/aeffectin,datum/effect/system/aeffectout)
 	if(!aeffectin || !aeffectout)
-		var/datum/effect/effect/system/spark_spread/aeffect = new
+		var/datum/effect/system/spark_spread/aeffect = new
 		aeffect.set_up(5, TRUE, teleatom)
 		effectin = effectin || aeffect
 		effectout = effectout || aeffect
@@ -192,9 +195,9 @@
 	return TRUE
 
 /datum/teleport/instant/science/teleportChecks(var/ignore_jamming = FALSE)
-	if(istype(teleatom, /obj/effect/effect/sparks)) // Don't teleport sparks or the server dies
+	if(istype(teleatom, /obj/effect/sparks)) // Don't teleport sparks or the server dies
 		return FALSE
-	
+
 	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		teleatom.visible_message("<span class='danger'>\The [teleatom] bounces off of the portal!</span>")
 		return FALSE

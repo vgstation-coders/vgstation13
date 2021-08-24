@@ -3,10 +3,8 @@
 //Effects spawned by rune spells
 
 /obj/effect/cult_ritual
-	icon = 'icons/effects/effects.dmi'
 	icon_state = ""
 	anchored = 1
-	mouse_opacity = 0
 
 /obj/effect/cult_ritual/cultify()
 	return
@@ -31,7 +29,7 @@
 	anchored = 1
 	mouse_opacity = 1
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	var/persist = 0//so mappers can make permanent sigils
 
 /obj/effect/cult_shortcut/New(var/turf/loc, var/atom/model)
@@ -92,7 +90,7 @@
 		if (image_color)
 			color = image_color
 		layer = NARSIE_GLOW
-		plane = LIGHTING_PLANE
+		plane = ABOVE_LIGHTING_PLANE
 	animate(src,alpha = 0, time = fadout)
 	spawn(fadout)
 		qdel(src)
@@ -123,7 +121,7 @@
 	invisibility = INVISIBILITY_CULTJAUNT
 	alpha = 127
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 	animate_movement = 0
@@ -592,7 +590,6 @@ var/bloodstone_backup = 0
 /obj/effect/rooting_trap/bloodnail
 	name = "blood nail"
 	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "bloodnail"
 
 /obj/effect/rooting_trap/bloodnail/New()

@@ -179,10 +179,8 @@
 
 			for(var/manual_type in typesof(/obj/item/weapon/book/manual))
 				if (!(manual_type in forbidden))
-					M = new manual_type()
-					dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[M.title]</A></td></tr>"
-					qdel(M)
-					M = null
+					M = manual_type
+					dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[initial(M.title)]</A></td></tr>"
 				manualcount++
 			dat += "</table>"
 			dat += "<BR><A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"

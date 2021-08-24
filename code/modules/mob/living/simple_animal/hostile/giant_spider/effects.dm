@@ -4,12 +4,12 @@
 /obj/effect/spider
 	name = "web"
 	desc = "It's stringy and sticky."
-	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 0
 	var/health = 15
 	gender = NEUTER
 	w_type=NOT_RECYCLABLE
+	mouse_opacity = 1
 
 //similar to weeds, but only barfed out by nurses manually
 /obj/effect/spider/ex_act(severity)
@@ -187,7 +187,7 @@
 /obj/effect/rooting_trap/stickyweb
 	name = "sticky web"
 	desc = "A mess of sticky strings."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "stickyweb"
 
 /obj/effect/rooting_trap/stickyweb/stick_to(var/atom/A, var/side = null)

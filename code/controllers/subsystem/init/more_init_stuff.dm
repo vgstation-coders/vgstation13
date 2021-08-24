@@ -38,16 +38,19 @@ var/datum/subsystem/more_init/SSmore_init
 		log_startup_progress("  Finished caching jukebox playlists in [stop_watch(watch)]s.")
 	..()
 
+	watch=start_watch()
+	log_startup_progress("Doing the other misc. initializations...")
+	process_teleport_locs()				//Sets up the wizard teleport locations
+	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
+	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
 	camera_sort(cameranet.cameras)
-
 	for (var/obj/machinery/computer/security/S in tv_monitors)
 		S.init_cams()
-
 	create_global_diseases()
-
 	init_wizard_apprentice_setups()
 	machinery_rating_cache = cache_machinery_components_rating()
 	typing_indicator = new
+	log_startup_progress("Finished doing the other misc. initializations in [stop_watch(watch)]s.")
 
 /proc/cache_machinery_components_rating()
 	var/list/cache = list()
@@ -112,5 +115,4 @@ var/datum/subsystem/more_init/SSmore_init
 						DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
 
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
-	spawn(1)
-		qdel(H)
+	qdel(H)

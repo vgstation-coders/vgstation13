@@ -92,7 +92,7 @@
 		underlays += image(contained.icon,contained.icon_state)
 		icon_state = "anomaly_container-full"
 		var/image/light = image(icon,"anomaly_container-light")
-		light.plane = LIGHTING_PLANE
+		light.plane = ABOVE_LIGHTING_PLANE
 		light.layer = ABOVE_LIGHTING_LAYER
 		overlays += light
 	else

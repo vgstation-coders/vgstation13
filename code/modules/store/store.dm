@@ -50,17 +50,20 @@ var/global/datum/store/centcomm_store=new
 				linked_db = DB
 				break
 
-/datum/store/proc/PlaceOrder(var/mob/living/usr, var/itemID, var/obj/machinery/computer/merch/merchcomp)
+/datum/store/proc/PlaceOrder(var/mob/living/user, var/itemID, var/obj/machinery/computer/merch/merchcomp)
 	// Get our item, first.
 	var/datum/storeitem/item = items["[itemID]"]
 	if(item.stock == 0)
-		to_chat(usr, "<span class='warning'>That item is sold out.</span>")
+		to_chat(user, "<span class='warning'>That item is sold out.</span>")
+		return
+	if(!item.available_to_user(user, merchcomp))
+		to_chat(user, "<span class='warning'>That item is not available to you.</span>")
 		return
 	// Try to deduct funds.
-	if(!charge(usr,item.cost,item,merchcomp))
+	if(!charge(user,item.cost,item,merchcomp))
 		return 0
 	// Give them the item.
-	item.deliver(usr,merchcomp)
+	item.deliver(user,merchcomp)
 	if(item.stock != -1)
 		item.stock--
 	return 1

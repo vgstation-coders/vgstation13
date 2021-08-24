@@ -222,9 +222,6 @@ var/global/list/ghdel_profiling = list()
 		if(T)
 			T.densityChanged()
 
-/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
-	return Bumped(F)
-
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
 // false if closed
@@ -541,6 +538,9 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/emag_act()
+	return
+
+/atom/proc/slime_act()
 	return
 
 /atom/proc/supermatter_act(atom/source, severity)

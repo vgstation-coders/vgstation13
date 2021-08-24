@@ -128,28 +128,6 @@
 	name = "waffles"
 	icon_state = "waffles"
 
-/obj/item/trash/plate
-	name = "plate"
-	icon_state = "plate"
-	var/clean = FALSE
-/obj/item/trash/plate/clean
-	icon_state = "cleanplate"
-	desc = "Clean enough to eat on, probably."
-	clean = TRUE
-/obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/soap))
-		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
-		clean = TRUE
-		update_icon()
-		return TRUE
-	return ..()
-
-/obj/item/trash/plate/update_icon()
-	if(clean)
-		icon_state = "cleanplate"
-	else
-		icon_state = "plate"
-
 /obj/item/trash/pietin
 	name = "pie tin"
 	icon_state = "pietin"
@@ -279,3 +257,11 @@ var/list/crushed_cans_cache = list()
 	name = "used tray"
 	icon_state	= "tray_plastic2_used"
 	desc = "Whoever said a tray is most useful when it is empty must not have been hungry."
+
+/obj/item/trash/zam_notraisins
+	name = "zam notraisins"
+	icon_state	= "zam_notraisins_rubbish"
+
+/obj/item/trash/zam_sliderwrapper
+	name = "zam slider wrapper"
+	icon_state	= "zam_spiderslider_wrapper"

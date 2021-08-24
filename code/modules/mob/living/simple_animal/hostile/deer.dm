@@ -27,8 +27,9 @@
 				D.get_spooked(new_target)
 
 /mob/living/simple_animal/hostile/deer/proc/is_spooked(var/mob/living/target)
-	if(friends.Find(target))
-		return 0
+	for(var/datum/weakref/ref in friends)
+		if (ref.get() == target)
+			return 0
 	if(ishuman(target))
 	/*
 	Making it so that there is some tactics to hunting deer
@@ -63,6 +64,9 @@
 	visible_message("<span class='danger'>\The [src] tries to flee from \the [target]!</span>")
 	retreat_distance = 25
 	minimum_distance = 25
+
+/mob/living/simple_animal/hostile/deer/get_butchering_products()
+	return list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head)
 
 /mob/living/simple_animal/hostile/deer/Life()
 	..()
@@ -101,8 +105,12 @@
 			icon_state = "deer_flower"
 
 		if(prob(25))
-			if(!friends.Find(user))
-				friends.Add(user)
+			var/already_friend = FALSE
+			for(var/datum/weakref/ref in friends)
+				if (ref.get() == user)
+					already_friend = TRUE
+			if (!already_friend)
+				friends += makeweakref(user)
 				to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 			name_mob(user)
 		qdel(A)
@@ -122,7 +130,8 @@
 			icon_state = "[icon_dead][(our_head.amount) ? "" : "_headless"]"
 
 /mob/living/simple_animal/hostile/deer/cultify()
-	new /mob/living/simple_animal/hostile/deer/flesh(get_turf(src))
+	var/mob/living/simple_animal/hostile/deer/flesh/fleshy_deer = new(get_turf(src))
+	fleshy_deer.dir = dir
 	qdel(src)
 
 /mob/living/simple_animal/hostile/deer/flesh
@@ -133,6 +142,9 @@
 	canRegenerate = 1
 	maxRegenTime = 150
 	minRegenTime = 60
+
+/mob/living/simple_animal/hostile/deer/flesh/get_butchering_products()
+	return list(/datum/butchering_product/deer_head)
 
 /mob/living/simple_animal/hostile/deer/flesh/cultify()
 	return

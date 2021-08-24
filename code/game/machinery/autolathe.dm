@@ -108,6 +108,7 @@
 		new /obj/item/weapon/kitchen/utensil/knife/large(), \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/device/taperecorder(), \
+		new /obj/item/tool/wirecutters/scissors(), \
 		new /obj/item/weapon/chisel(), \
 		new /obj/item/weapon/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \
@@ -129,6 +130,7 @@
 		new /obj/item/weapon/storage/box/ornaments(), \
 		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
 		new /obj/item/weapon/disk/shuttle_coords/station_auxillary(),\
+		new /obj/item/weapon/disk/blank(),\
 		),
 		"Hidden_Items" = list(
 		new /obj/item/weapon/gun/projectile/flamethrower/full(), \

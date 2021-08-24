@@ -446,6 +446,7 @@
 #define EGGNOG			"eggnog"
 #define FESTIVE_EGGNOG	"festive_eggnog"
 #define TENDIES			"tendies"
+#define DSYRUP			"dsyrup"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

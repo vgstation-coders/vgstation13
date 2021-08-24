@@ -25,6 +25,7 @@ var/runedec = 0 // Rune cap ?
 
 	var/summoning = 0
 	var/list/summonturfs = list()
+	mouse_opacity = 1 //So we can actually click these
 
 /obj/effect/rune_legacy/New()
 	..()
@@ -328,6 +329,7 @@ var/runedec = 0 // Rune cap ?
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 	if(isobserver(M))
 		if(M.invisibility != 0)
 			M.invisibility = 0

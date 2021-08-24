@@ -15,12 +15,10 @@
 	can_border_transition = 1
 	var/static/list/parallax_appearances
 
-/turf/space/New()
+/turf/space/initialize()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-
-/turf/space/initialize()
 	if(!parallax_appearances)
 		parallax_appearances = list()
 		for(var/i in 0 to 25)

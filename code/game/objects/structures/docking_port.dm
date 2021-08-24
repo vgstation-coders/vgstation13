@@ -265,6 +265,7 @@ var/global/list/dockinglights = list()
 	icon_state = "docklight"
 	light_color = LIGHT_COLOR_ORANGE
 	machine_flags = MULTITOOL_MENU
+	anchored = 1
 	var/triggered = 0
 	id_tag = "" //Mappers: This should match the areaname of the target destination port.
 	//Examples: "main research department", "research outpost", "deep space", "station auxillary docking", "north of the station", etc.

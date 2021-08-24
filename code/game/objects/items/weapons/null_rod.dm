@@ -29,6 +29,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
@@ -64,7 +65,7 @@
 		if (user.a_intent != I_HELP) //We assume the user is fighting
 			to_chat(user, "<span class='notice'>You swing \the [src] in front of you.</span>")
 			return
-		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)
+		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = ABOVE_LIGHTING_PLANE)
 		animation.alpha = 0
 		animate(animation, alpha = 255, time = 2)
 		animate(alpha = 0, time = 3)

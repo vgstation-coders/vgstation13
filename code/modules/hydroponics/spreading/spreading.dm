@@ -11,7 +11,7 @@
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
-	//mouse_opacity = 2
+	mouse_opacity = 1
 
 	var/health = 10
 	var/max_health = 100

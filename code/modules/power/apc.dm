@@ -644,19 +644,22 @@
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
-		if (	((stat & BROKEN) || malfhack) \
-				&& !opened \
-				&& ( \
-					(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) \
-					|| istype(W,/obj/item/tool/crowbar) \
-				) \
-				&& prob(20) )
+		if (((stat & BROKEN) || malfhack) && !opened && ((W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) || istype(W,/obj/item/tool/crowbar)))
 			user.do_attack_animation(src, W)
-			opened = 2
-			user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
-				"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
-				"You hear a loud bang.") //"you hear bang" is so bad I have to leave a comment to immortalize it
-			update_icon()
+			playsound(src, 'sound/items/metal_impact.ogg', 75, 1)
+			shake(1, 3)
+			user.delayNextAttack(8)
+			if (prob(20))
+				opened = 2
+				user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
+					"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
+					"You hear something metallic being hit, and falling on the floor.")
+				update_icon()
+			else
+				user.visible_message("<span class='warning'>\The [user.name] hits the broken APC's cover with \a [W.name] by [user.name]!</span>", \
+					"<span class='warning'>You hit the APC's cover with your [W.name]!</span>", \
+					"You hear something metallic being hit.")
+
 		else
 			if (istype(user, /mob/living/silicon))
 				return src.attack_hand(user)
@@ -1105,7 +1108,7 @@
 				cell.corrupt()
 				src.malfhack = 1
 				update_icon()
-				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+				var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 				smoke.set_up(3, 0, src.loc)
 				smoke.attach(src)
 				smoke.start()

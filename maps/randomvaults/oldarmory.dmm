@@ -105,7 +105,7 @@
 "ca" = (/obj/machinery/door/airlock{name = "Disguises"},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "cb" = (/obj/structure/closet/gimmick/tacticool,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "cc" = (/obj/structure/closet,/obj/item/clothing/head/helmet/volnutthelmet,/obj/item/clothing/suit/armor/volnutt,/obj/item/weapon/gun/energy/mmlbuster,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
-"cd" = (/obj/machinery/porta_turret{dir = 4; emagged = 1},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
+"cd" = (/obj/machinery/turret/portable{dir = 4; emagged = 1},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "ce" = (/obj/structure/sign/securearea,/turf/simulated/wall/r_wall,/area/vault/oldarmory)
 "cf" = (/obj/structure/painting/random,/turf/simulated/wall/r_wall,/area/vault/oldarmory)
 "cg" = (/obj/machinery/door/airlock/command{name = "Computer Chamber"},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)

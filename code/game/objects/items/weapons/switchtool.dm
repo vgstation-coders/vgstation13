@@ -87,10 +87,16 @@
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
 	if(istype(used_item, removing_item)) //if it's the thing that lets us remove tools and we have something to remove
-		if(deployed)
-			return remove_module(user)
-		else
-			return remove_all_modules(user)
+		var/no_modules = TRUE
+		for(var/module in stored_modules)
+			if(stored_modules[module])
+				no_modules = FALSE
+				break
+		if (!no_modules)
+			if(deployed)
+				return remove_module(user)
+			else
+				return remove_all_modules(user)
 
 	if(add_module(used_item, user))
 		return TRUE

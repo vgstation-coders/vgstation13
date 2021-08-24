@@ -234,7 +234,16 @@
 	name = "\improper Slime Extract Storage"
 	desc = "A refrigerated storage unit for slime extracts."
 
-	accepted_types = list(/obj/item/slime_extract)
+	accepted_types = list(
+		/obj/item/slime_extract,
+		/obj/item/weapon/slimepotion,
+		/obj/item/weapon/slimepotion2,
+		/obj/item/weapon/slimesteroid,
+		/obj/item/weapon/slimesteroid2,
+		/obj/item/weapon/slimenutrient,
+		/obj/item/weapon/slimedupe,
+		/obj/item/weapon/slimeres
+	)
 
 /obj/machinery/smartfridge/extract/New()
 	. = ..()
@@ -422,7 +431,7 @@
 	interact(user)
 
 /obj/machinery/smartfridge/emag(mob/user)
-	new/obj/effect/effect/sparks(get_turf(src))
+	new/obj/effect/sparks(get_turf(src))
 	playsound(loc,"sparks",50,1)
 	emagged = !emagged
 	if(emagged)

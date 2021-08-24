@@ -209,15 +209,7 @@ SELECT
     jobs.player_ckey,
     jobs.player_slot,
     jobs.alternate_option,
-    jobs.job_civilian_high,
-    jobs.job_civilian_med,
-    jobs.job_civilian_low,
-    jobs.job_medsci_high,
-    jobs.job_medsci_med,
-    jobs.job_medsci_low,
-    jobs.job_engsec_high,
-    jobs.job_engsec_med,
-    jobs.job_engsec_low,
+    jobs.jobs,
     body.player_ckey,
     body.player_slot,
     body.hair_red,
@@ -332,17 +324,10 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	organ_data["liver"] = preference_list["liver"]
 
 	alternate_option	= text2num(preference_list["alternate_option"])
-	job_civilian_high	= text2num(preference_list["job_civilian_high"])
-	job_civilian_med	= text2num(preference_list["job_civilian_med"])
-	job_civilian_low	= text2num(preference_list["job_civilian_low"])
-	job_medsci_high		= text2num(preference_list["job_medsci_high"])
-	job_medsci_med		= text2num(preference_list["job_medsci_med"])
-	job_medsci_low		= text2num(preference_list["job_medsci_low"])
-	job_engsec_high		= text2num(preference_list["job_engsec_high"])
-	job_engsec_med		= text2num(preference_list["job_engsec_med"])
-	job_engsec_low		= text2num(preference_list["job_engsec_low"])
-
-
+	if(preference_list["jobs"] && preference_list["jobs"] != "")
+		jobs = json_decode(preference_list["jobs"])
+	else
+		jobs = list()
 	metadata			= sanitize_text(metadata, initial(metadata))
 	real_name			= reject_bad_name(real_name)
 
@@ -382,15 +367,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	//be_special      = sanitize_integer(be_special, 0, 65535, initial(be_special))
 
 	alternate_option = sanitize_integer(alternate_option, 0, 2, initial(alternate_option))
-	job_civilian_high = sanitize_integer(job_civilian_high, 0, 65535, initial(job_civilian_high))
-	job_civilian_med = sanitize_integer(job_civilian_med, 0, 65535, initial(job_civilian_med))
-	job_civilian_low = sanitize_integer(job_civilian_low, 0, 65535, initial(job_civilian_low))
-	job_medsci_high = sanitize_integer(job_medsci_high, 0, 65535, initial(job_medsci_high))
-	job_medsci_med = sanitize_integer(job_medsci_med, 0, 65535, initial(job_medsci_med))
-	job_medsci_low = sanitize_integer(job_medsci_low, 0, 65535, initial(job_medsci_low))
-	job_engsec_high = sanitize_integer(job_engsec_high, 0, 65535, initial(job_engsec_high))
-	job_engsec_med = sanitize_integer(job_engsec_med, 0, 65535, initial(job_engsec_med))
-	job_engsec_low = sanitize_integer(job_engsec_low, 0, 65535, initial(job_engsec_low))
 
 	for(var/role_id in special_roles)
 		roles[role_id]=0
@@ -502,27 +478,27 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	check.Add("SELECT player_ckey FROM jobs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
 		if(!check.NextRow())
-		    //                       1           2           3                4                 5                6                7               8              9              10              11             12
-			q.Add("INSERT INTO jobs (player_ckey,player_slot,alternate_option,job_civilian_high,job_civilian_med,job_civilian_low,job_medsci_high,job_medsci_med,job_medsci_low,job_engsec_high,job_engsec_med,job_engsec_low) \
-					         VALUES (?,          ?,          ?,               ?,                ?,               ?,               ?,              ?,             ?,             ?,              ?,             ?)", \
-							        ckey,        slot,       alternate_option,job_civilian_high,job_civilian_med,job_civilian_low,job_medsci_high,job_medsci_med,job_medsci_low,job_engsec_high,job_engsec_med,job_engsec_low)
+		    //                       1           2           3                4
+			q.Add("INSERT INTO jobs (player_ckey,player_slot,alternate_option,jobs) \
+					         VALUES (?,          ?,          ?,               ?)", \
+							        ckey,        slot,       alternate_option,json_encode(jobs))
 			if(!q.Execute(db))
 				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Job list")
 		else
-		    //                     1                  2                   3                  4                  5                 6                7                8                 9                10
-			q.Add("UPDATE jobs SET alternate_option=?,job_civilian_high=?,job_civilian_med=?,job_civilian_low=?,job_medsci_high=?,job_medsci_med=?,job_medsci_low=?,job_engsec_high=?,job_engsec_med=?,job_engsec_low=? WHERE player_ckey = ? AND player_slot = ?",\
-								   alternate_option,  job_civilian_high,  job_civilian_med,  job_civilian_low,  job_medsci_high,  job_medsci_med,  job_medsci_low,  job_engsec_high,  job_engsec_med,  job_engsec_low,        ckey,               slot)
+		    //                     1                  2
+			q.Add("UPDATE jobs SET alternate_option=?,jobs=? WHERE player_ckey = ? AND player_slot = ?",\
+								   alternate_option,  json_encode(jobs),        ckey,               slot)
 			if(!q.Execute(db))
 				message_admins("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_character_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Updated Job List")
 	else
-		message_admins("Error in save_character_sqlite ln 790 #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("Error in save_character_sqlite ln 790 #:[q.Error()] - [q.ErrorMsg()]")
+		message_admins("Error in save_character_sqlite ln [__LINE__] #: [check.Error()] - [check.ErrorMsg()]")
+		WARNING("Error in save_character_sqlite ln [__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
 	check.Add("SELECT player_ckey FROM limbs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
