@@ -489,6 +489,13 @@
 /obj/structure/sign/poster/stealth/rip(mob/user)
 	roll_and_drop(get_turf(user))
 
+/obj/structure/sign/poster/stealth/roll_and_drop(turf/newloc)
+	if(newloc)
+		new /obj/item/mounted/poster/stealth(newloc, design)
+	else
+		new /obj/item/mounted/poster/stealth(get_turf(src), design)
+	qdel(src)
+
 /*=======
 Ninja Esword
 &
