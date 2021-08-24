@@ -490,7 +490,7 @@
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
-	if(src.throwing)
+	if(throwing)
 		for(var/atom/A in get_turf(src))
 			if(A == src)
 				continue

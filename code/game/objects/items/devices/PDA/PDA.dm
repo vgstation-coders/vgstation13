@@ -224,6 +224,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if (cartridge)
 		cartridge.initialize()
 
+/obj/item/device/pda/ert
+	name = "ERT PDA"
+	default_cartridge = /obj/item/weapon/cartridge/security
+	icon_state = "pda-ert"
+
 /obj/item/device/pda/medical
 	name = "Medical PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
@@ -1554,7 +1559,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				var/turf/T = loc
 				if(ismob(T))
 					T = T.loc
-				cartridge.forceMove(T)
+				U.put_in_hands(cartridge)
 				scanmode = SCANMODE_NONE
 				if (cartridge.radio)
 					cartridge.radio.hostpda = null

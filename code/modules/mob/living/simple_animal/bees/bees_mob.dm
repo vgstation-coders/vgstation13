@@ -237,10 +237,10 @@ var/bee_mobs_count = 0
 	//Calming bees
 	var/list/calmers = list(
 		/obj/effect/decal/chemical_puff,
-		/obj/effect/effect/smoke/chem,
-		/obj/effect/effect/water,
-		/obj/effect/effect/foam,
-		/obj/effect/effect/steam,
+		/obj/effect/smoke/chem,
+		/obj/effect/water,
+		/obj/effect/foam,
+		/obj/effect/steam,
 		/obj/effect/mist,
 		)
 

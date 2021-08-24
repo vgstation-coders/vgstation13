@@ -207,7 +207,7 @@
 
 /obj/machinery/suit_storage_unit/emag_act(var/mob/user)
 	emagged = TRUE
-	new/obj/effect/effect/sparks(get_turf(src))
+	new/obj/effect/sparks(get_turf(src))
 	playsound(loc,"sparks",50,1)
 	to_chat(user, "<span class='danger'>You short out the locking mechanism, dumping the contents</span>")
 	dump_everything()

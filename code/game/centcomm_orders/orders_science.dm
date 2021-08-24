@@ -433,6 +433,10 @@
 //Contained Large Artifacts
 /datum/centcomm_order/department/science/artifact/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	name = "Nanotrasen's Secure Containment Precinct"
 	must_be_in_crate = 0
 	requested = list(
@@ -460,6 +464,10 @@
 
 /datum/centcomm_order/department/science/supermatter/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	name = "Nanotrasen"
 	must_be_in_crate = 0
 	requested = list(
@@ -471,6 +479,10 @@
 //Large Crystals
 /datum/centcomm_order/department/science/crystal/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	name = "CentComm Beautification Department"
 	must_be_in_crate = 0
 	requested = list(
@@ -481,6 +493,10 @@
 //Assembled Alien Skeleton
 /datum/centcomm_order/department/science/skeleton/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/structure/skeleton = 1

@@ -64,7 +64,7 @@
 				S.snowballs--
 
 /obj/structure/geyser/proc/puff_smoke()
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(2, 0, get_turf(src)) //Make 2 drifting clouds of smoke, direction
 	smoke.time_to_live = 2 SECONDS //unusually short smoke
 	smoke.start()
@@ -110,7 +110,7 @@
 	preparing_smoke = 1
 	..()
 	spawn (15 SECONDS)
-		var/datum/effect/effect/system/smoke_spread/heat/smoke = new /datum/effect/effect/system/smoke_spread/heat()
+		var/datum/effect/system/smoke_spread/heat/smoke = new /datum/effect/system/smoke_spread/heat()
 		smoke.set_up(4, 0, get_turf(src))
 		smoke.time_to_live = 8 SECONDS
 		smoke.start()

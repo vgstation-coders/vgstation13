@@ -14,6 +14,11 @@
 
 /obj/machinery/computer/station_alert/New()
 	..()
+	if(world.has_round_started())
+		initialize()
+
+/obj/machinery/computer/station_alert/initialize()
+	..()
 	if(src.z != map.zMainStation)
 		var/area/A = get_area(src)
 		if(!A)

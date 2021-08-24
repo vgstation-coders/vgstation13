@@ -976,9 +976,15 @@ var/list/admin_verbs_mod = list(
 		to_chat(usr, "player list is empty!")
 		return
 
-	var/mob/winner = input("Who's a winner?", "Achievement Winner", null) as null|anything in player_list
-	if(!winner)
+	var/list/winners = list()
+	for (var/mob/M in player_list)
+		winners["[M.real_name] ([M.key])"] = M
+
+	var/choice = input("Who's a winner?", "Achievement Winner", null) as null|anything in winners
+	if(!choice)
 		return
+
+	var/mob/winner = winners[choice]
 
 	var/name = input("What will you call your achievement?", "Achievement Winner", "New Achievement", null) as null|text
 	if(!name)

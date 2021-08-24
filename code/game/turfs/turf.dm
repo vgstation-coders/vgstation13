@@ -86,14 +86,13 @@
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
 
-/turf/New()
+/turf/initialize()
 	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-	for(var/atom/movable/AM as mob|obj in src)
-		spawn( 0 )
-			src.Entered(AM)
+	for(var/atom/movable/AM in src)
+		src.Entered(AM)
 	if(opacity)
 		has_opaque_atom = TRUE
 
@@ -117,6 +116,8 @@
 		for(var/obj/obstacle in src)
 			/*if(ismob(mover) && mover:client)
 				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
+			if(obstacle in target) //If target is a turf and obstacle is a multitile object so that it covers target as well.
+				continue
 			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
 				/*if(ismob(mover) && mover:client)
 					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/

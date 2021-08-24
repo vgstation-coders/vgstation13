@@ -28,7 +28,7 @@
 "B" = (/obj/effect/decal/cleanable/dirt,/obj/effect/landmark/corpse/russian,/turf/simulated/floor/plating,/area/vault/sokoban/level)
 "C" = (/mob/living/simple_animal/hostile/creature,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "D" = (/obj/effect/decal/cleanable/dirt,/obj/structure/cult/forge,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
-"E" = (/obj/structure/cult/tome,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"E" = (/obj/structure/cult_legacy/tome,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaa

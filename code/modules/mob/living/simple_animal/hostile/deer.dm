@@ -27,8 +27,9 @@
 				D.get_spooked(new_target)
 
 /mob/living/simple_animal/hostile/deer/proc/is_spooked(var/mob/living/target)
-	if(friends.Find(target))
-		return 0
+	for(var/datum/weakref/ref in friends)
+		if (ref.get() == target)
+			return 0
 	if(ishuman(target))
 	/*
 	Making it so that there is some tactics to hunting deer
@@ -104,8 +105,12 @@
 			icon_state = "deer_flower"
 
 		if(prob(25))
-			if(!friends.Find(user))
-				friends.Add(user)
+			var/already_friend = FALSE
+			for(var/datum/weakref/ref in friends)
+				if (ref.get() == user)
+					already_friend = TRUE
+			if (!already_friend)
+				friends += makeweakref(user)
 				to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 			name_mob(user)
 		qdel(A)

@@ -300,7 +300,9 @@ to destroy them and players will be able to make replacements.
 	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
 	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall,
 	"data"=/obj/item/weapon/circuitboard/disk_duplicator,
-	"Ez-bake oven"=/obj/item/weapon/circuitboard/cooking,)
+	"Ez-bake oven"=/obj/item/weapon/circuitboard/cooking,
+	"candy machine"=/obj/item/weapon/circuitboard/cooking/candy,
+	"cereal maker"=/obj/item/weapon/circuitboard/cooking/cerealmaker)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -1385,7 +1387,6 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = /obj/machinery/anomaly/hyperspectral
 
 /obj/item/weapon/circuitboard/confectionator
-
 	name = "circuit board (confectionator)"
 	desc = "A circuit board used to run a kitchen appliance."
 	board_type = MACHINE
@@ -1416,6 +1417,26 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/capacitor = 2,
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
+						
+/obj/item/weapon/circuitboard/cooking/candy
+	name = "circuit board (candy machine)"
+	desc = "A circuit board for a candy machine."
+	board_type = MACHINE
+	build_path = /obj/machinery/cooking/candy
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+						/obj/item/weapon/stock_parts/manipulator = 3,
+						/obj/item/weapon/stock_parts/console_screen = 1) //boring recipe I know, but they're very simple machines
+						
+/obj/item/weapon/circuitboard/cooking/cerealmaker
+	name = "circuit board (cereal maker)"
+	desc = "A circuit board for a cereal maker."
+	board_type = MACHINE
+	build_path = /obj/machinery/cooking/cerealmaker
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+						/obj/item/weapon/stock_parts/manipulator = 3,
+						/obj/item/weapon/stock_parts/console_screen = 1) //boring recipe I know, but they're very simple machines
 
 /obj/item/weapon/circuitboard/medal_printer
 	name = "Circuit board (Medal Printer)"

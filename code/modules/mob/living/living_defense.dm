@@ -87,7 +87,7 @@
 		return
 	if(flags & INVULNERABLE)
 		return
-	if(istype(AM,/obj/) && !istype(AM,/obj/effect/effect/))
+	if(istype(AM,/obj/) && !istype(AM,/obj/effect/))
 		var/obj/O = AM
 		var/zone = ran_zone(LIMB_CHEST,75)//Hits a random part of the body, geared towards the chest
 		var/dtype = BRUTE

@@ -206,8 +206,10 @@
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
 		//WE DON'T ATTACK OUR FRIENDS (used by lazarus injectors, and rabid slimes)
-		if(friends.Find(L))
-			return 0
+
+		for(var/datum/weakref/ref in friends)
+			if (ref.get() == L)
+				return 0
 		return 1
 	if(isobj(the_target))
 		//if(the_target.type in wanted_objects)
@@ -346,7 +348,15 @@
 
 	var/mob/living/simple_animal/hostile/H = from
 	if(istype(H))
-		src.friends |= H.friends
+		for (var/datum/weakref/ref in H.friends)
+			var/not_a_friend_yet = TRUE
+			var/mob/M = ref.get()
+			for (var/datum/weakref/reff in H.friends)
+				if (M == reff.get())
+					not_a_friend_yet = FALSE
+					break
+			if (not_a_friend_yet)
+				friends += makeweakref(M)
 
 /mob/living/simple_animal/hostile/proc/OpenFire(var/atom/ttarget)
 	set waitfor = 0

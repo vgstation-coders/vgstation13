@@ -309,6 +309,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "silicate tank crate"
 	group = "Supplies"
 
+/datum/supply_packs/sacidtank
+	name = "Sulphuric acid tank"
+	contains = list(/obj/structure/reagent_dispensers/sacid)
+	cost = 8
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "sulphuric acid tank crate"
+	group = "Supplies"
+	one_access = list(access_engine, access_science)
+
 /datum/supply_packs/mining
 	name = "Mining equipment"
 	contains = list(/obj/item/weapon/pickaxe/drill,
@@ -1814,14 +1823,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 
 /datum/supply_packs/suit_modification_station
-	name = "suit modification station"
+	name = "Suit modification station"
 	contains = list()
 	cost = 200
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
+/datum/supply_packs/hardsuit_frames
+	name = "Hardsuit frames"
+	contains = list(/obj/item/device/rigframe,
+					/obj/item/device/rigframe,
+					/obj/item/device/rigframe)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/scisec
+	access = list(access_robotics)
+	containername = "hardsuit frame crate"
+	group = "Engineering"
+
 /datum/supply_packs/gourmonger
-	name = "dehydrated gourmonger"
+	name = "Dehydrated gourmonger"
 	contains = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger)
 	cost = 75
 	containertype = /obj/structure/closet/crate/secure/engisec

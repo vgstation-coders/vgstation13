@@ -49,12 +49,12 @@
 			return
 		if(2.0)
 			if (prob(50))
-				new /obj/effect/effect/water(src.loc)
+				new /obj/effect/water(src.loc)
 				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
-				new /obj/effect/effect/water(src.loc)
+				new /obj/effect/water(src.loc)
 				qdel(src)
 				return
 		else
@@ -62,7 +62,7 @@
 
 /obj/structure/reagent_dispensers/blob_act()
 	if(prob(50))
-		new /obj/effect/effect/water(src.loc)
+		new /obj/effect/water(src.loc)
 		qdel(src)
 
 /obj/structure/reagent_dispensers/New()
@@ -113,9 +113,9 @@
 
 /obj/structure/reagent_dispensers/fueltank/attack_hand()
 	if (rig)
-		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src]")
+		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
 		if(do_after(usr, src, 20))
-			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
+			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
 			if(rig)
 				rig.forceMove(get_turf(usr))
 				rig.master = null
@@ -125,13 +125,13 @@
 /obj/structure/reagent_dispensers/fueltank/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (W.is_wrench(user))
 		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
-			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
+			"You wrench [src]'s faucet [modded ? "closed" : "open"].")
 		modded = modded ? 0 : 1
 	if (istype(W,/obj/item/device/assembly_holder))
 		if (rig)
 			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
 			return ..()
-		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src]")
+		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src].")
 		if(do_after(user, src, 20))
 			if(rig)
 				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
@@ -140,7 +140,7 @@
 				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
 				return
 
-			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src]</span>")
+			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")
 
 			var/obj/item/device/assembly_holder/H = W
 			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
@@ -353,6 +353,34 @@
 		reagents.trans_to(S, S.max_silicate)
 		S.update_icon()
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		return 1
+
+/obj/structure/reagent_dispensers/sacid
+	name = "\improper Sulphuric Acid Dispenser"
+	desc = "A dispenser of sulphuric acid."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "sacidtank"
+	amount_per_transfer_from_this = 50
+
+/obj/structure/reagent_dispensers/sacid/New()
+	. = ..()
+	reagents.add_reagent(SACID, 1000)
+
+/obj/structure/reagent_dispensers/sacid/attackby(var/obj/item/W, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if(issolder(W))
+		var/obj/item/tool/solder/S = W
+		if(S.reagents.get_reagent_amount() >= S.max_fuel) // Already filled.
+			to_chat(user, "<span class='notice'>\The [S] is already full!</span>")
+			return
+
+		reagents.trans_to(S, S.max_fuel)
+		S.update_icon()
+		to_chat(user, "<span class='notice'>Solder refilled.</span>")
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 

@@ -16,7 +16,7 @@
 	var/smoke_ready = 1
 	var/smoke_cooldown = 100
 	var/dash_cooldown = 30
-	var/datum/effect/effect/system/smoke_spread/smoke_system = new
+	var/datum/effect/system/smoke_spread/smoke_system = new
 	var/image/rockets = null
 	operation_req_access = list(access_cent_specops)
 	wreckage = /obj/effect/decal/mecha_wreckage/marauder

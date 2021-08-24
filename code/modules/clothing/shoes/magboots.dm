@@ -99,7 +99,7 @@
 
 /obj/item/clothing/shoes/magboots/emag_act(var/mob/user)
 	emagged = TRUE
-	new/obj/effect/effect/sparks(get_turf(src))
+	new/obj/effect/sparks(get_turf(src))
 	playsound(loc,"sparks",50,1)
 	clothing_flags &= ~(NOSLIP | MAGPULSE)
 	slowdown = SHACKLE_SHOES_SLOWDOWN

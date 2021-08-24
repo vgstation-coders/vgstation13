@@ -250,3 +250,4 @@ var/global/list/falltempoverlays = list()
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
 		else
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
+		qdel(caster)
