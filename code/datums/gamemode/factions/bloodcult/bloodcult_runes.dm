@@ -165,9 +165,8 @@ var/list/rune_appearances_cache = list()
 /obj/effect/rune/proc/cast_word(var/word)
 	if (!word)
 		return
-	var/atom/movable/overlay/A = anim(target = get_turf(src), a_icon = 'icons/effects/deityrunes.dmi', a_icon_state = "[word]-tear", lay = layer+0.1, plane = plane)
-	animate(A,color = "black",time = 5)
-	animate(alpha = "black",time = 5)
+	var/atom/movable/overlay/A = anim(target = get_turf(src), a_icon = 'icons/effects/deityrunes.dmi', a_icon_state = "[word]-tear", lay = layer+0.2, plane = plane)
+	animate(A, alpha = 0,time = 5)
 
 /obj/effect/rune/ex_act(var/severity)
 	switch (severity)

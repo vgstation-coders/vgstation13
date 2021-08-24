@@ -97,9 +97,9 @@
 /datum/rune_spell/proc/pre_cast()
 	if(istype(spell_holder,/obj/effect/rune))
 		var/obj/effect/rune/R = spell_holder
-		R.cast_word(R.word1)
-		R.cast_word(R.word2)
-		R.cast_word(R.word3)
+		R.cast_word(R.word1.english)
+		R.cast_word(R.word2.english)
+		R.cast_word(R.word3.english)
 		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
 		else
