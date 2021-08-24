@@ -62,7 +62,6 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
-	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
@@ -230,24 +229,6 @@
 			if(client)
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
-		if (isshade(src) && gui_icons)
-			if(gui_icons.soulblade_bgLEFT)
-				qdel(gui_icons.soulblade_bgLEFT)
-				if(client)
-					client.screen -= gui_icons.soulblade_bgLEFT
-				gui_icons.soulblade_bgLEFT = null
-			if(gui_icons.soulblade_bloodbar)
-				qdel(gui_icons.soulblade_bloodbar)
-				if(client)
-					client.screen -= gui_icons.soulblade_bloodbar
-				gui_icons.soulblade_bloodbar = null
-			if(gui_icons.soulblade_coverLEFT)
-				qdel(gui_icons.soulblade_coverLEFT)
-				if(client)
-					client.screen -= gui_icons.soulblade_coverLEFT
-				gui_icons.soulblade_coverLEFT = null
-
-
 
 /mob/proc/cultify()
 	return
@@ -1533,6 +1514,9 @@ Use this proc preferably at the end of an equipment loadout
 
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
+	if (timestopped)
+		return 0 // update_canmove() is called on all affected mobs right as the timestop ends
+
 	if (locked_to)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (category && ~category.flags & LOCKED_CAN_LIE_AND_STAND)
@@ -1912,8 +1896,8 @@ mob/proc/on_foot()
 	if(M == src || !istype(M) || !mind)
 		return
 	if(!ear_deaf && !stat)
-		if(!(mind.heard_before[M.name]))
-			mind.heard_before[M.name] = M
+		if(!(mind.heard_before[M.name]) && M.mind)
+			mind.heard_before[M.name] = M.mind
 			M.heard_by |= mind
 
 /mob/acidable()
@@ -2177,30 +2161,36 @@ mob/proc/on_foot()
 /mob/proc/attempt_crawling(var/turf/target)
 	return FALSE
 
-/mob/proc/can_mind_interact(mob/living/carbon/target)
-	//to_chat(world, "Starting can interact on [target]")
-	if(!iscarbon(target))
-		return 0 //Can't see non humans with your fancy human mind.
-	//to_chat(world, "[target] is a human")
+/mob/proc/can_mind_interact(var/datum/mind/target_mind)
+	var/mob/living/target
+	if(isliving(target_mind))
+		target = target_mind
+	else
+		if(!istype(target_mind))
+			return null
+		target = target_mind.current
+	if (!istype(target))
+		return null
 	var/turf/target_turf = get_turf(target)
 	var/turf/our_turf = get_turf(src)
 	if(!target_turf)
-		//to_chat(world, "[target] is in null space")
-		return 0
-	if((target_turf.z != our_turf.z) || target.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
-		//to_chat(world, "[(target_turf.z != our_turf.z) ? "not on the same zlevel as [target]" : "[target] is not concious"]")
-		if(target_turf.z != map.zCentcomm)
-			to_chat(src, "The target mind is too faint...")//Prevent "The mind of Admin is too faint..."
-
-		return 0
+		return null
+	if (target.isDead())
+		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
+		return null
+	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
+		to_chat(src, "The target mind is too faint, they must be quite far from you...")
+		return null
+	if(target.stat != CONSCIOUS)
+		to_chat(src, "The target mind is too faint, but still close, they must be unconscious...")
+		return null
 	if(M_PSY_RESIST in target.mutations)
-		//to_chat(world, "[target] has psy resist")
 		to_chat(src, "The target mind is resisting!")
-		return 0
+		return null
 	if(target.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian,/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
 		to_chat(src, "Interference is disrupting the connection with the target mind.")
-		return 0
-	return 1
+		return null
+	return target
 
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE

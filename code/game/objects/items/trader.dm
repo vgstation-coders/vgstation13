@@ -1393,7 +1393,7 @@ var/global/list/cloudnine_stuff = list(
 /obj/effect/airshield
 	name = "airshield"
 	desc = "A shield that allows only non-gasses to pass through."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "planner"
 	opacity = FALSE
 	mouse_opacity = FALSE

@@ -575,7 +575,7 @@ Class Procs:
 /obj/machinery/proc/emag(mob/user as mob)
 	// Disable emaggability. Note that some machines such as the Communications Computer might be emaggable multiple times.
 	machine_flags &= ~EMAGGABLE
-	new/obj/effect/effect/sparks(get_turf(src))
+	new/obj/effect/sparks(get_turf(src))
 	playsound(loc,"sparks",50,1)
 
 

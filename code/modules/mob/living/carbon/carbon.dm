@@ -657,7 +657,6 @@
 	..()
 	var/static/list/resettable_vars = list(
 		"gender",
-		"antibodies",
 		"last_eating",
 		"life_tick",
 		"number_wounds",
@@ -666,6 +665,8 @@
 		"pulse")
 
 	reset_vars_after_duration(resettable_vars, duration)
+	if(immune_system)
+		immune_system.send_to_past(duration)
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
@@ -674,7 +675,10 @@
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
-				. *= I.slowdown
+				if(I.flags & SLOWDOWN_WHEN_CARRIED)
+					. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
+				else
+					. *= I.slowdown
 
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)

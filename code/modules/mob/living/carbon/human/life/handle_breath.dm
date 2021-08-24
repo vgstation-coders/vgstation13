@@ -78,7 +78,7 @@
 						break
 
 				if(!block)
-					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
+					for(var/obj/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
 						if(smoke.reagents.total_volume)
 							smoke.reagents.reaction(src, INGEST)
 							spawn(5)

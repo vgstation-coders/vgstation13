@@ -10,6 +10,8 @@
 	disallow_job = TRUE
 	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
+	default_admin_voice = "Spider Clan"
+	admin_voice_style = "bold"
 
 	stat_datum_type = /datum/stat/role/ninja
 
@@ -28,7 +30,7 @@
 		AppendObjective(/datum/objective/target/killsilicons)
 	else
 		if(prob(70))
-			AppendObjective(/datum/objective/target/delayed/assassinate)
+			AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 		else
 			AppendObjective(/datum/objective/target/skulls)
 
@@ -65,6 +67,7 @@
 	return dat
 
 /datum/role/ninja/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
 	if(href_list["toggleweeb"])
 		if(href_list["toggleweeb"]=="ninja")
 			equip_ninja(antag.current)
@@ -202,7 +205,7 @@
 			if(!target_ground && close_bright_grounds.len) //Final: whatever is left
 				target_ground = pick(close_bright_grounds)
 			if(target_ground)
-				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+				var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 				smoke.set_up(3, 0, get_turf(H))
 				smoke.start()
 				H.say("[activate_message]")
@@ -485,6 +488,13 @@
 
 /obj/structure/sign/poster/stealth/rip(mob/user)
 	roll_and_drop(get_turf(user))
+
+/obj/structure/sign/poster/stealth/roll_and_drop(turf/newloc)
+	if(newloc)
+		new /obj/item/mounted/poster/stealth(newloc, design)
+	else
+		new /obj/item/mounted/poster/stealth(get_turf(src), design)
+	qdel(src)
 
 /*=======
 Ninja Esword

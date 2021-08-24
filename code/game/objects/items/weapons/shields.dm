@@ -253,6 +253,7 @@
 	desc = "A veritable wall of defense."
 	icon_state = "tower_shield"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
+	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
 	slowdown = 4
 
 /obj/item/weapon/shield/riot/rune

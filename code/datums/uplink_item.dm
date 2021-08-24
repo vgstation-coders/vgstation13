@@ -880,6 +880,14 @@ var/list/uplink_items = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Botanist")
 
+/datum/uplink_item/jobspecific/service/vinesuit
+	name = "Space Vietnam Grass Coat"
+	desc = "This inconspicuous grass coat was woven from kudzu fibers for guerilla missions in Space Vietnam. While wearing the coat, space vines won't entangle, bite, or otherwise harm you."
+	item = 	/obj/item/clothing/suit/mino/vinesafe
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Botanist")
+
 /datum/uplink_item/jobspecific/service/beecase
 	name = "Briefcase Full of Bees"
 	desc = "A briefcase containing twenty angry bees. Will deliver the bee payload when first opened, functions as a normal briefcase after this initial swarm. The bees do not discriminate on targets, so either get someone else to open the briefcase for you or run."
@@ -1087,8 +1095,8 @@ var/list/uplink_items = list()
 	name = "Pocket Satellite"
 	desc = "A grenade which, when detonated in space, creates a circular station with radius 7. The station is loaded with self-powered computers, useful gear, and machinery as well as a teleporter beacon. Anyone right under it when it unfolds is crushed."
 	item = /obj/item/weapon/grenade/station
-	cost = 20
-	discounted_cost = 14
+	cost = 12
+	discounted_cost = 8
 	jobs_with_discount = list("Captain", "Head of Personnel")
 
 /datum/uplink_item/jobspecific/trader

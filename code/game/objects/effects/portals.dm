@@ -3,6 +3,7 @@
 	desc = "Looks stable, but still, best to test it with the clown first."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "portal0"
+	mouse_opacity = 1
 	var/mask = "portal_mask"
 	var/open_sound = 'sound/effects/portal_open.ogg'
 	var/close_sound = 'sound/effects/portal_close.ogg'

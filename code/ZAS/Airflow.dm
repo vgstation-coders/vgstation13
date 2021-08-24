@@ -40,7 +40,7 @@ atom/movable/GotoAirflowDest(n)
 */
 
 /mob/var/tmp/last_airflow_stun = 0
-/mob/proc/airflow_stun()
+/mob/proc/airflow_stun(differential)
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
 		return FALSE
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
@@ -55,7 +55,7 @@ atom/movable/GotoAirflowDest(n)
 		return FALSE
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(5)
+	SetKnockdown(rand(differential/20,differential/10))
 	last_airflow_stun = world.time
 
 /mob/living/silicon/airflow_stun()

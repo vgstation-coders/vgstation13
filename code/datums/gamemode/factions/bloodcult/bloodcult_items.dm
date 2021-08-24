@@ -844,13 +844,8 @@ var/list/arcane_tomes = list()
 					blood = min(100,blood+5)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 
-			if (shade && shade.hud_used && shade.gui_icons && shade.gui_icons.soulblade_bloodbar)
-				var/matrix/MAT = matrix()
-				MAT.Scale(1,blood/maxblood)
-				var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
-				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = MAT
-				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-				shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blood]"
+			if (shade)
+				shade.DisplayUI("Soulblade")
 
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)

@@ -93,8 +93,9 @@ var/global/gourmonger_saturation = 0
 					return 0
 		if((istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
-		if(friends.Find(L))
-			return 0
+		for(var/datum/weakref/ref in friends)
+			if (ref.get() == L)
+				return 0
 		if(!L.stat && !hangry)	//So we attack corpses but not living creatures unless we're starving
 			return 0
 		if(sniffTarget)	//Why are we running across the station if there's food right in front of us?

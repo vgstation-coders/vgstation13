@@ -171,7 +171,6 @@
 
 	name = "dry [src.name]"
 	icon_state = "vomit_[rand(1,4)]_dry"
-	mouse_opacity = 0
 	amount = 0
 	qdel(reagents)
 	reagents = null
@@ -238,6 +237,7 @@
 	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "campfire_burnt"
+	mouse_opacity = 1
 
 /obj/effect/decal/cleanable/clay_fragments
 	name = "clay fragments"
@@ -246,6 +246,7 @@
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "clay_fragments"
 	anchored = 0
+	mouse_opacity = 1
 
 /obj/effect/decal/cleanable/clay_fragments/New()
 	..()
@@ -259,7 +260,6 @@
 	icon = 'icons/effects/tile_effects.dmi'
 	icon_state = "tile_soot"
 	anchored = 1
-	mouse_opacity = 0
 
 	persistence_type = null //Okay, this one is probably too much. A shitton of these get made every plasmaflood and it's not very interesting to clean up.
 

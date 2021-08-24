@@ -194,7 +194,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Continue</A><BR>")
 
 			if(8)	//view messages
-				if(!isAdminGhost(user)) //Do not clear if admin
+				if(!isobserver(user)) //Do not clear if ghost
 					for (var/obj/machinery/requests_console/Console in requests_consoles)
 						if (Console.department == department)
 							Console.newmessagepriority = 0

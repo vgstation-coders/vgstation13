@@ -864,3 +864,12 @@
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/judge
+	name = "Judge ID card"
+	assignment = "Judge"
+	icon_state = "ERT_empty"
+
+/obj/item/weapon/card/id/judge/New()
+	..()
+	access = get_centcom_access("Emergency Responder")

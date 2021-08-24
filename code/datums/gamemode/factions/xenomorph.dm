@@ -17,6 +17,8 @@
 	initroletype = /datum/role/xenomorph
 	roletype = /datum/role/xenomorph
 	playlist = "endgame"
+	default_admin_voice = "Alien Hivemind"
+	admin_voice_style = "alien"
 	var/squad_sent = FALSE
 	var/announceWhen = 0
 
@@ -48,16 +50,16 @@
 		var/living_humans = FALSE
 		for(var/mob/living/carbon/human/M in mob_list)
 			if(!M.mind || M.stat == DEAD)
-				continue 
+				continue
 			var/turf/T = get_turf(M)
 			if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
-				continue 
+				continue
 			living_humans = TRUE
 			break
 		if(!living_humans)
 			return win(HUMANS_WIPED_OUT)
 
-	
+
 */
 /datum/faction/xenomorph/process()
 	if(world.time >= announceWhen && stage < FACTION_ACTIVE)
@@ -87,14 +89,14 @@
 				livingcrew++
 
 
-		
+
 	var/xeno_to_living_ratio = 0
 	if(livingcrew > 0)
 		xeno_to_living_ratio = livingxenos / livingcrew
 
 
 
-	//Alert the crew once the xenos grow past four. 
+	//Alert the crew once the xenos grow past four.
 	if (stage < FACTION_ACTIVE)
 		if(livingxenos > ACTIVE_XENO)
 			stage(FACTION_ACTIVE)
@@ -218,10 +220,10 @@
 
 
 */
-#undef ACTIVE_XENO	
-#undef QUARANTINE_RATIO 
-#undef XENO_ENDGAME_RATIO 
-#undef DEATHSQUAD_RATIO 
+#undef ACTIVE_XENO
+#undef QUARANTINE_RATIO
+#undef XENO_ENDGAME_RATIO
+#undef DEATHSQUAD_RATIO
 
-#undef XENO_STATION_WAS_NUKED 
-#undef HUMANS_WIPED_OUT 
+#undef XENO_STATION_WAS_NUKED
+#undef HUMANS_WIPED_OUT

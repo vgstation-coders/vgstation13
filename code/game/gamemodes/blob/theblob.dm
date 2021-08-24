@@ -18,6 +18,7 @@ var/list/blob_overminds = list()
 	opacity = 0
 	anchored = 1
 	penetration_dampening = 17
+	mouse_opacity = 1
 	var/health = 20
 	var/maxhealth = 20
 	var/health_timestamp = 0
@@ -60,7 +61,7 @@ var/list/blob_overminds = list()
 	time_since_last_pulse = world.time
 
 	if(icon_size == 64)
-		if(!asleep && spawning && !no_morph)
+		if(!asleep && spawning && !no_morph && !istype(src, /obj/effect/blob/core))
 			icon_state = initial(icon_state) + "_spawn"
 			spawn(10)
 				spawning = 0//for sprites
@@ -333,10 +334,12 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/proc/run_action()
 	return 0
 
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source)
+/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source, var/manual = FALSE)
 	if(prob && !prob(health))
 		return
 	if(istype(T, /turf/space) && prob(75))
+		if (source && manual)
+			source.add_points(round(2*BLOBATTCOST/3))
 		return
 	if(!T)
 		var/list/dirs = cardinal.Copy()
@@ -379,6 +382,8 @@ var/list/blob_looks_player = list(//Options available to players
 	else //If we cant move in hit the turf
 		if(!source || !source.restrain_blob)
 			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.
+		if (source && manual)
+			source.add_points(round(2*BLOBATTCOST/3))
 		B.manual_remove = 1
 		B.Delete()
 
@@ -426,7 +431,7 @@ var/list/blob_looks_player = list(//Options available to players
 
 /obj/effect/blob/normal/Delete()
 	..()
-/*
+/*	// Sadly having hundreds of blobs create overlays every few seconds is proving quite laggy
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
 	if(icon_size == 64)

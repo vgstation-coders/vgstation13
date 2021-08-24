@@ -3,17 +3,17 @@
 	desc = "A keyring with a small steel key, and a fancy blue and gold fob."
 	icon_state = "magic_keys"
 
-/obj/effect/effect/trails/firebird
+/obj/effect/trails/firebird
 	base_name = "fire"
 
-/obj/effect/effect/trails/firebird/Play()
+/obj/effect/trails/firebird/Play()
 	dir=pick(cardinal)
 	spawn(rand(10,20))
 		if(src)
 			qdel(src)
 
-/datum/effect/effect/system/trail/firebird
-	trail_type = /obj/effect/effect/trails/firebird
+/datum/effect/system/trail/firebird
+	trail_type = /obj/effect/trails/firebird
 
 /obj/structure/bed/chair/vehicle/firebird
 	name = "\improper Firebird"
@@ -30,11 +30,11 @@
 	pass_flags = PASSMOB|PASSDOOR
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/firebird
 	explodes_fueltanks = TRUE
-	var/datum/effect/effect/system/trail/firebird/ion_trail
+	var/datum/effect/system/trail/firebird/ion_trail
 
 /obj/structure/bed/chair/vehicle/firebird/New()
 	..()
-	ion_trail = new /datum/effect/effect/system/trail/firebird()
+	ion_trail = new /datum/effect/system/trail/firebird()
 	ion_trail.set_up(src)
 	ion_trail.start()
 

@@ -1233,7 +1233,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
 
 /datum/recipe/avocadosoup
-	reagents = list(WATER = 5, LIMEJUICE = 5, CREAM = 10)
+	reagents = list(LIMEJUICE = 5, CREAM = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,

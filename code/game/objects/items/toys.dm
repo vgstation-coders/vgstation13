@@ -565,7 +565,7 @@
 	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
 		if(T.density) //no wallsmoke pls
 			continue
-		var/datum/effect/effect/system/smoke_spread/bad/smoke = new /datum/effect/effect/system/smoke_spread/bad()
+		var/datum/effect/system/smoke_spread/bad/smoke = new /datum/effect/system/smoke_spread/bad()
 		smoke.set_up(5, 0, T)
 		smoke.start()
 	qdel(src)
