@@ -76,6 +76,8 @@
 			else
 				to_chat(src, "<span class='warning'>Unable to make the jump. Looks like all the blobs in a large radius around the target have been destroyed.</span>")
 
+/mob/camera/blob/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+	return
 
 /mob/camera/blob/proc/update_health()
 	DisplayUI("Blob")
