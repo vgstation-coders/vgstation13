@@ -43,7 +43,7 @@
 		AppendObjective(/datum/objective/freeform/syndicate)
 		return
 	if(istype(antag.current, /mob/living/silicon))
-		AppendObjective(/datum/objective/target/delayed/assassinate)
+		AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 
 		AppendObjective(/datum/objective/survive)
 
@@ -51,7 +51,7 @@
 			AppendObjective(/datum/objective/block)
 
 	else
-		AppendObjective(/datum/objective/target/delayed/assassinate)
+		AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 		AppendObjective(/datum/objective/target/steal)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
@@ -146,8 +146,10 @@
 
 /datum/role/traitor/challenger/ForgeObjectives()
 	AppendObjective(/datum/objective/survive)
+
 	if (assassination_target && assassination_target.antag)
-		var/datum/objective/target/assassinate/kill_target = new(auto_target = FALSE)
+		var/datum/objective/target/assassinate/delay_short/kill_target = new(auto_target = FALSE)
+		kill_target.owner = antag
 		if(kill_target.set_target(assassination_target.antag,TRUE))
 			AppendObjective(kill_target)
 			return
