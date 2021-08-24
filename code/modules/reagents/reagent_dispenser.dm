@@ -90,6 +90,16 @@
 	. = ..()
 	reagents.add_reagent(WATER, 1000)
 
+/obj/structure/reagent_dispensers/watertank/suicide_act(var/mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species == "Grey") // harms the grayys
+			to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+			reagents.trans_to(user, amount_per_transfer_from_this)
+			return(SUICIDE_ACT_BRUTELOSS)
+	else
+		return ..()
+	
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
 	desc = "A storage tank containing welding fuel."
@@ -414,6 +424,10 @@
 		return 1
 
 /obj/structure/reagent_dispensers/sacid/suicide_act(var/mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species == "Grey")
+			return ..() // Not harmed by this stuff, so get out
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
 	reagents.trans_to(user, amount_per_transfer_from_this)
 	return(SUICIDE_ACT_BRUTELOSS)
@@ -430,6 +444,7 @@
 
 /obj/structure/reagent_dispensers/degreaser/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and heavily drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
 	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/spooktank
