@@ -743,10 +743,11 @@
 
 /obj/machinery/photobooth/security
 	background = "mugshot"
+	icon_state = "secbooth"
 
 /obj/machinery/photobooth/New()
 	..()
-	var/image/I = image(icon, src, "photobooth_overlay")
+	var/image/I = image(icon, src, "[icon_state]_overlay")
 	I.plane = ABOVE_HUMAN_PLANE
 	I.layer = 0
 	overlays += I
