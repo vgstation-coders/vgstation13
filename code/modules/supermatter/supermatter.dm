@@ -134,12 +134,12 @@
 			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 			empulse(turff, 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
-		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
-		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
+		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 	qdel(src)
 	if (has_exploded > 1)
-		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
+		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 /obj/machinery/power/supermatter/shard/explode()
 	has_exploded++
@@ -148,11 +148,11 @@
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 		empulse(get_turf(src), 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
-		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
-		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
+		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 	qdel(src)
 	if (has_exploded > 1)
-		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted.")
+		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 /obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	Consume(AM)
