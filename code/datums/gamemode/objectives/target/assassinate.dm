@@ -9,7 +9,7 @@ var/list/assassination_objectives = list()
 	delay = 60 SECONDS
 
 /datum/objective/target/assassinate/delay_medium
-	name = "Assassinate <target> after 10 minute"
+	name = "Assassinate <target> after 10 minutes"
 	delay = 10 MINUTES
 
 /datum/objective/target/assassinate/New(var/text,var/auto_target = TRUE, var/mob/user = null)
