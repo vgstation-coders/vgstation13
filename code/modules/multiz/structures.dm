@@ -17,6 +17,10 @@
 
 	var/const/climb_time = 2 SECONDS
 
+/obj/structure/z_ladder/New()
+	if(world.has_round_started())
+		initialize()
+
 /obj/structure/z_ladder/initialize()
 	// the upper will connect to the lower
 	if(allowed_directions & DOWN) //we only want to do the top one, as it will initialize the ones before it.
@@ -133,6 +137,10 @@
 	opacity = 0
 	anchored = 1
 
+/obj/structure/z_ladder/New()
+	if(world.has_round_started())
+		initialize()
+
 /obj/structure/stairs/initialize()
 	for(var/turf/turf in locs)
 		var/turf/simulated/open/above = GetAbove(turf)
@@ -243,10 +251,6 @@
 		var/obj/item/stack/sheet/metal/S = W
 		if(!anchored)
 			to_chat(user, "<span class='warning'>The [src] must be anchored first!.</span>")
-			return
-		var/turf/simulated/open/above = GetAbove(src)
-		if(!above || !isopenspace(above))
-			to_chat(user, "<span class='warning'>The [src] must have an open space above it!.</span>")
 			return
 		else
 			if(S.amount < 4)
