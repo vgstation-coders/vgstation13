@@ -82,9 +82,9 @@
 
 /obj/machinery/atmospherics/pipe/zpipe/proc/normalize_dir()
 	if(dir == (NORTH|SOUTH))
-		set_dir(NORTH)
+		change_dir(NORTH)
 	else if(dir == (EAST|WEST))
-		set_dir(EAST)
+		change_dir(EAST)
 
 /obj/machinery/atmospherics/pipe/zpipe/Destroy()
 	if(node1)
@@ -291,7 +291,6 @@
 	..()
 	dpdir = dir
 	update()
-	return
 
 /obj/structure/disposalpipe/up/nextdir(var/fromdir)
 	var/nextdir
@@ -303,7 +302,7 @@
 
 /obj/structure/disposalpipe/up/transfer(var/obj/structure/disposalholder/H)
 	var/nextdir = nextdir(H.dir)
-	H.set_dir(nextdir)
+	H.change_dir(nextdir)
 
 	var/turf/T
 	var/obj/structure/disposalpipe/P
@@ -352,7 +351,7 @@
 
 /obj/structure/disposalpipe/down/transfer(var/obj/structure/disposalholder/H)
 	var/nextdir = nextdir(H.dir)
-	H.dir = nextdir
+	H.change_dir(nextdir)
 
 	var/turf/T
 	var/obj/structure/disposalpipe/P

@@ -11,10 +11,6 @@
 /turf/space/is_space()
 	return 1
 
-/atom/proc/set_dir(new_dir) //We should probably use this for our whole codebase for shadows. If z-shadow isn't working I may have to implement it widely.
-	. = new_dir != dir
-	dir = new_dir
-
 // Called after turf replaces old one
 /turf/proc/post_change()
 	levelupdate()
