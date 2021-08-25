@@ -41,7 +41,7 @@ var/global/lastDecTalkUse = 0
 /atom/movable/proc/can_speak()
 	return 1
 
-/atom/movable/proc/send_speech(var/datum/speech/speech, var/range=7)
+/atom/movable/proc/send_speech(var/datum/speech/speech, var/range=7, var/bubble_type)
 	say_testing(src, "/atom/movable/proc/send_speech() start, msg = [speech.message]; message_range = [range]; language = [speech.language ? speech.language.name : "None"];")
 	if(isnull(range))
 		range = 7
@@ -52,6 +52,7 @@ var/global/lastDecTalkUse = 0
 		listeners |= observers
 	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
+	send_speech_bubble(speech.message, bubble_type, listeners)
 
 /atom/movable/proc/atmospheric_speech(var/datum/speech/speech, var/range=7)
 	var/turf/T = get_turf(speech.speaker)

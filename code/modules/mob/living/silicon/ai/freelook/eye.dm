@@ -7,6 +7,7 @@
 	name = "Inactive AI Eye"
 	anchored = TRUE
 
+	var/humanlike = FALSE	//don't pass over dense things like walls while this is false, and move at human speed
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/high_res = 0
@@ -16,12 +17,19 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/mob/camera/aiEye/forceMove(atom/destination, no_tp=0, harderforce = TRUE, glide_size_override = 0)
 	if(ai)
+		var/obj/machinery/hologram/holopad/H
+		if(istype(ai.current, /obj/machinery/hologram/holopad))
+			H = ai.current
 		if(!isturf(ai.loc))
 			return
+		if(istype(H))
+			if(!harderforce && get_dist(H, destination) > H.holo_range && H.advancedholo)
+				return
 		if(!isturf(destination))
 			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
+
 		forceEnter(destination)
 
 		cameranet.visibility(src)
@@ -31,10 +39,8 @@
 			ai.see_in_dark = 8
 			ai.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
-		//Holopad
-		if(istype(ai.current, /obj/machinery/hologram/holopad))
-			var/obj/machinery/hologram/holopad/H = ai.current
-			H.move_hologram()
+		if(istype(H))
+			H.move_hologram(harderforce)
 
 		if(ai.camera_light_on)
 			ai.light_cameras()
@@ -91,23 +97,32 @@
 
 /client/proc/AIMove(n, direct, var/mob/living/silicon/ai/user)
 
-
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
-	if(user.cooldown && user.cooldown < world.timeofday) // 3 seconds
+	if((user.cooldown && user.cooldown < world.timeofday) || user.eyeobj.humanlike) // 3 seconds
 		user.sprint = initial
+
+	if(user.eyeobj.humanlike)
+		user.delayNextMove(1)
 
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
 		if(step)
 			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 4))
 				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
-			user.eyeobj.forceMove(step)
+			if(user.eyeobj.humanlike)
+				var/obj/machinery/hologram/holopad/H = user.current
+				if(istype(H))
+					H.holo.dir = direct
+				if(step.Enter(user.eyeobj))
+					user.eyeobj.forceMove(destination = step, harderforce = FALSE)
+			else
+				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
 	user.last_movement=world.time
 
 	user.cooldown = world.timeofday + 5
-	if(user.acceleration)
+	if(user.acceleration && !user.eyeobj.humanlike)
 		user.sprint = min(user.sprint + 0.5, max_sprint)
 	else
 		user.sprint = initial
@@ -119,6 +134,9 @@
 
 /mob/living/silicon/ai/proc/view_core()
 
+//	var/obj/machinery/hologram/holopad/H  = current
+//	if(istype(H))
+//		H.clear_holo()
 
 	current = null
 	cameraFollow = null

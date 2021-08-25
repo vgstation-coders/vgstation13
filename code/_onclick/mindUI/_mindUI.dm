@@ -83,6 +83,11 @@ var/list/mind_ui_ID2type = list()
 		if (element)
 			element.UpdateIcon()
 
+/mob/proc/UpdateAllElementIcons()
+	if (client)
+		for (var/obj/abstract/mind_ui_element/element in client.screen)
+			element.UpdateIcon()
+
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -270,8 +275,10 @@ var/list/mind_ui_ID2type = list()
 	return result
 
 
-/obj/abstract/mind_ui_element/proc/MoveUIElement(var/new_x = 0, var/new_y = 0, var/duration)
-	var/image/ui_image = image(icon, src, icon_state, ABOVE_HUD_LAYER)
+/obj/abstract/mind_ui_element/proc/SlideUIElement(var/new_x = 0, var/new_y = 0, var/duration, var/layer = MIND_UI_BACK, var/hide_after = FALSE)
+	invisibility = 101
+	var/image/ui_image = image(icon, src, icon_state, layer)
+	ui_image.overlays = overlays
 	var/mob/U = GetUser()
 	U.client.images |= ui_image
 	animate(ui_image, pixel_x = new_x - offset_x, pixel_y = new_y - offset_y,  time = duration)
@@ -280,3 +287,5 @@ var/list/mind_ui_ID2type = list()
 		offset_y = new_y
 		UpdateUIScreenLoc()
 		U.client.images -= ui_image
+		if(!hide_after)
+			invisibility = 0

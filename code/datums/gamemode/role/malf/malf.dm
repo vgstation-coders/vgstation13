@@ -28,8 +28,6 @@
 		malfAI.show_laws()
 		malfAI.DisplayUI("Malf")
 
-		new /datum/malf_module/active/coreshield(antag.current)
-
 		var/list/abilities = subtypesof(/datum/malfhack_ability)
 		
 		for(var/A in abilities)
@@ -56,9 +54,10 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		add_power(apcs.len * 0.2)
 
 /datum/role/malfAI/proc/add_power(var/amount)
-	processing_power = clamp(amount + processing_power, 0, max_processing_power)
-	antag.DisplayUI("Malf")
-	update_radial_locks()
+	if(antag && antag.current)
+		processing_power = clamp(amount + processing_power, 0, max_processing_power)
+		antag.current.UpdateAllElementIcons()
+		update_radial_locks()
 
 //Update lock/unlock status for any open radial menus
 /datum/role/malfAI/proc/update_radial_locks()

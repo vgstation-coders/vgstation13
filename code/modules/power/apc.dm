@@ -175,7 +175,8 @@
 /obj/machinery/power/apc/initialize()
 	..()
 	var/area/this_area = get_area(src)
-	name = "[this_area.name] APC"
+	if(this_area)
+		name = "[this_area.name] APC"
 
 	update_icon()
 	add_self_to_holomap()
@@ -715,8 +716,10 @@
 
 /obj/machinery/power/apc/proc/get_malf_status(var/mob/living/silicon/ai/user)
 	var/datum/role/malfAI/M = user.mind.GetRole(MALF)
+	if(!istype(M))
+		return 0 // 0 = User is not a Malf AI
 	if(src in M.currently_hacking_apcs)
-		return 5 		//currently being hacked
+		return 5 		//5 - currently being hacked
 	if (istype(user) && M)
 		if (malfai == (user.parent ? user.parent : user))
 			if (occupant == user)

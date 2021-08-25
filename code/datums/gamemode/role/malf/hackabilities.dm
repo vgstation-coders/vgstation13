@@ -133,3 +133,28 @@
 	if(!istype(C))
 		return
 	C.energy = 0
+
+
+//--------------------------------------------------------
+
+/datum/malfhack_ability/create_lifelike_hologram
+	name = "Create Lifelike Hologram"
+	desc = "Project a realistic looking hologram from this holopad."
+	locked_name = "Create Lifelike Hologram (Requires Module)"
+	icon = "radial_holo"
+	cost = 5
+
+/datum/malfhack_ability/create_lifelike_hologram/activate(var/mob/living/silicon/ai/A)
+	var/obj/machinery/hologram/holopad/C = machine
+	if(!istype(C))
+		return
+	if(C.create_advanced_holo(A))
+		..()
+
+/datum/malfhack_ability/create_lifelike_hologram/check_available(mob/living/silicon/ai/A)
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(!istype(A) || !istype(M))
+		return FALSE
+	if(!(/datum/malf_module/holopadfaker in M.purchased_modules))
+		return FALSE
+	return TRUE

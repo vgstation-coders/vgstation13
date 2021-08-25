@@ -33,13 +33,16 @@ var/const/HOLOPAD_MODE = 0
 	name = "\improper AI holopad"
 	desc = "It's a floor-mounted device for projecting holographic images. It is activated remotely."
 	icon_state = "holopad0"
-	var/mob/living/silicon/ai/master//Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
+	var/mob/living/silicon/ai/master  //Which AI, if any, is controlling the object? Only one AI may control a hologram at any time.
 	var/last_request = 0 //to prevent request spam. ~Carn
-	var/holo_range = 5 // Change to change how far the AI can move away from the holopad before deactivating.
+	var/holo_range = 6 // Change to change how far the AI can move away from the holopad before deactivating.
 	flags = HEAR
 	plane = ABOVE_TURF_PLANE
 	layer = ABOVE_TILE_LAYER
 	machine_flags = SCREWTOGGLE | CROWDESTROY
+	hack_abilities = list(
+		/datum/malfhack_ability/create_lifelike_hologram
+	)
 
 /obj/machinery/hologram/holopad/New()
 	..()
@@ -76,12 +79,13 @@ var/const/HOLOPAD_MODE = 0
 	I don't need to check for client since they're clicking on an object.
 	This may change in the future but for now will suffice.*/
 	user.cameraFollow = null // Stops tracking
-	if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
-		user.eyeobj.forceMove(get_turf(src))
-	else if(!holo)//If there is no hologram, possibly make one.
-		activate_holo(user)
-	else if(master==user)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
+
+	if(master==user)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
+	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
+		user.eyeobj.forceMove(get_turf(src))
+	else if (!holo)//If there is no hologram, possibly make one.
+		activate_holo(user)
 	return
 
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
@@ -131,23 +135,64 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		
 	return 1
 
+/obj/machinery/hologram/holopad/proc/create_advanced_holo(var/mob/living/silicon/ai/A)
+	if(stat & (FORCEDISABLE|NOPOWER))
+		return
+	if(get_dist(A.eyeobj, src) > holo_range)
+		to_chat(A, "<span class='warning'>You must be closer to the holopad to do this.</span>")
+		return
+
+	var/list/available_mobs = generate_appearance_list()
+	var/mob_to_copy = input(A, "Who will this hologram look like?", "Creatures") as null|anything in available_mobs
+	if(!mob_to_copy)
+		return 0
+	advancedholo = TRUE
+	holo = new /obj/effect/overlay/hologram/lifelike(get_turf(src), available_mobs[mob_to_copy])
+	holo.set_glide_size(DELAY2GLIDESIZE(1))
+	master = A
+	use_power = 2
+	if(!A.eyeobj)
+		A.make_eyeobj()
+	A.eyeobj.forceMove(get_turf(src))
+	A.current = src
+	A.client.CAN_MOVE_DIAGONALLY = FALSE
+	A.eyeobj.humanlike = TRUE
+	A.eyeobj.glide_size = DELAY2GLIDESIZE(1)
+	return 1
+
+/obj/machinery/hologram/holopad/proc/generate_appearance_list()
+	var/list/L = living_mob_list + dead_mob_list
+	var/list/newlist = list()
+	for(var/mob/living/M in L)
+		if(M.z != STATION_Z)
+			continue
+		newlist["[M.name]"] = M
+	return newlist
+		
 /obj/machinery/hologram/holopad/proc/clear_holo()
 	if(master && master.holopadoverlays.len)
 		for(var/image/ol in master.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad0"
 				break
-	qdel(holo)//Get rid of hologram.
-	qdel(ray)
-	holo = null
-	ray = null
-	if(master.current == src)
-		master.current = null
-	master = null//Null the master, since no-one is using it now.
+	visible_message("<span class='warning'>The image of [holo] fades away.</span>")
 	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
-	return 1
+	qdel(ray)
+	animate(holo, alpha = 0, time = 5)
+	spawn(5)
+		qdel(holo)//Get rid of hologram.
+		advancedholo = FALSE
+		holo = null
+		ray = null
+		master.client.CAN_MOVE_DIAGONALLY = TRUE
+		if(master.eyeobj)
+			master.eyeobj.humanlike = FALSE
+		if(master.current == src)
+			master.current = null
+		master = null//Null the master, since no-one is using it now.
+		return 1
 
 /obj/machinery/hologram/holopad/emp_act()
 	if(holo)
@@ -171,33 +216,34 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		clear_holo()//If not, we want to get rid of the hologram.
 	return 1
 
-/obj/machinery/hologram/holopad/proc/move_hologram()
+/obj/machinery/hologram/holopad/proc/move_hologram(var/forced = 0 )
 	if(holo)
 		if (get_dist(master.eyeobj, src) <= holo_range)
 			var/turf/T = holo.loc
 			var/turf/dest = get_turf(master.eyeobj)
 			step_to(holo, master.eyeobj) // So it turns.
 			holo.forceMove(dest)
-			var/disty = holo.y - ray.y
-			var/distx = holo.x - ray.x
-			var/newangle
-			if(!disty)
-				if(distx >= 0)
-					newangle = 90
+			if(ray)
+				var/disty = holo.y - ray.y
+				var/distx = holo.x - ray.x
+				var/newangle
+				if(!disty)
+					if(distx >= 0)
+						newangle = 90
+					else
+						newangle = 270
 				else
-					newangle = 270
-			else
-				newangle = arctan(distx/disty)
-				if(disty < 0)
-					newangle += 180
-				else if(distx < 0)
-					newangle += 360
-			var/matrix/M = matrix()
-			if (get_dist(T,dest) <= 1)
-				animate(ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
-			else
-				ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
-		else
+					newangle = arctan(distx/disty)
+					if(disty < 0)
+						newangle += 180
+					else if(distx < 0)
+						newangle += 360
+				var/matrix/M = matrix()
+				if (get_dist(T,dest) <= 1)
+					animate(ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
+				else
+					ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+		else if(!advancedholo || forced)
 			clear_holo()
 	return 1
 
@@ -231,8 +277,9 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	use_power = 1
 	idle_power_usage = 5
 	active_power_usage = 100
-	var/obj/effect/overlay/hologram/holo//The projection itself. If there is one, the instrument is on, off otherwise.
-	var/obj/effect/overlay/holoray/ray//The link between the projection and the projector.
+	var/obj/effect/overlay/hologram/holo 	//The projection itself. If there is one, the instrument is on, off otherwise.
+	var/obj/effect/overlay/holoray/ray		//The link between the projection and the projector.
+	var/advancedholo = FALSE				//are we projecting an advanced hologram? (malf AI)
 
 /obj/machinery/hologram/power_change()
 	if (powered())
@@ -290,3 +337,43 @@ Holographic project of everything else.
 	desc = "It makes a hologram appear...with magnets or something..."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "hologram0"
+
+
+/obj/effect/overlay/hologram/lifelike
+	plane = HUMAN_PLANE
+	layer = 0
+	icon = 'icons/mob/AI.dmi'
+	icon_state = "holo1"
+
+/obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy)
+	..()
+	steal_appearance(mob_to_copy)
+
+/obj/effect/overlay/hologram/lifelike/proc/steal_appearance(var/mob/living/M)
+	name = M.name
+	appearance = M.appearance
+	var/datum/log/L = new
+	M.examine(L)
+	desc = L.log
+	qdel(L)
+
+/obj/effect/overlay/hologram/lifelike/examine(mob/user, var/size = "")
+	if(desc)
+		to_chat(user, desc)
+	
+
+/obj/effect/overlay/hologram/lifelike/attack_hand(var/mob/living/M)
+	M.visible_message(\
+	"<span class='warning'>[M]'s hand passes straight through [src]!</span>", \
+	"<span class='warning'>Your hand passes straight through [src]!</span>", \
+	)
+
+/obj/effect/overlay/hologram/lifelike/attackby(var/obj/O)
+	visible_message("<span class='warning'>The [O] passes straight through [src]!</span>")
+
+/obj/effect/overlay/hologram/lifelike/bullet_act(var/obj/item/projectile/Proj)
+	visible_message("<span class='warning'>The [Proj] passes straight through [src]!</span>")
+
+/obj/effect/overlay/hologram/lifelike/Cross(atom/movable/AM)
+	if(AM.density == TRUE)
+		visible_message("<span class='warning'>The [AM] passes straight through [src]!</span>")
