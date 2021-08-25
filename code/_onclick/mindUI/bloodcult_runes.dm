@@ -3,7 +3,6 @@
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "rune_back"
 	layer = MIND_UI_BUTTON
-	mouse_opacity = 1
 	var/word = ""
 	var/hovering = FALSE
 	var/image/word_overlay
@@ -107,7 +106,9 @@
 
 /obj/abstract/mind_ui_element/hoverable/rune_close
 	name = "Hide UI"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "return"
+	layer = MIND_UI_BUTTON
 	var/hovering = FALSE
 
 /obj/abstract/mind_ui_element/hoverable/rune_close/StartHovering()
