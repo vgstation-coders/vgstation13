@@ -76,7 +76,7 @@
 		return // Nope
 	..()
 
-/obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/user)
+/obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/living/user)
 	if(!src.process_chambered()) //No rocket in the rocket launcher
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS
@@ -145,7 +145,7 @@
 		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		fired.detonate()
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/living/user)
 	if(!loaded)
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS

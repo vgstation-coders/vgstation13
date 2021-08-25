@@ -197,12 +197,6 @@
 	melt_temperature = MELTPOINT_STEEL
 	hitsound = 'sound/weapons/bladeslice.ogg'
 
-/obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You accidentally cut yourself with the [src].</span>")
@@ -277,12 +271,6 @@
 				new /obj/item/weapon/metal_blade(get_turf(src.loc))
 			qdel(src)
 			return
-
-/obj/item/weapon/kitchen/utensil/knife/large/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"

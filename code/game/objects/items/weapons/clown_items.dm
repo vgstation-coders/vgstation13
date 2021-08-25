@@ -61,7 +61,7 @@
 	var/can_honk_baton = 1
 	var/next_honk = 0
 
-/obj/item/weapon/bikehorn/suicide_act(mob/user)
+/obj/item/weapon/bikehorn/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
 	playsound(user, hitsound, 100, vary_pitch)
 	user.gib()

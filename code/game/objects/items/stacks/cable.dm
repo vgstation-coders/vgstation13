@@ -38,8 +38,12 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	attack_verb = list("whips", "lashes", "disciplines", "flogs")
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 
-/obj/item/stack/cable_coil/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+// Noose suicides, now ported from hippie!
+/obj/item/stack/cable_coil/suicide_act(var/mob/living/user)
+	if(locate(/obj/item/weapon/stool) in get_turf(user))
+		user.visible_message("<span class='danger'>[user] is making a noose with \the [src.name]! It looks like \he's trying to commit suicide!</span>")
+	else
+		user.visible_message("<span class='danger'>[user] is strangling \himself with \the [src.name]! It looks like \he's trying to commit suicide!</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/stack/cable_coil/New(loc, amount, var/param_color = null)
