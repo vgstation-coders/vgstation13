@@ -232,7 +232,7 @@
 	speed = initial(speed)
 	icon_state = icon_living
 
-	..(anim)
+	..()
 	speak_chance = initial(speak_chance)
 	turns_per_move = initial(turns_per_move)
 

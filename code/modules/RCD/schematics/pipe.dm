@@ -241,7 +241,7 @@
 // Rule of thumb: scrolling is clockwise.
 /datum/rcd_schematic/pipe/proc/get_dirs()
 	switch(pipe_type)
-		if(PIPE_UNARY||PIPE_Z_UP_BINARY||PIPE_Z_DOWN_BINARY)
+		if(PIPE_UNARY, PIPE_Z_UP_BINARY, PIPE_Z_DOWN_BINARY)
 			. = list(NORTH, EAST, SOUTH, WEST)
 
 		if(PIPE_TRINARY)

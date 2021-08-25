@@ -36,7 +36,7 @@
 		target_up = null
 	return ..()
 
-/obj/structure/z_ladder/attackby(obj/item/C as obj, mob/user as mob)
+/obj/structure/z_ladder/attackby(obj/item/C, mob/user)
 	attack_hand(user)
 
 /obj/structure/z_ladder/attack_hand(var/mob/M)
@@ -167,7 +167,7 @@
 /obj/structure/stairs/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
 
-/obj/structure/stairs/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/stairs/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
@@ -224,7 +224,7 @@
 	icon_state = "stairframe"
 	density = 0
 
-/obj/structure/stairs_frame/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/stairs_frame/attackby(obj/item/W, mob/user)
 	if(W.is_wirecutter(user))
 		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \

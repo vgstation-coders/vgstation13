@@ -341,7 +341,6 @@
 	..()
 	dpdir = dir
 	update()
-	return
 
 /obj/structure/disposalpipe/down/nextdir(var/fromdir)
 	var/nextdir
