@@ -16,6 +16,7 @@
 	flags = FPRINT  | OPENCONTAINER
 	possible_transfer_amounts = list(1,5,10)
 	volume = 50
+	var/condiment_overlay = null
 
 /obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -102,6 +103,8 @@
 			return
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
+		if (condiment_overlay && istype (target, /obj/item/weapon/reagent_containers/food/snacks))
+			target.overlays += image('icons/obj/food.dmi',target,condiment_overlay)
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
 			transfer(target, user, splashable_units = amount_per_transfer_from_this)
@@ -111,7 +114,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
 	if(reagents.reagent_list.len > 0)
-
+		condiment_overlay = null
 		item_state = null
 		switch(reagents.get_master_reagent_id())
 
@@ -119,6 +122,7 @@
 				name = KETCHUP
 				desc = "You feel more American already."
 				icon_state = KETCHUP
+				condiment_overlay = "ketchup"
 			if(MUSTARD)
 				name = "mustard"
 				desc = "A spicy yellow paste."
@@ -163,14 +167,17 @@
 				name = "salt shaker"
 				desc = "Salt. From space oceans, presumably."
 				icon_state = "saltshakersmall"
+				condiment_overlay = "salt"
 			if(BLACKPEPPER)
 				name = "pepper mill"
 				desc = "Often used to flavor food or make people sneeze."
 				icon_state = "peppermillsmall"
+				condiment_overlay = "pepper"
 			if(HOLYSALTS)
 				name = "holy salts"
 				desc = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
 				icon_state = "holysalts"
+				condiment_overlay = "holysalt"
 			if(CORNOIL)
 				name = "corn oil"
 				desc = "A delicious oil used in cooking. Made from corn."
@@ -213,9 +220,16 @@
 				desc = "A vital component for making chocolate."
 				icon_state = COCO
 			if(MAYO)
-				name = "Mayonaise Jar"
-				desc = "Here be mayo." //placeholder desc
+				name = "mayonaise jar"
+				desc = "Not an instrument."
 				icon_state = MAYO
+				condiment_overlay = "mayo"
+			if(CREAM)
+				name = "whipped cream dispenser"
+				desc = "Instant delight." //placeholder desc
+				icon_state = CREAM
+				item_state = "whippedcream"
+				condiment_overlay = "cream"
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -465,3 +479,12 @@
 /obj/item/weapon/reagent_containers/food/condiment/mayo/New()
 	..()
 	reagents.add_reagent(MAYO, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/cream
+	name = "whipped cream dispenser"
+	desc = "Instant delight!"
+
+/obj/item/weapon/reagent_containers/food/condiment/cream/New()
+	..()
+	reagents.add_reagent(CREAM, 50)
