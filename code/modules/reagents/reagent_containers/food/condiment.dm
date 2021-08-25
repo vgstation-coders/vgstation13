@@ -472,6 +472,15 @@
 	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
 
 
+/obj/item/weapon/reagent_containers/food/condiment/coco
+	name = "cocoa powder"
+	desc = "A vital component for making chocolate."
+
+/obj/item/weapon/reagent_containers/food/condiment/coco/New()
+	..()
+	reagents.add_reagent(COCO, 50)
+
+
 /obj/item/weapon/reagent_containers/food/condiment/mayo
 	name = "mayonnaise jar"
 	desc = "we have such sights to show you."
