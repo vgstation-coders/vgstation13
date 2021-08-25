@@ -116,6 +116,8 @@
 	volume = 70
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH
+	var/obj/machinery/atmospherics/node1
+	var/obj/machinery/atmospherics/node2
 	var/minimum_temperature_difference = 300
 	var/thermal_conductivity = 0 //WALL_HEAT_TRANSFER_COEFFICIENT No
 	color = "#B4B4B4"
@@ -441,7 +443,8 @@
 	color = "#B4B4B4"
 	dir = SOUTH
 	initialize_directions = EAST|NORTH|WEST
-	/*For node 1-2, see atmospherics.dm*/
+	var/obj/machinery/atmospherics/node1
+	var/obj/machinery/atmospherics/node2
 	var/obj/machinery/atmospherics/node3
 	level = LEVEL_BELOW_FLOOR
 	layer = PIPE_LAYER
@@ -684,7 +687,8 @@
 	dir = SOUTH
 	initialize_directions = NORTH|SOUTH|EAST|WEST
 	color = "#B4B4B4"
-	/*For node 1-2, see atmospherics.dm*/
+	var/obj/machinery/atmospherics/node1
+	var/obj/machinery/atmospherics/node2
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
 	level = LEVEL_BELOW_FLOOR

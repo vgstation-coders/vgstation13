@@ -4,6 +4,7 @@
 	layer = UNARY_PIPE_LAYER
 	can_be_coloured = 0
 	var/datum/gas_mixture/air_contents
+	var/obj/machinery/atmospherics/node1
 	var/datum/pipe_network/network
 
 /obj/machinery/atmospherics/unary/New()

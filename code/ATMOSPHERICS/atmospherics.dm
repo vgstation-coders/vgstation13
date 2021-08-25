@@ -43,9 +43,6 @@ Pipelines + Other Objects -> Pipe network
 	plane = ABOVE_TURF_PLANE
 	layer = PIPE_LAYER
 	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
-	//We brought this down to the atmospherics level. You don't need to use it for most pipes, but it's used for some things like machineries!
-	var/obj/machinery/atmospherics/node1
-	var/obj/machinery/atmospherics/node2
 
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
 
