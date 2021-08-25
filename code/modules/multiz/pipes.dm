@@ -12,9 +12,9 @@
 
 	dir = SOUTH
 	initialize_directions = SOUTH
-
-	// node1 is the connection on the same Z
-	// node2 is the connection on the other Z
+	
+	var/obj/machinery/atmospherics/node1
+	var/obj/machinery/atmospherics/node2
 
 	var/minimum_temperature_difference = 300
 	var/thermal_conductivity = 0 //WALL_HEAT_TRANSFER_COEFFICIENT No
