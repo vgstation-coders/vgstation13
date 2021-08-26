@@ -17,6 +17,7 @@
 	possible_transfer_amounts = list(1,5,10)
 	volume = 50
 	var/condiment_overlay = null
+	var/overlay_colored = FALSE
 
 /obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -108,6 +109,8 @@
 			var/image/I = image('icons/obj/food.dmi',target,condiment_overlay)
 			I.pixel_x = text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x
 			I.pixel_y = text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y
+			if (overlay_colored)
+				I.color = mix_color_from_reagents(reagents.reagent_list)
 			target.overlays += I
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
@@ -119,7 +122,9 @@
 
 	if(reagents.reagent_list.len > 0)
 		condiment_overlay = null
+		overlay_colored = FALSE
 		item_state = null
+		overlays.len = 0
 		switch(reagents.get_master_reagent_id())
 
 			if(KETCHUP)
@@ -207,12 +212,21 @@
 				name = "honey pot"
 				desc = "Sweet and healthy!"
 				icon_state = HONEY
-				item_state = null
+				condiment_overlay = HONEY
+				var/image/I = image(icon, src, "honey-color")
+				I.color = mix_color_from_reagents(reagents.reagent_list)
+				overlays += I
+				overlay_colored = TRUE
 			if(ROYALJELLY)
 				name = "royal jelly pot"
 				desc = "Spicy and healthy!"
 				icon_state = ROYALJELLY
 				item_state = HONEY
+				condiment_overlay = ROYALJELLY
+				var/image/I = image(icon, src, "royaljelly-color")
+				I.color = mix_color_from_reagents(reagents.reagent_list)
+				overlays += I
+				overlay_colored = TRUE
 			if(CINNAMON)
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."
@@ -238,8 +252,12 @@
 				name = "liquid butter bottle"
 				desc = "A one way trip to obesity."
 				icon_state = LIQUIDBUTTER
-				item_state = LIQUIDBUTTER
 				condiment_overlay = LIQUIDBUTTER
+			if(MAPLESYRUP)
+				name = "maple syrup"
+				desc = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
+				icon_state = MAPLESYRUP
+				condiment_overlay = MAPLESYRUP
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -516,3 +534,12 @@
 /obj/item/weapon/reagent_containers/food/condiment/liquidbutter/New()
 	..()
 	reagents.add_reagent(LIQUIDBUTTER, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/maple_syrup
+	name = "maple syrup"
+	desc = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
+
+/obj/item/weapon/reagent_containers/food/condiment/maple_syrup/New()
+	..()
+	reagents.add_reagent(MAPLESYRUP, 50)

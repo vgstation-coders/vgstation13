@@ -5134,6 +5134,29 @@
 		return 1
 	M.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT
 
+/datum/reagent/pancake_mix
+	name = "pancake mix"
+	id = PANCAKE
+	description = "A mix of flour, milk, butter, and egg yolk. ready to be cooked into delicious pancakes."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 15 * REAGENTS_METABOLISM
+	color = "#E6C968" //rgb: 90, 78, 40
+
+/datum/reagent/pancake_mix/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	M.nutrition += nutriment_factor
+
+/datum/reagent/pancake_mix/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(!(locate(/obj/effect/decal/cleanable/flour) in T))
+		var/obj/effect/decal/cleanable/flour/F = new (T)
+		F.color = "#E6C968"
+
 /datum/reagent/rice
 	name = "Rice"
 	id = RICE
@@ -5172,7 +5195,7 @@
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
 	nutriment_factor = 4 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
@@ -5220,7 +5243,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/irradiatedbeans/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5237,7 +5260,7 @@
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
-	
+
 /datum/reagent/toxicwaste/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5261,7 +5284,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/mutatedbeans/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5292,7 +5315,7 @@
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-	
+
 /datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5316,7 +5339,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
-	
+
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
@@ -5332,9 +5355,9 @@
 
 	if(prob(5))
 		M.adjustToxLoss(1)
-	
+
 	if(prob(5))
-		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage 
+		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage
 
 /datum/reagent/glowingramen
 	name = "Glowing Ramen Noodles"
@@ -5348,7 +5371,7 @@
 
 	if(..())
 		return 1
-	
+
 	if(prob(10))
 		M.apply_radiation(1, RAD_INTERNAL)
 
