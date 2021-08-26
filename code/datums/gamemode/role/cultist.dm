@@ -140,6 +140,7 @@
 
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
+	DisplayUI("Cultist")
 
 /datum/role/cultist/proc/update_cult_hud()
 	var/mob/M = antag?.current
