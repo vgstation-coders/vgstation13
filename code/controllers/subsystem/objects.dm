@@ -19,7 +19,7 @@ var/list/processing_objects = list()
 
 /datum/subsystem/obj/Initialize()
 	for(var/atom/object in world)
-		if(!(flags & ATOM_INITIALIZED))
+		if(!(object.flags & ATOM_INITIALIZED))
 			var/time_start = world.timeofday
 			object.initialize()
 			var/time = (world.timeofday - time_start)
