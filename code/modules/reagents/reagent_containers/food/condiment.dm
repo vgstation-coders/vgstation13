@@ -107,8 +107,8 @@
 		if (condiment_overlay && istype (target, /obj/item/weapon/reagent_containers/food/snacks))
 			var/list/params_list = params2list(params)
 			var/image/I = image('icons/obj/food.dmi',target,condiment_overlay)
-			I.pixel_x = text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x
-			I.pixel_y = text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y
+			I.pixel_x = clamp(text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
+			I.pixel_y = clamp(text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			if (overlay_colored)
 				I.color = mix_color_from_reagents(reagents.reagent_list)
 			target.overlays += I
@@ -224,6 +224,15 @@
 				item_state = HONEY
 				condiment_overlay = ROYALJELLY
 				var/image/I = image(icon, src, "royaljelly-color")
+				I.color = mix_color_from_reagents(reagents.reagent_list)
+				overlays += I
+				overlay_colored = TRUE
+			if(CHILLWAX)
+				name = "chill wax pot"
+				desc = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
+				icon_state = HONEY
+				condiment_overlay = HONEY
+				var/image/I = image(icon, src, "honey-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
 				overlays += I
 				overlay_colored = TRUE
@@ -543,3 +552,12 @@
 /obj/item/weapon/reagent_containers/food/condiment/maple_syrup/New()
 	..()
 	reagents.add_reagent(MAPLESYRUP, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/chillwax
+	name = "chill wax pot"
+	desc = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
+
+/obj/item/weapon/reagent_containers/food/condiment/chillwax/New()
+	..()
+	reagents.add_reagent(CHILLWAX, 50)
