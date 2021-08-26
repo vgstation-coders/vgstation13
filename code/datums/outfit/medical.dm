@@ -89,6 +89,7 @@
 		"Default" = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
 			slot_w_uniform_str = list(
+				"Orderly" = /obj/item/clothing/under/rank/orderly,
 				"Emergency Physician" = /obj/item/clothing/under/rank/medical,
 				"Surgeon" =  /obj/item/clothing/under/rank/medical/blue,
 				"Medical Doctor" = /obj/item/clothing/under/rank/medical,
@@ -101,13 +102,24 @@
 				"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
 			),
 			slot_head_str = list(
-				"Surgeron" = /obj/item/clothing/head/surgery/blue,
+				"Surgeon" = /obj/item/clothing/head/surgery/blue,
 			),
-			slot_s_store_str = /obj/item/device/flashlight/pen,
+			slot_s_store_str = list(
+				"Emergency Physician" = /obj/item/device/flashlight/pen,
+				"Surgeon" = /obj/item/device/flashlight/pen,
+				"Medical Doctor" = /obj/item/device/flashlight/pen,
+			),
+			slot_l_store_str = list(
+				"Orderly" = /obj/item/weapon/reagent_containers/syringe/stoxin,
+			),
+			slot_r_store_str = list(
+				"Orderly" = /obj/item/weapon/soap,
+			),
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
 			slot_w_uniform_str = list(
+				"Orderly" = /obj/item/clothing/under/rank/orderly,
 				"Emergency Physician" = /obj/item/clothing/under/rank/medical,
 				"Surgeon" =  /obj/item/clothing/under/rank/medical/blue,
 				"Medical Doctor" = /obj/item/clothing/under/rank/medical,
@@ -117,10 +129,17 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_l_store_str = list(
+				"Orderly" = /obj/item/weapon/reagent_containers/syringe/stoxin,
+			),
+			slot_r_store_str = list(
+				"Orderly" = /obj/item/weapon/soap,
+			),
 		),
 		/datum/species/vox = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
 			slot_w_uniform_str = list(
+				"Orderly" = /obj/item/clothing/under/rank/orderly,
 				"Emergency Physician" = /obj/item/clothing/under/rank/medical,
 				"Surgeon" =  /obj/item/clothing/under/rank/medical/blue,
 				"Medical Doctor" = /obj/item/clothing/under/rank/medical,
@@ -130,6 +149,12 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_l_store_str = list(
+				"Orderly" = /obj/item/weapon/reagent_containers/syringe/stoxin,
+			),
+			slot_r_store_str = list(
+				"Orderly" = /obj/item/weapon/soap,
+			),
 		),
 	)
 
@@ -182,7 +207,10 @@
 
 /datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
+	if(H.mind.role_alt_title == "Orderly")
+		H.put_in_hands(new /obj/item/clothing/suit/straight_jacket)
+	else
+		H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)

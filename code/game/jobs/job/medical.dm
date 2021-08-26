@@ -28,7 +28,7 @@
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
-	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
+	alt_titles = list("Emergency Physician", "Nurse", "Surgeon", "Orderly")
 	outfit_datum = /datum/outfit/doctor
 
 //Chemist is a medical job damnit	//YEAH FUCK YOU SCIENCE	-Pete	//Guys, behave -Erro //No, fuck science
