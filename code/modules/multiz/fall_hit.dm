@@ -102,6 +102,8 @@
 	..()
 	Consume(hit_atom)
 
+var/global/list/non_items = list(/obj/machinery,/obj/structure)
+
 // Opposite of fall_impact, called when something is dropped on someone
 /atom/movable/proc/fall_act(var/atom/hitting_atom)
 	return
@@ -119,7 +121,7 @@
 		AdjustKnockdown(((2 * min(hitting_atom.zs_fallen,5)) * gravity) * I.w_class)
 		if(I.w_class == W_CLASS_GIANT)
 			gib()
-	else if(is_type_in_list(hitting_atom,list(/obj/machinery,/obj/structure)))
+	else if(is_type_in_list(hitting_atom,non_items))
 		var/damage = ((3 * min(hitting_atom.zs_fallen,5)) * gravity)
 		if(hitting_atom.density)
 			damage *= 3

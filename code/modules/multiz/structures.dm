@@ -20,6 +20,7 @@
 /obj/structure/z_ladder/New()
 	if(world.has_round_started())
 		initialize()
+	..()
 
 /obj/structure/z_ladder/initialize()
 	// the upper will connect to the lower
@@ -137,9 +138,10 @@
 	opacity = 0
 	anchored = 1
 
-/obj/structure/z_ladder/New()
+/obj/structure/stairs/New()
 	if(world.has_round_started())
 		initialize()
+	..()
 
 /obj/structure/stairs/initialize()
 	for(var/turf/turf in locs)
