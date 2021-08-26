@@ -124,3 +124,16 @@
 		icon_state = "biofoam1"
 	else
 		icon_state = "biofoam0"
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/sedative_injector
+	name = "sedative injector"
+	desc = "A small, single-use device used to administer small amounts of sedative."
+	amount_per_transfer_from_this = 15
+	volume = 15
+	flags = FPRINT
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/sedative_injector/New()
+	..()
+	reagents.remove_reagent(DOCTORSDELIGHT, 30)
+	reagents.add_reagent(AMASEC, 1)
+	return

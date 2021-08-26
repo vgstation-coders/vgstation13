@@ -55,6 +55,22 @@
 		icon_state = "trashbag3"
 		slowdown = 1.8
 
+/obj/item/weapon/storage/bag/trash/bio
+	name = "hazardous waste bag"
+	desc = "A heavy-duty sterilized garbage bag for handling infectious medical waste and sharps."
+	icon_state = "biobag0"
+	item_state = "biobag"
+
+	sterility = "10"
+	fits_max_w_class = W_CLASS_LARGE
+	can_only_hold = list(
+		/obj/item/trash,
+		/obj/item/weapon/shard,
+		/obj/item/weapon/reagent_containers,
+		/obj/item/organ,
+		/obj/item/stack/medical,
+	)
+	slot_flags = SLOT_BELT
 
 // -----------------------------
 //        Plastic Bag

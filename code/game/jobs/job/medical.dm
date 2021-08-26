@@ -28,7 +28,7 @@
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
-	alt_titles = list("Emergency Physician", "Nurse", "Surgeon", "Orderly")
+	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
 	outfit_datum = /datum/outfit/doctor
 
 //Chemist is a medical job damnit	//YEAH FUCK YOU SCIENCE	-Pete	//Guys, behave -Erro //No, fuck science
@@ -82,6 +82,18 @@
 	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue, access_surgery)
 	alt_titles = list("Brig Medic")
 	outfit_datum = /datum/outfit/paramedic
+
+/datum/job/orderly
+	title = "Orderly"
+	faction = "Station"
+	total_positions = 2
+	spawn_positions = 1
+	supervisors = "the chief medical officer"
+	wage_payout = 55
+	selection_color = "#ffeef0"
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry)
+	minimal_access = list(access_medical, access_morgue, access_surgery)
+	outfit_datum = /datum/outfit/orderly
 
 /*
 /datum/job/psychiatrist
