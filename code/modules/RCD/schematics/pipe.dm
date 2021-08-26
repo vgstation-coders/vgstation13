@@ -479,6 +479,8 @@ var/global/list/disposalpipeID2State = list(
 	"intake",
 	"pipe-j1s",
 	"pipe-j1s",
+	"pipe-u",
+	"pipe-d"
 )
 
 //This is a meta thing to send a blended pipe sprite to clients, basically the default straight pipe, but blended blue.
@@ -826,3 +828,17 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= DISP_SORT_WRAP_JUNCTION
 	actual_id	= 11
 	pipe_type	= PIPE_TRINARY
+
+/datum/rcd_schematic/pipe/disposal/up
+	name		= "Up Pipe"
+
+	pipe_id		= DISP_PIPE_UP
+	actual_id	= 13
+	pipe_type	= PIPE_Z_UP_BINARY
+
+/datum/rcd_schematic/pipe/disposal/down
+	name		= "Down Pipe"
+
+	pipe_id		= DISP_PIPE_DOWN
+	actual_id	= 14
+	pipe_type	= PIPE_Z_DOWN_BINARY

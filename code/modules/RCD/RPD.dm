@@ -70,6 +70,8 @@
 	if(map.multiz)
 		schematics.Add(/datum/rcd_schematic/pipe/z_up)
 		schematics.Add(/datum/rcd_schematic/pipe/z_down)
+		schematics.Add(/datum/rcd_schematic/disposalpipe/up)
+		schematics.Add(/datum/rcd_schematic/disposalpipe/down)
 	..()
 
 /obj/item/device/rcd/rpd/examine(var/mob/user)
