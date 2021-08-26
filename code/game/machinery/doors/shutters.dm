@@ -9,7 +9,10 @@
 
 /obj/machinery/door/poddoor/shutters/New()
 	..()
-	layer = ABOVE_DOOR_LAYER
+	if(density)
+		layer = closed_layer
+	else
+		layer = open_layer
 
 /obj/machinery/door/poddoor/shutters/preopen
 	icon_state = "shutter0"
@@ -17,7 +20,7 @@
 	opacity = 0
 
 /obj/machinery/door/poddoor/shutters/preopen/toplayer
-	layer = 5
+	open_layer = ABOVE_DOOR_LAYER
 
 /obj/machinery/door/poddoor/shutters/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
