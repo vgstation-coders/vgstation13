@@ -366,6 +366,8 @@
 		return FALSE
 	if(istype(W, /obj/item/device/analyzer/plant_analyzer)) //ugly hack but what can you do
 		return FALSE
+	if(istype(W, /obj/item/weapon/reagent_containers/food/condiment))
+		return FALSE
 	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)

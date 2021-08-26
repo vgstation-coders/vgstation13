@@ -77,7 +77,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
+/obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag, params)
 	if(!flag || ismob(target))
 		return 0
 	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
@@ -104,7 +104,11 @@
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
 		if (condiment_overlay && istype (target, /obj/item/weapon/reagent_containers/food/snacks))
-			target.overlays += image('icons/obj/food.dmi',target,condiment_overlay)
+			var/list/params_list = params2list(params)
+			var/image/I = image('icons/obj/food.dmi',target,condiment_overlay)
+			I.pixel_x = text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x
+			I.pixel_y = text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y
+			target.overlays += I
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
 			transfer(target, user, splashable_units = amount_per_transfer_from_this)
@@ -229,7 +233,13 @@
 				desc = "Instant delight." //placeholder desc
 				icon_state = CREAM
 				item_state = "whippedcream"
-				condiment_overlay = "cream"
+				condiment_overlay = CREAM
+			if(LIQUIDBUTTER)
+				name = "liquid butter bottle"
+				desc = "A one way trip to obesity."
+				icon_state = LIQUIDBUTTER
+				item_state = LIQUIDBUTTER
+				condiment_overlay = LIQUIDBUTTER
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -497,3 +507,12 @@
 /obj/item/weapon/reagent_containers/food/condiment/cream/New()
 	..()
 	reagents.add_reagent(CREAM, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/liquidbutter
+	name = "liquid butter bottle"
+	desc = "A one way trip to obesity."
+
+/obj/item/weapon/reagent_containers/food/condiment/liquidbutter/New()
+	..()
+	reagents.add_reagent(LIQUIDBUTTER, 50)
