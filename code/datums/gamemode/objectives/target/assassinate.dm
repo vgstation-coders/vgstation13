@@ -73,6 +73,8 @@ var/list/assassination_objectives = list()
 		if(target.current.stat == DEAD || issilicon(target.current) || isbrain(target.current) || target.current.z > 6 || !target.current.ckey || isborer(target.current))
 			return TRUE
 		return FALSE
+	if (delayed_target) // our target hasn't been revealed yet
+		return FALSE
 	return TRUE
 
 /datum/objective/target/assassinate/proc/SyndicateCertification()
