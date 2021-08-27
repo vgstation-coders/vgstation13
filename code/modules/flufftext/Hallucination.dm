@@ -21,11 +21,14 @@ mob/living/carbon/var
 	hal_crit = 0
 
 mob/living/carbon/proc/handle_hallucinations()
-	if(handling_hal)
+	if(handling_hal || isUnconscious())
 		return
 	handling_hal = 1
 	while(hallucination > 20)
 		sleep(max(MIN_HAL_SLEEP,(rand(200,500)/(hallucination/25))))
+
+		if (isUnconscious())
+			return
 
 		if(gcDestroyed)
 			return
@@ -151,14 +154,16 @@ mob/living/carbon/proc/handle_hallucinations()
 							//To make it more realistic, I added two gunshots (enough to kill)
 							src << 'sound/weapons/Gunshot.ogg'
 							spawn(rand(10,30))
-								src << 'sound/weapons/Gunshot.ogg'
+								if (!isUnconscious())
+									src << 'sound/weapons/Gunshot.ogg'
 						if(10)
 							src << 'sound/weapons/smash.ogg'
 						if(11)
 							//Same as above, but with tasers.
 							src << 'sound/weapons/Taser.ogg'
 							spawn(rand(10,30))
-								src << 'sound/weapons/Taser.ogg'
+								if (!isUnconscious())
+									src << 'sound/weapons/Taser.ogg'
 					//Rare audio
 						if(12)
 							//These sounds are (mostly) taken from Hidden: Source
@@ -184,7 +189,8 @@ mob/living/carbon/proc/handle_hallucinations()
 						if(16) //rip pomf
 							src << 'sound/machines/ya_dun_clucked.ogg'
 							spawn(rand(1,15))
-								to_chat(src, "<i>You are filled with a great sadness.</i>")
+								if (!isUnconscious())
+									to_chat(src, "<i>You are filled with a great sadness.</i>")
 
 			if(66 to 70)
 				//Flashes of danger
@@ -256,7 +262,7 @@ mob/living/carbon/proc/handle_hallucinations()
 						if(4)
 							to_chat(src, "<span class='warning'>Your joints feel very stiff.</span>")
 						if(5)
-							src.say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
+							say(pick("Beep, boop", "beep, beep!", "Boop...bop"))
 						if(6)
 							to_chat(src, "Your skin feels loose.")
 						if(7)
@@ -280,7 +286,8 @@ mob/living/carbon/proc/handle_hallucinations()
 			if(82 to 85) //Clown
 				src << get_sfx("clownstep")
 				spawn(rand(16,28))
-					src << get_sfx("clownstep")
+					if (!isUnconscious())
+						src << get_sfx("clownstep")
 			if(86) //Makes a random mob near you look like a random food item
 				if(prob(15))
 					var/mob/living/L = src //Mob to change appearance of (you by default)
