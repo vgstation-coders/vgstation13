@@ -756,7 +756,7 @@
 
 /obj/machinery/photobooth/New()
 	..()
-	PO = new obj/effect/photobooth_overlay(loc)
+	PO = new /obj/effect/photobooth_overlay(loc)
 	PO.icon_state = "[icon_state]_overlay"
 
 /obj/machinery/photobooth/Destroy()
