@@ -33,6 +33,7 @@ var/list/one_way_windows
 
 	var/fire_temp_threshold = 800
 	var/fire_volume_mod = 100
+	var/dmg_threshold = 0 //Minimum amount of item damage to start damaging window
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
@@ -123,9 +124,14 @@ var/list/one_way_windows
 			damage_overlay.icon_state = "[cracked_base][damage_fraction]"
 			overlays += damage_overlay
 
+/obj/structure/window/proc/adjustHealthLoss(var/amount = 0)
+	if(amount < dmg_threshold)
+		return
+	health -= amount
+
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
 
-	health -= Proj.damage
+	adjustHealthLoss(Proj.damage)
 	. = ..()
 	healthcheck(Proj.firer)
 
@@ -134,21 +140,21 @@ var/list/one_way_windows
 
 	switch(severity)
 		if(1.0)
-			health -= rand(100, 150)
+			adjustHealthLoss(rand(100, 150))
 			healthcheck()
 			return
 		if(2.0)
-			health -= rand(20, 50)
+			adjustHealthLoss(rand(20, 50))
 			healthcheck()
 			return
 		if(3.0)
-			health -= rand(5, 15)
+			adjustHealthLoss(rand(5, 15))
 			healthcheck()
 			return
 
 /obj/structure/window/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
-	health -= rand(30, 50)
+	adjustHealthLoss(rand(30, 50))
 	healthcheck()
 
 /obj/structure/window/kick_act(mob/living/carbon/human/H)
@@ -169,11 +175,11 @@ var/list/one_way_windows
 		damage += S.bonus_kick_damage //Unless they're wearing heavy boots
 
 	if(damage > 0)
-		health -= damage
+		adjustHealthLoss(damage)
 		healthcheck()
 
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
@@ -188,7 +194,7 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
 		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
@@ -217,14 +223,14 @@ var/list/one_way_windows
 		return
 	if(ismob(AM))
 		var/mob/M = AM //Duh
-		health -= 10 //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
+		adjustHealthLoss(10) //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
 		healthcheck(M)
 		if (AM.invisibility < 101)
 			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
 			"<span class='danger'>You slam into \the [src].</span>")
 	else if(isobj(AM))
 		var/obj/item/I = AM
-		health -= I.throwforce
+		adjustHealthLoss(I.throwforce)
 		healthcheck()
 		if (AM.invisibility < 101)
 			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
@@ -235,7 +241,7 @@ var/list/one_way_windows
 		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes \the [src]!</span>")
-		health -= 25
+		adjustHealthLoss(25)
 		healthcheck()
 		user.delayNextAttack(8)
 
@@ -265,7 +271,7 @@ var/list/one_way_windows
 
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(10)
-	health -= damage
+	adjustHealthLoss(damage)
 	user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>", \
 	"<span class='danger'>You smash into \the [src]!</span>")
 	healthcheck(user)
@@ -328,14 +334,14 @@ var/list/one_way_windows
 					"<span class='warning'>You shove \the [M] into \the [src]!</span>")
 				if(GRAB_AGGRESSIVE)
 					M.apply_damage(10) //Nasty, but dazed and concussed at worst
-					health -= 5
+					adjustHealthLoss(5)
 					visible_message("<span class='danger'>\The [user] slams \the [M] into \the [src]!</span>", \
 					"<span class='danger'>You slam \the [M] into \the [src]!</span>")
 				if(GRAB_NECK to GRAB_KILL)
 					M.Stun(3)
 					M.Knockdown(3) //Almost certainly shoved head or face-first, you're going to need a bit for the lights to come back on
 					M.apply_damage(20) //That got to fucking hurt, you were basically flung into a window, most likely a shattered one at that
-					health -= 20 //Window won't like that
+					adjustHealthLoss(20) //Window won't like that
 					visible_message("<span class='danger'>\The [user] crushes \the [M] into \the [src]!</span>", \
 					"<span class='danger'>You crush \the [M] into \the [src]!</span>")
 			healthcheck(user)
@@ -516,7 +522,7 @@ var/list/one_way_windows
 	user.do_attack_animation(src, W)
 	if(W.damtype == BRUTE || W.damtype == BURN)
 		user.delayNextAttack(10)
-		health -= W.force
+		adjustHealthLoss(W.force)
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
 		"<span class='warning'>You hit \the [src] with \the [W].</span>")
 		healthcheck(user)
@@ -621,7 +627,7 @@ var/list/one_way_windows
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 
 	if(exposed_temperature > T0C + fire_temp_threshold)
-		health -= round(exposed_volume/fire_volume_mod)
+		adjustHealthLoss(round(exposed_volume/fire_volume_mod))
 		healthcheck(sound = 0)
 	..()
 
@@ -645,6 +651,7 @@ var/list/one_way_windows
 	reinforced = 1
 	penetration_dampening = 3
 	disperse_coeff = 0.8
+	dmg_threshold = 5
 
 /obj/structure/window/reinforced/oneway
 	one_way = 1
@@ -666,6 +673,7 @@ var/list/one_way_windows
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
 	disperse_coeff = 0.75
+	dmg_threshold = 10
 
 /obj/structure/window/plasma/oneway
 	one_way = 1
@@ -684,6 +692,7 @@ var/list/one_way_windows
 	health = 160
 	penetration_dampening = 7
 	disperse_coeff = 0.6
+	dmg_threshold = 15
 
 /obj/structure/window/reinforced/plasma/oneway
 	one_way = 1
