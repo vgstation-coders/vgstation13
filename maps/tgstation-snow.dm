@@ -15,7 +15,7 @@
 	height = 2
 	zLoc = 2
 	zLevels = list(
-		/datum/zLevel/snowmine{
+		/datum/zLevel/snowmine,
 		/datum/zLevel/snow{
 			name = "station"
 			movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
