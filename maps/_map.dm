@@ -250,11 +250,18 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
 
-
+/datum/zLevel/snowmine //not used on snaxi
+	name = "belowMine"
+	base_turf = /turf/unsimulated/wall/rock/ice
+	base_area = /area/mine/explored
+	movementJammed = TRUE
+	transitionLoops = TRUE
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow //not used on snaxi
 	name = "snow"
 	base_turf = /turf/unsimulated/floor/snow
+	base_area = /area/surface/snow
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow/post_mapload()

@@ -1,17 +1,21 @@
 #ifndef MAP_OVERRIDE
 //**************************************************************
-// Map Datum -- Snowfort Station
+// Map Datum -- Snowbox Station
 // Literally just box station (as of 16/12/2018), but with the base turf being snow
 //**************************************************************
 
 /datum/map/active
-	nameShort = "snowfort"
-	nameLong = "Snowfort Station"
+	nameShort = "snowbox"
+	nameLong = "Snowbox Station"
 	map_dir = "snowstation"
 	tDomeX = 128
 	tDomeY = 58
-	tDomeZ = 2
+	tDomeZ = 3
+	multiz = TRUE
+	height = 2
+	zLoc = 2
 	zLevels = list(
+		/datum/zLevel/snowmine{
 		/datum/zLevel/snow{
 			name = "station"
 			movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
@@ -23,7 +27,6 @@
 		/datum/zLevel/snow{
 			name = "derelict" ;
 			},
-		/datum/zLevel/snow,
 		/datum/zLevel/snow{
 			name = "spacePirateShip" ;
 			},
