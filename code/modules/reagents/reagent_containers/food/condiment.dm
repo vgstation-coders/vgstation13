@@ -195,6 +195,7 @@
 				name = SUGAR
 				desc = "Tasty space sugar!"
 				icon_state = SUGAR
+				condiment_overlay = SUGAR
 			if(CARAMEL)
 				name = CARAMEL
 				desc = "Tasty caramel cubes!"
@@ -216,6 +217,9 @@
 				var/image/I = image(icon, src, "honey-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
 				overlays += I
+				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
+				L.blend_mode = BLEND_ADD
+				overlays += L
 				overlay_colored = TRUE
 			if(ROYALJELLY)
 				name = "royal jelly pot"
@@ -230,11 +234,14 @@
 			if(CHILLWAX)
 				name = "chill wax pot"
 				desc = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
-				icon_state = HONEY
+				icon_state = CHILLWAX
 				condiment_overlay = HONEY
 				var/image/I = image(icon, src, "honey-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
 				overlays += I
+				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
+				L.blend_mode = BLEND_ADD
+				overlays += L
 				overlay_colored = TRUE
 			if(CINNAMON)
 				name = "cinnamon shaker"
