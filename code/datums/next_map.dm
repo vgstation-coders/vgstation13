@@ -135,6 +135,11 @@
 	path = "xoq"
 	is_enabled = FALSE
 
+/datum/next_map/snowbox
+	name = "Snowbox Station"
+	path = "snowstation"
+	is_enabled = FALSE
+
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))

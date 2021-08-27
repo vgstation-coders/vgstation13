@@ -44,6 +44,33 @@
 	center_y = 254
 	only_spawn_map_exclusive_vaults = TRUE
 
+	event_blacklist = list(/datum/event/radiation_storm,/datum/event/carp_migration,/datum/event/rogue_drone,/datum/event/immovable_rod,
+						/datum/event/meteor_wave,/datum/event/meteor_shower,/datum/event/thing_storm/meaty_gore,/datum/event/thing_storm/blob_shower,
+						/datum/event/thing_storm/blob_storm,/datum/event/thing_storm/fireworks)
+	load_map_elements = list(
+	/datum/map_element/dungeon/holodeck
+	)
+
+	snow_theme = TRUE
+	can_enlarge = FALSE
+
+/datum/map/active/map_specific_init()
+	climate = new /datum/climate/arctic()
+
+/datum/subsystem/daynightcycle
+	flags = SS_FIRE_IN_LOBBY
+	daynight_z_lvl = STATION_Z
+
+/datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
+	if(ispath(DR.role_category,/datum/role/blob_overmind))
+		return FALSE
+
+	return ..()
+
+/datum/map/active/map_equip(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+	H.equip_or_collect(new /obj/item/weapon/book/manual/snow(H.back), slot_in_backpack)
 
 ////////////////////////////////////////////////////////////////
 #include "tgstation-snow.dmm"
