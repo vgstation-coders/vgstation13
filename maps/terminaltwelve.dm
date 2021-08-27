@@ -4,9 +4,9 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "rePack"
-	nameLong = "rePacked Station"
-	map_dir = "repackedstation"
+	nameShort = "way"
+	nameLong = "Waystation"
+	map_dir = "waystation"
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2
