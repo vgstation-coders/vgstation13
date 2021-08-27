@@ -731,6 +731,7 @@
 	var/photo_power_usage = 1000
 	var/icon/photo
 	var/mob/living/current_mob
+	var/obj/effect/photobooth_overlay/PO = null
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/photobooth,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -745,12 +746,23 @@
 	background = "mugshot"
 	icon_state = "secbooth"
 
+/obj/effect/photobooth_overlay
+	name = "photobooth overlay"
+	desc = "Keep arms and legs inside at all times."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "photobooth_overlay"
+	plane = ABOVE_HUMAN_PLANE
+	layer = 0
+
 /obj/machinery/photobooth/New()
 	..()
-	var/image/I = image(icon, src, "[icon_state]_overlay")
-	I.plane = ABOVE_HUMAN_PLANE
-	I.layer = 0
-	overlays += I
+	PO = new obj/effect/photobooth_overlay(loc)
+	PO.icon_state = "[icon_state]_overlay"
+
+/obj/machinery/photobooth/Destroy()
+	qdel(PO)
+	PO = null
+	..()
 
 /obj/machinery/photobooth/examine(mob/user)
 	..()
