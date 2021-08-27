@@ -192,8 +192,8 @@
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
 	wage_payout = 55
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo, access_medical, access_bar, access_kitchen, access_hydroponics)
-	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)
+	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_mailsorting, access_medical, access_bar, access_kitchen, access_hydroponics)
+	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_mailsorting,  access_bar, access_kitchen)
 	alt_titles = list("Lawyer", "Bridge Officer")
 	outfit_datum = /datum/outfit/iaa
 
