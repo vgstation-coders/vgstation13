@@ -741,9 +741,13 @@
 		/obj/item/weapon/stock_parts/capacitor
 	) // capacitors for the flash, scanning_modules for the processing of the image, matter bin for the ink
 
+/obj/machinery/photobooth/security
+	background = "mugshot"
+	icon_state = "secbooth"
+
 /obj/machinery/photobooth/New()
 	..()
-	var/image/I = image(icon, src, "photobooth_overlay")
+	var/image/I = image(icon, src, "[icon_state]_overlay")
 	I.plane = ABOVE_HUMAN_PLANE
 	I.layer = 0
 	overlays += I
@@ -778,6 +782,7 @@
 		"balloons",
 		"nanotrasen_dark",
 		"nanotrasen_light",
+		"mugshot",
 		)
 	if (new_background)
 		background = new_background
