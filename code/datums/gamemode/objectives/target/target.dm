@@ -18,8 +18,9 @@
 	if(delay && (emergency_shuttle.location || emergency_shuttle.direction == 2))
 		PostDelay() //If the shuttle is docked or en route to centcomm, no delay
 		return TRUE
-	spawn(delay)
-		PostDelay()
+	if (delay)
+		spawn(delay)
+			PostDelay()
 	return TRUE
 
 /datum/objective/target/ShuttleDocked(state)
