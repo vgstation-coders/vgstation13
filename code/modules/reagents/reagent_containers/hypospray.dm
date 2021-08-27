@@ -136,4 +136,3 @@
 	..()
 	reagents.remove_reagent(DOCTORSDELIGHT, 30)
 	reagents.add_reagent(AMASEC, 1)
-	return
