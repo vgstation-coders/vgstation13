@@ -59,7 +59,7 @@
 /area/proc/update_dynamic_lighting()
 	if(dynamic_lighting)
 		var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
-		I.plane = LIGHTING_PLANE
+		I.plane = relative_plane(LIGHTING_PLANE)
 		I.blend_mode = BLEND_ADD
 		overlays += I
 	else

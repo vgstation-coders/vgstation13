@@ -51,8 +51,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define relative_plane_to_plane(x,y) (x - y + FLOAT_PLANE)
 
 
-#define CLICKCATCHER_PLANE -99
-#define SPACE_BACKGROUND_PLANE -98
+#define CLICKCATCHER_PLANE (-99)
+#define SPACE_BACKGROUND_PLANE (-98)
 #define SPACE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 1) // -97
 #define SPACE_DUST_PLANE (SPACE_PARALLAX_PLANE + 1) // -96
 #define ABOVE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 3) // -95
@@ -201,16 +201,16 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define LIGHTING_PLANE_MASTER 	(13 + FLOAT_PLANE)	// Don't put anything other than lighting_overlays in there please
+#define LIGHTING_PLANE_MASTER 	(13)	// Don't put anything other than lighting_overlays in there please
 
-#define LIGHTING_PLANE 			(14 + FLOAT_PLANE)	// Don't put anything other than lighting_overlays in there please
+#define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
 	#define SELF_VISION_LAYER 		   -1
 	#define LIGHTBULB_LAYER 			0
 	#define LIGHTING_LAYER 				2
 	#define ABOVE_LIGHTING_LAYER 		3
 	#define HIGHEST_LIGHTING_LAYER		3.5
 
-#define ABOVE_LIGHTING_PLANE	(15 + FLOAT_PLANE)
+#define ABOVE_LIGHTING_PLANE	(15)
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
 	#define NARSIE_GLOW 				3
@@ -334,6 +334,7 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 /obj/abstract/screen/plane_master/darkness_planemaster
 	plane = LIGHTING_PLANE
 	blend_mode    = BLEND_MULTIPLY
+	alpha = 255
 
 /obj/abstract/screen/plane_master/darkness_planemaster_dummy
 	alpha = 0

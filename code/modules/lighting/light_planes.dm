@@ -52,6 +52,7 @@
 	alpha = 10
 	appearance_flags = RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
 	var/list/alphas = list()
+
 /obj/abstract/screen/plane/dark/New()
 	..()
 	var/matrix/M = matrix()
