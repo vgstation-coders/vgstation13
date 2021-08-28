@@ -22,7 +22,7 @@
 
 	return ..()
 
-/obj/item/device/rcd/matter/engineering/suicide_act(var/mob/user)
+/obj/item/device/rcd/matter/engineering/suicide_act(var/mob/living/user)
 	visible_message("<span class='danger'>[user] is using the deconstruct function on \the [src] on \himself! It looks like \he's trying to commit suicide!</span>")
 	user.death(1)
 	return SUICIDE_ACT_CUSTOM

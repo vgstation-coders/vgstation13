@@ -66,6 +66,14 @@
 		/datum/rcd_schematic/pipe/disposal/sort_wrap
 	)
 
+/obj/item/device/rcd/rpd/New()
+	if(map.multiz)
+		schematics.Add(/datum/rcd_schematic/pipe/z_up)
+		schematics.Add(/datum/rcd_schematic/pipe/z_down)
+		schematics.Add(/datum/rcd_schematic/pipe/disposal/up)
+		schematics.Add(/datum/rcd_schematic/pipe/disposal/down)
+	..()
+
 /obj/item/device/rcd/rpd/examine(var/mob/user)
 	..()
 	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
@@ -239,6 +247,21 @@
 
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
+
+/obj/item/device/rcd/rpd/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is building pipes inside \himself! It looks like \he's trying to commit suicide!</span>")
+	playsound(src, 'sound/items/Deconstruct.ogg', 75, 1)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+		if(head_organ)
+			head_organ.explode()
+		else
+			user.gib()
+	else
+		user.gib()
+	new /obj/item/pipe(get_turf(src))
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/device/rcd/rpd/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))

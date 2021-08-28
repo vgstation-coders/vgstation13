@@ -13,7 +13,7 @@
 	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
 
-/obj/item/weapon/phone/suicide_act(mob/user)
+/obj/item/weapon/phone/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -60,9 +60,9 @@
 	throw_range = 20
 	var/potency = 20
 
-/obj/item/weapon/bananapeel/suicide_act(mob/user)
+/obj/item/weapon/bananapeel/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
-	return(SUICIDE_ACT_OXYLOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/corncob
 	name = "corn cob"
@@ -190,7 +190,7 @@
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.throw_item(target)
 
-/obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
+/obj/item/weapon/legcuffs/bolas/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -452,7 +452,7 @@
 	anchored = TRUE
 	icon_state = "beartrap1"
 
-/obj/item/weapon/beartrap/suicide_act(mob/user)
+/obj/item/weapon/beartrap/suicide_act(var/mob/living/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
@@ -857,7 +857,7 @@
 	if(armed)
 		if(istype(AM, /mob/living/carbon) && !istype(AM, /mob/living/carbon/brain))
 			var/mob/living/carbon/C = AM
-			if(C.m_intent != "walk")
+			if(C.glide_size > GLIDE_SIZE_OF_A_WALKING_HUMAN)
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
 				message_admins("[C] triggered the explosive wet floor sign at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 				log_game("[C] triggered the explosive wet floor sign at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
@@ -1005,7 +1005,7 @@
 	melt_temperature=MELTPOINT_STEEL
 	attack_verb = list("whips", "lashes", "disciplines", "tickles")
 
-/obj/item/weapon/wire/suicide_act(mob/user)
+/obj/item/weapon/wire/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_OXYLOSS)
 

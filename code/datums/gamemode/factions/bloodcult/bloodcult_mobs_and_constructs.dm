@@ -379,6 +379,7 @@ var/list/astral_projections = list()
 	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 	incorporeal_move = INCORPOREAL_GHOST
 	alpha = 127
+	now_pushing = 1 //prevents pushing atoms
 
 	//keeps track of whether we're in "ghost" form or "slightly less ghost" form
 	var/tangibility = FALSE
@@ -536,6 +537,10 @@ var/list/astral_projections = list()
 /mob/living/simple_animal/astral_projection/unarmed_attack_mob(mob/living/target)
 	return
 
+//this should prevent most other edge cases
+/mob/living/simple_animal/astral_projection/incapacitated()
+	return TRUE
+
 //bullets instantly end us
 /mob/living/simple_animal/astral_projection/bullet_act(var/obj/item/projectile/P)
 	if (tangibility)
@@ -618,7 +623,7 @@ var/list/astral_projections = list()
 		appearance = tangible_appearance
 		canmove = 1
 		incorporeal_move = 0
-		flying = 0
+		stop_flying()
 		flags = HEAR | PROXMOVE
 		see_invisible = SEE_INVISIBLE_CULTJAUNT//still can see some hidden things
 		speed = 1

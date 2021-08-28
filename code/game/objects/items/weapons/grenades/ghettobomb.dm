@@ -116,6 +116,15 @@
 				if(!gcDestroyed)
 					prime()
 
+/obj/item/weapon/grenade/iedcasing/suicide_act(var/mob/living/user)
+	if (!active) //no explosion with no active ied, dummy
+		return
+	
+	var/message_say = user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
+	user.say(message_say)
+	attack_self(user)
+	return SUICIDE_ACT_BRUTELOSS
 
 /obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
 
