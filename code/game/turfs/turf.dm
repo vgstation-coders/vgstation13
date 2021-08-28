@@ -87,6 +87,16 @@
 	universe.OnTurfTick(src)
 
 /turf/initialize()
+	shadow_atom = list(
+		"[NORTH]" = 0,
+		"[SOUTH]" = 0,
+		"[EAST]" = 0,
+		"[WEST]" = 0,
+		"[NORTHEAST]" = 0,
+		"[NORTHWEST]" = 0,
+		"[SOUTHEAST]" = 0,
+		"[SOUTHWEST]" = 0,
+	)
 	..()
 	if(loc)
 		var/area/A = loc
