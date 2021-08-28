@@ -252,7 +252,7 @@ var/global/list/accessable_z_levels = list()
 
 /datum/zLevel/snowmine //not used on snaxi
 	name = "belowMine"
-	base_turf = /turf/unsimulated/floor/snow/permafrost
+	base_turf = /turf/unsimulated/floor/asteroid/cave/permafrost
 	base_area = /area/mine/explored
 	movementJammed = TRUE
 	transitionLoops = TRUE
