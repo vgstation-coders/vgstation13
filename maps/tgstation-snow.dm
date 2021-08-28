@@ -19,6 +19,7 @@
 		/datum/zLevel/snow{
 			name = "station"
 			movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
+			base_turf = /turf/simulated/open
 		},
 		/datum/zLevel/centcomm,
 		/datum/zLevel/snow{
