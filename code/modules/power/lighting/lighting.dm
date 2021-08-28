@@ -266,13 +266,13 @@ var/global/list/obj/machinery/light/alllights = list()
 					current_bulb.status = LIGHT_BURNED
 					icon_state = "l[current_bulb.base_state]-burned"
 					on = 0
-					set_light(0)
+					kill_light()
 			else
 				use_power = 2
 				set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
 	else
 		use_power = 1
-		set_light(0)
+		kill_light()
 
 	if(current_bulb)
 		active_power_usage = (current_bulb.cost * 10)

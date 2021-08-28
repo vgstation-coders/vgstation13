@@ -66,10 +66,6 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T
-	if (opacity && isturf(loc))
-		T = loc // recalc_atom_opacity() is called later on this
-		T.reconsider_lights()
 
 	if(materials)
 		qdel(materials)
@@ -91,9 +87,6 @@
 	break_all_tethers()
 
 	forceMove(null, harderforce = TRUE)
-
-	if (T)
-		T.recalc_atom_opacity()
 
 	if(virtualhearer)
 		qdel(virtualhearer)

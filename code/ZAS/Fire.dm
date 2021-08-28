@@ -273,7 +273,7 @@ Attach to transfer valve and open. BOOM.
 /obj/effect/fire/Destroy()
 	SSair.remove_hotspot(src)
 
-	set_light(0)
+	kill_light()
 	..()
 
 turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.

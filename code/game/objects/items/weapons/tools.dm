@@ -488,7 +488,7 @@
 	else
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		set_light(0)
+		kill_light()
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -529,7 +529,7 @@
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		set_light(0)
+		kill_light()
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()

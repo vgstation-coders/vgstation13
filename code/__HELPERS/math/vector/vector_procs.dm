@@ -69,3 +69,20 @@
 	var/turf/T = locate(V.x, V.y, z)
 	return T
 
+// Return a list of unity vectors
+/proc/vector_to_steps(var/vector/V)
+	var/steps_number = max(abs(V.x), abs(V.y))
+	var/list/vector/steps = list()
+	for (var/i = 1 to steps_number)
+		var/delta = abs(V.x) - abs(V.y)
+		switch (delta)
+			if (-12 to -1)
+				steps += new /vector(sign(V.x), 0)
+				V.x -= sign(V.x)
+			if (0)
+				steps += new /vector(sign(V.x), sign(V.y))
+				V.x -= sign(V.x)
+				V.y -= sign(V.y)
+			if (1 to 12)
+				steps += new /vector(0, sign(V.y))
+				V.y -= sign(V.y)

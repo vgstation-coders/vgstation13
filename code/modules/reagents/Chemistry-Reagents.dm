@@ -5172,7 +5172,7 @@
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
 	nutriment_factor = 4 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
@@ -5220,7 +5220,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/irradiatedbeans/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5237,7 +5237,7 @@
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
-	
+
 /datum/reagent/toxicwaste/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5261,7 +5261,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/mutatedbeans/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5292,7 +5292,7 @@
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-	
+
 /datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5316,7 +5316,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
-	
+
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
@@ -5332,9 +5332,9 @@
 
 	if(prob(5))
 		M.adjustToxLoss(1)
-	
+
 	if(prob(5))
-		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage 
+		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage
 
 /datum/reagent/glowingramen
 	name = "Glowing Ramen Noodles"
@@ -5348,7 +5348,7 @@
 
 	if(..())
 		return 1
-	
+
 	if(prob(10))
 		M.apply_radiation(1, RAD_INTERNAL)
 
@@ -6732,7 +6732,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+		if(X.type == /atom/movable/light)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -6774,7 +6774,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+		if(X.type == /atom/movable/light)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -8843,7 +8843,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return
 	var/atom/A =  holder.my_atom
 	A.light_color = initial_color
-	A.set_light(0)
+	A.kill_light()
 
 /datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
@@ -8855,7 +8855,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.set_light(light_intensity)
 		spawn(volume * 10)
 			M.light_color = init_color
-			M.set_light(0)
+			M.kill_light()
 
 /datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -8866,7 +8866,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	T.set_light(light_intensity)
 	spawn(volume * 10)
 		T.light_color = init_color
-		T.set_light(0)
+		T.kill_light()
 
 /datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -8877,7 +8877,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	O.set_light(light_intensity)
 	spawn(volume * 10)
 		O.light_color = init_color
-		O.set_light(0)
+		O.kill_light()
 
 /datum/reagent/mucus
 	name = "Mucus"

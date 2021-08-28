@@ -220,7 +220,7 @@
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/C = current_blunt
 		C.lit = 0
 		C.update_brightness()
-		set_light(0)
+		kill_light()
 		user.visible_message("<span class='notice'>[user] snuffs out \his [src].</span>","<span class='notice'>You snuff out \the [src].</span>")
 		is_lit = 0
 		if(ismetal)
@@ -248,7 +248,7 @@
 
 /obj/item/weapon/hatchet/tomahawk/pipe/proc/burnout()
 	current_blunt = null
-	set_light(0)
+	kill_light()
 	is_lit = 0
 	if(ismob(loc) && !not_burned_out)
 		var/mob/living/M = loc
@@ -359,7 +359,7 @@
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/C = current_blunt
 		C.lit = 0
 		C.update_brightness()
-		set_light(0)
+		kill_light()
 		user.visible_message("<span class='notice'>[user] snuffs out \his [src].</span>","<span class='notice'>You snuff out \the [src].</span>")
 		is_lit = 0
 		icon_state = "pipe_tomahawk_broken"
@@ -383,7 +383,7 @@
 
 /obj/item/weapon/broken_pipe_tomahawk/proc/burnout(datum/thing)
 	current_blunt = null
-	set_light(0)
+	kill_light()
 	is_lit = 0
 	if(ismob(loc) && !not_burned_out)
 		var/mob/living/M = loc

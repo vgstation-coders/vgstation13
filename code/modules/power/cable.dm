@@ -112,7 +112,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	cable_list -= src
 
 	if(istype(attached))
-		attached.set_light(0)
+		attached.kill_light()
 		attached.icon_state = "powersink0"
 		attached.mode = 0
 		processing_objects.Remove(attached)

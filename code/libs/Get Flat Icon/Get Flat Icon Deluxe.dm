@@ -210,7 +210,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 	var/list/turf_image_datas = list()
 	turf_image_datas = get_content_image_datas(T)
 	for(var/atom/A in T.contents)
-		if (istype(A, /atom/movable/lighting_overlay))
+		if (istype(A, /atom/movable/light))
 			continue
 		if (camera)
 			A.photography_act(camera)

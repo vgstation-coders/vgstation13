@@ -84,7 +84,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		set_light(brightness_on,null,color_on)
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/clothing/head/helmet/space/rig/update_icon()

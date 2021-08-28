@@ -620,7 +620,7 @@
 	if(on)
 		set_light(brightness_on)
 	else
-		set_light(0)
+		kill_light()
 
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"

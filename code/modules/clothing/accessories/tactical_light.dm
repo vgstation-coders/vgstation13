@@ -27,7 +27,7 @@
 		icon_state = "[initial(icon_state)]_armor"
 	if(source_light && source_light.on)
 		icon_state = "[icon_state]-on"
-	
+
 
 /obj/item/clothing/accessory/taclight/can_attach_to(obj/item/clothing/C)
 	return (istype(C, /obj/item/clothing/head) || istype(C, /obj/item/clothing/suit/armor))
@@ -121,5 +121,5 @@
 	if(src.source_light && src.source_light.on)
 		C.set_light(src.source_light.brightness_on)
 	else
-		C.set_light(0)
+		C.kill_light()
 	update_icon()

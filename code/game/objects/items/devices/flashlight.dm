@@ -26,7 +26,7 @@
 		set_light(brightness_on)
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 
 /obj/item/device/flashlight/proc/update_brightness(var/mob/user = null, var/playsound = 1)
 	if(on)
@@ -37,7 +37,7 @@
 				playsound(src, sound_on, 50, 1)
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 		if(playsound && has_sound)
 			playsound(src, sound_off, 50, 1)
 
@@ -110,7 +110,7 @@
 	desc = "A compact, tactical flashlight with automatic self-attaching screws. Fits on armor and headgear."
 	icon_state = "taclight"
 	item_state = ""
-	
+
 /obj/item/device/flashlight/tactical/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return 0
@@ -129,7 +129,7 @@
 		return 1
 	else
 		to_chat(user, "<span class='notice'>\The [src] cannot be attached to that.</span>")
-	return ..()	
+	return ..()
 
 
 // the desk lamps are a bit special

@@ -183,12 +183,12 @@ proc/cardinalrange(var/center)
 			overlays += I
 			set_light(1.4,1)
 		else
-			set_light(0)
+			kill_light()
 		if(!processing)
 			setup_core()
 		return
 	else if(processing)
-		set_light(0)
+		kill_light()
 		shutdown_core()
 
 	for(var/direction in alldirs)

@@ -74,12 +74,12 @@
 */
 /turf
 	vis_flags = VIS_INHERIT_ID
-	
+
 /atom/movable
 	vis_flags = VIS_INHERIT_ID
 
 // Hides these from vis_contents due to how glitchy they are with it
-/atom/movable/lighting_overlay
+/atom/movable/light
 	vis_flags = VIS_HIDE
 
 /obj/effect/open_overlay
@@ -89,7 +89,7 @@
 	icon_state = "white"
 	layer = ABOVE_LIGHTING_LAYER
 	plane = ABOVE_LIGHTING_PLANE
-	
+
 /turf/simulated/open/update_icon()
 	var/alpha_to_subtract = 127
 	overlays.Cut()
@@ -97,7 +97,7 @@
 	var/turf/bottom
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 		alpha_to_subtract /= 2
-	
+
 	if(!bottom || bottom == src)
 		return
 	var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
@@ -123,7 +123,7 @@
 	var/turf/simulated/open/OS = GetAbove(src)
 	if(OS && isopenspace(OS))
 		OS.ChangeTurf(/turf/simulated/floor/plating)
-		
+
 /turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
@@ -195,7 +195,7 @@
 	icon_state = ""
 	layer = 0
 	plane = BASE_PLANE
-	
+
 /obj/effect/open_overlay/glass/damage
 	name = "glass open overlay cracks"
 	desc = "The dent in the window over the darkness of the abyss below"
@@ -210,7 +210,7 @@
 		var/turf/bottom
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 			alpha_to_subtract /= 2
-		
+
 		if(!bottom || bottom == src)
 			return
 		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
@@ -228,7 +228,7 @@
 		var/obj/effect/open_overlay/glass/overdamage = new /obj/effect/open_overlay/glass/damage
 		overdamage.icon_state = icon_state
 		vis_contents.Add(overdamage)
-		
+
 /turf/simulated/floor/glass/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	vis_contents.Cut()
 	overlays.Cut()

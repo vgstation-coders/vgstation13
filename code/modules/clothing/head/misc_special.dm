@@ -104,7 +104,7 @@
 		src.force = null
 		src.damtype = "brute"
 		src.icon_state = "cake0"
-		set_light(0)
+		kill_light()
 	return
 
 
@@ -176,7 +176,7 @@
 		if(on)
 			set_light(brightness_on)
 		else
-			set_light(0)
+			kill_light()
 
 /obj/item/clothing/head/pumpkinhead/attackby(var/obj/item/I, var/mob/user)
 	..()
