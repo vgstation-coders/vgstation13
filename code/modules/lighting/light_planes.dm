@@ -36,7 +36,7 @@
 
 /obj/abstract/screen/plane/self_vision
 	blend_mode = BLEND_ADD
-	plane = LIGHTING_PLANE
+	plane = LIGHTING_PLANE_MASTER
 	layer = SELF_VISION_LAYER
 	icon = 'icons/lighting/self_vision_default.dmi'
 	icon_state = "default"
@@ -45,6 +45,13 @@
 	invisibility = INVISIBILITY_LIGHTING
 	var/target_alpha = HUMAN_TARGET_ALPHA
 
+/obj/abstract/screen/plane/dark
+	blend_mode = BLEND_ADD
+	plane = LIGHTING_PLANE_MASTER // Just below the master plane.
+	icon = 'icons/lighting/over_dark.dmi'
+	alpha = 10
+	appearance_flags = RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
+	var/list/alphas = list()
 /obj/abstract/screen/plane/dark/New()
 	..()
 	var/matrix/M = matrix()

@@ -1601,13 +1601,13 @@ Use this proc preferably at the end of an equipment loadout
 	return directionface(SOUTH)
 
 /mob/proc/check_dark_vision()
-	if (client.darkness_planemaster && client.darkness_planemaster.alphas.len)
+	if (dark_plane && dark_plane.alphas.len)
 		var/max_alpha = 0
-		for (var/key in client.darkness_planemaster.alphas)
-			max_alpha = max(client.darkness_planemaster.alphas[key], max_alpha)
-		client.darkness_planemaster.alpha = max_alpha
+		for (var/key in dark_plane.alpha)
+			max_alpha = max(dark_plane.alphas[key], max_alpha)
+		dark_plane.alpha = max_alpha
 	else
-		client.darkness_planemaster?.alpha = initial(client.darkness_planemaster.alpha)
+		dark_plane?.alpha = initial(dark_plane.alpha)
 
 	if (self_vision)
 		if (isturf(loc))
