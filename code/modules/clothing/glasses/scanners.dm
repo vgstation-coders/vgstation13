@@ -149,7 +149,7 @@
 	see_invisible |= SEE_INVISIBLE_MINIMUM
 	seedarkness = FALSE
 	C.update_darkness()
-	C.dark_plane?.alphas["mesons"] = 255
+	C.client.darkness_planemaster?.alphas["mesons"] = 255
 //	body_parts_covered |= EYES
 	..()
 
@@ -160,13 +160,13 @@
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
 	seedarkness = TRUE
 	C.update_darkness()
-	C.dark_plane?.alphas -= "mesons"
+	C.client.darkness_planemaster?.alphas -= "mesons"
 
 /obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
 	. = ..()
 	if (user)
 		user.update_darkness()
-		user.dark_plane?.alphas -= "mesons"
+		user.client.darkness_planemaster?.alphas -= "mesons"
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)

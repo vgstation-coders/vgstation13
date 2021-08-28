@@ -101,8 +101,7 @@
 
 	machine_flags = WIREJACK
 
-	plane = LIGHTING_PLANE
-	layer = ABOVE_LIGHTING_LAYER
+	plane = OBJ_PLANE
 
 	light_range = 1
 	light_power = 1

@@ -67,8 +67,8 @@
 /mob/living/simple_animal/construct/update_perception()
 	if(client)
 		if(client.darkness_planemaster)
-			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
-			client.darkness_planemaster.alpha = 180
+			client.darkness_planemaster.blend_mode = BLEND_ADD
+			client.darkness_planemaster.alphas["construct"] = 180
 		client.color = list(
 					1,0,0,0,
 					0,1.3,0,0,

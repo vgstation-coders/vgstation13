@@ -60,6 +60,7 @@
 	if(dynamic_lighting)
 		var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
 		I.plane = LIGHTING_PLANE_MASTER
+		I.layer = ABOVE_DARK_LAYER
 		I.blend_mode = BLEND_ADD
 		overlays += I
 	else

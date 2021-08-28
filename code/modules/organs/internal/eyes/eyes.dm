@@ -31,7 +31,7 @@
 	removed_type = /obj/item/organ/internal/eyes/tajaran
 
 /datum/organ/internal/eyes/tajaran/update_perception(var/mob/living/carbon/human/M)
-	M.client.darkness_planemaster.alpha = 100
+	M.client.darkness_planemaster.alphas["cat_eyes"] = 100
 
 /datum/organ/internal/eyes/grey
 	name = "huge eyes"
@@ -69,8 +69,8 @@
 
 /datum/organ/internal/eyes/mushroom/update_perception(var/mob/living/carbon/human/M)
 	if (dark_mode)
-		M.client.darkness_planemaster.blend_mode = BLEND_SUBTRACT
-		M.client.darkness_planemaster.alpha = 100
+		M.client.darkness_planemaster.blend_mode = BLEND_ADD
+		M.client.darkness_planemaster.alphas["mushroom_eyes_normal"] = 100
 		M.client.darkness_planemaster.color = "#FF0000"
 		M.client.color = list(
 			1,0,0,0,
@@ -79,8 +79,8 @@
 			0,-0.1,0,1,
 			0,0,0,0)
 	else
-		M.client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
-		M.client.darkness_planemaster.alpha = 150
+		M.client.darkness_planemaster.blend_mode = BLEND_ADD
+		M.client.darkness_planemaster.alphas["mushroom_eyes_dark"] = 150
 		M.client.darkness_planemaster.color = null
 		M.client.color = list(
 			1,0,0,0,

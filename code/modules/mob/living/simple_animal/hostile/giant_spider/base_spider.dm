@@ -164,7 +164,7 @@
 	if(client)
 		if(client.darkness_planemaster)
 			client.darkness_planemaster.blend_mode = BLEND_ADD
-			client.darkness_planemaster.alpha = 100
+			client.darkness_planemaster.alphas["spider"] = 100
 		client.color = list(
 					1,0,0,0,
 					0,1,0,0,

@@ -197,9 +197,9 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-
-#define LIGHTING_PLANE_MASTER (13 + FLOAT_PLANE)
+#define LIGHTING_PLANE_MASTER 	(13 + FLOAT_PLANE)
 	#define FULL_DARK_LAYER 1
+	#define ABOVE_DARK_LAYER 2
 
 #define LIGHTING_PLANE 			(14 + FLOAT_PLANE)	// Don't put anything other than lighting_overlays in there please
 	#define SELF_VISION_LAYER 		   -1
@@ -330,10 +330,14 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 // DARKNESS PLANEMASTER
 // One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
 
+/obj/abstract/screen/plane_master/darkness_planemaster
+	plane = LIGHTING_PLANE_MASTER
+	layer = FULL_DARK_LAYER
 	blend_mode    = BLEND_MULTIPLY
+	alpha = MINIMUM_ALPHA_DARK_PLANE
+	appearance_flags = RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
+	var/list/alphas = list()
 
 /obj/abstract/screen/plane_master/darkness_planemaster_dummy
 	alpha = 0
