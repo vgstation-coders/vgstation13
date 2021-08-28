@@ -224,8 +224,7 @@ var/list/shuttle_log = list()
 			if(!Adjacent(usr) || usr.incapacitated())
 				return
 			var/datum/striketeam/ert/response_team = new()
-			response_team.mission = ert_reason
-			response_team.trigger_strike()
+			response_team.trigger_strike(usr,ert_reason,TRUE)
 			log_game("[key_name(usr)] has called an ERT with reason: [ert_reason]")
 			message_admins("[key_name_admin(usr)] has called an ERT with reason: [ert_reason]")
 			setMenuState(usr,COMM_SCREEN_MAIN)

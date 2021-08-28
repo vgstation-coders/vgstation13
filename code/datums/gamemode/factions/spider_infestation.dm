@@ -2,6 +2,8 @@
 /datum/faction/spider_infestation
 	name = SPIDERINFESTATION
 	ID = SPIDERINFESTATION
+	default_admin_voice = "Your Spider Senses"
+	admin_voice_style = "skeleton"
 	logo_state = "spider-logo"
 	hud_icons = list("spider-logo")
 

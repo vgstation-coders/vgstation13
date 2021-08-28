@@ -9,6 +9,8 @@
 	initroletype = /datum/role/time_agent
 	logo_state = "time-logo"
 	hud_icons = list("time-logo")
+	default_admin_voice = "The Agency"
+	admin_voice_style = "notice"
 	var/datum/role/time_agent/primary_agent = null // first added is primary, any others added are doppelgangers.
 	var/list/eviltwins = list()
 

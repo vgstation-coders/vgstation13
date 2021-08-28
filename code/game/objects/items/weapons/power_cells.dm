@@ -22,8 +22,9 @@
 	var/electronics_damage = 0 //Used by cyborgs
 	var/starch_cell = 0
 
-/obj/item/weapon/cell/suicide_act(mob/user)
+/obj/item/weapon/cell/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	electrocute_mob(user, get_area(src), src, 2)
 	return (SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/cell/empty/New()

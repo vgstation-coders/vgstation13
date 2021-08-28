@@ -10,6 +10,9 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 #define MECH_SCREEN_ROBOT_PARTS		12
 #define	MECH_SCREEN_ROBOT_UPGRADES	13
 
+#define MECH_SCREEN_HARDSUIT_PARTS	51
+#define MECH_SCREEN_HARDSUIT_UPGRADES	52
+
 #define	MECH_SCREEN_EXOSUIT_TOOLS	21
 #define	MECH_SCREEN_EXOSUIT_MODULES	22
 #define	MECH_SCREEN_EXOSUIT_WEAPONS	23
@@ -67,6 +70,14 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 		{{:helper.link('Robot Parts','gear',{'screen':11},(data.screen==11)?'linkOn':'', 'fixedLeft')}}
 		{{:helper.link('Components', 'gear',{'screen':12},(data.screen==12)?'linkOn':'', 'fixedLeft')}}
 		{{:helper.link('Upgrades',	 'gear',{'screen':13},(data.screen==13)?'linkOn':'', 'fixedLeft')}}
+	</div>
+	<br>
+	<div class="itemLabel", style = "width: 100%">
+		Hardsuit
+	</div>
+	<div class="line">
+		{{:helper.link('Hardsuit Parts','gear',{'screen':51},(data.screen==51)?'linkOn':'', 'fixedLeft')}}
+		{{:helper.link('Upgrades', 'gear',{'screen':52},(data.screen==52)?'linkOn':'', 'fixedLeft')}}
 	</div>
 	<br>
 	<div class="itemLabel">
@@ -243,6 +254,57 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 		</div>
 	</div>
 {{/if}}
+
+{{if data.screen == 51}}
+	<div class="item">
+		<div class="itemLabel">
+			<h3>Hardsuit Parts</h3>
+		</div>
+	<div class="itemContentWide" style="width:100%;">
+		<div class="statusDisplay">
+			<div class="line">
+					{{for data.parts.Hardsuit_Parts}}
+						<div class="line">
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+								{{:helper.link(value.cost, null, null, null, null, 'cost')}}
+								{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+							</div>
+						</div>
+					{{empty}}
+						<i>No parts in memory</i>
+					{{/for}}
+				</div>
+			</div>
+		</div>
+	</div>
+{{/if}}
+
+{{if data.screen == 52}}
+	<div class="item">
+		<div class="itemLabel">
+			<h3>Hardsuit Upgrades</h3>
+		</div>
+	<div class="itemContentWide" style="width:100%;">
+		<div class="statusDisplay">
+			<div class="line">
+					{{for data.parts.Hardsuit_Upgrades}}
+						<div class="line">
+							<div class="statusValue">
+								{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
+								{{:helper.link(value.cost, null, null, null, null, 'cost')}}
+								{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
+							</div>
+						</div>
+					{{empty}}
+						<i>No parts in memory</i>
+					{{/for}}
+				</div>
+			</div>
+		</div>
+	</div>
+{{/if}}
+
 
 {{if data.screen == 21}}
 	<div class="item">

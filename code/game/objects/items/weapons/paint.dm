@@ -19,7 +19,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	flags = FPRINT | OPENCONTAINER
 	var/paint_type = ""
 
-/obj/item/weapon/reagent_containers/glass/paint/suicide_act(mob/user)
+/obj/item/weapon/reagent_containers/glass/paint/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is taking \his hand and eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 

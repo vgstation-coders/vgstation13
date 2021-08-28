@@ -16,6 +16,8 @@
 	id = TIMEAGENT
 	required_pref = TIMEAGENT
 	logo_state = "time-logo"
+	default_admin_voice = "The Agency"
+	admin_voice_style = "notice"
 	var/list/objects_to_delete = list()
 	var/time_elapsed = 0
 	var/action_timer = 60

@@ -29,7 +29,7 @@
 	projectile_type = /obj/item/projectile/beam/lightlaser
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
-	
+
 /obj/item/weapon/gun/energy/laser/pistol/isHandgun()
 	return TRUE
 
@@ -388,9 +388,9 @@
 
 	name = "rainbow laser"
 	desc = "The NanoTrasen iniative to develop a laser weapon for clowns was a failure as the intended users were too clumsy to operate them."
-	projectile_type = "/obj/item/projectile/beam/white"
+	projectile_type = "/obj/item/projectile/beam/rainbow"
 	var/current_color = 1
-	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
+	var/static/list/color_list = list("#FF0000","#FF00FF","#0000FF","#00FFFF","#00FF00","#FFFF00")
 	icon_state = "rainbow_laser"
 	item_state = null
 	slot_flags = SLOT_BELT
@@ -400,7 +400,6 @@
 	var/pumping = 0
 
 /obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/user as mob)
-
 	if(pumping || !power_supply)
 		return TRUE
 	power_supply.charge = min(power_supply.charge + charge_cost * 2,power_supply.maxcharge)
@@ -416,12 +415,16 @@
 	update_icon()
 
 /obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	var/next_color
+	if(current_color < color_list.len )
+		next_color = current_color + 1
+	else
+		next_color = 1
 
 	projectile_color = color_list[current_color]
-	if(current_color < color_list.len )
-		current_color+=1
-	else
-		current_color = 1
+	projectile_color_shift = color_list[next_color]
+
+	current_color = next_color
 	..()
 
 /obj/item/weapon/gun/energy/laser/captain/combustion

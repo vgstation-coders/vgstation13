@@ -534,7 +534,7 @@
 	return 0
 
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
-	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
+	var/walking_factor = (!slip_on_walking && glide_size <= GLIDE_SIZE_OF_A_WALKING_HUMAN)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
 
 /mob/living/carbon/teleport_to(var/atom/A)
@@ -675,7 +675,10 @@
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
-				. *= I.slowdown
+				if(I.flags & SLOWDOWN_WHEN_CARRIED)
+					. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
+				else
+					. *= I.slowdown
 
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)

@@ -90,6 +90,16 @@
 	. = ..()
 	reagents.add_reagent(WATER, 1000)
 
+/obj/structure/reagent_dispensers/watertank/suicide_act(var/mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species == "Grey") // harms the grayys
+			to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+			reagents.trans_to(user, amount_per_transfer_from_this)
+			return(SUICIDE_ACT_BRUTELOSS)
+	else
+		return ..()
+	
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
 	desc = "A storage tank containing welding fuel."
@@ -113,9 +123,9 @@
 
 /obj/structure/reagent_dispensers/fueltank/attack_hand()
 	if (rig)
-		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src]")
+		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
 		if(do_after(usr, src, 20))
-			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
+			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
 			if(rig)
 				rig.forceMove(get_turf(usr))
 				rig.master = null
@@ -125,13 +135,13 @@
 /obj/structure/reagent_dispensers/fueltank/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (W.is_wrench(user))
 		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
-			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
+			"You wrench [src]'s faucet [modded ? "closed" : "open"].")
 		modded = modded ? 0 : 1
 	if (istype(W,/obj/item/device/assembly_holder))
 		if (rig)
 			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
 			return ..()
-		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src]")
+		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src].")
 		if(do_after(user, src, 20))
 			if(rig)
 				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
@@ -140,7 +150,7 @@
 				to_chat(user,"<span class='warning'>Oops! You can't let go of \the [W]!</span>")
 				return
 
-			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src]</span>")
+			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")
 
 			var/obj/item/device/assembly_holder/H = W
 			if (istype(H.a_left,/obj/item/device/assembly/igniter) || istype(H.a_right,/obj/item/device/assembly/igniter))
@@ -179,6 +189,20 @@
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
 			explode()
 	return ..()
+
+/obj/structure/reagent_dispensers/fueltank/suicide_act(var/mob/living/user)
+	var/obj/item/tool/weldingtool/welder = user.find_held_item_by_type(/obj/item/tool/weldingtool)
+	if(welder)
+		welder.setWelding(1)
+		if(welder.welding)
+			var/message_say = user.handle_suicide_bomb_cause()
+			to_chat(viewers(user), "<span class='danger'>[user] presses the warm lit welder against the cold body of a welding fuel tank! It looks like \he's going out with a bang!</span>")
+			user.say(message_say)
+			welder.afterattack(src,user,1)
+			return(SUICIDE_ACT_BRUTELOSS)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
@@ -228,6 +252,11 @@
 /obj/structure/reagent_dispensers/peppertank/New()
 	. = ..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 1000)
+
+/obj/structure/reagent_dispensers/peppertank/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his head underneath the dispenser nozzle and spraying the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_BRUTELOSS)
 
 /obj/structure/reagent_dispensers/water_cooler
 	name = "Water-Cooler"
@@ -279,6 +308,11 @@
 /obj/structure/reagent_dispensers/beerkeg/New()
 	. = ..()
 	reagents.add_reagent(BEER, 1000)
+
+/obj/structure/reagent_dispensers/beerkeg/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the keg nozzle and drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/beerkeg/wrenchable()
 	return 1
@@ -356,6 +390,48 @@
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 
+/obj/structure/reagent_dispensers/silicate/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
+
+/obj/structure/reagent_dispensers/sacid
+	name = "\improper Sulphuric Acid Dispenser"
+	desc = "A dispenser of sulphuric acid."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "sacidtank"
+	amount_per_transfer_from_this = 50
+
+/obj/structure/reagent_dispensers/sacid/New()
+	. = ..()
+	reagents.add_reagent(SACID, 1000)
+
+/obj/structure/reagent_dispensers/sacid/attackby(var/obj/item/W, var/mob/user)
+	. = ..()
+	if(.)
+		return
+
+	if(issolder(W))
+		var/obj/item/tool/solder/S = W
+		if(S.reagents.get_reagent_amount() >= S.max_fuel) // Already filled.
+			to_chat(user, "<span class='notice'>\The [S] is already full!</span>")
+			return
+
+		reagents.trans_to(S, S.max_fuel)
+		S.update_icon()
+		to_chat(user, "<span class='notice'>Solder refilled.</span>")
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+		return 1
+
+/obj/structure/reagent_dispensers/sacid/suicide_act(var/mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species == "Grey")
+			return ..() // Not harmed by this stuff, so get out
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and drinking the contents! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_BRUTELOSS)
+
 /obj/structure/reagent_dispensers/degreaser
 	name = "ethanol tank"
 	desc = "A tank filled with ethanol, used in the degreasing of engines."
@@ -365,6 +441,11 @@
 /obj/structure/reagent_dispensers/degreaser/New()
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
+
+/obj/structure/reagent_dispensers/degreaser/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the tank nozzle and heavily drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
 
 /obj/structure/reagent_dispensers/spooktank
 	name = "spooktank"

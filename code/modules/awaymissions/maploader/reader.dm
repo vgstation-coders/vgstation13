@@ -427,15 +427,6 @@ var/list/map_dimension_cache = list()
 
 	. = ..()
 
-	// Incase any lighting vars are on in the typepath we turn the light on in New().
-	if (light_power && light_range)
-		if (!light_obj)
-			light_obj = new()
-		if (!shadow_obj)
-			shadow_obj = new()
-		light_obj.cast_light()
-		shadow_obj.cast_light()
-
 //////////////////
 //Preloader datum
 //////////////////

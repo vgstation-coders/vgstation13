@@ -88,6 +88,16 @@
 
 /turf/initialize()
 	..()
+	shadow_atom = list(
+		"[NORTH]" = 0,
+		"[SOUTH]" = 0,
+		"[EAST]" = 0,
+		"[WEST]" = 0,
+		"[NORTHEAST]" = 0,
+		"[NORTHWEST]" = 0,
+		"[SOUTHEAST]" = 0,
+		"[SOUTHWEST]" = 0,
+	)
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
@@ -112,6 +122,8 @@
 		for(var/obj/obstacle in src)
 			/*if(ismob(mover) && mover:client)
 				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
+			if(obstacle in target) //If target is a turf and obstacle is a multitile object so that it covers target as well.
+				continue
 			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
 				/*if(ismob(mover) && mover:client)
 					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
@@ -402,7 +414,8 @@
 			SSair.mark_for_update(src)
 
 		W.levelupdate()
-
+		W.update_icon(1)
+		W.post_change() //What to do after changing the turf. Handles stuff like zshadow updates.
 		. = W
 		if (SS_READY(SSlighting))
 			if(old_opacity != opacity)
@@ -701,7 +714,7 @@
 
 	var/area/A = loc
 	if(istype(A))
-		return A.has_gravity
+		return A.gravity
 
 	return 1
 

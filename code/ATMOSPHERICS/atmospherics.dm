@@ -354,7 +354,7 @@ Pipelines + Other Objects -> Pipe network
 		L.ventcrawl_layer = src.piping_layer
 
 /obj/machinery/atmospherics/relaymove(mob/living/user, direction)
-	if(!(direction & initialize_directions)) //can't go in a way we aren't connecting to
+	if(user.loc != src || !(direction & initialize_directions)) //can't go in a way we aren't connecting to
 		return
 
 	var/obj/machinery/atmospherics/target_move = findConnecting(direction, user.ventcrawl_layer)
@@ -390,6 +390,8 @@ Pipelines + Other Objects -> Pipe network
 	user.canmove = 0
 	spawn(1)
 		user.canmove = 1
+	ventcrawl_to(user,findConnecting(direction, user.ventcrawl_layer),direction)
+	//For ventcrawl_to, see multiz/ventcrawl.dm
 
 /obj/machinery/atmospherics/proc/can_crawl_through()
 	return 1

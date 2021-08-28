@@ -7,6 +7,8 @@
 	wikiroute = ROLE_MINOR
 	logo_state = "spider-logo"
 	greets = list(GREET_DEFAULT)
+	default_admin_voice = "Your Spider Senses"
+	admin_voice_style = "skeleton"
 
 datum/role/giant_spider/Greet(var/greeting,var/custom)
 	if(!greeting)

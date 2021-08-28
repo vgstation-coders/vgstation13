@@ -383,6 +383,13 @@
 	if(health <= 0)
 		die()
 
+/obj/structure/bed/chair/vehicle/suicide_act(var/mob/living/user)
+	if(occupant == user)
+		to_chat(viewers(user), "<span class='danger'>[user] is licking the keyhole of the [src]! It looks like \he's trying to commit suicide.</span>")
+		return(SUICIDE_ACT_FIRELOSS)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth on the exhaust pipe of the [src]! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
+
 /obj/structure/bed/chair/vehicle/ex_act(severity)
 	switch (severity)
 		if(1.0)

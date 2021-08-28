@@ -17,7 +17,7 @@
 	blend_mode = BLEND_ADD
 
 	// Prevent shadows from jerking over walls when walking with a flashlight.
-	animate_movement = NO_STEPS
+	animate_movement = 1
 
 	alpha = 180
 
@@ -33,7 +33,7 @@
 /atom/movable/light/shadow
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
-	animate_movement = 1
+	animate_movement = 0
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
@@ -60,8 +60,9 @@
 		holder = null
 	for(var/thing in affecting_turfs)
 		var/turf/T = thing
-		if (T.shadow_atom == "\ref[src]")
-			T.shadow_atom = null
+		for (var/targ_dir in T.shadow_atom)
+			if (T.shadow_atom[targ_dir] == "\ref[src]")
+				T.shadow_atom[targ_dir] = null
 		T.lumcount = -1
 	affecting_turfs.Cut()
 	. = ..()
@@ -89,8 +90,9 @@
 // Moves the light overlay to the holder's turf and updates bleeding values accordingly.
 /atom/movable/light/proc/follow_holder()
 	for (var/turf/T in view(src, light_range))
-		if (T.shadow_atom == "\ref[src]")
-			T.shadow_atom = null
+		for (var/targ_dir in T.shadow_atom)
+			if (T.shadow_atom[targ_dir] == "\ref[src]")
+				T.shadow_atom[targ_dir] = 0
 	if(lighting_update_lights)
 		if(holder && holder.loc)
 			follow_holder_dir()

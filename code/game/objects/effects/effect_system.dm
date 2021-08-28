@@ -597,7 +597,7 @@ steam.start() -- spawns the effect
 		spawn(0)
 			var/turf/T = get_turf(src.holder)
 			if(T != src.oldposition)
-				if(istype(T, /turf/space))
+				if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
 					var/obj/effect/trails/I = new trail_type(src.oldposition)
 					src.oldposition = T
 					I.dir = src.holder.dir
@@ -641,7 +641,7 @@ steam.start() -- spawns the effect
 						src.oldposition = get_step(holder,EAST)
 						src.oldposition = get_step(oldposition,EAST)
 						src.oldloc = get_step(oldposition,NORTH)
-				if(istype(T, /turf/space))
+				if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
 					var/obj/effect/trails/ion/I = new /obj/effect/trails/ion(src.oldposition)
 					var/obj/effect/trails/ion/II = new /obj/effect/trails/ion(src.oldloc)
 					I.dir = src.holder.dir
@@ -746,7 +746,7 @@ steam.start() -- spawns the effect
 
 		if(metal)
 			var/turf/T = get_turf(src)
-			if(istype(T, /turf/space))
+			if(istype(T, /turf/space) || istype(T, /turf/simulated/open))
 				T.ChangeTurf(/turf/simulated/floor/foamedmetal)
 			if(metal == 2)
 				var/obj/structure/foamedmetal/M = new(src.loc)
