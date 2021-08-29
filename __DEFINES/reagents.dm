@@ -433,6 +433,7 @@
 #define IRONROT			"ironrot"
 #define GEOMETER		"geometer"
 #define EGG_YOLK		"egg_yolk"
+#define PANCAKE			"pancake"
 #define SPAGHETTI		"spaghetti"
 #define MUSTARD_POWDER	"mustard_powder"
 #define MAYO			"mayo"
