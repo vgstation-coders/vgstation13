@@ -7,21 +7,21 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
-	actions_types = list(/datum/action/item_action/hail)
+	actions_types = list(/datum/action/item_action/activate_hailer)
 
 	var/nextuse = 0
 	var/cooldown = 2 SECONDS
 	var/emagged = 0
 	var/insults = 0//just in case
 
-/obj/item/device/hailer/verb/hail()
-	set name = "Hail"
+/obj/item/device/hailer/verb/activate_hailer()
+	set src in usr
+	set name = "Activate Hailer"
+	set desc = "Activates your hailer."
 	set category = "Object"
-	set src in oview(1)
-
-	if(!usr.stat)
-		attack_self(usr)
-
+	if (!usr || loc != usr)
+		return
+	return attack_self(usr)
 
 /obj/item/device/hailer/proc/say_your_thing()
 	if(emagged)
