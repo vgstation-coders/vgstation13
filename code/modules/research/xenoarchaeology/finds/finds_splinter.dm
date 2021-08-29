@@ -24,12 +24,12 @@
 /obj/item/supermatter_splinter/prepickup(mob/living/user)
 	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in contents
 	if(SS)
-		SS.supermatter_act(source)
+		SS.supermatter_act(src)
 	else
 		var/obj/item/clothing/gloves/golden/G = user.get_item_by_slot(slot_gloves)
-			if(istype(G))
-				user.visible_message("<span class='notice'>The special lubrication on \the [G] prevents your hand from melting, but also prevents you from getting a grip.</span>")
-				return 1
+		if(istype(G))
+			to_chat(user,"<span class='notice'>The special lubrication on \the [G] prevents your hand from melting, but also prevents you from getting a grip.</span>")
+			return 1
 		var/datum/organ/external/external = user.get_active_hand_organ()
 		if(external)
 			user.visible_message("<span class='warning'>As \the [user] grasps onto \the [src], their [external.display_name] begins rapidly combusting!</span>", "<span class = 'warning'>As you try to get a grip onto \the [src], you feel your [external.display_name] tingle and glow, before it rapidly dissipates into ash.</span>")
@@ -40,7 +40,7 @@
 /obj/item/supermatter_splinter/kick_act(mob/living/carbon/human/user)
 	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in contents
 	if(SS)
-		SS.supermatter_act(source)
+		SS.supermatter_act(src)
 	else
 		var/obj/shoes = user.shoes
 		if(shoes)
@@ -59,7 +59,7 @@
 /obj/item/supermatter_splinter/bite_act(mob/living/carbon/human/user)
 	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in contents
 	if(SS)
-		SS.supermatter_act(source)
+		SS.supermatter_act(src)
 	else
 		var/datum/organ/external/head = user.get_organ(LIMB_HEAD)
 		if(head)
