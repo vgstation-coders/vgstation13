@@ -147,6 +147,7 @@ Attach to transfer valve and open. BOOM.
 	plane = ABOVE_TURF_PLANE
 
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 /obj/effect/fire/proc/Extinguish()
 	var/turf/simulated/S=loc

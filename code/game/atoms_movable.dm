@@ -73,6 +73,10 @@
 
 	lazy_invoke_event(/lazy_event/on_destroyed, list("thing" = src))
 
+	var/turf/T = loc
+	if (opacity && isturf(loc))
+		T = loc // check_blocks_light() is called later on this
+
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
 
@@ -87,6 +91,9 @@
 	break_all_tethers()
 
 	forceMove(null)
+
+	if (T)
+		T.check_blocks_light()
 
 	if(virtualhearer)
 		qdel(virtualhearer)

@@ -8,6 +8,7 @@
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 	var/wax = 200
 	var/lit = 0

@@ -597,7 +597,7 @@
 	icon_state = "ghettorig0"
 	item_state = "ghettorig0"
 	light_power = 1.5
-	var/brightness_on = 4 //luminosity when on
+	light_range = 4
 	var/on = 0
 	_color = "ghetto"
 	pressure_resistance = 4 * ONE_ATMOSPHERE
@@ -618,7 +618,7 @@
 	item_state = "ghettorig[on]"
 
 	if(on)
-		set_light(brightness_on)
+		set_light()
 	else
 		kill_light()
 
