@@ -7,11 +7,21 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
+	actions_types = list(/datum/action/item_action/hail)
 
 	var/nextuse = 0
 	var/cooldown = 2 SECONDS
 	var/emagged = 0
 	var/insults = 0//just in case
+
+/obj/item/device/hailer/verb/hail()
+	set name = "Hail"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!usr.stat)
+		attack_self(usr)
+
 
 /obj/item/device/hailer/proc/say_your_thing()
 	if(emagged)
