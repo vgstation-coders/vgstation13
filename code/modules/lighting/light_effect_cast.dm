@@ -308,7 +308,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
-	I.alpha = 180 - max(0, get_dist(src, target_turf) - 3)*25
+	I.alpha = 180
 	target_turf.shadow_atom[num2text(targ_dir)] = "\ref[src]"
 	temp_appearance += I
 
