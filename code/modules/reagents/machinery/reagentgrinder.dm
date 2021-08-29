@@ -396,11 +396,6 @@ var/global/list/juice_items = list (
 		if (istype(O, i))
 			return blend_items[i]
 
-/obj/machinery/reagentgrinder/proc/get_allowed_snack_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
-	for(var/i in blend_items)
-		if(istype(O, i))
-			return blend_items[i]
-
 /obj/machinery/reagentgrinder/proc/get_allowed_juice_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
 	for(var/i in juice_items)
 		if(istype(O, i))
@@ -479,7 +474,7 @@ var/global/list/juice_items = list (
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
 
-		var/allowed = get_allowed_snack_by_id(O)
+		var/allowed = get_allowed_by_id(O)
 		if(isnull(allowed))
 			break
 
