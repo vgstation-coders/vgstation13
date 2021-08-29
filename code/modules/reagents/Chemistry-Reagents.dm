@@ -4542,7 +4542,7 @@
 	id = FROSTOIL
 	description = "A special oil that noticably chills the body. Extraced from Icepeppers."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#B31008" //rgb: 139, 166, 233
+	color = "#8BA6E9" //rgb: 139, 166, 233
 	data = 1 //Used as a tally
 	custom_metabolism = FOOD_METABOLISM
 
@@ -8490,7 +8490,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Aww, come on Double D, I don't say 'gravy' all the time."
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 10 * REAGENTS_METABOLISM
-	color = "#EDEDE1"
+	color = "#E7A568"
 
 /datum/reagent/gravy/on_mob_life(var/mob/living/M, var/alien)
 	if(..())

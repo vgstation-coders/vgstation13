@@ -106,7 +106,7 @@
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
 		if (condiment_overlay && istype (target, /obj/item/weapon/reagent_containers/food/snacks))
 			var/list/params_list = params2list(params)
-			var/image/I = image('icons/obj/food.dmi',target,condiment_overlay)
+			var/image/I = image('icons/obj/condiment_overlays.dmi',target,condiment_overlay)
 			I.pixel_x = clamp(text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			I.pixel_y = clamp(text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			if (overlay_colored)
@@ -131,27 +131,31 @@
 				name = KETCHUP
 				desc = "You feel more American already."
 				icon_state = KETCHUP
-				condiment_overlay = "ketchup"
+				condiment_overlay = KETCHUP
 			if(MUSTARD)
 				name = "mustard"
 				desc = "A spicy yellow paste."
 				icon_state = MUSTARD
+				condiment_overlay = MUSTARD
 			if(RELISH)
 				name = "relish"
 				desc = "A pickled cucumber jam. Tasty!"
 				icon_state = RELISH
+				condiment_overlay = RELISH
 			if(CAPSAICIN)
 				name = "hotsauce"
 				desc = "You can almost TASTE the stomach ulcers now!"
 				icon_state = "hotsauce"
+				condiment_overlay = "hotsauce"
 			if(ENZYME)
 				name = "universal enzyme"
-				desc = "Used in cooking various dishes."
+				desc = "A universal enzyme used in the preperation of certain chemicals and foods."
 				icon_state = ENZYME
 			if(FLOUR)
 				name = "flour sack"
 				desc = "A big bag of flour. Good for baking!"
 				icon_state = FLOUR
+				condiment_overlay = FLOUR
 			if(MILK)
 				name = "space milk"
 				desc = "It's milk. White and nutritious goodness!"
@@ -168,10 +172,12 @@
 				name = "soy sauce"
 				desc = "A salty soy-based flavoring."
 				icon_state = SOYSAUCE
+				condiment_overlay = SOYSAUCE
 			if(FROSTOIL)
 				name = "coldsauce"
 				desc = "Leaves the tongue numb in its passage."
 				icon_state = "coldsauce"
+				condiment_overlay = "coldsauce"
 			if(SODIUMCHLORIDE)
 				name = "salt shaker"
 				desc = "Salt. From space oceans, presumably."
@@ -185,8 +191,8 @@
 			if(HOLYSALTS)
 				name = "holy salts"
 				desc = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
-				icon_state = "holysalts"
-				condiment_overlay = "holysalt"
+				icon_state = HOLYSALTS
+				condiment_overlay = HOLYSALTS
 			if(CORNOIL)
 				name = "corn oil"
 				desc = "A delicious oil used in cooking. Made from corn."
@@ -200,6 +206,7 @@
 				name = CARAMEL
 				desc = "Tasty caramel cubes!"
 				icon_state = CARAMEL
+				condiment_overlay = CARAMEL
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
@@ -208,7 +215,7 @@
 				name = "malt vinegar bottle"
 				desc = "Perfect for fish and chips!"
 				icon_state = "vinegar_container"
-				item_state = null
+				condiment_overlay = VINEGAR
 			if(HONEY)
 				name = "honey pot"
 				desc = "Sweet and healthy!"
@@ -247,17 +254,22 @@
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."
 				icon_state = CINNAMON
+				condiment_overlay = CINNAMON
 			if(GRAVY)
+				name = "gravy cruise"
+				desc = "Still a bit too small to sail on."
 				icon_state = GRAVY
+				condiment_overlay = GRAVY
 			if(COCO)
 				name = "cocoa powder"
 				desc = "A vital component for making chocolate."
 				icon_state = COCO
+				condiment_overlay = COCO
 			if(MAYO)
 				name = "mayonaise jar"
 				desc = "Not an instrument."
 				icon_state = MAYO
-				condiment_overlay = "mayo"
+				condiment_overlay = MAYO
 			if(CREAM)
 				name = "whipped cream dispenser"
 				desc = "Instant delight." //placeholder desc
@@ -297,7 +309,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/enzyme
 	name = "universal enzyme"
-	desc = "Used in cooking various dishes."
+	desc = "A universal enzyme used in the preperation of certain chemicals and foods."
 	icon_state = ENZYME
 
 /obj/item/weapon/reagent_containers/food/condiment/enzyme/New()
