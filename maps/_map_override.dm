@@ -54,5 +54,9 @@
 		#undef MAP_OVERRIDE
 		#include "synergy.dm"
 		#define MAP_OVERRIDE 10
+	#elif MAP_OVERRIDE == 11
+		#undef MAP_OVERRIDE
+		#include "waystation.dm"
+		#define MAP_OVERRIDE 11
 	#endif
 #endif
