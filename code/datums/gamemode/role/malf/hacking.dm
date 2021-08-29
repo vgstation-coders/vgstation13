@@ -9,7 +9,8 @@
 	var/malf_disrupted = FALSE
 	var/aicontrolbypass = FALSE
 	var/hack_abilities = list(
-		/datum/malfhack_ability/toggle/disable
+		/datum/malfhack_ability/toggle/disable,
+		/datum/malfhack_ability/overload
 	)
 
 /obj/machinery/proc/initialize_malfhack_abilities()
@@ -133,7 +134,7 @@
 		var/name_to_display = A.name
 		var/locked = FALSE
 		if(!A.check_available(malf))
-			name_to_display = A.locked_name
+			name_to_display = A.name + " (Requires Module)"
 			locked = TRUE
 		else if(!A.check_cost(malf))
 			locked = TRUE

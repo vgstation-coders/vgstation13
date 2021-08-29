@@ -93,14 +93,37 @@ var/global/list/ghdel_profiling = list()
 					contents.Add(new_value)
 					return 1
 
-/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, duration = 0.2 SECONDS)
+
+//pixelshift - max pixels to shift on each shake
+//speed - The speed of each shake
+//loop - How many shakes to perform
+//directions - How many times to change shake direction
+//Total shaking time is equal to speed * loops * directions
+/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, speed = 0.2 SECONDS, loops = 3, directions = 3)
+	set waitfor = 0
 	var/initialpixelx = pixel_x
 	var/initialpixely = pixel_y
-	var/shiftx = rand(-pixelshiftx,pixelshiftx)
-	var/shifty = rand(-pixelshifty,pixelshifty)
-	animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = 0.2, loop = duration)
-	pixel_x = initialpixelx
-	pixel_y = initialpixely
+	var/shakedirections = 0
+	while(shakedirections < directions)
+		if(!src)
+			return
+
+		//pick random values to shift to, exclude the initial position
+		var/shiftx = rand(1,pixelshiftx)
+		var/shifty = rand(1,pixelshifty)
+		if(prob(50))
+			shiftx = -shiftx
+		if(prob(50))
+			shifty = -shifty 
+
+		animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = speed, loop = loops)
+		shakedirections = shakedirections + 1
+		sleep(speed * loops)
+		pixel_x = initialpixelx
+		pixel_y = initialpixely
+
+
+
 
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x

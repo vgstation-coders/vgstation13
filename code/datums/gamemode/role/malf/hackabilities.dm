@@ -1,7 +1,6 @@
 /datum/malfhack_ability
 	var/name = "HACK"						//ability name (must be unique)
 	var/desc = "This does something."	//ability description
-	var/locked_name = "HACK (Requires Something)"
 	var/icon = "radial_off"				//icon to display in the radial
 	var/icon_toggled = "radial_on"
 	
@@ -140,7 +139,6 @@
 /datum/malfhack_ability/create_lifelike_hologram
 	name = "Create Lifelike Hologram"
 	desc = "Project a realistic looking hologram from this holopad."
-	locked_name = "Create Lifelike Hologram (Requires Module)"
 	icon = "radial_holo"
 	cost = 5
 
@@ -155,6 +153,30 @@
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return FALSE
-	if(!(/datum/malf_module/holopadfaker in M.purchased_modules))
+	if(!(locate(/datum/malf_module/holopadfaker) in M.purchased_modules))
+		return FALSE
+	return TRUE
+
+//--------------------------------------------------------
+
+/datum/malfhack_ability/overload
+	name = "Overload Machine"
+	desc = "Overload the circuits in this machine, causing an explosion."
+	icon = "radial_overload"
+	cost = 5
+
+/datum/malfhack_ability/overload/activate(var/mob/living/silicon/ai/A)
+	machine.visible_message("<span class='warning'>You hear a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>") //highlight this, motherfucker
+	spark(machine)
+	machine.shake_animation(4, 4, 0.2 SECONDS, 4, 5)
+	spawn(4 SECONDS)
+		explosion(get_turf(machine), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
+		qdel(machine)
+
+/datum/malfhack_ability/overload/check_available(mob/living/silicon/ai/A)
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(!istype(A) || !istype(M))
+		return FALSE
+	if(!(locate(/datum/malf_module/overload) in M.purchased_modules))
 		return FALSE
 	return TRUE

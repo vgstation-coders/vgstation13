@@ -13,7 +13,7 @@
 	var/list/purchased_modules = list()				//modules (upgrades) purchased
 
 	//fuck radials
-	var/list/ability_name_to_price = list()
+	var/list/ability_name_to_datum = list()
 
 /datum/role/malfAI/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -32,7 +32,7 @@
 		
 		for(var/A in abilities)
 			var/datum/malfhack_ability/M = new A
-			ability_name_to_price[M.name] = M.cost
+			ability_name_to_datum[M.name] = M
 			qdel(M)
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
@@ -66,7 +66,8 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		for(var/obj/screen/radial/slice/S in menu.elements)
 			if(!istype(S))
 				continue
-			if(processing_power >= ability_name_to_price[S.name])
+			var/datum/malfhack_ability/M = ability_name_to_datum[S.name]
+			if(M.check_cost(antag.current) && M.check_available(antag.current))
 				S.Unlock()
 			else
 				S.Lock()

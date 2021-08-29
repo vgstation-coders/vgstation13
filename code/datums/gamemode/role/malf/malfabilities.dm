@@ -51,7 +51,6 @@
 	icon_state = "firewall"
 	activate_cost = 5
 
-
 /datum/malf_module/active/coreshield/on_purchase()
 	malf.vis_contents += new /obj/effect/overlay/ai_shield
 
@@ -83,6 +82,9 @@
 
 //------------------------------------------------
 
+//Purchaseable hack abilities
 /datum/malf_module/holopadfaker
+/datum/malf_module/overload
+/datum/malf_module/shunting
 
 //------------------------------------------------

@@ -12,6 +12,7 @@
 #define UPSTATE_BLUESCREEN 32
 #define UPSTATE_WIREEXP 64
 #define UPSTATE_ALLGOOD 128
+#define UPSTATE_SHUNT 256
 
 //update_overlay
 #define APC_UPOVERLAY_CHARGEING0 1
@@ -262,6 +263,8 @@
 				icon_state = "[basestate]-nocover"
 		else if(update_state & UPSTATE_BROKE)
 			icon_state = "apc-b"
+		else if(update_state & UPSTATE_SHUNT)
+			icon_state = "apcshunt"
 		else if(update_state & UPSTATE_BLUESCREEN)
 			icon_state = "apcemag"
 		else if(update_state & UPSTATE_WIREEXP)
@@ -301,6 +304,8 @@
 		update_state |= UPSTATE_BROKE
 	if(stat & MAINT)
 		update_state |= UPSTATE_MAINT
+	if(locate(/mob/living/silicon/shuntedAI) in contents)
+		update_state |= UPSTATE_SHUNT
 
 	if(opened)
 		if(opened==1)
@@ -1003,6 +1008,10 @@
 /obj/machinery/power/apc/proc/malfoccupy(var/mob/living/silicon/ai/malf)
 	if(!istype(malf))
 		return
+	occupant = new /mob/living/silicon/shuntedAI(src, malf.laws, malf)
+	malf.mind.transfer_to(occupant)
+
+/*
 	if(istype(malf.loc, /obj/machinery/power/apc)) // Already in an APC
 		to_chat(malf, "<span class='warning'>You must evacuate your current apc first.</span>")
 		return
@@ -1036,7 +1045,7 @@
 		if(istype(mf.stat_datum, /datum/stat/faction/malf))
 			var/datum/stat/faction/malf/MS = mf.stat_datum
 			MS.shunted = TRUE
-
+*/
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)
 	if(!src.occupant)
@@ -1261,10 +1270,6 @@
 		update()
 	else if (last_ch != charging)
 		queue_icon_update()
-
-	if(malfai && cell.charge > 0 && !aidisabled)
-		var/datum/role/malfAI/M = malfai.mind.GetRole(MALF)
-		M.processing_power += 0.25
 
 // val 0=off, 1=off(auto) 2=on 3=on(auto)
 // on 0=off, 1=on, 2=autooff

@@ -61,6 +61,8 @@
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return
+	if(icon_state == "[base_icon_state]-hover")
+		return
 	if (M.processing_power >= module.activate_cost)
 		color = null
 	else
@@ -200,7 +202,8 @@
 		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/coreshield,
 		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/explosivecore,
 		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/explosiveborgs,
-		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/holopadfaker
+		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/holopadfaker,
+		/obj/abstract/mind_ui_element/hoverable/malf_upgrade/overload
 		)
 	display_with_parent = FALSE
 
@@ -227,7 +230,7 @@
 
 /obj/abstract/mind_ui_element/hoverable/malf_upgrade
 	name = "BROKEN UPGRADE"
-	desc = "This is a description."
+	desc = "This is a broken description."
 	icon = 'icons/ui/malf/32x32.dmi'
 	icon_state = "bg"
 	var/upgrade_icon = ""
@@ -264,6 +267,9 @@
 	if (purchased)
 		icon_state = "[base_icon_state]-purchased"
 		color = null
+		return
+	else if(icon_state == "[base_icon_state]-hover")
+		return
 	else if (M.processing_power >= cost)
 		color = null
 	else
@@ -327,3 +333,12 @@
 	cost = 10
 	offset_y = 104 
 	visible_offset_x = -96
+
+/obj/abstract/mind_ui_element/hoverable/malf_upgrade/overload
+	name = "Machine Overload"
+	desc = "Allows you to hijack the thermal regulators within station machinery, causing them to explode violently."
+	upgrade_icon = "overload"
+	module_type = /datum/malf_module/overload
+	cost = 10
+	offset_y = 104 
+	visible_offset_x = -56

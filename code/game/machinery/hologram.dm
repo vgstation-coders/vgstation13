@@ -374,6 +374,7 @@ Holographic project of everything else.
 /obj/effect/overlay/hologram/lifelike/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("<span class='warning'>The [Proj] passes straight through [src]!</span>")
 
-/obj/effect/overlay/hologram/lifelike/Cross(atom/movable/AM)
-	if(AM.density == TRUE)
+/obj/effect/overlay/hologram/lifelike/Crossed(atom/movable/AM)
+	..()
+	if(AM && AM.density == TRUE)
 		visible_message("<span class='warning'>The [AM] passes straight through [src]!</span>")
