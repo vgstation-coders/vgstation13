@@ -21,7 +21,7 @@
 		)
 	var/datum/dna/source_dna
 
-/mob/living/simple_animal/hostile/heart_attack/update_heart/proc/update_appearance(var/obj/item/organ/internal/heart/source, var/datum/dna/_dna, var/list/vir = list())
+/mob/living/simple_animal/hostile/heart_attack/proc/update_heart(var/obj/item/organ/internal/heart/source, var/datum/dna/_dna, var/list/vir = list())
 	if (!istype(source))
 		return
 	appearance = source.appearance
