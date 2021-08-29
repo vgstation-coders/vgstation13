@@ -36,6 +36,7 @@
 
 /obj/abstract/screen/plane/self_vision
 	blend_mode = BLEND_ADD
+	mouse_opacity = 0
 	plane = LIGHTING_PLANE_MASTER
 	layer = SELF_VISION_LAYER
 	icon = 'icons/lighting/self_vision_default.dmi'
@@ -47,6 +48,7 @@
 
 /obj/abstract/screen/plane/dark
 	blend_mode = BLEND_ADD
+	mouse_opacity = 0
 	plane = LIGHTING_PLANE_MASTER // Just below the master plane.
 	icon = 'icons/lighting/over_dark.dmi'
 	alpha = 10

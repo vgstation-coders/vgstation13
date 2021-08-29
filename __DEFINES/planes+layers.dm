@@ -51,7 +51,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define relative_plane_to_plane(x,y) (x - y + FLOAT_PLANE)
 
 
-#define CLICKCATCHER_PLANE (-99)
+#define CLICKCATCHER_PLANE (-99 + FLOAT_PLANE)
 #define SPACE_BACKGROUND_PLANE (-98)
 #define SPACE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 1) // -97
 #define SPACE_DUST_PLANE (SPACE_PARALLAX_PLANE + 1) // -96
@@ -217,7 +217,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define BASE_PLANE 				(16 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define BASE_PLANE 				(16)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
 #define MISC_HUD_MARKERS_PLANE	16
 

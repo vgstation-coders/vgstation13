@@ -86,7 +86,7 @@
 
 	break_all_tethers()
 
-	forceMove(null, harderforce = TRUE)
+	forceMove(null)
 
 	if(virtualhearer)
 		qdel(virtualhearer)
