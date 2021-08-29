@@ -112,7 +112,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	layer = ABOVE_DOOR_LAYER
 	use_power = 2
 	idle_power_usage = 2
-	active_power_usage = 20
+	active_power_usage = 10
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
 	var/on = 0					// 1 if on, 0 if off
 	var/on_gs = 0
@@ -248,28 +248,24 @@ var/global/list/obj/machinery/light/alllights = list()
 
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
-
-
 	update_icon()
 	if(on)
-		if(light_range != current_bulb.brightness_range || light_power != current_bulb.brightness_power || light_color != current_bulb.brightness_color)
-			current_bulb.switchcount++
-			if(current_bulb.rigged)
-				if(current_bulb.status == LIGHT_OK && trigger)
+		current_bulb.switchcount++
+		if(current_bulb.rigged)
+			if(current_bulb.status == LIGHT_OK && trigger)
 
-					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-
-					explode()
-			else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
-				if(current_bulb.status == LIGHT_OK && trigger)
-					current_bulb.status = LIGHT_BURNED
-					icon_state = "l[current_bulb.base_state]-burned"
-					on = 0
-					kill_light()
-			else
-				use_power = 2
-				set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
+				log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+				message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+				explode()
+		else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
+			if(current_bulb.status == LIGHT_OK && trigger)
+				current_bulb.status = LIGHT_BURNED
+				icon_state = "l[current_bulb.base_state]-burned"
+				on = 0
+				kill_light()
+		else
+			use_power = 2
+			set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
 	else
 		use_power = 1
 		kill_light()
@@ -622,9 +618,9 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 60)
 	w_type = RECYK_GLASS
 	brightness_range = 5
-	brightness_power = 4
+	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
-	cost = 8
+	cost = 4
 
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
@@ -632,7 +628,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	base_state = "hetube"
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
 	brightness_range = 8
-	brightness_power = 6
+	brightness_power = 4
 	brightness_color = LIGHT_COLOR_HALOGEN
 	cost = 2
 
@@ -642,7 +638,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	base_state = "hetube"
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 60)
 	brightness_range = 8
-	brightness_power = 6
+	brightness_power = 4
 	brightness_color = "#FFFFFF"
 	cost = 2
 
@@ -661,10 +657,10 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/item/weapon/light/tube/large
 	w_class = W_CLASS_SMALL
 	name = "large light tube"
-	brightness_range = 15
-	brightness_power = 6
+	brightness_range = 8
+	brightness_power = 4
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
-	cost = 15
+	cost = 8
 
 /obj/item/weapon/light/bulb
 	name = "light bulb"
@@ -674,10 +670,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	item_state = "contvapour"
 	fitting = "bulb"
 	brightness_range = 4
-	brightness_power = 4
+	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
-	cost = 5
+	cost = 2
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/light/bulb/broken
@@ -688,7 +684,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hebulb"
 	brightness_range = 6
-	brightness_power = 6
+	brightness_power = 3
 	brightness_color = LIGHT_COLOR_HALOGEN
 	cost = 1
 	starting_materials = list(MAT_GLASS = 150, MAT_IRON = 30)
@@ -698,7 +694,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	desc = "An LED light bulb with built-in electronics to control various properties."
 	base_state = "hebulb"
 	brightness_range = 6
-	brightness_power = 6
+	brightness_power = 3
 	brightness_color = "#FFFFFF"
 	cost = 1
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 30)
@@ -721,7 +717,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	base_state = "fbulb"
 	item_state = "egg4"
 	brightness_range = 5
-	brightness_power = 4
+	brightness_power = 2
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
 
 // update the icon state and description of the light
