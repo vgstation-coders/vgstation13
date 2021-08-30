@@ -23,13 +23,7 @@
 		},
 		/datum/zLevel/centcomm,
 		/datum/zLevel/snow{
-			name = "CrashedSat" ;
-			},
-		/datum/zLevel/snow{
 			name = "derelict" ;
-			},
-		/datum/zLevel/snow{
-			name = "spacePirateShip" ;
 			},
 		)
 	enabled_jobs = list(/datum/job/trader)
