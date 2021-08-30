@@ -1,34 +1,34 @@
 #define NEXT_PAGE_ID "__next__"
 #define DEFAULT_CHECK_DELAY 2 SECONDS
 
-/obj/abstract/screen/radial
+/obj/screen/radial
 	icon = 'icons/mob/radial.dmi'
 	layer = ABOVE_HUD_LAYER
 	plane = ABOVE_HUD_PLANE
 	var/datum/radial_menu/parent
 
-/obj/abstract/screen/radial/Destroy()
+/obj/screen/radial/Destroy()
 	..()
 	parent = null
 
-/obj/abstract/screen/radial/slice
+/obj/screen/radial/slice
 	icon_state = "radial_slice"
 	var/choice
 	var/next_page = FALSE
 	var/tooltip_desc
 
-/obj/abstract/screen/radial/slice/MouseEntered(location, control, params)
+/obj/screen/radial/slice/MouseEntered(location, control, params)
 	. = ..()
 	icon_state = "radial_slice_focus"
 	if(tooltip_desc)
 		openToolTip(usr,src,params,title = src.name,content = tooltip_desc,theme = parent.tooltip_theme)
 
-/obj/abstract/screen/radial/slice/MouseExited(location, control, params)
+/obj/screen/radial/slice/MouseExited(location, control, params)
 	. = ..()
 	icon_state = "radial_slice"
 	closeToolTip(usr)
 
-/obj/abstract/screen/radial/slice/Click(location, control, params)
+/obj/screen/radial/slice/Click(location, control, params)
 	if (!parent)//we're not ready yet
 		return
 	if(usr.client == parent.current_user)
@@ -40,11 +40,11 @@
 			else
 				parent.element_chosen(choice,usr)
 
-/obj/abstract/screen/radial/center
+/obj/screen/radial/center
 	name = "Close Menu"
 	icon_state = "radial_center"
 
-/obj/abstract/screen/radial/center/Click(location, control, params)
+/obj/screen/radial/center/Click(location, control, params)
 	if (!parent)//we're not ready yet
 		return
 	if(usr.client == parent.current_user)
@@ -66,8 +66,8 @@
 	var/tooltip_theme = "radial-default"
 
 	var/selected_choice
-	var/list/obj/abstract/screen/elements = list()
-	var/obj/abstract/screen/radial/center/close_button
+	var/list/obj/screen/elements = list()
+	var/obj/screen/radial/center/close_button
 	var/client/current_user
 	var/atom/anchor
 	var/image/menu_holder
@@ -162,7 +162,7 @@
 	if(elements.len < max_elements)
 		var/elements_to_add = max_elements - elements.len
 		for(var/i in 1 to elements_to_add) //Create all elements
-			var/obj/abstract/screen/radial/new_element = new /obj/abstract/screen/radial/slice
+			var/obj/screen/radial/new_element = new /obj/screen/radial/slice
 			new_element.icon = icon_file
 			new_element.parent = src
 			elements += new_element
@@ -194,14 +194,14 @@
 	var/list/page_choices = page_data[current_page]
 	var/angle_per_element = round(zone / page_choices.len)
 	for(var/i in 1 to elements.len)
-		var/obj/abstract/screen/radial/E = elements[i]
+		var/obj/screen/radial/E = elements[i]
 		var/angle = Wrap(starting_angle + (i - 1) * angle_per_element,0,360)
 		if(i > page_choices.len)
 			HideElement(E)
 		else
 			SetElement(E,page_choices[i],angle,anim = anim,anim_order = i)
 
-/datum/radial_menu/proc/HideElement(obj/abstract/screen/radial/slice/E)
+/datum/radial_menu/proc/HideElement(obj/screen/radial/slice/E)
 	E.overlays.len = 0
 	E.alpha = 0
 	E.name = "None"
@@ -210,7 +210,7 @@
 	E.choice = null
 	E.next_page = FALSE
 
-/datum/radial_menu/proc/SetElement(obj/abstract/screen/radial/slice/E,choice_id,angle,anim,anim_order)
+/datum/radial_menu/proc/SetElement(obj/screen/radial/slice/E,choice_id,angle,anim,anim_order)
 	//Position
 	var/py = round(cos(angle) * radius) + py_shift
 	var/px = round(sin(angle) * radius)
@@ -232,7 +232,7 @@
 	if(choice_id == NEXT_PAGE_ID)
 		E.name = "Next Page"
 		E.next_page = TRUE
-		E.overlays += "radial_next"
+		push(E.overlays, "radial_next")
 	else
 		if(istext(choices_values[choice_id]))
 			E.name = choices_values[choice_id]
@@ -243,7 +243,7 @@
 		E.maptext = null
 		E.next_page = FALSE
 		if(choices_icons[choice_id])
-			E.overlays += choices_icons[choice_id]
+			push(E.overlays,choices_icons[choice_id])
 		if(choices_tooltips[choice_id])
 			E.tooltip_desc = choices_tooltips[choice_id]
 

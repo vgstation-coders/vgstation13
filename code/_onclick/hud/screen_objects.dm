@@ -6,10 +6,6 @@
 	They are used with the client/screen list and the screen_loc var.
 	For more information, see the byond documentation on the screen_loc and screen vars.
 */
-
-/obj/abstract
-	vis_flags = 0
-
 /obj/abstract/screen
 	name = ""
 	icon = 'icons/mob/screen1.dmi'

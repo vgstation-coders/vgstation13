@@ -748,7 +748,7 @@
 /obj/machinery/photobooth/New()
 	..()
 	var/image/I = image(icon, src, "[icon_state]_overlay")
-	I.plane = relative_plane(ABOVE_HUMAN_PLANE)
+	I.plane = ABOVE_HUMAN_PLANE
 	I.layer = 0
 	overlays += I
 

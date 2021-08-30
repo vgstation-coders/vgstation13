@@ -196,6 +196,10 @@
 		. = L[L.len]
 		L.len--
 
+//Puts an item on the end of a list
+/proc/push(list/L, thing)
+	L += thing
+
 //Shift/Unshift works on a FIFO system unlike pop/push working on FILO
 //Returns the bottom(first) element from the list and removes it from the list
 /proc/shift(list/L)

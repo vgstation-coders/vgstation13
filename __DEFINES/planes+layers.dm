@@ -43,10 +43,6 @@ What is the naming convention for planes or layers?
 */
 
 
-#define relative_plane(x) (x - plane + FLOAT_PLANE)
-
-#define relative_plane_to_plane(x,y) (x - y + FLOAT_PLANE)
-
 
 #define CLICKCATCHER_PLANE -99
 #define SPACE_BACKGROUND_PLANE -98
