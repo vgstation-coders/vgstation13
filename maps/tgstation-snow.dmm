@@ -78878,16 +78878,6 @@
 	icon_state = "whiteblue"
 	},
 /area/medical/storage)
-"jEO" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/station/garage)
 "jER" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /obj/structure/cable{
@@ -83862,6 +83852,10 @@
 /obj/structure/window/reinforced,
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint2)
+"loY" = (
+/obj/machinery/suit_storage_unit/standard_unit,
+/turf/simulated/floor/engine/concrete,
+/area/station/garage)
 "lpZ" = (
 /turf/simulated/shuttle/wall{
 	icon_state = "swall_s9"
@@ -84634,20 +84628,6 @@
 	icon_state = "fakewindows2"
 	},
 /area/syndicate_mothership)
-"lCs" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/station/garage)
 "lCA" = (
 /obj/structure/closet/wardrobe/pjs,
 /turf/simulated/floor{
@@ -89305,6 +89285,12 @@
 	icon_state = "dark"
 	},
 /area/turret_protected/ai_upload)
+"nnK" = (
+/obj/machinery/door/airlock/glass{
+	name = "Pod Bay"
+	},
+/turf/simulated/wall,
+/area/station/garage)
 "nnW" = (
 /obj/structure/closet,
 /obj/machinery/power/apc{
@@ -91660,6 +91646,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/machinery/vending/snowgear,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -91715,6 +91702,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/machinery/vending/building,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -92403,6 +92391,10 @@
 	icon_state = "chapel"
 	},
 /area/wizard_station)
+"osO" = (
+/obj/structure/closet/cabinet/snow,
+/turf/simulated/floor,
+/area/storage/primary)
 "osR" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Bar Storage";
@@ -93468,6 +93460,16 @@
 /obj/item/stack/package_wrap,
 /turf/simulated/floor,
 /area/storage/primary)
+"oJs" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/station/garage)
 "oJt" = (
 /obj/structure/table,
 /turf/simulated/floor/airless,
@@ -95715,6 +95717,20 @@
 	},
 /turf/simulated/floor,
 /area/ai_monitored/storage/eva)
+"pzW" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/station/garage)
 "pAa" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -113280,12 +113296,6 @@
 	icon_state = "dark"
 	},
 /area/bridge)
-"wak" = (
-/obj/machinery/door/airlock/glass{
-	name = "Pod Bay"
-	},
-/turf/simulated/wall,
-/area/station/garage)
 "wap" = (
 /obj/structure/table,
 /obj/item/clothing/suit/straight_jacket,
@@ -235491,7 +235501,7 @@ mPY
 nxq
 ogj
 oIo
-nAT
+osO
 qol
 qTt
 rRf
@@ -236394,9 +236404,9 @@ lqc
 lUx
 lqc
 lqc
-wak
+nnK
 lqc
-lCs
+pzW
 lqc
 lqc
 qVR
@@ -236692,7 +236702,7 @@ aaa
 aaa
 aaa
 jVR
-nCI
+loY
 nCI
 jVR
 mTP
@@ -236994,12 +237004,12 @@ ycx
 ycx
 ycx
 kno
-nCI
+loY
 nCI
 kno
 mTP
 nCI
-jEO
+oJs
 oLp
 psp
 qpB
@@ -237301,7 +237311,7 @@ nCI
 mmD
 nCI
 nCI
-jEO
+oJs
 oLp
 psv
 qrp
@@ -237603,7 +237613,7 @@ nCI
 mmD
 nCI
 nCI
-jEO
+oJs
 oKL
 psV
 lqc
@@ -237905,7 +237915,7 @@ lqQ
 lqc
 mSO
 mTP
-jEO
+oJs
 oLp
 pts
 qqJ
@@ -238207,7 +238217,7 @@ nCI
 mmD
 nCI
 nCI
-jEO
+oJs
 oKV
 pub
 lqc
@@ -238509,7 +238519,7 @@ nCI
 mmD
 nCI
 nCI
-jEO
+oJs
 oLp
 pul
 qqP
@@ -238806,12 +238816,12 @@ ycx
 ycx
 ycx
 jVR
-nCI
+loY
 nCI
 jVR
 mTP
 nCI
-jEO
+oJs
 oLp
 puq
 qrp
@@ -239108,7 +239118,7 @@ aaa
 aaa
 aaa
 kno
-nCI
+loY
 nCI
 kno
 mTQ
