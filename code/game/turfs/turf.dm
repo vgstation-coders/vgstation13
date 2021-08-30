@@ -404,6 +404,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/simulated/W = new N(src)
+		if(world.has_round_started())
+			initialize()
 		if(env)
 			W.air = env //Copy the old environment data over if both turfs were simulated
 
@@ -417,7 +419,6 @@
 			SSair.mark_for_update(src)
 
 		W.levelupdate()
-		W.update_icon(1)
 		W.post_change() //What to do after changing the turf. Handles stuff like zshadow updates.
 		. = W
 
@@ -428,7 +429,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
-		W.initialize()
+		if(world.has_round_started())
+			W.initialize()
 
 		if(tell_universe)
 			universe.OnTurfChange(W)
