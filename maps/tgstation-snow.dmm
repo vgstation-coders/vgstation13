@@ -74013,6 +74013,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
+"hRB" = (
+/obj/machinery/door/airlock/glass{
+	name = "Pod Bay"
+	},
+/turf/simulated/floor/engine/concrete,
+/area/station/garage)
 "hRG" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
@@ -76180,6 +76186,16 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/ghettobar)
+"iGA" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/station/garage)
 "iGU" = (
 /obj/structure/window/barricade/full,
 /turf/simulated/floor/wood,
@@ -81488,16 +81504,6 @@
 	temperature = 80
 	},
 /area/tcomms/chamber)
-"kzK" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/station/garage)
 "kzM" = (
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
 /obj/machinery/light_switch{
@@ -82418,6 +82424,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
+"kNt" = (
+/obj/structure/closet/cabinet/snow,
+/turf/simulated/floor,
+/area/storage/primary)
 "kNw" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 6
@@ -89913,10 +89923,6 @@
 /obj/structure/catwalk,
 /turf/unsimulated/floor/snow,
 /area)
-"nzH" = (
-/obj/structure/closet/cabinet/snow,
-/turf/simulated/floor,
-/area/storage/primary)
 "nzW" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -93468,6 +93474,11 @@
 /obj/structure/table,
 /turf/simulated/floor/airless,
 /area)
+"oJw" = (
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/station/garage)
 "oJG" = (
 /obj/structure/table,
 /obj/item/stack/sheet/glass/glass{
@@ -93478,6 +93489,14 @@
 	icon_state = "floor4"
 	},
 /area/shuttle/nuclearops)
+"oJK" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 6
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/station/garage)
 "oKx" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -93573,6 +93592,9 @@
 /turf/simulated/floor/plating,
 /area/science/hallway)
 "oLp" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 10
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -100119,12 +100141,6 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/central)
-"rgD" = (
-/obj/machinery/door/airlock/glass{
-	name = "Pod Bay"
-	},
-/turf/simulated/floor/engine/concrete,
-/area/station/garage)
 "rgG" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible{
 	dir = 4
@@ -116676,20 +116692,6 @@
 /obj/structure/window/reinforced/tinted,
 /turf/simulated/floor/plating,
 /area/tcomms/storage)
-"xgv" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/station/garage)
 "xgw" = (
 /obj/machinery/power/apc{
 	dir = 8;
@@ -117063,6 +117065,20 @@
 /obj/item/weapon/lighter,
 /turf/simulated/floor/plating,
 /area/maintenance/port)
+"xqg" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/station/garage)
 "xqo" = (
 /obj/item/weapon/extinguisher,
 /turf/unsimulated/floor{
@@ -235501,7 +235517,7 @@ mPY
 nxq
 ogj
 oIo
-nzH
+kNt
 qol
 qTt
 rRf
@@ -236404,9 +236420,9 @@ lqc
 lUx
 lqc
 lqc
-rgD
+hRB
 lqc
-xgv
+xqg
 lqc
 lqc
 qVR
@@ -236708,7 +236724,7 @@ jVR
 mTP
 nCI
 ohv
-oLp
+oJw
 prQ
 lqc
 qWK
@@ -237009,8 +237025,8 @@ nCI
 kno
 mTP
 nCI
-kzK
-oLp
+iGA
+oJw
 psp
 qpB
 qRF
@@ -237311,8 +237327,8 @@ nCI
 mmD
 nCI
 nCI
-kzK
-oLp
+iGA
+oJK
 psv
 qrp
 qWP
@@ -237613,7 +237629,7 @@ nCI
 mmD
 nCI
 nCI
-kzK
+iGA
 oKL
 psV
 lqc
@@ -237915,8 +237931,8 @@ lqQ
 lqc
 mSO
 mTP
-kzK
-oLp
+iGA
+oJw
 pts
 qqJ
 qXQ
@@ -238217,7 +238233,7 @@ nCI
 mmD
 nCI
 nCI
-kzK
+iGA
 oKV
 pub
 lqc
@@ -238519,7 +238535,7 @@ nCI
 mmD
 nCI
 nCI
-kzK
+iGA
 oLp
 pul
 qqP
@@ -238821,8 +238837,8 @@ nCI
 jVR
 mTP
 nCI
-kzK
-oLp
+iGA
+oJw
 puq
 qrp
 bxm
