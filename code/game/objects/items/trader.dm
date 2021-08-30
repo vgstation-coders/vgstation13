@@ -1385,7 +1385,7 @@ var/global/list/cloudnine_stuff = list(
 
 /obj/item/airshield_projector/preattack(atom/target, mob/user , proximity)
 	var/turf/to_shield = get_turf(target)
-	if(is_type_in_list(target, ignore_types) && get_dist(to_shield,src))
+	if(is_type_in_list(target, ignore_types) && Adjacent(to_shield))
 		return TRUE
 	if(projected.len < max_proj && istype(to_shield) && (!locate(/obj/effect/airshield) in to_shield))
 		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
