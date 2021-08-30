@@ -366,6 +366,8 @@
 		return FALSE
 	if(istype(W, /obj/item/device/analyzer/plant_analyzer)) //ugly hack but what can you do
 		return FALSE
+	if(istype(W, /obj/item/weapon/reagent_containers/food/condiment))
+		return FALSE
 	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
@@ -1766,6 +1768,41 @@
 		H.Knockdown(3)
 		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
 		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake
+	name = "pancake"
+	desc = "You'll never guess what's for breakfast!"
+	icon_state = "pancake"
+	food_flags = FOOD_ANIMAL
+	var/pancakes = 1
+	var/max_pancakes = 10 // leaving badmins a way to raise it if they're ready to assume the consequences
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/attackby(var/obj/item/O, var/mob/user)
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/pancake))
+		var/obj/item/weapon/reagent_containers/food/snacks/pancake/I = O
+		if (pancakes + I.pancakes > max_pancakes)
+			to_chat(user, "<span class='warning'>sorry, can't go any higher!</span>")
+			return
+		to_chat(user, "<span class='notice'>...and another one!</span>")
+		var/amount = I.reagents.total_volume
+		I.reagents.trans_to(src, amount)
+		var/image/img = image(I.icon, src, I.icon_state)
+		img.appearance = I.appearance
+		img.pixel_x = 0
+		img.pixel_y = 2 * pancakes
+		img.plane = FLOAT_PLANE
+		img.layer = FLOAT_LAYER
+		overlays += img
+		pancakes += I.pancakes
+		qdel(I)
+	else
+		..()
+
 
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
