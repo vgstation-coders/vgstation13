@@ -701,7 +701,7 @@ obj/item/clothing/suit/cassock
 	if(!istype(H))
 		return ..()
 	if((src == H.wear_suit) && H.flying)
-		H.stop_flying()
+		H.flying = 0
 		animate(H, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(H, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(H)
@@ -718,7 +718,7 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/clownpiece/flying/dropped(mob/user as mob)
 	if(user.flying)
-		user.stop_flying()
+		user.flying = 0
 		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(user)

@@ -74,10 +74,9 @@
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
-		for(var/z0 in GetOpenConnectedZlevels(user))
-			for (var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
-				if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
-					O.create_chat_message(user, null, msg_runechat, "", list("italics"))
+		for (var/mob/O in viewers(world.view, user))
+			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
+				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)

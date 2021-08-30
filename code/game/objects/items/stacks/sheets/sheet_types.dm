@@ -55,8 +55,6 @@
 
 /obj/item/stack/sheet/metal/New(var/loc, var/amount=null)
 	recipes = metal_recipes
-	if(map.multiz)
-		recipes.Add(new/datum/stack_recipe("multi-floor stairs",   /obj/structure/stairs_frame, 4, time = 100, one_per_turf = 1, on_floor = 1))
 	return ..()
 
 /*

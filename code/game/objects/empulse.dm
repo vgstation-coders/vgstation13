@@ -32,12 +32,12 @@
 			//Double check for client
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
-				if(M_turf && (M_turf.z == epicenter.z || AreConnectedZLevels(M_turf.z,epicenter.z)))
+				if(M_turf && M_turf.z == epicenter.z)
 					var/dist = cheap_pythag(M_turf.x - x0, M_turf.y - y0)
-					if((dist <= round(heavy_range + world.view - 2, 1)) && (M_turf.z - epicenter.z <= max_range) && (epicenter.z - M_turf.z <= max_range))
+					if(dist <= round(heavy_range + world.view - 2, 1))
 						M << 'sound/effects/EMPulse.ogg'
 
-		for(var/turf/T in multi_z_spiral_block(epicenter,max_range,0,0,0))
+		for(var/turf/T in spiral_block(epicenter,max_range))
 			CHECK_TICK
 			var/dist = cheap_pythag(T.x - x0, T.y - y0)
 			if(dist > max_range)

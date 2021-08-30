@@ -200,7 +200,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/check_convertables,
 	/client/proc/toggle_convertibles,
 	/client/proc/check_spiral,
-	/client/proc/check_multi_z_spiral,
 	/client/proc/check_striketeams,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
 	/client/proc/debugNatureMapGenerator,
@@ -212,7 +211,6 @@ var/list/admin_verbs_debug = list(
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif
-	/client/proc/update_all_open_spaces,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
