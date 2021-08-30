@@ -81488,6 +81488,16 @@
 	temperature = 80
 	},
 /area/tcomms/chamber)
+"kzK" = (
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/station/garage)
 "kzM" = (
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe,
 /obj/machinery/light_switch{
@@ -89285,12 +89295,6 @@
 	icon_state = "dark"
 	},
 /area/turret_protected/ai_upload)
-"nnK" = (
-/obj/machinery/door/airlock/glass{
-	name = "Pod Bay"
-	},
-/turf/simulated/wall,
-/area/station/garage)
 "nnW" = (
 /obj/structure/closet,
 /obj/machinery/power/apc{
@@ -89909,6 +89913,10 @@
 /obj/structure/catwalk,
 /turf/unsimulated/floor/snow,
 /area)
+"nzH" = (
+/obj/structure/closet/cabinet/snow,
+/turf/simulated/floor,
+/area/storage/primary)
 "nzW" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -92391,10 +92399,6 @@
 	icon_state = "chapel"
 	},
 /area/wizard_station)
-"osO" = (
-/obj/structure/closet/cabinet/snow,
-/turf/simulated/floor,
-/area/storage/primary)
 "osR" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Bar Storage";
@@ -93460,16 +93464,6 @@
 /obj/item/stack/package_wrap,
 /turf/simulated/floor,
 /area/storage/primary)
-"oJs" = (
-/obj/effect/decal/warning_stripes{
-	dir = 1;
-	icon_state = "warning";
-	tag = "icon-warning (NORTH)"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/station/garage)
 "oJt" = (
 /obj/structure/table,
 /turf/simulated/floor/airless,
@@ -95717,20 +95711,6 @@
 	},
 /turf/simulated/floor,
 /area/ai_monitored/storage/eva)
-"pzW" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor/plating,
-/area/station/garage)
 "pAa" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -100139,6 +100119,12 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/central)
+"rgD" = (
+/obj/machinery/door/airlock/glass{
+	name = "Pod Bay"
+	},
+/turf/simulated/floor/engine/concrete,
+/area/station/garage)
 "rgG" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible{
 	dir = 4
@@ -116690,6 +116676,20 @@
 /obj/structure/window/reinforced/tinted,
 /turf/simulated/floor/plating,
 /area/tcomms/storage)
+"xgv" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/station/garage)
 "xgw" = (
 /obj/machinery/power/apc{
 	dir = 8;
@@ -235501,7 +235501,7 @@ mPY
 nxq
 ogj
 oIo
-osO
+nzH
 qol
 qTt
 rRf
@@ -236404,9 +236404,9 @@ lqc
 lUx
 lqc
 lqc
-nnK
+rgD
 lqc
-pzW
+xgv
 lqc
 lqc
 qVR
@@ -237009,7 +237009,7 @@ nCI
 kno
 mTP
 nCI
-oJs
+kzK
 oLp
 psp
 qpB
@@ -237311,7 +237311,7 @@ nCI
 mmD
 nCI
 nCI
-oJs
+kzK
 oLp
 psv
 qrp
@@ -237613,7 +237613,7 @@ nCI
 mmD
 nCI
 nCI
-oJs
+kzK
 oKL
 psV
 lqc
@@ -237915,7 +237915,7 @@ lqQ
 lqc
 mSO
 mTP
-oJs
+kzK
 oLp
 pts
 qqJ
@@ -238217,7 +238217,7 @@ nCI
 mmD
 nCI
 nCI
-oJs
+kzK
 oKV
 pub
 lqc
@@ -238519,7 +238519,7 @@ nCI
 mmD
 nCI
 nCI
-oJs
+kzK
 oLp
 pul
 qqP
@@ -238821,7 +238821,7 @@ nCI
 jVR
 mTP
 nCI
-oJs
+kzK
 oLp
 puq
 qrp
