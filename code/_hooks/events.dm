@@ -211,6 +211,7 @@
 // obj/item/item: the item being used for the attack
 /event/attackby
 
+/event/ui_act
 
 /datum
 	/// Associative list of type path -> list(),

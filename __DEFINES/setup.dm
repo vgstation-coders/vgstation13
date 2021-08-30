@@ -1446,7 +1446,6 @@ var/proccalls = 1
 
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
-#define log_tgui(text) diary << html_decode("\[[time_stamp()]]TGUI: [text]")
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
