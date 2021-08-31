@@ -57,7 +57,7 @@
 
 	if(ishuman(target) || ismonkey(target))
 		var/mob/living/carbon/C = target
-		if (C.sdisabilities & BLIND)
+		if ((C.sdisabilities & BLIND) || (C.sight & BLIND))
 			to_chat(user, "<span class='warning'>\the [C] is blind!</span>")
 			return FALSE
 		if(do_mob(user, C, 10 - C.get_vamp_enhancements()))
