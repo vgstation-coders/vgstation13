@@ -1181,7 +1181,7 @@ var/list/cult_spires = list()
 	if (!progbar)
 		progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = src, "icon_state" = "prog_bar_0")
 		progbar.pixel_z = WORLD_ICON_SIZE
-		progbar.plane = relative_plane(HUD_PLANE)
+		progbar.plane = HUD_PLANE
 		progbar.pixel_x = 16 * PIXEL_MULTIPLIER
 		progbar.pixel_y = 16 * PIXEL_MULTIPLIER
 		progbar.appearance_flags = RESET_ALPHA|RESET_COLOR
@@ -1192,7 +1192,7 @@ var/list/cult_spires = list()
 	if (!progbar)
 		progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = src, "icon_state" = "prog_bar_0")
 		progbar.pixel_z = WORLD_ICON_SIZE
-		progbar.plane = relative_plane(HUD_PLANE)
+		progbar.plane = HUD_PLANE
 		progbar.layer = HUD_ABOVE_ITEM_LAYER
 	progbar.icon_state = "prog_bar_[round((100 - min(1, timeleft / timetotal) * 100), 10)]"
 
