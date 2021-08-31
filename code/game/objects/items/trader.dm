@@ -1455,6 +1455,7 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
+	req_access = list(access_engine_equip)
 	var/mode = OMNIMODE_TOOL
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
@@ -1494,6 +1495,8 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 			return FALSE
 		C = M.client
 	if(!C)
+		return FALSE
+	if(!allowed(user))
 		return FALSE
 	return get_dist(target,src) <= C.view
 
