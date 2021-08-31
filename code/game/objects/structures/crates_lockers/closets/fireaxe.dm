@@ -4,17 +4,17 @@
 	desc = "A small label reads 'For Emergency use only', accompanied with pictograms detailing safe usages for the included fireaxe. As if."
 	var/obj/item/weapon/fireaxe/fireaxe = new/obj/item/weapon/fireaxe
 	icon_state = "fireaxe1000"
-	icon_closed = "fireaxe1000"
-	icon_opened = "fireaxe1100"
 	anchored = 1
 	density = 0
-	var/localopened = 0 //Setting this to keep it from behaviouring like a normal closet and obstructing movement in the map. -Agouri
 	opened = 1
-	var/hitstaken = 0
-	var/smashed = 0
 	locked = 1
 	plane = ABOVE_TURF_PLANE
 	layer = FIREAXE_LOCKER_LAYER
+	var/opened = 0
+	var/locked = 0
+	var/hitstaken = 0
+	var/smashed = 0
+	var/localopened = 0 //Setting this to keep it from behaviouring like a normal closet and obstructing movement in the map. -Agouri
 
 
 /obj/structure/fireaxecabinet/empty
