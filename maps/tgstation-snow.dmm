@@ -16335,7 +16335,9 @@
 /area/mine/explored)
 "aLk" = (
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap,
-/turf/unsimulated/mineral/random/snow,
+/turf/unsimulated//turf/unsimulated/mineral/random/snow{
+	mined_type = /turf/unsimulated/floor/asteroid/cave/permafrost
+	},
 /area/mine/explored)
 "aLl" = (
 /turf/simulated/wall/r_wall,
@@ -62990,7 +62992,9 @@
 /turf/simulated/floor,
 /area/security/lobby)
 "evh" = (
-/turf/unsimulated/mineral/random/snow,
+/turf/unsimulated//turf/unsimulated/mineral/random/snow{
+	mined_type = /turf/unsimulated/floor/asteroid/cave/permafrost
+	},
 /area/mine/explored)
 "evl" = (
 /obj/machinery/door/poddoor{
