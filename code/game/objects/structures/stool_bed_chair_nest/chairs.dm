@@ -165,6 +165,8 @@
 	spin(usr)
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
+	if(noghostspin)
+		return
 	if(!config.ghost_interaction || !can_spook())
 		if(user.isUnconscious() || user.restrained())
 			return
@@ -619,6 +621,7 @@
 	desc = "A reinforced chair that's firmly secured to the ground."
 	icon_state = "shuttleseat_neutral"
 	anchored = 1
+	noghostspin = 1
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
 	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
@@ -691,6 +694,7 @@
 /obj/structure/bed/chair/shuttle/gamer
 	desc = "Ain't got nothing to compensate."
 	icon_state = "shuttleseat_GAMER"
+	noghostspin = 0
 
 /obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
 	change_dir(turn(dir, 90))
