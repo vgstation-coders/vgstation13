@@ -1,5 +1,5 @@
 //I still dont think this should be a closet but whatever
-/obj/structure/closet/fireaxecabinet
+/obj/structure/fireaxecabinet
 	name = "fireaxe cabinet"
 	desc = "A small label reads 'For Emergency use only', accompanied with pictograms detailing safe usages for the included fireaxe. As if."
 	var/obj/item/weapon/fireaxe/fireaxe = new/obj/item/weapon/fireaxe
@@ -17,12 +17,12 @@
 	layer = FIREAXE_LOCKER_LAYER
 
 
-/obj/structure/closet/fireaxecabinet/empty
+/obj/structure/fireaxecabinet/empty
 	fireaxe = null
 	locked = 0 //Doesn't matter if an empty cabinet is locked. Make sure to lock it after you put the axe in, though.
 	localopened = 1
 
-/obj/structure/closet/fireaxecabinet/New(loc, var/ndir)
+/obj/structure/fireaxecabinet/New(loc, var/ndir)
 	..()
 	if(ndir)
 		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) //Stolen from one of several near-identical other things
@@ -30,7 +30,7 @@
 		dir = ndir
 	update_icon()
 
-/obj/structure/closet/fireaxecabinet/examine(mob/user)
+/obj/structure/fireaxecabinet/examine(mob/user)
 
 	..()
 	if(smashed)
@@ -46,7 +46,7 @@
 
 	to_chat(user, "A small [locked ? "red" : "green"] light indicates the cabinet is [locked ? "" : "un"]locked.")
 
-/obj/structure/closet/fireaxecabinet/attackby(var/obj/item/O as obj, var/mob/living/user as mob)  //Marker -Agouri
+/obj/structure/fireaxecabinet/attackby(var/obj/item/O as obj, var/mob/living/user as mob)  //Marker -Agouri
 
 	user.delayNextAttack(10) //Whatever we do here, no clicking around for the user for at least one second
 
@@ -150,7 +150,7 @@
 				spawn(10)
 					update_icon()
 
-/obj/structure/closet/fireaxecabinet/attack_hand(mob/user as mob)
+/obj/structure/fireaxecabinet/attack_hand(mob/user as mob)
 
 	var/hasaxe = 0
 	if(fireaxe)
@@ -192,7 +192,7 @@
 			spawn(10)
 				update_icon()
 
-/obj/structure/closet/fireaxecabinet/verb/toggle_openness() //nice name, huh? HUH?! -Erro //YEAH -Agouri
+/obj/structure/fireaxecabinet/verb/toggle_openness() //nice name, huh? HUH?! -Erro //YEAH -Agouri
 	set name = "Open/Close"
 	set category = "Object"
 
@@ -206,7 +206,7 @@
 	localopened = !localopened
 	update_icon()
 
-/obj/structure/closet/fireaxecabinet/verb/remove_fire_axe()
+/obj/structure/fireaxecabinet/verb/remove_fire_axe()
 	set name = "Remove Fire Axe"
 	set category = "Object"
 
@@ -225,11 +225,11 @@
 		to_chat(usr, "<span class='notice'>\The [src] is closed.</span>")
 	update_icon()
 
-/obj/structure/closet/fireaxecabinet/attack_paw(mob/user as mob)
+/obj/structure/fireaxecabinet/attack_paw(mob/user as mob)
 	attack_hand(user)
 	return
 
-/obj/structure/closet/fireaxecabinet/attack_ai(mob/user as mob)
+/obj/structure/fireaxecabinet/attack_ai(mob/user as mob)
 	if(isobserver(user))
 		return //NO. FUCK OFF.
 	if(smashed)
@@ -245,19 +245,19 @@
 			"<span class='notice'>You unlock [src]</span>")
 		return
 
-/obj/structure/closet/fireaxecabinet/update_icon() //Template: fireaxe[has fireaxe][is opened][hits taken][is smashed]. If you want the opening or closing animations, add "opening" or "closing" right after the numbers
+/obj/structure/fireaxecabinet/update_icon() //Template: fireaxe[has fireaxe][is opened][hits taken][is smashed]. If you want the opening or closing animations, add "opening" or "closing" right after the numbers
 	var/hasaxe = 0
 	if(fireaxe)
 		hasaxe = 1
 	icon_state = "fireaxe[hasaxe][localopened][hitstaken][smashed]"
 
-/obj/structure/closet/fireaxecabinet/open()
+/obj/structure/fireaxecabinet/open()
 	return
 
-/obj/structure/closet/fireaxecabinet/close()
+/obj/structure/fireaxecabinet/close()
 	return
 
-/obj/structure/closet/fireaxecabinet/Destroy()
+/obj/structure/fireaxecabinet/Destroy()
 	if(fireaxe)
 		visible_message("<span class='notice'>The fireaxe noisily ricochets off the ground as it slides out of \the [src].</span>")
 		fireaxe.forceMove(get_turf(src)) //Save the axe from destruction
