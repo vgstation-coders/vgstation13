@@ -156,7 +156,7 @@
 	var/avg_temp = 0
 	var/avg_divide = 0
 	for(var/obj/machinery/alarm/alarm in machines)
-		var/turf/simulated/location = loc
+		var/turf/simulated/location = alarm.loc
 		if(!istype(location))
 			continue
 		var/datum/gas_mixture/environment = location.return_air()
