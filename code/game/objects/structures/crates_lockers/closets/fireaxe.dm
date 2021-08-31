@@ -6,12 +6,10 @@
 	icon_state = "fireaxe1000"
 	anchored = 1
 	density = 0
-	opened = 1
-	locked = 1
+	var/opened = 1
+	var/locked = 1
 	plane = ABOVE_TURF_PLANE
 	layer = FIREAXE_LOCKER_LAYER
-	var/opened = 0
-	var/locked = 0
 	var/hitstaken = 0
 	var/smashed = 0
 	var/localopened = 0 //Setting this to keep it from behaviouring like a normal closet and obstructing movement in the map. -Agouri
@@ -46,7 +44,7 @@
 
 	to_chat(user, "A small [locked ? "red" : "green"] light indicates the cabinet is [locked ? "" : "un"]locked.")
 
-/obj/structure/fireaxecabinet/attackby(var/obj/item/O as obj, var/mob/living/user as mob)  //Marker -Agouri
+/obj/structure/fireaxecabinet/attackby(var/obj/item/O, var/mob/living/user)  //Marker -Agouri
 
 	user.delayNextAttack(10) //Whatever we do here, no clicking around for the user for at least one second
 
@@ -54,7 +52,7 @@
 	if(fireaxe)
 		hasaxe = 1
 
-	if(isrobot(user) || src.locked)
+	if(isrobot(user) || locked)
 		if(istype(O, /obj/item/device/multitool))
 			visible_message("<span class='notice'>[user] starts fiddling with \the [src]'s locking module.</span>", \
 			"<span class='notice'>You start disabling \the [src]'s locking module.</span>")
@@ -90,7 +88,7 @@
 						playsound(user, 'sound/effects/Glasshit.ogg', 100, 1)
 				update_icon()
 		return
-	if(istype(O, /obj/item/weapon/fireaxe) && src.localopened)
+	if(istype(O, /obj/item/weapon/fireaxe) && localopened)
 		if(!fireaxe)
 			var/obj/item/weapon/fireaxe/F = O
 			if(F.wielded)
@@ -132,10 +130,10 @@
 					spawn(10)
 						update_icon()
 	else
-		if(O.is_wrench(user) && src.localopened && !src.fireaxe)
+		if(O.is_wrench(user) && localopened && !fireaxe)
 			to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 			O.playtoolsound(src, 100)
-			new /obj/item/stack/sheet/plasteel (src.loc,2)
+			new /obj/item/stack/sheet/plasteel (loc,2)
 			qdel(src)
 		if(smashed)
 			return
@@ -150,7 +148,7 @@
 				spawn(10)
 					update_icon()
 
-/obj/structure/fireaxecabinet/attack_hand(mob/user as mob)
+/obj/structure/fireaxecabinet/attack_hand(var/mob/user)
 
 	var/hasaxe = 0
 	if(fireaxe)
@@ -182,7 +180,7 @@
 						update_icon()
 
 	else
-		localopened = !localopened //I'm pretty sure we don't need an if(src.smashed) in here. In case I'm wrong and it fucks up teh cabinet, **MARKER**. -Agouri
+		localopened = !localopened //I'm pretty sure we don't need an if(smashed) in here. In case I'm wrong and it fucks up teh cabinet, **MARKER**. -Agouri
 		if(localopened)
 			icon_state = "fireaxe[hasaxe][localopened][hitstaken][smashed]opening"
 			spawn(10)
@@ -225,11 +223,11 @@
 		to_chat(usr, "<span class='notice'>\The [src] is closed.</span>")
 	update_icon()
 
-/obj/structure/fireaxecabinet/attack_paw(mob/user as mob)
+/obj/structure/fireaxecabinet/attack_paw(var/mob/user)
 	attack_hand(user)
 	return
 
-/obj/structure/fireaxecabinet/attack_ai(mob/user as mob)
+/obj/structure/fireaxecabinet/attack_ai(var/mob/user)
 	if(isobserver(user))
 		return //NO. FUCK OFF.
 	if(smashed)
@@ -250,12 +248,6 @@
 	if(fireaxe)
 		hasaxe = 1
 	icon_state = "fireaxe[hasaxe][localopened][hitstaken][smashed]"
-
-/obj/structure/fireaxecabinet/open()
-	return
-
-/obj/structure/fireaxecabinet/close()
-	return
 
 /obj/structure/fireaxecabinet/Destroy()
 	if(fireaxe)
