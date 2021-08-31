@@ -133,7 +133,7 @@
 /datum/next_map/waystation
 	name = "Waystation"
 	path = "Waystation"
-	is_enabled = FALSE
+	max_players = 25
 
 /datum/next_map/xoq
 	name = "noitatS xoq"
