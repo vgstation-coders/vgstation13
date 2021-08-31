@@ -83191,6 +83191,7 @@
 	dir = 1;
 	on = 1
 	},
+/obj/structure/window/reinforced,
 /turf/simulated/floor,
 /area/supply/miningdock)
 "lck" = (
@@ -237797,9 +237798,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
+aZi
+aZi
+aZi
 wNd
 wNd
 wNd
@@ -238099,9 +238100,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
+aZi
+aZi
+aZi
 wNd
 wNd
 wNd
@@ -238397,14 +238398,14 @@ cfe
 cht
 uQd
 clT
+aZi
 wNd
 wNd
-wNd
-wNd
-wNd
-wNd
-wNd
-wNd
+aZi
+aZi
+aZi
+aZi
+aZi
 wNd
 wNd
 wNd
@@ -238699,8 +238700,8 @@ dBN
 dBN
 dBN
 dBN
-wNd
-wNd
+aZi
+aZi
 cJh
 lTl
 cxm
@@ -239247,7 +239248,7 @@ aaa
 aaa
 aaa
 aaa
-bZp
+aaa
 bZp
 aaa
 aaa
