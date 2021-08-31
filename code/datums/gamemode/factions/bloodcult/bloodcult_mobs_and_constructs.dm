@@ -297,7 +297,7 @@
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
 	glowicon.Blend(glowcolor, ICON_ADD)
 	var/image/glow = image(icon = glowicon, layer = overlay_layer)
-	glow.plane = overlay_plane
+	glow.plane = relative_plane(overlay_plane)
 	overlays += glow
 
 /mob/living/simple_animal/hostile/hex/Destroy()
@@ -435,7 +435,7 @@ var/list/astral_projections = list()
 			var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
 			I.pixel_x = 20 * PIXEL_MULTIPLIER
 			I.pixel_y = 20 * PIXEL_MULTIPLIER
-			I.plane = ANTAG_HUD_PLANE
+			I.plane = relative_plane(ANTAG_HUD_PLANE)
 			client.images += I
 
 
