@@ -4195,7 +4195,7 @@
 
 	M.SetStunned(2)
 
-/datum/reagent/suxameth/on_mob_life(var/mob/living/M)
+/datum/reagent/suxameth/on_overdose(var/mob/living/M)
 	M.adjustOxyLoss(4) //Very rapid deterioration if they go over 10 units
 
 /////////////////////////Food Reagents////////////////////////////

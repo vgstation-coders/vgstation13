@@ -129,6 +129,7 @@
 	name = "paralytic injector"
 	desc = "A small, single-use device used to administer small amounts of paralytic agent."
 	icon_state = "paralytic1"
+	item_state = "paralytic"
 	amount_per_transfer_from_this = 15
 	volume = 15
 	flags = FPRINT
@@ -138,7 +139,7 @@
 	reagents.remove_reagent(DOCTORSDELIGHT, 30)
 	reagents.add_reagent(SUX, 5)
 
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/update_icon()
 	if(reagents.total_volume > 0)
 		icon_state = "paralytic1"
 	else
