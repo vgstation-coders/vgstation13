@@ -175,8 +175,6 @@
 		"You hear banging.")
 		healthcheck(user, TRUE, "attack_hand hurt")
 
-	return
-
 /turf/simulated/floor/glass/attack_paw(mob/user as mob)
 	return attack_hand(user)
 

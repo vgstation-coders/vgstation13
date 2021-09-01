@@ -16,11 +16,13 @@
 		"Firing Range" = /area/holodeck/source_firingrange,
 		"Gym" = /area/holodeck/source_gym,
 		"Laser Tag Arena" = /area/holodeck/source_lasertag,
+		"Library" = /area/holodeck/source_library,
 		"Maze" = /area/holodeck/source_maze,
 		"Meeting Hall" = /area/holodeck/source_meetinghall,
 		"Panic Bunker" = /area/holodeck/source_panic,
 		"Picnic Area" = /area/holodeck/source_picnicarea,
 		"Snow Field" = /area/holodeck/source_snowfield,
+		"Space" = /area/holodeck/source_space,
 		"Theatre" = /area/holodeck/source_theatre,
 		"Thunderdome Court" = /area/holodeck/source_thunderdomecourt,
 		"Wild Ride" = /area/holodeck/source_wildride,
@@ -46,10 +48,12 @@
 		"Empty Court" = /area/holodeck/source_emptycourt,
 		"Firing Range" = /area/holodeck/source_firingrange,
 		"Gym" = /area/holodeck/source_gym,
+		"Library" = /area/holodeck/source_library,
 		"Meeting Hall" = /area/holodeck/source_meetinghall,
 		"Panic Bunker" = /area/holodeck/source_panic,
 		"Picnic Area" = /area/holodeck/source_picnicarea,
 		"Snow Field" = /area/holodeck/source_snowfield,
+		"Space" = /area/holodeck/source_space,
 		"Theatre" = /area/holodeck/source_theatre,
 		"Thunderdome Court" = /area/holodeck/source_thunderdomecourt,
 		"Wild Ride" = /area/holodeck/source_wildride,
@@ -430,6 +434,47 @@
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
+
+/turf/simulated/floor/holofloor/space
+	name = "space"
+	desc = "The final frontier! Or a very convincing projection of it."
+
+	icon = 'icons/turf/space.dmi'
+	icon_state = "0"
+
+	plane = SPACE_BACKGROUND_PLANE
+	dynamic_lighting = 0
+	luminosity = 1
+	intact = 0
+
+/turf/simulated/floor/holofloor/space/New(loc)
+	..(loc)
+	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	/*
+/turf/simulated/floor/glass/holodeck
+
+/turf/simulated/floor/glass/holodeck/update_icon()
+	overlays.len = 0
+
+/turf/simulated/floor/glass/holodeck/attack_generic(var/mob/living/user, var/damage = 0)
+	return
+
+/turf/simulated/floor/glass/holodeck/attack_hand(var/mob/living/user)
+	return
+
+/turf/simulated/floor/glass/holodeck/hitby(var/atom/movable/AM)
+	return TRUE
+
+/turf/simulated/floor/glass/holodeck/Entered(var/atom/movable/mover)
+	return 1
+
+/turf/simulated/floor/glass/holodeck/bullet_act(var/obj/item/projectile/Proj)
+	return
+
+/turf/simulated/floor/glass/holodeck/ex_act(severity)
+	return
+*/
+/obj/structure/bookcase/holodeck	// TODO: Spawn random books on load? have those books despawn along with the bookcase?
 
 /obj/structure/table/holotable
 	parts = null
