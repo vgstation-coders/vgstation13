@@ -386,14 +386,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
 
-/datum/recipe/rofflewaffles
-	reagents = list(PSILOCYBIN = 5, FLOUR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
-
 /datum/recipe/pancake
 	reagents = list(PANCAKE = 5)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pancake
