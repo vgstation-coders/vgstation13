@@ -450,30 +450,7 @@
 /turf/simulated/floor/holofloor/space/New(loc)
 	..(loc)
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
-	/*
-/turf/simulated/floor/glass/holodeck
 
-/turf/simulated/floor/glass/holodeck/update_icon()
-	overlays.len = 0
-
-/turf/simulated/floor/glass/holodeck/attack_generic(var/mob/living/user, var/damage = 0)
-	return
-
-/turf/simulated/floor/glass/holodeck/attack_hand(var/mob/living/user)
-	return
-
-/turf/simulated/floor/glass/holodeck/hitby(var/atom/movable/AM)
-	return TRUE
-
-/turf/simulated/floor/glass/holodeck/Entered(var/atom/movable/mover)
-	return 1
-
-/turf/simulated/floor/glass/holodeck/bullet_act(var/obj/item/projectile/Proj)
-	return
-
-/turf/simulated/floor/glass/holodeck/ex_act(severity)
-	return
-*/
 /obj/structure/bookcase/holodeck	// TODO: Spawn random books on load? have those books despawn along with the bookcase?
 
 /obj/structure/table/holotable
