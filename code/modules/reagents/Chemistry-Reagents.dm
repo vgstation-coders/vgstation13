@@ -780,32 +780,34 @@
 	if(..())
 		return 1
 
-	M.drowsyness += 2 * REM
+	if(M.drowsyness)
+		M.drowsyness += 2 * REM
 	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
-		holder.add_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
+		holder.add_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 4 * REM)
 	if(holder.has_any_reagents(STOXINS))
-		holder.add_reagents(STOXINS, 2 * REM)
+		holder.add_reagents(STOXINS, 4 * REM)
 	if(holder.has_reagent(PLASMA))
-		holder.add_reagent(PLASMA, REM)
+		holder.add_reagent(PLASMA, 2 * REM)
 	if(holder.has_any_reagents(SACIDS))
-		holder.add_reagents(SACIDS, REM)
+		holder.add_reagents(SACIDS, 2 * REM)
 	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
-		holder.add_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
+		holder.add_reagent(POTASSIUM_HYDROXIDE, 4 * REM)
 	if(holder.has_reagent(CYANIDE))
-		holder.add_reagent(CYANIDE, REM)
+		holder.add_reagent(CYANIDE, 2 * REM)
 	if(holder.has_reagent(AMATOXIN))
-		holder.add_reagent(AMATOXIN, 2 * REM)
+		holder.add_reagent(AMATOXIN, 4 * REM)
 	if(holder.has_reagent(CHLORALHYDRATE))
-		holder.add_reagent(CHLORALHYDRATE, 5 * REM)
+		holder.add_reagent(CHLORALHYDRATE, 10 * REM)
 	if(holder.has_reagent(CARPOTOXIN))
 		holder.add_reagent(CARPOTOXIN, REM)
 	if(holder.has_reagent(ZOMBIEPOWDER))
-		holder.add_reagent(ZOMBIEPOWDER, 0.5 * REM)
+		holder.add_reagent(ZOMBIEPOWDER, REM)
 	if(holder.has_reagent(MINDBREAKER))
-		holder.add_reagent(MINDBREAKER, 2 * REM)
+		holder.add_reagent(MINDBREAKER, 4 * REM)
 	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
-	M.hallucination += 5 * REM * lucidmod
-	M.adjustToxLoss(2 * REM)
+	if(M.hallucination)
+		M.hallucination += 5 * REM * lucidmod
+	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/pro_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
