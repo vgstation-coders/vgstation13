@@ -271,6 +271,7 @@ var/list/crushed_cans_cache = list()
 	name = "egg shell"
 	icon_state	= "egg"
 	desc = "Pieces of calcium carbonate."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 
 /obj/item/trash/egg/borer
-	icon_state	= "egg_borer"
+	icon_state	= "borer egg-growing"
