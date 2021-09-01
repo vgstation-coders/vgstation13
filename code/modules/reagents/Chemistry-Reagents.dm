@@ -4181,6 +4181,23 @@
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
 
+/datum/reagent/suxameth
+	name = "Suxameth"
+	id = SUX
+	description = "A name for Suxamethonium chloride. A medical full-body paralytic preferred because it is easy to purge."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#CFC5E9" //rgb: 207, 197, 223
+	overdose_am = 11
+
+/datum/reagent/suxameth/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.SetStunned(2)
+
+/datum/reagent/suxameth(var/mob/living/M)
+	M.adjustOxyLoss(4) //Very rapid deterioration if they go over 10 units
+
 /////////////////////////Food Reagents////////////////////////////
 
 //Part of the food code. Nutriment is used instead of the old "heal_amt" code
@@ -5172,7 +5189,7 @@
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
 	nutriment_factor = 4 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
@@ -5220,7 +5237,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/irradiatedbeans/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5237,7 +5254,7 @@
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
-	
+
 /datum/reagent/toxicwaste/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5261,7 +5278,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
-	
+
 /datum/reagent/mutatedbeans/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5292,7 +5309,7 @@
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
-	
+
 /datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -5316,7 +5333,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = REAGENTS_METABOLISM
-	
+
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
@@ -5332,9 +5349,9 @@
 
 	if(prob(5))
 		M.adjustToxLoss(1)
-	
+
 	if(prob(5))
-		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage 
+		M.apply_radiation(1, RAD_INTERNAL) //Call it uranium contamination so heavy metal poisoning for the tox and the uranium radiation for the radiation damage
 
 /datum/reagent/glowingramen
 	name = "Glowing Ramen Noodles"
@@ -5348,7 +5365,7 @@
 
 	if(..())
 		return 1
-	
+
 	if(prob(10))
 		M.apply_radiation(1, RAD_INTERNAL)
 

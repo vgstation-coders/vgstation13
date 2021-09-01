@@ -103,16 +103,11 @@
 			slot_head_str = list(
 				"Surgeron" = /obj/item/clothing/head/surgery/blue,
 			),
-			slot_s_store_str = list(
-				"Emergency Physician" = /obj/item/device/flashlight/pen,
-				"Surgeon" = /obj/item/device/flashlight/pen,
-				"Medical Doctor" = /obj/item/device/flashlight/pen,
-			),
+			slot_s_store_str = slot_s_store_str = /obj/item/device/flashlight/pen,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
 			slot_w_uniform_str = list(
-				"Orderly" = /obj/item/clothing/under/rank/orderly,
 				"Emergency Physician" = /obj/item/clothing/under/rank/medical,
 				"Surgeon" =  /obj/item/clothing/under/rank/medical/blue,
 				"Medical Doctor" = /obj/item/clothing/under/rank/medical,
@@ -419,19 +414,6 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/syringe/stoxin,
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
-	)
-
-	race_items_to_collect = list(
-		/datum/species/vox/ = list(
-			"Emergency Physician" = /obj/item/clothing/suit/storage/fr_jacket,
-			"Surgeon" =  /obj/item/clothing/suit/storage/labcoat,
-			"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
-		),
-		/datum/species/plasmaman/ = list(
-			"Emergency Physician" = /obj/item/clothing/suit/storage/fr_jacket,
-			"Surgeon" =  /obj/item/clothing/suit/storage/labcoat,
-			"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
-		)
 	)
 
 	pda_type = /obj/item/device/pda/medical

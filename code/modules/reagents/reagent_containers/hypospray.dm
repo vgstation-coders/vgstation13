@@ -128,6 +128,7 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector
 	name = "paralytic injector"
 	desc = "A small, single-use device used to administer small amounts of paralytic agent."
+	icon_state = "paralytic1"
 	amount_per_transfer_from_this = 15
 	volume = 15
 	flags = FPRINT
@@ -135,4 +136,10 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/New()
 	..()
 	reagents.remove_reagent(DOCTORSDELIGHT, 30)
-	reagents.add_reagent(AMASEC, 1)
+	reagents.add_reagent(SUX, 5)
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "paralytic1"
+	else
+		icon_state = "paralytic0"
