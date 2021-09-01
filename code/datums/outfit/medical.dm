@@ -103,7 +103,7 @@
 			slot_head_str = list(
 				"Surgeron" = /obj/item/clothing/head/surgery/blue,
 			),
-			slot_s_store_str = slot_s_store_str = /obj/item/device/flashlight/pen,
+			slot_s_store_str = /obj/item/device/flashlight/pen,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
