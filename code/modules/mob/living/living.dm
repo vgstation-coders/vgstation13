@@ -285,7 +285,7 @@
 
 	if(reagents.has_reagent(PRO_TOXIN))
 		mult *= -1 //invert the multiplier, make only toxin damage heal on pro-toxin
-		if (mult < 0) //make sure we're removing
+		if (amount * tox_damage_modifier * mult < 0) //make sure we're removing
 			drowsyness = max(drowsyness - 4 * REM, 0)
 			if(reagents.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
 				reagents.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 4 * REM)

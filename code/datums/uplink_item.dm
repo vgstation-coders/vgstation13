@@ -759,7 +759,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/medical/protoxbottle
 	name = "Inverse Toxin Chemical"
 	desc = "30 units of Dylivine, a special chemical that causes the body to accumulate any toxic chemicals it already has in greater numbers, which can only be cured by making it take toxin damage from other sources."
-	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	item = /obj/item/weapon/storage/box/syndie_kit/inverse_toxin
 	cost = 12
 	discounted_cost = 10
 	jobs_with_discount = list("Chemist", "Chief Medical Officer")
