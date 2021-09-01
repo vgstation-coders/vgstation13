@@ -919,12 +919,14 @@ Thanks.
 	if(L.locked_to && !L.isUnconscious())
 		// unbeartrapping yourself
 		if (istype(L.locked_to, /obj/item/weapon/beartrap/))
-			if (iscarbon(L))
+			if (!iscarbon(L))
+				L.locked_to.attack_hand(L)
+				return
+			else
 				var/mob/living/carbon/C = L
-				if (C.handcuffed)
+				if (!C.handcuffed)
+					L.locked_to.attack_hand(L)
 					return
-			L.locked_to.attack_hand(L)
-			return
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
