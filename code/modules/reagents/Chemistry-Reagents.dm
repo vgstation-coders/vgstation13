@@ -766,6 +766,53 @@
 	if(T.seed && !T.dead)
 		T.health += 1
 
+/datum/reagent/pro_toxin
+	name = "Dylivene"
+	id = PRO_TOXIN
+	description = "Dylivene is a broad-spectrum inverse toxin."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#C8A5DC" //rgb: 200, 165, 220
+	density = 1.49033
+	specheatcap = 0.55536
+
+/datum/reagent/pro_toxin/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.drowsyness += 2 * REM
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+		holder.add_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(STOXINS))
+		holder.add_reagents(STOXINS, 2 * REM)
+	if(holder.has_reagent(PLASMA))
+		holder.add_reagent(PLASMA, REM)
+	if(holder.has_any_reagents(SACIDS))
+		holder.add_reagents(SACIDS, REM)
+	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
+		holder.add_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
+	if(holder.has_reagent(CYANIDE))
+		holder.add_reagent(CYANIDE, REM)
+	if(holder.has_reagent(AMATOXIN))
+		holder.add_reagent(AMATOXIN, 2 * REM)
+	if(holder.has_reagent(CHLORALHYDRATE))
+		holder.add_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(CARPOTOXIN))
+		holder.add_reagent(CARPOTOXIN, REM)
+	if(holder.has_reagent(ZOMBIEPOWDER))
+		holder.add_reagent(ZOMBIEPOWDER, 0.5 * REM)
+	if(holder.has_reagent(MINDBREAKER))
+		holder.add_reagent(MINDBREAKER, 2 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
+	M.hallucination += 5 * REM * lucidmod
+	M.adjustToxLoss(2 * REM)
+
+/datum/reagent/pro_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
+	if(T.seed && !T.dead)
+		T.health -= 1
+
 /datum/reagent/phalanximine
 	name = "Phalanximine"
 	id = PHALANXIMINE

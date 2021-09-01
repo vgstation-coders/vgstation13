@@ -360,6 +360,7 @@
 #define GRAVY 			"gravy"
 #define LEFT4ZED		"left4zed"
 #define ANTI_TOXIN		"anti_toxin"
+#define PRO_TOXIN		"pro_toxin"
 #define REAGENT			"reagent"
 #define STOXIN2			"stoxin2"
 #define SPACE_DRUGS		"space_drugs"

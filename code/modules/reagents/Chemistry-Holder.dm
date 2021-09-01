@@ -643,6 +643,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return 1
 
+/datum/reagents/proc/add_reagents(var/list/reagent_list, var/amount, var/safety)
+	if(!isnum(amount))
+		return 1
+
+	for(var/id in reagent_list)
+		add_reagent(id, amount, safety)
+	return 1
+
 /datum/reagents/proc/remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 
 	if(!isnum(amount))

@@ -756,6 +756,14 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Chemist", "Chief Medical Officer")
 
+/datum/uplink_item/jobspecific/medical/protoxbottle
+	name = "Inverse Toxin Chemical"
+	desc = "30 units of Dylovine, a special chemical that causes the body to accumulate any toxic chemicals it already has in greater numbers, which can only be cured by making it take toxin damage from other sources."
+	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
+	cost = 5
+	discounted_cost = 4
+	jobs_with_discount = list("Chemist", "Chief Medical Officer")
+
 /datum/uplink_item/jobspecific/medical/hypozinebottle
 	name = "Lethal Speed Chemical"
 	desc = "30 units of Hypozine, a special chemical that causes the body to seamlessly synthesize Hyperzine, but also causes increases in muscle activity to levels that rapidly tear the user's body apart, causing catastrophic ligament failure. Metabolizes quite slowly."

@@ -553,6 +553,13 @@ var/datum/disease2/disease/wizarditis = null
 	..()
 	reagents.add_reagent(HYPOZINE, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/protoxin
+
+
+/obj/item/weapon/reagent_containers/glass/bottle/protoxin/New()
+	..()
+	reagents.add_reagent(PRO_TOXIN, 30)
+
 /obj/item/weapon/reagent_containers/glass/bottle/sacid
 	name = "Sulphuric Acid Bottle"
 	desc = "A small bottle. Contains a small amount of Sulphuric Acid."

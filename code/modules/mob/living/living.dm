@@ -283,6 +283,33 @@
 		if(H.species.tox_mod)
 			mult = H.species.tox_mod
 
+	if(holder.has_reagent(PRO_TOXIN))
+		mult *= -1 //invert the multiplier, make only toxin damage heal on pro-toxin
+		M.drowsyness = max(M.drowsyness - 4 * REM, 0)
+		if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+			holder.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 4 * REM)
+		if(holder.has_any_reagents(STOXINS))
+			holder.remove_reagents(STOXINS, 4 * REM)
+		if(holder.has_reagent(PLASMA))
+			holder.remove_reagent(PLASMA, 2 * REM)
+		if(holder.has_any_reagents(SACIDS))
+			holder.remove_reagents(SACIDS, 2 * REM)
+		if(holder.has_reagent(POTASSIUM_HYDROXIDE))
+			holder.remove_reagent(POTASSIUM_HYDROXIDE, 4 * REM)
+		if(holder.has_reagent(CYANIDE))
+			holder.remove_reagent(CYANIDE, REM)
+		if(holder.has_reagent(AMATOXIN))
+			holder.remove_reagent(AMATOXIN, 4 * REM)
+		if(holder.has_reagent(CHLORALHYDRATE))
+			holder.remove_reagent(CHLORALHYDRATE, 4 * REM)
+		if(holder.has_reagent(CARPOTOXIN))
+			holder.remove_reagent(CARPOTOXIN, 2 * REM)
+		if(holder.has_reagent(ZOMBIEPOWDER))
+			holder.remove_reagent(ZOMBIEPOWDER, REM)
+		if(holder.has_reagent(MINDBREAKER))
+			holder.remove_reagent(MINDBREAKER, 4 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	toxloss = min(max(toxloss + (amount * tox_damage_modifier * mult), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
