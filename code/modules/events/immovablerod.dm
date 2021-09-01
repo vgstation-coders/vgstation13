@@ -84,8 +84,7 @@ var/list/all_rods = list()
 /obj/item/projectile/immovablerod/hyper/New()
 	..()
 	var/image/I = image('icons/obj/objects_96x96.dmi',"immrod_bottom")
-	I.layer = layer-1
-	I.plane = -1
+	I.plane = relative_plane(PLATING_PLANE-1)
 	overlays += I
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
