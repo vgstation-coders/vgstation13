@@ -767,9 +767,9 @@
 		T.health += 1
 
 /datum/reagent/pro_toxin
-	name = "Dylivene"
+	name = "Dylivine"
 	id = PRO_TOXIN
-	description = "Dylivene is a broad-spectrum inverse toxin."
+	description = "Dylivine is a broad-spectrum inverse toxin."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.49033

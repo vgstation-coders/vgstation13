@@ -539,22 +539,13 @@ var/datum/disease2/disease/wizarditis = null
 	..()
 	reagents.add_reagent(FROSTOIL, 30)
 
-/obj/item/weapon/reagent_containers/glass/bottle/antisocial
-	//No special name or description
-
-/obj/item/weapon/reagent_containers/glass/bottle/antisocial/New()
+/obj/item/weapon/reagent_containers/glass/bottle/antisocial/New() //No special name or description
 	..()
 	reagents.add_reagent(BICARODYNE, 30)
-
-/obj/item/weapon/reagent_containers/glass/bottle/hypozine
-
 
 /obj/item/weapon/reagent_containers/glass/bottle/hypozine/New()
 	..()
 	reagents.add_reagent(HYPOZINE, 30)
-
-/obj/item/weapon/reagent_containers/glass/bottle/protoxin
-
 
 /obj/item/weapon/reagent_containers/glass/bottle/protoxin/New()
 	..()
