@@ -59,6 +59,7 @@ var/global/list/juice_items = list (
 
 		//Other
 		/obj/item/weapon/ectoplasm = list(ECTOPLASM = 5),
+		/obj/item/trash/egg = list(CALCIUMCARBONATE = 1),
 
 		//archaeology!
 		/obj/item/weapon/rocksliver = list(GROUND_ROCK = 30),

@@ -266,3 +266,11 @@ var/list/crushed_cans_cache = list()
 /obj/item/trash/zam_sliderwrapper
 	name = "zam slider wrapper"
 	icon_state	= "zam_spiderslider_wrapper"
+
+/obj/item/trash/egg
+	name = "egg shell"
+	icon_state	= "egg"
+	desc = "Pieces of calcium carbonate."
+
+/obj/item/trash/egg/borer
+	icon_state	= "egg_borer"

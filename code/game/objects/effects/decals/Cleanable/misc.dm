@@ -217,7 +217,7 @@
 	anchored = 1
 	reagent = EGG_YOLK
 	icon = 'icons/effects/tomatodecal.dmi'
-	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
+	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3", "smashed_egg4")
 
 /obj/effect/decal/cleanable/pie_smudge //honk
 	name = "smashed pie"
