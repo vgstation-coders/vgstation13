@@ -30,6 +30,7 @@
 	var/deepfried = 0 //Is the food deep-fried ?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	var/edible_by_utensil = TRUE //Can this snack be put on a fork?
+	var/plate_offset_y = 0
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -1707,6 +1708,7 @@
 	desc = "Totally baked."
 	icon_state = "loadedbakedpotato"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato/New()
 	..()
@@ -1718,6 +1720,7 @@
 	desc = "AKA: French Fries, Freedom Fries, etc."
 	icon_state = "fries"
 	trash = /obj/item/trash/plate
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/New()
 	..()
@@ -1820,6 +1823,7 @@
 	icon_state = "cheesyfries"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/New()
 	..()
@@ -2530,6 +2534,7 @@
 	desc = "Tasty fries from fresh carrots."
 	icon_state = "carrotfries"
 	trash = /obj/item/trash/plate
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries/New()
 	..()
@@ -2786,6 +2791,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -4
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
 	name = "xenomeatbread loaf"
@@ -2809,6 +2815,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -4
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
 	name = "spider meat loaf"
@@ -2832,6 +2839,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
 	name = "synthmeatbread loaf"
@@ -2901,6 +2909,7 @@
 	icon_state = "tofubreadslice"
 	trash = /obj/item/trash/plate
 	bitesize = 2
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/carrotcake
 	name = "carrot cake"
@@ -2925,6 +2934,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/braincake
 	name = "brain cake"
@@ -2994,6 +3004,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full/New()
 	..()
@@ -3021,6 +3032,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/limecake
 	name = "lime cake"
@@ -3043,6 +3055,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/lemoncake
 	name = "lemon cake"
@@ -3065,6 +3078,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/chocolatecake
 	name = "chocolate cake"
@@ -3087,6 +3101,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
 	name = "caramel cake"
@@ -3110,6 +3125,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 	name = "cheese wheel"
@@ -3220,6 +3236,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_LACTOSE
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	name = "Watermelon Slice"
@@ -3249,6 +3266,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinpie //You can't throw this pie
 	name = "Pumpkin Pie"
@@ -3758,6 +3776,7 @@
 	icon_state = "spiderlegcooked"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspiderleg/New()
 	..()
@@ -3992,6 +4011,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey
 	name = "turkey"
@@ -4019,6 +4039,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT
+	plate_offset_y = -1
 
 //////////////////CHICKEN//////////////////
 
@@ -4228,6 +4249,7 @@
 	icon_state = "flan"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/flan/New()
 	..()
@@ -4241,6 +4263,7 @@
 	icon_state = "honeyflan"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/honeyflan/New()
 	..()
@@ -4256,6 +4279,7 @@
 	icon_state = "omurice"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL //egg
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/New()
 	..()
@@ -4264,6 +4288,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/heart
 	icon_state = "omuriceheart"
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/face
 	icon_state = "omuriceface"
@@ -4333,6 +4358,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
 	name = "fruitcake"
@@ -4357,6 +4383,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake
 	name = "\improper Christmas cake"
@@ -4576,6 +4603,7 @@
 	name = "Coleslaw"
 	desc = "You fought the 'slaw, and the 'slaw won."
 	icon_state = "coleslaw"
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/coleslaw/New()
 	..()
@@ -4600,6 +4628,7 @@
 	icon_state = "cinnamon_roll"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll/New()
 	..()
@@ -5429,6 +5458,7 @@
 	icon_state = "quiche"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	bitesize = 4
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/quiche/New()
 	..()
@@ -5451,6 +5481,7 @@
 	desc = "The national dish of Tonga, a country that you had previously never heard about."
 	icon_state = "poissoncru"
 	bitesize = 2
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/poissoncru/New()
 	..()
@@ -5591,6 +5622,7 @@
 	icon_state = "poutine"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/poutine/New()
 	..()
@@ -5635,6 +5667,7 @@
 	icon_state = "poutinesyrup"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup/New()
 	..()
@@ -6209,6 +6242,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
 	icon_state = "butterfingers_r"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/New()
 	..()
@@ -6220,6 +6254,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	icon_state = "butterfingers_l"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/New()
 	..()

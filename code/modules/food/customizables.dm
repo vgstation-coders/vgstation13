@@ -191,7 +191,8 @@
 	if(src.fullyCustom)
 		var/icon/C = getFlatIcon(S, S.dir, 0)
 		I = image(C)
-		I.pixel_y = 12 * PIXEL_MULTIPLIER-empty_Y_space(C)
+		I.pixel_x = round(16 - (C.Width() / 2))
+		I.pixel_y = 12 * PIXEL_MULTIPLIER-empty_Y_space(C) + S.plate_offset_y
 	else
 		I = src.filling
 		if(istype(S) && S.filling_color != "#FFFFFF")
