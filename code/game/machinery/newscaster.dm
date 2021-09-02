@@ -61,14 +61,15 @@
 	img_pda = null
 	backup_img_pda = null
 
-/datum/feed_message/proc/ImagePDA()
+/proc/ImagePDA(var/icon/img)
 	if (img)
-		img_pda = icon(img)
+		var/icon/img_pda = icon(img)
 		//turns the image grayscale then applies an olive coat of paint
 		img_pda.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(128,128,0))
 		//lowers the brightness then ups the contrast so we get something that fits on a PDA screen
 		img_pda.MapColors(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,-0.53,-0.53,-0.53,0)
 		img_pda.MapColors(1.75,0,0,0,0,1.75,0,0,0,0,1.75,0,0,0,0,1.75,-0.375,-0.375,-0.375,0)
+		return img_pda
 
 /datum/feed_message/proc/NewspaperCopy()//We only copy the vars we'll need
 	var/datum/feed_message/copy = new()
@@ -708,7 +709,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
-					newMsg.ImagePDA()
+					ImagePDA(newMsg.img)
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
@@ -822,7 +823,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
 								WANTED.img = P.fields["img"]
-							WANTED.ImagePDA()
+							ImagePDA(WANTED.img)
 						news_network.wanted_issue = WANTED
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()

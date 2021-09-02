@@ -48,7 +48,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/f_lum = 2 //Luminosity for the flashlight function
 	var/silent = 0 //To beep or not to beep, that is the question
 	var/toff = 0 //If 1, messenger disabled
-	var/tnote = null //Current Texts
+	var/list/tnote = list() //Current Texts
 	var/last_text //No text spamming
 	var/last_honk //Also no honk spamming that's bad too
 	var/ttone = "beep" //The ringtone!
@@ -67,6 +67,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/ownjob = null //related to above
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
+	var/obj/item/weapon/photo/photo = null	// A slot for a photo
+	var/list/icon/imglist = list() // Viewed message photos
 	var/obj/item/device/analyzer/atmos_analys = new
 	var/obj/item/device/robotanalyzer/robo_analys = new
 	var/obj/item/device/hailer/integ_hailer = new
@@ -628,16 +630,30 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
-	var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[tnote]</body></html>"
-	usr << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+	var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
+	for(var/note in tnote)
+		dat += tnote[note]
+		var/icon/img = imglist[note]
+		if(img)
+			usr << browse_rsc(img, "tmp_photo_[note].png")
+			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+	dat += "</body></html>"
+	usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 
 /mob/living/silicon/ai/proc/cmd_show_message_log()
 	if(usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
 	if(!isnull(aiPDA))
-		var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[aiPDA.tnote]</body></html>"
-		usr << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+		var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
+		for(var/note in aiPDA.tnote)
+			dat += tnote[note]
+			var/icon/img = imglist[note]
+			if(img)
+				usr << browse_rsc(img, "tmp_photo_[note].png")
+				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
+		dat += "</body></html>"
+		usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 	else
 		to_chat(usr, "You do not have a PDA. You should make an issue report about this.")
 
@@ -862,7 +878,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
 					<a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
 					<a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
-					<a href='byond://?src=\ref[src];choice=21'><span class='pda_icon pda_mail'></span> Messages</a><br>"}
+					<a href='byond://?src=\ref[src];choice=21'><span class='pda_icon pda_mail'></span> Messages</a>"}
+				if(photo)
+					dat += " | <a href='byond://?src=\ref[src];choice=Eject Photo'>Eject Photo</a>"
+				dat += "<br>"
 				if (istype(cartridge, /obj/item/weapon/cartridge/syndicate))
 					dat += "<b>[cartridge:shock_charges] detonation charges left.</b><HR>"
 				if (istype(cartridge, /obj/item/weapon/cartridge/clown))
@@ -901,7 +920,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
 					<a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
 					<h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
-				dat += tnote
+				for(var/note in tnote)
+					dat += tnote[note]
+					var/icon/img = imglist[note]
+					if(img)
+						usr << browse_rsc(img, "tmp_photo_[note].png")
+						dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 				dat += "<br>"
 
 			if (3)
@@ -1980,7 +2004,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
 			silent = !silent
 		if("Clear")//Clears messages
-			tnote = null
+			tnote.Cut()
+			imglist.Cut()
 		if("Ringtone")
 			var/t = input(U, "Please enter new ringtone", name, ttone) as text
 			if (in_range(U, src) && loc == U)
@@ -2014,7 +2039,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
 				if(multicaster.check_status())
 					multicaster.multicast(target,src,usr,t)
-					tnote += "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
+					tnote["msg_id"] = "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
+					msg_id++
 					return
 			to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")
 
@@ -2101,6 +2127,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			else
 				U << browse(null, "window=pda")
 				return
+		if("Eject Photo")
+			if(photo)
+				U.put_in_hands(photo)
+				photo = null
 
 
 //TRADER FUNCTIONS======================================
@@ -2258,7 +2288,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(L)
 		to_chat(L, "[bicon(src)] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
 
-	tnote += "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
+	tnote["msg_id"] = "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
+	msg_id++
 
 	if(id)
 		if(!id.virtual_wallet)
@@ -2310,6 +2341,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			id.forceMove(get_turf(src))
 		id = null
 
+var/global/msg_id = 0
+
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage)
 	if(!reply_to)
 		reply_to = src
@@ -2356,10 +2389,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if(useTC != 2) // Does our recepient have a broadcaster on their level?
 			to_chat(U, "ERROR: Cannot reach recepient.")
 			return
-		useMS.send_pda_message("[P.owner]","[owner]","[t]")
+		useMS.send_pda_message("[P.owner]","[owner]","[photo ? "[t] <b>(Photo attached)</b>" : "[t]"]")
 
-		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
-		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
+		if(photo)
+			imglist["[msg_id]"] += ImagePDA(photo.img)
+			P.imglist["[msg_id]"] += ImagePDA(photo.img)
+		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
+		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
+		msg_id++
 		for(var/mob/dead/observer/M in player_list)
 			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
@@ -2506,6 +2543,11 @@ obj/item/device/pda/AltClick()
 	else if(istype(C, /obj/item/device/paicard) && !src.pai)
 		if(user.drop_item(C, src))
 			pai = C
+			to_chat(user, "<span class='notice'>You slot \the [C] into [src].</span>")
+			updateUsrDialog()
+	else if(istype(C, /obj/item/weapon/photo) && !src.photo)
+		if(user.drop_item(C, src))
+			photo = C
 			to_chat(user, "<span class='notice'>You slot \the [C] into [src].</span>")
 			updateUsrDialog()
 	else if(istype(C, /obj/item/weapon/pen))
