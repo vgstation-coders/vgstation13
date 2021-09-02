@@ -674,7 +674,13 @@ Target Machine: "}
 				</li>"}
 	dat += {"</ul>
 		<br><br>
-		Messages: <hr> [pda.tnote]"}
+		Messages: <hr>"}
+	for(var/note in pda.tnote)
+		dat += pda.tnote[note]
+		var/icon/img = pda.imglist[note]
+		if(img)
+			usr << browse_rsc(img, "tmp_photo_[note].png")
+			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 	return dat
 
 /mob/living/silicon/pai/proc/softwareHolomap()
