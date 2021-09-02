@@ -2039,6 +2039,8 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
 			silent = !silent
 		if("Clear")//Clears messages
+			for(var/note in tnote)
+				imglist.Remove(note)
 			tnote.Cut()
 		if("Ringtone")
 			var/t = input(U, "Please enter new ringtone", name, ttone) as text
