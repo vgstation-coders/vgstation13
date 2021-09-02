@@ -77,7 +77,7 @@
 				if (virus2?.len)
 					for (var/ID in virus2)
 						var/datum/disease2/disease/D = virus2[ID]
-						TrashItem.infect_disease2(D, 1, notes="(leftovers on a plate)",1)
+						TrashItem.infect_disease2(D, 1, "(leftovers on a plate)",1)
 
 				if (istype(TrashItem, /obj/item/trash/plate))
 					var/obj/item/trash/plate/P = TrashItem
