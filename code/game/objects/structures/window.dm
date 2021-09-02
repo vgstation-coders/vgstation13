@@ -124,14 +124,17 @@ var/list/one_way_windows
 			damage_overlay.icon_state = "[cracked_base][damage_fraction]"
 			overlays += damage_overlay
 
-/obj/structure/window/proc/adjustHealthLoss(var/amount = 0)
+/obj/structure/window/proc/adjustHealthLoss(var/amount = 0, var/atom/movable/W = null)
 	if(amount < dmg_threshold)
-		return
+		if(W)
+			visible_message("<span class='warning'>\The [W] [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
+		return FALSE
 	health -= amount
+	return TRUE
 
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
 
-	adjustHealthLoss(Proj.damage)
+	adjustHealthLoss(Proj.damage,Proj)
 	. = ..()
 	healthcheck(Proj.firer)
 
@@ -175,7 +178,9 @@ var/list/one_way_windows
 		damage += S.bonus_kick_damage //Unless they're wearing heavy boots
 
 	if(damage > 0)
-		adjustHealthLoss(damage)
+		if(!adjustHealthLoss(damage))
+			H.visible_message("<span class='danger'>\The [H]'s kick [pick("bounces","gleams")] off \the [src] harmlessly.</span>", \
+			"<span class='danger'>Your kick [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		healthcheck()
 
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
@@ -223,17 +228,17 @@ var/list/one_way_windows
 		return
 	if(ismob(AM))
 		var/mob/M = AM //Duh
-		adjustHealthLoss(10) //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
-		healthcheck(M)
 		if (AM.invisibility < 101)
 			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
 			"<span class='danger'>You slam into \the [src].</span>")
+		adjustHealthLoss(10,AM) //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
+		healthcheck(M)
 	else if(isobj(AM))
 		var/obj/item/I = AM
-		adjustHealthLoss(I.throwforce)
-		healthcheck()
 		if (AM.invisibility < 101)
 			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+		adjustHealthLoss(I.throwforce,AM)
+		healthcheck()
 
 /obj/structure/window/attack_hand(mob/living/user as mob)
 
@@ -241,7 +246,8 @@ var/list/one_way_windows
 		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes \the [src]!</span>")
-		adjustHealthLoss(25)
+		if(!adjustHealthLoss(25))
+			user.visible_message("<span class='danger'>[user]'s punch [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		healthcheck()
 		user.delayNextAttack(8)
 
@@ -271,9 +277,11 @@ var/list/one_way_windows
 
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(10)
-	adjustHealthLoss(damage)
 	user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>", \
 	"<span class='danger'>You smash into \the [src]!</span>")
+	if(!adjustHealthLoss(damage))
+		user.visible_message("<span class='danger'>\The [user]'s attack [pick("bounces","gleams")] off \the [src] harmlessly.</span>", \
+		"<span class='danger'>Your attack [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 	healthcheck(user)
 
 /obj/structure/window/attack_alien(mob/user as mob)
@@ -334,16 +342,16 @@ var/list/one_way_windows
 					"<span class='warning'>You shove \the [M] into \the [src]!</span>")
 				if(GRAB_AGGRESSIVE)
 					M.apply_damage(10) //Nasty, but dazed and concussed at worst
-					adjustHealthLoss(5)
 					visible_message("<span class='danger'>\The [user] slams \the [M] into \the [src]!</span>", \
 					"<span class='danger'>You slam \the [M] into \the [src]!</span>")
+					adjustHealthLoss(5,M)
 				if(GRAB_NECK to GRAB_KILL)
 					M.Stun(3)
 					M.Knockdown(3) //Almost certainly shoved head or face-first, you're going to need a bit for the lights to come back on
 					M.apply_damage(20) //That got to fucking hurt, you were basically flung into a window, most likely a shattered one at that
-					adjustHealthLoss(20) //Window won't like that
 					visible_message("<span class='danger'>\The [user] crushes \the [M] into \the [src]!</span>", \
 					"<span class='danger'>You crush \the [M] into \the [src]!</span>")
+					adjustHealthLoss(20,M) //Window won't like that
 			healthcheck(user)
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been window slammed by [user.name] ([user.ckey]) ([gstate]).</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Window slammed [M.name] ([gstate]).</font>")
@@ -522,9 +530,9 @@ var/list/one_way_windows
 	user.do_attack_animation(src, W)
 	if(W.damtype == BRUTE || W.damtype == BURN)
 		user.delayNextAttack(10)
-		adjustHealthLoss(W.force)
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
 		"<span class='warning'>You hit \the [src] with \the [W].</span>")
+		adjustHealthLoss(W.force,W)
 		healthcheck(user)
 		return
 	else
