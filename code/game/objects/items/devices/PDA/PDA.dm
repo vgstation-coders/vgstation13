@@ -24,7 +24,8 @@
 //The advanced pea-green monochrome lcd of tomorrow.
 
 var/global/list/obj/item/device/pda/PDAs = list()
-
+var/global/msg_id = 0
+var/global/list/icon/imglist = list() // Viewable message photos
 
 /obj/item/device/pda
 	name = "\improper PDA"
@@ -68,7 +69,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/weapon/photo/photo = null	// A slot for a photo
-	var/list/icon/imglist = list() // Viewed message photos
 	var/obj/item/device/analyzer/atmos_analys = new
 	var/obj/item/device/robotanalyzer/robo_analys = new
 	var/obj/item/device/hailer/integ_hailer = new
@@ -683,7 +683,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
 		for(var/note in aiPDA.tnote)
 			dat += aiPDA.tnote[note]
-			var/icon/img = aiPDA.imglist[note]
+			var/icon/img = imglist[note]
 			if(img)
 				usr << browse_rsc(img, "tmp_photo_[note].png")
 				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
@@ -2040,7 +2040,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			silent = !silent
 		if("Clear")//Clears messages
 			tnote.Cut()
-			imglist.Cut()
 		if("Ringtone")
 			var/t = input(U, "Please enter new ringtone", name, ttone) as text
 			if (in_range(U, src) && loc == U)
@@ -2376,8 +2375,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			id.forceMove(get_turf(src))
 		id = null
 
-var/global/msg_id = 0
-
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage)
 	if(!reply_to)
 		reply_to = src
@@ -2428,7 +2425,6 @@ var/global/msg_id = 0
 
 		if(photo)
 			imglist["[msg_id]"] = ImagePDA(photo.img)
-			P.imglist["[msg_id]"] = ImagePDA(photo.img)
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		msg_id++
