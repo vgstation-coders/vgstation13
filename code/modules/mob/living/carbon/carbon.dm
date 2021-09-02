@@ -687,6 +687,9 @@
 		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
 			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
 
+		if(reagents.has_reagent(SUX) && !(reagents.has_any_reagents(HYPERZINES)))
+			. *= 4
+
 /mob/living/carbon/base_movement_tally()
 	. = ..()
 	if(flying)

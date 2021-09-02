@@ -137,7 +137,7 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/New()
 	..()
 	reagents.remove_reagent(DOCTORSDELIGHT, 30)
-	reagents.add_reagent(SUX, 5)
+	reagents.add_reagent(SUX, 10)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/update_icon()
 	if(reagents.total_volume > 0)

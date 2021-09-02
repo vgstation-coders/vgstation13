@@ -733,6 +733,8 @@
 		holder.remove_reagent(AMATOXIN, 2 * REM)
 	if(holder.has_reagent(CHLORALHYDRATE))
 		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(SUX))
+		holder.remove_reagent(SUX, REM)
 	if(holder.has_reagent(CARPOTOXIN))
 		holder.remove_reagent(CARPOTOXIN, REM)
 	if(holder.has_reagent(ZOMBIEPOWDER))
@@ -4187,16 +4189,25 @@
 	description = "A name for Suxamethonium chloride. A medical full-body paralytic preferred because it is easy to purge."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CFC5E9" //rgb: 207, 197, 223
-	overdose_am = 11
+	data = null
+	flags = CHEMFLAG_DISHONORABLE
+	overdose_am = 21
+	custom_metabolism = 1
 
 /datum/reagent/suxameth/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-
-	M.SetStunned(2)
+		if(isnull(data))
+			// copied from chloral for the same reasons
+			data = 0
+		//M.drowsyness = 2
+	if(data >= 2)
+		M.SetStunned(2)
+		M.SetKnockdown(2)
+	data++
 
 /datum/reagent/suxameth/on_overdose(var/mob/living/M)
-	M.adjustOxyLoss(4) //Very rapid deterioration if they go over 10 units
+	M.adjustOxyLoss(6) //Paralyzes the diaphragm if they go over 20 units
 
 /////////////////////////Food Reagents////////////////////////////
 
