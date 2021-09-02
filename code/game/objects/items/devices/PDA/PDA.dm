@@ -612,7 +612,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		var/selected = plist[c]
 
 		if(isAI(usr))
-			var/mob/living/silicon/AI/A = usr
+			var/mob/living/silicon/ai/A = usr
 			if(A.aicamera.aipictures.len)
 				var/list/nametemp = list()
 				for(var/datum/picture/t in A.aicamera.aipictures)
