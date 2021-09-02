@@ -266,7 +266,15 @@
 
 /obj/item/device/camera/cartridge
 	name = "PDA camera"
+	desc = "You should not be seeing this outside of a cartridge"
 	start_with_bulb = FALSE
+	var/obj/item/weapon/cartridge/camera/host_cart = null
+
+/obj/item/device/camera/cartridge/New()
+	if(!loc || istype(loc,/obj/item/weapon/cartridge/camera))
+		qdel(src) // Do not exist outside of cartridges
+	else
+		host_cart = loc
 
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
@@ -518,7 +526,7 @@
 
 /obj/item/device/camera/cartridge/printpicture(mob/user, icon/temp, mobs, flag) //Add photos to cart
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
-	stored_photos += P
+	host_cart.stored_photos += P
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
