@@ -21,6 +21,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "match"
 	desc = "A budget match stick, used to start fires easily, preferably at the end of a smoke."
 	icon = 'icons/obj/cigarettes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	icon_state = "match"
 	item_state = "cig"
 	var/lit = 0
@@ -89,6 +90,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			icon_state = "[initial(icon_state)]_burnt"
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
+	if (istype(loc,/mob/living/carbon))
+		var/mob/living/carbon/M = loc
+		M.update_inv_wear_mask()
+		M.update_inv_hands()
 
 /obj/item/weapon/match/proc/update_brightness()
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
@@ -161,8 +166,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette
 	name = "cigarette"
 	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	icon_state = "cig"
-	item_state = "cig"
+	item_state = null
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 	w_class = W_CLASS_TINY
 	body_parts_covered = 0
@@ -219,6 +225,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			icon_state = "[initial(icon_state)]off"
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
+	if (istype(loc,/mob/living/carbon))
+		var/mob/living/carbon/M = loc
+		M.update_inv_wear_mask()
+		M.update_inv_hands()
 
 /obj/item/clothing/mask/cigarette/proc/update_brightness()
 	if(lit)
@@ -447,7 +457,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "bidilit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/bidibutt
-	item_state = "bidi"
 
 /obj/item/clothing/mask/cigarette/goldencarp
 	name = "Golden Carp cigarette"
@@ -456,7 +465,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "goldencarplit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/goldencarpbutt
-	item_state = "goldencarp"
 
 /obj/item/clothing/mask/cigarette/starlight
 	name = "Starlight cigarette"
@@ -465,7 +473,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "starlightlit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/starlightbutt
-	item_state = "starlight"
 
 /obj/item/clothing/mask/cigarette/lucky
 	name = "Lucky Strike cigarette"
@@ -474,7 +481,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "luckylit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/luckybutt
-	item_state = "lucky"
 
 /obj/item/clothing/mask/cigarette/redsuit
 	name = "Redsuit cigarette"
@@ -483,7 +489,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "redsuitlit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/redsuitbutt
-	item_state = "redsuit"
 
 /obj/item/clothing/mask/cigarette/ntstandard
 	name = "NT Standard cigarette"
@@ -492,7 +497,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "ntstandardlit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/ntstandardbutt
-	item_state = "ntstandard"
 
 /obj/item/clothing/mask/cigarette/spaceport
 	name = "Spaceport cigarette"
@@ -501,7 +505,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "spaceportlit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/spaceportbutt
-	item_state = "spaceport"
 
 
 
@@ -524,7 +527,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	flags = FPRINT
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/cigarbutt
-	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 25
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
@@ -622,7 +624,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon_state = "blunt"
 	overlay_on = "bluntlit"
 	type_butt = /obj/item/trash/cigbutt/bluntbutt
-	item_state = "blunt"
 	slot_flags = SLOT_MASK
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
@@ -682,7 +683,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A pipe, for smoking. Probably made of meershaum or something."
 	flags = FPRINT
 	icon_state = "pipe"
-	item_state = "pipe"
 	slot_flags = SLOT_MASK
 	overlay_on = "pipelit"
 	species_fit = list(GREY_SHAPED)
@@ -747,7 +747,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "corn cob pipe"
 	desc = "A nicotine delivery system popularized by folksy backwoodsmen and kept popular in the modern age and beyond by space hipsters."
 	icon_state = "cobpipe"
-	item_state = "cobpipe"
 	smoketime = 400
 
 /////////////////
@@ -760,6 +759,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lighter"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
+	item_state = null
 	w_class = W_CLASS_TINY
 	throwforce = 4
 	flags = null
@@ -825,6 +826,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			icon_state = "[initial(icon_state)][color_suffix]"
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
+	if (istype(loc,/mob/living/carbon))
+		var/mob/living/carbon/M = loc
+		M.update_inv_wear_mask()
+		M.update_inv_hands()
 
 /obj/item/weapon/lighter/proc/update_brightness()
 	if(lit)
@@ -919,7 +924,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "Zippo lighter"
 	desc = "The Zippo lighter. Need to light a smoke? Zippo!"
 	icon_state = "zippo"
-	item_state = "zippo"
 	color_suffix = null
 	var/open_sound = list('sound/items/zippo_open.ogg')
 	var/close_sound = list('sound/items/zippo_close.ogg')

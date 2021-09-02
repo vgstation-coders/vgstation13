@@ -1,5 +1,7 @@
 /obj/item/ashtray
 	icon = 'icons/ashtray.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
+	item_state = "ashtray"
 	w_class = W_CLASS_TINY
 
 	var/max_butts 	= 0
@@ -96,6 +98,7 @@
 	icon_half  = "ashtray_half_br"
 	icon_full  = "ashtray_full_br"
 	icon_broken  = "ashtray_bork_br"
+	item_state = "ashtray_br"
 	max_butts = 10
 	health = 72
 	starting_materials = list(MAT_IRON = 80)
@@ -117,6 +120,7 @@
 	icon_half  = "ashtray_half_gl"
 	icon_full  = "ashtray_full_gl"
 	icon_broken  = "ashtray_bork_gl"
+	item_state = "ashtray_gl"
 	max_butts = 12
 	health = 12
 	starting_materials = list(MAT_GLASS = 60)
