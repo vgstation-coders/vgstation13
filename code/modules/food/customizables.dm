@@ -250,7 +250,10 @@
 				F.infect_disease2(D,1, "added to a sandwhich",0)
 		F.attackby(I, user, params)
 		if (istype(F))
-			F.item_state = I.item_state
+			if (I.item_state)
+				F.item_state = I.item_state
+			else
+				F.item_state = I.icon_state
 		if (plates.len > 0)
 			user.put_in_hands(F)
 			var/obj/item/trash/plate/plate = plates[plates.len]

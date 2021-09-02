@@ -208,7 +208,7 @@
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		if(sounds)
 			playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
-		if (prob(20))
+		if (prob(35))
 			var/obj/effect/decal/cleanable/crumbs/C = new (get_turf(eater))
 			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 		if (virus2?.len)
