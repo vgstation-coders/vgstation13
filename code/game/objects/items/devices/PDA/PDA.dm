@@ -611,17 +611,26 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			return
 		var/selected = plist[c]
 
+		var/obj/item/device/camera/silicon/targetcam = null
 		if(isAI(usr))
 			var/mob/living/silicon/ai/A = usr
-			if(A.aicamera.aipictures.len)
-				var/list/nametemp = list()
-				for(var/datum/picture/t in A.aicamera.aipictures)
-					nametemp += t.fields["name"]
-				var/find = input("Select image") in nametemp
-				for(var/datum/picture/q in A.aicamera.aipictures)
-					if(q.fields["name"] == find)
-						photo = q
-						break
+			targetcam = A.aicamera
+		else if((isrobot(usr)))
+			var/mob/living/silicon/robot/R = usr
+			if(R.connected_ai)
+				targetcam = R.connected_ai.aicamera
+			else
+				targetcam = R.aicamera
+
+		if(targetcam && targetcam.aipictures.len)
+			var/list/nametemp = list()
+			for(var/datum/picture/t in targetcam.aipictures)
+				nametemp += t.fields["name"]
+			var/find = input("Select image") in nametemp
+			for(var/datum/picture/q in targetcam.aipictures)
+				if(q.fields["name"] == find)
+					photo = q
+					break
 		
 		create_message(usr, selected)
 		photo = null
