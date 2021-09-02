@@ -25,7 +25,6 @@
 
 var/global/list/obj/item/device/pda/PDAs = list()
 var/global/msg_id = 0
-var/global/list/icon/imglist = list() // Viewable message photos
 
 /obj/item/device/pda
 	name = "\improper PDA"
@@ -69,6 +68,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
 	var/obj/item/weapon/photo/photo = null	// A slot for a photo
+	var/list/icon/imglist = list() // Viewable message photos
 	var/obj/item/device/analyzer/atmos_analys = new
 	var/obj/item/device/robotanalyzer/robo_analys = new
 	var/obj/item/device/hailer/integ_hailer = new
@@ -683,7 +683,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
 		for(var/note in aiPDA.tnote)
 			dat += aiPDA.tnote[note]
-			var/icon/img = imglist[note]
+			var/icon/img = aiPDA.imglist[note]
 			if(img)
 				usr << browse_rsc(img, "tmp_photo_[note].png")
 				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
@@ -2039,8 +2039,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
 			silent = !silent
 		if("Clear")//Clears messages
-			for(var/note in tnote)
-				imglist.Remove(note)
+			imglist.Cut()
 			tnote.Cut()
 		if("Ringtone")
 			var/t = input(U, "Please enter new ringtone", name, ttone) as text
@@ -2060,21 +2059,8 @@ var/global/list/icon/imglist = list() // Viewable message photos
 			var/obj/item/device/pda/P = locate(href_list["target"])
 			src.create_message(U, P)
 		if("viewPhoto")
-			var/note = locate(href_list["image"])
-			var/psize = locate(href_list["size"])
-
-			usr << browse_rsc(imglist[note], "tmp_photo_view.png")
-			var/displaylength = 192
-			switch(psize)
-				if(5)
-					displaylength = 320
-				if(7)
-					displaylength = 448
-				
-			usr << browse("<html><head><title>[name]</title></head>" \
-			+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
-			+ "<img src='tmp_photo.png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' />" \
-			+ "</body></html>", "window=book;size=[displaylength]x[displaylength]")
+			var/obj/item/weapon/photo/PH = locate(href_list["image"])
+			PH.show(U)
 		if("Multimessage")
 			var/list/department_list = list("security","engineering","medical","research","cargo","service")
 			var/target = input("Select a department", "CAMO Service") as null|anything in department_list
@@ -2451,7 +2437,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
 					[U.real_name][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span>\
-					(<a href='byond://?src=\ref[P];choice=viewPhoto;image=[msg_id];size=[photo ? photo.photo_size : 3];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>")
+					[photo ? " (<a href='byond://?src=\ref[P];choice=viewPhoto;image=\ref[photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>" : ""]")
 
 
 		if (prob(15)&&!multicast_message) //Give the AI a chance of intercepting the message
@@ -2477,7 +2463,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 			L = get_holder_of_type(P, /mob/living/silicon)
 
 		if(L)
-			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=viewPhoto;image=[msg_id];size=[photo ? photo.photo_size : 3];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>) (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
+			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" [photo ? "(<a href='byond://?src=\ref[P];choice=viewPhoto;image=\ref[photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)" : ""] (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
 		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
 		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
