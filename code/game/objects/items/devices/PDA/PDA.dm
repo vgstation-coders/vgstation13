@@ -228,7 +228,7 @@ var/global/msg_id = 0
 
 /obj/item/device/pda/update_icon()
 	if (cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
-		var/image/cam_under = Image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam")
+		var/image/cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam")
 		cam_under.pixel_y = 8
 		underlays += cam_under
 	else
