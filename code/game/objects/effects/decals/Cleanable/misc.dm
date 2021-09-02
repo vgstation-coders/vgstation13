@@ -49,6 +49,23 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "pepper"
 
+/obj/effect/decal/cleanable/crumbs
+	name = "crumbs"
+	desc = "some food remains"
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	reagent = NUTRIMENT
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "crumbs"
+	plane = OBJ_PLANE
+	layer = TABLE_LAYER+0.1
+
+/obj/effect/decal/cleanable/crumbs/New()
+	..()
+	pixel_x = rand (-4,4) * PIXEL_MULTIPLIER
+	pixel_y = rand (-4,4) * PIXEL_MULTIPLIER
+
 /obj/effect/decal/cleanable/greenglow
 	name = "glowing goo"
 	desc = "Jeez. I hope that's not for lunch."
@@ -249,6 +266,20 @@
 	mouse_opacity = 1
 
 /obj/effect/decal/cleanable/clay_fragments/New()
+	..()
+	pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
+	pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
+
+/obj/effect/decal/cleanable/broken_plate
+	name = "broken plate"
+	desc = "Pieces from a broken plate."
+	gender = PLURAL
+	icon = 'icons/obj/trash.dmi'
+	icon_state = "brokenplate"
+	anchored = 0
+	mouse_opacity = 1
+
+/obj/effect/decal/cleanable/broken_plate/New()
 	..()
 	pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand (-3,3) * PIXEL_MULTIPLIER

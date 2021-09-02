@@ -81,7 +81,7 @@
 
 				if (istype(TrashItem, /obj/item/trash/plate))
 					var/obj/item/trash/plate/P = TrashItem
-					P.trash_color = filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 					P.update_icon()
 
 				if(ismob(old_loc))
@@ -208,6 +208,9 @@
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		if(sounds)
 			playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if (prob(20))
+			var/obj/effect/decal/cleanable/crumbs/C = new (get_turf(eater))
+			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 		if (virus2?.len)
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
@@ -1511,6 +1514,7 @@
 	icon_state = "popcorn"
 	trash = /obj/item/trash/popcorn
 	var/unpopped = 0
+	filling_color = "#EFE5D4"
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/New()
 		..()
@@ -1532,6 +1536,7 @@
 	desc = "Beef jerky made from the finest space cows."
 	trash = /obj/item/trash/sosjerky
 	food_flags = FOOD_MEAT
+	filling_color = "#733000"
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky/New()
 	..()
@@ -1600,6 +1605,7 @@
 	desc = "Bite sized cheesie snacks that will honk all over your mouth."
 	trash = /obj/item/trash/cheesie
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	filling_color = "#FFCC33"
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers/New()
 	..()
@@ -4099,6 +4105,7 @@
 	desc = "Commander Riker's What-The-Crisps."
 	icon_state = "chips"
 	trash = /obj/item/trash/chips
+	filling_color = "#FFB700"
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/New()
 	..()

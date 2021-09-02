@@ -17,6 +17,8 @@
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich(get_turf(src),I) //boy ain't this a mouthful
+		F.pixel_x = pixel_x
+		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
 		qdel(src)
 	else
@@ -28,6 +30,8 @@
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova(get_turf(src),I) //welp nevermind that
+		F.pixel_x = pixel_x
+		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
 		qdel(src)
 	else
@@ -39,6 +43,8 @@
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/burger(get_turf(src),I)
+		F.pixel_x = pixel_x
+		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
 		qdel(src)
 	else
@@ -50,6 +56,8 @@
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/pizza(get_turf(src),I)
+		F.pixel_x = pixel_x
+		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
 		qdel(src)
 	else
@@ -61,6 +69,8 @@
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/pasta(get_turf(src),I)
+		F.pixel_x = pixel_x
+		F.pixel_y = pixel_y
 		F.attackby(I, user, params)
 		qdel(src)
 	else
@@ -74,6 +84,7 @@
 	icon_state = "plate"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/trash.dmi', "right_hand" = 'icons/mob/in-hand/right/trash.dmi')
 	item_state = "plate1"
+	throwforce = 5
 	var/clean = FALSE
 	var/list/plates = list() // If the plates are stacked, they come here
 	var/new_stack = 0 // allows mappers to create plate stacks
@@ -136,6 +147,30 @@
 		to_chat(user, "<span class='warning'>You remove the topmost plate from the stack.</span>")
 		plate.update_icon()
 		update_icon()
+
+
+/obj/item/trash/plate/throw_impact(atom/hit_atom)
+	..()
+	for (var/obj/item/trash/plate/P in plates)
+		plates -= P
+		if(prob(70))
+			playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
+			new/obj/effect/decal/cleanable/broken_plate(loc)
+			visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+			qdel(P)
+		else
+			P.forceMove(loc)
+			P.pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
+			P.pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
+
+	if(prob(70))
+		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
+		new/obj/effect/decal/cleanable/broken_plate(loc)
+		visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+		qdel(src)
+	else
+		update_icon()
+
 
 /obj/item/trash/plate/attack_hand(var/mob/user)
 	if(plates.len > 0)
@@ -207,14 +242,15 @@
 			to_chat(user, "<span class='warning'>That's already got a plate!</span>")
 			return
 
-		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
+		var/obj/item/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
 
 		if (virus2?.len)
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
 				F.infect_disease2(D,1, "added to a sandwhich",0)
 		F.attackby(I, user, params)
-		F.item_state = I.item_state
+		if (istype(F))
+			F.item_state = I.item_state
 		if (plates.len > 0)
 			user.put_in_hands(F)
 			var/obj/item/trash/plate/plate = plates[plates.len]
@@ -276,7 +312,7 @@
 	var/image/topping
 	var/image/filling
 
-/obj/item/weapon/reagent_containers/food/snacks/customizable/New(loc,ingredient)
+/obj/item/weapon/reagent_containers/food/snacks/customizable/New(loc,var/obj/item/ingredient)
 	. = ..()
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
