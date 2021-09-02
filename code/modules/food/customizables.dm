@@ -303,7 +303,7 @@
 	if(fullyCustom)
 		I = image(S.icon,src,S.icon_state)
 		I.appearance = S.appearance
-		I.pixel_y = 12 * PIXEL_MULTIPLIER-empty_Y_space(icon(icon,icon_state)) + S.plate_offset_y
+		I.pixel_y = 12 * PIXEL_MULTIPLIER - empty_Y_space(icon(S.icon,S.icon_state)) + S.plate_offset_y
 	else
 		I = src.filling
 		if(istype(S) && S.filling_color != "#FFFFFF")
