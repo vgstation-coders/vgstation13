@@ -25,13 +25,21 @@
 		if (contents.len >= max_butts)
 			to_chat(user, "<span class='warning'>This ashtray is full.</span>")
 			return
+		if (istype(W,/obj/item/clothing/mask/cigarette/pipe) && (user.a_intent != I_HURT)) // angry spessmen can still crush their pipe inside the ashtray if they really want
+			var/obj/item/clothing/mask/cigarette/pipe/P = W
+			P.lit = 0
+			P.smoketime = 0
+			to_chat(user, "<span class='notice'>You tap your [P] over the [src], emptying the remaining tobbaco and ashes into it.</span>")
+			P.update_brightness()
+			add_fingerprint(user)
+			return
 		if(!user.drop_item(W, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if(istype(cig, /obj/item/trash/cigbutt))
 			to_chat(user, "<span class='notice'>You drop the [cig] into [src].</span>")
-		if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
+		else if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
 			if (cig.lit == 1)
 				visible_message("<span class='notice'>[user] crushes [cig] in [src], putting it out.</span>")
 			else if (cig.lit == 0)

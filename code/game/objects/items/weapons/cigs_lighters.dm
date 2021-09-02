@@ -23,7 +23,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon = 'icons/obj/cigarettes.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	icon_state = "match"
-	item_state = "cig"
+	item_state = "match"
 	var/lit = 0
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
@@ -36,6 +36,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
 	light_color = LIGHT_COLOR_FIRE
+	var/base_name = "match"
+	var/base_icon = "match"
 
 /obj/item/weapon/match/New()
 	..()
@@ -73,21 +75,21 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/match/update_icon()
 	switch(lit)
 		if(1)
-			name = "lit [initial(name)]"
-			item_state = "[initial(item_state)]on"
-			icon_state = "[initial(icon_state)]_lit"
+			name = "lit [base_name]"
+			icon_state = "[base_icon]_lit"
+			item_state = icon_state
 			damtype = BURN
 			attack_verb = lit_attack_verb
 		if(0)
-			name = "[initial(name)]"
-			item_state = "[initial(item_state)]off"
-			icon_state = "[initial(icon_state)]_unlit"
+			name = "[base_name]"
+			icon_state = "[base_icon]_unlit"
+			item_state = icon_state
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
 		if(-1)
-			name = "burnt [initial(name)]"
-			item_state = "[initial(item_state)]off"
-			icon_state = "[initial(icon_state)]_burnt"
+			name = "burnt [base_name]"
+			icon_state = "[base_icon]_burnt"
+			item_state = icon_state
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
 	if (istype(loc,/mob/living/carbon))
@@ -188,9 +190,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/chem_volume = 20
 	var/inside_item = 0 //For whether the cigarette is contained inside another item.
 	var/filling = null //To alter the name if it's a special kind of cigarette
+	var/base_name = "cigarette"
+	var/base_icon = "cig"
 
 /obj/item/clothing/mask/cigarette/New()
 	..()
+	base_name = name
+	base_icon = icon_state
 	flags |= NOREACT // so it doesn't react until you light it
 	create_reagents(chem_volume) // making the cigarrete a chemical holder with a maximum volume of 15
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -214,15 +220,15 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	switch(lit)
 		if(1)
-			name = filling ? "lit [filling] [initial(name)]" : "lit [initial(name)]"
-			item_state = "[initial(item_state)]on"
-			icon_state = "[initial(icon_state)]on"
+			name = filling ? "lit [filling] [base_name]" : "lit [base_name]"
+			item_state = "[base_icon]on"
+			icon_state = "[base_icon]on"
 			damtype = BURN
 			attack_verb = lit_attack_verb
 		if(0)
-			name = filling ? "[filling] [initial(name)]" : "[initial(name)]"
-			item_state = "[initial(item_state)]off"
-			icon_state = "[initial(icon_state)]off"
+			name = filling ? "[filling] [base_name]" : "[base_name]"
+			item_state = "[base_icon]off"
+			icon_state = "[base_icon]off"
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
 	if (istype(loc,/mob/living/carbon))
@@ -778,9 +784,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("prods", "pokes")
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
+	var/base_icon = "lighter"
 
 /obj/item/weapon/lighter/New()
 	..()
+	base_icon = icon_state
 	update_icon()
 
 /obj/item/weapon/lighter/Destroy()
@@ -814,16 +822,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(1)
 			initial_name = name
 			name = "lit [initial_name]"
-			item_state = "[initial(item_state)][color_suffix]on"
-			icon_state = "[initial(icon_state)][color_suffix]-on"
+			icon_state = "[base_icon][color_suffix]-on"
+			item_state = icon_state
 			damtype = BURN
 			attack_verb = lit_attack_verb
 		if(0)
 			if(!initial_name)
 				initial_name = name
 			name = "[initial_name]"
-			item_state = "[initial(item_state)][color_suffix]off"
-			icon_state = "[initial(icon_state)][color_suffix]"
+			icon_state = "[base_icon][color_suffix]"
+			item_state = icon_state
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
 	if (istype(loc,/mob/living/carbon))
