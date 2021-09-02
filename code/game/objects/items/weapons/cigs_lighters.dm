@@ -385,7 +385,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(isliving(loc))
 		M.IgniteMob()
 	smoketime--
-	if (smoketime == 5)
+	if (smoketime == 5 && ismob(loc))
+		var/mob/M = loc
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
 	var/datum/gas_mixture/env = location.return_air()
 	if(smoketime <= 0 || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
@@ -713,7 +714,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/process()
 	var/turf/location = get_turf(src)
 	smoketime--
-	if (smoketime == 5)
+	if (smoketime == 5 && ismob(loc))
+		var/mob/M = loc
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
 	if(smoketime <= 0)
 		new /obj/effect/decal/cleanable/ash(location)
