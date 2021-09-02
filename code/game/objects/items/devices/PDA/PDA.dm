@@ -2686,6 +2686,10 @@ obj/item/device/pda/AltClick()
 		note = A:info
 		to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
 
+	else if (istype(cartridge, /obj/item/weapon/cartridge/camera))
+		var/obj/item/weapon/cartridge/camera/CM = cartridge
+		CM.cart_cam.afterattack(A,user,proximity_flag)
+
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
 		if(SCANMODE_REAGENT)

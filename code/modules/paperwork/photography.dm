@@ -271,7 +271,7 @@
 	var/obj/item/weapon/cartridge/camera/host_cart = null
 
 /obj/item/device/camera/cartridge/New()
-	if(!loc || istype(loc,/obj/item/weapon/cartridge/camera))
+	if(!loc || !istype(loc,/obj/item/weapon/cartridge/camera))
 		qdel(src) // Do not exist outside of cartridges
 	else
 		host_cart = loc
