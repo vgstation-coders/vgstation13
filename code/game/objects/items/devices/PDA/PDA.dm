@@ -2062,7 +2062,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		if("viewPhoto")
 			var/note = locate(href_list["image"])
 			usr << browse_rsc(imglist[note], "tmp_photo_view.png")
-			user << browse("<html><head><title>[name]</title></head>" \
+			usr << browse("<html><head><title>[name]</title></head>" \
 			+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
 			+ "<img src='tmp_photo.png' width='448' style='-ms-interpolation-mode:nearest-neighbor' />" \
 			+ "</body></html>", "window=book;size=448x448")
