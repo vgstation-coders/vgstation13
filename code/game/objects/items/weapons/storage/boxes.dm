@@ -805,6 +805,14 @@
 	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 
+/obj/item/weapon/storage/box/autoinjectors/saltwater
+	desc = "Contains saltwater."
+
+/obj/item/weapon/storage/box/autoinjectors/saltwater/New()
+	..()
+	for (var/i; i < BOX_SPACE; i++)
+		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/saltwater(src)
+
 /obj/item/weapon/storage/box/antiviral_syringes
 	name = "box of anti-viral syringes"
 	desc = "Contains anti-viral syringes."

@@ -42,6 +42,10 @@
 		),
 	)
 
+	items_to_collect = list(
+		/obj/item/weapon/storage/box/autoinjectors/saltwater = slot_r_store_str
+	)
+
 	race_items_to_collect = list(
 		/datum/species/vox/ = list(
 			/obj/item/clothing/suit/storage/labcoat/cmo,
@@ -131,6 +135,10 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
+	)
+
+	items_to_collect = list(
+		/obj/item/weapon/storage/box/autoinjectors/saltwater = slot_r_store_str
 	)
 
 	race_items_to_collect = list(
@@ -240,6 +248,10 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/chemist,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
+	)
+
+	items_to_collect = list(
+		/obj/item/weapon/storage/box/autoinjectors/saltwater = slot_r_store_str
 	)
 
 	race_items_to_collect = list(
@@ -413,6 +425,10 @@
 		),
 	)
 
+	items_to_collect = list(
+		/obj/item/weapon/storage/box/autoinjectors/saltwater = slot_r_store_str
+	)
+
 	race_items_to_collect = list(
 		/datum/species/vox/ = list(
 			/obj/item/clothing/suit/storage/labcoat/genetics,
@@ -478,6 +494,10 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/virologist,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
+	)
+
+	items_to_collect = list(
+		/obj/item/weapon/storage/box/autoinjectors/saltwater = slot_r_store_str
 	)
 
 	race_items_to_collect = list(

@@ -124,3 +124,11 @@
 		icon_state = "biofoam1"
 	else
 		icon_state = "biofoam0"
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/saltwater
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/saltwater/New()
+	..()
+	reagents.remove_reagent(DOCTORSDELIGHT, 30)
+	reagents.add_reagent(SALTWATER, 5)
+	return

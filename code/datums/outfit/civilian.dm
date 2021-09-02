@@ -360,6 +360,7 @@
 		/obj/item/toy/crayon/rainbow = null,
 		/obj/item/weapon/storage/fancy/crayons = null,
 		/obj/item/toy/waterflower = null,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector/saltwater = null
 	)
 
 	pda_type = /obj/item/device/pda/clown
