@@ -583,12 +583,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	var/selected = plist[c]
 
-	if(targetcam.aipictures.len)
+	if(aicamera.aipictures.len)
 		var/list/nametemp = list()
-		for(var/datum/picture/t in targetcam.aipictures)
+		for(var/datum/picture/t in aicamera.aipictures)
 			nametemp += t.fields["name"]
 		var/find = input("Select image") in nametemp
-		for(var/datum/picture/q in targetcam.aipictures)
+		for(var/datum/picture/q in aicamera.aipictures)
 			if(q.fields["name"] == find)
 				aiPDA.photo = q
 				break
@@ -613,12 +613,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 		if(isAI(usr))
 			var/mob/living/silicon/AI/A = usr
-			if(A.targetcam.aipictures.len)
+			if(A.aicamera.aipictures.len)
 				var/list/nametemp = list()
-				for(var/datum/picture/t in A.targetcam.aipictures)
+				for(var/datum/picture/t in A.aicamera.aipictures)
 					nametemp += t.fields["name"]
 				var/find = input("Select image") in nametemp
-				for(var/datum/picture/q in A.targetcam.aipictures)
+				for(var/datum/picture/q in A.aicamera.aipictures)
 					if(q.fields["name"] == find)
 						photo = q
 						break
