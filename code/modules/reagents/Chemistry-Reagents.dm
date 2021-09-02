@@ -847,7 +847,10 @@
 		return 1
 
 	//Toxins are really weak, but without being treated, last very long
-	M.adjustToxLoss(0.2)
+	else if(holder.has_reagent(PRO_TOXIN))
+		M.adjustToxLoss(-0.2)
+	else
+		M.adjustToxLoss(0.2)
 
 /datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -888,7 +891,10 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(4)
+	if(holder.has_reagent(PRO_TOXIN))
+		M.adjustToxLoss(-4)
+	else
+		M.adjustToxLoss(4)
 	M.adjustOxyLoss(4)
 	M.sleeping += 1
 
@@ -2644,6 +2650,8 @@
 	var/mob/living/carbon/human/H = M
 	if(isplasmaman(H) || H.species.flags & PLASMA_IMMUNE)
 		return 1
+	else if(holder.has_reagent(PRO_TOXIN))
+		M.adjustToxLoss(-3 * REM)
 	else
 		M.adjustToxLoss(3 * REM)
 	if(holder.has_reagent("inaprovaline"))
@@ -3648,7 +3656,10 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(2 * REM)
+	else if(holder.has_reagent(PRO_TOXIN))
+		M.adjustToxLoss(-2 * REM)
+	else
+		M.adjustToxLoss(2 * REM)
 
 /datum/reagent/zombiepowder
 	name = "Zombie Powder"
@@ -3668,7 +3679,10 @@
 	else
 		M.status_flags &= ~FAKEDEATH
 	M.adjustOxyLoss(0.5 * REM)
-	M.adjustToxLoss(0.5 * REM)
+	else if(holder.has_reagent(PRO_TOXIN))
+		M.adjustToxLoss(-0.5 * REM)
+	else
+		M.adjustToxLoss(0.5 * REM)
 	M.Knockdown(10)
 	M.Stun(10)
 	M.silent = max(M.silent, 10)
@@ -4899,7 +4913,10 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(1.5)
+	if(holder.has_reagent(PRO_TOXIN))
+		M.adjustToxLoss(-1.5)
+	else
+		M.adjustToxLoss(1.5)
 
 /datum/reagent/amanatin
 	name = "Alpha-Amanatin"
