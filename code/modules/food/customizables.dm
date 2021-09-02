@@ -191,7 +191,7 @@
 		if (virus2?.len)
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
-				F.infect_disease2(V,1, "added to a sandwhich",0)
+				F.infect_disease2(D,1, "added to a sandwhich",0)
 		F.attackby(I, user, params)
 		if (plates.len > 0)
 			user.put_in_hands(F)
@@ -260,6 +260,10 @@
 	filling = image(icon,,"[initial(icon_state)]_filling")
 	reagents.add_reagent(NUTRIMENT,3)
 	if (ingredient)
+		if (ingredient.virus2?.len)
+			for (var/ID in ingredient.virus2)
+				var/datum/disease2/disease/D = ingredient.virus2[ID]
+				infect_disease2(D,1, "added to a custom food item",0)
 		virus2 = virus_copylist(ingredient.virus2)
 	updateName()
 
@@ -388,7 +392,7 @@
 		if (I.virus2?.len)
 			for (var/ID in I.virus2)
 				var/datum/disease2/disease/D = I.virus2[ID]
-				infect_disease2(V,1, "added to a sandwhich",0)
+				infect_disease2(D,1, "added to a sandwhich",0)
 	else
 		..()
 
