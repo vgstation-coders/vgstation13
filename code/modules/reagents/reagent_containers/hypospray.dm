@@ -17,8 +17,6 @@
 /obj/item/weapon/reagent_containers/hypospray/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/item/weapon/reagent_containers/hypospray/medical
-
 /obj/item/weapon/reagent_containers/hypospray/doctors_delight/New() //comment this to make hypos start off empty
 	..()
 	reagents.add_reagent(DOCTORSDELIGHT, 30)
@@ -105,8 +103,6 @@
 		to_chat(user, "<span class='info'>It is ready for injection.</span>")
 	else
 		to_chat(user, "<span class='info'>The [name] has been spent.</span>")
-
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight/New()
 	..()
