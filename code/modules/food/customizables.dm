@@ -177,6 +177,7 @@
 		else
 			visible_message("<span class='notice'>[user] cleans the plate with \the [I]. </span>","<span class='notice'>You clean the plate with \the [I]. </span>")
 		clean = TRUE
+		clean_blood()// removes diseases and stuff as well
 		update_icon()
 		return TRUE
 
@@ -186,6 +187,10 @@
 			return
 
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
+		for(var/ID in virus2)
+			if (!(ID in F.virus2))
+				var/datum/disease2/disease/V = virus2[ID]
+				F.infect_disease2(V,1, "pathogen on a dirty plate",0)
 		F.attackby(I, user, params)
 		if (plates.len > 0)
 			user.put_in_hands(F)
@@ -253,6 +258,8 @@
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
 	reagents.add_reagent(NUTRIMENT,3)
+	if (ingredient)
+		virus2 = virus_copylist(ingredient.virus2)
 	updateName()
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/attackby(obj/item/I, mob/user, params)
@@ -377,6 +384,10 @@
 		qdel(I)
 		addTop = 1
 		src.drawTopping()
+		for(var/ID in I.virus2)
+			if (!(ID in virus2))
+				var/datum/disease2/disease/V = I.virus2[ID]
+				infect_disease2(V,1, "added to a sandwhich",0)
 	else
 		..()
 
