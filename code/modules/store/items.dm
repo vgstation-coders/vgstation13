@@ -107,7 +107,7 @@
 /datum/storeitem/camcart
 	name = "PDA Camera Cartridge"
 	desc = "All the fun of an old camera, now on a tiny cartridge inside your microcomputer! Printer not included."
-	typepath = /obj/item/cartridge/camera
+	typepath = /obj/item/weapon/cartridge/camera
 	cost = 60
 
 /////////////////////////////

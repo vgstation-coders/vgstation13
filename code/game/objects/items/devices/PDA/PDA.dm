@@ -226,6 +226,14 @@ var/global/msg_id = 0
 	if (cartridge)
 		cartridge.initialize()
 
+/obj/item/device/pda/update_icon()
+	if (cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
+		var/image/cam_under = Image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam")
+		cam_under.pixel_y = 8
+		underlays += cam_under
+	else
+		underlays.Cut()
+
 /obj/item/device/pda/ert
 	name = "ERT PDA"
 	default_cartridge = /obj/item/weapon/cartridge/security
@@ -1619,6 +1627,7 @@ var/global/msg_id = 0
 				if(ismob(T))
 					T = T.loc
 				U.put_in_hands(cartridge)
+				update_icon()
 				scanmode = SCANMODE_NONE
 				if (cartridge.radio)
 					cartridge.radio.hostpda = null
@@ -2553,6 +2562,7 @@ obj/item/device/pda/AltClick()
 		if(user.drop_item(C, src))
 			cartridge = C
 			to_chat(user, "<span class='notice'>You insert [cartridge] into [src].</span>")
+			update_icon()
 			if(cartridge.radio)
 				cartridge.radio.hostpda = src
 
