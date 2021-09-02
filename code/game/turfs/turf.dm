@@ -77,6 +77,9 @@
 
 	var/last_beam_damage = 0
 
+	var/list/shadow_atom
+	var/list/shadow_atom_dirs
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -87,22 +90,35 @@
 	universe.OnTurfTick(src)
 
 /turf/initialize()
-	shadow_atom = list(
-		"[NORTH]" = 0,
-		"[SOUTH]" = 0,
-		"[EAST]" = 0,
-		"[WEST]" = 0,
-		"[NORTHEAST]" = 0,
-		"[NORTHWEST]" = 0,
-		"[SOUTHEAST]" = 0,
-		"[SOUTHWEST]" = 0,
-	)
 	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
+
+/turf/proc/init_shadow_lists()
+	if (loc.type != /area) // Spess tiles don't need all this.
+		shadow_atom = list(
+			"[NORTH]" = 0,
+			"[SOUTH]" = 0,
+			"[EAST]" = 0,
+			"[WEST]" = 0,
+			"[NORTHEAST]" = 0,
+			"[NORTHWEST]" = 0,
+			"[SOUTHEAST]" = 0,
+			"[SOUTHWEST]" = 0,
+		)
+		shadow_atom_dirs = list(
+			"[NORTH]" = list(),
+			"[SOUTH]" = list(),
+			"[EAST]" = list(),
+			"[WEST]" = list(),
+			"[NORTHEAST]" = list(),
+			"[NORTHWEST]" = list(),
+			"[SOUTHEAST]" = list(),
+			"[SOUTHWEST]" = list(),
+		)
 
 /turf/ex_act(severity)
 	return 0
