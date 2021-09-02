@@ -582,7 +582,19 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		return
 
 	var/selected = plist[c]
-	src.aiPDA.create_message(src, selected)
+
+	if(targetcam.aipictures.len)
+		var/list/nametemp = list()
+		for(var/datum/picture/t in targetcam.aipictures)
+			nametemp += t.fields["name"]
+		var/find = input("Select image") in nametemp
+		for(var/datum/picture/q in targetcam.aipictures)
+			if(q.fields["name"] == find)
+				aiPDA.photo = q
+				break
+	
+	aiPDA.create_message(src, selected)
+	aiPDA.photo = null
 
 //AI verb and proc for sending PDA messages.
 /obj/item/device/pda/ai/verb/cmd_send_pdamesg()
@@ -598,7 +610,21 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if (!c) // if the user hasn't selected a PDA file we can't send a message
 			return
 		var/selected = plist[c]
+
+		if(isAI(usr))
+			var/mob/living/silicon/AI/A = usr
+			if(A.targetcam.aipictures.len)
+				var/list/nametemp = list()
+				for(var/datum/picture/t in A.targetcam.aipictures)
+					nametemp += t.fields["name"]
+				var/find = input("Select image") in nametemp
+				for(var/datum/picture/q in A.targetcam.aipictures)
+					if(q.fields["name"] == find)
+						photo = q
+						break
+		
 		create_message(usr, selected)
+		photo = null
 
 
 /obj/item/device/pda/ai/verb/cmd_toggle_pda_receiver()
