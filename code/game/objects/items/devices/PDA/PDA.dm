@@ -647,8 +647,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(!isnull(aiPDA))
 		var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
 		for(var/note in aiPDA.tnote)
-			dat += tnote[note]
-			var/icon/img = imglist[note]
+			dat += aiPDA.tnote[note]
+			var/icon/img = aiPDA.imglist[note]
 			if(img)
 				usr << browse_rsc(img, "tmp_photo_[note].png")
 				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
@@ -2392,8 +2392,8 @@ var/global/msg_id = 0
 		useMS.send_pda_message("[P.owner]","[owner]","[photo ? "[t] <b>(Photo attached)</b>" : "[t]"]")
 
 		if(photo)
-			imglist["[msg_id]"] += ImagePDA(photo.img)
-			P.imglist["[msg_id]"] += ImagePDA(photo.img)
+			imglist["[msg_id]"] = ImagePDA(photo.img)
+			P.imglist["[msg_id]"] = ImagePDA(photo.img)
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		msg_id++
