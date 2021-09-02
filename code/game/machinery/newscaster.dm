@@ -709,7 +709,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
-					ImagePDA(newMsg.img)
+					newMsg.img_pda = ImagePDA(newMsg.img)
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
@@ -823,7 +823,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
 								WANTED.img = P.fields["img"]
-							ImagePDA(WANTED.img)
+							WANTED.img_pda = ImagePDA(WANTED.img)
 						news_network.wanted_issue = WANTED
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()
