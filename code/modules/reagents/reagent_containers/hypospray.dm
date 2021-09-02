@@ -13,15 +13,16 @@
 	possible_transfer_amounts = null
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
+	var/list/reagent_list = list(DOCTORSDELIGHT = 30)
 
 /obj/item/weapon/reagent_containers/hypospray/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-
-/obj/item/weapon/reagent_containers/hypospray/New() //comment this to make hypos start off empty
+/obj/item/weapon/reagent_containers/hypospray/New() //comment this to make hypos start off empty //or empty the reagent list
 	..()
-	reagents.add_reagent(DOCTORSDELIGHT, 30)
-	return
+	if(reagent_list.len)
+		for(var/R in reagent_list)
+			reagents.add_reagent(R, reagent_list[R])
 
 /obj/item/weapon/reagent_containers/hypospray/creatine/New() // TESTING!
 	..()
@@ -112,12 +113,7 @@
 	amount_per_transfer_from_this = 15
 	volume = 15
 	flags = FPRINT
-
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/New()
-	..()
-	reagents.remove_reagent(DOCTORSDELIGHT, 30)
-	reagents.add_reagent(BIOFOAM, 15)
-	return
+	reagent_list = list(BIOFOAM = 15)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
 	if(reagents.total_volume > 0)
