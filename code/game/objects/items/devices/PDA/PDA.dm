@@ -2061,11 +2061,20 @@ var/global/list/icon/imglist = list() // Viewable message photos
 			src.create_message(U, P)
 		if("viewPhoto")
 			var/note = locate(href_list["image"])
+			var/psize = locate(href_list["size"])
+
 			usr << browse_rsc(imglist[note], "tmp_photo_view.png")
+			var/displaylength = 192
+			switch(psize)
+				if(5)
+					displaylength = 320
+				if(7)
+					displaylength = 448
+				
 			usr << browse("<html><head><title>[name]</title></head>" \
 			+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
-			+ "<img src='tmp_photo.png' width='448' style='-ms-interpolation-mode:nearest-neighbor' />" \
-			+ "</body></html>", "window=book;size=448x448")
+			+ "<img src='tmp_photo.png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' />" \
+			+ "</body></html>", "window=book;size=[displaylength]x[displaylength]")
 		if("Multimessage")
 			var/list/department_list = list("security","engineering","medical","research","cargo","service")
 			var/target = input("Select a department", "CAMO Service") as null|anything in department_list
@@ -2433,7 +2442,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		if(photo)
 			imglist["[msg_id]"] = ImagePDA(photo.img)
 
-		useMS.send_pda_message("[P.owner]","[owner]","[photo ? "[t] <a href='byond://?src=\ref[P];choice=viewPhoto;image=msg_id;skiprefresh=1;target=\ref[reply_to]'>View Photo</a>" : "[t]"]")
+		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
@@ -2441,7 +2450,8 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		for(var/mob/dead/observer/M in player_list)
 			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
-					[U.real_name][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
+					[U.real_name][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span>\
+					(<a href='byond://?src=\ref[P];choice=viewPhoto;image=[msg_id];size=[photo ? photo.photo_size : 3];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>")
 
 
 		if (prob(15)&&!multicast_message) //Give the AI a chance of intercepting the message
@@ -2467,7 +2477,7 @@ var/global/list/icon/imglist = list() // Viewable message photos
 			L = get_holder_of_type(P, /mob/living/silicon)
 
 		if(L)
-			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
+			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=viewPhoto;image=[msg_id];size=[photo ? photo.photo_size : 3];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>) (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
 		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
 		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
