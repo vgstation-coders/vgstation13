@@ -392,26 +392,77 @@
 	icon_state = "sword0"
 	item_state = "sword0"
 	var/active = 0.0
+	var/base_state = "sword"
+	var/active_state = ""
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	attack_verb = list("attacks", "strikes", "hits")
+	var/dualsaber_type = /obj/item/toy/sword/dualsaber
 
-	attack_self(mob/user as mob)
-		src.active = !( src.active )
-		if (src.active)
-			to_chat(user, "<span class = 'info'>You extend the plastic blade with a quick flick of your wrist.</span>")
-			playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
-			src.icon_state = "swordblue"
-			src.item_state = "swordblue"
-			src.w_class = W_CLASS_LARGE
-		else
-			to_chat(user, "<span class = 'info'>You push the plastic blade back down into the handle.</span>")
-			playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
-			src.icon_state = "sword0"
-			src.item_state = "sword0"
-			src.w_class = W_CLASS_SMALL
-		src.add_fingerprint(user)
-		return
+/obj/item/toy/sword/New()
+	..()
+	_color = pick("red","blue","green","purple")
+	if(!active_state)
+		active_state = base_state + _color
+	update_icon()
+
+/obj/item/toy/sword/attack_self(mob/user as mob)
+	src.active = !( src.active )
+	if (src.active)
+		to_chat(user, "<span class = 'info'>You extend the plastic blade with a quick flick of your wrist.</span>")
+		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
+		src.w_class = W_CLASS_LARGE
+	else
+		to_chat(user, "<span class = 'info'>You push the plastic blade back down into the handle.</span>")
+		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+		src.w_class = W_CLASS_SMALL
+	src.add_fingerprint(user)
+	update_icon()
+
+/obj/item/toy/sword/update_icon()
+	if(active && _color)
+		icon_state = active_state
+		item_state = active_state
+	else
+		icon_state = "[base_state][active]"
+		item_state = "[base_state][active]"
+
+/obj/item/toy/sword/attackby(obj/item/weapon/W, mob/living/user)
+	if(istype(W, /obj/item/toy/sword))
+		to_chat(user, "<span class='notice'>You attach the ends of the two toy swords, making a single double-bladed one! You're cool.</span>")
+		var/obj/item/toy/sword/dualsaber/saber = new dualsaber_type(user.loc)
+		saber.colorset = W._color + src._color
+		saber.swords.Add(W, src)
+		user.drop_item(W)
+		W.forceMove(saber)
+		user.drop_item(src)
+		forceMove(saber)
+		user.put_in_hands(saber)
+		return 1
+	return ..()
+
+/obj/item/toy/sword/dualsaber
+	name = "toy double-bladed sword"
+	desc = "Two cheap, plastic replicas of energy swords, combined together! Ages 4 times 2 and up."
+	icon_state = "dualsaber0"
+	item_state = "dualsaber0"
+	var/list/swords = list()
+	var/colorset = ""
+
+/obj/item/toy/sword/dualsaber/attack_self(mob/user as mob)
+	..()
+	if (src.active)
+		src.w_class = W_CLASS_HUGE
+
+/obj/item/toy/sword/dualsaber/update_icon()
+	icon_state = "dualsaber[wielded ? colorset : 0]"
+	item_state = "dualsaber[wielded ? colorset : 0]"
+
+/obj/item/toy/sword/dualsaber/Destroy()
+	for(var/obj/item/I in swords)
+		qdel(I)
+	swords.Cut()
+	..()
 
 /obj/item/toy/katana
 	name = "replica katana"
