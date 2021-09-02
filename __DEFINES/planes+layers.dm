@@ -97,6 +97,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define TURF_PLANE				(-1 + FLOAT_PLANE)
 	#define MAPPING_TURF_LAYER			-999
+	
+#define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
 
 #define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 

@@ -193,8 +193,8 @@
 	desc = "The window over the darkness of the abyss below"
 	icon = 'icons/turf/overlays.dmi'
 	icon_state = ""
-	layer = 0
-	plane = BASE_PLANE
+	layer = TURF_LAYER
+	plane = GLASSTILE_PLANE
 
 /obj/effect/open_overlay/glass/damage
 	name = "glass open overlay cracks"
