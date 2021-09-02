@@ -133,7 +133,7 @@
 		/obj/item/device/radio/headset/heads/cmo,
 		/obj/item/weapon/storage/belt/medical,
 		/obj/item/device/flash,
-		/obj/item/weapon/reagent_containers/hypospray,
+		/obj/item/weapon/reagent_containers/hypospray/doctors_delight,
 		/obj/item/weapon/card/debit/preferred/department/medical,
 		/obj/item/weapon/switchtool/surgery,
 		/obj/item/weapon/autopsy_scanner/healthanalyzerpro

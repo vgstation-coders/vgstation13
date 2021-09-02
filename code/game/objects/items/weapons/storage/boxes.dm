@@ -194,7 +194,7 @@
 			25;/obj/item/toy/syndicateballoon/ntballoon,
 			25;/obj/item/weapon/reagent_containers/food/snacks/chococoin,
 			25;/obj/item/weapon/tank/emergency_oxygen/engi,
-			25;/obj/item/weapon/reagent_containers/hypospray/autoinjector,
+			25;/obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight,
 			25;/obj/item/weapon/reagent_containers/food/drinks/thermos/full
 		)
 		new toSpawn(src)
@@ -803,7 +803,7 @@
 /obj/item/weapon/storage/box/autoinjectors/New()
 	..()
 	for (var/i; i < BOX_SPACE; i++)
-		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight(src)
 
 /obj/item/weapon/storage/box/antiviral_syringes
 	name = "box of anti-viral syringes"
@@ -1543,5 +1543,5 @@
 	new /obj/item/clothing/glasses/scanner/meson(src)
 	new /obj/item/blueprints/construction_permit(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit(src)
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight(src)
 	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)

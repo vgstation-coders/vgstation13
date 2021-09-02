@@ -17,15 +17,16 @@
 /obj/item/weapon/reagent_containers/hypospray/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
+/obj/item/weapon/reagent_containers/hypospray/medical
 
-/obj/item/weapon/reagent_containers/hypospray/New() //comment this to make hypos start off empty
+/obj/item/weapon/reagent_containers/hypospray/doctors_delight/New() //comment this to make hypos start off empty
 	..()
 	reagents.add_reagent(DOCTORSDELIGHT, 30)
 	return
 
 /obj/item/weapon/reagent_containers/hypospray/creatine/New() // TESTING!
 	..()
-	reagents.remove_reagent(DOCTORSDELIGHT, 30)
+	//reagents.remove_reagent(DOCTORSDELIGHT, 30)
 	reagents.add_reagent(CREATINE, 30)
 	return
 
@@ -105,6 +106,12 @@
 	else
 		to_chat(user, "<span class='info'>The [name] has been spent.</span>")
 
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight/New()
+	..()
+	reagents.add_reagent(DOCTORSDELIGHT, 5)
+
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector
 	name = "biofoam injector"
 	desc = "A small, single-use device used to administer biofoam in the field."
@@ -115,7 +122,6 @@
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/New()
 	..()
-	reagents.remove_reagent(DOCTORSDELIGHT, 30)
 	reagents.add_reagent(BIOFOAM, 15)
 	return
 

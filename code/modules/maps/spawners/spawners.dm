@@ -62,7 +62,7 @@
 		/obj/item/weapon/storage/pill_bottle/inaprovaline,
 		/obj/item/weapon/storage/pill_bottle/kelotane,
 		/obj/item/weapon/reagent_containers/blood/OMinus,
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector/doctors_delight,
 		)
 
 /obj/abstract/map/spawner/medical/pills
