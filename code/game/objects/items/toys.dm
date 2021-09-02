@@ -455,8 +455,8 @@
 		src.w_class = W_CLASS_HUGE
 
 /obj/item/toy/sword/dualsaber/update_icon()
-	icon_state = "dualsaber[wielded ? colorset : 0]"
-	item_state = "dualsaber[wielded ? colorset : 0]"
+	icon_state = "dualsaber[active ? colorset : 0]"
+	item_state = "dualsaber[active ? colorset : 0]"
 
 /obj/item/toy/sword/dualsaber/Destroy()
 	for(var/obj/item/I in swords)
