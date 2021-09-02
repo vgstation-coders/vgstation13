@@ -269,6 +269,11 @@
 	icon_state = "cart-vox"
 	access_trader = 1
 
+/obj/item/weapon/cartridge/camera
+	name = "\improper Camera Cartridge"
+	icon_state = "cart-gbcam"
+	access_manifest = 1
+
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
 		return

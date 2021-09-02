@@ -32,6 +32,7 @@
 			/datum/storeitem/boombox,
 			/datum/storeitem/diskettebox,
 			/datum/storeitem/diskettebox_large,
+			/datum/storeitem/camcart,
 			),
 		"Toys" = list(
 			/datum/storeitem/beachball,
