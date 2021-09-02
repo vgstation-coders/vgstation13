@@ -4200,7 +4200,6 @@
 		if(isnull(data))
 			// copied from chloral for the same reasons
 			data = 0
-		//M.drowsyness = 2
 	if(data >= 2)
 		M.SetStunned(2)
 		M.SetKnockdown(2)
