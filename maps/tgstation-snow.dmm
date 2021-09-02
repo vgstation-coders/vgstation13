@@ -194,7 +194,7 @@
 /turf/simulated/wall/r_wall,
 /area/security/prison)
 "aaJ" = (
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aaK" = (
 /obj/machinery/door/airlock/external{
@@ -392,7 +392,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "abd" = (
 /obj/structure/cable/orange{
@@ -549,13 +549,13 @@
 /area/security/prison)
 "abt" = (
 /obj/structure/fence/door,
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "abx" = (
 /obj/structure/fence{
 	dir = 4
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "abz" = (
 /obj/structure/cable/orange{
@@ -654,7 +654,7 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "abI" = (
 /obj/structure/dispenser/oxygen,
@@ -759,7 +759,7 @@
 	name = "Prison Mining Airlocks";
 	network = list("JAIL","SS13")
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "abR" = (
 /obj/machinery/portable_atmospherics/scrubber/huge/stationary,
@@ -1133,7 +1133,7 @@
 /area/prison/cell_block/A)
 "acD" = (
 /obj/structure/ore_box,
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "acE" = (
 /obj/structure/ore_box,
@@ -1141,7 +1141,7 @@
 	name = "Prison Mining Courtyard North";
 	network = list("JAIL","SS13")
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "acF" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -1193,7 +1193,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "acM" = (
 /obj/structure/cable/orange{
@@ -1727,7 +1727,7 @@
 /obj/machinery/atmospherics/unary/vent{
 	dir = 4
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "adE" = (
 /obj/machinery/computer/arcade,
@@ -1874,7 +1874,7 @@
 /area/prison/cell_block/hydroponics)
 "adS" = (
 /obj/structure/closet/emcloset,
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "adT" = (
 /turf/simulated/wall,
@@ -2042,7 +2042,7 @@
 	name = "Prison Mining Courtyard South";
 	network = list("JAIL","SS13")
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aem" = (
 /obj/structure/cable{
@@ -2354,7 +2354,7 @@
 /obj/structure/transit_tube{
 	icon_state = "NE-SW"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aff" = (
 /obj/structure/transit_tube{
@@ -2480,7 +2480,7 @@
 /obj/structure/transit_tube{
 	icon_state = "W-NE"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "afv" = (
 /obj/machinery/portable_atmospherics/hydroponics,
@@ -2725,7 +2725,7 @@
 /obj/structure/transit_tube{
 	icon_state = "E-NW"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "afX" = (
 /obj/machinery/door_control{
@@ -2815,7 +2815,7 @@
 /obj/structure/transit_tube{
 	icon_state = "W-SE"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "agj" = (
 /obj/effect/glowshroom,
@@ -2884,7 +2884,7 @@
 /obj/structure/transit_tube{
 	icon_state = "S-NW"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "agv" = (
 /obj/machinery/door/firedoor/border_only{
@@ -3709,7 +3709,7 @@
 /obj/structure/transit_tube{
 	icon_state = "N-S"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aix" = (
 /turf/simulated/wall,
@@ -4081,7 +4081,7 @@
 /obj/structure/transit_tube{
 	icon_state = "N-SW"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "ajs" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -4291,12 +4291,6 @@
 /obj/item/weapon/storage/box/donkpockets,
 /turf/simulated/floor,
 /area/mine/west_outpost)
-"ajM" = (
-/obj/structure/transit_tube{
-	icon_state = "E-SW"
-	},
-/turf/unsimulated/floor/snow/asphalt/mine,
-/area/mine/explored)
 "ajT" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -4653,13 +4647,13 @@
 /obj/structure/transit_tube{
 	icon_state = "S-NE"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "akK" = (
 /obj/structure/transit_tube{
 	icon_state = "D-NW"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "akL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -4680,7 +4674,7 @@
 /obj/structure/transit_tube{
 	icon_state = "D-SW"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "akP" = (
 /obj/structure/disposalpipe/trunk{
@@ -5645,7 +5639,7 @@
 /obj/structure/hanging_lantern{
 	dir = 8
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "ani" = (
 /obj/machinery/power/battery/smes{
@@ -5802,7 +5796,7 @@
 /obj/structure/transit_tube{
 	icon_state = "N-SE"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "anD" = (
 /obj/structure/grille,
@@ -6486,7 +6480,7 @@
 /obj/structure/transit_tube{
 	icon_state = "NW-SE"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aoR" = (
 /turf/simulated/floor,
@@ -6518,7 +6512,7 @@
 	dir = 2;
 	icon_state = "pipe-c"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "apa" = (
 /obj/structure/window/reinforced{
@@ -6975,7 +6969,7 @@
 /obj/structure/disposaloutlet{
 	dir = 4
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aqa" = (
 /obj/machinery/camera{
@@ -7109,7 +7103,7 @@
 	dir = 1;
 	icon_state = "pipe-c"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aqq" = (
 /obj/structure/toilet{
@@ -7351,25 +7345,19 @@
 	},
 /turf/simulated/floor,
 /area/mine/production)
-"aqX" = (
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/unsimulated/floor/snow/asphalt/mine,
-/area/mine/explored)
 "aqY" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/transit_tube{
 	icon_state = "E-SW"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aqZ" = (
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
 /obj/structure/transit_tube,
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "ara" = (
 /obj/structure/transit_tube{
@@ -7875,7 +7863,7 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "asz" = (
 /obj/structure/catwalk{
@@ -7884,7 +7872,7 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "asC" = (
 /obj/structure/rack,
@@ -9819,7 +9807,7 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk4"
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "awB" = (
 /obj/structure/transit_tube{
@@ -9828,7 +9816,7 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk15"
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "awC" = (
 /obj/machinery/door/airlock/external{
@@ -11939,7 +11927,7 @@
 /obj/structure/transit_tube{
 	icon_state = "N-S"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aAW" = (
 /obj/effect/decal/warning_stripes{
@@ -12621,7 +12609,7 @@
 /obj/machinery/atmospherics/unary/vent{
 	dir = 1
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDf" = (
 /obj/structure/disposalpipe/trunk{
@@ -12794,21 +12782,21 @@
 /area/research_outpost/hallway)
 "aDV" = (
 /obj/structure/disposalpipe/segment,
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDW" = (
 /obj/machinery/door/window{
 	base_state = "left";
 	dir = 8
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDX" = (
 /obj/structure/transit_tube/station{
 	dir = 8
 	},
 /obj/structure/transit_tube_pod,
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDY" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -12886,7 +12874,7 @@
 /obj/structure/transit_tube{
 	icon_state = "D-NE"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aEe" = (
 /obj/structure/cable{
@@ -12897,7 +12885,7 @@
 /obj/structure/catwalk{
 	icon_state = "catwalk12"
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aEg" = (
 /turf/unsimulated/mineral/snow,
@@ -13017,10 +13005,6 @@
 /obj/structure/reagent_dispensers/fueltank,
 /turf/simulated/floor/plating,
 /area/mine/living_quarters)
-"aEF" = (
-/obj/structure/transit_tube,
-/turf/unsimulated/floor/snow/asphalt/mine,
-/area/mine/explored)
 "aEG" = (
 /obj/structure/table,
 /obj/item/stack/sheet/mineral/plasma{
@@ -13141,7 +13125,7 @@
 	convdir = -1;
 	id_tag = "mining_external"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aEV" = (
 /obj/structure/grille,
@@ -13503,7 +13487,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aFB" = (
 /obj/structure/closet/emcloset,
@@ -13835,7 +13819,7 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aGk" = (
 /obj/machinery/door/airlock/external{
@@ -13884,7 +13868,7 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aGp" = (
 /obj/structure/closet/secure_closet/excavation,
@@ -15327,7 +15311,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aJh" = (
 /obj/structure/disposalpipe/segment{
@@ -15445,7 +15429,7 @@
 	name = "VACUUM";
 	pixel_y = 32
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aJt" = (
 /obj/structure/window/reinforced{
@@ -15585,7 +15569,7 @@
 	dir = 8;
 	flickering = 1
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aJK" = (
 /obj/structure/window/reinforced{
@@ -15648,7 +15632,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aJS" = (
 /obj/structure/grille,
@@ -15785,24 +15769,17 @@
 /obj/structure/transit_tube{
 	icon_state = "D-SE"
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKg" = (
 /obj/structure/transit_tube{
 	icon_state = "E-SW"
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKh" = (
 /obj/structure/transit_tube,
-/turf/unsimulated/floor/asteroid/cave/permafrost,
-/area/mine/explored)
-"aKi" = (
-/obj/structure/transit_tube,
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKj" = (
 /obj/structure/transit_tube/station,
@@ -15815,7 +15792,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKk" = (
 /obj/machinery/mech_bay_recharge_port,
@@ -15825,7 +15802,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/turf/unsimulated/floor/snow/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/research_outpost/gearstore)
 "aKl" = (
 /obj/machinery/mech_bay_recharge_floor{
@@ -15834,14 +15811,14 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
-/turf/simulated/floor,
+/turf/unsimulated/floor/asteroid/underground,
 /area/research_outpost/gearstore)
 "aKm" = (
 /obj/machinery/computer/mech_bay_power_console,
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/turf/unsimulated/floor/snow/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/research_outpost/gearstore)
 "aKn" = (
 /obj/machinery/light/small{
@@ -15912,7 +15889,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKs" = (
 /obj/structure/cable/yellow{
@@ -15977,7 +15954,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKz" = (
 /obj/structure/grille,
@@ -15991,19 +15968,19 @@
 /obj/structure/transit_tube{
 	icon_state = "D-NE"
 	},
-/turf/simulated/floor/plating,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKA" = (
 /obj/structure/window/reinforced,
 /obj/structure/transit_tube{
 	icon_state = "E-NW"
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKB" = (
 /obj/structure/transit_tube,
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKC" = (
 /obj/structure/window/reinforced,
@@ -16013,7 +15990,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/simulated/floor/plating/airless,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKD" = (
 /obj/structure/grille,
@@ -16027,7 +16004,7 @@
 /obj/structure/transit_tube{
 	icon_state = "D-NW"
 	},
-/turf/simulated/floor/plating,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKE" = (
 /obj/structure/grille,
@@ -16038,14 +16015,14 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKF" = (
 /obj/machinery/door/window{
 	base_state = "left";
 	dir = 2
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKG" = (
 /obj/structure/closet/walllocker/emerglocker/west,
@@ -16090,7 +16067,7 @@
 /obj/structure/hanging_lantern{
 	dir = 4
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKJ" = (
 /obj/structure/transit_tube{
@@ -16195,7 +16172,7 @@
 	base_state = "left";
 	dir = 8
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKV" = (
 /obj/structure/transit_tube{
@@ -16204,7 +16181,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKW" = (
 /obj/structure/transit_tube{
@@ -16217,7 +16194,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKY" = (
 /obj/structure/transit_tube/station,
@@ -16227,7 +16204,7 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKZ" = (
 /obj/structure/transit_tube{
@@ -16236,7 +16213,7 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aLa" = (
 /obj/structure/grille,
@@ -16304,14 +16281,14 @@
 /obj/structure/hanging_lantern{
 	dir = 1
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aLh" = (
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aLi" = (
 /obj/machinery/door/window{
@@ -16319,14 +16296,14 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/turf/unsimulated/floor/asteroid/cave/permafrost,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aLj" = (
 /obj/structure/disposalpipe/segment{
 	dir = 8;
 	icon_state = "pipe-c"
 	},
-/turf/unsimulated/floor/snow/asphalt/mine,
+/turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aLk" = (
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap,
@@ -17262,18 +17239,11 @@
 	},
 /area/medical/virology)
 "aNb" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
+/obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/medical/virology)
+/turf/unsimulated/floor/asteroid/underground,
+/area/mine/explored)
 "aNc" = (
 /turf/unsimulated/floor/pit{
 	dir = 6
@@ -17366,16 +17336,11 @@
 	},
 /area/medical/virology)
 "aNp" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
-/area/medical/virology)
+/turf/unsimulated/floor/asteroid/underground,
+/area/mine/explored)
 "aNq" = (
 /turf/unsimulated/floor/pit{
 	dir = 5
@@ -58665,7 +58630,9 @@
 	},
 /area/security/hos)
 "egT" = (
-/obj/docking_port/destination/elite_syndie/near_station,
+/obj/docking_port/destination/deathsquad/near_station{
+	dir = 8
+	},
 /turf/unsimulated/floor/snow,
 /area)
 "egU" = (
@@ -62128,9 +62095,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "erW" = (
-/obj/docking_port/destination/deathsquad/near_station{
-	dir = 8
-	},
+/obj/docking_port/destination/elite_syndie/near_station,
 /turf/unsimulated/floor/snow,
 /area)
 "esq" = (
@@ -127557,7 +127522,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -127859,7 +127824,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -128161,7 +128126,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -128463,7 +128428,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -128765,7 +128730,7 @@ aEg
 aEg
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -129067,7 +129032,7 @@ aEI
 aEg
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -129673,7 +129638,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -129975,7 +129940,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -130582,7 +130547,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -130884,7 +130849,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 aaF
 bgQ
@@ -131186,7 +131151,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -132094,7 +132059,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -132396,7 +132361,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -132698,7 +132663,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -133000,7 +132965,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -133302,7 +133267,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -133604,7 +133569,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -133906,7 +133871,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -134208,7 +134173,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -134510,7 +134475,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -134812,7 +134777,7 @@ aEg
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -135114,7 +135079,7 @@ bgQ
 aia
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -135720,7 +135685,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -136022,7 +135987,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -136629,7 +136594,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 aaF
 bgQ
@@ -136931,7 +136896,7 @@ anI
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -137233,7 +137198,7 @@ anI
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -137535,7 +137500,7 @@ anI
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -137837,7 +137802,7 @@ anI
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -138139,7 +138104,7 @@ anI
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -138441,7 +138406,7 @@ anI
 anI
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -138743,7 +138708,7 @@ aEB
 anI
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -139045,7 +139010,7 @@ aEC
 anI
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -139347,7 +139312,7 @@ aED
 anI
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -139649,7 +139614,7 @@ aEE
 aFy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -139951,7 +139916,7 @@ aEG
 anI
 aia
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -140253,7 +140218,7 @@ aEJ
 anI
 aGh
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -140555,7 +140520,7 @@ anI
 anI
 aGi
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -140856,8 +140821,8 @@ aBl
 axm
 aFz
 aGj
-edy
-aoX
+aaJ
+aNb
 edy
 edy
 edy
@@ -141156,10 +141121,10 @@ axn
 azw
 aBm
 aEK
-edy
-edy
-edy
-aoX
+aaJ
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -141461,7 +141426,7 @@ anI
 aia
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -142067,7 +142032,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -142369,7 +142334,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -142671,7 +142636,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -142973,7 +142938,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -143275,7 +143240,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -143577,7 +143542,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -143879,7 +143844,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -144181,7 +144146,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -144483,7 +144448,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -144785,7 +144750,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -145087,7 +145052,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -145389,7 +145354,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -145691,7 +145656,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -145993,7 +145958,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -146295,7 +146260,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -146592,12 +146557,12 @@ edy
 edy
 edy
 edy
-edy
-edy
-edy
-edy
-edy
-aoX
+aaJ
+aaJ
+aaJ
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -146894,12 +146859,12 @@ edy
 edy
 edy
 edy
-edy
-edy
-edy
-edy
-edy
-aoX
+aaJ
+aaJ
+aaJ
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -147201,7 +147166,7 @@ aGk
 apk
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -147503,7 +147468,7 @@ apm
 apl
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -152021,7 +151986,7 @@ edy
 edy
 edy
 aaH
-aoX
+aNb
 edy
 awl
 edy
@@ -152323,7 +152288,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -152945,7 +152910,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -153247,7 +153212,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -153549,7 +153514,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -153851,7 +153816,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -154153,12 +154118,12 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
-edy
-evh
+aaF
+bgQ
 dYP
 dYP
 dYP
@@ -154455,7 +154420,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -154757,7 +154722,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -155059,7 +155024,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -155361,7 +155326,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -155663,7 +155628,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -155965,7 +155930,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -156267,7 +156232,7 @@ ekr
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -156569,7 +156534,7 @@ ekr
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -156871,7 +156836,7 @@ aKd
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -157163,7 +157128,7 @@ edy
 edy
 edy
 edy
-edy
+aaG
 edy
 edy
 edy
@@ -157173,7 +157138,7 @@ ekr
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -157475,7 +157440,7 @@ ekr
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -157773,11 +157738,11 @@ dYP
 dYP
 dYP
 dYP
-evh
+bgQ
+aia
 edy
 edy
-edy
-aoX
+aNb
 edy
 edy
 edy
@@ -158079,7 +158044,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -158381,7 +158346,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -158683,7 +158648,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -158985,7 +158950,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -159287,7 +159252,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -159594,8 +159559,8 @@ edy
 edy
 edy
 edy
-edy
-evh
+aaF
+bgQ
 dYP
 dYP
 dYP
@@ -162001,8 +161966,8 @@ dYP
 dYP
 dYP
 dYP
-evh
-edy
+bgQ
+aia
 edy
 edy
 aoX
@@ -163213,7 +163178,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -163515,7 +163480,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -163817,7 +163782,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -164119,7 +164084,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -164421,7 +164386,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -164723,7 +164688,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -165025,7 +164990,7 @@ evh
 evh
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -165327,7 +165292,7 @@ bgQ
 aia
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -165629,7 +165594,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -165931,7 +165896,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -166233,7 +166198,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -166253,6 +166218,7 @@ dYP
 dYP
 evh
 evh
+bgQ
 evh
 evh
 evh
@@ -166263,8 +166229,7 @@ evh
 evh
 evh
 evh
-evh
-evh
+bgQ
 evh
 evh
 evh
@@ -166535,7 +166500,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -166555,6 +166520,7 @@ evh
 evh
 evh
 edy
+aaH
 edy
 edy
 edy
@@ -166565,8 +166531,7 @@ edy
 edy
 edy
 edy
-edy
-edy
+aaH
 edy
 edy
 edy
@@ -166837,7 +166802,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -167139,7 +167104,7 @@ evh
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -167441,7 +167406,7 @@ evh
 evh
 edy
 edy
-aoX
+aNb
 edy
 evh
 evh
@@ -167452,7 +167417,7 @@ evh
 evh
 evh
 edy
-edy
+aaG
 edy
 edy
 evh
@@ -167743,7 +167708,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 aaF
 bgQ
 evh
@@ -167754,7 +167719,7 @@ evh
 dYP
 evh
 evh
-evh
+bgQ
 evh
 evh
 evh
@@ -168045,7 +168010,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 evh
 dYP
@@ -168347,7 +168312,7 @@ dYP
 evh
 edy
 edy
-aoX
+aNb
 edy
 evh
 dYP
@@ -168386,8 +168351,8 @@ aLZ
 aOw
 edy
 edy
-edy
-evh
+aaF
+bgQ
 dYP
 dYP
 dYP
@@ -168649,7 +168614,7 @@ evh
 evh
 edy
 edy
-aoX
+aNb
 edy
 evh
 evh
@@ -168951,7 +168916,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 evh
@@ -169253,7 +169218,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 evh
@@ -169555,7 +169520,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 evh
@@ -169831,8 +169796,8 @@ edy
 edy
 evh
 evh
+bgQ
 evh
-evh
 dYP
 dYP
 dYP
@@ -169857,7 +169822,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -170133,7 +170098,7 @@ edy
 edy
 edy
 edy
-edy
+aaH
 evh
 evh
 evh
@@ -170159,7 +170124,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 aaF
 bgQ
@@ -170461,7 +170426,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -170763,7 +170728,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -171065,7 +171030,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 arH
@@ -171334,6 +171299,7 @@ edy
 edy
 edy
 edy
+aaG
 edy
 edy
 edy
@@ -171366,8 +171332,7 @@ edy
 edy
 edy
 edy
-edy
-aoX
+aNb
 edy
 edy
 arH
@@ -171636,10 +171601,7 @@ edy
 edy
 edy
 evh
-evh
-evh
-evh
-evh
+bgQ
 edy
 edy
 edy
@@ -171669,7 +171631,10 @@ edy
 edy
 edy
 edy
-aoX
+edy
+edy
+edy
+aNb
 edy
 aEg
 aEg
@@ -171938,11 +171903,11 @@ evh
 evh
 evh
 evh
-dYP
-dYP
-dYP
 evh
-evh
+edy
+edy
+edy
+edy
 evh
 evh
 evh
@@ -171952,7 +171917,7 @@ edy
 edy
 edy
 edy
-edy
+aaG
 edy
 evh
 evh
@@ -171971,37 +171936,37 @@ edy
 edy
 edy
 edy
-aoX
-edy
-aEg
-aEI
-aEI
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-aLZ
-aLZ
-aLZ
-aLZ
 aNb
-aNp
+edy
+aEg
+aEI
+aEI
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+dYP
+aLZ
+aLZ
+aLZ
+aLZ
+aLZ
+aLZ
 aLZ
 aLZ
 aLZ
@@ -172240,12 +172205,12 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -172254,7 +172219,7 @@ evh
 evh
 evh
 evh
-evh
+bgQ
 evh
 evh
 dYP
@@ -172273,7 +172238,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 aEg
 aEg
@@ -172542,12 +172507,12 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -172575,7 +172540,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 evh
@@ -172844,12 +172809,12 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -172877,7 +172842,7 @@ aDW
 aKy
 edy
 edy
-aoX
+aNb
 edy
 edy
 evh
@@ -173146,12 +173111,12 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -173170,7 +173135,7 @@ dYP
 dYP
 aEI
 aEI
-aqX
+aKf
 akJ
 aIJ
 aAV
@@ -173179,7 +173144,7 @@ anC
 aKz
 edy
 edy
-aoX
+aNb
 edy
 edy
 evh
@@ -173448,6 +173413,12 @@ dYP
 dYP
 dYP
 dYP
+evh
+evh
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -173465,13 +173436,7 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-aqX
+aKf
 afe
 avg
 bgQ
@@ -173481,7 +173446,7 @@ aKe
 aKA
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -173751,11 +173716,11 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -173783,7 +173748,7 @@ edy
 aKB
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -174053,11 +174018,11 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+bgQ
+aia
+edy
+edy
+evh
 aEI
 aEI
 dYP
@@ -174075,7 +174040,7 @@ dYP
 dYP
 dYP
 aFJ
-aEF
+aKh
 aEI
 aEg
 edy
@@ -174085,11 +174050,11 @@ edy
 aKB
 edy
 edy
-aoX
+aNb
 edy
 edy
-edy
-evh
+aaF
+bgQ
 dYP
 dYP
 dYP
@@ -174355,11 +174320,11 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -174377,7 +174342,7 @@ dYP
 dYP
 evh
 evh
-aEF
+aKh
 edy
 edy
 edy
@@ -174387,7 +174352,7 @@ edy
 aKB
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -174657,11 +174622,11 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -174679,7 +174644,7 @@ dYP
 dYP
 evh
 edy
-aEF
+aKh
 edy
 edy
 edy
@@ -174689,7 +174654,7 @@ edy
 aKB
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -174959,12 +174924,12 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+evh
+evh
 dYP
 dYP
 dYP
@@ -174981,7 +174946,7 @@ dYP
 evh
 evh
 edy
-aEF
+aKh
 edy
 edy
 edy
@@ -174991,7 +174956,7 @@ edy
 aKB
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -175261,12 +175226,12 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
-dYP
-dYP
+evh
+edy
+edy
+edy
+edy
+evh
 dYP
 dYP
 dYP
@@ -175283,7 +175248,7 @@ dYP
 evh
 edy
 edy
-aEF
+aKh
 edy
 edy
 edy
@@ -175293,7 +175258,7 @@ edy
 aKB
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -175562,12 +175527,12 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-dYP
-dYP
 evh
 evh
+edy
+edy
+edy
+edy
 evh
 evh
 evh
@@ -175585,7 +175550,7 @@ evh
 evh
 edy
 edy
-aEF
+aKh
 edy
 edy
 edy
@@ -175595,7 +175560,7 @@ aKf
 aKC
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -175864,10 +175829,6 @@ dYP
 dYP
 dYP
 dYP
-dYP
-dYP
-evh
-evh
 evh
 edy
 edy
@@ -175876,6 +175837,10 @@ edy
 edy
 edy
 edy
+edy
+edy
+edy
+edy
 evh
 evh
 evh
@@ -175886,7 +175851,7 @@ evh
 evh
 edy
 edy
-aqX
+aKf
 afu
 edy
 edy
@@ -175897,7 +175862,7 @@ aKg
 aKD
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -176166,8 +176131,6 @@ dYP
 dYP
 dYP
 dYP
-dYP
-evh
 evh
 edy
 edy
@@ -176182,11 +176145,13 @@ edy
 edy
 edy
 edy
+edy
+edy
 evh
 evh
 edy
 edy
-aqX
+aKf
 akJ
 ajr
 akK
@@ -176199,7 +176164,7 @@ aKh
 aKE
 edy
 edy
-aoX
+aNb
 edy
 edy
 edy
@@ -176214,22 +176179,22 @@ edy
 evh
 evh
 evh
+bgQ
+evh
+edy
+edy
+edy
+edy
+edy
+edy
+edy
+edy
+edy
+edy
+edy
 evh
 evh
-edy
-edy
-edy
-edy
-edy
-edy
-edy
-edy
-edy
-edy
-edy
-evh
-evh
-evh
+bgQ
 evh
 oeI
 aHI
@@ -176469,7 +176434,6 @@ dYP
 dYP
 evh
 evh
-evh
 edy
 edy
 edy
@@ -176488,7 +176452,8 @@ edy
 edy
 edy
 edy
-ajM
+edy
+aKg
 akK
 aDS
 aDS
@@ -176497,14 +176462,11 @@ aDS
 aDS
 aDS
 aDS
-aKi
+aKX
 aKF
-edy
-edy
-aoX
-edy
-edy
-edy
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -176519,6 +176481,7 @@ edy
 edy
 edy
 edy
+aaH
 edy
 edy
 edy
@@ -176532,6 +176495,8 @@ edy
 edy
 edy
 edy
+edy
+aaH
 evh
 oeI
 aHJ
@@ -176779,7 +176744,7 @@ edy
 edy
 edy
 edy
-aqX
+aKf
 akJ
 aAV
 aAV
@@ -176790,7 +176755,7 @@ edy
 edy
 edy
 edy
-aEF
+aKh
 aaJ
 aDS
 aGp
@@ -176801,12 +176766,9 @@ aIK
 aDS
 aKj
 aKF
-edy
-edy
-aoX
-edy
-edy
-edy
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -176827,6 +176789,9 @@ edy
 edy
 edy
 edy
+edy
+edy
+aaG
 edy
 edy
 edy
@@ -177074,7 +177039,7 @@ dYP
 evh
 edy
 edy
-aqX
+aKf
 akJ
 aAV
 aAV
@@ -177102,10 +177067,10 @@ aIL
 aJu
 aJS
 aKk
-aJt
-edy
-edy
-aoX
+aNp
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -177128,7 +177093,7 @@ edy
 edy
 evh
 evh
-evh
+bgQ
 evh
 edy
 edy
@@ -177375,7 +177340,7 @@ dYP
 dYP
 evh
 edy
-aqX
+aKf
 afe
 akK
 agI
@@ -177404,10 +177369,10 @@ aIM
 aJu
 aJT
 aKl
-edy
-edy
-edy
-aoX
+aaJ
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -177677,7 +177642,7 @@ dYP
 dYP
 evh
 edy
-ajM
+aKg
 akK
 aEg
 agI
@@ -177706,10 +177671,10 @@ aIN
 aJv
 aDS
 aKm
-edy
-edy
-edy
-aoX
+aaJ
+aaJ
+aaJ
+aNb
 edy
 edy
 edy
@@ -177979,7 +177944,7 @@ dYP
 evh
 evh
 edy
-aEF
+aKh
 aEg
 aEg
 agI
@@ -178011,7 +177976,7 @@ aDS
 aDS
 aDS
 aLg
-aoX
+aNb
 edy
 edy
 edy
@@ -178019,7 +177984,7 @@ edy
 edy
 edy
 edy
-edy
+aaG
 edy
 edy
 edy
@@ -178281,7 +178246,7 @@ dYP
 evh
 edy
 edy
-aEF
+aKh
 aEg
 aEg
 agI
@@ -178312,8 +178277,8 @@ aJV
 aKn
 aKG
 aKS
-edy
-aoX
+aaJ
+aNb
 edy
 edy
 edy
@@ -178321,7 +178286,7 @@ edy
 edy
 aEg
 evh
-evh
+bgQ
 evh
 evh
 evh
@@ -178583,7 +178548,7 @@ evh
 evh
 edy
 edy
-aEF
+aKh
 aEg
 aEg
 agI
@@ -178614,8 +178579,8 @@ aJW
 aDR
 aKH
 aKT
-edy
-aoX
+aaJ
+aNb
 edy
 edy
 edy
@@ -178881,11 +178846,11 @@ dYP
 dYP
 dYP
 dYP
-evh
+bgQ
+aia
 edy
 edy
-edy
-aEF
+aKh
 aEg
 aEg
 agI
@@ -178916,8 +178881,8 @@ aDS
 aDS
 aDS
 aDS
-aia
-aoX
+abH
+aNb
 edy
 edy
 edy
@@ -179186,7 +179151,7 @@ dYP
 evh
 edy
 edy
-aqX
+aKf
 afu
 aEg
 aEg
@@ -179219,7 +179184,7 @@ edy
 edy
 edy
 edy
-aoX
+aNb
 edy
 edy
 aEg
@@ -179487,7 +179452,7 @@ dYP
 evh
 evh
 edy
-aqX
+aKf
 afe
 akK
 afM
@@ -179789,7 +179754,7 @@ dYP
 evh
 edy
 edy
-ajM
+aKg
 aff
 aeW
 afN
@@ -180091,7 +180056,7 @@ evh
 evh
 edy
 edy
-aEF
+aKh
 afg
 afv
 afO
@@ -180128,8 +180093,8 @@ edy
 edy
 edy
 edy
-edy
-aEg
+aaF
+bgQ
 aEI
 aEI
 dYP
@@ -180168,8 +180133,8 @@ xUD
 xUD
 xUD
 xUD
-aQz
-aQU
+xUD
+xUD
 aRp
 aRp
 aRp
@@ -180393,7 +180358,7 @@ evh
 edy
 edy
 edy
-aEF
+aKh
 afh
 afv
 afP
@@ -180695,7 +180660,7 @@ evh
 edy
 edy
 edy
-aEF
+aKh
 afh
 afv
 afP
@@ -180997,7 +180962,7 @@ evh
 edy
 edy
 edy
-aEF
+aKh
 afi
 afv
 afQ
@@ -182201,8 +182166,8 @@ dYP
 dYP
 dYP
 dYP
-evh
-edy
+bgQ
+aia
 edy
 aeW
 aeY
@@ -182237,7 +182202,7 @@ aDx
 aDx
 aEg
 aEg
-aEF
+aKh
 aEg
 aEI
 dYP
@@ -182539,7 +182504,7 @@ aJB
 aDx
 aEg
 aEg
-aEF
+aKh
 aEg
 aEI
 dYP
@@ -182841,7 +182806,7 @@ aCW
 aDx
 aEg
 evh
-aEF
+aKh
 evh
 dYP
 dYP
@@ -183143,7 +183108,7 @@ aCX
 aDx
 aEg
 evh
-aEF
+aKh
 evh
 dYP
 dYP
@@ -183445,7 +183410,7 @@ aDE
 aDE
 aEg
 evh
-aEF
+aKh
 evh
 dYP
 dYP
@@ -183747,7 +183712,7 @@ aCY
 aDE
 aEg
 evh
-aEF
+aKh
 evh
 dYP
 dYP
@@ -184049,7 +184014,7 @@ aCZ
 aDE
 aEg
 evh
-aEF
+aKh
 evh
 dYP
 dYP
@@ -184351,7 +184316,7 @@ aDc
 aDE
 aEg
 evh
-aEF
+aKh
 evh
 dYP
 dYP
@@ -184653,7 +184618,7 @@ aCi
 aCi
 aEg
 aEg
-aEF
+aKh
 evh
 evh
 evh
@@ -184926,7 +184891,7 @@ evh
 edy
 edy
 edy
-aEF
+aKh
 qct
 agb
 agz
@@ -184955,7 +184920,7 @@ aJC
 aCi
 aEg
 aEg
-aEF
+aKh
 evh
 bgQ
 evh
@@ -185228,7 +185193,7 @@ evh
 edy
 edy
 edy
-aEF
+aKh
 qct
 agc
 agA
@@ -185257,7 +185222,7 @@ aDd
 aCi
 aEg
 aEg
-aEF
+aKh
 aDj
 aEs
 evh
@@ -185530,7 +185495,7 @@ evh
 edy
 edy
 edy
-aEF
+aKh
 qct
 qct
 qct
@@ -185828,11 +185793,11 @@ dYP
 dYP
 dYP
 dYP
-evh
+bgQ
+aia
 edy
 edy
-edy
-aEF
+aKh
 aaJ
 aaJ
 aaJ
@@ -187066,7 +187031,7 @@ aHC
 aIu
 aCb
 aEg
-ajM
+aKg
 akK
 aEs
 edy
@@ -187368,7 +187333,7 @@ aBR
 aBQ
 aCb
 aEg
-aEF
+aKh
 aCA
 edy
 edy
@@ -187670,7 +187635,7 @@ aBR
 aBR
 aCb
 aEg
-aEF
+aKh
 edy
 aEs
 aEs
@@ -187972,7 +187937,7 @@ aBR
 aBR
 aCb
 aEg
-aEF
+aKh
 edy
 edy
 edy
@@ -188262,7 +188227,7 @@ edy
 edy
 edy
 edy
-aqX
+aKf
 awu
 ati
 auB
@@ -188274,7 +188239,7 @@ aCb
 aCb
 aCb
 aCb
-aEF
+aKh
 edy
 edy
 edy
@@ -188576,7 +188541,7 @@ aBK
 aBT
 aCc
 azd
-aEF
+aKh
 edy
 edy
 evh
@@ -188878,7 +188843,7 @@ aBK
 aBT
 aCk
 azd
-aEF
+aKh
 edy
 edy
 evh
@@ -189152,8 +189117,8 @@ dYP
 dYP
 dYP
 dYP
-evh
-edy
+bgQ
+aia
 edy
 edy
 edy
@@ -189180,7 +189145,7 @@ azT
 aBT
 aJb
 azd
-aEF
+aKh
 edy
 edy
 evh
@@ -189464,7 +189429,7 @@ edy
 edy
 edy
 edy
-aqX
+aKf
 akJ
 amf
 amf
@@ -189482,7 +189447,7 @@ azU
 aBT
 aCl
 azd
-aEF
+aKh
 edy
 edy
 evh
@@ -189766,7 +189731,7 @@ edy
 edy
 edy
 edy
-ajM
+aKg
 akK
 aEg
 aEg
@@ -189784,7 +189749,7 @@ azV
 aBT
 aCm
 azd
-aEF
+aKh
 edy
 edy
 evh
@@ -190068,7 +190033,7 @@ edy
 edy
 edy
 edy
-aEF
+aKh
 aaJ
 aEg
 aEg
@@ -190086,7 +190051,7 @@ azW
 aBT
 aCu
 azd
-aEF
+aKh
 edy
 edy
 evh
@@ -190370,7 +190335,7 @@ edy
 edy
 edy
 edy
-aEF
+aKh
 aEg
 aEg
 aEg
@@ -190388,7 +190353,7 @@ aso
 aso
 aso
 aso
-aEF
+aKh
 edy
 edy
 evh
@@ -190672,7 +190637,7 @@ edy
 edy
 edy
 evh
-aEF
+aKh
 aEg
 aEg
 aEg
@@ -190690,7 +190655,7 @@ azY
 aAM
 aso
 evh
-aEF
+aKh
 edy
 edy
 evh
@@ -190974,7 +190939,7 @@ edy
 edy
 evh
 evh
-aEF
+aKh
 asm
 asm
 asm
@@ -190992,7 +190957,7 @@ azZ
 aAN
 aso
 evh
-aEF
+aKh
 edy
 edy
 evh
@@ -191276,7 +191241,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 amk
 anx
@@ -191294,7 +191259,7 @@ aAO
 aAO
 aso
 aaJ
-aEF
+aKh
 edy
 edy
 evh
@@ -191578,7 +191543,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 aml
 any
@@ -191596,7 +191561,7 @@ aHD
 aHD
 aso
 aaJ
-aEF
+aKh
 edy
 edy
 evh
@@ -191880,7 +191845,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 amA
 any
@@ -191898,7 +191863,7 @@ aAb
 aAP
 aso
 aaJ
-aEF
+aKh
 edy
 evh
 evh
@@ -192182,7 +192147,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 amB
 aoi
@@ -192200,7 +192165,7 @@ aAc
 aAQ
 aso
 aaJ
-aEF
+aKh
 edy
 evh
 evh
@@ -192484,7 +192449,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 amB
 aoj
@@ -192502,7 +192467,7 @@ aHE
 aIv
 aCC
 aDe
-aEF
+aKh
 edy
 evh
 evh
@@ -192786,7 +192751,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 amC
 aok
@@ -192804,7 +192769,7 @@ aAd
 aAQ
 aJc
 aaJ
-aEF
+aKh
 edy
 evh
 evh
@@ -193088,7 +193053,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 amD
 aol
@@ -193106,7 +193071,7 @@ aAe
 aIw
 aJc
 aaJ
-aEF
+aKh
 edy
 edy
 evh
@@ -193390,7 +193355,7 @@ edy
 evh
 evh
 evh
-aEF
+aKh
 asm
 amE
 aom
@@ -193692,7 +193657,7 @@ edy
 edy
 evh
 evh
-aEF
+aKh
 asm
 amF
 aon
@@ -194592,8 +194557,8 @@ dYP
 dYP
 dYP
 evh
-evh
-edy
+bgQ
+aia
 edy
 edy
 edy
@@ -194619,7 +194584,7 @@ aJH
 aJH
 aKo
 aso
-aEF
+aKh
 edy
 edy
 dYP
@@ -194921,7 +194886,7 @@ aJI
 aJZ
 aKp
 aso
-aEF
+aKh
 edy
 edy
 dYP
@@ -197319,8 +197284,8 @@ dYP
 dYP
 dYP
 evh
-evh
-edy
+bgQ
+aia
 edy
 edy
 asy
@@ -197639,8 +197604,8 @@ edy
 edy
 aEe
 edy
-edy
-evh
+aaF
+bgQ
 dYP
 dYP
 dYP
@@ -202153,8 +202118,8 @@ dYP
 dYP
 dYP
 dYP
-evh
-edy
+bgQ
+aia
 asz
 edy
 edy
@@ -202773,8 +202738,8 @@ edy
 edy
 aEe
 edy
-edy
-evh
+aaF
+bgQ
 dYP
 dYP
 dYP
@@ -226258,7 +226223,7 @@ aaa
 enr
 aaa
 aaa
-erW
+aaa
 aaa
 aaa
 aaa
@@ -231979,7 +231944,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+egT
 aaa
 aaa
 aaa
@@ -270039,7 +270004,7 @@ aaa
 aaa
 aaa
 aaa
-egT
+aaa
 aaa
 aaa
 aaa
@@ -274268,7 +274233,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+erW
 aaa
 aaa
 aaa
