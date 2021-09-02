@@ -32,6 +32,7 @@
 	var/access_hydroponics = 0
 	var/access_trader = 0
 	var/access_robotics = 0
+	var/access_camera = 0
 	var/fax_pings = FALSE
 
 	// -- Crime against OOP variable (controls what is shown on PDA call to cartridge)
@@ -272,7 +273,7 @@
 /obj/item/weapon/cartridge/camera
 	name = "\improper Camera Cartridge"
 	icon_state = "cart-gbcam"
-	access_manifest = 1
+	access_camera = 1
 	var/obj/item/device/camera/cartridge/cart_cam = new
 	var/list/obj/item/weapon/photo/stored_photos = list()
 

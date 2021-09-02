@@ -9,6 +9,7 @@
 #define SCANMODE_DEVICE		6
 #define SCANMODE_ROBOTICS	7
 #define SCANMODE_HAILER		8
+#define SCANMODE_CAMERA		9
 
 // Don't ask.
 #define PDA_MODE_BEEPSKY 46
@@ -227,7 +228,7 @@ var/global/msg_id = 0
 		cartridge.initialize()
 
 /obj/item/device/pda/update_icon()
-	if (cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
+	if (cartridge && cartridge.access_camera)
 		var/image/cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam")
 		cam_under.pixel_y = 8
 		underlays += cam_under
@@ -897,7 +898,8 @@ var/global/msg_id = 0
 						dat += "<li><a href='byond://?src=\ref[src];choice=Send Shuttle'><span class='pda_icon pda_rdoor'></span> Send Trader Shuttle</a></li>"
 					if (cartridge.access_robotics)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Cyborg Analyzer'><span class='pda_icon pda_medical'></span> [scanmode == SCANMODE_ROBOTICS ? "Disable" : "Enable"] Cyborg Analyzer</a></li>"
-
+					if (cartridge.access_camera)
+						dat += "<li><a href='byond://?src=\ref[src];choice=PDA Camera'> [scanmode == SCANMODE_CAMERA ? "Disable" : "Enable"] Camera</a></li>"
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
 				if (pai)
@@ -2024,6 +2026,11 @@ var/global/msg_id = 0
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_robotics))
 				scanmode = SCANMODE_ROBOTICS
+		if("PDA Camera")
+			if(scanmode == SCANMODE_CAMERA)
+				scanmode = SCANMODE_NONE
+			else if((!isnull(cartridge)) && (cartridge.access_camera))
+				scanmode = SCANMODE_CAMERA
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
@@ -2682,13 +2689,13 @@ obj/item/device/pda/AltClick()
 		integ_hailer.cant_drop = 1
 		integ_hailer.afterattack(A, user, proximity_flag)
 
+	else if (scanmode == SCANMODE_CAMERA && istype(cartridge, /obj/item/weapon/cartridge/camera))
+		var/obj/item/weapon/cartridge/camera/CM = cartridge
+		CM.cart_cam.afterattack(A,user,proximity_flag)
+
 	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
 		note = A:info
 		to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
-
-	else if (istype(cartridge, /obj/item/weapon/cartridge/camera))
-		var/obj/item/weapon/cartridge/camera/CM = cartridge
-		CM.cart_cam.afterattack(A,user,proximity_flag)
 
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
