@@ -252,9 +252,8 @@
 	. = ..()
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
-	src.reagents.add_reagent(NUTRIMENT,3)
-	src.updateName()
-	return
+	reagents.add_reagent(NUTRIMENT,3)
+	updateName()
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/attackby(obj/item/I, mob/user, params)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
@@ -365,6 +364,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova
 	icon_state = "c_sandwich_nova"
 	plate_icon = "novacustom"
+
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova/New(loc,ingredient)
+	. = ..()
+	reagents.add_reagent(HELL_RAMEN, 0.6)
+	reagents.add_reagent(NOVAFLOUR, 0.2)
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/breadslice) && !addTop)
