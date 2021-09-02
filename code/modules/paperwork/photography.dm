@@ -264,6 +264,10 @@
 	else
 		return ..()
 
+/obj/item/device/camera/cartridge
+	name = "PDA camera"
+	start_with_bulb = FALSE
+
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
 	start_with_bulb = FALSE
@@ -493,6 +497,28 @@
 /obj/item/device/camera/proc/printpicture(mob/user, icon/temp, mobs, flag) //Normal camera proc for creating photos
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	user.put_in_hands(P)
+	var/icon/small_img = icon(temp)
+	var/icon/ic = icon('icons/obj/items.dmi',"photo")
+	small_img.Scale(8, 8)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
+	P.icon = ic
+	P.img = temp
+	P.info = mobs
+	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	P.photo_size = photo_size
+
+	if(blueprints)
+		P.blueprints = TRUE
+		blueprints = FALSE
+
+	if (double_agent_completion_ids.len > 0)
+		P.double_agent_completion_ids = double_agent_completion_ids.Copy()
+		double_agent_completion_ids = list()
+
+/obj/item/device/camera/cartridge/printpicture(mob/user, icon/temp, mobs, flag) //Add photos to cart
+	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	stored_photos += P
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)

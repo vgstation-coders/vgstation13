@@ -273,6 +273,8 @@
 	name = "\improper Camera Cartridge"
 	icon_state = "cart-gbcam"
 	access_manifest = 1
+	var/obj/item/device/camera/cartridge/cart_cam = new
+	var/list/obj/item/weapon/photo/stored_photos = list()
 
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
