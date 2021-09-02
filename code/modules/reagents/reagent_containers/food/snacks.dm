@@ -31,6 +31,7 @@
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	var/edible_by_utensil = TRUE //Can this snack be put on a fork?
 	var/plate_offset_y = 0
+	var/plate_icon = "fullycustom"
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -1708,7 +1709,7 @@
 	desc = "Totally baked."
 	icon_state = "loadedbakedpotato"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -5
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato/New()
 	..()
@@ -1854,7 +1855,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak
 	name = "Meat steak"
 	desc = "A piece of hot spicy meat."
-	icon_state = "meatstake"
+	icon_state = "meatsteak"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
 
@@ -1868,7 +1869,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak/synth
 	name = "Synthmeat steak"
 	desc = "It's still a delicious steak, but it has no soul."
-	icon_state = "meatstake"
+	icon_state = "meatsteak"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
 
@@ -2791,7 +2792,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -4
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
 	name = "xenomeatbread loaf"
@@ -2815,7 +2816,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -4
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
 	name = "spider meat loaf"
@@ -2839,7 +2840,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -5
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
 	name = "synthmeatbread loaf"
@@ -2909,7 +2910,7 @@
 	icon_state = "tofubreadslice"
 	trash = /obj/item/trash/plate
 	bitesize = 2
-	plate_offset_y = -5
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/carrotcake
 	name = "carrot cake"
@@ -3174,6 +3175,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_icon = "bluecustom"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "Bread"
@@ -3212,6 +3214,7 @@
 	name = "Nova bread slice"
 	desc = "A slice of Sol."
 	icon_state = "novabreadslice"
+	plate_icon = "novacustom"
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
@@ -3236,7 +3239,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_LACTOSE
-	plate_offset_y = -5
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	name = "Watermelon Slice"
@@ -3776,7 +3779,7 @@
 	icon_state = "spiderlegcooked"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
-	plate_offset_y = -5
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspiderleg/New()
 	..()

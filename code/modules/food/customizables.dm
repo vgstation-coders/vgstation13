@@ -22,6 +22,17 @@
 	else
 		return ..()
 
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/nova/attackby(obj/item/I,mob/user,params)
+	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
+			return
+		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova(get_turf(src),I) //welp nevermind that
+		F.attackby(I, user, params)
+		qdel(src)
+	else
+		return ..()
+
 /obj/item/weapon/reagent_containers/food/snacks/bun/attackby(obj/item/I,mob/user,params)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
@@ -62,31 +73,130 @@
 	name = "plate"
 	icon_state = "plate"
 	var/clean = FALSE
+	var/list/plates = list() // If the plates are stacked, they come here
+	var/new_stack = 0 // allows mappers to create plate stacks
 
 /obj/item/trash/plate/clean
 	icon_state = "cleanplate"
 	desc = "Clean enough to eat on, probably."
 	clean = TRUE
 
+/obj/item/trash/plate/clean/stack
+	new_stack = 9 // 10 plates total
+
+/obj/item/trash/plate/New(turf/loc)
+	..()
+	for (var/i = 1 to new_stack)
+		var/obj/item/trash/plate/P = new (src)
+		P.clean = clean
+		P.update_icon()
+		plates += P
+	update_icon()
+
 /obj/item/trash/plate/update_icon()
+	overlays.len = 0
 	if(clean)
 		icon_state = "cleanplate"
 	else
 		icon_state = "plate"
+	var/offset_y = 2
+	for (var/obj/item/trash/plate/plate in plates)
+		var/image/I = image(plate.icon, src, plate.icon_state)
+		I.pixel_y = offset_y
+		overlays += I
+		offset_y += 2
+
+/obj/item/trash/plate/proc/pick_a_plate(var/mob/user)
+	if (plates.len > 0)
+		var/obj/item/trash/plate/plate = plates[plates.len]
+		plates -= plate
+
+		user.put_in_hands(plate)
+		to_chat(user, "<span class='warning'>You remove the topmost plate from the stack.</span>")
+		plate.update_icon()
+		update_icon()
+
+/obj/item/trash/plate/attack_hand(var/mob/user)
+	if(plates.len > 0)
+		if(user.get_inactive_hand() != src)
+			..()
+			return
+
+		pick_a_plate(user)
+		return
+	..()
+
+/obj/item/trash/plate/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if (plates.len > 0)
+		if (over_object != usr)
+			return
+		var/mob/living/carbon/C = usr
+		if (!istype(C))
+			return
+		if(C.incapacitated() || C.lying || !Adjacent(C))
+			return
+
+		pick_a_plate(C)
+
+/obj/item/trash/plate/AltClick()
+	if (plates.len > 0)
+		var/mob/living/carbon/C = usr
+		if (!istype(C))
+			return
+		if(C.incapacitated() || C.lying || !Adjacent(C))
+			return
+
+		pick_a_plate(C)
 
 /obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/soap))
-		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
+	if( istype(I, /obj/item/trash/plate) )
+		var/obj/item/trash/plate/plate = I
+		// Make a list of all plates to be added
+		var/list/platestoadd = list()
+		platestoadd += plate
+		for(var/obj/item/trash/plate/i in plate.plates)
+			platestoadd += i
+
+		if( (plates.len+1) + platestoadd.len <= 10 )
+			if(user.drop_item(I, src))
+				plate.plates = list()
+				plates.Add(platestoadd)
+				plate.update_icon()
+				update_icon()
+				to_chat(user, "<span class='notice'>You stack another plate on top.</span>")
+		else
+			to_chat(user, "<span class='warning'>The stack is too high!</span>")
+		return TRUE
+
+	if(istype(I,/obj/item/weapon/soap)) // We can clean them all at once for convenience
+		if (plates.len > 0)
+			for (var/obj/item/trash/plate/plate in plates)
+				plate.clean = TRUE
+				plate.update_icon()
+			visible_message("<span class='notice'>[user] cleans the stack of plates with \the [I]. </span>","<span class='notice'>You clean the stack of plates with \the [I]. </span>")
+		else
+			visible_message("<span class='notice'>[user] cleans the plate with \the [I]. </span>","<span class='notice'>You clean the plate with \the [I]. </span>")
 		clean = TRUE
 		update_icon()
 		return TRUE
+
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now
 			to_chat(user, "<span class='warning'>That's already got a plate!</span>")
 			return
+
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
 		F.attackby(I, user, params)
-		qdel(src)
+		if (plates.len > 0)
+			user.put_in_hands(F)
+			var/obj/item/trash/plate/plate = plates[plates.len]
+			plates -= plate
+			qdel(plate)
+			update_icon()
+		else
+			F.pixel_x = pixel_x
+			F.pixel_y = pixel_y
+			qdel(src)
 	else
 		return ..()
 
@@ -177,6 +287,8 @@
 			src.overlays += src.filling
 		else
 			src.overlays += generateFilling(S, params)
+			if(fullyCustom)
+				icon_state = S.plate_icon
 		if(src.addTop)
 			src.drawTopping()
 
@@ -188,11 +300,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S, params)
 	var/image/I
-	if(src.fullyCustom)
-		var/icon/C = getFlatIcon(S, S.dir, 0)
-		I = image(C)
-		I.pixel_x = round(16 - (C.Width() / 2))
-		I.pixel_y = 12 * PIXEL_MULTIPLIER-empty_Y_space(C) + S.plate_offset_y
+	if(fullyCustom)
+		I = image(S.icon,src,S.icon_state)
+		I.appearance = S.appearance
+		I.pixel_y = 12 * PIXEL_MULTIPLIER-empty_Y_space(icon(icon,icon_state)) + S.plate_offset_y
 	else
 		I = src.filling
 		if(istype(S) && S.filling_color != "#FFFFFF")
@@ -203,7 +314,7 @@
 			I.pixel_y = src.ingredients.len * 2 * PIXEL_MULTIPLIER
 		else
 			src.overlays.len = 0
-	if(src.fullyCustom || src.stackIngredients)
+	if(fullyCustom || stackIngredients)
 		var/clicked_x = text2num(params2list(params)["icon-x"])
 		if (isnull(clicked_x))
 			I.pixel_x = 0
@@ -217,6 +328,7 @@
 			I.pixel_x = 1 * PIXEL_MULTIPLIER
 		else
 			I.pixel_x = 2 * PIXEL_MULTIPLIER
+
 	return I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()
@@ -249,6 +361,10 @@
 	icon_state = "c_sandwich"
 	stackIngredients = 1
 	addTop = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova
+	icon_state = "c_sandwich_nova"
+	plate_icon = "novacustom"
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/breadslice) && !addTop)
@@ -310,6 +426,7 @@
 	trash = /obj/item/trash/plate
 	bitesize = 2
 	ingMax = 0
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie
 	name = "pie"
