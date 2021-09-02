@@ -385,6 +385,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(isliving(loc))
 		M.IgniteMob()
 	smoketime--
+	if (smoketime == 5)
+		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
 	var/datum/gas_mixture/env = location.return_air()
 	if(smoketime <= 0 || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		if(smoketime > 0 && ishuman(loc))
