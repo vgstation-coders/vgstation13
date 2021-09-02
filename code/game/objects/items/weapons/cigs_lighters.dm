@@ -713,6 +713,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/pipe/process()
 	var/turf/location = get_turf(src)
 	smoketime--
+	if (smoketime == 5)
+		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")
 	if(smoketime <= 0)
 		new /obj/effect/decal/cleanable/ash(location)
 		lit = 0
