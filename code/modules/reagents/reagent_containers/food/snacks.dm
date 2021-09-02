@@ -79,6 +79,11 @@
 						var/datum/disease2/disease/D = virus2[ID]
 						TrashItem.infect_disease2(D, 1, notes="(leftovers on a plate)",1)
 
+				if (istype(TrashItem, /obj/item/trash/plate))
+					var/obj/item/trash/plate/P = TrashItem
+					P.trash_color = filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+					P.update_icon()
+
 				if(ismob(old_loc))
 					var/mob/M = old_loc
 					M.put_in_hands(TrashItem)

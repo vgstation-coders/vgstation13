@@ -72,9 +72,12 @@
 /obj/item/trash/plate
 	name = "plate"
 	icon_state = "plate"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/trash.dmi', "right_hand" = 'icons/mob/in-hand/right/trash.dmi')
+	item_state = "plate1"
 	var/clean = FALSE
 	var/list/plates = list() // If the plates are stacked, they come here
 	var/new_stack = 0 // allows mappers to create plate stacks
+	var/trash_color = null
 
 /obj/item/trash/plate/clean
 	icon_state = "cleanplate"
@@ -98,13 +101,31 @@
 	if(clean)
 		icon_state = "cleanplate"
 	else
-		icon_state = "plate"
+		icon_state = "cleanplate"
+		var/image/I = image(icon, src, "plate-remains")
+		I.color = trash_color
+		overlays += I
 	var/offset_y = 2
 	for (var/obj/item/trash/plate/plate in plates)
 		var/image/I = image(plate.icon, src, plate.icon_state)
 		I.pixel_y = offset_y
 		overlays += I
 		offset_y += 2
+	switch(plates.len)
+		if (0,1)
+			item_state = "plate1"
+		if (2,3)
+			item_state = "plate2"
+		if (4,5)
+			item_state = "plate3"
+		if (6,7)
+			item_state = "plate4"
+		if (8,9)
+			item_state = "plate5"
+	if (iscarbon(loc))
+		var/mob/living/carbon/M = loc
+		M.update_inv_hands()
+
 
 /obj/item/trash/plate/proc/pick_a_plate(var/mob/user)
 	if (plates.len > 0)
@@ -193,6 +214,7 @@
 				var/datum/disease2/disease/D = virus2[ID]
 				F.infect_disease2(D,1, "added to a sandwhich",0)
 		F.attackby(I, user, params)
+		F.item_state = I.item_state
 		if (plates.len > 0)
 			user.put_in_hands(F)
 			var/obj/item/trash/plate/plate = plates[plates.len]
