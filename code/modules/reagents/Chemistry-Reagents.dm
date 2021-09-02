@@ -847,7 +847,7 @@
 		return 1
 
 	//Toxins are really weak, but without being treated, last very long
-	else if(holder.has_reagent(PRO_TOXIN))
+	if(holder.has_reagent(PRO_TOXIN))
 		M.adjustToxLoss(-0.2)
 	else
 		M.adjustToxLoss(0.2)
@@ -3656,7 +3656,7 @@
 	if(..())
 		return 1
 
-	else if(holder.has_reagent(PRO_TOXIN))
+	if(holder.has_reagent(PRO_TOXIN))
 		M.adjustToxLoss(-2 * REM)
 	else
 		M.adjustToxLoss(2 * REM)
@@ -3679,7 +3679,7 @@
 	else
 		M.status_flags &= ~FAKEDEATH
 	M.adjustOxyLoss(0.5 * REM)
-	else if(holder.has_reagent(PRO_TOXIN))
+	if(holder.has_reagent(PRO_TOXIN))
 		M.adjustToxLoss(-0.5 * REM)
 	else
 		M.adjustToxLoss(0.5 * REM)
