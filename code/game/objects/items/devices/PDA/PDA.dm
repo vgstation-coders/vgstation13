@@ -2059,7 +2059,13 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		if("Message")
 			var/obj/item/device/pda/P = locate(href_list["target"])
 			src.create_message(U, P)
-
+		if("viewPhoto")
+			var/note = locate(href_list["image"])
+			usr << browse_rsc(imglist[note], "tmp_photo_view.png")
+			user << browse("<html><head><title>[name]</title></head>" \
+			+ "<body style='overflow:hidden;margin:0;text-align:center'>" \
+			+ "<img src='tmp_photo.png' width='448' style='-ms-interpolation-mode:nearest-neighbor' />" \
+			+ "</body></html>", "window=book;size=448x448")
 		if("Multimessage")
 			var/list/department_list = list("security","engineering","medical","research","cargo","service")
 			var/target = input("Select a department", "CAMO Service") as null|anything in department_list
@@ -2423,10 +2429,12 @@ var/global/list/icon/imglist = list() // Viewable message photos
 		if(useTC != 2) // Does our recepient have a broadcaster on their level?
 			to_chat(U, "ERROR: Cannot reach recepient.")
 			return
-		useMS.send_pda_message("[P.owner]","[owner]","[photo ? "[t] <b>(Photo attached)</b>" : "[t]"]")
 
 		if(photo)
 			imglist["[msg_id]"] = ImagePDA(photo.img)
+
+		useMS.send_pda_message("[P.owner]","[owner]","[photo ? "[t] <a href='byond://?src=\ref[P];choice=viewPhoto;image=msg_id;skiprefresh=1;target=\ref[reply_to]'>View Photo</a>" : "[t]"]")
+
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		msg_id++
