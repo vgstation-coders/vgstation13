@@ -187,10 +187,11 @@
 			return
 
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
-		for(var/ID in virus2)
-			if (!(ID in F.virus2))
-				var/datum/disease2/disease/V = virus2[ID]
-				F.infect_disease2(V,1, "pathogen on a dirty plate",0)
+
+		if (virus2?.len)
+			for (var/ID in virus2)
+				var/datum/disease2/disease/D = virus2[ID]
+				F.infect_disease2(V,1, "added to a sandwhich",0)
 		F.attackby(I, user, params)
 		if (plates.len > 0)
 			user.put_in_hands(F)
@@ -384,9 +385,9 @@
 		qdel(I)
 		addTop = 1
 		src.drawTopping()
-		for(var/ID in I.virus2)
-			if (!(ID in virus2))
-				var/datum/disease2/disease/V = I.virus2[ID]
+		if (I.virus2?.len)
+			for (var/ID in I.virus2)
+				var/datum/disease2/disease/D = I.virus2[ID]
 				infect_disease2(V,1, "added to a sandwhich",0)
 	else
 		..()

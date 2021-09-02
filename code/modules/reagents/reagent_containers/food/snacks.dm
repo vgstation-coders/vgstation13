@@ -74,7 +74,10 @@
 			//Otherwise, put the trash item in the same place where the food item was
 			if(ispath(trash, /obj/item))
 				var/obj/item/TrashItem = new trash(old_loc)
-				TrashItem.virus2 = virus_copylist(virus2)
+				if (virus2?.len)
+					for (var/ID in virus2)
+						var/datum/disease2/disease/D = virus2[ID]
+						TrashItem.infect_disease2(D, 1, notes="(leftovers on a plate)",1)
 
 				if(ismob(old_loc))
 					var/mob/M = old_loc
