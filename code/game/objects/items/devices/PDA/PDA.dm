@@ -2717,9 +2717,12 @@ obj/item/device/pda/AltClick()
 		integ_hailer.cant_drop = 1
 		integ_hailer.afterattack(A, user, proximity_flag)
 
-	else if (scanmode == SCANMODE_CAMERA && istype(cartridge, /obj/item/weapon/cartridge/camera))
+	else if (scanmode == SCANMODE_CAMERA && cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
 		var/obj/item/weapon/cartridge/camera/CM = cartridge
-		CM.cart_cam.afterattack(A,user,proximity_flag)
+		if(!CM.cart_cam)
+			return
+		CM.cart_cam.captureimage(A, user, proximity_flag)
+		playsound(loc, "polaroid", 75, 1, -3)
 
 	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
 		note = A:info
