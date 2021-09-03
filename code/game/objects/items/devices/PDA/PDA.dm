@@ -1638,7 +1638,7 @@ var/global/msg_id = 0
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
-				if(mode==4)//Fix for cartridges. Redirects to hub.
+				if(mode==4 || mode==19)//Fix for cartridges. Redirects to hub.
 					mode = 0
 				else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
 					cartridge.mode = mode
@@ -1654,11 +1654,11 @@ var/global/msg_id = 0
 				if(ismob(T))
 					T = T.loc
 				U.put_in_hands(cartridge)
-				update_icon()
 				scanmode = SCANMODE_NONE
 				if (cartridge.radio)
 					cartridge.radio.hostpda = null
 				cartridge = null
+				update_icon()
 
 //MENU FUNCTIONS===================================
 
@@ -2056,6 +2056,7 @@ var/global/msg_id = 0
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_camera))
 				scanmode = SCANMODE_CAMERA
+			update_icon()
 		if("Show Photos")
 			mode = 1998
 
