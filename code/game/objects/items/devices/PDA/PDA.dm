@@ -1581,7 +1581,7 @@ var/global/msg_id = 0
 					for(var/obj/item/weapon/photo/PH in CM.stored_photos)
 						usr << browse_rsc(img, "tmp_photo_gallery_[i].png")
 						var/displaylength = 192
-						switch(photo_size)
+						switch(PH.photo_size)
 							if(5)
 								displaylength = 320
 							if(7)
