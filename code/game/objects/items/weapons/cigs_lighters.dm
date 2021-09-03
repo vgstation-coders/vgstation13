@@ -192,6 +192,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/filling = null //To alter the name if it's a special kind of cigarette
 	var/base_name = "cigarette"
 	var/base_icon = "cig"
+	var/burn_on_end = FALSE
 
 /obj/item/clothing/mask/cigarette/New()
 	..()
@@ -399,7 +400,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		lit = 0 //Actually unlight the cigarette so that the lighting can update correctly
 		update_brightness()
 		if(ismob(loc))
-			if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+			if (burn_on_end)
+				to_chat(M, "<span class='danger'>Ow! The [name] burns the tip of your lips as it goes out.</span>")
+				M.apply_damage(1, BURN, LIMB_HEAD)
+			else if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 				to_chat(M, "<span class='notice'>\The [src] suddenly goes out in a weak fashion.</span>")
 			else
 				to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
@@ -638,6 +642,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
 	chem_volume = 100 //It's a fat blunt, a really fat blunt
+
+	burn_on_end = TRUE
 
 /obj/item/clothing/mask/cigarette/blunt/rolled //grown.dm handles reagents for these
 
