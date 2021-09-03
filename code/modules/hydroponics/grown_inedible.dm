@@ -266,12 +266,12 @@
 	icon = 'icons/obj/hydroponics/corn.dmi'
 	icon_state = "cob"
 	item_state = "corncob"
-	w_class = W_CLASS_SMALL
+	w_class = W_CLASS_TINY
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/weapon/corncob/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/corncob/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
 	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "<span class='notice'>You use [W] to fashion a pipe out of the corn cob!</span>")

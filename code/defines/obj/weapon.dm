@@ -64,17 +64,6 @@
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/corncob
-	name = "corn cob"
-	desc = "A reminder of meals gone by."
-	icon = 'icons/obj/hydroponics/corn.dmi'
-	icon_state = "cob"
-	item_state = "corncob"
-	w_class = W_CLASS_TINY
-	throwforce = 0
-	throw_speed = 4
-	throw_range = 20
-
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
 	desc = "A tube... of cardboard."
