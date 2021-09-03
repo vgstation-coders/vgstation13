@@ -683,7 +683,7 @@ var/global/msg_id = 0
 		dat += tnote[note]
 		var/icon/img = imglist[note]
 		if(img)
-			usr << browse_rsc(img, "tmp_photo_[note].png")
+			usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
 			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 	dat += "</body></html>"
 	usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
@@ -698,7 +698,7 @@ var/global/msg_id = 0
 			dat += aiPDA.tnote[note]
 			var/icon/img = aiPDA.imglist[note]
 			if(img)
-				usr << browse_rsc(img, "tmp_photo_[note].png")
+				usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
 				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 		dat += "</body></html>"
 		usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
@@ -974,7 +974,7 @@ var/global/msg_id = 0
 					dat += tnote[note]
 					var/icon/img = imglist[note]
 					if(img)
-						usr << browse_rsc(img, "tmp_photo_[note].png")
+						usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
 						dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 				dat += "<br>"
 
@@ -2488,7 +2488,7 @@ var/global/msg_id = 0
 				current_photo = input(U, "Photos found in [cartridge]. Please select one") in CM.stored_photos
 
 		if(current_photo)
-			imglist["[msg_id]"] = ImagePDA(current_photo.img)
+			imglist["[msg_id]"] = current_photo.img
 		
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
