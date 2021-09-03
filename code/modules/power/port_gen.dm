@@ -56,7 +56,7 @@
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""
-	var/sheet_path = /obj/item/stack/sheet/mineral/plasma
+	var/obj/sheet_path = /obj/item/stack/sheet/mineral/plasma
 	var/board_path = "/obj/item/weapon/circuitboard/pacman"
 	var/sheet_left = 0 // How much is left of the sheet
 	var/time_per_sheet = 40
@@ -79,8 +79,7 @@
 		board_path
 	)
 
-	var/obj/sheet = new sheet_path(null)
-	sheet_name = sheet.name
+	sheet_name = initial(sheet_path.name)
 	RefreshParts()
 
 /obj/machinery/power/port_gen/pacman/Destroy()

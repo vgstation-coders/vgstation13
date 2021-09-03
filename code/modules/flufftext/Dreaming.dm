@@ -20,7 +20,7 @@ mob/living/carbon/proc/dream()
 		"a red bus that drives through space","an alien artifact","the mechanic","a newspaper","an insectoid","a slime","a slime person","a mushroom person",
 		"the Cult of Nar-Sie","the Wizard Federation","an impossibly gigantic lamprey floating through space, bending reality as it goes","a sword that talks",
 		"an eclipse","a sandwich so tall that it pierces the heavens","things you people wouldn't believe","attack ships on fire off the shoulder of Orion","C-beams glittering in the dark near the Tannhäuser Gate",
-		"the xenoarchaeologist", "the xenobiologist",
+		"the xenoarchaeologist", "the xenobiologist", "getting reincarnated in another world",
 		)
 	spawn(0)
 		for(var/i = rand(1,4),i > 0, i--)

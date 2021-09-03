@@ -118,13 +118,18 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // to_sort might be either an atom or an image, returns its image data relative to its parent if there is one
-/proc/get_image_data(var/to_sort,var/list/parent)
+/proc/get_image_data(var/to_sort,var/list/parent, var/is_underlay = FALSE)
 	var/data[GFI_DX_MAX]
 	data[GFI_DX_ATOM] = to_sort
 	data[GFI_DX_ICON] = to_sort:icon
 	data[GFI_DX_STATE] = to_sort:icon_state
 	data[GFI_DX_DIR] = to_sort:dir
-	data[GFI_DX_PLANE] = to_sort:plane
+	if (to_sort:plane > 10000)
+		data[GFI_DX_PLANE] = to_sort:plane + FLOAT_PLANE - 2
+	else if (to_sort:plane < -10000)
+		data[GFI_DX_PLANE] = to_sort:plane - FLOAT_PLANE
+	else
+		data[GFI_DX_PLANE] = to_sort:plane
 	data[GFI_DX_LAYER] = to_sort:layer
 	data[GFI_DX_COLOR] = to_sort:color
 	data[GFI_DX_ALPHA] = to_sort:alpha
@@ -141,9 +146,44 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connection overlays use custom dirs
 			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
-			data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
+			if (is_underlay)
+				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] - 0.1
+			else
+				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
 		//child layer always overwrites
-		data[GFI_DX_COLOR] = parent[GFI_DX_COLOR]
+		if (data[GFI_DX_ICON] == 'icons/effects/blood.dmi')
+			var/blood_color
+			if (ishuman(parent_atom)) // uh oh, it's a human covered in blood, gotta find the correct blood color
+				var/mob/living/carbon/human/H = parent_atom
+				switch (data[GFI_DX_STATE])
+					if ("uniformblood")
+						if (H.w_uniform)
+							blood_color = H.w_uniform.blood_color
+					if ("armorblood","suitblood","coatblood")
+						if (H.wear_suit)
+							blood_color = H.wear_suit.blood_color
+					if ("helmetblood")
+						if (H.head)
+							blood_color = H.head.blood_color
+					if ("maskblood")
+						if (H.wear_mask)
+							blood_color = H.wear_mask.blood_color
+					if ("shoeblood")
+						if (H.shoes)
+							blood_color = H.shoes.blood_color
+					if ("bloodyhands")
+						if (H.gloves)
+							blood_color = H.gloves.blood_color
+						else
+							if (H.bloody_hands_data?.len)
+								blood_color = H.bloody_hands_data["blood_colour"]
+							else
+								blood_color = DEFAULT_BLOOD
+			data[GFI_DX_COLOR] = blood_color
+		else if (isitem(parent_atom) && (to_sort:name == "blood_overlay")) // just a blood-covered item
+			data[GFI_DX_COLOR] = to_sort:color
+		else
+			data[GFI_DX_COLOR] = parent[GFI_DX_COLOR]
 		if (parent[GFI_DX_ALPHA] != 255)
 			data[GFI_DX_ALPHA] = parent[GFI_DX_ALPHA]
 		data[GFI_DX_PIXEL_X] += parent[GFI_DX_PIXEL_X]
@@ -151,16 +191,16 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 	return data
 
 // fetches the image data of to_sort, as well as those of its overlays and underlays
-/proc/get_content_image_datas(var/to_sort,var/list/parent)
+/proc/get_content_image_datas(var/to_sort,var/list/parent, var/is_underlay = FALSE)
 	var/content_data = list()
-	var/list/my_data = get_image_data(to_sort,parent)
+	var/list/my_data = get_image_data(to_sort,parent, is_underlay)
 	if (!my_data)
 		return
 	content_data = list(my_data)
 	var/list/underlays = to_sort:underlays
 	var/list/overlays = to_sort:overlays
 	for (var/underlay in underlays)
-		var/list/L = get_content_image_datas(underlay,my_data)
+		var/list/L = get_content_image_datas(underlay,my_data, is_underlay = TRUE)
 		if (L)
 			content_data += L
 	for (var/overlay in overlays)

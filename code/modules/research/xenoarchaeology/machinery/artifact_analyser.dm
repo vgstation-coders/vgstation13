@@ -97,11 +97,14 @@ var/anomaly_report_num = 0
 
 		//print results
 		var/results = ""
+		var/error = FALSE
 		if(!owned_scanner)
 			reconnect_scanner()
 		if(!owned_scanner)
+			error = TRUE
 			results = "Error communicating with scanner."
 		else if(!scanned_atom || scanned_atom.loc != owned_scanner.loc)
+			error = TRUE
 			results = "Unable to locate scanned object. Ensure it was not moved in the process."
 		else
 			results = get_scan_info(scanned_atom)
@@ -115,7 +118,7 @@ var/anomaly_report_num = 0
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamp-qm")
 
-		if(!findtext(P.info, "Mundane"))
+		if(!findtext(P.info, "Mundane") && !error)
 			var/art_id
 			var/found = FALSE
 			for(var/artifact_id in excavated_large_artifacts)

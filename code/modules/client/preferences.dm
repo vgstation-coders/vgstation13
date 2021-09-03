@@ -24,6 +24,7 @@ var/global/list/special_roles = list(
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
+	TIMEAGENT		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
 )
@@ -44,6 +45,7 @@ var/global/list/special_roles = list(
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
+	TIMEAGENT		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
 )

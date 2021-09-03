@@ -26,6 +26,8 @@
 
 	roletype = /datum/role/blob_overmind/cerebrate
 	late_role = BLOBCEREBRATE
+	default_admin_voice = "Overmind Hivemind"
+	admin_voice_style = "blob"
 
 	var/datum/station_state/start
 

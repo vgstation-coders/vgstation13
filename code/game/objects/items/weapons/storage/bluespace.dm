@@ -19,12 +19,12 @@
 	slot_flags = 0 //doesn't fit on your back!
 	w_class = W_CLASS_SMALL //fits in pockets!
 
-/obj/item/weapon/storage/backpack/holding/suicide_act(mob/user)
+/obj/item/weapon/storage/backpack/holding/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] puts \the [src.name] on \his head and stretches the bag around \himself. With a sudden snapping sound, the bag shrinks to its original size, leaving no trace of [user].</b></span>")
 	user.drop_item(src)
 	qdel(user)
 
-/obj/item/weapon/storage/backpack/holding/miniblackhole/suicide_act(mob/user)
+/obj/item/weapon/storage/backpack/holding/miniblackhole/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] puts \the [src.name] on the ground and jumps inside, never to be seen again.<</b></span>")
 	user.drop_item(src)
 	qdel(user)

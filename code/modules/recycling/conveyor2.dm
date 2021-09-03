@@ -243,19 +243,18 @@
 
 	affecting = loc.contents - src		// moved items will be all in loc
 	spawn(1)	// slight delay to prevent infinite propagation due to map order	//TODO: please no spawn() in process(). It's a very bad idea
-		var/items_moved = 0
+		var/items_checked = 0
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
+					items_checked++
 					for(var/atom/dest in get_step(src, movedir)) //Should/can this be optimized to not check ALL atoms?
 						if(Adjacent(dest) && dest.conveyor_act(A, src))
-							items_moved++
 							break
 					if(A && A.loc == src.loc) //Check that our location didn't check from conveyor_acting on machinery.
 						A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
 						step(A,movedir)
-						items_moved++
-			if(items_moved >= max_moved)
+			if(items_checked >= max_moved)
 				break
 
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)

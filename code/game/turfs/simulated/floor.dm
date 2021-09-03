@@ -49,15 +49,18 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 
 /turf/simulated/floor/New()
+	create_floor_tile()
 	..()
-	if(!floor_tile)
-		floor_tile = new /obj/item/stack/tile/plasteel(null)
-		floor_tile.amount = 1
 	if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
-	
+
+/turf/simulated/floor/proc/create_floor_tile()
+	if(!floor_tile)
+		floor_tile = new /obj/item/stack/tile/plasteel(null)
+		floor_tile.amount = 1
+
 /turf/simulated/floor/Destroy()
 	//No longer phazon, not a teleport destination
 	if(material=="phazon")
@@ -383,7 +386,6 @@ turf/simulated/floor/update_icon()
 						FF.update_icon() //so siding get updated properly
 
 	if(floor_tile)
-		//qdel(floor_tile)
 		qdel(floor_tile)
 	icon_plating = "plating"
 	set_light(0)

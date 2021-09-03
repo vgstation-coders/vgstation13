@@ -396,6 +396,32 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
+/proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T, var/is_twin = FALSE)
+	H.delete_all_equipped_items()
+
+	var/datum/outfit/special/time_agent/concrete_outfit = new /datum/outfit/special/time_agent
+	concrete_outfit.is_twin = is_twin
+	concrete_outfit.equip(H)
+	if(T)
+		T.objects_to_delete = get_contents_in_object(H)
+	H.fully_replace_character_name(newname = "John Beckett")
+	H.make_all_robot_parts_organic()
+
+/proc/spawn_rand_maintenance(var/mob/living/carbon/human/H)
+	var/list/potential_locations = list()
+	for(var/area/maintenance/A in areas)
+		potential_locations.Add(A)
+	var/placed = FALSE
+	while(!placed && potential_locations.len)
+		var/area/maintenance/A = pick(potential_locations)
+		potential_locations.Remove(A)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!F.has_dense_content())
+				H.forceMove(F)
+				placed = TRUE
+				return TRUE
+	return FALSE
+
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
 		return 0

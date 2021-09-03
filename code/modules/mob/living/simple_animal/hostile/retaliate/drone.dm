@@ -35,7 +35,7 @@
 	flying = 1
 	mob_property_flags = MOB_ROBOTIC
 
-	var/datum/effect/effect/system/trail/ion_trail
+	var/datum/effect/system/trail/ion_trail
 	var/hostile_time = 0
 
 	//the drone randomly switches between hostile/retaliation only states because it's malfunctioning

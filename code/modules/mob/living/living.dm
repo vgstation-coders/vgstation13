@@ -919,12 +919,14 @@ Thanks.
 	if(L.locked_to && !L.isUnconscious())
 		// unbeartrapping yourself
 		if (istype(L.locked_to, /obj/item/weapon/beartrap/))
-			if (iscarbon(L))
+			if (!iscarbon(L))
+				L.locked_to.attack_hand(L)
+				return
+			else
 				var/mob/living/carbon/C = L
-				if (C.handcuffed)
+				if (!C.handcuffed)
+					L.locked_to.attack_hand(L)
 					return
-			L.locked_to.attack_hand(L)
-			return
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
@@ -1863,7 +1865,7 @@ Thanks.
 
 /mob/living/proc/breath_airborne_diseases_from_clouds()
 	for(var/turf/T in range(1, src))
-		for(var/obj/effect/effect/pathogen_cloud/cloud in T.contents)
+		for(var/obj/effect/pathogen_cloud/cloud in T.contents)
 			if (!cloud.sourceIsCarrier || cloud.source != src || cloud.modified)
 				if (Adjacent(cloud))
 					for (var/ID in cloud.viruses)
@@ -1882,7 +1884,7 @@ Thanks.
 				strength += V.infectionchance
 			strength = round(strength/airborne_viruses.len)
 			while (strength > 0)//stronger viruses create more clouds at once
-				new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
+				new /obj/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
 				strength -= 40
 
 /mob/living/proc/handle_virus_updates()

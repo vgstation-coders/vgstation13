@@ -4,6 +4,8 @@
 	required_pref = TRAITOR
 	logo_state = "synd-logo"
 	wikiroute = TRAITOR
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "syndradio"
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
 	var/obj/item/device/uplink/hidden/uplink//so we keep track of where the uplink they spawn with ends up
 
@@ -41,7 +43,7 @@
 		AppendObjective(/datum/objective/freeform/syndicate)
 		return
 	if(istype(antag.current, /mob/living/silicon))
-		AppendObjective(/datum/objective/target/delayed/assassinate)
+		AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 
 		AppendObjective(/datum/objective/survive)
 
@@ -49,7 +51,7 @@
 			AppendObjective(/datum/objective/block)
 
 	else
-		AppendObjective(/datum/objective/target/delayed/assassinate)
+		AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 		AppendObjective(/datum/objective/target/steal)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
@@ -88,6 +90,7 @@
 	return dat
 
 /datum/role/traitor/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
 	if(href_list["giveuplink"])
 		equip_traitor(antag.current, 20, src)
 	if(href_list["telecrystalsSet"])
@@ -143,8 +146,10 @@
 
 /datum/role/traitor/challenger/ForgeObjectives()
 	AppendObjective(/datum/objective/survive)
+
 	if (assassination_target && assassination_target.antag)
-		var/datum/objective/target/assassinate/kill_target = new(auto_target = FALSE)
+		var/datum/objective/target/assassinate/delay_short/kill_target = new(auto_target = FALSE)
+		kill_target.owner = antag
 		if(kill_target.set_target(assassination_target.antag,TRUE))
 			AppendObjective(kill_target)
 			return
@@ -201,6 +206,8 @@
 	required_pref = NUKE_OP
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "syndradio"
 
 /datum/role/nuclear_operative/leader
 	name = NUKE_OP_LEADER

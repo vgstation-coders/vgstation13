@@ -102,9 +102,12 @@ var/list/mind_ui_ID2type = list()
 	var/list/elements = list()	// the objects displayed by the UI. Those can be both non-interactable objects (background/fluff images, foreground shaders) and clickable interace buttons.
 	var/list/subUIs	= list()	// children UI. Closing the parent UI closes all the children.
 	var/datum/mind_ui/parent = null
+	var/offset_x = 0 //KEEP THESE AT 0, they are set by /obj/abstract/mind_ui_element/hoverable/movable/
+	var/offset_y = 0
 
 	var/x = "CENTER"
 	var/y = "CENTER"
+
 
 	var/list/element_types_to_spawn = list()
 	var/list/sub_uis_to_spawn = list()
@@ -136,7 +139,7 @@ var/list/mind_ui_ID2type = list()
 		if (!M.client)
 			return
 
-		if (!Valid() || display_with_parent) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
+		if (!Valid() || !display_with_parent) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
 			Hide()
 
 		for (var/obj/abstract/mind_ui_element/element in elements)
@@ -233,20 +236,6 @@ var/list/mind_ui_ID2type = list()
 	parent = P
 	UpdateUIScreenLoc()
 
-/obj/abstract/mind_ui_element/hoverable
-
-/obj/abstract/mind_ui_element/hoverable/MouseEntered(location,control,params)
-	StartHovering()
-
-/obj/abstract/mind_ui_element/hoverable/MouseExited()
-	StopHovering()
-
-/obj/abstract/mind_ui_element/hoverable/proc/StartHovering()
-	icon_state = "[base_icon_state]-hover"
-
-/obj/abstract/mind_ui_element/hoverable/proc/StopHovering()
-	icon_state = "[base_icon_state]"
-
 /obj/abstract/mind_ui_element/proc/Appear()
 	invisibility = 0
 	UpdateIcon()
@@ -259,7 +248,7 @@ var/list/mind_ui_ID2type = list()
 	return parent.mind.current
 
 /obj/abstract/mind_ui_element/proc/UpdateUIScreenLoc()
-	screen_loc = "[parent.x][offset_x ? ":[offset_x]" : ""],[parent.y][offset_y ? ":[offset_y]" : ""]"
+	screen_loc = "[parent.x]:[offset_x + parent.offset_x],[parent.y]:[offset_y+parent.offset_y]"
 
 /obj/abstract/mind_ui_element/proc/UpdateIcon()
 	return
@@ -275,7 +264,6 @@ var/list/mind_ui_ID2type = list()
 		result.overlays += I
 	return result
 
-
 /obj/abstract/mind_ui_element/proc/SlideUIElement(var/new_x = 0, var/new_y = 0, var/duration, var/layer = MIND_UI_BACK, var/hide_after = FALSE)
 	invisibility = 101
 	var/image/ui_image = image(icon, src, icon_state, layer)
@@ -290,3 +278,134 @@ var/list/mind_ui_ID2type = list()
 		U.client.images -= ui_image
 		if(!hide_after)
 			invisibility = 0
+
+
+////////////////// HOVERABLE ////////////////////////
+// Make use of MouseEntered/MouseExited to allow for effects and behaviours related to simply hovering above the element
+
+/obj/abstract/mind_ui_element/hoverable
+
+/obj/abstract/mind_ui_element/hoverable/MouseEntered(location,control,params)
+	StartHovering()
+
+/obj/abstract/mind_ui_element/hoverable/MouseExited()
+	StopHovering()
+
+/obj/abstract/mind_ui_element/hoverable/proc/StartHovering()
+	icon_state = "[base_icon_state]-hover"
+
+/obj/abstract/mind_ui_element/hoverable/proc/StopHovering()
+	icon_state = "[base_icon_state]"
+
+
+////////////////// MOVABLE ////////////////////////
+// Make use of MouseDown/MouseUp/MouseDrop to allow for relocating of the element
+// By setting "move_whole_ui" to TRUE, the element will cause its entire parent UI to move with it.
+
+/obj/abstract/mind_ui_element/hoverable/movable
+	var/move_whole_ui = FALSE
+	var/moving = FALSE
+	var/icon/movement
+
+/obj/abstract/mind_ui_element/hoverable/movable/AltClick(mob/user) // Alt+Click defaults to reset the offset
+	ResetLoc()
+
+/obj/abstract/mind_ui_element/hoverable/movable/MouseDown(location, control, params)
+	if (!movement)
+		var/icon/I = new(icon, icon_state)
+		I.Blend('icons/mouse/mind_ui.dmi', ICON_OVERLAY, I.Width()/2-16, I.Height()/2-16)
+		I.Scale(2* I.Width(),2* I.Height()) // doubling the size to account for players generally having more or less a 960x960 resolution
+		var/rgba = "#FFFFFF" + copytext(rgb(0,0,0,191), 8)
+		I.Blend(rgba, ICON_MULTIPLY)
+		movement = I
+
+	var/mob/M = GetUser()
+	M.client.mouse_pointer_icon = movement
+	moving = TRUE
+
+/obj/abstract/mind_ui_element/hoverable/movable/MouseUp(location, control, params)
+	var/mob/M = GetUser()
+	M.client.mouse_pointer_icon = initial(M.client.mouse_pointer_icon)
+	if (moving)
+		MoveLoc(params)
+
+/obj/abstract/mind_ui_element/hoverable/movable/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
+	var/mob/M = GetUser()
+	M.client.mouse_pointer_icon = initial(M.client.mouse_pointer_icon)
+	MoveLoc(params)
+
+/obj/abstract/mind_ui_element/hoverable/movable/proc/MoveLoc(var/params)
+	moving = FALSE
+	var/list/PM = params2list(params)
+	if(!PM || !PM["screen-loc"])
+		return
+
+	//first we need the x and y coordinates in pixels of the element relative to the bottom left corner of the screen
+	var/icon/I = new(icon,icon_state)
+	var/list/start_loc_params = splittext(screen_loc, ",")
+	var/list/start_loc_X = splittext(start_loc_params[1],":")
+	var/list/start_loc_Y = splittext(start_loc_params[2],":")
+	var/start_pix_X = text2num(start_loc_X[2])
+	var/start_pix_Y = text2num(start_loc_Y[2])
+	var/view = get_view_size()
+	var/X = start_loc_X[1]
+	var/Y = start_loc_Y[1]
+	var/start_x_val
+	var/start_y_val
+	if(findtext(X,"EAST-"))
+		var/num = text2num(copytext(X,6))
+		if(!num)
+			num = 0
+		start_x_val = view*2 + 1 - num
+	else if(findtext(X,"WEST+"))
+		var/num = text2num(copytext(X,6))
+		if(!num)
+			num = 0
+		start_x_val = num+1
+	else if(findtext(X,"CENTER"))
+		start_x_val = view+1
+	start_x_val *= 32
+	start_x_val += start_pix_X
+	if(findtext(Y,"NORTH-"))
+		var/num = text2num(copytext(Y,7))
+		if(!num)
+			num = 0
+		start_y_val = view*2 + 1 - num
+	else if(findtext(Y,"SOUTH+"))
+		var/num = text2num(copytext(Y,7))
+		if(!num)
+			num = 0
+		start_y_val = num+1
+	else if(findtext(Y,"CENTER"))
+		start_y_val = view+1
+	start_y_val *= 32
+	start_y_val += start_pix_Y
+
+	//now we get those of the place where we released the mouse button
+	var/list/dest_loc_params = splittext(PM["screen-loc"], ",")
+	var/list/dest_loc_X = splittext(dest_loc_params[1],":")
+	var/list/dest_loc_Y = splittext(dest_loc_params[2],":")
+	var/dest_pix_x = text2num(dest_loc_X[2]) - round(I.Width()/2)
+	var/dest_pix_y = text2num(dest_loc_Y[2]) - round(I.Height()/2)
+	var/dest_x_val = text2num(dest_loc_X[1])*32 + dest_pix_x
+	var/dest_y_val = text2num(dest_loc_Y[1])*32 + dest_pix_y
+
+	//and calculate the offset between the two, which we can then add to either the element or the whole UI
+	if (move_whole_ui)
+		parent.offset_x += dest_x_val - start_x_val
+		parent.offset_y += dest_y_val - start_y_val
+		parent.UpdateUIScreenLoc()
+	else
+		offset_x += dest_x_val - start_x_val
+		offset_y += dest_y_val - start_y_val
+		UpdateUIScreenLoc()
+
+/obj/abstract/mind_ui_element/hoverable/movable/proc/ResetLoc()
+	if (move_whole_ui)
+		parent.offset_x = 0
+		parent.offset_y = 0
+		parent.UpdateUIScreenLoc()
+	else
+		offset_x = initial(offset_x)
+		offset_y = initial(offset_y)
+		UpdateUIScreenLoc()

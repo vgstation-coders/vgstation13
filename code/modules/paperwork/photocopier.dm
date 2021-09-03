@@ -85,16 +85,23 @@
 				if(!copying)
 					break
 				if(toner >= 2)  //Was set to = 0, but if there was say 3 toner left and this ran, you would get -2 which would be weird for ink
-					var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
+					var/obj/item/weapon/photo/p
+					if (istype(photocopy, /obj/item/weapon/photo/id))
+						p = new /obj/item/weapon/photo/id (loc)
+					else
+						p = new /obj/item/weapon/photo (loc)
 					var/icon/I = icon(photocopy.icon, photocopy.icon_state)
 					var/icon/img = icon(photocopy.img)
+					var/greyscaled = 0
 					if(greytoggle == "Greyscale")
 						if(toner > 3) //plenty of toner, go straight greyscale
 							I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0)) //I'm not sure how expensive this is, but given the many limitations of photocopying, it shouldn't be an issue.
 							img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+							greyscaled = 1
 						else //not much toner left, lighten the photo
 							I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(100,100,100))
 							img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(100,100,100))
+							greyscaled = 2
 						toner -= 2	//photos use a lot of ink!
 					else if(greytoggle == "Color")
 						if(toner >= 3)
@@ -112,6 +119,17 @@
 					p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
 					p.info = photocopy.info
 					p.double_agent_completion_ids = photocopy.double_agent_completion_ids.Copy()
+
+					if (istype(photocopy, /obj/item/weapon/photo/id))
+						var/obj/item/weapon/photo/id/id_photo = photocopy
+						var/obj/item/weapon/photo/id/new_id = p
+						new_id.background = id_photo.background
+						new_id.four_sides = icon(id_photo.four_sides)
+						switch (greyscaled)
+							if (1)
+								new_id.four_sides.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+							if (2)
+								new_id.four_sides.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(100,100,100))
 
 					sleep(15)
 				else

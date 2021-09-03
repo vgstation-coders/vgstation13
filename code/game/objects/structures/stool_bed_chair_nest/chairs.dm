@@ -165,6 +165,8 @@
 	spin(usr)
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
+	if(noghostspin)
+		return
 	if(!config.ghost_interaction || !can_spook())
 		if(user.isUnconscious() || user.restrained())
 			return
@@ -484,6 +486,7 @@
 /obj/structure/bed/chair/comfy/couch/turn/inward/lime
 	color = CHAIR_LIME
 /obj/structure/bed/chair/comfy/couch/turn/outward/lime
+	color = CHAIR_LIME
 
 // #ae774c brown
 /obj/structure/bed/chair/comfy/couch/left/brown
@@ -618,10 +621,11 @@
 	desc = "A reinforced chair that's firmly secured to the ground."
 	icon_state = "shuttleseat_neutral"
 	anchored = 1
+	noghostspin = 1
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
 	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
-	if (M)
+	if (M && M != user)
 		return M.attackby(W,user)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		to_chat(user,"<span class='warning'>\The [W] cannot be rigged onto \the [src].</span>")
@@ -690,6 +694,7 @@
 /obj/structure/bed/chair/shuttle/gamer
 	desc = "Ain't got nothing to compensate."
 	icon_state = "shuttleseat_GAMER"
+	noghostspin = 0
 
 /obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
 	change_dir(turn(dir, 90))

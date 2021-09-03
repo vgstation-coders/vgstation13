@@ -40,6 +40,13 @@
 		return new shrapnel_type(src)
 
 
+/obj/item/ammo_casing/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"BB")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 //Boxes of ammo
 /obj/item/ammo_storage
 	name = "ammo box (.357)"
@@ -82,7 +89,7 @@
 	if(istype(A, /obj/item/ammo_casing)) //loading a bullet into the magazine or box
 		var/obj/item/ammo_casing/AC = A
 		var/accepted = 0
-		if((exact && (AC.type == text2path(ammo_type))) || (!exact && (AC.caliber == caliber)))
+		if((exact && (istype(AC, ammo_type))) || (!exact && (AC.caliber == caliber)))
 			accepted = 1
 		else
 			to_chat(user, "<span class='warning'>\the [AC] does not fit into [src]. </span>")
@@ -219,3 +226,10 @@
 
 /obj/item/ammo_storage/proc/ammo_count()
 	return stored_ammo.len
+
+/obj/item/ammo_storage/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"stored_ammo")
+
+	reset_vars_after_duration(resettable_vars, duration)

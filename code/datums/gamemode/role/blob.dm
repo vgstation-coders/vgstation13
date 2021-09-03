@@ -4,6 +4,8 @@
 	required_pref = BLOBOVERMIND
 	logo_state = "blob-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM)
+	default_admin_voice = "Overmind Hivemind"
+	admin_voice_style = "blob"
 	var/countdown = 60
 
 /datum/role/blob_overmind/cerebrate

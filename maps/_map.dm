@@ -31,6 +31,9 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
+	var/multiz = FALSE //Don't even boot up multiz if we don't need it.
+	var/height = 1 //Height of connecting z levels
+	var/zLoc = 1 //Location of where to connect below from
 
 	//Center of thunderdome admin room
 	var/tDomeX = 0
@@ -109,6 +112,8 @@
 	. = ..()
 
 	src.loadZLevels(src.zLevels)
+	if(multiz)
+		src.loadZLevelConnections(height,zLoc)
 
 	//The spawn below is needed
 	spawn()

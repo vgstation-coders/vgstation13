@@ -366,6 +366,8 @@
 		return FALSE
 	if(istype(W, /obj/item/device/analyzer/plant_analyzer)) //ugly hack but what can you do
 		return FALSE
+	if(istype(W, /obj/item/weapon/reagent_containers/food/condiment))
+		return FALSE
 	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
@@ -1767,6 +1769,41 @@
 		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
 		qdel(src)
 
+/obj/item/weapon/reagent_containers/food/snacks/pancake
+	name = "pancake"
+	desc = "You'll never guess what's for breakfast!"
+	icon_state = "pancake"
+	food_flags = FOOD_ANIMAL
+	var/pancakes = 1
+	var/max_pancakes = 10 // leaving badmins a way to raise it if they're ready to assume the consequences
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/attackby(var/obj/item/O, var/mob/user)
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/pancake))
+		var/obj/item/weapon/reagent_containers/food/snacks/pancake/I = O
+		if (pancakes + I.pancakes > max_pancakes)
+			to_chat(user, "<span class='warning'>sorry, can't go any higher!</span>")
+			return
+		to_chat(user, "<span class='notice'>...and another one!</span>")
+		var/amount = I.reagents.total_volume
+		I.reagents.trans_to(src, amount)
+		var/image/img = image(I.icon, src, I.icon_state)
+		img.appearance = I.appearance
+		img.pixel_x = 0
+		img.pixel_y = 2 * pancakes
+		img.plane = FLOAT_PLANE
+		img.layer = FLOAT_LAYER
+		overlays += img
+		pancakes += I.pancakes
+		qdel(I)
+	else
+		..()
+
+
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
 	desc = "Now thats a nice pasta!"
@@ -2030,7 +2067,7 @@
 		reagents.add_reagent(NUTRIMENT, 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
-	name = "Vegetable soup"
+	name = "Avocado Soup"
 	desc = "May be served either hot or cold."
 	icon_state = "avocadosoup"
 	trash = /obj/item/trash/snack_bowl
@@ -2039,7 +2076,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/avocadosoup/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(WATER, 5)
+	reagents.add_reagent(LIMEJUICE, 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/hotchili
@@ -6683,7 +6720,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SOYSAUCE, 10)
-	reagents.add_reagent(FORMIC_ACID, 4)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
@@ -6696,7 +6732,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(FORMIC_ACID, 6)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil

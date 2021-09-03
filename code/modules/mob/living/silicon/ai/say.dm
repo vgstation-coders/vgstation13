@@ -210,6 +210,10 @@ var/VOX_AVAILABLE_VOICES = list(
 	if(!message || announcing_vox > world.time)
 		return
 
+	var/exception = FALSE
+	if (message == "voxtest5")// Not sure how many words exactly it's counting in that one but more than 30 for sure and the decimal might also hinder the count
+		exception = TRUE
+
 	var/list/words = splittext(trim(message), " ")
 	var/list/incorrect_words = list()
 
@@ -228,7 +232,7 @@ var/VOX_AVAILABLE_VOICES = list(
 		var/wordlen = 1
 		if(word in vox_wordlen)
 			wordlen=vox_wordlen[word]
-		if(total_word_len+wordlen>50)
+		if(!exception && (total_word_len+wordlen>50))
 			to_chat(src, "<span class='notice'>There are too many words in this announcement.</span>")
 			return
 		total_word_len+=wordlen

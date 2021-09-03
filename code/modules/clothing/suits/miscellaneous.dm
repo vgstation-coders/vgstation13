@@ -701,7 +701,7 @@ obj/item/clothing/suit/cassock
 	if(!istype(H))
 		return ..()
 	if((src == H.wear_suit) && H.flying)
-		H.flying = 0
+		H.stop_flying()
 		animate(H, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(H, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(H)
@@ -718,7 +718,7 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/clownpiece/flying/dropped(mob/user as mob)
 	if(user.flying)
-		user.flying = 0
+		user.stop_flying()
 		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(user)
@@ -817,6 +817,12 @@ obj/item/clothing/suit/cassock
 	item_state = "mino"
 	body_parts_covered = ARMS|FULL_TORSO|IGNORE_INV
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/suit/mino/vinesafe
+	mech_flags = MECH_SCAN_ILLEGAL
+
+/obj/item/clothing/suit/mino/vinesafe/vine_protected()
+	return TRUE
 
 /obj/item/clothing/suit/kimono
 	name = "kimono"
@@ -958,6 +964,18 @@ obj/item/clothing/suit/cassock
 	..()
 	if(active)
 		to_chat(user, "<span class='danger'>It appears to be active. RUN!</span>")
+
+/obj/item/clothing/suit/bomber_vest/suicide_act(var/mob/living/user)
+	if (!active) //no explosion with no active vest, dummy
+		return
+	
+	var/message_say = user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
+	user.say(message_say)
+	explosion(user, 1, 3, 6)
+	message_admins("[user] has detonated \the [src]!")
+	qdel(src) //Just in case
+	return SUICIDE_ACT_CUSTOM
 
 /obj/item/clothing/suit/bomber_vest/proc/detonate(list/arguments)
 	var/mob/living/carbon/human/H = loc

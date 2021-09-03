@@ -418,8 +418,7 @@
 /obj/effect/artifact_field
 	name = "energy field"
 	desc = "An artifact is contained behind."
-	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 1
-	mouse_opacity = 0
+	mouse_opacity = 1
 	icon_state = "shield2"

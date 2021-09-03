@@ -1003,6 +1003,10 @@
 			C.ptype = 9
 		if("pipe-j2s")
 			C.ptype = 10
+		if("pipe-u")
+			C.ptype = 13
+		if("pipe-d")
+			C.ptype = 14
 	src.transfer_fingerprints_to(C)
 	C.change_dir(dir)
 	C.setDensity(FALSE)

@@ -13,7 +13,7 @@
 			key = mind.key // Force the ghost in here
 	if(Owner)
 		faction = "necro"
-		friends.Add(Owner)
+		friends += makeweakref(Owner)
 		creator = Owner
 		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
@@ -395,7 +395,7 @@
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
 	icon_living = "zombie_turned"
 	icon_dead = "zombie_turned"
-	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
+	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite fresh."
 	maxHealth = 50
 	health = 50
 	can_evolve = TRUE

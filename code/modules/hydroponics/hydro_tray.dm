@@ -598,13 +598,14 @@
 // See no evil, hear no evil. Returns all the potentially bad things on a hydroponic tray.
 /obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
 	var/list/things = list()
-	if (seed.thorny)
-		things += "thorny"
-	if (seed.carnivorous)
-		things += "carnivorous"
-	for (var/chemical_id in seed.chems)
-		if (chemical_id in reagents_to_log)
-			things += chemical_id
+	if(seed)
+		if (seed.thorny)
+			things += "thorny"
+		if (seed.carnivorous)
+			things += "carnivorous"
+		for (var/chemical_id in seed.chems)
+			if (chemical_id in reagents_to_log)
+				things += chemical_id
 	return english_list(things, "nothing")
 
 /datum/locking_category/hydro_tray

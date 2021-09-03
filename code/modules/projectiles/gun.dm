@@ -65,6 +65,7 @@
 	var/jammed = 0
 
 	var/projectile_color = null
+	var/projectile_color_shift = null
 
 	var/pai_safety = TRUE	//To allow the pAI to activate or deactivate firing capability
 
@@ -302,6 +303,8 @@
 	in_chamber.inaccurate = (istype(user.locked_to, /obj/structure/bed/chair/vehicle))
 	if(projectile_color)
 		in_chamber.apply_projectile_color(projectile_color)
+	if(projectile_color_shift)
+		in_chamber.apply_projectile_color_shift(projectile_color_shift)
 	if(params)
 		var/list/mouse_control = params2list(params)
 		if(mouse_control["icon-x"])

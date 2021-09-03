@@ -216,6 +216,9 @@
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")
 		return
+	if(!user.dexterity_check()) //preventing mice and stuff from just doing it
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
 	src.add_fingerprint(usr)
 	if (src.open)
 		src.close()
@@ -228,6 +231,9 @@
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")
 		return
+	if(!user.dexterity_check()) //preventing mice and stuff from just doing it
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
 	src.add_fingerprint(usr)
 	if (src.open)
 		src.close()

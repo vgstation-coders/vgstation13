@@ -40,8 +40,15 @@ What is the naming convention for planes or layers?
 	Make sure to use the name of your object before the _LAYER or _PLANE, eg: [NAME_OF_YOUR_OBJECT HERE]_LAYER or [NAME_OF_YOUR_OBJECT HERE]_PLANE
 	Also, as it's a define, it is standard practice to use capital letters for the variable so people know this.
 
+Why is FLOAT_PLANE added to a bunch of these?
+	So that it renders nicely when in vis_contents, such as below turfs in multi Z, though there are some bad exceptions like gas overlays, noted below.
+
 */
 
+
+#define relative_plane(x) (x - plane + FLOAT_PLANE)
+
+#define relative_plane_to_plane(x,y) (x - y + FLOAT_PLANE)
 
 
 #define CLICKCATCHER_PLANE -99
@@ -70,9 +77,9 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define PLATING_PLANE 			-21
+#define PLATING_PLANE 			(-5 + FLOAT_PLANE)
 
-#define ABOVE_PLATING_PLANE		-20
+#define ABOVE_PLATING_PLANE		(-4 + FLOAT_PLANE)
 
 	#define CATWALK_LAYER				2
 	#define DISPOSALS_PIPE_LAYER		3
@@ -82,16 +89,16 @@ What is the naming convention for planes or layers?
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
 
-#define FLOOR_PLANE 			-19
+#define FLOOR_PLANE 			(-3 + FLOAT_PLANE)
 
-#define BELOW_TURF_PLANE 		-18 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
+#define BELOW_TURF_PLANE 		(-2 + FLOAT_PLANE)		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
 	#define CORNER_LAYER 				2
 	#define SIDE_LAYER					3
 
-#define TURF_PLANE				-17
+#define TURF_PLANE				(-1 + FLOAT_PLANE)
 	#define MAPPING_TURF_LAYER			-999
 
-#define ABOVE_TURF_PLANE 		-16			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
+#define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define HOLOMAP_LAYER				1
 	#define RUNE_LAYER					2
@@ -114,11 +121,11 @@ What is the naming convention for planes or layers?
 	#define CREEPER_LAYER				19
 	#define WEED_LAYER					420
 
-#define NOIR_BLOOD_PLANE 		-15		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
+#define NOIR_BLOOD_PLANE 		(1 + FLOAT_PLANE)		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
 
-#define HIDING_MOB_PLANE 		-14			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
+#define HIDING_MOB_PLANE 		(2 + FLOAT_PLANE)			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
 
-#define OBJ_PLANE 				-13			// For objects which appear below humans.
+#define OBJ_PLANE 				(3 + FLOAT_PLANE)			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER			0
 	#define TABLE_LAYER					0.5
@@ -137,22 +144,22 @@ What is the naming convention for planes or layers?
 	#define ABOVE_DOOR_LAYER			12
 	#define CHAIR_LEG_LAYER				13
 
-#define LYING_MOB_PLANE			-11			// other mobs that are lying down.
+#define LYING_MOB_PLANE			(4 + FLOAT_PLANE)			// other mobs that are lying down.
 
-#define LYING_HUMAN_PLANE 		-10			// humans that are lying down
+#define LYING_HUMAN_PLANE 		(5 + FLOAT_PLANE)			// humans that are lying down
 
-#define ABOVE_OBJ_PLANE			-9			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
+#define ABOVE_OBJ_PLANE			(6 + FLOAT_PLANE)			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
 	#define BLANKIES_LAYER				0
 	#define FACEHUGGER_LAYER			1
 
-#define HUMAN_PLANE 			-8			// For Humans that are standing up.
+#define HUMAN_PLANE 			(7 + FLOAT_PLANE)			// For Humans that are standing up.
 
-#define MOB_PLANE 				-7			// For Mobs.
+#define MOB_PLANE 				(8 + FLOAT_PLANE)			// For Mobs.
 
 //	#define MOB_LAYER					4
 	#define SLIME_LAYER					5
 
-#define ABOVE_HUMAN_PLANE 		-6			// For things that should appear above humans.
+#define ABOVE_HUMAN_PLANE 		(9 + FLOAT_PLANE)			// For things that should appear above humans.
 
 	#define SHADOW_LAYER				0
 	#define VEHICLE_LAYER 				0
@@ -165,7 +172,7 @@ What is the naming convention for planes or layers?
 	#define CLOSED_CURTAIN_LAYER		5
 	#define CHAT_LAYER					6
 
-#define BLOB_PLANE 				-5			// For Blobs, which are above humans.
+#define BLOB_PLANE 				(10 + FLOAT_PLANE)			// For Blobs, which are above humans.
 
 	#define BLOB_ROOTS_LAYER			-1
 	#define BLOB_BASE_LAYER				0
@@ -176,7 +183,7 @@ What is the naming convention for planes or layers?
 	#define BLOB_CORE_LAYER				5
 	#define BLOB_SPORE_LAYER			6
 
-#define EFFECTS_PLANE 			-4			// For special effects.
+#define EFFECTS_PLANE 			(11 + FLOAT_PLANE)			// For special effects.
 
 	#define BELOW_PROJECTILE_LAYER 		3
 	#define PROJECTILE_LAYER 			4
@@ -188,14 +195,16 @@ What is the naming convention for planes or layers?
 	#define HORIZON_EXHAUST_LAYER		10
 	#define POINTER_LAYER 				11
 
-#define GHOST_PLANE 			-3			// Ghosts show up under lighting, HUD etc.
+#define GAS_PLANE 				11					// Gas overlays really hate being in anything except vis_contents when FLOAT_PLANE'D, don't ask
+
+#define GHOST_PLANE 			(12 + FLOAT_PLANE)			// Ghosts show up under lighting, HUD etc.
 
 	#define GHOST_LAYER 				1
 
-#define LIGHTING_PLANE 			-2	// Don't put anything other than lighting_overlays in there please
+#define LIGHTING_PLANE 			(13 + FLOAT_PLANE)	// Don't put anything other than lighting_overlays in there please
 	#define LIGHTING_LAYER 				0
 
-#define ABOVE_LIGHTING_PLANE	-1
+#define ABOVE_LIGHTING_PLANE	(14 + FLOAT_PLANE)
 	#define ABOVE_LIGHTING_LAYER		0
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
@@ -205,18 +214,18 @@ What is the naming convention for planes or layers?
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define BASE_PLANE 				0		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define BASE_PLANE 				(15 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	1
+#define MISC_HUD_MARKERS_PLANE	16
 
-#define ANTAG_HUD_PLANE		 	2
+#define ANTAG_HUD_PLANE		 	17
 
-#define STATIC_PLANE 			3		// For AI's static.
+#define STATIC_PLANE 			18		// For AI's static.
 
 	#define STATIC_LAYER				1
 	#define REACTIVATE_CAMERA_LAYER		2
 
-#define FULLSCREEN_PLANE		4		// for fullscreen overlays that do not cover the hud.
+#define FULLSCREEN_PLANE		19		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 		0
 	#define DAMAGE_HUD_LAYER 			1
@@ -225,7 +234,7 @@ What is the naming convention for planes or layers?
 	#define CRIT_LAYER 					4
 	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				5		// For the Head-Up Display
+#define HUD_PLANE 				20		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 			0
 	#define HUD_BASE_LAYER		 		1
@@ -237,7 +246,7 @@ What is the naming convention for planes or layers?
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
 
-#define ABOVE_HUD_PLANE 		6		// For being above the Head-Up Display
+#define ABOVE_HUD_PLANE 		21		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()

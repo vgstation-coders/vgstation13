@@ -329,17 +329,19 @@ var/global/resethearers = 0
 	if(!T)
 		return
 
-	for(var/mob/virtualhearer/VH in hearers(R, T))
-		var/can_hear = 1
-		if(istype(VH.attached, /mob))			//The virtualhearer is attached to a mob.
-			var/mob/M = VH.attached
-			if(M.client)						//The mob has a client.
-				var/client/C = M.client
-				if(C.ObscuredTurfs.len)			//The client is in range of something that is artificially obscuring its view.
-					if(T in C.ObscuredTurfs)	//The source's turf is one that is being artificially obscured.
-						can_hear = 0
-		if(can_hear)
-			. += VH.attached
+	for(var/z0 in GetOpenConnectedZlevels(T))
+		if(abs(z0 - T.z) <= R)
+			for(var/mob/virtualhearer/VH in hearers(R, locate(T.x,T.y,z0)))
+				var/can_hear = 1
+				if(istype(VH.attached, /mob))			//The virtualhearer is attached to a mob.
+					var/mob/M = VH.attached
+					if(M.client)						//The mob has a client.
+						var/client/C = M.client
+						if(C.ObscuredTurfs.len)			//The client is in range of something that is artificially obscuring its view.
+							if(T in C.ObscuredTurfs)	//The source's turf is one that is being artificially obscured.
+								can_hear = 0
+				if(can_hear)
+					. += VH.attached
 
 /**
  * Returns a list of mobs who can hear any of the radios given in @radios.

@@ -542,6 +542,9 @@
 	clothing_flags = CANEXTINGUISH
 	sterility = 30
 
+/obj/item/clothing/suit/proc/vine_protected()
+	return FALSE 
+
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
 //      Meaning the the suit is defined directly after the corresponding helmet. Just like below!

@@ -33,7 +33,7 @@
 				client.images -= I.pathogen
 			for (var/mob/living/L in infected_contact_mobs)
 				client.images -= L.pathogen
-			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+			for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 				client.images -= C.pathogen
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 				client.images -= C.pathogen

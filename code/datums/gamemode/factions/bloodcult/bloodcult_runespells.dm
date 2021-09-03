@@ -560,7 +560,6 @@
 
 /obj/effect/cult_ritual/cult_communication
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_communication"
 	pixel_y = 8
 	alpha = 200
@@ -1745,11 +1744,9 @@ var/list/blind_victims = list()
 
 /obj/effect/cult_ritual/reveal
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_reveal"
 	layer = NARSIE_GLOW
 	plane = ABOVE_LIGHTING_PLANE
-	mouse_opacity = 0
 	flags = PROXMOVE
 	var/mob/living/victim = null
 	var/duration = 2
@@ -2304,12 +2301,10 @@ var/list/blind_victims = list()
 
 /obj/effect/cult_ritual/feet_portal
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_rejoin"
 	pixel_y = -10
 	layer = ABOVE_OBJ_LAYER
 	plane = OBJ_PLANE
-	mouse_opacity = 0
 	flags = PROXMOVE
 	var/mob/living/caster = null
 	var/turf/source = null
@@ -2361,10 +2356,10 @@ var/list/blind_victims = list()
 
 	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_pad")
-	I_crystals.plane = OBJ_PLANE
+	I_crystals.plane = relative_plane_to_plane(OBJ_PLANE,spell_holder.plane)
 	I_crystals.layer = BELOW_TABLE_LAYER
 	var/image/I_stone = image('icons/obj/cult.dmi',"path_entrance")
-	I_stone.plane = ABOVE_TURF_PLANE
+	I_stone.plane = relative_plane_to_plane(ABOVE_TURF_PLANE,spell_holder.plane)
 	I_stone.layer = ABOVE_TILE_LAYER
 	I_stone.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 
@@ -2377,7 +2372,7 @@ var/list/blind_victims = list()
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
 		I = R.make_iconcache(W,null,0)
 		I_network = image(I)
-	I_network.plane = ABOVE_TURF_PLANE
+	I_network.plane = relative_plane_to_plane(ABOVE_TURF_PLANE,spell_holder.plane)
 	I_network.layer = BLOOD_LAYER
 	I_network.transform /= 2
 	I_network.pixel_y = -3
@@ -2483,10 +2478,10 @@ var/list/bloodcult_exitportals = list()
 
 	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
-	I_crystals.plane = OBJ_PLANE
+	I_crystals.plane = relative_plane_to_plane(OBJ_PLANE,spell_holder.plane)
 	I_crystals.layer = BELOW_TABLE_LAYER
 	var/image/I_stone = image('icons/obj/cult.dmi',"path_stone")
-	I_stone.plane = ABOVE_TURF_PLANE
+	I_stone.plane = relative_plane_to_plane(ABOVE_TURF_PLANE,spell_holder.plane)
 	I_stone.layer = ABOVE_TILE_LAYER
 	I_stone.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 
@@ -2499,7 +2494,7 @@ var/list/bloodcult_exitportals = list()
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
 		I = R.make_iconcache(W,null,0)
 		I_network = image(I)
-	I_network.plane = ABOVE_TURF_PLANE
+	I_network.plane = relative_plane_to_plane(ABOVE_TURF_PLANE,spell_holder.plane)
 	I_network.layer = BLOOD_LAYER
 	I_network.transform /= 2
 	I_network.pixel_y = -3
@@ -2824,7 +2819,6 @@ var/list/bloodcult_exitportals = list()
 
 /obj/effect/cult_ritual/resurrect
 	anchored = 1
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_resurrect"
 	layer = SHADOW_LAYER
 	plane = ABOVE_HUMAN_PLANE

@@ -11,6 +11,12 @@
 /datum/dna/gene/basic/nobreath/New()
 	block = NOBREATHBLOCK
 
+/datum/dna/gene/basic/nobreath/activate(var/mob/M)
+	..()
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.toxins_alert = 0 // deactivates the alert potentially set by lungs for breathing toxic gas
+
 /datum/dna/gene/basic/grant_spell/remoteview
 	name = "Remote Viewing"
 	activation_messages = list("Your mind expands.")
@@ -63,18 +69,23 @@
 		user.reset_view(0)
 		return
 
-	for(var/mob/living/target in targets)
+	for(var/T in targets)
+		var/mob/living/target
+		if (isliving(T))
+			target = T
+		if (istype (T, /datum/mind))
+			target = user.can_mind_interact(T)
 		if(target)
 			if(target == user)
-				user.remoteview_target = null
-				user.reset_view(0)
-			else if(!user.can_mind_interact(target))
 				user.remoteview_target = null
 				user.reset_view(0)
 			else
 				user.remoteview_target = target
 				user.reset_view(target)
 			break
+		else// can_mind_interact returned null
+			user.remoteview_target = null
+			user.reset_view(0)
 
 /datum/dna/gene/basic/regenerate
 	name = "Regenerate"
@@ -127,7 +138,7 @@
 	override_base = "genetic"
 	hud_state = "gen_project"
 
-	compatible_mobs = list(/mob/living/carbon/human)
+	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
 
 /spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
@@ -144,8 +155,11 @@
 		return 1
 
 	for(var/T in targets)
-		var/mob/living/carbon/human/target = T
-
+		var/mob/living/target
+		if (isliving(T))
+			target = T
+		if (istype (T, /datum/mind))
+			target = user.can_mind_interact(T)
 		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
 			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
 			return

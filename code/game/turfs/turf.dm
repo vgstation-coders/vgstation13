@@ -86,14 +86,13 @@
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
 
-/turf/New()
+/turf/initialize()
 	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-	for(var/atom/movable/AM as mob|obj in src)
-		spawn( 0 )
-			src.Entered(AM)
+	for(var/atom/movable/AM in src)
+		src.Entered(AM)
 	if(opacity)
 		has_opaque_atom = TRUE
 
@@ -117,6 +116,8 @@
 		for(var/obj/obstacle in src)
 			/*if(ismob(mover) && mover:client)
 				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
+			if(obstacle in target) //If target is a turf and obstacle is a multitile object so that it covers target as well.
+				continue
 			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
 				/*if(ismob(mover) && mover:client)
 					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
@@ -403,6 +404,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/simulated/W = new N(src)
+		if(world.has_round_started())
+			initialize()
 		if(env)
 			W.air = env //Copy the old environment data over if both turfs were simulated
 
@@ -416,7 +419,7 @@
 			SSair.mark_for_update(src)
 
 		W.levelupdate()
-
+		W.post_change() //What to do after changing the turf. Handles stuff like zshadow updates.
 		. = W
 
 	else
@@ -426,7 +429,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
-		W.initialize()
+		if(world.has_round_started())
+			W.initialize()
 
 		if(tell_universe)
 			universe.OnTurfChange(W)
@@ -718,7 +722,7 @@
 
 	var/area/A = loc
 	if(istype(A))
-		return A.has_gravity
+		return A.gravity
 
 	return 1
 

@@ -249,7 +249,7 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/clothing/under/securityskirt/elite,
 	/obj/item/clothing/head/helmet/donutgiver,
 	/obj/item/clothing/accessory/bangerboy,
-	/obj/item/key/security/spare,
+	/obj/structure/ammotree,
 	/obj/item/weapon/ram_kit,
 	/obj/item/device/vampirehead,
 	/obj/item/weapon/storage/lockbox/unlockable/peace,
@@ -1198,6 +1198,7 @@ var/global/list/alcatraz_stuff = list(
 	pixel_x = -16
 	plane = ABOVE_HUMAN_PLANE
 	var/state = AT_SEED
+	var/pity_timer = 0
 
 /obj/structure/ammotree/attackby(obj/item/I, mob/user)
 	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
@@ -1236,9 +1237,12 @@ var/global/list/alcatraz_stuff = list(
 	if(state >= AT_FLOWERING)
 		processing_objects -= src
 		return
-	if(prob(1))
+	if(prob(1) || pity_timer > 99)
 		state++
+		pity_timer = 0
 		update_icon()
+	else
+		pity_timer++
 
 /obj/item/ammofruit
 	name = "ammofruit"
@@ -1393,7 +1397,7 @@ var/global/list/cloudnine_stuff = list(
 /obj/effect/airshield
 	name = "airshield"
 	desc = "A shield that allows only non-gasses to pass through."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "planner"
 	opacity = FALSE
 	mouse_opacity = FALSE

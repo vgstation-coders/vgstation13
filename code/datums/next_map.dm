@@ -130,6 +130,11 @@
 	name = "Synergy Station"
 	path = "Synergy"
 
+/datum/next_map/waystation
+	name = "Waystation"
+	path = "Waystation"
+	max_players = 25
+
 /datum/next_map/xoq
 	name = "noitatS xoq"
 	path = "xoq"

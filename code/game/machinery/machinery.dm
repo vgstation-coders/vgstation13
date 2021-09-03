@@ -230,6 +230,10 @@ Class Procs:
 			qdel(pulse2)
 	..()
 
+/obj/machinery/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_FIRELOSS)
+
 /obj/machinery/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -578,7 +582,7 @@ Class Procs:
 /obj/machinery/proc/emag(mob/user as mob)
 	// Disable emaggability. Note that some machines such as the Communications Computer might be emaggable multiple times.
 	machine_flags &= ~EMAGGABLE
-	new/obj/effect/effect/sparks(get_turf(src))
+	new/obj/effect/sparks(get_turf(src))
 	playsound(loc,"sparks",50,1)
 
 

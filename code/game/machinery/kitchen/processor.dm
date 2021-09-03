@@ -204,6 +204,19 @@
 
 	return add_to(O, user)
 
+/obj/machinery/processor/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is sticking \his head inside the [src] and turning it on! It looks like \he's trying to commit suicide!</span>")
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+		if(head_organ)
+			head_organ.explode()
+		else
+			user.gib()
+	else
+		user.gib()
+	return (SUICIDE_ACT_BRUTELOSS)
+
 /obj/machinery/processor/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(src.processing || is_full())
 		return FALSE

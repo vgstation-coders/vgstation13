@@ -69,7 +69,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/forbid_apc = FALSE //never build an APC here?
 	var/construction_zone = FALSE //treat this area like space for blueprints?
 
-	var/has_gravity = 1
+	var/gravity = 1 // THIS REPLACES HAS_GRAVITY, now should be used as a float instead of a bool, for gravity multipliers in multi-z falling stuff
 
 	var/no_air = null
 //	var/list/lights				// list of all lights on this area
@@ -140,7 +140,7 @@ proc/process_adminbus_teleport_locs()
 			adminbusteleportlocs += AR.name
 			adminbusteleportlocs[AR.name] = AR
 
-	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
+	sortTim(adminbusteleportlocs, /proc/cmp_text_asc)
 
 
 /*-----------------------------------------------------------------------------*/
@@ -176,6 +176,14 @@ proc/process_adminbus_teleport_locs()
 /area/dojo
 	name = "\improper Spider Clan Dojo"
 	icon_state = "dojo"
+	requires_power = 0
+	dynamic_lighting = 0
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
+
+/area/timevoid
+	name = "\improper Void Between Timelines"
+	icon_state = "time_void"
 	requires_power = 0
 	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
@@ -518,7 +526,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "start"
 	requires_power = 0
 	dynamic_lighting = 0
-	has_gravity = 1
+	gravity = 1
 	flags = NO_PERSISTENCE //hmmm I wonder if someone can fuck with this
 
 // === end remove

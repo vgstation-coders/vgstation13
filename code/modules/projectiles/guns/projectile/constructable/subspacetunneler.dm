@@ -39,7 +39,7 @@
 		/obj/machinery/camera,									//AI cameras
 		/obj/machinery/requests_console,						//requests consoles
 		/obj/machinery/door_control,							//door control buttons
-		/obj/structure/closet/fireaxecabinet,					//fire axe cabinets
+		/obj/structure/fireaxecabinet,					//fire axe cabinets
 		/obj/machinery/light_switch,							//light switches
 		/obj/structure/sign,									//area signs
 		/obj/structure/closet/walllocker,						//defib lockers, wall-mounted O2 lockers, etc.

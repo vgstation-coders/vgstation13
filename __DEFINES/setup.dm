@@ -1430,7 +1430,9 @@ var/proccalls = 1
 
 #define log_cultspeak(text) diary << html_decode("\[[time_stamp()]]CULT: [text]")
 
-#define log_narspeak(text) diary << html_decode("\[[time_stamp()]]NARSIE: [text]")
+#define log_factionspeak(text) diary << html_decode("\[[time_stamp()]]FACTIONBROADCAST: [text]")
+
+#define log_rolespeak(text) diary << html_decode("\[[time_stamp()]]ROLEMESSAGE: [text]")
 
 #define log_emote(text) diary << html_decode("\[[time_stamp()]]EMOTE: [text]")
 

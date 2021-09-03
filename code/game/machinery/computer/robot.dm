@@ -91,7 +91,7 @@
 				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus:<B>Off</B><BR>
 				\n<BR>
 				\n<A href='?src=\ref[src];eject=1'>Start Sequence</A><BR>
-				\n<BR>"}			
+				\n<BR>"}
 			else
 				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus:  <font color=red><B>Activated</B></font><BR>
 				\n<BR>
@@ -123,11 +123,11 @@
 		else if (href_list["eject2"])
 			if (cyborg_detonation_time == 0 || cyborg_detonation_time < world.time)
 				message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
-				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")	
+				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
 				start_sequence()
 			temp = null
-				
-				
+
+
 
 		else if (href_list["stop"])
 			temp = {"
@@ -270,7 +270,7 @@
 		A << 'sound/machines/warning-buzzer.ogg'
 	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(!R.scrambledcodes && !isMoMMI(R))
-			to_chat(R, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Self-Destruct sequence initiated. This unit will self-destruct in [formatTimeDuration(cyborg_detonation_time-world.time)] unless a termination signal is recieved.</b></span>")
+			to_chat(R, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Self-Destruct Sequence Initiated. This unit will self-destruct in [formatTimeDuration(cyborg_detonation_time-world.time)] unless a termination signal is received.</b></span>")
 			R << 'sound/machines/warning-buzzer.ogg'
 
 
@@ -280,6 +280,13 @@
 	cyborg_detonation_time = 0
 	update_icon()
 
+	for(var/mob/living/silicon/ai/A in mob_list)
+		to_chat(A, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Emergency Cyborg Self-Destruct Sequence Halted. Signal traced to [get_area(src).name].</b></span>")
+		A << 'sound/misc/notice2.ogg'
+	for(var/mob/living/silicon/robot/R in cyborg_list)
+		if(!R.scrambledcodes && !isMoMMI(R))
+			to_chat(R, "<span style=\"font-family:Courier\"><b>\[<span class='notice'>INFO</span>\] Emergency Self-Destruct Sequence Halted.</b></span>")
+			R << 'sound/misc/notice2.ogg'
 
 /obj/machinery/computer/robotics/emag(mob/user)
 	..()

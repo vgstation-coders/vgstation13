@@ -47,7 +47,7 @@ For vending packs, see vending_packs.dm*/
 			acc_info["card"] = using_debit ? debit_card : usr_id
 			acc_info["check"] = TRUE
 		acc_info["idname"] = usr_id.registered_name
-		acc_info["idrank"] = usr_id.GetJobName()
+		acc_info["idrank"] = usr_id.assignment
 		acc_info["account"] = bank_account
 	else if(isAdminGhost(user))
 		acc_info["idname"] = "Commander Green"

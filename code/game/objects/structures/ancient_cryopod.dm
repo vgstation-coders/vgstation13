@@ -64,7 +64,7 @@
 		playsound(src, 'sound/machines/pressurehiss.ogg', 30, 1)
 		icon_state = "ancientpod_used"
 		desc = "An ancient looking cryogenic stasis pod. Its lights are off and its occupant is nowhere to be found."
-		new /obj/effect/effect/smoke(get_turf(src))
+		new /obj/effect/smoke(get_turf(src))
 		var/mob/living/carbon/human/S = new(get_turf(src))
 		var/roll = pick(possible_roles)
 		role = new roll

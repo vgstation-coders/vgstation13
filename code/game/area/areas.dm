@@ -39,7 +39,7 @@ var/area/space_area
 		//ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
 		ambient_sounds = list()
 		//lighting_state = 4
-		//has_gravity = 0    // Space has gravity.  Because.. because.
+		//gravity = 0    // Space has gravity.  Because.. because.
 
 	if(!requires_power)
 		power_light = 1
@@ -465,7 +465,7 @@ var/area/space_area
 /area/proc/gravitychange(var/gravitystate = 0, var/area/A)
 
 
-	A.has_gravity = gravitystate
+	A.gravity = gravitystate
 
 	if(gravitystate)
 		for(var/mob/living/carbon/human/H in A)

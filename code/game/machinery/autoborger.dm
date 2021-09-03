@@ -52,14 +52,14 @@
 		var/mob/living/carbon/human/H = AM
 		if((transform_standing || H.lying) && move_dir == EAST)// || move_dir == WEST)
 			AM.forceMove(src.loc)
-			do_transform(AM)
+			do_borging(AM)
 	//Shit bugs out if theres too many items on the enter side conveyer
 	else if(istype(AM, /obj/item))
 		var/move_dir = get_dir(loc, AM.loc)
 		if(move_dir == EAST)
 			AM.forceMove(src.loc)
 
-/obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H)
+/obj/machinery/autoborger/proc/do_borging(var/mob/living/carbon/human/H)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 	if(cooldown_state)
@@ -76,7 +76,7 @@
 	// Sleep for a couple of ticks to allow the human to see the pain
 	sleep(5)
 
-	var/mob/living/silicon/robot/R = H.Robotize(1, skipnaming=TRUE, malfAI=belongstomalf)
+	var/mob/living/silicon/robot/R = do_transform(H, 1, skipnaming=TRUE, malfAI=belongstomalf)
 	if(!R) // The borging failed, due to job ban, player age, or something similar
 		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		if (belongstomalf)
@@ -128,6 +128,9 @@
 	cooldown_time = world.time + cooldown_duration
 	cooldown_state = 1
 	update_icon()
+
+/obj/machinery/autoborger/proc/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
+	return H.Robotize(deleteItems,skipnaming,malfAI)
 
 /obj/machinery/autoborger/process()
 	..()
@@ -214,3 +217,10 @@
 				force_borg_module = sel_mod
 	interact(usr)
 	return 1
+
+/obj/machinery/autoborger/mommi
+	name = "Autimatic Crab Factory 5000"
+	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, silent crab comes out'. Human must be lying down and alive. Has to cooldown between each use."
+	
+/obj/machinery/autoborger/mommi/do_transform(var/mob/living/carbon/human/H, var/deleteItems=FALSE, var/skipnaming=FALSE, var/malfAI=null)
+	return H.MoMMIfy(deleteItems,skipnaming,malfAI)

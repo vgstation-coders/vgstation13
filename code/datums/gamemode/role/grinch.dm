@@ -1,12 +1,14 @@
 /datum/role/grinch
-    name = GRINCH
-    id = GRINCH
-    required_pref = GRINCH
-    logo_state = "synd-logo"
-    disallow_job = TRUE
+	name = GRINCH
+	id = GRINCH
+	required_pref = GRINCH
+	logo_state = "synd-logo"
+	disallow_job = TRUE
+	default_admin_voice = "Santa Claus"
+	admin_voice_style = "danger"
 
-    // -- Our bag
-    var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null
+	// -- Our bag
+	var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null
 
 // -- Transforms us into the devlish Grinch
 /datum/role/grinch/OnPostSetup(var/laterole = FALSE)

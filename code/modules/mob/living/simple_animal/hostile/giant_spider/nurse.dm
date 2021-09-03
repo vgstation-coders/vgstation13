@@ -153,7 +153,7 @@
 	stop_automated_movement = 1
 	if(do_after(src,cocoon_target, 50))
 		var/obj/effect/spider/cocoon/C = new(cocoon_target.loc)
-		var/large_cocoon = 0
+		var/suffix = ""
 		C.pixel_x = cocoon_target.pixel_x
 		C.pixel_y = cocoon_target.pixel_y
 		for(var/mob/living/M in C.loc)
@@ -163,7 +163,7 @@
 				M.unlock_atom(AM)
 			if (M.locked_to)
 				M.locked_to.unlock_atom(M)
-			large_cocoon = 1
+			suffix = "_mob"
 			if(M.getCloneLoss() < (1.25*M.maxHealth))
 				fed++
 				visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
@@ -176,13 +176,13 @@
 		for(var/obj/structure/S in C.loc)
 			if(!S.anchored)
 				S.forceMove(C)
-				large_cocoon = 1
+				suffix = "_large"
 		for(var/obj/machinery/M in C.loc)
 			if(!M.anchored)
 				M.forceMove(C)
-				large_cocoon = 1
-		if(large_cocoon)
-			C.icon_state = pick("cocoon_large1","cocoon_large2","cocoon_large3")
+				suffix = "_large"
+		if(suffix)
+			C.icon_state = pick("cocoon[suffix]1","cocoon[suffix]2","cocoon[suffix]3")
 			C.health = initial(C.health)*2
 	stop_automated_movement = 0
 

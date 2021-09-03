@@ -125,6 +125,28 @@
 		if(HIDES_IDENTITY_DEFAULT)
 			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
+// Generalising these for all items
+/obj/item/suicide_act(var/mob/living/user)
+	if (is_sharp())
+		if(w_class >= W_CLASS_MEDIUM)
+			to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
+							"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
+		else
+			to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+		if(sharpness_flags & HOT_EDGE)
+			return(SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_BRUTELOSS)
+		else
+			return SUICIDE_ACT_BRUTELOSS
+	else if (is_hot())
+		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+		user.IgniteMob()
+		return SUICIDE_ACT_FIRELOSS
+	else if (force >= 10)
+		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+
 /obj/item/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -167,16 +189,6 @@
 
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
-
-//user: The mob that is suiciding
-//damagetype: The type of damage the item will inflict on the user
-//SUICIDE_ACT_BRUTELOSS = 1
-//SUICIDE_ACT_FIRELOSS = 2
-//SUICIDE_ACT_TOXLOSS = 4
-//SUICIDE_ACT_OXYLOSS = 8
-//Output a creative message and then return the damagetype done
-/obj/item/proc/suicide_act(mob/user)
-	return
 
 /proc/wclass2text(w_class)
 	switch(w_class)
@@ -1151,7 +1163,9 @@ var/global/list/image/blood_overlays = list()
 	I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
 	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 
-	blood_overlays[type] = image(I)
+	var/image/img = image(I)
+	img.name = "blood_overlay"
+	blood_overlays[type] = img
 
 /obj/item/apply_luminol()
 	if(!..())

@@ -519,6 +519,44 @@
 
 //////////////////////////////////////////////
 //                                          //
+//               TIME AGENT                 //
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent
+	name = "time agent anomaly"
+	role_category = /datum/role/time_agent
+	required_candidates = 1
+	weight = 4
+	cost = 10
+	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
+	logo = "time-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if (antag_count < max_traitors)
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
+	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
+	if (!agency)
+		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	agency.HandleRecruitedRole(newagent)
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if(required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+
+//////////////////////////////////////////////
+//                                          //
 //               THE GRINCH (holidays)      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
@@ -814,3 +852,21 @@
 		return FALSE
 	return TRUE
 
+//////////////////////////////////////////////
+//                                          //
+//         JUDGE                            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/judge
+	name = "Judge"
+	role_category = /datum/role/judge
+	my_fac = /datum/faction/justice
+	required_pop = list(101,101,101,101,101,101,101,101,101,101)
+	required_candidates = 1
+	max_candidates = 5
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(10,10,10,10,10,10,10,10,10,10)
+	logo = "gun-logo"
+	repeatable = TRUE

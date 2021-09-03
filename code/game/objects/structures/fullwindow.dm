@@ -116,6 +116,7 @@
 	d_state = WINDOWSECURE
 	reinforced = 1
 	disperse_coeff = 0.8
+	dmg_threshold = 5
 
 /obj/structure/window/full/reinforced/loose
 	anchored = 0
@@ -132,6 +133,7 @@
 	health = 120
 	penetration_dampening = 5
 	disperse_coeff = 0.75
+	dmg_threshold = 10
 
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
@@ -151,6 +153,7 @@
 	health = 160
 	penetration_dampening = 7
 	disperse_coeff = 0.6
+	dmg_threshold = 15
 
 /obj/structure/window/full/reinforced/plasma/loose
 	anchored = 0

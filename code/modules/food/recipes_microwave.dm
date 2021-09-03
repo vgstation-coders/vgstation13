@@ -386,6 +386,10 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
 
+/datum/recipe/pancake
+	reagents = list(PANCAKE = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pancake
+
 /datum/recipe/sugarcookie
 	reagents = list(FLOUR = 5, SUGAR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
@@ -1233,7 +1237,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
 
 /datum/recipe/avocadosoup
-	reagents = list(WATER = 5, LIMEJUICE = 5, CREAM = 10)
+	reagents = list(LIMEJUICE = 5, CREAM = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
