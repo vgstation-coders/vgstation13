@@ -33,6 +33,29 @@
 	var/list/cant_scan = list()
 	var/matter = 0
 
+/obj/item/device/material_synth/preloaded
+	matter = MAX_MATSYNTH_MATTER
+
+/obj/item/device/material_synth/preloaded/admin
+	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
+							 "glass" = /obj/item/stack/sheet/glass/glass,
+							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
+							 "plasteel" = /obj/item/stack/sheet/plasteel,
+							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
+							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
+							 "silver" = /obj/item/stack/sheet/mineral/silver,
+							 "gold" = /obj/item/stack/sheet/mineral/gold,
+							 "diamond" = /obj/item/stack/sheet/mineral/diamond,
+							 "plasma" = /obj/item/stack/sheet/mineral/plasma,
+							 "uranium" = /obj/item/stack/sheet/mineral/uranium,
+							 "plastic" = /obj/item/stack/sheet/mineral/plastic,
+							 "mythril" = /obj/item/stack/sheet/mineral/mythril,
+							 "bananium" = /obj/item/stack/sheet/mineral/clown,
+							 "phazon" = /obj/item/stack/sheet/mineral/phazon,
+							 "telecrystal" = /obj/item/stack/sheet/mineral/telecrystal,
+							 "sandstone" = /obj/item/stack/sheet/mineral/sandstone,
+							 "bricks" = /obj/item/stack/sheet/mineral/brick)
+
 /obj/item/device/material_synth/robot/engiborg //Cyborg version, has less materials but can make rods n shit as well as scan.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
 							 "glass" = /obj/item/stack/sheet/glass/glass,
@@ -161,6 +184,21 @@
 
 	return 1
 
+/obj/item/device/material_synth/preloaded/admin/create_material(mob/user, var/material)
+	var/obj/item/stack/sheet/material_type = material
+
+	if (material_type)
+		var/tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize?", "Material Synthesizer") as num
+
+		if (tospawn >= 1)
+			var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))
+			spawned_sheet.amount = tospawn
+	else
+		to_chat(user, "<span class='warning'>You must select a sheet type first!</span>")
+		return
+
+	return 1
+
 /obj/item/device/material_synth/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return 0 // not adjacent
@@ -194,27 +232,36 @@
 			playsound(src, 'sound/machines/click.ogg', 20, 1)
 			RA.use(1)
 			to_chat(user, "<span class='notice'>The material synthetizer now holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.</span>")
-	if(istype(O, /obj/item/weapon/card/emag))
-		if(!emagged)
-			emagged = 1
-			var/matter_rng = rand(5, 25)
-			if(matter >= matter_rng)
-				var/obj/item/device/spawn_item = pick(existing_typesof(/obj/item/device)) //we make any kind of device. It's a surprise!
-				user.visible_message("<span class='warning'>\The [src] in [user]'s hands appears to be trying to synthesize... \a [initial(spawn_item.name)]?</span>", \
-									 "<span class='warning'>\The [src] pops and fizzles in your hands, before creating... \a [initial(spawn_item.name)]?</span>", \
-									 "<span class='warning'>You hear a loud popping noise.</span>")
-				sleep(10)
-				new spawn_item(get_turf(src))
-				matter -= matter_rng
-				return 1
-			else
-				to_chat(user, "<span class='danger'>The lack of matter in \the [src] shorts out the device!</span>")
-				explosion(src.loc, 0, 0, 1, 2) //traitors - fuck them, am I right?
-				qdel(src)
-		else
-			to_chat(user, "<span class='warning'>You don't think you can do that again.</span>")
-			return
 	return ..()
+
+/obj/item/device/material_synth/emag_act(mob/user)
+	if(!emagged)
+		emagged = 1
+		var/matter_rng = rand(5, 25)
+		if(matter >= matter_rng)
+			var/obj/item/device/spawn_item = pick(existing_typesof(/obj/item/device)) //we make any kind of device. It's a surprise!
+			user.visible_message("<span class='warning'>\The [src] pops and fizzles, before creating... \a [initial(spawn_item.name)]?</span>", \
+									"<span class='warning'>\The [src] pops and fizzles, before creating... \a [initial(spawn_item.name)]?</span>", \
+									"<span class='warning'>You hear a loud popping noise.</span>")
+			sleep(10)
+			new spawn_item(get_turf(src))
+			matter -= matter_rng
+			return 1
+		else
+			visible_message("<span class='danger'>The lack of matter in \the [src] shorts out the device!</span>")
+			explosion(src.loc, 0, 0, 1, 2) //traitors - fuck them, am I right?
+			qdel(src)
+	else
+		to_chat(user, "<span class='warning'>You don't think you can do that again.</span>")
+
+/obj/item/device/material_synth/preloaded/admin/emag_act(mob/user)
+	var/obj/item/device/spawn_item = pick(existing_typesof(/obj/item/device)) //we make any kind of device. It's a surprise!
+	user.visible_message("<span class='warning'>\The [src] pops and fizzles, before creating... \a [initial(spawn_item.name)]?</span>", \
+							"<span class='warning'>\The [src] pops and fizzles, before creating... \a [initial(spawn_item.name)]?</span>", \
+							"<span class='warning'>You hear a loud popping noise.</span>")
+	sleep(10)
+	new spawn_item(get_turf(src))
+	return 1
 
 /obj/item/device/material_synth/attack_self(mob/user)
 	if(materials_scanned.len)
