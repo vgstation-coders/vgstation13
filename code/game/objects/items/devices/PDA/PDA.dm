@@ -228,12 +228,16 @@ var/global/msg_id = 0
 		cartridge.initialize()
 
 /obj/item/device/pda/update_icon()
+	underlays.Cut()
+	underlays = list()
 	if (cartridge && cartridge.access_camera)
-		var/image/cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam")
+		var/image/cam_under
+		if(scanmode == SCANMODE_CAMERA)
+			cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam2")
+		else
+			cam_under = image("icon" = "icons/obj/pda.mi", "icon_state" = "cart-gbcam")
 		cam_under.pixel_y = 8
 		underlays += cam_under
-	else
-		underlays.Cut()
 
 /obj/item/device/pda/ert
 	name = "ERT PDA"
@@ -1570,12 +1574,12 @@ var/global/msg_id = 0
 						dat += {"<br>nanocoins: [app.total_coins]"}
 
 			if(1998) //Viewing photos
-				dat = "<h4>View Photos</h4>"
+				dat += {"<h4>View Photos</h4>"}
 				if(!cartridge || !istype(cartridge,/obj/item/weapon/cartridge/camera))
-					dat += "No camera found!"
+					dat += {"No camera found!"}
 				var/obj/item/weapon/cartridge/camera/CM = cartridge
 				if(!CM.stored_photos.len)
-					dat += "None found."
+					dat += {"None found."}
 				else
 					var/i = 0
 					for(var/obj/item/weapon/photo/PH in CM.stored_photos)
