@@ -1591,7 +1591,7 @@ var/global/msg_id = 0
 							if(7)
 								displaylength = 448
 
-						dat += "<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
+						dat += "<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><hr>"
 						i++
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
 				dat += cart
@@ -1634,11 +1634,11 @@ var/global/msg_id = 0
 //BASIC FUNCTIONS===================================
 		if("Refresh")//Refresh, goes to the end of the proc.
 		if("Return")//Return
-			if((mode<=9) || (locate(mode) in pda_app_menus))
+			if((mode<=9) || (mode==1998) || (locate(mode) in pda_app_menus))
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
-				if(mode==4 || mode==19)//Fix for cartridges. Redirects to hub.
+				if(mode==4)//Fix for cartridges. Redirects to hub.
 					mode = 0
 				else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
 					cartridge.mode = mode
@@ -2473,7 +2473,7 @@ var/global/msg_id = 0
 		
 		if(photo)
 			current_photo = photo
-			
+
 		if(cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
 			var/obj/item/weapon/cartridge/camera/CM = cartridge
 			if(CM.stored_photos.len)
