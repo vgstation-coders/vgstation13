@@ -927,16 +927,6 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = FULL_TORSO|IGNORE_INV
 	actions_types = list(/datum/action/item_action/toggle_bomber_vest)
 	var/active = 0
-	//That's right, we're using events for this vest to avoid hardcoding it everywhere
-	var/event_key_touched
-	var/event_key_bumping
-	var/event_key_bumped
-
-/obj/item/clothing/suit/bomber_vest/Destroy()
-	..()
-	event_key_touched = null
-	event_key_bumping = null
-	event_key_bumped = null
 
 /obj/item/clothing/suit/bomber_vest/proc/activate_vest()
 	var/mob/living/carbon/human/H = loc
@@ -947,18 +937,39 @@ obj/item/clothing/suit/cassock
 	if(!(H.wear_suit == src))
 		return
 	active = 1
-	event_key_touched = H.on_touched.Add(src, "detonate")
-	event_key_bumping = H.on_bumping.Add(src, "detonate")
-	event_key_bumped = H.on_bumped.Add(src, "detonate")
+	H.lazy_register_event(/lazy_event/on_touched, src, .proc/on_touched)
+	H.lazy_register_event(/lazy_event/on_hitby, src, .proc/on_hitby)
+	H.lazy_register_event(/lazy_event/on_attacked_by, src, .proc/on_attacked_by)
+	H.lazy_register_event(/lazy_event/on_unarmed_attack, src, .proc/on_unarmed_attack)
+	H.lazy_register_event(/lazy_event/on_to_bump, src, .proc/on_to_bump)
+	H.lazy_register_event(/lazy_event/on_bumped, src, .proc/on_bumped)
 	canremove = 0
+
+/obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
+	if(toucher == touched) //No bombing ourselves by checking ourselves
+		return
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/victim, obj/item/item)
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by()
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack()
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_to_bump()
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_bumped()
+	detonate()
 
 /obj/item/clothing/suit/bomber_vest/proc/deactivate_vest()
 	active = 0
 	var/mob/living/carbon/human/H = loc
 	if(H)
-		H.on_touched.Remove(event_key_touched)
-		H.on_bumping.Remove(event_key_bumping)
-		H.on_bumped.Remove(event_key_bumped)
+		H.lazy_unregister_event(/lazy_event/on_touched, src, .proc/on_touched)
+		H.lazy_unregister_event(/lazy_event/on_hitby, src, .proc/on_hitby)
+		H.lazy_unregister_event(/lazy_event/on_unarmed_attack, src, .proc/on_attacked_by)
+		H.lazy_unregister_event(/lazy_event/on_unarmed_attack, src, .proc/on_unarmed_attack)
+		H.lazy_unregister_event(/lazy_event/on_to_bump, src, .proc/on_to_bump)
+		H.lazy_unregister_event(/lazy_event/on_bumped, src, .proc/on_bumped)
 
 /obj/item/clothing/suit/bomber_vest/examine(mob/user)
 	..()
@@ -968,7 +979,7 @@ obj/item/clothing/suit/cassock
 /obj/item/clothing/suit/bomber_vest/suicide_act(var/mob/living/user)
 	if (!active) //no explosion with no active vest, dummy
 		return
-	
+
 	var/message_say = user.handle_suicide_bomb_cause()
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)

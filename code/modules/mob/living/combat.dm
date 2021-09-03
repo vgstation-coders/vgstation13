@@ -130,7 +130,8 @@
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
 
-	INVOKE_EVENT(on_touched, list("user" = target, "unarmed attacked by" = src))
+	lazy_invoke_event(/lazy_event/on_unarmed_attack, list("attacker" = target, "attacked" = src))
+
 	add_logs(src, target, "attacked ([damage_done]dmg)", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 	return damage_done
 

@@ -1,57 +1,3 @@
-/**
- * /vg/ Events System
- *
- * Intended to replace the hook system.
- * Eventually. :V
- */
-
-// Buggy bullshit requires shitty workarounds
-/proc/INVOKE_EVENT(event/event,args)
-	if(istype(event))
-		. = event.Invoke(args)
-
-/**
- * Event dispatcher
- */
-/event
-	var/list/handlers=list() // List of [\ref, Function]
-	var/atom/holder
-
-/event/New(loc, owner)
-	..()
-	holder = owner
-
-/event/Destroy()
-	holder = null
-	handlers = null
-	..()
-
-/event/proc/Add(var/objectRef,var/procName)
-	var/key="\ref[objectRef]:[procName]"
-	handlers[key]=list(EVENT_OBJECT_INDEX=objectRef,EVENT_PROC_INDEX=procName)
-	return key
-
-/event/proc/Remove(var/key)
-	return handlers.Remove(key)
-
-/event/proc/Invoke(var/list/args)
-	if(handlers.len==0)
-		return
-	for(var/key in handlers)
-		var/list/handler=handlers[key]
-		if(!handler)
-			continue
-
-		var/objRef = handler[EVENT_OBJECT_INDEX]
-		var/procName = handler[EVENT_PROC_INDEX]
-
-		if(objRef == null)
-			handlers.Remove(handler)
-			continue
-		args["event"] = src
-		if(call(objRef,procName)(args, holder)) //An intercept value so whatever code section knows we mean business
-			. = 1
-
 #define EVENT_HANDLER_OBJREF_INDEX 1
 #define EVENT_HANDLER_PROCNAME_INDEX 2
 
@@ -168,7 +114,7 @@
 /lazy_event/on_attackhand
 
 // Called whenever an atom bumps into another.
-// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
+// Currently only used by xenoarch artifacts and humans, should probably be moved to the base proc.
 // Arguments:
 // mob/user: the guy who is bumping.
 // atom/target: the atom that's being bumped into.
@@ -190,20 +136,53 @@
 // atom/item: the item
 /lazy_event/on_unequipped
 
-//Called when movable moves into a new turf
+// Called when movable moves into a new turf
 // Arguments:
 // atom/movable/mover: thing that moved
 // location: turf it entered
 // oldloc: atom it exited
 /lazy_event/on_entered
 
-//Called when movable moves from a turf
+// Called when movable moves from a turf
 // Arguments:
 // atom/movable/mover: thing that moved
 // location: turf it exited
 // newloc: atom it is entering
 /lazy_event/on_exited
 
+// Called by attack_hand
+// Arguments:
+// mob/toucher: the mob doing the touching
+// atom/touched: the thing being touched
+/lazy_event/on_touched
+
+// Called by to_bump
+// Currently only implemented for humans.
+// Arguments:
+// atom/movable/user: the thing that's bumping
+// atom/bumped: the thing that's being bumped
+/lazy_event/on_to_bump
+
+// Called by hitby
+// Currently only implemented for humans.
+// Arguments:
+// mob/victim: the mob being hit
+// obj/item/item: the item that's hitting the victim
+/lazy_event/on_hitby
+
+// Called by attacked_by
+// Arguments:
+// mob/attacker: the mob doing the attack
+// mob/attacked: the victim of the attack
+// mob/item: the item being used to attack with
+/lazy_event/on_attacked_by
+
+// Called by unarmed_attack_mob
+// Probably should be merged with /lazy_event/on_uattack.
+// Arguments:
+// mob/attacker: the mob doing the attack
+// mob/attacked: the victim of the attack
+/lazy_event/on_unarmed_attack
 
 /datum
 	/// Associative list of type path -> list(),

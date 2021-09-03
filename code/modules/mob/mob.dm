@@ -27,12 +27,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_bumping)
-		on_bumping.holder = null
-	if(on_bumped)
-		on_bumped.holder = null
-	if(on_touched)
-		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -66,13 +60,6 @@
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_bumping)
-	qdel(on_bumped)
-	qdel(on_touched)
-
-	on_bumping = null
-	on_bumped = null
-	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -248,9 +235,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_bumping = new(owner = src)
-	on_bumped = new(owner = src)
-	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
