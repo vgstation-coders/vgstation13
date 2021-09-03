@@ -2722,6 +2722,7 @@ obj/item/device/pda/AltClick()
 		if(!CM.cart_cam)
 			return
 		CM.cart_cam.captureimage(A, user, proximity_flag)
+		to_chat(user, "<span class='notice'>New photo added to camera.</span>")
 		playsound(loc, "polaroid", 75, 1, -3)
 
 	else if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
