@@ -31,6 +31,7 @@ var/light_power_multiplier = 5
 /atom/movable/light/proc/cast_light_init()
 	temp_appearance = list()
 	affecting_turfs = list()
+	affected_shadow_walls = list()
 	luminosity = 2*light_range
 
 	//cap light range to the max
@@ -54,6 +55,9 @@ var/light_power_multiplier = 5
 	for(var/turf/T in view(2*light_range, src))
 		T.lumcount = -1
 		affecting_turfs += T
+
+	for(var/turf/T in view(round(0.80*light_range), src))
+		affected_shadow_walls += T
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
@@ -291,38 +295,46 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
 
+var/changed_dir_once = 0
+
+/turf/proc/get_attack_dir(var/atom/movable/light/light_source)
+	var/targ_dir = get_dir(src, light_source)
+	message_admins("targ_dir starts as [targ_dir]")
+	// CHECK: may not actually smoothout that well.
+	var/turf/turf_light_angle = get_step(src, targ_dir)
+	if (light_source.CheckOcclusion(turf_light_angle) || !(turf_light_angle in light_source.affecting_turfs))
+		for (var/dir in alldirs)
+			var/turf/new_source = get_step(src, dir)
+			if (!(light_source.CheckOcclusion(new_source)) && (new_source in light_source.affecting_turfs))
+				message_admins("targ_dir went from [targ_dir] to [dir]")
+				targ_dir = dir
+				break
+
 /atom/movable/light/proc/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	var/targ_dir = get_dir(target_turf, src)
-	// CHECK: may not actually smoothout that well.
-	if (!(target_turf in view(src)))
-		targ_dir = turn(targ_dir, 180)
+	// The angle from which the light comes from: must be a floor tile (photons do not propagate within walls)
+	var/turf/turf_light_angle = get_step(target_turf, targ_dir)
+	if (CHECK_OCCLUSION(turf_light_angle) || !(turf_light_angle in affecting_turfs))
+		for (var/dir in alldirs)
+			var/turf/new_source = get_step(target_turf, dir)
+			if (!CHECK_OCCLUSION(new_source) && (new_source in affecting_turfs))
+				changed_dir_once = "targ_dir went from [targ_dir] to [dir]"
+				targ_dir = dir
+				break
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
 		var/turf/T = get_step(target_turf, d)
-		if(CHECK_OCCLUSION(T))
+		if(CHECK_OCCLUSION(T) && (T in affected_shadow_walls))
 			blocking_dirs |= d
 
-	var/num_dir = num2text(targ_dir)
-
 	// The "edge" of the light, with images consisting of directional sprites from wall_lighting.dmi "pushed" in the correct direction.
-	var/image/I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+	var/image/I = image('icons/lighting/wall_lighting_big.dmi', loc = get_turf(src))
 	I.icon_state = "[blocking_dirs]-[targ_dir]"
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
 	I.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
 	temp_appearance += I
-
-	// Lazy list inits
-	if (!target_turf.shadow_atom)
-		target_turf.shadow_atom = list()
-		target_turf.shadow_atom_dirs = list()
-	if (!(num_dir in target_turf.shadow_atom))
-		target_turf.shadow_atom += num_dir
-		target_turf.shadow_atom_dirs += num_dir
-
-	target_turf.shadow_atom[num_dir] = "\ref[src]"
-	target_turf.shadow_atom_dirs[num_dir] = list(targ_dir, blocking_dirs)
 
 /atom/movable/light/proc/update_appearance()
 	overlays = temp_appearance
@@ -340,7 +352,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	var/y_offset = target_turf.y - y
 	cast_main_shadow(target_turf, x_offset, y_offset)
 
-	if (is_valid_turf(target_turf, text2num(get_dir(src, target_turf))))
+	if ((target_turf in affected_shadow_walls) && is_valid_turf(target_turf))
 		cast_turf_shadow(target_turf, x_offset, y_offset)
 
 /atom/movable/light/proc/update_light_dir()
@@ -354,13 +366,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 // -- This is the UGLY part.
 
-/atom/movable/light/proc/is_valid_turf(var/turf/target_turf, var/targ_dir)
+/atom/movable/light/proc/is_valid_turf(var/turf/target_turf)
 	return FALSE
 
-/atom/movable/light/shadow/is_valid_turf(var/turf/target_turf, var/targ_dir)
-	for (var/dir in target_turf.shadow_atom)
-		if (dir == targ_dir)
-			return (target_turf.shadow_atom[dir] == "0")
+/atom/movable/light/shadow/is_valid_turf(var/turf/target_turf)
 	return TRUE
 
 // -- "moody lights", small glow overlays for APCs, etc
