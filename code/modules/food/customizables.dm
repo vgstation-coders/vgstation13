@@ -97,6 +97,7 @@
 	clean = TRUE
 
 /obj/item/trash/plate/clean/stack
+	name = "plates"
 	new_stack = 9 // 10 plates total
 
 /obj/item/trash/plate/New(turf/loc)
