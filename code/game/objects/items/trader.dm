@@ -1381,9 +1381,12 @@ var/global/list/cloudnine_stuff = list(
 	icon_state = "airprojector"
 	var/list/projected = list()
 	var/max_proj = 6
+	var/list/ignore_types = list(/obj/structure/table, /obj/structure/rack, /obj/item/weapon/storage)
 
 /obj/item/airshield_projector/preattack(atom/target, mob/user , proximity)
 	var/turf/to_shield = get_turf(target)
+	if(is_type_in_list(target, ignore_types) && Adjacent(to_shield))
+		return TRUE
 	if(projected.len < max_proj && istype(to_shield) && (!locate(/obj/effect/airshield) in to_shield))
 		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
 		var/obj/effect/airshield/A = new(to_shield)
