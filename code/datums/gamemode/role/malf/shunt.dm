@@ -35,7 +35,6 @@
 /mob/living/silicon/shuntedAI/proc/return_to_core()
 	if(!core)
 		return
-	var/atom/A = loc
 	mind.transfer_to(core)
 	core.update_perception()
 	core.shuntedAI = null
@@ -46,11 +45,17 @@
 /mob/living/silicon/shuntedAI/Login()
 	..()
 	DisplayUI("Shunted Malf")
-	client.CAN_MOVE_DIAGONALLY = TRUE
+	if(client)
+		client.CAN_MOVE_DIAGONALLY = TRUE
+		client.show_popup_menus = FALSE
 	var/datum/role/malfAI/M = mind.GetRole(MALF)
 	if(M)
 		M.regenerate_hack_overlays()
 	
+/mob/living/silicon/shuntedAI/Logout()
+	..()
+	if(client)
+		client.show_popup_menus = TRUE
 
 /mob/living/silicon/shuntedAI/movement_delay()
 	if(speeding)

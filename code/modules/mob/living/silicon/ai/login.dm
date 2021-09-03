@@ -19,16 +19,6 @@
 			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 		stored_freqs = 1
 	client.CAN_MOVE_DIAGONALLY = TRUE
-	
-	to_chat(world, "BEGIN")
-	if(mind)
-		to_chat(world, mind)
-	var/datum/role/malfAI/M = mind.GetRole(MALF)
-	if(M)
-		to_chat(world, "BING PING")
-		M.regenerate_hack_overlays()
-	else 
-		to_chat(world, "FUG")
 
 
 /mob/living/silicon/ai/proc/show_intro_text()
@@ -37,6 +27,4 @@
 	to_chat(src, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
 	to_chat(src, "To use something, simply click on it.")
 	to_chat(src, {"Use say ":b to speak to your cyborgs through binary."})
-	show_laws()
-	if(ismalf(src))
-		to_chat(src, "<b>These laws may be changed by other players, but you are not required to follow any of them.</b>")
+	

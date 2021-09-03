@@ -36,7 +36,7 @@
 
 /obj/abstract/mind_ui_element/hoverable/return_to_core/Click()
 	var/mob/living/silicon/shuntedAI/S = GetUser()
-	if(!istype(S))
+	if(!istype(S) || color == grayscale)
 		return
 	var/atom/A = S.loc
 	new /obj/effect/malf_jaunt(get_turf(S), S, get_turf(S.core), TRUE)
@@ -50,8 +50,11 @@
 	if(icon_state == "[base_icon_state]-hover")
 		return
 	if (A.core && !(A.core.stat & DEAD))
-		color = null
-		icon_state = "malf_unshunt"
+		if(istype(A.loc, /obj/machinery/power/apc))
+			color = null
+			icon_state = "malf_unshunt"
+		else
+			color = grayscale
 	else
 		color = null
 		icon_state = "malf_unshunt_blocked"

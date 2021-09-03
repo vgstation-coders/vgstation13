@@ -26,6 +26,7 @@
 		malfAI.laws_sanity_check()
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()
+		malfAI.show_laws()
 		malfAI.DisplayUI("Malf")
 
 		var/list/abilities = subtypesof(/datum/malfhack_ability)
@@ -71,7 +72,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 /datum/role/malfAI/proc/update_radial_locks()
 	var/list/open_radials = antag.current.client.radial_menus
 	for(var/datum/radial_menu/menu in open_radials)
-		for(var/obj/screen/radial/slice/S in menu.elements)
+		for(var/obj/abstract/screen/radial/slice/S in menu.elements)
 			if(!istype(S))
 				continue
 			var/datum/malfhack_ability/M = ability_name_to_datum[S.name]

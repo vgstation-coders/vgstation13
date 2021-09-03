@@ -12,7 +12,7 @@
 /datum/malfhack_ability/New(var/obj/machinery/M)
 	machine = M
 
-/datum/malfhack_ability/proc/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/proc/activate(var/mob/living/silicon/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return FALSE
@@ -21,7 +21,7 @@
 		return TRUE
 	return FALSE
 
-/datum/malfhack_ability/proc/check_cost(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/proc/check_cost(var/mob/living/silicon/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return FALSE
@@ -29,7 +29,7 @@
 		return TRUE
 	return FALSE
 
-/datum/malfhack_ability/proc/check_available(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/proc/check_available(var/mob/living/silicon/A)
 	//include some check for an ability
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
@@ -37,14 +37,14 @@
 	return TRUE
 
 
-/datum/malfhack_ability/oneuse/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/oneuse/activate(var/mob/living/silicon/A)
 	if(!..())
 		return FALSE
 	machine.hack_abilities -= src
 	return TRUE
 
 
-/datum/malfhack_ability/toggle/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/toggle/activate(var/mob/living/silicon/A)
 	if(!..())
 		return FALSE
 	toggled = !toggled
@@ -59,7 +59,7 @@
 	icon = "radial_off"
 	icon_toggled = "radial_on"
 
-/datum/malfhack_ability/toggle/disable/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/toggle/disable/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
 	toggled ? (machine.stat |= FORCEDISABLE) : (machine.stat &= ~FORCEDISABLE)
@@ -75,7 +75,7 @@
 	icon = "radial_lock"
 	icon_toggled = "radial_unlock_alt"
 
-/datum/malfhack_ability/toggle/apclock/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/toggle/apclock/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
 	var/obj/machinery/power/apc/P = machine
@@ -90,7 +90,7 @@
 	desc = "Upload your software to this APC and leave your core. You can return to your core as long as it is still intact."
 	icon = "radial_shunt"
 
-/datum/malfhack_ability/shunt/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/shunt/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
 	var/obj/machinery/power/apc/P = machine
@@ -115,7 +115,7 @@
 	icon = "radial_pulse"
 	cost = 10
 
-/datum/malfhack_ability/oneuse/turret_pulse/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/oneuse/turret_pulse/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
 	var/obj/machinery/turret/T = machine
@@ -130,7 +130,7 @@
 	icon = "radial_upgrade"
 	cost = 10
 
-/datum/malfhack_ability/oneuse/turret_upgrade/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/oneuse/turret_upgrade/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
 	var/obj/machinery/turret/T = machine
@@ -149,7 +149,7 @@
 	icon = "radial_drain"
 	cost = 5
 
-/datum/malfhack_ability/dump_dispenser_energy/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/dump_dispenser_energy/activate(var/mob/living/silicon/A)
 	if(!..())
 		return
 	var/obj/machinery/chem_dispenser/C = machine
@@ -166,14 +166,14 @@
 	icon = "radial_holo"
 	cost = 5
 
-/datum/malfhack_ability/create_lifelike_hologram/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/create_lifelike_hologram/activate(var/mob/living/silicon/A)
 	var/obj/machinery/hologram/holopad/C = machine
 	if(!istype(C))
 		return
 	if(C.create_advanced_holo(A))
 		..()
 
-/datum/malfhack_ability/create_lifelike_hologram/check_available(mob/living/silicon/ai/A)
+/datum/malfhack_ability/create_lifelike_hologram/check_available(mob/living/silicon/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return FALSE
@@ -189,7 +189,7 @@
 	icon = "radial_overload"
 	cost = 5
 
-/datum/malfhack_ability/overload/activate(var/mob/living/silicon/ai/A)
+/datum/malfhack_ability/overload/activate(var/mob/living/silicon/A)
 	machine.visible_message("<span class='warning'>You hear a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>") //highlight this, motherfucker
 	spark(machine)
 	machine.shake_animation(4, 4, 0.2 SECONDS, 4, 5)
@@ -197,7 +197,7 @@
 		explosion(get_turf(machine), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 		qdel(machine)
 
-/datum/malfhack_ability/overload/check_available(mob/living/silicon/ai/A)
+/datum/malfhack_ability/overload/check_available(mob/living/silicon/A)
 	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
 	if(!istype(A) || !istype(M))
 		return FALSE

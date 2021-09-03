@@ -4,7 +4,8 @@
 		O.mode = 0
 	if(!isturf(loc))
 		if (client)
+			client.show_popup_menus = TRUE
 			client.eye = loc
 			client.perspective = EYE_PERSPECTIVE
-	src.view_core()
+	view_core()
 	return
