@@ -2469,9 +2469,19 @@ var/global/msg_id = 0
 			to_chat(U, "ERROR: Cannot reach recepient.")
 			return
 
+		var/obj/item/weapon/photo/current_photo = null
+		
 		if(photo)
-			imglist["[msg_id]"] = ImagePDA(photo.img)
+			current_photo = photo
+			
+		if(cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
+			var/obj/item/weapon/cartridge/camera/CM = cartridge
+			if(CM.stored_photos.len)
+				current_photo = input(U, "Photos found in [cartridge]. Please select one", "Message to [P]", null) in CM.stored_photos
 
+		if(current_photo)
+			imglist["[msg_id]"] = ImagePDA(current_photo.img)
+		
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
