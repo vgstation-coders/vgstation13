@@ -1577,22 +1577,24 @@ var/global/msg_id = 0
 				dat += {"<h4>View Photos</h4>"}
 				if(!cartridge || !istype(cartridge,/obj/item/weapon/cartridge/camera))
 					dat += {"No camera found!"}
-				var/obj/item/weapon/cartridge/camera/CM = cartridge
-				if(!CM.stored_photos.len)
-					dat += {"None found."}
 				else
-					var/i = 0
-					for(var/obj/item/weapon/photo/PH in CM.stored_photos)
-						usr << browse_rsc(PH.img, "tmp_photo_gallery_[i].png")
-						var/displaylength = 192
-						switch(PH.photo_size)
-							if(5)
-								displaylength = 320
-							if(7)
-								displaylength = 448
+					dat += {"<a href='byond://?src=\ref[src];choice=Clear Photos'>Delete All Photos</a><hr>"}
+					var/obj/item/weapon/cartridge/camera/CM = cartridge
+					if(!CM.stored_photos.len)
+						dat += {"None found."}
+					else
+						var/i = 0
+						for(var/obj/item/weapon/photo/PH in CM.stored_photos)
+							usr << browse_rsc(PH.img, "tmp_photo_gallery_[i].png")
+							var/displaylength = 192
+							switch(PH.photo_size)
+								if(5)
+									displaylength = 320
+								if(7)
+									displaylength = 448
 
-						dat += "<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><hr>"
-						i++
+							dat += {"<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><hr>"}
+							i++
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
 				dat += cart
 
@@ -2059,6 +2061,12 @@ var/global/msg_id = 0
 			update_icon()
 		if("Show Photos")
 			mode = 1998
+		if("Clear Photos")
+			if(cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
+				var/obj/item/weapon/cartridge/camera/CM = cartridge
+				for(var/obj/item/weapon/photo/PH in CM.stored_photos)
+					qdel(PH)
+				CM.stored_photos = list()
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
