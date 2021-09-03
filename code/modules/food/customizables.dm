@@ -81,6 +81,7 @@
 
 /obj/item/trash/plate
 	name = "plate"
+	desc = "Someone ate something on it."
 	icon_state = "plate"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/trash.dmi', "right_hand" = 'icons/mob/in-hand/right/trash.dmi')
 	item_state = "plate1"
@@ -110,12 +111,17 @@
 /obj/item/trash/plate/update_icon()
 	overlays.len = 0
 	if(clean)
+		desc = "Clean enough to eat on, probably."
 		icon_state = "cleanplate"
 	else
-		icon_state = "cleanplate"
-		var/image/I = image(icon, src, "plate-remains")
-		I.color = trash_color
-		overlays += I
+		desc = "Someone ate something on it."
+		if (trash_color)
+			icon_state = "cleanplate"
+			var/image/I = image(icon, src, "plate-remains")
+			I.color = trash_color
+			overlays += I
+		else
+			icon_state = "plate"
 	var/offset_y = 2
 	for (var/obj/item/trash/plate/plate in plates)
 		var/image/I = image(plate.icon, src, plate.icon_state)
@@ -409,16 +415,19 @@
 	for(var/obj/item/S in src.ingredients)
 		if(i == 1)
 			new_name += "[S.name]"
+			if (fullyCustom)
+				desc = S.desc
 		else if(i == src.ingredients.len)
 			new_name += " and [S.name]"
 		else
 			new_name += ", [S.name]"
 		i++
-	new_name = "[new_name] [initial(src.name)]"
+	if (!fullyCustom)
+		new_name = "[new_name] [initial(src.name)]"
 	if(length(new_name) >= 150)
-		src.name = "something yummy"
+		name = "something yummy"
 	else
-		src.name = new_name
+		name = new_name
 	return new_name
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/Destroy()
@@ -472,7 +481,7 @@
 // Misc Subtypes ///////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom
-	name = "on a plate"
+	name = "something on a plate"
 	desc = "A unique dish."
 	icon_state = "fullycustom"
 	fullyCustom = 1 //how the fuck do you forget to add this?

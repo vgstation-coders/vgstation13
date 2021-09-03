@@ -32,6 +32,7 @@
 	var/edible_by_utensil = TRUE //Can this snack be put on a fork?
 	var/plate_offset_y = 0
 	var/plate_icon = "fullycustom"
+	var/visible_condiments = list()
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -503,6 +504,8 @@
 	desc = "Probably too incredible for mortal men to fully enjoy."
 	icon_state = "aesirsalad"
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#005369"
+
 /obj/item/weapon/reagent_containers/food/snacks/aesirsalad/New()
 	..()
 	eatverb = pick("crunch", "devour", "nibble", "gnaw", "gobble", "chomp")
@@ -516,6 +519,7 @@
 	icon_state = "candy"
 	trash = /obj/item/trash/candy
 	food_flags = FOOD_SWEET
+	filling_color = "#603000"
 
 /obj/item/weapon/reagent_containers/food/snacks/candy/New()
 	..()
@@ -1630,6 +1634,7 @@
 	icon_state = "danbar"
 	trash = /obj/item/trash/discountchocolate
 	food_flags = FOOD_SWEET
+	filling_color = "#7D390D"
 
 /obj/item/weapon/reagent_containers/food/snacks/discountchocolate/New()
 	..()
@@ -1663,6 +1668,7 @@
 	desc = "Ranch or cool ranch?"
 	icon_state = "donitos"
 	trash = /obj/item/trash/donitos
+	filling_color = "#C06800"
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos/New()
 	..()
@@ -1684,6 +1690,7 @@
 	desc = "For only the most MLG hardcore robust spessmen."
 	icon_state = "danitos"
 	trash = /obj/item/trash/danitos
+	filling_color = "#FF9933"
 
 /obj/item/weapon/reagent_containers/food/snacks/danitos/New()
 	..()
@@ -2298,6 +2305,7 @@
 	desc = "A nice and warm stew. Healthy and strong."
 	icon_state = "stew"
 	food_flags = FOOD_LIQUID | FOOD_MEAT
+	filling_color = "#EB7C28"
 
 /obj/item/weapon/reagent_containers/food/snacks/stew/New()
 	..()
@@ -2713,6 +2721,7 @@
 	icon_state = "beetsoup"
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_LIQUID
+	filling_color = "#E00000"
 
 /obj/item/weapon/reagent_containers/food/snacks/beetsoup/New()
 	..()
@@ -2726,6 +2735,7 @@
 	desc = "A tasty salad with apples on top."
 	icon_state = "herbsalad"
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#306900"
 
 /obj/item/weapon/reagent_containers/food/snacks/herbsalad/New()
 	..()
@@ -2738,6 +2748,7 @@
 	icon_state = "validsalad"
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT
+	filling_color = "#306900"
 
 /obj/item/weapon/reagent_containers/food/snacks/validsalad/New()
 	..()
@@ -3659,6 +3670,7 @@
 	name = "tin of beans"
 	desc = "Musical fruit in a slightly less musical container."
 	icon_state = "beans"
+	filling_color = "#982424"
 
 /obj/item/weapon/reagent_containers/food/snacks/beans/New()
 	..()
@@ -4021,6 +4033,7 @@
 	item_state = "kfc_bucket"
 	trash = /obj/item/trash/chicken_bucket
 	food_flags = FOOD_MEAT
+	filling_color = "#D8753E"
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
 	..()
@@ -4032,6 +4045,7 @@
 	desc = "We can fry further..."
 	icon_state = "chicken_drumstick"
 	food_flags = FOOD_MEAT
+	filling_color = "#D8753E"
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/New()
 	..()
@@ -5129,6 +5143,7 @@
 	desc = "The culinary culmination of all Vox culture: throwing all their plants into the same pot."
 	icon_state = "voxstew"
 	bitesize = 4
+	filling_color = "#89441E"
 
 /obj/item/weapon/reagent_containers/food/snacks/voxstew/New()
 	..()
@@ -5303,6 +5318,7 @@
 	icon_state = "starrynight"
 	bitesize = 2
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#245900"
 
 /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad/New()
 	..()
@@ -5315,6 +5331,7 @@
 	icon_state = "fruitsalad"
 	bitesize = 2
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#FF3366"
 
 /obj/item/weapon/reagent_containers/food/snacks/fruitsalad/New()
 	..()
