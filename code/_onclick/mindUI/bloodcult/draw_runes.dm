@@ -25,10 +25,6 @@
 	spawn(10)
 		..()
 
-/obj/abstract/mind_ui_element/hoverable/rune_close/Click()
-	var/mob/living/carbon/C = GetUser()
-
-
 /obj/abstract/mind_ui_element/hoverable/rune_word/UpdateIcon(var/appear = FALSE)
 	overlays.len = 0
 
@@ -105,7 +101,7 @@
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/hoverable/rune_close
-	name = "Hide UI"
+	name = "Hide Interface"
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "return"
 	layer = MIND_UI_BUTTON

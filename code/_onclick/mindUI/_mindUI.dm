@@ -108,6 +108,8 @@ var/list/mind_ui_ID2type = list()
 
 	var/display_with_parent = FALSE
 
+	var/active = TRUE
+
 /datum/mind_ui/New(var/datum/mind/M)
 	if (!istype(M))
 		qdel(src)
@@ -150,6 +152,7 @@ var/list/mind_ui_ID2type = list()
 
 // Makes every element visible
 /datum/mind_ui/proc/Display()
+	active = TRUE
 	for (var/obj/abstract/mind_ui_element/element in elements)
 		element.Appear()
 	for (var/datum/mind_ui/child in subUIs)
@@ -157,6 +160,7 @@ var/list/mind_ui_ID2type = list()
 			child.Display()
 
 /datum/mind_ui/proc/Hide()
+	active = FALSE
 	HideChildren()
 	HideElements()
 
@@ -239,7 +243,8 @@ var/list/mind_ui_ID2type = list()
 		UpdateIcon()
 
 /obj/abstract/mind_ui_element/proc/Hide()
-	invisibility = 101
+	if (!parent.active) // we check again for it due to potential spawn() use, and inconsistencies caused by quick UI toggling
+		invisibility = 101
 
 /obj/abstract/mind_ui_element/proc/GetUser()
 	ASSERT(parent && parent.mind && parent.mind.current)
@@ -334,12 +339,12 @@ var/list/mind_ui_ID2type = list()
 	var/Y = start_loc_Y[1]
 	var/start_x_val
 	var/start_y_val
-	if(findtext(X,"EAST-"))
+	if(findtext(X,"RIGHT"))
 		var/num = text2num(copytext(X,6))
 		if(!num)
 			num = 0
 		start_x_val = view*2 + 1 - num
-	else if(findtext(X,"WEST+"))
+	else if(findtext(X,"LEFT"))
 		var/num = text2num(copytext(X,6))
 		if(!num)
 			num = 0
@@ -348,12 +353,12 @@ var/list/mind_ui_ID2type = list()
 		start_x_val = view+1
 	start_x_val *= 32
 	start_x_val += start_pix_X
-	if(findtext(Y,"NORTH-"))
+	if(findtext(Y,"TOP"))
 		var/num = text2num(copytext(Y,7))
 		if(!num)
 			num = 0
 		start_y_val = view*2 + 1 - num
-	else if(findtext(Y,"SOUTH+"))
+	else if(findtext(Y,"BOTTOM"))
 		var/num = text2num(copytext(Y,7))
 		if(!num)
 			num = 0

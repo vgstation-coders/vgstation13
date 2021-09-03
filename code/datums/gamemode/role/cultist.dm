@@ -140,19 +140,24 @@
 
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
-	DisplayUI("Cultist")
 
 /datum/role/cultist/proc/update_cult_hud()
 	var/mob/M = antag?.current
-	if(M && M.client && M.hud_used)
-		if (isshade(M))
-			if (istype(M.loc,/obj/item/weapon/melee/soulblade))
-				M.DisplayUI("Soulblade")
-				M.client.screen |= list(M.healths2)
-			else
-				M.client.screen -= list(M.healths2)
+	if(M)
+		M.DisplayUI("Cultist")
+		if (M.client && M.hud_used)
+			if (isshade(M))
+				if (istype(M.loc,/obj/item/weapon/melee/soulblade))
+					M.DisplayUI("Soulblade")
+					M.client.screen |= list(M.healths2)
+				else
+					M.client.screen -= list(M.healths2)
 
 /datum/role/cultist/proc/remove_cult_hud()
+	var/mob/M = antag?.current
+	if(M)
+		M.HideUI("Cultist")
+		M.HideUI("Bloodcult Runes")
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
@@ -306,3 +311,25 @@
 	if (greeting)
 		to_chat(antag.current, "<span class='notice'>You are the chief cultist. You have been chosen by Nar-Sie to lead this cult to victory. Coordinate with your fellow acolytes, establish a plan, construct a base. Tear down the veil.</span>")
 		to_chat(antag.current, "<span class='notice'>You may speak with your fellow cultists by using ':x'.</span>")
+
+
+/datum/role/cultist/proc/erase_rune()
+	var/mob/living/user = antag.current
+	if (!istype(user))
+		return
+
+	if (user.incapacitated())
+		return
+
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+
+	if (rune && rune.invisibility == INVISIBILITY_OBSERVER)
+		to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here, you have to reveal it before you can erase words from it.</span>")
+		return
+
+	var/removed_word = erase_rune_word(get_turf(user))
+	if (removed_word)
+		to_chat(user, "<span class='notice'>You retrace your steps, carefully undoing the lines of the [removed_word] rune.</span>")
+	else
+		to_chat(user, "<span class='warning'>There aren't any rune words left to erase.</span>")
