@@ -329,26 +329,6 @@
 
 	frequency.post_signal(src, status_signal)
 
-/obj/item/weapon/cartridge/camera/generate_menu()
-	if(mode == 50) //Viewing photos
-		menu = "<h4>View Photos</h4>"
-		if(!stored_photos.len)
-			menu += "None found."
-		else
-			var/i = 0
-			for(var/obj/item/weapon/photo/PH in stored_photos)
-				if(loc && loc.usr)
-					loc.usr << browse_rsc(img, "tmp_photo_gallery_[i].png")
-				var/displaylength = 192
-				switch(photo_size)
-					if(5)
-						displaylength = 320
-					if(7)
-						displaylength = 448
-
-				menu += "<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
-				i++
-
 /obj/item/weapon/cartridge/proc/generate_menu()
 	switch(mode)
 		if(40) //signaller

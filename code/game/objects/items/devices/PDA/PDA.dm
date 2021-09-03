@@ -1569,6 +1569,26 @@ var/global/msg_id = 0
 					if(app.total_coins)
 						dat += {"<br>nanocoins: [app.total_coins]"}
 
+			if(1998) //Viewing photos
+				dat = "<h4>View Photos</h4>"
+				if(!cartridge || !istype(cartridge,/obj/item/weapon/cartridge/camera))
+					dat += "No camera found!"
+				var/obj/item/weapon/cartridge/camera/CM = cartridge
+				if(!CM.stored_photos.len)
+					dat += "None found."
+				else
+					var/i = 0
+					for(var/obj/item/weapon/photo/PH in CM.stored_photos)
+						usr << browse_rsc(img, "tmp_photo_gallery_[i].png")
+						var/displaylength = 192
+						switch(photo_size)
+							if(5)
+								displaylength = 320
+							if(7)
+								displaylength = 448
+
+						dat += "<img src='tmp_photo_gallery_[i].png' width='[displaylength]' style='-ms-interpolation-mode:nearest-neighbor' /><br>"
+						i++
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
 				dat += cart
 
@@ -2033,7 +2053,7 @@ var/global/msg_id = 0
 			else if((!isnull(cartridge)) && (cartridge.access_camera))
 				scanmode = SCANMODE_CAMERA
 		if("Show Photos")
-			mode = 50
+			mode = 1998
 
 //MESSENGER/NOTE FUNCTIONS===================================
 
