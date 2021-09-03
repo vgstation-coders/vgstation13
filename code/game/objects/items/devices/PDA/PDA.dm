@@ -900,6 +900,7 @@ var/global/msg_id = 0
 						dat += "<li><a href='byond://?src=\ref[src];choice=Cyborg Analyzer'><span class='pda_icon pda_medical'></span> [scanmode == SCANMODE_ROBOTICS ? "Disable" : "Enable"] Cyborg Analyzer</a></li>"
 					if (cartridge.access_camera)
 						dat += "<li><a href='byond://?src=\ref[src];choice=PDA Camera'> [scanmode == SCANMODE_CAMERA ? "Disable" : "Enable"] Camera</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=Show Photos'>Show Photos</a></li>"
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
 				if (pai)
@@ -2031,6 +2032,8 @@ var/global/msg_id = 0
 				scanmode = SCANMODE_NONE
 			else if((!isnull(cartridge)) && (cartridge.access_camera))
 				scanmode = SCANMODE_CAMERA
+		if("Show Photos")
+			mode = 50
 
 //MESSENGER/NOTE FUNCTIONS===================================
 

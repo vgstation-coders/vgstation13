@@ -527,6 +527,7 @@
 /obj/item/device/camera/cartridge/printpicture(mob/user, icon/temp, mobs, flag) //Add photos to cart
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	host_cart.stored_photos += P
+	temp = ImagePDA(temp)
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
@@ -534,8 +535,6 @@
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
-	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
-	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 	P.photo_size = photo_size
 
 	if(blueprints)
