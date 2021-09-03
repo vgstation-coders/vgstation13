@@ -126,7 +126,7 @@ var/list/one_way_windows
 
 /obj/structure/window/proc/adjustHealthLoss(var/amount = 0, var/atom/movable/W = null)
 	if(amount < dmg_threshold)
-		if(W)
+		if(W && !istype(W,/obj/item/projectile/fire_breath))
 			visible_message("<span class='warning'>\The [W] [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		return FALSE
 	health -= amount
