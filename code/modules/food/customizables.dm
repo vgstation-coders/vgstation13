@@ -123,7 +123,11 @@
 		else
 			icon_state = "plate"
 	var/offset_y = 2
+	name = "plate"
+	gender = NEUTER
 	for (var/obj/item/trash/plate/plate in plates)
+		name = "plates"
+		gender = PLURAL
 		var/image/I = image(plate.icon, src, plate.icon_state)
 		I.pixel_y = offset_y
 		overlays += I
@@ -143,6 +147,22 @@
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
 
+/obj/item/trash/plate/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	if (!user)
+		return
+	if (!slip_dir)
+		slip_dir = user.dir
+	var/turf/T = get_turf(src)
+	if (user.drop_item(src, T))
+		to_chat(user, "<span class='danger'>You drop \the [src] as you tumble.</span>")
+		var/distance = 1
+		if (slipperiness == TURF_WET_LUBE)
+			distance = 6
+		for (var/i = 1 to distance)
+			T = get_step(T,slip_dir)
+		throw_at(T,throw_range,throw_speed)
+	else
+		to_chat(user, "<span class='notice'>You somehow hold onto \the [src] as you fall.</span>")
 
 /obj/item/trash/plate/proc/pick_a_plate(var/mob/user)
 	if (plates.len > 0)
@@ -162,7 +182,7 @@
 		if(prob(70))
 			playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
 			new/obj/effect/decal/cleanable/broken_plate(loc)
-			visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+			visible_message("<span class='warning'>\The [src.name] [(plates.len > 0)?"have":"has"] been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 			qdel(P)
 		else
 			P.forceMove(loc)
