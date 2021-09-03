@@ -695,8 +695,8 @@ var/list/liftable_structures = list(\
 #define INVISIBILITY_CULTJAUNT 50	//Used by cult
 #define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
 
-#define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
-#define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
+#define INVISIBILITY_OBSERVER 70	//Used by Ghosts.
+#define SEE_INVISIBLE_OBSERVER 70	//Used by Ghosts.
 
 #define INVISIBILITY_MAXIMUM 100
 

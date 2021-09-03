@@ -85,6 +85,30 @@
 
 //---------------------------------------
 
+/datum/malfhack_ability/shunt
+	name = "Shunt Core Processes"
+	desc = "Upload your software to this APC and leave your core. You can return to your core as long as it is still intact."
+	icon = "radial_shunt"
+
+/datum/malfhack_ability/shunt/activate(var/mob/living/silicon/ai/A)
+	if(!..())
+		return
+	var/obj/machinery/power/apc/P = machine
+	if(!istype(P))
+		return
+	
+	var/obj/machinery/hologram/holopad/H  = A.current
+	if(istype(H))
+		H.clear_holo()
+
+	var/mob/living/silicon/shuntedAI/S = new(get_turf(A),A.laws,A)
+	A.mind.transfer_to(S)
+	new /obj/effect/malf_jaunt(S.loc, S, P)
+	S.update_perception()
+	
+
+//---------------------------------------
+
 /datum/malfhack_ability/oneuse/turret_pulse
 	name = "Upgrade Turret Laser"
 	desc = "Upgrade this turret's laser to a pulse laser."

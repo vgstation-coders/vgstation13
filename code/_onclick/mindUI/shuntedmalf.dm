@@ -38,7 +38,9 @@
 	var/mob/living/silicon/shuntedAI/S = GetUser()
 	if(!istype(S))
 		return
-	S.return_to_core()
+	var/atom/A = S.loc
+	new /obj/effect/malf_jaunt(get_turf(S), S, get_turf(S.core), TRUE)
+	A.update_icon()
 
 /obj/abstract/mind_ui_element/hoverable/return_to_core/UpdateIcon()
 	var/mob/living/silicon/shuntedAI/A = GetUser()

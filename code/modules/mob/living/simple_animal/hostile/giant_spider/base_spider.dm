@@ -167,9 +167,9 @@
 			client.darkness_planemaster.alpha = 100
 		client.color = list(
 					1,0,0,0,
-					0,1,0,0,
-	 				0,0,1,0,
-		 			0,0,-0.1,1,
+					0,1.3,0,0,
+	 				0,0,1.3,0,
+		 			0,-0.3,-0.3,1,
 		 			0,0,0,0)
 
 		if(a_matrix_testing_override)

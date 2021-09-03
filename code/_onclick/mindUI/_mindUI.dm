@@ -33,7 +33,6 @@ var/list/mind_ui_ID2type = list()
 	for (var/mind_ui in activeUIs)
 		var/datum/mind_ui/ui = activeUIs[mind_ui]
 		ui.RemoveFromClient()
-		activeUIs -= ui
 		qdel(ui)
 
 /datum/mind/proc/DisplayUI(var/ui_ID)

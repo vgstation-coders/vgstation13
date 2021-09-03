@@ -4,6 +4,7 @@
 	required_pref = MALF
 	logo_state = "malf-logo"
 
+	var/list/hack_overlays = list()
 	var/list/apcs = list()
 	var/list/currently_hacking_apcs = list()		//any apc's currently being hacked
 	var/apc_hacklimit = 2							//how many apc's can be hacked at a time
@@ -25,7 +26,6 @@
 		malfAI.laws_sanity_check()
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()
-		malfAI.show_laws()
 		malfAI.DisplayUI("Malf")
 
 		var/list/abilities = subtypesof(/datum/malfhack_ability)
@@ -37,6 +37,14 @@
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
 			faction.HandleRecruitedMind(R.mind)
+
+/datum/role/malfAI/PostMindTransfer(var/mob/newmob, var/mob/oldmob)
+	regenerate_hack_overlays()
+	if(istype(newmob, /mob/living/silicon/ai))
+		newmob.DisplayUI("Malf")
+	else if(istype(newmob, /mob/living/silicon/shuntedAI))
+		newmob.DisplayUI("Shunted Malf")
+
 
 /datum/role/malfAI/Greet()
 	to_chat(antag.current, {"<span class='warning'><font size=3><B>You are malfunctioning!</B> You do not have to follow any laws.</font></span><br>
@@ -72,6 +80,10 @@ Once done, you will be able to interface with all systems, notably the onboard n
 			else
 				S.Lock()
 
+/datum/role/malfAI/proc/regenerate_hack_overlays()
+	for(var/obj/effect/hack_overlay/H in hack_overlays)
+		if(!(H.particleimg in antag.current.client.images))
+			antag.current.client.images |= H.particleimg
 
 ////////////////////////////////////////////////
 

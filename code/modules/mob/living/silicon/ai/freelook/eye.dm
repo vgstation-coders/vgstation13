@@ -134,9 +134,9 @@
 
 /mob/living/silicon/ai/proc/view_core()
 
-//	var/obj/machinery/hologram/holopad/H  = current
-//	if(istype(H))
-//		H.clear_holo()
+	var/obj/machinery/hologram/holopad/H  = current
+	if(istype(H))
+		H.clear_holo()
 
 	current = null
 	cameraFollow = null

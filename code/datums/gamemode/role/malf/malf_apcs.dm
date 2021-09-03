@@ -1,7 +1,8 @@
 /obj/machinery/power/apc
 	malf_hack_time = APC_HACK_TIME
 	hack_abilities = list(
-		/datum/malfhack_ability/toggle/apclock
+		/datum/malfhack_ability/toggle/apclock,
+		/datum/malfhack_ability/shunt
 	)
 
 /obj/machinery/power/apc/malfhack_valid(var/mob/living/silicon/ai/malf)

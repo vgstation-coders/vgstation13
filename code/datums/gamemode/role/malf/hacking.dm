@@ -52,6 +52,11 @@
 	machine.hack_overlay = src
 	malf.client.images |= particleimg
 
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
+	if(M)
+		M.hack_overlays += src
+	
+
 /obj/effect/hack_overlay/proc/set_icon(var/newstate)
 	particleimg.icon_state = newstate
 
