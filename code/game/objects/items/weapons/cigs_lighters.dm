@@ -479,6 +479,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "bidilit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/bidibutt
+	burn_on_end = TRUE
 
 /obj/item/clothing/mask/cigarette/goldencarp
 	name = "Golden Carp cigarette"
