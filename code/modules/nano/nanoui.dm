@@ -168,7 +168,7 @@ nanoui is used to open and update nano browser uis
 		if(nano.src_object in view(7, nano.user))
 			can_interactive = 1
 	else
-		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user))
+		can_interactive = (isAI(nano.user) || !nano.distance_check || isAdminGhost(nano.user) || OMNI_LINK(nano.user,nano.src_object))
 
 	if (can_interactive)
 		return STATUS_INTERACTIVE // interactive (green visibility)

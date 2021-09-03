@@ -1455,6 +1455,7 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
+	req_access = list(access_engine_equip)
 	var/mode = OMNIMODE_TOOL
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
@@ -1471,10 +1472,18 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 
 /obj/item/device/multitool/omnitool/preattack(atom/target, mob/user, proximity)
 	if(proximity)
+		if(is_type_in_list(target.type,omnitoolable))
+			target.attack_hand(user)
 		return FALSE //immediately continue if in reach
 	if(can_connect(target, user) && is_type_in_list(target.type,omnitoolable))
 		target.attack_hand(user)
 		return TRUE
+
+/mob/living/proc/omnitool_connect(atom/target)
+	var/obj/item/device/multitool/omnitool/O = get_active_hand()
+	if(istype(O))
+		return O.can_connect(target,src)
+	return FALSE
 
 /obj/item/device/multitool/omnitool/proc/can_connect(atom/target, mob/user)
 	var/client/C
@@ -1486,6 +1495,8 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 			return FALSE
 		C = M.client
 	if(!C)
+		return FALSE
+	if(!allowed(user))
 		return FALSE
 	return get_dist(target,src) <= C.view
 
