@@ -337,7 +337,8 @@
 		else
 			var/i = 0
 			for(var/obj/item/weapon/photo/PH in stored_photos)
-				user << browse_rsc(img, "tmp_photo_gallery_[i].png")
+				if(loc && loc.usr)
+					loc.usr << browse_rsc(img, "tmp_photo_gallery_[i].png")
 				var/displaylength = 192
 				switch(photo_size)
 					if(5)
