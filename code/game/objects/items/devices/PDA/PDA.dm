@@ -2485,7 +2485,7 @@ var/global/msg_id = 0
 		if(cartridge && istype(cartridge, /obj/item/weapon/cartridge/camera))
 			var/obj/item/weapon/cartridge/camera/CM = cartridge
 			if(CM.stored_photos.len)
-				current_photo = input(U, "Photos found in [cartridge]. Please select one") in CM.stored_photos
+				current_photo = input(U, "Photos found in [cartridge]. Please select one", "Cartridge Photo Selection") as null|anything in CM.stored_photos
 
 		if(current_photo)
 			imglist["[msg_id]"] = current_photo.img
