@@ -146,14 +146,15 @@
 			//var/message = "Blank" //transferred message
 
 			dat += {"<center><A href='?src=\ref[src];back=1'>Back</a> - <A href='?src=\ref[src];refresh=1'>Refresh</center><hr>
-				<table border='1' width='100%'><tr><th width = '5%'>X</th><th width='15%'>Sender</th><th width='15%'>Recipient</th><th width='300px' word-wrap: break-word>Message</th></tr>"}
+				<table border='1' width='100%'><tr><th width = '5%'>X</th><th width='15%'>Sender</th><th width='15%'>Recipient</th><th width='300px' word-wrap: break-word>Message</th><th width='30%'>Photo</th></tr>"}
 			for(var/datum/data_pda_msg/pda in src.linkedServer.pda_msgs)
 				index++
 				if(index > 3000)
 					break
-				// Del - Sender   - Recepient - Message
-				// X   - Al Green - Your Mom  - WHAT UP!?
-				dat += "<tr><td width = '5%'><center><A href='?src=\ref[src];delete=\ref[pda]' style='color: rgb(255,0,0)'>X</a></center></td><td width='15%'>[pda.sender]</td><td width='15%'>[pda.recipient]</td><td width='300px'>[pda.message]</td></tr>"
+				// Del - Sender   - Recepient - Message - Photo
+				// X   - Al Green - Your Mom  - WHAT UP!? - [Photo]
+				user << browse_rsc(ImagePDA(pda.img_sent), "tmp_photo_[index].png")
+				dat += "<tr><td width = '5%'><center><A href='?src=\ref[src];delete=\ref[pda]' style='color: rgb(255,0,0)'>X</a></center></td><td width='15%'>[pda.sender]</td><td width='15%'>[pda.recipient]</td><td width='300px'>[pda.message]</td><th width='30%'><img src='tmp_photo_[index].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></th></tr>"
 			dat += "</table>"
 		//Hacking screen.
 		if(2)

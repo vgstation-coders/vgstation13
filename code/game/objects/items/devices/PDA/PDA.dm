@@ -2491,7 +2491,7 @@ var/global/msg_id = 0
 			imglist["[msg_id]"] = current_photo.img
 			P.imglist["[msg_id]"] = current_photo.img
 		
-		useMS.send_pda_message("[P.owner]","[owner]","[t]")
+		useMS.send_pda_message("[P.owner]","[owner]","[t]",current_photo.img)
 
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
