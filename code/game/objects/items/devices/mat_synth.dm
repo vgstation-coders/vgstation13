@@ -259,7 +259,6 @@
 	user.visible_message("<span class='warning'>\The [src] pops and fizzles, before creating... \a [initial(spawn_item.name)]?</span>", \
 							"<span class='warning'>\The [src] pops and fizzles, before creating... \a [initial(spawn_item.name)]?</span>", \
 							"<span class='warning'>You hear a loud popping noise.</span>")
-	sleep(10)
 	new spawn_item(get_turf(src))
 	return 1
 
