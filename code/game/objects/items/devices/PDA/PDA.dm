@@ -2489,6 +2489,7 @@ var/global/msg_id = 0
 
 		if(current_photo)
 			imglist["[msg_id]"] = current_photo.img
+			P.imglist["[msg_id]"] = current_photo.img
 		
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
