@@ -92,7 +92,7 @@
 
 	forceMove(null)
 
-	if (T)
+	if (istype(T))
 		T.check_blocks_light()
 
 	if(virtualhearer)
