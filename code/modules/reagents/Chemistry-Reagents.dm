@@ -4197,9 +4197,9 @@
 /datum/reagent/suxameth/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-		if(isnull(data))
-			// copied from chloral for the same reasons
-			data = 0
+	if(isnull(data))
+		// copied from chloral for the same reasons
+		data = 0
 	if(data >= 2)
 		M.SetStunned(2)
 		M.SetKnockdown(2)
