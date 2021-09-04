@@ -697,7 +697,7 @@ var/global/msg_id = 0
 		dat += tnote[note]
 		var/icon/img = imglist[note]
 		if(img)
-			usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
+			usr << browse_rsc(img, "tmp_photo_[note].png")
 			dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 	dat += "</body></html>"
 	usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
@@ -712,7 +712,7 @@ var/global/msg_id = 0
 			dat += aiPDA.tnote[note]
 			var/icon/img = aiPDA.imglist[note]
 			if(img)
-				usr << browse_rsc(ImagePDA(img), "tmp_photo_[note].png")
+				usr << browse_rsc(img, "tmp_photo_[note].png")
 				dat += "<img src='tmp_photo_[note].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'><BR>"
 		dat += "</body></html>"
 		usr << browse(dat, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
@@ -944,7 +944,7 @@ var/global/msg_id = 0
 					<a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
 					<a href='byond://?src=\ref[src];choice=21'><span class='pda_icon pda_mail'></span> Messages</a>"}
 				if(photo)
-					dat += " | <a href='byond://?src=\ref[src];choice=Eject Photo'>Eject Photo</a>"
+					dat += " | <a href='byond://?src=\ref[src];choice=Eject Photo'><span class='pda_icon pda_eject'></span>Eject Photo</a>"
 				dat += "<br>"
 				if (istype(cartridge, /obj/item/weapon/cartridge/syndicate))
 					dat += "<b>[cartridge:shock_charges] detonation charges left.</b><HR>"

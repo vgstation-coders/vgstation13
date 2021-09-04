@@ -155,7 +155,7 @@
 				// X   - Al Green - Your Mom  - WHAT UP!? - [Photo]
 				var/imgdat = ""
 				if(pda.img_sent)
-					user << browse_rsc(ImagePDA(pda.img_sent), "tmp_photo_[index].png")
+					user << browse_rsc(pda.img_sent, "tmp_photo_[index].png")
 					imgdat = "<img src='tmp_photo_[index].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'>"
 				dat += "<tr><td width = '5%'><center><A href='?src=\ref[src];delete=\ref[pda]' style='color: rgb(255,0,0)'>X</a></center></td><td width='15%'>[pda.sender]</td><td width='15%'>[pda.recipient]</td><td width='300px'>[pda.message]</td><th width='30%'>[imgdat]</th></tr>"
 			dat += "</table>"
