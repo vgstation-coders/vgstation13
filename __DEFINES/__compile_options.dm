@@ -15,7 +15,7 @@
 // bagelstation.dm:
 //#define MAP_OVERRIDE 0
 // defficiency.dm:
-//#define MAP_OVERRIDE 1
+#define MAP_OVERRIDE 1
 // metaclub.dm:
 //#define MAP_OVERRIDE 2
 // packedstation.dm

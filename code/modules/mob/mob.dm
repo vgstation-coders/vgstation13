@@ -1602,6 +1602,7 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/check_dark_vision()
 	if (dark_plane && dark_plane.alphas.len)
+		var/max_alpha = 0
 		for (var/key in dark_plane.alphas)
 			max_alpha = max(dark_plane.alphas[key], max_alpha)
 		dark_plane.alpha = max_alpha
