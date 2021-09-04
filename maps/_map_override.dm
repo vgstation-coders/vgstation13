@@ -58,5 +58,9 @@
 		#undef MAP_OVERRIDE
 		#include "waystation.dm"
 		#define MAP_OVERRIDE 11
+	#elif MAP_OVERRIDE == 12
+		#undef MAP_OVERRIDE
+		#include "lowfatbagel.dm"
+		#define MAP_OVERRIDE 12
 	#endif
 #endif
