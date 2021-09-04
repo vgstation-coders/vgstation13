@@ -423,3 +423,5 @@ proc/get_space_area()
 
 #define istransformable(A) (isatom(A))
 #define isapperanceeditable(A) (isatom(A))
+
+#define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)

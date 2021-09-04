@@ -128,13 +128,13 @@
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
 		return
-	..()
+	return ..()
 
 /turf/unsimulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)
 	if(BS && (istype(BS,/turf/simulated/wall) || istype(BS,/turf/unsimulated/wall)) && isopenspace(N))
 		return
-	..()
+	return ..()
 
 //This segment of code copied directly from space.dm
 

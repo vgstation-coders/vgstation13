@@ -685,7 +685,10 @@
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
-
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/update_icon()
+	overlays.len = 0
+	if (flags & OPENCONTAINER)
+		overlays += image(icon = icon, icon_state = "soda_open")
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
@@ -706,7 +709,7 @@
 	flags |= OPENCONTAINER
 	src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 	playsound(user, pick(open_sounds), 50, 1)
-	overlays += image(icon = icon, icon_state = "soda_open")
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola
 	name = "Space Cola"

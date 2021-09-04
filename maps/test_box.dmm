@@ -32966,7 +32966,7 @@
 	},
 /area/bridge)
 "bkH" = (
-/obj/structure/closet/fireaxecabinet{
+/obj/structure/fireaxecabinet{
 	pixel_y = -32
 	},
 /turf/simulated/floor{
@@ -66569,7 +66569,7 @@
 /turf/simulated/floor,
 /area/engineering/atmos_control)
 "cuF" = (
-/obj/structure/closet/fireaxecabinet{
+/obj/structure/fireaxecabinet{
 	pixel_y = -32
 	},
 /obj/machinery/suit_storage_unit/atmos,

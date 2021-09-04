@@ -762,7 +762,7 @@ steam.start() -- spawns the effect
 	reagents.my_atom = src
 	var/ccolor = mix_color_from_reagents(reagents.reagent_list)
 	if(ccolor)
-		icon += ccolor
+		color = ccolor
 	var/savedtemp
 	if(reagents.has_reagent(WATER))
 		var/turf/simulated/T = get_turf(src)

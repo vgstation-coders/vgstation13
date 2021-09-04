@@ -187,6 +187,9 @@
 /obj/item/proc/restock() //used for borg recharging
 	return
 
+/obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	return
+
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
 

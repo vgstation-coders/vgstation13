@@ -30,6 +30,9 @@
 	var/deepfried = 0 //Is the food deep-fried ?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
 	var/edible_by_utensil = TRUE //Can this snack be put on a fork?
+	var/plate_offset_y = 0
+	var/plate_icon = "fullycustom"
+	var/visible_condiments = list()
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -72,6 +75,15 @@
 			//Otherwise, put the trash item in the same place where the food item was
 			if(ispath(trash, /obj/item))
 				var/obj/item/TrashItem = new trash(old_loc)
+				if (virus2?.len)
+					for (var/ID in virus2)
+						var/datum/disease2/disease/D = virus2[ID]
+						TrashItem.infect_disease2(D, 1, "(leftovers on a plate)",1)
+
+				if (istype(TrashItem, /obj/item/trash/plate))
+					var/obj/item/trash/plate/P = TrashItem
+					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+					P.update_icon()
 
 				if(ismob(old_loc))
 					var/mob/M = old_loc
@@ -197,6 +209,9 @@
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		if(sounds)
 			playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
+		if (prob(35))
+			var/obj/effect/decal/cleanable/crumbs/C = new (get_turf(eater))
+			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 		if (virus2?.len)
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
@@ -366,6 +381,8 @@
 		return FALSE
 	if(istype(W, /obj/item/device/analyzer/plant_analyzer)) //ugly hack but what can you do
 		return FALSE
+	if(istype(W, /obj/item/weapon/reagent_containers/food/condiment))
+		return FALSE
 	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
@@ -487,6 +504,8 @@
 	desc = "Probably too incredible for mortal men to fully enjoy."
 	icon_state = "aesirsalad"
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#005369"
+
 /obj/item/weapon/reagent_containers/food/snacks/aesirsalad/New()
 	..()
 	eatverb = pick("crunch", "devour", "nibble", "gnaw", "gobble", "chomp")
@@ -500,6 +519,7 @@
 	icon_state = "candy"
 	trash = /obj/item/trash/candy
 	food_flags = FOOD_SWEET
+	filling_color = "#603000"
 
 /obj/item/weapon/reagent_containers/food/snacks/candy/New()
 	..()
@@ -1195,7 +1215,6 @@
 	desc = "That's all you can say!"
 	icon_state = "omelette"
 	food_flags = FOOD_ANIMAL //made from eggs
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette/New()
 	..()
@@ -1286,7 +1305,6 @@
 	name = "berry clafoutis"
 	desc = "No black birds, this is a good sign."
 	icon_state = "berryclafoutis"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/berryclafoutis/New()
@@ -1310,7 +1328,6 @@
 	name = "Eggplant Parmigiana"
 	desc = "The only good recipe for eggplant."
 	icon_state = "eggplantparm"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/eggplantparm/New()
@@ -1486,7 +1503,6 @@
 	name = "Cuban Carp"
 	desc = "A grifftastic sandwich that burns your tongue and then leaves it numb!"
 	icon_state = "cubancarp"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/cubancarp/New()
@@ -1502,6 +1518,7 @@
 	icon_state = "popcorn"
 	trash = /obj/item/trash/popcorn
 	var/unpopped = 0
+	filling_color = "#EFE5D4"
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/New()
 		..()
@@ -1523,6 +1540,7 @@
 	desc = "Beef jerky made from the finest space cows."
 	trash = /obj/item/trash/sosjerky
 	food_flags = FOOD_MEAT
+	filling_color = "#733000"
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky/New()
 	..()
@@ -1591,6 +1609,7 @@
 	desc = "Bite sized cheesie snacks that will honk all over your mouth."
 	trash = /obj/item/trash/cheesie
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	filling_color = "#FFCC33"
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers/New()
 	..()
@@ -1615,6 +1634,7 @@
 	icon_state = "danbar"
 	trash = /obj/item/trash/discountchocolate
 	food_flags = FOOD_SWEET
+	filling_color = "#7D390D"
 
 /obj/item/weapon/reagent_containers/food/snacks/discountchocolate/New()
 	..()
@@ -1648,6 +1668,7 @@
 	desc = "Ranch or cool ranch?"
 	icon_state = "donitos"
 	trash = /obj/item/trash/donitos
+	filling_color = "#C06800"
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos/New()
 	..()
@@ -1669,6 +1690,7 @@
 	desc = "For only the most MLG hardcore robust spessmen."
 	icon_state = "danitos"
 	trash = /obj/item/trash/danitos
+	filling_color = "#FF9933"
 
 /obj/item/weapon/reagent_containers/food/snacks/danitos/New()
 	..()
@@ -1705,6 +1727,7 @@
 	desc = "Totally baked."
 	icon_state = "loadedbakedpotato"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato/New()
 	..()
@@ -1715,7 +1738,7 @@
 	name = "Space Fries"
 	desc = "AKA: French Fries, Freedom Fries, etc."
 	icon_state = "fries"
-	trash = /obj/item/trash/plate
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/New()
 	..()
@@ -1730,7 +1753,6 @@
 	name = "Soy Dope"
 	desc = "Dope from a soy."
 	icon_state = "soydope"
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope/New()
 	..()
@@ -1767,6 +1789,41 @@
 		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
 		qdel(src)
 
+/obj/item/weapon/reagent_containers/food/snacks/pancake
+	name = "pancake"
+	desc = "You'll never guess what's for breakfast!"
+	icon_state = "pancake"
+	food_flags = FOOD_ANIMAL
+	var/pancakes = 1
+	var/max_pancakes = 10 // leaving badmins a way to raise it if they're ready to assume the consequences
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/pancake/attackby(var/obj/item/O, var/mob/user)
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/pancake))
+		var/obj/item/weapon/reagent_containers/food/snacks/pancake/I = O
+		if (pancakes + I.pancakes > max_pancakes)
+			to_chat(user, "<span class='warning'>sorry, can't go any higher!</span>")
+			return
+		to_chat(user, "<span class='notice'>...and another one!</span>")
+		var/amount = I.reagents.total_volume
+		I.reagents.trans_to(src, amount)
+		var/image/img = image(I.icon, src, I.icon_state)
+		img.appearance = I.appearance
+		img.pixel_x = 0
+		img.pixel_y = 2 * pancakes
+		img.plane = FLOAT_PLANE
+		img.layer = FLOAT_LAYER
+		overlays += img
+		pancakes += I.pancakes
+		qdel(I)
+	else
+		..()
+
+
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
 	desc = "Now thats a nice pasta!"
@@ -1781,8 +1838,8 @@
 	name = "Cheesy Fries"
 	desc = "Fries. Covered in cheese. Duh."
 	icon_state = "cheesyfries"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/New()
 	..()
@@ -1813,8 +1870,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak
 	name = "Meat steak"
 	desc = "A piece of hot spicy meat."
-	icon_state = "meatstake"
-	trash = /obj/item/trash/plate
+	icon_state = "meatsteak"
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak/New()
@@ -1827,8 +1883,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak/synth
 	name = "Synthmeat steak"
 	desc = "It's still a delicious steak, but it has no soul."
-	icon_state = "meatstake"
-	trash = /obj/item/trash/plate
+	icon_state = "meatsteak"
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/spacylibertyduff
@@ -2189,7 +2244,6 @@
 	name = "Sandwich"
 	desc = "A grand creation of meat, cheese, bread, and several leaves of lettuce! Arthur Dent would be proud."
 	icon_state = "sandwich"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
 
 /obj/item/weapon/reagent_containers/food/snacks/sandwich/New()
@@ -2201,7 +2255,6 @@
 	name = "Toasted Sandwich"
 	desc = "Now if you only had a pepper bar."
 	icon_state = "toastedsandwich"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL //This is made from a sandwich, which contains meat!
 
 /obj/item/weapon/reagent_containers/food/snacks/toastedsandwich/New()
@@ -2214,7 +2267,6 @@
 	name = "Grilled Cheese Sandwich"
 	desc = "Goes great with Tomato soup!"
 	icon_state = "toastedsandwich"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
 
 /obj/item/weapon/reagent_containers/food/snacks/grilledcheese/New()
@@ -2253,6 +2305,7 @@
 	desc = "A nice and warm stew. Healthy and strong."
 	icon_state = "stew"
 	food_flags = FOOD_LIQUID | FOOD_MEAT
+	filling_color = "#EB7C28"
 
 /obj/item/weapon/reagent_containers/food/snacks/stew/New()
 	..()
@@ -2267,7 +2320,6 @@
 	name = "Jellied Toast"
 	desc = "A slice of bread covered with delicious jam."
 	icon_state = "jellytoast"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/New()
@@ -2291,7 +2343,6 @@
 	name = "avocado toast"
 	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
 	icon_state = "avocadotoast"
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadotoast/New()
 	..()
@@ -2346,7 +2397,6 @@
 	name = "Stewed Soy Meat"
 	desc = "Even non-vegetarians will LOVE this!"
 	icon_state = "stewedsoymeat"
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/stewedsoymeat/New()
 	..()
@@ -2367,7 +2417,6 @@
 	name = "Boiled Spaghetti"
 	desc = "A plain dish of noodles, this sucks."
 	icon_state = "spaghettiboiled"
-	trash = /obj/item/trash/plate
 	restraint_resist_time = 1 SECONDS
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 
@@ -2424,7 +2473,6 @@
 	name = "Spaghetti"
 	desc = "Spaghetti and crushed tomatoes. Just like your abusive father used to make!"
 	icon_state = "pastatomato"
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/pastatomato/New()
 	..()
@@ -2436,7 +2484,6 @@
 	name = "copypasta"
 	desc = "You probably shouldn't try this, you always hear people talking about how bad it is..."
 	icon_state = "copypasta"
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/copypasta/New()
 	..()
@@ -2448,7 +2495,6 @@
 	name = "Spaghetti & Meatballs"
 	desc = "Now thats a nic'e meatball!"
 	icon_state = "meatballspaghetti"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti/New()
@@ -2460,7 +2506,6 @@
 	name = "Crab Spaghetti"
 	desc = "Goes well with Coffee."
 	icon_state = "crabspaghetti"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/crabspaghetti/New()
@@ -2492,7 +2537,7 @@
 	name = "Carrot Fries"
 	desc = "Tasty fries from fresh carrots."
 	icon_state = "carrotfries"
-	trash = /obj/item/trash/plate
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries/New()
 	..()
@@ -2590,7 +2635,6 @@
 	name = "Jelly Sandwich"
 	desc = "You wish you had some peanut butter to go with this..."
 	icon_state = "jellysandwich"
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/New()
 	..()
@@ -2677,6 +2721,7 @@
 	icon_state = "beetsoup"
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_LIQUID
+	filling_color = "#E00000"
 
 /obj/item/weapon/reagent_containers/food/snacks/beetsoup/New()
 	..()
@@ -2690,6 +2735,7 @@
 	desc = "A tasty salad with apples on top."
 	icon_state = "herbsalad"
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#306900"
 
 /obj/item/weapon/reagent_containers/food/snacks/herbsalad/New()
 	..()
@@ -2702,6 +2748,7 @@
 	icon_state = "validsalad"
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT
+	filling_color = "#306900"
 
 /obj/item/weapon/reagent_containers/food/snacks/validsalad/New()
 	..()
@@ -2713,7 +2760,6 @@
 	name = "golden apple streusel tart"
 	desc = "A tasty dessert that won't make it through a metal detector."
 	icon_state = "gappletart"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 
 /obj/item/weapon/reagent_containers/food/snacks/appletart/New()
@@ -2746,9 +2792,9 @@
 	name = "meatbread slice"
 	desc = "A slice of delicious meatbread."
 	icon_state = "meatbreadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -4
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
 	name = "xenomeatbread loaf"
@@ -2769,9 +2815,9 @@
 	name = "xenomeatbread slice"
 	desc = "A slice of delicious meatbread. Extra Heretical."
 	icon_state = "xenobreadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -4
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
 	name = "spider meat loaf"
@@ -2792,9 +2838,9 @@
 	name = "spider meat bread slice"
 	desc = "A slice of meatloaf made from an animal that most likely still wants you dead."
 	icon_state = "xenobreadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
 	name = "synthmeatbread loaf"
@@ -2815,7 +2861,6 @@
 	name = "synthmeatbread slice"
 	desc = "A slice of synthetic meatbread."
 	icon_state = "meatbreadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT
 
@@ -2839,7 +2884,6 @@
 	name = "banana-nut bread slice"
 	desc = "A slice of delicious banana bread."
 	icon_state = "bananabreadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 
@@ -2862,8 +2906,8 @@
 	name = "tofubread slice"
 	desc = "A slice of delicious tofubread."
 	icon_state = "tofubreadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/carrotcake
 	name = "carrot cake"
@@ -2885,9 +2929,9 @@
 	name = "carrot cake slice"
 	desc = "Carrotty slice of Carrot Cake, carrots are good for your eyes! Also not a lie."
 	icon_state = "carrotcake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/braincake
 	name = "brain cake"
@@ -2909,7 +2953,6 @@
 	name = "brain cake slice"
 	desc = "Lemme tell you something about prions. THEY'RE DELICIOUS."
 	icon_state = "braincakeslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE //meat, milk, eggs
 
@@ -2932,7 +2975,6 @@
 	name = "cheese cake slice"
 	desc = "A slice of pure cheestisfaction."
 	icon_state = "cheesecake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 
@@ -2954,9 +2996,9 @@
 	name = "vanilla cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "plaincake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full/New()
 	..()
@@ -2981,9 +3023,9 @@
 	name = "orange cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "orangecake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/limecake
 	name = "lime cake"
@@ -3003,9 +3045,9 @@
 	name = "lime cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "limecake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/lemoncake
 	name = "lemon cake"
@@ -3025,9 +3067,9 @@
 	name = "lemon cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "lemoncake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/chocolatecake
 	name = "chocolate cake"
@@ -3047,9 +3089,9 @@
 	name = "chocolate cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "chocolatecake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
 	name = "caramel cake"
@@ -3070,9 +3112,9 @@
 	name = "caramel cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "caramelcake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 	name = "cheese wheel"
@@ -3118,9 +3160,9 @@
 	name = "Birthday Cake slice"
 	desc = "A slice of your birthday!"
 	icon_state = "birthdaycakeslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_icon = "bluecustom"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "Bread"
@@ -3152,13 +3194,13 @@
 	name = "Bread slice"
 	desc = "A slice of home."
 	icon_state = "breadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
 	name = "Nova bread slice"
 	desc = "A slice of Sol."
 	icon_state = "novabreadslice"
+	plate_icon = "novacustom"
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
@@ -3180,9 +3222,9 @@
 	name = "Cream Cheese Bread slice"
 	desc = "A slice of yum!"
 	icon_state = "creamcheesebreadslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_LACTOSE
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	name = "Watermelon Slice"
@@ -3209,9 +3251,9 @@
 	name = "Apple Cake slice"
 	desc = "A slice of heavenly cake."
 	icon_state = "applecakeslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinpie //You can't throw this pie
 	name = "Pumpkin Pie"
@@ -3232,7 +3274,6 @@
 	name = "Pumpkin Pie slice"
 	desc = "A slice of pumpkin pie, with whipped cream on top. Perfection."
 	icon_state = "pumpkinpieslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 
@@ -3629,6 +3670,7 @@
 	name = "tin of beans"
 	desc = "Musical fruit in a slightly less musical container."
 	icon_state = "beans"
+	filling_color = "#982424"
 
 /obj/item/weapon/reagent_containers/food/snacks/beans/New()
 	..()
@@ -3719,8 +3761,8 @@
 	name = "boiled spider leg"
 	desc = "A giant spider's leg that's still twitching after being cooked. Gross!"
 	icon_state = "spiderlegcooked"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
+	plate_offset_y = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspiderleg/New()
 	..()
@@ -3743,7 +3785,6 @@
 	name = "green eggs and ham"
 	desc = "Would you eat them on a train? Would you eat them on a plane? Would you eat them on a state of the art corporate deathtrap floating through space?"
 	icon_state = "spidereggsham"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT | FOOD_ANIMAL
 
 /obj/item/weapon/reagent_containers/food/snacks/spidereggsham/New()
@@ -3952,9 +3993,9 @@
 	name = "\improper Buche de Noel slice"
 	desc = "A slice of winter magic."
 	icon_state = "buche_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey
 	name = "turkey"
@@ -3979,9 +4020,9 @@
 	name = "turkey drumstick"
 	desc = "Guaranteed vox-free!"
 	icon_state = "turkey_drumstick"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_MEAT
+	plate_offset_y = -1
 
 //////////////////CHICKEN//////////////////
 
@@ -3992,6 +4033,7 @@
 	item_state = "kfc_bucket"
 	trash = /obj/item/trash/chicken_bucket
 	food_flags = FOOD_MEAT
+	filling_color = "#D8753E"
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/New()
 	..()
@@ -4003,6 +4045,7 @@
 	desc = "We can fry further..."
 	icon_state = "chicken_drumstick"
 	food_flags = FOOD_MEAT
+	filling_color = "#D8753E"
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/New()
 	..()
@@ -4076,6 +4119,7 @@
 	desc = "Commander Riker's What-The-Crisps."
 	icon_state = "chips"
 	trash = /obj/item/trash/chips
+	filling_color = "#FFB700"
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/New()
 	..()
@@ -4169,7 +4213,6 @@
 	name = "Giga Puddi"
 	desc = "A large crème caramel."
 	icon_state = "gigapuddi"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi/New()
@@ -4189,8 +4232,8 @@
 	name = "Flan"
 	desc = "A small crème caramel."
 	icon_state = "flan"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/flan/New()
 	..()
@@ -4202,8 +4245,8 @@
 	name = "Honey Flan"
 	desc = "The systematic slavery of an entire society of insects, elegantly sized to fit in your mouth."
 	icon_state = "honeyflan"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/honeyflan/New()
 	..()
@@ -4217,8 +4260,8 @@
 	name = "omelette rice"
 	desc = "Just like your Japanese animes!"
 	icon_state = "omurice"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL //egg
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/New()
 	..()
@@ -4227,6 +4270,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/heart
 	icon_state = "omuriceheart"
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/face
 	icon_state = "omuriceface"
@@ -4293,9 +4337,9 @@
 	name = "chocolate-cherry cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "chococherrycake_slice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
 	name = "fruitcake"
@@ -4317,9 +4361,9 @@
 	desc = "Delicious and fruity."
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "fruitcakeslice"
-	trash = /obj/item/trash/plate
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake
 	name = "\improper Christmas cake"
@@ -4539,6 +4583,7 @@
 	name = "Coleslaw"
 	desc = "You fought the 'slaw, and the 'slaw won."
 	icon_state = "coleslaw"
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/coleslaw/New()
 	..()
@@ -4561,8 +4606,8 @@
 	name = "cinnamon roll"
 	desc = "Sweet and spicy!"
 	icon_state = "cinnamon_roll"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll/New()
 	..()
@@ -5098,6 +5143,7 @@
 	desc = "The culinary culmination of all Vox culture: throwing all their plants into the same pot."
 	icon_state = "voxstew"
 	bitesize = 4
+	filling_color = "#89441E"
 
 /obj/item/weapon/reagent_containers/food/snacks/voxstew/New()
 	..()
@@ -5272,6 +5318,7 @@
 	icon_state = "starrynight"
 	bitesize = 2
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#245900"
 
 /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad/New()
 	..()
@@ -5284,6 +5331,7 @@
 	icon_state = "fruitsalad"
 	bitesize = 2
 	trash = /obj/item/trash/snack_bowl
+	filling_color = "#FF3366"
 
 /obj/item/weapon/reagent_containers/food/snacks/fruitsalad/New()
 	..()
@@ -5392,6 +5440,7 @@
 	icon_state = "quiche"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	bitesize = 4
+	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/quiche/New()
 	..()
@@ -5414,6 +5463,7 @@
 	desc = "The national dish of Tonga, a country that you had previously never heard about."
 	icon_state = "poissoncru"
 	bitesize = 2
+	plate_offset_y = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/poissoncru/New()
 	..()
@@ -5552,8 +5602,8 @@
 	name = "poutine"
 	desc = "Fries, cheese & gravy. Your arteries will hate you for this."
 	icon_state = "poutine"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/poutine/New()
 	..()
@@ -5596,8 +5646,8 @@
 	name = "maple syrup poutine"
 	desc = "French fries lathered with Canadian maple syrup and cheese curds. Delightful, eh?"
 	icon_state = "poutinesyrup"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup/New()
 	..()
@@ -5609,7 +5659,6 @@
 	name = "bleach kipper"
 	desc = "Baby blue and very fishy."
 	icon_state = "bleachkipper"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
 	volume = 1
 	bitesize = 2
@@ -5692,7 +5741,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A piece of freshly-grilled salmon meat."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "salmonsteak"
-	trash = /obj/item/trash/plate
 	filling_color = "#7A3D11"
 	food_flags = FOOD_MEAT
 
@@ -6170,8 +6218,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
 	name = "butter fingers"
 	desc = "It's a microwaved hand slathered in butter!"
 	icon_state = "butterfingers_r"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/New()
 	..()
@@ -6181,8 +6229,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	name = "butter fingers"
 	desc = "It's a microwaved hand slathered in butter!"
 	icon_state = "butterfingers_l"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	plate_offset_y = -3
 
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/New()
 	..()
@@ -6363,7 +6411,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A classic treat of childhood."
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "pbj"
-	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/pbj/New()
 	..()
@@ -6477,8 +6524,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A steamed lobster, served with a side of melted butter and a slice of lemon. You can still feel its hatred"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_deluxe"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
+	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe/New()
 	..()
@@ -6492,8 +6539,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A steamed lobster, served with no sides. Eat up, you barbarian."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_simple"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
+	trash = /obj/item/trash/plate
 
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple/New()
@@ -6533,8 +6580,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A Lobster tail, drenched in butter and a bit of lemon, you monster."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_tail_baked"
-	trash = /obj/item/trash/plate
 	food_flags = FOOD_MEAT
+	trash = /obj/item/trash/plate
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked/New()
 	..()
@@ -6821,7 +6868,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 /obj/item/weapon/reagent_containers/food/snacks/dionaroast
 	name = "Diona Roast"
 	desc = "A slow cooked diona nymph. Very nutritious, and surprisingly tasty!"
-	trash = /obj/item/trash/plate
 	icon_state = "dionaroast"
 	food_flags = FOOD_MEAT
 

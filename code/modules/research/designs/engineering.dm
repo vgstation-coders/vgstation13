@@ -46,7 +46,7 @@
 	id = "ultra_cell"
 	req_tech = list(Tc_POWERSTORAGE = 8, Tc_MATERIALS = 6)
 	reliability_base = 70
-	build_type = PROTOLATHE
+	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100)
 	build_path = /obj/item/weapon/cell/ultra/empty
 	category = "Engineering"
@@ -57,7 +57,7 @@
 	id = "rad_cell"
 	req_tech = list(Tc_POWERSTORAGE = 7, Tc_MATERIALS = 5)
 	reliability_base = 70
-	build_type = PROTOLATHE
+	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_URANIUM = 150)
 	build_path = /obj/item/weapon/cell/rad/empty
 	category = "Engineering"
@@ -68,7 +68,7 @@
 	id = "phazon_cell"
 	req_tech = list(Tc_POWERSTORAGE = 9, Tc_MATERIALS = 9)
 	reliability_base = 70
-	build_type = PROTOLATHE
+	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_PHAZON = 200)
 	build_path = /obj/item/weapon/cell/rad/large/empty
 	category = "Engineering"

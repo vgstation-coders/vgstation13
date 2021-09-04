@@ -780,7 +780,7 @@
 		"chargingStatus" = charging,
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,
 		"coverLocked" = coverlocked,
-		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user), // Allow aghosts to fuck with APCs
+		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user) || OMNI_LINK(user,src), // Allow aghosts to fuck with APCs
 		"malfLocked"= malflocked,
 		"malfStatus" = get_malf_status(user),
 
@@ -895,7 +895,7 @@
 			return 0
 
 	else
-		if ((!in_range(src, user) || !istype(src.loc, /turf)))
+		if ((!is_in_range(user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
 
 		if (wiresexposed)
@@ -916,11 +916,8 @@
 	return 1
 
 /obj/machinery/power/apc/is_in_range(var/mob/user)
-	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		var/obj/item/device/multitool/omnitool/O = user.get_active_hand()
-		if(istype(O))
-			return O.can_connect(src,user)
-		return FALSE
+	if(!..())
+		return OMNI_LINK(user,src)
 	return TRUE
 
 /obj/machinery/power/apc/Topic(href, href_list)
@@ -935,7 +932,7 @@
 		return 0
 	if(!can_use(usr, 1))
 		return 0
-	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
+	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr) || OMNI_LINK(usr, src)) && locked)
 	// Shouldn't happen, this is here to prevent href exploits
 		to_chat(usr, "You must unlock the panel to use this!")
 		return 1

@@ -4,6 +4,7 @@
 //Added by Jack Rost
 /obj/item/trash
 	icon = 'icons/obj/trash.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/trash.dmi', "right_hand" = 'icons/mob/in-hand/right/trash.dmi')
 	w_class = W_CLASS_TINY
 	desc = "This is rubbish."
 	w_type=NOT_RECYCLABLE

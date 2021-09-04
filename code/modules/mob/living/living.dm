@@ -822,9 +822,13 @@ Thanks.
 		return
 	else if(istype(src.loc, /obj/structure/strange_present))
 		var/obj/structure/strange_present/present = src.loc
-		forceMove(T)
-		qdel(present)
-		playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
+		to_chat(L, "<span class='warning'>You attempt to unwrap yourself, these wraps are tight and will take some time.</span>")
+		if(do_after(src, src, 2 MINUTES))
+			L.visible_message("<span class='danger'>[L] successfully breaks out of [present]!</span>",\
+							  "<span class='notice'>You successfully break out!</span>")
+			forceMove(T)
+			qdel(present)
+			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
 	else if(istype(src.loc, /obj/item/delivery/large)) //Syndie item
 		var/obj/item/delivery/large/package = src.loc
@@ -919,12 +923,14 @@ Thanks.
 	if(L.locked_to && !L.isUnconscious())
 		// unbeartrapping yourself
 		if (istype(L.locked_to, /obj/item/weapon/beartrap/))
-			if (iscarbon(L))
+			if (!iscarbon(L))
+				L.locked_to.attack_hand(L)
+				return
+			else
 				var/mob/living/carbon/C = L
-				if (C.handcuffed)
+				if (!C.handcuffed)
+					L.locked_to.attack_hand(L)
 					return
-			L.locked_to.attack_hand(L)
-			return
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to

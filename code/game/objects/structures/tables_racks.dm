@@ -420,7 +420,7 @@
 
 	if(user.drop_item(W, src.loc))
 		if(W.loc == src.loc && params)
-			W.setPixelOffsetsFromParams(params, user)
+			W.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
 			return 1
 
 /obj/structure/table/proc/straight_table_check(var/direction)

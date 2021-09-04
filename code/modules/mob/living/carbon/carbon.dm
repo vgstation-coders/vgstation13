@@ -547,6 +547,9 @@
 	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
+	for(var/obj/item/I in held_items)
+		I.SlipDropped(src,dir,overlay_type) // can be set to trigger specific behaviours when items are dropped by slipping
+
 	if(..())
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 		return 1

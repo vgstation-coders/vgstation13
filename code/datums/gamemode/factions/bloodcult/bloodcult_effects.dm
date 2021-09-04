@@ -522,7 +522,7 @@ var/bloodstone_backup = 0
 			current_dots = dots
 		indicator.overlays.len = 0
 		indicator = image(icon='icons/obj/cult.dmi',loc=victim,icon_state="",layer=SNOW_OVERLAY_LAYER)
-		indicator.plane = EFFECTS_PLANE
+		indicator.plane = relative_plane(EFFECTS_PLANE)
 		indicator.pixel_y = 8
 		for (var/i = 1 to dots)
 			var/state = "stun_dot1"
@@ -530,13 +530,13 @@ var/bloodstone_backup = 0
 				if (anim)
 					state = "stun_dot2-flick"
 					var/image/I = image(icon='icons/obj/cult.dmi',icon_state="stun_dot-gone")
-					I.plane = EFFECTS_PLANE
+					I.plane = relative_plane(EFFECTS_PLANE)
 					I = place_indicator(I,i+1)
 					indicator.overlays += I
 				else
 					state = "stun_dot2"
 			var/image/I = image(icon='icons/obj/cult.dmi',icon_state=state)
-			I.plane = EFFECTS_PLANE
+			I.plane = relative_plane(EFFECTS_PLANE)
 			I = place_indicator(I,i)
 			indicator.overlays += I
 		for (var/client/C in viewers)

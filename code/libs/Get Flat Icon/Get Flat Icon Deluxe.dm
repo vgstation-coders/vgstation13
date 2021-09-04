@@ -124,7 +124,12 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 	data[GFI_DX_ICON] = to_sort:icon
 	data[GFI_DX_STATE] = to_sort:icon_state
 	data[GFI_DX_DIR] = to_sort:dir
-	data[GFI_DX_PLANE] = to_sort:plane
+	if (to_sort:plane > 10000)
+		data[GFI_DX_PLANE] = to_sort:plane + FLOAT_PLANE - 2
+	else if (to_sort:plane < -10000)
+		data[GFI_DX_PLANE] = to_sort:plane - FLOAT_PLANE
+	else
+		data[GFI_DX_PLANE] = to_sort:plane
 	data[GFI_DX_LAYER] = to_sort:layer
 	data[GFI_DX_COLOR] = to_sort:color
 	data[GFI_DX_ALPHA] = to_sort:alpha
