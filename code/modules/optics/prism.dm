@@ -73,7 +73,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.lazy_register_event(/lazy_event/beam_power_change, src, .proc/on_power_change)
+		B.register_event(/event/beam_power_change, src, .proc/on_power_change)
 		update_beams(B)
 
 /obj/machinery/prism/beam_disconnect(var/obj/effect/beam/emitter/B)
@@ -81,7 +81,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.lazy_unregister_event(/lazy_event/beam_power_change, src, .proc/on_power_change)
+		B.unregister_event(/event/beam_power_change, src, .proc/on_power_change)
 		update_beams(B)
 
 // When beam power changes

@@ -334,7 +334,7 @@
 		next_beam.set_power(power)
 	update_icon()
 	if(!master)
-		lazy_invoke_event(/lazy_event/beam_power_change, list("beam" = src))
+		invoke_event(/event/beam_power_change, list("beam" = src))
 
 /obj/effect/beam/emitter/spawn_child()
 	var/obj/effect/beam/emitter/beam = ..()

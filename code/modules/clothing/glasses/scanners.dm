@@ -226,11 +226,11 @@
 		clear()
 
 		if (viewing)
-			viewing.lazy_unregister_event(/lazy_event/on_logout, src, .proc/mob_logout)
+			viewing.unregister_event(/event/logout, src, .proc/mob_logout)
 			viewing = null
 
 		if (new_mob)
-			new_mob.lazy_register_event(/lazy_event/on_logout, src, .proc/mob_logout)
+			new_mob.register_event(/event/logout, src, .proc/mob_logout)
 			viewing = new_mob
 
 /obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/user)
@@ -238,7 +238,7 @@
 		return
 
 	clear()
-	viewing.lazy_unregister_event(/lazy_event/on_logout, src, .proc/mob_logout)
+	viewing.unregister_event(/event/logout, src, .proc/mob_logout)
 	viewing = null
 
 /obj/item/clothing/glasses/scanner/material/proc/get_images(var/turf/T, var/view)

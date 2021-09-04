@@ -11,8 +11,8 @@
 
 /datum/artifact_trigger/pay2use/New()
 	..()
-	my_artifact.lazy_register_event(/lazy_event/on_attackhand, src, .proc/owner_attackhand)
-	my_artifact.lazy_register_event(/lazy_event/on_attackhand, src, .proc/owner_attackby)
+	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackhand)
+	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackby)
 	mode = rand(0,2)
 	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
 	switch(mode)
@@ -196,7 +196,7 @@
 		payviacard(500, 3600, usr)
 
 /datum/artifact_trigger/pay2use/Destroy()
-	my_artifact.lazy_unregister_event(/lazy_event/on_attackhand, src, .proc/owner_attackhand)
-	my_artifact.lazy_unregister_event(/lazy_event/on_attackby, src, .proc/owner_attackby)
+	my_artifact.unregister_event(/event/attackhand, src, .proc/owner_attackhand)
+	my_artifact.unregister_event(/event/attackby, src, .proc/owner_attackby)
 	linked_db = null
 	..()

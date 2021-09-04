@@ -75,7 +75,7 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	lazy_invoke_event(/lazy_event/on_clickon, list(
+	invoke_event(/event/clickon, list(
 		"user" = src,
 		"modifiers" = modifiers,
 		"target" = A
@@ -152,7 +152,7 @@
 		else
 			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
+			if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 
@@ -183,7 +183,7 @@
 	else
 		if(ismob(A))
 			delayNextAttack(10)
-		if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
+		if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 			return
 		RangedAttack(A, params)
 
@@ -245,7 +245,7 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	lazy_invoke_event(/lazy_event/on_ruattack, list("atom" = A))
+	invoke_event(/event/ruattack, list("atom" = A))
 
 /*
 	Middle click
@@ -388,9 +388,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
-		lazy_invoke_event(/lazy_event/on_before_move)
-		lazy_invoke_event(/lazy_event/on_face)
-		lazy_invoke_event(/lazy_event/on_after_move)
+		invoke_event(/event/before_move)
+		invoke_event(/event/face)
+		invoke_event(/event/after_move)
 		return
 
 	if(abs(dx) < abs(dy))
@@ -404,9 +404,9 @@
 		else
 			change_dir(WEST)
 
-	lazy_invoke_event(/lazy_event/on_before_move)
-	lazy_invoke_event(/lazy_event/on_face)
-	lazy_invoke_event(/lazy_event/on_after_move)
+	invoke_event(/event/before_move)
+	invoke_event(/event/face)
+	invoke_event(/event/after_move)
 
 
 // File renamed to mouse.dm?

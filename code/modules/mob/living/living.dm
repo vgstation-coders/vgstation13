@@ -245,7 +245,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
+	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = amount)))
 		return 0
 
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
@@ -257,7 +257,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = OXY, "amount" = amount)))
+	if(invoke_event(/event/damaged, list("kind" = OXY, "amount" = amount)))
 		return 0
 
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
@@ -274,7 +274,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = TOX, "amount" = amount)))
+	if(invoke_event(/event/damaged, list("kind" = TOX, "amount" = amount)))
 		return 0
 
 	var/mult = 1
@@ -298,7 +298,7 @@
 		return 0	//godmode
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
+	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = amount)))
 		return 0
 
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
@@ -310,7 +310,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = CLONE, "amount" = amount)))
+	if(invoke_event(/event/damaged, list("kind" = CLONE, "amount" = amount)))
 		return 0
 
 	if(ishuman(src))
@@ -332,7 +332,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRAIN, "amount" = amount)))
+	if(invoke_event(/event/damaged, list("kind" = BRAIN, "amount" = amount)))
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
@@ -719,9 +719,9 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
-							lazy_invoke_event(/lazy_event/on_before_move)
+							invoke_event(/event/before_move)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
-							lazy_invoke_event(/lazy_event/on_after_move)
+							invoke_event(/event/after_move)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 					else
@@ -789,7 +789,7 @@ Thanks.
 
 	var/turf/T = get_turf(src)
 
-	lazy_invoke_event(/lazy_event/on_resist, list("user" = src))
+	invoke_event(/event/resist, list("user" = src))
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
@@ -1423,9 +1423,9 @@ Thanks.
 					AM.set_glide_size(src.glide_size)
 					if (ismob(AM))
 						var/mob/M = AM
-						lazy_invoke_event(/lazy_event/on_before_move)
+						invoke_event(/event/before_move)
 						step(M, t)
-						lazy_invoke_event(/lazy_event/on_after_move)
+						invoke_event(/event/after_move)
 					else
 						step(AM, t)
 				now_pushing = 0

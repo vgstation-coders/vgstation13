@@ -142,7 +142,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 	src.add_fingerprint(user)
 	to_chat(user, "<b>You touch [src].</b>")
-	lazy_invoke_event(/lazy_event/on_attackhand, list("user" = user, "target" = src))
+	invoke_event(/event/attackhand, list("user" = user, "target" = src))
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
@@ -155,17 +155,17 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
 	else
 		visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>")
-	lazy_invoke_event(/lazy_event/on_attackby, list("attacker" = user, "item" = W))
+	invoke_event(/event/attackby, list("attacker" = user, "item" = W))
 
 /obj/machinery/artifact/Bumped(var/atom/A)
 	if (istype(A,/obj))
-		lazy_invoke_event(/lazy_event/on_bumped, list("bumper" = A, "bumped" = src))
+		invoke_event(/event/bumped, list("bumper" = A, "bumped" = src))
 	else if (isliving(A))
 		var/mob/living/L = A
 		if (!ishuman(L) || !istype(L:gloves,/obj/item/clothing/gloves))
 			if (prob(50))
 				to_chat(L, "<b>You accidentally touch [src].<b>")
-				lazy_invoke_event(/lazy_event/on_bumped, list("bumper" = L, "bumped" = src))
+				invoke_event(/event/bumped, list("bumper" = L, "bumped" = src))
 	..()
 
 /obj/machinery/artifact/to_bump(var/atom/A)
@@ -174,16 +174,16 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		if (!ishuman(L) || !istype(L:gloves,/obj/item/clothing/gloves))
 			if (prob(50))
 				to_chat(L, "<b>\The [src] bumps into you.<b>")
-				lazy_invoke_event(/lazy_event/on_bumped, list("bumper" = L, "bumped" = src))
+				invoke_event(/event/bumped, list("bumper" = L, "bumped" = src))
 	..()
 
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
-	lazy_invoke_event(/lazy_event/on_projectile, list("projectile" = P))
+	invoke_event(/event/projectile, list("projectile" = P))
 	return ..()
 
 /obj/machinery/artifact/beam_connect(var/obj/effect/beam/B)
 	..()
-	lazy_invoke_event(/lazy_event/on_beam_connect, list("beam" = B))
+	invoke_event(/event/beam_connect, list("beam" = B))
 
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)
@@ -197,9 +197,9 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 				ArtifactRepercussion(src, null, "an explosion", "[type]")
 				qdel(src)
 			else
-				lazy_invoke_event(/lazy_event/on_explosion, list("severity" = severity))
+				invoke_event(/event/explosion, list("severity" = severity))
 		if(3.0)
-			lazy_invoke_event(/lazy_event/on_explosion, list("severity" = severity))
+			invoke_event(/event/explosion, list("severity" = severity))
 
 /obj/machinery/artifact/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()

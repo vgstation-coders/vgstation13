@@ -109,7 +109,7 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
-	lazy_invoke_event(/lazy_event/after_mind_transfer, list("mind" = src))
+	invoke_event(/event/after_mind_transfer, list("mind" = src))
 
 /datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"

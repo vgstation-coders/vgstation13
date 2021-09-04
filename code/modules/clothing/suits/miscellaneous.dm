@@ -937,12 +937,12 @@ obj/item/clothing/suit/cassock
 	if(!(H.wear_suit == src))
 		return
 	active = 1
-	H.lazy_register_event(/lazy_event/on_touched, src, .proc/on_touched)
-	H.lazy_register_event(/lazy_event/on_hitby, src, .proc/on_hitby)
-	H.lazy_register_event(/lazy_event/on_attacked_by, src, .proc/on_attacked_by)
-	H.lazy_register_event(/lazy_event/on_unarmed_attack, src, .proc/on_unarmed_attack)
-	H.lazy_register_event(/lazy_event/on_to_bump, src, .proc/on_to_bump)
-	H.lazy_register_event(/lazy_event/on_bumped, src, .proc/on_bumped)
+	H.register_event(/event/touched, src, .proc/on_touched)
+	H.register_event(/event/hitby, src, .proc/on_hitby)
+	H.register_event(/event/attacked_by, src, .proc/on_attacked_by)
+	H.register_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
+	H.register_event(/event/to_bump, src, .proc/on_to_bump)
+	H.register_event(/event/bumped, src, .proc/on_bumped)
 	canremove = 0
 
 /obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
@@ -964,12 +964,12 @@ obj/item/clothing/suit/cassock
 	active = 0
 	var/mob/living/carbon/human/H = loc
 	if(H)
-		H.lazy_unregister_event(/lazy_event/on_touched, src, .proc/on_touched)
-		H.lazy_unregister_event(/lazy_event/on_hitby, src, .proc/on_hitby)
-		H.lazy_unregister_event(/lazy_event/on_unarmed_attack, src, .proc/on_attacked_by)
-		H.lazy_unregister_event(/lazy_event/on_unarmed_attack, src, .proc/on_unarmed_attack)
-		H.lazy_unregister_event(/lazy_event/on_to_bump, src, .proc/on_to_bump)
-		H.lazy_unregister_event(/lazy_event/on_bumped, src, .proc/on_bumped)
+		H.unregister_event(/event/touched, src, .proc/on_touched)
+		H.unregister_event(/event/hitby, src, .proc/on_hitby)
+		H.unregister_event(/event/unarmed_attack, src, .proc/on_attacked_by)
+		H.unregister_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
+		H.unregister_event(/event/to_bump, src, .proc/on_to_bump)
+		H.unregister_event(/event/bumped, src, .proc/on_bumped)
 
 /obj/item/clothing/suit/bomber_vest/examine(mob/user)
 	..()
