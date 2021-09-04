@@ -49,7 +49,7 @@
 /obj/abstract/screen/plane/dark
 	blend_mode = BLEND_ADD
 	mouse_opacity = 0
-	plane = LIGHTING_PLANE_MASTER // Just below the master plane.
+	plane = LIGHTING_PLANE // Just below the master plane.
 	icon = 'icons/lighting/over_dark.dmi'
 	alpha = 10
 	appearance_flags = RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
