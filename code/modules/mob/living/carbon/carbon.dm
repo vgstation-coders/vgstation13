@@ -23,13 +23,13 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	lazy_invoke_event(/lazy_event/on_to_bump, list("user" = src, "bumped" = AM))
+	lazy_invoke_event(/lazy_event/on_to_bump, list("bumper" = src, "bumped" = AM))
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
-	lazy_invoke_event(/lazy_event/on_bumped, list("user" = src, "bumping" = AM))
+	lazy_invoke_event(/lazy_event/on_bumped, list("bumper" = AM, "bumped" = src))
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()

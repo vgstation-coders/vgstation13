@@ -116,7 +116,7 @@
 // Called whenever an atom bumps into another.
 // Currently only used by xenoarch artifacts and humans, should probably be moved to the base proc.
 // Arguments:
-// mob/user: the guy who is bumping.
+// atom/movable/bumper: the atom that is bumping.
 // atom/target: the atom that's being bumped into.
 /lazy_event/on_bumped
 
@@ -159,8 +159,8 @@
 // Called by to_bump
 // Currently only implemented for humans.
 // Arguments:
-// atom/movable/user: the thing that's bumping
-// atom/bumped: the thing that's being bumped
+// atom/movable/bumper: the atom that is bumping.
+// atom/target: the atom that's being bumped into.
 /lazy_event/on_to_bump
 
 // Called by hitby
@@ -183,6 +183,34 @@
 // mob/attacker: the mob doing the attack
 // mob/attacked: the victim of the attack
 /lazy_event/on_unarmed_attack
+
+// Called by beam_connect
+// Arguments:
+// obj/effect/beam/beam: the beam connecting with the atom
+/lazy_event/on_beam_connect
+
+// Called by bullet_act
+// Arguments:
+// obj/item/projectile/projectile: the projectile hitting the atom
+/lazy_event/on_projectile
+
+// Called by ex_act
+// Arguments:
+// severity: the severity of the explosion
+/lazy_event/on_explosion
+
+// Called by /obj/effect/beam/emitter/proc/set_power
+// Arguments:
+// obj/effect/beam/beam: the beam
+/lazy_event/beam_power_change
+
+// Called by attackby
+// Currently only used by artifacts.
+// Arguments:
+// mob/living/attacker: the mob attacking the atom
+// obj/item/item: the item being used for the attack
+/lazy_event/on_attackby
+
 
 /datum
 	/// Associative list of type path -> list(),

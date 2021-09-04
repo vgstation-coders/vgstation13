@@ -951,13 +951,13 @@ obj/item/clothing/suit/cassock
 	detonate()
 /obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/victim, obj/item/item)
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by()
+/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, mob/item)
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack()
+/obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack(mob/attacker, mob/attacked)
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_to_bump()
+/obj/item/clothing/suit/bomber_vest/proc/on_to_bump(atom/movable/bumper, atom/bumped)
 	detonate()
-/obj/item/clothing/suit/bomber_vest/proc/on_bumped()
+/obj/item/clothing/suit/bomber_vest/proc/on_bumped(atom/movable/bumper, atom/bumped)
 	detonate()
 
 /obj/item/clothing/suit/bomber_vest/proc/deactivate_vest()
@@ -988,12 +988,9 @@ obj/item/clothing/suit/cassock
 	qdel(src) //Just in case
 	return SUICIDE_ACT_CUSTOM
 
-/obj/item/clothing/suit/bomber_vest/proc/detonate(list/arguments)
+/obj/item/clothing/suit/bomber_vest/proc/detonate()
 	var/mob/living/carbon/human/H = loc
-	var/whitelist = arguments["has been touched by"]
 	if(!ishuman(H) || !active)
-		return
-	if(whitelist == H) //No bombing ourselves by checking ourselves
 		return
 	explosion(H, 1, 3, 6)
 	message_admins("[H] has detonated \the [src]!")

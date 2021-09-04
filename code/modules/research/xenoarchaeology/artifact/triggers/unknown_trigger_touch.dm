@@ -17,8 +17,10 @@
 			my_effect.DoEffectTouch(user)
 			my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) triggered by [context] ([my_effect.trigger]) || touched by [key_name(user)].")
 
-/datum/artifact_trigger/touch/proc/owner_bumped(mob/user, atom/target)
-	activate(user, "BUMPED")
+/datum/artifact_trigger/touch/proc/owner_bumped(atom/movable/bumper, atom/bumped)
+	if(!isliving(bumper))
+		return
+	activate(bumper, "BUMPED")
 
 /datum/artifact_trigger/touch/proc/owner_attackhand(mob/user, atom/target)
 	activate(user, "TOUCH")
