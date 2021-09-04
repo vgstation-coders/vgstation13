@@ -603,7 +603,14 @@ var/global/msg_id = 0
 		var/find = input("Select image") in nametemp
 		for(var/datum/picture/q in aicamera.aipictures)
 			if(q.fields["name"] == find)
-				aiPDA.photo = q
+				aiPDA.photo = new /obj/item/weapon/photo(aiPDA)
+				aiPDA.photo.name = q.fields["name"]
+				aiPDA.photo.icon = q.fields["icon"]
+				aiPDA.photo.img = q.fields["img"]
+				aiPDA.photo.info = q.fields["info"]
+				aiPDA.photo.pixel_x = q.fields["pixel_x"]
+				aiPDA.photo.pixel_y = q.fields["pixel_y"]
+				aiPDA.photo.blueprints = q.fields["blueprints"]
 				break
 	
 	aiPDA.create_message(src, selected)
@@ -642,7 +649,14 @@ var/global/msg_id = 0
 			var/find = input("Select image") in nametemp
 			for(var/datum/picture/q in targetcam.aipictures)
 				if(q.fields["name"] == find)
-					photo = q
+					photo = new /obj/item/weapon/photo(src)
+					photo.name = q.fields["name"]
+					photo.icon = q.fields["icon"]
+					photo.img = q.fields["img"]
+					photo.info = q.fields["info"]
+					photo.pixel_x = q.fields["pixel_x"]
+					photo.pixel_y = q.fields["pixel_y"]
+					photo.blueprints = q.fields["blueprints"]
 					break
 		
 		create_message(usr, selected)
