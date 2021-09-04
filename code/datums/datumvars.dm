@@ -21,7 +21,7 @@
 			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 
-/client/proc/debug_variables(atom/D)
+/client/proc/debug_variables(atom/D in world)
 	set category = "Debug"
 	set name = "View Variables"
 
