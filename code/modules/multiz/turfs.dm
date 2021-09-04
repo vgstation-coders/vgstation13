@@ -194,7 +194,7 @@
 	icon = 'icons/turf/overlays.dmi'
 	icon_state = ""
 	layer = TURF_LAYER
-	plane = GLASSTILE_PLANE
+	plane = BASE_PLANE
 
 /obj/effect/open_overlay/glass/damage
 	name = "glass open overlay cracks"
