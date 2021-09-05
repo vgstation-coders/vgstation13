@@ -120,12 +120,12 @@
 		user.update_inv_hands()
 		if(wielded)
 			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
-			user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+			user.register_event(/event/moved, src, .proc/mob_moved)
 			user.alpha = 1	//to cloak immediately instead of on the next Life() tick
 			user.alphas[CLOAKINGCLOAK] = 1
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
-			user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+			user.unregister_event(/event/moved, src, .proc/mob_moved)
 			user.alpha = initial(user.alpha)
 			user.alphas.Remove(CLOAKINGCLOAK)
 
@@ -219,8 +219,8 @@
 
 /obj/item/phylactery/Destroy()
 	if(bound_soul)
-		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/revive_soul)
-		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
+		bound_soul.unregister_event(/event/death, src, .proc/revive_soul)
+		bound_soul.unregister_event(/event/z_transition, src, .proc/z_block)
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
@@ -284,23 +284,23 @@
 
 /obj/item/phylactery/proc/unbind()
 	if(bound_soul)
-		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
-		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/revive_soul)
+		bound_soul.unregister_event(/event/z_transition, src, .proc/z_block)
+		bound_soul.unregister_event(/event/death, src, .proc/revive_soul)
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
-	to_bind.lazy_register_event(/lazy_event/on_death, src, .proc/revive_soul)
-	to_bind.lazy_register_event(/lazy_event/on_z_transition, src, .proc/z_block)
+	to_bind.register_event(/event/death, src, .proc/revive_soul)
+	to_bind.register_event(/event/z_transition, src, .proc/z_block)
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/unbind_mind()
 	if(bound_mind)
-		bound_mind.lazy_unregister_event(/lazy_event/after_mind_transfer, src, .proc/follow_mind)
+		bound_mind.unregister_event(/event/after_mind_transfer, src, .proc/follow_mind)
 	bound_mind = null
 
 /obj/item/phylactery/proc/bind_mind(var/datum/mind/to_bind)
-	to_bind.lazy_register_event(/lazy_event/after_mind_transfer, src, .proc/follow_mind)
+	to_bind.register_event(/event/after_mind_transfer, src, .proc/follow_mind)
 	bound_mind = to_bind
 
 /obj/item/phylactery/proc/follow_mind(datum/mind/mind)
@@ -417,14 +417,14 @@
 	equip_cooldown = initial(equip_cooldown)
 	var/spell/fuckup/F = new
 	H.add_spell(/spell/fuckup)
-	H.lazy_register_event(/lazy_event/on_spellcast, F, /spell/fuckup/proc/on_spellcast)
+	H.register_event(/event/spellcast, F, /spell/fuckup/proc/on_spellcast)
 	return ..()
 
 /obj/item/clothing/shoes/fuckup/unequipped(mob/living/carbon/human/H, equipped_slot)
 	equip_cooldown = initial(equip_cooldown)
 	for (var/spell/fuckup/F in H.spell_list)
 		H.remove_spell(F)
-		H.lazy_unregister_event(/lazy_event/on_spellcast, F, /spell/fuckup/proc/on_spellcast)
+		H.unregister_event(/event/spellcast, F, /spell/fuckup/proc/on_spellcast)
 	return ..()
 
 // -- Fuckup boot spell

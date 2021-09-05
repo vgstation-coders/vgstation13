@@ -270,9 +270,6 @@
 	penetration_dampening = 7
 
 	var/list/languages[0]
-	var/event/on_bumping //We bumped someone
-	var/event/on_bumped //We got bumped
-	var/event/on_touched // We got touched by anything
 
 	var/list/alphas = list()
 	var/spell/spell_channeling // The spell that's currently being channeled

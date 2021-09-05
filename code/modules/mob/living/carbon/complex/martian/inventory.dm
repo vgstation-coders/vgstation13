@@ -85,7 +85,7 @@
 		head = null
 		success = 1
 		update_inv_head()
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+		invoke_event(/event/unequipped, list(W))
 	else
 		success = ..()
 

@@ -100,7 +100,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	for(var/datum/action/action_datum in user_actions)
 		action_datum.Grant(user)
 
-	user.lazy_register_event(/lazy_event/on_moved, src, .proc/user_moved)
+	user.register_event(/event/moved, src, .proc/user_moved)
 
 /obj/machinery/computer/security/proc/stop_watching(mob/user)
 	user.cancel_camera()
@@ -108,7 +108,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		action_datum.Remove(user)
 		qdel(action_datum)
 	our_actions -= user
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/user_moved)
+	user.unregister_event(/event/moved, src, .proc/user_moved)
 
 /obj/machinery/computer/security/proc/user_moved(mob/mover)
 	if(is_in_range(mover))

@@ -378,7 +378,7 @@
 		update_inv_wear_mask()
 	else
 		return 0
-	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+	invoke_event(/event/unequipped, list(W))
 	if(success)
 		if(client)
 			client.screen -= W

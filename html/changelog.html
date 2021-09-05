@@ -73,11 +73,87 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.09.05</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Re-added Holodeck Space and Library simulations. (Killette2 &amp; SonixApache)</li>
+				<li class="rscadd">Heart Attacks now have their own mob type. They also now gib upon death and leave splatters when they attack. (</li>
+				<li class="rscadd">Eggs now contain 1u of useless Calcium Carbonate.</li>
+				<li class="rscadd">You can now crack eggs open onto a beaker or cauldron to transfer the yolk to them. Doing so will not add the calcium carbonate to the container, and instead produce some egg shells. (Bomber Harris)</li>
+				<li class="rscadd">Thrown or Hatched eggs now leave some egg shells behind. Those can be grinded to get the calcium carbonate back, although it has no use currently.</li>
+				<li class="imageadd">Added in-hand icons for most types and colours of eggs.</li>
+				<li class="imageadd">Implemented the unused 4th splatter sprite that smashed eggs can have. (throwing eggs now produces both a splatter, and egg shells).</li>
+				<li class="rscadd">You can now recover reagents from a microwave by holding an open reagent container while you eject its content.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Glass floors are no longer invisible over space.</li>
+				<li class="bugfix">Glass floors now have proper dark overlays underneath for open spaces, and show pipes as being underneath them.</li>
+				<li class="rscadd">PDAs can now send photos with messages, with a photo inserted into the PDA. This also includes AIs and borgs, who can select a photo from their internal camera to send.</li>
+				<li class="rscadd">A new cartridge with a built-in camera is available at merch computers! Includes the ability to view all photos and send one in a PDA message. No printer included, though.</li>
+				<li class="bugfix">Emitters no longer leave their beam in place when teleported away, instead instantly shutting off.</li>
+				<li class="tweak">The biomass, spacevine and powercreep random events no longer spawn their infestations in the arrivals shuttle hallway.</li>
+			</ul>
+			<h2 class="date">2021.09.04</h2>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The shuttle engine fire no longer constantly says it bounces/gleams off the windows in front.</li>
+			</ul>
+			<h2 class="date">2021.09.03</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Attempting to join with a job alt-title that&#39;s been removed no longer spawns you half-naked.</li>
+				<li class="tweak">Foam looks better.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Using a condiment bottle on a cauldron now transfers to it instead of from it. (eneocho &amp; kurfurst)</li>
+				<li class="tweak">The Biogenerator now indicates more clearly how many units of reagents you&#39;re printing. (eneocho)</li>
+				<li class="bugfix">Fixed open soda cans appearing closed when removed from a Chem Master. (DamianX)</li>
+				<li class="rscadd">Plates can now be stacked up, whether they are dirty or clean. You can clean a whole stack at once using soap. Be careful not to slip while carrying them.</li>
+				<li class="rscadd">You can remove plates from a stack either with an Alt Click, or a Mouse Drag onto yourself. Alternatively, clicking a stack with a food item will add a plate to it in your hand directly.</li>
+				<li class="rscadd">The Dinnerware now provides 5 stacks of 10 plates each, for a total of 50 plates, up from 20.</li>
+				<li class="rscadd">Plates now inflict 5 brute damage when thrown. They also have a 70 percent chance of shattering this way. Throwing a whole stack applies the chance to each individual plate but the damage isn&#39;t increased.</li>
+				<li class="rscadd">Infected food will transmit its diseases to custom snacks it is added to, including plates. The dirty plate will keep those diseases as well, so there is now some purpose to cleaning them up before using them again.</li>
+				<li class="imageadd">Plates have been removed from the sprites of most food items that had them.</li>
+				<li class="imageadd">Plates now have in-hand icons. Placing food on plates will give them the in-hand icon of the food item used.</li>
+				<li class="rscadd">Plates can be set up to look different depending on the food item, and have the item appear at an offset, which is useful for sprites that have visible pixels going below where the plate should be, such as for the dripping cheese on cheesy meat loafs.</li>
+				<li class="bugfix">Fixed custom sandwiches made using sliced nova bread not using the correct sprite nor carrying the nova bread&#39;s reagents. (eneocho)</li>
+				<li class="bugfix">Animated food items no longer stop animating when placed on a plate, such as for birthday cake slices.</li>
+				<li class="rscadd">Eating food without a fork now has a chance of spawning some crumbs under you. The crumbs are colored depending on the food item eaten.</li>
+				<li class="tweak">You now take 2 minutes to free yourself from a strange present, up from it being instant. (saulmyers)</li>
+				<li class="bugfix">Fixed slime brains getting deleted when re-inserted into their puddles. (chaklet)</li>
+				<li class="bugfix">Fixed being able to use glass sheets on grilles diagonally. (repertor)</li>
+				<li class="bugfix">Fixed meteors being invisible while fired at the station. (gurfan)</li>
+				<li class="imageadd">Added and polished in-hand icons for all cigarette-related items. Every lighters, match, box, cig, and even ashtrays are now visible in your hands.</li>
+				<li class="bugfix">You will no longer crush your pipe into an ashtray, unless on harm intent. On other intents you will simply empty its content and put it out.</li>
+				<li class="rscadd">Cigarettes and Pipes now warn you about 5 seconds prior that they&#39;re about to go out, letting you extinguish them of your own accord. Blunts specifically will burn your lips for 1 burn damage if you let them go out while still on your lips or hands.</li>
+				<li class="rscadd">You now get a message when trying to cut a pipe out of an ear of corn, telling you that you gotta eat it first.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The omnitool (from the cloud ix crate) now properly allows you to remote control any APC or air alarm as though you were a silicon, as long as you have the appropriate access. This means it will be &#34;unlocked&#34; even remotely when the omnitool is in your active hand.</li>
+				<li class="bugfix">Fixed the bugs with using the omnitool at range.</li>
+				<li class="tweak">Airshield projectors will not deploy an airshield when aimed at a storage container (like a backpack), table, or rack if adjacent to that object (includes wearing).</li>
+				<li class="tweak">Ninjas now need to wear their suit to use hologram projectors.</li>
+				<li class="tweak">Ninjas need to wait 2 deciseconds between throwing ninja stars, raised to 1 second if not wearing their suit. Additionally, they only get double throwing power when using the suit.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Toy swords now come in more colours than just blue.</li>
+				<li class="rscadd">Toy swords can now be combined to make toy dual sabers.</li>
+				<li class="rscadd">Ghosts can now view the full OOC crew manifest, with borgs and AIs.</li>
+			</ul>
 			<h2 class="date">2021.09.02</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed the gatling welder being in the wrong hand when facing left or right. (cloutcode)</li>
 				<li class="bugfix">Fixed Immovable Monoliths being tilted.</li>
+				<li class="bugfix">Ctrl plus Arrow no longer rotates chairs that aren&#39;t meant to rotate.</li>
+			</ul>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Items will now no longer break windows (including full ones) if their force is below a minimum damage threshold. Normal windows have a minimum of none, reinforced have 5, plasma have 10 and reinforced plasma have 15.</li>
 			</ul>
 			<h2 class="date">2021.09.01</h2>
 			<h3 class="author">DamianX updated:</h3>
@@ -1719,73 +1795,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">toomykins updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Added &#34;Hogan&#34; and &#34;Randomize&#34; AI module boards, which can now sometimes be found in the vault safe.</li>
-			</ul>
-			<h2 class="date">2021.04.17</h2>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Midround threat is now also displayed on scoreboards</li>
-			</ul>
-			<h2 class="date">2021.04.16</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed some cases where the game trying to spawn a blood stone at an invalid location would prevent any from spawning, leaving the cult unable to either win nor lose.</li>
-				<li class="bugfix">Fixed countless bugs related to chief cultists, including them being unable to use tattoo, hear cult comms, be deconverted, etc...</li>
-			</ul>
-			<h2 class="date">2021.04.13</h2>
-			<h3 class="author">Apogee-dev updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Teleporter consoles now only detect beacons set to the same frequency as the console</li>
-				<li class="rscadd">Examine beacons to view current frequency</li>
-				<li class="rscadd">hunting rifle now fits in the trader&#39;s coat&#39;s exosuit slot</li>
-			</ul>
-			<h3 class="author">BomberBro updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Megaphones now have in-hand sprites</li>
-			</ul>
-			<h3 class="author">Dacendeth updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Lowered odds of finding roulette revolvers by 80%</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Sweets from the candy machine have a random foodchem pulled from a list inside.</li>
-			</ul>
-			<h3 class="author">GreatBigFailure updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Siege cannons can no longer load &#34;grabs&#34; but can load anvils and banana cream pies.</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Anti-Toxin (Dylovene) is now just Dylovene.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Dynamic mode changed yet again! Midround antagonists should appear more frequently and be more varied than always ninjas or traitors.</li>
-			</ul>
-			<h3 class="author">help-maint updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a few more chemicals to floor pills, so even the more mundane combinations at least have a little bit of drugs.</li>
-				<li class="tweak">Adjusted vending machine prices slightly, to make them affordable but not dirt cheap.</li>
-				<li class="tweak">Moved the DIY soda to the merch computer.</li>
-				<li class="bugfix">Fixed custom fridges not respecting access requirements.</li>
-				<li class="tweak">Storage items won&#39;t collapse if they&#39;re not full, so you can always remove the 8th item and then put it back by clicking the same spot it was in.</li>
-			</ul>
-			<h3 class="author">kane-f updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">A new chemical recipe has been discovered allowing for the creation of a man&#39;s best friend, especially those who command personnel.</li>
-				<li class="tweak">Revolutionary squads now require less local threat to besiege your station</li>
-				<li class="rscadd">Basic syringe guns are now available on protolathes</li>
-				<li class="tweak">Rapid syringe guns are now lockboxed for medical access</li>
-				<li class="rscadd">Computers can now be reinforced from EMPs with plasma glass screens</li>
-			</ul>
-			<h3 class="author">robintime updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">the vox shuttle and the lightspeed ship are no longer visible to the AI without cameras</li>
-				<li class="tweak">made the lightship area have the same icon as the other areas used in randomvaults because i felt like it</li>
-				<li class="tweak">added the service and supply channel to dark mode</li>
-				<li class="tweak">makes admin PMs brighter on dark mode (including anything that uses .maroon)</li>
-				<li class="tweak">makes anything that uses the .recruit color readable  on dark mode</li>
-				<li class="tweak">made some other dark purple color brighter because i felt like it</li>
 			</ul>
 		</div>
 		<!--

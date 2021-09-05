@@ -405,6 +405,7 @@
 #define SALTWATER		"saltwater"
 #define CALCIUMOXIDE		"calciumoxide"
 #define CALCIUMHYDROXIDE	"calciumhydroxide"
+#define CALCIUMCARBONATE	"calciumcarbonate"
 #define MUSTARD			"mustard"
 #define RELISH			"relish"
 #define UNTABLE_MUTAGEN		"untable"
