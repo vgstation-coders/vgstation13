@@ -644,7 +644,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Thunderdome"
 	icon_state = "thunder"
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
 
 /area/tdome/tdome1
