@@ -242,7 +242,6 @@
 		dark_plane.alphas["toggle_darkness"] = 255
 	check_dark_vision()
 
-
 /mob/dead/observer/verb/analyze_air()
 	set name = "Analyze Air"
 	set category = "Ghost"

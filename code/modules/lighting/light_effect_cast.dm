@@ -3,6 +3,7 @@
 #define WIDE_SHADOW_THRESHOLD 80
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
+#define TURF_SHADOW_FRACTION 0.75
 
 // Shadows over light_range 5 haven't been done yet.
 #define MAX_LIGHT_RANGE 5
@@ -56,7 +57,7 @@ var/light_power_multiplier = 5
 		T.lumcount = -1
 		affecting_turfs += T
 
-	for(var/turf/T in view(round(0.80*light_range), src))
+	for(var/turf/T in view(round(TURF_SHADOW_FRACTION*light_range), src))
 		affected_shadow_walls += T
 
 	if(!isturf(loc))
@@ -295,40 +296,69 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
 
-var/changed_dir_once = 0
-
-/turf/proc/get_attack_dir(var/atom/movable/light/light_source)
-	var/targ_dir = get_dir(src, light_source)
-	message_admins("targ_dir starts as [targ_dir]")
-	// CHECK: may not actually smoothout that well.
-	var/turf/turf_light_angle = get_step(src, targ_dir)
-	if (light_source.CheckOcclusion(turf_light_angle) || !(turf_light_angle in light_source.affecting_turfs))
-		for (var/dir in alldirs)
-			var/turf/new_source = get_step(src, dir)
-			if (!(light_source.CheckOcclusion(new_source)) && (new_source in light_source.affecting_turfs))
-				message_admins("targ_dir went from [targ_dir] to [dir]")
-				targ_dir = dir
-				break
-
+// While this proc is quite involuted, the highest it can do is :
+// 8 loops in the first "for"
+// 4 loops in the second "for"
 /atom/movable/light/proc/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	var/targ_dir = get_dir(target_turf, src)
-	// The angle from which the light comes from: must be a floor tile (photons do not propagate within walls)
+
+	// This is a rather complicated block which is here for aesthetics.
+	// The goal is to get an angle of approach from the light that is as close to what the player sees as possible.
+	// We call this the "attack angle".
+	// To this end, angles which do not come from the same "room" as the light (ie, which are not in view) are excluded.
+	// Angles coming from walls are excluded as well.
+	// We then go by incremental steps away from the angle (-45, +45, +90, -90) until we do a full circle.
+	// This process allows us to find the closest direction the light might be hitting from.
+	// You may convince yourself of the working of this code with this snippet:
+	/*
+	var/dir_0 = 1
+	for (var/i = 1 to 8)
+    	world.log << dir_0
+    	var/angle = ((-1)**i)*i*45
+    	dir_0 = turn(dir_0, angle)
+	*/
+	// Where you will see the dir_0 go through the entire wind rose as expected.
+	// We need two attack angles : one cardinal and one intercardinal, for reasons that will become clear later on.
+
 	var/turf/turf_light_angle = get_step(target_turf, targ_dir)
+	var/list/closest_attack_angles = list()
 	if (CHECK_OCCLUSION(turf_light_angle) || !(turf_light_angle in affecting_turfs))
-		for (var/dir in alldirs)
-			var/turf/new_source = get_step(target_turf, dir)
-			if (!CHECK_OCCLUSION(new_source) && (new_source in affecting_turfs))
-				changed_dir_once = "targ_dir went from [targ_dir] to [dir]"
-				targ_dir = dir
-				break
+		var/direction = targ_dir
+		for (var/i = 1 to alldirs.len)
+			var/turf/new_source = get_step(target_turf, direction)
+			var/occluded = CHECK_OCCLUSION(new_source)
+			if (!occluded && (new_source in affecting_turfs))
+				closest_attack_angles += direction
+				if (closest_attack_angles.len == 2)
+					break
+			var/i_th_angle = ((-1)**i)*i*45 // -45, (-45+90)=+45, (+45-135)=-90, etc. With each step we go a little bit further away from the target direction.
+			direction = turn(direction, i_th_angle)
+
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
 		var/turf/T = get_step(target_turf, d)
 		if(CHECK_OCCLUSION(T) && (T in affected_shadow_walls))
 			blocking_dirs |= d
 
+	// Blending works best if the line formed by the wall and its two blocking neighbours is perpendical to the attack angle of the light.
+	// Basically that means that a corner must be attacked from an intercardinal, and a straight wall must be attacked from a cardinal.
+	// Since byond's directions algebra is shit, the best way to handle this is by cheating and selecting the easiest case (N|S or E|W) and using else.
+	if (closest_attack_angles.len)
+		if ((blocking_dirs == (NORTH|SOUTH)) || (blocking_dirs == (EAST|WEST)))
+			targ_dir = pick(closest_attack_angles & cardinal)
+		else
+			targ_dir = pick(closest_attack_angles & diagonal)
+
 	// The "edge" of the light, with images consisting of directional sprites from wall_lighting.dmi "pushed" in the correct direction.
-	var/image/I = image('icons/lighting/wall_lighting_big.dmi', loc = get_turf(src))
+	if (istype(target_turf, /turf/unsimulated/mineral))
+		var/image/img = image('icons/turf/rock_overlay.dmi', loc = get_turf(src))
+		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
+		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
+		img.layer = HIGHEST_LIGHTING_LAYER
+		img.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
+		temp_appearance += img
+
+	var/image/I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
 	I.icon_state = "[blocking_dirs]-[targ_dir]"
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
@@ -426,9 +456,50 @@ var/changed_dir_once = 0
 	I.icon_state = "overlay[overlay_state]"
 	overlays += I
 
+// -- debug & shit
+
+/turf/proc/get_attack_dir(var/atom/movable/light/light_source)
+	var/turf/target_turf = src
+	var/targ_dir = get_dir(target_turf, light_source)
+	var/turf/turf_light_angle = get_step(target_turf, targ_dir)
+	var/list/closest_attack_angles = list()
+	if (light_source.CheckOcclusion(turf_light_angle) || !(turf_light_angle in light_source.affecting_turfs))
+		var/direction = targ_dir
+		for (var/i = 1 to alldirs.len)
+			message_admins("[i]-th dir is [direction]")
+			var/turf/new_source = get_step(target_turf, direction)
+			var/occluded = light_source.CheckOcclusion(new_source)
+			if (!occluded && (new_source in light_source.affecting_turfs))
+				message_admins("[direction] is chosen")
+				closest_attack_angles += direction
+				if (closest_attack_angles.len == 2)
+					break
+			var/i_th_angle = ((-1)**i)*i*45
+			direction = turn(direction, i_th_angle)
+	message_admins("attack dirs are:")
+	for (var/x in closest_attack_angles)
+		message_admins("[x]")
+
+	var/blocking_dirs = 0
+	for(var/d in cardinal)
+		var/turf/T = get_step(target_turf, d)
+		if(light_source.CheckOcclusion(T) && (T in light_source.affected_shadow_walls))
+			blocking_dirs |= d
+
+	message_admins("blocking dirs are: [blocking_dirs]")
+
+	if (closest_attack_angles.len)
+		if ((blocking_dirs == (NORTH|SOUTH)) || (blocking_dirs == (EAST|WEST)))
+			targ_dir = pick(closest_attack_angles & cardinal)
+		else
+			targ_dir = pick(closest_attack_angles & diagonal)
+
+	message_admins("final targ_dir is: [targ_dir]")
+
 #undef MAX_LIGHT_RANGE
 #undef BASE_PIXEL_OFFSET
 #undef BASE_TURF_OFFSET
 #undef WIDE_SHADOW_THRESHOLD
 #undef OFFSET_MULTIPLIER_SIZE
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
+#undef TURF_SHADOW_FRACTION
