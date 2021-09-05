@@ -94,7 +94,7 @@
 
 /obj/structure/falsewall
 	name = "wall"
-	desc = "A huge chunk of metal used to seperate rooms."
+	desc = "A huge chunk of metal used to separate rooms."
 	anchored = 1
 	icon = 'icons/turf/walls.dmi'
 	var/mineral = "metal"
@@ -121,7 +121,7 @@
 /obj/structure/falsewall/Destroy()
 
 	var/temploc = src.loc
-	loc.invisibility = 0
+	loc.mouse_opacity = 1
 
 	spawn(10)
 		for(var/turf/simulated/wall/W in range(temploc,1))
@@ -157,7 +157,7 @@
 		opening = 1
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
-		loc.invisibility = 0
+		loc.mouse_opacity = 1
 		sleep(15)
 		setDensity(FALSE)
 		set_opacity(0)
@@ -171,7 +171,7 @@
 		set_opacity(1)
 		src.relativewall()
 		opening = 0
-		loc.invisibility = 101
+		loc.mouse_opacity = 0
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
@@ -242,7 +242,7 @@
 
 /obj/structure/falserwall	// why isn't this a child type?
 	name = "reinforced wall"
-	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
+	desc = "A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out."
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "r_wall"
 	density = 1
@@ -267,7 +267,7 @@
 /obj/structure/falserwall/Destroy()
 
 	var/temploc = src.loc
-	loc.invisibility = 0
+	loc.mouse_opacity = 1
 
 	spawn(10)
 		for(var/turf/simulated/wall/W in range(temploc,1))
@@ -295,7 +295,7 @@
 		// Open wall
 		icon_state = "frwall_open"
 		flick("frwall_opening", src)
-		loc.invisibility = 0
+		loc.mouse_opacity = 1
 		sleep(15)
 		setDensity(FALSE)
 		set_opacity(0)
@@ -309,7 +309,7 @@
 		set_opacity(1)
 		relativewall()
 		opening = 0
-		loc.invisibility = 101
+		loc.mouse_opacity = 0
 
 /obj/structure/falserwall/relativewall()
 
