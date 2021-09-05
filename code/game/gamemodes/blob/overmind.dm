@@ -26,11 +26,11 @@
 /mob/camera/blob/New()
 	blob_overminds += src
 	..()
-	lazy_register_event(/lazy_event/on_living_login, src, /mob/camera/blob/proc/add_HUD)
+	register_event(/event/living_login, src, /mob/camera/blob/proc/add_HUD)
 
 /mob/camera/blob/Destroy()
 	blob_overminds -= src
-	lazy_unregister_event(/lazy_event/on_living_login, src, /mob/camera/blob/proc/add_HUD)
+	unregister_event(/event/living_login, src, /mob/camera/blob/proc/add_HUD)
 	..()
 
 /mob/camera/blob/proc/add_HUD(var/mob/user)
@@ -195,7 +195,7 @@
 			if(newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
-		lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
+		invoke_event(/event/moved, list("mover" = src))
 		return 0
 
-	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
+	invoke_event(/event/moved, list("mover" = src))

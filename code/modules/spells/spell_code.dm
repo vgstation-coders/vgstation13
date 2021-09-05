@@ -195,7 +195,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = targets))
+		user.invoke_event(/event/spellcast, list("spell" = src, "user" = user, "targets" = targets))
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -213,17 +213,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
-		user.lazy_register_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
+		user.register_event(/event/uattack, src, .proc/channeled_spell)
 		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.lazy_register_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
+			user.register_event(/event/ruattack, src, .proc/channeled_spell)
 			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
-		user.lazy_unregister_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
-		user.lazy_unregister_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
+		user.unregister_event(/event/uattack, src, .proc/channeled_spell)
+		user.unregister_event(/event/ruattack, src, .proc/channeled_spell)
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
@@ -242,7 +242,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = target))
+		user.invoke_event(/event/spellcast, list("spell" = src, "user" = user, "targets" = target))
 
 		if(prob(critfailchance))
 			critfail(target, holder)

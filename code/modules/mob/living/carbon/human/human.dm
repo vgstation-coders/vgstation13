@@ -232,8 +232,8 @@
 
 	update_mutantrace()
 
-	lazy_register_event(/lazy_event/on_equipped, src, .proc/update_name)
-	lazy_register_event(/lazy_event/on_unequipped, src, .proc/update_name)
+	register_event(/event/equipped, src, .proc/update_name)
+	register_event(/event/unequipped, src, .proc/update_name)
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()

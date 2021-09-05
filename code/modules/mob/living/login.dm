@@ -8,7 +8,7 @@
 	mind.active = 1		//indicates that the mind is currently synced with a client
 
 	ResendAllUIs() // Re-sends mind UIs
-	lazy_invoke_event(/lazy_event/on_living_login, list("user" = src))
+	invoke_event(/event/living_login, list("user" = src))
 
 	//login during ventcrawl
 	if(is_ventcrawling && istype(loc, /obj/machinery/atmospherics)) //attach us back into the pipes

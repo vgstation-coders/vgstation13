@@ -355,28 +355,23 @@
 		recruiter.jobban_roles = list("pAI") // pAI/Borers share the same jobban check so here we go too.
 
 	// Role set to Yes or Always
-	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 	// Role set to No or Never
-	recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-	recruiter.recruited.Add(src, "recruiter_recruited")
+	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
 	recruiter.request_player()
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [name] is awakening. You have been added to the list of potential ghosts. ([controls])</span>")
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [name] is awakening. You have been added to the list of potential ghosts. ([controls])</span>")
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [src] is awakening. ([controls])</span>")
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is awakening. ([controls])</span>")
 
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
 		possessed = TRUE
 		qdel(recruiter)
 		recruiter = null
@@ -385,7 +380,7 @@
 		var/mob/living/simple_animal/shade/sword/S = new(src)
 		S.real_name = name
 		S.name = name
-		S.ckey = O.ckey
+		S.ckey = player.ckey
 		S.universal_speak = TRUE
 		S.universal_understand = TRUE
 		S.status_flags |= GODMODE //Make sure they can NEVER EVER leave the blade.

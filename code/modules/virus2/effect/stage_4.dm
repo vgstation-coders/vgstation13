@@ -828,8 +828,8 @@
 /datum/disease2/effect/emitter/activate(var/mob/living/mob)
 	if (istype(mob) && !emitter)
 		emitter = mob
-		emitter.lazy_register_event(/lazy_event/on_before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
-		emitter.lazy_register_event(/lazy_event/on_after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
+		emitter.register_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.register_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
@@ -896,8 +896,8 @@
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.lazy_unregister_event(/lazy_event/on_before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
-		emitter.lazy_unregister_event(/lazy_event/on_after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
+		emitter.unregister_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.unregister_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 		emitter = null
 	previous_dir = null
 	previous_loc = null

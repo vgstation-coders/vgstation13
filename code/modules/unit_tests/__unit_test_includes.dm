@@ -9,7 +9,7 @@
 #include "highscores.dm"
 #include "human.dm"
 #include "icons.dm"
-#include "lazy_events.dm"
+#include "events.dm"
 #include "names.dm"
 #include "reagent_recipe_collisions.dm"
 #include "turretid.dm"

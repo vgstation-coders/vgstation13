@@ -333,9 +333,6 @@
 	var/base_state = "emitter"
 	var/power = 1
 
-	//Notify prisms of power change.
-	var/event/power_change = new
-
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower
 	if(next)
@@ -343,7 +340,7 @@
 		next_beam.set_power(power)
 	update_icon()
 	if(!master)
-		INVOKE_EVENT(power_change,list("beam" = src))
+		invoke_event(/event/beam_power_change, list("beam" = src))
 
 /obj/effect/beam/emitter/spawn_child()
 	var/obj/effect/beam/emitter/beam = ..()

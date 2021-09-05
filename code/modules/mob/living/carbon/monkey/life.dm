@@ -82,9 +82,9 @@
 
 		if(prob(33) && canmove && isturf(loc) && !pulledby && !(grabbed_by?.len)) //won't move if being pulled
 
-			lazy_invoke_event(/lazy_event/on_before_move)
+			invoke_event(/event/before_move)
 			step(src, pick(cardinal))
-			lazy_invoke_event(/lazy_event/on_after_move)
+			invoke_event(/event/after_move)
 
 		if(prob(1))
 			passive_emote()

@@ -132,9 +132,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.register_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.unregister_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
@@ -165,10 +165,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
-		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag
