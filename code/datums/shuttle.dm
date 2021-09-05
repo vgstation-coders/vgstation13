@@ -333,7 +333,7 @@
 				destination_port = null
 				return
 			for(var/atom/movable/AA in linked_area)
-				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
+				AA.invoke_event(/event/z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)

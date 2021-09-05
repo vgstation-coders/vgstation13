@@ -400,7 +400,7 @@
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
+				M.unregister_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -410,7 +410,7 @@
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
+			user.unregister_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -596,7 +596,7 @@
 					animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 					watching_mobs |= user
 					user.client.images |= watcher_maps["\ref[user]"]
-					user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
+					user.register_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
 				switch(veil_thickness)
 					if (CULT_MENDED)
@@ -1483,7 +1483,7 @@ var/list/bloodstone_list = list()
 				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 				watching_mobs |= user
 				user.client.images |= watcher_maps["\ref[user]"]
-				user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
+				user.register_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 
 /obj/structure/cult/bloodstone/proc/checkPosition()
 	for(var/mob/M in watching_mobs)
@@ -1496,7 +1496,7 @@ var/list/bloodstone_list = list()
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
+				M.unregister_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -1506,7 +1506,7 @@ var/list/bloodstone_list = list()
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
+			user.unregister_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -1680,7 +1680,7 @@ var/list/bloodstone_list = list()
 	switch(dance_move)
 		if ("clock")
 			for (var/mob/M in contributors)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHWEST,NORTH)
 						M.forceMove(get_step(M,EAST))
@@ -1694,11 +1694,11 @@ var/list/bloodstone_list = list()
 					if (SOUTHWEST,WEST)
 						M.forceMove(get_step(M,NORTH))
 						M.dir = NORTH
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("counter")
 			for (var/mob/M in contributors)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHEAST,NORTH)
 						M.forceMove(get_step(M,WEST))
@@ -1712,22 +1712,22 @@ var/list/bloodstone_list = list()
 					if (NORTHWEST,WEST)
 						M.forceMove(get_step(M,SOUTH))
 						M.dir = SOUTH
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("spin")
 			for (var/mob/M in contributors)
 				spawn()
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = EAST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = NORTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = WEST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)

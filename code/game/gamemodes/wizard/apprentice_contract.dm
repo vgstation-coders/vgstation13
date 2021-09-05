@@ -149,27 +149,23 @@ var/list/wizard_apprentice_setups_by_name = list()
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 	// Role set to No or Never
-	recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-	recruiter.recruited.Add(src, "recruiter_recruited")
+	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
 	recruiter.request_player()
 
-/obj/item/wizard_apprentice_contract/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\A [src] is looking for candidates. You have been added to the list of potential ghosts. ([controls])</span>")
+/obj/item/wizard_apprentice_contract/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\A [src] is looking for candidates. You have been added to the list of potential ghosts. ([controls])</span>")
 
-/obj/item/wizard_apprentice_contract/proc/recruiter_not_recruiting(var/list/args)
+/obj/item/wizard_apprentice_contract/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
 	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
 	to_chat(O, "<span class='recruit'>\A [src] is looking for candidates. ([controls])</span>")
 
-/obj/item/wizard_apprentice_contract/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/ghost = args["player"]
-	if(!ghost)
+/obj/item/wizard_apprentice_contract/proc/recruiter_recruited(mob/dead/observer/player)
+	if(!player)
 		chosen_setup = null
 		polling_ghosts = FALSE
 		kill_light()
@@ -180,7 +176,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	var/mob/living/carbon/human/apprentice = new(this_turf)
 	apprentice.setGender(forced_apprentice_gender || pick(MALE,FEMALE))
 	apprentice.randomise_appearance_for(apprentice.gender)
-	apprentice.ckey = ghost.ckey
+	apprentice.ckey = player.ckey
 
 	chosen_setup.give_spells(apprentice)
 

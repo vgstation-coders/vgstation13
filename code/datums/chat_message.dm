@@ -54,7 +54,7 @@ var/runechat_icon = null
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
-		owned_by.mob.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
+		owned_by.mob.unregister_event(/event/destroyed, src, .proc/qdel_self)
 	owned_by = null
 	message_loc = null
 	message = null
@@ -74,7 +74,7 @@ var/runechat_icon = null
 	set waitfor = FALSE
 	// Register client who owns this message
 	owned_by = owner.client
-	owner.lazy_register_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
+	owner.register_event(/event/destroyed, src, .proc/qdel_self)
 
 	// Clip message
 	var/maxlen = owned_by.prefs.max_chat_length

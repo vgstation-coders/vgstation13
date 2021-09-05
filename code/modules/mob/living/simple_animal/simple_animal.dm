@@ -240,11 +240,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
-					lazy_invoke_event(/lazy_event/on_before_move)
+					invoke_event(/event/before_move)
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
-					lazy_invoke_event(/lazy_event/on_after_move)
+					invoke_event(/event/after_move)
 
 	handle_automated_speech()
 
@@ -594,7 +594,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
+	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
 	if (damage > 0)
 		damageoverlaytemp = 20
@@ -612,7 +612,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = damage)))
+	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2

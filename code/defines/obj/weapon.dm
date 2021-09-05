@@ -499,7 +499,7 @@
 					to_chat(trappeduser, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 					trapped = 0
 					unlock_atom(trappeduser)
-					trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+					trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 					trappeduser = null
 					anchored = FALSE
 					return
@@ -514,7 +514,7 @@
 						playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 						trapped = 0
 						unlock_atom(trappeduser)
-						trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+						trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 						trappeduser = null
 						anchored = FALSE
 						return
@@ -588,7 +588,7 @@
 				trapped = 0
 				anchored = FALSE
 				unlock_atom(trappeduser)
-				trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+				trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 				trappeduser = null
 			else
 				to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappeduser.name].</span>")
@@ -597,7 +597,7 @@
 					trapped = 0
 					anchored = FALSE
 					unlock_atom(trappeduser)
-					trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+					trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 					trappeduser = null
 		else if (istype(trappedbear))
 			to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappedbear.name].</span>")
@@ -666,7 +666,7 @@
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
 		H.audible_scream()
 		lock_atom(H, /datum/locking_category/beartrap)
-		H.lazy_register_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+		H.register_event(/event/moved, src, .proc/forcefully_remove)
 
 		if(trappedorgan.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
 			H.UpdateDamageIcon()
@@ -675,7 +675,7 @@
 		if(!H.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
 			to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap!</span>")
 			trapped = 0
-			trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+			trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 			trappeduser = null
 			unlock_atom(H)
 			anchored = FALSE
@@ -717,7 +717,7 @@
 			to_chat(trappeduser, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 			trapped = 0
 			unlock_atom(trappeduser)
-			trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+			trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 			trappeduser = null
 			anchored = FALSE
 
@@ -744,7 +744,7 @@
 		visible_message("<span class='warning'>The wound on [mover]'s leg worsens terribly as the trap let go of them.</span>")
 		trapped = 0
 		unlock_atom(trappeduser)
-		trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+		trappeduser.unregister_event(/event/moved, src, .proc/forcefully_remove)
 		anchored = FALSE
 		trappeduser.update_canmove()
 		trappeduser = null

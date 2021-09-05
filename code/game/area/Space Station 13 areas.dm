@@ -1237,6 +1237,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Holodeck - Checkers"
 /area/holodeck/source_gym
 	name = "\improper Holodeck - Gym"
+/area/holodeck/source_library
+	name = "\improper Holodeck - Library"
 
 /area/holodeck/source_catnip
 	name = "\improper Holodeck - Club Catnip"

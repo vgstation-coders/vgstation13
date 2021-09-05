@@ -125,7 +125,7 @@
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
-	lazy_invoke_event(/lazy_event/on_exited, list("mover" = mover, "location" = src, "newloc" = newloc))
+	invoke_event(/event/exited, list("mover" = mover, "location" = src, "newloc" = newloc))
 
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
@@ -175,7 +175,7 @@
 		A.inertia_dir = 0
 
 	..()
-	lazy_invoke_event(/lazy_event/on_entered, list("mover" = A, "location" = src, "oldloc" = OldLoc))
+	invoke_event(/event/entered, list("mover" = A, "location" = src, "oldloc" = OldLoc))
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj in range(1, src))
@@ -249,9 +249,9 @@
 			if(!move_to_z)
 				return
 
-			A.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			A.invoke_event(/event/z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
 			for(var/atom/movable/AA in contents_brought)
-				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				AA.invoke_event(/event/z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -281,9 +281,9 @@
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			A.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			A.invoke_event(/event/post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
 			for(var/atom/movable/AA in contents_brought)
-				AA.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				AA.invoke_event(/event/post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 
 /turf/proc/is_plating()
 	return 0
