@@ -57,7 +57,7 @@
 				if(M == user)
 					continue
 				to_chat(M, "[user] detaches the power sink from the cable.")
-			kill_light()
+			set_light(0)
 			icon_state = "powersink0"
 
 			return
@@ -65,7 +65,7 @@
 		..()
 
 /obj/item/device/powersink/Destroy()
-	kill_light()
+	set_light(0)
 	processing_objects.Remove(src)
 	attached?.attached = null
 	attached = null
@@ -100,7 +100,7 @@
 					continue
 				to_chat(M, "[user] deactivates the power sink!")
 			mode = 1
-			kill_light()
+			set_light(0)
 			icon_state = "powersink0"
 			playsound(src, 'sound/effects/teleport.ogg', 50, 1)
 			processing_objects.Remove(src)

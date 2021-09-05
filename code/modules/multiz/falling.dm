@@ -47,28 +47,28 @@
 	fall_lock = TRUE
 	spawn(4 / gravity) // Now we use a delay of 4 ticks divided by the gravity.
 		fall_lock = FALSE
-
+		
 		// We're in a new loc most likely, so check all this again
 		below = GetBelow(src)
 		if(!below)
 			return
-
+	
 		bottom = null
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
-
+	
 		if(istype(bottom,/turf/space))
 			return
 		T = loc
 		if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
 			return
-
+	
 		gravity = get_gravity()
 		if(!gravity)
 			return
 
 		/*if(throwing)  This was causing odd behavior where things wouldn't stop.
 			return*/
-
+	
 		if(can_fall())
 			// We spawn here to let the current move operation complete before we start falling. fall() is normally called from
 			// Entered() which is part of Move(), by spawn()ing we let that complete.  But we want to preserve if we were in client movement
@@ -94,7 +94,7 @@
 	return TRUE
 
 // These didn't fall anyways but better to nip this now just incase.
-/atom/movable/light/can_fall()
+/atom/movable/lighting_overlay/can_fall()
 	return FALSE
 
 // Function handling going over open spaces, pre-extension to normal throw hit checks
