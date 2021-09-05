@@ -154,7 +154,7 @@ proc/process_adminbus_teleport_locs()
 	power_light = 0
 	power_environ = 0
 	always_unpowered = 0
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 	shuttle_can_crush = TRUE
 
 /area/arrival
@@ -195,7 +195,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle
 	requires_power = 0
-	dynamic_lighting = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
+	dynamic_lighting = 0
 	//haha fuck you we dynamic lights now
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
@@ -363,7 +363,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Nuclear Operative Shuttle"
 	icon_state = "yellow"
 	requires_power = 0
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -446,14 +446,14 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Vox Skipjack"
 	icon_state = "yellow"
 	requires_power = 0
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship
 	name = "\improper Lightspeed Ship"
 	requires_power = 1
 	icon_state = "firingrange"
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship/start
@@ -542,7 +542,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Centcom"
 	icon_state = "centcom"
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
+	luminosity = 1
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE //Central Command is always squeaky clean yo
 
@@ -572,12 +573,12 @@ proc/process_adminbus_teleport_locs()
 /area/centcom/specops
 	name = "\improper Centcom Special Ops"
 	icon_state = "centcom-specops"
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 
 /area/centcom/striketeam
 	name = "\improper Custom Strike Team"
 	icon_state = "centcom-specops"
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 
 /area/centcom/creed
 	name = "Creed's Office"
@@ -643,7 +644,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Thunderdome"
 	icon_state = "thunder"
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
 
 /area/tdome/tdome1
@@ -670,7 +671,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Wizard's Den"
 	icon_state = "yellow"
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
 
 /area/vox_station
@@ -2843,7 +2844,7 @@ var/list/the_station_areas = list (
 	name = "abandoned shack"
 	requires_power = 0
 	icon_state = "firingrange"
-	dynamic_lighting = 1
+	dynamic_lighting = 0
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
 

@@ -37,7 +37,7 @@
 
 /obj/machinery/anomaly/hyperspectral/stop()
 	..()
-	set_light(0)
+	kill_light()
 
 /obj/machinery/anomaly/hyperspectral/ScanResults()
 	var/results = "The scan was inconclusive. Check sample integrity."
