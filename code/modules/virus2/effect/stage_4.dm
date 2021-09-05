@@ -556,15 +556,8 @@
 					spawn_turfs.Add(T)
 			if(!spawn_turfs.len)
 				spawn_turfs.Add(get_turf(H))
-			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
-			heart_attack.appearance = blown_heart.appearance
-			heart_attack.icon_dead = "heart-off"
-			heart_attack.environment_smash_flags = 0
-			heart_attack.melee_damage_lower = 15
-			heart_attack.melee_damage_upper = 15
-			heart_attack.health = 50
-			heart_attack.maxHealth = 50
-			heart_attack.stat_attack = 1
+			var/mob/living/simple_animal/hostile/heart_attack/HA = new(pick(spawn_turfs))
+			HA.update_heart(blown_heart,H.dna,virus_copylist(H.virus2))
 			score["heartattacks"]++
 			qdel(blown_heart)
 
