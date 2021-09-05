@@ -264,6 +264,7 @@
 	heat_production = 3800
 	source_temperature = TEMPERATURE_WELDER
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 
 	//Cost to make in the autolathe
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)

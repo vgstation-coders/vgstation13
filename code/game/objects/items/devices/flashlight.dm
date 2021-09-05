@@ -188,6 +188,7 @@
 	source_temperature = TEMPERATURE_FLAME
 	var/H_color = ""
 
+	light_type = LIGHT_SOFT_FLICKER
 	light_color = LIGHT_COLOR_FLARE
 
 /obj/item/device/flashlight/flare/New()
