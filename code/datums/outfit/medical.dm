@@ -400,7 +400,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/syringe/stoxin,
+			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
 		/datum/species/vox = list(
@@ -411,7 +411,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/syringe/stoxin,
+			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
 	)
