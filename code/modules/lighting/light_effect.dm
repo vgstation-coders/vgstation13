@@ -99,11 +99,10 @@
 			else
 				forceMove(holder.loc, glide_size_override = 8) // Hopefully whatever we're gliding with has smooth movement.
 
-		for(var/atom/movable/light/L in range(world.view, T)) //view(world.view, dview_mob))
 			if (world.cpu > LIGHT_CPU_THRESHOLD && ticker.current_state > GAME_STATE_PREGAME)
-				lighting_update_lights |= L
+				lighting_update_lights |= src
 			else
-				L.cast_light()
+				src.cast_light()
 	else
 		init_lights |= src
 
