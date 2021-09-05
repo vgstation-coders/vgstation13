@@ -9013,6 +9013,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 2.211
 	specheatcap = 87.45
 
+/datum/reagent/calciumcarbonate
+	name = "Calcium Carbonate"
+	id = CALCIUMCARBONATE
+	description = "An odorless, fine, white micro-crystalline powder. Usually obtained by grinding limestone, or egg shells."
+	color = "#FFFFFF"
+	density = 2.73
+	specheatcap = 83.43
+
 /datum/reagent/sodium_silicate
 	name = "Sodium Silicate"
 	id = SODIUMSILICATE

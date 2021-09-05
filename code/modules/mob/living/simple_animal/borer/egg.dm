@@ -75,6 +75,7 @@
 		var/mob/living/simple_animal/borer/B = new borer_type(T, child_prefix_index)
 		B.transfer_personality(O.client)
 		// Play hatching noise here.
+		new /obj/item/trash/egg/borer(T)
 		playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
 		qdel(src)
 	else
