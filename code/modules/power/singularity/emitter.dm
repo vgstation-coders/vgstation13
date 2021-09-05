@@ -189,6 +189,12 @@
 		to_chat(user, "<span class='warning'>\The [src] needs to be firmly secured to the floor first.</span>")
 		return 1
 
+/obj/machinery/power/emitter/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+	if(active)
+		visible_message("<span class='warning'>\the [src] gets yanked off of it's power cable and turns off!</span>")
+		turn_off()
+	..()
+
 //Important note, those procs not log the emitter being turned on or off, so please use the logs in attack_hand above
 /obj/machinery/power/emitter/proc/turn_on()
 	active = 1
