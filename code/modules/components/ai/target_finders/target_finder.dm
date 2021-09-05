@@ -6,7 +6,7 @@ var/list/target = TF.GetTargets()
 	var/range=0
 	var/list/exclude_types=list(
 			/obj/effect,
-			/atom/movable/light,
+			/atom/movable/lighting_overlay,
 			/turf
 	)
 
