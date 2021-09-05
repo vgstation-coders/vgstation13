@@ -62,5 +62,6 @@
 		I.plane = relative_plane(LIGHTING_PLANE)
 		I.blend_mode = BLEND_ADD
 		overlays += I
+		luminosity = 1
 	else
 		overlays.Cut()
