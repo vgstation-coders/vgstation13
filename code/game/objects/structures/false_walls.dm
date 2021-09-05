@@ -242,7 +242,7 @@
 
 /obj/structure/falserwall	// why isn't this a child type?
 	name = "reinforced wall"
-	desc = "A huge chunk of reinforced metal used to seperate rooms."
+	desc = "A huge chunk of reinforced metal and anchored rods used to seperate rooms and keep all but the most equipped crewmen out."
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "r_wall"
 	density = 1
