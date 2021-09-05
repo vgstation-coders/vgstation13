@@ -137,7 +137,7 @@ turf/simulated/floor/update_icon()
 			overlays += floor_overlay
 			light_color = floor_overlay.color
 		else
-			kill_light()
+			set_light(0)
 			icon_state = "light_off"
 	else if(is_grass_floor())
 		if(!broken && !burnt)
@@ -388,7 +388,7 @@ turf/simulated/floor/update_icon()
 	if(floor_tile)
 		qdel(floor_tile)
 	icon_plating = "plating"
-	kill_light()
+	set_light(0)
 	floor_tile = null
 	intact = 0
 	broken = 0
@@ -657,7 +657,7 @@ turf/simulated/floor/update_icon()
 						L.apply_radiation(3,RAD_EXTERNAL)
 					flick("uranium_active",src)
 					spawn(20)
-						kill_light()
+						set_light(0)
 					spawn(200)
 						spam_flag = 0
 						update_icon()

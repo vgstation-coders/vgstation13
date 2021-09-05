@@ -546,7 +546,7 @@
 
 /obj/machinery/bot/proc/turn_off()
 	on = 0
-	kill_light()
+	set_light(0)
 
 /obj/machinery/bot/proc/explode()
 	qdel(src)

@@ -74,7 +74,7 @@
 					continue
 				if(istype(A, /obj/structure/cable ))
 					continue
-				if(istype(A, /atom/movable/light))
+				if(istype(A, /atom/movable/lighting_overlay))
 					continue
 				if(A.flags & INVULNERABLE)
 					continue

@@ -40,8 +40,8 @@
 	spawn()
 		src.teleport(M)
 */
-/obj/effect/portal/Crossed(AM as mob|obj)
-	if(istype(AM, /atom/movable/light))
+/obj/effect/portal/Crossed(AM as mob|obj,var/no_tp=0)
+	if(no_tp)
 		return
 	spawn()
 		teleport(AM)
