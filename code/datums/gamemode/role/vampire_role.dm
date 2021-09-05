@@ -255,7 +255,6 @@
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.dark_plane.alphas["vampire_vision"] = 255
 		H.see_in_dark = 8
 		H.see_invisible = SEE_INVISIBLE_MINIMUM
 

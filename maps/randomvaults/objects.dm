@@ -461,7 +461,7 @@
 /obj/machinery/floodlight/on/New()
 	..()
 	on = 1
-	set_light()
+	set_light(brightness_on)
 	update_icon()
 
 /obj/machinery/floodlight/on/infinite
