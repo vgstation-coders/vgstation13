@@ -4,6 +4,7 @@
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 #define TURF_SHADOW_FRACTION 0.75
+#define BLUR_SIZE 2 // integer, please
 
 // Shadows over light_range 5 haven't been done yet.
 #define MAX_LIGHT_RANGE 5
@@ -302,6 +303,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/proc/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	var/targ_dir = get_dir(target_turf, src)
 
+	// 05/09: commented out for now, but worth exploring.
 	// This is a rather complicated block which is here for aesthetics.
 	// The goal is to get an angle of approach from the light that is as close to what the player sees as possible.
 	// We call this the "attack angle".
@@ -321,8 +323,11 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// We need two attack angles : one cardinal and one intercardinal, for reasons that will become clear later on.
 
 	var/turf/turf_light_angle = get_step(target_turf, targ_dir)
+	/*
 	var/list/closest_attack_angles = list()
+	*/
 	if (CHECK_OCCLUSION(turf_light_angle) || !(turf_light_angle in affecting_turfs))
+		/*
 		var/direction = targ_dir
 		for (var/i = 1 to alldirs.len)
 			var/turf/new_source = get_step(target_turf, direction)
@@ -333,6 +338,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 					break
 			var/i_th_angle = ((-1)**i)*i*45 // -45, (-45+90)=+45, (+45-135)=-90, etc. With each step we go a little bit further away from the target direction.
 			direction = turn(direction, i_th_angle)
+		*/
+		affected_shadow_walls -= src
+		return
 
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
@@ -343,12 +351,14 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// Blending works best if the line formed by the wall and its two blocking neighbours is perpendical to the attack angle of the light.
 	// Basically that means that a corner must be attacked from an intercardinal, and a straight wall must be attacked from a cardinal.
 	// Since byond's directions algebra is shit, the best way to handle this is by cheating and selecting the easiest case (N|S or E|W) and using else.
+		/*
 	if (closest_attack_angles.len)
+
 		if ((blocking_dirs == (NORTH|SOUTH)) || (blocking_dirs == (EAST|WEST)))
 			targ_dir = pick(closest_attack_angles & cardinal)
 		else
 			targ_dir = pick(closest_attack_angles & diagonal)
-
+		*/
 	// The "edge" of the light, with images consisting of directional sprites from wall_lighting.dmi "pushed" in the correct direction.
 	if (istype(target_turf, /turf/unsimulated/mineral))
 		var/image/img = image('icons/turf/rock_overlay.dmi', loc = get_turf(src))
@@ -375,6 +385,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		color = rgb(round(RGB[1]/2), round(RGB[2]/2), round(RGB[3]/2))
 	else
 		color = light_color
+
+/atom/movable/light/shadow/update_appearance()
+	. = ..()
+	filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
@@ -503,3 +517,4 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 #undef OFFSET_MULTIPLIER_SIZE
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
 #undef TURF_SHADOW_FRACTION
+#undef BLUR_SIZE
