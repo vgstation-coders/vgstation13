@@ -66,16 +66,16 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T
-	if (opacity && isturf(loc))
-		T = loc // recalc_atom_opacity() is called later on this
-		T.reconsider_lights()
 
 	if(materials)
 		qdel(materials)
 		materials = null
 
 	invoke_event(/event/destroyed, list("thing" = src))
+
+	var/turf/T = loc
+	if (opacity && isturf(loc))
+		T = loc // check_blocks_light() is called later on this
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -90,10 +90,10 @@
 
 	break_all_tethers()
 
-	forceMove(null, harderforce = TRUE)
+	forceMove(null)
 
-	if (T)
-		T.recalc_atom_opacity()
+	if (istype(T))
+		T.check_blocks_light()
 
 	if(virtualhearer)
 		qdel(virtualhearer)
@@ -124,7 +124,7 @@
 	else
 		glide_size = max(min, glide_size_override)
 
-/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(!loc || !NewLoc)
 		return 0
 	invoke_event(/event/before_move)
@@ -407,17 +407,16 @@
 			Obstacle.Bumped(src)
 	sound_override = 0
 
-// harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+/atom/movable/proc/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	invoke_event(/event/before_move)
 	if(glide_size_override)
 		glide_size = glide_size_override
 	var/atom/old_loc = loc
-	loc = destination
+	loc = NewLoc
 	last_moved = world.time
 
 	if(old_loc)
-		old_loc.Exited(src, destination)
+		old_loc.Exited(src, NewLoc)
 		for(var/atom/movable/AM in old_loc)
 			AM.Uncrossed(src)
 
@@ -430,7 +429,7 @@
 			A.Entered(src, old_loc)
 
 			for(var/atom/movable/AM in loc)
-				AM.Crossed(src,no_tp)
+				AM.Crossed(src)
 
 
 	for(var/atom/movable/AM in locked_atoms)
@@ -440,7 +439,8 @@
 	update_client_hook(loc)
 
 	invoke_event(/event/moved, list("mover" = src))
-	var/turf/T = get_turf(destination)
+	var/turf/T = get_turf(NewLoc)
+
 	if(old_loc && T && old_loc.z != T.z)
 		invoke_event(/event/z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
 	invoke_event(/event/after_move)
