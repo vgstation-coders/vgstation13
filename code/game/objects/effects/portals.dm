@@ -162,6 +162,10 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/teleport(atom/movable/M as mob|obj)
 	if(istype(M, /obj/effect)) //sparks don't teleport
 		return
+	if(istype(M, /atom/movable/light))
+		var/atom/movable/light/L = M
+		if (istype(L.holder, /obj/effect)) // sparks lights don't teleport either
+			return
 	if (!isobserver(M) && M.anchored && !istype(M, /obj/mecha) && !istype(M, /obj/item/projectile))
 		return
 	if (!target)
