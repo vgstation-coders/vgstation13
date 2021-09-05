@@ -191,7 +191,7 @@
 
 /obj/machinery/power/emitter/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	if(active)
-		visible_message("<span class='warning'>\the [src] gets yanked off of it's power cable and turns off!</span>")
+		visible_message("<span class='warning'>\the [src] gets yanked off of its power source and turns off!</span>")
 		turn_off()
 	..()
 
