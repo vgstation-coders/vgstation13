@@ -209,7 +209,7 @@
 
 	returns: a /list with information on the success/failure of the proc, and in the former case, information the blood that was used (color, type, dna)
 */
-/proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "", var/tribute = 0)
+/proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "", var/tribute = 0, var/feedback = TRUE)
 	//Blood Communion
 	var/communion = 0
 	var/communion_data = null
@@ -289,7 +289,7 @@
 							blood.apply_blood_data(CA.get_blood_data())
 						if (isconstruct(CA))//constructs can't get the blood communion tattoo but just in case they do later
 							blood.data["blood_colour"] = "#CC0E00"
-			if (!tribute && previous_result != BLOODCOST_TRIBUTE)
+			if (feedback && !tribute && previous_result != BLOODCOST_TRIBUTE)
 				user.visible_message("<span class='warning'>Drips of blood seem to appear out of thin air around \the [user], and fall onto the floor!</span>",
 									"<span class='rose'>An ally has lent you a drip of their blood for your ritual.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -302,7 +302,7 @@
 				blood.data["blood_DNA"] = blood_DNA
 				blood.data["blood_type"] = H.blood_DNA[blood_DNA]
 				//can't get virus data from bloody hands because it'd be a pain in the ass to code for minimal use
-			if (!tribute && previous_result != BLOODCOST_TARGET_HANDS)
+			if (feedback && !tribute && previous_result != BLOODCOST_TARGET_HANDS)
 				user.visible_message("<span class='warning'>The blood on \the [user]'s hands drips onto the floor!</span>",
 									"<span class='rose'>You let the blood smeared on your hands join the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -315,7 +315,7 @@
 				blood.data["blood_DNA"] = blood_DNA
 				blood.data["blood_type"] = B.blood_DNA[blood_DNA]
 			blood.data["virus2"] = virus_copylist(B.virus2)
-			if (!tribute && previous_result != BLOODCOST_TARGET_SPLATTER)
+			if (feedback && !tribute && previous_result != BLOODCOST_TARGET_SPLATTER)
 				user.visible_message("<span class='warning'>The blood on the floor below \the [user] starts moving!</span>",
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -324,7 +324,7 @@
 			if (iscarbon(C))
 				blood = new()
 				blood.apply_blood_data(C.get_blood_data())
-				if (!tribute && previous_result != BLOODCOST_TARGET_GRAB)
+				if (feedback && !tribute && previous_result != BLOODCOST_TARGET_GRAB)
 					user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data[BLOODCOST_TARGET_GRAB]], drawing blood from them!</span>",
 										"<span class='rose'>You stab your nails inside \the [data[BLOODCOST_TARGET_GRAB]] to draw some blood from them.</span>",
 										"<span class='warning'>You hear a liquid flowing.</span>")
@@ -334,7 +334,7 @@
 			if (iscarbon(C))
 				blood = new()
 				blood.apply_blood_data(C.get_blood_data())
-				if (!tribute && previous_result != BLOODCOST_TARGET_BLEEDER)
+				if (feedback && !tribute && previous_result != BLOODCOST_TARGET_BLEEDER)
 					user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds!</span>",
 										"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds to draw some blood from them.</span>",
 										"<span class='warning'>You hear a liquid flowing.</span>")
@@ -348,14 +348,14 @@
 		if (BLOODCOST_TARGET_BLOODPACK)
 			var/obj/item/weapon/reagent_containers/blood/B = data[BLOODCOST_TARGET_BLOODPACK]
 			blood = locate() in B.reagents.reagent_list
-			if (!tribute && previous_result != BLOODCOST_TARGET_BLOODPACK)
+			if (feedback && !tribute && previous_result != BLOODCOST_TARGET_BLOODPACK)
 				user.visible_message("<span class='warning'>\The [user] squeezes \the [data[BLOODCOST_TARGET_BLOODPACK]], pouring blood!</span>",
 									"<span class='rose'>You squeeze \the [data[BLOODCOST_TARGET_BLOODPACK]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_CONTAINER)
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
 			blood = locate() in G.reagents.reagent_list
-			if (!tribute && previous_result != BLOODCOST_TARGET_CONTAINER)
+			if (feedback && !tribute && previous_result != BLOODCOST_TARGET_CONTAINER)
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -375,7 +375,7 @@
 			if (isconstruct(user))
 				blood.data["blood_colour"] = "#CC0E00"//not like constructs can write runes by themselves currently, but they might do at some point
 
-			if (!tribute && (previous_result != BLOODCOST_TARGET_USER))
+			if (feedback && !tribute && (previous_result != BLOODCOST_TARGET_USER))
 				if (iscarbon(user))//if the user is holding a sharp weapon, they get a custom message
 					var/obj/item/weapon/W = user.get_active_hand()
 					if (W && W.sharpness_flags & SHARP_BLADE)

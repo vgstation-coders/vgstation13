@@ -13,6 +13,9 @@
 		/obj/abstract/mind_ui_element/hoverable/erase_runes,
 		/obj/abstract/mind_ui_element/hoverable/movable/cultist,
 		)
+	sub_uis_to_spawn = list(
+		/datum/mind_ui/bloodcult_runes,
+		)
 	display_with_parent = TRUE
 	y = "BOTTOM"
 
@@ -41,6 +44,9 @@
 	flick("rune_manual-click",src)
 	var/mob/M = GetUser()
 	if (M)
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			C.verbose = TRUE
 		M.DisplayUI("Bloodcult Runes")
 
 //------------------------------------------------------------
@@ -59,7 +65,25 @@
 	flick("rune_guide-click",src)
 	var/mob/M = GetUser()
 	if (M)
-		M.DisplayUI("Bloodcult Runes")
+
+		var/list/available_runes = list()
+		var/i = 1
+		for(var/blood_spell in subtypesof(/datum/rune_spell))
+			var/datum/rune_spell/instance = blood_spell
+			available_runes.Add("\Roman[i]-[initial(instance.name)]")
+			available_runes["\Roman[i]-[initial(instance.name)]"] = instance
+			i++
+		var/spell_name = input(M,"Remember how to trace a given rune.", "Trace Rune with a Guide", null) as null|anything in available_runes
+
+		if (spell_name)
+			for(var/datum/mind_ui/bloodcult_runes/BR in parent.subUIs)
+				BR.queued_rune = available_runes[spell_name]
+
+				var/datum/role/cultist/C = iscultist(M)
+				if (C)
+					C.verbose = TRUE
+				M.DisplayUI("Bloodcult Runes")
+				break
 
 //------------------------------------------------------------
 

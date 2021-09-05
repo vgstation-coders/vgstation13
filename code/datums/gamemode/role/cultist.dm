@@ -16,6 +16,15 @@
 	var/second_chance = 1
 	var/datum/deconversion_ritual/deconversion = null
 
+	//writing runes
+	var/list/rune_blood_data = list()
+	var/datum/rune_word/word = null
+	var/obj/effect/rune/rune = null
+	var/datum/rune_spell/spell = null
+	var/continue_drawing = 0
+	var/rune_blood_cost = 1
+	var/verbose = FALSE
+
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
@@ -311,6 +320,63 @@
 	if (greeting)
 		to_chat(antag.current, "<span class='notice'>You are the chief cultist. You have been chosen by Nar-Sie to lead this cult to victory. Coordinate with your fellow acolytes, establish a plan, construct a base. Tear down the veil.</span>")
 		to_chat(antag.current, "<span class='notice'>You may speak with your fellow cultists by using ':x'.</span>")
+
+
+/datum/role/cultist/proc/write_rune(var/word_to_draw)
+	if(continue_drawing) //Resets the current spell (guide selection) if continue_drawing is not 1.
+		continue_drawing = 0
+	else
+		spell = null
+
+	var/mob/living/user = antag.current
+
+	if (user.incapacitated())
+		return
+
+	var/muted = user.occult_muted()
+	if (muted)
+		to_chat(user,"<span class='danger'>You find yourself unable to focus your mind on the words of Nar-Sie.</span>")
+		return
+
+	if(!istype(user.loc, /turf))
+		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
+		return
+
+	var/turf/T = get_turf(user)
+	rune = locate() in T
+
+	if(rune)
+		if (rune.invisibility == INVISIBILITY_OBSERVER)
+			to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here. You have to reveal it before you can add more words to it.</span>")
+			return
+		else if (rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return
+
+	word = rune_words[word_to_draw]
+	rune_blood_data = use_available_blood(user, rune_blood_cost, feedback = verbose)
+	if (rune_blood_data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
+		return
+
+	if (verbose)
+		if(rune)
+			user.visible_message("<span class='warning'>\The [user] chants and paints more symbols on the floor.</span>",\
+					"<span class='warning'>You add another word to the rune.</span>",\
+					"<span class='warning'>You hear chanting.</span>")
+		else
+			user.visible_message("<span class='warning'>\The [user] begins to chant and paint symbols on the floor.</span>",\
+					"<span class='warning'>You begin drawing a rune on the floor.</span>",\
+					"<span class='warning'>You hear some chanting.</span>")
+
+	if(!user.checkTattoo(TATTOO_SILENT))
+		user.whisper("...[word.rune]...")
+
+	if(rune)
+		if(rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return
+	write_rune_word(get_turf(user), word, rune_blood_data["blood"], caster = user)
+	verbose = FALSE
 
 
 /datum/role/cultist/proc/erase_rune()

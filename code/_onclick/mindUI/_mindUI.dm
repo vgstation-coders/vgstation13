@@ -136,7 +136,7 @@ var/list/mind_ui_ID2type = list()
 			return
 
 		if (!Valid() || !display_with_parent) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
-			Hide()
+			Hide(TRUE)
 
 		for (var/obj/abstract/mind_ui_element/element in elements)
 			mind.current.client.screen |= element
@@ -159,18 +159,21 @@ var/list/mind_ui_ID2type = list()
 		if (child.display_with_parent)
 			child.Display()
 
-/datum/mind_ui/proc/Hide()
+/datum/mind_ui/proc/Hide(var/override = FALSE)
 	active = FALSE
-	HideChildren()
-	HideElements()
+	HideChildren(override)
+	HideElements(override)
 
-/datum/mind_ui/proc/HideChildren()
+/datum/mind_ui/proc/HideChildren(var/override = FALSE)
 	for (var/datum/mind_ui/child in subUIs)
-		child.Hide()
+		child.Hide(override)
 
-/datum/mind_ui/proc/HideElements()
+/datum/mind_ui/proc/HideElements(var/override = FALSE)
 	for (var/obj/abstract/mind_ui_element/element in elements)
-		element.Hide()
+		if (override)
+			element.invisibility = 101
+		else
+			element.Hide()
 
 /datum/mind_ui/proc/Valid()
 	return TRUE
