@@ -388,7 +388,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 /atom/movable/light/shadow/update_appearance()
 	. = ..()
-	filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
+	//filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
