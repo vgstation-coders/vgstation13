@@ -153,13 +153,13 @@
 				continue
 			var/turf/T = M.current.loc
 			if(T && istype(T.loc, /area/security/brig))
-				score["arrested"]++
+				score["oparrested"]++
 			else if(M.current.stat == DEAD)
 				score["opkilled"]++
 		if(foecount == score["arrested"])
-			score["allarrested"] = 1
+			score["alloparrested"] = 1
 
-		score["disc"] = 1
+		/*score["disc"] = 1
 		for(var/obj/item/weapon/disk/nuclear/A in world)
 			if(A.loc != /mob/living/carbon)
 				continue
@@ -174,7 +174,7 @@
 			if(location in bad_zone3)
 				score["disc"] = 0
 			if(A.loc.z != map.zMainStation)
-				score["disc"] = 0
+				score["disc"] = 0*/
 
 		/*if(score["nuked"])
 			nukedpenalty = 50000 //Congratulations, your score was nuked
@@ -199,15 +199,15 @@
 			foecount++
 			var/datum/mind/M = R.antag
 			if(!M || !M.current)
-				score["opkilled"]++
+				score["revkilled"]++
 				continue
 			var/turf/T = M.current.loc
 			if(istype(T.loc, /area/security/brig))
-				score["arrested"]++
+				score["revarrested"]++
 			else if (M.current.stat == DEAD)
-				score["opkilled"]++
+				score["revkilled"]++
 		if(foecount == score["arrested"])
-			score["allarrested"] = 1
+			score["allrevarrested"] = 1
 		for(var/mob/living/carbon/human/player in mob_list)
 			if(player.mind)
 				var/role = player.mind.assigned_role
@@ -312,8 +312,8 @@
 
 	//Mode Specific
 	if(find_active_faction_by_type(/datum/faction/syndicate/nuke_op))
-		if(score["disc"])
-			score["crewscore"] += 500
+		//if(score["disc"])
+			//score["crewscore"] += 500
 		var/killpoints = score["opkilled"] * 250
 		var/arrestpoints = score["arrested"] * 1000
 		score["crewscore"] += killpoints
@@ -464,9 +464,9 @@
 		<B>Number of Surviving Crew:</B> [crewcount]<BR>
 		<B>Final Location of Nuke:</B> [bombdat]<BR>
 		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
-		<B>Operatives Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
+		<B>Operatives Arrested:</B> [score["oparrested"]] ([score["oparrested"] * 1000] Points)<BR>
 		<B>Operatives Killed:</B> [score["opkilled"]] ([score["opkilled"] * 250] Points)<BR>
-		<B>All Operatives Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
+		<B>All Operatives Arrested:</B> [score["alloparrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
 //		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
 //		<B>Nuclear Disk Secure:</B> [score["disc"] ? "Yes" : "No"] ([score["disc"] * 500] Points)<BR>
@@ -503,11 +503,11 @@
 		<B>Number of Surviving Command Staff:</B> [comcount]<BR>
 		<B>Number of Surviving Revolutionaries:</B> [revcount]<BR>
 		<B>Number of Surviving Loyal Crew:</B> [loycount]<BR><BR>
-		<B>Revolution Heads Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
-		<B>Revolution Heads Slain:</B> [score["opkilled"]] ([score["opkilled"] * 500] Points)<BR>
+		<B>Revolution Heads Arrested:</B> [score["revarrested"]] ([score["revarrested"] * 1000] Points)<BR>
+		<B>Revolution Heads Slain:</B> [score["revkilled"]] ([score["revkilled"] * 500] Points)<BR>
 		<B>Command Staff Slain:</B> [score["deadcommand"]] (-[score["deadcommand"] * 500] Points)<BR>
 		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
-		<B>All Revolution Heads Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
+		<B>All Revolution Heads Arrested:</B> [score["allrevarrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
