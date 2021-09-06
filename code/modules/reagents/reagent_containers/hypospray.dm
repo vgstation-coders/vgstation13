@@ -131,7 +131,7 @@
 	amount_per_transfer_from_this = 15
 	volume = 15
 	flags = FPRINT
-	refill_reagent_list = list(BIOFOAM = 15)
+	refill_reagent_list = list(SUX = 10)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/update_icon()
 	if(reagents.total_volume > 0)
