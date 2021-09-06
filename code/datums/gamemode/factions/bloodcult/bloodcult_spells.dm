@@ -6,6 +6,8 @@
 
 ////////////////////BLOOD CULT DRAW RUNE////////////////////////
 
+// Those two spells replaced by the Cultist mind UI abilities. Keeping those commented out for now so I can more easily salvage some of it code later.
+/*
 /spell/cult/trace_rune
 	name = "Trace Rune"
 	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
@@ -199,8 +201,9 @@
 		to_chat(user, "<span class='notice'>You retrace your steps, carefully undoing the lines of the [removed_word] rune.</span>")
 	else
 		to_chat(user, "<span class='warning'>There aren't any rune words left to erase.</span>")
+*/
 
-
+// TODO UPHEAVAL PART 2, make this spell available again as a ritual reward. Though instead of using this code it'll probably be activated through mind UI
 //SPELL III
 /spell/cult/blood_dagger
 	name = "Blood Dagger"
@@ -254,6 +257,7 @@
 			"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
 		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0,-2)
 
+// TODO UPHEAVAL PART 2, not sure what to do with this spell really, it always kinda sucked and tomes as a whole need an overhaul
 var/list/arcane_pockets = list()
 //SPELL IV
 /spell/cult/arcane_dimension

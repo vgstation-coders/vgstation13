@@ -121,7 +121,7 @@
 		var/turf/tile = loc
 		if(isturf(tile))
 			tile.clean_blood()
-			for(var/A in tile)
+			for(var/atom/A in tile)
 				if(istype(A, /obj/effect))
 					if(iscleanaway(A))
 						qdel(A)

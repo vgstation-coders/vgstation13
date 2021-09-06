@@ -93,6 +93,11 @@ var/list/rune_appearances_cache = list()
 
 	..()
 
+/obj/effect/rune/ErasableRune()
+	if (activated)
+		return FALSE
+	return TRUE
+
 /obj/effect/rune/examine(var/mob/user)
 	..()
 	if(can_read_rune(user) || isobserver(user))

@@ -17,13 +17,8 @@
 	var/datum/deconversion_ritual/deconversion = null
 
 	//writing runes
-	var/list/rune_blood_data = list()
-	var/datum/rune_word/word = null
-	var/obj/effect/rune/rune = null
-	var/datum/rune_spell/spell = null
-	var/continue_drawing = 0
-	var/rune_blood_cost = 1
-	var/verbose = FALSE
+	var/rune_blood_cost = 1	// How much blood spent per rune word written
+	var/verbose = FALSE	// Used by the rune writing UI to avoid message spam
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -36,16 +31,6 @@
 
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
-
-	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-		antag.current.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	antag.store_memory("A couple of runes appear clearly in your mind:")
-	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
-	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
-	antag.store_memory("<B>Summon Tome:</B> SEE, BLOOD, HELL.")
-	antag.store_memory("<hr>")
 
 /datum/role/cultist/RemoveFromRole(var/datum/mind/M)
 	antag.current.remove_language(LANGUAGE_CULT)
@@ -84,10 +69,6 @@
 		return
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
-	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
-		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-		antag.current.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/role/cultist/process()
 	..()
@@ -323,11 +304,6 @@
 
 
 /datum/role/cultist/proc/write_rune(var/word_to_draw)
-	if(continue_drawing) //Resets the current spell (guide selection) if continue_drawing is not 1.
-		continue_drawing = 0
-	else
-		spell = null
-
 	var/mob/living/user = antag.current
 
 	if (user.incapacitated())
@@ -343,7 +319,7 @@
 		return
 
 	var/turf/T = get_turf(user)
-	rune = locate() in T
+	var/obj/effect/rune/rune = locate() in T
 
 	if(rune)
 		if (rune.invisibility == INVISIBILITY_OBSERVER)
@@ -353,8 +329,8 @@
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return
 
-	word = rune_words[word_to_draw]
-	rune_blood_data = use_available_blood(user, rune_blood_cost, feedback = verbose)
+	var/datum/rune_word/word = rune_words[word_to_draw]
+	var/list/rune_blood_data = use_available_blood(user, rune_blood_cost, feedback = verbose)
 	if (rune_blood_data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
 		return
 

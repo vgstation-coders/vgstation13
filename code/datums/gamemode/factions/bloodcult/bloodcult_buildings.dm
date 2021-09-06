@@ -206,6 +206,7 @@
 	var/lock_type = /datum/locking_category/buckle/bed
 	var/altar_task = ALTARTASK_NONE
 	var/gem_delay = 300
+	var/narsie_message_cooldown = 0
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
@@ -450,6 +451,20 @@
 				user.client.images |= progbar
 		return
 	if(is_locking(lock_type))
+		var/mob/M = get_locked(lock_type)[1]
+		if(M != user)
+			if (do_after(user,src,20))
+				M.visible_message("<span class='notice'>\The [M] was freed from \the [src] by \the [user]!</span>","You were freed from \the [src] by \the [user].")
+				unlock_atom(M)
+				if (blade)
+					blade.forceMove(loc)
+					blade.attack_hand(user)
+					to_chat(user, "<span class='warning'>You remove \the [blade] from \the [src]</span>")
+					blade = null
+					playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
+					update_icon()
+		// TODO UPHEAVAL PART 2, might bring back sacrifices later, for now you can still stab people on altars
+		/*
 		var/choices = list(
 			list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
 			list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
@@ -515,7 +530,7 @@
 									*/
 						spawn()
 							dance_start()
-
+			*/
 	else if (blade)
 		blade.forceMove(loc)
 		blade.attack_hand(user)
@@ -528,7 +543,7 @@
 		var/choices = list(
 			list("Consult Roster", "radial_altar_roster", "Check the names and status of all of the cult's members."),
 			list("Look through Veil", "radial_altar_map", "Check the veil for tears to locate other occult constructions."),
-			list("Commune with Nar-Sie", "radial_altar_commune", "Obtain guidance from Nar-Sie to help you complete your objectives."),
+			list("Commune with Nar-Sie", "radial_altar_commune", "Make contact with Nar-Sie."),
 			list("Conjure Soul Gem", "radial_altar_gem", "Order the altar to sculpt you a Soul Gem, to capture the soul of your enemies."),
 			)
 		var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
@@ -604,7 +619,19 @@
 					user.client.images |= watcher_maps["\ref[user]"]
 					user.register_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
-				// TODO (UPHEAVAL PART 1) : Let cultists talk to admins just like a comms console do, but also have some tips
+				if(narsie_message_cooldown)
+					to_chat(user, "<span class='warning'>This altar has already sent a message in the past 30 seconds, wait a moment.</span>")
+					return
+				var/input = stripped_input(user, "Please choose a message to transmit to Nar-Sie through the veil. Know that he can be fickle, and abuse of this ritual will leave your body asunder. Communion does not guarantee a response. There is a 30 second delay before you may commune again, be clear, full and concise.", "To abort, send an empty message.", "")
+				if(!input || !Adjacent(user))
+					return
+				NarSie_announce(input, usr)
+				to_chat(usr, "<span class='notice'>Your communion has been received.</span>")
+				var/turf/T = get_turf(usr)
+				log_say("[key_name(usr)] (@[T.x],[T.y],[T.z]) has communed with Nar-Sie: [input]")
+				narsie_message_cooldown = 1
+				spawn(30 SECONDS)
+					narsie_message_cooldown = 0
 			if ("Conjure Soul Gem")
 				altar_task = ALTARTASK_GEM
 				update_icon()
