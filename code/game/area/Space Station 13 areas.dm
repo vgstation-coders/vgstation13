@@ -2672,7 +2672,7 @@ var/list/the_station_areas = list (
 /area/beach/
 	name = "The metaclub's private beach"
 	icon_state = "null"
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	requires_power = 0
 	var/sound/mysound = null
 	shuttle_can_crush = FALSE
