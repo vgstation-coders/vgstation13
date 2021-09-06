@@ -8,27 +8,65 @@
 
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 1
+	var/crayon = null
+
+/obj/item/weapon/folder/New()
+	..()
+	update_icon()
+
+/obj/item/weapon/folder/black
+	crayon = "black"
 
 /obj/item/weapon/folder/blue
-	desc = "A blue folder."
-	icon_state = "folder_blue"
+	crayon = "blue"
 
 /obj/item/weapon/folder/red
-	desc = "A red folder."
-	icon_state = "folder_red"
-
-/obj/item/weapon/folder/yellow
-	desc = "A yellow folder."
-	icon_state = "folder_yellow"
+	crayon = "red"
 
 /obj/item/weapon/folder/white
-	desc = "A white folder."
-	icon_state = "folder_white"
+	crayon = "mime"
+
+/obj/item/weapon/folder/yellow
+	crayon = "yellow"
+
+/obj/item/weapon/folder/purple
+	crayon = "purple"
+
+/obj/item/weapon/folder/orange
+	crayon = "orange"
+
+/obj/item/weapon/folder/green
+	crayon = "green"
+
+/obj/item/weapon/folder/rainbow
+	crayon = "rainbow"
 
 /obj/item/weapon/folder/update_icon()
 	overlays.len = 0
 	if(contents.len)
 		overlays += image(icon = icon, icon_state = "folder_paper")
+
+	switch(crayon)
+		if(null)
+			icon_state = "folder"
+		if("black")
+			icon_state = "folder_black"
+		if("blue")
+			icon_state = "folder_blue"
+		if("red")
+			icon_state = "folder_red"
+		if("mime")
+			icon_state = "folder_white"
+		if("yellow")
+			icon_state = "folder_yellow"
+		if("purple")
+			icon_state = "folder_purple"
+		if("orange")
+			icon_state = "folder_orange"
+		if("green")
+			icon_state = "folder_green"
+		if("rainbow")
+			icon_state = "folder_honk"
 	return
 
 /obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -38,6 +76,13 @@
 			update_icon()
 	else if(istype(W, /obj/item/weapon/pen))
 		set_tiny_label(user, " - '", "'")
+	else if(istype(W, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = W
+		crayon = C.colourName
+		update_icon()
+	else if (istype(W, /obj/item/weapon/soap))
+		crayon = null
+		update_icon()
 	return
 
 /obj/item/weapon/folder/attack_self(mob/user as mob)

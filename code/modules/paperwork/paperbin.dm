@@ -19,6 +19,30 @@
 	..()
 	update_icon()
 
+/obj/item/weapon/paper_bin/blue
+	crayon = "blue"
+
+/obj/item/weapon/paper_bin/red
+	crayon = "red"
+
+/obj/item/weapon/paper_bin/white
+	crayon = "mime"
+
+/obj/item/weapon/paper_bin/yellow
+	crayon = "yellow"
+
+/obj/item/weapon/paper_bin/purple
+	crayon = "purple"
+
+/obj/item/weapon/paper_bin/orange
+	crayon = "orange"
+
+/obj/item/weapon/paper_bin/green
+	crayon = "green"
+
+/obj/item/weapon/paper_bin/rainbow
+	crayon = "rainbow"
+
 /obj/item/weapon/paper_bin/ignite()
 	if(amount || papers.len)
 		..()
@@ -77,14 +101,12 @@
 	add_fingerprint(user)
 	return
 
-
 /obj/item/weapon/paper_bin/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/paper) && user.drop_item(I, src))
 		to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
 		papers.Add(I)
 		amount++
 		update_icon()
-
 	else if(istype(I, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = I
 		crayon = C.colourName
