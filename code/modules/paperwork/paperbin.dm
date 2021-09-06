@@ -173,5 +173,4 @@
 			icon_state = "paper_bin_honk"
 
 /obj/item/weapon/paper_bin/empty
-	icon_state = "paper_bin0"
 	amount = 0
