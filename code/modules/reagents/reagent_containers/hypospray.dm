@@ -13,21 +13,20 @@
 	possible_transfer_amounts = null
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
+	var/list/refill_reagent_list = list(DOCTORSDELIGHT = 30)
 
 /obj/item/weapon/reagent_containers/hypospray/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-
-/obj/item/weapon/reagent_containers/hypospray/New() //comment this to make hypos start off empty
+/obj/item/weapon/reagent_containers/hypospray/New() //comment this to make hypos start off empty //or just empty the reagent list idk
 	..()
-	reagents.add_reagent(DOCTORSDELIGHT, 30)
-	return
+	reagent_refill()
 
-/obj/item/weapon/reagent_containers/hypospray/creatine/New() // TESTING!
-	..()
-	reagents.remove_reagent(DOCTORSDELIGHT, 30)
-	reagents.add_reagent(CREATINE, 30)
-	return
+/obj/item/weapon/reagent_containers/hypospray/proc/reagent_refill()
+	if(refill_reagent_list.len)
+		for(var/R in refill_reagent_list)
+			reagents.add_reagent(R, refill_reagent_list[R])
+		update_icon()
 
 /obj/item/weapon/reagent_containers/hypospray/attack(mob/M as mob, mob/user as mob)
 	if(!reagents.total_volume)
@@ -77,6 +76,10 @@
 
 	return
 
+/obj/item/weapon/reagent_containers/hypospray/creatine // TESTING!
+	name = "creatine hypospray"
+	refill_reagent_list = list(CREATINE = 30)
+
 /obj/item/weapon/reagent_containers/hypospray/autoinjector
 	name = "autoinjector"
 	desc = "A rapid and safe way to administer small amounts of drugs by untrained or trained personnel."
@@ -112,12 +115,7 @@
 	amount_per_transfer_from_this = 15
 	volume = 15
 	flags = FPRINT
-
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/New()
-	..()
-	reagents.remove_reagent(DOCTORSDELIGHT, 30)
-	reagents.add_reagent(BIOFOAM, 15)
-	return
+	refill_reagent_list = list(BIOFOAM = 15)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
 	if(reagents.total_volume > 0)
@@ -133,14 +131,21 @@
 	amount_per_transfer_from_this = 15
 	volume = 15
 	flags = FPRINT
-
-/obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/New()
-	..()
-	reagents.remove_reagent(DOCTORSDELIGHT, 30)
-	reagents.add_reagent(SUX, 10)
+	refill_reagent_list = list(SUX = 10)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/update_icon()
 	if(reagents.total_volume > 0)
 		icon_state = "paralytic1"
 	else
 		icon_state = "paralytic0"
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/admin // TESTING!
+	name = "dummy autoinjector"
+	desc = "Why? why would a test dummy ever need something like this?"
+	mech_flags = MECH_SCAN_FAIL
+	refill_reagent_list = list(ADMINORDRAZINE = 5)
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/admin/afterattack(obj/target, mob/user, adjacency_flag, click_params)
+	. = ..()
+	if(!reagents.total_volume)
+		reagent_refill()
