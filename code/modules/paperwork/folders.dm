@@ -24,7 +24,7 @@
 	crayon = "red"
 
 /obj/item/weapon/folder/white
-	crayon = "mime"
+	crayon = "sterile"
 
 /obj/item/weapon/folder/yellow
 	crayon = "yellow"
@@ -55,7 +55,7 @@
 			icon_state = "folder_blue"
 		if("red")
 			icon_state = "folder_red"
-		if("mime")
+		if("sterile")
 			icon_state = "folder_white"
 		if("yellow")
 			icon_state = "folder_yellow"
@@ -67,7 +67,14 @@
 			icon_state = "folder_green"
 		if("rainbow")
 			icon_state = "folder_honk"
+		if("mime")
+			icon_state = "folder_mime"
 	return
+
+/obj/item/weapon/folder/decontaminate()
+	..()
+	crayon = "sterile"
+	update_icon()
 
 /obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))

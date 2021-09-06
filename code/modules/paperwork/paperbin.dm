@@ -26,7 +26,7 @@
 	crayon = "red"
 
 /obj/item/weapon/paper_bin/white
-	crayon = "mime"
+	crayon = "sterile"
 
 /obj/item/weapon/paper_bin/yellow
 	crayon = "yellow"
@@ -43,9 +43,17 @@
 /obj/item/weapon/paper_bin/rainbow
 	crayon = "rainbow"
 
+/obj/item/weapon/paper_bin/mime
+	crayon = "mime"
+
 /obj/item/weapon/paper_bin/ignite()
 	if(amount || papers.len)
 		..()
+
+/obj/item/weapon/paper_bin/decontaminate()
+	..()
+	crayon = "sterile"
+	update_icon()
 
 /obj/item/weapon/paper_bin/ashify()
 	if(!on_fire)
@@ -181,7 +189,7 @@
 			icon_state = "paper_bin_blue"
 		if("red")
 			icon_state = "paper_bin_red"
-		if("mime")
+		if("sterile")
 			icon_state = "paper_bin_white"
 		if("yellow")
 			icon_state = "paper_bin_yellow"
@@ -193,6 +201,8 @@
 			icon_state = "paper_bin_green"
 		if("rainbow")
 			icon_state = "paper_bin_honk"
+		if("mime")
+			icon_state = "paper_bin_mime"
 
 /obj/item/weapon/paper_bin/empty
 	amount = 0
