@@ -141,7 +141,7 @@
 	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	leaderboard.insert_records(rich_escapes)
 
-	var/nukedpenalty = 1000
+	//var/nukedpenalty = 1000
 	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	if(NO)
 		var/foecount = 0
@@ -176,7 +176,7 @@
 			if(A.loc.z != map.zMainStation)
 				score["disc"] = 0
 
-		if(score["nuked"])
+		/*if(score["nuked"])
 			nukedpenalty = 50000 //Congratulations, your score was nuked
 
 			for(var/obj/machinery/nuclearbomb/nuke in machines)
@@ -190,7 +190,7 @@
 				else if(istype(T, /area/engine))
 					nukedpenalty = 100000
 				else
-					nukedpenalty = 10000
+					nukedpenalty = 10000*/
 
 	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
 	if(RV)
@@ -318,8 +318,8 @@
 		var/arrestpoints = score["arrested"] * 1000
 		score["crewscore"] += killpoints
 		score["crewscore"] += arrestpoints
-		if(score["nuked"])
-			score["crewscore"] -= nukedpenalty
+		//if(score["nuked"])
+			//score["crewscore"] -= nukedpenalty
 
 	if(find_active_faction_by_type(/datum/faction/revolution))
 		var/arrestpoints = score["arrested"] * 1000
@@ -415,7 +415,7 @@
 		var/crewcount = 0
 		var/diskdat = ""
 		var/bombdat = null
-		var/nukedpenalty = 1000
+		//var/nukedpenalty = 1000
 		for(var/datum/role/R in NO.members)
 			foecount++
 		for(var/mob/living/C in mob_list)
@@ -442,7 +442,7 @@
 			diskdat += "in [disk_loc.loc]"
 			break // Should only need one go-round, probably
 
-		for(var/obj/machinery/nuclearbomb/nuke in machines)
+		/*for(var/obj/machinery/nuclearbomb/nuke in machines)
 			if(nuke.r_code == "Nope")
 				continue
 			var/turf/T = nuke.loc
@@ -450,12 +450,12 @@
 			if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
 				nukedpenalty = 1000
 			else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
-				nukedpenalty = 5000
+				nukedpenalty = 50000
 			else if (istype(T,/area/engine))
-				nukedpenalty = 10000
+				nukedpenalty = 100000
 			else
-				nukedpenalty = 2000
-			break
+				nukedpenalty = 5000
+			break*/
 		if(!diskdat)
 			diskdat = "Uh oh. Something has fucked up! Report this."
 
@@ -466,9 +466,9 @@
 		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
 		<B>Operatives Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
 		<B>Operatives Killed:</B> [score["opkilled"]] ([score["opkilled"] * 250] Points)<BR>
-		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
 		<B>All Operatives Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
+//		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
 //		<B>Nuclear Disk Secure:</B> [score["disc"] ? "Yes" : "No"] ([score["disc"] * 500] Points)<BR>
 
 	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
