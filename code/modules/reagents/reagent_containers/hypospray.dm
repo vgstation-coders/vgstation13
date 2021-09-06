@@ -128,8 +128,8 @@
 	desc = "A small, single-use device used to administer small amounts of paralytic agent."
 	icon_state = "paralytic1"
 	item_state = "paralytic"
-	amount_per_transfer_from_this = 15
-	volume = 15
+	amount_per_transfer_from_this = 10
+	volume = 10
 	flags = FPRINT
 	refill_reagent_list = list(SUX = 10)
 
