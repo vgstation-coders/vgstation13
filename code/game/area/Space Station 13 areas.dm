@@ -681,24 +681,28 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper aft port solars"
 	icon_state = "southwest"
 	requires_power = 0
+	dynamic_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/northwest_solars
 	name = "\improper fore port solars"
 	icon_state = "northwest"
 	requires_power = 0
+	dynamic_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/northeast_solars
 	name = "\improper fore starboard solars"
 	icon_state = "northeast"
 	requires_power = 0
+	dynamic_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/southeast_solars
 	name = "\improper aft starboard solars"
 	icon_state = "southeast"
 	requires_power = 0
+	dynamic_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/mining
