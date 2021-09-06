@@ -48,7 +48,7 @@
 		if (VAMP_FAILURE)
 			critfail(target, user)
 			return FALSE
-	
+
 /spell/targeted/hypnotise/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)
 		return FALSE
@@ -57,7 +57,7 @@
 
 	if(ishuman(target) || ismonkey(target))
 		var/mob/living/carbon/C = target
-		if (C.is_blind())
+		if ((C.sdisabilities & BLIND) || (C.sight & BLIND))
 			to_chat(user, "<span class='warning'>\the [C] is blind!</span>")
 			return FALSE
 		if(do_mob(user, C, 10 - C.get_vamp_enhancements()))

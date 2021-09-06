@@ -7,7 +7,7 @@
 			return TRUE
 		else
 			to_chat(src, "<span class='warning'>You fail to catch \the [I]!")
-	INVOKE_EVENT(on_touched, list("user" = src, "hit by" = I))
+	invoke_event(/event/hitby, list("victim" = src, "item" = I))
 	return ..()
 
 /mob/living/carbon/proc/can_catch(var/obj/item/I, var/speed)
@@ -74,7 +74,7 @@
 		add_logs(user, src, "damaged", admin=1, object=I, addition="DMG: [max(damage - armor, 0)]")
 
 	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
-	INVOKE_EVENT(on_touched, list("user" = src, "attacked by" = I))
+	invoke_event(/event/attacked_by, list("attacked" = src, "attacker" = user, "item" = I))
 	return TRUE
 
 /mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)

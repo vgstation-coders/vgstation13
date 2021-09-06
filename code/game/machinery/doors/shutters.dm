@@ -9,7 +9,10 @@
 
 /obj/machinery/door/poddoor/shutters/New()
 	..()
-	layer = ABOVE_DOOR_LAYER
+	if(density)
+		layer = closed_layer
+	else
+		layer = open_layer
 
 /obj/machinery/door/poddoor/shutters/preopen
 	icon_state = "shutter0"
@@ -17,7 +20,7 @@
 	opacity = 0
 
 /obj/machinery/door/poddoor/shutters/preopen/toplayer
-	layer = 5
+	open_layer = ABOVE_DOOR_LAYER
 
 /obj/machinery/door/poddoor/shutters/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
@@ -29,6 +32,7 @@
 			flick("shutterc0", src)
 			icon_state = "shutter0"
 			sleep(animation_delay)
+			layer = open_layer
 			setDensity(FALSE)
 			set_opacity(0)
 			operating = 0
@@ -40,6 +44,7 @@
 		return 0
 	if(!operating) //in case of emag
 		operating = 1
+	layer = closed_layer
 	flick("shutterc0", src)
 	icon_state = "shutter0"
 	playsound(src.loc, sound_open, 100, 1)

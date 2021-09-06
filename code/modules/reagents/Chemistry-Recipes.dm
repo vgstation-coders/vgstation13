@@ -2286,6 +2286,30 @@
 	for(var/i=1 to created_volume)
 		new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
 
+/*
+		=Recipe for easy pancakes=
+
+	- Mix in a bowl:
+	* 100g plain flour
+	* 2 large eggs
+	* 300ml milk
+	* a tablespoon of melted butter
+	* a teaspoon of salt
+	* 3 tablespoons of sugar
+
+	- Pre-heat and lightly grease your cooking pan at medium-high heat
+	- Pour just enough of the mix to fill the pan's surface
+	- Wait around 3 minutes for the first side, flip, then 1 more minute on the other side (adjust depending on how fast your pan is cooking)
+	- Serve with some sugar or chocolate
+
+*/
+/datum/chemical_reaction/pancake_mix
+	name = "Pancake Mix"
+	id = PANCAKE
+	result = PANCAKE
+	required_reagents = list(FLOUR = 10, MILK = 30, LIQUIDBUTTER = 2, EGG_YOLK = 8, SODIUMCHLORIDE = 1, SUGAR = 5)
+	result_amount = 56 // 1:1
+
 //Jesus christ how horrible
 /datum/chemical_reaction/cream
 	name = "Cream"

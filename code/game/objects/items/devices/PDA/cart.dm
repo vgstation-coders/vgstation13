@@ -32,6 +32,7 @@
 	var/access_hydroponics = 0
 	var/access_trader = 0
 	var/access_robotics = 0
+	var/access_camera = 0
 	var/fax_pings = FALSE
 
 	// -- Crime against OOP variable (controls what is shown on PDA call to cartridge)
@@ -269,6 +270,25 @@
 	icon_state = "cart-vox"
 	access_trader = 1
 
+/obj/item/weapon/cartridge/camera
+	name = "\improper Camera Cartridge"
+	icon_state = "cart-gbcam"
+	access_camera = 1
+	var/obj/item/device/camera/cartridge/cart_cam = null
+	var/list/obj/item/weapon/photo/stored_photos = list()
+
+/obj/item/weapon/cartridge/camera/New()
+	..()
+	cart_cam = new /obj/item/device/camera/cartridge(src)
+	
+/obj/item/weapon/cartridge/camera/Destroy()
+	qdel(cart_cam)
+	cart_cam = null
+	for(var/obj/item/weapon/photo/PH in stored_photos)
+		qdel(PH)
+	stored_photos = list()
+	..()
+	
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
 		return

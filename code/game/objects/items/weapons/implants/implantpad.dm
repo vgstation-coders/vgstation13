@@ -13,82 +13,80 @@
 	var/broadcasting = null
 	var/listening = 1.0
 
-/obj/item/weapon/implantpad/proc/update()
-	if (src.case)
-		src.icon_state = "implantpad-1"
+/obj/item/weapon/implantpad/update_icon()
+	if (case)
+		icon_state = "implantpad-1"
 	else
-		src.icon_state = "implantpad-0"
-	return
+		icon_state = "implantpad-0"
 
 
-/obj/item/weapon/implantpad/attack_hand(mob/user as mob)
-	if ((src.case && user.is_holding_item(src)))
-		user.put_in_active_hand(case)
-
-		src.case.add_fingerprint(user)
-		src.case = null
-
-		src.add_fingerprint(user)
-		update()
+/obj/item/weapon/implantpad/attack_hand(var/mob/user)
+	if (case && user.is_holding_item(src))
+		eject(user)
 	else
 		return ..()
-	return
+
+/obj/item/weapon/implantpad/proc/eject(var/mob/user)
+	user.put_in_active_hand(case)
+
+	case.add_fingerprint(user)
+	case = null
+
+	add_fingerprint(user)
+	update_icon()
 
 
-/obj/item/weapon/implantpad/attackby(obj/item/weapon/implantcase/C as obj, mob/user as mob)
+/obj/item/weapon/implantpad/attackby(var/obj/item/weapon/implantcase/C, var/mob/user)
 	..()
 	if(istype(C, /obj/item/weapon/implantcase))
-		if(!( src.case ))
+		if(!case)
 			if(user.drop_item(C, src))
-				src.case = C
+				case = C
 	else
 		return
-	src.update()
-	return
+	update_icon()
 
 
-/obj/item/weapon/implantpad/attack_self(mob/user as mob)
+/obj/item/weapon/implantpad/attack_self(var/mob/user)
 	user.set_machine(src)
 	var/dat = "<B>Implant Mini-Computer:</B><HR>"
-	if (src.case)
-		if(src.case.imp)
-			if(istype(src.case.imp, /obj/item/weapon/implant))
-				dat += src.case.imp.get_data()
-				if(istype(src.case.imp, /obj/item/weapon/implant/tracking))
+	if (case)
+		if(case.imp)
+			if(istype(case.imp, /obj/item/weapon/implant))
+				dat += case.imp.get_data()
+				if(istype(case.imp, /obj/item/weapon/implant/tracking))
 					dat += {"ID (1-100):
 					<A href='byond://?src=\ref[src];tracking_id=-10'>-</A>
 					<A href='byond://?src=\ref[src];tracking_id=-1'>-</A> [case.imp:id]
 					<A href='byond://?src=\ref[src];tracking_id=1'>+</A>
-					<A href='byond://?src=\ref[src];tracking_id=10'>+</A><BR>"}
+					<A href='byond://?src=\ref[src];tracking_id=10'>+</A><BR>\[<A href='byond://?src=\ref[src];eject=1'>eject</A>\]"}
 		else
 			dat += "The implant casing is empty."
 	else
 		dat += "Please insert an implant casing!"
 	user << browse(dat, "window=implantpad")
 	onclose(user, "implantpad")
-	return
 
 
 /obj/item/weapon/implantpad/Topic(href, href_list)
 	..()
-	if (usr.stat)
+	var/mob/user = usr
+	if (user.incapacitated())
 		return
-	if ((usr.contents.Find(src)) || ((in_range(src, usr) && istype(src.loc, /turf))))
-		usr.set_machine(src)
+	if ((user.contents.Find(src)) || ((in_range(src, user) && istype(loc, /turf))))
+		user.set_machine(src)
 		if (href_list["tracking_id"])
-			var/obj/item/weapon/implant/tracking/T = src.case.imp
+			var/obj/item/weapon/implant/tracking/T = case.imp
 			T.id += text2num(href_list["tracking_id"])
 			T.id = min(100, T.id)
 			T.id = max(1, T.id)
 
-		if (istype(src.loc, /mob))
-			attack_self(src.loc)
-		else
-			for(var/mob/M in viewers(1, src))
-				if (M.client)
-					src.attack_self(M)
-		src.add_fingerprint(usr)
+		if (href_list["eject"])
+			if (case && (user.is_holding_item(src) || Adjacent(user)))
+				eject(user)
+
+		attack_self(user)
+
+		add_fingerprint(user)
 	else
-		usr << browse(null, "window=implantpad")
-		return
-	return
+		user << browse(null, "window=implantpad")

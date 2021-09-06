@@ -249,7 +249,7 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/clothing/under/securityskirt/elite,
 	/obj/item/clothing/head/helmet/donutgiver,
 	/obj/item/clothing/accessory/bangerboy,
-	/obj/item/key/security/spare,
+	/obj/structure/ammotree,
 	/obj/item/weapon/ram_kit,
 	/obj/item/device/vampirehead,
 	/obj/item/weapon/storage/lockbox/unlockable/peace,
@@ -1025,10 +1025,10 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/vachandle/pickup(mob/user)
 	..()
-	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/vachandle/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 	if(loc != myvac)
 		retract()
 
@@ -1158,11 +1158,11 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/pedometer/pickup(mob/user)
 	..()
-	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/pedometer/dropped(mob/user)
 	..()
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/pedometer/proc/mob_moved(atom/movable/mover)
 	var/turf/T = get_turf(src)
@@ -1198,6 +1198,7 @@ var/global/list/alcatraz_stuff = list(
 	pixel_x = -16
 	plane = ABOVE_HUMAN_PLANE
 	var/state = AT_SEED
+	var/pity_timer = 0
 
 /obj/structure/ammotree/attackby(obj/item/I, mob/user)
 	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
@@ -1236,9 +1237,12 @@ var/global/list/alcatraz_stuff = list(
 	if(state >= AT_FLOWERING)
 		processing_objects -= src
 		return
-	if(prob(1))
+	if(prob(1) || pity_timer > 99)
 		state++
+		pity_timer = 0
 		update_icon()
+	else
+		pity_timer++
 
 /obj/item/ammofruit
 	name = "ammofruit"
@@ -1377,9 +1381,12 @@ var/global/list/cloudnine_stuff = list(
 	icon_state = "airprojector"
 	var/list/projected = list()
 	var/max_proj = 6
+	var/list/ignore_types = list(/obj/structure/table, /obj/structure/rack, /obj/item/weapon/storage)
 
 /obj/item/airshield_projector/preattack(atom/target, mob/user , proximity)
 	var/turf/to_shield = get_turf(target)
+	if(is_type_in_list(target, ignore_types) && Adjacent(to_shield))
+		return TRUE
 	if(projected.len < max_proj && istype(to_shield) && (!locate(/obj/effect/airshield) in to_shield))
 		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
 		var/obj/effect/airshield/A = new(to_shield)
@@ -1451,6 +1458,7 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
+	req_access = list(access_engine_equip)
 	var/mode = OMNIMODE_TOOL
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
@@ -1467,10 +1475,18 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 
 /obj/item/device/multitool/omnitool/preattack(atom/target, mob/user, proximity)
 	if(proximity)
+		if(is_type_in_list(target.type,omnitoolable))
+			target.attack_hand(user)
 		return FALSE //immediately continue if in reach
 	if(can_connect(target, user) && is_type_in_list(target.type,omnitoolable))
 		target.attack_hand(user)
 		return TRUE
+
+/mob/living/proc/omnitool_connect(atom/target)
+	var/obj/item/device/multitool/omnitool/O = get_active_hand()
+	if(istype(O))
+		return O.can_connect(target,src)
+	return FALSE
 
 /obj/item/device/multitool/omnitool/proc/can_connect(atom/target, mob/user)
 	var/client/C
@@ -1482,6 +1498,8 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 			return FALSE
 		C = M.client
 	if(!C)
+		return FALSE
+	if(!allowed(user))
 		return FALSE
 	return get_dist(target,src) <= C.view
 

@@ -66,6 +66,14 @@
 		/datum/rcd_schematic/pipe/disposal/sort_wrap
 	)
 
+/obj/item/device/rcd/rpd/New()
+	if(map.multiz)
+		schematics.Add(/datum/rcd_schematic/pipe/z_up)
+		schematics.Add(/datum/rcd_schematic/pipe/z_down)
+		schematics.Add(/datum/rcd_schematic/pipe/disposal/up)
+		schematics.Add(/datum/rcd_schematic/pipe/disposal/down)
+	..()
+
 /obj/item/device/rcd/rpd/examine(var/mob/user)
 	..()
 	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
@@ -74,11 +82,11 @@
 
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
-	L.lazy_register_event(/lazy_event/on_clickon, src, .proc/mob_onclickon)
+	L.register_event(/event/clickon, src, .proc/mob_onclickon)
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
 	..()
-	L.lazy_unregister_event(/lazy_event/on_clickon, src, .proc/mob_onclickon)
+	L.unregister_event(/event/clickon, src, .proc/mob_onclickon)
 	hook_key = null
 
 // If the RPD is held, some modifiers are removed.

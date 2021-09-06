@@ -96,4 +96,6 @@
 	if(!WE.remove_fuel(1, user))
 		return
 	to_chat(user, "<span class='notice'>You cut \the [src] off of the wall.</span>")
+	WE.playtoolsound(src, 50)
+	new /obj/item/mounted/frame/extinguisher_cabinet(get_turf(src))
 	qdel(src)

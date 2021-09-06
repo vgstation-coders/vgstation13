@@ -130,11 +130,11 @@
 			eviltwinrecruiter.logging = TRUE
 
 			// A player has their role set to Yes or Always
-			eviltwinrecruiter.player_volunteering.Add(src, "recruiter_recruiting")
+			eviltwinrecruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 			// ", but No or Never
-			eviltwinrecruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+			eviltwinrecruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-			eviltwinrecruiter.recruited.Add(src, "recruiter_recruited")
+			eviltwinrecruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
 			eviltwinrecruiter.request_player()
 		if(5 to INFINITY)
@@ -142,25 +142,20 @@
 			// var/datum/organ/internal/teleorgan = pick(H.internal_organs)
 			return
 
-/datum/role/time_agent/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]'s evil twin. Get ready. ([controls])</span>")
+/datum/role/time_agent/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class=\"recruit\">You are a possible candidate for \a [src]'s evil twin. Get ready. ([controls])</span>")
 
-/datum/role/time_agent/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	if(O.client && get_role_desire_str(O.client.prefs.roles[TIMEAGENT]) != "Never")
-		to_chat(O, "<span class=\"recruit\">\a [src] is going to get shot by his evil twin. ([controls])</span>")
+/datum/role/time_agent/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	if(player.client && get_role_desire_str(player.client.prefs.roles[TIMEAGENT]) != "Never")
+		to_chat(player, "<span class=\"recruit\">\a [src] is going to get shot by his evil twin. ([controls])</span>")
 
 
-/datum/role/time_agent/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
+/datum/role/time_agent/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
 		qdel(eviltwinrecruiter)
 		eviltwinrecruiter = null
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
-		H.ckey = O.ckey
+		H.ckey = player.ckey
 		H.client.changeView()
 		var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind, fac = src.faction)
 		twin.erase_target = src

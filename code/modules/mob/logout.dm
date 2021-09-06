@@ -56,6 +56,6 @@
 				send2adminirc("[key_name(src, showantag = FALSE)] logged out - no more non-AFK admins online. - [admin_number_afk] AFK.")
 				send2admindiscord("[key_name(src, showantag = FALSE)] logged out. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 
-	lazy_invoke_event(/lazy_event/on_logout, list("user" = src))
+	invoke_event(/event/logout, list("user" = src))
 
 	..()

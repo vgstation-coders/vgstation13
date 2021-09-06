@@ -27,12 +27,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_bumping)
-		on_bumping.holder = null
-	if(on_bumped)
-		on_bumped.holder = null
-	if(on_touched)
-		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -66,13 +60,6 @@
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_bumping)
-	qdel(on_bumped)
-	qdel(on_touched)
-
-	on_bumping = null
-	on_bumped = null
-	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -248,9 +235,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_bumping = new(owner = src)
-	on_bumped = new(owner = src)
-	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -390,21 +374,30 @@
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = 7)
 	if(world.time>resethearers)
 		sethearing()
-	var/location = get_holder_at_turf_level(src) || get_turf(src)
-	for(var/mob/virtualhearer/hearer in viewers(range, location))
-		var/mob/M
-		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
-			var/obj/machinery/hologram/holopad/holo = hearer.attached
-			if(holo.master)
-				M = holo.master
-		if(istype(hearer.attached, /mob))
-			M = hearer.attached
-		if(M)
-			if(M.client)
-				var/client/C = M.client
-				if(get_turf(src) in C.ObscuredTurfs)
-					continue
-		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
+	var/atom/location = get_holder_at_turf_level(src) || get_turf(src) // Holders are nicer than turfs, I guess
+	var/turf/T_loc = get_turf(location) // For getting the .z var, atoms don't have this by default
+	var/list/found_Zs = GetOpenConnectedZlevels(location) // Saves constantly calling it
+	for(var/z0 in found_Zs)
+		if(!found_Zs.len || abs(z0 - T_loc.z) <= range) // So we can get in with an empty list
+			var/atom/thing_to_see
+			if(!found_Zs.len || z0 == T_loc.z) // Now this is why we need the empty list
+				thing_to_see = location // Put that holder thingy to work, like the original version of this function did
+			else
+				thing_to_see = locate(T_loc.x,T_loc.y,z0) // If not on the same zlevel as it, just do it on turfs, location goes there if all else fails anyways.
+			for(var/mob/virtualhearer/hearer in viewers(range, thing_to_see)) // Rest is self explanatory from here
+				var/mob/M
+				if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+					var/obj/machinery/hologram/holopad/holo = hearer.attached
+					if(holo.master)
+						M = holo.master
+				if(istype(hearer.attached, /mob))
+					M = hearer.attached
+				if(M)
+					if(M.client)
+						var/client/C = M.client
+						if(get_turf(src) in C.ObscuredTurfs)
+							continue
+				hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
 	for(var/mob/M in mob_list)
@@ -1568,10 +1561,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		lazy_invoke_event(/lazy_event/on_before_move)
+		invoke_event(/event/before_move)
 	dir = direction
-	lazy_invoke_event(/lazy_event/on_face)
-	lazy_invoke_event(/lazy_event/on_after_move)
+	invoke_event(/event/face)
+	invoke_event(/event/after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1593,9 +1586,9 @@ Use this proc preferably at the end of an equipment loadout
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	lazy_invoke_event(/lazy_event/on_before_move)
+	invoke_event(/event/before_move)
 	..()
-	lazy_invoke_event(/lazy_event/on_after_move)
+	invoke_event(/event/after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0

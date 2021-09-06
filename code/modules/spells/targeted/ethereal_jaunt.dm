@@ -120,9 +120,9 @@
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images += jaunts[A]
-				target.lazy_register_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
+				target.register_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				ethereal_jaunt(target, duration, enteranim, exitanim, mist)
-				target.lazy_unregister_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
+				target.unregister_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images -= jaunts[A]

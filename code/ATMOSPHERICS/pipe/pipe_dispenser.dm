@@ -34,6 +34,12 @@
 	interact(user)
 
 /obj/machinery/pipedispenser/interact(mob/user)
+	var/multi_z_dat = map.multiz ? {"
+<b>Multi-floor pipes:</b>
+<ul>
+	<li><a href='?src=\ref[src];make=[PIPE_Z_UP];dir=1'>Up Pipe</a></li>
+	<li><a href='?src=\ref[src];make=[PIPE_Z_DOWN];dir=1'>Down Pipe</a></li>
+</ul>"} : ""
 	var/dat = {"
 <b>Regular pipes:</b>
 <ul>
@@ -85,6 +91,7 @@
 	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD];dir=1'>Manifold</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
 </ul>
+[multi_z_dat]
 <b> Currently aligned at: [layer_to_make] \[ <a href='?src=\ref[src];editlayer=1'>EDIT</a> \]</b></li>
 "}
 //What number the make points to is in the define # at the top of construction.dm in same folder

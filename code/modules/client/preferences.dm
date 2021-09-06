@@ -712,9 +712,10 @@ var/const/MAX_SAVE_SLOTS = 16
 
 
 /datum/preferences/proc/GetPlayerAltTitle(datum/job/job)
-	return player_alt_titles.Find(job.title) > 0 \
-		? player_alt_titles[job.title] \
-		: job.title
+	var/alt_title = player_alt_titles[job.title]
+	if(!alt_title || !(alt_title in job.alt_titles))
+		return job.title
+	return alt_title
 
 /datum/preferences/proc/SetPlayerAltTitle(datum/job/job, new_title)
 	// remove existing entry

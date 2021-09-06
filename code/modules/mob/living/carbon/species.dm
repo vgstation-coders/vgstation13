@@ -1178,7 +1178,8 @@ var/list/has_died_as_golem = list()
 					O.replaced(slime_person)
 
 				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
-				qdel(O)
+				O.stabilized = TRUE
+				O.loc = null
 
 /datum/species/insectoid
 	name = "Insectoid"

@@ -264,6 +264,18 @@
 	else
 		return ..()
 
+/obj/item/device/camera/cartridge
+	name = "PDA camera"
+	desc = "You should not be seeing this outside of a cartridge"
+	start_with_bulb = FALSE
+	var/obj/item/weapon/cartridge/camera/host_cart = null
+
+/obj/item/device/camera/cartridge/New()
+	if(!loc || !istype(loc,/obj/item/weapon/cartridge/camera))
+		qdel(src) // Do not exist outside of cartridges
+	else
+		host_cart = loc
+
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
 	start_with_bulb = FALSE
@@ -512,6 +524,27 @@
 		P.double_agent_completion_ids = double_agent_completion_ids.Copy()
 		double_agent_completion_ids = list()
 
+/obj/item/device/camera/cartridge/printpicture(mob/user, icon/temp, mobs, flag) //Add photos to cart
+	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	host_cart.stored_photos += P
+	temp = ImagePDA(temp)
+	var/icon/small_img = icon(temp)
+	var/icon/ic = icon('icons/obj/items.dmi',"photo")
+	small_img.Scale(8, 8)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
+	P.icon = ic
+	P.img = temp
+	P.info = mobs
+	P.photo_size = photo_size
+
+	if(blueprints)
+		P.blueprints = TRUE
+		blueprints = FALSE
+
+	if (double_agent_completion_ids.len > 0)
+		P.double_agent_completion_ids = double_agent_completion_ids.Copy()
+		double_agent_completion_ids = list()
+
 /obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, flag) //Creates photos in sepia
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	user.put_in_hands(P)
@@ -741,10 +774,14 @@
 		/obj/item/weapon/stock_parts/capacitor
 	) // capacitors for the flash, scanning_modules for the processing of the image, matter bin for the ink
 
+/obj/machinery/photobooth/security
+	background = "mugshot"
+	icon_state = "secbooth"
+
 /obj/machinery/photobooth/New()
 	..()
-	var/image/I = image(icon, src, "photobooth_overlay")
-	I.plane = ABOVE_HUMAN_PLANE
+	var/image/I = image(icon, src, "[icon_state]_overlay")
+	I.plane = relative_plane(ABOVE_HUMAN_PLANE)
 	I.layer = 0
 	overlays += I
 
@@ -778,6 +815,7 @@
 		"balloons",
 		"nanotrasen_dark",
 		"nanotrasen_light",
+		"mugshot",
 		)
 	if (new_background)
 		background = new_background

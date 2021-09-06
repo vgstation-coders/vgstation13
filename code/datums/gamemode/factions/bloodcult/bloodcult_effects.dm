@@ -522,7 +522,7 @@ var/bloodstone_backup = 0
 			current_dots = dots
 		indicator.overlays.len = 0
 		indicator = image(icon='icons/obj/cult.dmi',loc=victim,icon_state="",layer=SNOW_OVERLAY_LAYER)
-		indicator.plane = EFFECTS_PLANE
+		indicator.plane = relative_plane(EFFECTS_PLANE)
 		indicator.pixel_y = 8
 		for (var/i = 1 to dots)
 			var/state = "stun_dot1"
@@ -530,13 +530,13 @@ var/bloodstone_backup = 0
 				if (anim)
 					state = "stun_dot2-flick"
 					var/image/I = image(icon='icons/obj/cult.dmi',icon_state="stun_dot-gone")
-					I.plane = EFFECTS_PLANE
+					I.plane = relative_plane(EFFECTS_PLANE)
 					I = place_indicator(I,i+1)
 					indicator.overlays += I
 				else
 					state = "stun_dot2"
 			var/image/I = image(icon='icons/obj/cult.dmi',icon_state=state)
-			I.plane = EFFECTS_PLANE
+			I.plane = relative_plane(EFFECTS_PLANE)
 			I = place_indicator(I,i)
 			indicator.overlays += I
 		for (var/client/C in viewers)
@@ -652,7 +652,7 @@ var/bloodstone_backup = 0
 	switch(dance_move)
 		if ("clock")
 			for (var/mob/M in dancers)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHWEST,NORTH)
 						step_to(M, get_step(M,EAST))
@@ -662,11 +662,11 @@ var/bloodstone_backup = 0
 						step_to(M, get_step(M,WEST))
 					if (SOUTHWEST,WEST)
 						step_to(M, get_step(M,NORTH))
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("counter")
 			for (var/mob/M in dancers)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHEAST,NORTH)
 						step_to(M, get_step(M,WEST))
@@ -676,22 +676,22 @@ var/bloodstone_backup = 0
 						step_to(M, get_step(M,EAST))
 					if (NORTHWEST,WEST)
 						step_to(M, get_step(M,SOUTH))
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("spin")
 			for (var/mob/M in dancers)
 				spawn()
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = EAST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = NORTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = WEST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
