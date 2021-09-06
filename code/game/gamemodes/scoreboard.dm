@@ -145,7 +145,7 @@
 	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	if(NO)
 		var/foecount = 0
-		for(var/datum/role/R in NO)
+		for(var/datum/role/R in NO.members)
 			foecount++
 			var/datum/mind/M = R.antag
 			if(!M || !M.current)
@@ -165,7 +165,7 @@
 				continue
 			var/turf/location = get_turf(A.loc)
 			var/area/bad_zone1 = locate(/area)
-			var/area/bad_zone2 = locate(/area/syndicate_station)
+			var/area/bad_zone2 = locate(/area/syndicate_mothership)
 			var/area/bad_zone3 = locate(/area/wizard_station)
 			if(location in bad_zone1)
 				score["disc"] = 0
@@ -183,7 +183,7 @@
 				if(nuke.r_code == "Nope")
 					continue
 				var/turf/T = get_turf(nuke)
-				if(istype(T, /area/syndicate_station) || istype(T, /area/wizard_station) || istype(T, /area/solar))
+				if(istype(T, /area/syndicate_mothership) || istype(T, /area/wizard_station) || istype(T, /area/solar))
 					nukedpenalty = 1000
 				else if(istype(T, /area/security/main) || istype(T, /area/security/brig) || istype(T, /area/security/armory) || istype(T, /area/security/checkpoint2))
 					nukedpenalty = 50000
@@ -195,7 +195,7 @@
 	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
 	if(RV)
 		var/foecount = 0
-		for(var/datum/role/R in RV)
+		for(var/datum/role/R in RV.members)
 			foecount++
 			var/datum/mind/M = R.antag
 			if(!M || !M.current)
@@ -415,7 +415,7 @@
 		var/crewcount = 0
 		var/diskdat = ""
 		var/bombdat = null
-		for(var/datum/role/R in NO)
+		for(var/datum/role/R in NO.members)
 			foecount++
 		for(var/mob/living/C in mob_list)
 			if(!istype(C,/mob/living/carbon/human) || !istype(C,/mob/living/silicon/robot) || !istype(C,/mob/living/silicon/ai))
@@ -444,9 +444,9 @@
 		for(var/obj/machinery/nuclearbomb/nuke in machines)
 			if(nuke.r_code == "Nope")
 				continue
-			var/turf/T = NUKE.loc
+			var/turf/T = nuke.loc
 			bombdat = T.loc
-			if(istype(T,/area/syndicate_station) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
+			if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
 				nukedpenalty = 1000
 			else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
 				nukedpenalty = 5000
@@ -476,7 +476,7 @@
 		var/comcount = 0
 		var/revcount = 0
 		var/loycount = 0
-		for(var/datum/role/R in RV)
+		for(var/datum/role/R in RV.members)
 			if(R.antag.current && R.antag.current.stat != 2)
 				if(istype(R,/datum/role/revolutionary/leader))
 					foecount++
