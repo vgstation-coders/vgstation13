@@ -141,13 +141,13 @@
 	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	leaderboard.insert_records(rich_escapes)
 
-	/*
-
 	var/nukedpenalty = 1000
-	if(ticker.mode.config_tag == "nuclear")
+	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(NO)
 		var/foecount = 0
-		for(var/datum/mind/M in ticker.mode:syndicates)
+		for(var/datum/role/R in NO)
 			foecount++
+			var/datum/mind/M = R.antag
 			if(!M || !M.current)
 				score["opkilled"]++
 				continue
@@ -192,11 +192,12 @@
 				else
 					nukedpenalty = 10000
 
-
-	if(ticker.mode.config_tag == "revolution")
+	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
+	if(RV)
 		var/foecount = 0
-		for(var/datum/mind/M in ticker.mode:head_revolutionaries)
+		for(var/datum/role/R in RV)
 			foecount++
+			var/datum/mind/M = R.antag
 			if(!M || !M.current)
 				score["opkilled"]++
 				continue
@@ -213,8 +214,6 @@
 				if(role in list("Captain", "Head of Security", "Head of Personnel", "Chief Engineer", "Research Director"))
 					if(player.stat == DEAD)
 						score["deadcommand"]++
-
-	*/
 
 	//Check station's power levels
 	var/skip_power_loss = 0
@@ -410,14 +409,13 @@
 	var/dat = completions
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
 
-	/*
-
-	if(ticker.mode.name == "nuclear emergency")
+	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(NO)
 		var/foecount = 0
 		var/crewcount = 0
 		var/diskdat = ""
 		var/bombdat = null
-		for(var/datum/mind/M in ticker.mode:syndicates)
+		for(var/datum/role/R in NO)
 			foecount++
 		for(var/mob/living/C in mob_list)
 			if(!istype(C,/mob/living/carbon/human) || !istype(C,/mob/living/silicon/robot) || !istype(C,/mob/living/silicon/ai))
@@ -451,19 +449,16 @@
 			if(istype(T,/area/syndicate_station) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
 				nukedpenalty = 1000
 			else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
-				nukedpenalty = 50000
+				nukedpenalty = 5000
 			else if (istype(T,/area/engine))
-				nukedpenalty = 100000
-			else
 				nukedpenalty = 10000
+			else
+				nukedpenalty = 2000
 			break
 		if(!diskdat)
 			diskdat = "Uh oh. Something has fucked up! Report this."
 
-		<B>Final Location of Nuke:</B> [bombdat]<BR>
-		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
-
-		dat += {"<B><U>MODE STATS</U></B><BR>
+		dat += {"<B><U>NUCLEAR ASSAULT STATS</U></B><BR>
 		<B>Number of Operatives:</B> [foecount]<BR>
 		<B>Number of Surviving Crew:</B> [crewcount]<BR>
 		<B>Final Location of Nuke:</B> [bombdat]<BR>
@@ -475,17 +470,18 @@
 		<HR>"}
 //		<B>Nuclear Disk Secure:</B> [score["disc"] ? "Yes" : "No"] ([score["disc"] * 500] Points)<BR>
 
-	if(ticker.mode.name == "revolution")
+	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
+	if(RV)
 		var/foecount = 0
 		var/comcount = 0
 		var/revcount = 0
 		var/loycount = 0
-		for(var/datum/mind/M in ticker.mode:head_revolutionaries)
-			if(M.current && M.current.stat != 2)
-				foecount++
-		for(var/datum/mind/M in ticker.mode:revolutionaries)
-			if(M.current && M.current.stat != 2)
-				revcount++
+		for(var/datum/role/R in RV)
+			if(R.antag.current && R.antag.current.stat != 2)
+				if(istype(R,/datum/role/revolutionary/leader))
+					foecount++
+				else
+					revcount++
 		for(var/mob/living/carbon/human/player in mob_list)
 			if(player.mind)
 				var/role = player.mind.assigned_role
@@ -493,7 +489,7 @@
 					if(player.stat != 2)
 						comcount++
 				else
-					if(player.mind in ticker.mode:revolutionaries)
+					if(locate(/datum/role/revolutionary) in player.mind.antag_roles)
 						continue
 					loycount++
 		for(var/mob/living/silicon/X in mob_list)
@@ -501,7 +497,7 @@
 				loycount++
 		var/revpenalty = 10000
 
-		dat += {"<B><U>MODE STATS</U></B><BR>
+		dat += {"<B><U>REVOLUTION STATS</U></B><BR>
 		<B>Number of Surviving Revolution Heads:</B> [foecount]<BR>
 		<B>Number of Surviving Command Staff:</B> [comcount]<BR>
 		<B>Number of Surviving Revolutionaries:</B> [revcount]<BR>
@@ -512,8 +508,6 @@
 		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
 		<B>All Revolution Heads Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
-
-	*/
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
 //	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
