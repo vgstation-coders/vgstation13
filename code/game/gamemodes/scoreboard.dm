@@ -325,8 +325,8 @@
 		var/arrestpoints = score["arrested"] * 1000
 		var/killpoints = score["opkilled"] * 500
 		var/comdeadpts = score["deadcommand"] * 500
-		if(score["traitorswon"])
-			score["crewscore"] -= 10000
+		//if(score["traitorswon"])
+			//score["crewscore"] -= 10000
 		score["crewscore"] += arrestpoints
 		score["crewscore"] += killpoints
 		score["crewscore"] -= comdeadpts
@@ -496,7 +496,7 @@
 		for(var/mob/living/silicon/X in mob_list)
 			if (X.stat != 2)
 				loycount++
-		var/revpenalty = 10000
+		//var/revpenalty = 10000
 
 		dat += {"<B><U>REVOLUTION STATS</U></B><BR>
 		<B>Number of Surviving Revolution Heads:</B> [foecount]<BR>
@@ -506,9 +506,9 @@
 		<B>Revolution Heads Arrested:</B> [score["revarrested"]] ([score["revarrested"] * 1000] Points)<BR>
 		<B>Revolution Heads Slain:</B> [score["revkilled"]] ([score["revkilled"] * 500] Points)<BR>
 		<B>Command Staff Slain:</B> [score["deadcommand"]] (-[score["deadcommand"] * 500] Points)<BR>
-		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
 		<B>All Revolution Heads Arrested:</B> [score["allrevarrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
+//		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
 //	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
