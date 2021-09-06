@@ -310,18 +310,18 @@
 	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
 
 
-	/*//Mode Specific
-	if(ticker.mode.config_tag == "nuclear")
+	//Mode Specific
+	if(find_active_faction_by_type(/datum/faction/syndicate/nuke_op))
 		if(score["disc"])
 			score["crewscore"] += 500
 		var/killpoints = score["opkilled"] * 250
 		var/arrestpoints = score["arrested"] * 1000
 		score["crewscore"] += killpoints
 		score["crewscore"] += arrestpoints
-		//if(score["nuked"])
-			//score["crewscore"] -= nukedpenalty
+		if(score["nuked"])
+			score["crewscore"] -= nukedpenalty
 
-	if(ticker.mode.config_tag == "revolution")
+	if(find_active_faction_by_type(/datum/faction/revolution))
 		var/arrestpoints = score["arrested"] * 1000
 		var/killpoints = score["opkilled"] * 500
 		var/comdeadpts = score["deadcommand"] * 500
@@ -329,7 +329,7 @@
 			score["crewscore"] -= 10000
 		score["crewscore"] += arrestpoints
 		score["crewscore"] += killpoints
-		score["crewscore"] -= comdeadpts*/
+		score["crewscore"] -= comdeadpts
 
 	//Good Things
 	score["crewscore"] += plasmashipped
@@ -415,6 +415,7 @@
 		var/crewcount = 0
 		var/diskdat = ""
 		var/bombdat = null
+		var/nukedpenalty = 1000
 		for(var/datum/role/R in NO.members)
 			foecount++
 		for(var/mob/living/C in mob_list)
