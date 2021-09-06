@@ -150,7 +150,7 @@
 		move_ray()
 		process_construct_hud(src)
 
-/mob/living/simple_animal/construct/builder/perfect/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
+/mob/living/simple_animal/construct/builder/perfect/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
 	if (ray)
 		move_ray()
