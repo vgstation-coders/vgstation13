@@ -21,7 +21,7 @@
 
 /obj/item/weapon/storage/briefcase/orderly
 	name = "orderly briefcase"
-	desc = "A briefcase for storing injectors and other tools of the trade. Has a medical cross emblazoned on each side."
+	desc = "A briefcase with a medical cross emblazoned on each side. It has a faintly sterile smell to it."
 	icon_state = "medbriefcase"
 
 /obj/item/weapon/storage/briefcase/orderly/New()
