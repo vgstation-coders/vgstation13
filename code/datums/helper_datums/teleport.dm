@@ -31,6 +31,8 @@
 		return FALSE
 	if(!setPrecision(aprecision))
 		return FALSE
+	var/turf/T = get_turf(adestination)
+	log_debug("TELEPORTATION: ateleatom: [ateleatom], adestination: [adestination][T ? "([T.x],[T.y],[T.z])" : ""]")
 	setEffects(aeffectin,aeffectout)
 	setForceTeleport(afteleport)
 	setIgnoreJamming(aijamming)
