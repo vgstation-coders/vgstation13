@@ -402,9 +402,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		color = rgb(round(RGB[1]/2), round(RGB[2]/2), round(RGB[3]/2))
 	else
 		color = light_color
-
-/atom/movable/light/shadow/update_appearance()
-	. = ..()
 	filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
 
 /atom/movable/light/proc/update_light_dir()
