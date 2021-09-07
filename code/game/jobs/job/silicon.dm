@@ -42,6 +42,7 @@
 	spawn_positions = 2
 	supervisors = "your laws and the AI"
 	selection_color = "#ddffdd"
+	species_blacklist = list() //for shrooms
 
 /datum/job/mommi/equip(var/mob/living/carbon/human/H)
 	if(!H)
