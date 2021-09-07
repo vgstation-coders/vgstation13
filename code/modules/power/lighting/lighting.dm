@@ -101,6 +101,8 @@
 
 var/global/list/obj/machinery/light/alllights = list()
 
+var/list/light_source_images = list()
+
 // the standard tube light fixture
 /obj/machinery/light
 	name = "light fixture"
@@ -121,6 +123,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/obj/item/weapon/light/current_bulb = null
 	var/spawn_with_bulb = /obj/item/weapon/light/tube
 	var/fitting = "tube"
+	var/image/source_image = null
 
 	// No ghost interaction.
 	ghost_read=0
@@ -231,7 +234,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	alllights -= src
 
 /obj/machinery/light/update_icon()
-
+	if (source_image)
+		light_source_images -= source_image
+		for (var/mob/living/simple_animal/hostile/giant_spider/GS in player_list)
+			if (GS.client)
+				GS.client.images -= source_image
 	if(current_bulb)
 		switch(current_bulb.status)		// set icon_states
 			if(LIGHT_OK)
@@ -245,6 +252,12 @@ var/global/list/obj/machinery/light/alllights = list()
 	else
 		icon_state = "l[fitting]-empty"
 		on = 0
+	source_image = image(icon,src,icon_state)
+	source_image.plane = LIGHT_SOURCE_PLANE
+	light_source_images += source_image
+	for (var/mob/living/simple_animal/hostile/giant_spider/GS in player_list)
+		if (GS.client)
+			GS.client.images += source_image
 
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
@@ -476,7 +489,6 @@ var/global/list/obj/machinery/light/alllights = list()
 				if (S)
 					S.broken_lights++
 		broken()
-	return
 // attack with hand - remove tube/bulb
 // if hands aren't protected and the light is on, burn the player
 
