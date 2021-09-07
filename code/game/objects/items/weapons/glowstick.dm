@@ -76,7 +76,7 @@
 
 /obj/item/clothing/accessory/glowstick/on_removed(mob/user)
 	if (attached_to)
-		attached_to.set_light(0)
+		attached_to.kill_light()
 	..()
 
 /obj/item/clothing/accessory/glowstick/suicide_act(var/mob/living/user)

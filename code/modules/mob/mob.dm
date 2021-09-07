@@ -1584,6 +1584,23 @@ Use this proc preferably at the end of an equipment loadout
 	set hidden = 1
 	return directionface(SOUTH)
 
+/mob/proc/check_dark_vision()
+	if (dark_plane && dark_plane.alphas.len)
+		var/max_alpha = 0
+		for (var/key in dark_plane.alphas)
+			max_alpha = max(dark_plane.alphas[key], max_alpha)
+		dark_plane.alpha = max_alpha
+	else
+		dark_plane?.alpha = initial(dark_plane.alpha)
+
+	if (self_vision)
+		if (isturf(loc))
+			var/turf/T = loc
+			if (T.get_lumcount() > 0)
+				self_vision.alpha = 0
+			else
+				self_vision.alpha = self_vision.target_alpha
+
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
 	invoke_event(/event/before_move)

@@ -21,7 +21,7 @@
 	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_GRUE)
 
 /spell/swallow_light/stop_casting(list/targets, mob/user)
-	user.set_light(0)
+	user.kill_light()
 	playsound(user, null, 50, channel = CHANNEL_GRUE)
 
 /spell/swallow_light/choose_targets(mob/user = usr)
