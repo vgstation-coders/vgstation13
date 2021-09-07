@@ -36,7 +36,7 @@
 	if(!message_mommi)
 		message_mommi = message_robot
 
-/datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+/datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE, var/arguments)
 	. = TRUE
 	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
 		return FALSE
@@ -202,14 +202,14 @@
 /mob/proc/audible_cough()
 	emote("coughs", message = TRUE, ignore_status = TRUE)
 
-/mob/proc/audible_scream()
+/mob/proc/audible_scream(var/arguments)
 	if(isvox(src) || isskelevox(src))
-		emote("shrieks", message = TRUE, ignore_status = TRUE)
+		emote("shrieks", message = TRUE, ignore_status = TRUE, arguments = arguments)
 		return
 	if(isinsectoid(src))
-		emote("chitters", message = TRUE, ignore_status = TRUE)
+		emote("chitters", message = TRUE, ignore_status = TRUE, arguments = arguments)
 		return
 	else
-		emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
+		emote("screams", message = TRUE, ignore_status = TRUE, arguments = arguments) // So it's forced
 
 
