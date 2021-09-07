@@ -38,7 +38,7 @@
 	. = ..()
 	update_contained_lights()
 
-/atom/movable/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/atom/movable/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	. = ..()
 	update_contained_lights()
 
