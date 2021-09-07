@@ -19,7 +19,7 @@
 	glide_size = WORLD_ICON_SIZE
 	blend_mode = BLEND_ADD
 
-	animate_movement = SLIDE_STEPS
+	animate_movement = NO_STEPS
 
 	alpha = 180
 
@@ -33,11 +33,14 @@
 
 	var/light_swallowed = 0
 
+/atom/movable/light/smooth
+	animate_movement = SLIDE_STEPS
+
 /atom/movable/light/shadow
 	name = null
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
-	animate_movement = SLIDE_STEPS
+	animate_movement = NO_STEPS
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder

@@ -147,13 +147,11 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		pixel_y = -(world.icon_size * light_range)
 
 	// This to avoid TILE_BOUND corner light effects while keeping smooth movement for movable light sources
-	// Basically, for movable lights, we always do white square + masking
-	// But for fixed lights, we wall-shadows-only lights do not cast a white square
-	// Probably not the smartest way around this
-	if (holder.lighting_flags & MOVABLE_LIGHT)
-		icon_state = "white"
-	else
-		icon_state = base_light_color_state
+	// There are THREE light atoms on an object
+	// - the white square (not TILE_BOUND)
+	// - the shadow square (TILE_BOUND)
+	// - the smooth white square (not TILE_BOUND)
+	icon_state = base_light_color_state
 
 	if (icon_state == "white") // This mask only makes sense if we are casting a white light
 		alpha = min(255,max(0,round(light_power*light_power_multiplier*25)))
@@ -178,6 +176,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	for(var/turf/T in view(light_range, src))
 		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
+
+/atom/movable/light/smooth/cast_shadows()
+	return
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
@@ -397,7 +398,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	overlays = temp_appearance
 	temp_appearance = null
 	// Because movable lights do this two-lights-sources thing
-	if (holder.lighting_flags & MOVABLE_LIGHT)
+	if ((holder.lighting_flags & MOVABLE_LIGHT) && icon_state == "white")
 		var/list/RGB = rgb2num(light_color)
 		color = rgb(round(RGB[1]/2), round(RGB[2]/2), round(RGB[3]/2))
 	else
