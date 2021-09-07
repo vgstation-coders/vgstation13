@@ -115,6 +115,7 @@
 	access = list(access_mime, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_mime, access_theatre)
 	outfit_datum = /datum/outfit/mime
+	species_blacklist = list() //for shrooms
 
 /datum/job/mime/reject_new_slots()
 	if(!xtra_positions)
