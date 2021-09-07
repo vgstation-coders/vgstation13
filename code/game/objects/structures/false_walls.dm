@@ -113,6 +113,12 @@
 	density = 1
 	opacity = 1
 
+
+/obj/structure/falsewall/examine(var/mob/user)
+	..()
+	if(Adjacent(user))
+		to_chat(user, "<span class='rose'>Now that you're standing close to it, that wall appears a bit odd.</span>")
+
 /obj/structure/falsewall/New()
 	..()
 	relativewall()
@@ -250,6 +256,11 @@
 	anchored = 1
 	var/mineral = "metal"
 	var/opening = 0
+
+/obj/structure/falserwall/examine(var/mob/user)
+	..()
+	if(Adjacent(user))
+		to_chat(user, "<span class='rose'>Now that you're standing close to it, that wall appears a bit odd.</span>")
 
 /obj/structure/falserwall/canSmoothWith()
 	var/static/list/smoothables = list(
