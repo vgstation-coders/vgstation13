@@ -1,6 +1,7 @@
 #define LIGHT_CPU_THRESHOLD 80
 
 /atom/movable/light
+	name = null
 	mouse_opacity = 0
 	plane = LIGHTING_PLANE
 
@@ -33,6 +34,7 @@
 	var/light_swallowed = 0
 
 /atom/movable/light/shadow
+	name = null
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = SLIDE_STEPS
