@@ -120,7 +120,7 @@
 		L.raise_lance()
 		return
 
-/obj/effect/lance_trigger/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/obj/effect/lance_trigger/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	var/old_last_move = last_move //Old direction
 
 	if(amount_of_turfs_charged > 0 && (world.time - last_moved) >= 3) //More than 2/10 of a second since last moved

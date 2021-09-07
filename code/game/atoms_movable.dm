@@ -407,7 +407,7 @@
 			Obstacle.Bumped(src)
 	sound_override = 0
 
-/atom/movable/proc/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/atom/movable/proc/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	invoke_event(/event/before_move)
 	if(glide_size_override)
 		glide_size = glide_size_override
@@ -429,7 +429,7 @@
 			A.Entered(src, old_loc)
 
 			for(var/atom/movable/AM in loc)
-				AM.Crossed(src)
+				AM.Crossed(src, from_tp) // Says if we crossed it from a teleporter.
 
 
 	for(var/atom/movable/AM in locked_atoms)
