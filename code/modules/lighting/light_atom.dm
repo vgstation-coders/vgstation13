@@ -6,6 +6,9 @@
 	var/light_range = 1
 	var/light_color = "#F4FFFA"
 
+	// Movable lights only
+	var/atom/movable/light/smooth/smooth_light_obj
+
 // Used to change hard BYOND opacity; this means a lot of updates are needed.
 /atom/proc/set_opacity(var/newopacity)
 	opacity = newopacity ? 1 : 0
