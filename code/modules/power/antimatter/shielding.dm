@@ -207,6 +207,13 @@ proc/cardinalrange(var/center)
 	if(!istype(W) || !user)
 		return
 	if(W.force > 10)
+		user.do_attack_animation(src, W)
+		playsound(src, 'sound/items/metal_impact.ogg', 75, 1)
+		shake(1, 3)
+		user.delayNextAttack(8)
+		visible_message("<span class='warning'>\The [user] hits \the [src] with \a [W]!</span>", \
+					"<span class='warning'>You hit \the [src] with your [W]!</span>", \
+					"You hear something metallic being hit.")
 		stability -= W.force/2
 		check_stability()
 	..()
