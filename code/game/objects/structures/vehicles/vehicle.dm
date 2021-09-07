@@ -191,6 +191,9 @@
 		return 0
 	if(move_delayer.blocked())
 		return 0
+	if (istype(locked_to, /obj/machinery/bot/mulebot))
+		var/obj/machinery/bot/mulebot/M = locked_to
+		M.unload(0)
 
 	//If we're in space or our area has no gravity...
 	var/turf/T = loc
@@ -486,7 +489,7 @@
 		target.set_light(brightness)
 		playsound(target, sounds[1], 50, 1)
 	else
-		target.set_light(0)
+		target.kill_light()
 		playsound(target, sounds[2], 50, 1)
 	target.update_icon()
 

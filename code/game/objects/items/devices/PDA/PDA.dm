@@ -2020,10 +2020,10 @@ var/global/msg_id = 0
 		if("Light")
 			if(fon)
 				fon = 0
-				set_light(0)
+				kill_light()
 			else
 				fon = 1
-				set_light(f_lum)
+				set_light(f_lum, l_type = LIGHT_SOFT)
 		if("Medical Scan")
 			if(scanmode == SCANMODE_MEDICAL)
 				scanmode = SCANMODE_NONE
@@ -2505,7 +2505,7 @@ var/global/msg_id = 0
 			imglist["[msg_id]"] = current_photo.img
 			P.imglist["[msg_id]"] = current_photo.img
 		
-		useMS.send_pda_message("[P.owner]","[owner]","[t]",current_photo.img)
+		useMS.send_pda_message("[P.owner]","[owner]","[t]",imglist["[msg_id]"])
 
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote["[msg_id]"] = "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"

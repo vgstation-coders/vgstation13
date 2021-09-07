@@ -7,7 +7,9 @@
 	name = "paper"
 	gender = NEUTER
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	icon_state = "paper"
+	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD

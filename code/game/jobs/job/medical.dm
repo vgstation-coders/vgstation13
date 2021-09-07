@@ -83,6 +83,18 @@
 	alt_titles = list("Brig Medic")
 	outfit_datum = /datum/outfit/paramedic
 
+/datum/job/orderly
+	title = "Orderly"
+	faction = "Station"
+	total_positions = 2
+	spawn_positions = 1
+	supervisors = "the chief medical officer"
+	wage_payout = 55
+	selection_color = "#ffeef0"
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry)
+	minimal_access = list(access_medical, access_morgue, access_surgery)
+	outfit_datum = /datum/outfit/orderly
+
 /*
 /datum/job/psychiatrist
 	title = "Psychiatrist"

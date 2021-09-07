@@ -1,5 +1,5 @@
 /obj/effect/decal/warning_stripes
-	icon = 'icons/effects/warning_stripes.dmi'
+	icon = 'icons/effects/floor_decals.dmi'
 
 /obj/effect/decal/warning_stripes/New()
 	. = ..()
@@ -38,7 +38,7 @@
 	name = "NMPI"
 	desc = "White holographic lines hovering above the ground. If your sense of direction is under average, just follow the Nanotrasen-approved Maintenance Path Indicator to never get lost again. Nanotrasen declines all responsibility if you decide to stray off the path indicated by the Nanotrasen-approved Maintenance Path Indicator."
 
-	icon = 'icons/effects/warning_stripes.dmi'
+	icon = 'icons/effects/floor_decals.dmi'
 	icon_state = "maintguide"
 	anchored = 1  //Otherwise people move them using crates
 
@@ -47,3 +47,18 @@
 	icon_state = "radiation_huge"
 	name = "Unshielded Area"
 	desc = "Designates an area that is NOT shielded against radiation storms. Enter at your own risk."
+
+//Siding
+/obj/effect/decal/warning_stripes/siding
+	name = "Siding"
+	icon_state = "siding"
+
+/obj/effect/decal/warning_stripes/siding/full
+	icon_state = "siding_full"
+
+/obj/effect/decal/warning_stripes/siding/gold
+	name = "Wood Siding"
+	icon_state = "wood_siding"
+
+/obj/effect/decal/warning_stripes/siding/gold/full
+	icon_state = "wood_siding_full"

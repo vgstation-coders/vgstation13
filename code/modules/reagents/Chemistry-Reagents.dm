@@ -733,6 +733,8 @@
 		holder.remove_reagent(AMATOXIN, 2 * REM)
 	if(holder.has_reagent(CHLORALHYDRATE))
 		holder.remove_reagent(CHLORALHYDRATE, 5 * REM)
+	if(holder.has_reagent(SUX))
+		holder.remove_reagent(SUX, REM)
 	if(holder.has_reagent(CARPOTOXIN))
 		holder.remove_reagent(CARPOTOXIN, REM)
 	if(holder.has_reagent(ZOMBIEPOWDER))
@@ -4181,6 +4183,31 @@
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
 
+/datum/reagent/suxameth
+	name = "Suxameth"
+	id = SUX
+	description = "A name for Suxamethonium chloride. A medical full-body paralytic preferred because it is easy to purge."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#CFC5E9" //rgb: 207, 197, 223
+	data = null
+	flags = CHEMFLAG_DISHONORABLE
+	overdose_am = 21
+	custom_metabolism = 1
+
+/datum/reagent/suxameth/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(isnull(data))
+		// copied from chloral for the same reasons
+		data = 0
+	if(data >= 2)
+		M.SetStunned(2)
+		M.SetKnockdown(2)
+	data++
+
+/datum/reagent/suxameth/on_overdose(var/mob/living/M)
+	M.adjustOxyLoss(6) //Paralyzes the diaphragm if they go over 20 units
+
 /////////////////////////Food Reagents////////////////////////////
 
 //Part of the food code. Nutriment is used instead of the old "heal_amt" code
@@ -6755,7 +6782,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+		if(X.type == /atom/movable/light)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -6797,7 +6824,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+		if(X.type == /atom/movable/light)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -8866,7 +8893,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return
 	var/atom/A =  holder.my_atom
 	A.light_color = initial_color
-	A.set_light(0)
+	A.kill_light()
 
 /datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
@@ -8878,7 +8905,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.set_light(light_intensity)
 		spawn(volume * 10)
 			M.light_color = init_color
-			M.set_light(0)
+			M.kill_light()
 
 /datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -8889,7 +8916,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	T.set_light(light_intensity)
 	spawn(volume * 10)
 		T.light_color = init_color
-		T.set_light(0)
+		T.kill_light()
 
 /datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -8900,7 +8927,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	O.set_light(light_intensity)
 	spawn(volume * 10)
 		O.light_color = init_color
-		O.set_light(0)
+		O.kill_light()
 
 /datum/reagent/mucus
 	name = "Mucus"

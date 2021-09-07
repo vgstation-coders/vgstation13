@@ -730,7 +730,7 @@ var/list/uplink_items = list()
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 18
 	discounted_cost = 12
-	jobs_with_discount = list("Medical Doctor", "Chief Medical Officer")
+	jobs_with_discount = list("Orderly", "Medical Doctor", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/medical/organ_remover
 	name = "Modified Organics Extractor"
