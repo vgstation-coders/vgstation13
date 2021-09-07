@@ -175,10 +175,13 @@
 
 /datum/teleport/instant/science/setEffects(datum/effect/system/aeffectin,datum/effect/system/aeffectout)
 	if(!aeffectin || !aeffectout)
+		//De-activated sparks by order of Pomf. Too easily exploited to create lag machines.
+		/*
 		var/datum/effect/system/spark_spread/aeffect = new
 		aeffect.set_up(5, TRUE, teleatom)
 		effectin = effectin || aeffect
 		effectout = effectout || aeffect
+		*/
 		return TRUE
 	else
 		return ..()
