@@ -224,10 +224,10 @@
 		var/obj/structure/bed/chair/vehicle/car = AM
 		if(car.explodes_fueltanks)
 			visible_message("<span class='danger'>\The [car] crashes into \the [src]!</span>")
-			explode()
 			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = car.occupant
 				H.audible_scream("fueltank_crash")
+			explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
 	if (reagents.total_volume > 500)
