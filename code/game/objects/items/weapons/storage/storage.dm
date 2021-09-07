@@ -58,6 +58,16 @@
 		return ..()
 	show_to(user)
 
+/obj/item/weapon/storage/examine(mob/user)
+	..()
+	if(isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //phantom mask users
+		var/mob/dead/observer/ghost = user
+		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
+			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //scrying or astral travel
+				return
+		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
+		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
 //override to allow certain circumstances of looking inside this item if not holding or adjacent
 //distance interact can let you use storage even inside a mecha (see screen_objects.dm L160)
 //and also pull items out of that storage; it can be quite powerful, add narrow conditions
