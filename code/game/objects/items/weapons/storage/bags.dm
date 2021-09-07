@@ -61,7 +61,7 @@
 	icon_state = "biobag0"
 	item_state = "biobag"
 
-	sterility = 10
+	sterility = 100
 	fits_max_w_class = W_CLASS_LARGE
 	can_only_hold = list(
 		"/obj/item/trash",
