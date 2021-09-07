@@ -658,7 +658,7 @@
 					"You hear something metallic being hit, and falling on the floor.")
 				update_icon()
 			else
-				user.visible_message("<span class='warning'>\The [user.name] hits the broken APC's cover with \a [W.name] by [user.name]!</span>", \
+				user.visible_message("<span class='warning'>\The [user.name] hits the broken APC's cover with \a [W.name]!</span>", \
 					"<span class='warning'>You hit the APC's cover with your [W.name]!</span>", \
 					"You hear something metallic being hit.")
 

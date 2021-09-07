@@ -31,6 +31,7 @@ var/light_power_multiplier = 5
 
 // Initialisation of the cast_light proc.
 /atom/movable/light/proc/cast_light_init()
+	filters = list()
 	temp_appearance = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
@@ -177,6 +178,15 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	for(var/turf/T in view(light_range, src))
 		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
+
+/atom/movable/light/proc/CastShadow(var/turf/target_turf)
+	//get the x and y offsets for how far the target turf is from the light
+	var/x_offset = target_turf.x - x
+	var/y_offset = target_turf.y - y
+	cast_main_shadow(target_turf, x_offset, y_offset)
+
+	if ((target_turf in affected_shadow_walls) && is_valid_turf(target_turf))
+		cast_turf_shadow(target_turf, x_offset, y_offset)
 
 /atom/movable/light/proc/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 
@@ -342,6 +352,13 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		affected_shadow_walls -= src
 		return
 
+	var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+	black_turf.icon_state = "black"
+	black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
+	black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+	black_turf.layer = HIGHEST_LIGHTING_LAYER
+	temp_appearance += black_turf
+
 	var/blocking_dirs = 0
 	for(var/d in cardinal)
 		var/turf/T = get_step(target_turf, d)
@@ -389,15 +406,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/shadow/update_appearance()
 	. = ..()
 	filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
-
-/atom/movable/light/proc/CastShadow(var/turf/target_turf)
-	//get the x and y offsets for how far the target turf is from the light
-	var/x_offset = target_turf.x - x
-	var/y_offset = target_turf.y - y
-	cast_main_shadow(target_turf, x_offset, y_offset)
-
-	if ((target_turf in affected_shadow_walls) && is_valid_turf(target_turf))
-		cast_turf_shadow(target_turf, x_offset, y_offset)
 
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)

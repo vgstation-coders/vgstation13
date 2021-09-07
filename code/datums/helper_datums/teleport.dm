@@ -56,6 +56,8 @@
 	if(istype(ateleatom, /obj/effect) && !istype(ateleatom, /obj/effect/dummy/chameleon))
 		qdel(ateleatom)
 		return FALSE
+	if(istype(ateleatom, /atom/movable/light))
+		return FALSE
 	if(istype(ateleatom))
 		teleatom = ateleatom
 		return TRUE

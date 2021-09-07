@@ -140,6 +140,7 @@
 	glasses_fit = TRUE
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
+	on = 1
 	var/area/A = get_area(src)
 	if(A.flags & NO_MESONS)
 		to_chat(C, "<span class = 'warning'>\The [src] flickers, but refuses to come online!</span>")
@@ -148,25 +149,29 @@
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
 	seedarkness = FALSE
-	C.update_darkness()
 	C.dark_plane?.alphas["mesons"] = 255
+	C.update_darkness()
+	C.check_dark_vision()
 //	body_parts_covered |= EYES
 	..()
 
 /obj/item/clothing/glasses/scanner/meson/disable(var/mob/C)
 	eyeprot = 0
+	on = 0
 //	body_parts_covered &= ~EYES
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
 	seedarkness = TRUE
-	C.update_darkness()
 	C.dark_plane?.alphas -= "mesons"
+	C.update_darkness()
+	C.check_dark_vision()
 
 /obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
 	. = ..()
 	if (user)
-		user.update_darkness()
 		user.dark_plane?.alphas -= "mesons"
+		user.update_darkness()
+		user.check_dark_vision()
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)

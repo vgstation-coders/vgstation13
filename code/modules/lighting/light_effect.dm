@@ -1,4 +1,7 @@
+#define LIGHT_CPU_THRESHOLD 80
+
 /atom/movable/light
+	name = null
 	mouse_opacity = 0
 	plane = LIGHTING_PLANE
 
@@ -16,8 +19,7 @@
 	glide_size = WORLD_ICON_SIZE
 	blend_mode = BLEND_ADD
 
-	// Prevent shadows from jerking over walls when walking with a flashlight.
-	animate_movement = 1
+	animate_movement = SLIDE_STEPS
 
 	alpha = 180
 
@@ -32,9 +34,10 @@
 	var/light_swallowed = 0
 
 /atom/movable/light/shadow
+	name = null
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
-	animate_movement = 0
+	animate_movement = SLIDE_STEPS
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
@@ -99,7 +102,11 @@
 			else
 				forceMove(holder.loc, glide_size_override = 8) // Hopefully whatever we're gliding with has smooth movement.
 
-			cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
+			if (world.cpu < LIGHT_CPU_THRESHOLD || ticker.current_state < GAME_STATE_SETTING_UP)
+				cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
+			else
+				lighting_update_lights |= src
+
 	else
 		init_lights |= src
 
@@ -137,3 +144,5 @@
 		if (CHECK_OCCLUSION(current_turf))
 			. = FALSE
 			return
+
+#undef LIGHT_CPU_THRESHOLD

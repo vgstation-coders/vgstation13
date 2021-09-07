@@ -191,6 +191,9 @@
 		return 0
 	if(move_delayer.blocked())
 		return 0
+	if (istype(locked_to, /obj/machinery/bot/mulebot))
+		var/obj/machinery/bot/mulebot/M = locked_to
+		M.unload(0)
 
 	//If we're in space or our area has no gravity...
 	var/turf/T = loc
