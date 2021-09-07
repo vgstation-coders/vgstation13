@@ -72,7 +72,7 @@
 	)
 	slot_flags = SLOT_BELT
 
-/obj/item/weapon/storage/bag/trash/update_icon()
+/obj/item/weapon/storage/bag/trash/bio/update_icon()
 	if(contents.len == 0)
 		icon_state = "biobag0"
 		slowdown = 1
