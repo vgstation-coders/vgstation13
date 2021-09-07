@@ -23,13 +23,13 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	INVOKE_EVENT(on_bumping, list("user" = src, "bumped" = AM))
+	invoke_event(/event/to_bump, list("bumper" = src, "bumped" = AM))
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
-	INVOKE_EVENT(on_bumped, list("user" = src, "bumping" = AM))
+	invoke_event(/event/bumped, list("bumper" = AM, "bumped" = src))
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
@@ -104,7 +104,7 @@
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	handle_symptom_on_touch(M, src, HAND)
-	INVOKE_EVENT(on_touched, list("user" = src, "has been touched by" = M))
+	invoke_event(/event/touched, list("toucher" = M, "touched" = src))
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
 	if(incapacitation_duration <= 0)
@@ -547,6 +547,9 @@
 	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
+	for(var/obj/item/I in held_items)
+		I.SlipDropped(src,dir,overlay_type) // can be set to trigger specific behaviours when items are dropped by slipping
+
 	if(..())
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 		return 1
@@ -686,6 +689,9 @@
 
 		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
 			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
+
+		if(reagents.has_reagent(SUX) && !(reagents.has_any_reagents(HYPERZINES)))
+			. *= 4
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()

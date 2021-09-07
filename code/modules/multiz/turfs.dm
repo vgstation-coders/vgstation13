@@ -194,7 +194,7 @@
 	icon = 'icons/turf/overlays.dmi'
 	icon_state = ""
 	layer = 0
-	plane = BASE_PLANE
+	plane = GLASSTILE_PLANE
 
 /obj/effect/open_overlay/glass/damage
 	name = "glass open overlay cracks"
@@ -215,6 +215,7 @@
 			return
 		var/obj/effect/open_overlay/overimage = new /obj/effect/open_overlay
 		overimage.alpha = 255 - alpha_to_subtract
+		overimage.color = rgb(0,0,0,overimage.alpha)
 		vis_contents += bottom
 		if(!istype(bottom,/turf/space)) // Space below us
 			vis_contents.Add(overimage)

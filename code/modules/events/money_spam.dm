@@ -109,7 +109,8 @@
 					if(ai.aiPDA != P && ai.aiPDA != src)
 						ai.show_message("<i>Intercepted message from <b>[sender]</b></i> (Unknown) <i>to <b>[P:owner]</b>: [message]</i>")
 
-			P.tnote += "<i><b>&larr; From [sender] (Unknown):</b></i><br>[message]<br>"
+			P.tnote["msg_id"] = "<i><b>&larr; From [sender] (Unknown):</b></i><br>[message]<br>"
+			msg_id++
 
 			if(!filter_app || (filter_app.function == 0)) //Checking if the PDA has the spam filtering app installed
 				if(!P.silent)

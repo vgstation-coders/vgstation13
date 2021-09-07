@@ -275,6 +275,12 @@ var/list/special_fruits = list()
 	trash = /obj/item/weapon/corncob
 	fragrance = INCENSE_CORNOIL
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/corn/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "<span class='warning'>You'll have to eat the corn first before you can cut a pipe out of its cob.</span>")
+		return
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
 	desc = "Great for toppings!"

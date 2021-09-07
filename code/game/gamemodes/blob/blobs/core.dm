@@ -144,7 +144,7 @@
 		return
 	if (!overmind)
 		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
-		if(confirm)
+		if(confirm == "Yes")
 			if(!overmind)
 				create_overmind(user.client)
 			else

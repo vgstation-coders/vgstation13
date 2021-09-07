@@ -55,6 +55,36 @@
 		icon_state = "trashbag3"
 		slowdown = 1.8
 
+/obj/item/weapon/storage/bag/trash/bio
+	name = "hazardous waste bag"
+	desc = "A heavy-duty sterilized garbage bag for handling infectious medical waste and sharps."
+	icon_state = "biobag0"
+	item_state = "biobag"
+
+	sterility = 10
+	fits_max_w_class = W_CLASS_LARGE
+	can_only_hold = list(
+		"/obj/item/trash",
+		"/obj/item/weapon/shard",
+		"/obj/item/weapon/reagent_containers",
+		"/obj/item/organ",
+		"/obj/item/stack/medical",
+	)
+	slot_flags = SLOT_BELT
+
+/obj/item/weapon/storage/bag/trash/update_icon()
+	if(contents.len == 0)
+		icon_state = "biobag0"
+		slowdown = 1
+	else if(contents.len < 12)
+		icon_state = "biobag1"
+		slowdown = 1.4
+	else if(contents.len < 21)
+		icon_state = "biobag2"
+		slowdown = 1.6
+	else
+		icon_state = "biobag3"
+		slowdown = 1.8
 
 // -----------------------------
 //        Plastic Bag
@@ -132,9 +162,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.register_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.unregister_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
@@ -165,10 +195,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
-		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag

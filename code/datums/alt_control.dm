@@ -8,7 +8,7 @@
 /datum/control/New(var/mob/new_controller, var/atom/new_controlled)
 	..()
 	controller = new_controller
-	controller.lazy_register_event(/lazy_event/on_damaged, src, .proc/user_damaged)
+	controller.register_event(/event/damaged, src, .proc/user_damaged)
 	controlled = new_controlled
 
 /datum/control/Destroy()

@@ -686,6 +686,13 @@
 	required_reagents = list(ETHANOL = 1, CHLORINE = 3, WATER = 1)
 	result_amount = 1
 
+/datum/chemical_reaction/suxameth
+	name = "Suxameth"
+	id = SUX
+	result = SUX
+	required_reagents = list(TOXIN = 1, CHLORINE = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/zombiepowder
 	name = "Zombie Powder"
 	id = ZOMBIEPOWDER

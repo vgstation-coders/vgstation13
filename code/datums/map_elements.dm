@@ -87,7 +87,7 @@ var/list/datum/map_element/map_elements = list()
 	if(!istype(A))
 		return
 
-	A.lazy_register_event(/lazy_event/on_destroyed, src, .proc/clear_references)
+	A.register_event(/event/destroyed, src, .proc/clear_references)
 	return A
 
 

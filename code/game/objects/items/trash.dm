@@ -4,6 +4,7 @@
 //Added by Jack Rost
 /obj/item/trash
 	icon = 'icons/obj/trash.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/trash.dmi', "right_hand" = 'icons/mob/in-hand/right/trash.dmi')
 	w_class = W_CLASS_TINY
 	desc = "This is rubbish."
 	w_type=NOT_RECYCLABLE
@@ -265,3 +266,12 @@ var/list/crushed_cans_cache = list()
 /obj/item/trash/zam_sliderwrapper
 	name = "zam slider wrapper"
 	icon_state	= "zam_spiderslider_wrapper"
+
+/obj/item/trash/egg
+	name = "egg shell"
+	icon_state	= "egg"
+	desc = "Pieces of calcium carbonate."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+
+/obj/item/trash/egg/borer
+	icon_state	= "borer egg-growing"

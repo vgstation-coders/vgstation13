@@ -93,9 +93,9 @@ var/global/list/alert_overlays_global = list()
 		"cold"
 	)
 
-/obj/machinery/door/firedoor/New()
+/obj/machinery/door/firedoor/New(loc, new_dir)
 	. = ..()
-
+	change_dir(new_dir)
 	if(!("[src.type]" in alert_overlays_global))
 		alert_overlays_global += list("[src.type]" = list("alert_hot" = list(),
 														"alert_cold" = list())
@@ -662,17 +662,12 @@ var/global/list/alert_overlays_global = list()
 		return 0
 
 	var/current_turf = get_turf(src)
-	var/turf_face = get_step(current_turf,user.dir)
-	if(SSair.air_blocked(current_turf, turf_face))
-		to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
-		return 1
-	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
+	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in current_turf
 	if(F && F.dir == user.dir)
 		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
 		return 1
 	if(do_after(user, user, 5 SECONDS))
-		var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
-		B.change_dir(user.dir)
+		new /obj/machinery/door/firedoor/border_only(current_turf, user.dir)
 		qdel(src)
 
 /obj/item/firedoor_frame/attackby(var/obj/item/weapon/C, var/mob/user)

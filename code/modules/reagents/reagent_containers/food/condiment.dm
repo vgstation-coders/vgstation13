@@ -81,7 +81,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag, params)
 	if(!flag || ismob(target))
 		return 0
-	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
+	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 		if(!target.reagents.total_volume) //Nothing in the dispenser
 			to_chat(user, "<span class='warning'>\The [target] is empty.</span>")

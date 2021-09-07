@@ -391,11 +391,11 @@
 	_color =  "jinglebells"
 
 /obj/item/clothing/accessory/jinglebells/pickup(mob/user)
-	user.lazy_register_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
+	user.register_event(/event/face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
 	jingle()
 
 /obj/item/clothing/accessory/jinglebells/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
+	user.unregister_event(/event/face, src, /obj/item/clothing/accessory/jinglebells/proc/jingle)
 
 /obj/item/clothing/accessory/jinglebells/proc/jingle()
 	var/turf/T = get_turf(src)
@@ -437,17 +437,17 @@
 		update_icon()
 		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
 
-		user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
+		user.unregister_event(/event/irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
 	if(ismob(C.loc) && !triggered)
 		var/mob/user = C.loc
-		user.lazy_register_event(/lazy_event/on_irradiate, src, .proc/check_rads)
+		user.register_event(/event/irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	user?.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
+	user?.unregister_event(/event/irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)

@@ -727,7 +727,7 @@ steam.start() -- spawns the effect
 /obj/effect/foam/fire
 	name = "fire supression foam"
 	icon_state = "mfoam"
-	
+
 /obj/effect/foam/fire/enhanced
 	lowest_temperature = 16
 
@@ -760,7 +760,7 @@ steam.start() -- spawns the effect
 	reagents.my_atom = src
 	var/ccolor = mix_color_from_reagents(reagents.reagent_list)
 	if(ccolor)
-		icon += ccolor
+		color = ccolor
 	var/savedtemp
 	if(reagents.has_reagent(WATER))
 		var/turf/simulated/T = get_turf(src)

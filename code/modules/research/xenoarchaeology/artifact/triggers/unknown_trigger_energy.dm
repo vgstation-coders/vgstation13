@@ -1,47 +1,44 @@
 /datum/artifact_trigger/energy
 	triggertype = TRIGGER_ENERGY
 	scanned_trigger = SCAN_PHYSICAL_ENERGETIC
-	var/key_attackby
-	var/key_projectile
-	var/key_beam
 
 /datum/artifact_trigger/energy/New()
 	..()
-	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
-	key_projectile = my_artifact.on_projectile.Add(src, "owner_projectile")
-	key_beam = my_artifact.on_beam.Add(src, "owner_beam")
+	my_artifact.register_event(/event/attackby, src, .proc/owner_attackby)
+	my_artifact.register_event(/event/projectile, src, .proc/owner_projectile)
+	my_artifact.register_event(/event/beam_connect, src, .proc/owner_beam)
 
-/datum/artifact_trigger/energy/proc/owner_attackby(var/list/event_args, var/source)
-	var/toucher = event_args[1]
-	var/context = event_args[2]
-	var/obj/item/weapon/item = event_args[3]
+/datum/artifact_trigger/energy/proc/owner_attackby(mob/living/attacker, obj/item/item)
+	var/static/list/energy_weapons = list(
+		/obj/item/weapon/melee/energy,
+		/obj/item/weapon/melee/legacy_cultblade,
+		/obj/item/weapon/card/emag,
+		/obj/item/device/multitool,
+	)
+	if(istype(item, /obj/item/weapon/melee/baton))
+		var/obj/item/weapon/melee/baton/stick = item
+		if(!stick.status)
+			return
+	if(!is_type_in_list(item, energy_weapons))
+		return
+	Triggered(attacker, "MELEE", item)
 
-	if(istype(item,/obj/item/weapon/melee/baton) && item:status ||\
-			istype(item,/obj/item/weapon/melee/energy) ||\
-			istype(item,/obj/item/weapon/melee/legacy_cultblade) ||\
-			istype(item,/obj/item/weapon/card/emag) ||\
-			istype(item,/obj/item/device/multitool))
-		Triggered(toucher, context, item)
+/datum/artifact_trigger/energy/proc/owner_projectile(obj/item/projectile/projectile)
+	var/list/energy_projectiles = list(
+		/obj/item/projectile/beam,
+		/obj/item/projectile/ion,
+		/obj/item/projectile/energy,
+	)
+	if(!is_type_in_list(projectile, energy_projectiles))
+		return
+	Triggered(projectile.firer, "PROJECTILE", projectile)
 
-/datum/artifact_trigger/energy/proc/owner_projectile(var/list/event_args, var/source)
-	var/toucher = event_args[1]
-	var/context = event_args[2]
-	var/item = event_args[3]
-
-	if(istype(item,/obj/item/projectile/beam) ||\
-		istype(item,/obj/item/projectile/ion) ||\
-		istype(item,/obj/item/projectile/energy))
-		Triggered(toucher, context, item)
-
-/datum/artifact_trigger/energy/proc/owner_beam(var/list/event_args, var/source)
-	var/obj/effect/beam/B = event_args[1]
-	var/context = event_args[2]
-
-	if (B?.get_damage())
-		Triggered(null, context, B)
+/datum/artifact_trigger/energy/proc/owner_beam(obj/effect/beam/beam)
+	if (beam?.get_damage())
+		Triggered(null, "BEAMCONNECT", beam)
 
 /datum/artifact_trigger/energy/Destroy()
-	my_artifact.on_attackby.Remove(key_attackby)
-	my_artifact.on_projectile.Remove(key_projectile)
-	my_artifact.on_beam.Remove(key_beam)
+	my_artifact.unregister_event(/event/attackby, src, .proc/owner_attackby)
+	my_artifact.unregister_event(/event/projectile, src, .proc/owner_projectile)
+	my_artifact.unregister_event(/event/beam_connect, src, .proc/owner_beam)
 	..()
