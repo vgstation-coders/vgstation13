@@ -126,7 +126,7 @@ FLOOR SAFES
 	else
 		radial.finish()
 
-/obj/structure/safe/proc/turn_dial(var/mob/user, var/task)
+/obj/structure/safe/proc/turn_dial(var/mob/living/user, var/task)
 	var/canhear = 0
 	if(user.find_held_item_by_type(/obj/item/clothing/accessory/stethoscope))
 		if (!(user.sdisabilities & DEAF) && !user.ear_deaf && !user.earprot())
