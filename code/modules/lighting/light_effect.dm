@@ -3,6 +3,7 @@
 /atom/movable/light
 	mouse_opacity = 0
 	plane = LIGHTING_PLANE
+	anchored = 1
 
 	layer = 1
 	//layer 1 = base plane layer
