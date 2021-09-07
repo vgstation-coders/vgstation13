@@ -1,7 +1,6 @@
 #define LIGHT_CPU_THRESHOLD 80
 
 /atom/movable/light
-	name = ""
 	mouse_opacity = 0
 	plane = LIGHTING_PLANE
 
