@@ -119,6 +119,9 @@
 		var/obj/item/toy/crayon/C = I
 		crayon = C.colourName
 		update_icon()
+	else if (istype(I, /obj/item/weapon/soap))
+		crayon = null
+		update_icon()
 
 /obj/item/weapon/paper_bin/examine(mob/user)
 	..()
@@ -182,27 +185,7 @@
 		paper = null
 		overlays += paper
 
-	switch(crayon)
-		if(null||"black")
-			icon_state = "paper_bin_black"
-		if("blue")
-			icon_state = "paper_bin_blue"
-		if("red")
-			icon_state = "paper_bin_red"
-		if("sterile")
-			icon_state = "paper_bin_white"
-		if("yellow")
-			icon_state = "paper_bin_yellow"
-		if("purple")
-			icon_state = "paper_bin_purple"
-		if("orange")
-			icon_state = "paper_bin_orange"
-		if("green")
-			icon_state = "paper_bin_green"
-		if("rainbow")
-			icon_state = "paper_bin_honk"
-		if("mime")
-			icon_state = "paper_bin_mime"
+	icon_state = "paper_bin_[crayon]"
 
 /obj/item/weapon/paper_bin/empty
 	amount = 0

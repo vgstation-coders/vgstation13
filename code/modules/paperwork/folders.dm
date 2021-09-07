@@ -3,7 +3,7 @@
 	desc = "A folder."
 	icon = 'icons/obj/bureaucracy.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
-	icon_state = "folder"
+	icon_state = "folder_"
 	item_state = null	// automatically uses the icon_state
 	w_class = W_CLASS_SMALL
 	pressure_resistance = 2
@@ -48,29 +48,7 @@
 	if(contents.len)
 		overlays += image(icon = icon, icon_state = "folder_paper")
 
-	switch(crayon)
-		if(null)
-			icon_state = "folder"
-		if("black")
-			icon_state = "folder_black"
-		if("blue")
-			icon_state = "folder_blue"
-		if("red")
-			icon_state = "folder_red"
-		if("sterile")
-			icon_state = "folder_white"
-		if("yellow")
-			icon_state = "folder_yellow"
-		if("purple")
-			icon_state = "folder_purple"
-		if("orange")
-			icon_state = "folder_orange"
-		if("green")
-			icon_state = "folder_green"
-		if("rainbow")
-			icon_state = "folder_honk"
-		if("mime")
-			icon_state = "folder_mime"
+	icon_state = "folder_[crayon]"
 	return
 
 /obj/item/weapon/folder/decontaminate()
