@@ -939,12 +939,13 @@ window "popupwindow"
 		type = MAIN
 		pos = 281,0
 		size = 120x120
-		anchor1 = none
-		anchor2 = none
+		anchor1 = -1,-1
+		anchor2 = -1,-1
 		background-color = none
 		is-visible = false
 		saved-params = "pos;size;is-minimized;is-maximized"
 		statusbar = false
+		can-resize = false
 
 window "rpane"
 	elem "rpane"
