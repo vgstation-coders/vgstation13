@@ -61,7 +61,7 @@
 	icon_state = "biobag0"
 	item_state = "biobag"
 
-	sterility = 10
+	sterility = 100
 	fits_max_w_class = W_CLASS_LARGE
 	can_only_hold = list(
 		"/obj/item/trash",
@@ -72,7 +72,7 @@
 	)
 	slot_flags = SLOT_BELT
 
-/obj/item/weapon/storage/bag/trash/update_icon()
+/obj/item/weapon/storage/bag/trash/bio/update_icon()
 	if(contents.len == 0)
 		icon_state = "biobag0"
 		slowdown = 1
