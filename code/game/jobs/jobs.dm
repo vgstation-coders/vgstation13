@@ -21,7 +21,8 @@ var/list/medical_positions = list(
 	"Virologist",
 //	"Psychiatrist",
 	"Paramedic",
-	"Chemist"
+	"Chemist",
+	"Orderly"
 )
 
 var/list/science_positions = list(
@@ -96,6 +97,7 @@ var/list/all_jobs_txt = list(
 //	"Psychiatrist",
 	"Paramedic",
 	"Chemist",
+	"Orderly",
 	"Research Director",
 	"Scientist",
 	"Roboticist",

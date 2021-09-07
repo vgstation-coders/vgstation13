@@ -2,7 +2,9 @@
 	name = "folder"
 	desc = "A folder."
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	icon_state = "folder"
+	item_state = null	// automatically uses the icon_state
 	w_class = W_CLASS_SMALL
 	pressure_resistance = 2
 

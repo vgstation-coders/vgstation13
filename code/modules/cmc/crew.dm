@@ -55,6 +55,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		"Virologist" = 23,
 		"Medical Doctor" = 24,
 		"Paramedic" = 25,
+		"Orderly" = 26,
 		"Research Director" = 30,
 		"Scientist" = 31,
 		"Roboticist" = 32,

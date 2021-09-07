@@ -123,6 +123,22 @@
 	else
 		icon_state = "biofoam0"
 
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector
+	name = "paralytic injector"
+	desc = "A small, single-use device used to administer small amounts of paralytic agent."
+	icon_state = "paralytic1"
+	item_state = "paralytic"
+	amount_per_transfer_from_this = 10
+	volume = 10
+	flags = FPRINT
+	refill_reagent_list = list(SUX = 10)
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "paralytic1"
+	else
+		icon_state = "paralytic0"
+
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/admin // TESTING!
 	name = "dummy autoinjector"
 	desc = "Why? why would a test dummy ever need something like this?"
@@ -133,4 +149,3 @@
 	. = ..()
 	if(!reagents.total_volume)
 		reagent_refill()
-
