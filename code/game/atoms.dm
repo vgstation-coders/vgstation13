@@ -59,7 +59,7 @@ var/global/list/ghdel_profiling = list()
 /atom/New()
 	. = ..()
 	// Light effects
-	if (moody_light_type || lighting_flags & IS_LIGHT_SOURCE)
+	if (moody_light_type || (lighting_flags & IS_LIGHT_SOURCE))
 		set_light()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
