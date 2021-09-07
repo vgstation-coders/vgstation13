@@ -142,6 +142,7 @@
 #define DIETHYLAMINE 			"diethylamine"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
 #define CHLORALHYDRATE 			"chloralhydrate"
+#define SUX					"suxameth"
 #define NUTRIMENT 			"nutriment"
 #define LIPOZINE 			"lipozine"
 #define SOYSAUCE 			"soysauce"

@@ -216,6 +216,7 @@ var/paperwork_library
 	desc = "It's a normal black ink pen."
 	name = "pen"
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	icon_state = "pen"
 	item_state = "pen"
 	origin_tech = Tc_MATERIALS + "=1"
