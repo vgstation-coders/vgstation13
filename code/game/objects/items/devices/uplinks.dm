@@ -7,28 +7,14 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 */
 
 /obj/item/device/uplink
-	var/welcome 					// Welcoming menu message
-	var/uses 						// Number of crystals
-	// List of items not to shove in their hands.
+	var/uses = 20 // Number of crystals
 	var/list/purchase_log = list()
-	var/show_description = null
 	var/active = 0
 	var/job = null
 	var/list/roles = list()
-
-/obj/item/device/uplink/New()
-	..()
-	if(ticker)
-		initialize()
-		return
-
-/obj/item/device/uplink/initialize()
-	if(ticker.mode)
-		welcome = "Syndicate Uplink Console"
-		uses = 20
-	else
-		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
-		uses = 90 // Because this is only happening on centcomm's snowflake uplink
+	var/lockable = TRUE
+	var/compact_mode = FALSE
+	var/selected_category
 
 /obj/item/device/uplink/proc/refund(mob/living/carbon/human/user, obj/item/I)
 	if(!user || !I)
@@ -53,154 +39,91 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 				return TRUE
 	return FALSE
 
-//Let's build a menu!
-/obj/item/device/uplink/proc/generate_menu(var/mob/user)
-	if(!job)
-		job = user.mind.assigned_role
-		roles = list()
-		for (var/role in user.mind.antag_roles)
-			var/datum/role/R = user.mind.antag_roles[role]
-			roles += R.id
-
-	var/dat = list()
-	dat += "<B>[src.welcome]</B><BR>"
-
-	dat += {"Tele-Crystals left: [src.uses]<BR>
-		<HR>
-		<B>Request item:</B><BR>
-		<I>Each item costs a number of tele-crystals as indicated by the number following their name.</I><br><BR>"}
-	var/list/buyable_items = get_uplink_items()
-
-	// Loop through categories
-	var/index = 0
-	for(var/category in buyable_items)
-
-		index++
-		dat += "<b>[category]</b><br>"
-
-		var/discounted_list = list() //These go on top.
-		var/jobexclusive_list = list()
-		var/nondiscounted_list = list() //These go on the bottom.
-
-		var/i = 0
-		// Loop through items in category
-		for(var/datum/uplink_item/item in buyable_items[category])
-			i++
-
-			if(!item.available_for_job(job))
-				continue
-
-			var/itemcost = item.get_cost(job)
-			var/cost_text = ""
-			var/desc = "[item.desc]"
-			var/final_text = ""
-			if(itemcost > 0)
-				if(item.gives_discount(job) || item.jobs_exclusive.len)
-					cost_text = "<span style='color: yellow; font-weight: bold;'>([itemcost]!)</span>"
-				else
-					cost_text = "([itemcost])"
-			if(itemcost <= uses)
-				final_text += "<A href='byond://?src=\ref[src];buy_item=[url_encode(category)]:[i];'>[item.name]</A> [cost_text] "
-			else
-				final_text += "<font color='grey'><i>[item.name] [cost_text] </i></font>"
-			if(item.refundable)
-				final_text += "<span style='color: yellow;'>\[R\]</span>"
-			if(item.desc)
-				if(show_description == 2)
-					final_text += "<A href='byond://?src=\ref[src];show_desc=1'><font size=2>\[-\]</font></A><BR><font size=2>[desc][item.refundable ? " Use this item on your uplink to refund it for [item.refund_amount || item.cost] TC.":""]</font>"
-				else
-					final_text += "<A href='byond://?src=\ref[src];show_desc=2' title='[html_encode(desc)]'><font size=2>\[?\]</font></A>"
-			final_text += "<BR>"
-
-			if(item.gives_discount(job))
-				discounted_list += final_text
-			else if(item.jobs_exclusive.len) //If we don't match this thing's job, we already exited out, so we don't need to check again
-				jobexclusive_list += final_text
-			else
-				nondiscounted_list += final_text
-
-		for(var/text in discounted_list|jobexclusive_list|nondiscounted_list) //Discounted first, nondiscounted later.
-			dat += text
-
-		// Break up the categories, if it isn't the last.
-		if(buyable_items.len != index)
-			dat += "<br>"
-
-	dat += "<HR>"
-	if (uses)
-		dat += "<a href='byond://?src=\ref[src];get_tc=1'>Extract telecrystals</a><br/>"
-	else
-		dat += "<font color='grey'><i>Extract telecrystals</i>/</font><br/>"
-	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
-	return dat
-
 // Interaction code. Gathers a list of items purchasable from the paren't uplink and displays it. It also adds a lock button.
-/obj/item/device/uplink/interact(mob/user as mob)
+/obj/item/device/uplink/interact(mob/user)
+	tgui_interact(user)
 
-	var/dat = "<body link='yellow' alink='white' bgcolor='#601414'><font color='white'>"
-	dat += src.generate_menu(user)
+/obj/item/device/uplink/ui_host(mob/user, datum/tgui/ui)
+	return loc
 
-	dat += {"<A href='byond://?src=\ref[src];lock=1'>Lock</a>
-		</font></body>"}
-	user << browse(dat, "window=hidden")
-	onclose(user, "hidden")
-	return
+/obj/item/device/uplink/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "Uplink")
+		ui.set_autoupdate(FALSE)
+		ui.open()
 
+/obj/item/device/uplink/ui_data(mob/user)
+	var/list/data = list()
+	data["telecrystals"] = uses
+	data["lockable"] = lockable
+	data["compactMode"] = compact_mode
+	data["selectedCategory"] = selected_category
+	return data
 
-/obj/item/device/uplink/Topic(href, href_list)
-	..()
+/obj/item/device/uplink/ui_static_data(mob/user)
+	var/list/data = list()
+	data["categories"] = list()
+	for(var/category in get_uplink_items(uplink_items))
+		var/list/cat = list(
+			"name" = category,
+			"items" = list()
+		)
+		for(var/datum/uplink_item/I in uplink_items[category])
+			if(!I.available_for_job(job) || !I.available_for_role(roles))
+				continue
+			cat["items"] += list(list(
+				"name" = I.name,
+				"cost" = I.get_cost(job),
+				"desc" = I.desc,
+				"discounted" = I.gives_discount(job) || length(I.jobs_exclusive),
+				"refundable" = I.refundable,
+			))
+		if(!length(cat["items"]))
+			continue
+		data["categories"] += list(cat)
+	return data
 
-	if (!is_holder_of(usr, src))
-		message_admins("[key_name(usr)] tried to access [src], an unlocked PDA, despite not being its holder. ([formatJumpTo(get_turf(src))])")
-		return FALSE
+/obj/item/device/uplink/ui_state(mob/user)
+	return global.deep_inventory_state
 
+/obj/item/device/uplink/ui_act(action, params)
+	. = ..()
+	if(.)
+		return
 	if(!active)
 		return
-
-	if (href_list["buy_item"])
-
-		var/item = href_list["buy_item"]
-		var/list/split = splittext(item, ":") // throw away variable
-
-		if(split.len == 2)
-			// Collect category and number
-			var/category = split[1]
-			var/number = text2num(split[2])
-
-			if(!job) //Should never happen unless the user somehow sends out a Topic() call before opening their uplink, but just in case.
-				job = usr.mind.assigned_role
+	switch(action)
+		if("buy")
+			var/item_name = params["name"]
 			var/list/buyable_items = get_uplink_items(job)
-
-			var/list/uplink = buyable_items[category]
-			if(uplink && uplink.len >= number)
-				var/datum/uplink_item/I = uplink[number]
-				if(I)
-					I.buy(src, usr)
-			else
-				var/text = "[key_name(usr)] tried to purchase an uplink item that doesn't exist"
-				var/textalt = "[key_name(usr)] tried to purchase an uplink item that doesn't exist [item]"
-				message_admins(text)
-				log_game(textalt)
-				admin_log.Add(textalt)
-
-	else if(href_list["show_desc"])
-		show_description = text2num(href_list["show_desc"])
-		interact(usr)
-
-	else if(href_list["get_tc"])
-		if (uses <= 0)
-			return
-		var/amount = input("How many telecrystals do you wish to withdraw?:", "Extract telecrystals", null) as num
-		if(!usr.Adjacent(src))
-			return
-		amount = clamp(amount, 0, uses)
-		if (amount <= 0)
-			return
-		uses -= amount
-		var/obj/item/stack/telecrystal/R = new /obj/item/stack/telecrystal(usr, amount)
-		var/mob/living/carbon/human/H = usr
-		to_chat(usr, "<span class='notice'>You withdraw [amount] telecrystal[amount > 1 ? "s" : ""] from your uplink.</span>")
-		H.put_in_hands(R)
+			var/datum/uplink_item/item
+			for(var/category in buyable_items)
+				for(var/datum/uplink_item/category_item in buyable_items[category])
+					if(category_item.name == item_name)
+						item = category_item
+						break
+			if(!item)
+				CRASH("unknown uplink_item [item_name]")
+			item.buy(src, usr)
+		if("lock")
+			active = FALSE
+			SStgui.close_uis(src)
+		if("select")
+			selected_category = params["category"]
+			return TRUE
+		if("compact_toggle")
+			compact_mode = !compact_mode
+			return TRUE
+		if("get_tc")
+			var/amount = clamp(text2num(params["amount"]), 0, uses)
+			if(amount == 0)
+				return
+			uses -= amount
+			var/obj/item/stack/telecrystal/R = new(get_turf(usr), amount)
+			to_chat(usr, "<span class='notice'>You withdraw [amount] telecrystal[amount > 1 ? "s" : ""] from the uplink.</span>")
+			usr.put_in_hands(R)
+			return TRUE
 
 // HIDDEN UPLINK - Can be stored in anything but the host item has to have a trigger for it.
 /* How to create an uplink in 3 easy steps!

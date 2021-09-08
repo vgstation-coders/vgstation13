@@ -361,6 +361,7 @@
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
 		if (role && T)
 			role.uplink = T
+		T.job = traitor_mob.mind.assigned_role
 
 /datum/mind/proc/find_syndicate_uplink(var/obj/item/device/uplink/true_uplink)
 	var/uplink = null
