@@ -1749,6 +1749,10 @@
 	..()
 	reagents.clear_reagents()
 
+/obj/item/weapon/reagent_containers/food/snacks/fries/cone
+	name = "cone of Space Fries"
+	icon_state = "fries_cone"
+
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
 	desc = "Dope from a soy."
@@ -1845,6 +1849,10 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
+	name = "punnet of Cheesy Fries"
+	icon_state = "cheesyfries_punnet"
 
 /obj/item/weapon/reagent_containers/food/snacks/fortunecookie
 	name = "Fortune cookie"

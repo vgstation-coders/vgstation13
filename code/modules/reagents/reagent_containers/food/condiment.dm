@@ -580,3 +580,35 @@
 /obj/item/weapon/reagent_containers/food/condiment/chillwax/New()
 	..()
 	reagents.add_reagent(CHILLWAX, 50)
+
+//////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/reagent_containers/food/condiment/small
+	possible_transfer_amounts = list(1, 5)
+	amount_per_transfer_from_this = 1
+
+/obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change()
+	return
+
+//-------------------------------------------------------------------------
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup
+	name = "ketchup packet"
+	desc = "You feel more American already."
+	icon_state = "ketchup_small"
+	condiment_overlay = KETCHUP
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
+	..()
+	reagents.add_reagent(KETCHUP, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo
+	name = "mayonaise packet"
+	desc = "Still not an instrument."
+	icon_state = "mayo_small"
+	condiment_overlay = MAYO
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
+	..()
+	reagents.add_reagent(MAYO, 5)
