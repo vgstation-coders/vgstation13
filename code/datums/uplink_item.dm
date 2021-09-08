@@ -41,8 +41,8 @@ var/list/uplink_items = list()
 	var/list/jobs_exclusive = list() //If empty, does nothing. If not empty, ONLY jobs in this list can buy this item.
 	var/list/jobs_excluded = list() //Jobs in this list cannot buy this item at all.
 	var/list/roles_exclusive = list() //If empty, does nothing. If not empty, ONLY roles in this list can buy this item.
-	var/list/roles_excluded = list() //Roles in this list cannot buy this item at all.
-
+	var/available_for_traitors = TRUE
+	var/available_for_nuke_ops = TRUE
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
@@ -62,19 +62,9 @@ var/list/uplink_items = list()
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
 /datum/uplink_item/proc/available_for_job(var/user_job)
-	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
-
-/datum/uplink_item/proc/available_for_role(var/list/roles)
-	if (roles_exclusive.len)
-		for (var/role in roles_exclusive)
-			if (role in roles)
-				return TRUE
-		return FALSE
-	else
-		for (var/role in roles_excluded)
-			if (role in roles)
-				return FALSE
+	if(!user_job)
 		return TRUE
+	return !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
 //This will get called that is essentially a New() by default.
 //Use this to make New()s that have extra conditions, such as bundles
@@ -82,23 +72,18 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/new_uplink_item(var/new_item, var/turf/location, mob/user)
 	return new new_item(location)
 
-/datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
+/datum/uplink_item/proc/spawn_item(var/turf/loc, datum/component/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
-	if(!available_for_role(U.roles))
-		var/dat = ""
-		for (var/role in roles_exclusive)
-			if (dat)
-				dat+= ", "
-			dat += role
-		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their role! (Role: [dat]) ([formatJumpTo(get_turf(U))])")
+	if(U.nuke_ops_inventory && !available_for_nuke_ops)
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a nuclear operative")
 		return
-	U.uses -= max(get_cost(U.job), 0)
+	U.telecrystals -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
 	return new_uplink_item(item, loc, user)
 
-/datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
+/datum/uplink_item/proc/buy(datum/component/uplink/U, var/mob/user)
 	if(!istype(U))
 		return 0
 
@@ -113,9 +98,10 @@ var/list/uplink_items = list()
 		return 0
 
 	// If the uplink's holder is in the user's contents
-	if ((U.loc in user.contents || (in_range(U.loc, user) && istype(U.loc.loc, /turf))))
+	var/obj/item/holder = U.parent
+	if ((holder in user.contents || (in_range(holder, user) && istype(holder.loc, /turf))))
 		user.set_machine(U)
-		if(get_cost(U.job) > U.uses)
+		if(get_cost(U.job) > U.telecrystals)
 			return 0
 
 		var/obj/I = spawn_item(get_turf(user), U, user)
@@ -154,8 +140,6 @@ var/list/uplink_items = list()
 						R = user.mind.GetRole(CHALLENGER)
 						if(R)
 							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
-		U.interact(user)
-
 		return 1
 	return 0
 
@@ -610,8 +594,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
-/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, user)
-
+/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/datum/component/uplink/U, user)
 	var/list/buyable_items = get_uplink_items()
 	var/list/possible_items = list()
 
@@ -621,15 +604,15 @@ var/list/uplink_items = list()
 				continue
 			if(!I.available_for_job(U.job))
 				continue
-			if(!I.available_for_role(U.roles))
+			if(!I.available_for_nuke_ops && U.nuke_ops_inventory)
 				continue
-			if(I.get_cost(U.job, 0.5) > U.uses)
+			if(I.get_cost(U.job, 0.5) > U.telecrystals)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.uses -= max(0, I.get_cost(U.job, 0.5))
+		U.telecrystals -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new_uplink_item(I.item, loc, user)
 
@@ -1128,7 +1111,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
-	roles_exclusive = list(TRAITOR)
+	available_for_nuke_ops = FALSE
 
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"

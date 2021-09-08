@@ -28,6 +28,7 @@
 	return dat
 
 /obj/item/weapon/implant/exile/implanted(mob/source, mob/user)
+	..()
 	theExile = source
 	disablePhrase = stripped_input(user, "Choose a phrase that disables the implant:")
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")

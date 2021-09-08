@@ -1,9 +1,9 @@
 /datum/component
 	var/datum/parent
 
-/datum/component/New(list/raw_args)
-	parent = raw_args[1]
-	var/list/arguments = raw_args.Copy(2)
+/datum/component/New(datum/parent, ...)
+	src.parent = parent
+	var/list/arguments = args.Copy(2)
 	if(!initialize(arglist(arguments)))
 		stack_trace("Incompatible [type] assigned to a [parent.type]! args: [json_encode(arguments)]")
 		qdel(src, TRUE, TRUE)
@@ -56,8 +56,8 @@
 		return null
 	return dc[c_type]
 
-/datum/proc/add_component(list/raw_args)
-	var/datum/component/new_type = raw_args[1]
+/datum/proc/add_component(...)
+	var/datum/component/new_type = args[1]
 
 	if(!ispath(new_type))
 		CRASH("add_component called with non-path first argument: [new_type]")
@@ -65,8 +65,8 @@
 	if(!isnull(get_component(new_type)))
 		CRASH("add_component called but [new_type] already exists")
 
-	raw_args[1] = src
-	var/datum/component/new_component = new new_type(raw_args)
+	args[1] = src
+	var/datum/component/new_component = new new_type(arglist(args))
 
 	if(!new_component || new_component.gcDestroyed)
 		CRASH("add_component tried to create new [new_type] but it was deleted")

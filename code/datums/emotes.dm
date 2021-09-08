@@ -47,9 +47,7 @@
 	msg = replace_pronoun(user, msg)
 
 	if(isliving(user))
-		var/mob/living/L = user
-		for(var/obj/item/weapon/implant/I in L)
-			I.trigger(key, L)
+		user.invoke_event(/event/emote, list("emote" = key, "source" = user))
 
 	if(!msg)
 		return

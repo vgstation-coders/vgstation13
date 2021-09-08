@@ -38,6 +38,9 @@
 	return TRUE
 
 /obj/item/device/multitool/attack_self(var/mob/user)
+	. = ..()
+	if(.)
+		return
 	if(!buffer?.get() && !clone) // Can't enable cloning without buffer.
 		return
 

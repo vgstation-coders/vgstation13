@@ -612,7 +612,7 @@ var/global/msg_id = 0
 				aiPDA.photo.pixel_y = q.fields["pixel_y"]
 				aiPDA.photo.blueprints = q.fields["blueprints"]
 				break
-	
+
 	aiPDA.create_message(src, selected)
 	aiPDA.photo = null
 
@@ -658,7 +658,7 @@ var/global/msg_id = 0
 					photo.pixel_y = q.fields["pixel_y"]
 					photo.blueprints = q.fields["blueprints"]
 					break
-		
+
 		create_message(usr, selected)
 		photo = null
 
@@ -777,7 +777,8 @@ var/global/msg_id = 0
 	if (map_app && map_app.holomap)
 		map_app.holomap.stopWatching()
 
-	if(active_uplink_check(user))
+	. = ..()
+	if(.)
 		return
 
 	if(user.client)
@@ -2111,13 +2112,14 @@ var/global/msg_id = 0
 			var/t = input(U, "Please enter new ringtone", name, ttone) as text
 			if (in_range(U, src) && loc == U)
 				if (t)
-					if(src.hidden_uplink && hidden_uplink.check_trigger(U, trim(lowertext(t)), trim(lowertext(lock_code))))
+					if(invoke_event(/event/pda_change_ringtone, list("user" = U, "new_ringtone" = t)))
 						to_chat(U, "The PDA softly beeps.")
 						U << browse(null, "window=pda")
 						src.mode = 0
 					else
 						t = copytext(sanitize(t), 1, 20)
 						ttone = t
+					return
 			else
 				U << browse(null, "window=pda")
 				return
@@ -2285,7 +2287,7 @@ var/global/msg_id = 0
 							else
 								difficulty += 2
 
-							if(P.hidden_uplink)
+							if(P.get_component(/datum/component/uplink))
 								U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
 								U << browse(null, "window=pda")
 								create_message(null, P, null, null, pick(syndicate_code_phrase)) //friendly fire
@@ -2492,7 +2494,7 @@ var/global/msg_id = 0
 			return
 
 		var/obj/item/weapon/photo/current_photo = null
-		
+
 		if(photo)
 			current_photo = photo
 
@@ -2504,7 +2506,7 @@ var/global/msg_id = 0
 		if(current_photo)
 			imglist["[msg_id]"] = current_photo.img
 			P.imglist["[msg_id]"] = current_photo.img
-		
+
 		useMS.send_pda_message("[P.owner]","[owner]","[t]",imglist["[msg_id]"])
 
 		tnote["[msg_id]"] = "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
@@ -2623,8 +2625,8 @@ obj/item/device/pda/AltClick()
 
 // access to status display signals
 /obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
-	..()
-	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, C))
+	. = ..()
+	if(.)
 		return
 	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
 		if(user.drop_item(C, src))

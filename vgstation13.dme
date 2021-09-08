@@ -293,6 +293,7 @@
 #include "code\datums\tether.dm"
 #include "code\datums\uplink_item.dm"
 #include "code\datums\components\component.dm"
+#include "code\datums\components\uplink.dm"
 #include "code\datums\diseases\appendicitis.dm"
 #include "code\datums\diseases\brainrot.dm"
 #include "code\datums\diseases\cold.dm"
