@@ -7,6 +7,8 @@
 	var/speeding = FALSE
 	var/list/highlighted_cables = list()
 
+	var/death_failsafe_counter = 0	//If the AI is outside of suitable machinery for TWO lifeticks, kill the AI
+
 /mob/living/silicon/shuntedAI/New(loc, var/datum/ai_laws/L, var/mob/living/silicon/ai/A)
 	..()
 	core = A
@@ -44,7 +46,7 @@
 
 /mob/living/silicon/shuntedAI/Login()
 	..()
-	DisplayUI("Shunted Malf")
+	DisplayUI("Malf")
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = TRUE
 		client.show_popup_menus = FALSE
@@ -65,6 +67,24 @@
 
 /mob/living/silicon/shuntedAI/Life()
 	..()
+
+	
+	if(!istype(loc, /obj/machinery) && !istype(loc, /obj/structure/cable) && !istype(loc, /obj/effect/malf_jaunt))	//We're outside of a cable or machine. Time to die.
+		if(death_failsafe_counter == 1)
+			death()
+			return
+		death_failsafe_counter = 1
+	else
+		death_failsafe_counter = 0
+
+	handle_powered()
+	updatehealth()
+
+	if(health <= 0)
+		death()
+
+
+/mob/living/silicon/shuntedAI/proc/handle_powered()
 	if(istype(loc, /obj/machinery/power/apc))
 		var/obj/machinery/power/apc/A = loc
 		var/obj/item/weapon/cell/cell = A.get_cell()
@@ -77,7 +97,21 @@
 		if(C.avail() <= 0)
 			adjustOxyLoss(1)
 
+/mob/living/silicon/shuntedAI/death(gibbed = 0)
+	if(stat == DEAD)
+		return
+	var/turf/T = get_turf(src)
+	forceMove(T, harderforce = TRUE)
+	new /obj/effect/gibspawner/robot/New(T)
+	playsound(src, 'sound/effects/electricity_short_disruption.ogg', 80, FALSE)		
+	stat = DEAD
+	update_canmove()
 
+	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+	see_in_dark = 8
+	see_invisible = SEE_INVISIBLE_LEVEL_TWO
+
+	return ..(gibbed)
 
 /obj/machinery/power/battery/smes/relaymove(var/mob/living/silicon/shuntedAI/user, direction)
 	if(!istype(user))
@@ -105,6 +139,8 @@
 /obj/structure/cable/relaymove(var/mob/living/silicon/shuntedAI/user, direction)
 	if(!istype(user))
 		return
+
+	//Calculate valid directions and attempt to transfer into an APC/SMES
 	var/list/valid_exit_directions = list()
 	var/turf/dest = get_step(src, direction)
 	var/turf/T = get_turf(src)
@@ -119,21 +155,24 @@
 	if(!target_move)
 		user.attempt_transfer(dest)
 		return
+
+	var/move_delay = user.movement_delay()
+
+	user.delayNextMove(move_delay)
+	user.set_glide_size(DELAY2GLIDESIZE(move_delay))
+
 	if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5))
 		user.delayNextMove(3)	
 
-	var/delay = user.movement_delay()
 
+	user.forceMove(target_move)
+	user.last_movement = world.time
+
+	user.set_highlighted_cable()
 	if(user.speeding)
 		target_move.shake(3, 3)
 		if(prob(10))
 			spark(target_move, 1)
-
-	user.forceMove(target_move, glide_size_override = DELAY2GLIDESIZE(delay))
-	user.delayNextMove(delay)
-	user.last_movement = world.time
-	user.set_highlighted_cable()
-
 
 
 /mob/living/silicon/shuntedAI/proc/attempt_transfer(var/turf/dest)
@@ -171,6 +210,7 @@
 	forceMove(A)
 	previous.update_icon()
 	A.update_icon()
+	UpdateAllElementIcons()
 	generate_cable_images()
 	set_highlighted_cable()
 
@@ -283,7 +323,7 @@
 	mouse_opacity = 0
 	icon = 'icons/effects/effects.dmi'
 	icon_state ="bloodnail"
-	color = "#32d600"
+	color = "#ffee00"
 	invisibility = 101
 	alpha = 180
 	layer = NARSIE_GLOW

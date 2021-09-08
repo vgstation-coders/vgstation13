@@ -34,17 +34,16 @@
 		for(var/A in abilities)
 			var/datum/malfhack_ability/M = new A
 			ability_name_to_datum[M.name] = M
-			qdel(M)
+			to_chat(world, "adding ability [M.name]")
 
 		for(var/mob/living/silicon/robot/R in malfAI.connected_robots)
 			faction.HandleRecruitedMind(R.mind)
 
 /datum/role/malfAI/PostMindTransfer(var/mob/newmob, var/mob/oldmob)
 	regenerate_hack_overlays()
-	if(istype(newmob, /mob/living/silicon/ai))
-		newmob.DisplayUI("Malf")
-	else if(istype(newmob, /mob/living/silicon/shuntedAI))
-		newmob.DisplayUI("Shunted Malf")
+	newmob.ResendAllUIs()
+	newmob.DisplayUI("Malf")
+
 
 
 /datum/role/malfAI/Greet()
@@ -70,16 +69,20 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 //Update lock/unlock status for any open radial menus
 /datum/role/malfAI/proc/update_radial_locks()
-	var/list/open_radials = antag.current.client.radial_menus
-	for(var/datum/radial_menu/menu in open_radials)
-		for(var/obj/abstract/screen/radial/slice/S in menu.elements)
-			if(!istype(S))
-				continue
-			var/datum/malfhack_ability/M = ability_name_to_datum[S.name]
-			if(M.check_cost(antag.current) && M.check_available(antag.current))
-				S.Unlock()
-			else
-				S.Lock()
+	if(antag.current.client)
+		var/list/open_radials = antag.current.client.radial_menus
+		for(var/datum/radial_menu/menu in open_radials)
+			for(var/obj/abstract/screen/radial/slice/S in menu.elements)
+				if(!istype(S))
+					continue
+				var/datum/malfhack_ability/M = ability_name_to_datum[S.name]
+				if(!M)
+					to_chat(world, "couldnt get ability from name, name is [S.name]")
+					return
+				if(M.check_cost(antag.current) && M.check_available(antag.current))
+					S.Unlock()
+				else
+					S.Lock()
 
 /datum/role/malfAI/proc/regenerate_hack_overlays()
 	for(var/obj/effect/hack_overlay/H in hack_overlays)

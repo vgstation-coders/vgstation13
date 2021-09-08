@@ -33,7 +33,7 @@ var/list/mind_ui_ID2type = list()
 	for (var/mind_ui in activeUIs)
 		var/datum/mind_ui/ui = activeUIs[mind_ui]
 		ui.RemoveFromClient()
-		qdel(ui)
+
 
 /datum/mind/proc/DisplayUI(var/ui_ID)
 	var/datum/mind_ui/ui
@@ -44,7 +44,10 @@ var/list/mind_ui_ID2type = list()
 			return
 		var/ui_type = mind_ui_ID2type[ui_ID]
 		ui = new ui_type(src)
-	ui.Display()
+	if(!ui.Valid())
+		ui.Hide()
+	else
+		ui.Display()
 
 /datum/mind/proc/HideUI(var/ui_ID)
 	if (ui_ID in activeUIs)
@@ -151,7 +154,7 @@ var/list/mind_ui_ID2type = list()
 		var/mob/M = mind.current
 		if (!M.client)
 			return
-
+		
 		mind.current.client.screen -= elements
 
 // Makes every element visible
@@ -160,7 +163,10 @@ var/list/mind_ui_ID2type = list()
 		element.Appear()
 	for (var/datum/mind_ui/child in subUIs)
 		if (child.display_with_parent)
-			child.Display()
+			if(child.Valid())
+				child.Display()
+			else
+				child.Hide()
 
 /datum/mind_ui/proc/Hide()
 	HideChildren()

@@ -99,12 +99,12 @@ var/global/list/ghdel_profiling = list()
 //loop - How many shakes to perform
 //directions - How many times to change shake direction
 //Total shaking time is equal to speed * loops * directions
-/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, speed = 0.2 SECONDS, loops = 3, directions = 3)
+/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, speed = 0.2 SECONDS, loops = 3)
 	set waitfor = 0
 	var/initialpixelx = pixel_x
 	var/initialpixely = pixel_y
 	var/shakedirections = 0
-	while(shakedirections < directions)
+	while(shakedirections < loops)
 		if(!src)
 			return
 
@@ -115,14 +115,12 @@ var/global/list/ghdel_profiling = list()
 			shiftx = -shiftx
 		if(prob(50))
 			shifty = -shifty 
-
-		animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = speed, loop = loops)
+			
+		animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = speed)
 		shakedirections = shakedirections + 1
-		sleep(speed * loops)
+		sleep(speed)
 		pixel_x = initialpixelx
 		pixel_y = initialpixely
-
-
 
 
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this

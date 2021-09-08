@@ -6,11 +6,12 @@
 		/datum/mind_ui/malf_top_panel,
 		/datum/mind_ui/malf_left_panel,
 		/datum/mind_ui/malf_right_panel,
+		/datum/mind_ui/shunt_bottom_panel,
 		)
 
 /datum/mind_ui/malf/Valid()
-	var/mob/living/silicon/ai/A = mind.current
-	if (!A)
+	var/mob/living/silicon/A = mind.current
+	if (!istype(A))
 		return FALSE
 	if(ismalf(A))
 		return TRUE
@@ -27,6 +28,14 @@
 	y = "TOP"
 	display_with_parent = TRUE
    	
+
+/datum/mind_ui/malf_top_panel/Valid()
+	var/mob/living/silicon/ai/A = mind.current
+	if (!istype(A))
+		return FALSE
+	if(ismalf(A))
+		return TRUE
+	return FALSE
 
 /datum/mind_ui/malf_top_panel/proc/SortPowers()
 	var/space_size = 40		//32 px icon, 8 px spacer
@@ -161,7 +170,13 @@
 		)
 	display_with_parent = TRUE
 
-
+/datum/mind_ui/malf_right_panel/Valid()
+	var/mob/living/silicon/ai/A = mind.current
+	if (!istype(A))
+		return FALSE
+	if(ismalf(A))
+		return TRUE
+	return FALSE
 
 //------------------------------------------------------------
 
@@ -342,3 +357,68 @@
 	cost = 10
 	offset_y = 104 
 	visible_offset_x = -56
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//						SHUNT BOTTOM PANEL   					  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/shunt_bottom_panel
+	uniqueID = "Shunt Bottom Panel"
+	y = "BOTTOM"
+	display_with_parent = TRUE
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/return_to_core,
+	)
+
+/datum/mind_ui/shunt_bottom_panel/Valid()
+	var/mob/living/silicon/shuntedAI/A = mind.current
+	if (!istype(A))
+		return FALSE
+	if(ismalf(A))
+		return TRUE
+	return FALSE
+
+/obj/abstract/mind_ui_element/hoverable/return_to_core
+	name = "Return To Core"
+	icon = 'icons/ui/malf/192x48.dmi'
+	layer = MIND_UI_BUTTON
+	icon_state = "malf_unshunt"
+	offset_x = -96
+
+/obj/abstract/mind_ui_element/hoverable/return_to_core/Click()
+	var/mob/living/silicon/shuntedAI/S = GetUser()
+	if(!istype(S) || !(color == null))
+		return
+	var/atom/A = S.loc
+	new /obj/effect/malf_jaunt(get_turf(S), S, get_turf(S.core), TRUE)
+	A.update_icon()
+
+/obj/abstract/mind_ui_element/hoverable/return_to_core/UpdateIcon()
+	var/mob/living/silicon/shuntedAI/A = GetUser()
+	var/datum/role/malfAI/M = A.mind.GetRole(MALF)
+	if(!istype(A) || !istype(M))
+		return
+	if(icon_state == "[base_icon_state]-hover")
+		return
+	if (A.core && !(A.core.stat & DEAD) && !(A.stat & DEAD))
+		if(istype(A.loc, /obj/machinery/power/apc))
+			color = null
+			icon_state = "malf_unshunt"
+		else
+			color = grayscale
+	else
+		color = null
+		icon_state = "malf_unshunt_blocked"
+
+
+/obj/abstract/mind_ui_element/hoverable/return_to_core/StartHovering()
+	if (color == null && icon_state == "malf_unshunt")
+		..()

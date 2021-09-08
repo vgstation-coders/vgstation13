@@ -127,6 +127,7 @@
 /datum/radial_menu/Destroy()
 	Reset()
 	hide()
+	current_user.radial_menus -= src
 	if(custom_check)
 		qdel(custom_check)
 		custom_check = null

@@ -5,7 +5,7 @@
 		/datum/malfhack_ability/shunt
 	)
 
-/obj/machinery/power/apc/malfhack_valid(var/mob/living/silicon/ai/malf)
+/obj/machinery/power/apc/malfhack_valid(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))		
 		to_chat(malf, "<span class='warning'>You are not a malfunctioning AI.</span>")
@@ -39,14 +39,14 @@
 	return TRUE
 
 
-/obj/machinery/power/apc/set_malf_owner(var/mob/living/silicon/ai/malf)
+/obj/machinery/power/apc/set_malf_owner(var/datum/role/malfAI/M)
+	var/mob/living/silicon/ai/malf = M.antag.current
 	if(!..())
 		return
-	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))
 		return
 	M.currently_hacking_apcs -= src
-	malf_owner = malf
+	malf_owner = M
 	to_chat(malf, "APC Hack Complete. The [name] is now under your exclusive control. You now have [M.apcs.len] APCs under your control.")
 	malf.clear_alert(name)
 	locked = TRUE

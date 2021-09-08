@@ -18,6 +18,9 @@
 		spawn(1)
 			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 		stored_freqs = 1
+	var/datum/role/malfAI/M = mind.GetRole(MALF)
+	if(M)
+		DisplayUI("Malf")
 	client.CAN_MOVE_DIAGONALLY = TRUE
 
 

@@ -4,7 +4,7 @@
 
 /obj/machinery
 	var/obj/effect/hack_overlay/hack_overlay
-	var/mob/living/silicon/ai/malf_owner
+	var/datum/role/malfAI/malf_owner
 	var/malf_hack_time = MACHINE_HACK_TIME
 	var/malf_disrupted = FALSE
 	var/aicontrolbypass = FALSE
@@ -20,7 +20,7 @@
 		hack_abilities = initialized_abilities
 
 /obj/machinery/AIRightClick(var/mob/user)
-	var/mob/living/silicon/ai/A = user
+	var/mob/living/silicon/A = user
 	if(istype(A))
 		hack_interact(user)
 
@@ -60,12 +60,17 @@
 /obj/effect/hack_overlay/proc/set_icon(var/newstate)
 	particleimg.icon_state = newstate
 
-/obj/machinery/proc/hack_interact(var/mob/living/silicon/ai/malf)
+/obj/machinery/proc/hack_interact(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))		
 		return
+	if(malf.stat != CONSCIOUS)
+		return
+	if(istype(malf, /mob/living/silicon/shuntedAI) && !istype(malf.loc, /obj/machinery/power/apc))
+		to_chat(malf, "<span class='warning'>Your connection isn't strong enough to hack while outside an APC.</span>")
+		return
 	if(!(stat & (BROKEN|NOPOWER)))
-		if(malf == malf_owner)
+		if(M == malf_owner)
 			if(!malf_disrupted)
 				hack_radial(malf) 
 		else
@@ -84,20 +89,23 @@
 		malf_disrupted = FALSE
 		set_hack_overlay_icon("hacked")
 
-/obj/machinery/proc/take_control(var/mob/living/silicon/ai/malf)
+/obj/machinery/proc/take_control(var/mob/living/silicon/malf)
+	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
+	if(!istype(M))
+		return
 	if(!malfhack_valid(malf))
 		return
 	if(!start_malfhack(malf))
 		to_chat(malf, "<span class='warning'>An unexpected error occured.</span>")
 		return
 	sleep(malf_hack_time)
-	set_malf_owner(malf)
+	set_malf_owner(M)
 	if(stat & NOAICONTROL)	//ai control wire was cut before hack could complete
 		malf_disrupt(MALF_DISRUPT_TIME, TRUE)
 	else
 		set_hack_overlay_icon("hacked")
 
-/obj/machinery/proc/malfhack_valid(var/mob/living/silicon/ai/malf)
+/obj/machinery/proc/malfhack_valid(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))		
 		to_chat(malf, "<span class='warning'>You are not a malfunctioning AI.</span>")
@@ -110,7 +118,7 @@
 		return FALSE
 	return TRUE
 
-/obj/machinery/proc/start_malfhack(var/mob/living/silicon/ai/malf)
+/obj/machinery/proc/start_malfhack(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(!istype(M) || !istype(malf))
 		return
@@ -122,16 +130,15 @@
 /obj/machinery/proc/set_hack_overlay_icon(var/newstate)
 	hack_overlay.set_icon(newstate)
 
-/obj/machinery/proc/set_malf_owner(var/mob/living/silicon/ai/malf)
-	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
-	if(!istype(M) || !istype(malf))
+/obj/machinery/proc/set_malf_owner(var/datum/role/malfAI/M)
+	if(!istype(M))
 		return
 	M.currently_hacking_machines -= src
-	malf_owner = malf
+	malf_owner = M
 	return TRUE
 
 //Generate the radial for this machine.
-/obj/machinery/proc/hack_radial(var/mob/living/silicon/ai/malf)
+/obj/machinery/proc/hack_radial(var/mob/living/silicon/malf)
 	var/list/choice_to_ability = list()
 	var/list/choices = list()
 	for(var/datum/malfhack_ability/A in hack_abilities)
@@ -154,9 +161,11 @@
 		A.activate(malf)
 
 
-/obj/machinery/atmospherics/hack_interact(var/mob/living/silicon/ai/malf)
+/obj/machinery/atmospherics/hack_interact(var/mob/living/silicon/malf)
 	return
 
-/obj/machinery/portable_atmospherics/hack_interact(mob/living/silicon/ai/malf)
+/obj/machinery/portable_atmospherics/hack_interact(mob/living/silicon/malf)
 	return
 	
+/obj/machinery/door/poddoor/hack_interact(mob/living/silicon/malf)
+	return

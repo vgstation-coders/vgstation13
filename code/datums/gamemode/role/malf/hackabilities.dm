@@ -90,7 +90,7 @@
 	desc = "Upload your software to this APC and leave your core. You can return to your core as long as it is still intact."
 	icon = "radial_shunt"
 
-/datum/malfhack_ability/shunt/activate(var/mob/living/silicon/A)
+/datum/malfhack_ability/shunt/activate(var/mob/living/silicon/ai/A)
 	if(!..())
 		return
 	var/obj/machinery/power/apc/P = machine
@@ -106,6 +106,13 @@
 	new /obj/effect/malf_jaunt(S.loc, S, P)
 	S.update_perception()
 	
+/datum/malfhack_ability/shunt/check_available(var/mob/living/silicon/ai/A)
+	if(!..())
+		return FALSE
+	if(istype(A))
+		return TRUE
+	return FALSE
+
 
 //---------------------------------------
 
@@ -192,7 +199,7 @@
 /datum/malfhack_ability/overload/activate(var/mob/living/silicon/A)
 	machine.visible_message("<span class='warning'>You hear a [pick("loud", "violent", "unsettling")], [pick("electrical","mechanical")] [pick("buzzing","rumbling","shaking")] sound!</span>") //highlight this, motherfucker
 	spark(machine)
-	machine.shake_animation(4, 4, 0.2 SECONDS, 4, 5)
+	machine.shake_animation(4, 4, 0.2 SECONDS, 20)
 	spawn(4 SECONDS)
 		explosion(get_turf(machine), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 		qdel(machine)
