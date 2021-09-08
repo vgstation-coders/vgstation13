@@ -1,7 +1,6 @@
 #ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Snowbox Station
-// Literally just box station (as of 16/12/2018), but with the base turf being snow
 //**************************************************************
 
 /datum/map/active
