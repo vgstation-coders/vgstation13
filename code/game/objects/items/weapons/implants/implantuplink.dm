@@ -5,7 +5,7 @@
 
 /obj/item/weapon/implant/uplink/New()
 	..()
-	var/datum/component/uplink_comp = add_component(/datum/component/uplink)
+	var/datum/component/uplink/uplink_comp = add_component(/datum/component/uplink)
 	uplink_comp.telecrystals = 10
 
 /obj/item/weapon/implant/uplink/implanted(mob/source)
