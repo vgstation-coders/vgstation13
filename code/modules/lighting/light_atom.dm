@@ -32,6 +32,8 @@
 		light_obj.follow_holder()
 	if (shadow_obj && !shadow_obj.gcDestroyed)
 		shadow_obj.follow_holder()
+	if (smooth_light_obj && !smooth_light_obj.gcDestroyed)
+		smooth_light_obj.follow_holder()
 
 /atom/movable/change_dir()
 	. = ..()
