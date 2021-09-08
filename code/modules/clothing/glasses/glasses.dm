@@ -22,6 +22,10 @@
 
 	var/obj/item/clothing/glasses/stored_glasses = null
 	var/glasses_fit = FALSE
+
+	var/my_dark_plane_alpha_override
+	var/my_dark_plane_alpha_override_value
+
 /*
 SEE_SELF  // can see self, no matter what
 SEE_MOBS  // can see all mobs, no matter what
@@ -509,6 +513,8 @@ var/list/science_goggles_wearers = list()
 	eyeprot = -2 //prepare for your eyes to get shit on
 
 	glasses_fit = TRUE
+	my_dark_plane_alpha_override = "thermals"
+	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/thermal/emp_act(severity)
 	if(istype(src.loc, /mob/living/carbon/human))
