@@ -116,6 +116,8 @@
 	see_in_dark = initial(see_in_dark)
 	seedarkness = FALSE
 	eyeprot = initial(eyeprot)
+	C.dark_plane?.alphas["night_vision"] = 255
+	check_dark_vision()
 	..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
@@ -123,7 +125,14 @@
 	see_in_dark = 0
 	seedarkness = TRUE
 	eyeprot = 0
+	C.dark_plane?.alphas -= "night_vision"
+	check_dark_vision()
 	..()
+
+/obj/item/clothing/glasses/scanner/night/dropped(mob/user)
+	user.dark_plane?.alphas -= "night_vision"
+	check_dark_vision()
+	. = ..()
 
 /obj/item/clothing/glasses/scanner/meson
 	name = "optical meson scanner"
