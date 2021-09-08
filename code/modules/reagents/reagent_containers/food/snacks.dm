@@ -1739,6 +1739,7 @@
 	desc = "AKA: French Fries, Freedom Fries, etc."
 	icon_state = "fries"
 	plate_offset_y = -2
+	filling_color = "#FFCF62"
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/New()
 	..()
@@ -1845,6 +1846,7 @@
 	icon_state = "cheesyfries"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	plate_offset_y = -3
+	filling_color = "#FFEB3B"
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/New()
 	..()
