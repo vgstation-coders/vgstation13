@@ -1752,6 +1752,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone
 	name = "cone of Space Fries"
 	icon_state = "fries_cone"
+	trash = /obj/item/trash/fries_cone
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
@@ -1853,6 +1854,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
 	name = "punnet of Cheesy Fries"
 	icon_state = "cheesyfries_punnet"
+	trash = /obj/item/trash/fries_punet
 
 /obj/item/weapon/reagent_containers/food/snacks/fortunecookie
 	name = "Fortune cookie"
