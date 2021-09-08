@@ -1086,11 +1086,11 @@ var/list/cult_spires = list()
 						forger = null
 						template = null
 					else
-						anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-work", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+						anim(target = loc, a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-work", lay = NARSIE_GLOW, offX = pixel_x, offY = pixel_y, plane = ABOVE_LIGHTING_PLANE)
 						playsound(L, 'sound/effects/forge.ogg', 50, 0, -4)
 						forging.overlays.len = 0
 						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")
-						I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+						I.plane = relative_plane_to_plane(ABOVE_LIGHTING_PLANE,forging.plane)
 						I.layer = NARSIE_GLOW
 						I.blend_mode = BLEND_ADD
 						I.alpha = (timeleft/timetotal)*255
@@ -1145,6 +1145,10 @@ var/list/cult_spires = list()
 	if(istype(I,/obj/item/clothing/mask/cigarette))
 		var/obj/item/clothing/mask/cigarette/fag = I
 		fag.light("<span class='notice'>\The [user] lights \the [fag] by bringing its tip close to \the [src]'s molten flow.</span>")
+		return 1
+	if(istype(I,/obj/item/candle))
+		var/obj/item/candle/stick = I
+		stick.light("<span class='notice'>\The [user] lights \the [stick] by bringing its wick close to \the [src]'s molten flow.</span>")
 		return 1
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper) || istype(I,/obj/item/weapon/tome))
 		I.ashify_item(user)

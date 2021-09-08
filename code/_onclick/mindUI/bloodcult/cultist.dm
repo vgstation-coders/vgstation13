@@ -70,6 +70,8 @@
 		var/i = 1
 		for(var/blood_spell in subtypesof(/datum/rune_spell))
 			var/datum/rune_spell/instance = blood_spell
+			if (initial(instance.secret))
+				continue
 			available_runes.Add("\Roman[i]-[initial(instance.name)]")
 			available_runes["\Roman[i]-[initial(instance.name)]"] = instance
 			i++

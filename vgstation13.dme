@@ -383,6 +383,7 @@
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_projectiles.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_runes.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_runespells.dm"
+#include "code\datums\gamemode\factions\bloodcult\bloodcult_runespells_special.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_spells.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_tattoos.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_use_blood.dm"

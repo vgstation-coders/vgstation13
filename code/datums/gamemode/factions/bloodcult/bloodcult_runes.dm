@@ -190,7 +190,7 @@ var/list/rune_appearances_cache = list()
 /obj/effect/rune/update_icon(var/draw_up_to = 3)
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	if (spell && initial(spell.custom_rune))
+	if (active_spell && active_spell.custom_rune)
 		return
 
 	overlays.len = 0

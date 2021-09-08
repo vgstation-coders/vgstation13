@@ -656,6 +656,8 @@ var/list/arcane_tomes = list()
 	var/movespeed = 2//smaller = faster
 	health = 40
 	var/maxHealth = 40
+	var/reflector = FALSE
+	var/mob/living/linked_cultist = null
 
 /obj/item/weapon/melee/soulblade/Destroy()
 	var/turf/T = get_turf(src)
@@ -681,6 +683,13 @@ var/list/arcane_tomes = list()
 			B.fingerprints = fingerprints.Copy()
 		new /obj/item/soulstone(T)
 	shade = null
+	..()
+
+/obj/item/weapon/melee/soulblade/attack_hand(var/mob/living/user)
+	if (shade)
+		if (iscultist(user) && (linked_cultist != user))
+			linked_cultist = user
+			to_chat(shade, "<spawn class='notice'>You have made contact with [user]. As long as you remain within 5 tiles of them, you can move by yourself without losing blood, and regenerate blood slowly passively.</span>")
 	..()
 
 /obj/item/weapon/melee/soulblade/salt_act()
@@ -905,7 +914,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile))
-		if (prob(60))
+		if (prob(60) || reflector)
 			return 0
 	return ..()
 
@@ -934,8 +943,14 @@ var/list/arcane_tomes = list()
 		takeDamage(O.throwforce)
 
 /obj/item/weapon/melee/soulblade/bullet_act(var/obj/item/projectile/P)
-	. = ..()
-	takeDamage(P.damage)
+	if (reflector)
+		if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
+			P.reflected = 1
+			P.rebound(src)
+		return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
+	else
+		. = ..()
+		takeDamage(P.damage)
 
 /obj/item/weapon/melee/soulblade/proc/capture_shade(var/mob/living/simple_animal/shade/target, var/mob/user)
 	if(shade)
@@ -1157,6 +1172,31 @@ var/list/arcane_tomes = list()
 	return
 
 /obj/item/clothing/shoes/cult/salt_act()
+	acid_melt()
+
+///////////////////////////////////////CULT GLOVES////////////////////////////////////////////////
+
+
+/obj/item/clothing/gloves/black/cult
+	name = "cult gloves"
+	desc = "These gloves are quite comfortable, and will keep you warm!"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
+	icon_state = "cult"
+	item_state = "cultgloves"
+	_color = "cult"
+	siemens_coefficient = 0.7
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/item/clothing/gloves/black/cult/get_cult_power()
+	return 10
+
+/obj/item/clothing/gloves/black/cult/cultify()
+	return
+
+/obj/item/clothing/gloves/black/cult/salt_act()
 	acid_melt()
 
 ///////////////////////////////////////CULT ROBES////////////////////////////////////////////////
@@ -1560,6 +1600,7 @@ var/list/arcane_tomes = list()
 		/obj/item/clothing/head/culthood,
 		/obj/item/clothing/shoes/cult,
 		/obj/item/clothing/suit/cultrobes,
+		/obj/item/clothing/gloves/black/cult,
 		)
 
 	var/list/stored_gear = list()
@@ -1639,5 +1680,30 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/blood_tesseract/cultify()
 	return
 
-/obj/item/weapon/handcuffs/cult/salt_act()
+/obj/item/weapon/blood_tesseract/salt_act()
 	throw_impact()
+
+///////////////////////////////////////BLOOD CANDLE////////////////////////////////////////////////
+
+/obj/item/candle/blood
+	name = "blood candle"
+	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
+	icon = 'icons/obj/candle.dmi'
+	icon_state = "bloodcandle1"
+
+	wax = 1200 // 20 minutes
+
+/obj/item/candle/blood/update_icon()
+	overlays.len = 0
+	var/i
+	if(wax > 800)
+		i = 1
+	else if(wax > 400)
+		i = 2
+	else i = 3
+	icon_state = "bloodcandle[i]"
+	if (lit)
+		var/image/I = image(icon,src,"[icon_state]_lit")
+		I.blend_mode = BLEND_ADD
+		I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+		overlays += I

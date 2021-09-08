@@ -109,6 +109,13 @@
 				blade.attack_hand(M)
 				blade = null
 				qdel(src)
+			else if (!M.get_inactive_hand())//cultists can catch the blade on the fly
+				blade.forceMove(loc)
+				M.swap_hand() // guarrantees
+				blade.attack_hand(M)
+				M.swap_hand()
+				blade = null
+				qdel(src)
 		else
 			A.attackby(blade,shade)
 	else

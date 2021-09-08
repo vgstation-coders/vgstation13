@@ -95,6 +95,8 @@
 			var/mob/living/L = SB.loc
 			if (iscultist(L) && SB.blood < SB.maxblood)
 				SB.blood++//no cap on blood regen when held by a cultist, no blood regen when held by a non-cultist (but there's a spell to take care of that)
+		else if (SB.linked_cultist && (get_dist(get_turf(SB.linked_cultist),get_turf(src)) <= 5))
+			SB.blood++//you can also regen blood to full when near your linked cultist
 		else if (SB.blood < SB.maxregenblood)
 			SB.blood++
 	else

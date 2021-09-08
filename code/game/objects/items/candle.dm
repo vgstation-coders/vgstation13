@@ -34,6 +34,7 @@
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
 		processing_objects.Add(src)
+		update_icon()
 
 /obj/item/candle/process()
 	if(!lit)
