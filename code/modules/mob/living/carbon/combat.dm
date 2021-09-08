@@ -92,3 +92,89 @@
 			return TRUE
 	else
 		return ..()
+
+//Tackle procs/////
+
+/mob/proc/doTackle(var/atom/A)
+	return
+
+/mob/living/carbon/doTackle(var/atom/A)
+	if(throw_delayer.blocked())
+		return
+	delayNextThrow(3)
+	throw_mode_off()
+	if(!get_turf(src) || istype(get_turf(src), /turf/space))
+		to_chat(src, "<span class='warning'>You need more footing to do that!")
+		return
+	if(restrained() || lying || stat)
+		return
+	var/tRange = calcTackleRange()
+	isTackling = TRUE
+	Knockdown(2)
+	throw_at(A, tRange, 3)
+
+/mob/living/carbon/throw_impact(atom/hit_atom, speed, user)
+	if(isTackling)
+		var/tackleForce = calcTackleForce()
+		if(isliving(hit_atom))
+			var/mob/living/L = hit_atom
+			var/tackleDefense = L.calcTackleDefense()
+			var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
+			var/rngDefense = rand(tackleDefense/2, tackleDefense)
+			var/tKnock = max(0, rngDefense - rngForce)	//Calculating our knockdown, we always get knocked down at least a little
+			Knockdown(tKnock)
+			tKnock = max(0, rngForce - rngDefense)	//Calculating their knockdown, they might not get knocked down at all
+			if(tKnock)
+				L.Knockdown(tKnock)
+				if(M_HORNS in mutations)
+					tKnock += 5
+				L.adjustBruteLoss(tKnock)
+		else if(hit_atom.density)
+			var/tPain = rand(1,10)
+			adjustBruteLoss(tPain)
+			Knockdown(tPain/2)
+		spawn(3)	//Just to let throw_impact stop throwing a tantrum
+			isTackling = FALSE
+	..()
+
+/mob/living/carbon/calcTackleRange(var/tR = 0)
+	tR += bonusTackleRange()
+	if(isninja(src))
+		tR += 1	//Avoiding tR++ for readability and ease of editing later
+	if(M_RUN in mutations)
+		tR += 1
+	return tR
+
+/mob/living/carbon/calcTackleForce(var/tForce = 0)
+	tForce += get_strength()*2
+	if(M_HULK in mutations)
+		tForce += 2	//hulk also contributes to get_strength() so the bonus is higher than appears here
+	if(M_FAT in mutations)
+		tForce += 3
+	tForce += bonusTackleForce()
+	if(M_VEGAN in mutations)
+		tForce -= 1
+	return max(0, tForce)
+
+/mob/living/carbon/calcTackleDefense(var/tDef = 0)
+	tDef += get_strength()
+	if(M_FAT in mutations)
+		tDef += 2
+	for(var/obj/item/weapon/I in held_items)
+		if(I.IsShield())
+			tDef += 5
+	tDef += bonusTackleDefense()
+	if(M_VEGAN in mutations)
+		tDef -= 1
+	if(M_CLUMSY in mutations)	//The clown fears fatsec
+		tDef -= 2
+	return max(0, tDef)
+
+/mob/living/carbon/proc/bonusTackleForce(var/tF = 1)
+	return tF
+
+/mob/living/carbon/proc/bonusTackleDefense(var/tD = 1)
+	return tD
+
+/mob/living/carbon/proc/bonusTackleRange(var/tR = 1)
+	return tR

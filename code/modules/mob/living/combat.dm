@@ -145,3 +145,12 @@
 //Chance is multiplied by the returned value
 /mob/living/proc/knockout_chance_modifier()
 	return 0
+
+/mob/living/proc/calcTackleForce()
+	return 0
+
+/mob/living/proc/calcTackleDefense()
+	return 0
+
+/mob/living/proc/calcTackleRange()
+	return 0

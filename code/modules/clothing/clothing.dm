@@ -284,6 +284,9 @@
 /obj/item/clothing/proc/get_armor_absorb(var/type)
 	return armor_absorb[type]
 
+/obj/item/clothing/proc/getTackleBonus()
+	return
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
@@ -498,6 +501,10 @@
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
 
+/obj/item/clothing/shoes/getTackleBonus()
+	if(clothing_flags & MAGPULSE)
+		return 4
+
 //Called from human_defense.dm proc foot_impact
 /obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
 	return damage
@@ -543,7 +550,7 @@
 	sterility = 30
 
 /obj/item/clothing/suit/proc/vine_protected()
-	return FALSE 
+	return FALSE
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.

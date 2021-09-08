@@ -30,6 +30,9 @@
 	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	eyeprot = 1
 
+/obj/item/clothing/head/helmet/tactical/riot/getTackleBonus()
+	return 2
+
 /obj/item/clothing/head/helmet/tactical/swat
 	name = "\improper SWAT helmet"
 	desc = "They're often used by highly trained Swat Members."
