@@ -278,10 +278,20 @@
 
 /datum/dna/gene/basic/midget/activate(var/mob/M, var/connected, var/flags)
 	..()
+	var/matrix/mat = matrix()
+	mat.Scale(1,0.7)
+	M.transform = mat
+
+	M.pixel_y = -4 * PIXEL_MULTIPLIER
 	M.pass_flags |= PASSTABLE
 
 /datum/dna/gene/basic/midget/deactivate(var/mob/M, var/connected, var/flags)
 	if(..())
+		var/matrix/mat = matrix()
+		mat.Scale(1,1)
+		M.transform = mat
+
+		M.pixel_y = 0 * PIXEL_MULTIPLIER
 		M.pass_flags &= ~PASSTABLE
 
 /datum/dna/gene/basic/xray
