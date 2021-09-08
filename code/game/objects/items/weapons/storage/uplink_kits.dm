@@ -192,24 +192,21 @@
 	var/obj/item/weapon/implanter/O = new(src)
 	O.imp = new /obj/item/weapon/implant/freedom(O)
 	O.update()
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/imp_compress
 	name = "box (C)"
 
 /obj/item/weapon/storage/box/syndie_kit/imp_compress/New()
 	new /obj/item/weapon/implanter/compressed(src)
 	..()
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/imp_explosive
 	name = "box (E)"
 
 /obj/item/weapon/storage/box/syndie_kit/imp_explosive/New()
 	new /obj/item/weapon/implanter/explosive(src)
 	..()
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/imp_uplink
 	name = "Uplink Implant (with injector)"
 
@@ -218,8 +215,7 @@
 	var/obj/item/weapon/implanter/O = new(src)
 	O.imp = new /obj/item/weapon/implant/uplink(O)
 	O.update()
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/space
 	name = "Space Suit and Helmet"
 
@@ -227,8 +223,7 @@
 	..()
 	new /obj/item/clothing/suit/space/syndicate(src)
 	new /obj/item/clothing/head/helmet/space/syndicate(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/surveillance
 	name = "box (S)"
 
@@ -236,8 +231,7 @@
 	..()
 	new /obj/item/device/handtv(src)
 	new /obj/item/weapon/storage/box/surveillance(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/conversion
 	name = "box (CK)"
 
@@ -245,8 +239,7 @@
 	..()
 	new /obj/item/weapon/conversion_kit(src)
 	new /obj/item/ammo_storage/box/a357(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/greytide
 	name = "box (GT)"
 
@@ -274,8 +267,7 @@
 /obj/item/weapon/storage/box/syndie_kit/ammo/New()
 	..()
 	new /obj/item/ammo_storage/speedloader/a357(src)
-	return
-
+	
 obj/item/weapon/storage/box/syndie_kit/cheaptide
 	name = "box (CT)"
 
@@ -291,8 +283,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/weapon/gun/projectile/flare/syndicate(src)
 	new /obj/item/ammo_storage/box/flare(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/explosive_hug
 	name = "box (C)"
 
@@ -300,8 +291,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/weapon/reagent_containers/glass/bottle/antisocial(src)
 	new /obj/item/weapon/reagent_containers/syringe(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
 	name = "box (C)"
 
@@ -309,8 +299,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/weapon/reagent_containers/glass/bottle/hypozine(src)
 	new /obj/item/weapon/reagent_containers/syringe(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/inverse_toxin
 	name = "box (C)"
 
@@ -318,8 +307,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/weapon/reagent_containers/glass/bottle/protoxin(src)
 	new /obj/item/weapon/reagent_containers/syringe(src)
-	return
-
+	
 /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
@@ -354,8 +342,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/weapon/glue(src)
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/glue(src)
-	return
-
+	
 
 //Syndicate Experimental Gear
 //Contains unique gear not found anywhere else
