@@ -6,7 +6,7 @@
 	var/list/arguments = args.Copy(2)
 	if(!initialize(arglist(arguments)))
 		stack_trace("Incompatible [type] assigned to a [parent.type]! args: [json_encode(arguments)]")
-		qdel(src, TRUE, TRUE)
+		qdel(src)
 		return
 
 	_join_parent(parent)
@@ -76,4 +76,4 @@
 /datum/proc/load_component(datum/component/c_type, ...)
 	. = get_component(c_type)
 	if(!.)
-		return add_component(args)
+		return add_component(arglist(args))
