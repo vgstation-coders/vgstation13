@@ -269,11 +269,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 	icon_state = "blank"
 	globalscreen = 1
 
-/obj/abstract/screen/plane_master/Destroy()
-	to_chat(world, "HELP I'VE BEEN DELETED [type]")
-	stack_trace("FUCK")
-	return ..()
-
 // CLICKMASTER
 // Singleton implementation
 // One planemaster for everybody, everybody always has it, they gain it during mob/login()
