@@ -5,6 +5,7 @@
 	var/enabled=1
 
 /datum/component/New(var/datum/component_container/CC)
+	..()
 	container=CC
 
 // Override to receive signals.

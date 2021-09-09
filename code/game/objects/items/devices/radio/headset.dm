@@ -243,7 +243,7 @@
 
 /obj/item/device/radio/headset/attackby(obj/item/weapon/W, mob/user)
 //	..()
-	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
+	if(invoke_event(/event/attackby, list("attacker" = user, "item" = W)))
 		return
 	user.set_machine(src)
 	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))

@@ -7,7 +7,6 @@
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459
-	var/traitor_frequency = 0 //tune to frequency to unlock traitor supplies
 	var/canhear_range = 3 // the range which mobs can hear this radio from
 	var/obj/item/device/radio/patch_link = null
 	var/datum/wires/radio/wires = null
@@ -59,7 +58,7 @@
 	radio_list -= src
 	remove_radio_all(src) //Just to be sure
 	..()
-	
+
 /obj/item/device/radio/initialize()
 	. = ..()
 	frequency = COMMON_FREQ //common chat
@@ -84,9 +83,6 @@
 
 /obj/item/device/radio/interact(mob/user as mob)
 	if(!on)
-		return
-
-	if(active_uplink_check(user))
 		return
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
@@ -122,12 +118,6 @@
 			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
 
-/obj/item/device/radio/proc/check_traitor_uplink(frequency)
-	if(hidden_uplink)
-		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
-			usr << browse(null, "window=radio")
-			return 1
-
 /obj/item/device/radio/Topic(href, href_list)
 	if (!isAdminGhost(usr) && (usr.stat || !on))
 		return
@@ -147,17 +137,15 @@
 		var/new_frequency
 		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		set_frequency(new_frequency)
-		if (check_traitor_uplink(frequency))
-			return
+		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+			set_frequency(new_frequency)
 
 	else if (href_list["freq"])
 		var/new_frequency
 		new_frequency = (frequency + text2num(href_list["freq"]))
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		set_frequency(new_frequency)
-		if (check_traitor_uplink(frequency))
-			return
+		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+			set_frequency(new_frequency)
 
 	else if (href_list["talk"])
 		broadcasting = text2num(href_list["talk"])
@@ -508,8 +496,8 @@
 	interact(user)
 
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	..()
-	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	if (!(W.is_screwdriver(user)))
