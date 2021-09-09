@@ -149,4 +149,8 @@
 			. = FALSE
 			return
 
+/image/shadow_overlay
+	appearance_flags = KEEP_TOGETHER
+	var/list/temp_appearance = list()
+
 #undef LIGHT_CPU_THRESHOLD

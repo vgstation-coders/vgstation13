@@ -395,6 +395,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
+	post_processing()
 	overlays = temp_appearance
 	temp_appearance = null
 	// Because movable lights do this two-lights-sources thing
@@ -404,9 +405,37 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	else
 		color = light_color
 
-/atom/movable/light/shadow/update_appearance()
-	. = ..()
-	filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
+// -- Empty
+/atom/movable/light/proc/post_processing()
+	return
+
+// Smooth out shadows and then blacken out the wall glow
+/atom/movable/light/shadow/post_processing()
+	// Fetch the image processed so far
+	var/image/shadow_overlay/image_result = new()
+	for (var/image/image_component in temp_appearance)
+		image_result.temp_appearance += image_component
+
+	image_result.overlays = image_result.temp_appearance
+	// Apply a filter
+	image_result.filters += filter(type = "blur", size = BLUR_SIZE)
+
+	temp_appearance = list()
+	temp_appearance += image_result
+
+	// -- eliminating the underglow
+	for (var/turf/T in affected_shadow_walls)
+		for (var/dir in cardinal)
+			var/turf/neighbour = get_step(T, dir)
+			if (!CHECK_OCCLUSION(neighbour))
+				var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+				black_turf.icon_state = "black"
+				var/x_offset = neighbour.x - x
+				var/y_offset = neighbour.y - y
+				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
+				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+				black_turf.layer = ANTI_GLOW_PASS_LAYER
+				temp_appearance += black_turf
 
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)
