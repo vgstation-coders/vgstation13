@@ -13,7 +13,7 @@
 	Nar-Sie's goal is to toy with the crew, before tearing open a breach through reality so he can pull the station into his realm and feast on the crew's blood."
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
-	hud_icons = list("cult-chief-logo", "cult-logo")
+	hud_icons = list("cult-apprentice-logo", "cult-logo", "cult-master-logo", "shade-blade")
 	default_admin_voice = "<span class='danger'>Nar-Sie</span>" // Nar-Sie's name always appear in red in the chat, makes it stand out.
 	admin_voice_style = "sinister"
 	admin_voice_say = "murmurs..."

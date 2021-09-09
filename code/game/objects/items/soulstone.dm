@@ -571,7 +571,7 @@
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 
 	if (cult && iscultist(user) && !cult.CanConvert(construct_class))
-		to_chat(activator, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
+		to_chat(user, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
 		return
 
 	switch(construct_class)
@@ -688,7 +688,7 @@
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 
 	if (cult && iscultist(user) && !cult.CanConvert(construct_class))
-		to_chat(activator, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
+		to_chat(user, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
 		return
 
 	switch(construct_class)

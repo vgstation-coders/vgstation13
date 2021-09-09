@@ -20,6 +20,12 @@
 	var/rune_blood_cost = 1	// How much blood spent per rune word written
 	var/verbose = FALSE	// Used by the rune writing UI to avoid message spam
 
+	var/cultist_role = CULTIST_ROLE_NONE // Because the role might change on the fly and we don't want to set everything again each time, better not start dealing with subtypes
+	var/time_role_changed_last = 0
+
+	var/datum/role/cultist/mentor = null
+	var/list/acolytes = list()
+
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
@@ -39,6 +45,7 @@
 		antag.current.remove_spell(spell_to_remove)
 	if (src in blood_communion)
 		blood_communion.Remove(src)
+	DropMentorship()
 	if (conversion.len > 0)
 		var/conv = pick(conversion)
 		switch (conv)
@@ -117,7 +124,6 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
-	to_chat(antag.current, "<span class='sinister'>A couple of runes linger vividly in your mind.</span><span class='info'> (check your notes).</span>")
 
 
 
@@ -148,6 +154,62 @@
 	if(M)
 		M.HideUI("Cultist")
 		M.HideUI("Bloodcult Runes")
+
+/datum/role/cultist/proc/DropMentorship()
+	if (mentor)
+		to_chat(antag.current,"<span class='warning'>You have ended your mentorship under [mentor.antag.name].</span>")
+		to_chat(mentor.antag.current,"<span class='warning'>[antag.name] has ended their mentorship under you.</span>")
+		message_admins("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
+		log_admin("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
+	if (acolytes.len > 0)
+		for (var/datum/role/cultist/C in acolytes)
+			to_chat(antag.current,"<span class='warning'>You have ended your mentorship of [C.antag.name].</span>")
+			to_chat(C.antag.current,"<span class='warning'>[antag.name] has ended their mentorship.</span>")
+			message_admins("[antag.key]/([antag.name]) has ended their mentorship of [C.antag.name]")
+			log_admin("[antag.key]/([antag.name]) has ended their mentorship of [C.antag.name]")
+
+/datum/role/cultist/proc/ChangeCultistRole(var/new_role)
+	if (!new_role)
+		return
+	cultist_role = new_role
+
+	DropMentorship()
+
+	switch(cultist_role)
+		if (CULTIST_ROLE_ACOLYTE)
+			logo_state = "cult-apprentice-logo"
+			FindMentor()
+		if (CULTIST_ROLE_HERALD)
+			logo_state = "cult-logo"
+		if (CULTIST_ROLE_MENTOR)
+			logo_state = "cult-master-logo"
+		else
+			logo_state = "cult-logo"
+			cultist_role = CULTIST_ROLE_NONE
+	if (faction)
+		faction.update_hud_icons()
+	if (antag.current)
+		antag.current.DisplayUI("Cultist Left Panel")
+	time_role_changed_last = world.time
+
+/datum/role/cultist/proc/FindMentor()
+	if (!faction)
+		return
+	var/datum/role/cultist/potential_mentor
+	var/min_acolytes = ARBITRARILY_LARGE_NUMBER
+	for (var/datum/role/cultist/C in faction.members)
+		if (C.cultist_role == CULTIST_ROLE_MENTOR)
+			if (C.acolytes.len < min_acolytes || (C.acolytes.len == min_acolytes && prob(50)))
+				min_acolytes = C.acolytes.len
+				potential_mentor = C
+
+	if (potential_mentor)
+		mentor = potential_mentor
+		potential_mentor.acolytes |= src
+		to_chat(antag.current, "<span class='sinister'>You are now in a mentorship under <span class='danger'>[mentor.name], the [mentor.antag.assigned_role=="MODE" ? (mentor.antag.special_role) : (mentor.antag.assigned_role)]</span>. Seek their help to learn the ways of our cult.</span>")
+		to_chat(mentor.antag.current, "<span class='sinister'>You are now mentoring <span class='danger'>[antag.name], the [antag.assigned_role=="MODE" ? (antag.special_role) : (antag.assigned_role)]</span>. </span>")
+		message_admins("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
+		log_admin("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
@@ -290,18 +352,6 @@
 					H.adjustOxyLoss(20)
 					H.adjustToxLoss(10)
 			*/
-
-/datum/role/cultist/chief
-	id = CHIEF_CULTIST
-	name = "Chief cultist"
-	logo_state = "cult-chief-logo"
-
-/datum/role/cultist/chief/Greet(var/greeting,var/custom)
-	. = ..()
-	if (greeting)
-		to_chat(antag.current, "<span class='notice'>You are the chief cultist. You have been chosen by Nar-Sie to lead this cult to victory. Coordinate with your fellow acolytes, establish a plan, construct a base. Tear down the veil.</span>")
-		to_chat(antag.current, "<span class='notice'>You may speak with your fellow cultists by using ':x'.</span>")
-
 
 /datum/role/cultist/proc/write_rune(var/word_to_draw)
 	var/mob/living/user = antag.current

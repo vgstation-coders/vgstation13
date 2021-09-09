@@ -1390,11 +1390,7 @@ var/list/arcane_tomes = list()
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 		cult.OnPostSetup()
-	var/datum/role/cultist/newCultist
-	if (cult.members.len > 0)
-		newCultist = new /datum/role/cultist()
-	else
-		newCultist = new /datum/role/cultist/chief()
+	var/datum/role/cultist/newCultist = new /datum/role/cultist()
 	newCultist.AssignToRole(user.mind,1)
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()

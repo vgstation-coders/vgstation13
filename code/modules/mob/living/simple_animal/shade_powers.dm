@@ -50,7 +50,15 @@
 
 	var/datum/role/cultist/C = iscultist(src)
 	if (C)
-		C.logo_state = "cult-logo"
+		switch(C.cultist_role)
+			if (CULTIST_ROLE_ACOLYTE)
+				C.logo_state = "cult-apprentice-logo"
+			if (CULTIST_ROLE_HERALD)
+				C.logo_state = "cult-logo"
+			if (CULTIST_ROLE_MENTOR)
+				C.logo_state = "cult-master-logo"
+			else
+				C.logo_state = "cult-logo"
 
 /mob/living/simple_animal/shade/proc/add_HUD(var/mob/user)
 	DisplayUI("Soulblade")

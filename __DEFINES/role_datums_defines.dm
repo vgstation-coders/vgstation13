@@ -39,7 +39,6 @@
 #define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
-#define CHIEF_CULTIST "chief cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
 #define NUKE_OP_LEADER "nuclear operative leader"
@@ -198,6 +197,11 @@
 
 #define DECONVERSION_ACCEPT	1
 #define DECONVERSION_REFUSE 2
+
+#define CULTIST_ROLE_NONE		0
+#define CULTIST_ROLE_ACOLYTE	1
+#define CULTIST_ROLE_HERALD		2
+#define CULTIST_ROLE_MENTOR		3
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -15,6 +15,7 @@
 		)
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_runes,
+		/datum/mind_ui/bloodcult_left_panel,
 		)
 	display_with_parent = TRUE
 	y = "BOTTOM"
@@ -120,4 +121,447 @@
 
 	move_whole_ui = TRUE
 
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - LEFT PANEL						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_left_panel
+	uniqueID = "Cultist Left Panel"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_help,
+		)
+	sub_uis_to_spawn = list(
+		/datum/mind_ui/bloodcult_role,
+		/datum/mind_ui/bloodcult_help,
+		)
+	display_with_parent = TRUE
+	x = "LEFT"
+
 //------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role
+	name = "Choose a Role"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "role"
+	offset_x = 6
+	offset_y = -92
+
+	var/image/click_me
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/New()
+	..()
+	click_me = image(icon, src, "click")
+	animate(click_me, pixel_y = 16 , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 8, time = 7, loop = -1, easing = SINE_EASING)
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/Click()
+	flick("role-click",src)
+
+	var/mob/M = GetUser()
+	if (M)
+		if (M.client)
+			M.client.images -= click_me
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			if (C.cultist_role != CULTIST_ROLE_NONE)
+				if (C.mentor)
+					to_chat(M,"<span class='notice'>You are currently in a mentorship under [C.mentor.antag.name].</span>")
+				if (C.acolytes.len > 0)
+					var/dat = ""
+					for (var/datum/role/cultist/U in C.acolytes)
+						dat += "[U.antag.name], "
+					to_chat(M,"<span class='notice'>You are currently mentoring [dat].</span>")
+				if ((world.time - C.time_role_changed_last) < 5 MINUTES)
+					if ((world.time - C.time_role_changed_last) > 4 MINUTES)
+						to_chat(M,"<span class='warning'>You must wait around [round((world.time - C.time_role_changed_last)/10)] seconds before you can switch role.</span>")
+					else
+						to_chat(M,"<span class='warning'>You must wait around [round((world.time - C.time_role_changed_last)/600)] minutes before you can switch role.</span>")
+					return
+				else
+					if (C.mentor)
+						if(alert(M, "Switching roles will put an end to your mentorship by [C.mentor.antag.name]. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
+							return
+					if (C.acolytes.len > 0)
+						if(alert(M, "Switching roles will put an end to your mentorship. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
+							return
+
+	var/datum/mind_ui/bloodcult_role/role_popup = locate() in parent.subUIs
+	if(role_popup)
+		role_popup.Display()
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/UpdateIcon()
+	var/mob/M = GetUser()
+	if (M)
+		if (M.client)
+			M.client.images -= click_me
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			overlays.len = 0
+			switch(C.cultist_role)
+				if (CULTIST_ROLE_NONE)
+					if (M.client)
+						M.client.images += click_me
+				if (CULTIST_ROLE_ACOLYTE)
+					overlays += "role_acolyte"
+				if (CULTIST_ROLE_HERALD)
+					overlays += "role_herald"
+				if (CULTIST_ROLE_MENTOR)
+					overlays += "role_mentor"
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help
+	name = "How do I Cult?"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "help"
+	offset_x = 6
+	offset_y = -119
+	var/clicked = FALSE
+
+	var/image/click_me
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help/New()
+	..()
+	click_me = image(icon, src, "click")
+	animate(click_me, pixel_y = 16 , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 8, time = 7, loop = -1, easing = SINE_EASING)
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help/Appear()
+	var/mob/M = GetUser()
+	if (M)
+		var/datum/role/cultist/C = iscultist(M)
+		if (M.client)
+			M.client.images -= click_me
+		if (C)
+			if (C.cultist_role != CULTIST_ROLE_ACOLYTE)
+				invisibility = 101	// We only appear to Acolytes
+			else
+				..()
+				if (!clicked && M.client)
+					M.client.images += click_me
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help/Click()
+	flick("help-click",src)
+	if (!clicked)
+		clicked = TRUE
+		var/mob/M = GetUser()
+		if (M)
+			if (M.client)
+				M.client.images -= click_me
+	var/datum/mind_ui/bloodcult_help/tooltip = locate() in parent.subUIs
+	if(tooltip)
+		tooltip.Display()
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - ROLE							  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_role
+	uniqueID = "Cultist Role"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/bloodcult_role_background,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_close,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm,
+		)
+	display_with_parent = FALSE
+
+	var/selected_role = CULTIST_ROLE_NONE
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_role_background
+	name = "Choose a Role"
+	icon = 'icons/ui/bloodcult/362x229.dmi'
+	icon_state = "background"
+	offset_x = -165
+	offset_y = -83
+	alpha = 200
+	layer = MIND_UI_BACK
+
+/obj/abstract/mind_ui_element/bloodcult_role_background/UpdateIcon()
+	overlays.len = 0
+	var/datum/mind_ui/bloodcult_role/P = parent
+	switch(P.selected_role)
+		if (CULTIST_ROLE_ACOLYTE)
+			overlays += "acolyte"
+		if (CULTIST_ROLE_HERALD)
+			overlays += "herald"
+		if (CULTIST_ROLE_MENTOR)
+			overlays += "mentor"
+		else
+			overlays += "none"
+
+/obj/abstract/mind_ui_element/bloodcult_role_background/Click()
+	parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_close
+	name = "Close"
+	icon = 'icons/ui/16x16.dmi'
+	icon_state = "close"
+	offset_x = 181
+	offset_y = 130
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_close/Click()
+	parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte
+	name = "Acolyte"
+	icon = 'icons/ui/bloodcult/40x40.dmi'
+	icon_state = "button_acolyte"
+	offset_x = -99
+	offset_y = 90
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/UpdateIcon()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_ACOLYTE)
+		icon_state = "button_acolyte-down"
+	else
+		icon_state = "button_acolyte"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/StartHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_ACOLYTE)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/StopHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_ACOLYTE)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/Click()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	P.selected_role = CULTIST_ROLE_ACOLYTE
+	P.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald
+	name = "Herald"
+	icon = 'icons/ui/bloodcult/40x40.dmi'
+	icon_state = "button_herald"
+	offset_x = -3
+	offset_y = 90
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/UpdateIcon()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_HERALD)
+		icon_state = "button_herald-down"
+	else
+		icon_state = "button_herald"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/StartHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_HERALD)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/StopHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_HERALD)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/Click()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	P.selected_role = CULTIST_ROLE_HERALD
+	P.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor
+	name = "Mentor"
+	icon = 'icons/ui/bloodcult/40x40.dmi'
+	icon_state = "button_mentor"
+	offset_x = 93
+	offset_y = 90
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/UpdateIcon()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_MENTOR)
+		icon_state = "button_mentor-down"
+	else
+		icon_state = "button_mentor"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/StartHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_MENTOR)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/StopHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_MENTOR)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/Click()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	P.selected_role = CULTIST_ROLE_MENTOR
+	P.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm
+	name = "Close"
+	icon = 'icons/ui/bloodcult/104x40.dmi'
+	icon_state = "confirm"
+	offset_x = -36
+	offset_y = -68
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm/UpdateIcon()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_NONE)
+		icon_state = "confirm-grey"
+	else
+		icon_state = "confirm"
+	base_icon_state = icon_state
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm/StartHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_NONE)
+		return
+	icon_state = "[base_icon_state]-hover"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm/StopHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_NONE)
+		return
+	icon_state = "[base_icon_state]"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm/Click()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == CULTIST_ROLE_NONE)
+		return
+	var/mob/M = GetUser()
+	if (M)
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			C.ChangeCultistRole(P.selected_role)
+			parent.Hide()
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - HELP							  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_help
+	uniqueID = "Cultist Help"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/bloodcult_help_background,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_close,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_previous,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_next,
+		)
+	display_with_parent = FALSE
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_help_background
+	name = "How do I Cult?"
+	icon = 'icons/ui/192x192.dmi'
+	icon_state = "cult_help1"
+	offset_x = -80
+	offset_y = -150
+	layer = MIND_UI_BACK
+	var/current_page = 1
+	var/max_page = 12
+
+/obj/abstract/mind_ui_element/bloodcult_help_background/UpdateIcon()
+	icon_state = "cult_help[current_page]"
+
+/obj/abstract/mind_ui_element/bloodcult_help_background/Click()
+	parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_close
+	name = "Close"
+	icon = 'icons/ui/16x16.dmi'
+	icon_state = "close"
+	offset_x = 96
+	offset_y = -38
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_close/Click()
+	parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_previous
+	name = "Previous Page"
+	icon = 'icons/ui/bloodcult/24x24.dmi'
+	icon_state = "button_prev"
+	offset_x = -80
+	offset_y = -150
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_previous/Appear()
+	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
+	if(help)
+		if (help.current_page <= 1)
+			invisibility = 101
+		else
+			..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_previous/Click()
+	flick("button_prev-click",src)
+	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
+	if(help)
+		help.current_page = max(help.current_page-1, 1)
+		parent.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_next
+	name = "Next Page"
+	icon = 'icons/ui/bloodcult/24x24.dmi'
+	icon_state = "button_next"
+	offset_x = 88
+	offset_y = -150
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_next/Appear()
+	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
+	if(help)
+		if (help.current_page >= 12)
+			invisibility = 101
+		else
+			..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_next/Click()
+	flick("button_next-click",src)
+	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
+	if(help)
+		help.current_page = min(help.current_page+1, 12)
+		parent.Display()
+
+//------------------------------------------------------------
+
