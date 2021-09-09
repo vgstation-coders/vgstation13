@@ -1,7 +1,7 @@
 #define LIGHT_CPU_THRESHOLD 80
 
 /atom/movable/light
-	name = null
+	name = ""
 	mouse_opacity = 0
 	plane = LIGHTING_PLANE
 	anchored = 1
@@ -38,7 +38,6 @@
 	vis_flags = VIS_INHERIT_ID
 
 /atom/movable/light/shadow
-	name = null
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
@@ -148,5 +147,9 @@
 		if (CHECK_OCCLUSION(current_turf))
 			. = FALSE
 			return
+
+/image/shadow_overlay
+	appearance_flags = KEEP_TOGETHER
+	var/list/temp_appearance = list()
 
 #undef LIGHT_CPU_THRESHOLD

@@ -1461,6 +1461,16 @@
 					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
 					break
 
+	if (istype(glasses))
+		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
+			dark_plane.alphas += glasses.my_dark_plane_alpha_override
+			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
+
+	if (mind)
+		for (var/key in mind.antag_roles)
+			var/datum/role/R = mind.antag_roles[key]
+			R.update_perception()
+
 	check_dark_vision()
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)

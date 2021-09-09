@@ -92,7 +92,7 @@
 	if(findtext(msg, phrase))
 		activate()
 
-/obj/item/weapon/implant/explosive/trigger(emote, source as mob)
+/obj/item/weapon/implant/explosive/trigger(emote, mob/source)
 	if(emote == "deathgasp")
 		activate()
 
@@ -122,6 +122,7 @@
 	usr.mind.store_memory("Explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
 	to_chat(usr, "The implanted explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
 	addHear()
+	source.register_event(/event/emote, src, .proc/trigger)
 	return 1
 
 /obj/item/weapon/implant/explosive/emp_act(severity)
@@ -149,6 +150,7 @@
 	return 0
 
 /obj/item/weapon/implant/explosive/handle_removal(var/mob/remover)
+	imp_in?.unregister_event(/event/emote, src, .proc/trigger)
 	makeunusable(75)
 
 /obj/item/weapon/implant/explosive/proc/small_boom()
@@ -263,6 +265,13 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		src.activate(src.reagents.total_volume)
 	return
 
+/obj/item/weapon/implant/chem/implanted(mob/source)
+	source.register_event(/event/emote, src, .proc/trigger)
+	return TRUE
+
+/obj/item/weapon/implant/explosive/handle_removal(mob/remover)
+	imp_in?.unregister_event(/event/emote, src, .proc/trigger)
+	makeunusable(75)
 
 /obj/item/weapon/implant/chem/activate(var/cause)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
@@ -446,11 +455,13 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return
 
 /obj/item/weapon/implant/adrenalin/implanted(mob/source)
-		source.mind.store_memory("A implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", 0, 0)
-		to_chat(source, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
-		return 1
+	source.register_event(/event/emote, src, .proc/trigger)
+	source.mind.store_memory("A implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", 0, 0)
+	to_chat(source, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
+	return 1
 
 /obj/item/weapon/implant/adrenalin/handle_removal(var/mob/remover)
+	imp_in?.unregister_event(/event/emote, src, .proc/trigger)
 	makeunusable(75)
 
 /obj/item/weapon/implant/death_alarm
@@ -579,6 +590,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	qdel (src)
 
 /obj/item/weapon/implant/compressed/implanted(mob/source as mob)
+	source.register_event(/event/emote, src, .proc/trigger)
 	src.activation_emote = input("Choose activation emote:") in list("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
 	usr.mind.store_memory("Compressed matter implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.", 0, 0)
 	to_chat(usr, "The implanted compressed matter implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
@@ -588,6 +600,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return 0
 
 /obj/item/weapon/implant/compressed/handle_removal(var/mob/remover)
+	imp_in?.unregister_event(/event/emote, src, .proc/trigger)
 	makeunusable(75)
 
 /obj/item/weapon/implant/cortical

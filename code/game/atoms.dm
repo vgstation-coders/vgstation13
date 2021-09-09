@@ -872,7 +872,7 @@ its easier to just keep the beam vertical.
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
 
-/atom/proc/initialize()
+/atom/initialize()
 	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()

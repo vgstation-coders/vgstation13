@@ -725,6 +725,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(src.type == new_type) //Already grown up
 		return
 
+	if(istype(locked_to,/obj/item/critter_cage)) // Baby mobs in cages won't grow up!
+		return
+
 	var/mob/living/simple_animal/new_animal = new new_type(src.loc)
 
 	if(locked_to) //Handle atom locking

@@ -48,7 +48,7 @@
  * optional inline_html string Custom HTML to inject.
  * optional fancy bool If TRUE, will hide the window titlebar.
  */
-/datum/tgui_window/proc/initialize(
+/datum/tgui_window/initialize(
 		inline_assets = list(),
 		inline_html = "",
 		fancy = FALSE)
