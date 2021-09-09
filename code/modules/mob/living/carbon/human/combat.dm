@@ -301,4 +301,8 @@
 /mob/living/carbon/human/bonusTackleRange(var/tR = 0)
 	if(species)
 		tR += species.tackleRange
-	return tR
+	if(wear_suit)
+		var/obj/item/slowSuit = wear_suit
+		if(slowSuit.slowdown > NO_SLOWDOWN)
+			tR -= 1
+	return max(0, tR)

@@ -101,41 +101,51 @@
 /mob/living/carbon/doTackle(var/atom/A)
 	if(throw_delayer.blocked())
 		return
-	delayNextThrow(3)
+	delayNextThrow(10)
 	throw_mode_off()
 	if(!get_turf(src) || istype(get_turf(src), /turf/space))
 		to_chat(src, "<span class='warning'>You need more footing to do that!")
 		return
-	if(restrained() || lying || stat)
+	if(restrained() || lying || locked_to || stat)
 		return
 	var/tRange = calcTackleRange()
 	isTackling = TRUE
-	Knockdown(2)
-	throw_at(A, tRange, 3)
+	knockdown = max(knockdown, 2)	//Not using the Knockdown() proc as it created odd behaviour with hulks and another knockdown immune
+	update_canmove()
+	throw_at(A, tRange, 1)
 
 /mob/living/carbon/throw_impact(atom/hit_atom, speed, user)
 	if(isTackling)
-		var/tackleForce = calcTackleForce()
-		if(isliving(hit_atom))
-			var/mob/living/L = hit_atom
-			var/tackleDefense = L.calcTackleDefense()
-			var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
-			var/rngDefense = rand(tackleDefense/2, tackleDefense)
-			var/tKnock = max(0, rngDefense - rngForce)	//Calculating our knockdown, we always get knocked down at least a little
-			Knockdown(tKnock)
-			tKnock = max(0, rngForce - rngDefense)	//Calculating their knockdown, they might not get knocked down at all
-			if(tKnock)
-				L.Knockdown(tKnock)
-				if(M_HORNS in mutations)
-					tKnock += 5
-				L.adjustBruteLoss(tKnock)
-		else if(hit_atom.density)
+		if(!throwing)
+			isTackling = FALSE	//Safety from throw_at being a jerk
+		else
+			var/tackleForce = calcTackleForce()
+			if(isliving(hit_atom))
+				var/mob/living/L = hit_atom
+				var/tackleDefense = L.calcTackleDefense()
+				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
+				var/rngDefense = rand(tackleDefense/2, tackleDefense)
+				var/tKnock = max(0, rngDefense - rngForce)	//Calculating our knockdown, we always get knocked down at least a little
+				Knockdown(tKnock)
+				tKnock = max(0, rngForce - rngDefense)	//Calculating their knockdown, they might not get knocked down at all
+				if(tKnock)
+					L.Knockdown(tKnock)
+					if(M_HORNS in mutations)
+						tKnock += 5
+					L.adjustBruteLoss(tKnock)
+			spawn(3)	//Just to let throw_impact stop throwing a tantrum
+				isTackling = FALSE
+	..()
+
+/mob/living/carbon/to_bump(atom/Obstacle)
+	..()
+	if(isTackling)
+		if(!throwing)
+			isTackling = FALSE	//Safety from throw_at being a jerk
+		else
 			var/tPain = rand(1,10)
 			adjustBruteLoss(tPain)
 			Knockdown(tPain/2)
-		spawn(3)	//Just to let throw_impact stop throwing a tantrum
-			isTackling = FALSE
-	..()
 
 /mob/living/carbon/calcTackleRange(var/tR = 0)
 	tR += bonusTackleRange()
@@ -146,6 +156,10 @@
 	return tR
 
 /mob/living/carbon/calcTackleForce(var/tForce = 0)
+	if(world.time > last_moved + 1 SECONDS)	//If you haven't moved in the last second you do a weaker "standing tackle"
+		tForce -= 1
+	else
+		tForce += 1
 	tForce += get_strength()*2
 	if(M_HULK in mutations)
 		tForce += 2	//hulk also contributes to get_strength() so the bonus is higher than appears here
@@ -162,12 +176,13 @@
 		tDef += 2
 	for(var/obj/item/weapon/I in held_items)
 		if(I.IsShield())
-			tDef += 5
+			tDef += 4
 	tDef += bonusTackleDefense()
 	if(M_VEGAN in mutations)
 		tDef -= 1
 	if(M_CLUMSY in mutations)	//The clown fears fatsec
 		tDef -= 2
+		playsound(loc, 'sound/items/bikehorn.ogg', 20, 1)
 	return max(0, tDef)
 
 /mob/living/carbon/proc/bonusTackleForce(var/tF = 1)
