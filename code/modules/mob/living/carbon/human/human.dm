@@ -1468,7 +1468,7 @@
 
 	if (mind)
 		for (var/key in mind.antag_roles)
-			var/role/R = mind.antag_roles[key]
+			var/datum/role/R = mind.antag_roles[key]
 			R.update_perception()
 
 	check_dark_vision()
