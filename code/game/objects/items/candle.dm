@@ -2,7 +2,7 @@
 	name = "red candle"
 	desc = "A candle made out of wax, used for moody lighting and solar flares."
 	icon = 'icons/obj/candle.dmi'
-	icon_state = "candle1"
+	icon_state = "candle"
 	item_state = "candle1"
 	w_class = W_CLASS_TINY
 	heat_production = 1000
@@ -12,24 +12,45 @@
 	var/wax = 200
 	var/lit = 0
 	var/flavor_text
+	var/trashtype = /obj/item/trash/candle
 
 /obj/item/candle/update_icon()
+	overlays.len = 0
 	var/i
 	if(wax > 150)
 		i = 1
 	else if(wax > 80)
 		i = 2
 	else i = 3
-	icon_state = "candle[i][lit ? "_lit" : ""]"
+	icon_state = "candle[i]"
+	if (lit)
+		var/image/I = image(icon,src,"[icon_state]_lit")
+		I.blend_mode = BLEND_ADD
+		if (isturf(loc))
+			I.plane = ABOVE_LIGHTING_PLANE
+		else
+			I.plane = ABOVE_HUD_PLANE // inventory
+		overlays += I
 
-/obj/item/candle/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/candle/dropped()
 	..()
+	update_icon()
+
+/obj/item/candle/attackby(var/obj/item/weapon/W, var/mob/user)
+	..()
+	if (lit && source_temperature)
+		if (istype(W, /obj/item/candle))
+			var/obj/item/candle/C = W
+			C.light("<span class='notice'>[user] lights [C] with [src].</span>")
+		else if (istype(W,/obj/item/clothing/mask/cigarette))
+			var/obj/item/clothing/mask/cigarette/fag = W
+			fag.light("<span class='notice'>[user] lights \the [fag] using \the [src]'s flame.</span>")
 	if(source_temperature && (W.is_hot() || W.sharpness_flags & (HOT_EDGE)))
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
 
 /obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
-	if(!src.lit)
-		src.lit = 1
+	if(!lit)
+		lit = 1
 		if(!quiet)
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
@@ -49,7 +70,7 @@
 		update_icon()
 		return
 	if(!wax)
-		new/obj/item/trash/candle(src.loc)
+		new trashtype(src.loc)
 		if(istype(src.loc, /mob))
 			src.dropped()
 		qdel(src)
@@ -84,14 +105,19 @@
 /obj/item/candle/holo
 	name = "holo candle"
 	desc = "A small disk projecting the image of a candle, used for futuristic lighting. It has a multitool port on it for changing colors."
-	icon_state = "holocandle_red"
+	icon_state = "holocandle_base"
 	//item_state = "candle1"
 	heat_production = 0
 	source_temperature = 0
 	light_color = LIGHT_COLOR_FIRE
 	wax = "red" //Repurposed var for the "wax" color.
 
+/obj/item/candle/holo/New()
+	..()
+	update_icon()
+
 /obj/item/candle/holo/update_icon()
+	overlays.len = 0
 	switch(wax)
 		if("red")
 			light_color = LIGHT_COLOR_FIRE
@@ -103,7 +129,17 @@
 			light_color = LIGHT_COLOR_GREEN
 		if("yellow")
 			light_color = LIGHT_COLOR_YELLOW
-	icon_state = "holocandle_[wax][lit ? "_lit" : ""]"
+	var/image/I_stick = image(icon,src,"holocandle_[wax]")
+	if (lit)
+		var/image/I_flame = image(icon,src,"holocandle_lit")
+		I_stick.overlays += I_flame
+	I_stick.blend_mode = BLEND_ADD
+	I_stick.alpha = 200
+	if (isturf(loc))
+		I_stick.plane = ABOVE_LIGHTING_PLANE
+	else
+		I_stick.plane = ABOVE_HUD_PLANE
+	overlays += I_stick
 
 /obj/item/candle/holo/attack_self(mob/user)
 	lit = !lit

@@ -87,7 +87,7 @@
 	takeDamage(Proj.damage)
 	return ..()
 
-/obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user, params)
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		if(iscarbon(G.affecting))
@@ -95,8 +95,9 @@
 			qdel(W)
 	else if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
-			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
-			MouseDropTo(W,user)
+			MouseDropTo(W,user,params)
+			if (W.loc != loc)
+				visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
 		else
 			user.delayNextAttack(8)
 			user.do_attack_animation(src, W)
@@ -349,7 +350,7 @@
 	else
 		return 0
 
-/obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user)
+/obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user, var/params)
 	if (altar_task)
 		return
 	if (!istype(O))
@@ -388,6 +389,9 @@
 
 	O.forceMove(loc)
 	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
+	if(params)
+		O.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
+		return 1
 
 
 /obj/structure/cult/altar/proc/checkPosition()
@@ -855,7 +859,7 @@ var/list/cult_spires = list()
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 	var/image/I_spire = image('icons/obj/cult_64x64.dmi',"spire[stage]-light")
-	I_spire.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+	I_spire.plane = ABOVE_LIGHTING_PLANE
 	I_spire.layer = NARSIE_GLOW
 	overlays += I_base
 	overlays += I_spire
@@ -1035,7 +1039,7 @@ var/list/cult_spires = list()
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 	var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-	I_lave.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+	I_lave.plane = ABOVE_LIGHTING_PLANE
 	I_lave.layer = NARSIE_GLOW
 	I_lave.blend_mode = BLEND_ADD
 	overlays += I_base
@@ -1090,7 +1094,7 @@ var/list/cult_spires = list()
 						playsound(L, 'sound/effects/forge.ogg', 50, 0, -4)
 						forging.overlays.len = 0
 						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")
-						I.plane = relative_plane_to_plane(ABOVE_LIGHTING_PLANE,forging.plane)
+						I.plane = ABOVE_LIGHTING_PLANE
 						I.layer = NARSIE_GLOW
 						I.blend_mode = BLEND_ADD
 						I.alpha = (timeleft/timetotal)*255
@@ -1135,7 +1139,7 @@ var/list/cult_spires = list()
 		I_base.layer = BELOW_PROJECTILE_LAYER
 		I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 		var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-		I_lave.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+		I_lave.plane = ABOVE_LIGHTING_PLANE
 		I_lave.layer = NARSIE_GLOW
 		I_lave.blend_mode = BLEND_ADD
 		overlays += I_base
@@ -1240,7 +1244,7 @@ var/list/cult_spires = list()
 	..()
 	icon_state = i_forge
 	var/image/I = image('icons/obj/cult_64x64.dmi',"[i_forge]-mask")
-	I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+	I.plane = ABOVE_LIGHTING_PLANE
 	I.layer = NARSIE_GLOW
 	I.blend_mode = BLEND_ADD
 	overlays += I

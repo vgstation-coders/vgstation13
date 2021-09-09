@@ -1689,9 +1689,10 @@ var/list/arcane_tomes = list()
 	name = "blood candle"
 	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
 	icon = 'icons/obj/candle.dmi'
-	icon_state = "bloodcandle1"
+	icon_state = "bloodcandle"
 
 	wax = 1200 // 20 minutes
+	trashtype = /obj/item/trash/blood_candle
 
 /obj/item/candle/blood/update_icon()
 	overlays.len = 0
@@ -1705,5 +1706,14 @@ var/list/arcane_tomes = list()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
-		I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+		if (isturf(loc))
+			I.plane = ABOVE_LIGHTING_PLANE
+		else
+			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
+
+/obj/item/trash/blood_candle
+	name = "blood candle"
+	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
+	icon = 'icons/obj/candle.dmi'
+	icon_state = "bloodcandle4"

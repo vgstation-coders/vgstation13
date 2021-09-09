@@ -190,7 +190,7 @@ var/list/rune_appearances_cache = list()
 /obj/effect/rune/update_icon(var/draw_up_to = 3)
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	if (active_spell && active_spell.custom_rune)
+	if (active_spell)
 		return
 
 	overlays.len = 0
@@ -258,56 +258,6 @@ var/list/rune_appearances_cache = list()
 		idle_pulse()
 	else
 		animate(src)
-/*
-/obj/effect/rune/proc/make_iconcache(var/datum/rune_word/word, var/datum/reagent/blood/blood, var/animated) //For caching rune icons
-	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-	if (!blood)
-		blood = new
-	var/lookupword = "[word.icon_state]-[animated]-[blood.data["blood_colour"]]"
-	if(lookupword in rune_appearances_cache)
-		I = rune_appearances_cache[lookupword]
-	else
-		I.Blend(icon('icons/effects/uristrunes.dmi', word.icon_state), ICON_OVERLAY)
-		var/finalblood = blood.data["blood_colour"]
-		var/list/blood_hsl = rgb2hsl(GetRedPart(finalblood),GetGreenPart(finalblood),GetBluePart(finalblood))
-		if(blood_hsl.len)
-			var/list/blood_rgb = hsl2rgb(blood_hsl[1],blood_hsl[2],50)//producing a color that is neither too bright nor too dark
-			if(blood_rgb.len)
-				finalblood = rgb(blood_rgb[1],blood_rgb[2],blood_rgb[3])
-
-		var/bc1 = finalblood
-		var/bc2 = finalblood
-		bc1 += "C8"
-		bc2 += "64"
-
-		I.SwapColor(rgb(0, 0, 0, 100), bc1)
-		I.SwapColor(rgb(0, 0, 0, 50), bc1)
-
-		for(var/x = 1, x <= WORLD_ICON_SIZE, x++)
-			for(var/y = 1, y <= WORLD_ICON_SIZE, y++)
-				var/p = I.GetPixel(x, y)
-
-				if(p == null)
-					var/n = I.GetPixel(x, y + 1)
-					var/s = I.GetPixel(x, y - 1)
-					var/e = I.GetPixel(x + 1, y)
-					var/w = I.GetPixel(x - 1, y)
-
-					if(n == "#000000" || s == "#000000" || e == "#000000" || w == "#000000")
-						I.DrawBox(bc1, x, y)
-
-					else
-						var/ne = I.GetPixel(x + 1, y + 1)
-						var/se = I.GetPixel(x + 1, y - 1)
-						var/nw = I.GetPixel(x - 1, y + 1)
-						var/sw = I.GetPixel(x - 1, y - 1)
-
-						if(ne == "#000000" || se == "#000000" || nw == "#000000" || sw == "#000000")
-							I.DrawBox(bc2, x, y)
-
-		I.MapColors(0.5,0,0,0,0.5,0,0,0,0.5)//we'll darken that color a bit
-	return I
-*/
 
 /obj/effect/rune/proc/idle_pulse()
 	//This masterpiece of a color matrix stack produces a nice animation no matter which color the rune is.
@@ -445,11 +395,8 @@ var/list/rune_appearances_cache = list()
 	if (!active_spell)
 		return fizzle(user)
 	else
-		activated++
 		if (active_spell.destroying_self)
 			active_spell = null
-		if (!gcDestroyed && (activated == 1))
-			update_icon() // begin pulsing
 
 /obj/effect/rune/proc/fizzle(var/mob/living/user)
 	var/silent = user.checkTattoo(TATTOO_SILENT)

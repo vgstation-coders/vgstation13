@@ -104,6 +104,9 @@
 /obj/effect/afterimage/red
 	image_color = "red"
 
+/obj/effect/afterimage/black
+	image_color = "black"
+
 /obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5)
 	..()
 	if(model)

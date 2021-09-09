@@ -98,6 +98,8 @@
 /datum/rune_spell/proc/pre_cast()
 	if(istype(spell_holder,/obj/effect/rune))
 		var/obj/effect/rune/R = spell_holder
+		R.activated++
+		R.update_icon()
 		R.cast_word(R.word1.english)
 		R.cast_word(R.word2.english)
 		R.cast_word(R.word3.english)
@@ -171,10 +173,9 @@
 		if (RITUALABORT_NEAR)
 			if (activator)
 				to_chat(activator, "<span class='warning'>You cannot perform this ritual that close from another similar structure.</span>")
-		if (RITUALABORT_OUTPOST)
+		if (RITUALABORT_OVERCROWDED)
 			if (activator)
-				to_chat(activator, "<span class='sinister'>The veil here is still too dense to allow raising structures from the realm of Nar-Sie. We must raise our structure in the heart of the station.</span>")
-
+				to_chat(activator, "<span class='warning'>There are too many human cultists and constructs already.</span>")
 
 	for(var/mob/living/L in contributors)
 		if (L.client)
@@ -640,8 +641,9 @@
 			list("Ritual Knife", "radial_paraphernelia_knife", "A long time ago a wizard enchanted one of those to infiltrate the realm of Nar-Sie and steal some soul stone shards. Now it's just a cool knife. Don't rely on it in a fight though."),
 			list("Arcane Tome", "radial_paraphernelia_tome", "Bring forth an arcane tome filled with Nar-Sie's knowledge. Harmful to the uninitiated in more ways than one. Ghosts can flick their pages."),
 			)
-		var/task = show_radial_menu(activator,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
-		if (!Adjacent(user) || !task)
+		var/task = show_radial_menu(activator,get_turf(spell_holder),choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
+		if (!spell_holder.Adjacent(activator) || !task || gcDestroyed)
+			qdel(src)
 			return
 		if (pay_blood())
 			R.one_pulse()
@@ -662,8 +664,15 @@
 					spawned_object = new /obj/item/weapon/tome(T)
 			spell_holder.visible_message("<span class='rose'>The blood drops merge into the rune, and \a [spawned_object] materializes on top.</span>")
 			anim(target = spawned_object, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_imbue")
-			new /obj/effect/afterimage(T,spawned_object)
+			new /obj/effect/afterimage/black(T,spawned_object)
 			qdel(src)
+
+
+/datum/rune_spell/paraphernelia/midcast(var/mob/add_cultist) // failsafe should someone be hogging the radial menu.
+	var/obj/effect/rune/R = spell_holder
+	R.active_spell = null
+	R.trigger(add_cultist)
+	qdel(src)
 
 /datum/rune_spell/paraphernelia/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
@@ -823,6 +832,8 @@ var/list/converted_minds = list()
 
 	var/mob/convertee = victim//trying to fix logs showing the victim as *null*
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+
 	update_progbar()
 	if (activator.client)
 		activator.client.images |= progbar
@@ -846,6 +857,9 @@ var/list/converted_minds = list()
 
 	for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(victim))
 		SPS.OnMobDeath(victim)//Think carefully before converting a sec officer
+
+	if (!cult.CanConvert("human"))
+		to_chat(activator, "<span class='warning'>There are already too many human cultists or constructs. They will be made prisoner.</span>")
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
@@ -960,6 +974,10 @@ var/list/converted_minds = list()
 		if (jobban_isbanned(victim, CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
 
+
+		if ((acceptance == "Always" || acceptance == "Yes") && !cult.CanConvert("human"))
+			acceptance = "Overcrowded"
+
 		//Players with cult enabled in their preferences will always get converted.
 		//Others get a choice, unless they're cult-banned or have their preferences set to Never (or disconnected), in which case they always die.
 		var/conversion_delay = 100
@@ -1006,6 +1024,9 @@ var/list/converted_minds = list()
 				conversion.icon_state = "rune_convert_bad"
 				to_chat(activator, "<span class='sinister'>This mindless creature will be sacrificed.</span>")
 				success = CONVERSION_MINDLESS
+			if ("Overcrowded")
+				to_chat(victim, "<span class='sinister'>EXCEPT...THERE ARE NO VACANT SEATS LEFT.</span>")
+				success = CONVERSION_OVERCROWDED
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
 		sleep(conversion_delay)
@@ -1024,8 +1045,6 @@ var/list/converted_minds = list()
 			abort(RITUALABORT_REMOVED)
 			return
 
-		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (victim.mind && !(victim.mind in converted_minds))
 			converted_minds += victim.mind
 			if (!cult)
@@ -1079,7 +1098,7 @@ var/list/converted_minds = list()
 					gondola.icon_state = gondola.icon_state_standing
 				abort(RITUALABORT_CONVERT)
 				return
-			if (CONVERSION_NOCHOICE, CONVERSION_REFUSE)
+			if (CONVERSION_NOCHOICE, CONVERSION_REFUSE, CONVERSION_OVERCROWDED)
 				conversion.icon_state = ""
 				flick("rune_convert_refused",conversion)
 				for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
@@ -1106,9 +1125,14 @@ var/list/converted_minds = list()
 						log_admin("BLOODCULT: [key_name(convertee)] has timed-out during conversion by [key_name(converter)].")
 
 					abort(RITUALABORT_NOCHOICE)
-				else
+				else if (success == CONVERSION_REFUSE)
 					message_admins("BLOODCULT: [key_name(convertee)] has refused conversion by [key_name(converter)].")
 					log_admin("BLOODCULT: [key_name(convertee)] has refused conversion by [key_name(converter)].")
+
+					abort(RITUALABORT_REFUSED)
+				else
+					message_admins("BLOODCULT: [key_name(convertee)] was made prisoner by [key_name(converter)] because the cult is overcrowded.")
+					log_admin("BLOODCULT: [key_name(convertee)] was made prisoner by [key_name(converter)] because the cult is overcrowded.")
 
 					abort(RITUALABORT_REFUSED)
 
@@ -2647,6 +2671,13 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+
+	if (cult && !cult.CanConvert("human"))
+		to_chat(shade, "<span class='warning'>There are too many human cultists and constructs already.</span>")
+		abort(RITUALABORT_OVERCROWDED)
+		return
+
 	husk = new (R.loc)
 	shade.forceMove(husk)
 
@@ -2714,6 +2745,13 @@ var/list/bloodcult_exitportals = list()
 			if (cancelling <= 0)
 				abort(RITUALABORT_BLOOD)
 				return
+
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+
+		if (cult && !cult.CanConvert("human"))
+			to_chat(shade, "<span class='warning'>There are too many human cultists and constructs already.</span>")
+			abort(RITUALABORT_OVERCROWDED)
+			return
 
 		if (accumulated_blood >= remaining_cost)
 			success()

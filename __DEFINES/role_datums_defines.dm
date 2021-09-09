@@ -154,7 +154,7 @@
 #define RITUALABORT_CONCEAL	"conceal"
 #define RITUALABORT_NEAR	"near"
 #define RITUALABORT_MISSING	"missing"
-#define RITUALABORT_OUTPOST "outpost"
+#define RITUALABORT_OVERCROWDED "overcrowded"
 
 #define TATTOO_POOL		"Blood Communion"
 #define TATTOO_SILENT	"Silent Casting"
@@ -187,6 +187,7 @@
 #define CONVERSION_ACCEPT	1
 #define CONVERSION_BANNED	2
 #define CONVERSION_MINDLESS	3
+#define CONVERSION_OVERCROWDED	4
 
 #define CONVERTIBLE_ALWAYS	1
 #define CONVERTIBLE_CHOICE	2

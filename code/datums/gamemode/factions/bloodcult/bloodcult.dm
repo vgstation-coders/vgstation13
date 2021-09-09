@@ -25,11 +25,46 @@
 
 	var/list/bindings = list()
 
+	var/list/cultist_cap = 9
+
 /datum/faction/bloodcult/check_win()
 	return cult_win
 
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
+
+/datum/faction/bloodcult/proc/CanConvert(var/conversion_type = "human")
+	var/human_count = 0
+	var/artificer_count = 0
+	var/wraith_count = 0
+	var/juggernaut_count = 0
+	var/over_cap = 0 // more than 1 construct of its type means less humans
+	for (var/datum/role/R in members)
+		var/mob/M = R.antag.current
+		if (istype(M, /mob/living/carbon/human))
+			human_count++
+		else if (istype(M, /mob/living/simple_animal/construct/builder))
+			if (artificer_count)
+				over_cap++
+			artificer_count++
+		else if (istype(M, /mob/living/simple_animal/construct/wraith))
+			if (wraith_count)
+				over_cap++
+			wraith_count++
+		else if (istype(M, /mob/living/simple_animal/construct/armoured))
+			if (juggernaut_count)
+				over_cap++
+			juggernaut_count++
+
+	switch (conversion_type)
+		if ("human")
+			return ((human_count + over_cap) < cultist_cap)
+		if ("Artificer")
+			return (!artificer_count || ((human_count + over_cap) < cultist_cap))
+		if ("Wraith")
+			return (!wraith_count || ((human_count + over_cap) < cultist_cap))
+		if ("Juggernaut")
+			return (!juggernaut_count || ((human_count + over_cap) < cultist_cap))
 
 /datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
 	. = ..()

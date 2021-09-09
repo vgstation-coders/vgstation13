@@ -568,6 +568,12 @@
 	if (!Adjacent(user) || (!isconstruct(user) && stone != user.get_active_hand())  || (isconstruct(user) && !stone.Adjacent(user)) || !construct_class || soul.loc != stone)
 		return//sanity check after we've picked a construct class
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+
+	if (cult && iscultist(user) && !cult.CanConvert(construct_class))
+		to_chat(activator, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
+		return
+
 	switch(construct_class)
 		if("Juggernaut")
 			if (perfect)
@@ -657,7 +663,8 @@
 	if (istype(user, /mob/living/simple_animal/construct/builder))
 		new /obj/item/soulstone/gem(loc)
 		var/obj/structure/constructshell/cult/alt/newshell = new (loc)
-		newshell.fingerprints = fingerprints.Copy()
+		if (fingerprints)
+			newshell.fingerprints = fingerprints.Copy()
 		qdel(src)
 		return 1
 	if (istype(user, /mob/living/simple_animal/shade))
@@ -676,6 +683,12 @@
 	var/construct_class = show_radial_menu(user,src,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
 
 	if (!Adjacent(user) || !construct_class)
+		return
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+
+	if (cult && iscultist(user) && !cult.CanConvert(construct_class))
+		to_chat(activator, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
 		return
 
 	switch(construct_class)
