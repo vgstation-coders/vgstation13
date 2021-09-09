@@ -244,16 +244,15 @@
 		apply()
 		return
 
-	if (new_mob != viewing)
-		clear()
+	clear()
 
-		if (viewing)
-			viewing.unregister_event(/event/logout, src, .proc/mob_logout)
-			viewing = null
+	if (viewing)
+		viewing.unregister_event(/event/logout, src, .proc/mob_logout)
+		viewing = null
 
-		if (new_mob)
-			new_mob.register_event(/event/logout, src, .proc/mob_logout)
-			viewing = new_mob
+	if (new_mob)
+		new_mob.register_event(/event/logout, src, .proc/mob_logout)
+		viewing = new_mob
 
 /obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/user)
 	if (user != viewing)
