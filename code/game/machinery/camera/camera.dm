@@ -106,7 +106,7 @@ var/list/camera_names=list()
 
 /obj/machinery/camera/proc/name_camera()
 	var/area/A=get_area(src)
-	var/basename=A.name
+	var/basename=format_text(A.name)
 	var/nethash=english_list(network)
 	var/suffix = 0
 	while(!suffix || ((nethash+c_tag) in camera_names))

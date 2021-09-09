@@ -19,7 +19,6 @@
 	pixel_y = -WORLD_ICON_SIZE/2
 	glide_size = WORLD_ICON_SIZE
 	blend_mode = BLEND_ADD
-
 	animate_movement = NO_STEPS
 
 	alpha = 180
@@ -36,6 +35,7 @@
 
 /atom/movable/light/smooth
 	animate_movement = SLIDE_STEPS
+	vis_flags = VIS_INHERIT_ID
 
 /atom/movable/light/shadow
 	name = null

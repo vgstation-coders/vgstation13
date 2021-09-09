@@ -26,11 +26,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/list/cam_plane_masters
 	var/obj/abstract/screen/background/cam_background
 
-/obj/machinery/computer/security/New()
-	..()
-	if (world.has_round_started())
-		initialize()
-
 /obj/machinery/computer/security/initialize()
 	tv_monitors += src
 	// Map name has to start and end with an A-Z character,
@@ -41,11 +36,18 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	cam_screen.name = "screen"
 	cam_screen.assigned_map = map_name
 	cam_screen.screen_loc = "[map_name]:1,1"
+	cam_screen.del_on_map_removal = FALSE
 	cam_plane_masters = list()
-	for(var/plane in subtypesof(/obj/abstract/screen/plane_master))
+	var/static/list/darkness_plane_things = list(
+		/obj/abstract/screen/plane/master,
+		/obj/abstract/screen/backdrop,
+		/obj/abstract/screen/plane/dark
+	)
+	for(var/plane in subtypesof(/obj/abstract/screen/plane_master) + darkness_plane_things)
 		var/obj/abstract/screen/instance = new plane()
 		instance.assigned_map = map_name
 		instance.screen_loc = "[map_name]:CENTER"
+		instance.del_on_map_removal = FALSE
 		cam_plane_masters += instance
 	cam_background = new
 	cam_background.assigned_map = map_name

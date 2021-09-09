@@ -26,8 +26,9 @@
 	name = "background"
 	icon = 'icons/mob/map_backgrounds.dmi'
 	icon_state = "clear"
-	layer = PLATING_PLANE
-	plane = PLATING_PLANE
+	layer = ABOVE_LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE // This is almost certainly incorrect
+	mouse_opacity = 0
 
 /**
  * Sets screen_loc of this screen object, in form of point coordinates,

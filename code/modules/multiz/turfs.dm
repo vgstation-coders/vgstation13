@@ -69,19 +69,6 @@
 			depth += 1
 		to_chat(user, "It is about [depth] levels deep.")
 
-/**
-* Update icon and overlays of open space to be that of the turf below, plus any visible objects on that turf.
-*/
-/turf
-	vis_flags = VIS_INHERIT_ID
-
-/atom/movable
-	vis_flags = VIS_INHERIT_ID
-
-// Hides these from vis_contents due to how glitchy they are with it
-/atom/movable/light
-	vis_flags = VIS_HIDE
-
 /obj/effect/open_overlay
 	name = "open overlay"
 	desc = "The darkness of the abyss below"
