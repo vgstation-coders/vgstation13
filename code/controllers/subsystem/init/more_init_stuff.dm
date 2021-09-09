@@ -30,7 +30,6 @@ var/datum/subsystem/more_init/SSmore_init
 		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
 	..()
 
-	buildcamlist()
 	if(config.media_base_url)
 		watch = start_watch()
 		log_startup_progress("Caching jukebox playlists...")
@@ -65,8 +64,6 @@ var/datum/subsystem/more_init/SSmore_init
 		var/datum/wizard_apprentice_setup/setup_datum = new setup_type
 		wizard_apprentice_setups_nanoui += list(list("name" = setup_datum.name, "desc" = setup_datum.generate_description()))
 		wizard_apprentice_setups_by_name[setup_datum.name] = setup_datum
-
-/datum/subsystem/more_init/proc/buildcamlist()
 
 
 /datum/subsystem/more_init/proc/cachedamageicons()
