@@ -20,9 +20,11 @@
 	if(ai)
 		if(!isturf(ai.loc))
 			return
+		var/turf/destination = NewLoc
 		if(!isturf(NewLoc))
-			var/turf/destination = get_turf(NewLoc)
-			forceEnter(destination)
+			destination = get_turf(NewLoc)
+
+		forceEnter(destination)
 
 		cameranet.visibility(src)
 		if(ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
@@ -90,7 +92,6 @@
 // This is handled in the proc below this one.
 
 /client/proc/AIMove(n, direct, var/mob/living/silicon/ai/user)
-
 
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50

@@ -1586,17 +1586,17 @@ Use this proc preferably at the end of an equipment loadout
 		var/max_alpha = 0
 		for (var/key in dark_plane.alphas)
 			max_alpha = max(dark_plane.alphas[key], max_alpha)
-		dark_plane.alpha = max_alpha
-	else
-		dark_plane?.alpha = initial(dark_plane.alpha)
+		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 10)
+	else if (dark_plane)
+		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 10)
 
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
-			if (T.get_lumcount() > 0)
-				self_vision.alpha = 0
+			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
+				animate(self_vision, alpha = self_vision.target_alpha, time = 10)
 			else
-				self_vision.alpha = self_vision.target_alpha
+				animate(self_vision, alpha = 0, time = 10)
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)

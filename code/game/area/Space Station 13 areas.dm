@@ -1316,7 +1316,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/solar
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 	shuttle_can_crush = FALSE
 

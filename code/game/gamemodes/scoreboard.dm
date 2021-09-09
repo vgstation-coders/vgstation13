@@ -141,31 +141,31 @@
 	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	leaderboard.insert_records(rich_escapes)
 
-	/*
-
-	var/nukedpenalty = 1000
-	if(ticker.mode.config_tag == "nuclear")
+	//var/nukedpenalty = 1000
+	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(NO)
 		var/foecount = 0
-		for(var/datum/mind/M in ticker.mode:syndicates)
+		for(var/datum/role/R in NO.members)
 			foecount++
+			var/datum/mind/M = R.antag
 			if(!M || !M.current)
 				score["opkilled"]++
 				continue
 			var/turf/T = M.current.loc
 			if(T && istype(T.loc, /area/security/brig))
-				score["arrested"]++
+				score["oparrested"]++
 			else if(M.current.stat == DEAD)
 				score["opkilled"]++
 		if(foecount == score["arrested"])
-			score["allarrested"] = 1
+			score["alloparrested"] = 1
 
-		score["disc"] = 1
+		/*score["disc"] = 1
 		for(var/obj/item/weapon/disk/nuclear/A in world)
 			if(A.loc != /mob/living/carbon)
 				continue
 			var/turf/location = get_turf(A.loc)
 			var/area/bad_zone1 = locate(/area)
-			var/area/bad_zone2 = locate(/area/syndicate_station)
+			var/area/bad_zone2 = locate(/area/syndicate_mothership)
 			var/area/bad_zone3 = locate(/area/wizard_station)
 			if(location in bad_zone1)
 				score["disc"] = 0
@@ -174,47 +174,46 @@
 			if(location in bad_zone3)
 				score["disc"] = 0
 			if(A.loc.z != map.zMainStation)
-				score["disc"] = 0
+				score["disc"] = 0*/
 
-		if(score["nuked"])
+		/*if(score["nuked"])
 			nukedpenalty = 50000 //Congratulations, your score was nuked
 
 			for(var/obj/machinery/nuclearbomb/nuke in machines)
 				if(nuke.r_code == "Nope")
 					continue
 				var/turf/T = get_turf(nuke)
-				if(istype(T, /area/syndicate_station) || istype(T, /area/wizard_station) || istype(T, /area/solar))
+				if(istype(T, /area/syndicate_mothership) || istype(T, /area/wizard_station) || istype(T, /area/solar))
 					nukedpenalty = 1000
 				else if(istype(T, /area/security/main) || istype(T, /area/security/brig) || istype(T, /area/security/armory) || istype(T, /area/security/checkpoint2))
 					nukedpenalty = 50000
 				else if(istype(T, /area/engine))
 					nukedpenalty = 100000
 				else
-					nukedpenalty = 10000
+					nukedpenalty = 10000*/
 
-
-	if(ticker.mode.config_tag == "revolution")
+	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
+	if(RV)
 		var/foecount = 0
-		for(var/datum/mind/M in ticker.mode:head_revolutionaries)
+		for(var/datum/role/R in RV.members)
 			foecount++
+			var/datum/mind/M = R.antag
 			if(!M || !M.current)
-				score["opkilled"]++
+				score["revkilled"]++
 				continue
 			var/turf/T = M.current.loc
 			if(istype(T.loc, /area/security/brig))
-				score["arrested"]++
+				score["revarrested"]++
 			else if (M.current.stat == DEAD)
-				score["opkilled"]++
+				score["revkilled"]++
 		if(foecount == score["arrested"])
-			score["allarrested"] = 1
+			score["allrevarrested"] = 1
 		for(var/mob/living/carbon/human/player in mob_list)
 			if(player.mind)
 				var/role = player.mind.assigned_role
 				if(role in list("Captain", "Head of Security", "Head of Personnel", "Chief Engineer", "Research Director"))
 					if(player.stat == DEAD)
 						score["deadcommand"]++
-
-	*/
 
 	//Check station's power levels
 	var/skip_power_loss = 0
@@ -311,10 +310,10 @@
 	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
 
 
-	/*//Mode Specific
-	if(ticker.mode.config_tag == "nuclear")
-		if(score["disc"])
-			score["crewscore"] += 500
+	//Mode Specific
+	if(find_active_faction_by_type(/datum/faction/syndicate/nuke_op))
+		//if(score["disc"])
+			//score["crewscore"] += 500
 		var/killpoints = score["opkilled"] * 250
 		var/arrestpoints = score["arrested"] * 1000
 		score["crewscore"] += killpoints
@@ -322,15 +321,15 @@
 		//if(score["nuked"])
 			//score["crewscore"] -= nukedpenalty
 
-	if(ticker.mode.config_tag == "revolution")
+	if(find_active_faction_by_type(/datum/faction/revolution))
 		var/arrestpoints = score["arrested"] * 1000
 		var/killpoints = score["opkilled"] * 500
 		var/comdeadpts = score["deadcommand"] * 500
-		if(score["traitorswon"])
-			score["crewscore"] -= 10000
+		//if(score["traitorswon"])
+			//score["crewscore"] -= 10000
 		score["crewscore"] += arrestpoints
 		score["crewscore"] += killpoints
-		score["crewscore"] -= comdeadpts*/
+		score["crewscore"] -= comdeadpts
 
 	//Good Things
 	score["crewscore"] += plasmashipped
@@ -410,14 +409,14 @@
 	var/dat = completions
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
 
-	/*
-
-	if(ticker.mode.name == "nuclear emergency")
+	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(NO)
 		var/foecount = 0
 		var/crewcount = 0
 		var/diskdat = ""
 		var/bombdat = null
-		for(var/datum/mind/M in ticker.mode:syndicates)
+		//var/nukedpenalty = 1000
+		for(var/datum/role/R in NO.members)
 			foecount++
 		for(var/mob/living/C in mob_list)
 			if(!istype(C,/mob/living/carbon/human) || !istype(C,/mob/living/silicon/robot) || !istype(C,/mob/living/silicon/ai))
@@ -443,49 +442,47 @@
 			diskdat += "in [disk_loc.loc]"
 			break // Should only need one go-round, probably
 
-		for(var/obj/machinery/nuclearbomb/nuke in machines)
+		/*for(var/obj/machinery/nuclearbomb/nuke in machines)
 			if(nuke.r_code == "Nope")
 				continue
-			var/turf/T = NUKE.loc
+			var/turf/T = nuke.loc
 			bombdat = T.loc
-			if(istype(T,/area/syndicate_station) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
+			if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
 				nukedpenalty = 1000
 			else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
 				nukedpenalty = 50000
 			else if (istype(T,/area/engine))
 				nukedpenalty = 100000
 			else
-				nukedpenalty = 10000
-			break
+				nukedpenalty = 5000
+			break*/
 		if(!diskdat)
 			diskdat = "Uh oh. Something has fucked up! Report this."
 
-		<B>Final Location of Nuke:</B> [bombdat]<BR>
-		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
-
-		dat += {"<B><U>MODE STATS</U></B><BR>
+		dat += {"<B><U>NUCLEAR ASSAULT STATS</U></B><BR>
 		<B>Number of Operatives:</B> [foecount]<BR>
 		<B>Number of Surviving Crew:</B> [crewcount]<BR>
 		<B>Final Location of Nuke:</B> [bombdat]<BR>
 		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
-		<B>Operatives Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
+		<B>Operatives Arrested:</B> [score["oparrested"]] ([score["oparrested"] * 1000] Points)<BR>
 		<B>Operatives Killed:</B> [score["opkilled"]] ([score["opkilled"] * 250] Points)<BR>
-		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
-		<B>All Operatives Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
+		<B>All Operatives Arrested:</B> [score["alloparrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
+//		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
 //		<B>Nuclear Disk Secure:</B> [score["disc"] ? "Yes" : "No"] ([score["disc"] * 500] Points)<BR>
 
-	if(ticker.mode.name == "revolution")
+	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
+	if(RV)
 		var/foecount = 0
 		var/comcount = 0
 		var/revcount = 0
 		var/loycount = 0
-		for(var/datum/mind/M in ticker.mode:head_revolutionaries)
-			if(M.current && M.current.stat != 2)
-				foecount++
-		for(var/datum/mind/M in ticker.mode:revolutionaries)
-			if(M.current && M.current.stat != 2)
-				revcount++
+		for(var/datum/role/R in RV.members)
+			if(R.antag.current && R.antag.current.stat != 2)
+				if(istype(R,/datum/role/revolutionary/leader))
+					foecount++
+				else
+					revcount++
 		for(var/mob/living/carbon/human/player in mob_list)
 			if(player.mind)
 				var/role = player.mind.assigned_role
@@ -493,27 +490,25 @@
 					if(player.stat != 2)
 						comcount++
 				else
-					if(player.mind in ticker.mode:revolutionaries)
+					if(locate(/datum/role/revolutionary) in player.mind.antag_roles)
 						continue
 					loycount++
 		for(var/mob/living/silicon/X in mob_list)
 			if (X.stat != 2)
 				loycount++
-		var/revpenalty = 10000
+		//var/revpenalty = 10000
 
-		dat += {"<B><U>MODE STATS</U></B><BR>
+		dat += {"<B><U>REVOLUTION STATS</U></B><BR>
 		<B>Number of Surviving Revolution Heads:</B> [foecount]<BR>
 		<B>Number of Surviving Command Staff:</B> [comcount]<BR>
 		<B>Number of Surviving Revolutionaries:</B> [revcount]<BR>
 		<B>Number of Surviving Loyal Crew:</B> [loycount]<BR><BR>
-		<B>Revolution Heads Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
-		<B>Revolution Heads Slain:</B> [score["opkilled"]] ([score["opkilled"] * 500] Points)<BR>
+		<B>Revolution Heads Arrested:</B> [score["revarrested"]] ([score["revarrested"] * 1000] Points)<BR>
+		<B>Revolution Heads Slain:</B> [score["revkilled"]] ([score["revkilled"] * 500] Points)<BR>
 		<B>Command Staff Slain:</B> [score["deadcommand"]] (-[score["deadcommand"] * 500] Points)<BR>
-		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
-		<B>All Revolution Heads Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
+		<B>All Revolution Heads Arrested:</B> [score["allrevarrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
-
-	*/
+//		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
 //	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
