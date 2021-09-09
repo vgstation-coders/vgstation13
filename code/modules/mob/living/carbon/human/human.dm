@@ -1466,6 +1466,11 @@
 			dark_plane.alphas += glasses.my_dark_plane_alpha_override
 			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
 
+	if (mind)
+		for (var/key in mind.antag_roles)
+			var/role/R = mind.antag_roles[key]
+			R.update_perception()
+
 	check_dark_vision()
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
