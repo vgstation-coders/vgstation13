@@ -119,28 +119,41 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		light_range = 2.5
 
 	else
+		if (base_light_color_state == "white")
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
-		switch (light_range)
-			if (1)
-				icon = 'icons/lighting/light_range_1.dmi'
-			if (2)
-				icon = 'icons/lighting/light_range_2.dmi'
-			if (3)
-				icon = 'icons/lighting/light_range_3.dmi'
-			if (4)
-				icon = 'icons/lighting/light_range_4.dmi'
-			if (5)
-				icon = 'icons/lighting/light_range_5.dmi'
-			if (6)
-				icon = 'icons/lighting/light_range_6.dmi'
-			if (7)
-				icon = 'icons/lighting/light_range_7.dmi'
-			if (8)
-				icon = 'icons/lighting/light_range_8.dmi'
-			if (9)
-				icon = 'icons/lighting/light_range_9.dmi'
+			switch (light_range)
+				if (1)
+					icon = 'icons/lighting/light_range_1.dmi'
+				if (2)
+					icon = 'icons/lighting/light_range_2.dmi'
+				if (3)
+					icon = 'icons/lighting/light_range_3.dmi'
+				if (4)
+					icon = 'icons/lighting/light_range_4.dmi'
+				if (5)
+					icon = 'icons/lighting/light_range_5.dmi'
+				if (6)
+					icon = 'icons/lighting/light_range_6.dmi'
+				if (7)
+					icon = 'icons/lighting/light_range_7.dmi'
+				if (8)
+					icon = 'icons/lighting/light_range_8.dmi'
+				if (9)
+					icon = 'icons/lighting/light_range_9.dmi'
+		else
+			switch (light_range)
+				if (1)
+					icon = 'icons/lighting/shadow_range_1.dmi'
+				if (2)
+					icon = 'icons/lighting/shadow_range_2.dmi'
+				if (3)
+					icon = 'icons/lighting/shadow_range_3.dmi'
+				if (4)
+					icon = 'icons/lighting/shadow_range_4.dmi'
+				if (5)
+					icon = 'icons/lighting/shadow_range_5.dmi'
 
 	if (light_type != LIGHT_DIRECTIONAL)
 		pixel_x = -(world.icon_size * light_range)
