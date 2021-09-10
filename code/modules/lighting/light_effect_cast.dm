@@ -408,7 +408,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
-	post_processing()
+	//post_processing()
 	overlays = temp_appearance
 	temp_appearance = null
 	// Because movable lights do this two-lights-sources thing
