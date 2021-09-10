@@ -164,6 +164,7 @@
 //	body_parts_covered &= ~EYES
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
+	my_dark_plane_alpha_override_value = 0
 	seedarkness = TRUE
 
 /obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
