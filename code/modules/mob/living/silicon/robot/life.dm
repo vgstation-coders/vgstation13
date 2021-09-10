@@ -172,8 +172,8 @@
 			dark_plane.alphas -= "robot_night_vision"
 			dark_plane.alphas -= "robot_mesons"
 			dark_plane.alphas -= "robot_thermal"
-		
-		check_dark_vision()
+
+	check_dark_vision()
 
 /mob/living/silicon/robot/proc/process_killswitch()
 	if(scrambledcodes)
