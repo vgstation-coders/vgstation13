@@ -200,7 +200,7 @@ var/paperwork_library
 	..() // Order of operations
 
 /datum/writing_style/script/New()
-	style = "font-family:Palatino Linotype, serif;"
+	style = "font-family:'Segoe Script', cursive;"
 	addReplacement(REG_BBTAG("\\*"), "<li>")
 	addReplacement(REG_BBTAG("hr"), "<HR>")
 	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
@@ -306,22 +306,32 @@ var/paperwork_library
 	name = "multi-pen"
 	desc = "It's a multicolor ink pen with three different ink colors. Its color is currently set to black."
 	icon_state = "pen_multi"
+	var/image/tip = null
 
 /obj/item/weapon/pen/multi/attack_self(mob/user as mob)
+	overlays.len = 0
 	switch(colour)
 		if("black")
 			colour = "blue"
+			tip = image('icons/obj/bureaucracy.dmi', src, "pen_tip_blue")
 		if("blue")
 			colour = "red"
+			tip = image('icons/obj/bureaucracy.dmi', src, "pen_tip_red")
 		else //red and also edge cases (how???)
 			colour = "black"
+			tip = image('icons/obj/bureaucracy.dmi', src, "pen_tip_black")
+	overlays += tip
 	desc = "It's a multicolor ink pen with three different ink colors. Its color is currently set to [colour]."
 	to_chat(user, "<span class='notice'>You switch the tip of \the [src] to [colour].</span>")
 
 /obj/item/weapon/pen/fountain
 	name = "fountain pen"
-	desc = "An old-fashioned fountain pen, for when you really want to impress."
+	desc = "A fancy fountain pen, for when you really want to impress. The nib is quite sharp."
 	icon_state = "pen_fountain"
+	sharpness = 1.2
+	force = 5
+	throwforce = 5
+	attack_verb = list("stabs")
 	style_type = /datum/writing_style/script
 
 /obj/item/weapon/pen/fountain/cap
@@ -340,6 +350,21 @@ var/paperwork_library
 /obj/item/weapon/pen/tactical/is_screwdriver(mob/user)
 	return TRUE
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
+	if(istype(src, /obj/item/weapon/pen/fountain))
+		if(user.zone_sel.selecting == "eyes" || user.zone_sel.selecting == LIMB_HEAD)
+			if(!istype(M))
+				return ..()
+			if(can_operate(M, user, src))
+				return ..()
+			if(clumsy_check(user) && prob(50))
+				M = user
+			return eyestab(M,user)
+		..()
+		var/mob/living/carbon/human/H = M
+		var/datum/reagent/blood/B = get_blood(H.vessel)
+		if(B)
+			colour = B.data["blood_colour"]
+
 	if(!ismob(M))
 		return
 	to_chat(user, "<span class='warning'>You stab [M] with the pen.</span>")
