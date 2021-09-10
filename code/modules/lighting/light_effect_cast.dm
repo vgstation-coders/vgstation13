@@ -442,7 +442,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	for (var/turf/T in affected_shadow_walls)
 		for (var/dir in cardinal)
 			var/turf/neighbour = get_step(T, dir)
-			if (!CHECK_OCCLUSION(neighbour))
+			if (neighbour && !CHECK_OCCLUSION(neighbour))
 				var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
 				black_turf.icon_state = "black"
 				var/x_offset = neighbour.x - x
