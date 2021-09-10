@@ -278,6 +278,10 @@
 		\[impact\] - \[/impact\] : <span style=\"font-family:Impact\">Impact</span><br>
 		\[palatino\] - \[/palatino\] : <span style=\"font-family:Palatino Linotype\">Palatino Linotype</span><br>
 		\[tnr\] - \[/tnr\] : <span style=\"font-family:Times New Roman\">Times New Roman</span>
+
+		<b><center>Fountain Pen Fonts</center><br></b>
+
+
 	</BODY></HTML>"}, "window=paper_help")
 
 /obj/item/weapon/paper/Topic(href, href_list)

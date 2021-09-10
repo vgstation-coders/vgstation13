@@ -158,7 +158,7 @@ var/paperwork_library
 
 	var/text_color
 	if(istype(P, /obj/item/weapon/pen))
-		text_color = P.color
+		text_color = P.colour
 	else if(istype(P, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = P
 		text_color = C.colour
@@ -198,6 +198,21 @@ var/paperwork_library
 	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
 
 	..() // Order of operations
+
+/datum/writing_style/script/New()
+	style = "font-family:Palatino Linotype, serif;"
+	addReplacement(REG_BBTAG("\\*"), "<li>")
+	addReplacement(REG_BBTAG("hr"), "<HR>")
+	addReplacement(REG_BBTAG("small"), "<span style=\"font-size:15px\">")
+	addReplacement(REG_BBTAG("/small"), "</span>")
+	addReplacement(REG_BBTAG("tiny"), "<span style=\"font-size:10px\">")
+	addReplacement(REG_BBTAG("/tiny"), "</span>")
+	addReplacement(REG_BBTAG("list"), "<ul>")
+	addReplacement(REG_BBTAG("/list"), "</ul>")
+
+	addExpression(REG_BBTAG("img")+"("+REG_NOTBB+")"+REG_BBTAG("/img"), ACT_BBCODE_IMG,list(),flags = "gi")
+
+	..()
 
 /datum/writing_style/pen/nano_paper/New()
 	addExpression(REG_BBTAG("video")+"("+REG_NOTBB+")"+REG_BBTAG("/video"), ACT_BBCODE_VIDEO,list(),flags = "gi")
@@ -286,6 +301,32 @@ var/paperwork_library
 	name = "promotional Nanotrasen pen"
 	desc = "Just a cheap plastic pen. It reads: \"For our most valued customers\". They probably meant 'employees'."
 
+/obj/item/weapon/pen/multi
+	colour = "black"
+	name = "multi-pen"
+	desc = "It's a multicolor ink pen with three different ink colors. Its color is currently set to black."
+	icon_state = "pen_multi"
+
+/obj/item/weapon/pen/multi/attack_self(mob/user as mob)
+	switch(colour)
+		if("black")
+			colour = "blue"
+		if("blue")
+			colour = "red"
+		else //red and also edge cases (how???)
+			colour = "black"
+	desc = "It's a multicolor ink pen with three different ink colors. Its color is currently set to [colour]."
+	to_chat(user, "<span class='notice'>You switch the tip of \the [src] to [colour].</span>")
+
+/obj/item/weapon/pen/fountain
+	name = "fountain pen"
+	desc = "An old-fashioned fountain pen, for when you really want to impress."
+	icon_state = "pen_fountain"
+	style_type = /datum/writing_style/script
+
+/obj/item/weapon/pen/fountain/cap
+	icon_state = "pen_fountain_cap"
+
 /obj/item/weapon/pen/tactical
 	name = "tacpen"
 	desc = "Tactical pen. The tip is self heating and can light things, the reverse can be used as a screwdriver. It contains a one-time reservoir of biofoam that cannot be refilled."
@@ -298,7 +339,6 @@ var/paperwork_library
 
 /obj/item/weapon/pen/tactical/is_screwdriver(mob/user)
 	return TRUE
-
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
 	if(!ismob(M))
 		return
