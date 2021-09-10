@@ -256,7 +256,6 @@ var/list/pinpointerpinpointer_list = list()
 /obj/item/weapon/pinpointer/pdapinpointer
 	name = "pda pinpointer"
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
-	var/used = FALSE
 	watches_nuke = FALSE
 	pinpointable = FALSE
 
@@ -280,10 +279,6 @@ var/list/pinpointerpinpointer_list = list()
 	set name = "Select pinpointer target"
 	set src in view(1)
 
-	if(used)
-		to_chat(usr,"Target has already been set!")
-		return
-
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
 	var/length = 1
@@ -292,7 +287,7 @@ var/list/pinpointerpinpointer_list = list()
 			L[text("([length]) [P.name]")] = P
 			length++
 
-	var/t = input("Select pinpointer target. WARNING: Can only set once.") as null|anything in L
+	var/t = input("Select pinpointer target.") as null|anything in L
 	if(t == "Cancel")
 		return
 	target = L[t]
@@ -302,8 +297,11 @@ var/list/pinpointerpinpointer_list = list()
 	active = TRUE
 	point_at(target)
 	to_chat(usr,"You set the pinpointer to locate [target]")
-	used = TRUE
 
+/obj/item/weapon/pinpointer/pdapinpointer/AltClick()
+	if(select_pda())
+		return
+	return ..()
 
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()
