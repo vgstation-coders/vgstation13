@@ -55,7 +55,6 @@ atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var
 			var/obj/item/headwear = H.head
 			if (headwear.NoiseDampening())
 				ear_safety += 1
-			if(istype(H.head, /obj/item/clothing/head/helmet))
 		if(M_HULK in M.mutations)
 			ear_safety += 1
 		if(istype(M.loc, /obj/mecha))
