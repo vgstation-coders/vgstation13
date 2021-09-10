@@ -258,6 +258,7 @@ var/list/pinpointerpinpointer_list = list()
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
 	watches_nuke = FALSE
 	pinpointable = FALSE
+	var/dna_profile
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
 	if(!active)
@@ -278,12 +279,23 @@ var/list/pinpointerpinpointer_list = list()
 	set category = "Object"
 	set name = "Select pinpointer target"
 	set src in view(1)
+	
+	if(usr.stat || !src.Adjacent(usr))
+		return
+	
+	if(!dna_profile)
+		dna_profile = usr.dna.unique_enzymes
+		to_chat(usr, "<span class='notice'>You submit a DNA sample to the [src]</span>")
+	else if(dna_profile != usr.dna.unique_enzymes)
+		to_chat(usr, "<span class='warning'>The [src] refuses to operate.</span>")
+		return
 
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
 	var/length = 1
 	for (var/obj/item/device/pda/P in PDAs)
-		if(P.name != "\improper PDA")
+		var/turf/T = get_turf(P)
+		if(P.name != "\improper PDA" && T.z != CENTCOMM_Z)
 			L[text("([length]) [P.name]")] = P
 			length++
 
