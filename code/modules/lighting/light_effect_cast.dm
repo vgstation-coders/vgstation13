@@ -32,6 +32,7 @@ var/light_power_multiplier = 5
 // Initialisation of the cast_light proc.
 /atom/movable/light/proc/cast_light_init()
 	filters = list()
+	pre_rendered_shadows = list()
 	temp_appearance = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
@@ -203,62 +204,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 	var/shadowoffset = WORLD_ICON_SIZE/2 + (WORLD_ICON_SIZE*light_range)
 
-	// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
-	// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
-	// The downside is, of course, that you need to cover all the cases in your switch.
-	var/icon/shadowicon
-	switch(light_range)
-		if(2)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_2_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_2_shadows2.dmi'
-		if(3)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_3_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_3_shadows2.dmi'
-		if(4)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_4_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_4_shadows2.dmi'
-		if(5)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_5_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_5_shadows2.dmi'
-		if(6)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_6_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_6_shadows2.dmi'
-		if(7)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_7_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_7_shadows2.dmi'
-		if(8)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_8_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_8_shadows2.dmi'
-		if(9)
-			if(num == 1)
-				shadowicon = 'icons/lighting/light_range_9_shadows1.dmi'
-			else
-				shadowicon = 'icons/lighting/light_range_9_shadows2.dmi'
-
-	var/image/I = image(shadowicon)
-
-	//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
-	if(xy_swap)
-		I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
-	else
-		I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-
-	var/matrix/M = matrix()
-
 	//TODO: rewrite this comment:
 	//using scale to flip the shadow template if needed
 	//horizontal (x) flip is easy, we just check if the offset is negative
@@ -273,35 +218,103 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		x_flip = x_offset < 0 ? -1 : 1
 		y_flip = y_offset < 0 ? -1 : 1
 
-	M.Scale(x_flip, y_flip)
+	var/matrix/M = matrix()
 
-	//here we do the actual rotate if needed
-	if(xy_swap)
-		M.Turn(90)
+	// Using BYOND's render_target magick here
 
-	//warning: you are approaching shitcode (this is where we move the shadow to the correct quadrant based on its rotation and flipping)
-	//shadows are only as big as a quarter or half of the light for optimization
+	var/image/I = new()
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]"
 
-	//please for the love of god change this if there's a better way
+	// We've done this before...
+	if (shadow_image_identifier in pre_rendered_shadows)
+		I.render_source = shadow_image_identifier
+	// Or not!
+	else
+		M.Scale(x_flip, y_flip)
+		//here we do the actual rotate if needed
+		if(xy_swap)
+			M.Turn(90)
+		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
+		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
+		// The downside is, of course, that you need to cover all the cases in your switch.
+		var/icon/shadowicon
+		switch(light_range)
+			if(2)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_2_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_2_shadows2.dmi'
+			if(3)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_3_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_3_shadows2.dmi'
+			if(4)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_4_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_4_shadows2.dmi'
+			if(5)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_5_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_5_shadows2.dmi'
+			if(6)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_6_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_6_shadows2.dmi'
+			if(7)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_7_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_7_shadows2.dmi'
+			if(8)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_8_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_8_shadows2.dmi'
+			if(9)
+				if(num == 1)
+					shadowicon = 'icons/lighting/light_range_9_shadows1.dmi'
+				else
+					shadowicon = 'icons/lighting/light_range_9_shadows2.dmi'
 
+		I = image(shadowicon)
+
+		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
+		if(xy_swap)
+			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
+		else
+			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+		//apply the transform matrix
+		I.transform = M
+		I.layer = LIGHTING_LAYER
+		I.render_target = shadow_image_identifier
+		pre_rendered_shadows += shadow_image_identifier
+
+	// Once that's done...
+	// We caclulate the offset
+	// This is basically a traduction of the old translate matrix big-bang-wahoo
+	// into something more sensible and render_source friendly
 	if(num == 1)
 		if((x_flip == 1 && y_flip == 1 && xy_swap == 0) || (x_flip == -1 && y_flip == 1 && xy_swap == 1))
-			M.Translate(shadowoffset, shadowoffset)
+			I.pixel_x += shadowoffset
+			I.pixel_y += shadowoffset
 		else if((x_flip == 1 && y_flip == -1 && xy_swap == 0) || (x_flip == 1 && y_flip == 1 && xy_swap == 1))
-			M.Translate(shadowoffset, 0)
+			I.pixel_x += shadowoffset
 		else if((xy_swap == 0 && x_flip == -y_flip) || (xy_swap == 1 && x_flip == -1 && y_flip == -1))
-			M.Translate(0, shadowoffset)
+			I.pixel_y += shadowoffset
 	else
 		if(x_flip == 1 && y_flip == 1 && xy_swap == 0)
-			M.Translate(0, shadowoffset)
+			I.pixel_y = shadowoffset
 		else if(x_flip == 1 && y_flip == 1 && xy_swap == 1)
-			M.Translate(shadowoffset / 2, shadowoffset / 2)
+			I.pixel_x += shadowoffset/2
+			I.pixel_y += shadowoffset/2
 		else if(x_flip == 1 && y_flip == -1 && xy_swap == 1)
-			M.Translate(-shadowoffset / 2, shadowoffset / 2)
+			I.pixel_x += -shadowoffset/2
+			I.pixel_y += shadowoffset/2
 
-	//apply the transform matrix
-	I.transform = M
-	I.layer = LIGHTING_LAYER
 	//and add it to the lights overlays
 	temp_appearance += I
 
@@ -353,8 +366,16 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		affected_shadow_walls -= src
 		return
 
-	var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-	black_turf.icon_state = "black"
+	var/image/black_turf = new()
+
+	if ("black_turf_prerender" in pre_rendered_shadows)
+		black_turf.render_target = "black_turf_prerender"
+	else
+		black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+		black_turf.icon_state = "black"
+		black_turf.render_source = "black_turf_prerender"
+		pre_rendered_shadows += "black_turf_prerender"
+
 	black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	black_turf.layer = HIGHEST_LIGHTING_LAYER
@@ -379,19 +400,35 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		*/
 	// The "edge" of the light, with images consisting of directional sprites from wall_lighting.dmi "pushed" in the correct direction.
 	if (istype(target_turf, /turf/unsimulated/mineral))
-		var/image/img = image('icons/turf/rock_overlay.dmi', loc = get_turf(src))
+		var/image/img = new
+		if ("roid_turf_prerender" in pre_rendered_shadows)
+			img.render_source = "roid_turf_prerender"
+		else
+			img = image('icons/turf/rock_overlay.dmi', loc = get_turf(src))
+			img.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
+			img.render_target = "roid_turf_prerender"
+			pre_rendered_shadows += "roid_turf_prerender"
+
 		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
 		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
 		img.layer = HIGHEST_LIGHTING_LAYER
-		img.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
 		temp_appearance += img
 
-	var/image/I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-	I.icon_state = "[blocking_dirs]-[targ_dir]"
+	var/turf_shadow_image_identifier = "turf_shadow_[targ_dir]_[blocking_dirs]"
+	var/image/I = new()
+
+	if (turf_shadow_image_identifier in pre_rendered_shadows)
+		I.render_source = turf_shadow_image_identifier
+	else
+		I = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+		I.icon_state = "[blocking_dirs]-[targ_dir]"
+		I.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
+		I.render_target = turf_shadow_image_identifier
+		pre_rendered_shadows += turf_shadow_image_identifier
+
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
-	I.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
@@ -428,8 +465,15 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		for (var/dir in cardinal)
 			var/turf/neighbour = get_step(T, dir)
 			if (!CHECK_OCCLUSION(neighbour))
-				var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-				black_turf.icon_state = "black"
+				var/image/black_turf = new()
+				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
+					black_turf.render_source = "postprocess_black_turf_prerender"
+				else
+					black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+					black_turf.icon_state = "black"
+					black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
+					pre_rendered_shadows += "postprocess_black_turf_prerender"
+
 				var/x_offset = neighbour.x - x
 				var/y_offset = neighbour.y - y
 				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
