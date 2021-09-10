@@ -479,7 +479,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	for (var/turf/T in affected_shadow_walls)
 		for (var/dir in cardinal)
 			var/turf/neighbour = get_step(T, dir)
-			if (!CHECK_OCCLUSION(neighbour))
+			if (neighbour && !CHECK_OCCLUSION(neighbour))
 				var/image/black_turf = new()
 				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
 					black_turf.render_source = "postprocess_black_turf_prerender"
@@ -488,7 +488,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 					black_turf.icon_state = "black"
 					black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
 					pre_rendered_shadows += "postprocess_black_turf_prerender"
-
+			if (neighbour && !CHECK_OCCLUSION(neighbour))
+				var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+				black_turf.icon_state = "black"
 				var/x_offset = neighbour.x - x
 				var/y_offset = neighbour.y - y
 				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
