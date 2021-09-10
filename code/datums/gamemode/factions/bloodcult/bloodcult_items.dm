@@ -1100,6 +1100,9 @@ var/list/arcane_tomes = list()
 	actions_types = list(/datum/action/item_action/toggle_anon)
 	var/anon_mode = FALSE
 
+/obj/item/clothing/head/culthood/NoiseDampening()	// those hoods cover the ears
+	return TRUE
+
 /obj/item/clothing/head/culthood/attack_self(var/mob/user)
 	if (!iscultist(user))
 		return

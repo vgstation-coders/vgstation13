@@ -25,7 +25,9 @@
 
 	var/list/bindings = list()
 
-	var/list/cultist_cap = 9
+	var/list/cultist_cap = 9 //see CanConvert() below
+
+	var/mentor_count = 0 //so we don't loop through the member list if we already know there are no mentors in there
 
 /datum/faction/bloodcult/check_win()
 	return cult_win
@@ -33,12 +35,20 @@
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
 
+
+//	So the way it works is that there cannot be more than 9 human cultists at a given time.
+//	If there is already 9 cultists, conversions will automatically cuff instead, and reincarnation rituals will abort
+//	This ALSO applies to dead and braindead/catatonic cultists. I'll have to monitor if this poses problem, maybe let admins deconvert players who have to disconnect?
+//	Shades aren't restricted by this though.
+//	For Constructs it's a bit special. Basically the first construct of each type doesn't count toward the cap,
+//	however each additional construct of a given type does. So if you have 2 juggernauts, you're limiting the cult to 8 humans, etc.
+//	When you hit the cap, you cannot create a construct if there's already one of that type.
 /datum/faction/bloodcult/proc/CanConvert(var/conversion_type = "human")
 	var/human_count = 0
 	var/artificer_count = 0
 	var/wraith_count = 0
 	var/juggernaut_count = 0
-	var/over_cap = 0 // more than 1 construct of its type means less humans
+	var/over_cap = 0
 	for (var/datum/role/R in members)
 		var/mob/M = R.antag.current
 		if (istype(M, /mob/living/carbon/human))
@@ -69,9 +79,9 @@
 /datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
 	. = ..()
 	if (cult_reminders.len)
-		to_chat(R.antag.current, "<span class='notice'>The other cultists have left some useful reminders for you. They will be stored in your memory.</span>")
+		to_chat(R.antag.current, "<span class='notice'>Other cultists have shared some of their knowledge. It will be stored in your memory (check your Notes under the IC tab).</span>")
 	for (var/reminder in cult_reminders)
-		R.antag.store_memory("Cult reminder: [reminder].")
+		R.antag.store_memory("Shared Cultist Knowledge: [reminder].")
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()

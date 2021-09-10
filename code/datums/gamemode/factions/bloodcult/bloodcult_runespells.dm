@@ -1138,7 +1138,7 @@ var/list/converted_minds = list()
 
 			if (CONVERSION_BANNED)
 
-				//cult.send_flavour_text_refuse(convertee, converter) Disabling those for now, I'll rewrite them at a later date
+				//cult.send_flavour_text_refuse(convertee, converter) Disabling those for now, I'll do a pass over them before this goes live
 
 				message_admins("BLOODCULT: [key_name(convertee)] died because they were converted by [key_name(converter)] while cult-banned.")
 				log_admin("BLOODCULT: [key_name(convertee)] died because they were converted by [key_name(converter)] while cult-banned.")
@@ -1291,21 +1291,33 @@ var/list/converted_minds = list()
 
 /obj/effect/cult_ritual/stun/New(turf/loc,var/type=1)
 	..()
+
 	switch (type)
 		if (1)
 			stun_duration++
 			flick("rune_stun",src)
+			var/image/I = image('icons/effects/480x480.dmi')	// visible AOE
+			I.plane = relative_plane(HIDING_MOB_PLANE)
+			I.pixel_x = -224
+			I.pixel_y = -224
+			overlays += I
 		if (2)
 			stun_duration--
 			flick("talisman_stun",src)
+			var/image/I = image('icons/effects/224x224.dmi')	// visible AOE
+			I.plane = relative_plane(HIDING_MOB_PLANE)
+			I.pixel_x = -96
+			I.pixel_y = -96
+			overlays += I
 
 	playsound(src, 'sound/effects/stun_rune.ogg', 75, 0, 0)
-	spawn(10)
+	spawn(20)
 		visible_message("<span class='warning'>The rune explodes in a bright flash of chaotic energies.</span>")
 
 		for(var/mob/living/L in viewers(src))
 			var/duration = stun_duration
-			if (type == 2 && get_dist(L,src)>=5)//talismans have a reduced range
+			var/dist = cheap_pythag(L.x - src.x, L.y - src.y)
+			if (type == 2 && dist>=4)//talismans have a reduced range
 				continue
 			shadow(L,loc,"rune_stun")
 			if (iscultist(L))

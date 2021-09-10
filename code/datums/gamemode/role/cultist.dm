@@ -81,6 +81,8 @@
 	..()
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
+	if ((cultist_role == CULTIST_ROLE_ACOLYTE) && !mentor)
+		FindMentor()
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -125,8 +127,6 @@
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 
-
-
 	spawn(1)
 		if (faction)
 			var/datum/objective_holder/OH = faction.objective_holder
@@ -155,6 +155,17 @@
 		M.HideUI("Cultist")
 		M.HideUI("Bloodcult Runes")
 
+/datum/role/cultist/extraPanelButtons()
+	var/dat = ""
+	if (mentor)
+		dat = "<br>Currently under the mentorship of <b>[mentor.antag.name]/([mentor.antag.key])</b><br>"
+	if (acolytes.len)
+		dat += "<br>Currently mentoring "
+		for (var/datum/role/cultist/acolyte in acolytes)
+			dat += "<b>[acolyte.antag.name]/([acolyte.antag.key])</b>, "
+		dat += "<br>"
+	return dat
+
 /datum/role/cultist/proc/DropMentorship()
 	if (mentor)
 		to_chat(antag.current,"<span class='warning'>You have ended your mentorship under [mentor.antag.name].</span>")
@@ -162,42 +173,58 @@
 		message_admins("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
 		log_admin("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
 	if (acolytes.len > 0)
-		for (var/datum/role/cultist/C in acolytes)
-			to_chat(antag.current,"<span class='warning'>You have ended your mentorship of [C.antag.name].</span>")
-			to_chat(C.antag.current,"<span class='warning'>[antag.name] has ended their mentorship.</span>")
-			message_admins("[antag.key]/([antag.name]) has ended their mentorship of [C.antag.name]")
-			log_admin("[antag.key]/([antag.name]) has ended their mentorship of [C.antag.name]")
+		for (var/datum/role/cultist/acolyte in acolytes)
+			to_chat(antag.current,"<span class='warning'>You have ended your mentorship of [acolyte.antag.name].</span>")
+			to_chat(acolyte.antag.current,"<span class='warning'>[antag.name] has ended their mentorship.</span>")
+			message_admins("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
+			log_admin("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
 
 /datum/role/cultist/proc/ChangeCultistRole(var/new_role)
 	if (!new_role)
 		return
+	var/datum/faction/bloodcult/cult = faction
+	if ((cultist_role == CULTIST_ROLE_MENTOR) && cult)
+		cult.mentor_count--
+
 	cultist_role = new_role
 
 	DropMentorship()
 
 	switch(cultist_role)
 		if (CULTIST_ROLE_ACOLYTE)
+			message_admins("BLOODCULT: [antag.key]/([antag.name]) has become a cultist acolyte.")
+			log_admin("BLOODCULT: [antag.key]/([antag.name]) has become a cultist acolyte.")
 			logo_state = "cult-apprentice-logo"
 			FindMentor()
+			if (!mentor)
+				message_admins("BLOODCULT: [antag.key]/([antag.name]) couldn't find a mentor.")
+				log_admin("BLOODCULT: [antag.key]/([antag.name]) couldn't find a mentor.")
 		if (CULTIST_ROLE_HERALD)
+			message_admins("BLOODCULT: [antag.key]/([antag.name]) has become a cultist herald.")
+			log_admin("BLOODCULT: [antag.key]/([antag.name]) has become a cultist herald.")
 			logo_state = "cult-logo"
 		if (CULTIST_ROLE_MENTOR)
+			message_admins("BLOODCULT: [antag.key]/([antag.name]) has become a cultist mentor.")
+			log_admin("BLOODCULT: [antag.key]/([antag.name]) has become a cultist mentor.")
 			logo_state = "cult-master-logo"
+			if (cult)
+				cult.mentor_count++
 		else
 			logo_state = "cult-logo"
 			cultist_role = CULTIST_ROLE_NONE
-	if (faction)
-		faction.update_hud_icons()
+	if (cult)
+		cult.update_hud_icons()
 	if (antag.current)
 		antag.current.DisplayUI("Cultist Left Panel")
 	time_role_changed_last = world.time
 
 /datum/role/cultist/proc/FindMentor()
-	if (!faction)
+	var/datum/faction/bloodcult/cult = faction
+	if (!cult || !cult.mentor_count)
 		return
 	var/datum/role/cultist/potential_mentor
 	var/min_acolytes = ARBITRARILY_LARGE_NUMBER
-	for (var/datum/role/cultist/C in faction.members)
+	for (var/datum/role/cultist/C in cult.members)
 		if (C.cultist_role == CULTIST_ROLE_MENTOR)
 			if (C.acolytes.len < min_acolytes || (C.acolytes.len == min_acolytes && prob(50)))
 				min_acolytes = C.acolytes.len
