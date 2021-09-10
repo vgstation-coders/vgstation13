@@ -19,6 +19,8 @@ var/area/space_area
 
 	flags = 0
 
+	var/broken_lights = 0
+
 /area/New()
 	area_turfs = list()
 	icon_state = ""

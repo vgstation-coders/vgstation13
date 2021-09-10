@@ -140,21 +140,23 @@ var/list/light_source_images = list()
 		update(0)
 	alllights += src
 
-	spawn(2)
-		var/area/A = get_area(src)
-		if(A && !A.requires_power)
-			on = 1
+/obj/machinery/light/initialize()
+	. = ..()
 
-		if (!map.lights_always_ok)
-			switch(fitting)
-				if("tube")
-					if(prob(2))
-						broken(1)
-				if("bulb")
-					if(prob(5))
-						broken(1)
-		spawn(1)
-			update(0)
+	var/area/A = get_area(src)
+	var/broken_bulb_ratio = (115*A.broken_lights)/(A.area_turfs.len) - 3 // 3 + 2 broken bulb per viewport
+	if(A && !A.requires_power)
+		on = 1
+	if (!map.lights_always_ok)
+		switch(fitting)
+			if("tube")
+				if(prob(1) && broken_bulb_ratio < 1)
+					broken(1, 1)
+			if("bulb")
+				if(prob(3) && broken_bulb_ratio < 1)
+					broken(1, 1)
+	spawn(1)
+		update(0)
 
 /obj/machinery/light/supports_holomap()
 	return TRUE
@@ -534,9 +536,15 @@ var/list/light_source_images = list()
 
 // break the light and make sparks if was on
 
-/obj/machinery/light/proc/broken(var/skip_sound_and_sparks = 0)
+/obj/machinery/light/proc/broken(var/skip_sound_and_sparks = 0, var/during_init = 0)
 	if(!current_bulb)
 		return
+
+	if (during_init)
+		var/turf/T = get_turf(src)
+		if (T)
+			var/area/A = get_area(src)
+			A.broken_lights++
 
 	if(!skip_sound_and_sparks)
 		if(current_bulb.status == LIGHT_OK || current_bulb.status == LIGHT_BURNED)
