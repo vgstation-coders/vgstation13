@@ -105,7 +105,7 @@
 			else
 				forceMove(holder.loc, glide_size_override = 8) // Hopefully whatever we're gliding with has smooth movement.
 
-			if (world.cpu < LIGHT_CPU_THRESHOLD || ticker.current_state < GAME_STATE_SETTING_UP)
+			if (world.cpu < LIGHT_CPU_THRESHOLD || !ticker || ticker.current_state < GAME_STATE_SETTING_UP)
 				cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
 			else
 				lighting_update_lights |= src
