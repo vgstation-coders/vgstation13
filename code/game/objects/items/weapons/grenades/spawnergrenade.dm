@@ -57,7 +57,6 @@
 	name = "viscerator grenade"
 	desc = "Will unleash a swarm of hostile viscerators that will hack at any nearby targets indiscriminately."
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
-	deliveryamt = 5
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 	mob_faction = "syndicate"
 
