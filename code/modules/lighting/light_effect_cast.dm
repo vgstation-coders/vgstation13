@@ -10,6 +10,7 @@
 #define MAX_LIGHT_RANGE 5
 
 var/light_power_multiplier = 5
+var/light_post_processing = 0 // Use writeglobal to change this
 
 // We actually see these "pseudo-light atoms" in order to ensure that wall shadows are only seen by people who can see the light.
 // Yes, this is stupid, but it's one of the limitations of TILE_BOUND, which cannot be chosen on an overlay-per-overlay basis.
@@ -408,7 +409,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
-	//post_processing()
+	if (light_post_processing)
+		post_processing()
 	overlays = temp_appearance
 	temp_appearance = null
 	// Because movable lights do this two-lights-sources thing
