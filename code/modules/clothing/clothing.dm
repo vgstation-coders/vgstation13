@@ -284,7 +284,10 @@
 /obj/item/clothing/proc/get_armor_absorb(var/type)
 	return armor_absorb[type]
 
-/obj/item/clothing/proc/getTackleBonus()
+/obj/item/clothing/proc/offenseTackleBonus()
+	return
+
+/obj/item/clothing/proc/defenseTackleBonus()
 	return
 
 //Ears: headsets, earmuffs and tiny objects
@@ -501,7 +504,7 @@
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
 
-/obj/item/clothing/shoes/getTackleBonus()
+/obj/item/clothing/shoes/defenseTackleBonus()
 	if(clothing_flags & MAGPULSE)
 		return 4
 

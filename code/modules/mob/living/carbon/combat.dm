@@ -121,15 +121,16 @@
 		else
 			var/tackleForce = calcTackleForce()
 			if(isliving(hit_atom))
+				add_attacklogs(src, hit_atom, "tackled")
 				var/mob/living/L = hit_atom
 				var/tackleDefense = L.calcTackleDefense()
 				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
 				var/rngDefense = rand(tackleDefense/2, tackleDefense)
 				var/tKnock = max(0, rngDefense - rngForce)	//Calculating our knockdown, we always get knocked down at least a little
-				Knockdown(tKnock)
+				Knockdown(min(10, tKnock)) //To prevent eternity knockdown from tackling an 8 riot shield martian or something
 				tKnock = max(0, rngForce - rngDefense)	//Calculating their knockdown, they might not get knocked down at all
 				if(tKnock)
-					L.Knockdown(tKnock)
+					L.Knockdown(min(10, tKnock))
 					if(M_HORNS in mutations)
 						tKnock += 5
 					L.adjustBruteLoss(tKnock)
@@ -161,29 +162,45 @@
 	else
 		tForce += 1
 	tForce += get_strength()*2
-	if(M_HULK in mutations)
-		tForce += 2	//hulk also contributes to get_strength() so the bonus is higher than appears here
-	if(M_FAT in mutations)
-		tForce += 3
+	tForce += offenseMutTackle()
 	tForce += bonusTackleForce()
-	if(M_VEGAN in mutations)
-		tForce -= 1
 	return max(0, tForce)
+
+/mob/living/carbon/proc/offenseMutTackle(var/tF = 0)
+	for(var/M in mutations)
+		switch(M)
+			if(M_HULK)
+				tF += 2 //hulk also contributes to get_strength() so the bonus is higher than appears here
+			if(M_FAT)
+				tF += 3
+			if(M_VEGAN)
+				tF -= 1
+			if(M_DWARF)
+				tF -= 2
+	return tF
 
 /mob/living/carbon/calcTackleDefense(var/tDef = 0)
 	tDef += get_strength()
-	if(M_FAT in mutations)
-		tDef += 2
 	for(var/obj/item/weapon/I in held_items)
 		if(I.IsShield())
 			tDef += 4
+	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
-	if(M_VEGAN in mutations)
-		tDef -= 1
-	if(M_CLUMSY in mutations)	//The clown fears fatsec
-		tDef -= 2
-		playsound(loc, 'sound/items/bikehorn.ogg', 20, 1)
 	return max(0, tDef)
+
+/mob/living/carbon/proc/defenseMutTackle(var/tD = 0)
+	for(var/M in mutations)
+		switch(M)
+			if(M_FAT)
+				tD += 2
+			if(M_VEGAN)
+				tD -= 1
+			if(M_CLUMSY)	//The clown fears fatsec
+				tD -= 2
+				playsound(loc, 'sound/items/bikehorn.ogg', 20, 1)
+			if(M_DWARF)
+				tD -= 2
+	return tD
 
 /mob/living/carbon/proc/bonusTackleForce(var/tF = 1)
 	return tF

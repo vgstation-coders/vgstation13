@@ -269,31 +269,17 @@
 //Tackle procs//////
 
 /mob/living/carbon/human/bonusTackleForce(var/tF = 0)
-	if(wear_suit)
-		var/obj/item/clothing/suit/S = wear_suit
-		if(istype(S))
-			tF += S.getTackleBonus()
-	if(head)
-		var/obj/item/clothing/head/H = head
-		if(istype(H))
-			tF += H.getTackleBonus()
+	for(var/obj/item/clothing/C in get_all_slots())
+		if(istype(C))
+			tF += C.offenseTackleBonus()
 	if(species)
 		tF += species.tacklePower
 	return tF
 
 /mob/living/carbon/human/bonusTackleDefense(var/tD = 0)
-	if(shoes)
-		var/obj/item/clothing/shoes/B = shoes
-		if(istype(B))
-			tD += B.getTackleBonus()
-	if(wear_suit)
-		var/obj/item/clothing/suit/S = wear_suit
-		if(istype(S))
-			tD += S.getTackleBonus()
-	if(head)
-		var/obj/item/clothing/head/H = head
-		if(istype(H))
-			tD += H.getTackleBonus()
+	for(var/obj/item/clothing/C in get_all_slots())
+		if(istype(C))
+			tD += C.defenseTackleBonus()
 	if(species)
 		tD += species.tacklePower
 	return tD

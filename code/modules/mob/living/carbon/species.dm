@@ -417,7 +417,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	default_mutations=list(M_SKELETON)
 	brute_mod = 2.0
-	tacklePower = 3
+	tacklePower = 2
 	tackleRange = 3		//How terribly spooky
 
 	has_organ = list(
