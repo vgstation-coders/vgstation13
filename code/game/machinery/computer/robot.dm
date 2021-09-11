@@ -72,7 +72,7 @@
 			name = R.name,
 			locked_down = R.lockdown,
 			status = R.stat,
-			charge = R.cell ? R.cell.get_percent() : null,
+			charge = R.cell ? R.cell.percent() : null,
 			module = R.module ? "[R.module.name] Module" : "No Module Installed",
 			master = R.connected_ai,
 			emagged = R.emagged,
