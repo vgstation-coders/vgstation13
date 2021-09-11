@@ -31,6 +31,9 @@
 	..()
 	charge = 0
 
+/obj/item/weapon/cell/proc/get_percent()
+	return round(charge/maxcharge)
+
 /obj/item/weapon/cell/crap
 	name = "\improper Nanotrasen brand rechargeable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT

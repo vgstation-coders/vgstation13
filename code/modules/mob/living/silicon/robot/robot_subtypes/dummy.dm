@@ -6,6 +6,6 @@
 	scrambledcodes = TRUE
 	AIlink = FALSE
 	lawupdate = FALSE
-	lockcharge = TRUE
+	lockdown = TRUE
 	canmove = FALSE
 	
