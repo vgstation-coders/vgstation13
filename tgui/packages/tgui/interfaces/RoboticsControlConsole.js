@@ -1,3 +1,6 @@
+// Copyright (c) 2021 /vg/station coders
+// SPDX-License-Identifier: MIT
+
 import { useBackend, useSharedState } from '../backend';
 import { Box, Button, LabeledList, NoticeBox, Section, Tabs, Flex, Divider } from '../components';
 import { Window } from '../layouts';
