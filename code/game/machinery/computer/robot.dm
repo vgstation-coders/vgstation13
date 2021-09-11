@@ -67,7 +67,7 @@
 	data["cyborgs"] = list()
 	for(var/mob/living/silicon/robot/R in cyborg_list)
 		if(!can_control(R,user))
-			return
+			continue
 		var/list/cyborg_data = list(
 			name = R.name,
 			locked_down = R.lockdown,
@@ -76,11 +76,13 @@
 			module = R.module ? "[R.module.name] Module" : "No Module Installed",
 			master = R.connected_ai,
 			emagged = R.emagged,
-			ref = R
+			borgimage = iconsouth2base64(getFlatIcon(R)),
+			ref = ref(R)
 		)
 		data["cyborgs"] += list(cyborg_data)
 
 	return data
+
 
 /obj/machinery/computer/robotics/ui_act(action, params)
 	. = ..()
@@ -90,32 +92,31 @@
 	switch(action)
 		if("killbot")
 			if(allowed(usr))
-				var/mob/living/silicon/robot/R = locate(params["robot"]) in cyborg_list
+				var/mob/living/silicon/robot/R = locate(params["ref"])
 				if(!can_control(R,usr))
 					return
 				to_chat(usr, "<span class='warning'>You send a detonation signal to [R.name].</span>")
-				
-				if(!R.self_destruct())
-					return 
+
 				var/turf/T = get_turf(src)
 				message_admins("[key_name(usr)] [formatJumpTo(usr)] detonated [key_name(R)] [formatJumpTo(get_turf(R))] using a robotics console!")
 				log_game("[key_name(usr)] detonated [key_name(R)] using a robotics console at [T.loc] (@[T.x],[T.y],[T.z])!")
 				if(R.connected_ai && usr != R.connected_ai)
 					to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Slaved Cyborg [R.name] detonated. Signal traced to [get_area(src).name].</b></span>")
 					R.connected_ai << 'sound/machines/twobeep.ogg'
-				
+				R.self_destruct()
+
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 
 		if("lockdown")
 			if(allowed(usr))
-				var/mob/living/silicon/robot/R = locate(params["robot"]) in cyborg_list
+				var/mob/living/silicon/robot/R = locate(params["ref"])
 				if(!can_control(R, usr))
-					return
+					return TRUE
 				var/turf/T = get_turf(src)
 				to_chat(usr, "<span class='warning'>You send a lockdown signal to [R.name].</span>")
 				if(!R.SetLockdown(!R.lockdown, TRUE))
-					return
+					return TRUE
 				if(R.connected_ai && usr != R.connected_ai)
 					message_admins("[key_name(usr)] [formatJumpTo(usr)] [!R.lockdown ? "locked down" : "released"] [key_name(R)] [formatJumpTo(R)] using a robotics console!")
 					log_game("[key_name(usr)] [!R.lockdown ? "locked down" : "released"] [key_name(R)] using a robotics console at [T.loc] (@[T.x],[T.y],[T.z])!")
@@ -128,7 +129,7 @@
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		if("hack")
-			var/mob/living/silicon/robot/R = locate(params["robot"]) in cyborg_list
+			var/mob/living/silicon/robot/R = locate(params["ref"])
 			if(isAdminGhost(usr))
 				to_chat(usr, "<span class='warning'>You emagged [R].")
 				log_game("[key_name(usr)] emagged [key_name(R)] using a robotics console!")
@@ -155,7 +156,7 @@
 				stop_sequence()
 				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has halted the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has halted the global cyborg killswitch!</span>")
-
+	return TRUE
 
 /obj/machinery/computer/robotics/proc/can_control(var/mob/living/silicon/robot/robot, var/mob/controller)
 	if(robot.scrambledcodes)

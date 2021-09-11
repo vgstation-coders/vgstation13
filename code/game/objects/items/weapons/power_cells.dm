@@ -32,7 +32,7 @@
 	charge = 0
 
 /obj/item/weapon/cell/proc/get_percent()
-	return round(charge/maxcharge)
+	return round((charge/maxcharge)*100)
 
 /obj/item/weapon/cell/crap
 	name = "\improper Nanotrasen brand rechargeable AA battery"
