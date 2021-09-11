@@ -543,7 +543,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 				var/y_offset = neighbour.y - y
 				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-				black_turf.layer = HIGHEST_LIGHTING_LAYER
+				black_turf.layer = ANTI_GLOW_PASS_LAYER
 				temp_appearance += black_turf
 
 /atom/movable/light/proc/update_light_dir()
