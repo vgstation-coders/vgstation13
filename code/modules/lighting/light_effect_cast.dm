@@ -430,7 +430,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
 		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
-		img.layer = HIGHEST_LIGHTING_LAYER
+		img.layer = ROID_TURF_LIGHT_LAYER
 		temp_appearance += img
 
 	var/image/black_turf = new()
@@ -527,8 +527,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
-		if (istype(T, /turf/unsimulated/mineral))
-			continue
 		for (var/dir in cardinal)
 			var/turf/neighbour = get_step(T, dir)
 			if (neighbour && !CHECK_OCCLUSION(neighbour))

@@ -212,6 +212,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define ABOVE_LIGHTING_LAYER 		3
 	#define HIGHEST_LIGHTING_LAYER		3.5
 	#define ANTI_GLOW_PASS_LAYER		4
+	#define ROID_TURF_LIGHT_LAYER 		5
 
 #define ABOVE_LIGHTING_PLANE	(15)
 	#define SUPERMATTER_WALL_LAYER 		1
