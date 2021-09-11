@@ -161,7 +161,7 @@
 /obj/machinery/computer/robotics/proc/can_control(var/mob/living/silicon/robot/robot, var/mob/controller)
 	if(robot.scrambledcodes)
 		return FALSE
-	if(isrobot(controller))
+	if(isrobot(controller) && controller != robot)
 		return FALSE
 	if(isAI(controller) && robot.connected_ai != controller)
 		return FALSE
