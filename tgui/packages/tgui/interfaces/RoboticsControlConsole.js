@@ -5,7 +5,12 @@ import { Window } from '../layouts';
 export const RoboticsControlConsole = (props, context) => {
   const { data } = useBackend(context);
   const [tab, setTab] = useSharedState(context, 'tab', 1);
-  const { can_hack, sequence_activated, sequence_timeleft, cyborgs = [] } = data;
+  const { 
+    can_hack, 
+    sequence_activated, 
+    sequence_timeleft, 
+    cyborgs = [], 
+  } = data;
   return (
     <Window
       width={500}
@@ -28,7 +33,10 @@ export const RoboticsControlConsole = (props, context) => {
           </Tabs.Tab>
         </Tabs>
         {tab === 1 && (
-          <SelfDestruct sequence_activated={sequence_activated} sequence_timeleft={sequence_timeleft} />
+          <SelfDestruct 
+            sequence_activated={sequence_activated} 
+            sequence_timeleft={sequence_timeleft}
+          />
         )}
         {tab === 2 && (
           <Cyborgs cyborgs={cyborgs} can_hack={can_hack} />
@@ -136,8 +144,8 @@ const Cyborgs = (props, context) => {
 };
 
 const SelfDestruct = (props, context) => {
- 	const { sequence_activated, sequence_timeleft } = props;
- 	const { act } = useBackend(context);
+  const { sequence_activated, sequence_timeleft } = props;
+  const { act } = useBackend(context);
   let minutes = Math.floor(sequence_timeleft/60);
   let seconds = Math.floor(sequence_timeleft-minutes*60);
 
