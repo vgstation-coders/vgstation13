@@ -175,7 +175,7 @@
 
 //Modules
 /obj/item/weapon/robot_module/standard
-	name = "Standard"
+	name = "standard robot module"
 	module_holder = "standard"
 	sprites = list(
 		"Default" = "robot",
@@ -221,7 +221,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/medical
-	name = "Medical"
+	name = "medical robot module"
 	module_holder = "medical"
 	quirk_flags = MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 	networks = list(CAMERANET_MEDBAY)
@@ -293,7 +293,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/engineering
-	name = "Engineering"
+	name = "engineering robot module"
 	module_holder = "engineer"
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_LIFT_ENGITAPE
 	networks = list(CAMERANET_ENGI)
@@ -348,7 +348,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/security
-	name = "Security"
+	name = "security robot module"
 	module_holder = "security"
 	quirk_flags = MODULE_IS_THE_LAW | MODULE_CAN_LIFT_SECTAPE
 	radio_key = /obj/item/device/encryptionkey/headset_sec
@@ -383,7 +383,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/janitor
-	name = "Janitor"
+	name = "janitorial robot module"
 	module_holder = "janitor"
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_CLEAN_ON_MOVE
 	sprites = list(
@@ -417,7 +417,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/butler
-	name = "Service"
+	name = "service robot module"
 	module_holder = "service"
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_HANDLE_FOOD | MODULE_CAN_BUY
 	radio_key = /obj/item/device/encryptionkey/headset_service
@@ -468,7 +468,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/miner
-	name = "Supply"
+	name = "supply robot module"
 	module_holder = "miner"
 	quirk_flags = MODULE_CAN_CLOSE_CLOSETS
 	networks = list(CAMERANET_MINE)
@@ -514,7 +514,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/syndicate
-	name = "Syndicate Combat"
+	name = "syndicate-modded combat robot module"
 	module_holder = "malf"
 	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_HAS_PROJ_RES
 	networks = list(CAMERANET_NUKE)
@@ -528,7 +528,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/syndicate/blitzkrieg
-	name = "Syndicate Blitzkrieg"
+	name = "syndicate blitzkrieg robot module"
 	sprites = list(
 		"Motile" = "motile-syndie"
 		)
@@ -547,7 +547,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/syndicate/crisis
-	name = "Syndicate Crisis"
+	name = "syndicate crisis robot module"
 	sprites = list(
 		"Droid" = "droid-crisis"
 		)
@@ -576,7 +576,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/combat
-	name = "Combat"
+	name = "combat robot module"
 	module_holder = "malf"
 	quirk_flags = MODULE_IS_THE_LAW | MODULE_HAS_PROJ_RES
 	radio_key = /obj/item/device/encryptionkey/headset_sec
@@ -611,7 +611,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/tg17355
-	name = "TG17355"
+	name = "tg17355 robot module"
 	module_holder = "brobot"
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_IS_DEFINITIVE
 	sprites = list(
@@ -636,7 +636,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/starman
-	name = "Starman"
+	name = "starman robot module"
 	module_holder = "starman"
 	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_IS_FLASHPROOF
 	sprites = list(
