@@ -144,6 +144,7 @@
 					message_admins("[key_name(usr)] emagged [key_name(R)] using a robotics console!")
 					R.SetEmagged(TRUE)
 					to_chat(usr, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ERROR</span>\] [R.name]: SAFETIES DISABLED.</b></span>")
+					usr << 'sound/misc/notice2.ogg'
 					hacking = 0
 				else
 					to_chat(usr, "You are already hacking a cyborg.")
@@ -163,7 +164,7 @@
 		return FALSE
 	if(isrobot(controller) && controller != robot)
 		return FALSE
-	if(isAI(controller) && robot.connected_ai != controller)
+	if(isAI(controller))
 		return FALSE
 	return TRUE
 
