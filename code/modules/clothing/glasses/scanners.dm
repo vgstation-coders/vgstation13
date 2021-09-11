@@ -110,20 +110,22 @@
 	color_matrix = list(0.8, 0, 0  ,\
 						0  , 1, 0  ,\
 						0  , 0, 0.8) //equivalent to #CCFFCC
+	my_dark_plane_alpha_override = "night_vision"
+	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_invisible = initial(see_invisible)
 	see_in_dark = initial(see_in_dark)
 	seedarkness = FALSE
 	eyeprot = initial(eyeprot)
-	..()
+	return ..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
+	. = ..()
 	see_invisible = 0
 	see_in_dark = 0
 	seedarkness = TRUE
 	eyeprot = 0
-	..()
 
 /obj/item/clothing/glasses/scanner/meson
 	name = "optical meson scanner"
@@ -136,8 +138,10 @@
 	seedarkness = FALSE
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
-
 	glasses_fit = TRUE
+
+	my_dark_plane_alpha_override = "mesons"
+	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
 	on = 1
@@ -149,9 +153,8 @@
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
 	seedarkness = FALSE
-	C.dark_plane?.alphas["mesons"] = 255
-	C.update_darkness()
-	C.check_dark_vision()
+	my_dark_plane_alpha_override_value = 255
+
 //	body_parts_covered |= EYES
 	..()
 
@@ -161,10 +164,8 @@
 //	body_parts_covered &= ~EYES
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
+	my_dark_plane_alpha_override_value = 0
 	seedarkness = TRUE
-	C.dark_plane?.alphas -= "mesons"
-	C.update_darkness()
-	C.check_dark_vision()
 
 /obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
 	. = ..()
@@ -244,16 +245,15 @@
 		apply()
 		return
 
-	if (new_mob != viewing)
-		clear()
+	clear()
 
-		if (viewing)
-			viewing.unregister_event(/event/logout, src, .proc/mob_logout)
-			viewing = null
+	if (viewing)
+		viewing.unregister_event(/event/logout, src, .proc/mob_logout)
+		viewing = null
 
-		if (new_mob)
-			new_mob.register_event(/event/logout, src, .proc/mob_logout)
-			viewing = new_mob
+	if (new_mob)
+		new_mob.register_event(/event/logout, src, .proc/mob_logout)
+		viewing = new_mob
 
 /obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/user)
 	if (user != viewing)

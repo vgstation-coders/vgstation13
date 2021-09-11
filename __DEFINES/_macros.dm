@@ -333,7 +333,7 @@
 #define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 // This might look silly. But it saves you up to 2 procs calls and a contents search. When you do thousands of it, it adds up.
-#define CHECK_OCCLUSION(T) (T?.blocks_light > 0 || CheckOcclusion(T))
+#define CHECK_OCCLUSION(T) ((T?.blocks_light > 0) || CheckOcclusion(T))
 
 //Macro for AREAS!
 

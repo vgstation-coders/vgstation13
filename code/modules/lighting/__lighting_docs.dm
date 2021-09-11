@@ -47,6 +47,9 @@ atom: (lighting_atom.dm)
   - var/atom/movable/light/light_obj; light source object for this atom, only present if light_range && light_power
   - var/atom/movable/light/shadow/shadow_obj; wall shadow source object for this atom, with TILE_BOUND to prevent it from bleeding over other walls
 
+	Movable lights only :
+  - var/atom/movable/light/smooth/smooth_light_obj; light_source for this atom, but with smooth movement.
+
 	NB: this means that the object casts its light twice, one for the people who can see it, another for those who can't.
     NB2: due to additive colour mixing, this means a normal colour would be shifted to white. To prevent this, light atoms have RGB numbers halved.
 	.... when they recombine, we see the original light.

@@ -1,5 +1,5 @@
 // reference: /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-/client/proc/debug_reagents(atom/D)
+/client/proc/debug_reagents(atom/D in world)
 	set category = "Debug"
 	set name = "Add Reagent"
 
@@ -21,7 +21,7 @@
 			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 
-/client/proc/debug_variables(atom/D)
+/client/proc/debug_variables(atom/D in world)
 	set category = "Debug"
 	set name = "View Variables"
 

@@ -195,8 +195,6 @@
 			return 0 // no updates, completely disabled (red visibility)
 		else if (nano.user.restrained() || nano.user.lying)
 			return 1 // update only (orange visibility)
-		else if (istype(instrumentObj, /obj/item/device/uplink/hidden)) // You know what if they have the uplink open let them use the UI
-			return 2 // Will build in distance checks on the topics for sanity.
 		else if (!(instrumentObj in view(4, nano.user))) // If the src object is not in visable, set status to 0
 			return 0 // no updates, completely disabled (red visibility)
 		else if (dist <= 1)

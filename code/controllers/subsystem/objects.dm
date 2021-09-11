@@ -11,6 +11,7 @@ var/list/processing_objects = list()
 	wait          = 2 SECONDS
 
 	var/list/currentrun
+	var/list/bad_inits = list()
 
 
 /datum/subsystem/obj/New()
@@ -27,7 +28,7 @@ var/list/processing_objects = list()
 				var/turf/T = get_turf(object)
 				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time] seconds to initialize.")
 		else
-			stack_trace("[object.type] initialized twice")
+			bad_inits[object.type] = bad_inits[object.type]+1
 		CHECK_TICK
 	for(var/area/place in areas)
 		var/obj/machinery/power/apc/place_apc = place.areaapc

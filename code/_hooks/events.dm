@@ -211,12 +211,36 @@
 // obj/item/item: the item being used for the attack
 /event/attackby
 
-//Called when living calls a life() tick
+/event/ui_act
+
+// Called when living calls a life() tick
 // Arguments:
 // mob/living/L: thing that ticker
 // life_ticks: the amounts of lifetick processed
 /lazy_event/on_life
 
+// Called by attack_self
+// Arguments:
+// mob/living/user
+/event/item_attack_self
+
+// Called when a PDA's ringtone is about to be changed.
+// Arguments:
+// mob/user: who's changing the ringtone
+// new_ringtone: the new ringtone, string
+/event/pda_change_ringtone
+
+// Called when a radio's frequency is about to be changed
+// Arguments:
+// mob/user: who's changing the frequency
+// new_frequency: the new frequency, number
+/event/radio_new_frequency
+
+// Called when a mob performs an emote
+// Arguments:
+// emote: the name of the emote being performed
+// mob/source: the mob performing the emote
+/event/emote
 
 /datum
 	/// Associative list of type path -> list(),
