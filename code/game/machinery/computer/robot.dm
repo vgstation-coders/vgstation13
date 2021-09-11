@@ -73,7 +73,7 @@
 			locked_down = R.lockdown,
 			status = R.stat,
 			charge = R.cell ? R.cell.percent() : null,
-			module = R.module ? "[R.module.name] Module" : "No Module Installed",
+			module = R.module ? "[R.modtype] Module" : "No Module Installed",
 			master = R.connected_ai,
 			emagged = R.emagged,
 			borgimage = iconsouth2base64(getFlatIcon(R)),
