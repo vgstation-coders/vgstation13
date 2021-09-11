@@ -37,7 +37,7 @@ var/light_post_processing = 1 // Use writeglobal to change this
 	temp_appearance = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
-	luminosity = 2*light_range
+	luminosity = light_range + 3
 
 	//cap light range to the max
 	light_range = min(MAX_LIGHT_RANGE, light_range)
@@ -535,9 +535,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 	temp_appearance = list()
 	if (holder.lighting_flags & NO_LUMINOSITY)
-		luminosity = 3
+		luminosity = 1
 	else
-		luminosity = max(3, 2*light_range)
+		luminosity = 3
 
 	//cap light range to 5
 	light_range = min(5, light_range)

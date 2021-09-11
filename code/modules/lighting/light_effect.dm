@@ -21,6 +21,7 @@
 	blend_mode = BLEND_ADD
 
 	animate_movement = NO_STEPS
+	infra_luminosity = 25 // Visible no matter where
 
 	alpha = 180
 
