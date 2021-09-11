@@ -79,8 +79,8 @@ export const GenericUplink = (props, context) => {
             content={compactMode ? 'Compact' : 'Detailed'}
             onClick={() => act('compact_toggle')} />
           <Button.Input
-            content={<Box><Icon name="coins"/> Withdraw</Box>}
-            onCommit={(e, value) => act('get_tc', { 'amount': value })}/>
+            content={<Box><Icon name="coins" /> Withdraw</Box>}
+            onCommit={(e, value) => act('get_tc', { 'amount': value })} />
 
           {!!lockable && (
             <Button
