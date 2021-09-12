@@ -40,7 +40,7 @@
 		var/list/mecha_data = list(
 			name = M.name,
 			health = round((M.health/initial(M.health))*100),
-			charge = M.cell ? M.cell.percent() : null,
+			charge = M.cell ? round(M.cell.percent()) : null,
 			pilot = M.occupant || "None",
 			location = A.name || "Unknown",
 			active = M.selected ? M.selected.name : "None",
