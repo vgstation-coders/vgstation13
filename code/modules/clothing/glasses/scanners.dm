@@ -2,22 +2,10 @@
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
 	var/on = TRUE
-	var/list/color_matrix = null
 
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
 
-/obj/item/clothing/glasses/scanner/proc/apply_color(mob/living/carbon/user)	//for altering the color of the wearer's vision while active
-	if(color_matrix)
-		if(user.client)
-			var/client/C = user.client
-			C.color =  color_matrix
-
-/obj/item/clothing/glasses/scanner/proc/remove_color(mob/living/carbon/user)
-	if(color_matrix)
-		if(user.client)
-			var/client/C = user.client
-			C.color = initial(C.color)
 
 /obj/item/clothing/glasses/scanner/equipped(var/mob/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
@@ -32,16 +20,14 @@
 		return
 	if(on)
 		if(iscarbon(M))
+			M.update_perception()
 			M.update_darkness()
-			apply_color(M)
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
 			user.seedarkness = TRUE
-			if(iscarbon(user))
-				remove_color(user)
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
@@ -72,28 +58,10 @@
 /obj/item/clothing/glasses/scanner/proc/enable(var/mob/C)
 	on = TRUE
 	to_chat(C, "You turn \the [src] on.")
-	if(iscarbon(loc))
-		if(istype(loc, /mob/living/carbon/monkey))
-			var/mob/living/carbon/monkey/M = C
-			if(M.glasses && (M.glasses == src))
-				apply_color(M)
-		else if(istype(loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = C
-			if(H.glasses && (H.glasses == src))
-				apply_color(H)
 
 /obj/item/clothing/glasses/scanner/proc/disable(var/mob/C)
 	on = FALSE
 	to_chat(C, "You turn \the [src] off.")
-	if(iscarbon(loc))
-		if(istype(loc, /mob/living/carbon/monkey))
-			var/mob/living/carbon/monkey/M = C
-			if(M.glasses && (M.glasses == src))
-				remove_color(M)
-		else if(istype(loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = C
-			if(H.glasses && (H.glasses == src))
-				remove_color(H)
 
 /obj/item/clothing/glasses/scanner/night
 	name = "night vision goggles"
@@ -101,31 +69,64 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = SEE_INVISIBLE_MINIMUM
-	seedarkness = FALSE
+	see_invisible = 0
+	seedarkness = TRUE
 	see_in_dark = 8
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
-	color_matrix = list(0.8, 0, 0  ,\
-						0  , 1, 0  ,\
-						0  , 0, 0.8) //equivalent to #CCFFCC
-	my_dark_plane_alpha_override = "night_vision"
-	my_dark_plane_alpha_override_value = 255
+	my_dark_plane_alpha_override_value = 30
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
-	see_invisible = initial(see_invisible)
 	see_in_dark = initial(see_in_dark)
-	seedarkness = FALSE
 	eyeprot = initial(eyeprot)
+	my_dark_plane_alpha_override = "night_vision"
+	if (ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if (H.glasses == src)
+			C.update_perception()
+	else if (ismonkey(C))
+		var/mob/living/carbon/monkey/M = C
+		if (M.glasses == src)
+			C.update_perception()
 	return ..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
 	. = ..()
-	see_invisible = 0
 	see_in_dark = 0
-	seedarkness = TRUE
+	my_dark_plane_alpha_override = null
 	eyeprot = 0
+	if (ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if (H.glasses == src)
+			if (C.client)
+				C.client.color = null
+			C.update_perception()
+	else if (ismonkey(C))
+		var/mob/living/carbon/monkey/M = C
+		if (M.glasses == src)
+			if (C.client)
+				C.client.color = null
+			C.update_perception()
+
+/obj/item/clothing/glasses/scanner/night/update_perception(var/mob/living/carbon/human/M)
+	if (on)
+		if (M.master_plane)
+			M.master_plane.blend_mode = BLEND_ADD
+		if (M.client)
+			M.client.color = "#33FF33"
+	else
+		my_dark_plane_alpha_override = null
+		if (M.master_plane)
+			M.master_plane.blend_mode = BLEND_MULTIPLY
+
+/obj/item/clothing/glasses/scanner/night/unequipped(mob/user, var/from_slot = null)
+	if(from_slot == slot_glasses)
+		if(on)
+			if (user.client)
+				user.client.color = null
+				user.update_perception()
+	..()
 
 var/list/meson_wearers = list()
 
