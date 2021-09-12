@@ -76,11 +76,21 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	eyeprot = -1
 	my_dark_plane_alpha_override_value = 30
+	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
+	var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_target
+
+/obj/item/clothing/glasses/scanner/night/New()
+	..()
+	overdark_planemaster = new
+	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
+	overdark_target = new
+	overdark_target.render_source = "night vision goggles (\ref[src])"
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_in_dark = initial(see_in_dark)
 	eyeprot = initial(eyeprot)
 	my_dark_plane_alpha_override = "night_vision"
+	add_overdark(C)
 	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
 		if (H.glasses == src)
@@ -96,6 +106,7 @@
 	see_in_dark = 0
 	my_dark_plane_alpha_override = null
 	eyeprot = 0
+	remove_overdark(C)
 	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
 		if (H.glasses == src)
@@ -115,18 +126,47 @@
 			M.master_plane.blend_mode = BLEND_ADD
 		if (M.client)
 			M.client.color = "#33FF33"
+			remove_overdark(M)
+			add_overdark(M)
 	else
 		my_dark_plane_alpha_override = null
 		if (M.master_plane)
 			M.master_plane.blend_mode = BLEND_MULTIPLY
 
+/obj/item/clothing/glasses/scanner/night/equipped(var/mob/M, glasses)
+	if(istype(M, /mob/living/carbon/monkey))
+		var/mob/living/carbon/monkey/O = M
+		if(O.glasses != src)
+			return
+	else if(istype(M, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		if(H.glasses != src)
+			return
+	else
+		return
+	if(on)
+		if(iscarbon(M))
+			add_overdark(M)
+	..()
+
 /obj/item/clothing/glasses/scanner/night/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
+			remove_overdark(user)
 			if (user.client)
 				user.client.color = null
 				user.update_perception()
 	..()
+
+/obj/item/clothing/glasses/scanner/night/proc/add_overdark(var/mob/living/carbon/C)
+	if (istype(C) && C.client)
+		C.client.screen |= overdark_planemaster
+		C.client.screen |= overdark_target
+
+/obj/item/clothing/glasses/scanner/night/proc/remove_overdark(var/mob/living/carbon/C)
+	if (istype(C) && C.client)
+		C.client.screen -= overdark_planemaster
+		C.client.screen -= overdark_target
 
 var/list/meson_wearers = list()
 
