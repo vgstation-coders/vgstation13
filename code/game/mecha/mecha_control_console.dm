@@ -87,9 +87,9 @@
 				M.log_message("Exosuit tracking beacon overload activated.",1)
 				M.occupant_message("<span class='red'><b>The exosuit tracking beacon short-circuits!</b></span>")
 				M.use_power(M.cell.charge) 
-				M.take_damage(M.health+100,"energy")
 				explosion(get_turf(M),0,0,1,2)
 				M.check_for_internal_damage(list(MECHA_INT_FIRE,MECHA_INT_TEMP_CONTROL,MECHA_INT_CONTROL_LOST,MECHA_INT_SHORT_CIRCUIT),1)
+				qdel(M)
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 	return TRUE

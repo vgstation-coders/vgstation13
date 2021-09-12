@@ -21,7 +21,7 @@ export const MechaControlConsole = (props, context) => {
 
 const Mechas = (props, context) => {
   const { mechas } = props;
-  const [ messageMechas, setMessageMechas] = useSharedState(context, 'messageMechas', []);
+  const [ messageMechas, setMessageMechas] = useLocalState(context, 'messageMechas', []);
   const [ messageText, setMessageText ] = useLocalState(context, 'messageText', '');
 
   const { act } = useBackend(context);
