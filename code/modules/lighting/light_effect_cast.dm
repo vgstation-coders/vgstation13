@@ -3,7 +3,6 @@
 #define WIDE_SHADOW_THRESHOLD 80
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
-#define TURF_SHADOW_FRACTION 0.75
 #define BLUR_SIZE 2 // integer, please
 
 // Shadows over light_range 5 haven't been done yet.
@@ -32,16 +31,21 @@ var/light_post_processing = 1 // Use writeglobal to change this
 
 // Initialisation of the cast_light proc.
 /atom/movable/light/proc/cast_light_init()
+
 	filters = list()
 	pre_rendered_shadows = list()
 	temp_appearance = list()
+	temp_appearance_shadows = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
-	luminosity = 2*light_range
 
 	//cap light range to the max
+	luminosity = 2*light_range
 	light_range = min(MAX_LIGHT_RANGE, light_range)
 	light_color = (holder.light_color || light_color)
+
+	var/atom/location = get_turf(src)
+	var/distance_to_wall_illum = get_wall_view()
 
 	if (light_swallowed > 0)
 		light_range = 1
@@ -60,9 +64,8 @@ var/light_post_processing = 1 // Use writeglobal to change this
 	for(var/turf/T in view(2*light_range, src))
 		T.lumcount = -1
 		affecting_turfs += T
-
-	for(var/turf/T in view(round(TURF_SHADOW_FRACTION*light_range), src))
-		affected_shadow_walls += T
+		if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
+			affected_shadow_walls += T
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
@@ -330,7 +333,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			I.pixel_y += shadowoffset/2
 
 	//and add it to the lights overlays
-	temp_appearance += I
+	temp_appearance_shadows += I
 
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
@@ -457,9 +460,35 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	else
 		color = light_color
 
-// -- Empty
+// -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
-	return
+	var/image/shadow_overlay/image_result = new()
+	for (var/image/image_component in temp_appearance_shadows)
+		image_result.temp_appearance += image_component
+
+	image_result.overlays = image_result.temp_appearance
+	// Apply a filter
+	image_result.filters += filter(type = "blur", size = BLUR_SIZE)
+	temp_appearance += image_result
+
+	// And then blacken out what's unvisible
+	// -- eliminating the underglow
+	for (var/turf/T in affected_shadow_walls)
+		var/image/black_turf = new()
+		if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
+			black_turf.render_source = "postprocess_black_turf_prerender"
+		else
+			black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
+			black_turf.icon_state = "black"
+			black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
+		pre_rendered_shadows += "postprocess_black_turf_prerender"
+		black_turf.icon_state = "black"
+		var/x_offset = T.x - x
+		var/y_offset = T.y - y
+		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
+		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+		black_turf.layer = ANTI_GLOW_PASS_LAYER
+		temp_appearance += black_turf
 
 // Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/shadow/post_processing()
@@ -615,5 +644,4 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 #undef WIDE_SHADOW_THRESHOLD
 #undef OFFSET_MULTIPLIER_SIZE
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
-#undef TURF_SHADOW_FRACTION
 #undef BLUR_SIZE
