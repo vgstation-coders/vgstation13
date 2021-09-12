@@ -66,7 +66,7 @@ var/light_post_processing = 1 // Use writeglobal to change this
 		alpha = initial(alpha)
 		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
 
-	for (var/thing in view(world.view, src))
+	for (var/thing in view(min(world.view, light_range), src))
 		if (ismob(thing))
 			var/mob/M = thing
 			M.check_dark_vision()
@@ -229,7 +229,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if(light_range < 2 || light_type == LIGHT_DIRECTIONAL)
 		return
 
-	for(var/turf/T in view(min(world.view, light_range), src))
+	for(var/turf/T in view(light_range, src))
 		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
 
