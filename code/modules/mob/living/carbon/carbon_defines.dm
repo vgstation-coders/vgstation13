@@ -28,6 +28,7 @@
 	var/obj/item/device/station_map/displayed_holomap = null
 
 	var/target_zone = null
+	var/isTackling = FALSE
 
 /mob/living/carbon/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	..()
