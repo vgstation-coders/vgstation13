@@ -1739,6 +1739,7 @@
 	desc = "AKA: French Fries, Freedom Fries, etc."
 	icon_state = "fries"
 	plate_offset_y = -2
+	filling_color = "#FFCF62"
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/New()
 	..()
@@ -1748,6 +1749,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
 	..()
 	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/fries/cone
+	name = "cone of Space Fries"
+	icon_state = "fries_cone"
+	trash = /obj/item/trash/fries_cone
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
@@ -1840,11 +1846,17 @@
 	icon_state = "cheesyfries"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	plate_offset_y = -3
+	filling_color = "#FFEB3B"
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
+	name = "punnet of Cheesy Fries"
+	icon_state = "cheesyfries_punnet"
+	trash = /obj/item/trash/fries_punet
 
 /obj/item/weapon/reagent_containers/food/snacks/fortunecookie
 	name = "Fortune cookie"
