@@ -707,7 +707,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/update_vicon()
 	if(stat & (BROKEN))
 		src.icon_state = "[initial(icon_state)]-broken"
-		return
 	else if (stat & (NOPOWER))
 		src.icon_state = "[initial(icon_state)]-off"
 	else
@@ -3368,6 +3367,11 @@ var/global/num_vending_terminals = 1
 		return 1
 	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")
 	return 0
+
+/obj/machinery/vending/sale/update_vicon()
+	..()
+	if(custom_stock.len == 0 && !(stat & BROKEN))
+		icon_state = "sale-off"
 
 /obj/machinery/vending/mining
 	name = "\improper Dwarven Mining Equipment"
