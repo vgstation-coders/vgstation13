@@ -586,9 +586,30 @@
 /obj/item/weapon/reagent_containers/food/condiment/small
 	possible_transfer_amounts = list(1, 5)
 	amount_per_transfer_from_this = 1
+	var/trash_type
 
 /obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change()
-	return
+	if(reagents.reagent_list.len <= 0)
+		if (trash_type)
+			var/obj/item/trash/trash = new trash_type(loc)
+			if (ismob(loc))
+				var/mob/M = loc
+				if (M.get_active_hand() == src)
+					M.drop_item(src, M.loc)
+					M.put_in_active_hand(trash)
+				else if (M.get_inactive_hand() == src)
+					M.drop_item(src, M.loc)
+					M.put_in_inactive_hand(trash)
+				M.update_inv_hands()
+			qdel(src)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
+	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers))
+		return FALSE
+	. = ..()
+
+/obj/item/weapon/reagent_containers/food/condiment/small/is_open_container()
+	return FALSE
 
 //-------------------------------------------------------------------------
 
@@ -597,6 +618,7 @@
 	desc = "You feel more American already."
 	icon_state = "ketchup_small"
 	condiment_overlay = KETCHUP
+	trash_type = /obj/item/trash/ketchup_packet
 
 /obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
 	..()
@@ -608,6 +630,7 @@
 	desc = "Still not an instrument."
 	icon_state = "mayo_small"
 	condiment_overlay = MAYO
+	trash_type = /obj/item/trash/mayo_packet
 
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
 	..()

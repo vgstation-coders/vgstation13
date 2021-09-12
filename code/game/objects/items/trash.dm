@@ -287,3 +287,13 @@ var/list/crushed_cans_cache = list()
 
 /obj/item/trash/egg/borer
 	icon_state	= "borer egg-growing"
+
+/obj/item/trash/ketchup_packet
+	name = "ketchup packet"
+	desc = "A used ketchup packet"
+	icon_state	= "ketchup_small"
+
+/obj/item/trash/mayo_packet
+	name = "mayonaise packet"
+	desc = "A used mayonnaise packet"
+	icon_state	= "mayo_small"
