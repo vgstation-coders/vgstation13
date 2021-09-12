@@ -468,7 +468,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	var/last_pixel_x_im = -50000
 	var/last_pixel_y_im = -50000
 	for (var/image/image_component in temp_appearance)
-		// Non-connex images
+		// The next image is not connected (ie, further than 32 pixels away) from the last current image? Means we are in a new group.
 		if ( abs(image_component.pixel_x - last_pixel_x_im) + abs(image_component.pixel_y - last_pixel_y_im) > WORLD_ICON_SIZE && image_result.temp_appearance.len)
 			image_result.overlays = image_result.temp_appearance
 			image_result.filters += filter(type = "blur", size = BLUR_SIZE)
