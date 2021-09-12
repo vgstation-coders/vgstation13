@@ -217,6 +217,7 @@ var/list/clothing_blacklist = list(
 	/obj/item/clothing/suit/space/rig/wizard,
 	/obj/item/clothing/mask/stone/infinite,
 	/obj/item/clothing/suit/armor/laserproof/advanced,
+	/obj/item/clothing/suit/space/rig/ninja,
 	)
 
 var/list/clothing = list ()
