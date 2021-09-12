@@ -589,19 +589,18 @@
 	var/trash_type
 
 /obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change()
-	if(reagents.reagent_list.len <= 0)
-		if (trash_type)
-			var/obj/item/trash/trash = new trash_type(loc)
-			if (ismob(loc))
-				var/mob/M = loc
-				if (M.get_active_hand() == src)
-					M.drop_item(src, M.loc)
-					M.put_in_active_hand(trash)
-				else if (M.get_inactive_hand() == src)
-					M.drop_item(src, M.loc)
-					M.put_in_inactive_hand(trash)
-				M.update_inv_hands()
-			qdel(src)
+	if(is_empty() && trash_type)
+		var/obj/item/trash/trash = new trash_type(loc)
+		if (ismob(loc))
+			var/mob/M = loc
+			if (M.get_active_hand() == src)
+				M.drop_item(src, M.loc)
+				M.put_in_active_hand(trash)
+			else if (M.get_inactive_hand() == src)
+				M.drop_item(src, M.loc)
+				M.put_in_inactive_hand(trash)
+			M.update_inv_hands()
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
 	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers))
