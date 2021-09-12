@@ -552,6 +552,7 @@ var/global/num_vending_terminals = 1
 			custom_stock += item
 			if(item.loc != src)
 				item.forceMove(src)
+			update_vicon()
 			return
 	//If this code block is reached, no existing vending_product exists, so we must create one
 	var/datum/data/vending_product/R = new()
@@ -566,6 +567,7 @@ var/global/num_vending_terminals = 1
 		item.forceMove(src)
 	product_records += R
 	custom_stock += item
+	update_vicon()
 
 /obj/machinery/vending/proc/connect_to_user_account(mob/user)
 	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
@@ -707,7 +709,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/update_vicon()
 	if(stat & (BROKEN))
 		src.icon_state = "[initial(icon_state)]-broken"
-		return
 	else if (stat & (NOPOWER))
 		src.icon_state = "[initial(icon_state)]-off"
 	else
@@ -1025,6 +1026,7 @@ var/global/num_vending_terminals = 1
 				products -= I
 				break
 	product_records -= R
+	update_vicon()
 	qdel(R)
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
@@ -1080,6 +1082,7 @@ var/global/num_vending_terminals = 1
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
+		update_vicon()
 		src.updateUsrDialog()
 
 /obj/machinery/vending/process()
@@ -3345,7 +3348,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale
 	name = "Sales"
 	desc = "Buy, sell, repeat."
-	icon_state = "sale"
+	icon_state = "sale-off"
 	is_custom_machine = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
@@ -3368,6 +3371,15 @@ var/global/num_vending_terminals = 1
 		return 1
 	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")
 	return 0
+
+/obj/machinery/vending/sale/update_vicon()
+	if(stat & (BROKEN))
+		src.icon_state = "sale-broken"
+	else if (stat & (NOPOWER) || custom_stock.len == 0)
+		src.icon_state = "sale-off"
+	else
+		src.icon_state = "sale"
+
 
 /obj/machinery/vending/mining
 	name = "\improper Dwarven Mining Equipment"
