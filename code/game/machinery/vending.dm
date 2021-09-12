@@ -552,6 +552,7 @@ var/global/num_vending_terminals = 1
 			custom_stock += item
 			if(item.loc != src)
 				item.forceMove(src)
+			update_vicon()
 			return
 	//If this code block is reached, no existing vending_product exists, so we must create one
 	var/datum/data/vending_product/R = new()
@@ -3344,7 +3345,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale
 	name = "Sales"
 	desc = "Buy, sell, repeat."
-	icon_state = "sale"
+	icon_state = "sale-off"
 	is_custom_machine = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
