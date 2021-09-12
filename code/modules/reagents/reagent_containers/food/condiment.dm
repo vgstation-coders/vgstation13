@@ -590,16 +590,14 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change()
 	if(is_empty() && trash_type)
-		var/obj/item/trash/trash = new trash_type(loc)
+		var/obj/item/trash/trash = new trash_type(get_turf(src))
 		if (ismob(loc))
 			var/mob/M = loc
-			if (M.get_active_hand() == src)
-				M.drop_item(src, M.loc)
-				M.put_in_active_hand(trash)
-			else if (M.get_inactive_hand() == src)
-				M.drop_item(src, M.loc)
-				M.put_in_inactive_hand(trash)
-			M.update_inv_hands()
+			var/hand_index = M.is_holding_item(src)
+			M.drop_item(src, M.loc)
+			if (hand_index)
+				M.put_in_hand(hand_index, trash)
+				M.update_inv_hands()
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
@@ -608,7 +606,8 @@
 	. = ..()
 
 /obj/item/weapon/reagent_containers/food/condiment/small/is_open_container()
-	return FALSE
+	return FALSE	// This should prevent most ways the packet could emptied other than by being applied on food.
+					// Worst case scenario, the empty packet will appear on the ground.
 
 //-------------------------------------------------------------------------
 
