@@ -44,6 +44,8 @@
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
 
+	var/list/connex_turf_shadows = list()
+
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
 	if(istype(holder, /atom))
