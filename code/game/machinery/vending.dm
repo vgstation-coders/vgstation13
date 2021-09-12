@@ -567,6 +567,7 @@ var/global/num_vending_terminals = 1
 		item.forceMove(src)
 	product_records += R
 	custom_stock += item
+	update_vicon()
 
 /obj/machinery/vending/proc/connect_to_user_account(mob/user)
 	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
@@ -1025,6 +1026,7 @@ var/global/num_vending_terminals = 1
 				products -= I
 				break
 	product_records -= R
+	update_vicon()
 	qdel(R)
 
 /obj/machinery/vending/proc/vend(datum/data/vending_product/R, mob/user, by_voucher = 0)
@@ -1080,6 +1082,7 @@ var/global/num_vending_terminals = 1
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
+		update_vicon()
 		src.updateUsrDialog()
 
 /obj/machinery/vending/process()
