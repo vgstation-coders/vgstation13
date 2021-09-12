@@ -69,7 +69,7 @@ var/light_post_processing = 1 // Use writeglobal to change this
 	for (var/mob/M in view(world.view, src))
 		M.check_dark_vision()
 
-	for(var/turf/T in view(2*light_range, src))
+	for(var/turf/T in view(max(light_range, world.view), src))
 		T.lumcount = -1
 		affecting_turfs += T
 		if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
