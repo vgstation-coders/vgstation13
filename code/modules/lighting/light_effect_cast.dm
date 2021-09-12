@@ -70,10 +70,6 @@ var/light_post_processing = 1 // Use writeglobal to change this
 		affecting_turfs.Cut()
 		return
 
-/atom/movable/light/shadow/cast_light_init()
-	connex_turf_shadows = list()
-	. = ..()
-
 /*
 
 Commented out as this doesn't works well with performance currently.
