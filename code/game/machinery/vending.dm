@@ -3345,7 +3345,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale
 	name = "Sales"
 	desc = "Buy, sell, repeat."
-	icon_state = "sales-off"
+	icon_state = "sale-off"
 	is_custom_machine = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
