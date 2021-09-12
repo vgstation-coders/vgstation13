@@ -3345,7 +3345,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale
 	name = "Sales"
 	desc = "Buy, sell, repeat."
-	icon_state = "sale-off"
+	icon_state = "sales-off"
 	is_custom_machine = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
@@ -3370,9 +3370,13 @@ var/global/num_vending_terminals = 1
 	return 0
 
 /obj/machinery/vending/sale/update_vicon()
-	..()
-	if(custom_stock.len == 0 && !(stat & BROKEN))
-		icon_state = "sale-off"
+	if(stat & (BROKEN))
+		src.icon_state = "sale-broken"
+	else if (stat & (NOPOWER) || custom_stock.len == 0)
+		src.icon_state = "sale-off"
+	else
+		src.icon_state = "sale"
+
 
 /obj/machinery/vending/mining
 	name = "\improper Dwarven Mining Equipment"
