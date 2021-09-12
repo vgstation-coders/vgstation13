@@ -67,10 +67,12 @@ const Mechas = (props, context) => {
                     placeholder='Enter Message'
                     onInput={(e, value) => setMessageText(value)}
                     onChange={(e, value) => {
-                        act('message', { 
-                            mechamessage: messageText,
-                            ref: mecha.ref
-                        })
+                        if(messageText) {
+                          act('message', { 
+                              mechamessage: messageText,
+                              ref: mecha.ref
+                          })
+                        }
                         setMessageText('')
                         setMessageMechas(messageMechas.filter(m => { return m !== mecha.ref }))
                      }} />
