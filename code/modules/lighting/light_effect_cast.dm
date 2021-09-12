@@ -229,7 +229,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if(light_range < 2 || light_type == LIGHT_DIRECTIONAL)
 		return
 
-	for(var/turf/T in view(light_range, src))
+	for(var/turf/T in view(min(world.view, light_range), src))
 		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
 
