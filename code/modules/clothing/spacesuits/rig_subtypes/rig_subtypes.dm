@@ -683,12 +683,12 @@
 
 
 //Ninja Rig
-/obj/item/clothing/suit/space/rig/ninja
+/obj/item/clothing/suit/space/rig/sundowner
 	name = "sundowner suit"
 	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for Desperado Spider Clan squad."
 	icon_state = "sundowner_suit"
 	item_state = "sundowner_suit"
-	head_type = /obj/item/clothing/head/helmet/space/rig/ninja
+	head_type = /obj/item/clothing/head/helmet/space/rig/sundowner
 	boots_type = /obj/item/clothing/shoes/ninja/redsun
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
@@ -706,7 +706,7 @@
 		/obj/item/mounted/poster/stealth
 		)
 
-/obj/item/clothing/head/helmet/space/rig/ninja
+/obj/item/clothing/head/helmet/space/rig/sundowner
 	name = "sundowner headgear"
 	desc = "What may appear to be a simple visor and neck guard is in fact a highly sophisticated nano-weave helmet."
 	icon_state = "rig0-sundowner"
@@ -718,11 +718,11 @@
 	eyeprot = 0
 	body_parts_covered = EARS|BEARD
 
-/obj/item/clothing/head/helmet/space/rig/ninja/update_brightness() //Shitcode HIJACK!
+/obj/item/clothing/head/helmet/space/rig/sundowner/update_brightness() //Shitcode HIJACK!
 	..()
 	update_mask()
 
-/obj/item/clothing/head/helmet/space/rig/ninja/proc/update_mask()
+/obj/item/clothing/head/helmet/space/rig/sundowner/proc/update_mask()
 	pressure_resistance = on ? (200 * ONE_ATMOSPHERE) : initial(pressure_resistance)
 	eyeprot = on ? 3 : initial(eyeprot)
 	body_parts_covered = on ? FULL_HEAD : initial(body_parts_covered) //It's ninja magic, i ain't gonna explain shit

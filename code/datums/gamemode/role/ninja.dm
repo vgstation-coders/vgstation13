@@ -105,7 +105,7 @@
 var/list/valid_ninja_suits = list(
 	/obj/item/clothing/suit/space/ninja,
 	/obj/item/clothing/suit/kimono/ronin,
-	/obj/item/clothing/suit/space/rig/ninja
+	/obj/item/clothing/suit/space/rig/sundowner
 	)
 
 /obj/item/stack/shuriken
