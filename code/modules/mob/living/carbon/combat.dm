@@ -214,5 +214,5 @@
 /mob/living/carbon/proc/bonusTackleDefense(var/tD = 25)
 	return tD
 
-/mob/living/carbon/proc/bonusTackleRange(var/tR = 25)
+/mob/living/carbon/proc/bonusTackleRange(var/tR = 3)
 	return tR
