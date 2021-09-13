@@ -224,7 +224,13 @@
 			chance_of_crumbs *= 0.3
 		chance_of_crumbs = clamp(chance_of_crumbs, 0, 100)
 		if (prob(chance_of_crumbs))
-			var/obj/effect/decal/cleanable/crumbs/C = new (get_turf(eater))
+			var/turf/T = get_turf(eater)
+			var/crumbs_on_floor = 0
+			for (var/obj/effect/decal/cleanable/crumbs/old_crumb in T)
+				crumbs_on_floor++
+				if (crumbs_on_floor >= 4)
+					qdel(old_crumb)
+			var/obj/effect/decal/cleanable/crumbs/C = new (T)
 			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 		if (virus2?.len)
 			for (var/ID in virus2)
