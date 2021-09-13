@@ -102,7 +102,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
-	#define HOLOMAP_LAYER				1
+	#define HOLOMAP_LAYER				1 //Note: Holomap images are not actually on ABOVE_TURF_PLANE. They are explicitly one plane above the parent turf.
 	#define RUNE_LAYER					2
 	#define DECAL_LAYER					3
 	#define SNOWPRINT_LAYER				4

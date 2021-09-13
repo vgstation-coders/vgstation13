@@ -235,12 +235,12 @@ var/list/meson_wearers = list()
 	var/mob/viewing
 
 /obj/item/clothing/glasses/scanner/material/enable()
-	update_mob(viewing)
 	..()
+	update_mob(viewing)
 
 /obj/item/clothing/glasses/scanner/material/disable()
-	update_mob(viewing)
 	..()
+	update_mob(viewing)
 
 /obj/item/clothing/glasses/scanner/material/update_icon()
 	if (!on)
