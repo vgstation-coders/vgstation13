@@ -506,7 +506,7 @@
 
 /obj/item/clothing/shoes/defenseTackleBonus()
 	if(clothing_flags & MAGPULSE)
-		return 4
+		return 40
 
 //Called from human_defense.dm proc foot_impact
 /obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
