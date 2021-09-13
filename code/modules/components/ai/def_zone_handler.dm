@@ -1,14 +1,17 @@
-/datum/component/ai/targetting_handler/RecieveAndReturnSignal(var/message_type, var/list/args)
-	if(message_type == COMSIG_GETDEFZONE)
-		var/mob/living/target = args["target"]
-		var/damagetype = args["damage_type"]
-		ASSERT(istype(target))
-		return EvaluateTarget(target, damagetype)
+/datum/component/ai/targetting_handler/initialize()
+	parent.register_event(/event/comp_ai_cmd_evaluate_target, src, .proc/evaluate_target)
+	return TRUE
 
-/datum/component/ai/targetting_handler/proc/EvaluateTarget(var/mob/living/target, var/damagetype) //Center mass.
+/datum/component/ai/targetting_handler/Destroy()
+	parent.register_event(/event/comp_ai_cmd_evaluate_target, src, .proc/evaluate_target)
+	..()
+
+//Center mass.
+/datum/component/ai/targetting_handler/proc/evaluate_target(mob/living/target, damage_type)
 	return LIMB_CHEST
 
-/datum/component/ai/targetting_handler/dumb/EvaluateTarget(var/mob/living/target, var/damagetype) //Random
+//Random
+/datum/component/ai/targetting_handler/dumb/evaluate_target(mob/living/target, damage_type)
 	var/list/static/potential_targets = list(
 		LIMB_HEAD,
 		LIMB_CHEST,
@@ -24,7 +27,8 @@
 		TARGET_MOUTH)
 	return pick(potential_targets)
 
-/datum/component/ai/targetting_handler/smart/EvaluateTarget(var/mob/living/target, var/damagetype) //Goes for the part with the least armor
+//Goes for the part with the least armor
+/datum/component/ai/targetting_handler/smart/evaluate_target(mob/living/target, damage_type)
 	var/list/static/potential_target = list(
 		LIMB_HEAD,
 		LIMB_CHEST,
@@ -41,7 +45,7 @@
 	var/weakpoint
 	var/weakpoint_armor = 100
 	for(var/i in potential_target)
-		var/armor = target.getarmor(i, damagetype)
+		var/armor = target.getarmor(i, damage_type)
 		if(!weakpoint || weakpoint_armor > armor)
 			weakpoint = i
 

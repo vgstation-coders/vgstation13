@@ -34,10 +34,6 @@
 			qdel(B)
 			B = null
 
-	if(BrainContainer)
-		qdel(BrainContainer)
-		BrainContainer = null
-
 	if(immune_system)
 		qdel(immune_system)
 		immune_system = null

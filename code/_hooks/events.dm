@@ -242,6 +242,28 @@
 // mob/source: the mob performing the emote
 /event/emote
 
+/event/comp_ai_friend_attacked
+
+/event/comp_ai_cmd_get_best_target
+/event/comp_ai_cmd_add_target
+/event/comp_ai_cmd_remove_target
+/event/comp_ai_cmd_find_targets
+
+/event/comp_ai_cmd_can_attack
+/event/comp_ai_cmd_move
+/event/comp_ai_cmd_attack
+/event/comp_ai_cmd_evaluate_target
+/event/comp_ai_cmd_get_damage_type
+
+/event/comp_ai_cmd_set_busy
+/event/comp_ai_cmd_get_busy
+
+/event/comp_ai_cmd_set_target
+/event/comp_ai_cmd_get_target
+
+/event/comp_ai_cmd_set_state
+/event/comp_ai_cmd_get_state
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

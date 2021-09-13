@@ -1,26 +1,15 @@
 /datum/component/controller/mob
-	var/walk_delay=4
+	var/walk_delay = 4
 
-/datum/component/controller/mob/RecieveSignal(var/message_type, var/list/args)
-	if(isliving(container.holder))
-		var/mob/living/M=container.holder
-		//testing("Got command: \[[message_type]\]: [json_encode(args)]")
-		switch(message_type)
-			if(COMSIG_CLICKON)
-				var/atom/A = args["target"]
-				var/params
-				if(args["def_zone"])
-					var/list/L = list("def_zone" = args["def_zone"])
-					params = list2params(L)
-				M.ClickOn(A, params)
-			if(COMSIG_STEP)
-				step(M, args["dir"], walk_delay)
+/datum/component/controller/mob/initialize()
+	parent.register_event(/event/comp_ai_cmd_move, src, .proc/cmd_move)
+	return TRUE
 
-			if(COMSIG_ADJUST_BODYTEMP) // list("temp"=TEMP_IN_KELVIN)
-				M.bodytemperature += args["temp"]
+/datum/component/controller/mob/Destroy()
+	parent.unregister_event(/event/comp_ai_cmd_move, src, .proc/cmd_move)
+	..()
 
-			if(COMSIG_SET_BODYTEMP) // list("temp"=TEMP_IN_KELVIN)
-				M.bodytemperature = args["temp"]
-
-			if(COMSIG_STATE) // list("state"=HOSTILE_STANCE_ATTACK)
-				setState(args["state"])
+/datum/component/controller/mob/proc/cmd_move(target)
+	if(!isnum(target))
+		CRASH("unknown dir [target]")
+	step(parent, target, walk_delay)
