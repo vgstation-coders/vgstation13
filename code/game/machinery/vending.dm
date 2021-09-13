@@ -1116,16 +1116,15 @@ var/global/num_vending_terminals = 1
 	return "beeps, [text]"
 
 /obj/machinery/vending/power_change()
-	if(stat & BROKEN)
-		icon_state = "[initial(icon_state)]-broken"
-	else
+	if(!(stat & BROKEN))
 		if( powered() )
-			icon_state = initial(icon_state)
+			update_vicon()
 			stat &= ~NOPOWER
 		else
 			spawn(rand(0, 15))
-				src.icon_state = "[initial(icon_state)]-off"
 				stat |= NOPOWER
+				update_vicon()
+	
 
 //Oh no we're malfunctioning!  Dump out some product and break.
 /obj/machinery/vending/proc/malfunction()
@@ -3374,11 +3373,11 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/sale/update_vicon()
 	if(stat & (BROKEN))
-		src.icon_state = "sale-broken"
+		icon_state = "sale-broken"
 	else if (stat & (NOPOWER) || custom_stock.len == 0)
-		src.icon_state = "sale-off"
+		icon_state = "sale-off"
 	else
-		src.icon_state = "sale"
+		icon_state = "sale"
 
 
 /obj/machinery/vending/mining
