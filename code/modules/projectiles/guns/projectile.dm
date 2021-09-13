@@ -331,7 +331,7 @@
 
 /obj/item/weapon/gun/projectile/examine(mob/user)
 	..()
-	if(conventional_firearm && getAmmo() > 1)
+	if(conventional_firearm)
 		to_chat(user, "<span class='info'>Has [getAmmo()] round\s remaining.</span>")
 	if(getSpent() > 0)
 		to_chat(user, "<span class='info'>Has [getSpent()] round\s spent.</span>")
