@@ -154,7 +154,15 @@
 
 	if(snack.reagents.total_volume)
 		loaded_food_name = snack.name
-		var/icon/food_to_load = getFlatIcon(snack)
+		var/icon/food_to_load
+		if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
+			var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
+			if (plated_food.ingredients.len)
+				food_to_load = getFlatIcon(pick(plated_food.ingredients)) // So the plate doesn't appear on the fork
+			else
+				food_to_load = getFlatIcon(snack)
+		else
+			food_to_load = getFlatIcon(snack)
 		food_to_load.Scale(16,16)
 		loaded_food = image(food_to_load)
 		loaded_food.pixel_x = 8 * PIXEL_MULTIPLIER + src.pixel_x

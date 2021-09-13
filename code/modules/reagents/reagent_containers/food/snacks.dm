@@ -33,6 +33,8 @@
 	var/plate_offset_y = 0
 	var/plate_icon = "fullycustom"
 	var/visible_condiments = list()
+	var/base_crumb_chance = 10
+	var/time_last_eaten
 	volume = 100 //Double amount snacks can carry, so that food prepared from excellent items can contain all the nutriments it deserves
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
@@ -209,7 +211,19 @@
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		if(sounds)
 			playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
-		if (prob(35))
+		var/chance_of_crumbs = base_crumb_chance
+		var/time_since_last_eaten = world.time - time_last_eaten
+		if (time_since_last_eaten < 10)
+			chance_of_crumbs *= 2
+		else if (time_since_last_eaten < 20)
+			chance_of_crumbs *= 1.5
+		if (eater.a_intent == I_HURT)
+			chance_of_crumbs *= 1.5
+		time_last_eaten = world.time
+		if (istype(src,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
+			chance_of_crumbs *= 0.3
+		chance_of_crumbs = clamp(chance_of_crumbs, 0, 100)
+		if (prob(chance_of_crumbs))
 			var/obj/effect/decal/cleanable/crumbs/C = new (get_turf(eater))
 			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 		if (virus2?.len)
@@ -520,6 +534,7 @@
 	trash = /obj/item/trash/candy
 	food_flags = FOOD_SWEET
 	filling_color = "#603000"
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/candy/New()
 	..()
@@ -566,6 +581,7 @@
 	name = "cookie"
 	desc = "COOKIE!!!"
 	icon_state = "COOKIE!!!"
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie/New()
 	..()
@@ -577,6 +593,7 @@
 	desc = "A holiday treat made with sugar and love."
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "gingerbread"
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man/New()
 	..()
@@ -591,6 +608,7 @@
 	wrapped = 0
 	bitesize = 2
 	food_flags = FOOD_SWEET
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/New()
 	..()
@@ -656,6 +674,7 @@
 	icon_state = "donut1"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL //eggs are used
 	var/soggy = 0
+	base_crumb_chance = 30
 
 //Called in drinks.dm attackby
 /obj/item/weapon/reagent_containers/food/snacks/donut/proc/dip(var/obj/item/weapon/reagent_containers/R, mob/user)
@@ -1034,6 +1053,7 @@
 	desc = "The cornerstone of every nutritious breakfast."
 	icon_state = "hburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/New()
 	..()
@@ -1044,12 +1064,15 @@
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
 	icon_state = "hburger"
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
 	desc = "Tastes like appendicitis."
 	icon_state = "hburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -1060,6 +1083,8 @@
 	desc = "Almost like a carp is yelling somewhere... Give me back that fillet -o- carp, give me that carp."
 	icon_state = "fishburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/fishburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -1070,6 +1095,8 @@
 	name = "tofu burger"
 	desc = "What... is that meat?"
 	icon_state = "tofuburger"
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/tofuburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -1080,6 +1107,7 @@
 	desc = "Tastes like chi... oh wait!"
 	icon_state = "mc_chicken"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/chickenburger/New()
 	..()
@@ -1091,6 +1119,7 @@
 	desc = "Technically vegetarian."
 	icon_state = "veggieburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/veggieburger/New()
 	..()
@@ -1102,6 +1131,7 @@
 	desc = "Technically vegetarian."
 	icon_state = "veggieburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph/New()
 	..()
@@ -1112,6 +1142,8 @@
 	name = "roburger"
 	desc = "The lettuce is the only organic component. Beep."
 	icon_state = "roburger"
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/roburger/New()
 	..()
 	reagents.add_reagent(NANITES, 2)
@@ -1122,6 +1154,8 @@
 	desc = "This massive patty looks like poison. Beep."
 	icon_state = "roburger"
 	volume = 100
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/roburgerbig/New()
 	..()
 	reagents.add_reagent(NANITES, 100)
@@ -1132,6 +1166,8 @@
 	desc = "Smells caustic. Tastes like heresy."
 	icon_state = "xburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/xenoburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
@@ -1141,6 +1177,8 @@
 	name = "clown burger"
 	desc = "This tastes funny..."
 	icon_state = "clownburger"
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/clownburger/New()
 	..()
 /*
@@ -1157,6 +1195,8 @@
 	name = "mime burger"
 	desc = "Its taste defies language."
 	icon_state = "mimeburger"
+	base_crumb_chance = 20
+
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -1168,6 +1208,7 @@
 	desc = "Illegal to have out on code green."
 	icon_state = "donutburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/donutburger/New()
 	..()
@@ -1180,6 +1221,7 @@
 	desc = "Blurring the line between ingredient and condiment."
 	icon_state = "avocadoburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger/New()
 	..()
@@ -1191,6 +1233,7 @@
 	desc = "Too sweet to be any good."
 	icon_state = "caramelburger"
 	food_flags = FOOD_MEAT | FOOD_SWEET
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/caramelburger/New()
 	..()
@@ -1203,6 +1246,7 @@
 	desc = "Fits perfectly in any pic-a-nic basket. Oh bothering to grizzle into this won't be a boo-boo. Honey, it would be beary foolish to hibernate on such a unbearably, ursa majorly good treat!"
 	icon_state = "bearburger"
 	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/bearburger/New()
 	..()
@@ -4132,6 +4176,7 @@
 	icon_state = "chips"
 	trash = /obj/item/trash/chips
 	filling_color = "#FFB700"
+	base_crumb_chance = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/chips/New()
 	..()
