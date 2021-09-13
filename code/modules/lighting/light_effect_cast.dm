@@ -8,6 +8,10 @@
 // Shadows over light_range 5 haven't been done yet.
 #define MAX_LIGHT_RANGE 5
 
+#define NO_POST_PROCESSING 	0
+#define WALL_SHADOWS_ONLY  	1
+#define ALL_SHADOWS	 		2
+
 var/light_power_multiplier = 5
 var/light_post_processing = 1 // Use writeglobal to change this
 
@@ -501,6 +505,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/proc/update_appearance()
 	if (light_post_processing)
 		post_processing()
+	else
+		temp_appearance += temp_appearance_shadows
 	overlays = temp_appearance
 	temp_appearance = null
 	// Because movable lights do this two-lights-sources thing
@@ -512,15 +518,17 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
-	var/image/shadow_overlay/image_result = new()
-	for (var/image/image_component in temp_appearance_shadows)
-		image_result.temp_appearance += image_component
+	if (light_post_processing < ALL_SHADOWS)
+		var/image/shadow_overlay/image_result = new()
+		for (var/image/image_component in temp_appearance_shadows)
+			image_result.temp_appearance += image_component
 
-	image_result.overlays = image_result.temp_appearance
-	// Apply a filter
-	image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-	temp_appearance += image_result
-
+		image_result.overlays = image_result.temp_appearance
+		// Apply a filter
+		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
+		temp_appearance += image_result
+	else
+		temp_appearance += temp_appearance_shadows
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
