@@ -518,7 +518,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
-	if (light_post_processing < ALL_SHADOWS)
+	if (light_post_processing == ALL_SHADOWS)
 		var/image/shadow_overlay/image_result = new()
 		for (var/image/image_component in temp_appearance_shadows)
 			image_result.temp_appearance += image_component
