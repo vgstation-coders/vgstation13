@@ -51,8 +51,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define relative_plane_to_plane(x,y) (x - y + FLOAT_PLANE)
 
 
-#define CLICKCATCHER_PLANE -99
-#define SPACE_BACKGROUND_PLANE -98
+#define CLICKCATCHER_PLANE (-99 + FLOAT_PLANE)
+#define SPACE_BACKGROUND_PLANE (-98)
 #define SPACE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 1) // -97
 #define SPACE_DUST_PLANE (SPACE_PARALLAX_PLANE + 1) // -96
 #define ABOVE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 3) // -95
@@ -97,7 +97,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define TURF_PLANE				(-1 + FLOAT_PLANE)
 	#define MAPPING_TURF_LAYER			-999
-	
+
 #define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
 
 #define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
@@ -203,22 +203,27 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define LIGHTING_PLANE 			(13 + FLOAT_PLANE)	// Don't put anything other than lighting_overlays in there please
-	#define LIGHTING_LAYER 				0
+								//13	//	THIS PLANE FOR RENT
 
-#define ABOVE_LIGHTING_PLANE	(14 + FLOAT_PLANE)
-	#define ABOVE_LIGHTING_LAYER		0
+#define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
+	#define SELF_VISION_LAYER 		   -1
+	#define LIGHTBULB_LAYER 			0
+	#define LIGHTING_LAYER 				2
+	#define ABOVE_LIGHTING_LAYER 		3
+	#define HIGHEST_LIGHTING_LAYER		3.5
+	#define ANTI_GLOW_PASS_LAYER		4
+	#define ROID_TURF_LIGHT_LAYER 		5
+
+#define ABOVE_LIGHTING_PLANE	(15)
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
 	#define NARSIE_GLOW 				3
 
-
-
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define BASE_PLANE 				(15 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define BASE_PLANE 				(16)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	16
+#define LIGHT_SOURCE_PLANE		16	// For Spiders to be able to click them despite being blinded
 
 #define ANTAG_HUD_PLANE		 	17
 
@@ -327,27 +332,3 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
 
-
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-
-	blend_mode    = BLEND_MULTIPLY
-
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = LIGHTING_PLANE
-
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy

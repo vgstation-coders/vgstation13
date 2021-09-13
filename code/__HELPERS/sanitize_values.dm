@@ -62,5 +62,5 @@
 
 //Removes lighting overlays from a list of objects
 /proc/sanitize_contents_list(list/contents)
-	for(var/atom/movable/lighting_overlay/lighting_overlay in contents)
+	for(var/atom/movable/light/lighting_overlay in contents)
 		contents.Remove(lighting_overlay)

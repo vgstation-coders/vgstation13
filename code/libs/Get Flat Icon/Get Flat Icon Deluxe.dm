@@ -182,7 +182,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 			data[GFI_DX_COLOR] = blood_color
 		else if (isitem(parent_atom) && (to_sort:name == "blood_overlay")) // just a blood-covered item
 			data[GFI_DX_COLOR] = to_sort:color
-		else
+		else if (parent[GFI_DX_COLOR] != null)
 			data[GFI_DX_COLOR] = parent[GFI_DX_COLOR]
 		if (parent[GFI_DX_ALPHA] != 255)
 			data[GFI_DX_ALPHA] = parent[GFI_DX_ALPHA]
@@ -215,7 +215,7 @@ proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/ov
 	var/list/turf_image_datas = list()
 	turf_image_datas = get_content_image_datas(T)
 	for(var/atom/A in T.contents)
-		if (istype(A, /atom/movable/lighting_overlay))
+		if (istype(A, /atom/movable/light))
 			continue
 		if (camera)
 			A.photography_act(camera)

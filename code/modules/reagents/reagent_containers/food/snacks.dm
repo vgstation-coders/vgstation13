@@ -447,9 +447,9 @@
 	var/child_volume = 3 // every spawned child will have this much or less reagent transferred to it. Small number = a lot of small items spawn
 
 // called when it leaves the microwave
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/forceMove(turf/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	. = ..()
-	if(isnull(destination))
+	if(isnull(NewLoc))
 		return
 	spawn_children()
 	qdel(src)
@@ -1739,6 +1739,7 @@
 	desc = "AKA: French Fries, Freedom Fries, etc."
 	icon_state = "fries"
 	plate_offset_y = -2
+	filling_color = "#FFCF62"
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/New()
 	..()
@@ -1748,6 +1749,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
 	..()
 	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/fries/cone
+	name = "cone of Space Fries"
+	icon_state = "fries_cone"
+	trash = /obj/item/trash/fries_cone
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
@@ -1840,11 +1846,17 @@
 	icon_state = "cheesyfries"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	plate_offset_y = -3
+	filling_color = "#FFEB3B"
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
+	name = "punnet of Cheesy Fries"
+	icon_state = "cheesyfries_punnet"
+	trash = /obj/item/trash/fries_punet
 
 /obj/item/weapon/reagent_containers/food/snacks/fortunecookie
 	name = "Fortune cookie"

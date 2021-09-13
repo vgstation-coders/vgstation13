@@ -130,6 +130,10 @@
 		name = "plates"
 		gender = PLURAL
 		var/image/I = image(plate.icon, src, plate.icon_state)
+		if (!plate.clean && plate.trash_color)
+			var/image/I_remains = image(icon, src, "plate-remains")
+			I_remains.color = plate.trash_color
+			I.overlays += I_remains
 		I.pixel_y = offset_y
 		overlays += I
 		offset_y += 2
@@ -402,6 +406,8 @@
 	if(fullyCustom)
 		I = image(S.icon,src,S.icon_state)
 		I.appearance = S.appearance
+		I.plane = FLOAT_PLANE
+		I.layer = FLOAT_LAYER
 		I.pixel_y = 12 * PIXEL_MULTIPLIER - empty_Y_space(icon(S.icon,S.icon_state)) + S.plate_offset_y
 	else
 		I = src.filling

@@ -580,3 +580,56 @@
 /obj/item/weapon/reagent_containers/food/condiment/chillwax/New()
 	..()
 	reagents.add_reagent(CHILLWAX, 50)
+
+//////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/reagent_containers/food/condiment/small
+	possible_transfer_amounts = list(1, 5)
+	amount_per_transfer_from_this = 1
+	var/trash_type
+
+/obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change()
+	if(is_empty() && trash_type)
+		var/obj/item/trash/trash = new trash_type(get_turf(src))
+		if (ismob(loc))
+			var/mob/M = loc
+			var/hand_index = M.is_holding_item(src)
+			M.drop_item(src, M.loc)
+			if (hand_index)
+				M.put_in_hand(hand_index, trash)
+				M.update_inv_hands()
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
+	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers))
+		return FALSE
+	. = ..()
+
+/obj/item/weapon/reagent_containers/food/condiment/small/is_open_container()
+	return FALSE	// This should prevent most ways the packet could emptied other than by being applied on food.
+					// Worst case scenario, the empty packet will appear on the ground.
+
+//-------------------------------------------------------------------------
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup
+	name = "ketchup packet"
+	desc = "You feel more American already."
+	icon_state = "ketchup_small"
+	condiment_overlay = KETCHUP
+	trash_type = /obj/item/trash/ketchup_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
+	..()
+	reagents.add_reagent(KETCHUP, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo
+	name = "mayonaise packet"
+	desc = "Still not an instrument."
+	icon_state = "mayo_small"
+	condiment_overlay = MAYO
+	trash_type = /obj/item/trash/mayo_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
+	..()
+	reagents.add_reagent(MAYO, 5)

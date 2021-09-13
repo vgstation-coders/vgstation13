@@ -99,7 +99,7 @@
 			return(SUICIDE_ACT_BRUTELOSS)
 	else
 		return ..()
-	
+
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
 	desc = "A storage tank containing welding fuel."
@@ -224,6 +224,9 @@
 		var/obj/structure/bed/chair/vehicle/car = AM
 		if(car.explodes_fueltanks)
 			visible_message("<span class='danger'>\The [car] crashes into \the [src]!</span>")
+			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = car.occupant
+				H.audible_scream("fueltank_crash")
 			explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()

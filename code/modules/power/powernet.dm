@@ -81,7 +81,7 @@
 	M.powernet = src
 	nodes += M
 
-/datum/powernet/proc/add_component(var/datum/power_connection/C)
+/datum/powernet/proc/add_connection(var/datum/power_connection/C)
 	if(C.powernet)							// if M already has a powernet...
 		if(C.powernet == src)
 			return

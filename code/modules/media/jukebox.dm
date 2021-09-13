@@ -26,10 +26,7 @@ var/global/global_playlists = list()
 			var/json = file2text(response["CONTENT"])
 			if("/>" in json)
 				continue
-			var/json_reader/reader = new()
-			reader.tokens = reader.ScanJson(json)
-			reader.i = 1
-			var/songdata = reader.read_value()
+			var/songdata = json_decode(json)
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
 			if(playlist.len==0)
@@ -982,7 +979,7 @@ var/global/list/loopModeNames=list(
 	if(popup)
 		popup.close()
 	playing = 0
-	set_light(0)
+	kill_light()
 	icon_state = ""
 	flick("repacking",src)
 	update_music()

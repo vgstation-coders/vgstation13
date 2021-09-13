@@ -152,6 +152,12 @@
 	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.5
 
+/obj/item/clothing/suit/armor/riot/offenseTackleBonus()
+	return 1
+
+/obj/item/clothing/suit/armor/riot/defenseTackleBonus()
+	return 2
+
 /obj/item/clothing/suit/armor/rune
 	name = "rune platebody"
 	desc = "Provides excellent protection."

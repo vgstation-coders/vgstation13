@@ -47,6 +47,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/punch_sharpness = 0										// Slicing/cutting force of punches. Independent of the sharpness added by claws.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
+	var/tacklePower = 5
+	var/tackleRange = 2
 	var/mutantrace											// Safeguard due to old code.
 	var/myhuman												// mob reference
 
@@ -415,6 +417,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	default_mutations=list(M_SKELETON)
 	brute_mod = 2.0
+	tacklePower = 2
+	tackleRange = 3		//How terribly spooky
 
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
@@ -590,6 +594,7 @@ var/global/list/whitelisted_species = list("Human")
 	eyes = "grey_eyes_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
+	tacklePower = 2
 
 	primitive = /mob/living/carbon/monkey/grey
 
@@ -661,6 +666,7 @@ var/global/list/whitelisted_species = list("Human")
 	eyes = "eyes_s"
 
 	max_hurt_damage = 10
+	tacklePower = 9
 
 	primitive = /mob/living/carbon/monkey // TODO
 
@@ -720,7 +726,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
-
+	tacklePower = 4
 	anatomy_flags = HAS_SWEAT_GLANDS
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
@@ -833,6 +839,8 @@ var/global/list/whitelisted_species = list("Human")
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	attack_verb = "slashes"
 	punch_damage = 5
+	tacklePower = 7
+	tackleRange = 1
 	primitive = /mob/living/carbon/monkey/diona
 
 	spells = list(/spell/targeted/transfer_reagents)
@@ -887,6 +895,8 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_GOLEM)
 	meat_type = /obj/item/stack/ore/diamond
 	attack_verb = "punches"
+	tacklePower = 8
+	tackleRange = 1
 
 	flags = NO_BREATHE | NO_PAIN | HYPOTHERMIA_IMMUNE
 	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | IS_BULKY | NO_STRUCTURE
@@ -1065,6 +1075,7 @@ var/list/has_died_as_golem = list()
 	known_languages = list(LANGUAGE_SLIME)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	attack_verb = "glomps"
+	tacklePower = 4
 
 	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
 	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR

@@ -106,7 +106,7 @@
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
-/datum/shuttle/proc/initialize()
+/datum/shuttle/initialize()
 	. = INIT_SUCCESS
 	src.docking_ports = list()
 	src.docking_ports_aboard = list()
@@ -771,9 +771,6 @@
 				old_turf.icon = D.base_turf_icon
 			if(D.base_turf_icon_state)
 				old_turf.icon_state = D.base_turf_icon_state
-
-		if(istype(old_turf,/turf/space))
-			old_turf.lighting_clear_overlay() //A horrible band-aid fix for lighting overlays appearing over space
 
 	//Update doors
 	if(turfs_to_update.len)

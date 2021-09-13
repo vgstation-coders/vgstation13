@@ -61,7 +61,7 @@
 	icon_state = "biobag0"
 	item_state = "biobag"
 
-	sterility = 10
+	sterility = 100
 	fits_max_w_class = W_CLASS_LARGE
 	can_only_hold = list(
 		"/obj/item/trash",
@@ -72,7 +72,7 @@
 	)
 	slot_flags = SLOT_BELT
 
-/obj/item/weapon/storage/bag/trash/update_icon()
+/obj/item/weapon/storage/bag/trash/bio/update_icon()
 	if(contents.len == 0)
 		icon_state = "biobag0"
 		slowdown = 1
@@ -284,7 +284,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil")
 
 /obj/item/weapon/storage/bag/food/update_icon()
 	if(contents.len < 1)
@@ -294,15 +294,20 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/food/menu1/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/fries(src)//4 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/fries/cone(src)//4 nutriments
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
+	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/food/menu2/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries(src)//6 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet(src)//6 nutriments
+	new/obj/item/weapon/kitchen/utensil/fork/plastic(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
+	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
 	update_icon()
 
 // -----------------------------

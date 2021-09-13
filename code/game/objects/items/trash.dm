@@ -187,6 +187,18 @@
 	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
 
+/obj/item/trash/fries_cone
+	name = "fries cone"
+	icon_state = "used_cone"
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type=RECYK_MISC
+
+/obj/item/trash/fries_punet
+	name = "fries punnet"
+	icon_state = "used_punnet"
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type=RECYK_MISC
+
 /obj/item/trash/mannequin/cultify()
 	if(icon_state != "mannequin_cult_empty")
 		name = "cult mannequin pedestale"
@@ -275,3 +287,13 @@ var/list/crushed_cans_cache = list()
 
 /obj/item/trash/egg/borer
 	icon_state	= "borer egg-growing"
+
+/obj/item/trash/ketchup_packet
+	name = "ketchup packet"
+	desc = "A used ketchup packet"
+	icon_state	= "ketchup_small"
+
+/obj/item/trash/mayo_packet
+	name = "mayonaise packet"
+	desc = "A used mayonnaise packet"
+	icon_state	= "mayo_small"

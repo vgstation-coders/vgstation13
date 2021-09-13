@@ -29,6 +29,8 @@ Possible to do for anyone motivated enough:
 // 1 = AREA BASED
 var/const/HOLOPAD_MODE = 0
 
+var/list/holopads = list()
+
 /obj/machinery/hologram/holopad
 	name = "\improper AI holopad"
 	desc = "It's a floor-mounted device for projecting holographic images. It is activated remotely."
@@ -43,6 +45,7 @@ var/const/HOLOPAD_MODE = 0
 
 /obj/machinery/hologram/holopad/New()
 	..()
+	holopads += src
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/holopad,
 		/obj/item/weapon/stock_parts/console_screen,
@@ -50,6 +53,10 @@ var/const/HOLOPAD_MODE = 0
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/micro_laser
 	)
+
+/obj/machinery/hologram/holopad/Destroy()
+	holopads -= src
+	..()
 
 /obj/machinery/hologram/holopad/GhostsAlwaysHear()
 	return TRUE
@@ -128,7 +135,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
-		
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/clear_holo()
@@ -144,7 +151,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	if(master.current == src)
 		master.current = null
 	master = null//Null the master, since no-one is using it now.
-	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
+	kill_light()			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = 1//Passive power usage.
 	return 1

@@ -68,7 +68,7 @@
 			singulo.target = null
 	icon_state = "[icontype]0"
 	active = 0
-	set_light(0)
+	kill_light()
 	if(user)
 		user.visible_message("<span class='warning'>[user] shuts down \the [src].</span>", \
 		"<span class='notice'>You shut down \the [src].</span>")

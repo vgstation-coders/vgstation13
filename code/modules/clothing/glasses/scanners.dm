@@ -19,7 +19,7 @@
 			var/client/C = user.client
 			C.color = initial(C.color)
 
-/obj/item/clothing/glasses/scanner/equipped(M as mob, glasses)
+/obj/item/clothing/glasses/scanner/equipped(var/mob/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/O = M
 		if(O.glasses != src)
@@ -32,12 +32,14 @@
 		return
 	if(on)
 		if(iscarbon(M))
+			M.update_darkness()
 			apply_color(M)
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
+			user.seedarkness = TRUE
 			if(iscarbon(user))
 				remove_color(user)
 	..()
@@ -99,7 +101,8 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+	see_invisible = SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
 	see_in_dark = 8
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -107,18 +110,24 @@
 	color_matrix = list(0.8, 0, 0  ,\
 						0  , 1, 0  ,\
 						0  , 0, 0.8) //equivalent to #CCFFCC
+	my_dark_plane_alpha_override = "night_vision"
+	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
 	see_invisible = initial(see_invisible)
 	see_in_dark = initial(see_in_dark)
+	seedarkness = FALSE
 	eyeprot = initial(eyeprot)
-	..()
+	return ..()
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
+	. = ..()
 	see_invisible = 0
 	see_in_dark = 0
+	seedarkness = TRUE
 	eyeprot = 0
-	..()
+
+var/list/meson_wearers = list()
 
 /obj/item/clothing/glasses/scanner/meson
 	name = "optical meson scanner"
@@ -128,12 +137,18 @@
 	vision_flags = SEE_TURFS
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
-
 	glasses_fit = TRUE
+	var/mob/viewing
+
+	my_dark_plane_alpha_override = "mesons"
+	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
+	on = 1
+	update_mob(viewing)
 	var/area/A = get_area(src)
 	if(A.flags & NO_MESONS)
 		to_chat(C, "<span class = 'warning'>\The [src] flickers, but refuses to come online!</span>")
@@ -141,20 +156,69 @@
 	eyeprot = initial(eyeprot)
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
+	my_dark_plane_alpha_override_value = 255
+
 //	body_parts_covered |= EYES
 	..()
 
 /obj/item/clothing/glasses/scanner/meson/disable(var/mob/C)
+	update_mob(viewing)
 	eyeprot = 0
+	on = 0
 //	body_parts_covered &= ~EYES
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
-	..()
+	my_dark_plane_alpha_override_value = 0
+	seedarkness = TRUE
+
+/obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
+	. = ..()
+	if (user)
+		user.dark_plane?.alphas -= "mesons"
+		user.update_darkness()
+		user.check_dark_vision()
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)
 		visible_message("<span class = 'warning'>\The [src] sputter out.</span>")
 		disable()
+
+/obj/item/clothing/glasses/scanner/meson/proc/clear()
+	if (viewing)
+		meson_wearers -= viewing
+		if (viewing.client)
+			viewing.client.images -= false_wall_images
+
+/obj/item/clothing/glasses/scanner/meson/proc/apply()
+	if (!viewing || !viewing.client || !on)
+		return
+
+	meson_wearers += viewing
+	viewing.client.images += false_wall_images
+
+/obj/item/clothing/glasses/scanner/meson/unequipped(var/mob/M)
+	update_mob()
+	..()
+
+/obj/item/clothing/glasses/scanner/meson/equipped(var/mob/M)
+	update_mob(M)
+	..()
+
+/obj/item/clothing/glasses/scanner/meson/proc/update_mob(var/mob/new_mob)
+	if (new_mob == viewing)
+		clear()
+		apply()
+		return
+
+	if (new_mob != viewing)
+		clear()
+		if (viewing)
+			viewing = null
+		if (new_mob)
+			viewing = new_mob
+			apply()
+
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"
@@ -216,22 +280,22 @@
 	showing = get_images(get_turf(viewing), viewing.client.view)
 	viewing.client.images += showing
 
+
 /obj/item/clothing/glasses/scanner/material/proc/update_mob(var/mob/new_mob)
 	if (new_mob == viewing)
 		clear()
 		apply()
 		return
 
-	if (new_mob != viewing)
-		clear()
+	clear()
 
-		if (viewing)
-			viewing.unregister_event(/event/logout, src, .proc/mob_logout)
-			viewing = null
+	if (viewing)
+		viewing.unregister_event(/event/logout, src, .proc/mob_logout)
+		viewing = null
 
-		if (new_mob)
-			new_mob.register_event(/event/logout, src, .proc/mob_logout)
-			viewing = new_mob
+	if (new_mob)
+		new_mob.register_event(/event/logout, src, .proc/mob_logout)
+		viewing = new_mob
 
 /obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/user)
 	if (user != viewing)

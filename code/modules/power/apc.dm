@@ -101,6 +101,14 @@
 
 	machine_flags = WIREJACK
 
+	plane = OBJ_PLANE
+
+	light_range = 1
+	light_power = 1
+	light_color = LIGHT_COLOR_RED
+	lighting_flags = FOLLOW_PIXEL_OFFSET
+	moody_light_type = /atom/movable/light/moody/apc
+
 /obj/machinery/power/apc/get_cell()
 	return cell
 
@@ -113,6 +121,8 @@
 // Frame only.
 /obj/machinery/power/apc/frame
 	icon_state = "apcmaint"
+	light_range = 0
+	light_power = 0
 
 /obj/machinery/power/apc/frame/New()
 	return ..(loc, dir, 1)
@@ -203,6 +213,9 @@
 			to_chat(user, "The cover is closed.")
 
 /obj/machinery/power/apc/update_icon()
+	var/old_light_range = light_range
+	var/old_light_power = light_power
+	var/old_light_color = light_color
 	if (!status_overlays)
 		status_overlays = 1
 		status_overlays_lock = new
@@ -250,8 +263,12 @@
 	if(update & 1) // Updating the icon state
 		if(update_state & UPSTATE_ALLGOOD)
 			icon_state = "apc0"
+			light_range = 1
+			light_power = 1
 		else if(update_state & (UPSTATE_OPENED1|UPSTATE_OPENED2))
 			var/basestate = "apc[ cell ? "2" : "1" ]"
+			light_range = 0
+			light_power = 0
 			if(update_state & UPSTATE_OPENED1)
 				if(update_state & (UPSTATE_MAINT|UPSTATE_BROKE))
 					icon_state = "apcmaint" //disabled APC cannot hold cell
@@ -261,10 +278,17 @@
 				icon_state = "[basestate]-nocover"
 		else if(update_state & UPSTATE_BROKE)
 			icon_state = "apc-b"
+			light_range = 0
+			light_power = 0
 		else if(update_state & UPSTATE_BLUESCREEN)
 			icon_state = "apcemag"
+			light_range = 1
+			light_power = 1
+			light_color = LIGHT_COLOR_APC_BLUE
 		else if(update_state & UPSTATE_WIREEXP)
 			icon_state = "apcewires"
+			light_range = 0
+			light_power = 0
 
 
 
@@ -284,6 +308,22 @@
 				overlays += status_overlays_equipment[equipment+1]
 				overlays += status_overlays_lighting[lighting+1]
 				overlays += status_overlays_environ[environ+1]
+
+	if (!(stat & (BROKEN|MAINT)))
+		switch (charging)
+			if (0) // Red
+				light_color = LIGHT_COLOR_RED
+			if (1) // Yellow
+				light_color = LIGHT_COLOR_APC_YELLOW
+			if (2)
+				light_color = LIGHT_COLOR_APC_GREEN
+
+	// Update color only
+	if (old_light_color != light_color)
+		light_obj.cast_light(TRUE)
+
+	if (old_light_range != light_range || old_light_power != light_power)
+		light_obj.cast_light()
 
 
 /obj/machinery/power/apc/proc/check_updates()
@@ -618,7 +658,7 @@
 					"You hear something metallic being hit, and falling on the floor.")
 				update_icon()
 			else
-				user.visible_message("<span class='warning'>\The [user.name] hits the broken APC's cover with \a [W.name] by [user.name]!</span>", \
+				user.visible_message("<span class='warning'>\The [user.name] hits the broken APC's cover with \a [W.name]!</span>", \
 					"<span class='warning'>You hit the APC's cover with your [W.name]!</span>", \
 					"You hear something metallic being hit.")
 
@@ -1344,9 +1384,10 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		spawn(0)
 			var/area/this_area = get_area(src)
 			for(var/obj/machinery/light/L in this_area)
-				L.on = 1
-				L.broken()
-				sleep(1)
+				L.flicker(5)
+				spawn(5)
+					L.on = 1
+					L.broken()
 
 /obj/machinery/power/apc/Destroy()
 	var/area/this_area = get_area(src)

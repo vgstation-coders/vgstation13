@@ -47,7 +47,6 @@
 	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
-	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 	var/list/species_fit = null //This object has a different appearance when worn by these species
 	var/nonplant_seed_type
@@ -280,11 +279,6 @@
 
 /obj/item/attack_paw(var/mob/user)
 	attack_hand(user)
-
-// Due to storage type consolidation this should get used more now.
-// I have cleaned it up a little, but it could probably use more.  -Sayu
-/obj/item/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	return ..()
 
 /obj/item/proc/talk_into(var/datum/speech/speech, var/channel=null)
 	return
@@ -1197,7 +1191,7 @@ var/global/list/image/blood_overlays = list()
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		var/obj/effect/decal/cleanable/blueglow/BG
 		BG = had_blood
-		BG.set_light(0)
+		BG.kill_light()
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)

@@ -265,3 +265,30 @@
 /mob/living/carbon/human/on_dodge(attacker, attacking_object)
 	if(isninja(src))
 		emote("smirks", message = TRUE)
+
+//Tackle procs//////
+
+/mob/living/carbon/human/bonusTackleForce(var/tF = 0)
+	for(var/obj/item/clothing/C in get_all_slots())
+		if(istype(C))
+			tF += C.offenseTackleBonus()
+	if(species)
+		tF += species.tacklePower
+	return tF
+
+/mob/living/carbon/human/bonusTackleDefense(var/tD = 0)
+	for(var/obj/item/clothing/C in get_all_slots())
+		if(istype(C))
+			tD += C.defenseTackleBonus()
+	if(species)
+		tD += species.tacklePower
+	return tD
+
+/mob/living/carbon/human/bonusTackleRange(var/tR = 0)
+	if(species)
+		tR += species.tackleRange
+	if(wear_suit)
+		var/obj/item/slowSuit = wear_suit
+		if(slowSuit.slowdown > NO_SLOWDOWN)
+			tR -= 1
+	return max(0, tR)

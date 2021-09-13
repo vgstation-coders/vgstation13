@@ -7,7 +7,9 @@
 	name = "paper"
 	gender = NEUTER
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	icon_state = "paper"
+	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
@@ -276,6 +278,7 @@
 		\[impact\] - \[/impact\] : <span style=\"font-family:Impact\">Impact</span><br>
 		\[palatino\] - \[/palatino\] : <span style=\"font-family:Palatino Linotype\">Palatino Linotype</span><br>
 		\[tnr\] - \[/tnr\] : <span style=\"font-family:Times New Roman\">Times New Roman</span>
+
 	</BODY></HTML>"}, "window=paper_help")
 
 /obj/item/weapon/paper/Topic(href, href_list)

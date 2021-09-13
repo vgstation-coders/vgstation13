@@ -6,6 +6,7 @@
 
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_MINIMUM
+	seedarkness = FALSE
 	invisibility = INVISIBILITY_OBSERVER
 
 	pass_flags = PASSBLOB
@@ -145,7 +146,7 @@
 			rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a> <span class='message'>[message_a]</span></span></i></font>"
 			M.show_message(rendered, 2)
 
-/mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE)
+/mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE, arguments)
 	return
 
 /mob/camera/blob/ex_act()

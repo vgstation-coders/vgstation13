@@ -31,6 +31,9 @@
 		Things to do to the *old* body prior to the mind transfer.
 	@PostMindTransfer(New_character, Mob/Living, Old_character, Mob/Living)
 		Things to do to the *new* body after the mind transfer is completed.
+
+	@update_perception()
+		Called on Life() to handle the role's additional alphas to the dark plane.
 */
 
 #define ROLE_MIXABLE   			1 // Can be used in mixed mode
@@ -259,6 +262,11 @@
 	return
 
 /datum/role/proc/check_win()
+	return
+
+// called on Life()
+
+/datum/role/proc/update_perception()
 	return
 
 // Create objectives here.

@@ -52,6 +52,16 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	// Lighting flags
+	var/lighting_flags
+	var/moody_light_type
+
+/atom/New()
+	. = ..()
+	// Light effects
+	if (moody_light_type || lighting_flags & IS_LIGHT_SOURCE)
+		set_light()
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -164,6 +174,15 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	if(light_obj)
+		qdel(light_obj)
+		light_obj = null
+	if(shadow_obj)
+		qdel(shadow_obj)
+		shadow_obj = null
+	if(smooth_light_obj)
+		qdel(smooth_light_obj)
+		smooth_light_obj = null
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
@@ -856,7 +875,7 @@ its easier to just keep the beam vertical.
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
 
-/atom/proc/initialize()
+/atom/initialize()
 	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()
@@ -906,3 +925,10 @@ its easier to just keep the beam vertical.
 //Called when a conveyor belt is pointing into us and an atom is coming in.
 /atom/proc/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	return
+
+/atom/proc/contains(atom/A)
+	if(!A)
+		return FALSE
+	for(var/atom/location = A.loc, location, location = location.loc)
+		if(location == src)
+			return TRUE

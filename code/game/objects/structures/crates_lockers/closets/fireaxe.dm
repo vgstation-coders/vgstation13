@@ -4,12 +4,15 @@
 	desc = "A small label reads 'For Emergency use only', accompanied with pictograms detailing safe usages for the included fireaxe. As if."
 	var/obj/item/weapon/fireaxe/fireaxe = new/obj/item/weapon/fireaxe
 	icon_state = "fireaxe1000"
+	icon = 'icons/obj/closet.dmi'
 	anchored = 1
 	density = 0
 	var/opened = 1
 	var/locked = 1
+	flags = FPRINT
 	plane = ABOVE_TURF_PLANE
 	layer = FIREAXE_LOCKER_LAYER
+	ignoreinvert = 1
 	var/hitstaken = 0
 	var/smashed = 0
 	var/localopened = 0 //Setting this to keep it from behaviouring like a normal closet and obstructing movement in the map. -Agouri

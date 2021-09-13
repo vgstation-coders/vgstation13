@@ -2,6 +2,7 @@
 	name = "clipboard"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "clipboard"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	item_state = "clipboard"
 	throwforce = 0
 	w_class = W_CLASS_SMALL
