@@ -25,12 +25,21 @@
 	var/list/movement_nodes = list()
 	var/target
 
+/datum/component/controller/movement/astar/initialize()
+	active_components += src
+	return ..()
+
+/datum/component/controller/movement/astar/Destroy()
+	active_components -= src
+	..()
+
 /datum/component/controller/movement/astar/cmd_move(target)
 	var/mob/living/dude = parent
 	if(isatom(target))
 		if(src.target == target)
 			return //We're already on our way there
-		AStar(parent, .proc/receive_path, dude, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id = dude.get_visible_id()) //fix callback owner
+		src.target = target
+		AStar(parent, new /callback(src, .proc/receive_path), parent, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance_cardinal, 0, 30, id = dude.get_visible_id())
 	else if(isnum(target))
 		movement_nodes = list()
 		dude.set_glide_size(DELAY2GLIDESIZE(walk_delay))
@@ -39,7 +48,7 @@
 		CRASH("target [target] is not an atom or a dir")
 
 /datum/component/controller/movement/astar/process()
-	if(movement_nodes && movement_nodes.len && target && (target != null))
+	if(movement_nodes && movement_nodes.len && target)
 		if(movement_nodes.len > 0)
 			step_to(parent, movement_nodes[1])
 			movement_nodes -= movement_nodes[1]

@@ -288,12 +288,11 @@
 	if(!length(event_handlers))
 		// This datum does not have any handler registered for this event_type.
 		return
-	. = NONE
 	for(var/key in event_handlers)
 		var/list/handler = event_handlers[key]
 		var/objRef = handler[EVENT_HANDLER_OBJREF_INDEX]
 		var/procName = handler[EVENT_HANDLER_PROCNAME_INDEX]
-		. |= CallAsync(objRef, procName, arguments)
+		. = . | CallAsync(objRef, procName, arguments)
 
 /**
   * Registers a proc to be called on an object whenever the specified event_type

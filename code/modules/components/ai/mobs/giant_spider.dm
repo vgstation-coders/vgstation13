@@ -5,7 +5,7 @@
 
 /mob/living/component/giant_spider/New()
 	..()
-	add_component(/datum/component/controller/mob)
+	add_component(/datum/component/controller)
 	add_component(/datum/component/ai/escape_confinement)
 	add_component(/datum/component/ai/hunt)
 	add_component(/datum/component/ai/melee/attack_animal)
