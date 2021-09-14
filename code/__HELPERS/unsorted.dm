@@ -1057,7 +1057,14 @@ proc/GaussRandRound(var/sigma,var/roundto)
 						if(istype(B, /turf/space))
 							continue moving
 
+					var/old_x = B.x
+					var/old_y = B.y
+					var/old_z = B.z
 					var/turf/X = B.ChangeTurf(T.type)
+					if (!X)
+						X = locate(old_x,old_y,old_z)
+					if (!X)
+						continue moving
 					X.name = old_name
 					X.dir = old_dir1
 					X.icon_state = old_icon_state1
