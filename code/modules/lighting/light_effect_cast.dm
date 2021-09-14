@@ -3,17 +3,12 @@
 #define WIDE_SHADOW_THRESHOLD 80
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
-#define BLUR_SIZE 2 // integer, please
 
 // Shadows over light_range 5 haven't been done yet.
 #define MAX_LIGHT_RANGE 5
 
-#define NO_POST_PROCESSING 	0
-#define WALL_SHADOWS_ONLY  	1
-#define ALL_SHADOWS	 		2
 
 var/light_power_multiplier = 5
-var/light_post_processing = NO_POST_PROCESSING // Use writeglobal to change this
 
 // We actually see these "pseudo-light atoms" in order to ensure that wall shadows are only seen by people who can see the light.
 // Yes, this is stupid, but it's one of the limitations of TILE_BOUND, which cannot be chosen on an overlay-per-overlay basis.
@@ -47,7 +42,6 @@ var/light_post_processing = NO_POST_PROCESSING // Use writeglobal to change this
 	filters = list()
 	pre_rendered_shadows = list()
 	temp_appearance = list()
-	temp_appearance_shadows = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
 
@@ -373,7 +367,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			I.pixel_y += shadowoffset/2
 
 	//and add it to the lights overlays
-	temp_appearance_shadows += I
+	temp_appearance += I
 
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
@@ -503,10 +497,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
-	if (light_post_processing)
-		post_processing()
-	else
-		temp_appearance += temp_appearance_shadows
+	post_processing()
 	overlays = temp_appearance
 	temp_appearance = null
 	// Because movable lights do this two-lights-sources thing
@@ -518,17 +509,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
-	if (light_post_processing == ALL_SHADOWS)
-		var/image/shadow_overlay/image_result = new()
-		for (var/image/image_component in temp_appearance_shadows)
-			image_result.temp_appearance += image_component
-
-		image_result.overlays = image_result.temp_appearance
-		// Apply a filter
-		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-		temp_appearance += image_result
-	else
-		temp_appearance += temp_appearance_shadows
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
@@ -548,50 +528,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		black_turf.layer = ANTI_GLOW_PASS_LAYER
 		temp_appearance += black_turf
 
-// Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/shadow/post_processing()
-	// Fetch the image processed so far
-	var/image/shadow_overlay/image_result = new()
-	var/last_pixel_x_im = -50000
-	var/last_pixel_y_im = -50000
-	for (var/image/image_component in temp_appearance)
-		// The next image is not connected (ie, further than 32 pixels away) from the last current image? Means we are in a new group.
-		if ( abs(image_component.pixel_x - last_pixel_x_im) + abs(image_component.pixel_y - last_pixel_y_im) > WORLD_ICON_SIZE && image_result.temp_appearance.len)
-			image_result.overlays = image_result.temp_appearance
-			image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-			temp_appearance += image_result
-			image_result = new()
-
-		temp_appearance -= image_component
-		image_result.temp_appearance += image_component
-		last_pixel_x_im = image_component.pixel_x
-		last_pixel_y_im = image_component.pixel_y
-
-	if (image_result.temp_appearance.len)
-		image_result.overlays = image_result.temp_appearance
-		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-		temp_appearance += image_result
-
-	// -- eliminating the underglow
-	for (var/turf/T in affected_shadow_walls)
-		for (var/dir in cardinal)
-			var/turf/neighbour = get_step(T, dir)
-			if (neighbour && !CHECK_OCCLUSION(neighbour))
-				var/image/black_turf = new()
-				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
-					black_turf.render_source = "postprocess_black_turf_prerender"
-				else
-					black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-					black_turf.icon_state = "black"
-					black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-					pre_rendered_shadows += "postprocess_black_turf_prerender"
-
-				var/x_offset = neighbour.x - x
-				var/y_offset = neighbour.y - y
-				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-				black_turf.layer = ANTI_GLOW_PASS_LAYER
-				temp_appearance += black_turf
+	return
 
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)
@@ -710,9 +648,3 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 #undef WIDE_SHADOW_THRESHOLD
 #undef OFFSET_MULTIPLIER_SIZE
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
-#undef BLUR_SIZE
-
-
-#undef NO_POST_PROCESSING
-#undef WALL_SHADOWS_ONLY
-#undef ALL_SHADOWS

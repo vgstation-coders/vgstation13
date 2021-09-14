@@ -112,6 +112,7 @@
 	no_goonchat_for_obj  =  sanitize_integer(no_goonchat_for_obj, 0, 1, initial(no_goonchat_for_obj))
 	tgui_fancy           =  sanitize_integer(tgui_fancy, 0, 1, initial(tgui_fancy))
 	show_warning_next_time = sanitize_integer(show_warning_next_time, 0, 1, initial(show_warning_next_time))
+	blur_size = sanitize_integer(blur_size, 0, 2, 0)
 	fps = sanitize_integer(fps, -1, 1000, initial(fps))
 	initialize_preferences()
 	return 1
