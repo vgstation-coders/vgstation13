@@ -76,7 +76,7 @@
 /mob/living/simple_animal/hostile/mannequin/Life()
 	. = ..()
 	if (.)
-		if (dissolving)
+		if (dissolving || (timer < 0))
 			return
 		timer--
 		if (captured_mob)
@@ -230,6 +230,7 @@
 /mob/living/simple_animal/hostile/mannequin/proc/freeCaptive()
 	if (!captured_mob)
 		return
+	captured_mob.timestopped = 0
 	captured_mob.forceMove(loc)
 	for(var/cloth in clothing)
 		var/obj/O = clothing[cloth]

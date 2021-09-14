@@ -1467,11 +1467,14 @@ Thanks.
 			return 0
 
 	spawn()
+		//we try to turn into marble mannequins, but if we're not compatible we'll use the old statue type
 		if(forever)
-			new /obj/structure/closet/statue/eternal(get_turf(src), src)
+			if (!turn_into_mannequin("marble",TRUE))
+				new /obj/structure/closet/statue/eternal(get_turf(src), src)
 		else
-			new /obj/structure/closet/statue(get_turf(src), src)
-
+			if (!turn_into_mannequin("marble"))
+				new /obj/structure/closet/statue(get_turf(src), src)
+		timestopped = 1
 	return 1
 
 /*
