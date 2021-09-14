@@ -1468,9 +1468,11 @@ Thanks.
 
 	spawn()
 		if(forever)
-			new /obj/structure/closet/statue/eternal(get_turf(src), src)
+			if (!turn_into_mannequin("marble",TRUE))//we try to turn into marble mannequins, but if we're not compatible we'll use the old statue type
+				new /obj/structure/closet/statue/eternal(get_turf(src), src)
 		else
-			new /obj/structure/closet/statue(get_turf(src), src)
+			if (!turn_into_mannequin("marble"))//we try to turn into marble mannequins, but if we're not compatible we'll use the old statue type
+				new /obj/structure/closet/statue(get_turf(src), src)
 
 	return 1
 

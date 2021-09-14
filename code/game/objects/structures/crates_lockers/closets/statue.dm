@@ -131,6 +131,7 @@
 		O.forceMove(src.loc)
 
 	for(var/mob/living/M in src)
+		M.timestopped = 0
 		M.forceMove(src.loc)
 		M.sdisabilities &= ~MUTE
 		M.take_overall_damage((M.health - health - 100),0) //any new damage the statue incurred is transfered to the mob

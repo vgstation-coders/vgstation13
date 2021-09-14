@@ -184,8 +184,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		*/
 
 		//Bleeding out
-		if (istype(loc, /obj/structure/mannequin)) // Petrified
-			return
 		var/blood_max = 0
 		var/blood_factor = 1
 		for(var/datum/organ/external/temp in organs)
