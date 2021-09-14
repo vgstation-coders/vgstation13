@@ -1079,7 +1079,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 
 					for(var/obj/O in objs)
-						newobjs += O.DuplicateObject(X)
+						newobjs += O.DuplicateObject(B)
 
 					for(var/mob/M in T)
 
@@ -1088,7 +1088,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 						mobs += M
 
 					for(var/mob/M in mobs)
-						newmobs += M.DuplicateObject(X)
+						newmobs += M.DuplicateObject(B)
 
 					copiedobjs += newobjs
 					copiedobjs += newmobs
