@@ -110,6 +110,8 @@ var/list/mind_ui_ID2type = list()
 
 	var/active = TRUE
 
+	var/obj/abstract/mind_ui_element/failsafe/failsafe	// All mind UI datums include one of those so we can detect if the elements somehow disappeared from client.screen
+
 /datum/mind_ui/New(var/datum/mind/M)
 	if (!istype(M))
 		qdel(src)
@@ -125,6 +127,8 @@ var/list/mind_ui_ID2type = list()
 	SendToClient()
 
 /datum/mind_ui/proc/SpawnElements()
+	failsafe = new (null, src)
+	elements += failsafe
 	for (var/element_type in element_types_to_spawn)
 		elements += new element_type(null, src)
 
@@ -153,6 +157,11 @@ var/list/mind_ui_ID2type = list()
 // Makes every element visible
 /datum/mind_ui/proc/Display()
 	active = TRUE
+
+	var/mob/M = mind.current
+	if (failsafe && M.client && !(failsafe in M.client.screen))
+		SendToClient() // The elements disappeared from the client screen due to some fuckery, send them back!
+
 	for (var/obj/abstract/mind_ui_element/element in elements)
 		element.Appear()
 	for (var/datum/mind_ui/child in subUIs)
@@ -269,6 +278,10 @@ var/list/mind_ui_ID2type = list()
 		I.pixel_x = (i - 1) * 6
 		result.overlays += I
 	return result
+
+/obj/abstract/mind_ui_element/failsafe
+	icon_state = "blank"
+	mouse_opacity = 0
 
 ////////////////// HOVERABLE ////////////////////////
 // Make use of MouseEntered/MouseExited to allow for effects and behaviours related to simply hovering above the element

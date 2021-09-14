@@ -1279,13 +1279,11 @@ var/list/converted_minds = list()
 	qdel(src)
 
 /obj/effect/cult_ritual/stun
+	icon_state = "stun_warning"
+	color = "black"
 	anchored = 1
-	icon = 'icons/effects/64x64.dmi'
-	icon_state = ""
-	pixel_x = -WORLD_ICON_SIZE/2
-	pixel_y = -WORLD_ICON_SIZE/2
-	layer = NARSIE_GLOW
-	plane = ABOVE_LIGHTING_PLANE
+	alpha = 0
+	plane = HIDING_MOB_PLANE
 	mouse_opacity = 0
 	var/stun_duration = 5
 
@@ -1295,28 +1293,31 @@ var/list/converted_minds = list()
 	switch (type)
 		if (1)
 			stun_duration++
-			flick("rune_stun",src)
-			var/image/I = image('icons/effects/480x480.dmi')	// visible AOE
-			I.plane = relative_plane(HIDING_MOB_PLANE)
-			I.pixel_x = -224
-			I.pixel_y = -224
-			overlays += I
+			anim(target = loc, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
+			icon = 'icons/effects/480x480.dmi'
+			pixel_x = -224
+			pixel_y = -224
+			animate(src,alpha = 255,time = 10)
 		if (2)
 			stun_duration--
-			flick("talisman_stun",src)
-			var/image/I = image('icons/effects/224x224.dmi')	// visible AOE
-			I.plane = relative_plane(HIDING_MOB_PLANE)
-			I.pixel_x = -96
-			I.pixel_y = -96
-			overlays += I
+			anim(target = loc, a_icon = 'icons/effects/64x64.dmi', flick_anim = "talisman_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
+			icon = 'icons/effects/224x224.dmi'
+			pixel_x = -96
+			pixel_y = -96
+			animate(src,alpha = 255,time = 10)
 
-	playsound(src, 'sound/effects/stun_rune.ogg', 75, 0, 0)
+	playsound(src, 'sound/effects/stun_rune_charge.ogg', 75, 0, 0)
 	spawn(20)
+		playsound(src, 'sound/effects/stun_rune.ogg', 75, 0, 0)
 		visible_message("<span class='warning'>The rune explodes in a bright flash of chaotic energies.</span>")
 
-		for(var/mob/living/L in viewers(src))
+		var/list/mobs_to_stun = get_all_mobs_in_dview(get_turf(src))
+
+		for(var/mob/living/L in mobs_to_stun)
 			var/duration = stun_duration
 			var/dist = cheap_pythag(L.x - src.x, L.y - src.y)
+			if (type == 1 && dist>=8)
+				continue
 			if (type == 2 && dist>=4)//talismans have a reduced range
 				continue
 			shadow(L,loc,"rune_stun")

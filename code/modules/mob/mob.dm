@@ -2191,5 +2191,8 @@ mob/proc/on_foot()
 /mob/proc/get_personal_ambience()
 	return list()
 
+/mob/proc/isBloodedAnimal()
+	return FALSE
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

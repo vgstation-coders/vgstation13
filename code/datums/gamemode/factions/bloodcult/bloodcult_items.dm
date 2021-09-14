@@ -801,6 +801,7 @@ var/list/arcane_tomes = list()
 
 	if (blood >= 5)
 		blood = max(0,blood-5)
+		update_icon()
 		var/turf/starting = get_turf(user)
 		var/turf/target = get_turf(A)
 		var/obj/item/projectile/bloodslash/BS = new (starting)
@@ -836,15 +837,30 @@ var/list/arcane_tomes = list()
 				if (C.take_blood(null,5))//same cost as spin, basically negates the cost, but doesn't let you farm corpses. It lets you make a mess out of them however.
 					blood = min(100,blood+5)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
-
+			update_icon()
+			if (shade)
+				shade.DisplayUI("Soulblade")
+		else if (M.isBloodedAnimal())
+			var/mob/living/simple_animal/SA = M
+			if (SA.stat != DEAD)
+				blood = min(100,blood+10)
+				to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
+			else
+				blood = min(100,blood+5)
+				to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
+			update_icon()
 			if (shade)
 				shade.DisplayUI("Soulblade")
 
+/obj/item/weapon/melee/soulblade/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
+	..(params, user, -16, -16, FALSE) // clamp has to be false or we can't put the blade in the left and lower portions of a table
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
+	..()
 	if(!iscultist(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up \the [src]. It would be wise to rid yourself of this, quickly.</span>")
 		user.Dizzy(120)
+	update_icon()
 
 /obj/item/weapon/melee/soulblade/dropped(var/mob/user)
 	..()
@@ -871,6 +887,11 @@ var/list/arcane_tomes = list()
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
+		if (iscultist(C))
+			var/image/I = image('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
+			I.pixel_x = 16
+			I.pixel_y = 16
+			overlays += I
 
 
 /obj/item/weapon/melee/soulblade/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
@@ -1389,6 +1410,8 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
+	if (iscultist(user))
+		return
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
@@ -1413,7 +1436,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/bloodcult_pamphlet/salt_act()
 	ignite()
 
-//Jaunter: creates a pylon on spawn, lets you teleport to it on use
+//Jaunter: creates a pylon on spawn, lets you teleport to it on use. That's an item I made to test and debug cult blood jaunts
 /obj/item/weapon/bloodcult_jaunter
 	name = "test jaunter"
 	desc = ""

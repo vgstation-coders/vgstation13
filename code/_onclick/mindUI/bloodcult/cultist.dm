@@ -7,6 +7,30 @@
 
 /datum/mind_ui/bloodcult_cultist
 	uniqueID = "Cultist"
+	sub_uis_to_spawn = list(
+		/datum/mind_ui/bloodcult_cultist_panel,
+		/datum/mind_ui/bloodcult_left_panel,
+		)
+	display_with_parent = TRUE
+	y = "BOTTOM"
+
+/datum/mind_ui/bloodcult_cultist/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(iscultist(M))
+		return TRUE
+	return FALSE
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - RUNEDRAW						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_cultist_panel
+	uniqueID = "Cultist Panel"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/hoverable/draw_runes_manual,
 		/obj/abstract/mind_ui_element/hoverable/draw_runes_guided,
@@ -15,7 +39,6 @@
 		)
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_runes,
-		/datum/mind_ui/bloodcult_left_panel,
 		)
 	display_with_parent = TRUE
 	y = "BOTTOM"
@@ -139,6 +162,14 @@
 		)
 	display_with_parent = TRUE
 	x = "LEFT"
+
+/datum/mind_ui/bloodcult_left_panel/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(iscultist(M))
+		return TRUE
+	return FALSE
 
 //------------------------------------------------------------
 
@@ -276,6 +307,14 @@
 	display_with_parent = FALSE
 
 	var/selected_role = CULTIST_ROLE_NONE
+
+/datum/mind_ui/bloodcult_role/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(iscultist(M))
+		return TRUE
+	return FALSE
 
 //------------------------------------------------------------
 
@@ -481,6 +520,14 @@
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_next,
 		)
 	display_with_parent = FALSE
+
+/datum/mind_ui/bloodcult_help/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(iscultist(M))
+		return TRUE
+	return FALSE
 
 //------------------------------------------------------------
 

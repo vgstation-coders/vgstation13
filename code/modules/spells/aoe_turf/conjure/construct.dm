@@ -428,7 +428,7 @@
 
 /spell/aoe_turf/conjure/path_entrance
 	name = "Path Entrance"
-	desc = "Place a shortcut through the veil between this world and the other one."
+	desc = "Place an entrance to a shortcut through the veil between this world and the other one."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 600
@@ -464,8 +464,8 @@
 	R.trigger(user)
 
 /spell/aoe_turf/conjure/path_exit
-	name = "Path Entrance"
-	desc = "Place a shortcut through the veil between this world and the other one."
+	name = "Path Exit"
+	desc = "Place an exit to a shotcut through the veil between this world and the other one."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 600

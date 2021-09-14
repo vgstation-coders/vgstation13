@@ -435,6 +435,8 @@ var/list/rune_appearances_cache = list()
 			spawn(8)
 				alpha = 255
 				update_icon()
+		else
+			alpha = 255
 		conceal_cooldown = 1
 		spawn(100)
 			if (src && loc)
@@ -605,7 +607,10 @@ var/list/rune_appearances_cache = list()
 	if (!spell_type)
 		return
 
-	var/datum/rune_spell/instance = spell_type
-	write_rune_word(T, rune_words[initial(instance.word1)], source, caster)
-	write_rune_word(T, rune_words[initial(instance.word2)], source, caster)
-	write_rune_word(T, rune_words[initial(instance.word3)], source, caster)
+	var/datum/rune_spell/spell_instance = spell_type
+	var/datum/rune_word/word1_instance = initial(spell_instance.word1)
+	var/datum/rune_word/word2_instance = initial(spell_instance.word2)
+	var/datum/rune_word/word3_instance = initial(spell_instance.word3)
+	write_rune_word(T, rune_words[initial(word1_instance.english)], source, caster)
+	write_rune_word(T, rune_words[initial(word2_instance.english)], source, caster)
+	write_rune_word(T, rune_words[initial(word3_instance.english)], source, caster)

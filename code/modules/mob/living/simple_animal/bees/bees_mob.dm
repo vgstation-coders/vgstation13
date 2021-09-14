@@ -59,6 +59,8 @@ var/bee_mobs_count = 0
 
 	held_items = list()
 
+	blooded = FALSE // certainly not enough blood there to matter
+
 ///////////////////////////////Basic Procs//////////////////////////////////
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
