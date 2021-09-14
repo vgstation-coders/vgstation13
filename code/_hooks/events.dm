@@ -292,6 +292,8 @@
 		var/list/handler = event_handlers[key]
 		var/objRef = handler[EVENT_HANDLER_OBJREF_INDEX]
 		var/procName = handler[EVENT_HANDLER_PROCNAME_INDEX]
+		// not |= because `null |= list()` is a runtime error
+		// but `null = null | list()` is not.
 		. = . | CallAsync(objRef, procName, arguments)
 
 /**
