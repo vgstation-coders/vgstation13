@@ -20,6 +20,4 @@
 /spell/targeted/flesh_to_stone/cast(var/list/targets, mob/user)
 	..()
 	for(var/mob/living/target in targets)
-		if (!target.turn_into_mannequin("marble"))//we try to turn them into marble mannequins, but if they're not compatible we'll use the old statue type
-			new /obj/structure/closet/statue(target.loc, target)
-		target.timestopped = 1
+		target.turn_into_statue(FALSE,TRUE)
