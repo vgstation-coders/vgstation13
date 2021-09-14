@@ -29,7 +29,7 @@
 	var/dried_type = null //What can we dry the food into
 	var/deepfried = 0 //Is the food deep-fried ?
 	var/filling_color = "#FFFFFF" //What color would a filling of this item be ?
-	var/random_filling_colors = list()
+	var/list/random_filling_colors = list()
 	var/edible_by_utensil = TRUE //Can this snack be put on a fork?
 	var/plate_offset_y = 0
 	var/plate_icon = "fullycustom"
