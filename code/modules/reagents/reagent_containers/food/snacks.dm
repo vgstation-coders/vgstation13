@@ -239,6 +239,8 @@
 			C.icon_state = crumb_icon
 			C.dir = pick(cardinal)
 			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+			if (random_filling_colors?.len > 0)
+				filling_color = pick(random_filling_colors)
 		if (virus2?.len)
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
