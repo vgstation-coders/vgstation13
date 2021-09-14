@@ -39,7 +39,7 @@
 		if(src.target == target)
 			return //We're already on our way there
 		src.target = target
-		AStar(parent, new /callback(src, .proc/receive_path), parent, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance_cardinal, 0, 30, id = dude.get_visible_id())
+		walk_to(dude, target, 0, walk_delay)
 	else if(isnum(target))
 		movement_nodes = list()
 		dude.set_glide_size(DELAY2GLIDESIZE(walk_delay))
