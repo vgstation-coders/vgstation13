@@ -374,7 +374,7 @@
 			* /raisestructure
 			* /communication
 			* /summontome
-			* /paraphernelia
+			* /paraphernalia
 			* /conversion
 			* /stun
 			* /blind

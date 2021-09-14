@@ -9,7 +9,7 @@
 //							SUMMON TOME							  //
 //																  //
 ////////////////////////////////////////////////////////////////////
-//Reason: Redundant with Paraphernelia. No harm in keeping the rune somewhat usable until another use is found for that word combination.
+//Reason: Redundant with paraphernalia. No harm in keeping the rune somewhat usable until another use is found for that word combination.
 
 /datum/rune_spell/summontome
 	secret = TRUE

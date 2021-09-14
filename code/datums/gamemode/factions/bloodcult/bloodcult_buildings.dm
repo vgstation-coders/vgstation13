@@ -88,16 +88,9 @@
 	return ..()
 
 /obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user, params)
-	if (istype(W, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = W
-		if(iscarbon(G.affecting))
-			MouseDropTo(G.affecting,user)
-			qdel(W)
-	else if (istype(W))
+	if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
-			MouseDropTo(W,user,params)
-			if (W.loc != loc)
-				visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
+			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
 		else
 			user.delayNextAttack(8)
 			user.do_attack_animation(src, W)
@@ -250,7 +243,7 @@
 
 	..()
 
-/obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user)
+/obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user, params)
 	if (altar_task)
 		return ..()
 	if(istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
@@ -291,6 +284,9 @@
 			return 1
 		var/obj/item/weapon/grab/G = I
 		if(iscarbon(G.affecting))
+			if (blade)
+				to_chat(user,"<span class='warning'>You must remove \the [blade] planted on \the [src] first.</span>")
+				return 1
 			var/mob/living/carbon/C = G.affecting
 			C.unlock_from()
 			if (!do_after(user,C,15))
@@ -301,6 +297,10 @@
 			C.forceMove(loc)
 			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
+			return 1
+	if(user.drop_item(I, loc))
+		if((I.loc == loc) && params)
+			I.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
 			return 1
 	..()
 
@@ -350,7 +350,7 @@
 	else
 		return 0
 
-/obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user, var/params)
+/obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user)
 	if (altar_task)
 		return
 	if (!istype(O))
@@ -389,9 +389,7 @@
 
 	O.forceMove(loc)
 	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
-	if(params)
-		O.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
-		return 1
+	return 1
 
 
 /obj/structure/cult/altar/proc/checkPosition()

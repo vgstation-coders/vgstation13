@@ -557,12 +557,12 @@
 
 ////////////////////////////////////////////////////////////////////
 //																  //
-//							PARAPHERNELIA						  //
+//							paraphernalia						  //
 //																  //
 ////////////////////////////////////////////////////////////////////
 
-/datum/rune_spell/paraphernelia
-	name = "Paraphernelia"
+/datum/rune_spell/paraphernalia
+	name = "paraphernalia"
 	desc = "Produce various apparatus such as talismans."
 	desc_talisman = "LIKE, HOW, NO SERIOUSLY CALL AN ADMIN."
 	invocation = "H'drak v'loso, mir'kanas verbot!"
@@ -584,7 +584,7 @@
 		inside an arcane tome carried by a fellow cultist. The ritual takes a bit of time and blood, but can save your acolyte some precious time."
 
 
-/datum/rune_spell/paraphernelia/cast()
+/datum/rune_spell/paraphernalia/cast()
 	var/obj/effect/rune/R = spell_holder
 	var/obj/item/weapon/talisman/AT = locate() in get_turf(spell_holder)
 	if (AT)
@@ -634,12 +634,12 @@
 			qdel(src)
 	else
 		var/choices = list(
-			list("Talisman", "radial_paraphernelia_talisman", "Can absorb runes (or attune to them in some cases), allowing you to carry their power in your pocket. Has a few other miscellaneous uses."),
-			list("Blood Candle", "radial_paraphernelia_candle", "A candle that can burn up to 20 minutes. Offers moody lighting."),
-			list("Tempting Goblet", "radial_paraphernelia_goblet", "A classy holder for your beverage of choice. Prank your enemies by hitting them with a goblet full of blood."),
-			list("Coffer", "radial_paraphernelia_coffer", "Keep your occult lab orderly by storing your cult paraphernelia in those coffers."),
-			list("Ritual Knife", "radial_paraphernelia_knife", "A long time ago a wizard enchanted one of those to infiltrate the realm of Nar-Sie and steal some soul stone shards. Now it's just a cool knife. Don't rely on it in a fight though."),
-			list("Arcane Tome", "radial_paraphernelia_tome", "Bring forth an arcane tome filled with Nar-Sie's knowledge. Harmful to the uninitiated in more ways than one. Ghosts can flick their pages."),
+			list("Talisman", "radial_paraphernalia_talisman", "Can absorb runes (or attune to them in some cases), allowing you to carry their power in your pocket. Has a few other miscellaneous uses."),
+			list("Blood Candle", "radial_paraphernalia_candle", "A candle that can burn up to 20 minutes. Offers moody lighting."),
+			list("Tempting Goblet", "radial_paraphernalia_goblet", "A classy holder for your beverage of choice. Prank your enemies by hitting them with a goblet full of blood."),
+			list("Coffer", "radial_paraphernalia_coffer", "Keep your occult lab orderly by storing your cult paraphernalia in those coffers."),
+			list("Ritual Knife", "radial_paraphernalia_knife", "A long time ago a wizard enchanted one of those to infiltrate the realm of Nar-Sie and steal some soul stone shards. Now it's just a cool knife. Don't rely on it in a fight though."),
+			list("Arcane Tome", "radial_paraphernalia_tome", "Bring forth an arcane tome filled with Nar-Sie's knowledge. Harmful to the uninitiated in more ways than one. Ghosts can flick their pages."),
 			)
 		var/task = show_radial_menu(activator,get_turf(spell_holder),choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
 		if (!spell_holder.Adjacent(activator) || !task || gcDestroyed)
@@ -668,22 +668,22 @@
 			qdel(src)
 
 
-/datum/rune_spell/paraphernelia/midcast(var/mob/add_cultist) // failsafe should someone be hogging the radial menu.
+/datum/rune_spell/paraphernalia/midcast(var/mob/add_cultist) // failsafe should someone be hogging the radial menu.
 	var/obj/effect/rune/R = spell_holder
 	R.active_spell = null
 	R.trigger(add_cultist)
 	qdel(src)
 
-/datum/rune_spell/paraphernelia/abort(var/cause)
+/datum/rune_spell/paraphernalia/abort(var/cause)
 	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
 	..()
 
 
-/datum/rune_spell/paraphernelia/cast_talisman()//there should be no ways for this to ever proc
+/datum/rune_spell/paraphernalia/cast_talisman()//there should be no ways for this to ever proc
 	return
 
 
-/datum/rune_spell/paraphernelia/proc/payment()
+/datum/rune_spell/paraphernalia/proc/payment()
 	var/failsafe = 0
 	while(failsafe < 1000)
 		failsafe++
@@ -729,7 +729,7 @@
 		sleep(10)
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
-/datum/rune_spell/paraphernelia/proc/success()
+/datum/rune_spell/paraphernalia/proc/success()
 	for(var/mob/living/L in contributors)
 		if (L.client)
 			L.client.images -= progbar
