@@ -70,14 +70,16 @@ var/light_post_processing = NO_POST_PROCESSING // Use writeglobal to change this
 		alpha = initial(alpha)
 		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
 
-	for (var/mob/M in view(world.view, src))
-		M.check_dark_vision()
-
-	for(var/turf/T in view(2*light_range, src))
-		T.lumcount = -1
-		affecting_turfs += T
-		if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
-			affected_shadow_walls += T
+	for (var/thing in view(min(world.view, light_range), src))
+		if (ismob(thing))
+			var/mob/M = thing
+			M.check_dark_vision()
+		if (isturf(thing))
+			var/turf/T = thing
+			T.lumcount = -1
+			affecting_turfs += T
+			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
+				affected_shadow_walls += T
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
