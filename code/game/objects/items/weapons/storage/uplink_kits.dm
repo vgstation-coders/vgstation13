@@ -2,7 +2,7 @@
 	..()
 	var/tagname
 	if(!forced_bundle)
-		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100, "clown" = 50, "druid" = 50, "actor" = 100, "jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50))
+		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 25, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 25, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100, "clown" = 50, "druid" = 50, "actor" = 100, "jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50))
 	else
 		tagname = forced_bundle
 
@@ -22,12 +22,12 @@
 			new /obj/item/device/chameleon(src)
 			new /obj/item/weapon/soap/syndie(src)
 
-//		if("screwed")//6?+6?+10+4=26
-//			new /obj/effect/spawner/newbomb/timer(src)
-//			new /obj/effect/spawner/newbomb/timer(src)
-//			new /obj/item/device/powersink(src)
-//			new /obj/item/clothing/suit/space/syndicate(src)
-//			new /obj/item/clothing/head/helmet/space/syndicate(src)
+		if("screwed")//6?+6?+10+4=26
+			new /obj/effect/spawner/newbomb/timer(src)
+			new /obj/effect/spawner/newbomb/timer(src)
+			new /obj/item/device/powersink(src)
+			new /obj/item/clothing/suit/space/syndicate(src)
+			new /obj/item/clothing/head/helmet/space/syndicate(src)
 
 		if("guns")//13+4+6+4=27
 			new /obj/item/weapon/gun/projectile/revolver(src)
@@ -58,11 +58,11 @@
 			new /obj/item/device/encryptionkey/binary(src)
 			new /obj/item/device/multitool/ai_detect(src)
 
-//		if("lordsingulo")//14+4+6=24
-//			new /obj/item/beacon/syndicate(src)
-//			new /obj/item/clothing/suit/space/syndicate(src)
-//			new /obj/item/clothing/head/helmet/space/syndicate(src)
-//			new /obj/item/weapon/card/emag(src)
+		if("lordsingulo")//14+4+6=24
+			new /obj/item/beacon/syndicate(src)
+			new /obj/item/clothing/suit/space/syndicate(src)
+			new /obj/item/clothing/head/helmet/space/syndicate(src)
+			new /obj/item/weapon/card/emag(src)
 
 		if("smoothoperator")//6?+2+2?+1+1?+1?+4+4=21
 			new /obj/item/weapon/gun/projectile/pistol(src)
