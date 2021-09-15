@@ -500,6 +500,16 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
+			if(isopenspace(T)) // Stair movement down
+				var/turf/below = GetBelow(T)
+				if(below)
+					var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
+					if(down_stairs && down_stairs.dir == mob.dir)
+						var/turf/target = get_step(below, mob.dir)
+						mob.Move(target)
+			var/obj/structure/stairs/up_stairs = locate(/obj/structure/stairs) in T
+			if(up_stairs && up_stairs.dir == mob.dir)
+				up_stairs.Bumped(mob)
 			mob.delayNextMove(movedelay)
 		if(INCORPOREAL_ETHEREAL, INCORPOREAL_ETHEREAL_IMPROVED) //Jaunting, without needing to be done through relaymove
 			var/jaunt_type = mob.incorporeal_move
