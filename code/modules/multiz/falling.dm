@@ -74,12 +74,12 @@
 
 		down_stairs = locate(/obj/structure/stairs) in below
 		if(down_stairs && down_stairs.dir == GetOppositeDir(dir))
-		Move(below)
-		if(isliving(src))
-			var/mob/living/L = src
-			if(L.pulling)
-				L.pulling.Move(below)
-		return
+			Move(below)
+			if(isliving(src))
+				var/mob/living/L = src
+				if(L.pulling)
+					L.pulling.Move(below)
+			return
 
 		gravity = get_gravity()
 		if(!gravity)
