@@ -40,7 +40,7 @@
 	if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
 		return
 
-	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
+	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
 	// Detect stairs below and traverse down them.
 	if(down_stairs && if(down_stairs.dir == dir))
 		var/turf/target = get_step(below, dir)
