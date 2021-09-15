@@ -106,6 +106,8 @@ var/list/uplink_items = list()
 
 		var/obj/I = spawn_item(get_turf(user), U, user)
 		if(!I)
+			if(name == "Random Item")
+				cost = 0
 			return 0
 		on_item_spawned(I,user)
 		var/icon/tempimage = icon(I.icon, I.icon_state)
@@ -140,6 +142,8 @@ var/list/uplink_items = list()
 						R = user.mind.GetRole(CHALLENGER)
 						if(R)
 							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [get_cost(U.job)] TC<BR>"}
+		if(name == "Random Item")
+			cost = 0
 		return 1
 	return 0
 
@@ -612,6 +616,7 @@ var/list/uplink_items = list()
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
+		cost = max(0, I.get_cost(U.job, 0.5))
 		U.telecrystals -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return new_uplink_item(I.item, loc, user)
