@@ -557,12 +557,12 @@
 
 ////////////////////////////////////////////////////////////////////
 //																  //
-//							paraphernalia						  //
+//							Paraphernalia						  //
 //																  //
 ////////////////////////////////////////////////////////////////////
 
 /datum/rune_spell/paraphernalia
-	name = "paraphernalia"
+	name = "Paraphernalia"
 	desc = "Produce various apparatus such as talismans."
 	desc_talisman = "LIKE, HOW, NO SERIOUSLY CALL AN ADMIN."
 	invocation = "H'drak v'loso, mir'kanas verbot!"
