@@ -1,0 +1,33 @@
+<div class="item">
+	<div class="itemLabel">
+		Credits on table:
+	</div>
+	<div class="itemContent">
+		{{:data.credsheld}}
+	</div>
+	<div class="itemLabel">
+		Credits in Shoal fund:
+	</div>
+	<div class="itemContent">
+		{{:data.shoalmoney}}
+	</div>
+	<div class="itemLabel">
+		Credits previously spent:
+	</div>
+	<div class="itemContent">
+		{{:data.pastbusiness}}
+	</div>
+</div>
+{{for data.categories}}
+	{{:helper.link(value.category, 'folder-collapsed', {'category' : value.category}, value.category == data.selectedCategory ? 'selected' : null)}}
+{{for}}
+<div class="item">&nbsp;</div>
+<div class="statusDisplay">
+	{{for data.databank}}
+		{{if value.category == data.selectedCategory}}
+			<div class="item">
+				{{:helper.link(value.name, 'cart', {'product' : value.name})}} {{:value.price}} credits
+			</div>
+		{{/if}}
+	{{for}}
+</div>

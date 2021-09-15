@@ -255,11 +255,14 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/weapon/storage/lockbox/unlockable/peace,
 	/obj/item/clothing/head/helmet/stun,
 	/obj/item/weapon/secway_kit,
+	/obj/structure/largecrate/secure,
+	/obj/item/weapon/storage/lockbox/advanced/ricochettaser,
+	/obj/item/weapon/storage/lockbox/advanced/energyshotgun
 	)
 
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	for(var/i = 1 to 7)
+	for(var/i = 1 to 6)
 		if(!alcatraz_stuff.len)
 			return
 		var/path = pick_n_take(alcatraz_stuff)

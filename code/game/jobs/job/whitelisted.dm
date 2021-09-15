@@ -32,6 +32,9 @@
 
 	if(!trader_account)
 		trader_account = create_trader_account
+
+	SStrade.loyal_customers[M.real_name] = 0
+
 	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>")
 
 	log_admin("([M.ckey]/[M]) started the game as a [job_title].")
