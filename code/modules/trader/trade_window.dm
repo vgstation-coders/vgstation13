@@ -9,12 +9,14 @@
 	req_access = list(access_trade)
 	anchored = TRUE
 	density = TRUE
+	var/merchant_name
 	var/datum/trade_product/product_selected = null //targets a datum in the list
 	var/category = TRADE_VARIETY
 	var/time_last_speech = 0
 
 /obj/structure/trade_window/New()
 	..()
+	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	SStrade.all_twindows += src
 
 /obj/structure/trade_window/Destroy()
@@ -40,9 +42,9 @@
 	if(user.drop_item(C, loc))
 		C.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
 		C.pixel_y = -3 * PIXEL_MULTIPLIER
-	if(product_selected && credits_held() >= product_selected.current_price(user))
-		trade(user)
-	updateUsrDialog()
+	/*if(product_selected && credits_held() >= product_selected.current_price(user))
+		trade(user)*/
+	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/proc/market_flux()
 	say("Market flux!")
@@ -61,19 +63,31 @@
 			ui.close()
 		return
 
-	if(!istype(user) || user.get_face_name() == "Unknown")
+	if(!istype(user))
+		say("I don't think I can do business with you.")
+		return
+
+	if(user.get_face_name() == "Unknown")
 		say("I don't talk to anyone whose face I can't see.")
 		return
+
+	if(!(user.get_face_name() in SStrade.loyal_customers))
+		var/datum/organ/external/head/head_organ = user.get_organ(LIMB_HEAD)
+		if(head_organ.disfigured)
+			say("What the fuck happened to your face? Who are you supposed to be?")
+		else
+			say("I don't know you. You want to join up? You need someone to vouch for you.")
+			return
 
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["selected"] = product_selected
 	data["credsheld"] = credits_held()
 	data["shoalmoney"] = trader_account.money
-	data["shoaldiscount"] = shoal_prestige_factor()-1
+	data["shoaldiscount"] = round(100*(SStrade.shoal_prestige_factor()-1))
 	if(user.get_face_name() in SStrade.loyal_customers)
 		data["pastbusiness"] = SStrade.loyal_customers[user.get_face_name()]
-		data["pastdiscount"] = SStrade.loyal_customer(user)-1
+		data["pastdiscount"] = round(100*(SStrade.loyal_customer(user)-1))
 	else
 		data["pastbusiness"] = 0
 		data["pastdiscount"] = "+50"
@@ -123,7 +137,11 @@
 	if(change_money(TP.current_price(user)))
 		SStrade.loyal_customers[user.get_face_name()] += TP.current_price(user)
 		TP.totalsold++
-		new TP.path(user.loc)
+		var/atom/movable/AM = new TP.path(user.loc)
+		if(isitem(AM))
+			user.put_in_hands(AM)
+		else
+			AM.shake(1, 3) //Just a little movement to make it obvious it's here.
 		say(pick("Very nice, here you go.", "Enjoy, sell it quickly.", "No refunds, no returns."))
 	nanomanager.update_uis(src)
 
@@ -142,7 +160,7 @@
 		say("Put some more cash up.")
 		return FALSE
 	else
-		playsound(loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+		playsound(loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
 		for(var/obj/O in counted_bills)
 			counted_bills -= O
 			qdel(O)
@@ -153,7 +171,7 @@
 	return TRUE
 
 /obj/structure/trade_window/say(var/message)
-	visible_message(message)
+	visible_message("<B>[merchant_name]</B> says, \"[message]\"")
 	if(world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
-		playsound(loc, pick(voice_vox_sound), 50, 1)
+		playsound(loc, pick(voice_vox_sound), 120, 0)

@@ -80,34 +80,34 @@
 	baseprice = 100
 
 /datum/trade_product/randommobs
-	name = "random friends"
+	name = "dehydrated friend cubes"
 	path = /obj/item/weapon/storage/box/mysterycubes
 	baseprice = 80
 	maxunits = 2
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/randomchems
-	name = "random chemicals box"
+	name = "assorted chemical pack"
 	path = /obj/item/weapon/storage/box/mystery_vial
 	baseprice = 30
 	maxunits = 5
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/randomcircuits
-	name = "random circuits box"
+	name = "children's circuitry booster pack"
 	path = /obj/item/weapon/storage/box/mystery_circuit
 	baseprice = 30
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/randommats
-	name = "random materials"
+	name = "surplus material scrap box"
 	path = /obj/item/weapon/storage/box/large/mystery_material
 	baseprice = 50
 	maxunits = 5
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/oddmats
-	name = "odd materials"
+	name = "odd scrap box"
 	path = /obj/item/weapon/storage/box/large/mystery_material/odd
 	baseprice = 30
 	maxunits = 5
