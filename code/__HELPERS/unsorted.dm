@@ -1057,13 +1057,13 @@ proc/GaussRandRound(var/sigma,var/roundto)
 						if(istype(B, /turf/space))
 							continue moving
 
-					var/turf/X = B.ChangeTurf(T.type)
-					X.name = old_name
-					X.dir = old_dir1
-					X.icon_state = old_icon_state1
-					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
+					B.ChangeTurf(T.type)
+					B.name = old_name
+					B.dir = old_dir1
+					B.icon_state = old_icon_state1
+					B.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
 
-					X.return_air().copy_from(T.return_air())
+					B.return_air().copy_from(T.return_air())
 
 					var/list/objs = new/list()
 					var/list/newobjs = new/list()
@@ -1079,7 +1079,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 
 					for(var/obj/O in objs)
-						newobjs += O.DuplicateObject(X)
+						newobjs += O.DuplicateObject(B)
 
 					for(var/mob/M in T)
 
@@ -1088,12 +1088,12 @@ proc/GaussRandRound(var/sigma,var/roundto)
 						mobs += M
 
 					for(var/mob/M in mobs)
-						newmobs += M.DuplicateObject(X)
+						newmobs += M.DuplicateObject(B)
 
 					copiedobjs += newobjs
 					copiedobjs += newmobs
 
-					toupdate += X
+					toupdate += B
 
 					refined_src -= T
 					refined_trg -= B
