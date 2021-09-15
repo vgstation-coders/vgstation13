@@ -1815,7 +1815,7 @@ Thanks.
 		block = check_contact_sterility(FEET)
 		bleeding = check_bodypart_bleeding(FEET)
 
-	var/list/viral_cleanable_types = list(
+	var/static/list/viral_cleanable_types = list(
 		/obj/effect/decal/cleanable/blood,
 		/obj/effect/decal/cleanable/mucus,
 		/obj/effect/decal/cleanable/vomit,
