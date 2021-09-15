@@ -175,8 +175,9 @@
 			new /obj/item/weapon/vinyl/scotland(src)
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
 
-		if("clown") //4 + 6 + 14 + 6 + ? = 30?
+		if("clown") //4 + 4 + 6 + 14 + 6 + ? = 34?
 			new /obj/item/weapon/invisible_spray/permanent(src)
+			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox(src)
 			for(var/i = 1 to 7)
@@ -189,17 +190,21 @@
 					/obj/item/weapon/grenade/spawnergrenade/beenade,
 					/obj/item/weapon/grenade/spawnergrenade/bearnade
 					)
-			for(var/i = 1 to 7)
+			for(var/i = 1 to 6)
 				var/obj/item/dS = pick(druidSummon)
 				new dS(src)
+				new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos(src)
 			new /obj/item/clothing/suit/storage/wintercoat/druid(src)
 
-		if("actor")	//6*5 + 1 + 5 + 2 = 38
+		if("actor")	//6*5 + 1 + 5 + 2 + 6 + mask = 44^mask
 			for(var/i = 1 to 5)
 				new /obj/item/device/reportintercom(src)
 			new /obj/item/device/megaphone/madscientist(src)
 			new /obj/item/clothing/mask/gas/voice(src)
 			new /obj/item/weapon/card/id/syndicate(src)
+			new /obj/item/clothing/mask/morphing/amorphous(src)
+			new /obj/item/device/chameleon(src)
+
 
 		if("jackpot") //14*2 = 28
 			new /obj/item/weapon/storage/box/syndicate(src)
@@ -218,6 +223,8 @@
 		if("Alchemist")
 			new /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle(src)
 			new /obj/item/weapon/storage/bag/potion/lesser_bundle(src)
+			new /obj/item/weapon/storage/box/mystery_vial(src)
+			new /obj/item/weapon/storage/box/mystery_vial(src)
 
 	tag = tagname
 
