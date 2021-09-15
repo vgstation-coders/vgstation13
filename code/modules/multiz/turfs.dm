@@ -43,7 +43,7 @@
 	mover.fall()
 
 /turf/simulated/open/has_gravity()
-	if(locate(/obj/structure/catwalk) in src)
+	if(locate(/obj/structure/catwalk) in src || locate(/obj/structure/lattice) in src)
 		return get_gravity()
 	return 0
 

@@ -40,6 +40,17 @@
 	if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
 		return
 
+	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
+	// Detect stairs below and traverse down them.
+	if(down_stairs && if(down_stairs.dir == dir))
+		var/turf/target = get_step(below, dir)
+		A.Move(target)
+		if(isliving(A))
+			var/mob/living/L = A
+			if(L.pulling)
+				L.pulling.Move(target)
+		return
+	
 	var/gravity = get_gravity()
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
@@ -123,15 +134,8 @@
 		if(!A.Cross(src, src.loc, 1, 0))
 			return FALSE
 
-	// TODO - Stairs should operate thru a different mechanism, not falling, to allow side-bumping.
-
 	// Now lets move there!
 	if(!Move(landing))
-		return 1
-
-	var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in landing
-	// Detect if we made a silent landing.
-	if(down_stairs)
 		return 1
 
 	if(isopenspace(oldloc))
