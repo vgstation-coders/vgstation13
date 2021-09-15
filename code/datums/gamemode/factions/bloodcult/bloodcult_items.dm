@@ -276,11 +276,22 @@ var/list/arcane_tomes = list()
 	var/datum/rune_spell/instance
 	var/list/choice_to_talisman = list()
 	var/image/talisman_image
+	var/blood_messages = 0
+	var/blanks = 0
 	for(var/obj/item/weapon/talisman/T in talismans)
 		talisman_image = new(T)
-		instance = T.spell_type
-		choices += list(list(T, talisman_image, initial(instance.desc_talisman), T.talisman_name()))
-		choice_to_talisman[initial(instance.name)] = T
+		if (T.blood_text)
+			choices += list(list("Bloody Message[blood_messages ? " #[blood_messages]" : ""]", talisman_image, "A ghost has scribled a message on this talisman."))
+			choice_to_talisman["Bloody Message[blood_messages ? " #[blood_messages]" : ""]"] = T
+			blood_messages++
+		else if (T.spell_type)
+			instance = T.spell_type
+			choices += list(list(T.talisman_name(), talisman_image, initial(instance.desc_talisman)))
+			choice_to_talisman[T.talisman_name()] = T
+		else
+			choices += list(list("Blank Talisman[blanks ? " #[blanks]" : ""]", talisman_image, "Just an empty talisman."))
+			choice_to_talisman["Blank Talisman[blanks ? " #[blanks]" : ""]"] = T
+			blanks++
 
 	if (state == TOME_CLOSED)
 		icon_state = "tome-open"
@@ -289,7 +300,7 @@ var/list/arcane_tomes = list()
 		playsound(user, "pageturn", 50, 1, -5)
 		state = TOME_OPEN
 	var/choice = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi', "radial-cult2")
-	if(!choice_to_talisman[choice])
+	if(choice)
 		return
 	var/obj/item/weapon/talisman/chosen_talisman = choice_to_talisman[choice]
 	if(!usr.held_items.Find(src))
