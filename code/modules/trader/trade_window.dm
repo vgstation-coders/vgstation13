@@ -11,6 +11,7 @@
 	density = TRUE
 	var/datum/trade_product/product_selected = null //targets a datum in the list
 	var/category = TRADE_VARIETY
+	var/time_last_speech = 0
 
 /obj/structure/trade_window/New()
 	..()
@@ -25,8 +26,6 @@
 
 /obj/structure/trade_window/attackby(obj/item/W, mob/user)
 	..()
-	if(!anchored)
-		return
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
@@ -38,17 +37,16 @@
 		updateUsrDialog()*/
 
 /obj/structure/trade_window/proc/pay_with_cash(obj/item/weapon/spacecash/C, mob/user)
-	if(user.drop_item(C, src))
-		vis_contents += C
+	if(user.drop_item(C, loc))
 		C.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
 		C.pixel_y = -3 * PIXEL_MULTIPLIER
-	if(credits_held() >= product_selected.current_price(user))
+	if(product_selected && credits_held() >= product_selected.current_price(user))
 		trade(user)
-		product_selected = null
 		updateUsrDialog()
 
 /obj/structure/trade_window/proc/market_flux()
-	visible_message("Market flux!")
+	say("Market flux!")
+	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/attack_hand(mob/user)
 	if(!isobserver(user) && (!Adjacent(user) || user.incapacitated()))
@@ -119,35 +117,42 @@
 		else
 			say("Buy what?")
 			return
-	if(change_money(TP.current_price()))
+	message_admins("Current price: [TP.current_price(user)]")
+	if(change_money(TP.current_price(user)))
 		SStrade.loyal_customers[user.get_face_name()] += TP.current_price(user)
 		TP.totalsold++
 		new TP.path(user.loc)
+		say(pick("Very nice, here you go.", "Enjoy, sell it quickly.", "No refunds, no returns."))
 	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/proc/credits_held()
-	return count_cash(vis_contents)
+	return count_cash(loc.contents)
 
 /obj/structure/trade_window/proc/change_money(var/price)
 	var/total = 0
 	var/list/counted_bills = list()
-	for(var/obj/item/weapon/spacecash/C in vis_contents)
+	for(var/obj/item/weapon/spacecash/C in loc.contents)
 		counted_bills += C
 		total += C.get_total()
 		if(total>price)
 			break
+	message_admins("Counted [total].")
 	if(total < price)
 		say("Put some more cash up.")
 		return FALSE
 	else
+		playsound(loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
 		for(var/obj/O in counted_bills)
+			counted_bills -= O
 			qdel(O)
 		dispense_cash(total-price,loc)
 		for(var/obj/item/weapon/spacecash/C in loc)
-			vis_contents += C
 			C.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
 			C.pixel_y = -3 * PIXEL_MULTIPLIER
 	return TRUE
 
 /obj/structure/trade_window/say(var/message)
 	visible_message(message)
+	if(world.time>time_last_speech+5 SECONDS)
+		time_last_speech = world.time
+		//playsound(loc, pick(voice_vox_sound), 50, 1)

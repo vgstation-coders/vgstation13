@@ -19,7 +19,9 @@
 	</div>
 </div>
 {{for data.categories}}
-	{{:helper.link(value.category, 'folder-collapsed', {'category' : value.category}, value.category == data.selectedCategory ? 'selected' : null)}}
+	<div class="itemContent">
+		{{:helper.link(value.category, 'folder-collapsed', {'category' : value.category}, value.category == data.selectedCategory ? 'selected' : null)}}
+	</div>
 {{for}}
 <div class="item">&nbsp;</div>
 <div class="statusDisplay">

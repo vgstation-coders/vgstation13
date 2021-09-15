@@ -12,6 +12,8 @@
 	var/sales_category = TRADE_SINGLE
 
 /datum/trade_product/proc/current_price(mob/user)
+	message_admins("Current price. BP: [baseprice]; FR: [flux_rate]; SM: [SStrade.shoal_prestige_factor()]; LC: [SStrade.loyal_customer(user)]")
+	message_admins("Overall: [baseprice * flux_rate * SStrade.shoal_prestige_factor() * SStrade.loyal_customer(user)]")
 	return round(baseprice * flux_rate * SStrade.shoal_prestige_factor() * SStrade.loyal_customer(user))
 
 /datum/trade_product/wardrobe

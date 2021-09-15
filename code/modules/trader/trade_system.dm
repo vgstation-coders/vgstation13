@@ -18,12 +18,17 @@ var/datum/subsystem/trade_system/SStrade
 	SStrade = src
 	for(var/path in subtypesof(/datum/trade_product))
 		all_trade_merch += new path
+	market_flux(FALSE)
 	..()
 
 /datum/subsystem/trade_system/fire(resumed = FALSE)
 	if(prob(FLUX_CHANCE))
-		for(var/datum/trade_product/TP in all_trade_merch)
-			TP.flux_rate = 1+(rand(-20,20)/100) //Anywhere from 0.8 to 1.2
+		market_flux()
+
+/datum/subsystem/trade_system/proc/market_flux(var/update_windows = TRUE)
+	for(var/datum/trade_product/TP in all_trade_merch)
+		TP.flux_rate = 1+(rand(-20,20)/100) //Anywhere from 0.8 to 1.2
+	if(update_windows)
 		for(var/obj/structure/trade_window/TW in all_twindows)
 			TW.market_flux()
 
@@ -48,6 +53,8 @@ var/datum/subsystem/trade_system/SStrade
 	return 1-round(trader_account.money / 25000, 0.01)
 
 /datum/subsystem/trade_system/proc/loyal_customer(mob/living/carbon/human/user)
+	if(!istype(user))
+		return 1.5
 	if(!(user.get_face_name() in loyal_customers))
 		return 1.5
 	if(loyal_customers[user.get_face_name()] >= 1000)
