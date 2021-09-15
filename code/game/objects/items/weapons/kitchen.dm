@@ -296,11 +296,12 @@
 	icon_state = "knifenazi"
 	siemens_coefficient = 1
 	sharpness = 1.5
-	force = 10.0
+	force = 10
 	throwforce = 30
 	throw_speed = 3
 	throw_range = 7
 	w_class = W_CLASS_SMALL
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	starting_materials = list(MAT_IRON = 12000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
@@ -318,8 +319,9 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.5
-	force = 10.0
+	force = 10
 	w_class = W_CLASS_MEDIUM
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
@@ -367,7 +369,7 @@
 	siemens_coefficient = 1
 	sharpness = 1.2
 	sharpness_flags = SHARP_BLADE
-	force = 15.0
+	force = 15
 	w_class = W_CLASS_SMALL
 	throwforce = 8.0
 	throw_speed = 3
@@ -384,8 +386,8 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
 	armor_penetration = 50
-	force = 25.0
-	throwforce = 15.0
+	force = 25
+	throwforce = 15
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
 	if(istype(hit_atom, /mob/living))
@@ -429,8 +431,8 @@
 	desc = "Used to knock out the Bartender."
 	icon_state = "rolling_pin"
 	hitsound = "sound/weapons/smash.ogg"
-	force = 8.0
-	throwforce = 10.0
+	force = 8
+	throwforce = 10
 	throw_speed = 2
 	throw_range = 7
 	w_class = W_CLASS_MEDIUM
