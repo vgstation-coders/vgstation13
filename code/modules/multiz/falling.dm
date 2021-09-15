@@ -73,6 +73,16 @@
 		if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
 			return
 
+		var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
+		if(down_stairs && if(down_stairs.dir == dir))
+			var/turf/target = get_step(below, dir)
+			A.Move(target)
+			if(isliving(A))
+				var/mob/living/L = A
+				if(L.pulling)
+					L.pulling.Move(target)
+			return
+
 		gravity = get_gravity()
 		if(!gravity)
 			return
