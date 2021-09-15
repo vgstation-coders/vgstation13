@@ -44,9 +44,9 @@
 	// Detect stairs below and traverse down them.
 	if(down_stairs && if(down_stairs.dir == dir))
 		var/turf/target = get_step(below, dir)
-		A.Move(target)
-		if(isliving(A))
-			var/mob/living/L = A
+		Move(target)
+		if(isliving(src))
+			var/mob/living/L = src
 			if(L.pulling)
 				L.pulling.Move(target)
 		return
@@ -73,12 +73,12 @@
 		if(!T.CanZPass(src, DOWN) || !below.CanZPass(src, DOWN))
 			return
 
-		var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
+		vdown_stairs = locate(/obj/structure/stairs) in below
 		if(down_stairs && if(down_stairs.dir == dir))
 			var/turf/target = get_step(below, dir)
-			A.Move(target)
-			if(isliving(A))
-				var/mob/living/L = A
+			Move(target)
+			if(isliving(src))
+				var/mob/living/L = src
 				if(L.pulling)
 					L.pulling.Move(target)
 			return

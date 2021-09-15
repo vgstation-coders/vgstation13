@@ -500,7 +500,7 @@
 				else
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
-			if(isopenspace(T)) // Stair movement down
+			if(istype(T, /turf/simulated/open)) // Stair movement down
 				var/turf/below = GetBelow(T)
 				if(below)
 					var/obj/structure/stairs/down_stairs = locate(/obj/structure/stairs) in below
