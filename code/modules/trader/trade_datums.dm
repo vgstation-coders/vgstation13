@@ -12,34 +12,32 @@
 	var/sales_category = TRADE_SINGLE
 
 /datum/trade_product/proc/current_price(mob/user)
-	message_admins("Current price. BP: [baseprice]; FR: [flux_rate]; SM: [SStrade.shoal_prestige_factor()]; LC: [SStrade.loyal_customer(user)]")
-	message_admins("Overall: [baseprice * flux_rate * SStrade.shoal_prestige_factor() * SStrade.loyal_customer(user)]")
 	return round(baseprice * flux_rate * SStrade.shoal_prestige_factor() * SStrade.loyal_customer(user))
 
 /datum/trade_product/wardrobe
 	name = "Wonderful Wardrobe"
 	path = /obj/structure/closet/secure_closet/wonderful
-	baseprice = 150
+	baseprice = 160
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/shoaljunk
 	name = "Shoal Junk crate"
 	path = /obj/structure/closet/crate/shoaljunk
-	baseprice = 100
+	baseprice = 110
 	maxunits = 3
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/cloudnine
 	name = "Cloud IX crate"
 	path = /obj/structure/closet/crate/internals/cloudnine
-	baseprice = 150
+	baseprice = 160
 	maxunits = 3
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/alcatrazfour
 	name = "Alcatraz IV crate"
 	path = /obj/structure/closet/crate/chest/alcatraz
-	baseprice = 150
+	baseprice = 160
 	maxunits = 4
 	sales_category = TRADE_VARIETY
 
@@ -84,21 +82,21 @@
 /datum/trade_product/randommobs
 	name = "random friends"
 	path = /obj/item/weapon/storage/box/mysterycubes
-	baseprice = 75
+	baseprice = 80
 	maxunits = 2
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/randomchems
 	name = "random chemicals box"
 	path = /obj/item/weapon/storage/box/mystery_vial
-	baseprice = 25
+	baseprice = 30
 	maxunits = 5
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/randomcircuits
 	name = "random circuits box"
 	path = /obj/item/weapon/storage/box/mystery_circuit
-	baseprice = 25
+	baseprice = 30
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/randommats
@@ -111,7 +109,7 @@
 /datum/trade_product/oddmats
 	name = "odd materials"
 	path = /obj/item/weapon/storage/box/large/mystery_material/odd
-	baseprice = 25
+	baseprice = 30
 	maxunits = 5
 	sales_category = TRADE_VARIETY
 

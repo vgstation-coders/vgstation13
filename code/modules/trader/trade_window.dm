@@ -42,7 +42,7 @@
 		C.pixel_y = -3 * PIXEL_MULTIPLIER
 	if(product_selected && credits_held() >= product_selected.current_price(user))
 		trade(user)
-		updateUsrDialog()
+	updateUsrDialog()
 
 /obj/structure/trade_window/proc/market_flux()
 	say("Market flux!")
@@ -70,10 +70,13 @@
 	data["selected"] = product_selected
 	data["credsheld"] = credits_held()
 	data["shoalmoney"] = trader_account.money
+	data["shoaldiscount"] = shoal_prestige_factor()-1
 	if(user.get_face_name() in SStrade.loyal_customers)
 		data["pastbusiness"] = SStrade.loyal_customers[user.get_face_name()]
+		data["pastdiscount"] = SStrade.loyal_customer(user)-1
 	else
 		data["pastbusiness"] = 0
+		data["pastdiscount"] = "+50"
 	data["selectedCategory"] = category
 	data["categories"] = list(list("category" = TRADE_SINGLE), list("category" = TRADE_VARIETY))
 	SStrade.rebuild_databank(user)
@@ -117,7 +120,6 @@
 		else
 			say("Buy what?")
 			return
-	message_admins("Current price: [TP.current_price(user)]")
 	if(change_money(TP.current_price(user)))
 		SStrade.loyal_customers[user.get_face_name()] += TP.current_price(user)
 		TP.totalsold++
@@ -136,7 +138,6 @@
 		total += C.get_total()
 		if(total>price)
 			break
-	message_admins("Counted [total].")
 	if(total < price)
 		say("Put some more cash up.")
 		return FALSE
@@ -155,4 +156,4 @@
 	visible_message(message)
 	if(world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
-		//playsound(loc, pick(voice_vox_sound), 50, 1)
+		playsound(loc, pick(voice_vox_sound), 50, 1)
