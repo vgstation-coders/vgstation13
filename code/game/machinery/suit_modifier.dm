@@ -19,6 +19,7 @@
 	desc = "A man-sized machine, akin to a coffin, meant to install modifications into a worn spacesuit."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "suitmodifier"
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 
 	var/list/modules_to_install = list()
 	var/obj/item/weapon/cell/cell = null
@@ -26,6 +27,7 @@
 	var/activated = FALSE
 	var/static/list/plasmaman_suits
 	var/static/list/vox_suits
+	var/apply_multiplier = 1
 	idle_power_usage = 50
 	active_power_usage = 300
 
@@ -61,8 +63,29 @@
 
 /obj/machinery/suit_modifier/New()
 	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/suit_modifier,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/micro_laser
+	)
 	if(world.has_round_started())
 		initialize()
+
+/obj/machinery/recharge_station/RefreshParts()
+	var/avg_rate = 0
+	var/amount = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		avg_rate += M.rating
+		amount++
+	apply_multiplier = (avg_rate / amount)
+	avg_rate = 0
+	amount = 0
+	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+		avg_rate += ML.rating
+		amount++
+	active_power_usage = 300 / (avg_rate / amount)
 
 /obj/machinery/suit_modifier/initialize()
 	suit_overlay = new
@@ -212,7 +235,7 @@
 	for(var/obj/item/rig_module/RM in modules_to_install)
 		if(locate(RM.type) in R.modules) //One already installed
 			continue
-		if(do_after(H, src, 5 SECONDS, needhand = FALSE))
+		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
 			say("Installing [RM] into \the [R].", class = "binaryradio")
 			R.modules.Add(RM)
 			RM.rig = R
@@ -252,7 +275,7 @@
 			return
 		working_animation()
 		say("Uninstalling [RM] from \the [R].", class = "binaryradio")
-		if(do_after(H, src, 5 SECONDS, needhand = FALSE))
+		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
 			R.modules.Remove(RM)
 			RM.rig = null
 			RM.forceMove(get_turf(src))
