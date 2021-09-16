@@ -1118,8 +1118,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/power_change()
 	if(!(stat & BROKEN))
 		if( powered() )
-			update_vicon()
 			stat &= ~NOPOWER
+			update_vicon()
 		else
 			spawn(rand(0, 15))
 				stat |= NOPOWER
