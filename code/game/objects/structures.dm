@@ -1,6 +1,7 @@
 obj/structure
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
+	var/can_bump_in_front = TRUE // For bumping items in front away
 
 obj/structure/blob_act(var/destroy = 0)
 	..()
@@ -58,7 +59,7 @@ obj/structure/ex_act(severity)
 	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 		return
 
-	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
+	if(istype(obstacle, /obj/structure) && can_bump_in_front)
 		if(!obstacle.anchored)
 			obstacle.Move(get_step(obstacle,src.dir))
 	..()

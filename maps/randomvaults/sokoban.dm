@@ -178,11 +178,12 @@ This ladder stuff looks confusing, so here's an illustration!!!
 	mysterious = FALSE
 
 //Crate
-//- can't be opened or pulled
+//- can't be opened, pulled or bump crates in front
 /obj/structure/closet/crate/sokoban
 	desc = "A very heavy, tamperproof crate. A thin coating of space lube allows it to be slid around on the floor effortlessly, despite its massive weight. Unfortunately, this means it can't be grabbed at all."
 
 	var/shipped = FALSE //Crate put on a teleporter
+	can_bump_in_front = FALSE //Stops normal crate inertia
 
 	var/datum/map_element/vault/sokoban/parent
 
