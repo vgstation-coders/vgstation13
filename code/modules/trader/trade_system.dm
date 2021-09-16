@@ -43,6 +43,7 @@ var/datum/subsystem/trade_system/SStrade
 		var/product_to_list = list()
 		product_to_list["name"] = TP.name
 		product_to_list["price"] = TP.current_price(user)
+		product_to_list["marketforces"] = 100*(TP.flux_rate - 1)
 		product_to_list["category"] = TP.sales_category
 		product_to_list["remaining"] = TP.maxunits - TP.totalsold
 		trade_databank += list(product_to_list)

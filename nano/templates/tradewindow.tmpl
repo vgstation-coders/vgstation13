@@ -28,7 +28,7 @@
 	{{for data.databank}}
 		{{if value.category == data.selectedCategory}}
 			<div class="item">
-				{{:helper.link(value.name, 'cart', {'product' : value.name})}} {{:value.price}} credits
+				{{:helper.link(value.name, 'cart', {'product' : value.name})}} {{:value.price}} credits ({{:value.marketforces}}% market forces)
 			</div>
 		{{/if}}
 	{{for}}

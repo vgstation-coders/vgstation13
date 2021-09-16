@@ -13,11 +13,13 @@
 	var/datum/trade_product/product_selected = null //targets a datum in the list
 	var/category = TRADE_VARIETY
 	var/time_last_speech = 0
+	var/datum/language/trader_language
 
 /obj/structure/trade_window/New()
 	..()
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	SStrade.all_twindows += src
+	trader_language = new /datum/language/vox
 
 /obj/structure/trade_window/Destroy()
 	SStrade.all_twindows -= src
@@ -68,13 +70,17 @@
 		return
 
 	if(user.get_face_name() == "Unknown")
-		say("I don't talk to anyone whose face I can't see.")
+		say(pick(tw_face_not_visible))
 		return
 
 	if(!(user.get_face_name() in SStrade.loyal_customers))
 		var/datum/organ/external/head/head_organ = user.get_organ(LIMB_HEAD)
 		if(head_organ.disfigured)
 			say("What the fuck happened to your face? Who are you supposed to be?")
+			if(user.real_name in SStrade.loyal_customers)
+				say("Oh, it's you, [user.real_name]. Get that hideous thing fixed.")
+			else
+				return
 		else
 			say("I don't know you. You want to join up? You need someone to vouch for you.")
 			return
@@ -142,7 +148,7 @@
 			user.put_in_hands(AM)
 		else
 			AM.shake(1, 3) //Just a little movement to make it obvious it's here.
-		say(pick("Very nice, here you go.", "Enjoy, sell it quickly.", "No refunds, no returns."))
+		say(pick(tw_sale_generic))
 	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/proc/credits_held()
@@ -171,7 +177,11 @@
 	return TRUE
 
 /obj/structure/trade_window/say(var/message)
-	visible_message("<B>[merchant_name]</B> says, \"[message]\"")
+	//visible_message("<B>[merchant_name]</B> says, \"[message]\"")
+	..(message, trader_language)
 	if(world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
 		playsound(loc, pick(voice_vox_sound), 120, 0)
+
+/obj/structure/trade_window/GetVoice()
+	return merchant_name
