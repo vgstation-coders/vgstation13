@@ -73,7 +73,7 @@
 	if(world.has_round_started())
 		initialize()
 
-/obj/machinery/recharge_station/RefreshParts()
+/obj/machinery/suit_modifier/RefreshParts()
 	var/avg_rate = 0
 	var/amount = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
