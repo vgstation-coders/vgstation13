@@ -58,6 +58,16 @@
 		return ..()
 	show_to(user)
 
+/obj/item/weapon/storage/examine(mob/user)
+	..()
+	if(isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //phantom mask users
+		var/mob/dead/observer/ghost = user
+		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
+			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //scrying or astral travel
+				return
+		to_chat(ghost, "It contains: <span class='info'>[counted_english_list(contents)]</span>.")
+		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
 //override to allow certain circumstances of looking inside this item if not holding or adjacent
 //distance interact can let you use storage even inside a mecha (see screen_objects.dm L160)
 //and also pull items out of that storage; it can be quite powerful, add narrow conditions
@@ -348,6 +358,8 @@
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
+	if (W.light_obj)
+		W.kill_light()
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)
@@ -381,6 +393,8 @@
 		if(!A.can_be_inserted(W, 1))
 			return 0
 
+	var/light_update = 1
+
 	if(istype(src, /obj/item/weapon/storage/fancy))
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
@@ -398,10 +412,19 @@
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location
 				A.handle_item_insertion(W, 1)
+				light_update = 0
 			else
 				W.forceMove(new_location)
 	else
 		W.forceMove(get_turf(src))
+
+	if (light_update)
+		if (istype(W, /obj/item/device/flashlight))
+			var/obj/item/device/flashlight/F = W
+			if (F.on)
+				F.set_light()
+		if (W.lighting_flags & IS_LIGHT_SOURCE)
+			W.set_light()
 
 	if(W.maptext)
 		W.maptext = ""

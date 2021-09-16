@@ -1441,7 +1441,15 @@
 	return id
 
 /mob/living/carbon/human/update_perception()
-	if(client && client.darkness_planemaster)
+	if (dark_plane)
+		dark_plane.alphas = list()
+		dark_plane.colours = null
+		dark_plane.blend_mode = BLEND_ADD
+
+	if (master_plane)
+		master_plane.blend_mode = BLEND_MULTIPLY
+
+	if(client && dark_plane)
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)
@@ -1449,9 +1457,21 @@
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			for (var/datum/disease2/effect/catvision/catvision in D.effects)
-				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
-					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
+				if (catvision.count)
+					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
 					break
+
+	if (istype(glasses))
+		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
+			dark_plane.alphas += glasses.my_dark_plane_alpha_override
+			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
+
+	if (mind)
+		for (var/key in mind.antag_roles)
+			var/datum/role/R = mind.antag_roles[key]
+			R.update_perception()
+
+	check_dark_vision()
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
@@ -2181,7 +2201,7 @@ mob/living/carbon/human/isincrit()
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
 
-/mob/living/carbon/human/turn_into_mannequin(var/material = "marble")
+/mob/living/carbon/human/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	var/list/valid_mannequin_species = list(
 		"Human",
 		"Vox",
@@ -2235,27 +2255,27 @@ mob/living/carbon/human/isincrit()
 			if (is_fat())
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else if (gender == FEMALE)
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 		if ("Vox")
 			switch (material)
 				if ("marble")
-					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 				if ("wood")
-					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 
 	if (new_mannequin)
 		return TRUE

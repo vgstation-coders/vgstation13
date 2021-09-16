@@ -992,7 +992,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	return duplicate
 
 
-/area/proc/copy_contents_to(var/area/A , var/platingRequired = 0 )
+/area/proc/copy_contents_to(area/A , platingRequired = FALSE)
 	//Takes: Area. Optional: If it should copy to areas that don't have plating
 	//Returns: Nothing.
 	//Notes: Attempts to move the contents of one area to another area.
@@ -1037,8 +1037,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		C.x_pos = (T.x - trg_min_x)
 		C.y_pos = (T.y - trg_min_y)
 
-	var/list/toupdate = new/list()
-
 	var/list/copiedobjs = list()
 
 	moving:
@@ -1047,74 +1045,37 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			for (var/turf/B in refined_trg)
 				var/datum/coords/C_trg = refined_trg[B]
 				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
-
 					var/old_name = T.name
-					var/old_dir1 = T.dir
-					var/old_icon_state1 = T.icon_state
-					var/old_icon1 = T.icon
+					var/old_dir = T.dir
+					var/old_icon_state = T.icon_state
+					var/old_icon = T.icon
 
 					if(platingRequired)
 						if(istype(B, /turf/space))
 							continue moving
 
-					var/turf/X = B.ChangeTurf(T.type)
-					X.name = old_name
-					X.dir = old_dir1
-					X.icon_state = old_icon_state1
-					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
+					B.ChangeTurf(T.type)
+					B.name = old_name
+					B.dir = old_dir
+					B.icon_state = old_icon_state
+					B.icon = old_icon
 
-					X.return_air().copy_from(T.return_air())
-
-					var/list/objs = new/list()
-					var/list/newobjs = new/list()
-					var/list/mobs = new/list()
-					var/list/newmobs = new/list()
+					B.return_air().copy_from(T.return_air())
 
 					for(var/obj/O in T)
-
-						if(!istype(O,/obj))
-							continue
-
-						objs += O
-
-
-					for(var/obj/O in objs)
-						newobjs += O.DuplicateObject(X)
+						copiedobjs += O.DuplicateObject(B)
 
 					for(var/mob/M in T)
-
 						if(!M.can_shuttle_move())
 							continue
-						mobs += M
-
-					for(var/mob/M in mobs)
-						newmobs += M.DuplicateObject(X)
-
-					copiedobjs += newobjs
-					copiedobjs += newmobs
-
-					toupdate += X
+						copiedobjs += M.DuplicateObject(B)
 
 					refined_src -= T
 					refined_trg -= B
 					continue moving
 
-
-
-
-	var/list/doors = new/list()
-
-	if(toupdate.len)
-		for(var/turf/simulated/T1 in toupdate)
-			for(var/obj/machinery/door/D2 in T1)
-				doors += D2
-			/*if(T1.parent)
-				SSair.groups_to_rebuild += T1.parent
-			else
-				SSair.mark_for_update(T1)*/
-
-	for(var/obj/O in doors)
-		O:update_nearby_tiles()
+	for(var/obj/machinery/door/new_door in copiedobjs)
+		new_door.update_nearby_tiles()
 
 	return copiedobjs
 
@@ -1982,3 +1943,11 @@ Game Mode config tags:
 	"Service" = SER_FREQ,
 	"Supply" = SUP_FREQ
 	)
+
+/proc/getviewsize(view)
+	if(isnum(view))
+		var/totalviewrange = (view < 0 ? -1 : 1) + 2 * view
+		return list(totalviewrange, totalviewrange)
+	else
+		var/list/viewrangelist = splittext(view,"x")
+		return list(text2num(viewrangelist[1]), text2num(viewrangelist[2]))

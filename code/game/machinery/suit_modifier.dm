@@ -37,7 +37,7 @@
 
 /proc/build_suit_list(datum/species/species, suit_base_path, helmet_base_path)
 	// This thing is using outfit datums to build an associative list of
-	// "job title string" -> list(suit_type_path, helmet_type_path)
+	// "job title string" -> list(suit_type_path, helmet_type_path, access_required)
 	. = list()
 	for(var/path in subtypesof(/datum/outfit))
 		var/datum/outfit/entry = new path
@@ -61,6 +61,10 @@
 
 /obj/machinery/suit_modifier/New()
 	..()
+	if(world.has_round_started())
+		initialize()
+
+/obj/machinery/suit_modifier/initialize()
 	suit_overlay = new
 	suit_overlay.icon = 'icons/obj/stationobjs.dmi'
 	suit_overlay.plane = ABOVE_HUMAN_PLANE

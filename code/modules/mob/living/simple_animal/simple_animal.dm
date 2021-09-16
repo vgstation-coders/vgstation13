@@ -371,7 +371,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			return "[emote], [text]"
 	return "says, [text]";
 
-/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE)
+/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE, arguments)
 	if(timestopped)
 		return //under effects of time magick
 	if(stat)
@@ -723,6 +723,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		new_type = type_override
 
 	if(src.type == new_type) //Already grown up
+		return
+
+	if(istype(locked_to,/obj/item/critter_cage)) // Baby mobs in cages won't grow up!
 		return
 
 	var/mob/living/simple_animal/new_animal = new new_type(src.loc)
