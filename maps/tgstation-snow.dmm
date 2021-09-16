@@ -22112,15 +22112,6 @@
 /obj/machinery/smartfridge,
 /turf/simulated/wall,
 /area/crew_quarters/kitchen)
-"beR" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/open,
-/area/hydroponics)
 "beU" = (
 /obj/machinery/portable_atmospherics/hydroponics,
 /obj/machinery/computer/security/telescreen/entertainment{
@@ -26326,12 +26317,6 @@
 	dir = 8;
 	icon_state = "green"
 	},
-/area/hydroponics)
-"bCI" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/open,
 /area/hydroponics)
 "bCJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -30849,18 +30834,6 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
-"bUA" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/open,
-/area/science/hallway)
 "bUD" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable{
@@ -38356,15 +38329,6 @@
 	icon_state = "whitehall"
 	},
 /area/science/hallway)
-"cwK" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/open,
-/area/science/hallway)
 "cwM" = (
 /obj/machinery/newscaster{
 	pixel_x = -32
@@ -41227,12 +41191,6 @@
 /area/supply/miningdock)
 "cJn" = (
 /turf/simulated/floor,
-/area/supply/miningdock)
-"cJp" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/open,
 /area/supply/miningdock)
 "cJq" = (
 /obj/structure/window/reinforced{
@@ -74607,12 +74565,6 @@
 	icon_state = "wood-broken4"
 	},
 /area/maintenance/ghettobar)
-"ibz" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/open,
-/area/science/xenobiology)
 "ibG" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -101337,15 +101289,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/engineering/burn_chamber)
-"rzB" = (
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/open,
-/area/science/xenobiology)
 "rzF" = (
 /obj/machinery/atmospherics/pipe/simple/cyan/visible,
 /turf/simulated/floor,
@@ -239900,7 +239843,7 @@ cGY
 cGY
 cGY
 cGY
-cJp
+cGY
 tEb
 ebO
 cRC
@@ -240202,7 +240145,7 @@ cGY
 cGY
 cGY
 cGY
-cJp
+cGY
 tEb
 ebO
 cRE
@@ -261309,7 +261252,7 @@ bEW
 bzz
 tHa
 bBd
-bCI
+bBd
 bfL
 bEw
 bEJ
@@ -261611,7 +261554,7 @@ bEW
 bbE
 tHj
 bBd
-beR
+bBd
 bfL
 whs
 bEJ
@@ -268282,7 +268225,7 @@ cub
 cub
 cub
 cub
-cwK
+cub
 cyD
 cer
 bLU
@@ -268584,7 +268527,7 @@ cub
 cub
 cub
 cub
-bUA
+cub
 cyE
 cer
 cLd
@@ -268939,7 +268882,7 @@ iJt
 pnm
 pnm
 pnm
-rzB
+pnm
 nSu
 jvP
 oHb
@@ -269241,7 +269184,7 @@ tRB
 pnm
 pnm
 pnm
-ibz
+pnm
 nSu
 jvP
 qUz
