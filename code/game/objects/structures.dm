@@ -52,3 +52,13 @@ obj/structure/ex_act(severity)
 		material_type.on_use(H,src,null)
 /obj/structure/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
+
+// Moved down from vehicles, allows "Newton's cradle" esque physics where bumping the nearest item in a chain pushes the furthest one until all are in the new position, in practice
+/obj/structure/to_bump(var/atom/movable/obstacle)
+	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
+		return
+
+	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
+		if(!obstacle.anchored)
+			obstacle.Move(get_step(obstacle,src.dir))
+	..()

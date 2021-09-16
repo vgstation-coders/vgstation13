@@ -418,15 +418,6 @@
 	// Transfer salvagables here.
 	return
 
-/obj/structure/bed/chair/vehicle/to_bump(var/atom/movable/obstacle)
-	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-		return
-
-	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
-		if(!obstacle.anchored)
-			obstacle.Move(get_step(obstacle,src.dir))
-	..()
-
 /obj/structure/bed/chair/vehicle/unlock_atom(var/atom/movable/AM)
 	. = ..()
 	if(!.)
