@@ -194,7 +194,7 @@
 	var/list/turf/simulated/floor/Floors = new
 
 	for(var/type in typesof(/area/hallway))
-		if(istype(type,/area/hallway/secondary/entry)) // no spawn in arrivals, make it less annoying for latejoiners
+		if(ispath(type,/area/hallway/secondary/entry)) // no spawn in arrivals, make it less annoying for latejoiners
 			continue
 		var/area/Hallway = locate(type)
 
