@@ -632,7 +632,9 @@
 	if(activated)
 		return
 	to_chat(mob, "<span class = 'warning'>You feel small...</span>")
-	mob.transform.Scale(1,0.7)
+	var/matrix/M = matrix()
+	M.Scale(1,0.7)
+	mob.transform = M
 
 	mob.pixel_y = -4 * PIXEL_MULTIPLIER
 
@@ -642,7 +644,9 @@
 
 /datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
-	mob.transform.Scale(1,1)
+	var/matrix/M = matrix()
+	M.Scale(1,1)
+	mob.transform = M
 
 	mob.pixel_y = 0 * PIXEL_MULTIPLIER
 
