@@ -168,16 +168,8 @@
 /turf/unsimulated/floor/asteroid/cave/permafrost,
 /area/mine/explored)
 "aaE" = (
-/obj/machinery/door/window{
-	base_state = "right";
-	icon_state = "right";
-	name = "AI Integrity Restorer";
-	req_access_txt = "16"
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
+/turf/simulated/floor/glass,
+/area/server)
 "aaF" = (
 /obj/structure/hanging_lantern,
 /turf/unsimulated/floor/asteroid/cave/permafrost,
@@ -6612,9 +6604,6 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 4
 	},
-/obj/effect/landmark/start{
-	name = "Cyborg"
-	},
 /turf/simulated/floor/bluegrid,
 /area/comms{
 	name = "\improper Cyborg Station"
@@ -6655,70 +6644,42 @@
 /turf/simulated/floor,
 /area/derelict/bridge)
 "apv" = (
-/obj/machinery/computer/aifixer,
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -22
 	},
-/turf/simulated/floor/bluegrid,
+/obj/structure/z_ladder/up,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/server)
 "apw" = (
+/obj/machinery/computer/aifixer,
 /turf/simulated/floor/bluegrid,
 /area/server)
 "apx" = (
-/obj/machinery/atmospherics/pipe/zpipe/up/scrubbers/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/server)
 "apy" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/obj/machinery/door/window{
-	base_state = "right";
-	dir = 8;
-	icon_state = "right";
-	name = "AI Integrity Restorer";
-	req_access_txt = "16"
-	},
+/obj/structure/z_ladder,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/turret_protected/ai_upload_foyer)
+/area/server)
 "apz" = (
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
-"apA" = (
-/obj/machinery/ai_status_display{
-	pixel_y = 32
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
-"apB" = (
-/obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 8
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
+/obj/machinery/recharge_station,
+/turf/simulated/floor/glass,
+/area/comms{
+	name = "\improper Cyborg Station"
+	})
 "apC" = (
-/turf/simulated/floor{
-	icon_state = "dark"
+/obj/structure/catwalk,
+/obj/effect/landmark/start{
+	name = "Cyborg"
 	},
+/turf/simulated/open,
 /area/comms{
 	name = "\improper Cyborg Station"
 	})
@@ -7282,9 +7243,6 @@
 	dir = 1;
 	name = "Messaging Server"
 	},
-/obj/machinery/atmospherics/pipe/zpipe/up/supply/hidden{
-	dir = 4
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7297,14 +7255,6 @@
 	dir = 1;
 	name = "Cyborg Station"
 	},
-/obj/structure/closet/crate{
-	name = "Camera Assembly Crate"
-	},
-/obj/item/weapon/camera_assembly,
-/obj/item/weapon/camera_assembly,
-/obj/item/weapon/camera_assembly,
-/obj/item/weapon/camera_assembly,
-/obj/item/weapon/camera_assembly,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7546,9 +7496,6 @@
 /turf/simulated/floor/plating,
 /area/mine/eva)
 "arr" = (
-/obj/effect/landmark/start{
-	name = "Cyborg"
-	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7674,9 +7621,6 @@
 "arJ" = (
 /turf/simulated/floor/wood,
 /area/research_outpost/hallway)
-"arQ" = (
-/turf/simulated/wall/r_wall,
-/area/turret_protected/ai_upload_foyer)
 "arR" = (
 /obj/machinery/alarm{
 	dir = 1;
@@ -8450,51 +8394,25 @@
 /obj/machinery/light/small,
 /turf/simulated/floor/bluegrid,
 /area/server)
-"atW" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
-"atX" = (
-/obj/machinery/light/small,
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	on = 1
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
-"atY" = (
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
-"atZ" = (
-/obj/machinery/light/small,
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
 "aua" = (
 /obj/machinery/alarm{
 	dir = 1;
 	pixel_y = -22
 	},
-/obj/machinery/recharge_station,
 /obj/machinery/light/small,
 /turf/simulated/floor/bluegrid,
 /area/comms{
 	name = "\improper Cyborg Station"
 	})
 "aub" = (
-/obj/machinery/recharge_station,
+/obj/structure/closet/crate{
+	name = "Camera Assembly Crate"
+	},
+/obj/item/weapon/camera_assembly,
+/obj/item/weapon/camera_assembly,
+/obj/item/weapon/camera_assembly,
+/obj/item/weapon/camera_assembly,
+/obj/item/weapon/camera_assembly,
 /turf/simulated/floor/bluegrid,
 /area/comms{
 	name = "\improper Cyborg Station"
@@ -16332,14 +16250,6 @@
 	mined_type = /turf/unsimulated/floor/asteroid/cave/permafrost
 	},
 /area/mine/explored)
-"aLl" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/turret_protected/ai_upload_foyer)
 "aLm" = (
 /obj/structure/stairs/north,
 /turf/simulated/floor{
@@ -83434,16 +83344,17 @@
 	},
 /area/crew_quarters/sleep)
 "lfC" = (
-/obj/structure/catwalk,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/machinery/atmospherics/pipe/zpipe/down/scrubbers{
-	dir = 4
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 6
 	},
-/turf/simulated/open,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/server)
 "lfI" = (
 /obj/machinery/light/small{
@@ -92012,7 +91923,6 @@
 /turf/unsimulated/floor/snow,
 /area/derelict/atmos)
 "olB" = (
-/obj/structure/catwalk,
 /obj/machinery/power/apc{
 	dir = 1;
 	pixel_y = 24
@@ -92022,7 +91932,13 @@
 	icon_state = "0-2";
 	pixel_y = 1
 	},
-/turf/simulated/open,
+/obj/machinery/atmospherics/unary/vent_pump{
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/server)
 "olD" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -100375,9 +100291,7 @@
 /turf/simulated/wall/r_wall,
 /area/maintenance/asmaint3)
 "rfT" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
-	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /turf/simulated/wall/r_wall,
 /area/server)
 "rgd" = (
@@ -109575,6 +109489,9 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
+/obj/effect/landmark/start{
+	name = "Cyborg"
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -113503,11 +113420,12 @@
 /turf/simulated/floor,
 /area/maintenance/disposal)
 "vXl" = (
-/obj/structure/catwalk,
-/obj/machinery/atmospherics/pipe/zpipe/down/supply{
-	dir = 4
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 1
 	},
-/turf/simulated/open,
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
 /area/server)
 "vXH" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
@@ -155874,7 +155792,7 @@ dYP
 dYP
 cmj
 apw
-apw
+apx
 atV
 cmj
 dYP
@@ -156477,10 +156395,10 @@ dYP
 dYP
 dYP
 cmj
-arQ
-apy
-atW
-arQ
+cmj
+pBF
+cmj
+cmj
 ekr
 ekr
 ekr
@@ -156779,10 +156697,10 @@ dYP
 dYP
 dYP
 dYP
-arQ
-apz
-atX
-arQ
+ekr
+edy
+edy
+edy
 edy
 edy
 edy
@@ -157081,10 +156999,10 @@ dYP
 dYP
 dYP
 dYP
-arQ
-apA
-atY
-cml
+ekr
+aia
+edy
+edy
 edy
 edy
 edy
@@ -157383,10 +157301,10 @@ dYP
 dYP
 dYP
 dYP
-arQ
-apB
-atZ
-arQ
+ekr
+edy
+edy
+edy
 edy
 edy
 edy
@@ -157685,10 +157603,10 @@ dYP
 dYP
 dYP
 cmq
-arQ
-aaE
-aLl
-arQ
+cmq
+sHt
+cmq
+cmq
 ekr
 ekr
 ekr
@@ -246172,9 +246090,9 @@ eEX
 eEX
 eEX
 cmj
-cjO
-cjO
-cjO
+aaE
+apy
+aaE
 cmj
 cpD
 crl
@@ -246474,9 +246392,9 @@ bVF
 rIH
 bXI
 cmj
+aaE
 cjO
-cjO
-cjO
+aaE
 cmj
 cpE
 crk
@@ -248892,7 +248810,7 @@ bXI
 cmq
 gOC
 apC
-gOC
+apz
 cmq
 crA
 crA
@@ -249194,7 +249112,7 @@ eEX
 cmq
 gOC
 wYB
-gOC
+apz
 cmq
 crD
 crD
