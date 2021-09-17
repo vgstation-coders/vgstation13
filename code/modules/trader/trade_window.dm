@@ -14,6 +14,7 @@
 	var/category = TRADE_VARIETY
 	var/time_last_speech = 0
 	var/datum/language/trader_language
+	var/list/last_greeted = list()
 
 /obj/structure/trade_window/New()
 	..()
@@ -49,7 +50,7 @@
 	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/proc/market_flux()
-	say("Market flux!")
+	say(pick(tw_market_flux))
 	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/attack_hand(mob/user)
@@ -66,7 +67,10 @@
 		return
 
 	if(!istype(user))
-		say("I don't think I can do business with you.")
+		if(ismonkey(user))
+			say("Just a sprout. Come back when you're bigger.")
+		else
+			say("I don't think I can do business with you.")
 		return
 
 	if(user.get_face_name() == "Unknown")
@@ -84,6 +88,8 @@
 		else
 			say("I don't know you. You want to join up? You need someone to vouch for you.")
 			return
+	else
+		greet(user)
 
 	// this is the data which will be sent to the ui
 	var/data[0]
@@ -140,6 +146,11 @@
 		else
 			say("Buy what?")
 			return
+	var/saleslines = tw_sale_generic.Copy()
+	if(TP.current_price(user) >= 200)
+		saleslines += tw_sale_expensive
+	if(TP.flux_rate <= 0.85)
+		saleslines += tw_sale_good_deal
 	if(change_money(TP.current_price(user)))
 		SStrade.loyal_customers[user.get_face_name()] += TP.current_price(user)
 		TP.totalsold++
@@ -148,7 +159,8 @@
 			user.put_in_hands(AM)
 		else
 			AM.shake(1, 3) //Just a little movement to make it obvious it's here.
-		say(pick(tw_sale_generic))
+
+		say(pick(saleslines))
 	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/proc/credits_held()
