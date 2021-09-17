@@ -321,7 +321,6 @@
 		human_name = copytext(human_name,lastname_index+1)
 	var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
 	HB.name = human_name+HB.name
-	HB.job = human_job
 	return HB
 
 /datum/recipe/human/burger
