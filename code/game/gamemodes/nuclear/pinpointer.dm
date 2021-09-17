@@ -259,6 +259,12 @@ var/list/pinpointerpinpointer_list = list()
 	watches_nuke = FALSE
 	pinpointable = FALSE
 	var/dna_profile
+	var/nextuse
+
+/obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>The [src] can select a target again in [altFormatTimeDuration(nextuse-world.time)].</span>") 
+	
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
 	if(!active)
@@ -289,6 +295,8 @@ var/list/pinpointerpinpointer_list = list()
 	else if(dna_profile != usr.dna.unique_enzymes)
 		to_chat(usr, "<span class='warning'>The [src] refuses to operate.</span>")
 		return
+	else if(nextuse - world.time > 0)
+		to_chat(usr, "<span class='warning'>The [src] is still recalibrating.</span>")
 
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
@@ -306,8 +314,11 @@ var/list/pinpointerpinpointer_list = list()
 	if(!target)
 		to_chat(usr,"Failed to locate [target]!")
 		return
+	if(nextuse - world.time > 0)
+		return
 	active = TRUE
 	point_at(target)
+	nextuse = world.time + 2 MINUTES
 	to_chat(usr,"You set the pinpointer to locate [target]")
 
 /obj/item/weapon/pinpointer/pdapinpointer/AltClick()
