@@ -33,7 +33,7 @@
 			final_pixel_y -= 4 * PIXEL_MULTIPLIER
 			final_transform *= matrix().Scale(1,0.7)
 		else
-			if(lying_prev == 0)
+			if(shrunken_prev == 0)
 				final_pixel_y += 4 * PIXEL_MULTIPLIER
 				final_transform *= matrix().Scale(1,1.4285714)
 
