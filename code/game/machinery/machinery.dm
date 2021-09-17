@@ -251,9 +251,6 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel) && !connected_cell)
-		return 0
-
 	switch (use_power)
 		if (1)
 			use_power(idle_power_usage, power_channel)

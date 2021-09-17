@@ -1369,9 +1369,6 @@ Use this proc preferably at the end of an equipment loadout
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
 
-	for (var/datum/action/camera/action_cam in actions)
-		action_cam.Remove(src)
-
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
 /mob/verb/DisableClick(argu = null as anything, sec = "" as text, number1 = 0 as num, number2 = 0 as num)
@@ -2205,7 +2202,7 @@ mob/proc/on_foot()
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE
 
-/mob/proc/turn_into_mannequin(var/material = "marble")
+/mob/proc/turn_into_mannequin(var/material = "marble", var/forever = FALSE)
 	return FALSE
 
 /mob/proc/get_personal_ambience()

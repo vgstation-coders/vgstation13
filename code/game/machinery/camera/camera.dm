@@ -100,15 +100,13 @@ var/list/camera_names=list()
 	if(!c_tag)
 		name_camera()
 	..()
-	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
-		adv_camera.update(z, TRUE, list(src))
 	update_hear()
 	cameranet.cameras += src // This is different from addCamera. addCamera() cares about visibility.
 	cameranet.addCamera(src)
 
 /obj/machinery/camera/proc/name_camera()
 	var/area/A=get_area(src)
-	var/basename=A.name
+	var/basename=format_text(A.name)
 	var/nethash=english_list(network)
 	var/suffix = 0
 	while(!suffix || ((nethash+c_tag) in camera_names))
@@ -135,9 +133,6 @@ var/list/camera_names=list()
 	wires = null
 	cameranet.cameras -= src
 	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that
-	if(adv_camera)
-		for(var/key in adv_camera.camerasbyzlevel)
-			adv_camera.camerasbyzlevel[key] -= src
 	..()
 
 /obj/machinery/camera/emp_act(severity)
@@ -148,7 +143,6 @@ var/list/camera_names=list()
 		network = list()
 		cameranet.removeCamera(src)
 		stat |= EMPED
-		adv_camera.update(z, TRUE, list(src))
 		kill_light()
 		triggerCameraAlarm()
 		update_icon()
@@ -159,14 +153,6 @@ var/list/camera_names=list()
 			update_icon()
 			if(can_use())
 				cameranet.addCamera(src)
-				adv_camera.update(z, TRUE, list(src))
-		for(var/mob/O in mob_list)
-			if (istype(O.machine, /obj/machinery/computer/security))
-				var/obj/machinery/computer/security/S = O.machine
-				if (S.current == src)
-					O.unset_machine()
-					O.reset_view(null)
-					to_chat(O, "The screen bursts into static.")
 		..()
 
 /obj/machinery/camera/ex_act(severity)
@@ -307,11 +293,11 @@ var/list/camera_messages = list()
 				continue
 			to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track=[U.name]'>[U.name]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 
-		for(var/mob/O in player_list)
-			if (istype(O.machine, /obj/machinery/computer/security))
-				var/obj/machinery/computer/security/S = O.machine
-				if (S.current == src)
-					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
+		for(var/obj/machinery/computer/security/tv in tv_monitors)
+			if(tv.active_camera != src)
+				continue
+			for(var/datum/tgui/ui in SStgui.open_uis_by_src[tv])
+				to_chat(ui.user, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 		add_fingerprint(user)
@@ -376,24 +362,12 @@ var/list/camera_messages = list()
 			playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 		add_hiddenprint(user)
 		cameranet.updateVisibility(src, 0)
-	// now disconnect anyone using the camera
-	//Apparently, this will disconnect anyone even if the camera was re-activated.
-	//I guess that doesn't matter since they can't use it anyway?
-	for(var/mob/O in player_list)
-		if (istype(O.machine, /obj/machinery/computer/security))
-			var/obj/machinery/computer/security/S = O.machine
-			if (S.current == src)
-				O.unset_machine()
-				O.reset_view(null)
-				to_chat(O, "The screen bursts into static.")
-	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/triggerCameraAlarm()
 	alarm_on = 1
 	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
 		S.triggerAlarm("Camera", this_area, list(src), src)
-	adv_camera.update(z, TRUE, list(src))
 
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
@@ -401,7 +375,6 @@ var/list/camera_messages = list()
 	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
 		S.cancelAlarm("Camera", this_area, src)
-	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/can_use()
 	if(!status)
@@ -484,7 +457,7 @@ var/list/camera_messages = list()
 		var/datum/speech/copy = speech.clone()
 		tv_message(copy)
 		for(var/obj/machinery/computer/security/S in tv_monitors)
-			if(S.current == src)
+			if(S.active_camera == src)
 				var/range = (istype(S, /obj/machinery/computer/security/telescreen) ? world.view : 1)
 				for (var/mob/virtualhearer/VH in viewers(range, S))
 					if (!ismob(VH.attached))

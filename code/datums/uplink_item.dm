@@ -447,7 +447,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/device_tools/pdapinpointer
 	name = "PDA Pinpointer"
-	desc = "A pinpointer that can flawlessly track any PDA in the local space sector. Useful for locating assassination targets or other high-value targets that you can't find. Do note that it can only be set once and cannot track normal targets like the nuclear disk, and is obvious upon inspection."
+	desc = "A pinpointer that can flawlessly track any PDA in the local space sector. Useful for locating assassination targets or other high-value targets that you can't find. Do note that it cannot track normal targets like the nuclear disk, and is obvious upon inspection."
 	item = /obj/item/weapon/pinpointer/pdapinpointer
 	cost = 4
 

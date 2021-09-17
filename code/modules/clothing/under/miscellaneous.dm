@@ -994,7 +994,7 @@
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/football/offenseTackleBonus()
-	return 1
+	return 5
 
 /obj/item/clothing/under/football/New()
 	icon_state = "redfootball_[pick(23,13,69,56)]"

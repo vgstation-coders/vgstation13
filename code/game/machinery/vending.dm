@@ -1118,8 +1118,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/power_change()
 	if(!(stat & BROKEN))
 		if( powered() )
-			update_vicon()
 			stat &= ~NOPOWER
+			update_vicon()
 		else
 			spawn(rand(0, 15))
 				stat |= NOPOWER
@@ -2255,7 +2255,9 @@ var/global/num_vending_terminals = 1
 	icon_vend = "dinnerware-vend"
 	products = list(
 		/obj/item/weapon/tray = 8,
-		/obj/item/weapon/kitchen/utensil/fork = 6,
+		/obj/item/weapon/kitchen/utensil/fork = 10,
+		/obj/item/weapon/kitchen/utensil/spoon = 10,
+		/obj/item/weapon/kitchen/utensil/knife = 10,
 		/obj/item/weapon/kitchen/utensil/knife/large = 3,
 		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 8,
 		/obj/item/clothing/suit/chef/classic = 2,

@@ -52,10 +52,10 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 
 #define CLICKCATCHER_PLANE (-99 + FLOAT_PLANE)
-#define SPACE_BACKGROUND_PLANE (-98)
-#define SPACE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 1) // -97
-#define SPACE_DUST_PLANE (SPACE_PARALLAX_PLANE + 1) // -96
-#define ABOVE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 3) // -95
+#define SPACE_BACKGROUND_PLANE (-98 + FLOAT_PLANE)
+#define SPACE_PARALLAX_PLANE (-97)
+#define SPACE_DUST_PLANE (-96)
+#define ABOVE_PARALLAX_PLANE (-95)
 
 /*
 	from stddef.dm, planes & layers built into byond.
@@ -331,4 +331,16 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	screen |= ghost_planemaster
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
+
+
+// OVERDARKNESS PLANEMASTER
+// Used to apply darkness over lights that the player isn't supposed to see when the lighting master is set to BLEND_ADD
+/obj/abstract/screen/plane_master/overdark_planemaster
+	plane = 0
+
+/obj/abstract/screen/plane_master/overdark_planemaster_target
+	appearance_flags = 0
+	plane = ABOVE_LIGHTING_PLANE
+	mouse_opacity = 0
+	screen_loc = "CENTER,CENTER"
 
