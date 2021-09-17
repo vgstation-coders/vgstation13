@@ -6,7 +6,6 @@
 	icon_state = "meat"
 	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
 	var/subjectname = ""
-	var/subjectjob = null
 	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
@@ -19,9 +18,6 @@
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
 		subjectname = M.name
-		if(istype(M, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-			subjectjob = H.job
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()

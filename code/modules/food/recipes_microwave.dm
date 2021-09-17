@@ -308,13 +308,11 @@
 
 /datum/recipe/human //Parent datum only
 
-/datum/recipe/human/proc/make_food(var/obj/container)
+/datum/recipe/human/make_food(var/obj/container)
 	var/human_name
-	var/human_job
 	for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
 		if(HM.subjectname)
 			human_name = HM.subjectname
-			human_job = HM.subjectjob
 			break
 	var/lastname_index = findtext(human_name, " ")
 	if(lastname_index)

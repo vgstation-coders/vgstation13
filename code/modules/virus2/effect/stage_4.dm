@@ -247,7 +247,6 @@
 					var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
-					newmeat.subjectjob = sourcejob
 					newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment / totalslabs) //Thehehe. Fat guys go first
 					//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 					allmeat[i] = newmeat
