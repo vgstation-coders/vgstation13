@@ -296,7 +296,8 @@ var/list/pinpointerpinpointer_list = list()
 		to_chat(usr, "<span class='warning'>The [src] refuses to operate.</span>")
 		return
 	else if(nextuse - world.time > 0)
-		to_chat(usr, "<span class='warning'>The [src] is still recalibrating.</span>")
+		to_chat(usr, "<span class='warning'>[src] is still recalibrating.</span>")
+		return
 
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
@@ -310,11 +311,11 @@ var/list/pinpointerpinpointer_list = list()
 	var/t = input("Select pinpointer target.") as null|anything in L
 	if(t == "Cancel")
 		return
+	if(nextuse - world.time > 0)
+		return
 	target = L[t]
 	if(!target)
 		to_chat(usr,"Failed to locate [target]!")
-		return
-	if(nextuse - world.time > 0)
 		return
 	active = TRUE
 	point_at(target)
