@@ -15,7 +15,7 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
-	if(incapacitated() || lockcharge)
+	if(incapacitated() || lockdown)
 		return
 
 	var/list/modifiers = params2list(params)
