@@ -145,6 +145,7 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_ROBOT_LAW "robot_law"
 #define SCREEN_ALARM_ROBOT_HACK "robot_hack"
 #define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
+#define SCREEN_ALARM_ROBOT_MODULELOCK "robot_modulelock"
 #define SCREEN_ALARM_ROBOT_RESET "robot_reset"
 
 #define SCREEN_ALARM_APC_HACKING "apc_hacking"
@@ -374,6 +375,11 @@ var/global/list/screen_alarms_locs = list(
 /obj/abstract/screen/alert/robot/locked
 	name = "Locked Down"
 	desc = "This unit has been remotely locked down."
+	icon_state = "locked"
+
+/obj/abstract/screen/alert/robot/modulelocked
+	name = "Locked Down"
+	desc = "This modules on this unit have been remotely locked down."
 	icon_state = "locked"
 
 /obj/abstract/screen/alert/robot/newlaw
