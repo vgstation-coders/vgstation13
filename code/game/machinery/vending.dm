@@ -1124,7 +1124,7 @@ var/global/num_vending_terminals = 1
 			spawn(rand(0, 15))
 				stat |= NOPOWER
 				update_vicon()
-	
+
 
 //Oh no we're malfunctioning!  Dump out some product and break.
 /obj/machinery/vending/proc/malfunction()
@@ -3655,7 +3655,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/zambiscuits = 2,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 4,
-		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 30,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 6,
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash = 16,
@@ -3668,10 +3668,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 35,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
-		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 100,
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter = 2,
 		)
 
 	pack = /obj/structure/vendomatpack/zamsnax
