@@ -12,11 +12,11 @@
 	if(lying != lying_prev)
 		animate = TRUE
 
-		if(lying == 0) // lying to standing
+		if(!lying) // lying to standing
 			final_pixel_y += 6 * PIXEL_MULTIPLIER
 			final_transform.Turn(-90)
-		else //if(lying != 0)
-			if(lying_prev == 0) // standing to lying
+		else //if(lying)
+			if(!lying_prev) // standing to lying
 				final_pixel_y -= 6 * PIXEL_MULTIPLIER
 				final_transform.Turn(90)
 
@@ -29,13 +29,20 @@
 	if(shrunken != shrunken_prev)
 		animate = TRUE
 
-		if(shrunken == 0)
-			final_pixel_y -= 4 * PIXEL_MULTIPLIER
-			final_transform *= matrix().Scale(1,0.7)
-		else
-			if(shrunken_prev == 0)
-				final_pixel_y += 4 * PIXEL_MULTIPLIER
+		if(!shrunken)
+			final_pixel_y += 4 * PIXEL_MULTIPLIER
+			if(!lying)
 				final_transform *= matrix().Scale(1,1.4285714)
+			else
+				final_transform *= matrix().Scale(1.4285714,1)
+		else
+			if(!shrunken_prev)
+				final_pixel_y -= 4 * PIXEL_MULTIPLIER
+				if(!lying)
+					final_transform *= matrix().Scale(1,0.7)
+				else
+					final_transform *= matrix().Scale(0.7,1)
+					
 
 		shrunken_prev = shrunken // so we don't try to animate until there's been another change.
 	
