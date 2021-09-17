@@ -114,7 +114,7 @@
 "mV" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/black_site_prism)
 "ng" = (/obj/effect/decal/cleanable/soot,/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/black_site_prism)
 "nh" = (/turf/simulated/wall/invulnerable,/area/vault/black_site_prism)
-"nl" = (/obj/machinery/computer/security/advanced,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
+"nl" = (/obj/machinery/computer/security,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "nw" = (/obj/machinery/door/airlock/centcom{locked = 1; name = "Command Center"; opacity = 1; req_access_txt = "101"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "ny" = (/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser{name = "Black Site Prism Operative"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "nA" = (/obj/effect/landmark/corpse/syndicatecommando{name = "Black Site Prism Commando"},/obj/effect/decal/cleanable/blood/splatter,/turf/simulated/floor/wood,/area/vault/black_site_prism)

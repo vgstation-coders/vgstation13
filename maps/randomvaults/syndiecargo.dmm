@@ -77,7 +77,7 @@
 "by" = (/obj/machinery/computer/message_monitor,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bz" = (/obj/machinery/computer/crew,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bA" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bB" = (/obj/machinery/computer/security/advanced,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bB" = (/obj/machinery/computer/security,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bC" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f5"; icon_state = "bswall_f5"},/area/vault/syndiecargo)
 "bD" = (/obj/machinery/door/airlock/external{icon_state = "door_locked"; locked = 1},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
 "bE" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f9"; icon_state = "bswall_f9"},/area/vault/syndiecargo)
