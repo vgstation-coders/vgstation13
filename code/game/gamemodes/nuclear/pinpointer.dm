@@ -263,7 +263,7 @@ var/list/pinpointerpinpointer_list = list()
 
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()
-	to_chat(user, "<span class='notice'>The [src] can select a target again in [altFormatTimeDuration(nextuse-world.time)].</span>") 
+	to_chat(user, "<span class='notice'>[src] can select a target again in [altFormatTimeDuration(nextuse-world.time)].</span>") 
 	
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
@@ -291,9 +291,9 @@ var/list/pinpointerpinpointer_list = list()
 	
 	if(!dna_profile)
 		dna_profile = usr.dna.unique_enzymes
-		to_chat(usr, "<span class='notice'>You submit a DNA sample to the [src]</span>")
+		to_chat(usr, "<span class='notice'>You submit a DNA sample to [src]</span>")
 	else if(dna_profile != usr.dna.unique_enzymes)
-		to_chat(usr, "<span class='warning'>The [src] refuses to operate.</span>")
+		to_chat(usr, "<span class='warning'>[src] refuses to operate.</span>")
 		return
 	else if(nextuse - world.time > 0)
 		to_chat(usr, "<span class='warning'>[src] is still recalibrating.</span>")
