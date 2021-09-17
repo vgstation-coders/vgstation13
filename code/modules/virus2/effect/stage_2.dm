@@ -632,16 +632,16 @@
 	if(activated)
 		return
 	to_chat(mob, "<span class = 'warning'>You feel small...</span>")
-	M.shrunken = 1
-	M.update_transform()
+	mob.shrunken = 1
+	mob.update_transform()
 	mob.pass_flags |= PASSTABLE
 
 	activated = 1
 
 /datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
-	M.shrunken = 0
-	M.update_transform()
+	mob.shrunken = 0
+	mob.update_transform()
 	mob.pass_flags &= ~PASSTABLE
 	activated = 0
 
