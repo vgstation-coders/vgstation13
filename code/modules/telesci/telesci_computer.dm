@@ -400,7 +400,7 @@ var/list/telesci_warnings = list(
 		return TRUE
 
 	if(href_list["setPOffsetY"])
-		var/new_y = input("Please input desired X offset.", name, y_player_off) as num
+		var/new_y = input("Please input desired Y offset.", name, y_player_off) as num
 		if(new_y < -MAX_POFFSET || new_y > MAX_POFFSET)
 			to_chat(usr, "<span class='caution'>Error: Invalid Y offset (-10 to 10)</span>")
 		else

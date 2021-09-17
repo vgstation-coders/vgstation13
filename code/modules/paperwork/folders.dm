@@ -18,30 +18,43 @@
 
 /obj/item/weapon/folder/black
 	crayon = "black"
+	icon_state = "folder_black" //previews for mapper sanity
 
 /obj/item/weapon/folder/blue
 	crayon = "blue"
+	icon_state = "folder_blue"
 
 /obj/item/weapon/folder/red
 	crayon = "red"
+	icon_state = "folder_red"
 
 /obj/item/weapon/folder/white
 	crayon = "sterile"
+	icon_state = "folder_sterile"
 
 /obj/item/weapon/folder/yellow
 	crayon = "yellow"
+	icon_state = "folder_yellow"
 
 /obj/item/weapon/folder/purple
 	crayon = "purple"
+	icon_state = "folder_purple"
 
 /obj/item/weapon/folder/orange
 	crayon = "orange"
+	icon_state = "folder_orange"
 
 /obj/item/weapon/folder/green
 	crayon = "green"
+	icon_state = "folder_green"
 
 /obj/item/weapon/folder/rainbow
 	crayon = "rainbow"
+	icon_state = "folder_rainbow"
+
+/obj/item/weapon/folder/mime
+	crayon = "mime"
+	icon_state = "folder_mime"
 
 /obj/item/weapon/folder/update_icon()
 	overlays.len = 0

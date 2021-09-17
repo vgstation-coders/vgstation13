@@ -570,7 +570,7 @@
 /mob/living/carbon/monkey/can_be_infected()
 	return 1
 
-/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble")
+/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	if (greaterform != "Human")
 		return FALSE
 
@@ -610,9 +610,9 @@
 
 	switch (material)
 		if ("marble")
-			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
 		if ("wood")
-			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
 
 	if (new_mannequin)
 		return TRUE

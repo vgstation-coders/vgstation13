@@ -6,6 +6,9 @@
 	var/light_range = 1
 	var/light_color = "#F4FFFA"
 
+	// Movable lights only
+	var/atom/movable/light/smooth/smooth_light_obj
+
 // Used to change hard BYOND opacity; this means a lot of updates are needed.
 /atom/proc/set_opacity(var/newopacity)
 	opacity = newopacity ? 1 : 0
@@ -29,6 +32,8 @@
 		light_obj.follow_holder()
 	if (shadow_obj && !shadow_obj.gcDestroyed)
 		shadow_obj.follow_holder()
+	if (smooth_light_obj && !smooth_light_obj.gcDestroyed)
+		smooth_light_obj.follow_holder()
 
 /atom/movable/change_dir()
 	. = ..()
@@ -38,7 +43,7 @@
 	. = ..()
 	update_contained_lights()
 
-/atom/movable/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/atom/movable/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	. = ..()
 	update_contained_lights()
 

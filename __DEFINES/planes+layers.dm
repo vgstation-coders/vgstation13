@@ -97,12 +97,12 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define TURF_PLANE				(-1 + FLOAT_PLANE)
 	#define MAPPING_TURF_LAYER			-999
-	
+
 #define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
 
 #define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
-	#define HOLOMAP_LAYER				1
+	#define HOLOMAP_LAYER				1 //Note: Holomap images are not actually on ABOVE_TURF_PLANE. They are explicitly one plane above the parent turf.
 	#define RUNE_LAYER					2
 	#define DECAL_LAYER					3
 	#define SNOWPRINT_LAYER				4
@@ -203,7 +203,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define LIGHTING_PLANE_MASTER 	(13)	// Don't put anything other than lighting_overlays in there please
+								//13	//	THIS PLANE FOR RENT
 
 #define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
 	#define SELF_VISION_LAYER 		   -1
@@ -211,6 +211,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define LIGHTING_LAYER 				2
 	#define ABOVE_LIGHTING_LAYER 		3
 	#define HIGHEST_LIGHTING_LAYER		3.5
+	#define ANTI_GLOW_PASS_LAYER		4
+	#define ROID_TURF_LIGHT_LAYER 		5
 
 #define ABOVE_LIGHTING_PLANE	(15)
 	#define SUPERMATTER_WALL_LAYER 		1
@@ -221,7 +223,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define BASE_PLANE 				(16)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	16
+#define LIGHT_SOURCE_PLANE		16	// For Spiders to be able to click them despite being blinded
 
 #define ANTAG_HUD_PLANE		 	17
 
@@ -330,27 +332,3 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
 
-
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-	blend_mode    = BLEND_MULTIPLY
-	alpha = 255
-
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = LIGHTING_PLANE
-
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy

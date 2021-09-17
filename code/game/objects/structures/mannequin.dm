@@ -74,8 +74,11 @@
 	var/chaintrap_range = 0//= Range at which mannequin awakens nearby mannequins when it awakens.
 
 
-/obj/structure/mannequin/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold = list(null, null), var/mob_to_capture)
+/obj/structure/mannequin/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold = list(null, null), var/mob_to_capture, var/forever)
 	..()
+
+	if (forever)
+		timer = -1
 
 	species = new species_type()
 
@@ -452,6 +455,7 @@
 /obj/structure/mannequin/proc/freeCaptive()
 	if (!captured)
 		return
+	captured.timestopped = 0
 	captured.forceMove(loc)
 	for(var/cloth in clothing)
 		var/obj/O = clothing[cloth]

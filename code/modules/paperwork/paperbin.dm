@@ -1,13 +1,14 @@
 /obj/item/weapon/paper_bin
 	name = "paper bin"
 	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "paper_bin_black"
+	icon_state = "paper_bin_"
 	item_state = "sheet-metal"
 	throwforce = 1
 	w_class = W_CLASS_MEDIUM
 	throw_speed = 3
 	throw_range = 7
 	pressure_resistance = 10
+	layer = BELOW_OBJ_LAYER
 	var/amount = 30					//How much paper is in the bin.
 	var/list/papers = new/list()	//List of papers put in the bin for reference.
 	var/crayon = null
@@ -19,32 +20,45 @@
 	..()
 	update_icon()
 
+/obj/item/weapon/paper_bin/black
+	crayon = "black"
+	icon_state = "paper_bin_black" //previews for mapper sanity
+
 /obj/item/weapon/paper_bin/blue
 	crayon = "blue"
+	icon_state = "paper_bin_blue"
 
 /obj/item/weapon/paper_bin/red
 	crayon = "red"
+	icon_state = "paper_bin_red"
 
 /obj/item/weapon/paper_bin/white
 	crayon = "sterile"
+	icon_state = "paper_bin_sterile"
 
 /obj/item/weapon/paper_bin/yellow
 	crayon = "yellow"
+	icon_state = "paper_bin_yellow"
 
 /obj/item/weapon/paper_bin/purple
 	crayon = "purple"
+	icon_state = "paper_bin_purple"
 
 /obj/item/weapon/paper_bin/orange
 	crayon = "orange"
+	icon_state = "paper_bin_orange"
 
 /obj/item/weapon/paper_bin/green
 	crayon = "green"
+	icon_state = "paper_bin_green"
 
 /obj/item/weapon/paper_bin/rainbow
 	crayon = "rainbow"
+	icon_state = "paper_bin_rainbow"
 
 /obj/item/weapon/paper_bin/mime
 	crayon = "mime"
+	icon_state = "paper_bin_mime"
 
 /obj/item/weapon/paper_bin/ignite()
 	if(amount || papers.len)

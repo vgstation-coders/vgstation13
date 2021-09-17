@@ -2,6 +2,8 @@
  * False Walls
  */
 
+var/list/false_wall_images = list()
+
 // Minimum pressure difference to fail building falsewalls.
 // Also affects admin alerts.
 #define FALSEDOOR_MAX_PRESSURE_DIFF 25.0
@@ -94,11 +96,12 @@
 
 /obj/structure/falsewall
 	name = "wall"
-	desc = "A huge chunk of metal used to seperate rooms."
+	desc = "A huge chunk of metal used to separate rooms."
 	anchored = 1
 	icon = 'icons/turf/walls.dmi'
 	var/mineral = "metal"
 	var/opening = 0
+	var/image/meson_image
 
 	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
 /obj/structure/falsewall/canSmoothWith()
@@ -113,14 +116,34 @@
 	density = 1
 	opacity = 1
 
+
+/obj/structure/falsewall/examine(var/mob/user)
+	..()
+	if(Adjacent(user))
+		to_chat(user, "<span class='rose'>Now that you're standing close to it, that wall appears a bit odd.</span>")
+
 /obj/structure/falsewall/New()
 	..()
 	relativewall()
 	relativewall_neighbours()
+	var/junction=findSmoothingNeighbors()
+	var/closed_state = "[mineral][junction]"
+	meson_image = image('icons/turf/walls.dmi',loc,closed_state)
+	meson_image.plane = plane
+	meson_image.layer = layer
+	false_wall_images |= meson_image
+
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images |= meson_image
 
 /obj/structure/falsewall/Destroy()
-
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images -= meson_image
+	false_wall_images -= meson_image
 	var/temploc = src.loc
+	loc.mouse_opacity = 1
 
 	spawn(10)
 		for(var/turf/simulated/wall/W in range(temploc,1))
@@ -156,10 +179,12 @@
 		opening = 1
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
+		loc.mouse_opacity = 1
 		sleep(15)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
+		update_meson_image()
 	else
 		opening = 1
 		flick("[mineral]fwall_closing", src)
@@ -169,6 +194,23 @@
 		set_opacity(1)
 		src.relativewall()
 		opening = 0
+		loc.mouse_opacity = 0
+		update_meson_image()
+
+
+/obj/structure/falsewall/proc/update_meson_image()
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images -= meson_image
+	false_wall_images -= meson_image
+	meson_image = image('icons/turf/walls.dmi',loc,icon_state)
+	meson_image.plane = plane
+	meson_image.layer = layer
+	false_wall_images |= meson_image
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images |= meson_image
+
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
@@ -237,9 +279,9 @@
  * False R-Walls
  */
 
-/obj/structure/falserwall
+/obj/structure/falserwall	// why isn't this a child type?
 	name = "reinforced wall"
-	desc = "A huge chunk of reinforced metal used to seperate rooms."
+	desc = "A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out."
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "r_wall"
 	density = 1
@@ -247,7 +289,13 @@
 	anchored = 1
 	var/mineral = "metal"
 	var/opening = 0
-// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
+	var/image/meson_image
+
+/obj/structure/falserwall/examine(var/mob/user)
+	..()
+	if(Adjacent(user))
+		to_chat(user, "<span class='rose'>Now that you're standing close to it, that wall appears a bit odd.</span>")
+
 /obj/structure/falserwall/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,
@@ -260,6 +308,49 @@
 	..()
 	relativewall()
 	relativewall_neighbours()
+	var/junction=findSmoothingNeighbors()
+	var/closed_state = "[mineral][junction]"
+	meson_image = image('icons/turf/walls.dmi',src,closed_state)
+	false_wall_images += meson_image
+
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images |= meson_image
+
+/obj/structure/falserwall/Destroy()
+	var/temploc = src.loc
+	loc.mouse_opacity = 1
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images -= meson_image
+	false_wall_images -= meson_image
+
+	spawn(10)
+		for(var/turf/simulated/wall/W in range(temploc,1))
+			W.relativewall()
+
+		for(var/obj/structure/falsewall/W in range(temploc,1))
+			W.relativewall()
+
+		for(var/obj/structure/falserwall/W in range(temploc,1))
+			W.relativewall()
+	..()
+
+/obj/structure/falserwall/Destroy()
+
+	var/temploc = src.loc
+	loc.mouse_opacity = 1
+
+	spawn(10)
+		for(var/turf/simulated/wall/W in range(temploc,1))
+			W.relativewall()
+
+		for(var/obj/structure/falsewall/W in range(temploc,1))
+			W.relativewall()
+
+		for(var/obj/structure/falserwall/W in range(temploc,1))
+			W.relativewall()
+	..()
 
 
 /obj/structure/falserwall/attack_ai(mob/user as mob)
@@ -276,10 +367,12 @@
 		// Open wall
 		icon_state = "frwall_open"
 		flick("frwall_opening", src)
+		loc.mouse_opacity = 1
 		sleep(15)
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
+		update_meson_image()
 	else
 		opening = 1
 		icon_state = "r_wall"
@@ -289,6 +382,21 @@
 		set_opacity(1)
 		relativewall()
 		opening = 0
+		loc.mouse_opacity = 0
+		update_meson_image()
+
+/obj/structure/falserwall/proc/update_meson_image()
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images -= meson_image
+	false_wall_images -= meson_image
+	meson_image = image('icons/turf/walls.dmi',src,icon_state)
+	meson_image.plane = plane
+	meson_image.layer = layer
+	false_wall_images += meson_image
+	for (var/mob/L in meson_wearers)
+		if (L.client)
+			L.client.images |= meson_image
 
 /obj/structure/falserwall/relativewall()
 

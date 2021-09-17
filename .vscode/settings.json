@@ -1,0 +1,18 @@
+{
+	"eslint.nodePath": "./tgui/.yarn/sdks",
+	"eslint.workingDirectories": [
+		"./tgui"
+	],
+	"typescript.tsdk": "./tgui/.yarn/sdks/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"search.exclude": {
+		"**/.yarn": true,
+		"**/.pnp.*": true
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"workbench.editorAssociations": {
+		"*.dmi": "imagePreview.previewEditor"
+	},
+}

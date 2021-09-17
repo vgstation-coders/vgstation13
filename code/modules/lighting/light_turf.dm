@@ -8,12 +8,9 @@
 		blocks_light = -1
 
 /turf/proc/get_lumcount()
-	var/list/affecting_lights = list()
 	if(lumcount == -1)
 		lumcount = 0
-		for (var/atom/movable/light/L in view(src))
-			affecting_lights += L
-		for(var/atom/movable/light/thing in affecting_lights)
+		for(var/atom/movable/light/thing in view(src))
 			lumcount += max(thing.light_range + 2 - get_dist(thing, src),0)
 		lumcount = clamp(lumcount,0,10)
 	return lumcount
