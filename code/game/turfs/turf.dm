@@ -320,14 +320,12 @@
 	return
 
 /turf/proc/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(src.intact)
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(0)
@@ -450,8 +448,7 @@
 
 	if (!ticker)
 		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
-	holomap_data = old_holomap // Holomap persists through everything...
-	update_holomap_planes() // But we might need to recalculate it.
+	holomap_data = old_holomap // Holomap persists through everything
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
@@ -666,7 +663,6 @@
 		new powerup(src)
 
 // Holomap stuff!
-#define PLANE_FOR (intact ? ABOVE_TURF_PLANE : ABOVE_PLATING_PLANE)
 /turf/proc/add_holomap(var/atom/movable/AM)
 	var/image/I = new
 	I.appearance = AM.appearance
@@ -676,28 +672,13 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = PLANE_FOR
+	I.plane = FLOAT_PLANE + 1 //Yes, there's a define equal to this value, but what we specifically want here is one plane above the parent, which is what this means.
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
 	if (!holomap_data)
 		holomap_data = list()
 	holomap_data += I
-
-// Goddamnit BYOND.
-// So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.
-//   (For some reason the existance of underlays prevented the main icon and overlays to render)
-//   (Yes, removing every underlay with VV instantly fixed the overlays and main icon)
-//   (Yes, I tried to reproduce it outside SS13, but got nothing)
-// So now I need to render the overlays at the plane above the turf (ABOVE_TURF_PLANE and ABOVE_PLATING_PLANE)
-// And as you probably already guessed, the plane required changes based on the turf type.
-// So this helper does that.
-/turf/proc/update_holomap_planes()
-	var/the_plane = PLANE_FOR
-	for (var/image/I in holomap_data)
-		I.plane = the_plane
-
-#undef PLANE_FOR
 
 // This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY.
 // Return a high number to make the mob move slower.

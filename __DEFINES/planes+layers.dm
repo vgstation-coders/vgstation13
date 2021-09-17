@@ -52,10 +52,10 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 
 #define CLICKCATCHER_PLANE (-99 + FLOAT_PLANE)
-#define SPACE_BACKGROUND_PLANE (-98)
-#define SPACE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 1) // -97
-#define SPACE_DUST_PLANE (SPACE_PARALLAX_PLANE + 1) // -96
-#define ABOVE_PARALLAX_PLANE (SPACE_BACKGROUND_PLANE + 3) // -95
+#define SPACE_BACKGROUND_PLANE (-98 + FLOAT_PLANE)
+#define SPACE_PARALLAX_PLANE (-97)
+#define SPACE_DUST_PLANE (-96)
+#define ABOVE_PARALLAX_PLANE (-95)
 
 /*
 	from stddef.dm, planes & layers built into byond.
@@ -102,7 +102,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
-	#define HOLOMAP_LAYER				1
+	#define HOLOMAP_LAYER				1 //Note: Holomap images are not actually on ABOVE_TURF_PLANE. They are explicitly one plane above the parent turf.
 	#define RUNE_LAYER					2
 	#define DECAL_LAYER					3
 	#define SNOWPRINT_LAYER				4
@@ -212,6 +212,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define ABOVE_LIGHTING_LAYER 		3
 	#define HIGHEST_LIGHTING_LAYER		3.5
 	#define ANTI_GLOW_PASS_LAYER		4
+	#define ROID_TURF_LIGHT_LAYER 		5
 
 #define ABOVE_LIGHTING_PLANE	(15)
 	#define SUPERMATTER_WALL_LAYER 		1

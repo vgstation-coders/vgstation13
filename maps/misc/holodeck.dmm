@@ -88,7 +88,7 @@
 "bJ" = (/obj/item/toy/gasha/shade{name = "shade (pawn)"},/turf/simulated/floor/holofloor{icon_state = "engine"; name = "g7"},/area/holodeck/source_chess)
 "bK" = (/obj/item/toy/gasha/shade{name = "shade (pawn)"},/turf/simulated/floor{icon_state = "white"; name = "h7"},/area/holodeck/source_chess)
 "bL" = (/obj/structure/table/holotable/wood,/obj/item/candle,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_dining)
-"bM" = (/obj/structure/table/holotable/wood,/obj/item/trash/plate,/obj/item/weapon/kitchen/utensil/fork{pixel_x = 8},/obj/item/weapon/kitchen/utensil/knife{pixel_x = -8},/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_dining)
+"bM" = (/obj/structure/table/holotable/wood,/obj/item/trash/plate/clean,/obj/item/weapon/kitchen/utensil/fork{pixel_x = 8},/obj/item/weapon/kitchen/utensil/knife{pixel_x = -8},/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_dining)
 "bN" = (/obj/structure/fence{dir = 4},/turf/simulated/floor/holofloor/grass,/area/holodeck/source_zoo)
 "bO" = (/obj/structure/fence/door,/turf/simulated/floor/holofloor/grass,/area/holodeck/source_zoo)
 "bP" = (/obj/item/toy/gasha/greyshirt,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "a7"},/area/holodeck/source_checkers)
