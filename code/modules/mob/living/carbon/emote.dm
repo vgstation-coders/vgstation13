@@ -318,13 +318,18 @@
 		return female_cough_sound
 	return male_cough_sound
 
-/datum/emote/living/carbon/sound/run_emote(mob/user, params)
+/datum/emote/living/carbon/sound/run_emote(mob/user, params, type_override, ignore_status, arguments)
 	var/mob/living/carbon/human/H = user
 	if(!istype(H))
 		return ..()
 	if(H.stat == DEAD)
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
+		if(arguments == "fueltank_crash")
+			if(isjusthuman(H))
+				playsound(H, 'sound/misc/crash_scream.ogg', 50, 0)
+				H.last_emote_sound = world.time
+				return
 		if((params == TRUE) || (Holiday == APRIL_FOOLS_DAY) || H.manual_emote_sound_override) // Forced scream or april fools or admin override
 			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
 				if(sound_message)

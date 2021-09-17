@@ -177,7 +177,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Spider Clan Dojo"
 	icon_state = "dojo"
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -185,7 +185,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Void Between Timelines"
 	icon_state = "time_void"
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -1157,7 +1157,7 @@ proc/process_adminbus_teleport_locs()
 /area/holodeck
 	name = "\improper Holodeck"
 	icon_state = "Holodeck"
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 	jammed = SUPER_JAMMED
@@ -2566,7 +2566,7 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/beach
 	name = "Beach"
 	icon_state = "null"
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	requires_power = 0
 
 /area/awaymission/leviathan

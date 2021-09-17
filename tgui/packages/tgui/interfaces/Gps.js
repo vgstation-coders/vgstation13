@@ -18,7 +18,7 @@ export const Gps = (props, context) => {
   } = data;
   return (
     <Window
-      title = "Global Positioning System"
+      title="Global Positioning System"
       width={470}
       height={500}
       resizable>
@@ -37,7 +37,7 @@ export const Gps = (props, context) => {
       <Window.Content scrollable>
         {!transmitting && (
           <Section
-          title="Settings">
+            title="Settings">
             <Button
               icon="power-off"
               onClick={() => act("turn_on")}>

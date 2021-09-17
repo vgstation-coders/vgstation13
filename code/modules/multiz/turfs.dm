@@ -43,7 +43,15 @@
 	mover.fall()
 
 /turf/simulated/open/has_gravity()
-	if(locate(/obj/structure/catwalk) in src)
+	var/turf/below = GetBelow(src)
+	if(!below)
+		return 0
+	if(istype(below,/turf/simulated/wall) || istype(below,/turf/unsimulated/wall))
+		return get_gravity()
+	for(var/atom/A in below)
+		if(A.density)
+			return get_gravity()
+	if(locate(/obj/structure/catwalk) in src || locate(/obj/structure/lattice) in src)
 		return get_gravity()
 	return 0
 

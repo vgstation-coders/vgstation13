@@ -102,7 +102,11 @@
 ****                           ****
 **********************************/
 
-var/list/valid_ninja_suits = list(/obj/item/clothing/suit/space/ninja,/obj/item/clothing/suit/kimono/ronin)
+var/list/valid_ninja_suits = list(
+	/obj/item/clothing/suit/space/ninja,
+	/obj/item/clothing/suit/kimono/ronin,
+	/obj/item/clothing/suit/space/rig/sundowner
+	)
 
 /obj/item/stack/shuriken
 	name = "3D printed shuriken"
@@ -711,6 +715,11 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
+
+/obj/item/clothing/shoes/ninja/redsun
+	name = "sundowner boots"
+	icon_state = "sundowner_boots"
+	item_state = "sundowner_boots"
 
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
