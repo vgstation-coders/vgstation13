@@ -222,7 +222,6 @@
 							//Drop some meat
 							to_chat(src, "<span class='warning'>A chunk of meat falls off of you!</span>")
 							var/sourcename = real_name
-							var/sourcejob = job
 
 
 							var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))

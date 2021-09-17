@@ -239,7 +239,6 @@
 				var/totalslabs = 1
 				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 				var/sourcename = H.real_name
-				var/sourcejob = H.job
 				var/sourcenutriment = H.nutrition / 15
 				//var/sourcetotalreagents = mob.reagents.total_volume
 
