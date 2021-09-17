@@ -180,6 +180,7 @@
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox(src)
+			new /obj/item/weapon/dnainjector/nofail/clumsymut(src)
 			for(var/i = 1 to 7)
 				new /obj/item/toy/balloon/long/living(src)
 			new /obj/item/weapon/spellbook/oneuse/shoesnatch(src)
