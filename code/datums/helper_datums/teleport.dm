@@ -147,7 +147,7 @@
 			AA.invoke_event(/event/z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
 
 	if(force_teleport)
-		teleatom.forceMove(destturf, from_tp = TRUE)
+		teleatom.forceMove(destturf, no_tp = 1)
 		playSpecials(destturf,effectout,soundout)
 	else
 		if(teleatom.Move(destturf))
