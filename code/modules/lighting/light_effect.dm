@@ -35,8 +35,6 @@
 
 	var/light_swallowed = 0
 
-	var/list/pre_rendered_shadows = list()
-
 /atom/movable/light/smooth
 	animate_movement = SLIDE_STEPS
 	vis_flags = VIS_INHERIT_ID
