@@ -3143,70 +3143,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/crackerbox = 200,
 		)
 
-/obj/machinery/vending/trader	// Boxes are defined in trader.dm
-	name = "\improper Trader Supply"
-	unhackable = TRUE
-	dont_render_OOS = TRUE
-	desc = "Make much coin."
-	req_access = list(access_trade)
-	product_slogans = list(
-		"Profits."
-	)
-	product_ads = list(
-		"When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma: should you tell your partner?"
-	)
-	vend_reply = "Money money money!"
-	icon_state = "voxseed"
-	products = list (
-		/obj/item/weapon/storage/trader_chemistry = 1,
-		/obj/structure/closet/secure_closet/wonderful = 1,
-		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 1,
-		/obj/structure/closet/crate/shoaljunk = 3,
-		/obj/structure/closet/crate/internals/cloudnine = 3,
-		/obj/item/weapon/storage/trader_chemistry = 1,
-		/obj/structure/closet/crate/chest/alcatraz = 3,
-		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,
-		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 1,
-		/obj/structure/largecrate/secure = 1,
-		/obj/structure/largecrate/secure/frankenstein = 1,
-		/obj/item/weapon/mech_expansion_kit = 3,
-		/obj/structure/wetdryvac = 1,
-		/obj/item/weapon/gun/projectile/hecate/hunting = 2,
-		/obj/item/weapon/fakeposter_kit = 1,
-		/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser = 1,
-		/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer = 1,
-		/obj/item/weapon/storage/box/mysterycubes = 2,
-		/obj/item/weapon/storage/box/mystery_vial = 5,
-		/obj/item/weapon/storage/box/mystery_circuit = 1,
-		/obj/item/weapon/storage/box/large/mystery_material = 5,
-		/obj/item/weapon/storage/box/large/mystery_material/odd = 5,
-		/obj/structure/closet/crate/freezer/bootlegpicnic = 3,
-		)
-	prices = list(
-		/obj/item/weapon/storage/trader_chemistry = 50,
-		/obj/structure/closet/secure_closet/wonderful = 150,
-		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 100,
-		/obj/structure/closet/crate/shoaljunk = 100,
-		/obj/structure/closet/crate/internals/cloudnine = 150,
-		/obj/structure/closet/crate/chest/alcatraz = 150,
-		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 100,
-		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 25,
-		/obj/structure/largecrate/secure = 100,
-		/obj/structure/largecrate/secure/frankenstein = 100,
-		/obj/item/weapon/mech_expansion_kit = 50,
-		/obj/structure/wetdryvac = 50,
-		/obj/item/weapon/gun/projectile/hecate/hunting = 100,
-		/obj/item/weapon/fakeposter_kit = 50,
-		/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser = 100,
-		/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer = 100,
-		/obj/item/weapon/storage/box/mysterycubes = 75,
-		/obj/item/weapon/storage/box/mystery_vial = 25,
-		/obj/item/weapon/storage/box/mystery_circuit = 25,
-		/obj/item/weapon/storage/box/large/mystery_material = 50,
-		/obj/item/weapon/storage/box/large/mystery_material/odd = 25,
-		/obj/structure/closet/crate/freezer/bootlegpicnic = 50,
-		)
-	pack = /obj/structure/vendomatpack/trader
+//trade vendor used to be here, now see trade_datums.dm
 
 /obj/machinery/vending/trader/New()
 	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
@@ -3215,15 +3152,6 @@ var/global/num_vending_terminals = 1
 		premium.Add(pick_n_take(upgrades))
 
 	..()
-
-/obj/machinery/vending/trader/throw_item()
-	var/mob/living/target = locate() in view(7, src)
-
-	if (!target)
-		return 0
-	for(var/i = 0 to rand(3,12))
-		var/obj/I = new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(src))
-		I.throw_at(target, 16, 3)
 
 /obj/machinery/vending/barber
 	name = "\improper BarberVend"
