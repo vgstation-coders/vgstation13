@@ -1,7 +1,6 @@
 /atom/movable/light/moody
 	icon = 'icons/lighting/special.dmi'
 	glide_size = 8 // Don't ask me why. It breaks gliding otherwise.
-	appearance_flags = KEEP_TOGETHER|TILE_BOUND
 	var/overlay_state
 
 /atom/movable/light/moody/apc
