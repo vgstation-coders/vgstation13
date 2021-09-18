@@ -554,25 +554,15 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 /atom/movable/light/shadow/post_processing()
 	// Fetch the image processed so far
 	var/image/shadow_overlay/image_result = new()
-	var/last_pixel_x_im = -50000
-	var/last_pixel_y_im = -50000
 	for (var/image/image_component in temp_appearance)
-		// The next image is not connected (ie, further than 32 pixels away) from the last current image? Means we are in a new group.
-		if ( abs(image_component.pixel_x - last_pixel_x_im) + abs(image_component.pixel_y - last_pixel_y_im) > WORLD_ICON_SIZE && image_result.temp_appearance.len)
-			image_result.overlays = image_result.temp_appearance
-			image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-			temp_appearance += image_result
-			image_result = new()
-
-		temp_appearance -= image_component
 		image_result.temp_appearance += image_component
-		last_pixel_x_im = image_component.pixel_x
-		last_pixel_y_im = image_component.pixel_y
 
-	if (image_result.temp_appearance.len)
-		image_result.overlays = image_result.temp_appearance
-		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-		temp_appearance += image_result
+	image_result.overlays = image_result.temp_appearance
+	// Apply a filter
+	image_result.filters += filter(type = "blur", size = BLUR_SIZE)
+
+	temp_appearance = list()
+	temp_appearance += image_result
 
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
