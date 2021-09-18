@@ -36,8 +36,6 @@
 //#define MAP_OVERRIDE 10
 // waystation.dm
 //#define MAP_OVERRIDE 11
-// lowfatbagel.dm
-//#define MAP_OVERRIDE 12
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this

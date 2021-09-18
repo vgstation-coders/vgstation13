@@ -184,7 +184,7 @@
 		icon_state = "analyserb"
 
 	if(stat & (BROKEN|NOPOWER))
-		kill_light()
+		set_light(0)
 	else
 		set_light(2,1)
 

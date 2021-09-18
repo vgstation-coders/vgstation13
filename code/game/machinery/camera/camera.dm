@@ -143,7 +143,7 @@ var/list/camera_names=list()
 		network = list()
 		cameranet.removeCamera(src)
 		stat |= EMPED
-		kill_light()
+		set_light(0)
 		triggerCameraAlarm()
 		update_icon()
 		spawn(900)

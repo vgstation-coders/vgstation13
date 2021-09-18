@@ -6550,10 +6550,10 @@
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
 				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
-				I.plane = ANTAG_HUD_PLANE
+				I.plane = MISC_HUD_MARKERS_PLANE
 				M.current.client.images += I
 				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
-				J.plane = ANTAG_HUD_PLANE
+				J.plane = MISC_HUD_MARKERS_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu
@@ -6782,7 +6782,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/light)//since there's one on every turf
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -6824,7 +6824,7 @@
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/light)//since there's one on every turf
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, data/50, data/50)
 	data++
@@ -8893,7 +8893,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return
 	var/atom/A =  holder.my_atom
 	A.light_color = initial_color
-	A.kill_light()
+	A.set_light(0)
 
 /datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
@@ -8905,7 +8905,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.set_light(light_intensity)
 		spawn(volume * 10)
 			M.light_color = init_color
-			M.kill_light()
+			M.set_light(0)
 
 /datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -8916,7 +8916,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	T.set_light(light_intensity)
 	spawn(volume * 10)
 		T.light_color = init_color
-		T.kill_light()
+		T.set_light(0)
 
 /datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -8927,7 +8927,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	O.set_light(light_intensity)
 	spawn(volume * 10)
 		O.light_color = init_color
-		O.kill_light()
+		O.set_light(0)
 
 /datum/reagent/mucus
 	name = "Mucus"
