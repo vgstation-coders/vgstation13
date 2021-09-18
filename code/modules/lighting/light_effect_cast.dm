@@ -137,12 +137,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		light_range = 2.5
 
 	else
-<<<<<<< HEAD
-		if (base_light_color_state == "white")
-
-
-=======
->>>>>>> parent of a94c0a5ce2... Europa Lights client-side optimisation pass 1
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
@@ -445,10 +439,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	temp_appearance += I
 
 /atom/movable/light/proc/update_appearance()
-	if (light_post_processing)
-		post_processing()
-	else
-		temp_appearance += temp_appearance_shadows
 	overlays = temp_appearance
 	temp_appearance = null
 	// Because movable lights do this two-lights-sources thing
@@ -458,65 +448,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	else
 		color = light_color
 
-// -- Smoothing out shadows
-/atom/movable/light/proc/post_processing()
-	if (light_post_processing == ALL_SHADOWS)
-		var/image/shadow_overlay/image_result = new()
-		for (var/image/image_component in temp_appearance_shadows)
-			image_result.temp_appearance += image_component
-
-		image_result.overlays = image_result.temp_appearance
-		// Apply a filter
-		image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-		temp_appearance += image_result
-	else
-		temp_appearance += temp_appearance_shadows
-	// And then blacken out what's unvisible
-	// -- eliminating the underglow
-	for (var/turf/T in affected_shadow_walls)
-		var/image/black_turf = new()
-		if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
-			black_turf.render_source = "postprocess_black_turf_prerender"
-		else
-			black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-			black_turf.icon_state = "black"
-			black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-		pre_rendered_shadows += "postprocess_black_turf_prerender"
-		black_turf.icon_state = "black"
-		var/x_offset = T.x - x
-		var/y_offset = T.y - y
-		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-		black_turf.layer = ANTI_GLOW_PASS_LAYER
-		temp_appearance += black_turf
-
-// Smooth out shadows and then blacken out the wall glow
-/atom/movable/light/shadow/post_processing()
-	// Fetch the image processed so far
-	var/image/shadow_overlay/image_result = new()
-	for (var/image/image_component in temp_appearance)
-		image_result.temp_appearance += image_component
-
-	image_result.overlays = image_result.temp_appearance
-	// Apply a filter
-	image_result.filters += filter(type = "blur", size = BLUR_SIZE)
-
-	temp_appearance = list()
-	temp_appearance += image_result
-
-	// -- eliminating the underglow
-	for (var/turf/T in affected_shadow_walls)
-		for (var/dir in cardinal)
-			var/turf/neighbour = get_step(T, dir)
-			if (neighbour && !CHECK_OCCLUSION(neighbour))
-				var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-				black_turf.icon_state = "black"
-				var/x_offset = neighbour.x - x
-				var/y_offset = neighbour.y - y
-				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-				black_turf.layer = ANTI_GLOW_PASS_LAYER
-				temp_appearance += black_turf
+/atom/movable/light/shadow/update_appearance()
+	. = ..()
+	filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
 
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)
