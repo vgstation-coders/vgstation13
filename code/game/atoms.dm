@@ -180,9 +180,6 @@ var/global/list/ghdel_profiling = list()
 	if(shadow_obj)
 		qdel(shadow_obj)
 		shadow_obj = null
-	if(smooth_light_obj)
-		qdel(smooth_light_obj)
-		smooth_light_obj = null
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)

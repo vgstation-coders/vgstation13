@@ -32,6 +32,11 @@
 	backdrop = new(client)
 	self_vision = new(client)
 
+	client.screen |= dark_plane
+	client.screen |= master_plane
+	client.screen |= backdrop
+	client.screen |= self_vision
+
 	update_darkness()
 	register_event(/event/before_move, src, /mob/proc/check_dark_vision)
 
