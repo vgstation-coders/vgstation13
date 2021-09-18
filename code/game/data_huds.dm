@@ -337,5 +337,4 @@ proc/process_construct_hud(var/mob/M, var/mob/eye)
 				holder.icon_state = "consthealth0"
 			else
 				holder.icon_state = "consthealth[10*round((construct.health/construct.maxHealth)*10)]"
-			holder.plane = ABOVE_LIGHTING_PLANE
 			C.images += holder

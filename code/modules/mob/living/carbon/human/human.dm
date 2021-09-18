@@ -1441,15 +1441,7 @@
 	return id
 
 /mob/living/carbon/human/update_perception()
-	if (dark_plane)
-		dark_plane.alphas = list()
-		dark_plane.colours = null
-		dark_plane.blend_mode = BLEND_ADD
-
-	if (master_plane)
-		master_plane.blend_mode = BLEND_MULTIPLY
-
-	if(client && dark_plane)
+	if(client && client.darkness_planemaster)
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)
@@ -1457,10 +1449,11 @@
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			for (var/datum/disease2/effect/catvision/catvision in D.effects)
-				if (catvision.count)
-					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
+				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
+					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
 					break
 
+<<<<<<< HEAD
 	if (istype(glasses))
 		glasses.update_perception(src)
 		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
@@ -1473,6 +1466,8 @@
 
 	check_dark_vision()
 
+=======
+>>>>>>> parent of 05519d9f3b... Redid better perception for Europa Lights (#30620)
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!

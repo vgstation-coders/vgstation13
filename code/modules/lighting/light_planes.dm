@@ -37,7 +37,7 @@
 /obj/abstract/screen/plane/self_vision
 	blend_mode = BLEND_ADD
 	mouse_opacity = 0
-	plane = LIGHTING_PLANE
+	plane = LIGHTING_PLANE_MASTER
 	layer = SELF_VISION_LAYER
 	icon = 'icons/lighting/self_vision_default.dmi'
 	icon_state = "default"
@@ -54,7 +54,6 @@
 	alpha = 10
 	appearance_flags = RESET_TRANSFORM | RESET_COLOR | RESET_ALPHA
 	var/list/alphas = list()
-	var/colours = null // will animate() to that colour next check_dark_vision()
 
 /obj/abstract/screen/plane/dark/New()
 	..()

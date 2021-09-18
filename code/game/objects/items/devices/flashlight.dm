@@ -52,13 +52,6 @@
 	update_brightness(user)
 	return 1
 
-/obj/item/device/flashlight/attack_animal(mob/living/simple_animal/M)
-	if(M.melee_damage_upper == 0)
-		return
-	else if (on && isspider(M))
-		on = FALSE
-		M.do_attack_animation(src, M)
-		update_brightness(M,1)
 
 /obj/item/device/flashlight/attack(mob/living/M as mob, mob/living/user as mob)
 	add_fingerprint(user)
@@ -243,10 +236,6 @@
 	// All good, turn it on.
 	user.visible_message("<span class='notice'>[user] activates the flare.</span>", "<span class='notice'>You pull the cord on the flare, activating it!</span>")
 	Light(user)
-
-
-/obj/item/device/flashlight/flare/attack_animal(mob/living/simple_animal/M)
-	return
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
 	on = 1

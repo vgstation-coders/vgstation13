@@ -1338,7 +1338,7 @@ var/list/admin_verbs_mod = list(
 		return
 
 	if (holder.see_lightmap)
-		usr.dark_plane.plane = LIGHTING_PLANE
+		usr.dark_plane.plane = LIGHTING_PLANE_MASTER
 		usr.dark_plane.alphas["light_map"] = 0
 	else
 		usr.dark_plane.plane = initial(usr.dark_plane.plane)

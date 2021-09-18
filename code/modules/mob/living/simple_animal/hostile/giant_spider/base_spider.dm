@@ -96,12 +96,15 @@
 	overdark_target = new
 	overdark_target.render_source = "night vision goggles (\ref[src])"
 
+<<<<<<< HEAD
 /mob/living/simple_animal/hostile/giant_spider/Login()
 	..()
 	client.images += light_source_images
 	client.screen |= overdark_planemaster
 	client.screen |= overdark_target
 
+=======
+>>>>>>> parent of 05519d9f3b... Redid better perception for Europa Lights (#30620)
 /mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
 		return 1
@@ -176,6 +179,7 @@
 	standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/giant_spider/update_perception()
+<<<<<<< HEAD
 	if(a_matrix_testing_override)	// setting to 1 lets you use spiders as a perception-testing mob
 		client.color = list(a_11,a_12,a_13,a_14,
 							a_21,a_22,a_23,a_24,
@@ -189,6 +193,12 @@
 		if (master_plane)
 			master_plane.blend_mode = BLEND_ADD
 		dark_plane.alphas["spider"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
+=======
+	if(client)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_ADD
+			client.darkness_planemaster.alpha = 100
+>>>>>>> parent of 05519d9f3b... Redid better perception for Europa Lights (#30620)
 		client.color = list(
 					1,0,0,0,
 					0,1,0,0,
@@ -196,7 +206,16 @@
 		 			0,0,-0.1,1,
 		 			0,0,0,0)
 
+<<<<<<< HEAD
 	check_dark_vision()
+=======
+		if(a_matrix_testing_override)
+			client.color = list(a_11,a_12,a_13,a_14,
+								a_21,a_22,a_23,a_24,
+		 						a_31,a_32,a_33,a_34,
+			 					a_41,a_42,a_43,a_44,
+			 					a_51,a_52,a_53,a_54)
+>>>>>>> parent of 05519d9f3b... Redid better perception for Europa Lights (#30620)
 
 /mob/living/simple_animal/hostile/giant_spider/regular_hud_updates()
 	if (!client)
