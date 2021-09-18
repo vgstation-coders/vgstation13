@@ -427,13 +427,12 @@
 		var/mob/living/L = user
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-			var/obj/item/clothing/gloves/G = H.get_item_by_slot(slot_gloves)
-			if(G && istype(G, /obj/item/clothing/gloves/latex))
+			if(H.is_wearing_item(/obj/item/clothing/gloves/latex))
 				return ..()
 		var/obj/item/toy/snappop/virus/G = new (get_turf(src))
 		var/turf/target = get_turf(L)
 		to_chat(L, "<span class='danger'>The goo coating the tape reacts violently!")
-		var/speed = 6
+		var/speed = 4
 		var/distance = 1
 		G.throw_at(target,distance,speed)
 		return FALSE
