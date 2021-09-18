@@ -3,6 +3,7 @@
 #define WIDE_SHADOW_THRESHOLD 80
 #define OFFSET_MULTIPLIER_SIZE 32
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
+#define TURF_SHADOW_FRACTION 0.75
 #define BLUR_SIZE 2 // integer, please
 
 // Shadows over light_range 5 haven't been done yet.
@@ -43,20 +44,15 @@ var/light_post_processing = 1 // Use writeglobal to change this
 
 // Initialisation of the cast_light proc.
 /atom/movable/light/proc/cast_light_init()
-
 	filters = list()
 	temp_appearance = list()
-	temp_appearance_shadows = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
+	luminosity = 2*light_range
 
 	//cap light range to the max
-	luminosity = 2*light_range
 	light_range = min(MAX_LIGHT_RANGE, light_range)
 	light_color = (holder.light_color || light_color)
-
-	var/atom/location = get_turf(src)
-	var/distance_to_wall_illum = get_wall_view()
 
 	if (light_swallowed > 0)
 		light_range = 1
@@ -69,6 +65,7 @@ var/light_post_processing = 1 // Use writeglobal to change this
 		alpha = initial(alpha)
 		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
 
+<<<<<<< HEAD
 	for (var/thing in view(min(world.view, light_range), src))
 		if (ismob(thing))
 			var/mob/M = thing
@@ -79,6 +76,17 @@ var/light_post_processing = 1 // Use writeglobal to change this
 			affecting_turfs += T
 			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
 				affected_shadow_walls += T
+=======
+	for (var/mob/M in view(world.view, src))
+		M.check_dark_vision()
+
+	for(var/turf/T in view(2*light_range, src))
+		T.lumcount = -1
+		affecting_turfs += T
+
+	for(var/turf/T in view(round(TURF_SHADOW_FRACTION*light_range), src))
+		affected_shadow_walls += T
+>>>>>>> parent of b1d2ebc858... Apply a little post-processing filter to neo-lights (#30608)
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
@@ -347,7 +355,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.transform = M
 	I.layer = LIGHTING_LAYER
 	//and add it to the lights overlays
-	temp_appearance_shadows += I
+	temp_appearance += I
 
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
@@ -447,10 +455,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		color = rgb(round(RGB[1]/2), round(RGB[2]/2), round(RGB[3]/2))
 	else
 		color = light_color
-
-/atom/movable/light/shadow/update_appearance()
-	. = ..()
-	filters += filter(type = "blur", size = BLUR_SIZE) // Thanks Lummox for blur post-processing
 
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)
@@ -569,4 +573,5 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 #undef WIDE_SHADOW_THRESHOLD
 #undef OFFSET_MULTIPLIER_SIZE
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
+#undef TURF_SHADOW_FRACTION
 #undef BLUR_SIZE

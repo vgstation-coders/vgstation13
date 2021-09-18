@@ -1,5 +1,4 @@
 #define LIGHT_CPU_THRESHOLD 80
-#define TURF_SHADOW_FRACTION 0.75
 
 /atom/movable/light
 	name = ""
@@ -31,7 +30,6 @@
 	var/list/affecting_turfs = list()
 	var/list/affected_shadow_walls = list()
 	var/list/temp_appearance
-	var/list/temp_appearance_shadows
 
 	var/light_swallowed = 0
 
@@ -137,15 +135,6 @@
 /atom/movable/light/proc/light_off()
 	alpha = 0
 
-/atom/movable/light/proc/get_wall_view()
-	return light_range
-
-/atom/movable/light/shadow/get_wall_view()
-	return round(TURF_SHADOW_FRACTION*light_range)
-
-/atom/movable/light/smooth/get_wall_view()
-	return 0
-
 // -- Does a basic cheap raycast from the light to the turf.
 // Return true if it can see it.
 /atom/movable/light/proc/can_see_turf(var/turf/T)
@@ -160,4 +149,3 @@
 			return
 
 #undef LIGHT_CPU_THRESHOLD
-#undef TURF_SHADOW_FRACTION
