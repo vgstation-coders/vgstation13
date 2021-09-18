@@ -15,19 +15,49 @@
 	var/time_last_speech = 0
 	var/datum/language/trader_language
 	var/list/last_greeted = list()
+	var/closed = FALSE //closes if atmos fails
 
 /obj/structure/trade_window/New()
 	..()
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	SStrade.all_twindows += src
+	processing_objects += src
 	trader_language = new /datum/language/vox
 
 /obj/structure/trade_window/Destroy()
 	SStrade.all_twindows -= src
+	processing_objects -= src
 	..()
 
-/obj/structure/trade_window/wrenchable()
-	return FALSE
+/obj/structure/trade_window/ex_act()
+	return
+
+/obj/structure/trade_window/blob_act()
+	return
+
+/obj/structure/trade_window/examine(mob/user)
+	..()
+	if(closed)
+		to_chat(user, "<span class='warning'>It's closed due to the bad atmosphere.</span>")
+
+/obj/structure/trade_window/process()
+	var/turf/T = get_turf(src)
+	if(T && !T.c_airblock(T)) //we are on an airflowing tile with pressure between 80 and 180
+		var/datum/gas_mixture/current_air = T.return_air()
+		var/pressure = current_air.return_pressure()
+		if(pressure <= 180 && pressure >= 80)
+			if(closed)
+				say("That's more like it. Opening shop back up.")
+			closed = FALSE
+			update_icon()
+			return
+	if(!closed)
+		say("Eck! Closing up!")
+	closed = TRUE
+	update_icon()
+
+/obj/structure/trade_window/update_icon()
+	icon_state = "trade_window[closed ? "-closed" : ""]"
 
 /obj/structure/trade_window/attackby(obj/item/W, mob/living/carbon/human/user)
 	if(!istype(user))
@@ -151,14 +181,14 @@
 		ui.open()
 
 /obj/structure/trade_window/Topic(href, href_list)
-	if(..())
+	if(closed)
 		return
 	if(usr.incapacitated() || (!Adjacent(usr)&&!isAdminGhost(usr)) || !usr.dexterity_check())
 		return
-	if(!ishuman(usr))
+	if(!ishuman(usr)&&!isAdminGhost(usr))
 		return
 	var/mob/living/carbon/human/H = usr
-	if(!(H.get_face_name() in SStrade.loyal_customers))
+	if(!(H.get_face_name() in SStrade.loyal_customers) && !isAdminGhost(usr))
 		say("I don't know you!")
 		return
 	if(href_list["product"])
@@ -182,6 +212,13 @@
 		else
 			say("Buy what?")
 			return
+	if(isAdminGhost(user))
+		say(pick("Keh, freebie. Someone likes you.", "Word from top, something free.", "Eh, for you, take it.", "This one, free."))
+		TP.totalsold++
+		new TP.path(loc)
+		flick("trade_sold",src)
+		nanomanager.update_uis(src)
+		return
 	var/saleslines = tw_sale_generic.Copy()
 	if(TP.current_price(user) >= 200)
 		saleslines += tw_sale_expensive
@@ -197,6 +234,7 @@
 			AM.shake(1, 3) //Just a little movement to make it obvious it's here.
 
 		say(pick(saleslines))
+		flick("trade_sold",src)
 	nanomanager.update_uis(src)
 
 /obj/structure/trade_window/proc/credits_held()
