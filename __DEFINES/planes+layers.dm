@@ -51,6 +51,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define relative_plane_to_plane(x,y) (x - y + FLOAT_PLANE)
 
 
+#define CLICKCATCHER_PLANE (-99 + FLOAT_PLANE)
 #define SPACE_BACKGROUND_PLANE (-98 + FLOAT_PLANE)
 #define SPACE_PARALLAX_PLANE (-97)
 #define SPACE_DUST_PLANE (-96)
