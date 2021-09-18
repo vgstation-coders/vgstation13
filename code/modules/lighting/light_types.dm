@@ -15,6 +15,3 @@
 
 /atom/movable/light/moody/statusdisplay
 	overlay_state = "_statusdisplay"
-
-/atom/movable/light/moody/morgue
-	overlay_state = "_morgue"
