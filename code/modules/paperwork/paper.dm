@@ -656,3 +656,34 @@ var/global/list/paper_folding_results = list ( \
 		user << browse_rsc(image, "previewicon-[identity][index].png")
 		index++
 	..()
+
+/obj/item/weapon/paper/traderapplication
+	name = "trader application"
+	display_x = 500
+	display_y = 600
+	var/applicant
+
+/obj/item/weapon/paper/traderapplication/New(loc,var/newapp)
+	..()
+	applicant = newapp
+	if(!applicant)
+		qdel(src)
+	info = {"<html><style>
+						body {color: #000000; background: #e7c9a9;}
+						h1 {color: #4444ee; font-size:30px;}
+  						h2 {color: #4444ee; font-size:14px}
+						fieldset {width:140px;}
+						</style>
+						<body>
+						<center><img src="https://ss13.moe/wiki/images/9/92/Shoal-logo.png"> <h1>Trade Pact</h1></center>
+						<h2>
+                          I, the inker, do solemnly vow that [applicant] (hereafter 'Applicant') can be trusted. By blood and claw, responsibility for this one is bound in blood to me.<BR>
+                          <B>JURISDICTION.</B> Disputes related to this contract will be brought before the Shoal Trade Council.<BR>
+                          <B>SCOPE.</B> Provisional licensure as a trader shall last the duration of this shift and apply to this sector.<BR>
+                          <B>INDEMNIFICATION.</B> The applicant waives legal rights against the Shoal, holding it harmless against all indemnification. Traders are independent contractors and the shoal does not accept responsibility for their actions.<BR>
+                          <B>CONFIDENTIALITY.</B> The applicant vows to uphold all Shoal trade secrets.<BR>
+                          <B>ASSIGNMENT.</B> The Shoal retains all rights related to its intellectual properties. This contract is not to be construed as a release of IP rights.<BR>
+                          <B>ARBITRATION.</B> The applicant is entitled to settle legal disputes before a Shoal Arbitration Flock and must seek this remedy before formal lawsuit.<BR>
+                          <B>NOTICE.</B> Notice of intent to dissolve relationship must be given by fax with at least one day advance notice.<BR>
+                          <B>FORCE MAJEURE.</B> This contract may be voided if the trade outpost is destroyed.
+                         </h2> <BR></body></html>"}

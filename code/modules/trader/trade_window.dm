@@ -29,11 +29,47 @@
 /obj/structure/trade_window/wrenchable()
 	return FALSE
 
-/obj/structure/trade_window/attackby(obj/item/W, mob/user)
-	..()
+/obj/structure/trade_window/attackby(obj/item/W, mob/living/carbon/human/user)
+	if(!istype(user))
+		return
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
+
+	if(istype(W, /obj/item/weapon/card/id/vox/extra) && !(user.get_face_name() in SStrade.loyal_customers))
+		if(user.get_face_name() == "Unknown")
+			say("Show it to me again, but this time without your face covered.")
+		else
+			say("Good. Now let me see...")
+			var/obj/item/weapon/card/id/vox/extra/E = W
+			if(E.canSet)
+				say("You haven't set the name on here. I'll help with that.")
+				E.registered_name = user.get_face_name()
+				E.name = "[E.registered_name]'s ID card ([E.assignment])"
+				E.canSet = FALSE
+			else
+				if(E.registered_name == user.get_face_name())
+					say("Okay, this all matches -- I'll get your paperwork.")
+				else
+					say("This isn't your card. Name doesn't match. Sorry, can't help you.")
+					return
+			//Haven't exited because of an invalid card.
+			var/obj/TA = new /obj/item/weapon/paper/traderapplication(loc, user.get_face_name())
+			TA.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
+			TA.pixel_y = -3 * PIXEL_MULTIPLIER
+			TA.shake(1,3)
+			playsound(TA, "pageturn", 50, 1)
+
+	if(istype(W,/obj/item/weapon/paper/traderapplication))
+		var/obj/item/weapon/paper/traderapplication/P = W
+		if(findtext(P.stamps,"inkpad"))
+			if(!(user.get_face_name() in SStrade.loyal_customers))
+				say("So who's vouching for you? I want it from them.")
+			else
+				say("Well, that settles it then. [user.get_face_name()], [P.applicant] is your responsibility.")
+				SStrade.loyal_customers[P.applicant] = 0
+		else
+			say("Go on, get that stamped.")
 
 	/*else if(istype(W, /obj/item/weapon/card) && product_selected)
 		//Does not check for linked database because we're not NT
@@ -74,10 +110,6 @@
 		return
 
 	if(user.get_face_name() == "Unknown")
-		say(pick(tw_face_not_visible))
-		return
-
-	if(!(user.get_face_name() in SStrade.loyal_customers))
 		var/datum/organ/external/head/head_organ = user.get_organ(LIMB_HEAD)
 		if(head_organ.disfigured)
 			say("What the fuck happened to your face? Who are you supposed to be?")
@@ -86,8 +118,12 @@
 			else
 				return
 		else
-			say("I don't know you. You want to join up? You need someone to vouch for you.")
+			say(pick(tw_face_not_visible))
 			return
+
+	if(!(user.get_face_name() in SStrade.loyal_customers))
+		say("I don't know you. You want to join up? You need someone to vouch for you. Bring a fresh ID and an inkpad to my table when you do.")
+		return
 	else
 		greet(user)
 

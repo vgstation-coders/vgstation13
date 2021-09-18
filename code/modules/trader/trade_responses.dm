@@ -59,7 +59,6 @@ var/static/list/tw_advice = list("Remember, buy low, sell high.", "Hey, there's 
 				buildgreet += pick(tw_greet_solo)
 
 	else
-		message_admins("Debug: Last talked [last_greeted[username]], current [world.time], and gap is [TRADE_GREET_FREQ].")
 		if(world.time < last_greeted[username] + (TRADE_GREET_FREQ))
 			return //greeted recently
 		else if(world.time > last_greeted[username] + (TRADE_GREET_FREQ*40)) //20 minutes
@@ -70,7 +69,6 @@ var/static/list/tw_advice = list("Remember, buy low, sell high.", "Hey, there's 
 			buildgreet += pick(tw_greet_short_wait)
 		switch(rand(1,20))
 			if(1 to 7) //33% chance to say nothing else.
-				buildgreet = trim(buildgreet)
 			if(8 to 10) //Comment on shoal account
 				switch(trader_account.money)
 					if(0)
@@ -103,5 +101,6 @@ var/static/list/tw_advice = list("Remember, buy low, sell high.", "Hey, there's 
 					buildgreet += pick(tw_advertise_generic)
 
 	last_greeted[username] = world.time
+	buildgreet = trim(buildgreet)
 	buildgreet = replacetext(buildgreet, "USER", username)
 	say(buildgreet)
