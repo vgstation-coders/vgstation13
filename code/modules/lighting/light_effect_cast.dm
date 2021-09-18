@@ -65,18 +65,6 @@ var/light_post_processing = 1 // Use writeglobal to change this
 		alpha = initial(alpha)
 		animate(src, alpha = initial(alpha) - rand(30, 60), time = 2, loop = -1, easing = SINE_EASING)
 
-<<<<<<< HEAD
-	for (var/thing in view(min(world.view, light_range), src))
-		if (ismob(thing))
-			var/mob/M = thing
-			M.check_dark_vision()
-		if (isturf(thing))
-			var/turf/T = thing
-			T.lumcount = -1
-			affecting_turfs += T
-			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
-				affected_shadow_walls += T
-=======
 	for (var/mob/M in view(world.view, src))
 		M.check_dark_vision()
 
@@ -86,7 +74,6 @@ var/light_post_processing = 1 // Use writeglobal to change this
 
 	for(var/turf/T in view(round(TURF_SHADOW_FRACTION*light_range), src))
 		affected_shadow_walls += T
->>>>>>> parent of b1d2ebc858... Apply a little post-processing filter to neo-lights (#30608)
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)

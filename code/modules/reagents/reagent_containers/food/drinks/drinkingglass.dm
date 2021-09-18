@@ -20,7 +20,7 @@
 	if(!molotov)
 		lit = 0
 	light_color = null
-	kill_light()
+	set_light(0)
 	origin_tech = ""
 
 	if (reagents.reagent_list.len > 0)

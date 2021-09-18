@@ -51,7 +51,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define relative_plane_to_plane(x,y) (x - y + FLOAT_PLANE)
 
 
-#define CLICKCATCHER_PLANE (-99 + FLOAT_PLANE)
 #define SPACE_BACKGROUND_PLANE (-98 + FLOAT_PLANE)
 #define SPACE_PARALLAX_PLANE (-97)
 #define SPACE_DUST_PLANE (-96)
@@ -59,7 +58,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 /*
 	from stddef.dm, planes & layers built into byond.
-
 	FLOAT_LAYER = -1
 	AREA_LAYER = 1
 	TURF_LAYER = 2
@@ -73,7 +71,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 	TOPDOWN_LAYER = 10000
 	BACKGROUND_LAYER = 20000
 	------
-
 	FLOAT_PLANE = -32767
 */
 
@@ -203,23 +200,20 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define LIGHTING_PLANE_MASTER 	(13)	// Don't put anything other than lighting_overlays in there please
+#define LIGHTING_PLANE 			(13 + FLOAT_PLANE)	// Don't put anything other than lighting_overlays in there please
+	#define LIGHTING_LAYER 				0
 
-#define LIGHTING_PLANE 			(14)	// Don't put anything other than lighting_overlays in there please
-	#define SELF_VISION_LAYER 		   -1
-	#define LIGHTBULB_LAYER 			0
-	#define LIGHTING_LAYER 				2
-	#define ABOVE_LIGHTING_LAYER 		3
-	#define HIGHEST_LIGHTING_LAYER		3.5
-
-#define ABOVE_LIGHTING_PLANE	(15)
+#define ABOVE_LIGHTING_PLANE	(14 + FLOAT_PLANE)
+	#define ABOVE_LIGHTING_LAYER		0
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
 	#define NARSIE_GLOW 				3
 
+
+
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
-#define BASE_PLANE 				(16)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define BASE_PLANE 				(15 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
 #define MISC_HUD_MARKERS_PLANE	16
 
@@ -335,8 +329,8 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 // One planemaster for each client, which they gain during mob/login()
 /obj/abstract/screen/plane_master/darkness_planemaster
 	plane = LIGHTING_PLANE
+
 	blend_mode    = BLEND_MULTIPLY
-	alpha = 255
 
 /obj/abstract/screen/plane_master/darkness_planemaster_dummy
 	alpha = 0

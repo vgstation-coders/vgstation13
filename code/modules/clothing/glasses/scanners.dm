@@ -7,7 +7,7 @@
 	toggle()
 
 
-/obj/item/clothing/glasses/scanner/equipped(var/mob/M, glasses)
+/obj/item/clothing/glasses/scanner/equipped(M as mob, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/O = M
 		if(O.glasses != src)
@@ -20,14 +20,14 @@
 		return
 	if(on)
 		if(iscarbon(M))
-			M.update_perception()
-			M.update_darkness()
+			apply_color(M)
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
-			user.seedarkness = TRUE
+			if(iscarbon(user))
+				remove_color(user)
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
@@ -69,8 +69,7 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = 0
-	seedarkness = TRUE
+	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
 	see_in_dark = 8
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
@@ -104,7 +103,6 @@
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
 	. = ..()
 	see_in_dark = 0
-	my_dark_plane_alpha_override = null
 	eyeprot = 0
 	remove_overdark(C)
 	if (ishuman(C))
@@ -178,7 +176,6 @@ var/list/meson_wearers = list()
 	vision_flags = SEE_TURFS
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
-	seedarkness = FALSE
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	glasses_fit = TRUE
@@ -188,8 +185,6 @@ var/list/meson_wearers = list()
 	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
-	on = 1
-	update_mob(viewing)
 	var/area/A = get_area(src)
 	if(A.flags & NO_MESONS)
 		to_chat(C, "<span class = 'warning'>\The [src] flickers, but refuses to come online!</span>")
@@ -197,28 +192,16 @@ var/list/meson_wearers = list()
 	eyeprot = initial(eyeprot)
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
-	seedarkness = FALSE
-	my_dark_plane_alpha_override_value = 255
-
 //	body_parts_covered |= EYES
 	..()
 
 /obj/item/clothing/glasses/scanner/meson/disable(var/mob/C)
 	update_mob(viewing)
 	eyeprot = 0
-	on = 0
 //	body_parts_covered &= ~EYES
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
-	my_dark_plane_alpha_override_value = 0
-	seedarkness = TRUE
-
-/obj/item/clothing/glasses/scanner/meson/unequipped(mob/user, from_slot)
-	. = ..()
-	if (user)
-		user.dark_plane?.alphas -= "mesons"
-		user.update_darkness()
-		user.check_dark_vision()
+	..()
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)
