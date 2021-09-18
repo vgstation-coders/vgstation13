@@ -97,7 +97,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define TURF_PLANE				(-1 + FLOAT_PLANE)
 	#define MAPPING_TURF_LAYER			-999
-	
+
 #define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
 
 #define ABOVE_TURF_PLANE 		(0 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
@@ -211,11 +211,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define LIGHTING_LAYER 				2
 	#define ABOVE_LIGHTING_LAYER 		3
 	#define HIGHEST_LIGHTING_LAYER		3.5
-<<<<<<< HEAD
-	#define ANTI_GLOW_PASS_LAYER		4
-	#define ROID_TURF_LIGHT_LAYER 		5
-=======
->>>>>>> parent of 048dbcbab2... Fixes shadowy underglow (#30655)
 
 #define ABOVE_LIGHTING_PLANE	(15)
 	#define SUPERMATTER_WALL_LAYER 		1
@@ -336,19 +331,6 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	screen |= ghost_planemaster_dummy
 
 
-<<<<<<< HEAD
-// OVERDARKNESS PLANEMASTER
-// Used to apply darkness over lights that the player isn't supposed to see when the lighting master is set to BLEND_ADD
-/obj/abstract/screen/plane_master/overdark_planemaster
-	plane = 0
-
-/obj/abstract/screen/plane_master/overdark_planemaster_target
-	appearance_flags = 0
-	plane = ABOVE_LIGHTING_PLANE
-	mouse_opacity = 0
-	screen_loc = "CENTER,CENTER"
-
-=======
 // DARKNESS PLANEMASTER
 // One planemaster for each client, which they gain during mob/login()
 /obj/abstract/screen/plane_master/darkness_planemaster
@@ -372,4 +354,3 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	screen |= darkness_planemaster
 	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
 	screen |= darkness_planemaster_dummy
->>>>>>> parent of 05519d9f3b... Redid better perception for Europa Lights (#30620)

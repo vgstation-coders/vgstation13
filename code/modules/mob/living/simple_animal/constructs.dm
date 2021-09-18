@@ -65,15 +65,10 @@
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /mob/living/simple_animal/construct/update_perception()
-<<<<<<< HEAD
-	if(dark_plane)
-		dark_plane.alphas["construct"] = 75
-=======
 	if(client)
 		if(client.darkness_planemaster)
 			client.darkness_planemaster.blend_mode = BLEND_MULTIPLY
 			client.darkness_planemaster.alpha = 180
->>>>>>> parent of 05519d9f3b... Redid better perception for Europa Lights (#30620)
 		client.color = list(
 					1,0,0,0,
 					0,1.3,0,0,

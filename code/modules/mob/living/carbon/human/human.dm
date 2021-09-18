@@ -1453,21 +1453,6 @@
 					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
 					break
 
-<<<<<<< HEAD
-	if (istype(glasses))
-		glasses.update_perception(src)
-		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
-			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
-
-	if (mind)
-		for (var/key in mind.antag_roles)
-			var/datum/role/R = mind.antag_roles[key]
-			R.update_perception()
-
-	check_dark_vision()
-
-=======
->>>>>>> parent of 05519d9f3b... Redid better perception for Europa Lights (#30620)
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!
