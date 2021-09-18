@@ -766,7 +766,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/medical/syndietape_viro
 	name = "Syndicate Biohazard Tape"
 	desc = "A length of biohazard tape coated in an engineered bacterium that forcibly ejects explosive goo when disturbed, but can be handled safely with latex gloves. Can be used 3 times."
-	item = /obj/item/taperoll/syndie/atmos
+	item = /obj/item/taperoll/syndie/viro
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
