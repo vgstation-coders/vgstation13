@@ -13,7 +13,7 @@
 #define ALL_SHADOWS	 		2
 
 var/light_power_multiplier = 5
-var/light_post_processing = NO_POST_PROCESSING // Use writeglobal to change this
+var/light_post_processing = 1 // Use writeglobal to change this
 
 // We actually see these "pseudo-light atoms" in order to ensure that wall shadows are only seen by people who can see the light.
 // Yes, this is stupid, but it's one of the limitations of TILE_BOUND, which cannot be chosen on an overlay-per-overlay basis.
@@ -713,8 +713,3 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 #undef OFFSET_MULTIPLIER_SIZE
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
 #undef BLUR_SIZE
-
-
-#undef NO_POST_PROCESSING
-#undef WALL_SHADOWS_ONLY
-#undef ALL_SHADOWS
