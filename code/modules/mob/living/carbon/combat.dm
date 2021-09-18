@@ -104,13 +104,13 @@
 	delayNextThrow(10)
 	throw_mode_off()
 	if(!get_turf(src) || istype(get_turf(src), /turf/space))
-		to_chat(src, "<span class='warning'>You need more footing to do that!")
+		to_chat(src, "<span class='warning'>You need more footing to do that!</span>")
 		return
 	if(restrained() || lying || locked_to || stat)
 		return
 	var/tRange = calcTackleRange()
 	isTackling = TRUE
-	knockdown = max(knockdown, 2)	//Not using the Knockdown() proc as it created odd behaviour with hulks and another knockdown immune
+	knockdown = max(knockdown, 3)	//Not using the Knockdown() proc as it created odd behaviour with hulks and another knockdown immune
 	update_canmove()
 	throw_at(A, tRange, 1)
 
@@ -123,14 +123,29 @@
 			if(isliving(hit_atom))
 				add_attacklogs(src, hit_atom, "tackled")
 				var/mob/living/L = hit_atom
+				to_chat(src, "<span class='warning'>Your tackle connects!</span>")
+				to_chat(L, "<span class='danger'>You are hit by [src]'s tackle!</span>")
+				playsound(src, 'sound/effects/bodyfall.ogg', 75, 1)
+				if (L.held_items.len)
+					for (var/obj/O in L.held_items)
+						drop_item(O, get_turf(src))
+						spawn()
+							var/dir = pick(alldirs)
+							var/turf/T = get_step(get_turf(src), dir)
+							T = get_step(T, dir)
+							T = get_step(T, dir)
+							drop_item(O)
+							O.throw_at(T, 3, 10)
 				var/tackleDefense = L.calcTackleDefense()
 				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
 				var/rngDefense = rand(tackleDefense/2, tackleDefense)
-				var/tKnock = max(0, rngDefense - rngForce)	//Calculating our knockdown, we always get knocked down at least a little
-				Knockdown(min(10, tKnock)) //To prevent eternity knockdown from tackling an 8 riot shield martian or something
+				var/tKnock = max(0, rngDefense - rngForce)
+				tKnock /= 10	//Numbers were inflated a digit to allow flexibility, now they need to be smaller
+				Knockdown(min(4, tKnock)) //To prevent eternity knockdown from tackling an 8 riot shield martian or something
 				tKnock = max(0, rngForce - rngDefense)	//Calculating their knockdown, they might not get knocked down at all
 				if(tKnock)
-					L.Knockdown(min(10, tKnock))
+					tKnock /= 10
+					L.Knockdown(min(3, tKnock))
 					if(M_HORNS in mutations)
 						tKnock += 5
 					L.adjustBruteLoss(tKnock)
@@ -144,7 +159,8 @@
 		if(!throwing)
 			isTackling = FALSE	//Safety from throw_at being a jerk
 		else
-			var/tPain = rand(1,10)
+			playsound(src, 'sound/items/trayhit1.ogg', 75, 1)
+			var/tPain = rand(5,15)
 			adjustBruteLoss(tPain)
 			Knockdown(tPain/2)
 
@@ -156,12 +172,12 @@
 		tR += 1
 	return tR
 
-/mob/living/carbon/calcTackleForce(var/tForce = 0)
+/mob/living/carbon/calcTackleForce(var/tForce = 50)
 	if(world.time > last_moved + 1 SECONDS)	//If you haven't moved in the last second you do a weaker "standing tackle"
-		tForce -= 1
+		tForce -= 20
 	else
-		tForce += 1
-	tForce += get_strength()*2
+		tForce += 10
+	tForce += get_strength()*10
 	tForce += offenseMutTackle()
 	tForce += bonusTackleForce()
 	return max(0, tForce)
@@ -170,20 +186,20 @@
 	for(var/M in mutations)
 		switch(M)
 			if(M_HULK)
-				tF += 2 //hulk also contributes to get_strength() so the bonus is higher than appears here
+				tF += 20 //hulk also contributes to get_strength() so the bonus is higher than appears here
 			if(M_FAT)
-				tF += 3
+				tF += 15
 			if(M_VEGAN)
-				tF -= 1
+				tF -= 15
 			if(M_DWARF)
-				tF -= 2
+				tF -= 20
 	return tF
 
-/mob/living/carbon/calcTackleDefense(var/tDef = 0)
-	tDef += get_strength()
+/mob/living/carbon/calcTackleDefense(var/tDef = 50)
+	tDef += get_strength()*10
 	for(var/obj/item/weapon/I in held_items)
 		if(I.IsShield())
-			tDef += 4
+			tDef += 35
 	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
 	return max(0, tDef)
@@ -192,21 +208,21 @@
 	for(var/M in mutations)
 		switch(M)
 			if(M_FAT)
-				tD += 2
+				tD += 25
 			if(M_VEGAN)
-				tD -= 1
+				tD -= 15
 			if(M_CLUMSY)	//The clown fears fatsec
-				tD -= 2
+				tD -= 20
 				playsound(loc, 'sound/items/bikehorn.ogg', 20, 1)
 			if(M_DWARF)
-				tD -= 2
+				tD -= 20
 	return tD
 
-/mob/living/carbon/proc/bonusTackleForce(var/tF = 1)
+/mob/living/carbon/proc/bonusTackleForce(var/tF = 25)
 	return tF
 
-/mob/living/carbon/proc/bonusTackleDefense(var/tD = 1)
+/mob/living/carbon/proc/bonusTackleDefense(var/tD = 25)
 	return tD
 
-/mob/living/carbon/proc/bonusTackleRange(var/tR = 1)
+/mob/living/carbon/proc/bonusTackleRange(var/tR = 3)
 	return tR

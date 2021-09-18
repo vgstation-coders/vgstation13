@@ -273,12 +273,15 @@
 			to_chat(user, "<span class='warning'>That's already got a plate!</span>")
 			return
 
-		var/obj/item/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/F = new(get_turf(src),I)
+
+		var/obj/item/weapon/reagent_containers/food/snacks/snack = I
+		F.valid_utensils = snack.valid_utensils
 
 		if (virus2?.len)
 			for (var/ID in virus2)
 				var/datum/disease2/disease/D = virus2[ID]
-				F.infect_disease2(D,1, "added to a sandwhich",0)
+				F.infect_disease2(D,1, "added on a plate",0)
 		F.attackby(I, user, params)
 		if (istype(F))
 			if (I.item_state)
@@ -519,6 +522,8 @@
 	desc = "A bowl with liquid and... stuff in it."
 	icon_state = "soup"
 	trash = /obj/item/trash/bowl
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/pizza
 	name = "pan pizza"
@@ -572,6 +577,7 @@
 	name = "jelly"
 	desc = "Totally jelly."
 	icon_state = "jellycustom"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/donkpocket
 	name = "donk pocket"
@@ -595,10 +601,12 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cookie
 	name = "cookie"
 	icon_state = "cookiecustom"
+	valid_utensils = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cotton
 	name = "flavored cotton candy"
 	icon_state = "cottoncandycustom"
+	valid_utensils = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/gummybear
 	name = "flavored giant gummy bear"
