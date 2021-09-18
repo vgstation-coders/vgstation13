@@ -201,10 +201,10 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define GHOST_LAYER 				1
 
-#define LIGHTING_PLANE 			(13 + FLOAT_PLANE)	// Don't put anything other than lighting_overlays in there please
+#define LIGHTING_PLANE 			(13)	// Don't put anything other than lighting_overlays in there please
 	#define LIGHTING_LAYER 				0
 
-#define ABOVE_LIGHTING_PLANE	(14 + FLOAT_PLANE)
+#define ABOVE_LIGHTING_PLANE	(14)
 	#define ABOVE_LIGHTING_LAYER		0
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
