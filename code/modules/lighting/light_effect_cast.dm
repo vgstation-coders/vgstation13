@@ -137,43 +137,34 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		light_range = 2.5
 
 	else
+<<<<<<< HEAD
 		if (base_light_color_state == "white")
 
 
+=======
+>>>>>>> parent of a94c0a5ce2... Europa Lights client-side optimisation pass 1
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
-			switch (light_range)
-				if (1)
-					icon = 'icons/lighting/light_range_1.dmi'
-				if (2)
-					icon = 'icons/lighting/light_range_2.dmi'
-				if (3)
-					icon = 'icons/lighting/light_range_3.dmi'
-				if (4)
-					icon = 'icons/lighting/light_range_4.dmi'
-				if (5)
-					icon = 'icons/lighting/light_range_5.dmi'
-				if (6)
-					icon = 'icons/lighting/light_range_6.dmi'
-				if (7)
-					icon = 'icons/lighting/light_range_7.dmi'
-				if (8)
-					icon = 'icons/lighting/light_range_8.dmi'
-				if (9)
-					icon = 'icons/lighting/light_range_9.dmi'
-		else
-			switch (light_range)
-				if (1)
-					icon = 'icons/lighting/shadow_range_1.dmi'
-				if (2)
-					icon = 'icons/lighting/shadow_range_2.dmi'
-				if (3)
-					icon = 'icons/lighting/shadow_range_3.dmi'
-				if (4)
-					icon = 'icons/lighting/shadow_range_4.dmi'
-				if (5)
-					icon = 'icons/lighting/shadow_range_5.dmi'
+		switch (light_range)
+			if (1)
+				icon = 'icons/lighting/light_range_1.dmi'
+			if (2)
+				icon = 'icons/lighting/light_range_2.dmi'
+			if (3)
+				icon = 'icons/lighting/light_range_3.dmi'
+			if (4)
+				icon = 'icons/lighting/light_range_4.dmi'
+			if (5)
+				icon = 'icons/lighting/light_range_5.dmi'
+			if (6)
+				icon = 'icons/lighting/light_range_6.dmi'
+			if (7)
+				icon = 'icons/lighting/light_range_7.dmi'
+			if (8)
+				icon = 'icons/lighting/light_range_8.dmi'
+			if (9)
+				icon = 'icons/lighting/light_range_9.dmi'
 
 	if (light_type != LIGHT_DIRECTIONAL)
 		pixel_x = -(world.icon_size * light_range)
@@ -412,38 +403,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		affected_shadow_walls -= src
 		return
 
-<<<<<<< HEAD
-	// -- Illuminating turfs
-	if (istype(target_turf, /turf/unsimulated/mineral))
-		var/image/img = new
-		var/roid_turf_prerender_identifier = "roid_turf_prerender_[light_power]"
-		if (roid_turf_prerender_identifier in pre_rendered_shadows)
-			img.render_source = roid_turf_prerender_identifier
-		else
-			img = image('icons/turf/rock_overlay.dmi', loc = get_turf(src))
-			img.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
-			img.render_target = roid_turf_prerender_identifier
-			pre_rendered_shadows += roid_turf_prerender_identifier
-
-		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
-		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
-		img.layer = ROID_TURF_LIGHT_LAYER
-		temp_appearance += img
-
-	var/image/black_turf = new()
-
-	if ("black_turf_prerender" in pre_rendered_shadows)
-		black_turf.render_target = "black_turf_prerender"
-	else
-		black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-		black_turf.icon_state = "black"
-		black_turf.render_source = "black_turf_prerender"
-		pre_rendered_shadows += "black_turf_prerender"
-
-=======
 	var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
 	black_turf.icon_state = "black"
->>>>>>> parent of 1420b6855d... Europa Lights Client-side optimisation pass 2 (#30681)
 	black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	black_turf.layer = HIGHEST_LIGHTING_LAYER
@@ -548,20 +509,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		for (var/dir in cardinal)
 			var/turf/neighbour = get_step(T, dir)
 			if (neighbour && !CHECK_OCCLUSION(neighbour))
-<<<<<<< HEAD
-				var/image/black_turf = new()
-				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
-					black_turf.render_source = "postprocess_black_turf_prerender"
-				else
-					black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-					black_turf.icon_state = "black"
-					black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-					pre_rendered_shadows += "postprocess_black_turf_prerender"
-
-=======
 				var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
 				black_turf.icon_state = "black"
->>>>>>> parent of 1420b6855d... Europa Lights Client-side optimisation pass 2 (#30681)
 				var/x_offset = neighbour.x - x
 				var/y_offset = neighbour.y - y
 				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
