@@ -1018,7 +1018,7 @@ var/list/converted_minds = list()
 				acceptance = get_role_desire_str(victim.client.prefs.roles[CULTIST])
 
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
-					if(I.implanted)
+					if(I.imp_in)
 						acceptance = "Implanted"
 		else if (!victim.mind)
 			acceptance = "Mindless"

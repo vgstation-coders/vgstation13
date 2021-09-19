@@ -12,7 +12,7 @@
 	..()
 
 /obj/item/weapon/implant/tracking/get_data()
-	var/dat = {"<b>Implant Specifications:</b><BR>
+	return {"<b>Implant Specifications:</b><BR>
 <b>Name:</b> Tracking Beacon<BR>
 <b>Life:</b> 10 minutes after death of host<BR>
 <b>Important Notes:</b> None<BR>
@@ -26,7 +26,6 @@ disintegrate into bio-safe elements.<BR>
 <b>Integrity:</b> Gradient creates slight risk of being overcharged and frying the
 circuitry. As a result neurotoxins can cause massive damage.<HR>
 Implant Specifics:<BR>"}
-	return dat
 
 /obj/item/weapon/implant/tracking/emp_act(severity)
 	if (malfunction)	//no, dawg, you can't malfunction while you are malfunctioning

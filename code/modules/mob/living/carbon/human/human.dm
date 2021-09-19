@@ -304,14 +304,6 @@
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
 
-/mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
-	for(var/L in M.contents)
-		if(istype(L, /obj/item/weapon/implant/loyalty))
-			for(var/datum/organ/external/O in M.organs)
-				if(L in O.implants)
-					return 1
-	return 0
-
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
 	M.unarmed_attack_mob(src)
 
@@ -1505,7 +1497,7 @@
 	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/rig/wizard))
 		threatcount += 2
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 	//Secbots are racist!
 	if(dna && dna.mutantrace && dna.mutantrace != "none")
