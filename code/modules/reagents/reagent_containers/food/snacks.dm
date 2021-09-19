@@ -6984,11 +6984,25 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	reagents.add_reagent(SACID, 4)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter
+	name = "Zam Buttery Biscuit"
+	desc = "Butter and acid blend together to make a divine biscuit flavor. Administrator Zam's favorite!"
+	icon_state = "zambiscuit_buttery"
+	food_flags = FOOD_ANIMAL | FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(HYRONALIN, 3)
+	reagents.add_reagent(LIQUIDBUTTER, 2)
+	reagents.add_reagent(SUGAR, 2)
+	reagents.add_reagent(SACID, 4)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical
-	name = "Radical Zam Biscuit"
+	name = "Zam Radical Biscuit"
 	desc = "This Zam biscuit is oddly warm to the touch and glows faintly. It's probably not safe for consumption..." // Despite the warning, I'm sure someone will eat it.
 	icon_state = "zambiscuit_radical"
-	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical/New()
 	..()
