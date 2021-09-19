@@ -12,6 +12,8 @@
 	var/sales_category = TRADE_SINGLE
 
 /datum/trade_product/proc/current_price(mob/user)
+	if(isAdminGhost(user))
+		return round(baseprice * flux_rate * SStrade.shoal_prestige_factor()) //Don't factor in personal discount
 	return round(baseprice * flux_rate * SStrade.shoal_prestige_factor() * SStrade.loyal_customer(user))
 
 /datum/trade_product/wardrobe

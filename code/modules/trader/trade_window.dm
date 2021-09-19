@@ -20,7 +20,6 @@
 /obj/structure/trade_window/New()
 	..()
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
-	SStrade.all_twindows += src
 	processing_objects += src
 	trader_language = new /datum/language/vox
 
@@ -119,9 +118,15 @@
 	say(pick(tw_market_flux))
 	nanomanager.update_uis(src)
 
+/obj/structure/trade_window/attack_ai(mob/user)
+	if(isAdminGhost(user))
+		attack_hand(user)
+
 /obj/structure/trade_window/attack_hand(mob/user)
 	if(!isobserver(user) && (!Adjacent(user) || user.incapacitated()))
 		return
+	if(!(src in SStrade.all_twindows))
+		SStrade.all_twindows += src
 	ui_interact(user)
 
 /obj/structure/trade_window/ui_interact(mob/living/carbon/human/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -131,44 +136,52 @@
 		if(ui)
 			ui.close()
 		return
+	var/aghost = FALSE
 
 	if(!istype(user))
-		if(ismonkey(user))
+		if(isAdminGhost(user))
+			aghost = TRUE
+		else if(ismonkey(user))
 			say("Just a sprout. Come back when you're bigger.")
 		else
 			say("I don't think I can do business with you.")
-		return
-
-	if(user.get_face_name() == "Unknown")
-		var/datum/organ/external/head/head_organ = user.get_organ(LIMB_HEAD)
-		if(head_organ.disfigured)
-			say("What the fuck happened to your face? Who are you supposed to be?")
-			if(user.real_name in SStrade.loyal_customers)
-				say("Oh, it's you, [user.real_name]. Get that hideous thing fixed.")
-			else
-				return
-		else
-			say(pick(tw_face_not_visible))
 			return
 
-	if(!(user.get_face_name() in SStrade.loyal_customers))
-		say("I don't know you. You want to join up? You need someone to vouch for you. Bring a fresh ID and an inkpad to my table when you do.")
-		return
-	else
-		greet(user)
-
-	// this is the data which will be sent to the ui
 	var/data[0]
+	if(!aghost)
+		if(user.get_face_name() == "Unknown")
+			var/datum/organ/external/head/head_organ = user.get_organ(LIMB_HEAD)
+			if(head_organ.disfigured)
+				say("What the fuck happened to your face? Who are you supposed to be?")
+				if(user.real_name in SStrade.loyal_customers)
+					say("Oh, it's you, [user.real_name]. Get that hideous thing fixed.")
+				else
+					return
+			else
+				say(pick(tw_face_not_visible))
+				return
+
+		else if(!(user.get_face_name() in SStrade.loyal_customers))
+			say("I don't know you. You want to join up? You need someone to vouch for you. Bring a fresh ID and an inkpad to my table when you do.")
+			return
+		else
+			greet(user)
+
+		if(user.get_face_name() in SStrade.loyal_customers)
+			data["pastbusiness"] = SStrade.loyal_customers[user.get_face_name()]
+			data["pastdiscount"] = round(100*(SStrade.loyal_customer(user)-1))
+		else
+			data["pastbusiness"] = 0
+			data["pastdiscount"] = "+50"
+
+	else
+		data["pastbusiness"] = "Admin"
+		data["pastdiscount"] = "-100"
+
 	data["selected"] = product_selected
 	data["credsheld"] = credits_held()
 	data["shoalmoney"] = trader_account.money
 	data["shoaldiscount"] = round(100*(SStrade.shoal_prestige_factor()-1))
-	if(user.get_face_name() in SStrade.loyal_customers)
-		data["pastbusiness"] = SStrade.loyal_customers[user.get_face_name()]
-		data["pastdiscount"] = round(100*(SStrade.loyal_customer(user)-1))
-	else
-		data["pastbusiness"] = 0
-		data["pastdiscount"] = "+50"
 	data["selectedCategory"] = category
 	data["categories"] = list(list("category" = TRADE_SINGLE), list("category" = TRADE_VARIETY))
 	SStrade.rebuild_databank(user)
@@ -183,12 +196,10 @@
 /obj/structure/trade_window/Topic(href, href_list)
 	if(closed)
 		return
-	if(usr.incapacitated() || (!Adjacent(usr)&&!isAdminGhost(usr)) || !usr.dexterity_check())
-		return
-	if(!ishuman(usr)&&!isAdminGhost(usr))
+	if(!isAdminGhost(usr) && (usr.incapacitated() || !Adjacent(usr)))
 		return
 	var/mob/living/carbon/human/H = usr
-	if(!(H.get_face_name() in SStrade.loyal_customers) && !isAdminGhost(usr))
+	if(!isAdminGhost(usr) && !(H.get_face_name() in SStrade.loyal_customers))
 		say("I don't know you!")
 		return
 	if(href_list["product"])
@@ -213,9 +224,16 @@
 			say("Buy what?")
 			return
 	if(isAdminGhost(user))
-		say(pick("Keh, freebie. Someone likes you.", "Word from top, something free.", "Eh, for you, take it.", "This one, free."))
+		say(pick(tw_adminbus_freeitem))
 		TP.totalsold++
-		new TP.path(loc)
+		var/turf/newloc = loc
+		for(var/direction in cardinal)
+			var/turf/proposal = get_step(loc,direction)
+			if(isfloor(proposal))
+				newloc = proposal
+				break
+		new TP.path(newloc)
+		product_selected = null
 		flick("trade_sold",src)
 		nanomanager.update_uis(src)
 		return
@@ -228,6 +246,7 @@
 		SStrade.loyal_customers[user.get_face_name()] += TP.current_price(user)
 		TP.totalsold++
 		var/atom/movable/AM = new TP.path(user.loc)
+		product_selected = null
 		if(isitem(AM))
 			user.put_in_hands(AM)
 		else
@@ -249,7 +268,7 @@
 		if(total>price)
 			break
 	if(total < price)
-		say("Put some more cash up.")
+		say(pick(tw_not_enough_cash))
 		return FALSE
 	else
 		playsound(loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
@@ -263,7 +282,6 @@
 	return TRUE
 
 /obj/structure/trade_window/say(var/message)
-	//visible_message("<B>[merchant_name]</B> says, \"[message]\"")
 	..(message, trader_language)
 	if(world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
