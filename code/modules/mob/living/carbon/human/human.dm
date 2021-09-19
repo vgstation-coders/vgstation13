@@ -699,7 +699,6 @@
 
 /mob/living/carbon/human/proc/check_dna()
 	dna.check_integrity(src)
-	return
 
 /mob/living/carbon/human/get_species()
 
@@ -803,69 +802,10 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
-	if(new_facial)
-		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
-		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
-		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
+	pick_appearance(src,"Morph",FALSE)
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
-	if(new_facial)
-		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
-		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
-		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
+	pick_gender(src,"Morph",FALSE)
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
-	if(new_eyes)
-		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
-
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
-
-	if (!new_tone)
-		new_tone = 35
-	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	my_appearance.s_tone =  -my_appearance.s_tone + 35
-
-	// hair
-	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
-	var/list/hairs = list()
-
-	// loop through potential hairs
-	for(var/x in all_hairs)
-		var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
-		hairs.Add(H.name) // add hair name to hairs
-		qdel(H) // delete the hair after it's all done
-		H = null
-
-	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
-
-	// if new style selected (not cancel)
-	if (new_style)
-		my_appearance.h_style = new_style
-
-	// facial hair
-	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
-	var/list/fhairs = list()
-
-	for(var/x in all_fhairs)
-		var/datum/sprite_accessory/facial_hair/H = new x
-		fhairs.Add(H.name)
-		qdel(H)
-		H = null
-
-	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
-
-	if(new_style)
-		my_appearance.f_style = new_style
-
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			setGender(MALE)
-		else
-			setGender(FEMALE)
 	regenerate_icons()
 	check_dna()
 
