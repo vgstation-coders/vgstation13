@@ -113,10 +113,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	var/struc_enzymes="" // Encoded SE
 	var/unique_enzymes="" // MD5 of player name
 
-	// Internal dirtiness checks
-	var/dirtyUI=0
-	var/dirtySE=0
-
 	// Okay to read, but you're an idiot if you do.
 	// BLOCK = VALUE
 	var/list/SE[DNA_SE_LENGTH]
@@ -222,7 +218,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value>=0)
 	ASSERT(value<=4095)
 	UI[block]=value
-	dirtyUI=1
 	if(!defer)
 		UpdateUI()
 
@@ -317,7 +312,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value>=0)
 	ASSERT(value<=4095)
 	SE[block]=value
-	dirtySE=1
 	if(!defer)
 		UpdateSE()
 	//testing("SetSEBlock([block],[value],[defer]): [value] -> [GetSEValue(block)]")
@@ -395,7 +389,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 			newBlock+=newSubBlock
 		else
 			newBlock+=copytext(oldBlock,i,i+1)
-	//testing("SetSESubBlock([block],[subBlock],[newSubBlock],[defer]): [oldBlock] -> [newBlock]")
 	SetSEBlock(block,newBlock,defer)
 
 
@@ -409,17 +402,11 @@ var/global/list/facial_hair_styles_female_list	= list()
 	src.uni_identity=""
 	for(var/block in UI)
 		uni_identity += EncodeDNABlock(block)
-	//testing("New UI: [uni_identity]")
-	dirtyUI=0
 
 /datum/dna/proc/UpdateSE()
-	//var/oldse=struc_enzymes
 	struc_enzymes=""
 	for(var/block in SE)
 		struc_enzymes += EncodeDNABlock(block)
-	//testing("Old SE: [oldse]")
-	//testing("New SE: [struc_enzymes]")
-	dirtySE=0
 
 // BACK-COMPAT!
 //  Just checks our character has all the crap it needs.
