@@ -238,7 +238,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return
 	ASSERT(maxvalue<=4095)
-	var/mapped_value = round(map_range(value, 0, maxvalue, 0, 0xFFF))
+	var/mapped_value = round(map_range(value, 0, max(maxvalue,1), 0, 0xFFF))
 	SetUIValue(block, mapped_value, defer)
 
 // Getter version of above.
