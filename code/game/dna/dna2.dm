@@ -449,3 +449,4 @@ var/global/list/facial_hair_styles_female_list	= list()
 	reg_dna[unique_enzymes] = character.real_name
 	if(character.species)
 		species = character.species.name
+	character.fixblood()
