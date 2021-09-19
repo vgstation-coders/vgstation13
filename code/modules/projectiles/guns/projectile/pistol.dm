@@ -285,7 +285,7 @@
 	louden_overlay.pixel_y += silencer_offset[SILENCER_OFFSET_Y]
 	overlays += louden_overlay
 	gun_part_overlays += louden_overlay
-	var/obj/item/ammo_storage/magazine/m380auto/fatmag = new /obj/item/ammo_storage/magazine/m380auto/extended(src)
+	var/obj/item/ammo_storage/magazine/m380auto/extended/fatmag = new(src)
 	stored_magazine = fatmag
 	chamber_round()
 	mag_overlay()
