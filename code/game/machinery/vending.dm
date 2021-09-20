@@ -145,10 +145,10 @@ var/global/num_vending_terminals = 1
 
 	coinbox = new(src)
 
-	for(var/spath in slogan_languages)
-		if(ispath(spath))
-			slogan_languages -= spath
-			slogan_languages += new spath //convert paths into language datums
+	for(var/langname in slogan_languages)
+		if(istext(langname))
+			slogan_languages -= langname
+			slogan_languages += all_languages[langname] //pull the language datum from its name
 
 	if(ticker)
 		initialize()
@@ -1587,7 +1587,7 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/offlicence
-	slogan_languages = list(/datum/language/gutter)
+	slogan_languages = list(LANGUAGE_GUTTER)
 
 /obj/machinery/vending/offlicence/get_language(mob/target)
 	if(prob(25))
@@ -2217,7 +2217,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/weapon/storage/box/boxen = 1
 		)
-	slogan_languages = list(/datum/language/vox)
+	slogan_languages = list(LANGUAGE_VOX)
 
 /obj/machinery/vending/magivend
 	name = "\improper MagiVend"
@@ -3182,7 +3182,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/crackerbox = 200,
 		)
-	slogan_languages = (/datum/language/vox)
+	slogan_languages = list(LANGUAGE_VOX)
 
 //trade vendor used to be here, now see trade_datums.dm
 
@@ -3653,7 +3653,7 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/zamsnax
-	slogan_languages = list(/datum/language/grey)
+	slogan_languages = list(LANGUAGE_GREY)
 
 /obj/machinery/vending/zamsnax/get_language(var/mob/living/M)
 	if(isgrey(M))
