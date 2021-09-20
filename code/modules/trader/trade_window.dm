@@ -21,7 +21,8 @@
 	..()
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	processing_objects += src
-	trader_language = new /datum/language/vox
+	trader_language = all_languages[LANGUAGE_VOX]
+	SStrade.all_twindows += src
 
 /obj/structure/trade_window/Destroy()
 	SStrade.all_twindows -= src
@@ -84,19 +85,21 @@
 					return
 			//Haven't exited because of an invalid card.
 			var/obj/TA = new /obj/item/weapon/paper/traderapplication(loc, user.get_face_name())
-			TA.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
-			TA.pixel_y = -3 * PIXEL_MULTIPLIER
+			tableadjust(TA)
 			TA.shake(1,3)
 			playsound(TA, "pageturn", 50, 1)
 
 	if(istype(W,/obj/item/weapon/paper/traderapplication))
 		var/obj/item/weapon/paper/traderapplication/P = W
 		if(findtext(P.stamps,"inkpad"))
-			if(!(user.get_face_name() in SStrade.loyal_customers))
+			if(P.applicant in SStrade.loyal_customers)
+				say("Very funny. We've already done this, burn any extra papers.")
+			else if(!(user.get_face_name() in SStrade.loyal_customers))
 				say("So who's vouching for you? I want it from them.")
 			else
 				say("Well, that settles it then. [user.get_face_name()], [P.applicant] is your responsibility.")
-				SStrade.loyal_customers[P.applicant] = 0
+				SStrade.loyal_customers[P.applicant] = NEW_RECRUIT
+				qdel(P)
 		else
 			say("Go on, get that stamped.")
 
@@ -108,8 +111,7 @@
 
 /obj/structure/trade_window/proc/pay_with_cash(obj/item/weapon/spacecash/C, mob/user)
 	if(user.drop_item(C, loc))
-		C.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
-		C.pixel_y = -3 * PIXEL_MULTIPLIER
+		tableadjust(C)
 	/*if(product_selected && credits_held() >= product_selected.current_price(user))
 		trade(user)*/
 	nanomanager.update_uis(src)
@@ -277,8 +279,7 @@
 			qdel(O)
 		dispense_cash(total-price,loc)
 		for(var/obj/item/weapon/spacecash/C in loc)
-			C.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
-			C.pixel_y = -3 * PIXEL_MULTIPLIER
+			tableadjust(C)
 	return TRUE
 
 /obj/structure/trade_window/say(var/message)
@@ -289,3 +290,13 @@
 
 /obj/structure/trade_window/GetVoice()
 	return merchant_name
+
+/obj/structure/trade_window/proc/tablenew(var/path, var/shake=FALSE)
+	var/atom/A = new path(loc)
+	tableadjust(A)
+	if(shake)
+		A.shake(1,3)
+
+/obj/structure/trade_window/proc/tableadjust(var/atom/A)
+	A.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
+	A.pixel_y = -3 * PIXEL_MULTIPLIER

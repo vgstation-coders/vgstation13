@@ -1124,7 +1124,7 @@ var/global/num_vending_terminals = 1
 			spawn(rand(0, 15))
 				stat |= NOPOWER
 				update_vicon()
-	
+
 
 //Oh no we're malfunctioning!  Dump out some product and break.
 /obj/machinery/vending/proc/malfunction()
@@ -3133,6 +3133,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
 		/obj/item/weapon/storage/box/biscuit = 2,
+		/obj/item/talonprosthetic = 3,
 		)
 
 	prices = list(
@@ -3141,6 +3142,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/crackerbox = 200,
+		/obj/item/talonprosthetic = 80,
 		)
 
 //trade vendor used to be here, now see trade_datums.dm

@@ -1670,11 +1670,3 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	for(var/i = 1 to 2)
 		var/bootlegDrink = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/drinks))
 		new bootlegDrink(src)
-
-
-//Restock//////////////////////
-
-/obj/structure/vendomatpack/trader
-	name = "trader supply recharge pack"
-	targetvendomat = /obj/machinery/vending/trader
-	icon_state = "sale"

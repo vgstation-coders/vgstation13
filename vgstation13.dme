@@ -2710,6 +2710,7 @@
 #include "code\modules\tgui\states\zlevel.dm"
 #include "code\modules\tooltip\tooltip.dm"
 #include "code\modules\trader\trade_datums.dm"
+#include "code\modules\trader\trade_gear.dm"
 #include "code\modules\trader\trade_responses.dm"
 #include "code\modules\trader\trade_system.dm"
 #include "code\modules\trader\trade_window.dm"
