@@ -2,40 +2,43 @@
 #define TRADE_GREET_FREQ (30 SECONDS)
 
 var/static/list/tw_face_not_visible = list("I don't talk to anyone whose face I can't see.", "Hey, mask off!", "Let me look you in the eyes before we do business.")
+var/static/list/tw_not_enough_cash = list("Put some more cash up.","More creds.","Keh, don't short me.", "This isn't enough.","This isn't a charity.", "Cash on the table.")
 
 var/static/list/tw_sale_generic = list("Very nice, here you go.", "Enjoy, sell it quickly.", "No refunds, no returns.")
 var/static/list/tw_sale_good_deal = list("Good time to buy.", "The market favors this one.", "The timing was right.", "Investing while it's cheap -- good!")
 var/static/list/tw_sale_expensive = list("Was it hard to part with so much?", "This is expensive, so earn it back quickly.", "You better get your money's worth.")
+var/static/list/tw_adminbus_freeitem = list("Keh, freebie. Someone likes you.", "Word from top, something free.", "Eh, for you, take it.", "This one, free.")
 
 var/static/list/tw_market_flux = list("Market flux!", "Market forces shifting...", "Just got an update on prices!", "Turn on VNN, new prices!", "Just got an update on prices!", "Hey, hey, price update!", "Get over here, new prices!")
 
 var/static/list/tw_advertise_generic = list("Get over here, take a look at this stuff.", "You seen the new market prices?", "Still a lot of products left.")
-var/static/list/tw_advertise_low_price = list("Good deal on PRODUCT. Have a look.", "Market favors PRODUCT right now.", "Think you could sell PRODUCT? Good time to buy.")
+var/static/list/tw_advertise_low_price = list("Good deal on TWPRODUCT. Have a look.", "Market favors TWPRODUCT right now.", "Think you could sell TWPRODUCT? Good time to buy.", "TWRATE OFF? On TWPRODUCT?! You can't pass this up!", "TWRATE off deal on TWPRODUCT!", "Deals as low as TWRATE off!")
 
 var/static/list/tw_low_sales = list("You're just getting started, after all.", "You better earn your keep.", "Let's see if you're worth investing in, eh?")
 var/static/list/tw_medium_sales = list("Making good progress. Keep it up.", "Your sales are growing, good.", "Hey, I appreciate the business, again.", "I love a repeat customer, keh!")
 var/static/list/tw_high_sales = list("You've come some way, haven't you?", "My favorite customer, eh?", "How fast can you move this one, super-seller?")
 
-var/static/list/tw_empty_shoal = list("Eh, Shoal's bankrupt, though.", "You lot haven't done anything for the Shoal yet.", "Don't forget to contribute to the Shoal.")
+var/static/list/tw_empty_shoal = list("Eh, Shoal's bankrupt, though. You'll put some cash in, eh?", "You lot haven't done anything for the Shoal yet. Don't you know about the trader account?", "Don't forget to contribute to the Shoal.")
 var/static/list/tw_low_shoal = list("Your crew is making some progress with the Shoal, pool more.", "I've seen some Shoal contributions here - not enough.", "Remember, 10% of your earnings go into the Shoal. No, 20%!")
 var/static/list/tw_satisfied_shoal = list("You've done well here, a good trade outpost.", "Your earnings are a mark of pride.", "The Shoal is healthy thanks to your crew, but no time to stop.")
 var/static/list/tw_high_shoal = list("The Shoal is swollen with earnings.","This crew's wealth is legendary.","No one can doubt what profits have been made here.")
 
-var/static/list/tw_greet_initial = list("USER, eh? ", "I've got it here somewhere - oh, USER, right? ", "That face... you're USER? ")
+var/static/list/tw_greet_initial = list("TWUSER, eh? ", "I've got it here somewhere - oh, TWUSER, right? ", "That face... you're TWUSER? ")
 var/static/list/tw_greet_latejoin = list("Took your sweet time, hmm? ", "Well, you're not exactly here for the shift start. ", "How was the flight in? ")
 var/static/list/tw_greet_precursors = list("Well, at least you can count on ", "Keep your eyes open for ", "There's also ")
 var/static/list/tw_greet_captain = list("Keh, early bird gets the worm! ", "Here first, looking to take charge? ", "You're fast, eh? Don't leave behind the others. ")
-var/static/list/tw_greet_follower = list("Not as fast as CAPTAIN, but you're here, that's what counts. ", "Stick with CAPTAIN, okay? ", "Good to have you on too. Make much coin. ", "Mhm, you've got spirit. Not going to be beat by CAPTAIN, huh? ", "I see potential in you, too. ", "Tall for a trader, eh? You warrior stock? ")
+var/static/list/tw_greet_follower = list("Not as fast as TWCAPTAIN, but you're here, that's what counts. ", "Stick with TWCAPTAIN, okay? ", "Good to have you on too. Make much coin. ", "Mhm, you've got spirit. Not going to be beat by TWCAPTAIN, huh? ", "I see potential in you, too. ", "Tall for a trader, eh? You warrior stock? ")
 var/static/list/tw_greet_solo = list("Just you and me out here, yeah? ", "Shoal has sent us two ahead to prospect. ", "No one to watch your back, stay safe, eh? ", "Just us? Maybe they send someone else, later, eh? ")
 
-var/static/list/tw_greet_short_wait = list("Still browsing? ", "Come over here, USER, let's have a little chat. ", "Hey, my favorite trader! Not left yet? ", "Taking off soon? Gotta earn somehow. ", "Hey, USER, don't get left behind, okay? ")
-var/static/list/tw_greet_medium_wait = list("How was it over there? Good sales?", "Welcome back, USER.", "Hey USER! Stocking up?", "Come back for more, USER?", "USER's back again, I bet I know what for...", "There you are, USER!")
-var/static/list/tw_greet_long_wait = list("Still alive? That's great. ","Still in one piece, USER? ", "You made it back, eh? Good! ","Been awhile, USER, I was getting worried! ", "There he is! And still hearty. ", "USER! My friend! ")
+var/static/list/tw_greet_short_wait = list("Still browsing? ", "Come over here, TWUSER, let's have a little chat. ", "Hey, my favorite trader! Not left yet? ", "Taking off soon? Gotta earn somehow. ", "Hey, TWUSER, don't get left behind, okay? ","Go with your gut, don't worry too much about the exact right product. You'll sell it. ", "Hey, I know you're leaving soon - don't forget to check in once in a while, okay? ", "Fifty three plus twenty... Eh? Yeah, I'm still listening! ", "Do do do do do. Chik-chika, chik-chika. ", "Yeah, yeah, catalog's still here. ", "Hm? Something else? ", "What, another? ", "Is there something more? ", "Keh, greedy for products. ", "That one? ", "TWUSER, TWUSER... ", "I'd say the list isn't going to change if you keep staring at it, but it's not quite true. ")
+var/static/list/tw_greet_medium_wait = list("How was it over there? Good sales?", "Welcome back, TWUSER.", "Hey TWUSER! Stocking up?", "Come back for more, TWUSER?", "TWUSER's back again, I bet I know what for...", "There you are, TWUSER!")
+var/static/list/tw_greet_long_wait = list("Still alive? That's great. Been way too long since I've seen you. Was it busy on station, or did you go for some deep space salvage? ","Still in one piece, TWUSER? To be honest, I was getting worried I wouldn't see you again. This is a partnership you know, you can check in once in a while! ", "You made it back, eh? Good! That was quite a trip - been away from the outpost too long. ","Been awhile, TWUSER, I was getting worried! Ranging out a bit isn't bad, but I do want to know that you're checking in regularly. It's a hostile place out there, for our like. ", "There he is! And still hearty. Feels like it has been a long time, hasn't it? Well, let's get down to business, then. ", "TWUSER! My friend! ")
 
-var/static/list/tw_advice = list("Remember, buy low, sell high.", "Hey, there's rewards for success. Bank some credits.", "Don't lose the Shoal card. Important.", "Don't cause trouble for other traders.", "If you can't trust other traders, who can you trust?",
-		"If you got a stethoscope, you could crack that old safe, yeah?", "You tried a gimmick? Humans love gimmicks.", "Try taking them some home-cooked Vox food.", "Target the ones with money... miners, department heads.", "Hey, remind them they can print money from PDA.",
-		"Sometimes freebies lure customers to the ship. Something small, like a gacha toy or free drink.", "Remember, trust is currency. Become rich in trust.", "Remember, slave trading is almost always a bad idea. Leave that to raiders.", "Treat this place like your home, but never forget that it is not.",
-		"Consider getting a PDA. Remote control of ship can help.", "Don't leave stock unattended.", "Humans don't like having to walk to ship. Try PDA marketing and deliveries.", "Targeted advertising works, try it.")
+var/static/list/tw_advice_intro = list("Hey, a word of advice: ", "Some advice: ", "I was thinking... ", "My two cents - ", "Here's the thing... ", "Want a tip? ")
+var/static/list/tw_advice = list("remember, buy low, sell high.", "hey, there's rewards for success. Bank some credits.", "don't lose the Shoal card. Important.", "don't cause trouble for other traders.", "if you can't trust other traders, who can you trust?",
+		"if you got a stethoscope, you could crack that old safe, yeah?", "you tried a gimmick? Humans love gimmicks.", "try taking them some home-cooked Vox food.", "target the ones with money... miners, department heads.", "Hey, remind them they can print money from PDA.",
+		"sometimes freebies lure customers to the ship. Something small, like a gacha toy or free drink.", "Remember, trust is currency. Become rich in trust.", "remember, slave trading is almost always a bad idea. Leave that to raiders.", "treat this place like your home, but never forget that it is not.",
+		"consider getting a PDA. Remote control of ship can help.", "don't leave stock unattended.", "humans don't like having to walk to ship. Try PDA marketing and deliveries.", "targeted advertising works, try it.", "if you get lonely, try planting mushroom nodes. Sometimes, a friend.")
 
 /obj/structure/trade_window/proc/greet(mob/living/carbon/human/user)
 	var/buildgreet
@@ -54,7 +57,7 @@ var/static/list/tw_advice = list("Remember, buy low, sell high.", "Hey, there's 
 				if(last_greeted.len == 0) //Greet the first player who isn't the only trader
 					buildgreet += pick(tw_greet_captain)
 				else //Greet someone who didn't get to the window first
-					buildgreet += replacetext(pick(tw_greet_follower),"CAPTAIN",last_greeted[1])
+					buildgreet += replacetext(pick(tw_greet_follower),"TWCAPTAIN",last_greeted[1])
 			else //Greet a solo trader
 				buildgreet += pick(tw_greet_solo)
 
@@ -88,19 +91,25 @@ var/static/list/tw_advice = list("Remember, buy low, sell high.", "Hey, there's 
 					if(1000 to INFINITY)
 						buildgreet += pick(tw_high_sales)
 			if(14 to 16) //advice
-				buildgreet += pick(tw_advice)
+				buildgreet += pick(tw_advice_intro) + pick(tw_advice)
 			if(17 to 20) //advertise
-				var/target_product
-				for(var/datum/trade_product/TP in SStrade.all_trade_merch)
-					if(TP.flux_rate <= 0.85)
-						target_product = TP.name
-						break
-				if(target_product)
-					buildgreet += replacetext(pick(tw_advertise_low_price),"PRODUCT",target_product)
-				else
-					buildgreet += pick(tw_advertise_generic)
+				buildgreet += advertisement()
 
 	last_greeted[username] = world.time
 	buildgreet = trim(buildgreet)
-	buildgreet = replacetext(buildgreet, "USER", username)
+	buildgreet = replacetext(buildgreet, "TWUSER", username)
 	say(buildgreet)
+
+/obj/structure/trade_window/proc/advertisement()
+	var/target_product
+	var/readable_rate = "0%"
+	var/list/shuffledmerch = shuffle(SStrade.all_trade_merch)
+	for(var/datum/trade_product/TP in shuffledmerch)
+		if(TP.flux_rate <= 0.85)
+			target_product = TP.name
+			readable_rate = "[100-(100*TP.flux_rate)]%"
+			break
+	if(target_product)
+		return replacetext(replacetext(pick(tw_advertise_low_price),"TWPRODUCT",target_product), "TWRATE",readable_rate)
+	else
+		return pick(tw_advertise_generic)

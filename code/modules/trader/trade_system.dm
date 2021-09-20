@@ -7,15 +7,17 @@ var/datum/subsystem/trade_system/SStrade
 /datum/subsystem/trade_system
 	name       = "Trade System"
 	//unspecified init order
-	flags      = SS_TICKER
-	wait       = 30 SECONDS //check in no more than once every thirty seconds
+	flags = SS_TICKER
+	wait       = SS_WAIT_ENGINES //check in no more than once every thirty seconds
 	var/list/all_twindows = list() //All trade windows
 	var/list/all_trade_merch = list() //The list of all trade products, kept as elements
 	var/list/trade_databank = list() //The above, converted to associative list format for use in UI
 	var/list/loyal_customers = list() //Associative list, associates face identities with cash spent.
 
+/datum/subsystem/trade_system/New()
+	NEW_SS_GLOBAL(SStrade)
+
 /datum/subsystem/trade_system/Initialize(timeofday)
-	SStrade = src
 	for(var/path in subtypesof(/datum/trade_product))
 		all_trade_merch += new path
 	market_flux(FALSE)
