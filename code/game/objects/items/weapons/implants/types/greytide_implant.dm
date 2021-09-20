@@ -50,7 +50,7 @@
 				imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
 				qdel(src)
 				return
-	if(istraitor(imp_in))
+	if(istraitor(imp_in) || ischallenger(imp_in))
 		imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel a familiar sensation in your head that quickly dissipates.</span>")
 		qdel(src)
 		return
