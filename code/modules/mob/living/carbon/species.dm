@@ -283,6 +283,8 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/OutOfCrit(var/mob/living/carbon/human/H)
 
+/datum/species/proc/silent_speech(message)
+
 // -- Outfit datums --
 /datum/species/proc/final_equip(var/mob/living/carbon/human/H)
 
@@ -1269,15 +1271,15 @@ var/list/has_died_as_golem = list()
 	gender = NEUTER
 
 	tox_mod = 0.8
-	brute_mod = 1.8
+	brute_mod = 0.5
 	burn_mod = 0.6
 
 	primitive = /mob/living/carbon/monkey/mushroom
 
-	spells = list(/spell/targeted/genetic/invert_eyes)
+	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/genetic/fungaltelepathy)
 
-	default_mutations=list(M_REMOTE_TALK)
-	default_block_names=list("REMOTETALK")
+
+	default_mutations=list(M_EXOSKELETON)
 
 	blood_color = MUSHROOM_BLOOD
 	flesh_color = "#D3D3D3"
@@ -1300,9 +1302,10 @@ var/list/has_died_as_golem = list()
 
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
-					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
-					Additionally, you cannot speak. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
+					You have a resistance to burn and toxin, and your exoskeleton provides great protection against brute at the cost of easily-broken limbs.<br>\
+					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
+	var/mob/living/telepathic_target
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1310,6 +1313,14 @@ var/list/has_died_as_golem = list()
 /datum/species/mushroom/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
+
+/datum/species/mushroom/silent_speech(mob/M, message)
+	if(istype(telepathic_target) && M.can_mind_interact(telepathic_target))
+		telepathic_target.show_message("<span class='mushroom'>You feel <b>[M]:</b>'s thoughts: [message]</span>.")
+		M.show_message("<span class='mushroom'>Projected to [telepathic_target]: [message]</span>")
+		log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
+		for(var/mob/dead/observer/G in dead_mob_list)
+			G.show_message("<i>Mushroom telepathy from <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
 
 /datum/species/lich
 	name = "Undead"

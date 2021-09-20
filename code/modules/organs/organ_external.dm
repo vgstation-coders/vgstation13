@@ -450,7 +450,7 @@
 
 	//Bone fracurtes
 	var/datum/species/species = src.species || owner.species
-	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier && is_organic() && !(species.anatomy_flags & NO_BONES))
+	if(config.bones_can_break && brute_dam > min_broken_damage * config.organ_health_multiplier * (has_mutation(M_EXOSKELETON) ? 0.5 : 1) && is_organic() && !(species.anatomy_flags & NO_BONES))
 		src.fracture()
 	if(!is_broken())
 		perma_injury = 0
@@ -982,7 +982,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	playsound(owner.loc, "fracture", 100, 1, -2)
 	status |= ORGAN_BROKEN
-	broken_description = pick("broken", "fracture", "hairline fracture")
+	if(has_mutation(M_EXOSKELETON))
+		broken_description = pick("shattered","crumpled","broken") + "exoskeleton"
+	else
+		broken_description = pick("broken", "fracture", "hairline fracture")
 	perma_injury = brute_dam
 
 	//Fractures have a chance of getting you out of restraints. All spacemen are all trained to be Houdini.
