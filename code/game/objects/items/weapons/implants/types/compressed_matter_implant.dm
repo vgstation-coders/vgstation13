@@ -3,7 +3,7 @@
 	desc = "Based on compressed matter technology, can store a single item."
 	icon_state = "implant_evil"
 	var/activation_emote = "sigh"
-	var/obj/item/scanned = null
+	var/obj/item/scanned
 
 /obj/item/weapon/implant/compressed/get_data()
 	return {"
@@ -21,11 +21,11 @@
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return 0
 
-	if (src.scanned == null)
+	if (scanned == null)
 		return 0
 
-	if (emote == src.activation_emote)
-		to_chat(source, "The air glows as \the [src.scanned.name] uncompresses.")
+	if (emote == activation_emote)
+		to_chat(source, "The air glows as \the [scanned.name] uncompresses.")
 		activate()
 
 /obj/item/weapon/implant/compressed/activate()
@@ -38,12 +38,12 @@
 
 /obj/item/weapon/implant/compressed/implanted(mob/implanter)
 	imp_in.register_event(/event/emote, src, .proc/trigger)
-	src.activation_emote = input("Choose activation emote:") in list("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
-	usr.mind.store_memory("Compressed matter implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.", 0, 0)
-	to_chat(usr, "The implanted compressed matter implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
+	activation_emote = input(implanter, "Choose activation emote:") in list("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
+	implanter.mind.store_memory("Compressed matter implant in [implanter == imp_in ? "yourself" : imp_in.name] can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.", TRUE)
+	to_chat(implanter, "The implanted compressed matter implant can be activated by using the [activation_emote] emote, <B>say *[activation_emote]</B> to attempt to activate.")
 
 /obj/item/weapon/implant/compressed/islegal()
-	return 0
+	return FALSE
 
 /obj/item/weapon/implant/compressed/handle_removal(mob/remover)
 	imp_in?.unregister_event(/event/emote, src, .proc/trigger)
