@@ -80,9 +80,10 @@
 
 /obj/item/weapon/fireaxe/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(/obj/item/weapon/antiaxe_kit))
+	if(istype(W,/obj/item/weapon/antiaxe_kit))
 		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 		new /obj/item/weapon/fireaxe/antimatter(loc)
+		qdel(W)
 		qdel(src)
 
 /obj/item/weapon/fireaxe/suicide_act(mob/user)

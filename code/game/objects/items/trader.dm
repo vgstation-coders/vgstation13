@@ -1303,7 +1303,7 @@ var/global/list/yantar_stuff = list(
 	name = "Cloud IX engineering crate"
 	desc = "The Cloud IX engineering facility hangs in the atmosphere of the eponymous gas giant. But are the workers happy? Nein."
 
-//3+8+4=15
+//3+8+7=18
 var/global/list/cloudnine_stuff = list(
 	//3 of a kind
 	/obj/item/airshield_projector,/obj/item/airshield_projector,/obj/item/airshield_projector,
@@ -1317,11 +1317,14 @@ var/global/list/cloudnine_stuff = list(
 	/obj/machinery/power/antiquesynth,
 	/obj/item/weapon/am_containment/decelerator,
 	/obj/structure/largecrate/secure/magmaw,
+	/obj/item/wasteos,
+	/obj/item/weapon/storage/toolbox/master,
+	/obj/item/weapon/antiaxe_kit,
 	)
 
 /obj/structure/closet/crate/internals/cloudnine/New()
 	..()
-	for(var/i = 1 to 5)
+	for(var/i = 1 to 6)
 		if(!cloudnine_stuff.len)
 			return
 		var/path = pick_n_take(cloudnine_stuff)
@@ -1408,8 +1411,8 @@ var/global/list/cloudnine_stuff = list(
 
 /obj/item/airshield_projector/preattack(atom/target, mob/user , proximity)
 	var/turf/to_shield = get_turf(target)
-	if(is_type_in_list(target, ignore_types) && Adjacent(to_shield))
-		return TRUE
+	if(is_type_in_list(target, ignore_types) && user.Adjacent(to_shield))
+		return FALSE
 	if(projected.len < max_proj && istype(to_shield) && (!locate(/obj/effect/airshield) in to_shield))
 		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
 		var/obj/effect/airshield/A = new(to_shield)
@@ -1533,7 +1536,8 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	name = "\improper Box of Waste-Os!(TM)"
 	desc = "Now with extra supermatter chunks! An ill-fated breakfast mixup at the cereal factory led to a discovery that you can suspend supermatter in chemical waste. My God, nobody deserves a mixup that bad."
 	w_class = W_CLASS_SMALL
-
+	icon = 'icons/obj/items_weird.dmi'
+	icon_state = "toxiccereal"
 	flags = FPRINT | OPENCONTAINER
 
 /obj/item/wasteos/New()
@@ -1547,6 +1551,16 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 		to_chat(user,"<span class='danger'>\The [I] hits something inside \the [src] and is eradicated!</span>")
 		qdel(I)
 		return
+
+	else
+		..()
+
+/obj/item/wasteos/on_reagent_change()
+	if(reagents && reagents.reagent_list.len > 1 + reagents.has_reagent(ETHANOL))
+	//If more than one, or two if ethanol present
+		reagents.isolate_any_reagent(list(CHEMICAL_WASTE, ETHANOL))
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+
 	if(!reagents.has_reagent(CHEMICAL_WASTE))
 		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 		visible_message("<span class='danger'>The chunks burn through through \the [src]!</span>")
@@ -1554,15 +1568,16 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 		for(var/i = 1 to 3)
 			new /obj/item/supermatter_splinter(T)
 		qdel(src)
-	else
-		..()
+	..()
 
 /obj/item/weapon/storage/toolbox/master
 	name = "master toolbox"
-	desc = "The mark of a true artisan engineer. Use in hand to engage the safety grip."
+	desc = "The mark of a true artisan engineer. Fully insulated, too! Use in hand to engage the safety grip. Can quick-gather materials."
 	icon_state = "toolbox_shiny"
 	item_state = "toolbox_shiny"
 	siemens_coefficient = 0
+	allow_quick_gather = TRUE
+	use_to_pickup = TRUE
 
 /obj/item/weapon/storage/toolbox/master/attack_self(mob/user)
 	cant_drop = !cant_drop
@@ -1580,41 +1595,51 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 
 /obj/item/weapon/fireaxe/antimatter
 	name = "antimatter fireaxe"
-	desc = "My God, it's full of stars."
+	desc = "Whatever exotic, entropic material this is made out of, it's definitely not antimatter. Use to inhale gasses and cool them, use again to release and exhale them. It seems to take up curiously little space."
+	icon = 'icons/obj/items_weird.dmi'
+	icon_state = "fireaxe-antimatter"
+	item_state = "fireaxe-antimatter0"
 	flags = FPRINT | TWOHANDABLE
-	var/mols_inhaled = 0
+	w_class = W_CLASS_TINY
+	var/datum/gas_mixture/removed
 
-/obj/item/weapon/fireaxe/antimatter/update_wield(mob/user)
+/obj/item/weapon/fireaxe/antimatter/update_wield(mob/living/carbon/user)
 	..()
 	item_state = "fireaxe-antimatter[wielded ? 1 : 0]"
 	force = wielded ? 18 : initial(force) //much less deadly than a matter fireaxe
-	visible_message("<span class='sinister'>\The [src] [wielded ? "in" : "ex"]hales.</span>")
-	user.delayNextAttack(2 SECONDS)
-	var/image/void = image('icons/effects/effects.dmi',src,"bhole3")
-	void.plane = ABOVE_HUMAN_PLANE
-	flick_overlay(void, list(user.client), 1 SECOND)
-	if(user)
-		user.update_inv_hands()
-	var/turf/simulated/S = get_turf(loc)
-	if(!istype(S))
-		return
-	var/datum/gas_mixture/air_contents = S.return_air()
-	var/zone/Z = S.zone
 
+	var/turf/simulated/S = get_turf(loc)
+	var/datum/gas_mixture/air_contents = S.return_air()
+	var/zone/Z
 	if(wielded)
+		if(!istype(S))
+			to_chat(user,"<span class='warning'>\The [src] can't inhale here.</span>")
+			return
+		Z = S.zone
 		if(Z)
 			for(var/turf/T in Z.contents)
 				for(var/obj/effect/fire/F in T)
-					F.extinguish()
-		var/datum/gas_mixture/removed = air_contents.remove_volume(0.25 * CELL_VOLUME)
-		if(removed)
-			if(removed.temperature > T20C)
-				COOL
-
-			env.merge(removed)
+					F.Extinguish()
+		removed = air_contents.remove_volume(20 * CELL_VOLUME)
+		if(removed && removed.temperature > T20C)
+			removed.temperature = T20C
 
 	else
-		mols_inhaled = 0
+		if(!removed)
+			return //nothing to exhale
+		if(istype(S))
+			air_contents.merge(removed)
+		qdel(removed)
+		removed = null
+	visible_message("<span class='sinister'>\The [src] [wielded ? "in" : "ex"]hales.</span>")
+	playsound(loc, 'sound/effects/spray.ogg', 50, 1)
+	var/image/void = image('icons/effects/effects.dmi',user ? user : src,"bhole3")
+	flick_overlay(void, clients_in_moblist(view(7,loc)), 1 SECONDS)
+	void.plane = ABOVE_HUMAN_PLANE
+	if(user)
+		user.delayNextAttack(2 SECONDS)
+		user.update_inv_hands()
+
 
 //Mystery mob cubes//////////////
 
