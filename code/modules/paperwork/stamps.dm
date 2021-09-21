@@ -137,6 +137,9 @@ proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffse
 		to_chat(H, "<span class='warning'>Your active hand is not a talon!</span>")
 		return
 	..()
+	var/obj/structure/trade_window/TW = locate() in P.loc
+	if(TW)
+		TW.attackby(P,user)
 
 /obj/item/weapon/stamp/attack_paw(mob/user as mob)
 	return attack_hand(user)

@@ -15,7 +15,8 @@ var/list/current_prisoners = list()
 	can_request_prisoner = FALSE
 
 	if(!recruiter)
-		recruiter = new(src)
+		var/obj/structure/bed/chair/chairspawn = pick(prisonerstart)
+		recruiter = new(chairspawn)
 		recruiter.display_name = "prisoner"
 		recruiter.role = ROLE_PRISONER
 		recruiter.jobban_roles = list("minor roles") //has anyone even been banned from minor roles?

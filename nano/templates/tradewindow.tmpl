@@ -1,0 +1,35 @@
+<div class="item">
+	<div class="itemLabel">
+		Credits on table:
+	</div>
+	<div class="itemContent">
+		{{:data.credsheld}}
+	</div>
+	<div class="itemLabel">
+		Credits in Shoal fund:
+	</div>
+	<div class="itemContent">
+		{{:data.shoalmoney}} ({{:data.shoaldiscount}}% price)
+	</div>
+	<div class="itemLabel">
+		Past business:
+	</div>
+	<div class="itemContent">
+		{{:data.pastbusiness}} ({{:data.pastdiscount}}% price)
+	</div>
+</div>
+{{for data.categories}}
+	<div class="itemContent">
+		{{:helper.link(value.category, 'folder-collapsed', {'category' : value.category}, value.category == data.selectedCategory ? 'selected' : null)}}
+	</div>
+{{for}}
+<div class="item">&nbsp;</div>
+<div class="statusDisplay">
+	{{for data.databank}}
+		{{if value.category == data.selectedCategory}}
+			<div class="item">
+				{{:helper.link(value.name, 'cart', {'product' : value.name})}} {{:value.price}} credits ({{:value.marketforces}}% market forces)
+			</div>
+		{{/if}}
+	{{for}}
+</div>

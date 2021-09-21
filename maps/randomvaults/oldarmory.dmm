@@ -126,7 +126,7 @@
 "cv" = (/obj/machinery/computer/atmos_alert,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "cw" = (/obj/machinery/computer/crew,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "cx" = (/obj/machinery/computer/secure_data,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
-"cy" = (/obj/machinery/computer/security/advanced,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
+"cy" = (/obj/machinery/computer/security,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "cz" = (/obj/structure/rack,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "cA" = (/obj/structure/rack,/obj/item/clothing/head/helmet/doomguy,/obj/item/clothing/shoes/doomguy,/obj/item/clothing/suit/armor/doomguy,/obj/item/clothing/under/doomguy,/obj/item/weapon/storage/belt/security/doomguy,/obj/item/clothing/gloves/doomguy,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "cB" = (/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/vault/oldarmory)

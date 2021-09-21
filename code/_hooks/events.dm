@@ -1,10 +1,6 @@
 #define EVENT_HANDLER_OBJREF_INDEX 1
 #define EVENT_HANDLER_PROCNAME_INDEX 2
 
-/proc/CallAsync(datum/source, proctype, list/arguments)
-	set waitfor = FALSE
-	return call(source, proctype)(arglist(arguments))
-
 // Declare children of this type path to use as identifiers for the events.
 /event
 
@@ -271,7 +267,7 @@
 		var/list/handler = event_handlers[key]
 		var/objRef = handler[EVENT_HANDLER_OBJREF_INDEX]
 		var/procName = handler[EVENT_HANDLER_PROCNAME_INDEX]
-		. |= CallAsync(objRef, procName, arguments)
+		. |= call(objRef, procName)(arglist(arguments))
 
 /**
   * Registers a proc to be called on an object whenever the specified event_type
