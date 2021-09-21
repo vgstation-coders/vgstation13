@@ -1113,7 +1113,8 @@ var/list/has_died_as_golem = list()
 	var/mob/living/slime_pile/S = new(H.loc)
 	if(H.real_name)
 		S.real_name = H.real_name
-		S.desc = "The remains of what used to be [S.real_name]."
+		S.name = "puddle of [H.real_name]"
+		S.desc = "The slimy remains of what used to be [S.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
 	S.slime_person = H
 	H.forceMove(S)
 
