@@ -257,6 +257,7 @@ List of hard deletions:"}
 
 /datum/proc/Destroy()
 	SHOULD_CALL_PARENT(TRUE)
+	registered_events = null
 	gcDestroyed = "Bye, world!"
 	tag = null
 
