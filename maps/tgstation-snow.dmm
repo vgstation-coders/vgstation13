@@ -779,7 +779,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/prison/cell_block/A)
+/area/security/prison)
 "abS" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/simulated/floor{
@@ -1082,7 +1082,7 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/prison/cell_block/A)
+/area/security/prison)
 "acv" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
@@ -96939,6 +96939,14 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/trade/start)
+"pPH" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "pPV" = (
 /obj/structure/rack,
 /obj/item/weapon/kitchen/utensil/knife/large/ritual,
@@ -151993,10 +152001,10 @@ dYP
 dYP
 evh
 edy
-aac
-aac
-aac
-aac
+aaI
+aaI
+aaI
+aaI
 edy
 evh
 dYP
@@ -152295,10 +152303,10 @@ dYP
 dYP
 evh
 edy
-aac
+aaI
 acu
 acu
-aac
+aaI
 edy
 evh
 dYP
@@ -152597,10 +152605,10 @@ evh
 evh
 evh
 edy
-aac
-aca
-aca
-aac
+aaI
+aaQ
+aaQ
+aaI
 edy
 evh
 dYP
@@ -152899,10 +152907,10 @@ edy
 edy
 edy
 edy
-aac
-aca
-aca
-aac
+aaI
+aaQ
+aaQ
+aaI
 edy
 evh
 dYP
@@ -153198,13 +153206,13 @@ evh
 evh
 evh
 edy
-aac
-aac
-aac
-aac
-aca
-aca
-aac
+aaI
+aaI
+aaI
+aaI
+pPH
+aaQ
+aaI
 edy
 evh
 dYP
@@ -153500,13 +153508,13 @@ edy
 edy
 edy
 edy
-aac
-aca
-aca
+aaI
+pPH
+aaQ
 abR
-aca
-aca
-aac
+aaQ
+aaQ
+aaI
 edy
 evh
 evh
@@ -153802,13 +153810,13 @@ aaI
 aaI
 aaI
 aaI
-aac
-aca
-aca
+aaI
+aaQ
+aaQ
 abR
-aca
-aca
-aac
+aaQ
+aaQ
+aaI
 edy
 edy
 edy
