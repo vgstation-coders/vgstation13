@@ -16,7 +16,7 @@
 	return 1
 
 /obj/item/weapon/implant/uplink/handle_removal(mob/remover)
-	imp_in?.register_event(/event/emote, src, .proc/trigger)
+	imp_in?.unregister_event(/event/emote, src, .proc/trigger)
 	makeunusable(75)
 
 /obj/item/weapon/implant/uplink/activate()
