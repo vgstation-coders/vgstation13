@@ -170,7 +170,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /*
  * ASTAR
  * source: the atom which calls this Astar call.TRUE
- * proc_to_call: the proc to call on the source
+ * callback: the callback to invoke when the path is ready
  * start: starting atom
  * end: end of targetted path
  * Adjacent: the proc which rules what is adjacent for us
@@ -180,7 +180,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
  * Creates a pathmaker datum to process the path if we aren't processing the path.
  * Returns nothing if this path is already being processed.
  */
-/proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = ASTAR_DEBUG)
+/proc/AStar(source, callback, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = ASTAR_DEBUG)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
 		return ASTAR_FAIL
@@ -191,8 +191,8 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	if(!isturf(end))
 		target = end
 
-	astar_debug("ASTAR called [source] [proc_to_call] [start:x][start:y][start:z] [end:x][end:y][end:z] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
-	new /datum/path_maker(source,proc_to_call, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
+	astar_debug("ASTAR called [source] [callback] [start:x],[start:y],[start:z] [end:x],[end:y],[end:z] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
+	new /datum/path_maker(source,callback, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
 	return ASTAR_REGISTERED
 
 // Only use if you just need to check if a path exists, and is a reasonable length
@@ -394,8 +394,8 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 /////////////////////////////////////////////////////////////////////////
 
-/atom/proc/make_astar_path(var/atom/target, var/receiving_proc = .proc/get_astar_path)
-	AStar(src, receiving_proc, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
+/atom/proc/make_astar_path(var/atom/target, var/callback = new /callback(src, .proc/get_astar_path))
+	AStar(src, callback, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
 
 //override when needed to receive your path
 /atom/proc/get_astar_path(var/list/L)

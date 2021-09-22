@@ -185,7 +185,7 @@
 		if(target)
 			if (waiting_for_path)
 				return 1
-			calc_path(target, .proc/get_path)
+			calc_path(target, new /callback(src, .proc/get_path))
 			if (path && length(path))
 				process_path()
 			return 1
@@ -225,7 +225,7 @@
 	if(frustration > 5)
 		summoned = FALSE // Let's not try again.
 		if (target && !target.gcDestroyed)
-			calc_path(target, .proc/get_path, next)
+			calc_path(target, new /callback(src, .proc/get_path), next)
 		else
 			target = null
 			path = list()
@@ -306,7 +306,7 @@
 
 	if(patrol_target)
 		waiting_for_patrol = TRUE
-		calc_patrol_path(patrol_target, .proc/get_patrol_path)
+		calc_patrol_path(patrol_target, new /callback(.proc/get_patrol_path))
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
@@ -368,7 +368,7 @@
 			return TRUE
 	if(frustration > 5)
 		if (target && !target.gcDestroyed)
-			calc_path(target, .proc/get_path, next)
+			calc_path(target, new /callback(src, .proc/get_path), next)
 		else
 			target = null
 			patrol_path = list()
@@ -484,11 +484,11 @@
 
 // Caluculate a path between the bot and the target.
 // Target is the target to go to.
-// proc_to_call is the proc which is called by the pathmaker once it's done its work and wishes to return a path.
+// callback gets called by the pathmaker once it's done its work and wishes to return a path.
 // avoid is a turf the path should NOT go through. (a previous obstacle.) This info is then given to the pathmaker.
 // Fast bots use quick_AStar method to direcly calculate a path and move on it.
-/obj/machinery/bot/proc/calc_path(var/target, var/proc_to_call, var/turf/avoid = null)
-	ASSERT(target && proc_to_call)
+/obj/machinery/bot/proc/calc_path(var/target, var/callback, var/turf/avoid = null)
+	ASSERT(target && callback)
 	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
 	if ((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) // For beepers and ED209
 		// IMPORTANT: Quick AStar only takes TURFS as arguments.
@@ -497,12 +497,12 @@
 		log_astar_bot("path is [path.len]")
 		return TRUE
 	waiting_for_path = 1
-	. = AStar(src, proc_to_call, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	. = AStar(src, callback, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 	if (!.)
 		waiting_for_path = 0
 
-/obj/machinery/bot/proc/calc_patrol_path(var/target, var/proc_to_call, var/turf/avoid = null)
-	ASSERT(target && proc_to_call)
+/obj/machinery/bot/proc/calc_patrol_path(var/target, var/callback, var/turf/avoid = null)
+	ASSERT(target && callback)
 	log_astar_beacon("[new_destination]")
 	var/cardinal_proc = bot_flags & BOT_SPACEWORTHY ? /turf/proc/AdjacentTurfsSpace : /turf/proc/CardinalTurfsWithAccess
 	if ((get_dist(src, target) < 13) && !(bot_flags & BOT_NOT_CHASING)) // For beepers and ED209
@@ -510,7 +510,7 @@
 		waiting_for_patrol = FALSE // Case we are calculating a quick path for a patrol.
 		patrol_path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		return TRUE
-	return AStar(src, proc_to_call, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	return AStar(src, callback, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
 
 
 // This proc is called by the path maker once it has calculated a path.
