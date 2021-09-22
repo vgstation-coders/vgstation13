@@ -316,6 +316,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/kitchen/utensil/fork(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
 	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/food/zam_menu2/New()
@@ -324,6 +325,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/kitchen/utensil/fork(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
 	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/food/zam_menu3/New()
@@ -332,6 +334,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/kitchen/utensil/fork(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
 	update_icon()
 
 // -----------------------------
