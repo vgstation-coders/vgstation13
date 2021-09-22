@@ -121,12 +121,6 @@ mob/proc/remove_internal_organ()
 		return 1
 	return 0
 
-/proc/isloyal(A) //Checks to see if the person contains a loyalty implant, then checks that the implant is actually inside of them
-	for(var/obj/item/weapon/implant/loyalty/L in A)
-		if(L && L.implanted)
-			return 1
-	return 0
-
 /proc/check_holy(var/mob/A) //checks to see if the tile the mob stands on is holy
 	var/turf/T = get_turf(A)
 	if(!T)
@@ -481,7 +475,7 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 	//same declaration as intent function, which this is based on
 	set name = "a-zone"
 	set hidden = 1
-	
+
 	//standard type check
 	if(zone_sel && zone_sel.selecting)
 		var/old_selecting = zone_sel.selecting //same as in click function for icon updates

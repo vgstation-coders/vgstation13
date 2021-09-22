@@ -454,7 +454,7 @@
 				threatcount += 4
 
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 
 	return threatcount
