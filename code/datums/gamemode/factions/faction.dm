@@ -225,13 +225,13 @@ var/list/factions_with_hud_icons = list()
 			return
 		for (var/datum/role/R in members)
 			if (R.antag?.current)
-				to_chat(R.antag.current, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>[message]</span>")
+				to_chat(R.antag.current, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span>")
 
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>[message]</span></span>")
+			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span></span>")
 
 		message_admins("Admin [key_name_admin(usr)] has talked to [name] as [voice_per_admin[user.ckey]].")
-		log_factionspeak("[key_name(usr)] as [voice_per_admin[user.ckey]]: [message]")
+		log_factionspeak("[key_name(usr)] as [voice_per_admin[user.ckey]]: \"[message]\"")
 
 	if (href_list["faction_set_speaker"])
 		if (!(user.ckey in voice_per_admin))
