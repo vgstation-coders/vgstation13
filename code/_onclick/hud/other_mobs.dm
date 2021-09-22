@@ -166,11 +166,32 @@
 	mymob.client.screen += list(vampire_blood_display)
 
 
-/datum/hud/proc/countdown_hud()
+/datum/hud/proc/countdown_blob()
 
 	countdown_display = new /obj/abstract/screen
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
 	countdown_display.name = "Burst Countdown"
-	countdown_display.icon_state = "template"
+	countdown_display.icon_state = "countdown_blob"
+	countdown_display.screen_loc = ui_under_health
+
+	mymob.client.screen += list(countdown_display)
+
+/datum/hud/proc/countdown_monkey()
+
+	countdown_display = new /obj/abstract/screen
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
+	countdown_display.name = "Primitive Countdown"
+	countdown_display.icon_state = "countdown_monkey"
+	countdown_display.screen_loc = ui_under_health
+
+	mymob.client.screen += list(countdown_display)
+
+/datum/hud/proc/countdown_time_agent()
+
+	countdown_display = new /obj/abstract/screen
+	countdown_display.name = "Time Countdown"
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
+	countdown_display.icon_state = "countdown_default"
 	countdown_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(countdown_display)
