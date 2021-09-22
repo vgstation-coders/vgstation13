@@ -15,7 +15,7 @@
 	var/speed_bonus = 0
 	var/circuitpath = /obj/item/weapon/circuitboard/egg_incubator
 	var/active_state = "incubator_old_on"
-	var/outputDir = null
+	var/outputDir = 0
 
 /obj/machinery/egg_incubator/New()
 	. = ..()
