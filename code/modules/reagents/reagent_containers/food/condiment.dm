@@ -633,3 +633,15 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
 	..()
 	reagents.add_reagent(MAYO, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce
+	name = "soysauce packet"
+	desc = "Tasty soysauce in a convenient tiny packet."
+	icon_state = "soysauce_small"
+	condiment_overlay = SOYSAUCE
+	trash_type = /obj/item/trash/soysauce_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce/New()
+	..()
+	reagents.add_reagent(SOYSAUCE, 5)

@@ -6894,8 +6894,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 14)
-	reagents.add_reagent(DOCTORSDELIGHT, 5)
+	reagents.add_reagent(NUTRIMENT, 11)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 5
 
@@ -6908,8 +6907,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 12)
-	reagents.add_reagent(ALKYSINE, 5)
+	reagents.add_reagent(NUTRIMENT, 9)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 4
 
@@ -6923,8 +6921,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10)
-	reagents.add_reagent(ANTI_TOXIN, 5)
+	reagents.add_reagent(NUTRIMENT, 7)
 	reagents.add_reagent(SACID, 3)
 	bitesize = 4
 
@@ -6973,7 +6970,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(HYRONALIN, 3)
 	reagents.add_reagent(COCO, 2)
 	reagents.add_reagent(SUGAR, 2)
