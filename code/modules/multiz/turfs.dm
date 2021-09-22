@@ -42,12 +42,14 @@
 	..()
 	mover.fall()
 
+var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated/wall,/turf/unsimulated/mineral,/turf/simulated/shuttle/wall)
+
 /turf/simulated/open/has_gravity()
 	var/turf/below = GetBelow(src)
 	if(!below)
 		return 0
 	// Turf checks for not spacemoving
-	if(istype(below,/turf/simulated/wall) || istype(below,/turf/unsimulated/wall)  || istype(below,/turf/unsimulated/mineral))
+	if(is_type_in_list(below, no_spacemove_turfs))
 		return get_gravity()
 	// Dense stuff below checks
 	for(var/atom/A in below)
