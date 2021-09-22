@@ -636,8 +636,8 @@
 
 
 /obj/item/weapon/reagent_containers/food/condiment/small/soysauce
-	name = "soysauce packet"
-	desc = "Tasty soysauce in a convenient tiny packet."
+	name = "soy sauce packet"
+	desc = "Tasty soy sauce in a convenient tiny packet."
 	icon_state = "soysauce_small"
 	condiment_overlay = SOYSAUCE
 	trash_type = /obj/item/trash/soysauce_packet
