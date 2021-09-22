@@ -107,6 +107,7 @@
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 
 	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+	var/can_have_robots = TRUE
 
 /datum/map/New()
 	. = ..()
