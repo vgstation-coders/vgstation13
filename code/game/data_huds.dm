@@ -295,9 +295,6 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		if(G.see_invisible)
 			see_invisible = G.see_invisible
 
-	seedarkness = G.seedarkness
-	update_darkness()
-
 	/* HUD shit goes here, as long as it doesn't modify sight flags
 	 * The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
 	 */
@@ -337,5 +334,4 @@ proc/process_construct_hud(var/mob/M, var/mob/eye)
 				holder.icon_state = "consthealth0"
 			else
 				holder.icon_state = "consthealth[10*round((construct.health/construct.maxHealth)*10)]"
-			holder.plane = ABOVE_LIGHTING_PLANE
 			C.images += holder

@@ -492,6 +492,9 @@
 
 
 /obj/item/device/radio/attack_self(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	interact(user)
 

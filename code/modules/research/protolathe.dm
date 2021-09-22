@@ -42,7 +42,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(2)
 	else
-		kill_light()
+		set_light(0)
 
 /obj/machinery/r_n_d/fabricator/protolathe/New()
 	. = ..()

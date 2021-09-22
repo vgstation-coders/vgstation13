@@ -489,8 +489,6 @@
 
 
 /client/proc/send_html_resources()
-	if(adv_camera && minimapinit)
-		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)
@@ -559,18 +557,6 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		view = world.view
 	else
 		view = newView
-
-	if (mob.dark_plane)
-		mob.dark_plane.transform = null
-		var/matrix/M = matrix()
-		M.Scale(view*2.2)
-		mob.dark_plane.transform = M
-
-	if (mob.backdrop)
-		mob.backdrop.transform = null
-		var/matrix/M = matrix()
-		M.Scale(view*3)
-		mob.backdrop.transform = M
 
 	if(mob && ishuman(mob))
 		var/mob/living/carbon/human/H = mob
