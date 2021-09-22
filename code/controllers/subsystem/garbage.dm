@@ -1,8 +1,8 @@
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
 
-#define GC_DEBUG
-#define GC_FINDREF
-#define GC_REFDEBUG
+//#define GC_DEBUG
+//#define GC_FINDREF
+//#define GC_REFDEBUG
 
 var/datum/subsystem/garbage/SSgarbage
 
