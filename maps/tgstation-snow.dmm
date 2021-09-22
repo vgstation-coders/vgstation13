@@ -1385,6 +1385,9 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -55799,6 +55802,9 @@
 	icon_state = "0-4"
 	},
 /obj/structure/cable/orange,
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -79898,11 +79904,14 @@
 	},
 /area/science/hallway)
 "jUa" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/cable/orange{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden{
+	dir = 4;
+	initialize_directions = 13
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -89735,6 +89744,14 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
+"ntz" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/prison/cell_block/A)
 "ntA" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -96939,14 +96956,6 @@
 	icon_state = "floor3"
 	},
 /area/shuttle/trade/start)
-"pPH" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
-/area/security/prison)
 "pPV" = (
 /obj/structure/rack,
 /obj/item/weapon/kitchen/utensil/knife/large/ritual,
@@ -101199,6 +101208,9 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -102446,6 +102458,16 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/port)
+"rSC" = (
+/obj/machinery/atmospherics/unary/vent_pump{
+	canSpawnMice = 0;
+	dir = 4;
+	on = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "rSE" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -106472,6 +106494,17 @@
 	},
 /turf/simulated/floor/plating,
 /area/science/storage)
+"tsz" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "tsA" = (
 /obj/effect/decal/warning_stripes{
 	dir = 2;
@@ -110629,6 +110662,14 @@
 	},
 /turf/simulated/floor/plating,
 /area/storage/tools)
+"uSS" = (
+/obj/machinery/atmospherics/pipe/simple/supply/hidden{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "uSW" = (
 /obj/machinery/firealarm{
 	dir = 8;
@@ -110938,6 +110979,14 @@
 	tag = "icon-caution (WEST)"
 	},
 /area/hallway/primary/aft)
+"uYv" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark"
+	},
+/area/security/prison)
 "uYG" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
@@ -152909,7 +152958,7 @@ edy
 edy
 aaI
 aaQ
-aaQ
+rSC
 aaI
 edy
 evh
@@ -153210,8 +153259,8 @@ aaI
 aaI
 aaI
 aaI
-pPH
-aaQ
+tsz
+uSS
 aaI
 edy
 evh
@@ -153509,11 +153558,11 @@ edy
 edy
 edy
 aaI
-pPH
+uYv
 aaQ
 abR
-aaQ
-aaQ
+aaS
+uSS
 aaI
 edy
 evh
@@ -153814,8 +153863,8 @@ aaI
 aaQ
 aaQ
 abR
-aaQ
-aaQ
+aaS
+uSS
 aaI
 edy
 edy
@@ -154418,8 +154467,8 @@ adK
 aca
 aca
 acl
-aca
-acS
+adu
+acP
 acl
 rXa
 adc
@@ -154720,7 +154769,7 @@ abK
 abS
 abS
 acm
-abS
+ntz
 ruo
 acM
 add
