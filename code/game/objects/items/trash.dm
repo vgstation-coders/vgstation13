@@ -300,5 +300,5 @@ var/list/crushed_cans_cache = list()
 
 /obj/item/trash/soysauce_packet
 	name = "soy sauce packet"
-	desc = "A used soysauce packet"
+	desc = "A used soy sauce packet"
 	icon_state	= "soysauce_small"
