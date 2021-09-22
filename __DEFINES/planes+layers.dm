@@ -214,6 +214,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
+#define OPEN_OVERLAY_PLANE	(14 + FLOAT_PLANE) // This one won't behave either
+
 #define BASE_PLANE 				(15 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
 #define MISC_HUD_MARKERS_PLANE	16
