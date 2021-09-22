@@ -338,7 +338,7 @@
 	W.name = "[H.real_name]'s ID Card"
 	W.registered_name = H.real_name
 	W.UpdateName()
-	W.SetOwnerInfo(H)
+	W.SetOwnerDNAInfo(H)
 	H.equip_to_slot_or_drop(W, slot_wear_id)
 	if (pda_type)
 		var/obj/item/device/pda/pda = new pda_type(H)

@@ -39,7 +39,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	vessel.add_reagent(BLOOD,560)
 
 //Resets blood data
-/mob/living/carbon/human/proc/fixblood()
+/mob/living/carbon/human/proc/copy_dna_data_to_blood_reagent()
 	for(var/datum/reagent/blood/B in vessel.reagent_list)
 		if(B.id == BLOOD)
 			B.data = list(

@@ -426,14 +426,13 @@ var/global/list/facial_hair_styles_female_list	= list()
 			struc_enzymes = "43359156756131E13763334D1C369012032164D4FE4CD61544B6C03F251B6C60A42821D26BA3B0FD6"
 
 // BACK-COMPAT!
-//  Initial DNA setup.  I'm kind of wondering why the hell this doesn't just call the above.
+//  Initial DNA setup.
 /datum/dna/proc/ready_dna(mob/living/carbon/human/character)
-	ResetUIFrom(character)
+	check_integrity(character)
 
-	ResetSE()
-
-	unique_enzymes = md5(character.real_name)
 	reg_dna[unique_enzymes] = character.real_name
 	if(character.species)
 		species = character.species.name
-	character.fixblood()
+	character.copy_dna_data_to_blood_reagent()
+	for (var/obj/item/weapon/card/id/card in character)
+		card.SetOwnerDNAInfo(character)
