@@ -15,6 +15,7 @@
 	var/speed_bonus = 0
 	var/circuitpath = /obj/item/weapon/circuitboard/egg_incubator
 	var/active_state = "incubator_old_on"
+	var/outputDir = null
 
 /obj/machinery/egg_incubator/New()
 	. = ..()
@@ -48,10 +49,21 @@
 /obj/machinery/egg_incubator/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
 		return 1
-	if(contents.len >= limit)
-		to_chat(user, "\The [src] has no more space!")
-		return 1
-	if (istype(O,input_path))
+	if(ismultitool(O) && !panel_open)
+		var/result = input("Set your location as output?") in list("Yes","No","Machine Location")	//Copy paste of r_n_d machines, consistency
+		switch(result)
+			if("Yes")
+				if(!Adjacent(user))
+					to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+					return 1
+				outputDir = get_dir(src, user)
+			if("Machine Location")
+				outputDir = 0
+				to_chat(user, "<span class='notice'>Output set.</span>")
+	if(istype(O,input_path))
+		if(contents.len >= limit)
+			to_chat(user, "\The [src] has no more space!")
+			return 1
 		if(animal_count[/mob/living/simple_animal/chicken] >= ANIMAL_CHILD_CAP)
 			to_chat(user, "<span class='warning'>You get the feeling there are enough of those already.</span>")
 			return 1
@@ -123,9 +135,15 @@
 /obj/machinery/egg_incubator/proc/eject(var/obj/E)
 	if(E.loc != src)
 		return //You can't eject it if it's not here.
-	E.forceMove(get_turf(src))
+	E.forceMove(get_step(get_turf(src), outputDir))
 	src.updateUsrDialog()
 	visible_message("<span class='info'>\The [E] is released from \the [src].</span>")
+
+/obj/machinery/egg_incubator/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, input_path))
+		if(contents.len >= limit || animal_count[/mob/living/simple_animal/chicken] >= ANIMAL_CHILD_CAP)
+			return
+		AM.forceMove(src)
 
 /obj/machinery/egg_incubator/box_cloner
 	name = "box flesh cloner"
@@ -150,3 +168,5 @@
 /obj/machinery/egg_incubator/box_cloner/getProgress(var/obj/item/weapon/reagent_containers/food/snacks/meat/box/B)
 	if(istype(B))
 		return B.amount_cloned
+
+
