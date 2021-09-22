@@ -2,7 +2,7 @@
 	..()
 	var/tagname
 	if(!forced_bundle)
-		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 25, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 25, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100, "clown" = 50, "druid" = 50, "actor" = 100, "jackpot" = 7, "Eugenics" = 50, "Alchemist" = 50))
 	else
 		tagname = forced_bundle
 
@@ -175,7 +175,60 @@
 			new /obj/item/weapon/vinyl/scotland(src)
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
 
+		if("clown") //4 + 4 + 6 + 14 + 6 + ? = 34?
+			new /obj/item/weapon/invisible_spray/permanent(src)
+			new /obj/item/weapon/glue(src)
+			new /obj/item/weapon/glue(src)
+			new /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox(src)
+			new /obj/item/weapon/dnainjector/nofail/clumsymut(src)
+			for(var/i = 1 to 7)
+				new /obj/item/toy/balloon/long/living(src)
+			new /obj/item/weapon/spellbook/oneuse/shoesnatch(src)
+
+		if("druid")	//bear*viscerator to the power of carp
+			var/list/druidSummon = list(
+					/obj/item/weapon/grenade/spawnergrenade/spesscarp,
+					/obj/item/weapon/grenade/spawnergrenade/beenade,
+					/obj/item/weapon/grenade/spawnergrenade/bearnade
+					)
+			for(var/i = 1 to 6)
+				var/obj/item/dS = pick(druidSummon)
+				new dS(src)
+				new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos(src)
+			new /obj/item/clothing/suit/storage/wintercoat/druid(src)
+
+		if("actor")	//6*5 + 1 + 5 + 2 + 6 + mask = 44^mask
+			for(var/i = 1 to 5)
+				new /obj/item/device/reportintercom(src)
+			new /obj/item/device/megaphone/madscientist(src)
+			new /obj/item/clothing/mask/gas/voice(src)
+			new /obj/item/weapon/card/id/syndicate(src)
+			new /obj/item/clothing/mask/morphing/amorphous(src)
+			new /obj/item/device/chameleon(src)
+
+
+		if("jackpot") //14*2 = 28
+			new /obj/item/weapon/storage/box/syndicate(src)
+			new /obj/item/weapon/storage/box/syndicate(src)
+
+		if("Eugenics")
+			new /obj/item/weapon/dnainjector/nofail/hulkmut(src)
+			new /obj/item/weapon/dnainjector/nofail/xraymut(src)
+			new /obj/item/weapon/dnainjector/nofail/telemut(src)
+			new /obj/item/weapon/dnainjector/nofail/nobreath(src)
+			new /obj/item/weapon/dnainjector/nofail/regenerate(src)
+			new /obj/item/weapon/dnainjector/nofail/runfast(src)
+			new /obj/item/weapon/dnainjector/nofail/jumpy(src)
+			new /obj/item/weapon/dnainjector/nofail/strong(src)
+
+		if("Alchemist")
+			new /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle(src)
+			new /obj/item/weapon/storage/bag/potion/lesser_bundle(src)
+			new /obj/item/weapon/storage/box/mystery_vial(src)
+			new /obj/item/weapon/storage/box/mystery_vial(src)
+
 	tag = tagname
+
 
 
 /obj/item/weapon/storage/box/syndie_kit
@@ -385,7 +438,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/ammo_storage/box/BMG50(src)
 	new /obj/item/ammo_storage/box/BMG50(src)
 	new /obj/item/clothing/glasses/thermal/syndi(src)
-	
+
 /obj/item/weapon/storage/box/syndie_kit/spotter
 	name = "Spotter"
 
@@ -411,7 +464,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
 	new /obj/item/device/reportintercom(src)
 	dispense_cash(10000, src)
-	
+
 /obj/item/weapon/storage/box/syndie_kit/shootershotty
 	name = "Shotgun"
 
@@ -464,11 +517,11 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 		if("sniperspotter")
 			new /obj/item/weapon/storage/box/syndie_kit/sniper(src)
 			new /obj/item/weapon/storage/box/syndie_kit/spotter(src)
-		
+
 		if("scammers")
 			new /obj/item/weapon/storage/box/syndie_kit/scammer(src)
 			new /obj/item/weapon/storage/box/syndie_kit/scammer(src)
-		
+
 		if("workplaceshooter")
 			new /obj/item/weapon/storage/box/syndie_kit/shootershotty(src)
 			new /obj/item/weapon/storage/box/syndie_kit/shooteruzis(src)
