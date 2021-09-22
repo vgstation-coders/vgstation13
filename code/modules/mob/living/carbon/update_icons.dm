@@ -4,6 +4,9 @@
  * Handles lying down and shrinking from DNA and viruses
  * IMPORTANT: Multiple animate() calls do not stack well, so try to do them all at once if you can.
  */
+
+#define SHRINK_SCALE_FACTOR 0.7
+
 /mob/living/carbon/update_transform()
 	var/matrix/final_transform = transform
 	var/final_pixel_y = pixel_y
@@ -32,16 +35,16 @@
 		if(!shrunken)
 			final_pixel_y += 4 * PIXEL_MULTIPLIER
 			if(!lying)
-				final_transform *= matrix().Scale(1,1.4285714)
+				final_transform *= matrix().Scale(1, 1 / SHRINK_SCALE_FACTOR)
 			else
-				final_transform *= matrix().Scale(1.4285714,1)
+				final_transform *= matrix().Scale(1 / SHRINK_SCALE_FACTOR, 1)
 		else
 			if(!shrunken_prev)
 				final_pixel_y -= 4 * PIXEL_MULTIPLIER
 				if(!lying)
-					final_transform *= matrix().Scale(1,0.7)
+					final_transform *= matrix().Scale(1, SHRINK_SCALE_FACTOR)
 				else
-					final_transform *= matrix().Scale(0.7,1)
+					final_transform *= matrix().Scale(SHRINK_SCALE_FACTOR, 1)
 					
 
 		shrunken_prev = shrunken // so we don't try to animate until there's been another change.
