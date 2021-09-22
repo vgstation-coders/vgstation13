@@ -93,6 +93,8 @@
 		A.area_turfs += src
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
+	if(opacity)
+		has_opaque_atom = TRUE
 
 /turf/ex_act(severity)
 	return 0
@@ -285,6 +287,10 @@
 			for(var/atom/movable/AA in contents_brought)
 				AA.invoke_event(/event/post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 
+	if(A && A.opacity)
+		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
+		reconsider_lights()
+
 /turf/proc/is_plating()
 	return 0
 /turf/proc/can_place_cables()
@@ -320,14 +326,12 @@
 	return
 
 /turf/proc/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(src.intact)
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(0)
@@ -353,6 +357,10 @@
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
+	var/old_dynamic_lighting = dynamic_lighting
+	var/old_affecting_lights = affecting_lights
+	var/old_lighting_overlay = lighting_overlay
+	var/old_corners = corners
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
 	var/old_registered_events = registered_events
@@ -408,19 +416,9 @@
 		if(SS_READY(SSair))
 			SSair.mark_for_update(src)
 
-		if(istype(W, /turf/space) && W.loc.dynamic_lighting == 0)
-			var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
-			I.plane = relative_plane(LIGHTING_PLANE)
-			I.blend_mode = BLEND_ADD
-			W.overlays += I
-
 		W.levelupdate()
 		W.post_change() //What to do after changing the turf. Handles stuff like zshadow updates.
 		. = W
-		if (SS_READY(SSlighting))
-			if(old_opacity != opacity)
-				for(var/atom/movable/light/L in range(5, src)) //view(world.view, dview_mob))
-					lighting_update_lights |= L
 
 	else
 		//if(zone)
@@ -432,12 +430,6 @@
 		if(world.has_round_started())
 			W.initialize()
 
-		if(istype(W, /turf/space) && W.loc.dynamic_lighting == 0)
-			var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
-			I.plane = relative_plane(LIGHTING_PLANE)
-			I.blend_mode = BLEND_ADD
-			W.overlays += I
-
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
@@ -448,10 +440,22 @@
 
 		. = W
 
+	recalc_atom_opacity()
+	if (SSlighting && SSlighting.initialized)
+		lighting_overlay = old_lighting_overlay
+		affecting_lights = old_affecting_lights
+		corners = old_corners
+		if((old_opacity != opacity) || (dynamic_lighting != old_dynamic_lighting) || force_lighting_update)
+			reconsider_lights()
+		if(dynamic_lighting != old_dynamic_lighting)
+			if(dynamic_lighting)
+				lighting_build_overlay()
+			else
+				lighting_clear_overlay()
+
 	if (!ticker)
 		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
-	holomap_data = old_holomap // Holomap persists through everything...
-	update_holomap_planes() // But we might need to recalculate it.
+	holomap_data = old_holomap // Holomap persists through everything
 	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
@@ -666,7 +670,6 @@
 		new powerup(src)
 
 // Holomap stuff!
-#define PLANE_FOR (intact ? ABOVE_TURF_PLANE : ABOVE_PLATING_PLANE)
 /turf/proc/add_holomap(var/atom/movable/AM)
 	var/image/I = new
 	I.appearance = AM.appearance
@@ -676,28 +679,13 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = PLANE_FOR
+	I.plane = FLOAT_PLANE + 1 //Yes, there's a define equal to this value, but what we specifically want here is one plane above the parent, which is what this means.
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
 	if (!holomap_data)
 		holomap_data = list()
 	holomap_data += I
-
-// Goddamnit BYOND.
-// So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.
-//   (For some reason the existance of underlays prevented the main icon and overlays to render)
-//   (Yes, removing every underlay with VV instantly fixed the overlays and main icon)
-//   (Yes, I tried to reproduce it outside SS13, but got nothing)
-// So now I need to render the overlays at the plane above the turf (ABOVE_TURF_PLANE and ABOVE_PLATING_PLANE)
-// And as you probably already guessed, the plane required changes based on the turf type.
-// So this helper does that.
-/turf/proc/update_holomap_planes()
-	var/the_plane = PLANE_FOR
-	for (var/image/I in holomap_data)
-		I.plane = the_plane
-
-#undef PLANE_FOR
 
 // This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY.
 // Return a high number to make the mob move slower.

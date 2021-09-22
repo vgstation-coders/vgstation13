@@ -113,10 +113,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	var/struc_enzymes="" // Encoded SE
 	var/unique_enzymes="" // MD5 of player name
 
-	// Internal dirtiness checks
-	var/dirtyUI=0
-	var/dirtySE=0
-
 	// Okay to read, but you're an idiot if you do.
 	// BLOCK = VALUE
 	var/list/SE[DNA_SE_LENGTH]
@@ -200,7 +196,13 @@ var/global/list/facial_hair_styles_female_list	= list()
 	SetUIValueRange(DNA_UI_EYES_G,    character.my_appearance.g_eyes,    255,    1)
 	SetUIValueRange(DNA_UI_EYES_B,    character.my_appearance.b_eyes,    255,    1)
 
-	SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1) // Value can be negative.
+	if (character.species)
+		if (character.species.name == "Human")
+			SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1)
+		else
+			SetUIValueRange(DNA_UI_SKIN_TONE, character.my_appearance.s_tone, character.species.max_skin_tone,    1)
+	else
+		SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1)
 
 	SetUIState(DNA_UI_GENDER,         character.gender!=MALE,        1)
 
@@ -216,7 +218,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value>=0)
 	ASSERT(value<=4095)
 	UI[block]=value
-	dirtyUI=1
 	if(!defer)
 		UpdateUI()
 
@@ -232,7 +233,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return
 	ASSERT(maxvalue<=4095)
-	var/mapped_value = round(map_range(value, 0, maxvalue, 0, 0xFFF))
+	var/mapped_value = round(map_range(value, 0, max(maxvalue,1), 0, 0xFFF))
 	SetUIValue(block, mapped_value, defer)
 
 // Getter version of above.
@@ -311,7 +312,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value>=0)
 	ASSERT(value<=4095)
 	SE[block]=value
-	dirtySE=1
 	if(!defer)
 		UpdateSE()
 	//testing("SetSEBlock([block],[value],[defer]): [value] -> [GetSEValue(block)]")
@@ -389,7 +389,6 @@ var/global/list/facial_hair_styles_female_list	= list()
 			newBlock+=newSubBlock
 		else
 			newBlock+=copytext(oldBlock,i,i+1)
-	//testing("SetSESubBlock([block],[subBlock],[newSubBlock],[defer]): [oldBlock] -> [newBlock]")
 	SetSEBlock(block,newBlock,defer)
 
 
@@ -403,24 +402,17 @@ var/global/list/facial_hair_styles_female_list	= list()
 	src.uni_identity=""
 	for(var/block in UI)
 		uni_identity += EncodeDNABlock(block)
-	//testing("New UI: [uni_identity]")
-	dirtyUI=0
 
 /datum/dna/proc/UpdateSE()
-	//var/oldse=struc_enzymes
 	struc_enzymes=""
 	for(var/block in SE)
 		struc_enzymes += EncodeDNABlock(block)
-	//testing("Old SE: [oldse]")
-	//testing("New SE: [struc_enzymes]")
-	dirtySE=0
 
 // BACK-COMPAT!
 //  Just checks our character has all the crap it needs.
 /datum/dna/proc/check_integrity(var/mob/living/carbon/human/character)
 	if(character)
-		if(UI.len != DNA_UI_LENGTH)
-			ResetUIFrom(character)
+		ResetUIFrom(character) // Takes care of updating our DNA so it matches our appearance
 
 		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			ResetSE()
@@ -444,3 +436,4 @@ var/global/list/facial_hair_styles_female_list	= list()
 	reg_dna[unique_enzymes] = character.real_name
 	if(character.species)
 		species = character.species.name
+	character.fixblood()

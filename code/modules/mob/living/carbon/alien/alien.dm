@@ -14,6 +14,8 @@
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 
+	see_in_dark = 8
+
 	var/plasma = 250
 	var/max_plasma = 500
 	var/neurotoxin_cooldown = 0
@@ -39,6 +41,22 @@
 	default_language = all_languages[LANGUAGE_XENO]
 	init_language = default_language
 	. = ..()
+	change_sight(adding = SEE_MOBS)
+
+/*
+/mob/living/carbon/alien/update_perception()
+	if(dark_plane)
+		dark_plane.alphas["alien"] = 200
+		dark_plane.colours = "#8C5E2F"
+		client.color = list(
+					1.2,0,0,0,
+					0,1.3,0,0,
+	 				0,0,1.3,0,
+		 			0,-0.05,-0.1,1,
+		 			0,0,0,0)
+
+	check_dark_vision()
+*/
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0

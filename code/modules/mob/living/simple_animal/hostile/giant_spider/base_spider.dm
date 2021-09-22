@@ -86,11 +86,6 @@
 	var/a_53 = 0
 	var/a_54 = 0
 
-
-/mob/living/simple_animal/hostile/giant_spider/Login()
-	..()
-	client.images += light_source_images
-
 /mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
 		return 1
@@ -165,10 +160,10 @@
 	standard_damage_overlay_updates()
 
 /mob/living/simple_animal/hostile/giant_spider/update_perception()
-	if(dark_plane)
-		if (master_plane)
-			master_plane.blend_mode = BLEND_ADD
-		dark_plane.alphas["spider"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
+	if(client)
+		if(client.darkness_planemaster)
+			client.darkness_planemaster.blend_mode = BLEND_ADD
+			client.darkness_planemaster.alpha = 100
 		client.color = list(
 					1,0,0,0,
 					0,1,0,0,
@@ -182,8 +177,6 @@
 		 						a_31,a_32,a_33,a_34,
 			 					a_41,a_42,a_43,a_44,
 			 					a_51,a_52,a_53,a_54)
-
-	check_dark_vision()
 
 /mob/living/simple_animal/hostile/giant_spider/regular_hud_updates()
 	if (!client)

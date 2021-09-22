@@ -304,14 +304,6 @@
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
 
-/mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
-	for(var/L in M.contents)
-		if(istype(L, /obj/item/weapon/implant/loyalty))
-			for(var/datum/organ/external/O in M.organs)
-				if(L in O.implants)
-					return 1
-	return 0
-
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
 	M.unarmed_attack_mob(src)
 
@@ -699,7 +691,6 @@
 
 /mob/living/carbon/human/proc/check_dna()
 	dna.check_integrity(src)
-	return
 
 /mob/living/carbon/human/get_species()
 
@@ -803,69 +794,10 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
-	if(new_facial)
-		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
-		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
-		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
+	pick_appearance(src,"Morph",FALSE)
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
-	if(new_facial)
-		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
-		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
-		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
+	pick_gender(src,"Morph",FALSE)
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
-	if(new_eyes)
-		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
-
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
-
-	if (!new_tone)
-		new_tone = 35
-	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	my_appearance.s_tone =  -my_appearance.s_tone + 35
-
-	// hair
-	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
-	var/list/hairs = list()
-
-	// loop through potential hairs
-	for(var/x in all_hairs)
-		var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
-		hairs.Add(H.name) // add hair name to hairs
-		qdel(H) // delete the hair after it's all done
-		H = null
-
-	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
-
-	// if new style selected (not cancel)
-	if (new_style)
-		my_appearance.h_style = new_style
-
-	// facial hair
-	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
-	var/list/fhairs = list()
-
-	for(var/x in all_fhairs)
-		var/datum/sprite_accessory/facial_hair/H = new x
-		fhairs.Add(H.name)
-		qdel(H)
-		H = null
-
-	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
-
-	if(new_style)
-		my_appearance.f_style = new_style
-
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			setGender(MALE)
-		else
-			setGender(FEMALE)
 	regenerate_icons()
 	check_dna()
 
@@ -1441,15 +1373,7 @@
 	return id
 
 /mob/living/carbon/human/update_perception()
-	if (dark_plane)
-		dark_plane.alphas = list()
-		dark_plane.colours = null
-		dark_plane.blend_mode = BLEND_ADD
-
-	if (master_plane)
-		master_plane.blend_mode = BLEND_MULTIPLY
-
-	if(client && dark_plane)
+	if(client && client.darkness_planemaster)
 		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 		if(E)
 			E.update_perception(src)
@@ -1457,21 +1381,9 @@
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			for (var/datum/disease2/effect/catvision/catvision in D.effects)
-				if (catvision.count)
-					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
+				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
+					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
 					break
-
-	if (istype(glasses))
-		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
-			dark_plane.alphas += glasses.my_dark_plane_alpha_override
-			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
-
-	if (mind)
-		for (var/key in mind.antag_roles)
-			var/datum/role/R = mind.antag_roles[key]
-			R.update_perception()
-
-	check_dark_vision()
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
@@ -1525,7 +1437,7 @@
 	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/rig/wizard))
 		threatcount += 2
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 	//Secbots are racist!
 	if(dna && dna.mutantrace && dna.mutantrace != "none")
@@ -2197,7 +2109,7 @@ mob/living/carbon/human/isincrit()
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
 
-/mob/living/carbon/human/turn_into_mannequin(var/material = "marble")
+/mob/living/carbon/human/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	var/list/valid_mannequin_species = list(
 		"Human",
 		"Vox",
@@ -2251,27 +2163,27 @@ mob/living/carbon/human/isincrit()
 			if (is_fat())
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else if (gender == FEMALE)
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 		if ("Vox")
 			switch (material)
 				if ("marble")
-					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 				if ("wood")
-					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 
 	if (new_mannequin)
 		return TRUE

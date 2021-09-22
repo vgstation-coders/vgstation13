@@ -90,6 +90,7 @@
 
 		M.dna.UpdateUI()
 		M.UpdateAppearance()
+		M.fixblood()
 
 	if(husk)
 		M.ChangeToHusk()

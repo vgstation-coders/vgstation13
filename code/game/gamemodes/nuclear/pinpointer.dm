@@ -256,9 +256,15 @@ var/list/pinpointerpinpointer_list = list()
 /obj/item/weapon/pinpointer/pdapinpointer
 	name = "pda pinpointer"
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
-	var/used = FALSE
 	watches_nuke = FALSE
 	pinpointable = FALSE
+	var/dna_profile
+	var/nextuse
+
+/obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>[src] can select a target again in [altFormatTimeDuration(nextuse-world.time)].</span>") 
+	
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
 	if(!active)
@@ -279,21 +285,33 @@ var/list/pinpointerpinpointer_list = list()
 	set category = "Object"
 	set name = "Select pinpointer target"
 	set src in view(1)
-
-	if(used)
-		to_chat(usr,"Target has already been set!")
+	
+	if(usr.stat || !src.Adjacent(usr))
+		return
+	
+	if(!dna_profile)
+		dna_profile = usr.dna.unique_enzymes
+		to_chat(usr, "<span class='notice'>You submit a DNA sample to [src]</span>")
+	else if(dna_profile != usr.dna.unique_enzymes)
+		to_chat(usr, "<span class='warning'>[src] refuses to operate.</span>")
+		return
+	else if(nextuse - world.time > 0)
+		to_chat(usr, "<span class='warning'>[src] is still recalibrating.</span>")
 		return
 
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
 	var/length = 1
 	for (var/obj/item/device/pda/P in PDAs)
-		if(P.name != "\improper PDA")
+		var/turf/T = get_turf(P)
+		if(P.name != "\improper PDA" && T.z != CENTCOMM_Z)
 			L[text("([length]) [P.name]")] = P
 			length++
 
-	var/t = input("Select pinpointer target. WARNING: Can only set once.") as null|anything in L
+	var/t = input("Select pinpointer target.") as null|anything in L
 	if(t == "Cancel")
+		return
+	if(nextuse - world.time > 0)
 		return
 	target = L[t]
 	if(!target)
@@ -301,9 +319,13 @@ var/list/pinpointerpinpointer_list = list()
 		return
 	active = TRUE
 	point_at(target)
+	nextuse = world.time + 2 MINUTES
 	to_chat(usr,"You set the pinpointer to locate [target]")
-	used = TRUE
 
+/obj/item/weapon/pinpointer/pdapinpointer/AltClick()
+	if(select_pda())
+		return
+	return ..()
 
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()

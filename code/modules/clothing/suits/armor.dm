@@ -153,10 +153,10 @@
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/riot/offenseTackleBonus()
-	return 1
+	return 15
 
 /obj/item/clothing/suit/armor/riot/defenseTackleBonus()
-	return 2
+	return 20
 
 /obj/item/clothing/suit/armor/rune
 	name = "rune platebody"

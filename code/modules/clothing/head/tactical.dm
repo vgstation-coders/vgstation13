@@ -31,10 +31,10 @@
 	eyeprot = 1
 
 /obj/item/clothing/head/helmet/tactical/riot/offenseTackleBonus()
-	return 1
+	return 10
 
 /obj/item/clothing/head/helmet/tactical/riot/defenseTackleBonus()
-	return 1
+	return 10
 
 /obj/item/clothing/head/helmet/tactical/swat
 	name = "\improper SWAT helmet"

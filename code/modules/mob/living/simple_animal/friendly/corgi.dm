@@ -334,7 +334,7 @@
 	min_oxy = initial(min_oxy)
 	minbodytemp = initial(minbodytemp)
 	maxbodytemp = initial(maxbodytemp)
-	kill_light()
+	set_light(0)
 
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)
@@ -633,7 +633,7 @@
 
 
 
-/mob/living/simple_animal/corgi/turn_into_mannequin(var/material = "marble")
+/mob/living/simple_animal/corgi/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	var/turf/T = get_turf(src)
 	var/obj/structure/mannequin/new_mannequin
 
@@ -658,9 +658,9 @@
 
 	switch (material)
 		if ("marble")
-			new_mannequin = new /obj/structure/mannequin/corgi(T,null,null,mannequin_clothing,list(null, null),src)
+			new_mannequin = new /obj/structure/mannequin/corgi(T,null,null,mannequin_clothing,list(null, null),src,forever)
 		if ("wood")
-			new_mannequin = new /obj/structure/mannequin/wood/corgi(T,null,null,mannequin_clothing,list(null, null),src)
+			new_mannequin = new /obj/structure/mannequin/wood/corgi(T,null,null,mannequin_clothing,list(null, null),src,forever)
 
 	if (new_mannequin)
 		return TRUE

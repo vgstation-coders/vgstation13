@@ -251,11 +251,8 @@
 /datum/outfit/proc/give_implants(var/mob/living/carbon/human/H)
 	for (var/imp_type in implant_types)
 		var/obj/item/weapon/implant/I = new imp_type(H)
-		I.imp_in = H
-		I.implanted = 1
-		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD) // By default, all implants go to the head.
-		affected.implants += I
-		I.part = affected
+		if(!I.insert(H, LIMB_HEAD))
+			stack_trace("implant/insert() failed")
 
 // -- Species-related equip (turning on internals, etc)
 /datum/outfit/proc/species_final_equip(var/mob/living/carbon/human/H)

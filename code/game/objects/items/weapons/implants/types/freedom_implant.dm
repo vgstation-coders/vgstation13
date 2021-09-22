@@ -1,0 +1,44 @@
+/obj/item/weapon/implant/freedom
+	name = "freedom"
+	desc = "Use this to escape from those evil Red Shirts."
+	_color = "r"
+	var/activation_emote = "chuckle"
+	var/uses = 5
+
+/obj/item/weapon/implant/freedom/New()
+	src.activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
+	..()
+
+/obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source)
+	if (src.uses < 1)
+		return 0
+	if (emote == src.activation_emote)
+		src.uses--
+		to_chat(source, "You feel a faint click.")
+		if (source.handcuffed)
+			source.drop_from_inventory(source.handcuffed)
+		if (source.legcuffed)
+			source.drop_from_inventory(source.legcuffed)
+
+/obj/item/weapon/implant/freedom/implanted(mob/implanter)
+	imp_in.mind.store_memory("Freedom implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.", 0, 0)
+	to_chat(imp_in, "The implanted freedom implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
+
+/obj/item/weapon/implant/freedom/handle_removal(mob/remover)
+	makeunusable(75)
+
+/obj/item/weapon/implant/freedom/get_data()
+	return {"
+<b>Implant Specifications:</b><BR>
+<b>Name:</b> Freedom Beacon<BR>
+<b>Life:</b> optimum 5 uses<BR>
+<b>Important Notes:</b> <font color='red'>Illegal</font><BR>
+<HR>
+<b>Implant Details:</b> <BR>
+<b>Function:</b> Transmits a specialized cluster of signals to override handcuff locking
+mechanisms<BR>
+<b>Special Features:</b><BR>
+<i>Neuro-Scan</i>- Analyzes certain shadow signals in the nervous system<BR>
+<b>Integrity:</b> The battery is extremely weak and commonly after injection its
+life can drive down to only 1 use.<HR>
+No Implant Specifics"}

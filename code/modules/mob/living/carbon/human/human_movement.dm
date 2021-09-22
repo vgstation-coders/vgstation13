@@ -163,7 +163,7 @@
 	. = ..()
 
 	// We have magboots, and magboots can protect us
-	if (. && magboots_slip_factor)
+	if (magboots_slip_factor)
 		return SLIP_HAS_MAGBOOTS
 	// We don't have magboots, or magboots can't protect us
 	return (. && !shoes_slip_factor)
