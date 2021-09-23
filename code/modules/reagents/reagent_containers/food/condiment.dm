@@ -647,7 +647,7 @@
 	reagents.add_reagent(SOYSAUCE, 5)
 
 /obj/item/weapon/reagent_containers/food/condiment/small/vinegar
-	name = "vinegar packet"
+	name = "malt vinegar packet"
 	desc = "Perfect for smaller portions of fish and chips."
 	icon_state = "vinegar_small"
 	condiment_overlay = VINEGAR

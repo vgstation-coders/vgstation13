@@ -313,7 +313,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/food/zam_menu1/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner1(src)//18 nutriments if microwaved
-	new/obj/item/weapon/kitchen/utensil/fork(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
 	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
@@ -322,7 +322,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/food/zam_menu2/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner2(src)//15 nutriments if microwaved
-	new/obj/item/weapon/kitchen/utensil/fork(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
 	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
@@ -331,7 +331,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/food/zam_menu3/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner3(src)//12 nutriments if microwaved
-	new/obj/item/weapon/kitchen/utensil/fork(src)
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
