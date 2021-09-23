@@ -1578,7 +1578,6 @@ obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external
 	if(!istype(H))
 		return
 	if(H.dna)
-		H.check_dna_integrity()
 		owner_dna = H.dna.Clone()
 		if(!blood_DNA)
 			blood_DNA = list()

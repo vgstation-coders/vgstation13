@@ -429,6 +429,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 // BACK-COMPAT!
 //  Initial DNA setup.
 /datum/dna/proc/ready_dna(mob/living/carbon/human/character)
+	ResetUIFrom(character)
 	check_integrity(character)
 
 	reg_dna[unique_enzymes] = character.real_name
