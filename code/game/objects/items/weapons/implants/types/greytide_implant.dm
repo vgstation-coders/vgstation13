@@ -27,7 +27,12 @@
 		target.adjustBrainLoss(10)
 		return FALSE
 	var/datum/faction/F = find_active_faction_by_typeandmember(/datum/faction/syndicate/greytide, null, implanter.mind)
-	if(!F)
+	if(F)
+		for(var/datum/role/grey in F.members)
+			if(grey.antag == target.mind)
+				to_chat(target, "<span class='warning'>[target] is already on our side!</span>")
+				return FALSE
+	else
 		F = ticker.mode.CreateFaction(/datum/faction/syndicate/greytide, 0, 1)
 		F.HandleNewMind(implanter.mind)
 
@@ -45,6 +50,8 @@
 
 /obj/item/weapon/implant/traitor/implanted(mob/implanter)
 	for(var/obj/item/weapon/implant/I in imp_in)
+		if(I == src)
+			continue
 		if(istype(I, /obj/item/weapon/implant/traitor) || istype(I, /obj/item/weapon/implant/loyalty))
 			if(I.imp_in == imp_in)
 				imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
