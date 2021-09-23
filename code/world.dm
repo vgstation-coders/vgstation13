@@ -26,6 +26,7 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	CRASH(msg)
 
 /proc/auxtools_expr_stub()
+	CRASH("auxtools not loaded")
 #endif
 
 /datum/early_init/New()
