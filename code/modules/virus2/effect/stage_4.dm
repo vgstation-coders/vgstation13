@@ -640,6 +640,7 @@
 		affected.my_appearance.h_style = "Shoulder-length Hair Alt"
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 	switch(count)
 		if (10 to 30)
@@ -776,6 +777,7 @@
 		affected.my_appearance.h_style = old_h_style
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 /datum/disease2/effect/magnitis
 	name = "Magnitis"

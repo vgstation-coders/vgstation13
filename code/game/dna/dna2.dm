@@ -197,7 +197,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	SetUIValueRange(DNA_UI_EYES_B,    character.my_appearance.b_eyes,    255,    1)
 
 	if (character.species)
-		if (character.species.name == "Human")
+		if (character.species.anatomy_flags & HAS_SKIN_TONE)
 			SetUIValueRange(DNA_UI_SKIN_TONE, 35-character.my_appearance.s_tone, 220,    1)
 		else
 			SetUIValueRange(DNA_UI_SKIN_TONE, character.my_appearance.s_tone, character.species.max_skin_tone,    1)
@@ -233,7 +233,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return
 	ASSERT(maxvalue<=4095)
-	var/mapped_value = round(map_range(value, 0, max(maxvalue,1), 0, 0xFFF))
+	var/mapped_value = round(map_range(value, 0, max(maxvalue,1), 0, 0xFFF), 1)
 	SetUIValue(block, mapped_value, defer)
 
 // Getter version of above.
@@ -412,7 +412,8 @@ var/global/list/facial_hair_styles_female_list	= list()
 //  Just checks our character has all the crap it needs.
 /datum/dna/proc/check_integrity(var/mob/living/carbon/human/character)
 	if(character)
-		ResetUIFrom(character) // Takes care of updating our DNA so it matches our appearance
+		if(UI.len != DNA_UI_LENGTH)
+			ResetUIFrom(character)
 
 		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			ResetSE()

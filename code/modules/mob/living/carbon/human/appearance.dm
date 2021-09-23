@@ -8,21 +8,21 @@
 	var/gender
 
 	// "Proper" to the appearance datum.
-	var/s_tone
+	var/s_tone = 0
 
 	var/h_style = "Bald"
-	var/r_hair
-	var/g_hair
-	var/b_hair
+	var/r_hair = 0
+	var/g_hair = 0
+	var/b_hair = 0
 
-	var/f_style
-	var/r_facial
-	var/g_facial
-	var/b_facial
+	var/f_style = "Shaved"
+	var/r_facial = 0
+	var/g_facial = 0
+	var/b_facial = 0
 
-	var/r_eyes
-	var/g_eyes
-	var/b_eyes
+	var/r_eyes = 0
+	var/g_eyes = 0
+	var/b_eyes = 0
 
 /mob/living/carbon/human/
 	var/datum/human_appearance/my_appearance
@@ -251,7 +251,8 @@
 
 	if (update_icons_and_dna)
 		regenerate_icons()
-		check_dna()
+		check_dna_integrity()
+		update_dna_from_appearance()
 
 /datum/human_appearance/send_to_past(var/duration)
 	..()
