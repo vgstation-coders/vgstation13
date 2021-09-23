@@ -235,7 +235,7 @@
 			var/crumbs_to_del = 0
 			for (var/obj/effect/decal/cleanable/crumbs/old_crumb in T)
 				crumbs_on_floor += old_crumb
-				if (crumbs_on_floor >= 4)
+				if (crumbs_on_floor.len >= 4)
 					crumbs_to_del++
 			for (var/obj/effect/decal/cleanable/crumbs/old_crumb in crumbs_on_floor)
 				if (!crumbs_to_del)
