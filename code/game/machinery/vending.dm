@@ -3320,7 +3320,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sale
 	name = "Sales"
 	desc = "Buy, sell, repeat."
-	icon_state = "sale-off"
+	icon_state = "sale"
 	is_custom_machine = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
@@ -3330,6 +3330,10 @@ var/global/num_vending_terminals = 1
 	products = list()
 
 	pack = /obj/structure/vendomatpack/custom
+
+/obj/machinery/vending/sale/New()
+	..()
+	update_vicon()
 
 /obj/machinery/vending/sale/link_to_account()
 	return
@@ -3346,12 +3350,21 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/sale/update_vicon()
 	if(stat & (BROKEN))
-		icon_state = "sale-broken"
+		icon_state = initial(icon_state)+"-broken"
 	else if (stat & (NOPOWER) || custom_stock.len == 0)
-		icon_state = "sale-off"
+		icon_state = initial(icon_state)+"sale-off"
 	else
-		icon_state = "sale"
+		icon_state = initial(icon_state)
 
+/obj/machinery/vending/sale/trader
+	name = "TraderVend"
+	desc = "Legitimately acquired goods sold here!"
+	icon_state = "trader"
+	pack = /obj/structure/vendomatpack/custom
+
+/obj/machinery/vending/sale/trader/link_to_account()
+	reconnect_database()
+	linked_account = trader_account
 
 /obj/machinery/vending/mining
 	name = "\improper Dwarven Mining Equipment"
