@@ -239,7 +239,7 @@
 
 /datum/storeitem/zamdinner2
 	name = "Zam Mothership Stew"
-	desc = "This old stew from mothership vats is very nutricious to slurp and burp! Do not share with human friends."
+	desc = "This old stew from mothership vats is very nutritious to slurp and burp! Do not share with human friends."
 	typepath = /obj/item/weapon/storage/bag/food/zam_menu2
 	cost = 60
 
