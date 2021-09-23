@@ -14412,12 +14412,11 @@
 	name = "Biohazard Shutter";
 	opacity = 0
 	},
-/obj/machinery/door/airlock/maintenance{
-	req_access_txt = "55"
+/obj/machinery/door/airlock/external{
+	req_access_txt = "13";
+	req_one_access_txt = "13"
 	},
-/turf/simulated/floor{
-	icon_state = "dark"
-	},
+/turf/simulated/floor/plating,
 /area/science/xenobiology)
 "aHu" = (
 /obj/structure/closet/secure_closet/excavation,
@@ -90144,6 +90143,13 @@
 	icon_state = "dark"
 	},
 /area/storage/tech)
+"nyP" = (
+/obj/machinery/door/airlock/external{
+	req_access_txt = "13";
+	req_one_access_txt = "13"
+	},
+/turf/simulated/floor/plating,
+/area/science/xenobiology)
 "nyU" = (
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
@@ -95767,6 +95773,9 @@
 	icon_state = "floor3"
 	},
 /area/centcom/evac)
+"psb" = (
+/turf/simulated/floor/plating,
+/area/science/xenobiology)
 "psl" = (
 /obj/machinery/hologram/holopad,
 /obj/structure/cable{
@@ -176704,10 +176713,10 @@ edy
 edy
 edy
 edy
-evh
-evh
 bgQ
 evh
+dYP
+dYP
 oeI
 aHI
 aOg
@@ -177006,10 +177015,10 @@ edy
 edy
 edy
 edy
-edy
-edy
 aaH
-evh
+edy
+xUD
+xUD
 oeI
 aHJ
 aOh
@@ -177310,8 +177319,8 @@ edy
 edy
 edy
 edy
-edy
-edy
+nyP
+psb
 oeI
 aNR
 aOi
@@ -177612,8 +177621,8 @@ edy
 edy
 edy
 edy
-edy
-edy
+xUD
+psb
 xUD
 jvP
 jvP
@@ -177914,8 +177923,8 @@ evh
 evh
 evh
 edy
-edy
-edy
+xUD
+psb
 aHt
 aNS
 aOj
@@ -178216,8 +178225,8 @@ dYP
 dYP
 evh
 evh
-evh
-evh
+xUD
+xUD
 xUD
 xUD
 xUD
