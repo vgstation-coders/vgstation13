@@ -390,8 +390,6 @@ Pipelines + Other Objects -> Pipe network
 	user.canmove = 0
 	spawn(1)
 		user.canmove = 1
-	ventcrawl_to(user,findConnecting(direction, user.ventcrawl_layer),direction)
-	//For ventcrawl_to, see multiz/ventcrawl.dm
 
 /obj/machinery/atmospherics/proc/can_crawl_through()
 	return 1
