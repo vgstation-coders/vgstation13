@@ -1198,7 +1198,7 @@
 			update_dna_from_appearance()
 
 	src.species.handle_post_spawn(src)
-	regenerate_icons()
+	src.update_icons()
 	if(species.species_intro)
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
