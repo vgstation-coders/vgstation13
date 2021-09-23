@@ -342,7 +342,6 @@ var/list/sent_strike_teams = list()
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)
 
 	new_commando.dna.ready_dna(new_commando)//Creates DNA.
-	new_commando.update_dna_from_appearance()
 
 	//Creates mind stuff.
 	new_commando.mind = new
