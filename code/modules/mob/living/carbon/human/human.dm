@@ -1194,7 +1194,8 @@
 			my_appearance.f_style = random_facial_hair_style(gender, species)
 		if (my_appearance.s_tone > species.max_skin_tone)
 			my_appearance.s_tone = random_skin_tone(species)
-		update_dna_from_appearance()
+		if(dna)
+			update_dna_from_appearance()
 
 	src.species.handle_post_spawn(src)
 	regenerate_icons()
