@@ -396,7 +396,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if(!isnum(value))
 		warning("Expected a number, got [value]")
 		return 0
-	return num2hex(value, 3)
+	return "[num2hex(value, 3)]"
 
 /datum/dna/proc/UpdateUI()
 	src.uni_identity=""
