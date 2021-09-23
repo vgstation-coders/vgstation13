@@ -3173,6 +3173,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
 		/obj/item/weapon/storage/box/biscuit = 2,
+		/obj/item/talonprosthetic = 3,
 		)
 
 	prices = list(
@@ -3181,6 +3182,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/crackerbox = 200,
+		/obj/item/talonprosthetic = 80,
 		)
 	slogan_languages = list(LANGUAGE_VOX)
 

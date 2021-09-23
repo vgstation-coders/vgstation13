@@ -29,6 +29,7 @@ var/static/list/tw_greet_precursors = list("Well, at least you can count on ", "
 var/static/list/tw_greet_captain = list("Keh, early bird gets the worm! ", "Here first, looking to take charge? ", "You're fast, eh? Don't leave behind the others. ")
 var/static/list/tw_greet_follower = list("Not as fast as TWCAPTAIN, but you're here, that's what counts. ", "Stick with TWCAPTAIN, okay? ", "Good to have you on too. Make much coin. ", "Mhm, you've got spirit. Not going to be beat by TWCAPTAIN, huh? ", "I see potential in you, too. ", "Tall for a trader, eh? You warrior stock? ")
 var/static/list/tw_greet_solo = list("Just you and me out here, yeah? ", "Shoal has sent us two ahead to prospect. ", "No one to watch your back, stay safe, eh? ", "Just us? Maybe they send someone else, later, eh? ")
+var/static/list/tw_merchant = list("Oh, before I forget - this is for you. ", "Your licence was sent in today. ", "This is for you - hey, you look just like your picture. ", "Your paperwork got here first. ", "I suppose you'll be wanting this licence, too. ", "Hey, don't run off without your papers, yeah? ")
 
 var/static/list/tw_greet_short_wait = list("Still browsing? ", "Come over here, TWUSER, let's have a little chat. ", "Hey, my favorite trader! Not left yet? ", "Taking off soon? Gotta earn somehow. ", "Hey, TWUSER, don't get left behind, okay? ","Go with your gut, don't worry too much about the exact right product. You'll sell it. ", "Hey, I know you're leaving soon - don't forget to check in once in a while, okay? ", "Fifty three plus twenty... Eh? Yeah, I'm still listening! ", "Do do do do do. Chik-chika, chik-chika. ", "Yeah, yeah, catalog's still here. ", "Hm? Something else? ", "What, another? ", "Is there something more? ", "Keh, greedy for products. ", "That one? ", "TWUSER, TWUSER... ", "I'd say the list isn't going to change if you keep staring at it, but it's not quite true. ")
 var/static/list/tw_greet_medium_wait = list("How was it over there? Good sales?", "Welcome back, TWUSER.", "Hey TWUSER! Stocking up?", "Come back for more, TWUSER?", "TWUSER's back again, I bet I know what for...", "There you are, TWUSER!")
@@ -40,26 +41,50 @@ var/static/list/tw_advice = list("remember, buy low, sell high.", "hey, there's 
 		"sometimes freebies lure customers to the ship. Something small, like a gacha toy or free drink.", "Remember, trust is currency. Become rich in trust.", "remember, slave trading is almost always a bad idea. Leave that to raiders.", "treat this place like your home, but never forget that it is not.",
 		"consider getting a PDA. Remote control of ship can help.", "don't leave stock unattended.", "humans don't like having to walk to ship. Try PDA marketing and deliveries.", "targeted advertising works, try it.", "if you get lonely, try planting mushroom nodes. Sometimes, a friend.")
 
+var/static/list/tw_induct_cantspeak = list("If you don't speak the language, this is going to be tough. ", "These words are lost on you, eh? ","This book has what you need to get started. ")
+var/static/list/tw_induct_traditional = list("I dub thee, trader. Here, you get these, too. ", "These are for you. Little gift. ", "Something else - traditional for starting out. ")
+
 /obj/structure/trade_window/proc/greet(mob/living/carbon/human/user)
 	var/buildgreet
 	var/username = user.get_face_name()
 	if(!(username in last_greeted)) //First time greeting
-		buildgreet += pick(tw_greet_initial)
-		if(world.time > LATEJOIN_TIME_CUTOFF) //Greet a latejoiner
-			buildgreet += pick(tw_greet_latejoin)
-			var/position = SStrade.loyal_customers.Find(username)
-			if(position > 1)
-				buildgreet +=  pick(tw_greet_precursors) + english_list(last_greeted) + "."
+		if(SStrade.loyal_customers[username] == -1) //Special introduction for a recruit
+			if(!(trader_language in user.languages))
+				buildgreet += pick(tw_induct_cantspeak)
+				tablenew(/obj/item/dictionary/vox, TRUE)
+				playsound(loc, "pageturn", 50, 1)
 			else
-				buildgreet += "You're starting from scratch out there. Good luck. Feh."
-		else //Greet an roundstart/early arrival
-			if(SStrade.loyal_customers.len > 1) //Greet one from a group
-				if(last_greeted.len == 0) //Greet the first player who isn't the only trader
-					buildgreet += pick(tw_greet_captain)
-				else //Greet someone who didn't get to the window first
-					buildgreet += replacetext(pick(tw_greet_follower),"TWCAPTAIN",last_greeted[1])
-			else //Greet a solo trader
-				buildgreet += pick(tw_greet_solo)
+				buildgreet += pick(tw_induct_traditional)
+				tablenew(/obj/item/weapon/storage/box/donkpockets/random_amount)
+				tablenew(/obj/item/weapon/reagent_containers/food/drinks/thermos/full)
+				tablenew(/obj/item/weapon/coin/trader)
+				tablenew(/obj/item/weapon/storage/wallet)
+			SStrade.loyal_customers[username] = 0
+		else
+			buildgreet += pick(tw_greet_initial)
+			if(world.time > LATEJOIN_TIME_CUTOFF) //Greet a latejoiner
+				buildgreet += pick(tw_greet_latejoin)
+				var/position = SStrade.loyal_customers.Find(username)
+				if(position > 1)
+					buildgreet +=  pick(tw_greet_precursors) + english_list(last_greeted) + "."
+				else
+					buildgreet += "You're starting from scratch out there. Good luck. Feh. "
+			else //Greet an roundstart/early arrival
+				if(SStrade.loyal_customers.len > 1) //Greet one from a group
+					if(last_greeted.len == 0) //Greet the first player who isn't the only trader
+						buildgreet += pick(tw_greet_captain)
+					else //Greet someone who didn't get to the window first
+						buildgreet += replacetext(pick(tw_greet_follower),"CAPTAIN",last_greeted[1])
+				else //Greet a solo trader
+					buildgreet += pick(tw_greet_solo)
+
+			if(user.mind.role_alt_title == "Merchant")
+				buildgreet += pick(tw_merchant)
+				var/obj/ML = new /obj/item/weapon/paper/merchant(loc,user)
+				ML.pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
+				ML.pixel_y = -3 * PIXEL_MULTIPLIER
+				ML.shake(1,3)
+				playsound(loc, "pageturn", 50, 1)
 
 	else
 		if(world.time < last_greeted[username] + (TRADE_GREET_FREQ))

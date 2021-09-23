@@ -1,6 +1,7 @@
 #define TRADE_SINGLE "Single Products"
 #define TRADE_VARIETY "Variety Packs"
 #define FLUX_CHANCE 3
+#define NEW_RECRUIT -1
 
 /datum/trade_product
 	var/name = "Abstract Product"
