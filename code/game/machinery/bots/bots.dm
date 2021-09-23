@@ -306,7 +306,7 @@
 
 	if(patrol_target)
 		waiting_for_patrol = TRUE
-		calc_patrol_path(patrol_target, new /callback(.proc/get_patrol_path))
+		calc_patrol_path(patrol_target, new /callback(src, .proc/get_patrol_path))
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
