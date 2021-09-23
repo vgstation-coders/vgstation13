@@ -24,6 +24,8 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 /proc/auxtools_stack_trace(msg)
 	CRASH(msg)
+
+/proc/auxtools_expr_stub()
 #endif
 
 /datum/early_init/New()
