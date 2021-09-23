@@ -19,6 +19,11 @@
 			source.drop_from_inventory(source.handcuffed)
 		if (source.legcuffed)
 			source.drop_from_inventory(source.legcuffed)
+		var/mob/living/carbon/human/dude = source
+		if(istype(dude))
+			var/jacket = dude.is_wearing_item(/obj/item/clothing/suit/straight_jacket, slot_wear_suit)
+			if(jacket)
+				source.u_equip(jacket, TRUE)
 
 /obj/item/weapon/implant/freedom/implanted(mob/implanter)
 	imp_in.register_event(/event/emote, src, .proc/trigger)
