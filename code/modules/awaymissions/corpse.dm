@@ -90,7 +90,7 @@
 
 		M.dna.UpdateUI()
 		M.UpdateAppearance()
-		M.fixblood()
+		M.copy_dna_data_to_blood_reagent()
 
 	if(husk)
 		M.ChangeToHusk()
@@ -215,6 +215,7 @@
 			W.name = "[W.name] ([W.assignment])"
 		W.registered_name = M.real_name
 		M.equip_to_slot_or_del(W, slot_wear_id)
+		W.SetOwnerDNAInfo(M)
 
 // I'll work on making a list of corpses people request for maps, or that I think will be commonly used. Syndicate operatives for example.
 

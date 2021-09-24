@@ -103,7 +103,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/blood_color = DEFAULT_BLOOD //Red.
 	var/flesh_color = DEFAULT_FLESH //Pink.
 	var/base_color      //Used when setting species.
-	var/max_skin_tone = 0
+	var/max_skin_tone = 1
 
 	var/uniform_icons       = 'icons/mob/uniform.dmi'
 	var/fat_uniform_icons   = 'icons/mob/uniform_fat.dmi'

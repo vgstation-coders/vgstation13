@@ -742,7 +742,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.mutations.Add(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.UpdateDamageIcon()
-	H.fixblood()
+	H.copy_dna_data_to_blood_reagent()
 	to_chat(mob, "<span class='sinister'>You feel different.</span>")
 	activated = 1
 
@@ -755,7 +755,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.mutations.Remove(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.UpdateDamageIcon()
-	H.fixblood()
+	H.copy_dna_data_to_blood_reagent()
 	to_chat(mob, "<span class='warning'>You feel like your old self again.</span>")
 	activated = 0
 

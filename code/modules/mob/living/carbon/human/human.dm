@@ -689,8 +689,11 @@
 	return 0
 
 
-/mob/living/carbon/human/proc/check_dna()
+/mob/living/carbon/human/proc/check_dna_integrity()
 	dna.check_integrity(src)
+
+/mob/living/carbon/human/proc/update_dna_from_appearance() // Takes care of updating our DNA so it matches our appearance
+	dna.ResetUIFrom(src)
 
 /mob/living/carbon/human/get_species()
 
@@ -799,7 +802,10 @@
 	pick_gender(src,"Morph",FALSE)
 
 	regenerate_icons()
-	check_dna()
+
+	check_dna_integrity()
+
+	update_dna_from_appearance()
 
 	visible_message("<span class='notice'>\The [src] morphs and changes [get_visible_gender() == MALE ? "his" : get_visible_gender() == FEMALE ? "her" : "their"] appearance!</span>", "<span class='notice'>You change your appearance!</span>", "<span class='warning'>Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!</span>")
 
@@ -835,7 +841,6 @@
 
 	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
-		fixblood()
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
@@ -1136,6 +1141,11 @@
 
 	if(S.gender)
 		gender = S.gender
+	else if (gender == "neuter") // when going back from an non-gendered species to a gendered one, you'll get assigned randomly
+		if (prob(50))
+			gender = "male"
+		else
+			gender = "female"
 
 	for(var/L in species.known_languages)
 		add_language(L)
@@ -1171,8 +1181,22 @@
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
 	src.movement_speed_modifier = species.move_speed_multiplier
+
 	if(dna)
 		dna.species = new_species_name
+
+	if(my_appearance)
+		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
+		if (!(my_appearance.h_style in valid_hair))
+			my_appearance.h_style = random_hair_style(gender, species)
+		var/list/valid_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)
+		if (!(my_appearance.f_style in valid_facial_hair))
+			my_appearance.f_style = random_facial_hair_style(gender, species)
+		if (my_appearance.s_tone > species.max_skin_tone)
+			my_appearance.s_tone = random_skin_tone(species)
+		if(dna)
+			update_dna_from_appearance()
+
 	src.species.handle_post_spawn(src)
 	src.update_icons()
 	if(species.species_intro)

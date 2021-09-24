@@ -572,8 +572,6 @@ Thanks.
 		H.vessel.reagent_list = list()
 		H.vessel.add_reagent(BLOOD,560)
 		H.pain_shock_stage = 0
-		spawn(1)
-			H.fixblood()
 		for(var/organ_name in H.organs_by_name)
 			var/datum/organ/external/O = H.organs_by_name[organ_name]
 			for(var/obj/item/weapon/shard/shrapnel/s in O.implants)
