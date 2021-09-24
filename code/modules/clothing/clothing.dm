@@ -398,6 +398,39 @@
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
 	var/gave_out_gifts = FALSE //for snowman animation
+	var/obj/item/clothing/head/on_top = null //for stacking
+
+var/global/hatStacking = 0
+
+/client/proc/configHat()
+	set name = "Toggle Hat Stacking"
+	set category = "Debug"
+
+	. = (alert("Allow hats to stack?",,"Yes","No")=="Yes")
+	if(.)
+		hatStacking = 1
+	else
+		hatStacking = 0
+	log_admin("[key_name(usr)] set hatStacking to [hatStacking].")
+	message_admins("[key_name(usr)] set hatStacking to [hatStacking].")
+
+/obj/item/clothing/head/attackby(obj/item/W, mob/user)
+	if(hatStacking)
+		if(on_top)
+			on_top.attackby(W,user)
+		else if(istype(W,/obj/item/clothing/head) && !istype(W,/obj/item/clothing/head/helmet))
+			var/obj/item/clothing/head/hat = W
+			hat.forceMove(src)
+			hat.pixel_y += 8
+			vis_contents.add(hat)
+			on_top = hat
+	..()
+
+/obj/item/clothing/head/attack_self(mob/user)
+	if(on_top)
+		user.put_in_hands(on_top)
+		on_top = null
+	..()
 
 /obj/item/clothing/head/proc/bite_action(mob/target)
 	return
