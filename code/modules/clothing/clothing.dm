@@ -399,8 +399,10 @@
 	species_restricted = list("exclude","Muton")
 	var/gave_out_gifts = FALSE //for snowman animation
 	var/obj/item/clothing/head/on_top = null //for stacking
+	var/stack_depth = 0
 
 var/global/hatStacking = 0
+var/global/maxStackDepth = 10
 
 /client/proc/configHat()
 	set name = "Toggle Hat Stacking"
@@ -411,16 +413,28 @@ var/global/hatStacking = 0
 		hatStacking = 1
 	else
 		hatStacking = 0
+	. = (input("Set stack limit. (1 to 100)"))
+	. = text2num(.)
+	if(isnum(.) && (. in 1 to 100))
+		maxStackDepth = .
+	else
+		to_chat(usr, "That wasn't a valid number.")
 	log_admin("[key_name(usr)] set hatStacking to [hatStacking].")
 	message_admins("[key_name(usr)] set hatStacking to [hatStacking].")
+	log_admin("[key_name(usr)] set maxStackDepth to [maxStackDepth].")
+	message_admins("[key_name(usr)] set maxStackDepth to [maxStackDepth].")
 
 /obj/item/clothing/head/attackby(obj/item/W, mob/user)
 	if(hatStacking)
 		if(on_top)
 			on_top.attackby(W,user)
 		else if(istype(W,/obj/item/clothing/head) && !istype(W,/obj/item/clothing/head/helmet))
-			if(user.drop_item(W))
-				var/obj/item/clothing/head/hat = W
+			var/obj/item/clothing/head/hat = W
+			if(hat.stack_depth >= maxStackDepth)
+				to_chat(user,"<span class='warning'>You cannot stack any higher than this!</span>")
+			else if(user.drop_item(W))
+				to_chat(user,"<span class='notice'>You add \the [hat] onto \the [src] and stack it in a towering pillar!</span>")
+				hat.stack_depth++
 				W.forceMove(src)
 				W.pixel_y += 4 * PIXEL_MULTIPLIER
 				vis_contents.Add(W)
@@ -433,7 +447,9 @@ var/global/hatStacking = 0
 		if(on_top.on_top)
 			on_top.attack_hand(user)
 		else
+			to_chat(user,"You remove \the [on_top] from the towering pillar.")
 			on_top.pixel_y = 0
+			on_top.stack_depth = 0
 			user.put_in_hands(on_top)
 			vis_contents.Cut()
 			on_top = null
