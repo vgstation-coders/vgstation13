@@ -59,6 +59,3 @@
 #define SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN !DEVELOPER_MODE
 
 #define AUXTOOLS_DEBUGGER DEVELOPER_MODE
-
-//Map-specific defines
-#define ROBOT_CHECK "robot check"
