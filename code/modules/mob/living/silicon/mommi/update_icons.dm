@@ -106,7 +106,7 @@
 				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
 				overhats.overlays += abovehats
 
-				if(head.blood_DNA && head.blood_DNA.len)
+				if(above.blood_DNA && above.blood_DNA.len)
 					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
 					bloodsies.color = above.blood_color
 					//standing.overlays	+= bloodsies
