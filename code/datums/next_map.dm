@@ -5,14 +5,12 @@
 	var/max_players = 999
 	var/is_enabled = TRUE // If FALSE, it doesn't show up during the vote but can be rigged
 
+/datum/next_map/proc/is_compiled()
+	return fexists("maps/voting/"+path+"/vgstation13.dmb")
+
 /datum/next_map/proc/is_votable()
-	if(!fexists("maps/voting/"+path))
-		var/msg = "Skipping map [name] because the folder [path] does not exist."
-		message_admins(msg)
-		warning(msg)
-		return FALSE
-	if(!fexists("maps/voting/"+path+"/vgstation13.dmb"))
-		var/msg = "Skipping map [name] because the file [path]/vgstation13.dmb does not exist."
+	if(!is_compiled())
+		var/msg = "Skipping map [name] because it has not been compiled."
 		message_admins(msg)
 		warning(msg)
 		return FALSE
@@ -200,6 +198,8 @@
 	var/list/all_maps = list()
 	for(var/map_path in subtypesof(/datum/next_map))
 		var/datum/next_map/map = new map_path
+		if(!map.is_compiled())
+			continue
 		all_maps += map.name
 		all_maps[map.name] = map.path
 	return all_maps
