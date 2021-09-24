@@ -955,9 +955,9 @@ var/global/list/damage_icon_parts = list()
 			var/i = 1
 			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
 				if(above.wear_override)
-					standing = image("icon" = head.wear_override)
+					standing = image("icon" = above.wear_override)
 				else
-					standing = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
+					standing = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
 
 				for(var/datum/organ/external/OE in get_organs_by_slot(slot_head, src)) //Display species-exclusive species correctly on attached limbs
 					if(OE.species)
@@ -972,20 +972,20 @@ var/global/list/damage_icon_parts = list()
 					if(has_icon(standing.icon, "[above.icon_state]_f"))
 						standing.icon_state = "[above.icon_state]_f"
 
-				standing.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_x"] + (8 * i)) * PIXEL_MULTIPLIER
+				standing.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_x"] + (2 * i)) * PIXEL_MULTIPLIER
 				O.overlays += standing
 
 				if(above.dynamic_overlay)
 					if(above.dynamic_overlay["[HEAD_LAYER]"])
 						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
-						dyn_overlay.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_x"] + (8 * i)) * PIXEL_MULTIPLIER
+						dyn_overlay.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_x"] + (2 * i)) * PIXEL_MULTIPLIER
 						O.overlays += dyn_overlay
 
 				if(head.blood_DNA && head.blood_DNA.len)
 					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
 					bloodsies.color = above.blood_color
 					//standing.overlays	+= bloodsies
-					bloodsies.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_x"] + (8 * i)) * PIXEL_MULTIPLIER
+					bloodsies.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_x"] + (2 * i)) * PIXEL_MULTIPLIER
 					O.overlays	+= bloodsies
 
 				//above.generate_accessory_overlays(O)

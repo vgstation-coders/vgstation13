@@ -419,19 +419,21 @@ var/global/hatStacking = 0
 		if(on_top)
 			on_top.attackby(W,user)
 		else if(istype(W,/obj/item/clothing/head) && !istype(W,/obj/item/clothing/head/helmet))
-			var/obj/item/clothing/head/hat = W
-			hat.forceMove(src)
-			hat.pixel_y += 8 * PIXEL_MULTIPLIER
-			vis_contents.Add(hat)
-			on_top = hat
+			if(user.drop_item(W))
+				var/obj/item/clothing/head/hat = W
+				W.forceMove(src)
+				W.pixel_y += 4 * PIXEL_MULTIPLIER
+				vis_contents.Add(W)
+				on_top = hat
 	..()
 
-/obj/item/clothing/head/attack_self(mob/user)
+/obj/item/clothing/head/attack_hand(mob/user)
 	if(on_top)
+		on_top.pixel_y = 0
 		user.put_in_hands(on_top)
 		vis_contents.Cut()
 		on_top = null
-	..()
+	return ..()
 
 /obj/item/clothing/head/proc/bite_action(mob/target)
 	return
