@@ -31,7 +31,6 @@
 	var/list/affecting_turfs = list()
 	var/list/affected_shadow_walls = list()
 	var/list/temp_appearance
-	var/list/temp_appearance_shadows
 
 	var/light_swallowed = 0
 
