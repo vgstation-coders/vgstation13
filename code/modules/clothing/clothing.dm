@@ -437,7 +437,7 @@ var/global/hatStacking = 0
 			user.put_in_hands(on_top)
 			vis_contents.Cut()
 			on_top = null
-		user.update_inv_head()
+			user.update_inv_head()
 		return
 	return ..()
 
