@@ -142,9 +142,6 @@ List of hard deletions:"}
 #define FINDREF_OUTPUT(msg) to_chat(world, msg);testing(msg)
 
 /datum/subsystem/garbage/proc/FindRef(datum/D)
-	if(istype(D, world.mob))
-		FINDREF_OUTPUT("GC: Skipping FindRef for default mob [ref(D)] [D] | [D.type]. Thanks BYOND.")
-		return
 	FINDREF_OUTPUT("GC: Searching references for [ref(D)] [D] | [D.type]")
 	if(istype(D, /atom/movable))
 		var/atom/movable/A = D
