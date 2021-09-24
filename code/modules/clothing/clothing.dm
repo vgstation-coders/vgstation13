@@ -429,10 +429,14 @@ var/global/hatStacking = 0
 
 /obj/item/clothing/head/attack_hand(mob/user)
 	if(on_top)
-		on_top.pixel_y = 0
-		user.put_in_hands(on_top)
-		vis_contents.Cut()
-		on_top = null
+		if(on_top.on_top)
+			on_top.attack_hand(user)
+		else
+			on_top.pixel_y = 0
+			user.put_in_hands(on_top)
+			vis_contents.Cut()
+			on_top = null
+		return
 	return ..()
 
 /obj/item/clothing/head/proc/bite_action(mob/target)
