@@ -405,7 +405,7 @@ var/global/hatStacking = 0
 var/global/maxStackDepth = 10
 
 /client/proc/configHat()
-	set name = "Toggle Hat Stacking"
+	set name = "Configure Hat Stacking"
 	set category = "Debug"
 
 	. = (alert("Allow hats to stack?",,"Yes","No")=="Yes")
@@ -430,11 +430,11 @@ var/global/maxStackDepth = 10
 			on_top.attackby(W,user)
 		else if(istype(W,/obj/item/clothing/head) && !istype(W,/obj/item/clothing/head/helmet))
 			var/obj/item/clothing/head/hat = W
-			if(hat.stack_depth >= maxStackDepth)
+			if(stack_depth >= maxStackDepth)
 				to_chat(user,"<span class='warning'>You cannot stack any higher than this!</span>")
 			else if(user.drop_item(W))
 				to_chat(user,"<span class='notice'>You add \the [hat] onto \the [src] and stack it in a towering pillar!</span>")
-				hat.stack_depth++
+				stack_depth++
 				W.forceMove(src)
 				W.pixel_y += 4 * PIXEL_MULTIPLIER
 				vis_contents.Add(W)
@@ -449,7 +449,7 @@ var/global/maxStackDepth = 10
 		else
 			to_chat(user,"You remove \the [on_top] from the towering pillar.")
 			on_top.pixel_y = 0
-			on_top.stack_depth = 0
+			stack_depth--
 			user.put_in_hands(on_top)
 			vis_contents.Cut()
 			on_top = null
