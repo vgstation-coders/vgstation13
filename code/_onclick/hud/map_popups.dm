@@ -16,6 +16,7 @@
 	// But even there, this thing wasn't on the *lowest* plane.
 	layer = PLATING_PLANE
 	plane = PLATING_PLANE
+	globalscreen = TRUE
 
 /**
  * A generic background object.
@@ -29,6 +30,7 @@
 	layer = ABOVE_LIGHTING_PLANE
 	plane = ABOVE_LIGHTING_PLANE // This is almost certainly incorrect
 	mouse_opacity = 0
+	globalscreen = TRUE
 
 /**
  * Sets screen_loc of this screen object, in form of point coordinates,
@@ -81,6 +83,7 @@
 		return FALSE
 	for(var/obj/abstract/screen/screen_obj in screen_maps[map_name])
 		screen_maps[map_name] -= screen_obj
+		screen -= screen_obj
 		if(screen_obj.del_on_map_removal)
 			qdel(screen_obj)
 	screen_maps -= map_name
