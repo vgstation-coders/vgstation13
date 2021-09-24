@@ -129,7 +129,8 @@
 		return FALSE
 
 	playSpecials(curturf,effectin,soundin)
-	teleatom.unlock_from()
+	if (!isobserver(teleatom))
+		teleatom.unlock_from()
 
 	if(istype(teleatom,/obj/item/projectile))
 		var/Xchange = destturf.x - curturf.x
