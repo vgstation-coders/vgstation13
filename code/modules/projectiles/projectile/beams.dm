@@ -85,6 +85,16 @@ var/list/beam_master = list()
 	var/beam_shift = null// the beam will animate() toward this color after being fired
 	var/list/ray/past_rays = list() //full of rays
 
+	lighting_flags = IS_LIGHT_SOURCE
+	light_range = 0
+	light_power = 3
+	light_color = LIGHT_COLOR_RED
+
+/obj/item/projectile/beam/New(...)
+	if (!light_color)
+		light_color = beam_color
+	. = ..()
+
 /obj/item/projectile/beam/Destroy()
 	for(var/ray/R in past_rays)
 		qdel(R)
@@ -112,9 +122,9 @@ var/list/beam_master = list()
 
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color, color_shift = beam_shift, emit_light = lighting_flags, _light_power = light_power, _light_color = light_color)
 		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color, color_shift = beam_shift, emit_light = lighting_flags, _light_power = light_power, _light_color = light_color)
 
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
@@ -192,6 +202,9 @@ var/list/beam_master = list()
 	damage = 40
 	linear_movement = 0
 
+	light_power = 4 // very bright
+
+
 /obj/item/projectile/beam/retro
 	icon_state = "laser_old"
 	linear_movement = 0
@@ -213,6 +226,9 @@ var/list/beam_master = list()
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
+
+	light_power = 3
+	light_color = LIGHT_COLOR_TUNGSTEN
 
 /obj/item/projectile/beam/lightning/proc/adjustAngle(angle)
 	angle = round(angle) + 45
@@ -530,15 +546,20 @@ var/list/beam_master = list()
 	destroy = 1
 	fire_sound = 'sound/weapons/pulse.ogg'
 
+	light_color = LIGHT_COLOR_BLUE
+	light_power = 5
+
 /obj/item/projectile/beam/deathlaser
 	name = "death laser"
 	icon_state = "heavylaser"
 	damage = 60
+	light_power = 5
 
 /obj/item/projectile/beam/emitter
 	name = "emitter beam"
 	icon_state = "emitter"
 	damage = 30
+	lighting_flags = 0
 
 /obj/item/projectile/beam/emitter/singularity_pull()
 	return
@@ -555,6 +576,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	flag = "laser"
 	icon_state = "bluelaser"
 	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
+	light_power = 1
 
 /obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
 	if(ismob(target))
