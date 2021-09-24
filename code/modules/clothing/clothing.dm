@@ -425,6 +425,7 @@ var/global/hatStacking = 0
 				W.pixel_y += 4 * PIXEL_MULTIPLIER
 				vis_contents.Add(W)
 				on_top = hat
+				user.update_inv_head()
 	..()
 
 /obj/item/clothing/head/attack_hand(mob/user)
@@ -436,6 +437,7 @@ var/global/hatStacking = 0
 			user.put_in_hands(on_top)
 			vis_contents.Cut()
 			on_top = null
+		user.update_inv_head()
 		return
 	return ..()
 
