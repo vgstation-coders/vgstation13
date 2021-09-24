@@ -945,7 +945,6 @@ var/global/list/damage_icon_parts = list()
 			O.color = I.color
 		O.pixel_x = species.inventory_offsets["[slot_head]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_head]"]["pixel_y"] * PIXEL_MULTIPLIER
-		obj_to_plane_overlay(O,HEAD_LAYER)
 		//overlays_standing[HEAD_LAYER]	= standing
 	//else
 		//overlays_standing[HEAD_LAYER]	= null
@@ -990,6 +989,8 @@ var/global/list/damage_icon_parts = list()
 
 				//above.generate_accessory_overlays(O)
 				i++
+
+		obj_to_plane_overlay(O,HEAD_LAYER)
 
 	if(update_icons)
 		update_icons()
