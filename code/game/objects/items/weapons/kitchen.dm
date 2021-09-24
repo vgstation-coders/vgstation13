@@ -255,6 +255,12 @@
 	icon_state = "pfork"
 	melt_temperature = MELTPOINT_PLASTIC
 
+/obj/item/weapon/kitchen/utensil/fork/teflon
+	name = "teflon fork"
+	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
+	icon_state = "tfork"
+	melt_temperature = MELTPOINT_PLASTIC
+
 /*
  * Knives
  */
