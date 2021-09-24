@@ -287,7 +287,7 @@
 	//			continue
 
 			for(var/obj/O in T)
-				if(O.density)
+				if(!O.Cross(src, get_turf(T)))
 					continue direction_loop
 
 			new /obj/effect/alien/weeds(T, linked_node)
