@@ -22,7 +22,7 @@
 	icon = original
 
 /obj/item/supermatter_splinter/prepickup(mob/living/user)
-	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in contents
+	var/obj/item/supermatter_shielding/SS = locate(/obj/item/supermatter_shielding) in user.contents
 	if(SS)
 		SS.supermatter_act(src)
 	else

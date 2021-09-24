@@ -103,6 +103,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/blood_color = DEFAULT_BLOOD //Red.
 	var/flesh_color = DEFAULT_FLESH //Pink.
 	var/base_color      //Used when setting species.
+	var/max_skin_tone = 1
+
 	var/uniform_icons       = 'icons/mob/uniform.dmi'
 	var/fat_uniform_icons   = 'icons/mob/uniform_fat.dmi'
 	var/gloves_icons        = 'icons/mob/hands.dmi'
@@ -314,6 +316,8 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey
 
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
+
+	max_skin_tone = 220
 
 /datum/species/human/gib(mob/living/carbon/human/H)
 	..()
@@ -535,6 +539,7 @@ var/global/list/whitelisted_species = list("Human")
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
 
 	flesh_color = "#AFA59E"
+	max_skin_tone = 1
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -595,6 +600,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	max_hurt_damage = 3 // From 5 (for humans)
 	tacklePower = 25
+
+	max_skin_tone = 4
 
 	primitive = /mob/living/carbon/monkey/grey
 
@@ -745,6 +752,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
+	max_skin_tone = 6
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
 
@@ -1113,7 +1121,8 @@ var/list/has_died_as_golem = list()
 	var/mob/living/slime_pile/S = new(H.loc)
 	if(H.real_name)
 		S.real_name = H.real_name
-		S.desc = "The remains of what used to be [S.real_name]."
+		S.name = "puddle of [H.real_name]"
+		S.desc = "The slimy remains of what used to be [S.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
 	S.slime_person = H
 	H.forceMove(S)
 

@@ -235,7 +235,7 @@
 			var/crumbs_to_del = 0
 			for (var/obj/effect/decal/cleanable/crumbs/old_crumb in T)
 				crumbs_on_floor += old_crumb
-				if (crumbs_on_floor >= 4)
+				if (crumbs_on_floor.len >= 4)
 					crumbs_to_del++
 			for (var/obj/effect/decal/cleanable/crumbs/old_crumb in crumbs_on_floor)
 				if (!crumbs_to_del)
@@ -517,9 +517,9 @@
 	var/child_volume = 3 // every spawned child will have this much or less reagent transferred to it. Small number = a lot of small items spawn
 
 // called when it leaves the microwave
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/forceMove(turf/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	. = ..()
-	if(isnull(NewLoc))
+	if(isnull(destination))
 		return
 	spawn_children()
 	qdel(src)
@@ -1093,10 +1093,6 @@
 
 
 /obj/item/weapon/reagent_containers/food/snacks/human
-	var/hname = ""
-	var/job = null
-
-
 	name = "-burger"
 	desc = "A bloody burger."
 	icon_state = "hburger"
@@ -6898,8 +6894,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 14)
-	reagents.add_reagent(DOCTORSDELIGHT, 5)
+	reagents.add_reagent(NUTRIMENT, 11)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 5
 
@@ -6912,8 +6907,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 12)
-	reagents.add_reagent(ALKYSINE, 5)
+	reagents.add_reagent(NUTRIMENT, 9)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 4
 
@@ -6927,8 +6921,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 10)
-	reagents.add_reagent(ANTI_TOXIN, 5)
+	reagents.add_reagent(NUTRIMENT, 7)
 	reagents.add_reagent(SACID, 3)
 	bitesize = 4
 
@@ -6977,18 +6970,32 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(HYRONALIN, 3)
 	reagents.add_reagent(COCO, 2)
 	reagents.add_reagent(SUGAR, 2)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter
+	name = "Zam Buttery Biscuit"
+	desc = "Butter and acid blend together to make a divine biscuit flavor. Administrator Zam's favorite!"
+	icon_state = "zambiscuit_buttery"
+	food_flags = FOOD_ANIMAL | FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(HYRONALIN, 3)
+	reagents.add_reagent(LIQUIDBUTTER, 2)
+	reagents.add_reagent(SUGAR, 2)
+	reagents.add_reagent(SACID, 4)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical
-	name = "Radical Zam Biscuit"
+	name = "Zam Radical Biscuit"
 	desc = "This Zam biscuit is oddly warm to the touch and glows faintly. It's probably not safe for consumption..." // Despite the warning, I'm sure someone will eat it.
 	icon_state = "zambiscuit_radical"
-	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical/New()
 	..()

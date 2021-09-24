@@ -119,8 +119,8 @@ var/list/blood_communion = list()
 	H.status_flags &= ~CANSTUN
 	H.status_flags &= ~CANKNOCKDOWN
 	H.status_flags &= ~CANPARALYSE
-	H.fixblood()
 	H.regenerate_icons()
+	H.update_dna_from_appearance()
 
 /datum/cult_tattoo/fast
 	name = TATTOO_FAST

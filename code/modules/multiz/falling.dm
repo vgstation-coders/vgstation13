@@ -49,7 +49,7 @@
 			if(L.pulling)
 				L.pulling.Move(below)
 		return
-	
+
 	var/gravity = get_gravity()
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
@@ -113,7 +113,7 @@
 	return TRUE
 
 // These didn't fall anyways but better to nip this now just incase.
-/atom/movable/light/can_fall()
+/atom/movable/lighting_overlay/can_fall()
 	return FALSE
 
 // Function handling going over open spaces, pre-extension to normal throw hit checks

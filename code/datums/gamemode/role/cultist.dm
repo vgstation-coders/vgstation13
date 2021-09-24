@@ -247,9 +247,8 @@
 		return 0
 	if (reagents && reagents.has_reagent(HOLYWATER))
 		return 1
-	for(var/obj/item/weapon/implant/holy/I in src)
-		if (I.implanted)
-			return 1
+	if (is_implanted(/obj/item/weapon/implant/holy))
+		return 1
 	return 0
 
 /datum/role/cultist/handle_reagent(var/reagent_id)

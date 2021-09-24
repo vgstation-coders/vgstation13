@@ -556,17 +556,13 @@
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
-		I.forceMove(newmob)
-		I.implanted = 1
-		I.imp_in = newmob
-		if(istype(newmob, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = newmob
-			if(!I.part) //implanted as a nonhuman, won't have one.
-				I.part = /datum/organ/external/chest
-			for (var/datum/organ/external/affected in H.organs)
-				if(!istype(affected, I.part))
-					continue
-				affected.implants += I
+		if(!I.imp_in)
+			continue
+		if(!I.remove())
+			stack_trace("failed to remove implant")
+			continue
+		if(!I.insert(newmob, I.part?.name))
+			stack_trace("failed to insert implant")
 
 /mob/living/carbon/proc/dropBorers(var/gibbed = null)
 	var/list/borer_list = get_brain_worms()

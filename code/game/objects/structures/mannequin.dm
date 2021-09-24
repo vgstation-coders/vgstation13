@@ -142,7 +142,7 @@
 		captured.setOxyLoss(intialOxy)
 		if (timer >= 5)
 			captured.Paralyse(2)
-	if (timer <= 0)
+	if (timer == 0)
 		freeCaptive()
 		qdel(src)
 

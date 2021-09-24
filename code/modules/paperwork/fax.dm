@@ -299,12 +299,12 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
 
 /proc/SendMerchantFax(mob/living/carbon/human/merchant)
-	var/obj/item/weapon/paper/merchantreport/P
+	var/obj/item/weapon/paper/merchant/report/P
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 		if(F.department == "Internal Affairs" && !F.stat)
 			flick("faxreceive", F)
 			playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
-			P = new /obj/item/weapon/paper/merchantreport(F,merchant)
+			P = new /obj/item/weapon/paper/merchant/report(F,merchant)
 			spawn(2 SECONDS)
 				P.forceMove(F.loc)
 	return P

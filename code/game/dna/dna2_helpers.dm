@@ -149,7 +149,14 @@
 	my_appearance.g_eyes   = dna.GetUIValueRange(DNA_UI_EYES_G,    255)
 	my_appearance.b_eyes   = dna.GetUIValueRange(DNA_UI_EYES_B,    255)
 
-	my_appearance.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, 220) // Value can be negative.
+	if (species)
+		if (species.name == "Human")
+			my_appearance.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, species.max_skin_tone)
+		else
+			my_appearance.s_tone   = dna.GetUIValueRange(DNA_UI_SKIN_TONE, species.max_skin_tone)
+	else
+		my_appearance.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, species.max_skin_tone)
+
 	setGender(MALE)
 	if (dna.GetUIState(DNA_UI_GENDER))
 		setGender(FEMALE)
@@ -166,8 +173,7 @@
 	var/beard = clamp(dna.GetUIValueRange(DNA_UI_BEARD_STYLE, species_facial_hair.len) + 1, 1, species_facial_hair.len)
 	my_appearance.f_style = species_facial_hair[beard]
 
-	update_body(0)
-	update_hair()
+	regenerate_icons()
 
 	return 1
 

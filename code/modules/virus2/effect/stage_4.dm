@@ -239,7 +239,6 @@
 				var/totalslabs = 1
 				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 				var/sourcename = H.real_name
-				var/sourcejob = H.job
 				var/sourcenutriment = H.nutrition / 15
 				//var/sourcetotalreagents = mob.reagents.total_volume
 
@@ -247,7 +246,6 @@
 					var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
-					newmeat.subjectjob = sourcejob
 					newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment / totalslabs) //Thehehe. Fat guys go first
 					//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 					allmeat[i] = newmeat
@@ -642,6 +640,7 @@
 		affected.my_appearance.h_style = "Shoulder-length Hair Alt"
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 	switch(count)
 		if (10 to 30)
@@ -778,6 +777,7 @@
 		affected.my_appearance.h_style = old_h_style
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 /datum/disease2/effect/magnitis
 	name = "Magnitis"

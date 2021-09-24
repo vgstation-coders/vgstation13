@@ -1,10 +1,6 @@
 #define EVENT_HANDLER_OBJREF_INDEX 1
 #define EVENT_HANDLER_PROCNAME_INDEX 2
 
-/proc/CallAsync(datum/source, proctype, list/arguments)
-	set waitfor = FALSE
-	return call(source, proctype)(arglist(arguments))
-
 // Declare children of this type path to use as identifiers for the events.
 /event
 
@@ -242,6 +238,28 @@
 // mob/source: the mob performing the emote
 /event/emote
 
+/event/comp_ai_friend_attacked
+
+/event/comp_ai_cmd_get_best_target
+/event/comp_ai_cmd_add_target
+/event/comp_ai_cmd_remove_target
+/event/comp_ai_cmd_find_targets
+
+/event/comp_ai_cmd_can_attack
+/event/comp_ai_cmd_move
+/event/comp_ai_cmd_attack
+/event/comp_ai_cmd_evaluate_target
+/event/comp_ai_cmd_get_damage_type
+
+/event/comp_ai_cmd_set_busy
+/event/comp_ai_cmd_get_busy
+
+/event/comp_ai_cmd_set_target
+/event/comp_ai_cmd_get_target
+
+/event/comp_ai_cmd_set_state
+/event/comp_ai_cmd_get_state
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
@@ -266,12 +284,13 @@
 	if(!length(event_handlers))
 		// This datum does not have any handler registered for this event_type.
 		return
-	. = NONE
 	for(var/key in event_handlers)
 		var/list/handler = event_handlers[key]
 		var/objRef = handler[EVENT_HANDLER_OBJREF_INDEX]
 		var/procName = handler[EVENT_HANDLER_PROCNAME_INDEX]
-		. |= CallAsync(objRef, procName, arguments)
+		// not |= because `null |= list()` is a runtime error
+		// but `null = null | list()` is not.
+		. = . | call(objRef, procName)(arglist(arguments))
 
 /**
   * Registers a proc to be called on an object whenever the specified event_type

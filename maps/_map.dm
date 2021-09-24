@@ -107,6 +107,7 @@
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 
 	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+	var/can_have_robots = TRUE
 
 /datum/map/New()
 	. = ..()
@@ -158,10 +159,6 @@
 var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()
-
-//Set map-specific conditions here
-/datum/map/proc/map_specific_conditions(var/condition)
-	return 1
 
 //For any map-specific UI, like AI jumps
 /datum/map/proc/special_ui(var/obj/abstract/screen/S, mob/user)
@@ -250,11 +247,18 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
 
-
+/datum/zLevel/snowmine //not used on snaxi
+	name = "belowMine"
+	base_turf = /turf/unsimulated/floor/asteroid/cave/permafrost
+	base_area = /area/mine/explored
+	movementJammed = TRUE
+	transitionLoops = TRUE
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow //not used on snaxi
 	name = "snow"
 	base_turf = /turf/unsimulated/floor/snow
+	base_area = /area/surface/snow
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow/post_mapload()

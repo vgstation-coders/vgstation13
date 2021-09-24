@@ -86,7 +86,7 @@
 "bH" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner"; icon_state = "warning_corner"; dir = 2},/obj/structure/sign/vacuum{pixel_y = -32},/turf/simulated/floor,/area/vault/listening)
 "bI" = (/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor,/area/vault/listening)
 "bJ" = (/obj/effect/decal/warning_stripes{tag = "icon-warning_corner (WEST)"; icon_state = "warning_corner"; dir = 8},/turf/simulated/floor,/area/vault/listening)
-"bK" = (/obj/machinery/computer/security/advanced,/turf/simulated/floor,/area/vault/listening)
+"bK" = (/obj/machinery/computer/security,/turf/simulated/floor,/area/vault/listening)
 "bL" = (/obj/structure/rack,/obj/item/weapon/gun/projectile/pistol,/obj/item/weapon/gun/projectile/pistol,/obj/item/weapon/gun/energy/laser/retro,/obj/machinery/light,/obj/item/weapon/gun/energy/laser/retro,/turf/simulated/floor,/area/vault/listening)
 "bM" = (/obj/structure/rack,/obj/item/ammo_storage/magazine/mc9mm,/obj/item/ammo_storage/magazine/mc9mm,/obj/item/ammo_storage/magazine/mc9mm,/obj/item/ammo_storage/magazine/mc9mm,/turf/simulated/floor,/area/vault/listening)
 "bN" = (/obj/structure/table,/obj/machinery/recharger,/turf/simulated/floor,/area/vault/listening)
