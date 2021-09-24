@@ -422,14 +422,14 @@ var/global/hatStacking = 0
 			var/obj/item/clothing/head/hat = W
 			hat.forceMove(src)
 			hat.pixel_y += 8 * PIXEL_MULTIPLIER
-			vis_contents.add(hat)
+			vis_contents.Add(hat)
 			on_top = hat
 	..()
 
 /obj/item/clothing/head/attack_self(mob/user)
 	if(on_top)
 		user.put_in_hands(on_top)
-		vis_contents.cut()
+		vis_contents.Cut()
 		on_top = null
 	..()
 
