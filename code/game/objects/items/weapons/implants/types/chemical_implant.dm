@@ -38,7 +38,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/chem/implanted(mob/implanter)
 	imp_in.register_event(/event/emote, src, .proc/trigger)
 
-/obj/item/weapon/implant/explosive/handle_removal(mob/remover)
+/obj/item/weapon/implant/chem/handle_removal(mob/remover)
 	imp_in?.unregister_event(/event/emote, src, .proc/trigger)
 	makeunusable(75)
 
