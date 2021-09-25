@@ -468,7 +468,7 @@ var/global/maxStackDepth = 10
 	for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
 		hat_names += above.name
 	if(hat_names.len)
-		return " It is piled underneath [english_list(hat_names)]."
+		return " It is piled underneath a [english_list(hat_names)]."
 
 /obj/item/clothing/head/proc/bite_action(mob/target)
 	return
