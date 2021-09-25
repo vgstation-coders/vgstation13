@@ -43,13 +43,13 @@ var/cmp_field = "name"
 var/atom/cmp_dist_origin=null
 /proc/cmp_dist_asc(var/atom/a, var/atom/b)
 	return get_dist_squared(cmp_dist_origin, a) - get_dist_squared(cmp_dist_origin, b)
-	
+
 /proc/cmp_dist_desc(var/atom/a, var/atom/b)
 	return get_dist_squared(cmp_dist_origin, b) - get_dist_squared(cmp_dist_origin, a)
 
 /proc/cmp_profile_avg_time_dsc(var/list/a, var/list/b)
 	return (b[PROFILE_ITEM_TIME]/(b[PROFILE_ITEM_COUNT] || 1)) - (a[PROFILE_ITEM_TIME]/(a[PROFILE_ITEM_COUNT] || 1))
- 
+
 /proc/cmp_profile_time_dsc(var/list/a, var/list/b)
 	return b[PROFILE_ITEM_TIME] - a[PROFILE_ITEM_TIME]
 
@@ -61,3 +61,10 @@ var/atom/cmp_dist_origin=null
 
 /proc/cmp_list_by_element_asc(list/a, list/b)
 	return b[cmp_field] - a[cmp_field]
+
+/proc/cmp_timer(datum/timer/a, datum/timer/b)
+	var/a_when = a.when
+	var/b_when = b.when
+	if(a_when == b_when)
+		return b.id - a.id
+	return b_when - a_when

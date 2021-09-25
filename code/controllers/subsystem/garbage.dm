@@ -262,6 +262,9 @@ List of hard deletions:"}
 	registered_events = null
 	gcDestroyed = "Bye, world!"
 	tag = null
+	for(var/timer in active_timers)
+		qdel(timer)
+	active_timers = null
 
 /datum/var/gcDestroyed
 
