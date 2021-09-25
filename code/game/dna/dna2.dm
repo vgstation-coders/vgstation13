@@ -241,7 +241,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return 0
 	var/value = GetUIValue(block)
-	return round(map_range(value, 0, 0xFFF, 0, maxvalue))
+	return round(map_range(value, 0, 0xFFF, 0, maxvalue), 1)
 
 // Is the UI gene "on" or "off"?
 // For UI, this is simply a check of if the value is > 2050.
