@@ -778,7 +778,7 @@
 				O.overlays += I
 
 				if(above.dynamic_overlay)
-					if(clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
+					if(above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
 						var/image/dyn_overlay = above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
 						dyn_overlay.pixel_y = (2 * i) * PIXEL_MULTIPLIER
 						O.overlays += dyn_overlay
