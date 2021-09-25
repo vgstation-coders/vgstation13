@@ -1294,25 +1294,26 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	..()
 
 /obj/machinery/power/apc/ex_act(severity)
-
 	switch(severity)
-		if(1.0)
-			//set_broken() //now Destroy() do what we need
-			if (cell)
-				cell.ex_act(1.0) // more lags woohoo
+		if(1)
+			if(cell)
+				qdel(cell)
+				cell = null
 			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
+		if(2)
+			if(prob(50))
 				set_broken()
-				if (cell && prob(50))
-					cell.ex_act(2.0)
-		if(3.0)
-			if (prob(25))
+				if(cell && prob(50))
+					cell.ex_act(2)
+					if(cell && cell.gcDestroyed)
+						cell = null
+		if(3)
+			if(prob(25))
 				set_broken()
 				if (cell && prob(25))
-					cell.ex_act(3.0)
-	return
+					cell.ex_act(3)
+					if(cell && cell.gcDestroyed)
+						cell = null
 
 /obj/machinery/power/apc/blob_act()
 	if (prob(75))
