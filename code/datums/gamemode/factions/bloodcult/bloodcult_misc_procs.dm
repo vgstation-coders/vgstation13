@@ -62,9 +62,8 @@ var/static/list/valid_cultpower_slots = list(
 /mob/proc/occult_muted()
 	if (reagents && reagents.has_reagent(HOLYWATER))
 		return 1
-	for(var/obj/item/weapon/implant/holy/I in src)
-		if (I.implanted)
-			return 1
+	if (is_implanted(/obj/item/weapon/implant/holy))
+		return 1
 	return 0
 
 /mob/proc/get_convertibility()
@@ -136,12 +135,11 @@ var/static/list/valid_cultpower_slots = list(
 
 /mob/living/carbon/proc/implant_pop()
 	for(var/obj/item/weapon/implant/loyalty/I in src)
-		if (I.implanted)
+		if (I.imp_in)
 			to_chat(src, "<span class='sinister'>Your blood pushes back against the loyalty implant, it will visibly pop out within seconds!</span>")
 			spawn(10 SECONDS)
-				I.forceMove(get_turf(src))
-				I.implanted = 0
-				visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
+				if (I.remove())
+					visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
 
 
 /mob/living/carbon/proc/boxify(var/delete_body = TRUE, var/new_anim = TRUE, var/box_state = "cult")//now its own proc so admins may atomProcCall it if they so desire.
