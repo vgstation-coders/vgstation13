@@ -435,11 +435,14 @@ var/global/maxStackDepth = 10
 			else if(user.drop_item(W))
 				to_chat(user,"<span class='notice'>You add \the [hat] onto \the [src] and stack it in a towering pillar!</span>")
 				stack_depth++
+				hat.stack_depth = stack_depth
 				W.forceMove(src)
 				W.pixel_y += 4 * PIXEL_MULTIPLIER
 				vis_contents.Add(W)
 				on_top = hat
 				user.update_inv_head()
+				for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+					above.stack_depth = stack_depth
 	..()
 
 /obj/item/clothing/head/attack_hand(mob/user)
@@ -450,10 +453,13 @@ var/global/maxStackDepth = 10
 			to_chat(user,"You remove \the [on_top] from the towering pillar.")
 			on_top.pixel_y = 0
 			stack_depth--
+			on_top.stack_depth = 0
 			user.put_in_hands(on_top)
 			vis_contents.Cut()
 			on_top = null
 			user.update_inv_head()
+			for(var/obj/item/clothing/head/above = on_top; above; above = above.on_top)
+				above.stack_depth = stack_depth
 		return
 	return ..()
 
