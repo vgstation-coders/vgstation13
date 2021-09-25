@@ -756,6 +756,44 @@
 
 		clothToUpdate.generate_accessory_overlays(O)
 
+		if(istype(clothToUpdate,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = clothToUpdate
+			var/i = 1
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				if(primitive)
+					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], above.icon_state)
+				else if (corgi)
+					I = image(slotIcon[MANNEQUIN_ICONS_CORGI], above.icon_state)
+				else if(clothToUpdate.icon_override)
+					I = image(above.icon_override, above.icon_state)
+				else
+					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], above.icon_state)
+
+				if(species.name in above.species_fit)
+					var/icon/species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
+					if(species_icon)
+						I.icon = species_icon
+
+				I.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				O.overlays += I
+
+				if(above.dynamic_overlay)
+					if(clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
+						dyn_overlay.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+						O.overlays += dyn_overlay
+
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/bloodsies_state = get_bloodsies_state(above,slot)
+					if(bloodsies_state)
+						var/image/bloodsies	= image('icons/effects/blood.dmi', bloodsies_state)
+						bloodsies.color		= above.blood_color
+						bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+						O.overlays += bloodsies
+
+				//above.generate_accessory_overlays(O)
+				i++
+
 /obj/structure/mannequin/proc/update_icon_hand(var/obj/abstract/Overlays/O,var/index)
 	var/obj/item/heldItem = get_held_item_by_index(index)
 
