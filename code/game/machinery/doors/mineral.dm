@@ -26,7 +26,7 @@
 
 	if(istype(user, /obj/mecha))
 		open()
-	else if (istype(user, /obj/machinery/bot))
+	else if (istype(user, /obj/machinery/bot) && SpecialAccess(user))
 		open()
 	else if(ismob(user))
 		var/mob/M = user
@@ -355,9 +355,7 @@
 	if (ismob(user))
 		var/mob/M = user
 		if (isanycultist(M))
-			to_chat(world, "SpecialAccess = TRUE")
 			return TRUE
-	to_chat(world, "SpecialAccess = FALSE")
 	return FALSE
 
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)

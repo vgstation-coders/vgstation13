@@ -95,7 +95,6 @@ var/list/all_doors = list()
 		var/obj/machinery/bot/bot = AM
 
 		if (check_access(bot.botcard) && !operating && SpecialAccess(AM))
-			to_chat(world, "opening door from /obj/machinery/door/Bumped")
 			open()
 
 		return
@@ -154,7 +153,6 @@ var/list/all_doors = list()
 		denied()
 
 /obj/machinery/door/proc/SpecialAccess(var/atom/user)
-	to_chat(world, "SpecialAccess = TRUE")
 	return TRUE
 
 /obj/machinery/door/attack_ai(mob/user as mob)

@@ -207,9 +207,9 @@
 					to_chat(M,"<span class='notice'>You are currently mentoring [dat].</span>")
 				if ((world.time - C.time_role_changed_last) < 5 MINUTES)
 					if ((world.time - C.time_role_changed_last) > 4 MINUTES)
-						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - world.time - C.time_role_changed_last)/10)] seconds before you can switch role.</span>")
+						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - (world.time - C.time_role_changed_last))/10)] seconds before you can switch role.</span>")
 					else
-						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - world.time - C.time_role_changed_last)/600)] minutes before you can switch role.</span>")
+						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - (world.time - C.time_role_changed_last))/600)] minutes before you can switch role.</span>")
 					return
 				else
 					if (C.mentor)
