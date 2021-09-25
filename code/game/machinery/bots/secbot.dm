@@ -42,11 +42,6 @@
 		/obj/item/weapon/melee/defibrillator
 		)
 
-	var/list/cannot_open = list(
-		/obj/machinery/door/firedoor,
-		/obj/machinery/door/mineral/resin,
-		/obj/machinery/door/mineral/cult,
-		)
 	light_color = LIGHT_COLOR_RED
 	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
 	var/obj/item/weapon/melee/baton/baton = null

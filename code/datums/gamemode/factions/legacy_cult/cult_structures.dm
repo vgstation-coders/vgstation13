@@ -25,8 +25,6 @@
 	var/isbroken = 0
 	light_range = 5
 	light_color = LIGHT_COLOR_RED
-	lighting_flags = IS_LIGHT_SOURCE|FOLLOW_PIXEL_OFFSET
-	light_type = LIGHT_SOFT_FLICKER
 
 /obj/structure/cult_legacy/pylon/attack_hand(mob/M as mob)
 	attackpylon(M, 5)

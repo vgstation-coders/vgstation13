@@ -219,6 +219,7 @@
 		if (istype(D, /obj/machinery/door/poddoor))
 			continue
 		if (D.check_access(botcard) && !D.operating && D.SpecialAccess(src))
+			to_chat(world, "opening door from /obj/machinery/bot/proc/on_path_step_fail")
 			D.open()
 			frustration = 0
 			return TRUE
@@ -363,6 +364,7 @@
 		if (istype(D, /obj/machinery/door/poddoor))
 			continue
 		if (D.check_access(botcard) && !D.operating && D.SpecialAccess(src))
+			to_chat(world, "opening door from /obj/machinery/bot/proc/on_patrol_step_fail")
 			D.open()
 			frustration = 0
 			return TRUE

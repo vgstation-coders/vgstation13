@@ -355,7 +355,9 @@
 	if (ismob(user))
 		var/mob/M = user
 		if (isanycultist(M))
+			to_chat(world, "SpecialAccess = TRUE")
 			return TRUE
+	to_chat(world, "SpecialAccess = FALSE")
 	return FALSE
 
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)

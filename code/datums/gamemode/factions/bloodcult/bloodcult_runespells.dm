@@ -360,7 +360,7 @@
 	while(failsafe < 1000)
 		failsafe++
 		//are our payers still here and about?
-		var/summoners = 0//the higher, the easier it is to perform the ritual without many cultists. default=0
+		var/summoners = 2//the higher, the easier it is to perform the ritual without many cultists. default=2
 		for(var/mob/living/L in contributors)
 			if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
 				summoners++
@@ -428,7 +428,7 @@
 	desc_talisman = "Use it to write and send a message to all followers of Nar-Sie. When in the middle of a ritual, use it again to transmit a message that will be remembered by all."
 	invocation = "O bidai nabora se'sma!"
 	rune_flags = RUNE_STAND
-	talisman_uses = 5
+	talisman_uses = 10
 	var/obj/effect/cult_ritual/cult_communication/comms = null
 	word1 = /datum/rune_word/self
 	word2 = /datum/rune_word/other
@@ -1338,7 +1338,7 @@ var/list/converted_minds = list()
 				S.Knockdown(duration)//TODO: TEST THAT
 		qdel(src)
 
-var/list/blind_victims = list()
+var/list/confusion_victims = list()
 
 
 ////////////////////////////////////////////////////////////////////
@@ -1348,7 +1348,7 @@ var/list/blind_victims = list()
 ////////////////////////////////////////////////////////////////////
 
 /datum/rune_spell/confusion
-	name = "Confusion"//Can't just call it "blind" anymore, can we?
+	name = "Confusion"
 	desc = "Sow panic in the mind of your enemies, and obscure cameras."
 	desc_talisman = "Sow panic in the mind of your enemies, and obscure cameras. The effect is shorter than when used from a rune."
 	invocation = "Sti' kaliesin!"
@@ -1423,7 +1423,7 @@ var/list/blind_victims = list()
 			to_chat(C, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
 			shadow(C,T)//shadow trail moving from the spell_holder to the victim
 			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-			if (!(C in blind_victims))
+			if (!(C in confusion_victims))
 				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/confusion_border)//victims DO still get blinded for a second
 				C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
 				C.update_fullscreen_alpha("blindblack", 255, 5)
@@ -1453,7 +1453,7 @@ var/list/blind_victims = list()
 	spawn(10)
 		for(var/mob/living/carbon/C in victims)
 			var/new_victim = 0
-			if (!(C in blind_victims))
+			if (!(C in confusion_victims))
 				new_victim = 1
 				C.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
 			C.update_fullscreen_alpha("blindblind", 255, 0)
@@ -1467,21 +1467,21 @@ var/list/blind_victims = list()
 						continue//the victims still see themselves as humans (or whatever they are)
 					my_hallucinated_stuff.Add(L.static_overlays["cult"])
 				if (!new_victim)
-					my_hallucinated_stuff.Add(blind_victims[C])
-					C.client.images.Remove(blind_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
-				blind_victims[C] = my_hallucinated_stuff//allows us to seamlessly refresh their duration.
+					my_hallucinated_stuff.Add(confusion_victims[C])
+					C.client.images.Remove(confusion_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
+				confusion_victims[C] = my_hallucinated_stuff//allows us to seamlessly refresh their duration.
 				C.client.images.Add(my_hallucinated_stuff)
 				C.regular_hud_updates()//data huds are disabled for the duration of the confusion
 				var/hallenght = my_hallucinated_stuff.len
 				spawn(duration-5)
-					if (C in blind_victims)
-						var/list/LI = blind_victims[C]
+					if (C in confusion_victims)
+						var/list/LI = confusion_victims[C]
 						if (LI.len == hallenght)//this checks whether this proc comes from the last blind rune the victim was affected from
 							C.update_fullscreen_alpha("blindborder", 0, 5)
 							C.overlay_fullscreen("blindwhite", /obj/abstract/screen/fullscreen/white)
 							C.update_fullscreen_alpha("blindwhite", 255, 3)
 							sleep(5)
-							blind_victims.Remove(C)
+							confusion_victims.Remove(C)
 							C.update_fullscreen_alpha("blindwhite", 0, 12)
 							C.clear_fullscreen("blindblack", animate = 0)
 							C.clear_fullscreen("blindborder", animate = 0)
@@ -1490,7 +1490,7 @@ var/list/blind_victims = list()
 							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
-		while (blind_victims.len > 0)//if the ritual atom stops existing while people are still confused, weird shit can occurs such as people remaining blinded forever.
+		while (confusion_victims.len > 0)//if the ritual atom stops existing while people are still confused, weird shit can occurs such as people remaining blinded forever.
 			sleep(10 SECONDS)
 		qdel(src)
 
@@ -1797,7 +1797,7 @@ var/list/blind_victims = list()
 	desc_talisman = "For a whole minute, you may see the invisible, the dead, the concealed, and the propensity of the living to serve our agenda."
 	invocation = "Rash'tla sektath mal'zua. Zasan therium viortia."
 	rune_flags = RUNE_STAND
-	talisman_uses = 5
+	talisman_uses = 10
 	word1 = /datum/rune_word/see
 	word2 = /datum/rune_word/hell
 	word3 = /datum/rune_word/join
@@ -1919,7 +1919,7 @@ var/list/blind_victims = list()
 	word2 = /datum/rune_word/destroy
 	word3 = /datum/rune_word/other
 	rune_flags = RUNE_STAND
-	talisman_uses = 3
+	talisman_uses = 5
 	page = "This rune, which you have to stand above to use, equips your character with cult gear. Namely, Cult Hood, Cult Robes, Cult Shoes, and a Cult Backpack. Wearing cult gear improves your efficiency with a few rituals (see Tools section below) on top of granting you very decent armor values. After using the rune, a Blood Tesseract appears in your hand, containing clothes that had to be swapped out because you were already wearing them in your head/suit slots. You can use it to get your clothing back instantly. Lastly, the talisman version has 3 uses, and gets back in your hand after you use the Blood Tesseract. The inventory of your backpack gets always gets transferred upon use. "
 	var/list/slots_to_store = list(
 		slot_shoes,

@@ -359,7 +359,7 @@
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
-	if(hallucination)
+	if(hallucination || (src in confusion_victims))
 		if(drugged_message)
 			msg = drugged_message
 		if(blind_drugged_message)
@@ -1141,9 +1141,12 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Examine"
 	set category = "IC"
 
-//	if( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
 	if(is_blind(src))
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
+		return
+
+	if (src in confusion_victims)
+		to_chat(src, "<span class='sinister'>[pick("Oh god what's this even?","Paranoia and panic prevent you from calmly observing whatever this is.")]</span>")
 		return
 
 	if(get_dist(A,client.eye) > client.view)

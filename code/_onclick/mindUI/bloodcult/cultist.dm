@@ -518,6 +518,7 @@
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_close,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_previous,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_next,
+		/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_help_move,
 		)
 	display_with_parent = FALSE
 
@@ -609,6 +610,19 @@
 	if(help)
 		help.current_page = min(help.current_page+1, 12)
 		parent.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_help_move
+	name = "Move Interface (Click and Drag)"
+	icon = 'icons/ui/16x16.dmi'
+	icon_state = "move"
+	layer = MIND_UI_BUTTON
+	offset_x = -80
+	offset_y = -38
+	mouse_opacity = 1
+
+	move_whole_ui = TRUE
 
 //------------------------------------------------------------
 
