@@ -15,7 +15,7 @@
 	return !L.len
 
 //add an element in the list,
-//immediatly ordering it to its position using Insertion sort
+//immediatly ordering it to its position
 /PriorityQueue/proc/Enqueue(atom/A)
 	if(!L.len)
 		L += A
@@ -76,7 +76,7 @@
 		i--
 	return 1
 
-
+// uses Insertion sort
 /PriorityQueue/reverse/Enqueue(atom/A)
 	var/i
 	L.Add(A)
