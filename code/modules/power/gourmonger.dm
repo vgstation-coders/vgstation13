@@ -172,7 +172,7 @@ var/global/gourmonger_saturation = 0
 	var/mealPerc = (mealCount / growToSplit) * 100
 	switch(mealPerc)
 		if(0 to 25)
-			kill_light()
+			set_light(0)
 		if(25 to 49)
 			set_light(1, 2, "#c0e280")
 		if(50 to 69)

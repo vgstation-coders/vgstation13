@@ -532,7 +532,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_Z_UP)
 			P =new /obj/machinery/atmospherics/pipe/zpipe/up(src.loc)
-
+		
 		if(PIPE_Z_DOWN)
 			P =new /obj/machinery/atmospherics/pipe/zpipe/down(src.loc)
 

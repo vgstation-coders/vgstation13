@@ -1,7 +1,6 @@
-/datum/component/ai/target_finder/simple_view/GetTargets()
-	ASSERT(container.holder!=null)
+/datum/component/ai/target_finder/simple_view/cmd_find_targets()
 	var/list/o = list()
-	for(var/atom/A in view(range, container.holder))
+	for(var/atom/A in view(range, parent))
 		if(is_type_in_list(A, exclude_types))
 			continue
 		o += A

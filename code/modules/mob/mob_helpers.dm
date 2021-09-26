@@ -67,6 +67,9 @@ mob/proc/remove_internal_organ()
 	. = ..()
 	if(.)
 		return .
+	var/obj/item/clothing/glasses/scanner/S = is_wearing_item(/obj/item/clothing/glasses/scanner, slot_glasses)
+	if(S && S.on && S.color_matrix)
+		return S.color_matrix
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
 		return eyes.colourmatrix
@@ -116,12 +119,6 @@ mob/proc/remove_internal_organ()
 		if(desc!="")
 			add_ghostlogs(A, target, desc, 1)
 		return 1
-	return 0
-
-/proc/isloyal(A) //Checks to see if the person contains a loyalty implant, then checks that the implant is actually inside of them
-	for(var/obj/item/weapon/implant/loyalty/L in A)
-		if(L && L.implanted)
-			return 1
 	return 0
 
 /proc/check_holy(var/mob/A) //checks to see if the tile the mob stands on is holy

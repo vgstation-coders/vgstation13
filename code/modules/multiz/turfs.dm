@@ -42,15 +42,21 @@
 	..()
 	mover.fall()
 
+// Static list so it isn't slow in the check below
+var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated/wall,/turf/unsimulated/mineral,/turf/simulated/shuttle/wall)
+
 /turf/simulated/open/has_gravity()
 	var/turf/below = GetBelow(src)
 	if(!below)
 		return 0
-	if(istype(below,/turf/simulated/wall) || istype(below,/turf/unsimulated/wall))
+	// Turf checks for not spacemoving
+	if(is_type_in_list(below, no_spacemove_turfs))
 		return get_gravity()
+	// Dense stuff below checks
 	for(var/atom/A in below)
 		if(A.density)
 			return get_gravity()
+	// Structure checks (these really should be turfs)
 	if(locate(/obj/structure/catwalk) in src || locate(/obj/structure/lattice) in src)
 		return get_gravity()
 	return 0
@@ -83,7 +89,7 @@
 	icon = 'icons/effects/32x32.dmi'
 	icon_state = "white"
 	layer = ABOVE_LIGHTING_LAYER
-	plane = ABOVE_LIGHTING_PLANE
+	plane = OPEN_OVERLAY_PLANE
 
 /turf/simulated/open/update_icon()
 	var/alpha_to_subtract = 127
@@ -221,7 +227,7 @@
 		var/obj/effect/open_overlay/glass/overglass = new /obj/effect/open_overlay/glass
 		overglass.icon_state = glass_state
 		vis_contents.Add(overglass)
-		var/obj/effect/open_overlay/glass/overdamage = new /obj/effect/open_overlay/glass/damage
+		var/obj/effect/open_overlay/glass/damage/overdamage = new /obj/effect/open_overlay/glass/damage
 		overdamage.icon_state = icon_state
 		vis_contents.Add(overdamage)
 

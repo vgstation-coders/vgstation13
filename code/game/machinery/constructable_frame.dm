@@ -633,6 +633,17 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/manipulator = 1,
 							/obj/item/weapon/stock_parts/matter_bin = 1)
 
+/obj/item/weapon/circuitboard/suit_modifier
+	name = "Circuit Board (Spacesuit Modification Station)"
+	desc = "A circuit board used to run a spacesuit modification station."
+	build_path = /obj/machinery/suit_modifier
+	board_type = MACHINE
+	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_PROGRAMMING + "=3"
+	req_components = list (
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/heater
 	name = "Circuit Board (Heater)"
 	desc = "A circuit board used to run a gas heater."

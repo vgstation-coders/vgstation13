@@ -38,14 +38,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	vessel.add_reagent(BLOOD,560)
 
-	spawn(1)
-		//This lets DNA stuff properly initialize first, otherwise the blood in the vessels won't have any DNA.
-		//To safely remove this spawn(), find where dna.unique_enzymes/b_type are created and call fixblood() right after.
-		//Also test that blood driping when you cut yourself with a knife carries DNA properly using the detective scanner to be sure.
-		fixblood()
-
 //Resets blood data
-/mob/living/carbon/human/proc/fixblood()
+/mob/living/carbon/human/proc/copy_dna_data_to_blood_reagent()
 	for(var/datum/reagent/blood/B in vessel.reagent_list)
 		if(B.id == BLOOD)
 			B.data = list(

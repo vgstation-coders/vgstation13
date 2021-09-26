@@ -49,7 +49,7 @@
 	if(locate(/obj/item/weapon/implant/loyalty) in user)
 		to_chat(user,"<span class='info'>These gloves can be used to convey messages to other loyalty implanted crew. Use an open hand on yourself while wearing them.</span>")
 
-/obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/user, proximity)
+/obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/living/user, proximity)
 	if(A == user && !user.incapacitated())
 		if(user.is_implanted(/obj/item/weapon/implant/loyalty))
 			var/list/choices = list(
@@ -69,7 +69,7 @@
 /obj/item/clothing/gloves/swat/operator/proc/signal(var/sign, mob/user)
 	if(user.incapacitated())
 		return
-	for(var/mob/M in view(7, user))
+	for(var/mob/living/M in view(7, user))
 		if(!M.client)
 			continue //Don't bother, no one to show it to
 		if(M.isUnconscious() || M.eye_blind || M.blinded)

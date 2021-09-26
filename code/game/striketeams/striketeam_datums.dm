@@ -338,7 +338,6 @@ var/list/sent_strike_teams = list()
 	//M.rebuild_appearance()
 	new_commando.update_hair()
 	new_commando.update_body()
-	new_commando.check_dna(new_commando)
 
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)
 

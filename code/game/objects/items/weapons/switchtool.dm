@@ -521,7 +521,7 @@
 		var/obj/item/tool/weldingtool/experimental/weldingtool = deployed
 		weldingtool.setWelding(0)
 	..()
-	kill_light()
+	set_light(0)
 
 //switchtools maxed out intended for testing/spawning and maybe as loot. Don't forget to add any more tools added to these lists later
 /obj/item/weapon/switchtool/holo/maxed

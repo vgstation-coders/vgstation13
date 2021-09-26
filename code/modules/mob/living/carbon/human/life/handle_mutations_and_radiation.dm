@@ -222,13 +222,11 @@
 							//Drop some meat
 							to_chat(src, "<span class='warning'>A chunk of meat falls off of you!</span>")
 							var/sourcename = real_name
-							var/sourcejob = job
 
 
 							var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
 							newmeat.name = sourcename + " " + newmeat.name
 							newmeat.subjectname = sourcename
-							newmeat.subjectjob = sourcejob
 							newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment)
 							var/turf/Tx = get_turf(src)
 							newmeat.throw_at(get_step(Tx,src.dir), 1, 3)
