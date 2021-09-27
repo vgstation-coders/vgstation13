@@ -347,7 +347,7 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_close
 	name = "Close"
-	icon = 'icons/ui/16x16.dmi'
+	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "close"
 	offset_x = 181
 	offset_y = 130
@@ -534,16 +534,17 @@
 
 /obj/abstract/mind_ui_element/bloodcult_help_background
 	name = "How do I Cult?"
-	icon = 'icons/ui/192x192.dmi'
-	icon_state = "cult_help1"
+	icon = 'icons/ui/bloodcult/192x192.dmi'
+	icon_state = "cult_help"
 	offset_x = -80
 	offset_y = -150
 	layer = MIND_UI_BACK
 	var/current_page = 1
-	var/max_page = 12
+	var/max_page = 13
 
 /obj/abstract/mind_ui_element/bloodcult_help_background/UpdateIcon()
-	icon_state = "cult_help[current_page]"
+	overlays.len = 0
+	overlays += "cult_help[current_page]"
 
 /obj/abstract/mind_ui_element/bloodcult_help_background/Click()
 	parent.Hide()
@@ -552,7 +553,7 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_help_close
 	name = "Close"
-	icon = 'icons/ui/16x16.dmi'
+	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "close"
 	offset_x = 96
 	offset_y = -38
@@ -599,7 +600,7 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_help_next/Appear()
 	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
 	if(help)
-		if (help.current_page >= 12)
+		if (help.current_page >= help.max_page)
 			invisibility = 101
 		else
 			..()
@@ -608,14 +609,14 @@
 	flick("button_next-click",src)
 	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
 	if(help)
-		help.current_page = min(help.current_page+1, 12)
+		help.current_page = min(help.current_page+1, help.max_page)
 		parent.Display()
 
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/hoverable/movable/bloodcult_help_move
 	name = "Move Interface (Click and Drag)"
-	icon = 'icons/ui/16x16.dmi'
+	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "move"
 	layer = MIND_UI_BUTTON
 	offset_x = -80

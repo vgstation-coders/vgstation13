@@ -1138,8 +1138,6 @@ var/list/converted_minds = list()
 
 			if (CONVERSION_BANNED)
 
-				//cult.send_flavour_text_refuse(convertee, converter) Disabling those for now, I'll do a pass over them before this goes live
-
 				message_admins("BLOODCULT: [key_name(convertee)] died because they were converted by [key_name(converter)] while cult-banned.")
 				log_admin("BLOODCULT: [key_name(convertee)] died because they were converted by [key_name(converter)] while cult-banned.")
 				conversion.icon_state = ""
@@ -1166,7 +1164,6 @@ var/list/converted_minds = list()
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
-	//cult.send_flavour_text_accept(victim, converter)  Disabling those for now, I'll rewrite them at a later date
 	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
@@ -1995,7 +1992,7 @@ var/list/confusion_victims = list()
 
 	activator.put_in_hands(BT)
 	to_chat(activator, "<span class='notice'>Robes and gear of the followers of Nar-Sie manifests around your body. You feel empowered.</span>")
-	to_chat(activator, "<span class='notice'>You \a [BT] materializes in your hand, you may use it to instantly swap back into your stored clothing.</span>")
+	to_chat(activator, "<span class='notice'>A [BT] materializes in your hand, you may use it to instantly swap back into your stored clothing.</span>")
 	qdel(src)
 
 
