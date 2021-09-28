@@ -21,8 +21,8 @@
 	..()
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	processing_objects += src
-	trader_language = all_languages[LANGUAGE_VOX]
-	SStrade.all_twindows += src
+	if(SStrade)
+		SStrade.all_twindows += src
 
 /obj/structure/trade_window/Destroy()
 	SStrade.all_twindows -= src
@@ -283,6 +283,8 @@
 	return TRUE
 
 /obj/structure/trade_window/say(var/message)
+	if(!trader_language)
+		trader_language = all_languages[LANGUAGE_VOX]
 	..(message, trader_language)
 	if(world.time>time_last_speech+5 SECONDS)
 		time_last_speech = world.time
