@@ -1,6 +1,6 @@
 /obj/machinery/vending/old_vendotron
 	name = "old vendotron"
-	desc = "Originating from who knows where, it's a miracle this thing is still operational."
+	desc = "Covered in layers of gunk of varying ages and origins, it's obvious this old vendotron has a history, and wares to match."
 	icon_state = "Old_Vendotron"
 	icon_vend = "Old_Vendotron-vend"
 	unhackable = TRUE
@@ -232,6 +232,76 @@
 	thePrice = rand(thePrice * 0.7, thePrice * 1.3)	//30% cheaper or pricier, totally random for SPICE
 	return thePrice
 
+
+//The end///////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /obj/machinery/vending/old_vendotron/emag(mob/user)
 	if(!emagged)
 		emagged = TRUE
@@ -325,6 +395,7 @@
 		spawn(1 SECONDS)
 			if(!sC.gcDestroyed)
 				sC.itemFire()
+				animate(src, alpha = 0, time = 1 SECONDS)
 		spawn(2 SECONDS)
 			if(!sC.gcDestroyed)
 				qdel(sC)
