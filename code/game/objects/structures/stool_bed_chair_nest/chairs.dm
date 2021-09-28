@@ -6,12 +6,6 @@
 #define CHAIR_BLACK "#81807c"
 #define CHAIR_RED "#e75555"
 
-/client/verb/chairs()
-	to_chat(world, "| type | name | can_rotate | ghost_can_rotate |")
-	for(var/t in typesof(/obj/structure/bed/chair))
-		var/obj/structure/bed/chair/c = t
-		to_chat(world, "| [c] | [initial(c.name)] | [initial(c.can_rotate)] | [initial(c.ghost_can_rotate)] |")
-
 /obj/structure/bed/chair
 	name = "chair"
 	desc = "You sit in this. Either by will or force."
