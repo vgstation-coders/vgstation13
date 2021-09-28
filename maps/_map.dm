@@ -24,7 +24,7 @@
 
 	var/nameShort = ""
 	var/nameLong = ""
-	var/list/zLevels = list()
+	var/list/datum/zLevel/zLevels = list()
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3
@@ -197,6 +197,8 @@ var/global/list/accessable_z_levels = list()
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/base_area = null //default base area type, what blueprints erase into; if null, space; be careful with parent areas because locate() could find a child!
 	var/z //Number of the z-level (the z coordinate)
+	var/datum/zLevel/z_above //The linked zLevel above, for multiZ
+	var/datum/zLevel/z_below //Same, with below
 
 /datum/zLevel/proc/post_mapload()
 	return
