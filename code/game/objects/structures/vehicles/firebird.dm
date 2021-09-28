@@ -19,6 +19,7 @@
 	name = "\improper Firebird"
 	desc = "A Pontiac Firebird Trans Am with skulls and crossbones on the hood, dark grey paint, and gold trim.  No magic required for this baby."
 	icon_state = "firebird"
+	noghostspin = 1
 	//nick = "TRUE POWER"
 	keytype = /obj/item/key/firebird
 	can_spacemove = 1
