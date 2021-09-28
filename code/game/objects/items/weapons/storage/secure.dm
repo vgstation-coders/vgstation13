@@ -16,20 +16,25 @@
 	var/icon_sparking = "securespark"
 	var/icon_opened = "secure0"
 	var/locked = 1
-	var/code = ""
-	var/l_code = null
-	var/l_set = 0
-	var/l_setshort = 0
-	var/l_hacking = 0
+	var/id_locked = 0
+	var/code = "" // The entered code
+	var/lastguess_code // Last guessed code
+	var/l_code = null // The set code
+	var/obscurecode_text // The partially starred out code from emagging, keeping it consistent here
+	var/l_set = 0 // Code set?
+	var/l_setshort = 0 // Memory reset?
+	var/l_hacking = 0 // Hacking lock to prevent spam
 	var/emagged = 0
 	var/open = 0
+	req_access = list(access_all_personal_lockers) // For personalised ID locking
+	var/registered_name = null
 	w_class = W_CLASS_MEDIUM
 	fits_max_w_class = W_CLASS_SMALL
 	max_combined_w_class = 14
 
 /obj/item/weapon/storage/secure/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>The service panel is [src.open ? "open" : "closed"].</span>")
+	to_chat(user, "<span class='info'>The service panel is [open ? "open" : "closed"].</span>")
 
 /obj/item/weapon/storage/secure/AltClick()
 	if(!locked)
@@ -37,38 +42,53 @@
 
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(locked)
-		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
-			emagged = 1
-			src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
-			sleep(6)
-			overlays.len = 0
-			overlays += image('icons/obj/storage/storage.dmi', icon_locking)
-			locked = 0
-			to_chat(user, "You short out the lock on [src].")
-			return
-
-		if (W.is_screwdriver(user))
-			if (do_after(user, src, 20))
-				src.open =! src.open
-				user.show_message(text("<span class='notice'>You [] the service panel.</span>", (src.open ? "open" : "close")))
-			return
-		if ((istype(W, /obj/item/device/multitool)) && (src.open == 1)&& (!src.l_hacking))
-			user.show_message(text("<span class='warning'>Now attempting to reset internal memory, please hold.</span>"), 1)
-			src.l_hacking = 1
-			if (do_after(usr, src, 100))
-				if (prob(40))
-					src.l_setshort = 1
-					src.l_set = 0
-					user.show_message(text("<span class='warning'>Internal memory reset.  Please give it a few seconds to reinitialize.</span>"), 1)
-					sleep(80)
-					src.l_setshort = 0
-					src.l_hacking = 0
-				else
-					user.show_message(text("<span class='warning'>Unable to reset internal memory.</span>"), 1)
-					src.l_hacking = 0
+		if(istype(W, /obj/item/weapon/card/id))
+			var/obj/item/weapon/card/id/I = W
+			if(!I || !I.registered_name)
+				return
+			if(allowed(user) || registered_name || (registered_name == I.registered_name)) //they can open all of these, or nobody owns this, or they own this
+				if(!registered_name && I.registered_name)
+					registered_name = I.registered_name
+					desc = "Owned by [I.registered_name]."
+					return
+				id_locked = !id_locked
+				return
 			else
-				src.l_hacking = 0
-			return
+				to_chat(user, "<span class='notice'>Access Denied.</span>")
+				return
+		if (W.is_screwdriver(user))
+			if(!id_locked)
+				open =! open
+				to_chat(user,"<span class='notice'>You [open ? "open" : "close"] the service panel.</span>")
+				return
+			else
+				to_chat(user, "<span class='notice'>Access Denied.</span>")
+				return
+		if (istype(W, /obj/item/device/multitool))
+			if (open == 1 && !l_hacking)
+				visible_message("<span class='notice'>[bicon(src)] \The [src] beeps: Now attempting to reset internal memory, please hold.</span>")
+				l_hacking = 1
+				if (do_after(usr, src, 100))
+					if (prob(40))
+						l_setshort = 1
+						l_set = 0
+						visible_message("<span class='notice'>[bicon(src)] \The [src] beeps: Internal memory reset.  Please give it a few seconds to reinitialize.</span>")
+						sleep(80)
+						l_setshort = 0
+						l_hacking = 0
+					else
+						visible_message("<span class='warning'>[bicon(src)] \The [src] beeps: Unable to reset internal memory.</span>")
+						l_hacking = 0
+				else
+					l_hacking = 0
+				return
+			else if (emagged && lastguess_code)
+				var/correct = 0
+				for(var/i = 1, i <= length(lastguess_code); i++)
+					if(lastguess_code[i] == l_code[i])
+						correct++
+				to_chat(user,"<span class='notice'>&*%$Correctly guessed numbers: [correct].</span>")
+				return
 		//At this point you have exhausted all the special things to do when locked
 		// ... but it's still locked.
 		return
@@ -76,11 +96,18 @@
 	// -> storage/attackby() what with handle insertion, etc
 	. = ..()
 
+/obj/item/weapon/storage/secure/emag_act()
+	if(locked && !emagged && l_code)
+		emagged = 1
+		overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
+		visible_message("<span class='warning'>[bicon(src)] \The [src] beeps: Encryption module runtime. Partial code obscurity failure.</span>")
+		obscurecode_text = stars(l_code,pick(40,60))
+		sleep(6)
 
 /obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
 	if (locked)
 		if(Adjacent(usr))
-			src.add_fingerprint(usr)
+			add_fingerprint(usr)
 		return
 	..()
 
@@ -90,16 +117,16 @@
 
 /obj/item/weapon/storage/secure/proc/showInterface(mob/user)
 	user.set_machine(src)
-	var/dat = text("<TT><B>[]</B><BR>\n\nLock Status: []",src, (src.locked ? "LOCKED" : "UNLOCKED"))
+	var/dat = text("<TT><B>[]</B><BR>\n\nLock Status: []",src, (locked ? "LOCKED" : "UNLOCKED"))
 	var/message = "Code"
-	if ((src.l_set == 0) && (!src.emagged) && (!src.l_setshort))
+	if ((l_set == 0) && (!emagged) && (!l_setshort))
 		dat += text("<p>\n<b>5-DIGIT PASSCODE NOT SET.<br>ENTER NEW PASSCODE.</b>")
-	if (src.emagged)
-		dat += text("<p>\n<font color=red><b>LOCKING SYSTEM ERROR - 1701</b></font>")
-	if (src.l_setshort)
+	if (emagged)
+		dat += text("<p>\n<font color=red><b>ENCRYPTION SYSTEM ERROR - 1701. 01000111&%^$PASSCODE^&%$$ [obscurecode_text]</b></font>")
+	if (l_setshort)
 		dat += text("<p>\n<font color=red><b>ALERT: MEMORY SYSTEM ERROR - 6040 201</b></font>")
-	message = text("[]", src.code)
-	if (!src.locked)
+	message = text("[]", code)
+	if (!locked)
 		message = "*****"
 	dat += {"<HR><br/>>[message]<BR>\n
 		<A href='?src=\ref[src];type=1'>1</A>-<A href='?src=\ref[src];type=2'>2</A>-<A href='?src=\ref[src];type=3'>3</A><BR>\n
@@ -114,27 +141,29 @@
 		return
 	if (href_list["type"])
 		if (href_list["type"] == "E")
-			if ((src.l_set == 0) && (length(src.code) == 5) && (!src.l_setshort) && (src.code != "ERROR"))
-				src.l_code = src.code
-				src.l_set = 1
-			else if ((src.code == src.l_code) && (src.emagged == 0) && (src.l_set == 1))
-				src.locked = 0
-				src.overlays = null
+			if ((l_set == 0) && (length(code) == 5) && (!l_setshort) && (code != "ERROR"))
+				l_code = code
+				l_set = 1
+			else if ((code == l_code) && (l_set == 1))
+				locked = 0
+				overlays = null
+				emagged = 0
 				overlays += image('icons/obj/storage/storage.dmi', icon_opened)
-				src.code = null
+				code = null
 			else
-				src.code = "ERROR"
+				lastguess_code = code
+				code = "ERROR"
 		else
-			if ((href_list["type"] == "R") && (src.emagged == 0) && (!src.l_setshort))
-				src.locked = 1
-				src.overlays = null
-				src.code = null
-				src.close(usr)
+			if ((href_list["type"] == "R") && (!l_setshort))
+				locked = 1
+				overlays = null
+				code = null
+				close(usr)
 			else
-				src.code += text("[]", href_list["type"])
-				if (length(src.code) > 5)
-					src.code = "ERROR"
-		src.add_fingerprint(usr)
+				code += text("[]", href_list["type"])
+				if (length(code) > 5)
+					code = "ERROR"
+		add_fingerprint(usr)
 		showInterface(usr) //refresh!
 
 // -----------------------------
@@ -163,21 +192,21 @@
 	new /obj/item/weapon/pen(src)
 
 /obj/item/weapon/storage/secure/briefcase/attack_hand(mob/user as mob)
-	if ((src.loc == user) && (src.locked == 1))
+	if ((loc == user) && (locked == 1))
 		to_chat(user, "<span class='warning'>[src] is locked and cannot be opened!</span>")
-	else if ((src.loc == user) && (!src.locked))
+	else if ((loc == user) && (!locked))
 		if(!stealthy(user))
 			playsound(src, "rustle", 50, 1, -5)
 		if (user.s_active)
 			user.s_active.close(user) //Close and re-open
-		src.show_to(user)
+		show_to(user)
 	else
 		..()
 		for(var/mob/M in range(1))
 			if (M.s_active == src)
-				src.close(M)
-		src.orient2hud(user)
-	src.add_fingerprint(user)
+				close(M)
+		orient2hud(user)
+	add_fingerprint(user)
 
 /obj/item/weapon/storage/secure/briefcase/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
@@ -205,10 +234,10 @@
 			user.Paralyse(2)
 			return
 
-		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [name] by [user.name] ([user.ckey])</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to attack [M.name] ([M.ckey])</font>")
 
-		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
 
 		var/t = user:zone_sel.selecting
 		if (t == LIMB_HEAD)
