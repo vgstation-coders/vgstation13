@@ -32,17 +32,14 @@
 /obj/item/projectile/immovablerod/vending/New()
 	..()
 	collisionCount = rand(4, 6)
-	to_chat(world, "Count is = [collisionCount]")
 
 /obj/item/projectile/immovablerod/vending/break_stuff()
 	if(loc.density)
 		loc.ex_act(2)
 		collisionCount--
-		to_chat(world, "Count is = [collisionCount]")
 		if(prob(25))
 			clong()
 		if(collisionCount <= 0)
-			to_chat(world, "Should be becoming vendor")
 			becomeVendor()
 
 /obj/item/projectile/immovablerod/vending/proc/becomeVendor()

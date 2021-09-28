@@ -190,7 +190,6 @@
 		else
 			addUncommonStock()
 	for(var/u = 1 to rarerRolls)	//Guaranteed uncommon stock, much more likely rare stock
-		to_chat(world, "rarer rolls")
 		addUncommonStock()
 
 /obj/machinery/vending/old_vendotron/proc/addCommonStock()
@@ -205,7 +204,6 @@
 	var/stockPrice = priceRandomizer(commonStock[chosenStock])
 	prices.Add(chosenStock)
 	prices[chosenStock] = stockPrice
-	to_chat(world, "Common stock chosen: [chosenStock]")
 
 /obj/machinery/vending/old_vendotron/proc/addUncommonStock()
 	if(prob(80))
@@ -218,7 +216,6 @@
 		var/stockPrice = priceRandomizer(uncommonStock[chosenStock])
 		prices.Add(chosenStock)
 		prices[chosenStock] = stockPrice
-		to_chat(world, "Uncommon stock chosen: [chosenStock]")
 	else
 		addRareStock()
 
@@ -230,11 +227,9 @@
 	var/stockPrice = priceRandomizer(rareStock[chosenStock])
 	prices.Add(chosenStock)
 	prices[chosenStock] = stockPrice
-	to_chat(world, "Rare stock chosen: [chosenStock]")
 
 /obj/machinery/vending/old_vendotron/proc/priceRandomizer(var/thePrice = 0)
 	thePrice = rand(thePrice * 0.7, thePrice * 1.3)	//30% cheaper or pricier, totally random for SPICE
-	to_chat(world, "price set to: [thePrice]")
 	return thePrice
 
 /obj/machinery/vending/old_vendotron/emag(mob/user)
@@ -259,6 +254,16 @@
 
 /obj/machinery/vending/old_vendotron/malfunction()
 	punishCheapskate()
+
+/obj/machinery/vending/old_vendotron/crowbarDestroy(mob/user, obj/item/tool/crowbar/C)
+	user.visible_message(	"[user] struggles to pry out the firmly secured circuitboard from \the [src].",
+							"You struggle to pry out the firmly secured circuitboard from \the [src]...")
+	if(do_after(user, src, 10 SECONDS))	//This is a strong hint that something may or may not be going on
+		user.drop_item(C, get_turf(user), 1)	//Your glue won't help
+		C.animationBolt()
+		user.visible_message(	"\The [src] begins to pry out the circuitboard from [user].",
+								"\The [src] begins to pry out the circuitboard from you.")
+
 
 /obj/machinery/vending/old_vendotron/proc/punishCheapskate()
 	var/ourPunishment = rand(1, 6)
@@ -317,12 +322,10 @@
 		sC.wFuel = 20
 		sC.dir = get_dir(src, sC)
 		sC.anchored = TRUE
-		to_chat(world, "Cannons should fire soon")
-		spawn(3)
+		spawn(1 SECONDS)
 			if(!sC.gcDestroyed)
-				to_chat(world, "Fire!")
 				sC.itemFire()
-		spawn(6)
+		spawn(2 SECONDS)
 			if(!sC.gcDestroyed)
 				qdel(sC)
 
@@ -340,7 +343,7 @@
 	visible_message("<span class='big danger'>Even \the [src] looks afraid!</span>")
 	var/obj/item/weapon/grenade/iedcasing/preassembled/gNightmare = new /obj/item/weapon/grenade/iedcasing/preassembled(get_turf(src))
 	gNightmare.det_time = 5 SECONDS
-	gNightmare.name = "Improved Explosive Nightmare"
+	gNightmare.name = "Improvised Explosive Nightmare"
 	for(var/i = 1 to nightmareLevel)
 		var/obj/item/anvil/A = new /obj/item/anvil(gNightmare)
 		gNightmare.shrapnel_list.Add(A)

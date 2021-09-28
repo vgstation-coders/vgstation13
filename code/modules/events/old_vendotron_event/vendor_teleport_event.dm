@@ -16,7 +16,6 @@
 
 /datum/event/old_vendotron_teleport/proc/teleportVendor()
 	var/turf/vendT = vendSpawnDecide()
-	to_chat(world, "Spawn location is x[vendT.x] y[vendT.y] z[vendT.z]")
 	fancyEntrance(vendT)
 
 /datum/event/old_vendotron_teleport/proc/vendSpawnDecide()
@@ -27,11 +26,16 @@
 		/area/shuttle/administration/station,
 		/area/ai_monitored/storage/emergency,
 		/area/arrival,
+		/area/shuttle/escape_pod1,
+		/area/shuttle/escape_pod2,
+		/area/shuttle/escape_pod3,
+		/area/shuttle/escape_pod4,
+		/area/shuttle/escape_pod5,
+		/area/shuttle/prison/,
 	)
 	var/list/vendSpawnAreas = the_station_areas - dontSpawnHere
 	var/area/toSpawn = pick(vendSpawnAreas)
 	toSpawn = locate(toSpawn)
-	to_chat(world, "toSpawn is [toSpawn.name]")
 	var/list/turf/simulated/floor/vendSpawn = list()
 	for(var/turf/simulated/floor/F in toSpawn)
 		if(!F.has_dense_content())
@@ -45,12 +49,9 @@
 
 /datum/event/old_vendotron_teleport/proc/fancyEntrance(var/turf/vendT)
 	var/obj/effect/old_vendotron_entrance/E = new /obj/effect/old_vendotron_entrance(vendT)
-	to_chat(world, "made the portal")
 	E.aestheticEntrance()
-	to_chat(world, "entrance got fancy")
 	playsound(E, 'sound/effects/eleczap.ogg', 100, 1)
 	spawn(4 SECONDS)
-		to_chat(world, "Been 4 seconds")
 		var/obj/machinery/vending/old_vendotron/OV = new /obj/machinery/vending/old_vendotron(vendT)
 		playsound(OV, 'sound/effects/coins.ogg', 100, 1)
 
@@ -62,12 +63,10 @@
 /obj/effect/old_vendotron_entrance/New()
 	..()
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\An old vendotron has been teleported onto the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
 
 /obj/effect/old_vendotron_entrance/proc/aestheticEntrance()
-	to_chat(world, "Starting entrance")
 	animate(src, alpha = 255, transform = matrix()*2, time = 3 SECONDS)
-	to_chat(world, "phase 2")
 	spawn(3 SECONDS)
 		animate(src, icon_state = "bhole3", transform = matrix()*0.1, time = 3 SECONDS)
 	spawn(35)
