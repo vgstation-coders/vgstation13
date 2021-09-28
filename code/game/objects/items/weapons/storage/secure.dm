@@ -105,6 +105,8 @@
 		visible_message("<span class='warning'>[bicon(src)] \The [src] beeps: Encryption module runtime. Partial code obscurity failure.</span>")
 		obscurecode_text = stars(l_code,pick(40,60))
 		sleep(6)
+		overlays.len = 0
+		overlays += image('icons/obj/storage/storage.dmi', icon_locking)
 
 /obj/item/weapon/storage/secure/emp_act(severity)
 	var/unlockprob = 0
@@ -113,7 +115,7 @@
 			unlockprob = 10
 		if(2)
 			unlockprob = 5
-	if(prob(unlockprob))
+	if(prob(unlockprob) && id_locked)
 		id_locked = 0
 		visible_message("<span class='warning'>[bicon(src)] \The [src] hisses: ^&^$%^&*&^$^&NAMELOCK FAILURE&*%$£%&*^*&*^*&^&*^*&.</span>")
 
