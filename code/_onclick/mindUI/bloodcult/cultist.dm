@@ -207,7 +207,7 @@
 					to_chat(M,"<span class='notice'>You are currently mentoring [dat].</span>")
 				if ((world.time - C.time_role_changed_last) < 5 MINUTES)
 					if ((world.time - C.time_role_changed_last) > 4 MINUTES)
-						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - (world.time - C.time_role_changed_last))/10) + 1] seconds before you can switch role.</span>")
+						to_chat(M,"<span class='warning'>You must wait [round((5 MINUTES - (world.time - C.time_role_changed_last))/10) + 1] seconds before you can switch role.</span>")
 					else
 						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - (world.time - C.time_role_changed_last))/600) + 1] minutes before you can switch role.</span>")
 					return
@@ -299,9 +299,9 @@
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/bloodcult_role_background,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_close,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role/acolyte,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role/herald,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role/mentor,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/acolyte,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/herald,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/mentor,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm,
 		/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_role_move,
 		)
@@ -359,46 +359,46 @@
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select
 	icon = 'icons/ui/bloodcult/40x40.dmi'
 	icon_state = "button"
 	layer = MIND_UI_BUTTON
 	var/role_small = ""
 	var/role = null
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/New()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/New()
 	..()
 	overlays += "overlay_[role_small]"
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/UpdateIcon()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/UpdateIcon()
 	var/datum/mind_ui/bloodcult_role/P = parent
 	if (P.selected_role == role)
 		icon_state = "button-down"
 	else
 		icon_state = "button"
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/StartHovering()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/StartHovering()
 	var/datum/mind_ui/bloodcult_role/P = parent
 	if (P.selected_role == role)
 		return
 	else
 		..()
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/StopHovering()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/StopHovering()
 	var/datum/mind_ui/bloodcult_role/P = parent
 	if (P.selected_role == role)
 		return
 	else
 		..()
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/Click()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/Click()
 	var/datum/mind_ui/bloodcult_role/P = parent
 	P.selected_role = role
 	P.Display()
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/acolyte
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/acolyte
 	name = "Acolyte"
 	offset_x = -99
 	offset_y = 90
@@ -407,7 +407,7 @@
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/herald
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/herald
 	name = "Herald"
 	offset_x = -3
 	offset_y = 90
@@ -416,7 +416,7 @@
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/mentor
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/mentor
 	name = "Mentor"
 	offset_x = 93
 	offset_y = 90

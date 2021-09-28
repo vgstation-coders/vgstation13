@@ -1280,14 +1280,14 @@ var/list/converted_minds = list()
 	switch (type)
 		if (1)
 			stun_duration++
-			anim(target = loc, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
+			anim(target = loc, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_stun", sleeptime = 20, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 			icon = 'icons/effects/480x480.dmi'
 			pixel_x = -224
 			pixel_y = -224
 			animate(src,alpha = 255,time = 10)
 		if (2)
 			stun_duration--
-			anim(target = loc, a_icon = 'icons/effects/64x64.dmi', flick_anim = "talisman_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
+			anim(target = loc, a_icon = 'icons/effects/64x64.dmi', flick_anim = "talisman_stun", sleeptime = 20, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 			icon = 'icons/effects/224x224.dmi'
 			pixel_x = -96
 			pixel_y = -96
