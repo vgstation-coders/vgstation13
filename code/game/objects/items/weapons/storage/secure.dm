@@ -50,11 +50,13 @@
 				if(!registered_name && I.registered_name)
 					registered_name = I.registered_name
 					desc = "Owned by [I.registered_name]."
+					visible_message("<span class='notice'>[bicon(src)] \The [src] beeps: Registered name synced to service panel. Welcome, [registered_name]</span>")
 					return
 				id_locked = !id_locked
+				to_chat(user,"<span class='notice'>You toggle the ID lock on the service panel.</span>")
 				return
 			else
-				to_chat(user, "<span class='notice'>Access Denied.</span>")
+				to_chat(user, "<span class='warning'>Access Denied.</span>")
 				return
 		if (W.is_screwdriver(user))
 			if(!id_locked)
@@ -62,7 +64,7 @@
 				to_chat(user,"<span class='notice'>You [open ? "open" : "close"] the service panel.</span>")
 				return
 			else
-				to_chat(user, "<span class='notice'>Access Denied.</span>")
+				to_chat(user, "<span class='warning'>Access Denied.</span>")
 				return
 		if (istype(W, /obj/item/device/multitool))
 			if (open == 1 && !l_hacking)
@@ -87,7 +89,7 @@
 				for(var/i = 1, i <= length(lastguess_code); i++)
 					if(lastguess_code[i] == l_code[i])
 						correct++
-				to_chat(user,"<span class='notice'>&*%$Correctly guessed numbers: [correct].</span>")
+				visible_message("<span class='notice'>[bicon(src)] \The [src] hisses: &*%$PASSCODE MATCH: [correct].</span>")
 				return
 		//At this point you have exhausted all the special things to do when locked
 		// ... but it's still locked.
@@ -103,6 +105,17 @@
 		visible_message("<span class='warning'>[bicon(src)] \The [src] beeps: Encryption module runtime. Partial code obscurity failure.</span>")
 		obscurecode_text = stars(l_code,pick(40,60))
 		sleep(6)
+
+/obj/item/weapon/storage/secure/emp_act(severity)
+	var/unlockprob = 0
+	switch(severity)
+		if(1)
+			unlockprob = 10
+		if(2)
+			unlockprob = 5
+	if(prob(unlockprob))
+		id_locked = 0
+		visible_message("<span class='warning'>[bicon(src)] \The [src] hisses: ^&^$%^&*&^$^&NAMELOCK FAILURE&*%$£%&*^*&*^*&^&*^*&.</span>")
 
 /obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
 	if (locked)
