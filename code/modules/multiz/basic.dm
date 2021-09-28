@@ -10,13 +10,13 @@
 	var/turf/turf = get_turf(atom)
 	if(!turf)
 		return null
-	return HasAbove(turf.z) ? get_step(turf, UP) : null
+	return HasAbove(turf.z) ? locate(turf.x,turf.y,map.zLevels[z].z_above.z) : null
 
 /proc/GetBelow(var/atom/atom)
 	var/turf/turf = get_turf(atom)
 	if(!turf)
 		return null
-	return HasBelow(turf.z) ? get_step(turf, DOWN) : null
+	return HasBelow(turf.z) ? locate(turf.x,turf.y,map.zLevels[z].z_below.z) : null
 
 /proc/GetConnectedZlevels(z)
 	. = list(z)
