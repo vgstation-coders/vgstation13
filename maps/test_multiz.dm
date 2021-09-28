@@ -37,8 +37,6 @@
 	tDomeY = 100
 	tDomeZ = 1
 	multiz = TRUE
-	height = 5
-	zLoc = 5
 	zLevels = list(
 		/datum/zLevel/centcomm,
 		/datum/zLevel/subterranean,

@@ -11,8 +11,6 @@
 	tDomeY = 58
 	tDomeZ = 3
 	multiz = TRUE
-	height = 2
-	zLoc = 2
 	zLevels = list(
 		/datum/zLevel/snowmine{
 			z_above = 2
