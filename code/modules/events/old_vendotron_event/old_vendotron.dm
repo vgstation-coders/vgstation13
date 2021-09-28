@@ -2,6 +2,7 @@
 	name = "old vendotron"
 	desc = "Originating from who knows where, it's a miracle this thing is still operational."
 	icon_state = "Old_Vendotron"
+	icon_vend = "Old_Vendotron-vend"
 	unhackable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 	var/list/commonStock = list(
@@ -63,6 +64,18 @@
 		/obj/item/weapon/storage/toolbox/syndicate = 150,
 		/obj/item/weapon/storage/firstaid/adv = 150,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/chaos = 50,
+		/obj/item/weapon/stock_parts/micro_laser/high/ultra = 150,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico = 150,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 150,
+		/obj/item/weapon/stock_parts/capacitor/adv/super = 150,
+		/obj/item/slime_extract/grey = 100,
+		/obj/item/slime_extract/silver = 130,
+		/obj/item/slime_extract/pink = 150,
+		/obj/item/slime_extract/bluespace = 200,
+		/obj/item/weapon/pickaxe/drill/diamond = 500,
+		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube = 150,
+		/obj/item/weapon/storage/box/large/mystery_material = 150,
+
 	)
 
 	var/list/uncommonStock = list(
@@ -74,7 +87,7 @@
 		/obj/item/potion/invisibility/major = 350,
 		/obj/item/weapon/dice/d20/cursed = 250,
 		/obj/item/weapon/implanter/compressed = 400,
-		/obj/item/weapon/implant/freedom = 500,
+		/obj/item/weapon/storage/box/syndie_kit/imp_freedom = 500,
 		/obj/item/weapon/reagent_containers/food/snacks/egg/chaos = 50,
 		/obj/item/bluespace_crystal = 75,
 		/mob/living/simple_animal/hostile/gremlin = 125,
@@ -123,6 +136,18 @@
 		/obj/item/weapon/bikehorn/baton = 300,
 		/obj/item/weapon/grenade/flashbang/clusterbang = 300,
 		/obj/item/cannonball/bananium = 200,
+		/obj/item/weapon/stock_parts/micro_laser/high/ultra/giga = 200,
+		/obj/item/weapon/stock_parts/capacitor/adv/super/ultra = 250,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico/femto = 200,
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic/bluespace = 200,
+		/obj/item/weapon/storage/lockbox/advanced = 150,
+		/obj/item/device/analyzer/scope = 220,
+		/obj/item/weapon/circuitboard/mecha/phazon/main = 350,
+		/obj/item/mecha_parts/mecha_equipment/teleporter = 300,
+		/obj/item/mecha_parts/mecha_equipment/gravcatapult = 300,
+		/obj/item/weapon/storage/box/mysterycubes = 250,
+		/obj/item/weapon/glow_orb = 200,
+		/obj/item/stack/sheet/mineral/phazon = 300,
 	)
 
 	var/list/rareStock = list(
@@ -146,6 +171,9 @@
 		/obj/item/bluespace_crystal/flawless = 2400,	//Spessmart has it at 1800 so we're making it pricier
 		/obj/item/weapon/cloakingcloak = 1400,
 		/obj/structure/bed/chair/vehicle/wheelchair/multi_people = 900,
+		/obj/item/weapon/veilrender/vealrender = 50000,	//One day, 30 years from now, someone will win the lottery in a round this is rolled
+		/obj/item/phylactery = 750,
+		/obj/item/clothing/shoes/blindingspeed = 1800,
 	)
 
 /obj/machinery/vending/old_vendotron/New()
@@ -157,7 +185,7 @@
 	var/stockAmount = rand(6, 18)
 	var/rarerRolls = 1 + round(player_list.len * 0.1, 1) //More players more stock, slightly
 	for(var/i = 1 to stockAmount)
-		if(prob(80))
+		if(prob(70))
 			addCommonStock()
 		else
 			addUncommonStock()
@@ -170,8 +198,13 @@
 	theStock = rand(1, commonStock.len)
 	var/chosenStock = commonStock[theStock]
 	products.Add(chosenStock)
+	if(prob(50))		//common items can easily have 2-3 stock
+		products[chosenStock] = 2
+	else if(prob(25))
+		products[chosenStock] = 3
 	var/stockPrice = priceRandomizer(commonStock[chosenStock])
-	prices.Add(list(chosenStock = stockPrice))
+	prices.Add(chosenStock)
+	prices[chosenStock] = stockPrice
 	to_chat(world, "Common stock chosen: [chosenStock]")
 
 /obj/machinery/vending/old_vendotron/proc/addUncommonStock()
@@ -180,8 +213,11 @@
 		theStock = rand(1, uncommonStock.len)
 		var/chosenStock = uncommonStock[theStock]
 		products.Add(chosenStock)
+		if(prob(15))	//Uncommon items A rare double stock
+			products[chosenStock] = 2
 		var/stockPrice = priceRandomizer(uncommonStock[chosenStock])
-		prices.Add(list(chosenStock = stockPrice))
+		prices.Add(chosenStock)
+		prices[chosenStock] = stockPrice
 		to_chat(world, "Uncommon stock chosen: [chosenStock]")
 	else
 		addRareStock()
@@ -192,11 +228,12 @@
 	var/chosenStock = rareStock[theStock]
 	products.Add(chosenStock)
 	var/stockPrice = priceRandomizer(rareStock[chosenStock])
-	prices.Add(list(chosenStock = stockPrice))
+	prices.Add(chosenStock)
+	prices[chosenStock] = stockPrice
 	to_chat(world, "Rare stock chosen: [chosenStock]")
 
 /obj/machinery/vending/old_vendotron/proc/priceRandomizer(var/thePrice = 0)
-	thePrice += thePrice * rand(-0.3, 0.3)	//30% cheaper or pricier, totally random for SPICE
+	thePrice = rand(thePrice * 0.7, thePrice * 1.3)	//30% cheaper or pricier, totally random for SPICE
 	to_chat(world, "price set to: [thePrice]")
 	return thePrice
 
@@ -212,24 +249,37 @@
 	if(severity < 3)
 		punishCheapskate()
 
+/obj/machinery/vending/old_vendotron/kick_act(mob/living/carbon/human/user)
+	..()
+	if(prob(1))	//Let's make it very hard to turn this against the crew without tools
+		if(prob(75))
+			punishCheapskate()
+		else
+			robotsInDisguise(user)
+
+/obj/machinery/vending/old_vendotron/malfunction()
+	punishCheapskate()
+
 /obj/machinery/vending/old_vendotron/proc/punishCheapskate()
-	var/ourPunishment = rand(1, 5)
+	var/ourPunishment = rand(1, 6)
 	switch(ourPunishment)
 		if(1)
-			ahhSpiders()	//I will not be changing these proc names. They are perfect the way they are
+			ahhSpiders()	//I will not be changing these proc names.
 		if(2)
-			platesPlatesPlates()
+			platesPlatesPlates()	//They are perfect the way they are
 		if(3)
-			broadSideBarrage()
+			broadSideBarrage()	//I mean it, I'm not changing these
 		if(4)
-			youHaveToEatAllTheEggs()
+			youHaveToEatAllTheEggs()	//Go on, ask me
 		if(5)
+			ghettoNightmare()	//I will say "No"
+		if(6)
 			robotsInDisguise()
 
 /obj/machinery/vending/old_vendotron/proc/ahhSpiders(var/spiderAmount = 20)
 	visible_message("<span class='big danger'>Loud chittering can be heard from \the [src]!</span>")
 	for(var/i = 1, i < spiderAmount, i++)
-		spawn(i)
+		spawn(i+1)
 			if(prob(75))
 				new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(src))
 			else
@@ -238,7 +288,7 @@
 /obj/machinery/vending/old_vendotron/proc/platesPlatesPlates(var/plateAmount = 50) //This many is necessary, I promise
 	visible_message("<span class='big danger'>\The [src] enters dinner mode!</span>")
 	for(var/i = 1, i < plateAmount, i++)
-		spawn(i+1)
+		spawn(i+2)
 			var/obj/item/trash/plate/thePlate = new /obj/item/trash/plate(get_turf(src))
 			var/turf/plateTarg = null
 			if(prob(50))
@@ -269,18 +319,38 @@
 		sC.anchored = TRUE
 		to_chat(world, "Cannons should fire soon")
 		spawn(3)
-			to_chat(world, "Fire!")
-			sC.itemFire()
-			qdel(sC)
+			if(!sC.gcDestroyed)
+				to_chat(world, "Fire!")
+				sC.itemFire()
+		spawn(6)
+			if(!sC.gcDestroyed)
+				qdel(sC)
 
 /obj/machinery/vending/old_vendotron/proc/youHaveToEatAllTheEggs(var/eggAmount = 8)
 	visible_message("<span class='big danger'>\The [src] vends some peculiar eggs!</span>")
 	for(var/i = 1 to eggAmount)
-		var/turf/eggT = get_turf(pick(orange(5, src)))
+		var/turf/eggT = get_turf(pick(orange(5, get_turf(src))))
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/cEgg = new /obj/item/weapon/reagent_containers/food/snacks/egg/chaos(eggT)
 		var/eggTimer = rand(3, 10)
 		spawn(eggTimer SECONDS)
-			cEgg.hatch()
+			if(!cEgg.gcDestroyed)
+				cEgg.hatch()
+
+/obj/machinery/vending/old_vendotron/proc/ghettoNightmare(var/nightmareLevel = 8, mob/user)	//This is a sin
+	visible_message("<span class='big danger'>Even \the [src] looks afraid!</span>")
+	var/obj/item/weapon/grenade/iedcasing/preassembled/gNightmare = new /obj/item/weapon/grenade/iedcasing/preassembled(get_turf(src))
+	gNightmare.det_time = 5 SECONDS
+	gNightmare.name = "Improved Explosive Nightmare"
+	for(var/i = 1 to nightmareLevel)
+		var/obj/item/anvil/A = new /obj/item/anvil(gNightmare)
+		gNightmare.shrapnel_list.Add(A)
+		gNightmare.current_shrapnel++
+		if(gNightmare.current_shrapnel >= gNightmare.max_shrapnel)
+			break //More of a safety, already breaking the laws of IED
+	var/turf/gTarg = get_ranged_target_turf(src, dir, 3)
+	gNightmare.throw_at(gTarg, 3, 5)
+	gNightmare.attack_self(user)
+	animate(gNightmare, transform = matrix()*3, time = 5 SECONDS)
 
 /obj/machinery/vending/old_vendotron/proc/robotsInDisguise(mob/user)
 	visible_message("<span class='big danger'>\The [src] engages neo-ultra-capitalism mode!</span>")
@@ -290,8 +360,6 @@
 	src.forceMove(madVendor)
 	if(user)
 		madVendor.GiveTarget(user)
-
-
 
 /mob/living/simple_animal/hostile/old_vendotron
 	name = "old vendotron"
@@ -303,12 +371,12 @@
 	health = 600
 	melee_damage_lower = 10
 	melee_damage_upper = 30
-	attacktext = "punches"
+	attacktext = "vends"
 	mob_property_flags = MOB_CONSTRUCT | MOB_ROBOTIC | MOB_NO_PETRIFY | MOB_NO_LAZ
 	environment_smash_flags = SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_STRONG
 	var/obj/machinery/vending/old_vendotron/ourVendor = null
 	var/lastPunish = 0
-	var/punishCooldown = 75
+	var/punishCooldown = 50
 
 /mob/living/simple_animal/hostile/old_vendotron/death(var/gibbed = FALSE)
 	if(ourVendor)
@@ -321,13 +389,23 @@
 /mob/living/simple_animal/hostile/old_vendotron/Life()
 	..()
 	if(stance == HOSTILE_STANCE_ATTACK || stance == HOSTILE_STANCE_ATTACKING)
-		if(prob(15) && lastPunish <= world.time + punishCooldown)
-			ourVendor.platesPlatesPlates()
+		if(punishCommies())
 			lastPunish = world.time
-		else if(prob(20) && lastPunish <= world.time + punishCooldown)
+
+/mob/living/simple_animal/hostile/old_vendotron/proc/punishCommies()
+	if(lastPunish + punishCooldown <= world.time)
+		if(prob(15))
+			ourVendor.platesPlatesPlates(30)
+			return TRUE
+		if(prob(20))
 			ourVendor.broadSideBarrage()
-			lastPunish = world.time
-		else if(prob(20) && lastPunish <= world.time + punishCooldown)
-			ourVendor.youHaveToEatAllTheEggs(4)
-		else if(prob(5) && lastPunish <= world.time + punishCooldown)
+			return TRUE
+		if(prob(5))
+			ourVendor.ghettoNightmare(3)
+		if(prob(10))
+			ourVendor.youHaveToEatAllTheEggs(3)
+			return TRUE
+		if(prob(10))
 			ourVendor.ahhSpiders(10)
+			return TRUE
+	return FALSE

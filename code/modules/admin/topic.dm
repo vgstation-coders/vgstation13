@@ -3533,11 +3533,16 @@
 				feedback_add_details("admin_secrets_fun_used","IRH")
 				message_admins("[key_name_admin(usr)] has sent an immovable monolith to the station. That one's gonna hurt.", 1)
 				immovablerod(2)
-			if("old_vendotron")
+			if("old_vendotron_crash")
 				feedback_inc("admin_secrets_fun_used", 1)
-				feedback_add_details("admin_secrets_fun_used","VEND")
-				message_admins("[key_name_admin(usr)] has started an old vendotron event", 1)
-				new /datum/event/old_vendotron
+				feedback_add_details("admin_secrets_fun_used","VENDC")
+				message_admins("[key_name_admin(usr)] has started an old vendotron crash event", 1)
+				new /datum/event/old_vendotron_crash
+			if("old_vendotron_teleport")
+				feedback_inc("admin_secrets_fun_used", 1)
+				feedback_add_details("admin_secrets_fun_used","VENDT")
+				message_admins("[key_name_admin(usr)] has started an old vendotron teleport event", 1)
+				new /datum/event/old_vendotron_teleport
 			if("prison_break")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PB")

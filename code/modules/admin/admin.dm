@@ -836,7 +836,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
 			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=old_vendotron'>Launch an old vendotron at the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=old_vendotron_crash'>Launch an old vendotron at the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=old_vendotron_teleport'>Teleport an old vendotron onto the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
 			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
