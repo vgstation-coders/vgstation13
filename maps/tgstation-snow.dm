@@ -14,11 +14,14 @@
 	height = 2
 	zLoc = 2
 	zLevels = list(
-		/datum/zLevel/snowmine,
+		/datum/zLevel/snowmine{
+			z_above = 2
+		},
 		/datum/zLevel/snow{
 			name = "station"
 			movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
 			base_turf = /turf/simulated/open
+			z_below = 1
 		},
 		/datum/zLevel/centcomm,
 		/datum/zLevel/snow{

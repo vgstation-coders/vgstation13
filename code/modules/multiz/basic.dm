@@ -10,19 +10,19 @@
 	var/turf/turf = get_turf(atom)
 	if(!turf)
 		return null
-	return HasAbove(turf.z) ? locate(turf.x,turf.y,map.zLevels[turf.z].z_above.z) : null
+	return HasAbove(turf.z) ? locate(turf.x,turf.y,map.zLevels[turf.z].z_above) : null
 
 /proc/GetBelow(var/atom/atom)
 	var/turf/turf = get_turf(atom)
 	if(!turf)
 		return null
-	return HasBelow(turf.z) ? locate(turf.x,turf.y,map.zLevels[turf.z].z_below.z) : null
+	return HasBelow(turf.z) ? locate(turf.x,turf.y,map.zLevels[turf.z].z_below) : null
 
 /proc/GetConnectedZlevels(z)
 	. = list(z)
-	for(var/level = z, HasBelow(level), level = map.zLevels[z].z_below.z)
+	for(var/level = z, HasBelow(level), level = map.zLevels[z].z_below)
 		. |= level
-	for(var/level = z, HasAbove(level), level = map.zLevels[z].z_above.z)
+	for(var/level = z, HasAbove(level), level = map.zLevels[z].z_above)
 		. |= level
 
 /proc/AreConnectedZLevels(var/zA, var/zB)
@@ -33,9 +33,9 @@
 	if (!turf)
 		return list()
 	. = list(turf.z)
-	for(var/level = turf.z, HasBelow(level) && isvisiblespace(GetBelow(locate(turf.x,turf.y,level))), level = map.zLevels[z].z_below.z)
+	for(var/level = turf.z, HasBelow(level) && isvisiblespace(GetBelow(locate(turf.x,turf.y,level))), level = map.zLevels[z].z_below)
 		. |= level
-	for(var/level = turf.z, HasAbove(level) && isvisiblespace(GetAbove(locate(turf.x,turf.y,level))), level = map.zLevels[z].z_above.z)
+	for(var/level = turf.z, HasAbove(level) && isvisiblespace(GetAbove(locate(turf.x,turf.y,level))), level = map.zLevels[z].z_above)
 		. |= level
 
 /proc/AreOpenConnectedZLevels(var/zA, var/zB)
