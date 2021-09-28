@@ -299,10 +299,11 @@
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/bloodcult_role_background,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_close,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role/acolyte,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role/herald,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role/mentor,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm,
+		/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_role_move,
 		)
 	display_with_parent = FALSE
 
@@ -358,111 +359,69 @@
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte
-	name = "Acolyte"
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role
 	icon = 'icons/ui/bloodcult/40x40.dmi'
-	icon_state = "button_acolyte"
+	icon_state = "button"
+	layer = MIND_UI_BUTTON
+	var/role_small = ""
+	var/role = null
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/New()
+	..()
+	overlays += "overlay_[role_small]"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/UpdateIcon()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == role)
+		icon_state = "button-down"
+	else
+		icon_state = "button"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/StartHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == role)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/StopHovering()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	if (P.selected_role == role)
+		return
+	else
+		..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/Click()
+	var/datum/mind_ui/bloodcult_role/P = parent
+	P.selected_role = role
+	P.Display()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/acolyte
+	name = "Acolyte"
 	offset_x = -99
 	offset_y = 90
-	layer = MIND_UI_BUTTON
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/UpdateIcon()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_ACOLYTE)
-		icon_state = "button_acolyte-down"
-	else
-		icon_state = "button_acolyte"
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/StartHovering()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_ACOLYTE)
-		return
-	else
-		..()
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/StopHovering()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_ACOLYTE)
-		return
-	else
-		..()
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_acolyte/Click()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	P.selected_role = CULTIST_ROLE_ACOLYTE
-	P.Display()
+	role_small = "acolyte"
+	role = CULTIST_ROLE_ACOLYTE
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/herald
 	name = "Herald"
-	icon = 'icons/ui/bloodcult/40x40.dmi'
-	icon_state = "button_herald"
 	offset_x = -3
 	offset_y = 90
-	layer = MIND_UI_BUTTON
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/UpdateIcon()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_HERALD)
-		icon_state = "button_herald-down"
-	else
-		icon_state = "button_herald"
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/StartHovering()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_HERALD)
-		return
-	else
-		..()
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/StopHovering()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_HERALD)
-		return
-	else
-		..()
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_herald/Click()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	P.selected_role = CULTIST_ROLE_HERALD
-	P.Display()
+	role_small = "herald"
+	role = CULTIST_ROLE_HERALD
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/mentor
 	name = "Mentor"
-	icon = 'icons/ui/bloodcult/40x40.dmi'
-	icon_state = "button_mentor"
 	offset_x = 93
 	offset_y = 90
-	layer = MIND_UI_BUTTON
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/UpdateIcon()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_MENTOR)
-		icon_state = "button_mentor-down"
-	else
-		icon_state = "button_mentor"
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/StartHovering()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_MENTOR)
-		return
-	else
-		..()
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/StopHovering()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	if (P.selected_role == CULTIST_ROLE_MENTOR)
-		return
-	else
-		..()
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role_mentor/Click()
-	var/datum/mind_ui/bloodcult_role/P = parent
-	P.selected_role = CULTIST_ROLE_MENTOR
-	P.Display()
+	role_small = "mentor"
+	role = CULTIST_ROLE_MENTOR
 
 //------------------------------------------------------------
 
@@ -504,6 +463,19 @@
 		if (C)
 			C.ChangeCultistRole(P.selected_role)
 			parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_role_move
+	name = "Move Interface (Click and Drag)"
+	icon = 'icons/ui/bloodcult/16x16.dmi'
+	icon_state = "move"
+	layer = MIND_UI_BUTTON
+	offset_x = -165
+	offset_y = 130
+	mouse_opacity = 1
+
+	move_whole_ui = TRUE
 
 ////////////////////////////////////////////////////////////////////
 //																  //

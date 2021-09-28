@@ -1,5 +1,4 @@
 
-#define RUNE_STAND	1
 
 //Returns a rune spell based on the given 3 words.
 /proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/rune_word/word1, var/datum/rune_word/word2, var/datum/rune_word/word3)
@@ -266,12 +265,11 @@
 	cost_upkeep = 1
 	remaining_cost = 300
 	accumulated_blood = 0
-	page = "A very greedy rune. very thirsty. Alone, the ritual will be long and exhausting. With others, it will be quick and effortless. \
-	 Nevertheless, an essential rune, for the cult needs an altar where to commune with Nar-Sie, and perform the Sacrifice when the time has come. \
-	 As the veil thins and the blood flows, the altar will allow the cultists to perform new rituals, namely, the exchange of blood, for a shard of the Soulstone. \
-	 You may use them to trap the souls of defeated foes, or channel those the dead. You can make even better use of them after raising a forge, and placing them \
-	 inside a Construct Shell, or a Cult Blade. Lastly, raising an Arcaneum will let you permanently imbue your skin with a gift from Nar Sie. Follow your purpose \
-	 and you may see even more gifts come your way."
+	page = "Channel this rune to create either an Altar, a Forge, or a Spire. You can speed up the ritual by having other cultist touch the rune, or by wearing cult garments. \
+		Altars let you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station. \
+		Forges let you craft armors, powerful blades, as well as construct shells. Blades and shells can be combined with soul gems to great effect, \
+		but note that Forges tend to sear those who stay near them too long. You can mitigate the effect with cult apparel, or use the Fervor rune to reset your temperature. \
+		Spires provide easy communication for the cult in the entire region. Use :x (or .x, or #x) to use cult chat after one is built."
 	var/turf/loc_memory = null
 	var/spawntype = /obj/structure/cult/altar
 
@@ -296,7 +294,7 @@
 	proximity_check() //See above
 
 	var/list/choices = list(
-		list("Altar", "radial_altar", "The nexus of a cult base. Has many uses. More runes will also become usable after the first altar has been raised."),
+		list("Altar", "radial_altar", "The nexus of a cult base. Lets you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station."),
 		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
 		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
 	)
@@ -318,14 +316,6 @@
 			spawntype = /obj/structure/cult/spire
 		if("Forge")
 			spawntype = /obj/structure/cult/forge
-		if("Spire (locked)")
-			to_chat(user,"Reach Act 1 to unlock the Spire. It allows human cultists to acquire Arcane Tattoos, providing various buffs.")
-			abort()
-			return
-		if("Forge (locked)")
-			to_chat(user,"Reach Act 1 to unlock the Forge. It enables the forging of cult blades and armor, as well as new construct shells.")
-			abort()
-			return
 
 	loc_memory = spell_holder.loc
 	contributors.Add(user)
@@ -333,7 +323,7 @@
 	if(user.client)
 		user.client.images |= progbar
 	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
-	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it or by wearing cult attire.</span>")
+	to_chat(activator, "<span class='rose'>This ritual's can be sped up by having multiple cultists partake in it or by wearing cult attire.</span>")
 	spawn()
 		payment()
 

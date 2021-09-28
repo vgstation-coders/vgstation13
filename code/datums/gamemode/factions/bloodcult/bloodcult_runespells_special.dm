@@ -21,10 +21,7 @@
 	word2 = /datum/rune_word/blood
 	word3 = /datum/rune_word/hell
 	cost_invoke = 4
-	page = "Knowledge is of the essence. Becoming useful to the cult isn't simple, but having a desire to learn and improve is the first step. \
-		This rune is the first step on this journey, you don't have to study all the runes right away but the answer to your current conundrum could be in one of them. \
-		The tome in your hands is the produce of this ritual, by having it open in your hands, the meaning of every rune can freely flow into your mind, \
-		which means that you can trace them more easily. Be mindful though, if anyone spots this tome in your hand, your devotion to Nar-Sie will be immediately exposed."
+	page = ""
 
 /datum/rune_spell/summontome/cast()
 	var/obj/effect/rune/R = spell_holder
@@ -86,4 +83,13 @@
 	streamer.toggle_streaming()
 	qdel(src)
 
-#undef RUNE_STAND
+/*
+Hall of fame of previous deprecated runes, might redesign later, noting their old word combinations there so I can easily retrieve them later.
+
+MANIFEST GHOST: Blood 	See 	Travel
+SACRIFICE: 		Hell 	Blood 	Join
+DRAIN BLOOD: 	Travel 	Blood 	Self
+BLOOD BOIL: 	Destroy See 	Blood
+TEAR REALITY:	Hell 	Join 	Self
+
+*/

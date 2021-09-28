@@ -560,6 +560,14 @@
 				for (var/datum/role/cultist/C in cult.members)
 					var/datum/mind/M = C.antag
 					var/conversion = ""
+					var/cult_role = ""
+					switch (C.cultist_role)
+						if (CULTIST_ROLE_ACOLYTE)
+							cult_role = "Acolyte"
+						if (CULTIST_ROLE_MENTOR)
+							cult_role = "Mentor"
+						else
+							cult_role = "Herald"
 					if (C.conversion.len > 0)
 						conversion = pick(C.conversion)
 					var/origin_text = ""
@@ -583,7 +591,7 @@
 							extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
 						else if (H.isDead())
 							extra = " - <span style='color:#FF0000'>DEAD</span>"
-					dat += "<li><b>[M.name]</b></li> - [origin_text][extra]"
+					dat += "<li><b>[M.name] ([cult_role])</b></li> - [origin_text][extra]"
 				for(var/obj/item/weapon/handcuffs/cult/cuffs in cult.bindings)
 					if (iscarbon(cuffs.loc))
 						var/mob/living/carbon/C = cuffs.loc
@@ -597,7 +605,7 @@
 									extra = " - <span style='color:#FF0000'>DEAD</span>"
 							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
 				dat += {"</ul></body>"}
-				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
+				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=600x400")
 				onclose(user, "cultroster")
 			if ("Look through Veil")
 				if(user.hud_used && user.hud_used.holomap_obj)
