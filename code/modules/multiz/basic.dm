@@ -1,9 +1,13 @@
 // If you add a more comprehensive system, just untick this file.
 
 /proc/HasAbove(var/z)
+	if(z >= world.maxz || z < 1)
+		return FALSE
 	return map.zLevels[z].z_above ? TRUE : FALSE
 
 /proc/HasBelow(var/z)
+	if(z > world.maxz || z < 2)
+		return FALSE
 	return map.zLevels[z].z_below ? TRUE : FALSE
 
 /proc/GetAbove(var/atom/atom)
