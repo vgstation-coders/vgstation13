@@ -100753,6 +100753,8 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 1
 	},
+/obj/item/weapon/storage/bag/trash/bio,
+/obj/item/taperoll/viro,
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whiteblue"
