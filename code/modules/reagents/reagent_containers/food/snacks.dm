@@ -4979,7 +4979,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	var/candyness = 161 //how long this thing will last
 	var/list/reagents_to_add = list(NUTRIMENT=2, SUGAR=8)
-	volume = 15 //not a lotta room for poison
+	volume = 20 //not a lotta room for poison
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
 	..()
@@ -5029,7 +5029,6 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop
 	name = "medipop"
-	volume = 20
 	reagents_to_add = list(NUTRIMENT=2, SUGAR=8, TRICORDRAZINE=10)
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/lollicheap
