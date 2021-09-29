@@ -1513,11 +1513,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
 	if(!disfigured)
-		/*	Allowing spessmen to ""cleanly"" decapitated people.
-		if(brute_dam > 40)
+		if(!edge && (brute_dam > 40))
 			if(prob(50))
 				disfigure("brute")
-		*/
 		if(burn_dam > 40)
 			disfigure((used_weapon != WPN_LOW_BODY_TEMP) ? "burn" : "frostbite")
 
