@@ -1192,7 +1192,7 @@
 		var/list/valid_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)
 		if (!(my_appearance.f_style in valid_facial_hair))
 			my_appearance.f_style = random_facial_hair_style(gender, species)
-		if (my_appearance.s_tone > species.max_skin_tone)
+		if (((my_appearance.s_tone < 0) && !(species.anatomy_flags & HAS_SKIN_TONE)) || (my_appearance.s_tone > species.max_skin_tone))
 			my_appearance.s_tone = random_skin_tone(species)
 		if(dna)
 			update_dna_from_appearance()
