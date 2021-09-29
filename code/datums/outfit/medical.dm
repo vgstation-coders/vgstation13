@@ -359,7 +359,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/orderly,
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
+			slot_head_str = list(), //nurse hats won't spawn without this because ???
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
 		/datum/species/plasmaman = list(
