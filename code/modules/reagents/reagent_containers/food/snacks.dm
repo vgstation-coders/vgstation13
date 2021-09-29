@@ -5033,7 +5033,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/lollicheap
 	name = "cheap medipop"
-	reagents_to_add = list(NUTRIMENT=2, SUGAR=8, PICCOLYN=1)
+	reagents_to_add = list(NUTRIMENT=2, SUGAR=8, PICCOLYN=1, TRICORDRAZINE = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin
 	name = "\improper Choco-Coin"
