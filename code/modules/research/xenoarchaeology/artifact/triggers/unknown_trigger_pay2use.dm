@@ -12,7 +12,7 @@
 /datum/artifact_trigger/pay2use/New()
 	..()
 	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackhand)
-	my_artifact.register_event(/event/attackhand, src, .proc/owner_attackby)
+	my_artifact.register_event(/event/attackby, src, .proc/owner_attackby)
 	mode = rand(0,2)
 	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
 	switch(mode)
