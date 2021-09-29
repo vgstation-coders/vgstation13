@@ -155,6 +155,7 @@
 	target.op_stage.face = 0
 	target.op_stage.tooth_replace = 0
 	target.update_name()
+	target.update_hair()
 
 /datum/surgery_step/face/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
