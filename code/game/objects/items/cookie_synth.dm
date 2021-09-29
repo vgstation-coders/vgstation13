@@ -84,9 +84,9 @@
 /obj/item/weapon/cookiesynth/lollipop
 	name = "medipop synthesizer"
 	desc = "A self-recharging device used to rapidly deploy medicinal lollipops. Tell your patient they were very brave today."
-	food_type = /obj/item/weapon/reagent_containers/food/snacks/medipop
+	food_type = /obj/item/weapon/reagent_containers/food/snacks/lollipop/medipop
 
 /obj/item/weapon/cookiesynth/lollicheap
 	name = "cheap medipop synthesizer"
 	desc = "A self-recharging device used to rapidly deploy ordinary, non-medicinal lollipops. Tell your patient they were very brave today."
-	food_type = /obj/item/weapon/reagent_containers/food/snacks/lollicheap
+	food_type = /obj/item/weapon/reagent_containers/food/snacks/lollipop/lollicheap
