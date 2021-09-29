@@ -57,7 +57,10 @@ var/list/map_dimension_cache = list()
  * A list of all atoms created
  *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num)
+	if((rotate % 90) != 0) //If not divisible by 90, make it
+		rotate += (rotate % 90)
+	
 	if(!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
 
@@ -118,21 +121,23 @@ var/list/map_dimension_cache = list()
 
 		//if exceeding the world max x or y, increase it
 		var/x_depth = length(copytext(zgrid,1,findtext(zgrid,"\n",2,0))) //This is the length of an encoded line (like "aaaaaaaaBBBBaaaaccccaaa")
+		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
-		if(world.maxx < map_width + x_offset)
+		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_width + x_offset
+		var/y_check = rotate == 0 || rotate == 180 ? y_depth + y_offset : y_depth + y_offset
+		if(world.maxx < x_check)
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
 				return list()
-			world.maxx = map_width + x_offset
+			world.maxx = x_check
 			WARNING("Loading [map_element] enlarged the map. New max x = [world.maxx]")
 
-		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
-		if(world.maxy < y_depth + y_offset)
+		if(world.maxy < y_check)
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
 				return list()
-			world.maxy = y_depth + y_offset
+			world.maxy = y_check
 			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
@@ -146,7 +151,15 @@ var/list/map_dimension_cache = list()
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
-				spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+				switch(rotate)
+					if(0)
+						spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset,rotate)
+					if(90)
+						spawned_atoms |= parse_grid(grid_models[model_key],y_depth-ycrd,xcrd,zcrd+z_offset,rotate)
+					if(180)
+						spawned_atoms |= parse_grid(grid_models[model_key],x_depth-xcrd,y_depth-ycrd,zcrd+z_offset,rotate)
+					if(270)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd,x_depth-xcrd,zcrd+z_offset,rotate)
 				if (remove_lag)
 					CHECK_TICK
 			if(map_element)
@@ -198,7 +211,7 @@ var/list/map_dimension_cache = list()
  * A list with all spawned atoms
  *
  */
-/dmm_suite/proc/parse_grid(var/model as text,var/xcrd as num,var/ycrd as num,var/zcrd as num)
+/dmm_suite/proc/parse_grid(var/model as text,var/xcrd as num,var/ycrd as num,var/zcrd as num,var/rotate as num)
 	/*Method parse_grid()
 	- Accepts a text string containing a comma separated list of type paths of the
 		same construction as those contained in a .dmm file, and instantiates them.
@@ -302,7 +315,7 @@ var/list/map_dimension_cache = list()
 
 	//finally instance all remainings objects/mobs
 	for(index=1,index < first_turf_index,index++)
-		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd)
+		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
 
 	return spawned_atoms
@@ -312,7 +325,7 @@ var/list/map_dimension_cache = list()
 ////////////////
 
 //Instance an atom at (x,y,z) and gives it the variables in attributes
-/dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z)
+/dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z, var/rotate)
 	if(!path)
 		return
 	var/atom/instance
@@ -327,6 +340,10 @@ var/list/map_dimension_cache = list()
 
 	if(_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
+
+	// Stolen from shuttlecode but very good to reuse here
+	if(rotate)
+		instance.shuttle_rotate(rotate)
 
 	return instance
 
