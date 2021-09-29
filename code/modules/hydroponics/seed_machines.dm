@@ -74,14 +74,17 @@
 	if(failed_task)
 		failed_task = 0
 		visible_message("[bicon(src)] [src] pings unhappily, flashing a red warning light.")
+		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 	else
 		visible_message("[bicon(src)] [src] pings happily.")
+		playsound(src, 'sound/machines/notify.ogg', 50, 0)
 
 	if(eject_disk)
 		eject_disk = 0
 		if(loaded_disk)
 			loaded_disk.forceMove(get_turf(src))
 			visible_message("[bicon(src)] [src] beeps and spits out [loaded_disk].")
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
 			loaded_disk = null
 
 	nanomanager.update_uis(src)
