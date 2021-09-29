@@ -67,12 +67,12 @@
 	user.gib()
 
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
-	if(honk())
+	if(honk(user))
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
 	if (isliving(AM) && world.time > next_honk)
-		honk()
+		honk(AM)
 		next_honk = world.time + honk_delay
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
@@ -81,7 +81,7 @@
 		//honk()
 		//return
 
-	if(!proximity_flag && istype(target, /mob) && honk()) //for skilled honking at a range
+	if(!proximity_flag && istype(target, /mob) && honk(user)) //for skilled honking at a range
 		target.visible_message(\
 			"<span class='notice'>[user] honks \the [src] at \the [target].</span>",\
 			"[user] honks \the [src] at you.")
@@ -90,15 +90,22 @@
 	if(..())
 		return 1
 
-	honk()
+	honk(H)
 
 /obj/item/weapon/bikehorn/bite_act(mob/living/H)
 	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='danger'>You bite \the [src].</span>")
 
-	honk()
+	honk(H)
 
-/obj/item/weapon/bikehorn/proc/honk()
+/obj/item/weapon/bikehorn/proc/honk(var/mob/user)
 	if(world.time - last_honk_time >= honk_delay)
+		var/initial_hitsound = hitsound
+		if(ishuman(user)) //Merry Cico Del Mayo, ai caramba!!!!!
+			var/mob/living/carbon/human/H = user
+			if(clumsy_check(H) && H.is_wearing_item(/obj/item/clothing/head/sombrero) && H.is_wearing_item(/obj/item/clothing/suit/poncho))
+				hitsound = 'sound/items/bikehorn_curaracha.ogg'
+				spawn(0)
+					hitsound = initial_hitsound
 		last_honk_time = world.time
 		playsound(src, hitsound, 50, vary_pitch)
 		return 1
