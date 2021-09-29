@@ -96,8 +96,12 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	overlays.Cut()
 	vis_contents.Cut()
 	var/turf/bottom
+	var/depth = 0
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
 		alpha_to_subtract /= 2
+		depth++
+		if(depth > config.multiz_render_cap) // To stop getting caught on this in infinite loops
+			break
 
 	if(!bottom || bottom == src)
 		return

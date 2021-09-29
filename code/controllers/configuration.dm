@@ -74,6 +74,9 @@
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
 
+	
+	var/multiz_render_cap = 8			//how far down open spaces will render
+
 	// BSQL things
 	var/bsql_debug = 0
 	var/async_query_timeout = 10
@@ -575,6 +578,10 @@
 					blocking_query_timeout = text2num(value)
 				if("bsql_thread_limit")
 					bsql_thread_limit = text2num(value)
+
+				
+				if("multiz_render_cap")
+					multiz_render_cap = text2num(value)
 
 				if("media_base_url")
 					media_base_url = value
