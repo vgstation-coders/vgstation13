@@ -359,7 +359,9 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/orderly,
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
-			slot_head_str = null, //special_equip needs this slot to exist to spawn nurse hats
+			slot_head_str = list(
+				"Surgeron" = /obj/item/clothing/head/surgery/purple, //special_equip needs this slot to exist and a null value won't work. have a joke about an old bug instead.
+			),
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
 		/datum/species/plasmaman = list(
