@@ -33,13 +33,13 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 // Helper for the below
 /proc/get_zs_away(atom/Loc1,atom/Loc2)
 	if(Loc1.z == Loc2.z)
-		return 0
+		return 0 // Nip this in the bud to save performance maybe
 	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
-		return INFINITY
+		return INFINITY // Redundant to below but sanity checking
 
 	var/dist_above = 0
 	var/dist_below = 0
-	var/above_found = FALSE
+	var/above_found = FALSE // Using booleans to see how we handle this later, don't want us hitting the ceiling and pulling a short distance when it wasn't found
 	var/below_found = FALSE
 
 	for(var/level = Loc1.z, HasBelow(level), level = map.zLevels[level].z_below)
@@ -47,19 +47,25 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 			below_found = TRUE
 			break
 		dist_below++
+		if(map.zLevels[level].z_below == Loc1.z) // If we end up where we started, get out of the infinite loop (called after value is upped)
+			break
+
 	for(var/level = Loc1.z, HasAbove(level), level = map.zLevels[level].z_above)
 		if(level == Loc2.z)
 			above_found = TRUE
 			break
 		dist_above++
+		if(map.zLevels[level].z_above == Loc1.z)
+			break
 
 	if(above_found && below_found)
-		return min(dist_above,dist_below)
+		return min(dist_above,dist_below) // Get minimum of each if found above AND below
 	else if(above_found)
-		return dist_above
+		return dist_above // Otherwise as normal
 	else if(below_found)
 		return dist_below
-	return INFINITY
+	return INFINITY // Yeah, redundant
+
 /**
  * Z-Distance functions
  *
