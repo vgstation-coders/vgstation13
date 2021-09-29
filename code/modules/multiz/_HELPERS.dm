@@ -31,14 +31,12 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 // BEGIN /VG/ CODE
 
 // Helper for the below
-
 /proc/get_zs_away(atom/Loc1,atom/Loc2)
 	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
 		return INFINITY
 
 	var/dist_above = 0
 	var/dist_below = 0
-
 
 	for(var/level = Loc1.z, HasBelow(level), level = map.zLevels[level].z_below)
 		if(level == Loc2.z)
@@ -49,7 +47,7 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 			break
 		dist_above++
 	
-	return max(dist_above,dist_below)
+	return min(dist_above,dist_below)
 
 /**
  * Z-Distance functions
