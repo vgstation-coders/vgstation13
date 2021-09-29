@@ -37,18 +37,26 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 	var/dist_above = 0
 	var/dist_below = 0
+	var/above_found = FALSE
+	var/below_found = FALSE
 
 	for(var/level = Loc1.z, HasBelow(level), level = map.zLevels[level].z_below)
 		if(level == Loc2.z)
+			below_found = TRUE
 			break
 		dist_below++
 	for(var/level = Loc1.z, HasAbove(level), level = map.zLevels[level].z_above)
 		if(level == Loc2.z)
+			above_found = TRUE
 			break
 		dist_above++
-	
-	return min(dist_above,dist_below)
-
+	if(above_found && below_found)
+		return min(dist_above,dist_below)
+	else if(above_found)
+		return dist_above
+	else if(below_found)
+		return dist_below
+	return INFINITY
 /**
  * Z-Distance functions
  *
