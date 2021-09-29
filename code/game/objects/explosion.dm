@@ -142,7 +142,8 @@ var/explosion_shake_message_cooldown = 0
 	var/y0 = offcenter.y
 	var/z0 = offcenter.z
 	
-	log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [offcenter.loc.name] ([x0],[y0],[z0])")
+	if(epicenter != offcenter) // Not relevant if not in multi-z
+		log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [offcenter.loc.name] ([x0],[y0],[z0])")
 	
 	for(var/turf/T in spiral_block(offcenter,max_range,1))
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
