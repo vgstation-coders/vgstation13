@@ -29,6 +29,28 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 	return 0
 
 // BEGIN /VG/ CODE
+
+// Helper for the below
+
+/proc/get_zs_away(atom/Loc1,atom/Loc2)
+	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
+		return INFINITY
+
+	var/dist_above = 0
+	var/dist_below = 0
+
+
+	for(var/level = Loc1.z, HasBelow(level), level = map.zLevels[level].z_below)
+		if(level == Loc2.z)
+			break
+		dist_below++
+	for(var/level = Loc1.z, HasAbove(level), level = map.zLevels[level].z_above)
+		if(level == Loc2.z)
+			break
+		dist_above++
+	
+	return max(dist_above,dist_below)
+
 /**
  * Z-Distance functions
  *
@@ -36,23 +58,17 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
  *
  * Euclidean follows suit for the proper formula
  */
-/proc/get_z_dist(atom/Loc1,atom/Loc2)
+/proc/get_z_dist(atom/Loc1, atom/Loc2)
 	var/dx = abs(Loc1.x - Loc2.x)
 	var/dy = abs(Loc1.y - Loc2.y)
-	var/dz = abs(Loc1.z - Loc2.z)
-
-	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
-		return INFINITY
+	var/dz = get_zs_away(Loc1,Loc2)
 
 	return max(dx,dy,dz)
 
 /proc/get_z_dist_euclidian(atom/Loc1, atom/Loc2)
 	var/dx = Loc1.x - Loc2.x
 	var/dy = Loc1.y - Loc2.y
-	var/dz = Loc1.z - Loc2.z
-
-	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
-		return INFINITY
+	var/dz = get_zs_away(Loc1,Loc2)
 
 	return sqrt(dx**2 + dy**2 + dz**2)
 
@@ -64,10 +80,8 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
  * Use to compare distances. Used in component mobs.
  */
 /proc/get_z_dist_squared(var/atom/a, var/atom/b)
-	if(!AreConnectedZLevels(a.z, b.z))
-		return INFINITY
 
-	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((b.z-a.z)**2)
+	return ((b.x-a.x)**2) + ((b.y-a.y)**2) + ((get_zs_away(a,b))**2)
 
 /proc/multi_z_spiral_block(var/turf/epicenter,var/max_range,var/inward=0,var/draw_red=0,var/cube=1)
 	var/list/spiraled_turfs = list()
