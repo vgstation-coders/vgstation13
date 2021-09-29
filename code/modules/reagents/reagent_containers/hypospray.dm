@@ -108,6 +108,51 @@
 	else
 		to_chat(user, "<span class='info'>The [name] has been spent.</span>")
 
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/tramadol_injector
+	name = "tramadol injector"
+	desc = "A small, single-use device used to administer a dose of painkillers."
+	icon_state = "tramadol1"
+	amount_per_transfer_from_this = 10
+	volume = 10
+	flags = FPRINT
+	refill_reagent_list = list(TRAMADOL = 10)
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/tramadol_injector/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "tramadol1"
+	else
+		icon_state = "tramadol0"
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/charcoal_injector
+	name = "charcoal injector"
+	desc = "A small, single-use device used to administer a dose of activated charcoal."
+	icon_state = "charcoal1"
+	amount_per_transfer_from_this = 5
+	volume = 5
+	flags = FPRINT
+	refill_reagent_list = list(CHARCOAL = 5)
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/charcoal_injector/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "charcoal1"
+	else
+		icon_state = "charcoal0"
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/inaprovaline_injector
+	name = "inaprovaline injector"
+	desc = "A small, single-use device used to stabilize a badly-wounded patient, slow bleeding, and reduce pain."
+	icon_state = "inaprov1"
+	amount_per_transfer_from_this = 15
+	volume = 15
+	flags = FPRINT
+	refill_reagent_list = list(INAPROVALINE = 15)
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/inaprovaline_injector/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "inaprov1"
+	else
+		icon_state = "inaprov0"
+
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector
 	name = "biofoam injector"
 	desc = "A small, single-use device used to administer biofoam in the field."

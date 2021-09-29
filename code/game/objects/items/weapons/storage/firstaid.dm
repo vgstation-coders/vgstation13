@@ -35,7 +35,7 @@
 	icon_state = pick("ointment","firefirstaid")
 
 	new /obj/item/device/healthanalyzer(src)
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/tramadol_injector(src)
 	new /obj/item/stack/medical/ointment(src)
 	new /obj/item/stack/medical/ointment(src)
 	new /obj/item/weapon/reagent_containers/pill/kelotane(src)
@@ -77,7 +77,7 @@
 	icon_state = pick("antitoxin","antitoxfirstaid","antitoxfirstaid2","antitoxfirstaid3")
 
 	new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/charcoal_injector(src)
 	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
 	new /obj/item/weapon/reagent_containers/pill/antitox(src)
 	new /obj/item/weapon/reagent_containers/pill/antitox(src)
@@ -100,7 +100,7 @@
 		return
 	for (var/i = 1 to 4)
 		new /obj/item/weapon/reagent_containers/pill/dexalin(src)
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/inaprovaline_injector(src)
 	new /obj/item/weapon/reagent_containers/syringe/inaprovaline(src)
 	new /obj/item/device/healthanalyzer(src)
 	return
