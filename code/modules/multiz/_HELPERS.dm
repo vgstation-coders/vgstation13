@@ -32,6 +32,8 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 
 // Helper for the below
 /proc/get_zs_away(atom/Loc1,atom/Loc2)
+	if(Loc1.z == Loc2.z)
+		return 0
 	if(!AreConnectedZLevels(Loc1.z, Loc2.z))
 		return INFINITY
 
@@ -50,6 +52,7 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 			above_found = TRUE
 			break
 		dist_above++
+
 	if(above_found && below_found)
 		return min(dist_above,dist_below)
 	else if(above_found)
