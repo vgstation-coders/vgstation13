@@ -136,6 +136,7 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/output_dir = 0   //Direction used to output to (for things like fabs), set to 0 for loc.
 
 	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
 	var/battery_dependent = 0	//Requires a battery to run
@@ -626,9 +627,14 @@ Class Procs:
 			else
 				return -1
 
-	if(O.is_multitool(user) && machine_flags & MULTITOOL_MENU)
-		update_multitool_menu(user)
-		return 1
+	if(O.is_multitool(user))
+		if(!panel_open && machine_flags & MULTIOUTPUT)
+			setOutputLocation(user)
+			return 1
+		if(machine_flags & MULTITOOL_MENU)
+			update_multitool_menu(user)
+			return 1
+
 
 	if(!anchored && machine_flags & FIXED2WORK)
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")
@@ -774,3 +780,17 @@ Class Procs:
 
 /obj/machinery/proc/is_operational()
 	return !(stat & (NOPOWER|BROKEN|MAINT))
+
+
+/obj/machinery/proc/setOutputLocation(user)
+	var/result = input("Set your location as output?") in list("Yes","No","Machine Location")
+	switch(result)
+		if("Yes")
+			if(!Adjacent(user))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+				return 1
+			output_dir = get_dir(src, user)
+			to_chat(user, "<span class='notice'>Output set.</span>")
+		if("Machine Location")
+			output_dir = 0
+			to_chat(user, "<span class='notice'>Output set.</span>")
