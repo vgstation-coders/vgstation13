@@ -1,6 +1,9 @@
+// Copyright (c) 2020 /vg/station coders
+// SPDX-License-Identifier: MIT
+
 import { createSearch, decodeHtmlEntities } from 'common/string';
 import { useBackend, useLocalState } from '../backend';
-import { Box, Button, Flex, Input, Section, Table, Tabs, NoticeBox, Icon } from '../components';
+import { Box, Button, Flex, Input, Section, Tabs, NoticeBox } from '../components';
 import { Window } from '../layouts';
 
 const MAX_SEARCH_RESULTS = 25;
