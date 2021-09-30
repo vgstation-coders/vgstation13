@@ -1094,7 +1094,6 @@
 	else
 		return 0
 
-
 /obj/machinery/power/apc/process()
 
 	if(stat & (BROKEN|MAINT|FORCEDISABLE))
@@ -1133,15 +1132,13 @@
 
 	if(!src.avail())
 		main_status = 0
-	else if(excess < lastused_total) //Show "low power" if leftover energy in the grid isn't enough to charge this
+	else if(excess < 0)
 		main_status = 1
-		terminal?.get_powernet()?.unmet_demand += (lastused_total-max(excess,0))
 	else
 		main_status = 2
 
 	//if(debug)
 	//	world.log << "Status: [main_status] - Excess: [excess] - Last Equip: [lastused_equip] - Last Light: [lastused_light] - Longterm: [longtermpower]"
-
 
 	if(cell && !shorted)
 
@@ -1157,9 +1154,9 @@
 
 		else		// no excess, and not enough per-apc
 
-			if((cell.charge / CELLRATE + excess) >= lastused_total)		// can we draw enough from cell+grid to cover last usage?
-				var/use_remnant = cell.give(CELLRATE * excess)
-				add_load(use_remnant)		// so draw what we can from the grid
+			if((cell.charge / CELLRATE + excess) >= lastused_total)					// can we draw enough from cell+grid to cover last usage?
+				cell.charge = min(cell.maxcharge, cell.charge + CELLRATE * excess)	//recharge with what we can
+				add_load(excess)		// so draw what we can from the grid
 				charging = 0
 
 			else	// not enough power available to run the last tick!
@@ -1213,7 +1210,6 @@
 				var/ch = min(excess * CELLRATE, cell.maxcharge * CHARGELEVEL)
 				add_load(ch/CELLRATE) // Removes the power we're taking from the grid
 				cell.give(ch) // actually recharge the cell
-
 
 			else
 				charging = 0		// stop charging
