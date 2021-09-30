@@ -7722,7 +7722,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod3/station)
 "amJ" = (
 /obj/structure/cable{
@@ -14205,7 +14205,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod1/station)
 "axU" = (
 /turf/space,
@@ -14232,7 +14232,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod2/station)
 "axX" = (
 /turf/space,
@@ -21398,7 +21398,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "aNk" = (
 /obj/structure/grille,
@@ -21409,7 +21409,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "aNl" = (
 /turf/simulated/wall/shuttle{
@@ -23796,7 +23796,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "aRK" = (
 /obj/structure/table/reinforced,
@@ -43276,7 +43276,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/research/station)
 "bEx" = (
 /turf/space,
@@ -49265,7 +49265,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "bPe" = (
 /obj/structure/grille,
@@ -49273,7 +49273,7 @@
 	dir = 1
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "bPf" = (
 /turf/simulated/floor{
@@ -52958,7 +52958,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/mining/station)
 "bVW" = (
 /turf/space,
@@ -56563,7 +56563,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/mining/station)
 "ccq" = (
 /obj/structure/grille,
@@ -74767,7 +74767,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "cJe" = (
 /obj/machinery/atmospherics/binary/volume_pump{
@@ -80434,7 +80434,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod5/station)
 "cSI" = (
 /obj/docking_port/destination/salvage/south{
@@ -82644,7 +82644,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "cXg" = (
 /obj/machinery/flasher{
@@ -82788,7 +82788,7 @@
 /obj/docking_port/shuttle{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "cXy" = (
 /obj/structure/bed/chair/shuttle/red{
@@ -83011,7 +83011,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "cYb" = (
 /obj/structure/bed/chair{
@@ -83045,7 +83045,7 @@
 	dir = 4;
 	id_tag = "QMLoad2"
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/supply)
 "cYf" = (
 /obj/machinery/conveyor{
@@ -83091,7 +83091,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "cYk" = (
 /obj/structure/grille,
@@ -83131,7 +83131,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "cYp" = (
 /obj/structure/grille,
@@ -83179,7 +83179,7 @@
 	dir = 4;
 	id_tag = "QMLoad"
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/supply)
 "cYv" = (
 /obj/machinery/conveyor/centcom_auto{

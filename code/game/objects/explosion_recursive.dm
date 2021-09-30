@@ -108,7 +108,7 @@ proc/explosion_rec(turf/epicenter, power)
 /turf/simulated/floor/shuttle/brig
 	explosion_resistance = 1
 
-/turf/simulated/floor/plating/shuttle
+/turf/simulated/floor/shuttle/plating
 	explosion_resistance = 1
 
 /turf/simulated/wall/shuttle

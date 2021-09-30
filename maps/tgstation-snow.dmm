@@ -44911,7 +44911,7 @@
 /area/shuttle/administration/centcom)
 "dbJ" = (
 /obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/administration/centcom)
 "dbK" = (
 /obj/machinery/door/airlock/external,
@@ -48779,7 +48779,7 @@
 	dir = 4
 	},
 /obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/ert/centcom)
 "dkK" = (
 /obj/structure/shuttle/engine/propulsion/right{
@@ -49200,21 +49200,21 @@
 	icon_state = "14"
 	},
 /obj/structure/grille,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/striketeam/centcom)
 "dlP" = (
 /obj/structure/shuttle/window{
 	icon_state = "9"
 	},
 /obj/structure/grille,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/striketeam/centcom)
 "dlQ" = (
 /obj/structure/shuttle/window{
 	icon_state = "17"
 	},
 /obj/structure/grille,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/striketeam/centcom)
 "dlR" = (
 /turf/simulated/wall/shuttle,
@@ -49834,7 +49834,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dnj" = (
 /obj/structure/grille,
@@ -49842,7 +49842,7 @@
 	dir = 1
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dnk" = (
 /obj/structure/grille,
@@ -49853,7 +49853,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dnl" = (
 /turf/simulated/wall/shuttle{
@@ -50044,7 +50044,7 @@
 	dir = 1;
 	id_tag = "beltanator"
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/supply)
 "dnJ" = (
 /obj/machinery/conveyor/centcom_auto{
@@ -50818,7 +50818,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dpE" = (
 /obj/machinery/flasher{
@@ -51348,7 +51348,7 @@
 /obj/docking_port/shuttle{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dqK" = (
 /obj/structure/bed/chair/shuttle/red{
@@ -51569,7 +51569,7 @@
 	dir = 4
 	},
 /obj/structure/window/full/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/transport1/centcom)
 "drm" = (
 /turf/simulated/wall/shuttle{
@@ -52284,7 +52284,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dsO" = (
 /obj/structure/bed/chair{
@@ -52484,7 +52484,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dtj" = (
 /turf/unsimulated/wall/fakeglass,
@@ -52541,7 +52541,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dtq" = (
 /obj/machinery/computer/fluff/starmap,
@@ -52967,7 +52967,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/specops/centcom)
 "duG" = (
 /obj/docking_port/shuttle{
@@ -59815,7 +59815,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod3)
 "eld" = (
 /obj/structure/table,
@@ -70068,7 +70068,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod1)
 "gAE" = (
 /turf/simulated/wall/shuttle{
@@ -70113,7 +70113,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod2)
 "gAU" = (
 /obj/machinery/light{
@@ -70391,7 +70391,7 @@
 	name = "Salvage Shuttle Dock"
 	},
 /obj/docking_port/destination/pod1/centcom,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "gGE" = (
 /obj/machinery/door/airlock/glass{
@@ -70529,7 +70529,7 @@
 	name = "Salvage Shuttle Dock"
 	},
 /obj/docking_port/destination/pod2/centcom,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "gJW" = (
 /obj/machinery/light_switch{
@@ -71302,7 +71302,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod5)
 "gXt" = (
 /obj/structure/cable{
@@ -73678,7 +73678,7 @@
 /area/engineering/engine)
 "hKW" = (
 /obj/item/weapon/bikehorn,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "hLb" = (
 /obj/structure/grille,
@@ -73736,7 +73736,7 @@
 /area/hallway/primary/fore)
 "hMa" = (
 /obj/item/weapon/beach_ball,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "hMj" = (
 /obj/structure/grille,
@@ -73839,7 +73839,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "hOn" = (
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "hOy" = (
 /obj/machinery/computer/ordercomp,
@@ -75738,7 +75738,7 @@
 /area/medical/paramedics)
 "iye" = (
 /obj/item/weapon/toy/xmas_cracker,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "iyf" = (
 /obj/structure/table,
@@ -75846,7 +75846,7 @@
 /obj/item/weapon/gun/energy/pulse_rifle/destroyer{
 	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "iAr" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{
@@ -78159,7 +78159,7 @@
 /area/science/hallway)
 "jpI" = (
 /obj/item/weapon/beach_ball/holoball,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "jpJ" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -78420,7 +78420,7 @@
 /area/engineering/engine)
 "juC" = (
 /obj/item/weapon/boomerang/toy,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "juI" = (
 /obj/machinery/door/firedoor/border_only{
@@ -78520,7 +78520,7 @@
 /area/hallway/primary/central)
 "jwK" = (
 /obj/machinery/door/airlock/maintenance_hatch,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "jwS" = (
 /obj/machinery/light{
@@ -78629,7 +78629,7 @@
 /area/hallway/primary/central)
 "jxX" = (
 /obj/item/device/instrument/guitar,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "jxY" = (
 /obj/machinery/status_display{
@@ -82521,7 +82521,7 @@
 /area/science/rd)
 "kMI" = (
 /obj/machinery/chem_dispenser/scp_294,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "kMV" = (
 /obj/structure/cable{
@@ -83946,7 +83946,7 @@
 /obj/machinery/vending/circus{
 	emagged = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "lnr" = (
 /obj/structure/cable{
@@ -87481,7 +87481,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "mBJ" = (
 /obj/structure/grille,
@@ -87492,7 +87492,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "mCb" = (
 /obj/structure/table/woodentable,
@@ -91338,7 +91338,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "nXD" = (
 /obj/machinery/navbeacon{
@@ -93301,7 +93301,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "oBp" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -95610,7 +95610,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "ppQ" = (
 /obj/machinery/atmospherics/unary/vent_pump{
@@ -98559,7 +98559,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "qur" = (
 /obj/machinery/door/airlock/maintenance{
@@ -98753,7 +98753,7 @@
 /obj/docking_port/destination/pod3/centcom{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "qyh" = (
 /obj/machinery/door/window/brigdoor{
@@ -102315,7 +102315,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "rOr" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
@@ -108315,7 +108315,7 @@
 /obj/docking_port/destination/pod5/centcom{
 	dir = 4
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "tUx" = (
 /obj/machinery/light{
@@ -109781,7 +109781,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "uDe" = (
 /obj/structure/bed/chair,
@@ -114099,7 +114099,7 @@
 	id_tag = "syndicate_elite";
 	name = "Front Hull Door"
 	},
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/shuttle/syndicate_elite/mothership)
 "wdt" = (
 /obj/structure/table/woodentable,
@@ -118931,7 +118931,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "xJO" = (
 /obj/machinery/door/poddoor{
@@ -119333,7 +119333,7 @@
 	dir = 1
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "xOT" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -119406,7 +119406,7 @@
 	dir = 4
 	},
 /obj/structure/window/reinforced,
-/turf/simulated/floor/plating/shuttle,
+/turf/simulated/floor/shuttle/plating,
 /area/centcom/evac)
 "xQa" = (
 /obj/structure/window/reinforced,

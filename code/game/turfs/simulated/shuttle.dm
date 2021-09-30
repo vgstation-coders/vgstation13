@@ -22,7 +22,6 @@
 		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
 		bullet_marks = 0
 		icon = initial(icon)
-	..()
 
 /turf/simulated/wall/shuttle/cultify()
 	ChangeTurf(/turf/simulated/wall/cult)
@@ -35,6 +34,9 @@
 	heat_capacity = 0
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
+
+/turf/simulated/floor/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	return
 
 /turf/simulated/floor/shuttle/airless
 	oxygen   = 0.01
@@ -61,7 +63,7 @@
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
 	return
 
-/turf/simulated/floor/plating/shuttle
+/turf/simulated/floor/shuttle/plating
 	name = "plating"
 	icon_state = "plating"
 	thermal_conductivity = 0.05
@@ -69,7 +71,7 @@
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
 
-/turf/simulated/floor/plating/shuttle/airless
+/turf/simulated/floor/shuttle/plating/airless
 	oxygen   = 0.01
 	nitrogen = 0.01
 
