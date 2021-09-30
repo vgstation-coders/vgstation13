@@ -155,7 +155,7 @@
 	if(ishuman(parent))
 		var/mob/living/carbon/human/H = parent
 
-		var/obj/item/stack/sheet/animalhide/A = new result(location)
+		var/obj/item/stack/sheet/animalhide/human/A = new result(location)
 
 		if(!isjusthuman(H) && H.species) //Grey skin, unathi skin, etc.
 			A.name = H.species.name ? "[lowertext(H.species.name)] skin" : A.name
