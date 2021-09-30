@@ -27,7 +27,7 @@
 /obj/item/weapon/storage/briefcase/orderly/New()
 	..()
 	new /obj/item/weapon/cookiesynth/lollicheap(src)
-	for (var/i = 1 to 5)
+	for (var/i = 1 to 4)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector(src)
 
 /obj/item/weapon/storage/briefcase/suicide_act(var/mob/living/user)
