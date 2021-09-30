@@ -1271,7 +1271,7 @@ var/list/has_died_as_golem = list()
 	gender = NEUTER
 
 	tox_mod = 0.8
-	brute_mod = 0.5
+	brute_mod = 1.8
 	burn_mod = 0.6
 
 	primitive = /mob/living/carbon/monkey/mushroom
@@ -1279,7 +1279,7 @@ var/list/has_died_as_golem = list()
 	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/genetic/fungaltelepathy)
 
 
-	default_mutations=list(M_EXOSKELETON)
+	default_mutations=list() //exoskeleton someday...
 
 	blood_color = MUSHROOM_BLOOD
 	flesh_color = "#D3D3D3"
@@ -1302,7 +1302,7 @@ var/list/has_died_as_golem = list()
 
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
-					You have a resistance to burn and toxin, and your exoskeleton provides great protection against brute at the cost of easily-broken limbs.<br>\
+					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
 					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 	var/mob/living/telepathic_target
