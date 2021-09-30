@@ -1,7 +1,3 @@
-var/global/list/shuttle_turfs = list(/turf/simulated/wall/shuttle,/turf/simulated/floor/shuttle,/turf/simulated/floor/plating/shuttle,)
-
-#define isshuttleturf(A) is_type_in_list(A, shuttle_turfs)
-
 /turf/simulated/wall/shuttle
 	icon_state = "wall1"
 	opacity = 1
