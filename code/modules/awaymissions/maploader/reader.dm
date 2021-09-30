@@ -57,7 +57,7 @@ var/list/map_dimension_cache = list()
  * A list of all atoms created
  *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite = FALSE)
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
 
@@ -171,13 +171,13 @@ var/list/map_dimension_cache = list()
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
 				switch(rotate)
 					if(0)
-						spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset,rotate,overwrite)
 					if(90)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_flip_rotate,xcrd_rotate,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_flip_rotate,xcrd_rotate,zcrd+z_offset,rotate,overwrite)
 					if(180)
-						spawned_atoms |= parse_grid(grid_models[model_key],xcrd_flip,ycrd_flip,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],xcrd_flip,ycrd_flip,zcrd+z_offset,rotate,overwrite)
 					if(270)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_rotate,xcrd_flip_rotate,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_rotate,xcrd_flip_rotate,zcrd+z_offset,rotate,overwrite)
 				if (remove_lag)
 					CHECK_TICK
 			if(map_element)
@@ -232,7 +232,7 @@ var/list/map_dimension_cache = list()
  * A list with all spawned atoms
  *
  */
-/dmm_suite/proc/parse_grid(var/model as text,var/xcrd as num,var/ycrd as num,var/zcrd as num,var/rotate as num)
+/dmm_suite/proc/parse_grid(var/model as text,var/xcrd as num,var/ycrd as num,var/zcrd as num,var/rotate as num,var/overwrite = FALSE)
 	/*Method parse_grid()
 	- Accepts a text string containing a comma separated list of type paths of the
 		same construction as those contained in a .dmm file, and instantiates them.
@@ -335,6 +335,10 @@ var/list/map_dimension_cache = list()
 	spawned_atoms.Add(T)
 
 	//finally instance all remainings objects/mobs
+	if(overwrite)
+		var/turf/T_old = locate(xcrd,ycrd,zcrd)
+		for(var/atom/thing in T_old)
+			qdel(T_old)
 	for(index=1,index < first_turf_index,index++)
 		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
