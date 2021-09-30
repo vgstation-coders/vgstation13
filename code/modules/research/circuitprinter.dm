@@ -17,7 +17,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	build_time = IMPRINTER_BUILD_TIME
 	build_number = 1
 
-	research_flags = HASOUTPUT | TAKESMATIN | CONSOLECONTROL | LOCKBOXES
+	research_flags = HASOUTPUT | TAKESMATIN | CONSOLECONTROL | LOCKBOXES | MULTIOUTPUT
 
 	// Don't log reagent transfers.  They're just spammy.
 	log_reagents = 0

@@ -7,7 +7,7 @@
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 500
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | MULTIOUTPUT
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
 	var/input_path = /obj/item/weapon/reagent_containers/food/snacks/egg
@@ -15,7 +15,7 @@
 	var/speed_bonus = 0
 	var/circuitpath = /obj/item/weapon/circuitboard/egg_incubator
 	var/active_state = "incubator_old_on"
-	var/outputDir = 0
+	output_dir = 0
 
 /obj/machinery/egg_incubator/New()
 	. = ..()
@@ -49,17 +49,6 @@
 /obj/machinery/egg_incubator/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
 		return 1
-	if(ismultitool(O) && !panel_open)
-		var/result = input("Set your location as output?") in list("Yes","No","Machine Location")	//Copy paste of r_n_d machines, consistency
-		switch(result)
-			if("Yes")
-				if(!Adjacent(user))
-					to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
-					return 1
-				outputDir = get_dir(src, user)
-			if("Machine Location")
-				outputDir = 0
-				to_chat(user, "<span class='notice'>Output set.</span>")
 	if(istype(O,input_path))
 		if(contents.len >= limit)
 			to_chat(user, "\The [src] has no more space!")
@@ -135,7 +124,7 @@
 /obj/machinery/egg_incubator/proc/eject(var/obj/E)
 	if(E.loc != src)
 		return //You can't eject it if it's not here.
-	E.forceMove(get_step(get_turf(src), outputDir))
+	E.forceMove(get_step(get_turf(src), output_dir))
 	src.updateUsrDialog()
 	visible_message("<span class='info'>\The [E] is released from \the [src].</span>")
 
