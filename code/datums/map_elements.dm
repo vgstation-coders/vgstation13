@@ -15,6 +15,7 @@ var/list/datum/map_element/map_elements = list()
 	var/width //Width of the map element, in turfs
 	var/height //Height of the map element, in turfs
 	var/can_rotate = TRUE //Can this be rotated?
+	var/rotation = 0 //The map's rotation value
 
 /datum/map_element/proc/pre_load() //Called before loading the element
 	return
@@ -51,6 +52,7 @@ var/list/datum/map_element/map_elements = list()
 		var/file = file(file_path)
 		if(isfile(file))
 			var/list/L = maploader.load_map(file, z, x, y, src, rotate)
+			rotation = rotate
 			initialize(L)
 			return L
 	else //No file specified - empty map element
