@@ -148,10 +148,6 @@
 	result = /obj/item/stack/sheet/animalhide/human
 	amount = 3
 
-/datum/butchering_product/skin/gondola
-	result = /obj/item/stack/sheet/animalhide/gondola
-	amount = 2
-
 /datum/butchering_product/skin/human/spawn_result(location, mob/parent)
 	if(!amount)
 		return
@@ -168,6 +164,14 @@
 			if(H.mind && H.mind.assigned_role && H.mind.assigned_role != "MODE") //CLOWN LEATHER, ASSISTANT LEATHER, CAPTAIN LEATHER
 				A.name = "[lowertext(H.mind.assigned_role)] skin"
 				A.source_string = lowertext(H.mind.assigned_role)
+
+		if (H.species)
+			A.skin_color = H.species.flesh_color
+			A.color = A.skin_color
+
+/datum/butchering_product/skin/gondola
+	result = /obj/item/stack/sheet/animalhide/gondola
+	amount = 2
 
 /datum/butchering_product/skin/deer
 	result = /obj/item/stack/sheet/animalhide/deer
