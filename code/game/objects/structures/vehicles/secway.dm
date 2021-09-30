@@ -197,7 +197,6 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 	desc = "An elite secway, lovingly crafted by a security member."
 	icon_state = "secway-custom-classic"
 	keytype = /obj/item/key/security/spare
-	req_access = list(63)
 	health = 200
 	max_health = 200
 	var/knockdown_time = 1
