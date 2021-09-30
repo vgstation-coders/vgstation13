@@ -379,12 +379,12 @@
 	icon_state = "bcircuit"
 
 // VOX SHUTTLE SHIT
-/turf/simulated/shuttle/floor/vox
+/turf/simulated/floor/shuttle/vox
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
 
-/turf/simulated/shuttle/plating/vox
+/turf/simulated/floor/plating/shuttle/vox
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'

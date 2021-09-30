@@ -403,7 +403,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
 	if (istype(T2, /turf/space))
 		return BORDER_SPACE //omg hull breach we all going to die here
-	if (istype(T2, /turf/simulated/shuttle))
+	if (isshuttleturf(T2))
 		return BORDER_SPACE
 	var/areatype = get_area_type(T2.loc)
 	if (areatype != AREA_SPACE && areatype != AREA_CONSTRUCT)

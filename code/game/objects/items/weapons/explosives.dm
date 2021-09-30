@@ -53,7 +53,7 @@
 /obj/item/weapon/c4/afterattack(atom/target as obj|turf, mob/user as mob, flag)
 	if (!flag)
 		return
-	if (istype(target, /turf/unsimulated) || istype(target, /turf/simulated/shuttle) || istype(target, /obj/item/weapon/storage/))
+	if (istype(target, /turf/unsimulated) || isshuttleturf(target) || istype(target, /obj/item/weapon/storage/))
 		return
 	to_chat(user, "Planting explosives...")
 	if(ismob(target))

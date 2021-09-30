@@ -89,7 +89,7 @@
 /turf/simulated/wall/invulnerable/ice,
 /area)
 "au" = (
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "av" = (
 /turf/simulated/floor/plating/snow/cold,
@@ -98,11 +98,11 @@
 /turf/simulated/floor/plating/snow,
 /area)
 "ax" = (
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "ay" = (
 /obj/machinery/floodlight/on,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "az" = (
 /turf/simulated/wall,
@@ -117,11 +117,11 @@
 /obj/docking_port/shuttle{
 	dir = 8
 	},
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "aC" = (
 /obj/machinery/computer/shuttle,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "aD" = (
 /obj/machinery/light_switch{
@@ -732,7 +732,7 @@
 /turf/simulated/wall/r_wall,
 /area)
 "co" = (
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "cp" = (
 /obj/docking_port/shuttle,
@@ -742,21 +742,21 @@
 "cq" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/card/id/captains_spare,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cr" = (
 /obj/structure/table/reinforced,
 /obj/item/clothing/suit/space/rig/atmos,
 /obj/item/clothing/mask/breath,
 /obj/item/weapon/tank/oxygen,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cs" = (
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "ct" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cu" = (
 /obj/structure/bed/chair{
@@ -765,21 +765,21 @@
 /obj/effect/landmark{
 	name = "JoinLate"
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cv" = (
 /obj/effect/landmark{
 	name = "Observer-Start"
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cw" = (
 /obj/effect/landmark/start,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cx" = (
 /obj/item/device/flashlight/lantern/on,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "cy" = (
 /obj/structure/radial_gen/movable/snow_nature/snow_forest,
