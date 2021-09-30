@@ -173,11 +173,11 @@ var/list/map_dimension_cache = list()
 					if(0)
 						spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset,rotate,overwrite)
 					if(90)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_flip_rotate,xcrd_rotate,zcrd+z_offset,rotate,overwrite)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_rotate,xcrd_flip_rotate,zcrd+z_offset,rotate,overwrite)
 					if(180)
 						spawned_atoms |= parse_grid(grid_models[model_key],xcrd_flip,ycrd_flip,zcrd+z_offset,rotate,overwrite)
 					if(270)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_rotate,xcrd_flip_rotate,zcrd+z_offset,rotate,overwrite)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_flip_rotate,xcrd_rotate,zcrd+z_offset,rotate,overwrite)
 				if (remove_lag)
 					CHECK_TICK
 			if(map_element)
@@ -367,10 +367,8 @@ var/list/map_dimension_cache = list()
 		_preloader.load(instance)
 
 	// Stolen from shuttlecode but very good to reuse here
-	if(rotate == 180)
+	if(rotate)
 		instance.shuttle_rotate(rotate)
-	else if(rotate == 90 || rotate == 270)
-		instance.shuttle_rotate((rotate + 180) % 360)
 
 	return instance
 
