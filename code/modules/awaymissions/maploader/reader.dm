@@ -363,8 +363,10 @@ var/list/map_dimension_cache = list()
 		_preloader.load(instance)
 
 	// Stolen from shuttlecode but very good to reuse here
-	if(rotate)
+	if(rotate == 180)
 		instance.shuttle_rotate(rotate)
+	else if(rotate == 90 || rotate == 270)
+		instance.shuttle_rotate((rotate + 180) % 360)
 
 	return instance
 
