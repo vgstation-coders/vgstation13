@@ -73,7 +73,7 @@
 /datum/job/paramedic
 	title = "Paramedic"
 	faction = "Station"
-	total_positions = 4
+	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer"
 	wage_payout = 55
