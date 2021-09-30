@@ -32,17 +32,11 @@ export const PowerMonitorContent = (props, context) => {
   ] = useLocalState(context, 'sortByField', null);
   const supply = history.supply[history.supply.length - 1] || 0;
   const demand = history.demand[history.demand.length - 1] || 0;
-  const unmet = history.unmet[history.unmet.length - 1] || 0;
   const supplyData = history.supply.map((value, i) => [i, value]);
   const demandData = history.demand.map((value, i) => [i, value]);
-  const unmetData = history.unmet.map((value, i) => [i, value]);
-  const minValue = Math.min(
-    ...history.supply,
-    ...history.demand);
   const maxValue = Math.max(
     ...history.supply,
-    ...history.demand,
-    ...history.unmet);
+    ...history.demand);
     // Process area data
   const areas = flow([
     map((area, i) => ({
@@ -66,7 +60,7 @@ export const PowerMonitorContent = (props, context) => {
                 <ProgressBar
                   value={supply}
                   minValue={0}
-                  maxValue={maxValue}
+                  maxValue={demand}
                   color="teal">
                   {toFixed(supply / 1000) + ' kW'}
                 </ProgressBar>
@@ -75,48 +69,31 @@ export const PowerMonitorContent = (props, context) => {
                 <ProgressBar
                   value={demand}
                   minValue={0}
-                  maxValue={maxValue}
+                  maxValue={supply}
                   color="pink">
                   {toFixed(demand / 1000) + ' kW'}
                 </ProgressBar>
               </LabeledList.Item>
-              <LabeledList.Item label="Unmet">
-                <ProgressBar
-                  value={unmet}
-                  minValue={0}
-                  maxValue={maxValue}
-                  color="yellow">
-                  {toFixed(unmet / 1000) + ' kW'}
-                </ProgressBar>
-              </LabeledList.Item>
             </LabeledList>
-            {minValue}
           </Section>
         </Flex.Item>
-        <Flex.Item mx={0.5} grow={1}>
-          <Section position="relative" height="100%">
+        <Flex.Item mx={0.5} grow={2}>
+          <Box position="relative" height="100%">
             <Chart.Line
               fillPositionedParent
               data={supplyData}
               rangeX={[0, supplyData.length - 1]}
-              rangeY={[minValue, maxValue]}
+              rangeY={[0, maxValue]}
               strokeColor="rgba(0, 181, 173, 1)"
               fillColor="rgba(0, 181, 173, 0.25)" />
             <Chart.Line
               fillPositionedParent
               data={demandData}
               rangeX={[0, demandData.length - 1]}
-              rangeY={[minValue, maxValue]}
+              rangeY={[0, maxValue]}
               strokeColor="rgba(224, 57, 151, 1)"
               fillColor="rgba(224, 57, 151, 0.25)" />
-            <Chart.Line
-              fillPositionedParent
-              data={unmetData}
-              rangeX={[0, unmetData.length - 1]}
-              rangeY={[minValue, maxValue]}
-              strokeColor="rgba(255, 255, 23, 1)"
-              fillColor="rgba(225, 225, 23, 0.25)" />
-          </Section>
+          </Box>
         </Flex.Item>
       </Flex>
       <Section>
