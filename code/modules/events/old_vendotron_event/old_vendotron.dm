@@ -155,7 +155,7 @@
 		/obj/item/clothing/gloves/powerfist = 1800, //I don't even know if these work!
 		/obj/item/clothing/head/bearpelt/real/spare = 800,
 		/obj/item/clothing/head/celtic = 250,
-		/obj/item/clothing/mask/stone = 12000,	//Extremely difficult outside of the whole station wanting you to be a vampire
+		/obj/item/weapon/winter_gift/special = 2400,	//Extremely difficult outside of the whole station wanting you to be a vampire
 		/obj/item/clothing/mask/morphing/amorphous = 150,	//Cheaper than uncommon
 		/obj/item/clothing/shoes/magboots/deathsquad = 500,
 		/obj/item/clothing/suit/space/rig/centcomm/old = 500,
@@ -308,7 +308,7 @@
 		if(prob(50))
 			punishCheapskate()
 		else
-			robotsInDisguise(user)
+			neoUltraCapitalismMode(user)
 
 /obj/machinery/vending/old_vendotron/emp_act(severity)
 	if(severity < 3)
@@ -320,7 +320,7 @@
 		if(prob(75))
 			punishCheapskate()
 		else
-			robotsInDisguise(user)
+			neoUltraCapitalismMode(user)
 
 /obj/machinery/vending/old_vendotron/malfunction()
 	punishCheapskate()
@@ -349,7 +349,7 @@
 		if(5)
 			ghettoNightmare()	//I will say "No"
 		if(6)
-			robotsInDisguise()
+			neoUltraCapitalismMode()
 
 /obj/machinery/vending/old_vendotron/proc/ahhSpiders(var/spiderAmount = 20)
 	visible_message("<span class='big danger'>Loud chittering can be heard from \the [src]!</span>")
@@ -426,7 +426,7 @@
 	gNightmare.attack_self(user)
 	animate(gNightmare, transform = matrix()*3, time = 5 SECONDS)
 
-/obj/machinery/vending/old_vendotron/proc/robotsInDisguise(mob/user)
+/obj/machinery/vending/old_vendotron/proc/neoUltraCapitalismMode(mob/user)
 	visible_message("<span class='big danger'>\The [src] engages neo-ultra-capitalism mode!</span>")
 	do_flick(src, "Old_Vendotron-transform", 25)
 	var/mob/living/simple_animal/hostile/old_vendotron/madVendor = new /mob/living/simple_animal/hostile/old_vendotron(loc)
