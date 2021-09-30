@@ -259,8 +259,8 @@
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
+	output_dir = WEST
 	var/input_dir = EAST
-	var/output_dir = WEST
 	var/filter_dir = SOUTH
 
 	var/max_items_moved = 100

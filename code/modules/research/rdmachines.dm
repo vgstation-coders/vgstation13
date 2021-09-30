@@ -14,7 +14,6 @@ var/global/list/rnd_machines = list()
 	var/disabled	= 0
 	var/shocked		= 0
 	var/obj/machinery/computer/rdconsole/linked_console
-	var/output_dir	= 0 // Direction used to output to (for things like fabs), set to 0 for loc.
 	var/stopped		= 0
 	var/base_state	= ""
 	var/build_time	= 0
@@ -138,6 +137,10 @@ var/global/list/rnd_machines = list()
 		return TRUE
 	return FALSE
 
+/obj/machinery/r_n_d/setOutputLocation(user)
+	if(research_flags &HASOUTPUT)
+		..()
+
 /obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)
 		shock(user,50, O.siemens_coefficient)
@@ -153,22 +156,6 @@ var/global/list/rnd_machines = list()
 		return 1
 	if (disabled)
 		return 1
-	if (istype(O, /obj/item/device/multitool))
-		if(!panel_open && research_flags &HASOUTPUT)
-			var/result = input("Set your location as output?") in list("Yes","No","Machine Location")
-			switch(result)
-				if("Yes")
-					if(!Adjacent(user))
-						to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
-						return 1
-
-					output_dir = get_dir(src, user)
-					to_chat(user, "<span class='notice'>Output set.</span>")
-				if("Machine Location")
-					output_dir = 0
-					to_chat(user, "<span class='notice'>Output set.</span>")
-			return 1
-		return
 	if (!linked_console && !(istype(src, /obj/machinery/r_n_d/fabricator))) //fabricators get a free pass because they aren't tied to a console
 		to_chat(user, "\The [src] must be linked to an R&D console first!")
 		return 1
