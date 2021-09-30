@@ -203,7 +203,7 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 /obj/machinery/account_database/initialize()
 	..()
 
-	if(z == CENTCOMM_Z && isnull(centcomm_account_db))
+	if(z == map.zCentcomm && isnull(centcomm_account_db))
 		centcomm_account_db = src
 
 /obj/machinery/account_database/Destroy()
