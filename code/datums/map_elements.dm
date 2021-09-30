@@ -14,6 +14,7 @@ var/list/datum/map_element/map_elements = list()
 
 	var/width //Width of the map element, in turfs
 	var/height //Height of the map element, in turfs
+	var/can_rotate = TRUE //Can this be rotated?
 
 /datum/map_element/proc/pre_load() //Called before loading the element
 	return
