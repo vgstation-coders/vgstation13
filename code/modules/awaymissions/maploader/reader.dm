@@ -151,7 +151,7 @@ var/list/map_dimension_cache = list()
 
 			//fill the current square using the model map
 			xcrd=x_offset
-			xcrd_flip + x_offset + map_width
+			xcrd_flip=x_offset + map_width
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				xcrd_flip--
