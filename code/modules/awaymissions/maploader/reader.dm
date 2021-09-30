@@ -108,6 +108,8 @@ var/list/map_dimension_cache = list()
 	var/zcrd=-1
 	var/ycrd=x_offset
 	var/xcrd=y_offset
+	var/ycrd_flip=x_offset
+	var/xcrd_flip=y_offset
 
 	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
 
@@ -142,24 +144,27 @@ var/list/map_dimension_cache = list()
 
 		//then proceed it line by line, starting from top
 		ycrd = y_offset + y_depth
+		ycrd_flip = y_offset
 
 		for(var/gpos=1;gpos!=0;gpos=findtext(zgrid,"\n",gpos,0)+1)
 			var/grid_line = copytext(zgrid,gpos,findtext(zgrid,"\n",gpos,0))
 
 			//fill the current square using the model map
 			xcrd=x_offset
+			xcrd_flip + x_offset + map_width
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
+				xcrd_flip--
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
 				switch(rotate)
 					if(0)
 						spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset,rotate)
 					if(90)
-						spawned_atoms |= parse_grid(grid_models[model_key],y_depth-ycrd,xcrd,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd_flip,xcrd,zcrd+z_offset,rotate)
 					if(180)
-						spawned_atoms |= parse_grid(grid_models[model_key],map_width-xcrd,y_depth-ycrd,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],xcrd_flip,ycrd_flip,zcrd+z_offset,rotate)
 					if(270)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd,map_width-xcrd,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd,xcrd_flip,zcrd+z_offset,rotate)
 				if (remove_lag)
 					CHECK_TICK
 			if(map_element)
@@ -170,6 +175,7 @@ var/list/map_dimension_cache = list()
 				break
 
 			ycrd--
+			ycrd_flip++
 
 			if(remove_lag)
 				CHECK_TICK
