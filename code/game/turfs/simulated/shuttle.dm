@@ -5,6 +5,7 @@
 	thermal_conductivity = 0.05
 	heat_capacity = 0
 	melt_temperature = 0 // Doesn't melt.
+	flags = INVULNERABLE
 
 /turf/simulated/wall/shuttle/shuttle_rotate(angle) //delete this when autosmooth is added
 	src.transform = turn(src.transform, angle)
@@ -23,9 +24,16 @@
 		bullet_marks = 0
 		icon = initial(icon)
 
-/turf/simulated/wall/shuttle/cultify()
-	ChangeTurf(/turf/simulated/wall/cult)
-	turf_animation('icons/effects/effects.dmi',"cultwall",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
+/turf/simulated/wall/shuttle/ex_act(severity)
+	return
+
+/turf/simulated/wall/mech_drill_act(severity)
+	return
+
+/turf/simulated/wall/attack_animal(var/mob/living/simple_animal/M)
+	return
+
+/turf/simulated/wall/shuttle/singularity_pull(S, current_size)
 	return
 
 /turf/simulated/floor/shuttle
@@ -34,6 +42,7 @@
 	heat_capacity = 0
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
+	flags = INVULNERABLE
 
 /turf/simulated/floor/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
