@@ -152,8 +152,8 @@ var/list/map_dimension_cache = list()
 		//then proceed it line by line, starting from top
 		ycrd = y_offset + y_depth
 		ycrd_rotate = x_offset + map_width
-		ycrd_flip = y_offset
-		ycrd_flip_rotate = x_offset
+		ycrd_flip = y_offset + 1
+		ycrd_flip_rotate = x_offset + 1
 
 		for(var/gpos=1;gpos!=0;gpos=findtext(zgrid,"\n",gpos,0)+1)
 			var/grid_line = copytext(zgrid,gpos,findtext(zgrid,"\n",gpos,0))
@@ -161,8 +161,8 @@ var/list/map_dimension_cache = list()
 			//fill the current square using the model map
 			xcrd=x_offset
 			xcrd_rotate=y_offset
-			xcrd_flip=x_offset + map_width
-			xcrd_flip_rotate=y_offset + map_width
+			xcrd_flip=x_offset + map_width + 1
+			xcrd_flip_rotate=y_offset + map_width + 1
 			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				xcrd_rotate++
