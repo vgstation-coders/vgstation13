@@ -9,6 +9,7 @@
 	var/viewload = 0			// the load as it appears on the power console (gradually updated)
 	var/number = 0
 	var/netexcess = 0			// excess power on the powernet (typically avail-load)
+	var/unmet_demand = 0		// amount load would incraese if avail was arbitrarily large
 
 ////////////////////////////////////////////
 // POWERNET DATUM PROCS
@@ -116,6 +117,7 @@
 	load = 0
 	avail = newavail
 	newavail = 0
+	unmet_demand = 0
 
 /datum/powernet/proc/get_electrocute_damage()
 	// cube root of power times 1,5 to 2 in increments of 10^-1
