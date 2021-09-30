@@ -26,6 +26,7 @@
 	search()
 	history["supply"] = list()
 	history["demand"] = list()
+	history["unmet"] = list()
 
 /obj/machinery/computer/powermonitor/proc/search()
 	var/obj/machinery/power/apc/areaapc = get_area(src).areaapc
@@ -64,6 +65,7 @@
 		return data
 	data["supply"] = format_watts(connected_powernet.avail)
 	data["demand"] = format_watts(connected_powernet.viewload)
+	data["unmet"] = format_watts(connected_powernet.unmet_demand)
 	for(var/obj/machinery/power/terminal/term in connected_powernet.nodes)
 		var/obj/machinery/power/apc/apc = term.master
 		if(!istype(apc))
@@ -85,17 +87,17 @@
 		next_record = world.time + record_interval
 
 		var/list/supply = history["supply"]
+		var/list/demand = history["demand"]
+		var/list/unmet = history["unmet"]
+
 		if(connected_powernet)
 			supply += connected_powernet.avail
-		if(supply.len > record_size)
-			supply.Cut(1, 2)
-
-		var/list/demand = history["demand"]
-		if(connected_powernet)
 			demand += connected_powernet.viewload
-		if(demand.len > record_size)
-			demand.Cut(1, 2)
+			unmet += connected_powernet.unmet_demand
 
+		for(var/list/history_list in history)
+			if(history_list.len > record_size)
+				supply.Cut(1, 2)
 
 /obj/machinery/computer/powermonitor/power_change()
 	..()
