@@ -124,8 +124,8 @@ var/list/map_dimension_cache = list()
 		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
-		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : map_width + x_offset
-		var/y_check = rotate == 0 || rotate == 180 ? y_depth + y_offset : y_depth + y_offset
+		var/x_check = rotate == 0 || rotate == 180 ? map_width + x_offset : y_depth + y_offset
+		var/y_check = rotate == 0 || rotate == 180 ? y_depth + y_offset : map_width + x_offset
 		if(world.maxx < x_check)
 			if(!map.can_enlarge)
 				WARNING("Cancelled load of [map_element] due to map bounds.")
@@ -157,9 +157,9 @@ var/list/map_dimension_cache = list()
 					if(90)
 						spawned_atoms |= parse_grid(grid_models[model_key],y_depth-ycrd,xcrd,zcrd+z_offset,rotate)
 					if(180)
-						spawned_atoms |= parse_grid(grid_models[model_key],x_depth-xcrd,y_depth-ycrd,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],map_width-xcrd,y_depth-ycrd,zcrd+z_offset,rotate)
 					if(270)
-						spawned_atoms |= parse_grid(grid_models[model_key],ycrd,x_depth-xcrd,zcrd+z_offset,rotate)
+						spawned_atoms |= parse_grid(grid_models[model_key],ycrd,map_width-xcrd,zcrd+z_offset,rotate)
 				if (remove_lag)
 					CHECK_TICK
 			if(map_element)
