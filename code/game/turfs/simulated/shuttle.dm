@@ -65,11 +65,8 @@
 
 /turf/simulated/floor/shuttle/plating
 	name = "plating"
+	icon = 'icons/turf/floors.dmi'
 	icon_state = "plating"
-	thermal_conductivity = 0.05
-	heat_capacity = 0
-	soot_type = null
-	melt_temperature = 0 // Doesn't melt.
 
 /turf/simulated/floor/shuttle/plating/airless
 	oxygen   = 0.01
