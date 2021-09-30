@@ -50804,7 +50804,7 @@
 /area/centcom/evac)
 "dpC" = (
 /obj/structure/bed/chair/shuttle/red,
-/turf/simulated/floor/shuttle4,
+/turf/simulated/floor/shuttle/brig,
 /area/shuttle/escape/centcom)
 "dpD" = (
 /obj/structure/grille,
@@ -51087,10 +51087,10 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/turf/simulated/floor/shuttle4,
+/turf/simulated/floor/shuttle/brig,
 /area/shuttle/escape/centcom)
 "dqh" = (
-/turf/simulated/floor/shuttle4,
+/turf/simulated/floor/shuttle/brig,
 /area/shuttle/escape/centcom)
 "dqi" = (
 /obj/machinery/door/airlock/glass_security{
@@ -51354,7 +51354,7 @@
 /obj/structure/bed/chair/shuttle/red{
 	dir = 1
 	},
-/turf/simulated/floor/shuttle4,
+/turf/simulated/floor/shuttle/brig,
 /area/shuttle/escape/centcom)
 "dqL" = (
 /obj/structure/bed/chair/shuttle,

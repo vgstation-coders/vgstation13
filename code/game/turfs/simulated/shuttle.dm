@@ -73,26 +73,6 @@
 	oxygen   = 0.01
 	nitrogen = 0.01
 
-/turf/simulated/floor/shuttle4 // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
+/turf/simulated/floor/shuttle/brig // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
 	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
 	icon_state = "floor4"
-
-/turf/simulated/floor/shuttle4/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			new/obj/effect/decal/cleanable/soot(src)
-		if(2.0)
-			if(prob(65))
-				new/obj/effect/decal/cleanable/soot(src)
-		if(3.0)
-			if(prob(20))
-				new/obj/effect/decal/cleanable/soot(src)
-			return
-	return
-
-/turf/simulated/floor/shuttle4/cultify()
-	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
-		name = "engraved floor"
-		icon_state = "cult"
-		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
-	return

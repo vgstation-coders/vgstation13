@@ -277,7 +277,7 @@ var/intercom_range_display_status = 0
 			/turf/simulated/floor/plating/shuttle,
 			/turf/space
 		),
-		/turf/simulated/floor/shuttle4 = list(
+		/turf/simulated/floor/shuttle/brig = list(
 			/turf/simulated/wall/shuttle,
 			/turf/simulated/floor/shuttle,
 			/turf/simulated/floor/plating/shuttle,
