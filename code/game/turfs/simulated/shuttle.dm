@@ -1,8 +1,5 @@
 /turf/simulated/wall/shuttle
 	icon_state = "wall1"
-	opacity = 1
-	density = 1
-	blocks_air = 1
 	explosion_block = 2
 	icon = 'icons/turf/shuttle.dmi'
 	thermal_conductivity = 0.05
