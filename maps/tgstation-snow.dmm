@@ -44522,9 +44522,7 @@
 /area/centcom)
 "daH" = (
 /obj/machinery/vending/boozeomat,
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/shuttle/administration/centcom)
 "daI" = (
 /obj/machinery/vending/coffee,
@@ -44787,9 +44785,7 @@
 /obj/structure/shuttle/engine/heater{
 	dir = 8
 	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/shuttle/administration/centcom)
 "dbr" = (
 /obj/machinery/vending/snack,
@@ -54075,9 +54071,7 @@
 	},
 /area/syndicate_mothership)
 "dyN" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/shuttle/administration/centcom)
 "dyP" = (
 /obj/item/weapon/stool{
@@ -63876,9 +63870,7 @@
 	icon_state = "space";
 	name = "EXTERNAL AIRLOCK"
 	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/shuttle/nuclearops)
 "eCN" = (
 /obj/machinery/door_timer/cell_3{
@@ -90096,9 +90088,7 @@
 	},
 /area/science/robotics)
 "nAp" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/syndicate_mothership)
 "nAw" = (
 /obj/structure/cable{
@@ -97764,9 +97754,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/teleporter)
 "qgG" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/shuttle/syndicate_elite/mothership)
 "qgH" = (
 /obj/effect/decal/warning_stripes{
@@ -104081,9 +104069,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint3)
 "sEB" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/syndicate_mothership/elite_squad)
 "sEL" = (
 /obj/machinery/atmospherics/pipe/simple/yellow/visible,
@@ -106945,9 +106931,7 @@
 	icon_state = "redalertonly";
 	name = "Status Display"
 	},
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/syndicate_mothership/elite_squad)
 "tzB" = (
 /obj/item/weapon/tank/emergency_oxygen{
@@ -119483,9 +119467,7 @@
 /turf/simulated/floor/carpet,
 /area/security/vacantoffice)
 "xSK" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "wall3"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/black,
 /area/shuttle/nuclearops)
 "xSY" = (
 /obj/structure/cable{
