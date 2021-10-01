@@ -8,6 +8,15 @@
 	flags = INVULNERABLE
 	walltype = "swall"
 
+/turf/simulated/wall/shuttle/canSmoothWith()
+	var/static/list/smoothables = list(
+		/turf/simulated/wall/shuttle,
+		/obj/machinery/door/unpowered/shuttle,
+		/obj/structure/shuttle,
+		/obj/structure/grille,
+	)
+	return smoothables
+
 /turf/simulated/wall/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
