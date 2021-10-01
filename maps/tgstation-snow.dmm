@@ -18090,7 +18090,7 @@
 	dir = 8
 	},
 /obj/effect/landmark/start{
-	name = "Scientist"
+	name = "Xenobiologist"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -25375,35 +25375,12 @@
 /turf/simulated/floor,
 /area/science/chargebay)
 "byt" = (
-/obj/structure/table,
-/obj/item/stack/sheet/glass/glass{
-	amount = 20;
-	pixel_x = -3;
-	pixel_y = 6
-	},
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
-/obj/item/stack/sheet/metal{
-	amount = 50
-	},
 /obj/effect/decal/warning_stripes{
 	dir = 1;
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/machinery/suit_modifier,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -25574,9 +25551,6 @@
 /turf/simulated/floor/wood,
 /area/library)
 "bzH" = (
-/obj/effect/landmark/start{
-	name = "Medical Doctor"
-	},
 /obj/machinery/door_control{
 	desc = "A remote control switch for the medbay foyer.";
 	id_tag = "MedbayFoyerL";
@@ -25589,6 +25563,9 @@
 	},
 /obj/structure/bed/chair/office/light{
 	dir = 1
+	},
+/obj/effect/landmark/start{
+	name = "Orderly"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -26041,10 +26018,6 @@
 /turf/simulated/floor/bluegrid,
 /area/science/chargebay)
 "bBW" = (
-/obj/structure/disposalpipe/segment{
-	dir = 4;
-	icon_state = "pipe-c"
-	},
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -26053,15 +26026,45 @@
 /turf/simulated/floor,
 /area/science/chargebay)
 "bBX" = (
-/obj/structure/disposalpipe/segment{
+/obj/structure/bed/chair{
 	dir = 4
 	},
-/turf/simulated/floor,
-/area/science/chargebay)
+/obj/effect/landmark/start{
+	name = "Xenobiologist"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/science/xenobiology)
 "bBZ" = (
-/obj/machinery/disposal,
-/obj/structure/disposalpipe/trunk{
-	dir = 8
+/obj/structure/table,
+/obj/item/stack/sheet/plasteel{
+	amount = 10;
+	pixel_x = 3;
+	pixel_y = -3
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/glass/glass{
+	amount = 20;
+	pixel_x = -3;
+	pixel_y = 3
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -26393,6 +26396,9 @@
 /obj/machinery/alarm{
 	dir = 8;
 	pixel_x = 24
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/science/chargebay)
@@ -27247,9 +27253,6 @@
 	},
 /obj/structure/window/reinforced{
 	dir = 8
-	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/science/robotics)
@@ -30560,9 +30563,6 @@
 /area/science/chargebay)
 "bUi" = (
 /obj/structure/table,
-/obj/item/stack/sheet/plasteel{
-	amount = 10
-	},
 /obj/item/stack/cable_coil,
 /obj/item/device/flash,
 /obj/item/device/flash,
@@ -32013,10 +32013,10 @@
 	name = "\improper Cyborg Station"
 	})
 "bYR" = (
-/obj/structure/table,
-/obj/item/device/mmi,
-/obj/item/device/mmi,
-/obj/item/device/mmi,
+/obj/machinery/disposal,
+/obj/structure/disposalpipe/trunk{
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -36991,7 +36991,7 @@
 	dir = 8
 	},
 /obj/effect/landmark/start{
-	name = "Scientist"
+	name = "Xenoarchaeologist"
 	},
 /turf/simulated/floor/mineral/plasma,
 /area/science/hallway)
@@ -71884,7 +71884,7 @@
 	pixel_x = -26
 	},
 /obj/effect/landmark/start{
-	name = "Scientist"
+	name = "Xenoarchaeologist"
 	},
 /turf/simulated/floor/mineral/plasma,
 /area/science/hallway)
@@ -77051,6 +77051,14 @@
 	},
 /turf/simulated/wall/r_wall,
 /area/engineering/atmos)
+"iTr" = (
+/obj/effect/landmark/start{
+	name = "Scientist"
+	},
+/turf/simulated/floor{
+	icon_state = "white"
+	},
+/area/science/hallway)
 "iTt" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -89727,6 +89735,9 @@
 	icon_state = "warning";
 	tag = "icon-warning (NORTH)"
 	},
+/obj/effect/landmark/start{
+	name = "Scientist"
+	},
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -94905,6 +94916,12 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
+"pbn" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/simulated/wall,
+/area/science/robotics)
 "pbp" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -99849,11 +99866,14 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint3)
 "qPQ" = (
-/obj/structure/disposalpipe/segment,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4;
+	icon_state = "pipe-c"
 	},
 /turf/simulated/floor,
 /area/science/chargebay)
@@ -104948,6 +104968,9 @@
 	pixel_x = 32;
 	pixel_y = -6;
 	range = 4
+	},
+/obj/effect/landmark/start{
+	name = "Orderly"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -118723,13 +118746,13 @@
 /obj/structure/bed/chair/comfy/beige{
 	dir = 1
 	},
-/obj/effect/landmark/start{
-	name = "Scientist"
-	},
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -22;
 	pixel_y = 0
+	},
+/obj/effect/landmark/start{
+	name = "Xenoarchaeologist"
 	},
 /turf/simulated/floor/mineral/plasma,
 /area/science/hallway)
@@ -177963,7 +177986,7 @@ jvP
 jvP
 jvP
 aOR
-aOR
+bBX
 aOR
 jvP
 jvP
@@ -178870,7 +178893,7 @@ jvP
 aOJ
 aOU
 aPc
-aPc
+aOU
 aOJ
 jvP
 jvP
@@ -266086,7 +266109,7 @@ tEU
 bOD
 bzQ
 bUh
-bBX
+bzQ
 bDQ
 cax
 cds
@@ -266389,7 +266412,7 @@ kAI
 gIs
 skE
 bHj
-chj
+pbn
 chj
 chj
 chj
@@ -270633,7 +270656,7 @@ jRn
 cBp
 mqw
 cgt
-cgt
+iTr
 ciP
 uWS
 cSN
