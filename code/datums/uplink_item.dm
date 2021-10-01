@@ -105,7 +105,12 @@ var/list/uplink_items = list()
 			return 0
 
 		var/O = spawn_item(get_turf(user), U, user)
-		var/obj/I = istype(O,/datum/uplink_item) ? new_uplink_tem(O.item,get_turf(user),user) : O
+		var/obj/I = null
+		if(isobj(I))
+			I = O
+		else if(istype(I,/datum/uplink_item))
+			var/datum/uplink_item/UI = O
+			I = new_uplink_item(UI.item,get_turf(user),user)
 		if(!I)
 			return 0
 		on_item_spawned(I,user)
