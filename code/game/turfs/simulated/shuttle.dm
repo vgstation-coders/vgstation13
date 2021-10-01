@@ -34,6 +34,12 @@
 /turf/simulated/wall/shuttle/singularity_pull(S, current_size)
 	return
 
+/turf/simulated/wall/shuttle/black
+	walltype = "bswall"
+
+/turf/simulated/wall/shuttle/unsmoothed/relativewall()
+	return
+
 /turf/simulated/floor/shuttle
 	icon = 'icons/turf/shuttle.dmi'
 	thermal_conductivity = 0.05
