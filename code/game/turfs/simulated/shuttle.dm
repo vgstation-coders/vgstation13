@@ -40,6 +40,9 @@
 /turf/simulated/wall/shuttle/unsmoothed/relativewall()
 	return
 
+/turf/simulated/shuttle/wall/unsmoothed/shuttle_rotate(angle)
+	src.transform = turn(src.transform, angle)
+
 /turf/simulated/floor/shuttle
 	icon = 'icons/turf/shuttle.dmi'
 	thermal_conductivity = 0.05
