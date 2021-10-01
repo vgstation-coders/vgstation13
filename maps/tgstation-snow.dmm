@@ -48984,7 +48984,7 @@
 /area/centcom/striketeam)
 "dll" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswallc4"
+	icon_state = "bswall10"
 	},
 /area/shuttle/ert/centcom)
 "dlm" = (
@@ -49542,7 +49542,7 @@
 /area/shuttle/striketeam/centcom)
 "dmG" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swallc3"
+	icon_state = "swall6"
 	},
 /area/shuttle/striketeam/centcom)
 "dmH" = (
@@ -49572,7 +49572,7 @@
 /area/centcom/striketeam)
 "dmJ" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswallc1"
+	icon_state = "bswall9"
 	},
 /area/shuttle/ert/centcom)
 "dmK" = (
@@ -50122,7 +50122,7 @@
 /area/shuttle/striketeam/centcom)
 "dnS" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swallc2"
+	icon_state = "swall5"
 	},
 /area/shuttle/striketeam/centcom)
 "dnT" = (
@@ -52886,7 +52886,7 @@
 /area/shuttle/specops/centcom)
 "dur" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswallc3"
+	icon_state = "bswall6"
 	},
 /area/shuttle/specops/centcom)
 "duu" = (
@@ -53096,7 +53096,7 @@
 /area/shuttle/specops/centcom)
 "duW" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswallc2"
+	icon_state = "bswall5"
 	},
 /area/shuttle/specops/centcom)
 "duX" = (

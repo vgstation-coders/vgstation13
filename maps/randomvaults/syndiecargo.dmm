@@ -48,7 +48,7 @@
 "aV" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor/shuttle{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "aW" = (/obj/machinery/light,/turf/simulated/floor/shuttle{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "aX" = (/mob/living/simple_animal/hostile/humanoid/syndicate/ranged,/turf/simulated/floor/shuttle{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"aY" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswallc2"; icon_state = "bswallc2"},/area/vault/syndiecargo)
+"aY" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall5"; icon_state = "bswall5"},/area/vault/syndiecargo)
 "aZ" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall14"; icon_state = "bswall14"},/area/vault/syndiecargo)
 "ba" = (/obj/machinery/door/airlock/multi_tile/glass,/turf/simulated/floor/shuttle{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bb" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall1"; icon_state = "bswall1"},/area/vault/syndiecargo)
