@@ -267,6 +267,7 @@
 													/obj/item/clothing/under/rank/medical,
 													/obj/item/clothing/under/rank/nursesuit,
 													/obj/item/clothing/under/rank/nurse,
+													/obj/item/clothing/under/rank/orderly,
 													/obj/item/clothing/under/rank/chemist,
 													/obj/item/clothing/under/rank/pharma,
 													/obj/item/clothing/under/rank/geneticist,
