@@ -8,9 +8,6 @@
 	flags = INVULNERABLE
 	walltype = "swall"
 
-/turf/simulated/wall/shuttle/shuttle_rotate(angle) //delete this when autosmooth is added
-	src.transform = turn(src.transform, angle)
-
 /turf/simulated/wall/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
