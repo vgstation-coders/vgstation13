@@ -48753,14 +48753,10 @@
 	},
 /area/shuttle/ert/centcom)
 "dkH" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall12"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/ert/centcom)
 "dkI" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall14"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/ert/centcom)
 "dkJ" = (
 /obj/structure/grille,
@@ -48979,9 +48975,7 @@
 	},
 /area/centcom/striketeam)
 "dll" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall10"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/ert/centcom)
 "dlm" = (
 /obj/machinery/light/small{
@@ -48993,9 +48987,7 @@
 /turf/simulated/floor/bluegrid,
 /area/shuttle/ert/centcom)
 "dlo" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall1"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/ert/centcom)
 "dlp" = (
 /obj/structure/bed/chair/shuttle/red,
@@ -49561,18 +49553,14 @@
 	},
 /area/centcom/striketeam)
 "dmJ" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall9"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/ert/centcom)
 "dmK" = (
 /obj/machinery/light/small,
 /turf/simulated/floor/bluegrid,
 /area/shuttle/ert/centcom)
 "dmL" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall2"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/ert/centcom)
 "dmM" = (
 /obj/structure/table/reinforced,
@@ -49918,9 +49906,7 @@
 	},
 /area/centcom/striketeam)
 "dnu" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall13"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/ert/centcom)
 "dnv" = (
 /obj/structure/shuttle/engine/propulsion/left{
@@ -52589,14 +52575,10 @@
 	},
 /area/shuttle/specops/centcom)
 "dtD" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall14"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/specops/centcom)
 "dtE" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall12"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/specops/centcom)
 "dtF" = (
 /obj/machinery/door/airlock/external{
@@ -52849,9 +52831,7 @@
 	},
 /area/shuttle/specops/centcom)
 "dur" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall6"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/specops/centcom)
 "duu" = (
 /obj/item/clothing/head/that{
@@ -53055,9 +53035,7 @@
 	},
 /area/shuttle/specops/centcom)
 "duW" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall5"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/specops/centcom)
 "duX" = (
 /turf/simulated/wall/shuttle/unsmoothed{
@@ -53163,9 +53141,7 @@
 	},
 /area/shuttle/specops/centcom)
 "dvl" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "bswall13"
-	},
+/turf/simulated/wall/shuttle/black,
 /area/shuttle/specops/centcom)
 "dvm" = (
 /obj/structure/rack,
