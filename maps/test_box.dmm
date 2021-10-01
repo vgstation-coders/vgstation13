@@ -14199,9 +14199,8 @@
 /area/shuttle/escape_pod1/station)
 "axU" = (
 /turf/space,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 3;
-	icon_state = "swall_f10"
+/obj/structure/shuttle/diag_wall{
+	dir = 1
 	},
 /area/shuttle/escape_pod1/station)
 "axV" = (
@@ -14224,9 +14223,8 @@
 /area/shuttle/escape_pod2/station)
 "axX" = (
 /turf/space,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 3;
-	icon_state = "swall_f10"
+/obj/structure/shuttle/diag_wall{
+	dir = 1
 	},
 /area/shuttle/escape_pod2/station)
 "axY" = (
@@ -43238,9 +43236,8 @@
 /area/shuttle/research/station)
 "bEx" = (
 /turf/space,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 3;
-	icon_state = "swall_f10"
+/obj/structure/shuttle/diag_wall{
+	dir = 1
 	},
 /area/shuttle/research/station)
 "bEy" = (
@@ -52912,9 +52909,8 @@
 /area/shuttle/mining/station)
 "bVW" = (
 /turf/space,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 3;
-	icon_state = "swall_f10"
+/obj/structure/shuttle/diag_wall{
+	dir = 1
 	},
 /area/shuttle/mining/station)
 "bVX" = (
@@ -80301,9 +80297,8 @@
 /area/engineering/engineering_auxiliary)
 "cSx" = (
 /turf/space,
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 3;
-	icon_state = "swall_f10"
+/obj/structure/shuttle/diag_wall{
+	dir = 1
 	},
 /area/shuttle/escape/centcom)
 "cSy" = (

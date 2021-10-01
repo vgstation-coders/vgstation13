@@ -49826,9 +49826,8 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dnl" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 3;
-	icon_state = "swall_f10"
+/obj/structure/shuttle/diag_wall{
+	dir = 1
 	},
 /area/shuttle/escape/centcom)
 "dnm" = (
