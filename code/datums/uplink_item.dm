@@ -106,10 +106,11 @@ var/list/uplink_items = list()
 
 		var/O = spawn_item(get_turf(user), U, user)
 		var/obj/I = null
+		var/datum/uplink_item/UI = null
 		if(isobj(I))
 			I = O
 		else if(istype(I,/datum/uplink_item))
-			var/datum/uplink_item/UI = O
+			UI = O
 			I = new_uplink_item(UI.item,get_turf(user),user)
 		if(!I)
 			return 0
@@ -118,7 +119,10 @@ var/list/uplink_items = list()
 
 		var/bundlename = name
 		if(name == "Random Item" || name == "For showing that you are The Boss")
-			bundlename = I.name
+			if(UI)
+				bundlename = UI.name
+			else
+				bundlename = I.name
 		if(I.tag)
 			bundlename = "[I.tag] bundle"
 			I.tag = null
