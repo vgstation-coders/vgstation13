@@ -6,6 +6,7 @@
 	heat_capacity = 0
 	melt_temperature = 0 // Doesn't melt.
 	flags = INVULNERABLE
+	walltype = "swall"
 
 /turf/simulated/wall/shuttle/shuttle_rotate(angle) //delete this when autosmooth is added
 	src.transform = turn(src.transform, angle)
