@@ -17,12 +17,14 @@
 	var/list/last_greeted = list()
 	var/closed = FALSE //closes if atmos fails
 
+/obj/structure/trade_window/initialize()
+	..()
+	SStrade.all_twindows += src
+
 /obj/structure/trade_window/New()
 	..()
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	processing_objects += src
-	if(SStrade)
-		SStrade.all_twindows += src
 
 /obj/structure/trade_window/Destroy()
 	SStrade.all_twindows -= src
@@ -127,8 +129,6 @@
 /obj/structure/trade_window/attack_hand(mob/user)
 	if(!isobserver(user) && (!Adjacent(user) || user.incapacitated()))
 		return
-	if(!(src in SStrade.all_twindows))
-		SStrade.all_twindows += src
 	ui_interact(user)
 
 /obj/structure/trade_window/ui_interact(mob/living/carbon/human/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
