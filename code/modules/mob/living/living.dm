@@ -1325,109 +1325,113 @@ Thanks.
 	static_overlays["cult"] = static_overlay
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
-	if (now_pushing || !loc || size <= SIZE_TINY)
-		return
-	now_pushing = 1
-	if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
-		var/obj/structure/bed/roller/R = AM
-		for(var/mob/living/tmob in range(R, 1))
-			if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
-				to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
-				now_pushing = 0
-				return
-	if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
-		var/mob/living/tmob = AM
-		for(var/obj/structure/bed/roller/R in range(tmob, 1))
-			if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
-				to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
-				now_pushing = 0
-				return
-		for(var/mob/living/M in range(tmob, 1)) //no pushing prisoners or people pulling prisoners
-			if(tmob.pinned.len ||  ((M.pulling == tmob && (tmob.restrained() && !(M.restrained()) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)))
-				to_chat(src, "<span class='warning'>[tmob] is restrained, you can't push past.</span>")
-				now_pushing = 0
-				return
-			if(tmob.pulling == M && (M.restrained() && !(tmob.restrained()) && tmob.stat == 0))
-				to_chat(src, "<span class='warning'>[tmob] is restraining [M], you can't push past.</span>")
-				now_pushing = 0
-				return
-
-		//BubbleWrap: people in handcuffs are always switched around as if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
-		var/dense = 0
-		if(loc.density)
-			dense = 1
-		for(var/atom/movable/A in loc)
-			if(A == src)
-				continue
-			if(A.density)
-				if(A.flow_flags&ON_BORDER)
-					dense = !A.Cross(src, src.loc)
-				else
-					dense = 1
-			if(dense)
-				break
-		if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
-			var/turf/oldloc = loc
-			forceMove(tmob.loc)
-			tmob.forceMove(oldloc, glide_size_override = src.glide_size)
-			now_pushing = 0
-			for(var/mob/living/carbon/slime/slime in view(1,tmob))
-				if(slime.Victim == tmob)
-					slime.UpdateFeed()
+	spawn(0)
+		if (now_pushing || !loc || size <= SIZE_TINY)
 			return
-
-		if(!can_move_mob(tmob, 0, 0))
-			now_pushing = 0
-			return
-		var/mob/living/carbon/human/H = null
-		if(ishuman(tmob))
-			H = tmob
-		if(H && ((M_FAT in H.mutations) || (H && H.species && H.species.anatomy_flags & IS_BULKY)))
-			var/mob/living/carbon/human/U = null
-			if(ishuman(src))
-				U = src
-			if(prob(40) && !(U && ((M_FAT in U.mutations) || (U && U.species && U.species.anatomy_flags & IS_BULKY))))
-				to_chat(src, "<span class='danger'>You fail to push [tmob]'s fat ass out of the way.</span>")
-				now_pushing = 0
-				return
-
-		for(var/obj/item/weapon/shield/riot/R in tmob.held_items)
-			if(prob(99))
-				now_pushing = 0
-				return
-
-		if(!(tmob.status_flags & CANPUSH))
-			now_pushing = 0
-			return
-
-		tmob.LAssailant = src
-		tmob.assaulted_by(src, TRUE)
-
-	now_pushing = 0
-	..()
-	if (!istype(AM, /atom/movable))
-		return
-	if (!now_pushing)
 		now_pushing = 1
-
-		if (!AM.anchored && AM.can_be_pushed(src))
-			var/t = get_dir(src, AM)
-			if(AM.flow_flags & ON_BORDER && !t)
-				t = AM.dir
-			if (istype(AM, /obj/structure/window/full))
-				for(var/obj/structure/window/win in get_step(AM,t))
+		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
+			var/obj/structure/bed/roller/R = AM
+			for(var/mob/living/tmob in range(R, 1))
+				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
+					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
 					now_pushing = 0
 					return
-			AM.set_glide_size(src.glide_size)
-			if (ismob(AM))
-				var/mob/M = AM
-				invoke_event(/event/before_move)
-				step(M, t)
-				invoke_event(/event/after_move)
-			else
-				step(AM, t)
-				step(src, t)
+		if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
+			var/mob/living/tmob = AM
+			for(var/obj/structure/bed/roller/R in range(tmob, 1))
+				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
+					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
+					now_pushing = 0
+					return
+			for(var/mob/living/M in range(tmob, 1)) //no pushing prisoners or people pulling prisoners
+				if(tmob.pinned.len ||  ((M.pulling == tmob && (tmob.restrained() && !(M.restrained()) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)))
+					to_chat(src, "<span class='warning'>[tmob] is restrained, you can't push past.</span>")
+					now_pushing = 0
+					return
+				if(tmob.pulling == M && (M.restrained() && !(tmob.restrained()) && tmob.stat == 0))
+					to_chat(src, "<span class='warning'>[tmob] is restraining [M], you can't push past.</span>")
+					now_pushing = 0
+					return
+
+			//BubbleWrap: people in handcuffs are always switched around as if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
+			var/dense = 0
+			if(loc.density)
+				dense = 1
+			for(var/atom/movable/A in loc)
+				if(A == src)
+					continue
+				if(A.density)
+					if(A.flow_flags&ON_BORDER)
+						dense = !A.Cross(src, src.loc)
+					else
+						dense = 1
+				if(dense)
+					break
+			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
+				var/turf/oldloc = loc
+				forceMove(tmob.loc)
+				tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+				now_pushing = 0
+				for(var/mob/living/carbon/slime/slime in view(1,tmob))
+					if(slime.Victim == tmob)
+						slime.UpdateFeed()
+				return
+
+			if(!can_move_mob(tmob, 0, 0))
+				now_pushing = 0
+				return
+			var/mob/living/carbon/human/H = null
+			if(ishuman(tmob))
+				H = tmob
+			if(H && ((M_FAT in H.mutations) || (H && H.species && H.species.anatomy_flags & IS_BULKY)))
+				var/mob/living/carbon/human/U = null
+				if(ishuman(src))
+					U = src
+				if(prob(40) && !(U && ((M_FAT in U.mutations) || (U && U.species && U.species.anatomy_flags & IS_BULKY))))
+					to_chat(src, "<span class='danger'>You fail to push [tmob]'s fat ass out of the way.</span>")
+					now_pushing = 0
+					return
+
+			for(var/obj/item/weapon/shield/riot/R in tmob.held_items)
+				if(prob(99))
+					now_pushing = 0
+					return
+
+			if(!(tmob.status_flags & CANPUSH))
+				now_pushing = 0
+				return
+
+			tmob.LAssailant = src
+			tmob.assaulted_by(src, TRUE)
+
 		now_pushing = 0
+		spawn(0)
+			..()
+			if (!istype(AM, /atom/movable))
+				return
+			if (!now_pushing)
+				now_pushing = 1
+
+				if (!AM.anchored && AM.can_be_pushed(src))
+					var/t = get_dir(src, AM)
+					if(AM.flow_flags & ON_BORDER && !t)
+						t = AM.dir
+					if (istype(AM, /obj/structure/window/full))
+						for(var/obj/structure/window/win in get_step(AM,t))
+							now_pushing = 0
+							return
+					AM.set_glide_size(src.glide_size)
+					if (ismob(AM))
+						var/mob/M = AM
+						invoke_event(/event/before_move)
+						step(M, t)
+						invoke_event(/event/after_move)
+					else
+						step(AM, t)
+						step(src, t)
+				now_pushing = 0
+			return
+	return
 
 /mob/living/is_open_container()
 	return 1
