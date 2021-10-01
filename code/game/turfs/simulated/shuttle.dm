@@ -35,6 +35,7 @@
 	return
 
 /turf/simulated/wall/shuttle/black
+	icon_state = "wall3"
 	walltype = "bswall"
 
 /turf/simulated/wall/shuttle/unsmoothed/relativewall()
