@@ -133,6 +133,7 @@
 			if(amount == 0)
 				if(prob(5))
 					visible_message("\The [src] pings.")
+					playsound(src, 'sound/machines/notify.ogg', 50, 0)
 				return
 
 			var/mob/living/carbon/human/T = attached
@@ -148,6 +149,7 @@
 			if(T.vessel.get_reagent_amount(BLOOD) < BLOOD_VOLUME_SAFE)
 				if(prob(5))
 					visible_message("\The [src] beeps loudly.")
+					playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 
 			var/datum/reagent/blood/B = T.take_blood(beaker,amount)
 
