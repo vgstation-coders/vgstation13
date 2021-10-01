@@ -13,6 +13,7 @@
 		/turf/simulated/wall/shuttle,
 		/obj/machinery/door/unpowered/shuttle,
 		/obj/structure/shuttle,
+		/obj/structure/shuttle/diag_wall,
 		/obj/structure/grille,
 	)
 	return smoothables
@@ -56,6 +57,36 @@
 /turf/simulated/wall/shuttle/unsmoothed/black
 	icon_state = "wall3"
 	walltype = "bswall"
+
+/obj/structure/shuttle/diag_wall // This used to be a turf and was a pain to manage with layering two on the same tile
+	name = "wall"
+	desc = "A huge chunk of metal used to separate rooms."
+	icon_state = "diagonalWall"
+	density = 1
+	plane = TURF_PLANE
+	layer = TURF_LAYER
+	anchored = 1
+
+/obj/structure/shuttle/diag_wall/ex_act(severity)
+	return
+
+/obj/structure/shuttle/diag_wall/mech_drill_act(severity)
+	return
+
+/obj/structure/shuttle/diag_wall/attack_animal(var/mob/living/simple_animal/M)
+	return
+
+/obj/structure/shuttle/diag_wall/singularity_pull(S, current_size)
+	return
+
+/obj/structure/shuttle/diag_wall/black
+	icon_state = "diagonalWall3"
+
+/obj/structure/shuttle/diag_wall/smooth
+	icon_state = "diagonalWallS"
+
+/obj/structure/shuttle/diag_wall/smooth/black
+	icon_state = "diagonalWall3S"
 
 /turf/simulated/floor/shuttle
 	icon = 'icons/turf/shuttle.dmi'

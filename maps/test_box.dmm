@@ -82814,7 +82814,7 @@
 "cXG" = (
 /turf/space,
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s6"
+	icon_state = "swall_f6"
 	},
 /area/shuttle/supply)
 "cXH" = (
@@ -82844,7 +82844,7 @@
 "cXL" = (
 /turf/space,
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/shuttle/supply)
 "cXM" = (
@@ -83280,7 +83280,7 @@
 "cYP" = (
 /turf/space,
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s5"
+	icon_state = "swall_f5"
 	},
 /area/shuttle/supply)
 "cYQ" = (
@@ -83296,7 +83296,7 @@
 "cYS" = (
 /turf/space,
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s9"
+	icon_state = "swall_f9"
 	},
 /area/shuttle/supply)
 "cYT" = (

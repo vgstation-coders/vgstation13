@@ -47759,7 +47759,7 @@
 /area/centcom/control)
 "diz" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s6"
+	icon_state = "swall_f6"
 	},
 /area/shuttle/supply)
 "diA" = (
@@ -47788,7 +47788,7 @@
 /area/shuttle/supply)
 "diE" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/shuttle/supply)
 "diF" = (
@@ -59370,7 +59370,7 @@
 /area/shuttle/escape_pod3)
 "ejK" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/shuttle/escape_pod3)
 "ejL" = (
@@ -68707,7 +68707,7 @@
 /area/medical/paramedics)
 "gcK" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/centcom/evac)
 "gcN" = (
@@ -69970,7 +69970,7 @@
 /area/engineering/engine)
 "gAj" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s6"
+	icon_state = "swall_f6"
 	},
 /area/shuttle/escape_pod1)
 "gAp" = (
@@ -69992,7 +69992,7 @@
 /area/shuttle/escape_pod1)
 "gAE" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s6"
+	icon_state = "swall_f6"
 	},
 /area/shuttle/escape_pod2)
 "gAH" = (
@@ -73465,7 +73465,7 @@
 /area/engineering/mechanics)
 "hIl" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s5"
+	icon_state = "swall_f5"
 	},
 /area/shuttle/arrival/station)
 "hIp" = (
@@ -82387,7 +82387,7 @@
 /area/maintenance/fpmaint2)
 "kLu" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s5"
+	icon_state = "swall_f5"
 	},
 /area/centcom/evac)
 "kLK" = (
@@ -83512,7 +83512,7 @@
 /area/crew_quarters/fitness)
 "lhX" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s9"
+	icon_state = "swall_f9"
 	},
 /area/shuttle/arrival/station)
 "lij" = (
@@ -83917,7 +83917,7 @@
 /area/station/garage)
 "lpZ" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s9"
+	icon_state = "swall_f9"
 	},
 /area/centcom/evac)
 "lqa" = (
@@ -85093,7 +85093,7 @@
 /area/engineering/burn_chamber)
 "lJw" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/asteroid/clown)
 "lJB" = (
@@ -87321,7 +87321,7 @@
 /area/science/telescience)
 "mAw" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s6"
+	icon_state = "swall_f6"
 	},
 /area/shuttle/arrival/station)
 "mAD" = (
@@ -92303,7 +92303,7 @@
 /area/science/xenobiology/specimen_6)
 "ooz" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/shuttle/escape_pod1)
 "ooD" = (
@@ -93627,7 +93627,7 @@
 /area/shuttle/nuclearops)
 "oIh" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s5"
+	icon_state = "swall_f5"
 	},
 /area/asteroid/clown)
 "oIo" = (
@@ -95046,7 +95046,7 @@
 /area/hallway/secondary/entry)
 "phk" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/shuttle/escape_pod5)
 "phl" = (
@@ -97144,7 +97144,7 @@
 /area/djstation)
 "pVd" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s9"
+	icon_state = "swall_f9"
 	},
 /area/shuttle/escape_pod3)
 "pVo" = (
@@ -104538,7 +104538,7 @@
 /area/maintenance/aft)
 "sNl" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/shuttle/arrival/station)
 "sNz" = (
@@ -106394,7 +106394,7 @@
 /area/storage/art)
 "trk" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s9"
+	icon_state = "swall_f9"
 	},
 /area/asteroid/clown)
 "trr" = (
@@ -108979,7 +108979,7 @@
 /area/maintenance/disposal)
 "umR" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s9"
+	icon_state = "swall_f9"
 	},
 /area/shuttle/escape_pod5)
 "umY" = (
@@ -109198,7 +109198,7 @@
 /area/bridge)
 "usL" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s10"
+	icon_state = "swall_f10"
 	},
 /area/shuttle/escape_pod2)
 "usZ" = (
@@ -112515,7 +112515,7 @@
 /area/bridge)
 "vCy" = (
 /turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall_s6"
+	icon_state = "swall_f6"
 	},
 /area/asteroid/clown)
 "vCZ" = (

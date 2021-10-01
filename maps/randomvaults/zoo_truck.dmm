@@ -11,7 +11,7 @@
 "ak" = (/obj/structure/table/reinforced,/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/bottle/robustharvest,/obj/item/weapon/reagent_containers/glass/bottle/ammonia{pixel_x = -10; pixel_y = 2},/obj/structure/button{name = "secret button"; pixel_y = -10},/turf/simulated/floor/shuttle,/area/vault/automap)
 "al" = (/obj/structure/table/reinforced,/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient{pixel_x = 7; pixel_y = -1},/obj/item/weapon/pen,/turf/simulated/floor/shuttle,/area/vault/automap)
 "am" = (/obj/structure/computerframe,/obj/effect/plantsegment/single,/obj/item/weapon/shard{icon_state = "small"},/obj/item/weapon/circuitboard/blank{name = "melted circuitboard"},/obj/item/stack/cable_coil{amount = 5},/turf/simulated/floor/shuttle,/area/vault/automap)
-"an" = (/turf/simulated/floor/shuttle,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_s5"},/area/vault/automap)
+"an" = (/turf/simulated/floor/shuttle,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f5"},/area/vault/automap)
 "ao" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall3"},/area/vault/automap)
 "ap" = (/obj/structure/closet/crate,/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle,/area/vault/automap)
 "aq" = (/obj/structure/closet/crate,/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/shuttle,/area/vault/automap)
@@ -147,12 +147,12 @@
 "cQ" = (/obj/machinery/light_construct,/obj/item/weapon/light/tube,/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
 "cR" = (/obj/machinery/light_construct{dir = 8},/obj/item/weapon/light/tube,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "cS" = (/obj/structure/window/barricade/full,/obj/structure/window/barricade,/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"cT" = (/turf/simulated/floor/shuttle/plating,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_s5"},/area/vault/automap)
+"cT" = (/turf/simulated/floor/shuttle/plating,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f5"},/area/vault/automap)
 "cU" = (/obj/machinery/door/airlock/maintenance,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "cV" = (/obj/structure/door_assembly/door_assembly_sec,/obj/structure/grille/broken,/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/bear/panda,/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
 "cW" = (/obj/machinery/door/airlock/vault{icon_state = "door_locked"; locked = 1; name = "Cell 2"},/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
 "cX" = (/obj/structure/grille/broken,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
-"cY" = (/turf/simulated/floor/shuttle/plating,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_s9"},/area/vault/automap)
+"cY" = (/turf/simulated/floor/shuttle/plating,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f9"},/area/vault/automap)
 "cZ" = (/obj/structure/window/barricade/full,/obj/structure/window/barricade,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "da" = (/obj/effect/landmark/stonefier,/mob/living/simple_animal/crab,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "db" = (/obj/effect/decal/cleanable/greenglow,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
@@ -187,7 +187,7 @@
 "dE" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/chem_dispenser,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dF" = (/obj/machinery/chem_dispenser,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dG" = (/obj/structure/flora/pottedplant/random,/obj/machinery/light_construct,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"dH" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_s9"},/area/vault/automap)
+"dH" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f9"},/area/vault/automap)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaabacadadaeafagaaaaaaaaaaaa
