@@ -141,7 +141,8 @@
 		if(!client.prefs.saveloaded)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 			return
-		if(alert(src,"Are you sure you wish to observe? You will not be able to play this round!","Player Setup","Yes","No") == "Yes")
+		var/playroundtext == client.check_rights(R_ADMIN) ? "" : " You will not be able to play this round!"
+		if(alert(src,"Are you sure you wish to observe?[playroundtext]","Player Setup","Yes","No") == "Yes")
 			if(!client)
 				return 1
 			sleep(1)
