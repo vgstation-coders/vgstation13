@@ -24,7 +24,7 @@
 
 	var/nameShort = ""
 	var/nameLong = ""
-	var/list/zLevels = list()
+	var/list/datum/zLevel/zLevels = list()
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3
@@ -32,8 +32,6 @@
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
 	var/multiz = FALSE //Don't even boot up multiz if we don't need it.
-	var/height = 1 //Height of connecting z levels
-	var/zLoc = 1 //Location of where to connect below from
 
 	//Center of thunderdome admin room
 	var/tDomeX = 0
@@ -113,8 +111,6 @@
 	. = ..()
 
 	src.loadZLevels(src.zLevels)
-	if(multiz)
-		src.loadZLevelConnections(height,zLoc)
 
 	//The spawn below is needed
 	spawn()
@@ -197,6 +193,8 @@ var/global/list/accessable_z_levels = list()
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/base_area = null //default base area type, what blueprints erase into; if null, space; be careful with parent areas because locate() could find a child!
 	var/z //Number of the z-level (the z coordinate)
+	var/z_above //The linked zLevel Z above, for multiZ
+	var/z_below //Same, with below
 
 /datum/zLevel/proc/post_mapload()
 	return

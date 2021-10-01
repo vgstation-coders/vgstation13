@@ -362,3 +362,6 @@ BSQL_THREAD_LIMIT 50
 
 ## Uncomment to enable verbose BSQL communication logs
 #BSQL_DEBUG
+
+## The maximum number of z-levels rendered above or below in multi-z
+MULTIZ_RENDER_CAP 8
