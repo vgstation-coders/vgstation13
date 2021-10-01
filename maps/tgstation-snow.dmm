@@ -47758,9 +47758,7 @@
 /turf/unsimulated/floor,
 /area/centcom/control)
 "diz" = (
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/supply)
 "diA" = (
 /turf/simulated/wall/shuttle,
@@ -49795,9 +49793,7 @@
 	},
 /area/centcom/control)
 "dnh" = (
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape/centcom)
 "dni" = (
 /obj/structure/grille,
@@ -68096,9 +68092,7 @@
 	},
 /area/hallway/primary/fore)
 "fRI" = (
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/centcom/evac)
 "fRT" = (
 /obj/effect/decal/warning_stripes{
@@ -69967,9 +69961,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "gAj" = (
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape_pod1)
 "gAp" = (
 /turf/simulated/wall/shuttle,
@@ -69989,9 +69981,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod1)
 "gAE" = (
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape_pod2)
 "gAH" = (
 /obj/structure/cable{
@@ -87312,9 +87302,7 @@
 /turf/simulated/floor/engine,
 /area/science/telescience)
 "mAw" = (
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/arrival/station)
 "mAD" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -112504,9 +112492,7 @@
 	},
 /area/bridge)
 "vCy" = (
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/asteroid/clown)
 "vCZ" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{

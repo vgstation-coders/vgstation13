@@ -5035,9 +5035,7 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape_pod3/station)
 "aif" = (
 /obj/machinery/portable_atmospherics/canister/sleeping_agent{
@@ -14183,9 +14181,7 @@
 /area/maintenance/ghettomorgue)
 "axS" = (
 /turf/space,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape_pod1/station)
 "axT" = (
 /obj/structure/grille,
@@ -14210,9 +14206,7 @@
 /area/shuttle/escape_pod1/station)
 "axV" = (
 /turf/space,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape_pod2/station)
 "axW" = (
 /obj/structure/grille,
@@ -21364,9 +21358,7 @@
 /area/maintenance/fsmaint2)
 "aNg" = (
 /turf/space,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/arrival/station)
 "aNh" = (
 /turf/simulated/wall/shuttle,
@@ -22865,9 +22857,7 @@
 /area/shuttle/arrival/station)
 "aQh" = (
 /turf/space,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape/centcom)
 "aQi" = (
 /obj/structure/bed/chair/shuttle{
@@ -43227,9 +43217,7 @@
 /area/science/lab)
 "bEu" = (
 /turf/space,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/research/station)
 "bEv" = (
 /turf/simulated/wall/shuttle,
@@ -52903,9 +52891,7 @@
 /area/science/test_area)
 "bVT" = (
 /turf/space,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/mining/station)
 "bVU" = (
 /turf/simulated/wall/shuttle,
@@ -82799,9 +82785,7 @@
 /area/shuttle/escape/centcom)
 "cXG" = (
 /turf/space,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/supply)
 "cXH" = (
 /turf/simulated/wall/shuttle,
@@ -83397,9 +83381,7 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/obj/structure/shuttle/diag_wall{
-	dir = 2
-	},
+/obj/structure/shuttle/diag_wall,
 /area/shuttle/escape_pod5/station)
 "cZm" = (
 /obj/structure/shuttle/engine/propulsion/burst{
