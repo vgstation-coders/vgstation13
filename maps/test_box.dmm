@@ -7392,9 +7392,7 @@
 	},
 /area/shuttle/escape_pod1/station)
 "amd" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod3/station)
 "ame" = (
 /turf/space,
@@ -14832,9 +14830,7 @@
 /turf/simulated/wall/r_wall,
 /area/hallway/secondary/entry)
 "azi" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod1/station)
 "azj" = (
 /obj/structure/bed/chair{
@@ -14849,9 +14845,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/escape_pod1/station)
 "azk" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod2/station)
 "azl" = (
 /obj/structure/bed/chair{
@@ -21381,9 +21375,7 @@
 	},
 /area/shuttle/arrival/station)
 "aNh" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aNi" = (
 /obj/machinery/door/unpowered/shuttle,
@@ -21412,9 +21404,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "aNl" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall14"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aNm" = (
 /turf/space,
@@ -22125,9 +22115,7 @@
 /turf/simulated/floor/plating,
 /area/chapel/main)
 "aOD" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall11"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aOE" = (
 /obj/structure/closet/secure_closet/personal,
@@ -22182,9 +22170,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aOM" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall7"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aON" = (
 /obj/structure/shuttle/engine/propulsion{
@@ -22857,9 +22843,7 @@
 /turf/simulated/floor/plating,
 /area/chapel/main)
 "aQd" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aQe" = (
 /obj/structure/table/reinforced,
@@ -22883,9 +22867,7 @@
 /area/shuttle/arrival/station)
 "aQg" = (
 /obj/machinery/recharger,
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aQh" = (
 /turf/space,
@@ -26420,9 +26402,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "aWT" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall13"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aWU" = (
 /turf/space,
@@ -43260,9 +43240,7 @@
 	},
 /area/shuttle/research/station)
 "bEv" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/research/station)
 "bEw" = (
 /obj/structure/grille,
@@ -44249,9 +44227,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "bGl" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/research/station)
 "bGm" = (
 /obj/structure/closet/crate,
@@ -52942,9 +52918,7 @@
 	},
 /area/shuttle/mining/station)
 "bVU" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/mining/station)
 "bVV" = (
 /obj/structure/grille,
@@ -53745,9 +53719,7 @@
 /turf/simulated/floor/engine/vacuum,
 /area/science/test_area)
 "bXr" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/mining/station)
 "bXs" = (
 /obj/structure/table,
@@ -80361,9 +80333,7 @@
 	},
 /area/shuttle/escape/centcom)
 "cSy" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod5/station)
 "cSz" = (
 /turf/space,
@@ -82525,9 +82495,7 @@
 	},
 /area/shuttle/escape/centcom)
 "cWO" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cWP" = (
 /obj/machinery/computer/atmos_alert,
@@ -82601,19 +82569,13 @@
 	},
 /area/shuttle/escape/centcom)
 "cWZ" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall13"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cXa" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cXb" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall14"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cXc" = (
 /obj/machinery/door/airlock/glass_command{
@@ -82624,9 +82586,7 @@
 /area/shuttle/escape/centcom)
 "cXd" = (
 /obj/machinery/status_display,
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cXe" = (
 /obj/structure/bed/chair/shuttle/red,
@@ -82839,9 +82799,7 @@
 	},
 /area/centcom/evac)
 "cXE" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall7"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cXF" = (
 /obj/item/device/radio/intercom{
@@ -82860,9 +82818,7 @@
 	},
 /area/shuttle/supply)
 "cXH" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall12"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/supply)
 "cXI" = (
 /obj/structure/grille,
@@ -82909,9 +82865,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "cXP" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall3"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/supply)
 "cXQ" = (
 /turf/simulated/floor/shuttle,
@@ -83208,9 +83162,7 @@
 /area/shuttle/escape/centcom)
 "cYy" = (
 /obj/machinery/status_display,
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall14"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cYz" = (
 /obj/machinery/door/airlock/glass_medical{
@@ -83220,9 +83172,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "cYA" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall11"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cYB" = (
 /obj/machinery/door/poddoor/preopen,
@@ -83258,9 +83208,7 @@
 	},
 /area/shuttle/escape/centcom)
 "cYG" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall7"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/supply)
 "cYH" = (
 /turf/simulated/wall/shuttle/unsmoothed{
@@ -83275,9 +83223,7 @@
 	},
 /area/shuttle/supply)
 "cYJ" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall11"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/supply)
 "cYK" = (
 /obj/structure/grille,
@@ -83338,9 +83284,7 @@
 	},
 /area/shuttle/supply)
 "cYQ" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall15"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/supply)
 "cYR" = (
 /obj/structure/window/reinforced{
@@ -83368,9 +83312,7 @@
 	},
 /area/shuttle/escape/centcom)
 "cYV" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "swall1"
-	},
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "cYW" = (
 /obj/structure/table,
