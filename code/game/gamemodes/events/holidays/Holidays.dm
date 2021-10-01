@@ -195,6 +195,8 @@ var/global/Holiday = null
 		if(Holiday == INTERNATIONAL_CLOWN_DAY)
 			sleep(600)
 			set_security_level("rainbow")
+		if(Holiday == APRIL_FOOLS_DAY)
+			hatStacking = 1
 
 // Nested in the random events loop. Will be triggered every 2 minutes
 /proc/Holiday_Random_Event()
