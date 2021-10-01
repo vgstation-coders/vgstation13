@@ -32555,7 +32555,7 @@
 /turf/simulated/open,
 /area/mine/explored)
 "caX" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 8;
 	icon_state = "diagonalWall3"
 	},
@@ -32579,7 +32579,7 @@
 /turf/simulated/floor/plating/airless,
 /area/shuttle/trade/start)
 "cba" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "wall3"
 	},
@@ -32990,7 +32990,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "ccA" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "diagonalWall3"
 	},
@@ -44522,7 +44522,7 @@
 /area/centcom)
 "daH" = (
 /obj/machinery/vending/boozeomat,
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/shuttle/administration/centcom)
@@ -44787,7 +44787,7 @@
 /obj/structure/shuttle/engine/heater{
 	dir = 8
 	},
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/shuttle/administration/centcom)
@@ -47762,12 +47762,12 @@
 /turf/unsimulated/floor,
 /area/centcom/control)
 "diz" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s6"
 	},
 /area/shuttle/supply)
 "diA" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/supply)
@@ -47793,7 +47793,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "diE" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/shuttle/supply)
@@ -48269,7 +48269,7 @@
 /turf/unsimulated/floor,
 /area/centcom/control)
 "dju" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall3"
 	},
 /area/shuttle/supply)
@@ -48751,18 +48751,18 @@
 	},
 /area/centcom/suppy)
 "dkG" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "wall3"
 	},
 /area/shuttle/ert/centcom)
 "dkH" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall12"
 	},
 /area/shuttle/ert/centcom)
 "dkI" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall14"
 	},
 /area/shuttle/ert/centcom)
@@ -48983,7 +48983,7 @@
 	},
 /area/centcom/striketeam)
 "dll" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswallc4"
 	},
 /area/shuttle/ert/centcom)
@@ -48997,7 +48997,7 @@
 /turf/simulated/floor/bluegrid,
 /area/shuttle/ert/centcom)
 "dlo" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall1"
 	},
 /area/shuttle/ert/centcom)
@@ -49186,12 +49186,12 @@
 	},
 /area/shuttle/striketeam/centcom)
 "dlM" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall14"
 	},
 /area/shuttle/striketeam/centcom)
 "dlN" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/striketeam/centcom)
@@ -49541,7 +49541,7 @@
 	},
 /area/shuttle/striketeam/centcom)
 "dmG" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swallc3"
 	},
 /area/shuttle/striketeam/centcom)
@@ -49571,7 +49571,7 @@
 	},
 /area/centcom/striketeam)
 "dmJ" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswallc1"
 	},
 /area/shuttle/ert/centcom)
@@ -49580,7 +49580,7 @@
 /turf/simulated/floor/bluegrid,
 /area/shuttle/ert/centcom)
 "dmL" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall2"
 	},
 /area/shuttle/ert/centcom)
@@ -49821,7 +49821,7 @@
 	},
 /area/centcom/control)
 "dnh" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_f6"
 	},
 /area/shuttle/escape/centcom)
@@ -49856,7 +49856,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dnl" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 3;
 	icon_state = "swall_f10"
 	},
@@ -49928,7 +49928,7 @@
 	},
 /area/centcom/striketeam)
 "dnu" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall13"
 	},
 /area/shuttle/ert/centcom)
@@ -50121,7 +50121,7 @@
 	},
 /area/shuttle/striketeam/centcom)
 "dnS" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swallc2"
 	},
 /area/shuttle/striketeam/centcom)
@@ -50163,7 +50163,7 @@
 	},
 /area/centcom/control)
 "dnY" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall3"
 	},
 /area/shuttle/escape/centcom)
@@ -50201,18 +50201,18 @@
 	},
 /area/shuttle/escape/centcom)
 "doe" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall7"
 	},
 /area/shuttle/supply)
 "dof" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "wall_floor"
 	},
 /area/shuttle/supply)
 "dog" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 8;
 	icon_state = "wall_floor"
 	},
@@ -50257,7 +50257,7 @@
 	},
 /area/shuttle/striketeam/centcom)
 "dol" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall13"
 	},
 /area/shuttle/striketeam/centcom)
@@ -50446,7 +50446,7 @@
 /turf/unsimulated/floor/snow,
 /area/shuttle/supply)
 "doI" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall15"
 	},
 /area/shuttle/supply)
@@ -50584,17 +50584,17 @@
 	},
 /area/centcom/control)
 "doY" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall13"
 	},
 /area/shuttle/escape/centcom)
 "doZ" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/escape/centcom)
 "dpa" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall14"
 	},
 /area/shuttle/escape/centcom)
@@ -50607,7 +50607,7 @@
 /area/shuttle/escape/centcom)
 "dpc" = (
 /obj/machinery/status_display,
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/escape/centcom)
@@ -51552,7 +51552,7 @@
 /turf/simulated/wall/shuttle,
 /area/shuttle/transport1/centcom)
 "drk" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/transport1/centcom)
@@ -51572,7 +51572,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/transport1/centcom)
 "drm" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall14"
 	},
 /area/shuttle/transport1/centcom)
@@ -51623,7 +51623,7 @@
 	},
 /area/centcom/evac)
 "drr" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall7"
 	},
 /area/shuttle/escape/centcom)
@@ -52169,7 +52169,7 @@
 	},
 /area/centcom/suppy)
 "dsB" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "wall3"
 	},
@@ -52424,7 +52424,7 @@
 	},
 /area/centcom/specops)
 "dtd" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall13"
 	},
 /area/shuttle/transport1/centcom)
@@ -52625,12 +52625,12 @@
 	},
 /area/shuttle/specops/centcom)
 "dtD" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall14"
 	},
 /area/shuttle/specops/centcom)
 "dtE" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall12"
 	},
 /area/shuttle/specops/centcom)
@@ -52650,7 +52650,7 @@
 	},
 /area/shuttle/specops/centcom)
 "dtG" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall_f10"
 	},
 /area/shuttle/specops/centcom)
@@ -52885,7 +52885,7 @@
 	},
 /area/shuttle/specops/centcom)
 "dur" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswallc3"
 	},
 /area/shuttle/specops/centcom)
@@ -52933,7 +52933,7 @@
 /area/shuttle/escape/centcom)
 "duB" = (
 /obj/machinery/status_display,
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall14"
 	},
 /area/shuttle/escape/centcom)
@@ -52945,7 +52945,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "duD" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall11"
 	},
 /area/shuttle/escape/centcom)
@@ -53095,12 +53095,12 @@
 	},
 /area/shuttle/specops/centcom)
 "duW" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswallc2"
 	},
 /area/shuttle/specops/centcom)
 "duX" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall_f9"
 	},
 /area/shuttle/specops/centcom)
@@ -53203,7 +53203,7 @@
 	},
 /area/shuttle/specops/centcom)
 "dvl" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "bswall13"
 	},
 /area/shuttle/specops/centcom)
@@ -53275,7 +53275,7 @@
 	},
 /area/shuttle/escape/centcom)
 "dvv" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall1"
 	},
 /area/shuttle/escape/centcom)
@@ -53420,7 +53420,7 @@
 	},
 /area/tdome)
 "dvL" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_f5"
 	},
 /area/shuttle/escape/centcom)
@@ -53432,12 +53432,12 @@
 /turf/unsimulated/floor,
 /area/shuttle/escape/centcom)
 "dvN" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_f9"
 	},
 /area/shuttle/escape/centcom)
 "dvO" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 8;
 	icon_state = "diagonalWall3"
 	},
@@ -53506,7 +53506,7 @@
 	},
 /area/shuttle/nuclearops)
 "dvS" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "diagonalWall3"
 	},
@@ -53863,7 +53863,7 @@
 	},
 /area/syndicate_mothership)
 "dxG" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "wall3"
 	},
@@ -54029,7 +54029,7 @@
 	},
 /area/tdome)
 "dyn" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "diagonalWall3"
 	},
 /area/shuttle/nuclearops)
@@ -54046,7 +54046,7 @@
 	},
 /area/shuttle/nuclearops)
 "dyq" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
 	},
@@ -54141,7 +54141,7 @@
 	},
 /area/syndicate_mothership)
 "dyN" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/shuttle/administration/centcom)
@@ -59438,12 +59438,12 @@
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod3)
 "ejJ" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/escape_pod3)
 "ejK" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/shuttle/escape_pod3)
@@ -63944,7 +63944,7 @@
 	icon_state = "space";
 	name = "EXTERNAL AIRLOCK"
 	},
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/shuttle/nuclearops)
@@ -65745,7 +65745,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/hallway/primary)
 "eVZ" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_f10"
 	},
 /area/asteroid/clown)
@@ -68174,7 +68174,7 @@
 	},
 /area/hallway/primary/fore)
 "fRI" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_f6"
 	},
 /area/centcom/evac)
@@ -68782,7 +68782,7 @@
 /turf/simulated/floor/plating,
 /area/medical/paramedics)
 "gcK" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/centcom/evac)
@@ -69895,7 +69895,7 @@
 /turf/simulated/floor,
 /area/engineering/atmos)
 "gyl" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall3"
 	},
 /area/centcom/evac)
@@ -70047,12 +70047,12 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "gAj" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s6"
 	},
 /area/shuttle/escape_pod1)
 "gAp" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall7"
 	},
 /area/centcom/evac)
@@ -70071,7 +70071,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod1)
 "gAE" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s6"
 	},
 /area/shuttle/escape_pod2)
@@ -70240,7 +70240,7 @@
 /turf/simulated/floor/plating,
 /area/supply/miningdock)
 "gDy" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/centcom/evac)
@@ -70799,7 +70799,7 @@
 	name = "\improper Cyborg Station"
 	})
 "gOE" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall11"
 	},
 /area/centcom/evac)
@@ -71936,7 +71936,7 @@
 /turf/unsimulated/floor/snow/asphalt,
 /area/hallway/secondary/entry)
 "hhE" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall3"
 	},
 /area/shuttle/escape_pod1)
@@ -71953,7 +71953,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/escape_pod1)
 "hiS" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall3"
 	},
 /area/shuttle/escape_pod2)
@@ -73552,7 +73552,7 @@
 /turf/simulated/floor,
 /area/engineering/mechanics)
 "hIl" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s5"
 	},
 /area/shuttle/arrival/station)
@@ -76472,7 +76472,7 @@
 	},
 /area/wizard_station)
 "iKk" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_f5"
 	},
 /area/asteroid/clown)
@@ -78329,7 +78329,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint)
 "jsa" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/asteroid/clown)
@@ -82476,7 +82476,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint2)
 "kLu" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s5"
 	},
 /area/centcom/evac)
@@ -82687,7 +82687,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "kQa" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 3;
 	icon_state = "swall2";
 	tag = "icon-swall2"
@@ -83601,7 +83601,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/fitness)
 "lhX" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s9"
 	},
 /area/shuttle/arrival/station)
@@ -84006,7 +84006,7 @@
 /turf/simulated/floor/engine/concrete,
 /area/station/garage)
 "lpZ" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s9"
 	},
 /area/centcom/evac)
@@ -85182,7 +85182,7 @@
 /turf/simulated/wall/r_wall,
 /area/engineering/burn_chamber)
 "lJw" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/asteroid/clown)
@@ -87410,7 +87410,7 @@
 /turf/simulated/floor/engine,
 /area/science/telescience)
 "mAw" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s6"
 	},
 /area/shuttle/arrival/station)
@@ -87449,7 +87449,7 @@
 	},
 /area/maintenance/disposal)
 "mAH" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/arrival/station)
@@ -87509,7 +87509,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "mCu" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall14"
 	},
 /area/shuttle/arrival/station)
@@ -89035,7 +89035,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
 "nei" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall11"
 	},
 /area/shuttle/arrival/station)
@@ -89206,7 +89206,7 @@
 /turf/simulated/open,
 /area/science/xenobiology/specimen_4)
 "niE" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall7"
 	},
 /area/shuttle/arrival/station)
@@ -89784,7 +89784,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
 "nuk" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 8;
 	icon_state = "diagonalWall3"
 	},
@@ -90186,7 +90186,7 @@
 	},
 /area/science/robotics)
 "nAp" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/syndicate_mothership)
@@ -91401,7 +91401,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/locker)
 "nYE" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall3"
 	},
 /area/shuttle/arrival/station)
@@ -92404,7 +92404,7 @@
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_6)
 "ooz" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/shuttle/escape_pod1)
@@ -93728,7 +93728,7 @@
 	},
 /area/shuttle/nuclearops)
 "oIh" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s5"
 	},
 /area/asteroid/clown)
@@ -94004,7 +94004,7 @@
 /turf/simulated/floor,
 /area/gateway)
 "oMV" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 8;
 	icon_state = "diagonalWall3"
 	},
@@ -94416,7 +94416,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "oUI" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 1;
 	icon_state = "diagonalWall3"
 	},
@@ -95147,7 +95147,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "phk" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/shuttle/escape_pod5)
@@ -97245,7 +97245,7 @@
 /turf/simulated/floor/plating,
 /area/djstation)
 "pVd" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s9"
 	},
 /area/shuttle/escape_pod3)
@@ -97856,7 +97856,7 @@
 /turf/simulated/floor/airless,
 /area/derelict/teleporter)
 "qgG" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/shuttle/syndicate_elite/mothership)
@@ -99547,7 +99547,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "qKz" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall13"
 	},
 /area/shuttle/arrival/station)
@@ -101163,7 +101163,7 @@
 	},
 /area/shuttle/nuclearops)
 "rsN" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
 	},
@@ -104175,7 +104175,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint3)
 "sEB" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/syndicate_mothership/elite_squad)
@@ -104645,7 +104645,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "sNl" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/shuttle/arrival/station)
@@ -106501,7 +106501,7 @@
 /turf/simulated/floor/plating,
 /area/storage/art)
 "trk" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s9"
 	},
 /area/asteroid/clown)
@@ -107039,7 +107039,7 @@
 	icon_state = "redalertonly";
 	name = "Status Display"
 	},
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/syndicate_mothership/elite_squad)
@@ -109088,7 +109088,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/disposal)
 "umR" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s9"
 	},
 /area/shuttle/escape_pod5)
@@ -109307,7 +109307,7 @@
 	},
 /area/bridge)
 "usL" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s10"
 	},
 /area/shuttle/escape_pod2)
@@ -109448,7 +109448,7 @@
 	},
 /area/bridge)
 "uwq" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall12"
 	},
 /area/shuttle/escape_pod5)
@@ -112626,7 +112626,7 @@
 	},
 /area/bridge)
 "vCy" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_s6"
 	},
 /area/asteroid/clown)
@@ -113333,7 +113333,7 @@
 /turf/simulated/floor/plating,
 /area/security/vacantoffice)
 "vPB" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall14"
 	},
 /area/centcom/evac)
@@ -114005,7 +114005,7 @@
 /turf/simulated/floor/airless,
 /area/asteroid/clown)
 "wbK" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "diagonalWall3"
 	},
 /area/shuttle/syndicate_elite/mothership)
@@ -114108,7 +114108,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "wdv" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	dir = 4;
 	icon_state = "diagonalWall3"
 	},
@@ -117888,7 +117888,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "xtI" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "swall_f9"
 	},
 /area/asteroid/clown)
@@ -118714,7 +118714,7 @@
 /turf/simulated/floor/mineral/plasma,
 /area/science/hallway)
 "xHp" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "diagonalWall3"
 	},
 /area/shuttle/trade/start)
@@ -119581,7 +119581,7 @@
 /turf/simulated/floor/carpet,
 /area/security/vacantoffice)
 "xSK" = (
-/turf/simulated/wall/shuttle{
+/turf/simulated/wall/shuttle/unsmoothed{
 	icon_state = "wall3"
 	},
 /area/shuttle/nuclearops)

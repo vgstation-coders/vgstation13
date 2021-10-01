@@ -14,11 +14,11 @@
 "an" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/grille,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/full/plasma,/turf/space,/area/vault/oldarmory)
 "ao" = (/turf/simulated/floor/plating,/area/vault/oldarmory)
 "ap" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/full/plasma,/turf/space,/area/vault/oldarmory)
-"aq" = (/turf/simulated/wall/shuttle{dir = 8; icon_state = "diagonalWall3"},/area/vault/oldarmory)
+"aq" = (/turf/simulated/wall/shuttle/unsmoothed{dir = 8; icon_state = "diagonalWall3"},/area/vault/oldarmory)
 "ar" = (/turf/simulated/wall/invulnerable,/area/vault/oldarmory)
 "as" = (/obj/structure/sign/securearea,/turf/simulated/wall/invulnerable,/area/vault/oldarmory)
 "at" = (/obj/machinery/door/airlock/highsecurity{locked = 1; name = "SECURE FACILITY"},/turf/simulated/floor/plating,/area/vault/oldarmory)
-"au" = (/turf/simulated/wall/shuttle{dir = 1; icon_state = "diagonalWall3"},/area/vault/oldarmory)
+"au" = (/turf/simulated/wall/shuttle/unsmoothed{dir = 1; icon_state = "diagonalWall3"},/area/vault/oldarmory)
 "av" = (/obj/machinery/sweet,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "aw" = (/obj/machinery/vending/nuka,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "ax" = (/obj/machinery/vending/snack,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
@@ -117,7 +117,7 @@
 "cm" = (/obj/machinery/syndicate_beacon{desc = "This seems to be what the Syndicate agents here are using to communicate with their leaders. Maybe they'd be willing to hire you?"; name = "Syndicate Communications Relay"},/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "cn" = (/obj/structure/bed/chair,/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "co" = (/obj/machinery/vending/hatdispenser,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
-"cp" = (/turf/simulated/wall/shuttle{icon_state = "diagonalWall3"},/area/vault/oldarmory)
+"cp" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "diagonalWall3"},/area/vault/oldarmory)
 "cq" = (/obj/machinery/light,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "cr" = (/obj/structure/table/reinforced,/obj/machinery/recharger,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "cs" = (/obj/machinery/computer/security/engineering,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
@@ -129,7 +129,7 @@
 "cy" = (/obj/machinery/computer/security,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "cz" = (/obj/structure/rack,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/obj/item/clothing/mask/fakemoustache,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
 "cA" = (/obj/structure/rack,/obj/item/clothing/head/helmet/doomguy,/obj/item/clothing/shoes/doomguy,/obj/item/clothing/suit/armor/doomguy,/obj/item/clothing/under/doomguy,/obj/item/weapon/storage/belt/security/doomguy,/obj/item/clothing/gloves/doomguy,/turf/simulated/floor/shuttle/brig,/area/vault/oldarmory)
-"cB" = (/turf/simulated/wall/shuttle{dir = 4; icon_state = "diagonalWall3"},/area/vault/oldarmory)
+"cB" = (/turf/simulated/wall/shuttle/unsmoothed{dir = 4; icon_state = "diagonalWall3"},/area/vault/oldarmory)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
