@@ -34,10 +34,10 @@
 /turf/simulated/wall/shuttle/ex_act(severity)
 	return
 
-/turf/simulated/wall/mech_drill_act(severity)
+/turf/simulated/wall/shuttle/mech_drill_act(severity)
 	return
 
-/turf/simulated/wall/attack_animal(var/mob/living/simple_animal/M)
+/turf/simulated/wall/shuttle/attack_animal(var/mob/living/simple_animal/M)
 	return
 
 /turf/simulated/wall/shuttle/singularity_pull(S, current_size)
