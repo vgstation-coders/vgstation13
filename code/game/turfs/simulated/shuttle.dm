@@ -13,7 +13,6 @@
 		/turf/simulated/wall/shuttle,
 		/obj/machinery/door/unpowered/shuttle,
 		/obj/structure/shuttle,
-		/obj/structure/shuttle/diag_wall,
 		/obj/structure/grille,
 	)
 	return smoothables
