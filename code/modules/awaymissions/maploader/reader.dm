@@ -364,7 +364,7 @@ var/list/map_dimension_cache = list()
 		instance = new path (locate(x,y,z))//first preloader pass
 
 	// Stolen from shuttlecode but very good to reuse here
-	if(rotate)
+	if(rotate && instance)
 		instance.shuttle_rotate(rotate)
 
 	if(_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
