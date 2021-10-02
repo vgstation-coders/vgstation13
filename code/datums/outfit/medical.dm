@@ -101,7 +101,7 @@
 				"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
 			),
 			slot_head_str = list(
-				"Surgeron" = /obj/item/clothing/head/surgery/blue,
+				"Surgeon" = /obj/item/clothing/head/surgery/blue,
 			),
 			slot_s_store_str = /obj/item/device/flashlight/pen,
 		),
