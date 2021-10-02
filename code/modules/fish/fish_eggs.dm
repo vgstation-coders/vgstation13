@@ -88,7 +88,7 @@ var/list/nonhatching_types = list("sea devil") //If you ever want to create anot
 
 /obj/item/fish_eggs/seadevil
 	name = "sea devil"
-	desc = "An aquatic offshoot of gremlins that engage in the peculiar behavior of hatching fish eggs to eat mature adults."
+	desc = "An aquatic offshoot of gremlins that engage in the peculiar behavior of hatching fish eggs to eat the grime they create."
 	icon_state = "seadevil"
 	fish_type = "sea devil"
 

@@ -324,7 +324,7 @@
 				if(prob(10))
 					playsound(src,'sound/items/bikehorn.ogg', 80, 1)
 			if("sea devil")
-				if(fish_list.len > 1 && prob(5))
+				if(filth_level > 2.5 && prob(5))
 					//Small chance to eat a random fish that isn't itself.
 					seadevil_eat()
 
@@ -384,11 +384,8 @@
 	update_icon()
 
 /obj/machinery/fishtank/proc/seadevil_eat()
-	var/list/fish_to_eat = fish_list.Copy()
-	fish_to_eat.Remove("sea devil")
-	var/eat_target = pick(fish_to_eat)
-	visible_message("<span class='notice'>The sea devil devours \an [eat_target].</span>")
-	kill_fish(eat_target)
+	remove_filth(1)
+	visible_message("<span class='notice'>The sea devil devours some algae.</span>")
 
 /obj/machinery/fishtank/proc/add_fish(var/type)
 	if(!type || type == "dud")

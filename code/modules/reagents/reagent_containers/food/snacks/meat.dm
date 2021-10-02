@@ -206,6 +206,16 @@
 	reagents.add_reagent(ROACHSHELL, rand(2,6))
 	bitesize = 5
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket
+	name = "cricket meat"
+	desc = "Tastes a bit like nuts, very earthy. Not much of a serving, though."
+	icon_state = "roachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/New()
+	..()
+	reagents.add_reagent(FLOUR, rand(4,10))
+	bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 	desc = "A chunk of meat from an above-average sized cockroach."
 	icon_state = "bigroachmeat"
