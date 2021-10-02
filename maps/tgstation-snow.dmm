@@ -53948,9 +53948,7 @@
 	},
 /area/tdome)
 "dyn" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "diagonalWall3"
-	},
+/obj/structure/shuttle/diag_wall/black,
 /area/shuttle/nuclearops)
 "dyo" = (
 /obj/machinery/door/airlock/external,
@@ -113857,9 +113855,7 @@
 /turf/simulated/floor/airless,
 /area/asteroid/clown)
 "wbK" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "diagonalWall3"
-	},
+/obj/structure/shuttle/diag_wall/black,
 /area/shuttle/syndicate_elite/mothership)
 "wbM" = (
 /turf/simulated/floor{
@@ -118565,9 +118561,7 @@
 /turf/simulated/floor/mineral/plasma,
 /area/science/hallway)
 "xHp" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	icon_state = "diagonalWall3"
-	},
+/obj/structure/shuttle/diag_wall/black,
 /area/shuttle/trade/start)
 "xHG" = (
 /obj/machinery/door/window{
