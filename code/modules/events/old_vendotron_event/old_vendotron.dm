@@ -233,73 +233,7 @@
 	return thePrice
 
 
-//The end///////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//Begin spoilers/////
 
 
 /obj/machinery/vending/old_vendotron/emag(mob/user)
