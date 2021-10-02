@@ -1,7 +1,7 @@
 "aa" = (/turf/space,/area)
-"ab" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall_f6"; icon_state = "bswall_f6"},/area/vault/syndiecargo)
+"ab" = (/obj/structure/shuttle/diag_wall/smooth/black,/area/vault/syndiecargo)
 "ac" = (/obj/structure/shuttle/engine/propulsion/burst{tag = "icon-burst_l (NORTH)"; icon_state = "burst_l"; dir = 1},/turf/simulated/floor/shuttle/plating,/area/vault/syndiecargo)
-"ad" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall_f10"; icon_state = "bswall_f10"},/area/vault/syndiecargo)
+"ad" = (/obj/structure/shuttle/diag_wall/smooth/black{dir = 8},/area/vault/syndiecargo)
 "ae" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall3"; icon_state = "bswall3"},/area/vault/syndiecargo)
 "af" = (/obj/structure/shuttle/engine/heater{tag = "icon-heater (NORTH)"; icon_state = "heater"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/turf/simulated/floor/shuttle/plating,/area/vault/syndiecargo)
 "ag" = (/obj/structure/shuttle/engine/heater{tag = "icon-heater (NORTH)"; icon_state = "heater"; dir = 1},/obj/structure/window/reinforced/plasma,/turf/simulated/floor/shuttle/plating,/area/vault/syndiecargo)
@@ -78,9 +78,9 @@
 "bz" = (/obj/machinery/computer/crew,/turf/simulated/floor/shuttle{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bA" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/floor/shuttle{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
 "bB" = (/obj/machinery/computer/security,/turf/simulated/floor/shuttle{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bC" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall_f5"; icon_state = "bswall_f5"},/area/vault/syndiecargo)
+"bC" = (/obj/structure/shuttle/diag_wall/smooth/black{dir = 1},/area/vault/syndiecargo)
 "bD" = (/obj/machinery/door/airlock/external{icon_state = "door_locked"; locked = 1},/turf/simulated/floor/shuttle/plating,/area/vault/syndiecargo)
-"bE" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-bswall_f9"; icon_state = "bswall_f9"},/area/vault/syndiecargo)
+"bE" = (/obj/structure/shuttle/diag_wall/smooth/black{dir = 4},/area/vault/syndiecargo)
 "bF" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (NORTH)"; icon_state = "plasmarwindow"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/obj/structure/window/full/reinforced/plasma,/obj/machinery/door/poddoor{id_tag = 350; name = "Shutters"},/turf/simulated/floor/shuttle/plating,/area/vault/syndiecargo)
 
 (1,1,1) = {"
