@@ -3354,7 +3354,7 @@ var/global/num_vending_terminals = 1
 	if(stat & (BROKEN))
 		icon_state = initial(icon_state)+"-broken"
 	else if (stat & (NOPOWER) || custom_stock.len == 0)
-		icon_state = initial(icon_state)+"sale-off"
+		icon_state = initial(icon_state)+"-off"
 	else
 		icon_state = initial(icon_state)
 
