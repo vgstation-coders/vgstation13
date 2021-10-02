@@ -418,7 +418,7 @@
 "ib" = (/obj/machinery/shower{tag = "icon-shower (WEST)"; icon_state = "shower"; dir = 8},/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/spacebattle/cruiser)
 "ic" = (/obj/structure/toilet,/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/spacebattle/cruiser)
 "id" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/fire,/turf/simulated/floor{icon_state = "white"},/area/awaymission/spacebattle/cruiser)
-"ie" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-swall_f9"; icon_state = "swall_f9"},/area/awaymission/spacebattle/cruiser)
+"ie" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/area/awaymission/spacebattle/cruiser)
 "if" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor{icon_state = "freezerfloor"},/area/awaymission/spacebattle/cruiser)
 "ig" = (/turf/simulated/wall/shuttle/unsmoothed{tag = "icon-swall1"; icon_state = "swall1"},/area/awaymission/spacebattle/cruiser)
 "ih" = (/obj/item/weapon/storage/firstaid/regular,/turf/simulated/floor{icon_state = "white"},/area/awaymission/spacebattle/cruiser)

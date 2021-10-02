@@ -1,6 +1,6 @@
 "a" = (/turf/space,/area)
 "b" = (/turf/unsimulated/mineral,/area/vault/prison_ship)
-"c" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f6"},/area/vault/prison_ship)
+"c" = (/obj/structure/shuttle/diag_wall/smooth,/area/vault/prison_ship)
 "d" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall14"},/area/vault/prison_ship)
 "e" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall12"},/area/vault/prison_ship)
 "f" = (/obj/item/stack/rods,/turf/simulated/floor/shuttle/plating,/area/vault/prison_ship)
@@ -24,10 +24,10 @@
 "x" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall3"},/area/vault/prison_ship)
 "y" = (/obj/item/toy/gasha/nurse,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
 "z" = (/obj/structure/displaycase/broken,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"A" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f5"},/area/vault/prison_ship)
+"A" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/area/vault/prison_ship)
 "B" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall13"},/area/vault/prison_ship)
 "C" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"D" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f9"},/area/vault/prison_ship)
+"D" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/area/vault/prison_ship)
 
 (1,1,1) = {"
 aaaaaaaabbbbaa

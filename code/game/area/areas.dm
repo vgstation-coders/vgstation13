@@ -542,7 +542,7 @@ var/area/space_area
 
 var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
-var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
+var/list/transparent_icons = list("diagonalWall3") //icon_states for which to prepare an underlay
 
 /area/proc/move_contents_to(var/area/A, var/turftoleave=null, var/direction = null)
 	//Takes: Area. Optional: turf type to leave behind.

@@ -1,5 +1,5 @@
-"a" = (/turf/unsimulated/mineral,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f6"},/area/asteroid)
-"b" = (/turf/unsimulated/mineral,/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall_f10"},/area/asteroid)
+"a" = (/turf/unsimulated/mineral,/obj/structure/shuttle/diag_wall/smooth,/area/asteroid)
+"b" = (/turf/unsimulated/mineral,/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area/asteroid)
 "c" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor/shuttle,/area/asteroid)
 "e" = (/obj/structure/flora/rock/pile,/turf/unsimulated/floor/asteroid,/area/asteroid)
 "f" = (/obj/effect/decal/cleanable/soot,/obj/structure/boulder,/turf/unsimulated/floor/asteroid,/area/asteroid)
