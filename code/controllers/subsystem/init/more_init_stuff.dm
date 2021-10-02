@@ -47,6 +47,8 @@ var/datum/subsystem/more_init/SSmore_init
 	init_wizard_apprentice_setups()
 	machinery_rating_cache = cache_machinery_components_rating()
 	typing_indicator = new
+	CHECK_TICK
+	centcomm_store = new
 	log_startup_progress("Finished doing the other misc. initializations in [stop_watch(watch)]s.")
 
 /proc/cache_machinery_components_rating()

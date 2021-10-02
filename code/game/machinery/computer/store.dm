@@ -46,6 +46,7 @@
 				"cost" = item.cost,
 				"desc" = item.desc,
 				"stock" = item.stock,
+				"img" = item.img,
 			))
 		if(!length(cat["items"]))
 			continue

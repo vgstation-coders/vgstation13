@@ -8,6 +8,8 @@
 	var/cost=0
 	var/stock = -1 //-1 = unlimited stock. Any other value means the item will become unavailable at 0.
 	var/category = "Misc"
+	/// base64 icon of the item
+	var/img
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
 	if(istype(typepath,/obj/item/weapon/storage))

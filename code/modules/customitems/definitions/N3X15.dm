@@ -12,6 +12,7 @@
 	name = "Robotics Research Labcoat"
 	desc = "A suit that protects against nothing, but looks fashionable. Well, apart from the crappy portrait drawn on the back with permanent marker."
 	base_icon_state = "labcoat_tox"
+	icon_state = "labcoat_tox"
 
 
 

@@ -16,7 +16,7 @@ job objectives = good stock market, shitty job objective completion = shitty eco
 Goal for now is to get the store itself working, however.
 */
 
-var/global/datum/store/centcomm_store=new
+var/global/datum/store/centcomm_store
 
 /datum/store
 	var/list/datum/storeitem/items=list()
@@ -27,9 +27,14 @@ var/global/datum/store/centcomm_store=new
 /datum/store/New()
 	for(var/itempath in subtypesof(/datum/storeitem))
 		var/datum/storeitem/instance = new itempath()
+		var/obj/item/item_type = instance.typepath
+		var/item_icon = initial(item_type.icon)
+		var/item_icon_state = initial(item_type.icon_state)
+		instance.img = icon2base64(icon(item_icon, item_icon_state))
 		if(!items[instance.category])
 			items[instance.category] = list()
 		items[instance.category] += instance
+		CHECK_TICK
 
 /datum/store/proc/charge(var/mob/user,var/amount,var/datum/storeitem/item,var/obj/machinery/computer/merch/merchcomp)
 	if(!user)

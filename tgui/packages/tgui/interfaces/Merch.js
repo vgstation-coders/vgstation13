@@ -11,8 +11,9 @@ const MAX_SEARCH_RESULTS = 25;
 export const Merch = (props, context) => {
   return (
     <Window
-      width={800}
-      height={475}>
+      width={822}
+      height={580}
+      theme="neutral">
       <Window.Content scrollable>
         <MerchUplink />
       </Window.Content>
@@ -109,12 +110,23 @@ const ItemList = (props, context) => {
       title={item.name}
       level={2}
       buttons={(
-        <Button
-          content={item.cost + ' ' + currencySymbol}
-          onClick={() => act('buy', {
-            name: item.name,
-          })} />
+        <Box>
+          {item.stock !== -1 ? `In stock: ${item.stock} ` : ""}
+          <Button
+            content={item.cost + ' ' + currencySymbol}
+            disabled={item.stock === 0}
+            onClick={() => act('buy', {
+              name: item.name,
+            })} />
+        </Box>
       )}>
+      <img
+        src={`data:image/jpeg;base64, ${item.img}`}
+        style={{
+          'vertical-align': 'middle',
+          'horizontal-align': 'middle',
+        }}
+      />
       {decodeHtmlEntities(item.desc)}
     </Section>
   ));
