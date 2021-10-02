@@ -345,7 +345,7 @@ var/paperwork_library
 	if(!bloodied)
 		return
 	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
-		if(reagentholder.reagents.has_only_any(list(WATER,CLEANER,BLEACH))) //cannot contain any reagent except water bleach or cleaner
+		if(reagentholder.reagents.has_only_any(list(WATER,CLEANER,BLEACH,ETHANOL))) //cannot contain any reagent outside of this list, but can contain the list in any proportion
 			to_chat(user, "<span class='notice'>You dip \the [src] into \the [reagentholder], cleaning out the nib.</span>")
 			bloodied = FALSE
 			colour = "black"
