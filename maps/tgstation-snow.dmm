@@ -32555,9 +32555,8 @@
 /turf/simulated/open,
 /area/mine/explored)
 "caX" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 8;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
 	},
 /area/shuttle/trade/start)
 "caY" = (
@@ -32990,9 +32989,8 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "ccA" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
 	},
 /area/shuttle/trade/start)
 "ccD" = (
@@ -53360,9 +53358,8 @@
 	},
 /area/shuttle/escape/centcom)
 "dvO" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 8;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
 	},
 /area/shuttle/nuclearops)
 "dvP" = (
@@ -53429,9 +53426,8 @@
 	},
 /area/shuttle/nuclearops)
 "dvS" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
 	},
 /area/shuttle/nuclearops)
 "dvT" = (
@@ -53969,9 +53965,8 @@
 	},
 /area/shuttle/nuclearops)
 "dyq" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 4;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 4
 	},
 /area/shuttle/nuclearops)
 "dyr" = (
@@ -89665,9 +89660,8 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
 "nuk" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 8;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
 	},
 /area/syndicate_mothership)
 "nur" = (
@@ -93879,9 +93873,8 @@
 /turf/simulated/floor,
 /area/gateway)
 "oMV" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 8;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
 	},
 /area/shuttle/syndicate_elite/mothership)
 "oNi" = (
@@ -94291,9 +94284,8 @@
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "oUI" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 1;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
 	},
 /area/shuttle/syndicate_elite/mothership)
 "oVb" = (
@@ -101034,9 +101026,8 @@
 	},
 /area/shuttle/nuclearops)
 "rsN" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 4;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 4
 	},
 /area/shuttle/trade/start)
 "rtc" = (
@@ -113969,9 +113960,8 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "wdv" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 4;
-	icon_state = "diagonalWall3"
+/obj/structure/shuttle/diag_wall/black{
+	dir = 4
 	},
 /area/shuttle/syndicate_elite/mothership)
 "wdy" = (
