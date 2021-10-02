@@ -740,3 +740,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Ancient Cryogenic Pod"
 	alert_title = "Abnormal Life Sign Report"
 	message = "An abnormal life sign has been detected in promiximity of the station. Long range scans determine signal to be human life. Approach with caution."
+
+/datum/command_alert/old_vendotron_crash
+	alert_title = "Odd Machine Debris"
+	message = "A large chunk of debris is on a collision course with your station. Moderate damage is expected at its current velocity. The nature of the debris is unknown, however our sensors are picking up what sounds like the faint jingling of coins."
+
+/datum/command_alert/old_vendotron_teleport
+	alert_title = "Warning - Unknown Bluespace Anom#ly Det%ct!$"
+
+/datum/command_alert/old_vendotron_teleport/announce()
+	message = "A bluespace tear of unknown origin is formi!g w£thi$ !$@ cu&ic met£#s o£ [station_name()] plea$e-BZZZZZZZT Come on down for fabulous, splendiferous, one of a kind goods at reasona#le pri$es! We'%e prac@ic£all% giving #$e@ away! All $ales a#$ fi@%l-BZZZT excercise caution and report any anomalous activity."
+	..()
