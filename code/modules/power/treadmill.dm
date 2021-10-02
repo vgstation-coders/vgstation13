@@ -16,6 +16,7 @@
 	anchored = 1
 	use_power = 0
 	idle_power_usage = 0
+	pass_flags_self = PASSGLASS
 	var/count_power = 0 //How much power have we produced SO FAR this count?
 	var/tick_power = 0 //How much power did we produce last count?
 	var/power_efficiency = 1 //Based on parts
@@ -85,7 +86,7 @@
 /obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if((flow_flags & ON_BORDER) && (mover.dir == dir))
 		powerwalk(mover)
@@ -95,7 +96,7 @@
 /obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		if(air_group)

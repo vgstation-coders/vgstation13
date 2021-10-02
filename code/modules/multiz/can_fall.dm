@@ -74,7 +74,7 @@
 /obj/structure/lattice/CanFallThru(atom/movable/mover as mob|obj, turf/target as turf)
 	if(target.z >= z)
 		return TRUE // We don't block sideways or upward movement.
-	else if(istype(mover) && mover.checkpass(PASSGRILLE))
+	else if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE // Anything small enough to pass a grille will pass a lattice
 	if(!isturf(mover.loc))
 		return FALSE // Only let loose floor items fall. No more snatching things off people's hands.
@@ -83,6 +83,6 @@
 
 // So you'll slam when falling onto a grille
 /obj/structure/lattice/CheckFall(var/atom/movable/falling_atom)
-	if(istype(falling_atom) && falling_atom.checkpass(PASSGRILLE))
+	if(istype(falling_atom) && falling_atom.checkpass(pass_flags_self))
 		return FALSE
 	return falling_atom.fall_impact(src)

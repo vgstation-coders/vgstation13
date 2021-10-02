@@ -10,6 +10,7 @@
 	pressure_resistance = 5*ONE_ATMOSPHERE
 	layer = BELOW_OBJ_LAYER
 	explosion_resistance = 5
+	pass_flags_self = PASSGRILLE
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
 	var/grille_material = /obj/item/stack/rods
@@ -170,7 +171,7 @@
 /obj/structure/grille/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGRILLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		if(istype(mover, /obj/item/projectile))

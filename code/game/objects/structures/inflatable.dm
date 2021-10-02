@@ -134,7 +134,7 @@
 	opacity = 0
 	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "wall"
-
+	pass_flags_self = PASSGLASS
 	var/undeploy_path = null
 	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
@@ -250,7 +250,7 @@
 /obj/structure/inflatable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return !density
 

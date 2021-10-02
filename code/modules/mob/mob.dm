@@ -3,6 +3,7 @@
 
 /mob
 	plane = MOB_PLANE
+	pass_flags_self = PASSMOB
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 

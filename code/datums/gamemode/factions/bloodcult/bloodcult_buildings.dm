@@ -196,6 +196,7 @@
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	layer = TABLE_LAYER
+	pass_flags_self = PASSTABLE
 	var/obj/item/weapon/melee/soulblade/blade = null
 	var/lock_type = /datum/locking_category/buckle/bed
 	var/altar_task = ALTARTASK_NONE
@@ -345,7 +346,7 @@
 		var/mob/M = mover
 		if(M.flying)
 			return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0

@@ -28,6 +28,7 @@
 #define SS_INIT_MINIMAP           -23
 #define SS_INIT_PERSISTENCE_MAP	  -98
 #define SS_INIT_PERSISTENCE_MISC  -99
+#define SS_INIT_PATHFINDER        -100
 #define SS_INIT_DAYNIGHT		  -200
 
 #define SS_PRIORITY_TIMER          1000

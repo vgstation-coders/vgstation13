@@ -26,7 +26,7 @@ var/list/one_way_windows
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
-
+	pass_flags_self = PASSGLASS
 	var/obj/abstract/Overlays/damage_overlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
@@ -186,7 +186,7 @@ var/list/one_way_windows
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
@@ -201,7 +201,7 @@ var/list/one_way_windows
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGLASS))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
+	if(istype(mover) && mover.checkpass(pass_flags_self))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
 		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
 			dim_beam(mover)
 		return 1
