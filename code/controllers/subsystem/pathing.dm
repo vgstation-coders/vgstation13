@@ -74,7 +74,7 @@ var/global/list/pathmakers = list()
 	var/turf/start
 	var/turf/end
 	var/atom/target
-	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
+	var/PriorityQueue/open = new /PriorityQueue/reverse(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
 	var/list/path = null //the returned path, if any
 	var/PathNode/cur //current processed turf

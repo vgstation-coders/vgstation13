@@ -207,12 +207,14 @@
 		if(istype(obj,/obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
 			imp.remove(user)
+			user.put_in_hands(imp)
 		else
 			obj.forceMove(get_turf(target))
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		affected.hidden.forceMove(get_turf(target))
+		user.put_in_hands(affected.hidden)
 		if(!affected.hidden.blood_DNA)
 			affected.hidden.blood_DNA = list()
 		affected.hidden.blood_DNA[target.dna.unique_enzymes] = target.dna.b_type

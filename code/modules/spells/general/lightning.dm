@@ -30,6 +30,11 @@
 	..()
 	chargeoverlay = image("icon" = 'icons/mob/mob.dmi', "icon_state" = "sithlord")
 
+/spell/lightning/is_valid_target(var/target, mob/user, options)
+	if(options)
+		return (target in options)
+	return ((target in view_or_range(range, user, selection_type)) && (istype(target, /mob/living) || istype(target, /obj/machinery/bot) || istype(target, /obj/mecha)))
+
 /spell/lightning/quicken_spell()
 	if(!can_improve(Sp_SPEED))
 		return 0

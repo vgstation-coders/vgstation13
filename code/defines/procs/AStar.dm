@@ -46,71 +46,6 @@ length to avoid portals or something i guess?? Not that they're counted right no
 //  Same as 1), but check all turf, including unsimulated
 
 //////////////////////
-//PriorityQueue object
-//////////////////////
-
-//an ordered list, using the cmp proc to weight the list elements
-/PriorityQueue
-	var/list/L //the actual queue
-	var/cmp //the weight function used to order the queue
-
-/PriorityQueue/New(compare)
-	L = new()
-	cmp = compare
-
-/PriorityQueue/proc/IsEmpty()
-	return !L.len
-
-//add an element in the list,
-//immediatly ordering it to its position using Insertion sort
-/PriorityQueue/proc/Enqueue(var/atom/A)
-	var/i
-	L.Add(A)
-	i = L.len -1
-	while(i > 0 &&  call(cmp)(L[i],A) >= 0) //place the element at it's right position using the compare proc
-		L.Swap(i,i+1) 						//last inserted element being first in case of ties (optimization)
-		i--
-
-//removes and returns the first element in the queue
-/PriorityQueue/proc/Dequeue()
-	ASSERT(L.len)
-	. = L[1]
-	Remove(.)
-	return .
-
-//removes an element
-/PriorityQueue/proc/Remove(var/atom/A)
-	return L.Remove(A)
-
-//returns a copy of the elements list
-/PriorityQueue/proc/List()
-	RETURN_TYPE(/list)
-	var/list/ret = L.Copy()
-	return ret
-
-//return the position of an element or 0 if not found
-/PriorityQueue/proc/Seek(var/atom/A)
-	return L.Find(A)
-
-//return the element at the i_th position
-/PriorityQueue/proc/Get(var/i)
-	ASSERT(i < L.len && i > 1)
-	return L[i]
-
-//replace the passed element at it's right position using the cmp proc
-/PriorityQueue/proc/ReSort(var/atom/A)
-	var/i = Seek(A)
-	if (i == 0)
-		CRASH("[src] was seeking [A] but could not find it.")
-	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
-		L.Swap(i,i+1)
-		i++
-	while(i > 1 && call(cmp)(L[i],L[i-1]) <= 0) //last inserted element being first in case of ties (optimization)
-		L.Swap(i,i-1)
-		i--
-	return 1
-
-//////////////////////
 //PathNode object
 //////////////////////
 
@@ -202,7 +137,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	. = list() // In case of failure/runtimes, we want to return a list.
-	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
+	var/PriorityQueue/open = new /PriorityQueue/reverse(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
 	var/list/path = list() //the returned path, if any
 	var/PathNode/cur //current processed turf

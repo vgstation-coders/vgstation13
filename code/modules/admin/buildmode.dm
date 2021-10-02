@@ -67,8 +67,6 @@
 			if(SOUTHWEST)
 				dir = NORTH
 		return 1
-	DblClick(object,location,control,params)
-		return Click(object,location,control,params)
 
 /obj/effect/bmode/buildhelp
 	icon = 'icons/misc/buildmode.dmi'

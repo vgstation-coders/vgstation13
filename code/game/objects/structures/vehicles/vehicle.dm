@@ -26,7 +26,6 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
-	noghostspin = 1 //You guys are no fun
 	buckle_range = 1
 	var/empstun = 0
 	var/health = 100

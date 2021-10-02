@@ -1770,7 +1770,7 @@ mob/living/carbon/human/isincrit()
 	return internal_organs_by_name["appendix"]
 
 //Moved from internal organ surgery
-//Removes organ from src, places organ object under user
+//Removes organ from src, places organ object in user's hands
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 /mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/internal/extractedorgan
@@ -1791,6 +1791,7 @@ mob/living/carbon/human/isincrit()
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)
+			user.put_in_hands(extractedorgan)
 
 			return extractedorgan
 

@@ -945,10 +945,52 @@ var/global/list/damage_icon_parts = list()
 			O.color = I.color
 		O.pixel_x = species.inventory_offsets["[slot_head]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_head]"]["pixel_y"] * PIXEL_MULTIPLIER
-		obj_to_plane_overlay(O,HEAD_LAYER)
 		//overlays_standing[HEAD_LAYER]	= standing
 	//else
 		//overlays_standing[HEAD_LAYER]	= null
+
+		if(istype(head,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = head
+			var/i = 1
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				if(above.wear_override)
+					standing = image("icon" = above.wear_override)
+				else
+					standing = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot_head, src)) //Display species-exclusive species correctly on attached limbs
+					if(OE.species)
+						S = OE.species
+						break
+
+				if(S.name in above.species_fit) //Allows clothes to display differently for multiple species
+					if(S.head_icons && has_icon(S.head_icons, above.icon_state))
+						standing.icon = S.head_icons
+
+				if((gender == FEMALE) && (above.clothing_flags & GENDERFIT)) //genderfit
+					if(has_icon(standing.icon, "[above.icon_state]_f"))
+						standing.icon_state = "[above.icon_state]_f"
+
+				standing.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+				O.overlays += standing
+
+				if(above.dynamic_overlay)
+					if(above.dynamic_overlay["[HEAD_LAYER]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
+						dyn_overlay.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+						O.overlays += dyn_overlay
+
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					bloodsies.color = above.blood_color
+					//standing.overlays	+= bloodsies
+					bloodsies.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+					O.overlays	+= bloodsies
+
+				//above.generate_accessory_overlays(O)
+				i++
+
+		obj_to_plane_overlay(O,HEAD_LAYER)
 
 	if(update_icons)
 		update_icons()

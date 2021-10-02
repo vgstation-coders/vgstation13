@@ -6,7 +6,7 @@ var/datum/subsystem/trade_system/SStrade
 
 /datum/subsystem/trade_system
 	name       = "Trade System"
-	//unspecified init order
+	init_order    = SS_INIT_OBJECT+0.1 //Always initialize just before objects
 	flags = SS_TICKER
 	wait       = SS_WAIT_ENGINES //check in no more than once every thirty seconds
 	var/list/all_twindows = list() //All trade windows
