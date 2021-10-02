@@ -3,8 +3,11 @@
 	var/muteletter_tries = 3
 	var/list/muteletters_check = list()
 
-///mob/living/carbon/human/say(var/message)
-//	..(message)
+/mob/living/carbon/human/say(var/message)
+	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message))
+		species.silent_speech(src,message)
+	else
+		..()
 
 // This is obsolete if the human is using a language.
 // Verbs in such a situation are given in /datum/language/get_spoken_verb().
