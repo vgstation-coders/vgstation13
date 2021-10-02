@@ -71,20 +71,20 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/tome/proc/tome_text()
 	var/page_data = null
-	var/dat = {"<title>arcane tome</title><body style="color:#5C1D12" background="tomebg.png">
+	var/dat = {"<title>arcane tome</title><body style="color:#FFFFFF" bgcolor="#110000">
 
 			<style>
-				label {display: inline-block; width: 50px;text-align: right;float: left;margin: 0 0 0 -45px;}
+				label {display: inline-block; width: 50px;text-align: right;float: left;margin: 0 0 0 10px;}
 				ul {list-style-type: none;}
 				li:before {content: "-";padding-left: 4px;}
-				a {text-decoration: none; color:#5C1D12}
-				.column {float: left; width: 250px; padding: 0px; height: 300px;}
+				a {text-decoration: none; color:#FFEC66}
+				.column {float: left; width: 400px; padding: 0px; height: 300px;}
 				.row:after {content: ""; display: table; clear: both;}
 			</style>
 
 			<div class="row">
-			<div class="column">
-			<div align="center" style="margin: 0 0 0 -10px;"><div style="font-size:20px"><b>The scriptures of <font color=#AE250F>Nar-Sie</b></font></div>The Geometer of Blood</div>
+			<div class="column" style="font-size:18px">
+			<div align="center" style="margin: 0 0 0 -10px;"><div style="font-size:30px"><b>The scriptures of <font color=#FF250F>Nar-Sie</b></font></div>The Geometer of Blood</div>
 			<ul>
 			<a href='byond://?src=\ref[src];page=[PAGE_FOREWORD]'><label> * </label> <li> Foreword</a> </li>"}
 
@@ -102,12 +102,12 @@ var/list/arcane_tomes = list()
 
 	dat += {"<a href='byond://?src=\ref[src];page=[PAGE_LORE1]'><label> * </label> <li>  about this tome and our goal </li></a>
 			</ul></div>
-			<div class="column">      <div align="left">      <b><ul>"}
+			<div style="font-size:18px" class="column">      <div align="left">      <b><ul>"}
 
 	for (var/obj/item/weapon/talisman/T in talismans)
-		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[T.talisman_name()][(T.uses > 1) ? " [T.uses] uses" : ""]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
+		dat += {"<label> * </label><li>  <a style="color:#FFEC66" href='byond://?src=\ref[src];talisman=\ref[T]'>[T.talisman_name()][(T.uses > 1) ? " [T.uses] uses" : ""]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
 
-	dat += {"</ul></b></div><div style="margin: 0px 20px;" align="justify">"}
+	dat += {"</ul></b></div><div align="justify">"}
 
 	if (page_data)
 		dat += page_data
@@ -160,7 +160,7 @@ var/list/arcane_tomes = list()
 		usr.put_in_hands(T)
 
 	usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-	usr << browse(tome_text(), "window=arcanetome;size=537x375")
+	usr << browse(tome_text(), "window=arcanetome;size=900x500")
 
 /obj/item/weapon/tome/attack(var/mob/living/M, var/mob/living/user)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
@@ -203,7 +203,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/tome/pickup(var/mob/user)
 	if(iscultist(user) && state == TOME_OPEN)
 		usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-		usr << browse(tome_text(), "window=arcanetome;size=537x375")
+		usr << browse(tome_text(), "window=arcanetome;size=900x500")
 
 /obj/item/weapon/tome/dropped(var/mob/user)
 	usr << browse(null, "window=arcanetome")
@@ -231,7 +231,7 @@ var/list/arcane_tomes = list()
 			playsound(user, "pageturn", 50, 1, -5)
 			state = TOME_OPEN
 			usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-			usr << browse(tome_text(), "window=arcanetome;size=537x375")
+			usr << browse(tome_text(), "window=arcanetome;size=900x500")
 		else
 			icon_state = "tome"
 			item_state = "tome"
@@ -267,7 +267,7 @@ var/list/arcane_tomes = list()
 				to_chat(user, "<span class='notice'>You slip \the [I] into \the [src].</span>")
 				if (state == TOME_OPEN)
 					usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-					usr << browse(tome_text(), "window=arcanetome;size=537x375")
+					usr << browse(tome_text(), "window=arcanetome;size=900x500")
 		else
 			to_chat(user, "<span class='warning'>This tome cannot contain any more talismans. Use or remove some first.</span>")
 
@@ -423,7 +423,7 @@ var/list/arcane_tomes = list()
 				var/obj/item/weapon/tome/T = loc
 				T.talismans.Remove(src)
 				user << browse_rsc('icons/tomebg.png', "tomebg.png")
-				user << browse(T.tome_text(), "window=arcanetome;size=537x375")
+				user << browse(T.tome_text(), "window=arcanetome;size=900x500")
 				user.put_in_hands(src)
 		return
 
