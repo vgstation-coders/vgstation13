@@ -189,6 +189,12 @@
 		to_chat(user, "<span class='warning'>\The [src] needs to be firmly secured to the floor first.</span>")
 		return 1
 
+/obj/machinery/power/emitter/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	if(active) // You just removed it from the power cable it was on, what did you think would happen?
+		visible_message("<span class='warning'>The [src] gets yanked off of its power source and turns off!</span>")
+		turn_off()
+	..()
+
 //Important note, those procs not log the emitter being turned on or off, so please use the logs in attack_hand above
 /obj/machinery/power/emitter/proc/turn_on()
 	active = 1
@@ -327,9 +333,6 @@
 	var/base_state = "emitter"
 	var/power = 1
 
-	//Notify prisms of power change.
-	var/event/power_change = new
-
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower
 	if(next)
@@ -337,7 +340,7 @@
 		next_beam.set_power(power)
 	update_icon()
 	if(!master)
-		INVOKE_EVENT(power_change,list("beam" = src))
+		invoke_event(/event/beam_power_change, list("beam" = src))
 
 /obj/effect/beam/emitter/spawn_child()
 	var/obj/effect/beam/emitter/beam = ..()

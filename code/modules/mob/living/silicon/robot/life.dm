@@ -198,7 +198,7 @@
 	update_icons()
 
 /mob/living/silicon/robot/update_canmove()
-	canmove = !(paralysis || stunned || knockdown || locked_to || lockcharge || anchored)
+	canmove = !(paralysis || stunned || knockdown || locked_to || lockdown || anchored)
 	return canmove
 
 /mob/living/silicon/robot/proc/check_locked_zlevel()

@@ -1482,7 +1482,9 @@
 			if(!check_rights(R_PERMISSIONS,0))
 				if(!check_if_greater_rights_than(M.client))
 					return
-			to_chat(M, "<span class='warning'>You have been kicked from the server</span>")
+			if(alert("Do you want to kick [M]?","Kick confirmation", "Yes", "No") != "Yes")
+				return
+			to_chat(M, "<span class='userdanger'>You have been kicked from the server</span>")
 			log_admin("[key_name(usr)] booted [key_name(M)].")
 			message_admins("<span class='notice'>[key_name_admin(usr)] booted [key_name_admin(M)].</span>", 1)
 			//M.client = null
@@ -2611,52 +2613,6 @@
 				message_admins("[key_name(usr)] attempted to set an unknown timer to 0.")
 		check_antagonists()
 
-	/*
-	else if(href_list["cult_nextobj"])
-		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
-			return
-
-		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-		if(!cult_round)
-			alert("Couldn't locate cult mode datum! This shouldn't ever happen, tell a coder!")
-			return
-
-		cult_round.bypass_phase()
-		message_admins("Admin [key_name_admin(usr)] has unlocked the Cult's next objective.")
-		log_admin("Admin [key_name_admin(usr)] has unlocked the Cult's next objective.")
-		check_antagonists()
-
-	else if(href_list["cult_mindspeak"])
-		var/input = stripped_input(usr, "Communicate to all the cultists with the voice of Nar-Sie", "Voice of Nar-Sie", "")
-		if(!input)
-			return
-
-		for(var/datum/mind/H in ticker.mode.cult)
-			if (H.current)
-				to_chat(H.current, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[input]</span></span>")
-
-		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[input]</span></span>")
-
-		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [input]")
-
-	else if(href_list["cult_privatespeak"])
-		var/mob/M = locate(href_list["cult_privatespeak"])
-		if(!M)
-			return
-
-		var/input = stripped_input(usr, "Whisper to [M.real_name] with the voice of Nar-Sie", "Voice of Nar-Sie", "")
-		if(!input)
-			return
-
-		to_chat(M, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to you, <span class='sinister'>[input]</span></span>")
-
-		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [M.real_name], <span class='sinister'>[input]</span></span>")
-
-		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-	*/
 	else if(href_list["adminplayerobservecoodjump"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -3577,6 +3533,16 @@
 				feedback_add_details("admin_secrets_fun_used","IRH")
 				message_admins("[key_name_admin(usr)] has sent an immovable monolith to the station. That one's gonna hurt.", 1)
 				immovablerod(2)
+			if("old_vendotron_crash")
+				feedback_inc("admin_secrets_fun_used", 1)
+				feedback_add_details("admin_secrets_fun_used","VENDC")
+				message_admins("[key_name_admin(usr)] has started an old vendotron crash event", 1)
+				new /datum/event/old_vendotron_crash
+			if("old_vendotron_teleport")
+				feedback_inc("admin_secrets_fun_used", 1)
+				feedback_add_details("admin_secrets_fun_used","VENDT")
+				message_admins("[key_name_admin(usr)] has started an old vendotron teleport event", 1)
+				new /datum/event/old_vendotron_teleport
 			if("prison_break")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","PB")
@@ -5727,7 +5693,7 @@
 					var/choice = alert("This mob is the leader of the religion. Are you sure you wish to remove him from his faith?", "Removing religion", "Yes", "No")
 					if (choice != "Yes")
 						return FALSE
-				M.mind.faith.action_renounce.Remove(M)
+				M.verbs -= /mob/proc/renounce_faith
 				M.mind.faith.renounce(M) // Bypass checks
 
 				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."

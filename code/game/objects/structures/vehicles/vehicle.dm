@@ -26,7 +26,6 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
-	noghostspin = 1 //You guys are no fun
 	buckle_range = 1
 	var/empstun = 0
 	var/health = 100
@@ -191,6 +190,9 @@
 		return 0
 	if(move_delayer.blocked())
 		return 0
+	if (istype(locked_to, /obj/machinery/bot/mulebot))
+		var/obj/machinery/bot/mulebot/M = locked_to
+		M.unload(0)
 
 	//If we're in space or our area has no gravity...
 	var/turf/T = loc
@@ -383,6 +385,13 @@
 	if(health <= 0)
 		die()
 
+/obj/structure/bed/chair/vehicle/suicide_act(var/mob/living/user)
+	if(occupant == user)
+		to_chat(viewers(user), "<span class='danger'>[user] is licking the keyhole of the [src]! It looks like \he's trying to commit suicide.</span>")
+		return(SUICIDE_ACT_FIRELOSS)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth on the exhaust pipe of the [src]! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
+
 /obj/structure/bed/chair/vehicle/ex_act(severity)
 	switch (severity)
 		if(1.0)
@@ -422,8 +431,8 @@
 	if(!.)
 		return
 
-	AM.pixel_x = initial(AM.pixel_x)
-	AM.pixel_y = initial(AM.pixel_y)
+	AM.pixel_x -= offsets["[dir]"]["x"]
+	AM.pixel_y -= offsets["[dir]"]["y"]
 
 	last_dir = null
 

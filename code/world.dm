@@ -10,6 +10,7 @@ var/world_startup_time
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
+	movement_mode = TILE_MOVEMENT_MODE
 
 
 var/savefile/panicfile
@@ -24,6 +25,9 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 /proc/auxtools_stack_trace(msg)
 	CRASH(msg)
+
+/proc/auxtools_expr_stub()
+	CRASH("auxtools not loaded")
 #endif
 
 /datum/early_init/New()
@@ -146,9 +150,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 	Master.Setup()
 
-	process_teleport_locs()				//Sets up the wizard teleport locations
-	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
-	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
 	spawn(2000)		//so we aren't adding to the round-start lag

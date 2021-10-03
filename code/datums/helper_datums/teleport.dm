@@ -10,8 +10,8 @@
 	var/atom/movable/teleatom //atom to teleport
 	var/atom/destination //destination to teleport to
 	var/precision = FALSE //teleport precision
-	var/datum/effect/effect/system/effectin //effect to show right before teleportation
-	var/datum/effect/effect/system/effectout //effect to show right after teleportation
+	var/datum/effect/system/effectin //effect to show right before teleportation
+	var/datum/effect/system/effectout //effect to show right after teleportation
 	var/soundin //soundfile to play before teleportation
 	var/soundout //soundfile to play after teleportation
 	var/force_teleport = TRUE //if false, teleport will use Move() proc (dense objects will prevent teleportation)
@@ -31,6 +31,8 @@
 		return FALSE
 	if(!setPrecision(aprecision))
 		return FALSE
+	var/turf/T = get_turf(adestination)
+	log_debug("TELEPORTATION: ateleatom: [ateleatom], adestination: [adestination][T ? "([T.x],[T.y],[T.z])" : ""]")
 	setEffects(aeffectin,aeffectout)
 	setForceTeleport(afteleport)
 	setIgnoreJamming(aijamming)
@@ -63,7 +65,7 @@
 
 	//custom effects must be properly set up first for instant-type teleports
 	//optional
-/datum/teleport/proc/setEffects(datum/effect/effect/system/aeffectin=null,datum/effect/effect/system/aeffectout=null)
+/datum/teleport/proc/setEffects(datum/effect/system/aeffectin=null,datum/effect/system/aeffectout=null)
 	effectin = istype(aeffectin) ? aeffectin : null
 	effectout = istype(aeffectout) ? aeffectout : null
 	return TRUE
@@ -88,7 +90,7 @@
 /datum/teleport/proc/teleportChecks()
 	return TRUE
 
-/datum/teleport/proc/playSpecials(atom/location,datum/effect/effect/system/effect,sound)
+/datum/teleport/proc/playSpecials(atom/location,datum/effect/system/effect,sound)
 	if(location)
 		if(effect)
 			spawn(-1)
@@ -127,7 +129,8 @@
 		return FALSE
 
 	playSpecials(curturf,effectin,soundin)
-	teleatom.unlock_from()
+	if (!isobserver(teleatom))
+		teleatom.unlock_from()
 
 	if(istype(teleatom,/obj/item/projectile))
 		var/Xchange = destturf.x - curturf.x
@@ -140,12 +143,12 @@
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
 
 	if(curturf.z != destturf.z)
-		teleatom.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
+		teleatom.invoke_event(/event/z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
 		for(var/atom/movable/AA in recursive_type_check(teleatom))
-			AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
+			AA.invoke_event(/event/z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
 
 	if(force_teleport)
-		teleatom.forceMove(destturf,TRUE)
+		teleatom.forceMove(destturf, no_tp = 1)
 		playSpecials(destturf,effectout,soundout)
 	else
 		if(teleatom.Move(destturf))
@@ -171,12 +174,15 @@
 
 /datum/teleport/instant/science
 
-/datum/teleport/instant/science/setEffects(datum/effect/effect/system/aeffectin,datum/effect/effect/system/aeffectout)
+/datum/teleport/instant/science/setEffects(datum/effect/system/aeffectin,datum/effect/system/aeffectout)
 	if(!aeffectin || !aeffectout)
-		var/datum/effect/effect/system/spark_spread/aeffect = new
+		//De-activated sparks by order of Pomf. Too easily exploited to create lag machines.
+		/*
+		var/datum/effect/system/spark_spread/aeffect = new
 		aeffect.set_up(5, TRUE, teleatom)
 		effectin = effectin || aeffect
 		effectout = effectout || aeffect
+		*/
 		return TRUE
 	else
 		return ..()
@@ -195,7 +201,7 @@
 	return TRUE
 
 /datum/teleport/instant/science/teleportChecks(var/ignore_jamming = FALSE)
-	if(istype(teleatom, /obj/effect/effect/sparks)) // Don't teleport sparks or the server dies
+	if(istype(teleatom, /obj/effect/sparks)) // Don't teleport sparks or the server dies
 		return FALSE
 
 	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite

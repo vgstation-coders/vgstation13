@@ -88,7 +88,7 @@
 "bJ" = (/obj/item/toy/gasha/shade{name = "shade (pawn)"},/turf/simulated/floor/holofloor{icon_state = "engine"; name = "g7"},/area/holodeck/source_chess)
 "bK" = (/obj/item/toy/gasha/shade{name = "shade (pawn)"},/turf/simulated/floor{icon_state = "white"; name = "h7"},/area/holodeck/source_chess)
 "bL" = (/obj/structure/table/holotable/wood,/obj/item/candle,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_dining)
-"bM" = (/obj/structure/table/holotable/wood,/obj/item/trash/plate,/obj/item/weapon/kitchen/utensil/fork{pixel_x = 8},/obj/item/weapon/kitchen/utensil/knife{pixel_x = -8},/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_dining)
+"bM" = (/obj/structure/table/holotable/wood,/obj/item/trash/plate/clean,/obj/item/weapon/kitchen/utensil/fork{pixel_x = 8},/obj/item/weapon/kitchen/utensil/knife{pixel_x = -8},/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_dining)
 "bN" = (/obj/structure/fence{dir = 4},/turf/simulated/floor/holofloor/grass,/area/holodeck/source_zoo)
 "bO" = (/obj/structure/fence/door,/turf/simulated/floor/holofloor/grass,/area/holodeck/source_zoo)
 "bP" = (/obj/item/toy/gasha/greyshirt,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "a7"},/area/holodeck/source_checkers)
@@ -269,9 +269,6 @@
 "fi" = (/turf/simulated/floor/holofloor{dir = 5; icon_state = "red"},/area/holodeck/source_basketball)
 "fj" = (/obj/item/weapon/stool/hologram,/obj/structure/window/holo{dir = 8},/turf/simulated/floor/holofloor{icon_state = "cult"},/area/holodeck/source_basketball)
 "fk" = (/obj/item/weapon/stool/hologram,/turf/simulated/floor/holofloor{icon_state = "cult"},/area/holodeck/source_basketball)
-"fl" = (/turf/space,/area/holodeck/source_space)
-"fm" = (/obj/item/toy/minimeteor,/turf/space,/area/holodeck/source_space)
-"fn" = (/obj/structure/window/reinforced/holo,/turf/space,/area/holodeck/source_space)
 "fo" = (/turf/simulated/floor/holofloor{icon_state = "snow"},/area/holodeck/source_snowfield)
 "fp" = (/obj/structure/snow_flora,/turf/simulated/floor/holofloor{icon_state = "snow"},/area/holodeck/source_snowfield)
 "fq" = (/obj/structure/flora/grass/both,/turf/simulated/floor/holofloor{icon_state = "snow"},/area/holodeck/source_snowfield)
@@ -297,13 +294,13 @@
 "fK" = (/turf/simulated/floor/holofloor/light,/area/holodeck/source_lasertag)
 "fL" = (/turf/simulated/shuttle/wall{icon_state = "wall3"},/area/holodeck/source_lasertag)
 "fM" = (/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
-"fN" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet6-2"},/area)
-"fO" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet14-10"},/area)
-"fP" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet10-8"},/area)
-"fQ" = (/obj/structure/bookcase,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area)
-"fR" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet6-2"},/area)
-"fS" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet14-10"},/area)
-"fT" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet10-8"},/area)
+"fN" = (/obj/structure/table/holotable/wood,/obj/item/device/flashlight/lamp/green{pixel_x = 1; pixel_y = 5},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet6-2"},/area/holodeck/source_library)
+"fO" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet14-10"},/area/holodeck/source_library)
+"fP" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet10-8"},/area/holodeck/source_library)
+"fQ" = (/obj/structure/bookcase/holodeck,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_library)
+"fR" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet6-2"},/area/holodeck/source_library)
+"fS" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet14-10"},/area/holodeck/source_library)
+"fT" = (/obj/structure/table/holotable/wood,/obj/item/device/flashlight/lamp/green{pixel_x = 1; pixel_y = 5},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet10-8"},/area/holodeck/source_library)
 "fU" = (/turf/simulated/floor/holofloor{icon_state = "grass1"; name = "Holodeck Projector Floor"},/area/holodeck/source_medieval)
 "fV" = (/turf/simulated/floor/holofloor{icon_state = "asteroid"},/area/holodeck/source_medieval)
 "fW" = (/obj/structure/flora/ausbushes/ywflowers,/turf/simulated/floor/holofloor{icon_state = "grass1"; name = "Holodeck Projector Floor"},/area/holodeck/source_medieval)
@@ -320,10 +317,6 @@
 "gh" = (/turf/simulated/floor/holofloor{icon_state = "red"},/area/holodeck/source_basketball)
 "gi" = (/turf/simulated/floor/holofloor{dir = 6; icon_state = "red"},/area/holodeck/source_basketball)
 "gj" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "red"},/area/holodeck/source_basketball)
-"gk" = (/obj/structure/window/reinforced/holo{dir = 4},/turf/space,/area/holodeck/source_space)
-"gl" = (/turf/simulated/floor/holofloor,/area/holodeck/source_space)
-"gm" = (/obj/structure/window/reinforced/holo{dir = 8},/turf/space,/area/holodeck/source_space)
-"gn" = (/obj/item/toy/spinningtoy,/turf/space,/area/holodeck/source_space)
 "go" = (/turf/simulated/floor/holofloor{icon_state = "carpet7-3"},/area/holodeck/source_meetinghall)
 "gp" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{icon_state = "carpet15-15"},/area/holodeck/source_meetinghall)
 "gq" = (/obj/structure/bed/chair/holowood/wings,/turf/simulated/floor/holofloor{icon_state = "carpet15-15"},/area/holodeck/source_meetinghall)
@@ -342,15 +335,11 @@
 "gD" = (/obj/structure/grille,/obj/structure/window/reinforced/holo{dir = 1},/obj/structure/window/reinforced/holo{dir = 8},/obj/structure/cable/white,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "gE" = (/obj/structure/grille,/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 1},/obj/structure/cable/white,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "gF" = (/obj/structure/grille,/obj/structure/window/reinforced/holo{dir = 4},/obj/structure/window/reinforced/holo{dir = 1},/obj/structure/cable/white,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
-"gG" = (/obj/structure/bed/chair/holowood/normal{dir = 1},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet5-1"},/area)
-"gH" = (/obj/structure/bed/chair/holowood/normal{dir = 1},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet13-5"},/area)
-"gI" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet9-4"},/area)
-"gJ" = (/turf/simulated/floor/holofloor{icon_state = "carpet7-3"},/area)
-"gK" = (/turf/simulated/floor/holofloor{icon_state = "carpet15-15"},/area)
-"gL" = (/turf/simulated/floor/holofloor{icon_state = "carpet11-12"},/area)
-"gM" = (/obj/structure/bookcase/manuals/research_and_development,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area)
-"gN" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet5-1"},/area)
-"gO" = (/obj/structure/bed/chair/holowood/normal{dir = 1},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet9-4"},/area)
+"gG" = (/obj/structure/bed/chair/holowood/normal{dir = 1},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet5-1"},/area/holodeck/source_library)
+"gH" = (/obj/structure/bed/chair/holowood/normal{dir = 1},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet13-5"},/area/holodeck/source_library)
+"gI" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet9-4"},/area/holodeck/source_library)
+"gN" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet5-1"},/area/holodeck/source_library)
+"gO" = (/obj/structure/bed/chair/holowood/normal{dir = 1},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet9-4"},/area/holodeck/source_library)
 "gP" = (/obj/structure/fence/corner{dir = 8},/turf/simulated/floor/holofloor{icon_state = "grass1"; name = "Holodeck Projector Floor"},/area/holodeck/source_medieval)
 "gQ" = (/obj/structure/fence{dir = 4},/turf/simulated/floor/holofloor{dir = 4; icon_state = "asteroid2"},/area/holodeck/source_medieval)
 "gR" = (/obj/structure/fence{dir = 4},/turf/simulated/floor/holofloor{icon_state = "grass1"; name = "Holodeck Projector Floor"},/area/holodeck/source_medieval)
@@ -363,12 +352,6 @@
 "gY" = (/obj/structure/window/reinforced/holo{dir = 1},/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
 "gZ" = (/obj/structure/window/reinforced/holo{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
 "ha" = (/obj/structure/window/reinforced/holo{dir = 4},/obj/structure/window/reinforced/holo{dir = 1},/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
-"hb" = (/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 4},/turf/space,/area/holodeck/source_space)
-"hc" = (/turf/simulated/floor/holofloor{icon_state = "rampbottom"},/area/holodeck/source_space)
-"hd" = (/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 8},/obj/structure/window/reinforced/holo{dir = 1},/turf/space,/area/holodeck/source_space)
-"he" = (/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 1},/turf/space,/area/holodeck/source_space)
-"hf" = (/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 1},/obj/structure/window/reinforced/holo{dir = 4},/turf/space,/area/holodeck/source_space)
-"hg" = (/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 8},/turf/space,/area/holodeck/source_space)
 "hh" = (/obj/structure/flora/rock/pile/snow,/turf/simulated/floor/holofloor{icon_state = "snow"},/area/holodeck/source_snowfield)
 "hi" = (/obj/structure/table/holotable/wood,/obj/item/weapon/gavelblock,/obj/item/weapon/gavelhammer,/turf/simulated/floor/holofloor{icon_state = "carpet15-15"},/area/holodeck/source_meetinghall)
 "hj" = (/obj/structure/table/holotable,/obj/item/device/deskbell{name = "bell"},/obj/item/clothing/under/mime{name = "referee's outfit"},/obj/item/weapon/storage/belt/champion,/obj/item/device/megaphone,/turf/simulated/floor/holofloor{icon_state = "cult"},/area/holodeck/source_boxingcourt)
@@ -383,9 +366,8 @@
 "hs" = (/obj/structure/table/holotable,/obj/item/clothing/shoes/roman,/obj/item/clothing/under/gladiator,/obj/item/clothing/head/helmet/gladiator,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "ht" = (/obj/structure/table/holotable,/obj/item/clothing/shoes/roman,/obj/item/clothing/under/roman,/obj/item/clothing/head/helmet/roman,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "hu" = (/obj/structure/table/holotable,/obj/item/clothing/suit/armor/knight/templar,/obj/item/clothing/head/helmet/knight/templar,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
-"hv" = (/obj/structure/bookcase/manuals/engineering,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area)
-"hw" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area)
-"hx" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet13-5"},/area)
+"hw" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area/holodeck/source_library)
+"hx" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet13-5"},/area/holodeck/source_library)
 "hy" = (/obj/structure/fence,/turf/simulated/floor/holofloor{icon_state = "grass1"; name = "Holodeck Projector Floor"},/area/holodeck/source_medieval)
 "hz" = (/obj/structure/table/holotable/wood,/obj/item/clothing/suit/armor/knight/red,/obj/item/clothing/head/helmet/knight/red,/turf/simulated/floor/holofloor{icon_state = "asteroid"},/area/holodeck/source_medieval)
 "hA" = (/obj/structure/table/holotable/wood,/obj/item/weapon/claymore{pixel_x = -5},/obj/item/weapon/claymore{pixel_x = 5},/turf/simulated/floor/holofloor{icon_state = "grass1"; name = "Holodeck Projector Floor"},/area/holodeck/source_medieval)
@@ -413,9 +395,6 @@
 "hW" = (/obj/structure/window/reinforced/holo,/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
 "hX" = (/obj/structure/window/reinforced/holo,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
 "hY" = (/obj/structure/window/reinforced/holo{dir = 4},/obj/structure/window/reinforced/holo,/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
-"hZ" = (/obj/structure/window/reinforced/holo{dir = 1},/turf/space,/area/holodeck/source_space)
-"ia" = (/obj/structure/window/reinforced/holo{dir = 1},/obj/structure/window/reinforced/holo{dir = 4},/turf/space,/area/holodeck/source_space)
-"ib" = (/obj/structure/window/reinforced/holo{dir = 8},/obj/structure/window/reinforced/holo{dir = 1},/turf/space,/area/holodeck/source_space)
 "ic" = (/turf/simulated/floor/holofloor{icon_state = "carpet15-15"},/area/holodeck/source_meetinghall)
 "id" = (/obj/item/clothing/under/rainbow,/turf/simulated/floor/beach/sand,/area/holodeck/source_beach)
 "ie" = (/obj/item/clothing/glasses/sunglasses/holo,/turf/simulated/floor/beach/sand,/area/holodeck/source_beach)
@@ -449,7 +428,6 @@
 "iG" = (/obj/structure/window/reinforced/holo{dir = 1},/turf/simulated/floor/holofloor,/area/holodeck/source_thunderdomecourt)
 "iH" = (/obj/structure/window/reinforced/holo{dir = 1},/turf/simulated/floor/holofloor{dir = 4; icon_state = "green"},/area/holodeck/source_thunderdomecourt)
 "iI" = (/obj/structure/grille,/obj/structure/window/reinforced/holo{dir = 8},/obj/item/weapon/shard,/obj/structure/cable/white,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
-"iJ" = (/obj/structure/bookcase/manuals/xenoarchaeology,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area)
 "iK" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "asteroid2"},/area/holodeck/source_medieval)
 "iL" = (/obj/item/trash/cigbutt,/turf/simulated/floor/holofloor/light,/area/holodeck/source_catnip)
 "iM" = (/turf/simulated/floor/holofloor{dir = 8; icon_state = "green"},/area/holodeck/source_basketball)
@@ -463,8 +441,7 @@
 "iU" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "asteroid3"},/area/holodeck/source_medieval)
 "iV" = (/obj/structure/window/reinforced/holo,/obj/item/trash/popcorn,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/holofloor/light,/area/holodeck/source_catnip)
 "iW" = (/obj/structure/window/reinforced/holo,/turf/simulated/floor/holofloor/light,/area/holodeck/source_catnip)
-"iX" = (/obj/structure/window/reinforced/holo{dir = 1},/obj/item/toy/minimeteor,/turf/space,/area/holodeck/source_space)
-"iY" = (/turf/simulated/floor/holofloor{dir = 1; icon_state = "rampbottom"},/area/holodeck/source_space)
+"iY" = (/turf/simulated/floor/holofloor/space,/area/holodeck/source_space)
 "iZ" = (/turf/simulated/floor/beach/coastline,/area/holodeck/source_beach)
 "ja" = (/turf/simulated/floor/holofloor{dir = 10; icon_state = "green"},/area/holodeck/source_boxingcourt)
 "jb" = (/obj/structure/window/reinforced/holo,/turf/simulated/floor/holofloor{icon_state = "green"},/area/holodeck/source_boxingcourt)
@@ -480,7 +457,6 @@
 "jl" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/holofloor{dir = 8; icon_state = "rampbottom"},/area/holodeck/source_catnip)
 "jm" = (/obj/structure/window/reinforced/holo{dir = 4},/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
 "jn" = (/obj/item/weapon/stool/hologram,/obj/item/clothing/accessory/armband/hydro{name = "green armband"},/obj/item/clothing/under/shorts/green,/turf/simulated/floor/holofloor{icon_state = "cult"},/area/holodeck/source_basketball)
-"jo" = (/obj/structure/window/reinforced/holo{dir = 4},/obj/item/toy/minimeteor,/turf/space,/area/holodeck/source_space)
 "jp" = (/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet1-0"},/area/holodeck/source_meetinghall)
 "jq" = (/turf/simulated/floor/beach/water,/area/holodeck/source_beach)
 "jr" = (/obj/structure/table/holotable,/obj/item/clothing/gloves/boxing/hologlove{icon_state = "boxinggreen"; item_state = "boxinggreen"},/obj/item/clothing/gloves/boxing/hologlove{icon_state = "boxinggreen"; item_state = "boxinggreen"},/obj/item/clothing/under/shorts/green,/obj/item/clothing/under/shorts/green,/turf/simulated/floor/holofloor{icon_state = "cult"},/area/holodeck/source_boxingcourt)
@@ -489,10 +465,9 @@
 "ju" = (/obj/machinery/door/airlock/glass{id_tag = "holorage"},/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "jv" = (/obj/structure/grille,/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 1},/obj/structure/cable/white,/obj/structure/window/reinforced/holo{dir = 8},/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "jw" = (/obj/structure/grille,/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 4},/obj/structure/cable/white,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
-"jx" = (/obj/structure/bed/chair/holowood/normal,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet6-2"},/area)
-"jy" = (/obj/structure/bed/chair/holowood/normal,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet14-10"},/area)
-"jz" = (/obj/structure/bookcase/manuals/medical,/turf/simulated/floor/holofloor{dir = 4; icon_state = "wood"},/area)
-"jA" = (/obj/structure/bed/chair/holowood/normal,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet10-8"},/area)
+"jx" = (/obj/structure/bed/chair/holowood/normal,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet6-2"},/area/holodeck/source_library)
+"jy" = (/obj/structure/bed/chair/holowood/normal,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet14-10"},/area/holodeck/source_library)
+"jA" = (/obj/structure/bed/chair/holowood/normal,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet10-8"},/area/holodeck/source_library)
 "jB" = (/obj/structure/fence/corner,/turf/simulated/floor/holofloor{icon_state = "asteroid"},/area/holodeck/source_medieval)
 "jC" = (/obj/structure/window/reinforced/holo,/obj/structure/window/reinforced/holo{dir = 8},/turf/simulated/floor/holofloor,/area/holodeck/source_catnip)
 "jD" = (/obj/structure/window/reinforced/holo{dir = 1},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/holofloor/light,/area/holodeck/source_catnip)
@@ -506,9 +481,9 @@
 "jL" = (/obj/item/toy/gasha/carptoy,/turf/simulated/floor/beach/water,/area/holodeck/source_beach)
 "jM" = (/obj/structure/table/holotable,/obj/item/clothing/head/helmet/thunderdome,/obj/item/clothing/suit/armor/tdome/green,/obj/item/clothing/under/color/green,/obj/item/weapon/holo/esword/green,/turf/simulated/floor/holofloor{icon_state = "green"},/area/holodeck/source_thunderdomecourt)
 "jN" = (/obj/structure/table/holotable,/obj/machinery/readybutton{pixel_y = 0},/turf/simulated/floor/holofloor{icon_state = "green"},/area/holodeck/source_thunderdomecourt)
-"jO" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet5-1"},/area)
-"jP" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet13-5"},/area)
-"jQ" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet9-4"},/area)
+"jO" = (/obj/structure/table/holotable/wood,/obj/item/device/flashlight/lamp/green{pixel_x = 1; pixel_y = 5},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet5-1"},/area/holodeck/source_library)
+"jP" = (/obj/structure/table/holotable/wood,/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet13-5"},/area/holodeck/source_library)
+"jQ" = (/obj/structure/table/holotable/wood,/obj/item/device/flashlight/lamp/green{pixel_x = 1; pixel_y = 5},/turf/simulated/floor/holofloor{dir = 4; icon_state = "carpet9-4"},/area/holodeck/source_library)
 "jR" = (/obj/structure/flora/ausbushes/ppflowers,/turf/simulated/floor/holofloor{icon_state = "asteroid"},/area/holodeck/source_medieval)
 "jS" = (/turf/unsimulated/wall{icon_state = "iron13"},/area)
 "jT" = (/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/wall{icon_state = "iron12"},/area)
@@ -526,15 +501,15 @@ acadaTadadadadadadadaTadaeafaWafaidQafafbXafafafaeaYbaaZaYbaaYbaaYaYbaaYaedududu
 acadadaTadadadadadaTadadaeafbXafafaiafafeoafagaWaeaZaYbaaZaYaZaYaZaZaYaZaedududuepeqeqeqerdududuaeaxaxaxaxaxaxaxaxaxaxaxaeayayayayayayayayayayayaedabdbdbdbdbdbdbdbdbddbaedUdUdUdUdUdUdUdUdUdUdUaeaDaDeseteuevewexeyezaDaeaEaFaFaFaFeAaFaFaFaFaEaeeBeBeBeCeBaJbqaGaGeDaGaeeEeEeEeEaOeFaOeGeGeGeGaeaQaQaQaQefaQbsbsbsaQaQaeaRaReHeIeJeKeLeMeNeOaRaeaSaSaSaSaSaSaSaSaSaSaSae
 acadadadadadadadadadadadaeePafaiafePaiafafafagafaealeQajalakajeQalalakalaedududududududududududuaeaxaxaxaxaxaxaxaxaxaxaxaeayayayayayayayayayayayaeeReSeSeSeSeSeSeSeSeSeTaeeUdUdUeVdUeWdUeXdUdUeYaeaDaDaDaDaDaDaDaDaDaDaDaeaEaEaEaFaFaFaFaFaEaEaEaeeZeCeBeBeBaJeDaGbpaGfaaeeEeEeEeEaOaOaOeGeGeGeGaeaQaQaQaQaQaQaQaQaQaQaQaeaRaRaRaRaRaRaRaRaRaRaRaeaSaSaSaSaSaSaSaSaSaSaSae
 fbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcaaabababababababababababfbfcfcfcfcfcfcfcfcfcfcfcaaabababababababababababaaabababababababababababaa
-acfdfefffgfffhfifgfifjfkaeflflfmfnfnfnfnfnflflflaefofofofofofofpfofofqfraefsfsfsftfufufufvfsfsfsaefwfwfwfwfxfyfzfxfwfwfwaefAfBfCfDfDfDfDfDfDfEfAaefFfFfFfFfFfFfFfFfFfFfFaefGfHfHfHfHfHfHfHfHfHfIaefJfJfJfJfJfJfJfJfJfJfJaefKfKfKfKfKfLfKfKfKfKfKaefMfMfMfMfMfMfMfMfMfMfMaefNfOfPfQfRfSfPfQfRfOfTaefUfVfUfWfUfUfUfUfUfUfXaefYfZgafYgbgagafYgcfYfYaeaSaSaSaSaSaSaSaSaSaSaSae
-acfdgdgegfggghgigfgjfjfkaeflflgkglglglglglgmgnflaefrfofofofqfofofofofrfoaefsfsfsgogpgqgpgrfsfsfsaefwgsfwgtfwfwfwfwfwfwfwaefAfBgugvgvgvgvgvgwfEfAaefFfFfFfFfFfFfFfFfFfFfFaegxgygzgzgAgygAgygzgAgBaefJgCfJgCgCfJgCgCgCgCfJaefKfKfKfKfKfKfKfKfKfKfKaefMfMgDgEgEgEgEgEgFfMfMaegGgHgIfQgJgKgLgMgNgHgOaefUgPgQgRgRgSgTgRgRgUfXaefZgVgWgXgXgWgYgZgWhafYaeaSaSaSaSaSaSaSaSaSaSaSae
-acfkgdgegfgfgfgfgfgjfjfkaefnfnhbhchdhehfhchgfnfnaefofofofofofofofofohhfoaefsfsfsgogphigpgrfsfsfsaefwfwfwfwfwfwfwfwfwgsfwaefAfBgugvgvgvgvgvgwfEfAaefFfFhjfFhkhkhkfFhlfFfFaegxhmfHfIhnhogxhmfIgxgBaefJgCfJgCfJfJgCfJfJfJgCaefKfKfLfKfKfLfKfKfLfKfKaefMhphqhrhshthufMhqhpfMaefQhvhwfQgNhxgIfQhwfQfQaefUhyhzhAfUfUfVhBhChyfUaegbhDhEhFhGhHhGhGhIhJgaaeaSaSaSaSaSaSaSaSaSaSaSae
-achKhKgegfgfghgfgfgjhKhKaeglglglglglglglglglglglaefrfohLfofofofofohMfofoaefsfsfsgohNhOhPgrfsfsfsaefwfwfwfwfwfwfwfwfwfwfwaehQhQgugvgvgvgvgvgwhQhQaefFfFfFhRhShShShTfFfFfFaegxgygzhofGfIgxgyhogxgBaefJgCfJgCfJgCgCgCgCfJfJaefKfKfKfKfKfKfKfKfKfKfKaefMhphqfMfMfMfMfMhqhpfMaehwhwhwfQfQfQfQfQhwhwhwaefXhyfVfVfVfVfVfUfVhUfUaefYhVhGhWhWhWhXhWhGhYfZaeaSaSaSaSaSaSaSaSaSaSaSae
-acfkgdggghgighggghgifjfkaehZhZhZhZiaglibhZhZhZhZaefofofofofofofqfofofofoaeftfufuicicicicicfufufvaefwidiefwfwifigfwihfwfwaefAfBiiijijijijijikfEfAaefFfFhkilimimiminhkfFfFaegxhmfHfIgxhmiohmfIgxgBaegCfJfJgCfJfJfJfJgCfJgCaefKfKfKfLfKfKfKfKfKfKfLaefMhphqipfMiqfMfMhqhpfMaefQhwfRfSfSfSfSfSfPhwfQaefUhUirfVfVisfVfVfVhUfUaegaitiuivgafYfZiwiuivfYaeaSaSaSaSaSaSaSaSaSaSaSae
-acfkgdixiyiziAixiyizfjfkaefnfnfnfnhbglhgfnfnfnfnaefohMfoiBhhiCfofofofofoaegogpgpgpgpiDgpgpgpgpgraefwfwfwiEfwfwfwfwfwfwfwaefAfBiFiGiGiGiGiGiHfEfAaefFfFhkilimimiminhkfFfFaegxgygzhohngzgAgyhogxgBaefJgCgCfJgCfJgCgCgCfJgCaefLfKfKfKfKfKfKfLfKfKfKaefMhpiIfMfMfMfMfMhqhpfMaefQhwgNhxhxhxhxhxgIhwiJaefUhUfVfVfVfVfVfVfVhUiKaefZfYfYfYfYfYgafZiLfYgaaeaSaSaSaSaSaSaSaSaSaSaSae
-achKhKiMgfgfiygfgfiNhKhKaeglglglglglglglglglglglaefofofofofohhfofofohLfoaegoiOiOiOiOiPiOiOiOiOgraeiQiQiQiQiQiQiQiQiQiQiQaehQhQiRgvgvgvgvgviShQhQaefFfFhkilimimiminhkfFfFaegxhmfHfHfHfIgxhmfIgxgBaegCfJgCfJfJfJgCfJfJfJgCaefKfKfKfKfKfKfKfKfKfKfKaefMhphqfMiTfMfMfMhqhpfMaehwhwhwfQfQfQfQfQhwhwhwaefUhyfViUfVfVfVfVfVhUfUaegagVgWhaiVfYiWgVgWhafYaeaSaSaSaSaSaSaSaSaSaSaSae
-acfkgdiMgfgfgfgfgfiNfjfkaeiXhZiaiYhdhehfiYibhZhZaefoiBfofofofofofrfofofoaegogpgpgpgpiPgpgpgpgpgraeiZiZiZiZiZiZiZiZiZiZiZaefAfBiRgvgvgvgvgviSfEfAaefFfFfFjajbjbjbjcfFfFfFaegxgygAgygAgBgxgyhogxgBaefJfJfJfJfJgCfJgCgCfJgCaefKfKfLfKfKfLfKfKfLfKfKaefMhphqfMfMfMfMjdhqhpfMaefQfQhwfQfRfSfPfQhwfQfQaefUhUjejffXfUfUjgjhhyfUaefZhDjijjjkfYjlhGjijmfYaeaSaSaSaSaSaSaSaSaSaSaSae
-acfkgdiMgfixiyizgfiNfjjnaeflfljoglglglglglgmflflaefoiBfohMfofofofofofofoaegoiOiOiOiOjpiOiOiOiOgraejqjqjqjqjqjqjqjqjqjqjqaefAfBiRgvgvgvgvgviSfEfAaefFfFjrfFhkhkhkfFfFfFfFaegxgBgxgBgxgBgxhmfIgxgBaefJgCgCgCgCgCfJgCgCfJgCaefKfKfKfKfKfKfKfKfKfKfKaefMfMjsgEjtjujvgEjwfMfMaejxjyfPjzgJgKgLfQfRjyjAaefVgPgTgRgRgSgRgRgRjBfUaefYjChWhYjDfYjDjChWhYgbaeaSaSaSaSaSaSaSaSaSaSaSae
-acfkgdjEjFjEjGjHjFjHjIjnaefmflflhZhZhZhZhZflflflaefohLfofofrfohLfofohMfoaejJhOhOhOhOhOhOhOhOhOjKaejqjqjqjqjLjqjqjqjqjqjqaefAfBjMjMjMjMjMjMjNfEfAaefFfFfFfFfFfFfFfFfFfFfFaehnhohnhohnhohngzhohnhoaefJfJfJfJfJfJfJfJfJfJgCaefKfKfKfKfKfLfKfKfKfKfKaefMfMfMfMfMfMfMfMfMfMfMaejOjPgIfQgNhxgIfQgNjPjQaejRfUfUfXfUfUfVfUfUfUfUaegafYfYfZfYfYgafYfYgagbaeaSaSaSaSaSaSaSaSaSaSaSae
+acfdfefffgfffhfifgfifjfkaeiYiYiYiYiYiYiYiYiYiYiYaefofofofofofofpfofofqfraefsfsfsftfufufufvfsfsfsaefwfwfwfwfxfyfzfxfwfwfwaefAfBfCfDfDfDfDfDfDfEfAaefFfFfFfFfFfFfFfFfFfFfFaefGfHfHfHfHfHfHfHfHfHfIaefJfJfJfJfJfJfJfJfJfJfJaefKfKfKfKfKfLfKfKfKfKfKaefMfMfMfMfMfMfMfMfMfMfMaefNfOfPfQfQfQfQfQfRfOfTaefUfVfUfWfUfUfUfUfUfUfXaefYfZgafYgbgagafYgcfYfYaeaSaSaSaSaSaSaSaSaSaSaSae
+acfdgdgegfggghgigfgjfjfkaeiYiYiYiYiYiYiYiYiYiYiYaefrfofofofqfofofofofrfoaefsfsfsgogpgqgpgrfsfsfsaefwgsfwgtfwfwfwfwfwfwfwaefAfBgugvgvgvgvgvgwfEfAaefFfFfFfFfFfFfFfFfFfFfFaegxgygzgzgAgygAgygzgAgBaefJgCfJgCgCfJgCgCgCgCfJaefKfKfKfKfKfKfKfKfKfKfKaefMfMgDgEgEgEgEgEgFfMfMaegGgHgIfQfRfSfPhwgNgHgOaefUgPgQgRgRgSgTgRgRgUfXaefZgVgWgXgXgWgYgZgWhafYaeaSaSaSaSaSaSaSaSaSaSaSae
+acfkgdgegfgfgfgfgfgjfjfkaeiYiYiYiYiYiYiYiYiYiYiYaefofofofofofofofofohhfoaefsfsfsgogphigpgrfsfsfsaefwfwfwfwfwfwfwfwfwgsfwaefAfBgugvgvgvgvgvgwfEfAaefFfFhjfFhkhkhkfFhlfFfFaegxhmfHfIhnhogxhmfIgxgBaefJgCfJgCfJfJgCfJfJfJgCaefKfKfLfKfKfLfKfKfLfKfKaefMhphqhrhshthufMhqhpfMaefQfQhwfQgNhxgIfQhwfQfQaefUhyhzhAfUfUfVhBhChyfUaegbhDhEhFhGhHhGhGhIhJgaaeaSaSaSaSaSaSaSaSaSaSaSae
+achKhKgegfgfghgfgfgjhKhKaeiYiYiYiYiYiYiYiYiYiYiYaefrfohLfofofofofohMfofoaefsfsfsgohNhOhPgrfsfsfsaefwfwfwfwfwfwfwfwfwfwfwaehQhQgugvgvgvgvgvgwhQhQaefFfFfFhRhShShShTfFfFfFaegxgygzhofGfIgxgyhogxgBaefJgCfJgCfJgCgCgCgCfJfJaefKfKfKfKfKfKfKfKfKfKfKaefMhphqfMfMfMfMfMhqhpfMaehwhwhwfQfQfQfQfQhwhwhwaefXhyfVfVfVfVfVfUfVhUfUaefYhVhGhWhWhWhXhWhGhYfZaeaSaSaSaSaSaSaSaSaSaSaSae
+acfkgdggghgighggghgifjfkaeiYiYiYiYiYiYiYiYiYiYiYaefofofofofofofqfofofofoaeftfufuicicicicicfufufvaefwidiefwfwifigfwihfwfwaefAfBiiijijijijijikfEfAaefFfFhkilimimiminhkfFfFaegxhmfHfIgxhmiohmfIgxgBaegCfJfJgCfJfJfJfJgCfJgCaefKfKfKfLfKfKfKfKfKfKfLaefMhphqipfMiqfMfMhqhpfMaefQfQfRfSfSfSfSfSfPfQfQaefUhUirfVfVisfVfVfVhUfUaegaitiuivgafYfZiwiuivfYaeaSaSaSaSaSaSaSaSaSaSaSae
+acfkgdixiyiziAixiyizfjfkaeiYiYiYiYiYiYiYiYiYiYiYaefohMfoiBhhiCfofofofofoaegogpgpgpgpiDgpgpgpgpgraefwfwfwiEfwfwfwfwfwfwfwaefAfBiFiGiGiGiGiGiHfEfAaefFfFhkilimimiminhkfFfFaegxgygzhohngzgAgyhogxgBaefJgCgCfJgCfJgCgCgCfJgCaefLfKfKfKfKfKfKfLfKfKfKaefMhpiIfMfMfMfMfMhqhpfMaefQfQgNhxhxhxhxhxgIfQfQaefUhUfVfVfVfVfVfVfVhUiKaefZfYfYfYfYfYgafZiLfYgaaeaSaSaSaSaSaSaSaSaSaSaSae
+achKhKiMgfgfiygfgfiNhKhKaeiYiYiYiYiYiYiYiYiYiYiYaefofofofofohhfofofohLfoaegoiOiOiOiOiPiOiOiOiOgraeiQiQiQiQiQiQiQiQiQiQiQaehQhQiRgvgvgvgvgviShQhQaefFfFhkilimimiminhkfFfFaegxhmfHfHfHfIgxhmfIgxgBaegCfJgCfJfJfJgCfJfJfJgCaefKfKfKfKfKfKfKfKfKfKfKaefMhphqfMiTfMfMfMhqhpfMaehwhwhwfQfQfQfQfQhwhwhwaefUhyfViUfVfVfVfVfVhUfUaegagVgWhaiVfYiWgVgWhafYaeaSaSaSaSaSaSaSaSaSaSaSae
+acfkgdiMgfgfgfgfgfiNfjfkaeiYiYiYiYiYiYiYiYiYiYiYaefoiBfofofofofofrfofofoaegogpgpgpgpiPgpgpgpgpgraeiZiZiZiZiZiZiZiZiZiZiZaefAfBiRgvgvgvgvgviSfEfAaefFfFfFjajbjbjbjcfFfFfFaegxgygAgygAgBgxgyhogxgBaefJfJfJfJfJgCfJgCgCfJgCaefKfKfLfKfKfLfKfKfLfKfKaefMhphqfMfMfMfMjdhqhpfMaefQfQhwfQfRfSfPfQhwfQfQaefUhUjejffXfUfUjgjhhyfUaefZhDjijjjkfYjlhGjijmfYaeaSaSaSaSaSaSaSaSaSaSaSae
+acfkgdiMgfixiyizgfiNfjjnaeiYiYiYiYiYiYiYiYiYiYiYaefoiBfohMfofofofofofofoaegoiOiOiOiOjpiOiOiOiOgraejqjqjqjqjqjqjqjqjqjqjqaefAfBiRgvgvgvgvgviSfEfAaefFfFjrfFhkhkhkfFfFfFfFaegxgBgxgBgxgBgxhmfIgxgBaefJgCgCgCgCgCfJgCgCfJgCaefKfKfKfKfKfKfKfKfKfKfKaefMfMjsgEjtjujvgEjwfMfMaejxjyfPhwgNhxgIfQfRjyjAaefVgPgTgRgRgSgRgRgRjBfUaefYjChWhYjDfYjDjChWhYgbaeaSaSaSaSaSaSaSaSaSaSaSae
+acfkgdjEjFjEjGjHjFjHjIjnaeiYiYiYiYiYiYiYiYiYiYiYaefohLfofofrfohLfofohMfoaejJhOhOhOhOhOhOhOhOhOjKaejqjqjqjqjLjqjqjqjqjqjqaefAfBjMjMjMjMjMjMjNfEfAaefFfFfFfFfFfFfFfFfFfFfFaehnhohnhohnhohngzhohnhoaefJfJfJfJfJfJfJfJfJfJgCaefKfKfKfKfKfLfKfKfKfKfKaefMfMfMfMfMfMfMfMfMfMfMaejOjPgIfQfQfQfQfQgNjPjQaejRfUfUfXfUfUfVfUfUfUfUaegafYfYfZfYfYgafYfYgagbaeaSaSaSaSaSaSaSaSaSaSaSae
 jSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTjSjTjTjTjTjTjTjTjTjTjTjTfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfbfcfcfcfcfcfcfcfcfcfcfcfb
 "}

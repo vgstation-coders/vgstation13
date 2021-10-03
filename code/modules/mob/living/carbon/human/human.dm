@@ -232,8 +232,8 @@
 
 	update_mutantrace()
 
-	lazy_register_event(/lazy_event/on_equipped, src, .proc/update_name)
-	lazy_register_event(/lazy_event/on_unequipped, src, .proc/update_name)
+	register_event(/event/equipped, src, .proc/update_name)
+	register_event(/event/unequipped, src, .proc/update_name)
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()
@@ -303,14 +303,6 @@
 			for (var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
-
-/mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
-	for(var/L in M.contents)
-		if(istype(L, /obj/item/weapon/implant/loyalty))
-			for(var/datum/organ/external/O in M.organs)
-				if(L in O.implants)
-					return 1
-	return 0
 
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
 	M.unarmed_attack_mob(src)
@@ -697,9 +689,11 @@
 	return 0
 
 
-/mob/living/carbon/human/proc/check_dna()
+/mob/living/carbon/human/proc/check_dna_integrity()
 	dna.check_integrity(src)
-	return
+
+/mob/living/carbon/human/proc/update_dna_from_appearance() // Takes care of updating our DNA so it matches our appearance
+	dna.ResetUIFrom(src)
 
 /mob/living/carbon/human/get_species()
 
@@ -803,71 +797,15 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
-	if(new_facial)
-		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
-		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
-		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
+	pick_appearance(src,"Morph",FALSE)
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
-	if(new_facial)
-		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
-		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
-		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
+	pick_gender(src,"Morph",FALSE)
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
-	if(new_eyes)
-		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
-
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
-
-	if (!new_tone)
-		new_tone = 35
-	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	my_appearance.s_tone =  -my_appearance.s_tone + 35
-
-	// hair
-	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
-	var/list/hairs = list()
-
-	// loop through potential hairs
-	for(var/x in all_hairs)
-		var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
-		hairs.Add(H.name) // add hair name to hairs
-		qdel(H) // delete the hair after it's all done
-		H = null
-
-	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
-
-	// if new style selected (not cancel)
-	if (new_style)
-		my_appearance.h_style = new_style
-
-	// facial hair
-	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
-	var/list/fhairs = list()
-
-	for(var/x in all_fhairs)
-		var/datum/sprite_accessory/facial_hair/H = new x
-		fhairs.Add(H.name)
-		qdel(H)
-		H = null
-
-	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
-
-	if(new_style)
-		my_appearance.f_style = new_style
-
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			setGender(MALE)
-		else
-			setGender(FEMALE)
 	regenerate_icons()
-	check_dna()
+
+	check_dna_integrity()
+
+	update_dna_from_appearance()
 
 	visible_message("<span class='notice'>\The [src] morphs and changes [get_visible_gender() == MALE ? "his" : get_visible_gender() == FEMALE ? "her" : "their"] appearance!</span>", "<span class='notice'>You change your appearance!</span>", "<span class='warning'>Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!</span>")
 
@@ -903,7 +841,6 @@
 
 	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
-		fixblood()
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
@@ -1204,6 +1141,11 @@
 
 	if(S.gender)
 		gender = S.gender
+	else if (gender == "neuter") // when going back from an non-gendered species to a gendered one, you'll get assigned randomly
+		if (prob(50))
+			gender = "male"
+		else
+			gender = "female"
 
 	for(var/L in species.known_languages)
 		add_language(L)
@@ -1239,8 +1181,22 @@
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
 	src.movement_speed_modifier = species.move_speed_multiplier
+
 	if(dna)
 		dna.species = new_species_name
+
+	if(my_appearance)
+		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
+		if (!(my_appearance.h_style in valid_hair))
+			my_appearance.h_style = random_hair_style(gender, species)
+		var/list/valid_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)
+		if (!(my_appearance.f_style in valid_facial_hair))
+			my_appearance.f_style = random_facial_hair_style(gender, species)
+		if (((my_appearance.s_tone < 0) && !(species.anatomy_flags & HAS_SKIN_TONE)) || (my_appearance.s_tone > species.max_skin_tone))
+			my_appearance.s_tone = random_skin_tone(species)
+		if(dna)
+			update_dna_from_appearance()
+
 	src.species.handle_post_spawn(src)
 	src.update_icons()
 	if(species.species_intro)
@@ -1505,7 +1461,7 @@
 	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/rig/wizard))
 		threatcount += 2
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 	//Secbots are racist!
 	if(dna && dna.mutantrace && dna.mutantrace != "none")
@@ -1814,7 +1770,7 @@ mob/living/carbon/human/isincrit()
 	return internal_organs_by_name["appendix"]
 
 //Moved from internal organ surgery
-//Removes organ from src, places organ object under user
+//Removes organ from src, places organ object in user's hands
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 /mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/internal/extractedorgan
@@ -1835,6 +1791,7 @@ mob/living/carbon/human/isincrit()
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)
+			user.put_in_hands(extractedorgan)
 
 			return extractedorgan
 
@@ -1896,18 +1853,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"my_appearance.r_hair",
-		"my_appearance.g_hair",
-		"my_appearance.b_hair",
-		"my_appearance.h_style",
-		"my_appearance.r_facial",
-		"my_appearance.g_facial",
-		"my_appearance.b_facial",
-		"my_appearance.f_style",
-		"my_appearance.r_eyes",
-		".my_appearance.g_eyes",
-		".my_appearance.b_eyes",
-		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",
@@ -1947,8 +1892,10 @@ mob/living/carbon/human/isincrit()
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
-	if(vessel)
-		vessel.send_to_past(duration)
+	 if(vessel)
+	 	vessel.send_to_past(duration)
+	if(my_appearance)
+		my_appearance.send_to_past(duration)
 
 	updatehealth()
 
@@ -1958,21 +1905,17 @@ mob/living/carbon/human/isincrit()
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	BrainContainer = new (src)
-	BrainContainer.AddComponent(/datum/component/controller/mob)
-	BrainContainer.AddComponent(/datum/component/ai/hand_control)
-	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
-	BrainContainer.register_for_updates()
+	add_component(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
-	BrainContainer.AddComponent(/datum/component/ai/human_brain)
-	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
-	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
-	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
-	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
-	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
-	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
+	add_component(/datum/component/ai/human_brain)
+	add_component(/datum/component/ai/target_finder/human)
+	add_component(/datum/component/ai/target_holder/prioritizing)
+	add_component(/datum/component/ai/melee/attack_human)
+	add_component(/datum/component/ai/melee/throw_attack)
+	add_component(/datum/component/ai/crowd_attack)
+	add_component(pick(typesof(/datum/component/ai/targetting_handler)))
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...
@@ -2191,11 +2134,10 @@ mob/living/carbon/human/isincrit()
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
 
-
-/mob/living/carbon/human/turn_into_mannequin(var/material = "marble")
+/mob/living/carbon/human/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	var/list/valid_mannequin_species = list(
 		"Human",
-		"Voc",
+		"Vox",
 		"Manifested",
 		)
 	if (!(species.name in valid_mannequin_species))
@@ -2246,28 +2188,73 @@ mob/living/carbon/human/isincrit()
 			if (is_fat())
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else if (gender == FEMALE)
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 			else
 				switch (material)
 					if ("marble")
-						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 					if ("wood")
-						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 		if ("Vox")
 			switch (material)
 				if ("marble")
-					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 				if ("wood")
-					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src)
+					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
 
 	if (new_mannequin)
 		return TRUE
 	return FALSE
+
+/mob/living/carbon/human/get_butchering_products()
+	if (!species)
+		return list()
+
+	switch (species.name)
+		if ("Human","Manifested")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/human)
+		if ("Unathi")
+			return list(/datum/butchering_product/teeth/lots, /datum/butchering_product/skin/lizard/lots)
+		if ("Skrell")
+			return list(/datum/butchering_product/teeth/lots)
+		if ("Skellington")
+			return list(/datum/butchering_product/teeth/human)
+		if ("Tajaran")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
+	return list()
+		/*	Missing Sprites, pls contribute
+
+		if ("Vox")
+			return list(
+		if ("Diona")
+			return list(
+		if ("Skeletal Vox")
+			return list(
+		if ("Plasmaman")
+			return list(
+		if ("Muton")
+			return list(
+		if ("Grey")
+			return list(
+		if ("Golem")
+			return list(
+		if ("Grue")
+			return list(
+		if ("Slime")
+			return list(
+		if ("Insectoid")
+			return list(
+		if ("Mushroom")
+			return list(
+		if ("Undead")
+			return list(
+
+		*/

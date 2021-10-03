@@ -7,7 +7,6 @@
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459
-	var/traitor_frequency = 0 //tune to frequency to unlock traitor supplies
 	var/canhear_range = 3 // the range which mobs can hear this radio from
 	var/obj/item/device/radio/patch_link = null
 	var/datum/wires/radio/wires = null
@@ -59,7 +58,7 @@
 	radio_list -= src
 	remove_radio_all(src) //Just to be sure
 	..()
-	
+
 /obj/item/device/radio/initialize()
 	. = ..()
 	frequency = COMMON_FREQ //common chat
@@ -84,9 +83,6 @@
 
 /obj/item/device/radio/interact(mob/user as mob)
 	if(!on)
-		return
-
-	if(active_uplink_check(user))
 		return
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
@@ -122,42 +118,34 @@
 			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
 
-/obj/item/device/radio/proc/check_traitor_uplink(frequency)
-	if(hidden_uplink)
-		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
-			usr << browse(null, "window=radio")
-			return 1
-
 /obj/item/device/radio/Topic(href, href_list)
 	if (!isAdminGhost(usr) && (usr.stat || !on))
-		return
+		return 1
 
 	if(!in_range(src,usr) && !isAdminGhost(usr) && !issilicon(usr)) //Not adjacent/have telekinesis/a silicon/an aghost? Close it.
 		usr << browse(null, "window=radio")
-		return
+		return 1
 	usr.set_machine(src)
 	if (href_list["open"])
 		var/mob/target = locate(href_list["open"])
 		var/mob/living/silicon/ai/A = locate(href_list["open2"])
 		if(A && target)
 			A.open_nearest_door(target)
-		return
+		return 1
 
 	else if("set_freq" in href_list)
 		var/new_frequency
 		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		set_frequency(new_frequency)
-		if (check_traitor_uplink(frequency))
-			return
+		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+			set_frequency(new_frequency)
 
 	else if (href_list["freq"])
 		var/new_frequency
 		new_frequency = (frequency + text2num(href_list["freq"]))
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		set_frequency(new_frequency)
-		if (check_traitor_uplink(frequency))
-			return
+		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+			set_frequency(new_frequency)
 
 	else if (href_list["talk"])
 		broadcasting = text2num(href_list["talk"])
@@ -504,12 +492,15 @@
 
 
 /obj/item/device/radio/attack_self(mob/user)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	interact(user)
 
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	..()
-	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
+	. = ..()
+	if(.)
 		return
 	user.set_machine(src)
 	if (!(W.is_screwdriver(user)))
@@ -529,3 +520,89 @@
 	for (var/ch_name in channels)
 		channels[ch_name] = 0
 	..()
+
+/obj/item/device/radio/phone
+	name = "radio phone"
+	desc = "A hard line, immobile."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "brown_phone"
+	anchored = TRUE
+	w_class = W_CLASS_LARGE
+	canhear_range = 1
+	channels = list("Response Team" = 1, "Command" = 0)
+
+/obj/item/device/radio/phone/attack_hand(mob/user)
+	add_fingerprint(user)
+	if(anchored)
+		attack_self(user)
+	else
+		..()
+
+/obj/item/device/radio/phone/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(!speech.speaker || speech.frequency)
+		return
+	if(broadcasting && (get_dist(src, speech.speaker) <= canhear_range))
+		for(var/ch in channels)
+			if(channels[ch])
+				talk_into(speech, ch)
+
+/obj/item/device/radio/phone/interact(mob/user as mob)
+	if(!on)
+		return
+
+	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+
+	dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
+	if(channels["Response Team"] == 1)
+		dat += "Channel: <b>Responder</b> <A href='byond://?src=\ref[src];toggle_channel=1'>Command</A>"
+	else
+		dat += "Channel: <A href='byond://?src=\ref[src];toggle_channel=1'>Responder</A> <b>Command</b>"
+
+	dat+={"</TT></body></html>"}
+	user << browse(dat, "window=radio")
+	onclose(user, "radio")
+
+/obj/item/device/radio/phone/Topic(href, href_list)
+	if(..())
+		return 1
+	if("toggle_channel" in href_list)
+		channels["Response Team"] = !channels["Response Team"]
+		channels["Command"] = !channels["Command"]
+		updateDialog()
+
+/obj/item/device/radio/phone/pack
+	name = "radio backpack"
+	desc = "Although most of the space is taken up by the radio, there's still space for some storage. Use in hand to access radio channels."
+	anchored = FALSE
+	slot_flags = SLOT_BACK
+	icon_state = "radiopack"
+	item_state = "radiopack"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
+	var/obj/item/weapon/storage/radiopack/ourpack
+
+/obj/item/device/radio/phone/pack/New()
+	..()
+	ourpack = new /obj/item/weapon/storage/radiopack(src)
+
+/obj/item/device/radio/phone/pack/attack_hand(mob/user)
+	if(user.get_inactive_hand() == src)
+		ourpack.show_to(user)
+	else
+		..()
+
+/obj/item/device/radio/phone/pack/AltClick(mob/user)
+	ourpack.AltClick(user)
+
+/obj/item/device/radio/phone/pack/attackby(obj/item/I, mob/user)
+	ourpack.attackby(I,user)
+
+/obj/item/weapon/storage/radiopack
+	name = "radio backpack"
+	desc = "Although most of the space is taken up by the radio, there's still space for some storage. Use in hand to access radio channels."
+	w_class = W_CLASS_LARGE
+
+/obj/item/weapon/storage/radiopack/distance_interact(mob/user)
+	if(istype(loc,/obj/item/device/radio/phone/pack) && in_range(user,loc))
+		playsound(loc, rustle_sound, 50, 1, -5)
+		return TRUE
+	return FALSE

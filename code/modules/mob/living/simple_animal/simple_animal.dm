@@ -240,11 +240,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
-					lazy_invoke_event(/lazy_event/on_before_move)
+					invoke_event(/event/before_move)
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
-					lazy_invoke_event(/lazy_event/on_after_move)
+					invoke_event(/event/after_move)
 
 	handle_automated_speech()
 
@@ -371,7 +371,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			return "[emote], [text]"
 	return "says, [text]";
 
-/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE)
+/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE, arguments)
 	if(timestopped)
 		return //under effects of time magick
 	if(stat)
@@ -565,12 +565,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	setDensity(FALSE)
 
 	animal_count[src.type]--
-	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
-		var/list/L = animal_butchering_products[src.species_type]
-		src.butchering_drops = list()
+	var/list/animal_butchering_products = get_butchering_products()
+	if(!src.butchering_drops && animal_butchering_products.len > 0) //If we already created a list of butchering drops, don't create another one
+		butchering_drops = list()
 
-		for(var/butchering_type in L)
-			src.butchering_drops += new butchering_type
+		for(var/butchering_type in animal_butchering_products)
+			butchering_drops += new butchering_type
 
 	..(gibbed)
 
@@ -594,7 +594,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
+	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
 	if (damage > 0)
 		damageoverlaytemp = 20
@@ -612,7 +612,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = damage)))
+	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -723,6 +723,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		new_type = type_override
 
 	if(src.type == new_type) //Already grown up
+		return
+
+	if(istype(locked_to,/obj/item/critter_cage)) // Baby mobs in cages won't grow up!
 		return
 
 	var/mob/living/simple_animal/new_animal = new new_type(src.loc)

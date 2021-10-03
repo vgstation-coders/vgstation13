@@ -47,7 +47,7 @@
 		return
 
 	visible_message("<span class='danger'>\The [src] emits a cloud of miasma before being laid to rest.</span>")
-	var/datum/effect/effect/system/smoke_spread/chem/rot/S = new /datum/effect/effect/system/smoke_spread/chem/rot
+	var/datum/effect/system/smoke_spread/chem/rot/S = new /datum/effect/system/smoke_spread/chem/rot
 	S.attach(loc)
 	S.set_up(src, 10, 0, loc)
 	spawn(0)
@@ -55,7 +55,7 @@
 
 	..(gibbed)
 
-/datum/effect/effect/system/smoke_spread/chem/rot/set_up(var/mob/M, n = 5, c = 0, loca, direct)
+/datum/effect/system/smoke_spread/chem/rot/set_up(var/mob/M, n = 5, c = 0, loca, direct)
 	if(n > 20)
 		n = 20
 	number = n

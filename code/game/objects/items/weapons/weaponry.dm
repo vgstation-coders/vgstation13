@@ -12,7 +12,7 @@
 	attack_verb = list("bans")
 
 
-/obj/item/weapon/banhammer/suicide_act(mob/user)
+/obj/item/weapon/banhammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -29,7 +29,7 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
-/obj/item/weapon/sord/suicide_act(mob/user)
+/obj/item/weapon/sord/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -59,10 +59,6 @@
 /obj/item/weapon/claymore/IsShield()
 	return 1
 
-/obj/item/weapon/claymore/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/claymore/cultify()
 	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()
@@ -84,7 +80,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/weapon/katana/suicide_act(mob/user)
+/obj/item/weapon/katana/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -255,7 +251,7 @@ obj/item/weapon/banhammer/admin
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
+/obj/item/weapon/melee/bone_hammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 

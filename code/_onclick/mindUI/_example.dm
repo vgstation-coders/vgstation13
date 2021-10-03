@@ -20,6 +20,7 @@
 		)
 	x = "LEFT"
 	y = "BOTTOM"
+	display_with_parent = TRUE
 
 //------------------------------------------------------------
 
@@ -44,6 +45,7 @@
 		/obj/abstract/mind_ui_element/test_window,
 		/obj/abstract/mind_ui_element/hoverable/test_close,
 		/obj/abstract/mind_ui_element/hoverable/test_hello,
+		/obj/abstract/mind_ui_element/hoverable/movable/test_move,
 		)
 	display_with_parent = TRUE
 
@@ -97,5 +99,17 @@
 /obj/abstract/mind_ui_element/hoverable/test_hello/Click()
 	flick("hello-click",src)
 	to_chat(GetUser(), "[bicon(src)] Hello World!")
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/movable/test_move
+	icon = 'icons/ui/32x32.dmi'
+	icon_state = "move"
+	layer = MIND_UI_BUTTON
+	offset_x = -80
+	offset_y = 16
+	mouse_opacity = 1
+
+	move_whole_ui = TRUE
 
 //------------------------------------------------------------

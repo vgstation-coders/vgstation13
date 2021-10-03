@@ -191,6 +191,12 @@ obj/machinery/gibber/New()
 	update_icon()
 	return
 
+/obj/machinery/gibber/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \himself inside the [src] and turning it on! It looks like \he's trying to commit suicide.</span>")
+	user.forceMove(src)
+	src.occupant = user
+	startgibbing(user)
+	return SUICIDE_ACT_CUSTOM
 
 /obj/machinery/gibber/proc/startgibbing(var/mob/user)
 	if(src.operating)
@@ -218,7 +224,7 @@ obj/machinery/gibber/New()
 	for (var/i=1 to totalslabs)
 		//first we spawn the meat
 		var/obj/item/weapon/newmeat
-		if(istype(occupant.meat_type, /obj/item/weapon/reagent_containers))
+		if(ispath(occupant.meat_type, /obj/item/weapon/reagent_containers))
 			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 		else

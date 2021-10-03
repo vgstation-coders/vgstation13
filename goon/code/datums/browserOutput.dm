@@ -147,6 +147,7 @@ For the main html chat area
 
 /datum/chatOutput/proc/pingLoop()
 	set waitfor = FALSE
+	usr = null //Otherwise this holds a reference to the new_player and causes it to hard del
 
 	while (owner)
 		ehjax_send(data = owner.is_afk(29 SECONDS) ? "softPang" : "pang") // SoftPang isn't handled anywhere but it'll always reset the opts.lastPang.

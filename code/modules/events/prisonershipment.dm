@@ -6,7 +6,7 @@ var/list/current_prisoners = list()
 /datum/event/prisontransfer
 	var/datum/recruiter/recruiter = null //for prisoner shit
 
-/datum/event/prisontransfer/can_start(var/list/active_with_role)  
+/datum/event/prisontransfer/can_start(var/list/active_with_role)
 	if(active_with_role["Security"] > 2)
 		return 15
 	return 0
@@ -15,36 +15,32 @@ var/list/current_prisoners = list()
 	can_request_prisoner = FALSE
 
 	if(!recruiter)
-		recruiter = new(src)
+		var/obj/structure/bed/chair/chairspawn = pick(prisonerstart)
+		recruiter = new(chairspawn)
 		recruiter.display_name = "prisoner"
 		recruiter.role = ROLE_PRISONER
 		recruiter.jobban_roles = list("minor roles") //has anyone even been banned from minor roles?
 
 		// Role set to Yes or Always
-		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 		// Role set to No or Never
-		recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-		recruiter.recruited.Add(src, "recruiter_recruited")
+		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
 		recruiter.request_player()
-	
-
-/datum/event/prisontransfer/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>A prisoner is about to be sent to the station. You have been added to the list of potential ghosts. ([controls])</span>")
-
-/datum/event/prisontransfer/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>A prisoner is about to be sent to the station. ([controls])</span>")
 
 
-/datum/event/prisontransfer/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
+/datum/event/prisontransfer/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>A prisoner is about to be sent to the station. You have been added to the list of potential ghosts. ([controls])</span>")
+
+/datum/event/prisontransfer/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>A prisoner is about to be sent to the station. ([controls])</span>")
+
+
+/datum/event/prisontransfer/proc/recruiter_recruited(mob/dead/observer/player)
 	can_request_prisoner = TRUE		//This is set to false by the prisoner role if we exceed the limit.
-	if(O)
+	if(player)
 		qdel(recruiter)
 		recruiter = null
 
@@ -52,7 +48,7 @@ var/list/current_prisoners = list()
 
 		//Make the prisoner
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
-		H.ckey = O.ckey
+		H.ckey = player.ckey
 		H.client.changeView()
 		var/species = pickweight(list(
 			"Human" 	= 4,
@@ -119,17 +115,17 @@ var/list/current_prisoners = list()
 				sleep(150)
 				if(!can_move_shuttle())
 					continue
-			
+
 				sleep(50)	//everyone is off, wait 5 more seconds so people don't get ZAS'd out the airlock
-				if(!can_move_shuttle())	
+				if(!can_move_shuttle())
 					continue
 				if(!transport_shuttle.move_to_dock(centcomdock))
 					message_admins("The transport shuttle couldn't return to centcomm for some reason.")
 					return
-				
+
 //putting it in a proc like this just cleans things up, this is identical to the checks for the cargo shuttle except mimics arent allowed
-/datum/event/prisontransfer/proc/can_move_shuttle() 
-	var/contents = get_contents_in_object(transport_shuttle.linked_area)	
+/datum/event/prisontransfer/proc/can_move_shuttle()
+	var/contents = get_contents_in_object(transport_shuttle.linked_area)
 	if (locate(/mob/living) in contents)
 		return FALSE
 	if (locate(/obj/item/weapon/disk/nuclear) in contents)

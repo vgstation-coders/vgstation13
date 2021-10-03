@@ -73,6 +73,9 @@
 			return
 	return ..()
 
+/mob/living/simple_animal/hostile/retaliate/cluwne/get_butchering_products()
+	return list(/datum/butchering_product/teeth/bunch)
+
 /mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	var/currenthealth = health
 	..()
@@ -119,7 +122,7 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE)
+/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE, arguments)
 	if(timestopped)
 		return //under effects of time magick
 

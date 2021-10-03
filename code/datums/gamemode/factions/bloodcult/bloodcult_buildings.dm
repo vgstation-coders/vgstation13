@@ -216,7 +216,7 @@
 	..()
 	flick("[icon_state]-spawn", src)
 	var/image/I = image(icon, "altar_overlay")
-	I.plane = ABOVE_HUMAN_PLANE
+	I.plane = relative_plane(ABOVE_HUMAN_PLANE)
 	overlays.Add(I)
 	for (var/mob/living/carbon/C in loc)
 		Crossed(C)
@@ -313,11 +313,11 @@
 			I = image(icon, "altar-soulblade-full")
 		else
 			I = image(icon, "altar-soulblade")
-		I.plane = ABOVE_HUMAN_PLANE
+		I.plane = relative_plane(ABOVE_HUMAN_PLANE)
 		I.pixel_y = 3
 		overlays.Add(I)
 	var/image/I = image(icon, "altar_overlay")
-	I.plane = ABOVE_HUMAN_PLANE
+	I.plane = relative_plane(ABOVE_HUMAN_PLANE)
 	overlays.Add(I)
 
 	if (health < maxHealth/3)
@@ -400,7 +400,7 @@
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
+				M.unregister_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -410,7 +410,7 @@
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
+			user.unregister_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -596,7 +596,7 @@
 					animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 					watching_mobs |= user
 					user.client.images |= watcher_maps["\ref[user]"]
-					user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/altar/proc/checkPosition)
+					user.register_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
 				switch(veil_thickness)
 					if (CULT_MENDED)
@@ -881,11 +881,11 @@ var/list/cult_spires = list()
 	animate(alpha = 144, color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
 	overlays.len = 0
 	var/image/I_base = image('icons/obj/cult_64x64.dmi',"spire[stage]")
-	I_base.plane = EFFECTS_PLANE
+	I_base.plane = relative_plane(EFFECTS_PLANE)
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
 	var/image/I_spire = image('icons/obj/cult_64x64.dmi',"spire[stage]-light")
-	I_spire.plane = ABOVE_LIGHTING_PLANE
+	I_spire.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 	I_spire.layer = NARSIE_GLOW
 	overlays += I_base
 	overlays += I_spire
@@ -1057,11 +1057,11 @@ var/list/cult_spires = list()
 	animate(alpha = 240, time = 2)
 	overlays.len = 0
 	var/image/I_base = image('icons/obj/cult_64x64.dmi',"forge")
-	I_base.plane = EFFECTS_PLANE
+	I_base.plane = relative_plane(EFFECTS_PLANE)
 	I_base.layer = BELOW_PROJECTILE_LAYER
 	I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 	var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-	I_lave.plane = ABOVE_LIGHTING_PLANE
+	I_lave.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 	I_lave.layer = NARSIE_GLOW
 	I_lave.blend_mode = BLEND_ADD
 	overlays += I_base
@@ -1104,7 +1104,7 @@ var/list/cult_spires = list()
 						forging = null
 						var/obj/item/I = new template(L)
 						if (istype(I))
-							I.plane = EFFECTS_PLANE
+							I.plane = relative_plane(EFFECTS_PLANE)
 							I.layer = PROJECTILE_LAYER
 							I.pixel_y = 12
 						else
@@ -1116,7 +1116,7 @@ var/list/cult_spires = list()
 						playsound(L, 'sound/effects/forge.ogg', 50, 0, -4)
 						forging.overlays.len = 0
 						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")
-						I.plane = ABOVE_LIGHTING_PLANE
+						I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 						I.layer = NARSIE_GLOW
 						I.blend_mode = BLEND_ADD
 						I.alpha = (timeleft/timetotal)*255
@@ -1157,11 +1157,11 @@ var/list/cult_spires = list()
 		animate(alpha = 224, time = 2)
 		animate(alpha = 240, time = 2)
 		var/image/I_base = image('icons/obj/cult_64x64.dmi',"forge")
-		I_base.plane = EFFECTS_PLANE
+		I_base.plane = relative_plane(EFFECTS_PLANE)
 		I_base.layer = BELOW_PROJECTILE_LAYER
 		I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
 		var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
-		I_lave.plane = ABOVE_LIGHTING_PLANE
+		I_lave.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 		I_lave.layer = NARSIE_GLOW
 		I_lave.blend_mode = BLEND_ADD
 		overlays += I_base
@@ -1262,7 +1262,7 @@ var/list/cult_spires = list()
 	..()
 	icon_state = i_forge
 	var/image/I = image('icons/obj/cult_64x64.dmi',"[i_forge]-mask")
-	I.plane = ABOVE_LIGHTING_PLANE
+	I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 	I.layer = NARSIE_GLOW
 	I.blend_mode = BLEND_ADD
 	overlays += I
@@ -1483,7 +1483,7 @@ var/list/bloodstone_list = list()
 				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
 				watching_mobs |= user
 				user.client.images |= watcher_maps["\ref[user]"]
-				user.lazy_register_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
+				user.register_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 
 /obj/structure/cult/bloodstone/proc/checkPosition()
 	for(var/mob/M in watching_mobs)
@@ -1496,7 +1496,7 @@ var/list/bloodstone_list = list()
 			if(M.client)
 				spawn(5)//we give it time to fade out
 					M.client.images -= watcher_maps["\ref[M]"]
-				M.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
+				M.unregister_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 		watching_mobs = list()
@@ -1506,7 +1506,7 @@ var/list/bloodstone_list = list()
 				if(!(user in watching_mobs))
 					user.client.images -= watcher_maps["\ref[user]"]
 					watcher_maps -= "\ref[user]"
-			user.lazy_unregister_event(/lazy_event/on_face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
+			user.unregister_event(/event/face, src, /obj/structure/cult/bloodstone/proc/checkPosition)
 			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
 
 			watching_mobs -= user
@@ -1680,7 +1680,7 @@ var/list/bloodstone_list = list()
 	switch(dance_move)
 		if ("clock")
 			for (var/mob/M in contributors)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHWEST,NORTH)
 						M.forceMove(get_step(M,EAST))
@@ -1694,11 +1694,11 @@ var/list/bloodstone_list = list()
 					if (SOUTHWEST,WEST)
 						M.forceMove(get_step(M,NORTH))
 						M.dir = NORTH
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("counter")
 			for (var/mob/M in contributors)
-				M.lazy_invoke_event(/lazy_event/on_before_move)
+				M.invoke_event(/event/before_move)
 				switch (get_dir(src,M))
 					if (NORTHEAST,NORTH)
 						M.forceMove(get_step(M,WEST))
@@ -1712,22 +1712,22 @@ var/list/bloodstone_list = list()
 					if (NORTHWEST,WEST)
 						M.forceMove(get_step(M,SOUTH))
 						M.dir = SOUTH
-				M.lazy_invoke_event(/lazy_event/on_after_move)
-				M.lazy_invoke_event(/lazy_event/on_moved, list("mover" = M))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
 		if ("spin")
 			for (var/mob/M in contributors)
 				spawn()
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = EAST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = NORTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = WEST
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)
 					sleep(0.75)
 					M.dir = SOUTH
-					M.lazy_invoke_event(/lazy_event/on_face)
+					M.invoke_event(/event/face)

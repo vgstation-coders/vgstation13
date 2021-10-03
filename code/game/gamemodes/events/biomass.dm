@@ -10,6 +10,7 @@
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE
+	mouse_opacity = 1
 	var/energy = 0
 	var/obj/effect/biomass_controller/master = null
 	var/health = 15
@@ -193,6 +194,8 @@
 	var/list/turf/simulated/floor/Floors = new
 
 	for(var/type in typesof(/area/hallway))
+		if(ispath(type,/area/hallway/secondary/entry)) // no spawn in arrivals, make it less annoying for latejoiners
+			continue
 		var/area/Hallway = locate(type)
 
 		for(var/turf/simulated/floor/Floor in Hallway.contents)

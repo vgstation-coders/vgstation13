@@ -106,7 +106,7 @@
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
-/datum/shuttle/proc/initialize()
+/datum/shuttle/initialize()
 	. = INIT_SUCCESS
 	src.docking_ports = list()
 	src.docking_ports_aboard = list()
@@ -333,7 +333,7 @@
 				destination_port = null
 				return
 			for(var/atom/movable/AA in linked_area)
-				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
+				AA.invoke_event(/event/z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)

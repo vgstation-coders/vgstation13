@@ -217,6 +217,7 @@ var/list/clothing_blacklist = list(
 	/obj/item/clothing/suit/space/rig/wizard,
 	/obj/item/clothing/mask/stone/infinite,
 	/obj/item/clothing/suit/armor/laserproof/advanced,
+	/obj/item/clothing/suit/space/rig/sundowner,
 	)
 
 var/list/clothing = list ()
@@ -266,7 +267,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		for(var/atom/movable/AM in (src.contents + E.contents))
 
 			if(!is_type_in_list(AM, protected_objects)) continue
-			AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/item_destroyed)
+			AM.register_event(/event/destroyed, src, .proc/item_destroyed)
 
 /area/vault/supermarket/shop/Exited(atom/movable/AM, atom/newloc)
 	..()
@@ -739,7 +740,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			var/price = to_spawn[new_item_type]
 
 			I.name = "[I.name] ($[price])"
-			I.lazy_register_event(/lazy_event/on_destroyed, S, /area/vault/supermarket/shop/proc/item_destroyed) //Only trigger alarm when an item for sale is destroyed
+			I.register_event(/event/destroyed, S, /area/vault/supermarket/shop/proc/item_destroyed) //Only trigger alarm when an item for sale is destroyed
 
 			S.items[I] = price
 

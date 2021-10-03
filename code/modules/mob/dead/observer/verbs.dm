@@ -105,7 +105,7 @@
 				client.images -= I.pathogen
 			for (var/mob/living/L in infected_contact_mobs)
 				client.images -= L.pathogen
-			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+			for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 				client.images -= C.pathogen
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 				client.images -= C.pathogen
@@ -120,7 +120,7 @@
 			for (var/mob/living/L in infected_contact_mobs)
 				if (L.pathogen)
 					client.images |= L.pathogen
-			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+			for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 				if (C.pathogen)
 					client.images |= C.pathogen
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
@@ -277,7 +277,7 @@
 
 	var/dat
 	dat += "<h4>Crew Manifest</h4>"
-	dat += data_core.get_manifest()
+	dat += data_core.get_manifest(OOC = 1)
 
 	src << browse(dat, "window=manifest;size=370x420;can_close=1")
 

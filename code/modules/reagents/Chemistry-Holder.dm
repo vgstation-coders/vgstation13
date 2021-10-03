@@ -495,6 +495,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	update_total()
 	my_atom.on_reagent_change()
 
+/datum/reagents/proc/isolate_any_reagent(var/list/protected_reagents)
+	for(var/A in reagent_list)
+		var/datum/reagent/R = A
+		var/protected = FALSE
+		for(var/B in protected_reagents)
+			if(R.id == B)
+				protected = TRUE
+		if (protected == FALSE)
+			del_reagent(R.id,update_totals=0)
+	update_total()
+	my_atom.on_reagent_change()
+
 /datum/reagents/proc/del_reagent(var/reagent, var/update_totals=1)
 	var/total_dirty=0
 	for(var/A in reagent_list)
@@ -967,12 +979,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	for(var/y in reagent_list)
 		var/datum/reagent/R = y
 		R.send_to_past(duration)
-
-	spawn(duration + 1)
-		if(my_atom)
-			var/atom/A = my_atom
-			A.reagents = src
-
 
 //written for ethylredoxrazine, but might be fun for turning water into wine or something
 /datum/reagents/proc/convert_some_of_type(var/datum/reagent/convert_from_type, var/datum/reagent/convert_to_type,var/convert_amount)

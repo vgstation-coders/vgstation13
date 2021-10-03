@@ -67,7 +67,7 @@
 		if(head.blood_DNA && head.blood_DNA.len)
 			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(head)] [head.gender==PLURAL?"some":"a"] blood-stained [head.name] on [t_his] head! [format_examine(head, "Examine")][head.description_accessories()]</span>\n"
 		else
-			msg += "[t_He] [t_is] wearing [bicon(head)] \a [head] on [t_his] head. [format_examine(head, "Examine")][head.description_accessories()]\n"
+			msg += "[t_He] [t_is] wearing [bicon(head)] \a [head] on [t_his] head. [format_examine(head, "Examine")][head.description_accessories()][head.description_hats()]\n"
 
 	//suit/armour
 	if(wear_suit && wear_suit.is_visible())

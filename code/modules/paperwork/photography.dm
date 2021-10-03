@@ -264,6 +264,18 @@
 	else
 		return ..()
 
+/obj/item/device/camera/cartridge
+	name = "PDA camera"
+	desc = "You should not be seeing this outside of a cartridge"
+	start_with_bulb = FALSE
+	var/obj/item/weapon/cartridge/camera/host_cart = null
+
+/obj/item/device/camera/cartridge/New()
+	if(!loc || !istype(loc,/obj/item/weapon/cartridge/camera))
+		qdel(src) // Do not exist outside of cartridges
+	else
+		host_cart = loc
+
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
 	start_with_bulb = FALSE
@@ -465,6 +477,12 @@
 	if(!isAI(user)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
 		if(user.client)		//To make shooting through security cameras possible
 			seen = get_hear(world.view, user.client.eye) //To make shooting through security cameras possible
+			// To make shooting through the tgui cameras possible
+			for(var/datum/tgui/ui in user.tgui_open_uis)
+				var/obj/machinery/computer/security/tv = ui.src_object.ui_host()
+				if(istype(tv, /obj/machinery/computer/security))
+					if(tv.active_camera)
+						seen |= get_hear(world.view, tv.active_camera)
 		else
 			seen = get_hear(world.view, user)
 	else
@@ -502,6 +520,27 @@
 	P.info = mobs
 	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	P.photo_size = photo_size
+
+	if(blueprints)
+		P.blueprints = TRUE
+		blueprints = FALSE
+
+	if (double_agent_completion_ids.len > 0)
+		P.double_agent_completion_ids = double_agent_completion_ids.Copy()
+		double_agent_completion_ids = list()
+
+/obj/item/device/camera/cartridge/printpicture(mob/user, icon/temp, mobs, flag) //Add photos to cart
+	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	host_cart.stored_photos += P
+	temp = ImagePDA(temp)
+	var/icon/small_img = icon(temp)
+	var/icon/ic = icon('icons/obj/items.dmi',"photo")
+	small_img.Scale(8, 8)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
+	P.icon = ic
+	P.img = temp
+	P.info = mobs
 	P.photo_size = photo_size
 
 	if(blueprints)
@@ -741,10 +780,14 @@
 		/obj/item/weapon/stock_parts/capacitor
 	) // capacitors for the flash, scanning_modules for the processing of the image, matter bin for the ink
 
+/obj/machinery/photobooth/security
+	background = "mugshot"
+	icon_state = "secbooth"
+
 /obj/machinery/photobooth/New()
 	..()
-	var/image/I = image(icon, src, "photobooth_overlay")
-	I.plane = ABOVE_HUMAN_PLANE
+	var/image/I = image(icon, src, "[icon_state]_overlay")
+	I.plane = relative_plane(ABOVE_HUMAN_PLANE)
 	I.layer = 0
 	overlays += I
 
@@ -778,6 +821,7 @@
 		"balloons",
 		"nanotrasen_dark",
 		"nanotrasen_light",
+		"mugshot",
 		)
 	if (new_background)
 		background = new_background
@@ -791,10 +835,10 @@
 			to_chat(user, "<span class='warning'>\The [current_mob] is already using the booth currently.</span>")
 		return
 	var/turf/T = get_turf(src)
-	if (T != user.loc)
+	current_mob = locate() in T
+	if (!current_mob)
 		to_chat(user, "<span class='notice'>You must enter the booth from the front before you can take a picture of yourself.</span>")
 		return
-	current_mob = user
 	lock_atom(current_mob, /datum/locking_category/photobooth)
 	anim(target = src, a_icon = icon, flick_anim = "photobooth-flash", sleeptime = 40, plane = ABOVE_HUMAN_PLANE, lay = OPEN_CURTAIN_LAYER)
 	playsound(T, "rustle", 50, 1, -2)

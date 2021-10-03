@@ -77,10 +77,12 @@ Class Procs:
 
 /connection/proc/mark_direct()
 	state |= CONNECTION_DIRECT
+	++edge.direct
 //	to_chat(world, "Marked direct.")
 
 /connection/proc/mark_indirect()
 	state &= ~CONNECTION_DIRECT
+	--edge.direct
 //	to_chat(world, "Marked indirect.")
 
 /connection/proc/mark_space()
@@ -112,8 +114,8 @@ Class Procs:
 	else if(block_status & ZONE_BLOCKED)
 		if(direct())
 			mark_indirect()
-		else
-			mark_direct()
+	else if(!direct())
+		mark_direct()
 
 	var/b_is_space = (!istype(B,/turf/simulated))
 

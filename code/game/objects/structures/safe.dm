@@ -126,10 +126,11 @@ FLOOR SAFES
 	else
 		radial.finish()
 
-/obj/structure/safe/proc/turn_dial(var/mob/user, var/task)
+/obj/structure/safe/proc/turn_dial(var/mob/living/user, var/task)
 	var/canhear = 0
 	if(user.find_held_item_by_type(/obj/item/clothing/accessory/stethoscope))
-		canhear = 1
+		if (!(user.sdisabilities & DEAF) && !user.ear_deaf && !user.earprot())
+			canhear = 1
 
 	switch (task)
 		if ("Rotate Clockwise")

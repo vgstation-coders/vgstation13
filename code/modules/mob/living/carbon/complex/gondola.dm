@@ -42,6 +42,9 @@
 /mob/living/carbon/complex/gondola/say()
 	return
 
+/mob/living/carbon/complex/gondola/get_butchering_products()
+	return list(/datum/butchering_product/skin/gondola, /datum/butchering_product/teeth/few)
+
 /mob/living/carbon/complex/gondola/cult/New() //fug.....
 	..()
 	icon_state_standing = pick("gondola_c","gondola_c_tome")

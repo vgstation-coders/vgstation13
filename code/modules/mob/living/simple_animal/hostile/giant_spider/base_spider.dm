@@ -86,7 +86,6 @@
 	var/a_53 = 0
 	var/a_54 = 0
 
-
 /mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
 		return 1
@@ -120,6 +119,9 @@
 	if(istype(A,/obj/structure/window) && proximity_flag && (!target || !ismob(target)) && performPressureCheck(get_turf(A)))
 		return
 	.=..()
+
+/mob/living/simple_animal/hostile/giant_spider/get_butchering_products()
+	return list(/datum/butchering_product/spider_legs)
 
 //Can we actually attack a possible target?
 /mob/living/simple_animal/hostile/giant_spider/CanAttack(var/atom/the_target)

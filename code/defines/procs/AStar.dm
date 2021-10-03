@@ -46,71 +46,6 @@ length to avoid portals or something i guess?? Not that they're counted right no
 //  Same as 1), but check all turf, including unsimulated
 
 //////////////////////
-//PriorityQueue object
-//////////////////////
-
-//an ordered list, using the cmp proc to weight the list elements
-/PriorityQueue
-	var/list/L //the actual queue
-	var/cmp //the weight function used to order the queue
-
-/PriorityQueue/New(compare)
-	L = new()
-	cmp = compare
-
-/PriorityQueue/proc/IsEmpty()
-	return !L.len
-
-//add an element in the list,
-//immediatly ordering it to its position using Insertion sort
-/PriorityQueue/proc/Enqueue(var/atom/A)
-	var/i
-	L.Add(A)
-	i = L.len -1
-	while(i > 0 &&  call(cmp)(L[i],A) >= 0) //place the element at it's right position using the compare proc
-		L.Swap(i,i+1) 						//last inserted element being first in case of ties (optimization)
-		i--
-
-//removes and returns the first element in the queue
-/PriorityQueue/proc/Dequeue()
-	ASSERT(L.len)
-	. = L[1]
-	Remove(.)
-	return .
-
-//removes an element
-/PriorityQueue/proc/Remove(var/atom/A)
-	return L.Remove(A)
-
-//returns a copy of the elements list
-/PriorityQueue/proc/List()
-	RETURN_TYPE(/list)
-	var/list/ret = L.Copy()
-	return ret
-
-//return the position of an element or 0 if not found
-/PriorityQueue/proc/Seek(var/atom/A)
-	return L.Find(A)
-
-//return the element at the i_th position
-/PriorityQueue/proc/Get(var/i)
-	ASSERT(i < L.len && i > 1)
-	return L[i]
-
-//replace the passed element at it's right position using the cmp proc
-/PriorityQueue/proc/ReSort(var/atom/A)
-	var/i = Seek(A)
-	if (i == 0)
-		CRASH("[src] was seeking [A] but could not find it.")
-	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
-		L.Swap(i,i+1)
-		i++
-	while(i > 1 && call(cmp)(L[i],L[i-1]) <= 0) //last inserted element being first in case of ties (optimization)
-		L.Swap(i,i-1)
-		i--
-	return 1
-
-//////////////////////
 //PathNode object
 //////////////////////
 
@@ -170,7 +105,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /*
  * ASTAR
  * source: the atom which calls this Astar call.TRUE
- * proc_to_call: the proc to call on the source
+ * callback: the callback to invoke when the path is ready
  * start: starting atom
  * end: end of targetted path
  * Adjacent: the proc which rules what is adjacent for us
@@ -180,7 +115,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
  * Creates a pathmaker datum to process the path if we aren't processing the path.
  * Returns nothing if this path is already being processed.
  */
-/proc/AStar(source, proc_to_call, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = ASTAR_DEBUG)
+/proc/AStar(source, callback, start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/debug = ASTAR_DEBUG)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	if(start:z != end:z) //if you're feeling ambitious and make something that can ASTAR through z levels, feel free to remove this check
 		return ASTAR_FAIL
@@ -191,8 +126,8 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	if(!isturf(end))
 		target = end
 
-	astar_debug("ASTAR called [source] [proc_to_call] [start:x][start:y][start:z] [end:x][end:y][end:z] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
-	new /datum/path_maker(source,proc_to_call, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
+	astar_debug("ASTAR called [source] [callback] [start:x],[start:y],[start:z] [end:x],[end:y],[end:z] [adjacent] [dist] [maxnodes] [maxnodedepth] [mintargetdist] [minnodedist] [id] [exclude] [debug]")
+	new /datum/path_maker(source,callback, get_turf(start), get_turf(end), target, adjacent, dist, maxnodes, maxnodedepth, mintargetdist, id, exclude, debug)
 	return ASTAR_REGISTERED
 
 // Only use if you just need to check if a path exists, and is a reasonable length
@@ -202,7 +137,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 /proc/quick_AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minnodedist,id=null, var/turf/exclude=null, var/reference)
 	ASSERT(!istype(end,/area)) //Because yeah some things might be doing this and we want to know what
 	. = list() // In case of failure/runtimes, we want to return a list.
-	var/PriorityQueue/open = new /PriorityQueue(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
+	var/PriorityQueue/open = new /PriorityQueue/reverse(/proc/PathWeightCompare) //the open list, ordered using the PathWeightCompare proc, from lower f to higher
 	var/list/closed = new() //the closed list
 	var/list/path = list() //the returned path, if any
 	var/PathNode/cur //current processed turf
@@ -394,8 +329,8 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 /////////////////////////////////////////////////////////////////////////
 
-/atom/proc/make_astar_path(var/atom/target, var/receiving_proc = .proc/get_astar_path)
-	AStar(src, receiving_proc, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
+/atom/proc/make_astar_path(var/atom/target, var/callback = new /callback(src, .proc/get_astar_path))
+	AStar(src, callback, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30)
 
 //override when needed to receive your path
 /atom/proc/get_astar_path(var/list/L)

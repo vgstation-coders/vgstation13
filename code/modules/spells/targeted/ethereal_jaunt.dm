@@ -54,7 +54,7 @@
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	if(mist)
 		target.ExtinguishMob()
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, mobloc)
 		steam.start()
 
@@ -83,7 +83,7 @@
 	//Begin unjaunting
 	mobloc = get_turf(target)
 	if(mist)
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, mobloc)
 		steam.start()
 	target.delayNextMove(25)
@@ -120,9 +120,9 @@
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images += jaunts[A]
-				target.lazy_register_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
+				target.register_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				ethereal_jaunt(target, duration, enteranim, exitanim, mist)
-				target.lazy_unregister_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
+				target.unregister_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images -= jaunts[A]

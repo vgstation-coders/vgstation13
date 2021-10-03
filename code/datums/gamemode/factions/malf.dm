@@ -10,6 +10,8 @@
 	initroletype = /datum/role/malfAI //First addition should be the AI
 	roletype = /datum/role/malfbot //Then anyone else should be bots
 	logo_state = "malf-logo"
+	default_admin_voice = "01100111 01101111 01100100" // god
+	admin_voice_style = "siliconsay"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
 	playlist = "malfdelta"

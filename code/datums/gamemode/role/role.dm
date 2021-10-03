@@ -31,6 +31,9 @@
 		Things to do to the *old* body prior to the mind transfer.
 	@PostMindTransfer(New_character, Mob/Living, Old_character, Mob/Living)
 		Things to do to the *new* body after the mind transfer is completed.
+
+	@update_perception()
+		Called on Life() to handle the role's additional alphas to the dark plane.
 */
 
 #define ROLE_MIXABLE   			1 // Can be used in mixed mode
@@ -103,9 +106,16 @@
 
 	var/icon/logo_state = "synd-logo"
 
+	var/default_admin_voice = "Supreme Leader"
+	var/admin_voice_style = "radio" // check stylesheet.dm for a list of all possible styles
+	var/list/voice_per_admin = list()
+	var/admin_voice_say = "says"
+
 	var/list/greets = list(GREET_DEFAULT,GREET_CUSTOM)
 
 	var/wikiroute
+	var/threat_generated = 0
+	var/threat_level_inflated = 0
 
 	var/list/current_powers = list()
 	var/list/available_powers = list()		//holds instances of each power
@@ -254,6 +264,11 @@
 /datum/role/proc/check_win()
 	return
 
+// called on Life()
+
+/datum/role/proc/update_perception()
+	return
+
 // Create objectives here.
 /datum/role/proc/ForgeObjectives()
 	return
@@ -282,17 +297,24 @@
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	if(!antag || !antag.current)
 		return
+	if (!ismob(usr))
+		return
+	var/mob/user = usr
+	if (!(user.ckey in voice_per_admin))
+		voice_per_admin[user.ckey] = default_admin_voice
 	var/mob/M = antag.current
 	if (M)
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
-	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
-	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
+	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(admin PM)</a>
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>
+	 - <a href='?src=\ref[src]&mind=\ref[antag]&role_speak=\ref[M]'>(Message as:</a><a href='?src=\ref[src]&mind=\ref[antag]&role_set_speaker=\ref[M]'>\[[voice_per_admin[user.ckey]]\])</a>"}
 	else
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 	[name] [antag.name]/[antag.key]<b><font color=red> - (DESTROYED)</font></b>
 	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
-	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>
+	 - <a href='?src=\ref[src]&mind=\ref[antag]&role_speak=\ref[M]'>(Message as:</a><a href='?src=\ref[src]&mind=\ref[antag]&role_set_speaker=\ref[M]'>\[[voice_per_admin[user.ckey]]\])</a>"}
 
 
 /datum/role/proc/Greet(var/greeting,var/custom)
@@ -475,6 +497,50 @@
 
 // USE THIS INSTEAD (global)
 /datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	if (!ismob(usr))
+		return
+	var/mob/user = usr
+
+	if (href_list["role_speak"])
+		if(!usr.check_rights(R_ADMIN))
+			message_admins("[usr] tried to access RoleTopic() without permissions.")
+			return
+		if (!(user.ckey in voice_per_admin))
+			voice_per_admin[user.ckey] = default_admin_voice
+
+		var/message = input("What message shall we send as [voice_per_admin[user.ckey]]?",
+                    "Role Message",
+                    "")
+		if (!message)
+			return
+
+		var/mob/mob = M.current
+
+		if (mob)
+			to_chat(mob, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span>")
+
+		for(var/mob/dead/observer/O in player_list)
+			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span></span>")
+
+		message_admins("Admin [key_name_admin(usr)] has talked to [key_name(mob)] as [voice_per_admin[user.ckey]].")
+		log_rolespeak("[key_name(usr)] as [voice_per_admin[user.ckey]] to [key_name(mob)]: \"[message]\"")
+
+	if (href_list["role_set_speaker"])
+		if(!usr.check_rights(R_ADMIN))
+			message_admins("[usr] tried to access faction RoleTopic() without permissions.")
+			return
+		if (!(user.ckey in voice_per_admin))
+			voice_per_admin[user.ckey] = default_admin_voice
+
+		var/mob/mob = M.current
+
+		if (mob)
+			var/new_name = input("What should you call yourself when messaging [mob]?",
+	                    "Change Messager Name",
+	                    "[voice_per_admin[user.ckey]]")
+			if (new_name)
+				voice_per_admin[user.ckey] = new_name
+		user.client.holder.check_antagonists()
 
 /datum/role/proc/ShuttleDocked(state)
 	if(objectives.objectives.len)
@@ -518,6 +584,19 @@
 // What do they display on the player StatPanel ?
 /datum/role/proc/StatPanel()
 	return ""
+
+/datum/role/proc/increment_threat(var/amount)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(!istype(D))
+		return //It's not dynamic!
+	threat_generated += amount
+	if(D.midround_threat >= D.midround_threat_level)
+		D.create_midround_threat(amount)
+		if(!threat_level_inflated) //Our first time raising the cap
+			D.threat_log += "[worldtime2text()]: [name] started increasing the threat cap."
+		threat_level_inflated += amount
+	else
+		D.refund_midround_threat(amount)
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

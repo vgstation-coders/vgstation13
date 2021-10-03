@@ -492,7 +492,20 @@
 	if (src.reagents.total_volume)
 		src.dirty++
 		if(reagent_disposal)
-			if(scanning_power >= 1) //You get one bottle, don't fuck it up
+			var/mob/user = usr
+			var/recovered_reagents = FALSE
+			if (user && Adjacent(user))
+				for(var/obj/item/weapon/reagent_containers/glass/G in (user.get_active_hand() + user.get_inactive_hand()))
+					if(!G.reagents)
+						continue
+					if(!G.is_open_container())
+						continue
+
+					to_chat(user, "<span class='notice'>You recover the reagents from the microwave inside your [G]!</span>")
+					reagents.trans_to(G, reagents.total_volume)
+					recovered_reagents = TRUE
+					break
+			if(!recovered_reagents && scanning_power >= 1) //You get one bottle, don't fuck it up
 				var/obj/item/weapon/reagent_containers/food/condiment/C = new(get_turf(src))
 				reagents.trans_to(C, reagents.total_volume)
 			reagents.clear_reagents()

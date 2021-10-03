@@ -307,21 +307,19 @@
 // Human ///////////////////////////////////////////////////////
 
 /datum/recipe/human //Parent datum only
-	make_food(var/obj/container as obj)
-		var/human_name
-		var/human_job
-		for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
-			if(HM.subjectname)
-				human_name = HM.subjectname
-				human_job = HM.subjectjob
-				break
-		var/lastname_index = findtext(human_name, " ")
-		if(lastname_index)
-			human_name = copytext(human_name,lastname_index+1)
-		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
-		HB.name = human_name+HB.name
-		HB.job = human_job
-		return HB
+
+/datum/recipe/human/make_food(var/obj/container)
+	var/human_name
+	for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
+		if(HM.subjectname)
+			human_name = HM.subjectname
+			break
+	var/lastname_index = findtext(human_name, " ")
+	if(lastname_index)
+		human_name = copytext(human_name,lastname_index+1)
+	var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
+	HB.name = human_name+HB.name
+	return HB
 
 /datum/recipe/human/burger
 	reagents = list(FLOUR = 5)
@@ -385,6 +383,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
+
+/datum/recipe/pancake
+	reagents = list(PANCAKE = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pancake
 
 /datum/recipe/sugarcookie
 	reagents = list(FLOUR = 5, SUGAR = 5)
@@ -647,6 +649,20 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries
+
+/datum/recipe/punnetofcheesyfries
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries,
+		/obj/item/stack/sheet/cardboard,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
+
+/datum/recipe/coneoffries
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/fries,
+		/obj/item/stack/sheet/cardboard,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/cone
 
 /datum/recipe/popcorn
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/corn)
@@ -1233,7 +1249,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
 
 /datum/recipe/avocadosoup
-	reagents = list(WATER = 5, LIMEJUICE = 5, CREAM = 10)
+	reagents = list(LIMEJUICE = 5, CREAM = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,

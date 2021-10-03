@@ -10,6 +10,8 @@
 
 	roletype = /datum/role/plague_mouse
 	late_role = PLAGUEMOUSE
+	default_admin_voice = "Big Rat"
+	admin_voice_style = "skeleton" // grey, bold and italic
 
 	var/diseaseID = ""
 	var/datum/disease2/disease/bacteria/plague

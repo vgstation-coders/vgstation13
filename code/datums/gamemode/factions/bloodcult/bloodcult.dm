@@ -54,6 +54,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
 	hud_icons = list("cult-chief-logo", "cult-logo")
+	default_admin_voice = "<span class='danger'>Nar-Sie</span>" // Nar-Sie's name always appear in red in the chat, makes it stand out.
+	admin_voice_style = "sinister"
+	admin_voice_say = "murmurs..."
 	var/list/bloody_floors = list()
 	//var/target_change = FALSE
 	//var/change_cooldown = 0
@@ -84,25 +87,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	dat += "<br><a href='?src=\ref[src];cult_mindspeak_global=1'>Voice of Nar-Sie</a>"
 	dat += "<br><a href='?src=\ref[src];cult_progress=1'>(debug) Cult Progression Skip</a>"
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
 	..()
-	if (href_list["cult_mindspeak_global"])
-		var/message = input("What message shall we send?",
-                    "Voice of Nar-Sie",
-                    "")
-		for (var/datum/role/R in members)
-			if (R.antag?.current && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
-				to_chat(R.antag.current, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
-
-		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[message]</span></span>")
-
-		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [message]")
 	if (href_list["cult_progress"])
 		if (alert(usr, "Skip to the next Act?","Cult Progression Skip","Yes","No") == "No")
 			return
@@ -259,12 +248,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 /mob/living/carbon/proc/implant_pop()
 	for(var/obj/item/weapon/implant/loyalty/I in src)
-		if (I.implanted)
+		if (I.imp_in)
 			to_chat(src, "<span class='sinister'>Your blood pushes back against the loyalty implant, it will visibly pop out within seconds!</span>")
 			spawn(10 SECONDS)
-				I.forceMove(get_turf(src))
-				I.implanted = 0
-				visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
+				if(I.remove())
+					visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
 
 /mob/living/carbon/proc/boxify(var/delete_body = TRUE, var/new_anim = TRUE, var/box_state = "cult")//now its own proc so admins may atomProcCall it if they so desire.
 	var/turf/T = get_turf(src)
@@ -297,9 +285,6 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		cup.reagents.add_reagent(SLIMEJELLY, 50)
 	if (isalien(src))//w/e
 		cup.reagents.add_reagent(RADIUM, 50)
-
-	for(var/obj/item/weapon/implant/loyalty/I in src)
-		I.implanted = 0
 
 	for(var/obj/item/I in src)
 		u_equip(I)
@@ -1063,9 +1048,8 @@ var/static/list/valid_cultpower_slots = list(
 		if (jobban_isbanned(src, CULTIST) || isantagbanned(src) || (acceptance == "Never"))
 			return CONVERTIBLE_NEVER
 
-		for(var/obj/item/weapon/implant/loyalty/I in src)
-			if(I.implanted)
-				return CONVERTIBLE_IMPLANT
+		if(is_loyalty_implanted())
+			return CONVERTIBLE_IMPLANT
 
 		if (acceptance == "Always" || acceptance == "Yes")
 			return CONVERTIBLE_ALWAYS

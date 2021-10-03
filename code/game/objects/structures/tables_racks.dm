@@ -381,6 +381,16 @@
 		return
 	return ..()
 
+/obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+	for (var/atom/A in loc)
+		if (A == src)
+			continue
+		if (!A.Cross(victim,get_turf(victim)))
+			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
+			return FALSE
+	victim.forceMove(loc)
+	return TRUE
+
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (!W)
 		return
@@ -391,7 +401,8 @@
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
-					M.forceMove(loc)
+					if (!TryToThrowOnTable(user,M))
+						return
 					if (prob(15))
 						M.Knockdown(5)
 						M.Stun(5)
@@ -403,7 +414,8 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				M.forceMove(loc)
+				if (!TryToThrowOnTable(user,M))
+					return
 				M.Knockdown(5)
 				M.Stun(5)
 				visible_message("<span class='warning'>[user] puts [M] on \the [src].</span>")
@@ -420,7 +432,7 @@
 
 	if(user.drop_item(W, src.loc))
 		if(W.loc == src.loc && params)
-			W.setPixelOffsetsFromParams(params, user)
+			W.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
 			return 1
 
 /obj/structure/table/proc/straight_table_check(var/direction)
@@ -658,7 +670,8 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.forceMove(loc)
+				if (!TryToThrowOnTable(user,G.affecting))
+					return
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")

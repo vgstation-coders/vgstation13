@@ -448,7 +448,7 @@
 			var/mob/living/simple_animal/hostile/humanoid/H = NM
 			H.items_to_drop = list()
 		NM.faction = "lazarus \ref[user]"
-		NM.friends += user
+		NM.friends += makeweakref(user)
 		MC.contained_mob = NM
 		MC.name = "lazarus capsule - [NM.name]"
 	..()

@@ -139,7 +139,7 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 
-/obj/item/toy/spinningtoy/suicide_act(mob/user)
+/obj/item/toy/spinningtoy/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -392,26 +392,77 @@
 	icon_state = "sword0"
 	item_state = "sword0"
 	var/active = 0.0
+	var/base_state = "sword"
+	var/active_state = ""
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	attack_verb = list("attacks", "strikes", "hits")
+	var/dualsaber_type = /obj/item/toy/sword/dualsaber
 
-	attack_self(mob/user as mob)
-		src.active = !( src.active )
-		if (src.active)
-			to_chat(user, "<span class = 'info'>You extend the plastic blade with a quick flick of your wrist.</span>")
-			playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
-			src.icon_state = "swordblue"
-			src.item_state = "swordblue"
-			src.w_class = W_CLASS_LARGE
-		else
-			to_chat(user, "<span class = 'info'>You push the plastic blade back down into the handle.</span>")
-			playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
-			src.icon_state = "sword0"
-			src.item_state = "sword0"
-			src.w_class = W_CLASS_SMALL
-		src.add_fingerprint(user)
-		return
+/obj/item/toy/sword/New()
+	..()
+	_color = pick("red","blue","green","purple")
+	if(!active_state)
+		active_state = base_state + _color
+	update_icon()
+
+/obj/item/toy/sword/attack_self(mob/user as mob)
+	src.active = !( src.active )
+	if (src.active)
+		to_chat(user, "<span class = 'info'>You extend the plastic blade with a quick flick of your wrist.</span>")
+		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
+		src.w_class = W_CLASS_LARGE
+	else
+		to_chat(user, "<span class = 'info'>You push the plastic blade back down into the handle.</span>")
+		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+		src.w_class = W_CLASS_SMALL
+	src.add_fingerprint(user)
+	update_icon()
+
+/obj/item/toy/sword/update_icon()
+	if(active && _color)
+		icon_state = active_state
+		item_state = active_state
+	else
+		icon_state = "[base_state][active]"
+		item_state = "[base_state][active]"
+
+/obj/item/toy/sword/attackby(obj/item/weapon/W, mob/living/user)
+	if(istype(W, /obj/item/toy/sword))
+		to_chat(user, "<span class='notice'>You attach the ends of the two toy swords, making a single double-bladed one! You're cool.</span>")
+		var/obj/item/toy/sword/dualsaber/saber = new dualsaber_type(user.loc)
+		saber.colorset = W._color + src._color
+		saber.swords.Add(W, src)
+		user.drop_item(W)
+		W.forceMove(saber)
+		user.drop_item(src)
+		forceMove(saber)
+		user.put_in_hands(saber)
+		return 1
+	return ..()
+
+/obj/item/toy/sword/dualsaber
+	name = "toy double-bladed sword"
+	desc = "Two cheap, plastic replicas of energy swords, combined together! Ages 4 times 2 and up."
+	icon_state = "dualsaber0"
+	item_state = "dualsaber0"
+	var/list/swords = list()
+	var/colorset = ""
+
+/obj/item/toy/sword/dualsaber/attack_self(mob/user as mob)
+	..()
+	if (src.active)
+		src.w_class = W_CLASS_HUGE
+
+/obj/item/toy/sword/dualsaber/update_icon()
+	icon_state = "dualsaber[active ? colorset : 0]"
+	item_state = "dualsaber[active ? colorset : 0]"
+
+/obj/item/toy/sword/dualsaber/Destroy()
+	for(var/obj/item/I in swords)
+		qdel(I)
+	swords.Cut()
+	..()
 
 /obj/item/toy/katana
 	name = "replica katana"
@@ -440,7 +491,7 @@
 	attack_verb = list("pricked", "absorbed", "gored", "stung")
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/toy/foamblade/suicide_act(mob/user)
+/obj/item/toy/foamblade/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is absorbing \himself! It looks like \he's trying to commit suicide.</span>")
 	playsound(src, 'sound/effects/lingabsorbs.ogg', 50, 1)
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
@@ -501,7 +552,7 @@
 /obj/item/toy/crayon/proc/Format(var/mob/user,var/text,var/obj/item/weapon/paper/P)
 	return style.Format(text,src,user,P)
 
-/obj/item/toy/crayon/suicide_act(mob/user)
+/obj/item/toy/crayon/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
 
@@ -565,7 +616,7 @@
 	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
 		if(T.density) //no wallsmoke pls
 			continue
-		var/datum/effect/effect/system/smoke_spread/bad/smoke = new /datum/effect/effect/system/smoke_spread/bad()
+		var/datum/effect/system/smoke_spread/bad/smoke = new /datum/effect/system/smoke_spread/bad()
 		smoke.set_up(5, 0, T)
 		smoke.start()
 	qdel(src)
@@ -730,7 +781,7 @@
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
 
-/obj/item/toy/gooncode/suicide_act(mob/user)
+/obj/item/toy/gooncode/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 

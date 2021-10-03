@@ -97,6 +97,9 @@
 	hat = null
 	glasses = null
 
+/mob/living/carbon/monkey/get_butchering_products()
+	return list(/datum/butchering_product/skin/monkey, /datum/butchering_product/teeth/few)
+
 /mob/living/carbon/monkey/abiotic()
 	for(var/obj/item/I in held_items)
 		if(I.abstract)
@@ -451,7 +454,7 @@
 				threatcount += 4
 
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 
 	return threatcount
@@ -567,7 +570,7 @@
 /mob/living/carbon/monkey/can_be_infected()
 	return 1
 
-/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble")
+/mob/living/carbon/monkey/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
 	if (greaterform != "Human")
 		return FALSE
 
@@ -607,9 +610,9 @@
 
 	switch (material)
 		if ("marble")
-			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+			new_mannequin = new /obj/structure/mannequin/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
 		if ("wood")
-			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src)
+			new_mannequin = new /obj/structure/mannequin/wood/monkey(T,null,null,mannequin_clothing,mannequin_held_items,src,forever)
 
 	if (new_mannequin)
 		return TRUE

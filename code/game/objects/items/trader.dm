@@ -249,17 +249,20 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/clothing/under/securityskirt/elite,
 	/obj/item/clothing/head/helmet/donutgiver,
 	/obj/item/clothing/accessory/bangerboy,
-	/obj/item/key/security/spare,
+	/obj/structure/ammotree,
 	/obj/item/weapon/ram_kit,
 	/obj/item/device/vampirehead,
 	/obj/item/weapon/storage/lockbox/unlockable/peace,
 	/obj/item/clothing/head/helmet/stun,
 	/obj/item/weapon/secway_kit,
+	/obj/structure/largecrate/secure,
+	/obj/item/weapon/storage/lockbox/advanced/ricochettaser,
+	/obj/item/weapon/storage/lockbox/advanced/energyshotgun
 	)
 
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	for(var/i = 1 to 7)
+	for(var/i = 1 to 6)
 		if(!alcatraz_stuff.len)
 			return
 		var/path = pick_n_take(alcatraz_stuff)
@@ -826,6 +829,26 @@ var/global/list/alcatraz_stuff = list(
 	else
 		return FALSE
 
+/obj/structure/closet/crate/medical/yantar
+	name = "Yantar security crate"
+	desc = "From the forbidden 'X' laboratory focused on medical research."
+	has_lock_type = null
+
+var/global/list/yantar_stuff = list(
+	//1 of a kind
+	/obj/item/weapon/storage/trader_chemistry,
+	/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer,
+	/obj/structure/largecrate/secure/frankenstein,
+	)
+
+/obj/structure/closet/crate/medical/yantar/New()
+	..()
+	for(var/i = 1 to 3)
+		if(!yantar_stuff.len)
+			return
+		var/path = pick_n_take(yantar_stuff)
+		new path(src)
+
 /obj/item/weapon/card/id/vox/extra
 	name = "Spare trader ID"
 	desc = "A worn looking ID with access to the tradepost, able to be set once for aspiring traders."
@@ -1025,10 +1048,10 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/vachandle/pickup(mob/user)
 	..()
-	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/vachandle/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 	if(loc != myvac)
 		retract()
 
@@ -1158,11 +1181,11 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/pedometer/pickup(mob/user)
 	..()
-	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/pedometer/dropped(mob/user)
 	..()
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/pedometer/proc/mob_moved(atom/movable/mover)
 	var/turf/T = get_turf(src)
@@ -1198,6 +1221,7 @@ var/global/list/alcatraz_stuff = list(
 	pixel_x = -16
 	plane = ABOVE_HUMAN_PLANE
 	var/state = AT_SEED
+	var/pity_timer = 0
 
 /obj/structure/ammotree/attackby(obj/item/I, mob/user)
 	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
@@ -1236,9 +1260,12 @@ var/global/list/alcatraz_stuff = list(
 	if(state >= AT_FLOWERING)
 		processing_objects -= src
 		return
-	if(prob(1))
+	if(prob(1) || pity_timer > 99)
 		state++
+		pity_timer = 0
 		update_icon()
+	else
+		pity_timer++
 
 /obj/item/ammofruit
 	name = "ammofruit"
@@ -1276,7 +1303,7 @@ var/global/list/alcatraz_stuff = list(
 	name = "Cloud IX engineering crate"
 	desc = "The Cloud IX engineering facility hangs in the atmosphere of the eponymous gas giant. But are the workers happy? Nein."
 
-//3+8+4=15
+//3+8+7=18
 var/global/list/cloudnine_stuff = list(
 	//3 of a kind
 	/obj/item/airshield_projector,/obj/item/airshield_projector,/obj/item/airshield_projector,
@@ -1290,11 +1317,14 @@ var/global/list/cloudnine_stuff = list(
 	/obj/machinery/power/antiquesynth,
 	/obj/item/weapon/am_containment/decelerator,
 	/obj/structure/largecrate/secure/magmaw,
+	/obj/item/wasteos,
+	/obj/item/weapon/storage/toolbox/master,
+	/obj/item/weapon/antiaxe_kit,
 	)
 
 /obj/structure/closet/crate/internals/cloudnine/New()
 	..()
-	for(var/i = 1 to 5)
+	for(var/i = 1 to 6)
 		if(!cloudnine_stuff.len)
 			return
 		var/path = pick_n_take(cloudnine_stuff)
@@ -1377,9 +1407,12 @@ var/global/list/cloudnine_stuff = list(
 	icon_state = "airprojector"
 	var/list/projected = list()
 	var/max_proj = 6
+	var/list/ignore_types = list(/obj/structure/table, /obj/structure/rack, /obj/item/weapon/storage)
 
 /obj/item/airshield_projector/preattack(atom/target, mob/user , proximity)
 	var/turf/to_shield = get_turf(target)
+	if(is_type_in_list(target, ignore_types) && user.Adjacent(to_shield))
+		return FALSE
 	if(projected.len < max_proj && istype(to_shield) && (!locate(/obj/effect/airshield) in to_shield))
 		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
 		var/obj/effect/airshield/A = new(to_shield)
@@ -1393,7 +1426,7 @@ var/global/list/cloudnine_stuff = list(
 /obj/effect/airshield
 	name = "airshield"
 	desc = "A shield that allows only non-gasses to pass through."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "planner"
 	opacity = FALSE
 	mouse_opacity = FALSE
@@ -1451,6 +1484,7 @@ var/list/decelerators = list()
 	origin_tech = Tc_ENGINEERING + "=4"
 	sharpness = 1
 	force = 6
+	req_access = list(access_engine_equip)
 	var/mode = OMNIMODE_TOOL
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
@@ -1467,10 +1501,18 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 
 /obj/item/device/multitool/omnitool/preattack(atom/target, mob/user, proximity)
 	if(proximity)
+		if(is_type_in_list(target.type,omnitoolable))
+			target.attack_hand(user)
 		return FALSE //immediately continue if in reach
 	if(can_connect(target, user) && is_type_in_list(target.type,omnitoolable))
 		target.attack_hand(user)
 		return TRUE
+
+/mob/living/proc/omnitool_connect(atom/target)
+	var/obj/item/device/multitool/omnitool/O = get_active_hand()
+	if(istype(O))
+		return O.can_connect(target,src)
+	return FALSE
 
 /obj/item/device/multitool/omnitool/proc/can_connect(atom/target, mob/user)
 	var/client/C
@@ -1483,10 +1525,121 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 		C = M.client
 	if(!C)
 		return FALSE
+	if(!allowed(user))
+		return FALSE
 	return get_dist(target,src) <= C.view
 
 #undef OMNIMODE_WIRE
 #undef OMNIMODE_TOOL
+
+/obj/item/wasteos
+	name = "\improper Box of Waste-Os!(TM)"
+	desc = "Now with extra supermatter chunks! An ill-fated breakfast mixup at the cereal factory led to a discovery that you can suspend supermatter in chemical waste. My God, nobody deserves a mixup that bad."
+	w_class = W_CLASS_SMALL
+	icon = 'icons/obj/items_weird.dmi'
+	icon_state = "toxiccereal"
+	flags = FPRINT | OPENCONTAINER
+
+/obj/item/wasteos/New()
+	..()
+	create_reagents(60)
+	reagents.add_reagent(CHEMICAL_WASTE, 50)
+
+/obj/item/wasteos/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/reagent_containers/dropper) || istype(I, /obj/item/weapon/reagent_containers/syringe))
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		to_chat(user,"<span class='danger'>\The [I] hits something inside \the [src] and is eradicated!</span>")
+		qdel(I)
+		return
+
+	else
+		..()
+
+/obj/item/wasteos/on_reagent_change()
+	if(reagents && reagents.reagent_list.len > 1 + reagents.has_reagent(ETHANOL))
+	//If more than one, or two if ethanol present
+		reagents.isolate_any_reagent(list(CHEMICAL_WASTE, ETHANOL))
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+
+	if(!reagents.has_reagent(CHEMICAL_WASTE))
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+		visible_message("<span class='danger'>The chunks burn through through \the [src]!</span>")
+		var/turf/T = get_turf(src)
+		for(var/i = 1 to 3)
+			new /obj/item/supermatter_splinter(T)
+		qdel(src)
+	..()
+
+/obj/item/weapon/storage/toolbox/master
+	name = "master toolbox"
+	desc = "The mark of a true artisan engineer. Fully insulated, too! Use in hand to engage the safety grip. Can quick-gather materials."
+	icon_state = "toolbox_shiny"
+	item_state = "toolbox_shiny"
+	siemens_coefficient = 0
+	allow_quick_gather = TRUE
+	use_to_pickup = TRUE
+
+/obj/item/weapon/storage/toolbox/master/attack_self(mob/user)
+	cant_drop = !cant_drop
+	to_chat(user,"<span class='notice'>You [cant_drop ? "engage" : "disengage"] the safety grip.</span>")
+
+/obj/item/weapon/antiaxe_kit
+	name = "antimatter axe kit"
+	desc = "A matter inverter from the secret labs of the Cloud IX engineering facility. It will turn your ordinary axe into an antimatter axe."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	flags = FPRINT
+	siemens_coefficient = 0
+	w_class = W_CLASS_SMALL
+
+/obj/item/weapon/fireaxe/antimatter
+	name = "antimatter fireaxe"
+	desc = "Whatever exotic, entropic material this is made out of, it's definitely not antimatter. Use to inhale gasses and cool them, use again to release and exhale them. It seems to take up curiously little space."
+	icon = 'icons/obj/items_weird.dmi'
+	icon_state = "fireaxe-antimatter"
+	item_state = "fireaxe-antimatter0"
+	flags = FPRINT | TWOHANDABLE
+	w_class = W_CLASS_TINY
+	var/datum/gas_mixture/removed
+
+/obj/item/weapon/fireaxe/antimatter/update_wield(mob/living/carbon/user)
+	..()
+	item_state = "fireaxe-antimatter[wielded ? 1 : 0]"
+	force = wielded ? 18 : initial(force) //much less deadly than a matter fireaxe
+
+	var/turf/simulated/S = get_turf(loc)
+	var/datum/gas_mixture/air_contents = S.return_air()
+	var/zone/Z
+	if(wielded)
+		if(!istype(S))
+			to_chat(user,"<span class='warning'>\The [src] can't inhale here.</span>")
+			return
+		Z = S.zone
+		if(Z)
+			for(var/turf/T in Z.contents)
+				for(var/obj/effect/fire/F in T)
+					F.Extinguish()
+		removed = air_contents.remove_volume(20 * CELL_VOLUME)
+		if(removed && removed.temperature > T20C)
+			removed.temperature = T20C
+
+	else
+		if(!removed)
+			return //nothing to exhale
+		if(istype(S))
+			air_contents.merge(removed)
+		qdel(removed)
+		removed = null
+	visible_message("<span class='sinister'>\The [src] [wielded ? "in" : "ex"]hales.</span>")
+	playsound(loc, 'sound/effects/spray.ogg', 50, 1)
+	var/image/void = image('icons/effects/effects.dmi',user ? user : src,"bhole3")
+	flick_overlay(void, clients_in_moblist(view(7,loc)), 1 SECONDS)
+	void.plane = ABOVE_HUMAN_PLANE
+	if(user)
+		user.delayNextAttack(2 SECONDS)
+		user.update_inv_hands()
+
 
 //Mystery mob cubes//////////////
 
@@ -1629,11 +1782,3 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	for(var/i = 1 to 2)
 		var/bootlegDrink = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/drinks))
 		new bootlegDrink(src)
-
-
-//Restock//////////////////////
-
-/obj/structure/vendomatpack/trader
-	name = "trader supply recharge pack"
-	targetvendomat = /obj/machinery/vending/trader
-	icon_state = "sale"

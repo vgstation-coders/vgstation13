@@ -56,6 +56,8 @@ var/list/potential_bonus_items = list(
 	initroletype = /datum/role/vox_raider
 	logo_state = "vox-logo"
 	hud_icons = list("vox-logo")
+	default_admin_voice = "Vox Shoal"
+	admin_voice_style = "vox"
 
 	var/time_left = (60 MINUTES)/10
 	var/completed = FALSE

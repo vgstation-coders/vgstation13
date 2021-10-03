@@ -21,6 +21,10 @@
 
 	var/obj/item/clothing/glasses/stored_glasses = null
 	var/glasses_fit = FALSE
+
+	var/my_dark_plane_alpha_override
+	var/my_dark_plane_alpha_override_value
+
 /*
 SEE_SELF  // can see self, no matter what
 SEE_MOBS  // can see all mobs, no matter what
@@ -110,7 +114,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 
 	glasses_fit = TRUE
@@ -171,7 +175,7 @@ var/list/science_goggles_wearers = list()
 		for (var/mob/living/L in infected_contact_mobs)
 			if (L.pathogen)
 				M.client.images |= L.pathogen
-		for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+		for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 			if (C.pathogen)
 				M.client.images |= C.pathogen
 		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
@@ -185,7 +189,7 @@ var/list/science_goggles_wearers = list()
 		M.client.images -= I.pathogen
 	for (var/mob/living/L in infected_contact_mobs)
 		M.client.images -= L.pathogen
-	for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+	for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 		M.client.images -= C.pathogen
 	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 		M.client.images -= C.pathogen
@@ -498,6 +502,8 @@ var/list/science_goggles_wearers = list()
 	eyeprot = -2 //prepare for your eyes to get shit on
 
 	glasses_fit = TRUE
+	my_dark_plane_alpha_override = "thermals"
+	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/thermal/emp_act(severity)
 	if(istype(src.loc, /mob/living/carbon/human))
@@ -646,8 +652,8 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/enable()
 	if (istype(emitter))
-		emitter.lazy_register_event(/lazy_event/on_before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
-		emitter.lazy_register_event(/lazy_event/on_after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
+		emitter.register_event(/event/before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.register_event(/event/after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 	update_emitter()
 
 /obj/item/clothing/glasses/emitter/proc/disable()
@@ -655,8 +661,8 @@ var/list/science_goggles_wearers = list()
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.lazy_unregister_event(/lazy_event/on_before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
-		emitter.lazy_unregister_event(/lazy_event/on_after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
+		emitter.unregister_event(/event/before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.unregister_event(/event/after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 		emitter = null
 
 /obj/item/clothing/glasses/emitter/process()

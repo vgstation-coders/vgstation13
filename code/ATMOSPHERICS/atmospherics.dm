@@ -354,7 +354,7 @@ Pipelines + Other Objects -> Pipe network
 		L.ventcrawl_layer = src.piping_layer
 
 /obj/machinery/atmospherics/relaymove(mob/living/user, direction)
-	if(!(direction & initialize_directions)) //can't go in a way we aren't connecting to
+	if(user.loc != src || !(direction & initialize_directions)) //can't go in a way we aren't connecting to
 		return
 
 	var/obj/machinery/atmospherics/target_move = findConnecting(direction, user.ventcrawl_layer)

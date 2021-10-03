@@ -71,6 +71,23 @@ var/global/gourmonger_saturation = 0
 	else if(kcalPower > 1000)
 		to_chat(user, "<span class='notice'>The [src] is even fatter than usual.</span>")
 
+/mob/living/simple_animal/hostile/gourmonger/attackby(obj/W, mob/user)
+	..()
+	if(!hangry && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
+		handFeed(W, user)
+
+/mob/living/simple_animal/hostile/gourmonger/proc/handFeed(var/obj/item/weapon/reagent_containers/food/snacks/F, mob/user)
+	if(currentlyMunching)
+		to_chat(user, "<span class='info'>\The [src] is busy eating something else.</span>")
+		return
+	eatFood(F)
+	if(F.gcDestroyed)
+		LoseTarget()	//Functions as a reset too, in case they're fixated on something out of their reach or whatever
+		if(prob(5))
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+
 /mob/living/simple_animal/hostile/gourmonger/CanAttack(var/atom/the_target) //My hands are tied. I swear I had a reason for this copy paste. It also trims some weight from targeting.
 	if(currentlyMunching)
 		return 0
@@ -93,8 +110,9 @@ var/global/gourmonger_saturation = 0
 					return 0
 		if((istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
-		if(friends.Find(L))
-			return 0
+		for(var/datum/weakref/ref in friends)
+			if (ref.get() == L)
+				return 0
 		if(!L.stat && !hangry)	//So we attack corpses but not living creatures unless we're starving
 			return 0
 		if(sniffTarget)	//Why are we running across the station if there's food right in front of us?
@@ -205,12 +223,14 @@ var/global/gourmonger_saturation = 0
 				..()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/munchOn(var/atom/T, var/munchTime = 3)
+	if(currentlyMunching)
+		return FALSE
 	flick("gourmonger_eat", src)	//This is a 2.8 second animation
 	currentlyMunching = TRUE
 	canmove = 0
 	for(var/i = 0, i<munchTime, i++)
 		if(T.gcDestroyed)
-			target = null
+			LoseTarget()
 			currentlyMunching = FALSE
 			canmove = 1
 			return
@@ -229,6 +249,8 @@ var/global/gourmonger_saturation = 0
 	toEat.reagents.clear_reagents()
 	eatOutcome(nValue, nValue/2)
 	toEat.after_consume(src)
+	if(!toEat.gcDestroyed)
+		qdel(toEat)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/eatCorpse(var/mob/living/L)
 	if(ishuman(L))
@@ -333,7 +355,7 @@ var/global/gourmonger_saturation = 0
 		stuckTurf = null
 	else if(beenStuckCount >= 10)	//Aight fuck this we're finding a new target
 		sniffTarget = null
-		target = null
+		LoseTarget()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/chargeThrough(var/turf/cT, var/cDir)
 	if(istype(cT, /turf/simulated/wall))

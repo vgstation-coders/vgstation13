@@ -1,6 +1,7 @@
 // Clickable stat() button.
 /obj/effect/statclick
 	var/target
+	icon = null
 
 /obj/effect/statclick/New(text, target)
 	name = text
@@ -99,6 +100,7 @@
 		if("Vote")
 			debug_variables(vote)
 			feedback_add_details("admin_verb","DprocessVote")
+
 	message_admins("Admin [key_name_admin(usr)] is debugging the [controller] controller.")
 
 /client/proc/rigvote()

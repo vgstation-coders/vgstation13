@@ -11,7 +11,7 @@
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
-	//mouse_opacity = 2
+	mouse_opacity = 1
 
 	var/health = 10
 	var/max_health = 100
@@ -42,20 +42,20 @@
 		var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
 		unlock_atom(V)
 
-	lazy_unregister_event(/lazy_event/on_before_move, src, /obj/effect/plantsegment/proc/before_moving)
-	lazy_unregister_event(/lazy_event/on_after_move, src, /obj/effect/plantsegment/proc/after_moving)
+	unregister_event(/event/before_move, src, /obj/effect/plantsegment/proc/before_moving)
+	unregister_event(/event/after_move, src, /obj/effect/plantsegment/proc/after_moving)
 	before_moving()
 	..()
 
 /obj/effect/plantsegment/proc/before_moving()
 	for(var/direc in cardinal)
 		var/turf/T = get_step(src, direc)
-		T.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
+		T.unregister_event(/event/density_change, src, .proc/proxDensityChange)
 
 /obj/effect/plantsegment/proc/after_moving()
 	for(var/direc in cardinal)
 		var/turf/T = get_step(src, direc)
-		T.lazy_register_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
+		T.register_event(/event/density_change, src, .proc/proxDensityChange)
 
 /obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
 	..()
@@ -91,8 +91,8 @@
 		health = max_health
 		mature_time = 0
 
-	lazy_register_event(/lazy_event/on_before_move, src, /obj/effect/plantsegment/proc/before_moving)
-	lazy_register_event(/lazy_event/on_after_move, src, /obj/effect/plantsegment/proc/after_moving)
+	register_event(/event/before_move, src, /obj/effect/plantsegment/proc/before_moving)
+	register_event(/event/after_move, src, /obj/effect/plantsegment/proc/after_moving)
 	after_moving()
 
 	spawn(1) // Plants will sometimes be spawned in the turf adjacent to the one they need to end up in, for the sake of correct dir/etc being set.

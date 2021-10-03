@@ -62,6 +62,8 @@
 
 //Aiming at the target mob.
 /obj/item/weapon/gun/proc/Aim(var/mob/living/M)
+	if (M.alpha <= 1)
+		return // no abusing aiming to reveal cloaked individuals. Why do cloaking cloaks set alpha to specifically 1 anyway? The human eye can't see that 'cept maybe on a fully white background.
 	if(!target || !(M in target))
 		lock_time = world.time
 		if(target && !automatic) //If they're targeting someone and they have a non automatic weapon.

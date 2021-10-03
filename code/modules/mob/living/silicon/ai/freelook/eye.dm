@@ -91,7 +91,6 @@
 
 /client/proc/AIMove(n, direct, var/mob/living/silicon/ai/user)
 
-
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 

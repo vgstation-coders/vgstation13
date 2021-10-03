@@ -5770,7 +5770,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/machinery/computer/security/advanced,
+/obj/machinery/computer/security,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -7530,7 +7530,7 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/machinery/computer/security/advanced,
+/obj/machinery/computer/security,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -32966,7 +32966,7 @@
 	},
 /area/bridge)
 "bkH" = (
-/obj/structure/closet/fireaxecabinet{
+/obj/structure/fireaxecabinet{
 	pixel_y = -32
 	},
 /turf/simulated/floor{
@@ -58833,7 +58833,6 @@
 	pixel_x = 1;
 	pixel_y = -1
 	},
-/obj/item/weapon/circuitboard/security/advanced,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
@@ -66569,7 +66568,7 @@
 /turf/simulated/floor,
 /area/engineering/atmos_control)
 "cuF" = (
-/obj/structure/closet/fireaxecabinet{
+/obj/structure/fireaxecabinet{
 	pixel_y = -32
 	},
 /obj/machinery/suit_storage_unit/atmos,
@@ -69337,12 +69336,6 @@
 	},
 /area/science/xenobiology)
 "czI" = (
-/obj/machinery/requests_console{
-	department = "Science";
-	departmentType = 2;
-	name = "Science Requests Console";
-	pixel_y = 30
-	},
 /obj/machinery/camera{
 	c_tag = "Xenobiology Module North"
 	},
@@ -69351,6 +69344,12 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
+	},
+/obj/machinery/requests_console{
+	department = "Xenobiology";
+	departmentType = 2;
+	name = "Xenobiology Requests Console";
+	pixel_y = 30
 	},
 /turf/simulated/floor{
 	icon_state = "white"

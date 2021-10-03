@@ -36,7 +36,7 @@
 	if(!message_mommi)
 		message_mommi = message_robot
 
-/datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE)
+/datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE, var/arguments)
 	. = TRUE
 	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
 		return FALSE
@@ -47,9 +47,7 @@
 	msg = replace_pronoun(user, msg)
 
 	if(isliving(user))
-		var/mob/living/L = user
-		for(var/obj/item/weapon/implant/I in L)
-			I.trigger(key, L)
+		user.invoke_event(/event/emote, list("emote" = key, "source" = user))
 
 	if(!msg)
 		return
@@ -74,9 +72,10 @@
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
-		for (var/mob/O in viewers(world.view, user))
-			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
-				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
+		for(var/z0 in GetOpenConnectedZlevels(user))
+			for (var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
+				if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
+					O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
@@ -201,14 +200,14 @@
 /mob/proc/audible_cough()
 	emote("coughs", message = TRUE, ignore_status = TRUE)
 
-/mob/proc/audible_scream()
+/mob/proc/audible_scream(var/arguments)
 	if(isvox(src) || isskelevox(src))
-		emote("shrieks", message = TRUE, ignore_status = TRUE)
+		emote("shrieks", message = TRUE, ignore_status = TRUE, arguments = arguments)
 		return
 	if(isinsectoid(src))
-		emote("chitters", message = TRUE, ignore_status = TRUE)
+		emote("chitters", message = TRUE, ignore_status = TRUE, arguments = arguments)
 		return
 	else
-		emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
+		emote("screams", message = TRUE, ignore_status = TRUE, arguments = arguments) // So it's forced
 
 

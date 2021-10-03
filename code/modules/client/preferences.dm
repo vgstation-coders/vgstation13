@@ -24,6 +24,7 @@ var/global/list/special_roles = list(
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
+	TIMEAGENT		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER   = 1,
 )
@@ -44,6 +45,7 @@ var/global/list/special_roles = list(
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
+	TIMEAGENT		= 1,
 	ROLE_MINOR		= 1,
 	ROLE_PRISONER	= 1,
 )
@@ -456,7 +458,7 @@ var/const/MAX_SAVE_SLOTS = 16
 			return "Low"
 	return "NEVER"
 
-/datum/preferences/proc/SetChoices(mob/user, limit = 15, list/splitJobs = list("Chief Engineer", "Head of Security"), widthPerColumn = 295, height = 620)
+/datum/preferences/proc/SetChoices(mob/user, limit = 16, list/splitJobs = list("Chief Engineer", "Head of Security"), widthPerColumn = 295, height = 620)
 	if(!job_master)
 		return
 
@@ -710,9 +712,10 @@ var/const/MAX_SAVE_SLOTS = 16
 
 
 /datum/preferences/proc/GetPlayerAltTitle(datum/job/job)
-	return player_alt_titles.Find(job.title) > 0 \
-		? player_alt_titles[job.title] \
-		: job.title
+	var/alt_title = player_alt_titles[job.title]
+	if(!alt_title || !(alt_title in job.alt_titles))
+		return job.title
+	return alt_title
 
 /datum/preferences/proc/SetPlayerAltTitle(datum/job/job, new_title)
 	// remove existing entry

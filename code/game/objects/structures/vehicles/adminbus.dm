@@ -11,6 +11,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
+	ghost_can_rotate = FALSE
 	var/can_move=1
 	var/list/passengers = list()
 	var/unloading = 0
@@ -206,9 +207,9 @@
 	update_lightsource()
 	handle_mob_bumping()
 	if(warp)
-		warp.forceMove(loc)
+		warp.forceMove(loc, glide_size_override = glide_size)
 	if(busjuke)
-		busjuke.forceMove(loc)
+		busjuke.forceMove(loc, glide_size_override = glide_size)
 		busjuke.change_dir(dir)
 		if(busjuke.icon_state)
 			busjuke.repack()
@@ -218,17 +219,17 @@
 		var/atom/A = passengers[i]
 		if(isliving(A))
 			var/mob/living/M = A
-			M.forceMove(loc)
+			M.forceMove(loc, glide_size_override = glide_size)
 		else if(isbot(A))
 			var/obj/machinery/bot/B = A
-			B.forceMove(loc)
+			B.forceMove(loc, glide_size_override = glide_size)
 	for(var/obj/structure/hookshot/H in hookshot)
-		H.forceMove(get_step(H,src.dir))
+		H.forceMove(get_step(H,src.dir), glide_size_override = glide_size)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/update_lightsource()
 	var/turf/T = get_step(src,src.dir)
 	if(T.opacity)
-		lightsource.forceMove(T)
+		lightsource.forceMove(T, glide_size_override = glide_size)
 		switch(roadlights)							//if the bus is right against a wall, only the wall's tile is lit
 			if(0)
 				if(lightsource.light_range != 0)
@@ -239,7 +240,7 @@
 	else
 		T = get_step(T,src.dir)						//if there is a wall two tiles in front of the bus, the lightsource is right in front of the bus, though weaker
 		if(T.opacity)
-			lightsource.forceMove(get_step(src,src.dir))
+			lightsource.forceMove(get_step(src,src.dir), glide_size_override = glide_size)
 			switch(roadlights)
 				if(0)
 					if(lightsource.light_range != 0)
@@ -251,7 +252,7 @@
 					if(lightsource.light_range != 2)
 						lightsource.set_light(2)
 		else
-			lightsource.forceMove(T)
+			lightsource.forceMove(T, glide_size_override = glide_size)
 			switch(roadlights)						//otherwise, the lightsource position itself two tiles in front of the bus and with regular light_range
 				if(0)
 					if(lightsource.light_range != 0)
@@ -424,24 +425,11 @@
 					to_chat(user, "<span class='notice'>You may not climb into \the [src] while its door is closed.</span>")
 					return
 
-/obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD(var/mob/M)
-	M.DisplayUI("Adminbus")
-	/*
-	if(!M || !(M.hud_used))
-		return
-
-	M.hud_used.adminbus_hud()
-	update_rearview()
-	*/
+/obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD(var/mob/user)
+	user.DisplayUI("Adminbus")
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/remove_HUD(var/mob/M)
 	M.HideUI("Adminbus")
-	/*
-	if(!M || !(M.hud_used))
-		return
-
-	M.hud_used.remove_adminbus_hud()
-	*/
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/update_rearview()
 	if(occupant)
@@ -506,7 +494,7 @@
 		H.max_distance = max_distance
 		H.abus = abus
 	if(max_distance > 0)
-		forceMove(get_step(src,toward))
+		forceMove(get_step(src,toward), glide_size_override = glide_size)
 		sleep(2)
 		var/obj/machinery/singularity/S2 = hook_throw(toward)
 		if(S2)
@@ -517,7 +505,7 @@
 		return null
 
 /obj/structure/hookshot/proc/hook_back()
-	forceMove(get_step_towards(src,abus))
+	forceMove(get_step_towards(src,abus), glide_size_override = glide_size)
 	max_distance++
 	if(max_distance >= 7)
 		abus.hookshot -= src
@@ -535,7 +523,7 @@
 				var/mob/living/M = abus.occupant
 				M.UpdateUIElementIcon(/obj/abstract/mind_ui_element/hoverable/adminbus_hook)
 			return
-	forceMove(get_step_towards(src,abus))
+	forceMove(get_step_towards(src,abus), glide_size_override = glide_size)
 	max_distance++
 	if(max_distance >= 7)
 		abus.hookshot -= src
@@ -582,7 +570,7 @@
 /obj/structure/singulo_chain/proc/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)//I don't see how this could be null but a sanity check won't hurt
-		src.forceMove(parent)
+		forceMove(parent, glide_size_override = glide_size)
 	if(child)
 		if(get_dist(src,child) > 1)
 			child.move_child(T)
@@ -593,11 +581,11 @@
 /obj/structure/singulo_chain/anchor/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)
-		src.forceMove(parent)
+		forceMove(parent, glide_size_override = glide_size)
 	else
 		dir = get_dir(T,src)
 	if(target)
-		target.forceMove(src.loc)
+		target.forceMove(loc, glide_size_override = glide_size)
 
 /obj/structure/singulo_chain/cultify()
 	return
@@ -663,14 +651,16 @@
 		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		M.flags |= INVULNERABLE
 		bus.add_HUD(M)
+		M.register_event(/event/living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
 /datum/locking_category/adminbus/unlock(var/atom/movable/AM)
 	. = ..()
 	if (isliving(AM))
 		var/mob/living/M = AM
 		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
-		bus.remove_HUD(M)
 		M.flags &= ~INVULNERABLE
+		bus.remove_HUD(M)
+		M.unregister_event(/event/living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
 /obj/structure/bed/chair/vehicle/adminbus/acidable()
 	return 0

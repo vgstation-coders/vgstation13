@@ -49,6 +49,24 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "pepper"
 
+/obj/effect/decal/cleanable/crumbs
+	name = "crumbs"
+	desc = "some food remains"
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	reagent = NUTRIMENT
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "crumbs"
+	plane = OBJ_PLANE
+	layer = TABLE_LAYER+0.1
+	age = 3
+
+/obj/effect/decal/cleanable/crumbs/New()
+	..()
+	pixel_x = rand (-4,4) * PIXEL_MULTIPLIER
+	pixel_y = rand (-4,4) * PIXEL_MULTIPLIER
+
 /obj/effect/decal/cleanable/greenglow
 	name = "glowing goo"
 	desc = "Jeez. I hope that's not for lunch."
@@ -171,7 +189,6 @@
 
 	name = "dry [src.name]"
 	icon_state = "vomit_[rand(1,4)]_dry"
-	mouse_opacity = 0
 	amount = 0
 	qdel(reagents)
 	reagents = null
@@ -201,7 +218,7 @@
 	anchored = 1
 	reagent = EGG_YOLK
 	icon = 'icons/effects/tomatodecal.dmi'
-	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
+	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3", "smashed_egg4")
 
 /obj/effect/decal/cleanable/pie_smudge //honk
 	name = "smashed pie"
@@ -238,6 +255,7 @@
 	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "campfire_burnt"
+	mouse_opacity = 1
 
 /obj/effect/decal/cleanable/clay_fragments
 	name = "clay fragments"
@@ -246,8 +264,23 @@
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "clay_fragments"
 	anchored = 0
+	mouse_opacity = 1
 
 /obj/effect/decal/cleanable/clay_fragments/New()
+	..()
+	pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
+	pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
+
+/obj/effect/decal/cleanable/broken_plate
+	name = "broken plate"
+	desc = "Pieces from a broken plate."
+	gender = PLURAL
+	icon = 'icons/obj/trash.dmi'
+	icon_state = "brokenplate"
+	anchored = 0
+	mouse_opacity = 1
+
+/obj/effect/decal/cleanable/broken_plate/New()
 	..()
 	pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
@@ -259,7 +292,6 @@
 	icon = 'icons/effects/tile_effects.dmi'
 	icon_state = "tile_soot"
 	anchored = 1
-	mouse_opacity = 0
 
 	persistence_type = null //Okay, this one is probably too much. A shitton of these get made every plasmaflood and it's not very interesting to clean up.
 

@@ -286,7 +286,7 @@
 /obj/structure/closet/crate/secure/anti_tamper/Destroy()
 	if(locked)
 		visible_message("<span class = 'warning'>Something bursts open from within \the [src]!</span>")
-		var/datum/effect/effect/system/smoke_spread/chem/S = new //Surprise!
+		var/datum/effect/system/smoke_spread/chem/S = new //Surprise!
 		S.attach(get_turf(src))
 		S.chemholder.reagents.add_reagent(CAPSAICIN, 40)
 		S.chemholder.reagents.add_reagent(CONDENSEDCAPSAICIN, 16)
@@ -480,9 +480,10 @@
 	AM.forceMove(src)
 	return 1
 
-/obj/structure/closet/crate/attack_hand(mob/user as mob)
+/obj/structure/closet/crate/attack_hand(var/mob/user)
 	if(!Adjacent(user))
 		return
+	add_fingerprint(user)
 	if(opened)
 		close()
 	else

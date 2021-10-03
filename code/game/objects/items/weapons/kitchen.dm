@@ -29,12 +29,64 @@
 	shrapnel_amount = 1
 	shrapnel_size = 2
 	shrapnel_type = /obj/item/projectile/bullet/shrapnel
+	var/loaded_food = ""
+	var/image/food_overlay
+	var/food_type
 
 /obj/item/weapon/kitchen/utensil/New()
 	. = ..()
 
 	if (prob(60))
 		src.pixel_y = rand(0, 4) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/kitchen/utensil/attack_self(var/mob/living/carbon/user)
+	if(loaded_food)
+		attack(user,user)
+
+/obj/item/weapon/kitchen/utensil/proc/load_food(var/obj/item/weapon/reagent_containers/food/snacks/snack, var/mob/user)
+	if(!istype(snack) || !istype(user))
+		return
+
+	if(loaded_food)
+		to_chat(user, "<span class='notice'>There's already [loaded_food] on your [src].</span>")
+		return
+
+	if(snack.wrapped)
+		to_chat(user, "<span class='notice'>You can't eat packaging!</span>")
+		return
+
+	if(snack.reagents.total_volume)
+		loaded_food = snack.name
+
+		load_food_appearance(snack)
+
+		food_type = snack.type
+
+		if(snack.reagents.total_volume > snack.bitesize)
+			snack.reagents.trans_to(src, snack.bitesize)
+		else
+			snack.reagents.trans_to(src, snack.reagents.total_volume)
+			snack.bitecount++
+			snack.after_consume(user)
+	return 1
+
+/obj/item/weapon/kitchen/utensil/proc/load_food_appearance(var/obj/item/weapon/reagent_containers/food/snacks/snack)
+	return
+
+/obj/item/weapon/kitchen/utensil/proc/feed_to(mob/living/carbon/user, mob/living/carbon/target)
+	if (!loaded_food)
+		return
+	var/obj/item/weapon/reagent_containers/food/snacks/snack = food_type
+	if (initial(snack.food_flags) & FOOD_LIQUID)
+		playsound(target.loc,'sound/items/drink.ogg', 10, 1)
+	else
+		playsound(target.loc,'sound/items/eatfood.ogg', 10, 1)
+	reagents.reaction(target, INGEST)
+	reagents.trans_to(target.reagents, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+	overlays -= food_overlay
+	qdel(food_overlay)
+	loaded_food = ""
+	food_overlay = null
 
 /*
  * Spoons
@@ -48,11 +100,66 @@
 	var/bendable = TRUE
 	var/bent = FALSE
 
+/obj/item/weapon/kitchen/utensil/spoon/New()
+	..()
+	reagents = new(10)
+	reagents.my_atom = src
+
+/obj/item/weapon/kitchen/utensil/spoon/examine(mob/user)
+	..()
+	if(loaded_food)
+		user.show_message("It has a spoonful of [loaded_food] on it.")
+
+/obj/item/weapon/kitchen/utensil/spoon/load_food_appearance(var/obj/item/weapon/reagent_containers/food/snacks/snack)
+	food_overlay = image(icon,src,"spoon-fillings")
+	var/newcolor
+	if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
+		if (plated_food.ingredients.len)
+			var/obj/item/weapon/reagent_containers/food/snacks/ingredient = pick(plated_food.ingredients)
+			newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIcon(ingredient, ingredient.dir, 0), 1, 1)
+		else
+			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+	else
+		newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+	food_overlay.color = newcolor
+	overlays += food_overlay
+
 /obj/item/weapon/kitchen/utensil/spoon/attack_self(mob/user)
-	if(!bendable || !(M_TK in user.mutations))
-		visible_message("[user] holds up [src] and stares at it intently. What a weirdo.")
-		return
-	bend(user)
+	if(!loaded_food)
+		if(!bendable || !(M_TK in user.mutations))
+			visible_message("[user] holds up [src] and stares at it intently. What a weirdo.")
+		else
+			bend(user)
+	else
+		..()
+
+/obj/item/weapon/kitchen/utensil/spoon/attack(var/mob/living/carbon/M, var/mob/living/carbon/user)
+	if(!istype(M) || !istype(user))
+		return ..()
+
+	if(can_operate(M, user, src))
+		if(do_surgery(M, user, src))
+			return
+
+	if (loaded_food)
+		reagents.update_total()
+		if(!M.hasmouth())
+			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
+			return
+		if(M == user)
+			user.visible_message("<span class='notice'>[user] eats a delicious spoonful of [loaded_food]!</span>")
+			feed_to(user, user)
+			return
+		else
+			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious spoonful of [loaded_food].</span>")
+			if(do_mob(user, M))
+				if(!loaded_food)
+					return
+
+				user.visible_message("<span class='notice'>[user] feeds [M] a delicious spoonful of [loaded_food]!</span>")
+				feed_to(user, M)
+				return
 
 /obj/item/weapon/kitchen/utensil/spoon/proc/bend(mob/user)
 	visible_message(message = "<span class='warning'>Whoa, [user] looks at [src] and it bends like clay!</span>")
@@ -79,8 +186,6 @@
 	icon_state = "fork"
 	sharpness_flags = SHARP_TIP
 	sharpness = 0.6
-	var/loaded_food_name
-	var/image/loaded_food
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/kitchen/utensil/fork/New()
@@ -88,11 +193,7 @@
 	reagents = new(10)
 	reagents.my_atom = src
 
-/obj/item/weapon/kitchen/utensil/fork/attack_self(var/mob/living/carbon/user)
-	if(loaded_food)
-		attack(user,user)
-
-/obj/item/weapon/kitchen/utensil/fork/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/weapon/kitchen/utensil/fork/attack(var/mob/living/carbon/M, var/mob/living/carbon/user)
 	if(!istype(M) || !istype(user))
 		return ..()
 
@@ -103,22 +204,22 @@
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
-	if (src.loaded_food)
+	if (loaded_food)
 		reagents.update_total()
 		if(!M.hasmouth())
 			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
 			return
 		if(M == user)
-			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
+			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food]!</span>")
 			feed_to(user, user)
 			return
 		else
-			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
+			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food].</span>")
 			if(do_mob(user, M))
 				if(!loaded_food)
 					return
 
-				user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
+				user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food]!</span>")
 				feed_to(user, M)
 				return
 	else
@@ -130,51 +231,23 @@
 /obj/item/weapon/kitchen/utensil/fork/examine(mob/user)
 	..()
 	if(loaded_food)
-		user.show_message("It has a forkful of [loaded_food_name] on it.")
+		user.show_message("It has a forkful of [loaded_food] on it.")
 
-/obj/item/weapon/kitchen/utensil/fork/proc/load_food(obj/item/weapon/reagent_containers/food/snacks/snack, mob/user)
-	if(!snack || !user || !istype(snack) || !istype(user))
-		return
-
-	if(!snack.edible_by_utensil)
-		to_chat(user, "<span class='notice'>It wouldn't make sense to put \the [snack.name] on a fork.</span>")
-		return
-
-	if(snack.food_flags & FOOD_LIQUID)
-		to_chat(user, "<span class='notice'>You can't eat that with a fork.</span>")
-		return
-
-	if(loaded_food)
-		to_chat(user, "<span class='notice'>You already have food on \the [src].</span>")
-		return
-
-	if(snack.wrapped)
-		to_chat(user, "<span class='notice'>You can't eat packaging!</span>")
-		return
-
-	if(snack.reagents.total_volume)
-		loaded_food_name = snack.name
-		var/icon/food_to_load = getFlatIcon(snack)
-		food_to_load.Scale(16,16)
-		loaded_food = image(food_to_load)
-		loaded_food.pixel_x = 8 * PIXEL_MULTIPLIER + src.pixel_x
-		loaded_food.pixel_y = 15 * PIXEL_MULTIPLIER + src.pixel_y
-		src.overlays += loaded_food
-		if(snack.reagents.total_volume > snack.bitesize)
-			snack.reagents.trans_to(src, snack.bitesize)
+/obj/item/weapon/kitchen/utensil/fork/load_food_appearance(var/obj/item/weapon/reagent_containers/food/snacks/snack)
+	var/icon/food_to_load
+	if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
+		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
+		if (plated_food.ingredients.len)
+			food_to_load = getFlatIcon(pick(plated_food.ingredients)) // So the plate doesn't appear on the fork
 		else
-			snack.reagents.trans_to(src, snack.reagents.total_volume)
-			snack.bitecount++
-			snack.after_consume(user)
-	return 1
-
-/obj/item/weapon/kitchen/utensil/fork/proc/feed_to(mob/living/carbon/user, mob/living/carbon/target)
-	reagents.reaction(target, INGEST)
-	reagents.trans_to(target.reagents, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
-	overlays -= loaded_food
-	qdel(loaded_food)
-	loaded_food = null
-	loaded_food_name = null
+			food_to_load = getFlatIcon(snack)
+	else
+		food_to_load = getFlatIcon(snack)
+	food_to_load.Scale(16,16)
+	food_overlay = image(food_to_load)
+	food_overlay.pixel_x = 8 * PIXEL_MULTIPLIER + pixel_x
+	food_overlay.pixel_y = 17 * PIXEL_MULTIPLIER + pixel_y
+	overlays += food_overlay
 
 /obj/item/weapon/kitchen/utensil/fork/plastic
 	name = "plastic fork"
@@ -182,26 +255,29 @@
 	icon_state = "pfork"
 	melt_temperature = MELTPOINT_PLASTIC
 
+/obj/item/weapon/kitchen/utensil/fork/teflon
+	name = "teflon fork"
+	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
+	icon_state = "tfork"
+	melt_temperature = MELTPOINT_PLASTIC
+
 /*
  * Knives
  */
 /obj/item/weapon/kitchen/utensil/knife
 	name = "small knife"
-	desc = "Can cut through any food."
+	desc = "A round tipped knife used to cut food food."
 	icon_state = "smallknife"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 10.0
+	force = 5.0
 	throwforce = 10.0
 	sharpness = 1.2
-	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	sharpness_flags = SHARP_BLADE
 	melt_temperature = MELTPOINT_STEEL
 	hitsound = 'sound/weapons/bladeslice.ogg'
 
-/obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (SUICIDE_ACT_BRUTELOSS)
+/obj/item/weapon/kitchen/utensil/knife/load_food(var/obj/item/weapon/reagent_containers/food/snacks/snack, var/mob/user)
+	return
 
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
@@ -226,11 +302,12 @@
 	icon_state = "knifenazi"
 	siemens_coefficient = 1
 	sharpness = 1.5
-	force = 10.0
+	force = 10
 	throwforce = 30
 	throw_speed = 3
 	throw_range = 7
 	w_class = W_CLASS_SMALL
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	starting_materials = list(MAT_IRON = 12000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
@@ -248,8 +325,9 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.5
-	force = 10.0
+	force = 10
 	w_class = W_CLASS_MEDIUM
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
@@ -278,12 +356,6 @@
 			qdel(src)
 			return
 
-/obj/item/weapon/kitchen/utensil/knife/large/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-	return (SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"
 	desc = "The unearthly energies that once powered this blade are now dormant."
@@ -303,7 +375,7 @@
 	siemens_coefficient = 1
 	sharpness = 1.2
 	sharpness_flags = SHARP_BLADE
-	force = 15.0
+	force = 15
 	w_class = W_CLASS_SMALL
 	throwforce = 8.0
 	throw_speed = 3
@@ -320,8 +392,8 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
 	armor_penetration = 50
-	force = 25.0
-	throwforce = 15.0
+	force = 25
+	throwforce = 15
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
 	if(istype(hit_atom, /mob/living))
@@ -365,8 +437,8 @@
 	desc = "Used to knock out the Bartender."
 	icon_state = "rolling_pin"
 	hitsound = "sound/weapons/smash.ogg"
-	force = 8.0
-	throwforce = 10.0
+	force = 8
+	throwforce = 10
 	throw_speed = 2
 	throw_range = 7
 	w_class = W_CLASS_MEDIUM

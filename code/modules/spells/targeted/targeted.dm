@@ -38,8 +38,10 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 		return 0
 	if(!(range == GLOBALCAST) && !(range == SELFCAST && target == user) && (options && !(target in options))) //Shouldn't be necessary but a good check in case of overrides
 		return 0
-	if(mind_affecting && !user.can_mind_interact(target))
-		return 0
+	if(ismob(target) && mind_affecting)
+		var/mob/M = target
+		if (!user.can_mind_interact(M.mind))
+			return 0
 	return !compatible_mobs.len || is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/choose_targets(mob/user = usr)
@@ -59,9 +61,9 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			if(!user || !user.mind || !user.mind.heard_before.len)
 				return
 			var/target_name = input(user, "Choose the target, from those whose voices you've heard before.", "Targeting") in user.mind.heard_before
-			var/mob/temp_target = user.mind.heard_before[target_name]
+			var/datum/mind/temp_target = user.mind.heard_before[target_name]
 			believed_name = target_name
-			targets += temp_target
+			targets += temp_target.current
 		else if((range == 0 || range == SELFCAST) && (spell_flags & INCLUDEUSER))
 			targets += user
 		else
@@ -82,8 +84,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 					continue
 				if(mind_affecting)
 					if(iscarbon(user))
-						var/mob/living/carbon/C = user
-						if(!C.can_mind_interact(M))
+						if(!M.mind || !user.can_mind_interact(M.mind))
 							continue
 				possible_targets += M
 

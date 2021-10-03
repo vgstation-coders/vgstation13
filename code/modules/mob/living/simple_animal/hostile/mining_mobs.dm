@@ -108,6 +108,9 @@
 	flag = "energy"
 	temperature = 50
 
+/mob/living/simple_animal/hostile/asteroid/basilisk/get_butchering_products()
+	return list(/datum/butchering_product/skin/basilisk)
+
 /mob/living/simple_animal/hostile/asteroid/basilisk/GiveTarget(var/new_target)
 	target = new_target
 	if(target != null)
@@ -207,11 +210,14 @@ obj/item/asteroid/basilisk_hide/New()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Burrow()//Begin the chase to kill the goldgrub in time
 	if(!alerted)
-		alerted = 1
+		alerted = TRUE
 		spawn(chase_time)
 			if(alerted)
-				visible_message("<span class='danger'>\The [src] burrows into the ground, vanishing from sight!</span>")
 				var/turf/T = get_turf(src)
+				if (istype(T, /turf/space))
+					alerted = FALSE
+					return
+				visible_message("<span class='danger'>\The [src] burrows into the ground, vanishing from sight!</span>")
 				forceMove(null)
 				T.ex_act(2)
 				spawn(rand(30 SECONDS,90 SECONDS))
@@ -280,6 +286,9 @@ obj/item/asteroid/basilisk_hide/New()
 	minimum_distance = 3
 	pass_flags = PASSTABLE
 	hostile_interest = 15 //Very persistent
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/get_butchering_products()
+	return list(/datum/butchering_product/hivelord_core)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
 	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
@@ -482,6 +491,9 @@ obj/item/asteroid/basilisk_hide/New()
 		new /obj/effect/goliath_tentacle/original(tturf)
 		ranged_cooldown = ranged_cooldown_cap
 	return
+
+/mob/living/simple_animal/hostile/asteroid/goliath/get_butchering_products()
+	return list(/datum/butchering_product/skin/goliath, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/hostile/asteroid/goliath/adjustBruteLoss(var/damage)
 	ranged_cooldown--
@@ -883,11 +895,11 @@ obj/item/asteroid/basilisk_hide/New()
 	holder_type = /obj/item/weapon/holder/animal/pillow
 	size = SIZE_SMALL
 	pacify_aura = TRUE
+	environment_smash_flags = 0
 	var/image/eyes
 
 /mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
 	pacify_aura = FALSE
-	environment_smash_flags = 0
 	response_help = "pets"
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)

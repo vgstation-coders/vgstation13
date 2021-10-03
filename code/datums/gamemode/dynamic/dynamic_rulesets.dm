@@ -79,8 +79,9 @@
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/dynamic_ruleset/proc/choose_candidates()
 	var/mob/M = pick(candidates)
-	assigned += M
-	candidates -= M
+	if (istype(M))
+		assigned += M
+		candidates -= M
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/proc/process()
@@ -124,9 +125,9 @@
 
 	var/threat = 0
 	if(midround)
-		threat = mode.midround_threat_level == 100 ? round(mode.midround_threat_level/10)+1 : 10
+		threat = mode.midround_threat_level != 100 ? round(mode.midround_threat_level/10)+1 : 10
 	else
-		threat = mode.threat_level == 100 ? round(mode.threat_level/10)+1 : 10
+		threat = mode.threat_level != 100 ? round(mode.threat_level/10)+1 : 10
 	if (enemies_count < required_enemies[threat] && !map.ignore_enemy_requirement(src))
 		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
 		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")

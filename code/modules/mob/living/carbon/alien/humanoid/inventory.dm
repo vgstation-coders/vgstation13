@@ -52,13 +52,13 @@
 		success = 1
 		slot = slot_r_store
 		update_inv_pockets()
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+		invoke_event(/event/unequipped, list(W))
 	else if (W == l_store)
 		l_store = null
 		success = 1
 		slot = slot_l_store
 		update_inv_pockets()
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+		invoke_event(/event/unequipped, list(W))
 	else
 		success = ..()
 

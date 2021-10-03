@@ -27,12 +27,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_bumping)
-		on_bumping.holder = null
-	if(on_bumped)
-		on_bumped.holder = null
-	if(on_touched)
-		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -62,18 +56,10 @@
 	attack_delayer = null
 	special_delayer = null
 	throw_delayer = null
-	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_bumping)
-	qdel(on_bumped)
-	qdel(on_touched)
-
-	on_bumping = null
-	on_bumped = null
-	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -230,24 +216,6 @@
 			if(client)
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
-		if (isshade(src) && gui_icons)
-			if(gui_icons.soulblade_bgLEFT)
-				qdel(gui_icons.soulblade_bgLEFT)
-				if(client)
-					client.screen -= gui_icons.soulblade_bgLEFT
-				gui_icons.soulblade_bgLEFT = null
-			if(gui_icons.soulblade_bloodbar)
-				qdel(gui_icons.soulblade_bloodbar)
-				if(client)
-					client.screen -= gui_icons.soulblade_bloodbar
-				gui_icons.soulblade_bloodbar = null
-			if(gui_icons.soulblade_coverLEFT)
-				qdel(gui_icons.soulblade_coverLEFT)
-				if(client)
-					client.screen -= gui_icons.soulblade_coverLEFT
-				gui_icons.soulblade_coverLEFT = null
-
-
 
 /mob/proc/cultify()
 	return
@@ -267,9 +235,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_bumping = new(owner = src)
-	on_bumped = new(owner = src)
-	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -409,21 +374,30 @@
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = 7)
 	if(world.time>resethearers)
 		sethearing()
-	var/location = get_holder_at_turf_level(src) || get_turf(src)
-	for(var/mob/virtualhearer/hearer in viewers(range, location))
-		var/mob/M
-		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
-			var/obj/machinery/hologram/holopad/holo = hearer.attached
-			if(holo.master)
-				M = holo.master
-		if(istype(hearer.attached, /mob))
-			M = hearer.attached
-		if(M)
-			if(M.client)
-				var/client/C = M.client
-				if(get_turf(src) in C.ObscuredTurfs)
-					continue
-		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
+	var/atom/location = get_holder_at_turf_level(src) || get_turf(src) // Holders are nicer than turfs, I guess
+	var/turf/T_loc = get_turf(location) // For getting the .z var, atoms don't have this by default
+	var/list/found_Zs = GetOpenConnectedZlevels(location) // Saves constantly calling it
+	for(var/z0 in found_Zs)
+		if(!found_Zs.len || abs(z0 - T_loc.z) <= range) // So we can get in with an empty list
+			var/atom/thing_to_see
+			if(!found_Zs.len || z0 == T_loc.z) // Now this is why we need the empty list
+				thing_to_see = location // Put that holder thingy to work, like the original version of this function did
+			else
+				thing_to_see = locate(T_loc.x,T_loc.y,z0) // If not on the same zlevel as it, just do it on turfs, location goes there if all else fails anyways.
+			for(var/mob/virtualhearer/hearer in viewers(range, thing_to_see)) // Rest is self explanatory from here
+				var/mob/M
+				if(istype(hearer.attached, /obj/machinery/hologram/holopad))
+					var/obj/machinery/hologram/holopad/holo = hearer.attached
+					if(holo.master)
+						M = holo.master
+				if(istype(hearer.attached, /mob))
+					M = hearer.attached
+				if(M)
+					if(M.client)
+						var/client/C = M.client
+						if(get_turf(src) in C.ObscuredTurfs)
+							continue
+				hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
 	for(var/mob/M in mob_list)
@@ -1395,9 +1369,6 @@ Use this proc preferably at the end of an equipment loadout
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
 
-	for (var/datum/action/camera/action_cam in actions)
-		action_cam.Remove(src)
-
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
 /mob/verb/DisableClick(argu = null as anything, sec = "" as text, number1 = 0 as num, number2 = 0 as num)
@@ -1587,10 +1558,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		lazy_invoke_event(/lazy_event/on_before_move)
+		invoke_event(/event/before_move)
 	dir = direction
-	lazy_invoke_event(/lazy_event/on_face)
-	lazy_invoke_event(/lazy_event/on_after_move)
+	invoke_event(/event/face)
+	invoke_event(/event/after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1612,9 +1583,9 @@ Use this proc preferably at the end of an equipment loadout
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	lazy_invoke_event(/lazy_event/on_before_move)
+	invoke_event(/event/before_move)
 	..()
-	lazy_invoke_event(/lazy_event/on_after_move)
+	invoke_event(/event/after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0
@@ -1915,8 +1886,8 @@ mob/proc/on_foot()
 	if(M == src || !istype(M) || !mind)
 		return
 	if(!ear_deaf && !stat)
-		if(!(mind.heard_before[M.name]))
-			mind.heard_before[M.name] = M
+		if(!(mind.heard_before[M.name]) && M.mind)
+			mind.heard_before[M.name] = M.mind
 			M.heard_by |= mind
 
 /mob/acidable()
@@ -2180,35 +2151,41 @@ mob/proc/on_foot()
 /mob/proc/attempt_crawling(var/turf/target)
 	return FALSE
 
-/mob/proc/can_mind_interact(mob/living/carbon/target)
-	//to_chat(world, "Starting can interact on [target]")
-	if(!iscarbon(target))
-		return 0 //Can't see non humans with your fancy human mind.
-	//to_chat(world, "[target] is a human")
+/mob/proc/can_mind_interact(var/datum/mind/target_mind)
+	var/mob/living/target
+	if(isliving(target_mind))
+		target = target_mind
+	else
+		if(!istype(target_mind))
+			return null
+		target = target_mind.current
+	if (!istype(target))
+		return null
 	var/turf/target_turf = get_turf(target)
 	var/turf/our_turf = get_turf(src)
 	if(!target_turf)
-		//to_chat(world, "[target] is in null space")
-		return 0
-	if((target_turf.z != our_turf.z) || target.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
-		//to_chat(world, "[(target_turf.z != our_turf.z) ? "not on the same zlevel as [target]" : "[target] is not concious"]")
-		if(target_turf.z != map.zCentcomm)
-			to_chat(src, "The target mind is too faint...")//Prevent "The mind of Admin is too faint..."
-
-		return 0
+		return null
+	if (target.isDead())
+		to_chat(src, "You cannot sense the target mind anymore, that's not good...")
+		return null
+	if(target_turf.z != our_turf.z) //Not on the same zlevel as us
+		to_chat(src, "The target mind is too faint, they must be quite far from you...")
+		return null
+	if(target.stat != CONSCIOUS)
+		to_chat(src, "The target mind is too faint, but still close, they must be unconscious...")
+		return null
 	if(M_PSY_RESIST in target.mutations)
-		//to_chat(world, "[target] has psy resist")
 		to_chat(src, "The target mind is resisting!")
-		return 0
+		return null
 	if(target.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian,/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
 		to_chat(src, "Interference is disrupting the connection with the target mind.")
-		return 0
-	return 1
+		return null
+	return target
 
 /mob/proc/canMouseDrag()//used mostly to check if the mob can drag'and'drop stuff in/out of various other stuff, such as disposals, cryo tubes, etc.
 	return TRUE
 
-/mob/proc/turn_into_mannequin(var/material = "marble")
+/mob/proc/turn_into_mannequin(var/material = "marble", var/forever = FALSE)
 	return FALSE
 
 /mob/proc/get_personal_ambience()

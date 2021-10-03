@@ -35,7 +35,7 @@
 	flying = 1
 	mob_property_flags = MOB_ROBOTIC
 
-	var/datum/effect/effect/system/trail/ion_trail
+	var/datum/effect/system/trail/ion_trail
 	var/hostile_time = 0
 
 	//the drone randomly switches between hostile/retaliation only states because it's malfunctioning
@@ -243,52 +243,52 @@
 		if(spawnees & 1)
 			C = new(src.loc)
 			C.name = "Drone CPU motherboard"
-			C.origin_tech = "programming=[rand(3,6)]"
+			C.origin_tech = Tc_PROGRAMMING + "=[rand(3,6)]"
 
 		if(spawnees & 2)
 			C = new(src.loc)
 			C.name = "Drone neural interface"
-			C.origin_tech = "biotech=[rand(3,6)]"
+			C.origin_tech = Tc_BIOTECH + "=[rand(3,6)]"
 
 		if(spawnees & 4)
 			C = new(src.loc)
 			C.name = "Drone suspension processor"
-			C.origin_tech = "magnets=[rand(3,6)]"
+			C.origin_tech = Tc_MAGNETS + "=[rand(3,6)]"
 
 		if(spawnees & 8)
 			C = new(src.loc)
 			C.name = "Drone shielding controller"
-			C.origin_tech = "bluespace=[rand(3,6)]"
+			C.origin_tech = Tc_BLUESPACE + "=[rand(3,6)]"
 
 		if(spawnees & 16)
 			C = new(src.loc)
 			C.name = "Drone power capacitor"
-			C.origin_tech = "powerstorage=[rand(3,6)]"
+			C.origin_tech = Tc_POWERSTORAGE + "=[rand(3,6)]"
 
 		if(spawnees & 32)
 			C = new(src.loc)
 			C.name = "Drone hull reinforcer"
-			C.origin_tech = "materials=[rand(3,6)]"
+			C.origin_tech = Tc_MATERIALS + "=[rand(3,6)]"
 
 		if(spawnees & 64)
 			C = new(src.loc)
 			C.name = "Drone auto-repair system"
-			C.origin_tech = "engineering=[rand(3,6)]"
+			C.origin_tech = Tc_ENGINEERING + "=[rand(3,6)]"
 
 		if(spawnees & 128)
 			C = new(src.loc)
 			C.name = "Drone plasma overcharge counter"
-			C.origin_tech = "plasmatech=[rand(3,6)]"
+			C.origin_tech = Tc_PLASMATECH + "=[rand(3,6)]"
 
 		if(spawnees & 256)
 			C = new(src.loc)
 			C.name = "Drone targetting circuitboard"
-			C.origin_tech = "combat=[rand(3,6)]"
+			C.origin_tech = Tc_COMBAT + "=[rand(3,6)]"
 
 		if(spawnees & 512)
 			C = new(src.loc)
 			C.name = "Corrupted drone morality core"
-			C.origin_tech = "illegal=[rand(3,6)]"
+			C.origin_tech = Tc_SYNDICATE + "=[rand(3,6)]"
 
 	..()
 

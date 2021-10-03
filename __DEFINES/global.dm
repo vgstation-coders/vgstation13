@@ -141,6 +141,7 @@ var/list/prisonsecuritywarp = list()	//prison security goes to these
 var/list/prisonwarped = list()	//list of players already warped
 var/list/blobstart = list()
 var/list/ninjastart = list()
+var/list/timeagentstart = list()
 var/list/prisonerstart = list()
 var/list/voxstart = list() //Vox raider spawn points
 var/list/voxlocker = list() //Vox locker spawn points
@@ -402,7 +403,8 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
 	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
-	/mob/living/simple_animal/hostile/ginger/gingerbroodmother		// Gingerbominations...
+	/mob/living/simple_animal/hostile/ginger/gingerbroodmother,		// Gingerbominations...
+	/mob/living/simple_animal/hostile/old_vendotron,				// Why is a normal, harmless, vending machine on this list?
 	)
 
 // Set by traitor item, affects cargo supplies

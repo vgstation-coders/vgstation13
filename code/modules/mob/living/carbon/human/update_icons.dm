@@ -377,9 +377,10 @@ var/global/list/damage_icon_parts = list()
 	if(M_FAT in mutations)
 		fat = "fat"
 
-	var/image/standing	= image("icon" = 'icons/effects/genetics.dmi')
 	overlays -= obj_overlays[MUTATIONS_LAYER]
 	var/obj/abstract/Overlays/O = obj_overlays[MUTATIONS_LAYER]
+	O.icon = 'icons/effects/genetics.dmi'
+	O.icon_state = ""
 	O.overlays.len = 0
 	O.underlays.len = 0
 
@@ -392,37 +393,22 @@ var/global/list/damage_icon_parts = list()
 			continue
 		var/underlay=gene.OnDrawUnderlays(src,g,fat)
 		if(underlay)
-			//standing.underlays += underlay
-			O.underlays += underlay
+			O.underlays += image('icons/effects/genetics.dmi', underlay)
 			add_image = 1
 	for(var/mut in mutations)
 		switch(mut)
-			/*if(M_RESIST_COLD)
-				standing.underlays	+= "fire[fat]_s"
-				add_image = 1
-			if(M_RESIST_HEAT)
-				standing.underlays	+= "cold[fat]_s"
-				add_image = 1
-			if(TK)
-				standing.underlays	+= "telekinesishead[fat]_s"
-				add_image = 1
-			*/
 			if(M_LASER)
-				//standing.overlays += image(icon = standing.icon, icon_state = "lasereyes_s")
-				O.overlays += image(icon = O.icon, icon_state = "lasereyes_s")
+				O.overlays += image('icons/effects/genetics.dmi', "lasereyes_s")
 				add_image = 1
 	if((M_RESIST_COLD in mutations) && (M_RESIST_HEAT in mutations))
 		if(!(src.species.name == "Vox") && !(src.species.name == "Skeletal Vox"))
-			//standing.underlays	-= "cold[fat]_s"
-			//standing.underlays	-= "fire[fat]_s"
-			//standing.underlays	+= "coldfire[fat]_s"
-			O.underlays	-= "cold[fat]_s"
-			O.underlays	-= "fire[fat]_s"
-			O.underlays	+= "coldfire[fat]_s"
+			O.underlays	-= image('icons/effects/genetics.dmi', "cold[fat]_s")
+			O.underlays	-= image('icons/effects/genetics.dmi', "fire[fat]_s")
+			O.underlays	+= image('icons/effects/genetics.dmi', "coldfire[fat]_s")
 		else if((src.species.name == "Vox") || (src.species.name == "Skeletal Vox"))
-			O.underlays -= "coldvox_s"
-			O.underlays	-= "firevox_s"
-			O.underlays	+= "coldfirevox_s"
+			O.underlays -= image('icons/effects/genetics.dmi', "coldvox_s")
+			O.underlays	-= image('icons/effects/genetics.dmi', "firevox_s")
+			O.underlays	+= image('icons/effects/genetics.dmi', "coldfirevox_s")
 
 	//Cultist tattoos
 	if (iscultist(src))
@@ -436,12 +422,7 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += I
 
 	if(add_image)
-		O.icon = standing
-		O.icon_state = standing.icon_state
 		obj_to_plane_overlay(O,MUTATIONS_LAYER)
-		//overlays_standing[MUTATIONS_LAYER]	= standing
-	//else
-		//overlays_standing[MUTATIONS_LAYER]	= null
 	if(update_icons)
 		update_icons()
 
@@ -964,10 +945,52 @@ var/global/list/damage_icon_parts = list()
 			O.color = I.color
 		O.pixel_x = species.inventory_offsets["[slot_head]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_head]"]["pixel_y"] * PIXEL_MULTIPLIER
-		obj_to_plane_overlay(O,HEAD_LAYER)
 		//overlays_standing[HEAD_LAYER]	= standing
 	//else
 		//overlays_standing[HEAD_LAYER]	= null
+
+		if(istype(head,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = head
+			var/i = 1
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				if(above.wear_override)
+					standing = image("icon" = above.wear_override)
+				else
+					standing = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+
+				for(var/datum/organ/external/OE in get_organs_by_slot(slot_head, src)) //Display species-exclusive species correctly on attached limbs
+					if(OE.species)
+						S = OE.species
+						break
+
+				if(S.name in above.species_fit) //Allows clothes to display differently for multiple species
+					if(S.head_icons && has_icon(S.head_icons, above.icon_state))
+						standing.icon = S.head_icons
+
+				if((gender == FEMALE) && (above.clothing_flags & GENDERFIT)) //genderfit
+					if(has_icon(standing.icon, "[above.icon_state]_f"))
+						standing.icon_state = "[above.icon_state]_f"
+
+				standing.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+				O.overlays += standing
+
+				if(above.dynamic_overlay)
+					if(above.dynamic_overlay["[HEAD_LAYER]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
+						dyn_overlay.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+						O.overlays += dyn_overlay
+
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					bloodsies.color = above.blood_color
+					//standing.overlays	+= bloodsies
+					bloodsies.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+					O.overlays	+= bloodsies
+
+				//above.generate_accessory_overlays(O)
+				i++
+
+		obj_to_plane_overlay(O,HEAD_LAYER)
 
 	if(update_icons)
 		update_icons()

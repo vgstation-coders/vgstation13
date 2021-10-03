@@ -68,8 +68,10 @@
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
+	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
+
+	var/has_exploded = 0 // increments each times it tries to explode so we may track how it may occur more than once
 
 /obj/machinery/power/supermatter/airflow_hit(atom/A)
 	if(ismovable(A))
@@ -122,18 +124,35 @@
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
-	if(!istype(universe,/datum/universal_state/supermatter_cascade))
-		var/turf/turff = get_turf(src)
-		new /turf/unsimulated/wall/supermatter(turff)
-		SetUniversalState(/datum/universal_state/supermatter_cascade)
-		explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-		empulse(turff, 100, 200, 1)
+	has_exploded++
+	var/turf/T = get_turf(src)
+	if (has_exploded <= 1)
+		if(!istype(universe,/datum/universal_state/supermatter_cascade))
+			var/turf/turff = get_turf(src)
+			new /turf/unsimulated/wall/supermatter(turff)
+			SetUniversalState(/datum/universal_state/supermatter_cascade)
+			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+			empulse(turff, 100, 200, 1)
+	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
+		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+
 	qdel(src)
+	if (has_exploded > 1)
+		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 /obj/machinery/power/supermatter/shard/explode()
-	explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-	empulse(get_turf(src), 100, 200, 1)
+	has_exploded++
+	var/turf/T = get_turf(src)
+	if (has_exploded <= 1)
+		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+		empulse(get_turf(src), 100, 200, 1)
+	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
+		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
+		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 	qdel(src)
+	if (has_exploded > 1)
+		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 /obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	Consume(AM)
@@ -479,6 +498,12 @@
 		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
 		if(l.apply_radiation(rads, RAD_EXTERNAL))
 			visible_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>", "<span class=\"warning\">The unearthly ringing subsides and you notice you have fresh radiation burns.</span>")
+
+/obj/machinery/power/supermatter/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] suicidally slams \himself head first into the [src], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash, never to be seen again.</span>")
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+	Consume(user)
+	return SUICIDE_ACT_CUSTOM
 
 /obj/machinery/power/supermatter/blob_act()
 	explode()

@@ -150,6 +150,10 @@
 		to_chat(user, "<span class='warning'>The [name] burns your bare hand!</span>")
 		user.adjustFireLoss(rand(1,5))
 
+/obj/item/weapon/grown/novaflower/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS)
+
 /obj/item/weapon/grown/nettle // -- Skie
 	plantname = "nettle"
 	desc = "It's probably <B>not</B> wise to touch it with bare hands..."
@@ -192,6 +196,10 @@
 	potency = newValue
 	force = round((5+potency/5), 1)
 
+/obj/item/weapon/grown/nettle/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
+
 /obj/item/weapon/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
 	desc = "A glowing red nettle that incites rage in you just from looking at it."
@@ -208,7 +216,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("stings, pricks")
 
-/obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
+/obj/item/weapon/grown/deathnettle/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
 
@@ -258,12 +266,12 @@
 	icon = 'icons/obj/hydroponics/corn.dmi'
 	icon_state = "cob"
 	item_state = "corncob"
-	w_class = W_CLASS_SMALL
+	w_class = W_CLASS_TINY
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/weapon/corncob/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/corncob/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
 	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "<span class='notice'>You use [W] to fashion a pipe out of the corn cob!</span>")

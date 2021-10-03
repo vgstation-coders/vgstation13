@@ -85,6 +85,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	verbs += /obj/proc/remove_pai
 
 /obj/attackby(obj/item/weapon/W, mob/user)
+	invoke_event(/event/attackby, list("attacker" = user, "item" = W))
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -308,6 +309,29 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/interact(mob/user)
 	return
 
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/obj/proc/suicide_act(var/mob/living/user)
+	if (is_hot())
+		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		user.IgniteMob()
+		return SUICIDE_ACT_FIRELOSS
+	else if (sharpness >= 1)
+		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+	else if (force >= 10)
+		if (prob(50))
+			playsound(user, 'sound/items/trayhit1.ogg', 50, 1)
+		else
+			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
+		user.visible_message("<span class='danger'>[user] strikes his head on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
 		return
@@ -325,14 +349,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return FALSE
 
 /obj/singularity_pull(S, current_size)
-	lazy_invoke_event(/lazy_event/on_before_move)
+	invoke_event(/event/before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
 	else
 		step_towards(src, S)
-	lazy_invoke_event(/lazy_event/on_after_move)
+	invoke_event(/event/after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"

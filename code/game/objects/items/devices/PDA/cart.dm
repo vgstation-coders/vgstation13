@@ -32,6 +32,7 @@
 	var/access_hydroponics = 0
 	var/access_trader = 0
 	var/access_robotics = 0
+	var/access_camera = 0
 	var/fax_pings = FALSE
 
 	// -- Crime against OOP variable (controls what is shown on PDA call to cartridge)
@@ -169,6 +170,7 @@
 /obj/item/weapon/cartridge/signal
 	name = "\improper Generic signaler cartridge"
 	desc = "A data cartridge with an integrated radio signaler module."
+	radio_type = /obj/item/radio/integrated/signal
 
 /obj/item/weapon/cartridge/signal/toxins
 	name = "\improper Signal Ace 2"
@@ -268,6 +270,25 @@
 	icon_state = "cart-vox"
 	access_trader = 1
 
+/obj/item/weapon/cartridge/camera
+	name = "\improper Camera Cartridge"
+	icon_state = "cart-gbcam"
+	access_camera = 1
+	var/obj/item/device/camera/cartridge/cart_cam = null
+	var/list/obj/item/weapon/photo/stored_photos = list()
+
+/obj/item/weapon/cartridge/camera/New()
+	..()
+	cart_cam = new /obj/item/device/camera/cartridge(src)
+	
+/obj/item/weapon/cartridge/camera/Destroy()
+	qdel(cart_cam)
+	cart_cam = null
+	for(var/obj/item/weapon/photo/PH in stored_photos)
+		qdel(PH)
+	stored_photos = list()
+	..()
+	
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))
 		return
@@ -323,7 +344,7 @@
 /obj/item/weapon/cartridge/proc/generate_menu()
 	switch(mode)
 		if(40) //signaller
-			menu = "<h4><img src=pda_signaler.png> Remote Signaling System</h4>"
+			menu = "<h4><span class='pda_icon pda_signaler'></span> Remote Signaling System</h4>"
 
 			menu += {"
 <a href='byond://?src=\ref[src];choice=Send Signal'>Send Signal</A><BR>
@@ -340,19 +361,10 @@ Code:
 [radio:code]
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=1'>+</a>
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=5'>+</a><br>"}
-		/*if (41) //crew manifest
-
-
-			menu = {"<h4><img src=pda_notes.png> Crew Manifest</h4>
-				Entries cannot be modified from this terminal.<br><br>"}
-			if(data_core)
-				menu += data_core.get_manifest(1) // make it monochrome
-			menu += "<br>"*/
-
 
 		if (42) //status displays
 
-			menu = {"<h4><img src=pda_status.png> Station Status Display Interlink</h4>
+			menu = {"<h4><span class='pda_icon pda_status'></span> Station Status Display Interlink</h4>
 				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=blank'>Clear</A> \]<BR>
 				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=shuttle'>Shuttle ETA</A> \]<BR>
 				\[ <A HREF='?src=\ref[src];choice=Status;statdisp=message'>Message</A> \]
@@ -363,7 +375,7 @@ Code:
 				<A HREF='?src=\ref[src];choice=Status;statdisp=alert;alert=lockdown'>Lockdown</A> |
 				<A HREF='?src=\ref[src];choice=Status;statdisp=alert;alert=biohazard'>Biohazard</A> \]<BR>"}
 		if (43) //Muskets' and Rockdtben's power monitor :D
-			menu = "<h4><img src=pda_power.png> Please select a Power Monitoring Computer</h4><BR>No Power Monitoring Computer detected in the vicinity.<BR>"
+			menu = "<h4><span class='pda_icon pda_power'></span> Please select a Power Monitoring Computer</h4><BR>No Power Monitoring Computer detected in the vicinity.<BR>"
 			var/powercount = 0
 			var/found = 0
 
@@ -372,7 +384,7 @@ Code:
 					var/turf/T = get_turf(src)
 					if(T.z == pMon.z)//the application may only detect power monitoring computers on its Z-level.
 						if(!found)
-							menu = "<h4><img src=pda_power.png> Please select a Power Monitoring Computer</h4><BR>"
+							menu = "<h4><span class='pda_icon pda_power'></span> Please select a Power Monitoring Computer</h4><BR>"
 							found = 1
 							menu += "<FONT SIZE=-1>"
 						powercount++
@@ -383,10 +395,10 @@ Code:
 
 		if (433) //Muskets' and Rockdtben's power monitor :D
 			if(!powmonitor)
-				menu = "<h4><img src=pda_power.png> Power Monitor </h4><BR>"
+				menu = "<h4><span class='pda_icon pda_power'></span> Power Monitor </h4><BR>"
 				menu += "No connection<BR>"
 			else
-				menu = "<h4><img src=pda_power.png> [powmonitor] </h4><BR>"
+				menu = "<h4><span class='pda_icon pda_power'></span> [powmonitor] </h4><BR>"
 				var/list/L = list()
 				for(var/obj/machinery/power/terminal/term in powmonitor.connected_powernet.nodes)
 					if(istype(term.master, /obj/machinery/power/apc))
@@ -410,7 +422,7 @@ Code:
 				menu += "</FONT></PRE>"
 
 		if (53)
-			menu = "<h4><img src=pda_alert.png> Please select an Alert Computer</h4><BR>No Alert Computer detected in the vicinity.<BR>"
+			menu = "<h4><span class='pda_icon pda_alert'></span> Please select an Alert Computer</h4><BR>No Alert Computer detected in the vicinity.<BR>"
 			alertmonitor = null
 			alertmonitors = list()
 
@@ -422,7 +434,7 @@ Code:
 					var/turf/T = get_turf(src)
 					if(T.z == aMon.z)//the application may only detect station alert computers on its Z-level.
 						if(!found)
-							menu = "<h4><img src=pda_alert.png> Please select an Alert Computer</h4><BR>"
+							menu = "<h4><span class='pda_icon pda_alert'></span> Please select an Alert Computer</h4><BR>"
 							found = 1
 							menu += "<FONT SIZE=-1>"
 						alertcount++
@@ -433,10 +445,10 @@ Code:
 
 		if (533)
 			if(!alertmonitor)
-				menu = "<h4><img src=pda_alert.png> Alert Monitor </h4><BR>"
+				menu = "<h4><span class='pda_icon pda_alert'></span> Alert Monitor </h4><BR>"
 				menu += "No connection<BR>"
 			else
-				menu = "<h4><img src=pda_alert.png> [alertmonitor] </h4><BR>"
+				menu = "<h4><span class='pda_icon pda_alert'></span> [alertmonitor] </h4><BR>"
 				for (var/cat in alertmonitor.alarms)
 					menu += text("<B>[]</B><BR>\n", cat)
 					var/list/L = alertmonitor.alarms[cat]
@@ -460,13 +472,13 @@ Code:
 				menu += "</FONT></PRE>"
 
 		if (44) //medical records //This thing only displays a single screen so it's hard to really get the sub-menu stuff working.
-			menu = "<h4><img src=pda_medical.png> Medical Record List</h4>"
+			menu = "<h4><span class='pda_icon pda_medical'></span> Medical Record List</h4>"
 			if(!isnull(data_core.general))
 				for (var/datum/data/record/R in sortRecord(data_core.general))
 					menu += "<a href='byond://?src=\ref[src];choice=Medical Records;target=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
 			menu += "<br>"
 		if(441)
-			menu = "<h4><img src=pda_medical.png> Medical Record</h4>"
+			menu = "<h4><span class='pda_icon pda_medical'></span> Medical Record</h4>"
 
 			if (istype(active1, /datum/data/record) && (active1 in data_core.general))
 
@@ -482,7 +494,7 @@ Code:
 
 
 			menu += {"<br>
-				<h4><img src=pda_medical.png> Medical Data</h4>"}
+				<h4><span class='pda_icon pda_medical'></span> Medical Data</h4>"}
 			if (istype(active2, /datum/data/record) && (active2 in data_core.medical))
 
 				menu += {"Blood Type: [active2.fields["b_type"]]<br><br>
@@ -500,14 +512,14 @@ Code:
 
 			menu += "<br>"
 		if (45) //security records
-			menu = "<h4><img src=pda_cuffs.png> Security Record List</h4>"
+			menu = "<h4><span class='pda_icon pda_cuffs'></span> Security Record List</h4>"
 			if(!isnull(data_core.general))
 				for (var/datum/data/record/R in sortRecord(data_core.general))
 					menu += "<a href='byond://?src=\ref[src];choice=Security Records;target=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
 
 			menu += "<br>"
 		if(451)
-			menu = "<h4><img src=pda_cuffs.png> Security Record</h4>"
+			menu = "<h4><span class='pda_icon pda_cuffs'></span> Security Record</h4>"
 
 			if (istype(active1, /datum/data/record) && (active1 in data_core.general))
 
@@ -523,7 +535,7 @@ Code:
 
 
 			menu += {"<br>
-				<h4><img src=pda_cuffs.png> Security Data</h4>"}
+				<h4><span class='pda_icon pda_cuffs'></span> Security Data</h4>"}
 			if (istype(active3, /datum/data/record) && (active3 in data_core.security))
 
 				menu += {"Criminal Status: [active3.fields["criminal"]]<br>
@@ -541,7 +553,7 @@ Code:
 			menu += "<br>"
 		if (47) //quartermaster order records
 
-			menu = {"<h4><img src=pda_crate.png> Supply Record Interlink</h4>
+			menu = {"<h4><span class='pda_icon pda_crate'></span> Supply Record Interlink</h4>
 				<BR><B>Supply shuttle</B><BR>
 				Location: [SSsupply_shuttle.moving ? "Moving to station ([SSsupply_shuttle.eta] Mins.)":SSsupply_shuttle.at_station ? "Station":"Dock"]<BR>
 				Current approved orders: <BR><ol>"}
@@ -556,7 +568,7 @@ Code:
 				menu += "<li>#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]</li>"
 			menu += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management."
 		if (49) //janitorial locator
-			menu = "<h4><img src=pda_bucket.png> Persistent Custodial Object Locator</h4>"
+			menu = "<h4><span class='pda_icon pda_bucket'></span> Persistent Custodial Object Locator</h4>"
 
 			var/turf/cl = get_turf(src)
 			if (!cl)

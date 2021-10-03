@@ -47,7 +47,6 @@
 	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
-	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 	var/list/species_fit = null //This object has a different appearance when worn by these species
 	var/nonplant_seed_type
@@ -125,6 +124,28 @@
 		if(HIDES_IDENTITY_DEFAULT)
 			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
+// Generalising these for all items
+/obj/item/suicide_act(var/mob/living/user)
+	if (is_sharp())
+		if(w_class >= W_CLASS_MEDIUM)
+			to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
+							"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
+		else
+			to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+		if(sharpness_flags & HOT_EDGE)
+			return(SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_BRUTELOSS)
+		else
+			return SUICIDE_ACT_BRUTELOSS
+	else if (is_hot())
+		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+		user.IgniteMob()
+		return SUICIDE_ACT_FIRELOSS
+	else if (force >= 10)
+		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+
 /obj/item/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -165,18 +186,11 @@
 /obj/item/proc/restock() //used for borg recharging
 	return
 
+/obj/item/proc/SlipDropped(var/mob/living/user, var/slip_dir, var/slipperiness = TURF_WET_WATER)
+	return
+
 /obj/item/projectile_check()
 	return PROJREACT_OBJS
-
-//user: The mob that is suiciding
-//damagetype: The type of damage the item will inflict on the user
-//SUICIDE_ACT_BRUTELOSS = 1
-//SUICIDE_ACT_FIRELOSS = 2
-//SUICIDE_ACT_TOXLOSS = 4
-//SUICIDE_ACT_OXYLOSS = 8
-//Output a creative message and then return the damagetype done
-/obj/item/proc/suicide_act(mob/user)
-	return
 
 /proc/wclass2text(w_class)
 	switch(w_class)
@@ -265,11 +279,6 @@
 
 /obj/item/attack_paw(var/mob/user)
 	attack_hand(user)
-
-// Due to storage type consolidation this should get used more now.
-// I have cleaned it up a little, but it could probably use more.  -Sayu
-/obj/item/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	return ..()
 
 /obj/item/proc/talk_into(var/datum/speech/speech, var/channel=null)
 	return
@@ -1151,7 +1160,9 @@ var/global/list/image/blood_overlays = list()
 	I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
 	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 
-	blood_overlays[type] = image(I)
+	var/image/img = image(I)
+	img.name = "blood_overlay"
+	blood_overlays[type] = img
 
 /obj/item/apply_luminol()
 	if(!..())

@@ -9,14 +9,14 @@
 	var/result=null
 
 /datum/biogen_recipe/proc/Render(var/context)
-	var/html = "<li><a href='?src=\ref[context];action=create;item=[id];num=1'>[amount_per_unit==1?"":"[amount_per_unit] "][name]</a> <FONT COLOR=blue>([cost])</FONT>"
+	var/html = "<li><a href='?src=\ref[context];action=create;item=[id];num=1'>[name][(amount_per_unit > 1) ? " [amount_per_unit] units" : ""]</a> <FONT COLOR=blue>([cost])</FONT>"
 	if(other_amounts.len)
 		var/first=1
 		html += " ("
 		for(var/amount in other_amounts)
 			if(!first)
 				html +=" "
-			html +="<A href='?src=\ref[context];action=create;item=[id];num=[amount]'>x[amount*amount_per_unit]</A>"
+			html +="<A href='?src=\ref[context];action=create;item=[id];num=[amount]'>[(amount_per_unit > 1) ? "[amount*amount_per_unit] units" : "x[amount*amount_per_unit]"]</A>"
 			first=0
 		html += ")"
 	html += "</li>"

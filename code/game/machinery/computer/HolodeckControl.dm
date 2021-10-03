@@ -16,11 +16,13 @@
 		"Firing Range" = /area/holodeck/source_firingrange,
 		"Gym" = /area/holodeck/source_gym,
 		"Laser Tag Arena" = /area/holodeck/source_lasertag,
+		"Library" = /area/holodeck/source_library,
 		"Maze" = /area/holodeck/source_maze,
 		"Meeting Hall" = /area/holodeck/source_meetinghall,
 		"Panic Bunker" = /area/holodeck/source_panic,
 		"Picnic Area" = /area/holodeck/source_picnicarea,
 		"Snow Field" = /area/holodeck/source_snowfield,
+		"Space" = /area/holodeck/source_space,
 		"Theatre" = /area/holodeck/source_theatre,
 		"Thunderdome Court" = /area/holodeck/source_thunderdomecourt,
 		"Wild Ride" = /area/holodeck/source_wildride,
@@ -46,10 +48,12 @@
 		"Empty Court" = /area/holodeck/source_emptycourt,
 		"Firing Range" = /area/holodeck/source_firingrange,
 		"Gym" = /area/holodeck/source_gym,
+		"Library" = /area/holodeck/source_library,
 		"Meeting Hall" = /area/holodeck/source_meetinghall,
 		"Panic Bunker" = /area/holodeck/source_panic,
 		"Picnic Area" = /area/holodeck/source_picnicarea,
 		"Snow Field" = /area/holodeck/source_snowfield,
+		"Space" = /area/holodeck/source_space,
 		"Theatre" = /area/holodeck/source_theatre,
 		"Thunderdome Court" = /area/holodeck/source_thunderdomecourt,
 		"Wild Ride" = /area/holodeck/source_wildride,
@@ -407,10 +411,11 @@
 /turf/simulated/floor/holofloor/grass
 	name = "lush Grass"
 	icon_state = "grass1"
+
+/turf/simulated/floor/holofloor/grass/create_floor_tile()
 	floor_tile = new/obj/item/stack/tile/grass
 
 /turf/simulated/floor/holofloor/grass/New()
-	floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
 	icon_state = "grass[pick("1","2","3","4")]"
 	..()
 	spawn(4)
@@ -429,6 +434,24 @@
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
+
+/turf/simulated/floor/holofloor/space
+	name = "space"
+	desc = "The final frontier! Or a very convincing projection of it."
+
+	icon = 'icons/turf/space.dmi'
+	icon_state = "0"
+
+	plane = SPACE_BACKGROUND_PLANE
+	dynamic_lighting = 0
+	luminosity = 1
+	intact = 0
+
+/turf/simulated/floor/holofloor/space/New(loc)
+	..(loc)
+	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+
+/obj/structure/bookcase/holodeck	// TODO: Spawn random books on load? have those books despawn along with the bookcase?
 
 /obj/structure/table/holotable
 	parts = null

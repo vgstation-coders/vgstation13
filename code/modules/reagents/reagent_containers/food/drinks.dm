@@ -685,7 +685,10 @@
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
-
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/update_icon()
+	overlays.len = 0
+	if (flags & OPENCONTAINER)
+		overlays += image(icon = icon, icon_state = "soda_open")
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
@@ -706,7 +709,7 @@
 	flags |= OPENCONTAINER
 	src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 	playsound(user, pick(open_sounds), 50, 1)
-	overlays += image(icon = icon, icon_state = "soda_open")
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola
 	name = "Space Cola"
@@ -1104,6 +1107,21 @@
 	reagents.add_reagent(CAFFEINE, 5)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator
+	name = "Zam Human Hydrator"
+	desc = "The mothership provides only the best mineral water for humans to drink, REAL minerals included."
+	icon_state = "Zam_HumanHydrator"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator/New()
+	..()
+	reagents.add_reagent(WATER, 35)
+	reagents.add_reagent(IRON, 1)
+	reagents.add_reagent(COPPER, 1)
+	reagents.add_reagent(SILVER, 1)
+	reagents.add_reagent(GOLD, 1)
+	reagents.add_reagent(DIAMONDDUST, 1)
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza
 	name = "Zam Polytrinic Palooza"
@@ -1749,18 +1767,18 @@
 //smashing when thrown
 /obj/item/weapon/reagent_containers/food/drinks/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
-	if(isGlass)
+	if(isGlass && isturf(loc)) // don't shatter if we got caught mid-flight
 		isGlass = 0 //to avoid it from hitting the wall, then hitting the floor, which would cause two broken bottles to appear
-		src.visible_message("<span  class='warning'>The [smashtext][src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
+		visible_message("<span  class='warning'>The [smashtext][name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		if(reagents.total_volume)
 			if(molotov == 1 || reagents.has_reagent(FUEL))
 				user?.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
 				log_attack("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name(user)] and containing [reagents.get_reagent_ids()]")
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
-			src.reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
+			reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor
 			if(hit_atom != get_turf(src)) //prevent spilling on the floor twice though
-				src.reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
+				reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
 		if(molotov == 1) //for molotovs
@@ -1778,8 +1796,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/proc/create_broken_bottle()
 	//create new broken bottle
 	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
-	B.name = src.smashname
-	B.icon_state = src.icon_state
+	B.name = smashname
+	B.icon_state = icon_state
 
 	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 		B.icon_state = "glass_empty"

@@ -198,7 +198,7 @@ var/global/list/ghdel_profiling = list()
 	densityChanged()
 
 /atom/proc/densityChanged()
-	lazy_invoke_event(/lazy_event/on_density_change, list("atom" = src))
+	invoke_event(/event/density_change, list("atom" = src))
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 	if(!isturf(src))
@@ -599,7 +599,7 @@ its easier to just keep the beam vertical.
 				H.dna = new /datum/dna(null)
 				H.dna.real_name = H.real_name
 				H.dna.flavor_text = H.flavor_text
-		H.check_dna()
+		H.check_dna_integrity()
 
 		//Now, deal with gloves.
 		if (H.gloves && H.gloves != src)
@@ -683,7 +683,7 @@ its easier to just keep the beam vertical.
 	if (!istype(M.dna, /datum/dna))
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
-	M.check_dna()
+	M.check_dna_integrity()
 	if (!( src.flags & FPRINT))
 		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
@@ -856,7 +856,7 @@ its easier to just keep the beam vertical.
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
 
-/atom/proc/initialize()
+/atom/initialize()
 	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()
@@ -906,3 +906,10 @@ its easier to just keep the beam vertical.
 //Called when a conveyor belt is pointing into us and an atom is coming in.
 /atom/proc/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	return
+
+/atom/proc/contains(atom/A)
+	if(!A)
+		return FALSE
+	for(var/atom/location = A.loc, location, location = location.loc)
+		if(location == src)
+			return TRUE

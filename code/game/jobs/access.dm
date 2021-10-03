@@ -63,7 +63,7 @@
 /var/const/access_tcomsat = 61 // has access to the entire telecomms satellite / machinery
 /var/const/access_gateway = 62
 /var/const/access_sec_doors = 63 // Security front doors
-/var/const/access_psychiatrist = 64 // Psychiatrist's office
+// 64 was used by access_psychiatrist. Feel free to repurpose.
 /var/const/access_salvage_captain = 65 // Salvage ship captain's quarters
 /var/const/access_weapons = 66 //Weapon authorization for secbots
 
@@ -234,7 +234,7 @@
 	            access_teleporter, access_eva, access_heads, access_captain, access_all_personal_lockers,
 	            access_tech_storage, access_chapel_office, access_atmospherics, access_kitchen,
 	            access_bar, access_janitor, access_crematorium, access_robotics, access_cargo, access_construction,
-	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
+	            access_hydroponics, access_library, access_lawyer, access_virology, access_cmo, access_qm, access_clown, access_mime, access_surgery,
 	            access_theatre, access_science, access_mining, access_mailsorting,access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
 	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_biohazard)
@@ -382,8 +382,6 @@
 			return "Virology"
 		if(access_biohazard)
 			return "Biohazard"
-		if(access_psychiatrist)
-			return "Psychiatrist's Office"
 		if(access_cmo)
 			return "Chief Medical Officer"
 		if(access_qm)

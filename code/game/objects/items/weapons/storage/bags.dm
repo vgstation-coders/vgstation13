@@ -55,6 +55,36 @@
 		icon_state = "trashbag3"
 		slowdown = 1.8
 
+/obj/item/weapon/storage/bag/trash/bio
+	name = "hazardous waste bag"
+	desc = "A heavy-duty sterilized garbage bag for handling infectious medical waste and sharps."
+	icon_state = "biobag0"
+	item_state = "biobag"
+
+	sterility = 100
+	fits_max_w_class = W_CLASS_LARGE
+	can_only_hold = list(
+		"/obj/item/trash",
+		"/obj/item/weapon/shard",
+		"/obj/item/weapon/reagent_containers",
+		"/obj/item/organ",
+		"/obj/item/stack/medical",
+	)
+	slot_flags = SLOT_BELT
+
+/obj/item/weapon/storage/bag/trash/bio/update_icon()
+	if(contents.len == 0)
+		icon_state = "biobag0"
+		slowdown = 1
+	else if(contents.len < 12)
+		icon_state = "biobag1"
+		slowdown = 1.4
+	else if(contents.len < 21)
+		icon_state = "biobag2"
+		slowdown = 1.6
+	else
+		icon_state = "biobag3"
+		slowdown = 1.8
 
 // -----------------------------
 //        Plastic Bag
@@ -84,7 +114,7 @@ obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
 
-/obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
+/obj/item/weapon/storage/bag/plasticbag/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -132,9 +162,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.register_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.unregister_event(/event/moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
@@ -165,10 +195,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
-		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag
@@ -254,7 +284,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil")
 
 /obj/item/weapon/storage/bag/food/update_icon()
 	if(contents.len < 1)
@@ -264,15 +294,47 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/food/menu1/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/fries(src)//4 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/fries/cone(src)//4 nutriments
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
+	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/food/menu2/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries(src)//6 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet(src)//6 nutriments
+	new/obj/item/weapon/kitchen/utensil/fork/plastic(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
+	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/food/zam_menu1/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner1(src)//18 nutriments if microwaved
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
+	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/food/zam_menu2/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner2(src)//15 nutriments if microwaved
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
+	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	update_icon()
+
+/obj/item/weapon/storage/bag/food/zam_menu3/New()
+	..()
+	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner3(src)//12 nutriments if microwaved
+	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
+	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
 	update_icon()
 
 // -----------------------------

@@ -60,6 +60,11 @@
 
 	return 0
 
+/mob/proc/activate_empty_hand()
+	var/empty_hand = find_empty_hand_index()
+	if(empty_hand)
+		activate_hand(empty_hand)
+
 /mob/proc/empty_hand_indexes_amount()
 	. = 0
 
@@ -378,7 +383,7 @@
 		update_inv_wear_mask()
 	else
 		return 0
-	lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+	invoke_event(/event/unequipped, list(W))
 	if(success)
 		if(client)
 			client.screen -= W

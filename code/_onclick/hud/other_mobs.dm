@@ -77,28 +77,6 @@
 
 
 	////////SOUL BLADE HUD ELEMENTS////////
-	mymob.gui_icons.soulblade_bgLEFT = new /obj/abstract/screen
-	mymob.gui_icons.soulblade_bgLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
-	mymob.gui_icons.soulblade_bgLEFT.icon_state = "backgroundLEFT"
-	mymob.gui_icons.soulblade_bgLEFT.name = "Blood"
-	mymob.gui_icons.soulblade_bgLEFT.layer = HUD_BASE_LAYER
-	mymob.gui_icons.soulblade_bgLEFT.screen_loc = ui_blob_bgLEFT
-
-	mymob.gui_icons.soulblade_coverLEFT = new /obj/abstract/screen
-	mymob.gui_icons.soulblade_coverLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
-	mymob.gui_icons.soulblade_coverLEFT.icon_state = "coverLEFT"
-	mymob.gui_icons.soulblade_coverLEFT.name = "Blood"
-	mymob.gui_icons.soulblade_coverLEFT.layer = HUD_ABOVE_ITEM_LAYER
-	mymob.gui_icons.soulblade_coverLEFT.screen_loc = ui_blob_bgLEFT
-	mymob.gui_icons.soulblade_coverLEFT.maptext_x = 1
-	mymob.gui_icons.soulblade_coverLEFT.maptext_y = 126*PIXEL_MULTIPLIER
-
-	mymob.gui_icons.soulblade_bloodbar = new /obj/abstract/screen
-	mymob.gui_icons.soulblade_bloodbar.icon = 'icons/mob/screen1_shade_bars.dmi'
-	mymob.gui_icons.soulblade_bloodbar.icon_state = "blood"
-	mymob.gui_icons.soulblade_bloodbar.name = "Blood"
-	mymob.gui_icons.soulblade_bloodbar.screen_loc = ui_blob_powerbar
-
 	mymob.healths2 = new /obj/abstract/screen
 	mymob.healths2.icon = 'icons/mob/screen1_shade.dmi'
 	mymob.healths2.icon_state = "blade_ok"
@@ -188,11 +166,32 @@
 	mymob.client.screen += list(vampire_blood_display)
 
 
-/datum/hud/proc/countdown_hud()
+/datum/hud/proc/countdown_blob()
 
 	countdown_display = new /obj/abstract/screen
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
 	countdown_display.name = "Burst Countdown"
-	countdown_display.icon_state = "template"
+	countdown_display.icon_state = "countdown_blob"
+	countdown_display.screen_loc = ui_under_health
+
+	mymob.client.screen += list(countdown_display)
+
+/datum/hud/proc/countdown_monkey()
+
+	countdown_display = new /obj/abstract/screen
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
+	countdown_display.name = "Primitive Countdown"
+	countdown_display.icon_state = "countdown_monkey"
+	countdown_display.screen_loc = ui_under_health
+
+	mymob.client.screen += list(countdown_display)
+
+/datum/hud/proc/countdown_time_agent()
+
+	countdown_display = new /obj/abstract/screen
+	countdown_display.name = "Time Countdown"
+	countdown_display.icon = 'icons/mob/screen_countdowns.dmi'
+	countdown_display.icon_state = "countdown_default"
 	countdown_display.screen_loc = ui_under_health
 
 	mymob.client.screen += list(countdown_display)

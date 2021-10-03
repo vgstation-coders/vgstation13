@@ -26,10 +26,15 @@
 /mob/camera/blob/New()
 	blob_overminds += src
 	..()
+	register_event(/event/living_login, src, /mob/camera/blob/proc/add_HUD)
 
 /mob/camera/blob/Destroy()
 	blob_overminds -= src
+	unregister_event(/event/living_login, src, /mob/camera/blob/proc/add_HUD)
 	..()
+
+/mob/camera/blob/proc/add_HUD(var/mob/user)
+	DisplayUI("Blob")
 
 /mob/camera/blob/Login()
 	..()
@@ -71,6 +76,8 @@
 			else
 				to_chat(src, "<span class='warning'>Unable to make the jump. Looks like all the blobs in a large radius around the target have been destroyed.</span>")
 
+/mob/camera/blob/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+	return
 
 /mob/camera/blob/proc/update_health()
 	DisplayUI("Blob")
@@ -138,7 +145,7 @@
 			rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a> <span class='message'>[message_a]</span></span></i></font>"
 			M.show_message(rendered, 2)
 
-/mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE)
+/mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE, arguments)
 	return
 
 /mob/camera/blob/ex_act()
@@ -188,7 +195,7 @@
 			if(newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
-		lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
+		invoke_event(/event/moved, list("mover" = src))
 		return 0
 
-	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
+	invoke_event(/event/moved, list("mover" = src))

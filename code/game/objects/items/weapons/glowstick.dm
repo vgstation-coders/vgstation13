@@ -12,7 +12,7 @@
 	light_color = GLOW_GREEN
 	w_class = W_CLASS_SMALL
 
-/obj/item/weapon/glowstick/suicide_act(mob/user)
+/obj/item/weapon/glowstick/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 	qdel(src)
@@ -79,7 +79,7 @@
 		attached_to.set_light(0)
 	..()
 
-/obj/item/clothing/accessory/glowstick/suicide_act(mob/user)
+/obj/item/clothing/accessory/glowstick/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 	qdel(src)
@@ -104,11 +104,11 @@
 	update_icon()
 
 /obj/item/clothing/accessory/glowstick/phazon/pickup(mob/user)
-	user.lazy_register_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
+	user.register_event(/event/face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
 
 /obj/item/clothing/accessory/glowstick/phazon/dropped(mob/user)
 	..()
-	user.lazy_unregister_event(/lazy_event/on_face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
+	user.unregister_event(/event/face, src, /obj/item/clothing/accessory/glowstick/phazon/proc/colorchange)
 
 /obj/item/clothing/accessory/glowstick/phazon/attack_self()
 	colorchange()

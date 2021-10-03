@@ -19,6 +19,7 @@
 	desc = "A man-sized machine, akin to a coffin, meant to install modifications into a worn spacesuit."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "suitmodifier"
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 
 	var/list/modules_to_install = list()
 	var/obj/item/weapon/cell/cell = null
@@ -26,6 +27,7 @@
 	var/activated = FALSE
 	var/static/list/plasmaman_suits
 	var/static/list/vox_suits
+	var/apply_multiplier = 1
 	idle_power_usage = 50
 	active_power_usage = 300
 
@@ -37,7 +39,7 @@
 
 /proc/build_suit_list(datum/species/species, suit_base_path, helmet_base_path)
 	// This thing is using outfit datums to build an associative list of
-	// "job title string" -> list(suit_type_path, helmet_type_path)
+	// "job title string" -> list(suit_type_path, helmet_type_path, access_required)
 	. = list()
 	for(var/path in subtypesof(/datum/outfit))
 		var/datum/outfit/entry = new path
@@ -61,6 +63,31 @@
 
 /obj/machinery/suit_modifier/New()
 	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/suit_modifier,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/micro_laser
+	)
+	if(world.has_round_started())
+		initialize()
+
+/obj/machinery/suit_modifier/RefreshParts()
+	var/avg_rate = 0
+	var/amount = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		avg_rate += M.rating
+		amount++
+	apply_multiplier = (avg_rate / amount)
+	avg_rate = 0
+	amount = 0
+	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+		avg_rate += ML.rating
+		amount++
+	active_power_usage = 300 / (avg_rate / amount)
+
+/obj/machinery/suit_modifier/initialize()
 	suit_overlay = new
 	suit_overlay.icon = 'icons/obj/stationobjs.dmi'
 	suit_overlay.plane = ABOVE_HUMAN_PLANE
@@ -109,7 +136,12 @@
 	if(H.loc == loc)
 		var/obj/worn_suit = H.get_item_by_slot(slot_wear_suit)
 		if(istype(worn_suit, /obj/item/clothing/suit/space/rig))
+			var/obj/item/clothing/suit/space/rig/worn_rig = worn_suit
 			if(!modules_to_install.len && !cell)
+				if(worn_rig.modules.len)
+					say("Installed modules detected.", class = "binaryradio")
+					process_module_removal(H)
+					return
 				say("No upgrade available.", class = "binaryradio")
 				return
 			process_module_installation(H)
@@ -149,7 +181,7 @@
 /obj/machinery/suit_modifier/proc/finished_animation()
 	suit_overlay.icon_state = null
 	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
-	new /obj/effect/effect/smoke(get_turf(src))
+	new /obj/effect/smoke(get_turf(src))
 
 /proc/filter_suit_list(mob/living/carbon/human/guy, list/suit_list)
 	var/guy_access = guy.GetAccess()
@@ -203,7 +235,7 @@
 	for(var/obj/item/rig_module/RM in modules_to_install)
 		if(locate(RM.type) in R.modules) //One already installed
 			continue
-		if(do_after(H, src, 5 SECONDS, needhand = FALSE))
+		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
 			say("Installing [RM] into \the [R].", class = "binaryradio")
 			R.modules.Add(RM)
 			RM.rig = R
@@ -220,6 +252,34 @@
 			R.cell = cell
 			cell = null
 	finished_animation()
+	unlock_atom(H)
+	R.initialize_suit()
+	use_power = 1
+	activated = FALSE
+
+/obj/machinery/suit_modifier/proc/process_module_removal(var/mob/living/carbon/human/H)
+	if(activated)
+		return
+	lock_atom(H)
+	activated = TRUE
+	use_power = 2
+	activation_animation()
+	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
+	R.deactivate_suit()
+	if(R.modules.len)
+		// if we have something that's not a rig_module here we have a problem
+		var/obj/item/rig_module/RM = input(H, "Choose an upgrade to remove from [R].", R) as null|anything in R.modules
+		if(!RM|| !H.Adjacent(src) || H.incapacitated())
+			unlock_atom(H)
+			activated = FALSE
+			return
+		working_animation()
+		say("Uninstalling [RM] from \the [R].", class = "binaryradio")
+		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
+			R.modules.Remove(RM)
+			RM.rig = null
+			RM.forceMove(get_turf(src))
+		finished_animation()
 	unlock_atom(H)
 	R.initialize_suit()
 	use_power = 1

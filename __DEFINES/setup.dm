@@ -1147,6 +1147,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define WIREJACK		512 //can we wirejack it? if flagged, machine calls wirejack()
 #define SHUTTLEWRENCH	1024 //if this flag exists, the computer can be wrenched on shuttle floors
 #define SECUREDPANEL 2048 //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
+#define MULTIOUTPUT 4096 //Let's you set the output location with a multitool
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
@@ -1404,6 +1405,9 @@ var/proccalls = 1
 #define FOOD_LIQUID	8
 #define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
 #define FOOD_LACTOSE 32 //Contains MILK
+
+#define UTENSILE_FORK	1
+#define UTENSILE_SPOON	2
 /*
  *
  *
@@ -1428,7 +1432,9 @@ var/proccalls = 1
 
 #define log_cultspeak(text) diary << html_decode("\[[time_stamp()]]CULT: [text]")
 
-#define log_narspeak(text) diary << html_decode("\[[time_stamp()]]NARSIE: [text]")
+#define log_factionspeak(text) diary << html_decode("\[[time_stamp()]]FACTIONBROADCAST: [text]")
+
+#define log_rolespeak(text) diary << html_decode("\[[time_stamp()]]ROLEMESSAGE: [text]")
 
 #define log_emote(text) diary << html_decode("\[[time_stamp()]]EMOTE: [text]")
 
@@ -1444,7 +1450,6 @@ var/proccalls = 1
 
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
-#define log_tgui(text) diary << html_decode("\[[time_stamp()]]TGUI: [text]")
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")

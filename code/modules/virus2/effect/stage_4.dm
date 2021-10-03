@@ -239,7 +239,6 @@
 				var/totalslabs = 1
 				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 				var/sourcename = H.real_name
-				var/sourcejob = H.job
 				var/sourcenutriment = H.nutrition / 15
 				//var/sourcetotalreagents = mob.reagents.total_volume
 
@@ -247,7 +246,6 @@
 					var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
-					newmeat.subjectjob = sourcejob
 					newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment / totalslabs) //Thehehe. Fat guys go first
 					//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 					allmeat[i] = newmeat
@@ -556,15 +554,8 @@
 					spawn_turfs.Add(T)
 			if(!spawn_turfs.len)
 				spawn_turfs.Add(get_turf(H))
-			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
-			heart_attack.appearance = blown_heart.appearance
-			heart_attack.icon_dead = "heart-off"
-			heart_attack.environment_smash_flags = 0
-			heart_attack.melee_damage_lower = 15
-			heart_attack.melee_damage_upper = 15
-			heart_attack.health = 50
-			heart_attack.maxHealth = 50
-			heart_attack.stat_attack = 1
+			var/mob/living/simple_animal/hostile/heart_attack/HA = new(pick(spawn_turfs))
+			HA.update_heart(blown_heart,H.dna,virus_copylist(H.virus2))
 			score["heartattacks"]++
 			qdel(blown_heart)
 
@@ -649,6 +640,7 @@
 		affected.my_appearance.h_style = "Shoulder-length Hair Alt"
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 	switch(count)
 		if (10 to 30)
@@ -785,6 +777,7 @@
 		affected.my_appearance.h_style = old_h_style
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 /datum/disease2/effect/magnitis
 	name = "Magnitis"
@@ -835,8 +828,8 @@
 /datum/disease2/effect/emitter/activate(var/mob/living/mob)
 	if (istype(mob) && !emitter)
 		emitter = mob
-		emitter.lazy_register_event(/lazy_event/on_before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
-		emitter.lazy_register_event(/lazy_event/on_after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
+		emitter.register_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.register_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
@@ -903,8 +896,8 @@
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.lazy_unregister_event(/lazy_event/on_before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
-		emitter.lazy_unregister_event(/lazy_event/on_after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
+		emitter.unregister_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.unregister_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 		emitter = null
 	previous_dir = null
 	previous_loc = null

@@ -38,7 +38,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/tome/salt_act()
 	ignite()
 
-/obj/item/weapon/tome/suicide_act(mob/living/user)
+/obj/item/weapon/tome/suicide_act(var/mob/living/user)
 	if (iscultist(user))
 		anim(target = user, a_icon = 'icons/obj/cult.dmi', a_icon_state = "build", lay = BELOW_OBJ_LAYER, plane = OBJ_PLANE, sleeptime = 20)
 		user.Stun(10)
@@ -351,7 +351,7 @@ var/list/arcane_tomes = list()
 	else
 		return "\[blank\]"
 
-/obj/item/weapon/talisman/suicide_act(mob/user)
+/obj/item/weapon/talisman/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swallows \a [src] and appears to be choking on it! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_OXYLOSS)
 
@@ -559,10 +559,6 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
-/obj/item/weapon/melee/cultblade/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with \the [src]! It looks like \he's trying to commit suicide.</span>")
-	return (SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/melee/cultblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
 	if(!checkcult)
 		return ..()
@@ -709,7 +705,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/soulblade/cultify()
 	return
 
-/obj/item/weapon/melee/soulblade/suicide_act(mob/living/user)
+/obj/item/weapon/melee/soulblade/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] stabs \his stomach open with \the [src]! [shade ? "It looks like they're trying to commit suicide" : "The gem above the handle begins to glow..."].</span>")
 	if(shade || !iscarbon(user))
 		return (SUICIDE_ACT_BRUTELOSS)
@@ -848,13 +844,8 @@ var/list/arcane_tomes = list()
 					blood = min(100,blood+5)
 					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 
-			if (shade && shade.hud_used && shade.gui_icons && shade.gui_icons.soulblade_bloodbar)
-				var/matrix/MAT = matrix()
-				MAT.Scale(1,blood/maxblood)
-				var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
-				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = MAT
-				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-				shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blood]"
+			if (shade)
+				shade.DisplayUI("Soulblade")
 
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
@@ -1021,7 +1012,7 @@ var/list/arcane_tomes = list()
 			S.update_icon()
 	..()
 
-/obj/item/weapon/melee/blood_dagger/suicide_act(mob/user)
+/obj/item/weapon/melee/blood_dagger/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his throat with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 

@@ -23,13 +23,13 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	INVOKE_EVENT(on_bumping, list("user" = src, "bumped" = AM))
+	invoke_event(/event/to_bump, list("bumper" = src, "bumped" = AM))
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
-	INVOKE_EVENT(on_bumped, list("user" = src, "bumping" = AM))
+	invoke_event(/event/bumped, list("bumper" = AM, "bumped" = src))
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
@@ -104,7 +104,7 @@
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	handle_symptom_on_touch(M, src, HAND)
-	INVOKE_EVENT(on_touched, list("user" = src, "has been touched by" = M))
+	invoke_event(/event/touched, list("toucher" = M, "touched" = src))
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
 	if(incapacitation_duration <= 0)
@@ -534,7 +534,7 @@
 	return 0
 
 /mob/living/carbon/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
-	var/walking_factor = (!slip_on_walking && m_intent == M_INTENT_WALK)
+	var/walking_factor = (!slip_on_walking && glide_size <= GLIDE_SIZE_OF_A_WALKING_HUMAN)
 	return (on_foot()) && !locked_to && !lying && !unslippable && !walking_factor
 
 /mob/living/carbon/teleport_to(var/atom/A)
@@ -547,23 +547,22 @@
 	if ((CheckSlip(slip_on_walking, overlay_type, slip_on_magbooties)) != TRUE)
 		return 0
 
+	for(var/obj/item/I in held_items)
+		I.SlipDropped(src,dir,overlay_type) // can be set to trigger specific behaviours when items are dropped by slipping
+
 	if(..())
 		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 		return 1
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
-		I.forceMove(newmob)
-		I.implanted = 1
-		I.imp_in = newmob
-		if(istype(newmob, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = newmob
-			if(!I.part) //implanted as a nonhuman, won't have one.
-				I.part = /datum/organ/external/chest
-			for (var/datum/organ/external/affected in H.organs)
-				if(!istype(affected, I.part))
-					continue
-				affected.implants += I
+		if(!I.imp_in)
+			continue
+		if(!I.remove())
+			stack_trace("failed to remove implant")
+			continue
+		if(!I.insert(newmob, I.part?.name))
+			stack_trace("failed to insert implant")
 
 /mob/living/carbon/proc/dropBorers(var/gibbed = null)
 	var/list/borer_list = get_brain_worms()
@@ -657,7 +656,6 @@
 	..()
 	var/static/list/resettable_vars = list(
 		"gender",
-		"antibodies",
 		"last_eating",
 		"life_tick",
 		"number_wounds",
@@ -666,6 +664,8 @@
 		"pulse")
 
 	reset_vars_after_duration(resettable_vars, duration)
+	if(immune_system)
+		immune_system.send_to_past(duration)
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
@@ -674,7 +674,10 @@
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
 			else
-				. *= I.slowdown
+				if(I.flags & SLOWDOWN_WHEN_CARRIED)
+					. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
+				else
+					. *= I.slowdown
 
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
@@ -682,6 +685,9 @@
 
 		if(. > 1 && reagents.has_any_reagents(HYPERZINES))
 			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
+
+		if(reagents.has_reagent(SUX) && !(reagents.has_any_reagents(HYPERZINES)))
+			. *= 4
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()

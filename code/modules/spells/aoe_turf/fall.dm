@@ -113,7 +113,7 @@ var/global/list/falltempoverlays = list()
 				if(C.mob)
 					C.mob.see_fall()
 
-	user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = targets))
+	user.invoke_event(/event/spellcast, list("spell" = src, "user" = user, "targets" = targets))
 
 		//animate(aoe_underlay, transform = null, time = 2)
 	//var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
@@ -250,3 +250,4 @@ var/global/list/falltempoverlays = list()
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
 		else
 			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
+		qdel(caster)

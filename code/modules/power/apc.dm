@@ -606,19 +606,22 @@
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
-		if (	((stat & BROKEN) || malfhack) \
-				&& !opened \
-				&& ( \
-					(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) \
-					|| istype(W,/obj/item/tool/crowbar) \
-				) \
-				&& prob(20) )
+		if (((stat & BROKEN) || malfhack) && !opened && ((W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) || istype(W,/obj/item/tool/crowbar)))
 			user.do_attack_animation(src, W)
-			opened = 2
-			user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
-				"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
-				"You hear a loud bang.") //"you hear bang" is so bad I have to leave a comment to immortalize it
-			update_icon()
+			playsound(src, 'sound/items/metal_impact.ogg', 75, 1)
+			shake(1, 3)
+			user.delayNextAttack(8)
+			if (prob(20))
+				opened = 2
+				user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
+					"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
+					"You hear something metallic being hit, and falling on the floor.")
+				update_icon()
+			else
+				user.visible_message("<span class='warning'>\The [user.name] hits the broken APC's cover with \a [W.name]!</span>", \
+					"<span class='warning'>You hit the APC's cover with your [W.name]!</span>", \
+					"You hear something metallic being hit.")
+
 		else
 			if (istype(user, /mob/living/silicon))
 				return src.attack_hand(user)
@@ -737,7 +740,7 @@
 		"chargingStatus" = charging,
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,
 		"coverLocked" = coverlocked,
-		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user), // Allow aghosts to fuck with APCs
+		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user) || OMNI_LINK(user,src), // Allow aghosts to fuck with APCs
 		"malfLocked"= malflocked,
 		"malfStatus" = get_malf_status(user),
 
@@ -852,7 +855,7 @@
 			return 0
 
 	else
-		if ((!in_range(src, user) || !istype(src.loc, /turf)))
+		if ((!is_in_range(user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
 
 		if (wiresexposed)
@@ -873,11 +876,8 @@
 	return 1
 
 /obj/machinery/power/apc/is_in_range(var/mob/user)
-	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		var/obj/item/device/multitool/omnitool/O = user.get_active_hand()
-		if(istype(O))
-			return O.can_connect(src,user)
-		return FALSE
+	if(!..())
+		return OMNI_LINK(user,src)
 	return TRUE
 
 /obj/machinery/power/apc/Topic(href, href_list)
@@ -892,7 +892,7 @@
 		return 0
 	if(!can_use(usr, 1))
 		return 0
-	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
+	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr) || OMNI_LINK(usr, src)) && locked)
 	// Shouldn't happen, this is here to prevent href exploits
 		to_chat(usr, "You must unlock the panel to use this!")
 		return 1
@@ -1067,7 +1067,7 @@
 				cell.corrupt()
 				src.malfhack = 1
 				update_icon()
-				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+				var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 				smoke.set_up(3, 0, src.loc)
 				smoke.attach(src)
 				smoke.start()
@@ -1294,25 +1294,26 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	..()
 
 /obj/machinery/power/apc/ex_act(severity)
-
 	switch(severity)
-		if(1.0)
-			//set_broken() //now Destroy() do what we need
-			if (cell)
-				cell.ex_act(1.0) // more lags woohoo
+		if(1)
+			if(cell)
+				qdel(cell)
+				cell = null
 			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
+		if(2)
+			if(prob(50))
 				set_broken()
-				if (cell && prob(50))
-					cell.ex_act(2.0)
-		if(3.0)
-			if (prob(25))
+				if(cell && prob(50))
+					cell.ex_act(2)
+					if(cell && cell.gcDestroyed)
+						cell = null
+		if(3)
+			if(prob(25))
 				set_broken()
 				if (cell && prob(25))
-					cell.ex_act(3.0)
-	return
+					cell.ex_act(3)
+					if(cell && cell.gcDestroyed)
+						cell = null
 
 /obj/machinery/power/apc/blob_act()
 	if (prob(75))

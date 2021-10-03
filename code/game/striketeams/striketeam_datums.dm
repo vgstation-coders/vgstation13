@@ -23,7 +23,7 @@ var/list/sent_strike_teams = list()
 
 	var/datum/outfit/outfit_datum
 
-/datum/striketeam/proc/trigger_strike(var/mob/user, var/missiontext)
+/datum/striketeam/proc/trigger_strike(var/mob/user, var/missiontext, var/from_console = FALSE)
 	mission = missiontext
 
 	var/user_key_name = key_name(user)
@@ -42,11 +42,11 @@ var/list/sent_strike_teams = list()
 		qdel(src)
 		return
 
-	//Logging
-	message_admins("<span class='notice'>[user_key_name] is preparing a [striketeam_name].</span>", 1)
 
+	if(user && !from_console) // Admin business
+		//Logging
+		message_admins("<span class='notice'>[user_key_name] is preparing a [striketeam_name].</span>", 1)
 
-	if(user)
 		if(alert("Do you really want [faction_name] to send in the [striketeam_name]?",,"Yes","No")!="Yes")
 			qdel(src)
 			return
@@ -338,7 +338,6 @@ var/list/sent_strike_teams = list()
 	//M.rebuild_appearance()
 	new_commando.update_hair()
 	new_commando.update_body()
-	new_commando.check_dna(new_commando)
 
 	new_commando.age = !leader_selected ? rand(23,35) : rand(35,45)
 

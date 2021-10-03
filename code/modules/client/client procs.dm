@@ -72,6 +72,10 @@
 		var/datum/log_controller/I = investigations[I_HREFS]
 		I.write("<small>[time_stamp()] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][copytext(sanitize(href), 1, 3000)]<br />")
 
+	// Tgui Topic middleware
+	if(tgui_Topic(href_list))
+		return
+
 	switch(href_list["_src_"])
 		if("holder")
 			hsrc = holder
@@ -485,8 +489,6 @@
 
 
 /client/proc/send_html_resources()
-	if(adv_camera && minimapinit)
-		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)

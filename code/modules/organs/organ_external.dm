@@ -1513,9 +1513,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
 	if(!disfigured)
+		/*
 		if(brute_dam > 40)
 			if(prob(50))
 				disfigure("brute")
+		*/
 		if(burn_dam > 40)
 			disfigure((used_weapon != WPN_LOW_BODY_TEMP) ? "burn" : "frostbite")
 
@@ -1527,7 +1529,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.visible_message("<span class='warning'>You hear a sickening cracking sound coming from \the [owner]'s face.</span>",
 		                      "<span class='danger'>Your face becomes an unrecognizable, mangled mess!</span>",
 		                      "<span class='warning'>You hear a sickening crack.</span>")
-	else if (type == "burn")
+	else if (type == "burn")// Also caused by Sulph Acid and Poly Acid.
 		owner.visible_message("<span class='warning'>[owner]'s face melts away, turning into a mangled mess!</span>",
 		                      "<span class='danger'>Your face melts away into an unrecognizable, mangled mess!</span>",
 		                      "<span class='warning'>You hear a sickening sizzle.</span>")
@@ -1824,9 +1826,6 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ
 					hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
 				overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
-
-	if(brainmob && brainmob.client)
-		brainmob.client.screen.len = null //clear the hud
 
 	if(H && istype(H))
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()

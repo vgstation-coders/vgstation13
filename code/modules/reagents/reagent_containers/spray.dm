@@ -195,6 +195,10 @@
 
 	delay_spraying = FALSE
 
+/obj/item/weapon/reagent_containers/spray/chemsprayer/attack_self(var/mob/user)
+	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
+	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this * 3] units per spray.</span>")
+
 /obj/item/weapon/reagent_containers/spray/chemsprayer/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puffs
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)

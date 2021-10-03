@@ -137,6 +137,7 @@
 		return
 	for (var/i = 1 to 4)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+
 /*
  * Pill Bottles
  */

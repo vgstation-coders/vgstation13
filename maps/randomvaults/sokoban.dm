@@ -49,7 +49,7 @@
 		SL.file_path = pick_n_take(src.available_levels) //No duplicate levels
 		SL.parent = src
 
-		load_dungeon(SL)
+		load_dungeon(SL,rotation)
 		loaded_levels.Add(SL)
 
 	//Load ending
@@ -114,12 +114,12 @@
 
 	for(var/obj/structure/closet/crate/sokoban/crate in objects)
 		//check_cheat performs some additional checks first, and only then marks the user as a cheater
-		crate.lazy_register_event(/lazy_event/on_moved, crate, /obj/structure/closet/crate/sokoban/proc/check_cheat)
+		crate.register_event(/event/moved, crate, /obj/structure/closet/crate/sokoban/proc/check_cheat)
 		crate.parent = src.parent
 
 	for(var/obj/structure/sokoban_teleporter/teleporter in objects)
 		//Teleporters are supposed to be unmovable, so if they're moved or deleted - it's guaranteed cheating
-		teleporter.lazy_register_event(/lazy_event/on_moved, parent, /datum/map_element/vault/sokoban/proc/on_cheat)
+		teleporter.register_event(/event/moved, parent, /datum/map_element/vault/sokoban/proc/on_cheat)
 
 		if(parent)
 			parent.teleporters.Add(teleporter)
@@ -137,7 +137,7 @@
 	reward = track_atom(locate(/obj/item/clothing/suit/armor/laserproof/advanced) in objects)
 	if(reward)
 		reward_turf = get_turf(reward)
-		reward.lazy_register_event(/lazy_event/on_moved, parent, /datum/map_element/vault/sokoban/proc/mark_winner)
+		reward.register_event(/event/moved, parent, /datum/map_element/vault/sokoban/proc/mark_winner)
 
 /*
 This ladder stuff looks confusing, so here's an illustration!!!

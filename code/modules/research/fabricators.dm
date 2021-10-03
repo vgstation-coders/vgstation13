@@ -35,7 +35,7 @@
 	var/min_cap_T = 0.1 //The minimum cap used to how much time coeff can be improved
 	var/fabricator_cooldown = 2 //In deciseconds, the delay between each item starting to be built
 
-	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
+	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE | MULTIOUTPUT
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
 
 /obj/machinery/r_n_d/fabricator/New()
@@ -486,7 +486,7 @@
 	stopped=1
 
 /obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff(var/datum/design/part as obj,var/resource as text, var/roundto=1)
-	return round(part.materials[resource]*resource_coeff, roundto)
+	return max(1,round(part.materials[resource]*resource_coeff, roundto))
 
 //produces the adjusted time taken to build a component
 //different fabricators have different modifiers
