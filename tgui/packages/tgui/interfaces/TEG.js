@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import { useBackend } from '../backend';
-import { Button, LabeledList, Section, ProgressBar, Flex } from '../components';
+import { LabeledList, Section, ProgressBar, Flex } from '../components';
 import { Window } from '../layouts';
 
 export const TEG = (props, context) => {
