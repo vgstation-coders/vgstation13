@@ -91,6 +91,8 @@ var/list/arcane_tomes = list()
 	var i = 1
 	for(var/subtype in subtypesof(/datum/rune_spell))
 		var/datum/rune_spell/instance = subtype
+		if (initial(instance.secret))
+			continue
 		dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
 		if (i == current_page)
 			var/datum/rune_word/word1 = initial(instance.word1)
@@ -160,7 +162,7 @@ var/list/arcane_tomes = list()
 		usr.put_in_hands(T)
 
 	usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-	usr << browse(tome_text(), "window=arcanetome;size=900x500")
+	usr << browse(tome_text(), "window=arcanetome;size=900x600")
 
 /obj/item/weapon/tome/attack(var/mob/living/M, var/mob/living/user)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
@@ -203,7 +205,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/tome/pickup(var/mob/user)
 	if(iscultist(user) && state == TOME_OPEN)
 		usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-		usr << browse(tome_text(), "window=arcanetome;size=900x500")
+		usr << browse(tome_text(), "window=arcanetome;size=900x600")
 
 /obj/item/weapon/tome/dropped(var/mob/user)
 	usr << browse(null, "window=arcanetome")
@@ -231,7 +233,7 @@ var/list/arcane_tomes = list()
 			playsound(user, "pageturn", 50, 1, -5)
 			state = TOME_OPEN
 			usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-			usr << browse(tome_text(), "window=arcanetome;size=900x500")
+			usr << browse(tome_text(), "window=arcanetome;size=900x600")
 		else
 			icon_state = "tome"
 			item_state = "tome"
@@ -267,7 +269,7 @@ var/list/arcane_tomes = list()
 				to_chat(user, "<span class='notice'>You slip \the [I] into \the [src].</span>")
 				if (state == TOME_OPEN)
 					usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-					usr << browse(tome_text(), "window=arcanetome;size=900x500")
+					usr << browse(tome_text(), "window=arcanetome;size=900x600")
 		else
 			to_chat(user, "<span class='warning'>This tome cannot contain any more talismans. Use or remove some first.</span>")
 
@@ -423,7 +425,7 @@ var/list/arcane_tomes = list()
 				var/obj/item/weapon/tome/T = loc
 				T.talismans.Remove(src)
 				user << browse_rsc('icons/tomebg.png', "tomebg.png")
-				user << browse(T.tome_text(), "window=arcanetome;size=900x500")
+				user << browse(T.tome_text(), "window=arcanetome;size=900x600")
 				user.put_in_hands(src)
 		return
 

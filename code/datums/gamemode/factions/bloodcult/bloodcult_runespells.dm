@@ -266,10 +266,10 @@
 	remaining_cost = 300
 	accumulated_blood = 0
 	page = "Channel this rune to create either an Altar, a Forge, or a Spire. You can speed up the ritual by having other cultist touch the rune, or by wearing cult garments. \
-		Altars let you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station. \
-		Forges let you craft armors, powerful blades, as well as construct shells. Blades and shells can be combined with soul gems to great effect, \
-		but note that Forges tend to sear those who stay near them too long. You can mitigate the effect with cult apparel, or use the Fervor rune to reset your temperature. \
-		Spires provide easy communication for the cult in the entire region. Use :x (or .x, or #x) to use cult chat after one is built."
+		<br><br>Altars let you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station.\
+		<br><br>Forges let you craft armors, powerful blades, as well as construct shells. Blades and shells can be combined with soul gems to great effect, \
+		but note that Forges tend to sear those who stay near them too long. You can mitigate the effect with cult apparel, or use the Fervor rune to reset your temperature.\
+		<br><br>Spires provide easy communication for the cult in the entire region. Use :x (or .x, or #x) to use cult chat after one is built."
 	var/turf/loc_memory = null
 	var/spawntype = /obj/structure/cult/altar
 
@@ -423,9 +423,11 @@
 	word1 = /datum/rune_word/self
 	word2 = /datum/rune_word/other
 	word3 = /datum/rune_word/technology
-	page = "You are not alone. Never forget it. The cult's true strength lies in its numbers, and how well each individual cooperates with the rest. \
-		This rune is your main mean of cooperation. Its ritual lets you open a communication channel straight into the mind of every other cultists, \
-		including constructs and soul blades. Just speak, and your words will instantly reach their minds. Keep the cult updated on your activities."
+	page = "By standing on top of the rune and touching it, everyone in the cult will then be able to hear what you say or whisper. \
+		You will also systematically speak in the language of the cult when using it.\
+		<br><br>Talismans imbued with this rune can be used 10 times to send messages to the rest of the cult.\
+		<br><br>Lastly touching the rune a second time while you are already using it lets you set cult reminders that will be heard by newly converts and added to their notes.\
+		<br><br>This rune persists upon use, allowing repeated usage."
 
 /datum/rune_spell/communication/cast()
 	var/obj/effect/rune/R = spell_holder
