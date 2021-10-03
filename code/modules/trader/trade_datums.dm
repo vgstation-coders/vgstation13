@@ -68,7 +68,7 @@
 	name = "Zinc Saucier's crate"
 	path = /obj/structure/closet/crate/freezer/zincsaucer
 	baseprice = 160
-	maxunits = 2
+	maxunits = 3
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/babel

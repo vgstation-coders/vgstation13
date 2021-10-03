@@ -379,9 +379,10 @@
 			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
 		else
 			user.drop_item(O, force_drop = 1)
-			qdel(O)
+			var/obj/item/apiary/IA = O
 
-			var/obj/machinery/apiary/A = new(src.loc)
+			var/obj/machinery/apiary/A = new IA.buildtype(src.loc)
+			A.itemform = O
 			A.icon = src.icon
 			A.icon_state = src.icon_state
 			A.hydrotray_type = src.type
@@ -398,7 +399,7 @@
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
-		
+
 	else
 		return ..()
 

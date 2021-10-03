@@ -66,6 +66,7 @@
 		remains.dir = dir
 		remains.pixel_x = pixel_x
 		remains.pixel_y = pixel_y
+		remains.icon_state = "cricket_remains[pick(1,2)]"
 
 		playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
 

@@ -1985,6 +1985,7 @@
 #include "code\modules\mob\living\simple_animal\borer.dm"
 #include "code\modules\mob\living\simple_animal\combat.dm"
 #include "code\modules\mob\living\simple_animal\constructs.dm"
+#include "code\modules\mob\living\simple_animal\cricket.dm"
 #include "code\modules\mob\living\simple_animal\parrot.dm"
 #include "code\modules\mob\living\simple_animal\puddi.dm"
 #include "code\modules\mob\living\simple_animal\roach.dm"

@@ -52,6 +52,10 @@ var/list/apiaries_list = list()
 
 	machine_flags = WRENCHMOVE
 
+/obj/machinery/apiary/langstroth
+	name = "\improper Langstroth hive"
+	apiary_icon = "langstroth"
+
 /obj/machinery/apiary/New()
 	..()
 	apiaries_list.Add(src)
@@ -154,6 +158,11 @@ var/list/apiaries_list = list()
 	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
 	angry_swarm()
 
+/obj/machinery/apiary/langstroth/attack_hand(mob/user)
+	if(harvest_honeycombs())
+		playsound(loc, 'sound/effects/fan.ogg', 75, 1, -1)
+		visible_message("<span class='good'>\The [itemform] fans smoke, calming the residents for the harvest.</span>")
+
 /obj/machinery/apiary/attackby(var/obj/item/O, var/mob/user)
 	if(..())
 		return
@@ -206,7 +215,7 @@ var/list/apiaries_list = list()
 			for(var/obj/I in src.contents)
 				I.forceMove(created_tray)
 				contents -= I
-			new /obj/item/apiary(src.loc)
+			item.forceMove(loc)
 
 			if(harvest_honeycombs())
 				to_chat(user, "<span class='notice'>You successfully harvest the honeycombs. The empty apiary can be relocated.</span>")
