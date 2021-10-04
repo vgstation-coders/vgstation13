@@ -634,6 +634,25 @@ var/global/list/alcatraz_stuff = list(
 	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
 
+/obj/item/weapon/suit_wand
+	name = "suit sensing wand"
+	desc = "Used by medical staff to ensure compliance with vitals tracking regulations."
+	icon_state = "telebaton_1"
+	item_state = "telebaton_1"
+	w_class = W_CLASS_SMALL
+
+/obj/item/weapon/suit_wand/attack(mob/living/M, mob/living/user)
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.handcuffed || H.is_wearing_item(/obj/item/clothing/suit/straight_jacket, slot_wear_suit))
+			H.toggle_sensors(H,user)
+		else
+			user.visible_message("<span class='danger'>[user] begins waving \the [src] over [M].</span>","<span class='danger'>You begin waving \the [src] over [M].</span>")
+			if(do_after(user,H, 2 SECONDS))
+				H.toggle_sensors(user)
+	else
+		..()
 
 
 #define VAMP_FLASH_CD 50
@@ -835,6 +854,8 @@ var/global/list/alcatraz_stuff = list(
 	has_lock_type = null
 
 var/global/list/yantar_stuff = list(
+	//3 of a kind
+	/obj/item/weapon/suit_wand,/obj/item/weapon/suit_wand,/obj/item/weapon/suit_wand,
 	//1 of a kind
 	/obj/item/weapon/storage/trader_chemistry,
 	/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer,
