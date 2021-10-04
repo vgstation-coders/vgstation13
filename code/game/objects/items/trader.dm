@@ -641,7 +641,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/weapon/depocket_wand/suit/attack_self(mob/user)
 	var/list/modes = list("Off", "Binary sensors", "Vitals tracker", "Tracking beacon")
-	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[1]) in modes
+	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[wand_mode + 1]) in modes
 	if(user.incapacitated())
 		return
 	wand_mode = modes.Find(switchMode) - 1
