@@ -43,7 +43,7 @@
 	display_with_parent = TRUE
 	y = "BOTTOM"
 
-/datum/mind_ui/bloodcult_cultist/Valid()
+/datum/mind_ui/bloodcult_cultist_panel/Valid()
 	var/mob/M = mind.current
 	if (!M)
 		return FALSE

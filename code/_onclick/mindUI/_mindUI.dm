@@ -156,6 +156,9 @@ var/list/mind_ui_ID2type = list()
 
 // Makes every element visible
 /datum/mind_ui/proc/Display()
+	if (!Valid())
+		Hide(TRUE)
+		return
 	active = TRUE
 
 	var/mob/M = mind.current
