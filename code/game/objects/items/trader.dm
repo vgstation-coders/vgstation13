@@ -648,13 +648,13 @@ var/global/list/alcatraz_stuff = list(
 
 	switch(wand_mode)
 		if(0)
-			to_chat(user, "<span class='notice'>The [src] will now disable suit remote sensing equipment.</span>")
+			to_chat(user, "<span class='notice'>\The [src] will now disable suit remote sensing equipment.</span>")
 		if(1)
-			to_chat(user, "<span class='notice'>The [src] will now make suits report whether the wearer is live or dead.</span>")
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report whether the wearer is live or dead.</span>")
 		if(2)
-			to_chat(user, "<span class='notice'>The [src] will now make suits report vital lifesigns.</span>")
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report vital lifesigns.</span>")
 		if(3)
-			to_chat(user, "<span class='notice'>The [src] will now make suits report vital lifesigns as well as coordinate positions.</span>")
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report vital lifesigns as well as coordinate positions.</span>")
 
 /obj/item/weapon/depocket_wand/suit/scan(mob/living/carbon/human/H, mob/living/user)
 	var/obj/item/clothing/under/suit = H.w_uniform
