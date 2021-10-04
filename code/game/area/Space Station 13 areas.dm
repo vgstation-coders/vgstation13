@@ -177,7 +177,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Spider Clan Dojo"
 	icon_state = "dojo"
 	requires_power = 0
-	dynamic_lighting = 1
+	dynamic_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -185,7 +185,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Void Between Timelines"
 	icon_state = "time_void"
 	requires_power = 0
-	dynamic_lighting = 1
+	dynamic_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
