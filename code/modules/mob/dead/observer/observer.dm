@@ -605,8 +605,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		else
 			to_chat(usr, "That arena doesn't seem to exist anymore.")
 
-	..()
-
 //END TELEPORT HREF CODE
 
 /mob/dead/observer/html_mob_check()
