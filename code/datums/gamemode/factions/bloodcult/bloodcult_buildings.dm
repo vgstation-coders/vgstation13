@@ -440,17 +440,20 @@
 		stopWatching(user)
 		return
 	if (altar_task)
-		if (altar_task == ALTARTASK_SACRIFICE)
-			if (user in contributors)
-				return
-			if (!user.checkTattoo(TATTOO_SILENT))
-				if (prob(5))
-					user.say("Let me show you the dance of my people!","C")
-				else
-					user.say("Barhah hra zar'garis!","C")
-			contributors.Add(user)
-			if (user.client)
-				user.client.images |= progbar
+		switch (altar_task)
+			if (ALTARTASK_GEM)
+				to_chat(user, "<span class='warning'>You must wait before the Altar's current task is over.</span>")
+			if (ALTARTASK_SACRIFICE)
+				if (user in contributors)
+					return
+				if (!user.checkTattoo(TATTOO_SILENT))
+					if (prob(5))
+						user.say("Let me show you the dance of my people!","C")
+					else
+						user.say("Barhah hra zar'garis!","C")
+				contributors.Add(user)
+				if (user.client)
+					user.client.images |= progbar
 		return
 	if(is_locking(lock_type))
 		var/mob/M = get_locked(lock_type)[1]

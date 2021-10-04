@@ -225,6 +225,8 @@
 	var/datum/role/cultist/potential_mentor
 	var/min_acolytes = ARBITRARILY_LARGE_NUMBER
 	for (var/datum/role/cultist/C in cult.members)
+		if (C.antag.current.isDead())
+			continue
 		if (C.cultist_role == CULTIST_ROLE_MENTOR)
 			if (C.acolytes.len < min_acolytes || (C.acolytes.len == min_acolytes && prob(50)))
 				min_acolytes = C.acolytes.len

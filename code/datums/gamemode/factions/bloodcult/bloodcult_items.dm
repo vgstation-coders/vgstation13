@@ -1,5 +1,7 @@
 #define PAGE_FOREWORD		0
 #define PAGE_LORE1			101
+#define PAGE_LORE2			102
+#define PAGE_LORE3			103
 
 var/list/arcane_tomes = list()
 
@@ -102,7 +104,9 @@ var/list/arcane_tomes = list()
 			page_data += initial(instance.page)
 		i++
 
-	dat += {"<a href='byond://?src=\ref[src];page=[PAGE_LORE1]'><label> * </label> <li>  about this tome and our goal </li></a>
+	dat += {"<a href='byond://?src=\ref[src];page=[PAGE_LORE1]'><label> * </label> <li>  Addendum I </li></a>
+			<a href='byond://?src=\ref[src];page=[PAGE_LORE2]'><label> * </label> <li>  Addendum II </li></a>
+			<a href='byond://?src=\ref[src];page=[PAGE_LORE3]'><label> * </label> <li>  Addendum III </li></a>
 			</ul></div>
 			<div style="font-size:18px" class="column">      <div align="left">      <b><ul>"}
 
@@ -124,18 +128,33 @@ var/list/arcane_tomes = list()
 	var/dat = null
 	switch (current_page)
 		if (PAGE_FOREWORD)
-			dat = {"<div align="center"><b>Foreword</b></div><br>
-				This tome in your hands is both a guide to the ways of the devotes to Nar-Sie, and a tool to help them performing the cult's rituals.
-				Inside are gathered notes on the various rituals, which you can read to study their use, and learn their runes. You don't have to learn
-				the runes by heart however, as keeping this tome open allows you to immediately remember them when tracing words. Additional pieces of lore
-				are available in the latter pages, aiming to satisfy the curiosity of the assiduous cultists.
-				"}
+			dat = {"<div align="center"><b>Foreword</b></div><br>"}
+			dat += "<i>Written over the ages by a collection of arch-cultists, under the guidance of the geometer himself.</i>\
+				<br><br>Touch a chapter to read it."
 		if (PAGE_LORE1)
-			dat = {"<div align="center"><b>About this tome and our goal</b></div><br>
-				This tome was written under the guidance of Nar-Sie, by devotes who have left behind their flesh enveloppes and taken residence in the realm of the Geometer of Blood.
-				Our goal is to help our kin in the physical world, that is you, achieve the Tear Reality ritual, so that you can all join us and bring along lots of value, in other words blood.
-				This goal has been achieved countless times before by different beings in different place, and this tome has been updated thanks to the knowledge of those who joined us.
-				"}
+			dat = {"<div align="center"><b>Addendum I: "From the other side of the veil"</b></div><br>"}
+			dat += "<i>It is by chance that humanity stumbled upon the realm of Nar-Sie some centuries ago, \
+					although while some of those so called wizards called it a happy little accident, few of them know that the dice was loaded from the start.\
+					<br><br>Nar-Sie threw some artifacts adrift in the bluespace, waiting for some intelligent life to pick them up and trace their way back to him. \
+					For you see, Nar-Sie loves two things about humans, the blood that flows from their veins, and the dramatic circumstances around which said blood ends up flowing from their gaping wounds.\
+					<br><br>How did he know about humanity's existence before they even reached him you might ask? It's quite simple, he could hear the drumming of our heartbeats all the way from the other side of the veil.</i>"
+		if (PAGE_LORE2)
+			dat = {"<div align="center"><b>Addendum II: "From whom the blood spills"</b></div><br>"}
+			dat += "<i>After contact was made between the planes, it was a matter of time before some people would appear who would actively seek Nar-Sie.\
+					<br><br>Either because his love of drama and chaos resonated with them, and they wanted to become his heralds, performing sacrifices for his amusement, \
+					or because they were in awe with his... \"otherworldlyness?\" People who had lived until now grounded in reality, and became quite fascinated with something mystic, yet tangible.\
+					<br><br>And of course, then came those who seeked to defy him. Either in the name of their own gods, or out of their own sense of morality, but little do those know, \
+					Nar-Sie loves them equally, and doesn't care too much from whom the blood spills.</i>"
+		if (PAGE_LORE3)
+			dat = {"<div align="center"><b>Addendum III: "The geometer's calling card"</b></div><br>"}
+			dat += "<i>A common misconception about Nar-Sie is about his title, why is he the Geometer of Blood? Nobody dared ask him directly by fear of offending him, so for a long time, \
+					many cultists just assumed that he was really into geometry, and his powers manifesting from blood drawings of precise patterns would corroborate this hypothesis.\
+					<br><br>Some cultists eventually took it upon themselves to commune with him to get an answer, after performing some sacrifices for good measure. The answer was unexpected, and shed more light on the cult's origins. \
+					They learned that after the wizards cut their way into his plane, it took some time for them to run into him, just like humans aren't aware of every single ant living in their garden. \
+					But when they did arrive upon him, his gigantic form twisted upon the scenery gave them the image of a geometer moth.\
+					<br><br>And just like moths tend to be attracted by light, they saw that Nar-Sie was attracted by blood, so they called him the Geometer of Blood, a title very much to his liking.\
+					<br><br>As humanity ventures deeper and deeper into the darkness of space and toys with powers they understand less and less, Nar-Sie feels them coming closer and closer to him, and wants now to hasten the process. \
+					His cult sends heralds to let humanity know how much he likes them (their blood mostly), and until he's ready to invite them into his realm, they leave blood-splattered space stations across the stars as his calling card.</i>"
 	return dat
 
 /obj/item/weapon/tome/Topic(href, href_list)
@@ -317,6 +336,8 @@ var/list/arcane_tomes = list()
 
 #undef PAGE_FOREWORD
 #undef PAGE_LORE1
+#undef PAGE_LORE2
+#undef PAGE_LORE3
 
 ///////////////////////////////////////TALISMAN////////////////////////////////////////////////
 
