@@ -26,7 +26,7 @@ var/list/processing_objects = list()
 			var/time = (world.timeofday - time_start)
 			if(time > 1 SECONDS)
 				var/turf/T = get_turf(object)
-				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time] seconds to initialize.")
+				log_debug("Slow object initialize. [object] ([object.type]) at [T?.x],[T?.y],[T?.z] took [time/10] seconds to initialize.")
 		else
 			bad_inits[object.type] = bad_inits[object.type]+1
 		CHECK_TICK

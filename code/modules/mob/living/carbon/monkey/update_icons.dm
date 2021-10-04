@@ -92,6 +92,22 @@
 			if(hat.dynamic_overlay["[HEAD_LAYER]"])
 				var/image/dyn_overlay = hat.dynamic_overlay["[HEAD_LAYER]"]
 				I.overlays += dyn_overlay
+
+		var/i = 1
+		var/image/aboveimg
+		for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+			aboveimg = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+
+			aboveimg.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+			I.overlays += aboveimg
+
+			if(above.dynamic_overlay)
+				if(above.dynamic_overlay["[HEAD_LAYER]"])
+					var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
+					aboveimg.overlays += dyn_overlay
+
+			i++
+
 		overlays_standing[M_HAT_LAYER]	= I
 		hat.screen_loc = ui_monkey_hat
 	else

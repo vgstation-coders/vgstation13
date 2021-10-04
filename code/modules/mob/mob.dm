@@ -1369,9 +1369,6 @@ Use this proc preferably at the end of an equipment loadout
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
 
-	for (var/datum/action/camera/action_cam in actions)
-		action_cam.Remove(src)
-
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
 /mob/verb/DisableClick(argu = null as anything, sec = "" as text, number1 = 0 as num, number2 = 0 as num)
@@ -1583,23 +1580,6 @@ Use this proc preferably at the end of an equipment loadout
 /mob/verb/southface()
 	set hidden = 1
 	return directionface(SOUTH)
-
-/mob/proc/check_dark_vision()
-	if (dark_plane && dark_plane.alphas.len)
-		var/max_alpha = 0
-		for (var/key in dark_plane.alphas)
-			max_alpha = max(dark_plane.alphas[key], max_alpha)
-		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 10)
-	else if (dark_plane)
-		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 10)
-
-	if (self_vision)
-		if (isturf(loc))
-			var/turf/T = loc
-			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
-				animate(self_vision, alpha = self_vision.target_alpha, time = 10)
-			else
-				animate(self_vision, alpha = 0, time = 10)
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)

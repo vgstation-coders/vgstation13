@@ -207,6 +207,14 @@
 	jammed = 2
 	color = "blue"
 
+/obj/effect/blob/core/ame_lab
+	name = "antimatter control unit"
+	desc = "This device injects antimatter into connected shielding units. Wrench the device to set it...wait hold on, something's off..?"
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi'
+	looks = "AME_new"
+	asleep = TRUE
+	no_ghosts_allowed = TRUE
+
 /obj/item/weapon/paper/amelab1
 	name = "paper- 'Initial Report'"
 	info = "I have arrived at the lab. The builders have just finished setting up the atmos and have departed. The station is using so little power that the P.A.C.M.A.N. in the maintenance is more than enough to recharge the APC. Centcomm should send the parts for the reactor by tomorrow, I can't wait to build it."
@@ -461,7 +469,7 @@
 /obj/machinery/floodlight/on/New()
 	..()
 	on = 1
-	set_light()
+	set_light(brightness_on)
 	update_icon()
 
 /obj/machinery/floodlight/on/infinite

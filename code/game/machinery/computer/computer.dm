@@ -21,7 +21,7 @@
 
 /obj/machinery/computer/New()
 	..()
-	if(ticker)
+	if(world.has_round_started())
 		initialize()
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)

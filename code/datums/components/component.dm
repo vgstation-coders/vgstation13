@@ -77,3 +77,6 @@
 	. = get_component(c_type)
 	if(!.)
 		return add_component(arglist(args))
+
+/datum/component/proc/process()
+	set waitfor = FALSE

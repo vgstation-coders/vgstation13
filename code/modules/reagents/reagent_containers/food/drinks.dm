@@ -1108,6 +1108,21 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator
+	name = "Zam Human Hydrator"
+	desc = "The mothership provides only the best mineral water for humans to drink, REAL minerals included."
+	icon_state = "Zam_HumanHydrator"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator/New()
+	..()
+	reagents.add_reagent(WATER, 35)
+	reagents.add_reagent(IRON, 1)
+	reagents.add_reagent(COPPER, 1)
+	reagents.add_reagent(SILVER, 1)
+	reagents.add_reagent(GOLD, 1)
+	reagents.add_reagent(DIAMONDDUST, 1)
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza
 	name = "Zam Polytrinic Palooza"
 	desc = "This drink has been banned in all mothership controlled territories. Consume at your own risk."
@@ -1867,7 +1882,7 @@
 	if(lit)
 		set_light(src.brightness_lit)
 	else
-		kill_light()
+		set_light(0)
 
 //todo: can light cigarettes with
 //todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now

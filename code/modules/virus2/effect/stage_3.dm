@@ -504,11 +504,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 
 	if (mob.see_in_dark_override < 9)
 		mob.see_in_dark_override = night_vision_strength + 1
-		if (count == 0)
+		if (count == 1)
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate as they adjust for low-light environments.</span>")
-		else if (count == 6)
-			to_chat(mob, "<span class = 'notice'>Your pupils reach their maximum dilation.</span>")
-			mob.see_in_dark_override = 9
 		else
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
 
@@ -745,7 +742,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.mutations.Add(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.UpdateDamageIcon()
-	H.fixblood()
+	H.copy_dna_data_to_blood_reagent()
 	to_chat(mob, "<span class='sinister'>You feel different.</span>")
 	activated = 1
 
@@ -758,7 +755,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.mutations.Remove(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.UpdateDamageIcon()
-	H.fixblood()
+	H.copy_dna_data_to_blood_reagent()
 	to_chat(mob, "<span class='warning'>You feel like your old self again.</span>")
 	activated = 0
 

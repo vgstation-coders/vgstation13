@@ -74,6 +74,9 @@
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
 
+	
+	var/multiz_render_cap = 8			//how far down open spaces will render
+
 	// BSQL things
 	var/bsql_debug = 0
 	var/async_query_timeout = 10
@@ -180,6 +183,7 @@
 	var/skip_minimap_generation = 0 //If 1, don't generate minimaps
 	var/skip_holominimap_generation = 0 //If 1, don't generate holominimaps
 	var/skip_vault_generation = 0 //If 1, don't generate vaults
+	var/disable_vault_rotation = 0 //If 1, don't load vaults rotated
 	var/shut_up_automatic_diagnostic_and_announcement_system = 0 //If 1, don't play the vox sounds at the start of every shift.
 	var/no_lobby_music = 0 //If 1, don't play lobby music, regardless of client preferences.
 	var/no_ambience = 0 //If 1, don't play ambience, regardless of client preferences.
@@ -576,6 +580,10 @@
 				if("bsql_thread_limit")
 					bsql_thread_limit = text2num(value)
 
+				
+				if("multiz_render_cap")
+					multiz_render_cap = text2num(value)
+
 				if("media_base_url")
 					media_base_url = value
 				if("media_secret_key")
@@ -598,6 +606,8 @@
 					skip_holominimap_generation = 1
 				if("skip_vault_generation")
 					skip_vault_generation = 1
+				if("disable_vault_rotation")
+					disable_vault_rotation = 1
 				if("shut_up_automatic_diagnostic_and_announcement_system")
 					shut_up_automatic_diagnostic_and_announcement_system = 1
 				if("no_lobby_music")

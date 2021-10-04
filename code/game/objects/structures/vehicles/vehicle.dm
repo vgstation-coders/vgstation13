@@ -26,7 +26,6 @@
 	icon = 'icons/obj/vehicles.dmi'
 	anchored = 1
 	density = 1
-	noghostspin = 1 //You guys are no fun
 	buckle_range = 1
 	var/empstun = 0
 	var/health = 100
@@ -480,7 +479,7 @@
 		target.set_light(brightness)
 		playsound(target, sounds[1], 50, 1)
 	else
-		target.kill_light()
+		target.set_light(0)
 		playsound(target, sounds[2], 50, 1)
 	target.update_icon()
 

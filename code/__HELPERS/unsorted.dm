@@ -1435,7 +1435,7 @@ var/mob/dview/tview/tview_mob = new()
 	if(!contents.len)
 		return 0
 	for(var/atom/A in contents)
-		if(!istype(A, /atom/movable/light))
+		if(!istype(A, /atom/movable/lighting_overlay))
 			return 0
 	return 1
 
@@ -1443,7 +1443,7 @@ var/mob/dview/tview/tview_mob = new()
 //Includes an exception list if you don't want to delete some stuff
 /turf/proc/clear_contents(var/list/ignore = list())
 	for(var/atom/turf_contents in contents)
-		if(!istype(turf_contents, /atom/movable/light) && !is_type_in_list(turf_contents, ignore) && !(flags & INVULNERABLE))
+		if(!istype(turf_contents, /atom/movable/lighting_overlay) && !is_type_in_list(turf_contents, ignore) && !(flags & INVULNERABLE))
 			qdel(turf_contents)
 
 /proc/multinum_display(var/number,var/digits)//multinum_display(42,4) = "0042"; multinum_display(-137,6) = "-000137"; multinum_display(4572,3) = "999"
@@ -1951,3 +1951,24 @@ Game Mode config tags:
 	else
 		var/list/viewrangelist = splittext(view,"x")
 		return list(text2num(viewrangelist[1]), text2num(viewrangelist[2]))
+
+/**
+ * Get a bounding box of a list of atoms.
+ *
+ * Arguments:
+ * - atoms - List of atoms. Can accept output of view() and range() procs.
+ *
+ * Returns: list(x1, y1, x2, y2)
+ */
+/proc/get_bbox_of_atoms(list/atoms)
+	var/list/list_x = list()
+	var/list/list_y = list()
+	for(var/_a in atoms)
+		var/atom/a = _a
+		list_x += a.x
+		list_y += a.y
+	return list(
+		min(list_x),
+		min(list_y),
+		max(list_x),
+		max(list_y))

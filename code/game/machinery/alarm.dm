@@ -1005,7 +1005,7 @@ var/global/list/airalarm_presets = list(
 				var/list/selected = TLV[env]
 				var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
 				var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
-				if (isnull(newval) || ..() || !buttonCheck())
+				if (isnull(newval) || ..() || !buttonCheck(usr))
 					return 1
 				set_threshold(env, threshold, newval, 1)
 		return 1

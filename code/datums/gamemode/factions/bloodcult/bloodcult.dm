@@ -248,12 +248,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 /mob/living/carbon/proc/implant_pop()
 	for(var/obj/item/weapon/implant/loyalty/I in src)
-		if (I.implanted)
+		if (I.imp_in)
 			to_chat(src, "<span class='sinister'>Your blood pushes back against the loyalty implant, it will visibly pop out within seconds!</span>")
 			spawn(10 SECONDS)
-				I.forceMove(get_turf(src))
-				I.implanted = 0
-				visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
+				if(I.remove())
+					visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
 
 /mob/living/carbon/proc/boxify(var/delete_body = TRUE, var/new_anim = TRUE, var/box_state = "cult")//now its own proc so admins may atomProcCall it if they so desire.
 	var/turf/T = get_turf(src)
@@ -286,9 +285,6 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		cup.reagents.add_reagent(SLIMEJELLY, 50)
 	if (isalien(src))//w/e
 		cup.reagents.add_reagent(RADIUM, 50)
-
-	for(var/obj/item/weapon/implant/loyalty/I in src)
-		I.implanted = 0
 
 	for(var/obj/item/I in src)
 		u_equip(I)
@@ -1052,9 +1048,8 @@ var/static/list/valid_cultpower_slots = list(
 		if (jobban_isbanned(src, CULTIST) || isantagbanned(src) || (acceptance == "Never"))
 			return CONVERTIBLE_NEVER
 
-		for(var/obj/item/weapon/implant/loyalty/I in src)
-			if(I.implanted)
-				return CONVERTIBLE_IMPLANT
+		if(is_loyalty_implanted())
+			return CONVERTIBLE_IMPLANT
 
 		if (acceptance == "Always" || acceptance == "Yes")
 			return CONVERTIBLE_ALWAYS

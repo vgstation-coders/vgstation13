@@ -238,8 +238,6 @@
 		var/datum/design/design = ready_queue[text2num(href_list["remove_researched"])]
 		if(design)
 			ready_queue -= design
-			qdel(design)
-			design = null
 		ui_interact(usr)
 		return 1
 

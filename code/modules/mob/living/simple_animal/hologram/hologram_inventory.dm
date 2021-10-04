@@ -136,6 +136,27 @@
 		head.generate_accessory_overlays(O)
 		O.icon = standing
 		O.icon_state = standing.icon_state
+
+		if(istype(head,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = head
+			var/i = 1
+			var/image/abovehats
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				abovehats = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				O.overlays += abovehats
+				if(above.dynamic_overlay)
+					if(above.dynamic_overlay["[HEAD_LAYER]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
+						O.overlays += dyn_overlay
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					bloodsies.color = above.blood_color
+					bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+					O.overlays	+= bloodsies
+
+				i++
+		
 		var/image/I = new()
 		I.appearance = O.appearance
 		I.plane = FLOAT_PLANE

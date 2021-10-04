@@ -516,6 +516,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		new_character.dna = new()//Let's first give them a new DNA.
 		new_character.dna.unique_enzymes = record_found.fields["b_dna"]//Enzymes are based on real name but we'll use the record for conformity.
 		new_character.dna.b_type = record_found.fields["b_type"]
+		new_character.copy_dna_data_to_blood_reagent()
 
 		// I HATE BYOND.  HATE.  HATE. - N3X
 		var/list/newSE= record_found.fields["enzymes"]

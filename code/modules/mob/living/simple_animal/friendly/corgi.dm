@@ -299,6 +299,20 @@
 				dir = i
 				sleep(1)
 		return
+	
+	if(istype(item_to_add,/obj/item/clothing/head))
+		var/obj/item/clothing/head/hat = item_to_add
+		if(hat.on_top)
+			to_chat(usr, "You set [item_to_add] on [src]'s head, but it falls off from [src]'s restlessness!")
+			usr.drop_item(item_to_add, src.loc)
+
+			if(prob(25))
+				step_rand(item_to_add)
+			if (ckey == null)
+				for(var/i in list(1,2,4,8,4,8,4,dir))
+					dir = i
+					sleep(1)
+			return
 
 	on_new_hat(item_to_add)//changes the corgi's name, description and behaviour to match their new hat
 
@@ -334,7 +348,7 @@
 	min_oxy = initial(min_oxy)
 	minbodytemp = initial(minbodytemp)
 	maxbodytemp = initial(maxbodytemp)
-	kill_light()
+	set_light(0)
 
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)

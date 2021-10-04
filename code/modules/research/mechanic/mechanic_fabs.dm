@@ -13,7 +13,7 @@
 	icon_state = "genfab"
 	max_material_storage = GEN_FAB_BASESTORAGE
 	nano_file = "genfab.tmpl"
-	var/list/design_types = GENFAB | IMPRINTER | PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
+	var/list/design_types = GENFAB | IMPRINTER | PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB | MULTIOUTPUT
 	var/removable_designs = 1
 	var/plastic_added = 1 //if plastic costs are added for designs - the autolathe doesn't have this
 

@@ -52,16 +52,6 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
-	// Lighting flags
-	var/lighting_flags
-	var/moody_light_type
-
-/atom/New()
-	. = ..()
-	// Light effects
-	if (moody_light_type || lighting_flags & IS_LIGHT_SOURCE)
-		set_light()
-
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -174,15 +164,6 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
-	if(light_obj)
-		qdel(light_obj)
-		light_obj = null
-	if(shadow_obj)
-		qdel(shadow_obj)
-		shadow_obj = null
-	if(smooth_light_obj)
-		qdel(smooth_light_obj)
-		smooth_light_obj = null
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
@@ -618,7 +599,7 @@ its easier to just keep the beam vertical.
 				H.dna = new /datum/dna(null)
 				H.dna.real_name = H.real_name
 				H.dna.flavor_text = H.flavor_text
-		H.check_dna()
+		H.check_dna_integrity()
 
 		//Now, deal with gloves.
 		if (H.gloves && H.gloves != src)
@@ -702,7 +683,7 @@ its easier to just keep the beam vertical.
 	if (!istype(M.dna, /datum/dna))
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
-	M.check_dna()
+	M.check_dna_integrity()
 	if (!( src.flags & FPRINT))
 		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.

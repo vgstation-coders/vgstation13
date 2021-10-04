@@ -103,7 +103,7 @@
 		holder3.icon_state = "hudblank"
 
 		for(var/obj/item/weapon/implant/I in src)
-			if(I.implanted)
+			if(I.imp_in)
 				if(istype(I,/obj/item/weapon/implant/tracking))
 					holder1.icon_state = "hud_imp_tracking"
 				if(istype(I,/obj/item/weapon/implant/loyalty))

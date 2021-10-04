@@ -60,6 +60,11 @@
 
 	return 0
 
+/mob/proc/activate_empty_hand()
+	var/empty_hand = find_empty_hand_index()
+	if(empty_hand)
+		activate_hand(empty_hand)
+
 /mob/proc/empty_hand_indexes_amount()
 	. = 0
 

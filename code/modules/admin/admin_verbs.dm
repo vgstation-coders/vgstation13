@@ -189,6 +189,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
 	/client/proc/configFood,
+	/client/proc/configHat,
 	/client/proc/cmd_dectalk,
 	/client/proc/debug_reagents,
 	/client/proc/create_awaymission,
@@ -209,7 +210,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
 	/client/proc/bee_count,
-	/client/proc/see_lightmap,
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif
@@ -1219,10 +1219,15 @@ var/list/admin_verbs_mod = list(
 			return
 
 
-	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	ME.load(x_coord - 1, y_coord - 1, z_coord) //Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
+	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading") as null|num
+	if(rotate == null)
+		return
+	var/overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
+
+	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord] rotated by [rotate] degrees")
+	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord] rotated by [rotate] degrees")
+	ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite) //Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
+	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"] rotated by [rotate] degrees")
 
 /client/proc/create_awaymission()
 	set category = "Admin"
@@ -1328,20 +1333,3 @@ var/list/admin_verbs_mod = list(
 		holder.ViewAllRods()
 	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-
-/client/proc/see_lightmap()
-	set name = "See lightmap"
-	set category = "Ghost"
-
-	if (!usr.check_rights(R_DEBUG))
-		to_chat(usr, "<span class='notice'>Only admins can use this command.</span>")
-		return
-
-	if (holder.see_lightmap)
-		usr.dark_plane.plane = LIGHTING_PLANE
-		usr.dark_plane.alphas["light_map"] = 0
-	else
-		usr.dark_plane.plane = initial(usr.dark_plane.plane)
-		usr.dark_plane.alphas -= "light_map"
-
-	holder.see_lightmap = !holder.see_lightmap

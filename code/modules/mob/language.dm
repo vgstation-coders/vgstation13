@@ -17,9 +17,10 @@
 	var/list/space_chance = 55       // Likelihood of getting a space in the random scramble string.
 
 /datum/language/proc/get_spoken_verb(var/msg, var/silicon, var/mode, var/mob/speaker)
-	var/speaker_verb_override = speaker.get_spoken_verb(msg)
-	if (speaker_verb_override)
-		return speaker_verb_override
+	if(istype(speaker))
+		var/speaker_verb_override = speaker.get_spoken_verb(msg)
+		if (speaker_verb_override)
+			return speaker_verb_override
 	switch(mode)
 		if(SPEECH_MODE_WHISPER)
 			return "[whisper_verb]"

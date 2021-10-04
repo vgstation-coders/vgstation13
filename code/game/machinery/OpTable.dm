@@ -117,7 +117,7 @@
 	for (var/atom/A in loc)
 		if (A == src)
 			continue
-		if (A.density)
+		if (!A.Cross(victim,get_turf(victim)))
 			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
 			return FALSE
 	victim.forceMove(loc)

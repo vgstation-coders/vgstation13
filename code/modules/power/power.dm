@@ -93,6 +93,7 @@
 		return 0
 
 /obj/machinery/power/proc/get_powernet()
+	RETURN_TYPE(/datum/powernet)
 	check_rebuild()
 	return powernet
 
@@ -170,7 +171,7 @@
 
 		if(!use_auto_lights)
 			return
-		kill_light()
+		set_light(0)
 
 /obj/machinery/power/can_overload()
 	return 0
