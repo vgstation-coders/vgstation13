@@ -681,7 +681,7 @@ var/global/list/alcatraz_stuff = list(
 		if(3)
 			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to report vital lifesigns as well as coordinate positions with \the [src].</span>",\
 								"<span class='danger'>You set [H]'s sensors to report vital lifesigns as well as coordinate positions.</span>")
-	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [wand_mode] by [user.name] ([user.ckey])</font>")
+	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [wand_mode] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Set [H.name]'s suit sensors ([H.ckey]).</font>")
 	log_attack("[user.name] ([user.ckey]) has set [H.name]'s suit sensors ([H.ckey]) to [wand_mode].")
 
