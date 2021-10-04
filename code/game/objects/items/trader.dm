@@ -641,7 +641,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/weapon/depocket_wand/suit/attack_self(mob/user)
 	var/list/modes = list("Off", "Binary sensors", "Vitals tracker", "Tracking beacon")
-	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[sensor_mode + 1]) in modes
+	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[1]) in modes
 	if(user.incapacitated())
 		return
 	wand_mode = modes.Find(switchMode) - 1
@@ -670,17 +670,17 @@ var/global/list/alcatraz_stuff = list(
 	suit.sensor_mode = wand_mode
 	switch(suit.sensor_mode)
 		if(0)
-			user.visible_message("<span class='danger'>[user] has set [M]'s suit sensors to disable suit remote sensing equipment with \the [src].</span>",\
-								"<span class='danger'>You set [M]'s sensors to disable suit remote sensing equipment.</span>")
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to disable suit remote sensing equipment with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to disable suit remote sensing equipment.</span>")
 		if(1)
-			user.visible_message("<span class='danger'>[user] has set [M]'s suit sensors to whether the wearer is live or dead with \the [src].</span>",\
-								"<span class='danger'>You set [M]'s sensors to report whether the wearer is live or dead.</span>")
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to whether the wearer is live or dead with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report whether the wearer is live or dead.</span>")
 		if(2)
-			user.visible_message("<span class='danger'>[user] has set [M]'s suit sensors to report vital lifesigns with \the [src].</span>",\
-								"<span class='danger'>You set [M]'s sensors to report vital lifesigns.</span>")
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to report vital lifesigns with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report vital lifesigns.</span>")
 		if(3)
-			user.visible_message("<span class='danger'>[user] has set [M]'s suit sensors to report vital lifesigns as well as coordinate positions with \the [src].</span>",\
-								"<span class='danger'>You set [M]'s sensors to report vital lifesigns as well as coordinate positions.</span>")
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to report vital lifesigns as well as coordinate positions with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report vital lifesigns as well as coordinate positions.</span>")
 	src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [wand_mode] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Set [H.name]'s suit sensors ([H.ckey]).</font>")
 	log_attack("[user.name] ([user.ckey]) has set [H.name]'s suit sensors ([H.ckey]) to [wand_mode].")
