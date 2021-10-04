@@ -636,7 +636,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/weapon/depocket_wand/suit
 	name = "suit sensing wand"
-	desc = "Used by medical staff to ensure compliance with vitals tracking regulations."
+	desc = "Used by medical staff to ensure compliance with vitals tracking regulations and to save vocal cord wear from demanding it over communications systems."
 	var/wand_mode = 3
 
 /obj/item/weapon/depocket_wand/suit/attack_self(mob/user)
