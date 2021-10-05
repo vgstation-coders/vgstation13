@@ -82582,11 +82582,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "kQa" = (
-/turf/simulated/wall/shuttle/unsmoothed{
-	dir = 3;
-	icon_state = "swall2";
-	tag = "icon-swall2"
-	},
+/turf/simulated/wall/shuttle,
 /area/centcom/evac)
 "kQc" = (
 /obj/effect/decal/warning_stripes{

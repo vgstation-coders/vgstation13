@@ -6,7 +6,7 @@
 "f" = (/obj/effect/glowshroom,/turf/unsimulated/floor/asteroid,/area/vault/automap)
 "g" = (/obj/effect/landmark/corpse/clown,/obj/item/weapon/paper{info = "The call has gone out! Our ancestral home has been rediscovered! Not a small patch of land, but a true clown nation, a true Clown Planet! We're on our way home at last!"},/turf/unsimulated/floor/asteroid,/area/vault/automap)
 "h" = (/obj/structure/shuttle/diag_wall/smooth,/area/vault/automap)
-"i" = (/turf/simulated/wall/shuttle/unsmoothed{icon_state = "swall12"},/area/vault/automap)
+"i" = (/turf/simulated/wall/shuttle,/area/vault/automap)
 "j" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor/airless,/area/vault/automap)
 "k" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area/vault/automap)
 "l" = (/turf/unsimulated/floor/asteroid,/obj/structure/shuttle/diag_wall/smooth{dir = 4},/area/vault/automap)
