@@ -1427,8 +1427,8 @@ Thanks.
 						step(M, t)
 						invoke_event(/event/after_move)
 					else
-						step(AM, t)
-						step(src, t)
+						if(AM.Move(get_step(AM, t), t, glide_size_override = glide_size))
+							src.Move(get_step(src, t), t, glide_size_override = glide_size)
 				now_pushing = 0
 			return
 	return
