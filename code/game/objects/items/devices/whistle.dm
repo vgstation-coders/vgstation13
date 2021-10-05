@@ -17,7 +17,7 @@
 /obj/item/device/hailer/verb/activate_hailer()
 	set src in usr
 	set name = "Activate Hailer"
-	set desc = "Activates your hailer."
+	set desc = "Activates your hailer. Ctrl+click a turf to use a targeted hail."
 	set category = "Object"
 	if (!usr || loc != usr)
 		return
@@ -103,3 +103,115 @@
 
 	// ~ sound and cooldown ~ //
 	do_your_sound(user)
+
+// Hailer attachment
+
+/obj/item/device/hailer/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/clothing/under) || istype(target, /obj/item/clothing/suit/armor))
+		var/obj/item/clothing/C = target
+		var/obj/item/clothing/accessory/hailer/H = new()
+		if(C.check_accessory_overlap(H))
+			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to \the [C].</span>")
+			return
+		if(user.drop_item(src))
+			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			C.attach_accessory(H)
+			transfer_fingerprints(src,H)
+			forceMove(H)
+		return 1
+	else
+		..()
+	return ..()
+
+/obj/item/clothing/accessory/hailer
+	name = "hailer"
+	desc = "This is attached to something."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "voice0" //placeholder sprites
+	accessory_exclusion = ACCESSORY_HAILER
+	var/obj/item/device/hailer/source_hailer
+	ignoreinteract = TRUE
+
+/obj/item/clothing/accessory/hailer/New()
+	..()
+	if (!source_hailer)
+		source_hailer = new /obj/item/device/hailer/
+		source_hailer.forceMove(src)
+
+/obj/item/clothing/accessory/hailer/Destroy()
+	source_hailer = null
+	..()
+
+/obj/item/clothing/accessory/hailer/can_attach_to(obj/item/clothing/C)
+	return (istype(C, /obj/item/clothing/under) || istype(C, /obj/item/clothing/suit/armor))
+
+/obj/item/clothing/accessory/hailer/on_attached(obj/item/clothing/C)
+	..()
+	var/datum/action/A = new /datum/action/item_action/activate_hailer_attached(C)
+	if(ismob(C.loc))
+		var/mob/user = C.loc
+		A.Grant(user)
+	update_icon()
+
+/obj/item/clothing/accessory/hailer/update_icon()
+	if(!attached_to)
+		return
+	if(attached_to.overlays.len)
+		attached_to.overlays -= inv_overlay
+	if(icon_state)
+		inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[icon_state]")
+		if (attached_to.overlays.len)
+			attached_to.overlays -= inv_overlay
+		attached_to.overlays += inv_overlay
+	if(ishuman(attached_to.loc))
+		var/mob/living/carbon/human/H = attached_to.loc
+		H.update_inv_by_slot(attached_to.slot_flags)
+
+	attached_to.update_icon()
+
+/obj/item/clothing/accessory/hailer/on_removed(mob/user)
+	if(!attached_to)
+		return
+	icon_state = null
+	if(ismob(attached_to.loc))
+		var/mob/M = attached_to.loc
+		M.regenerate_icons()
+	for(var/datum/action/A in attached_to.actions)
+		if(istype(A, /datum/action/item_action/activate_hailer_attached))
+			qdel(A)
+	if(source_hailer)
+		source_hailer.forceMove(get_turf(src))
+		if(user)
+			user.put_in_hands(source_hailer)
+		add_fingerprint(user)
+		transfer_fingerprints(src,source_hailer)
+		source_hailer = null
+	update_icon()
+	attached_to = null
+	qdel(src)
+
+/obj/item/clothing/accessory/hailer/attack_self(mob/user)
+	if(user.isUnconscious() || user.restrained())
+		return
+	if(source_hailer)
+		source_hailer.attack_self(user)
+
+/obj/item/clothing/accessory/hailer/attackby(var/obj/item/I, var/mob/user)
+	if(I.is_screwdriver(user) && attached_to)
+		to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
+		attached_to.remove_accessory(user, src)
+
+/obj/item/clothing/accessory/hailer/on_accessory_interact()
+	return -1 //override priority check since you can't pull it off anyway
+
+/datum/action/item_action/activate_hailer_attached
+	name = "Activate Hailer"
+	desc = "Activates your hailer. Ctrl+click a turf to use a targeted hail."
+	//var/obj/item/clothing/accessory/hailer/ownerhail
+/*
+/datum/action/item_action/activate_hailer_attached/Trigger()
+	ownerhail.attack_self(owner)
+	to_chat(world, "DEBUG Attempting to hail with [ownerhail].")
+*/
