@@ -175,7 +175,7 @@
 "ds" = (/turf/simulated/floor{tag = "icon-damaged4"; icon_state = "damaged4"},/turf/simulated/wall/shuttle/unsmoothed{icon_state = "diagonalWall3"},/area/awaymission/spacebattle/cruiser)
 "dt" = (/obj/machinery/door/poddoor{density = 0; icon_state = "pdoor0"; id_tag = "spacebattlepod2"; name = "Front Hull Door"; opacity = 1},/turf/simulated/floor/shuttle/plating,/area/awaymission/spacebattle/cruiser)
 "du" = (/turf/simulated/floor{tag = "icon-damaged1"; icon_state = "damaged1"},/turf/simulated/wall/shuttle/unsmoothed{dir = 4; icon_state = "diagonalWall3"},/area/awaymission/spacebattle/cruiser)
-"dv" = (/obj/structure/shuttle/diag_wall/smooth{dir = 2},/area/awaymission/spacebattle/cruiser)
+"dv" = (/obj/structure/shuttle/diag_wall/smooth,/area/awaymission/spacebattle/cruiser)
 "dw" = (/obj/effect/decal/cleanable/blood,/turf/simulated/wall/shuttle,/area/awaymission/spacebattle/cruiser)
 "dx" = (/turf/simulated/wall/shuttle,/area/awaymission/spacebattle/cruiser)
 "dy" = (/turf/simulated/wall/shuttle,/area/awaymission/spacebattle/cruiser)

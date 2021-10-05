@@ -200,7 +200,7 @@
 "dR" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/emergency,/turf/unsimulated/floor,/area/jungle/crash_ship_source)
 "dS" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor,/area/jungle/crash_ship_source)
 "dT" = (/obj/item/weapon/storage/firstaid/regular,/turf/unsimulated/jungle/path,/area/jungle/crash_ship_source)
-"dU" = (/turf/unsimulated/jungle/path,/obj/structure/shuttle/diag_wall/smooth{dir = 2},/area/jungle/crash_ship_source)
+"dU" = (/turf/unsimulated/jungle/path,/obj/structure/shuttle/diag_wall/smooth,/area/jungle/crash_ship_source)
 "dV" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/electrical,/turf/unsimulated/floor,/area/jungle/crash_ship_source)
 "dW" = (/turf/simulated/wall/shuttle,/area/jungle/crash_ship_source)
 "dX" = (/turf/unsimulated/jungle/path,/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area/jungle/crash_ship_source)
