@@ -1401,7 +1401,7 @@
 "XY" = (/obj/structure/bed/chair,/obj/effect/landmark{name = "tdomeobserve"},/turf/unsimulated/floor{dir = 8; icon_state = "redbluefull"},/area)
 "XZ" = (/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker,/turf/unsimulated/floor{icon_state = "white"},/area)
 "Yd" = (/obj/structure/bed/chair/office/light{dir = 8},/turf/unsimulated/floor{icon_state = "white"},/area)
-"Ye" = (/turf/simulated/wall/shuttle/unsmoothed{dir = 3; icon_state = "swall_f10"},/area)
+"Ye" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area)
 "Yg" = (/obj/structure/bed/chair/wood/wings{dir = 1},/turf/unsimulated/floor{dir = 1; icon_state = "dark neutral stripe"},/area)
 "Yi" = (/obj/effect/overlay/palmtree_l,/turf/unsimulated/beach/sand,/area)
 "Yl" = (/obj/structure/grille,/obj/structure/shuttle/window{icon_state = "15"},/turf/simulated/floor/shuttle,/area)
