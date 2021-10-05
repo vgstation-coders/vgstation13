@@ -42,11 +42,11 @@
 		return list()
 	. = list(turf.z)
 	for(var/level = turf.z, HasBelow(level) && isvisiblespace(GetBelow(locate(turf.x,turf.y,level))), level = map.zLevels[level].z_below)
-		if(level != z && level in .) // No infinite loops
+		if(level != turf.z && level in .) // No infinite loops
 			break
 		. |= level
 	for(var/level = turf.z, HasAbove(level) && isvisiblespace(GetAbove(locate(turf.x,turf.y,level))), level = map.zLevels[level].z_above)
-		if(level != z && level in .) // No infinite loops
+		if(level != turf.z && level in .) // No infinite loops
 			break
 		. |= level
 
