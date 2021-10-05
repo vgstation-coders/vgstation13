@@ -61,5 +61,6 @@ obj/structure/ex_act(severity)
 
 	if(istype(obstacle, /obj/structure) && can_bump_in_front)
 		if(!obstacle.anchored)
-			obstacle.Move(get_step(obstacle,src.dir), glide_size_override = glide_size)
+			obstacle.Move(get_step(obstacle, dir), dir, glide_size_override = glide_size)
+			step(src, dir)
 	..()
