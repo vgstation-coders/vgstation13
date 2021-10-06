@@ -447,6 +447,7 @@ var/list/virusdishes = list()
 /obj/item/weapon/storage/lockbox/diskettebox/syndisease/New()
 	..()
 	new /obj/item/weapon/disk/disease/invisible(src)
+	new /obj/item/weapon/disk/disease/spoof(src)
 
 	var/list/potential_deadly_symptoms = list()
 
@@ -467,6 +468,18 @@ var/list/virusdishes = list()
 		syndisk.stage = syndisk.effect.stage
 		potential_deadly_symptoms -= effect_type
 	update_icon()
+
+/obj/item/weapon/disk/disease/spoof
+	name = "strange GNA disk"
+
+/obj/item/weapon/disk/disease/spoof/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
+	if(istype(target,/obj/item/weapon/disk/disease))
+		var/obj/item/weapon/disk/disease/D = target
+		effect = D.effect
+		to_chat(user,"<span class='notice'>Effect copied.</span>")
+		name = "\improper [D.effect.name] GNA disk (Stage: [D.effect.stage])"
+		stage = D.effect.stage
+		effect.spoof = 1
 
 /obj/item/weapon/disk/disease/invisible
 	name = "\improper Waiting Syndrome GNA disk (Stage 1)"
