@@ -32555,6 +32555,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
 	},
+/turf/space,
 /area/shuttle/trade/start)
 "caY" = (
 /obj/structure/shuttle/engine/heater{
@@ -32989,6 +32990,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 1
 	},
+/turf/space,
 /area/shuttle/trade/start)
 "ccD" = (
 /obj/structure/bed,
@@ -52659,6 +52661,7 @@
 /obj/structure/shuttle/diag_wall/smooth/black{
 	dir = 1
 	},
+/turf/space,
 /area/shuttle/specops/centcom)
 "dtH" = (
 /obj/structure/table,
@@ -53094,6 +53097,7 @@
 /obj/structure/shuttle/diag_wall/smooth/black{
 	dir = 4
 	},
+/turf/space,
 /area/shuttle/specops/centcom)
 "duY" = (
 /obj/structure/rack,
@@ -53425,6 +53429,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
 	},
+/turf/space,
 /area/shuttle/nuclearops)
 "dvP" = (
 /obj/structure/grille,
@@ -53493,6 +53498,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 1
 	},
+/turf/space,
 /area/shuttle/nuclearops)
 "dvT" = (
 /obj/structure/flora/pottedplant/random,
@@ -54016,6 +54022,7 @@
 /area/tdome)
 "dyn" = (
 /obj/structure/shuttle/diag_wall/black,
+/turf/space,
 /area/shuttle/nuclearops)
 "dyo" = (
 /obj/machinery/door/airlock/external,
@@ -54033,6 +54040,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 4
 	},
+/turf/space,
 /area/shuttle/nuclearops)
 "dyr" = (
 /obj/structure/reagent_dispensers/watertank,
@@ -89701,6 +89709,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
 	},
+/turf/space,
 /area/syndicate_mothership)
 "nur" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -93915,6 +93924,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
 	},
+/turf/space,
 /area/shuttle/syndicate_elite/mothership)
 "oNi" = (
 /obj/machinery/alarm{
@@ -94326,6 +94336,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 1
 	},
+/turf/space,
 /area/shuttle/syndicate_elite/mothership)
 "oVb" = (
 /obj/effect/decal/warning_stripes{
@@ -101079,6 +101090,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 4
 	},
+/turf/space,
 /area/shuttle/trade/start)
 "rtc" = (
 /obj/structure/sink{
@@ -113913,6 +113925,7 @@
 /area/asteroid/clown)
 "wbK" = (
 /obj/structure/shuttle/diag_wall/black,
+/turf/space,
 /area/shuttle/syndicate_elite/mothership)
 "wbM" = (
 /turf/simulated/floor{
@@ -114017,6 +114030,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 4
 	},
+/turf/space,
 /area/shuttle/syndicate_elite/mothership)
 "wdy" = (
 /obj/structure/cable{
@@ -118617,6 +118631,7 @@
 /area/science/hallway)
 "xHp" = (
 /obj/structure/shuttle/diag_wall/black,
+/turf/space,
 /area/shuttle/trade/start)
 "xHG" = (
 /obj/machinery/door/window{
