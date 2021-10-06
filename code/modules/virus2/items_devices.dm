@@ -470,7 +470,7 @@ var/list/virusdishes = list()
 	update_icon()
 
 /obj/item/weapon/disk/disease/spoof
-	name = "strange GNA disk"
+	desc = "A disk for storing the structure of a pathogen's Glycol Nucleic Acid pertaining to a specific symptom. <span class='warning'>This one has some strange wiring on its back.</span>"
 
 /obj/item/weapon/disk/disease/spoof/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
 	if(istype(target,/obj/item/weapon/disk/disease))
