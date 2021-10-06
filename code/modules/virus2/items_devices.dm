@@ -484,7 +484,7 @@ var/list/virusdishes = list()
 			potential_nice_symptoms += diseasetype
 
 	if (potential_nice_symptoms.len < 1)
-		break
+		return
 	var/effect_type = pick(potential_nice_symptoms)
 	effect = new effect_type()
 	name = "\improper [effect.name] GNA disk (Stage: [effect.stage])"
