@@ -1,18 +1,16 @@
 "aa" = (/turf/space,/area)
-"ab" = (/obj/structure/shuttle/diag_wall/smooth,/area/vault/automap)
+"ab" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/vault/automap)
 "ac" = (/obj/structure/shuttle/window{icon_state = "14"},/obj/structure/grille,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "ad" = (/obj/structure/shuttle/window{icon_state = "9"},/obj/structure/grille,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "ae" = (/obj/structure/shuttle/window{icon_state = "17"},/obj/structure/grille,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"af" = (/turf/simulated/wall/shuttle,/area/vault/automap)
-"ag" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area/vault/automap)
-"ah" = (/turf/simulated/wall/shuttle,/area/vault/automap)
+"af" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor/shuttle,/area/vault/automap)
+"ag" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/space,/area/vault/automap)
 "ai" = (/obj/structure/computerframe,/obj/effect/plantsegment/single,/obj/item/weapon/shard,/turf/simulated/floor/shuttle,/area/vault/automap)
 "aj" = (/obj/structure/bed/chair{dir = 8},/obj/effect/plantsegment/single,/turf/simulated/floor/shuttle,/area/vault/automap)
 "ak" = (/obj/structure/table/reinforced,/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/bottle/robustharvest,/obj/item/weapon/reagent_containers/glass/bottle/ammonia{pixel_x = -10; pixel_y = 2},/obj/structure/button{name = "secret button"; pixel_y = -10},/turf/simulated/floor/shuttle,/area/vault/automap)
 "al" = (/obj/structure/table/reinforced,/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient{pixel_x = 7; pixel_y = -1},/obj/item/weapon/pen,/turf/simulated/floor/shuttle,/area/vault/automap)
 "am" = (/obj/structure/computerframe,/obj/effect/plantsegment/single,/obj/item/weapon/shard{icon_state = "small"},/obj/item/weapon/circuitboard/blank{name = "melted circuitboard"},/obj/item/stack/cable_coil{amount = 5},/turf/simulated/floor/shuttle,/area/vault/automap)
-"an" = (/turf/simulated/floor/shuttle,/obj/structure/shuttle/diag_wall/smooth{dir = 1},/area/vault/automap)
-"ao" = (/turf/simulated/wall/shuttle,/area/vault/automap)
+"an" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor/shuttle,/area/vault/automap)
 "ap" = (/obj/structure/closet/crate,/obj/machinery/light{dir = 1},/turf/simulated/floor/shuttle,/area/vault/automap)
 "aq" = (/obj/structure/closet/crate,/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/shuttle,/area/vault/automap)
 "ar" = (/obj/structure/closet/crate,/obj/effect/landmark/stonefier,/mob/living/simple_animal/cockroach,/turf/simulated/floor/shuttle,/area/vault/automap)
@@ -23,9 +21,7 @@
 "aw" = (/obj/structure/bed/chair{dir = 1},/obj/effect/plantsegment/single,/turf/simulated/floor/shuttle,/area/vault/automap)
 "ax" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/turf/simulated/floor/shuttle,/area/vault/automap)
 "ay" = (/obj/structure/closet/crate,/obj/item/weapon/paper/feeding_schedule{name = "pinned note"; pixel_x = -32},/turf/simulated/floor/shuttle,/area/vault/automap)
-"az" = (/turf/simulated/floor/shuttle,/obj/structure/shuttle/diag_wall/smooth,/area/vault/automap)
-"aA" = (/turf/simulated/wall/shuttle,/area/vault/automap)
-"aB" = (/turf/simulated/wall/shuttle,/area/vault/automap)
+"az" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/simulated/floor/shuttle,/area/vault/automap)
 "aC" = (/obj/effect/plantsegment/single,/obj/machinery/light_construct{dir = 8},/obj/effect/decal/cleanable/dirt,/obj/item/weapon/shard,/turf/simulated/floor/shuttle,/area/vault/automap)
 "aD" = (/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/pill/hyperzine,/obj/item/stack/cable_coil{amount = 5},/turf/simulated/floor/shuttle,/area/vault/automap)
 "aE" = (/obj/effect/plantsegment/single,/obj/effect/decal/cleanable/greenglow,/turf/simulated/floor/shuttle,/area/vault/automap)
@@ -55,7 +51,7 @@
 "bc" = (/obj/structure/shuttle/window{icon_state = "16"},/obj/structure/grille,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "bd" = (/obj/effect/plantsegment/single,/obj/item/stack/sheet/metal,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient,/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/lizard,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/vault/automap)
 "be" = (/obj/effect/plantsegment/single,/obj/item/stack/medical/ointment/tajaran,/obj/item/weapon/reagent_containers/glass/bottle/left4zed,/obj/item/weapon/reagent_containers/glass/bottle/left4zed,/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/retaliate/cockatrice{gender = "female"},/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/vault/automap)
-"bf" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/item/weapon/light/tube,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor/shuttle,/area/vault/automap)
+"bf" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/item/weapon/light/tube,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor/shuttle,/area/vault/automap)
 "bg" = (/obj/effect/plantsegment/single,/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/pen,/turf/simulated/floor/shuttle,/area/vault/automap)
 "bh" = (/obj/effect/plantsegment/single,/obj/structure/bed/chair/comfy/beige{dir = 8},/turf/simulated/floor/shuttle,/area/vault/automap)
 "bi" = (/obj/effect/plantsegment/single,/obj/machinery/portable_atmospherics/hydroponics,/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/shuttle,/area/vault/automap)
@@ -69,7 +65,7 @@
 "bq" = (/obj/structure/shuttle/window{icon_state = "8"},/obj/structure/grille,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "br" = (/obj/effect/plantsegment/single,/obj/item/weapon/table_parts,/obj/item/stack/medical/bruise_pack/tajaran,/obj/item/weapon/reagent_containers/glass/bottle/robustharvest,/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/vault/automap)
 "bs" = (/obj/effect/plantsegment/single,/obj/item/weapon/table_parts,/obj/item/stack/sheet/metal,/obj/item/weapon/reagent_containers/glass/bottle/left4zed,/obj/item/weapon/reagent_containers/glass/bottle/robustharvest,/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle{icon_state = "floor3"},/area/vault/automap)
-"bt" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/obj/effect/landmark/stonefier,/mob/living/simple_animal/corgi/puppy{dir = 1},/turf/simulated/floor/shuttle,/area/vault/automap)
+"bt" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/effect/landmark/stonefier,/mob/living/simple_animal/corgi/puppy{dir = 1},/turf/simulated/floor/shuttle,/area/vault/automap)
 "bu" = (/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient{name = "empty fertilizer bottle"},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle,/area/vault/automap)
 "bv" = (/obj/effect/plantsegment/single,/obj/structure/bed/chair/comfy/beige{dir = 8},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle,/area/vault/automap)
 "bw" = (/obj/effect/plantsegment/single,/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor/shuttle,/area/vault/automap)
@@ -79,7 +75,7 @@
 "bA" = (/obj/structure/closet/l3closet/scientist,/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/shuttle,/area/vault/automap)
 "bB" = (/obj/structure/disposaloutlet{dir = 4; pixel_x = 8},/obj/structure/disposalpipe/trunk{dir = 8},/turf/simulated/wall/shuttle,/area/vault/automap)
 "bC" = (/obj/effect/glowshroom,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"bD" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor/shuttle,/area/vault/automap)
+"bD" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor/shuttle,/area/vault/automap)
 "bE" = (/obj/effect/plantsegment/single,/obj/item/weapon/barricade_kit,/turf/simulated/floor/shuttle,/area/vault/automap)
 "bF" = (/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/pill/hyperzine,/turf/simulated/floor/shuttle,/area/vault/automap)
 "bG" = (/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor/shuttle,/area/vault/automap)
@@ -88,7 +84,7 @@
 "bJ" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "bK" = (/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "bL" = (/obj/machinery/portable_atmospherics/hydroponics,/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
-"bM" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/machinery/light_construct{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/shuttle,/area/vault/automap)
+"bM" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/machinery/light_construct{dir = 8},/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/mimic/crate/item,/turf/simulated/floor/shuttle,/area/vault/automap)
 "bN" = (/obj/effect/plantsegment/single,/obj/effect/glowshroom,/obj/effect/landmark/stonefier,/mob/living/simple_animal/corgi{dir = 4},/turf/simulated/floor/shuttle,/area/vault/automap)
 "bO" = (/obj/effect/plantsegment/single,/obj/structure/bed/chair/comfy/beige{dir = 8},/obj/effect/decal/cleanable/fruit_smudge,/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle,/area/vault/automap)
 "bP" = (/obj/effect/plantsegment/single,/obj/machinery/portable_atmospherics/hydroponics,/obj/item/weapon/minihoe,/turf/simulated/floor/shuttle,/area/vault/automap)
@@ -100,7 +96,7 @@
 "bV" = (/obj/structure/grille/broken,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "bW" = (/obj/item/weapon/reagent_containers/glass/bucket,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "bX" = (/obj/item/weapon/reagent_containers/pill/hyperzine,/obj/structure/reagent_dispensers/watertank,/obj/machinery/light_construct{dir = 4},/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
-"bY" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor/shuttle,/area/vault/automap)
+"bY" = (/obj/effect/plantsegment/single,/obj/structure/flora/pottedplant/random,/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor/shuttle,/area/vault/automap)
 "bZ" = (/obj/effect/plantsegment/single,/obj/effect/glowshroom,/turf/simulated/floor/shuttle,/area/vault/automap)
 "ca" = (/obj/effect/plantsegment/single,/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/humanoid/diona{dir = 4; name = "Roots Pointing Outwards"},/turf/simulated/floor/shuttle,/area/vault/automap)
 "cb" = (/obj/machinery/door/airlock/maintenance,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
@@ -111,13 +107,13 @@
 "cg" = (/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "ch" = (/obj/item/weapon/reagent_containers/glass/bottle/eznutrient{name = "empty fertilizer bottle"},/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "ci" = (/obj/effect/plantsegment/single,/obj/effect/landmark/stonefier,/mob/living/simple_animal/corgi/puppy{dir = 4},/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
-"cj" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/obj/effect/decal/warning_stripes{tag = "icon-warning (WEST)"; icon_state = "warning"; dir = 8},/turf/simulated/floor/shuttle,/area/vault/automap)
-"ck" = (/obj/effect/plantsegment/single,/obj/structure/disposalpipe/trunk,/obj/machinery/disposal/deliveryChute{dir = 1; name = "Food Delivery"},/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor/shuttle,/area/vault/automap)
-"cl" = (/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient{name = "empty fertilizer bottle"},/obj/machinery/light_construct,/obj/item/weapon/light/tube,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor/shuttle,/area/vault/automap)
-"cm" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor/shuttle,/area/vault/automap)
-"cn" = (/obj/effect/plantsegment/single,/obj/structure/disposalpipe/trunk,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/turf/simulated/floor/shuttle,/area/vault/automap)
-"co" = (/obj/effect/plantsegment/single,/obj/machinery/light_construct,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle,/area/vault/automap)
-"cp" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{tag = "icon-warning"; icon_state = "warning"; dir = 2},/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/retaliate/goat,/turf/simulated/floor/shuttle,/area/vault/automap)
+"cj" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/obj/effect/decal/warning_stripes{dir = 8; icon_state = "warning"; tag = "icon-warning (WEST)"},/turf/simulated/floor/shuttle,/area/vault/automap)
+"ck" = (/obj/effect/plantsegment/single,/obj/structure/disposalpipe/trunk,/obj/machinery/disposal/deliveryChute{dir = 1; name = "Food Delivery"},/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/turf/simulated/floor/shuttle,/area/vault/automap)
+"cl" = (/obj/effect/plantsegment/single,/obj/item/weapon/reagent_containers/glass/bottle/eznutrient{name = "empty fertilizer bottle"},/obj/machinery/light_construct,/obj/item/weapon/light/tube,/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/turf/simulated/floor/shuttle,/area/vault/automap)
+"cm" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/turf/simulated/floor/shuttle,/area/vault/automap)
+"cn" = (/obj/effect/plantsegment/single,/obj/structure/disposalpipe/trunk,/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/turf/simulated/floor/shuttle,/area/vault/automap)
+"co" = (/obj/effect/plantsegment/single,/obj/machinery/light_construct,/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle,/area/vault/automap)
+"cp" = (/obj/effect/plantsegment/single,/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/retaliate/goat,/turf/simulated/floor/shuttle,/area/vault/automap)
 "cq" = (/obj/item/weapon/light/tube,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "cr" = (/mob/living/simple_animal/hostile/lizard,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "cs" = (/obj/item/weapon/reagent_containers/pill/hyperzine,/obj/effect/landmark/stonefier,/mob/living/simple_animal/chicken{dir = 1},/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
@@ -147,12 +143,12 @@
 "cQ" = (/obj/machinery/light_construct,/obj/item/weapon/light/tube,/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
 "cR" = (/obj/machinery/light_construct{dir = 8},/obj/item/weapon/light/tube,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "cS" = (/obj/structure/window/barricade/full,/obj/structure/window/barricade,/mob/living/simple_animal/hostile/retaliate/cockatrice/chick,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"cT" = (/turf/simulated/floor/shuttle/plating,/obj/structure/shuttle/diag_wall/smooth{dir = 1},/area/vault/automap)
+"cT" = (/obj/structure/shuttle/diag_wall/smooth,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "cU" = (/obj/machinery/door/airlock/maintenance,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/automap)
 "cV" = (/obj/structure/door_assembly/door_assembly_sec,/obj/structure/grille/broken,/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/bear/panda,/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
 "cW" = (/obj/machinery/door/airlock/vault{icon_state = "door_locked"; locked = 1; name = "Cell 2"},/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
 "cX" = (/obj/structure/grille/broken,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle{icon_state = "floor4"},/area/vault/automap)
-"cY" = (/turf/simulated/floor/shuttle/plating,/obj/structure/shuttle/diag_wall/smooth{dir = 4},/area/vault/automap)
+"cY" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "cZ" = (/obj/structure/window/barricade/full,/obj/structure/window/barricade,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "da" = (/obj/effect/landmark/stonefier,/mob/living/simple_animal/crab,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "db" = (/obj/effect/decal/cleanable/greenglow,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
@@ -165,12 +161,12 @@
 "di" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dj" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/lizard,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dk" = (/obj/effect/landmark/stonefier,/mob/living/simple_animal/hostile/humanoid/diona/junkie{dir = 8; health = 20; name = "Diona Muscipula"},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"dl" = (/turf/simulated/floor/shuttle/plating,/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area/vault/automap)
+"dl" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dm" = (/obj/item/weapon/reagent_containers/glass/bottle/ammonia,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dn" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/chem_master,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "do" = (/obj/item/weapon/reagent_containers/glass/bottle/eznutrient{name = "empty fertilizer bottle"},/obj/effect/decal/cleanable/dirt,/obj/structure/table,/obj/item/weapon/reagent_containers/glass/beaker/large,/obj/item/weapon/reagent_containers/syringe/giant,/obj/item/weapon/reagent_containers/syringe/giant,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dp" = (/obj/structure/door_assembly/door_assembly_vault,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"dq" = (/turf/simulated/floor/shuttle/plating,/obj/structure/shuttle/diag_wall/smooth,/area/vault/automap)
+"dq" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dr" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "ds" = (/obj/structure/shuttle/engine/router,/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dt" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
@@ -178,7 +174,7 @@
 "dv" = (/obj/effect/decal/cleanable/dirt,/obj/item/weapon/reagent_containers/glass/bottle/ammonia,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dw" = (/obj/item/weapon/pickaxe/shovel/spade,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dx" = (/obj/item/weapon/light/tube,/obj/effect/glowshroom,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"dy" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/area/vault/automap)
+"dy" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/automap)
 "dz" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dA" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dB" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/shuttle/plating,/area/vault/automap)
@@ -187,27 +183,27 @@
 "dE" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/chem_dispenser,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dF" = (/obj/machinery/chem_dispenser,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
 "dG" = (/obj/structure/flora/pottedplant/random,/obj/machinery/light_construct,/turf/simulated/floor/shuttle/plating,/area/vault/automap)
-"dH" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/area/vault/automap)
+"dH" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/automap)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaabacadadaeafagaaaaaaaaaaaa
-aaaaaaabafafafahaiajakalamanafafafagaaaa
-aaaaaaaoapaqaraoasatauavawaxaxaxaxaoaaaa
-aaabafahayazafaAaBaCaDaEaFaGaHaIaxaJafag
-aaaKaLaKaMaNaOaPaQaRaSaTaUaVaWaXaYaoaZao
-aabaafahbbbcbdbebcbfbgbhbibjbkavblanbmah
-aaaobnbobpbqbrbsbqbtbubvbwbwbxaGbybzbAbB
-aaaobCaJafaAafafahbDbEbhbwbwaUavbFbGbHao
-aaaobIaobJbKbLbJaobMbNbObPbQbRbSaxazafah
-aaaobTaobUbVbWbXaBbYbZbZcabRbFaEavcbccao
-aabccdaocecfcgchcicjckclcmcncockcpaocqbc
-aabqcraocgbVcsctaBcucvaBcwcvaBcxcyaoczbq
-aacAbnaJafaBcgcBaocCcDaocEcFaocGcHaocIcA
-aaaocJaocgcgcgcKaocLcMaocNcOaocPcQaocRao
-aaaocScTcUafafafaAcVafaAcWafaAcXafcYcZao
-aaaobndadbdccqdddecddfdgdhbndidjbndkbnao
-aabaafafafafdlbndmdndobCdbdpdqafafafafah
-aaaodrdsdsdtaodudmdvdwdxbCduaodrdsdsdtao
-aadydzdAdAdBaodCdDdEdFbndGdCaodzdAdAdBdH
-aaaaaaaaaaaadyafafafafafafafdHaaaaaaaaaa
+aaaaaaaaaaaaaaabacadadaeaJagaaaaaaaaaaaa
+aaaaaaabaJaJaJaJaiajakalamanaJaJaJagaaaa
+aaaaaaaJapaqaraJasatauavawaxaxaxaxaJaaaa
+aaabaJaJayazaJaJaJaCaDaEaFaGaHaIaxaJaJag
+aaaKaLaKaMaNaOaPaQaRaSaTaUaVaWaXaYaJaZaJ
+aabaaJaJbbbcbdbebcbfbgbhbibjbkavblafbmaJ
+aaaJbnbobpbqbrbsbqbtbubvbwbwbxaGbybzbAbB
+aaaJbCaJaJaJaJaJaJbDbEbhbwbwaUavbFbGbHaJ
+aaaJbIaJbJbKbLbJaJbMbNbObPbQbRbSaxazaJaJ
+aaaJbTaJbUbVbWbXaJbYbZbZcabRbFaEavcbccaJ
+aabccdaJcecfcgchcicjckclcmcncockcpaJcqbc
+aabqcraJcgbVcsctaJcucvaJcwcvaJcxcyaJczbq
+aacAbnaJaJaJcgcBaJcCcDaJcEcFaJcGcHaJcIcA
+aaaJcJaJcgcgcgcKaJcLcMaJcNcOaJcPcQaJcRaJ
+aaaJcScTcUaJaJaJaJcVaJaJcWaJaJcXaJcYcZaJ
+aaaJbndadbdccqdddecddfdgdhbndidjbndkbnaJ
+aabaaJaJaJaJdlbndmdndobCdbdpdqaJaJaJaJaJ
+aaaJdrdsdsdtaJdudmdvdwdxbCduaJdrdsdsdtaJ
+aadydzdAdAdBaJdCdDdEdFbndGdCaJdzdAdAdBdH
+aaaaaaaaaaaadyaJaJaJaJaJaJaJdHaaaaaaaaaa
 "}
