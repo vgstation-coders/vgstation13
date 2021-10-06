@@ -472,6 +472,24 @@ var/list/virusdishes = list()
 /obj/item/weapon/disk/disease/spoof
 	desc = "A disk for storing the structure of a pathogen's Glycol Nucleic Acid pertaining to a specific symptom. <span class='warning'>This one has some strange wiring on its back.</span>"
 
+/obj/item/weapon/disk/disease/spoof/New()
+	..()
+	var/list/potential_nice_symptoms = list()
+
+	for (var/diseasetype in subtypesof(/datum/disease2/effect))
+		var/datum/disease2/effect/E = diseasetype
+		if (initial(E.restricted))
+			continue
+		if (initial(E.stage) == 4 && initial(E.badness) <= EFFECT_DANGER_FLAVOR)
+			potential_nice_symptoms += diseasetype
+
+	if (potential_nice_symptoms.len < 1)
+		break
+	var/effect_type = pick(potential_nice_symptoms)
+	effect = new effect_type()
+	name = "\improper [effect.name] GNA disk (Stage: [effect.stage])"
+	stage = effect.stage
+
 /obj/item/weapon/disk/disease/spoof/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
 	if(istype(target,/obj/item/weapon/disk/disease))
 		var/obj/item/weapon/disk/disease/D = target
