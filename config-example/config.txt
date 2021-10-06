@@ -369,6 +369,3 @@ BSQL_THREAD_LIMIT 50
 
 ## The maximum number of z-levels rendered above or below in multi-z
 MULTIZ_RENDER_CAP 8
-
-## The maximum number of z-levels checked below in multi-z
-MULTIZ_BOTTOM_CAP 16

@@ -25,12 +25,8 @@
 /proc/GetConnectedZlevels(z)
 	. = list(z)
 	for(var/level = z, HasBelow(level), level = map.zLevels[level].z_below)
-		if((level != z) && (level in .)) // No infinite loops
-			break
 		. |= level
 	for(var/level = z, HasAbove(level), level = map.zLevels[level].z_above)
-		if((level != z) && (level in .)) // No infinite loops
-			break
 		. |= level
 
 /proc/AreConnectedZLevels(var/zA, var/zB)
@@ -42,12 +38,8 @@
 		return list()
 	. = list(turf.z)
 	for(var/level = turf.z, HasBelow(level) && isvisiblespace(GetBelow(locate(turf.x,turf.y,level))), level = map.zLevels[level].z_below)
-		if((level != turf.z) && (level in .)) // No infinite loops
-			break
 		. |= level
 	for(var/level = turf.z, HasAbove(level) && isvisiblespace(GetAbove(locate(turf.x,turf.y,level))), level = map.zLevels[level].z_above)
-		if((level != turf.z) && (level in .)) // No infinite loops
-			break
 		. |= level
 
 /proc/AreOpenConnectedZLevels(var/zA, var/zB)
