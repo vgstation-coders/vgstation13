@@ -3,14 +3,14 @@
 /turf/space,
 /area)
 "ab" = (
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "ac" = (
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "ad" = (
 /obj/machinery/floodlight/on,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "ae" = (
 /obj/docking_port/destination/escape/shuttle/centcom{
@@ -22,11 +22,11 @@
 /obj/docking_port/shuttle{
 	dir = 8
 	},
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/escape/centcom)
 "ag" = (
 /obj/machinery/computer/shuttle,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "ah" = (
 /turf/unsimulated/wall,
@@ -180,7 +180,7 @@
 /turf/simulated/wall/r_wall,
 /area/gateway)
 "aR" = (
-/turf/simulated/shuttle/wall,
+/turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aS" = (
 /obj/docking_port/shuttle,
@@ -233,7 +233,7 @@
 	},
 /area/gateway)
 "aZ" = (
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "ba" = (
 /obj/machinery/door/airlock,
@@ -299,13 +299,13 @@
 /obj/effect/landmark{
 	name = "JoinLate"
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "bj" = (
 /obj/effect/landmark{
 	name = "Observer-Start"
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "bk" = (
 /obj/machinery/suit_storage_unit/mining,
@@ -360,7 +360,7 @@
 /area/crew_quarters/bar)
 "bq" = (
 /obj/effect/landmark/start,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "br" = (
 /obj/machinery/suit_storage_unit/engie,
@@ -1513,7 +1513,7 @@
 /obj/machinery/light/he{
 	dir = 8
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "eb" = (
 /obj/structure/bed/chair{
@@ -1525,11 +1525,11 @@
 /obj/machinery/light/he{
 	dir = 4
 	},
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "ec" = (
 /obj/machinery/light/he,
-/turf/simulated/shuttle/floor,
+/turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "ed" = (
 /obj/machinery/account_database,

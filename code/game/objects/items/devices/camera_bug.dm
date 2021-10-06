@@ -15,7 +15,7 @@
 		/obj/effect,
 		/turf/simulated/floor,
 		/turf/space,
-		/turf/simulated/shuttle,
+		/turf/simulated/wall/shuttle,
 		/mob/living/carbon,
 		/obj/item/weapon/storage
 	)

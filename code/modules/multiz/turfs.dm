@@ -43,7 +43,7 @@
 	mover.fall()
 
 // Static list so it isn't slow in the check below
-var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated/wall,/turf/unsimulated/mineral,/turf/simulated/shuttle/wall)
+var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated/wall,/turf/unsimulated/mineral)
 
 /turf/simulated/open/has_gravity()
 	var/turf/below = GetBelow(src)

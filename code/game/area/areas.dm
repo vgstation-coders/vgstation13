@@ -542,7 +542,7 @@ var/area/space_area
 
 var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
-var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
+var/list/transparent_icons = list("diagonalWall3") //icon_states for which to prepare an underlay
 
 /area/proc/move_contents_to(var/area/A, var/turftoleave=null, var/direction = null)
 	//Takes: Area. Optional: turf type to leave behind.
@@ -641,30 +641,6 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 
 						SX.air.copy_from(ST.zone.air)
 						ST.zone.remove(ST)
-
-					/* Quick visual fix for some weird shuttle corner artefacts when on transit space tiles */
-					if(direction && findtext(X.icon_state, "swall_s"))
-
-						// Spawn a new shuttle corner object
-						var/obj/corner = new()
-						corner.forceMove(X)
-						corner.setDensity(TRUE)
-						corner.anchored = 1
-						corner.icon = X.icon
-						corner.icon_state = replacetext(X.icon_state, "_s", "_f")
-						corner.tag = "delete me"
-						corner.name = "wall"
-
-						// Find a new turf to take on the property of
-						var/turf/nextturf = get_step(corner, direction)
-						if(!nextturf || !istype(nextturf, /turf/space))
-							nextturf = get_step(corner, turn(direction, 180))
-
-
-						// Take on the icon of a neighboring scrolling space icon
-						X.icon = nextturf.icon
-						X.icon_state = nextturf.icon_state
-
 
 					for(var/obj/O in T)
 

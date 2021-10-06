@@ -638,7 +638,7 @@
 		if(!old_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get original turf at [old_C.x_pos];[old_C.y_pos];[our_center.z]")
 			continue
-		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/shuttle/wall)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
+		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/wall/shuttle)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
 			if(old_turf.icon_state in transparent_icons)
 				add_underlay = 1
 				if(old_turf.underlays.len) //this list is in code/game/area/areas.dm

@@ -172,7 +172,7 @@
 					components = null
 				else
 					if(P.is_screwdriver(user))
-						if(istype(get_turf(src), /turf/simulated/shuttle))
+						if(isshuttleturf(get_turf(src)))
 							to_chat(user, "<span class='warning'>You must move \the [src] to a more stable location, such as a space station, before you can finish constructing it.</span>")
 							return
 						var/component_check = 1
