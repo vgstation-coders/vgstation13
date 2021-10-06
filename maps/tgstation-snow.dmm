@@ -32555,7 +32555,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
 	},
-/turf/space,
+/turf/unsimulated/floor/snow,
 /area/shuttle/trade/start)
 "caY" = (
 /obj/structure/shuttle/engine/heater{
@@ -32990,7 +32990,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow,
 /area/shuttle/trade/start)
 "ccD" = (
 /obj/structure/bed,
@@ -39180,6 +39180,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
+"cAM" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/unsimulated/mineral/random/high_chance_clown/snow,
+/area/asteroid/clown)
 "cAO" = (
 /obj/item/weapon/lipstick/random,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -47772,7 +47778,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
 	},
-/turf/space,
+/turf/unsimulated/floor/snow,
 /area/shuttle/supply)
 "diA" = (
 /obj/structure/shuttle/diag_wall/black,
@@ -47805,7 +47811,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow,
 /area/shuttle/supply)
 "diF" = (
 /turf/unsimulated/floor{
@@ -53429,7 +53435,10 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 8
 	},
-/turf/space,
+/turf/unsimulated/floor{
+	icon = 'icons/turf/snow.dmi';
+	icon_state = "snow"
+	},
 /area/shuttle/nuclearops)
 "dvP" = (
 /obj/structure/grille,
@@ -54022,7 +54031,10 @@
 /area/tdome)
 "dyn" = (
 /obj/structure/shuttle/diag_wall/black,
-/turf/space,
+/turf/unsimulated/floor{
+	icon = 'icons/turf/snow.dmi';
+	icon_state = "snow"
+	},
 /area/shuttle/nuclearops)
 "dyo" = (
 /obj/machinery/door/airlock/external,
@@ -54040,7 +54052,10 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 4
 	},
-/turf/space,
+/turf/unsimulated/floor{
+	icon = 'icons/turf/snow.dmi';
+	icon_state = "snow"
+	},
 /area/shuttle/nuclearops)
 "dyr" = (
 /obj/structure/reagent_dispensers/watertank,
@@ -59437,9 +59452,9 @@
 /area/shuttle/escape_pod3)
 "ejK" = (
 /obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
+	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod3)
 "ejL" = (
 /obj/structure/cable{
@@ -69459,6 +69474,12 @@
 	},
 /turf/simulated/floor,
 /area/engineering/burn_chamber)
+"gqD" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/unsimulated/floor/snow,
+/area/asteroid/clown)
 "gqQ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -70022,8 +70043,10 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "gAj" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod1)
 "gAB" = (
 /obj/structure/grille,
@@ -70040,8 +70063,10 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod1)
 "gAE" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod2)
 "gAH" = (
 /obj/structure/cable{
@@ -71613,6 +71638,10 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
+"hdE" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/unsimulated/mineral/random/high_chance_clown/snow,
+/area/asteroid/clown)
 "hdF" = (
 /obj/structure/morgue,
 /turf/simulated/floor{
@@ -83540,7 +83569,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/arrival/station)
 "lij" = (
 /obj/item/device/radio/intercom{
@@ -85121,9 +85150,9 @@
 /area/engineering/burn_chamber)
 "lJw" = (
 /obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
+	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow,
 /area/asteroid/clown)
 "lJB" = (
 /obj/machinery/atmospherics/pipe/simple/filtering/hidden{
@@ -87350,8 +87379,10 @@
 /turf/simulated/floor/engine,
 /area/science/telescience)
 "mAw" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/arrival/station)
 "mAD" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -90408,6 +90439,14 @@
 	icon_state = "white"
 	},
 /area/tdome)
+"nIm" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/shuttle/trade/start)
 "nJn" = (
 /obj/structure/sink{
 	dir = 8;
@@ -92326,9 +92365,9 @@
 /area/science/xenobiology/specimen_6)
 "ooz" = (
 /obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
+	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod1)
 "ooD" = (
 /obj/item/device/radio/intercom{
@@ -95071,9 +95110,9 @@
 /area/hallway/secondary/entry)
 "phk" = (
 /obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
+	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod5)
 "phl" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
@@ -95082,6 +95121,14 @@
 	},
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
+"phu" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle{
+	icon_state = "floor3"
+	},
+/area/shuttle/trade/start)
 "phI" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -97172,7 +97219,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod3)
 "pVo" = (
 /obj/machinery/power/apc{
@@ -101090,7 +101137,7 @@
 /obj/structure/shuttle/diag_wall/black{
 	dir = 4
 	},
-/turf/space,
+/turf/unsimulated/floor/snow,
 /area/shuttle/trade/start)
 "rtc" = (
 /obj/structure/sink{
@@ -104568,9 +104615,9 @@
 /area/maintenance/aft)
 "sNl" = (
 /obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
+	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/arrival/station)
 "sNz" = (
 /obj/structure/disposalpipe/segment{
@@ -109015,7 +109062,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod5)
 "umY" = (
 /obj/structure/closet/radiation,
@@ -109233,9 +109280,9 @@
 /area/bridge)
 "usL" = (
 /obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
+	dir = 1
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/escape_pod2)
 "usZ" = (
 /obj/structure/flora/pottedplant/random,
@@ -112424,6 +112471,12 @@
 /obj/structure/reagent_dispensers/silicate,
 /turf/simulated/floor,
 /area/engineering/engine)
+"vzX" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/simulated/floor/airless,
+/area/asteroid/clown)
 "vAl" = (
 /turf/simulated/floor{
 	dir = 8;
@@ -112550,8 +112603,10 @@
 	},
 /area/bridge)
 "vCy" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/unsimulated/floor/snow,
 /area/asteroid/clown)
 "vCZ" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
@@ -115113,6 +115168,15 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine)
+"wwh" = (
+/obj/structure/shuttle/diag_wall/black{
+	dir = 1
+	},
+/turf/unsimulated/floor{
+	icon = 'icons/turf/snow.dmi';
+	icon_state = "snow"
+	},
+/area/shuttle/nuclearops)
 "wwJ" = (
 /obj/structure/cable{
 	d1 = 1;
@@ -117806,7 +117870,7 @@
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
-/turf/space,
+/turf/unsimulated/floor/snow/permafrost,
 /area/asteroid/clown)
 "xtO" = (
 /obj/structure/lattice,
@@ -118437,6 +118501,10 @@
 	},
 /turf/simulated/floor,
 /area/engineering/engine_storage)
+"xEH" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/unsimulated/floor/snow/asphalt,
+/area/shuttle/arrival/station)
 "xEW" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/light{
@@ -118631,7 +118699,7 @@
 /area/science/hallway)
 "xHp" = (
 /obj/structure/shuttle/diag_wall/black,
-/turf/space,
+/turf/unsimulated/floor/snow,
 /area/shuttle/trade/start)
 "xHG" = (
 /obj/machinery/door/window{
@@ -223375,7 +223443,7 @@ mAw
 qKz
 oBn
 qKz
-mAw
+xEH
 mzg
 bZp
 bZp
@@ -224282,7 +224350,7 @@ qKz
 mAM
 qKz
 qKz
-mAw
+xEH
 orp
 bZp
 lkc
@@ -282823,7 +282891,7 @@ rCR
 nhb
 nhb
 rCR
-ccA
+phu
 cba
 bZp
 bZk
@@ -283428,7 +283496,7 @@ jlD
 tLu
 bil
 nhb
-ccA
+phu
 cba
 bZk
 bZk
@@ -284032,7 +284100,7 @@ jlD
 tJU
 nhb
 jbU
-caX
+nIm
 cba
 bZk
 bZk
@@ -284635,7 +284703,7 @@ cjc
 nhb
 nhb
 cjc
-caX
+nIm
 cba
 bZp
 bZk
@@ -379048,7 +379116,7 @@ dtz
 xGg
 xGg
 xGg
-dvS
+wwh
 xSK
 xSK
 xSK
@@ -456943,11 +457011,11 @@ pQo
 pQo
 pQo
 pQo
-vCy
+cAM
 pQo
 pQo
 xFi
-vCy
+hdE
 pQo
 pQo
 pQo
@@ -457551,8 +457619,8 @@ xtI
 gJI
 xKP
 tFg
-lJw
-vCy
+vzX
+hdE
 gJI
 pQo
 pQo
@@ -460572,7 +460640,7 @@ seu
 seu
 seu
 tpm
-xtI
+gqD
 bZp
 bZp
 bZp
