@@ -1,7 +1,6 @@
 obj/structure
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
-	var/can_bump_in_front = TRUE // For bumping items in front away
 
 obj/structure/blob_act(var/destroy = 0)
 	..()
@@ -53,14 +52,3 @@ obj/structure/ex_act(severity)
 		material_type.on_use(H,src,null)
 /obj/structure/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
-
-// Moved down from vehicles, allows "Newton's cradle" esque physics where bumping the nearest item in a chain pushes the furthest one until all are in the new position, in practice
-/obj/structure/to_bump(var/atom/movable/obstacle)
-	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-		return
-
-	if(istype(obstacle, /obj/structure) && can_bump_in_front)
-		if(!obstacle.anchored)
-			obstacle.Move(get_step(obstacle, dir), dir, glide_size_override = glide_size)
-			step(src, dir)
-	..()
