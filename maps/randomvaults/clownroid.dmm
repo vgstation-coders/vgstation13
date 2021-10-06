@@ -5,11 +5,11 @@
 "e" = (/turf/unsimulated/floor/asteroid,/area/vault/automap)
 "f" = (/obj/effect/glowshroom,/turf/unsimulated/floor/asteroid,/area/vault/automap)
 "g" = (/obj/effect/landmark/corpse/clown,/obj/item/weapon/paper{info = "The call has gone out! Our ancestral home has been rediscovered! Not a small patch of land, but a true clown nation, a true Clown Planet! We're on our way home at last!"},/turf/unsimulated/floor/asteroid,/area/vault/automap)
-"h" = (/obj/structure/shuttle/diag_wall/smooth,/area/vault/automap)
+"h" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/vault/automap)
 "i" = (/turf/simulated/wall/shuttle,/area/vault/automap)
 "j" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor/airless,/area/vault/automap)
-"k" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area/vault/automap)
-"l" = (/turf/unsimulated/floor/asteroid,/obj/structure/shuttle/diag_wall/smooth{dir = 4},/area/vault/automap)
+"k" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/space,/area/vault/automap)
+"l" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/unsimulated/floor/asteroid,/area/vault/automap)
 "m" = (/obj/effect/landmark/corpse/clown,/obj/effect/decal/cleanable/blood,/turf/simulated/floor/airless,/area/vault/automap)
 "n" = (/turf/simulated/floor/airless,/area/vault/automap)
 "o" = (/obj/structure/closet/crate,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/toy/gasha/clown,/turf/simulated/floor/airless,/area/vault/automap)
@@ -29,14 +29,15 @@
 "C" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/vault/automap)
 "D" = (/obj/item/weapon/shard,/obj/effect/decal/cleanable/blood,/obj/structure/bed/chair/shuttle{dir = 8},/turf/simulated/floor/airless,/area/vault/automap)
 "E" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/simulated/floor/airless,/area/vault/automap)
-"F" = (/turf/space,/obj/structure/shuttle/diag_wall/smooth{dir = 1},/area/vault/automap)
-"G" = (/turf/simulated/floor/airless,/obj/structure/shuttle/diag_wall/smooth{dir = 8},/area/vault/automap)
+"F" = (/obj/structure/shuttle/diag_wall/smooth,/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/automap)
+"G" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/simulated/floor/airless,/area/vault/automap)
 "H" = (/obj/item/weapon/pickaxe,/turf/simulated/floor/airless,/area/vault/automap)
 "I" = (/obj/structure/closet/crate,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/turf/simulated/floor/airless,/area/vault/automap)
 "J" = (/obj/structure/shuttle/engine/propulsion/left{dir = 4},/turf/space,/area/vault/automap)
-"K" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/area/vault/automap)
-"L" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/area/vault/automap)
+"K" = (/obj/structure/shuttle/diag_wall/smooth,/turf/unsimulated/mineral,/area/vault/automap)
+"L" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/automap)
 "M" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid,/area/vault/automap)
+"T" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/automap)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaabaaaaaaa
@@ -64,7 +65,7 @@ cdddddddeegefdddcaaaaaaaaaaa
 cddddddddefeedddcaaaaaaaaaaa
 acddddddddedddddcaaaaaaaaaaa
 acddddddddddddddchiijjiiiiik
-aaccdddddddddddhilemnnopqnrs
+aaccdddddddddddTilemnnopqnrs
 aaacddddddddddddcctunvnvwnrx
 aaccddddddddddddcyzAnwnBnwrx
 aaccdddddddddddCuDvEvmnnnwrx
