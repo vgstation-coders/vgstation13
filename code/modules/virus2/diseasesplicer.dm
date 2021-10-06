@@ -208,8 +208,7 @@
 		var/datum/disease2/effect/e = effects[x]
 		if(e.stage == memorybank.stage)
 			if(e.spoof)
-				var/datum/disease2/effect/fake_effect = dish.contained_virus.fake_effects[x]
-				fake_effect = memorybank.getcopy(dish.contained_virus)
+				dish.contained_virus.fake_effects[x] = memorybank.getcopy(dish.contained_virus)
 				log_debug("[dish.contained_virus.form] #[add_zero("[dish.contained_virus.uniqueID]", 4)][dish.contained_virus.childID ? "-[add_zero("[dish.contained_virus.childID]", 2)]" : ""] had [memorybank.name] falsely spliced into to replace [e.name] in databases by [key_name(usr)].")
 				dish.contained_virus.log += "<br />[timestamp()] [memorybank.name] spoof spliced in by [key_name(usr)] (replaces [e.name] in database listing)"
 			else

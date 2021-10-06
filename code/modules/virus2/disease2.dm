@@ -857,7 +857,7 @@ var/global/list/virusDB = list()
 		dat += "[A]"
 	return dat
 
-/datum/disease2/disease/proc/get_info()
+/datum/disease2/disease/proc/get_info(var/trueinfo = FALSE)
 	var/r = "GNAv3 [name()]"
 	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b> - [get_subdivisions_string()]"
 	r += "<BR>Infectability : <b>[infectionchance]%</b>"
@@ -866,7 +866,7 @@ var/global/list/virusDB = list()
 	r += "<dl>"
 	var/i = 1
 	for(var/datum/disease2/effect/e in effects)
-		if(fake_effects[i])
+		if(fake_effects[i] && !trueinfo)
 			var/datum/disease2/effect/f_e = fake_effects[i]
 			r += "<dt> &#x25CF; <b>Stage [f_e.stage] - [f_e.name]</b> (Danger: [f_e.badness]). Strength: <b>[f_e.multiplier]</b>. Occurrence: <b>[f_e.chance]%</b>.</dt>"
 			r += "<dd>[f_e.desc]</dd>"
