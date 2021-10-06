@@ -76,6 +76,7 @@
 
 	
 	var/multiz_render_cap = 8			//how far down open spaces will render
+	var/multiz_bottom_cap = 16			//how far down open spaces will detect for a bottom
 
 	// BSQL things
 	var/bsql_debug = 0
@@ -583,6 +584,8 @@
 				
 				if("multiz_render_cap")
 					multiz_render_cap = text2num(value)
+				if("multiz_bottom_cap")
+					multiz_bottom_cap = text2num(value)
 
 				if("media_base_url")
 					media_base_url = value
