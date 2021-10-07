@@ -30,7 +30,7 @@
 	var/obj/machinery/computer/cloning/cloning_computer = null
 
 
-	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
+	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU | MULTIOUTPUT
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -41,7 +41,7 @@
 	biomass = CLONE_BIOMASS // * 3 - N3X
 
 /obj/machinery/cloning/clonepod/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return ""
+	return "(<a href='?src=\ref[src];set_output_dir=1'>Set Output Direction</a>)"
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -161,24 +161,6 @@
 /obj/item/weapon/disk/data/examine(mob/user)
 	..()
 	to_chat(user, "The write-protect tab is set to [read_only ? "protected" : "unprotected"].")
-
-//Health Tracker Implant
-
-/obj/item/weapon/implant/health
-	name = "health implant"
-	var/healthstring = ""
-
-/obj/item/weapon/implant/health/proc/sensehealth()
-	if (!implanted)
-		return "ERROR"
-	else
-		if(isliving(implanted))
-			var/mob/living/L = implanted
-			healthstring = "[round(L.getOxyLoss())] - [round(L.getFireLoss())] - [round(L.getToxLoss())] - [round(L.getBruteLoss())]"
-		if (!healthstring)
-			healthstring = "ERROR"
-		return healthstring
-
 /obj/machinery/cloning/clonepod/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
 	return attack_hand(user)
@@ -281,11 +263,15 @@
 	H.update_mutantrace()
 	for(var/datum/language/L in R.languages)
 		H.add_language(L.name)
+		if (L == R.default_language)
+			H.default_language = R.default_language
+	H.attack_log = R.attack_log
 	H.real_name = H.dna.real_name
 	H.flavor_text = H.dna.flavor_text
 
-	H.suiciding = FALSE
-	H.name = H.get_visible_name()
+	if(H.mind)
+		H.mind.suiciding = FALSE
+	H.update_name()
 	return TRUE
 
 //Grow clones to maturity then kick them out.  FREELOADERS
@@ -298,7 +284,7 @@
 		return
 
 	if((occupant) && (occupant.loc == src))
-		if((occupant.stat == DEAD) || (occupant.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
+		if((occupant.stat == DEAD) || (occupant.mind && occupant.mind.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
 			locked = FALSE
 			go_out()
 			connected_message("Clone Rejected: Deceased.")
@@ -355,7 +341,7 @@
 	go_out()
 	return
 
-/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
 		return FALSE
@@ -416,14 +402,17 @@
 	add_fingerprint(usr)
 	return
 
-/obj/machinery/cloning/clonepod/proc/go_out(var/exit = loc)
+/obj/machinery/cloning/clonepod/proc/go_out(var/exit)
 	if (locked)
 		return
+
+	if(!exit)
+		exit = output_turf()
 
 	if (mess) //Clean that mess and dump those gibs!
 		mess = FALSE
 		working = FALSE //NOW we're done.
-		gibs(loc)
+		gibs(exit)
 		icon_state = "pod_0"
 		return
 
@@ -434,6 +423,9 @@
 		occupant.client.eye = occupant.client.mob
 		occupant.client.perspective = MOB_PERSPECTIVE
 	occupant.forceMove(exit)
+	var/obj/machinery/conveyor/C = locate() in exit
+	if(C && C.operating != 0)
+		occupant << sound('sound/ambience/powerhouse.ogg') //the ride begins
 	icon_state = "pod_0"
 	eject_wait = FALSE //If it's still set somehow.
 	//do early ejection damage
@@ -457,7 +449,6 @@
 	occupant.updatehealth()
 
 	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
-	occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
 	occupant = null
 	if(biomass > 0)
 		biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass
@@ -577,6 +568,16 @@
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		locked = FALSE
 		go_out()
+
+/obj/machinery/cloning/clonepod/proc/output_turf()
+	if(!output_dir || !isturf(loc))
+		return loc
+
+	var/turf/T = get_step(get_turf(src), output_dir)
+	if(!T || is_blocked_turf(T))
+		return loc
+	return T
+
 
 /*
  *	Diskette Box

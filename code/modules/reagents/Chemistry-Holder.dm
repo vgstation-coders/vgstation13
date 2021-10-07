@@ -174,6 +174,9 @@ var/const/INGEST = 2
 		R.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data, chem_temp)
 		src.remove_reagent(current_reagent.id, current_reagent_transfer)
 
+	for(var/datum/reagent/reagent_datum in R.reagent_list) //Wake up all of the reagents in our target, let them know we did stuff
+		reagent_datum.post_transfer(src)
+
 	// Called from add/remove_agent. -- N3X
 	//src.update_total()
 	//R.update_total()
@@ -368,16 +371,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			R.on_mob_life(M)
 	update_total()
 
-/datum/reagents/proc/conditional_update_move(var/atom/A, var/Running = 0)
-	for(var/datum/reagent/R in reagent_list)
-		R.on_move (A, Running)
-	update_total()
-
-/datum/reagents/proc/conditional_update(var/atom/A, )
-	for(var/datum/reagent/R in reagent_list)
-		R.on_update (A)
-	update_total()
-
 /datum/reagents/proc/handle_reactions()
 	if(!my_atom)
 		return //sanity check
@@ -502,6 +495,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	update_total()
 	my_atom.on_reagent_change()
 
+/datum/reagents/proc/isolate_any_reagent(var/list/protected_reagents)
+	for(var/A in reagent_list)
+		var/datum/reagent/R = A
+		var/protected = FALSE
+		for(var/B in protected_reagents)
+			if(R.id == B)
+				protected = TRUE
+		if (protected == FALSE)
+			del_reagent(R.id,update_totals=0)
+	update_total()
+	my_atom.on_reagent_change()
+
 /datum/reagents/proc/del_reagent(var/reagent, var/update_totals=1)
 	var/total_dirty=0
 	for(var/A in reagent_list)
@@ -542,31 +547,36 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0)
-
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/amount_override = 0)
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
+				var/amount_splashed = R.volume+volume_modifier
+				if (amount_override)
+					amount_splashed = amount_override
 				if(ismob(A))
 					if(isanimal(A))
-						R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
+						R.reaction_animal(A, TOUCH, amount_splashed)
 					else
-						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
+						R.reaction_mob(A, TOUCH, amount_splashed)
 				if(isturf(A))
-					R.reaction_turf(A, R.volume+volume_modifier)
+					R.reaction_turf(A, amount_splashed)
 				if(istype(A, /obj))
-					R.reaction_obj(A, R.volume+volume_modifier)
+					R.reaction_obj(A, amount_splashed)
 		if(INGEST)
 			for(var/datum/reagent/R in reagent_list)
+				var/amount_splashed = R.volume+volume_modifier
+				if (amount_override)
+					amount_splashed = amount_override
 				if(ismob(A))
 					if(isanimal(A))
-						R.reaction_animal(A, INGEST, R.volume+volume_modifier)
+						R.reaction_animal(A, INGEST, amount_splashed)
 					else
-						R.reaction_mob(A, INGEST, R.volume+volume_modifier)
+						R.reaction_mob(A, INGEST, amount_splashed)
 				if(isturf(A) && R)
-					R.reaction_turf(A, R.volume+volume_modifier)
+					R.reaction_turf(A, amount_splashed)
 				if(istype(A, /obj) && R)
-					R.reaction_obj(A, R.volume+volume_modifier)
+					R.reaction_obj(A, amount_splashed)
 	return
 
 /datum/reagents/proc/reaction_dropper(var/atom/A, var/volume_modifier=0)
@@ -970,14 +980,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = y
 		R.send_to_past(duration)
 
-	spawn(duration + 1)
-		if(my_atom)
-			var/atom/A = my_atom
-			A.reagents = src
-
-
 //written for ethylredoxrazine, but might be fun for turning water into wine or something
 /datum/reagents/proc/convert_some_of_type(var/datum/reagent/convert_from_type, var/datum/reagent/convert_to_type,var/convert_amount)
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
 	var/total_amount_converted = 0
 
 	for(var/datum/reagent/itsareagent in reagent_list)
@@ -988,3 +994,24 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			remove_that_reagent(itsareagent, amount_to_convert)
 	return add_reagent(initial(convert_to_type.id), total_amount_converted)
 
+/datum/reagents/proc/convert_all_to_id(var/reagent_id, var/list/whitelisted_ids)
+	if(my_atom.flags & NOREACT)
+		return //Yup, no reactions here. No siree.
+	if(!reagent_list.len)
+		return
+	if(reagent_list.len == 1)
+		var/datum/reagent/the_one_and_only = reagent_list[1]
+		if(the_one_and_only.id == reagent_id || (the_one_and_only.id in whitelisted_ids)) //work's done
+			return
+
+	var/total_amount_converted = 0
+	for(var/datum/reagent/reagent_datum in reagent_list)
+		if(reagent_datum.id == reagent_id || (reagent_datum.id in whitelisted_ids))
+			continue
+		total_amount_converted += reagent_datum.volume
+		remove_that_reagent(reagent_datum, reagent_datum.volume)
+
+	if(!(my_atom.flags & SILENTCONTAINER))
+		playsound(my_atom, 'sound/effects/bubbles.ogg', 50, 1)
+
+	return add_reagent(reagent_id, total_amount_converted)

@@ -133,3 +133,14 @@
 
 	for (var/A in antigen)
 		antibodies[A] = min(antibodies[A] + 20, 100)
+
+
+/datum/immune_system/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"strength",
+		"overloaded",
+		"antibodies"
+	)
+
+	reset_vars_after_duration(resettable_vars, duration)

@@ -11,7 +11,7 @@
 
 	var/lock_type = /datum/locking_category/buckle/cage
 
-	var/mob/living/simple_animal/critter = null
+	var/atom/movable/critter = null
 
 
 /obj/item/critter_cage/New()
@@ -34,7 +34,14 @@
 	if (critter)
 		if( !user.get_active_hand() )
 			unlock_atom(critter)
-			critter.scoop_up(user)
+			if(isliving(critter))
+				var/mob/living/L = critter
+				L.scoop_up(user)
+			else
+				var/matrix/grow = matrix()
+				grow.Scale(1)
+				critter.transform = grow
+				user.put_in_hands(critter)
 			user.visible_message("<span class='notice'>[user] picks up \the [critter].</span>", "<span class='notice'>You pick up \the [critter].</span>")
 			critter = null
 	else
@@ -57,7 +64,18 @@
 			qdel(store)
 			critter.forceMove(loc)
 			lock_atom(critter,lock_type)
-
+		if(!critter && istype(O, /obj/item/device/mmi))
+			var/obj/item/device/mmi/M = O
+			if(!M.brainmob)
+				to_chat(user, "<span class='warning'>Without a brain inside that won't accomplish a thing.</span>")
+			else
+				if(user.drop_item(M, loc))
+					var/matrix/shrink = matrix()
+					shrink.Scale(0.5)
+					M.transform = shrink
+					critter = M
+					critter.forceMove(loc)
+					lock_atom(critter, lock_type)
 		if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
 			if(!user.drop_item(O, loc))
 				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
@@ -73,7 +91,10 @@
 	if (.)
 		AM.plane = MOB_PLANE
 		AM.pixel_x = pixel_x
-		AM.pixel_y = pixel_y+5
+		if(isliving(critter))
+			AM.pixel_y = pixel_y+5
+		else
+			AM.pixel_y = pixel_y-3
 
 /obj/item/critter_cage/unlock_atom(var/atom/movable/AM)
 	. = ..()
@@ -105,22 +126,8 @@
 		critter.pixel_x = pixel_x
 		critter.pixel_y = pixel_y+5
 
-/obj/item/critter_cage/MouseDropFrom(var/over_object)
-	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)))
-		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
-			if(istype(over_object,/obj/abstract/screen/inventory))
-				var/obj/abstract/screen/inventory/OI = over_object
-
-				if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
-					usr.u_equip(src, 0)
-					usr.put_in_hand(OI.hand_index, src)
-					src.add_fingerprint(usr)
-
-			else if(istype(over_object,/mob/living))
-				if(usr == over_object)
-					if( !usr.get_active_hand() )
-						usr.put_in_hands(src)
-						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
+/obj/item/critter_cage/MouseDropFrom(atom/over_object)
+	MouseDropPickUp(over_object)
 	return ..()
 
 /obj/item/critter_cage/with_mouse

@@ -11,6 +11,8 @@
 	roletype = /datum/role/wizard
 	logo_state = "wizard-logo"
 	hud_icons = list("wizard-logo","apprentice-logo")
+	default_admin_voice = "Wizard Federation"
+	admin_voice_style = "notice"
 
 /datum/faction/wizard/civilwar
 	var/enemy_faction

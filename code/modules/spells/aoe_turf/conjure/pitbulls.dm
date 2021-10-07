@@ -1,6 +1,6 @@
 /spell/aoe_turf/conjure/pitbull
 	name = "Summon Pitbulls"
-	desc = "This spell summons a group of misunderstood pitbulls. You can maintain up to 60 living pitbulls at a time."
+	desc = "This spell summons a group of misunderstood pitbulls. You can maintain up to 60 living pitbulls at a time. They won't attack wizards or apprentices, in general."
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 
@@ -15,7 +15,6 @@
 	invocation = "GR'T W'TH K'DS"
 	invocation_type = SpI_SHOUT
 	spell_flags = NEEDSCLOTHES
-	override_icon = 'icons/mob/animal.dmi'
 	hud_state = "pitbull"
 	cast_sound = 'sound/voice/pitbullbark.ogg'
 	quicken_price = Sp_BASE_PRICE

@@ -40,7 +40,7 @@
 		if(construction_step != WIRINGUNSECURE)
 			to_chat(user,"<span class='warning'>The wires are still secure on that!</span>")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 			"<span class='notice'>You start disassembling \the [src].</span>")
 		if(WT.do_weld(user, src, 6 SECONDS, 2))

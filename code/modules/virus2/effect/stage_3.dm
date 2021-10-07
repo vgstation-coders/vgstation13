@@ -625,7 +625,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		mob.adjustBruteLoss(-get_damage)
 		mob.adjustToxLoss(max(1,get_damage * multiplier / 5))
 
-
 /datum/disease2/effect/cyborg_limbs
 	name = "Metallica Syndrome"
 	desc = "Rapidly replaces some organic tissue in the body, causing limbs and other organs to become robotic."
@@ -743,7 +742,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.mutations.Add(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.UpdateDamageIcon()
-	H.fixblood()
+	H.copy_dna_data_to_blood_reagent()
 	to_chat(mob, "<span class='sinister'>You feel different.</span>")
 	activated = 1
 
@@ -756,7 +755,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.mutations.Remove(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.UpdateDamageIcon()
-	H.fixblood()
+	H.copy_dna_data_to_blood_reagent()
 	to_chat(mob, "<span class='warning'>You feel like your old self again.</span>")
 	activated = 0
 
@@ -806,3 +805,26 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	message = replacetext(message,"I","we")
 	message = replacetext(message,"me","us")
 	speech.message = message
+
+/datum/disease2/effect/toothdecay
+	name = "Piratitis Syndrome"
+	desc = "Causes the infected to progressively lose their teeth and speak like a pirate."
+	encyclopedia = "Symptom strength increases the chance of losing teeth, but the chance also goes down the less teeth the infected has."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	affect_voice = 1
+	multiplier = 1
+	max_multiplier = 3
+
+/datum/disease2/effect/toothdecay/activate(var/mob/living/mob)
+	if (!count)
+		to_chat(mob, "<span class='warning'>[pick("You feel like you could use a bottle o' rhum.","You feel like kidnapping the princess of Canada.")]</span>")
+		affect_voice_active = 1
+	if (ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in H.butchering_drops
+		if (prob((5 * T.amount / 32) * multiplier))
+			H.knock_out_teeth()
+
+/datum/disease2/effect/toothdecay/affect_mob_voice(var/datum/speech/speech)
+	speech.message = piratespeech(speech.message)

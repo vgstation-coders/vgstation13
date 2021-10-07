@@ -106,10 +106,8 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/spacepond
 	file_path = "maps/randomvaults/spacepond.dmm"
 
-/datum/map_element/vault/spacepond/initialize(list/objects)
-	..()
-
-	load_dungeon(/datum/map_element/dungeon/wine_cellar)
+/datum/map_element/vault/spacepond/pre_load()
+	load_dungeon(/datum/map_element/dungeon/wine_cellar,rotation)
 
 /datum/map_element/dungeon/wine_cellar
 	file_path = "maps/randomvaults/dungeons/wine_cellar.dmm"
@@ -139,7 +137,7 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/prison_ship.dmm"
 
 /datum/map_element/vault/prison/pre_load()
-	load_dungeon(/datum/map_element/dungeon/prison)
+	load_dungeon(/datum/map_element/dungeon/prison,rotation)
 
 /datum/map_element/dungeon/prison
 	file_path = "maps/randomvaults/dungeons/prison.dmm"
@@ -153,14 +151,14 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/droneship
 	file_path = "maps/randomvaults/droneship.dmm"
 
+/datum/map_element/vault/amelab
+	file_path = "maps/randomvaults/amelab.dmm"
+
 /datum/map_element/vault/meteorlogical_station
 	file_path = "maps/randomvaults/meteorlogical_station.dmm"
 
 /datum/map_element/vault/taxi_engi
 	file_path = "maps/randomvaults/taxi_engineering.dmm"
-
-/datum/map_element/vault/lightspeedship
-	file_path = "maps/randomvaults/lightspeedship.dmm"
 
 /datum/map_element/vault/ice_comet
 	file_path = "maps/randomvaults/ice_comet.dmm"
@@ -190,7 +188,7 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/spy_satellite.dmm"
 
 /datum/map_element/vault/spy_sat/pre_load()
-	load_dungeon(/datum/map_element/dungeon/satellite_deployment)
+	load_dungeon(/datum/map_element/dungeon/satellite_deployment,rotation)
 
 /datum/map_element/dungeon/satellite_deployment
 	file_path = "maps/randomvaults/dungeons/satellite_deployment.dmm"

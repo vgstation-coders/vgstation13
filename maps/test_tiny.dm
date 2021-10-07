@@ -2,7 +2,6 @@
 //**************************************************************
 // Map Datum -- Teststation
 //**************************************************************
-
 /datum/map/active
 	nameShort = "test_tiny"
 	nameLong = "Test Station"
@@ -15,6 +14,8 @@
 		)
 
 	load_map_elements = list(/datum/map_element/dungeon/holodeck)
+	zCentcomm = 1
+	lights_always_ok = TRUE
 
 ////////////////////////////////////////////////////////////////
 #include "test_tiny.dmm"

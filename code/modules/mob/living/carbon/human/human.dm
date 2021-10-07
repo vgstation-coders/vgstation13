@@ -232,8 +232,8 @@
 
 	update_mutantrace()
 
-	lazy_register_event(/lazy_event/on_equipped, src, .proc/update_name)
-	lazy_register_event(/lazy_event/on_unequipped, src, .proc/update_name)
+	register_event(/event/equipped, src, .proc/update_name)
+	register_event(/event/unequipped, src, .proc/update_name)
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()
@@ -304,14 +304,6 @@
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
 
-/mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
-	for(var/L in M.contents)
-		if(istype(L, /obj/item/weapon/implant/loyalty))
-			for(var/datum/organ/external/O in M.organs)
-				if(L in O.implants)
-					return 1
-	return 0
-
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
 	M.unarmed_attack_mob(src)
 
@@ -328,6 +320,8 @@
 // called when something steps onto a human
 // this could be made more general, but for now just handle mulebot
 /mob/living/carbon/human/Crossed(var/atom/movable/AM)
+	if (flags & INVULNERABLE)
+		return
 	var/blood = 0
 	var/obj/machinery/bot/mulebot/MB = AM
 	if(istype(MB))
@@ -386,17 +380,17 @@
 	else
 		return if_no_id
 	return
-//repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
+//repurposed proc. Now it combines get_worn_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
 /mob/living/carbon/human/proc/get_visible_name()
 	if( wear_mask && wear_mask.is_hidden_identity())	//Wearing a mask which hides our face, use id-name if possible
-		return get_id_name("Unknown")
+		return get_worn_id_name("Unknown")
 	if( head && head.is_hidden_identity())
-		return get_id_name("Unknown")	//Likewise for hats
+		return get_worn_id_name("Unknown")	//Likewise for hats
 	var/datum/role/vampire/V = isvampire(src)
-	if(V && (/datum/power/vampire/shadow in V.current_powers) && V.ismenacing)
-		return get_id_name("Unknown")
+	if(V && (locate(/datum/power/vampire/shadow) in V.current_powers) && V.ismenacing)
+		return get_worn_id_name("Unknown")
 	var/face_name = get_face_name()
-	var/id_name = get_id_name("")
+	var/id_name = get_worn_id_name("")
 	if(id_name && (id_name != face_name))
 		return "[face_name] (as [id_name])"
 	return face_name
@@ -409,7 +403,7 @@
 
 //gets name from ID or PDA itself, ID inside PDA doesn't matter
 //Useful when player is being seen by other mobs
-/mob/living/carbon/human/proc/get_id_name(var/if_no_id = "Unknown")
+/mob/living/carbon/human/proc/get_worn_id_name(var/if_no_id = "Unknown")
 	if(wear_id)
 		. = wear_id.get_owner_name_from_ID()
 	if(!.)
@@ -622,6 +616,9 @@
 		if (!t1 || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		med_record.add_comment(t1)
+	else if (href_list["purchaselog"])
+		if(mind)
+			mind.role_purchase_log()
 	else if (href_list["listitems"])
 		var/mob/M = usr
 		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
@@ -692,9 +689,11 @@
 	return 0
 
 
-/mob/living/carbon/human/proc/check_dna()
+/mob/living/carbon/human/proc/check_dna_integrity()
 	dna.check_integrity(src)
-	return
+
+/mob/living/carbon/human/proc/update_dna_from_appearance() // Takes care of updating our DNA so it matches our appearance
+	dna.ResetUIFrom(src)
 
 /mob/living/carbon/human/get_species()
 
@@ -798,71 +797,15 @@
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
 
-	var/new_facial = input("Please select facial hair color.", "Character Generation",rgb(my_appearance.r_facial,my_appearance.g_facial,my_appearance.b_facial)) as color
-	if(new_facial)
-		my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
-		my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
-		my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
+	pick_appearance(src,"Morph",FALSE)
 
-	var/new_hair = input("Please select hair color.", "Character Generation",rgb(my_appearance.r_hair,my_appearance.g_hair,my_appearance.b_hair)) as color
-	if(new_facial)
-		my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
-		my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
-		my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
+	pick_gender(src,"Morph",FALSE)
 
-	var/new_eyes = input("Please select eye color.", "Character Generation",rgb(my_appearance.r_eyes,my_appearance.g_eyes,my_appearance.b_eyes)) as color
-	if(new_eyes)
-		my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
-
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-my_appearance.s_tone]")  as text
-
-	if (!new_tone)
-		new_tone = 35
-	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-	my_appearance.s_tone =  -my_appearance.s_tone + 35
-
-	// hair
-	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
-	var/list/hairs = list()
-
-	// loop through potential hairs
-	for(var/x in all_hairs)
-		var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
-		hairs.Add(H.name) // add hair name to hairs
-		qdel(H) // delete the hair after it's all done
-		H = null
-
-	var/new_style = input("Please select hair style", "Character Generation",my_appearance.h_style)  as null|anything in hairs
-
-	// if new style selected (not cancel)
-	if (new_style)
-		my_appearance.h_style = new_style
-
-	// facial hair
-	var/list/all_fhairs = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
-	var/list/fhairs = list()
-
-	for(var/x in all_fhairs)
-		var/datum/sprite_accessory/facial_hair/H = new x
-		fhairs.Add(H.name)
-		qdel(H)
-		H = null
-
-	new_style = input("Please select facial style", "Character Generation",my_appearance.f_style)  as null|anything in fhairs
-
-	if(new_style)
-		my_appearance.f_style = new_style
-
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			setGender(MALE)
-		else
-			setGender(FEMALE)
 	regenerate_icons()
-	check_dna()
+
+	check_dna_integrity()
+
+	update_dna_from_appearance()
 
 	visible_message("<span class='notice'>\The [src] morphs and changes [get_visible_gender() == MALE ? "his" : get_visible_gender() == FEMALE ? "her" : "their"] appearance!</span>", "<span class='notice'>You change your appearance!</span>", "<span class='warning'>Oh, god!  What the hell was that?  It sounded like flesh getting squished and bone ground into a different shape!</span>")
 
@@ -898,7 +841,6 @@
 
 	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
-		fixblood()
 
 	var/datum/organ/internal/brain/BBrain = internal_organs_by_name["brain"]
 	if(!BBrain)
@@ -996,7 +938,6 @@
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	update_inv_gloves()	//handles bloody hands overlays and updating
-	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return 1 //we applied blood to the item
 
 /mob/living/carbon/human/add_blood_from_data(var/list/blood_data)
@@ -1012,7 +953,6 @@
 		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[blood_data["blood_DNA"]] = blood_data["blood_type"]
 	update_inv_gloves()	//handles bloody hands overlays and updating
-	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return TRUE //we applied blood to the item
 
 /mob/living/carbon/human/clean_blood(var/clean_feet)
@@ -1201,6 +1141,11 @@
 
 	if(S.gender)
 		gender = S.gender
+	else if (gender == "neuter") // when going back from an non-gendered species to a gendered one, you'll get assigned randomly
+		if (prob(50))
+			gender = "male"
+		else
+			gender = "female"
 
 	for(var/L in species.known_languages)
 		add_language(L)
@@ -1236,71 +1181,177 @@
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
 	src.movement_speed_modifier = species.move_speed_multiplier
+
 	if(dna)
 		dna.species = new_species_name
+
+	if(my_appearance)
+		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
+		if (!(my_appearance.h_style in valid_hair))
+			my_appearance.h_style = random_hair_style(gender, species)
+		var/list/valid_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)
+		if (!(my_appearance.f_style in valid_facial_hair))
+			my_appearance.f_style = random_facial_hair_style(gender, species)
+		if (((my_appearance.s_tone < 0) && !(species.anatomy_flags & HAS_SKIN_TONE)) || (my_appearance.s_tone > species.max_skin_tone))
+			my_appearance.s_tone = random_skin_tone(species)
+		if(dna)
+			update_dna_from_appearance()
+
 	src.species.handle_post_spawn(src)
 	src.update_icons()
 	if(species.species_intro)
 		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
-/mob/living/carbon/human/proc/bloody_doodle()
+#define BLOODOODLE_NOSOURCE	0
+#define BLOODOODLE_HANDS	1
+#define BLOODOODLE_GLOVES	2
+#define BLOODOODLE_BLEEDING	2
+
+/mob/living/carbon/human/verb/bloody_doodle()
 	set category = "IC"
 	set name = "Write in blood"
-	set desc = "Use blood on your hands to write a short message on the floor or a wall, murder mystery style."
+	set desc = "Use blood on your hands to write a short message on the floor, murder mystery style."
 
-	if (src.stat)
+	if (incapacitated() || isUnconscious())
 		return
 
-	if (!(bloody_hands_data?.len))
+	var/turf/T = get_turf(src)
+	if (!isfloor(T))
+		to_chat(src, "<span class='warning'>You can only doodle over floors.</span>")
 		return
 
-	if (usr != src)
-		return 0 //something is terribly wrong
-
-	if (!bloody_hands)
-		verbs -= /mob/living/carbon/human/proc/bloody_doodle
-
-	if (src.gloves)
-		to_chat(src, "<span class='warning'>Your [src.gloves] are getting in the way.</span>")
-		return
-
-	var/turf/simulated/T = src.loc
-	if (!istype(T)) //to prevent doodling out of mechs and lockers
-		to_chat(src, "<span class='warning'>You cannot reach the floor.</span>")
-		return
-
-	var/direction = input(src,"Which way?","Tile selection") as anything in list("Here","North","South","East","West")
-	if (direction != "Here")
-		T = get_step(T,text2dir(direction))
-	if (!istype(T))
-		to_chat(src, "<span class='warning'>You cannot doodle there.</span>")
-		return
-
-	var/num_doodles = 0
 	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
-		num_doodles++
-	if (num_doodles > 4)
-		to_chat(src, "<span class='warning'>There is no space to write on!</span>")
+		to_chat(src, "<span class='warning'>This floor is already filled with writings.</span>")
 		return
 
-	var/max_length = bloody_hands * 30 //tweeter style
+	var/doodle_color
+	var/doodle_DNA
+	var/doodle_type
+	var/obj/item/clothing/gloves/actual_gloves
+	var/blood_source = BLOODOODLE_NOSOURCE
 
-	var/message = stripped_input(src,"Write a message. It cannot be longer than [max_length] characters.","Blood writing", "")
+	//blood on your gloves?
+	if (istype(gloves, /obj/item/clothing/gloves))
+		actual_gloves = gloves
+		if(actual_gloves.transfer_blood > 0 && actual_gloves.blood_DNA?.len)
+			doodle_DNA = pick(actual_gloves.blood_DNA)
+			doodle_type = actual_gloves.blood_DNA[doodle_DNA]
+			doodle_color = actual_gloves.blood_color
+			blood_source = BLOODOODLE_GLOVES
 
-	if (message)
-		var/used_blood_amount = round(length(message) / 30, 1)
-		bloody_hands = max(0, bloody_hands - used_blood_amount) //use up some blood
+	//blood on your hands?
+	if(!actual_gloves && bloody_hands > 0 && bloody_hands_data?.len)
+		doodle_DNA = bloody_hands_data["blood_DNA"]
+		doodle_type = bloody_hands_data["blood_type"]
+		doodle_color = bloody_hands_data["blood_colour"]
+		blood_source = BLOODOODLE_HANDS
 
-		if (length(message) > max_length)
-			message += "-"
-			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
+	//are your own hands bleeding you wannabe cultist?
+	var/datum/organ/external/right_hand = organs_by_name[LIMB_RIGHT_HAND]
+	var/datum/organ/external/left_hand = organs_by_name[LIMB_LEFT_HAND]
+	if (!doodle_color && !actual_gloves)
+		if ((!(right_hand.status & ORGAN_DESTROYED) && (right_hand.status & ORGAN_BLEEDING)) || (!(left_hand.status & ORGAN_DESTROYED) && (left_hand.status & ORGAN_BLEEDING)))
+			if (dna)
+				doodle_DNA = dna.unique_enzymes
+				doodle_type = dna.b_type
+			if (species)
+				if (species.anatomy_flags & NO_BLOOD)
+					to_chat(src, "<span class='warning'>There is no blood to use coming out of your wounds.</span>")
+					return
+				doodle_color = species.blood_color
+			else
+				doodle_color = DEFAULT_BLOOD
+			blood_source = BLOODOODLE_BLEEDING
 
-		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
-		W.basecolor = (bloody_hands_data["blood_colour"]) ? bloody_hands_data["blood_colour"] : DEFAULT_BLOOD
-		W.update_icon()
-		W.message = message
-		W.add_fingerprint(src)
+	if (!doodle_color)
+		to_chat(src, "<span class='warning'>There is no blood on your [actual_gloves ? "gloves" : "hands"].</span>")
+		return
+
+
+	//Blood found, now to write a message
+	var/max_length = 30
+	var/message = stripped_input(src,"Write a message. You will be able to preview it.","Bloody writings", "")
+
+	if (!message)
+		return
+
+	message = copytext(message, 1, max_length)
+
+	var/letter_amount = length(replacetext(message, " ", ""))
+	if(!letter_amount) //If there is no text
+		return
+
+	//Previewing our message
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
+	I.maptext_height = 32
+	I.maptext_width = 64
+	I.maptext_x = -16
+	I.maptext_y = -2
+	I.loc = T
+	I.alpha = 180
+
+	client.images.Add(I)
+	var/continue_drawing = alert(src, "This is how your message will look. Continue?", "Bloody writings", "Yes", "Cancel")
+
+	client.images.Remove(I)
+	animate(I) //Cancel the animation so that the image gets garbage collected
+	I.loc = null
+	qdel(I)
+
+	if(continue_drawing != "Yes" || !Adjacent(T))
+		return
+
+	//One last sanity check
+	var/can_still_doodle = FALSE
+	var/obj/item/clothing/gloves/actual_gloves2
+	if (istype(gloves, /obj/item/clothing/gloves))
+		actual_gloves2 = gloves
+	switch(blood_source)
+		if (BLOODOODLE_HANDS)
+			if(!actual_gloves2 && bloody_hands > 0 && bloody_hands_data?.len)
+				can_still_doodle = TRUE
+		if (BLOODOODLE_GLOVES)
+			if(actual_gloves2.transfer_blood > 0 && actual_gloves2.blood_DNA?.len)
+				can_still_doodle = TRUE
+		if (BLOODOODLE_BLEEDING)
+			if (!actual_gloves2)
+				if ((!(right_hand.status & ORGAN_DESTROYED) && (right_hand.status & ORGAN_BLEEDING)) || (!(left_hand.status & ORGAN_DESTROYED) && (left_hand.status & ORGAN_BLEEDING)))
+					can_still_doodle = TRUE
+
+	if(!can_still_doodle)
+		if (blood_source == BLOODOODLE_BLEEDING)
+			to_chat(src, "<span class='warning'>Your hands are no longer bleeding.</span>")
+		else
+			to_chat(src, "<span class='warning'>There is no blood left on your [actual_gloves2 ? "gloves" : "hands"].</span>")
+		return
+
+	//Finally writing our message
+	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
+	W.basecolor = doodle_color
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
+	W.add_fingerprint(src)
+	var/invisible = invisibility || !alpha
+	W.visible_message("<span class='warning'>[invisible ? "Invisible fingers" : "\The [src]"] crudely paint[invisible ? "" : "s"] something in blood on \the [T]...</span>")
+	W.blood_DNA[doodle_DNA] = doodle_type
+
+	switch(blood_source)
+		if (BLOODOODLE_HANDS)
+			bloody_hands = max(0,bloody_hands - 1)
+		if (BLOODOODLE_GLOVES)
+			actual_gloves2.transfer_blood = max(0,actual_gloves2.transfer_blood - 1)
+		if (BLOODOODLE_BLEEDING)
+			if (vessel)
+				vessel.remove_reagent(BLOOD, 1)
+	update_inv_gloves()
+
+#undef BLOODOODLE_NOSOURCE
+#undef BLOODOODLE_HANDS
+#undef BLOODOODLE_GLOVES
+#undef BLOODOODLE_BLEEDING
+
+
 /mob/living/carbon/human/can_inject(var/mob/user, var/error_msg, var/target_zone)
 	. = 1
 	if(!user)
@@ -1344,6 +1395,19 @@
 			if(id)
 				break
 	return id
+
+/mob/living/carbon/human/update_perception()
+	if(client && client.darkness_planemaster)
+		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+		if(E)
+			E.update_perception(src)
+
+		for(var/ID in virus2)
+			var/datum/disease2/disease/D = virus2[ID]
+			for (var/datum/disease2/effect/catvision/catvision in D.effects)
+				if (catvision.count)//if catulism has activated at least once, we can see much better in the dark.
+					client.darkness_planemaster.alpha = min(100, client.darkness_planemaster.alpha)
+					break
 
 /mob/living/carbon/human/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
@@ -1397,7 +1461,7 @@
 	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/rig/wizard))
 		threatcount += 2
 	//Loyalty implants imply trustworthyness
-	if(isloyal(src))
+	if(is_loyalty_implanted())
 		threatcount -= 1
 	//Secbots are racist!
 	if(dna && dna.mutantrace && dna.mutantrace != "none")
@@ -1414,7 +1478,7 @@
 /mob/living/carbon/human/has_eyes()
 	if(internal_organs_by_name["eyes"])
 		var/datum/organ/internal/eyes = internal_organs_by_name["eyes"]
-		if(eyes && istype(eyes) && !eyes.status & ORGAN_CUT_AWAY)
+		if(eyes && istype(eyes) && !(eyes.status & ORGAN_CUT_AWAY))
 			return 1
 	return 0
 /mob/living/carbon/human/singularity_act()
@@ -1706,7 +1770,7 @@ mob/living/carbon/human/isincrit()
 	return internal_organs_by_name["appendix"]
 
 //Moved from internal organ surgery
-//Removes organ from src, places organ object under user
+//Removes organ from src, places organ object in user's hands
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
 /mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/internal/extractedorgan
@@ -1727,15 +1791,19 @@ mob/living/carbon/human/isincrit()
 			internal_organs -= extractedorgan.organ_data
 			affectedarea.internal_organs -= extractedorgan.organ_data
 			extractedorgan.removed(src,user)
+			user.put_in_hands(extractedorgan)
 
 			return extractedorgan
 
 /mob/living/carbon/human/feels_pain()
-	if(!species)
+	if(!species) //should really really not happen!!
 		return FALSE
 	if(species.flags & NO_PAIN)
 		return FALSE
 	if(pain_numb)
+		return FALSE
+	var/datum/organ/internal/brain/sponge = internal_organs_by_name["brain"]
+	if(!sponge || !istype(sponge) || (sponge.status & ORGAN_CUT_AWAY))
 		return FALSE
 	return TRUE
 
@@ -1785,18 +1853,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"my_appearance.r_hair",
-		"my_appearance.g_hair",
-		"my_appearance.b_hair",
-		"my_appearance.h_style",
-		"my_appearance.r_facial",
-		"my_appearance.g_facial",
-		"my_appearance.b_facial",
-		"my_appearance.f_style",
-		"my_appearance.r_eyes",
-		".my_appearance.g_eyes",
-		".my_appearance.b_eyes",
-		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",
@@ -1836,8 +1892,10 @@ mob/living/carbon/human/isincrit()
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
-	if(vessel)
-		vessel.send_to_past(duration)
+	 if(vessel)
+	 	vessel.send_to_past(duration)
+	if(my_appearance)
+		my_appearance.send_to_past(duration)
 
 	updatehealth()
 
@@ -1847,21 +1905,17 @@ mob/living/carbon/human/isincrit()
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	BrainContainer = new (src)
-	BrainContainer.AddComponent(/datum/component/controller/mob)
-	BrainContainer.AddComponent(/datum/component/ai/hand_control)
-	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
-	BrainContainer.register_for_updates()
+	add_component(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
-	BrainContainer.AddComponent(/datum/component/ai/human_brain)
-	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
-	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
-	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
-	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
-	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
-	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
+	add_component(/datum/component/ai/human_brain)
+	add_component(/datum/component/ai/target_finder/human)
+	add_component(/datum/component/ai/target_holder/prioritizing)
+	add_component(/datum/component/ai/melee/attack_human)
+	add_component(/datum/component/ai/melee/throw_attack)
+	add_component(/datum/component/ai/crowd_attack)
+	add_component(pick(typesof(/datum/component/ai/targetting_handler)))
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...
@@ -1881,6 +1935,7 @@ mob/living/carbon/human/isincrit()
 	return TRUE
 
 /mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+	dropBorers()
 	if(crabzombie)
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
 		T.virus2 = virus_copylist(virus2)
@@ -1977,15 +2032,46 @@ mob/living/carbon/human/isincrit()
 	else
 		return ..()
 
+/mob/living
+	var/hangman_score = 0 // For round end leaderboards
+
+/mob/living/carbon/human/proc/DormantGenes(var/badGeneProb = 2, var/chanceForGoodIfBad = 10, var/goodGeneProb = 0, var/chanceForBadIfGood = 0) // default values are those used on roundstart/latejoin
+	if(prob(badGeneProb))
+		dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD, dormant = TRUE)
+		if(prob(chanceForGoodIfBad))
+			dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD, dormant = TRUE)
+
+	if(prob(goodGeneProb))
+		dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD, dormant = TRUE)
+		if(prob(chanceForBadIfGood))
+			dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_BAD, dormant = TRUE)
+
+
+
 /mob/living/carbon/human/Hear(var/datum/speech/speech, var/rendered_speech="")
 	..()
 	if(stat)
 		return //Don't bother if we're dead or unconscious
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
+	var/mob/living/H = speech.speaker
+	var/hangman_answer = speech.message
+	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
+	hangman_answer = replacetext(hangman_answer,"?","")
+	hangman_answer = replacetext(hangman_answer,"!","")
+	if(muted_letters && muted_letters.len && length(hangman_answer) == 1) // If we're working with a hangman cursed individuel and we only said a letter
+		if(hangman_answer in muteletters_check) // Correct answer?
+			muted_letters.Remove(hangman_answer) // Baleet it
+			H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
+			H.hangman_score++ // Add to score
+		else if(muteletter_tries)
+			muteletter_tries-- //Reduce the attempts left before...
+			visible_message("<span class='sinister'>This letter is not found in obscured speech! [muteletter_tries] tries left.</span>")
+		else
+			set_muted_letters(min(0,26-(muted_letters.len+1))) // It gets scrambled and lengthened!
+			visible_message("<span class='sinister'>Too many bad guessses... the letters have been obscured again!</span>")
 	if(!mind || !mind.faith || length(speech.message) < 20)
 		return //If we aren't religious or hearing a long message, don't check further
-	var/mob/living/H = speech.speaker
 	if(dizziness || stuttering || jitteriness || hallucination || confused || drowsyness || pain_shock_stage)
 		if(isliving(H) && H.mind == mind.faith.religiousLeader)
 			AdjustDizzy(rand(-8,-10))
@@ -1995,6 +2081,17 @@ mob/living/carbon/human/isincrit()
 			remove_confused(rand(8, 10))
 			drowsyness = max(0, drowsyness-rand(8,10))
 			pain_shock_stage = max(0, pain_shock_stage-rand(3,5))
+
+/mob/living/carbon/human/proc/set_muted_letters(var/keep_amount)
+	muteletter_tries = 3
+	muted_letters = list("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+	for(var/i = 0, i < keep_amount, i++)
+		pick_n_take(muted_letters)
+
+/mob/living/carbon/human/rejuvenate(animation = 0)
+	muted_letters = list()
+	muteletter_tries = 3
+	..()
 
 /mob/living/carbon/human/can_be_infected()
 	return 1
@@ -2036,3 +2133,128 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/make_meat(location)
 	var/ourMeat = new meat_type(location, src)
 	return ourMeat	//Exists due to meat having a special New()
+
+/mob/living/carbon/human/turn_into_mannequin(var/material = "marble",var/forever = FALSE)
+	var/list/valid_mannequin_species = list(
+		"Human",
+		"Vox",
+		"Manifested",
+		)
+	if (!(species.name in valid_mannequin_species))
+		return FALSE
+
+	var/turf/T = get_turf(src)
+	var/obj/structure/mannequin/new_mannequin
+
+	var/list/mannequin_clothing = list(
+		SLOT_MANNEQUIN_ICLOTHING,
+		SLOT_MANNEQUIN_FEET,
+		SLOT_MANNEQUIN_GLOVES,
+		SLOT_MANNEQUIN_EARS,
+		SLOT_MANNEQUIN_OCLOTHING,
+		SLOT_MANNEQUIN_EYES,
+		SLOT_MANNEQUIN_BELT,
+		SLOT_MANNEQUIN_MASK,
+		SLOT_MANNEQUIN_HEAD,
+		SLOT_MANNEQUIN_BACK,
+		SLOT_MANNEQUIN_ID,
+		)
+
+	mannequin_clothing[SLOT_MANNEQUIN_ICLOTHING] = w_uniform
+	mannequin_clothing[SLOT_MANNEQUIN_OCLOTHING] = wear_suit
+	mannequin_clothing[SLOT_MANNEQUIN_HEAD] = head
+	mannequin_clothing[SLOT_MANNEQUIN_MASK] = wear_mask
+	mannequin_clothing[SLOT_MANNEQUIN_BACK] = back
+	mannequin_clothing[SLOT_MANNEQUIN_ID] = wear_id
+	mannequin_clothing[SLOT_MANNEQUIN_BELT] = belt
+	mannequin_clothing[SLOT_MANNEQUIN_GLOVES] = gloves
+	mannequin_clothing[SLOT_MANNEQUIN_FEET] = shoes
+	mannequin_clothing[SLOT_MANNEQUIN_EARS] = ears
+	mannequin_clothing[SLOT_MANNEQUIN_EYES] = glasses
+
+	var/list/mannequin_held_items = list(null, null)
+
+	for (var/i = 1 to mannequin_held_items.len)
+		var/obj/O = held_items[i]
+		if (O)
+			drop_item(O,T,TRUE)
+			mannequin_held_items[i] = O
+
+	for (var/obj/O in get_all_slots())
+		drop_item(O,T,TRUE)
+
+	switch (species.name)
+		if ("Human","Manifested")
+			if (is_fat())
+				switch (material)
+					if ("marble")
+						new_mannequin = new /obj/structure/mannequin/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+					if ("wood")
+						new_mannequin = new /obj/structure/mannequin/wood/fat(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+			else if (gender == FEMALE)
+				switch (material)
+					if ("marble")
+						new_mannequin = new /obj/structure/mannequin/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+					if ("wood")
+						new_mannequin = new /obj/structure/mannequin/wood/woman(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+			else
+				switch (material)
+					if ("marble")
+						new_mannequin = new /obj/structure/mannequin(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+					if ("wood")
+						new_mannequin = new /obj/structure/mannequin/wood(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+		if ("Vox")
+			switch (material)
+				if ("marble")
+					new_mannequin = new /obj/structure/mannequin/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+				if ("wood")
+					new_mannequin = new /obj/structure/mannequin/wood/vox(T,my_appearance.f_style,my_appearance.h_style,mannequin_clothing,mannequin_held_items,src,forever)
+
+	if (new_mannequin)
+		return TRUE
+	return FALSE
+
+/mob/living/carbon/human/get_butchering_products()
+	if (!species)
+		return list()
+
+	switch (species.name)
+		if ("Human","Manifested")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/human)
+		if ("Unathi")
+			return list(/datum/butchering_product/teeth/lots, /datum/butchering_product/skin/lizard/lots)
+		if ("Skrell")
+			return list(/datum/butchering_product/teeth/lots)
+		if ("Skellington")
+			return list(/datum/butchering_product/teeth/human)
+		if ("Tajaran")
+			return list(/datum/butchering_product/teeth/human, /datum/butchering_product/skin/cat/lots)
+	return list()
+		/*	Missing Sprites, pls contribute
+
+		if ("Vox")
+			return list(
+		if ("Diona")
+			return list(
+		if ("Skeletal Vox")
+			return list(
+		if ("Plasmaman")
+			return list(
+		if ("Muton")
+			return list(
+		if ("Grey")
+			return list(
+		if ("Golem")
+			return list(
+		if ("Grue")
+			return list(
+		if ("Slime")
+			return list(
+		if ("Insectoid")
+			return list(
+		if ("Mushroom")
+			return list(
+		if ("Undead")
+			return list(
+
+		*/

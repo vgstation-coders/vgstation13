@@ -336,7 +336,17 @@
 	name = "chicken suit head"
 	desc = "Bkaw!"
 	icon_state = "chickenhead"
-	item_state = "chickensuit"
+	item_state = "chickenhead"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED)
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+	siemens_coefficient = 2.0
+
+/obj/item/clothing/head/chicken/white
+	name = "white chicken suit head"
+	desc = "Caw!"
+	icon_state = "chickenhead_white"
+	item_state = "chickenhead_white"
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
@@ -356,7 +366,7 @@
 
 /obj/item/clothing/head/bearpelt/real/spare
 	name = "spare bear pelt"
-	desc = "shimmers in the light"
+	desc = "It shimmers in the light"
 	icon_state = "sparebearpelt"
 	item_state = "sparebearpelt"
 	slot_flags = SLOT_ID|SLOT_HEAD
@@ -387,6 +397,12 @@
 	desc = "For those polar chills."
 	icon_state = "polarbearpelt"
 	item_state = "polarbearpelt"
+
+/obj/item/clothing/head/bearpelt/panda
+	name = "panda pelt hat"
+	desc = "Makes you want to chew on bamboo sticks."
+	icon_state = "pandbearpelt"
+	item_state = "pandbearpelt"
 
 /obj/item/clothing/head/wolfpelt
 	name = "wolf pelt hat"
@@ -684,6 +700,14 @@
 	desc = "An oversized Donitos promotional plastic donut-shaped hat."
 	icon_state = "donitos_pope"
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/head/banana_hat
+	name = "banana hat"
+	desc = "Ring ring ring ring ring ring ring." //BANANA PHONE!
+	icon_state = "banana_hat"
+	item_state = "banana_hat"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/bteamcaptain
     name = "\improper Burning Team Captain"

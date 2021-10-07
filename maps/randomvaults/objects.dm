@@ -198,6 +198,78 @@
 	..()
 	pod_code = "[rand(10000, 99999.0)]"
 
+/area/vault/amelab
+	name = "\improper Nanotrasen Experimental AME Lab"
+	requires_power = 1
+
+/area/vault/amelab/lab
+	requires_power = 0
+	jammed = 2
+	color = "blue"
+
+/obj/effect/blob/core/ame_lab
+	name = "antimatter control unit"
+	desc = "This device injects antimatter into connected shielding units. Wrench the device to set it...wait hold on, something's off..?"
+	icon = 'icons/mob/blob/blob_AME_64x64.dmi'
+	looks = "AME_new"
+	asleep = TRUE
+	no_ghosts_allowed = TRUE
+
+/obj/item/weapon/paper/amelab1
+	name = "paper- 'Initial Report'"
+	info = "I have arrived at the lab. The builders have just finished setting up the atmos and have departed. The station is using so little power that the P.A.C.M.A.N. in the maintenance is more than enough to recharge the APC. Centcomm should send the parts for the reactor by tomorrow, I can't wait to build it."
+
+/obj/item/weapon/paper/amelab2
+	name = "paper- 'Second Report'"
+	info = "The cargo shuttle dropped the parts about an hour ago and I've somehow already finished assembling the Antimatter Engine. In fact, the lab is running on its power right now. It's such a fool-proof system, you just pulse the parts with a multitool and it assembles on its own, not sure how anyone could mess it up really. I've shutdown the P.A.C.M.A.N., it might come in handy later in case of emergency. Antimatter is a much more efficient energy source, with just one jar this small lab could stay online for aeons."
+
+/obj/item/weapon/paper/amelab3
+	name = "paper- 'Third Report'"
+	info = "As instructed in Phase One of the experiment, I've started slowly raising the fuel injection. The engine seems to remain stable at up to 4 units of antimatter per injection, beyond that it quickly starts losing structural integrity and the injections become quite loud. I have determined that the highest safe amount of fuel units per injection is equal to twice the amount of cores."
+
+/obj/item/weapon/paper/amelab4
+	name = "paper- 'Fourth Report'"
+	info = "Centcomm has shipped me some much larger fuel jars in preparation for Phase Two. A scientist will be coming, an Anomalist specifically. I'm not quite versed into Exotic Particle science but they will test alternative ways to raise the power output. This can go wrong in so many ways but we're all well aware of the risks, and the pay is good enough. Worst case scenario the lab explodes and we'll be the only casualties."
+
+/obj/item/weapon/paper/amelab5
+	name = "paper- 'Fifth Report'"
+	info = "The anomalist has started their experiments on the engine, they brought various devices and machines I do not recognize. Regardless, the radiations their tools emit seem to have a positive effect on the power output. Looks like we're on the verge of a technological breakthrough! With the last deliveries we also ordered a portable SMES kit. If we can export enough surplus energy we might not only earn ourselves a bonus, but also prove the commercial applications of the enhanced AME."
+
+/obj/item/weapon/paper/amelab6
+	name = "paper- 'Sixth Report'"
+	info = "Something went wrong, very wrong. The AME isn't outputting any power anymore but will not shutdown. More worrying even, the engine appears to be emitting its own exotic particles now, different from those we were using until now. The rate of particle production seems to be slowly rising at a constant rate. You will find attached to this report all the data we could gather from it. Please advise."
+
+/obj/item/weapon/paper/amelab7
+	name = "paper- 'Final Report'"
+	info = "We've drained the engine room of oxygen, somehow this seems to have slowed down the increase in exotic particles. After reading the data that came with our previous report Centcomm decided to completely abort the project. A shuttle will come by to extract us shortly, which is either a testament to how valuable we are, or how dangerous the engine has actually become. I like to hope it's both. I leave those notes here should Centcomm decide to resume the experiments. <b>Most importantly I advise against trying to put any more fuel inside the engine</b>."
+
+/obj/item/weapon/storage/bag/clipboard/amelab/New()
+	..()
+	var/list/papers = list()
+	papers += new /obj/item/weapon/paper/amelab1(src)
+	papers += new /obj/item/weapon/paper/amelab2(src)
+	papers += new /obj/item/weapon/paper/amelab3(src)
+	papers += new /obj/item/weapon/paper/amelab4(src)
+	papers += new /obj/item/weapon/paper/amelab5(src)
+	papers += new /obj/item/weapon/paper/amelab6(src)
+	papers += new /obj/item/weapon/paper/amelab7(src)
+
+	for (var/obj/item/weapon/paper/P in papers)
+		P.update_icon()
+		P.mouse_opacity = 2
+		toppaper = P
+
+	update_icon()
+
+/obj/item/weapon/disk/shuttle_coords/vault/amelab
+	name = "Experimental AME Lab shuttle destination disk"
+	desc = "This satellite could be repurposed as a comfortable hang-out. Although we might want to keep the lab properly sealed."
+	destination = /obj/docking_port/destination/vault/amelab
+
+/obj/docking_port/destination/vault/amelab
+	areaname = "Nanotrasen Experimental AME Lab"
+
+
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
 
@@ -431,7 +503,7 @@
 	. = ..()
 	name = "\improper AI Satellite APC"
 
-/obj/machinery/porta_turret/AIvault
+/obj/machinery/turret/portable/AIvault
 	req_access = list(access_ai_upload)
 	check_records = 1
 	criminals = 1
@@ -440,7 +512,7 @@
 	check_anomalies = 1
 	ai = 1
 
-/obj/machinery/porta_turret/AIvault/New()
+/obj/machinery/turret/portable/AIvault/New()
 	installed = new/obj/item/weapon/gun/energy/laser/retro/ancient(src)
 	..()
 	if(prob(25))
@@ -462,10 +534,6 @@
 	..()
 	network = list()
 	cameranet.removeCamera(src)
-
-/obj/machinery/power/monitor/old
-	icon_state = "powerold"
-	light_color = LIGHT_COLOR_BLUE
 
 /obj/effect/landmark/corpse/engineer/old
 	generate_random_mob_name = 1
@@ -809,7 +877,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled
 	name = "acid pie"
-	desc = "Tangy tasting"
+	desc = "Tangy tasting!"
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
 	..()
@@ -872,5 +940,6 @@
 
 /obj/machinery/turret/russian
 	faction = "russian"
-	lasers = 1
-	lasertype = /obj/item/projectile/beam/heavylaser
+
+/obj/machinery/turret/russian/New()
+	installed = new /obj/item/weapon/gun/energy/laser(src)

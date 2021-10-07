@@ -184,7 +184,7 @@
 
 /obj/item/projectile/meteor/radioactive
 	name = "radioactive meteor"
-	desc = "The Engineer's bane"
+	desc = "The engineer's bane."
 	icon_state = "medium_radioactive"
 
 /obj/item/projectile/meteor/radioactive/to_bump(atom/a)
@@ -280,21 +280,21 @@
 	name = "apocalyptic meteor"
 	desc = "And behold, a white meteor. And on that meteor..."
 	projectile_speed = 4 //slow, massive, apocalyptic
-	
+
 /obj/item/projectile/meteor/boss/New()
 	..()
 	appearance_flags |= PIXEL_SCALE
 	var/matrix/boss = matrix()
 	boss.Scale(1.5,1.5)
 	transform = boss
-	
+
 /obj/item/projectile/meteor/boss/to_bump(atom/A)
 
 	if(loc == null)
 		return
 
 	explosion(get_turf(src), 7, 14, 28, 32, 0, 1, 0) //adios
-	qdel(src)	
+	qdel(src)
 
 /obj/item/projectile/meteor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pickaxe)) //Yeah, you can totally do that
@@ -324,13 +324,17 @@
 	icon_state = "meteorblob"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -16 * PIXEL_MULTIPLIER
+	var/did_blob_stuff = FALSE
 
 /obj/item/projectile/meteor/blob/to_bump(atom/A)
 	if(!loc)
 		return
 
+	if (did_blob_stuff) // we already bumped into something and are probably in the process of deleting ourselves
+		return
+
 	if(ismob(A))
-		src.forceMove(A.loc)
+		forceMove(A.loc)
 		A.blob_act()
 		return
 
@@ -347,17 +351,33 @@
 
 	var/turf/T = get_turf(A)
 
+	var/obj/effect/blob/is_there_a_blob = (locate(/obj/effect/blob) in T)
+
+	if(penetration && !is_there_a_blob)
+		if(penetration >= A.penetration_dampening)	//if the obstacle is too resistant, we don't go through it.
+			penetration = max(0, penetration - A.penetration_dampening)
+
+			new/obj/effect/blob/shield(T, no_morph = 1) // if the meteor goes through, we leave a strong blob on it to prevent sudden airflow
+			forceMove(T)
+			update_pixel()
+			pixel_x = PixelX
+			pixel_y = PixelY
+			return
+
 	for(var/atom/AT in T)
 		AT.blob_act(1)
 
 	T.blob_act(1)
 
-	var/obj/effect/blob/is_there_a_blob = (locate(/obj/effect/blob) in T)
-
 	if(is_there_a_blob)
-		do_blob_stuff(loc)
+		if (loc)
+			do_blob_stuff(loc)
+		else
+			do_blob_stuff(get_step(T,dir))
 	else
 		do_blob_stuff(T)
+
+	did_blob_stuff = TRUE
 
 	qdel(src)
 
@@ -368,6 +388,7 @@
 	name = "Blob Node"
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteornode"
+	penetration = 10
 
 /obj/item/projectile/meteor/blob/node/do_blob_stuff(var/turf/T)
 	new/obj/effect/blob/node(T, no_morph = 1)
@@ -378,6 +399,7 @@ var/list/blob_candidates = list()
 	name = "Blob Core"
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteorcore"
+	penetration = 20
 	var/client/blob_candidate = null
 	var/could_reenter_corpse = FALSE
 
@@ -405,12 +427,13 @@ var/list/blob_candidates = list()
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
+	log_admin("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
+	message_admins("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))
 		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
 	else
 		new/obj/effect/blob/core(T, no_morph = 1)
-	log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
-	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
+	blob_candidate = null
 
 //It's a tool to debug and test stuff, ok? Pls don't hand them out to players unless you just want to set the world on fire.
 /obj/item/weapon/meteor_gun
@@ -482,7 +505,7 @@ var/list/blob_candidates = list()
 	icon_state = "firework_sparkle"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -16 * PIXEL_MULTIPLIER
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	layer = ABOVE_LIGHTING_LAYER
 
 /obj/effect/overlay/firework_sparkle/New()

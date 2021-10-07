@@ -56,6 +56,7 @@
 		var/mob/M = AM
 		to_chat(src, "<span class='danger'>You are too depressed to push [M] out of \the way.</span>")
 		M.LAssailant = src
+		M.assaulted_by(src)
 		return
 	..()
 
@@ -68,7 +69,7 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/faguette/emote(act, m_type = null, message = null, ignore_status = FALSE)
+/mob/living/simple_animal/hostile/retaliate/faguette/emote(act, m_type = null, message = null, ignore_status = FALSE, arguments)
 	if(timestopped)
 		return //under effects of time magick
 

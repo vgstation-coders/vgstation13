@@ -3,10 +3,8 @@
 //Effects spawned by rune spells
 
 /obj/effect/cult_ritual
-	icon = 'icons/effects/effects.dmi'
 	icon_state = ""
 	anchored = 1
-	mouse_opacity = 0
 
 /obj/effect/cult_ritual/cultify()
 	return
@@ -31,7 +29,7 @@
 	anchored = 1
 	mouse_opacity = 1
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	var/persist = 0//so mappers can make permanent sigils
 
 /obj/effect/cult_shortcut/New(var/turf/loc, var/atom/model)
@@ -50,10 +48,10 @@
 	var/jump_dir = get_dir(T,loc)
 	shadow(loc,T,"sigil_jaunt")
 	spawn(1)
-		new /obj/effect/red_afterimage(T,user)
+		new /obj/effect/afterimage/red(T,user)
 		user.forceMove(loc)
 		sleep(1)
-		new /obj/effect/red_afterimage(loc,user)
+		new /obj/effect/afterimage/red(loc,user)
 		user.forceMove(get_step(loc,jump_dir))
 
 /obj/effect/cult_shortcut/cultify()
@@ -72,38 +70,46 @@
 	return
 
 
-/obj/effect/red_afterimage
+/obj/effect/afterimage
 	icon = null
 	icon_state = null
 	anchored = 1
 	mouse_opacity = 0
+	var/image_color
 
-/obj/effect/red_afterimage/New(var/turf/loc, var/atom/model)
+/obj/effect/afterimage/red
+	image_color = "red"
+
+/obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5)
 	..()
 	if(model)
 		src.appearance = model.appearance
+		invisibility = 0
+		alpha = 255
 		dir = model.dir
-		color = "red"
+		if (image_color)
+			color = image_color
 		layer = NARSIE_GLOW
-		plane = LIGHTING_PLANE
-	animate(src,alpha = 0, time = 5)
-	spawn(5)
+		plane = ABOVE_LIGHTING_PLANE
+	animate(src,alpha = 0, time = fadout)
+	spawn(fadout)
 		qdel(src)
 
-/obj/effect/red_afterimage/cultify()
+/obj/effect/afterimage/cultify()
 	return
 
-/obj/effect/red_afterimage/ex_act()
+/obj/effect/afterimage/ex_act()
 	return
 
-/obj/effect/red_afterimage/emp_act()
+/obj/effect/afterimage/emp_act()
 	return
 
-/obj/effect/red_afterimage/blob_act()
+/obj/effect/afterimage/blob_act()
 	return
 
-/obj/effect/red_afterimage/singularity_act()
+/obj/effect/afterimage/singularity_act()
 	return
+
 
 ///////////////////////////////////////JAUNT////////////////////////////////////////////////
 //Cultists ride in those when teleporting
@@ -115,7 +121,7 @@
 	invisibility = INVISIBILITY_CULTJAUNT
 	alpha = 127
 	layer = NARSIE_GLOW
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 	animate_movement = 0
@@ -147,10 +153,11 @@
 	var/atom/movable/overlay/landing_animation = null
 	var/landing = 0
 
+	var/force_jaunt = FALSE
 
 /obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup)
 	..()
-	if (!user && !packup)
+	if (!user && !packup && !force_jaunt)
 		qdel(src)
 		return
 	if (user)
@@ -358,7 +365,7 @@
 		sleep(sleeptime)
 
 /obj/effect/bloodcult_jaunt/proc/init_jaunt()
-	if (!rider && packed.len <= 0)
+	if (!rider && packed.len <= 0 && !force_jaunt)
 		qdel(src)
 		return
 	spawn while(loc)
@@ -374,6 +381,8 @@
 /obj/effect/bloodcult_jaunt/proc/bump_target_check()
 	if (loc == target)
 		playsound(loc, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+		if (force_jaunt)
+			playsound(loc, 'sound/effects/convert_failure.ogg', 30, 0, -1)
 		if (rider)
 			rider.forceMove(target)
 			if (ismob(rider))
@@ -407,6 +416,16 @@
 		if (landing_animation)
 			flick("cult_jaunt_land",landing_animation)
 		qdel(src)
+
+/obj/effect/bloodcult_jaunt/traitor
+	invisibility = 0
+	alpha = 200
+	force_jaunt = TRUE
+
+/obj/effect/bloodcult_jaunt/traitor/init_jaunt()
+	animate(src, alpha = 0, time = 3)
+	..()
+
 
 ///////////////////////////////////////BLOODSTONE DEFENSES////////////////////////////////////////////////
 
@@ -503,7 +522,7 @@ var/bloodstone_backup = 0
 			current_dots = dots
 		indicator.overlays.len = 0
 		indicator = image(icon='icons/obj/cult.dmi',loc=victim,icon_state="",layer=SNOW_OVERLAY_LAYER)
-		indicator.plane = EFFECTS_PLANE
+		indicator.plane = relative_plane(EFFECTS_PLANE)
 		indicator.pixel_y = 8
 		for (var/i = 1 to dots)
 			var/state = "stun_dot1"
@@ -511,13 +530,13 @@ var/bloodstone_backup = 0
 				if (anim)
 					state = "stun_dot2-flick"
 					var/image/I = image(icon='icons/obj/cult.dmi',icon_state="stun_dot-gone")
-					I.plane = EFFECTS_PLANE
+					I.plane = relative_plane(EFFECTS_PLANE)
 					I = place_indicator(I,i+1)
 					indicator.overlays += I
 				else
 					state = "stun_dot2"
 			var/image/I = image(icon='icons/obj/cult.dmi',icon_state=state)
-			I.plane = EFFECTS_PLANE
+			I.plane = relative_plane(EFFECTS_PLANE)
 			I = place_indicator(I,i)
 			indicator.overlays += I
 		for (var/client/C in viewers)
@@ -565,3 +584,114 @@ var/bloodstone_backup = 0
 
 /obj/effect/stun_indicator/singularity_act()
 	return
+
+///////////////////////////////////THROWN DAGGER TRAP////////////////////////////
+
+/obj/effect/rooting_trap/bloodnail
+	name = "blood nail"
+	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
+	icon_state = "bloodnail"
+
+/obj/effect/rooting_trap/bloodnail/New()
+	..()
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+
+/obj/effect/rooting_trap/bloodnail/stick_to(var/atom/A, var/side = null)
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
+	var/turf/T = get_turf(A)
+	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
+	. = ..()
+	if (.)
+		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
+
+///////////////////////////////////CULT DANCE////////////////////////////////////
+//used by the cultdance emote. other cult dances have their own procs
+/obj/effect/cult_ritual/dance
+	var/list/dancers = list()
+
+/obj/effect/cult_ritual/dance/New(var/turf/loc, var/mob/first_dancer)
+	if (!first_dancer)
+		qdel(src)
+		return
+
+	dancers += first_dancer
+	//processing_objects.Add(src)
+
+	we_can_dance()
+
+
+/obj/effect/cult_ritual/dance/Destroy()
+	//processing_objects.Remove(src)
+	dancers = list()
+	..()
+
+/obj/effect/cult_ritual/dance/proc/we_can_dance()
+	while(TRUE)
+		for (var/mob/M in dancers)
+			if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
+				dancers -= M
+				continue
+		if (dancers.len <= 0)
+			qdel(src)
+			return
+		dance_step()
+		sleep(3)
+		dance_step()
+		sleep(3)
+		dance_step()
+		sleep(6)
+
+/obj/effect/cult_ritual/dance/proc/add_dancer(var/mob/dancer)
+	dancers += dancer
+
+/obj/effect/cult_ritual/dance/proc/dance_step()
+	var/dance_move = pick("clock","counter","spin")
+	switch(dance_move)
+		if ("clock")
+			for (var/mob/M in dancers)
+				M.invoke_event(/event/before_move)
+				switch (get_dir(src,M))
+					if (NORTHWEST,NORTH)
+						step_to(M, get_step(M,EAST))
+					if (NORTHEAST,EAST)
+						step_to(M, get_step(M,SOUTH))
+					if (SOUTHEAST,SOUTH)
+						step_to(M, get_step(M,WEST))
+					if (SOUTHWEST,WEST)
+						step_to(M, get_step(M,NORTH))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
+		if ("counter")
+			for (var/mob/M in dancers)
+				M.invoke_event(/event/before_move)
+				switch (get_dir(src,M))
+					if (NORTHEAST,NORTH)
+						step_to(M, get_step(M,WEST))
+					if (SOUTHEAST,EAST)
+						step_to(M, get_step(M,NORTH))
+					if (SOUTHWEST,SOUTH)
+						step_to(M, get_step(M,EAST))
+					if (NORTHWEST,WEST)
+						step_to(M, get_step(M,SOUTH))
+				M.invoke_event(/event/after_move)
+				M.invoke_event(/event/moved, list("mover" = M))
+		if ("spin")
+			for (var/mob/M in dancers)
+				spawn()
+					M.dir = SOUTH
+					M.invoke_event(/event/face)
+					sleep(0.75)
+					M.dir = EAST
+					M.invoke_event(/event/face)
+					sleep(0.75)
+					M.dir = NORTH
+					M.invoke_event(/event/face)
+					sleep(0.75)
+					M.dir = WEST
+					M.invoke_event(/event/face)
+					sleep(0.75)
+					M.dir = SOUTH
+					M.invoke_event(/event/face)

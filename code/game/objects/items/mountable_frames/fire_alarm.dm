@@ -1,6 +1,6 @@
 obj/item/mounted/frame/firealarm
 	name = "fire alarm frame"
-	desc = "Used for building Fire Alarms"
+	desc = "Used for building fire alarms."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "fire_bitem"
 	flags = FPRINT

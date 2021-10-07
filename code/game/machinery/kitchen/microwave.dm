@@ -85,6 +85,29 @@
 /*******************
 *   Item Adding
 ********************/
+
+/obj/machinery/microwave/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(holdingitems && holdingitems.len >= limit)
+		return FALSE
+	else if(istype(AM, /obj/item/weapon/storage/bag/plants))
+		var/obj/item/weapon/storage/bag/B = AM
+		for (var/obj/item/weapon/reagent_containers/food/snacks/G in AM.contents)
+			B.remove_from_storage(G,src)
+			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
+				break
+	else if(is_type_in_list(AM,acceptable_items))
+		if (istype(AM,/obj/item/stack))
+			var/obj/item/stack/ST = AM
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
+		else
+			AM.forceMove(src)
+	else
+		return FALSE
+	src.updateUsrDialog()
+	return TRUE
+
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
 		if(src.broken == 2 && O.is_screwdriver(user)) // If it's broken and they're using a screwdriver
@@ -152,22 +175,26 @@
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				to_chat(user, "<span class='notice'>You fill \the [src]] to the brim.</span>")
 				break
-		src.updateUsrDialog()
+		updateUsrDialog()
 
 		return 1
 	else if(is_type_in_list(O,acceptable_items))
-		if (istype(O,/obj/item/stack) && O:amount>1)
-			new O.type (src)
-			O:use(1)
-			user.visible_message( \
-				"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
-				"<span class='notice'>You add one of [O] to \the [src].</span>")
-		else
-		//	user.before_take_item(O)	//This just causes problems so far as I can tell. -Pete
-			if(user.drop_item(O, src))
+		if (istype(O,/obj/item/stack))
+			var/obj/item/stack/ST = O
+			if(ST.amount > 1)
+				new ST.type (src)
+				ST.use(1)
 				user.visible_message( \
-					"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
-					"<span class='notice'>You add \the [O] to \the [src].</span>")
+					"<span class='notice'>[user] has added one of [O] to \the [src].</span>", \
+					"<span class='notice'>You add one of [O] to \the [src].</span>")
+				updateUsrDialog()
+				return 1
+		if(user.drop_item(O, src))
+			user.visible_message( \
+				"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
+				"<span class='notice'>You add \the [O] to \the [src].</span>")
+			updateUsrDialog()
+			return 1
 	else if(is_type_in_list(O,accepts_reagents_from))
 		if (!O.reagents)
 			return 1
@@ -183,7 +210,7 @@
 	else
 		to_chat(user, "<span class='warning'>You have no idea what you can cook with this [O].</span>")
 		return 1
-	src.updateUsrDialog()
+	updateUsrDialog()
 
 /obj/machinery/microwave/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -465,7 +492,20 @@
 	if (src.reagents.total_volume)
 		src.dirty++
 		if(reagent_disposal)
-			if(scanning_power >= 1) //You get one bottle, don't fuck it up
+			var/mob/user = usr
+			var/recovered_reagents = FALSE
+			if (user && Adjacent(user))
+				for(var/obj/item/weapon/reagent_containers/glass/G in (user.get_active_hand() + user.get_inactive_hand()))
+					if(!G.reagents)
+						continue
+					if(!G.is_open_container())
+						continue
+
+					to_chat(user, "<span class='notice'>You recover the reagents from the microwave inside your [G]!</span>")
+					reagents.trans_to(G, reagents.total_volume)
+					recovered_reagents = TRUE
+					break
+			if(!recovered_reagents && scanning_power >= 1) //You get one bottle, don't fuck it up
 				var/obj/item/weapon/reagent_containers/food/condiment/C = new(get_turf(src))
 				reagents.trans_to(C, reagents.total_volume)
 			reagents.clear_reagents()

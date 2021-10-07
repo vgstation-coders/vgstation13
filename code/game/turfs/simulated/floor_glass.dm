@@ -28,7 +28,7 @@
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 	if(!floor_overlays[glass_state])
 		var/image/floor_overlay = image('icons/turf/overlays.dmi', glass_state)
-		floor_overlay.plane = TURF_PLANE
+		floor_overlay.plane = GLASSTILE_PLANE
 		floor_overlay.layer = TURF_LAYER
 		floor_overlays[glass_state] = floor_overlay
 	overlays += floor_overlays[glass_state]
@@ -46,7 +46,7 @@
 	var/icon_state = "[cracked_base][damage_fraction]"
 	if(!damage_overlays[icon_state])
 		var/image/_damage_overlay = image('icons/obj/structures.dmi', icon_state)
-		_damage_overlay.plane = TURF_PLANE
+		_damage_overlay.plane = GLASSTILE_PLANE
 		_damage_overlay.layer = TURF_LAYER
 		damage_overlays[icon_state] = _damage_overlay
 	var/damage_overlay = damage_overlays[icon_state]
@@ -77,7 +77,7 @@
 	// TODO: Break all pipes/wires? //Maybe not, N3X.
 
 	spawnBrokenPieces(src)
-	ChangeTurf(/turf/space)
+	ChangeTurf(get_base_turf(src.z))
 
 /turf/simulated/floor/glass/proc/spawnBrokenPieces(var/turf/T)
 	new shardtype(T, sheetamount)
@@ -102,7 +102,6 @@
 
 
 /turf/simulated/floor/glass/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(FALSE) // ALWAYS show subfloor stuff.
@@ -175,8 +174,6 @@
 		"You hear banging.")
 		healthcheck(user, TRUE, "attack_hand hurt")
 
-	return
-
 /turf/simulated/floor/glass/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
@@ -242,7 +239,7 @@
 				return
 
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/tool/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
 				"<span class='notice'>You begin removing \the [src].</span>", \
 				"<span class='warning'>You hear welding noises.</span>")

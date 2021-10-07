@@ -105,7 +105,7 @@
 
 /datum/airalarm_preset/human //For humans
 	name = "Human"
-	desc = "Permits Oxygen and Nitrogen"
+	desc = "Permits oxygen and nitrogen."
 	core = TRUE
 	oxygen = list(16, 18, 135, 140)
 	nitrogen = list(-1, -1,  -1,  -1)
@@ -120,7 +120,7 @@
 
 /datum/airalarm_preset/vox //For vox
 	name = "Vox"
-	desc = "Permits Nitrogen only"
+	desc = "Permits nitrogen only."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(16, 18, 135,  140)
@@ -135,7 +135,7 @@
 
 /datum/airalarm_preset/coldroom //Server rooms etc.
 	name = "Coldroom"
-	desc = "For server rooms and freezers"
+	desc = "For server rooms and freezers."
 	core = TRUE
 	oxygen = list(-1, -1, -1, -1)
 	nitrogen = list(-1, -1, -1, -1)
@@ -150,7 +150,7 @@
 
 /datum/airalarm_preset/plasmaman //HONK
 	name = "Plasmaman"
-	desc = "Permits Plasma and Nitrogen only"
+	desc = "Permits plasma and nitrogen only."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, -1, -1)
@@ -165,7 +165,7 @@
 
 /datum/airalarm_preset/vacuum
 	name = "Vacuum"
-	desc = "For rooms to be kept under vacuum"
+	desc = "For rooms to be kept under vacuum."
 	core = TRUE
 	oxygen = list(-1, -1, 0.5, 1)
 	nitrogen = list(-1, -1, 0.5, 1)
@@ -832,7 +832,7 @@ var/global/list/airalarm_presets = list(
 	//   Not sent from atmos console AND
 	//   Not silicon AND locked AND
 	//   NOT adminghost.
-	data["locked"]=!fromAtmosConsole && (!(istype(user, /mob/living/silicon)) && locked) && !isAdminGhost(user)
+	data["locked"]=!fromAtmosConsole && (!(istype(user, /mob/living/silicon)) && locked) && !isAdminGhost(user) && !(OMNI_LINK(user,src))
 
 	data["rcon"]=rcon_setting
 	data["rcon_enabled"] = remote_control
@@ -906,6 +906,19 @@ var/global/list/airalarm_presets = list(
 	if(!shorted)
 		ui_interact(user)
 
+/obj/machinery/alarm/proc/buttonCheck(mob/user)
+	if(!locked)
+		return 1
+	if(issilicon(user))
+		return 1
+	if(user.hasFullAccess())
+		return 1
+	if(OMNI_LINK(user,src))
+		return 1
+	if(isAdminGhost(user))
+		return 1
+	return 0
+
 /obj/machinery/alarm/Topic(href, href_list)
 	if(href_list["close"])
 		if(usr.machine == src)
@@ -913,9 +926,40 @@ var/global/list/airalarm_presets = list(
 		return 1
 	if(..())
 		return 1
-	if(href_list["rcon"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
+
+	add_fingerprint(usr)
+
+
+	//These options MUST be first in Topic() because they do not require access check as below
+	if(href_list["screen"])
+		screen = text2num(href_list["screen"])
+		return 1
+
+	if(href_list["temperature"])
+		var/list/selected = TLV["temperature"]
+		var/max_temperature
+		var/min_temperature
+		if(buttonCheck(usr))
+			max_temperature = MAX_TARGET_TEMPERATURE - T0C
+			min_temperature = MIN_TARGET_TEMPERATURE - T0C
+		else
+			max_temperature = selected[3] - T0C
+			min_temperature = selected[2] - T0C
+		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+		if(input_temperature==null)
 			return 1
+		if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
+			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
+		else
+			input_temperature = input_temperature + T0C
+			set_temperature(input_temperature)
+		return 1
+
+	if(!buttonCheck(usr))
+		to_chat(usr, "<span class='warning'>It's locked!</span>")
+		return 1
+
+	if(href_list["rcon"])
 		rcon_setting = text2num(href_list["rcon"])
 		//propagate to other AAs in the area
 		var/area/this_area = get_area(src)
@@ -924,12 +968,7 @@ var/global/list/airalarm_presets = list(
 				AA.rcon_setting = rcon_setting
 		return 1
 
-	add_fingerprint(usr)
-
-	//testing(href)
 	if(href_list["command"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		var/device_id = href_list["id_tag"]
 		switch(href_list["command"])
 			if( "power",
@@ -966,35 +1005,23 @@ var/global/list/airalarm_presets = list(
 				var/list/selected = TLV[env]
 				var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
 				var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
-				if (isnull(newval) || ..() || (locked && !issilicon(usr) && !usr.hasFullAccess()))
+				if (isnull(newval) || ..() || !buttonCheck(usr))
 					return 1
 				set_threshold(env, threshold, newval, 1)
 		return 1
 	if(href_list["reset_thresholds"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		apply_preset(1) //just apply the preset without cycling
 		return 1
 
-	if(href_list["screen"])
-		screen = text2num(href_list["screen"])
-		return 1
-
 	if(href_list["atmos_alarm"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		set_alarm(1)
 		return 1
 
 	if(href_list["atmos_reset"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		set_alarm(0)
 		return 1
 
 	if(href_list["enable_override"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		var/area/this_area = get_area(src)
 		this_area.doors_overridden = 1
 		this_area.UpdateFirelocks()
@@ -1002,8 +1029,6 @@ var/global/list/airalarm_presets = list(
 		return 1
 
 	if(href_list["disable_override"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		var/area/this_area = get_area(src)
 		this_area.doors_overridden = 0
 		this_area.UpdateFirelocks()
@@ -1011,44 +1036,18 @@ var/global/list/airalarm_presets = list(
 		return 1
 
 	if(href_list["mode"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		mode = text2num(href_list["mode"])
 		apply_mode()
 		return 1
 
 	if(href_list["toggle_cycle_after_preset"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		cycle_after_preset = !cycle_after_preset
 		return 1
 
 	if(href_list["preset"])
-		if(locked && !issilicon(usr) && !usr.hasFullAccess())
-			return 1
 		if(href_list["preset"] in airalarm_presets)
 			preset = href_list["preset"]
 			apply_preset(!cycle_after_preset)
-		return 1
-
-	if(href_list["temperature"])
-		var/list/selected = TLV["temperature"]
-		var/max_temperature
-		var/min_temperature
-		if(!locked || issilicon(usr) || usr.hasFullAccess())
-			max_temperature = MAX_TARGET_TEMPERATURE - T0C
-			min_temperature = MIN_TARGET_TEMPERATURE - T0C
-		else
-			max_temperature = selected[3] - T0C
-			min_temperature = selected[2] - T0C
-		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
-		if(input_temperature==null)
-			return 1
-		if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-		else
-			input_temperature = input_temperature + T0C
-			set_temperature(input_temperature)
 		return 1
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)
@@ -1065,7 +1064,7 @@ var/global/list/airalarm_presets = list(
 
 			if(wiresexposed && !wires.IsAllCut() && iswiretool(W))
 				return attack_hand(user)
-			else if(wiresexposed && wires.IsAllCut() && iswirecutter(W))
+			else if(wiresexposed && wires.IsAllCut() && W.is_wirecutter(user))
 				buildstage = 1
 				update_icon()
 				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
@@ -1149,6 +1148,11 @@ var/global/list/airalarm_presets = list(
 		return 1
 	return 0
 
+/obj/machinery/alarm/is_in_range(var/mob/user)
+	if(!..())
+		return OMNI_LINK(user,src)
+	return TRUE
+
 /*
 FIRE ALARM
 */
@@ -1214,7 +1218,7 @@ FIRE ALARM
 	return ..()
 
 /obj/machinery/firealarm/CtrlClick(var/mob/user)
-	if (ismouse(user)) // Squeak
+	if (!(user.dexterity_check())) // Squeak
 		return
 	if(user.incapacitated() || (!in_range(src, user) && !issilicon(user)))
 		return
@@ -1266,11 +1270,11 @@ FIRE ALARM
 	if(wiresexposed)
 		switch(buildstage)
 			if(2)
-				if (ismultitool(W))
+				if (W.is_multitool(user))
 					src.detecting = !( src.detecting )
 					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]connected [src]'s detecting unit.")
 					playsound(src, 'sound/items/healthanalyzer.ogg', 50, 1)
-				if(iswirecutter(W))
+				if(W.is_wirecutter(user))
 					to_chat(user, "You begin to cut the wiring...")
 					W.playtoolsound(src, 50)
 					if (do_after(user, src,  50) && buildstage == 2 && wiresexposed)
@@ -1357,7 +1361,7 @@ FIRE ALARM
 	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
 		return
 
-	if (!(ishigherbeing(user) || ismonkey(user))) // No squeaks or moos allowed.
+	if (!(user.dexterity_check())) // No squeaks or moos allowed.
 		return
 
 	if (buildstage != 2)

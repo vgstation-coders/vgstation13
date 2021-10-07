@@ -333,6 +333,10 @@
 //High-tier slime cores
 /datum/centcomm_order/department/science/pyrite/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/pyrite = rand(1,3)
@@ -341,6 +345,10 @@
 
 /datum/centcomm_order/department/science/cerulean/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/cerulean = rand(1,3)
@@ -349,6 +357,10 @@
 
 /datum/centcomm_order/department/science/sepia/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/sepia = rand(1,3)
@@ -357,6 +369,10 @@
 
 /datum/centcomm_order/department/science/bluespace/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/bluespace = rand(1,3)
@@ -365,6 +381,10 @@
 
 /datum/centcomm_order/department/science/adamantine/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/adamantine = rand(1,3)
@@ -373,6 +393,10 @@
 
 /datum/centcomm_order/department/science/oil/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/oil = rand(1,3)
@@ -381,6 +405,10 @@
 
 /datum/centcomm_order/department/science/black/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/black = rand(1,3)
@@ -389,6 +417,10 @@
 
 /datum/centcomm_order/department/science/lightpink/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenobiology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/item/slime_extract/lightpink = rand(1,3)
@@ -401,6 +433,10 @@
 //Contained Large Artifacts
 /datum/centcomm_order/department/science/artifact/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	name = "Nanotrasen's Secure Containment Precinct"
 	must_be_in_crate = 0
 	requested = list(
@@ -428,6 +464,10 @@
 
 /datum/centcomm_order/department/science/supermatter/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	name = "Nanotrasen"
 	must_be_in_crate = 0
 	requested = list(
@@ -439,6 +479,10 @@
 //Large Crystals
 /datum/centcomm_order/department/science/crystal/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	name = "CentComm Beautification Department"
 	must_be_in_crate = 0
 	requested = list(
@@ -449,6 +493,10 @@
 //Assembled Alien Skeleton
 /datum/centcomm_order/department/science/skeleton/New()
 	..()
+	request_consoles_to_notify = list(
+		"Research Director's Desk",
+		"Xenoarchaeology",
+		)
 	must_be_in_crate = 0
 	requested = list(
 		/obj/structure/skeleton = 1

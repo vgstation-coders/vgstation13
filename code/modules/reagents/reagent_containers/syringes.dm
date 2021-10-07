@@ -39,7 +39,7 @@
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
 
-/obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
+/obj/item/weapon/reagent_containers/syringe/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -375,6 +375,15 @@
 /obj/item/weapon/reagent_containers/syringe/charcoal/New()
 	..()
 	reagents.add_reagent("charcoal", 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/stoxin
+	name = "syringe (sleep toxin)"
+	desc = "Contains sleep toxin - used to sedate patients."
+/obj/item/weapon/reagent_containers/syringe/stoxin/New()
+	..()
+	reagents.add_reagent(STOXIN, 15)
 	mode = SYRINGE_INJECT
 	update_icon()
 

@@ -319,7 +319,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/apron,
 			slot_wear_mask_str = /obj/item/clothing/mask/surgical,
-			slot_l_store_str = /obj/item/weapon/scalpel,
+			slot_l_store_str = /obj/item/tool/scalpel,
 		),
 	)
 
@@ -338,7 +338,7 @@
 	W.name = "[H.real_name]'s ID Card"
 	W.registered_name = H.real_name
 	W.UpdateName()
-	W.SetOwnerInfo(H)
+	W.SetOwnerDNAInfo(H)
 	H.equip_to_slot_or_drop(W, slot_wear_id)
 	if (pda_type)
 		var/obj/item/device/pda/pda = new pda_type(H)
@@ -379,7 +379,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/wcoat,
 			slot_r_store_str = /obj/item/weapon/melee/energy/sword,
-			slot_l_store_str = /obj/item/weapon/scalpel,
+			slot_l_store_str = /obj/item/tool/scalpel,
 		),
 	)
 	pda_type = /obj/item/device/pda/heads/assassin
@@ -519,6 +519,78 @@
 	)
 	id_type = /obj/item/weapon/card/id/soviet_admiral
 
+// ----- Space hobo
+
+/datum/outfit/special/with_id/hobo
+
+	outfit_name = "Space Hobo"
+
+	backpack_types = list(
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+	)
+
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/grey,
+			slot_shoes_str = /obj/item/clothing/shoes/magboots,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
+			slot_belt_str = /obj/item/weapon/pickaxe,
+            slot_wear_suit_str = /obj/item/clothing/suit/space/ghettorig,
+            slot_head_str = /obj/item/clothing/head/helmet/space/ghetto,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/vox = list(
+			slot_w_uniform_str =/obj/item/clothing/under/vox/vox_robes,
+			slot_shoes_str = /obj/item/clothing/shoes/magboots/vox,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
+			slot_belt_str = /obj/item/weapon/pickaxe,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+		),
+		/datum/species/mushroom = list(
+			slot_w_uniform_str = /obj/item/clothing/under/stilsuit,
+			slot_shoes_str = /obj/item/clothing/shoes/magboots,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
+			slot_belt_str = /obj/item/weapon/pickaxe,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/mushmen,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mushmen,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/tajaran = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/grey,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal/catbeast,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
+			slot_belt_str = /obj/item/weapon/pickaxe,
+            slot_wear_suit_str = /obj/item/clothing/suit/space/ghettorig,
+            slot_head_str = /obj/item/clothing/head/helmet/space/ghetto,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/unathi = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/grey,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
+			slot_belt_str = /obj/item/weapon/pickaxe,
+            slot_wear_suit_str = /obj/item/clothing/suit/space/ghettorig,
+            slot_head_str = /obj/item/clothing/head/helmet/space/ghetto,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+	)
+
+	equip_survival_gear = list(
+		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
+	)
+
+	pda_type = null
+	id_type = /obj/item/weapon/card/id/hobo
+
 // ----- Antags
 
 /datum/outfit/special/bomberman
@@ -648,7 +720,7 @@
 
 /datum/outfit/special/prisoner/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
-  
+
 /datum/outfit/special/prisoneralt //no headset + soap
 	outfit_name = "Prisoner Alternative"
 	items_to_spawn = list(
@@ -756,6 +828,10 @@
 /datum/outfit/special/tourist/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
 
+/datum/outfit/special/tourist/post_equip(var/mob/living/carbon/human/H)
+	..()
+	equip_accessory(H, /obj/item/clothing/accessory/wristwatch, /obj/item/clothing/under)
+
 /datum/outfit/special/cosmonaut
 	outfit_name = "Cosmonaut"
 	items_to_spawn = list(
@@ -788,3 +864,50 @@
 /datum/outfit/special/sports/post_equip(var/mob/living/carbon/human/H)
 	..()
 	equip_accessory(H, /obj/item/clothing/accessory/storage/fannypack, /obj/item/clothing/under, 5)
+
+
+/datum/outfit/special/time_agent
+	var/is_twin = FALSE
+	outfit_name = "Time Agent"
+	give_disabilities_equipment = TRUE
+	equip_survival_gear = list() // default gear
+	backpack_types = list(
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack/satchel_tox,
+	)
+
+	items_to_spawn = list(
+		"Default" = list(
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_w_uniform_str = /obj/item/clothing/under/rank/scientist,
+			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
+			slot_wear_mask_str = /obj/item/clothing/mask/gas/death_commando,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/time,
+			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen/double,
+			slot_belt_str = /obj/item/weapon/storage/belt/grenade/chrono,
+			slot_head_str = /obj/item/clothing/head/helmet/space/time,
+		)
+	)
+
+	items_to_collect = list(
+		/obj/item/device/jump_charge,
+		/obj/item/device/timeline_eraser,
+		/obj/item/weapon/gun/projectile/automatic/rewind,
+		/obj/item/device/chronocapture,
+		/obj/item/weapon/pinpointer/advpinpointer/time_agent,
+	)
+
+/datum/outfit/special/time_agent/pre_equip(var/mob/living/carbon/human/H)
+	if (is_twin)
+		items_to_collect -= /obj/item/device/jump_charge
+		items_to_collect += /obj/item/weapon/storage/box/chrono_grenades/future
+
+	if(H.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		to_chat(H, "<span class='notice'>Your intensive physical training to become a Time Agent has paid off and made you fit again!</span>")
+		H.overeatduration = 0 //Fat-B-Gone
+		if(H.nutrition > 400) //We are also overeating nutriment-wise
+			H.nutrition = 400
+		H.mutations.Remove(M_FAT)
+		H.update_mutantrace(0)
+		H.update_mutations(0)
+		H.update_inv_w_uniform(0)
+		H.update_inv_wear_suit()

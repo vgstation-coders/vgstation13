@@ -129,7 +129,7 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 				if("I go for the classics")
 					baby.icon_state = "secway-custom-classic"
 				if("A big donut")
-					baby.icon_state = "secway-custom-sprinkes"
+					baby.icon_state = "secway-custom-sprinkles"
 				if("A Rottweiler combat cyborg")
 					baby.icon_state = "secway-custom-rottweiler"
 				if("I'm the head honcho")

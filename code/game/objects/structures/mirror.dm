@@ -33,7 +33,7 @@
 
 /obj/structure/mirror/proc/vampire_check(mob/living/user, mob/living/carbon/human/target)
 	var/datum/role/vampire/V = isvampire(target)
-	if(V && !(/datum/power/vampire/mature in V.current_powers))
+	if(V && !(locate(/datum/power/vampire/mature) in V.current_powers))
 		to_chat(user, "<span class='notice'>You don't see anything in \the [src].</span>")
 		return FALSE
 	return TRUE
@@ -79,7 +79,7 @@
 		if("Beard")
 			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, target.gender, target.species.name)
 			if(species_facial_hair.len)
-				var/new_style = input(user, "Select a facial hair style", "Grooming") as null|anything in species_facial_hair
+				var/new_style = input(user, "Select a facial hair style", "Grooming", target.my_appearance.f_style) as null|anything in species_facial_hair
 				if(!new_style || !attempt(user, target, which))
 					return
 				target.my_appearance.f_style = new_style
@@ -88,7 +88,7 @@
 		if("Hair")
 			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, target.species.name) //gender intentionally left null so speshul snowflakes can cross-hairdress
 			if(species_hair.len)
-				var/new_style = input(user, "Select a hair style", "Grooming") as null|anything in species_hair
+				var/new_style = input(user, "Select a hair style", "Grooming", target.my_appearance.h_style) as null|anything in species_hair
 				if(!new_style || !attempt(user, target, which))
 					return
 				target.my_appearance.h_style = new_style
@@ -143,7 +143,7 @@
 			icon_state = "mirror"
 			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
-	else if(istype(I, /obj/item/weapon/crowbar))
+	else if(istype(I, /obj/item/tool/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
@@ -221,7 +221,7 @@
 		switch(which)
 
 			if("Name")
-				var/stagename = copytext(sanitize(input(targ, "Pick a name","Name") as null|text), 1, MAX_NAME_LEN)
+				var/stagename = copytext(sanitize(input(targ, "Pick a name","Name",M.real_name) as null|text), 1, MAX_NAME_LEN)
 				targ.real_name = stagename
 				targ.name = stagename
 

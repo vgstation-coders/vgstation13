@@ -1,7 +1,6 @@
 /obj/machinery/power/am_control_unit
 	name = "antimatter control unit"
 	desc = "This device injects antimatter into connected shielding units. Wrench the device to set it up."
-	//icon = 'icons/obj/machines/antimatter.dmi'
 	icon = 'icons/obj/machines/new_ame.dmi'
 	icon_state = "control"
 	var/icon_mod = "on" // on, critical, or fuck
@@ -84,7 +83,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/produce_power()
-	playsound(src, 'sound/effects/bang.ogg', 25, 1)
+	playsound(src, 'sound/effects/explosionsmallfar.ogg', 25, 1)
 	var/core_power = reported_core_efficiency//Effectively how much fuel we can safely deal with
 	if(core_power <= 0)
 		return 0//Something is wrong
@@ -108,6 +107,20 @@
 		playsound(src, 'sound/effects/bang.ogg', 50, 1)
 	return
 
+/obj/machinery/power/am_control_unit/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item/weapon/am_containment))
+		if(fueljar)
+			return FALSE
+		var/obj/item/weapon/am_containment/AMC = AM
+		var/mob/last_touched = AMC.fingerprintslast
+		fueljar = AMC
+		overlays += "control-[AMC.icon_state]"
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		AMC.forceMove(src)
+		message_admins("AME loaded with fuel by [last_touched ? "[last_touched.real_name] ([last_touched.key])" : "a conveyor"] at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+		visible_message("The conveyor loads an [AMC.name] into the [src.name].")
+		return TRUE
+	return FALSE
 
 /obj/machinery/power/am_control_unit/emp_act(severity)
 	switch(severity)
@@ -196,6 +209,8 @@
 			to_chat(user, "<span class='warning'>There is already a [fueljar] inside!</span>")
 			return
 		fueljar = W
+		overlays += "control-[W.icon_state]"
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(user.client)
 			user.client.screen -= W
 		user.u_equip(W,1)
@@ -208,6 +223,13 @@
 		return
 
 	if(W.force >= 20)
+		user.do_attack_animation(src, W)
+		playsound(src, 'sound/items/metal_impact.ogg', 75, 1)
+		shake(1, 3)
+		user.delayNextAttack(8)
+		visible_message("<span class='warning'>\The [user] hits \the [src] with \a [W]!</span>", \
+					"<span class='warning'>You hit \the [src] with your [W]!</span>", \
+					"You hear something metallic being hit.")
 		stability -= W.force/2
 		check_stability()
 	..()
@@ -252,11 +274,13 @@
 /obj/machinery/power/am_control_unit/proc/toggle_power()
 	active = !active
 	if(active)
+		playsound(src, 'sound/effects/fall.ogg', 50, 1)
 		use_power = 2
-		visible_message("The [src.name] starts up.")
+		visible_message("[bicon(src)] The [src.name] starts up.")
 	else
+		playsound(src, 'sound/effects/fall2.ogg', 50, 1)
 		use_power = 1
-		visible_message("The [src.name] shuts down.")
+		visible_message("[bicon(src)] The [src.name] shuts down.")
 	for(var/obj/machinery/am_shielding/AMS in linked_cores)
 		AMS.update_icon()
 	update_icon()
@@ -346,7 +370,7 @@
 		"siliconUser" = istype(user, /mob/living/silicon),
 	)
 
-	ui = nanomanager.get_open_ui(user, src, ui_key, ui, data, force_open)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
 		ui = new(user, src, ui_key, "ame.tmpl", "Antimatter Control Unit", 500, data["siliconUser"] ? 465 : 390)
@@ -378,33 +402,31 @@
 	if(href_list["togglestatus"])
 		toggle_power()
 		message_admins("AME toggled [active?"on":"off"] by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-		return 1
 
 	if(href_list["refreshicons"])
 		update_shield_icons = 2 // Fuck it
-		return 1
 
 	if(href_list["ejectjar"])
 		if(fueljar)
 			message_admins("AME fuel jar ejected by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 			fueljar.forceMove(src.loc)
 			fueljar = null
+			overlays.len = 0
+			playsound(src, 'sound/machines/click.ogg', 50, 1)
 			//fueljar.control_unit = null currently it does not care where it is
 			//update_icon() when we have the icon for it
-		return 1
 
 	if(href_list["set_strength"])
 		var/newval = input("Enter new injection strength") as num|null
 		if(isnull(newval))
+			updateDialog()
 			return
 		fuel_injection=newval
 		fuel_injection=max(1,fuel_injection)
 		message_admins("AME injection strength set to [fuel_injection] by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-		return 1
 
 	if(href_list["refreshstability"])
 		check_core_stability()
-		return 1
 
 	updateDialog()
 	return 1

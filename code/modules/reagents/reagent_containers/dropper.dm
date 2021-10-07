@@ -51,6 +51,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 	update_icon()
 	return
 

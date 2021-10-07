@@ -191,10 +191,10 @@
 
 	return is_type_in_list(W, list(\
 		/obj/item/weapon/kitchen/utensil, \
-		/obj/item/weapon/screwdriver, \
-		/obj/item/weapon/wirecutters, \
+		/obj/item/tool/screwdriver, \
+		/obj/item/tool/wirecutters, \
 		/obj/item/weapon/pen, \
-		/obj/item/weapon/scalpel, \
+		/obj/item/tool/scalpel, \
 		/obj/item/weapon/minihoe, \
 		/obj/item/weapon/hatchet, \
 		/obj/item/weapon/pickaxe/shovel/spade, \

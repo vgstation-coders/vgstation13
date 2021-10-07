@@ -93,9 +93,9 @@ var/global/list/alert_overlays_global = list()
 		"cold"
 	)
 
-/obj/machinery/door/firedoor/New()
+/obj/machinery/door/firedoor/New(loc, new_dir)
 	. = ..()
-
+	change_dir(new_dir)
 	if(!("[src.type]" in alert_overlays_global))
 		alert_overlays_global += list("[src.type]" = list("alert_hot" = list(),
 														"alert_cold" = list())
@@ -134,7 +134,6 @@ var/global/list/alert_overlays_global = list()
 			if(A)
 				A.all_doors |= src
 				areas_added |= A
-
 
 /obj/machinery/door/firedoor/initialize()
 	if (twin) // Already paired with something
@@ -250,8 +249,8 @@ var/global/list/alert_overlays_global = list()
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 /obj/machinery/door/firedoor/CtrlClick(mob/user)
-	if(isAdminGhost(user))
-		attack_ai(user,TRUE)
+	if(isrobot(user) || isAdminGhost(user))
+		attack_ai(user, TRUE)
 	else
 		..()
 
@@ -294,7 +293,7 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	if(iswelder(C))
-		var/obj/item/weapon/weldingtool/W = C
+		var/obj/item/tool/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
 			user.visible_message("<span class='attack'>\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
@@ -361,6 +360,18 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/attack_animal(var/mob/living/simple_animal/M as mob)
+	M.delayNextAttack(8)
+	if(M.melee_damage_upper == 0)
+		return
+	M.do_attack_animation(src, M)
+	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+					  "<span class='warning'>You smash against \the [src].</span>", \
+					  "You hear twisting metal.")
+	if(prob(33))
+		new /obj/item/firedoor_frame(get_turf(src))
+		qdel(src)
 
 /obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/weapon/C, var/no_reruns = FALSE)
 	if(operating)
@@ -592,6 +603,8 @@ var/global/list/alert_overlays_global = list()
 	flow_flags = ON_BORDER
 
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
@@ -609,6 +622,8 @@ var/global/list/alert_overlays_global = list()
 		close()
 
 /obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(flow_flags & ON_BORDER)
@@ -647,17 +662,12 @@ var/global/list/alert_overlays_global = list()
 		return 0
 
 	var/current_turf = get_turf(src)
-	var/turf_face = get_step(current_turf,user.dir)
-	if(SSair.air_blocked(current_turf, turf_face))
-		to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
-		return 1
-	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
+	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in current_turf
 	if(F && F.dir == user.dir)
 		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
 		return 1
 	if(do_after(user, user, 5 SECONDS))
-		var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
-		B.change_dir(user.dir)
+		new /obj/machinery/door/firedoor/border_only(current_turf, user.dir)
 		qdel(src)
 
 /obj/item/firedoor_frame/attackby(var/obj/item/weapon/C, var/mob/user)
@@ -667,6 +677,8 @@ var/global/list/alert_overlays_global = list()
 		drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
 		qdel(src)
 
+/obj/machinery/door/firedoor/AICtrlClick(mob/user)
+	attack_ai(user,TRUE)
 
 //Removed pending a fix for atmos issues caused by full tile firelocks.
 /*

@@ -33,6 +33,7 @@ var/list/one_way_windows
 
 	var/fire_temp_threshold = 800
 	var/fire_volume_mod = 100
+	var/dmg_threshold = 0 //Minimum amount of item damage to start damaging window
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
@@ -123,9 +124,17 @@ var/list/one_way_windows
 			damage_overlay.icon_state = "[cracked_base][damage_fraction]"
 			overlays += damage_overlay
 
+/obj/structure/window/proc/adjustHealthLoss(var/amount = 0, var/atom/movable/W = null)
+	if(amount < dmg_threshold)
+		if(W && !istype(W,/obj/item/projectile/fire_breath))
+			visible_message("<span class='warning'>\The [W] [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
+		return FALSE
+	health -= amount
+	return TRUE
+
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
 
-	health -= Proj.damage
+	adjustHealthLoss(Proj.damage,Proj)
 	. = ..()
 	healthcheck(Proj.firer)
 
@@ -134,21 +143,21 @@ var/list/one_way_windows
 
 	switch(severity)
 		if(1.0)
-			health -= rand(100, 150)
+			adjustHealthLoss(rand(100, 150))
 			healthcheck()
 			return
 		if(2.0)
-			health -= rand(20, 50)
+			adjustHealthLoss(rand(20, 50))
 			healthcheck()
 			return
 		if(3.0)
-			health -= rand(5, 15)
+			adjustHealthLoss(rand(5, 15))
 			healthcheck()
 			return
 
 /obj/structure/window/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
-	health -= rand(30, 50)
+	adjustHealthLoss(rand(30, 50))
 	healthcheck()
 
 /obj/structure/window/kick_act(mob/living/carbon/human/H)
@@ -169,10 +178,14 @@ var/list/one_way_windows
 		damage += S.bonus_kick_damage //Unless they're wearing heavy boots
 
 	if(damage > 0)
-		health -= damage
+		if(!adjustHealthLoss(damage))
+			H.visible_message("<span class='danger'>\The [H]'s kick [pick("bounces","gleams")] off \the [src] harmlessly.</span>", \
+			"<span class='danger'>Your kick [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		healthcheck()
 
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
+		return 1
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(flow_flags & ON_BORDER)
@@ -186,16 +199,27 @@ var/list/one_way_windows
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		if(istype(mover,/obj/item/projectile/beam))
-			var/obj/item/projectile/beam/B = mover
-			B.damage *= disperse_coeff
-			if(B.damage <= 1)
-				B.bullet_die()
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
+		return 1
+	if(istype(mover) && mover.checkpass(PASSGLASS))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
+		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
+			dim_beam(mover)
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
+
+
+/obj/structure/window/proc/dim_beam(var/obj/item/projectile/beam/B)
+	if(istype(B))
+		B.damage *= disperse_coeff
+		if(B.damage <= 1)
+			B.bullet_die()
+
+/obj/structure/window/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src]! It looks like \he's trying to commit suicide.</span>")
+	attack_generic(user,10)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 //Someone threw something at us, please advise
 /obj/structure/window/hitby(var/atom/movable/AM)
@@ -204,17 +228,17 @@ var/list/one_way_windows
 		return
 	if(ismob(AM))
 		var/mob/M = AM //Duh
-		health -= 10 //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
-		healthcheck(M)
 		if (AM.invisibility < 101)
 			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
 			"<span class='danger'>You slam into \the [src].</span>")
+		adjustHealthLoss(10,AM) //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
+		healthcheck(M)
 	else if(isobj(AM))
 		var/obj/item/I = AM
-		health -= I.throwforce
-		healthcheck()
 		if (AM.invisibility < 101)
 			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+		adjustHealthLoss(I.throwforce,AM)
+		healthcheck()
 
 /obj/structure/window/attack_hand(mob/living/user as mob)
 
@@ -222,7 +246,8 @@ var/list/one_way_windows
 		user.do_attack_animation(src, user)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes \the [src]!</span>")
-		health -= 25
+		if(!adjustHealthLoss(25))
+			user.visible_message("<span class='danger'>[user]'s punch [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		healthcheck()
 		user.delayNextAttack(8)
 
@@ -252,9 +277,11 @@ var/list/one_way_windows
 
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(10)
-	health -= damage
 	user.visible_message("<span class='danger'>\The [user] smashes into \the [src]!</span>", \
 	"<span class='danger'>You smash into \the [src]!</span>")
+	if(!adjustHealthLoss(damage))
+		user.visible_message("<span class='danger'>\The [user]'s attack [pick("bounces","gleams")] off \the [src] harmlessly.</span>", \
+		"<span class='danger'>Your attack [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 	healthcheck(user)
 
 /obj/structure/window/attack_alien(mob/user as mob)
@@ -315,16 +342,16 @@ var/list/one_way_windows
 					"<span class='warning'>You shove \the [M] into \the [src]!</span>")
 				if(GRAB_AGGRESSIVE)
 					M.apply_damage(10) //Nasty, but dazed and concussed at worst
-					health -= 5
 					visible_message("<span class='danger'>\The [user] slams \the [M] into \the [src]!</span>", \
 					"<span class='danger'>You slam \the [M] into \the [src]!</span>")
+					adjustHealthLoss(5,M)
 				if(GRAB_NECK to GRAB_KILL)
 					M.Stun(3)
 					M.Knockdown(3) //Almost certainly shoved head or face-first, you're going to need a bit for the lights to come back on
 					M.apply_damage(20) //That got to fucking hurt, you were basically flung into a window, most likely a shattered one at that
-					health -= 20 //Window won't like that
 					visible_message("<span class='danger'>\The [user] crushes \the [M] into \the [src]!</span>", \
 					"<span class='danger'>You crush \the [M] into \the [src]!</span>")
+					adjustHealthLoss(20,M) //Window won't like that
 			healthcheck(user)
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been window slammed by [user.name] ([user.ckey]) ([gstate]).</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Window slammed [M.name] ([gstate]).</font>")
@@ -377,7 +404,7 @@ var/list/one_way_windows
 		return 1
 
 
-	if(ismultitool(W) && smartwindow)
+	if(W.is_multitool(user) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
 
@@ -463,7 +490,7 @@ var/list/one_way_windows
 					return
 
 				if(iswelder(W))
-					var/obj/item/weapon/weldingtool/WT = W
+					var/obj/item/tool/weldingtool/WT = W
 					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
 					if(WT.do_weld(user, src, 40, 1) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
@@ -490,7 +517,7 @@ var/list/one_way_windows
 			return
 
 		if(iswelder(W) && !d_state)
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
 			if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Ditto above
@@ -503,9 +530,9 @@ var/list/one_way_windows
 	user.do_attack_animation(src, W)
 	if(W.damtype == BRUTE || W.damtype == BURN)
 		user.delayNextAttack(10)
-		health -= W.force
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
 		"<span class='warning'>You hit \the [src] with \the [W].</span>")
+		adjustHealthLoss(W.force,W)
 		healthcheck(user)
 		return
 	else
@@ -578,21 +605,6 @@ var/list/one_way_windows
 	..()
 	update_nearby_tiles()
 
-//This proc has to do with airgroups and atmos, it has nothing to do with smoothwindows, that's update_nearby_icons().
-/obj/structure/window/proc/update_nearby_tiles(var/turf/T)
-
-
-	if(!SS_READY(SSair))
-		return 0
-
-	if(!T)
-		T = get_turf(src)
-
-	if(isturf(T))
-		SSair.mark_for_update(T)
-
-	return 1
-
 //This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
 /obj/structure/window/proc/update_nearby_icons(var/turf/T)
 
@@ -623,7 +635,7 @@ var/list/one_way_windows
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 
 	if(exposed_temperature > T0C + fire_temp_threshold)
-		health -= round(exposed_volume/fire_volume_mod)
+		adjustHealthLoss(round(exposed_volume/fire_volume_mod))
 		healthcheck(sound = 0)
 	..()
 
@@ -647,6 +659,7 @@ var/list/one_way_windows
 	reinforced = 1
 	penetration_dampening = 3
 	disperse_coeff = 0.8
+	dmg_threshold = 5
 
 /obj/structure/window/reinforced/oneway
 	one_way = 1
@@ -668,6 +681,7 @@ var/list/one_way_windows
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
 	disperse_coeff = 0.75
+	dmg_threshold = 10
 
 /obj/structure/window/plasma/oneway
 	one_way = 1
@@ -686,6 +700,7 @@ var/list/one_way_windows
 	health = 160
 	penetration_dampening = 7
 	disperse_coeff = 0.6
+	dmg_threshold = 15
 
 /obj/structure/window/reinforced/plasma/oneway
 	one_way = 1

@@ -9,10 +9,9 @@
 #include "highscores.dm"
 #include "human.dm"
 #include "icons.dm"
-#include "lazy_events.dm"
+#include "events.dm"
 #include "names.dm"
 #include "reagent_recipe_collisions.dm"
-#include "slipping.dm"
 #include "turretid.dm"
 #include "outfit_datums.dm"
 #include "ray.dm"
@@ -20,4 +19,5 @@
 #include "reagent_ids.dm"
 #include "supermatter_airflow.dm"
 #include "languages.dm"
+#include "hour_calculations.dm"
 #endif

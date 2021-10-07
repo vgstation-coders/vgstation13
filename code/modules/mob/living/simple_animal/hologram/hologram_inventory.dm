@@ -8,16 +8,19 @@
 		head = null
 		success = 1
 		update_inv_head()
+		invoke_event(/event/unequipped, list(W))
 	if (W == w_uniform)
 		w_uniform = null
 		success = 1
 		update_inv_w_uniform()
+		invoke_event(/event/unequipped, list(W))
 	if (W == wear_suit)
 		wear_suit = null
 		success = 1
 		update_inv_wear_suit()
+		invoke_event(/event/unequipped, list(W))
 	else
-		..()
+		success = ..()
 
 	if(success)
 		if (W)
@@ -30,7 +33,7 @@
 			if(W)
 				W.reset_plane_and_layer()
 
-	return
+	return success
 
 /mob/living/simple_animal/hologram/advanced/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
 	if(!istype(W))
@@ -133,6 +136,27 @@
 		head.generate_accessory_overlays(O)
 		O.icon = standing
 		O.icon_state = standing.icon_state
+
+		if(istype(head,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = head
+			var/i = 1
+			var/image/abovehats
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				abovehats = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				O.overlays += abovehats
+				if(above.dynamic_overlay)
+					if(above.dynamic_overlay["[HEAD_LAYER]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
+						O.overlays += dyn_overlay
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					bloodsies.color = above.blood_color
+					bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+					O.overlays	+= bloodsies
+
+				i++
+		
 		var/image/I = new()
 		I.appearance = O.appearance
 		I.plane = FLOAT_PLANE

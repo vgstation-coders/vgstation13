@@ -8,7 +8,7 @@
 
 /obj/structure/window/barricade
 	name = "wood barricade"
-	desc = "A barricade made out of wood planks, it looks like it can take a few solid hits."
+	desc = "A barricade made out of wood planks. It looks like it can take a few solid hits."
 	icon = 'icons/obj/barricade.dmi'
 	icon_state = "barricade"
 	anchored = 1
@@ -126,7 +126,7 @@
 
 /obj/structure/window/barricade/full
 	name = "wood barricade"
-	desc = "A barricade made out of wood planks, it is very likely going to be a tough nut to crack"
+	desc = "A barricade made out of wood planks. It's probably going to be a tough nut to crack."
 	icon_state = "barricade_full"
 	health = 150
 	sheetamount = 3

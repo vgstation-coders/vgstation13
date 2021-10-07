@@ -1,5 +1,5 @@
 // reference: /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-/client/proc/debug_reagents(atom/D)
+/client/proc/debug_reagents(atom/D in world)
 	set category = "Debug"
 	set name = "Add Reagent"
 
@@ -21,7 +21,7 @@
 			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 
-/client/proc/debug_variables(atom/D)
+/client/proc/debug_variables(atom/D in world)
 	set category = "Debug"
 	set name = "View Variables"
 
@@ -141,9 +141,6 @@
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
-	#if EXTOOLS_REFERENCE_TRACKING
-	body += "<option value='?_src_=vars;view_references=\ref[D]'>View references</option>"
-	#endif
 	body += "<option value>---</option>"
 
 	if(ismob(D))
@@ -927,17 +924,7 @@ function loadPage(list) {
 			return
 
 		callatomproc(DAT)	//Yes it could be a datum, technically but eh
-	#if EXTOOLS_REFERENCE_TRACKING
-	else if(href_list["view_references"])
-		if(!check_rights(R_DEBUG))
-			return
 
-		var/datum/target = locate(href_list["view_references"])
-		if(!target)
-			return
-
-		usr.client.view_refs(target)
-	#endif
 	else if (href_list["edit_transform"])
 		if (!check_rights(R_DEBUG))
 			return

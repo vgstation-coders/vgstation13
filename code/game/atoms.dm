@@ -198,16 +198,13 @@ var/global/list/ghdel_profiling = list()
 	densityChanged()
 
 /atom/proc/densityChanged()
-	lazy_invoke_event(/lazy_event/on_density_change, list("atom" = src))
+	invoke_event(/event/density_change, list("atom" = src))
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 	if(!isturf(src))
 		var/turf/T = get_turf(src)
 		if(T)
 			T.densityChanged()
-
-/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
-	return Bumped(F)
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
@@ -251,6 +248,9 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/bullet_act(var/obj/item/projectile/Proj)
 	return PROJECTILE_COLLISION_DEFAULT
+
+/atom/proc/photography_act(var/obj/item/device/camera/camera) //Called when this atom has its picture taken by a camera
+	return
 
 /atom/proc/in_contents_of(container)//can take class or object instance as argument
 	if(ispath(container))
@@ -524,6 +524,9 @@ its easier to just keep the beam vertical.
 /atom/proc/emag_act()
 	return
 
+/atom/proc/slime_act()
+	return
+
 /atom/proc/supermatter_act(atom/source, severity)
 	qdel(src)
 	return 1
@@ -596,7 +599,7 @@ its easier to just keep the beam vertical.
 				H.dna = new /datum/dna(null)
 				H.dna.real_name = H.real_name
 				H.dna.flavor_text = H.flavor_text
-		H.check_dna()
+		H.check_dna_integrity()
 
 		//Now, deal with gloves.
 		if (H.gloves && H.gloves != src)
@@ -680,7 +683,7 @@ its easier to just keep the beam vertical.
 	if (!istype(M.dna, /datum/dna))
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
-	M.check_dna()
+	M.check_dna_integrity()
 	if (!( src.flags & FPRINT))
 		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
@@ -809,6 +812,12 @@ its easier to just keep the beam vertical.
 /atom/proc/isacidhardened()
 	return FALSE
 
+/atom/proc/salt_act()
+	return
+
+/atom/proc/acid_melt()
+	return
+
 /atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
 	var/turf/curloc = get_turf(src)
 	var/turf/targloc = get_turf(target)
@@ -847,7 +856,7 @@ its easier to just keep the beam vertical.
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
 
-/atom/proc/initialize()
+/atom/initialize()
 	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()
@@ -893,3 +902,14 @@ its easier to just keep the beam vertical.
 	return 1
 /atom/proc/setPersistenceAge()
 	return
+
+//Called when a conveyor belt is pointing into us and an atom is coming in.
+/atom/proc/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	return
+
+/atom/proc/contains(atom/A)
+	if(!A)
+		return FALSE
+	for(var/atom/location = A.loc, location, location = location.loc)
+		if(location == src)
+			return TRUE

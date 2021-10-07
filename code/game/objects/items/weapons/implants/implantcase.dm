@@ -1,5 +1,5 @@
 /obj/item/weapon/implantcase
-	name = "Glass Case"
+	name = "glass case"
 	desc = "A case containing an implant."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-0"
@@ -7,17 +7,17 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_TINY
-	var/obj/item/weapon/implant/imp = null
+	var/obj/item/weapon/implant/imp
 
 /obj/item/weapon/implantcase/proc/update()
 	desc = initial(desc)
 	if (imp)
-		icon_state = text("implantcase-[]", imp._color)
+		icon_state = "implantcase-[imp._color]"
 		desc += "<br>It is loaded with a [imp.name]."
 	else
 		icon_state = "implantcase-0"
 
-/obj/item/weapon/implantcase/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/weapon/implantcase/attackby(obj/item/I, mob/user)
 	..()
 	if (istype(I, /obj/item/weapon/pen))
 		set_tiny_label(user, " - '", "'")
@@ -27,10 +27,6 @@
 			user.show_message("<span class='warning'>You can't load a broken implant back into a case.</span>")
 			return 0
 		user.drop_item(timp, force_drop = 1)
-		if(timp.implanted) 
-			timp.implanted = null
-		if(timp.implanted) 
-			timp.imp_in = null
 		timp.forceMove(src)
 		user.show_message("<span class='warning'>You load \the [timp] into \the [src].</span>")
 		imp = timp
@@ -38,7 +34,7 @@
 	else if (istype(I, /obj/item/weapon/implanter))
 		var/obj/item/weapon/implanter/the_implanter = I
 		if (the_implanter.imp)
-			if (imp || the_implanter.imp.implanted)
+			if (imp)
 				return
 			the_implanter.imp.forceMove(src)
 			imp = the_implanter.imp
@@ -66,7 +62,7 @@
 	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER
 
 /obj/item/weapon/implantcase/tracking
-	name = "Glass Case- 'Tracking'"
+	name = "glass case 'Tracking'"
 	desc = "A case containing a tracking implant."
 	icon_state = "implantcase-b"
 
@@ -75,7 +71,7 @@
 	..()
 
 /obj/item/weapon/implantcase/explosive
-	name = "Glass Case- 'Explosive'"
+	name = "glass case 'Explosive'"
 	desc = "A case containing an explosive implant."
 	icon_state = "implantcase-r"
 
@@ -85,7 +81,7 @@
 
 
 /obj/item/weapon/implantcase/chem
-	name = "Glass Case- 'Chem'"
+	name = "glass case 'Chem'"
 	desc = "A case containing a chemical implant."
 	icon_state = "implantcase-b"
 
@@ -93,9 +89,18 @@
 	imp = new /obj/item/weapon/implant/chem(src)
 	..()
 
+/obj/item/weapon/implantcase/remote
+	name = "glass case 'Chem'"
+	desc = "A case containing a \"chemical\" implant."
+	icon_state = "implantcase-b"
+
+/obj/item/weapon/implantcase/remote/New()
+	imp = new /obj/item/weapon/implant/explosive/remote(src)
+	..()
+
 
 /obj/item/weapon/implantcase/loyalty
-	name = "Glass Case- 'Loyalty'"
+	name = "glass case- 'Loyalty'"
 	desc = "A case containing a loyalty implant."
 	icon_state = "implantcase-r"
 
@@ -106,7 +111,7 @@
 
 
 /obj/item/weapon/implantcase/death_alarm
-	name = "Glass Case- 'Death Alarm'"
+	name = "glass case- 'Death Alarm'"
 	desc = "A case containing a death alarm implant."
 	icon_state = "implantcase-b"
 
@@ -115,7 +120,7 @@
 	..()
 
 /obj/item/weapon/implantcase/peace
-	name = "glass case- 'Pax'"
+	name = "glass case 'Pax'"
 	desc = "A case containing a peace-inducing implant."
 	icon_state = "implantcase-b"
 
@@ -125,7 +130,7 @@
 
 
 /obj/item/weapon/implantcase/holy
-	name = "Glass Case- 'Holy'"
+	name = "glass case 'Holy'"
 	desc = "A case containing a holy implant."
 	icon_state = "implantcase-o"
 

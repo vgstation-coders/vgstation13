@@ -54,6 +54,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
 	hud_icons = list("cult-chief-logo", "cult-logo")
+	default_admin_voice = "<span class='danger'>Nar-Sie</span>" // Nar-Sie's name always appear in red in the chat, makes it stand out.
+	admin_voice_style = "sinister"
+	admin_voice_say = "murmurs..."
 	var/list/bloody_floors = list()
 	//var/target_change = FALSE
 	//var/change_cooldown = 0
@@ -84,25 +87,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	dat += "<br><a href='?src=\ref[src];cult_mindspeak_global=1'>Voice of Nar-Sie</a>"
 	dat += "<br><a href='?src=\ref[src];cult_progress=1'>(debug) Cult Progression Skip</a>"
 	return dat
 
 /datum/faction/bloodcult/Topic(href, href_list)
 	..()
-	if (href_list["cult_mindspeak_global"])
-		var/message = input("What message shall we send?",
-                    "Voice of Nar-Sie",
-                    "")
-		for (var/datum/role/R in members)
-			if (R.antag?.current && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
-				to_chat(R.antag.current, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
-
-		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[message]</span></span>")
-
-		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-		log_narspeak("[key_name(usr)] Voice of Nar-Sie: [message]")
 	if (href_list["cult_progress"])
 		if (alert(usr, "Skip to the next Act?","Cult Progression Skip","Yes","No") == "No")
 			return
@@ -161,6 +150,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		veil_thickness = CULT_MENDED
 		..()
 		command_alert(/datum/command_alert/bloodstones_broken)
+		var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+		if (istype(dynamic_mode))
+			dynamic_mode.update_stillborn_rulesets()
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
 		for (var/obj/effect/rune/R in rune_set.rune_list)
@@ -256,12 +248,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 /mob/living/carbon/proc/implant_pop()
 	for(var/obj/item/weapon/implant/loyalty/I in src)
-		if (I.implanted)
+		if (I.imp_in)
 			to_chat(src, "<span class='sinister'>Your blood pushes back against the loyalty implant, it will visibly pop out within seconds!</span>")
 			spawn(10 SECONDS)
-				I.forceMove(get_turf(src))
-				I.implanted = 0
-				visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
+				if(I.remove())
+					visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
 
 /mob/living/carbon/proc/boxify(var/delete_body = TRUE, var/new_anim = TRUE, var/box_state = "cult")//now its own proc so admins may atomProcCall it if they so desire.
 	var/turf/T = get_turf(src)
@@ -280,13 +271,20 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		take_blood(cup, cup.volume)//Up to 60u
 		cup.on_reagent_change()//so we get the reagentsfillings overlay
 		new/obj/item/weapon/skull(coffer)
+	if (ismonkey(src))
+		var/list/skulless_monkeys = list(
+			/mob/living/carbon/monkey/mushroom,
+			/mob/living/carbon/monkey/diona,
+			/mob/living/carbon/monkey/rock,
+			)
+		var/mob/living/carbon/monkey/M = src
+		if (!(M.species_type in skulless_monkeys))
+			take_blood(cup, cup.volume)//Up to 60u
+			new/obj/item/weapon/skull(coffer)
 	if (isslime(src))
 		cup.reagents.add_reagent(SLIMEJELLY, 50)
 	if (isalien(src))//w/e
 		cup.reagents.add_reagent(RADIUM, 50)
-
-	for(var/obj/item/weapon/implant/loyalty/I in src)
-		I.implanted = 0
 
 	for(var/obj/item/I in src)
 		u_equip(I)
@@ -626,7 +624,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/total_accumulated = 0
 	var/total_needed = amount_needed
 	if (!tribute && iscultist(user))
-		var/datum/role/cultist/mycultist = user.mind.GetRole(CULTIST)
+		var/datum/role/cultist/mycultist = iscultist(user)
 		if (mycultist in blood_communion)
 			communion = 1
 			amount_needed = max(1,round(amount_needed * 4 / 5))//saving 20% blood
@@ -906,8 +904,20 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/list/places_to_spawn = list()
 	for (var/i = 1 to 4)
 		for (var/j = 10; j > 0; j--)
-			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
-			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
+			/*
+			the value of i governs which corner of the map the bloodstone will try to spawn in.
+			from 1 to 4, the corners will be selected in this order: North-West, South-East, North-East, South-West
+
+			the higher j, the further away from the center of the map will the bloodstone be. it tries 10 times per bloodstone, and searches each time closer to the center
+			*/
+			var/coordX = map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 )
+			var/coordY = map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 )
+
+			var/turf/T = get_turf(pick(range(j*3,locate(coordX,coordY,map.zMainStation))))
+			if (!T)
+				message_admins("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
+				log_admin("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
+			else if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated)) || !isshuttleturf(T))
 				//Adding some blacklisted areas, specifically solars
 				if (!istype(T.loc,/area/solar) && is_type_in_list(T.loc,the_station_areas))
 					places_to_spawn += T
@@ -923,8 +933,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		if (!B.loc)
 			qdel(B)
-			message_admins("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
-			log_admin("Blood Cult: A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			message_admins("Blood Cult: !ERROR! A blood stone was somehow spawned in nullspace. It has been destroyed.")
+			log_admin("Blood Cult: !ERROR! A blood stone was somehow spawned in nullspace. It has been destroyed.")
 
 /*	prepare_cult_holomap
 	returns: the initialized cult holomap
@@ -1038,9 +1048,8 @@ var/static/list/valid_cultpower_slots = list(
 		if (jobban_isbanned(src, CULTIST) || isantagbanned(src) || (acceptance == "Never"))
 			return CONVERTIBLE_NEVER
 
-		for(var/obj/item/weapon/implant/loyalty/I in src)
-			if(I.implanted)
-				return CONVERTIBLE_IMPLANT
+		if(is_loyalty_implanted())
+			return CONVERTIBLE_IMPLANT
 
 		if (acceptance == "Always" || acceptance == "Yes")
 			return CONVERTIBLE_ALWAYS
@@ -1064,6 +1073,7 @@ var/static/list/valid_cultpower_slots = list(
 
 	I.pixel_y = 16 * PIXEL_MULTIPLIER
 	I.plane = ANTAG_HUD_PLANE
+	I.appearance_flags |= RESET_COLOR|RESET_ALPHA
 
 	//inspired from the rune color matrix because boy am I proud of it
 	animate(I, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 2)//9

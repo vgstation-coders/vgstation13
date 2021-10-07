@@ -5,11 +5,12 @@
 #define MANNEQUIN_ICONS_SLOT		"slot_icon"
 #define MANNEQUIN_ICONS_PRIMITIVE	"primitive_icon"
 #define MANNEQUIN_ICONS_SPECIES		"species_icon"
+#define MANNEQUIN_ICONS_CORGI		"corgi"
 #define MANNEQUIN_ICONS_FAT			"fat_icon"
 #define MANNEQUIN_DYNAMIC_LAYER		"dynamic_layer"
 
 /obj/structure/mannequin
-	name = "human marble mannequin"
+	name = "human man marble mannequin"
 	desc = "You almost feel like it's going to come alive any second."
 	icon = 'icons/obj/mannequin.dmi'
 	icon_state="mannequin_marble_human"
@@ -24,12 +25,27 @@
 	var/species_type = /datum/species/human
 	var/fat = 0
 	var/primitive = 0
+	var/corgi = FALSE
+	gender = MALE
 	var/list/clothing = list()
 	var/list/obj/item/held_items = list(null, null)
+	var/hair_style
+	var/beard_style
+	var/hair_color = "#B9C1B8"
 	var/clothing_offset_x = 0
 	var/clothing_offset_y = 3*PIXEL_MULTIPLIER
 	var/health = 90
 	var/maxHealth = 90
+	var/has_pedestal = TRUE
+	var/timer = 80 //in seconds
+	var/mob/living/captured
+	var/intialTox = 0
+	var/intialFire = 0
+	var/intialBrute = 0
+	var/intialOxy = 0
+	var/dissolving = FALSE
+
+	var/additional_damage = 0//tracking how much damage we took
 
 	var/list/all_slot_icons = list()
 
@@ -57,8 +73,12 @@
 	var/trapped_strip = 0//1= Mannequin awakens if you try to strip it or to wrench it.
 	var/chaintrap_range = 0//= Range at which mannequin awakens nearby mannequins when it awakens.
 
-/obj/structure/mannequin/New()
+
+/obj/structure/mannequin/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold = list(null, null), var/mob_to_capture, var/forever)
 	..()
+
+	if (forever)
+		timer = -1
 
 	species = new species_type()
 
@@ -76,6 +96,28 @@
 		SLOT_MANNEQUIN_ID,
 		)
 
+	beard_style = f_style
+	hair_style = h_style
+
+	if (items_to_wear?.len)
+		for (var/slot in clothing)
+			var/obj/item/O = items_to_wear[slot]
+			if (O)
+				clothing[slot] = O
+				O.forceMove(src)
+				O.mannequin_equip(src,slot)
+
+	for (var/i = 1 to held_items.len)
+		var/obj/item/O = items_to_hold[i]
+		if (O)
+			held_items[i] = O
+			O.forceMove(src)
+			O.mannequin_equip(src,"hands",i)
+
+	if (mob_to_capture)
+		capture_mob(mob_to_capture)
+
+
 	for(var/cloth_slot in clothing)
 		all_slot_icons[cloth_slot] = get_slot_icons(cloth_slot)
 
@@ -83,6 +125,97 @@
 
 	if(awake)
 		Awaken()
+
+/obj/structure/mannequin/Destroy()
+	processing_objects.Remove(src)
+	captured = null
+	held_items.len = 0
+	clothing.len = 0
+	..()
+
+/obj/structure/mannequin/process()
+	timer--
+	if (captured)
+		captured.setToxLoss(intialTox)
+		captured.adjustFireLoss(intialFire - captured.getFireLoss())
+		captured.adjustBruteLoss(intialBrute - captured.getBruteLoss())
+		captured.setOxyLoss(intialOxy)
+		if (timer >= 5)
+			captured.Paralyse(2)
+	if (timer == 0)
+		freeCaptive()
+		qdel(src)
+
+/obj/structure/mannequin/proc/capture_mob(var/mob/M)
+	if(!isliving(M))
+		return
+	has_pedestal = FALSE
+	var/mob/living/L = M
+	if(L.locked_to)
+		L.locked_to = 0
+		L.anchored = 0
+	if(L.client)
+		L.client.perspective = EYE_PERSPECTIVE
+		L.client.eye = src
+
+	for(var/obj/item/I in L.held_items)
+		L.drop_item(I)
+
+	if(L.locked_to)
+		L.unlock_from()
+
+	L.sdisabilities |= MUTE
+	L.delayNextAttack(timer)
+	L.click_delayer.setDelay(timer)
+	health = L.health*2
+	maxHealth = L.maxHealth*2
+	intialTox = L.getToxLoss()
+	intialFire = L.getFireLoss()
+	intialBrute = L.getBruteLoss()
+	intialOxy = L.getOxyLoss()
+
+	dir = L.dir
+
+	L.forceMove(src)
+
+	name = "statue of \a [name]"
+	if(iscorgi(L))
+		desc = "If it takes forever, I will wait for you..."
+	else
+		desc = "An incredibly lifelike marble carving."
+
+	if(timer < 0)
+		L.death(FALSE)
+	else
+		processing_objects.Add(src)
+
+	M.forceMove(src)
+	captured = M
+	processing_objects.Add(src)
+
+/obj/structure/mannequin/proc/dissolve()
+	if(dissolving)
+		return
+
+	visible_message("<span class='notice'>The statue's surface begins cracking and dissolving!</span>")
+
+	processing_objects.Remove(src) //Disable the statue's processing (otherwise it may heal the occupants or something like that)
+	dissolving = TRUE
+
+	//Kill and husk the occupants over the course of 6 seconds, then dump them out (they won't be cloneable but their brains will be OK)
+	spawn(10)
+		for(var/i=1 to 5)
+			for(var/mob/living/L in contents)
+				L.adjustBruteLoss(10)
+				if (L.health <= 0)
+					L.mutations |= M_NOCLONE
+
+					if(ishuman(L) && !(M_HUSK in L.mutations))
+						var/mob/living/carbon/human/H = L
+						H.ChangeToHusk()
+				sleep(10)
+
+		breakDown()
 
 /obj/structure/mannequin/HasProximity(var/atom/movable/AM)
 	if(trapped_prox && isliving(AM))
@@ -236,6 +369,7 @@
 		if(!item_in_hand)
 			if(get_held_item_by_index(hand_index))
 				var/obj/item/I = held_items[hand_index]
+				I.mannequin_unequip(src)
 				user.put_in_hands(I)
 				held_items[hand_index] = null
 				to_chat(user, "<span class='info'>You pick up \the [I] from \the [src].</span>")
@@ -243,14 +377,17 @@
 			if(get_held_item_by_index(hand_index))
 				if(user.drop_item(item_in_hand,src))
 					var/obj/item/I = held_items[hand_index]
+					I.mannequin_unequip(src)
 					user.put_in_hands(I)
 					held_items[hand_index] = item_in_hand
+					item_in_hand.mannequin_equip(src,"hands",hand_index)
 					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
 				else
 					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 			else
 				if(user.drop_item(item_in_hand,src))
 					held_items[hand_index] = item_in_hand
+					item_in_hand.mannequin_equip(src,"hands",hand_index)
 					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
 				else
 					to_chat(user, "<span class='warning'>You can't drop that!</span>")
@@ -265,6 +402,7 @@
 		if(!item_in_hand)
 			if(clothing[item_slot])
 				var/obj/item/I = clothing[item_slot]
+				I.mannequin_unequip(src)
 				user.put_in_hands(I)
 				clothing[item_slot] = null
 				add_fingerprint(user)
@@ -274,8 +412,10 @@
 				if(canEquip(user, item_slot,item_in_hand))
 					if(user.drop_item(item_in_hand,src))
 						var/obj/item/I = clothing[item_slot]
+						I.mannequin_unequip(src)
 						user.put_in_hands(I)
 						clothing[item_slot] = item_in_hand
+						item_in_hand.mannequin_equip(src,item_slot)
 						add_fingerprint(user)
 						to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
 					else
@@ -286,6 +426,7 @@
 				if(canEquip(user, item_slot,item_in_hand))
 					if(user.drop_item(item_in_hand,src))
 						clothing[item_slot] = item_in_hand
+						item_in_hand.mannequin_equip(src,item_slot)
 						add_fingerprint(user)
 						to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
 					else
@@ -299,6 +440,7 @@
 
 /obj/structure/mannequin/proc/getDamage(var/damage)
 	health -= damage
+	additional_damage += damage
 	healthCheck()
 	if(health > 0 && (trapped_strip || trapped_prox))
 		Awaken()
@@ -310,14 +452,78 @@
 		breakDown()
 
 
+/obj/structure/mannequin/proc/freeCaptive()
+	if (!captured)
+		return
+	captured.timestopped = 0
+	captured.forceMove(loc)
+	for(var/cloth in clothing)
+		var/obj/O = clothing[cloth]
+		if (O)
+			switch(cloth)
+				if(SLOT_MANNEQUIN_ICLOTHING)
+					captured.equip_to_slot_or_drop(O, slot_w_uniform)
+				if(SLOT_MANNEQUIN_FEET)
+					captured.equip_to_slot_or_drop(O, slot_shoes)
+				if(SLOT_MANNEQUIN_GLOVES)
+					captured.equip_to_slot_or_drop(O, slot_gloves)
+				if(SLOT_MANNEQUIN_EARS)
+					captured.equip_to_slot_or_drop(O, slot_ears)
+				if(SLOT_MANNEQUIN_OCLOTHING)
+					captured.equip_to_slot_or_drop(O, slot_wear_suit)
+				if(SLOT_MANNEQUIN_EYES)
+					captured.equip_to_slot_or_drop(O, slot_glasses)
+				if(SLOT_MANNEQUIN_BELT)
+					captured.equip_to_slot_or_drop(O, slot_belt)
+				if(SLOT_MANNEQUIN_MASK)
+					captured.equip_to_slot_or_drop(O, slot_wear_mask)
+				if(SLOT_MANNEQUIN_HEAD)
+					if (iscorgi(captured))
+						var/mob/living/simple_animal/corgi/corgi = captured
+						O.forceMove(captured)
+						corgi.inventory_back = O
+						corgi.regenerate_icons()
+					else
+						captured.equip_to_slot_or_drop(O, slot_head)
+				if(SLOT_MANNEQUIN_BACK)
+					if (iscorgi(captured))
+						var/mob/living/simple_animal/corgi/corgi = captured
+						corgi.place_on_head(O)
+					else
+						captured.equip_to_slot_or_drop(O, slot_back)
+				if(SLOT_MANNEQUIN_ID)
+					captured.equip_to_slot_or_drop(O, slot_wear_id)
+	clothing.len = 0
+
+	for(var/index = 1 to held_items.len)
+		var/obj/item/tool = held_items[index]
+		if (!tool)
+			continue
+		captured.put_in_hands(tool)
+	held_items.len = 0
+
+	captured.dir = dir
+	captured.apply_damage(additional_damage)
+
 /obj/structure/mannequin/proc/breakDown()
+	visible_message("<span class='warning'><b>[src]</b> collapses!</span>")
 	new /obj/effect/decal/cleanable/dirt(loc)
+	playsound(loc, 'sound/effects/stone_crumble.ogg', 100, 1)
+	if (captured)
+		if (dissolving)
+			freeCaptive()
+			qdel(src)
+			return
+		else
+			captured.gib()
 	for(var/cloth in clothing)
 		if(clothing[cloth])
 			var/obj/item/cloth_to_drop = clothing[cloth]
+			cloth_to_drop.mannequin_unequip(src)
 			cloth_to_drop.forceMove(loc)
 			clothing[cloth] = null
-	for(var/obj/item_to_drop in held_items)
+	for(var/obj/item/item_to_drop in held_items)
+		item_to_drop.mannequin_unequip(src)
 		item_to_drop.forceMove(loc)
 		held_items -= item_to_drop
 	qdel(src)
@@ -356,25 +562,30 @@
 /obj/structure/mannequin/proc/show_inv(var/mob/user)
 	var/dat
 
-	for(var/i = 1 to held_items.len)
-		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(get_held_item_by_index(i))]</A><BR>"
+	if (corgi)
+		dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_HEAD]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_HEAD])]</A>"
+		dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BACK]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BACK])]</A>"
+	else
+		for(var/i = 1 to held_items.len)
+			dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(get_held_item_by_index(i))]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BACK]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BACK])]</A>"
-	dat += "<BR>"
-	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_HEAD]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_HEAD])]</A>"
-	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_MASK]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_MASK])]</A>"
-	dat += "<BR><B>Eyes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_EYES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_EYES])]</A>"
-	if(!primitive)
-		dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_EARS]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_EARS])]</A>"
-	dat += "<BR>"
-	if(!primitive)
-		dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_OCLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_OCLOTHING])]</A>"
-		dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_FEET]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_FEET])]</A>"
-		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_GLOVES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_GLOVES])]</A>"
-	dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ICLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ICLOTHING])]</A>"
-	if(!primitive)
-		dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BELT]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BELT])]</A>"
-		dat += "<BR><B>ID:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ID]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ID])]</A>"
+		dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BACK]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BACK])]</A>"
+		dat += "<BR>"
+		dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_HEAD]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_HEAD])]</A>"
+		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_MASK]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_MASK])]</A>"
+		dat += "<BR><B>Eyes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_EYES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_EYES])]</A>"
+		if(!primitive)
+			dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_EARS]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_EARS])]</A>"
+		dat += "<BR>"
+		if(!primitive)
+			dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_OCLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_OCLOTHING])]</A>"
+			dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_FEET]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_FEET])]</A>"
+			dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_GLOVES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_GLOVES])]</A>"
+		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ICLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ICLOTHING])]</A>"
+		if(!primitive)
+			dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BELT]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BELT])]</A>"
+			dat += "<BR><B>ID:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ID]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ID])]</A>"
+
 	dat += "<BR>"
 	dat += {"
 	<BR>
@@ -391,7 +602,19 @@
 		if(!(itemToCheck.clothing_flags & ONESIZEFITSALL))
 			if(user)
 				to_chat(user, "<span class='warning'>\The [src] is too large for \the [itemToCheck]</span>")
-			return 0
+			return FALSE
+
+	if (corgi)
+		switch(item_slot)
+			if(SLOT_MANNEQUIN_HEAD)
+				if(itemToCheck.type in valid_corgi_hats)
+					return TRUE
+			if(SLOT_MANNEQUIN_BACK)
+				if(itemToCheck.type in valid_corgi_backpacks)
+					return TRUE
+		if(user)
+			to_chat(user, "<span class='warning'>\The [itemToCheck] doesn't fit there.</span>")
+		return FALSE
 
 	var/inv_slot
 
@@ -420,11 +643,11 @@
 			inv_slot = SLOT_ID
 
 	if(itemToCheck.slot_flags & inv_slot)
-		return 1
+		return TRUE
 
 	if(user)
 		to_chat(user, "<span class='warning'>\The [itemToCheck] doesn't fit there.</span>")
-	return 0
+	return FALSE
 
 /obj/structure/mannequin/update_icon()
 	..()
@@ -432,6 +655,26 @@
 	var/obj/abstract/Overlays/O = new /obj/abstract/Overlays/
 	O.layer = FLOAT_LAYER
 	O.overlays.len = 0
+
+	if (hair_style)
+		var/datum/sprite_accessory/hair_style_icon = hair_styles_list[hair_style]
+		var/icon/hair_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_s")
+		if(hair_style_icon.additional_accessories)
+			hair_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_acc"), ICON_OVERLAY)
+		if (species && species.name != "Human")
+			hair_s.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))
+		hair_s.Blend(hair_color, ICON_ADD)
+		O.overlays += hair_s
+
+	if (beard_style)
+		var/datum/sprite_accessory/beard_style_icon = facial_hair_styles_list[beard_style]
+		var/icon/beard_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_s")
+		if(beard_style_icon.additional_accessories)
+			beard_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_acc"), ICON_OVERLAY)
+		if (species && species.name != "Human")
+			beard_s.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))
+		beard_s.Blend(hair_color, ICON_ADD)
+		O.overlays += beard_s
 
 	for(var/cloth_slot in clothing)
 		update_icon_slot(O,cloth_slot)
@@ -442,10 +685,19 @@
 	var/image/I = new()
 	I.appearance = O.appearance
 	I.plane = FLOAT_PLANE
-	I.pixel_x = clothing_offset_x
-	I.pixel_y = clothing_offset_y
+	if (icon != 'icons/obj/mannequin_64x64.dmi')
+		if (has_pedestal)
+			icon = 'icons/obj/mannequin.dmi'
+			I.pixel_x = clothing_offset_x
+			I.pixel_y = clothing_offset_y
+		else
+			icon = 'icons/mob/mannequin.dmi'
+	else
+		I.pixel_x = clothing_offset_x
+		I.pixel_y = clothing_offset_y
 	overlays += I
 	qdel(O)
+
 
 /obj/structure/mannequin/proc/update_icon_slot(var/obj/abstract/Overlays/O, var/slot)
 	var/obj/item/clothing/clothToUpdate = clothing[slot]
@@ -473,6 +725,8 @@
 			else
 				if(primitive)
 					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], t_state)
+				else if (corgi)
+					I = image(slotIcon[MANNEQUIN_ICONS_CORGI], t_state)
 				else if(clothToUpdate.icon_override)
 					I = image(clothToUpdate.icon_override, t_state)
 				else
@@ -501,6 +755,44 @@
 				O.overlays += bloodsies
 
 		clothToUpdate.generate_accessory_overlays(O)
+
+		if(istype(clothToUpdate,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = clothToUpdate
+			var/i = 1
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				if(primitive)
+					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], above.icon_state)
+				else if (corgi)
+					I = image(slotIcon[MANNEQUIN_ICONS_CORGI], above.icon_state)
+				else if(clothToUpdate.icon_override)
+					I = image(above.icon_override, above.icon_state)
+				else
+					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], above.icon_state)
+
+				if(species.name in above.species_fit)
+					var/icon/species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
+					if(species_icon)
+						I.icon = species_icon
+
+				I.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				O.overlays += I
+
+				if(above.dynamic_overlay)
+					if(above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
+						var/image/dyn_overlay = above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
+						dyn_overlay.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+						O.overlays += dyn_overlay
+
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/bloodsies_state = get_bloodsies_state(above,slot)
+					if(bloodsies_state)
+						var/image/bloodsies	= image('icons/effects/blood.dmi', bloodsies_state)
+						bloodsies.color		= above.blood_color
+						bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+						O.overlays += bloodsies
+
+				//above.generate_accessory_overlays(O)
+				i++
 
 /obj/structure/mannequin/proc/update_icon_hand(var/obj/abstract/Overlays/O,var/index)
 	var/obj/item/heldItem = get_held_item_by_index(index)
@@ -579,11 +871,13 @@
 			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.head_icons
 			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey_head.dmi'
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.head_icons
+			slotIcon[MANNEQUIN_ICONS_CORGI] = 'icons/mob/corgi_head.dmi'
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = HEAD_LAYER
 		if(SLOT_MANNEQUIN_BACK)
 			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.back_icons
 			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.back_icons
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.back_icons
+			slotIcon[MANNEQUIN_ICONS_CORGI] = 'icons/mob/corgi_back.dmi'
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = BACK_LAYER
 		if(SLOT_MANNEQUIN_ID)
 			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.id_icons
@@ -620,7 +914,7 @@
 		SLOT_MANNEQUIN_GLOVES = mapping_gloves,
 		SLOT_MANNEQUIN_EARS = mapping_ears,
 		SLOT_MANNEQUIN_OCLOTHING = mapping_suit,
-		SLOT_MANNEQUIN_EYES = mapping_shoes,
+		SLOT_MANNEQUIN_EYES = mapping_glasses,
 		SLOT_MANNEQUIN_BELT = mapping_belt,
 		SLOT_MANNEQUIN_MASK = mapping_mask,
 		SLOT_MANNEQUIN_HEAD = mapping_hat,
@@ -634,21 +928,26 @@
 			var/obj/item/clothToWear = new mapped_cloth(src)
 			if(canEquip(null, mapped_slot, clothToWear))
 				clothing[mapped_slot] = clothToWear
+				clothToWear.mannequin_equip(src,mapped_slot)
 			else
 				qdel(clothToWear)
 
 	if(mapping_hand_right)
 		var/obj/item/clothToWear = new mapping_hand_right(src)
 		held_items[GRASP_RIGHT_HAND] = clothToWear
+		clothToWear.mannequin_equip(src,"hands",GRASP_RIGHT_HAND)
 	if(mapping_hand_left)
 		var/obj/item/clothToWear = new mapping_hand_left(src)
 		held_items[GRASP_LEFT_HAND] = clothToWear
+		clothToWear.mannequin_equip(src,"hands",GRASP_LEFT_HAND)
 
 	update_icon()
 
 
 /obj/structure/mannequin/proc/spin()
+	invoke_event(/event/before_move)
 	change_dir(turn(dir, 90))
+	invoke_event(/event/after_move)
 
 /obj/structure/mannequin/verb/rotate_mannequin()
 	set name = "Rotate Mannequin"
@@ -667,6 +966,11 @@
 	spin()
 
 
+/obj/structure/mannequin/woman
+	name = "human woman marble mannequin"
+	icon_state="mannequin_marble_human_woman"
+	gender = FEMALE
+
 /obj/structure/mannequin/fat
 	name = "fat human marble mannequin"
 	icon_state="mannequin_marble_fat_human"
@@ -683,19 +987,41 @@
 	primitive = 1
 	clothing_offset_y = -5*PIXEL_MULTIPLIER
 
+/obj/structure/mannequin/corgi
+	name = "corgi marble mannequin"
+	icon_state="mannequin_marble_corgi"
+	corgi = 1
+
 /obj/structure/mannequin/wood
-	name = "human wooden mannequin"
+	name = "human man wooden mannequin"
 	desc = "This should look great in a visual arts workshop."
 	icon_state="mannequin_wooden_human"
+	hair_color = "#705036"
 	health = 30
 	maxHealth = 30
 	trueForm = /mob/living/simple_animal/hostile/mannequin/wood
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 2.5
 
+/obj/structure/mannequin/wood/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold, var/mob_to_capture)
+	..()
+	if (mob_to_capture)
+		if(iscorgi(mob_to_capture))
+			desc = "If it takes forever, I will wait for you..."
+		else
+			desc = "An incredibly lifelike wooden carving."
+
 /obj/structure/mannequin/wood/breakDown()
 	new /obj/item/stack/sheet/wood(loc, 5)//You get half the materials used to make a block bac)
 	..()
+
+/obj/structure/mannequin/wood/dissolve()
+	return
+
+/obj/structure/mannequin/wood/woman
+	name = "human woman wooden mannequin"
+	icon_state="mannequin_wooden_human_woman"
+	gender = FEMALE
 
 /obj/structure/mannequin/wood/fat
 	name = "fat human wooden mannequin"
@@ -713,6 +1039,11 @@
 	primitive = 1
 	clothing_offset_y = -5*PIXEL_MULTIPLIER
 
+/obj/structure/mannequin/wood/corgi
+	name = "corgi wooden mannequin"
+	icon_state="mannequin_wooden_corgi"
+	corgi = 1
+
 /obj/structure/mannequin/animationBolt(var/mob/firer)
 	Awaken(firer)
 
@@ -722,35 +1053,60 @@
 	awakening = 1
 	for(var/obj/structure/mannequin/M in range(src,chaintrap_range))
 		M.Awaken()
-	var/obj/item/trash/mannequin/newPedestal = new pedestal(loc)
-	newPedestal.dir = dir
+	if (has_pedestal)
+		var/obj/item/trash/mannequin/newPedestal = new pedestal(loc)
+		newPedestal.dir = dir
 	var/mob/living/simple_animal/hostile/mannequin/livingMannequin = new trueForm(loc)
 	livingMannequin.name = name
 	livingMannequin.icon_state = icon_state
 	livingMannequin.health = health
 	livingMannequin.maxHealth = maxHealth
 	livingMannequin.dir = dir
+	livingMannequin.additional_damage = additional_damage
+	livingMannequin.timer = timer
+	if (captured)
+		livingMannequin.captured_mob = captured
+		captured.forceMove(livingMannequin)
+		captured = null
 	var/image/I = image('icons/effects/32x32.dmi',"blank")
 	I.overlays |= overlays
-	I.pixel_x = -clothing_offset_x
-	I.pixel_y = -clothing_offset_y
+	if (has_pedestal)
+		I.pixel_x = -clothing_offset_x
+		I.pixel_y = -clothing_offset_y
 	livingMannequin.overlays += I
 	for(var/slot in clothing)
 		if(clothing[slot])
 			var/obj/item/cloth = clothing[slot]
+			cloth.mannequin_unequip(src)
 			cloth.forceMove(livingMannequin)
-			livingMannequin.clothing += cloth
+			cloth.mannequin_equip(livingMannequin,slot)
+			livingMannequin.clothing[slot] = cloth
 			clothing[slot] = null
-	for(var/obj/item/tool in held_items)
-		tool.forceMove(livingMannequin)
-		livingMannequin.clothing += tool
-		held_items -= tool
-		if(tool.force >= livingMannequin.melee_damage_lower)
-			livingMannequin.melee_damage_lower = tool.force
-			livingMannequin.melee_damage_upper = tool.force
-			livingMannequin.attacktext = "swings [tool] at"
-			if(tool.hitsound)
-				livingMannequin.attack_sound = tool.hitsound
+	if (held_items?.len)
+		for(var/index = 1 to held_items.len)
+			var/obj/item/tool = get_held_item_by_index(index)
+			if (!tool)
+				continue
+			tool.mannequin_unequip(src)
+			tool.forceMove(livingMannequin)
+			tool.mannequin_equip(livingMannequin,"hands",index)
+			livingMannequin.held_items[index] = tool
+			held_items -= tool
+
+			//If we're holding a weapon stronger than our base damage, let's use it instead
+			if(tool.force >= livingMannequin.melee_damage_lower)
+				livingMannequin.melee_damage_lower = tool.force
+				livingMannequin.melee_damage_upper = tool.force
+				livingMannequin.equipped_melee_weapon = tool
+
+			if (livingMannequin.equipped_melee_weapon)
+				livingMannequin.attacktext = "swings \the [livingMannequin.equipped_melee_weapon] at"
+				visible_message("<span class='warning'>\The [src] grips \the [livingMannequin.equipped_melee_weapon].</span>")
+				if(livingMannequin.equipped_melee_weapon.hitsound)
+					livingMannequin.attack_sound = livingMannequin.equipped_melee_weapon.hitsound
+
+			if (istype(tool, /obj/item/weapon/gun))
+				livingMannequin.equipGun(tool)
 	if(firer)
 		livingMannequin.faction = "\ref[firer]"
 	qdel(src)
@@ -767,30 +1123,47 @@
 	icon_state = "marble"
 	var/time_to_sculpt = 200
 	var/list/available_sculptures = list(
-		"human"		=	/obj/structure/mannequin,
+		"human man"		=	/obj/structure/mannequin,
+		"human woman"	=	/obj/structure/mannequin/woman,
 		"fat human"	=	/obj/structure/mannequin/fat,
 		"monkey"	=	/obj/structure/mannequin/monkey,
 		"vox"		=	/obj/structure/mannequin/vox,
+		"corgi"		=	/obj/structure/mannequin/corgi,
 		)
-
 
 /obj/structure/block/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(W.is_wrench(user))
 		return wrenchAnchor(user, W, 5 SECONDS)
 	else if(istype(W, /obj/item/weapon/chisel))
-
+		var/beard_style
+		var/hair_style
+		var/chosen_gender = MALE
+		var/chosen_species_name = "Human"
 		var/chosen_sculpture = input("Choose a sculpture type.", "[name]") as null|anything in available_sculptures
-
 		if(!chosen_sculpture || !Adjacent(user))
 			return
+		if (chosen_sculpture == "human woman")
+			chosen_gender = FEMALE
+		if (chosen_sculpture == "vox")
+			chosen_species_name = "Vox"
+		if (chosen_sculpture != "monkey" && chosen_sculpture != "corgi")
+			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, chosen_species_name)
+			if(species_hair.len)
+				hair_style = input(user, "Select a hair style", "Scuplting Hair") as null|anything in species_hair
 
+			if (chosen_gender != FEMALE)
+				var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, chosen_gender, chosen_species_name)
+				if(species_facial_hair.len)
+					beard_style = input(user, "Select a beard style", "Sculpting Beard") as null|anything in species_facial_hair
+		if(!Adjacent(user))
+			return
 		user.visible_message("[user.name] starts sculpting \the [src] with a passion!","You start sculpting \the [src] with a passion!","You hear a repeated knocking sound.")
 		var/turf/T=get_turf(src)
 
 		if(do_after(user, src, time_to_sculpt))
 			new /obj/effect/decal/cleanable/dirt(T)
 			var/mannequin_type = available_sculptures[chosen_sculpture]
-			var/obj/structure/mannequin/M = new mannequin_type(T)
+			var/obj/structure/mannequin/M = new mannequin_type(T,beard_style,hair_style)
 			M.anchored = anchored
 			M.add_fingerprint(user)
 			user.visible_message("[user.name] finishes \the [M].","You finish \the [M].")
@@ -805,10 +1178,12 @@
 	icon_state = "wooden"
 	time_to_sculpt = 100
 	available_sculptures = list(
-		"human"		=	/obj/structure/mannequin/wood,
+		"human man"		=	/obj/structure/mannequin/wood,
+		"human woman"	=	/obj/structure/mannequin/wood/woman,
 		"fat human"	=	/obj/structure/mannequin/wood/fat,
 		"monkey"	=	/obj/structure/mannequin/wood/monkey,
 		"vox"		=	/obj/structure/mannequin/wood/vox,
+		"corgi"		=	/obj/structure/mannequin/wood/corgi,
 		)
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 5
@@ -869,6 +1244,8 @@
 
 	qdel(src)
 
+/obj/structure/mannequin/cyber/dissolve()
+	return
 
 /obj/structure/mannequin/cyber/ex_act(severity)
 	switch(severity)
@@ -971,7 +1348,7 @@
 			if(health >= maxHealth)
 				to_chat(user, "<span class='warning'>Nothing to fix here!</span>")
 				return
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(WT.remove_fuel(5))
 				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
@@ -987,7 +1364,7 @@
 			if(health >= maxHealth)
 				to_chat(user, "<span class='warning'>Nothing to fix here!</span>")
 				return
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(WT.remove_fuel(5))
 				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)

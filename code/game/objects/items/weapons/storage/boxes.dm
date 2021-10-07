@@ -88,6 +88,18 @@
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/plasmaman
+	icon_state = "box_plasmaman"
+	item_state = "box_plasmaman"
+
+/obj/item/weapon/storage/box/survival/plasmaman/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/breath(src)
+	new /obj/item/weapon/tank/emergency_plasma(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+
 /obj/item/weapon/storage/box/survival/engineer
 	icon_state = "box_eva"
 	item_state = "box_eva"
@@ -98,6 +110,30 @@
 		qdel(A)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+
+/obj/item/weapon/storage/box/survival/engineer/vox
+	icon_state = "box_eva"
+	item_state = "box_eva"
+
+/obj/item/weapon/storage/box/survival/engineer/vox/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/breath/vox(src)
+	new /obj/item/weapon/tank/emergency_nitrogen/engi(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+
+/obj/item/weapon/storage/box/survival/engineer/plasmaman
+	icon_state = "box_plasmaman"
+	item_state = "box_plasmaman"
+
+/obj/item/weapon/storage/box/survival/engineer/plasmaman/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/breath(src)
+	new /obj/item/weapon/tank/emergency_plasma/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
 /obj/item/weapon/storage/box/survival/ert
@@ -121,10 +157,17 @@
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/gas/syndicate(src)
-	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 	new /obj/item/weapon/reagent_containers/pill/cyanide(src) //For those who hate fun
 	new /obj/item/weapon/reagent_containers/pill/laststand(src) //HOOOOOO HOOHOHOHOHOHO - N3X
+
+/obj/item/weapon/storage/box/survival/nuke/vox/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_nitrogen(src)
+
+/obj/item/weapon/storage/box/survival/nuke/human/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 
 /obj/item/weapon/storage/box/priority_care
 	name = "priority care parcel"
@@ -136,6 +179,7 @@
 	..()
 	new /obj/item/weapon/spacecash/c100(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating(src)
+	var/possible_mug = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug))
 	for(var/i in 1 to 3)
 		var/toSpawn = pick(
 			/obj/item/voucher/free_item/donk,
@@ -145,7 +189,7 @@
 			/obj/item/mounted/poster,
 			/obj/item/weapon/pen/NT,
 			/obj/item/clothing/accessory/medal/participation,
-			/obj/item/weapon/reagent_containers/food/drinks/americup,
+			possible_mug,
 			/obj/item/weapon/lighter/NT,
 			25;/obj/item/toy/syndicateballoon/ntballoon,
 			25;/obj/item/weapon/reagent_containers/food/snacks/chococoin,
@@ -237,7 +281,7 @@
 
 /obj/item/weapon/storage/box/injectors
 	name = "\improper DNA injectors"
-	desc = "This box contains injectors it seems."
+	desc = "This box contains injectors, it seems."
 	icon_state = "box_injector"
 
 /obj/item/weapon/storage/box/injectors/New()
@@ -308,7 +352,7 @@
 
 /obj/item/weapon/storage/box/emps
 	name = "emp grenades"
-	desc = "A box containing emp grenades."
+	desc = "A box containing EMP grenades."
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/emps/New()
@@ -369,6 +413,13 @@
 	..()
 	for(var/i = 1 to 5)
 		new /obj/item/weapon/implantcase/chem(src)
+	new /obj/item/weapon/implanter(src)
+	new /obj/item/weapon/implantpad(src)
+
+/obj/item/weapon/storage/box/remeximp/New()
+	..()
+	for(var/i = 1 to 5)
+		new /obj/item/weapon/implantcase/remote(src)
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
 
@@ -501,6 +552,16 @@
 	..()
 	for(var/i = 1; i <= 5; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube(src)
+
+/obj/item/weapon/storage/box/monkeycubes/spacecarpcube
+	name = "space carp baby cube box"
+	desc = "Drymate brand space carp baby cubes, shipped from F1SH-1NG. Just add water!"
+	icon_state = "spacecarpcubebox"
+
+/obj/item/weapon/storage/box/monkeycubes/spacecarpcube/New()
+	..()
+	for(var/i = 1; i <= 5; i++)
+		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube(src)
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"
@@ -744,6 +805,16 @@
 	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 
+/obj/item/weapon/storage/box/antiviral_syringes
+	name = "box of anti-viral syringes"
+	desc = "Contains anti-viral syringes."
+	icon_state = "syringe"
+
+/obj/item/weapon/storage/box/antiviral_syringes/New()
+	..()
+	for (var/i; i < BOX_SPACE; i++)
+		new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
+
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
 	desc = "It's a box of mugs."
@@ -751,8 +822,10 @@
 
 /obj/item/weapon/storage/box/mugs/New()
 	..()
-	for(var/i=0,i<6,i++)
+	for(var/i=0,i<5,i++)
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(src)
+	var/flagmug = pick(subtypesof(/obj/item/weapon/reagent_containers/food/drinks/flagmug))
+	new flagmug(src)
 
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
@@ -825,7 +898,7 @@
 	desc = "A box of seven glass Christmas ornaments. Color not included."
 	icon_state = "ornament_box"
 	foldable = null
-	starting_materials = list(MAT_GLASS = 2500)		//needed for autolathe production
+	starting_materials = list(MAT_GLASS = 2000)		//needed for autolathe production
 
 /obj/item/weapon/storage/box/ornaments/New()
 	..()
@@ -963,7 +1036,7 @@
 
 /obj/item/weapon/storage/box/mechfigures
 	name = "box of mech figurines"
-	desc = "An old box of mech figurines"
+	desc = "An old box of mech figurines."
 	icon_state = "box"
 
 /obj/item/weapon/storage/box/mechfigures/New()
@@ -1046,6 +1119,14 @@
 /obj/item/weapon/storage/box/smartbox/clothing_box/chickensuit/New()
 	new	/obj/item/clothing/head/chicken(src)
 	new /obj/item/clothing/suit/chickensuit(src)
+	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuitwhite
+	name = "White chicken suit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/chickensuitwhite/New()
+	new	/obj/item/clothing/head/chicken/white(src)
+	new /obj/item/clothing/suit/chickensuit/white(src)
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/monkeysuit
@@ -1414,3 +1495,53 @@
 	new /obj/item/clothing/suit/armor/hos/surveyor(src)
 	new /obj/item/clothing/head/HoS/surveyor(src)
 	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set
+	name = "Banana outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/banana_set/New()
+	new /obj/item/clothing/suit/banana_suit(src)
+	new /obj/item/clothing/head/banana_hat(src)
+	..()
+
+/obj/item/weapon/storage/box/biscuit
+	name = "biscuit box"
+	desc = "Just the right way to start your day."
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "biscuitbox"
+	storage_slots = 6
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/risenshiny")
+	foldable = /obj/item/stack/sheet/cardboard
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type = RECYK_MISC
+
+/obj/item/weapon/storage/box/biscuit/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/snacks/risenshiny(src)
+
+/obj/item/weapon/storage/box/chemistry_kit
+	name = "basic chemistry set"
+	desc = "A box containing the basics for chemistry."
+
+/obj/item/weapon/storage/box/chemistry_kit/New()
+	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer(src)
+	new /obj/item/weapon/electrolyzer(src)
+	new /obj/item/weapon/cell/high(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/plasma(src)
+	..()
+
+/obj/item/weapon/storage/box/dorf
+	name = "dwarven equipment box"
+	desc = "Contains all the things a hardened dwarf needs to survive."
+	icon_state = "dorf"
+
+/obj/item/weapon/storage/box/dorf/New()
+	..()
+	new /obj/item/weapon/pickaxe(src)
+	new /obj/item/clothing/glasses/scanner/meson(src)
+	new /obj/item/blueprints/construction_permit(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)

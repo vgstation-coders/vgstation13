@@ -105,6 +105,8 @@
 
 	if(!id_tag) //Without an ID tag we'll never work, so let's try to copy it from one of our neighbors.
 		copy_radio_from_neighbors()
+	if(!id_tag) //still no go
+		id_tag = "[rand(9999)]"
 
 	update_nearby_conveyors() //smooth with diagonals
 
@@ -241,25 +243,29 @@
 
 	affecting = loc.contents - src		// moved items will be all in loc
 	spawn(1)	// slight delay to prevent infinite propagation due to map order	//TODO: please no spawn() in process(). It's a very bad idea
-		var/items_moved = 0
+		var/items_checked = 0
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
-					A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
-					step(A,movedir)
-					items_moved++
-			if(items_moved >= max_moved)
+					items_checked++
+					for(var/atom/dest in get_step(src, movedir)) //Should/can this be optimized to not check ALL atoms?
+						if(Adjacent(dest) && dest.conveyor_act(A, src))
+							break
+					if(A && A.loc == src.loc) //Check that our location didn't check from conveyor_acting on machinery.
+						A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
+						step(A,movedir)
+			if(items_checked >= max_moved)
 				break
 
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
 	return
 
-/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/conveyor/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	return
 
 /obj/machinery/conveyor/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.do_weld(user, src, 30, 0))
 			user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
 			"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
@@ -326,11 +332,9 @@
 	if(.)
 		return .
 	if("setdir" in href_list)
-		operating=0
 		update_dir(text2num(href_list["setdir"]))
 		return MT_UPDATE
 	if("reverse" in href_list)
-		operating=0
 		in_reverse=!in_reverse
 		updateConfig()
 		return MT_UPDATE
@@ -465,6 +469,12 @@
 /obj/machinery/conveyor_switch/New()
 	..()
 	if(!id_tag)
+		for(var/obj/machinery/conveyor/conveyor in orange(src,1))
+			if(conveyor && conveyor.id_tag)
+				id_tag = conveyor.id_tag
+				set_frequency(conveyor.frequency)
+				break
+	if(!id_tag) //still no go
 		id_tag = "[rand(9999)]"
 		set_frequency(frequency) //I tried just assigning the ID tag during initialize(), but that didn't work somehow, probably because it makes TOO MUCH SENSE
 	update()

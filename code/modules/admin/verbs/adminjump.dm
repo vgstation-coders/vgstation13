@@ -126,7 +126,7 @@
 		var/list/vaults = list()
 
 		for(var/datum/map_element/V in map_elements)
-			var/name = "[V.type_abbreviation] [V.name ? V.name : V.file_path] @ [V.location ? "[V.location.x],[V.location.y],[V.location.z]" : "UNKNOWN"]"
+			var/name = "[V.type_abbreviation] [V.name ? V.name : V.file_path] @ [V.location ? "[V.location.x],[V.location.y],[V.location.z][V.rotation ? " (rotated by [V.rotation] degrees)" : ""]" : "UNKNOWN"]"
 
 			vaults[name] = V
 

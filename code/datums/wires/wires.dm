@@ -20,7 +20,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 	var/list/wires = list()
 	var/list/wire_names = null
-	var/list/signallers = list()
+	var/list/assemblies = list()
 
 	var/table_options = " align='center'"
 	var/row_options1 = " width='80px'"
@@ -103,7 +103,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		html += "<td[row_options2]>"
 		html += "<A href='?src=\ref[src];action=1;cut=[colour]'>[IsColourCut(colour) ? "Mend" :  "Cut"]</A>"
 		html += " <A href='?src=\ref[src];action=1;pulse=[colour]'>Pulse</A>"
-		html += " <A href='?src=\ref[src];action=1;attach=[colour]'>[IsAttached(colour) ? "Detach" : "Attach"] Signaller</A></td></tr>"
+		html += " <A href='?src=\ref[src];action=1;attach=[colour]'>[IsAttached(colour) ? "Detach" : "Attach"] Assembly</A></td></tr>"
 	html += "</table>"
 	html += "</div>"
 
@@ -128,7 +128,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				I = L.get_active_hand()
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
-				if(iswirecutter(I) || isswitchtool(I))
+				if(I.is_wirecutter(L) || isswitchtool(I))
 					var/colour = href_list["cut"]
 					CutWireColour(colour)
 					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire [IsColourCut(colour) ? "cut" : "mended"] by [key_name(usr)] ([src.type])")
@@ -136,7 +136,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 					to_chat(L, "<span class='error'>You need wirecutters!</span>")
 
 			else if(href_list["pulse"])
-				if(ismultitool(I) || isswitchtool(I))
+				if(I.is_multitool(L) || isswitchtool(I))
 					var/colour = href_list["pulse"]
 					PulseColour(colour)
 					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by [key_name(usr)] ([src.type])")
@@ -154,12 +154,12 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 				// Attach
 				else
-					if(istype(I, /obj/item/device/assembly/signaler))
+					if(istype(I, /obj/item/device/assembly))
 						if(L.drop_item(I))
 							Attach(colour, I)
 							holder.investigation_log(I_WIRES, "|| [I] \ref[I] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 					else
-						to_chat(L, "<span class='error'>You need a remote signaller!</span>")
+						to_chat(L, "<span class='error'>You need an assembly!</span>")
 
 
 
@@ -253,19 +253,19 @@ var/const/POWER = 8
 //
 
 /datum/wires/proc/IsAttached(var/colour)
-	if(signallers[colour])
+	if(assemblies[colour])
 		return 1
 	return 0
 
 /datum/wires/proc/GetAttached(var/colour)
-	if(signallers[colour])
-		return signallers[colour]
+	if(assemblies[colour])
+		return assemblies[colour]
 	return null
 
-/datum/wires/proc/Attach(var/colour, var/obj/item/device/assembly/signaler/S)
+/datum/wires/proc/Attach(var/colour, var/obj/item/device/assembly/S)
 	if(colour && S)
 		if(!IsAttached(colour))
-			signallers[colour] = S
+			assemblies[colour] = S
 			S.forceMove(holder)
 			S.connected = src
 			return S
@@ -274,15 +274,15 @@ var/const/POWER = 8
 	if(colour)
 		var/obj/item/device/assembly/signaler/S = GetAttached(colour)
 		if(S)
-			signallers -= colour
+			assemblies -= colour
 			S.connected = null
 			S.forceMove(holder.loc)
 			return S
 
 
 /datum/wires/proc/Pulse(var/obj/item/device/assembly/signaler/S)
-	for(var/colour in signallers)
-		if(S == signallers[colour])
+	for(var/colour in assemblies)
+		if(S == assemblies[colour])
 			PulseColour(colour)
 			holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by \a [S] \ref[S] ([src.type])")
 			break

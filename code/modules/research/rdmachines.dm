@@ -14,7 +14,6 @@ var/global/list/rnd_machines = list()
 	var/disabled	= 0
 	var/shocked		= 0
 	var/obj/machinery/computer/rdconsole/linked_console
-	var/output_dir	= 0 // Direction used to output to (for things like fabs), set to 0 for loc.
 	var/stopped		= 0
 	var/base_state	= ""
 	var/build_time	= 0
@@ -46,15 +45,6 @@ var/global/list/rnd_machines = list()
 
 	if(ticker)
 		initialize()
-
-// Define initial output.
-/obj/machinery/r_n_d/initialize()
-	..()
-	if(research_flags &HASOUTPUT)
-		for(var/direction in cardinal)
-			if(locate(/obj/machinery/mineral/output, get_step(get_turf(src), direction)))
-				output_dir = direction
-				break
 
 /obj/machinery/r_n_d/Destroy()
 	if(linked_console)
@@ -131,16 +121,25 @@ var/global/list/rnd_machines = list()
 				if (materials.storage[matID] == 0) // No materials of this type
 					continue
 				var/datum/material/M = materials.getMaterial(matID)
-				var/obj/item/stack/sheet/sheet = new M.sheettype(src.loc)
+				var/obj/item/stack/sheet/sheet = new M.sheettype(loc)
 				if(sheet)
 					var/available_num_sheets = round(materials.storage[matID]/sheet.perunit)
 					if(available_num_sheets>0)
+						while (available_num_sheets > MAX_SHEET_STACK_AMOUNT)
+							available_num_sheets -= MAX_SHEET_STACK_AMOUNT
+							var/obj/item/stack/sheet/bonus_sheet = new M.sheettype(loc)
+							bonus_sheet.amount = MAX_SHEET_STACK_AMOUNT
+							materials.removeAmount(matID, MAX_SHEET_STACK_AMOUNT * sheet.perunit)
 						sheet.amount = available_num_sheets
 						materials.removeAmount(matID, sheet.amount * sheet.perunit)
 					else
 						qdel(sheet)
 		return TRUE
 	return FALSE
+
+/obj/machinery/r_n_d/setOutputLocation(user)
+	if(research_flags &HASOUTPUT)
+		..()
 
 /obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)
@@ -157,22 +156,6 @@ var/global/list/rnd_machines = list()
 		return 1
 	if (disabled)
 		return 1
-	if (istype(O, /obj/item/device/multitool))
-		if(!panel_open && research_flags &HASOUTPUT)
-			var/result = input("Set your location as output?") in list("Yes","No","Machine Location")
-			switch(result)
-				if("Yes")
-					if(!Adjacent(user))
-						to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
-						return 1
-
-					output_dir = get_dir(src, user)
-					to_chat(user, "<span class='notice'>Output set.</span>")
-				if("Machine Location")
-					output_dir = 0
-					to_chat(user, "<span class='notice'>Output set.</span>")
-			return 1
-		return
 	if (!linked_console && !(istype(src, /obj/machinery/r_n_d/fabricator))) //fabricators get a free pass because they aren't tied to a console
 		to_chat(user, "\The [src] must be linked to an R&D console first!")
 		return 1

@@ -33,10 +33,15 @@
 
 /mob/proc/death(gibbed)
 	timeofdeath = world.time
-	lazy_invoke_event(/lazy_event/on_death, list("user" = src, "body_destroyed" = gibbed))
+	invoke_event(/event/death, list("user" = src, "body_destroyed" = gibbed))
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
+	if (runescape_skull_display && ticker)//we died, begone skull
+		if ("\ref[src]" in ticker.runescape_skulls)
+			var/datum/runescape_skull_data/the_data = ticker.runescape_skulls["\ref[src]"]
+			ticker.runescape_skulls -= "\ref[src]"
+			qdel(the_data)
 	if(client)
 		client.color = initial(client.color)
 	for(var/obj/item/I in src)
@@ -45,14 +50,16 @@
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.on_holder_death(src)
 	if(transmogged_from)
-		var/obj/transmog_body_container/C = transmogged_from
-		var/mob/living/L = C.contained_mob
-		transmogrify()
-		L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
-		if(istype(L))
-			L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
-			L.updatehealth()
-		return
+		transmog_death()
+
+/mob/proc/transmog_death()
+	var/obj/transmog_body_container/C = transmogged_from
+	var/mob/living/L = C.contained_mob
+	transmogrify()
+	L.visible_message("<span class='danger'>\The [L]'s body shifts and contorts!</span>")
+	if(istype(L))
+		L.adjustOxyLoss(max(L.health,200))	//if you die while transmogrified, you die for real
+		L.updatehealth()
 
 //This proc should be used when you're restoring a guy to life. It will remove him from the dead mob list, and add him to the living mob list. It will also remove any verbs
 //that his dead body has

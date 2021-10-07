@@ -25,11 +25,14 @@
 	var/has_electronics = 0
 	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
+	var/is_wooden = null //used in dismantling cabinet-type closets
 	var/obj/item/weapon/circuitboard/airlock/electronics
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	ignoreinvert = 1
+
+	var/time_initialized_at = 0
 
 /obj/structure/closet/New()
 	..()
@@ -58,11 +61,21 @@
 	has_lock_type = /obj/structure/closet/secure_closet/basic
 
 /obj/structure/closet/proc/canweld()
-	return 1
+	if(is_wooden)
+		return 0
+	else
+		return 1
 
 /obj/structure/closet/initialize()
 	..()
-	spawn_contents()
+	if (!time_initialized_at)
+		time_initialized_at = world.time
+		spawn_contents()
+	else
+		//haha, so you'd like to initialize twice huh? you got some explaining to do kid.
+		message_admins("[src] at ([x],[y],[z]) tried to initialize at time = [world.time] despite having already initialized at time = [time_initialized_at]")
+		ASSERT(!time_initialized_at)
+		return
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
 		if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
 			take_contents()
@@ -442,7 +455,7 @@
 			return 0
 
 		if(iswelder(W) && canweld())
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/tool/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
@@ -453,12 +466,22 @@
 			qdel(src)
 			return
 
+		if((istype(W, /obj/item/tool/crowbar)) && is_wooden)
+			var/obj/item/tool/crowbar/WT = W
+			materials.makeSheets(src)
+			for(var/mob/M in viewers(src))
+				M.show_message("<span class='notice'>\The [src] has been dismantled by [user] with \the [WT].</span>", 1)
+			if(has_electronics)
+				dump_electronics()
+			qdel(src)
+			return
+
 		user.drop_item(W, src.loc)
 
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(iswelder(W) && canweld())
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
@@ -488,8 +511,10 @@
 		return 0
 	if(istype(O, /obj/structure/closet))
 		return 0
-	if(move_them)
-		step_towards(O, src.loc)
+	if(move_them)//We've already checked for adjacency so it's fine to use forceMove, it also guarrantees that they won't bump into us?
+		O.forceMove(user.loc)
+		sleep(1)
+		O.forceMove(src.loc)
 	if(show_message && user != O)
 		user.show_viewers("<span class='danger'>[user] stuffs [O] into [src]!</span>")
 	src.add_fingerprint(user)

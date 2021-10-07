@@ -180,7 +180,7 @@
 	
 	//deconstruction
 	if(iswelder(W) && !anchored)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
 			return
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)

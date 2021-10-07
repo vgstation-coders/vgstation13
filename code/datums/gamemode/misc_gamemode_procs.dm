@@ -17,7 +17,7 @@
 				msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<font color='#ffcc00'><b>Connected, Inactive</b></font>)\n"
 				continue //AFK client
 			if(L.stat)
-				if(L.suiciding)	//Suicider
+				if(L.mind && L.mind.suiciding)	//Suicider
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 					continue //Disconnected client
 				if(L.stat == UNCONSCIOUS)
@@ -31,7 +31,7 @@
 		for(var/mob/dead/observer/D in mob_list)
 			if(D.mind && D.mind.current == L)
 				if(L.stat == DEAD)
-					if(L.suiciding)	//Suicider
+					if(L.mind.suiciding)	//Suicider
 						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 						continue //Disconnected client
 					else
@@ -310,74 +310,16 @@
 			roles += player.mind.assigned_role
 	return roles
 
-/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20, var/datum/role/traitor/role)
-	if (!istype(traitor_mob))
-		return
-	. = 1
-
-	// find a radio! toolbox(es), backpack, belt, headset
-	var/loc = ""
-	var/list/contents = recursive_type_check(traitor_mob, /obj/item/device)
-	var/obj/item/R = locate(/obj/item/device/pda) in contents //Hide the uplink in a PDA if available, otherwise radio
-	if(!R)
-		R = locate(/obj/item/device/radio) in contents
-
-	if (!R)
-		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you a radio.")
-		. = 0
-	else
-		var/obj/item/device/uplink/hidden/T
-		if (istype(R, /obj/item/device/radio))
-			// generate list of radio freqs
-			var/obj/item/device/radio/target_radio = R
-			var/freq = 1441
-			var/list/freqlist = list()
-			while (freq <= 1489)
-				if (freq < 1451 || freq > 1459)
-					freqlist += freq
-				freq += 2
-				if ((freq % 2) == 0)
-					freq += 1
-			freq = freqlist[rand(1, freqlist.len)]
-
-			T = new(R)
-			T.uses = uses
-			target_radio.hidden_uplink = T
-			target_radio.traitor_frequency = freq
-			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features.")
-			traitor_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).")
-			traitor_mob.mind.total_TC += target_radio.hidden_uplink.uses
-		else if (istype(R, /obj/item/device/pda))
-			// generate a passcode if the uplink is hidden in a PDA
-			var/pda_pass = "[rand(100,999)] [pick("Alpha","Bravo","Delta","Omega")]"
-
-			T = new(R)
-			R.hidden_uplink = T
-			var/obj/item/device/pda/P = R
-			P.lock_code = pda_pass
-
-			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features.")
-			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
-			traitor_mob.mind.total_TC += R.hidden_uplink.uses
-		if (role && T)
-			role.uplink = T
-			T.job = role.name_for_uplink
-
-/datum/mind/proc/find_syndicate_uplink(var/obj/item/device/uplink/true_uplink)
-	var/uplink = null
-
+/datum/mind/proc/find_syndicate_uplink(datum/component/uplink/true_uplink)
 	for (var/obj/item/I in get_contents_in_object(current, /obj/item))
-		if (I && I.hidden_uplink)
-			uplink = I.hidden_uplink
-			break
+		var/datum/component/uplink/uplink_comp = I.get_component(/datum/component/uplink)
+		if(uplink_comp)
+			return uplink_comp
 
-	if (!uplink && true_uplink)
-		return true_uplink//returns the uplink they spawned with rather than the one they are currently carrying
-
-	return uplink
+	return true_uplink // returns the uplink they spawned with rather than the one they are currently carrying, or null
 
 /datum/mind/proc/take_uplink()
-	var/obj/item/device/uplink/hidden/H = find_syndicate_uplink()
+	var/datum/component/uplink/H = find_syndicate_uplink()
 	if(H)
 		message_admins("Found and deleted [H] for [src].")
 		qdel(H)
@@ -396,6 +338,32 @@
 	to_chat(killer, "<b>Your laws have been changed!</b>")
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
+
+/proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T, var/is_twin = FALSE)
+	H.delete_all_equipped_items()
+
+	var/datum/outfit/special/time_agent/concrete_outfit = new /datum/outfit/special/time_agent
+	concrete_outfit.is_twin = is_twin
+	concrete_outfit.equip(H)
+	if(T)
+		T.objects_to_delete = get_contents_in_object(H)
+	H.fully_replace_character_name(newname = "John Beckett")
+	H.make_all_robot_parts_organic()
+
+/proc/spawn_rand_maintenance(var/mob/living/carbon/human/H)
+	var/list/potential_locations = list()
+	for(var/area/maintenance/A in areas)
+		potential_locations.Add(A)
+	var/placed = FALSE
+	while(!placed && potential_locations.len)
+		var/area/maintenance/A = pick(potential_locations)
+		potential_locations.Remove(A)
+		for(var/turf/simulated/floor/F in A.contents)
+			if(!F.has_dense_content())
+				H.forceMove(F)
+				placed = TRUE
+				return TRUE
+	return FALSE
 
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
@@ -481,7 +449,7 @@
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
 	C.UpdateName()
-	C.SetOwnerInfo(H)
+	C.SetOwnerDNAInfo(H)
 	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
 	var/obj/item/weapon/storage/wallet/W = new

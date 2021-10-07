@@ -38,6 +38,9 @@ Buildable meters
 #define PIPE_HE_MANIFOLD		31
 #define PIPE_HE_MANIFOLD4W      32
 #define PIPE_HEAT_PUMP          33
+#define PIPE_HE_CAP				34
+#define PIPE_Z_UP				35
+#define PIPE_Z_DOWN				36
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -50,13 +53,15 @@ Buildable meters
 #define DISP_END_CHUTE			7
 #define DISP_SORT_JUNCTION		8
 #define DISP_SORT_WRAP_JUNCTION	9
+#define DISP_PIPE_UP			10
+#define DISP_PIPE_DOWN			11
 
 var/global/list/unstackable_pipes = list(PIPE_LAYER_MANIFOLD)
 var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION, PIPE_HE_MANIFOLD, PIPE_HE_MANIFOLD4W)
 
 /obj/item/pipe
 	name = "pipe"
-	desc = "A pipe"
+	desc = "A pipe."
 	var/pipe_type = 0
 	//var/pipe_dir = 0
 	var/pipename
@@ -124,6 +129,10 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 				src.pipe_type = PIPE_MANIFOLD
 		else if(istype(make_from, /obj/machinery/atmospherics/pipe/layer_manifold))
 			src.pipe_type = PIPE_LAYER_MANIFOLD
+		else if(istype(make_from, /obj/machinery/atmospherics/pipe/zpipe/up))
+			src.pipe_type = PIPE_Z_UP
+		else if(istype(make_from, /obj/machinery/atmospherics/pipe/zpipe/down))
+			src.pipe_type = PIPE_Z_DOWN
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/vent_pump))
 			src.pipe_type = PIPE_UVENT
 		else if(istype(make_from, /obj/machinery/atmospherics/binary/valve/digital))
@@ -160,6 +169,8 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 				src.pipe_type = PIPE_INSUL_MANIFOLD4W
 			else
 				src.pipe_type = PIPE_MANIFOLD4W
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/heat))
+			src.pipe_type = PIPE_HE_CAP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap))
 			src.pipe_type = PIPE_CAP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/thermal_plate))
@@ -227,7 +238,10 @@ var/global/list/pipeID2State = list(
 	"layeradapter",
 	"he_manifold",
 	"he_manifold4w",
-	"heat_pump"
+	"heat_pump",
+	"he_cap",
+	"z_up",
+	"z_down"
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -263,7 +277,10 @@ var/global/list/nlist = list( \
 	"pipe alignment adapter",
 	"h/e manifold", \
 	"h/e 4-way manifold", \
-	"thermoelectric cooler"
+	"thermoelectric cooler", \
+	"h/e pipe cap", \
+	"up pipe", \
+	"down pipe"
 )
 /obj/item/pipe/proc/update()
 
@@ -350,8 +367,8 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return flip|cw|acw
 		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER,PIPE_MTVALVE,PIPE_DTVALVE)
 			return dir|flip|cw
-		if(PIPE_CAP)
-			return flip
+		if(PIPE_CAP, PIPE_HE_CAP, PIPE_Z_UP, PIPE_Z_DOWN)
+			return dir
 	return 0
 
 /obj/item/pipe/proc/get_pdir() //endpoints for regular pipes
@@ -388,6 +405,8 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return get_pipe_dir()
 		if(PIPE_JUNCTION)
 			return dir
+		if(PIPE_HE_CAP)
+			return get_pipe_dir()
 		else
 			return 0
 
@@ -472,6 +491,9 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 		if(PIPE_CAP)
 			P=new /obj/machinery/atmospherics/unary/cap(src.loc)
 
+		if(PIPE_HE_CAP)
+			P=new /obj/machinery/atmospherics/unary/cap/heat(src.loc)
+
 		if(PIPE_PASSIVE_GATE)		//passive gate
 			P=new /obj/machinery/atmospherics/binary/passive_gate(src.loc)
 
@@ -507,6 +529,12 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_LAYER_ADAPTER)
 			P =new /obj/machinery/atmospherics/pipe/layer_adapter(src.loc)
+
+		if(PIPE_Z_UP)
+			P =new /obj/machinery/atmospherics/pipe/zpipe/up(src.loc)
+		
+		if(PIPE_Z_DOWN)
+			P =new /obj/machinery/atmospherics/pipe/zpipe/down(src.loc)
 
 		if(PIPE_HEAT_PUMP)
 			P = new /obj/machinery/atmospherics/binary/heat_pump(loc)

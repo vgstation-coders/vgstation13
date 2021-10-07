@@ -237,10 +237,9 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 /proc/Centcomm_fax(var/obj/item/weapon/paper/sent, var/sentname, var/mob/Sender, var/centcomm_dpt)
 
 //why the fuck doesnt the thing show as orange
-	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' to <b>[centcomm_dpt]</b> via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
-	for (var/client/C in admins)
-		C.output_to_special_tab(msg)
-		C << 'sound/effects/fax.ogg'
+	var/admin_msg = "Receiving '[sentname]' to <b>[centcomm_dpt]</b> via secure connection..."
+	var/msg = "<span class='notice'><b>  CENTCOMM FAX: [key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<a href='?_src_=holder;role_panel=\ref[Sender]'>RP</a>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[Sender]'>BSA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: [admin_msg] <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
+	send_prayer_to_admins(msg, admin_msg, 'sound/effects/fax.ogg', "Centcomm Fax", key_name(Sender, 1), get_turf(Sender))
 
 	for (var/obj/machinery/faxmachine/fax in allfaxes)
 		if (fax.z == CENTCOMM_Z)
@@ -248,7 +247,6 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 			P.name = "[sentname]"
 			P.info = "[sent.info]"
 			playsound(fax.loc, "sound/effects/fax.ogg", 50, 1)
-
 
 /proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)
 
@@ -301,12 +299,12 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
 
 /proc/SendMerchantFax(mob/living/carbon/human/merchant)
-	var/obj/item/weapon/paper/merchantreport/P
+	var/obj/item/weapon/paper/merchant/report/P
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 		if(F.department == "Internal Affairs" && !F.stat)
 			flick("faxreceive", F)
 			playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
-			P = new /obj/item/weapon/paper/merchantreport(F,merchant)
+			P = new /obj/item/weapon/paper/merchant/report(F,merchant)
 			spawn(2 SECONDS)
 				P.forceMove(F.loc)
 	return P

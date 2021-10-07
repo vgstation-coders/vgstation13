@@ -61,26 +61,7 @@
 /mob/living/simple_animal/hostile/retaliate/cluwne/New()
 	..()
 	// Set up wordfilter
-	speech_filter = new
-	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger|security|shitcurity)",
-	list(
-		"honker",
-		"fun police",
-		"unfun",
-	))
-	// HELP THEY'RE KILLING ME
-	// FINALLY THEY'RE TICKLING ME
-	var/tickle_prefixes="\\b(kill+|murder|beat|wound|hurt|harm)"
-	speech_filter.addReplacement("[tickle_prefixes]ing","tickling")
-	speech_filter.addReplacement("[tickle_prefixes]ed", "tickled")
-	speech_filter.addReplacement(tickle_prefixes,       "tickle")
-
-	speech_filter.addReplacement("h\[aei\]lp\\s+me","end my show")
-	speech_filter.addReplacement("h\[aei\]lp\\s+him","end his show")
-	speech_filter.addReplacement("h\[aei\]lp\\s+her","end her show")
-	speech_filter.addReplacement("h\[aei\]lp\\s+them","end their show")
-	speech_filter.addReplacement("h\[aei\]lp\\s+(\[^\\s\]+)","end $1's show")
-	speech_filter.addReplacement("^h\[aei\]lp.*","END THE SHOW")
+	speech_filter = new /datum/speech_filter/cluwne
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/AttackingTarget()
 	if(isliving(target))
@@ -91,6 +72,9 @@
 			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
 			return
 	return ..()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/get_butchering_products()
+	return list(/datum/butchering_product/teeth/bunch)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	var/currenthealth = health
@@ -119,6 +103,7 @@
 		var/mob/M = AM
 		to_chat(src, "<span class='danger'>You are too depressed to push [M] out of \the way.</span>")
 		M.LAssailant = src
+		M.assaulted_by(src)
 		return
 	..()
 
@@ -137,7 +122,7 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE)
+/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE, arguments)
 	if(timestopped)
 		return //under effects of time magick
 

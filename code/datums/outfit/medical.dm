@@ -42,6 +42,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/cmo,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/cmo,
+		)
+	)
+
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
 	)
@@ -55,7 +64,11 @@
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
 
 /datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	items_to_collect[randomcan] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/clothing/suit/straight_jacket] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 
 // -- Doctor
@@ -88,7 +101,7 @@
 				"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
 			),
 			slot_head_str = list(
-				"Surgeron" = /obj/item/clothing/head/surgery/blue,
+				"Surgeon" = /obj/item/clothing/head/surgery/blue,
 			),
 			slot_s_store_str = /obj/item/device/flashlight/pen,
 		),
@@ -103,63 +116,49 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/
 		),
 		/datum/species/vox = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
 			slot_w_uniform_str = list(
 				"Emergency Physician" = /obj/item/clothing/under/rank/medical,
 				"Surgeon" =  /obj/item/clothing/under/rank/medical/blue,
-				"Medical Doctor" = /obj/item/clothing/under/rank/medical,
+				"Medical Doctor" = /obj/item/clothing/under/rank/medical
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox
 		),
+	)
+
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			"Emergency Physician" = /obj/item/clothing/suit/storage/fr_jacket,
+			"Surgeon" =  /obj/item/clothing/suit/storage/labcoat,
+			"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
+		),
+		/datum/species/plasmaman/ = list(
+			"Emergency Physician" = /obj/item/clothing/suit/storage/fr_jacket,
+			"Surgeon" =  /obj/item/clothing/suit/storage/labcoat,
+			"Medical Doctor" =  /obj/item/clothing/suit/storage/labcoat,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
-	special_snowflakes = list(
-		"Default" = list(
-			"Nurse" = list(slot_w_uniform_str, slot_head_str),
-		),
-		/datum/species/vox = list(
-			"Nurse" = list(slot_w_uniform_str),
-		),
-		/datum/species/plasmaman = list(
-			"Nurse" = list(slot_w_uniform_str),
-		),
-	)
-
-// This right here is the proof that the female gender should be removed from the codebase. Fucking snowflakes
-
-/datum/outfit/doctor/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
-	switch (title)
-		if ("Nurse")
-			switch (slot)
-				if (slot_w_uniform_str)
-					if(H.gender == FEMALE)
-						if(prob(50))
-							H.equip_or_collect(new /obj/item/clothing/under/rank/nursesuit(H), slot_w_uniform)
-						else
-							H.equip_or_collect(new /obj/item/clothing/under/rank/nurse(H), slot_w_uniform)
-					else
-						H.equip_or_collect(new /obj/item/clothing/under/rank/medical/purple(H), slot_w_uniform)
-				if (slot_head_str)
-					if (H.gender == FEMALE)
-						H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
-
 /datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
+	items_to_collect[randomcan] = GRASP_RIGHT_HAND
 	return ..()
 
 // -- Chemist
@@ -213,12 +212,26 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/chemist,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/chemist,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/chemist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/chemist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/bag/chem] = GRASP_LEFT_HAND
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	items_to_collect[/obj/item/weapon/storage/bag/chem] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink] = SURVIVAL_BOX //apparently they like this stuff
+	items_to_collect[/obj/item/weapon/storage/box/chemistry_kit] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
+	items_to_collect[randomcan] = GRASP_LEFT_HAND
 	return ..()
 
 // -- Paramedic
@@ -237,8 +250,14 @@
 
 	items_to_spawn = list(
 		"Default" = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/paramedic,
@@ -248,8 +267,14 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 		),
 		/datum/species/plasmaman = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
@@ -258,8 +283,14 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 		/datum/species/vox = list(
-			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical/paramedic,
+			slot_ears_str = list(
+				"Paramedic" = /obj/item/device/radio/headset/headset_med,
+				"Brig Medic" = /obj/item/device/radio/headset/headset_medsec,
+			),
+			slot_w_uniform_str = list(
+				 "Paramedic" = /obj/item/clothing/under/rank/medical/paramedic,
+				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
+			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
@@ -267,26 +298,134 @@
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
+
 	)
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	items_to_collect = list(
 		/obj/item/device/healthanalyzer = SURVIVAL_BOX,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/paramedic,
+			/obj/item/clothing/head/soft/paramedic,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/paramedic,
+			/obj/item/clothing/head/soft/paramedic,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
+/datum/outfit/paramedic/pre_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
+	if(H.mind.role_alt_title == "Brig Medic") //Briggies get an implant
+		implant_types += /obj/item/weapon/implant/loyalty
+
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/tool/FixOVein/clot] = GRASP_RIGHT_HAND
 	return ..()
+
+// -- Orderly
+/datum/outfit/orderly
+
+	outfit_name = "Orderly"
+	associated_job = /datum/job/orderly
+
+	backpack_types = list(
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack/medic,
+		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_med,
+		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/med,
+	)
+
+	items_to_spawn = list(
+		"Default" = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_med,
+			slot_w_uniform_str = /obj/item/clothing/under/rank/orderly,
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_head_str = list(
+				"Surgeron" = /obj/item/clothing/head/surgery/purple, //special_equip needs this slot to exist and a null value won't work. have a joke about an old bug instead.
+			),
+			slot_r_store_str = /obj/item/weapon/soap,
+		),
+		/datum/species/plasmaman = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_med,
+			slot_w_uniform_str = /obj/item/clothing/under/rank/orderly,
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
+			slot_r_store_str = /obj/item/weapon/soap,
+		),
+		/datum/species/vox = list(
+			slot_ears_str = /obj/item/device/radio/headset/headset_med,
+			slot_w_uniform_str = /obj/item/clothing/under/rank/orderly,
+			slot_shoes_str = /obj/item/clothing/shoes/white,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
+			slot_r_store_str = /obj/item/weapon/soap,
+		),
+	)
+
+	pda_type = /obj/item/device/pda/medical
+	pda_slot = slot_belt
+	id_type = /obj/item/weapon/card/id/medical
+
+	special_snowflakes = list(
+		"Default" = list(
+			"Nurse" = list(slot_w_uniform_str, slot_head_str),
+		),
+		/datum/species/vox = list(
+			"Nurse" = list(slot_w_uniform_str),
+		),
+		/datum/species/plasmaman = list(
+			"Nurse" = list(slot_w_uniform_str),
+		),
+	)
+
+// This right here is the proof that the female gender should be removed from the codebase. Fucking snowflakes
+
+/datum/outfit/orderly/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
+	switch (title)
+		if ("Nurse")
+			switch (slot)
+				if (slot_w_uniform_str)
+					if(H.gender == FEMALE)
+						if(prob(50))
+							H.equip_or_collect(new /obj/item/clothing/under/rank/nursesuit(H), slot_w_uniform)
+						else
+							H.equip_or_collect(new /obj/item/clothing/under/rank/nurse(H), slot_w_uniform)
+					else
+						H.equip_or_collect(new /obj/item/clothing/under/rank/medical/purple(H), slot_w_uniform)
+				if (slot_head_str)
+					if (H.gender == FEMALE)
+						H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
+
+/datum/outfit/orderly/post_equip(var/mob/living/carbon/human/H)
+	..()
+	H.put_in_hands(new /obj/item/clothing/suit/straight_jacket)
+	H.put_in_hands(new /obj/item/weapon/storage/briefcase/orderly)
 
 // -- Geneticist
 
@@ -331,12 +470,27 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/genetics,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/genetics,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/geneticist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	var/obj/item/weapon/dnainjector/nofail/randominjector = pick(/obj/item/weapon/dnainjector/nofail/remotesay, /obj/item/weapon/dnainjector/nofail/runfast, /obj/item/weapon/dnainjector/nofail/strong)
+	items_to_collect[randomcan] = GRASP_RIGHT_HAND
+	items_to_collect[randominjector] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/weapon/dnainjector/nofail/remotesay] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 
 // -- Virologist
@@ -383,6 +537,15 @@
 		),
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/suit/storage/labcoat/virologist,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/suit/storage/labcoat/virologist,
+		)
+	)
+
 	pda_type = /obj/item/device/pda/viro
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
@@ -392,5 +555,7 @@
 	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
 
 /datum/outfit/virologist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/virusdish/random] = GRASP_LEFT_HAND
+	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
+	items_to_collect[randomcan] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/weapon/virusdish/random] = SURVIVAL_BOX
 	return ..()

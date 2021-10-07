@@ -6,7 +6,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	desc = "A wall-mounted flashbulb device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "mflash1"
-	 
+
 	var/range = 2 //this is roughly the size of brig cell
 	var/disable = 0
 	var/last_flash = 0 //Don't want it getting spammed like regular flashes
@@ -50,7 +50,7 @@ var/list/obj/machinery/flasher/flashers = list()
 
 //Don't want to render prison breaks impossible
 /obj/machinery/flasher/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (iswirecutter(W))
+	if (W.is_wirecutter(user))
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)
@@ -121,7 +121,7 @@ var/list/obj/machinery/flasher/flashers = list()
 
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if ((M.m_intent != "walk") && (src.anchored))
+		if ((M.glide_size > GLIDE_SIZE_OF_A_WALKING_HUMAN) && (src.anchored))
 			src.flash()
 
 /obj/machinery/flasher/portable/attackby(obj/item/weapon/W as obj, mob/user as mob)

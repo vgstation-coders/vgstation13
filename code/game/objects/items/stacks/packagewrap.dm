@@ -22,10 +22,12 @@
 		/obj/item/weapon/winter_gift,
 		/obj/item/weapon/storage/evidencebag,
 		/obj/item/weapon/storage/backpack/holding,
-		/obj/item/weapon/legcuffs/bolas
+		/obj/item/weapon/legcuffs/bolas,
+		/mob/living/simple_animal/hostile/mimic/crate/item
 		)
 
 	var/list/wrappable_big_stuff = list(
+		/mob/living/simple_animal/hostile/mimic/crate,
 		/obj/structure/closet,
 		/obj/structure/vendomatpack,
 		/obj/structure/stackopacks
@@ -43,7 +45,7 @@
 		return 0//proceed as normally (put wrap in box)
 	else
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
-	
+
 
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
 	var/atom/movable/target = attacked
@@ -88,6 +90,10 @@
 			var/obj/structure/closet/C = target
 			if(C.opened)
 				return
+		if(istype(target, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/MC = target
+			if(MC.angry)
+				return
 		if(amount >= 3)
 			var/obj/item/P = new bigpath(get_turf(target.loc),target)
 			target.forceMove(P)
@@ -119,6 +125,7 @@
 				H.LAssailant = null
 			else
 				H.LAssailant = user
+				H.assaulted_by(user)
 			log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to wrap [H.name] ([H.ckey])</font>")
 			use(2)
 			return 1
@@ -156,6 +163,9 @@
 /obj/item/delivery/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
+		if(istype(AM, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/MC = AM
+			MC.anger()
 	..()
 
 /obj/item/delivery/attack_self(mob/user as mob)
@@ -198,11 +208,12 @@
 	w_class = W_CLASS_GIANT //Someone was going to find a way to exploit this some day
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
+	var/syndie = 0 //so disposals can route syndie packages
 
 /obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()
 	w_class = W_CLASS_GIANT
-	if(istype(target,/obj/structure/closet/crate) || ishuman(target))
+	if(istype(target,/obj/structure/closet/crate) || istype(target, /mob/living/simple_animal/hostile/mimic/crate) || ishuman(target))
 		icon_state = "deliverycrate"
 	else if(istype(target,/obj/structure/vendomatpack))
 		icon_state = "deliverypack"
@@ -214,6 +225,9 @@
 /obj/item/delivery/large/Destroy()
 	for(var/atom/movable/AM in contents)
 		AM.forceMove(get_turf(src))
+		if(istype(AM, /mob/living/simple_animal/hostile/mimic/crate))
+			var/mob/living/simple_animal/hostile/mimic/crate/MC = AM
+			MC.anger()
 	..()
 
 /obj/item/delivery/large/attack_paw(mob/user as mob)

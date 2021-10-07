@@ -17,7 +17,7 @@
 	..()
 	name += spellname
 
-/obj/item/weapon/spellbook/oneuse/attack_self(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/attack_self(mob/user)
 	var/spell/S = new spell(user)
 	for(var/spell/knownspell in user.spell_list)
 		if(knownspell.type == S.type)
@@ -36,10 +36,10 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.real_name] ([user.ckey]) learned the spell [spellname] ([S]).</font>")
 		onlearned(user)
 
-/obj/item/weapon/spellbook/oneuse/proc/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/proc/recoil(mob/user)
 	user.visible_message("<span class='warning'>[src] glows in a black light!</span>")
 
-/obj/item/weapon/spellbook/oneuse/proc/onlearned(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/proc/onlearned(mob/user)
 	used = 1
 	user.visible_message("<span class='caution'>[src] glows dark for a second!</span>")
 
@@ -52,7 +52,7 @@
 	icon_state ="bookfireball"
 	desc = "This book feels warm to the touch."
 
-/obj/item/weapon/spellbook/oneuse/fireball/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/fireball/recoil(mob/user)
 	..()
 	explosion(user.loc, -1, 0, 2, 3, 0)
 	qdel(src)
@@ -75,7 +75,7 @@
 	icon_state ="bookblind"
 	desc = "This book looks blurry, no matter how you look at it."
 
-/obj/item/weapon/spellbook/oneuse/blind/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/blind/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>You go blind!</span>")
 	user.eye_blind = 10
@@ -103,13 +103,36 @@
 	icon_state ="bookforcewall"
 	desc = "This book has a dedication to mimes everywhere inside the front cover."
 
-/obj/item/weapon/spellbook/oneuse/forcewall/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/forcewall/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>You suddenly feel very solid!</span>")
 	var/obj/structure/closet/statue/S = new /obj/structure/closet/statue(user.loc, user)
 	S.timer = 30
 	user.drop_item()
 
+/obj/item/weapon/spellbook/oneuse/unwall
+	spell = /spell/targeted/mime_unwall
+	spellname = "unwall"
+	icon_state ="bookforcewall"
+	desc = "This book has a dedication to finger gun-toting mimes everywhere inside the front cover."
+	disabled_from_bundle = 1
+
+/obj/item/weapon/spellbook/oneuse/unwall/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/M = user
+		if(!issilent(M))
+			recoil(user)
+	else
+		recoil(user)
+	..()
+
+/obj/item/weapon/spellbook/oneuse/unwall/recoil(mob/user)
+	..()
+	to_chat(user, "<span class='warning'>You suddenly feel very silent!</span>")
+	if(ishuman(user))
+		var/mob/living/carbon/human/M = user
+		M.flash_eyes(visual = 1)
+	user.mind.miming = MIMING_OUT_OF_CURSE
 
 /obj/item/weapon/spellbook/oneuse/knock
 	spell = /spell/aoe_turf/knock
@@ -117,10 +140,23 @@
 	icon_state ="bookknock"
 	desc = "This book is hard to hold closed properly."
 
-/obj/item/weapon/spellbook/oneuse/knock/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/knock/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>You're knocked down!</span>")
 	user.Knockdown(20)
+
+/obj/item/weapon/spellbook/oneuse/hangman
+	spell = /spell/aoe_turf/hangman
+	spellname = "hangman"
+	icon_state ="bookhangman"
+	desc = "This book has some letters blanked out in the words."
+
+/obj/item/weapon/spellbook/oneuse/hangman/recoil(mob/user)
+	..()
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		H.set_muted_letters(6)
+		H.visible_message("<span class='danger'>[H]'s spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>","<span class='sinister'>You attempt to read the book and find your spoken words are now obscured. Others must shout letters to reveal them. Mistakes reverse the reveals!</span>")
 
 /obj/item/weapon/spellbook/oneuse/horsemask
 	spell = /spell/targeted/equip_item/horsemask
@@ -147,7 +183,7 @@
 	desc = "This book is made of 100% post-consumer wizard."
 	disabled_from_bundle = 1
 
-/obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user as mob)
+/obj/item/weapon/spellbook/oneuse/charge/recoil(mob/user)
 	..()
 	to_chat(user, "<span class='warning'>[src] suddenly feels very warm!</span>")
 	empulse(src, 1, 1)
@@ -347,7 +383,7 @@
 
 /obj/item/weapon/spellbook/oneuse/timestop/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		user.stunned = 5
+		user.AdjustStunned(5)
 		user.flash_eyes(visual = 1)
 		to_chat(user, "<span class = 'warning'>You have been turned into a statue!</span>")
 		new /obj/structure/closet/statue(user.loc, user) //makes the statue
@@ -519,10 +555,10 @@
 ///// ANCIENT SPELLBOOK /////
 
 /obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise available to purchase, only available via the spellbook bundle
-	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate, /spell/targeted/card)
 	spell = null
 	icon_state = "book"
-	desc = "A book of lost and forgotten knowledge"
+	desc = "A book of lost and forgotten knowledge."
 	spellname = "forgotten knowledge"
 
 /obj/item/weapon/spellbook/oneuse/ancient/New()
@@ -539,10 +575,10 @@
 /obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be available at christmas
 	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
 	icon_state = "winter"
-	desc = "A book of festive knowledge"
+	desc = "A book of festive knowledge."
 	spellname = "winter"
 
 /obj/item/weapon/spellbook/oneuse/ancient/winter/recoil(mob/living/carbon/user)
-	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from Santa!</span>")
 	user.gib()
 	qdel(src)

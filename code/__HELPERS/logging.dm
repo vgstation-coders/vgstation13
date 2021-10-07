@@ -81,8 +81,9 @@
  * Helper proc to log attacks or similar events between two mobs.
  */
 /proc/add_attacklogs(var/mob/user, var/mob/target, var/what_done, var/object = null, var/addition = null, var/admin_warn = TRUE)
-	var/user_txt = (user ? "[user][user.ckey ? " ([user.ckey])" : ""]" : "\<NULL USER\>")
-	var/target_txt = (target ? ismob(target) ? "[target][target.ckey ? " ([target.ckey])" : ""]" : "[target]" : "\<NULL TARGET\>")
+	ASSERT(istype(user))
+	var/user_txt = "[user][user.ckey ? " ([user.ckey])" : " (no key)"]"
+	var/target_txt = (target ? ismob(target) ? "[target][target.ckey ? " ([target.ckey])" : " (no key)"]" : "[target]" : "")
 	var/object_txt = (object ? " with \the [object]" : "")
 	var/intent_txt = (user ? " (INTENT: [uppertext(user.a_intent)])" : "")
 	var/addition_txt = (addition ? " ([addition])" : "")
@@ -93,6 +94,9 @@
 	if (ismob(target))
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user_txt][object_txt].[intent_txt][addition_txt]</font>")
 		target.LAssailant = (iscarbon(user) ? user : null)
+
+	if (ismob(user) && ismob(target))
+		target.assaulted_by(user)
 
 	var/log_msg = "<span class='danger'>[user_txt] [what_done] [target_txt][object_txt][intent_txt].</span>[addition_txt] ([formatJumpTo(user, "JMP")])"
 	log_attack(log_msg)
@@ -148,3 +152,35 @@
 
 	else
 		return "(nullspace)"
+
+/**
+ * Appends a tgui-related log entry. All arguments are optional.
+ */
+/proc/log_tgui(user, message, context,
+		datum/tgui_window/window,
+		datum/src_object)
+	var/entry = list("TGUI: ")
+	// Insert user info
+	if(!user)
+		entry += "<nobody>"
+	else if(istype(user, /mob))
+		var/mob/mob = user
+		entry += "[mob.ckey] (as [mob] at [mob.x],[mob.y],[mob.z])"
+	else if(istype(user, /client))
+		var/client/client = user
+		entry += "[client.ckey]"
+	// Insert context
+	if(context)
+		entry += " in [context]"
+	else if(window)
+		entry += " in [window.id]"
+	// Resolve src_object
+	if(!src_object && window?.locked_by)
+		src_object = window.locked_by.src_object
+	// Insert src_object info
+	if(src_object)
+		entry += "\nUsing: [src_object.type] [ref(src_object)]"
+	// Insert message
+	if(message)
+		entry += "\n[message]"
+	world.log << jointext(entry, null)

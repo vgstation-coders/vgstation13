@@ -147,6 +147,7 @@ For the main html chat area
 
 /datum/chatOutput/proc/pingLoop()
 	set waitfor = FALSE
+	usr = null //Otherwise this holds a reference to the new_player and causes it to hard del
 
 	while (owner)
 		ehjax_send(data = owner.is_afk(29 SECONDS) ? "softPang" : "pang") // SoftPang isn't handled anywhere but it'll always reset the opts.lastPang.
@@ -217,6 +218,16 @@ For the main html chat area
 		return 0
 
 	iconCache[iconKey] << icon
+	var/iconData = iconCache.ExportText(iconKey)
+	var/list/partial = splittext(iconData, "{")
+	return replacetext(copytext(partial[2], 3, -5), "\n", "")
+
+//same as above but only saves the South icon_state, used to display the players on last round's scoreboard.
+/proc/iconsouth2base64(var/icon/icon, var/iconKey = "misc")
+	if (!isicon(icon))
+		return 0
+
+	iconCache[iconKey] << icon(icon, dir = SOUTH, frame = 1)
 	var/iconData = iconCache.ExportText(iconKey)
 	var/list/partial = splittext(iconData, "{")
 	return replacetext(copytext(partial[2], 3, -5), "\n", "")

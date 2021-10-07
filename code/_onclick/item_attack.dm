@@ -3,6 +3,7 @@
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
+	. = invoke_event(/event/item_attack_self, list("user" = user))
 	if(flags & TWOHANDABLE)
 		if(!(flags & MUSTTWOHAND))
 			if(wielded)
@@ -31,8 +32,7 @@
 			I.attack(src, user, def_zone, originator)
 		else
 			I.attack(src, user, def_zone)
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
+	invoke_event(/event/attackby, list("attacker" = user, "item" = I))
 
 
 
@@ -70,7 +70,7 @@ obj/item/proc/get_clamped_volume()
 	if (!istype(M)) // not sure if this is the right thing...
 		return 0
 	//var/messagesource = M
-	if (can_operate(M, user))        //Checks if mob is lying down on table for surgery
+	if (can_operate(M, user, I))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,I))
 			return 1
 
@@ -270,8 +270,6 @@ obj/item/proc/get_clamped_volume()
 			animation.master = null
 			qdel(animation)
 
-	if(hitsound)
-		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)
 		material_type.on_use(src,attacked, user)
 

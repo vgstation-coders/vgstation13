@@ -139,6 +139,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define DATAHUD_RANGE_OVERHEAD	7	//how many tiles away from the edge of the client's view do the HUD icons start appearing
 									//necessary due to them only being updated on Life()
 
+#define ADMINBUS_MAX_CAPACITY	16
+
 //WEIGHT CLASSES
 #define W_CLASS_TINY 1
 #define W_CLASS_SMALL 2
@@ -741,6 +743,12 @@ SEE_PIXELS	256
 #define BEE_SWARM 4
 #define BEE_BUILDING 5
 
+#define BEE_STING_BLOCK		0
+#define BEE_STING_PIERCE	1
+#define BEE_STING_NORMAL	2
+
+#define MAX_BEES_PER_SWARM	20
+
 //for infestation events
 #define LOC_KITCHEN 0
 #define LOC_ATMOS 1
@@ -811,6 +819,9 @@ SEE_PIXELS	256
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 #define ORGAN_MALFUNCTIONING 8192
 
+#define SURGERY_SUCCESS_NORMAL 0
+#define SURGERY_SUCCESS_ALWAYS 1
+#define SURGERY_SUCCESS_NEVER  2
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -1136,6 +1147,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define WIREJACK		512 //can we wirejack it? if flagged, machine calls wirejack()
 #define SHUTTLEWRENCH	1024 //if this flag exists, the computer can be wrenched on shuttle floors
 #define SECUREDPANEL 2048 //it won't let you open the deconstruction panel if you don't have the linked account number. Originally used for custom vending machines
+#define MULTIOUTPUT 4096 //Let's you set the output location with a multitool
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
@@ -1239,9 +1251,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define TOTAL_LAYERS			23
 //////////////////////////////////
 
-
-//COMMENT IF YOUR DREAMDAEMON VERSION IS BELOW 507.1248
-#define BORDER_USE_TURF_EXIT 1
 
 ////////////////////////
 ////PDA APPS DEFINES////
@@ -1396,6 +1405,9 @@ var/proccalls = 1
 #define FOOD_LIQUID	8
 #define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
 #define FOOD_LACTOSE 32 //Contains MILK
+
+#define UTENSILE_FORK	1
+#define UTENSILE_SPOON	2
 /*
  *
  *
@@ -1420,7 +1432,9 @@ var/proccalls = 1
 
 #define log_cultspeak(text) diary << html_decode("\[[time_stamp()]]CULT: [text]")
 
-#define log_narspeak(text) diary << html_decode("\[[time_stamp()]]NARSIE: [text]")
+#define log_factionspeak(text) diary << html_decode("\[[time_stamp()]]FACTIONBROADCAST: [text]")
+
+#define log_rolespeak(text) diary << html_decode("\[[time_stamp()]]ROLEMESSAGE: [text]")
 
 #define log_emote(text) diary << html_decode("\[[time_stamp()]]EMOTE: [text]")
 
@@ -1436,7 +1450,6 @@ var/proccalls = 1
 
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
-#define log_tgui(text) diary << html_decode("\[[time_stamp()]]TGUI: [text]")
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
@@ -1610,11 +1623,16 @@ var/proccalls = 1
 #define DNA2_BUF_UE 2
 #define DNA2_BUF_SE 4
 
-#define DEFAULT_BLOOD "#A10808"
-#define DEFAULT_FLESH "#FFC896"
-#define ALIEN_BLOOD "#05EE05"
-#define ALIEN_FLESH "#34334B"
-#define ROBOT_OIL "#030303"
+#define DEFAULT_BLOOD	"#A10808"
+#define DEFAULT_FLESH	"#FFC896"
+#define ALIEN_BLOOD		"#05EE05"
+#define ALIEN_FLESH		"#34334B"
+#define ROBOT_OIL		"#030303"
+#define VOX_BLOOD		"#2299FC"
+#define MUSHROOM_BLOOD	"#D3D3D3"
+#define INSECT_BLOOD	"#EBECE6"
+#define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
+#define GHOUL_BLOOD		"#7FFF00"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1635,15 +1653,17 @@ var/proccalls = 1
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 
-#define BEESPECIES_NORMAL	"bees"
-#define BEESPECIES_VOX		"chill bugs"
-#define BEESPECIES_HORNET	"hornets"
-#define BEESPECIES_BLOOD	"hell bugs"
+#define BEESPECIES_NORMAL	"bee"
+#define BEESPECIES_VOX		"chill bug"
+#define BEESPECIES_HORNET	"hornet"
+#define BEESPECIES_BLOOD	"hell bug"
 
 //mob/proc/is_pacified()
 #define VIOLENCE_SILENT		0
 #define VIOLENCE_DEFAULT	1
 #define VIOLENCE_GUN		2
+
+#define MAX_SHEET_STACK_AMOUNT	50
 
 // Used to determine which HUD is in use
 #define HUD_NONE 0

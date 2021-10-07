@@ -2,7 +2,7 @@
 
 /datum/design/posibrain
 	name = "Positronic Brain"
-	desc = "Allows for the construction of a positronic brain"
+	desc = "Allows for the construction of a positronic brain."
 	id = "posibrain"
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 6, Tc_BLUESPACE = 2, Tc_PROGRAMMING = 4)
 	build_type = PROTOLATHE

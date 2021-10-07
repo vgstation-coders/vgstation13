@@ -1,6 +1,6 @@
 /datum/design/basic_cell
 	name = "Basic Power Cell"
-	desc = "A basic power cell that holds 1000 units of energy"
+	desc = "A basic power cell that holds 1000 units of energy."
 	id = "basic_cell"
 	req_tech = list(Tc_POWERSTORAGE = 1)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
@@ -10,7 +10,7 @@
 
 /datum/design/high_cell
 	name = "High-Capacity Power Cell"
-	desc = "A power cell that holds 10000 units of energy"
+	desc = "A power cell that holds 10000 units of energy."
 	id = "high_cell"
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
@@ -20,7 +20,7 @@
 
 /datum/design/super_cell
 	name = "Super-Capacity Power Cell"
-	desc = "A power cell that holds 20000 units of energy"
+	desc = "A power cell that holds 20000 units of energy."
 	id = "super_cell"
 	req_tech = list(Tc_POWERSTORAGE = 3, Tc_MATERIALS = 2)
 	reliability_base = 75
@@ -31,7 +31,7 @@
 
 /datum/design/hyper_cell
 	name = "Hyper-Capacity Power Cell"
-	desc = "A power cell that holds 30000 units of energy"
+	desc = "A power cell that holds 30000 units of energy."
 	id = "hyper_cell"
 	req_tech = list(Tc_POWERSTORAGE = 5, Tc_MATERIALS = 4)
 	reliability_base = 70
@@ -42,11 +42,11 @@
 
 /datum/design/ultra_cell
 	name = "Ultra-Capacity Power Cell"
-	desc = "A power cell that holds 50000 units of energy"
+	desc = "A power cell that holds 50000 units of energy."
 	id = "ultra_cell"
 	req_tech = list(Tc_POWERSTORAGE = 8, Tc_MATERIALS = 6)
 	reliability_base = 70
-	build_type = PROTOLATHE
+	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100)
 	build_path = /obj/item/weapon/cell/ultra/empty
 	category = "Engineering"
@@ -57,7 +57,7 @@
 	id = "rad_cell"
 	req_tech = list(Tc_POWERSTORAGE = 7, Tc_MATERIALS = 5)
 	reliability_base = 70
-	build_type = PROTOLATHE
+	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_URANIUM = 150)
 	build_path = /obj/item/weapon/cell/rad/empty
 	category = "Engineering"
@@ -68,7 +68,7 @@
 	id = "phazon_cell"
 	req_tech = list(Tc_POWERSTORAGE = 9, Tc_MATERIALS = 9)
 	reliability_base = 70
-	build_type = PROTOLATHE
+	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_PHAZON = 200)
 	build_path = /obj/item/weapon/cell/rad/large/empty
 	category = "Engineering"
@@ -104,7 +104,7 @@
 	build_path = /obj/item/clothing/glasses/scanner/night
 
 /datum/design/device_analyser
-	name = "Device Analyser"
+	name = "Device Analyzer"
 	desc = "A device for scanning other devices. Meta."
 	id = "deviceanalyser"
 	req_tech = list(Tc_MAGNETS = 3, Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 3)
@@ -223,5 +223,5 @@
 	req_tech = list(Tc_ENGINEERING = 5, Tc_BLUESPACE = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 18750, MAT_GLASS = 9375)
-	build_path = /obj/item/weapon/weldingtool/gatling/empty
+	build_path = /obj/item/tool/weldingtool/gatling/empty
 	category = "Engineering"

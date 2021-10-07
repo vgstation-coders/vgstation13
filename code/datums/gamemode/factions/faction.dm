@@ -44,6 +44,10 @@ var/list/factions_with_hud_icons = list()
 	var/list/faction_scoreboard_data = list()
 	var/stage = FACTION_DORMANT //role_datums_defines.dm
 	var/playlist
+	var/default_admin_voice = "Supreme Leader"
+	var/admin_voice_style = "radio" // check stylesheet.dm for a list of all possible styles
+	var/list/voice_per_admin = list()
+	var/admin_voice_say = "says"
 
 	var/minor_victory = FALSE
 
@@ -196,14 +200,49 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/Topic(href, href_list)
 	..()
+	if(!usr.check_rights(R_ADMIN))
+		message_admins("[usr] tried to access faction Topic() without permissions.")
+		return
+
 	if(href_list["destroyfac"])
-		if(!usr.check_rights(R_ADMIN))
-			message_admins("[usr] tried to destroy a faction without permissions.")
-			return
 		if(alert(usr, "Are you sure you want to destroy [name]?",  "Destroy Faction" , "Yes" , "No") != "Yes")
 			return
 		message_admins("[key_name(usr)] destroyed faction [name].")
 		Dismantle()
+
+	if (!ismob(usr))
+		return
+	var/mob/user = usr
+
+	if (href_list["faction_speak"])
+		if (!(user.ckey in voice_per_admin))
+			voice_per_admin[user.ckey] = default_admin_voice
+
+		var/message = input("What message shall we send as [voice_per_admin[user.ckey]]?",
+                    "Faction Broadcast",
+                    "")
+		if (!message)
+			return
+		for (var/datum/role/R in members)
+			if (R.antag?.current)
+				to_chat(R.antag.current, "<b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span>")
+
+		for(var/mob/dead/observer/O in player_list)
+			to_chat(O, "<span class='game say'><b>[voice_per_admin[user.ckey]]</b> [admin_voice_say] <span class='[admin_voice_style]'>\"[message]\"</span></span>")
+
+		message_admins("Admin [key_name_admin(usr)] has talked to [name] as [voice_per_admin[user.ckey]].")
+		log_factionspeak("[key_name(usr)] as [voice_per_admin[user.ckey]]: \"[message]\"")
+
+	if (href_list["faction_set_speaker"])
+		if (!(user.ckey in voice_per_admin))
+			voice_per_admin[user.ckey] = default_admin_voice
+
+		var/new_name = input("What should you call yourself when broadcasting to [name]?",
+                    "Change Broadcaster Name",
+                    "[voice_per_admin[user.ckey]]")
+		if (new_name)
+			voice_per_admin[user.ckey] = new_name
+		user.client.holder.check_antagonists()
 
 /datum/faction/proc/IsSuccessful()
 	var/win = TRUE
@@ -219,6 +258,9 @@ var/list/factions_with_hud_icons = list()
 	return header
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
+	var/mob/user = usr
+	if (!(user.ckey in voice_per_admin))
+		voice_per_admin[user.ckey] = default_admin_voice
 	var/dat = "<br>"
 	dat += GetObjectivesMenuHeader()
 	dat += " <a href='?src=\ref[src];destroyfac=1'>\[Destroy\]</A><br>"
@@ -231,6 +273,7 @@ var/list/factions_with_hud_icons = list()
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
 			dat += "<br>"
+	dat += "<br><a href='?src=\ref[src];faction_speak=1'>Message faction as:</a><a href='?src=\ref[src];faction_set_speaker=1'>\[[voice_per_admin[user.ckey]]\]:</a>"
 	return dat
 
 /datum/faction/proc/process()
@@ -314,6 +357,7 @@ var/list/factions_with_hud_icons = list()
 					I.pixel_x = 20 * PIXEL_MULTIPLIER
 					I.pixel_y = 20 * PIXEL_MULTIPLIER
 					I.plane = ANTAG_HUD_PLANE
+					I.appearance_flags |= RESET_COLOR|RESET_ALPHA
 					if (factions_with_icons > 1)
 						animate(I, layer = 1, time = 0.1 + offset * HUDICON_BLINKDURATION, loop = -1)
 						animate(layer = 0, time = 0.1)
@@ -406,7 +450,9 @@ var/list/factions_with_hud_icons = list()
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 	roletype = /datum/role/changeling
 	logo_state = "change-logoa"
-	
+	default_admin_voice = "Changeling Hivemind"
+	admin_voice_style = "borer"
+
 	//Hivemind Bank, contains a list of DNA that changelings can share and use.
 	var/list/hivemind_bank = list()
 
@@ -423,6 +469,8 @@ var/list/factions_with_hud_icons = list()
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad
 	ID = CUSTOMSQUAD
 	logo_state = "nano-logo"
+	default_admin_voice = "Commander"
+	admin_voice_style = "secradio"
 
 /datum/faction/strike_team/forgeObjectives(var/mission)
 	var/datum/objective/custom/c = new /datum/objective/custom
@@ -438,6 +486,8 @@ var/list/factions_with_hud_icons = list()
 	roletype = /datum/role/emergency_responder
 	logo_state = "ert-logo"
 	hud_icons = list("ert-logo")
+	default_admin_voice = "Nanotrasen Central Command"
+	admin_voice_style = "resteamradio"
 
 //________________________________________________
 
@@ -448,6 +498,8 @@ var/list/factions_with_hud_icons = list()
 	roletype = /datum/role/death_commando
 	logo_state = "death-logo"
 	hud_icons = list("death-logo","creed-logo")
+	default_admin_voice = "Nanotrasen Central Command"
+	admin_voice_style = "dsquadradio"
 
 //________________________________________________
 
@@ -457,11 +509,15 @@ var/list/factions_with_hud_icons = list()
 	initroletype = /datum/role/syndicate_elite_commando
 	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "syndradio"
 
 //________________________________________________
 
 /datum/faction/strike_team/custom
 	name = "Custom Strike Team"
+	default_admin_voice = "Commander"
+	admin_voice_style = "secradio"
 
 /datum/faction/strike_team/custom/New()
 	..()

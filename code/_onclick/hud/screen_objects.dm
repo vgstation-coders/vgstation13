@@ -6,6 +6,10 @@
 	They are used with the client/screen list and the screen_loc var.
 	For more information, see the byond documentation on the screen_loc and screen vars.
 */
+
+/obj/abstract
+	vis_flags = 0
+
 /obj/abstract/screen
 	name = ""
 	icon = 'icons/mob/screen1.dmi'
@@ -29,11 +33,6 @@
 	maptext_height = 480
 	maptext_width = 480
 
-/obj/abstract/screen/adminbus
-
-/obj/abstract/screen/specialblob
-	var/obj/effect/blob/linked_blob = null
-
 /obj/abstract/screen/schematics
 	var/datum/rcd_schematic/ourschematic
 
@@ -46,6 +45,7 @@
 	icon = ourschematic.icon
 	icon_state = ourschematic.icon_state
 	name = ourschematic.name
+	overlays += ourschematic.overlays
 	transform = transform*0.8
 
 /obj/abstract/screen/schematics/Click()
@@ -54,6 +54,7 @@
 
 /obj/abstract/screen/schematics/Destroy()
 	ourschematic = null
+	overlays = list()
 	..()
 
 /obj/abstract/screen/inventory
@@ -588,173 +589,6 @@
 		else
 			return 0
 	return 1
-
-/obj/abstract/screen/adminbus/Click()
-	switch(name)
-		if("Delete Bus")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Adminbus_Deletion(usr)
-		if("Delete Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.remove_mobs(usr)
-		if("Spawn Clowns")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,1,5)
-		if("Spawn Carps")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,2,5)
-		if("Spawn Bears")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,3,5)
-		if("Spawn Trees")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,4,5)
-		if("Spawn Spiders")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,5,5)
-		if("Spawn Large Alien Queen")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.spawn_mob(usr,6,1)
-		if("Spawn Loads of Captain Spare IDs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.loadsa_goodies(usr,1)
-		if("Spawn Loads of Money")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.loadsa_goodies(usr,2)
-		if("Repair Surroundings")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Mass_Repair(usr)
-		if("Mass Rejuvination")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.mass_rejuvinate(usr)
-		if("Singularity Hook")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.throw_hookshot(usr)
-		if("Adminbus-mounted Jukebox")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Mounted_Jukebox(usr)
-		if("Teleportation")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Teleportation(usr)
-		if("Release Passengers")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.release_passengers(usr)
-		if("Send Passengers Back Home")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Send_Home(usr)
-		/*if("Antag Madness!")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Make_Antag(usr)*/
-		if("Give Infinite Laser Guns to the Passengers")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.give_lasers(usr)
-		if("Delete the given Infinite Laser Guns")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.delete_lasers(usr)
-		if("Give Fuse-Bombs to the Passengers")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.give_bombs(usr)
-		if("Delete the given Fuse-Bombs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.delete_bombs(usr)
-		if("Send Passengers to the Thunderdome's Red Team")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Arena_Red(usr)
-		if("Split the Passengers between the two Thunderdome Teams")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Arena(usr)
-		if("Send Passengers to the Thunderdome's Green Team")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Arena_Green(usr)
-		if("Send Passengers to the Thunderdome's Observers' Lodge")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Sendto_Thunderdome_Obs(usr)
-		if("Capture Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_bumpers(usr,1)
-		if("Hit Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_bumpers(usr,2)
-		if("Gib Mobs")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_bumpers(usr,3)
-		if("Close Door")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_door(usr,0)
-		if("Open Door")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_door(usr,1)
-		if("Turn Off Headlights")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_lights(usr,0)
-		if("Dipped Headlights")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_lights(usr,1)
-		if("Main Headlights")
-			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
-				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.toggle_lights(usr,2)
-
-/obj/abstract/screen/specialblob/Click()
-	if(isovermind(usr))
-		var/mob/camera/blob/overmind = usr
-		switch(name)
-			if("Spawn Blob")
-				overmind.expand_blob_power()
-			if("Spawn Strong Blob")
-				overmind.create_shield_power()
-			if("Spawn Resource Blob")
-				overmind.create_resource()
-			if("Spawn Factory Blob")
-				overmind.create_factory()
-			if("Spawn Node Blob")
-				overmind.create_node()
-			if("Spawn Blob Core")
-				overmind.create_core()
-			if("Call Overminds")
-				overmind.callblobs()
-			if("Rally Spores")
-				overmind.rally_spores_power()
-			if("Psionic Message")
-				var/message = input(overmind,"Send a message to the crew.","Psionic Message") as null|text
-				if(message)
-					overmind.telepathy(message)
-			if("Jump to Blob")
-				overmind.forceMove(linked_blob.loc)
-		return 1
 
 /obj/abstract/screen/inventory/Click()
 	// At this point in client Click() code we have passed the 1/10 sec check and little else

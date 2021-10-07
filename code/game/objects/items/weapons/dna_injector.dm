@@ -151,7 +151,7 @@
 			qdel(src)
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
-		H.name = H.get_visible_name()
+		H.update_name()
 	return uses
 
 /obj/item/weapon/dnainjector/attack(mob/M as mob, mob/user as mob)
@@ -169,6 +169,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	if(inuse)
 		return 0
@@ -811,7 +812,7 @@
 
 /obj/item/weapon/dnainjector/nofail/stuttmut
 	name = "DNA-Injector (Stutt.)"
-	desc = "Makes you s-s-stuttterrr"
+	desc = "Makes you s-s-stuttterrr!"
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 	//block = 9
@@ -822,7 +823,7 @@
 
 /obj/item/weapon/dnainjector/nofail/antistutt
 	name = "DNA-Injector (Anti-Stutt.)"
-	desc = "Fixes that speaking impairment."
+	desc = "Fixes that speech impediment."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 9
@@ -1204,7 +1205,7 @@
 
 /obj/item/weapon/dnainjector/nofail/elvis
 	name = "DNA-Injector (Elvis)"
-	desc = "Tell the folks back home this is the promised land calling"
+	desc = "Tell the folks back home this is the promised land calling."
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 	//block = 14
@@ -1325,7 +1326,7 @@
 
 /obj/item/weapon/dnainjector/nofail/antifarsight
 	name = "DNA-Injector (Anti-Farsight)"
-	desc = "No fun allowed"
+	desc = "No fun allowed."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2

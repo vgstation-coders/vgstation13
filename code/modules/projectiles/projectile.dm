@@ -185,6 +185,7 @@ var/list/impact_master = list()
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
+				M.assaulted_by(firer)
 		else
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
@@ -195,6 +196,7 @@ var/list/impact_master = list()
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
+				M.assaulted_by(firer)
 	else
 		M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN/(no longer exists)</b> shot <b>UNKNOWN/(no longer exists)</b> with a <b>[type]</b>"
 		msg_admin_attack("UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]. Wait what the fuck?")
@@ -293,6 +295,7 @@ var/list/impact_master = list()
 					M.LAssailant = null
 				else
 					M.LAssailant = firer
+					M.assaulted_by(firer)
 
 	if(!A)
 		return 1
@@ -308,6 +311,7 @@ var/list/impact_master = list()
 						BM.LAssailant = null
 				else
 					BM.LAssailant = firer
+					BM.assaulted_by(firer)
 
 	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
 
@@ -487,19 +491,11 @@ var/list/impact_master = list()
 
 	target_angle = round(Get_Angle(starting,target))
 
-	if(linear_movement)
+	if(linear_movement && !lock_angle)
 		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
 		transform = projectile_matrix
 		icon_state = "[icon_state]_pixel"
-		/*
-		//If the icon has not been added yet
-		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
-			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
-			if(!lock_angle)
-				I.Turn(target_angle+45)
-			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-		*/
+
 	return 1
 
 
@@ -748,17 +744,9 @@ var/list/impact_master = list()
 
 	target_angle = round(newangle)
 
-	if(linear_movement)
+	if(linear_movement && !lock_angle)
 		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
 		transform = projectile_matrix
-		/*
-		if( !("[icon_state][target_angle]" in bullet_master) )
-			var/icon/I = new(initial(icon),"[icon_state]_pixel")
-			if(!lock_angle)
-				I.Turn(target_angle+45)
-			bullet_master["[icon_state]_angle[target_angle]"] = I
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-		*/
 
 /obj/item/projectile/test //Used to see if you can hit them.
 	invisibility = 101 //Nope!  Can't see me!
@@ -861,3 +849,6 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/apply_projectile_color(var/proj_color)
 	color = proj_color
+
+/obj/item/projectile/proc/apply_projectile_color_shift(var/proj_color_shift)
+	return

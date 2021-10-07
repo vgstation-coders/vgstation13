@@ -39,7 +39,7 @@
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/tool/weldingtool/WT = P
 				if(WT.do_weld(user, src, 2 SECONDS, 0))
 					if(gcDestroyed || state != NOCIRCUITBOARD)
 						return
@@ -78,7 +78,7 @@
 						to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 						state = WIREDFRAME
 		if(WIREDFRAME)
-			if(iswirecutter(P))
+			if(P.is_wirecutter(user))
 				if(brain)
 					to_chat(user, "Get that brain out of there first!")
 				else
@@ -101,7 +101,7 @@
 				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
 					return
-				if(!map.map_specific_conditions(ROBOT_CHECK))
+				if(!map.can_have_robots)
 					to_chat(user, "<span class='warning'>The station prevents you from kickstarting the tyranny of the AI!</span>")
 					return
 				if(prison.brainmob.stat == DEAD)

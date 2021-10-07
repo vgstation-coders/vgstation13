@@ -18,10 +18,6 @@
 /obj/item/weapon/sword/weaponcraft
 	var/obj/item/weapon/reagent_containers/hypospray/hypo = null
 
-/obj/item/weapon/sword/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/sword/weaponcraft/attack_self(mob/user as mob)
 	if(!hypo)
 		return
@@ -235,6 +231,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		B.reagents.trans_to(M, inject_amount)
 
@@ -265,7 +262,7 @@
 
 /obj/item/weapon/sword/executioner/attackby(obj/item/weapon/W, mob/user)
 	if(iswelder(W) && !complete)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the metal blade onto \the [src].")
 		if(WT.do_weld(user, src, 30))
 			to_chat(user, "You weld the metal blade onto \the [src].")

@@ -2,8 +2,6 @@
 //Deity Link, giving a new meaning to the Adminbus since 2014//
 ///////////////////////////////////////////////////////////////
 
-#define MAX_CAPACITY 16
-
 /obj/structure/bed/chair/vehicle/adminbus//Fucking release the passengers and unbuckle yourself from the bus before you delete it.
 	name = "\improper Adminbus"
 	desc = "Shit just got fucking real."
@@ -13,6 +11,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
+	ghost_can_rotate = FALSE
 	var/can_move=1
 	var/list/passengers = list()
 	var/unloading = 0
@@ -48,9 +47,65 @@
 	busjuke.plane = ABOVE_HUMAN_PLANE
 	busjuke.dir = EAST
 
+/obj/structure/bed/chair/vehicle/adminbus/Destroy()
+	for(var/i=passengers.len;i>0;i--)
+		var/atom/A = passengers[i]
+		if(isliving(A))
+			var/mob/living/L = A
+			freed(L)
+		else if(isbot(A))
+			var/obj/machinery/bot/B = A
+			switch(dir)
+				if(SOUTH)
+					B.x = x-1
+				if(WEST)
+					B.y = y+1
+				if(NORTH)
+					B.x = x+1
+				if(EAST)
+					B.y = y-1
+			B.turn_on()
+			B.flags &= ~INVULNERABLE
+			B.anchored = 0
+			passengers -= B
+
+	delete_bombs()
+	delete_lasers()
+	remove_mobs()
+
+	if(singulo)
+		singulo.on_release()
+
+	for(var/obj/structure/singulo_chain/N in chain)
+		chain -= N
+		qdel(N)
+
+	for(var/obj/structure/hookshot/H in hookshot)
+		hookshot -= H
+		qdel(H)
+
+	if (busjuke)
+		busjuke.disconnect_media_source()
+	qdel(busjuke)
+	busjuke = null
+	qdel(warp)
+	warp = null
+	qdel(lightsource)
+	lightsource = null
+
+	var/turf/T = get_turf(src)
+	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-WORLD_ICON_SIZE*2,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = EFFECTS_PLANE)
+
+	if (occupant)
+		unlock_atom(occupant)
+	..()
+
 //Don't want the layer to change.
 /obj/structure/bed/chair/vehicle/adminbus/handle_layer()
 	return
+
+/obj/structure/bed/chair/vehicle/adminbus/Process_Spacemove(var/check_drift = 0)
+	return TRUE
 
 /obj/structure/bed/chair/vehicle/adminbus/update_mob()
 	if(occupant)
@@ -152,9 +207,9 @@
 	update_lightsource()
 	handle_mob_bumping()
 	if(warp)
-		warp.forceMove(loc)
+		warp.forceMove(loc, glide_size_override = glide_size)
 	if(busjuke)
-		busjuke.forceMove(loc)
+		busjuke.forceMove(loc, glide_size_override = glide_size)
 		busjuke.change_dir(dir)
 		if(busjuke.icon_state)
 			busjuke.repack()
@@ -164,17 +219,17 @@
 		var/atom/A = passengers[i]
 		if(isliving(A))
 			var/mob/living/M = A
-			M.forceMove(loc)
+			M.forceMove(loc, glide_size_override = glide_size)
 		else if(isbot(A))
 			var/obj/machinery/bot/B = A
-			B.forceMove(loc)
+			B.forceMove(loc, glide_size_override = glide_size)
 	for(var/obj/structure/hookshot/H in hookshot)
-		H.forceMove(get_step(H,src.dir))
+		H.forceMove(get_step(H,src.dir), glide_size_override = glide_size)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/update_lightsource()
 	var/turf/T = get_step(src,src.dir)
 	if(T.opacity)
-		lightsource.forceMove(T)
+		lightsource.forceMove(T, glide_size_override = glide_size)
 		switch(roadlights)							//if the bus is right against a wall, only the wall's tile is lit
 			if(0)
 				if(lightsource.light_range != 0)
@@ -185,7 +240,7 @@
 	else
 		T = get_step(T,src.dir)						//if there is a wall two tiles in front of the bus, the lightsource is right in front of the bus, though weaker
 		if(T.opacity)
-			lightsource.forceMove(get_step(src,src.dir))
+			lightsource.forceMove(get_step(src,src.dir), glide_size_override = glide_size)
 			switch(roadlights)
 				if(0)
 					if(lightsource.light_range != 0)
@@ -197,7 +252,7 @@
 					if(lightsource.light_range != 2)
 						lightsource.set_light(2)
 		else
-			lightsource.forceMove(T)
+			lightsource.forceMove(T, glide_size_override = glide_size)
 			switch(roadlights)						//otherwise, the lightsource position itself two tiles in front of the bus and with regular light_range
 				if(0)
 					if(lightsource.light_range != 0)
@@ -217,7 +272,7 @@
 			for(var/mob/living/L in S)
 				if(L.flags & INVULNERABLE)
 					continue
-				if(passengers.len < MAX_CAPACITY)
+				if(passengers.len < ADMINBUS_MAX_CAPACITY)
 					capture_mob(L)
 				else
 					if(occupant)
@@ -225,7 +280,7 @@
 			for(var/obj/machinery/bot/B in S)
 				if(B.flags & INVULNERABLE)
 					continue
-				if(passengers.len < MAX_CAPACITY)
+				if(passengers.len < ADMINBUS_MAX_CAPACITY)
 					capture_mob(B)
 		if(2)
 			var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
@@ -271,7 +326,7 @@
 		return ..()
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/capture_mob(atom/A, var/selfclimb=0)
-	if(passengers.len >= MAX_CAPACITY)
+	if(passengers.len >= ADMINBUS_MAX_CAPACITY)
 		to_chat(A, "<span class='warning'>\the [src] is full!</span>")
 		return
 	if(unloading)
@@ -329,7 +384,7 @@
 			return
 		else
 			if(!(user.check_rights(R_ADMINBUS)))
-				to_chat(user, "<span class='notice'>Oh you are a god alright, but you don't seem to have your Adminbus driver license!</span>")
+				to_chat(user, "<span class='notice'>You're a god alright, but you don't seem to have your Adminbus driver license!</span>")
 				return
 			user.visible_message(
 				"<span class='notice'>[user] climbs onto \the [src]!</span>",
@@ -370,37 +425,15 @@
 					to_chat(user, "<span class='notice'>You may not climb into \the [src] while its door is closed.</span>")
 					return
 
-/obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD(var/mob/M)
-	if(!M || !(M.hud_used))
-		return
-
-	M.hud_used.adminbus_hud()
-	update_rearview()
+/obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD(var/mob/user)
+	user.DisplayUI("Adminbus")
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/remove_HUD(var/mob/M)
-	if(!M || !(M.hud_used))
-		return
-
-	M.hud_used.remove_adminbus_hud()
+	M.HideUI("Adminbus")
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/update_rearview()
 	if(occupant)
-		for(var/i=1;i<=MAX_CAPACITY;i++)
-			var/mob/living/M = occupant
-			M.client.screen -= M.gui_icons.rearviews[i]
-			var/obj/abstract/screen/adminbus/S = M.gui_icons.rearviews[i]
-			var/icon/passenger_img = null
-			var/atom/A = null
-			if(i<=passengers.len)
-				A = passengers[i]
-			if(!A)
-				S.icon = 'icons/adminbus/32x32.dmi'
-				S.icon_state = ""
-			else
-				passenger_img = getFlatIcon(A,SOUTH,0)
-				S.icon = passenger_img
-				M.gui_icons.rearviews[i] = S
-				M.client.screen += M.gui_icons.rearviews[i]
+		occupant.UpdateUIElementIcon(/obj/abstract/mind_ui_element/adminbus_top_panel)
 
 /obj/structure/bed/chair/vehicle/adminbus/emp_act(severity)
 	return
@@ -411,6 +444,9 @@
 
 /obj/structure/bed/chair/vehicle/adminbus/ex_act(severity)
 	visible_message("<span class='warning'>The bus withstands the explosion with no damage.</span>")
+	return
+
+/obj/structure/bed/chair/vehicle/adminbus/blob_act()
 	return
 
 /obj/structure/bed/chair/vehicle/adminbus/cultify()
@@ -458,7 +494,7 @@
 		H.max_distance = max_distance
 		H.abus = abus
 	if(max_distance > 0)
-		forceMove(get_step(src,toward))
+		forceMove(get_step(src,toward), glide_size_override = glide_size)
 		sleep(2)
 		var/obj/machinery/singularity/S2 = hook_throw(toward)
 		if(S2)
@@ -469,9 +505,10 @@
 		return null
 
 /obj/structure/hookshot/proc/hook_back()
-	forceMove(get_step_towards(src,abus))
+	forceMove(get_step_towards(src,abus), glide_size_override = glide_size)
 	max_distance++
 	if(max_distance >= 7)
+		abus.hookshot -= src
 		qdel(src)
 		return
 	sleep(2)
@@ -481,18 +518,19 @@
 	if(!dropped)
 		var/obj/machinery/singularity/S = locate(/obj/machinery/singularity) in src.loc
 		if(S)
+			abus.capture_singulo(S)
 			if(abus.occupant)
 				var/mob/living/M = abus.occupant
-				M.gui_icons.adminbus_hook.icon_state = "icon_singulo"
-			abus.capture_singulo(S)
+				M.UpdateUIElementIcon(/obj/abstract/mind_ui_element/hoverable/adminbus_hook)
 			return
-	forceMove(get_step_towards(src,abus))
+	forceMove(get_step_towards(src,abus), glide_size_override = glide_size)
 	max_distance++
 	if(max_distance >= 7)
+		abus.hookshot -= src
+		abus.hook = 1
 		if(abus.occupant)
 			var/mob/living/M = abus.occupant
-			M.gui_icons.adminbus_hook.icon_state = "icon_hook"
-		abus.hook = 1
+			M.UpdateUIElementIcon(/obj/abstract/mind_ui_element/hoverable/adminbus_hook)
 		qdel(src)
 		return
 	sleep(2)
@@ -514,7 +552,7 @@
 
 /obj/structure/singulo_chain
 	name = "singularity chain"
-	desc = "Admins are above all logic"
+	desc = "Admins are above all logic."
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
 	pixel_x = -WORLD_ICON_SIZE
@@ -532,7 +570,7 @@
 /obj/structure/singulo_chain/proc/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)//I don't see how this could be null but a sanity check won't hurt
-		src.forceMove(parent)
+		forceMove(parent, glide_size_override = glide_size)
 	if(child)
 		if(get_dist(src,child) > 1)
 			child.move_child(T)
@@ -543,11 +581,11 @@
 /obj/structure/singulo_chain/anchor/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)
-		src.forceMove(parent)
+		forceMove(parent, glide_size_override = glide_size)
 	else
 		dir = get_dir(T,src)
 	if(target)
-		target.forceMove(src.loc)
+		target.forceMove(loc, glide_size_override = glide_size)
 
 /obj/structure/singulo_chain/cultify()
 	return
@@ -606,8 +644,6 @@
 /obj/structure/teleportwarp/singularity_pull()
 	return 0
 
-#undef MAX_CAPACITY
-
 /datum/locking_category/adminbus/lock(var/atom/movable/AM)
 	. = ..()
 	if (isliving(AM))
@@ -615,14 +651,16 @@
 		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		M.flags |= INVULNERABLE
 		bus.add_HUD(M)
+		M.register_event(/event/living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
 /datum/locking_category/adminbus/unlock(var/atom/movable/AM)
 	. = ..()
 	if (isliving(AM))
 		var/mob/living/M = AM
 		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
-		bus.remove_HUD(M)
 		M.flags &= ~INVULNERABLE
+		bus.remove_HUD(M)
+		M.unregister_event(/event/living_login, bus, /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD)
 
 /obj/structure/bed/chair/vehicle/adminbus/acidable()
 	return 0

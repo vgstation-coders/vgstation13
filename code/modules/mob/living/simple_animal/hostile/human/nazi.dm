@@ -260,11 +260,11 @@
 	reloads = 2
 	ranged_cooldown_cap = 2
 
-	var/datum/effect/effect/system/trail/ion_trail
+	var/datum/effect/system/trail/ion_trail
 
 /mob/living/simple_animal/hostile/humanoid/nazi/spacetrooper/New()
 	. = ..()
-	ion_trail = new /datum/effect/effect/system/trail()
+	ion_trail = new /datum/effect/system/trail()
 	ion_trail.set_up(src)
 	ion_trail.start()
 
@@ -349,7 +349,7 @@
 	light_range = 2
 	light_color = "#88BB88"
 
-	var/datum/effect/effect/system/trail/ion_trail
+	var/datum/effect/system/trail/ion_trail
 
 /mob/living/simple_animal/hostile/mechahitler/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(..())
@@ -357,7 +357,7 @@
 
 /mob/living/simple_animal/hostile/mechahitler/New()
 	. = ..()
-	ion_trail = new /datum/effect/effect/system/trail()
+	ion_trail = new /datum/effect/system/trail()
 	ion_trail.set_up(src)
 	ion_trail.start()
 
@@ -366,9 +366,9 @@
 
 /mob/living/simple_animal/hostile/mechahitler/death(var/gibbed = FALSE)
 	set waitfor = 0
+	say("Eva, auf wiedersehen!")
 	..(TRUE)
 	dir = 2
-	say("Eva, auf wiedersehen!")
 	ranged = 0
 	sleep(10)
 	var/turf/eloc = get_turf(loc)

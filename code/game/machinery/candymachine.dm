@@ -16,7 +16,23 @@
 /obj/machinery/sweet/attackby(var/obj/O as obj, var/mob/user as mob)
 	if (stat & (NOPOWER|BROKEN))
 		return ..()
-	if (is_type_in_list(O, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
+
+	if(istype(O, /obj/item/weapon/coin/pomf))
+		var/obj/item/weapon/coin/real_coin = O
+		if(user.drop_item(O, src))
+			user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
+			src.visible_message("<span class='notice'>[src] clicks softly.</span>")
+			sleep(rand(10,15))
+			src.visible_message("<span class='notice'>[src] dispenses a...an egg?</span>")
+			spawn(30)
+				to_chat(user,"<span class='sinister'>...throw the egg...</span>")
+			new/obj/item/weapon/reagent_containers/food/snacks/egg/pomf(src.loc)
+
+			if(real_coin.string_attached)
+				to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
+			qdel(O)
+			return
+	else if (is_type_in_list(O, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
 		if(emagged == 1)
 			if(user.drop_item(O, src))
 				user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "You put a coin into [src] and turn the knob.</span>")

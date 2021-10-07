@@ -16,7 +16,7 @@
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 50)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/storage/bag/ore, /obj/item/device/t_scanner, /obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/storage/bag/ore, /obj/item/device/t_scanner, /obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer
@@ -72,6 +72,7 @@
 	_color = "mining"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 10)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	clothing_flags = GOLIATHREINFORCE
 
@@ -82,6 +83,7 @@
 	item_state = "rig-mining"
 	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 10)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	clothing_flags = GOLIATHREINFORCE
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
@@ -250,6 +252,7 @@
 	_color = "medical"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 30)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/suit/space/rig/medical
@@ -259,6 +262,7 @@
 	item_state = "medical_hardsuit"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 30)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical, /obj/item/roller)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/medical
@@ -385,7 +389,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED,INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket)
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos/gold
 
 //ADMINBUS RIGS. SOVIET + NAZI
@@ -436,6 +440,46 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/soviet
+
+//Adminbus RIGsuit: Trauma Team
+/obj/item/clothing/head/helmet/space/rig/traumateam
+	name = "trauma team helmet"
+	desc = "A spaceworthy helmet designed for high-risk medical work. Protects against radiation, gunfire, and lawsuits."
+	icon_state = "rig0-traumateam"
+	item_state = "traumateam_helm"
+	_color = "traumateam"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 10, laser = 25, energy = 5, bomb = 40, bio = 100, rad = 30)
+	siemens_coefficient = 0.7
+	pressure_resistance = 40 * ONE_ATMOSPHERE
+
+/obj/item/clothing/suit/space/rig/traumateam
+	icon_state = "rig-traumateam"
+	name = "trauma team hardsuit"
+	desc = "A spaceworthy suit designed for high-risk medical work. Protects against radiation, gunfire, and lawsuits."
+	item_state = "traumateam_hardsuit"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_restricted = list("exclude",VOX_SHAPED)
+	armor = list(melee = 40, bullet = 10, laser = 25, energy = 5, bomb = 40, bio = 100, rad = 30)
+	allowed = list(
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/storage/firstaid,
+		/obj/item/device/healthanalyzer,
+		/obj/item/stack/medical,
+		/obj/item/roller,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro,
+	)
+	siemens_coefficient = 0.7
+	pressure_resistance = 40 * ONE_ATMOSPHERE
+	head_type = /obj/item/clothing/head/helmet/space/rig/traumateam
 
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
@@ -636,3 +680,49 @@
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
 	color_on = "#81F9C6" //Aquamarine. A combination of the colors from the lamp and rail light.
 	species_fit = list(INSECT_SHAPED)
+
+
+//Ninja Rig
+/obj/item/clothing/suit/space/rig/sundowner
+	name = "sundowner suit"
+	desc = "A unique, vacuum-proof suit of nano-enhanced armor designed specifically for Desperado Spider Clan squad."
+	icon_state = "sundowner_suit"
+	item_state = "sundowner_suit"
+	head_type = /obj/item/clothing/head/helmet/space/rig/sundowner
+	boots_type = /obj/item/clothing/shoes/ninja/redsun
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	species_fit = list("Human")
+	species_restricted = list("Human") //only have human sprites :/
+	can_take_pai = TRUE
+	allowed = list(
+		/obj/item/weapon/tank,
+		/obj/item/weapon/cell,
+		/obj/item/weapon/melee/energy/sword,
+		/obj/item/stack/shuriken,
+		/obj/item/weapon/storage/box/syndie_kit/smokebombs,
+		/obj/item/toy/snappop/smokebomb,
+		/obj/item/weapon/substitutionhologram,
+		/obj/item/mounted/poster/stealth
+		)
+
+/obj/item/clothing/head/helmet/space/rig/sundowner
+	name = "sundowner headgear"
+	desc = "What may appear to be a simple visor and neck guard is in fact a highly sophisticated nano-weave helmet."
+	icon_state = "rig0-sundowner"
+	item_state = "rig0-sundowner"
+	_color = "sundowner"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	color_on = "#ff0000" //RED SUN
+	pressure_resistance = 0
+	eyeprot = 0
+	body_parts_covered = EARS|BEARD
+
+/obj/item/clothing/head/helmet/space/rig/sundowner/update_brightness() //Shitcode HIJACK!
+	..()
+	update_mask()
+
+/obj/item/clothing/head/helmet/space/rig/sundowner/proc/update_mask()
+	pressure_resistance = on ? (200 * ONE_ATMOSPHERE) : initial(pressure_resistance)
+	eyeprot = on ? 3 : initial(eyeprot)
+	body_parts_covered = on ? FULL_HEAD : initial(body_parts_covered) //It's ninja magic, i ain't gonna explain shit

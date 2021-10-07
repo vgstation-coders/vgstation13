@@ -24,13 +24,14 @@
 
 	var/nameShort = ""
 	var/nameLong = ""
-	var/list/zLevels = list()
+	var/list/datum/zLevel/zLevels = list()
 	var/zMainStation = 1
 	var/zCentcomm = 2
 	var/zTCommSat = 3
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
+	var/multiz = FALSE //Don't even boot up multiz if we don't need it.
 
 	//Center of thunderdome admin room
 	var/tDomeX = 0
@@ -103,35 +104,8 @@
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 
-	var/list/holodeck_rooms = list(
-		"Basketball Court",
-		"Beach",
-		"Boxing Court",
-		"Checkers Court",
-		"Chess Board",
-		"Desert",
-		"Dining Hall",
-		"Empty Court",
-		"Firing Range",
-		"Gym",
-		"Laser Tag Arena",
-		"Maze",
-		"Meeting Hall",
-		"Panic Bunker",
-		"Picnic Area",
-		"Snow Field",
-		"Theatre",
-		"Thunderdome Court",
-		"Wild Ride",
-		"Zoo"
-	)
-	var/list/emagged_holodeck_rooms = list(
-		"Begin Atmospheric Burn Simulation" = "Ensure the holodeck is empty before testing.",
-		"Begin Wildlife Simulation" = "Ensure the holodeck is empty before testing.",
-		"Club Catnip" = "Ensure the holodeck is empty before testing.",
-		"Combat Arena" = "Safety protocols disabled - weapons are not for recreation.",
-		"Medieval Tournament" = "Safety protocols disabled - weapons are not for recreation.",
-	)
+	var/lights_always_ok = FALSE //should all lights be on and working at roundstart
+	var/can_have_robots = TRUE
 
 /datum/map/New()
 	. = ..()
@@ -182,10 +156,6 @@ var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()
 
-//Set map-specific conditions here
-/datum/map/proc/map_specific_conditions(var/condition)
-	return 1
-
 //For any map-specific UI, like AI jumps
 /datum/map/proc/special_ui(var/obj/abstract/screen/S, mob/user)
 	return FALSE
@@ -223,6 +193,8 @@ var/global/list/accessable_z_levels = list()
 	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
 	var/base_area = null //default base area type, what blueprints erase into; if null, space; be careful with parent areas because locate() could find a child!
 	var/z //Number of the z-level (the z coordinate)
+	var/z_above //The linked zLevel Z above, for multiZ
+	var/z_below //Same, with below
 
 /datum/zLevel/proc/post_mapload()
 	return
@@ -273,11 +245,18 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = 1
 	base_turf = /turf/unsimulated/beach/sand
 
-
+/datum/zLevel/snowmine //not used on snaxi
+	name = "belowMine"
+	base_turf = /turf/unsimulated/floor/asteroid/cave/permafrost
+	base_area = /area/mine/explored
+	movementJammed = TRUE
+	transitionLoops = TRUE
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow //not used on snaxi
 	name = "snow"
 	base_turf = /turf/unsimulated/floor/snow
+	base_area = /area/surface/snow
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/snow/post_mapload()

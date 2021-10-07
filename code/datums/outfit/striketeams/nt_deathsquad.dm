@@ -21,7 +21,7 @@
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/ert,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/ert,
 	)
 
 	items_to_collect = list(
@@ -34,7 +34,7 @@
 
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
-		/obj/item/weapon/implant/explosive/,
+		/obj/item/weapon/implant/explosive/nuclear,
 	)
 
 	id_type = /obj/item/weapon/card/id/death_commando

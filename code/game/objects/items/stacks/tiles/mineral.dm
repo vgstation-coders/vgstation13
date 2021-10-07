@@ -141,7 +141,7 @@
 
 /obj/item/stack/tile/mineral/phazon/adjust_slowdown(mob/living/L, current_slowdown)
 	current_slowdown *= 0.75
-	..()
+	return ..()
 
 /obj/item/stack/tile/mineral/brass
 	name = "brass tile"

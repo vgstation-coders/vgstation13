@@ -19,6 +19,7 @@
 	G.synch()
 	target.LAssailant = src
 	target.grabbed_by(src)
+	target.assaulted_by(src)
 
 	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 	visible_message("<span class='warning'>[src] grabs [target] passively!</span>")
@@ -100,6 +101,7 @@
 
 	if(!damage)
 		if(miss_unarmed_attack(target))
+			target.on_dodge(src)
 			return
 
 	var/zone = ran_zone(get_unarmed_damage_zone(target))
@@ -123,12 +125,11 @@
 		damage += sharpness
 		damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 
-	if(target.BrainContainer)
-		target.BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=src,"damage"=damage_done))
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
 
-	INVOKE_EVENT(on_touched, list("user" = target, "unarmed attacked by" = src))
+	invoke_event(/event/unarmed_attack, list("attacker" = target, "attacked" = src))
+
 	add_logs(src, target, "attacked ([damage_done]dmg)", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 	return damage_done
 
@@ -141,4 +142,13 @@
 //Affects the chance of getting stunned by a punch
 //Chance is multiplied by the returned value
 /mob/living/proc/knockout_chance_modifier()
+	return 0
+
+/mob/living/proc/calcTackleForce()
+	return 0
+
+/mob/living/proc/calcTackleDefense()
+	return 0
+
+/mob/living/proc/calcTackleRange()
 	return 0

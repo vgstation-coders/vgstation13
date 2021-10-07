@@ -183,7 +183,7 @@
 	T.ClearDecals()
 
 /datum/paint_info/decal
-	icon		= 'icons/effects/warning_stripes.dmi'
+	icon		= 'icons/effects/floor_decals.dmi'
 	ftype		= PAINT_ALL
 	file_name	= "tile_painter_d_"
 
@@ -303,6 +303,18 @@
 /datum/rcd_schematic/tile/warning_plating
 	name = "Plating warning"
 
+/datum/rcd_schematic/tile/siding
+	name = "Siding"
+
+/datum/rcd_schematic/tile/siding_gold
+	name = "Wood siding"
+
+/datum/rcd_schematic/tile/siding_full
+	name = "Siding"
+
+/datum/rcd_schematic/tile/siding_gold_full
+	name = "Wood siding"
+
 /datum/rcd_schematic/tile/chapel
 	name = "Chapel"
 
@@ -371,6 +383,13 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"1"),
+
+		// Misc
+		new /datum/paint_info/decal(DIR_ONE,	"olympics"),
+		new /datum/paint_info/decal(DIR_ALL,	"siding"),
+		new /datum/paint_info/decal(DIR_ONE,	"siding_full"),
+		new /datum/paint_info/decal(DIR_ALL,	"wood_siding"),
+		new /datum/paint_info/decal(DIR_ONE,	"wood_siding_full")
 	),
 	"Gray" = list(
 		new /datum/paint_info(DIR_ONE,		"floor"),
@@ -644,6 +663,20 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info(DIR_ONE,		"solarpanel")
 	)
 )
+
+/datum/paint_info/emagged
+	icon  = 'icons/turf/floors.dmi'
+	icon_state = "css"
+	name	   = "missing texture"
+
+/datum/rcd_schematic/tile/emagged
+	name				= "ERROR"
+
+/datum/rcd_schematic/tile/emagged/New()
+	selection = new /datum/paint_info/emagged
+	..()
+
+
 
 #undef PAINT_ALL
 #undef PAINT_FLOOR

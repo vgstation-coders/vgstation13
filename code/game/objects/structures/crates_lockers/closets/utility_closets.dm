@@ -117,15 +117,15 @@
 	if(prob(70))
 		. += /obj/item/device/flashlight
 	if(prob(70))
-		. += /obj/item/weapon/screwdriver
+		. += /obj/item/tool/screwdriver
 	if(prob(70))
-		. += /obj/item/weapon/wrench
+		. += /obj/item/tool/wrench
 	if(prob(70))
-		. += /obj/item/weapon/weldingtool
+		. += /obj/item/tool/weldingtool
 	if(prob(70))
-		. += /obj/item/weapon/crowbar
+		. += /obj/item/tool/crowbar
 	if(prob(70))
-		. += /obj/item/weapon/wirecutters
+		. += /obj/item/tool/wirecutters
 	if(prob(70))
 		. += /obj/item/device/t_scanner
 	if(prob(20))

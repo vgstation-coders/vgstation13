@@ -20,12 +20,10 @@
 	var/ai_completions = ""
 	for(var/mob/living/silicon/ai/ai in mob_list)
 		var/icon/flat = getFlatIcon(ai)
-		end_icons += flat
-		var/tempstate = end_icons.len
 		if(ai.stat != 2)
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
+			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
 		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
+			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
 		ai_completions += "<br>[ai.write_laws()]"
 
 		if (ai.connected_robots.len)
@@ -40,23 +38,18 @@
 		if(!robo)
 			continue
 		var/icon/flat = getFlatIcon(robo)
-		end_icons += flat
-		var/tempstate = end_icons.len
 		if (!robo.connected_ai)
 			if (robo.stat != 2)
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
+				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
 			else
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
+				ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
 		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
+			ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
 		ai_completions += "<br>[robo.write_laws()]"
 
 	for(var/mob/living/silicon/pai/pAI in mob_list)
-		var/icon/flat
-		flat = getFlatIcon(pAI)
-		end_icons += flat
-		var/tempstate = end_icons.len
-		ai_completions += {"<br><b><img src="logo_[tempstate].png"> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
+		var/icon/flat = getFlatIcon(pAI)
+		ai_completions += {"<br><b><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
 
 	if (ai_completions)
 		completions += "<h2>Silicons Laws</h2>"
@@ -139,35 +132,40 @@
 					score["dmgestname"] = player.real_name
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
+		if(player.hangman_score > score["hangmanrecord"])
+			score["hangmanrecord"] = player.hangman_score
+			score["hangmanname"] = player.real_name
+			score["hangmanjob"] = player.job
+			score["hangmankey"] = player.key
 
 	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	leaderboard.insert_records(rich_escapes)
 
-	/*
-
-	var/nukedpenalty = 1000
-	if(ticker.mode.config_tag == "nuclear")
+	//var/nukedpenalty = 1000
+	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(NO)
 		var/foecount = 0
-		for(var/datum/mind/M in ticker.mode:syndicates)
+		for(var/datum/role/R in NO.members)
 			foecount++
+			var/datum/mind/M = R.antag
 			if(!M || !M.current)
 				score["opkilled"]++
 				continue
 			var/turf/T = M.current.loc
 			if(T && istype(T.loc, /area/security/brig))
-				score["arrested"]++
+				score["oparrested"]++
 			else if(M.current.stat == DEAD)
 				score["opkilled"]++
 		if(foecount == score["arrested"])
-			score["allarrested"] = 1
+			score["alloparrested"] = 1
 
-		score["disc"] = 1
+		/*score["disc"] = 1
 		for(var/obj/item/weapon/disk/nuclear/A in world)
 			if(A.loc != /mob/living/carbon)
 				continue
 			var/turf/location = get_turf(A.loc)
 			var/area/bad_zone1 = locate(/area)
-			var/area/bad_zone2 = locate(/area/syndicate_station)
+			var/area/bad_zone2 = locate(/area/syndicate_mothership)
 			var/area/bad_zone3 = locate(/area/wizard_station)
 			if(location in bad_zone1)
 				score["disc"] = 0
@@ -176,47 +174,46 @@
 			if(location in bad_zone3)
 				score["disc"] = 0
 			if(A.loc.z != map.zMainStation)
-				score["disc"] = 0
+				score["disc"] = 0*/
 
-		if(score["nuked"])
+		/*if(score["nuked"])
 			nukedpenalty = 50000 //Congratulations, your score was nuked
 
 			for(var/obj/machinery/nuclearbomb/nuke in machines)
 				if(nuke.r_code == "Nope")
 					continue
 				var/turf/T = get_turf(nuke)
-				if(istype(T, /area/syndicate_station) || istype(T, /area/wizard_station) || istype(T, /area/solar))
+				if(istype(T, /area/syndicate_mothership) || istype(T, /area/wizard_station) || istype(T, /area/solar))
 					nukedpenalty = 1000
 				else if(istype(T, /area/security/main) || istype(T, /area/security/brig) || istype(T, /area/security/armory) || istype(T, /area/security/checkpoint2))
 					nukedpenalty = 50000
 				else if(istype(T, /area/engine))
 					nukedpenalty = 100000
 				else
-					nukedpenalty = 10000
+					nukedpenalty = 10000*/
 
-
-	if(ticker.mode.config_tag == "revolution")
+	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
+	if(RV)
 		var/foecount = 0
-		for(var/datum/mind/M in ticker.mode:head_revolutionaries)
+		for(var/datum/role/R in RV.members)
 			foecount++
+			var/datum/mind/M = R.antag
 			if(!M || !M.current)
-				score["opkilled"]++
+				score["revkilled"]++
 				continue
 			var/turf/T = M.current.loc
 			if(istype(T.loc, /area/security/brig))
-				score["arrested"]++
+				score["revarrested"]++
 			else if (M.current.stat == DEAD)
-				score["opkilled"]++
+				score["revkilled"]++
 		if(foecount == score["arrested"])
-			score["allarrested"] = 1
+			score["allrevarrested"] = 1
 		for(var/mob/living/carbon/human/player in mob_list)
 			if(player.mind)
 				var/role = player.mind.assigned_role
 				if(role in list("Captain", "Head of Security", "Head of Personnel", "Chief Engineer", "Research Director"))
 					if(player.stat == DEAD)
 						score["deadcommand"]++
-
-	*/
 
 	//Check station's power levels
 	var/skip_power_loss = 0
@@ -293,29 +290,30 @@
 		if (isolated_antibodies[antigen] == 1)
 			score["disease_vaccine"] += "[antigen]"
 			if (antigen in blood_antigens)
-				score["disease_vaccine_score"] += 10
+				score["disease_vaccine_score"] += 40
 			else if (antigen in common_antigens)
-				score["disease_vaccine_score"] += 30
+				score["disease_vaccine_score"] += 120
 			else if (antigen in rare_antigens)
-				score["disease_vaccine_score"] += 50
+				score["disease_vaccine_score"] += 200
 			else if (antigen in alien_antigens)
-				score["disease_vaccine_score"] += 100
+				score["disease_vaccine_score"] += 400
 		else
 			score["disease_vaccine"] += "-"
 
-	if (score["disease_vaccine_score"] == 580)
-		score["disease_vaccine_score"] = 1000
+	if (score["disease_vaccine_score"] == 2320)
+		score["disease_vaccine_score"] = 3000 // panacea bonus
 
 	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
 	//--Science--
+	var/slimes = score["slimes"] * 20 //How many slimes were harvested
 	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
 
 
-	/*//Mode Specific
-	if(ticker.mode.config_tag == "nuclear")
-		if(score["disc"])
-			score["crewscore"] += 500
+	//Mode Specific
+	if(find_active_faction_by_type(/datum/faction/syndicate/nuke_op))
+		//if(score["disc"])
+			//score["crewscore"] += 500
 		var/killpoints = score["opkilled"] * 250
 		var/arrestpoints = score["arrested"] * 1000
 		score["crewscore"] += killpoints
@@ -323,15 +321,15 @@
 		//if(score["nuked"])
 			//score["crewscore"] -= nukedpenalty
 
-	if(ticker.mode.config_tag == "revolution")
+	if(find_active_faction_by_type(/datum/faction/revolution))
 		var/arrestpoints = score["arrested"] * 1000
 		var/killpoints = score["opkilled"] * 500
 		var/comdeadpts = score["deadcommand"] * 500
-		if(score["traitorswon"])
-			score["crewscore"] -= 10000
+		//if(score["traitorswon"])
+			//score["crewscore"] -= 10000
 		score["crewscore"] += arrestpoints
 		score["crewscore"] += killpoints
-		score["crewscore"] -= comdeadpts*/
+		score["crewscore"] -= comdeadpts
 
 	//Good Things
 	score["crewscore"] += plasmashipped
@@ -342,6 +340,7 @@
 	score["crewscore"] += escapoints
 	score["crewscore"] += meals
 	score["crewscore"] += time
+	score["crewscore"] += slimes
 	score["crewscore"] += artifacts
 	//score["crewscore"] += beneficialpoints
 	score["crewscore"] += score["disease_vaccine_score"]
@@ -398,24 +397,26 @@
 	to_chat(world, "<b>The crew's final score is:</b>")
 	to_chat(world, "<b><font size='4'>[score["crewscore"]]</font></b>")
 
+	scorestats(completions)
+
 	for(var/mob/E in player_list)
-		if(E.client)
-			E.scorestats(completions)
-			winset(E.client, "rpane.round_end", "is-visible=true")
+		E.display_round_end_scoreboard()
+
+	mode.send2servers()
 	return
 
-/mob/proc/scorestats(var/completions)
+/proc/scorestats(var/completions)
 	var/dat = completions
 	dat += {"<BR><h2>Round Statistics and Score</h2>"}
 
-	/*
-
-	if(ticker.mode.name == "nuclear emergency")
+	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(NO)
 		var/foecount = 0
 		var/crewcount = 0
 		var/diskdat = ""
 		var/bombdat = null
-		for(var/datum/mind/M in ticker.mode:syndicates)
+		//var/nukedpenalty = 1000
+		for(var/datum/role/R in NO.members)
 			foecount++
 		for(var/mob/living/C in mob_list)
 			if(!istype(C,/mob/living/carbon/human) || !istype(C,/mob/living/silicon/robot) || !istype(C,/mob/living/silicon/ai))
@@ -441,49 +442,47 @@
 			diskdat += "in [disk_loc.loc]"
 			break // Should only need one go-round, probably
 
-		for(var/obj/machinery/nuclearbomb/nuke in machines)
+		/*for(var/obj/machinery/nuclearbomb/nuke in machines)
 			if(nuke.r_code == "Nope")
 				continue
-			var/turf/T = NUKE.loc
+			var/turf/T = nuke.loc
 			bombdat = T.loc
-			if(istype(T,/area/syndicate_station) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
+			if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
 				nukedpenalty = 1000
 			else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
 				nukedpenalty = 50000
 			else if (istype(T,/area/engine))
 				nukedpenalty = 100000
 			else
-				nukedpenalty = 10000
-			break
+				nukedpenalty = 5000
+			break*/
 		if(!diskdat)
 			diskdat = "Uh oh. Something has fucked up! Report this."
 
-		<B>Final Location of Nuke:</B> [bombdat]<BR>
-		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
-
-		dat += {"<B><U>MODE STATS</U></B><BR>
+		dat += {"<B><U>NUCLEAR ASSAULT STATS</U></B><BR>
 		<B>Number of Operatives:</B> [foecount]<BR>
 		<B>Number of Surviving Crew:</B> [crewcount]<BR>
 		<B>Final Location of Nuke:</B> [bombdat]<BR>
 		<B>Final Location of Disk:</B> [diskdat]<BR><BR>
-		<B>Operatives Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
+		<B>Operatives Arrested:</B> [score["oparrested"]] ([score["oparrested"] * 1000] Points)<BR>
 		<B>Operatives Killed:</B> [score["opkilled"]] ([score["opkilled"] * 250] Points)<BR>
-		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
-		<B>All Operatives Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
+		<B>All Operatives Arrested:</B> [score["alloparrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
+//		<B>Station Destroyed:</B> [score["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
 //		<B>Nuclear Disk Secure:</B> [score["disc"] ? "Yes" : "No"] ([score["disc"] * 500] Points)<BR>
 
-	if(ticker.mode.name == "revolution")
+	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
+	if(RV)
 		var/foecount = 0
 		var/comcount = 0
 		var/revcount = 0
 		var/loycount = 0
-		for(var/datum/mind/M in ticker.mode:head_revolutionaries)
-			if(M.current && M.current.stat != 2)
-				foecount++
-		for(var/datum/mind/M in ticker.mode:revolutionaries)
-			if(M.current && M.current.stat != 2)
-				revcount++
+		for(var/datum/role/R in RV.members)
+			if(R.antag.current && R.antag.current.stat != 2)
+				if(istype(R,/datum/role/revolutionary/leader))
+					foecount++
+				else
+					revcount++
 		for(var/mob/living/carbon/human/player in mob_list)
 			if(player.mind)
 				var/role = player.mind.assigned_role
@@ -491,27 +490,25 @@
 					if(player.stat != 2)
 						comcount++
 				else
-					if(player.mind in ticker.mode:revolutionaries)
+					if(locate(/datum/role/revolutionary) in player.mind.antag_roles)
 						continue
 					loycount++
 		for(var/mob/living/silicon/X in mob_list)
 			if (X.stat != 2)
 				loycount++
-		var/revpenalty = 10000
+		//var/revpenalty = 10000
 
-		dat += {"<B><U>MODE STATS</U></B><BR>
+		dat += {"<B><U>REVOLUTION STATS</U></B><BR>
 		<B>Number of Surviving Revolution Heads:</B> [foecount]<BR>
 		<B>Number of Surviving Command Staff:</B> [comcount]<BR>
 		<B>Number of Surviving Revolutionaries:</B> [revcount]<BR>
 		<B>Number of Surviving Loyal Crew:</B> [loycount]<BR><BR>
-		<B>Revolution Heads Arrested:</B> [score["arrested"]] ([score["arrested"] * 1000] Points)<BR>
-		<B>Revolution Heads Slain:</B> [score["opkilled"]] ([score["opkilled"] * 500] Points)<BR>
+		<B>Revolution Heads Arrested:</B> [score["revarrested"]] ([score["revarrested"] * 1000] Points)<BR>
+		<B>Revolution Heads Slain:</B> [score["revkilled"]] ([score["revkilled"] * 500] Points)<BR>
 		<B>Command Staff Slain:</B> [score["deadcommand"]] (-[score["deadcommand"] * 500] Points)<BR>
-		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
-		<B>All Revolution Heads Arrested:</B> [score["allarrested"] ? "Yes" : "No"] (Score tripled)<BR>
+		<B>All Revolution Heads Arrested:</B> [score["allrevarrested"] ? "Yes" : "No"] (Score tripled)<BR>
 		<HR>"}
-
-	*/
+//		<B>Revolution Successful:</B> [score["traitorswon"] ? "Yes" : "No"] (-[score["traitorswon"] * revpenalty] Points)<BR>
 
 //	var/totalfunds = wagesystem.station_budget + wagesystem.research_budget + wagesystem.shipping_budget
 //	<B>Beneficial diseases in living mobs:</B> [score["disease_good"]] ([score["disease_good"] * 20] Points)<BR><BR>
@@ -531,6 +528,7 @@
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Isolated Vaccines:</B> [score["disease_vaccine"]] ([score["disease_vaccine_score"]] Points)<BR>
 	<B>Extracted Symptoms:</B> [score["disease_extracted"]] ([score["disease_effects"]] Points)<BR>
+	<B>Harvested Slimes:</B> [score["slimes"]] ([score["slimes"] * 20] Points)<BR><BR>
 	<B>Analyzed & Activated Large Artifacts:</B> [score["artifacts"]] ([score["artifacts"] * 400] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
@@ -569,6 +567,8 @@
 		dat += "<B>Law Upload Modules Used:</B> [score["lawchanges"]]<BR>"
 	if(score["gunsspawned"] > 0)
 		dat += "<B>Guns Magically Spawned:</B> [score["gunsspawned"]]<BR>"
+	if(score["hangmanrecord"] > 0)
+		dat += "<B>Highest Hangman Score:</B> [score["hangmanname"]], [score["hangmanjob"]]: [score["hangmanrecord"]] ([score["hangmankey"]])<BR>"
 	if(score["nukedefuse"] < 30)
 		dat += "<B>Seconds Left on the Nuke When It Was Defused:</B> [score["nukedefuse"]]<BR>"
 	if(score["disease_most"] != null)
@@ -674,21 +674,21 @@
 			var/cash = num2text(entry.cash, 12)
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 
-	for(var/i = 1; i <= end_icons.len; i++)
-		src << browse_rsc(end_icons[i],"logo_[i].png")
+	round_end_info = dat
+	round_end_info_no_img = remove_images(dat)
+	log_game(round_end_info_no_img)
+	stat_collection.crew_score = score["crewscore"]
 
-	if(!endgame_info_logged) //So the End Round info only gets logged on the first player.
-		endgame_info_logged = 1
-		round_end_info = dat
-		log_game(dat)
-
-		stat_collection.crew_score = score["crewscore"]
+/mob/proc/display_round_end_scoreboard()
+	if (!client)
+		return
 
 	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
-	popup.set_content(dat)
+	popup.set_content(round_end_info)
 	popup.open()
 
-	return
+	winset(client, "rpane.round_end", "is-visible=true")
+	winset(client, "rpane.last_round_end", "is-visible=false")
 
 /datum/achievement
     var/item

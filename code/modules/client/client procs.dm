@@ -72,6 +72,10 @@
 		var/datum/log_controller/I = investigations[I_HREFS]
 		I.write("<small>[time_stamp()] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][copytext(sanitize(href), 1, 3000)]<br />")
 
+	// Tgui Topic middleware
+	if(tgui_Topic(href_list))
+		return
+
 	switch(href_list["_src_"])
 		if("holder")
 			hsrc = holder
@@ -269,6 +273,19 @@
 	//Set map label to correct map name
 	winset(src, "rpane.mapb", "text=\"[map.nameLong]\"")
 
+	if (round_end_info)
+		winset(src, "rpane.round_end", "is-visible=true")
+		winset(src, "rpane.last_round_end", "is-visible=false")
+	else if (last_round_end_info)
+		winset(src, "rpane.round_end", "is-visible=false")
+		winset(src, "rpane.last_round_end", "is-visible=true")
+	else
+		winset(src, "rpane.round_end", "is-visible=false")
+		winset(src, "rpane.last_round_end", "is-visible=false")
+
+	if (runescape_pvp)
+		to_chat(src, "<span class='userdanger'>WARNING: Wilderness mode is enabled; players can only harm one another in maintenance areas!</span>")
+
 	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 
 	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
@@ -405,7 +422,7 @@
 		qdel(query_age)
 	if(!isnum(player_age))
 		player_age = 0
-	if(age < 14)
+	if(age < MINIMUM_NON_SUS_ACCOUNT_AGE)
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
 	testing("[src]/[ckey(key)] logged in with age of [age]/[player_age]/[Joined]")
@@ -472,13 +489,13 @@
 
 
 /client/proc/send_html_resources()
-	if(adv_camera && minimapinit)
-		adv_camera.sendResources(src)
 	while(!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)
 	var/datum/asset/simple/E = new/datum/asset/simple/emoji_list()
 	send_asset_list(src, E.assets)
+	var/datum/asset/simple/F = new/datum/asset/simple/other_fonts()
+	send_asset_list(src, F.assets)
 
 /proc/get_role_desire_str(var/rolepref)
 	switch(rolepref & ROLEPREF_VALMASK)
@@ -548,6 +565,9 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			for(var/obj/item/clothing/accessory/holomap_chip/HC in U.accessories)
 				HC.update_holomap()
 
+	if(mob)
+		mob.UpdateUIScreenLoc()
+
 /client/verb/SwapSides()
 	set name = "swapsides"
 	set hidden = 1
@@ -612,5 +632,7 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 	if(prefs.hear_voicesound)
 		if(issilicon(origin))
 			mob.playsound_local(get_turf(origin), get_sfx("voice-silicon"),50,1)
+		if(isvox(origin))
+			mob.playsound_local(get_turf(origin), get_sfx("voice-vox"),50,0)
 		else
 			mob.playsound_local(get_turf(origin), get_sfx("voice-human"),50,1)

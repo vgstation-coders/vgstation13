@@ -516,6 +516,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		new_character.dna = new()//Let's first give them a new DNA.
 		new_character.dna.unique_enzymes = record_found.fields["b_dna"]//Enzymes are based on real name but we'll use the record for conformity.
 		new_character.dna.b_type = record_found.fields["b_type"]
+		new_character.copy_dna_data_to_blood_reagent()
 
 		// I HATE BYOND.  HATE.  HATE. - N3X
 		var/list/newSE= record_found.fields["enzymes"]
@@ -635,7 +636,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(!M)
 			return
 		M.revive(0)
-		M.suiciding = 0
+		if(M.mind)
+			M.mind.suiciding = 0
 
 		log_admin("[key_name(usr)] healed / revived [key_name(M)]")
 		message_admins("<span class='warning'>Admin [key_name_admin(usr)] healed / revived [key_name_admin(M)]!</span>", 1)
@@ -687,7 +689,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/cmd_admin_delete(atom/O)
+/client/proc/cmd_admin_delete(atom/O in world)
 	set category = "Admin"
 	set name = "Delete"
 

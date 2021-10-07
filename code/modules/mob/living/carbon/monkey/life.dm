@@ -72,6 +72,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
+		standard_damage_overlay_updates()
 
 	// Grabbing
 	for(var/obj/item/weapon/grab/G in src)
@@ -81,9 +82,9 @@
 
 		if(prob(33) && canmove && isturf(loc) && !pulledby && !(grabbed_by?.len)) //won't move if being pulled
 
-			StartMoving()
+			invoke_event(/event/before_move)
 			step(src, pick(cardinal))
-			EndMoving()
+			invoke_event(/event/after_move)
 
 		if(prob(1))
 			passive_emote()
@@ -225,7 +226,7 @@
 						block = 1
 
 				if(!block)
-					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
+					for(var/obj/effect/smoke/chem/smoke in view(1, src))
 						if(smoke.reagents.total_volume)
 							smoke.reagents.reaction(src, INGEST)
 							spawn(5)

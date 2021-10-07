@@ -36,7 +36,7 @@
 			Tr = get_turf(C)
 			if((Tr) && (Tr.z != src.z))
 				continue//Out of range
-			if(!C.implanted)
+			if(!C.imp_in)
 				continue
 
 			dat += {"[C.imp_in.name] | Remaining Units: [C.reagents.total_volume] | Inject:
@@ -44,12 +44,20 @@
 				<A href='?src=\ref[src];inject5=\ref[C]'>(<font color=red>(5)</font>)</A>
 				<A href='?src=\ref[src];inject10=\ref[C]'>(<font color=red>(10)</font>)</A><BR>
 				********************************<BR>"}
+		for(var/obj/item/weapon/implant/explosive/remote/R in remote_implants)
+			Tr = get_turf(R)
+			if((Tr) && (Tr.z != src.z))
+				continue//Out of range
+			if(!R.imp_in)
+				continue
+
+			dat += {"[R.imp_in.name] | <A href='?src=\ref[src];explode=\ref[R]'><font color=red>Activate explosion</font></A>"}
 		dat += "<HR>Tracking Implants<BR>"
 		for(var/obj/item/weapon/implant/tracking/T in tracking_implants)
 			Tr = get_turf(T)
 			if((Tr) && (Tr.z != src.z))
 				continue//Out of range
-			if(!T.implanted)
+			if(!T.imp_in)
 				continue
 			var/loc_display = "Unknown"
 			var/mob/living/carbon/M = T.imp_in
@@ -114,6 +122,11 @@
 
 			var/mob/living/carbon/R = I.imp_in
 			to_chat(R, "<span class='good'>You hear a voice in your head saying: '[warning]'</span>")
+
+		else if(href_list["explode"])
+			var/obj/item/weapon/implant/I = locate(href_list["explode"])
+			if(istype(I))
+				I.activate()
 
 		src.add_fingerprint(usr)
 	src.updateUsrDialog()

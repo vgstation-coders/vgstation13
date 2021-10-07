@@ -77,7 +77,7 @@
 	name = "plasmaman atmospheric suit"
 	icon_state = "plasmamanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -96,7 +96,7 @@
 	name = "plasmaman engineer suit"
 	icon_state = "plasmamanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 

@@ -105,7 +105,7 @@
 
 /datum/recipe/donutburger
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal
 		)
@@ -173,6 +173,11 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
 	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburger
+
+/datum/recipe/veggieburgernymph
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph
 
 /datum/recipe/avocadoburger
 	reagents = list(FLOUR = 5)
@@ -302,21 +307,19 @@
 // Human ///////////////////////////////////////////////////////
 
 /datum/recipe/human //Parent datum only
-	make_food(var/obj/container as obj)
-		var/human_name
-		var/human_job
-		for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
-			if(HM.subjectname)
-				human_name = HM.subjectname
-				human_job = HM.subjectjob
-				break
-		var/lastname_index = findtext(human_name, " ")
-		if(lastname_index)
-			human_name = copytext(human_name,lastname_index+1)
-		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
-		HB.name = human_name+HB.name
-		HB.job = human_job
-		return HB
+
+/datum/recipe/human/make_food(var/obj/container)
+	var/human_name
+	for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
+		if(HM.subjectname)
+			human_name = HM.subjectname
+			break
+	var/lastname_index = findtext(human_name, " ")
+	if(lastname_index)
+		human_name = copytext(human_name,lastname_index+1)
+	var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
+	HB.name = human_name+HB.name
+	return HB
 
 /datum/recipe/human/burger
 	reagents = list(FLOUR = 5)
@@ -380,6 +383,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
+
+/datum/recipe/pancake
+	reagents = list(PANCAKE = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pancake
 
 /datum/recipe/sugarcookie
 	reagents = list(FLOUR = 5, SUGAR = 5)
@@ -642,6 +649,20 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries
+
+/datum/recipe/punnetofcheesyfries
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries,
+		/obj/item/stack/sheet/cardboard,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
+
+/datum/recipe/coneoffries
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/fries,
+		/obj/item/stack/sheet/cardboard,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/cone
 
 /datum/recipe/popcorn
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/corn)
@@ -1228,7 +1249,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
 
 /datum/recipe/avocadosoup
-	reagents = list(WATER = 5, LIMEJUICE = 5, CREAM = 10)
+	reagents = list(LIMEJUICE = 5, CREAM = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
@@ -1914,10 +1935,10 @@
 		)
 	result = /obj/item/weapon/storage/fancy/food_box/chicken_bucket
 
-/datum/recipe/chicken_fillet
+/datum/recipe/chicken_tenders
 	reagents = list(CORNOIL = 3)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_fillet
+	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders
 
 /datum/recipe/crab_sticks
 	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)
@@ -2882,3 +2903,64 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
 
+/datum/recipe/sweetroll
+	reagents = list(FLOUR = 5, SUGAR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/butter,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sweetroll
+
+// You have now entered the Ayy food zone
+
+/datum/recipe/greytvdinner1
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner1
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
+
+/datum/recipe/greytvdinner2
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner2
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2
+
+/datum/recipe/greytvdinner3
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinner3
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3
+
+/datum/recipe/greygreens
+	reagents = list(SOYSAUCE = 10)
+	items = list(
+		/obj/item/weapon/grown/nettle,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/greygreens
+
+/datum/recipe/stuffedpitcher
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
+
+/datum/recipe/nymphsperil
+	reagents = list(RICE = 10, CORNOIL = 5, SACID = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
+
+//You have now exited the ayy food zone. Thanks for visiting.
+
+/datum/recipe/dionaroast
+	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, CORNOIL = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/apple
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/dionaroast

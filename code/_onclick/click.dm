@@ -75,7 +75,7 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	lazy_invoke_event(/lazy_event/on_clickon, list(
+	invoke_event(/event/clickon, list(
 		"user" = src,
 		"modifiers" = modifiers,
 		"target" = A
@@ -118,7 +118,10 @@
 		return
 
 	if(in_throw_mode)
-		throw_item(A)
+		if(!get_active_hand() && (a_intent == I_GRAB || a_intent == I_DISARM))
+			doTackle(A)
+		else
+			throw_item(A)
 		return
 
 	var/obj/item/held_item = get_active_hand()
@@ -147,12 +150,12 @@
 				resolved = A.attackby(held_item, src, params)
 				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
-				if(!resolved && A && !A.gcDestroyed && held_item)
+				if(!resolved && A && !A.gcDestroyed && held_item && !held_item.gcDestroyed)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
 			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
+			if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 
@@ -183,7 +186,7 @@
 	else
 		if(ismob(A))
 			delayNextAttack(10)
-		if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
+		if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 			return
 		RangedAttack(A, params)
 
@@ -245,7 +248,7 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	lazy_invoke_event(/lazy_event/on_ruattack, list("atom" = A))
+	invoke_event(/event/ruattack, list("atom" = A))
 
 /*
 	Middle click
@@ -264,7 +267,7 @@
 
 /mob/proc/MiddleShiftClickOn(var/atom/A)
 	A.MiddleShiftClick(src)
-	
+
 /atom/proc/MiddleShiftClick(var/mob/user)
 	user.pointed(src)
 
@@ -388,9 +391,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
-		StartMoving()
-		Facing()
-		EndMoving()
+		invoke_event(/event/before_move)
+		invoke_event(/event/face)
+		invoke_event(/event/after_move)
 		return
 
 	if(abs(dx) < abs(dy))
@@ -404,9 +407,9 @@
 		else
 			change_dir(WEST)
 
-	StartMoving()
-	Facing()
-	EndMoving()
+	invoke_event(/event/before_move)
+	invoke_event(/event/face)
+	invoke_event(/event/after_move)
 
 
 // File renamed to mouse.dm?

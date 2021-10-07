@@ -1,7 +1,5 @@
 /datum/job/rd
 	title = "Research Director"
-	flag = RD
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -23,8 +21,6 @@
 
 /datum/job/scientist
 	title = "Scientist"
-	flag = SCIENTIST
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 5
 	spawn_positions = 3
@@ -32,23 +28,50 @@
 	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
-	access = list(access_robotics, access_rnd, access_tox_storage, access_science, access_xenobiology)
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
-	alt_titles = list("Xenoarcheologist", "Anomalist", "Plasma Researcher", "Xenobiologist", "Research Botanist")
+	alt_titles = list("Plasma Researcher", "Research Botanist")
 
 	outfit_datum = /datum/outfit/scientist
 
+/datum/job/xenoarchaeologist
+	title = "Xenoarchaeologist"
+	faction = "Station"
+	total_positions = 2
+	spawn_positions = 2
+	supervisors = "the research director"
+	wage_payout = 55
+	selection_color = "#ffeeff"
+	idtype = /obj/item/weapon/card/id/research
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
+	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
+	alt_titles = list("Anomalist")
+
+	outfit_datum = /datum/outfit/xenoarchaeologist
+
+datum/job/xenobiologist
+	title = "Xenobiologist"
+	faction = "Station"
+	total_positions = 2
+	spawn_positions = 2
+	supervisors = "the research director"
+	wage_payout = 55
+	selection_color = "#ffeeff"
+	idtype = /obj/item/weapon/card/id/research
+	access = list(access_rnd, access_robotics, access_tox_storage, access_science, access_xenobiology)
+	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
+
+	outfit_datum = /datum/outfit/xenobiologist
+
 /datum/job/roboticist
 	title = "Roboticist"
-	flag = ROBOTICIST
-	department_flag = MEDSCI
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "research director"
 	wage_payout = 55
 	selection_color = "#ffeeff"
-	access = list(access_robotics, access_tech_storage, access_morgue, access_science, access_rnd) //As a job that handles so many corpses, it makes sense for them to have morgue access.
+	access = list(access_rnd, access_robotics, access_tech_storage, access_morgue, access_science) //As a job that handles so many corpses, it makes sense for them to have morgue access.
 	minimal_access = list(access_robotics, access_tech_storage, access_morgue, access_science) //As a job that handles so many corpses, it makes sense for them to have morgue access.
 	alt_titles = list("Biomechanical Engineer","Mechatronic Engineer")
 

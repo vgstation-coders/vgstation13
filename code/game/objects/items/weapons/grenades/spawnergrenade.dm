@@ -57,7 +57,7 @@
 	name = "viscerator grenade"
 	desc = "Will unleash a swarm of hostile viscerators that will hack at any nearby targets indiscriminately."
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
-	deliveryamt = 2
+	deliveryamt = 4
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 	mob_faction = "syndicate"
 
@@ -77,11 +77,11 @@
 
 /obj/item/weapon/grenade/spawnergrenade/beenade
 	name = "bee-nade"
-	desc = "Angry bees. When you need them, where you need them."
+	desc = "Over a dozen angry hornets. The grenade comes equiped with a pheromone spray so the hornets won't attack the one who threw the grenade."
 	icon_state = "beenade"
-	spawner_type = /mob/living/simple_animal/bee/angry
+	spawner_type = /mob/living/simple_animal/bee/adminSpawned_hornet/angry
 	deliveryamt = 15
-	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4;" + Tc_SYNDICATE + "=4"
 
 
 /obj/item/weapon/grenade/spawnergrenade/beenade/postPrime(var/list/spawned_atoms)
@@ -89,6 +89,16 @@
 		return
 	playsound(src, 'sound/effects/bees.ogg', 100, 1)
 
+	for(var/mob/living/simple_animal/bee/B in spawned_atoms)
+		B.FindTarget()
+		B.MoveToTarget()
+
+
+/obj/item/weapon/grenade/spawnergrenade/beenade/handle_faction(var/mob/living/spawned, var/mob/living/L)
+	if(!spawned || !L)
+		return
+
+	spawned.faction = "\ref[L]"
 
 /obj/item/weapon/grenade/spawnergrenade/bearnade
 	name = "tactical bearstrike delivery beacon"

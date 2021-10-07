@@ -1,5 +1,5 @@
 /obj/item/weapon/banhammer
-	desc = "A banhammer"
+	desc = "A banhammer."
 	name = "banhammer"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "toyhammer"
@@ -12,13 +12,13 @@
 	attack_verb = list("bans")
 
 
-/obj/item/weapon/banhammer/suicide_act(mob/user)
+/obj/item/weapon/banhammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/sord
 	name = "\improper SORD"
-	desc = "This thing is so unspeakably shitty you are having a hard time even holding it."
+	desc = "This thing is so unspeakably shitty you're having a hard time even holding it."
 	icon_state = "sord"
 	item_state = "sord"
 	flags = FPRINT
@@ -29,7 +29,7 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
-/obj/item/weapon/sord/suicide_act(mob/user)
+/obj/item/weapon/sord/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -59,17 +59,13 @@
 /obj/item/weapon/claymore/IsShield()
 	return 1
 
-/obj/item/weapon/claymore/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
-
 /obj/item/weapon/claymore/cultify()
 	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()
 
 /obj/item/weapon/katana
 	name = "katana"
-	desc = "Woefully underpowered in D20"
+	desc = "Woefully underpowered in D20."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "katana"
 	item_state = null
@@ -84,7 +80,7 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/weapon/katana/suicide_act(mob/user)
+/obj/item/weapon/katana/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -184,7 +180,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 			I = null
 			qdel(src)
 
-	else if(iswirecutter(I))
+	else if(I.is_wirecutter(user))
 		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
 
 		user.before_take_item(I)
@@ -255,7 +251,7 @@ obj/item/weapon/banhammer/admin
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
+/obj/item/weapon/melee/bone_hammer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
@@ -454,7 +450,7 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/hammer
 	name = "smithing hammer"
-	desc = "for those with a predeliction for applying concussive maintenance"
+	desc = "for those with a predeliction for applying concussive maintenance."
 	icon = 'icons/obj/blacksmithing/hammer.dmi'
 	icon_state = "hammer"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')

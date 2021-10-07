@@ -14,28 +14,36 @@
 	layer = BLOB_CORE_LAYER
 	var/core_warning_delay = 0
 	var/previous_health = 200
+	var/no_ghosts_allowed = FALSE
 
 	icon_new = "core"
 	icon_classic = "blob_core"
 
 
 /obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0)
-	looks = newlook
+	if (looks == "new")
+		looks = newlook
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
-	if(icon_size == 64)
-		if(!no_morph && new_overmind)
-			flick("core_spawn",src)
+	if (!asleep && icon_size == 64)
+		if(new_overmind)
+			if (!no_morph)
+				flick("core_spawn",src)
 		else
 			icon_state = "cerebrate"
-			flick("morph_core",src)
+			icon_new = "cerebrate"
+			if (!no_morph)
+				flick("morph_core",src)
 	playsound(src, get_sfx("gib"),50,1)
-	if(!overmind)
-		create_overmind(new_overmind)
+	if(!overmind && !asleep)
+		if (new_overmind)
+			create_overmind(new_overmind)
+		else
+			recruit_overmind()
 	point_rate = new_rate
 	last_resource_collection = world.time
-	..(loc, newlook)
+	..(loc, looks)
 
 /obj/effect/blob/core/Destroy()
 	blob_cores -= src
@@ -82,10 +90,13 @@
 		health = min(maxhealth, health + 1)
 		update_icon()
 
+	if(asleep)
+		return
+
 	if(!spawning)//no expanding on the first Life() tick
 
 		if(icon_size == 64)
-		//	anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
+			anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = layer+0.5, offX = -16, offY = -16, alph = 200, plane = BLOB_PLANE)
 			for(var/mob/M in viewers(src))
 				M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
@@ -128,12 +139,15 @@
 			to_chat(usr, "<span class='warning'>Looks like someone applied first. First arrived, first served. Better luck next time.</span>")
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
+	if (no_ghosts_allowed)
+		to_chat(user, "<span class='warning'>This [src] cannot be controlled by ghosts.</span>")
+		return
 	if (!overmind)
 		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
-		if(confirm)
+		if(confirm == "Yes")
 			if(!overmind)
 				create_overmind(user.client)
-			else	
+			else
 				to_chat(user, "<span class='warning'>Someone has already taken control of this core.</span>")
 
 /obj/effect/blob/core/proc/create_overmind(var/client/new_overmind)
@@ -174,11 +188,11 @@
 
 	if (icon_state == "cerebrate")
 		icon_state = "core"
+		icon_new = "core"
 		flick("morph_cerebrate",src)
 
 	B.special_blobs += src
-	B.hud_used.blob_hud()
-	B.update_specialblobs()
+	B.DisplayUI("Blob")
 
 	if(!B.blob_core.creator)//If this core is the first of its lineage (created by game mode/event/admins, instead of another overmind) it gets to choose its looks.
 		var/new_name = "Blob Overmind ([rand(1, 999)])"
@@ -203,8 +217,6 @@
 		B.name = new_name
 		B.real_name = new_name
 		B.mind.name = new_name
-		B.gui_icons.blob_spawncore.icon_state = ""
-		B.gui_icons.blob_spawncore.name = ""
 		for(var/mob/camera/blob/O in blob_overminds)
 			if(O != B)
 				to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
@@ -213,6 +225,15 @@
 
 /obj/effect/blob/core/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
+
+		if (looks == "AME_new")
+			icon_state = "core"
+			var/hurt_percentage = round((health * 100) / maxhealth)
+			if (hurt_percentage < 25)
+				icon_state = "core_fuck"
+			else if (hurt_percentage < 50)
+				icon_state = "core_critical"
+
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
@@ -227,3 +248,20 @@
 					update_icon()
 
 			..()
+
+
+/obj/effect/blob/update_icon(var/spawnend = 0)
+	if(icon_size == 64)
+		if(health < maxhealth)
+			var/hurt_percentage = round((health * 100) / maxhealth)
+			var/hurt_icon
+			switch(hurt_percentage)
+				if(0 to 25)
+					hurt_icon = "hurt_100"
+				if(26 to 50)
+					hurt_icon = "hurt_75"
+				if(51 to 75)
+					hurt_icon = "hurt_50"
+				else
+					hurt_icon = "hurt_25"
+			overlays += image(icon,hurt_icon)

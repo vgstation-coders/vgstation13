@@ -102,9 +102,9 @@
 	if(user)
 		if(active)
 			trigger(user)
-			user.lazy_register_event(/lazy_event/on_moved, src, .proc/holder_moved)
+			user.register_event(/event/moved, src, .proc/holder_moved)
 			return
-		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/holder_moved)
+		user.unregister_event(/event/moved, src, .proc/holder_moved)
 
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active

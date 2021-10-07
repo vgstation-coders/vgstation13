@@ -18,8 +18,10 @@
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
 #define PLAGUEMICE "plague mice invasion"
+#define SPIDERINFESTATION "spider infestation"
 #define SPIDERCLAN "spider clan"
 #define XENOMORPH_HIVE "alien hivemind"
+#define JUSTICE_DEPARTMENT "justice department"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -28,6 +30,7 @@
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
 #define GREYTIDE_FAC "Greytide mindlink"
 #define WIZARD_CONTRACT "wizard contract"
+#define TIMEAGENCY "time agency"
 // Role IDs
 #define TRAITOR "traitor"
 #define CHALLENGER "challenger"
@@ -66,13 +69,17 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
+#define TIMEAGENT "time agent"
+#define TIMEAGENTTWIN "time agent twin"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
+#define GIANTSPIDER "giant spider"
 #define STREAMER "streamer"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"
 #define CLOWN_LING "clown ling"
 #define TAG_MIME "tag mime"
+#define JUDGE "judge"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -188,6 +195,7 @@
 #define CONVERSION_NOCHOICE	0
 #define CONVERSION_ACCEPT	1
 #define CONVERSION_BANNED	2
+#define CONVERSION_MINDLESS	3
 
 #define CONVERTIBLE_ALWAYS	1
 #define CONVERTIBLE_CHOICE	2
@@ -266,3 +274,6 @@
 #define SYNDICATE_CANCELED	2
 
 #define DOUBLE_AGENT_TC_REWARD	5
+
+#define BASE_RULESET_WEIGHT 10
+#define ADDITIONAL_RULESET_WEIGHT 1.4

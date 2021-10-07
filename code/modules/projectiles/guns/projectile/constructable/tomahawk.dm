@@ -10,7 +10,7 @@
 
 /obj/item/weapon/hatchet/tomahawk/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/surgicaldrill))
+	if(istype(W, /obj/item/tool/surgicaldrill))
 		to_chat(user, "You begin drilling a hole through the handle of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 30))
@@ -77,13 +77,13 @@
 			var/obj/item/weapon/broken_pipe_tomahawk/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			var/obj/item/weapon/wrench/I = new (get_turf(user))
+			var/obj/item/tool/wrench/I = new (get_turf(user))
 			user.put_in_hands(I)
 	else
 		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
 			new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
 		else
-			new /obj/item/weapon/wrench(get_turf(src.loc))
+			new /obj/item/tool/wrench(get_turf(src.loc))
 	qdel(src)
 
 /obj/item/weapon/hatchet/tomahawk/examine(mob/user)
@@ -160,7 +160,7 @@
 
 /obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
 	if(current_blunt)
-		current_blunt.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/burnout)
+		current_blunt.unregister_event(/event/destroyed, src, .proc/burnout)
 		qdel(current_blunt)
 		current_blunt = null
 	..()
@@ -179,7 +179,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		B.lazy_register_event(/lazy_event/on_destroyed, src, .proc/burnout)
+		B.register_event(/event/destroyed, src, .proc/burnout)
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()
@@ -322,7 +322,7 @@
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src)
-		B.lazy_register_event(/lazy_event/on_destroyed, src, .proc/burnout)
+		B.register_event(/event/destroyed, src, .proc/burnout)
 		B.inside_item = 1
 		W.reagents.trans_to(B, (W.reagents.total_volume))
 		B.update_brightness()

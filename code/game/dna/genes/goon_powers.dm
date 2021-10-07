@@ -51,11 +51,25 @@
 /datum/dna/gene/basic/stealth/chameleon/New()
 	block = CHAMELEONBLOCK
 
+/datum/dna/gene/basic/stealth/chameleon/activate(var/mob/M, var/connected, var/flags)
+	..()
+	M.register_event(/event/moved, src, .proc/mob_moved)
+	return 1
+
+/datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
+	if(!..())
+		return 0
+	M.unregister_event(/event/moved, src, .proc/mob_moved)
+	return 1
+
+/datum/dna/gene/basic/stealth/chameleon/proc/mob_moved(var/mob/mover)
+	mover.alphas["chameleon_stealth"] = round(255 * 0.80)
+
 /datum/dna/gene/basic/stealth/chameleon/OnMobLife(var/mob/M)
 	if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
 		M.alphas["chameleon_stealth"] = max(M.alphas["chameleon_stealth"] - 25, 0)
 	else
-		M.alphas["chameleon_stealth"] = round(255 * 0.80)
+		mob_moved(M)
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -464,6 +478,7 @@
 			var/prevLayer = target.layer
 			target.plane = EFFECTS_PLANE
 
+			target.flying = 1
 			for(var/i=0, i<duration, i++)
 				step(target, target.dir)
 				if(i < 5)
@@ -472,6 +487,7 @@
 					target.pixel_y -= 8 * PIXEL_MULTIPLIER
 				sleep(1)
 			target.pixel_y = 0
+			target.stop_flying()
 
 			if (M_FAT in target.mutations && prob(66))
 				target.visible_message("<span class='warning'><b>[target.name]</b> crashes due to their heavy weight!</span>")

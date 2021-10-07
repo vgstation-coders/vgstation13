@@ -241,6 +241,9 @@ RESPAWN_AS_MOMMI
 ## Uncomment this to disallow spawning as a mouse.
 #NO_RESPAWN_AS_MOUSE
 
+## Uncomment this to disallow spawning as a space hobo.
+#NO_RESPAWN_AS_HOBO
+
 ##Remove the # to let ghosts spin chairs
 #GHOST_INTERACTION
 
@@ -310,6 +313,10 @@ SKIP_HOLOMINIMAP_GENERATION
 ## Uncomment to disable generation of vaults (makes the server start faster!)
 SKIP_VAULT_GENERATION
 
+## DISABLE_VAULT_ROTATION
+## Uncomment to disable rotation of vaults
+#DISABLE_VAULT_ROTATION
+
 ## SHUT_UP_AUTOMATIC_DIAGNOSTIC_AND_ANNOUNCEMENT_SYSTEM
 ## Uncomment to disable the lovely robotic voice that tells you the time at the start of every shift.
 ## Recommended for your sanity if you start the server a lot for testing things.
@@ -359,3 +366,6 @@ BSQL_THREAD_LIMIT 50
 
 ## Uncomment to enable verbose BSQL communication logs
 #BSQL_DEBUG
+
+## The maximum number of z-levels rendered above or below in multi-z
+MULTIZ_RENDER_CAP 8

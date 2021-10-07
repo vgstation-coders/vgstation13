@@ -7,6 +7,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines")
+	hitsound = "sound/weapons/whip.ogg"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
 
@@ -28,12 +29,12 @@
 		"/obj/item/device/lightreplacer"
 		)
 	can_only_hold = list(
-		"/obj/item/weapon/crowbar",
-		"/obj/item/weapon/screwdriver",
-		"/obj/item/weapon/weldingtool",
-		"/obj/item/weapon/solder",
-		"/obj/item/weapon/wirecutters",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/crowbar",
+		"/obj/item/tool/screwdriver",
+		"/obj/item/tool/weldingtool",
+		"/obj/item/tool/solder",
+		"/obj/item/tool/wirecutters",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/multitool",
 		"/obj/item/device/flashlight",
 		"/obj/item/stack/cable_coil",
@@ -49,36 +50,37 @@
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
 		"/obj/item/device/silicate_sprayer",
-		"/obj/item/device/geiger_counter"
+		"/obj/item/device/geiger_counter",
+		"/obj/item/airshield_projector"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 /obj/item/weapon/storage/belt/utility/full/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 
 
 /obj/item/weapon/storage/belt/utility/atmostech/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
 
 /obj/item/weapon/storage/belt/utility/chief
@@ -88,12 +90,12 @@
 	item_state = "utilitychief"
 	fits_max_w_class = 5
 	can_only_hold = list(
-		"/obj/item/weapon/crowbar",
-		"/obj/item/weapon/screwdriver",
-		"/obj/item/weapon/weldingtool",
-		"/obj/item/weapon/solder",
-		"/obj/item/weapon/wirecutters",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/crowbar",
+		"/obj/item/tool/screwdriver",
+		"/obj/item/tool/weldingtool",
+		"/obj/item/tool/solder",
+		"/obj/item/tool/wirecutters",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/multitool",
 		"/obj/item/device/flashlight",
 		"/obj/item/stack/cable_coil",
@@ -116,22 +118,23 @@
 		"/obj/item/weapon/rcl",
 		"/obj/item/device/silicate_sprayer",
 		"/obj/item/device/geiger_counter",
-		"/obj/item/weapon/inflatable_dispenser"
+		"/obj/item/weapon/inflatable_dispenser",
+		"/obj/item/airshield_projector"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
 	..()
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/weldingtool/hugetank(src)
-	new /obj/item/weapon/wirecutters(src)
-	new /obj/item/weapon/wrench(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/weldingtool/hugetank(src)
+	new /obj/item/tool/wirecutters(src)
+	new /obj/item/tool/wrench(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/stack/cable_coil(src)
 	new /obj/item/stack/cable_coil(src)
 	new /obj/item/device/t_scanner(src)
 	new /obj/item/device/analyzer(src)
-	new /obj/item/weapon/solder/pre_fueled(src)
+	new /obj/item/tool/solder/pre_fueled(src)
 	new /obj/item/device/silicate_sprayer(src)
 	new /obj/item/device/rcd/rpd(src)
 	new /obj/item/device/rcd/matter/engineering/pre_loaded(src)
@@ -182,11 +185,11 @@
 
 /obj/item/weapon/storage/belt/slim/pro/New()
 	..()
-	new /obj/item/weapon/screwdriver(src)
-	new /obj/item/weapon/wrench(src)
-	new /obj/item/weapon/weldingtool(src)
-	new /obj/item/weapon/crowbar(src)
-	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/weldingtool(src)
+	new /obj/item/tool/crowbar(src)
+	new /obj/item/tool/wirecutters(src)
 	new /obj/item/device/multitool(src)
 
 /obj/item/weapon/storage/belt/security
@@ -282,7 +285,7 @@
 
 /obj/item/weapon/storage/belt/soulstone
 	name = "soul stone belt"
-	desc = "Designed for ease of access to the shards during a fight, as to not let a single enemy spirit slip away"
+	desc = "Designed for ease of access to the shards during a fight, as to not let a single enemy spirit slip away."
 	icon_state = "soulstonebelt"
 	item_state = "soulstonebelt"
 	storage_slots = 6
@@ -386,9 +389,9 @@
 		"/obj/item/weapon/paper",
 		"/obj/item/weapon/pen",
 		"/obj/item/clothing/glasses",
-		"/obj/item/weapon/wrench",
+		"/obj/item/tool/wrench",
 		"/obj/item/device/mining_scanner",
-		"/obj/item/weapon/crowbar",
+		"/obj/item/tool/crowbar",
 		"/obj/item/weapon/storage/box/excavation",
 		"/obj/item/weapon/gun/energy/kinetic_accelerator",
 		"/obj/item/weapon/resonator",
@@ -445,7 +448,7 @@
 			var/mob/living/simple_animal/hostile/humanoid/H = NM
 			H.items_to_drop = list()
 		NM.faction = "lazarus \ref[user]"
-		NM.friends += user
+		NM.friends += makeweakref(user)
 		MC.contained_mob = NM
 		MC.name = "lazarus capsule - [NM.name]"
 	..()
@@ -488,3 +491,36 @@
 		"/obj/item/weapon/mop",
 		"/obj/item/weapon/storage/bag/trash")
 
+/obj/item/weapon/storage/belt/leather
+	name = "leather belt"
+	desc = "This belt is of uncommonly good craftsmanship. For some reason, the inside of the buckle reads '18+'."
+	icon_state = "leather"
+	item_state = "leather"
+	storage_slots = 2 //no pouches, no straps, just a waistband
+
+/obj/item/weapon/storage/belt/leather/equipped(mob/living/M, slot)
+	..()
+	if(!istype(M))
+		return
+	if(slot == slot_belt)
+		M.maxHealth += 4
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species)
+				H.species.punch_damage += 4
+		to_chat(M, "<span class='notice'>You feel tough enough to punch a boar in half!</span>")
+		spawn(0) //this is just for the adminwarning - finish unequipping everything before attempting to calculate this
+			if(M.maxHealth == initial(M.maxHealth)+8)
+				message_admins("[key_name(M)] appears to have found some kind of leather belt exploit. What a champ! Give them a pat on the back and tell them to bugreport it after.")
+
+/obj/item/weapon/storage/belt/leather/unequipped(mob/living/M, from_slot)
+	..()
+	if(!istype(M))
+		return
+	if(from_slot == slot_belt)
+		M.maxHealth -= 4
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species)
+				H.species.punch_damage -= 4
+		to_chat(M, "<span class='notice'>You feel like a dress-wearing weakling.</span>")

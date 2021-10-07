@@ -14,7 +14,7 @@ var/global/list/cyborg_list = list()						//List of all living cyborgs, includin
 var/global/list/dead_mob_list = list()				//List of all dead mobs, including clientless. Excludes /mob/new_player
 var/list/observers = new/list()
 var/global/list/areas = list()
-var/global/list/active_component_containers = list() 	//List of all component containers that have registered for updating
+var/global/list/active_components = list() 	//List of all components that have registered for updating
 
 var/global/list/chemical_reactions_list				//list of all /datum/chemical_reaction datums. Used during chemical reactions
 var/global/list/chemical_reagents_list				//list of all /datum/reagent datums indexed by reagent id. Used by chemistry stuff
@@ -85,6 +85,7 @@ var/list/pinpointer_list = list()
 var/list/crematorium_list = list()
 var/list/tracking_implants = list()
 var/list/chemical_implants = list()
+var/list/remote_implants = list()
 var/list/mech_tracking_beacons = list()
 var/list/mop_list = list()
 var/list/mopbucket_list = list()
@@ -95,3 +96,5 @@ var/list/vehicle_list = list()
 var/list/paicard_list = list()
 var/list/effects_list = list()
 var/list/obj/structure/morgue/morgue_list = list()
+var/list/obj/effect/time_anomaly/time_anomaly_list = list()
+var/list/map_pickspawners = list()

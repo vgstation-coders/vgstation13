@@ -6,7 +6,6 @@
 	icon_state = "meat"
 	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
 	var/subjectname = ""
-	var/subjectjob = null
 	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
@@ -19,9 +18,6 @@
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
 		subjectname = M.name
-		if(istype(M, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-			subjectjob = H.job
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
@@ -69,6 +65,11 @@
 	desc = "It's got an awful lot of protein for a vegetable."
 	icon_state = "diona_meat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat // Can also be used to make veggie burgers like normal diona meat.
+	name = "nymph meat"
+	desc = "A chunk of meat from a diona nymph. It looks dense and fibrous."
+	icon_state = "nymphmeat"
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	name = "vox meat"
 	desc = "Considering its Avian origin, tastes unsurprisingly like chicken."
@@ -96,7 +97,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 	name = "carp fillet"
-	desc = "A fillet of spess carp meat"
+	desc = "A fillet of space carp meat."
 	icon_state = "fishfillet"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/New()
@@ -122,7 +123,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 	name = "xenomeat"
-	desc = "A slab of xeno meat"
+	desc = "A slab of xeno meat."
 	icon_state = "xenomeat"
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat/New()
 	..()

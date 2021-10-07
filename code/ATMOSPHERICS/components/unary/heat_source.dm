@@ -7,7 +7,7 @@
 	use_power = 1
 
 	name = "Heat Reservoir"
-	desc = "Heats gas when connected to pipe network"
+	desc = "Heats gas when connected to pipe network."
 
 	var/on = 0
 

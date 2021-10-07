@@ -7,7 +7,9 @@
 	name = "paper"
 	gender = NEUTER
 	icon = 'icons/obj/bureaucracy.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/bureaucracy.dmi', "right_hand" = 'icons/mob/in-hand/right/bureaucracy.dmi')
 	icon_state = "paper"
+	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
@@ -276,6 +278,7 @@
 		\[impact\] - \[/impact\] : <span style=\"font-family:Impact\">Impact</span><br>
 		\[palatino\] - \[/palatino\] : <span style=\"font-family:Palatino Linotype\">Palatino Linotype</span><br>
 		\[tnr\] - \[/tnr\] : <span style=\"font-family:Times New Roman\">Times New Roman</span>
+
 	</BODY></HTML>"}, "window=paper_help")
 
 /obj/item/weapon/paper/Topic(href, href_list)
@@ -469,6 +472,17 @@ var/global/list/paper_folding_results = list ( \
 	else
 		return ..()
 
+
+/obj/item/weapon/paper/proc/sudokize(var/color)
+	var/list/sudokus = file2list("data/sudoku.txt")
+	info = "<style>\
+	td{width: 35px;height: 35px;border: 1px solid black;text-align: center;vertical-align: middle;font-family:Verdana, sans;color:[color];font-weight: bold;}\
+	table{border: 3px solid black;}\
+	</style>\
+	<table cellpadding='0' cellspacing='0'>[pick(sudokus)]</table>"
+	updateinfolinks()
+	update_icon()
+
 /*
  * Premade paper
  */
@@ -581,7 +595,7 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/suitdispenser
 	name = "paper- 'Suit Dispenser Manual - How to use them?'"
-	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one bellow this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
+	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one below this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
 
 /obj/item/weapon/paper/diy_soda
 	name = "paper- 'Instructions'"
@@ -606,39 +620,103 @@ var/global/list/paper_folding_results = list ( \
 	artifact = null
 	..()
 
-/obj/item/weapon/paper/merchantreport
+/obj/item/weapon/paper/merchant
 	var/identity
 	var/list/mugshots = list()
+	var/icon_updates = FALSE
+	display_y = 500
 
-/obj/item/weapon/paper/merchantreport/New(loc,mob/living/carbon/human/merchant)
+/obj/item/weapon/paper/merchant/update_icon()
+	if(icon_updates)
+		..()
+
+/obj/item/weapon/paper/merchant/New(loc,mob/living/carbon/human/merchant)
 	if(merchant)
-		identity = merchant.client.prefs.real_name
-		name = "Licensed Merchant Report - [identity]"
 		merchant.client.prefs.update_preview_icon(0) //This is necessary because if they don't check their character sheet it never generates!
 		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_front)
 		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_side)
-		info = {"<html><style>
-						body {color: #000000; background: #ccffff;}
-						h1 {color: #000000; font-size:30px;}
-						fieldset {width:140px;}
-						</style>
-						<body>
-						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
-						Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
-						<fieldset>
-	  					<legend>Picture</legend>
-						<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
-						</fieldset><BR>
-						Name: [identity]<BR>
-						Blood Type: [merchant.dna.b_type]<BR>
-						Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
-		display_y = 700
-		CentcommStamp(src)
+		apply_text(merchant)
 	..()
 
-/obj/item/weapon/paper/merchantreport/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
+/obj/item/weapon/paper/merchant/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
 	var/index = 1
 	for(var/image in mugshots)
 		user << browse_rsc(image, "previewicon-[identity][index].png")
 		index++
 	..()
+
+/obj/item/weapon/paper/merchant/proc/apply_text(mob/living/carbon/human/merchant)
+	identity = merchant.client.prefs.real_name
+	icon = 'icons/obj/items.dmi'
+	icon_state = "permit"
+	name = "Merchant's Licence - [identity]"
+	info = {"<html><style>
+			body {color: #000000; background: #ffff0d;}
+			h1 {color: #000000; font-size:30px;}
+			fieldset {width:140px;}
+			</style>
+			<body>
+			<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>Merchant's Licence</h1></center>
+			Nanotrasen\'s commercial arm has authorized commercial activity for a merchant who holds a licence for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is displayed below.<BR>
+			<fieldset>
+	  		<legend>Picture</legend>
+			<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
+			</fieldset><BR>
+			Name: [identity]<BR>
+			Blood Type: [merchant.dna.b_type]<BR>
+			Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
+
+/obj/item/weapon/paper/merchant/report
+	icon_updates = TRUE
+	display_y = 700
+
+/obj/item/weapon/paper/merchant/report/apply_text(mob/living/carbon/human/merchant)
+	identity = merchant.client.prefs.real_name
+	name = "Licensed Merchant Report - [identity]"
+	info = {"<html><style>
+			body {color: #000000; background: #ccffff;}
+			h1 {color: #000000; font-size:30px;}
+			fieldset {width:140px;}
+			</style>
+			<body>
+			<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
+			Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a licence for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
+			<fieldset>
+	  		<legend>Picture</legend>
+			<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
+			</fieldset><BR>
+			Name: [identity]<BR>
+			Blood Type: [merchant.dna.b_type]<BR>
+			Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
+	CentcommStamp(src)
+
+/obj/item/weapon/paper/traderapplication
+	name = "trader application"
+	display_x = 500
+	display_y = 600
+	var/applicant
+
+/obj/item/weapon/paper/traderapplication/New(loc,var/newapp)
+	..()
+	applicant = newapp
+	if(!applicant)
+		qdel(src)
+	info = {"<html><style>
+						body {color: #000000; background: #e7c9a9;}
+						h1 {color: #4444ee; font-size:30px;}
+  						h2 {color: #4444ee; font-size:14px}
+						fieldset {width:140px;}
+						</style>
+						<body>
+						<center><img src="https://ss13.moe/wiki/images/9/92/Shoal-logo.png"> <h1>Trade Pact</h1></center>
+						<h2>
+                          I, the inker, do solemnly vow that [applicant] (hereafter 'Applicant') can be trusted. By blood and claw, responsibility for this one is bound in blood to me.<BR>
+                          <B>JURISDICTION.</B> Disputes related to this contract will be brought before the Shoal Trade Council.<BR>
+                          <B>SCOPE.</B> Provisional licensure as a trader shall last the duration of this shift and apply to this sector.<BR>
+                          <B>INDEMNIFICATION.</B> The applicant waives legal rights against the Shoal, holding it harmless against all indemnification. Traders are independent contractors and the shoal does not accept responsibility for their actions.<BR>
+                          <B>CONFIDENTIALITY.</B> The applicant vows to uphold all Shoal trade secrets.<BR>
+                          <B>ASSIGNMENT.</B> The Shoal retains all rights related to its intellectual properties. This contract is not to be construed as a release of IP rights.<BR>
+                          <B>ARBITRATION.</B> The applicant is entitled to settle legal disputes before a Shoal Arbitration Flock and must seek this remedy before formal lawsuit.<BR>
+                          <B>NOTICE.</B> Notice of intent to dissolve relationship must be given by fax with at least one day advance notice.<BR>
+                          <B>FORCE MAJEURE.</B> This contract may be voided if the trade outpost is destroyed.
+                         </h2> <BR></body></html>"}

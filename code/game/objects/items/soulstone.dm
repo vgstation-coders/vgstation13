@@ -30,7 +30,7 @@
 	shade = null//just to be sure
 	..()
 
-/obj/item/soulstone/suicide_act(mob/living/user)
+/obj/item/soulstone/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swallows \the [src] and begins to choke on it! [shade ? "It looks like they are trying to commit suicide" : ""].</span>")
 	user.drop_from_inventory(src)
 	if (ishuman(user))
@@ -136,7 +136,7 @@
 					newCultist.conversion["soulstone"] = user
 			else
 				if (iscultist(target))
-					var/datum/role/cultist = target.mind.GetRole(CULTIST)
+					var/datum/role/cultist = iscultist(target)
 					to_chat(target, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
 					cultist.Drop()
 					target.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it
@@ -474,7 +474,7 @@
 
 		else
 			if (iscultist(shadeMob))
-				var/datum/role/cultist = shadeMob.mind.GetRole(CULTIST)
+				var/datum/role/cultist = iscultist(shadeMob)
 				to_chat(shadeMob, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
 				cultist.Drop()
 				shadeMob.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it

@@ -332,11 +332,15 @@
 			if(buy_type in available_potions)
 				if(use(available_potions[buy_type]))
 					var/atom/item = new buy_type(get_turf(usr))
+					to_chat(usr, "<span class='info'>You have purchased [item].</span>")
 					feedback_add_details("wizard_spell_learned", "PT")
 					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
-					if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
-						var/datum/stat/role/wizard/WD = W.stat_datum
-						WD.spellbook_purchases.Add(item.name)
+					if(istype(W))
+						var/icon/tempimage = icon(item.icon, item.icon_state)
+						W.potions_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [item]<BR>"}
+						if (istype(W.stat_datum, /datum/stat/role/wizard))
+							var/datum/stat/role/wizard/WD = W.stat_datum
+							WD.spellbook_purchases.Add(item.name)
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])

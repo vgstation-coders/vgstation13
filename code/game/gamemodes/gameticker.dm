@@ -29,6 +29,8 @@ var/datum/controller/gameticker/ticker
 	var/datum/religion/chap_rel 			// Official religion of chappy
 	var/list/datum/religion/religions = list() // Religion(s) in the game
 
+	var/list/runescape_skulls = list() // Keeping track of the runescape skulls that appear over mobs when enabled
+
 	var/random_players = 0 	// if set to nonzero, ALL players who latejoin or declare-ready join will have random appearances/genders
 
 	var/hardcore_mode = 0	//If set to nonzero, hardcore mode is enabled (current hardcore mode features: damage from hunger)
@@ -49,41 +51,25 @@ var/datum/controller/gameticker/ticker
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
 
+
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
-	var/oursong = file(pick(
-		"sound/music/space.ogg",
-		"sound/music/traitor.ogg",
-		"sound/music/space_oddity.ogg",
-		"sound/music/title1.ogg",
-		"sound/music/title2.ogg",
-		"sound/music/title3.ogg",
-		"sound/music/clown.ogg",
-		"sound/music/robocop.ogg",
-		"sound/music/street_cleaner_robocop.ogg",
-		"sound/music/gaytony.ogg",
-		"sound/music/rocketman.ogg",
-		"sound/music/2525.ogg",
-		"sound/music/moonbaseoddity.ogg",
-		"sound/music/whatisthissong.ogg",
-		"sound/music/space_asshole.ogg",
-		"sound/music/starman.ogg",
-		"sound/music/Lou_Reed_-_Satellite_of_Love.ogg",
-		"sound/music/dawsonschristian.ogg",
-		"sound/music/carmenmirandasghost.ogg",
-		"sound/music/twilight.ogg",
-		))
-
-	if(SNOW_THEME)
-		var/path = "sound/music/xmas/"
-		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
-				filenames -= filename
-		login_music = file("[path][pick(filenames)]")
+	var/path = "sound/music/login/"
+	if(Holiday == APRIL_FOOLS_DAY)
+		path = "sound/music/aprilfools/"
+	else if(SNOW_THEME)
+		path = "sound/music/xmas/"
+	var/list/filenames = flist(path)
+	for(var/filename in filenames)
+		if(copytext(filename, length(filename)) == "/")
+			filenames -= filename
+	if (map.nameShort == "lamprey")
+		login_music = file("sound/music/lampreytheme.ogg")
+	else if (map.nameShort == "dorf")
+		login_music = file("sound/music/b12_combined_start.ogg")
 	else
-		login_music = fcopy_rsc(oursong)
+		login_music = file("[path][pick(filenames)]")
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
@@ -201,10 +187,20 @@ var/datum/controller/gameticker/ticker
 
 	gamestart_time = world.time / 10
 
+	init_mind_ui()
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
 	collect_minds()
 	equip_characters()
+
+	for(var/mob/living/carbon/human/player in player_list)
+		switch(player.mind.assigned_role)
+			if("MODE","Mobile MMI","Trader")
+				//No injection
+			else
+				player.update_icons()
+				data_core.manifest_inject(player)
+
 	current_state = GAME_STATE_PLAYING
 
 	// Update new player panels so they say join instead of ready up.
@@ -399,12 +395,7 @@ var/datum/controller/gameticker/ticker
 				if(player.mind.assigned_role=="Mobile MMI")
 					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				var/mob/living/carbon/human/new_character = player.create_character()
-				switch(new_character.mind.assigned_role)
-					if("MODE","Mobile MMI","Trader")
-						//No injection
-					else
-						data_core.manifest_inject(new_character)
-				player.FuckUpGenes(new_character)
+				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
 
 
@@ -422,6 +413,7 @@ var/datum/controller/gameticker/ticker
 			if(player.mind.assigned_role != "MODE")
 				job_master.EquipRank(player, player.mind.assigned_role, 0)
 				EquipCustomItems(player)
+			player.apeify()
 	if(captainless)
 		for(var/mob/M in player_list)
 			if(!istype(M,/mob/new_player))
@@ -440,6 +432,12 @@ var/datum/controller/gameticker/ticker
 	if(world.time > nanocoins_lastchange)
 		nanocoins_lastchange = world.time + rand(3000,15000)
 		nanocoins_rates = (rand(1,30))/10
+
+	//runescape skull updates
+	if (runescape_skull_display)
+		for (var/entry in runescape_skulls)
+			var/datum/runescape_skull_data/the_data = runescape_skulls[entry]
+			the_data.process()
 
 	/*emergency_shuttle.process()*/
 	watchdog.check_for_update()
@@ -465,13 +463,13 @@ var/datum/controller/gameticker/ticker
 				feedback_set("map vote choices", options)
 
 			else
-				var/list/maps = get_maps()
+				var/list/maps = get_votable_maps()
 				var/list/choices=list()
 				for(var/key in maps)
 					choices.Add(key)
 				var/mapname=pick(choices)
 				vote.chosen_map = maps[mapname] // Hack, but at this point I could not give a shit.
-				watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
+				watchdog.chosen_map = mapname
 				log_game("Server chose [watchdog.chosen_map]!")
 
 
@@ -552,87 +550,12 @@ var/datum/controller/gameticker/ticker
 	scoreboard()
 	return 1
 
-/*
-/datum/controller/gameticker/proc/ert_declare_completion()
-	var/text = ""
-	if( ticker.mode.ert.len )
-		var/icon/logo = icon('icons/logos.dmi', "ert-logo")
-		end_icons += logo
-		var/tempstate = end_icons.len
-		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The emergency responders were:</B></FONT> <img src="logo_[tempstate].png">"}
-		for(var/datum/mind/ert in ticker.mode.ert)
-			if(ert.current)
-				var/icon/flat = getFlatIcon(ert.current, SOUTH, 1, 1)
-				end_icons += flat
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> <b>[ert.key]</b> was <b>[ert.name]</b> ("}
-				if(ert.current.stat == DEAD)
-					text += "died"
-					flat.Turn(90)
-					end_icons[tempstate] = flat
-				else
-					text += "survived"
-				if(ert.current.real_name != ert.name)
-					text += " as [ert.current.real_name]"
-			else
-				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
-				end_icons += sprotch
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> [ert.key] was [ert.name] ("}
-				text += "body destroyed"
-			text += ")"
-		text += "<BR><HR>"
-
-	return text
-
-/datum/controller/gameticker/proc/deathsquad_declare_completion()
-	var/text = ""
-	if( ticker.mode.deathsquad.len )
-		var/icon/logo = icon('icons/logos.dmi', "death-logo")
-		end_icons += logo
-		var/tempstate = end_icons.len
-		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The death commando were:</B></FONT> <img src="logo_[tempstate].png">"}
-		for(var/datum/mind/deathsquad in ticker.mode.deathsquad)
-			if(deathsquad.current)
-				var/icon/flat = getFlatIcon(deathsquad.current, SOUTH, 1, 1)
-				end_icons += flat
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> <b>[deathsquad.key]</b> was <b>[deathsquad.name]</b> ("}
-				if(deathsquad.current.stat == DEAD)
-					text += "died"
-					flat.Turn(90)
-					end_icons[tempstate] = flat
-				else
-					text += "survived"
-				if(deathsquad.current.real_name != deathsquad.name)
-					text += " as [deathsquad.current.real_name]"
-			else
-				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
-				end_icons += sprotch
-				tempstate = end_icons.len
-				text += {"<br><img src="logo_[tempstate].png"> [deathsquad.key] was [deathsquad.name] ("}
-				text += "body destroyed"
-			text += ")"
-		text += "<BR><HR>"
-
-	return text
-*/
 /datum/controller/gameticker/proc/bomberman_declare_completion()
 	var/icon/bomberhead = icon('icons/obj/clothing/hats.dmi', "bomberman")
-	end_icons += bomberhead
-	var/tempstatebomberhead = end_icons.len
 	var/icon/bronze = icon('icons/obj/bomberman.dmi', "bronze")
-	end_icons += bronze
-	var/tempstatebronze = end_icons.len
 	var/icon/silver = icon('icons/obj/bomberman.dmi', "silver")
-	end_icons += silver
-	var/tempstatesilver = end_icons.len
 	var/icon/gold = icon('icons/obj/bomberman.dmi', "gold")
-	end_icons += gold
-	var/tempstategold = end_icons.len
 	var/icon/platinum = icon('icons/obj/bomberman.dmi', "platinum")
-	end_icons += platinum
-	var/tempstateplatinum = end_icons.len
 
 	var/list/bronze_tier = list()
 	for (var/mob/living/carbon/M in player_list)
@@ -663,44 +586,34 @@ var/datum/controller/gameticker/ticker
 		if(istype(M.head_state, /obj/item/clothing/head/helmet/space/bomberman) && istype(M.tool_state, /obj/item/weapon/bomberman/))
 			special_tier += M
 
-	var/text = {"<img src="logo_[tempstatebomberhead].png"> <font size=5><b>Bomberman Mode Results</b></font> <img src="logo_[tempstatebomberhead].png">"}
+	var/text = {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(bomberhead)]'> <font size=5><b>Bomberman Mode Results</b></font> <img class='icon' src='data:image/png;base64,[iconsouth2base64(bomberhead)]'>"}
 	if(!platinum_tier.len && !gold_tier.len && !silver_tier.len && !bronze_tier.len)
 		text += "<br><span class='danger'>DRAW!</span>"
 	if(platinum_tier.len)
-		text += {"<br><img src="logo_[tempstateplatinum].png"> <b>Platinum Trophy</b> (never removed his clothes, kept his bomb dispenser until the end, and escaped on the shuttle):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(platinum)]'> <b>Platinum Trophy</b> (never removed his clothes, kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in platinum_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(gold_tier.len)
-		text += {"<br><img src="logo_[tempstategold].png"> <b>Gold Trophy</b> (kept his bomb dispenser until the end, and escaped on the shuttle):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(gold)]'> <b>Gold Trophy</b> (kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in gold_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(silver_tier.len)
-		text += {"<br><img src="logo_[tempstatesilver].png"> <b>Silver Trophy</b> (kept his bomb dispenser until the end, and escaped in a pod):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(silver)]'> <b>Silver Trophy</b> (kept his bomb dispenser until the end, and escaped in a pod):"}
 		for (var/mob/M in silver_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(bronze_tier.len)
-		text += {"<br><img src="logo_[tempstatebronze].png"> <b>Bronze Trophy</b> (kept his bomb dispenser until the end):"}
+		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(bronze)]'> <b>Bronze Trophy</b> (kept his bomb dispenser until the end):"}
 		for (var/mob/M in bronze_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.real_name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(special_tier.len)
 		text += "<br><b>Special Mention</b> to those adorable MoMMis:"
 		for (var/mob/M in special_tier)
 			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
-			end_icons += flat
-			var/tempstate = end_icons.len
-			text += {"<br><img src="logo_[tempstate].png"> <b>[M.key]</b> as <b>[M.name]</b>"}
+			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.name]</b>"}
 
 	return text
 

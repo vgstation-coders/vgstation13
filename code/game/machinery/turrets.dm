@@ -1,41 +1,42 @@
-/area/turret_protected
-	name = "Turret Protected Area"
-	turret_protected = 1
-
 /obj/machinery/turret
 	name = "turret"
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "grey_target_prism"
-	var/raised = 0
+	var/raised = 0								// if the turret cover is "open" and the turret is raised
 	var/enabled = 1
+	var/obj/item/weapon/gun/installed = null	// the type of weapon installed
 	anchored = 1
-	invisibility = INVISIBILITY_LEVEL_TWO
+	invisibility = INVISIBILITY_LEVEL_TWO		// the turret is invisible if it's inside its cover
 	density = 1
-	var/faction = null //No shooting our buddies!
-	var/shootsilicons = 0 //You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
-	var/lasers = 0
-	var/lasertype = /obj/item/projectile/beam
-	var/health = 80
-	var/obj/machinery/turretcover/cover = null
-	var/popping = 0
+	var/faction = null 							//No shooting our buddies!
+	var/shootsilicons = 0						//You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
+	var/health = 80								// the turret's health
+	var/obj/machinery/turretcover/cover = null	// the cover that is covering this turret
+	var/raising = 0								// if the turret is currently opening or closing its cover
 	var/wasvalid = 0
-	var/lastfired = 0
-	var/shot_delay = 30 //3 seconds between shots
+	var/lastfired = 0							// 1: if the turret is cooling down from a shot, 0: turret is ready to fire
+
+	var/reqpower = 350							// Amount of power per shot
+	var/shot_delay = 30 						//3 seconds between shots
 	var/fire_twice = 0
 
-	use_power = 1
-	idle_power_usage = 50
-	active_power_usage = 300
+	use_power = 1								// this turret uses and requires power
+	idle_power_usage = 50						// when inactive, this turret takes up constant 50 Equipment power
+	active_power_usage = 300					// when active, this turret takes up constant 300 Equipment power
 //	var/list/targets
 	var/atom/movable/cur_target
 	var/targeting_active = 0
-	var/area/protected_area
 
 
 /obj/machinery/turret/New()
 //	targets = new
 	..()
-	return
+	spawn(10)
+		update_gun()
+
+/obj/machinery/turret/proc/update_gun()
+	if(!installed)
+		installed = new /obj/item/weapon/gun/energy/gun(src)
 
 /obj/machinery/turretcover
 	name = "pop-up turret cover"
@@ -46,17 +47,16 @@
 	density = 0
 	var/obj/machinery/turret/host = null
 
-/obj/machinery/turret/proc/isPopping()
-	return (popping!=0)
-
 /obj/machinery/turret/power_change()
 	if(stat & BROKEN)
 		icon_state = "grey_target_prism"
 	else
 		if( powered() )
 			if (src.enabled)
-				if (src.lasers)
-					icon_state = "orange_target_prism"
+				if(istype(installed,/obj/item/weapon/gun/energy/gun))
+					var/obj/item/weapon/gun/energy/gun/EG = installed
+					if(EG.mode == 1)
+						icon_state = "orange_target_prism"
 				else
 					icon_state = "target_prism"
 			else
@@ -69,25 +69,25 @@
 
 /obj/machinery/turret/proc/setState(var/enabled, var/lethal)
 	src.enabled = enabled
-	src.lasers = lethal
+	if(istype(installed,/obj/item/weapon/gun/energy/gun))
+		var/obj/item/weapon/gun/energy/gun/EG = installed
+		switch(lethal)
+			if(1)
+				EG.mode = 1
+				EG.charge_cost = 100
+				EG.fire_sound = 'sound/weapons/Laser.ogg'
+				EG.projectile_type = "/obj/item/projectile/beam"
+				EG.modifystate = "energykill"
+			if(0)
+				EG.mode = 0
+				EG.charge_cost = 100
+				EG.fire_sound = 'sound/weapons/Taser.ogg'
+				EG.projectile_type = "/obj/item/projectile/energy/electrode"
+				EG.modifystate = "energystun"
 	src.power_change()
 
-
-/obj/machinery/turret/proc/get_protected_area()
-	var/area/TP = get_area(src)
-	if(istype(TP) && TP.turret_protected)
-		return TP
-	if(TP && !TP.turret_protected)
-		message_admins("DEBUG: [src] deleted itself because turret_protected var not set on area [TP].")
-		qdel(src)
-	return
-
 /obj/machinery/turret/proc/check_target(var/atom/movable/T as mob|obj)
-	if(T && (T in protected_area.turretTargets))
-		var/area/area_T = get_area(T)
-		if(!area_T || (area_T.type != protected_area.type))
-			protected_area.Exited(T)
-			return 0 //If the guy is somehow not in the turret's area (teleportation), get them out the damn list. --NEO
+	if(T && (T in view(7,src)))
 		if( ismob(T) )
 			var/mob/M = T
 			if((M.flags & INVULNERABLE) || M.faction == faction)
@@ -95,8 +95,12 @@
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
 			if( !MC.stat )
-				if( !MC.isStunned() || lasers ) //only shoots them while they're down if set to laser mode
+				if( !MC.isStunned() )
 					return 1
+				if(istype(installed,/obj/item/weapon/gun/energy/gun)) //only shoots them while they're down if set to laser mode
+					var/obj/item/weapon/gun/energy/gun/EG = installed
+					if(EG.mode == 1)
+						return 1
 		if(issilicon(T))
 			if(!shootsilicons || istype(T,/mob/living/silicon/ai))
 				return 0
@@ -120,41 +124,29 @@
 /obj/machinery/turret/proc/get_new_target()
 	var/list/new_targets = new
 	var/new_target
-	for(var/mob/M in protected_area.turretTargets)
-		if(issilicon(M))
-			if(!shootsilicons || istype(M, /mob/living/silicon/ai))
-				continue
-		if(!M.stat && !(M.flags & INVULNERABLE) && M.faction != faction)
-			if(iscarbon(M))
-				var/mob/living/carbon/C = M
-				if(!C.isStunned() || lasers) //only shoots them while they're down if set to laser mode
-					new_targets += C
-			else
-				new_targets += M
-
-	for(var/obj/mecha/M in protected_area.turretTargets)
-		if(M.occupant)
+	for(var/mob/M in view(7, src))
+		if(check_target(M))
 			new_targets += M
-
-	// /vg/ vehicles
-	for(var/obj/structure/bed/chair/vehicle/V in protected_area.turretTargets)
-		if(V.is_locking_type(/mob/living))
+	for(var/obj/mecha/ME in view(7, src))
+		if(check_target(ME))
+			new_targets += ME
+	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
+		if(check_target(V))
 			new_targets += V
-
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
 
-
 /obj/machinery/turret/process()
 	if(stat & (NOPOWER|BROKEN))
+		// if the turret has no power or is broken, make the turret pop down if it hasn't already
+		popDown()
 		return
 	if(src.cover==null)
 		src.cover = new /obj/machinery/turretcover(src.loc)
 		src.cover.host = src
-	protected_area = get_protected_area()
-	if(!enabled || !protected_area || protected_area.turretTargets.len<=0)
-		if(!isDown() && !isPopping())
+	if(!enabled)
+		if(raised && !raising)
 			popDown()
 		return
 	if(!check_target(cur_target)) //if current target fails target check
@@ -166,8 +158,8 @@
 			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
 //		to_chat(world, "[cur_target]")
-		if(!isPopping())
-			if(isDown())
+		if(!raising)
+			if(!raised)
 				popUp()
 				use_power = 2
 			else
@@ -182,10 +174,9 @@
 				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
 				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
-	else if(!isPopping())//else, pop down
-		if(!isDown())
-			popDown()
-			use_power = 1
+	else if(!raising || raised)//else, pop down
+		popDown()
+		use_power = 1
 	return
 
 /obj/machinery/turret/proc/target()
@@ -198,56 +189,62 @@
 /obj/machinery/turret/proc/shootAt(var/atom/movable/target)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
-	var/fire_sound = 'sound/weapons/Laser.ogg'
-	if (!T || !U)
+	if (!istype(T) || !istype(U))
 		return
-	var/obj/item/projectile/A
-	if (src.lasers)
-		A = new lasertype(loc)
-		use_power(500)
-	else
-		A = new /obj/item/projectile/energy/electrode( loc )
-		fire_sound = 'sound/weapons/Taser.ogg'
-		use_power(200)
+	
+	use_power(reqpower)
 
+	playsound(src, installed.fire_sound, 75, 1)
+	var/obj/item/projectile/A
+	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
+		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
+		R.choose_projectile()
+		A = new R.in_chamber.type(loc)
+	else
+		var/obj/item/weapon/gun/energy/E = installed
+		A = new E.projectile_type(loc)
 	A.original = target
+	A.starting = T
+	A.shot_from = installed
 	A.target = U
 	A.current = T
-	A.starting = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
-	playsound(T, fire_sound, 50, 1)
 	A.OnFired()
-	A.process()
+	spawn()
+		A.process()
 	return
 
+/obj/machinery/turret/proc/popUp() // pops the turret up
+	if(raising || raised)
+		return
+	if(stat & BROKEN)
+		return
+	invisibility=0
+	raising=1
+	flick("popup",cover)
+	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
+	sleep(5)
+	sleep(5)
+	raising=0
+	cover.icon_state="openTurretCover"
+	raised=1
+	layer = TURRET_LAYER
 
-/obj/machinery/turret/proc/isDown()
-	return (invisibility!=0)
-
-/obj/machinery/turret/proc/popUp()
-	if ((!isPopping()) || src.popping==-1)
-		invisibility = 0
-		popping = 1
-		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
-		if (src.cover!=null)
-			flick("popup", src.cover)
-			src.cover.icon_state = "openTurretCover"
-		spawn(10)
-			if (popping==1)
-				popping = 0
-
-/obj/machinery/turret/proc/popDown()
-	if ((!isPopping()) || src.popping==1)
-		popping = -1
-		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
-		if (src.cover!=null)
-			flick("popdown", src.cover)
-			src.cover.icon_state = "turretCover"
-		spawn(10)
-			if (popping==-1)
-				invisibility = INVISIBILITY_LEVEL_TWO
-				popping = 0
+/obj/machinery/turret/proc/popDown() // pops the turret down
+	if(raising || !raised)
+		return
+	if(stat & BROKEN)
+		return
+	layer = OBJ_LAYER
+	raising=1
+	flick("popdown",cover)
+	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
+	sleep(10)
+	raising=0
+	cover.icon_state="turretCover"
+	raised=0
+	invisibility = INVISIBILITY_LEVEL_TWO
 
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
@@ -257,7 +254,6 @@
 
 	if (src.health <= 0)
 		src.die()
-	return
 
 /obj/machinery/turret/attackby(obj/item/weapon/W, mob/living/user)//I can't believe no one added this before/N
 	user.do_attack_animation(src, W)
@@ -267,10 +263,20 @@
 	playsound(src, 'sound/weapons/smash.ogg', 60, 1)
 	spark(src, 5, FALSE)
 	src.health -= W.force * 0.5
-	visible_message("<span class='danger'>[user] attacked \the [src] with \the [W]!</span>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src] with [W]</font>")
-	if (src.health <= 0)
-		src.die()
+	if(W.attack_verb && W.attack_verb.len)
+		user.visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You attack \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You hear a clang!</span>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[pick(W.attack_verb)] [src] with [W]</font>")
+	else
+		user.visible_message("<span class='warning'><B>[user] attacks \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You attack \the [src] with \the [W]!</span>", \
+					"<span class='warning'>You hear a clang!</span>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src] with [W]</font>")
+	if (W.force >= 2)
+		src.health -= W.force * 0.5
+		if (src.health <= 0)
+			src.die()
 	return
 
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M)
@@ -301,8 +307,7 @@
 /obj/machinery/turret/emp_act(severity)
 	switch(severity)
 		if(1)
-			enabled = 0
-			lasers = 0
+			setState(0,0)
 			power_change()
 	..()
 
@@ -310,18 +315,18 @@
 	if(severity < 3)
 		src.die()
 
-/obj/machinery/turret/proc/die()
+/obj/machinery/turret/proc/die() // called when the turret dies, ie, health <= 0
 	src.health = 0
 	setDensity(FALSE)
-	src.stat |= BROKEN
+	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "destroyed_target_prism"
-	if (cover!=null)
-		qdel(cover)
-		cover = null
+	invisibility = 0
 	sleep(3)
 	flick("explosion", src)
-	spawn(13)
-		qdel(src)
+	src.setDensity(TRUE)
+	if (cover!=null) // deletes the cover - no need on keeping it there!
+		qdel(cover)
+		cover = null
 
 /obj/machinery/turretid
 	name = "turret control switchboard"
@@ -671,7 +676,15 @@
 	return
 
 /obj/machinery/turret/Destroy()
+	// deletes its own cover with it
 	if(cover)
 		qdel(cover)
 		cover = null
 	..()
+
+/obj/machinery/turret/centcomm
+	name = "turret"
+
+/obj/machinery/turret/centcomm/update_gun()
+	if(!installed)
+		installed = new /obj/item/weapon/gun/energy/laser/cannon(src)

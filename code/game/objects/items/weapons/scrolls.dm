@@ -58,7 +58,7 @@
 	if(!((user == loc || (in_range(src, user) && istype(src.loc, /turf)))))
 		return
 
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(5, 0, user.loc)
 	smoke.attach(user)
 	smoke.start()
@@ -90,12 +90,12 @@
 		if(!success)
 			tempL.Remove(attempt)
 		else
-			user.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
+			user.invoke_event(/event/z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
 			break
 
 	if(!success)
 		user.forceMove(pick(L))
-		user.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
+		user.invoke_event(/event/z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
 
 	smoke.start()
 	src.uses -= 1

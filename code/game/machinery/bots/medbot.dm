@@ -507,7 +507,7 @@ var/list/firstaid_exceptions = list(
 	if(C.isDead())
 		return 0 //welp too late for them!
 
-	if(C.suiciding)
+	if(C.mind && C.mind.suiciding)
 		return 0 //Kevorkian school of robotic medical assistants.
 
 	if(emagged == 2) //Everyone needs our medicine. (Our medicine is toxins)

@@ -272,7 +272,7 @@
 	return
 
 /obj/structure/stackopacks/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
+	if(istype(W,/obj/item/tool/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/tool/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
 		var/turf/T = get_turf(src)
 		for(var/obj/O in contents)
 			O.forceMove(T)
@@ -301,3 +301,8 @@
 		O.forceMove(T)
 	to_chat(M, "<span class='notice'>You rip the protective coil apart.</span>")
 	qdel(src)
+
+/obj/structure/vendomatpack/zamsnax
+	name = "Zam Snax recharge pack"
+	targetvendomat = /obj/machinery/vending/zamsnax
+	icon_state = "ZAMsnax"

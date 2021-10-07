@@ -4,6 +4,7 @@
 //Added by Jack Rost
 /obj/item/trash
 	icon = 'icons/obj/trash.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/trash.dmi', "right_hand" = 'icons/mob/in-hand/right/trash.dmi')
 	w_class = W_CLASS_TINY
 	desc = "This is rubbish."
 	w_type=NOT_RECYCLABLE
@@ -128,28 +129,6 @@
 	name = "waffles"
 	icon_state = "waffles"
 
-/obj/item/trash/plate
-	name = "plate"
-	icon_state = "plate"
-	var/clean = FALSE
-/obj/item/trash/plate/clean
-	icon_state = "cleanplate"
-	desc = "Clean enough to eat on, probably."
-	clean = TRUE
-/obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/soap))
-		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
-		clean = TRUE
-		update_icon()
-		return TRUE
-	return ..()
-
-/obj/item/trash/plate/update_icon()
-	if(clean)
-		icon_state = "cleanplate"
-	else
-		icon_state = "plate"
-
 /obj/item/trash/pietin
 	name = "pie tin"
 	icon_state = "pietin"
@@ -208,6 +187,18 @@
 	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
 
+/obj/item/trash/fries_cone
+	name = "fries cone"
+	icon_state = "used_cone"
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type=RECYK_MISC
+
+/obj/item/trash/fries_punet
+	name = "fries punnet"
+	icon_state = "used_punnet"
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type=RECYK_MISC
+
 /obj/item/trash/mannequin/cultify()
 	if(icon_state != "mannequin_cult_empty")
 		name = "cult mannequin pedestale"
@@ -248,7 +239,8 @@ var/list/crushed_cans_cache = list()
 	throw_speed = 3
 
 /obj/item/trash/soda_cans/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
-	..()
+	name = color
+	..(loc, age, icon_state, null, dir, pixel_x, pixel_y)
 	if(icon_state)
 		if (!(icon_state in crushed_cans_cache))
 			var/icon/I = icon('icons/obj/drinks.dmi',"crushed_can")
@@ -260,16 +252,58 @@ var/list/crushed_cans_cache = list()
 		icon = icon(crushed_cans_cache[icon_state])
 		item_state = icon_state
 
-
 /obj/item/trash/soda_cans/atom2mapsave()
-	color = name//a bit hacky but hey
 	. = ..()
-
-/obj/item/trash/soda_cans/post_mapsave2atom(var/list/L)
-	name = color
-	color = null
+	.["color"] = name//a bit hacky but at least it works
 
 /obj/item/trash/slag
 	name = "slag"
-	desc = "Electronics burnt to a crisp"
+	desc = "Electronics burnt to a crisp."
 	icon_state = "slag"
+
+/obj/item/trash/used_tray
+	name = "dirty tray"
+	icon_state	= "tray_plastic_used"
+	desc = "No nutrition left, just memories."
+
+/obj/item/trash/used_tray2
+	name = "used tray"
+	icon_state	= "tray_plastic2_used"
+	desc = "Whoever said a tray is most useful when it is empty must not have been hungry."
+
+/obj/item/trash/zam_notraisins
+	name = "zam notraisins"
+	icon_state	= "zam_notraisins_rubbish"
+
+/obj/item/trash/zam_sliderwrapper
+	name = "zam slider wrapper"
+	icon_state	= "zam_spiderslider_wrapper"
+
+/obj/item/trash/egg
+	name = "egg shell"
+	icon_state	= "egg"
+	desc = "Pieces of calcium carbonate."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+
+/obj/item/trash/egg/borer
+	icon_state	= "borer egg-growing"
+
+/obj/item/trash/ketchup_packet
+	name = "ketchup packet"
+	desc = "A used ketchup packet"
+	icon_state	= "ketchup_small"
+
+/obj/item/trash/mayo_packet
+	name = "mayonaise packet"
+	desc = "A used mayonnaise packet"
+	icon_state	= "mayo_small"
+
+/obj/item/trash/soysauce_packet
+	name = "soy sauce packet"
+	desc = "A used soy sauce packet"
+	icon_state	= "soysauce_small"
+
+/obj/item/trash/vinegar_packet
+	name = "malt vinegar packet"
+	desc = "A used vinegar packet"
+	icon_state	= "vinegar_small"

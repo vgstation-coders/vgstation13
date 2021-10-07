@@ -13,6 +13,7 @@
 	idle_power_usage = 5
 	active_power_usage = 100
 	flags = NOREACT
+	source_temperature = T0C + 4
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
 	var/list/datum/fridge_pile/piles = list()
@@ -27,7 +28,7 @@
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -104,6 +105,16 @@
 	for(var/ac_type in accepted_types)
 		if(istype(O, ac_type))
 			return 1
+
+/obj/machinery/smartfridge/thermal_energy_transfer()
+	return -75 //slow
+
+/obj/machinery/smartfridge/process()
+	if(stat & (NOPOWER|BROKEN) || !anchored)
+		return
+
+	for(var/obj/item/I in contents)
+		I.attempt_heating(src)
 
 /obj/machinery/smartfridge/seeds
 	name = "\improper MegaSeed Servitor"
@@ -223,7 +234,16 @@
 	name = "\improper Slime Extract Storage"
 	desc = "A refrigerated storage unit for slime extracts."
 
-	accepted_types = list(/obj/item/slime_extract)
+	accepted_types = list(
+		/obj/item/slime_extract,
+		/obj/item/weapon/slimepotion,
+		/obj/item/weapon/slimepotion2,
+		/obj/item/weapon/slimesteroid,
+		/obj/item/weapon/slimesteroid2,
+		/obj/item/weapon/slimenutrient,
+		/obj/item/weapon/slimedupe,
+		/obj/item/weapon/slimeres
+	)
 
 /obj/machinery/smartfridge/extract/New()
 	. = ..()
@@ -303,6 +323,9 @@
 
 // Returns TRUE on success
 /obj/machinery/smartfridge/proc/try_insert_item(var/obj/item/O, var/mob/user)
+	if(!allowed(user) && !emagged)
+		to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		return FALSE
 	if(accept_check(O))
 		if(!user.drop_item(O, src))
 			return FALSE
@@ -326,6 +349,9 @@
 /obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
 	if(!istype(B))
 		return FALSE
+	if(!allowed(user) && !emagged)
+		to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		return FALSE
 	var/objects_loaded = 0
 	for(var/obj/G in B.contents)
 		if(!accept_check(G))
@@ -348,6 +374,28 @@
 	. = ..()
 	if(.)
 		update_nearby_tiles()
+
+/obj/machinery/smartfridge/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if((stat & NOPOWER) || (contents.len >= MAX_N_OF_ITEMS))
+		return FALSE
+	if(accept_check(AM))
+		piles = sortList(piles)
+		AM.forceMove(src)
+		insert_item(AM)
+		return TRUE
+	else if(istype(AM,/obj/item/weapon/storage/bag))
+		var/obj/item/weapon/storage/bag/B = AM
+		var/objects_loaded = 0
+		for(var/obj/G in B.contents)
+			if(!accept_check(G))
+				continue
+			if(!B.remove_from_storage(G, src))
+				continue
+			insert_item(G)
+			objects_loaded++
+		if(objects_loaded)
+			return TRUE			
+	return FALSE
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
@@ -381,6 +429,15 @@
 /obj/machinery/smartfridge/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
+
+/obj/machinery/smartfridge/emag(mob/user)
+	new/obj/effect/sparks(get_turf(src))
+	playsound(loc,"sparks",50,1)
+	emagged = !emagged
+	if(emagged)
+		to_chat(user, "<span class='warning'>You disable the security protocols.</span>")
+	else
+		to_chat(user, "<span class='warning'>You restore the security protocols.</span>")
 
 /*******************
 *   SmartFridge Menu
@@ -469,6 +526,10 @@
 			usr.unset_machine()
 		return 1
 
+	if(!allowed(usr) && !emagged) //this explicitly means all topic() options below this line require access
+		to_chat(usr, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		return
+
 	usr.set_machine(src)
 
 	var/formatted_name = format_text(href_list["pile"])
@@ -505,16 +566,6 @@
 				display_miniicons = MINIICONS_ON
 
 	src.updateUsrDialog()
-
-/obj/machinery/smartfridge/proc/update_nearby_tiles(var/turf/T)
-    if(!SS_READY(SSair))
-        return 0
-
-    if(!T)
-        T = get_turf(src)
-    if(isturf(T))
-        SSair.mark_for_update(T)
-    return 1
 
 /obj/machinery/smartfridge/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(!istype(mover))

@@ -1,5 +1,5 @@
 /obj/item/mounted
-	var/list/buildon_types = list(/turf/simulated/wall, /turf/simulated/shuttle/wall)
+	var/list/buildon_types = list(/turf/simulated/wall, /turf/simulated/wall/shuttle)
 
 
 /obj/item/mounted/afterattack(var/atom/A, mob/user, proximity_flag)
@@ -9,11 +9,18 @@
 			found_type = 1
 			break
 
+	if (!found_type)
+		found_type = check_buildon(A, user)
+
 	if(found_type)
 		if(try_build(A, user, proximity_flag))
 			return do_build(A, user)
 	else
 		..()
+
+// Override for special mounted frames...
+/obj/item/mounted/proc/check_buildon(var/atom/A, mob/user)
+	return FALSE
 
 /obj/item/mounted/proc/try_build(turf/on_wall, mob/user, proximity_flag) //checks
 	if(!on_wall || !user)

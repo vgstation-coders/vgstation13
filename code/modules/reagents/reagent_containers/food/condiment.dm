@@ -16,6 +16,8 @@
 	flags = FPRINT  | OPENCONTAINER
 	possible_transfer_amounts = list(1,5,10)
 	volume = 50
+	var/condiment_overlay = null
+	var/overlay_colored = FALSE
 
 /obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -65,6 +67,7 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 
 		if(reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST)
@@ -75,10 +78,10 @@
 		return 1
 	return 0
 
-/obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
+/obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag, params)
 	if(!flag || ismob(target))
 		return 0
-	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
+	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 		if(!target.reagents.total_volume) //Nothing in the dispenser
 			to_chat(user, "<span class='warning'>\The [target] is empty.</span>")
@@ -101,38 +104,58 @@
 			return
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
+		if (condiment_overlay && istype (target, /obj/item/weapon/reagent_containers/food/snacks))
+			var/list/params_list = params2list(params)
+			var/image/I = image('icons/obj/condiment_overlays.dmi',target,condiment_overlay)
+			I.pixel_x = clamp(text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
+			I.pixel_y = clamp(text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
+			if (overlay_colored)
+				I.color = mix_color_from_reagents(reagents.reagent_list)
+			target.overlays += I
+	else if(isfloor(target))
+		if (amount_per_transfer_from_this > 1)
+			transfer(target, user, splashable_units = amount_per_transfer_from_this)
+		else
+			to_chat(user, "<span class='warning'>You have to open the lid at least a bit more to spill condiments on \the [target].</span>")
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
 	if(reagents.reagent_list.len > 0)
-
+		condiment_overlay = null
+		overlay_colored = FALSE
 		item_state = null
+		overlays.len = 0
 		switch(reagents.get_master_reagent_id())
 
 			if(KETCHUP)
 				name = KETCHUP
 				desc = "You feel more American already."
 				icon_state = KETCHUP
+				condiment_overlay = KETCHUP
 			if(MUSTARD)
 				name = "mustard"
 				desc = "A spicy yellow paste."
 				icon_state = MUSTARD
+				condiment_overlay = MUSTARD
 			if(RELISH)
 				name = "relish"
 				desc = "A pickled cucumber jam. Tasty!"
 				icon_state = RELISH
+				condiment_overlay = RELISH
 			if(CAPSAICIN)
 				name = "hotsauce"
 				desc = "You can almost TASTE the stomach ulcers now!"
 				icon_state = "hotsauce"
+				condiment_overlay = "hotsauce"
 			if(ENZYME)
 				name = "universal enzyme"
-				desc = "Used in cooking various dishes."
+				desc = "A universal enzyme used in the preperation of certain chemicals and foods."
 				icon_state = ENZYME
 			if(FLOUR)
 				name = "flour sack"
 				desc = "A big bag of flour. Good for baking!"
 				icon_state = FLOUR
+				condiment_overlay = FLOUR
 			if(MILK)
 				name = "space milk"
 				desc = "It's milk. White and nutritious goodness!"
@@ -149,18 +172,27 @@
 				name = "soy sauce"
 				desc = "A salty soy-based flavoring."
 				icon_state = SOYSAUCE
+				condiment_overlay = SOYSAUCE
 			if(FROSTOIL)
 				name = "coldsauce"
 				desc = "Leaves the tongue numb in its passage."
 				icon_state = "coldsauce"
+				condiment_overlay = "coldsauce"
 			if(SODIUMCHLORIDE)
 				name = "salt shaker"
 				desc = "Salt. From space oceans, presumably."
 				icon_state = "saltshakersmall"
+				condiment_overlay = "salt"
 			if(BLACKPEPPER)
 				name = "pepper mill"
 				desc = "Often used to flavor food or make people sneeze."
 				icon_state = "peppermillsmall"
+				condiment_overlay = "pepper"
+			if(HOLYSALTS)
+				name = "holy salts"
+				desc = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
+				icon_state = HOLYSALTS
+				condiment_overlay = HOLYSALTS
 			if(CORNOIL)
 				name = "corn oil"
 				desc = "A delicious oil used in cooking. Made from corn."
@@ -169,10 +201,12 @@
 				name = SUGAR
 				desc = "Tasty space sugar!"
 				icon_state = SUGAR
+				condiment_overlay = SUGAR
 			if(CARAMEL)
 				name = CARAMEL
 				desc = "Tasty caramel cubes!"
 				icon_state = CARAMEL
+				condiment_overlay = CARAMEL
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
@@ -181,38 +215,84 @@
 				name = "malt vinegar bottle"
 				desc = "Perfect for fish and chips!"
 				icon_state = "vinegar_container"
-				item_state = null
+				condiment_overlay = VINEGAR
 			if(HONEY)
 				name = "honey pot"
 				desc = "Sweet and healthy!"
 				icon_state = HONEY
-				item_state = null
+				condiment_overlay = HONEY
+				var/image/I = image(icon, src, "honey-color")
+				I.color = mix_color_from_reagents(reagents.reagent_list)
+				overlays += I
+				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
+				L.blend_mode = BLEND_ADD
+				overlays += L
+				overlay_colored = TRUE
 			if(ROYALJELLY)
 				name = "royal jelly pot"
 				desc = "Spicy and healthy!"
 				icon_state = ROYALJELLY
 				item_state = HONEY
+				condiment_overlay = ROYALJELLY
+				var/image/I = image(icon, src, "royaljelly-color")
+				I.color = mix_color_from_reagents(reagents.reagent_list)
+				overlays += I
+				overlay_colored = TRUE
+			if(CHILLWAX)
+				name = "chill wax pot"
+				desc = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
+				icon_state = CHILLWAX
+				condiment_overlay = HONEY
+				var/image/I = image(icon, src, "honey-color")
+				I.color = mix_color_from_reagents(reagents.reagent_list)
+				overlays += I
+				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
+				L.blend_mode = BLEND_ADD
+				overlays += L
+				overlay_colored = TRUE
 			if(CINNAMON)
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."
 				icon_state = CINNAMON
+				condiment_overlay = CINNAMON
 			if(GRAVY)
+				name = "gravy cruise"
+				desc = "Still a bit too small to sail on."
 				icon_state = GRAVY
+				condiment_overlay = GRAVY
 			if(COCO)
 				name = "cocoa powder"
 				desc = "A vital component for making chocolate."
 				icon_state = COCO
+				condiment_overlay = COCO
 			if(MAYO)
-				name = "Mayonaise Jar"
-				desc = "Here be mayo" //placeholder desc
+				name = "mayonaise jar"
+				desc = "Not an instrument."
 				icon_state = MAYO
+				condiment_overlay = MAYO
+			if(CREAM)
+				name = "whipped cream dispenser"
+				desc = "Instant delight." //placeholder desc
+				icon_state = CREAM
+				item_state = "whippedcream"
+				condiment_overlay = CREAM
+			if(LIQUIDBUTTER)
+				name = "liquid butter bottle"
+				desc = "A one way trip to obesity."
+				icon_state = LIQUIDBUTTER
+				condiment_overlay = LIQUIDBUTTER
+			if(MAPLESYRUP)
+				name = "maple syrup"
+				desc = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
+				icon_state = MAPLESYRUP
+				condiment_overlay = MAPLESYRUP
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
 				icon_state = "emptycondiment"
 
 				if(reagents.reagent_list.len == 1)
-					desc = "Looks like it is [reagents.get_master_reagent_name()], but you are not sure."
+					desc = "It looks like [reagents.get_master_reagent_name()], but you're not sure."
 				else
 					desc = "A mixture of various condiments. [reagents.get_master_reagent_name()] is one of them."
 				icon_state = "mixedcondiments"
@@ -229,7 +309,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/enzyme
 	name = "universal enzyme"
-	desc = "Used in cooking various dishes."
+	desc = "A universal enzyme used in the preperation of certain chemicals and foods."
 	icon_state = ENZYME
 
 /obj/item/weapon/reagent_containers/food/condiment/enzyme/New()
@@ -373,18 +453,29 @@
 	name = "salt shaker"
 	desc = "Salt. From space oceans, presumably."
 	icon_state = "saltshakersmall"
-	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
+	possible_transfer_amounts = list(1, 10, 50)
 	amount_per_transfer_from_this = 1
 
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker/New()
 	..()
 	reagents.add_reagent(SODIUMCHLORIDE, 50)
 
+/obj/item/weapon/reagent_containers/food/condiment/holysalts
+	name = "holy salts"
+	desc = "Blessed salts have been used for centuries as a sacramental. Pouring it on the floor in large enough quantity will offer protection from sources of evil and mend boundaries."
+	icon_state = "holysalts"
+	possible_transfer_amounts = list(1, 10, 50)
+	amount_per_transfer_from_this = 10
+
+/obj/item/weapon/reagent_containers/food/condiment/holysalts/New()
+	..()
+	reagents.add_reagent(HOLYSALTS, 50)
+
 /obj/item/weapon/reagent_containers/food/condiment/peppermill
 	name = "pepper mill"
 	desc = "Often used to flavor food or make people sneeze."
 	icon_state = "peppermillsmall"
-	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
+	possible_transfer_amounts = list(1, 10, 50)
 	amount_per_transfer_from_this = 1
 
 /obj/item/weapon/reagent_containers/food/condiment/peppermill/New()
@@ -437,6 +528,15 @@
 	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
 
 
+/obj/item/weapon/reagent_containers/food/condiment/coco
+	name = "cocoa powder"
+	desc = "A vital component for making chocolate."
+
+/obj/item/weapon/reagent_containers/food/condiment/coco/New()
+	..()
+	reagents.add_reagent(COCO, 50)
+
+
 /obj/item/weapon/reagent_containers/food/condiment/mayo
 	name = "mayonnaise jar"
 	desc = "we have such sights to show you."
@@ -444,3 +544,115 @@
 /obj/item/weapon/reagent_containers/food/condiment/mayo/New()
 	..()
 	reagents.add_reagent(MAYO, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/cream
+	name = "whipped cream dispenser"
+	desc = "Instant delight!"
+
+/obj/item/weapon/reagent_containers/food/condiment/cream/New()
+	..()
+	reagents.add_reagent(CREAM, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/liquidbutter
+	name = "liquid butter bottle"
+	desc = "A one way trip to obesity."
+
+/obj/item/weapon/reagent_containers/food/condiment/liquidbutter/New()
+	..()
+	reagents.add_reagent(LIQUIDBUTTER, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/maple_syrup
+	name = "maple syrup"
+	desc = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
+
+/obj/item/weapon/reagent_containers/food/condiment/maple_syrup/New()
+	..()
+	reagents.add_reagent(MAPLESYRUP, 50)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/chillwax
+	name = "chill wax pot"
+	desc = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
+
+/obj/item/weapon/reagent_containers/food/condiment/chillwax/New()
+	..()
+	reagents.add_reagent(CHILLWAX, 50)
+
+//////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/reagent_containers/food/condiment/small
+	possible_transfer_amounts = list(1, 5)
+	amount_per_transfer_from_this = 1
+	var/trash_type
+
+/obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change()
+	if(is_empty() && trash_type)
+		var/obj/item/trash/trash = new trash_type(get_turf(src))
+		if (ismob(loc))
+			var/mob/M = loc
+			var/hand_index = M.is_holding_item(src)
+			M.drop_item(src, M.loc)
+			if (hand_index)
+				M.put_in_hand(hand_index, trash)
+				M.update_inv_hands()
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
+	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers))
+		return FALSE
+	. = ..()
+
+/obj/item/weapon/reagent_containers/food/condiment/small/is_open_container()
+	return FALSE	// This should prevent most ways the packet could emptied other than by being applied on food.
+					// Worst case scenario, the empty packet will appear on the ground.
+
+//-------------------------------------------------------------------------
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup
+	name = "ketchup packet"
+	desc = "You feel more American already."
+	icon_state = "ketchup_small"
+	condiment_overlay = KETCHUP
+	trash_type = /obj/item/trash/ketchup_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
+	..()
+	reagents.add_reagent(KETCHUP, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo
+	name = "mayonaise packet"
+	desc = "Still not an instrument."
+	icon_state = "mayo_small"
+	condiment_overlay = MAYO
+	trash_type = /obj/item/trash/mayo_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
+	..()
+	reagents.add_reagent(MAYO, 5)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce
+	name = "soy sauce packet"
+	desc = "Tasty soy sauce in a convenient tiny packet."
+	icon_state = "soysauce_small"
+	condiment_overlay = SOYSAUCE
+	trash_type = /obj/item/trash/soysauce_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/soysauce/New()
+	..()
+	reagents.add_reagent(SOYSAUCE, 5)
+
+/obj/item/weapon/reagent_containers/food/condiment/small/vinegar
+	name = "malt vinegar packet"
+	desc = "Perfect for smaller portions of fish and chips."
+	icon_state = "vinegar_small"
+	condiment_overlay = VINEGAR
+	trash_type = /obj/item/trash/vinegar_packet
+
+/obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
+	..()
+	reagents.add_reagent(VINEGAR, 5)

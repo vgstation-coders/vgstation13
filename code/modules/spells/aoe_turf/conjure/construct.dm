@@ -142,7 +142,7 @@
 
 /spell/aoe_turf/conjure/wall/reinforced//what?
 	name = "Greater Construction"
-	desc = "This spell constructs a reinforced metal wall"
+	desc = "This spell constructs a reinforced metal wall."
 	user_type = USER_TYPE_CULT//why?
 
 	charge_max = 300
@@ -213,7 +213,7 @@
 
 /spell/aoe_turf/conjure/forcewall/lesser
 	name = "Shield"
-	desc = "Allows you to pull up a shield to protect yourself and allies from incoming threats"
+	desc = "Allows you to pull up a shield to protect yourself and allies from incoming threats."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 300
@@ -229,9 +229,8 @@
 
 //Code for the Juggernaut construct's forcefield, that seemed like a good place to put it.
 /obj/effect/forcefield/cult
-	desc = "That eerie looking obstacle seems to have been pulled from another dimension through sheer force"
+	desc = "That eerie looking obstacle seems to have been pulled from another dimension through sheer force."
 	name = "Juggerwall"
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "m_shield_cult"
 	light_color = LIGHT_COLOR_RED
 	luminosity = 2
@@ -316,7 +315,7 @@
 /obj/effect/forcefield/cult/large
 	desc = "That eerie looking obstacle seems to have been pulled from another dimension through sheer force."
 	name = "Juggerwall"
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "juggerwall"
 	light_color = LIGHT_COLOR_RED
 	luminosity = 2
@@ -327,7 +326,7 @@
 
 /obj/effect/forcefield/cult/large/Destroy()
 	if (loc)
-		new /obj/effect/red_afterimage(loc,src)
+		new /obj/effect/afterimage/red(loc,src)
 	if (side1)
 		qdel(side1)
 	if (side2)

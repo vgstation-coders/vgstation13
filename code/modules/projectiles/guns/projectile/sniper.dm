@@ -8,6 +8,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 16
 	slot_flags = SLOT_BACK
+	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
 	fire_delay = 30
 	w_class = W_CLASS_LARGE
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
@@ -15,7 +16,7 @@
 	ammo_type = "/obj/item/ammo_casing/BMG50"
 	max_shells = 1
 	load_method = 0
-	slowdown = 10
+	slowdown = 2
 	var/backup_view = 7
 
 /obj/item/weapon/gun/projectile/hecate/isHandgun()
@@ -49,8 +50,10 @@
 
 /obj/item/weapon/gun/projectile/hecate/attack_self(mob/user)
 	if(wielded)
+		slowdown = 2
 		unwield(user)
 	else
+		slowdown = 10
 		wield(user)
 
 /obj/item/weapon/gun/projectile/hecate/hunting
@@ -76,6 +79,9 @@
 	actions_types = list(/datum/action/item_action/toggle_wielding)
 
 /obj/item/weapon/gun/projectile/hecate/hunting/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
+	if(ishuman(atarget))
+		P.stun = 0
+		P.weaken = 0
 	if(isanimal(atarget))
 		P.damage *= 6
 

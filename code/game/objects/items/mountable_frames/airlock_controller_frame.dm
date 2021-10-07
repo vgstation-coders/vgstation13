@@ -1,8 +1,8 @@
 // Copypasta from APC HULL
 
 /obj/item/mounted/frame/airlock_controller
-	name = "Airlock Controller frame"
-	desc = "Used for repairing or building airlock controllers"
+	name = "airlock controller frame"
+	desc = "Used for repairing or building airlock controllers."
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_control_build0"
 	mount_reqs = list("simfloor")

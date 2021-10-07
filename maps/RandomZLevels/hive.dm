@@ -830,10 +830,6 @@ var/list/hive_pylons = list()
 	var/infinite = 0
 
 /obj/item/supermatter_shielding/supermatter_act(atom/source)
-	var/turf/T = get_turf(src)
-
-	if(T)
-		explosion(T, -1, -1, 1)
 
 	if(istype(loc, /mob/living))
 		var/mob/living/L = loc

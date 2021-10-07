@@ -61,14 +61,15 @@
 	img_pda = null
 	backup_img_pda = null
 
-/datum/feed_message/proc/ImagePDA()
+/proc/ImagePDA(var/icon/img)
 	if (img)
-		img_pda = icon(img)
+		var/icon/img_pda = icon(img)
 		//turns the image grayscale then applies an olive coat of paint
 		img_pda.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(128,128,0))
 		//lowers the brightness then ups the contrast so we get something that fits on a PDA screen
 		img_pda.MapColors(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,-0.53,-0.53,-0.53,0)
 		img_pda.MapColors(1.75,0,0,0,0,1.75,0,0,0,0,1.75,0,0,0,0,1.75,-0.375,-0.375,-0.375,0)
+		return img_pda
 
 /datum/feed_message/proc/NewspaperCopy()//We only copy the vars we'll need
 	var/datum/feed_message/copy = new()
@@ -409,7 +410,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192'></a><BR><BR>"
+								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
 							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
@@ -708,7 +709,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
-					newMsg.ImagePDA()
+					newMsg.img_pda = ImagePDA(newMsg.img)
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
@@ -822,7 +823,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
 								WANTED.img = P.fields["img"]
-							WANTED.ImagePDA()
+							WANTED.img_pda = ImagePDA(WANTED.img)
 						news_network.wanted_issue = WANTED
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()
@@ -992,6 +993,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(do_after(user, src,10))
 					to_chat(user, "<span class='notice'>You pry off the [src]!.</span>")
 					new /obj/item/mounted/frame/newscaster(loc)
+					EjectPhoto(user)
 					qdel(src)
 					return
 

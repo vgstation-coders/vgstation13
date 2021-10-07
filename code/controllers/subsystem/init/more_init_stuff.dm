@@ -30,7 +30,6 @@ var/datum/subsystem/more_init/SSmore_init
 		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
 	..()
 
-	buildcamlist()
 	if(config.media_base_url)
 		watch = start_watch()
 		log_startup_progress("Caching jukebox playlists...")
@@ -38,16 +37,17 @@ var/datum/subsystem/more_init/SSmore_init
 		log_startup_progress("  Finished caching jukebox playlists in [stop_watch(watch)]s.")
 	..()
 
+	watch=start_watch()
+	log_startup_progress("Doing the other misc. initializations...")
+	process_teleport_locs()				//Sets up the wizard teleport locations
+	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
+	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
 	camera_sort(cameranet.cameras)
-
-	for (var/obj/machinery/computer/security/S in tv_monitors)
-		S.init_cams()
-
 	create_global_diseases()
-
 	init_wizard_apprentice_setups()
 	machinery_rating_cache = cache_machinery_components_rating()
 	typing_indicator = new
+	log_startup_progress("Finished doing the other misc. initializations in [stop_watch(watch)]s.")
 
 /proc/cache_machinery_components_rating()
 	var/list/cache = list()
@@ -64,28 +64,6 @@ var/datum/subsystem/more_init/SSmore_init
 		var/datum/wizard_apprentice_setup/setup_datum = new setup_type
 		wizard_apprentice_setups_nanoui += list(list("name" = setup_datum.name, "desc" = setup_datum.generate_description()))
 		wizard_apprentice_setups_by_name[setup_datum.name] = setup_datum
-
-/datum/subsystem/more_init/proc/buildcamlist()
-	adv_camera.camerasbyzlevel = list()
-	for(var/key in adv_camera.zlevels)
-		adv_camera.camerasbyzlevel["[key]"] = list()
-	//camerasbyzlevel = list("1" = list(), "5" = list())
-	if(!istype(cameranet) || !istype(cameranet.cameras) || !cameranet.cameras.len)
-		world.log << "cameranet has not been initialized before us, finding cameras manually."
-		for(var/obj/machinery/camera/C in world) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
-				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
-				ourlist += C
-	else
-		for(var/obj/machinery/camera/C in cameranet.cameras) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
-				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
-				ourlist += C
-	for(var/key in adv_camera.camerasbyzlevel)
-		var/list/keylist = adv_camera.camerasbyzlevel[key]
-		world.log << "[key] has [keylist.len] entries"
-
-	adv_camera.initialized = 1
 
 
 /datum/subsystem/more_init/proc/cachedamageicons()
@@ -112,5 +90,4 @@ var/datum/subsystem/more_init/SSmore_init
 						DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
 
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
-	spawn(1)
-		qdel(H)
+	qdel(H)

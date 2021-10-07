@@ -1,6 +1,8 @@
 var/bomb_set
 var/obj/item/weapon/disk/nuclear/nukedisk
 
+var/list/nuclear_bombs = list()
+
 /obj/machinery/nuclearbomb
 	name = "\improper Nuclear Fission Explosive"
 	desc = "Uh oh. RUN!!!!"
@@ -24,7 +26,12 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/New()
 	..()
+	nuclear_bombs += src
 	r_code = "[rand(10000, 99999)]"//Creates a random code upon object spawn.
+
+/obj/machinery/nuclearbomb/Destroy()
+	nuclear_bombs -= src
+	..()
 
 /obj/machinery/nuclearbomb/process()
 	if(timing)
@@ -49,7 +56,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(0)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/tool/weldingtool/WT = O
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -60,7 +67,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(1)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/tool/crowbar))
 					user.visible_message("[user] starts forcing open the bolt covers on [src].", "You start forcing open the anchoring bolt covers with [O]...")
 
 					if(do_after(user,  src, 15))
@@ -73,7 +80,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(2)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/tool/weldingtool/WT = O
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -96,7 +103,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(4)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/tool/crowbar))
 
 					user.visible_message("[user] begins lifting [src] off of the anchors.", "You begin lifting the device off the anchors...")
 
@@ -230,12 +237,18 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 						src.icon_state = "nuclearbomb1"
 						bomb_set = 0
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+						if (istype(dynamic_mode))
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["safety"])
 					src.safety = !( src.safety )
 					if(safety)
 						src.timing = 0
 						bomb_set = 0
 						score["nukedefuse"] = min(src.timeleft, score["nukedefuse"])
+						var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+						if (istype(dynamic_mode))
+							dynamic_mode.update_stillborn_rulesets()
 				if (href_list["anchor"])
 
 					if(removal_stage == 5)

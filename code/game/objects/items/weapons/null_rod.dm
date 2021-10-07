@@ -16,7 +16,7 @@
 	var/list/fluff_transformations = list() //does it have any special transformations only accessible to it? Should only be subtypes of /obj/item/weapon/nullrod
 	var/fluff_pickup = "pulverize"
 
-/obj/item/weapon/nullrod/suicide_act(mob/user)
+/obj/item/weapon/nullrod/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
@@ -29,6 +29,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
@@ -49,7 +50,7 @@
 		var/datum/role/vampire/V = isvampire(H)
 
 		if(V && isReligiousLeader(user)) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
-			if(/datum/power/vampire/mature in V.current_powers)
+			if(locate(/datum/power/vampire/mature) in V.current_powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 					V.nullified = min(5, V.nullified + 2)
@@ -61,7 +62,10 @@
 	if(!prox_flag)
 		return
 	if(istype(A, /turf/simulated/floor))
-		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE)
+		if (user.a_intent != I_HELP) //We assume the user is fighting
+			to_chat(user, "<span class='notice'>You swing \the [src] in front of you.</span>")
+			return
+		var/atom/movable/overlay/animation = anim(target = A, a_icon = 'icons/effects/96x96.dmi', a_icon_state = "nullcheck", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = ABOVE_LIGHTING_PLANE)
 		animation.alpha = 0
 		animate(animation, alpha = 255, time = 2)
 		animate(alpha = 0, time = 3)
@@ -87,7 +91,7 @@
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
 		if(ishuman(user)) //Typecasting, only humans can be vampires
 			var/datum/role/vampire/V = isvampire(user)
-			if(V && !(/datum/power/vampire/undying in V.current_powers))
+			if(V && !(locate(/datum/power/vampire/undying) in V.current_powers))
 				V.smitecounter += 60
 				to_chat(user, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
 
@@ -291,7 +295,7 @@
 
 /obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
 	..()
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if(istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
 		if(do_after(user, src, 30))
 			new /obj/item/weapon/nullrod/mosinnagant/obrez(get_turf(src))
@@ -311,7 +315,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
 /obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
-    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+    if (istype(A, /obj/item/tool/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
         return
     else
         return ..()
@@ -351,28 +355,23 @@
 		recruiter.jobban_roles = list("pAI") // pAI/Borers share the same jobban check so here we go too.
 
 	// Role set to Yes or Always
-	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 	// Role set to No or Never
-	recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-	recruiter.recruited.Add(src, "recruiter_recruited")
+	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
 	recruiter.request_player()
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [name] is awakening. You have been added to the list of potential ghosts. ([controls])</span>")
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [name] is awakening. You have been added to the list of potential ghosts. ([controls])</span>")
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>\The [src] is awakening. ([controls])</span>")
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class='recruit'>\The [src] is awakening. ([controls])</span>")
 
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
+/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
 		possessed = TRUE
 		qdel(recruiter)
 		recruiter = null
@@ -381,7 +380,7 @@
 		var/mob/living/simple_animal/shade/sword/S = new(src)
 		S.real_name = name
 		S.name = name
-		S.ckey = O.ckey
+		S.ckey = player.ckey
 		S.universal_speak = TRUE
 		S.universal_understand = TRUE
 		S.status_flags |= GODMODE //Make sure they can NEVER EVER leave the blade.

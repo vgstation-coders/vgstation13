@@ -78,7 +78,7 @@
 						break
 
 				if(!block)
-					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
+					for(var/obj/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
 						if(smoke.reagents.total_volume)
 							smoke.reagents.reaction(src, INGEST)
 							spawn(5)
@@ -132,10 +132,10 @@
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 0
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
-	if(!breath || (breath.total_moles() == 0) || suiciding || !L)
+	if(!breath || (breath.total_moles() == 0) || (mind && mind.suiciding) || !L)
 		if(reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			return 0
-		if(suiciding)
+		if(mind && mind.suiciding)
 			adjustOxyLoss(2) //If you are suiciding, you should die a little bit faster
 			failed_last_breath = 1
 			oxygen_alert = 1

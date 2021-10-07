@@ -4,7 +4,7 @@
 	icon_state = "valve_1"
 	item_state = "ttv"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/tanks.dmi', "right_hand" = 'icons/mob/in-hand/right/tanks.dmi')
-	desc = "Regulates the transfer of air between two tanks"
+	desc = "Regulates the transfer of air between two tanks."
 	var/obj/item/weapon/tank/tank_one
 	var/obj/item/weapon/tank/tank_two
 	var/obj/item/device/attached_device
@@ -254,6 +254,21 @@
 		// Delete ourselves.
 		qdel(src)
 
+/obj/item/device/transfer_valve/suicide_act(var/mob/living/user)
+	if (valve_open || !tank_one || !tank_two || simulate_merge() < 1) //no explosion with no tanks or dev, dummy
+		tank_one.forceMove(get_turf(src))
+		tank_one = null
+		tank_two.forceMove(get_turf(src))
+		tank_two = null
+		update_icon()
+		to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src]! It looks like \he's trying to commit suicide!</span>")
+		return(SUICIDE_ACT_BRUTELOSS)
+	
+	var/message_say = user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
+	user.say(message_say)
+	toggle_valve(user)
+	return SUICIDE_ACT_CUSTOM
 
 /obj/item/device/transfer_valve/blob_act()
 	toggle_valve()

@@ -22,7 +22,7 @@
 	//delayer = null
 
 	if (viewing)
-		viewing.mob.lazy_unregister_event(/lazy_event/on_logout, src, .proc/mob_logout)
+		viewing.mob.unregister_event(/event/logout, src, .proc/mob_logout)
 
 	..()
 
@@ -36,7 +36,7 @@
 		viewing.images -= showing
 		showing.Cut()
 		to_chat(user, "You turn off \the [src].")
-		viewing.mob.lazy_unregister_event(/lazy_event/on_logout, src, .proc/mob_logout)
+		viewing.mob.unregister_event(/event/logout, src, .proc/mob_logout)
 		viewing = null
 		return
 
@@ -47,14 +47,14 @@
 	showing = get_images(get_turf(user), viewing.view)
 	viewing.images |= showing
 	//delayer.addDelay(2 SECONDS) // Should be enough to prevent lag due to spam.
-	user.lazy_register_event(/lazy_event/on_logout, src, .proc/mob_logout)
+	user.register_event(/event/logout, src, .proc/mob_logout)
 
 /obj/item/device/holomap/proc/mob_logout(mob/user)
 	if (viewing)
 		viewing.images -= showing
 		viewing = null
 
-	user.lazy_unregister_event(/lazy_event/on_logout, src, .proc/mob_logout)
+	user.unregister_event(/event/logout, src, .proc/mob_logout)
 
 	visible_message("\The [src] turns off.")
 	showing.Cut()
@@ -88,7 +88,7 @@
 		W.playtoolsound(src, 50)
 		return 1
 
-	if (ismultitool(W) && panel)
+	if (W.is_multitool(user) && panel)
 		hacked = !hacked
 		to_chat(user, "<span class='notify'>You [hacked ? "disable" : "enable"] the lock on \the [src].</span>")
 		return 1

@@ -137,6 +137,7 @@
 		return
 	for (var/i = 1 to 4)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+
 /*
  * Pill Bottles
  */
@@ -330,6 +331,20 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	..()
 	for (var/i = 1 to 4)
 		new /obj/item/weapon/reagent_containers/food/snacks/lollipop(src)
+	overlays = null
+
+/obj/item/weapon/storage/pill_bottle/zambiscuits
+	name = "Zam Biscuit Package"
+	desc = "A package of Zam biscuits, popular fare for hungry Grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "zambiscuits"
+	storage_slots = 3
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit", "/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical")
+
+/obj/item/weapon/storage/pill_bottle/zambiscuits/New()
+	..()
+	for (var/i = 1 to 3)
+		new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
 	overlays = null
 
 /obj/item/weapon/storage/pill_bottle/nanofloxacin

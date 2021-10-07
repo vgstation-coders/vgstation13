@@ -54,7 +54,7 @@
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	if(mist)
 		target.ExtinguishMob()
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, mobloc)
 		steam.start()
 
@@ -77,18 +77,24 @@
 
 	sleep(duration)
 
+	if (target.gcDestroyed)
+		return
+
 	//Begin unjaunting
 	mobloc = get_turf(target)
 	if(mist)
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, mobloc)
 		steam.start()
 	target.delayNextMove(25)
 	target.dir = SOUTH
 	sleep(20)
+	if (target.gcDestroyed)
+		return
 	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	sleep(5)
-
+	if (target.gcDestroyed)
+		return
 	//Forcemove him onto the tile and make him visible and vulnerable
 	target.forceMove(mobloc)
 	target.invisibility = 0
@@ -114,9 +120,9 @@
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images += jaunts[A]
-				target.lazy_register_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
+				target.register_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				ethereal_jaunt(target, duration, enteranim, exitanim, mist)
-				target.lazy_unregister_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
+				target.unregister_event(/event/moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images -= jaunts[A]
@@ -126,7 +132,7 @@
 
 /spell/targeted/ethereal_jaunt/jauntgroup
 	name = "Group Jaunt"
-	desc = "This spell allows all people within range to be jaunted along with the user"
+	desc = "This spell allows all people within range to be jaunted along with the user."
 	hud_state = "group_jaunt"
 	user_type = USER_TYPE_OTHER
 
@@ -141,7 +147,7 @@
 
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
-	desc = "This spell allows you to pass through walls"
+	desc = "This spell allows you to pass through walls."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200

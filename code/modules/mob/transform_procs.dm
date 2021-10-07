@@ -72,7 +72,6 @@
 			Mo.dna.SetSEValueRange(MONKEYBLOCK, 0xDAC, 0xFFF)
 	if(isliving(src))
 		var/mob/living/L = src
-		Mo.suiciding = L.suiciding
 		Mo.take_overall_damage(L.getBruteLoss() + L.getCloneLoss(), L.getFireLoss())
 		Mo.setToxLoss(L.getToxLoss())
 		Mo.setOxyLoss(L.getOxyLoss())
@@ -180,16 +179,17 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
+		return FALSE
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
 	qdel(src)
 	return O
 
-/mob/proc/MoMMIfy()
-	if(!Premorph())
+/mob/proc/MoMMIfy(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
+	if(!Premorph(delete_items))
 		return
-	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src))
+	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src), malfAI)
 	. = O
 	if(mind)		//TODO
 		mind.transfer_to(O)
@@ -207,8 +207,9 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-	spawn()
-		O.Namepick()
+	if(!skipnaming)
+		spawn()
+			O.Namepick()
 	qdel(src)
 	return O
 

@@ -271,14 +271,14 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/attach()
 	..()
-	chassis.lazy_register_event(/lazy_event/on_moved, src, .proc/layCable)
+	chassis.register_event(/event/moved, src, .proc/layCable)
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/detach()
-	chassis.lazy_unregister_event(/lazy_event/on_moved, src, .proc/layCable)
+	chassis.unregister_event(/event/moved, src, .proc/layCable)
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Destroy()
-	chassis.lazy_unregister_event(/lazy_event/on_moved, src, .proc/layCable)
+	chassis.unregister_event(/event/moved, src, .proc/layCable)
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/action(var/obj/item/stack/cable_coil/target)
@@ -424,7 +424,7 @@
 	..()
 	flags |= NOREACT
 	syringes = new
-	known_reagents = list(INAPROVALINE="Inaprovaline",ANTI_TOXIN="Anti-Toxin (Dylovene)")
+	known_reagents = list(INAPROVALINE="Inaprovaline",ANTI_TOXIN="Dylovene")
 	processed_reagents = new
 	create_reagents(max_volume)
 	synth = new (list(src),0)

@@ -69,6 +69,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	..()
+	standard_damage_overlay_updates()
 	if(!stat && prob(speak_chance))
 		for(var/mob/M in view())
 			M << 'sound/effects/mousesqueek.ogg'
@@ -263,6 +264,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
+	if(isUnconscious())
+		return
+
 	if(!can_be_infected())
 		return
 	var/block = 0
@@ -518,6 +522,28 @@
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
 	..(TRUE)
-	if(!gibbed && !suiciding && loc != null)
+	if(!gibbed && !(mind && mind.suiciding) && loc != null)
 		explosion(get_turf(loc),-1,0,2)
 		gib()
+
+/mob/living/simple_animal/mouse/transmog
+	maxHealth = 35
+	health = 35
+
+/mob/living/simple_animal/mouse/transmog/transmog_death()
+	if(!transmogged_from)
+		return //Should never happen, but sanity is good
+	var/obj/transmog_body_container/C = transmogged_from
+	var/mob/living/L = C.contained_mob
+	if(istype(loc,/obj/machinery/atmospherics))
+		loc.visible_message("<span class='danger'>\The [loc] gets destroyed by the sudden emergence of \the [L]!</span>")
+		var/turf/T = get_turf(loc)
+		T.ex_act(3) //lightly damage turf
+		qdel(loc) //moves out
+	else
+		L.visible_message("<span class='danger'>\The [src] suddenly snaps back into the shape of \the [L]!</span>")
+	transmogrify()
+
+/mob/living/simple_animal/mouse/transmog/attempt_suicide(forced = FALSE, suicide_set = TRUE)
+	to_chat(src, "<span class='warning'>Your mousy instincts prevent you from snapping your own neck!</span>")
+	return

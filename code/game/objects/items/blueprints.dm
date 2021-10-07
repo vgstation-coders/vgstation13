@@ -55,7 +55,7 @@
 these cannot rename rooms that are in by default BUT can rename rooms that are created via blueprints/permit  */
 /obj/item/blueprints/construction_permit
 	name = "construction permit"
-	desc = "An electronic permit designed to register a room for the use of APC and air alarms"
+	desc = "An electronic permit designed to register a room for the use of APC and air alarms."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "permit"
 
@@ -83,6 +83,10 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	can_edit_areas = list(AREA_BLUEPRINTS, AREA_STATION)
 	can_delete_areas = list(AREA_BLUEPRINTS, AREA_STATION)
+
+
+/obj/item/blueprints/primary/photography_act(var/obj/item/device/camera/camera)
+	camera.blueprints = 1
 
 /obj/item/blueprints/attack_self(mob/living/M)
 	if (!ishigherbeing(M) && !issilicon(M))
@@ -399,7 +403,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
 	if (istype(T2, /turf/space))
 		return BORDER_SPACE //omg hull breach we all going to die here
-	if (istype(T2, /turf/simulated/shuttle))
+	if (isshuttleturf(T2))
 		return BORDER_SPACE
 	var/areatype = get_area_type(T2.loc)
 	if (areatype != AREA_SPACE && areatype != AREA_CONSTRUCT)
@@ -468,10 +472,14 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	Turns the area the person is currently in into a shuttle if it meets to certian standards
 		- Is a custom area. No players turning the bar into a shuttle
 		- Has enough engines that are active
-			- 2 engines for every 25 tiles of area.
+			- 2 engines minimum
+			- 1 engine for every 15 tiles of area.
 			- Engines must be of the DIY variety, and have a connected heater.
 		- The point they are facing is outwards on the edge of the area
 */
+
+#define CUSTOM_SHUTTLE_TILES_PER_ENGINE 15 // centralized config thingy. #de[B]ines 4 lyfe, performance forever
+
 
 /obj/item/shuttle_license
 	name = "shuttle verification license"
@@ -496,12 +504,18 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	var/area_size = A.area_turfs.len
 	var/active_engines = 0
 	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in A)
-		if(D.heater && D.anchored)
-			active_engines++
+		if(D.anchored)
+			if(D.heater) // it has a heater, great, count it
+				active_engines++
+			else // fix for engines getting their internal state desyncronized from what is actually happening
+				if(D.try_connect())
+					active_engines++
+				else if (D.retard_checks() && D.try_connect())
+					active_engines++
 
-	if(active_engines < 2 || area_size/active_engines > 15) //2 engines per 30 tiles, with a minimum of 2 engines.
+	if(active_engines < 2 || area_size/active_engines > CUSTOM_SHUTTLE_TILES_PER_ENGINE) // 1 engine per 15 tiles, with a minimum of 2 engines.
 		to_chat(user, "<span class = 'warning'>This area is not a viable shuttle. Reason: Insufficient engine count.</span>")
-		to_chat(user, "<span class = 'notice'> Active engine count: [active_engines]. Area size: [area_size] meters squared.</span>")
+		to_chat(user, "<span class = 'notice'> Detected [active_engines] of [max(2, Ceiling(area_size/CUSTOM_SHUTTLE_TILES_PER_ENGINE))] engines required for a [area_size] square meter shuttle.<br>1 engine required for every [CUSTOM_SHUTTLE_TILES_PER_ENGINE] square meters, 2 engines minimum.</span>")
 		return
 
 	var/turf/check_turf = get_step(user, user.dir)
@@ -520,15 +534,28 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	var/obj/docking_port/shuttle/DP = new /obj/docking_port/shuttle(get_turf(src))
 	DP.dir = user.dir
-
+	// Link the custom shuttle to a basic homing port to return to.
+	var/turf/home_base = get_step(get_turf(DP), DP.dir)
+	var/obj/docking_port/destination/my_shuttle_home_base = new(home_base)
+	my_shuttle_home_base.name = "[name] home port"
+	my_shuttle_home_base.dir = reverse_direction(DP.dir)
 
 	var/datum/shuttle/custom/S = new(starting_area = A)
 	S.initialize()
 	S.name = name
+	S.linked_port.docked_with = my_shuttle_home_base
 
-	to_chat(user, "Shuttle created!")
-
+	to_chat(user, "<span class='notice'>Shuttle created!</span>")
+	var/obj/item/weapon/disk/shuttle_coords/my_docking_port_dest = new(get_turf(src))
+	my_docking_port_dest.destination = my_shuttle_home_base
+	my_docking_port_dest.name = "[name] home port"
+	my_docking_port_dest.desc = "This disc links to the home base of [user]'s custom shuttle, [name]."
+	my_docking_port_dest.header = "[name] home port"
+	user.put_in_hands(my_docking_port_dest)
+	to_chat(user, "<span class='notice'>Congratulations! You have succesfully created a shuttle. You will find in your hands the destination disk linked to your home base, which is where you created the shuttle. Don't lose it, it cannot be replaced!</span>")
+	to_chat(user, "<span class='notice'><h3>Happy hunting!</h3></span>")
 
 	message_admins("<span class='notice'>[key_name_admin(user)] has turned [A.name] into a shuttle named [S.name]. [formatJumpTo(get_turf(user))]</span>")
 	log_admin("[key_name(user)]  has turned [A.name] into a shuttle named [S.name].")
 	qdel(src)
+#undef CUSTOM_SHUTTLE_TILES_PER_ENGINE

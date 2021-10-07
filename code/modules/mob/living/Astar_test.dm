@@ -1,6 +1,6 @@
 /mob/living/clickbot
 	name = "pathfinder"
-	desc = "A small robot. used for traversing derelict stations in search of valuables"
+	desc = "A small robot used for traversing derelict stations in search of valuables."
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "spiderbot-chassis"
 	var/list/path = list()
@@ -8,8 +8,8 @@
 /mob/living/clickbot/ClickOn(var/atom/A, var/params)
 	make_astar_path(A)
 
-/mob/living/clickbot/make_astar_path(var/atom/target, var/receiving_proc = .get_astar_path)
-	AStar(src, receiving_proc, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30, debug = TRUE)
+/mob/living/clickbot/make_astar_path(var/atom/target, var/callback = new /callback(src, .get_astar_path))
+	AStar(src, callback, get_turf(src), target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 30, 30, debug = TRUE)
 
 
 /mob/living/clickbot/get_astar_path(var/list/L)

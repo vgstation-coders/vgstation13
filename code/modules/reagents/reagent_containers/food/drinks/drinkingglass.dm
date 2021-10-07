@@ -15,8 +15,6 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-
-	viewcontents = 1
 	overlays.len = 0
 	flammable = 0
 	if(!molotov)
@@ -30,7 +28,6 @@
 			icon_state ="blackglass"
 			name = "international drink of mystery"
 			desc = "The identity of this drink has been concealed for its protection."
-			viewcontents = 0
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
 			R.handle_special_behavior(src)
@@ -128,10 +125,11 @@
 
 		if(R.mug_icon_state)
 			icon_state = R.mug_icon_state
-			item_state = R.mug_icon_state
+			//item_state = R.mug_icon_state
+			//looks like there is none made yet so at least let's not hold an invisible mug
 
 		else
-			make_reagent_overlay()
+			mug_reagent_overlay()
 	else
 		overlays.len = 0
 		icon_state = "mug_empty"
@@ -139,9 +137,9 @@
 		desc = "A simple mug."
 		return
 
-/obj/item/weapon/reagent_containers/food/drinks/mug/proc/make_reagent_overlay()
+/obj/item/weapon/reagent_containers/food/drinks/proc/mug_reagent_overlay()
 	overlays.len = 0
-	icon_state ="mug_empty"
+	icon_state = base_icon_state
 	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")
 	filling.icon += mix_color_from_reagents(reagents.reagent_list)
 	filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)

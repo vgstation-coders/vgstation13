@@ -49,14 +49,17 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 
 /turf/simulated/floor/New()
+	create_floor_tile()
 	..()
-	if(!floor_tile)
-		floor_tile = new /obj/item/stack/tile/plasteel(null)
-		floor_tile.amount = 1
 	if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
+
+/turf/simulated/floor/proc/create_floor_tile()
+	if(!floor_tile)
+		floor_tile = new /obj/item/stack/tile/plasteel(null)
+		floor_tile.amount = 1
 
 /turf/simulated/floor/Destroy()
 	//No longer phazon, not a teleport destination
@@ -383,7 +386,6 @@ turf/simulated/floor/update_icon()
 						FF.update_icon() //so siding get updated properly
 
 	if(floor_tile)
-		//qdel(floor_tile)
 		qdel(floor_tile)
 	icon_plating = "plating"
 	set_light(0)
@@ -622,7 +624,7 @@ turf/simulated/floor/update_icon()
 				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
 	else if(iswelder(C))
-		var/obj/item/weapon/weldingtool/welder = C
+		var/obj/item/tool/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
 				if(welder.remove_fuel(1,user))
@@ -680,16 +682,13 @@ turf/simulated/floor/update_icon()
 			return
 		qdel(P)
 
-
-/turf/simulated/floor/attack_construct(mob/user as mob)
+/turf/simulated/floor/attack_construct(var/mob/user)
 	if(istype(src,/turf/simulated/floor/carpet))
 		return//carpets are cool
 	if(istype(user,/mob/living/simple_animal/construct/builder))
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
 			S.perform(user, 0, list(src))
-			//var/obj/abstract/screen/spell/SS = S.connected_button
-			//SS.update_charge(1)
 			return 1
 	return 0
 

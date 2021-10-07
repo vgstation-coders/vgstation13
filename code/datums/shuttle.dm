@@ -106,7 +106,7 @@
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
-/datum/shuttle/proc/initialize()
+/datum/shuttle/initialize()
 	. = INIT_SUCCESS
 	src.docking_ports = list()
 	src.docking_ports_aboard = list()
@@ -333,7 +333,7 @@
 				destination_port = null
 				return
 			for(var/atom/movable/AA in linked_area)
-				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
+				AA.invoke_event(/event/z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -638,7 +638,7 @@
 		if(!old_turf)
 			message_admins("ERROR when moving [src.name] ([src.type]) - failed to get original turf at [old_C.x_pos];[old_C.y_pos];[our_center.z]")
 			continue
-		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/shuttle/wall)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
+		else if(old_turf.preserve_underlay == 0 && istype(old_turf,/turf/simulated/wall/shuttle)) //Varediting a turf's "preserve_underlay" to 1 will protect its underlay from being changed
 			if(old_turf.icon_state in transparent_icons)
 				add_underlay = 1
 				if(old_turf.underlays.len) //this list is in code/game/area/areas.dm

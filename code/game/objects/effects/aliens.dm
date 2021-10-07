@@ -12,8 +12,9 @@
  */
 /obj/effect/alien
 	name = "alien thing"
-	desc = "theres something alien about this"
+	desc = "There's something alien about this."
 	icon = 'icons/mob/alien.dmi'
+	mouse_opacity = 1
 	w_type=NOT_RECYCLABLE
 
 /*
@@ -286,7 +287,7 @@
 	//			continue
 
 			for(var/obj/O in T)
-				if(O.density)
+				if(!O.Cross(src, get_turf(T)))
 					continue direction_loop
 
 			new /obj/effect/alien/weeds(T, linked_node)
@@ -448,7 +449,7 @@
 	MAX_GROWTH_TIME = 3000
 
 /obj/effect/alien/egg
-	desc = "It looks like a weird egg"
+	desc = "It looks like a weird egg."
 	name = "egg"
 	icon_state = "egg_growing"
 	density = 0

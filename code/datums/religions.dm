@@ -1,7 +1,7 @@
 /proc/DecidePrayerGod(var/mob/H)
 	if(!H || !H.mind)
 		return "a voice"
-	if(H.mind.GetRole(CULTIST))
+	if(iscultist(H))
 		return "Nar-Sie"
 	else if(H.mind.faith) // The user has a faith
 		var/datum/religion/R = H.mind.faith
@@ -102,6 +102,26 @@
 		else
 			return R.deity_name
 
+/mob/proc/renounce_faith()
+	set category = "IC"
+	set name = "Renounce Faith"
+	set desc = "Leave the religion you are currently in."
+
+	if (!mind || !mind.faith)
+		to_chat(src, "<span class='warning'>You have no religion to renounce.</span>")
+		verbs -= /mob/proc/renounce_faith
+		return
+
+	var/datum/religion/R = mind.faith
+
+	if (R.leadsThisReligion(src))
+		to_chat(src, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
+		return
+	if (alert("Do you wish to renounce [R.name]?","Renouncing a religion","Yes","No") != "Yes")
+		return
+
+	R.renounce(src)
+	verbs -= /mob/proc/renounce_faith
 
 // This file lists all religions, as well as the prototype for a religion
 /datum/religion
@@ -122,7 +142,6 @@
 	var/list/bible_names = list()
 	var/list/deity_names = list()
 
-	var/datum/action/renounce/action_renounce
 	var/list/keys = list("abstractbasetype") // What you need to type to get this particular relgion.
 	var/converts_everyone = FALSE
 	var/preferred_incense = /obj/item/weapon/storage/fancy/incensebox/harebells
@@ -132,9 +151,6 @@
 /datum/religion/New() // For religions with several bibles/deities
 	if (bible_names.len)
 		bible_name = pick(bible_names)
-	/*if (deity_names.len)
-		deity_name = pick(deity_names)*/
-	action_renounce = new /datum/action/renounce(src)
 
 /datum/religion/proc/leadsThisReligion(var/mob/living/user)
 	return (user.mind && user.mind == religiousLeader)
@@ -217,7 +233,7 @@
 	subject.mind.faith = src
 	adepts += subject.mind
 	if(can_renounce)
-		action_renounce.Grant(subject)
+		subject.verbs |= /mob/proc/renounce_faith
 	if(!default)
 		to_chat(subject, "<span class='good'>You feel your mind become clear and focused as you discover your newfound faith. You are now a follower of [name].</span>")
 		if (!preacher)
@@ -257,29 +273,6 @@
 	to_chat(subject, "<span class='notice'>You renounce [name].</span>")
 	adepts -= subject.mind
 	subject.mind.faith = null
-
-// Action : renounce your faith. For players.
-/datum/action/renounce
-	name = "Renounce faith"
-	desc = "Leave the religion you are currently in."
-	icon_icon = 'icons/obj/clothing/hats.dmi'
-	button_icon_state = "fedora" // :^) Needs a better icon
-
-/datum/action/renounce/Trigger()
-	var/datum/religion/R = target
-	var/mob/living/M = owner
-
-	if (!R) // No religion, may as well be a good time to remove the icon if it's there
-		Remove(M)
-		return FALSE
-	if (R.leadsThisReligion(M))
-		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
-		return FALSE
-	if (alert("Do you wish to renounce [R.name]?","Renouncing a religion","Yes","No") != "Yes")
-		return FALSE
-
-	R.renounce(owner)
-	Remove(owner)
 
 // interceptPrayer: Called when anyone (not necessarily one of our adepts!) whispers a prayer.
 // Return 1 to CANCEL THAT GUY'S PRAYER (!!!), or return null and just do something fun.
@@ -1016,7 +1009,7 @@
 		return FALSE
 
 	var/obj/item/weapon/grenade/flashbang/F = preacher.held_items[held_banger]
-	var/obj/item/weapon/screwdriver/S = subject.held_items[held_screwdriver]
+	var/obj/item/tool/screwdriver/S = subject.held_items[held_screwdriver]
 
 	if (F.det_time != 50) // The timer isn't properly set
 		to_chat(preacher, "<span class='warning'>The timer in the flashbang isn't properly set up. Set it to 5 seconds.</span>")
@@ -1408,7 +1401,7 @@
 
 /datum/religion/esports/equip_chaplain(mob/living/carbon/human/H)
 	var/turf/here = get_turf(H)
-	new /obj/item/weapon/crowbar/red(here)
+	new /obj/item/tool/crowbar/red(here)
 	var/obj/item/clothing/head/donitos_pope/pope_hat = new(here)
 	H.equip_to_appropriate_slot(pope_hat, override=TRUE)
 	var/obj/structure/closet/crate/flatpack/tv_pack1 = new(here)

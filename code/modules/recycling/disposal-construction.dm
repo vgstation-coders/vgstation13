@@ -14,7 +14,7 @@
 	w_type = RECYK_METAL
 	level = 2
 	var/ptype = 0
-	// 0=straight, 1=bent, 2=junction-j1, 3=junction-j2, 4=junction-y, 5=trunk, 6=disposal bin, 7=outlet, 8=inlet
+	// 0=straight, 1=bent, 2=junction-j1, 3=junction-j2, 4=junction-y, 5=trunk, 6=disposal bin, 7=outlet, 8=inlet, 9=up, 10=down
 
 	var/dpdir = 0	// directions as disposalpipe
 	var/base_state = "pipe-s"
@@ -74,6 +74,14 @@
 			base_state = "pipe-j2s"
 			dpdir = dir | left | flip
 
+		if(13)
+			base_state = "pipe-u"
+			dpdir = dir
+		
+		if(14)
+			base_state = "pipe-d"
+			dpdir = dir
+	
 	if(ptype<6 || ptype>8)
 		icon_state = "con[base_state]"
 	else
@@ -248,7 +256,7 @@
 			if(competing_pipe())
 				to_chat(user, "There is already a [nicetype] at that location.")
 				return
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/tool/weldingtool/W = I
 			to_chat(user, "Welding the [nicetype] in place.")
 			if(W.do_weld(user,src,20,0))
 				if(gcDestroyed || !W.isOn())

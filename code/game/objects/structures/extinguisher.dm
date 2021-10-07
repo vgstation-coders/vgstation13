@@ -12,8 +12,12 @@
 	has_extinguisher = null
 	opened = 1
 
-/obj/structure/extinguisher_cabinet/New()
+/obj/structure/extinguisher_cabinet/New(loc, var/ndir)
 	..()
+	if(ndir)
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE)
+		pixel_y = (ndir & 3)? (ndir == 1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : 0
+		dir = ndir
 	update_icon()
 
 /obj/structure/extinguisher_cabinet/attackby(obj/item/O, mob/user)
@@ -80,7 +84,7 @@
 		icon_state = "extinguisher_empty"
 
 
-/obj/structure/extinguisher_cabinet/proc/weld(var/obj/item/weapon/weldingtool/WE, var/mob/user)
+/obj/structure/extinguisher_cabinet/proc/weld(var/obj/item/tool/weldingtool/WE, var/mob/user)
 	if(!istype(WE))
 		return
 	if(has_extinguisher)
@@ -92,4 +96,6 @@
 	if(!WE.remove_fuel(1, user))
 		return
 	to_chat(user, "<span class='notice'>You cut \the [src] off of the wall.</span>")
+	WE.playtoolsound(src, 50)
+	new /obj/item/mounted/frame/extinguisher_cabinet(get_turf(src))
 	qdel(src)

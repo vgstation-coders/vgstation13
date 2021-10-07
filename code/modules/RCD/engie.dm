@@ -3,7 +3,8 @@
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock
+	/datum/rcd_schematic/con_airlock,
+	/datum/rcd_schematic/con_window,
 	)
 
 
@@ -21,7 +22,7 @@
 
 	return ..()
 
-/obj/item/device/rcd/matter/engineering/suicide_act(var/mob/user)
+/obj/item/device/rcd/matter/engineering/suicide_act(var/mob/living/user)
 	visible_message("<span class='danger'>[user] is using the deconstruct function on \the [src] on \himself! It looks like \he's trying to commit suicide!</span>")
 	user.death(1)
 	return SUICIDE_ACT_CUSTOM
@@ -35,7 +36,8 @@
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock/borg
+	/datum/rcd_schematic/con_airlock/borg,
+	/datum/rcd_schematic/con_window/borg,
 	)
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/admin

@@ -110,6 +110,7 @@
 		S.forceMove(loc)
 		S.visible_message("<span class='notice'>[S] crawls free of the processor!</span>")
 		return
+	score["slimes"]++
 	for(var/i = 1, i <= C, i++)
 		new S.coretype(loc)
 		feedback_add_details("slime_core_harvested","[replacetext(S.colour," ","_")]")
@@ -188,7 +189,7 @@
 		return P
 	return 0
 
-/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(contents.len)
 		to_chat(user, "You can't do that while something is loaded in \the [src].")
 		return 0
@@ -202,6 +203,45 @@
 		return fill(O, user)
 
 	return add_to(O, user)
+
+/obj/machinery/processor/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is sticking \his head inside the [src] and turning it on! It looks like \he's trying to commit suicide!</span>")
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+		if(head_organ)
+			head_organ.explode()
+		else
+			user.gib()
+	else
+		user.gib()
+	return (SUICIDE_ACT_BRUTELOSS)
+
+/obj/machinery/processor/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(src.processing || is_full())
+		return FALSE
+	if(istype(AM, /obj/item/weapon/storage/bag/plants))
+		var/obj/item/weapon/storage/bag/plants/bag = AM
+		var/items_transferred = 0
+		for(var/obj/item/item in bag.contents)
+			var/datum/food_processor_process/recipe = select_recipe(item)
+			if (!recipe)
+				continue
+			bag.remove_from_storage(item,src)
+			items_transferred++
+		if(items_transferred == 0 && !is_full())
+			return FALSE
+	else
+		if(isliving(AM))
+			var/mob/living/L = AM
+			if(!L.lying)
+				return FALSE
+		var/datum/food_processor_process/P = select_recipe(AM)
+		if (!P)
+			return FALSE
+		AM.forceMove(src)
+		return TRUE
+	return FALSE
 
 /obj/machinery/processor/proc/add_to(var/atom/movable/A, var/mob/user)
 	if(src.processing)
@@ -278,6 +318,23 @@
 		return
 	add_to(O,user)
 
+/obj/machinery/processor/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	var/mob/user = usr
+	if(user.incapacitated() || (user.loc != src))
+		return
+	over_location = get_turf(over_location)
+	if(!istype(over_location) || over_location.density)
+		return
+	if(!Adjacent(over_location))
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	visible_message("[user] climbs out of \the [src].")
+	user.forceMove(loc)
+
 /obj/machinery/processor/proc/warn_full(var/mob/who)
 	to_chat(who, "<span class='warning'>\The [src] is full, it cannot fit anymore.</span>")
 
@@ -287,7 +344,7 @@
 /obj/machinery/processor/proc/fill(var/obj/item/weapon/storage/bag/plants/bag, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
-		return
+		return 1
 	var/items_transferred = 0
 	for(var/obj/item/item in bag.contents)
 		if(is_full())
@@ -303,3 +360,4 @@
 		items_transferred++
 	if(items_transferred == 0 && !is_full())
 		to_chat(user, "<span class='warning'>You can't process anything in \the [bag].</span>")
+		return 1

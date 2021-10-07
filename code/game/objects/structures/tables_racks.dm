@@ -301,6 +301,8 @@
 	return
 
 /obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(air_group || (height==0))
 		return 1
 	if(istype(mover,/obj/item/projectile))
@@ -318,8 +320,10 @@
 			return 1
 	return 0
 
-/obj/structure/table/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
-	destroy()
+/obj/structure/table/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+		destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
@@ -346,6 +350,8 @@
 	return 1
 
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	if(flow_flags & ON_BORDER)
@@ -375,6 +381,16 @@
 		return
 	return ..()
 
+/obj/structure/table/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+	for (var/atom/A in loc)
+		if (A == src)
+			continue
+		if (!A.Cross(victim,get_turf(victim)))
+			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
+			return FALSE
+	victim.forceMove(loc)
+	return TRUE
+
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (!W)
 		return
@@ -385,21 +401,25 @@
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
-					G.affecting.forceMove(loc)
+					if (!TryToThrowOnTable(user,M))
+						return
 					if (prob(15))
 						M.Knockdown(5)
 						M.Stun(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
-					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
+					visible_message("<span class='warning'>[user] slams [M]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
+					add_attacklogs(user, M, "harmfully tabled", admin_warn = FALSE)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.forceMove(loc)
-				G.affecting.Knockdown(5)
-				G.affecting.Stun(5)
-				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
+				if (!TryToThrowOnTable(user,M))
+					return
+				M.Knockdown(5)
+				M.Stun(5)
+				visible_message("<span class='warning'>[user] puts [M] on \the [src].</span>")
+				add_attacklogs(user, M, "harmlessly tabled", admin_warn = FALSE)
 			qdel(W)
 			return
 
@@ -412,7 +432,7 @@
 
 	if(user.drop_item(W, src.loc))
 		if(W.loc == src.loc && params)
-			W.setPixelOffsetsFromParams(params, user)
+			W.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
 			return 1
 
 /obj/structure/table/proc/straight_table_check(var/direction)
@@ -600,7 +620,7 @@
 				return
 
 	else if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.isOn())
 			to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
 			if(WT.do_weld(user, src, 50, 0))
@@ -650,7 +670,8 @@
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
 			else
-				G.affecting.forceMove(loc)
+				if (!TryToThrowOnTable(user,G.affecting))
+					return
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
@@ -772,8 +793,10 @@ obj/structure/table/plastic
 		return 1
 	return !density
 
-/obj/structure/rack/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
-	destroy()
+/obj/structure/rack/Bumped(atom/movable/AM)
+	..()
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird))
+		destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_wrench(user) && can_disassemble())

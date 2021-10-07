@@ -1,7 +1,5 @@
 /datum/job/chief_engineer
 	title = "Chief Engineer"
-	flag = CHIEF
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -22,8 +20,6 @@
 
 /datum/job/engineer
 	title = "Station Engineer"
-	flag = ENGINEER
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 5
 	spawn_positions = 5
@@ -37,8 +33,6 @@
 
 /datum/job/atmos
 	title = "Atmospheric Technician"
-	flag = ATMOSTECH
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 3
 	spawn_positions = 2
@@ -51,8 +45,6 @@
 
 /datum/job/mechanic
 	title = "Mechanic"
-	flag = MECHANIC
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 3
 	spawn_positions = 2

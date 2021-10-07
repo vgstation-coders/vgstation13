@@ -19,12 +19,12 @@
 	slot_flags = 0 //doesn't fit on your back!
 	w_class = W_CLASS_SMALL //fits in pockets!
 
-/obj/item/weapon/storage/backpack/holding/suicide_act(mob/user)
+/obj/item/weapon/storage/backpack/holding/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] puts \the [src.name] on \his head and stretches the bag around \himself. With a sudden snapping sound, the bag shrinks to its original size, leaving no trace of [user].</b></span>")
 	user.drop_item(src)
 	qdel(user)
 
-/obj/item/weapon/storage/backpack/holding/miniblackhole/suicide_act(mob/user)
+/obj/item/weapon/storage/backpack/holding/miniblackhole/suicide_act(var/mob/living/user)
 	user.visible_message("<span class = 'danger'><b>[user] puts \the [src.name] on the ground and jumps inside, never to be seen again.<</b></span>")
 	user.drop_item(src)
 	qdel(user)
@@ -52,7 +52,7 @@
 	qdel(H)
 	qdel(src)
 	var/datum/zLevel/ourzLevel = map.zLevels[user.z]
-	if(ourzLevel.bluespace_jammed)
+	if(ourzLevel.bluespace_jammed && !is_on_shuttle(usr))
 		//Stop breaking into centcomm via dungeons you shits
 		message_admins("[key_name_admin(user)] detonated [H] and [src], creating an explosion.")
 		log_game("[key_name(user)] detonated [H] and [src], creating an explosion.")

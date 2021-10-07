@@ -38,7 +38,6 @@ var/global/datum/controller/vote/vote = new()
 	var/list/current_votes = list()
 	var/list/discarded_choices = list()
 	var/list/ismapvote
-	var/list/allmaps
 	var/chosen_map
 	name               = "datum"
 	var/datum/html_interface/nanotrasen/vote/interface
@@ -233,9 +232,8 @@ var/global/datum/controller/vote/vote = new()
 					init_shift_change(null, 1)
 			if("map")
 				if(.)
-					chosen_map = ismapvote[.]
-					var/mapname = .
-					watchdog.chosen_map = copytext(mapname,1,(length(mapname)))
+					chosen_map = "maps/voting/" + ismapvote[.] + "/vgstation13.dmb"
+					watchdog.chosen_map = ismapvote[.]
 					log_game("Players voted and chose.... [watchdog.chosen_map]!")
 					//testing("Vote picked [chosen_map]")
 
@@ -255,10 +253,13 @@ var/global/datum/controller/vote/vote = new()
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
+		if (mob_ckey in voted)
+			to_chat(user, "<span class='warning'>You may only vote once.</span>")
+			return 0
+		if (isnum(vote) && (1>vote) || (vote > choices.len))
+			to_chat(user, "<span class='warning'>Illegal vote.</span>")
+			return 0
 		if(mode == "map")
-			if (mob_ckey in voted)
-				to_chat(user, "<span class='warning'>You may only vote for the map once.</span>")
-				return 0
 			if(!user.client.holder)
 				if(isnewplayer(user))
 					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
@@ -270,7 +271,7 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		if(current_votes[mob_ckey])
 			choices[choices[current_votes[mob_ckey]]]--
-		if(vote && 1<=vote && vote<=choices.len)
+		if(vote && vote != "cancel_vote")
 			voted += mob_ckey
 			choices[choices[vote]]++	//check this
 			current_votes[mob_ckey] = vote
@@ -314,7 +315,7 @@ var/global/datum/controller/vote/vote = new()
 					choices.Add(option)
 			if("map")
 				question = "What should the next map be?"
-				var/list/maps = get_maps()
+				var/list/maps = get_votable_maps()
 				for(var/key in maps)
 					choices.Add(key)
 				if(!choices.len)
@@ -445,6 +446,15 @@ var/global/datum/controller/vote/vote = new()
 	if(!usr || !usr.client)
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
+		if ("cancel_vote")
+			var/mob_ckey = usr.ckey
+			if (!(mob_ckey in voted))
+				return
+			voted -= mob_ckey
+			choices[choices[current_votes[mob_ckey]]]--
+			current_votes[mob_ckey] = null
+			src.updateFor(usr.client)
+			return 0
 		if("cancel")
 			if(usr.client.holder)
 				reset()

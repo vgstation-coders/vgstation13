@@ -6,12 +6,14 @@
 	//See code/datums/helper_datums/butchering.dm
 	init_butchering_list()
 
-	clear_fullscreens()
-
+	clear_fullscreens(TRUE)
 	handle_symptom_on_death()
 	..()
+	standard_damage_overlay_updates()
 
 /mob/living/gib(animation = FALSE, meat = TRUE)
+	if(!isUnconscious())
+		forcesay("-")
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -27,10 +29,11 @@
 /mob/living/proc/init_butchering_list()
 	if(butchering_drops && butchering_drops.len) //Already initialized
 		return
-	if(species_type && animal_butchering_products[species_type])
+
+	var/list/animal_butchering_products = get_butchering_products()
+	if(species_type && animal_butchering_products.len > 0)
 		if(!butchering_drops)
 			butchering_drops = list()
-		var/list/L = animal_butchering_products[species_type]
 
-		for(var/butchering_type in L)
+		for(var/butchering_type in animal_butchering_products)
 			src.butchering_drops += new butchering_type

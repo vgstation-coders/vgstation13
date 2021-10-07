@@ -4,7 +4,7 @@
 	name = "meat spike"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "spike"
-	desc = "A spike for collecting meat from animals"
+	desc = "A spike for collecting meat from animals."
 	density = 1
 	anchored = 1
 
@@ -99,3 +99,11 @@
 	if(occupant)
 		qdel(occupant)
 		occupant = null
+
+/obj/structure/kitchenspike/suicide_act(var/mob/living/user)
+	user.forceMove(get_turf(src))
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \himself onto the [src]! It looks like \he's trying to commit suicide.</span>")
+	while(user.meat_taken < user.meat_amount)
+		user.drop_meat(get_turf(src))
+	user.gib()
+	return(SUICIDE_ACT_CUSTOM)

@@ -1513,9 +1513,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
 	if(!disfigured)
+		/*
 		if(brute_dam > 40)
 			if(prob(50))
 				disfigure("brute")
+		*/
 		if(burn_dam > 40)
 			disfigure((used_weapon != WPN_LOW_BODY_TEMP) ? "burn" : "frostbite")
 
@@ -1527,7 +1529,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		owner.visible_message("<span class='warning'>You hear a sickening cracking sound coming from \the [owner]'s face.</span>",
 		                      "<span class='danger'>Your face becomes an unrecognizable, mangled mess!</span>",
 		                      "<span class='warning'>You hear a sickening crack.</span>")
-	else if (type == "burn")
+	else if (type == "burn")// Also caused by Sulph Acid and Poly Acid.
 		owner.visible_message("<span class='warning'>[owner]'s face melts away, turning into a mangled mess!</span>",
 		                      "<span class='danger'>Your face melts away into an unrecognizable, mangled mess!</span>",
 		                      "<span class='warning'>You hear a sickening sizzle.</span>")
@@ -1540,6 +1542,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		                      "<span class='danger'>Your face becomes an unrecognizable, mangled mess!</span>")
 
 	disfigured = TRUE
+
+	owner.update_hair()
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS
@@ -1788,7 +1792,7 @@ obj/item/organ/external/head/Destroy()
 /obj/item/organ/external/head/posi
 	name = "robotic head"
 
-obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
+obj/item/organ/external/head/New(loc, mob/living/carbon/human/H, var/datum/organ/external/head/O)
 	origin_body = H
 
 	if(istype(H))
@@ -1800,43 +1804,41 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 			B.detach()
 		qdel(src)
 		return
-	//Add (facial) hair.
-	if(H && H.my_appearance.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
-		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
-		if(facial_hair_style && (species.name in facial_hair_style.species_allowed))
-			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
-			if(facial_hair_style.do_colouration)
-				facial.Blend(rgb(H.my_appearance.r_facial, H.my_appearance.g_facial, H.my_appearance.b_facial), ICON_ADD)
 
-			overlays.Add(facial) // icon.Blend(facial, ICON_OVERLAY)
+	if (!O || !O.disfigured)
+		//Add (facial) hair.
+		if(H && H.my_appearance.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
+			var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
+			if(facial_hair_style && (species.name in facial_hair_style.species_allowed))
+				var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
+				if(facial_hair_style.do_colouration)
+					facial.Blend(rgb(H.my_appearance.r_facial, H.my_appearance.g_facial, H.my_appearance.b_facial), ICON_ADD)
 
-	if(H && H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
-		var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
-		if(hair_style && (species.name in hair_style.species_allowed))
-			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
-			if(hair_style.do_colouration)
-				hair.Blend(rgb(H.my_appearance.r_hair, H.my_appearance.g_hair, H.my_appearance.b_hair), ICON_ADD)
-			if(hair_style.additional_accessories)
-				hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
+				overlays.Add(facial) // icon.Blend(facial, ICON_OVERLAY)
 
-			overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
+		if(H && H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
+			var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
+			if(hair_style && (species.name in hair_style.species_allowed))
+				var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
+				if(hair_style.do_colouration)
+					hair.Blend(rgb(H.my_appearance.r_hair, H.my_appearance.g_hair, H.my_appearance.b_hair), ICON_ADD)
+				if(hair_style.additional_accessories)
+					hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
-	if(brainmob && brainmob.client)
-		brainmob.client.screen.len = null //clear the hud
+				overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
 
 	if(H && istype(H))
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms()
 		if(B)
 			B.infest_limb(src)
 
-	//if(ishuman(H))
-	//	if(H.gender == FEMALE)
-	//		H.icon_state = "head_f"
-	//	H.overlays += H.generate_head_icon()
 	if(H)
 		transfer_identity(H)
 
-		name = "[H.real_name]'s head"
+		if (!O || !O.disfigured)
+			name = "[H.real_name]'s head"
+		else
+			name = "disfigured head "
 
 		H.regenerate_icons()
 
@@ -1875,7 +1877,7 @@ obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/
 	brainmob.container = src
 
 obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
+	if(istype(W,/obj/item/tool/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(0)
@@ -1895,7 +1897,7 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		else
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
 
-	else if(istype(W,/obj/item/weapon/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
+	else if(istype(W,/obj/item/tool/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(1)

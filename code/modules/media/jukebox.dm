@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "idm", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "vidya", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -26,10 +26,7 @@ var/global/global_playlists = list()
 			var/json = file2text(response["CONTENT"])
 			if("/>" in json)
 				continue
-			var/json_reader/reader = new()
-			reader.tokens = reader.ScanJson(json)
-			reader.i = 1
-			var/songdata = reader.read_value()
+			var/songdata = json_decode(json)
 			for(var/list/record in songdata)
 				playlist += new /datum/song_info(record)
 			if(playlist.len==0)
@@ -210,6 +207,11 @@ var/global/list/loopModeNames=list(
 		linked_account = department_accounts[department]
 	else
 		linked_account = station_account
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	if(MM == 10 && !("halloween" in playlists)) //Checking for jukeboxes with it already
+		playlists["halloween"] = "Halloween"
+	if(MM == 12 && !("christmas" in playlists)) //Checking for jukeboxes with it already
+		playlists["christmas"] = "Christmas Jingles"
 
 /obj/machinery/media/jukebox/Destroy()
 	if(wires)
@@ -808,22 +810,17 @@ var/global/list/loopModeNames=list(
 		"jazzswing" = "Jazz & Swing",
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
+		"funk" = "Funk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"security" = "Security",
+		"vidya" = "Video Games",
 		"upbeathypedancejam" = "Dance"
 	)
-
-/obj/machinery/media/jukebox/bar/New()
-	..()
-	var/MM = text2num(time2text(world.timeofday, "MM"))
-	if(MM == 10)
-		playlists["halloween"] = "Halloween"
-	if(MM == 12)
-		playlists["christmas"] = "Christmas Jingles"
 
 
 // Relaxing elevator music~
@@ -844,6 +841,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
+		"idm" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -852,6 +850,7 @@ var/global/list/loopModeNames=list(
 		"shoegaze" = "Shoegaze",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
+		"vidya" = "Video Games",
 		"thunderdome" = "Thunderdome"
 	)
 
@@ -877,6 +876,7 @@ var/global/list/loopModeNames=list(
 		"filk" = "Filk",
 		"funk" = "Funk",
 		"folk" = "Folk",
+		"idm" = "90's IDM",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
 		"muzakjazz" = "Muzak",
@@ -886,6 +886,7 @@ var/global/list/loopModeNames=list(
 		"shuttle" = "Shuttle",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
+		"vidya" = "Video Games",
 		"thunderdome" = "Thunderdome",
 		"emagged" ="Syndicate Mix",
 		"shuttle"= "Shuttle",
@@ -941,7 +942,8 @@ var/global/list/loopModeNames=list(
 	icon_state = ""
 	light_color = LIGHT_COLOR_BLUE
 	luminosity = 0
-	plane = EFFECTS_PLANE
+	plane = ABOVE_HUMAN_PLANE
+	layer = ABOVE_OBJ_LAYER
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 
@@ -997,6 +999,33 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/adminbus/cultify()
 	return
 
+/obj/machinery/media/jukebox/superjuke/adminbus/singularity_act()
+	return 0
+
+/obj/machinery/media/jukebox/superjuke/adminbus/singularity_pull()
+	return 0
+
+obj/machinery/media/jukebox/holyjuke
+	name = "Holyjuke"
+	desc = "The Pastor's jukebox. You feel a weight being lifted simply by basking in its presence."
+
+	state_base = "holyjuke"
+	icon_state = "holyjuke"
+
+	change_cost = 0
+
+	playlist_id="holy"
+	// Must be defined on your server.
+	playlists=list(
+		"holy" = "Pastor's Paradise"
+	)
+
+/obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
+	// EMAG DOES NOTHING
+	if(istype(W, /obj/item/weapon/card/emag))
+		to_chat(user, "<span class='warning'>A guiltiness fills your heart as a higher power pushes away \the [W]!</span>")
+		return
+	..()
 
 /obj/item/weapon/vinyl
 	name = "nanovinyl"
@@ -1078,6 +1107,10 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - folk"
 	unformatted = "folk"
 	formatted = "Folk"
+/obj/item/weapon/vinyl/idm
+	name = "nanovinyl - 90's IDM"
+	unformatted = "idm"
+	formatted = "90's IDM"
 /obj/item/weapon/vinyl/jazz
 	name = "nanovinyl - jazz & swing"
 	unformatted = "jazzswing"
@@ -1133,6 +1166,11 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - dance"
 	unformatted = "upbeathypedancejam"
 	formatted = "Dance"
+/obj/item/weapon/vinyl/vidya
+	name = "nanovynil - vidya"
+	unformatted = "vidya"
+	formatted = "Video Games"
+	mask = "##0096FF"
 /obj/item/weapon/vinyl/scotland
 	name = "nanovinyl - highlander"
 	desc = "Oh no."
@@ -1152,3 +1190,8 @@ obj/item/weapon/vinyl/christmas
 	name = "nanovynil - christmas"
 	unformatted = "christmas"
 	formatted = "Christmas Jingles"
+/obj/item/weapon/vinyl/holy
+	name = "nanovinyl - holy"
+	unformatted = "holy"
+	formatted = "Holy"
+	mask = "#8000FF"//purple

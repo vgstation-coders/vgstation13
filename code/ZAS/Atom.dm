@@ -48,10 +48,10 @@
 	#ifdef ZLEVELS
 	if(other.z != src.z)
 		if(other.z < src.z)
-			if(!istype(src, /turf/simulated/floor/open))
+			if(!istype(src, /turf/simulated/open))
 				return BLOCKED
 		else
-			if(!istype(other, /turf/simulated/floor/open))
+			if(!istype(other, /turf/simulated/open))
 				return BLOCKED
 	#endif
 
@@ -61,3 +61,13 @@
 		if(result == BLOCKED)
 			return BLOCKED
 	return result
+
+/atom/proc/update_nearby_tiles(var/turf/T)
+	if(!SS_READY(SSair))
+		return 0
+
+	if(!T)
+		T = get_turf(src)
+	if(isturf(T))
+		SSair.mark_for_update(T)
+	return 1

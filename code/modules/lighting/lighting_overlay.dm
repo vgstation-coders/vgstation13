@@ -11,8 +11,6 @@
 	layer            = LIGHTING_LAYER
 	invisibility     = INVISIBILITY_LIGHTING
 
-	blend_mode    = BLEND_MULTIPLY
-
 	var/needs_update = FALSE
 
 	#if WORLD_ICON_SIZE != 32

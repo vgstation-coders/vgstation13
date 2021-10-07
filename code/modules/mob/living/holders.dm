@@ -49,8 +49,8 @@
 /obj/item/weapon/holder/relaymove(mob/M, direction)
 	qdel(src) //This calls Destroy(), and frees the mob
 
-/obj/item/weapon/holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	for(var/mob/M in src.contents)
+/obj/item/weapon/holder/attackby(var/obj/item/weapon/W, var/mob/user)
+	for(var/mob/M in contents)
 		M.attackby(W,user)
 
 /obj/item/weapon/holder/update_wield(mob/user)
@@ -109,6 +109,18 @@
 		if(w_class > W_CLASS_SMALL)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
 
+/obj/item/weapon/holder/animal/attackby(var/obj/item/weapon/W, var/mob/user)
+	if (istype(W, /obj/item/offhand))
+		for(var/mob/M in contents)
+			M.attack_hand(user)
+		return
+	for(var/mob/M in contents)
+		M.attackby(W,user)
+
+/obj/item/weapon/holder/animal/attack_self(var/mob/user)
+	for(var/mob/M in contents)
+		M.attack_hand(user)
+
 //MICE
 
 /obj/item/weapon/holder/animal/mouse
@@ -147,14 +159,14 @@
 
 /obj/item/weapon/holder/animal/cow
 	name = "cow holder"
-	desc = "Pretty heavy"
+	desc = "Pretty heavy!"
 	item_state = "cow"
 
 //CATS
 
 /obj/item/weapon/holder/animal/cat
 	name = "cat holder"
-	desc = "Runtime error"
+	desc = "RUNTIME ERROR"
 	item_state = "cat1"
 
 	update_itemstate_on_twohand = TRUE
@@ -194,7 +206,7 @@
 //SLIMES
 /obj/item/weapon/holder/animal/slime
 	name = "slime holder"
-	desc = "It seeps through your fingers"
+	desc = "It seeps through your fingers."
 
 /obj/item/weapon/holder/animal/slime/proc/unfreeze()
 	var/mob/living/simple_animal/slime/S = stored_mob
@@ -212,7 +224,7 @@
 
 /obj/item/weapon/holder/animal/pillow
 	name = "pillow holder"
-	desc = "Comforbable"
+	desc = "Comfortable."
 	item_state = "pillow"
 	slot_flags = SLOT_HEAD
 	update_itemstate_on_twohand = TRUE

@@ -136,6 +136,7 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/output_dir = 0   //Direction used to output to (for things like fabs), set to 0 for loc.
 
 	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
 	var/battery_dependent = 0	//Requires a battery to run
@@ -226,6 +227,10 @@ Class Procs:
 			qdel(pulse2)
 	..()
 
+/obj/machinery/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his hands into the sockets of the [src] and tries to fry \himself! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_FIRELOSS)
+
 /obj/machinery/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -247,9 +252,6 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel) && !connected_cell)
-		return 0
-
 	switch (use_power)
 		if (1)
 			use_power(idle_power_usage, power_channel)
@@ -285,89 +287,92 @@ Class Procs:
 
 /obj/machinery/proc/handle_multitool_topic(var/href, var/list/href_list, var/mob/user)
 	var/obj/item/device/multitool/P = get_multitool(usr)
-	if(P && istype(P))
-		var/update_mt_menu=0
-		var/re_init=0
-		if("set_tag" in href_list)
-			if(!(href_list["set_tag"] in multitool_var_whitelist))
-				var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src) as null|text),1,MAX_MESSAGE_LEN)
-				log_admin("[usr] ([formatPlayerPanel(usr,usr.ckey)]) attempted to modify variable(var = [href_list["set_tag"]], value = [newid]) using multitool - [formatJumpTo(usr)]")
-				message_admins("[usr] ([formatPlayerPanel(usr,usr.ckey)]) attempted to modify variable(var = [href_list["set_tag"]], value = [newid]) using multitool - [formatJumpTo(usr)]")
-				return
-			if(!(href_list["set_tag"] in vars))
-				to_chat(usr, "<span class='warning'>Something went wrong: Unable to find [href_list["set_tag"]] in vars!</span>")
-				return 1
-			var/current_tag = src.vars[href_list["set_tag"]]
-			var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src, current_tag) as null|text),1,MAX_MESSAGE_LEN)
-			if(newid)
-				vars[href_list["set_tag"]] = newid
-				re_init=1
-			update_mt_menu = 1
+	if(!istype(P))
+		return
 
-		if("unlink" in href_list)
-			var/idx = text2num(href_list["unlink"])
-			if (!idx)
-				return 1
+	var/update_mt_menu=0
+	var/re_init=0
+	if("set_tag" in href_list)
+		if(!(href_list["set_tag"] in multitool_var_whitelist))
+			var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src) as null|text),1,MAX_MESSAGE_LEN)
+			log_admin("[usr] ([formatPlayerPanel(usr,usr.ckey)]) attempted to modify variable(var = [href_list["set_tag"]], value = [newid]) using multitool - [formatJumpTo(usr)]")
+			message_admins("[usr] ([formatPlayerPanel(usr,usr.ckey)]) attempted to modify variable(var = [href_list["set_tag"]], value = [newid]) using multitool - [formatJumpTo(usr)]")
+			return
+		if(!(href_list["set_tag"] in vars))
+			to_chat(usr, "<span class='warning'>Something went wrong: Unable to find [href_list["set_tag"]] in vars!</span>")
+			return 1
+		var/current_tag = src.vars[href_list["set_tag"]]
+		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag", src, current_tag) as null|text),1,MAX_MESSAGE_LEN)
+		if(newid)
+			vars[href_list["set_tag"]] = newid
+			re_init=1
+		update_mt_menu = 1
 
-			var/obj/O = getLink(idx)
-			if(!O)
-				return 1
+	if("unlink" in href_list)
+		var/idx = text2num(href_list["unlink"])
+		if (!idx)
+			return 1
 
-			if(unlinkFrom(usr, O))
-				to_chat(usr, "<span class='confirm'>A green light flashes on \the [P], confirming the link was removed.</span>")
-			else
-				to_chat(usr, "<span class='attack'>A red light flashes on \the [P].  It appears something went wrong when unlinking the two devices.</span>")
-			update_mt_menu=1
+		var/obj/O = getLink(idx)
+		if(!O)
+			return 1
 
-		if("link" in href_list)
-			var/obj/O = P.buffer
-			if(!O)
-				return 1
-			if(!canLink(O,href_list))
-				to_chat(usr, "<span class='warning'>You can't link with that device.</span>")
-				return 1
-			if (isLinkedWith(O))
-				to_chat(usr, "<span class='attack'>A red light flashes on \the [P]. The two devices are already linked.</span>")
-				return 1
+		if(unlinkFrom(usr, O))
+			to_chat(usr, "<span class='confirm'>A green light flashes on \the [P], confirming the link was removed.</span>")
+		else
+			to_chat(usr, "<span class='attack'>A red light flashes on \the [P].  It appears something went wrong when unlinking the two devices.</span>")
+		update_mt_menu=1
 
-			if(linkWith(usr, O, href_list))
-				to_chat(usr, "<span class='confirm'>A green light flashes on \the [P], confirming the link has been created.</span>")
-			else
-				to_chat(usr, "<span class='attack'>A red light flashes on \the [P].  It appears something went wrong when linking the two devices.</span>")
-			update_mt_menu=1
+	if("link" in href_list)
+		var/obj/O = P.buffer?.get()
+		if(!O)
+			return 1
+		if(!canLink(O,href_list))
+			to_chat(usr, "<span class='warning'>You can't link with that device.</span>")
+			return 1
+		if (isLinkedWith(O))
+			to_chat(usr, "<span class='attack'>A red light flashes on \the [P]. The two devices are already linked.</span>")
+			return 1
 
-		if("buffer" in href_list)
-			if(istype(src, /obj/machinery/telecomms))
-				var/obj/machinery/telecomms/T = src
-				if(!T.id)
-					to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
-					return
-			else if(!id_tag)
+		if(linkWith(usr, O, href_list))
+			to_chat(usr, "<span class='confirm'>A green light flashes on \the [P], confirming the link has been created.</span>")
+			re_init = shouldReInitOnMultitoolLink(usr, O, href_list)
+		else
+			to_chat(usr, "<span class='attack'>A red light flashes on \the [P].  It appears something went wrong when linking the two devices.</span>")
+		update_mt_menu=1
+
+	if("buffer" in href_list)
+		if(istype(src, /obj/machinery/telecomms))
+			var/obj/machinery/telecomms/T = src
+			if(!T.id)
 				to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 				return
-			P.buffer = src
-			to_chat(usr, "<span class='confirm'>A green light flashes, and the device appears in the multitool buffer.</span>")
-			update_mt_menu=1
+		else if(!id_tag)
+			to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
+			return
+		P.setBuffer(src)
+		to_chat(usr, "<span class='confirm'>A green light flashes, and the device appears in the multitool buffer.</span>")
+		update_mt_menu=1
 
-		if("flush" in href_list)
-			to_chat(usr, "<span class='confirm'>A green light flashes, and the device disappears from the multitool buffer.</span>")
-			P.buffer = null
-			update_mt_menu=1
+	if("flush" in href_list)
+		to_chat(usr, "<span class='confirm'>A green light flashes, and the device disappears from the multitool buffer.</span>")
+		P.setBuffer(null)
+		update_mt_menu=1
 
-		var/ret = multitool_topic(usr,href_list,P.buffer)
-		if(ret == MT_ERROR)
-			return 1
-		if(ret & MT_UPDATE)
-			update_mt_menu=1
-		if(ret & MT_REINIT)
-			re_init=1
+	var/ret = multitool_topic(usr,href_list,P.buffer?.get())
+	if(ret == MT_ERROR)
+		return 1
+	if(ret & MT_UPDATE)
+		update_mt_menu=1
+	if(ret & MT_REINIT)
+		re_init=1
 
-		if(re_init)
-			initialize()
-		if(update_mt_menu)
-			//usr.set_machine(src)
-			update_multitool_menu(usr)
-			return 1
+	if(re_init)
+		initialize()
+	if(update_mt_menu)
+		//usr.set_machine(src)
+		update_multitool_menu(usr)
+		return 1
 
 /obj/machinery/proc/is_on_same_z(var/mob/user)
 	var/turf/T = get_turf(user)
@@ -488,7 +493,7 @@ Class Procs:
 		else
 			qdel(I)
 
-/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
@@ -535,7 +540,7 @@ Class Procs:
 	togglePanelOpen(toggleitem, user)
 	return 1
 
-/obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+/obj/machinery/proc/weldToFloor(var/obj/item/tool/weldingtool/WT, mob/user)
 	if(!anchored)
 		state = 0 //since this might be wrong, we go sanity
 		to_chat(user, "You need to secure \the [src] before it can be welded.")
@@ -568,7 +573,7 @@ Class Procs:
 /obj/machinery/proc/emag(mob/user as mob)
 	// Disable emaggability. Note that some machines such as the Communications Computer might be emaggable multiple times.
 	machine_flags &= ~EMAGGABLE
-	new/obj/effect/effect/sparks(get_turf(src))
+	new/obj/effect/sparks(get_turf(src))
 	playsound(loc,"sparks",50,1)
 
 
@@ -622,9 +627,14 @@ Class Procs:
 			else
 				return -1
 
-	if(ismultitool(O) && machine_flags & MULTITOOL_MENU)
-		update_multitool_menu(user)
-		return 1
+	if(O.is_multitool(user))
+		if(!panel_open && machine_flags & MULTIOUTPUT)
+			setOutputLocation(user)
+			return 1
+		if(machine_flags & MULTITOOL_MENU)
+			update_multitool_menu(user)
+			return 1
+
 
 	if(!anchored && machine_flags & FIXED2WORK)
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")
@@ -770,3 +780,17 @@ Class Procs:
 
 /obj/machinery/proc/is_operational()
 	return !(stat & (NOPOWER|BROKEN|MAINT))
+
+
+/obj/machinery/proc/setOutputLocation(user)
+	var/result = input("Set your location as output?") in list("Yes","No","Machine Location")
+	switch(result)
+		if("Yes")
+			if(!Adjacent(user))
+				to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
+				return 1
+			output_dir = get_dir(src, user)
+			to_chat(user, "<span class='notice'>Output set.</span>")
+		if("Machine Location")
+			output_dir = 0
+			to_chat(user, "<span class='notice'>Output set.</span>")

@@ -75,7 +75,7 @@
 
 /obj/item/stack/tile/plasteel/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(amount < 4)
 			to_chat(user, "<span class='warning'>You need at least four tiles to do this.</span>")
 			return
@@ -132,6 +132,7 @@
 
 /obj/item/stack/glass_tile/rglass
 	name = "glass tile"
+	singular_name = "tile"
 	desc = "A relatively clear reinforced glass tile."
 	icon_state = "tile_rglass"
 	max_amount = 60
@@ -152,6 +153,7 @@
 
 /obj/item/stack/glass_tile/rglass/plasma
 	name = "plasma glass tile"
+	singular_name = "tile"
 	desc = "A relatively clear reinforced plasma glass tile."
 	icon_state = "tile_plasmarglass"
 

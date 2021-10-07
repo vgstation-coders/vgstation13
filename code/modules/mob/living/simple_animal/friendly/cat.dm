@@ -62,7 +62,7 @@
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
-	desc = "D'aaawwww"
+	desc = "D'aaawwww!"
 	icon_state = "kitten"
 	icon_living = "kitten"
 	icon_dead = "kitten_dead"
@@ -116,6 +116,9 @@
 	. = ..()
 	react_to_touch(M)
 	M.delayNextAttack(2 SECONDS)
+
+/mob/living/simple_animal/cat/get_butchering_products()
+	return list(/datum/butchering_product/skin/cat)
 
 /mob/living/simple_animal/cat/proc/react_to_touch(mob/M)
 	if(M && !isUnconscious())

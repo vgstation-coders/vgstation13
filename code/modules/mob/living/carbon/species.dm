@@ -47,6 +47,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/punch_sharpness = 0										// Slicing/cutting force of punches. Independent of the sharpness added by claws.
 	var/punch_throw_range = 0
 	var/punch_throw_speed = 1
+	var/tacklePower = 50
+	var/tackleRange = 2
 	var/mutantrace											// Safeguard due to old code.
 	var/myhuman												// mob reference
 
@@ -79,6 +81,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/brute_mod 		// brute multiplier
 	var/burn_mod		// burn multiplier
 	var/tox_mod			// toxin multiplier
+	var/rad_mod			// radiation multiplier
 
 	var/body_temperature = 310.15
 
@@ -100,6 +103,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/blood_color = DEFAULT_BLOOD //Red.
 	var/flesh_color = DEFAULT_FLESH //Pink.
 	var/base_color      //Used when setting species.
+	var/max_skin_tone = 1
+
 	var/uniform_icons       = 'icons/mob/uniform.dmi'
 	var/fat_uniform_icons   = 'icons/mob/uniform_fat.dmi'
 	var/gloves_icons        = 'icons/mob/hands.dmi'
@@ -144,6 +149,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/species_intro //What intro you're given when you become this species.
 	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
+	var/datum/speech_filter/speech_filter
+
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -166,6 +173,8 @@ var/global/list/whitelisted_species = list("Human")
 	H.invisibility = 101
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
+	if(speech_filter)
+		speech.message = speech_filter.FilterSpeech(speech.message)
 	if(H.dna)
 		if(length(speech.message) >= 2)
 			for(var/gene_type in H.active_genes)
@@ -276,6 +285,8 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/OutOfCrit(var/mob/living/carbon/human/H)
 
+/datum/species/proc/silent_speech(message)
+
 // -- Outfit datums --
 /datum/species/proc/final_equip(var/mob/living/carbon/human/H)
 
@@ -308,6 +319,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
+	max_skin_tone = 220
+
 /datum/species/human/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
@@ -339,7 +352,7 @@ var/global/list/whitelisted_species = list("Human")
 	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
-	blood_color = "#272727"
+	blood_color = PALE_BLOOD
 	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
@@ -390,9 +403,9 @@ var/global/list/whitelisted_species = list("Human")
 	wear_suit_icons = 'icons/mob/species/unathi/suit.dmi'
 
 
-/datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
-	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+/datum/species/unathi/New()
+	..()
+	speech_filter = new /datum/speech_filter/unathi
 
 /datum/species/unathi/gib(mob/living/carbon/human/H)
 	..()
@@ -410,6 +423,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	default_mutations=list(M_SKELETON)
 	brute_mod = 2.0
+	tacklePower = 20
+	tackleRange = 3		//How terribly spooky
 
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
@@ -526,8 +541,7 @@ var/global/list/whitelisted_species = list("Human")
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
 
 	flesh_color = "#AFA59E"
-
-	var/datum/speech_filter/speech_filter = new
+	max_skin_tone = 1
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -544,26 +558,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/tajaran/New()
 	..()
-	// Combining all the worst shit the world has ever offered.
-
-	// Note: Comes BEFORE other stuff.
-	// Trying to remember all the stupid fucking furry memes is hard
-	speech_filter.addPickReplacement("\\b(asshole|comdom|shitter|shitler|retard|dipshit|dipshit|greyshirt|nigger)\\b",
-		list(
-			"silly rabbit",
-			"sandwich", // won't work too well with plurals OH WELL
-			"recolor",
-			"party pooper"
-		)
-	)
-	speech_filter.addWordReplacement("me","meow")
-	speech_filter.addWordReplacement("I","meow") // Should replace with player's first name.
-	speech_filter.addReplacement("fuck","yiff")
-	speech_filter.addReplacement("shit","scat")
-	speech_filter.addReplacement("scratch","scritch")
-	speech_filter.addWordReplacement("(help|assist)\\smeow","kill meow") // help me(ow) -> kill meow
-	speech_filter.addReplacement("god","gosh")
-	speech_filter.addWordReplacement("(ass|butt)", "rump")
+	speech_filter = new /datum/speech_filter/tajaran
 
 /datum/species/tajaran/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
@@ -592,10 +587,6 @@ var/global/list/whitelisted_species = list("Human")
 			speech.message = pick("GOD, PLEASE", "NO, GOD", "AGGGGGGGH") + " "
 
 		speech.message += pick("KILL ME", "END MY SUFFERING", "I CAN'T DO THIS ANYMORE")
-
-		return ..()
-
-	speech.message = speech_filter.FilterSpeech(speech.message)
 	return ..()
 
 /datum/species/tajaran/gib(mob/living/carbon/human/H)
@@ -610,11 +601,15 @@ var/global/list/whitelisted_species = list("Human")
 	eyes = "grey_eyes_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
+	tacklePower = 25
+
+	flesh_color = "#B5B5B5"
+	max_skin_tone = 4
 
 	primitive = /mob/living/carbon/monkey/grey
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS | ACID4WATER
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
@@ -681,6 +676,7 @@ var/global/list/whitelisted_species = list("Human")
 	eyes = "eyes_s"
 
 	max_hurt_damage = 10
+	tacklePower = 90
 
 	primitive = /mob/living/carbon/monkey // TODO
 
@@ -740,7 +736,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
-
+	tacklePower = 40
 	anatomy_flags = HAS_SWEAT_GLANDS
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
@@ -757,8 +753,9 @@ var/global/list/whitelisted_species = list("Human")
 	default_mutations = list(M_BEAK, M_TALONS)
 	flags = IS_WHITELISTED | NO_SCAN
 
-	blood_color = "#2299FC"
+	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
+	max_skin_tone = 6
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
 
@@ -853,7 +850,11 @@ var/global/list/whitelisted_species = list("Human")
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	attack_verb = "slashes"
 	punch_damage = 5
+	tacklePower = 65
+	tackleRange = 1
 	primitive = /mob/living/carbon/monkey/diona
+
+	spells = list(/spell/targeted/transfer_reagents)
 
 	warning_low_pressure = 50
 	hazard_low_pressure = -1
@@ -881,7 +882,18 @@ var/global/list/whitelisted_species = list("Human")
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
 					You absorb radiation which helps you in a similar way to sunlight. Your rigid, wooden limbs make you incredibly slow.<br>\
 					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
-					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
+					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally.<br>\
+					Your liver is special. It converts a portion of what you ingest into ammonia. You can use your transfer reagents spell to inject plants."
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver/diona,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+	)
 
 /datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
@@ -894,6 +906,8 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_GOLEM)
 	meat_type = /obj/item/stack/ore/diamond
 	attack_verb = "punches"
+	tacklePower = 70
+	tackleRange = 1
 
 	flags = NO_BREATHE | NO_PAIN | HYPOTHERMIA_IMMUNE
 	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | IS_BULKY | NO_STRUCTURE
@@ -1057,7 +1071,7 @@ var/list/has_died_as_golem = list()
 	brute_mod = 0.8
 	move_speed_multiplier = 2
 
-	blood_color = "#7FFF00"
+	blood_color = GHOUL_BLOOD
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
 
@@ -1072,6 +1086,7 @@ var/list/has_died_as_golem = list()
 	known_languages = list(LANGUAGE_SLIME)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	attack_verb = "glomps"
+	tacklePower = 35
 
 	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
 	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR
@@ -1109,7 +1124,8 @@ var/list/has_died_as_golem = list()
 	var/mob/living/slime_pile/S = new(H.loc)
 	if(H.real_name)
 		S.real_name = H.real_name
-		S.desc = "The remains of what used to be [S.real_name]."
+		S.name = "puddle of [H.real_name]"
+		S.desc = "The slimy remains of what used to be [S.real_name]. There's probably still enough genetic material in there for a cloning console to work its magic."
 	S.slime_person = H
 	H.forceMove(S)
 
@@ -1185,7 +1201,8 @@ var/list/has_died_as_golem = list()
 					O.replaced(slime_person)
 
 				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
-				qdel(O)
+				O.stabilized = TRUE
+				O.loc = null
 
 /datum/species/insectoid
 	name = "Insectoid"
@@ -1198,12 +1215,12 @@ var/list/has_died_as_golem = list()
 	flags = IS_WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
-	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1
 	tox_mod = 0.5
+	rad_mod = 0.5
 
-	blood_color = "#ebece6"
-	flesh_color = "#9c7f25"
+	blood_color = INSECT_BLOOD
+	flesh_color = "#9C7F25"
 
 	uniform_icons = 'icons/mob/species/insectoid/uniform.dmi'
 //	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
@@ -1228,14 +1245,14 @@ var/list/has_died_as_golem = list()
 		"brain" =    /datum/organ/internal/brain,
 		"eyes" =     /datum/organ/internal/eyes/compound/
 		)
-/datum/species/insectoid/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	speech.message = replacetext(speech.message, "s", "z") //stolen from plasman code if it borks.
-	..()
 
 	species_intro = "You are an Insectoid.<br>\
 					Your body is highly resistant to the initial effects of radiation exposure, and you'll be better able to defend against toxic chemicals. <br>\
 					However, your body is more susceptible to heat than that of other species. Resilient though you may be, heat and flame are your biggest concern."
 
+/datum/species/insectoid/New()
+	..()
+	speech_filter = new /datum/speech_filter/insectoid
 
 /datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
 	var/sounds = rand(2,3)
@@ -1247,6 +1264,7 @@ var/list/has_died_as_golem = list()
 
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
 	H.default_gib()
+
 
 
 /datum/species/mushroom
@@ -1268,12 +1286,12 @@ var/list/has_died_as_golem = list()
 
 	primitive = /mob/living/carbon/monkey/mushroom
 
-	spells = list(/spell/targeted/genetic/invert_eyes)
+	spells = list(/spell/targeted/genetic/invert_eyes, /spell/targeted/genetic/fungaltelepathy)
 
-	default_mutations=list(M_REMOTE_TALK)
-	default_block_names=list("REMOTETALK")
 
-	blood_color = "#D3D3D3"
+	default_mutations=list() //exoskeleton someday...
+
+	blood_color = MUSHROOM_BLOOD
 	flesh_color = "#D3D3D3"
 
 	//Copypaste of Dionae
@@ -1294,9 +1312,10 @@ var/list/has_died_as_golem = list()
 
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
-					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
-					Additionally, you cannot speak. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
+					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
+					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
+	var/mob/living/telepathic_target
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1304,6 +1323,14 @@ var/list/has_died_as_golem = list()
 /datum/species/mushroom/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
+
+/datum/species/mushroom/silent_speech(mob/M, message)
+	if(istype(telepathic_target) && M.can_mind_interact(telepathic_target))
+		telepathic_target.show_message("<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>.")
+		M.show_message("<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
+		log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
+		for(var/mob/dead/observer/G in dead_mob_list)
+			G.show_message("<i>Mushroom telepathy from <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
 
 /datum/species/lich
 	name = "Undead"

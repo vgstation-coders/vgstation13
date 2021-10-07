@@ -159,7 +159,7 @@ proc/healthanalyze(mob/living/M as mob, mob/living/user as mob, var/mode = 0, va
 			to_chat(user, {"<span class='notice'>Analyzing Results for the floor:<br>Overall Status: Healthy</span>
 Key: <span class='notice'>Suffocation</span>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<span class='red'>Brute</span>
 Damage Specifics: <span class='notice'>0</span> - <font color='green'>0</font> - <font color='#FFA500'>0</font> - <span class='red'>0</span>
-[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: ???&deg;C (???&deg;F)</span>
+[(M.undergoing_hypothermia() || M.undergoing_hyperthermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: ???&deg;C (???&deg;F)</span>
 <span class='notice'>Localized Damage, Brute/Burn:</span>
 <span class='notice'>No limb damage detected.</span>
 Blood Level Unknown: ???% ???cl
@@ -177,13 +177,13 @@ Subject's pulse: ??? BPM"})
 		OX = fake_oxy > 50 ? "<b>[fake_oxy]</b>" : fake_oxy
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
-		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
+		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[(M.health - M.halloss)/M.maxHealth*100]% Healthy"]</span>"
 	if(isanimal(M))
 		to_chat(user, message)//Simple animal, we don't care about anything else.
 		return message
 	message += "<br>Key: <span class='notice'>Suffocation</span>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<span class='red'>Brute</span>"
 	message += "<br>Damage Specifics: <span class='notice'>[OX]</span> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <span class='red'>[BR]</span>"
-	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
+	message += "<br>[(M.undergoing_hypothermia() || M.undergoing_hyperthermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
 	if(M.tod && M.isDead())
 		message += "<br><span class='notice'>Time of Death: [M.tod]</span>"
 	if(istype(M, /mob/living/carbon/human) && mode)
@@ -540,7 +540,7 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && !istype(R,/datum/reagent/citalopram) && !istype(R,/datum/reagent/paroxetine) && !istype(R,/datum/reagent/incense) && !istype(R,/datum/reagent/antipathogenic) && !istype(R,/datum/reagent/vaccine) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
+				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && isnum(R.data) && !isNonTimeDataReagent(R) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else

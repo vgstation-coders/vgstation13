@@ -19,7 +19,18 @@
 /obj/item/weapon/storage/briefcase/biogen
 	desc = "Smells faintly of potato."
 
-/obj/item/weapon/storage/briefcase/suicide_act(mob/user)
+/obj/item/weapon/storage/briefcase/orderly
+	name = "orderly briefcase"
+	desc = "A briefcase with a medical cross emblazoned on each side. It has a faintly sterile smell to it."
+	icon_state = "medbriefcase"
+
+/obj/item/weapon/storage/briefcase/orderly/New()
+	..()
+	new /obj/item/weapon/cookiesynth/lollicheap(src)
+	for (var/i = 1 to 4)
+		new /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector(src)
+
+/obj/item/weapon/storage/briefcase/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'><b>[user] is smashing \his head inside the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -164,10 +175,11 @@
 	if(!released)
 		release(target)
 
-//The bees will attack whoever opens the briefcase
+//The bees will attack whoever opens the briefcase or gets whacked with it
 /obj/item/weapon/storage/briefcase/bees/proc/release(var/mob/user)
 	released = TRUE
 	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
 	var/mob/living/simple_animal/bee/swarm/BEES = new(get_turf(src))
 	BEES.forceMove(user.loc)
 	BEES.target = user
+	BEES.AttackTarget()

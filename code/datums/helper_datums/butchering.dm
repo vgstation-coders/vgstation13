@@ -1,7 +1,7 @@
 ///////////////Butcher Datums////////////////////////////////////////////////////////////////
 
-//When giving a mob a special butcher product, like goliath plates, it must be added to the animal_butchering_products list lower in this dm.
-//The mob's butchering_drops list is made from animal_butchering_products when it dies. Humans get it when they're created.
+//When giving a mob a special butcher product, like goliath plates, the mob must be given its own get_butchering_products() proc which returns a list of /datum/butchering_product.
+//The mob's butchering_drops list is made from get_butchering_products() when it dies. Humans however get it when they're created.
 
 /datum/butchering_product
 	var/obj/item/result
@@ -148,10 +148,6 @@
 	result = /obj/item/stack/sheet/animalhide/human
 	amount = 3
 
-/datum/butchering_product/skin/gondola
-	result = /obj/item/stack/sheet/animalhide/gondola
-	amount = 2
-
 /datum/butchering_product/skin/human/spawn_result(location, mob/parent)
 	if(!amount)
 		return
@@ -159,7 +155,7 @@
 	if(ishuman(parent))
 		var/mob/living/carbon/human/H = parent
 
-		var/obj/item/stack/sheet/animalhide/A = new result(location)
+		var/obj/item/stack/sheet/animalhide/human/A = new result(location)
 
 		if(!isjusthuman(H) && H.species) //Grey skin, unathi skin, etc.
 			A.name = H.species.name ? "[lowertext(H.species.name)] skin" : A.name
@@ -168,6 +164,14 @@
 			if(H.mind && H.mind.assigned_role && H.mind.assigned_role != "MODE") //CLOWN LEATHER, ASSISTANT LEATHER, CAPTAIN LEATHER
 				A.name = "[lowertext(H.mind.assigned_role)] skin"
 				A.source_string = lowertext(H.mind.assigned_role)
+
+		if (H.species)
+			A.skin_color = H.species.flesh_color
+			A.color = A.skin_color
+
+/datum/butchering_product/skin/gondola
+	result = /obj/item/stack/sheet/animalhide/gondola
+	amount = 2
 
 /datum/butchering_product/skin/deer
 	result = /obj/item/stack/sheet/animalhide/deer
@@ -194,6 +198,9 @@
 
 /datum/butchering_product/skin/bear/brownbear
 	result = /obj/item/clothing/head/bearpelt/brown/real
+
+/datum/butchering_product/skin/bear/panda
+	result = /obj/item/clothing/head/bearpelt/panda
 
 /datum/butchering_product/skin/bear/polarbear
 	result = /obj/item/clothing/head/bearpelt/polar
@@ -318,52 +325,6 @@
 	verb_name = "remove carapace"
 	verb_gerund = "removing the carapace from"
 	butcher_time = 10
-
-
-#define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
-#define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
-#define TEETH_LOTS		/datum/butchering_product/teeth/lots	//16-24
-#define TEETH_HUMAN		/datum/butchering_product/teeth/human	//32
-
-var/global/list/animal_butchering_products = list(
-	/mob/living/simple_animal/cat						= list(/datum/butchering_product/skin/cat),
-	/mob/living/simple_animal/corgi						= list(/datum/butchering_product/skin/corgi, TEETH_FEW),
-	/mob/living/simple_animal/hostile/lizard			= list(/datum/butchering_product/skin/lizard),
-	/mob/living/simple_animal/hostile/asteroid/goliath	= list(/datum/butchering_product/skin/goliath, TEETH_LOTS),
-	/mob/living/simple_animal/hostile/asteroid/basilisk	= list(/datum/butchering_product/skin/basilisk),
-	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),
-	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
-	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
-	/mob/living/simple_animal/hostile/bear/spare		= list(/datum/butchering_product/skin/bear/spare, TEETH_LOTS),
-	/mob/living/simple_animal/hostile/bear/polarbear	= list(/datum/butchering_product/skin/bear/polarbear, TEETH_LOTS), // all bears have lots of teeth
-	/mob/living/simple_animal/hostile/bear/brownbear	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
-	/mob/living/simple_animal/hostile/bear/panda	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
-	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
-	/mob/living/simple_animal/hostile/alien				= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH), //Same as the player-controlled aliens
-	/mob/living/simple_animal/hostile/retaliate/cluwne	= list(TEETH_BUNCH), //honk
-	/mob/living/simple_animal/hostile/creature			= list(TEETH_LOTS),
-	/mob/living/simple_animal/hostile/frog				= list(/datum/butchering_product/frog_leg),
-	/mob/living/simple_animal/hostile/deer				= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
-	/mob/living/simple_animal/hostile/deer/flesh		= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
-	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
-	/mob/living/simple_animal/rabbit					= list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot),
-	/mob/living/simple_animal/snail						= list(/datum/butchering_product/snail_carapace),
-	/mob/living/simple_animal/hostile/wolf				= list(/datum/butchering_product/skin/wolf, TEETH_LOTS),
-
-	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
-	/mob/living/carbon/human/unathi						= list(TEETH_LOTS, /datum/butchering_product/skin/lizard/lots),
-	/mob/living/carbon/human/skrell						= list(TEETH_LOTS),
-	/mob/living/carbon/human/skellington				= list(TEETH_HUMAN),
-	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN, /datum/butchering_product/skin/cat/lots),
-	/mob/living/carbon/human/dummy						= list(TEETH_HUMAN),
-
-	/mob/living/carbon/complex/gondola				= list(/datum/butchering_product/skin/gondola, TEETH_FEW),
-)
-
-#undef TEETH_FEW
-#undef TEETH_BUNCH
-#undef TEETH_LOTS
-#undef TEETH_HUMAN
 
 /////////////////////////////////Butcher procs/////////////////////////////////////////////////
 

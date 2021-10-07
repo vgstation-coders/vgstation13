@@ -34,6 +34,8 @@
 //#define MAP_OVERRIDE 9
 // synergy.dm
 //#define MAP_OVERRIDE 10
+// waystation.dm
+//#define MAP_OVERRIDE 11
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
@@ -56,8 +58,4 @@
 // I wonder what this does
 #define SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN !DEVELOPER_MODE
 
-#define EXTOOLS_REFERENCE_TRACKING DEVELOPER_MODE
-#define EXTOOLS_DEBUGGER DEVELOPER_MODE
-
-//Map-specific defines
-#define ROBOT_CHECK "robot check"
+#define AUXTOOLS_DEBUGGER DEVELOPER_MODE

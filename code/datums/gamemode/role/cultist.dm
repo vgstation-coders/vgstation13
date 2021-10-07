@@ -7,6 +7,9 @@
 						"Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
+	default_admin_voice = "<span class='danger'>Nar-Sie</span>" // Nar-Sie's name always appear in red in the chat, makes it stand out.
+	admin_voice_style = "sinister"
+	admin_voice_say = "murmurs..."
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
@@ -226,16 +229,12 @@
 			tattoos_names = "none"
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
-		if (isshade(M) && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
-			if(!M.gui_icons.soulblade_bgLEFT)
-				M.hud_used.shade_hud()
-
-			M.client.screen += list(
-				M.gui_icons.soulblade_bgLEFT,
-				M.gui_icons.soulblade_coverLEFT,
-				M.gui_icons.soulblade_bloodbar,
-				M.healths2,
-				)
+		if (isshade(M))
+			if (istype(M.loc,/obj/item/weapon/melee/soulblade))
+				M.DisplayUI("Soulblade")
+				M.client.screen |= list(M.healths2)
+			else
+				M.client.screen -= list(M.healths2)
 
 /datum/role/cultist/proc/remove_cult_hud()
 	var/mob/M = antag?.current
@@ -243,20 +242,14 @@
 		qdel(M.hud_used.cult_Act_display)
 		qdel(M.hud_used.cult_tattoo_display)
 
-/mob/living/carbon/proc/occult_muted()
+/mob/proc/occult_muted()
 	if (checkTattoo(TATTOO_HOLY))
 		return 0
 	if (reagents && reagents.has_reagent(HOLYWATER))
 		return 1
-	for(var/obj/item/weapon/implant/holy/I in src)
-		if (I.implanted)
-			return 1
+	if (is_implanted(/obj/item/weapon/implant/holy))
+		return 1
 	return 0
-
-/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
-	var/dat = ..()
-	dat += " - <a href='?src=\ref[src]&mind=\ref[antag]&cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
-	return dat
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
@@ -399,21 +392,6 @@
 						H.confused = 6
 					H.adjustOxyLoss(20)
 					H.adjustToxLoss(10)
-
-/datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
-	if (href_list["cult_privatespeak"])
-		var/message = input("What message shall we send?",
-                    "Voice of Nar-Sie",
-                    "")
-		var/mob/mob = M.current
-		if (mob)
-			to_chat(mob, "<span class='danger'>Nar-Sie</span> murmurs to you... <span class='sinister'>[message]</span>")
-
-			for(var/mob/dead/observer/O in player_list)
-				to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [mob.real_name], <span class='sinister'>[message]</span></span>")
-
-			message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-			log_narspeak("[key_name(usr)] Voice of Nar-Sie (privately to [mob.real_name]): [message]")
 
 /datum/role/cultist/chief
 	id = CHIEF_CULTIST

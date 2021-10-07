@@ -113,12 +113,24 @@
 /obj/machinery/optable/process()
 	check_victim()
 
+/obj/machinery/optable/proc/TryToThrowOnTable(var/mob/user,var/mob/victim)
+	for (var/atom/A in loc)
+		if (A == src)
+			continue
+		if (!A.Cross(victim,get_turf(victim)))
+			to_chat(user, "<span class='warning'>\The [A] prevents you from dragging \the [victim] on top of \the [src]</span>")
+			return FALSE
+	victim.forceMove(loc)
+	return TRUE
+
 /obj/machinery/optable/proc/take_victim(mob/living/carbon/C, mob/living/carbon/user as mob)
 	if (victim)
 		to_chat(user, "<span class='bnotice'>The table is already occupied!</span>")
 
+	if (!TryToThrowOnTable(user, C))
+		return
 	C.unlock_from()
-	C.forceMove(loc)
+	C.forceMove(loc) // again in case unlock_from() brought them back where they were
 
 	if (C.client)
 		C.client.perspective = EYE_PERSPECTIVE

@@ -3,6 +3,8 @@
 	id = WIZAPP_MASTER
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
+	default_admin_voice = "Wizard Federation"
+	admin_voice_style = "notice"
 
 /datum/role/wizard_apprentice
 	name = "wizard's apprentice"
@@ -47,6 +49,4 @@
 		if(S.user_type != USER_TYPE_WIZARD)
 			continue
 		var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-		end_icons += tempimage
-		var/tempstate = end_icons.len
-		. += "<img src='logo_[tempstate].png'> [S.name]<BR>"
+		. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"

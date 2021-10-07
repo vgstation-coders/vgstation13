@@ -287,7 +287,7 @@
 
 /obj/item/clothing/head/beret/sec/ocelot
 	name = "Ocelot's beret"
-	desc = "Ocelot's signature red beret"
+	desc = "Ocelot's signature red beret."
 
 /obj/item/clothing/head/beret/sec/ocelot/OnMobLife(var/mob/living/carbon/human/wearer)
 	if(wearer.get_item_by_slot(slot_head) == src)

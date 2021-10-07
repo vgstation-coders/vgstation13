@@ -183,15 +183,17 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/crowbar = GRASP_LEFT_HAND,
+		/obj/item/tool/crowbar = GRASP_LEFT_HAND,
 		/obj/item/weapon/storage/bag/ore = slot_l_store_str,
 	)
 
 	equip_survival_gear = list(
 		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer/plasmaman,
 		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/shaftminer

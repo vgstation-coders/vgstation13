@@ -26,9 +26,7 @@
 		/obj/item/clothing/shoes/brown,
 		/obj/item/device/radio/headset/heads/captain,
 		/obj/item/clothing/gloves/captain,
-		/obj/item/clothing/shoes/magboots/captain,
 		/obj/item/weapon/gun/energy/gun,
-		/obj/item/clothing/suit/space/rig/captain,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/clothing/under/dress/dress_cap,
 		/obj/item/device/gps/secure,
@@ -230,6 +228,9 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
+	is_wooden = TRUE
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
 
 /obj/structure/closet/secure_closet/detective/atoms_to_spawn()
 	return list(

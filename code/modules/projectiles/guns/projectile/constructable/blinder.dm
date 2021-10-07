@@ -190,7 +190,7 @@
 		to_chat(user, "<span class='notice'>There's no room in \the [src]'s film chamber with the [cell ? "power cell" : "wire"] inside it.</span>")
 		return
 
-	if(iswirecutter(W))
+	if(W.is_wirecutter(user))
 		if(cell)
 			to_chat(user, "<span class='warning'>You can't reach the wires with the power cell in the way.</span>")
 			return

@@ -69,7 +69,7 @@
 //Health readout module
 /obj/item/rig_module/health_readout
 	name = "articulated spine"
-	desc = "Lets passers by read your health from a distance"
+	desc = "Lets passer-bys read your health from a distance."
 
 /obj/item/rig_module/health_readout/examine_addition(mob/user)
 	if(!ishuman(rig.wearer))
@@ -232,7 +232,7 @@
 	rig.armor["rad"] = 100
 
 	say_to_wearer("[src] enabled.")
-	rig.wearer.lazy_register_event(/lazy_event/on_irradiate, src, .proc/absorb_rads)
+	rig.wearer.register_event(/event/irradiate, src, .proc/absorb_rads)
 	..()
 
 /obj/item/rig_module/rad_shield/deactivate()
@@ -244,12 +244,12 @@
 	rig?.armor["rad"] = initial_suit
 
 	say_to_wearer("[src] disabled.")
-	rig.wearer?.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/absorb_rads)
+	rig.wearer?.unregister_event(/event/irradiate, src, .proc/absorb_rads)
 	..()
 
 /obj/item/rig_module/rad_shield/proc/absorb_rads(mob/living/carbon/human/user, rads)
 	if(rig?.wearer != user) //Well lad.
-		user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/absorb_rads)
+		user.unregister_event(/event/irradiate, src, .proc/absorb_rads)
 		return
 
 	if(rig.H)

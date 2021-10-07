@@ -154,9 +154,9 @@ proc/age2agedescription(age)
 
 proc/RoundHealth(health)
 	switch(health)
-		if(100 to INFINITY)
+		if(99 to INFINITY)
 			return "health100"
-		if(70 to 100)
+		if(70 to 99)
 			return "health80"
 		if(50 to 70)
 			return "health60"
@@ -226,6 +226,7 @@ proc/add_logs(mob/user, mob/target, what_done, var/admin=1, var/object=null, var
 			target.LAssailant = null
 		else
 			target.LAssailant = user
+			target.assaulted_by(user)
 	if(admin)
 		log_attack("<font color='red'>[user ? "[user.name][(ismob(user) && user.ckey) ? "([user.ckey])" : ""]" : "NON-EXISTANT SUBJECT"] [what_done] [target ? "[target.name][(ismob(target) && target.ckey)? "([target.ckey])" : ""]" : "NON-EXISTANT SUBJECT"][object ? " with [object]" : " "]. [addition]</font>")
 
@@ -313,9 +314,17 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 
 	return L
 
-//not to be confused with is_loyalty_implanted in human/human.dm L290
+/mob/proc/is_loyalty_implanted()
+	return is_implanted(/obj/item/weapon/implant/loyalty)
+
+//not to be confused with is_loyalty_implanted
 /mob/proc/is_implanted(var/type)
 	for(var/obj/item/weapon/implant/I in src)
-		if(I.implanted && istype(I,type))
+		if(I.imp_in && istype(I, type))
 			return TRUE
 	return FALSE
+
+/proc/find_player_by_ckey(var/ckey)
+	for (var/mob/M in player_list)
+		if (M.ckey == ckey)
+			return M

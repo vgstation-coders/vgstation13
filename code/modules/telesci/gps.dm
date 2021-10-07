@@ -80,10 +80,10 @@ var/list/SPS_list = list()
 		return "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
 
 // Begin tgui
-/obj/item/device/gps/tgui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = global.adjacent_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+/obj/item/device/gps/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, ui_key, "Gps", name, 500, 500, master_ui, state)
+		ui = new(user, src, "Gps")
 		ui.open()
 	ui.set_autoupdate(autorefreshing)
 
@@ -106,7 +106,7 @@ var/list/SPS_list = list()
 	data["devices"] = devices
 	return data
 
-/obj/item/device/gps/ui_act(action, list/params)
+/obj/item/device/gps/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	if(..())
 		return
 	switch(action)
@@ -263,7 +263,7 @@ var/list/SPS_list = list()
 		if(receiver && !receiver.stat)
 			receiver.receive_alert(alerttype, transmission_data, verbose)
 			boop = TRUE
-	
+
 	if(boop)
 		deathsound(isdead)
 

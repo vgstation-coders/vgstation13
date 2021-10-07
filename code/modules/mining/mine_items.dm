@@ -204,8 +204,14 @@ proc/move_mining_shuttle()
 	toolsounds = list('sound/weapons/Genhit.ogg')
 	var/drill_verb = "picking"
 	var/diggables = DIG_ROCKS
-
 	var/excavation_amount = 100
+
+/obj/item/weapon/pickaxe/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/oil)
+		has_slime=1
+		to_chat(user, "You mold the slime extract around the tip of \the [src].")
+		return TRUE
 
 /obj/item/weapon/pickaxe/hammer
 	name = "sledgehammer"
@@ -263,7 +269,7 @@ proc/move_mining_shuttle()
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
-	desc = "A rock cutter that uses bursts of hot plasma"
+	desc = "A rock cutter that uses bursts of hot plasma."
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	toolsounds = list('sound/items/Welder.ogg')
@@ -309,8 +315,10 @@ proc/move_mining_shuttle()
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+			return
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+			return
 
 	if(proximity_flag && istype(target, /obj/item/stack/sheet/mineral/plasma))
 		var/obj/item/stack/sheet/mineral/plasma/A = target
@@ -319,8 +327,11 @@ proc/move_mining_shuttle()
 			A.use(loading_ammo)
 			current_ammo += loading_ammo
 			to_chat(user, "<span class='notice'>You load \the [src].</span>")
+			return
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
+			return
+	..()
 
 /obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
 	..()
@@ -529,10 +540,9 @@ proc/move_mining_shuttle()
 /obj/effect/resonance
 	name = "resonance field"
 	desc = "A resonating field that significantly damages anything inside of it when the field eventually ruptures."
-	icon = 'icons/effects/effects.dmi'
 	icon_state = "shield1"
 	plane = ABOVE_HUMAN_PLANE
-	mouse_opacity = 0
+	mouse_opacity = 1
 	var/resonance_damage = 30
 	var/creator = null
 
@@ -635,7 +645,7 @@ proc/move_mining_shuttle()
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/tool/weldingtool/W = I
 		if(W.welding && !stat)
 			if(stance != HOSTILE_STANCE_IDLE)
 				to_chat(user, "<span class='warning'>\The [src] is moving around too much to repair!</span>")
@@ -813,7 +823,7 @@ proc/move_mining_shuttle()
 				M.revive(refreshbutcher = refreshes_drops)
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
-					H.friends += user
+					H.friends += makeweakref(user)
 
 					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
 					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
@@ -955,16 +965,12 @@ proc/move_mining_shuttle()
 	update_icon()
 
 /obj/item/device/mobcapsule/proc/take_contents(mob/user)
-	for(var/mob/living/simple_animal/AM in src.loc)
-		if(istype(AM))
-			var/mob/living/simple_animal/M = AM
-			var/mob/living/simple_animal/hostile/H = M
-			if(!istype(H))
-				continue
-			for(var/things in H.friends)
-				if(capsuleowner in H.friends)
-					if(insert(AM, user) == -1) //Limit reached
-						break
+	for(var/mob/living/simple_animal/hostile/AM in loc)
+		for(var/datum/weakref/things in AM.friends)
+			var/mob/M = things.get()
+			if(capsuleowner == M)
+				if(insert(AM, user) == -1) //Limit reached
+					break
 
 /**********************Mining Scanner**********************/
 

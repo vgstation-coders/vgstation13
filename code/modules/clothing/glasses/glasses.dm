@@ -21,6 +21,10 @@
 
 	var/obj/item/clothing/glasses/stored_glasses = null
 	var/glasses_fit = FALSE
+
+	var/my_dark_plane_alpha_override
+	var/my_dark_plane_alpha_override_value
+
 /*
 SEE_SELF  // can see self, no matter what
 SEE_MOBS  // can see all mobs, no matter what
@@ -33,7 +37,7 @@ BLIND     // can't see anything
 
 /obj/item/clothing/glasses/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
-	if(!istype(H) || stored_glasses || !glasses_fit)
+	if(!istype(H) || stored_glasses || !glasses_fit || slot == slot_l_store || slot == slot_r_store)
 		return ..()
 	if(slot != slot_glasses)
 		return CANNOT_EQUIP
@@ -110,7 +114,7 @@ var/list/science_goggles_wearers = list()
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 
 	glasses_fit = TRUE
@@ -171,7 +175,7 @@ var/list/science_goggles_wearers = list()
 		for (var/mob/living/L in infected_contact_mobs)
 			if (L.pathogen)
 				M.client.images |= L.pathogen
-		for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+		for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 			if (C.pathogen)
 				M.client.images |= C.pathogen
 		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
@@ -185,7 +189,7 @@ var/list/science_goggles_wearers = list()
 		M.client.images -= I.pathogen
 	for (var/mob/living/L in infected_contact_mobs)
 		M.client.images -= L.pathogen
-	for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+	for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 		M.client.images -= C.pathogen
 	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 		M.client.images -= C.pathogen
@@ -494,10 +498,12 @@ var/list/science_goggles_wearers = list()
 	origin_tech = Tc_MAGNETS + "=3"
 	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
-	invisa_view = 2 
+	invisa_view = 2
 	eyeprot = -2 //prepare for your eyes to get shit on
 
 	glasses_fit = TRUE
+	my_dark_plane_alpha_override = "thermals"
+	my_dark_plane_alpha_override_value = 255
 
 /obj/item/clothing/glasses/thermal/emp_act(severity)
 	if(istype(src.loc, /mob/living/carbon/human))
@@ -605,7 +611,7 @@ var/list/science_goggles_wearers = list()
 	item_state = "glasses"
 	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_MATERIALS + "=3" + Tc_ANOMALY + "=4"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
-	var/mob/living/emitter
+	var/atom/movable/emitter
 	var/obj/effect/beam/emitter/eyes/beam
 	var/previous_dir
 	var/turf/previous_loc
@@ -614,7 +620,7 @@ var/list/science_goggles_wearers = list()
 	..()
 	if(slot == slot_glasses)
 		emitter = M
-		enable(emitter)
+		enable()
 		processing_objects.Add(src)
 
 /obj/item/clothing/glasses/emitter/unequipped(mob/M, from_slot)
@@ -622,9 +628,20 @@ var/list/science_goggles_wearers = list()
 	previous_dir = null
 	previous_loc = null
 	if(from_slot == slot_glasses)
-		disable(emitter)
+		disable()
 		processing_objects.Remove(src)
 
+/obj/item/clothing/glasses/emitter/mannequin_equip(var/atom/movable/mannequin,var/slot,var/hand_slot)//can be either a static structure or an hostile mob
+	if(slot == SLOT_MANNEQUIN_EYES)
+		emitter = mannequin
+		enable()
+		processing_objects.Add(src)
+
+/obj/item/clothing/glasses/emitter/mannequin_unequip(var/atom/movable/mannequin)
+	previous_dir = null
+	previous_loc = null
+	disable()
+	processing_objects.Remove(src)
 
 /obj/item/clothing/glasses/emitter/Destroy()
 	disable(emitter)
@@ -633,30 +650,37 @@ var/list/science_goggles_wearers = list()
 	previous_loc = null
 	..()
 
-/obj/item/clothing/glasses/emitter/proc/enable(mob/living/M)
+/obj/item/clothing/glasses/emitter/proc/enable()
 	if (istype(emitter))
-		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
-		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
+		emitter.register_event(/event/before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.register_event(/event/after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 	update_emitter()
 
-/obj/item/clothing/glasses/emitter/proc/disable(mob/living/M)
+/obj/item/clothing/glasses/emitter/proc/disable()
 	if (beam)
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.callOnStartMove -= "\ref[src]"
-		emitter.callOnEndMove -= "\ref[src]"
+		emitter.unregister_event(/event/before_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_start)
+		emitter.unregister_event(/event/after_move, src, /obj/item/clothing/glasses/emitter/proc/update_emitter_end)
 		emitter = null
 
 /obj/item/clothing/glasses/emitter/process()
 	update_emitter()
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter()
-	if (!emitter || !isturf(emitter.loc) || emitter.lying)
+	if (!emitter || !isturf(emitter.loc))
 		if (beam)
 			qdel(beam)
 			beam = null
 		return
+	if (ismob(emitter))
+		var/mob/M = emitter
+		if (M.lying)
+			if(beam)
+				qdel(beam)
+				beam = null
+			return
 	if (!beam)
 		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir
@@ -673,8 +697,12 @@ var/list/science_goggles_wearers = list()
 		beam = null
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_end()
-	if (!emitter || !isturf(emitter.loc) || emitter.lying)
+	if (!emitter || !isturf(emitter.loc))
 		return
+	if (ismob(emitter))
+		var/mob/M = emitter
+		if(M.lying)
+			return
 	if (!beam)
 		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir

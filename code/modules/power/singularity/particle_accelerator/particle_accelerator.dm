@@ -224,7 +224,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 						"You add some wires.")
 					temp_state++
 		if(2)
-			if(iswirecutter(O))//TODO:Shock user if its on?
+			if(O.is_wirecutter(user))//TODO:Shock user if its on?
 				user.visible_message("[user.name] removes some wires from the [src.name].", \
 					"You remove some wires.")
 				temp_state--
@@ -366,7 +366,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 						"You add some wires.")
 					temp_state++
 		if(2)
-			if(iswirecutter(O))//TODO:Shock user if its on?
+			if(O.is_wirecutter(user))//TODO:Shock user if its on?
 				user.visible_message("[user.name] removes some wires from the [src.name].", \
 					"You remove some wires.")
 				temp_state--

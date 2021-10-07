@@ -85,8 +85,9 @@
 		head = null
 		success = 1
 		update_inv_head()
+		invoke_event(/event/unequipped, list(W))
 	else
-		..()
+		success = ..()
 
 	if(success)
 		if (W)

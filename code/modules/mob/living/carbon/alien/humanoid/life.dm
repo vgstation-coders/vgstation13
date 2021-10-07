@@ -125,7 +125,7 @@
 				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				// Handle chem smoke effect  -- Doohl
-				for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
+				for(var/obj/effect/smoke/chem/smoke in view(1, src))
 					if(smoke.reagents.total_volume)
 						smoke.reagents.reaction(src, INGEST)
 						spawn(5)
@@ -381,15 +381,6 @@
 
 /mob/living/carbon/alien/humanoid/handle_regular_hud_updates()
 
-	if(isDead() || (M_XRAY in mutations))
-		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-		see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if(!isDead())
-		change_sight(adding = SEE_MOBS, removing = SEE_TURFS|SEE_OBJS)
-		see_in_dark = 4
-		see_invisible = SEE_INVISIBLE_MINIMUM
-
 	if(healths)
 		if(!isDead())
 			switch(health)
@@ -424,16 +415,8 @@
 		clear_alert(SCREEN_ALARM_FIRE)
 	//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 	//blame the person who coded them. Temporary fix added.
-	if(client)
-		clear_fullscreens()
-		if(src.eye_blind)
-			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
-		if (src.disabilities & NEARSIGHTED)
-			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
-		if (src.eye_blurry)
-			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
-		if (src.druggy)
-			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+
+	standard_damage_overlay_updates()
 
 	if(!isDead())
 		if(machine)

@@ -45,6 +45,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
+	// Does this item have a slime installed?
+	var/has_slime = 0
+
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
 	return FALSE
@@ -82,6 +85,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	verbs += /obj/proc/remove_pai
 
 /obj/attackby(obj/item/weapon/W, mob/user)
+	invoke_event(/event/attackby, list("attacker" = user, "item" = W))
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -305,6 +309,29 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/interact(mob/user)
 	return
 
+//user: The mob that is suiciding
+//damagetype: The type of damage the item will inflict on the user
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
+//Output a creative message and then return the damagetype done
+/obj/proc/suicide_act(var/mob/living/user)
+	if (is_hot())
+		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		user.IgniteMob()
+		return SUICIDE_ACT_FIRELOSS
+	else if (sharpness >= 1)
+		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+	else if (force >= 10)
+		if (prob(50))
+			playsound(user, 'sound/items/trayhit1.ogg', 50, 1)
+		else
+			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
+		user.visible_message("<span class='danger'>[user] strikes his head on \the [src]! It looks like \he's trying to commit suicide.</span>")
+		return SUICIDE_ACT_BRUTELOSS
+
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
 		return
@@ -316,19 +343,29 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/shuttle_act(datum/shuttle/S)
 	return qdel(src)
 
+/obj/slime_act(primarytype, mob/user)
+	if(has_slime)
+		to_chat(user, "\the [src] already has a slime extract attached.")
+		return FALSE
+
 /obj/singularity_pull(S, current_size)
+	invoke_event(/event/before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
 	else
 		step_towards(src, S)
+	invoke_event(/event/after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
 /obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
 	return 0
+
+/obj/proc/shouldReInitOnMultitoolLink(var/mob/user, var/obj/buffer, var/list/context)
+	return FALSE
 
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
@@ -368,12 +405,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 0
 
 	// Cloning stuff goes here.
-	if(P.clone && P.buffer) // Cloning is on.
-		if(!canClone(P.buffer))
+	var/obj/machinery/bufRef = P.buffer?.get();
+	if(P.clone && bufRef) // Cloning is on.
+		if(!canClone(bufRef))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
 			return
 
-		if(!clone(P.buffer))
+		if(!clone(bufRef))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
 			return
 
@@ -402,19 +440,19 @@ a {
 "}
 	dat += multitool_menu(user,P)
 	if(P)
-		if(P.buffer)
+		if(bufRef)
 			var/id = null
-			if(istype(P.buffer, /obj/machinery/telecomms))
-				var/obj/machinery/telecomms/buffer = P.buffer//Casting is better than using colons
+			if(istype(bufRef, /obj/machinery/telecomms))
+				var/obj/machinery/telecomms/buffer = bufRef//Casting is better than using colons
 				id = buffer.id
-			else if(P.buffer.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
-				id = P.buffer:id_tag//sadly, : is needed
+			else if(bufRef.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+				id = bufRef:id_tag//sadly, : is needed
 
-			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
+			dat += "<p><b>MULTITOOL BUFFER:</b> [bufRef] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
 
-			dat += linkMenu(P.buffer)
+			dat += linkMenu(bufRef)
 
-			if(P.buffer)
+			if(bufRef)
 				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
 			dat += "</p>"
 		else
@@ -473,7 +511,7 @@ a {
 		return FALSE
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
+			if(isshuttleturf(src.loc) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to this!</span>")
 				return FALSE
 			if(istype(src.loc, /turf/space)) //if on a space tile

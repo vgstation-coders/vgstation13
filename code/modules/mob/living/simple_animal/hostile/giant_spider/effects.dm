@@ -3,13 +3,13 @@
 //generic procs copied from obj/effect/alien
 /obj/effect/spider
 	name = "web"
-	desc = "it's stringy and sticky"
-	icon = 'icons/effects/effects.dmi'
+	desc = "It's stringy and sticky."
 	anchored = 1
 	density = 0
 	var/health = 15
 	gender = NEUTER
 	w_type=NOT_RECYCLABLE
+	mouse_opacity = 1
 
 //similar to weeds, but only barfed out by nurses manually
 /obj/effect/spider/ex_act(severity)
@@ -35,7 +35,7 @@
 	var/damage = (W.is_hot() || W.is_sharp()) ? (W.force) : (W.force / SPIDERWEB_BRUTE_DIVISOR)
 
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			damage = 15
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -115,6 +115,11 @@
 	processing_objects.Remove(src)
 	..()
 
+/obj/effect/spider/eggcluster/healthcheck()
+	if(health <= 0)
+		new /obj/item/weapon/reagent_containers/food/snacks/spidereggs(loc)
+		qdel(src)
+
 /obj/effect/spider/eggcluster/process()
 	amount_grown += rand(0,2)
 	if(amount_grown >= 100)
@@ -123,42 +128,7 @@
 			//new /obj/effect/spider/spiderling(src.loc)
 			new /mob/living/simple_animal/hostile/giant_spider/spiderling(src.loc)
 		qdel(src)
-/*s
-/obj/effect/spider/spiderling
-	name = "spiderling"
-	desc = "It never stays still for long."
-	icon_state = "spiderling"
-	anchored = 0
-	layer = HIDING_MOB_PLANE
-	health = 3
-	var/amount_grown = 0
-	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent
-	var/travelling_in_vent = 0
 
-/obj/effect/spider/spiderling/New()
-	..()
-	pixel_x = rand(6,-6)
-	pixel_y = rand(6,-6)
-	processing_objects.Add(src)
-	//50% chance to grow up
-	if(prob(50))
-		amount_grown = 1
-
-/obj/effect/spider/spiderling/to_bump(atom/user)
-	if(istype(user, /obj/structure/table))
-		src.forceMove(user.loc)
-	else
-		..()
-
-/obj/effect/spider/spiderling/proc/die()
-	visible_message("<span class='alert'>[src] dies!</span>")
-	new /obj/effect/decal/cleanable/spiderling_remains(src.loc)
-	qdel(src)
-
-/obj/effect/spider/spiderling/healthcheck()
-	if(health <= 0)
-		die()
-*/
 /obj/effect/decal/cleanable/spiderling_remains
 	name = "spiderling remains"
 	desc = "Green squishy mess."
@@ -181,45 +151,20 @@
 		A.forceMove(src.loc)
 	..()
 
+/////////////////////////////////////SPIDER QUEEN STICKY PROJECTILE TRAP////////////////////////////////
 
 //Spawns on top of mobs hit with the queen's web projectile
-/obj/effect/overlay/stickyweb
+/obj/effect/rooting_trap/stickyweb
 	name = "sticky web"
 	desc = "A mess of sticky strings."
-	icon = 'icons/effects/effects.dmi'
+	mouse_opacity = 1
 	icon_state = "stickyweb"
-	anchored = 1
-	density = 0
-	plane = ABOVE_HUMAN_PLANE
-	layer = CLOSED_CURTAIN_LAYER
-	var/atom/stuck_to = null
-	var/duration = 10 SECONDS
 
-/obj/effect/overlay/stickyweb/Destroy()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	stuck_to = null
-	..()
-
-/obj/effect/overlay/stickyweb/proc/stick_to(var/atom/A, var/side = null)
+/obj/effect/rooting_trap/stickyweb/stick_to(var/atom/A, var/side = null)
 	var/turf/T = get_turf(A)
 	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
-
-	if(isliving(A) && !isspace(T))//can't nail people down unless there's a turf to nail them to.
-		stuck_to = A
+	. = ..()
+	if (.)
 		visible_message("<span class='warning'>\the sticky ball splatters over \the [A]'s legs, sticking them to \the [T].</span>")
-		lock_atom(A, /datum/locking_category/buckle)
-
-	spawn(duration)
-		qdel(src)
-
-/obj/effect/overlay/stickyweb/attack_hand(var/mob/user)
-	if (do_after(user,src,1.5 SECONDS))
-		unstick()
-
-/obj/effect/overlay/stickyweb/proc/unstick()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	qdel(src)
 
 #undef SPIDERWEB_BRUTE_DIVISOR

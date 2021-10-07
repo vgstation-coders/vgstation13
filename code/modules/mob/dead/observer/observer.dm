@@ -268,28 +268,6 @@ Works together with spawning an observer, noted above.
 		else
 			visible.icon_state = "visible0"
 
-// Direct copied from medical HUD glasses proc, used to determine what health bar to put over the targets head.
-/mob/dead/proc/RoundHealth(var/health)
-	switch(health)
-		if(100 to INFINITY)
-			return "health100"
-		if(70 to 100)
-			return "health80"
-		if(50 to 70)
-			return "health60"
-		if(30 to 50)
-			return "health40"
-		if(18 to 30)
-			return "health25"
-		if(5 to 18)
-			return "health10"
-		if(1 to 5)
-			return "health1"
-		if(-99 to 0)
-			return "health0"
-		else
-			return "health-100"
-
 // Pretty much a direct copy of Medical HUD stuff, except will show ill if they are ill instead of also checking for known illnesses.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
@@ -410,7 +388,11 @@ Works together with spawning an observer, noted above.
 			ghostype = /mob/dead/observer/deafmute
 		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
 		ghost.attack_log += src.attack_log // Keep our attack logs.
-		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
+		var/timetocheck = timeofdeath
+		if (isbrain(src))
+			var/mob/living/carbon/brain/brainmob = src
+			timetocheck = brainmob.timeofhostdeath
+		ghost.timeofdeath = timetocheck //BS12 EDIT
 		ghost.key = key
 		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
 			ghost.verbs -= /mob/dead/observer/verb/toggle_antagHUD	// Poor guys, don't know what they are missing!
@@ -437,6 +419,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				return
 			if ("Stay in body")
 				return
+
+	if (istype(src,/mob/living/simple_animal/astral_projection))
+		qdel(src)
+		return
 
 	if(src.health < 0 && stat != DEAD) //crit people
 		succumb_proc(0)
@@ -618,8 +604,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
 		else
 			to_chat(usr, "That arena doesn't seem to exist anymore.")
-
-	..()
 
 //END TELEPORT HREF CODE
 

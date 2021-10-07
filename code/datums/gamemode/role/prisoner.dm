@@ -8,6 +8,8 @@
 	required_pref = ROLE_MINOR
 	wikiroute = ROLE_MINOR
 	logo_state = "prisoner-logo"
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "secradio"
 
 	var/moneyBonus = 100
 
@@ -36,11 +38,6 @@
 	))
 
 	H.set_species(species)
-
-	//Give them their outfit
-	var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner
-	outfit.equip(H)
-
 	//Randomize their looks (but let them pick a name)
 	H.randomise_appearance_for()
 	var/randname = random_name(H.gender, H.species.name)
@@ -48,6 +45,10 @@
 	H.regenerate_icons()
 	H.dna.ResetUIFrom(H)
 	H.dna.ResetSE()
+
+	//Give them their outfit
+	var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner
+	outfit.equip(H)
 	mob_rename_self(H, "prisoner")
 
 	//Send them to the starting location.

@@ -105,7 +105,7 @@
 				client.images -= I.pathogen
 			for (var/mob/living/L in infected_contact_mobs)
 				client.images -= L.pathogen
-			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+			for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 				client.images -= C.pathogen
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 				client.images -= C.pathogen
@@ -120,7 +120,7 @@
 			for (var/mob/living/L in infected_contact_mobs)
 				if (L.pathogen)
 					client.images |= L.pathogen
-			for (var/obj/effect/effect/pathogen_cloud/C in pathogen_clouds)
+			for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
 				if (C.pathogen)
 					client.images |= C.pathogen
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
@@ -277,7 +277,7 @@
 
 	var/dat
 	dat += "<h4>Crew Manifest</h4>"
-	dat += data_core.get_manifest()
+	dat += data_core.get_manifest(OOC = 1)
 
 	src << browse(dat, "window=manifest;size=370x420;can_close=1")
 
@@ -287,71 +287,127 @@
 	set name = "Write in blood"
 	set desc = "If the round is sufficiently spooky, write a short message in blood on the floor or a wall. Remember, no IC in OOC or OOC in IC."
 
+	//Some basic checks first
 	if(!(config.cult_ghostwriter))
 		to_chat(src, "<span class='warning'>That verb is not currently permitted.</span>")
 		return
 
-	if (!src.stat)
-		return
-
-	if (usr != src)
-		return 0 //something is terribly wrong
-
-	var/ghosts_can_write
+	var/ghosts_can_write = FALSE
+	//legacy cult
 	var/datum/faction/cult/narsie/C = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
-		ghosts_can_write = 1
+		ghosts_can_write = TRUE
 
+	//new cult
 	if (veil_thickness >= CULT_ACT_III)
-		ghosts_can_write = 1
+		ghosts_can_write = TRUE
+	if (invisibility == 0)
+		ghosts_can_write = TRUE
 
 	if(!ghosts_can_write)
 		to_chat(src, "<span class='warning'>The veil is not thin enough for you to do that.</span>")
 		return
 
+	var/turf/T = get_turf(src)
+	if (!isfloor(T))
+		to_chat(src, "<span class='warning'>You can only doodle over floors.</span>")
+		return
+
+	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
+		to_chat(src, "<span class='warning'>This floor is already filled with writings.</span>")
+		return
+
+	//Ok the place is clear, now we need some blood
 	var/list/choices = list()
-	for(var/obj/effect/decal/cleanable/blood/B in view(1,src))
-		if(B.amount > 0)
-			choices += B
+	var/i = 1
+	var/writings_blood_amount = 0
+	var/turf/original_bloodsource
+
+	for(var/obj/effect/decal/cleanable/blood/B in range(1,T))
+		if(B.counts_as_blood)
+			if (istype(B,/obj/effect/decal/cleanable/blood/writing))//this prevents ghosts from making an infinite chain of messages
+				var/obj/effect/decal/cleanable/blood/writing/writings = B
+				if (writings.original_bloodsource && max(0,round(cheap_pythag(T.x - writings.original_bloodsource.x, T.y - writings.original_bloodsource.y))) <= writings.original_amount)
+					writings_blood_amount = writings.original_amount
+					original_bloodsource = writings.original_bloodsource
+					choices["[i] - [B] (color = [B.basecolor])"] = B
+			else if (istype(B,/obj/effect/decal/cleanable/blood/tracks))
+				var/obj/effect/decal/cleanable/blood/tracks/tracks = B
+				choices["[i] - [B] (color = [tracks.last_blood_color])"] = B
+				original_bloodsource = get_turf(B)
+			else
+				choices["[i] - [B] (color = [B.basecolor])"] = B
+				writings_blood_amount = B.amount
+				original_bloodsource = get_turf(B)
+		i++
 
 	if(!choices.len)
 		to_chat(src, "<span class = 'warning'>There is no blood to use nearby.</span>")
 		return
 
-	var/obj/effect/decal/cleanable/blood/choice = input(src,"What blood would you like to use?") in null|choices
-	var/direction = input(src,"Which way?","Tile selection") as anything in list("Here","North","South","East","West")
-	var/turf/simulated/T = src.loc
-	if (direction != "Here")
-		T = get_step(T,text2dir(direction))
+	var/choice = input(src,"What blood would you like to use?") in null|choices
 
-	if (!istype(T))
-		to_chat(src, "<span class='warning'>You cannot doodle there.</span>")
+	if(!choice || !Adjacent(T))
 		return
 
-	if(!choice || choice.amount == 0 || !(src.Adjacent(choice)))
+	var/obj/effect/decal/cleanable/blood/blood_source = choices[choice]
+
+	if(!blood_source)
 		return
 
-	var/doodle_color = (choice.basecolor) ? choice.basecolor : DEFAULT_BLOOD
-	var/num_doodles = 0
-	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
-		num_doodles++
-	if (num_doodles > 4)
-		to_chat(src, "<span class='warning'>There is no space to write on!</span>")
+	var/doodle_color = (blood_source.basecolor) ? blood_source.basecolor : DEFAULT_BLOOD
+	if (istype(blood_source,/obj/effect/decal/cleanable/blood/tracks))
+		var/obj/effect/decal/cleanable/blood/tracks/tracks = blood_source
+		doodle_color = tracks.last_blood_color
+
+	//Blood found, now to write a message
+	var/max_length = 30
+	var/message = stripped_input(src,"Write a message. You will be able to preview it.","Bloody writings", "")
+
+	if (!message)
 		return
 
-	var/max_length = 50
-	var/message = stripped_input(src,"Write a message. It cannot be longer than [max_length] characters.","Blood writing", "")
+	message = copytext(message, 1, max_length)
 
-	if (message)
-		if (length(message) > max_length)
-			message += "-"
-			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
-		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
-		W.basecolor = doodle_color
-		W.update_icon()
-		W.message = message
-		W.add_hiddenprint(src)
-		W.visible_message("<span class='warning'>Invisible fingers crudely paint something in blood on [T]...</span>")
+	var/letter_amount = length(replacetext(message, " ", ""))
+	if(!letter_amount) //If there is no text
+		return
+
+	//Previewing our message
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
+	I.maptext_height = 32
+	I.maptext_width = 64
+	I.maptext_x = -16
+	I.maptext_y = -2
+	I.loc = T
+	I.alpha = 180
+
+	client.images.Add(I)
+	var/continue_drawing = alert(src, "This is how your message will look. Continue?", "Bloody writings", "Yes", "Cancel")
+
+	client.images.Remove(I)
+	animate(I) //Cancel the animation so that the image gets garbage collected
+	I.loc = null
+	qdel(I)
+
+	if(continue_drawing != "Yes" || !Adjacent(T))
+		return
+
+	if(blood_source.gcDestroyed)
+		to_chat(src, "<span class = 'warning'>The blood source you selected has been removed before you had time to finish your message.</span>")
+		return
+
+	//Finally writing our message
+	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
+	W.basecolor = doodle_color
+	W.maptext = {"<span style="color:[doodle_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
+	W.add_hiddenprint(src)
+	W.original_amount = writings_blood_amount
+	W.original_bloodsource = original_bloodsource
+	W.visible_message("<span class='warning'>Invisible fingers crudely paint something in blood on \the [T]...</span>")
+	if(istype(blood_source.blood_DNA,/list))
+		W.blood_DNA |= blood_source.blood_DNA.Copy()
 
 /mob/dead/observer/verb/hide_ghosts()
 	set name = "Hide Ghosts"
@@ -462,6 +518,42 @@
 					break
 	else
 		to_chat(src, "<span class='warning'>Unable to find any MoMMI Spawners ready to build a MoMMI in the universe. Please try again.</span>")
+
+/mob/dead/observer/verb/become_hobo()
+	set name = "Become Space Hobo"
+	set category = "Ghost"
+	if(!(mind && mind.current && can_reenter_corpse) || (mind.current.key && copytext(mind.current.key,1,2)!="@"))
+		to_chat(src, "<span class='warning'>You must have had presence on this plane to become this.</span>")
+		return
+	if(!config.respawn_as_hobo)
+		to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled.</span>")
+		return
+	var/timedifference = world.time - client.time_died_as_mouse
+	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
+		var/timedifference_text
+		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
+		to_chat(src, "<span class='warning'>You may only spawn again as this role more than [mouse_respawn_time] minutes after your death. You have [timedifference_text] left.</span>")
+		return
+	if(hoboamount == hobostart.len)
+		to_chat(src, "<span class='warning'>The world has enough of these as is.</span>")
+		return
+
+	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
+	if(response != "Yeah!")
+		return  //Hit the wrong key...again.
+	
+	//find a viable mouse candidate
+	var/mob/living/carbon/human/hobo = new(pick(hobostart))
+	hobo.key = src.key
+	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
+	hobo.generate_name()
+	var/datum/outfit/special/with_id/hobo/hobo_outfit = new
+	hobo_outfit.equip(hobo)
+	to_chat(hobo, "<B>You are a Space Hobo.</B>")
+	// somewhat taken from CEV eris
+	to_chat(hobo, "<b>The ID you wear likely not even your own. At least as far as you can remember. But this chunk of plastic still can be a rare oddity that can change your character. Find a way to stay out of trouble, and survive. Though this does not mean you have no home, as the asteroid is your home. Whatever planet you may have come from is now a distant memory.</b>")
+	to_chat(hobo, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
+	hoboamount++
 
 /mob/dead/observer/verb/pai_signup()
 	set name = "Sign up as pAI"

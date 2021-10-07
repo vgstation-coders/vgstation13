@@ -4,7 +4,7 @@
 	icon_state = "monkeycube"
 	bitesize = 12
 	food_flags = FOOD_MEAT
-	edible_by_utensil = FALSE
+	valid_utensils = 0
 	var/contained_mob = /mob/living/carbon/monkey
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/New()
@@ -136,3 +136,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube
 	name = "lab mouse cube"
 	contained_mob = /mob/living/simple_animal/mouse/balbc
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/spacecarpcube
+	name = "space carp cube"
+	contained_mob = /mob/living/simple_animal/hostile/carp/baby

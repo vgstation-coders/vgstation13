@@ -15,14 +15,11 @@
 /mob/living/simple_animal/shade/proc/give_blade_powers()
 	if (!istype(loc, /obj/item/weapon/melee/soulblade))
 		return
+	DisplayUI("Soulblade")
+	register_event(/event/living_login, src, /mob/living/simple_animal/shade/proc/add_HUD)
 	if (client)
 		client.CAN_MOVE_DIAGONALLY = 1
-		if(!gui_icons.soulblade_bgLEFT)
-			hud_used.shade_hud()
 		client.screen += list(
-			gui_icons.soulblade_bgLEFT,
-			gui_icons.soulblade_coverLEFT,
-			gui_icons.soulblade_bloodbar,
 			healths2,
 			)
 	var/obj/item/weapon/melee/soulblade/SB = loc
@@ -35,7 +32,7 @@
 	add_spell(new /spell/soulblade/blade_mend, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_boil, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(src)
 	if (C)
 		C.logo_state = "shade-blade"
 
@@ -44,19 +41,19 @@
 	if (client)
 		client.CAN_MOVE_DIAGONALLY = 0
 		client.screen -= list(
-			gui_icons.soulblade_bgLEFT,
-			gui_icons.soulblade_coverLEFT,
-			gui_icons.soulblade_bloodbar,
 			healths2,
 			)
-	if (hud_used && gui_icons && gui_icons.soulblade_coverLEFT)
-		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = ""
+	HideUI("Soulblade")
+	unregister_event(/event/living_login, src, /mob/living/simple_animal/shade/proc/add_HUD)
 	for(var/spell/soulblade/spell_to_remove in spell_list)
 		remove_spell(spell_to_remove)
 
-	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	var/datum/role/cultist/C = iscultist(src)
 	if (C)
 		C.logo_state = "cult-logo"
+
+/mob/living/simple_animal/shade/proc/add_HUD(var/mob/user)
+	DisplayUI("Soulblade")
 
 /spell/soulblade
 	panel = "Cult"
@@ -76,12 +73,7 @@
 	var/obj/item/weapon/melee/soulblade/SB = holder.loc
 	SB.blood = max(0,SB.blood-blood_cost)
 	var/mob/shade = holder
-	var/matrix/M = matrix()
-	M.Scale(1,SB.blood/SB.maxblood)
-	var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER
-	shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
-	shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-	shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[SB.blood]"
+	shade.DisplayUI("Soulblade")
 
 
 /////////////////////////////

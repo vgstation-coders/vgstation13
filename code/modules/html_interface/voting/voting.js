@@ -44,7 +44,6 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode){
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Restart</font>")));
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<font color='grey'>Crew Transfer</font>")));
 	}
-	
 	if(admin > 0 || allow_mode > 0){
 		$("#vote_main").append($("<div  class='item'></div>").append($("<div class='itemContent'></div>").html("<a href='?src=" + hSrc + ";vote=gamemode'>GameMode</a>" + (admin == 2 ? "(<a href='?src=" + hSrc + ";vote=toggle_gamemode'>" + (allow_mode?"Allowed":"Disallowed") + "</a>)" : ""))));
 	}
@@ -55,14 +54,18 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode){
 	if(mode != null && mode != ""){
 		$("#vote_main").hide();
 		$("#vote_choices").show();
-		if(admin > 0) $("#vote_admin").show();
+		$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a "  +  "href='?src=" + hSrc + ";vote=cancel_vote" + "'>Cancel your vote</a>")));
+		if(admin > 0)
+			$("#vote_admin").show();
+		else
+			$("#vote_admin").hide();
 	}
 	else{
 		$("#vote_main").show();
 		$("#vote_choices").hide();
 		$("#vote_admin").hide();
 	}
-	
+
 }
 
 function update_choices(ID, choice, votes){

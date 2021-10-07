@@ -44,13 +44,14 @@
 	for(var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
 
-/datum/command_alert/biohazard_alert/minor
-	level_max = 4
-	level_min = 2
+/datum/command_alert/biohazard_organ
+	name = "Organ Failures"
+	alert_title = "Risk of Spontaneous Organ Failure"
+	force_report = 1
 
-/datum/command_alert/biohazard_alert/major
-	level_max = 7
-	level_min = 5
+/datum/command_alert/biohazard_organ/announce()
+	message = "The microdosimetry meter onboard [station_name()] has been tripped by recent cosmic interference. Automated Bragg Curve calculations show a threat of ion implantation in crew members, which may lead to sickness or organ failure. Central Command advises regular health screening of staff displaying symptoms of malaise."
+	..()
 
 ///////HISS
 
@@ -71,7 +72,7 @@
 	theme = "endgame"
 
 /datum/command_alert/xenomorph_station_nuke/announce()
-	message = "Hostile lifeforms are continuing to spread unchecked throughout [station_name()], total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized."
+	message = "Hostile lifeforms are continuing to spread unchecked throughout [station_name()], total quarantine failure is now possible. As such, Directive 7-12 has now been authorized."
 	..()
 
 /datum/command_alert/xenomorph_station_unlock
@@ -125,7 +126,7 @@
 	theme = "endgame"
 
 /datum/command_alert/biohazard_station_nuke/announce()
-	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()]."
+	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possible. As such, Directive 7-12 has now been authorized for [station_name()]."
 	..()
 
 /datum/command_alert/biohazard_station_unlock
@@ -200,8 +201,22 @@
 
 /datum/command_alert/biohazard_level_5/announce()
 	message = "Confirmed outbreak of level 5 biohazard aboard [station_name()]. All personnel must contain the outbreak."
+	. = ..()
 
-	..()
+/datum/command_alert/blob_defcon_3
+	name = "Biohazard Alert (level 5) DEFCON 3"
+	alert_title = "Biohazard Alert 5 DEFON 3"
+	message = "Accelerated growth of Biohazard Alert Level 5. DEFCON protocol engaged. Code Red is activated."
+
+/datum/command_alert/blob_defcon_2
+	name = "Biohazard Alert (level 5) DEFCON 2"
+	alert_title = "Biohazard Alert 5 DEFON 2"
+	message = "Accelerated growth of Biohazard Alert Level 5. Additional DEFCON provisions engaged. Additional reinforcements available. Cyborg units can switch a new module."
+
+/datum/command_alert/blob_defcon_1
+	name = "Biohazard Alert (level 5) DEFCON 1"
+	alert_title = "Biohazard Alert 5 DEFON 1"
+	message = "Accelerated growth of Biohazard Alert Level 5. Terminal DEFCON provisions engaged. Increased access to all personnel. Additional equipment may be transfered from Communications Consoles."
 
 /// REVS
 
@@ -513,7 +528,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Anomaly Alert"
 
 /datum/command_alert/bluespace_anomaly/New(impact_area_name)
-	message = "Bluespace anomaly detected in the vicinity of [station_name()]. [impact_area_name || "An unknown area"] has been affected."
+	message = "Bluespace anomaly detected aboard [station_name()]. [impact_area_name ? "Areas somewhere in the vicinity of [impact_area_name] have" : "An unknown area has"] been affected."
 	..()
 
 //////////POWER DISABLED
@@ -542,7 +557,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Centcom Link Lost"
 	alert_title = "Automated Announcement"
 	alert = 'sound/AI/connection_lost.ogg'
-	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is be unable to be called or recalled until further notice."
+	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is unable to be called or recalled until further notice."
 
 /datum/command_alert/command_link_restored
 	name = "Centcom Link Restored"
@@ -725,3 +740,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Ancient Cryogenic Pod"
 	alert_title = "Abnormal Life Sign Report"
 	message = "An abnormal life sign has been detected in promiximity of the station. Long range scans determine signal to be human life. Approach with caution."
+
+/datum/command_alert/old_vendotron_crash
+	alert_title = "Odd Machine Debris"
+	message = "A large chunk of debris is on a collision course with your station. Moderate damage is expected at its current velocity. The nature of the debris is unknown, however our sensors are picking up what sounds like the faint jingling of coins."
+
+/datum/command_alert/old_vendotron_teleport
+	alert_title = "Warning - Unknown Bluespace Anom#ly Det%ct!$"
+
+/datum/command_alert/old_vendotron_teleport/announce()
+	message = "A bluespace tear of unknown origin is formi!g w£thi$ !$@ cu&ic met£#s o£ [station_name()] plea$e-BZZZZZZZT Come on down for fabulous, splendiferous, one of a kind goods at reasona#le pri$es! We'%e prac@ic£all% giving #$e@ away! All $ales a#$ fi@%l-BZZZT excercise caution and report any anomalous activity."
+	..()

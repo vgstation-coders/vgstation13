@@ -1,6 +1,6 @@
 /obj/structure/closet/statue
 	name = "statue"
-	desc = "An incredibly lifelike marble carving"
+	desc = "An incredibly lifelike marble carving."
 	icon = 'icons/obj/statue.dmi'
 	icon_state = "human_male"
 	density = 1
@@ -74,9 +74,10 @@
 	..()
 
 /obj/structure/closet/statue/Destroy()
-	..()
-
 	processing_objects.Remove(src)
+	for (var/atom/A in src)
+		qdel(A)
+	..()
 
 
 /obj/structure/closet/statue/proc/dissolve()
@@ -92,12 +93,13 @@
 	spawn(10)
 		for(var/i=1 to 5)
 			for(var/mob/living/L in contents)
-				L.adjustBruteLoss(60)
-				L.mutations |= M_NOCLONE
+				L.adjustBruteLoss(10)
+				if (L.health <= 0)
+					L.mutations |= M_NOCLONE
 
-				if(ishuman(L) && !(M_HUSK in L.mutations))
-					var/mob/living/carbon/human/H = L
-					H.ChangeToHusk()
+					if(ishuman(L) && !(M_HUSK in L.mutations))
+						var/mob/living/carbon/human/H = L
+						H.ChangeToHusk()
 				sleep(10)
 
 		dump_contents()
@@ -129,6 +131,7 @@
 		O.forceMove(src.loc)
 
 	for(var/mob/living/M in src)
+		M.timestopped = 0
 		M.forceMove(src.loc)
 		M.sdisabilities &= ~MUTE
 		M.take_overall_damage((M.health - health - 100),0) //any new damage the statue incurred is transfered to the mob
@@ -198,7 +201,7 @@
 	if (user)
 		user.gib()
 	dump_contents()
-	visible_message("<span class='warning'>[src] shatters into pieces!. </span>")
+	visible_message("<span class='warning'>[src] shatters into pieces! </span>")
 	qdel(src)
 
 /obj/structure/closet/statue/container_resist()

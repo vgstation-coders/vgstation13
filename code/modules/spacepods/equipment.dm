@@ -72,7 +72,7 @@
 
 /obj/item/device/spacepod_equipment/weaponry
 	name = "pod weapon"
-	desc = "You shouldn't be seeing this"
+	desc = "You shouldn't be seeing this."
 	icon = 'icons/pods/ship.dmi'
 	icon_state = "blank"
 	var/projectile_type
@@ -105,7 +105,7 @@
 
 /obj/item/device/spacepod_equipment/weaponry/laser
 	name = "\improper laser system"
-	desc = "A weak laser system for space pods, fires concentrated bursts of energy"
+	desc = "A weak laser system for space pods that fires concentrated bursts of energy."
 	icon_state = "pod_w_laser"
 	projectile_type = /obj/item/projectile/beam
 	shot_cost = 150
@@ -169,8 +169,8 @@
 			if(L.code == code)
 				L.toggle_lock()
 
-/obj/item/device/pod_key/attackby(var/obj/O, mob/user)
-	if(ismultitool(O))
+/obj/item/device/pod_key/attackby(var/obj/item/O, mob/user)
+	if(O.is_multitool(user))
 		code = input(user,"Enter a number:","Key Code",code) as num
 		return
 	.=..()

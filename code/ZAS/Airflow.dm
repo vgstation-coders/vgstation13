@@ -40,7 +40,7 @@ atom/movable/GotoAirflowDest(n)
 */
 
 /mob/var/tmp/last_airflow_stun = 0
-/mob/proc/airflow_stun()
+/mob/proc/airflow_stun(differential)
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
 		return FALSE
 	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
@@ -55,7 +55,7 @@ atom/movable/GotoAirflowDest(n)
 		return FALSE
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(5)
+	SetKnockdown(rand(differential/20,differential/10))
 	last_airflow_stun = world.time
 
 /mob/living/silicon/airflow_stun()
@@ -103,7 +103,7 @@ atom/movable/GotoAirflowDest(n)
 	return TRUE
 
 /mob/living/carbon/human/check_airflow_movable(n)
-	if(reagents.has_reagent(MEDCORES))
+	if(reagents.has_any_reagents(CORES))
 		return FALSE
 	return ..()
 
@@ -256,7 +256,7 @@ atom/movable/GotoAirflowDest(n)
 	var/groin_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_GROIN,"melee"))
 	apply_damage(groin_damage, BRUTE, LIMB_GROIN, 0, 0, used_weapon = "Airflow")
 
-	if((head_damage + chest_damage + groin_damage) > 15)
+	if(!(species.anatomy_flags & NO_BLOOD) && (head_damage + chest_damage + groin_damage) > 15)
 		var/turf/T = get_turf(src)
 		T.add_blood(src)
 		bloody_body(src)

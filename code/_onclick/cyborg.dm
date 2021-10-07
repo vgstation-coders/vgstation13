@@ -15,7 +15,7 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
-	if(incapacitated() || lockcharge)
+	if(incapacitated() || lockdown)
 		return
 
 	var/list/modifiers = params2list(params)
@@ -47,7 +47,7 @@
 		aicamera.captureimage(A, src)
 		return
 
-	if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A)))
+	if(invoke_event(/event/uattack, list("atom" = A)))
 		return
 
 	var/obj/item/W = get_active_hand()

@@ -201,6 +201,7 @@
 /obj/item/weapon/gun/energy/shotgun/Fire(atom/target, mob/living/user, params, reflex, struggle, use_shooter_turf)
 	if(..()) //gun successfully fired
 		pumped = FALSE
+		update_icon()
 		return TRUE
 
 /obj/item/weapon/gun/energy/shotgun/proc/pump(mob/M as mob)
@@ -208,6 +209,7 @@
 		if(power_supply.charge >= charge_cost)
 			playsound(src, 'sound/weapons/shotgunpump.ogg', 60, 1)
 			pumped = world.time
+			update_icon()
 		else
 			click_empty(M)
 
@@ -223,8 +225,22 @@
 /obj/item/weapon/gun/energy/shotgun/AltClick(mob/user)
 	if(is_holder_of(user, src) && !user.incapacitated())
 		mode = !mode
+		var/freq = 30000 + mode * 25000
+		user.playsound_local(user, 'sound/misc/click.ogg', 30, mode, freq, 0, 0, 0)
 		to_chat(user,"<span class='notice'>You flick the toggle into the [mode ? "SWEEPER" : "HUNTER"] position.</span>")
 		if(!mode)
 			projectile_type = "/obj/item/projectile/energy/electrode/fast"
 		else
 			projectile_type = "/obj/item/projectile/energy/electrode/scatter"
+			
+/obj/item/weapon/gun/energy/shotgun/update_icon()
+	..()
+	if(pumped)
+		var/image/pump_overlay = image("icon" = 'icons/obj/gun.dmi', "icon_state" = "eshotgun-pumped")
+		overlays += pump_overlay
+		gun_part_overlays += pump_overlay
+	else
+		for(var/image/ol in gun_part_overlays)
+			if(ol.icon_state == "eshotgun-pumped")
+				overlays -= ol
+				gun_part_overlays -= ol

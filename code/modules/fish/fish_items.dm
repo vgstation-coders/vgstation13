@@ -40,7 +40,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throw_speed = 3
 	throw_range = 7
 
-/obj/item/weapon/fishtools/fish_net/suicide_act(mob/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
+/obj/item/weapon/fishtools/fish_net/suicide_act(var/mob/living/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
 	visible_message("<span class='warning'>\The [user] places \the [src] on top of \his head, \his fingers tangled in the netting! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -66,7 +66,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throw_range = 7
 	attack_verb = list("scrubbed", "brushed", "scraped")
 
-/obj/item/weapon/fishtools/fish_tank_brush/suicide_act(mob/user)
+/obj/item/weapon/fishtools/fish_tank_brush/suicide_act(var/mob/living/user)
 	visible_message("<span class='warning'>\The [user] is vigorously scrubbing \himself raw with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
@@ -101,7 +101,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/fish
 	name = "fish"
-	desc = "A generic fish"
+	desc = "A generic fish."
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "fish"
 	throwforce = 1
@@ -136,7 +136,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	force = 3
 
 /obj/item/weapon/fish/shark/attackby(var/obj/item/O, var/mob/user)
-	if(istype(O, /obj/item/weapon/wirecutters))
+	if(istype(O, /obj/item/tool/wirecutters))
 		to_chat(user, "You rip out the teeth of \the [src]!")
 		new /obj/item/weapon/fish/toothless_shark(get_turf(src))
 		new /obj/item/stack/teeth/shark(get_turf(src), 10)
@@ -217,12 +217,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/lobster
 	name = "lobster"
-	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone, its innate anger and hatred is kept intact."
+	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone. Its innate anger and hatred is kept intact."
 	icon_state = "lobster"
 	icon = 'icons/obj/fish_items.dmi'
 
 /obj/item/weapon/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
-	if(iswirecutter(O))
+	if(O.is_wirecutter(user))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
@@ -232,7 +232,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/attackby(var/obj/item/O, var/mob/user) // extracting the meat from the tail, just makes normal lobster meat
-	if(iswirecutter(O))
+	if(O.is_wirecutter(user))
 		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
 		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		qdel(src)
@@ -242,12 +242,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/steamed_lobster_simple_uncracked // a cooked lobster without its shell cracked
 	name = "Steamed Lobster"
-	desc = "A steamed lobster, you can almost hear its screams. Its shell isnt cracked open yet"
+	desc = "A steamed lobster. You can almost hear its screams. Its shell isn't cracked open yet."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_simple"
 
 /obj/item/weapon/steamed_lobster_simple_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso, simple version
-	if(istype(O, /obj/item/weapon/wirecutters))
+	if(istype(O, /obj/item/tool/wirecutters))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
 		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple(get_turf(src))
 		qdel(src)
@@ -256,12 +256,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/steamed_lobster_deluxe_uncracked // a cooked lobster without its shell cracked, deluxe edition
 	name = "Steamed Lobster"
-	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred. Its shell isnt cracked open yet" //if anyones got a better desc im all ears
+	desc = "A steamed lobster, served with a side of melted butter and a slice of lemon. You can still feel its hatred. Its shell isn't cracked open yet." //if anyones got a better desc im all ears
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_deluxe"
 
 /obj/item/weapon/steamed_lobster_deluxe_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso
-	if(istype(O, /obj/item/weapon/wirecutters))
+	if(istype(O, /obj/item/tool/wirecutters))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
 		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe(get_turf(src))
 		qdel(src)

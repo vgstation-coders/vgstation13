@@ -33,6 +33,8 @@
 	special_role = MADMONKEY
 	logo_state = "monkey-logo"
 	greets = list(GREET_MASTER,GREET_DEFAULT,GREET_CUSTOM)
+	default_admin_voice = "Monkey King"
+	admin_voice_style = "rough"
 	var/countdown = 60
 
 datum/role/madmonkey/Greet(var/greeting,var/custom)
@@ -86,4 +88,4 @@ datum/role/madmonkey/Greet(var/greeting,var/custom)
 			antag.current.hud_used.countdown_display.overlays += I1
 			antag.current.hud_used.countdown_display.overlays += I2
 		else
-			antag.current.hud_used.countdown_hud()
+			antag.current.hud_used.countdown_monkey()

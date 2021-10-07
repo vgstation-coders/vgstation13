@@ -141,6 +141,22 @@
 			changetype=selected
 	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
 
+/obj/item/weapon/gun/energy/mouser
+	name = "mouser pistol"
+	desc = "This gun isn't Kafka-esque because it transforms people. It's Kafka-esque because it represents an indifferent faceless authority which subjugates the confused, disoriented common man."
+	icon_state = "mauser"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	fire_sound = 'sound/effects/stealthoff.ogg'
+	projectile_type = "/obj/item/projectile/mouse"
+	charge_cost = 100
+
+/obj/item/weapon/gun/energy/mouser/update_icon()
+	return
+	
+/obj/item/weapon/gun/energy/mouser/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/staff/sinterklaas
 	name = "staff of sinterklaas"
 	desc = "There's a knock on the door, a hard knock, a soft knock, there's a knock on the door, who could it be?"
@@ -269,6 +285,7 @@
 		"YOUR TIME HAS NOT COME, YET.",\
 		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 	playsound(src, get_sfx("soulstone"), 50,1)
+	H.dropBorers()
 	switch(raisetype)
 		if(RAISE_TYPE_ZOMBIE)
 			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(H), user, H)
@@ -380,7 +397,7 @@
 				else
 					var/turf/simulated/wall/W = target
 					W.dismantle_wall(1,1)
-			else if(istype(target, /turf/simulated/floor) || istype(target, /turf/simulated/shuttle))
+			else if(istype(target, /turf/simulated/floor) || isshuttleturf(target))
 				to_chat(user, "<span class='notice'>[src] fizzles quietly.</span>")
 				return
 			else
@@ -567,7 +584,7 @@
 
 obj/item/weapon/gun/energy/staff/focus
 	name = "mental focus"
-	desc = "An artifact that channels the will of the user into destructive bolts of force. If you aren't careful with it, you might poke someone's brain out.\n Has two modes: Single and AoE"
+	desc = "An artifact that channels the will of the user into destructive bolts of force. If you aren't careful with it, you might poke someone's brain out.\n Has two modes: Single and AoE."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "focus"
 	item_state = "focus"

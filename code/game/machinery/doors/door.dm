@@ -94,7 +94,7 @@ var/list/all_doors = list()
 	if (istype(AM, /obj/machinery/bot))
 		var/obj/machinery/bot/bot = AM
 
-		if (check_access(bot.botcard) && !operating)
+		if (check_access(bot.botcard) && !operating && SpecialAccess(AM))
 			open()
 
 		return
@@ -103,7 +103,7 @@ var/list/all_doors = list()
 		var/obj/mecha/mecha = AM
 
 		if (density)
-			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
+			if (mecha.occupant && !operating && SpecialAccess(mecha.occupant) && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
 			else if(!operating)
 				denied()
@@ -112,7 +112,7 @@ var/list/all_doors = list()
 		var/obj/structure/bed/chair/vehicle/vehicle = AM
 
 		if (density)
-			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
+			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && SpecialAccess(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]) && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 				if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
@@ -151,6 +151,9 @@ var/list/all_doors = list()
 		open()
 	else if(!operating)
 		denied()
+
+/obj/machinery/door/proc/SpecialAccess(var/atom/user)
+	return TRUE
 
 /obj/machinery/door/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
@@ -404,7 +407,7 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/requiresID()
 	return 1
 
-/obj/machinery/door/proc/update_nearby_tiles(var/turf/T)
+/obj/machinery/door/update_nearby_tiles(var/turf/T)
 	if(!SS_READY(SSair))
 		return 0
 

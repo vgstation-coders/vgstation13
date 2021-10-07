@@ -28,10 +28,12 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 var/list/card_swipe_sound = list('sound/effects/cardswipe1.ogg', 'sound/effects/cardswipe2.ogg')
 var/list/mop_sound = list('sound/effects/mop1.ogg', 'sound/effects/mop2.ogg', 'sound/effects/mop3.ogg', 'sound/effects/mop4.ogg', 'sound/effects/mop5.ogg')
 var/list/voice_human_sound = list('sound/misc/Vocal1.ogg','sound/misc/Vocal2.ogg','sound/misc/Vocal3.ogg','sound/misc/Vocal4.ogg','sound/misc/Vocal5.ogg')
+var/list/voice_vox_sound = list('sound/misc/voxvocal1.ogg','sound/misc/voxvocal2.ogg','sound/misc/voxvocal3.ogg','sound/misc/voxvocal4.ogg','sound/misc/voxvocal5.ogg')
 var/list/voice_silicon_sound = list('sound/misc/silicon-vocal1.ogg','sound/misc/silicon-vocal2.ogg','sound/misc/silicon-vocal3.ogg','sound/misc/silicon-vocal4.ogg','sound/misc/silicon-vocal5.ogg')
 var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W95_error.ogg', 'sound/machines/W98_error.ogg', 'sound/machines/W7_error.ogg')
 var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuckupstep2.ogg')
 var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jinglebell2.ogg', 'sound/items/jinglebell3.ogg')
+var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/disappear_2.ogg', 'sound/effects/disappear_3.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -86,9 +88,10 @@ var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jingleb
 
 		var/turf/player_turf = get_turf(player)
 
-		if (player_turf && turf_source && player_turf.z == turf_source.z)
-			if(get_dist(player_turf, turf_source) <= Dist)
-				player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel,wait)
+		for(var/z0 in GetOpenConnectedZlevels(turf_source))
+			if (player_turf && turf_source && player_turf.z == z0)
+				if(get_z_dist(player_turf, turf_source) <= Dist)
+					player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel,wait)
 
 var/const/FALLOFF_SOUNDS = 1
 var/const/SURROUND_CAP = 7
@@ -213,6 +216,8 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(mop_sound)
 			if ("voice-human")
 				soundin = pick(voice_human_sound)
+			if ("voice-vox")
+				soundin = pick(voice_vox_sound)
 			if ("voice-silicon")
 				soundin = pick(voice_silicon_sound)
 			if ("windows error")
@@ -221,5 +226,7 @@ var/const/SURROUND_CAP = 7
 				soundin = fuckup_step
 			if ("jinglebell")
 				soundin = jingle_sound
+			if ("disappear_sound")
+				soundin = pick(disappear_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

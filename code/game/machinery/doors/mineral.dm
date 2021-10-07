@@ -163,7 +163,7 @@
 
 /obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			TemperatureAct(100)
 	return ..()
@@ -253,6 +253,13 @@
 	hardness = 1.5
 	var/close_delay = 100
 	soundeffect = 'sound/effects/attackblob.ogg'
+
+/obj/machinery/door/mineral/resin/SpecialAccess(var/atom/user)
+	if (ismob(user))
+		var/mob/M = user
+		if (isalien(M))
+			return TRUE
+	return FALSE
 
 /obj/machinery/door/mineral/resin/TryToSwitchState(atom/user)
 	if(isalien(user) && !operating)
@@ -344,6 +351,13 @@
 	anim(location = loc,target = loc.loc,a_icon = 'icons/obj/doors/doorcult.dmi', flick_anim = "cultdoor_breakdown")
 	..()
 
+/obj/machinery/door/mineral/cult/SpecialAccess(var/atom/user)
+	if (ismob(user))
+		var/mob/M = user
+		if (isanycultist(M))
+			return TRUE
+	return FALSE
+
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)
 	if (!density && !operating && !(locate(/mob/living) in loc))
 		if (ismob(mover))
@@ -351,6 +365,9 @@
 			if (M.pulling && loc)
 				M.pulling.forceMove(loc)//so we don't stop pulling stuff when moving through cult doors
 		close()
+
+/obj/machinery/door/mineral/cult/attack_construct(var/mob/user)
+	return TryToSwitchState(user)
 
 /obj/machinery/door/mineral/cult/TryToSwitchState(atom/user)
 	if (ismob(user))

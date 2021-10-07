@@ -31,12 +31,14 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	force = 10
+	var/hurt_intent_stun_duration = 0.8 SECONDS
+	var/normal_stun_duration = 0.5 SECONDS
 
 /obj/item/weapon/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
-		user.Knockdown(8)
-		user.Stun(8)
+		user.Knockdown(hurt_intent_stun_duration)
+		user.Stun(hurt_intent_stun_duration)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -54,17 +56,17 @@
 		if(!..())
 			return
 		playsound(src, "swing_hit", 50, 1, -1)
-		if (M.stuttering < 8 && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
-			M.stuttering = 8
-		M.Stun(8)
-		M.Knockdown(8)
+		if (M.stuttering < hurt_intent_stun_duration && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
+			M.stuttering = hurt_intent_stun_duration
+		M.Stun(hurt_intent_stun_duration)
+		M.Knockdown(hurt_intent_stun_duration)
 		for(var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been beaten with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 	else
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
-		M.Stun(5)
-		M.Knockdown(5)
+		M.Stun(normal_stun_duration)
+		M.Knockdown(normal_stun_duration)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
@@ -72,11 +74,19 @@
 			M.LAssailant = null
 		else
 			M.LAssailant = user
+			M.assaulted_by(user)
 		src.add_fingerprint(user)
 
 		for(var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
+
+/obj/item/weapon/melee/classic_baton/daystick
+	name = "\improper Daystick"
+	desc = "The Daystick is named as such as a Judge would \"beat the daylights\" out of a target."
+	hurt_intent_stun_duration = 1.6 SECONDS
+	normal_stun_duration = 1 SECONDS
+	force = 15
 
 //Telescopic baton
 /obj/item/weapon/melee/telebaton
@@ -177,6 +187,7 @@
 				target.LAssailant = null
 			else
 				target.LAssailant = user
+				target.assaulted_by(user)
 		return
 	else
 		return ..()
@@ -240,10 +251,6 @@
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
-
-/obj/item/weapon/melee/bone_sword/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/bone_sword/New(atom/A, var/p_borer = null)
 	..(A)
