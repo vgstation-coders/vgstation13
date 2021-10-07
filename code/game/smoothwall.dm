@@ -30,8 +30,11 @@
 	if(!A)
 		return 0
 	if(is_type_in_list(A, canSmoothWith()))
-		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
-		if(src.mineral == A:mineral)
+		if(istype(A, turf/simulated/wall))
+			var/turf/simulated/wall/W = A
+			if(src.mineral == W.mineral)
+				return 1
+		else
 			return 1
 
 	return 0
