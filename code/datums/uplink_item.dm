@@ -776,7 +776,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/medical/symptomforger
 	name = "GNA Database Forger Disk"
 	desc = "A disk that looks almost exactly like a normal GNA disk, with the exception of being able to copy the symptom from any other normal one to splice into a disk. Splicing this in does not affect the disease, but instead creates a forged symptom onto the database, obscuring the original effect."
-	item = /obj/item/disk/disease/spoof
+	item = /obj/item/weapon/disk/disease/spoof
 	cost = 12
 	discounted_cost = 6
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
