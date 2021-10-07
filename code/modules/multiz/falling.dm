@@ -31,7 +31,11 @@
 		return
 
 	var/turf/bottom = null
+	var/depth = 0
 	for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+		depth++
+		if(depth > config.multiz_bottom_cap) // To stop getting caught on this in infinite loops
+			break
 
 	if(istype(bottom,/turf/space))
 		return
@@ -64,7 +68,11 @@
 			return
 
 		bottom = null
+		depth = 0
 		for(bottom = GetBelow(src); isopenspace(bottom); bottom = GetBelow(bottom))
+			depth++
+			if(depth > config.multiz_bottom_cap) // To stop getting caught on this in infinite loops
+				break
 
 		if(istype(bottom,/turf/space))
 			return
