@@ -2,14 +2,6 @@
 	name = "shuttle"
 	icon = 'icons/turf/shuttle.dmi'
 
-/obj/structure/shuttle/New(loc)
-	..(loc)
-	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
-		initialize()
-
-/obj/structure/shuttle/initialize()
-	relativewall_neighbours()
-
 /obj/structure/shuttle/window
 	name = "shuttle window"
 	icon = 'icons/obj/podwindows.dmi'

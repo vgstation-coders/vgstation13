@@ -30,7 +30,7 @@
 	if(!A)
 		return 0
 	if(is_type_in_list(A, canSmoothWith()))
-		if(istype(A, turf/simulated/wall))
+		if(istype(A, /turf/simulated/wall))
 			var/turf/simulated/wall/W = A
 			if(src.mineral == W.mineral)
 				return 1
@@ -88,9 +88,12 @@
 			for(var/atom/A in T)
 				A.relativewall()
 
-/turf/simulated/wall/New()
-	..()
+/turf/simulated/wall/New(loc)
+	..(loc)
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
 
+/turf/simulated/wall/initialize()
 	// SMOOTH US WITH OUR NEIGHBORS
 	relativewall()
 
