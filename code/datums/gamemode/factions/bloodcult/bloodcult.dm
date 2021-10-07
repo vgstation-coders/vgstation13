@@ -917,7 +917,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			if (!T)
 				message_admins("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
 				log_admin("Blood Cult: !ERROR! spawn_bloodstones() tried to select a null turf at [map.nameLong]. Debug info: i = [i], j = [j]")
-			else if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
+			else if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated)) || !isshuttleturf(T))
 				//Adding some blacklisted areas, specifically solars
 				if (!istype(T.loc,/area/solar) && is_type_in_list(T.loc,the_station_areas))
 					places_to_spawn += T

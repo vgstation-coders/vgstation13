@@ -231,7 +231,7 @@
 	if (!proximity_flag)
 		return 0
 	if (chewed)
-		if(ismob(A) || istype(A, /turf/unsimulated) || istype(A, /turf/simulated/shuttle) || istype(A, /obj/item/weapon/storage/))
+		if(ismob(A) || istype(A, /turf/unsimulated) || isshuttleturf(A) || istype(A, /obj/item/weapon/storage/))
 			return
 		target = A
 

@@ -16,7 +16,7 @@ job objectives = good stock market, shitty job objective completion = shitty eco
 Goal for now is to get the store itself working, however.
 */
 
-var/global/datum/store/centcomm_store=new
+var/global/datum/store/centcomm_store
 
 /datum/store
 	var/list/datum/storeitem/items=list()
@@ -25,12 +25,19 @@ var/global/datum/store/centcomm_store=new
 	var/obj/machinery/account_database/linked_db
 
 /datum/store/New()
-	for(var/itempath in typesof(/datum/storeitem) - /datum/storeitem/)
-		items["[itempath]"] = new itempath()
+	for(var/itempath in subtypesof(/datum/storeitem))
+		var/datum/storeitem/instance = new itempath()
+		var/obj/item/item_type = instance.typepath
+		var/item_icon = initial(item_type.icon)
+		var/item_icon_state = initial(item_type.icon_state)
+		instance.img = icon2base64(icon(item_icon, item_icon_state))
+		if(!items[instance.category])
+			items[instance.category] = list()
+		items[instance.category] += instance
+		CHECK_TICK
 
 /datum/store/proc/charge(var/mob/user,var/amount,var/datum/storeitem/item,var/obj/machinery/computer/merch/merchcomp)
 	if(!user)
-		//testing("No initial_account")
 		return 0
 	var/obj/item/weapon/card/card = user.get_card()
 	if(!card)
@@ -50,13 +57,20 @@ var/global/datum/store/centcomm_store=new
 				linked_db = DB
 				break
 
-/datum/store/proc/PlaceOrder(var/mob/living/user, var/itemID, var/obj/machinery/computer/merch/merchcomp)
+/datum/store/proc/PlaceOrder(var/mob/living/user, var/itemName, var/obj/machinery/computer/merch/merchcomp)
 	// Get our item, first.
-	var/datum/storeitem/item = items["[itemID]"]
+	var/datum/storeitem/item
+	for(var/category in items)
+		var/list/category_items = items[category]
+		for(var/datum/storeitem/i in category_items)
+			if(i.name == itemName)
+				item = i
+				break
+	ASSERT(item)
 	if(item.stock == 0)
 		to_chat(user, "<span class='warning'>That item is sold out.</span>")
 		return
-	if(!item.available_to_user(user, merchcomp))
+	if(!item.available_to_user(user))
 		to_chat(user, "<span class='warning'>That item is not available to you.</span>")
 		return
 	// Try to deduct funds.

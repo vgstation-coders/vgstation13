@@ -27,7 +27,7 @@
 "aF" = (/obj/machinery/atmospherics/unary/tank/air{starting_volume = 3200},/obj/effect/decal/warning_stripes{dir = 2; icon_state = "warning"; tag = "icon-warning"},/turf/simulated/floor/engine{name = "air floor"; nitrogen = 10580; oxygen = 2644},/area/shuttle/lightship/start)
 "aH" = (/obj/structure/table,/obj/abstract/map/spawner/maint,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "aJ" = (/obj/structure/closet/crate,/obj/item/clothing/under/rank/maintenance_tech,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"aL" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_s6"},/area/shuttle/lightship/start)
+"aL" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/shuttle/lightship/start)
 "aV" = (/obj/effect/decal/warning_stripes{icon_state = "air"},/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 5; tag = "icon-intact (NORTHWEST)"},/turf/simulated/floor/engine{name = "air floor"; nitrogen = 10580; oxygen = 2644},/area/shuttle/lightship/start)
 "aW" = (/obj/machinery/atmospherics/pipe/manifold4w/general/hidden,/obj/machinery/meter,/turf/simulated/floor/engine{name = "air floor"; nitrogen = 10580; oxygen = 2644},/area/shuttle/lightship/start)
 "aX" = (/obj/machinery/light{dir = 4},/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 9; tag = "icon-intact (NORTHWEST)"},/turf/simulated/floor/engine{name = "air floor"; nitrogen = 10580; oxygen = 2644},/area/shuttle/lightship/start)
@@ -52,12 +52,11 @@
 "bN" = (/obj/machinery/light{dir = 8; icon_state = "ltube1"},/turf/simulated/floor{dir = 8; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "bS" = (/obj/machinery/door/airlock/glass,/obj/structure/cable,/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "bW" = (/obj/machinery/seed_extractor,/turf/simulated/floor{dir = 8; icon_state = "whitegreen"},/area/shuttle/lightship/start)
-"bX" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/shuttle/lightship/start)
+"bX" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall/shuttle,/area/shuttle/lightship/start)
 "bY" = (/obj/machinery/atmospherics/pipe/manifold/general/hidden,/turf/simulated/floor/engine{name = "air floor"; nitrogen = 10580; oxygen = 2644},/area/shuttle/lightship/start)
 "bZ" = (/obj/machinery/light{dir = 4},/obj/structure/closet/emcloset,/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
 "ca" = (/obj/machinery/cooking/deepfryer,/turf/simulated/floor{dir = 4; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "cc" = (/obj/structure/closet/walllocker/defiblocker/west,/turf/simulated/floor{dir = 8; icon_state = "whiteblue"},/area/shuttle/lightship/start)
-"cd" = (/turf/simulated/shuttle/wall{icon_state = "swallc3"},/area/shuttle/lightship/start)
 "ce" = (/turf/simulated/floor{dir = 4; icon_state = "whitebluecorner"},/area/shuttle/lightship/start)
 "cf" = (/obj/machinery/recharger/defibcharger/wallcharger{pixel_y = 32},/turf/simulated/floor{dir = 1; icon_state = "whiteblue"},/area/shuttle/lightship/start)
 "cg" = (/obj/machinery/chem_dispenser,/turf/simulated/floor{dir = 5; icon_state = "whiteblue"},/area/shuttle/lightship/start)
@@ -72,7 +71,6 @@
 "cF" = (/turf/simulated/floor{dir = 8; icon_state = "whiteblue"},/area/shuttle/lightship/start)
 "cI" = (/turf/simulated/floor{icon_state = "cmo"},/area/shuttle/lightship/start)
 "cJ" = (/obj/machinery/chem_master,/turf/simulated/floor{dir = 4; icon_state = "whiteblue"},/area/shuttle/lightship/start)
-"cL" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f10"},/area/shuttle/lightship/start)
 "cP" = (/obj/machinery/light{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "cQ" = (/obj/structure/bed/chair/wood/normal{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "cR" = (/obj/structure/table/woodentable,/obj/item/trash/plate,/obj/item/weapon/kitchen/utensil/spoon,/obj/item/weapon/kitchen/utensil/fork,/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
@@ -83,7 +81,7 @@
 "da" = (/obj/structure/door_assembly,/turf/simulated/floor{dir = 10; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "db" = (/obj/structure/door_assembly,/turf/simulated/floor{dir = 5; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "dc" = (/obj/structure/table,/obj/machinery/light_switch{dir = 1; pixel_x = 7; pixel_y = 3},/obj/machinery/door_control{id_tag = "lightship_shutter_window"; name = "Hull Window Shutters"; pixel_x = -4; pixel_y = -2; range = 40},/obj/machinery/door_control{id_tag = "lightship_doorbolts"; name = "External Airlock Bolts"; normaldoorcontrol = 1; pixel_x = -4; pixel_y = 7; range = 40; specialfunctions = 4},/turf/simulated/floor{dir = 10; icon_state = "whitegreen"},/area/shuttle/lightship/start)
-"dh" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_s10"},/area/shuttle/lightship/start)
+"dh" = (/obj/structure/shuttle/diag_wall/smooth{dir = 1},/turf/space,/area/shuttle/lightship/start)
 "dj" = (/obj/structure/closet/emcloset,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "dk" = (/obj/machinery/light{dir = 1},/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "dl" = (/obj/machinery/vending/engineering{req_access = null},/turf/simulated/floor{dir = 9; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
@@ -199,7 +197,6 @@
 "gK" = (/obj/structure/bed/chair/comfy/black{dir = 1},/turf/simulated/floor{dir = 5; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "gM" = (/obj/machinery/door/airlock/glass,/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "gR" = (/turf/simulated/floor{dir = 4; icon_state = "whiteyellowcorner"},/area/shuttle/lightship/start)
-"gS" = (/turf/simulated/shuttle/wall{dir = 2; icon_state = "swall1"},/area/shuttle/lightship/start)
 "gT" = (/obj/structure/bed,/obj/item/weapon/bedsheet/purple,/turf/simulated/floor/carpet,/area/shuttle/lightship/start)
 "gU" = (/obj/structure/closet{icon_closed = "cabinet_closed"; icon_opened = "cabinet_open"; icon_state = "cabinet_closed"},/obj/abstract/map/spawner/safe/clothing,/obj/abstract/map/spawner/safe/any,/turf/simulated/floor/carpet,/area/shuttle/lightship/start)
 "gV" = (/obj/structure/bed,/obj/item/weapon/bedsheet/rainbow,/turf/simulated/floor/carpet,/area/shuttle/lightship/start)
@@ -220,25 +217,20 @@
 "hw" = (/obj/machinery/shield_gen,/obj/structure/extinguisher_cabinet{pixel_y = -30},/turf/simulated/floor/bluegrid,/area/shuttle/lightship/start)
 "hy" = (/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "hz" = (/obj/machinery/light,/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
-"hA" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/shuttle/lightship/start)
 "hB" = (/obj/structure/bookcase/manuals/engineering,/turf/simulated/floor{dir = 8; icon_state = "whiteyellowcorner"},/area/shuttle/lightship/start)
 "hC" = (/obj/machinery/light,/turf/simulated/floor{dir = 8; icon_state = "whiteyellowcorner"},/area/shuttle/lightship/start)
 "hE" = (/turf/simulated/floor{dir = 8; icon_state = "whiteyellowcorner"},/area/shuttle/lightship/start)
 "hF" = (/obj/structure/table,/obj/structure/bedsheetbin,/turf/simulated/floor{dir = 8; icon_state = "whiteyellowcorner"},/area/shuttle/lightship/start)
-"hG" = (/turf/simulated/shuttle/wall{icon_state = "swall2"},/area/shuttle/lightship/start)
 "hH" = (/obj/structure/bed,/obj/item/weapon/bedsheet/red,/turf/simulated/floor/carpet,/area/shuttle/lightship/start)
 "hI" = (/obj/structure/table/woodentable,/obj/item/device/flashlight/lamp/green,/turf/simulated/floor/carpet,/area/shuttle/lightship/start)
 "hJ" = (/obj/structure/bed,/obj/item/weapon/bedsheet/yellow,/turf/simulated/floor/carpet,/area/shuttle/lightship/start)
 "hL" = (/obj/machinery/door/airlock/external,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"hN" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/shuttle/lightship/start)
 "hP" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"hQ" = (/turf/simulated/shuttle/wall{icon_state = "swall15"},/area/shuttle/lightship/start)
 "hR" = (/obj/machinery/door/airlock/maintenance_hatch,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "hT" = (/obj/structure/closet/emcloset,/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
 "hU" = (/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
 "hV" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
 "hW" = (/obj/machinery/r_n_d/fabricator/circuit_imprinter,/turf/simulated/floor{icon_state = "whitepurple"},/area/shuttle/lightship/start)
-"hX" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/shuttle/lightship/start)
 "hZ" = (/obj/structure/closet/coffin,/obj/effect/landmark/corpse/engineer,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "ia" = (/obj/structure/closet/coffin,/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "ib" = (/obj/machinery/door/airlock/external{id_tag = "lightship_doorbolts"},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
@@ -257,20 +249,16 @@
 "ir" = (/obj/structure/rack,/obj/item/clothing/under/rank/engine_tech,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "is" = (/obj/machinery/suit_storage_unit/standard_unit,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "it" = (/obj/machinery/suit_storage_unit/standard_unit,/obj/machinery/light,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"iu" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_s5"},/area/shuttle/lightship/start)
-"iv" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/shuttle/lightship/start)
+"iu" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/shuttle/lightship/start)
 "ix" = (/obj/machinery/door/airlock/external{id_tag = "lightship_doorbolts"},/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
-"iz" = (/turf/simulated/shuttle/wall,/area/shuttle/lightship/start)
-"iA" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/shuttle/lightship/start)
 "iB" = (/mob/living/simple_animal/hostile/giant_spider/spiderling/salk,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "iC" = (/obj/structure/bed/chair/comfy/black,/turf/simulated/floor{dir = 9; icon_state = "whitered"},/area/shuttle/lightship/start)
 "iD" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "iE" = (/obj/structure/closet/crate/critter,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"iF" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/shuttle/lightship/start)
-"iG" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/shuttle/lightship/start)
+"iG" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/shuttle/lightship/start)
 "js" = (/obj/machinery/newscaster{dir = 4; pixel_x = -28},/turf/simulated/floor{dir = 1; icon_state = "whiteredcorner"},/area/shuttle/lightship/start)
 "jv" = (/turf/space,/area/shuttle/lightship/start)
-"jz" = (/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall2"; tag = "icon-swall2"},/area/shuttle/lightship/start)
+"jz" = (/turf/simulated/wall/shuttle,/area/shuttle/lightship/start)
 "nU" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{one_way = 1},/obj/machinery/door/poddoor{id_tag = "lightship_shutter_window"; name = "Hull Window Shutters"},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "uW" = (/obj/docking_port/shuttle,/obj/machinery/door/airlock/external{id_tag = "lightship_doorbolts"},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "xR" = (/obj/machinery/computer/rdconsole/pod{name = "Lightspeed Ship R&D Console"},/turf/simulated/floor{icon_state = "whitepurple"},/area/shuttle/lightship/start)
@@ -287,32 +275,32 @@
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaUGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaabaehNhRhNhNhNhNhNhNhNhNhNhNdhaaaaaajzuWSSjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaagacahdUajdjalamanaoapaqararhAaaaaaaawhkUZnUaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaagacatdUdUdUdUdUdUdUauavaraqhAaaaaaahAaxUZhAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaagafhNivhNhNhNhNivhNhNhNhNhNiAaaaLhNiFixixiFcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaabyaLiFaFaFaFaFhAaHaHbIaJaHhAaLiAikhUhUhUilhXcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaLbXiAayaVaWbYaXhAdUdUdUdUaHhXiFiAifhUhUhUbZhAcdhNcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaLhQbXhNbibjbkivhNiFhRhNhNivhNiFhNhXhNhNhNczhNiAhNhNiFcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaLiFiAbsbtbubvbwhAbxgRgRbAbBgSbDhIbFhAcBdBdBdTdHhAezfHfUcddKivcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aahXhNiAbNhyhyhyeDhPgIgIgIgIgIhohphphqhAbWhyhyhycagScchycecfcghXiFhNcLaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aLiFhNiAckclfBfBcohzhEhEhEhEhEhGcwgUcyhAdzhyhyhycDgMcFcIEWcIcJhXhNhNiFeteMivhNhNcLaaaaaaaaaaaaaaaa
-hXhNhNhQhNhNgkhNhNivhNhNhNivgkiFhNhNhNiAcPcQcRdAcThGcVhycXhycYhAdadbdcesfdhXhNhNiFdKhNivhNhNhNdhaa
-gSFXdkgSdldmdnaddpeBdrdrdrhAfndudvdwdxhPdzfmfpdAeShAdDcIhycIdFgSdbeugKeueshPdJdMdLdMdNhAdPdQdRgSaa
-ibdUdUibdVdWfBaZdYdZdrdrdrhAeXfqhyfFfagMeuehiiejekhAeleoeoeoepgMeuesaieseugMevgagagaexhAjshyeAipaa
-dKdUdUdKdVbmeEeFeGeHdrdrdrhAeIhyhyhyfahXhNhNhPhNhNhQhNgMhPhNhNhNhNhNhNhNhNiAhyfVfVfVhyhPeREkeTeUaa
-ibdUdUibdVbreVeVeWeBdrdrdrhAeXeYhyfnfagMhphphphpffhAfhhUfRhUhUgMfnfqakfqfngMfrfsfsfsftfueRhyfvfEaa
-hGIUfyhGfzfAfBfCfDdZdrdrdrhAfFfGfGfIfJhPhphpfMfNSvhAfOfRhUfRfShGfqiCfWfnfXhPfZxRgbhWgchGgegfgghGaa
-hXhNhNhQhNhNgMhNhNiFhNhNhNiFgkivhNhNhNiAgogpgqfNhqgSgthUfRhUgvhAgxgyasZqgAhXhNhNivdKhNiFhNhNhNiGaa
-iuivhNiAgHgIgIgIhyhygRgRgRbAgRgSgTgUgVhAhpgpgWhphpbShUfRhUfRhahXhNhNiveteMiFhNhNiGaaaaaaaaaaaaaaaa
-aahXhNiAhghhhihjhkhPhmhmhmhmhmhohphphqhAhrhphphphthGhvhvhwhahahXivhNiGjvaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaiuiviAhyhmhmhmhzhAhBhChEhEhFhGhHhIhJhAhNhNhNhLhNhQhNhNhNivdKiFiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaiuhQhNhNhNhNiviFhNhNhRhNhNiFhNivhNiAhThUhVhUhUhXhNhNiviGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaiuhNivhZiahAaHdUdUdUdUdUieaHhXiviAifhUhUhUighXivhNiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaiuhNihhAdUdUSqdUdUijdUdUhAiuiAikhUhUhUilhXiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaimaeiviziohAdUiqiririsitisishAaaiuhNivSSSSiviGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaimaciAdUdUizhNhNhNhNhNhNhNhNiAaaaaaahAaxUZhAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaimaciAdUiBiodUdUioiDdUdUioiEhAaaaaaaazhkUZazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaabafiFhRhNhNhNhNhNhNhNhNhNhNiGaaaaaagSSSSSgSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabaejzhRjzjzjzjzjzjzjzjzjzjzdhaaaaaajzuWSSjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaagacahdUajdjalamanaoapaqararjzaaaaaaawhkUZnUaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaagacatdUdUdUdUdUdUdUauavaraqjzaaaaaajzaxUZjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaagafjzjzjzjzjzjzjzjzjzjzjzjzjzaaaLjzjzixixjzdhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaabyaLjzaFaFaFaFjzaHaHbIaJaHjzaLjzikhUhUhUiljzdhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaLbXjzayaVaWbYaXjzdUdUdUdUaHjzjzjzifhUhUhUbZjzjzjzdhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaLjzbXjzbibjbkjzjzjzhRjzjzjzjzjzjzjzjzjzjzczjzjzjzjzjzdhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaLjzjzbsbtbubvbwjzbxgRgRbAbBjzbDhIbFjzcBdBdBdTdHjzezfHfUjzdKjzdhaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aajzjzjzbNhyhyhyeDhPgIgIgIgIgIhohphphqjzbWhyhyhycajzcchycecfcgjzjzjzdhaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aLjzjzjzckclfBfBcohzhEhEhEhEhEjzcwgUcyjzdzhyhyhycDgMcFcIEWcIcJjzjzjzjzeteMjzjzjzdhaaaaaaaaaaaaaaaa
+jzjzjzjzjzjzgkjzjzjzjzjzjzjzgkjzjzjzjzjzcPcQcRdAcTjzcVhycXhycYjzdadbdcesfdjzjzjzjzdKjzjzjzjzjzdhaa
+jzFXdkjzdldmdnaddpeBdrdrdrjzfndudvdwdxhPdzfmfpdAeSjzdDcIhycIdFjzdbeugKeueshPdJdMdLdMdNjzdPdQdRjzaa
+ibdUdUibdVdWfBaZdYdZdrdrdrjzeXfqhyfFfagMeuehiiejekjzeleoeoeoepgMeuesaieseugMevgagagaexjzjshyeAipaa
+dKdUdUdKdVbmeEeFeGeHdrdrdrjzeIhyhyhyfajzjzjzhPjzjzjzjzgMhPjzjzjzjzjzjzjzjzjzhyfVfVfVhyhPeREkeTeUaa
+ibdUdUibdVbreVeVeWeBdrdrdrjzeXeYhyfnfagMhphphphpffjzfhhUfRhUhUgMfnfqakfqfngMfrfsfsfsftfueRhyfvfEaa
+jzIUfyjzfzfAfBfCfDdZdrdrdrjzfFfGfGfIfJhPhphpfMfNSvjzfOfRhUfRfSjzfqiCfWfnfXhPfZxRgbhWgcjzgegfggjzaa
+jzjzjzjzjzjzgMjzjzjzjzjzjzjzgkjzjzjzjzjzgogpgqfNhqjzgthUfRhUgvjzgxgyasZqgAjzjzjzjzdKjzjzjzjzjziGaa
+iujzjzjzgHgIgIgIhyhygRgRgRbAgRjzgTgUgVjzhpgpgWhphpbShUfRhUfRhajzjzjzjzeteMjzjzjziGaaaaaaaaaaaaaaaa
+aajzjzjzhghhhihjhkhPhmhmhmhmhmhohphphqjzhrhphphphtjzhvhvhwhahajzjzjziGjvaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaiujzjzhyhmhmhmhzjzhBhChEhEhFjzhHhIhJjzjzjzjzhLjzjzjzjzjzjzdKjziGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaiujzjzjzjzjzjzjzjzjzhRjzjzjzjzjzjzjzhThUhVhUhUjzjzjzjziGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaiujzjzhZiajzaHdUdUdUdUdUieaHjzjzjzifhUhUhUigjzjzjziGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaiujzihjzdUdUSqdUdUijdUdUjziujzikhUhUhUiljziGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaimaejzjziojzdUiqiririsitisisjzaaiujzjzSSSSjziGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaimacjzdUdUjzjzjzjzjzjzjzjzjzjzaaaaaajzaxUZjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaimacjzdUiBiodUdUioiDdUdUioiEjzaaaaaaazhkUZazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabafjzhRjzjzjzjzjzjzjzjzjzjziGaaaaaajzSSSSjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}

@@ -13,7 +13,7 @@ export const MechaControlConsole = (props, context) => {
       width={600}
       height={460}>
       <Window.Content scrollable>
-        <Mechas mechas={mechas}/>
+        <Mechas mechas={mechas} />
       </Window.Content>
     </Window>
   );
@@ -21,8 +21,8 @@ export const MechaControlConsole = (props, context) => {
 
 const Mechas = (props, context) => {
   const { mechas } = props;
-  const [ messageMechas, setMessageMechas] = useLocalState(context, 'messageMechas', []);
-  const [ messageText, setMessageText ] = useLocalState(context, 'messageText', '');
+  const [messageMechas, setMessageMechas] = useLocalState(context, 'messageMechas', []);
+  const [messageText, setMessageText] = useLocalState(context, 'messageText', '');
 
   const { act } = useBackend(context);
   if (!mechas.length) {
@@ -40,9 +40,9 @@ const Mechas = (props, context) => {
         buttons={(
           <>
             <Button
-            icon='envelope'
-            content='Message'
-            onClick={() => setMessageMechas(messageMechas.concat(mecha.ref))} />
+              icon="envelope"
+              content="Message"
+              onClick={() => setMessageMechas(messageMechas.concat(mecha.ref))} />
             <Button.Confirm
               icon={mecha.status ? 'unlock' : 'lock'}
               color={mecha.status ? 'good' : 'default'}
@@ -51,52 +51,51 @@ const Mechas = (props, context) => {
                 ref: mecha.ref,
               })} />
             <Button.Confirm
-              icon='bomb'
-              content='Overload Beacon'
-              color='bad'
+              icon="bomb"
+              content="Overload Beacon"
+              color="bad"
               onClick={() => act('shock', {
                 ref: mecha.ref,
               })} />
           </>
         )}>
-        {messageMechas.includes(mecha.ref) ?
-            <Modal align='center'>
-                Send Message
-                <Input
-                    value={messageText}
-                    placeholder='Enter Message'
-                    onInput={(e, value) => setMessageText(value)}
-                    onChange={(e, value) => {
-                        if(messageText) {
-                          act('message', { 
-                              mechamessage: messageText,
-                              ref: mecha.ref
-                          })
-                        }
-                        setMessageText('')
-                        setMessageMechas(messageMechas.filter(m => { return m !== mecha.ref }))
-                     }} />
+        {messageMechas.includes(mecha.ref)
+          ? <Modal align="center">
+            Send Message
+            <Input
+              value={messageText}
+              placeholder="Enter Message"
+              onInput={(e, value) => setMessageText(value)}
+              onChange={(e, value) => {
+                if (messageText) {
+                  act('message', { 
+                    mechamessage: messageText,
+                    ref: mecha.ref,
+                  });
+                }
+                setMessageText('');
+                setMessageMechas(messageMechas.filter(m => { return m !== mecha.ref; }));
+              }} />
             </Modal>
-            : ''
-        }
-        <Flex align='center' justify='space-evenly'>
+          : ''}
+        <Flex align="center" justify="space-evenly">
           <Flex.Item>
             <Box
-              as='img'
+              as="img"
               src={`data:image/jpeg;base64,${mecha.mechaimage}`}
-              height='80px'
-              width='80px'
-              mx='5px'
+              height="80px"
+              width="80px"
+              mx="5px"
               style={{
                 '-ms-interpolation-mode': 'nearest-neighbor',
               }}
 
             />
           </Flex.Item>
-          <Flex.Item align='stretch'><Divider vertical hidden={false}/></Flex.Item>
+          <Flex.Item align="stretch"><Divider vertical hidden={false} /></Flex.Item>
           <Flex.Item>
             <LabeledList>
-              <LabeledList.Item label='Integrity'>
+              <LabeledList.Item label="Integrity">
                 <Box color={mecha.health <= 30
                   ? 'bad'
                   : mecha.health <= 70
@@ -107,7 +106,7 @@ const Mechas = (props, context) => {
                     : 'Not Functional'}
                 </Box>
               </LabeledList.Item>
-              <LabeledList.Item label='Cell Charge'>
+              <LabeledList.Item label="Cell Charge">
                 <Box color={mecha.charge <= 30
                   ? 'bad'
                   : mecha.charge <= 70
@@ -118,16 +117,16 @@ const Mechas = (props, context) => {
                     : 'Not Found'}
                 </Box>
               </LabeledList.Item>
-              <LabeledList.Item label='Pilot'>
+              <LabeledList.Item label="Pilot">
                 {mecha.pilot}
               </LabeledList.Item>
-              <LabeledList.Item label='Location'>
+              <LabeledList.Item label="Location">
                 {mecha.location}
               </LabeledList.Item>
-              <LabeledList.Item label='Active Module'>
+              <LabeledList.Item label="Active Module">
                 {mecha.active}
               </LabeledList.Item>
-              <LabeledList.Item label='Status'>
+              <LabeledList.Item label="Status">
                 <Box color={mecha.status ? 'average' : 'default'}>
                   {mecha.status ? 'Locked Down' : 'Functional'}
                 </Box>

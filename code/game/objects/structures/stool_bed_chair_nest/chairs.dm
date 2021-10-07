@@ -418,7 +418,7 @@
 	desc = "Looks really comfy."
 	sheet_amt = 2
 	anchored = 1
-	can_rotate = FALSE
+	can_rotate = TRUE
 	color = null
 
 // layer stuff
@@ -611,7 +611,8 @@
 	desc = "A reinforced chair that's firmly secured to the ground."
 	icon_state = "shuttleseat_neutral"
 	anchored = 1
-	can_rotate = FALSE
+	can_rotate = TRUE
+	ghost_can_rotate = TRUE
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
 	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
@@ -645,9 +646,6 @@
 			qdel(src)
 		return
 	..()
-
-/obj/structure/bed/chair/shuttle/spin(var/mob/M)
-	to_chat(M,"<span class='warning'>\The [src] is firmly secured to \the [loc], you cannot spin it.</span>")
 
 /obj/structure/bed/chair/shuttle/New()
 	..()
