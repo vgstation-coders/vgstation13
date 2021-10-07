@@ -205,7 +205,7 @@
 			"<span class='notice'>With one strong swing, the rotting [src] crumbles away under \the [W].</span>")
 			src.dismantle_wall(1)
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been broken after rotting by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -245,7 +245,7 @@
 				user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
 				"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
-				var/pdiff = performWallPressureCheck(src.loc)
+				var/pdiff = performWallPressureCheck(src)
 				if(pdiff)
 					investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 					message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -267,7 +267,7 @@
 			user.visible_message("<span class='warning'>[user] slices through \the [src]'s outer plating.</span>", \
 			"<span class='notice'>You slice through \the [src]'s outer plating.</span>", \
 			"<span class='warning'>You hear welding noises.</span>")
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -288,7 +288,7 @@
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			dismantle_wall()
 
-			var/pdiff = performWallPressureCheck(src.loc)
+			var/pdiff = performWallPressureCheck(src)
 			if(pdiff)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 				message_admins("\The [src] with a pdiff of [pdiff] has been drilled through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
@@ -347,7 +347,7 @@
 	F.burn_tile()
 	F.icon_state = "[cultwall ? "cultwall_thermite" : "wall_thermite"]"
 
-	var/pdiff = performWallPressureCheck(src.loc)
+	var/pdiff = performWallPressureCheck(src)
 	if(pdiff)
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been thermited through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has been thermited by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
