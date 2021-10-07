@@ -1152,7 +1152,7 @@ proc/process_adminbus_teleport_locs()
 /area/holodeck
 	name = "\improper Holodeck"
 	icon_state = "Holodeck"
-	dynamic_lighting = 1
+	dynamic_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 	jammed = SUPER_JAMMED
