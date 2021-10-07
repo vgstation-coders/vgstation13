@@ -66,6 +66,11 @@
 	layer = TURF_LAYER
 	anchored = 1
 
+/obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group)
+		return 0
+	return !density
+
 /obj/structure/shuttle/diag_wall/ex_act(severity)
 	return
 
