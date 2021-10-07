@@ -39,6 +39,14 @@
 
 	makes_noise = 1
 
+/obj/machinery/door/unpowered/shuttle/New(loc)
+	..(loc)
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+/obj/machinery/door/unpowered/shuttle/initialize()
+	relativewall_neighbours()
+
 /obj/machinery/door/unpowered/shuttle/cultify()
 	new /obj/machinery/door/mineral/wood(loc)
 	..()
