@@ -773,6 +773,14 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
+/datum/uplink_item/jobspecific/medical/symptomforger
+	name = "GNA Database Forger Disk"
+	desc = "A disk that looks almost exactly like a normal GNA disk, with the exception of being able to copy the symptom from any other normal one to splice into a disk. Splicing this in does not affect the disease, but instead creates a forged symptom onto the database, obscuring the original effect."
+	item = /obj/item/disk/disease/spoof
+	cost = 12
+	discounted_cost = 6
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
 /datum/uplink_item/jobspecific/medical/syndietape_viro
 	name = "Syndicate Biohazard Tape"
 	desc = "A length of biohazard tape coated in an engineered bacterium that forcibly ejects explosive goo when disturbed, but can be handled safely with latex gloves. Can be used 3 times."

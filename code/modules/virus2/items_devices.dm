@@ -447,7 +447,7 @@ var/list/virusdishes = list()
 /obj/item/weapon/storage/lockbox/diskettebox/syndisease/New()
 	..()
 	new /obj/item/weapon/disk/disease/invisible(src)
-	new /obj/item/weapon/disk/disease/spoof(src)
+	new /obj/item/weapon/disk/disease/spoof/premade(src)
 
 	var/list/potential_deadly_symptoms = list()
 
@@ -472,7 +472,7 @@ var/list/virusdishes = list()
 /obj/item/weapon/disk/disease/spoof
 	desc = "A disk for storing the structure of a pathogen's Glycol Nucleic Acid pertaining to a specific symptom. <span class='warning'>This one has some strange wiring on its back.</span>"
 
-/obj/item/weapon/disk/disease/spoof/New()
+/obj/item/weapon/disk/disease/spoof/premade/New()
 	..()
 	var/list/potential_nice_symptoms = list()
 
