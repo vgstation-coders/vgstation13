@@ -520,7 +520,7 @@ Class Procs:
 		if(icon_state_open)	//don't need to reset the icon_state if it was never changed
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
-	if(toggleitem.is_screwdriver(user))
+	if(toggleitem?.is_screwdriver(user))
 		toggleitem.playtoolsound(loc, 50)
 	update_icon()
 	return 1
