@@ -1,5 +1,5 @@
 /turf/simulated/wall/shuttle
-	icon_state = "wall1"
+	icon_state = "swall0"
 	explosion_block = 2
 	icon = 'icons/turf/shuttle.dmi'
 	thermal_conductivity = 0.05
@@ -13,7 +13,6 @@
 		/turf/simulated/wall/shuttle,
 		/obj/machinery/door/unpowered/shuttle,
 		/obj/structure/shuttle,
-		/obj/structure/grille,
 	)
 	return smoothables
 
@@ -44,8 +43,11 @@
 	return
 
 /turf/simulated/wall/shuttle/black
-	icon_state = "wall3"
+	icon_state = "bswall0"
 	walltype = "bswall"
+
+/turf/simulated/wall/shuttle/unsmoothed
+	icon_state = "wall1"
 
 /turf/simulated/wall/shuttle/unsmoothed/relativewall()
 	return
@@ -65,6 +67,11 @@
 	plane = TURF_PLANE
 	layer = TURF_LAYER
 	anchored = 1
+
+/obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group)
+		return 0
+	return !density
 
 /obj/structure/shuttle/diag_wall/ex_act(severity)
 	return
