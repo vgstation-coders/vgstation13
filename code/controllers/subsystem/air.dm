@@ -297,27 +297,25 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 			merge(A.zone,B.zone)
 			return
 
-	var/a_to_b = get_dir(A,B)
-	var/b_to_a = get_dir(B,A)
 
 	if(!A.connections)
-		A.connections = new
+		A.connections = list()
 	if(!B.connections)
-		B.connections = new
+		B.connections = list()
 
-	if(A.connections.get(a_to_b))
+	if(B in A.connections)
 		return
-	if(B.connections.get(b_to_a))
+	if(A in B.connections)
 		return
 	if(!space)
 		if(A.zone == B.zone)
 			return
 
 
-	var/connection/c = new /connection(A,B)
+	var/connection/c = new /connection(A, B)
 
-	A.connections.place(c, a_to_b)
-	B.connections.place(c, b_to_a)
+	A.connections[B] = c
+	B.connections[A] = c
 
 	if(direct)
 		c.mark_direct()

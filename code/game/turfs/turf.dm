@@ -368,8 +368,14 @@
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
-	if(connections)
-		connections.erase_all()
+	//The following two lines are an optimization. Without them, each connection would search connections when erased to remove itself.
+	var/list/connection/connections = src.connections
+	src.connections = null
+
+	for(var/turf/T in connections)
+		connections[T].erase()
+
+	connections = null
 
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)
