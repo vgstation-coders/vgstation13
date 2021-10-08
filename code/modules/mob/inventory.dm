@@ -221,7 +221,7 @@
 		return 0
 
 	if(W.flags & MUSTTWOHAND)
-		if(!W.wield(src, 1))
+		if(!W.wield(src, 1) || !(M_STRONG in mutations))
 			to_chat(src, "You need both hands to pick up \the [W].")
 			return 0
 

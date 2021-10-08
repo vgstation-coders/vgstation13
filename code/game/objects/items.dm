@@ -953,7 +953,7 @@
 		return
 
 /obj/item/proc/unwield(mob/user)
-	if(flags & MUSTTWOHAND && (src in user))
+	if(flags & MUSTTWOHAND && !(M_STRONG in user.mutations) && (src in user))
 		user.drop_from_inventory(src)
 	if(istype(wielded))
 		wielded.wielding = null
