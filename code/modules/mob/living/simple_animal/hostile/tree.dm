@@ -39,6 +39,8 @@
 	faction = "forest"
 	held_items = list()
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/tree/FindTarget()
 	. = ..()
 	if(.)

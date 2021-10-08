@@ -2841,6 +2841,29 @@
 			M.Knockdown(20)
 			M.stuttering = 20
 
+	else if(href_list["NarSieDevour"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+
+		var/mob/living/M = locate(href_list["NarSieDevour"])
+		if(!isliving(M))
+			to_chat(usr, "This can only be used on instances of type /mob/living")
+			return
+
+		if(alert(src.owner, "Are you sure you wish to gib [key_name(M)]?",  "Confirm Gibbing?" , "Yes" , "No") != "Yes")
+			return
+
+		to_chat(M, "<span class='danger'>You have angered the gods!</span>")
+
+		log_admin("[key_name(M)] has been Devoured (gibbed) by [src.owner]")
+		message_admins("[key_name(M)] has been Devoured (gibbed) by [src.owner]")
+
+		M.Stun(10)
+		anim(target = M, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_sac", lay = ABOVE_SINGULO_LAYER, plane = EFFECTS_PLANE)
+		sleep(4)
+		M.gib()
+
+
 	else if(href_list["Assplode"])
 		if(!check_rights(R_ADMIN|R_FUN))
 			return
@@ -2912,6 +2935,35 @@
 		log_admin("[src.owner] replied to [key_name(M)]'s Centcomm message with the message [input].")
 		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Centcom message with:</span> \"[input]\"")
 		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from Central Command. Message as follows.\"\n<span class = 'bold'>\"[input]\"</span>")
+
+	else if(href_list["NarSieReply"])
+		var/mob/M = locate(href_list["NarSieReply"])
+		if (!istype(M))
+			to_chat(usr, "This can only be used on instances of type /mob")
+			return
+
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a communion to Nar-Sie from [key_name_admin(M)]</span>.")
+
+		var/datum/role/cultist/C = iscultist(M)
+		if (!C)
+			to_chat(usr, "<span class='warning'>Non-cultists cannot be replied to.</span>") // should only happen if they get deconverted in the meantime
+			return
+
+		var/message = input("What message shall Nar-Sie respond with?",
+                    "Nar-Sie Reply",
+                    "")
+		if (!message)
+			return
+
+		if (M)
+			to_chat(M, "<b><span class='danger'>Nar-Sie</span></b> murmurs... <span class='sinister'>[message]</span>")
+
+		for(var/mob/dead/observer/O in player_list)
+			to_chat(O, "<span class='game say'><b><span class='danger'>Nar-Sie</span></b> replies to [M]... <span class='sinister'>[message]</span></span>")
+
+		message_admins("Admin [key_name_admin(usr)] has replied to a communion from [key_name(M)].")
+		log_admin("[src.owner] replied to [key_name(M)]'s communion to Nar-Sie with the message: [message].")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s communion to Nar-Sie with:</span> \"[message]\"")
 
 	else if(href_list["SyndicateReply"])
 		var/mob/M = locate(href_list["SyndicateReply"])
@@ -3960,16 +4012,7 @@
 						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						return
-					if("Bloodstones raised")
-						command_alert(/datum/command_alert/bloodstones_raised)
-						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
-						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")
-						return
-					if("Bloodstones destroyed")
-						command_alert(/datum/command_alert/bloodstones_broken)
-						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodsontes Alert (destroyed).")
-						log_admin("[key_name_admin(usr)] triggered a FAKE Bloodsontes Aler (destroyed).")
-						return
+					//TODO (UPHEAVAL PART 2) think of fake alerts too
 			if("fakebooms") //Micheal Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")

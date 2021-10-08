@@ -26,6 +26,8 @@
 	min_n2 = 0
 	max_n2 = 0
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/humanoid/skellington/corsaire
 	name = "skellington corsaire"
 	desc = "A skellington dressed in pirate garb and wielding a blade."

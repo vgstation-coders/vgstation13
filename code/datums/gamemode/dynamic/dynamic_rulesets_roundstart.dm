@@ -359,14 +359,8 @@
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-	var/leader = 1
 	for(var/mob/M in assigned)
-		var/datum/role/cultist/newCultist
-		if (leader) // First of the gang
-			newCultist = new /datum/role/cultist/chief
-			leader = 0
-		else
-			newCultist = new
+		var/datum/role/cultist/newCultist = new
 		newCultist.AssignToRole(M.mind,1)
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.Greet(GREET_ROUNDSTART)

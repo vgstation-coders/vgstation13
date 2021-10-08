@@ -1,4 +1,22 @@
 
+/datum/objective/bloodcult
+	name = "Cultist of Nar-Sie"
+	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbringer of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others. Above all, ensure that at least one of you remains alive to spread the cult's influence to other space stations."
+
+/datum/objective/bloodcult/IsFulfilled()
+	if (..())
+		return TRUE
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult && cult.members.len > 0)
+		for (var/datum/role/cultist/C in cult.members)
+			if (C.antag.current && !C.antag.current.isDead())
+				return TRUE
+	return FALSE
+
+
+
+/* there might be useful bits of code here to use later so I'm leaving this commented out for convenience for now.
 /datum/objective/bloodcult_reunion
 	explanation_text = "The Reunion: Meet up with your fellow cultists, and erect an altar aboard the station."
 	name = "Blood Cult: Prologue"
@@ -229,3 +247,4 @@
 
 /datum/objective/bloodcult_feast/IsFulfilled()
 	return TRUE//might expand on that later after release, if I ever get to implement my rework of post-NarSie.
+*/

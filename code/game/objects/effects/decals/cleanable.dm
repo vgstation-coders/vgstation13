@@ -54,9 +54,11 @@ var/list/infected_cleanables = list()
 	update_icon()
 
 	if(counts_as_blood)
+		/* TODO (UPHEAVAL PART 2) : some ritual involving blood spilled over floors
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
 			cult.add_bloody_floor(get_turf(src))
+		*/
 		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 		if(legacy_cult)
 			var/turf/T = get_turf(src)
@@ -226,9 +228,11 @@ var/list/infected_cleanables = list()
 
 /obj/effect/decal/cleanable/proc/bloodspill_add()
 	//new cult
+	/* TODO (UPHEAVAL PART 2) : some ritual involving blood spilled over floors
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
 		cult.add_bloody_floor(get_turf(src))
+	*/
 	//old cult
 	var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if(legacy_cult)
@@ -242,9 +246,11 @@ var/list/infected_cleanables = list()
 
 /obj/effect/decal/cleanable/proc/bloodspill_remove()
 	//new cult
+	/* TODO (UPHEAVAL PART 2) : some ritual involving blood spilled over floors
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
 		cult.remove_bloody_floor(get_turf(src))
+	*/
 	//old cult
 	var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if(legacy_cult)

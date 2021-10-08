@@ -33,6 +33,7 @@
 	var/active = 0
 
 	var/memory
+	var/datum/body_archive/body_archive
 
 	var/assigned_role
 	var/special_role
@@ -558,6 +559,8 @@
 			ticker.minds += mind
 		else
 			world.log << "## DEBUG: mind_initialize(): No ticker ready yet! Please inform Carn"
+	if (!mind.body_archive)
+		mind.body_archive = new(src)
 	if(!mind.name)
 		mind.name = real_name
 	mind.current = src

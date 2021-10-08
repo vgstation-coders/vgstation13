@@ -596,47 +596,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 //////////////BLOOD CULT
 
-/datum/command_alert/cult_detected
-	name = "Occult Activity Detected - Please Investigate"
-	alert_title = "Occult Activity"
-	force_report = 1
+/*
+TODO (UPHEAVAL PART 2) Guess i'll add the future new announcements here
 
-/datum/command_alert/cult_detected/announce()
-	message = "Irregularities in the fabric of space-time around [station_name()] appear to correlate with the propagation of occult activities. Remember that cult membership is strictly prohibited by Nanotrasen and exposes you to the death penalty, applicable immediately if evidence is made. We encourage the station's security department to investigate, and the rest of the crew to cooperate with them."
-	..()
+*/
 
-/datum/command_alert/bloodstones_raised
-	name = "Occult Activity Detected - Station Locked Down"
-	alert_title = "Occult Assault"
-	force_report = 1
-	theme = "endgame"
-	alertlevel = "red"
-
-/datum/command_alert/bloodstones_raised/announce()
-	message = "Occult energies detected emanating from [station_name()]. Readings suggest an assault from the Cult of Nar-Sie. The station is now locked down under Directive 7-10, until destruction of all the bloodstones has been confirmed. Regroup with your station's security forces and approach the stones with caution, follow your superiors' directions."
-	..()
-
-/datum/command_alert/bloodstones_anchor
-	name = "Occult Activity Critical - Breach of Space-Time Detected"
-	alert_title = "Occult Assault Critical"
-	force_report = 1
-	theme = "endgame"
-	alertlevel = "red"
-
-/datum/command_alert/bloodstones_anchor/announce()
-	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
-	..()
-
-/datum/command_alert/bloodstones_broken
-	name = "Occult Activity Ceased - Lock Down Lifted"
-	alert_title = "Occult Gone"
-	force_report = 1
-	stoptheme = 1
-	alertlevel = "blue"
-
-/datum/command_alert/bloodstones_broken/announce()
-	message = "Destruction of the bloodstones confirmed. The Cult is no longer an immediate threat to Nanotrasen. Lock down of the station has been revoked."
-	..()
 
 ////////MISC STUFF
 

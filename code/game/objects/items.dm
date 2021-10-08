@@ -1559,3 +1559,6 @@ var/global/list/image/blood_overlays = list()
 	if(A && toolsounds)
 		var/tool_sound = pick(toolsounds)
 		playsound(A, tool_sound, volume, TRUE, vary)
+
+/obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
+	return FALSE

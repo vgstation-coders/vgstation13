@@ -44,6 +44,8 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	var/last_scan = 0
 	var/unstable = 0
 
+	blooded = FALSE
+
 
 /mob/living/simple_animal/hostile/glow_orb/New()
 	..()

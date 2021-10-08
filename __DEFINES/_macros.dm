@@ -212,7 +212,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -261,11 +261,7 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define isnewcultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
-
-#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
-
-#define iscultist(H) (isnewcultist(H) || ischiefcultist(H))
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 

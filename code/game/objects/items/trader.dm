@@ -646,7 +646,7 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "vamphead0"
 	flags = HEAR | FPRINT
 	force = 7
-	var/obj/effect/decal/cleanable/blood/located_blood
+	var/obj/effect/located_blood
 	var/flash_last_used = 0
 	var/scream_last_used = 0
 
@@ -686,8 +686,10 @@ var/global/list/alcatraz_stuff = list(
 											"There. The blood is close...",
 											"Do you hear its call?")
 			to_chat(loc,"<B>[src]</B> [pick("murmurs","shrieks","hisses","groans","complains")], \"<span class='sinister'>[pick(blood_phrases)]</span>\"")*/
-			update_icon()
-			return
+
+	for(var/obj/effect/rune/R in range(5,loc))
+		located_blood = R
+
 	update_icon()
 
 /obj/item/device/vampirehead/on_enter_storage(obj/item/weapon/storage/S)
