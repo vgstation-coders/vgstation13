@@ -257,6 +257,18 @@
 			return TRUE
 		return
 
+/obj/item/weapon/switchtool/is_screwdriver(mob/user)
+	return deployed?.is_screwdriver(user)
+
+/obj/item/weapon/switchtool/is_wrench(mob/user)
+	return deployed?.is_wrench(user)
+
+/obj/item/weapon/switchtool/is_wirecutter(mob/user)
+	return deployed?.is_wirecutter(user)
+
+/obj/item/weapon/switchtool/is_multitool(mob/user)
+	return deployed?.is_multitool(user)
+
 
 /obj/item/weapon/switchtool/surgery
 	name = "surgeon's switchtool"
