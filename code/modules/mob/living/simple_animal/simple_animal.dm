@@ -109,6 +109,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/pacify_aura = FALSE
 
+	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff
+
+/mob/living/simple_animal/isBloodedAnimal()
+	return blooded
+
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 

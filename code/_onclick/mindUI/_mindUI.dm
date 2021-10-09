@@ -108,6 +108,10 @@ var/list/mind_ui_ID2type = list()
 
 	var/display_with_parent = FALSE
 
+	var/active = TRUE
+
+	var/obj/abstract/mind_ui_element/failsafe/failsafe	// All mind UI datums include one of those so we can detect if the elements somehow disappeared from client.screen
+
 /datum/mind_ui/New(var/datum/mind/M)
 	if (!istype(M))
 		qdel(src)
@@ -123,6 +127,8 @@ var/list/mind_ui_ID2type = list()
 	SendToClient()
 
 /datum/mind_ui/proc/SpawnElements()
+	failsafe = new (null, src)
+	elements += failsafe
 	for (var/element_type in element_types_to_spawn)
 		elements += new element_type(null, src)
 
@@ -134,7 +140,7 @@ var/list/mind_ui_ID2type = list()
 			return
 
 		if (!Valid() || !display_with_parent) // Makes sure the UI isn't still active when we should have lost it (such as coming out of a mecha while disconnected)
-			Hide()
+			Hide(TRUE)
 
 		for (var/obj/abstract/mind_ui_element/element in elements)
 			mind.current.client.screen |= element
@@ -150,23 +156,36 @@ var/list/mind_ui_ID2type = list()
 
 // Makes every element visible
 /datum/mind_ui/proc/Display()
+	if (!Valid())
+		Hide(TRUE)
+		return
+	active = TRUE
+
+	var/mob/M = mind.current
+	if (failsafe && M.client && !(failsafe in M.client.screen))
+		SendToClient() // The elements disappeared from the client screen due to some fuckery, send them back!
+
 	for (var/obj/abstract/mind_ui_element/element in elements)
 		element.Appear()
 	for (var/datum/mind_ui/child in subUIs)
 		if (child.display_with_parent)
 			child.Display()
 
-/datum/mind_ui/proc/Hide()
-	HideChildren()
-	HideElements()
+/datum/mind_ui/proc/Hide(var/override = FALSE)
+	active = FALSE
+	HideChildren(override)
+	HideElements(override)
 
-/datum/mind_ui/proc/HideChildren()
+/datum/mind_ui/proc/HideChildren(var/override = FALSE)
 	for (var/datum/mind_ui/child in subUIs)
-		child.Hide()
+		child.Hide(override)
 
-/datum/mind_ui/proc/HideElements()
+/datum/mind_ui/proc/HideElements(var/override = FALSE)
 	for (var/obj/abstract/mind_ui_element/element in elements)
-		element.Hide()
+		if (override)
+			element.invisibility = 101
+		else
+			element.Hide()
 
 /datum/mind_ui/proc/Valid()
 	return TRUE
@@ -231,11 +250,16 @@ var/list/mind_ui_ID2type = list()
 	UpdateUIScreenLoc()
 
 /obj/abstract/mind_ui_element/proc/Appear()
-	invisibility = 0
-	UpdateIcon()
+	if (invisibility)
+		invisibility = 0
+		UpdateIcon(TRUE)
+	else
+		invisibility = 0
+		UpdateIcon()
 
 /obj/abstract/mind_ui_element/proc/Hide()
-	invisibility = 101
+	if (!parent.active) // we check again for it due to potential spawn() use, and inconsistencies caused by quick UI toggling
+		invisibility = 101
 
 /obj/abstract/mind_ui_element/proc/GetUser()
 	ASSERT(parent && parent.mind && parent.mind.current)
@@ -244,7 +268,7 @@ var/list/mind_ui_ID2type = list()
 /obj/abstract/mind_ui_element/proc/UpdateUIScreenLoc()
 	screen_loc = "[parent.x]:[offset_x + parent.offset_x],[parent.y]:[offset_y+parent.offset_y]"
 
-/obj/abstract/mind_ui_element/proc/UpdateIcon()
+/obj/abstract/mind_ui_element/proc/UpdateIcon(var/appear = FALSE)
 	return
 
 /obj/abstract/mind_ui_element/proc/String2Image(var/string) // only supports numbers right now
@@ -257,6 +281,10 @@ var/list/mind_ui_ID2type = list()
 		I.pixel_x = (i - 1) * 6
 		result.overlays += I
 	return result
+
+/obj/abstract/mind_ui_element/failsafe
+	icon_state = "blank"
+	mouse_opacity = 0
 
 ////////////////// HOVERABLE ////////////////////////
 // Make use of MouseEntered/MouseExited to allow for effects and behaviours related to simply hovering above the element
@@ -330,12 +358,12 @@ var/list/mind_ui_ID2type = list()
 	var/Y = start_loc_Y[1]
 	var/start_x_val
 	var/start_y_val
-	if(findtext(X,"EAST-"))
+	if(findtext(X,"RIGHT"))
 		var/num = text2num(copytext(X,6))
 		if(!num)
 			num = 0
 		start_x_val = view*2 + 1 - num
-	else if(findtext(X,"WEST+"))
+	else if(findtext(X,"LEFT"))
 		var/num = text2num(copytext(X,6))
 		if(!num)
 			num = 0
@@ -344,12 +372,12 @@ var/list/mind_ui_ID2type = list()
 		start_x_val = view+1
 	start_x_val *= 32
 	start_x_val += start_pix_X
-	if(findtext(Y,"NORTH-"))
+	if(findtext(Y,"TOP"))
 		var/num = text2num(copytext(Y,7))
 		if(!num)
 			num = 0
 		start_y_val = view*2 + 1 - num
-	else if(findtext(Y,"SOUTH+"))
+	else if(findtext(Y,"BOTTOM"))
 		var/num = text2num(copytext(Y,7))
 		if(!num)
 			num = 0

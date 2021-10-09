@@ -634,6 +634,56 @@ var/global/list/alcatraz_stuff = list(
 	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
 
+/obj/item/weapon/depocket_wand/suit
+	name = "suit sensing wand"
+	desc = "Used by medical staff to ensure compliance with vitals tracking regulations and to save vocal cord wear from demanding it over communications systems."
+	var/wand_mode = 3
+
+/obj/item/weapon/depocket_wand/suit/attack_self(mob/user)
+	var/static/list/modes = list("Off", "Binary sensors", "Vitals tracker", "Tracking beacon")
+	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[wand_mode + 1]) in modes
+	if(user.incapacitated())
+		return
+	wand_mode = modes.Find(switchMode) - 1
+
+	switch(wand_mode)
+		if(0)
+			to_chat(user, "<span class='notice'>\The [src] will now disable suit remote sensing equipment.</span>")
+		if(1)
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report whether the wearer is live or dead.</span>")
+		if(2)
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report vital lifesigns.</span>")
+		if(3)
+			to_chat(user, "<span class='notice'>\The [src] will now make suits report vital lifesigns as well as coordinate positions.</span>")
+
+/obj/item/weapon/depocket_wand/suit/scan(mob/living/carbon/human/H, mob/living/user)
+	var/obj/item/clothing/under/suit = H.w_uniform
+	if(!suit)
+		to_chat(user, "<span class='warning'>\The [H] is not wearing a suit.</span>")
+		return
+	if(!suit.has_sensor)
+		to_chat(user, "<span class='warning'>\The [H]'s suit does not have sensors.</span>")
+		return
+	if(suit.has_sensor >= 2)
+		to_chat(user, "<span class='warning'>\The [H]'s suit sensor controls are locked.</span>")
+		return
+	suit.sensor_mode = wand_mode
+	switch(suit.sensor_mode)
+		if(0)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to disable suit remote sensing equipment with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to disable suit remote sensing equipment.</span>")
+		if(1)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to whether the wearer is live or dead with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report whether the wearer is live or dead.</span>")
+		if(2)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to report vital lifesigns with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report vital lifesigns.</span>")
+		if(3)
+			user.visible_message("<span class='danger'>[user] has set [H]'s suit sensors to report vital lifesigns as well as coordinate positions with \the [src].</span>",\
+								"<span class='danger'>You set [H]'s sensors to report vital lifesigns as well as coordinate positions.</span>")
+	H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [wand_mode] by [user.name] ([user.ckey])</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Set [H.name]'s suit sensors ([H.ckey]).</font>")
+	log_attack("[user.name] ([user.ckey]) has set [H.name]'s suit sensors ([H.ckey]) to [wand_mode].")
 
 
 #define VAMP_FLASH_CD 50
@@ -646,7 +696,7 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "vamphead0"
 	flags = HEAR | FPRINT
 	force = 7
-	var/obj/effect/decal/cleanable/blood/located_blood
+	var/obj/effect/located_blood
 	var/flash_last_used = 0
 	var/scream_last_used = 0
 
@@ -686,8 +736,10 @@ var/global/list/alcatraz_stuff = list(
 											"There. The blood is close...",
 											"Do you hear its call?")
 			to_chat(loc,"<B>[src]</B> [pick("murmurs","shrieks","hisses","groans","complains")], \"<span class='sinister'>[pick(blood_phrases)]</span>\"")*/
-			update_icon()
-			return
+
+	for(var/obj/effect/rune/R in range(5,loc))
+		located_blood = R
+
 	update_icon()
 
 /obj/item/device/vampirehead/on_enter_storage(obj/item/weapon/storage/S)
@@ -835,6 +887,8 @@ var/global/list/alcatraz_stuff = list(
 	has_lock_type = null
 
 var/global/list/yantar_stuff = list(
+	//3 of a kind
+	/obj/item/weapon/depocket_wand/suit,/obj/item/weapon/depocket_wand/suit,/obj/item/weapon/depocket_wand/suit,
 	//1 of a kind
 	/obj/item/weapon/storage/trader_chemistry,
 	/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer,

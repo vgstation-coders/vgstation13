@@ -26,7 +26,7 @@
 
 	if(istype(user, /obj/mecha))
 		open()
-	else if (istype(user, /obj/machinery/bot))
+	else if (istype(user, /obj/machinery/bot) && SpecialAccess(user))
 		open()
 	else if(ismob(user))
 		var/mob/M = user

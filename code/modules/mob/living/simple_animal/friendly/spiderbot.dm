@@ -46,6 +46,8 @@
 	size = SIZE_SMALL
 	meat_type = null
 
+	blooded = FALSE
+
 /mob/living/simple_animal/spiderbot/canEnterVentWith()
 	var/static/list/allowed_items = list(
 		/obj/item/device/radio/borg,

@@ -119,7 +119,7 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 	global_deadchat_listeners = list()
 
-	initialize_runesets()
+	initialize_rune_words()
 
 	initialize_beespecies()
 	generate_radio_frequencies()

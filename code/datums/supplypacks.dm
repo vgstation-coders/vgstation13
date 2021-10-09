@@ -447,7 +447,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Supplies"
 
 /datum/supply_packs/religious//you can only order default-looking bibles for now
-	name = "Religious Paraphernelia"
+	name = "Religious Paraphernalia"
 	contains = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater,
 					/obj/item/weapon/storage/bible,
 					/obj/item/weapon/storage/fancy/incensebox/harebells,

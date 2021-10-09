@@ -736,6 +736,8 @@ its easier to just keep the beam vertical.
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		clear_luminol()
 
+/atom/proc/ErasableRune() // god that's dumb but I need to work them into that iscleanaway macro somehow
+	return FALSE
 
 /atom/proc/get_global_map_pos()
 	if(!islist(global_map) || isemptylist(global_map))

@@ -1475,9 +1475,9 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 			O.status &= ~ORGAN_ROBOT
 			O.status |= ORGAN_PEG
 		else if(status == "assisted")
-			I.mechassist()
+			I?.mechassist()
 		else if(status == "mechanical")
-			I.mechanize()
+			I?.mechanize()
 		else
 			continue
 	var/datum/species/chosen_species = all_species[species]

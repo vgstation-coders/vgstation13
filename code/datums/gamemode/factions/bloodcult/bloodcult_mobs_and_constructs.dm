@@ -435,7 +435,7 @@ var/list/astral_projections = list()
 			var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
 			I.pixel_x = 20 * PIXEL_MULTIPLIER
 			I.pixel_y = 20 * PIXEL_MULTIPLIER
-			I.plane = relative_plane(ANTAG_HUD_PLANE)
+			I.plane = ANTAG_HUD_PLANE
 			client.images += I
 
 

@@ -1,4 +1,28 @@
 
+///////////////////////////////////////VISUAL EFFECTS//////////////////////////////////////////////
+
+// Based on holopad rays. Causes a Shadow to move from T to C
+// "sprite" var can be replaced to use another icon_state from icons/effects/96x96.dmi
+/proc/shadow(var/atom/C,var/turf/T,var/sprite="rune_blind")
+	var/disty = C.y - T.y
+	var/distx = C.x - T.x
+	var/newangle
+	if(!disty)
+		if(distx >= 0)
+			newangle = 90
+		else
+			newangle = 270
+	else
+		newangle = arctan(distx/disty)
+		if(disty < 0)
+			newangle += 180
+		else if(distx < 0)
+			newangle += 360
+	var/matrix/M1 = matrix()
+	var/matrix/M2 = turn(M1.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = ABOVE_LIGHTING_PLANE, trans = M2)
+
+
 ///////////////////////////////////////CULT RITUALS////////////////////////////////////////////////
 //Effects spawned by rune spells
 
@@ -79,6 +103,9 @@
 
 /obj/effect/afterimage/red
 	image_color = "red"
+
+/obj/effect/afterimage/black
+	image_color = "black"
 
 /obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5)
 	..()

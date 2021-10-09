@@ -29,6 +29,7 @@
 	var/stat_allowed = CONSCIOUS
 	var/hands_needed = 0//how many hands do you need to perform the emote
 	var/static/list/emote_list = list()
+	var/replace_pronouns = TRUE
 
 /datum/emote/New()
 	if(key_third_person)
@@ -99,7 +100,7 @@
 			if(findtext(message, "%s"))
 				message = replacetext(message, "%s", "")
 			return message
-		else
+		else if (replace_pronouns)
 			switch(H.gender)
 				if(MALE)
 					if(findtext(message, "their"))

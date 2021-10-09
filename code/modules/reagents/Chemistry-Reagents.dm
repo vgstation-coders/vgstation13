@@ -2276,7 +2276,11 @@
 		return 1
 
 	O.clean_blood()
-	if(istype(O, /obj/effect/decal/cleanable))
+	if(istype(O, /obj/effect/rune))
+		var/obj/effect/rune/R = O
+		if (!R.activated)
+			qdel(O)
+	else if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
 	else if(O.color)
 		O.color = ""

@@ -549,8 +549,10 @@ var/list/headset_modes = list(
 	var/datum/role/cultist/culto = iscultist(src)
 	if (culto)
 		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
-			if (checkTattoo(TATTOO_CHAT) || istype(culto, /datum/role/cultist/chief))
-				return 1
+			var/turf/T = get_turf(src)
+			for (var/obj/structure/cult/spire/S in cult_spires)
+				if (isturf(S.loc) && S.z == T.z) // Spires need to not be concealed and on the same Z Level.
+					return 1
 		if(setting == HEAR_CULT_CHAT)
 			return 1
 
@@ -602,7 +604,10 @@ var/list/headset_modes = list(
 		if(tracking_speech_bubble_recipients.len)
 			display_bubble_to_clientlist(image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1), tracking_speech_bubble_recipients)
 
-/proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist)
+/proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist, var/mob/living/source)
+	if (source)
+		speech_bubble.pixel_x = source.pixel_x
+		speech_bubble.pixel_y = source.pixel_y
 	speech_bubble.plane = ABOVE_LIGHTING_PLANE
 	speech_bubble.appearance_flags = RESET_COLOR
 	flick_overlay(speech_bubble, clientlist, 30)

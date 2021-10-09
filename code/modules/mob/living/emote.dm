@@ -49,6 +49,7 @@
 	key_third_person = "cultdances"
 	message = "displays the dance of their people."
 	restraint_check = TRUE
+	replace_pronouns = FALSE
 
 /datum/emote/living/dance/cult/can_run_emote(var/mob/user, var/status_check)
 	if (user.occult_muted())

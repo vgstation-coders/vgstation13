@@ -39,7 +39,6 @@
 #define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
-#define CHIEF_CULTIST "chief cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
 #define NUKE_OP_LEADER "nuclear operative leader"
@@ -112,15 +111,6 @@
 
 #define MALF_CHOOSING_NUKE	4
 
-#define CULT_MENDED		-1
-#define CULT_PROLOGUE	0
-#define CULT_ACT_I		1
-#define CULT_ACT_II		2
-#define CULT_ACT_III	3
-#define CULT_ACT_IV		4
-#define CULT_EPILOGUE	5
-
-
 //////////////////////////////////CULT STUFF////////////////////////////////////
 
 #define BLOODCOST_TARGET_BLEEDER	"bleeder"
@@ -163,7 +153,7 @@
 #define RITUALABORT_CONCEAL	"conceal"
 #define RITUALABORT_NEAR	"near"
 #define RITUALABORT_MISSING	"missing"
-#define RITUALABORT_OUTPOST "outpost"
+#define RITUALABORT_OVERCROWDED "overcrowded"
 
 #define TATTOO_POOL		"Blood Communion"
 #define TATTOO_SILENT	"Silent Casting"
@@ -186,6 +176,8 @@
 #define	RUNE_CAN_IMBUE	1
 #define	RUNE_CANNOT		2
 
+#define RUNE_STAND	1
+
 #define	MAX_TALISMAN_PER_TOME	5
 
 #define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
@@ -196,6 +188,7 @@
 #define CONVERSION_ACCEPT	1
 #define CONVERSION_BANNED	2
 #define CONVERSION_MINDLESS	3
+#define CONVERSION_OVERCROWDED	4
 
 #define CONVERTIBLE_ALWAYS	1
 #define CONVERTIBLE_CHOICE	2
@@ -206,6 +199,11 @@
 
 #define DECONVERSION_ACCEPT	1
 #define DECONVERSION_REFUSE 2
+
+#define CULTIST_ROLE_NONE		0
+#define CULTIST_ROLE_ACOLYTE	1
+#define CULTIST_ROLE_HERALD		2
+#define CULTIST_ROLE_MENTOR		3
 
 ////////////////////////////////////////////////////////////////////////////////
 

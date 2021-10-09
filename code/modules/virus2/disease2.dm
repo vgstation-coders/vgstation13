@@ -7,6 +7,7 @@ var/global/list/disease2_list = list()
 	var/subID = 0// 000 to 9999, set if the pathogen underwent effect or antigen mutation
 	var/childID = 0// 01 to 99, incremented as the pathogen gets analyzed after a mutation
 	var/list/datum/disease2/effect/effects = list()
+	var/list/datum/disease2/effect/fake_effects = list()
 
 	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
 	//Ignored if infected materials are ingested (injected with infected blood, eating infected meat)
@@ -856,16 +857,23 @@ var/global/list/virusDB = list()
 		dat += "[A]"
 	return dat
 
-/datum/disease2/disease/proc/get_info()
+/datum/disease2/disease/proc/get_info(var/trueinfo = FALSE)
 	var/r = "GNAv3 [name()]"
 	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b> - [get_subdivisions_string()]"
 	r += "<BR>Infectability : <b>[infectionchance]%</b>"
 	r += "<BR>Spread forms : <b>[get_spread_string()]</b>"
 	r += "<BR>Progress Speed : <b>[stageprob]%</b>"
 	r += "<dl>"
+	var/i = 1
 	for(var/datum/disease2/effect/e in effects)
-		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
-		r += "<dd>[e.desc]</dd>"
+		if(fake_effects[i] && !trueinfo)
+			var/datum/disease2/effect/f_e = fake_effects[i]
+			r += "<dt> &#x25CF; <b>Stage [f_e.stage] - [f_e.name]</b> (Danger: [f_e.badness]). Strength: <b>[f_e.multiplier]</b>. Occurrence: <b>[f_e.chance]%</b>.</dt>"
+			r += "<dd>[f_e.desc]</dd>"
+		else
+			r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
+			r += "<dd>[e.desc]</dd>"
+		i++
 	r += "</dl>"
 	r += "<BR>Antigen pattern: [get_antigen_string()]"
 	r += "<BR><i>last analyzed at: [worldtime2text()]</i>"
@@ -893,6 +901,7 @@ var/global/list/virusDB = list()
 	v.fields["name"] = name()
 	v.fields["nickname"] = ""
 	v.fields["description"] = get_info()
+	v.fields["description_hidden"] = get_info(TRUE)
 	v.fields["custom_desc"] = "No comments yet."
 	v.fields["antigen"] = get_antigen_string()
 	v.fields["spread type"] = get_spread_string()

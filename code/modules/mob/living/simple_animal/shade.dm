@@ -32,6 +32,8 @@
 	mob_property_flags = MOB_SUPERNATURAL
 	var/space_damage_warned = FALSE
 
+	blooded = FALSE
+
 /mob/living/simple_animal/shade/New()
 	..()
 	add_language(LANGUAGE_CULT)
@@ -94,9 +96,12 @@
 		else if (istype(SB.loc,/mob/living))
 			var/mob/living/L = SB.loc
 			if (iscultist(L) && SB.blood < SB.maxblood)
-				SB.blood++//no cap on blood regen when held by a cultist, no blood regen when held by a non-cultist (but there's a spell to take care of that)
-		else if (SB.blood < SB.maxregenblood)
-			SB.blood++
+				SB.blood = min(SB.maxblood,SB.blood+2)//no cap on blood regen when held by a cultist, no blood regen when held by a non-cultist (but there's a spell to take care of that)
+		if (SB.linked_cultist && (get_dist(get_turf(SB.linked_cultist),get_turf(src)) <= 5))
+			SB.blood = min(SB.maxblood,SB.blood+1)//you can also regen blood to full when near your linked cultist
+		if (SB.blood < SB.maxregenblood)
+			SB.blood++ // a bit of extra regen when at very low blood
+		SB.update_icon()
 	else
 		if (istype(loc,/turf/space))
 			if (!space_damage_warned)

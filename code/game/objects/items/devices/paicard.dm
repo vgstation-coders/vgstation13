@@ -179,7 +179,7 @@
 	overlays.Cut()
 
 /obj/item/device/paicard/emp_act(severity)
-	pai.emp_act(severity)
+	pai?.emp_act(severity)
 	..()
 
 /obj/item/device/paicard/dropped(mob/user)

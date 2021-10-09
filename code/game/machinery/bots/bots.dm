@@ -218,7 +218,7 @@
 			continue
 		if (istype(D, /obj/machinery/door/poddoor))
 			continue
-		if (D.check_access(botcard))
+		if (D.check_access(botcard) && !D.operating && D.SpecialAccess(src))
 			D.open()
 			frustration = 0
 			return TRUE
@@ -362,7 +362,7 @@
 			continue
 		if (istype(D, /obj/machinery/door/poddoor))
 			continue
-		if (D.check_access(botcard))
+		if (D.check_access(botcard) && !D.operating && D.SpecialAccess(src))
 			D.open()
 			frustration = 0
 			return TRUE

@@ -75,6 +75,7 @@
 	name = "Yantar medical crate"
 	path = /obj/structure/closet/crate/medical/yantar
 	baseprice = 220
+	maxunits = 2
 	sales_category = TRADE_VARIETY
 
 /datum/trade_product/condidisp
