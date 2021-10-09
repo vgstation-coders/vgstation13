@@ -26,6 +26,18 @@
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
 
+/turf/simulated/wall/initialize()
+	..()
+	// SMOOTH US WITH OUR NEIGHBORS
+	relativewall()
+
+	// WE NEED TO TELL ALL OUR FRIENDS ABOUT THIS SCANDAL
+	relativewall_neighbours()
+
+	var/turf/simulated/open/OS = GetAbove(src)
+	if(OS && isopenspace(OS))
+		OS.ChangeTurf(/turf/simulated/floor/plating)
+
 /turf/simulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,

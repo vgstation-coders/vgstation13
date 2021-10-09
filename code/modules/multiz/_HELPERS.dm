@@ -1,6 +1,5 @@
 var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floor/glass)
 
-#define isopenspace(A) istype(A, /turf/simulated/open)
 #define isvisiblespace(A) is_type_in_list(A, visible_spaces)
 #define OPENSPACE_PLANE_START -23
 #define OPENSPACE_PLANE_END -8
