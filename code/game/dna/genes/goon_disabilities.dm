@@ -76,7 +76,7 @@
 
 /datum/dna/gene/disability/fat/deactivate(var/mob/M,var/connected,var/flags)
 	if(..() && M.nutrition <= OVEREAT_THRESHOLD)
-		M.overeatduration = 0
+		M.overeatduration = M.overeatduration > 600 ? M.overeatduration - 600 : 0
 
 /datum/dna/gene/disability/fat/New()
 	..()
