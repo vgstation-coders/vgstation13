@@ -42,6 +42,9 @@
 	var/datum/disease2/disease/virus
 		// Parent virus. Plans to generalize these are underway.
 
+	var/spoof = 0
+		// If this effect is used to hide a true effect on a database.
+
 	var/restricted = 0
 	// If 1, will never appear randomly in a disease, requiring instead to be manually set in the code. If 2, will not either appear in the encyclopedia.
 // The actual guts of the effect. Has a prob(chance)% to get called per tick.

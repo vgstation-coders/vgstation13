@@ -200,7 +200,7 @@ var/list/infected_contact_mobs = list()
 			plague.update_hud_icons()
 			for(var/datum/role/plague_mouse/M in plague.members)
 				var/datum/mind/mouse_mind = M.antag
-				mouse_mind.store_memory(D.get_info(), forced = 1)
+				mouse_mind.store_memory(D.get_info(TRUE), forced = 1)
 				mouse_mind.store_memory("<hr>")
 		//----------------
 

@@ -496,7 +496,7 @@
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_examine"])
 
 		var/datum/browser/popup = new(usr, "\ref[D]", "[D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)]", 600, 300, src)
-		popup.set_content(D.get_info())
+		popup.set_content(D.get_info(TRUE))
 		popup.open()
 
 	else if(href_list["diseasepanel_toggledb"])
