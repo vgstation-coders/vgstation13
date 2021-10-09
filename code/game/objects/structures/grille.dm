@@ -2,7 +2,7 @@
 	name = "grille"
 	desc = "A matrix of metal rods, usually used as a support for window bays, with screws to secure it to the floor."
 	icon = 'icons/obj/structures.dmi'
-	icon_state = "grille"
+	icon_state = "grille0"
 	density = 1
 	anchored = 1
 	flags = FPRINT
@@ -13,6 +13,31 @@
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
 	var/grille_material = /obj/item/stack/rods
+
+/obj/structure/grille/canSmoothWith()
+	var/static/list/smoothables = list(
+		/obj/structure/grille,
+	)
+	return smoothables
+
+/obj/structure/grille/New(loc)
+	..(loc)
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+/obj/structure/grille/initialize()
+	relativewall()
+	relativewall_neighbours()
+
+/obj/structure/grille/relativewall()
+	var/junction = findSmoothingNeighbors()
+	icon_state = "grille[junction]"
+
+/obj/structure/grille/isSmoothableNeighbor(atom/A)
+	if (istype(A, /turf/space))
+		return 0
+
+	return ..()
 
 /obj/structure/grille/examine(mob/user)
 
