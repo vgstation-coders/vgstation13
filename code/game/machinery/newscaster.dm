@@ -150,6 +150,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
 	var/c_locked = FALSE; //Will our new channel be locked to public submissions?
 	var/c_anonymous = FALSE //Will our new channel be anonymous?
+	var/c_anoncreate = FALSE //Will our new channel be created anonymously?
 	var/hitstaken = 0 //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = list()
 	var/anonymous_posting = FALSE
@@ -315,6 +316,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<B>Channel Author:</B> <FONT COLOR='green'>[scanned_user]</FONT><BR>
 					<B><A href='?src=\ref[src];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(c_locked) ? ("NO") : ("YES")]<BR>
 					<B><A href='?src=\ref[src];set_channel_anonymous=1'>Anonymous feed</A>:</B> [(c_anonymous) ? ("YES") : ("NO")]<BR><BR>
+					<B><A href='?src=\ref[src];set_channel_anonymous=1'>Create feed anonymously</A>:</B> [(c_anoncreate) ? ("YES") : ("NO")]<BR><BR>
 					<BR><A href='?src=\ref[src];submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"}
 
 			if(NEWSCASTER_NEW_MESSAGE)
@@ -606,7 +608,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(choice=="Confirm")
 					var/datum/feed_channel/newChannel = new /datum/feed_channel
 					newChannel.channel_name = channel_name
-					newChannel.author = scanned_user
+					newChannel.author = c_anoncreate ? "Anonymous": scanned_user
 					newChannel.locked = c_locked
 					newChannel.anonymous = c_anonymous
 					feedback_inc("newscaster_channels",1)
