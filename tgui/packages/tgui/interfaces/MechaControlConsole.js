@@ -1,7 +1,7 @@
 // Copyright (c) 2021 /vg/station coders
 // SPDX-License-Identifier: MIT
 
-import { useBackend, useSharedState, useLocalState } from '../backend';
+import { useBackend, useLocalState } from '../backend';
 import { Box, Button, LabeledList, NoticeBox, Section, Flex, Divider, Input, Modal } from '../components';
 import { Window } from '../layouts';
 
@@ -33,7 +33,7 @@ const Mechas = (props, context) => {
     );
   }
   return mechas.map(mecha => {
-    return ( 
+    return (
       <Section
         key={mecha.ref}
         title={mecha.name}
@@ -42,7 +42,9 @@ const Mechas = (props, context) => {
             <Button
               icon="envelope"
               content="Message"
-              onClick={() => setMessageMechas(messageMechas.concat(mecha.ref))} />
+              onClick={() => {
+                return setMessageMechas(messageMechas.concat(mecha.ref));
+              }} />
             <Button.Confirm
               icon={mecha.status ? 'unlock' : 'lock'}
               color={mecha.status ? 'good' : 'default'}
@@ -60,7 +62,8 @@ const Mechas = (props, context) => {
           </>
         )}>
         {messageMechas.includes(mecha.ref)
-          ? <Modal align="center">
+        && (
+          <Modal align="center">
             Send Message
             <Input
               value={messageText}
@@ -68,16 +71,16 @@ const Mechas = (props, context) => {
               onInput={(e, value) => setMessageText(value)}
               onChange={(e, value) => {
                 if (messageText) {
-                  act('message', { 
+                  act('message', {
                     mechamessage: messageText,
                     ref: mecha.ref,
                   });
                 }
                 setMessageText('');
-                setMessageMechas(messageMechas.filter(m => { return m !== mecha.ref; }));
+                setMessageMechas(messageMechas.filter(
+                  m => { return m !== mecha.ref; }));
               }} />
-            </Modal>
-          : ''}
+          </Modal>)}
         <Flex align="center" justify="space-evenly">
           <Flex.Item>
             <Box

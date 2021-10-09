@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { useBackend } from '../backend';
-import { Button, LabeledList, Section, NumberInput, Box } from '../components';
+import { Button, LabeledList, Section, NumberInput } from '../components';
 import { Window } from '../layouts';
 
 export const MSGS = (props, context) => {

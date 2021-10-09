@@ -139,8 +139,8 @@
 	if(istype(item, /obj/item/stack/telecrystal))
 		var/obj/item/stack/telecrystal/crystals = item
 		telecrystals += crystals.amount
-		crystals.use(crystals.amount)
 		to_chat(attacker, "<span class='notice'>You insert [crystals.amount] telecrystal[crystals.amount > 1 ? "s" : ""] into the uplink.</span>")
+		crystals.use(crystals.amount)
 		return
 	var/list/items = get_uplink_items()
 	for(var/category in items)
