@@ -316,7 +316,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<B>Channel Author:</B> <FONT COLOR='green'>[scanned_user]</FONT><BR>
 					<B><A href='?src=\ref[src];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(c_locked) ? ("NO") : ("YES")]<BR>
 					<B><A href='?src=\ref[src];set_channel_anonymous=1'>Anonymous feed</A>:</B> [(c_anonymous) ? ("YES") : ("NO")]<BR><BR>
-					<B><A href='?src=\ref[src];set_channel_anonymous=1'>Create feed anonymously</A>:</B> [(c_anoncreate) ? ("YES") : ("NO")]<BR><BR>
+					<B><A href='?src=\ref[src];set_channel_anoncreate=1'>Create feed anonymously</A>:</B> [(c_anoncreate) ? ("YES") : ("NO")]<BR><BR>
 					<BR><A href='?src=\ref[src];submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"}
 
 			if(NEWSCASTER_NEW_MESSAGE)
@@ -578,6 +578,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			c_anonymous = !c_anonymous
 			updateUsrDialog()
 
+		else if(href_list["set_channel_anoncreate"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"created anonymous channel"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			c_anoncreate = !c_anoncreate
+			updateUsrDialog()
 
 		else if(href_list["set_anon_posting"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"made the author of the post anonymous"))
