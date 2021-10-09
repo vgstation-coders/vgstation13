@@ -332,6 +332,8 @@
 
 #define isspace(A) (A.type == /area)
 
+#define isopenspace(A) istype(A, /turf/simulated/open)
+
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
 proc/get_space_area()
