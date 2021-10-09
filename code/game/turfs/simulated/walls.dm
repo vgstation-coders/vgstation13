@@ -35,7 +35,7 @@
 	relativewall_neighbours()
 
 	var/turf/simulated/open/OS = GetAbove(src)
-	if(OS && isopenspace(OS))
+	if(istype(OS))
 		OS.ChangeTurf(/turf/simulated/floor/plating)
 
 /turf/simulated/wall/canSmoothWith()
