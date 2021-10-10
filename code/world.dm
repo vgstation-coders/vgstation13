@@ -43,7 +43,7 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 /world/New()
 	world_startup_time = world.timeofday
-	Profile(world_startup_time)
+	Profile(PROFILE_START)
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
