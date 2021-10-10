@@ -78,12 +78,13 @@
 	#endif
 
 		#ifdef ZLEVELS
+		var/turf/unsim
 		if(d == 16)
-			var/turf/unsim = GetAbove(src)
+			unsim = GetAbove(src)
 		else if(d == 32)
-			var/turf/unsim = GetBelow(src)
+			unsim = GetBelow(src)
 		else
-			var/turf/unsim = get_step(src, d)
+			unsim = get_step(src, d)
 		#else
 		var/turf/unsim = get_step(src, d)
 		#endif
