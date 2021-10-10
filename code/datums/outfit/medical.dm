@@ -424,7 +424,6 @@
 
 /datum/outfit/orderly/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/clothing/suit/straight_jacket)
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/orderly)
 
 // -- Geneticist
