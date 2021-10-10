@@ -72,12 +72,21 @@
 
 	var/list/postponed
 	#ifdef ZLEVELS
-	for(var/d = 1, d < 64, d *= 2)
+	for(var/d = 1, d <= 32, d *= 2)
 	#else
-	for(var/d = 1, d < 16, d *= 2)
+	for(var/d = 1, d <= 8, d *= 2)
 	#endif
 
+		#ifdef ZLEVELS
+		if(d = 16)
+			var/turf/unsim = GetAbove(src)
+		else if(d = 32)
+			var/turf/unsim = GetBelow(src)
+		else
+			var/turf/unsim = get_step(src, d)
+		#else
 		var/turf/unsim = get_step(src, d)
+		#endif
 
 		if(!unsim) // Edge of map.
 			continue
