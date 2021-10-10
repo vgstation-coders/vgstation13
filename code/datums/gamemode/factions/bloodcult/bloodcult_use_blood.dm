@@ -48,6 +48,16 @@
 		data[BLOODCOST_RESULT] = BLOODCOST_TRIBUTE
 		return data
 
+	//Are we a construct?
+	if (isconstruct(user))
+		var/mob/living/simple_animal/construct/C_user = user
+		if (!C_user.purge)//Constructs can use runes for free as long as they aren't getting purged by holy water or null rods
+			data[BLOODCOST_TARGET_USER] = C_user
+			data[BLOODCOST_AMOUNT_USER] = amount_needed
+			amount_gathered = amount_needed
+			data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
+			return data
+
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
 	if (istype (H_user) && H_user.blood_DNA?.len)
@@ -185,12 +195,6 @@
 				data[BLOODCOST_TARGET_USER] = C_user
 				data[BLOODCOST_AMOUNT_USER] = blood_gathered
 				amount_gathered += blood_gathered
-		else if (isconstruct(user))
-			var/mob/living/simple_animal/construct/C_user = user
-			if (!C_user.purge)//Constructs can use runes for free as long as they aren't getting purged by holy water or null rods
-				data[BLOODCOST_TARGET_USER] = C_user
-				data[BLOODCOST_AMOUNT_USER] = amount_needed
-				amount_gathered = amount_needed
 
 
 	if (amount_gathered >= amount_needed)
