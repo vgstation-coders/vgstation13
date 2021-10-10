@@ -4,6 +4,8 @@
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
 
+/turf/var/tmp/list/connection/connections
+
 /turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
 	if(graphic_add && graphic_add.len)
 		vis_contents += graphic_add
@@ -177,8 +179,8 @@
 		SSair.connect(src, T)
 
 /turf/proc/post_update_air_properties()
-	if(connections)
-		connections.update_all()
+	for(var/turf/T in connections) //Attempting to loop through null just doesn't do anything.
+		connections[T].update()
 
 /turf/assume_air(datum/gas_mixture/giver) //use this for machines to adjust air
 	return 0
