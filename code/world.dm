@@ -40,10 +40,10 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		// warn on missing library
 		warning("There is no auxtools library for this system included with SpacemanDMM. Debugging will not work. Pester them to add one.")
 	#endif
+	world.Profile(PROFILE_START)
 
 /world/New()
 	world_startup_time = world.timeofday
-	Profile(PROFILE_START)
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
