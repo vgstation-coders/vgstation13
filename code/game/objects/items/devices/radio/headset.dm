@@ -243,7 +243,7 @@
 
 /obj/item/device/radio/headset/attackby(obj/item/weapon/W, mob/user)
 //	..()
-	if(invoke_event(/event/attackby, list("attacker" = user, "item" = W)))
+	if(INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W))
 		return
 	user.set_machine(src)
 	if (!( W.is_screwdriver(user) || (istype(W, /obj/item/device/encryptionkey/ ))))

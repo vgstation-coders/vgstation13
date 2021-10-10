@@ -127,7 +127,7 @@
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
-	invoke_event(/event/exited, list("mover" = mover, "location" = src, "newloc" = newloc))
+	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
@@ -177,7 +177,7 @@
 		A.inertia_dir = 0
 
 	..()
-	invoke_event(/event/entered, list("mover" = A, "location" = src, "oldloc" = OldLoc))
+	INVOKE_EVENT(src, /event/entered, "mover" = A, "location" = src, "oldloc" = OldLoc)
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj in range(1, src))
@@ -251,9 +251,9 @@
 			if(!move_to_z)
 				return
 
-			A.invoke_event(/event/z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			INVOKE_EVENT(A, /event/z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
 			for(var/atom/movable/AA in contents_brought)
-				AA.invoke_event(/event/z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -283,9 +283,9 @@
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			A.invoke_event(/event/post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			INVOKE_EVENT(A, /event/post_z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
 			for(var/atom/movable/AA in contents_brought)
-				AA.invoke_event(/event/post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.

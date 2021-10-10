@@ -110,7 +110,7 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
-	invoke_event(/event/after_mind_transfer, list("mind" = src))
+	INVOKE_EVENT(src, /event/after_mind_transfer, "mind" = src)
 
 /datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"

@@ -15,4 +15,4 @@
 	for(var/mob/living/M in oview(7, parent))
 		if(!(M in brain.friends)) //THEY'RE ATTACKING OUR BOY, GET HIM!
 			continue
-		M.invoke_event(/event/comp_ai_friend_attacked, list("attacker"=attacker))
+		INVOKE_EVENT(M, /event/comp_ai_friend_attacked, "attacker"=attacker)

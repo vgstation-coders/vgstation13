@@ -75,7 +75,7 @@
  */
 /datum/proc/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	SHOULD_CALL_PARENT(TRUE)
-	invoke_event(/event/ui_act, list(usr, action))
+	INVOKE_EVENT(src, /event/ui_act, usr, action)
 	// If UI is not interactive or usr calling Topic is not the UI user, bail.
 	if(!ui || ui.status != UI_INTERACTIVE)
 		return TRUE

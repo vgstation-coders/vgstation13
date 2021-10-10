@@ -16,8 +16,8 @@
 		if(CanOpenDoor(D))
 			if(get_dist(src, target) > 1)
 				return // keep movin'.
-			parent.invoke_event(/event/comp_ai_cmd_set_busy, list("yes" = TRUE))
-			parent.invoke_event(/event/comp_ai_cmd_move, list("target" = 0))
+			INVOKE_EVENT(parent, /event/comp_ai_cmd_set_busy, "yes" = TRUE)
+			INVOKE_EVENT(parent, /event/comp_ai_cmd_move, "target" = 0)
 			D.visible_message("<span class='warning'>\The [D]'s motors whine as four arachnid claws begin trying to force it open!</span>")
 			spawn(50)
 				if(CanOpenDoor(D) && prob(25))
@@ -30,10 +30,10 @@
 							FD.open(1)
 
 					// Reset targetting
-					parent.invoke_event(/event/comp_ai_cmd_set_busy, list("yes" = FALSE))
-					parent.invoke_event(/event/comp_ai_cmd_set_target, list("target" = null))
+					INVOKE_EVENT(parent, /event/comp_ai_cmd_set_busy, "yes" = FALSE)
+					INVOKE_EVENT(parent, /event/comp_ai_cmd_set_target, "target" = null)
 			return
-		parent.invoke_event(/event/comp_ai_cmd_set_busy, list("yes" = FALSE))
+		INVOKE_EVENT(parent, /event/comp_ai_cmd_set_busy, "yes" = FALSE)
 
 /datum/component/ai/door_opener/proc/performPressureCheck(var/turf/loc)
 	var/turf/simulated/lT=loc
