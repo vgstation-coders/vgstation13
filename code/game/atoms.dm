@@ -483,15 +483,20 @@ its easier to just keep the beam vertical.
 /atom/proc/can_mech_drill()
 	return acidable()
 
-/atom/proc/blob_act(destroy = 0,var/obj/effect/blob/source = null)
-	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
+/atom/proc/blob_act(destroy = 0, var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
 		return
-	if (source)
-		anim(target = loc, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	var/_target
+
+	if(isturf(src))
+		_target = src
 	else
-		anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
-	return
+		_target = loc
+
+	if(source)
+		anim(target = _target, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	else
+		anim(target = _target, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 
 /atom/proc/singularity_act()
 	return
