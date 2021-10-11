@@ -164,7 +164,7 @@
 	update()
 
 /obj/effect/step_trigger/teleporter/portal/proc/update()
-    target_turf = locate(px,py,pz)
+    target_turf = locate(teleport_x,teleport_y,teleport_z)
     update_icon()
 
 /obj/effect/step_trigger/teleporter/portal/update_icon()
@@ -182,7 +182,7 @@
         return
 
     for(var/obj/effect/step_trigger/teleporter/portal/P in world)
-        P.target_turf = locate(P.px,P.py,P.pz)
+        P.target_turf = locate(P.teleport_x,P.teleport_y,P.teleport_z)
         P.update_icon()
 
     message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
