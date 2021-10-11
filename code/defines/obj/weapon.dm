@@ -622,7 +622,7 @@
 				armed = 0
 				anchored = FALSE
 				var/mob/living/simple_animal/SA = AM
-				visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
+				SA.visible_message("<span class='danger'>\The [SA] steps on \the [src].</span>",\
 						"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
 						"<span class='notice'>You hear a sudden snapping sound!",\
 						//Hallucination messages
