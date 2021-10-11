@@ -199,7 +199,7 @@
 "YA" = (/obj/machinery/door/airlock,/turf/simulated/floor,/area/crew_quarters/bar)
 "YJ" = (/obj/effect/decal/cleanable/crayon/fuckyou,/turf/unsimulated/wall,/area/centcom/evac)
 "Zh" = (/obj/machinery/portable_atmospherics/hydroponics,/obj/machinery/light/he,/turf/simulated/floor{dir = 1; icon_state = "green"},/area/crew_quarters/bar)
-"Zs" = (/turf/portal,/area)
+"Zs" = (/obj/effect/step_trigger/teleporter/portal,/area)
 "ZF" = (/turf/simulated/floor{dir = 8; icon_state = "green"},/area/crew_quarters/bar)
 "ZK" = (/obj/machinery/door/window{dir = 2; name = "Test Chamber"; req_access_txt = ""},/turf/simulated/floor,/area/crew_quarters/bar)
 "ZR" = (/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor{dir = 1; icon_state = "green"},/area/crew_quarters/bar)

@@ -151,3 +151,38 @@
 	..()
 	teleport_x_offset = world.maxx - 25
 	teleport_y_offset = world.maxy - 25
+
+/* Instant teleporter with vis_contents */
+
+/obj/effect/step_trigger/teleporter/portal
+    plane = SPACE_BACKGROUND_PLANE
+
+    var/turf/target_turf
+
+/obj/effect/step_trigger/teleporter/portal/initialize()
+	..()
+	update()
+
+/obj/effect/step_trigger/teleporter/portal/proc/update()
+    target_turf = locate(px,py,pz)
+    update_icon()
+
+/obj/effect/step_trigger/teleporter/portal/update_icon()
+	overlays.Cut()
+	vis_contents.Cut()
+	vis_contents += target_turf
+
+// Debug verbs.
+/client/proc/update_all_area_portals()
+    set category = "Debug"
+    set name = "Update area portals"
+    set desc = "Force all area portal turfs to update"
+
+    if (!holder)
+        return
+
+    for(var/obj/effect/step_trigger/teleporter/portal/P in world)
+        P.target_turf = locate(P.px,P.py,P.pz)
+        P.update_icon()
+
+    message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
