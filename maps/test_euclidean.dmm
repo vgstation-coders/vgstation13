@@ -300,14 +300,6 @@
 /obj/machinery/suit_storage_unit/engie,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
-"mh" = (
-/obj/machinery/door/airlock/external,
-/obj/effect/step_trigger/teleporter/portal{
-	teleport_x = -1;
-	teleport_y = -43
-	},
-/turf/simulated/floor,
-/area/crew_quarters/bar)
 "my" = (
 /obj/machinery/power/apc{
 	dir = 8;
@@ -502,12 +494,6 @@
 	},
 /turf/simulated/floor,
 /area/gateway)
-"tQ" = (
-/obj/effect/step_trigger/teleporter/portal{
-	teleport_z = 1
-	},
-/turf/simulated/wall/r_wall,
-/area/crew_quarters/bar)
 "uk" = (
 /obj/machinery/suit_storage_unit/security,
 /turf/simulated/floor,
@@ -984,10 +970,6 @@
 /area/crew_quarters/bar)
 "JS" = (
 /obj/machinery/door/airlock/external,
-/obj/effect/step_trigger/teleporter/portal{
-	teleport_x = 1;
-	teleport_y = 43
-	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "Kr" = (
@@ -1463,13 +1445,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/bar)
-"Wv" = (
-/obj/effect/step_trigger/teleporter/portal{
-	teleport_x = -1;
-	teleport_y = -43
-	},
-/turf/simulated/wall/r_wall,
-/area/crew_quarters/bar)
 "WD" = (
 /obj/effect/step_trigger/teleporter/portal{
 	teleport_z = 1
@@ -1543,12 +1518,6 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
-/area/crew_quarters/bar)
-"YD" = (
-/obj/effect/step_trigger/teleporter/portal{
-	teleport_z = -1
-	},
-/turf/simulated/wall/r_wall,
 /area/crew_quarters/bar)
 "YJ" = (
 /obj/machinery/portable_atmospherics/hydroponics,
@@ -7199,7 +7168,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7222,7 +7191,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 fg
 bi
 gN
@@ -7265,7 +7234,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7288,7 +7257,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7331,7 +7300,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7354,7 +7323,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7397,7 +7366,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7420,7 +7389,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7463,7 +7432,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7486,7 +7455,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7529,7 +7498,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7552,7 +7521,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7595,7 +7564,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7618,7 +7587,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7661,7 +7630,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7684,7 +7653,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7727,7 +7696,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7750,7 +7719,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7816,7 +7785,7 @@ fL
 fL
 fL
 fL
-mh
+JS
 bi
 bi
 bi
@@ -7859,7 +7828,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7882,7 +7851,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7925,7 +7894,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -7948,7 +7917,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -7991,7 +7960,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -8014,7 +7983,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -8057,7 +8026,7 @@ bi
 bi
 bi
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -8080,7 +8049,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -8123,7 +8092,7 @@ Yf
 EU
 EU
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -8146,7 +8115,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -8189,7 +8158,7 @@ Yl
 TT
 Zo
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -8212,7 +8181,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -8255,7 +8224,7 @@ bi
 bi
 hC
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -8278,7 +8247,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -8321,7 +8290,7 @@ bi
 bi
 hC
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -8344,7 +8313,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -8387,7 +8356,7 @@ YJ
 is
 Na
 bi
-Wv
+ag
 ie
 ie
 ie
@@ -8410,7 +8379,7 @@ fL
 fL
 fL
 fL
-Wv
+ag
 bi
 bi
 bi
@@ -12904,13 +12873,13 @@ aa
 aa
 ag
 bi
-bi
+JI
 bi
 bi
 ag
 bi
 bi
-bi
+JI
 bi
 ag
 aa
@@ -13102,13 +13071,13 @@ aa
 aa
 ag
 bi
-bi
+JG
 bi
 bi
 ag
 bi
 bi
-bi
+JG
 bi
 ag
 aa
@@ -13234,13 +13203,13 @@ aa
 aa
 ag
 bi
-bi
+JI
 bi
 bi
 ag
 bi
 bi
-bi
+JI
 bi
 ag
 aa
@@ -13432,13 +13401,13 @@ aa
 aa
 ag
 bi
-bi
+JG
 bi
 bi
 ag
 bi
 bi
-bi
+JG
 bi
 ag
 aa
@@ -17396,12 +17365,12 @@ vo
 vo
 vo
 vo
-YD
-YD
-kO
-YD
-YD
-YD
+ag
+ag
+bi
+ag
+ag
+ag
 aa
 ag
 ag
@@ -17465,7 +17434,7 @@ aa
 ag
 bi
 bi
-bi
+JI
 bi
 ag
 aa
@@ -17528,7 +17497,7 @@ aa
 aa
 aa
 aa
-ag
+bi
 bi
 bi
 bi
@@ -17594,7 +17563,7 @@ aa
 aa
 aa
 aa
-ag
+bi
 bi
 bi
 bi
@@ -17663,7 +17632,7 @@ aa
 ag
 bi
 bi
-bi
+JG
 bi
 qN
 bi
@@ -17726,12 +17695,12 @@ WS
 WS
 WS
 WS
-tQ
-tQ
-WD
-tQ
-tQ
-tQ
+ag
+ag
+bi
+ag
+ag
+ag
 ag
 ag
 ag
@@ -21684,13 +21653,13 @@ aa
 aa
 ag
 bi
-bi
+JI
 bi
 bi
 ag
 bi
 bi
-bi
+JI
 bi
 ag
 aa
@@ -21882,13 +21851,13 @@ aa
 aa
 ag
 bi
-bi
+JG
 bi
 bi
 ag
 bi
 bi
-bi
+JG
 bi
 ag
 aa
@@ -22014,13 +21983,13 @@ aa
 aa
 ag
 bi
-bi
+JI
 bi
 bi
 ag
 bi
 bi
-bi
+JI
 bi
 ag
 aa
@@ -22212,13 +22181,13 @@ aa
 aa
 ag
 bi
-bi
+JG
 bi
 bi
 ag
 bi
 bi
-bi
+JG
 bi
 ag
 aa
