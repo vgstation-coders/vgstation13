@@ -85,7 +85,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	verbs += /obj/proc/remove_pai
 
 /obj/attackby(obj/item/weapon/W, mob/user)
-	invoke_event(/event/attackby, list("attacker" = user, "item" = W))
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
@@ -349,14 +349,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return FALSE
 
 /obj/singularity_pull(S, current_size)
-	invoke_event(/event/before_move)
+	INVOKE_EVENT(src, /event/before_move)
 	if(anchored)
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
 	else
 		step_towards(src, S)
-	invoke_event(/event/after_move)
+	INVOKE_EVENT(src, /event/after_move)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"

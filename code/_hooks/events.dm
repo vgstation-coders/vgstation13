@@ -275,15 +275,11 @@
   * * event/event_type Required. The typepath of the event to invoke.
   * * list/arguments Optional. List of parameters to be passed to the event handlers.
   */
+#define INVOKE_EVENT(target, event_type, arguments...) (target.registered_events?[event_type] && target.invoke_event(event_type, list(##arguments)))
+
 /datum/proc/invoke_event(event/event_type, list/arguments)
 	SHOULD_NOT_OVERRIDE(TRUE)
-	if(!length(registered_events))
-		// No event at all is registered for this datum.
-		return
 	var/list/event_handlers = registered_events[event_type]
-	if(!length(event_handlers))
-		// This datum does not have any handler registered for this event_type.
-		return
 	for(var/key in event_handlers)
 		var/list/handler = event_handlers[key]
 		var/objRef = handler[EVENT_HANDLER_OBJREF_INDEX]

@@ -1561,10 +1561,10 @@ Use this proc preferably at the end of an equipment loadout
 	if(!canface())
 		return 0
 	if (dir!=direction)
-		invoke_event(/event/before_move)
+		INVOKE_EVENT(src, /event/before_move)
 	dir = direction
-	invoke_event(/event/face)
-	invoke_event(/event/after_move)
+	INVOKE_EVENT(src, /event/face)
+	INVOKE_EVENT(src, /event/after_move)
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
@@ -1586,9 +1586,9 @@ Use this proc preferably at the end of an equipment loadout
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
-	invoke_event(/event/before_move)
+	INVOKE_EVENT(src, /event/before_move)
 	..()
-	invoke_event(/event/after_move)
+	INVOKE_EVENT(src, /event/after_move)
 
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0

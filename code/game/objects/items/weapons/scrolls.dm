@@ -90,12 +90,12 @@
 		if(!success)
 			tempL.Remove(attempt)
 		else
-			user.invoke_event(/event/z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
+			INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
 			break
 
 	if(!success)
 		user.forceMove(pick(L))
-		user.invoke_event(/event/z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
+		INVOKE_EVENT(user, /event/z_transition, "user" = user, "to_z" = user.z, "from_z" = prev_z)
 
 	smoke.start()
 	src.uses -= 1

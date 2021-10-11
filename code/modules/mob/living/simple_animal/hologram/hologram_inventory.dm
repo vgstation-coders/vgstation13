@@ -8,17 +8,17 @@
 		head = null
 		success = 1
 		update_inv_head()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	if (W == w_uniform)
 		w_uniform = null
 		success = 1
 		update_inv_w_uniform()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	if (W == wear_suit)
 		wear_suit = null
 		success = 1
 		update_inv_wear_suit()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else
 		success = ..()
 
@@ -156,7 +156,7 @@
 					O.overlays	+= bloodsies
 
 				i++
-		
+
 		var/image/I = new()
 		I.appearance = O.appearance
 		I.plane = FLOAT_PLANE

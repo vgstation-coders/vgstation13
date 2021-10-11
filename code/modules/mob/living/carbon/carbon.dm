@@ -23,13 +23,13 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
-	invoke_event(/event/to_bump, list("bumper" = src, "bumped" = AM))
+	INVOKE_EVENT(src, /event/to_bump, "bumper" = src, "bumped" = AM)
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
-	invoke_event(/event/bumped, list("bumper" = AM, "bumped" = src))
+	INVOKE_EVENT(src, /event/bumped, "bumper" = AM, "bumped" = src)
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
@@ -104,7 +104,7 @@
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	handle_symptom_on_touch(M, src, HAND)
-	invoke_event(/event/touched, list("toucher" = M, "touched" = src))
+	INVOKE_EVENT(src, /event/touched, "toucher" = M, "touched" = src)
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
 	if(incapacitation_duration <= 0)

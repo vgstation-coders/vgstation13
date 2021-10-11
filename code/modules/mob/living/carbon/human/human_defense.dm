@@ -484,8 +484,8 @@ emp_act
 	var/damage_blocked = 0
 
 	//INVOKE_EVENT may return null sometimes - this doesn't work nice with bitflags (which is what's being done here). Hence the !! operator - it turns a null into a 0.
-	var/brute_resolved = !!invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = b_loss))
-	var/burn_resolved = !!invoke_event(/event/damaged, list("kind" = BURN, "amount" = f_loss))
+	var/brute_resolved = !!INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = b_loss)
+	var/burn_resolved = !!INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = f_loss)
 	damage_blocked |= (brute_resolved | burn_resolved)
 
 	if(damage_blocked)
