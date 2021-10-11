@@ -113,13 +113,13 @@
 
 	var/relative = FALSE // move relative to this position? (disabling moves to normal absolute coords)
 
-	Trigger(var/atom/movable/A)
-		if(teleport_x && teleport_y && teleport_z)
-			if(relative)
-				A.x += teleport_x
-				A.y += teleport_y
-				A.z += teleport_z
-			else
+/obj/effect/step_trigger/teleporter/Trigger(var/atom/movable/A)
+		if(relative)
+			A.x += teleport_x
+			A.y += teleport_y
+			A.z += teleport_z
+		else
+			if(teleport_x && teleport_y && teleport_z)
 				A.x = teleport_x
 				A.y = teleport_y
 				A.z = teleport_z
@@ -137,13 +137,13 @@
 	if(istype(A,/obj/item/projectile/fire_breath/shuttle_exhaust))
 		qdel(A)
 		return
-	if(teleport_x && teleport_y && teleport_z)
-		if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
-			if(relative)
-				A.x += rand(teleport_x, teleport_x_offset)
-				A.y += rand(teleport_y, teleport_y_offset)
-				A.z += rand(teleport_z, teleport_z_offset)
-			else
+	if(relative)
+		A.x += rand(teleport_x, teleport_x_offset)
+		A.y += rand(teleport_y, teleport_y_offset)
+		A.z += rand(teleport_z, teleport_z_offset)
+	else
+		if(teleport_x && teleport_y && teleport_z)
+			if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
 				A.x = rand(teleport_x, teleport_x_offset)
 				A.y = rand(teleport_y, teleport_y_offset)
 				A.z = rand(teleport_z, teleport_z_offset)
@@ -186,7 +186,8 @@
 	if(relative)
 		vis_contents += locate(src.x+teleport_x,src.y+teleport_y,src.z+teleport_z)
 	else
-		vis_contents += locate(teleport_x,teleport_y,teleport_z)
+		if(teleport_x && teleport_y && teleport_z)
+			vis_contents += locate(teleport_x,teleport_y,teleport_z)
 
 // Debug verbs.
 /client/proc/update_all_area_portals()
@@ -199,5 +200,7 @@
 
     for(var/obj/effect/step_trigger/teleporter/portal/P in world)
         P.update_icon()
+		for(var/atom/movable/A in P.loc)
+			P.Trigger(A)
 
     message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
