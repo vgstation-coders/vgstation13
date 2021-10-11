@@ -383,7 +383,7 @@
 		update_inv_wear_mask()
 	else
 		return 0
-	invoke_event(/event/unequipped, list(W))
+	INVOKE_EVENT(src, /event/unequipped, W)
 	if(success)
 		if(client)
 			client.screen -= W

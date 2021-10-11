@@ -69,7 +69,7 @@
 		RestrainedClickOn(A)
 	else
 	*/
-	if(invoke_event(/event/uattack, list("atom" = A))) //This returns 1 when doing an action intercept
+	if(INVOKE_EVENT(src, /event/uattack, "atom" = A)) //This returns 1 when doing an action intercept
 		return
 	A.add_hiddenprint(src)
 	A.attack_ai(src)

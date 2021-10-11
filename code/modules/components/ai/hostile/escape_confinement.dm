@@ -11,10 +11,11 @@
 
 /datum/component/ai/escape_confinement/process()
 	life_tick++
-	if(parent.invoke_event(/event/comp_ai_cmd_get_busy))
+	if(INVOKE_EVENT(parent, /event/comp_ai_cmd_get_busy))
 		return
 	var/atom/parent_atom = parent
-	switch(parent.invoke_event(/event/comp_ai_cmd_get_state))
+	var/result = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_state)
+	switch(result)
 		if(HOSTILE_STANCE_IDLE)
 			EscapeConfinement()
 		if(HOSTILE_STANCE_ATTACK)
@@ -37,8 +38,8 @@
 /datum/component/ai/escape_confinement/proc/DestroySurroundings()
 	EscapeConfinement()
 	var/list/smash_dirs = list(0)
-	var/atom/target = parent.invoke_event(/event/comp_ai_cmd_get_target)
-	if(!target || !parent.invoke_event(/event/comp_ai_cmd_can_attack, list("target" = target)))
+	var/atom/target = INVOKE_EVENT(parent, /event/comp_ai_cmd_get_target)
+	if(!target || INVOKE_EVENT(!parent, /event/comp_ai_cmd_can_attack, "target" = target))
 		smash_dirs |= alldirs //if no target, attack everywhere
 	else
 		var/targdir = get_dir(src, target)

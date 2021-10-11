@@ -102,19 +102,19 @@
 		success = 1
 		slot = slot_head
 		update_inv_hat()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else if(W == glasses)
 		glasses = null
 		success = 1
 		slot = slot_glasses
 		update_inv_glasses()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else if(W == uniform)
 		uniform = null
 		success = 1
 		slot = slot_w_uniform
 		update_inv_uniform()
-		invoke_event(/event/unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else
 		success = ..()
 	if(success)

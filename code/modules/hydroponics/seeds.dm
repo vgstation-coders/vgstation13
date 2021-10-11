@@ -19,6 +19,7 @@
 		initialize()
 
 /obj/item/seeds/initialize()
+	..()
 	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
@@ -47,7 +48,7 @@
 /obj/item/seeds/random
 	seed_type = null
 
-/obj/item/seeds/random/New()
+/obj/item/seeds/random/initialize()
 	seed = SSplant.create_random_seed()
 	seed_type = seed.name
 	..()
@@ -1453,7 +1454,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,20))
-		
+
 	lifespan = 60
 	maturation = 6
 	production = 6

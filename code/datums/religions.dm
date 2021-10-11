@@ -855,7 +855,7 @@
 
 /datum/religion/medbay
 	name = "Medbay"
-	deity_name = "The Chief Medical Officier"
+	deity_name = "The Chief Medical Officer"
 	bible_name = "The Wild Ride"
 	male_adept = "Doctor"
 	female_adept = "Nurse"

@@ -198,7 +198,7 @@ var/global/list/ghdel_profiling = list()
 	densityChanged()
 
 /atom/proc/densityChanged()
-	invoke_event(/event/density_change, list("atom" = src))
+	INVOKE_EVENT(src, /event/density_change, "atom" = src)
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 	if(!isturf(src))

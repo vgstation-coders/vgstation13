@@ -241,7 +241,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = amount))
 		return 0
 
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
@@ -253,7 +253,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = OXY, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = OXY, "amount" = amount))
 		return 0
 
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
@@ -270,7 +270,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = TOX, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = TOX, "amount" = amount))
 		return 0
 
 	var/mult = 1
@@ -294,7 +294,7 @@
 		return 0	//godmode
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = amount))
 		return 0
 
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
@@ -306,7 +306,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = CLONE, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = CLONE, "amount" = amount))
 		return 0
 
 	if(ishuman(src))
@@ -328,7 +328,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(invoke_event(/event/damaged, list("kind" = BRAIN, "amount" = amount)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRAIN, "amount" = amount))
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
@@ -713,9 +713,9 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
-							invoke_event(/event/before_move)
+							INVOKE_EVENT(src, /event/before_move)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
-							invoke_event(/event/after_move)
+							INVOKE_EVENT(src, /event/after_move)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 					else
@@ -783,7 +783,7 @@ Thanks.
 
 	var/turf/T = get_turf(src)
 
-	invoke_event(/event/resist, list("user" = src))
+	INVOKE_EVENT(src, /event/resist, "user" = src)
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
@@ -1423,9 +1423,9 @@ Thanks.
 					AM.set_glide_size(src.glide_size)
 					if (ismob(AM))
 						var/mob/M = AM
-						invoke_event(/event/before_move)
+						INVOKE_EVENT(src, /event/before_move)
 						step(M, t)
-						invoke_event(/event/after_move)
+						INVOKE_EVENT(src, /event/after_move)
 					else
 						step(AM, t)
 				now_pushing = 0
