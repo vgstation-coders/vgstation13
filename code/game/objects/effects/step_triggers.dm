@@ -157,20 +157,14 @@
 /obj/effect/step_trigger/teleporter/portal
     plane = SPACE_BACKGROUND_PLANE
 
-    var/turf/target_turf
-
 /obj/effect/step_trigger/teleporter/portal/initialize()
 	..()
-	update()
-
-/obj/effect/step_trigger/teleporter/portal/proc/update()
-    target_turf = locate(teleport_x,teleport_y,teleport_z)
-    update_icon()
+	update_icon()
 
 /obj/effect/step_trigger/teleporter/portal/update_icon()
 	overlays.Cut()
 	vis_contents.Cut()
-	vis_contents += target_turf
+	vis_contents += locate(teleport_x,teleport_y,teleport_z)
 
 // Debug verbs.
 /client/proc/update_all_area_portals()
@@ -182,7 +176,6 @@
         return
 
     for(var/obj/effect/step_trigger/teleporter/portal/P in world)
-        P.target_turf = locate(P.teleport_x,P.teleport_y,P.teleport_z)
         P.update_icon()
 
     message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
