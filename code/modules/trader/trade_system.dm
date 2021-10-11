@@ -29,6 +29,8 @@ var/datum/subsystem/trade_system/SStrade
 		market_flux()
 	restock_chance()
 	flash_sale()
+	for(var/obj/structure/trade_window/TW in all_twindows)
+		nanomanager.update_uis(TW)
 
 /datum/subsystem/trade_system/proc/market_flux(var/update_windows = TRUE)
 	for(var/datum/trade_product/TP in all_trade_merch)
@@ -48,8 +50,6 @@ var/datum/subsystem/trade_system/SStrade
 				continue
 			flash_sale_target = TP
 			return
-	for(var/obj/structure/trade_window/TW in all_twindows)
-		nanomanager.update_uis(TW)
 
 /datum/subsystem/trade_system/proc/restock_chance()
 	//Every 100 in the account gives a 1% chance for a restocked item, up to 10%
