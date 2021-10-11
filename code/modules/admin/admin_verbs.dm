@@ -213,6 +213,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/unit_test_panel,
 #endif
 	/client/proc/update_all_open_spaces,
+	/client/proc/update_all_area_portals,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
