@@ -171,6 +171,7 @@
 	invisibility = 0
 	relative = TRUE
 	affect_ghosts = TRUE
+	var/target_turf
 
 // Block gases for now
 /obj/effect/step_trigger/teleporter/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -186,10 +187,23 @@
 	overlays.Cut()
 	vis_contents.Cut()
 	if(relative)
-		vis_contents += locate(src.x+teleport_x,src.y+teleport_y,src.z+teleport_z)
+		target_turf = locate(src.x+teleport_x,src.y+teleport_y,src.z+teleport_z)
 	else
 		if(teleport_x && teleport_y && teleport_z)
-			vis_contents += locate(teleport_x,teleport_y,teleport_z)
+			target_turf = locate(teleport_x,teleport_y,teleport_z)
+	vis_contents += target_turf
+
+/obj/effect/step_trigger/teleporter/portal/ex_act(severity)
+	if(target_turf)
+		target_turf.ex_act(severity)
+		for(var/atom/movable/A in target_turf)
+			A.ex_act(severity)
+
+/obj/effect/step_trigger/teleporter/portal/emp_act(severity)
+	if(target_turf)
+		target_turf.emp_act(severity)
+		for(var/atom/movable/A in target_turf)
+			A.emp_act(severity)
 
 // Debug verbs.
 /client/proc/update_all_area_portals()
