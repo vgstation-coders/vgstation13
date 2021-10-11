@@ -57462,11 +57462,19 @@
 "edC" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/structure/table/reinforced,
-/obj/item/weapon/storage/lockbox/loyalty,
 /obj/effect/decal/warning_stripes{
 	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
+	},
+/obj/item/weapon/storage/lockbox/holy{
+	pixel_x = 5;
+	pixel_y = 2
+	},
+/obj/item/weapon/storage/lockbox/exile,
+/obj/item/weapon/storage/lockbox/loyalty{
+	pixel_x = -2;
+	pixel_y = 5
 	},
 /turf/simulated/floor,
 /area/security/warden)
