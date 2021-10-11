@@ -27,24 +27,25 @@
 
 /datum/dna/gene/disability/radioactive
 	name = "Radioactive"
-	desc = "The subject suffers from constant radiation sickness and causes the same on nearby organics."
-	activation_message = "You feel a strange sickness permeate your whole body."
-	deactivation_message = "You no longer feel awful and sick all over."
+	desc = "The subject emits radiation to nearby people, but rapidly gets rid of their own radiation."
+	activation_message = "You feel a strange warmth permeate your whole body."
+	deactivation_message = "You no longer feel strangely warm."
 	flags = GENE_UNNATURAL
 
 /datum/dna/gene/disability/radioactive/New()
 	..()
 	block = RADBLOCK
 
-/datum/dna/gene/disability/radioactive/OnMobLife(var/mob/owner)
-	owner.radiation = max(owner.radiation, 20)
-	for(var/mob/living/L in range(1, owner))
-		if(L == owner)
-			continue
-		to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-		L.apply_radiation(5, RAD_EXTERNAL)
-
-	emitted_harvestable_radiation(get_turf(owner), 1, range = 2) //Around 70W, nothing much really
+/datum/dna/gene/disability/radioactive/OnMobLife(var/mob/living/owner)
+	var/radiation = owner.radiation
+	owner.radiation = max(radiation - 30, 0)
+	if(owner.getarmor(null, "rad") < 100)
+		emitted_harvestable_radiation(get_turf(owner), radiation * 100, range = 3) //1 power = ~70W, are you ready for radiation engines?
+		for(var/mob/living/L in range(1, owner))
+			if(L == owner)
+				continue
+			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
+			L.apply_radiation(5, RAD_EXTERNAL)
 
 /datum/dna/gene/disability/radioactive/OnDrawUnderlays(var/mob/M,var/g,var/fat)
 	return "rads[fat]_s"
