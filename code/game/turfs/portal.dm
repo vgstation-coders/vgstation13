@@ -1,13 +1,13 @@
 /turf/portal
-	name = "area portal"
-	icon = 'icons/turf/space.dmi'
-	icon_state = ""
-	density = 0
-	plane = OPENSPACE_PLANE
-	dynamic_lighting = 0
+    name = "area portal"
+    icon = 'icons/turf/space.dmi'
+    icon_state = ""
+    density = 0
+    plane = OPENSPACE_PLANE
+    dynamic_lighting = 0
 
     // Target coords to render
-	var/px = 1
+    var/px = 1
     var/py = 1
     var/pz = 1
     var/turf/target_turf
@@ -21,12 +21,12 @@
 	update()
 
 /turf/portal/Entered(var/atom/movable/mover)
-	..()
+    ..()
     mover.forceMove(target_turf)
 
 /turf/portal/proc/update()
     target_turf = locate(px,py,pz)
-	levelupdate()
+    levelupdate()
     for(var/atom/movable/A in src)
         A.forceMove(target_turf)
     update_icon()
@@ -48,17 +48,17 @@
 
 // Debug verbs.
 /client/proc/update_all_area_portals()
-	set category = "Debug"
-	set name = "Update area portals"
-	set desc = "Force all area portal turfs to update"
+    set category = "Debug"
+    set name = "Update area portals"
+    set desc = "Force all area portal turfs to update"
 
-	if (!holder)
-		return
+    if (!holder)
+        return
 
-	for(var/turf/portal/P in world)
+    for(var/turf/portal/P in world)
         P.target_turf = locate(P.px,P.py,P.pz)
-		P.update_icon()
-		for(var/atom/movable/A in P)
-			A.forceMove(P.target_turf)
+        P.update_icon()
+        for(var/atom/movable/A in P)
+            A.forceMove(P.target_turf)
 
-	message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
+    message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
