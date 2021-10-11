@@ -281,6 +281,28 @@ the HUD updates properly! */
 				var/charge_ratio = exosuit_cell.charge / exosuit_cell.maxcharge
 				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
 
+proc/process_hydro_hud(var/mob/M, var/advanced_mode,var/mob/eye)
+	if(!M)
+		return
+	if(!M.client)
+		return
+	if(!(M in hydro_hud_users))
+		hydro_hud_users += M
+	var/client/C = M.client
+	var/image/holder
+	var/turf/T
+	if(eye)
+		T = get_turf(eye)
+	else
+		T = get_turf(M)
+
+	for(var/mob/living/simple_animal/SA in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+		SA.hydro_hud_image(C)
+
+	for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+		if(!draw_warnings)
+			//They won't draw warnings, so we will!
+
 
 //Unsure of where to put this, but since most of it is HUDs it seemed fitting to go here.
 /mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G)

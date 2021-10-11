@@ -138,7 +138,8 @@ var/list/acceptible_sushi_inputs = list()
 		processing_objects -= src
 		return
 	if(prob(population*4))
-		playsound(src, 'sound/effects/cricket_chirp.ogg', 10, 1)
+		spawn(rand(0,3) //Slightly offset sounds to be more natural
+			playsound(src, 'sound/effects/cricket_chirp.ogg', 25)
 	if(eggs) //Hatch one egg
 		eggs--
 		population++
