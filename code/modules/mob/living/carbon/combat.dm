@@ -126,12 +126,7 @@
 				to_chat(src, "<span class='warning'>Your tackle connects!</span>")
 				to_chat(L, "<span class='danger'>You are hit by [src]'s tackle!</span>")
 				playsound(src, 'sound/effects/bodyfall.ogg', 75, 1)
-				for (var/obj/held in L.held_items)
-					var/dir = pick(alldirs)
-					var/turf/target = get_turf(src)
-					for(var/i in 1 to 3)
-						target = get_step(target, dir)
-					L.throw_item(target, held)
+
 				var/tackleDefense = L.calcTackleDefense()
 				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
 				var/rngDefense = rand(tackleDefense/2, tackleDefense)
@@ -145,6 +140,12 @@
 					if(M_HORNS in mutations)
 						tKnock += 5
 					L.adjustBruteLoss(tKnock)
+					for (var/obj/held in L.held_items)
+						var/dir = pick(alldirs)
+						var/turf/target = get_turf(src)
+						for(var/i in 1 to 3)
+							target = get_step(target, dir)
+						L.throw_item(target, held)
 			spawn(3)	//Just to let throw_impact stop throwing a tantrum
 				isTackling = FALSE
 	..()
