@@ -187,6 +187,7 @@
 			adjust_nutrition(15)
 			if(prob(25))
 				if(!pack_alpha)
+					environment_smash_flags = 0 //No longer smash things
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					message_admins("[key_name(user)] has tamed a wolf: @[formatJumpTo(user, "JMP")]")
