@@ -13,7 +13,6 @@
 	name = "ground floor"
 	movementJammed = 1
 	z_above = 3
-	z_below = 5
 
 /datum/zLevel/second
 	name = "second floor"
@@ -25,7 +24,6 @@
 	name = "third floor"
 	movementJammed = 1
 	z_below = 4
-	z_above = 2
 
 /datum/map/active
 	nameShort = "test_euclidean"

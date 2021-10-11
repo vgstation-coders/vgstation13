@@ -960,12 +960,6 @@
 	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
-"JS" = (
-/obj/machinery/door/airlock/external{
-	name = "Clown Planet"
-	},
-/turf/simulated/floor,
-/area/crew_quarters/bar)
 "Kr" = (
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large,
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large,
@@ -1438,13 +1432,6 @@
 	dir = 4
 	},
 /turf/simulated/floor/plating,
-/area/crew_quarters/bar)
-"Wv" = (
-/obj/structure/stairs/west,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/turf/simulated/floor,
 /area/crew_quarters/bar)
 "Xg" = (
 /obj/structure/table,
@@ -7092,28 +7079,28 @@ bi
 bi
 bi
 ag
-ie
-ie
-ie
-ie
-ie
-ie
-ie
-ie
-ie
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}
 (21,1,2) = {"
 aa
-fL
-fL
-fL
-fL
-fL
-fL
-fL
-fL
-fL
-fL
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 ag
 gI
 bi
@@ -7166,11 +7153,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (22,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7232,11 +7219,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (23,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7298,11 +7285,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (24,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7364,11 +7351,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (25,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7430,11 +7417,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (26,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7496,11 +7483,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (27,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7562,11 +7549,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (28,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7628,11 +7615,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (29,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7694,11 +7681,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (30,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7751,7 +7738,7 @@ bi
 bi
 bi
 bi
-JS
+mh
 ie
 ie
 ie
@@ -7760,11 +7747,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (31,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7826,11 +7813,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (32,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7892,11 +7879,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (33,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -7958,11 +7945,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (34,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -8024,11 +8011,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (35,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -8090,11 +8077,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (36,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -8156,11 +8143,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (37,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -8222,11 +8209,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (38,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -8288,11 +8275,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (39,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -8354,11 +8341,11 @@ ie
 ie
 ie
 ie
-ie
+aa
 "}
 (40,1,2) = {"
 aa
-fL
+aa
 fL
 fL
 fL
@@ -8412,28 +8399,28 @@ Qe
 bs
 bi
 ag
-ie
-ie
-ie
-ie
-ie
-ie
-ie
-ie
-ie
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 "}
 (41,1,2) = {"
 aa
-fL
-fL
-fL
-fL
-fL
-fL
-fL
-fL
-fL
-fL
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
+aa
 ag
 bi
 bi
@@ -8978,7 +8965,7 @@ aa
 aa
 aa
 ag
-uv
+ag
 wV
 yV
 Cj
@@ -9044,10 +9031,10 @@ aa
 aa
 aa
 ag
-uv
-uv
-uv
-uv
+bi
+bi
+bi
+bi
 ag
 aa
 aa
@@ -9110,10 +9097,10 @@ aa
 aa
 aa
 ag
-uv
-uv
-uv
-uv
+bi
+bi
+bi
+bi
 ag
 aa
 aa
@@ -9176,10 +9163,10 @@ aa
 aa
 aa
 ag
-uv
-uv
-uv
-uv
+bi
+bi
+bi
+bi
 ag
 aa
 aa
@@ -13401,7 +13388,7 @@ aa
 aa
 aa
 ag
-uv
+ag
 uv
 uv
 uv
@@ -17629,7 +17616,7 @@ qN
 JG
 tf
 sk
-uv
+ag
 ag
 aa
 aa
@@ -21656,7 +21643,7 @@ ag
 uv
 uv
 uv
-uv
+ag
 ag
 aa
 aa
@@ -21722,7 +21709,7 @@ ag
 uv
 uv
 uv
-Wv
+HZ
 ag
 aa
 aa
