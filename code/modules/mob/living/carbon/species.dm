@@ -1303,6 +1303,18 @@ var/list/has_died_as_golem = list()
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
+//	uniform_icons = 'icons/mob/species/mushroom/uniform.dmi'
+//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+//	gloves_icons    = 'icons/mob/species/vox/gloves.dmi'
+//	glasses_icons   = 'icons/mob/species/vox/eyes.dmi'
+//	ears_icons      = 'icons/mob/ears.dmi'
+//	shoes_icons 	= 'icons/mob/species/vox/shoes.dmi'
+	head_icons      = 'icons/mob/species/mushroom/head.dmi'
+//	belt_icons      = 'icons/mob/belt.dmi'
+	wear_suit_icons = 'icons/mob/species/mushroom/suit.dmi'
+//	wear_mask_icons = 'icons/mob/species/mushroom/masks.dmi'
+//	back_icons      = 'icons/mob/back.dmi'
+
 	has_mutant_race = 0
 
 	has_organ = list(
