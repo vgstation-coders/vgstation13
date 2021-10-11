@@ -254,6 +254,7 @@
 				if(pack_alpha.isDead())
 					visible_message("<span class = 'notice'>\The [src] lets out a mournful howl. </span>")
 					//Howl noise?
+					environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 					pack_alpha = null
 				else
 					if(alpha_stance == WOLF_ALPHANONE) //Rough following
