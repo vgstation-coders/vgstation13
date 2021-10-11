@@ -111,12 +111,18 @@
 	var/teleport_y = 0
 	var/teleport_z = 0
 
+	var/relative = FALSE // move relative to this position? (disabling moves to normal absolute coords)
+
 	Trigger(var/atom/movable/A)
 		if(teleport_x && teleport_y && teleport_z)
-
-			A.x = teleport_x
-			A.y = teleport_y
-			A.z = teleport_z
+			if(relative)
+				A.x += teleport_x
+				A.y += teleport_y
+				A.z += teleport_z
+			else
+				A.x = teleport_x
+				A.y = teleport_y
+				A.z = teleport_z
 
 /* Random teleporter, teleports atoms to locations ranging from teleport_x - teleport_x_offset, etc */
 
@@ -133,10 +139,14 @@
 		return
 	if(teleport_x && teleport_y && teleport_z)
 		if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
-
-			A.x = rand(teleport_x, teleport_x_offset)
-			A.y = rand(teleport_y, teleport_y_offset)
-			A.z = rand(teleport_z, teleport_z_offset)
+			if(relative)
+				A.x += rand(teleport_x, teleport_x_offset)
+				A.y += rand(teleport_y, teleport_y_offset)
+				A.z += rand(teleport_z, teleport_z_offset)
+			else
+				A.x = rand(teleport_x, teleport_x_offset)
+				A.y = rand(teleport_y, teleport_y_offset)
+				A.z = rand(teleport_z, teleport_z_offset)
 
 /obj/effect/step_trigger/teleporter/random/shuttle_transit
 	teleport_x = 25
@@ -158,6 +168,7 @@
 	icon = 'icons/turf/space.dmi'
 	icon_state = ""
 	plane = SPACE_BACKGROUND_PLANE
+	relative = TRUE
 
 /obj/effect/step_trigger/teleporter/portal/initialize()
 	..()
@@ -166,7 +177,10 @@
 /obj/effect/step_trigger/teleporter/portal/update_icon()
 	overlays.Cut()
 	vis_contents.Cut()
-	vis_contents += locate(teleport_x,teleport_y,teleport_z)
+	if(relative)
+		vis_contents += locate(src.x+teleport_x,src.y+teleport_y,src.z+teleport_z)
+	else
+		vis_contents += locate(teleport_x,teleport_y,teleport_z)
 
 // Debug verbs.
 /client/proc/update_all_area_portals()
