@@ -167,8 +167,10 @@
 /obj/effect/step_trigger/teleporter/portal
 	icon = 'icons/turf/space.dmi'
 	icon_state = ""
-	plane = SPACE_BACKGROUND_PLANE
+	plane = ABOVE_TURF_PLANE
+	invisibility = 0
 	relative = TRUE
+	affect_ghosts = TRUE
 
 // Block gases for now
 /obj/effect/step_trigger/teleporter/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
