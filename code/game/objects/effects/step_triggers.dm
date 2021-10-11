@@ -170,6 +170,12 @@
 	plane = SPACE_BACKGROUND_PLANE
 	relative = TRUE
 
+// Block gases for now
+/obj/effect/step_trigger/teleporter/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover))
+		return ..()
+	return FALSE
+
 /obj/effect/step_trigger/teleporter/portal/initialize()
 	..()
 	update_icon()
