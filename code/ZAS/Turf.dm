@@ -92,6 +92,13 @@
 		if(!unsim) // Edge of map.
 			continue
 
+		var/obj/effect/step_trigger/teleporter/portal/port = locate(/obj/effect/step_trigger/teleporter/portal) in unsim // Area portal handling.
+		if(port && port.target_turf)
+			unsim = port.target_turf
+		
+		if(!unsim) // Above check should be fine, but sanity
+			continue
+		
 		var/block = unsim.c_airblock(src)
 		if(block & AIR_BLOCKED)
 
