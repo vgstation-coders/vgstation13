@@ -114,15 +114,15 @@
 	var/relative = FALSE // move relative to this position? (disabling moves to normal absolute coords)
 
 /obj/effect/step_trigger/teleporter/Trigger(var/atom/movable/A)
-		if(relative)
-			A.x += teleport_x
-			A.y += teleport_y
-			A.z += teleport_z
-		else
-			if(teleport_x && teleport_y && teleport_z)
-				A.x = teleport_x
-				A.y = teleport_y
-				A.z = teleport_z
+	if(relative)
+		A.x += teleport_x
+		A.y += teleport_y
+		A.z += teleport_z
+	else
+		if(teleport_x && teleport_y && teleport_z)
+			A.x = teleport_x
+			A.y = teleport_y
+			A.z = teleport_z
 
 /* Random teleporter, teleports atoms to locations ranging from teleport_x - teleport_x_offset, etc */
 
@@ -191,16 +191,16 @@
 
 // Debug verbs.
 /client/proc/update_all_area_portals()
-    set category = "Debug"
-    set name = "Update area portals"
-    set desc = "Force all area portal turfs to update"
+	set category = "Debug"
+	set name = "Update area portals"
+	set desc = "Force all area portal turfs to update"
 
-    if (!holder)
-        return
+	if (!holder)
+		return
 
-    for(var/obj/effect/step_trigger/teleporter/portal/P in world)
-        P.update_icon()
+	for(var/obj/effect/step_trigger/teleporter/portal/P in world)
+		P.update_icon()
 		for(var/atom/movable/A in P.loc)
 			P.Trigger(A)
 
-    message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
+	message_admins("Admin [key_name_admin(usr)] forced area portals to update.")
