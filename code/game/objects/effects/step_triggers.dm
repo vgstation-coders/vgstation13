@@ -155,7 +155,9 @@
 /* Instant teleporter with vis_contents */
 
 /obj/effect/step_trigger/teleporter/portal
-    plane = SPACE_BACKGROUND_PLANE
+	icon = 'icons/turf/space.dmi'
+	icon_state = ""
+	plane = SPACE_BACKGROUND_PLANE
 
 /obj/effect/step_trigger/teleporter/portal/initialize()
 	..()
