@@ -3,7 +3,7 @@
     icon = 'icons/turf/space.dmi'
     icon_state = ""
     density = 0
-    plane = OPENSPACE_PLANE
+    plane = SPACE_BACKGROUND_PLANE
     dynamic_lighting = 0
 
     // Target coords to render
