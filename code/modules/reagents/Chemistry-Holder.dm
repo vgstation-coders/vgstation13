@@ -725,6 +725,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return amount_cache[reagent] >= max(0,amount)
 	return 0
 
+/datum/reagents/proc/has_only_any(list/good_reagents)
+    var/found_any_good_reagent = FALSE
+    for(var/reagent in amount_cache)
+        if(!good_reagents.Find(reagent))
+            return FALSE
+        found_any_good_reagent = TRUE
+    return found_any_good_reagent
+
 /datum/reagents/proc/has_reagent_type(var/reagent_type, var/amount = -1, var/strict = 0)
 	if(!ispath(reagent_type,/datum/reagent))
 		return 0

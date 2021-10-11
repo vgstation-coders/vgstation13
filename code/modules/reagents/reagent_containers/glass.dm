@@ -91,6 +91,10 @@
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+		if(istype(W, /obj/item/weapon/pen/fountain))
+			var/obj/item/weapon/pen/fountain/P = W
+			if(P.bloodied)
+				..()
 		set_tiny_label(user)
 	attempt_heating(W, user)
 
