@@ -171,7 +171,7 @@
 	invisibility = 0
 	relative = TRUE
 	affect_ghosts = TRUE
-	var/target_turf
+	var/turf/target_turf
 
 // Block gases for now
 /obj/effect/step_trigger/teleporter/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
