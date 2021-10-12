@@ -395,16 +395,16 @@
 	IED = null
 	..()
 
-/obj/item/weapon/beartrap/ex_act(var/severity)
+/obj/item/weapon/beartrap/ex_act(var/severity, var/child = null, var/mob/whodunnit)
 	switch(severity)
 		if (1)
 			qdel(src)
 		if (2)
 			if (IED)
-				IED.prime()
+				IED.prime(whodunnit)
 		if (3)
 			if (IED && prob(50))
-				IED.prime()
+				IED.prime(whodunnit)
 
 /obj/item/weapon/beartrap/armed
 	armed = 1
@@ -691,7 +691,7 @@
 	message_admins(log_str)
 	log_game(log_str)
 	spawn(IED.det_time)
-		IED.prime()
+		IED.prime(L)
 		desc = initial(desc)
 		overlays.Remove(ied_overlay)
 		if (trappeduser && trappedorgan?.amputated)//check if they lost their leg, and get them out of the trap
