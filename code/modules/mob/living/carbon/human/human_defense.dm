@@ -526,7 +526,7 @@ emp_act
 			if(LIMB_LEFT_ARM)
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
 	if(update)
-		add_attacklogs(user, src, "got caught in an explosive blast from", addition = "Severity: [severity]", admin_warn = TRUE)
+		add_attacklogs(whodunnit, src, "got caught in an explosive blast from", addition = "Severity: [severity]", admin_warn = TRUE)
 		UpdateDamageIcon()
 
 

@@ -227,7 +227,7 @@
 			if(car.occupant && istype(car.occupant, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = car.occupant
 				H.audible_scream("fueltank_crash")
-			explode(H)
+			explode(car.occupant)
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode(var/mob/user)
 	if (reagents.total_volume > 500)
