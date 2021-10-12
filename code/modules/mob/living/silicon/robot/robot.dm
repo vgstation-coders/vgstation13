@@ -474,9 +474,11 @@
 			if(!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 		if(3.0)
 			if(!isDead())
 				adjustBruteLoss(30)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	updatehealth()
 

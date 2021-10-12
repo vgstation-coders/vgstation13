@@ -580,7 +580,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	..(gibbed)
 
 
-/mob/living/simple_animal/ex_act(severity)
+/mob/living/simple_animal/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 	..()
@@ -592,10 +592,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		if (2.0)
 			adjustBruteLoss(60)
-
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 60", admin_warn = TRUE)
 
 		if(3.0)
 			adjustBruteLoss(30)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
