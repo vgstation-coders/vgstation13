@@ -67,6 +67,7 @@
 		broken = 0
 		icon_state = initial(icon_state)
 		setDensity(TRUE)
+		relativewall_neighbours()
 	if(health <= 0) //Dead
 		new grille_material(get_turf(src)) //Drop the second set of rods
 		qdel(src)
