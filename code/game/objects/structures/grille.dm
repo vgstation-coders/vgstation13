@@ -62,6 +62,7 @@
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
 		new grille_material(get_turf(src)) //One rod set
+		relativewall_neighbours()
 	else if(health > (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
