@@ -43,7 +43,7 @@
 	..(amount)
 
 
-/mob/living/carbon/alien/larva/ex_act(severity)
+/mob/living/carbon/alien/larva/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 
