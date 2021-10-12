@@ -424,6 +424,7 @@ emp_act
 			b_loss += 300
 			if(!prob(gotarmor)) //Percent chance equal to their armor resist to not gib instantly.
 				gib()
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
@@ -441,10 +442,12 @@ emp_act
 		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
 				gib()
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				return
 
 			else if (stat == 2 && !client)
 				gibs(loc, virus2)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 				qdel(src)
 				return
 

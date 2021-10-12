@@ -587,6 +587,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	switch (severity)
 		if (1.0)
 			adjustBruteLoss(500)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 			gib()
 			return
 
