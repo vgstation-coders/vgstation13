@@ -206,6 +206,11 @@ var/list/headset_modes = list(
 		message_range = 1
 	if(copytext(text, length(text)) == "!")
 		message_range++
+	if(M_WHISPER in mutations)
+		message_range -= 2
+
+	if(M_LOUD in mutations)
+		message_range += 3
 
 	if(radio_return & ITALICS)
 		speech.message_classes.Add("italics")
