@@ -30,13 +30,16 @@
 	relativewall_neighbours()
 
 /obj/structure/grille/relativewall()
+	if(broken)
+		return
 	var/junction = findSmoothingNeighbors()
 	icon_state = "grille[junction]"
 
 /obj/structure/grille/isSmoothableNeighbor(atom/A)
-	if (istype(A, /turf/space))
-		return 0
-
+	if(istype(A,/obj/structure/grille))
+		var/obj/structure/grille/G = A
+		if(G.broken)
+			return 0
 	return ..()
 
 /obj/structure/grille/examine(mob/user)
@@ -59,10 +62,12 @@
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
 		new grille_material(get_turf(src)) //One rod set
+		relativewall_neighbours()
 	else if(health > (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		setDensity(TRUE)
+		relativewall_neighbours()
 	if(health <= 0) //Dead
 		new grille_material(get_turf(src)) //Drop the second set of rods
 		qdel(src)
@@ -287,7 +292,7 @@
 /obj/structure/grille/broken //THIS IS ONLY TO BE USED FOR MAPPING, THANK YOU FOR YOUR UNDERSTANDING
 
 	//We need to set all variables for broken grilles manually, notably to have those show up nicely in mapmaker
-	icon_state = "grille-b"
+	icon_state = "grille0-b"
 	broken = 1
 	density = 0 //Not blocking anything anymore
 
@@ -315,6 +320,8 @@
 		return 0 //Make sure air doesn't drain
 	return ..()
 
+/obj/structure/grille/cult/relativewall()
+	return
 
 /obj/structure/grille/invulnerable
 	desc = "A reinforced grille made with advanced alloys and techniques. It's impossible to break one without the use of heavy machinery."
@@ -339,4 +346,7 @@
 	return
 
 /obj/structure/grille/replicant/clockworkify()
+	return
+
+/obj/structure/grille/replicant/relativewall()
 	return

@@ -30,6 +30,8 @@
 	if(!A)
 		return 0
 	if(is_type_in_list(A, canSmoothWith()))
+		if(istype(A, /turf/simulated/wall/shuttle) && !istype(src, /turf/simulated/wall/shuttle))
+			return 0
 		if(istype(A, /turf/simulated/wall))
 			var/turf/simulated/wall/W = A
 			if(src.mineral == W.mineral)
