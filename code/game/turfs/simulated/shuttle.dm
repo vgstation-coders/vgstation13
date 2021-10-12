@@ -16,7 +16,7 @@
 	)
 	return smoothables
 
-/obj/structure/grille/isSmoothableNeighbor(atom/A)
+/turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
 	if (istype(A, /turf/simulated/wall)  && !istype(A, /turf/simulated/wall/shuttle))
 		return 0
 	return ..()
