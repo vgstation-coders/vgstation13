@@ -16,11 +16,6 @@
 	)
 	return smoothables
 
-/turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
-	if (istype(A, /turf/simulated/wall)  && !istype(A, /turf/simulated/wall/shuttle))
-		return 0
-	return ..()
-
 /turf/simulated/wall/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
