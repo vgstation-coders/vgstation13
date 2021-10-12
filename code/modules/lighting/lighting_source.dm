@@ -210,21 +210,21 @@
 	applied_lum_b = lum_b
 
 	FOR_DVIEW(var/turf/T, light_range, source_turf, INVISIBILITY_LIGHTING)
-		apply_lum_to_turf(T)
+		apply_lum_to_turf(T,update_gen)
 
 		var/obj/effect/step_trigger/teleporter/portal/P = locate(/obj/effect/step_trigger/teleporter/portal) in T
 		if(P && isturf(P.loc))
 			var/turf/TP = P.loc
-			apply_lum_to_turf(TP)
+			apply_lum_to_turf(TP,update_gen)
 
 		P = locate(/obj/effect/step_trigger/teleporter/portal) in T.vis_locs
 		if(P && isturf(P.loc))
 			var/turf/TP = P.loc
-			apply_lum_to_turf(TP)
+			apply_lum_to_turf(TP,update_gen)
 
 	update_gen++
 
-/datum/light_source/proc/apply_lum_to_turf(var/turf/T)
+/datum/light_source/proc/apply_lum_to_turf(var/turf/T,var/update_gen)
 	if (!T.lighting_corners_initialised)
 		T.generate_missing_corners()
 
