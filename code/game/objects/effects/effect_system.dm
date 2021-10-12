@@ -65,20 +65,18 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/turf/location
 	var/atom/holder
 	var/setup = 0
-	var/mob/user //for investigation
 
 /datum/effect/system/Destroy()
 	holder = null
 	..()
 
-/datum/effect/system/proc/set_up(n = 3, c = 0, turf/loc, var/mob/whodunnit)
+/datum/effect/system/proc/set_up(n = 3, c = 0, turf/loc)
 	if(n > 10)
 		n = 10
 	number = n
 	cardinals = c
 	location = loc
 	setup = 1
-	user = whodunnit
 
 /datum/effect/system/proc/attach(atom/atom)
 	holder = atom
@@ -1039,8 +1037,9 @@ steam.start() -- spawns the effect
 	var/amount 						// TNT equivalent
 	var/flashing = 0			// does explosion creates flash effect?
 	var/flashing_factor = 0		// factor of how powerful the flash effect relatively to the explosion
+	var/mob/user //for investigation
 
-/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0)
+/datum/effect/system/reagents_explosion/set_up (amt, loc, flash = 0, flash_fact = 0, var/mob/whodunnit)
 	amount = amt
 	if(istype(loc, /turf/))
 		location = loc
@@ -1049,6 +1048,7 @@ steam.start() -- spawns the effect
 
 	flashing = flash
 	flashing_factor = flash_fact
+	user = whodunnit
 
 	return
 
