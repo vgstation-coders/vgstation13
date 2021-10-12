@@ -831,7 +831,7 @@
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
 				message_admins("[C] triggered the explosive wet floor sign at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 				log_game("[C] triggered the explosive wet floor sign at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
-				explosion(src.loc,-1,2,0)
+				explosion(src.loc,-1,2,0, whodunnit = get_mob_by_key(fingerprintslast))
 				if(ishuman(C))
 					dead_legs(C)
 				if(src)

@@ -54,7 +54,7 @@
 	if(exploding && !exploded)
 		message_admins("AME explosion at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) - Last touched by [fingerprintslast]",0,1)
 		exploded=1
-		explosion(get_turf(src),8,10,12,15)
+		explosion(get_turf(src),8,10,12,15, whodunnit = get_mob_by_key(fingerprintslast))
 		if(src)
 			qdel(src)
 

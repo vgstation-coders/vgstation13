@@ -268,7 +268,7 @@
 
 //		to_chat(world, "<span class='notice'>Exploding Pressure: [pressure] kPa, intensity: [range]</span>")
 
-		explosion(epicenter, round(range*0.25), round(range*0.5), round(range), round(range*1.5), 1, cap)
+		explosion(epicenter, round(range*0.25), round(range*0.5), round(range), round(range*1.5), 1, cap, whodunnit = get_mob_by_key(fingerprintslast))
 		if(cap)
 			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 				if(bhangmeter)
