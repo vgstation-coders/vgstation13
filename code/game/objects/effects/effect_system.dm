@@ -65,18 +65,20 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/turf/location
 	var/atom/holder
 	var/setup = 0
+	var/mob/whodunnit //for investigation
 
 /datum/effect/system/Destroy()
 	holder = null
 	..()
 
-/datum/effect/system/proc/set_up(n = 3, c = 0, turf/loc)
+/datum/effect/system/proc/set_up(n = 3, c = 0, turf/loc, var/mob/whodunnit)
 	if(n > 10)
 		n = 10
 	number = n
 	cardinals = c
 	location = loc
 	setup = 1
+	user = whodunnit
 
 /datum/effect/system/proc/attach(atom/atom)
 	holder = atom
@@ -1078,7 +1080,7 @@ steam.start() -- spawns the effect
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 
-		explosion(location, devastation, heavy, light, flash)
+		explosion(location, devastation, heavy, light, flash, whodunnit = user)
 
 /datum/effect/system/reagents_explosion/proc/holder_damage(var/atom/holder)
 	if(holder)
