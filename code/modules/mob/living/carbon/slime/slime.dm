@@ -246,16 +246,19 @@
 	switch (severity)
 		if (1.0)
 			b_loss += 500
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 			return
 
 		if (2.0)
 
 			b_loss += 60
 			f_loss += 60
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 
 
 		if(3.0)
 			b_loss += 30
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	adjustBruteLoss(b_loss)
 	adjustFireLoss(f_loss)
