@@ -408,7 +408,7 @@ emp_act
 		w_uniform.apply_luminol()
 		update_inv_w_uniform(update)
 
-/mob/living/carbon/human/ex_act(var/severity, var/noblind = FALSE)
+/mob/living/carbon/human/ex_act(var/severity, var/child=null, var/mob/whodunnit, var/noblind = FALSE)
 	if(flags & INVULNERABLE)
 		return FALSE
 
@@ -526,6 +526,7 @@ emp_act
 			if(LIMB_LEFT_ARM)
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05, used_weapon = weapon_message)
 	if(update)
+		add_attacklogs(user, src, "got caught in an explosive blast from", addition = "Severity: [severity]", admin_warn = TRUE)
 		UpdateDamageIcon()
 
 

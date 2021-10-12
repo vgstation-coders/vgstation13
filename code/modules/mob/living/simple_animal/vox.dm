@@ -40,7 +40,7 @@
 	var/turf/gloc = get_turf(loc)
 	visible_message("<span class='danger'><B>[src] shudders violently and explodes!</B>","<span class='warning'>You feel your body rupture!</span></span>")
 	gib()
-	explosion(gloc, -1, -1, 3, 5)
+	explosion(gloc, -1, -1, 3, 5, whodunnit = src)
 
 /mob/living/simple_animal/vox/armalis/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)

@@ -868,7 +868,7 @@
 		sleep(50)
 		say("Someone pass the boombox.")
 		sleep(5)
-		explosion(get_turf(src), -1,1,4)
+		explosion(get_turf(src), -1,1,4, whodunnit = user)
 		qdel(src)
 	else
 		return

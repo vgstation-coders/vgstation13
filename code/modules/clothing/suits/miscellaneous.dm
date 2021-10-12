@@ -983,7 +983,7 @@ obj/item/clothing/suit/cassock
 	var/message_say = user.handle_suicide_bomb_cause()
 	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
 	user.say(message_say)
-	explosion(user, 1, 3, 6)
+	explosion(user, 1, 3, 6, whodunnit = user)
 	message_admins("[user] has detonated \the [src]!")
 	qdel(src) //Just in case
 	return SUICIDE_ACT_CUSTOM
@@ -992,7 +992,7 @@ obj/item/clothing/suit/cassock
 	var/mob/living/carbon/human/H = loc
 	if(!ishuman(H) || !active)
 		return
-	explosion(H, 1, 3, 6)
+	explosion(H, 1, 3, 6, whodunnit = H)
 	message_admins("[H] has detonated \the [src]!")
 	qdel(src) //Just in case
 
