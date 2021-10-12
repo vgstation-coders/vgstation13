@@ -213,12 +213,14 @@
 		apply_lum_to_turf(T)
 
 		var/obj/effect/step_trigger/teleporter/portal/P = locate(/obj/effect/step_trigger/teleporter/portal) in T
-		if(P)
-			apply_lum_to_turf(P.loc)
+		if(P && isturf(P.loc))
+			var/turf/TP = P.loc
+			apply_lum_to_turf(TP)
 
 		P = locate(/obj/effect/step_trigger/teleporter/portal) in T.vis_locs
-		if(P)
-			apply_lum_to_turf(P.loc)
+		if(P && isturf(P.loc))
+			var/turf/TP = P.loc
+			apply_lum_to_turf(TP)
 
 	update_gen++
 
