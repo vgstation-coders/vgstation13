@@ -35,6 +35,13 @@
 	var/junction = findSmoothingNeighbors()
 	icon_state = "grille[junction]"
 
+/obj/structure/grille/isSmoothableNeighbor(atom/A)
+	if(istype(A,/obj/structure/grille))
+		var/obj/structure/grille/G = A
+		if(G.broken)
+			return 0
+	return ..()
+
 /obj/structure/grille/examine(mob/user)
 
 	..()
