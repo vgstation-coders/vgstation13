@@ -65,7 +65,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/turf/location
 	var/atom/holder
 	var/setup = 0
-	var/mob/whodunnit //for investigation
+	var/mob/user //for investigation
 
 /datum/effect/system/Destroy()
 	holder = null
