@@ -202,9 +202,9 @@ var/explosion_shake_message_cooldown = 0
 				A.throw_at(throwT,pushback+2,500)
 				//else A.GotoExplosionThrowDest(throwT, 50)
 				//world.log << "THROWING [A] AT [throwT]"
-			A.ex_act(dist,whodunnit)
+			A.ex_act(dist,null,whodunnit)
 
-		T.ex_act(dist,whodunnit)
+		T.ex_act(dist,null,whodunnit)
 
 		CHECK_TICK
 
