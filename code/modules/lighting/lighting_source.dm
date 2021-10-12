@@ -279,6 +279,20 @@
 			T.generate_missing_corners()
 		corners |= T.get_corners()
 		turfs   += T
+		var/obj/effect/step_trigger/teleporter/portal/P = locate(/obj/effect/step_trigger/teleporter/portal) in T
+		if(P && isturf(P.loc))
+			var/turf/TP = P.loc
+			if (!TP.lighting_corners_initialised)
+				TP.generate_missing_corners()
+			corners |= TP.get_corners()
+			turfs   += TP
+		P = locate(/obj/effect/step_trigger/teleporter/portal) in T.vis_locs
+		if(P && isturf(P.loc))
+			var/turf/TP = P.loc
+			if (!TP.lighting_corners_initialised)
+				TP.generate_missing_corners()
+			corners |= TP.get_corners()
+			turfs   += TP
 
 	var/list/L = turfs - affecting_turfs // New turfs, add us to the affecting lights of them.
 	affecting_turfs += L
