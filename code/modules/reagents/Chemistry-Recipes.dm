@@ -3784,8 +3784,9 @@
 				H.drop_all()
 			gibs(H.loc, H.virus2, H.dna)
 	else
-		var/L = get_turf(holder.my_atom)
-		new /mob/living/simple_animal/hostile/humanoid/skellington(L) //Should spawn skeletons normally if the holder isn't human.
+		for(var/i = 1 to created_volume)
+			var/L = get_turf(holder.my_atom)
+			new /mob/living/simple_animal/hostile/humanoid/skellington(L) //Should spawn skeletons normally if the holder isn't human.
 	
 /datum/chemical_reaction/synthskeleton/proc/bigBoned(var/mob/living/carbon/human/theSkel, var/volume)
 	for(var/datum/organ/external/E in theSkel.organs)
