@@ -62,7 +62,8 @@
 			f_loss += 60
 			ear_damage += 30
 			ear_deaf += 120[
-			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: [shielded ? "60" : "120"]", admin_warn = TRUE)
+			var/totaldmg = shielded ? 60 : 120
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: [totaldmg]", admin_warn = TRUE)
 
 		if(3)
 			b_loss += 30
