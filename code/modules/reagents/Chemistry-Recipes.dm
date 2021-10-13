@@ -3750,7 +3750,7 @@
 	name = "Ectoplasm"
 	id = ECTOPLASM
 	result = ECTOPLASM
-	required_reagents = list(AMINOMICIAN = 1, FROSTOIL = 1)
+	required_reagents = list(AMINOMICIN = 1, FROSTOIL = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthskeleton
