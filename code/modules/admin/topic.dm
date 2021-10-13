@@ -3943,15 +3943,13 @@
 				var/custom_outfit = input(usr,"Custom outfit?","Equip Outfit","") as null|anything in list("Yes","No")
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				if(!custom_outfit)
-					var/obj/item/weapon/card/id/admin/admin_id = new(D)
-					admin_id.registered_name = newname
+				var/obj/item/weapon/card/id/admin/admin_id = new(D)
+				admin_id.registered_name = newname
+				if(custom_outfit != "Yes")
 					D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
 					D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
-					D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 					D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 					D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
-					D.equip_to_slot_or_del(admin_id, slot_wear_id)
 				else
 					var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
 					var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
@@ -3959,6 +3957,8 @@
 						return
 					var/datum/outfit/concrete_outfit = new outfit_type
 					concrete_outfit.equip(D, TRUE)
+				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
+				D.equip_to_slot_or_del(admin_id, slot_wear_id)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
 				D.real_name = newname
