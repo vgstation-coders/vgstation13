@@ -4,6 +4,9 @@
 /var/list/asset_cache      = list()
 /var/asset_cache_populated = FALSE
 
+/// Associative list of type path -> instance of type path
+var/list/asset_datums = list()
+
 /client
 	var/list/cache = list() // List of all assets sent to this client by the asset cache.
 	var/list/completed_asset_jobs = list() // List of all completed jobs, awaiting acknowledgement.
@@ -125,12 +128,16 @@
 	asset_cache[asset_name] = asset
 
 
+/proc/get_asset_datum(path)
+	return asset_datums[path]
+
 //From here on out it's populating the asset cache.
 
 /proc/populate_asset_cache()
-	for(var/type in typesof(/datum/asset) - list(/datum/asset, /datum/asset/simple))
+	for(var/type in typesof(/datum/asset) - list(/datum/asset, /datum/asset/simple, /datum/asset/spritesheet))
 		var/datum/asset/A = new type()
-
+		asset_datums += type
+		asset_datums[type] = A
 		A.register()
 
 	global.asset_cache_populated = TRUE
@@ -610,3 +617,38 @@
 #undef SPRSZ_COUNT
 #undef SPRSZ_ICON
 #undef SPRSZ_STRIPPED
+
+/datum/asset/spritesheet/merch
+	name = "merch"
+
+/datum/asset/spritesheet/merch/register()
+	for (var/category in centcomm_store.items)
+		for(var/datum/storeitem/k in centcomm_store.items[category])
+			var/atom/item = initial(k.typepath)
+			if (!ispath(item, /atom))
+				continue
+
+			var/icon_file = initial(item.icon)
+			var/icon_state = initial(item.icon_state)
+			var/icon/I
+
+			var/icon_states_list = icon_states(icon_file)
+			if(icon_state in icon_states_list)
+				I = icon(icon_file, icon_state, SOUTH)
+				var/c = initial(item.color)
+				if (!isnull(c) && c != "#FFFFFF")
+					I.Blend(c, ICON_MULTIPLY)
+			else
+				var/icon_states_string
+				for (var/an_icon_state in icon_states_list)
+					if (!icon_states_string)
+						icon_states_string = "[json_encode(an_icon_state)](\ref[an_icon_state])"
+					else
+						icon_states_string += ", [json_encode(an_icon_state)](\ref[an_icon_state])"
+				stack_trace("[item] does not have a valid icon state, icon=[icon_file], icon_state=[json_encode(icon_state)](\ref[icon_state]), icon_states=[icon_states_string]")
+				I = icon('icons/turf/floors.dmi', "", SOUTH)
+
+			var/imgid = replacetext(replacetext("[item]", "/obj/item/", ""), "/", "-")
+
+			Insert(imgid, I)
+	return ..()
