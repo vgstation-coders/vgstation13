@@ -3957,6 +3957,10 @@
 						return
 					var/datum/outfit/concrete_outfit = new outfit_type
 					concrete_outfit.equip(D, TRUE)
+					var/obj/item/I = get_item_by_slot(slot_wear_id)
+					qdel(I)
+					I = get_item_by_slot(slot_ears)
+					qdel(I)
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(admin_id, slot_wear_id)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
