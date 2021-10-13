@@ -623,7 +623,8 @@ var/list/asset_datums = list()
 
 /datum/asset/spritesheet/merch/register()
 	for (var/category in centcomm_store.items)
-		for(var/datum/storeitem/k in centcomm_store.items[category])
+		var/list/category_items = centcomm_store.items[category]
+		for(var/datum/storeitem/k in category_items)
 			var/atom/item = initial(k.typepath)
 			if (!ispath(item, /atom))
 				continue
