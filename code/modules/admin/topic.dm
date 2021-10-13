@@ -3936,26 +3936,35 @@
 			if("spawnselfdummy")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TD")
-				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
-				log_admin("[key_name_admin(usr)] spawned himself as a Test Dummy.")
 				var/newname = ""
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
 				if (!newname)
 					newname = "Admin"
+				var/custom_outfit = input(usr,"Custom outfit?","Equip Outfit","") as null|anything in list("Yes","No")
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				var/obj/item/weapon/card/id/admin/admin_id = new(D)
-				admin_id.registered_name = newname
-				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
-				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
-				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
-				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
-				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
-				D.equip_to_slot_or_del(admin_id, slot_wear_id)
+				if(!custom_outfit)
+					var/obj/item/weapon/card/id/admin/admin_id = new(D)
+					admin_id.registered_name = newname
+					D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
+					D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
+					D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
+					D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
+					D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
+					D.equip_to_slot_or_del(admin_id, slot_wear_id)
+				else
+					var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
+					var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+					if(!outfit_type || !ispath(outfit_type))
+						return
+					var/datum/outfit/concrete_outfit = new outfit_type
+					concrete_outfit.equip(D, TRUE)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
 				D.real_name = newname
 				usr.client.cmd_assume_direct_control(D)
+				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+				log_admin("[key_name_admin(usr)] spawned himself as a Test Dummy.")
 
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
 			if("fakealerts")
