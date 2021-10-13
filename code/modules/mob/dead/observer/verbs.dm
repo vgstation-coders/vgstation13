@@ -534,6 +534,9 @@
 	if(hoboamount == hobostart.len)
 		to_chat(src, "<span class='warning'>The world has enough of these as is.</span>")
 		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
+		return
 
 	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
 	if(response != "Yeah!")
