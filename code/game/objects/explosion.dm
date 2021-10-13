@@ -99,8 +99,8 @@ var/explosion_shake_message_cooldown = 0
 				if(!istype(M.loc,/turf/space))
 					M << 'sound/effects/explosionfar.ogg'
 		if(adminlog)
-			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([formatJumpTo(epicenter,"JMP")]) [whodunnit ? " caused by [whodunnit] ([formatJumpTo(whodunnit,"JMP")])" : ""]")
-			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] [whodunnit ? " caused by [whodunnit]" : ""]")
+			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([formatJumpTo(epicenter,"JMP")]) [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"] ([formatJumpTo(whodunnit,"JMP")])" : ""]")
+			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"]" : ""]")
 
 		//Pause the lighting updates for a bit.
 		var/postponeCycles = max(round(devastation_range/8),1)
