@@ -3957,9 +3957,9 @@
 						return
 					var/datum/outfit/concrete_outfit = new outfit_type
 					concrete_outfit.equip(D, TRUE)
-					var/obj/item/I = get_item_by_slot(slot_wear_id)
+					var/obj/item/I = D.get_item_by_slot(slot_wear_id)
 					qdel(I)
-					I = get_item_by_slot(slot_ears)
+					I = D.get_item_by_slot(slot_ears)
 					qdel(I)
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(admin_id, slot_wear_id)
