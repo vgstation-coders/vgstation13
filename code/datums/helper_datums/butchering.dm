@@ -260,7 +260,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/frog_leg
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
-	radial_icon = "radial_sleg"
+	radial_icon = "radial_fleg"
 	amount = 2 //not a magic number, frogs have 2 legs
 	butcher_time = 10
 
@@ -288,6 +288,7 @@
 	result = /obj/item/deer_head
 	verb_name = "remove head"
 	verb_gerund = "removing the head from"
+	radial_icon = "radial_dhead"
 	amount = 1
 	butcher_time = 15
 
