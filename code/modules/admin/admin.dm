@@ -784,6 +784,7 @@ var/global/floorIsLava = 0
 	if(check_rights(R_FUN,0))
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawnselfdummyoutfit'>Spawn yourself as a Test Dummy (Custom Outfit)</A><BR>
 			<BR>
 			<BR>
 			"}
