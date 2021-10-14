@@ -174,12 +174,12 @@
 	w_class = W_CLASS_TINY
 	can_flip = 1
 
-obj/item/clothing/mask/bandana/red
+/obj/item/clothing/mask/bandana/red
 	name = "red bandana"
 	icon_state = "bandred"
 	species_fit = list(INSECT_SHAPED)
 
-obj/item/clothing/mask/joy
+/obj/item/clothing/mask/joy
 	name = "joy mask"
 	desc = "Express your happiness or hide your sorrows with this laughing face with crying tears of joy cutout."
 	icon_state = "joy"

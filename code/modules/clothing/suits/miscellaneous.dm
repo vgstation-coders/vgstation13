@@ -366,7 +366,7 @@ var/list/tag_suits_list = list()
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
-obj/item/clothing/suit/cassock
+/obj/item/clothing/suit/cassock
 	name = "Cassock"
 	desc = "A black garment belonging to a priest."
 	icon_state = "cassock"

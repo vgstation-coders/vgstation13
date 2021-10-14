@@ -1771,10 +1771,10 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/hasFullAccess()
 	return 0
 
-mob/proc/assess_threat()
+/mob/proc/assess_threat()
 	return 0
 
-mob/proc/on_foot()
+/mob/proc/on_foot()
 	return !(lying || flying || locked_to)
 
 /mob/proc/dexterity_check()//can the mob use computers, guns, and other fine technologies

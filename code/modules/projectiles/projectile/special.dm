@@ -205,7 +205,7 @@
 	var/range = 2
 	fire_sound = 'sound/weapons/Taser.ogg'
 
-obj/item/projectile/kinetic/New()
+/obj/item/projectile/kinetic/New()
 	var/turf/proj_turf = get_turf(src)
 	if(!istype(proj_turf, /turf))
 		return

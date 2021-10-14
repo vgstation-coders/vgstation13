@@ -15,7 +15,7 @@
 	pressure_resistance = 2
 	attack_verb = list("stamps")
 
-proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffset)
+/proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffset)
 	if(istype(P, /obj/item/weapon/paper/envelope))
 		stampoverlay.pixel_x = Yoffset * PIXEL_MULTIPLIER
 		stampoverlay.pixel_y = Xoffset * PIXEL_MULTIPLIER //envelopes are broad instead of long, we just invert the x and y.

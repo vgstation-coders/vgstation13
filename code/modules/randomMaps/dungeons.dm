@@ -45,7 +45,7 @@ var/turf/dungeon_area = null
 
 #define MAXIMUM_DUNGEON_WIDTH 80
 
-proc/load_dungeon(dungeon_type, var/rotate = 0)
+/proc/load_dungeon(dungeon_type, var/rotate = 0)
 	if(!dungeon_area)
 		return 0
 

@@ -152,9 +152,9 @@
 /obj/machinery/door/mineral/transparent
 	opacity = 0
 
-	close()
-		..()
-		opacity = 0
+/obj/machinery/door/mineral/transparent/close()
+	..()
+	opacity = 0
 
 /obj/machinery/door/mineral/transparent/plasma
 	prefix = "plasma"

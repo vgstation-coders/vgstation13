@@ -108,10 +108,10 @@
 	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
 
-obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
 
-obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
+/obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(var/mob/living/user)

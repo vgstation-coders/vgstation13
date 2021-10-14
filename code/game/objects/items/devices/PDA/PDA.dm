@@ -2568,7 +2568,7 @@ var/global/msg_id = 0
 	else
 		to_chat(usr, "<span class='notice'>You cannot do this while restrained.</span>")
 
-obj/item/device/pda/CtrlClick()
+/obj/item/device/pda/CtrlClick()
 	if ( can_use(usr) ) // Checks that the PDA is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
 		verb_remove_pen(usr)
 		return
@@ -2597,7 +2597,7 @@ obj/item/device/pda/CtrlClick()
 	else
 		to_chat(usr, "<span class='notice'>You cannot do this while restrained.</span>")
 
-obj/item/device/pda/AltClick()
+/obj/item/device/pda/AltClick()
 	if ( can_use(usr) ) // Checks that the PDA is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
 		verb_remove_id(usr)
 		return

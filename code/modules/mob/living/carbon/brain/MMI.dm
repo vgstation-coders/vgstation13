@@ -25,7 +25,7 @@
 	var/mob/living/silicon/robot = null//Appears unused.
 	var/obj/mecha = null//This does not appear to be used outside of reference in mecha.dm.
 
-obj/item/device/mmi/Destroy()
+/obj/item/device/mmi/Destroy()
 	if(brainmob)
 		qdel(brainmob)
 		brainmob = null

@@ -199,10 +199,10 @@ FLOOR SAFES
 		if(istype(I, /obj/item/clothing/accessory/stethoscope))
 			recursive_dial(user, show_radial_menu(user,src,choices,'icons/obj/safe_radial.dmi',"radial-safe", custom_check = new /callback(src, .proc/radial_check, user), recursive = TRUE))
 
-obj/structure/safe/blob_act()
+/obj/structure/safe/blob_act()
 	return
 
-obj/structure/safe/ex_act(severity)
+/obj/structure/safe/ex_act(severity)
 	return
 
 //FLOOR SAFES

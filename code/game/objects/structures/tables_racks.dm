@@ -716,7 +716,7 @@
 /*
  * Plastic
  */
-obj/structure/table/plastic
+/obj/structure/table/plastic
 	name = "plastic table"
 	desc = "A plastic table perfect for on a space patio."
 	icon_state = "plastictable"

@@ -27,7 +27,7 @@ Ambience system.
 	var/ambience_buffer // essentially world.time + the length of the ambience sound file. this is to prevent overlap.
 */
 
-client/proc/handle_ambience()
+/client/proc/handle_ambience()
 	if(!mob)//I have no trust for Byond.
 		return
 

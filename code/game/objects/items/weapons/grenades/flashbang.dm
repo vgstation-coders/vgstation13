@@ -8,7 +8,7 @@
 /obj/item/weapon/grenade/flashbang/prime(banglet)
 	flashbangprime(delsrc = TRUE, isbanglet = banglet)
 
-atom/proc/flashbangprime(var/delsrc = FALSE, var/ignore_protection = FALSE, isbanglet = FALSE)
+/atom/proc/flashbangprime(var/delsrc = FALSE, var/ignore_protection = FALSE, isbanglet = FALSE)
 	var/turf/flashbang_turf = get_turf(src)
 	if(!flashbang_turf)
 		return
@@ -36,7 +36,7 @@ atom/proc/flashbangprime(var/delsrc = FALSE, var/ignore_protection = FALSE, isba
 	if(delsrc)
 		qdel(src)
 
-atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var/isbanglet = FALSE)
+/atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var/isbanglet = FALSE)
 	if (locate(/obj/item/weapon/cloaking_device, M))			// Called during the loop that bangs people in lockers/containers and when banging
 		for(var/obj/item/weapon/cloaking_device/S in M)			// people in normal view.  Could theroetically be called during other explosions.
 			S.active = 0										// -- Polymorph

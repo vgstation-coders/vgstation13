@@ -100,7 +100,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
 
-proc/process_teleport_locs()
+/proc/process_teleport_locs()
 	for(var/area/AR in areas)
 		if(istype(AR, /area/shuttle) || istype(AR, /area/wizard_station))
 			continue
@@ -115,7 +115,7 @@ proc/process_teleport_locs()
 
 var/list/ghostteleportlocs = list()
 
-proc/process_ghost_teleport_locs()
+/proc/process_ghost_teleport_locs()
 	for(var/area/AR in areas)
 		if(ghostteleportlocs.Find(AR.name))
 			continue
@@ -131,7 +131,7 @@ proc/process_ghost_teleport_locs()
 
 var/global/list/adminbusteleportlocs = list()
 
-proc/process_adminbus_teleport_locs()
+/proc/process_adminbus_teleport_locs()
 	for(var/area/AR in areas)
 		if(adminbusteleportlocs.Find(AR.name))
 			continue

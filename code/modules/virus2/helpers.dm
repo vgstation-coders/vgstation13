@@ -1,5 +1,5 @@
 //Build random disease type
-proc/get_random_weighted_disease(var/operation = WDISH)
+/proc/get_random_weighted_disease(var/operation = WDISH)
 	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined)
 	var/list/weighted_list = list()
 	for(var/P in possibles)
@@ -13,7 +13,7 @@ proc/get_random_weighted_disease(var/operation = WDISH)
 
 //Checks if table-passing table can reach target (5 tile radius)
 //For the record that proc is only used by the "Gregarious Impetus" symptom and super/toxic farts.
-proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
+/proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	var/obj/dummy = new(source)
 	dummy.flags = FPRINT
 	dummy.pass_flags = PASSTABLE

@@ -202,7 +202,7 @@
 
 	needs_treatment = 1 // this only heals when bandaged
 
-datum/wound/cut/massive
+/datum/wound/cut/massive
 	max_bleeding_stage = 2
 	stages = list("massive wound" = 70, "massive healing wound" = 50, "massive angry scar" = 10,  "massive jagged scar" = 0)
 

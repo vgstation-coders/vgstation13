@@ -198,7 +198,7 @@
 	damage = 25
 
 
-obj/item/projectile/bullet/suffocationbullet
+/obj/item/projectile/bullet/suffocationbullet
 	name = "CO2 bullet"
 	damage = 20
 	damage_type = OXY

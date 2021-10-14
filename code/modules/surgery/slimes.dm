@@ -3,11 +3,11 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/slime
-	is_valid_mutantrace(mob/living/carbon/slime/target)
-		return istype(target, /mob/living/carbon/slime/)
+/datum/surgery_step/slime/is_valid_mutantrace(mob/living/carbon/slime/target)
+	return istype(target, /mob/living/carbon/slime/)
 
-	can_use(mob/living/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
-		return target.stat == 2
+/datum/surgery_step/slime/can_use(mob/living/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
+	return target.stat == 2
 
 
 

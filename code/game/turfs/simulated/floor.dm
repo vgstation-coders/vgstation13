@@ -115,7 +115,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
 		new /obj/effect/decal/cleanable/dirt(src)
 
-turf/simulated/floor/update_icon()
+/turf/simulated/floor/update_icon()
 
 	if(lava)
 		return

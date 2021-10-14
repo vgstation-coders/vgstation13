@@ -329,7 +329,7 @@
 	new /obj/item/ammo_storage/speedloader/a357(src)
 	return
 
-obj/item/weapon/storage/box/syndie_kit/cheaptide
+/obj/item/weapon/storage/box/syndie_kit/cheaptide
 	name = "box (CT)"
 
 /obj/item/weapon/storage/box/syndie_kit/cheaptide/New()

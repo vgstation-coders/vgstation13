@@ -96,7 +96,7 @@
 			log_game("SQL ERROR during death reporting. Error : \[[err]\]\n")
 		qdel(query)
 
-proc/statistic_cycle()
+/proc/statistic_cycle()
 	if(!sqllogging)
 		return
 	while(1)
@@ -106,7 +106,7 @@ proc/statistic_cycle()
 		sleep(6000) // Poll every ten minutes
 
 //This proc is used for feedback. It is executed at round end.
-proc/sql_commit_feedback()
+/proc/sql_commit_feedback()
 	if(!blackbox)
 		log_game("Round ended without a blackbox recorder. No feedback was sent to the database.")
 		return

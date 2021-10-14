@@ -3,7 +3,7 @@
 	icon = 'icons/obj/decals.dmi'
 	icon_state = "shock"
 
-obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
+/obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 	user.do_attack_animation(M, src)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")

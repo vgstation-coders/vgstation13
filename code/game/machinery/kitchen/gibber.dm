@@ -26,7 +26,7 @@
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
-obj/machinery/gibber/New()
+/obj/machinery/gibber/New()
 	. = ..()
 
 	component_parts = newlist(
