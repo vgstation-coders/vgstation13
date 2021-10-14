@@ -606,6 +606,8 @@ var/list/rune_appearances_cache = list()
 /proc/write_full_rune(var/turf/T, var/spell_type, var/datum/reagent/blood/source, var/mob/caster = null)
 	if (!spell_type)
 		return
+	if (!rune_words_initialized)
+		initialize_rune_words()
 
 	var/datum/rune_spell/spell_instance = spell_type
 	var/datum/rune_word/word1_instance = initial(spell_instance.word1)
@@ -614,3 +616,27 @@ var/list/rune_appearances_cache = list()
 	write_rune_word(T, rune_words[initial(word1_instance.english)], source, caster)
 	write_rune_word(T, rune_words[initial(word2_instance.english)], source, caster)
 	write_rune_word(T, rune_words[initial(word3_instance.english)], source, caster)
+
+/obj/rune_spawner
+	name = "rune spawner"
+	icon = 'icons/obj/rune.dmi'
+	icon_state = "4"
+	var/rune_type = null
+	var/rune_activated = FALSE
+
+
+/obj/rune_spawner/New(turf/loc)
+	..()
+	var/turf/T = get_turf(src)
+	if (rune_type)
+		write_full_rune(T,rune_type,null,null)
+
+		var/obj/effect/rune/rune = locate() in T
+		if (rune && rune_activated)
+			rune.activated = 1
+			rune.update_icon()
+	qdel(src)
+
+/obj/rune_spawner/random/New(turf/loc)
+	rune_type = pick(subtypesof(/datum/rune_spell))
+	..()

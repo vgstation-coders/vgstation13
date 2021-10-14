@@ -1768,6 +1768,16 @@ var/list/arcane_tomes = list()
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
 
+/obj/item/candle/blood/proximity	// lits itself up when someone comes close (intended for mapping purposes)
+	flags = FPRINT | PROXMOVE
+
+/obj/item/candle/blood/proximity/HasProximity(var/atom/movable/AM)
+	if(isliving(AM))
+		light("<span class='notice'>\The [src] mysteriously lights itself up as \the [AM] comes close.</span>")
+		return 1
+	return 0
+
+
 /obj/item/trash/blood_candle
 	name = "blood candle"
 	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
