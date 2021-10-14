@@ -591,7 +591,6 @@
 	trash = /obj/item/trash/candy
 	food_flags = FOOD_SWEET
 	filling_color = "#603000"
-	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/candy/New()
 	..()
@@ -604,7 +603,6 @@
 	desc = "A little treat for blood donors."
 	trash = /obj/item/trash/candy
 	food_flags = FOOD_SWEET
-	base_crumb_chance = 0
 	
 /obj/item/weapon/reagent_containers/food/snacks/candy/donor/New()
 	..()
