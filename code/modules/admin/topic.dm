@@ -3946,16 +3946,16 @@
 				admin_id.registered_name = newname
 				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
 				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
+				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
-				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(admin_id, slot_wear_id)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
 				D.real_name = newname
 				usr.client.cmd_assume_direct_control(D)
-				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
-				log_admin("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy.")
+				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy.")
 			if("spawnselfdummyoutfit")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TDO")
@@ -3983,8 +3983,8 @@
 				D.name = newname
 				D.real_name = newname
 				usr.client.cmd_assume_direct_control(D)
-				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy wearing \a [concrete_outfit.outfit_name].")
-				log_admin("[key_name_admin(usr)] spawned himself as a Test Dummy wearing \a [concrete_outfit.outfit_name].")
+				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
+				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
 
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
 			if("fakealerts")
