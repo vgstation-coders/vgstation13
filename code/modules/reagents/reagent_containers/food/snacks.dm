@@ -1215,7 +1215,6 @@
 	name = "roburger"
 	desc = "The lettuce is the only organic component. Beep."
 	icon_state = "roburger"
-	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/roburger/New()
 	..()
@@ -1227,7 +1226,6 @@
 	desc = "This massive patty looks like poison. Beep."
 	icon_state = "roburger"
 	volume = 100
-	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/roburgerbig/New()
 	..()
@@ -4150,7 +4148,6 @@
 	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "cereal_box"
 	bitesize = 2
-	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/cereal/New()
 	..()
@@ -7118,7 +7115,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "A sweet biscuit with an exquisite blend of chocolate and acid flavors. The recipe is a mothership secret."
 	icon_state = "zambiscuit"
 	food_flags = FOOD_SWEET
-	base_crumb_chance = 0	
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit/New()
 	..()
@@ -7134,7 +7130,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	desc = "Butter and acid blend together to make a divine biscuit flavor. Administrator Zam's favorite!"
 	icon_state = "zambiscuit_buttery"
 	food_flags = FOOD_ANIMAL | FOOD_SWEET
-	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter/New()
 	..()
@@ -7149,7 +7144,6 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	name = "Zam Radical Biscuit"
 	desc = "This Zam biscuit is oddly warm to the touch and glows faintly. It's probably not safe for consumption..." // Despite the warning, I'm sure someone will eat it.
 	icon_state = "zambiscuit_radical"
-	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical/New()
 	..()
