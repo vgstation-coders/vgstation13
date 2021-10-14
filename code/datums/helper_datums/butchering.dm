@@ -248,6 +248,7 @@
 	result = /obj/item/xenos_claw
 	verb_name = "declaw"
 	verb_gerund = "declawing"
+	radial_icon = "icon_xclaw"
 
 /datum/butchering_product/xeno_claw/desc_modifier()
 	if(!amount)
