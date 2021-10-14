@@ -3963,6 +3963,7 @@
 				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
 				if (!newname)
 					newname = "Admin"
+				var/choice = input("Edit appearance on spawn?", "Admin") in list("Yes", "No!")
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
 				var/obj/item/weapon/card/id/admin/admin_id = new(D)
@@ -3983,6 +3984,9 @@
 				D.name = newname
 				D.real_name = newname
 				usr.client.cmd_assume_direct_control(D)
+				if(choice == "Yes")
+					D.pick_gender(usr)
+					D.pick_appearance(usr)
 				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
 				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
 
