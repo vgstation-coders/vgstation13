@@ -3983,10 +3983,10 @@
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
 				D.real_name = newname
-				usr.client.cmd_assume_direct_control(D)
 				if(choice == "Yes")
 					D.pick_gender(usr)
 					D.pick_appearance(usr)
+				usr.client.cmd_assume_direct_control(D)
 				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
 				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
 
