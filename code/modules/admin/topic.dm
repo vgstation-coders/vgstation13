@@ -3953,9 +3953,9 @@
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
 				D.real_name = newname
-				usr.client.cmd_assume_direct_control(D)
 				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy.")
 				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy.")
+				usr.client.cmd_assume_direct_control(D)
 			if("spawnselfdummyoutfit")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TDO")
@@ -3964,14 +3964,14 @@
 				if (!newname)
 					newname = "Admin"
 				var/choice = alert("Edit appearance on spawn?", "Admin", "Yes", "No")
-				var/turf/T = get_turf(usr)
-				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				var/obj/item/weapon/card/id/admin/admin_id = new(D)
-				admin_id.registered_name = newname
 				var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
 				var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
 				if(!outfit_type || !ispath(outfit_type))
 					return
+				var/turf/T = get_turf(usr)
+				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
+				var/obj/item/weapon/card/id/admin/admin_id = new(D)
+				admin_id.registered_name = newname
 				var/datum/outfit/concrete_outfit = new outfit_type
 				concrete_outfit.equip(D, TRUE)
 				var/obj/item/I = D.get_item_by_slot(slot_wear_id)
@@ -3983,12 +3983,12 @@
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
 				D.real_name = newname
-				usr.client.cmd_assume_direct_control(D)
-				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
-				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
 				if(choice == "Yes")
 					D.pick_gender(usr)
 					D.pick_appearance(usr)
+				message_admins("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
+				log_admin("[key_name_admin(usr)] spawned themself as a Test Dummy wearing \a [concrete_outfit.outfit_name] outfit.")
+				usr.client.cmd_assume_direct_control(D)
 
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
 			if("fakealerts")
