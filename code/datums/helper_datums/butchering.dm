@@ -459,6 +459,12 @@
 	var/theProduct = getProduct(choice)
 	return theProduct
 
+/mob/living/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /mob/living/proc/getProduct(choice)
 	for(var/datum/butchering_product/BP in butchering_drops)
