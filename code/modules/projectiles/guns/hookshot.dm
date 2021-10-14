@@ -467,6 +467,7 @@
 /obj/item/weapon/gun/hookshot/whip
 	name = "bullwhip"
 	icon = 'icons/obj/weapons.dmi'
+	desc = "A leather whip, commonly used as a tool for herding livestock."
 	icon_state = "bullwhip"
 	fire_sound = 'sound/weapons/whip_crack.ogg'
 	fire_action = "flick"
