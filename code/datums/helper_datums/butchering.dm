@@ -22,6 +22,9 @@
 
 	var/butcher_time = 20
 
+	var/radial_icon = "icon_butcher"
+	//Icon in the radial menu
+
 /datum/butchering_product/New()
 	..()
 
@@ -42,6 +45,7 @@
 	result = /obj/item/stack/teeth
 	verb_name = "harvest teeth"
 	verb_gerund = "removing teeth from"
+	radial_icon = "icon_teeth"
 
 	stored_in_organ = LIMB_HEAD //Cutting a LIMB_HEAD off will transfer teeth to the head object
 
@@ -119,6 +123,7 @@
 	result = /obj/item/stack/sheet/animalhide
 	verb_name = "skin"
 	verb_gerund = "skinning"
+	radial_icon = "icon_skin"
 
 /datum/butchering_product/skin/desc_modifier(mob/parent)
 	if(!amount)
@@ -229,6 +234,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
+	radial_icon = "icon_sleg"
 	amount = 8 //Amount of legs that all normal spiders have
 	butcher_time = 10
 
@@ -253,6 +259,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/frog_leg
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
+	radial_icon = "icon_sleg"
 	amount = 2 //not a magic number, frogs have 2 legs
 	butcher_time = 10
 
@@ -266,6 +273,7 @@
 	result = /obj/item/asteroid/hivelord_core
 	verb_name = "remove the core from"
 	verb_gerund = "removing the core from"
+	radial_icon = "icon_core"
 	butcher_time = 2
 
 /datum/butchering_product/hivelord_core/desc_modifier()
@@ -428,22 +436,21 @@
 /mob/living/proc/butcherMenuStep(mob/user)
 	var/list/butcherType = list()
 	if(meat_type && meat_amount > meat_taken)
-		butcherType += "Butcher"
+		butcherType += list("Butcher","radial_butcher")
 	for(var/datum/butchering_product/BP in butchering_drops)
 		if(BP.amount)
-			butcherType += BP.verb_name
+			butcherType += list(BP.verb_name,BP.radial_icon)
 	if(!butcherType.len)
 		to_chat(user, "<span class='notice'>There's nothing to butcher.</span>")
 		return
-	butcherType += "Cancel"
 	return butcherType
 
 
 /mob/living/proc/butcherChooseStep(mob/user, butcherOptions, butcherTool)
-	var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in null|butcherOptions
+	var/choice = show_radial_menu(usr,loc,butcherOptions,custom_check = new /callback(src, .proc/radial_check, user))
+	if(!radial_check(user))
+		return
 	if(!butcherCheck(user, butcherTool))
-		return 0
-	if(choice == "Cancel")
 		return 0
 	if(choice == "Butcher")
 		return BUTCHER_MEAT
