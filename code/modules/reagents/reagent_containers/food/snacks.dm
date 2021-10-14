@@ -244,6 +244,7 @@
 				crumbs_to_del--
 			var/obj/effect/decal/cleanable/crumbs/C = new (T)
 			C.icon_state = crumb_icon
+			C.name = crumb_icon
 			C.dir = pick(cardinal)
 			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 			if (random_filling_colors?.len > 0)
