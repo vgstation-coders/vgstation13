@@ -294,6 +294,6 @@
 	
 /obj/item/weapon/cell/broken/New()
 	..()
-	desc = "The inner circuitry have melted and it bulges at the sides. <span class='warning'>It will explode any moment now.</span>"
+	desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It can explode any moment now.</span>"
 	if(prob(5))
 		explosion(loc, 0, 1, 2, 2)//smallish explosion
