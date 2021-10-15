@@ -598,6 +598,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 	deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
 	known_languages = list(LANGUAGE_GREY)
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	eyes = "grey_eyes_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
