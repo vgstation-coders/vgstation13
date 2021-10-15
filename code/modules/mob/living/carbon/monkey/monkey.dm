@@ -619,3 +619,6 @@
 		return TRUE
 	return FALSE
 
+/mob/living/carbon/monkey/make_meat(location)
+	var/ourMeat = new meat_type(location, src)
+	return ourMeat
