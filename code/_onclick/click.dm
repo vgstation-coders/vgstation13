@@ -322,14 +322,15 @@
 			user.client.statpanel = T.name
 
 /mob/living/carbon/AltClick(var/mob/user)
-	if((meat_type || butchering_drops) && (stat == DEAD))	//if the carbon has a meat, and if it is dead.
-		var/obj/item/item_in_hand = user.get_active_hand()
-		if(item_in_hand && (item_in_hand.sharpness_flags & SHARP_BLADE))
-			butcher()
-			return 1
-	else if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
-		src.give_item(user)
-		return
+	if(!(user == src) && user.Adjacent(src))
+		if((meat_type || butchering_drops) && (stat == DEAD))	//if the carbon has a meat, and if it is dead.
+			var/obj/item/item_in_hand = user.get_active_hand()
+			if(item_in_hand && (item_in_hand.sharpness_flags & SHARP_BLADE))
+				butcher()
+				return 1
+		else if(!isrobot(user))
+			src.give_item(user)
+			return
 	..()
 
 /*
