@@ -248,7 +248,10 @@
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
-
+	if(charge_rate < (initial(charge_rate)/10) //if charge rate goes under 10% of the original value, deletes itself and spawns a broken cell in its place, broken cell has a 5% chance to "explode".
+		qdel(src)
+		new /obj/item/weapon/cell/broken(get_turf(src)) //if I understand this correctly, it should spawn the cell inside whatever had it beforehand
+		
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
 	switch(rand(3))
@@ -282,3 +285,15 @@
 /obj/item/weapon/cell/rad/large/empty/New()
 	..()
 	charge = 0
+	
+/obj/item/weapon/cell/broken
+	name = "broken cell"
+	icon_state = "cell"
+	maxcharge = 0
+	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
+	
+/obj/item/weapon/cell/broken/New()
+	..()
+	desc = "The inner circuitry have melted and it bulges at the sides. <span class='warning'>You feel it will explode any moment now.</span>"
+	if(prob(5))
+		rigged = true //since rigged uses maxcharge, the explosion should be 0-0-0
