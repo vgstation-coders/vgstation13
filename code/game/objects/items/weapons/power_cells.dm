@@ -294,6 +294,6 @@
 	
 /obj/item/weapon/cell/broken/New()
 	..()
-	desc = "The inner circuitry have melted and it bulges at the sides. <span class='warning'>You feel it will explode any moment now.</span>"
+	desc = "The inner circuitry have melted and it bulges at the sides. <span class='warning'>It will explode any moment now.</span>"
 	if(prob(5))
-		rigged = true //since rigged uses maxcharge, the explosion should be 0-0-0
+		explosion(loc, 0, 1, 2, 2)//smallish explosion
