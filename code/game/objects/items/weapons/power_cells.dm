@@ -248,7 +248,7 @@
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
-	if(charge_rate < (initial(charge_rate)/10) //if charge rate goes under 10% of the original value, deletes itself and spawns a broken cell in its place, broken cell has a 5% chance to "explode".
+	if(charge_rate < (initial(charge_rate)/10)) //if charge rate goes under 10% of the original value, deletes itself and spawns a broken cell in its place, broken cell has a 5% chance to "explode".
 		qdel(src)
 		new /obj/item/weapon/cell/broken(get_turf(src)) //if I understand this correctly, it should spawn the cell inside whatever had it beforehand
 		
