@@ -876,6 +876,7 @@
 	id = "solidphazon"
 	result = null
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PHAZON = 1)
+	required_catalysts = list(MUTAGEN = 5)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
