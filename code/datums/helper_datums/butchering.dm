@@ -449,13 +449,9 @@
 
 
 /mob/living/proc/butcherChooseStep(mob/user, var/list/butcherOptions, butcherTool)
-	var/choice
-	if(butcherOptions.len > 1)
-		choice = show_radial_menu(usr,loc,butcherOptions,custom_check = new /callback(src, .proc/radial_check, user))
-		if(!radial_check(user))
-			return
-	else
-		choice = butcherOptions[1]
+	var/choice = show_radial_menu(usr,loc,butcherOptions,custom_check = new /callback(src, .proc/radial_check, user))
+	if(!radial_check(user))
+		return
 	if(!butcherCheck(user, butcherTool))
 		return 0
 	if(choice == "Butcher")
