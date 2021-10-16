@@ -5,19 +5,14 @@
 	icon_state = ""
 	plane = ABOVE_TURF_PLANE
 	invisibility = 0
-	relative = TRUE
-	affect_ghosts = TRUE
 	var/turf/target_turf
 	var/teleport_x = 0	// teleportation coordinates
 	var/teleport_y = 0
 	var/teleport_z = 0
-	var/affect_ghosts = 0
 
 /turf/portal/Entered(var/atom/movable/mover)
 	..()
 	if(!mover)
-		return
-	if(istype(mover, /mob/dead/observer) && !affect_ghosts)
 		return
 	if(istype(mover, /obj/effect/beam))//those things aren't meant to get moved
 		return
