@@ -13,8 +13,15 @@
 		/turf/simulated/wall/shuttle,
 		/obj/machinery/door/unpowered/shuttle,
 		/obj/structure/shuttle,
+		/obj/structure/grille,
 	)
 	return smoothables
+
+/turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
+	if (get_area(A) != get_area(src))
+		return 0
+
+	return ..()
 
 /turf/simulated/wall/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
