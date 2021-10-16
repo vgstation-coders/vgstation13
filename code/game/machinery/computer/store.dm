@@ -46,12 +46,15 @@
 				"cost" = item.cost,
 				"desc" = item.desc,
 				"stock" = item.stock,
-				"img" = item.img,
+				"path" = replacetext(replacetext("[item.typepath]", "/obj/item/", ""), "/", "-")
 			))
 		if(!length(cat["items"]))
 			continue
 		data["categories"] += list(cat)
 	return data
+
+/obj/machinery/computer/merch/ui_assets()
+	return list(/datum/asset/spritesheet/merch)
 
 /obj/machinery/computer/merch/ui_act(action, params)
 	. = ..()
