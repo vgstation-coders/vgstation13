@@ -11,7 +11,7 @@
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall/shuttle,
-		/obj/machinery/door/unpowered/shuttle,
+		/obj/machinery/door,
 		/obj/structure/shuttle,
 		/obj/structure/grille,
 	)
