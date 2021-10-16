@@ -111,15 +111,9 @@
 	var/teleport_y = 0
 	var/teleport_z = 0
 
-	var/relative = FALSE // move relative to this position? (disabling moves to normal absolute coords)
-
-/obj/effect/step_trigger/teleporter/Trigger(var/atom/movable/A)
-	if(relative)
-		A.x += teleport_x
-		A.y += teleport_y
-		A.z += teleport_z
-	else
+	Trigger(var/atom/movable/A)
 		if(teleport_x && teleport_y && teleport_z)
+
 			A.x = teleport_x
 			A.y = teleport_y
 			A.z = teleport_z
@@ -137,16 +131,12 @@
 	if(istype(A,/obj/item/projectile/fire_breath/shuttle_exhaust))
 		qdel(A)
 		return
-	if(relative)
-		A.x += rand(teleport_x, teleport_x_offset)
-		A.y += rand(teleport_y, teleport_y_offset)
-		A.z += rand(teleport_z, teleport_z_offset)
-	else
-		if(teleport_x && teleport_y && teleport_z)
-			if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
-				A.x = rand(teleport_x, teleport_x_offset)
-				A.y = rand(teleport_y, teleport_y_offset)
-				A.z = rand(teleport_z, teleport_z_offset)
+	if(teleport_x && teleport_y && teleport_z)
+		if(teleport_x_offset && teleport_y_offset && teleport_z_offset)
+
+			A.x = rand(teleport_x, teleport_x_offset)
+			A.y = rand(teleport_y, teleport_y_offset)
+			A.z = rand(teleport_z, teleport_z_offset)
 
 /obj/effect/step_trigger/teleporter/random/shuttle_transit
 	teleport_x = 25
