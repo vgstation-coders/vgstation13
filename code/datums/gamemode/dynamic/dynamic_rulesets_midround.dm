@@ -112,6 +112,10 @@
 			message_admins("[name]: Applicant was null. This may be caused if the mind changed bodies after applying.")
 			i++
 			continue
+		if(!applicant.key)
+			message_admins("[name] was chosen but he logged out, picking another...")
+			i++
+			continue
 		message_admins("DEBUG: Selected [applicant] for rule.")
 
 		var/mob/new_character = applicant
