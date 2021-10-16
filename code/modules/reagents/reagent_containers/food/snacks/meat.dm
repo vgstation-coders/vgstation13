@@ -91,7 +91,7 @@
 	
 /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	name = "insectoid meat"
-	desc = "A slab of gooey, white meat. It's still got traces of hardened chiten."
+	desc = "A slab of gooey, white meat. It's still got traces of hardened chitin."
 	icon_state = "insectoidmeat"
 	
 /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid/New()
