@@ -52,15 +52,40 @@
 	return attack_hand(user)
 
 /obj/structure/dispenser/attack_hand(mob/user as mob)
-	user.set_machine(src)
-	var/dat = "[src]<br><br>"
 
-	dat += {"Oxygen tanks: [oxytanks.len] - [oxytanks.len ? "<A href='?src=\ref[src];oxygen=1'>Dispense</A>" : "empty"]<br>
-		Plasma tanks: [platanks.len] - [platanks.len ? "<A href='?src=\ref[src];plasma=1'>Dispense</A>" : "empty"]"}
-	user << browse(dat, "window=dispenser")
-	onclose(user, "dispenser")
-	return
+	var/list/choices = list(
+		list("Take O2 tank ([oxytanks.len] left)", "radial_tank[oxytanks.len]"),
+		list("Take plasma tank ([platanks.len] left)", "radial_ptank[platanks.len]"),
+	)
 
+	var/task = show_radial_menu(user,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+	if(!radial_check(user))
+		return
+
+	switch(task)
+		if("Take O2 tank ([oxytanks.len] left)")
+			if(oxytanks.len > 0)
+				var/obj/item/weapon/tank/oxygen/O = oxytanks[oxytanks.len]
+				oxytanks.Remove(O)
+				usr.put_in_hands(O)
+				to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
+				update_icon()
+				attack_hand(user)
+		if("Take plasma tank ([platanks.len] left)")
+			if(platanks.len > 0)
+				var/obj/item/weapon/tank/plasma/P = platanks[platanks.len]
+				platanks.Remove(P)
+				usr.put_in_hands(P)
+				to_chat(usr, "<span class='notice'>You take [P] out of [src].</span>")
+				update_icon()
+				attack_hand(user)
+
+/obj/structure/dispenser/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/structure/dispenser/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/tank/oxygen) || istype(I, /obj/item/weapon/tank/air) || istype(I, /obj/item/weapon/tank/anesthetic))
@@ -92,29 +117,3 @@
 			anchored = 1
 		I.playtoolsound(src, 50)
 		return
-
-/obj/structure/dispenser/Topic(href, href_list)
-	if(usr.stat || usr.restrained())
-		return
-	if(Adjacent(usr))
-		usr.set_machine(src)
-		if(href_list["oxygen"])
-			if(oxytanks.len > 0)
-				var/obj/item/weapon/tank/oxygen/O = oxytanks[oxytanks.len]
-				oxytanks.Remove(O)
-				usr.put_in_hands(O)
-				to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
-				update_icon()
-		if(href_list["plasma"])
-			if(platanks.len > 0)
-				var/obj/item/weapon/tank/plasma/P = platanks[platanks.len]
-				platanks.Remove(P)
-				usr.put_in_hands(P)
-				to_chat(usr, "<span class='notice'>You take [P] out of [src].</span>")
-				update_icon()
-		add_fingerprint(usr)
-		updateUsrDialog()
-	else
-		usr << browse(null, "window=dispenser")
-		return
-	return
