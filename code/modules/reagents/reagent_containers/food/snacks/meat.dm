@@ -17,6 +17,7 @@
 	if(M)
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
+		subjectname = M.name
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
