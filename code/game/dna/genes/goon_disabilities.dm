@@ -74,6 +74,10 @@
 	if(M.overeatduration < 500)
 		M.overeatduration = 600 // This ensures M_FAT activates if the mob isn't already fat
 
+/datum/dna/gene/disability/fat/deactivate(var/mob/M,var/connected,var/flags)
+	if(..() && M.nutrition <= OVEREAT_THRESHOLD)
+		M.overeatduration = M.overeatduration > 600 ? M.overeatduration - 600 : 0
+
 /datum/dna/gene/disability/fat/New()
 	..()
 	block = FATBLOCK
