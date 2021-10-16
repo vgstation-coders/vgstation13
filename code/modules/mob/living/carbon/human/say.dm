@@ -4,7 +4,7 @@
 	var/list/muteletters_check = list()
 
 /mob/living/carbon/human/say(var/message)
-	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message))
+	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message) && !findtext(message, "*", 1, 2))
 		species.silent_speech(src,message)
 	else
 		..()
