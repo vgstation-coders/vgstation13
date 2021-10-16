@@ -53,7 +53,7 @@
 
 /obj/structure/dispenser/attack_hand(mob/user as mob)
 
-	if(platanks.len && oxytanks.len)
+	if(platanks.len || oxytanks.len)
 		var/list/choices = list(
 			list("Take O2 tank", "radial_tank[oxytanks.len]"),
 			list("Take plasma tank", "radial_ptank[platanks.len]"),
@@ -65,22 +65,23 @@
 
 		switch(task)
 			if("Take O2 tank")
-				if(oxytanks.len > 0)
+				if(oxytanks.len)
 					var/obj/item/weapon/tank/oxygen/O = oxytanks[oxytanks.len]
 					oxytanks.Remove(O)
 					usr.put_in_hands(O)
 					to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
 					update_icon()
-					attack_hand(user)
+					if(platanks.len || oxytanks.len)
+						attack_hand(user)
 			if("Take plasma tank")
-				if(platanks.len > 0)
+				if(platanks.len)
 					var/obj/item/weapon/tank/plasma/P = platanks[platanks.len]
 					platanks.Remove(P)
 					usr.put_in_hands(P)
 					to_chat(usr, "<span class='notice'>You take [P] out of [src].</span>")
 					update_icon()
-					attack_hand(user)
-	
+					if(platanks.len || oxytanks.len)
+						attack_hand(user)
 	else
 		to_chat(user, "<span class='warning'>[src] is empty.</span>")
 
