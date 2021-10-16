@@ -6,10 +6,10 @@
 	density = 1
 	explosion_block = 2
 	blocks_air = 1
-
+	flags = TIMELESS
 	holomap_draw_override = HOLOMAP_DRAW_FULL
-
 	var/walltype = "riveted"
+
 /turf/unsimulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(/turf/unsimulated/wall)
 	return smoothables
