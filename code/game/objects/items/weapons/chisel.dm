@@ -64,7 +64,12 @@
 			var/icon/engraving_overlay = new/icon('icons/effects/crayondecal.dmi',"[engraving_icon_state]",2.1)
 
 			user.visible_message("<span class='notice'>[user.name] starts engraving something on the [W.name].</span>", "<span class='notice'>You start engraving an image of [engraving_name] on the [W.name].</span>")
-			if(do_after(user, target, 60))
+
+			var/graffiti_time = 6 SECONDS
+			if(M_CHAV in user.mutations)
+				graffiti_time = 2 SECONDS
+
+			if(do_after(user, target, graffiti_time))
 				if( !istype(W, /turf/simulated/wall) || !user || !src || !W )
 					return
 				if( W.rotting )

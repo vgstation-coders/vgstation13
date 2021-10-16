@@ -26,11 +26,25 @@
 			slot_w_uniform_str = /obj/item/clothing/under/stilsuit,
 			slot_shoes_str = /obj/item/clothing/shoes/magboots,
 			slot_belt_str = /obj/item/device/radio,
-			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/mushmen,
-			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mushmen,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/trader/flex,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/trader/flex,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/skellington/skelevox = list(
+			slot_w_uniform_str =/obj/item/clothing/under/vox/vox_robes,
+			slot_shoes_str = /obj/item/clothing/shoes/magboots/vox,
+			slot_belt_str = /obj/item/device/radio,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/trader,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/trader,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		)
+
 	)
+
+	equip_survival_gear = list(
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
+	)
+
 
 	items_to_collect = list(
 		/obj/item/weapon/storage/wallet/trader = SURVIVAL_BOX,

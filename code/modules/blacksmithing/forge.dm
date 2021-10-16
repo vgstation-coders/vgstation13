@@ -134,6 +134,8 @@
 		return
 	if(heating)
 		heating.attempt_heating(src, null)
+		if(heating.gcDestroyed)
+			heating = null
 
 
 //Prefer to burn through sheets over ores

@@ -474,7 +474,7 @@ its easier to just keep the beam vertical.
 // 3 is light damage.
 //
 // child is set to the child object that exploded, if available.
-/atom/proc/ex_act(var/severity, var/child=null)
+/atom/proc/ex_act(var/severity, var/child=null, var/mob/whodunnit)
 	return
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)

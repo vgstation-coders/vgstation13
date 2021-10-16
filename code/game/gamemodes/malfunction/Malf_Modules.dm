@@ -158,7 +158,7 @@ rcd light flash thingy on matter drain
 	var/obj/machinery/M = targets[1]
 	M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
 	spawn(50)
-		explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
+		explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
 		qdel(M)
 
 /datum/AI_Module/large/place_cyborg_autoborger

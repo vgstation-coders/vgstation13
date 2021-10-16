@@ -149,6 +149,4 @@
 		/obj/item/clothing/shoes/magboots/vox,
 		/obj/item/clothing/under/vox/vox_casual,
 		/obj/item/weapon/tank/jetpack/nitrogen,
-		/obj/item/clothing/suit/space/vox/civ/mushmen,
-		/obj/item/clothing/head/helmet/space/vox/civ/mushmen,
 	)

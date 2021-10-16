@@ -259,7 +259,7 @@
 	to_chat(user, "<span class='danger'>\The [src]'s firing mechanism fails!</span>")
 	loaded_item.forceMove(user.loc)
 	loaded_item = null
-	explosion(user, -1, 0, 2)
+	explosion(user, -1, 0, 2, whodunnit = user)
 	qdel(src)
 	return
 

@@ -91,7 +91,7 @@
 
 	..(TRUE)
 
-	explosion(T, -1, 1, 2)
+	explosion(T, -1, 1, 2, whodunnit = src)
 
 /obj/effect/landmark/corpse/skellington
 	name = "skellington"

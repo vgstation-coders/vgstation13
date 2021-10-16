@@ -206,8 +206,12 @@
 		return
 	if(href_list["product"])
 		locate_data(href_list["product"], usr) //Even though the list contains a path, hrefs only pass text so let's use name here instead of path
-	if(href_list["category"])
+	else if(href_list["category"])
 		category = href_list["category"]
+	else if(href_list["deposit"])
+		deposit_all(usr)
+	else if(href_list["additem"] && isAdminGhost(usr))
+		add_product(usr)
 	update_icon()
 	return 1
 
@@ -260,6 +264,37 @@
 
 /obj/structure/trade_window/proc/credits_held()
 	return count_cash(loc.contents)
+
+/obj/structure/trade_window/proc/deposit_all(mob/user)
+	var/value = credits_held()
+
+	if(!value)
+		say(pick(tw_deposit_zero))
+		return
+	comment_deposit(user,value)
+	trader_account.money += value
+	for(var/obj/item/weapon/spacecash/C in loc.contents)
+		qdel(C)
+
+	playsound(loc, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 70, 1)
+
+/obj/structure/trade_window/proc/add_product(mob/user)
+	var/atom/movable/product = user?.client?.holder?.marked_datum
+	if(!product)
+		to_chat(user,"<span class='danger'>You have no marked datum.</span>")
+		return
+	else if(!ismob(product) && !isobj(product))
+		to_chat(user,"<span class='danger'>Your marked datum must be an object or mob.</span>")
+		return
+	var/price_input = input(user, "Select Price", "Select Price", "") as null|num
+	if(isnull(price_input))
+		return
+	var/datum/trade_product/TP = new()
+	TP.name = product.name
+	TP.path = product.type
+	TP.baseprice = price_input
+	SStrade.all_trade_merch += TP
+	message_admins("[key_name(user)] created a new product datum: [TP.name] <a href='?_src_=vars;Vars=\ref[TP]'>\[VV\]</a>.")
 
 /obj/structure/trade_window/proc/change_money(var/price)
 	var/total = 0
