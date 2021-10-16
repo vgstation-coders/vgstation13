@@ -212,15 +212,10 @@
 	FOR_DVIEW(var/turf/T, light_range, source_turf, INVISIBILITY_LIGHTING)
 		apply_lum_to_turf(T,update_gen)
 
-		var/obj/effect/step_trigger/teleporter/portal/P = locate(/obj/effect/step_trigger/teleporter/portal) in T
-		if(P && isturf(P.loc))
-			var/turf/TP = P.loc
-			apply_lum_to_turf(TP,update_gen)
-
-		P = locate(/obj/effect/step_trigger/teleporter/portal) in T.vis_locs
-		if(P && isturf(P.loc))
-			var/turf/TP = P.loc
-			apply_lum_to_turf(TP,update_gen)
+		if(istype(T,/turf/portal))
+			var/turf/portal/P = T
+			if(P.target_turf)
+				apply_lum_to_turf(P.target_turf,update_gen)
 
 	update_gen++
 
@@ -279,14 +274,14 @@
 			T.generate_missing_corners()
 		corners |= T.get_corners()
 		turfs   += T
-		var/obj/effect/step_trigger/teleporter/portal/P = locate(/obj/effect/step_trigger/teleporter/portal) in T
+		var/turf/portal/P = locate(/turf/portal) in T
 		if(P && isturf(P.loc))
 			var/turf/TP = P.loc
 			if (!TP.lighting_corners_initialised)
 				TP.generate_missing_corners()
 			corners |= TP.get_corners()
 			turfs   += TP
-		P = locate(/obj/effect/step_trigger/teleporter/portal) in T.vis_locs
+		P = locate(/turf/portal) in T.vis_locs
 		if(P && isturf(P.loc))
 			var/turf/TP = P.loc
 			if (!TP.lighting_corners_initialised)
