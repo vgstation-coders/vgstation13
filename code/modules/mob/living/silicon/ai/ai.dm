@@ -560,6 +560,8 @@ var/list/ai_list = list()
 		light_cameras()
 	if(istype(A,/obj/machinery/camera))
 		current = A
+		var/obj/machinery/camera/C = A
+		C.camera_twitch()
 	..()
 
 

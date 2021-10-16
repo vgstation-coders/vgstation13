@@ -147,6 +147,8 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		if(!selected_camera)
 			return TRUE
 
+		active_camera.camera_twitch()
+
 		update_active_camera_screen()
 
 		return TRUE

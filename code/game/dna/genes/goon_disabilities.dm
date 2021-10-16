@@ -139,6 +139,7 @@
 	desc = "Forces the language center of the subject's brain to construct sentences in a more rudimentary manner."
 	activation_message = "Ye feel like a reet prat like, innit?"
 	deactivation_message = "You no longer feel like being rude and sassy."
+	mutation = M_CHAV
 
 /datum/dna/gene/disability/chav/New()
 	..()
@@ -151,6 +152,7 @@
 	desc = "Forces the language center of the subject's brain to construct sentences in a vaguely norse manner."
 	activation_message = "You feel Swedish, however that works."
 	deactivation_message = "The feeling of Swedishness passes."
+	mutation = M_SWEDE
 
 /datum/dna/gene/disability/swedish/New()
 	..()
