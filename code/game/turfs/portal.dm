@@ -16,7 +16,7 @@
 		return
 	if(istype(mover, /obj/effect/beam))//those things aren't meant to get moved
 		return
-	mover.forceMove(target_turf)
+	mover.Move(target_turf)
 
 /turf/portal/initialize()
 	..()
