@@ -653,3 +653,29 @@ var/list/asset_datums = list()
 
 			Insert(imgid, I)
 	return ..()
+
+/datum/asset/spritesheet/bible
+	name = "bible"
+
+/datum/asset/spritesheet/bible/register()
+	var/const/icon_file = 'icons/obj/storage/bibles.dmi'
+	var/list/bible_icon_states = icon_states(icon_file)
+
+	for(var/name in all_bible_styles)
+		var/list/data = all_bible_styles[name]
+
+		var/icon_state
+		if(islist(data))
+			icon_state = data["icon"]
+		else
+			icon_state = data
+
+		var/icon/I
+		if(icon_state in bible_icon_states)
+			I = icon(icon_file, icon_state, SOUTH)
+		else
+			stack_trace("[icon_state] is not a valid icon state, icon=[icon_file], icon_states=[bible_icon_states]")
+			I = icon('icons/turf/floors.dmi', "", SOUTH)
+
+		Insert(icon_state, I)
+	return ..()
