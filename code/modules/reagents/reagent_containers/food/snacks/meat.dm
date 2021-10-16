@@ -33,6 +33,7 @@
 	name = "monkey meat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey/New(atom/A, var/mob/M)
+	if(M)
 		name = "[initial(M.name)] [meatword]"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
@@ -53,8 +54,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human/New(atom/A, var/mob/M)
 	..()
-	if(uppertext(M.name) == "UNKNOWN")
-		if(ishuman(M))
+	if(ishuman(M))
+		if(uppertext(M.name) == "UNKNOWN")
 			var/mob/living/carbon/human/H = M
 			name = "[lowertext(H.species.name)] [meatword]"
 
