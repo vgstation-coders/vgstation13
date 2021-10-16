@@ -433,7 +433,7 @@ var/list/ai_list = list()
 					message_admins("[key_name_admin(src)] called the shuttle due to being hit with an EMP.'.")
 	..()
 
-/mob/living/silicon/ai/ex_act(severity)
+/mob/living/silicon/ai/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 
@@ -445,13 +445,16 @@ var/list/ai_list = list()
 			if(!isDead())
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 200", admin_warn = TRUE)
 		if(2.0)
 			if(!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 120", admin_warn = TRUE)
 		if(3.0)
 			if(!isDead())
 				adjustBruteLoss(30)
+				add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 	updatehealth()
 

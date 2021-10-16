@@ -88,7 +88,7 @@
 		visible_message(message)
 	if(catastrophic)
 		spawn(0.5 SECONDS)
-			explosion(loc, 0, prob(15), 2, 0)
+			explosion(loc, 0, prob(15), 2, 0, whodunnit = user)
 
 /obj/item/device/camera_bug/Destroy()
 	camera_bugs -= src

@@ -306,7 +306,7 @@
 			return 0
 		else if(user in cheaters)
 			to_chat(usr, "<span class='danger'>[enemy_name] throws a bomb at you for trying to cheat him again.</span>")
-			explosion(holder.loc,-1,0,2)//IED sized explosion
+			explosion(holder.loc,-1,0,2, whodunnit = user)//IED sized explosion
 			user.gib()
 			cheaters = null
 			qdel(src)
