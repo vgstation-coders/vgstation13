@@ -21,6 +21,14 @@
 /turf/portal/initialize()
 	..()
 	update_icon()
+	
+/turf/portal/shuttle_rotate(angle)
+	..()
+	if(angle == 180 || angle == 270)
+		teleport_x *= -1
+	if(angle == 180 || angle == 90)
+		teleport_y *= -1
+	update_icon()
 
 /turf/portal/update_icon()
 	overlays.Cut()
