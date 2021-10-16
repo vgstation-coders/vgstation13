@@ -66,18 +66,22 @@ export const CameraConsole = (props, context) => {
             || '—'}
         </div>
         <div className="CameraConsole__toolbarRight">
-          <Button
-            icon="heart"
-            disabled={!activeCamera}
-            onClick={() => act('follow')}>
-            Follow
-          </Button>
-          <Button
-            icon="star"
-            disabled={!activeCamera}
-            onClick={() => act('subscribe')}>
-            Subscribe
-          </Button>
+          {props.isSpessTV && (
+            <>
+              <Button
+                icon="heart"
+                disabled={!activeCamera}
+                onClick={() => act('follow')}>
+                Follow
+              </Button>
+              <Button
+                icon="star"
+                disabled={!activeCamera}
+                onClick={() => act('subscribe')}>
+                Subscribe
+              </Button>
+            </>
+          )}
           <Button
             icon="chevron-left"
             disabled={!prevCameraName}
