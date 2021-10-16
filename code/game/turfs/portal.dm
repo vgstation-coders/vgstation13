@@ -25,11 +25,7 @@
 /turf/portal/update_icon()
 	overlays.Cut()
 	vis_contents.Cut()
-	if(relative)
-		target_turf = locate(src.x+teleport_x,src.y+teleport_y,src.z+teleport_z)
-	else
-		if(teleport_x && teleport_y && teleport_z)
-			target_turf = locate(teleport_x,teleport_y,teleport_z)
+	target_turf = locate(src.x+teleport_x,src.y+teleport_y,src.z+teleport_z)
 	vis_contents += target_turf
 
 /turf/portal/ex_act(severity)
