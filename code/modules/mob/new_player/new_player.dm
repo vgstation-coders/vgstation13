@@ -370,7 +370,7 @@
 
 	ticker.mode.latespawn(src)//can we make them a latejoin antag?
 
-	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
+	var/mob/living/carbon/human/character = create_character(1)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
@@ -648,7 +648,7 @@
 	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
-/mob/new_player/proc/create_character()
+/mob/new_player/proc/create_character(var/joined_late = 0)
 	spawning = 1
 	close_spawn_windows()
 
@@ -723,6 +723,36 @@
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
+	var/rank = new_character.mind.assigned_role
+	if(!joined_late)
+		var/obj/S = null
+		// Find a spawn point that wasn't given to anyone
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if(sloc.name != rank)
+				continue
+			if(locate(/mob/living) in sloc.loc)
+				continue
+			S = sloc
+			break
+		if(!S)
+			// Find a spawn point that was already given to someone else
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if(sloc.name != rank)
+					continue
+				S = sloc
+				stack_trace("not enough spawn points for [rank]")
+				break
+		if(!S)
+			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
+			S = locate("start*[rank]")
+		if(S)
+			// Use the given spawn point
+			new_character.forceMove(S.loc)
+		else
+			// Use the arrivals shuttle spawn point
+			stack_trace("no spawn points for [rank]")
+			new_character.forceMove(pick(latejoin))
+	
 	new_character.key = key		//Manually transfer the key to log them in
 
 	for(var/datum/religion/R in ticker.religions)

@@ -394,7 +394,7 @@ var/datum/controller/gameticker/ticker
 			else
 				if(player.mind.assigned_role=="Mobile MMI")
 					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-				var/mob/living/carbon/human/new_character = player.create_character()
+				var/mob/living/carbon/human/new_character = player.create_character(0)
 				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
 
