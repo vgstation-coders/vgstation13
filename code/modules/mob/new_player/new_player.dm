@@ -392,17 +392,17 @@
 		mime.AssignToRole(character.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
 
-	if(character.mind.assigned_role != "MODE")
-		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
-
-	job_master.CheckPriorityFulfilled(rank)
-
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
 		R.OnPostSetup(TRUE) // Latejoiner post-setup.
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
+
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
+	job_master.CheckPriorityFulfilled(rank)
 
 	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
 		//Removal of job slot is in role/role.dm
