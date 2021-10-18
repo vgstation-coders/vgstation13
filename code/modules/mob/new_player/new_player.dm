@@ -805,14 +805,7 @@
 			new_character.Namepick()
 		return new_character
 	else
-		var/mob/living/silicon/ai/new_character = new(spawn_loc)
-		//Handles transferring the mind and key manually.
-		if (mind)
-			mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
-			mind.transfer_to(new_character)
-		new_character.key = key //Do this after. For reasons known only to oldcoders.
-		spawn()
-			new_character.Namepick()
+		var/mob/living/silicon/ai/new_character = AIize()
 		return new_character
 
 /mob/new_player/proc/ViewPrediction()
