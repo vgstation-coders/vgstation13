@@ -258,6 +258,18 @@
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
 	clothing_flags = GOLIATHREINFORCE
 
+/obj/item/clothing/suit/space/vox/civ/trader/flex
+	name = "flexible trader pressure suit"
+	desc = "A bulky, pressurized suit, even larger than would need to accomodate an alien body. A flexible solution for certain friends of the Shoal."
+	species_fit = list(VOX_SHAPED,MUSHROOM_SHAPED)
+	species_restricted = list(VOX_SHAPED,MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/vox/civ/trader/flex
+	name = "flexible helmet"
+	desc = "A pressurized helmet. The sides expand to accomodate quills or cap."
+	species_fit = list(VOX_SHAPED,MUSHROOM_SHAPED)
+	species_restricted = list(VOX_SHAPED,MUSHROOM_SHAPED)
+
 /obj/item/clothing/suit/space/vox/civ/trader/carapace //carapace
 	name = "alien carapace armor"
 	icon_state = "vox-carapace"
@@ -307,42 +319,6 @@
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet.?"
-
-// -- Mushroom,traders --
-
-/obj/item/clothing/suit/space/vox/civ/mushmen
-	name = "mushmen pressure suit"
-	icon_state = "mushroom-pressure"
-	item_state = "mushroom-pressure"
-	desc = "It looks like a deformed vox pressure suit, fit for mushroom people."
-	species_restricted = list(MUSHROOM_SHAPED)
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen
-	actions_types = list(/datum/action/item_action/dim_lighting)
-	name = "mushmen helmet"
-	icon_state = "mushroom-pressure"
-	item_state = "mushroom-pressure"
-	desc = "It looks like a deformed vox pressure helmet, fit for mushroom people."
-	species_restricted = list(MUSHROOM_SHAPED)
-	var/up = 0
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/attack_self(var/mob/user)
-	toggle(user)
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/proc/toggle(var/mob/user)
-	if(!user.incapacitated())
-		if(src.up)
-			to_chat(user, "<span class='notice'>You use \the [src]'s visor to protect your face from incoming light.</span>")
-		else
-			to_chat(user, "<span class='notice'>You disengage \the [src]'s light protection visor.</span>")
-		src.up = !src.up
-
-/obj/item/clothing/head/helmet/space/vox/civ/mushmen/islightshielded()
-	return !up
-
-
-/datum/action/item_action/dim_lighting
-	name = "Dim lighting"
 
 // Vox Casual//////////////////////////////////////////////
 // Civvie

@@ -14,7 +14,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/obj/machinery/camera/active_camera
 	var/list/network = list(CAMERANET_SS13)
 	var/mapping = 0//For the overview file, interesting bit of code.
-
+	var/tgui_interface = "CameraConsole"
 	light_color = LIGHT_COLOR_RED
 
 	/// The turf where the camera was last updated.
@@ -105,7 +105,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 			user.client.register_map_obj(plane)
 		user.client.register_map_obj(cam_background)
 		// Open UI
-		ui = new(user, src, "CameraConsole")
+		ui = new(user, src, tgui_interface)
 		ui.open()
 
 /obj/machinery/computer/security/ui_data()
@@ -121,6 +121,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 /obj/machinery/computer/security/ui_static_data()
 	var/list/data = list()
+	data["title"] = name
 	data["mapRef"] = map_name
 	var/list/cameras = get_available_cameras()
 	data["cameras"] = list()
@@ -146,6 +147,8 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		if(!selected_camera)
 			return TRUE
 
+		active_camera.camera_twitch()
+
 		update_active_camera_screen()
 
 		return TRUE
@@ -158,20 +161,17 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	var/list/visible_turfs = list()
 
-	// Is this camera located in or attached to a living thing? If so, assume the camera's loc is the living thing.
-	var/cam_location = isliving(active_camera.loc) ? active_camera.loc : active_camera
-
 	// If we're not forcing an update for some reason and the cameras are in the same location,
 	// we don't need to update anything.
 	// Most security cameras will end here as they're not moving.
-	var/newturf = get_turf(cam_location)
+	var/newturf = get_turf(active_camera)
 	if(last_camera_turf == newturf)
 		return
 
 	// Cameras that get here are moving, and are likely attached to some moving atom such as cyborgs.
-	last_camera_turf = get_turf(cam_location)
+	last_camera_turf = get_turf(newturf)
 
-	var/list/visible_things = active_camera.isXRay() ? range(active_camera.view_range, cam_location) : view(active_camera.view_range, cam_location)
+	var/list/visible_things = active_camera.isXRay() ? range(active_camera.view_range, newturf) : view(active_camera.view_range, newturf)
 
 	for(var/turf/visible_turf in visible_things)
 		visible_turfs += visible_turf
@@ -234,6 +234,29 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	icon_state = "crt"
 	network = list(CAMERANET_SPESSTV)
 	density = TRUE
+	tgui_interface = "SpessTVCameraConsole"
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/ui_act(action, list/params)
+	. = ..()
+	if(.)
+		return
+	switch(action)
+		if("follow")
+			var/obj/machinery/camera/arena/spesstv/camera = active_camera
+			if(!istype(camera))
+				return
+			var/datum/role/streamer/streamer_role = camera.streamer
+			if(!istype(streamer_role))
+				return
+			streamer_role.try_add_follower(usr.mind)
+		if("subscribe")
+			var/obj/machinery/camera/arena/spesstv/camera = active_camera
+			if(!istype(camera))
+				return
+			var/datum/role/streamer/streamer_role = camera.streamer
+			if(!istype(streamer_role))
+				return
+			streamer_role.try_add_subscription(usr.mind, src)
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/is_operational()
 	return TRUE

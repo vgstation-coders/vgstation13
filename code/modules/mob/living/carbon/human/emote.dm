@@ -134,7 +134,7 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	if(world.time - H.lastFart <= 400)
+	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
 		message = "strains, and nothing happens."
 		emote_type = EMOTE_VISIBLE
 		return ..()
@@ -261,7 +261,7 @@
 					if(H && B)
 						to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
 						H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
-						explosion(get_turf(H),-1,-1,1,5) //Tiny explosion with flash
+						explosion(get_turf(H),-1,-1,1,5, whodunnit = H) //Tiny explosion with flash
 						H.dust()
 //Ayy lmao
 

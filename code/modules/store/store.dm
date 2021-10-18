@@ -27,10 +27,6 @@ var/global/datum/store/centcomm_store
 /datum/store/New()
 	for(var/itempath in subtypesof(/datum/storeitem))
 		var/datum/storeitem/instance = new itempath()
-		var/obj/item/item_type = instance.typepath
-		var/item_icon = initial(item_type.icon)
-		var/item_icon_state = initial(item_type.icon_state)
-		instance.img = icon2base64(icon(item_icon, item_icon_state))
 		if(!items[instance.category])
 			items[instance.category] = list()
 		items[instance.category] += instance

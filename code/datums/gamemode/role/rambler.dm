@@ -52,6 +52,7 @@
 	name = "shakashuri"
 	desc = "Similar to other woodwinds, though it can be played only by a true rambler of souls."
 	slot_flags = SLOT_BACK
+	requires_mouth = FALSE //Playing a shakashuri doth art in the mindbrain's heart, anyway
 
 /obj/item/device/instrument/recorder/shakashuri/attack_self(mob/user)
 	if(!isrambler(user))

@@ -2311,7 +2311,7 @@ var/global/msg_id = 0
 								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded")
 								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded", 1)
 								cartridge:shock_charges--
-								P.explode()
+								P.explode(U)
 			else
 				U.unset_machine()
 				U << browse(null, "window=pda")
@@ -2786,7 +2786,7 @@ var/global/msg_id = 0
 				if(A.Adjacent(user))
 					return dev_analys.preattack(A, user, 1)
 
-/obj/item/device/pda/proc/explode() //This needs tuning.
+/obj/item/device/pda/proc/explode(var/mob/user) //This needs tuning.
 	var/turf/T = get_turf(src.loc)
 
 	if (ismob(loc))
@@ -2796,7 +2796,7 @@ var/global/msg_id = 0
 	if(T)
 		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 
-		explosion(T, -1, -1, 2, 3)
+		explosion(T, -1, -1, 2, 3, whodunnit = user)
 
 	qdel(src)
 	return

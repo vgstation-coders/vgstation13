@@ -1,6 +1,7 @@
 // Copyright (c) 2020 /vg/station coders
 // SPDX-License-Identifier: MIT
 
+import { classes } from 'common/react';
 import { createSearch, decodeHtmlEntities } from 'common/string';
 import { useBackend, useLocalState } from '../backend';
 import { Box, Button, Flex, Input, Section, Tabs, NoticeBox } from '../components';
@@ -120,13 +121,15 @@ const ItemList = (props, context) => {
             })} />
         </Box>
       )}>
-      <img
-        src={`data:image/jpeg;base64, ${item.img}`}
+      <span
+        className={classes([
+          'merch32x32',
+          item.path,
+        ])}
         style={{
           'vertical-align': 'middle',
           'horizontal-align': 'middle',
-        }}
-      />
+        }} />
       {decodeHtmlEntities(item.desc)}
     </Section>
   ));

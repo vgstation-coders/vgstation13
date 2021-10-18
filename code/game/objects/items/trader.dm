@@ -190,7 +190,7 @@
 			say("That is enough for [crackers_to_dispense] crackers!")
 			if(crackers_to_dispense > 100)
 				visible_message("<span class = 'warning'>\The [src]'s matter fabrication unit overloads!</span>")
-				explosion(loc, 0, prob(15), 2, 0)
+				explosion(loc, 0, prob(15), 2, 0, whodunnit = user)
 				qdel(src)
 				return
 			for(var/x = 1 to crackers_to_dispense)
@@ -452,7 +452,7 @@ var/global/list/alcatraz_stuff = list(
 	var/datum/organ/external/active_hand = user.get_active_hand_organ()
 	if(active_hand)
 		active_hand.explode()
-	explosion(user, -1, 0, 2)
+	explosion(user, -1, 0, 2, whodunnit = user)
 	qdel(src)
 
 /obj/item/clothing/head/helmet/donutgiver/Hear(var/datum/speech/speech, var/rendered_speech="")

@@ -92,6 +92,14 @@
 		if(!unsim) // Edge of map.
 			continue
 
+		if(istype(unsim,/turf/portal))
+			var/turf/portal/port = unsim // Area portal handling.
+			if(port.target_turf)
+				unsim = port.target_turf
+		
+		if(!unsim) // Above check should be fine, but sanity
+			continue
+		
 		var/block = unsim.c_airblock(src)
 		if(block & AIR_BLOCKED)
 

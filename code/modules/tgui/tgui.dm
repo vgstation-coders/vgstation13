@@ -97,7 +97,7 @@
 		window.send_message("ping")
 	window.send_asset(/datum/asset/simple/fontawesome)
 	window.send_asset(/datum/asset/simple/tgfont)
-	for(var/datum/asset/asset in src_object.ui_assets(user))
+	for(var/asset in src_object.ui_assets(user))
 		window.send_asset(asset)
 	window.send_message("update", get_payload(
 		with_data = TRUE,

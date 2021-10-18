@@ -255,7 +255,7 @@
 	if(!client || !asset)
 		return
 	sent_assets |= list(asset)
-	var/datum/asset/instance = new asset
+	var/datum/asset/instance = get_asset_datum(asset)
 	instance.send(client)
 	if(istype(instance, /datum/asset/spritesheet))
 		var/datum/asset/spritesheet/spritesheet = instance

@@ -216,7 +216,7 @@
 
 /obj/item/projectile/bullet/burstbullet/on_hit(var/atom/target, var/blocked = 0)
 	..()
-	explosion(target, 0,1,1,5)
+	explosion(target, 0,1,1,5, whodunnit = firer)
 	qdel(src)
 
 /obj/item/projectile/bullet/boombullet
@@ -388,7 +388,7 @@
 		var/heavy_impact_range = 0.5
 		var/light_impact_range = 1
 		var/flash_range = light_impact_range
-		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range, whodunnit = firer)
 	qdel(src)
 
 /obj/item/projectile/bullet/osipr

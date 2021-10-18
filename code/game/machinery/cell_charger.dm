@@ -107,7 +107,7 @@
 		if(emagged) //Oh shit nigger what are you doing
 			spark(src, 5)
 			spawn(15)
-				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
+				explosion(src.loc, -1, 1, 3, adminlog = 0, whodunnit = user) //Overload
 				qdel(src) //It exploded, rip
 			return
 		usr.put_in_hands(charging)

@@ -476,6 +476,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
 #define M_HORNS         208
+#define M_SWEDE			209
+#define M_CHAV			210
 
 // /vg/ muts
 #define M_LOUD		308		// CAUSES INTENSE YELLING

@@ -56,7 +56,7 @@
 	var/A_turf = get_turf(A)
 	..()
 	if(special_collision == PROJECTILE_COLLISION_DEFAULT || special_collision == PROJECTILE_COLLISION_BLOCKED)
-		explosion(A_turf, exdev, exheavy, exlight, exflash)
+		explosion(A_turf, exdev, exheavy, exlight, exflash, whodunnit = firer)
 		if(!gcDestroyed)
 			qdel(src)
 
@@ -246,7 +246,7 @@
 	return 1
 
 /obj/item/projectile/rocket/nikita/proc/detonate(var/atom/A)
-	explosion(A, exdev, exheavy, exlight, exflash)
+	explosion(A, exdev, exheavy, exlight, exflash, whodunnit = firer)
 	if(!gcDestroyed)
 		qdel(src)
 

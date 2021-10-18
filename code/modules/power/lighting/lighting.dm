@@ -260,7 +260,7 @@ var/global/list/obj/machinery/light/alllights = list()
 					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 
-					explode()
+					explode(get_mob_by_key(fingerprintslast))
 			else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
 				if(current_bulb.status == LIGHT_OK && trigger)
 					current_bulb.status = LIGHT_BURNED
@@ -342,7 +342,7 @@ var/global/list/obj/machinery/light/alllights = list()
 					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 
-					explode()
+					explode(get_mob_by_key(fingerprintslast))
 			else
 				to_chat(user, "This type of light requires a [fitting].")
 				return
@@ -583,11 +583,11 @@ var/global/list/obj/machinery/light/alllights = list()
 /*
  * Explode the light.
  */
-/obj/machinery/light/proc/explode()
+/obj/machinery/light/proc/explode(var/mob/user)
 	spawn(0)
 		broken() // Break it first to give a warning.
 		sleep(2)
-		explosion(get_turf(src), 0, 0, 2, 2)
+		explosion(get_turf(src), 0, 0, 2, 2, whodunnit = user)
 		sleep(1)
 		qdel(src)
 

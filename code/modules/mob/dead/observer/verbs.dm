@@ -522,9 +522,6 @@
 /mob/dead/observer/verb/become_hobo()
 	set name = "Become Space Hobo"
 	set category = "Ghost"
-	if(!(mind && mind.current && can_reenter_corpse) || (mind.current.key && copytext(mind.current.key,1,2)!="@"))
-		to_chat(src, "<span class='warning'>You must have had presence on this plane to become this.</span>")
-		return
 	if(!config.respawn_as_hobo)
 		to_chat(src, "<span class='warning'>Respawning as Space Hobo is disabled.</span>")
 		return
@@ -536,6 +533,9 @@
 		return
 	if(hoboamount == hobostart.len)
 		to_chat(src, "<span class='warning'>The world has enough of these as is.</span>")
+		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
 		return
 
 	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")

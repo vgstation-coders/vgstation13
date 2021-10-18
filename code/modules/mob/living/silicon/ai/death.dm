@@ -48,7 +48,7 @@
 		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
 		playsound(src, 'sound/machines/Alarm_short.ogg', 75, FALSE)
 		spawn(30)
-			explosion(src.loc, 2, 5, 8, 10)
+			explosion(src.loc, 2, 5, 8, 10, whodunnit = src)
 			gibbed = TRUE
 			gib()
 
