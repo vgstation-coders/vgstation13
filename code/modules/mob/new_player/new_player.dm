@@ -368,11 +368,20 @@
 
 	job_master.AssignRole(src, rank, 1)
 
-	ticker.mode.latespawn(src)//can we make them a latejoin antag?
-
 	var/mob/living/carbon/human/character = create_character(1)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
+
+	var/atom/movable/what_to_move = character.locked_to || character
+
+	var/datum/job/J = job_master.GetJob(rank)
+	if(J.spawns_from_edge)
+		Meteortype_Latejoin(what_to_move, rank)
+	else
+		// TODO:  Job-specific latejoin overrides.
+		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+
+	ticker.mode.latespawn(character)//can we make them a latejoin antag?
 
 	// Very hacky. Sorry about that
 	if(ticker.tag_mode_enabled == TRUE)
@@ -403,15 +412,6 @@
 
 
 	EquipCustomItems(character)
-
-	var/atom/movable/what_to_move = character.locked_to || character
-
-	var/datum/job/J = job_master.GetJob(rank)
-	if(J.spawns_from_edge)
-		Meteortype_Latejoin(what_to_move, rank)
-	else
-		// TODO:  Job-specific latejoin overrides.
-		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
 	character.store_position()
 
