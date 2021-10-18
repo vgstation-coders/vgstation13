@@ -383,19 +383,12 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/create_characters()
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind)
-			if(player.mind.assigned_role=="AI")
-				player.close_spawn_windows()
+			if(player.mind.assigned_role=="AI" || player.mind.assigned_role=="Cyborg" || player.mind.assigned_role=="Mobile MMI")
 				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-				player.AIize()
-			else if(player.mind.assigned_role=="Cyborg")
-				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
-				player.create_roundstart_cyborg()
-
+				player.create_roundstart_silicon(player.mind.assigned_role)
 			else if(!player.mind.assigned_role)
 				continue
 			else
-				if(player.mind.assigned_role=="Mobile MMI")
-					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				var/mob/living/carbon/human/new_character = player.create_character(0)
 				new_character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 				qdel(player)
