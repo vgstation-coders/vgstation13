@@ -387,7 +387,7 @@
 	if(ticker.tag_mode_enabled == TRUE)
 		character.mind.assigned_role = "MODE"
 		var/datum/outfit/mime/mime_outfit = new
-		mime_outfit.equip(character)
+		mime_outfit.equip(character, strip = TRUE, delete = TRUE)
 		var/datum/role/tag_mode_mime/mime = new
 		mime.AssignToRole(character.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
