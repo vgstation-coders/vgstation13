@@ -160,7 +160,7 @@
 		return
 
 	//So zards properly get their items when they are admin-made.
-	dropped_items = wizard_mob.unequip_everything()
+	var/dropped_items = wizard_mob.unequip_everything()
 	for(var/atom/A in dropped_items)
 		qdel(A)
 	if(!wizard_mob.find_empty_hand_index())
