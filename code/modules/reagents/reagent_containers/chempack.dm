@@ -144,7 +144,7 @@
 	to_chat(usr, "<span class='notice'>You flush the contents of \the [src].</span>")
 	src.update_icon()
 
-obj/item/weapon/reagent_containers/chempack/verb/set_fill()
+/obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 	set name = "Set fill amount"
 	set category = "Object"
 	set src in usr

@@ -12,7 +12,7 @@ encompasses a larger field.
 
 **************************************/
 
-proc/hex2num(hex)
+/proc/hex2num(hex)
 	//Converts a hexadecimal string (eg. "9F") into a numeral (eg. 159).
 
 	if(!istext(hex))

@@ -1,4 +1,4 @@
-obj/item/mounted/frame/firealarm
+/obj/item/mounted/frame/firealarm
 	name = "fire alarm frame"
 	desc = "Used for building fire alarms."
 	icon = 'icons/obj/monitors.dmi'

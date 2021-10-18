@@ -309,7 +309,7 @@
 					affected.put_in_hands(fake_katana)
 				given_katana = 1
 
-datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
+/datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
 	if (ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
@@ -362,7 +362,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/mob)
 	if(prob(15))
 		to_chat(mob, "Your feet feel slippy!")
 
-datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
+/datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/affected = mob
 

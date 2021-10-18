@@ -184,54 +184,53 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	density = 1.808
 	specheatcap = 0.85
 
-	reaction_turf(var/turf/T, var/volume)
-		if(!istype(T) || istype(T, /turf/space))
-			return
-		var/ind = "[initial(T.icon)][color]"
-		if(!cached_icons[ind])
-			var/icon/overlay = new/icon(initial(T.icon))
-			overlay.Blend(color,ICON_MULTIPLY)
-			overlay.SetIntensity(1.4)
-			T.icon = overlay
-			cached_icons[ind] = T.icon
-		else
-			T.icon = cached_icons[ind]
+/datum/reagent/paint/reaction_turf(var/turf/T, var/volume)
+	if(!istype(T) || istype(T, /turf/space))
 		return
+	var/ind = "[initial(T.icon)][color]"
+	if(!cached_icons[ind])
+		var/icon/overlay = new/icon(initial(T.icon))
+		overlay.Blend(color,ICON_MULTIPLY)
+		overlay.SetIntensity(1.4)
+		T.icon = overlay
+		cached_icons[ind] = T.icon
+	else
+		T.icon = cached_icons[ind]
 
-	red
-		name = "Red Paint"
-		id = "paint_red"
-		color = "#FF0000"
+/datum/reagent/paint/red
+	name = "Red Paint"
+	id = "paint_red"
+	color = "#FF0000"
 
-	green
-		name = "Green Paint"
-		color = "#00FF00"
-		id = "paint_green"
+/datum/reagent/paint/green
+	name = "Green Paint"
+	color = "#00FF00"
+	id = "paint_green"
 
-	blue
-		name = "Blue Paint"
-		color = "#0000FF"
-		id = "paint_blue"
+/datum/reagent/paint/blue
+	name = "Blue Paint"
+	color = "#0000FF"
+	id = "paint_blue"
 
-	yellow
-		name = "Yellow Paint"
-		color = "#FFFF00"
-		id = "paint_yellow"
+/datum/reagent/paint/yellow
+	name = "Yellow Paint"
+	color = "#FFFF00"
+	id = "paint_yellow"
 
-	purple
-		name = "Purple Paint"
-		color = "#FF00FF"
-		id = "paint_purple"
+/datum/reagent/paint/purple
+	name = "Purple Paint"
+	color = "#FF00FF"
+	id = "paint_purple"
 
-	black
-		name = "Black Paint"
-		color = "#333333"
-		id = "paint_black"
+/datum/reagent/paint/black
+	name = "Black Paint"
+	color = "#333333"
+	id = "paint_black"
 
-	white
-		name = "White Paint"
-		color = "#FFFFFF"
-		id = "paint_white"
+/datum/reagent/paint/white
+	name = "White Paint"
+	color = "#FFFFFF"
+	id = "paint_white"
 
 /datum/reagent/paint_remover
 	name = "Paint Remover"
@@ -240,10 +239,9 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	reagent_state = 2
 	color = "#808080"
 
-	reaction_turf(var/turf/T, var/volume)
-		if(istype(T) && T.icon != initial(T.icon))
-			T.icon = initial(T.icon)
-		return
+/datum/reagent/paint_remover/reaction_turf(var/turf/T, var/volume)
+	if(istype(T) && T.icon != initial(T.icon))
+		T.icon = initial(T.icon)
 
 /datum/reagent/paint_remover/on_mob_life(var/mob/living/M)
 	if(..())

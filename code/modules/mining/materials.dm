@@ -10,7 +10,7 @@
 * Tracks and manages material storage for an object.
 */
 
-proc/initialize_materials()
+/proc/initialize_materials()
 	for(var/matdata in subtypesof(/datum/material))
 		var/datum/material/mat = new matdata
 		material_list += list(mat.id = mat)

@@ -176,26 +176,25 @@
 	master = null
 	dir = 2
 
-	move
-		name = "Allow Walking"
-		icon_state = "no_walk0"
-		screen_loc = ui_gun2
+/obj/abstract/screen/gun/move
+	name = "Allow Walking"
+	icon_state = "no_walk0"
+	screen_loc = ui_gun2
 
-	run
-		name = "Allow Running"
-		icon_state = "no_run0"
-		screen_loc = ui_gun3
+/obj/abstract/screen/gun/run
+	name = "Allow Running"
+	icon_state = "no_run0"
+	screen_loc = ui_gun3
 
-	item
-		name = "Allow Item Use"
-		icon_state = "no_item0"
-		screen_loc = ui_gun1
+/obj/abstract/screen/gun/item
+	name = "Allow Item Use"
+	icon_state = "no_item0"
+	screen_loc = ui_gun1
 
-	mode
-		name = "Toggle Gun Mode"
-		icon_state = "gun0"
-		screen_loc = ui_gun_select
-		//dir = 1
+/obj/abstract/screen/gun/mode
+	name = "Toggle Gun Mode"
+	icon_state = "gun0"
+	screen_loc = ui_gun_select
 
 /obj/abstract/screen/gun/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)

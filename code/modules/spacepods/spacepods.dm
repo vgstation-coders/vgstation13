@@ -477,56 +477,52 @@
 
 /datum/global_iterator/pod_preserve_temp  //normalizing cabin air temperature to 20 degrees celsium
 	delay = 20
-
-	process(var/obj/spacepod/spacepod)
-		if(spacepod.cabin_air && spacepod.cabin_air.return_volume() > 0)
-			var/delta = spacepod.cabin_air.temperature - T20C
-			spacepod.cabin_air.temperature -= max(-10, min(10, round(delta/4,0.1)))
-		return
+/datum/global_iterator/pod_preserve_temp/process(var/obj/spacepod/spacepod)
+	if(spacepod.cabin_air && spacepod.cabin_air.return_volume() > 0)
+		var/delta = spacepod.cabin_air.temperature - T20C
+		spacepod.cabin_air.temperature -= max(-10, min(10, round(delta/4,0.1)))
 
 /datum/global_iterator/pod_tank_give_air
 	delay = 15
 
-	process(var/obj/spacepod/spacepod)
-		if(spacepod.internal_tank)
-			var/datum/gas_mixture/tank_air = spacepod.internal_tank.return_air()
-			var/datum/gas_mixture/cabin_air = spacepod.cabin_air
+/datum/global_iterator/pod_tank_give_air/process(var/obj/spacepod/spacepod)
+	if(spacepod.internal_tank)
+		var/datum/gas_mixture/tank_air = spacepod.internal_tank.return_air()
+		var/datum/gas_mixture/cabin_air = spacepod.cabin_air
 
-			var/release_pressure = ONE_ATMOSPHERE
-			var/cabin_pressure = cabin_air.return_pressure()
-			var/pressure_delta = min(release_pressure - cabin_pressure, (tank_air.return_pressure() - cabin_pressure)/2)
-			var/transfer_moles = 0
-			if(pressure_delta > 0) //cabin pressure lower than release pressure
-				if(tank_air.return_temperature() > 0)
-					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
-					var/datum/gas_mixture/removed = tank_air.remove(transfer_moles)
-					cabin_air.merge(removed)
-			else if(pressure_delta < 0) //cabin pressure higher than release pressure
-				var/datum/gas_mixture/t_air = spacepod.get_turf_air()
-				pressure_delta = cabin_pressure - release_pressure
+		var/release_pressure = ONE_ATMOSPHERE
+		var/cabin_pressure = cabin_air.return_pressure()
+		var/pressure_delta = min(release_pressure - cabin_pressure, (tank_air.return_pressure() - cabin_pressure)/2)
+		var/transfer_moles = 0
+		if(pressure_delta > 0) //cabin pressure lower than release pressure
+			if(tank_air.return_temperature() > 0)
+				transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+				var/datum/gas_mixture/removed = tank_air.remove(transfer_moles)
+				cabin_air.merge(removed)
+		else if(pressure_delta < 0) //cabin pressure higher than release pressure
+			var/datum/gas_mixture/t_air = spacepod.get_turf_air()
+			pressure_delta = cabin_pressure - release_pressure
+			if(t_air)
+				pressure_delta = min(cabin_pressure - t_air.return_pressure(), pressure_delta)
+			if(pressure_delta > 0) //if location pressure is lower than cabin pressure
+				transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+				var/datum/gas_mixture/removed = cabin_air.remove(transfer_moles)
 				if(t_air)
-					pressure_delta = min(cabin_pressure - t_air.return_pressure(), pressure_delta)
-				if(pressure_delta > 0) //if location pressure is lower than cabin pressure
-					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
-					var/datum/gas_mixture/removed = cabin_air.remove(transfer_moles)
-					if(t_air)
-						t_air.merge(removed)
-					else //just delete the cabin gas, we're in space or some shit
-						qdel(removed)
-		else
-			return stop()
-		return
+					t_air.merge(removed)
+				else //just delete the cabin gas, we're in space or some shit
+					qdel(removed)
+	else
+		return stop()
 
 /datum/global_iterator/pod_lights_use_charge
 	delay = 10
 
-	process(var/obj/spacepod/spacepod)
-		if(spacepod.battery && spacepod.lights_enabled)
-			if(spacepod.battery.charge > 0)
-				spacepod.battery.use(SPACEPOD_LIGHTS_CONSUMPTION)
-			else
-				spacepod.toggle_lights()
-		return
+/datum/global_iterator/pod_lights_use_charge/process(var/obj/spacepod/spacepod)
+	if(spacepod.battery && spacepod.lights_enabled)
+		if(spacepod.battery.charge > 0)
+			spacepod.battery.use(SPACEPOD_LIGHTS_CONSUMPTION)
+		else
+			spacepod.toggle_lights()
 
 /obj/spacepod/proc/toggle_lights()
 	if(lights_enabled)

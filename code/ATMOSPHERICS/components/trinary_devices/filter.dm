@@ -1,4 +1,4 @@
-obj/machinery/atmospherics/trinary/filter
+/obj/machinery/atmospherics/trinary/filter
 	icon = 'icons/obj/atmospherics/filter.dmi'
 	icon_state = "hintact_off"
 	name = "Gas filter"

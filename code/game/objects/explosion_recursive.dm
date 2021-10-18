@@ -25,7 +25,7 @@
 var/list/datum/explosion_turf/explosion_turfs = list()
 var/explosion_in_progress = 0
 
-proc/get_explosion_turf(var/turf/T)
+/proc/get_explosion_turf(var/turf/T)
 	for( var/datum/explosion_turf/ET in explosion_turfs )
 		if( T == ET.turf )
 			return ET
@@ -34,7 +34,7 @@ proc/get_explosion_turf(var/turf/T)
 	explosion_turfs += ET
 	return ET
 
-proc/explosion_rec(turf/epicenter, power)
+/proc/explosion_rec(turf/epicenter, power)
 
 
 	var/loopbreak = 0

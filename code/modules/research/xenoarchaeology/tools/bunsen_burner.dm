@@ -238,7 +238,7 @@
 /obj/machinery/bunsen_burner/mapped //for the sci break room
 
 
-obj/machinery/bunsen_burner/mapped/New()
+/obj/machinery/bunsen_burner/mapped/New()
 	..()
 	desc = "[initial(desc)] Perfect for keeping your coffee hot."
 	var/obj/item/weapon/reagent_containers/food/drinks/mug/coffeemug = new /obj/item/weapon/reagent_containers/food/drinks/mug

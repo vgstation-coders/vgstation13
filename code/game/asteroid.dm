@@ -29,7 +29,7 @@ proc/admin_spawn_room_at_pos()
 	return
 */
 
-proc/check_complex_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0)
+/proc/check_complex_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0)
 	var/list/surroundings = list()
 
 	surroundings |= range(7, locate(T.x,T.y,T.z))
@@ -46,7 +46,7 @@ proc/check_complex_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0
 
 	return 1
 
-proc/make_mining_asteroid_secret()
+/proc/make_mining_asteroid_secret()
 	var/turf/T = null
 	var/sanity = 0
 	var/list/turfs = null

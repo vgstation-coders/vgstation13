@@ -1734,7 +1734,7 @@
 /mob/living/carbon/human/proc/is_bulky()
 	return species.anatomy_flags & IS_BULKY
 
-mob/living/carbon/human/isincrit()
+/mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
 

@@ -120,7 +120,7 @@
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("jabs","stabs","rips")
 
-obj/item/weapon/wirerod
+/obj/item/weapon/wirerod
 	name = "wired rod"
 	desc = "A rod with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 	icon_state = "wiredrod"
@@ -135,7 +135,7 @@ obj/item/weapon/wirerod
 	attack_verb = list("hits", "bludgeons", "whacks", "bonks")
 
 
-obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/weapon/shard))
 		user.visible_message("<span class='notice'>[user] starts securing \the [I] to the top of \the [src].</span>",\
@@ -227,7 +227,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	item_state = "skinningknife"
 	force = 10
 
-obj/item/weapon/banhammer/admin
+/obj/item/weapon/banhammer/admin
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
 	force = 999

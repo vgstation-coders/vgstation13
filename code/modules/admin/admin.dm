@@ -1464,7 +1464,7 @@ var/global/floorIsLava = 0
 
 var/admin_shuttle_location = 0 // 0 = centcom 13, 1 = station
 
-proc/move_admin_shuttle()
+/proc/move_admin_shuttle()
 	var/area/fromArea
 	var/area/toArea
 	if (admin_shuttle_location == 1)
@@ -1484,7 +1484,7 @@ proc/move_admin_shuttle()
 
 var/alien_ship_location = 1 // 0 = base , 1 = mine
 
-proc/move_alien_ship()
+/proc/move_alien_ship()
 	var/area/fromArea
 	var/area/toArea
 	if (alien_ship_location == 1)
@@ -1500,7 +1500,7 @@ proc/move_alien_ship()
 		alien_ship_location = 1
 	return
 
-proc/formatJumpTo(location, where = "")
+/proc/formatJumpTo(location, where = "")
 	var/turf/loc
 
 	if (isturf(location))
@@ -1513,7 +1513,7 @@ proc/formatJumpTo(location, where = "")
 
 	return "<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc ? loc.x : "mystery"];Y=[loc ? loc.y : "mystery"];Z=[loc ? loc.z : "mystery"]'>[where]</a>"
 
-proc/formatLocation(location)
+/proc/formatLocation(location)
 	var/turf/loc
 
 	if (isturf(location))
@@ -1525,7 +1525,7 @@ proc/formatLocation(location)
 	var/answer = "[istype(A) ? "[A.name]" : "UNKNOWN"] - [istype(loc) ? "[loc.x],[loc.y],[loc.z]" : "UNKNOWN"]"
 	return answer
 
-proc/formatPlayerPanel(var/mob/U,var/text="PP")
+/proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	return "<A HREF='?_src_=holder;adminplayeropts=\ref[U]'>[text]</A>"
 
 //Credit to MrStonedOne from TG for this QoL improvement

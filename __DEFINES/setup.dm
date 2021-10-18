@@ -1775,7 +1775,7 @@ One; Your account number and PIN are required.
 Two; Your ID card, account number and PIN are required.
 You can change this mid-game at an ATM."}
 
-proc/bank_security_num2text(var/num)
+/proc/bank_security_num2text(var/num)
 	switch(num)
 		if(0)
 			return "Zero"

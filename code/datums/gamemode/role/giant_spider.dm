@@ -10,7 +10,7 @@
 	default_admin_voice = "Your Spider Senses"
 	admin_voice_style = "skeleton"
 
-datum/role/giant_spider/Greet(var/greeting,var/custom)
+/datum/role/giant_spider/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 

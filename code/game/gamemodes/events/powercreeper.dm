@@ -206,7 +206,7 @@
 		if(T)
 			. += power_list(T, src, turn(dir, 180), powernetless_only)
 
-obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
+/obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
 	var/turf/TB = get_step(src, direction)
 
 	for(var/obj/structure/cable/C in TB)

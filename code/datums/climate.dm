@@ -243,12 +243,12 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 	mining_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
 	security_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
 
-datum/weather/snow/blizzard/omega
+/datum/weather/snow/blizzard/omega
 	name = "<font color='purple'>dark season</font>"
 	next_weather = list(/datum/weather/snow/heavy = 100)
 	snowfall_prob = 15
 	snow_fluff_estimate = "<font color='purple'>more than 13.5cm/minute (Dark Season)</font>"
 
-datum/weather/snow/blizzard/omega/New()
+/datum/weather/snow/blizzard/omega/New()
 	..()
 	timeleft = 2 HOURS

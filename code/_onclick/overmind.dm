@@ -16,7 +16,7 @@
 	if(T)
 		create_shield(T)
 
-mob/camera/blob/DblClickOn(var/atom/A) //Teleport view to another blob
+/mob/camera/blob/DblClickOn(var/atom/A) //Teleport view to another blob
 	var/turf/T = get_turf(A)
 
 	var/obj/effect/blob/B = (locate(/obj/effect/blob) in T)

@@ -37,7 +37,7 @@
 	..()
 	update_nearby_tiles()
 
-obj/structure/windoor_assembly/Destroy()
+/obj/structure/windoor_assembly/Destroy()
 	setDensity(FALSE)
 	update_nearby_tiles()
 	..()

@@ -9,7 +9,7 @@
 
 	var/min_seeds = 1 //better manipulators improve this
 	var/max_seeds = 4 //better scanning modules improve this
-	
+
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 /********************************************************************
@@ -65,12 +65,12 @@
 		S.use(1)
 		new /obj/item/seeds/grassseed(loc)
 		return TRUE
-	
+
 	if(seedify(AM, src))
 		return TRUE
 	return FALSE
 
-obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 	// Emptying a plant bag
 	if (istype(O,/obj/item/weapon/storage/bag/plants))
@@ -107,26 +107,26 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 		S.use(1)
 		new /obj/item/seeds/grassseed(loc)
 		return
-	
+
 	if(seedify(O, src, user))
 		to_chat(user, "<span class='notice'>You extract some seeds from [O].</span>")
-		return		
+		return
 
 	..()
 
 //Code shamelessly ported over and adapted from tgstation's github repo, PR #2973, credit to Kelenius for the original code
-datum/seed_pile //Maybe there's a better way to do this.
+/datum/seed_pile //Maybe there's a better way to do this.
 	var/datum/seed/seed
 	var/amount
 
-datum/seed_pile/New(var/seed, var/amount = 1)
+/datum/seed_pile/New(var/seed, var/amount = 1)
 	src.seed = seed
 	src.amount = amount
 
 /obj/machinery/seed_extractor/attack_hand(mob/user as mob)
 	interact(user)
 
-obj/machinery/seed_extractor/interact(mob/user as mob)
+/obj/machinery/seed_extractor/interact(mob/user as mob)
 	if (stat)
 		return 0
 
@@ -249,7 +249,7 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 	popup.open()
 	return
 
-obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
+/obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 	if(..())
 		return
 	usr.set_machine(src)
@@ -278,7 +278,7 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 		sortTim(piles, sorting_methods[sortby])
 		updateUsrDialog()
 		return
-	
+
 	if("amt" in href_list)
 		var/amt = text2num(href_list["amt"])
 		var/datum/seed/S = SSplant.seeds[href_list["seed"]]
@@ -304,7 +304,7 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 		updateUsrDialog()
 		return
 
-obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
+/obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
 	if(istype(O.loc,/obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = O.loc
 		S.remove_from_storage(O,src)
@@ -317,7 +317,7 @@ obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
 			return
 	piles += new /datum/seed_pile(O.seed)
 
-obj/machinery/seed_extractor/proc/hasSpaceCheck(mob/user as mob)
+/obj/machinery/seed_extractor/proc/hasSpaceCheck(mob/user as mob)
 	if(contents.len >= MAX_N_OF_ITEMS)
 		to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 		return 0

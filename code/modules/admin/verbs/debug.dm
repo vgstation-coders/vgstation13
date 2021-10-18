@@ -874,7 +874,7 @@ var/global/blood_virus_spreading_disabled = 0
 	else
 		alert("Invalid mob, needs to be a human.")
 
-client/proc/make_invulnerable(var/mob/M in mob_list)
+/client/proc/make_invulnerable(var/mob/M in mob_list)
 	set name = "Toggle Invulnerability"
 	set desc = "Make the target atom invulnerable to all form of damage."
 	set category = "Fun"
@@ -896,7 +896,7 @@ client/proc/make_invulnerable(var/mob/M in mob_list)
 	log_admin("[ckey(key)]/([mob]) has toggled [M]'s invulnerability [(M.flags & INVULNERABLE) ? "on" : "off"]")
 	message_admins("[ckey(key)]/([mob]) has toggled [M]'s invulnerability [(M.flags & INVULNERABLE) ? "on" : "off"]")
 
-client/proc/delete_all_adminbus()
+/client/proc/delete_all_adminbus()
 	set name = "Delete every Adminbus"
 	set desc = "When the world cannot handle them anymore."
 	set category = "Fun"
@@ -907,7 +907,7 @@ client/proc/delete_all_adminbus()
 	for(var/obj/structure/bed/chair/vehicle/adminbus/AB in world)
 		AB.Adminbus_Deletion()
 
-client/proc/delete_all_bomberman()
+/client/proc/delete_all_bomberman()
 	set name = "Remove all that Bomberman shit"
 	set desc = "4th wall ointment."
 	set category = "Fun"
@@ -963,7 +963,7 @@ client/proc/delete_all_bomberman()
 	for(var/obj/structure/powerup/O in bombermangear)
 		qdel(O)
 
-client/proc/create_bomberman_arena()
+/client/proc/create_bomberman_arena()
 	set name = "Create a Bomberman Arena"
 	set desc = "Create a customizable Bomberman-type arena."
 	set category = "Fun"
@@ -985,7 +985,7 @@ client/proc/create_bomberman_arena()
 	var/datum/bomberman_arena/A = new /datum/bomberman_arena(T, arena_type, src.mob)
 	arenas += A
 
-client/proc/control_bomberman_arena()
+/client/proc/control_bomberman_arena()
 	set name = "Arena Control Panel"
 	set desc = "Control or Remove an existing Bomberman-type arena."
 	set category = "Fun"
@@ -1069,7 +1069,7 @@ client/proc/control_bomberman_arena()
 
 
 
-client/proc/mob_list()
+/client/proc/mob_list()
 	set name = "show mob list"
 	set category = "Debug"
 
@@ -1088,7 +1088,7 @@ client/proc/mob_list()
 		to_chat(usr, "Found [foundnull] null entries in the mob list, running null clearer.")
 		listclearnulls(mob_list)
 
-client/proc/check_bomb()
+/client/proc/check_bomb()
 	set name = "Check Bomb Impact"
 	set category = "Debug"
 
@@ -1167,7 +1167,7 @@ client/proc/check_bomb()
 		if("Stealthy")
 			stealthy_level = input("How long do you want the fade-in to last? (in tenth of seconds)","Stealthy Preferences") as num
 
-client/proc/cure_disease()
+/client/proc/cure_disease()
 	set name = "Cure Disease"
 	set category = "Debug"
 	if(!holder)
@@ -1207,7 +1207,7 @@ client/proc/cure_disease()
 	log_admin("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 
-client/proc/check_convertables()
+/client/proc/check_convertables()
 	set name = "Check Convertables (Cult v2.0)"
 	set category = "Debug"
 	if(!holder || !ticker || !ticker.mode)
@@ -1231,7 +1231,7 @@ client/proc/check_convertables()
 	to_chat(usr, dat)
 
 
-client/proc/toggle_convertibles()
+/client/proc/toggle_convertibles()
 	set name = "Toggle Convertibles HUD (Cult 3.0+)"
 	set category = "Debug"
 	set desc = "Displays a marker over crew members showing their propension to get converted."

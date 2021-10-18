@@ -157,7 +157,7 @@
 			return 1
 	return 0
 
-obj/item/device/multitool/ai_detect/update_icon()
+/obj/item/device/multitool/ai_detect/update_icon()
 	if(src.detected)
 		if(src.detected & DETECT_AI)
 			src.icon_state = "[initial(src.icon_state)]_red"
@@ -171,7 +171,7 @@ obj/item/device/multitool/ai_detect/update_icon()
 		src.icon_state = initial(src.icon_state)
 	return
 
-obj/item/device/multitool/ai_detect/examine(mob/user)
+/obj/item/device/multitool/ai_detect/examine(mob/user)
 	..()
 	if(src.detected)
 		user << "<span class='info'>The screen displays:</span>"

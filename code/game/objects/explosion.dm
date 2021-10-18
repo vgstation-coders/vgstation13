@@ -141,10 +141,10 @@ var/explosion_shake_message_cooldown = 0
 	var/x0 = offcenter.x
 	var/y0 = offcenter.y
 	var/z0 = offcenter.z
-	
+
 	if(epicenter != offcenter) // Not relevant if not in multi-z
 		log_debug("Destroying size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [offcenter.loc.name] ([x0],[y0],[z0])")
-	
+
 	for(var/turf/T in spiral_block(offcenter,max_range,1))
 		var/dist = cheap_pythag(T.x - x0, T.y - y0)
 		var/_dist = dist
@@ -208,8 +208,5 @@ var/explosion_shake_message_cooldown = 0
 
 		CHECK_TICK
 
+	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time, whodunnit)
-
-proc/secondaryexplosion(turf/epicenter, range)
-	for(var/turf/tile in trange(range, epicenter))
-		tile.ex_act(2)

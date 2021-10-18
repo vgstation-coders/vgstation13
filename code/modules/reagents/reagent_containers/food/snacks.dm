@@ -6491,7 +6491,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(METHYLIN,5)
 
-obj/item/weapon/reagent_containers/food/snacks/butterstick
+/obj/item/weapon/reagent_containers/food/snacks/butterstick
 	name = "butter on a stick"
 	desc = "The clown told you to make this."
 	icon_state = "butter_stick"
@@ -6537,7 +6537,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 	icon_state = "ambrosia_brownie"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
 
-obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
 	name = "butter fingers"
 	desc = "It's a microwaved hand slathered in butter!"
 	icon_state = "butterfingers_r"
@@ -6549,7 +6549,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	name = "butter fingers"
 	desc = "It's a microwaved hand slathered in butter!"
 	icon_state = "butterfingers_l"

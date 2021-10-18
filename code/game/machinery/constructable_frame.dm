@@ -452,7 +452,7 @@ to destroy them and players will be able to make replacements.
 	icon_state = "door_electronics"
 	//origin_tech = Tc_PROGRAMMING + "=2"
 
-obj/item/weapon/circuitboard/rdserver
+/obj/item/weapon/circuitboard/rdserver
 	name = "Circuit Board (R&D Server)"
 	desc = "A circuit board used to run a R&D server."
 	build_path = /obj/machinery/r_n_d/server
@@ -1428,7 +1428,7 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/capacitor = 2,
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
-						
+
 /obj/item/weapon/circuitboard/cooking/candy
 	name = "circuit board (candy machine)"
 	desc = "A circuit board for a candy machine."
@@ -1438,7 +1438,7 @@ obj/item/weapon/circuitboard/rdserver
 	req_components = list(
 						/obj/item/weapon/stock_parts/manipulator = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1) //boring recipe I know, but they're very simple machines
-						
+
 /obj/item/weapon/circuitboard/cooking/cerealmaker
 	name = "circuit board (cereal maker)"
 	desc = "A circuit board for a cereal maker."

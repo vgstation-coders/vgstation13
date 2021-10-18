@@ -1,4 +1,4 @@
-mob/living/carbon/proc/dream()
+/mob/living/carbon/proc/dream()
 	dreaming = 1
 	var/list/dreams = list(
 		"an ID card","a bottle","a familiar face","a crewmember","a toolbox","a security officer","the captain",
@@ -32,8 +32,8 @@ mob/living/carbon/proc/dream()
 				break
 		dreaming = 0
 
-mob/living/carbon/proc/handle_dreams()
+/mob/living/carbon/proc/handle_dreams()
 	if(prob(5) && !dreaming)
 		dream()
 
-mob/living/carbon/var/dreaming = 0
+/mob/living/carbon/var/dreaming = 0

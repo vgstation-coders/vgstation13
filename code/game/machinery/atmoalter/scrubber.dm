@@ -76,12 +76,12 @@
 /obj/machinery/portable_atmospherics/scrubber/huge/stationary
 	name = "Stationary Air Scrubber"
 
-	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-		if(W.is_wrench(user))
-			to_chat(user, "<span class='notice'>The bolts are too tight for you to unscrew!</span>")
-			return
+/obj/machinery/portable_atmospherics/scrubber/huge/stationary/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+	if(W.is_wrench(user))
+		to_chat(user, "<span class='notice'>The bolts are too tight for you to unscrew!</span>")
+		return
 
-		..()
+	..()
 
 
 /obj/machinery/portable_atmospherics/scrubber/update_icon()

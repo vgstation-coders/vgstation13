@@ -22,10 +22,10 @@
 /mob/proc/is_fat()
 	return 0
 
-mob/proc/isincrit()
+/mob/proc/isincrit()
 	return 0
 
-mob/proc/get_heart()
+/mob/proc/get_heart()
 	return null
 
 /mob/proc/get_lungs()
@@ -40,7 +40,7 @@ mob/proc/get_heart()
 /mob/proc/get_appendix()
 	return null
 
-mob/proc/remove_internal_organ()
+/mob/proc/remove_internal_organ()
 	return null
 
 /mob/proc/get_broken_organs()
@@ -129,7 +129,7 @@ mob/proc/remove_internal_organ()
 		return 0
 	return 1  //The tile is holy. Beware!
 
-proc/hasorgans(A)
+/proc/hasorgans(A)
 	return ishuman(A)
 
 
@@ -261,7 +261,7 @@ proc/hasorgans(A)
 		p++
 	return t
 
-proc/slur(phrase)
+/proc/slur(phrase)
 	var/leng=length(phrase)
 	var/counter=length(phrase)
 	var/newphrase=""
@@ -314,7 +314,7 @@ proc/slur(phrase)
 	return copytext(t,1,MAX_MESSAGE_LEN)
 
 
-proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
+/proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
 	/* Turn text into complete gibberish! */
 	var/returntext = ""
 	for(var/i = 1, i <= length(t), i++)
@@ -514,7 +514,7 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 		var/mob/living/carbon/human/H = src
 		H.set_attack_type(ATTACK_BITE)
 
-proc/is_blind(A)
+/proc/is_blind(A)
 	if(istype(A, /mob/living/carbon))
 		var/mob/living/carbon/C = A
 		if(C.blinded != null)

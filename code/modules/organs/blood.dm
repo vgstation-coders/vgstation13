@@ -430,7 +430,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 /proc/get_blood(datum/reagents/container)
 	return locate(/datum/reagent/blood) in container.reagent_list
 
-proc/blood_incompatible(donor,receiver)
+/proc/blood_incompatible(donor,receiver)
 	if(!donor || !receiver)
 		return 0
 
@@ -454,7 +454,7 @@ proc/blood_incompatible(donor,receiver)
 		//AB is a universal receiver.
 	return 0
 
-proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
+/proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	var/obj/effect/decal/cleanable/blood/B
 	var/decal_type = /obj/effect/decal/cleanable/blood/splatter
 	var/turf/T = get_turf(target)

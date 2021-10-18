@@ -329,7 +329,7 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade
+/obj/item/weapon/grenade/chem_grenade/exgrenade
 	name = "EX Chem Grenade"
 	desc = "A specially designed large grenade that can hold three containers."
 	icon_state = "ex_grenade"
@@ -337,7 +337,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED) && path != PATH_STAGE_COMPLETE)
 		var/obj/item/device/assembly_holder/det = W
 		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))

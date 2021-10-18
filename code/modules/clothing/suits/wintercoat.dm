@@ -399,7 +399,7 @@
 		/obj/item/device/detective_scanner,
 		/obj/item/device/taperecorder)
 
-obj/item/clothing/suit/storage/wintercoat/fur/update_icon()
+/obj/item/clothing/suit/storage/wintercoat/fur/update_icon()
 	if(!belted)
 		icon_state="[base_icon_state]_beltless"
 	else

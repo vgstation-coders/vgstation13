@@ -1,4 +1,4 @@
-obj/machinery/recharger/defibcharger/wallcharger // obj/machinery/recharger/defibcharger define doesn't exist, don't bother trying to look for it
+/obj/machinery/recharger/defibcharger/wallcharger // obj/machinery/recharger/defibcharger define doesn't exist, don't bother trying to look for it
 	name = "defibrillator recharger"
 	desc = "A special wall-mounted recharger used to recharge defibrillators."
 	icon = 'icons/obj/stationobjs.dmi'
@@ -29,7 +29,7 @@ obj/machinery/recharger/defibcharger/wallcharger // obj/machinery/recharger/defi
 
 	RefreshParts()
 
-obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user as mob)
+/obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user as mob)
 	add_fingerprint(user)
 
 	if(charging)
@@ -39,10 +39,10 @@ obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user as mob)
 		use_power = 1
 		update_icon()
 
-obj/machinery/recharger/defibcharger/wallcharger/attack_paw(mob/user as mob)
+/obj/machinery/recharger/defibcharger/wallcharger/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-obj/machinery/recharger/defibcharger/wallcharger/emp_act(severity)
+/obj/machinery/recharger/defibcharger/wallcharger/emp_act(severity)
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		..(severity)
 		return
@@ -52,7 +52,7 @@ obj/machinery/recharger/defibcharger/wallcharger/emp_act(severity)
 		B.charges = 0
 	..(severity)
 
-obj/machinery/recharger/defibcharger/wallcharger/update_icon()	//we have an update_icon() in addition to the stuff in process to make it feel a tiny bit snappier.
+/obj/machinery/recharger/defibcharger/wallcharger/update_icon()	//we have an update_icon() in addition to the stuff in process to make it feel a tiny bit snappier.
 	if(charging)
 		icon_state = "wrecharger1"
 	else
@@ -60,7 +60,7 @@ obj/machinery/recharger/defibcharger/wallcharger/update_icon()	//we have an upda
 
 
 
-obj/machinery/recharger/defibcharger/wallcharger/process()
+/obj/machinery/recharger/defibcharger/wallcharger/process()
 	if(stat & (NOPOWER|BROKEN) || !anchored)
 		return
 
@@ -91,7 +91,7 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 		return TRUE
 	return FALSE
 
-obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
+/obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
 	if(istype(G, /obj/item/weapon/melee/defibrillator))
 		if(..())
 			return

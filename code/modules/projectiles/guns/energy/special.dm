@@ -153,7 +153,7 @@
 
 /obj/item/weapon/gun/energy/mouser/update_icon()
 	return
-	
+
 /obj/item/weapon/gun/energy/mouser/isHandgun()
 	return TRUE
 
@@ -582,7 +582,7 @@
 	projectile_type = "/obj/item/projectile/beam/mindflayer"
 	fire_sound = 'sound/weapons/Laser.ogg'
 
-obj/item/weapon/gun/energy/staff/focus
+/obj/item/weapon/gun/energy/staff/focus
 	name = "mental focus"
 	desc = "An artifact that channels the will of the user into destructive bolts of force. If you aren't careful with it, you might poke someone's brain out.\n Has two modes: Single and AoE."
 	icon = 'icons/obj/wizard.dmi'
@@ -591,7 +591,7 @@ obj/item/weapon/gun/energy/staff/focus
 	projectile_type = "/obj/item/projectile/forcebolt"
 	charge_cost = 100
 
-obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
+/obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	if(projectile_type == "/obj/item/projectile/forcebolt")
 		charge_cost = 250
 		to_chat(user, "<span class='warning'>The [src.name] will now strike a small area.</span>")
@@ -720,7 +720,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 
-obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(defective && prob(30))
 		target = get_ranged_target_turf(user, pick(diagonal), 7)
 	..()
