@@ -24,7 +24,7 @@ export const Merch = (props, context) => {
 
 export const MerchUplink = (props, context) => {
   const {
-    currencySymbol = 'cr',
+    currencySymbol = 'credits',
   } = props;
   const { data } = useBackend(context);
   const {
