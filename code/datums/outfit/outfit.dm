@@ -103,7 +103,7 @@
 		L = items_to_spawn["Default"]
 
 	if(strip)
-		var/dropped_items = M.unequip_everything()
+		var/list/dropped_items = H.unequip_everything()
 		if(delete)
 			for(var/atom/A in dropped_items)
 				qdel(A)

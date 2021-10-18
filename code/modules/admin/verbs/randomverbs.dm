@@ -1086,7 +1086,6 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 	if(!mob)
 		return
-	var/list/dropped_items
 	var/delete_text
 	var/strip_text = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Outfit","") as null|anything in list("Yes","No")
 	if(!strip_text)
