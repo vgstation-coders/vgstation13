@@ -75,7 +75,7 @@
 
 		var/datum/outfit/striketeam/nukeops/concrete_outfit = new our_outfit
 
-		concrete_outfit.equip(synd_mind.current)
+		concrete_outfit.equip(synd_mind.current, strip = TRUE, delete = TRUE)
 
 		share_syndicate_codephrase(N.antag.current)
 		N.antag.current << sound('sound/voice/syndicate_intro.ogg')

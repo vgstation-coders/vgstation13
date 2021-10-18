@@ -1100,12 +1100,15 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(!outfit_type || !ispath(outfit_type))
 		return
 	if(strip_items == "Yes")
-		dropped_items = M.unequip_everything()
-		if(delete_items == "Yes")
-			for(var/atom/A in dropped_items)
-				qdel(A)
+		strip_items = TRUE
+	else
+		strip_items = FALSE
+	if(delete_items == "Yes")
+		delete_items = TRUE
+	else
+		delete_items = FALSE
 	var/datum/outfit/concrete_outfit = new outfit_type
-	concrete_outfit.equip(M, TRUE)
+	concrete_outfit.equip(M, TRUE, strip = strip_items, delete = delete_items)
 	log_admin("[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].")
 	message_admins("<span class='notice'>[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].</span>", 1)
 
