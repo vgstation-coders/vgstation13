@@ -91,9 +91,6 @@ var/list/tgui_religion_data
 		tgui_religion_data = data
 	return tgui_religion_data
 
-/client/verb/choose_religion()
-	ChooseReligion(mob)
-
 /proc/get_religion_by_name(name)
 	for(var/entry in subtypesof(/datum/religion))
 		var/datum/religion/path = entry

@@ -23,6 +23,11 @@ const isBlank = function (str) {
   return (!str || /^\s*$/.test(str));
 };
 
+const capitalize = (str) => {
+  if (typeof str !== 'string') return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export const CustomReligion = (props, context) => {
   const { act, data } = useBackend(context);
   const [
@@ -199,10 +204,10 @@ export const DefinedReligion = (props, context) => {
             {selectedReligion.femaleAdept}
           </LabeledList.Item>
           <LabeledList.Item key="Conversion ritual" label="Conversion ritual">
-            {selectedReligion.convertMethod}
+            {capitalize(selectedReligion.convertMethod)}
           </LabeledList.Item>
           <LabeledList.Item key="Preferred incense" label="Preferred incense">
-            {selectedReligion.preferredIncense}
+            {capitalize(selectedReligion.preferredIncense)}
           </LabeledList.Item>
           <LabeledList.Item key="Notes" label="Notes">
             {selectedReligion.notes}
@@ -252,12 +257,14 @@ export const ChooseReligion = (props, context) => {
               </Button>
             </Flex.Item>
             <Flex.Item>
-              <Input
-                autoFocus
-                fluid
-                mt={1}
-                placeholder="Search for a religion or deity"
-                onInput={(_, value) => setSearchText(value)} />
+              {!useCustomReligion && (
+                <Input
+                  autoFocus
+                  fluid
+                  mt={1}
+                  placeholder="Search for a religion or deity"
+                  onInput={(_, value) => setSearchText(value)} />
+              )}
             </Flex.Item>
             <Flex.Item height="100%">
               {!useCustomReligion &&(
