@@ -160,11 +160,9 @@
 		return
 
 	//So zards properly get their items when they are admin-made.
-	qdel(wizard_mob.wear_suit)
-	qdel(wizard_mob.head)
-	qdel(wizard_mob.shoes)
-	qdel(wizard_mob.r_store)
-	qdel(wizard_mob.l_store)
+	dropped_items = wizard_mob.unequip_everything()
+	for(var/atom/A in dropped_items)
+		qdel(A)
 	if(!wizard_mob.find_empty_hand_index())
 		wizard_mob.u_equip(wizard_mob.held_items[GRASP_LEFT_HAND])
 	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
