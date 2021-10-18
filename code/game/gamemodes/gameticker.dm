@@ -171,7 +171,6 @@ var/datum/controller/gameticker/ticker
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
 	collect_minds()
-	equip_characters()
 
 	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
@@ -193,6 +192,8 @@ var/datum/controller/gameticker/ticker
 		else
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
+
+	equip_characters()
 
 	for(var/mob/living/carbon/human/player in player_list)
 		switch(player.mind.assigned_role)
