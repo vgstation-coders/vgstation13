@@ -470,11 +470,6 @@ var/global/datum/controller/occupations/job_master
 	if(H.mind)
 		H.mind.assigned_role = rank
 		alt_title = H.mind.role_alt_title
-
-		switch(rank)
-			if("Mobile MMI")
-				H.MoMMIfy()
-				return 1
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
 	else
