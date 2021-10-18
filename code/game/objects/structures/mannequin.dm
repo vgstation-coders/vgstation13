@@ -945,9 +945,9 @@
 
 
 /obj/structure/mannequin/proc/spin()
-	invoke_event(/event/before_move)
+	INVOKE_EVENT(src, /event/before_move)
 	change_dir(turn(dir, 90))
-	invoke_event(/event/after_move)
+	INVOKE_EVENT(src, /event/after_move)
 
 /obj/structure/mannequin/verb/rotate_mannequin()
 	set name = "Rotate Mannequin"

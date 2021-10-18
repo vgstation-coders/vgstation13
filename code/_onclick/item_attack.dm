@@ -3,7 +3,7 @@
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
-	. = invoke_event(/event/item_attack_self, list("user" = user))
+	. = INVOKE_EVENT(src, /event/item_attack_self, "user" = user)
 	if(flags & TWOHANDABLE)
 		if(!(flags & MUSTTWOHAND))
 			if(wielded)
@@ -32,7 +32,7 @@
 			I.attack(src, user, def_zone, originator)
 		else
 			I.attack(src, user, def_zone)
-	invoke_event(/event/attackby, list("attacker" = user, "item" = I))
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = I)
 
 
 

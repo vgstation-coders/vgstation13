@@ -11,10 +11,17 @@
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall/shuttle,
-		/obj/machinery/door/unpowered/shuttle,
+		/obj/machinery/door,
 		/obj/structure/shuttle,
+		/obj/structure/grille,
 	)
 	return smoothables
+
+/turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
+	if (get_area(A) != get_area(src))
+		return 0
+
+	return ..()
 
 /turf/simulated/wall/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -67,6 +74,7 @@
 	plane = TURF_PLANE
 	layer = TURF_LAYER
 	anchored = 1
+	opacity = 1
 
 /obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)

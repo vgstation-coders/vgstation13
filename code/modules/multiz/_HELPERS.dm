@@ -1,6 +1,5 @@
 var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floor/glass)
 
-#define isopenspace(A) istype(A, /turf/simulated/open)
 #define isvisiblespace(A) is_type_in_list(A, visible_spaces)
 #define OPENSPACE_PLANE_START -23
 #define OPENSPACE_PLANE_END -8
@@ -149,12 +148,12 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 	multi_z_spiral_block(epicenter,max_range,inward,1,shape)
 
 // Halves above and below, as per suggestion by deity on how to handle multi-z explosions
-/proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time)
+/proc/explosion_destroy_multi_z(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit)
 	if(HasAbove(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/upcenter = GetAbove(offcenter)
 		if(upcenter.z > epicenter.z)
-			explosion_destroy(epicenter, upcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)
+			explosion_destroy(epicenter, upcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time, whodunnit)
 	if(HasBelow(offcenter.z) && (devastation_range >= 1 || heavy_impact_range >= 1 || light_impact_range >= 1 || flash_range >= 1))
 		var/turf/downcenter = GetBelow(offcenter)
 		if(downcenter.z < epicenter.z)
-			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time)
+			explosion_destroy(epicenter, downcenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, explosion_time, whodunnit)

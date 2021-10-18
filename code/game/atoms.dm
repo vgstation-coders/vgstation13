@@ -198,7 +198,7 @@ var/global/list/ghdel_profiling = list()
 	densityChanged()
 
 /atom/proc/densityChanged()
-	invoke_event(/event/density_change, list("atom" = src))
+	INVOKE_EVENT(src, /event/density_change, "atom" = src)
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 	if(!isturf(src))
@@ -474,7 +474,7 @@ its easier to just keep the beam vertical.
 // 3 is light damage.
 //
 // child is set to the child object that exploded, if available.
-/atom/proc/ex_act(var/severity, var/child=null)
+/atom/proc/ex_act(var/severity, var/child=null, var/mob/whodunnit)
 	return
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)
@@ -483,15 +483,20 @@ its easier to just keep the beam vertical.
 /atom/proc/can_mech_drill()
 	return acidable()
 
-/atom/proc/blob_act(destroy = 0,var/obj/effect/blob/source = null)
-	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
+/atom/proc/blob_act(destroy = 0, var/obj/effect/blob/source = null)
 	if(flags & INVULNERABLE)
 		return
-	if (source)
-		anim(target = loc, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	var/_target
+
+	if(isturf(src))
+		_target = src
 	else
-		anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
-	return
+		_target = loc
+
+	if(source)
+		anim(target = _target, a_icon = source.icon, flick_anim = "blob_act", sleeptime = 15, direction = get_dir(source, src), lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
+	else
+		anim(target = _target, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 
 /atom/proc/singularity_act()
 	return

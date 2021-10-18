@@ -333,8 +333,26 @@ var/paperwork_library
 	throwforce = 5
 	attack_verb = list("stabs")
 	style_type = /datum/writing_style/script
+	var/bloodied = null
+
+/obj/item/weapon/pen/fountain/examine(mob/user)
+	. = ..()
+	if(bloodied)
+		to_chat(user, "<span class='info'>The nib is dripping with a viscous substance.</span>")
+
+/obj/item/weapon/pen/fountain/afterattack(obj/reagentholder, mob/user as mob)
+	..()
+	if(!bloodied)
+		return
+	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+		if(reagentholder.reagents.has_only_any(list(WATER,CLEANER,BLEACH,ETHANOL, HOLYWATER))) //cannot contain any reagent outside of this list, but can contain the list in any proportion
+			to_chat(user, "<span class='notice'>You dip \the [src] into \the [reagentholder], cleaning out the nib.</span>")
+			bloodied = FALSE
+			colour = "black"
 
 /obj/item/weapon/pen/fountain/cap
+	name = "captain's fountain pen"
+	desc = "A fancy fountain pen, for when you really want to impress. This one comes in a commanding navy and gold. The nib is quite sharp."
 	icon_state = "pen_fountain_cap"
 
 /obj/item/weapon/pen/tactical
@@ -349,12 +367,14 @@ var/paperwork_library
 
 /obj/item/weapon/pen/tactical/is_screwdriver(mob/user)
 	return TRUE
+
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
 	if(istype(src, /obj/item/weapon/pen/fountain))
+		var/obj/item/weapon/pen/fountain/P = src
 		if(user.zone_sel.selecting == "eyes" || user.zone_sel.selecting == LIMB_HEAD)
 			if(!istype(M))
 				return ..()
-			if(can_operate(M, user, src))
+			if(can_operate(M, user, P))
 				return ..()
 			if(clumsy_check(user) && prob(50))
 				M = user
@@ -363,7 +383,8 @@ var/paperwork_library
 		var/mob/living/carbon/human/H = M
 		var/datum/reagent/blood/B = get_blood(H.vessel)
 		if(B)
-			colour = B.data["blood_colour"]
+			P.bloodied = TRUE
+			P.colour = B.data["blood_colour"]
 
 	if(!ismob(M))
 		return

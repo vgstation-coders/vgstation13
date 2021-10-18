@@ -30,6 +30,8 @@
 	if(!A)
 		return 0
 	if(is_type_in_list(A, canSmoothWith()))
+		if(istype(A, /turf/simulated/wall/shuttle) && !istype(src, /turf/simulated/wall/shuttle))
+			return 0
 		if(istype(A, /turf/simulated/wall))
 			var/turf/simulated/wall/W = A
 			if(src.mineral == W.mineral)
@@ -87,18 +89,6 @@
 			T.relativewall()
 			for(var/atom/A in T)
 				A.relativewall()
-
-/turf/simulated/wall/New(loc)
-	..(loc)
-	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
-		initialize()
-
-/turf/simulated/wall/initialize()
-	// SMOOTH US WITH OUR NEIGHBORS
-	relativewall()
-
-	// WE NEED TO TELL ALL OUR FRIENDS ABOUT THIS SCANDAL
-	relativewall_neighbours()
 
 /turf/simulated/wall/Destroy()
 	remove_rot()

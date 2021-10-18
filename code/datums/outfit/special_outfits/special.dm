@@ -556,8 +556,8 @@
 			slot_shoes_str = /obj/item/clothing/shoes/magboots,
 			slot_glasses_str = /obj/item/clothing/glasses/scanner/meson,
 			slot_belt_str = /obj/item/weapon/pickaxe,
-			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/mushmen,
-			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mushmen,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/trader/flex,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/trader/flex,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 		/datum/species/tajaran = list(

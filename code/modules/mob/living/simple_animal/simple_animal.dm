@@ -245,11 +245,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
-					invoke_event(/event/before_move)
+					INVOKE_EVENT(src, /event/before_move)
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
-					invoke_event(/event/after_move)
+					INVOKE_EVENT(src, /event/after_move)
 
 	handle_automated_speech()
 
@@ -580,26 +580,28 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	..(gibbed)
 
 
-/mob/living/simple_animal/ex_act(severity)
+/mob/living/simple_animal/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 	..()
 	switch (severity)
 		if (1.0)
 			adjustBruteLoss(500)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 			gib()
 			return
 
 		if (2.0)
 			adjustBruteLoss(60)
-
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 60", admin_warn = TRUE)
 
 		if(3.0)
 			adjustBruteLoss(30)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(invoke_event(/event/damaged, list("kind" = BRUTE, "amount" = damage)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = damage))
 		return 0
 	if (damage > 0)
 		damageoverlaytemp = 20
@@ -617,7 +619,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(invoke_event(/event/damaged, list("kind" = BURN, "amount" = damage)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = damage))
 		return 0
 	if(skinned())
 		damage = damage * 2

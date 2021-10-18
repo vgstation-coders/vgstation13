@@ -213,6 +213,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/unit_test_panel,
 #endif
 	/client/proc/update_all_open_spaces,
+	/client/proc/update_all_area_portals,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -674,23 +675,23 @@ var/list/admin_verbs_mod = list(
 	set desc = "Cause an explosion of varying strength at your location."
 
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb")
+	var/list/choices = list("Small Bomb (1,3,4)", "Medium Bomb (3,7,14)", "Big Bomb (7,14,28)", "Custom Bomb")
 	var/choice = input("What size explosion would you like to produce?") in choices | null
 	switch(choice)
 		if(null)
 			return 0
-		if("Small Bomb (1,2,3)")
-			explosion(epicenter, 1, 2, 3, 3)
-		if("Medium Bomb (2,3,4)")
-			explosion(epicenter, 2, 3, 4, 4)
-		if("Big Bomb (3,5,7)")
-			explosion(epicenter, 3, 5, 7, 5)
+		if("Small Bomb (1,3,4)")
+			explosion(epicenter, 1, 3, 4, 4, whodunnit = usr)
+		if("Medium Bomb (3,7,14)")
+			explosion(epicenter, 3, 7, 14, 14, whodunnit = usr)
+		if("Big Bomb (7,14,28)")
+			explosion(epicenter, 7, 14, 28, 28, whodunnit = usr)
 		if("Custom Bomb")
 			var/devastation_range = input("Devastation range (in tiles):") as num
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
-			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, whodunnit = usr)
 
 	log_admin("[key_name(usr)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
 	message_admins("<span class='notice'>[key_name_admin(src)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>).</span>")

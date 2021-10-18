@@ -137,14 +137,14 @@
 		var/new_frequency
 		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+		if(!INVOKE_EVENT(src, /event/radio_new_frequency, "user" = usr, "new_frequency" = new_frequency))
 			set_frequency(new_frequency)
 
 	else if (href_list["freq"])
 		var/new_frequency
 		new_frequency = (frequency + text2num(href_list["freq"]))
 		new_frequency = sanitize_frequency(new_frequency, maxf)
-		if(!invoke_event(/event/radio_new_frequency, list("user" = usr, "new_frequency" = new_frequency)))
+		if(!INVOKE_EVENT(src, /event/radio_new_frequency, "user" = usr, "new_frequency" = new_frequency))
 			set_frequency(new_frequency)
 
 	else if (href_list["talk"])

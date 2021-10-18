@@ -1303,6 +1303,18 @@ var/list/has_died_as_golem = list()
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
+//	uniform_icons = 'icons/mob/species/mushroom/uniform.dmi'
+//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+//	gloves_icons    = 'icons/mob/species/vox/gloves.dmi'
+//	glasses_icons   = 'icons/mob/species/vox/eyes.dmi'
+//	ears_icons      = 'icons/mob/ears.dmi'
+//	shoes_icons 	= 'icons/mob/species/vox/shoes.dmi'
+	head_icons      = 'icons/mob/species/mushroom/head.dmi'
+//	belt_icons      = 'icons/mob/belt.dmi'
+	wear_suit_icons = 'icons/mob/species/mushroom/suit.dmi'
+//	wear_mask_icons = 'icons/mob/species/mushroom/masks.dmi'
+//	back_icons      = 'icons/mob/back.dmi'
+
 	has_mutant_race = 0
 
 	has_organ = list(
@@ -1326,11 +1338,15 @@ var/list/has_died_as_golem = list()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
 	if(istype(telepathic_target) && M.can_mind_interact(telepathic_target))
-		telepathic_target.show_message("<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>.")
-		M.show_message("<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
-		log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
 		for(var/mob/dead/observer/G in dead_mob_list)
-			G.show_message("<i>Mushroom telepathy from <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
+			G.show_message("<i>Fungal Telepathy, <b>[M]</b> to <b>[telepathic_target]</b>: [message]</i>")
+		log_admin("[key_name(M)] mushroom projects his mind towards (believed:[telepathic_target]/actual:[key_name(telepathic_target)]: [message]</span>")
+		if(telepathic_target == M) //Talking to ourselves
+			to_chat(M,"<span class='mushroom'>Projected to self: [message]</span>")
+			return
+		to_chat(telepathic_target,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: [message]</span>.")
+		to_chat(M,"<span class='mushroom'>Projected to <b>[telepathic_target]</b>: [message]</span>")
+
 
 /datum/species/lich
 	name = "Undead"
