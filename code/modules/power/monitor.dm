@@ -89,11 +89,12 @@
 
 		if(connected_powernet)
 			supply += connected_powernet.avail
-			demand += connected_powernet.viewload
-
-		for(var/list/history_list in history)
-			if(history_list.len > record_size)
+			if(supply.len > record_size)
 				supply.Cut(1, 2)
+
+			demand += connected_powernet.viewload
+			if(demand.len > record_size)
+				demand.Cut(1, 2)
 
 /obj/machinery/computer/powermonitor/power_change()
 	..()
