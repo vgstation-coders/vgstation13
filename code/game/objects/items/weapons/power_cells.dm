@@ -259,9 +259,9 @@
 		charge = 0
 		maxcharge = 0
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
-		if(explodium = TRUE)
-			if(prob(5))
-				explosion(loc, 0, 1, 2, 2)//smallish explosion
+	if(explodium = TRUE)
+		if(prob(5))
+			explosion(loc, 0, 1, 2, 2)//smallish explosion
 		
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
