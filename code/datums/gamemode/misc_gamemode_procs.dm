@@ -163,57 +163,29 @@
 	var/list/dropped_items = wizard_mob.unequip_everything()
 	for(var/atom/A in dropped_items)
 		qdel(A)
-	if(!wizard_mob.find_empty_hand_index())
-		wizard_mob.u_equip(wizard_mob.held_items[GRASP_LEFT_HAND])
-	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
-	disable_suit_sensors(wizard_mob)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
 	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
 	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
 	if(WPF && PFW)  //Are there wizwar factions?
 		if(WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(wizard_mob), slot_wear_suit)
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(wizard_mob), slot_head)
 			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
-		//	S.uses = Sp_BASE_PRICE * 3.5
-		//	S.max_uses = Sp_BASE_PRICE * 3.5
-			wizard_mob.put_in_hands(S)
+			var/datum/outfit/special/wizard/red/W = new
+			if(apprentice)
+				W.apprentice = TRUE
+			W.equip(wizard_mob)
+			W.post_equip(wizard_mob)
 		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
 			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
-		//	S.uses = Sp_BASE_PRICE * 3.5
-		//	S.max_uses = Sp_BASE_PRICE * 3.5
-			wizard_mob.put_in_hands(S)
-		else //An ordinary wizard spawned after the wizwar ruleset was called, this shouldn't happen unless someone forces ragin' mages. Give them normal robes but no absorb spell.
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
-			if(!apprentice)
-				wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
+			var/datum/outfit/special/wizard/W = new
+			if(apprentice)
+				W.apprentice = TRUE
+			W.equip(wizard_mob)
+			W.post_equip(wizard_mob)
 	else //No wizwar, give them normal robes
-		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
-		if(!apprentice)
-			wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
-	if(wizard_mob.backbag == 2)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(wizard_mob), slot_back)
-	if(wizard_mob.backbag == 3)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(wizard_mob), slot_back)
-	if(wizard_mob.backbag == 4)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
-//	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
-	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
-	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
-
-	wizard_mob.make_all_robot_parts_organic()
-
-	// For Vox and plasmadudes.
-	//wizard_mob.species.handle_post_spawn(wizard_mob)
+		var/datum/outfit/special/wizard/W = new
+		if(apprentice)
+			W.apprentice = TRUE
+		W.equip(wizard_mob)
+		W.post_equip(wizard_mob)
 
 	if(!apprentice)
 		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
