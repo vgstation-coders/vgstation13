@@ -33,11 +33,16 @@
 			AppendObjective(/datum/objective/hijack)
 	return
 
-/datum/role/wizard/OnPostSetup()
+/datum/role/wizard/OnPreSetup()
 	. = ..()
 	if(!.)
 		return
 	antag.current.forceMove(pick(wizardstart))
+
+/datum/role/wizard/OnPostSetup()
+	. = ..()
+	if(!.)
+		return
 	equip_wizard(antag.current)
 	name_wizard(antag.current)
 	antag.current.flavor_text = null
