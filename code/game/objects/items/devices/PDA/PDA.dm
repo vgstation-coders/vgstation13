@@ -2110,7 +2110,7 @@ var/global/msg_id = 0
 			tnote.Cut()
 		if("Ringtone")
 			var/t = input(U, "Please enter new ringtone", name, ttone) as text
-			if (in_range(U, src) && loc == U)
+			if (loc == U)
 				if (t)
 					if(INVOKE_EVENT(src, /event/pda_change_ringtone, "user" = U, "new_ringtone" = t))
 						to_chat(U, "The PDA softly beeps.")
