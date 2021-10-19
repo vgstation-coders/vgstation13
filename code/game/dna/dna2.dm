@@ -418,13 +418,19 @@ var/global/list/facial_hair_styles_female_list	= list()
 		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			ResetSE()
 
-		if(length(unique_enzymes) != 32)
+		if(character.real_name != "unknown")
 			unique_enzymes = md5(character.real_name)
+		else if(real_name && real_name != "unknown")
+			unique_enzymes = md5(real_name)
+		else
+			unique_enzymes = md5(capitalize(pick(first_names_male)))
 	else
 		if(length(uni_identity) != 3*DNA_UI_LENGTH)
 			uni_identity = "00600200A00E0110148FC01300B0095BD7FD3F4"
 		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			struc_enzymes = "43359156756131E13763334D1C369012032164D4FE4CD61544B6C03F251B6C60A42821D26BA3B0FD6"
+		unique_enzymes = md5(capitalize(pick(first_names_male)))
+
 
 // BACK-COMPAT!
 //  Initial DNA setup.

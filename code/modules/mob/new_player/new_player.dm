@@ -549,7 +549,7 @@
 				civ[job] = active
 			else
 				misc[job] = active
-	
+
 	if(highprior.len > 0)
 		dat += "<tr><th class='reqhead' colspan=3>High Priority Jobs</th></tr>"
 		for(var/datum/job/job in highprior)
@@ -774,7 +774,7 @@
 	dat += job_master.display_prediction()
 
 	src << browse(dat, "window=manifest;size=370x420;can_close=1")
-	
+
 /mob/new_player/proc/ViewManifest()
 	var/dat = {"<html><body>
 <h4>Crew Manifest</h4>"}
