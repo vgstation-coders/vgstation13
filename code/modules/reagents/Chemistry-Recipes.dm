@@ -3651,7 +3651,6 @@
 	id = AMINOMICIAN
 	result = AMINOMICIAN
 	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3)
-	required_catalysts = list(RADIUM = 5)
 	result_amount = 1
 
 /datum/chemical_reaction/synthcorgi
@@ -3751,7 +3750,7 @@
 	name = "Ectoplasm"
 	id = ECTOPLASM
 	result = ECTOPLASM
-	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 2, FROSTOIL = 1)
+	required_reagents = list(AMINOMICIAN = 1, FROSTOIL = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthskeleton
