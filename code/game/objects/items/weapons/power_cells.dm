@@ -255,7 +255,7 @@
 		explodium = TRUE
 		name = "broken cell"
 		icon_state = "cell"
-		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30
+		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
 		charge = 0
 		maxcharge = 0
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
