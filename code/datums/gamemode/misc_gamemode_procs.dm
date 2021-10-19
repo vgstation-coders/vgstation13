@@ -184,7 +184,6 @@
 		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
 		to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
 		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
-	wizard_mob.update_icons()
 	return 1
 
 /proc/name_wizard(mob/living/carbon/human/wizard_mob, role_name = "Space Wizard")
