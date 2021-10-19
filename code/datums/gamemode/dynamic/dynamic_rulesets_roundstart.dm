@@ -238,6 +238,7 @@
 	var/mob/M = pick(assigned)
 	if (M)
 		var/datum/role/wizard/newWizard = new
+		M.forceMove(pick(wizardstart))
 		newWizard.AssignToRole(M.mind,1)
 		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
@@ -309,6 +310,7 @@
 			WPF.HandleRecruitedRole(newWizard)
 		else
 			PFW.HandleRecruitedRole(newWizard)
+		M.forceMove(pick(wizardstart))
 		newWizard.AssignToRole(M.mind,1)
 		newWizard.Greet(GREET_MIDROUND)
 	return 1

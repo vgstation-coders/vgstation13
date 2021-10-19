@@ -33,12 +33,6 @@
 			AppendObjective(/datum/objective/hijack)
 	return
 
-/datum/role/wizard/OnPreSetup()
-	. = ..()
-	if(!.)
-		return
-	antag.current.forceMove(pick(wizardstart))
-
 /datum/role/wizard/OnPostSetup()
 	. = ..()
 	if(!.)

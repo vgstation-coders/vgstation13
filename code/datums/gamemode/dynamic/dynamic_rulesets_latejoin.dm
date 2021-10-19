@@ -96,6 +96,7 @@
 		federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 	var/mob/M = pick(assigned)
 	var/datum/role/wizard/newWizard = new
+	M.forceMove(pick(wizardstart))
 	newWizard.AssignToRole(M.mind,1)
 	federation.HandleRecruitedRole(newWizard)
 	newWizard.Greet(GREET_LATEJOIN)

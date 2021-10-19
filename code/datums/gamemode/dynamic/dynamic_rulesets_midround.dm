@@ -317,6 +317,9 @@
 		new_role.OnPostSetup() //Each individual role to show up gets a postsetup
 	..()
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/finish_setup(var/mob/new_character, var/index)
+	new_character.forceMove(pick(wizardstart))
+	..()
 
 //////////////////////////////////////////////
 //                                          //
