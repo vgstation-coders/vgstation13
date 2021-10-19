@@ -159,10 +159,6 @@
 	if (!istype(wizard_mob))
 		return
 
-	//So zards properly get their items when they are admin-made.
-	var/list/dropped_items = wizard_mob.unequip_everything()
-	for(var/atom/A in dropped_items)
-		qdel(A)
 	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
 	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
 	if(WPF && PFW)  //Are there wizwar factions?
@@ -171,18 +167,18 @@
 			var/datum/outfit/special/wizard/red/W = new
 			if(apprentice)
 				W.apprentice = TRUE
-			W.equip(wizard_mob)
+			W.equip(wizard_mob, strip = TRUE, delete = TRUE)
 		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
 			wizard_mob.add_spell(new /spell/targeted/absorb)
 			var/datum/outfit/special/wizard/W = new
 			if(apprentice)
 				W.apprentice = TRUE
-			W.equip(wizard_mob)
+			W.equip(wizard_mob, strip = TRUE, delete = TRUE)
 	else //No wizwar, give them normal robes
 		var/datum/outfit/special/wizard/W = new
 		if(apprentice)
 			W.apprentice = TRUE
-		W.equip(wizard_mob)
+		W.equip(wizard_mob, strip = TRUE, delete = TRUE)
 
 	if(!apprentice)
 		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
