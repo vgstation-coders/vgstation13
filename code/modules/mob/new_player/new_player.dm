@@ -787,18 +787,17 @@
 		message_admins("WARNING! Couldn't find a spawn location for a [type]. They will spawn at the arrival shuttle.")
 
 	//Create the robot and move over prefs
-	switch(type)
-		if("AI")
-			return AIize()
+	if(type == "AI")
+		return AIize()
+	else
+		forceMove(spawn_loc)
+		var/mob/living/silicon/robot/new_character
+		if(type == "Mobile MMI")
+			new_character = MoMMIfy()
 		else
-			forceMove(spawn_loc)
-			var/mob/living/silicon/robot/new_character
-			if("Mobile MMI")
-				new_character = MoMMIfy()
-			else
-				new_character = Robotize()
-			new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
-			return new_character
+			new_character = Robotize()
+		new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
+		return new_character
 
 /mob/new_player/proc/ViewPrediction()
 	var/dat = {"<html><body>
