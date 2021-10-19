@@ -172,20 +172,17 @@
 			if(apprentice)
 				W.apprentice = TRUE
 			W.equip(wizard_mob)
-			W.post_equip(wizard_mob)
 		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
 			wizard_mob.add_spell(new /spell/targeted/absorb)
 			var/datum/outfit/special/wizard/W = new
 			if(apprentice)
 				W.apprentice = TRUE
 			W.equip(wizard_mob)
-			W.post_equip(wizard_mob)
 	else //No wizwar, give them normal robes
 		var/datum/outfit/special/wizard/W = new
 		if(apprentice)
 			W.apprentice = TRUE
 		W.equip(wizard_mob)
-		W.post_equip(wizard_mob)
 
 	if(!apprentice)
 		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
