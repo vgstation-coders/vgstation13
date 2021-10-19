@@ -224,7 +224,9 @@
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
 	var/charge_rate = 100
 	var/damaged = FALSE
-
+	var/empable = TRUE
+	var/explodium = FALSE
+	
 /obj/item/weapon/cell/rad/empty/New()
 	..()
 	charge = 0
@@ -249,25 +251,37 @@
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
 	if(charge_rate < (initial(charge_rate)/10)) //if charge rate goes under 10% of the original value, deletes itself and spawns a broken cell in its place, broken cell has a 5% chance to "explode".
-		qdel(src)
-		new /obj/item/weapon/cell/broken(get_turf(src)) //if I understand this correctly, it should spawn the cell inside whatever had it beforehand
+		empable = FALSE
+		explodium = TRUE
+		name = "broken cell"
+		icon_state = "cell"
+		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30
+		charge = 0
+		maxcharge = 0
+		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
+		if(explodium = TRUE)
+			if(prob(5))
+				explosion(loc, 0, 1, 2, 2)//smallish explosion
 		
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
-	switch(rand(3))
-		if(0)
-			charge_rate *= severity*0.3
-			damaged = TRUE
-		if(1)
-			maxcharge *= severity*0.3
-			charge = 0
-		if(2)
-			maxcharge *= severity*0.3
-			charge = 0
-			charge_rate *= severity*0.3
-			damaged = TRUE
-		if(3)
-			return
+	if(empable = true)
+		switch(rand(3))
+			if(0)
+				charge_rate *= severity*0.2
+				damaged = TRUE
+			if(1)
+				maxcharge *= severity*0.2
+				charge = 0
+			if(2)
+				maxcharge *= severity*0.2
+				charge = 0
+				charge_rate *= severity*0.2
+				damaged = TRUE
+			if(3)
+				return
+	else
+		return
 
 /obj/item/weapon/cell/rad/examine(mob/user)
 	..()
@@ -285,15 +299,3 @@
 /obj/item/weapon/cell/rad/large/empty/New()
 	..()
 	charge = 0
-	
-/obj/item/weapon/cell/broken
-	name = "broken cell"
-	icon_state = "cell"
-	maxcharge = 0
-	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
-	
-/obj/item/weapon/cell/broken/New()
-	..()
-	desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It can explode any moment now.</span>"
-	if(prob(5))
-		explosion(loc, 0, 1, 2, 2)//smallish explosion
