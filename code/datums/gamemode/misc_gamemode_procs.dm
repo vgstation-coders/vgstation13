@@ -165,19 +165,16 @@
 		if(WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
 			wizard_mob.add_spell(new /spell/targeted/absorb)
 			var/datum/outfit/special/wizard/red/W = new
-			if(apprentice)
-				W.apprentice = TRUE
+			W.apprentice = apprentice
 			W.equip(wizard_mob, strip = TRUE, delete = TRUE)
 		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
 			wizard_mob.add_spell(new /spell/targeted/absorb)
 			var/datum/outfit/special/wizard/W = new
-			if(apprentice)
-				W.apprentice = TRUE
+			W.apprentice = apprentice
 			W.equip(wizard_mob, strip = TRUE, delete = TRUE)
 	else //No wizwar, give them normal robes
 		var/datum/outfit/special/wizard/W = new
-		if(apprentice)
-			W.apprentice = TRUE
+		W.apprentice = apprentice
 		W.equip(wizard_mob, strip = TRUE, delete = TRUE)
 
 	if(!apprentice)
