@@ -788,12 +788,17 @@
 
 	//Create the robot and move over prefs
 	switch(type)
-		if("Cyborg")
-			return Robotize()
 		if("AI")
 			return AIize()
-		if("Mobile MMI")
-			return MoMMIfy()
+		else
+			forceMove(spawn_loc)
+			var/mob/living/silicon/robot/new_character
+			if("Mobile MMI")
+				new_character = MoMMIfy()
+			else
+				new_character = Robotize()
+			new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
+			return new_character
 
 /mob/new_player/proc/ViewPrediction()
 	var/dat = {"<html><body>
