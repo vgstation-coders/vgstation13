@@ -792,11 +792,12 @@
 	else
 		forceMove(spawn_loc)
 		var/mob/living/silicon/robot/new_character
+		var/datum/preferences/prefs = client.prefs
 		if(type == "Mobile MMI")
 			new_character = MoMMIfy()
 		else
 			new_character = Robotize()
-		new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
+		new_character.mmi.create_identity(prefs) //Uses prefs to create a brain mob
 		return new_character
 
 /mob/new_player/proc/ViewPrediction()
