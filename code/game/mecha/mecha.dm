@@ -2122,6 +2122,8 @@
 	force = 0
 
 /obj/item/device/mech_painter/afterattack(var/obj/mecha/M, var/mob/user)
+	if(!istype(M))
+		return 0
 	if (!M.paintable)
 		to_chat(user, "<span class='warning'>This mech cannot be painted.</span>")
 		return 1
