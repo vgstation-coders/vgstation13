@@ -12,7 +12,7 @@
 		return "Honkmother"
 	else if(H.mind.assigned_role == "Trader")
 		return "Shoalmother"
-	else if(H.mind.assigned_role == "AI" || H.mind.assigned_role == "Cyborg")
+	else if(issilicon(H))
 		return "MAINFRAME"
 	else if(!ishuman(H) || !isobserver(H))
 		return "Animal Jesus"
