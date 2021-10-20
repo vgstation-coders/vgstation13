@@ -129,6 +129,7 @@
 	if(!latejoinprompt(M,src))
 		message_admins("[M.key] has opted out of becoming a ninja.")
 		return 0
+	M.forceMove(pick(ninjastart))
 	var/datum/role/ninja/newninja = new
 	newninja.AssignToRole(M.mind,1)
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
