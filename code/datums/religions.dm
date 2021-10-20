@@ -3,6 +3,8 @@
 		return "a voice"
 	if(iscultist(H))
 		return "Nar-Sie"
+	else if(ischangeling(H))
+		return "The Hive"
 	else if(H.mind.faith) // The user has a faith
 		var/datum/religion/R = H.mind.faith
 		return R.deity_name
@@ -10,10 +12,12 @@
 		return "Honkmother"
 	else if(H.mind.assigned_role == "Trader")
 		return "Shoalmother"
-	else if(!ishuman(H))
+	else if(H.mind.assigned_role == "AI" || H.mind.assigned_role == "Cyborg")
+		return "MAINFRAME"
+	else if(!ishuman(H) || !isobserver(H))
 		return "Animal Jesus"
 	else
-		return "Faithless"
+		return "a voice"
 
 /datum/religion_ui
 	var/choice
