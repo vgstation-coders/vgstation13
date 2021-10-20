@@ -98,7 +98,7 @@
 	
 /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid/New()
 	..()
-	reagents.add_reagent(ANTI_TOXIN, 5)
+	reagents.add_reagent(LITHOTORCRAZINE, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	name = "vox meat"
