@@ -598,6 +598,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 	deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
 	known_languages = list(LANGUAGE_GREY)
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	eyes = "grey_eyes_s"
 
 	max_hurt_damage = 3 // From 5 (for humans)
@@ -1210,6 +1211,7 @@ var/list/has_died_as_golem = list()
 	deform = 'icons/mob/human_races/r_def_insectoid.dmi'
 	eyes = "insectoid_eyes_m"
 	known_languages = list(LANGUAGE_INSECT)
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	primitive = /mob/living/carbon/monkey/roach
 
 	flags = IS_WHITELISTED
