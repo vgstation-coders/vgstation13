@@ -250,7 +250,7 @@
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
-	if(charge_rate < (initial(charge_rate)/10)) //if charge rate goes under 10% of the original value, deletes itself and spawns a broken cell in its place, broken cell has a 5% chance to "explode".
+	if(charge_rate < (initial(charge_rate)/10)) //if charge rate goes under 10% of the original value it transforms into broken cell which has no charge rate, 0 max charge and has a 5% chance to "explode".
 		empable = FALSE
 		explodium = TRUE
 		name = "broken cell"
@@ -258,6 +258,7 @@
 		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
 		charge = 0
 		maxcharge = 0
+		charge_rate = 0
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
 	if(explodium == TRUE)
 		if(prob(5))
