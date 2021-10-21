@@ -84,7 +84,6 @@
 		else
 			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
-
 /obj/item/device/depth_scanner/attack_self(var/mob/user as mob)
 	return src.interact(user)
 
