@@ -57,7 +57,12 @@
 	var/nuke_code = "[rand(10000, 99999)]"
 	var/leader_selected = 0
 	var/agent_number = 1
+	var/list/turf/synd_spawn = list()
 
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "Syndicate-Spawn")
+			synd_spawn += get_turf(A)
+			continue
 	for(var/datum/role/nuclear_operative/N in members)
 		var/datum/mind/synd_mind = N.antag
 
