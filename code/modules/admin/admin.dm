@@ -1452,11 +1452,10 @@ var/global/floorIsLava = 0
 		message_admins("<span class='notice'>[numEmot] invoked emotions ashed.</span>")
 
 /proc/get_afk_admins()
-	var/admin_number_afk = 0
 	for(var/client/X in admins)
 		if((R_ADMIN|R_MOD) & X.holder.rights)
 			if(X.is_afk())
-				. += admin_number_afk++
+				.++
 
 //
 //
