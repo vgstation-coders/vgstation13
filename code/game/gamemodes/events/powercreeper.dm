@@ -125,7 +125,7 @@
 
 /obj/structure/cable/powercreeper/proc/die()
 	grown = 0 //we can't attack or spread anymore
-	do_flick(src, "death[add_state]", 13)
+	do_flick(src, "death[add_state]", 0.7 SECONDS)
 	qdel(src)
 
 /obj/structure/cable/powercreeper/proc/try_electrocution_turf(var/turf/T, var/checkdir)
@@ -141,7 +141,6 @@
 /obj/structure/cable/powercreeper/proc/try_electrocution(var/mob/living/M)
 	if(!istype(M) || M.isDead())
 		return 0
-	Beam(M, "lighting", 'icons/obj/zap.dmi', 5, 2)
 	playsound(src,'sound/weapons/electriczap.ogg',50, 1) //we still want a sound
 	return electrocute_mob(M, powernet, src)
 
