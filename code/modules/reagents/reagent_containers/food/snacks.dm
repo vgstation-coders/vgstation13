@@ -647,6 +647,36 @@
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
+
+/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
+	name = "seasonal cookie"
+	desc = "Charming holiday sugar cookies, just like Mom used to make."
+	icon = 'icons/obj/food_seasonal.dmi'
+	var/cookiecutter
+
+/obj/item/weapon/reagent_containers/food/snacks/cookie/multispawner/holiday/New()
+	..()
+	if(Holiday = HALLOWEEN)
+		if(!cookiecutter)
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+			icon_state = "[cookiecutter]"
+	if(Holiday = XMAS)
+		if(!cookiecutter)
+			cookiecutter = pick( list("stocking","tree","snowman","star","mitt","angel","deer") )
+			icon_state = "[cookiecutter]"
+	if(Holiday = XMAS_EVE)
+		if(!cookiecutter)
+			cookiecutter = pick( list("stocking","tree","snowman","star","mitt","angel","deer") )
+			icon_state = "[cookiecutter]"
+	else
+		if(!cookiecutter)
+			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","star","mitt","angel","deer") )
+			icon_state = "[cookiecutter]"
+
+
+
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
 	name = "gingerbread man"
 	desc = "A holiday treat made with sugar and love."
