@@ -25,17 +25,17 @@
 			//find the first artifact and store it
 			if(M.finds.len)
 				var/datum/find/F = M.finds[1]
-				to_chat(user,"Anomaly depth: [F.excavation_required] cm")
-				to_chat(user,"Clearance above anomaly depth: [F.clearance_range] cm")
+				to_chat(user,"<span class='notice'>Anomaly depth: <strong>[F.excavation_required]</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[F.clearance_range]</strong> cm</span>")
 				var/index = responsive_carriers.Find(F.responsive_reagent)
 				if(index > 0 && index <= finds_as_strings.len)
-					to_chat(user,"Anomaly material: <font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font></strong>")
+					to_chat(user,"<span class='notice'>Anomaly material: <strong><font color=[color_from_find_reagent[finds_as_strings[index]]]>[finds_as_strings[index]]</font></strong></span>")
 				else
-					to_chat(user,"Anomaly material: Unknown")
+					to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 			else
-				to_chat(user,"Anomaly depth: 0 cm")
-				to_chat(user,"Clearance above anomaly depth: 0 cm")
-				to_chat(user,"Anomaly material: Unknown")
+				to_chat(user,"<span class='notice'>Anomaly depth: <strong>0</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>0</strong> cm</span>")
+				to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 		else
 			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
@@ -47,8 +47,8 @@
 			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 
 			//these values are arbitrary
-			to_chat(user,"Anomaly depth: [rand(75,100)] cm")
-			to_chat(user,"Clearance above anomaly depth: [rand(5,25)] cm")
-			to_chat(user,"Anomaly material: Unknown")
+			to_chat(user,"<span class='notice'>Anomaly depth: <strong>[rand(75,100)]</strong></span> cm")
+			to_chat(user,"<span class='notice'>Clearance above anomaly depth: <strong>[rand(5,25)]</strong> cm</span>")
+			to_chat(user,"<span class='notice'>Anomaly material: <strong>Unknown</strong></span>")
 		else
 			playsound(user, 'sound/items/detscan.ogg', 10, 1)
