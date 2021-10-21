@@ -369,12 +369,10 @@
 			synd_spawn += get_turf(A)
 			continue
 	
-	var/spawnpos = 1
-	for(var/mob/M in assigned)
-		if(spawnpos > synd_spawn.len)
-			spawnpos = 1
-		M.forceMove(synd_spawn[spawnpos])
-		spawnpos++
+	var/spawnpos = index
+	if(spawnpos > synd_spawn.len)
+		spawnpos = 1
+	M.forceMove(synd_spawn[spawnpos])
 	if(index == 1) //Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind, 1)
