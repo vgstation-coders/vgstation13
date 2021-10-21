@@ -488,12 +488,15 @@
 	else
 		return 0
 
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/spider_clan))
+		ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	new_character.forceMove(pick(ninjastart))
+	..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/setup_role(var/datum/role/newninja)
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
-	if (!spoider)
-		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
 	spoider.HandleRecruitedRole(newninja)
-
 	return ..()
 
 //////////////////////////////////////////////
