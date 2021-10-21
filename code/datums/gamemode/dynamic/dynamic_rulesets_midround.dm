@@ -358,7 +358,23 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(!nuclear)
+		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
 	nuclear.forgeObjectives()
+
+	var/list/turf/synd_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "Syndicate-Spawn")
+			synd_spawn += get_turf(A)
+			continue
+	
+	var/spawnpos = 1
+	for(var/mob/M in assigned)
+		if(spawnpos > synd_spawn.len)
+			spawnpos = 1
+		M.forceMove(synd_spawn[spawnpos])
+		spawnpos++
 	if(index == 1) //Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind, 1)

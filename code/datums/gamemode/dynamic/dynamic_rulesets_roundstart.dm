@@ -463,8 +463,6 @@ Assign your candidates in choose_candidates() instead.
 	for(var/obj/effect/landmark/A in landmarks_list)
 		if(A.name == "Syndicate-Spawn")
 			synd_spawn += get_turf(A)
-			qdel(A)
-			A = null
 			continue
 
 	var/spawnpos = 1
