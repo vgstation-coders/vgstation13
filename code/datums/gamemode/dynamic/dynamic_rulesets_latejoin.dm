@@ -129,7 +129,7 @@
 	var/turf/oldloc = get_turf(M)
 	var/obj/effect/landmark/templand
 	for(var/obj/effect/landmark/start/S in landmarks_list)
-		if(A.name == "start")
+		if(S.name == "start")
 			templand = S
 			break
 	if(templand)

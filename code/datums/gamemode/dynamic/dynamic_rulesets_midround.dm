@@ -671,6 +671,18 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
 	shoal.forgeObjectives()
+
+	var/list/turf/vox_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "voxstart")
+			vox_spawn += get_turf(A)
+			continue
+	
+	var/spawn_count = index
+	if(spawn_count > vox_spawn.len)
+		spawn_count = 1
+	new_character.forceMove(synd_spawn[spawn_count])
 	if (index == 1) // Our first guy is the leader
 		var/datum/role/vox_raider/chief_vox/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
