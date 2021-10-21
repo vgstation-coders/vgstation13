@@ -544,7 +544,7 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent
-	name = "time agent anomaly"
+	name = "Time Agent Anomaly"
 	role_category = /datum/role/time_agent
 	required_candidates = 1
 	weight = 4
@@ -563,8 +563,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
 	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
-	if (!agency)
-		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
 	agency.HandleRecruitedRole(newagent)
 
 	return ..()
@@ -574,6 +572,11 @@
 		return 0
 	return ..()
 
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/time_agent))
+		ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	new_character.forceMove(pick(timeagentstart))
+	..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -833,6 +836,8 @@
 
 	new_character = generate_ruleset_body(new_character)
 	var/datum/role/new_role = new role_category
+	var/obj/structure/bed/chair/chair = pick(prisonerstart)
+	new_character.forceMove(get_turf(chair))
 	new_role.AssignToRole(new_character.mind,1)
 	setup_role(new_role)
 
