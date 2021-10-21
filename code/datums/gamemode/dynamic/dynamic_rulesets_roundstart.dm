@@ -522,7 +522,9 @@ Assign your candidates in choose_candidates() instead.
 	//Now that we've replaced the eventual other AIs, we make sure this chosen candidate has the proper roles.
 	M.mind.assigned_role = "AI"
 	if(!isAI(M))
-		M.AIize()
+		assigned.Remove(M)
+		M = M.AIize()
+		assigned.Add(M)
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
