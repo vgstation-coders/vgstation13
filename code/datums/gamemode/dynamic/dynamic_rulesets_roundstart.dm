@@ -458,8 +458,21 @@ Assign your candidates in choose_candidates() instead.
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
 	if(!nuclear)
 		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
+	var/list/turf/synd_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "Syndicate-Spawn")
+			synd_spawn += get_turf(A)
+			qdel(A)
+			A = null
+			continue
+
+	var/spawnpos = 1
 	var/leader = 1
 	for(var/mob/M in assigned)
+		if(spawnpos > synd_spawn.len)
+			spawnpos = 1
+		M.forceMove(synd_spawn[spawnpos])
 		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
@@ -471,6 +484,7 @@ Assign your candidates in choose_candidates() instead.
 			newCop.AssignToRole(M.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
+		spawnpos++
 	for(var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
 		bomb.spawnbomb()
 	return 1
