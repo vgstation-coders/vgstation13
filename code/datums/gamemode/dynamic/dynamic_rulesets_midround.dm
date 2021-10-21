@@ -682,7 +682,7 @@
 	var/spawn_count = index
 	if(spawn_count > vox_spawn.len)
 		spawn_count = 1
-	new_character.forceMove(synd_spawn[spawn_count])
+	new_character.forceMove(vox_spawn[spawn_count])
 	if (index == 1) // Our first guy is the leader
 		var/datum/role/vox_raider/chief_vox/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
