@@ -42,6 +42,8 @@ var/explosion_shake_message_cooldown = 0
 		if(!epicenter)
 			return
 
+		if(devastation_range > 1)
+			score["largeexplosions"]++ //For the scoreboard
 		score["explosions"]++ //For the scoreboard
 
 		var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)

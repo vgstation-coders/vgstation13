@@ -149,8 +149,9 @@
 	var/list/p_hotspot = SSair.processing_parts[SSAIR_HOTSPOT]
 	if(p_hotspot.len > 200) // List of turfs on fire length
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[p_hotspot.len] turfs were on fire by the end of the round.", min(1000, p_hotspot.len/2))
-	
-	//future idea: "the crew has a blast" if six big explosions happen, "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways
+	if(score["largeexplosions"] >= 6)
+		episode_names += new /datum/episode_name/rare("THE CREW HAS A BLAST", "score["largeexplosions"] large explosions happened this round.", min(1000, score["largeexplosions"]*100))
+	//future idea: "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways.
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
