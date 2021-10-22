@@ -219,7 +219,7 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 			n++
 		s["players"] = n
 
-		s["admins"] = admins
+		s["admins"] = admins - afk_admins
 		s["afk_admins"] = afk_admins
 
 		return list2params(s)
