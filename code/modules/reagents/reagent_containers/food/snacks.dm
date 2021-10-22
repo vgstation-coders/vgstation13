@@ -650,32 +650,30 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
 
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(SUGAR, 6)
+
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
 	name = "seasonal cookie"
 	desc = "Charming holiday sugar cookies, just like Mom used to make."
 	icon = 'icons/obj/food_seasonal.dmi'
 	var/cookiecutter
 
-/obj/item/weapon/reagent_containers/food/snacks/cookie/multispawner/holiday/New()
+/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
 	..()
-	if(Holiday = HALLOWEEN)
-		if(!cookiecutter)
-			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
-			icon_state = "[cookiecutter]"
-	if(Holiday = XMAS)
-		if(!cookiecutter)
-			cookiecutter = pick( list("stocking","tree","snowman","star","mitt","angel","deer") )
-			icon_state = "[cookiecutter]"
-	if(Holiday = XMAS_EVE)
-		if(!cookiecutter)
-			cookiecutter = pick( list("stocking","tree","snowman","star","mitt","angel","deer") )
-			icon_state = "[cookiecutter]"
-	else
-		if(!cookiecutter)
-			cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","star","mitt","angel","deer") )
-			icon_state = "[cookiecutter]"
-
-
+	if(!cookiecutter)
+		switch(Holiday)
+			if(XMAS || XMAS_EVE)
+				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
+				icon_state = "[cookiecutter]"
+			if(HALLOWEEN)
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+				icon_state = "[cookiecutter]"
+			else
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer") )
+				icon_state = "[cookiecutter]"
 
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
 	name = "gingerbread man"
@@ -686,8 +684,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(SUGAR, 2)
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(SUGAR, 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar
