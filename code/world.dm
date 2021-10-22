@@ -206,17 +206,21 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		s["revision"] = return_revision()
 		var/n = 0
 		var/admins = 0
+		var/afk_admins = 0
 
 		for(var/client/C in clients)
 			if(C.holder)
 				if(C.holder.fakekey)
 					continue	//so stealthmins aren't revealed by the hub
+				if(C.is_afk())
+					afk_admins++
 				admins++
 			s["player[n]"] = C.key
 			n++
 		s["players"] = n
 
 		s["admins"] = admins
+		s["afk_admins"] = afk_admins
 
 		return list2params(s)
 	else if (findtext(T,"notes:"))
