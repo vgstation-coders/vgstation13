@@ -84,6 +84,8 @@
 					episode_names += new /datum/episode_name/rare("[pick("THE OPPORTUNITY OF A LIFETIME", "DRASTIC MEASURES", "DEUS EX", "THE SHOW MUST GO ON", "TRIAL BY FIRE", "A STITCH IN TIME", "ALL'S FAIR IN LOVE AND WAR", "COME HELL OR HIGH HEAVEN", "REVERSAL OF FORTUNE", "DOUBLE TOIL AND DOUBLE TROUBLE")]", "High threat level of [mode.threat_level]%... but the crew still had a very high score!", score["crewscore"]/50)
 				if(score["time"] > 60 * 55 && score["time"] < 60 * 65) //55-65 minutes
 					episode_names += new /datum/episode_name/rare("RUSH HOUR", "High threat level of [mode.threat_level]%, and the round lasted just about an hour.", 500)
+				if(get_station_avg_temp() < T0C)
+					episode_names += new /datum/episode_name/rare("A COLD DAY IN HELL", "Station temperature was below 0C this round and threat was high", 1000)
 		if(locate(/datum/dynamic_ruleset/roundstart/malf) in mode.executed_rules)
 			episode_names += new /datum/episode_name/rare("[pick("I'M SORRY [uppr_name], I'M AFRAID I CAN'T LET YOU DO THAT", "A STRANGE GAME", "THE AI GOES ROGUE", "RISE OF THE MACHINES")]", "Round included a malfunctioning AI.", 300)
 		if(locate(/datum/dynamic_ruleset/roundstart/delayed/revs) in mode.executed_rules)
@@ -148,8 +150,6 @@
 	if(p_hotspot.len > 200) // List of turfs on fire length
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[p_hotspot.len] turfs were on fire by the end of the round.", min(1000, p_hotspot.len/2))
 	
-	if(get_station_avg_temp() < T0C && mode.threat_level > 60)
-		episode_names += new /datum/episode_name/rare("A COLD DAY IN HELL", "Station temperature was below 0C this round and threat was high", 1000)
 	//future idea: "the crew has a blast" if six big explosions happen, "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways
 
 	var/deadcatbeastcount = 0
