@@ -44,7 +44,7 @@ var/explosion_shake_message_cooldown = 0
 
 		if(devastation_range > 1)
 			score["largeexplosions"]++ //For the scoreboard
-		if(istype(get_area(epicenter),/area/shuttle))
+		if(istype(get_area(epicenter),/area/shuttle/escape/centcom))
 			score["shuttlebombed"] += devastation_range //For the scoreboard
 		score["explosions"]++ //For the scoreboard
 
