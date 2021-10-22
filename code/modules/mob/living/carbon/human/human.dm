@@ -2060,15 +2060,17 @@ mob/living/carbon/human/isincrit()
 		hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation and uppercase
 		hangman_answer = replacetext(hangman_answer,"?","")
 		hangman_answer = replacetext(hangman_answer,"!","")
-		if(hangman_answer == hangman_phrase)
+		if(hangman_answer == hangman_phrase) // Whole phrase guessed right?
 			for(var/letter in muteletters_check)
-				muted_letters.Remove(letter)
+				muted_letters.Remove(letter) // Wipe checked letters from muted ones
+				muteletters_check.Remove(letter) // And the list itself
 			H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\"</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\"</span>")
 			H.hangman_score += length(hangman_answer) // Add to score
 		hangman_answer = uppertext(hangman_answer)
 		if(length(hangman_answer) == 1) // If we're working with a hangman cursed individual and we only said a letter
 			if(hangman_answer in muteletters_check) // Correct answer?
 				muted_letters.Remove(hangman_answer) // Baleet it
+				muteletters_check.Remove(hangman_answer) // Here too
 				var/obscured_answer = ""
 				for(var/letter in muted_letters)
 					obscured_answer = replacetext(hangman_phrase, letter, "_")
