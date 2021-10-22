@@ -153,7 +153,6 @@
 		episode_names += new /datum/episode_name/rare("THE CREW HAS A BLAST", "[score["largeexplosions"]] large explosions happened this round.", min(1000, score["largeexplosions"]*100))
 	if(score["shuttlebombed"] >= score["escapees"] && score["escapees"] > 5)
 		episode_names += new /datum/episode_name/rare("ON A WING AND A PRAYER", "The shuttle was bombed but [score["escapees"]] people escaped anyways.", min(1000, score["shuttlebombed"]*200))
-	//future idea: "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox.
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
@@ -265,6 +264,8 @@
 					episode_names += new /datum/episode_name/rare("BIRDS OF A FEATHER...", "Most of the survivors were Vox.", min(1500, voxcount*250))
 				if(voxcount / human_escapees.len > 0.6 && emergency_shuttle.was_early_launched)
 					episode_names += new /datum/episode_name/rare("EARLY BIRD GETS THE WORM", "Most or all of the survivors were Vox, and the shuttle timer was shortened.", 1500)
+				if(voxcount / human_escapees.len > 0.6 && score["shuttlebombed"] > 3)
+					episode_names += new /datum/episode_name/rare("SITTING DUCKS", "Most or all of the survivors were Vox, and the shuttle was bombed.", min(1500,score["shuttlebombed"]*3))
 				if(dionacount / human_escapees.len > 0.6)
 					episode_names += new /datum/episode_name/rare("[pick("ALL BARK AND NO BITE", "THE CREW GETS STUMPED")]", "Most of the survivors were Diona.", min(1500, dionacount*350))
 				if(baldycount / human_escapees.len > 0.6 && human_escapees.len > 3)
