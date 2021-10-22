@@ -2064,7 +2064,10 @@ mob/living/carbon/human/isincrit()
 		if(length(hangman_answer) == 1) // If we're working with a hangman cursed individual and we only said a letter
 			if(hangman_answer in muteletters_check) // Correct answer?
 				muted_letters.Remove(hangman_answer) // Baleet it
-				H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear!</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
+				var/obscured_answer = ""
+				for(var/letter in muted_letters)
+					obscured_answer = replacetext(hangman_phrase, letter, "_")
+				H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer]</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear!</span>")
 				H.hangman_score++ // Add to score
 			else if(muteletter_tries)
 				muteletter_tries-- //Reduce the attempts left before...

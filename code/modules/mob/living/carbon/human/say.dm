@@ -2,6 +2,7 @@
 	var/list/muted_letters = list()
 	var/muteletter_tries = 3
 	var/list/muteletters_check = list()
+	var/hangman_phrase = ""
 
 /mob/living/carbon/human/say(var/message)
 	if(species && (species.flags & SPECIES_NO_MOUTH) && !get_message_mode(message) && !findtext(message, "*", 1, 2))
@@ -94,6 +95,7 @@
 			if(!(letter in muted_letters))
 				muteletters_check.Remove(letter)
 		for(var/letter in muted_letters)
+			hangman_phrase = speech.message
 			speech.message = replacetext(speech.message, letter, "_")
 
 
