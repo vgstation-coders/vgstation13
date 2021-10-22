@@ -2056,9 +2056,10 @@ mob/living/carbon/human/isincrit()
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	var/mob/living/H = speech.speaker
 	var/hangman_answer = speech.message
-	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation -kanef
+	hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation and uppercase
 	hangman_answer = replacetext(hangman_answer,"?","")
 	hangman_answer = replacetext(hangman_answer,"!","")
+	hangman_answer = uppertext(hangman_answer)
 	if(muted_letters && muted_letters.len && length(hangman_answer) == 1) // If we're working with a hangman cursed individuel and we only said a letter
 		if(hangman_answer in muteletters_check) // Correct answer?
 			muted_letters.Remove(hangman_answer) // Baleet it
