@@ -2064,8 +2064,8 @@ mob/living/carbon/human/isincrit()
 			for(var/letter in muteletters_check)
 				muted_letters.Remove(letter) // Wipe checked letters from muted ones
 				muteletters_check.Remove(letter) // And the list itself
-			H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\"</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\"</span>")
-			H.hangman_score += length(hangman_answer) // Add to score
+				H.hangman_score++ // Add to score
+			H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\".</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\".</span>")
 		hangman_answer = uppertext(hangman_answer)
 		if(length(hangman_answer) == 1) // If we only said a letter
 			if(hangman_answer in muteletters_check) // Correct answer?
@@ -2074,7 +2074,10 @@ mob/living/carbon/human/isincrit()
 				var/obscured_answer = ""
 				for(var/letter in muted_letters)
 					obscured_answer = replacetext(hangman_phrase, letter, "_")
-				H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer]</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer]</span>")
+				if(muteletters_check.len)
+					H.visible_message("<span class='sinister'>[speech.speaker] has found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer].</span>","<span class='sinister'>You found a letter obscured in [src]'s sentence and it has been made clear! Current sentence: [obscured_answer].</span>")
+				else
+					H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\".</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\".</span>")
 				H.hangman_score++ // Add to score
 			else if(muteletter_tries)
 				muteletter_tries-- //Reduce the attempts left before...
