@@ -94,11 +94,11 @@
 		for(var/letter in muteletters_check)
 			if(!(letter in muted_letters))
 				muteletters_check.Remove(letter)
+		hangman_phrase = speech.message
+		hangman_phrase = replacetext(hangman_phrase,".","") // Filter out punctuation
+		hangman_phrase = replacetext(hangman_phrase,"?","")
+		hangman_phrase = replacetext(hangman_phrase,"!","")
 		for(var/letter in muted_letters)
-			hangman_phrase = speech.message
-			hangman_phrase = replacetext(hangman_phrase,".","") // Filter out punctuation
-			hangman_phrase = replacetext(hangman_phrase,"?","")
-			hangman_phrase = replacetext(hangman_phrase,"!","")
 			speech.message = replacetext(speech.message, letter, "_")
 
 
