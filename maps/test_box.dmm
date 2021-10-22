@@ -5031,7 +5031,7 @@
 /turf/space,
 /area/solar/fstarboard)
 "aie" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -7175,7 +7175,7 @@
 /obj/structure/shuttle/engine/propulsion/burst{
 	dir = 4
 	},
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod3/station)
 "alK" = (
@@ -7381,14 +7381,14 @@
 /area/maintenance/fsmaint)
 "amc" = (
 /obj/structure/shuttle/engine/propulsion/burst,
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod1/station)
 "amd" = (
 /turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod3/station)
 "ame" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -7992,13 +7992,13 @@
 /area/maintenance/fsmaint)
 "and" = (
 /obj/structure/shuttle/engine/propulsion/burst,
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod1/station)
 "ane" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -14179,7 +14179,7 @@
 /turf/simulated/wall,
 /area/maintenance/ghettomorgue)
 "axS" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -14199,13 +14199,13 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod1/station)
 "axU" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
 /area/shuttle/escape_pod1/station)
 "axV" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -14225,7 +14225,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod2/station)
 "axX" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -15877,7 +15877,7 @@
 /area/maintenance/ghettomorgue)
 "aBC" = (
 /obj/structure/shuttle/engine/propulsion/burst,
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod2/station)
 "aBD" = (
@@ -15886,7 +15886,7 @@
 /area/shuttle/escape_pod1/station)
 "aBE" = (
 /obj/structure/shuttle/engine/propulsion/burst,
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/simulated/floor/plating,
@@ -21358,13 +21358,13 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint2)
 "aNg" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
 /area/shuttle/research/station)
 "aNh" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -21396,13 +21396,13 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/arrival/station)
 "aNl" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
 /area/shuttle/escape/centcom)
 "aNm" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -22110,7 +22110,7 @@
 /turf/simulated/floor/plating,
 /area/chapel/main)
 "aOD" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -25570,7 +25570,7 @@
 /turf/simulated/floor/plating,
 /area/chapel/main)
 "aVk" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/shuttle/arrival/station)
 "aVl" = (
@@ -26389,7 +26389,7 @@
 /turf/simulated/wall/shuttle,
 /area/shuttle/arrival/station)
 "aWU" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -43232,7 +43232,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/research/station)
 "bEx" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -47476,7 +47476,7 @@
 /turf/simulated/floor/plating,
 /area/science/shuttlebay)
 "bMl" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/shuttle/research/station)
 "bMm" = (
@@ -47487,7 +47487,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/research/station)
 "bMn" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -52898,7 +52898,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/mining/station)
 "bVW" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -58634,7 +58634,7 @@
 /turf/simulated/floor/grass,
 /area/science/test_area)
 "cfY" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/shuttle/mining/station)
 "cfZ" = (
@@ -58644,7 +58644,7 @@
 /turf/space,
 /area/shuttle/mining/station)
 "cga" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -80286,7 +80286,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/engineering_auxiliary)
 "cSx" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -80295,7 +80295,7 @@
 /turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod5/station)
 "cSz" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -80500,7 +80500,7 @@
 /turf/simulated/floor/plating,
 /area/engineering/engineering_auxiliary)
 "cSW" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/simulated/floor/shuttle{
@@ -80508,7 +80508,7 @@
 	},
 /area/shuttle/escape/centcom)
 "cSX" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -82446,7 +82446,7 @@
 	},
 /area/shuttle/escape/centcom)
 "cWN" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
@@ -82771,7 +82771,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "cXL" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -83131,13 +83131,13 @@
 	},
 /area/shuttle/escape/centcom)
 "cYH" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "cYI" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/simulated/floor/shuttle,
@@ -83195,7 +83195,7 @@
 	},
 /area/shuttle/escape/centcom)
 "cYP" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/shuttle/supply)
 "cYQ" = (
@@ -83209,7 +83209,7 @@
 /turf/simulated/floor/plating/airless,
 /area/shuttle/supply)
 "cYS" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -83255,7 +83255,7 @@
 /turf/space,
 /area/shuttle/supply)
 "cZa" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/shuttle/escape/centcom)
 "cZb" = (
@@ -83266,7 +83266,7 @@
 /turf/simulated/floor/plating/airless,
 /area/shuttle/escape/centcom)
 "cZc" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -83327,7 +83327,7 @@
 /obj/structure/shuttle/engine/propulsion/burst{
 	dir = 4
 	},
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod5/station)
 "puQ" = (

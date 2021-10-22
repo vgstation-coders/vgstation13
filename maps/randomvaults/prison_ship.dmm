@@ -1,6 +1,6 @@
 "a" = (/turf/space,/area)
 "b" = (/turf/unsimulated/mineral,/area/vault/prison_ship)
-"c" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/unsimulated/mineral,/area/vault/prison_ship)
+"c" = (/turf/simulated/wall/shuttle/diag/smooth{dir = 8},/turf/unsimulated/mineral,/area/vault/prison_ship)
 "f" = (/obj/item/stack/rods,/turf/simulated/floor/shuttle/plating,/area/vault/prison_ship)
 "g" = (/obj/item/stack/rods,/turf/unsimulated/mineral,/area/vault/prison_ship)
 "h" = (/obj/item/stack/rods,/obj/effect/landmark/corpse/mutilated,/turf/simulated/floor/shuttle/plating,/area/vault/prison_ship)
@@ -20,10 +20,10 @@
 "w" = (/obj/structure/computerframe,/obj/item/weapon/disk/shuttle_coords/vault/prison,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
 "y" = (/obj/item/toy/gasha/nurse,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
 "z" = (/obj/structure/displaycase/broken,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"A" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/prison_ship)
+"A" = (/turf/simulated/wall/shuttle/diag/smooth,/turf/space,/area/vault/prison_ship)
 "B" = (/turf/simulated/wall/shuttle,/area/vault/prison_ship)
 "C" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/shuttle/brig,/area/vault/prison_ship)
-"D" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/prison_ship)
+"D" = (/turf/simulated/wall/shuttle/diag/smooth{dir = 4},/turf/space,/area/vault/prison_ship)
 
 (1,1,1) = {"
 aaaaaaaabbbbaa

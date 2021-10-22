@@ -17,7 +17,7 @@
 "q" = (/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "r" = (/turf/unsimulated/floor/asteroid,/area/vault/icetruck)
 "s" = (/obj/item/weapon/rack_parts,/turf/unsimulated/floor/asteroid,/area/vault/icetruck)
-"t" = (/obj/structure/shuttle/diag_wall/smooth{dir = 8},/turf/space,/area/vault/icetruck)
+"t" = (/turf/simulated/wall/shuttle/diag/smooth{dir = 8},/turf/space,/area/vault/icetruck)
 "u" = (/obj/machinery/space_heater/air_conditioner,/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
 "w" = (/obj/structure/sink{dir = 8; pixel_x = -12; pixel_y = 2},/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
 "x" = (/turf/simulated/floor/shuttle{icon_state = "floor2"},/area/vault/icetruck)
@@ -27,9 +27,9 @@
 "B" = (/obj/item/weapon/reagent_containers/food/drinks/ice,/obj/item/weapon/reagent_containers/food/drinks/ice,/obj/item/weapon/reagent_containers/food/drinks/ice,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "C" = (/obj/machinery/cooking/icemachine,/turf/unsimulated/floor/snow,/area/vault/icetruck)
 "D" = (/obj/machinery/cooking/icemachine,/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/gun/energy/temperature,/obj/item/weapon/gun/energy/temperature,/obj/item/weapon/gun/energy/temperature,/turf/unsimulated/floor/snow,/area/vault/icetruck)
-"E" = (/obj/structure/shuttle/diag_wall/smooth,/turf/space,/area/vault/icetruck)
+"E" = (/turf/simulated/wall/shuttle/diag/smooth,/turf/space,/area/vault/icetruck)
 "G" = (/turf/simulated/wall/shuttle,/area/vault/icetruck)
-"H" = (/obj/structure/shuttle/diag_wall/smooth{dir = 4},/turf/space,/area/vault/icetruck)
+"H" = (/turf/simulated/wall/shuttle/diag/smooth{dir = 4},/turf/space,/area/vault/icetruck)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaa

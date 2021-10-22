@@ -66,40 +66,19 @@
 	icon_state = "wall3"
 	walltype = "bswall"
 
-/obj/structure/shuttle/diag_wall // This used to be a turf and was a pain to manage with layering two on the same tile
-	name = "wall"
-	desc = "A huge chunk of metal used to separate rooms."
+/turf/simulated/wall/shuttle/diag
 	icon_state = "diagonalWall"
-	density = 1
-	plane = TURF_PLANE
-	layer = TURF_LAYER
-	anchored = 1
-	opacity = 1
 
-/obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group)
-		return 0
-	return !density
+/turf/simulated/wall/shuttle/diag/canSmoothWith()
+	return list()
 
-/obj/structure/shuttle/diag_wall/ex_act(severity)
-	return
-
-/obj/structure/shuttle/diag_wall/mech_drill_act(severity)
-	return
-
-/obj/structure/shuttle/diag_wall/attack_animal(var/mob/living/simple_animal/M)
-	return
-
-/obj/structure/shuttle/diag_wall/singularity_pull(S, current_size)
-	return
-
-/obj/structure/shuttle/diag_wall/black
+/turf/simulated/wall/shuttle/diag/black
 	icon_state = "diagonalWall3"
 
-/obj/structure/shuttle/diag_wall/smooth
+/turf/simulated/wall/shuttle/diag/smooth
 	icon_state = "diagonalWallS"
 
-/obj/structure/shuttle/diag_wall/smooth/black
+/turf/simulated/wall/shuttle/diag/smooth/black
 	icon_state = "diagonalWall3S"
 
 /turf/simulated/floor/shuttle

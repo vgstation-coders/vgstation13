@@ -32557,7 +32557,7 @@
 /turf/simulated/open,
 /area/mine/explored)
 "caX" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 8
 	},
 /turf/unsimulated/floor/snow,
@@ -32992,7 +32992,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "ccA" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow,
@@ -39186,7 +39186,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "cAM" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/unsimulated/mineral/random/high_chance_clown/snow,
@@ -44893,7 +44893,7 @@
 	},
 /area/prison/solitary)
 "dbF" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 1
 	},
 /turf/unsimulated/floor{
@@ -45390,7 +45390,7 @@
 	},
 /area/centcom/living)
 "dcX" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 4
 	},
 /turf/unsimulated/floor{
@@ -47780,13 +47780,13 @@
 /turf/unsimulated/floor,
 /area/centcom/control)
 "diz" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/unsimulated/floor/snow,
 /area/shuttle/supply)
 "diA" = (
-/obj/structure/shuttle/diag_wall/black,
+/turf/simulated/wall/shuttle/diag/black,
 /turf/unsimulated/floor{
 	name = "plating"
 	},
@@ -47813,7 +47813,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "diE" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow,
@@ -48773,19 +48773,19 @@
 	},
 /area/centcom/suppy)
 "dkG" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/turf/simulated/wall/shuttle/diag/smooth/black{
 	dir = 8
 	},
 /turf/space,
 /area/shuttle/ert/centcom)
 "dkH" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
 /area/shuttle/striketeam/centcom)
 "dkI" = (
-/obj/structure/shuttle/diag_wall/smooth/black,
+/turf/simulated/wall/shuttle/diag/smooth/black,
 /turf/space,
 /area/shuttle/ert/centcom)
 "dkJ" = (
@@ -48952,7 +48952,7 @@
 /turf/unsimulated/wall/blastdoor,
 /area/centcom/striketeam)
 "dlf" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -49003,7 +49003,7 @@
 	},
 /area/centcom/striketeam)
 "dll" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/simulated/floor/shuttle{
@@ -49020,7 +49020,7 @@
 /turf/simulated/floor/bluegrid,
 /area/shuttle/ert/centcom)
 "dlo" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor3"
 	},
@@ -49206,13 +49206,13 @@
 	},
 /area/shuttle/striketeam/centcom)
 "dlM" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
 /area/shuttle/striketeam/centcom)
 "dlN" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/unsimulated/floor/snow,
@@ -49239,7 +49239,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/striketeam/centcom)
 "dlR" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -49566,7 +49566,7 @@
 	},
 /area/shuttle/striketeam/centcom)
 "dmG" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -49597,7 +49597,7 @@
 	},
 /area/centcom/striketeam)
 "dmJ" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -49607,7 +49607,7 @@
 /turf/simulated/floor/bluegrid,
 /area/shuttle/ert/centcom)
 "dmL" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/simulated/floor/shuttle,
@@ -49881,7 +49881,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape/centcom)
 "dnl" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -50235,13 +50235,13 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
 "dof" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/supply)
 "dog" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/simulated/floor/shuttle,
@@ -50470,7 +50470,7 @@
 	},
 /area/shuttle/escape/centcom)
 "doH" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/unsimulated/floor/snow,
 /area/shuttle/supply)
 "doI" = (
@@ -50610,17 +50610,17 @@
 	},
 /area/centcom/control)
 "doY" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area)
 "doZ" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
 "dpa" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/simulated/floor/shuttle,
@@ -50633,7 +50633,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/escape/centcom)
 "dpc" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -51576,11 +51576,11 @@
 /turf/unsimulated/wall,
 /area/prison/solitary)
 "drj" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/shuttle/transport1/centcom)
 "drk" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/space,
@@ -51601,7 +51601,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/transport1/centcom)
 "drm" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -51651,7 +51651,7 @@
 	},
 /area/centcom/evac)
 "drr" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/simulated/floor/shuttle,
@@ -51747,7 +51747,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
 "drE" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
 "drF" = (
@@ -52014,7 +52014,7 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/transport1/centcom)
 "dsg" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/simulated/floor/shuttle,
 /area/centcom/evac)
 "dsh" = (
@@ -52641,7 +52641,7 @@
 /turf/space,
 /area/shuttle/specops/centcom)
 "dtD" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -52669,7 +52669,7 @@
 	},
 /area/shuttle/specops/centcom)
 "dtG" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/turf/simulated/wall/shuttle/diag/smooth/black{
 	dir = 1
 	},
 /turf/space,
@@ -53105,7 +53105,7 @@
 	},
 /area/shuttle/specops/centcom)
 "duX" = (
-/obj/structure/shuttle/diag_wall/smooth/black{
+/turf/simulated/wall/shuttle/diag/smooth/black{
 	dir = 4
 	},
 /turf/space,
@@ -53420,7 +53420,7 @@
 	},
 /area/tdome)
 "dvL" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/shuttle/escape/centcom)
 "dvM" = (
@@ -53431,13 +53431,13 @@
 /turf/unsimulated/floor,
 /area/shuttle/escape/centcom)
 "dvN" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
 /area/shuttle/escape/centcom)
 "dvO" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 8
 	},
 /turf/unsimulated/floor{
@@ -53509,7 +53509,7 @@
 	},
 /area/shuttle/nuclearops)
 "dvS" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 1
 	},
 /turf/space,
@@ -53775,7 +53775,7 @@
 /turf/unsimulated/beach/sand,
 /area/centcom/holding)
 "dxr" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 8
 	},
 /turf/unsimulated/floor{
@@ -54035,7 +54035,7 @@
 	},
 /area/tdome)
 "dyn" = (
-/obj/structure/shuttle/diag_wall/black,
+/turf/simulated/wall/shuttle/diag/black,
 /turf/unsimulated/floor{
 	icon = 'icons/turf/snow.dmi';
 	icon_state = "snow"
@@ -54054,7 +54054,7 @@
 	},
 /area/shuttle/nuclearops)
 "dyq" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 4
 	},
 /turf/unsimulated/floor{
@@ -59464,7 +59464,7 @@
 /turf/simulated/wall/shuttle,
 /area/shuttle/escape_pod3)
 "ejK" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -68789,7 +68789,7 @@
 /turf/simulated/floor/plating,
 /area/medical/paramedics)
 "gcK" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/space,
@@ -69488,7 +69488,7 @@
 /turf/simulated/floor,
 /area/engineering/burn_chamber)
 "gqD" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/unsimulated/floor/snow,
@@ -70055,7 +70055,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "gAj" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -70075,7 +70075,7 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/escape_pod1)
 "gAE" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -71651,7 +71651,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "hdE" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/unsimulated/mineral/random/high_chance_clown/snow,
 /area/asteroid/clown)
 "hdF" = (
@@ -82462,7 +82462,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/fpmaint2)
 "kLu" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/space,
 /area/centcom/evac)
 "kLK" = (
@@ -83579,7 +83579,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/fitness)
 "lhX" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -83985,7 +83985,7 @@
 /turf/simulated/floor/engine/concrete,
 /area/station/garage)
 "lpZ" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/space,
@@ -85162,7 +85162,7 @@
 /turf/simulated/wall/r_wall,
 /area/engineering/burn_chamber)
 "lJw" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow,
@@ -87392,7 +87392,7 @@
 /turf/simulated/floor/engine,
 /area/science/telescience)
 "mAw" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -89750,7 +89750,7 @@
 /turf/simulated/floor/plating/airless,
 /area/derelict/singularity_engine)
 "nuk" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 8
 	},
 /turf/space,
@@ -90453,7 +90453,7 @@
 	},
 /area/tdome)
 "nIm" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 8
 	},
 /turf/simulated/floor/shuttle{
@@ -92377,7 +92377,7 @@
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_6)
 "ooz" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -93973,7 +93973,7 @@
 /turf/simulated/floor,
 /area/gateway)
 "oMV" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 8
 	},
 /turf/space,
@@ -94385,7 +94385,7 @@
 /turf/unsimulated/floor/snow,
 /area/surface/snow)
 "oUI" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 1
 	},
 /turf/space,
@@ -95121,7 +95121,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "phk" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -95134,7 +95134,7 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "phu" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 1
 	},
 /turf/simulated/floor/shuttle{
@@ -97227,7 +97227,7 @@
 /turf/simulated/floor/plating,
 /area/djstation)
 "pVd" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -101145,7 +101145,7 @@
 	},
 /area/shuttle/nuclearops)
 "rsN" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 4
 	},
 /turf/unsimulated/floor/snow,
@@ -104625,7 +104625,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "sNl" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -109091,7 +109091,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/disposal)
 "umR" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -109311,7 +109311,7 @@
 	},
 /area/bridge)
 "usL" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/unsimulated/floor/snow/asphalt,
@@ -112504,7 +112504,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "vzX" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 1
 	},
 /turf/simulated/floor/airless,
@@ -112636,7 +112636,7 @@
 	},
 /area/bridge)
 "vCy" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 8
 	},
 /turf/unsimulated/floor/snow,
@@ -114012,7 +114012,7 @@
 /turf/simulated/floor/airless,
 /area/asteroid/clown)
 "wbK" = (
-/obj/structure/shuttle/diag_wall/black,
+/turf/simulated/wall/shuttle/diag/black,
 /turf/space,
 /area/shuttle/syndicate_elite/mothership)
 "wbM" = (
@@ -114115,7 +114115,7 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/captain)
 "wdv" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 4
 	},
 /turf/space,
@@ -115202,7 +115202,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "wwh" = (
-/obj/structure/shuttle/diag_wall/black{
+/turf/simulated/wall/shuttle/diag/black{
 	dir = 1
 	},
 /turf/unsimulated/floor{
@@ -117900,7 +117900,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/port)
 "xtI" = (
-/obj/structure/shuttle/diag_wall/smooth{
+/turf/simulated/wall/shuttle/diag/smooth{
 	dir = 4
 	},
 /turf/unsimulated/floor/snow/permafrost,
@@ -118535,7 +118535,7 @@
 /turf/simulated/floor,
 /area/engineering/engine_storage)
 "xEH" = (
-/obj/structure/shuttle/diag_wall/smooth,
+/turf/simulated/wall/shuttle/diag/smooth,
 /turf/unsimulated/floor/snow/asphalt,
 /area/shuttle/arrival/station)
 "xEW" = (
@@ -118731,7 +118731,7 @@
 /turf/simulated/floor/mineral/plasma,
 /area/science/hallway)
 "xHp" = (
-/obj/structure/shuttle/diag_wall/black,
+/turf/simulated/wall/shuttle/diag/black,
 /turf/unsimulated/floor/snow,
 /area/shuttle/trade/start)
 "xHG" = (
