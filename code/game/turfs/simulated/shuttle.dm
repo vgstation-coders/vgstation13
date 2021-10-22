@@ -69,8 +69,8 @@
 /turf/simulated/wall/shuttle/diag
 	icon_state = "diagonalWall"
 
-/turf/simulated/wall/shuttle/diag/canSmoothWith()
-	return list()
+/turf/simulated/wall/shuttle/diag/relativewall()
+	return
 
 /turf/simulated/wall/shuttle/diag/black
 	icon_state = "diagonalWall3"
