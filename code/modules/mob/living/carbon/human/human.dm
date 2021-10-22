@@ -2060,7 +2060,7 @@ mob/living/carbon/human/isincrit()
 		hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation and uppercase
 		hangman_answer = replacetext(hangman_answer,"?","")
 		hangman_answer = replacetext(hangman_answer,"!","")
-		if(hangman_answer == hangman_phrase) // Whole phrase guessed right?
+		if(hangman_phrase != "" && hangman_answer == hangman_phrase) // Whole phrase guessed right?
 			for(var/letter in muteletters_check)
 				muted_letters.Remove(letter) // Wipe checked letters from muted ones
 				muteletters_check.Remove(letter) // And the list itself
