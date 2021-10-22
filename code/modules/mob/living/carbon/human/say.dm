@@ -96,6 +96,9 @@
 				muteletters_check.Remove(letter)
 		for(var/letter in muted_letters)
 			hangman_phrase = speech.message
+			hangman_answer = replacetext(hangman_phrase,".","") // Filter out punctuation and uppercase
+			hangman_answer = replacetext(hangman_phrase,"?","")
+			hangman_answer = replacetext(hangman_phrase,"!","")
 			speech.message = replacetext(speech.message, letter, "_")
 
 
