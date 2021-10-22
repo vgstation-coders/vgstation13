@@ -146,8 +146,10 @@
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score["disease"]] disease points this round.", min(500, (score["disease"]*25) * (score["disease"]/score["escapees"])))
 	var/list/p_hotspot = SSair.processing_parts[SSAIR_HOTSPOT]
 	if(p_hotspot.len > 200) // List of turfs on fire length
-		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[score["turfsonfire"]] turfs were on fire by the end of the round.", min(1000, score["turfsonfire"]/2))
-	//future idea: "a cold day in hell" if most of the station was freezing and threat was high
+		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[p_hotspot.len] turfs were on fire by the end of the round.", min(1000, p_hotspot.len/2))
+	
+	if(get_station_avg_temp() < T0C && mode.threat_level > 60)
+		episode_names += new /datum/episode_name/rare("A COLD DAY IN HELL", "Station temperature was below 0C this round and threat was high", 1000)
 	//future idea: "the crew has a blast" if six big explosions happen, "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways
 
 	var/deadcatbeastcount = 0
