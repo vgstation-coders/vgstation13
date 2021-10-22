@@ -2055,7 +2055,7 @@ mob/living/carbon/human/isincrit()
 	if(ear_deaf || speech.frequency || speech.speaker == src)
 		return //First, eliminate radio chatter, speech from us, or wearing earmuffs/deafened
 	var/mob/living/H = speech.speaker
-	if(muted_letters && muted_letters.len)
+	if(muted_letters && muted_letters.len) // If we're working with a hangman cursed individual
 		var/hangman_answer = speech.message
 		hangman_answer = replacetext(hangman_answer,".","") // Filter out punctuation and uppercase
 		hangman_answer = replacetext(hangman_answer,"?","")
@@ -2067,7 +2067,7 @@ mob/living/carbon/human/isincrit()
 			H.visible_message("<span class='sinister'>[speech.speaker] has found the sentence spoken! It was \"[hangman_phrase]\"</span>","<span class='sinister'>You found the sentence spoken! It was \"[hangman_phrase]\"</span>")
 			H.hangman_score += length(hangman_answer) // Add to score
 		hangman_answer = uppertext(hangman_answer)
-		if(length(hangman_answer) == 1) // If we're working with a hangman cursed individual and we only said a letter
+		if(length(hangman_answer) == 1) // If we only said a letter
 			if(hangman_answer in muteletters_check) // Correct answer?
 				muted_letters.Remove(hangman_answer) // Baleet it
 				muteletters_check.Remove(hangman_answer) // Here too
