@@ -1610,7 +1610,6 @@ var/global/list/firealarms = list() //shrug
 
 	if(avg_divide)
 		return avg_temp / avg_divide
-	else
-		return T0C
+	return T0C
 
 #undef CHECKED_GAS
