@@ -150,8 +150,10 @@
 	if(p_hotspot.len > 200) // List of turfs on fire length
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[p_hotspot.len] turfs were on fire by the end of the round.", min(1000, p_hotspot.len/2))
 	if(score["largeexplosions"] >= 6)
-		episode_names += new /datum/episode_name/rare("THE CREW HAS A BLAST", "score["largeexplosions"] large explosions happened this round.", min(1000, score["largeexplosions"]*100))
-	//future idea: "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox, "on a wing and a prayer" if the shuttle is bombed but enough people survive anyways.
+		episode_names += new /datum/episode_name/rare("THE CREW HAS A BLAST", "[score["largeexplosions"]] large explosions happened this round.", min(1000, score["largeexplosions"]*100))
+	if(score["shuttlebombed"] >= score["escapees"] && score["escapees"] > 5)
+		episode_names += new /datum/episode_name/rare("ON A WING AND A PRAYER", "The shuttle was bombed but [score["escapees"]] people escaped anyways.", min(1000, score["shuttlebombed"]*200))
+	//future idea: "sitting ducks" if the escape shuttle is bombed and the would-be escapees were mostly vox.
 
 	var/deadcatbeastcount = 0
 	for(var/mob/living/carbon/human/H in dead_mob_list)
