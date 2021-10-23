@@ -1538,57 +1538,66 @@
 	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
-"eQ" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 8
-	},
-/turf/space,
-/area/shuttle/supply)
-"iV" = (
-/obj/machinery/light{
-	dir = 1
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
-"jK" = (
-/obj/machinery/computer/supplycomp,
-/turf/simulated/floor,
-/area/crew_quarters/bar)
-"pN" = (
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
-"tT" = (
-/obj/docking_port/shuttle{
-	dir = 8
-	},
-/turf/simulated/floor/shuttle,
-/area/shuttle/supply)
-"zV" = (
-/obj/structure/shuttle/diag_wall/smooth{
-	dir = 1
-	},
-/turf/space,
-/area/shuttle/supply)
-"GO" = (
-/turf/simulated/wall/shuttle,
-/area/shuttle/supply)
-"Nk" = (
-/obj/structure/shuttle/diag_wall/smooth,
-/turf/space,
-/area/shuttle/supply)
-"OJ" = (
+"fP" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 4
 	},
 /turf/space,
 /area/shuttle/supply)
-"PP" = (
+"kn" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/supply)
+"mN" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/shuttle/supply)
+"mQ" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"ud" = (
+/obj/docking_port/shuttle{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"ws" = (
+/obj/machinery/computer/supplycomp,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"AX" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/space,
+/area/shuttle/supply)
+"Fg" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"IA" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area/shuttle/supply)
+"Kz" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/card/debit/trader,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"KT" = (
 /obj/docking_port/destination/supply/centcom{
 	dir = 4
 	},
 /obj/machinery/door/airlock/external,
 /turf/simulated/floor,
 /area/centcom/suppy)
+"Md" = (
+/obj/structure/trade_window,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
 
 (1,1,1) = {"
 aa
@@ -24909,11 +24918,11 @@ ar
 ar
 av
 aa
-aa
 aw
+Md
 aM
+Kz
 aw
-aa
 aa
 aa
 aa
@@ -25314,7 +25323,7 @@ ar
 av
 aa
 aw
-jK
+ws
 aM
 aM
 aM
@@ -25725,7 +25734,7 @@ aw
 aw
 aw
 aK
-PP
+KT
 aK
 aw
 aw
@@ -25925,11 +25934,11 @@ aa
 aa
 aa
 aa
-eQ
+IA
 aE
-tT
+ud
 aE
-Nk
+mN
 aa
 aw
 aM
@@ -26127,11 +26136,11 @@ aa
 aa
 aa
 aa
-GO
-pN
-pN
-pN
-GO
+kn
+mQ
+mQ
+mQ
+kn
 aa
 aw
 aF
@@ -26329,11 +26338,11 @@ aa
 aa
 aa
 aa
-GO
-iV
-pN
-pN
-GO
+kn
+Fg
+mQ
+mQ
+kn
 aa
 aw
 aM
@@ -26531,11 +26540,11 @@ aa
 aa
 aa
 aa
-GO
-pN
-pN
-pN
-GO
+kn
+mQ
+mQ
+mQ
+kn
 aa
 aw
 aM
@@ -26733,11 +26742,11 @@ aa
 aa
 aa
 aa
-GO
-pN
-pN
-pN
-GO
+kn
+mQ
+mQ
+mQ
+kn
 aa
 aw
 aw
@@ -26935,11 +26944,11 @@ aa
 aa
 aa
 aa
-zV
-GO
-GO
-GO
-OJ
+AX
+kn
+kn
+kn
+fP
 aa
 aa
 aw
