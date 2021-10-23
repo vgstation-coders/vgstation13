@@ -746,6 +746,8 @@
 		for(var/atom/movable/AM in old_turf)
 			if(!AM.can_shuttle_move(src))
 				continue
+			if(istype(AM,/obj/structure/shuttle/diag_wall)
+				old_turf.dynamic_lighting = 0
 			move_atom(AM, new_turf, rotate)
 
 
@@ -789,10 +791,14 @@
 
 		spawn()
 			AM.forceMove(new_turf)
+			if(istype(AM,/obj/structure/shuttle/diag_wall)
+				new_turf.dynamic_lighting = 1
 
 		//TODO: Make this compactible with bound_x and bound_y.
 	else
 		AM.forceMove(new_turf)
+		if(istype(AM,/obj/structure/shuttle/diag_wall)
+			new_turf.dynamic_lighting = 1
 
 	if(rotate)
 		AM.shuttle_rotate(rotate)
