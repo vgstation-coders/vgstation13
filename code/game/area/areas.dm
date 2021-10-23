@@ -644,7 +644,7 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 					/* Quick visual fix for transit space tiles */
 					if(direction && (locate(/obj/structure/shuttle/diag_wall) in X))
 						// Find a new turf to take on the property of
-						var/turf/nextturf = get_step(corner, direction)
+						var/turf/nextturf = get_step(X, direction)
 						if(!nextturf || !istype(nextturf, /turf/space))
 							nextturf = get_step(corner, turn(direction, 180))
 
