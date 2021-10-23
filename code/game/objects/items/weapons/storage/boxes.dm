@@ -908,10 +908,18 @@
 	var/floor_type = rand(1,5)
 	for(var/i = 1 to 5)
 		new /obj/item/inflatable/nonmove/shuttle/floor(src,floor_type)
-	for(var/i = 1 to 5)
-		new /obj/item/inflatable/nonmove/shuttle/wall(src)
-	for(var/i = 1 to 5)
-		new /obj/item/inflatable/diagshuttlewall(src)
+	if(prob(50))
+		for(var/i = 1 to 5)
+			new /obj/item/inflatable/nonmove/shuttle/wall(src)
+	else
+		for(var/i = 1 to 5)
+			new /obj/item/inflatable/nonmove/shuttle/wall/black(src)
+	if(prob(50))
+		for(var/i = 1 to 5)
+			new /obj/item/inflatable/diagshuttlewall(src)
+	else
+		for(var/i = 1 to 5)
+			new /obj/item/inflatable/diagshuttlewall/black(src)
 
 /obj/item/weapon/storage/box/ornaments
 	name = "box of ornaments"
