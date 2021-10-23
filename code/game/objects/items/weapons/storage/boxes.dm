@@ -598,6 +598,7 @@
 	name = "security essentials"
 	desc = "A box containing essential security officer equipment. It has a piece of paper with the letters SEC written on it taped to one side."
 	icon_state = "largebox_sec"
+	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 31
 	can_only_hold = list(
