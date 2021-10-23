@@ -642,8 +642,7 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 						ST.zone.remove(ST)
 					
 					/* Quick visual fix for transit space tiles */
-					if(direction && locate(/obj/structure/shuttle/diag_wall) in X)
-
+					if(direction && (locate(/obj/structure/shuttle/diag_wall) in X))
 						// Find a new turf to take on the property of
 						var/turf/nextturf = get_step(corner, direction)
 						if(!nextturf || !istype(nextturf, /turf/space))
