@@ -88,7 +88,7 @@
 /obj/structure/shuttle/diag_wall/Destroy()
 	var/turf/T = get_turf(src)
 	if(T)
-		T.dynamic_lighting = 1
+		T.dynamic_lighting = 0
 	..()
 
 /obj/structure/shuttle/diag_wall/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
