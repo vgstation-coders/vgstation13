@@ -115,13 +115,17 @@
 		return FALSE
 
 /obj/item/inflatable/nonmove/shuttle/wall
-	name = "inflatable wall"
+	name = "inflatable shuttle wall"
 	desc = "A folded membrane which rapidly expands into a large cubical shape on activation."
 	icon_state = "folded_swall"
 	deploy_path = /turf/simulated/wall/shuttle
 
+/obj/item/inflatable/nonmove/shuttle/wall/black
+	icon_state = "folded_bswall"
+	deploy_path = /turf/simulated/wall/shuttle/black
+
 /obj/item/inflatable/nonmove/shuttle/floor
-	name = "inflatable floor"
+	name = "inflatable shuttle floor"
 	desc = "A folded membrane, which rapidly expands along the horizontal plane until it runs out of room to inflate, or air to inflate with."
 	icon_state = "folded_sfloor1"
 	deploy_path = /turf/simulated/floor/shuttle
@@ -138,10 +142,14 @@
 	T.icon_state = "floor[floor_type]"
 
 /obj/item/inflatable/diagshuttlewall
-	name = "inflatable wall"
-	desc = "A folded membrane which rapidly expands into a large cubical shape on activation."
+	name = "inflatable diagonal shuttle wall"
+	desc = "A folded membrane which rapidly expands into a large triangular shape on activation."
 	icon_state = "folded_dswall"
-	deploy_path = /obj/structure/shuttle/diag_wall
+	deploy_path = /obj/structure/shuttle/diag_wall/smooth
+
+/obj/item/inflatable/diagshuttlewall/black
+	icon_state = "folded_bdswall"
+	deploy_path = /obj/structure/shuttle/diag_wall/smooth/black
 
 /obj/item/inflatable/diagshuttlewall/can_inflate(var/location)
 	if(!location)
