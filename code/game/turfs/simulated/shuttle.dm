@@ -77,19 +77,28 @@
 	opacity = 1
 
 /obj/structure/shuttle/diag_wall/initialize()
-	if(locate(/turf/space) in loc)
-		var/turf/space/S = loc
-		S.dynamic_lighting = 1
+	var/turf/T = get_turf(src)
+	if(T)
+		T.dynamic_lighting = 1
 
 /obj/structure/shuttle/diag_wall/New()
 	..()
 	initialize()
 
 /obj/structure/shuttle/diag_wall/Destroy()
-	if(locate(/turf/space) in loc)
-		var/turf/space/S = loc
-		S.dynamic_lighting = 0
+	var/turf/T = get_turf(src)
+	if(T)
+		T.dynamic_lighting = 1
 	..()
+
+/obj/structure/shuttle/diag_wall/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
+	var/turf/T = get_turf(src)
+	if(T)
+		T.dynamic_lighting = 0
+	..()
+	var/turf/T = get_turf(src)
+	if(T)
+		T.dynamic_lighting = 1
 
 /obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
