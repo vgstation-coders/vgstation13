@@ -80,6 +80,7 @@
 	var/turf/T = get_turf(src)
 	if(T)
 		T.dynamic_lighting = 1
+		T.lighting_build_overlay()
 
 /obj/structure/shuttle/diag_wall/New()
 	..()
