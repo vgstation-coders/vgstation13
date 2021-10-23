@@ -127,13 +127,7 @@
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(assigned)
 	var/turf/oldloc = get_turf(M)
-	var/obj/effect/landmark/templand
-	for(var/obj/effect/landmark/start/S in landmarks_list)
-		if(S.name == "start")
-			templand = S
-			break
-	if(templand)
-		M.forceMove(get_turf(templand))
+	M.forceMove(null)
 	if(!latejoinprompt(M,src))
 		message_admins("[M.key] has opted out of becoming a ninja.")
 		M.forceMove(oldloc)
