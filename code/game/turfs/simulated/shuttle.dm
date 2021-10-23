@@ -86,7 +86,7 @@
 	if(world.has_round_started())
 		initialize()
 	var/turf/T = get_turf(src)
-	if(T)
+	if(T && !T.lighting_overlay)
 		new /atom/movable/lighting_overlay(T, TRUE)
 
 /obj/structure/shuttle/diag_wall/Destroy()
