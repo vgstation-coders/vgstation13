@@ -17,6 +17,9 @@
 	zCentcomm = 1
 	lights_always_ok = TRUE
 
+/datum/subsystem/supply_shuttle
+	movetime = 5 SECONDS
+
 ////////////////////////////////////////////////////////////////
 #include "test_tiny.dmm"
 #endif
