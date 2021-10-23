@@ -46,7 +46,7 @@
 
 /obj/item/inflatable/proc/inflate(mob/user)
 	playsound(loc, 'sound/items/zip.ogg', 75, 1)
-	var/obj/structure/inflatable/R = new deploy_path(get_turf(src))
+	var/atom/movable/R = new deploy_path(get_turf(src))
 	transfer_fingerprints_to(R)
 	visible_message("<span class='notice'>\The [src] inflates.</span>")
 	qdel(src)
@@ -83,25 +83,96 @@
 	icon_state = "folded"
 	deploy_path = /obj/structure/inflatable/shelter
 
-/obj/item/inflatable/floor
-	name = "inflatable floor"
-	desc = "A folded membrane, which rapidly expands along the horizontal plane until it runs out of room to inflate, or air to inflate with."
-	icon_state = "folded_floor"
-	deploy_path = /turf/simulated/floor/inflatable
-
-/obj/item/inflatable/floor/can_inflate(var/location)
+/obj/item/inflatable/nonmove/can_inflate(var/location)
 	var/turf/T = get_turf(src)
 	if(!istype(T, get_base_turf(T.z)))
 		return FALSE
 	return ..()
 
-/obj/item/inflatable/floor/inflate(mob/user)
+/obj/item/inflatable/nonmove/inflate(mob/user)
 	playsound(loc, 'sound/items/zip.ogg', 75, 1)
 	visible_message("<span class='notice'>\The [src] inflates.</span>")
 	var/turf/T = get_turf(src)
-	T.ChangeTurf(/turf/simulated/floor/inflatable)
+	T.ChangeTurf(deploy_path)
 	qdel(src)
 
+/obj/item/inflatable/nonmove/floor
+	name = "inflatable floor"
+	desc = "A folded membrane, which rapidly expands along the horizontal plane until it runs out of room to inflate, or air to inflate with."
+	icon_state = "folded_floor"
+	deploy_path = /turf/simulated/floor/inflatable
+
+/obj/item/inflatable/nonmove/shuttle/can_inflate(var/location)
+	var/turf/T = get_turf(src)
+	if(istype(T, deploy_path))
+		return FALSE
+	var/area/A = get_area(src)
+	if(!A.get_shuttle() || !istype(A,/area/station/custom))
+		return FALSE
+	if(!location)
+		location = loc
+	if(!isturf(location))
+		return FALSE
+
+/obj/item/inflatable/nonmove/shuttle/wall
+	name = "inflatable wall"
+	desc = "A folded membrane which rapidly expands into a large cubical shape on activation."
+	icon_state = "folded_swall"
+	deploy_path = /turf/simulated/wall/shuttle
+
+/obj/item/inflatable/nonmove/shuttle/floor
+	name = "inflatable floor"
+	desc = "A folded membrane, which rapidly expands along the horizontal plane until it runs out of room to inflate, or air to inflate with."
+	icon_state = "folded_sfloor1"
+	deploy_path = /turf/simulated/floor/shuttle
+	var/floor_type = 1
+
+/obj/item/inflatable/nonmove/shuttle/floor/New(loc, var/type)
+	..()
+	floor_type = type
+	icon_state = "folded_sfloor[floor_type]"
+
+/obj/item/inflatable/nonmove/shuttle/floor/inflate(mob/user)
+	..()
+	var/turf/T = get_turf(src)
+	T.icon_state = "floor[floor_type]"
+
+/obj/item/inflatable/diagshuttlewall
+	name = "inflatable wall"
+	desc = "A folded membrane which rapidly expands into a large cubical shape on activation."
+	icon_state = "folded_dswall"
+	deploy_path = /obj/structure/shuttle/diag_wall
+
+/obj/item/inflatable/diagshuttlewall/can_inflate(var/location)
+	if(!location)
+		location = loc
+	if(!isturf(location))
+		return 0
+	if(locate(/obj/structure/shuttle/diag_wall) in get_turf(location))
+		return 0
+	return 1
+
+/obj/item/inflatable/diagshuttlewall/inflate(mob/user)
+	var/list/spawn_dirs = list("Southwest","Northeast","Northwest","Southeast")
+	var/spawn_dir_txt = input("Select a direction to deflate this as", "Diagonal shuttle wall", null) as null|anything in spawn_dirs
+	if(!spawn_dir_txt)
+		return
+	var/spawn_dir = NORTH
+	switch(spawn_dir_txt)
+		if("Southwest")
+			spawn_dir = NORTH
+		if("Northeast")
+			spawn_dir = SOUTH
+		if("Northwest")
+			spawn_dir = EAST
+		if("Southeast")
+			spawn_dir = WEST
+	playsound(loc, 'sound/items/zip.ogg', 75, 1)
+	var/obj/structure/shuttle/diag_wall/R = new deploy_path(get_turf(src))
+	R.dir = spawn_dir
+	transfer_fingerprints_to(R)
+	visible_message("<span class='notice'>\The [src] inflates.</span>")
+	qdel(src)
 /*/obj/item/inflatable/shelter/attack_self(mob/user)
 	user.anchored = 1 Previously, this would anchor the user in place until it inflated and put them inside
 	..()

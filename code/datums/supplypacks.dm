@@ -1804,12 +1804,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 
 /datum/supply_packs/engine_parts
-	name = "DIY Shuttle Engine kit"
+	name = "DIY Shuttle kit"
 	contains = list(/obj/structure/shuttle/engine/propulsion/DIY,
-					/obj/structure/shuttle/engine/heater/DIY)
-	cost = 100
+					/obj/structure/shuttle/engine/heater/DIY,
+					/obj/item/weapon/storage/box/shuttlekit,
+					/obj/item/weapon/storage/box/shuttlekit,
+					/obj/item/weapon/storage/box/shuttlekit)
+	cost = 200
 	containertype = /obj/structure/closet/crate/secure/engisec
-	containername = "\improper Shuttle engines crate"
+	containername = "\improper Shuttle parts crate"
 	group = "Engineering"
 
 /datum/supply_packs/shuttle_permit

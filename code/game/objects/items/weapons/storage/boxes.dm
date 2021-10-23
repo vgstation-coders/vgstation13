@@ -893,6 +893,26 @@
 	for(var/i = 1 to 4)
 		new /obj/item/inflatable/wall(src)
 
+/obj/item/weapon/storage/box/shuttlekit
+	name = "inflatable shuttle building kit"
+	desc = "Contains inflatable shuttle walls and floors."
+	icon_state = "inf_box"
+	can_only_hold = list(
+		"/obj/item/inflatable/nonmove/shuttle",
+		"/obj/item/inflatable/diagshuttlewall")
+	fits_max_w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 45
+
+/obj/item/weapon/storage/box/shuttlekit/New()
+	..()
+	var/floor_type = rand(1,5)
+	for(var/i = 1 to 5)
+		new /obj/item/inflatable/nonmove/shuttle/floor(src,floor_type)
+	for(var/i = 1 to 5)
+		new /obj/item/inflatable/nonmove/shuttle/wall(src)
+	for(var/i = 1 to 5)
+		new /obj/item/inflatable/diagshuttlewall(src)
+
 /obj/item/weapon/storage/box/ornaments
 	name = "box of ornaments"
 	desc = "A box of seven glass Christmas ornaments. Color not included."
