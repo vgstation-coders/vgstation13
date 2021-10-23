@@ -80,14 +80,13 @@
 	var/turf/T = get_turf(src)
 	if(T)
 		T.dynamic_lighting = 1
+		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
+			new /atom/movable/lighting_overlay(T, TRUE)
 
 /obj/structure/shuttle/diag_wall/New()
 	..()
 	if(world.has_round_started())
 		initialize()
-	var/turf/T = get_turf(src)
-	if(T && !T.lighting_overlay)
-		new /atom/movable/lighting_overlay(T, TRUE)
 
 /obj/structure/shuttle/diag_wall/Destroy()
 	var/turf/T = get_turf(src)
