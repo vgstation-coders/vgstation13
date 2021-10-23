@@ -598,6 +598,25 @@
 	name = "security essentials"
 	desc = "A box containing essential security officer equipment. It has a piece of paper with the letters SEC written on it taped to one side."
 	icon_state = "largebox_sec"
+	fits_max_w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 31
+	can_only_hold = list(
+		"/obj/item/device/radio/headset/headset_sec",
+		"/obj/item/clothing/glasses/sunglasses/sechud",
+		"/obj/item/clothing/gloves/black",
+		"/obj/item/weapon/storage/belt/security",
+		"/obj/item/device/flashlight/tactical",
+		"/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical",
+		"/obj/item/device/gps/secure",
+		"/obj/item/device/flash",
+		"/obj/item/weapon/grenade/flashbang",
+		"/obj/item/weapon/melee/baton/loaded",
+		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/reagent_containers/spray/pepper",
+		"/obj/item/taperoll/police",
+		"/obj/item/device/hailer",
+		"/obj/item/device/law_planner",
+	)
 
 /obj/item/weapon/storage/box/large/securitygear/New()
 	..()
