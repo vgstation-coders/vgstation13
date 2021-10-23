@@ -90,14 +90,12 @@
 	var/turf/T = get_turf(src)
 	if(T)
 		T.dynamic_lighting = 0
-		T.lighting_clear_overlay()
 	..()
 
 /obj/structure/shuttle/diag_wall/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = get_turf(src)
 	if(T)
 		T.dynamic_lighting = 0
-		T.lighting_clear_overlay()
 	..()
 	T = get_turf(src)
 	if(T)
