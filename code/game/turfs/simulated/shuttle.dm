@@ -96,7 +96,7 @@
 	if(T)
 		T.dynamic_lighting = 0
 	..()
-	var/turf/T = get_turf(src)
+	T = get_turf(src)
 	if(T)
 		T.dynamic_lighting = 1
 
