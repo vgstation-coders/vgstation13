@@ -646,7 +646,7 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 						// Find a new turf to take on the property of
 						var/turf/nextturf = get_step(X, direction)
 						if(!nextturf || !istype(nextturf, /turf/space))
-							nextturf = get_step(corner, turn(direction, 180))
+							nextturf = get_step(X, turn(direction, 180))
 
 						// Take on the icon of a neighboring scrolling space icon
 						X.icon = nextturf.icon
