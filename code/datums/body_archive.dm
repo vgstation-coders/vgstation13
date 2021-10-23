@@ -9,12 +9,13 @@
 		return
 	..()
 	mob_type = source.type
+	log_debug("[key_name(src)] has has had their body ([mob_type]) archived.")
 	if (ishuman(source))
 		var/mob/living/carbon/human/H = source
 		var/datum/organ/internal/brain/Brain = H.internal_organs_by_name["brain"]
 
 		var/datum/dna2/record/R = new /datum/dna2/record()
-		if(!isnull(Brain.owner_dna) && Brain.owner_dna != H.dna)
+		if(Brain && !isnull(Brain.owner_dna) && Brain.owner_dna != H.dna)
 			R.dna = Brain.owner_dna.Clone()
 		else
 			R.dna = H.dna.Clone()
