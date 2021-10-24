@@ -660,14 +660,16 @@
 	desc = "Charming holiday sugar cookies, just like Mom used to make."
 	icon = 'icons/obj/food_seasonal.dmi'
 	var/cookiecutter
+	var/MM
+	MM = text2num(time2text(world.timeofday, "MM"))
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
 	..()
 	if(!cookiecutter)
-		switch(Holiday)
-			if(XMAS || XMAS_EVE)
+		switch(MM)
+			if(12)
 				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
-			if(HALLOWEEN)
+			if(10)
 				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
 			else
 				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer") )
