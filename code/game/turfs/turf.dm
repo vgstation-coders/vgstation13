@@ -109,9 +109,6 @@
 	..()
 	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
-/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
-	return ..()
-
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)

@@ -190,12 +190,9 @@ var/list/one_way_windows
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return TRUE
-	if(can_pass(mover))
-		if(istype(mover,/obj/item/projectile/beam))
-			var/obj/item/projectile/beam/B = mover
-			B.damage *= disperse_coeff
-			if(B.damage <= 1)
-				B.bullet_die()
+	if(can_pass(mover))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
+		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | reverse_direction(dir)))
+			dim_beam(mover)
 		return TRUE
 	if(!density)
 		return TRUE
