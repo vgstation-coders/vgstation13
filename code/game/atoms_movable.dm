@@ -81,7 +81,7 @@
 
 	remove_border_dummy()
 
-	INVOKE_EVENT(src, /lazy_event/on_destroyed, "thing" = src)
+	INVOKE_EVENT(src, /event/destroyed, "thing" = src)
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)

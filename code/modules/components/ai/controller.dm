@@ -19,12 +19,7 @@
 /datum/component/controller/Destroy()
 	parent.unregister_event(/event/comp_ai_cmd_set_busy, src, .proc/cmd_set_busy)
 	parent.unregister_event(/event/comp_ai_cmd_get_busy, src, .proc/cmd_get_busy)
-
-// Called when we bump another movable atom.
-/datum/component/controller/proc/OnBump(var/atom/A)
-	if(istype(A, /atom/movable))
-		var/atom/movable/AM = A
-		SendSignal(COMSIG_BUMP, list("movable"=AM))
+	..()
 
 	parent.unregister_event(/event/comp_ai_cmd_set_target, src, .proc/cmd_set_target)
 	parent.unregister_event(/event/comp_ai_cmd_get_target, src, .proc/cmd_get_target)
