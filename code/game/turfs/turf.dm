@@ -113,7 +113,7 @@
 		border_objects -= mover //Don't bother checking for the flag, in case it lost it.
 		if(!border_objects.len)
 			border_objects = null
-	lazy_invoke_event(/lazy_event/on_exited, list("mover" = mover, "location" = src, "newloc" = newloc))
+	INVOKE_EVENT(src, /lazy_event/on_exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	return Cross(mover, src)

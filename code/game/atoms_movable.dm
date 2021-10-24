@@ -81,7 +81,7 @@
 
 	remove_border_dummy()
 
-	lazy_invoke_event(/lazy_event/on_destroyed, list("thing" = src))
+	INVOKE_EVENT(src, /lazy_event/on_destroyed, "thing" = src)
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -436,6 +436,8 @@
 	if(can_pass(mover))
 		return TRUE
 	if(!density)
+		return TRUE
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
 		return TRUE
 	return bounds_dist(src, mover) >= 0
 
