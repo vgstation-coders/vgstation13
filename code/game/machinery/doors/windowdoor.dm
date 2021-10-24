@@ -118,12 +118,12 @@
 		return !density
 	return TRUE
 
+/obj/machinery/door/window/can_pass(atom/movable/mover)
+	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
+
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
-
-/obj/machinery/door/window/can_pass(atom/movable/mover)
-	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
 
 /obj/machinery/door/window/open()
 	if(!density) //it's already open you silly cunt

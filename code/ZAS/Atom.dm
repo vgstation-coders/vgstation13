@@ -4,13 +4,9 @@
 /turf/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 
 	if(!target)
-		return FALSE
+		return ..()
 
 	if(istype(mover))
-		for(var/atom/movable/border_object in border_objects)
-			if(!border_object.Cross(mover, target, height, air_group))
-				bump_target = border_object
-				return FALSE
 		return !density
 
 	else // Now, doing more detailed checks for air movement and air group formation

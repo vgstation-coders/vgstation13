@@ -55,7 +55,7 @@
 	var/last_explosion_push = 0
 	var/mob/virtualhearer/virtualhearer
 
-	var/can_bump //Workaround to make things only bump one object per movement
+	var/list/could_bump //In a given movement, holds the objects that BYOND internally calls Bump() on, so we can pick one to call to_bump() on.
 
 	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
 
@@ -175,10 +175,11 @@
 		set_glide_size(glide_size_override)
 
 	var/atom/oldloc = loc
-	can_bump = TRUE
+	could_bump = list()
 	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
 		. = ..()
 
+		perform_bump()
 		update_dir()
 		INVOKE_EVENT(src, /event/after_move)
 		return
@@ -187,6 +188,7 @@
 	if(Dir || (loc != NewLoc))
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
+			perform_bump()
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
 				if (Dir & EAST) //Northeast
@@ -412,13 +414,24 @@
 			Obstacle.Bumped(src)
 	sound_override = 0
 
-//As it says above, don't override this. Override to_bump() and/or Obstacle's get_bump_target() instead.
+//As it says above, don't override this. Override to_bump() and/or Obstacle's get_bump_target() instead. Assumes could_bump is already a list (not null).
 /atom/movable/Bump(atom/Obstacle)
-	to_chat(src, "[Obstacle]")
-	if(!can_bump)
-		return
-	to_bump(Obstacle.get_bump_target())
-	can_bump = FALSE
+	could_bump += Obstacle
+
+//Choose an actual bump target from the list of potential bump targets, and to_bump() it.
+//Bumps the first border object in the list, or the last object if there isn't one.
+//This seems weird, but the list order is out of our control and essentially arbitrary, so it doesn't matter.
+//The only relevant guarantee is that any turfs in the list will be at the end, so they have priority over non-border objects.
+//(The order is based on ref, as far as I can tell.)
+/atom/movable/proc/perform_bump()
+	var/atom/target
+	for(var/atom/A as anything in could_bump)
+		target = A //Can't just use target as the loop variable. For some reason, BYOND nulls it after the loop in that case.
+		if(target.flow_flags & ON_BORDER)
+			break
+	if(target)
+		to_bump(target.get_bump_target())
+	could_bump = null
 
 /atom/movable/proc/setup_border_dummy()
 	if(border_dummy)
@@ -1189,12 +1202,43 @@
 	forceMove(picked)
 
 
+//border_dummy
+
+//Replaces the use of Uncross() for border object collision, because Uncross() is not quite correct for that.
+//Using Uncross() causes various problems for objects with altered bounding boxes or step_size.
+//The solution used here is absolutely idiotic, but as far as I can figure is the most correct approach within BYOND's stock movecode.
+
+//#define DEBUG_BORDER_DUMMY
+
 /atom/movable/border_dummy
-	//invisibility = 101
+	#ifdef DEBUG_BORDER_DUMMY
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "window"
 	color = "red"
+	#else
+	invisibility = 101
+	#endif
 	flow_flags = ON_BORDER
+
+//The following serves to prevent objects from overlapping the border object from the side.
+//By widening the border_dummy to either side of the border object, we make it so that objects approaching from the edge overlap it as well as objects in front of the border object.
+/atom/movable/border_dummy/update_dir()
+	..()
+	//A general system to let arbitrary atoms rotate their bounds with dir would be good, but this is enough for now
+	switch(dir)
+		if(NORTH, SOUTH)
+			bound_x = -WORLD_ICON_SIZE
+			bound_width = 3 * WORLD_ICON_SIZE
+			bound_y = 0
+			bound_height = WORLD_ICON_SIZE
+		if(EAST, WEST)
+			bound_x = 0
+			bound_width = WORLD_ICON_SIZE
+			bound_y = -WORLD_ICON_SIZE
+			bound_height = 3 * WORLD_ICON_SIZE
+		else //Shouldn't happen
+			stack_trace("border_dummy has invalid dir [dir]")
+
 
 /atom/movable/border_dummy/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(!istype(mover))
@@ -1210,6 +1254,10 @@
 /datum/locking_category/border_dummy
 	y_offset = 1
 	rotate_offsets = TRUE
+
+#ifdef DEBUG_BORDER_DUMMY
+#undef DEBUG_BORDER_DUMMY
+#endif
 
 
 // -- trackers

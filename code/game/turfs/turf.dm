@@ -71,8 +71,6 @@
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
 	var/last_beam_damage = 0
-	var/list/border_objects //Only exists when there are border objects on the turf.
-	var/atom/movable/bump_target //If this var is not null, bumping this turf bumps this object instead. Used for border objects. Unset immediately when bumped.
 
 /turf/examine(mob/user)
 	..()
@@ -109,25 +107,16 @@
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
-	if(border_objects)
-		border_objects -= mover //Don't bother checking for the flag, in case it lost it.
-		if(!border_objects.len)
-			border_objects = null
 	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
-	return Cross(mover, src)
+	return ..()
 
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
-
-	if(A.flow_flags & ON_BORDER)
-		if(!border_objects)
-			border_objects = list()
-		border_objects += A
 
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
@@ -251,10 +240,6 @@
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
 		reconsider_lights()
-
-/turf/get_bump_target()
-	. = bump_target?.get_bump_target() || ..()
-	bump_target = null
 
 /turf/proc/is_plating()
 	return 0
