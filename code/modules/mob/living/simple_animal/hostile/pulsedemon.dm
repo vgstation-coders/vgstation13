@@ -99,7 +99,7 @@
 
 /obj/machinery/power/relaymove(mob/user as mob)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-	    user.forceMove(get_turf(src))
+        user.forceMove(get_turf(src))
     
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
