@@ -53,7 +53,7 @@
 
 /mob/living/simple_animal/hostile/asteroid/Life()
 	..()
-	if(!istype(get_area(src), /area/mine/unexplored) && mind && client && !client.check_rights(R_ADMIN))
+	if(!istype(get_area(src), /area/mine/unexplored) && mind && client && !check_rights(R_ADMIN))
 		client.time_died_as_mouse = world.time
 		ghostize(0) // Prevents player controlled ones from leaving mines
 
