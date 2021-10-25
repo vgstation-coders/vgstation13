@@ -972,6 +972,13 @@ proc/move_mining_shuttle()
 				if(insert(AM, user) == -1) //Limit reached
 					break
 
+/obj/item/device/mobcapsule/antag/insert(var/atom/movable/AM, mob/user)
+	if(..())
+		if(istype(contained_mob,/mob/living/simple_animal/hostile/asteroid))
+			var/mob/living/simple_animal/hostile/asteroid/AM = contained_mob
+			AM.can_leave_roid = TRUE
+			return 1
+	return 0
 /**********************Mining Scanner**********************/
 
 /obj/item/device/mining_scanner

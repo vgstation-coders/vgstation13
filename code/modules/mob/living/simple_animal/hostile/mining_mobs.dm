@@ -20,6 +20,7 @@
 	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
+	var/can_leave_roid = FALSE
 	held_items = list()
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 
@@ -53,7 +54,7 @@
 
 /mob/living/simple_animal/hostile/asteroid/Life()
 	..()
-	if(client && !check_rights(R_ADMIN) && mind && !istype(get_area(src), /area/mine/unexplored))
+	if(client && !check_rights(R_ADMIN) && mind && !istype(get_area(src), /area/mine/unexplored) && !can_leave_roid)
 		client.time_died_as_mouse = world.time
 		ghostize(0) // Prevents player controlled ones from leaving mines
 
