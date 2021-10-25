@@ -793,11 +793,11 @@
 /datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/finish_setup(mob/new_character, index)
 	var/datum/powernet/PN = pick(powernets)
 	var/list/cables_to_spawn_at = list()
-	for(var/datum/cable/C in PN.cables)
+	for(var/obj/structure/cable/C in PN.cables)
 		var/turf/simulated/floor/F = get_turf(C)
 		if(F && !F.floor_tile)
 			cables_to_spawn_at.Add(C)
-	var/cable/our_cable = pick(cables_to_spawn_at)
+	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
 	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
 	new_character.forceMove(get_turf(our_cable))
 	PD.key = new_character.key

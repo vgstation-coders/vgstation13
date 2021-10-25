@@ -20,9 +20,9 @@
 
     attacktext = "electrocutes"
     attack_sound = "sparks"
-	harm_intent_damage = 0
-	melee_damage_lower = 0
-	melee_damage_upper = 0 //Handled in unarmed_attack_mob() anyways
+    harm_intent_damage = 0
+    melee_damage_lower = 0
+    melee_damage_upper = 0 //Handled in unarmed_attack_mob() anyways
 
     var/charge = 1000
     var/maxcharge = 1000
@@ -51,8 +51,12 @@
             controlling_area = get_area(current_power)
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
+
+/mob/living/simple_animal/hostile/asteroid/update_perception()
+	if(client && client.darkness_planemaster)
+		client.darkness_planemaster.alpha = 100    
     update_cableview()
-    
+
 /mob/living/simple_animal/hostile/pulse_demon/Life()
     current_power = locate(/obj/machinery/power) in loc
     if(current_power)
@@ -89,7 +93,7 @@
         if(istype(current_power,/obj/machinery/power/apc))
             controlling_area = get_area(current_power)
         forceMove(current_power)
-	    playsound(src,'sound/weapons/electriczap.ogg',50, 1)
+        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -100,8 +104,7 @@
             if(!isturf(loc))
                 forceMove(get_turf(NewLoc))
             controlling_area = null
-            if(current_net != previous_net)
-                update_cableview()
+            update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
     if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
@@ -120,7 +123,7 @@
 
 /obj/machinery/power/relaymove(mob/user as mob)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-	    playsound(src,'sound/weapons/electriczap.ogg',50, 1)
+        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
         user.forceMove(get_turf(src))
     
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
@@ -146,7 +149,7 @@
     shockMob(M)
 
 /mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
-    shockMob(M)
+    shockMob(target)
     ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
@@ -156,7 +159,7 @@
         M.electrocute_act(30, src, 2)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
-    if(client)
+    if(client && (current_net != previous_net))
         for(var/image/current_image in cables_shown)
             client.images -= current_image
         if(current_cable)

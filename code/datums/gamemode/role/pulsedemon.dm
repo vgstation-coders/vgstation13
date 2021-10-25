@@ -9,7 +9,7 @@
 	greets = list(GREET_DEFAULT)
 	default_admin_voice = "The Currents"
 	admin_voice_style = "skeleton"
-    var/list/obj/machinery/power/apc/controlled_apcs = list()
+	var/list/obj/machinery/power/apc/controlled_apcs = list()
 
 /datum/role/pulse_demon/Greet(var/greeting,var/custom)
 	if(!greeting)
