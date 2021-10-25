@@ -234,9 +234,9 @@
 			if(6)
 				icon_state = "[initial(icon_state)]_dir3"
 		if (dir_sum in alldirs)
-			dir = dir_sum
+			change_dir(dir_sum)
 		else
-			dir = 2
+			change_dir(SOUTH)
 
 /obj/structure/table/ex_act(severity)
 	switch(severity)
@@ -503,7 +503,7 @@
 			spawn(0)
 				A.throw_at(pick(targets),1,1)
 
-	dir = direction
+	change_dir(direction)
 	if(dir != NORTH)
 		plane = ABOVE_HUMAN_PLANE
 	flipped = 1

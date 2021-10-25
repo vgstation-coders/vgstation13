@@ -239,7 +239,7 @@
 	if(anchored)
 		to_chat(usr, "It is fastened to the floor; therefore, you can't rotate it!")
 		return FALSE
-	dir = turn(dir, 270)
+	change_dir(turn(dir, 270))
 	update_nearby_tiles()
 	update_icon()
 
