@@ -36,8 +36,10 @@
             death()
     else
         forceMove(current_power)
+    set_light(2,2,"#bbbb00")
     
 /mob/living/simple_animal/hostile/pulsedem/Life()
+    current_power = locate(/obj/machinery/power) in loc
     if(current_power)
         if(istype(current_power,/obj/machinery/power/apc))
             controlling_area = get_area(current_power)
@@ -48,6 +50,7 @@
         else
             health -= health_drain_rate
     else
+        current_cable = locate(/obj/structure/cable) in loc
         if(current_cable)
             if(current_cable.avail() > amount_per_regen)
                 current_cable.add_load(amount_per_regen)
@@ -81,7 +84,7 @@
 
 /mob/living/simple_animal/hostile/pulsedem/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
-        A.attack_robot(src)
+        A.attack_ai(src)
     ..()
 
 /mob/living/simple_animal/hostile/pulsedem/ex_act(severity)
