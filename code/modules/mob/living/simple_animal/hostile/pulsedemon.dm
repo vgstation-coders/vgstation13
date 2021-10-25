@@ -69,7 +69,8 @@
     if(new_power)
         current_power = new_power
         current_cable = null
-        forceMove(new_power)
+        controlling_area = get_area(current_power)
+        forceMove(current_power)
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
