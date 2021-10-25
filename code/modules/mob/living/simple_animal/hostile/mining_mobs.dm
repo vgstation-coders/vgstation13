@@ -55,8 +55,11 @@
 /mob/living/simple_animal/hostile/asteroid/Life()
 	..()
 	if(client && !check_rights(R_ADMIN) && mind && !istype(get_area(src), /area/mine/unexplored) && !can_leave_roid_posessed)
-		client.time_died_as_mouse = world.time
 		ghostize(0) // Prevents player controlled ones from leaving mines
+
+/mob/living/simple_animal/hostile/asteroid/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
+	client.time_died_as_mouse = world.time
+	..()
 
 /mob/living/simple_animal/hostile/asteroid/update_perception()
 	if(client && client.darkness_planemaster)
