@@ -338,7 +338,7 @@
 	return WA
 
 /obj/machinery/door/window/proc/set_assembly(var/obj/structure/windoor_assembly/WA)
-	WA.dir = dir
+	WA.change_dir(dir)
 	WA.anchored = TRUE
 	WA.wired = TRUE
 	WA.facing = (is_left_opening() ? "l" : "r")

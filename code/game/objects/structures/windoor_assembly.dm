@@ -60,7 +60,7 @@
 /obj/structure/windoor_assembly/proc/make_windoor(var/mob/user)
 	var/spawn_type = secure ? secure_type : windoor_type
 	var/obj/machinery/door/window/windoor = new spawn_type(loc)
-	windoor.dir = dir
+	windoor.change_dir(dir)
 	windoor.base_state = (facing == "l" ? "left" : "right")
 	windoor.icon_state = windoor.base_state
 	transfer_fingerprints_to(windoor)

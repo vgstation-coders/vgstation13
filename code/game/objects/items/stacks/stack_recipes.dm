@@ -93,7 +93,7 @@
 		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
 			O = new result_type(usr.loc)
 
-	O.dir = usr.dir
+	O.change_dir(usr.dir)
 	if(start_unanchored)
 		var/obj/A = O
 		A.anchored = 0

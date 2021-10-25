@@ -124,7 +124,7 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	change_dir(turn(src.dir, -90))
 
 /obj/machinery/power/treadmill/verb/rotate_anticlock()
 	set category = "Object"
@@ -135,4 +135,4 @@
 		to_chat(usr, "It is fastened to the floor!")
 		return
 
-	src.dir = turn(src.dir, 90)
+	change_dir(turn(src.dir, 90))

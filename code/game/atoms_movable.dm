@@ -259,7 +259,10 @@
 			category.update_lock(AM)
 
 //Like forceMove(), but for dirs!
-/atom/movable/proc/change_dir(new_dir, var/changer)
+/atom/proc/change_dir(new_dir, changer)
+	dir = new_dir
+
+/atom/movable/change_dir(new_dir, changer)
 	if(locked_to && changer != locked_to)
 		return
 
