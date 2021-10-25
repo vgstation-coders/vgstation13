@@ -28,6 +28,7 @@
     var/maxcharge = 1000
     var/health_drain_rate = 5
     var/amount_per_regen = 100
+    var/takeover_time = 30
     var/area/controlling_area
     var/obj/structure/cable/current_cable
     var/datum/powernet/current_net
@@ -91,7 +92,17 @@
         current_power = new_power
         current_cable = null
         if(istype(current_power,/obj/machinery/power/apc))
-            controlling_area = get_area(current_power)
+            var/obj/machinery/power/apc/current_apc = current_power
+            if(current_apc.pulsecompromised)
+                controlling_area = get_area(current_power)
+            else
+                to_chat(src,"<span class='notice'>You are now attempting to hack \the [src], this will take approximately [takeover_time] seconds")
+                if(do_after(src,current_apc,takeover_time*10))
+                    current_apc.pulsecompromised = 1
+                    controlling_area = get_area(current_power)
+                    if(mind && mind.antag_roles)
+                        var/datum/role/pulse_demon/PD = locate(/datum/role/pulse_demon) in mind.antag_roles
+                        PD.controlled_apcs.Add(current_apc)
         forceMove(current_power)
         playsound(src,'sound/weapons/electriczap.ogg',50, 1)
     else

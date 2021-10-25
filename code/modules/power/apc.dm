@@ -79,6 +79,7 @@
 	var/mob/living/silicon/ai/hacking_ai = null     //The AI that is currently attempting to hack this APC
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
 	var/malflocked = 0 //used for malfs locking down APCs
+	var/pulsecompromised = 0 //used for pulsedemons
 //	luminosity = 1
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
 	var/beenhit = 0 // used for counting how many times it has been hit, used for Aliens at the moment
