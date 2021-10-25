@@ -52,7 +52,7 @@
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
 
-/mob/living/simple_animal/hostile/asteroid/update_perception()
+/mob/living/simple_animal/hostile/pulse_demon/update_perception()
     if(client && client.darkness_planemaster)
         client.darkness_planemaster.alpha = 100    
     update_cableview()
