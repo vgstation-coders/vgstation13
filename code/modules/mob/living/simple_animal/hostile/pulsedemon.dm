@@ -16,7 +16,6 @@
     maxHealth = 50
     speed = 0.75
     move_to_delay = 1
-    density = 0
     size = SIZE_TINY
 
     attacktext = "electrocutes"
@@ -28,8 +27,11 @@
     var/amount_per_regen = 100
     var/area/controlling_area
     var/obj/structure/cable/current_cable
+    var/datum/powernet/current_net
+    var/datum/powernet/previous_net
     var/obj/machinery/power/current_power
     var/can_move=1
+    var/list/image/cables_shown = list()
 
 /mob/living/simple_animal/hostile/pulse_demon/New()
     current_power = locate(/obj/machinery/power) in loc
@@ -37,17 +39,19 @@
         current_cable = locate(/obj/structure/cable) in loc
         if(!current_cable)
             death()
+        else
+            current_net = current_cable.get_powernet()
+            update_cableview()
     else
+        current_net = current_power.get_powernet()
+        if(istype(current_power,/obj/machinery/power/apc))
+            controlling_area = get_area(current_power)
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
     
 /mob/living/simple_animal/hostile/pulse_demon/Life()
     current_power = locate(/obj/machinery/power) in loc
     if(current_power)
-        if(istype(current_power,/obj/machinery/power/apc))
-            controlling_area = get_area(current_power)
-        else
-            controlling_area = null
         if(current_power.avail() > amount_per_regen)
             current_power.add_load(amount_per_regen)
         else
@@ -62,6 +66,8 @@
         else
             death()
     ..()
+    if(current_net != previous_net)
+        update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
     ..()
@@ -72,23 +78,24 @@
         return
     ..()
     var/obj/machinery/power/new_power = locate(/obj/machinery/power) in NewLoc
-    if(new_power)
+    if(new_power && !current_power)
         current_power = new_power
         current_cable = null
-        controlling_area = get_area(current_power)
+        if(istype(current_power,/obj/machinery/power/apc))
+            controlling_area = get_area(current_power)
         forceMove(current_power)
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
             current_cable = new_cable
+            previous_net = current_net
+            current_net = current_cable.get_powernet()
             current_power = null
             if(!isturf(loc))
                 forceMove(get_turf(NewLoc))
+            controlling_area = null
 
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
-    if(ismob(obstacle))
-        var/mob/M = obstacle
-        shockMob(M)
     if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
         can_move = 0
         forceMove(get_step(src,src.dir))
@@ -96,6 +103,9 @@
         can_move = 1
     else
         return ..()
+
+/mob/living/simple_animal/hostile/pulse_demon/Crossed(mob/user as mob)
+    shockMob(user)
 
 /obj/machinery/power/relaymove(mob/user as mob)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -129,3 +139,14 @@
         electrocute_mob(M, PN, src, 2)
     else
         M.electrocute_act(30, src, 2)
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
+    if(client)
+        for(var/image/current_image in cables_shown)
+            client.images -= current_image
+        if(current_cable)
+            for(var/obj/structure/cable/C in current_net.cables)
+                var/image/CI = image(C, C.loc, layer = ABOVE_LIGHTING_LAYER, dir = C.dir)
+                CI.plane = ABOVE_LIGHTING_PLANE
+                cables_shown += CI
+                client.images += CI
