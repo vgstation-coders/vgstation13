@@ -419,6 +419,7 @@
 
 //As it says above, don't override this. Override to_bump() and/or Obstacle's get_bump_target() instead. Assumes could_bump is already a list (not null).
 /atom/movable/Bump(atom/Obstacle)
+	SHOULD_NOT_OVERRIDE(TRUE)
 	could_bump += Obstacle
 
 //Choose an actual bump target from the list of potential bump targets, and to_bump() it.
