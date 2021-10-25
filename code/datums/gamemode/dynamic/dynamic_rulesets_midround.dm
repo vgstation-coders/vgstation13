@@ -775,6 +775,36 @@
 
 //////////////////////////////////////////////
 //                                          //
+//                PULSE DEMON               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon
+	name = "Pulse Demon Infiltration"
+	role_category = /datum/role/pulse_demon
+	enemy_jobs = list("Station Engineer","Chief Engineer")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 0
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/finish_setup(mob/new_character, index)
+	var/datum/powernet/PN = pick(powernets)
+	var/list/cables_to_spawn_at = list()
+	for(var/datum/cable/C in PN.cables)
+		var/turf/simulated/floor/F = get_turf(C)
+		if(F && !F.floor_tile)
+			cables_to_spawn_at.Add(C)
+	var/cable/our_cable = pick(cables_to_spawn_at)
+	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
+	new_character.forceMove(get_turf(our_cable))
+	PD.key = new_character.key
+	return ..()
+
+//////////////////////////////////////////////
+//                                          //
 //             Prisoner                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
