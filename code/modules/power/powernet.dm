@@ -280,7 +280,7 @@ var/global/powernets_broke = 0
 // power_source is a source of electricity, can be powercell, area, apc, cable, powernet or null
 // source is an object caused electrocuting (airlock, grille, etc)
 // no animations will be performed by this proc.
-/proc/electrocute_mob(mob/living/M, power_source, obj/source, siemens_coeff = 1.0)
+/proc/electrocute_mob(mob/living/M, power_source, atom/source, siemens_coeff = 1.0)
 	if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
 		return 0
 

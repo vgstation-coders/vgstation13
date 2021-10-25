@@ -17,12 +17,12 @@
     density = 0
     size = SIZE_TINY
 
-    attacktext = picks("electrifies","shocks","electrocutes")
+    attacktext = "electrocutes"
     attack_sound = "sparks"
 
     var/charge = 1000
     var/maxcharge = 1000
-    var/drain_rate = 5
+    var/health_drain_rate = 5
     var/amount_per_regen = 100
     var/area/controlling_area
     var/obj/structure/cable/current_cable
@@ -99,4 +99,8 @@
             visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
         if(I_HURT)
             visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
-    shock(H, 100, 2.0)
+    var/datum/powernet/PN = current_cable.get_powernet()
+    if(PN && PN.avail)
+        electrocute_mob(M, PN, src, 2)
+    else
+        M.electrocute_act(30, src, 2)	
