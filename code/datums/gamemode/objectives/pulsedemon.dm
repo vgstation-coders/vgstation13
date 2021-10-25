@@ -3,7 +3,7 @@
 	name = "Hijack APCs (as Pulse Demon)"
 	var/amount = 20
 
-/datum/objective/pulse_demon/infesty/PostAppend()
+/datum/objective/pulse_demon/infest/PostAppend()
 	. = ..()
 	amount = rand(3,5) * 5
 	explanation_text = "Hijack [amount] APCs"
