@@ -19,7 +19,6 @@
 /datum/component/controller/Destroy()
 	parent.unregister_event(/event/comp_ai_cmd_set_busy, src, .proc/cmd_set_busy)
 	parent.unregister_event(/event/comp_ai_cmd_get_busy, src, .proc/cmd_get_busy)
-	..()
 
 	parent.unregister_event(/event/comp_ai_cmd_set_target, src, .proc/cmd_set_target)
 	parent.unregister_event(/event/comp_ai_cmd_get_target, src, .proc/cmd_get_target)
