@@ -789,6 +789,7 @@
 	cost = 0
 	requirements = list(5,5,15,15,20,20,20,20,40,70)
 	high_population_requirement = 10
+	logo = "pulsedemon-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/generate_ruleset_body(var/mob/applicant)
 	var/list/cables_to_spawn_at = list()
