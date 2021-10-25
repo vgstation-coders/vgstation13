@@ -133,7 +133,7 @@
     return ..()
 
 /obj/machinery/power/relaymove(mob/user as mob)
-    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon) && dir == opposite_dirs[user.dir])
         playsound(src,'sound/weapons/electriczap.ogg',50, 1)
         user.forceMove(get_turf(src))
     
