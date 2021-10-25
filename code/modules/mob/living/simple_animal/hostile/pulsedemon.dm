@@ -141,10 +141,16 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon) && dir == opposite_dirs[user.dir])
         playsound(src,'sound/weapons/electriczap.ogg',50, 1)
         user.forceMove(get_turf(src))
-    
+
+/atom/proc/attack_pulsedemon(mob/user)
+    return
+
+/obj/machinery/attack_pulsedemon(mob/user)
+    return attack_hand(user)
+
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
-    if(get_area(A) == controlling_area && istype(A,/obj/machinery))
-        A.attack_hand(src)
+    if(get_area(A) == controlling_area)
+        A.attack_pulsedemon(src)
     ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/ex_act(severity)
