@@ -975,8 +975,8 @@ proc/move_mining_shuttle()
 /obj/item/device/mobcapsule/antag/insert(var/atom/movable/AM, mob/user)
 	if(..())
 		if(istype(contained_mob,/mob/living/simple_animal/hostile/asteroid))
-			var/mob/living/simple_animal/hostile/asteroid/AM = contained_mob
-			AM.can_leave_roid_posessed = TRUE
+			var/mob/living/simple_animal/hostile/asteroid/HM = contained_mob
+			HM.can_leave_roid_posessed = TRUE
 			return 1
 	return 0
 /**********************Mining Scanner**********************/
