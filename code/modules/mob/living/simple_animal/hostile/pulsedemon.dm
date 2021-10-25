@@ -33,7 +33,6 @@
     var/datum/powernet/current_net
     var/datum/powernet/previous_net
     var/obj/machinery/power/current_power
-    var/list/obj/machinery/power/apc/controlled_apcs = list()
     var/can_move=1
     var/list/image/cables_shown = list()
 
