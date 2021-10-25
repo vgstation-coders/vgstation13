@@ -68,6 +68,7 @@
 #define USER_TYPE_SPIDER "spider"
 #define USER_TYPE_MECH "mech"
 #define USER_TYPE_CHANGELING "changeling"
+#define USER_TYPE_PULSEDEMON "pulsedemon"
 
 //Spell aspect flags
 #define SPELL_FIRE 1 //Fire based spells
