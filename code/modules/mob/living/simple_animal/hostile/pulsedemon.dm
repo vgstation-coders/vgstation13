@@ -117,7 +117,7 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/Crossed(mob/user as mob)
     var/turf/simulated/floor/F = get_turf(src)
-    if(F && !F.floor_tile && user != src && isliving(user))
+    if(istype(F,/turf/simulated/floor) && !F.floor_tile && user != src && isliving(user))
         shockMob(user)
     return ..()
 

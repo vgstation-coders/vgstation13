@@ -795,7 +795,7 @@
 	for(var/datum/powernet/PN in powernets)
 		for(var/obj/structure/cable/C in PN.cables)
 			var/turf/simulated/floor/F = get_turf(C)
-			if(F && !F.floor_tile)
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile)
 				cables_to_spawn_at.Add(C)
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
 	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
