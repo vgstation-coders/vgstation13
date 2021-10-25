@@ -134,9 +134,8 @@
     shockMob(M)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
-    var/datum/powernet/PN = current_cable.get_powernet()
-    if(PN && PN.avail)
-        electrocute_mob(M, PN, src, 2)
+    if(current_net && current_net.avail)
+        electrocute_mob(M, current_net, src, 2)
     else
         M.electrocute_act(30, src, 2)
 
