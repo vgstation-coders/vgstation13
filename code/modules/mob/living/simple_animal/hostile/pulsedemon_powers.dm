@@ -38,30 +38,3 @@
     var/turf/T = get_turf(user)
     var/atom/target = targets[1]
     user.forceMove(target)
-
-/spell/pulse_demon/overload_machine
-	name = "Overload Machine"
-    abbreviation = "OM"
-    desc = "Blow up a machine to ruin someone's day and knock them down"
-
-    range = 20
-    spell_flags = WAIT_FOR_CLICK
-    duration = 20
-
-    hud_state = ""
-
-/spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
-	if(istype(target, /obj/item/device/radio/intercom))
-		return 1
-	if (istype(target, /obj/machinery))
-		var/obj/machinery/M = target
-		return M.can_overload()
-	else
-		to_chat(holder, "That is not a machine.")
-
-/spell/pulse_demon/overload_machine/cast(var/list/targets, mob/user)
-	var/obj/machinery/M = targets[1]
-	M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
-	spawn(50)
-		explosion(get_turf(M), -1, 0, 1, 2, whodunnit = user)
-		qdel(M)
