@@ -555,6 +555,36 @@
 	to_chat(hobo, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
 	hoboamount++
 
+/mob/dead/observer/verb/haunt_roidmob()
+	set name = "Posess Asteroid Mob"
+	set category = "Ghost"
+	var/timedifference = world.time - client.time_died_as_mouse
+	if(client.time_died_as_mouse && timedifference <= mouse_respawn_time * 600)
+		var/timedifference_text
+		timedifference_text = time2text(mouse_respawn_time * 600 - timedifference,"mm:ss")
+		to_chat(src, "<span class='warning'>You may only posess an asteroid mob more than [mouse_respawn_time] minutes after the last. You have [timedifference_text] left.</span>")
+		return
+	if(!world.has_round_started())
+		to_chat(src, "<span class='warning'>The game has not started yet.</span>")
+		return
+
+	var/response = alert(src, "Are you -sure- you want to posess a mob? You will not be able to leave the asteroid while doing so","Possess asteroid mob","Yeah!","Nope!")
+	if(response != "Yeah!")
+		return  //Hit the wrong key...again.
+	
+	//find a viable mouse candidate
+	var/list/roidmobs = list()
+	for(var/mob/living/simple_animal/hostile/asteroid/AM in mob_list)
+		roidmobs += AM
+	var/mob/living/simple_animal/hostile/asteroid/roidmob = pick(roidmobs)
+	
+	roidmob.ghostize(0) //boot the old mob out
+
+	message_admins("<span class='adminnotice'>[key_name(src)] has become a [roidmob.name].</span>")
+	log_admin("[key_name(src)] has become a [roidmob.name].")
+	roidmob.ckey = ckey
+	qdel(src)
+
 /mob/dead/observer/verb/pai_signup()
 	set name = "Sign up as pAI"
 	set category = "Ghost"

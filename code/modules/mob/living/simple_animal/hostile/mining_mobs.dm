@@ -51,6 +51,17 @@
 			visible_message("<span class='notice'>\The [T] [src.throw_message] \the [src]!</span>")
 			return
 
+/mob/living/simple_animal/hostile/asteroid/Life()
+	..()
+	if(!istype(get_area(src), /area/mine/unexplored) && mind && client && !client.check_rights(R_ADMIN))
+		client.time_died_as_mouse = world.time
+		ghostize(0) // Prevents player controlled ones from leaving mines
+
+/mob/living/simple_animal/hostile/asteroid/death(var/gibbed = FALSE)
+	if(client)
+		client.time_died_as_mouse = world.time
+	..(gibbed)
+
 /mob/living/simple_animal/hostile/asteroid/basilisk
 	name = "basilisk"
 	desc = "A territorial beast, covered in a thick shell that absorbs energy. Its stare causes victims to freeze from the inside."
