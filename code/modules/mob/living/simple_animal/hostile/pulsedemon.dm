@@ -1,4 +1,4 @@
-/mob/living/simple_animal/hostile/pulsedem
+/mob/living/simple_animal/hostile/pulse_demon
     name = "pulse demon"
     desc = "A strange electrical apparition that lives in wires."
     icon_state = "pulsedem"
@@ -9,6 +9,8 @@
     response_help = "reaches their hand into"
     response_disarm = "pushes their hand through"
     response_harm = "punches their fist through"
+    plane = ABOVE_PLATING_PLANE
+    layer = PULSEDEMON_LAYER
 
     health = 50
     maxHealth = 50
@@ -29,7 +31,7 @@
     var/obj/machinery/power/current_power
     var/can_move=1
 
-/mob/living/simple_animal/hostile/pulsedem/New()
+/mob/living/simple_animal/hostile/pulse_demon/New()
     current_power = locate(/obj/machinery/power) in loc
     if(!current_power)
         current_cable = locate(/obj/structure/cable) in loc
@@ -39,7 +41,7 @@
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
     
-/mob/living/simple_animal/hostile/pulsedem/Life()
+/mob/living/simple_animal/hostile/pulse_demon/Life()
     current_power = locate(/obj/machinery/power) in loc
     if(current_power)
         if(istype(current_power,/obj/machinery/power/apc))
@@ -61,11 +63,11 @@
             death()
     ..()
 
-/mob/living/simple_animal/hostile/pulsedem/death(var/gibbed = 0)
+/mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
     ..()
     qdel(src)
 
-/mob/living/simple_animal/hostile/pulsedem/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/mob/living/simple_animal/hostile/pulse_demon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
     if(!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc)
         return
     ..()
@@ -83,7 +85,10 @@
             if(!isturf(loc))
                 forceMove(get_turf(NewLoc))
 
-/mob/living/simple_animal/hostile/pulsedem/to_bump(var/atom/obstacle) // Copied from how adminbus does it
+/mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
+    if(ismob(obstacle))
+        var/mob/M = obstacle
+        shockMob(M)
     if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
         can_move = 0
         forceMove(get_step(src,src.dir))
@@ -91,20 +96,24 @@
         can_move = 1
     else
         return ..()
+
+/obj/machinery/power/relaymove(mob/user as mob)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+	    user.forceMove(get_turf(src))
     
-/mob/living/simple_animal/hostile/pulsedem/ClickOn(var/atom/A, var/params)
+/mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
         A.attack_ai(src)
     ..()
 
-/mob/living/simple_animal/hostile/pulsedem/ex_act(severity)
+/mob/living/simple_animal/hostile/pulse_demon/ex_act(severity)
     return
 
-/mob/living/simple_animal/hostile/pulsedem/emp_act(severity)
+/mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
     visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
     health -= rand(20,25) / severity
 
-/mob/living/simple_animal/hostile/pulsedem/attack_hand(mob/living/carbon/human/M as mob)
+/mob/living/simple_animal/hostile/pulse_demon/attack_hand(mob/living/carbon/human/M as mob)
     switch(M.a_intent)
         if(I_HELP)
             visible_message("<span class ='notice'>[M] [response_help] [src].</span>")
@@ -112,8 +121,11 @@
             visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
         if(I_HURT)
             visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
+        shockMob(M)
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     var/datum/powernet/PN = current_cable.get_powernet()
     if(PN && PN.avail)
         electrocute_mob(M, PN, src, 2)
     else
-        M.electrocute_act(30, src, 2)	
+        M.electrocute_act(30, src, 2)

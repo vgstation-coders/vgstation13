@@ -86,6 +86,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define WIRE_LAYER					6
 	#define VENT_BEZEL_LAYER			7
 	#define WIRE_TERMINAL_LAYER			8
+	#define PULSEDEMON_LAYER			9
 
 #define FLOOR_PLANE 			(-3 + FLOAT_PLANE)
 
