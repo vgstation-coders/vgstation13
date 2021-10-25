@@ -27,7 +27,7 @@
     var/area/controlling_area
     var/obj/structure/cable/current_cable
     var/obj/machinery/power/current_power
-	var/can_move=1
+    var/can_move=1
 
 /mob/living/simple_animal/hostile/pulsedem/New()
     current_power = locate(/obj/machinery/power) in loc
@@ -84,13 +84,13 @@
                 forceMove(get_turf(NewLoc))
 
 /mob/living/simple_animal/hostile/pulsedem/to_bump(var/atom/obstacle) // Copied from how adminbus does it
-	if(can_move && !locate(/obj/machinery/power) in NewLoc)
-		can_move = 0
-		forceMove(get_step(src,src.dir))
-		sleep(1)
-		can_move = 1
-	else
-		return ..()
+    if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
+        can_move = 0
+        forceMove(get_step(src,src.dir))
+        sleep(1)
+        can_move = 1
+    else
+        return ..()
     
 /mob/living/simple_animal/hostile/pulsedem/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
