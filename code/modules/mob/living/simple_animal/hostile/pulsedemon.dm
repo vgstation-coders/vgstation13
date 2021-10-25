@@ -96,7 +96,7 @@
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
             else
-                to_chat(src,"<span class='notice'>You are now attempting to hack \the [src], this will take approximately [takeover_time] seconds")
+                to_chat(src,"<span class='notice'>You are now attempting to hack \the [src], this will take approximately [takeover_time] seconds.</span>")
                 if(do_after(src,current_apc,takeover_time*10))
                     current_apc.pulsecompromised = 1
                     controlling_area = get_area(current_power)
