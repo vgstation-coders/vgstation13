@@ -121,7 +121,7 @@
             visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
         if(I_HURT)
             visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
-        shockMob(M)
+    shockMob(M)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     var/datum/powernet/PN = current_cable.get_powernet()
