@@ -105,8 +105,9 @@
         return ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/Crossed(mob/user as mob)
-    if(user != src)
+    if(user != src && isliving(user))
         shockMob(user)
+    return ..()
 
 /obj/machinery/power/relaymove(mob/user as mob)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
