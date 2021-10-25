@@ -976,7 +976,7 @@ proc/move_mining_shuttle()
 	if(..())
 		if(istype(contained_mob,/mob/living/simple_animal/hostile/asteroid))
 			var/mob/living/simple_animal/hostile/asteroid/AM = contained_mob
-			AM.can_leave_roid = TRUE
+			AM.can_leave_roid_posessed = TRUE
 			return 1
 	return 0
 /**********************Mining Scanner**********************/

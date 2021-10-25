@@ -20,7 +20,7 @@
 	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
-	var/can_leave_roid = FALSE
+	var/can_leave_roid_posessed = FALSE
 	held_items = list()
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 

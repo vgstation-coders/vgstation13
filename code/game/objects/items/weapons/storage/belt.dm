@@ -441,7 +441,7 @@
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)) // list of possible hostile mobs
 	critters = shuffle(critters)
 	while(contents.len < 6)
-		var/obj/item/device/mobcapsule/MC = new /obj/item/device/mobcapsule(src)
+		var/obj/item/device/mobcapsule/antag/MC = new /obj/item/device/mobcapsule/antag(src)
 		var/chosen = pick(critters)
 		critters -= chosen
 		var/mob/living/simple_animal/hostile/NM = new chosen(MC)
