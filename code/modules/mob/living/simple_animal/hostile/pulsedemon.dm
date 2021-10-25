@@ -42,13 +42,13 @@
             death()
         else
             current_net = current_cable.get_powernet()
-            update_cableview()
     else
         current_net = current_power.get_powernet()
         if(istype(current_power,/obj/machinery/power/apc))
             controlling_area = get_area(current_power)
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
+    update_cableview()
     
 /mob/living/simple_animal/hostile/pulse_demon/Life()
     current_power = locate(/obj/machinery/power) in loc
@@ -76,6 +76,9 @@
     if(!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc)
         return
     ..()
+    var/turf/simulated/floor/F = get_turf(src)
+    if(F && !F.floor_tile && prob(10))
+        spark(src,rand(2,4))
     var/obj/machinery/power/new_power = locate(/obj/machinery/power) in NewLoc
     if(new_power && !current_power)
         current_power = new_power
@@ -106,7 +109,8 @@
         return ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/Crossed(mob/user as mob)
-    if(user != src && isliving(user))
+    var/turf/simulated/floor/F = get_turf(src)
+    if(F && !F.floor_tile && user != src && isliving(user))
         shockMob(user)
     return ..()
 
