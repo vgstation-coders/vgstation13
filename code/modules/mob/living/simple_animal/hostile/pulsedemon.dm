@@ -53,8 +53,8 @@
     set_light(2,2,"#bbbb00")
 
 /mob/living/simple_animal/hostile/asteroid/update_perception()
-	if(client && client.darkness_planemaster)
-		client.darkness_planemaster.alpha = 100    
+    if(client && client.darkness_planemaster)
+        client.darkness_planemaster.alpha = 100    
     update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
