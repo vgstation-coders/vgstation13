@@ -91,6 +91,8 @@
     if(new_power && !current_power)
         current_power = new_power
         current_cable = null
+        forceMove(current_power)
+        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
         if(istype(current_power,/obj/machinery/power/apc))
             var/obj/machinery/power/apc/current_apc = current_power
             if(current_apc.pulsecompromised)
@@ -103,8 +105,6 @@
                     if(mind && mind.antag_roles)
                         var/datum/role/pulse_demon/PD = locate(/datum/role/pulse_demon) in mind.antag_roles
                         PD.controlled_apcs.Add(current_apc)
-        forceMove(current_power)
-        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
