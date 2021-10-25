@@ -1,24 +1,24 @@
 /mob/living/simple_animal/hostile/pulsedem
-	name = "pulse demon"
+    name = "pulse demon"
     desc = "A strange electrical apparition that lives in wires."
-	icon_state = "pulsedem"
-	icon_living = "pulsedem"
-	icon_dead = "pulsedem_dead" // Should never be seen but just in case
-	speak_chance = 20
-	emote_hear = list("vibrates", "sizzles")
-	response_help = "reaches their hand into"
-	response_disarm = "pushes their hand through"
-	response_harm = "punches their fist through"
+    icon_state = "pulsedem"
+    icon_living = "pulsedem"
+    icon_dead = "pulsedem_dead" // Should never be seen but just in case
+    speak_chance = 20
+    emote_hear = list("vibrates", "sizzles")
+    response_help = "reaches their hand into"
+    response_disarm = "pushes their hand through"
+    response_harm = "punches their fist through"
 
-	health = 50
-	maxHealth = 50
-	speed = 6
-	move_to_delay = 2
+    health = 50
+    maxHealth = 50
+    speed = 6
+    move_to_delay = 2
     density = 0
     size = SIZE_TINY
 
-	attacktext = picks("electrifies","shocks","electrocutes")
-	attack_sound = "sparks"
+    attacktext = picks("electrifies","shocks","electrocutes")
+    attack_sound = "sparks"
 
     var/charge = 1000
     var/maxcharge = 1000
@@ -81,22 +81,22 @@
 
 /mob/living/simple_animal/hostile/pulsedem/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
-	    A.attack_robot(src)
+        A.attack_robot(src)
     ..()
 
 /mob/living/simple_animal/hostile/pulsedem/ex_act(severity)
     return
 
 /mob/living/simple_animal/hostile/pulsedem/emp_act(severity)
-	visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
+    visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
     health -= rand(20,25) / severity
 
 /mob/living/simple_animal/hostile/pulsedem/attack_hand(mob/living/carbon/human/M as mob)
     switch(M.a_intent)
-		if(I_HELP)
-			visible_message("<span class ='notice'>[M] [response_help] [src].</span>")
-		if(I_GRAB||I_DISARM)
-			visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
-		if(I_HURT)
-			visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
+        if(I_HELP)
+            visible_message("<span class ='notice'>[M] [response_help] [src].</span>")
+        if(I_GRAB||I_DISARM)
+            visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
+        if(I_HURT)
+            visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
     shock(H, 100, 2.0)
