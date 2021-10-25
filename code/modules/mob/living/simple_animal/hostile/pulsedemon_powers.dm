@@ -3,18 +3,15 @@
 	user_type = USER_TYPE_PULSEDEMON
 
 /spell/pulse_demon/cable_zap
-	name = "Cable Hop"
-	abbreviation = "CH"
-	desc = "Jump to another cable in view"
+    name = "Cable Hop"
+    abbreviation = "CH"
+    desc = "Jump to another cable in view"
 
-	charge_max = 100
-	spell_flags = 0
-	range = 20
+    range = 20
+    spell_flags = WAIT_FOR_CLICK
+    duration = 20
 
-	spell_flags = WAIT_FOR_CLICK
-	duration = 20
-
-	hud_state = ""
+    hud_state = ""
 
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
@@ -25,9 +22,6 @@
     return
 
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
-    var/turf/T = get_turf(user)
-    var/atom/target = targets[1]
-    user.forceMove(target)
     var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
     L.damage = 15
     L.tang = adjustAngle(get_angle(target,T))
@@ -40,3 +34,34 @@
     L.starting = target
     L.yo = target.y - T.y
     L.xo = target.x - T.x
+	spawn L.process()
+    var/turf/T = get_turf(user)
+    var/atom/target = targets[1]
+    user.forceMove(target)
+
+/spell/pulse_demon/overload_machine
+	name = "Overload Machine"
+    abbreviation = "OM"
+    desc = "Blow up a machine to ruin someone's day and knock them down"
+
+    range = 20
+    spell_flags = WAIT_FOR_CLICK
+    duration = 20
+
+    hud_state = ""
+
+/spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
+	if(istype(target, /obj/item/device/radio/intercom))
+		return 1
+	if (istype(target, /obj/machinery))
+		var/obj/machinery/M = target
+		return M.can_overload()
+	else
+		to_chat(holder, "That is not a machine.")
+
+/spell/pulse_demon/overload_machine/cast(var/list/targets, mob/user)
+	var/obj/machinery/M = targets[1]
+	M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
+	spawn(50)
+		explosion(get_turf(M), -1, 0, 1, 2, whodunnit = user)
+		qdel(M)
