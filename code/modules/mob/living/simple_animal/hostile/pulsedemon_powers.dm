@@ -18,7 +18,7 @@
         return (target in options)
     if(isturf(target))
         var/turf/T = target
-        return ((target in view_or_range(range, user, selection_type)) && (locate(/obj/structure/cable) in T.contents || locate(/obj/machinery/power) in T.contents))
+        return ((target in view_or_range(range, user, selection_type)) && (locate(/obj/structure/cable) in T.contents))
     return
 
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
