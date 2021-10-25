@@ -1240,7 +1240,7 @@
 			bound_y = -WORLD_ICON_SIZE
 			bound_height = 3 * WORLD_ICON_SIZE
 		else //Shouldn't happen
-			stack_trace("border_dummy has invalid dir [dir]")
+			CRASH("border_dummy has invalid dir [dir]")
 
 
 /atom/movable/border_dummy/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
