@@ -34,6 +34,7 @@
     var/list/image/cables_shown = list()
 
 /mob/living/simple_animal/hostile/pulse_demon/New()
+    ..()
     current_power = locate(/obj/machinery/power) in loc
     if(!current_power)
         current_cable = locate(/obj/structure/cable) in loc
@@ -66,8 +67,6 @@
         else
             death()
     ..()
-    if(current_net != previous_net)
-        update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
     ..()
@@ -94,6 +93,8 @@
             if(!isturf(loc))
                 forceMove(get_turf(NewLoc))
             controlling_area = null
+            if(current_net != previous_net)
+                update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
     if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
