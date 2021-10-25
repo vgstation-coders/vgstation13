@@ -3,10 +3,7 @@
 
 /turf/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 
-	if(!target)
-		return ..()
-
-	if(istype(mover))
+	if(!target || istype(mover))
 		return !density
 
 	else // Now, doing more detailed checks for air movement and air group formation
