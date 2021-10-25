@@ -57,9 +57,6 @@
 		return !density
 	return TRUE
 
-/obj/structure/windoor_assembly/can_pass(atom/movable/mover)
-	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
-
 /obj/structure/windoor_assembly/proc/make_windoor(var/mob/user)
 	var/spawn_type = secure ? secure_type : windoor_type
 	var/obj/machinery/door/window/windoor = new spawn_type(loc)

@@ -84,11 +84,8 @@
 	else
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
 
-/obj/machinery/power/treadmill/can_pass(var/atom/movable/mover)
-	return ..() && mover.checkpass(PASSGLASS)
-
 /obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(can_pass(mover))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	if(!density)
 		return TRUE

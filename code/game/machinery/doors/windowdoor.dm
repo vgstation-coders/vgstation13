@@ -10,6 +10,7 @@
 	flow_flags = ON_BORDER
 	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
 	layer = WINDOOR_LAYER //Below curtains
+	pass_flags_self = PASSDOOR|PASSGLASS
 	opacity = 0
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/secure = FALSE
@@ -106,7 +107,7 @@
 		close()
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(can_pass(mover))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
 		return TRUE
@@ -117,9 +118,6 @@
 			return FALSE
 		return !density
 	return TRUE
-
-/obj/machinery/door/window/can_pass(atom/movable/mover)
-	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)

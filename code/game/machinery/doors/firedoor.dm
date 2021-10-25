@@ -601,16 +601,14 @@ var/global/list/alert_overlays_global = list()
 	heat_proof = 1
 	air_properties_vary_with_direction = 1
 	flow_flags = ON_BORDER
+	pass_flags_self = PASSDOOR|PASSGLASS
 
 /obj/machinery/door/firedoor/border_only/New()
 	..()
 	setup_border_dummy()
 
-/obj/machinery/door/firedoor/border_only/can_pass(atom/movable/mover)
-	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
-
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(can_pass(mover))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	if(!density)
 		return TRUE

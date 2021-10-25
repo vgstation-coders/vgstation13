@@ -184,13 +184,10 @@ var/list/one_way_windows
 			"<span class='danger'>Your kick [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		healthcheck()
 
-/obj/structure/window/can_pass(atom/movable/mover)
-	return ..() && mover.checkpass(PASSGLASS)
-
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
 		return TRUE
-	if(can_pass(mover))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
+	if(istype(mover) && mover.checkpass(pass_flags_self))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
 		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | reverse_direction(dir)))
 			dim_beam(mover)
 		return TRUE

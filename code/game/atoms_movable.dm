@@ -446,7 +446,7 @@
 		border_dummy = null
 
 /atom/movable/proc/border_dummy_Cross(atom/movable/mover) //border_dummy calls this in its own Cross() to detect collision
-	if(can_pass(mover))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	if(!density)
 		return TRUE
