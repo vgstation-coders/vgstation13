@@ -12,6 +12,11 @@
     plane = ABOVE_PLATING_PLANE
     layer = PULSEDEMON_LAYER
 
+	minbodytemp = 0
+	maxbodytemp = 4000
+	min_oxy = 0
+	max_co2 = 0
+	max_tox = 0
     health = 50
     maxHealth = 50
     speed = 0.75
