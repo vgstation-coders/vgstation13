@@ -60,7 +60,6 @@
 
 /mob/living/simple_animal/hostile/asteroid/update_perception()
 	if(client && client.darkness_planemaster)
-		client.darkness_planemaster.blend_mode = BLEND_ADD
 		client.darkness_planemaster.alpha = 100
 
 /mob/living/simple_animal/hostile/asteroid/death(var/gibbed = FALSE)

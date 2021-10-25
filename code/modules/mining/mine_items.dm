@@ -979,6 +979,7 @@ proc/move_mining_shuttle()
 			HM.can_leave_roid_posessed = TRUE
 			return 1
 	return 0
+
 /**********************Mining Scanner**********************/
 
 /obj/item/device/mining_scanner
