@@ -1,0 +1,42 @@
+
+/spell/pulse_demon
+	user_type = USER_TYPE_PULSEDEMON
+
+/spell/pulse_demon/cable_zap
+	name = "Cable Hop"
+	abbreviation = "CH"
+	desc = "Jump to another cable in view"
+
+	charge_max = 100
+	spell_flags = 0
+	range = 20
+
+	spell_flags = WAIT_FOR_CLICK
+	duration = 20
+
+	hud_state = ""
+
+/spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
+    if(options)
+        return (target in options)
+    if(isturf(target))
+        var/turf/T = target
+        return ((target in view_or_range(range, user, selection_type)) && (locate(/obj/structure/cable) in T.contents || locate(/obj/machinery/power) in T.contents))
+    return
+
+/spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
+    var/turf/T = get_turf(user)
+    var/atom/target = targets[1]
+    user.forceMove(target)
+    var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
+    L.damage = 15
+    L.tang = adjustAngle(get_angle(target,T))
+    L.icon = midicon
+    L.icon_state = "[L.tang]"
+    L.firer = user
+    L.def_zone = LIMB_CHEST
+    L.original = target
+    L.current = target
+    L.starting = target
+    L.yo = target.y - T.y
+    L.xo = target.x - T.x
