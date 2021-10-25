@@ -3,7 +3,7 @@
     desc = "A strange electrical apparition that lives in wires."
     icon_state = "pulsedem"
     icon_living = "pulsedem"
-    icon_dead = "pulsedem_dead" // Should never be seen but just in case
+    icon_dead = "pulsedem" // Should never be seen but just in case
     speak_chance = 20
     emote_hear = list("vibrates", "sizzles")
     response_help = "reaches their hand into"
@@ -20,6 +20,9 @@
 
     attacktext = "electrocutes"
     attack_sound = "sparks"
+	harm_intent_damage = 0
+	melee_damage_lower = 0
+	melee_damage_upper = 0 //Handled in unarmed_attack_mob() anyways
 
     var/charge = 1000
     var/maxcharge = 1000
@@ -30,6 +33,7 @@
     var/datum/powernet/current_net
     var/datum/powernet/previous_net
     var/obj/machinery/power/current_power
+    var/list/obj/machinery/power/apc/controlled_apcs = list()
     var/can_move=1
     var/list/image/cables_shown = list()
 
@@ -86,6 +90,7 @@
         if(istype(current_power,/obj/machinery/power/apc))
             controlling_area = get_area(current_power)
         forceMove(current_power)
+	    playsound(src,'sound/weapons/electriczap.ogg',50, 1)
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -116,11 +121,12 @@
 
 /obj/machinery/power/relaymove(mob/user as mob)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+	    playsound(src,'sound/weapons/electriczap.ogg',50, 1)
         user.forceMove(get_turf(src))
     
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
-    if(get_area(A) == controlling_area)
-        A.attack_ai(src)
+    if(get_area(A) == controlling_area && istype(A,/obj/machinery))
+        A.attack_hand(src)
     ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/ex_act(severity)
@@ -139,6 +145,10 @@
         if(I_HURT)
             visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
     shockMob(M)
+
+/mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
+    shockMob(M)
+    ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     if(current_net && current_net.avail)
