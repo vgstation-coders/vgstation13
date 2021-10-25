@@ -284,3 +284,15 @@
 		spiderling_growth_display.screen_loc = ui_under_health
 
 		mymob.client.screen += list(spiderling_growth_display)
+
+/datum/hud/proc/pulsedemon_hud()
+
+	mymob.healths = new /obj/abstract/screen
+	mymob.healths.icon = 'icons/mob/screen1_pulsedemon.dmi'
+	mymob.healths.icon_state = "health0"
+	mymob.healths.name = "health"
+	mymob.healths.screen_loc = ui_health
+
+	mymob.client.reset_screen()
+
+	mymob.client.screen += list(mymob.healths)
