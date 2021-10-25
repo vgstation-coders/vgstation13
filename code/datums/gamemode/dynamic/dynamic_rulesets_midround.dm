@@ -790,7 +790,7 @@
 	requirements = list(5,5,15,15,20,20,20,20,40,70)
 	high_population_requirement = 10
 
-/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/finish_setup(mob/new_character, index)
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/generate_ruleset_body(var/mob/applicant)
 	var/list/cables_to_spawn_at = list()
 	for(var/datum/powernet/PN in powernets)
 		for(var/obj/structure/cable/C in PN.cables)
@@ -798,10 +798,10 @@
 			if(istype(F,/turf/simulated/floor) && !F.floor_tile)
 				cables_to_spawn_at.Add(C)
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
+	applicant.forceMove(get_turf(our_cable))
 	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
-	new_character.forceMove(get_turf(our_cable))
-	PD.key = new_character.key
-	return ..()
+	PD.key = applicant.key
+	return PD
 
 //////////////////////////////////////////////
 //                                          //
