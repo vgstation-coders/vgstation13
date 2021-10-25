@@ -575,7 +575,11 @@
 	//find a viable mouse candidate
 	var/list/roidmobs = list()
 	for(var/mob/living/simple_animal/hostile/asteroid/AM in mob_list)
-		roidmobs += AM
+		if(istype(get_area(AM), /area/mine/unexplored))
+			roidmobs += AM
+	if(!roidmobs.len)
+		to_chat(src, "<span class='warning'>No asteroid mobs have been found to possess.</span>")
+		return
 	var/mob/living/simple_animal/hostile/asteroid/roidmob = pick(roidmobs)
 	
 	roidmob.ghostize(0) //boot the old mob out
