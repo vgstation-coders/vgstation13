@@ -107,25 +107,20 @@
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
-"aD" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 1
-	},
-/area/crew_quarters/bar)
 "aE" = (
-/turf/simulated/floor{
-	icon_state = "cult"
-	},
-/area/crew_quarters/bar)
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
 "aF" = (
 /obj/machinery/floodlight/on/infinite,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aG" = (
-/turf/unsimulated/wall/fakeglass{
-	dir = 1;
-	icon_state = "fakewindows2"
+/obj/machinery/door/airlock/external,
+/obj/docking_port/destination/supply/station{
+	dir = 4
 	},
+/turf/simulated/floor,
 /area/crew_quarters/bar)
 "aH" = (
 /obj/machinery/light/he{
@@ -144,7 +139,8 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aK" = (
-/turf/unsimulated/wall/fakeglass,
+/obj/window_grille_spawner/reinforced,
+/turf/simulated/floor,
 /area/crew_quarters/bar)
 "aL" = (
 /obj/machinery/suit_storage_unit/atmos,
@@ -1540,6 +1536,66 @@
 /obj/effect/landmark{
 	name = "wizard"
 	},
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"fP" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
+/turf/space,
+/area/shuttle/supply)
+"kn" = (
+/turf/simulated/wall/shuttle,
+/area/shuttle/supply)
+"mN" = (
+/obj/structure/shuttle/diag_wall/smooth,
+/turf/space,
+/area/shuttle/supply)
+"mQ" = (
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"ud" = (
+/obj/docking_port/shuttle{
+	dir = 8
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"ws" = (
+/obj/machinery/computer/supplycomp,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"AX" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 1
+	},
+/turf/space,
+/area/shuttle/supply)
+"Fg" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/shuttle,
+/area/shuttle/supply)
+"IA" = (
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
+/turf/space,
+/area/shuttle/supply)
+"Kz" = (
+/obj/structure/table/reinforced,
+/obj/item/weapon/card/debit/trader,
+/turf/simulated/floor,
+/area/crew_quarters/bar)
+"KT" = (
+/obj/docking_port/destination/supply/centcom{
+	dir = 4
+	},
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor,
+/area/centcom/suppy)
+"Md" = (
+/obj/structure/trade_window,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 
@@ -24862,11 +24918,11 @@ ar
 ar
 av
 aa
-aa
 aw
+Md
 aM
+Kz
 aw
-aa
 aa
 aa
 aa
@@ -25267,14 +25323,14 @@ ar
 av
 aa
 aw
+ws
 aM
 aM
 aM
 aM
 aM
 aM
-aM
-aM
+aF
 aM
 aM
 aM
@@ -25469,14 +25525,14 @@ ar
 av
 aa
 aw
-aM
 aF
 aM
 aM
 aM
 aM
 aM
-aF
+aM
+aM
 aM
 aM
 aM
@@ -25670,17 +25726,17 @@ ar
 ar
 av
 aa
-az
-aD
-aG
-aK
-az
 aw
-az
-aD
+aK
 aG
 aK
-az
+aw
+aw
+aw
+aK
+KT
+aK
+aw
 aw
 aw
 aw
@@ -25872,17 +25928,17 @@ ar
 ar
 av
 aa
-az
-aE
-aE
-aE
-az
 aa
-az
+aa
+aa
+aa
+aa
+aa
+IA
 aE
+ud
 aE
-aE
-az
+mN
 aa
 aw
 aM
@@ -26074,17 +26130,17 @@ ar
 ar
 av
 aa
-az
-aE
-aE
-aE
-az
 aa
-az
-aE
-aE
-aE
-az
+aa
+aa
+aa
+aa
+aa
+kn
+mQ
+mQ
+mQ
+kn
 aa
 aw
 aF
@@ -26276,17 +26332,17 @@ ao
 ao
 ao
 aa
-az
-aE
-aE
-aE
-az
 aa
-az
-aE
-aE
-aE
-az
+aa
+aa
+aa
+aa
+aa
+kn
+Fg
+mQ
+mQ
+kn
 aa
 aw
 aM
@@ -26478,17 +26534,17 @@ aa
 aa
 aa
 aa
-az
-aE
-aE
-aE
-az
 aa
-az
-aE
-aE
-aE
-az
+aa
+aa
+aa
+aa
+aa
+kn
+mQ
+mQ
+mQ
+kn
 aa
 aw
 aM
@@ -26680,17 +26736,17 @@ aa
 aa
 aa
 aa
-az
-az
-az
-az
-az
 aa
-az
-az
-az
-az
-az
+aa
+aa
+aa
+aa
+aa
+kn
+mQ
+mQ
+mQ
+kn
 aa
 aw
 aw
@@ -26888,11 +26944,11 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
+AX
+kn
+kn
+kn
+fP
 aa
 aa
 aw
