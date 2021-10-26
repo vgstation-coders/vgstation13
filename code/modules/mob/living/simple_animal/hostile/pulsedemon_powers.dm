@@ -19,7 +19,10 @@
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
         return (target in options)
-    return ((target in view_or_range(range, user, selection_type)) && ((locate(/obj/structure/cable) in target.contents) || istype(target,/obj/structure/cable)))
+    var/turf/T = get_turf(target)
+    if(T)
+        return ((target in view_or_range(range, user, selection_type)) && (locate(/obj/structure/cable) in T.contents))
+    return ((target in view_or_range(range, user, selection_type)) && istype(target,/obj/structure/cable))
 
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
     var/turf/T = get_turf(user)

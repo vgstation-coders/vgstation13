@@ -178,7 +178,7 @@
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
         A.attack_pulsedemon(src)
-    else if(ismob(A) || ismecha(A) || isvehicle(A))
+    else if(!istype(A,/obj/machinery))
         ..()
 
 /mob/living/silicon/hasFullAccess()
