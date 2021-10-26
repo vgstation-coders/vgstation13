@@ -47,7 +47,9 @@ var/timer_id = 1
 
 	return id_str
 
-#define del_timer(id) qdel(timers_by_id[id])
+/proc/del_timer(id)
+	qdel(timers_by_id[id])
+
 /datum/timer
 	var/callback/callback
 	var/when

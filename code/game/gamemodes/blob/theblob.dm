@@ -19,6 +19,7 @@ var/list/blob_overminds = list()
 	anchored = 1
 	penetration_dampening = 17
 	mouse_opacity = 1
+	pass_flags_self = PASSBLOB
 	var/health = 20
 	var/maxhealth = 20
 	var/health_timestamp = 0
@@ -108,7 +109,7 @@ var/list/blob_overminds = list()
 /obj/effect/blob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSBLOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return 0
 

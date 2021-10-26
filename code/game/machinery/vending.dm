@@ -20,6 +20,7 @@ var/global/num_vending_terminals = 1
 	anchored = 1
 	density = 1
 	layer = OPEN_DOOR_LAYER //This is below BELOW_OBJ_LAYER because vendors can contain crates/closets
+	pass_flags_self = PASSMACHINE
 	var/health = 100
 	var/maxhealth = 100 //Kicking feature
 	var/active = 1		//No sales pitches if off!
@@ -207,7 +208,7 @@ var/global/num_vending_terminals = 1
 		to_chat(user, "<span class='notice'>Its small, red segmented display reads $[num2septext(currently_vending.price - credits_held)]</span>")
 
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(seconds_electrified > 0)
 		if(istype(mover, /obj/item))

@@ -23,7 +23,7 @@ var/list/all_doors = list()
 	var/autoclose = 0
 	var/glass = 0
 	var/normalspeed = 1
-
+	pass_flags_self = PASSDOOR
 	machine_flags = SCREWTOGGLE
 
 	// for glass airlocks/opacity firedoors
@@ -328,6 +328,8 @@ var/list/all_doors = list()
 
 /obj/machinery/door/New()
 	. = ..()
+	if(!opacity)
+		pass_flags_self |= PASSGLASS
 	all_doors += src
 
 	if(density)
@@ -377,7 +379,7 @@ var/list/all_doors = list()
 		open()
 	return ..()
 
-/obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
+/obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
 
 
