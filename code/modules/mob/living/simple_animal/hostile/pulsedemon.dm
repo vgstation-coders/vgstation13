@@ -12,11 +12,11 @@
     plane = ABOVE_PLATING_PLANE
     layer = PULSEDEMON_LAYER
 
-	minbodytemp = 0
-	maxbodytemp = 4000
-	min_oxy = 0
-	max_co2 = 0
-	max_tox = 0
+    minbodytemp = 0
+    maxbodytemp = 4000
+    min_oxy = 0
+    max_co2 = 0
+    max_tox = 0
     health = 50
     maxHealth = 50
     speed = 0.75
@@ -64,14 +64,12 @@
     update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
-    current_power = locate(/obj/machinery/power) in loc
     if(current_power)
         if(current_power.avail() > amount_per_regen)
             current_power.add_load(amount_per_regen)
         else
             health -= health_drain_rate
     else
-        current_cable = locate(/obj/structure/cable) in loc
         if(current_cable)
             if(current_cable.avail() > amount_per_regen)
                 current_cable.add_load(amount_per_regen)
@@ -90,26 +88,30 @@
         return
     ..()
     var/turf/simulated/floor/F = get_turf(src)
-    if(F && !F.floor_tile && prob(10))
+    if(istype(F,/turf/simulated/floor) && !F.floor_tile && prob(25))
         spark(src,rand(2,4))
     var/obj/machinery/power/new_power = locate(/obj/machinery/power) in NewLoc
     if(new_power && !current_power)
+        loc = new_power
         current_power = new_power
         current_cable = null
-        forceMove(current_power)
         playsound(src,'sound/weapons/electriczap.ogg',50, 1)
+        spark(src,rand(2,4))
         if(istype(current_power,/obj/machinery/power/apc))
             var/obj/machinery/power/apc/current_apc = current_power
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
             else
-                to_chat(src,"<span class='notice'>You are now attempting to hack \the [src], this will take approximately [takeover_time] seconds.</span>")
+                to_chat(src,"<span class='notice'>You are now attempting to hack \the [current_apc], this will take approximately [takeover_time] seconds.</span>")
                 if(do_after(src,current_apc,takeover_time*10))
                     current_apc.pulsecompromised = 1
                     controlling_area = get_area(current_power)
-                    if(mind && mind.antag_roles)
+                    to_chat(src,"<span class='notice'>Takeover complete.</span>")
+                    if(mind && mind.antag_roles.len)
                         var/datum/role/pulse_demon/PD = locate(/datum/role/pulse_demon) in mind.antag_roles
-                        PD.controlled_apcs.Add(current_apc)
+                        if(PD)
+                            PD.controlled_apcs.Add(current_apc)
+                            to_chat(src,"<span class='notice'>You are now controlling [PD.controlled_apcs.len] APCs.</span>")
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -118,7 +120,7 @@
             current_net = current_cable.get_powernet()
             current_power = null
             if(!isturf(loc))
-                forceMove(get_turf(NewLoc))
+                loc = get_turf(NewLoc)
             controlling_area = null
             update_cableview()
 
@@ -131,16 +133,20 @@
     else
         return ..()
 
-/mob/living/simple_animal/hostile/pulse_demon/Crossed(mob/user as mob)
+/mob/living/simple_animal/hostile/pulse_demon/Crossed(mob/user)
     var/turf/simulated/floor/F = get_turf(src)
     if(istype(F,/turf/simulated/floor) && !F.floor_tile && user != src && isliving(user))
         shockMob(user)
     return ..()
 
-/obj/machinery/power/relaymove(mob/user as mob)
-    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon) && dir == opposite_dirs[user.dir])
-        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
-        user.forceMove(get_turf(src))
+/obj/machinery/power/relaymove(mob/user, direction)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/turf/T = get_turf(src)
+        var/turf/T2 = get_step(T,direction)
+        if(locate(/obj/structure/cable) in T2)
+            playsound(src,'sound/weapons/electriczap.ogg',50, 1)
+            spark(src,rand(2,4))
+            user.forceMove(get_turf(src))
 
 /atom/proc/attack_pulsedemon(mob/user)
     return

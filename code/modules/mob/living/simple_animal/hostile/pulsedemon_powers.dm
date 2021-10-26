@@ -22,6 +22,8 @@
     return
 
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
+    var/turf/T = get_turf(user)
+    var/atom/target = targets[1]
     var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
     L.damage = 15
     L.tang = adjustAngle(get_angle(target,T))
@@ -34,7 +36,5 @@
     L.starting = target
     L.yo = target.y - T.y
     L.xo = target.x - T.x
-	spawn L.process()
-    var/turf/T = get_turf(user)
-    var/atom/target = targets[1]
+    spawn L.process()
     user.forceMove(target)
