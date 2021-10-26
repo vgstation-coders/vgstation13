@@ -40,6 +40,13 @@
 	hud.name = "reinforce grab"
 	hud.master = src
 
+/obj/item/weapon/grab/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	if(!(giver == assailant) || !giver.Adjacent(affecting) || !receiver.Adjacent(affecting))
+		return FALSE
+	assailant = receiver
+	state = GRAB_PASSIVE //downgrade grabs to weakest level when passing
+	return TRUE
+
 /obj/item/weapon/grab/preattack()
 	if(!assailant || !affecting)
 		return 1 //Cancel attack

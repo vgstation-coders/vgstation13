@@ -45,6 +45,9 @@
 					src << "<span class='warning'>[user] can't let go of \the [I]!</span>"
 					user << "<span class='warning'>You can't seem to let go of \the [I].</span>"
 					return
+				if(!I.on_give(user,src))
+					visible_message("<span class='warning'>[user] tried to hand \the [I] to [src], but couldn't!</span>")
+					return
 
 				src.put_in_hands(I)
 				src.visible_message("<span class='notice'>[user] handed \the [I] to [src].</span>")
