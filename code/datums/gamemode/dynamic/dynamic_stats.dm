@@ -195,3 +195,8 @@
 	threat_generated = C.threat_generated
 	threat_level_inflated = C.threat_level_inflated
 	areas_defiled = C.areas_defiled
+
+/datum/stat/faction/wilkerson
+	var/malcolmPoints = 0
+	var/halPoints	= 0
+	var/loisPoints	= 0
