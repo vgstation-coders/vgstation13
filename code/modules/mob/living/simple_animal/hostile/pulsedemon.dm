@@ -161,6 +161,10 @@
 /obj/machinery/computer/arcade/attack_pulsedemon(mob/user)
     user.loc = src
     playertwo = user
+	var/dat = game.get_p2_dat()
+
+	user << browse(dat, "window=arcade")
+	onclose(user, "arcade")
 
 /obj/machinery/camera/attack_pulsedemon(mob/user)
     user.loc = src
