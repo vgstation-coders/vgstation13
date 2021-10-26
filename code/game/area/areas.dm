@@ -542,7 +542,6 @@ var/area/space_area
 
 var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
-var/list/transparent_icons = list("diagonalWall3") //icon_states for which to prepare an underlay
 
 /area/proc/move_contents_to(var/area/A, var/turftoleave=null, var/direction = null)
 	//Takes: Area. Optional: turf type to leave behind.
@@ -641,17 +640,19 @@ var/list/transparent_icons = list("diagonalWall3") //icon_states for which to pr
 
 						SX.air.copy_from(ST.zone.air)
 						ST.zone.remove(ST)
+					
+					/* Quick visual fix for transit space tiles */
+					if(direction && (locate(/obj/structure/shuttle/diag_wall) in X))
+						// Find a new turf to take on the property of
+						var/turf/nextturf = get_step(X, direction)
+						if(!nextturf || !istype(nextturf, /turf/space))
+							nextturf = get_step(X, turn(direction, 180))
+
+						// Take on the icon of a neighboring scrolling space icon
+						X.icon = nextturf.icon
+						X.icon_state = nextturf.icon_state
 
 					for(var/obj/O in T)
-
-						// Reset the shuttle corners
-						if(O.tag == "delete me")
-							X.icon = 'icons/turf/shuttle.dmi'
-							X.icon_state = replacetext(O.icon_state, "_f", "_s") // revert the turf to the old icon_state
-							X.name = "wall"
-							qdel(O) // prevents multiple shuttle corners from stacking
-							O = null
-							continue
 						if(!istype(O,/obj))
 							continue
 						O.forceMove(X)
