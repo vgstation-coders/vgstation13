@@ -145,6 +145,7 @@ Class Procs:
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
+	var/pulsecompromised = 0 //Used for pulsedemons
 
 	/**
 	 * Machine construction/destruction/emag flags.
