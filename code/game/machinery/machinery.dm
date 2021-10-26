@@ -660,7 +660,7 @@ Class Procs:
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
 	return 1
 
-/obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
+/obj/machinery/proc/shock(mob/living/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
 	if(!istype(user) || !user.Adjacent(src))
