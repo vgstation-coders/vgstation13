@@ -786,7 +786,7 @@
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
-	cost = 0
+	cost = 20
 	requirements = list(5,5,15,15,20,20,20,20,40,70)
 	high_population_requirement = 10
 	logo = "pulsedemon-logo"
