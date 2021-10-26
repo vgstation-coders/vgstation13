@@ -84,12 +84,15 @@
     ..()
     qdel(src)
 
+/mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
+    var/turf/simulated/floor/F = get_turf(src)
+    return istype(F,/turf/simulated/floor) && F.floor_tile
+
 /mob/living/simple_animal/hostile/pulse_demon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
     if(!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc)
         return
     ..()
-    var/turf/simulated/floor/F = get_turf(src)
-    if(istype(F,/turf/simulated/floor) && !F.floor_tile && prob(25))
+    if(!is_under_tile() && prob(25))
         spark(src,rand(2,4))
     var/obj/machinery/power/new_power = locate(/obj/machinery/power) in NewLoc
     if(new_power && !current_power)
@@ -103,16 +106,10 @@
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
             else
-                to_chat(src,"<span class='notice'>You are now attempting to hack \the [current_apc], this will take approximately [takeover_time] seconds.</span>")
-                if(do_after(src,current_apc,takeover_time*10))
-                    current_apc.pulsecompromised = 1
-                    controlling_area = get_area(current_power)
-                    to_chat(src,"<span class='notice'>Takeover complete.</span>")
-                    if(mind && mind.antag_roles.len)
-                        var/datum/role/pulse_demon/PD = locate(/datum/role/pulse_demon) in mind.antag_roles
-                        if(PD)
-                            PD.controlled_apcs.Add(current_apc)
-                            to_chat(src,"<span class='notice'>You are now controlling [PD.controlled_apcs.len] APCs.</span>")
+                hijackAPC(current_apc)
+        else if(istype(current_power,/obj/machinery/power/battery))
+            var/obj/machinery/power/battery/current_battery = current_power
+            suckBattery(current_battery)
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -134,11 +131,10 @@
     else
         return ..()
 
-/mob/living/simple_animal/hostile/pulse_demon/Crossed(mob/user)
-    var/turf/simulated/floor/F = get_turf(src)
-    if(istype(F,/turf/simulated/floor) && !F.floor_tile && user != src && isliving(user))
-        shockMob(user)
-    return ..()
+/mob/living/simple_animal/hostile/pulse_demon/Bumped(atom/movable/AM)
+    if(!is_under_tile() && isliving(AM))
+        var/mob/living/L = AM
+        shockMob(L)
 
 /obj/machinery/power/relaymove(mob/user, direction)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -181,10 +177,10 @@
     else if(!istype(A,/obj/machinery))
         ..()
 
-/mob/living/silicon/hasFullAccess()
+/mob/living/simple_animal/hostile/pulse_demon/hasFullAccess()
 	return 1
 
-/mob/living/silicon/GetAccess()
+/mob/living/simple_animal/hostile/pulse_demon/GetAccess()
 	return get_all_accesses()
 
 /mob/living/simple_animal/hostile/pulse_demon/dexterity_check()
@@ -231,6 +227,22 @@
         electrocute_mob(M, current_net, src, 2)
     else
         M.electrocute_act(30, src, 2)
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/hijackAPC(var/obj/machinery/power/apc/current_apc)
+    to_chat(src,"<span class='notice'>You are now attempting to hack \the [current_apc], this will take approximately [takeover_time] seconds.</span>")
+    if(do_after(src,current_apc,takeover_time*10))
+        current_apc.pulsecompromised = 1
+        controlling_area = get_area(current_power)
+        to_chat(src,"<span class='notice'>Takeover complete.</span>")
+        if(mind && mind.antag_roles.len)
+            var/datum/role/pulse_demon/PD = locate(/datum/role/pulse_demon) in mind.antag_roles
+            if(PD)
+                PD.controlled_apcs.Add(current_apc)
+                to_chat(src,"<span class='notice'>You are now controlling [PD.controlled_apcs.len] APCs.</span>")
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
+    to_chat(src,"<span class='notice'>You are now draining power from \the [current_battery] and refilling charge.</span>")
+    return
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
     if(client && (current_net != previous_net))

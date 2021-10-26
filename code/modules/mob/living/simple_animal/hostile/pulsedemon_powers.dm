@@ -27,17 +27,28 @@
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
     var/turf/T = get_turf(user)
     var/turf/target = get_turf(targets[1])
+    var/obj/structure/cable/cable = locate() in target
+    if(!cable || !istype(cable))
+        to_chat(user,"<span class='warning'>...Where's the cable?</span>")
+        return
     var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
-    L.damage = 15
-    L.tang = adjustAngle(get_angle(target,T))
-    L.icon = midicon
-    L.icon_state = "[L.tang]"
-    L.firer = user
-    L.def_zone = LIMB_CHEST
-    L.original = target
-    L.current = target
-    L.starting = target
-    L.yo = target.y - T.y
-    L.xo = target.x - T.x
-    spawn L.process()
-    user.forceMove(target)
+    var/datum/powernet/PN = cable.get_powernet()
+    if(PN)
+        L.damage = PN.get_electrocute_damage()
+    if(L.damage <= 0)
+        qdel(L)
+        to_chat(user,"<span class='warning'>There is no power to jolt you across!</span>")
+    else
+        playsound(target, 'sound/effects/eleczap.ogg', 75, 1)
+        L.tang = adjustAngle(get_angle(target,T))
+        L.icon = midicon
+        L.icon_state = "[L.tang]"
+        L.firer = user
+        L.def_zone = LIMB_CHEST
+        L.original = target
+        L.current = target
+        L.starting = target
+        L.yo = target.y - T.y
+        L.xo = target.x - T.x
+        spawn L.process()
+        user.forceMove(target)
