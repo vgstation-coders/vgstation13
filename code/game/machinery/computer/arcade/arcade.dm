@@ -9,6 +9,7 @@
 	emag_cost = 0 // because fun
 	light_color = LIGHT_COLOR_GREEN
 	var/haunted = 0
+	var/mob/playertwo
 
 /obj/machinery/computer/arcade/haunted
 	desc = "Still doesn't support pinball, but does support spookiness."

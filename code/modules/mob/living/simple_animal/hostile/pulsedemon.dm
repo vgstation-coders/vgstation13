@@ -155,6 +155,13 @@
 /obj/machinery/attack_pulsedemon(mob/user)
     return attack_ai(user)
 
+/obj/machinery/computer/security/attack_pulsedemon(mob/user)
+    return attack_hand(user)
+
+/obj/machinery/computer/arcade/attack_pulsedemon(mob/user)
+    user.loc = src
+    playertwo = user
+
 /obj/machinery/camera/attack_pulsedemon(mob/user)
     user.loc = src
     user.change_sight(adding = vision_flags)
@@ -227,7 +234,9 @@
             client.images -= current_image
         if(current_cable)
             for(var/obj/structure/cable/C in current_net.cables)
-                var/image/CI = image(C, C.loc, layer = ABOVE_LIGHTING_LAYER, dir = C.dir)
-                CI.plane = ABOVE_LIGHTING_PLANE
-                cables_shown += CI
-                client.images += CI
+                var/turf/simulated/floor/F = get_turf(C)
+                if(istype(F,/turf/simulated/floor) && F.floor_tile)
+                    var/image/CI = image(C, C.loc, layer = ABOVE_LIGHTING_LAYER, dir = C.dir)
+                    CI.plane = ABOVE_LIGHTING_PLANE
+                    cables_shown += CI
+                    client.images += CI
