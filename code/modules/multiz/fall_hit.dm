@@ -100,7 +100,7 @@
 
 /obj/machinery/power/supermatter/fall_impact(var/atom/hit_atom)
 	..()
-	Consume(hit_atom)
+	Bumped(hit_atom)
 
 var/global/list/non_items = list(/obj/machinery,/obj/structure)
 
