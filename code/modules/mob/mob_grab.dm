@@ -42,7 +42,7 @@
 
 /obj/item/weapon/grab/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
 	if(!(giver == assailant) || !giver.Adjacent(affecting) || !receiver.Adjacent(affecting))
-		visible_message("<span class='warning'>[user] tried to pass [affecting] to [src] but couldn't.</span>")
+		visible_message("<span class='warning'>[giver] tried to pass [affecting] to [receiver] but couldn't.</span>")
 		return FALSE
 	receiver.grab_mob(affecting)
 	return FALSE
