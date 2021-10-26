@@ -1,9 +1,9 @@
 
 /spell/pulse_demon
-	user_type = USER_TYPE_PULSEDEMON
+    user_type = USER_TYPE_PULSEDEMON
     school = "pulse demon"
-	override_base = "pulsedemon"
-	hud_state = "pd_icon_base"
+    override_base = "pulsedemon"
+    hud_state = "pd_icon_base"
 
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
