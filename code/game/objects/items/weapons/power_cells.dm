@@ -224,8 +224,6 @@
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
 	var/charge_rate = 100
 	var/damaged = FALSE
-	var/empable = TRUE
-	var/explodium = FALSE
 	
 /obj/item/weapon/cell/rad/empty/New()
 	..()
@@ -250,23 +248,22 @@
 	if(prob(5))
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
-	if(charge_rate < (initial(charge_rate)/10)) //if charge rate goes under 10% of the original value it transforms into broken cell which has no charge rate, 0 max charge and has a 5% chance to "explode".
-		empable = FALSE
-		explodium = TRUE
+	if(charge_rate < (initial(charge_rate)/10)) //if charge rate goes under 10% of the original value it transforms into broken cell that has no charge rate, 0 max charge and a 5% chance to explode.
 		name = "broken cell"
 		icon_state = "cell"
 		starting_materials = list(MAT_IRON = 200, MAT_GLASS = 30)
 		charge = 0
 		maxcharge = 0
 		charge_rate = 0
+		damaged = FALSE //so you don't get the damaged examine if the cell is broken
 		desc = "The inner circuitry melted and the paint flaked off. It bulges slightly at the sides. <span class='warning'>It's going to explode any moment now.</span>"
-	if(explodium == TRUE)
 		if(prob(5))
 			explosion(loc, 0, 1, 2, 2)//smallish explosion
+			qdel(src) //in the  event the cell explodes but isn't destroyed somehow, it also self deletes
 		
 /obj/item/weapon/cell/rad/emp_act(severity)
 	..()
-	if(empable == TRUE)
+	if(maxcharge > 0)
 		switch(rand(3))
 			if(0)
 				charge_rate *= severity*0.2
@@ -279,11 +276,7 @@
 				charge = 0
 				charge_rate *= severity*0.2
 				damaged = TRUE
-			if(3)
-				return
-	else
-		return
-
+			
 /obj/item/weapon/cell/rad/examine(mob/user)
 	..()
 	if(damaged)
