@@ -4,6 +4,7 @@
 	var/list/prizes = list()
 	var/list/cheaters = list()
 	var/emagged = 0
+	var/turn = 0
 
 /datum/arcade_game/Destroy()
 	cheaters = null
@@ -29,6 +30,8 @@
 /datum/arcade_game/proc/get_dat()
 	return ""
 
+/datum/arcade_game/proc/get_p2_dat()
+	return ""
 
 /datum/arcade_game/proc/is_cheater(mob/user)
 	if(user in cheaters)
@@ -162,18 +165,47 @@
 
 	return dat
 
+/datum/arcade_game/space_villain/get_p2_dat()
+	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
+
+	dat += {"<center><h4>[enemy_name]</h4></center>
+		<br><center><h3>[temp]</h3></center>
+		<br><center>Health: [enemy_hp] | Magic: [enemy_mp] | Player Health: [player_hp]</center>"}
+	if (gameover)
+		dat += "<center><b><a href='byond://?src=\ref[src];newgame=1'>New Game</a>"
+	else
+
+		dat += {"<center><b><a href='byond://?src=\ref[src];p2attack=1'>Attack</a> |
+			<a href='byond://?src=\ref[src];p2heal=1'>Heal</a> |
+			<a href='byond://?src=\ref[src];p2charge=1'>Recharge Power</a>"}
+
+	dat += "</b></center>"
+
+	return dat
+
 /datum/arcade_game/space_villain/Topic(href, href_list)
 	if(..())
 		return
 	if (!blocked && !gameover)
-		if (href_list["attack"])
-			action_attack()
+		if(usr != playertwo && turn = 0)
+			if (href_list["attack"])
+				action_attack()
 
-		else if (href_list["heal"])
-			action_heal()
+			else if (href_list["heal"])
+				action_heal()
 
-		else if (href_list["charge"])
-			action_charge()
+			else if (href_list["charge"])
+				action_charge()
+
+		else
+			if (href_list["p2attack"])
+				action_attack()
+
+			else if (href_list["p2heal"])
+				action_heal()
+
+			else if (href_list["p2charge"])
+				action_charge()
 
 	if (href_list["close"])
 		usr.unset_machine()
@@ -260,6 +292,7 @@
 			feedback_inc("arcade_loss_hp_normal")
 
 	blocked = 0
+	turn = 0
 
 /datum/arcade_game/space_villain/proc/action_charge()
 	blocked = 1
@@ -271,7 +304,9 @@
 
 	holder.updateUsrDialog()
 	sleep(10)
-	arcade_action()
+	turn = 1
+	if(!playertwo)
+		arcade_action()
 
 /datum/arcade_game/space_villain/proc/action_heal()
 	blocked = 1
@@ -286,7 +321,9 @@
 	player_hp += healamt
 	blocked = 1
 	holder.updateUsrDialog()
-	arcade_action()
+	turn = 1
+	if(!playertwo)
+		arcade_action()
 
 /datum/arcade_game/space_villain/proc/action_attack()
 	blocked = 1
@@ -298,7 +335,43 @@
 
 	sleep(10)
 	enemy_hp -= attackamt
-	arcade_action()
+	turn = 1
+	if(!playertwo)
+		arcade_action()
+
+/datum/arcade_game/space_villain/proc/action_p2charge()
+	blocked = 1
+	var/chargeamt = rand(4,7)
+	temp = "You regain [chargeamt] points"
+	enemy_mp += chargeamt
+
+	holder.updateUsrDialog()
+	sleep(10)
+	turn = 0
+
+/datum/arcade_game/space_villain/proc/action_p2heal()
+	blocked = 1
+	var/pointamt = rand(1,3)
+	var/healamt = rand(6,8)
+	temp = "You use [pointamt] magic to heal for [healamt] damage!"
+	holder.updateUsrDialog()
+
+	sleep(10)
+	enemy_mp -= pointamt
+	enemy_hp += healamt
+	blocked = 1
+	holder.updateUsrDialog()
+	turn = 0
+
+/datum/arcade_game/space_villain/proc/action_p2attack()
+	blocked = 1
+	var/attackamt = rand(2,6)
+	temp = "You attack for [attackamt] damage!"
+	holder.updateUsrDialog()
+
+	sleep(10)
+	player_hp -= attackamt
+	turn = 0
 
 /datum/arcade_game/space_villain/is_cheater(mob/user)
 	if(emagged && !gameover)
