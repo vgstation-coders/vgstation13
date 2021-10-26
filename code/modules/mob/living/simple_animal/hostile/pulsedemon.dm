@@ -152,12 +152,19 @@
     return
 
 /obj/machinery/attack_pulsedemon(mob/user)
-    return attack_hand(user)
+    return attack_ai(user)
 
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
         A.attack_pulsedemon(src)
-    ..()
+    else if(ismob(A) || ismecha(A) || isvehicle(A))
+        ..()
+
+/mob/living/silicon/hasFullAccess()
+	return 1
+
+/mob/living/silicon/GetAccess()
+	return get_all_accesses()
 
 /mob/living/simple_animal/hostile/pulse_demon/dexterity_check()
 	return TRUE
@@ -167,6 +174,18 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/ex_act(severity)
     return
+
+/mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
+    visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
+    return
+
+/mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
+    visible_message("<span class ='notice'>[user]'s foot goes right through \the [src]!</span>")
+    shockMob(user)
+
+/mob/living/simple_animal/hostile/pulse_demon/bite_act(mob/living/carbon/human/user)
+    visible_message("<span class ='notice'>[user] attempted to taste \the [src], for no particular reason, and got rightfully burned.</span>")
+    shockMob(user)
 
 /mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
     visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
