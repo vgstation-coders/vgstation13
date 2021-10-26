@@ -19,14 +19,11 @@
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
         return (target in options)
-    if(isturf(target))
-        var/turf/T = target
-        return ((target in view_or_range(range, user, selection_type)) && (locate(/obj/structure/cable) in T.contents))
-    return
+    return ((target in view_or_range(range, user, selection_type)) && ((locate(/obj/structure/cable) in T.contents)) || istype(target,/obj/structure/cable))
 
 /spell/pulse_demon/cable_zap/cast(list/targets, mob/user = usr)
     var/turf/T = get_turf(user)
-    var/turf/target = targets[1]
+    var/turf/target = get_turf(targets[1])
     var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
     L.damage = 15
     L.tang = adjustAngle(get_angle(target,T))
