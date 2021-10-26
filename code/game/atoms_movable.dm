@@ -175,18 +175,11 @@
 		set_glide_size(glide_size_override)
 
 	var/atom/oldloc = loc
-	could_bump = list()
-	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
-		. = ..()
-
-		perform_bump()
-		update_dir()
-		INVOKE_EVENT(src, /event/after_move)
-		return
 
 	//We always split up movements into cardinals for issues with diagonal movements.
 	if(Dir || (loc != NewLoc))
 		if (!(Dir & (Dir - 1))) //Cardinal move
+			could_bump = list()
 			. = ..()
 			perform_bump()
 		else //Diagonal move, split it into cardinal moves
@@ -442,6 +435,7 @@
 		return
 	border_dummy = new()
 	lock_atom(border_dummy, /datum/locking_category/border_dummy)
+	border_dummy.update_dir()
 
 /atom/movable/proc/remove_border_dummy()
 	if(border_dummy)
