@@ -1,6 +1,9 @@
 
 /spell/pulse_demon
 	user_type = USER_TYPE_PULSEDEMON
+    school = "pulse demon"
+	override_base = "pulsedemon"
+	hud_state = "pd_icon_base"
 
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
@@ -11,7 +14,7 @@
     spell_flags = WAIT_FOR_CLICK
     duration = 20
 
-    hud_state = ""
+    hud_state = "pd_cablehop"
 
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
