@@ -159,6 +159,12 @@
         A.attack_pulsedemon(src)
     ..()
 
+/mob/living/simple_animal/hostile/pulse_demon/dexterity_check()
+	return TRUE
+
+/mob/living/simple_animal/hostile/pulse_demon/Process_Spacemove(var/check_drift = 0)
+	return TRUE
+
 /mob/living/simple_animal/hostile/pulse_demon/ex_act(severity)
     return
 
