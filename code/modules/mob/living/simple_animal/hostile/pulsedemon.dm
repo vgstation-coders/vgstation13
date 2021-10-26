@@ -12,7 +12,7 @@
     plane = ABOVE_PLATING_PLANE
     layer = PULSEDEMON_LAYER
 
-	see_in_dark = 8
+    see_in_dark = 8
     minbodytemp = 0
     maxbodytemp = 4000
     min_oxy = 0
