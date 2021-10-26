@@ -12,6 +12,7 @@
     plane = ABOVE_PLATING_PLANE
     layer = PULSEDEMON_LAYER
 
+	see_in_dark = 8
     minbodytemp = 0
     maxbodytemp = 4000
     min_oxy = 0
@@ -60,7 +61,7 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     if(client && client.darkness_planemaster)
-        client.darkness_planemaster.alpha = 100    
+        client.darkness_planemaster.alpha = 192    
     update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
@@ -153,6 +154,15 @@
 
 /obj/machinery/attack_pulsedemon(mob/user)
     return attack_ai(user)
+
+/obj/machinery/camera/attack_pulsedemon(mob/user)
+    user.loc = src
+    user.change_sight(adding = vision_flags)
+
+/obj/machinery/power/apc/attack_pulsedemon(mob/user)
+    if(user.loc != src)
+        user.loc = src
+        user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
     if(get_area(A) == controlling_area)
