@@ -18,6 +18,8 @@
 	I = user.get_active_hand()
 	if(!I)
 		return
+	if(!I.pregive(user,src))
+		return
 	if(src == user) //Shouldn't happen
 		to_chat(user, "<span class='warning'>You tried to give yourself \the [I], but you didn't want it.</span>")
 		return
@@ -41,12 +43,11 @@
 					to_chat(src, "<span class='warning'>Your hands are full.</span>")
 					to_chat(user, "<span class='warning'>Their hands are full.</span>")
 					return
+				if(!I.on_give(user,src))
+					return
 				if(!user.drop_item(I))
 					src << "<span class='warning'>[user] can't let go of \the [I]!</span>"
 					user << "<span class='warning'>You can't seem to let go of \the [I].</span>"
-					return
-				if(!I.on_give(user,src))
-					visible_message("<span class='warning'>[user] tried to hand \the [I] to [src], but couldn't!</span>")
 					return
 
 				src.put_in_hands(I)

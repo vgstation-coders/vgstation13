@@ -311,7 +311,11 @@
 /obj/item/proc/pickup(mob/user)
 	return
 
-// called after an item is passed to another person through the give proc, see carbon/give.dm
+// called before an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
+/obj/item/proc/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return TRUE
+
+// called while an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
 /obj/item/proc/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
 	return TRUE
 

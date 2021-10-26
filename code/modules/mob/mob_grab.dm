@@ -42,10 +42,10 @@
 
 /obj/item/weapon/grab/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
 	if(!(giver == assailant) || !giver.Adjacent(affecting) || !receiver.Adjacent(affecting))
+		visible_message("<span class='warning'>[user] tried to pass [affecting] to [src] but couldn't.</span>")
 		return FALSE
-	assailant = receiver
-	state = GRAB_PASSIVE //downgrade grabs to weakest level when passing
-	return TRUE
+	receiver.grab_mob(affecting)
+	return FALSE
 
 /obj/item/weapon/grab/preattack()
 	if(!assailant || !affecting)
