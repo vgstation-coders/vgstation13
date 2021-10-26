@@ -187,7 +187,7 @@
 	if(..())
 		return
 	if (!blocked && !gameover)
-		if(usr != playertwo && turn = 0)
+		if(usr != holder.playertwo && turn == 0)
 			if (href_list["attack"])
 				action_attack()
 
@@ -305,7 +305,7 @@
 	holder.updateUsrDialog()
 	sleep(10)
 	turn = 1
-	if(!playertwo)
+	if(!holder.playertwo)
 		arcade_action()
 
 /datum/arcade_game/space_villain/proc/action_heal()
@@ -322,7 +322,7 @@
 	blocked = 1
 	holder.updateUsrDialog()
 	turn = 1
-	if(!playertwo)
+	if(!holder.playertwo)
 		arcade_action()
 
 /datum/arcade_game/space_villain/proc/action_attack()
@@ -336,7 +336,7 @@
 	sleep(10)
 	enemy_hp -= attackamt
 	turn = 1
-	if(!playertwo)
+	if(!holder.playertwo)
 		arcade_action()
 
 /datum/arcade_game/space_villain/proc/action_p2charge()
