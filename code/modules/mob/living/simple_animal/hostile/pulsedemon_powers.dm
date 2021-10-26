@@ -1,9 +1,16 @@
 
 /spell/pulse_demon
+    name = "Pulse Demon Spell"
+    desc = "A template pulse demon spell."
+    abbreviation = "PD"
+    still_recharging_msg = "<span class='warning'>You're still warming up!</span>"
+
     user_type = USER_TYPE_PULSEDEMON
     school = "pulse demon"
     override_base = "pulsedemon"
     hud_state = "pd_icon_base"
+    charge_max = 20 SECONDS
+    cooldown_min = 1 SECONDS
 
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
