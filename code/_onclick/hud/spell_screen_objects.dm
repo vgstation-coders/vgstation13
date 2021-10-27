@@ -234,6 +234,15 @@
 
 	screen_loc = ui_alien_master
 
+/obj/abstract/screen/movable/spell_master/pulse_demon
+	name = "Pulse Demon Abilities"
+	icon_state = "pulsedemon_spell_ready"
+
+	open_state = "pd-open"
+	closed_state = "pd-closed"
+
+	screen_loc = ui_alien_master
+
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
 /////////////////////////////////////////
