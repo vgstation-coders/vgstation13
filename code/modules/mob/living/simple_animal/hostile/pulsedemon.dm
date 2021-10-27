@@ -34,6 +34,8 @@
     var/maxcharge = 1000
     var/health_drain_rate = 5
     var/amount_per_regen = 100
+    var/charge_absorb_amount = 1000
+    var/max_can_absorb = 10000
     var/takeover_time = 30
     var/area/controlling_area
     var/obj/structure/cable/current_cable
@@ -86,6 +88,9 @@
         else
             health -= health_drain_rate
     else if(current_power)
+        if(istype(current_power,/obj/machinery/power/battery))
+            var/obj/machinery/power/battery/current_battery = current_power
+            suckBattery(current_battery)
         if(current_power.avail() > amount_per_regen)
             current_power.add_load(amount_per_regen)
         else
@@ -123,7 +128,8 @@
                 hijackAPC(current_apc)
         else if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
-            suckBattery(current_battery)
+            to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
+            max_can_absorb = current_battery.charge
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -258,7 +264,11 @@
                 to_chat(src,"<span class='notice'>You are now controlling [PD.controlled_apcs.len] APCs.</span>")
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
-    to_chat(src,"<span class='notice'>You are now draining power from \the [current_battery] and refilling charge.</span>")
+    if(current_battery.charge >= charge_absorb_amount)
+        current_battery.charge -= charge_absorb_amount
+        charge += charge_absorb_amount
+        if(max_charge <= max_can_absorb)
+            max_charge += charge_absorb_amount
     return
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
