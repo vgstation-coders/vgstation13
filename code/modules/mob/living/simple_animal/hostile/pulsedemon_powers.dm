@@ -63,7 +63,7 @@
 /spell/pulse_demon/emag
     name = "Electromagnetic Tamper"
     abbreviation = "ES"
-    desc = "Unlocks hidden programming in machines"
+    desc = "Unlocks hidden programming in machines. Must be inside a compromised APC to use."
 
     range = 10
     spell_flags = WAIT_FOR_CLICK
@@ -73,8 +73,17 @@
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
-    if(istype(target,/obj/machinery))
-        var/obj/machinery/M = target
-        M.emag(user)
-        return
-    target.emag_act(user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if(PD.controlling_area == get_area(target))
+            if(istype(target,/obj/machinery))
+                var/obj/machinery/M = target
+                M.emag(PD)
+                return
+            target.emag_act(PD)
+    else
+        if(istype(target,/obj/machinery))
+            var/obj/machinery/M = target
+            M.emag(user)
+            return
+        target.emag_act(user)
