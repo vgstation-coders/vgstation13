@@ -144,6 +144,8 @@
             previous_net = current_net
             current_net = current_cable.get_powernet()
             current_power = null
+            current_robot = null
+            current_weapon = null
             if(!isturf(loc))
                 loc = get_turf(NewLoc)
             controlling_area = null
@@ -151,6 +153,8 @@
         else
             current_cable = null
             current_power = null
+            current_robot = null
+            current_weapon = null
 
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
     if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
@@ -225,12 +229,18 @@
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         if(occupant && istype(occupant,/mob/living/silicon/robot))
             var/mob/living/silicon/robot/R = occupant
-            to_chat(PD,"<span class='notice'>You are now attempting to hijack \the [R]'s targeting module, this will take approximately [PD.takeover_time] seconds.</span>")
-            if(do_after(PD,src,PD.takeover_time*10))
-                if(occupant)
-                    to_chat(PD,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
-                    PD.loc = R
-                    PD.current_robot = R
+            if(!R.pulsecompromised)
+                to_chat(PD,"<span class='notice'>You are now attempting to hijack \the [R]'s targeting module, this will take approximately [PD.takeover_time] seconds.</span>")
+                if(do_after(PD,src,PD.takeover_time*10))
+                    if(occupant)
+                        to_chat(PD,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
+                        R.pulsecompromised = 1
+                        PD.loc = R
+                        PD.current_robot = R
+            else
+                to_chat(PD,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
+                PD.loc = R
+                PD.current_robot = R
         else
             to_chat(PD,"<span class='warning'>There is no silicon-based occupant inside.</span>")
 
