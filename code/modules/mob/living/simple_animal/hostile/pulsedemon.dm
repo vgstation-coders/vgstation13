@@ -71,7 +71,7 @@
 			hud_used.pulsedemon_hud()
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'>Charge: <font color='#FFFF00'>[charge]</font><br>Max: <font color='#FF9900'>[max_charge]</font><br></div>"
+		hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'>Charge: <font color='#FFFF00'>[charge]</font><br>Max: <font color='#FF9900'>[maxcharge]</font><br></div>"
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
     if(current_power)
