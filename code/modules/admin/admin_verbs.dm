@@ -88,6 +88,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
 	/client/proc/artifacts_panel,
+	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
 	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 )

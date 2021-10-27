@@ -626,6 +626,14 @@
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(T)
 
+	else if(href_list["bodyarchivepanel_spawncopy"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/body_archive/archive = locate(href_list["bodyarchivepanel_spawncopy"])
+
+		archive.spawn_copy(get_turf(usr))
+
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
 			return

@@ -1399,6 +1399,14 @@ var/global/blood_virus_spreading_disabled = 0
 		log_admin("[key_name(usr)] checked the Artifacts Panel.")
 	feedback_add_details("admin_verb","ART")
 
+/client/proc/body_archive_panel()
+	set name = "Body Archive Panel"
+	set category = "Admin"
+	if(holder)
+		holder.body_archive_panel()
+		log_admin("[key_name(usr)] checked the Body Archive Panel.")
+	feedback_add_details("admin_verb","BAP")
+
 /client/proc/climate_panel()
 	set name = "Climate Panel"
 	set category = "Admin"
