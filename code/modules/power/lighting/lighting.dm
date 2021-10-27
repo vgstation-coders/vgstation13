@@ -444,11 +444,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	src.flicker(1)
 	return
 
-/obj/machinery/light/attack_robot(mob/user)
+/obj/machinery/light/attack_robot(mob/user, mob/real_user)
 	if(isMoMMI(user))
-		return attack_hand(user)
+		return attack_hand(real_user)
 	else
-		return attack_ai(user)
+		return attack_ai(real_user)
 
 
 // Aliens smash the bulb but do not get electrocuted./N

@@ -182,6 +182,8 @@
         if(istype(current_weapon,/obj/item/weapon/gun))
             var/obj/item/weapon/gun/G = current_weapon
             G.Fire(A,src)
+    else if(current_robot)
+        A.attack_robot(current_robot,src)
     else if(!istype(A,/obj/machinery))
         ..()
 
@@ -209,9 +211,9 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         if(charging)
-            to_chat(PD,"<span class='notice'>You are now attempting to hijack the [charging], this will take approximately [PD.takeover_time] seconds.</span>")
+            to_chat(PD,"<span class='notice'>You are now attempting to hijack \the [charging], this will take approximately [PD.takeover_time] seconds.</span>")
             if(do_after(PD,src,PD.takeover_time*10))
-                to_chat(PD,"<span class='notice'>You are now inside the [charging].</span>")
+                to_chat(PD,"<span class='notice'>You are now inside \the [charging].</span>")
                 PD.loc = charging
                 PD.current_weapon = charging
         else
@@ -223,10 +225,10 @@
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         if(occupant && istype(occupant,/mob/living/silicon/robot))
             var/mob/living/silicon/robot/R = occupant
-            to_chat(PD,"<span class='notice'>You are now attempting to hijack the [R]'s targeting module, this will take approximately [PD.takeover_time] seconds.</span>")
+            to_chat(PD,"<span class='notice'>You are now attempting to hijack \the [R]'s targeting module, this will take approximately [PD.takeover_time] seconds.</span>")
             if(do_after(PD,src,PD.takeover_time*10))
                 if(occupant)
-                    to_chat(PD,"<span class='notice'>You are now inside the [R], in control of its targeting.</span>")
+                    to_chat(PD,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
                     PD.loc = R
                     PD.current_robot = R
         else

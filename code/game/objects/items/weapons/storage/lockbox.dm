@@ -19,8 +19,8 @@
 /obj/item/weapon/storage/lockbox/can_use()
 	return broken || !locked
 
-/obj/item/weapon/storage/lockbox/attack_robot(var/mob/user)
-	to_chat(user, "<span class='rose'>This box was not designed for use by non-organics.</span>")
+/obj/item/weapon/storage/lockbox/attack_robot(var/mob/user, var/mob/real_user)
+	to_chat(real_user, "<span class='rose'>This box was not designed for use by non-organics.</span>")
 	return
 
 /obj/item/weapon/storage/lockbox/proc/toggle(var/mob/user, var/id_name)

@@ -407,11 +407,11 @@
 		qdel(src)
 
 // This is broken, see attack_ai.
-/obj/structure/closet/attack_robot(mob/living/silicon/robot/user as mob)
+/obj/structure/closet/attack_robot(mob/living/silicon/robot/user as mob, mob/real_user as mob)
 	if(isMoMMI(user) || HAS_MODULE_QUIRK(user, required_quirk))
 		src.add_hiddenprint(user)
 		add_fingerprint(user)
-		return src.attack_hand(user)
+		return src.attack_hand(real_user)
 	..(user)
 
 /obj/machinery/closet/attack_ai(mob/user as mob)
@@ -603,7 +603,7 @@
 	if (isrobot(usr))
 		var/mob/living/silicon/robot/R = usr
 		if(isMoMMI(R) || HAS_MODULE_QUIRK(R, required_quirk))
-			src.attack_robot(R)
+			src.attack_robot(R,R)
 			return
 
 	if(ishuman(usr))

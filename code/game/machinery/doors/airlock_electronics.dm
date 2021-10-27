@@ -18,10 +18,10 @@
 	var/installed = 0
 
 	// Allow dicking with it while it's on the floor.
-/obj/item/weapon/circuitboard/airlock/attack_robot(mob/user as mob)
+/obj/item/weapon/circuitboard/airlock/attack_robot(mob/user as mob, mob/real_user as mob)
 	if(isMoMMI(user))
 		return ..()
-	attack_self(user)
+	attack_self(real_user)
 	return 1
 
 /obj/item/weapon/circuitboard/airlock/attackby(obj/item/W as obj, mob/user as mob)

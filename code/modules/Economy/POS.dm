@@ -411,9 +411,9 @@ var/const/POS_HEADER = {"<html>
 	else
 		overlays += image(icon = icon, icon_state = "pos-standby")
 
-/obj/machinery/pos/attack_robot(var/mob/user)
+/obj/machinery/pos/attack_robot(var/mob/user, var/mob/real_user)
 	if(isMoMMI(user))
-		return attack_hand(user)
+		return attack_hand(real_user)
 	return ..()
 
 /obj/machinery/pos/attack_hand(var/mob/user)

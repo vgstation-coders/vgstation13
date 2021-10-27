@@ -255,8 +255,8 @@ var/global/list/juice_items = list (
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/reagentgrinder/attack_robot(mob/user as mob)
-	return attack_hand(user)
+/obj/machinery/reagentgrinder/attack_robot(mob/user as mob, mob/real_user as mob)
+	return attack_hand(real_user)
 
 /obj/machinery/reagentgrinder/interact(mob/user as mob) // The microwave Menu
 	var/is_chamber_empty = 0

@@ -370,11 +370,11 @@
 	return attack_hand(user)
 
 
-/obj/machinery/power/supermatter/attack_robot(mob/user as mob)
+/obj/machinery/power/supermatter/attack_robot(mob/user as mob, mob/real_user as mob)
 	if(Adjacent(user))
-		return attack_hand(user)
+		return attack_hand(real_user)
 	else
-		attack_ai(user)
+		attack_ai(real_user)
 
 /obj/machinery/power/supermatter/kick_act(mob/living/H)
 	..()

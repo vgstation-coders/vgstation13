@@ -55,7 +55,7 @@
 	// Cyborgs have no range-checking unless there is item use
 	if(!W)
 		A.add_hiddenprint(src)
-		A.attack_robot(src)
+		A.attack_robot(src,src)
 		return
 
 	if(W == A)
@@ -157,13 +157,13 @@
 /mob/living/silicon/robot/UnarmedAttack(atom/A)
 	if(ismob(A))
 		delayNextAttack(10)
-	A.attack_robot(src)
+	A.attack_robot(src,src)
 	return
 /mob/living/silicon/robot/RangedAttack(atom/A)
-	A.attack_robot(src)
+	A.attack_robot(src,src)
 
-/atom/proc/attack_robot(mob/user as mob)
-	attack_ai(user)
+/atom/proc/attack_robot(mob/user as mob, mob/real_user as mob)
+	attack_ai(real_user)
 	return
 
 

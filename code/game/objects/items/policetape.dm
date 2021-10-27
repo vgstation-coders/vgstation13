@@ -217,9 +217,9 @@
 			return
 		breaktape(null, user)
 
-/obj/item/tape/attack_robot(mob/user)
+/obj/item/tape/attack_robot(mob/user, mob/real_user as mob)
 	if(Adjacent(user))
-		return attack_hand(user)
+		return attack_hand(real_user)
 
 /obj/item/tape/allowed(mob/user)
 	if(isrobot(user) && !isMoMMI(user))

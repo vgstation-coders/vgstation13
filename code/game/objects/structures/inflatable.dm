@@ -263,9 +263,9 @@
 	var/is_open = 0
 	var/busy = 0
 
-/obj/structure/inflatable/door/attack_robot(mob/user)
+/obj/structure/inflatable/door/attack_robot(mob/user, mob/real_user)
 	if(user.Adjacent(src))
-		toggle(user)
+		toggle(real_user)
 
 /obj/structure/inflatable/door/attack_hand(mob/user)
 	toggle(user)
