@@ -69,7 +69,7 @@
     spell_flags = WAIT_FOR_CLICK
     duration = 20
 
-    hud_state = "pd_cablehop"
+    hud_state = "wiz_tech"
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -81,9 +81,70 @@
                 M.emag(PD)
                 return
             target.emag_act(PD)
+        else
+            to_chat(holder, "You need to be in an APC for this!")
     else
         if(istype(target,/obj/machinery))
             var/obj/machinery/M = target
             M.emag(user)
             return
         target.emag_act(user)
+
+/spell/pulse_demon/emp
+    name = "Electromagnetic Pulse"
+    abbreviation = "EP"
+    desc = "EMPs a targeted machine. Must be inside a compromised APC to use."
+
+    range = 10
+    spell_flags = WAIT_FOR_CLICK
+    duration = 20
+
+    hud_state = "wiz_tech"
+
+/spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
+    var/atom/target = targets[1]
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if(PD.controlling_area == get_area(target))
+            target.emp_act(1)
+        else
+            to_chat(holder, "You need to be in an APC for this!")
+    else
+        target.emp_act(1)
+
+/spell/pulse_demon/overload_machine
+    name = "Overload Machine"
+    abbreviation = "OM"
+    desc = "Overloads the electronics in a machine, causing an explosion."
+
+    range = 10
+    spell_flags = WAIT_FOR_CLICK
+    duration = 20
+
+    hud_state = "overload"
+
+/spell/pulse_demon/is_valid_target(var/atom/target)
+    if(istype(target, /obj/item/device/radio/intercom))
+        return 1
+    if (istype(target, /obj/machinery))
+        var/obj/machinery/M = target
+        return M.can_overload()
+    else
+        to_chat(holder, "That is not a machine.")
+
+/spell/pulse_demon/cast(var/list/targets, mob/user)
+    var/obj/machinery/M = targets[1]
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if(PD.controlling_area == get_area(M))
+            M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
+            spawn(50)
+                explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
+                qdel(M)
+        else
+            to_chat(holder, "You need to be in an APC for this!")
+    else
+        M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
+        spawn(50)
+            explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
+            qdel(M)
