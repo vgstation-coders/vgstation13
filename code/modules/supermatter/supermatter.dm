@@ -155,7 +155,7 @@
 		stack_trace("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 
 /obj/machinery/power/supermatter/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	Consume(AM)
+	Bumped(AM)
 	return TRUE
 
 /obj/machinery/power/supermatter/ex_act(severity,var/mob/whodunnit)

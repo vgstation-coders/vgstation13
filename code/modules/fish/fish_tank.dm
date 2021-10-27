@@ -109,7 +109,7 @@
 	anchored = TRUE
 	throwpass = FALSE				// This thing is the size of a wall, you can't throw past it.
 	circuitboard = /obj/item/weapon/circuitboard/fishwall
-
+	pass_flags_self = PASSGLASS
 	tank_type = "wall"
 	water_capacity = 500		// This thing fills an entire tile,5 large beakers worth
 	max_fish = 10				// Plenty of room for a lot of fish
@@ -124,7 +124,7 @@
 	food_level = MAX_FOOD
 
 /obj/machinery/fishtank/wall/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0) // Prevents airflow. Copied from windows.
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	return FALSE
 

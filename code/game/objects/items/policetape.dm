@@ -18,6 +18,7 @@
 	anchored = 1
 	density = 1
 	layer = ABOVE_DOOR_LAYER
+	pass_flags_self = PASSGLASS
 	var/icon_base
 	var/robot_compatibility
 
@@ -195,7 +196,7 @@
 		return 1
 	if(air_group || (height == 0))
 		return 1
-	if((mover.checkpass(PASSGLASS) || istype(mover, /obj/item/projectile/meteor) || mover.throwing == 1))
+	if((mover.checkpass(pass_flags_self) || istype(mover, /obj/item/projectile/meteor) || mover.throwing == 1))
 		return 1
 	else
 		return 0

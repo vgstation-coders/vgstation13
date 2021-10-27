@@ -3767,8 +3767,10 @@
 		var/mob/living/carbon/human/H = holder.my_atom
 		if(created_volume <= 9)
 			for(var/i = 1 to created_volume)
+				var/L = get_turf(holder.my_atom)
+				new /mob/living/simple_animal/hostile/humanoid/skellington(L)
 				var/datum/organ/external/E = pick(H.organs)
-				E.fracture()
+				E.fracture() //Hopefully this means that under 10u the skellingtons still get spawned, but AT 10u you turn into one.
 		else
 			if(isskellington(H) || isskelevox(H) || islich(H))
 				bigBoned(H, created_volume)
@@ -3782,10 +3784,11 @@
 				H.visible_message("<span class='danger'>[H.name]'s skeleton jumps right out of their skin, forcefully!</span>")
 				H.drop_all()
 			gibs(H.loc, H.virus2, H.dna)
-	for(var/i = 1 to created_volume)
-		var/L = get_turf(holder.my_atom)
-		new /mob/living/simple_animal/hostile/humanoid/skellington(L)
-
+	else
+		for(var/i = 1 to created_volume)
+			var/L = get_turf(holder.my_atom)
+			new /mob/living/simple_animal/hostile/humanoid/skellington(L) //Should spawn skeletons normally if the holder isn't human.
+	
 /datum/chemical_reaction/synthskeleton/proc/bigBoned(var/mob/living/carbon/human/theSkel, var/volume)
 	for(var/datum/organ/external/E in theSkel.organs)
 		if(!E.is_organic() || (E.min_broken_damage >= E.max_damage))

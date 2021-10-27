@@ -15,7 +15,7 @@
 	anchored = FALSE
 	density = FALSE
 	dir = NORTH
-
+	pass_flags_self = PASSDOOR|PASSGLASS
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
@@ -46,7 +46,7 @@
 	icon_state = "[facing]_[secure ? "secure_":""]windoor_assembly[wired ? "02":"01"]"
 
 /obj/structure/windoor_assembly/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
 		if(air_group)
@@ -56,7 +56,7 @@
 		return TRUE
 
 /obj/structure/windoor_assembly/Uncross(atom/movable/mover, turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
 	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see

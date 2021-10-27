@@ -9,7 +9,8 @@ var/global/list/ghdel_profiling = list()
 	var/ghost_read  = 1 // All ghosts can read
 	var/ghost_write = 0 // Only aghosts can write
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
-
+	/// pass_flags that this atom has. If any of this matches a pass_flag on a moving thing, by default, we let them through.
+	var/pass_flags_self = NONE
 	var/flags = FPRINT
 	var/flow_flags = 0
 	var/list/fingerprints

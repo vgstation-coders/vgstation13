@@ -2,7 +2,7 @@
 	if(air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(PASSMOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 
 	if(ismob(mover))

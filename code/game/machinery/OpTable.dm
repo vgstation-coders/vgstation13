@@ -12,7 +12,7 @@
 	var/strapped = 0.0
 	throwpass = 1 //so Adjacent passes.
 	var/rating = 1 //Use this for upgrades some day
-
+	pass_flags_self = PASSTABLE
 	var/obj/machinery/computer/operating/computer = null
 
 /obj/machinery/optable/New()
@@ -60,7 +60,7 @@
 	if(air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		return 0

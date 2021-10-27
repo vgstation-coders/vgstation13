@@ -20,6 +20,7 @@
 	anchored = 1.0
 	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite its density.
+	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
 	var/health = 100
@@ -311,7 +312,7 @@
 		var/mob/M = mover
 		if(M.flying)
 			return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(flipped)
 		if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
@@ -352,7 +353,7 @@
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
@@ -735,6 +736,7 @@
 	anchored = 1.0
 	throwpass = 1	//You can throw objects over this, despite its density.
 	layer = TABLE_LAYER //So items are always layered over it
+	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
 	var/health = 20
@@ -789,7 +791,7 @@
 /obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return !density
 

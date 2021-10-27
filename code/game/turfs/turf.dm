@@ -56,11 +56,6 @@
 
 	var/explosion_block = 0
 
-	//For shuttles - if 1, the turf's underlay will never be changed when moved
-	//See code/datums/shuttle.dm @ 544
-	var/preserve_underlay = 0
-
-
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 

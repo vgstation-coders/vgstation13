@@ -151,27 +151,7 @@
 		warning(msg)
 		return FALSE
 
-	var/avg_temp = 0
-	var/avg_divide = 0
-	for(var/obj/machinery/alarm/alarm in machines)
-		var/turf/simulated/location = alarm.loc
-		if(!istype(location))
-			continue
-		var/datum/gas_mixture/environment = location.return_air()
-		if(!environment)
-			continue
-		avg_temp += environment.temperature
-		avg_divide++
-
-	if(avg_divide)
-		avg_temp /= avg_divide // quick and easy way to get the mean, was calculating both values along the way
-	else
-		var/msg = "Skipping map [name] as no suitable air alarms were found to get average temperature."
-		message_admins(msg)
-		warning(msg)
-		return FALSE
-
-	if(avg_temp > T0C)
+	if(get_station_avg_temp() >= T0C)
 		var/msg = "Skipping map [name] as station average temperature is above 0C."
 		message_admins(msg)
 		warning(msg)
