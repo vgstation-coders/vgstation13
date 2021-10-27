@@ -267,9 +267,8 @@
     if(current_battery.charge >= charge_absorb_amount)
         current_battery.charge -= charge_absorb_amount
         charge += charge_absorb_amount
-        if(max_charge <= max_can_absorb)
-            max_charge += charge_absorb_amount
-    return
+        if(maxcharge <= max_can_absorb)
+            maxcharge += charge_absorb_amount
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
     if(client && (current_net != previous_net))
