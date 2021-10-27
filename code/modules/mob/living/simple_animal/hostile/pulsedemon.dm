@@ -91,12 +91,16 @@
         if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
             suckBattery(current_battery)
-        if(current_power.avail() > amount_per_regen)
+        else if(istype(current_power,/obj/machinery/power/apc))
+            var/obj/machinery/power/apc/current_apc = current_power
+            drainAPC(current_apc)
+        else if(current_power.avail() > amount_per_regen)
             current_power.add_load(amount_per_regen)
         else
             health -= health_drain_rate    
     else
         death()
+    regular_hud_updates()
     ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
@@ -122,6 +126,7 @@
         spark(src,rand(2,4))
         if(istype(current_power,/obj/machinery/power/apc))
             var/obj/machinery/power/apc/current_apc = current_power
+            max_can_absorb = current_apc.cell.charge
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
             else
@@ -129,7 +134,7 @@
         else if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
             to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
-            max_can_absorb = current_battery.charge
+            max_can_absorb = current_battery.chargelevel
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -266,6 +271,13 @@
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
     if(current_battery.charge >= charge_absorb_amount)
         current_battery.charge -= charge_absorb_amount
+        charge += charge_absorb_amount
+        if(maxcharge <= max_can_absorb)
+            maxcharge += charge_absorb_amount
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
+    if(current_apc.cell.charge >= charge_absorb_amount)
+        current_apc.cell.use(charge_absorb_amount)
         charge += charge_absorb_amount
         if(maxcharge <= max_can_absorb)
             maxcharge += charge_absorb_amount
