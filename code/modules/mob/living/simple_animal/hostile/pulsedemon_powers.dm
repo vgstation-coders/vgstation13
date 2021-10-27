@@ -11,6 +11,25 @@
     hud_state = "pd_icon_base"
     charge_max = 20 SECONDS
     cooldown_min = 1 SECONDS
+    var/charge_cost = 0
+
+/spell/pulse_demon/cast_check(var/skipcharge = 0, var/mob/user = usr)
+    . = ..()
+    if (!.)
+        return FALSE
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if (PD.charge < charge_cost)
+            to_chat(PD, "<span class='warning'>You are too low on power, this spell needs a charge of [PD.charge] to cast.</span>")
+            return FALSE
+    else //only pulse demons allowed
+        message_admins("[user.real_name] has a pulse demon spell... and they aren't a pulse demon!")
+        return FALSE
+
+/spell/pulse_demon/cast(var/list/targets, var/mob/living/carbon/human/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.charge -= charge_cost
 
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
@@ -22,6 +41,7 @@
     duration = 20
 
     hud_state = "pd_cablehop"
+    charge_cost = 5000
 
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
@@ -59,6 +79,7 @@
         L.xo = target.x - T.x
         spawn L.process()
         user.forceMove(target)
+        ..()
 
 /spell/pulse_demon/emag
     name = "Electromagnetic Tamper"
@@ -70,6 +91,7 @@
     duration = 20
 
     hud_state = "wiz_tech"
+    charge_cost = 20000
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -79,16 +101,12 @@
             if(istype(target,/obj/machinery))
                 var/obj/machinery/M = target
                 M.emag(PD)
+                ..()
                 return
             target.emag_act(PD)
+            ..()
         else
             to_chat(holder, "You need to be in an APC for this!")
-    else
-        if(istype(target,/obj/machinery))
-            var/obj/machinery/M = target
-            M.emag(user)
-            return
-        target.emag_act(user)
 
 /spell/pulse_demon/emp
     name = "Electromagnetic Pulse"
@@ -100,6 +118,7 @@
     duration = 20
 
     hud_state = "wiz_tech"
+    charge_cost = 10000
 
 /spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -107,10 +126,9 @@
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         if(PD.controlling_area == get_area(target))
             target.emp_act(1)
+            ..()
         else
             to_chat(holder, "You need to be in an APC for this!")
-    else
-        target.emp_act(1)
 
 /spell/pulse_demon/overload_machine
     name = "Overload Machine"
@@ -122,6 +140,7 @@
     duration = 20
 
     hud_state = "overload"
+    charge_cost = 50000
 
 /spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
     if(istype(target, /obj/item/device/radio/intercom))
@@ -141,10 +160,6 @@
             spawn(50)
                 explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
                 qdel(M)
+            ..()
         else
             to_chat(holder, "You need to be in an APC for this!")
-    else
-        M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
-        spawn(50)
-            explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
-            qdel(M)
