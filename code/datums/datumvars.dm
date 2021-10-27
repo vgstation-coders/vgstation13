@@ -889,8 +889,12 @@ function loadPage(list) {
 		if(!M.mind)
 			to_chat(usr, "Only mobs with a /mind have their original body archived")
 			return
+		if (ishuman(M) && alert("Since you are resetting a human, do you want them to keep their current inventory equipped or drop it all on the floor?", "Body Resetting", "Keep Inventory", "Drop Everything") == "Keep Inventory")
+			M.reset_body(keep_clothes = TRUE)
+		else
+			M.reset_body()
 		add_gamelogs(usr, " reset [(M == usr) ? "their own" : "[key_name(M)]'s"] body from its archive.", admin = TRUE, tp_link = TRUE)
-		M.reset_body()
+
 
 	else if(href_list["adjustDamage"] && href_list["mobToDamage"])
 		if(!check_rights(R_DEBUG|R_ADMIN|R_FUN))

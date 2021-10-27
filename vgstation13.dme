@@ -1313,6 +1313,7 @@
 #include "code\modules\admin\banappearance.dm"
 #include "code\modules\admin\banjob.dm"
 #include "code\modules\admin\banooc.dm"
+#include "code\modules\admin\body_archive_panel.dm"
 #include "code\modules\admin\buildmode.dm"
 #include "code\modules\admin\check_antagonists.dm"
 #include "code\modules\admin\climate_panel.dm"
