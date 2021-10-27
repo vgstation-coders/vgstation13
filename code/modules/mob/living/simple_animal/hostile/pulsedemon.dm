@@ -64,6 +64,15 @@
         client.darkness_planemaster.alpha = 192    
     update_cableview()
 
+/mob/living/simple_animal/hostile/pulse_demon/regular_hud_updates()
+	..()
+	if(client && hud_used)
+		if(!hud_used.pulsedemon_charge_display)
+			hud_used.pulsedemon_hud()
+		hud_used.pulsedemon_charge_display.maptext_width = WORLD_ICON_SIZE
+		hud_used.pulsedemon_charge_display.maptext_height = WORLD_ICON_SIZE
+		hud_used.pulsedemon_charge_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'>Charge:<br><font color='#FFFF00'>[charge]</font></div>"
+
 /mob/living/simple_animal/hostile/pulse_demon/Life()
     if(current_power)
         if(current_power.avail() > amount_per_regen)
