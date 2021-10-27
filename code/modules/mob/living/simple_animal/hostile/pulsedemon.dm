@@ -324,20 +324,24 @@
         current_apc.pulsecompromising = 0
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
-    if(current_battery.charge >= charge_absorb_amount)
-        current_battery.charge -= charge_absorb_amount
-        if(maxcharge <= max_can_absorb)
-            maxcharge += charge_absorb_amount
-        if(charge <= maxcharge)
-            charge += charge_absorb_amount
+    var/amount_to_drain = charge_absorb_amount
+    if(current_battery.charge <= charge_absorb_amount)
+        amount_to_drain = current_battery.charge
+    current_battery.charge -= amount_to_drain
+    if(maxcharge <= max_can_absorb)
+        maxcharge += amount_to_drain
+    if(charge <= maxcharge)
+        charge += amount_to_drain
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
-    if(current_apc.cell.charge >= charge_absorb_amount)
-        current_apc.cell.use(charge_absorb_amount)
-        if(maxcharge <= max_can_absorb)
-            maxcharge += charge_absorb_amount
-        if(charge <= maxcharge)
-            charge += charge_absorb_amount
+    var/amount_to_drain = charge_absorb_amount
+    if(current_apc.cell.charge <= charge_absorb_amount)
+        amount_to_drain = current_battery.charge
+    current_apc.cell.use(amount_to_drain)
+    if(maxcharge <= max_can_absorb)
+        maxcharge += amount_to_drain
+    if(charge <= maxcharge)
+        charge += amount_to_drain
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
     if(client && (current_net != previous_net))
