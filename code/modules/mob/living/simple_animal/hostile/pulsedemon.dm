@@ -211,11 +211,26 @@
         if(charging)
             to_chat(PD,"<span class='notice'>You are now attempting to hijack the [charging], this will take approximately [PD.takeover_time] seconds.</span>")
             if(do_after(PD,src,PD.takeover_time*10))
-                to_chat(PD,"<span class='notice'>You are now inside the [charging]</span>")
+                to_chat(PD,"<span class='notice'>You are now inside the [charging].</span>")
                 PD.loc = charging
                 PD.current_weapon = charging
         else
             to_chat(PD,"<span class='warning'>There is no weapon charging.</span>")
+
+/obj/machinery/recharge_station/attack_pulsedemon(mob/user)
+    user.loc = src
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if(occupant && istype(occupant,/mob/living/silicon/robot))
+            var/mob/living/silicon/robot/R = occupant
+            to_chat(PD,"<span class='notice'>You are now attempting to hijack the [R]'s targeting module, this will take approximately [PD.takeover_time] seconds.</span>")
+            if(do_after(PD,src,PD.takeover_time*10))
+                if(occupant)
+                    to_chat(PD,"<span class='notice'>You are now inside the [R], in control of its targeting.</span>")
+                    PD.loc = R
+                    PD.current_robot = R
+        else
+            to_chat(PD,"<span class='warning'>There is no silicon-based occupant inside.</span>")
 
 /obj/machinery/power/apc/attack_pulsedemon(mob/user)
     if(user.loc != src)
