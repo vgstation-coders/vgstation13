@@ -300,4 +300,4 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths)
+	mymob.client.screen += list(mymob.healths,vampire_blood_display)
