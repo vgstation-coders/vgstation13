@@ -42,6 +42,8 @@
     var/datum/powernet/current_net
     var/datum/powernet/previous_net
     var/obj/machinery/power/current_power
+    var/mob/living/silicon/robot/current_robot
+    var/obj/item/weapon/current_weapon
     var/can_move=1
     var/list/image/cables_shown = list()
 
@@ -73,7 +75,7 @@
 			hud_used.pulsedemon_hud()
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:2px'>C: <font color='#FFFF00'>[charge/1000]kW</font><br>M: <font color='#FF9900'>[maxcharge/1000]kW</font></div>"
+		hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:2px'>C:<br><font color='#FFFF00'>[charge/1000]kW</font></div>"
 
 /mob/living/simple_animal/hostile/pulse_demon/Stat()
 	..()
@@ -173,6 +175,16 @@
             spark(src,rand(2,4))
             user.forceMove(get_turf(src))
 
+/mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
+    if(get_area(A) == controlling_area)
+        A.attack_pulsedemon(src)
+    else if(current_weapon)
+        if(istype(current_weapon,/obj/item/weapon/gun))
+            var/obj/item/weapon/gun/G = current_weapon
+            G.Fire(A,src)
+    else if(!istype(A,/obj/machinery))
+        ..()
+
 /atom/proc/attack_pulsedemon(mob/user)
     return
 
@@ -183,10 +195,8 @@
     return attack_hand(user)
 
 /obj/machinery/computer/arcade/attack_pulsedemon(mob/user)
-    user.loc = src
     playertwo = user
     var/dat = game.get_p2_dat()
-
     user << browse(dat, "window=arcade")
     onclose(user, "arcade")
 
@@ -194,16 +204,23 @@
     user.loc = src
     user.change_sight(adding = vision_flags)
 
+/obj/machinery/recharger/attack_pulsedemon(mob/user)
+    user.loc = src
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if(charging)
+            to_chat(PD,"<span class='notice'>You are now attempting to hijack the [charging], this will take approximately [PD.takeover_time] seconds.</span>")
+            if(do_after(PD,src,PD.takeover_time*10))
+                to_chat(PD,"<span class='notice'>You are now inside the [charging]</span>")
+                PD.loc = charging
+                PD.current_weapon = charging
+        else
+            to_chat(PD,"<span class='warning'>There is no weapon charging.</span>")
+
 /obj/machinery/power/apc/attack_pulsedemon(mob/user)
     if(user.loc != src)
         user.loc = src
         user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
-
-/mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
-    if(get_area(A) == controlling_area)
-        A.attack_pulsedemon(src)
-    else if(!istype(A,/obj/machinery))
-        ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/hasFullAccess()
 	return 1
@@ -271,16 +288,18 @@
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
     if(current_battery.charge >= charge_absorb_amount)
         current_battery.charge -= charge_absorb_amount
-        charge += charge_absorb_amount
         if(maxcharge <= max_can_absorb)
             maxcharge += charge_absorb_amount
+        if(charge <= maxcharge)
+            charge += charge_absorb_amount
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
     if(current_apc.cell.charge >= charge_absorb_amount)
         current_apc.cell.use(charge_absorb_amount)
-        charge += charge_absorb_amount
         if(maxcharge <= max_can_absorb)
             maxcharge += charge_absorb_amount
+        if(charge <= maxcharge)
+            charge += charge_absorb_amount
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
     if(client && (current_net != previous_net))
