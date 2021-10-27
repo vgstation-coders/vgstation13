@@ -123,7 +123,7 @@
 
     hud_state = "overload"
 
-/spell/pulse_demon/is_valid_target(var/atom/target)
+/spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
     if(istype(target, /obj/item/device/radio/intercom))
         return 1
     if (istype(target, /obj/machinery))
@@ -132,7 +132,7 @@
     else
         to_chat(holder, "That is not a machine.")
 
-/spell/pulse_demon/cast(var/list/targets, mob/user)
+/spell/pulse_demon/overload_machine/cast(var/list/targets, mob/user)
     var/obj/machinery/M = targets[1]
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
