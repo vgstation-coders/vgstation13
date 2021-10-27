@@ -73,20 +73,25 @@
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:2px'>C: <font color='#FFFF00'>[charge/1000]kW</font><br>M: <font color='#FF9900'>[maxcharge/1000]kW</font></div>"
 
+/mob/living/simple_animal/hostile/pulse_demon/Stat()
+	..()
+	if(statpanel("Status"))
+		stat(null, text("Charge stored: [charge]W"))
+		stat(null, text("Max charge stored: [maxcharge]W"))
+
 /mob/living/simple_animal/hostile/pulse_demon/Life()
-    if(current_power)
+    if(current_cable)
+        if(current_cable.avail() > amount_per_regen)
+            current_cable.add_load(amount_per_regen)
+        else
+            health -= health_drain_rate
+    else if(current_power)
         if(current_power.avail() > amount_per_regen)
             current_power.add_load(amount_per_regen)
         else
-            health -= health_drain_rate
+            health -= health_drain_rate    
     else
-        if(current_cable)
-            if(current_cable.avail() > amount_per_regen)
-                current_cable.add_load(amount_per_regen)
-            else
-                health -= health_drain_rate
-        else
-            death()
+        death()
     ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
@@ -130,6 +135,9 @@
                 loc = get_turf(NewLoc)
             controlling_area = null
             update_cableview()
+        else
+            current_cable = null
+            current_power = null
 
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
     if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
