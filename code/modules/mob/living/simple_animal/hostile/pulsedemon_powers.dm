@@ -17,7 +17,7 @@
     abbreviation = "CH"
     desc = "Jump to another cable in view"
 
-    range = 20
+    range = 5
     spell_flags = WAIT_FOR_CLICK
     duration = 20
 
@@ -59,3 +59,22 @@
         L.xo = target.x - T.x
         spawn L.process()
         user.forceMove(target)
+
+/spell/pulse_demon/emag
+    name = "Electromagnetic Tamper"
+    abbreviation = "ES"
+    desc = "Unlocks hidden programming in machines"
+
+    range = 10
+    spell_flags = WAIT_FOR_CLICK
+    duration = 20
+
+    hud_state = "pd_cablehop"
+
+/spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
+    var/atom/target = targets[1]
+    if(istype(target,/obj/machinery))
+        var/obj/machinery/M = target
+        M.emag(user)
+        return
+    target.emag_act(user)

@@ -307,7 +307,7 @@
 			update_state |= UPSTATE_OPENED1
 		if(opened==2)
 			update_state |= UPSTATE_OPENED2
-	else if(emagged || malfai || spooky || compromising)
+	else if(emagged || malfai || spooky || pulsecompromising)
 		update_state |= UPSTATE_BLUESCREEN
 	else if(wiresexposed)
 		update_state |= UPSTATE_WIREEXP
