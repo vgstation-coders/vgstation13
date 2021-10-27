@@ -121,13 +121,11 @@
         spark(src,rand(2,4))
     var/obj/machinery/power/new_power = locate(/obj/machinery/power) in NewLoc
     if(new_power && !current_power)
-        loc = new_power
-        current_power = new_power
-        current_cable = null
-        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
-        spark(src,rand(2,4))
         if(istype(current_power,/obj/machinery/power/apc))
             var/obj/machinery/power/apc/current_apc = current_power
+            if(current_apc.occupant)
+                to_chat(src,"<span class='warning'>Something else that isn't a pulse demon is already in here!</span>")
+                return
             max_can_absorb = current_apc.cell.charge
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
@@ -137,6 +135,11 @@
             var/obj/machinery/power/battery/current_battery = current_power
             to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
             max_can_absorb = current_battery.chargelevel
+        loc = new_power
+        current_power = new_power
+        current_cable = null
+        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
+        spark(src,rand(2,4))
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -231,12 +234,16 @@
             var/mob/living/silicon/robot/R = occupant
             if(!R.pulsecompromised)
                 to_chat(PD,"<span class='notice'>You are now attempting to hijack \the [R]'s targeting module, this will take approximately [PD.takeover_time] seconds.</span>")
+                to_chat(R,"<span class='danger'>ALERT: ELECTRIAL MALEVOLANCE DETECTED, TARGETING SYSTEMS HIJACK IN PROGRESS</span>")
                 if(do_after(PD,src,PD.takeover_time*10))
                     if(occupant)
                         to_chat(PD,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
                         R.pulsecompromised = 1
                         PD.loc = R
                         PD.current_robot = R
+                        to_chat(R, "<span class='danger'>ERRORERRORERROR</span>")
+                        sleep(20)
+                        to_chat(R, "<span class='danger'>TARGETING SYSTEMS HIJACKED, REPORT ALL UNWANTED ACTIVITY IN VERBAL FORM</span>")
             else
                 to_chat(PD,"<span class='notice'>You are now inside \the [R], in control of its targeting.</span>")
                 PD.loc = R
@@ -302,7 +309,9 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/hijackAPC(var/obj/machinery/power/apc/current_apc)
     to_chat(src,"<span class='notice'>You are now attempting to hack \the [current_apc], this will take approximately [takeover_time] seconds.</span>")
+    current_apc.pulsecompromising = 1
     if(do_after(src,current_apc,takeover_time*10))
+        current_apc.pulsecompromising = 0
         current_apc.pulsecompromised = 1
         controlling_area = get_area(current_power)
         to_chat(src,"<span class='notice'>Takeover complete.</span>")
@@ -311,6 +320,8 @@
             if(PD)
                 PD.controlled_apcs.Add(current_apc)
                 to_chat(src,"<span class='notice'>You are now controlling [PD.controlled_apcs.len] APCs.</span>")
+    else
+        current_apc.pulsecompromising = 0
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/suckBattery(var/obj/machinery/power/battery/current_battery)
     if(current_battery.charge >= charge_absorb_amount)

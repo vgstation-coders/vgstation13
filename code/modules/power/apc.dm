@@ -50,6 +50,7 @@
 	use_power = 0
 	req_access = list(access_engine_equip)
 	var/spooky=0
+	var/pulsecompromising=0
 	var/obj/item/weapon/cell/cell
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
@@ -306,7 +307,7 @@
 			update_state |= UPSTATE_OPENED1
 		if(opened==2)
 			update_state |= UPSTATE_OPENED2
-	else if(emagged || malfai || spooky)
+	else if(emagged || malfai || spooky || compromising)
 		update_state |= UPSTATE_BLUESCREEN
 	else if(wiresexposed)
 		update_state |= UPSTATE_WIREEXP
