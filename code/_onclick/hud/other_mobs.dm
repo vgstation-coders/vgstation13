@@ -293,11 +293,10 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
 
-	pulsedemon_charge_display = new /obj/abstract/screen
-	pulsedemon_charge_display.icon = 'icons/mob/screen_spells.dmi'
-	pulsedemon_charge_display.icon_state = "pulsedemon_spell_base"
-	pulsedemon_charge_display.name = "Charge"
-	pulsedemon_charge_display.screen_loc = ui_under_health
+	vampire_blood_display = new /obj/abstract/screen
+	vampire_blood_display.name = "Charge"
+	vampire_blood_display.icon_state = "dark128"
+	vampire_blood_display.screen_loc = ui_under_health
 
 	mymob.client.reset_screen()
 

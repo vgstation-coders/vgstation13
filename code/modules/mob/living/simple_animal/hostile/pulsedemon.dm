@@ -67,11 +67,11 @@
 /mob/living/simple_animal/hostile/pulse_demon/regular_hud_updates()
 	..()
 	if(client && hud_used)
-		if(!hud_used.pulsedemon_charge_display)
+		if(!hud_used.vampire_blood_display)
 			hud_used.pulsedemon_hud()
-		hud_used.pulsedemon_charge_display.maptext_width = WORLD_ICON_SIZE
-		hud_used.pulsedemon_charge_display.maptext_height = WORLD_ICON_SIZE
-		hud_used.pulsedemon_charge_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'>Charge:<br><font color='#FFFF00'>[charge]</font></div>"
+		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE
+		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
+		hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'>Charge: <font color='#FFFF00'>[charge]</font><br>Max: <font color='#FF9900'>[max_charge]</font><br></div>"
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
     if(current_power)

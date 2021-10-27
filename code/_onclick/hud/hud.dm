@@ -26,7 +26,6 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	var/obj/abstract/screen/countdown_display // /vg/
 	var/obj/abstract/screen/cult_Act_display // /vg/
 	var/obj/abstract/screen/cult_tattoo_display // /vg/
-	var/obj/abstract/screen/pulsedemon_charge_display // /vg/
 	var/list/obj/abstract/screen/hand_hud_objects = list()
 	var/obj/abstract/screen/action_intent
 	var/obj/abstract/screen/move_intent
