@@ -181,6 +181,11 @@
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			could_bump = list()
 			. = ..()
+			//The following section is a workaround for a BYOND bug. Remove when the bug is fixed.
+			if((appearance_flags & TILE_MOVER) && (. < step_size))
+				. = 0
+				forceMove(oldloc)
+			//End workaround
 			perform_bump()
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
