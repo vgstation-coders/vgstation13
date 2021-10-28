@@ -37,6 +37,7 @@
     var/charge_absorb_amount = 1000
     var/max_can_absorb = 10000
     var/takeover_time = 30
+    var/show_desc = FALSE
     var/area/controlling_area
     var/obj/structure/cable/current_cable
     var/datum/powernet/current_net
@@ -307,12 +308,17 @@
     dat += {"<B>Select a spell ([charge] left to purchase with)</B><BR>
             <HR>
             <B>Abilities:</B><BR>
-            <I>The number afterwards is the charge cost.</I><BR>"}
+            <I>The number afterwards is the charge cost.</I><BR><A href='byond://?src=\ref[src];desc=1'>(Show more info)</A><BR>"}
     var/list/spells = getAllPulseDemonSpells()
+    for(var/spell/spell in spell_list)
+        if(spells.Find(spell.type)) //User knows this aleady
+            spells.Remove(spell.type)
     for(var/spell/S in spells)
         if(istype(S,/spell/pulse_demon))
             var/spell/pulse_demon/PDS = S
-            dat += "<A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A> ([PDS.purchase_cost])<BR>"
+            dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost])<BR>"
+            if(show_desc)
+                dat += "<I>[PDS.desc]</I><BR>"
     dat += "<HR>"
     var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu")
     popup.set_content(dat)
@@ -330,6 +336,9 @@
         add_spell(PDS, "pd_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
         charge -= PDS.purchase_cost
         //possible_spells -= PDS
+    
+    if(href_list["desc"])
+        show_desc = !show_desc
 
     powerMenu()
 
