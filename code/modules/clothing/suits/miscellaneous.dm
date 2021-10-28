@@ -909,6 +909,7 @@ var/list/tag_suits_list = list()
 	icon_state = "poncho"
 	item_state = "poncho"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/banana_suit
 	name = "banana suit"
