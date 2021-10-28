@@ -62,6 +62,7 @@
             controlling_area = get_area(current_power)
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
+    add_spell(new /spell/pulse_demon/abilities, "pd_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     if(client && client.darkness_planemaster)
@@ -300,6 +301,37 @@
 /mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
     shockMob(target)
     ..()
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
+    var/dat
+    dat += {"<B>Select a spell ([charge] left to purchase with)</B><BR>
+            <HR>
+            <B>Abilities:</B><BR>
+            <I>The number afterwards is the charge cost.</I><BR>"}
+    var/list/spells = getAllPulseDemonSpells()
+    for(var/spell/S in spells)
+        if(istype(S,/spell/pulse_demon))
+            var/spell/pulse_demon/PDS = S
+            dat += "<A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A> ([PDS.purchase_cost])<BR>"
+    dat += "<HR>"
+    var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu")
+    popup.set_content(dat)
+    popup.open()
+
+/mob/living/simple_animal/hostile/pulse_demon/Topic(href, href_list)
+    ..()
+    if(href_list["buy"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.purchase_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this ability.</span>")
+            return
+
+        // Give the power and take away the money.
+        add_spell(PDS, "pd_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
+        charge -= PDS.purchase_cost
+        //possible_spells -= PDS
+
+    powerMenu()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     if(current_net && current_net.avail)

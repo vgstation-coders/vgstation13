@@ -12,6 +12,7 @@
     charge_max = 20 SECONDS
     cooldown_min = 1 SECONDS
     var/charge_cost = 0
+    var/purchase_cost = 0
 
 /spell/pulse_demon/cast_check(var/skipcharge = 0, var/mob/user = usr)
     . = ..()
@@ -31,6 +32,16 @@
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         PD.charge -= charge_cost
 
+/spell/pulse_demon/abilities
+	name = "Abilities"
+	desc = "View and purchase abilities with your electrical charge."
+	abbreviation = "AB"
+
+/spell/pulse_demon/abilities/cast(var/list/targets, var/mob/living/carbon/human/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.powerMenu()
+
 /spell/pulse_demon/cable_zap
     name = "Cable Hop"
     abbreviation = "CH"
@@ -42,6 +53,7 @@
 
     hud_state = "pd_cablehop"
     charge_cost = 5000
+    purchase_cost = 15000
 
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
@@ -92,6 +104,7 @@
 
     hud_state = "wiz_tech"
     charge_cost = 20000
+    purchase_cost = 100000
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -119,6 +132,7 @@
 
     hud_state = "wiz_tech"
     charge_cost = 10000
+    purchase_cost = 50000
 
 /spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -141,6 +155,7 @@
 
     hud_state = "overload"
     charge_cost = 50000
+    purchase_cost = 200000
 
 /spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
     if(istype(target, /obj/item/device/radio/intercom))
