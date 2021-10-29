@@ -476,6 +476,10 @@ obj/item/weapon/banhammer/admin
 	item_state = "baseball_bat"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	force = 15
+	throwforce = 10
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
 
 /obj/item/weapon/baseball_bat/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -530,3 +534,7 @@ obj/item/weapon/banhammer/admin
 	force = 15
 	sharpness = 0.5
 	sharpness_flags = SHARP_TIP
+	throwforce = 10
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
