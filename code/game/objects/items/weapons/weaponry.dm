@@ -120,7 +120,7 @@
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("jabs","stabs","rips")
 
-obj/item/weapon/wirerod
+/obj/item/weapon/wirerod
 	name = "wired rod"
 	desc = "A rod with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 	icon_state = "wiredrod"
@@ -135,7 +135,7 @@ obj/item/weapon/wirerod
 	attack_verb = list("hits", "bludgeons", "whacks", "bonks")
 
 
-obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/weapon/shard))
 		user.visible_message("<span class='notice'>[user] starts securing \the [I] to the top of \the [src].</span>",\
@@ -467,3 +467,66 @@ obj/item/weapon/banhammer/admin
 	sharpness = 2
 	sharpness = SHARP_TIP
 	hitsound = 'sound/weapons/bladeslice.ogg'
+
+/obj/item/weapon/baseball_bat
+	name = "baseball bat"
+	desc = "Good for reducing a doubleheader to a no-header."
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	icon_state = "baseball_bat"
+	item_state = "baseball_bat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 15
+
+/obj/item/weapon/baseball_bat/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/stack/rods))
+		if(!(istype(user.get_inactive_hand(), /obj/item/weapon/storage/toolbox) || istype(user.get_inactive_hand(), /obj/item/weapon/hammer)))
+			to_chat(user, "<span class='info'>You need to be holding a toolbox or hammer to do that!</span>")
+			return
+		to_chat(user, "<span class='notice'>You hammer the [W.name] into \the [src].</span>")
+		var/obj/item/stack/rodstack = W
+		rodstack.use(1)
+		new /obj/item/weapon/spiked_bat(get_turf(src))
+		qdel(src)
+
+/obj/item/weapon/baseball_bat/IsShield()
+	return TRUE
+
+/obj/item/weapon/baseball_bat/on_block(damage, atom/movable/blocked)
+	if(ismob(loc))
+		var/mob/H = loc
+		if(!H.in_throw_mode)
+			return FALSE
+		if(IsShield() < blocked.ignore_blocking)
+			return FALSE
+		if(damage > 15)
+			return FALSE
+		if (prob(85 - round(damage * 15 / 3)))
+			visible_message("<span class='borange'>[loc] knocks away \the [blocked] with \the [src]!</span>")
+			playsound(usr.loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
+			if(ismovable(blocked))
+				var/atom/movable/M = blocked
+				var/turf/Q = get_turf(M)
+				var/turf/target
+				var/throwdir = turn(M.dir, 180 + rand(-30, 30))
+				if(istype(Q, /turf/space)) // if ended in space, then range is unlimited
+					target = get_edge_target_turf(Q, throwdir)
+				else						// otherwise limit to 10 tiles
+					target = get_ranged_target_turf(Q, throwdir, 10)
+				M.throw_at(target,100,4)
+
+			return TRUE
+		return FALSE
+
+
+/obj/item/weapon/spiked_bat
+	name = "spiked bat"
+	desc = "A classic among delinquent youths. Not very effective at hitting balls."
+	icon = 'icons/obj/weapons.dmi'
+	hitsound = "sound/weapons/spikebat_hit.ogg"
+	icon_state = "spikebat"
+	item_state = "spikebat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 15
+	sharpness = 0.5
+	sharpness_flags = SHARP_TIP

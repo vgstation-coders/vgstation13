@@ -25,7 +25,7 @@
 	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
-	return 1
+	return TRUE
 
 /obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/melee/baton) || istype(W, /obj/item/weapon/melee/telebaton) || istype(W, /obj/item/weapon/melee/classic_baton))
