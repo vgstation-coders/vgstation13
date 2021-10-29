@@ -475,6 +475,7 @@ obj/item/weapon/banhammer/admin
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	flags = TWOHANDABLE
 	force = 15
 	throwforce = 10
 	throw_speed = 1
@@ -499,13 +500,11 @@ obj/item/weapon/banhammer/admin
 /obj/item/weapon/baseball_bat/on_block(damage, atom/movable/blocked)
 	if(ismob(loc))
 		var/mob/H = loc
-		if(!H.in_throw_mode)
+		if(!H.in_throw_mode || !wielded || damage > 15)
 			return FALSE
 		if(IsShield() < blocked.ignore_blocking)
 			return FALSE
-		if(damage > 15)
-			return FALSE
-		if (prob(85 - round(damage * 15 / 3)))
+		if (prob(85 - round(damage * 5)))
 			visible_message("<span class='borange'>[loc] knocks away \the [blocked] with \the [src]!</span>")
 			playsound(usr.loc, 'sound/weapons/baseball_hit.ogg', 75, 1)
 			if(ismovable(blocked))
@@ -518,7 +517,7 @@ obj/item/weapon/banhammer/admin
 				else						// otherwise limit to 10 tiles
 					target = get_ranged_target_turf(Q, throwdir, 10)
 				M.throw_at(target,100,4)
-
+			H.in_throw_mode = FALSE
 			return TRUE
 		return FALSE
 
