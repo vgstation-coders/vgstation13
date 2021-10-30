@@ -238,8 +238,8 @@
 	name = "Pulse Demon Abilities"
 	icon_state = "pulsedemon_spell_ready"
 
-	open_state = "pd-open"
-	closed_state = "pd-closed"
+	open_state = "pd_open"
+	closed_state = "pd_closed"
 
 	screen_loc = ui_alien_master
 
