@@ -35,7 +35,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/sheet_amt = 1
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
-	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
+	var/datum/delay_controller/pAImove_delayer
 	var/pAImovement_delay = 0
 
 	// Can we wrench/weld this to a turf with a dense /obj on it?
@@ -83,6 +83,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	P.forceMove(src)
 	integratedpai = P
 	verbs += /obj/proc/remove_pai
+	pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
 
 /obj/attackby(obj/item/weapon/W, mob/user)
 	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
@@ -184,6 +185,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		verbs -= /obj/proc/remove_pai
 		var/obj/item/device/paicard/P = integratedpai
 		integratedpai = null
+		qdel(pAImove_delayer)
+		pAImove_delayer = null
 		return P
 	return 0
 
