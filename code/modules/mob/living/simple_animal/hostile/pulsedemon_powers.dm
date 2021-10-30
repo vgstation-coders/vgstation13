@@ -181,6 +181,65 @@
         else
             to_chat(holder, "You need to be in an APC for this!")
 
+/spell/pulse_demon/remote_hijack
+    name = "Remote Hijack"
+    abbreviation = "RH"
+    desc = "Remotely hijacks an APC"
+
+    range = 10
+    spell_flags = WAIT_FOR_CLICK
+    duration = 20
+
+    hud_state = "overload"
+    charge_cost = 10000
+    purchase_cost = 100000
+
+/spell/pulse_demon/remote_hijack/is_valid_target(var/atom/target)
+    if(istype(target, /obj/machinery/power/apc))
+        var/obj/machinery/power/apc/A = target
+        if(!A.pulsecompromised)
+            return 1
+        else
+            to_chat(holder, "This APC is already hijacked.")
+    else
+        to_chat(holder, "That is not an APC.")
+
+/spell/pulse_demon/remote_hijack/cast(var/list/targets, mob/user)
+    var/obj/machinery/power/APC/A = targets[1]
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.hijackAPC(A)
+
+/spell/pulse_demon/remote_drain
+    name = "Remote Drain"
+    abbreviation = "RD"
+    desc = "Remotely drains a power source"
+
+    range = 10
+    spell_flags = WAIT_FOR_CLICK
+    duration = 20
+
+    hud_state = "overload"
+    charge_cost = 10000
+    purchase_cost = 50000
+
+/spell/pulse_demon/remote_drain/is_valid_target(var/atom/target)
+    if(istype(target, /obj/machinery/power/apc) || istype(target, /obj/machinery/power/battery))
+        return 1
+    else
+        to_chat(holder, "That is not a valid drainable power source.")
+
+/spell/pulse_demon/remote_drain/cast(var/list/targets, mob/user)
+    var/obj/machinery/power/P = targets[1]
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if(istype(P,/obj/machinery/power/apc))
+            var/obj/machinery/power/apc/A = P
+            PD.drainAPC(A)
+        else if(istype(P,/obj/machinery/power/battery))
+            var/obj/machinery/power/battery/B = P
+            PD.suckBattery(B)
+
 //Passive spells
 //Cannot be normally cast, instead they rely on process()
 
