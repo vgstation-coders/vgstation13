@@ -281,29 +281,33 @@
     return
 
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
-    visible_message("<span class ='notice'>[user]'s foot goes right through \the [src]!</span>")
-    shockMob(user)
+    if(!is_under_tile())
+        visible_message("<span class ='notice'>[user]'s foot goes right through \the [src]!</span>")
+        shockMob(user)
 
 /mob/living/simple_animal/hostile/pulse_demon/bite_act(mob/living/carbon/human/user)
-    visible_message("<span class ='notice'>[user] attempted to taste \the [src], for no particular reason, and got rightfully burned.</span>")
-    shockMob(user)
+    if(!is_under_tile())
+        visible_message("<span class ='notice'>[user] attempted to taste \the [src], for no particular reason, and got rightfully burned.</span>")
+        shockMob(user)
 
 /mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
     visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
     health -= rand(20,25) / severity
 
 /mob/living/simple_animal/hostile/pulse_demon/attack_hand(mob/living/carbon/human/M as mob)
-    switch(M.a_intent)
-        if(I_HELP)
-            visible_message("<span class ='notice'>[M] [response_help] [src].</span>")
-        if(I_GRAB||I_DISARM)
-            visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
-        if(I_HURT)
-            visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
-    shockMob(M)
+    if(!is_under_tile())
+        switch(M.a_intent)
+            if(I_HELP)
+                visible_message("<span class ='notice'>[M] [response_help] [src].</span>")
+            if(I_GRAB||I_DISARM)
+                visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
+            if(I_HURT)
+                visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
+        shockMob(M)
 
 /mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
-    shockMob(target)
+    if(!is_under_tile())
+        shockMob(target)
     ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
@@ -341,9 +345,9 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     if(current_net && current_net.avail)
-        electrocute_mob(M, current_net, src, 2)
+        electrocute_mob(M, current_net, src, 1)
     else
-        M.electrocute_act(30, src, 2)
+        M.electrocute_act(30, src, 1)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/hijackAPC(var/obj/machinery/power/apc/current_apc)
     to_chat(src,"<span class='notice'>You are now attempting to hack \the [current_apc], this will take approximately [takeover_time] seconds.</span>")
