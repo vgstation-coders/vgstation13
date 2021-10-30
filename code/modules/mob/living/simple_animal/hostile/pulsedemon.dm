@@ -47,7 +47,7 @@
     var/obj/item/weapon/current_weapon
     var/can_move=1
     var/list/image/cables_shown = list()
-    var/list/spell/pulse_demon/possible_spells = list()
+    var/list/possible_spells = list()
 
 /mob/living/simple_animal/hostile/pulse_demon/New()
     ..()
@@ -65,8 +65,8 @@
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
     add_spell(new /spell/pulse_demon/abilities, "pd_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
-    for(var/spell/pulse_demon/pd_spell in getAllPulseDemonSpells())
-        var/spell/pulse_demon/S = new pd_spell
+    for(var/pd_spell in getAllPulseDemonSpells())
+        var/spell/S = new pd_spell
         if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/passive && S.type != /spell/pulse_demon/abilities)
             possible_spells += S
 
@@ -167,6 +167,9 @@
             current_weapon = null
 
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
+    if(!is_under_tile() && isliving(obstacle))
+        var/mob/living/L = obstacle
+        shockMob(L)
     if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
         can_move = 0
         forceMove(get_step(src,src.dir))
@@ -174,11 +177,6 @@
         can_move = 1
     else
         return ..()
-
-/mob/living/simple_animal/hostile/pulse_demon/Bumped(atom/movable/AM)
-    if(!is_under_tile() && isliving(AM))
-        var/mob/living/L = AM
-        shockMob(L)
 
 /obj/machinery/power/relaymove(mob/user, direction)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
