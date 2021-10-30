@@ -318,9 +318,17 @@
 /mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
     var/dat
     dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
-            <HR>
-            <B>Abilities:</B><BR>
-            <I>The number afterwards is the charge cost.</I><BR><A href='byond://?src=\ref[src];desc=1'>(Show more info)</A><BR>"}
+            <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
+    if(spell_list.len > 1)
+        dat += "<B>Known abilities:</B><BR>"
+        for(var/spell/S in spell_list)
+            if(!istype(S,/spell/pulse_demon/abilities))
+                dat += "<B>[S.name]</B><A href='byond://?src=\ref[src];upgrade=1;spell=\ref[S]'>Upgrade</A><BR>"
+                if(show_desc)
+                    dat += "<I>[S.desc]</I><BR>"
+        dat += "<HR>"
+    dat += "<B>Available abilities:</B><BR>"
+    dat += "<I>The number afterwards is the charge cost.</I><BR>"
     for(var/spell/pulse_demon/PDS in possible_spells)
         dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
         if(show_desc)

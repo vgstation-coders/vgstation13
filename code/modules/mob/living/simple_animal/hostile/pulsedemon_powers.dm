@@ -39,6 +39,10 @@
     desc = "View and purchase abilities with your electrical charge."
     abbreviation = "AB"
     hud_state = "pd_closed"
+    charge_max = 1 SECONDS
+
+/spell/pulse_demon/abilities/choose_targets(var/mob/user = usr)
+    return list(user) // Self-cast
 
 /spell/pulse_demon/abilities/cast(var/list/targets, var/mob/living/carbon/human/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
