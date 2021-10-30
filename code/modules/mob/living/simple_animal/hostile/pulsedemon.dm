@@ -28,26 +28,31 @@
     attack_sound = "sparks"
     harm_intent_damage = 0
     melee_damage_lower = 0
-    melee_damage_upper = 0 //Handled in unarmed_attack_mob() anyways
+    melee_damage_upper = 0                      //Handled in unarmed_attack_mob() anyways
 
-    var/charge = 1000
-    var/maxcharge = 1000
-    var/health_drain_rate = 5
-    var/amount_per_regen = 100
-    var/charge_absorb_amount = 1000
-    var/max_can_absorb = 10000
-    var/takeover_time = 30
-    var/show_desc = FALSE
-    var/area/controlling_area
-    var/obj/structure/cable/current_cable
-    var/datum/powernet/current_net
-    var/datum/powernet/previous_net
-    var/obj/machinery/power/current_power
-    var/mob/living/silicon/robot/current_robot
-    var/obj/item/weapon/current_weapon
-    var/can_move=1
-    var/list/image/cables_shown = list()
-    var/list/possible_spells = list()
+    //VARS
+    var/charge = 1000                           //Charge stored
+    var/maxcharge = 1000                        //Max charge storable
+    var/health_drain_rate = 5                   //Health drained per tick when not on power source
+    var/amount_per_regen = 100                  //Amount of power used to regenerate health
+    var/charge_absorb_amount = 1000             //Amount of power sucked per tick
+    var/max_can_absorb = 10000                  //Maximum amount that max charge can increase to
+    var/takeover_time = 30                      //Time spent taking over electronics
+    var/show_desc = FALSE                       //For the ability menu
+
+    //TYPES
+    var/area/controlling_area                   // Area controlled from an APC
+    var/obj/structure/cable/current_cable       // Current cable we're on
+    var/datum/powernet/current_net              // Powernet for cableview to update
+    var/datum/powernet/previous_net             // Old net to check against current one for cable view update
+    var/obj/machinery/power/current_power       // Current power machine we're in
+    var/mob/living/silicon/robot/current_robot  // Currently controlled robot
+    var/obj/item/weapon/current_weapon          // Current gun we're controlling
+    var/can_move=1                              // See to_bump()
+
+    //LISTS
+    var/list/image/cables_shown = list()        // In cable views
+    var/list/possible_spells = list()           // To be purchasable from ability menu
 
 /mob/living/simple_animal/hostile/pulse_demon/New()
     ..()

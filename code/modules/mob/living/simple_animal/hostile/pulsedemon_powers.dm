@@ -35,9 +35,9 @@
         PD.charge -= charge_cost
 
 /spell/pulse_demon/abilities
-	name = "Abilities"
-	desc = "View and purchase abilities with your electrical charge."
-	abbreviation = "AB"
+    name = "Abilities"
+    desc = "View and purchase abilities with your electrical charge."
+    abbreviation = "AB"
     hud_state = "pd_closed"
 
 /spell/pulse_demon/abilities/cast(var/list/targets, var/mob/living/carbon/human/user)
