@@ -47,6 +47,7 @@
     var/obj/item/weapon/current_weapon
     var/can_move=1
     var/list/image/cables_shown = list()
+    var/list/spell/pulse_demon/possible_spells = list()
 
 /mob/living/simple_animal/hostile/pulse_demon/New()
     ..()
@@ -64,6 +65,10 @@
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
     add_spell(new /spell/pulse_demon/abilities, "pd_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+    for(var/spell/pulse_demon/pd_spell in getAllPulseDemonSpells())
+        var/spell/pulse_demon/S = new pd_spell
+        if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/passive && S.type != /spell/pulse_demon/abilities)
+            possible_spells += S
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     if(client && client.darkness_planemaster)
@@ -309,12 +314,7 @@
             <HR>
             <B>Abilities:</B><BR>
             <I>The number afterwards is the charge cost.</I><BR><A href='byond://?src=\ref[src];desc=1'>(Show more info)</A><BR>"}
-    var/list/pdspells = list()
-    for(var/pd_spell in getAllPulseDemonSpells())
-        var/spell/S = new pd_spell
-        if(!spell_list.Find(S) && S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/passive)
-            pdspells += S
-    for(var/spell/pulse_demon/PDS in pdspells)
+    for(var/spell/pulse_demon/PDS in possible_spells)
         dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
         if(show_desc)
             dat += "<I>[PDS.desc]</I><BR>"
@@ -334,7 +334,7 @@
         // Give the power and take away the money.
         add_spell(PDS, "pd_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
         charge -= PDS.purchase_cost
-        //possible_spells -= PDS
+        possible_spells.Remove(PDS)
     
     if(href_list["desc"])
         show_desc = !show_desc

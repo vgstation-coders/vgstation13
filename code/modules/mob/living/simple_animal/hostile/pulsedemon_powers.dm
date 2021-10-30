@@ -7,6 +7,8 @@
 
     user_type = USER_TYPE_PULSEDEMON
     school = "pulse demon"
+    spell_flags = 0
+
     override_base = "pulsedemon"
     hud_state = "pd_icon_base"
     charge_max = 20 SECONDS
@@ -192,9 +194,10 @@
     return //Does nothing, add processes to children instead
 
 /spell/pulse_demon/passive/halftakeover
-	name = "Faster takeover"
-	abbreviation = "FT"
-	desc = "Allows hijacking of electronics in half the previous time."
+    name = "Faster takeover"
+    abbreviation = "FT"
+    desc = "Allows hijacking of electronics in half the previous time."
+    purchase_cost = 20000
 
 /spell/pulse_demon/passive/halftakeover/on_added(mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -202,9 +205,10 @@
         PD.takeover_time /= 2
 
 /spell/pulse_demon/passive/doubleabsorb
-	name = "Faster power absorbing"
-	abbreviation = "FA"
-	desc = "Allows double the amount of power absorbed per second."
+    name = "Faster power absorbing"
+    abbreviation = "FA"
+    desc = "Allows double the amount of power absorbed per second."
+    purchase_cost = 10000
 
 /spell/pulse_demon/passive/doubleabsorb/on_added(mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -212,9 +216,10 @@
         PD.charge_absorb_amount *= 2
 
 /spell/pulse_demon/passive/doubleregen
-	name = "Faster regeneration"
-	abbreviation = "FR"
-	desc = "Allows double the speed of health regeneration from power."
+    name = "Faster regeneration"
+    abbreviation = "FR"
+    desc = "Allows double the speed of health regeneration from power."
+    purchase_cost = 40000
 
 /spell/pulse_demon/passive/doubleregen/on_added(mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
