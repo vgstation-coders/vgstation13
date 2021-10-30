@@ -17,6 +17,14 @@
 	abstract = 1
 	var/obj/item/wielding = null
 
+/obj/item/offhand/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
+	giver.swap_hand()
+	receiver.give_item(giver)
+	return FALSE
+
+/obj/item/offhand/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return FALSE
+
 /obj/item/offhand/dropped(user)
 	if(!wielding)
 		qdel(src)
