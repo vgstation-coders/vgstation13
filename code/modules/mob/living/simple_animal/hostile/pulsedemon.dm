@@ -327,9 +327,9 @@
                 if(show_desc)
                     dat += "<I>[S.desc]</I><BR>"
         dat += "<HR>"
-    dat += "<B>Available abilities:</B><BR>"
-    dat += "<I>The number afterwards is the charge cost.</I><BR>"
     if(possible_spells.len)
+        dat += "<B>Available abilities:</B><BR>"
+        dat += "<I>The number afterwards is the charge cost.</I><BR>"
         for(var/spell/pulse_demon/PDS in possible_spells)
             dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
             if(show_desc)
