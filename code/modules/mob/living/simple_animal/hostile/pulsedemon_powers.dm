@@ -147,7 +147,7 @@
 /spell/pulse_demon/overload_machine
     name = "Overload Machine"
     abbreviation = "OM"
-    desc = "Overloads the electronics in a machine, causing an explosion."
+    desc = "Overloads the electronics in a machine, causing an explosion. Must be inside a compromised APC to use."
 
     range = 10
     spell_flags = WAIT_FOR_CLICK
@@ -178,3 +178,45 @@
             ..()
         else
             to_chat(holder, "You need to be in an APC for this!")
+
+//Passive spells
+//Cannot be normally cast, instead they rely on process()
+
+/spell/pulse_demon/passive
+    charge_type = Sp_PASSIVE
+    level_max = list(Sp_TOTAL = 0) //Passive spells have no use.
+    charge_max = 0 //Redundancy
+    spell_flags = NO_BUTTON
+
+/spell/pulse_demon/passive/process()
+    return //Does nothing, add processes to children instead
+
+/spell/pulse_demon/passive/halftakeover
+	name = "Faster takeover"
+	abbreviation = "FT"
+	desc = "Allows hijacking of electronics in half the previous time."
+
+/spell/pulse_demon/passive/halftakeover/on_added(mob/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.takeover_time /= 2
+
+/spell/pulse_demon/passive/doubleabsorb
+	name = "Faster power absorbing"
+	abbreviation = "FA"
+	desc = "Allows double the amount of power absorbed per second."
+
+/spell/pulse_demon/passive/doubleabsorb/on_added(mob/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.charge_absorb_amount *= 2
+
+/spell/pulse_demon/passive/doubleregen
+	name = "Faster regeneration"
+	abbreviation = "FR"
+	desc = "Allows double the speed of health regeneration from power."
+
+/spell/pulse_demon/passive/doubleregen/on_added(mob/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.amount_per_regen *= 2

@@ -63,7 +63,7 @@
             controlling_area = get_area(current_power)
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
-    add_spell(new /spell/pulse_demon/abilities, "pd_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
+    add_spell(new /spell/pulse_demon/abilities, "pd_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     if(client && client.darkness_planemaster)
@@ -305,20 +305,19 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
     var/dat
-    dat += {"<B>Select a spell ([charge] left to purchase with)</B><BR>
+    dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
             <HR>
             <B>Abilities:</B><BR>
             <I>The number afterwards is the charge cost.</I><BR><A href='byond://?src=\ref[src];desc=1'>(Show more info)</A><BR>"}
-    var/list/spells = getAllPulseDemonSpells()
-    for(var/spell/spell in spell_list)
-        if(spells.Find(spell.type)) //User knows this aleady
-            spells.Remove(spell.type)
-    for(var/spell/S in spells)
-        if(istype(S,/spell/pulse_demon))
-            var/spell/pulse_demon/PDS = S
-            dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost])<BR>"
-            if(show_desc)
-                dat += "<I>[PDS.desc]</I><BR>"
+    var/list/pdspells = list()
+    for(var/pd_spell in getAllPulseDemonSpells())
+        var/spell/S = new pd_spell
+        if(!spell_list.Find(S) && S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/passive)
+            pdspells += S
+    for(var/spell/pulse_demon/PDS in pdspells)
+        dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
+        if(show_desc)
+            dat += "<I>[PDS.desc]</I><BR>"
     dat += "<HR>"
     var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu")
     popup.set_content(dat)
