@@ -128,6 +128,11 @@
         spark(src,rand(2,4))
     var/obj/machinery/power/new_power = locate(/obj/machinery/power) in NewLoc
     if(new_power && !current_power)
+        current_power = new_power
+        current_cable = null
+        loc = new_power
+        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
+        spark(src,rand(2,4))
         if(istype(current_power,/obj/machinery/power/apc))
             var/obj/machinery/power/apc/current_apc = current_power
             if(current_apc.occupant)
@@ -142,11 +147,6 @@
             var/obj/machinery/power/battery/current_battery = current_power
             to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
             max_can_absorb = current_battery.chargelevel
-        loc = new_power
-        current_power = new_power
-        current_cable = null
-        playsound(src,'sound/weapons/electriczap.ogg',50, 1)
-        spark(src,rand(2,4))
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
