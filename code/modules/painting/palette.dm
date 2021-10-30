@@ -57,7 +57,7 @@ interactions:
 	// Graphics stuff
 	desc = "A piece of wood"
 	name = "painting brush"
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "painting_brush"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 
