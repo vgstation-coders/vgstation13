@@ -143,7 +143,7 @@
             if(current_apc.occupant)
                 to_chat(src,"<span class='warning'>Something else that isn't a pulse demon is already in here!</span>")
                 return
-            max_can_absorb = current_apc.cell.charge
+            max_can_absorb = current_apc.cell.maxcharge
             if(current_apc.pulsecompromised)
                 controlling_area = get_area(current_power)
             else
@@ -151,7 +151,7 @@
         else if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
             to_chat(src,"<span class='notice'>You are now draining power from \the [current_power] and refilling charge.</span>")
-            max_can_absorb = current_battery.chargelevel
+            max_can_absorb = current_battery.output
     else
         var/obj/structure/cable/new_cable = locate(/obj/structure/cable) in NewLoc
         if(new_cable)
@@ -193,15 +193,18 @@
             user.forceMove(get_turf(src))
 
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
-    if(get_area(A) == controlling_area)
-        A.attack_pulsedemon(src)
-    else if(current_weapon)
-        if(istype(current_weapon,/obj/item/weapon/gun))
-            var/obj/item/weapon/gun/G = current_weapon
-            G.Fire(A,src)
-    else if(current_robot)
-        A.attack_robot(current_robot,src)
-    else if(!istype(A,/obj/machinery))
+    if(!spell_channeling)
+        if(get_area(A) == controlling_area)
+            A.attack_pulsedemon(src)
+        else if(current_weapon)
+            if(istype(current_weapon,/obj/item/weapon/gun))
+                var/obj/item/weapon/gun/G = current_weapon
+                G.Fire(A,src)
+        else if(current_robot)
+            A.attack_robot(current_robot,src)
+        else if(!istype(A,/obj/machinery))
+            ..()
+    else
         ..()
 
 /atom/proc/attack_pulsedemon(mob/user)
