@@ -205,9 +205,9 @@
         to_chat(holder, "That is not an APC.")
 
 /spell/pulse_demon/remote_hijack/cast(var/list/targets, mob/user)
-    var/obj/machinery/power/APC/A = targets[1]
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        var/obj/machinery/power/apc/A = targets[1]
         PD.hijackAPC(A)
 
 /spell/pulse_demon/remote_drain
@@ -230,9 +230,9 @@
         to_chat(holder, "That is not a valid drainable power source.")
 
 /spell/pulse_demon/remote_drain/cast(var/list/targets, mob/user)
-    var/obj/machinery/power/P = targets[1]
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        var/obj/machinery/power/P = targets[1]
         if(istype(P,/obj/machinery/power/apc))
             var/obj/machinery/power/apc/A = P
             PD.drainAPC(A)
