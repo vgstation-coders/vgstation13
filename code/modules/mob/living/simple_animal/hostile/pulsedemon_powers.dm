@@ -38,6 +38,7 @@
 	name = "Abilities"
 	desc = "View and purchase abilities with your electrical charge."
 	abbreviation = "AB"
+    hud_state = "pd_closed"
 
 /spell/pulse_demon/abilities/cast(var/list/targets, var/mob/living/carbon/human/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -104,7 +105,7 @@
     spell_flags = WAIT_FOR_CLICK
     duration = 20
 
-    hud_state = "wiz_tech"
+    hud_state = "pd_emag"
     charge_cost = 20000
     purchase_cost = 100000
 
@@ -190,7 +191,7 @@
     spell_flags = WAIT_FOR_CLICK
     duration = 20
 
-    hud_state = "overload"
+    hud_state = "pd_hijack"
     charge_cost = 10000
     purchase_cost = 100000
 
@@ -219,7 +220,7 @@
     spell_flags = WAIT_FOR_CLICK
     duration = 20
 
-    hud_state = "overload"
+    hud_state = "pd_drain"
     charge_cost = 10000
     purchase_cost = 50000
 
@@ -248,6 +249,7 @@
     level_max = list(Sp_TOTAL = 0) //Passive spells have no use.
     charge_max = 0 //Redundancy
     spell_flags = NO_BUTTON
+    hud_state = "pd_closed"
 
 /spell/pulse_demon/passive/process()
     return //Does nothing, add processes to children instead

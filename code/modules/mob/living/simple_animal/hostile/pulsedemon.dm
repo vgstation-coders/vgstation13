@@ -64,7 +64,7 @@
             controlling_area = get_area(current_power)
         forceMove(current_power)
     set_light(2,2,"#bbbb00")
-    add_spell(new /spell/pulse_demon/abilities, "pd_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+    add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
     for(var/pd_spell in getAllPulseDemonSpells())
         var/spell/S = new pd_spell
         if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/passive && S.type != /spell/pulse_demon/abilities)
@@ -334,7 +334,7 @@
             return
 
         // Give the power and take away the money.
-        add_spell(PDS, "pd_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
+        add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
         charge -= PDS.purchase_cost
         possible_spells.Remove(PDS)
     
