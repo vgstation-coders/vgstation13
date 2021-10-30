@@ -114,7 +114,7 @@ var/list/body_archives = list()
 	if (our_mind)
 		has_been_shade -= our_mind
 		our_mind.transfer_to(H)
-		//H.ckey = R.ckey
+		H.ckey = R.ckey // Maybe needed to put things like ghosts back in bodies
 	if (H.mind && H.mind.miming)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
