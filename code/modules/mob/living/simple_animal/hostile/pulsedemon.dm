@@ -323,17 +323,18 @@
         dat += "<B>Known abilities:</B><BR>"
         for(var/spell/S in spell_list)
             if(!istype(S,/spell/pulse_demon/abilities))
-                dat += "<B>[S.name]</B><A href='byond://?src=\ref[src];upgrade=1;spell=\ref[S]'>Upgrade</A><BR>"
+                dat += "<B>[S.name]</B> <A href='byond://?src=\ref[src];upgrade=1;spell=\ref[S]'>Upgrade</A><BR>"
                 if(show_desc)
                     dat += "<I>[S.desc]</I><BR>"
         dat += "<HR>"
     dat += "<B>Available abilities:</B><BR>"
     dat += "<I>The number afterwards is the charge cost.</I><BR>"
-    for(var/spell/pulse_demon/PDS in possible_spells)
-        dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
-        if(show_desc)
-            dat += "<I>[PDS.desc]</I><BR>"
-    dat += "<HR>"
+    if(possible_spells.len)
+        for(var/spell/pulse_demon/PDS in possible_spells)
+            dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
+            if(show_desc)
+                dat += "<I>[PDS.desc]</I><BR>"
+        dat += "<HR>"
     var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu")
     popup.set_content(dat)
     popup.open()
