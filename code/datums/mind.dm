@@ -73,6 +73,8 @@
 
 	var/list/activeUIs = list()
 
+	var/mob_legacy_fac
+
 /datum/mind/New(var/key)
 	src.key = key
 
@@ -106,6 +108,8 @@
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
+
+	new_character.faction = mob_legacy_fac
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
