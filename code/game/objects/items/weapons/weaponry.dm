@@ -470,7 +470,7 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/baseball_bat
 	name = "baseball bat"
-	desc = "Good for reducing a doubleheader to a no-header."
+	desc = "Good for reducing a doubleheader to a zeroheader."
 	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat"
@@ -482,10 +482,14 @@ obj/item/weapon/banhammer/admin
 	throw_range = 7
 	w_class = W_CLASS_LARGE
 
+/obj/item/weapon/baseball_bat/update_wield()
+	..()
+	force = wielded ? 25 : initial(force)
+
 /obj/item/weapon/baseball_bat/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/stack/rods))
-		if(!(istype(user.get_inactive_hand(), /obj/item/weapon/storage/toolbox) || istype(user.get_inactive_hand(), /obj/item/weapon/hammer)))
+		if(!ishammer(user.get_inactive_hand()))
 			to_chat(user, "<span class='info'>You need to be holding a toolbox or hammer to do that!</span>")
 			return
 		to_chat(user, "<span class='notice'>You hammer the [W.name] into \the [src].</span>")
@@ -530,6 +534,7 @@ obj/item/weapon/banhammer/admin
 	icon_state = "spikebat"
 	item_state = "spikebat"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	flags = TWOHANDABLE
 	force = 15
 	sharpness = 0.5
 	sharpness_flags = SHARP_TIP
@@ -537,3 +542,8 @@ obj/item/weapon/banhammer/admin
 	throw_speed = 1
 	throw_range = 7
 	w_class = W_CLASS_LARGE
+
+/obj/item/weapon/spiked_bat/update_wield()
+	..()
+	force = wielded ? 25 : initial(force)
+
