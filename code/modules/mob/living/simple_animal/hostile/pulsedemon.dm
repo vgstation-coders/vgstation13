@@ -374,8 +374,8 @@
         current_apc.pulsecompromised = 1
         controlling_area = get_area(current_power)
         to_chat(src,"<span class='notice'>Takeover complete.</span>")
-        if(mind && mind.antag_roles.len)
-            var/datum/role/pulse_demon/PD = locate(/datum/role/pulse_demon) in mind.antag_roles
+        if(mind && mind.GetRole(PULSEDEMON))
+            var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
             if(PD)
                 PD.controlled_apcs.Add(current_apc)
                 to_chat(src,"<span class='notice'>You are now controlling [PD.controlled_apcs.len] APCs.</span>")
