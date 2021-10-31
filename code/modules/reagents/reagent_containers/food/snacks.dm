@@ -7018,7 +7018,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zamdinner1
 	name = "Zam Steak and Nettles"
 	icon_state	= "box_tvdinner1"
-	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
 	food_flags = FOOD_MEAT
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
@@ -7032,7 +7032,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zamdinner2
 	name = "Zam Mothership Stew"
 	icon_state	= "box_tvdinner2"
-	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
 
@@ -7045,7 +7045,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zamdinner3
 	name = "Zam Spider Slider Delight"
 	icon_state	= "box_tvdinner3"
-	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
 	food_flags = FOOD_MEAT
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
@@ -7102,7 +7102,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/greygreens
 	name = "Grey Greens"
-	desc = "A dish beloved by Greys since first contact, acidic vegetables seasoned with soy sauce."
+	desc = "A dish beloved by greys since first contact, acidic vegetables seasoned with soy sauce."
 	trash = /obj/item/trash/used_tray2
 	icon_state = "greygreens"
 	base_crumb_chance = 0
@@ -7115,7 +7115,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
 	name = "Stuffed Pitcher"
-	desc = "A delicious Grey alternative to a stuffed pepper. Very acidic."
+	desc = "A delicious grey alternative to a stuffed pepper. Very acidic."
 	trash = /obj/item/trash/used_tray2
 	icon_state = "stuffedpitcher"
 	food_flags = FOOD_ANIMAL
@@ -7243,7 +7243,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped
 	name = "Zam Spider Slider"
-	desc = "A self-heating acidic slider for Grey laborers on salaries too humble to afford the full meal."
+	desc = "A self-heating acidic slider for grey laborers on salaries too humble to afford the full meal."
 	icon_state = "zam_spiderslider_wrapped"
 	wrapped = 1
 
