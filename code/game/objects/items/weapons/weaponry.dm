@@ -484,7 +484,7 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/baseball_bat/update_wield()
 	..()
-	force = wielded ? 25 : initial(force)
+	force = wielded ? 18 : initial(force)
 
 /obj/item/weapon/baseball_bat/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -535,7 +535,7 @@ obj/item/weapon/banhammer/admin
 	item_state = "spikebat"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	flags = TWOHANDABLE
-	force = 15
+	force = 10
 	sharpness = 0.5
 	sharpness_flags = SHARP_TIP
 	throwforce = 10
@@ -545,5 +545,5 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/spiked_bat/update_wield()
 	..()
-	force = wielded ? 25 : initial(force)
+	force = wielded ? 15 : initial(force)
 
