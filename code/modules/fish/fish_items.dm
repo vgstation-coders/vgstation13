@@ -70,6 +70,14 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	visible_message("<span class='warning'>\The [user] is vigorously scrubbing \himself raw with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
+/obj/item/weapon/fishtools/fishtank_helper
+	name = "aquarium automation module"
+	desc = "A module that automates cleaning and feeding aquariums."
+	icon = 'icons/obj/module.dmi'
+	icon_state = "cyborg_upgrade"
+	w_class = W_CLASS_SMALL
+
+
 //////////////////////////////////////////////
 //				Fish Items					//
 //////////////////////////////////////////////
