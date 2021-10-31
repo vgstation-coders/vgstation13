@@ -386,22 +386,22 @@
     var/amount_to_drain = charge_absorb_amount
     if(current_battery.charge <= charge_absorb_amount)
         amount_to_drain = current_battery.charge
-    if(charge == maxcharge)
-        amount_to_drain = 0
-    current_battery.charge -= amount_to_drain
     if(maxcharge <= max_can_absorb)
         maxcharge += amount_to_drain
+    else if(charge == maxcharge)
+        amount_to_drain = 0
+    current_battery.charge -= amount_to_drain
     charge += min((maxcharge-charge),amount_to_drain)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
     var/amount_to_drain = charge_absorb_amount
     if(current_apc.cell.charge <= charge_absorb_amount)
         amount_to_drain = current_apc.cell.charge
-    if(charge == maxcharge)
-        amount_to_drain = 0
-    current_apc.cell.use(amount_to_drain)
     if(maxcharge <= max_can_absorb)
         maxcharge += amount_to_drain
+    else if(charge == maxcharge)
+        amount_to_drain = 0
+    current_apc.cell.use(amount_to_drain)
     charge += min((maxcharge-charge),amount_to_drain)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
