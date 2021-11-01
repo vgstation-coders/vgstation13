@@ -58,10 +58,8 @@
     charge_cost /= 1.5
     return temp
 
-/spell/pulse_demon/is_valid_target(var/atom/target, mob/user, options)
-    if(options)
-        return (target in options)
-    return (target in view_or_range(range, user, selection_type))
+/spell/pulse_demon/is_valid_target(var/atom/target)
+    return 1
 
 /spell/pulse_demon/abilities
     name = "Abilities"
@@ -157,6 +155,8 @@
                 return
             target.emag_act(PD)
             ..()
+        else if(istype(PD.loc,/obj/machinery/power/apc))
+            to_chat(holder, "You can only cast this in the area you control!")
         else
             to_chat(holder, "You need to be in an APC for this!")
 
@@ -179,8 +179,10 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         if(PD.controlling_area == get_area(target))
-            target.emp_act(1)
+            empulse(get_turf(target),1,1,0)
             ..()
+        else if(istype(PD.loc,/obj/machinery/power/apc))
+            to_chat(holder, "You can only cast this in the area you control!")
         else
             to_chat(holder, "You need to be in an APC for this!")
 
@@ -217,6 +219,8 @@
                 explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
                 qdel(M)
             ..()
+        else if(istype(PD.loc,/obj/machinery/power/apc))
+            to_chat(holder, "You can only cast this in the area you control!")
         else
             to_chat(holder, "You need to be in an APC for this!")
 
