@@ -205,7 +205,7 @@
         else if(!istype(A,/obj/machinery))
             ..()
     else
-        ..()
+        spell_channeling.channeled_spell(A)
 
 /atom/proc/attack_pulsedemon(mob/user)
     return
