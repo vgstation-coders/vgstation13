@@ -329,7 +329,7 @@
             if(show_desc)
                 dat += "<I>Allows hijacking of electronics in half the previous time.</I><BR>"
         if(charge_absorb_amount <= 600000)
-            dat += "<A href='byond://?src=\ref[src];absorbing=1'>Faster power absorbing ([charge_absorb_amount*10]]W)</A><BR>"
+            dat += "<A href='byond://?src=\ref[src];absorbing=1'>Faster power absorbing ([charge_absorb_amount*10]W)</A><BR>"
             if(show_desc)
                 dat += "<I>Allows double the amount of power absorbed per second.</I><BR>"
         if(amount_per_regen <= maxHealth)
