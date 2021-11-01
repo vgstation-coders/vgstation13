@@ -440,6 +440,7 @@
         
         charge -= maxHealth * 1000
         maxHealth *= 1.5
+        health *= 1.5
         to_chat(src,"<span class='notice'>Your maximum health is now [maxHealth].</span>")
 
     powerMenu()
