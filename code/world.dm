@@ -11,7 +11,7 @@ var/world_startup_time
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
 	movement_mode = TILE_MOVEMENT_MODE
-
+	sleep_offline = FALSE
 
 var/savefile/panicfile
 
@@ -49,12 +49,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
 
-	/*Runtimes, not sure if i need it still so commenting out for now
-	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
-	midicon = rotate_icon('icons/obj/lightning.dmi', "lightning")
-	endicon = rotate_icon('icons/obj/lightning.dmi', "lightningend")
-	*/
-
 	// logs
 	var/date_string = time2text(world.realtime, "YYYY/MM-Month/DD-Day")
 
@@ -70,14 +64,13 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	diaryofmeanpeople = file("data/logs/[date_string] Attack.log")
 	admin_diary = file("data/logs/[date_string] admin only.log")
 
-	var/log_start = "---------------------\n\[[time_stamp()]\]WORLD: starting up..."
+	var/now = time_stamp()
+	var/log_start = "---------------------\n\[[now]\]WORLD: starting up..."
 
 	diary << log_start
 	diaryofmeanpeople << log_start
 	admin_diary << log_start
-	var/ourround = time_stamp()
-	panicfile.cd = ourround
-
+	panicfile.cd = now
 
 	changelog_hash = md5('html/changelog.html')					//used for telling if the changelog has changed recently
 
@@ -115,35 +108,15 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 	src.update_status()
 
-	paperwork_setup()
-
-	global_deadchat_listeners = list()
-
 	initialize_rune_words()
 
 	initialize_beespecies()
 	generate_radio_frequencies()
-	//sun = new /datum/sun()
+
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
 
-	plmaster = new /obj/effect/overlay()
-	plmaster.icon = 'icons/effects/tile_effects.dmi'
-	plmaster.icon_state = "plasma"
-	plmaster.layer = FLY_LAYER
-	plmaster.plane = EFFECTS_PLANE
-	plmaster.mouse_opacity = 0
-
-	slmaster = new /obj/effect/overlay()
-	slmaster.icon = 'icons/effects/tile_effects.dmi'
-	slmaster.icon_state = "sleeping_agent"
-	slmaster.layer = FLY_LAYER
-	slmaster.plane = EFFECTS_PLANE
-	slmaster.mouse_opacity = 0
-
 	src.update_status()
-
-	sleep_offline = 0
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
@@ -152,24 +125,7 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
-	spawn(2000)		//so we aren't adding to the round-start lag
-		if(config.ToRban)
-			ToRban_autoupdate()
-		/*if(config.kick_inactive)
-			KickInactiveClients()*/
-
 	return ..()
-
-//world/Topic(href, href_list[])
-//		to_chat(world, "Received a Topic() call!")
-//		to_chat(world, "[href]")
-//		for(var/a in href_list)
-//			to_chat(world, "[a]")
-//		if(href_list["hello"])
-//			to_chat(world, "Hello world!")
-//			return "Hello world!"
-//		to_chat(world, "End of Topic() call.")
-//		..()
 
 /world/Topic(T, addr, master, key)
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
@@ -280,7 +236,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		D.closeAll()
 
 	Master.Shutdown()
-	paperwork_stop()
 
 	stop_all_media()
 
