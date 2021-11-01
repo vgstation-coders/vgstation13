@@ -58,6 +58,11 @@
     charge_cost /= 1.5
     return temp
 
+/spell/pulse_demon/is_valid_target(var/atom/target, mob/user, options)
+    if(options)
+        return (target in options)
+    return (target in view_or_range(range, user, selection_type))
+
 /spell/pulse_demon/abilities
     name = "Abilities"
     desc = "View and purchase abilities with your electrical charge."
