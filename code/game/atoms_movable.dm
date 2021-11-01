@@ -131,7 +131,7 @@
 		glide_size = max(min, glide_size_override) * step_size / WORLD_ICON_SIZE //This should probably go in DELAY2GLIDESIZE() instead but that would be a lot of changed macros
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
-	if(!loc || !NewLoc)
+	if(!loc || !NewLoc || locked_to)
 		return 0
 	INVOKE_EVENT(src, /event/before_move)
 
@@ -803,7 +803,7 @@
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)
-	return 1
+	return !locked_to
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
@@ -1249,6 +1249,9 @@
 	if(!locked_to)
 		CRASH("border_dummy was collision checked while not locked to anything! ([x], [y], [z])")
 	return (mover == locked_to) || locked_to.border_dummy_Cross(mover) //An object will hit its own border_dummy if the (mover == locked_to) isn't included.
+
+/atom/movable/border_dummy/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0)
+	return //It wouldn't actually move even without this override, but it would still hit things on its own tile.
 
 /atom/movable/border_dummy/get_bump_target()
 	return locked_to.get_bump_target() //I don't think it's possible for this line to execute if locked_to is null due to Cross() above.
