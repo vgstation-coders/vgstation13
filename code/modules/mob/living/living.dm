@@ -954,7 +954,7 @@ Thanks.
 
 			else if(iscarbon(L))
 				var/mob/living/carbon/C = L
-				if(C.handcuffed)
+				if(C.restrained())
 					if(isalienadult(C) || (M_HULK in usr.mutations))
 						C.visible_message("<span class='warning'>[C] is trying to forcefully unbuckle!</span>",
 						                   "<span class='warning'>You attempt to forcefully unbuckle (This will take around five seconds).</span>")
