@@ -345,8 +345,8 @@
         dat += "<B>Known abilities:</B><BR>"
         for(var/spell/S in spell_list)
             if(!istype(S,/spell/pulse_demon/abilities))
-                var/icon/spellimg = icon(S.overlay_icon, S.overlay_icon_state)
-                dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> <B>[S.name]</B> "
+                var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
+                dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
                 dat += "[S.spell_levels[Sp_SPEED] < S.level_max[Sp_SPEED] ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A>" : ""] "
                 dat += "[S.spell_levels[Sp_POWER] < S.level_max[Sp_POWER] ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A>" : ""]<BR>"
                 if(show_desc)
@@ -356,8 +356,8 @@
         dat += "<B>Available abilities:</B><BR>"
         dat += "<I>The number afterwards is the charge cost.</I><BR>"
         for(var/spell/pulse_demon/PDS in possible_spells)
-            var/icon/spellimg = icon(PDS.overlay_icon, PDS.overlay_icon_state)
-            dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> "
+            var/icon/spellimg = icon('icons/mob/screen_spells.dmi', PDS.hud_state)
+            dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> "
             dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
             if(show_desc)
                 dat += "<I>[PDS.desc]</I><BR>"
@@ -384,6 +384,9 @@
 
     if(href_list["quicken"])
         var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.upgrade_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
         if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
             to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
             return
@@ -393,6 +396,9 @@
 
     if(href_list["empower"])
         var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.upgrade_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
         if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
             to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
             return
