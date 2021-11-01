@@ -332,7 +332,7 @@
             dat += "<A href='byond://?src=\ref[src];absorbing=1'>Faster power absorbing ([charge_absorb_amount*10]]W)</A><BR>"
             if(show_desc)
                 dat += "<I>Allows double the amount of power absorbed per second.</I><BR>"
-        if(amount_per_regen < maxHealth)
+        if(amount_per_regen <= maxHealth)
             dat += "<A href='byond://?src=\ref[src];regeneration=1'>Faster health regeneration ([amount_per_regen*5000]W)</A><BR>"
             if(show_desc)
                 dat += "<I>Allows double the speed of health regeneration from power.</I><BR>"
