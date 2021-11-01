@@ -322,12 +322,21 @@
     var/dat
     dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
             <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
+    dat += "<B>Upgrades:</B><BR>"
+    if(takeover_time > 1)
+        dat += "<A href='byond://?src=\ref[src];takeover=1'>Faster takeover time ([10 * (100 / takeover_time)]kW)</A><BR>"
+    if(charge_absorb_amount < 600000)
+        dat += "<A href='byond://?src=\ref[src];absorbing=1'>Faster power absorbing ([charge_absorb_amount/100]]kW)</A><BR>"
+    if(amount_per_regen < maxHealth)
+        dat += "<A href='byond://?src=\ref[src];regeneration=1'>Faster health regeneration ([amount_per_regen*5]kW)</A><BR>"
     if(spell_list.len > 1)
         dat += "<B>Known abilities:</B><BR>"
         for(var/spell/S in spell_list)
             if(!istype(S,/spell/pulse_demon/abilities))
                 var/icon/spellimg = icon(S.overlay_icon, S.overlay_icon_state)
-                dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> <B>[S.name]</B> <A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A> <A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A><BR>"
+                dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> <B>[S.name]</B> "
+                dat += "[S.spell_levels[Sp_SPEED] < S.level_max[Sp_SPEED] ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A>" : ""] "
+                dat += "[S.spell_levels[Sp_POWER] < S.level_max[Sp_POWER] ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A>" : ""]<BR>"
                 if(show_desc)
                     dat += "<I>[S.desc]</I><BR>"
         dat += "<HR>"
@@ -336,7 +345,8 @@
         dat += "<I>The number afterwards is the charge cost.</I><BR>"
         for(var/spell/pulse_demon/PDS in possible_spells)
             var/icon/spellimg = icon(PDS.overlay_icon, PDS.overlay_icon_state)
-            dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> <B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
+            dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> "
+            dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
             if(show_desc)
                 dat += "<I>[PDS.desc]</I><BR>"
         dat += "<HR>"
@@ -377,6 +387,30 @@
 
         PDS.empower_spell()
         charge -= PDS.upgrade_cost
+
+    if(href_list["takeover"])
+        if(charge < 10000 * (100 / takeover_time))
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        
+        charge -= 10000 * (100 / takeover_time)
+        takeover_time /= 1.5
+    
+    if(href_list["absorbing"])
+        if(charge < charge_absorb_amount * 10)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        
+        charge -= charge_absorb_amount * 10
+        charge_absorb_amount *= 1.5
+    
+    if(href_list["regeneration"])
+        if(charge < 40000)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        
+        charge -=  amount_per_regen * 10000
+        amount_per_regen *= 1.5
 
     powerMenu()
 
