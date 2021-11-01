@@ -407,6 +407,7 @@
         
         charge -= 10000 * (100 / takeover_time)
         takeover_time /= 1.5
+        to_chat(src,"<span class='notice'>You will now take [takeover_time] seconds to hijack machinery.</span>")
     
     if(href_list["absorbing"])
         if(charge < charge_absorb_amount * 10)
@@ -415,6 +416,7 @@
         
         charge -= charge_absorb_amount * 10
         charge_absorb_amount *= 1.5
+        to_chat(src,"<span class='notice'>You will now absorb [charge_absorb_amount]W per second while in a power source.</span>")
     
     if(href_list["regeneration"])
         if(charge < amount_per_regen * 10000)
@@ -423,6 +425,7 @@
         
         charge -= amount_per_regen * 10000
         amount_per_regen *= 1.5
+        to_chat(src,"<span class='notice'>You will now regenerate [amount_per_regen] health per second while in a power source.</span>")
     
     if(href_list["health"])
         if(charge < maxHealth * 1000)
@@ -431,6 +434,7 @@
         
         charge -= maxHealth * 1000
         maxHealth *= 1.5
+        to_chat(src,"<span class='notice'>Your maximum health is now [maxHealth].</span>")
 
     powerMenu()
 
