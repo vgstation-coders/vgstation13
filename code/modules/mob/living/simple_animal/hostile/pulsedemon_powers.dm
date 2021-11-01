@@ -8,6 +8,7 @@
     user_type = USER_TYPE_PULSEDEMON
     school = "pulse demon"
     spell_flags = 0
+    level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
 
     override_base = "pulsedemon"
     hud_state = "pd_icon_base"
@@ -15,6 +16,7 @@
     cooldown_min = 1 SECONDS
     var/charge_cost = 0
     var/purchase_cost = 0
+    var/upgrade_cost = 0
 
 /spell/pulse_demon/cast_check(var/skipcharge = 0, var/mob/user = usr)
     . = ..()
@@ -34,12 +36,35 @@
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         PD.charge -= charge_cost
 
+/spell/pulse_demon/empower_spell()
+    spell_levels[Sp_POWER]++
+
+    var/temp = ""
+    name = initial(name)
+    switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
+        if(3)
+            temp = "You have improved [name] into Frugal [name]."
+            name = "Frugal [name]"
+        if(2)
+            temp = "You have improved [name] into Cheap [name]."
+            name = "Cheap [name]"
+        if(1)
+            temp = "You have improved [name] into Renewable [name]."
+            name = "Renewable [name]"
+        if(0)
+            temp = "You have improved [name] into Self-Sufficient [name]."
+            name = "Self-Sufficient [name]"
+
+    charge_cost /= 1.5
+    return temp
+
 /spell/pulse_demon/abilities
     name = "Abilities"
     desc = "View and purchase abilities with your electrical charge."
     abbreviation = "AB"
     hud_state = "pd_closed"
-    charge_max = 1 SECONDS
+    charge_max = 0
+    level_max = list()
 
 /spell/pulse_demon/abilities/choose_targets(var/mob/user = usr)
     return list(user) // Self-cast
@@ -61,6 +86,7 @@
     hud_state = "pd_cablehop"
     charge_cost = 5000
     purchase_cost = 15000
+    upgrade_cost = 10000
 
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
@@ -112,6 +138,7 @@
     hud_state = "pd_emag"
     charge_cost = 20000
     purchase_cost = 100000
+    upgrade_cost = 50000
 
 /spell/pulse_demon/emag/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -140,6 +167,7 @@
     hud_state = "wiz_tech"
     charge_cost = 10000
     purchase_cost = 50000
+    upgrade_cost = 20000
 
 /spell/pulse_demon/emp/cast(list/targets, mob/user = usr)
     var/atom/target = targets[1]
@@ -163,6 +191,7 @@
     hud_state = "overload"
     charge_cost = 50000
     purchase_cost = 200000
+    upgrade_cost = 100000
 
 /spell/pulse_demon/overload_machine/is_valid_target(var/atom/target)
     if(istype(target, /obj/item/device/radio/intercom))
@@ -198,6 +227,7 @@
     hud_state = "pd_hijack"
     charge_cost = 10000
     purchase_cost = 100000
+    upgrade_cost = 20000
 
 /spell/pulse_demon/remote_hijack/is_valid_target(var/atom/target)
     if(istype(target, /obj/machinery/power/apc))
@@ -227,6 +257,7 @@
     hud_state = "pd_drain"
     charge_cost = 10000
     purchase_cost = 50000
+    upgrade_cost = 10000
 
 /spell/pulse_demon/remote_drain/is_valid_target(var/atom/target)
     if(istype(target, /obj/machinery/power/apc) || istype(target, /obj/machinery/power/battery))
@@ -250,7 +281,7 @@
 
 /spell/pulse_demon/passive
     charge_type = Sp_PASSIVE
-    level_max = list(Sp_TOTAL = 0) //Passive spells have no use.
+    level_max = list(Sp_TOTAL = 3, Sp_POWER = 3)
     charge_max = 0 //Redundancy
     spell_flags = NO_BUTTON
     hud_state = "pd_closed"
@@ -263,6 +294,7 @@
     abbreviation = "FT"
     desc = "Allows hijacking of electronics in half the previous time."
     purchase_cost = 20000
+    upgrade_cost = 20000
 
 /spell/pulse_demon/passive/halftakeover/on_added(mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -274,6 +306,7 @@
     abbreviation = "FA"
     desc = "Allows double the amount of power absorbed per second."
     purchase_cost = 10000
+    upgrade_cost = 10000
 
 /spell/pulse_demon/passive/doubleabsorb/on_added(mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
@@ -285,6 +318,7 @@
     abbreviation = "FR"
     desc = "Allows double the speed of health regeneration from power."
     purchase_cost = 40000
+    upgrade_cost = 40000
 
 /spell/pulse_demon/passive/doubleregen/on_added(mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))

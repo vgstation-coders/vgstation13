@@ -327,7 +327,7 @@
         for(var/spell/S in spell_list)
             if(!istype(S,/spell/pulse_demon/abilities))
                 var/icon/spellimg = icon(S.overlay_icon, S.overlay_icon_state)
-                dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> <B>[S.name]</B> <A href='byond://?src=\ref[src];upgrade=1;spell=\ref[S]'>Upgrade</A><BR>"
+                dat += "<img src='data:image/png;base64,[icon2base64(spellimg)]' style='position: relative; top: 10;'/> <B>[S.name]</B> <A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A> <A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A><BR>"
                 if(show_desc)
                     dat += "<I>[S.desc]</I><BR>"
         dat += "<HR>"
@@ -359,6 +359,24 @@
     
     if(href_list["desc"])
         show_desc = !show_desc
+
+    if(href_list["quicken"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
+            to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
+            return
+
+        PDS.quicken_spell()
+        charge -= PDS.upgrade_cost
+
+    if(href_list["empower"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
+            to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
+            return
+
+        PDS.empower_spell()
+        charge -= PDS.upgrade_cost
 
     powerMenu()
 
