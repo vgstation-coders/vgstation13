@@ -72,7 +72,7 @@
     add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
     for(var/pd_spell in getAllPulseDemonSpells())
         var/spell/S = new pd_spell
-        if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/passive && S.type != /spell/pulse_demon/abilities)
+        if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities)
             possible_spells += S
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
