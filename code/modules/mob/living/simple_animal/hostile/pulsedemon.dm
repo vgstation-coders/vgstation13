@@ -322,7 +322,7 @@
     var/dat
     dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
             <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
-    if(takeover_time > 1 || charge_absorb_amount < 600000 || amount_per_regen < maxHealth)
+    if(takeover_time > 1 || charge_absorb_amount < 600000 || amount_per_regen < maxHealth || maxHealth < 200)
         dat += "<B>Upgrades:</B><BR>"
         if(takeover_time > 1)
             dat += "<A href='byond://?src=\ref[src];takeover=1'>Faster takeover time ([10000 * (100 / takeover_time)]W)</A><BR>"
@@ -336,6 +336,10 @@
             dat += "<A href='byond://?src=\ref[src];regeneration=1'>Faster health regeneration ([amount_per_regen*5000]W)</A><BR>"
             if(show_desc)
                 dat += "<I>Allows double the speed of health regeneration from power.</I><BR>"
+        if(maxHealth < 200)
+            dat += "<A href='byond://?src=\ref[src];health=1'>Increased max health ([maxHealth*1000]W)</A><BR>"
+            if(show_desc)
+                dat += "<I>Increases the limit of your current health.</I><BR>"
         dat += "<HR>"
     if(spell_list.len > 1)
         dat += "<B>Known abilities:</B><BR>"
@@ -413,12 +417,20 @@
         charge_absorb_amount *= 1.5
     
     if(href_list["regeneration"])
-        if(charge < 40000)
+        if(charge < amount_per_regen * 10000)
             to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
             return
         
-        charge -=  amount_per_regen * 10000
+        charge -= amount_per_regen * 10000
         amount_per_regen *= 1.5
+    
+    if(href_list["health"])
+        if(charge < maxHealth * 1000)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        
+        charge -= maxHealth * 1000
+        maxHealth *= 1.5
 
     powerMenu()
 
