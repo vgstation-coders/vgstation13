@@ -35,6 +35,7 @@
 	vis_contents.Cut()
 	var/turf/temp_turf = locate(src.x+teleport_x,src.y+teleport_y,src.z+teleport_z)
 	if(istype(temp_turf,/turf/portal))
+		warning("Area portal ([src.x],[src.y],[src.z]) target turf  is another area portal([src.x+teleport_x],[src.y+teleport_y],[src.z+teleport_z]), aborting targeting")
 		return
 	target_turf = temp_turf
 	vis_contents += target_turf
