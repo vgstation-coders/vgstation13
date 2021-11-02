@@ -322,20 +322,20 @@
     var/dat
     dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
             <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
-    if(takeover_time >= 1 || charge_absorb_amount <= 600000 || amount_per_regen <= maxHealth || maxHealth <= 200)
+    if(takeover_time >= 1 || charge_absorb_amount <= 600000 || health_drain_rate >= 1 || maxHealth <= 200)
         dat += "<B>Upgrades:</B><BR>"
         if(takeover_time >= 1)
             dat += "<A href='byond://?src=\ref[src];takeover=1'>Faster takeover time ([10000 * (100 / takeover_time)]W)</A><BR>"
             if(show_desc)
-                dat += "<I>Allows hijacking of electronics in half the previous time.</I><BR>"
+                dat += "<I>Allows hijacking of electronics in less time.</I><BR>"
         if(charge_absorb_amount <= 600000)
             dat += "<A href='byond://?src=\ref[src];absorbing=1'>Faster power absorbing ([charge_absorb_amount*10]W)</A><BR>"
             if(show_desc)
-                dat += "<I>Allows double the amount of power absorbed per second.</I><BR>"
+                dat += "<I>Allows more power absorbed per second.</I><BR>"
         if(amount_per_regen <= maxHealth)
-            dat += "<A href='byond://?src=\ref[src];regeneration=1'>Faster health regeneration ([amount_per_regen*5000]W)</A><BR>"
+            dat += "<A href='byond://?src=\ref[src];regeneration=1'>Slower health drain ([10000 * (100 / health_drain_rate)]W)</A><BR>"
             if(show_desc)
-                dat += "<I>Allows double the speed of health regeneration from power.</I><BR>"
+                dat += "<I>Allows less health to be drained when not on a power source.</I><BR>"
         if(maxHealth <= 200)
             dat += "<A href='byond://?src=\ref[src];health=1'>Increased max health ([maxHealth*1000]W)</A><BR>"
             if(show_desc)
@@ -425,13 +425,13 @@
         to_chat(src,"<span class='notice'>You will now absorb [charge_absorb_amount]W per second while in a power source.</span>")
     
     if(href_list["regeneration"])
-        if(charge < amount_per_regen * 10000)
+        if(charge < 10000 * (100 / health_drain_rate))
             to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
             return
         
-        charge -= amount_per_regen * 10000
-        amount_per_regen *= 1.5
-        to_chat(src,"<span class='notice'>You will now regenerate [amount_per_regen] health per second while in a power source.</span>")
+        charge -= 10000 * (100 / health_drain_rate)
+        health_drain_rate /= 1.5
+        to_chat(src,"<span class='notice'>You will now drain [health_drain_rate] health per second while not on a power source.</span>")
     
     if(href_list["health"])
         if(charge < maxHealth * 1000)
