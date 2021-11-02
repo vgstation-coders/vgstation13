@@ -207,6 +207,22 @@
     else
         spell_channeling.channeled_spell(A)
 
+/mob/living/simple_animal/hostile/pulse_demon/ShiftClickOn(var/atom/A)
+    if(get_area(A) == controlling_area)
+        A.AIShiftClick(src)
+
+/mob/living/simple_animal/hostile/pulse_demon/CtrlClickOn(var/atom/A)
+    if(get_area(A) == controlling_area)
+        A.AICtrlClick(src)
+
+/mob/living/simple_animal/hostile/pulse_demon/AltClickOn(var/atom/A)
+    if(get_area(A) == controlling_area)
+        A.AIAltClick(src)
+
+/mob/living/simple_animal/hostile/pulse_demon/MiddleShiftClickOn(var/atom/A)
+    if(get_area(A) == controlling_area)
+        A.AIMiddleShiftClick(src)
+
 /atom/proc/attack_pulsedemon(mob/user)
     return
 
