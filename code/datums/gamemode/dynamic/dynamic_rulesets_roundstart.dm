@@ -751,3 +751,35 @@ Assign your candidates in choose_candidates() instead.
 		mime.AssignToRole(M2.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//             AWAY MISSION                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/away_mission
+	name = "Away Mission"
+	role_category = null
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 0
+	weight = BASE_RULESET_WEIGHT
+	cost = 0
+	requirements = list(0,40,80,90,95,97,98,99,99,100)
+	high_population_requirement = 15
+
+// 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance until at 70, where it becomes 30%.
+/datum/dynamic_ruleset/roundstart/away_mission/acceptable(population, threat_level)
+	var/probability = clamp(threat_level, 30, 70)
+	return !prob(probability)
+
+/datum/dynamic_ruleset/roundstart/away_mission/choose_candidates()
+	return TRUE
+
+/datum/dynamic_ruleset/roundstart/away_mission/execute()
+	message_admins("Starting a round with an away mission.")
+	log_admin("Starting a round with an away mission.")
+	createRandomZlevel()
+	return TRUE
