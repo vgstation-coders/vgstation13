@@ -781,5 +781,4 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/away_mission/execute()
 	message_admins("Starting a round with an away mission.")
 	log_admin("Starting a round with an away mission.")
-	createRandomZlevel()
-	return TRUE
+	return createRandomZlevel()
