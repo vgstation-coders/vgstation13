@@ -195,15 +195,50 @@
 /mob/living/simple_animal/hostile/pulse_demon/ClickOn(var/atom/A, var/params)
     if(!spell_channeling)
         if(get_area(A) == controlling_area)
+            var/list/modifiers = params2list(params)
+            if(modifiers["middle"])
+                if(modifiers["shift"])
+                    MiddleShiftClickOn(A)
+                    return
+                else
+                    MiddleClickOn(A)
+                    return
+            if(modifiers["shift"])
+                ShiftClickOn(A)
+                return
+            if(modifiers["alt"]) // alt and alt-gr (rightalt)
+                AltClickOn(A)
+                return
+            if(modifiers["ctrl"])
+                CtrlClickOn(A)
+                return
             A.attack_pulsedemon(src)
         else if(current_weapon)
             if(istype(current_weapon,/obj/item/weapon/gun))
                 var/obj/item/weapon/gun/G = current_weapon
                 G.Fire(A,src)
         else if(current_robot)
+            var/list/modifiers = params2list(params)
+            if(modifiers["middle"])
+                if(modifiers["shift"])
+                    MiddleShiftClickOn(A)
+                    return
+                else
+                    MiddleClickOn(A)
+                    return
+            if(modifiers["shift"])
+                ShiftClickOn(A)
+                return
+            if(modifiers["alt"]) // alt and alt-gr (rightalt)
+                AltClickOn(A)
+                return
+            if(modifiers["ctrl"])
+                CtrlClickOn(A)
+                return
             A.attack_robot(current_robot,src)
-        else if(!istype(A,/obj/machinery))
-            ..()
+        else if(isliving(A))
+            var/mob/living/L = A
+            unarmed_attack_mob(L)
     else
         spell_channeling.channeled_spell(A)
 
@@ -492,9 +527,9 @@
     var/amount_to_drain = charge_absorb_amount
     if(current_battery.charge <= charge_absorb_amount)
         amount_to_drain = current_battery.charge
-    if(maxcharge <= max_can_absorb)
+    if(maxcharge <= max_can_absorb && charge >= maxcharge)
         maxcharge += amount_to_drain
-    else if(charge == maxcharge)
+    else if(charge >= maxcharge)
         amount_to_drain = 0
     current_battery.charge -= amount_to_drain
     charge += min((maxcharge-charge),amount_to_drain)
@@ -503,9 +538,9 @@
     var/amount_to_drain = charge_absorb_amount
     if(current_apc.cell.charge <= charge_absorb_amount)
         amount_to_drain = current_apc.cell.charge
-    if(maxcharge <= max_can_absorb)
+    if(maxcharge <= max_can_absorb && charge >= maxcharge)
         maxcharge += amount_to_drain
-    else if(charge == maxcharge)
+    else if(charge >= maxcharge)
         amount_to_drain = 0
     current_apc.cell.use(amount_to_drain)
     charge += min((maxcharge-charge),amount_to_drain)

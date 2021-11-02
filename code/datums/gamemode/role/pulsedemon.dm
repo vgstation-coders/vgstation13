@@ -29,12 +29,13 @@
 	if(istype(antag.current,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = antag.current
 		var/bought_nothing = TRUE
-		if(PD.spell_list)
+		if(PD.spell_list.len > 1)
 			bought_nothing = FALSE
 			. += "<BR>The pulse demon knew:<BR>"
 			for(var/spell/S in PD.spell_list)
-				var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+				if(!istype(PD,/spell/pulse_demon/abilities))
+					var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+					. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
 		if(bought_nothing)
 			. += "The pulse demon did not use any abilities this round."
-		. += "<BR>The pulse demon hijacked [controlled_apcs.len] APCs with a takeover time of [PD.takeover_time] seconds and a health of [PD.maxHealth], absorbing [PD.charge_absorb_amount] per second."
+		. += "<BR>The pulse demon hijacked [controlled_apcs.len] APCs with a takeover time of [PD.takeover_time] seconds and a health of [PD.maxHealth], absorbing [PD.charge_absorb_amount]W per second."
