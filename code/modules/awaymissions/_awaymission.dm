@@ -189,28 +189,32 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 	return potentialRandomZlevels
 
 /proc/createRandomZlevel(override = 0, var/datum/map_element/away_mission/AM, var/messages = null)
-	if(!messages)
-		messages = world
-
 	if(existing_away_missions.len && !override)	//crude, but it saves another var!
-		return
+		return FALSE
 
 	if(!AM) //If we were provided an away mission datum, don't generate the list of away missions
-		to_chat(messages, "<span class='danger'>Searching for away missions...</span>")
+		if(messages)
+			to_chat(messages, "<span class='danger'>Searching for away missions...</span>")
 		var/list/potentialRandomZlevels = getRandomZlevels()
 
 		if(!potentialRandomZlevels.len)
-			return
+			return FALSE
 
 		AM = pick(potentialRandomZlevels)
-		to_chat(messages, "<span class='danger'>[potentialRandomZlevels.len] away missions found. Loading...</span>")
+		
+		if(messages)
+			to_chat(messages, "<span class='danger'>[potentialRandomZlevels.len] away missions found. Loading...</span>")
 	else
-		to_chat(messages, "<span class='danger'>Loading an away mission...</span>")
+		if(messages)
+			to_chat(messages, "<span class='danger'>Loading an away mission...</span>")
 
 	log_game("Loading away mission [AM.file_path]")
 
 	if(AM.load())
-		to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
-		return
+		if(messages)
+			to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
+		return TRUE
 
-	to_chat(messages, "<span class='danger'>Failed to load away mission [AM.file_path] (file doesn't exist).</span>")
+	if(messages)
+		to_chat(messages, "<span class='danger'>Failed to load away mission [AM.file_path] (file doesn't exist).</span>")
+	return FALSE
