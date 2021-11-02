@@ -59,8 +59,8 @@
 	category = "Misc"
 
 /datum/design/fishtank_helper
-	name = "Aquarium Feed and Clean Module"
-	desc = "Automates cleaning and feeding aquariums. Fits all sizes."
+	name = "Aquarium Clean Module"
+	desc = "Automates cleaning of aquariums. Fits all sizes."
 	id = "fishtank_helper"
 	build_type = PROTOLATHE
 	build_path = /obj/item/weapon/fishtools/fishtank_helper

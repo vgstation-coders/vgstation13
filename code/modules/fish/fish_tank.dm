@@ -51,7 +51,7 @@
 	var/cur_health = 0			// Current health, starts at max_health
 	var/leaking = NO_LEAK
 	var/shard_count = 0			// Number of glass shards to salvage when broken (1 less than the number of sheets to build the tank)
-	var/automated = 0			// Cleans and feeds fish on its own
+	var/automated = 0			// Cleans the aquarium on its own
 
 /obj/machinery/fishtank/bowl
 	name = "fish bowl"
@@ -297,8 +297,6 @@
 				remove_water(1)
 
 	if(automated)
-		if(fish_list.len > 0)
-			add_food(0.05)						//Should be enough to sustain the full aquarium, unless they are breeding like crazy
 		if(filth_level > 0)
 			remove_filth(0.05)
 
@@ -579,8 +577,8 @@
 
 	if(automated)
 		examine_message += "<br>"
-		var/flavor_text = pick("burps and gulps", "cleans and feeds", "boops and beeps", "gloops and loops")
-		examine_message += "<span class = 'notice'>The Clean and Feed module [flavor_text].</span>"
+		var/flavor_text = pick("burps and gulps", "cleans and pinks", "boops and beeps", "gloops and loops")
+		examine_message += "<span class = 'notice'>The automated cleaning module [flavor_text].</span>"
 
 	examine_message += "<br>"
 

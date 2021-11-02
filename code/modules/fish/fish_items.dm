@@ -72,7 +72,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/fishtools/fishtank_helper
 	name = "aquarium automation module"
-	desc = "A module that automates cleaning and feeding aquariums."
+	desc = "A module that automates cleaning of aquariums."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "cyborg_upgrade"
 	w_class = W_CLASS_SMALL
