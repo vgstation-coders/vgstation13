@@ -1163,12 +1163,11 @@ Thanks.
 		else
 			do_after_callback = new /callback(GLOBAL_PROC, /proc/straight_jacket_resist_do_after)
 			resist_time = 2 MINUTES // Default
-			var/datum/organ/external/left_arm = get_organ(LIMB_LEFT_ARM)
-			if(left_arm && left_arm.is_usable() && left_arm.is_broken())
-				resist_time -= 30 SECONDS
-			var/datum/organ/external/right_arm = get_organ(LIMB_RIGHT_ARM)
-			if(right_arm && right_arm.is_usable() && right_arm.is_broken())
-				resist_time -= 30 SECONDS
+			var/left_arm = get_organ(LIMB_LEFT_ARM)
+			var/right_arm = get_organ(LIMB_RIGHT_ARM)
+			for(var/datum/organ/external/arm in list(left_arm, right_arm))
+				if(!arm.is_existing() || arm.is_broken())
+					resist_time -= 30 SECONDS
 		var_to_check = "wear_suit"
 	else
 		return
@@ -1196,15 +1195,16 @@ Thanks.
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
 /proc/straight_jacket_resist_do_after(mob/living/carbon/user)
-	var/datum/organ/external/left_arm = user.get_organ(LIMB_LEFT_ARM)
-	if(left_arm && !left_arm.is_broken())
+	var/left_arm = user.get_organ(LIMB_LEFT_ARM)
+	var/right_arm = user.get_organ(LIMB_RIGHT_ARM)
+	for(var/datum/organ/external/arm in list(left_arm, right_arm))
+		if(!arm)
+			// Not a humanoid or something
+			continue
+		if(!arm.is_existing() || arm.is_broken() || !arm.is_organic())
+			continue
 		if(prob(5))
-			left_arm.fracture()
-			return FALSE
-	var/datum/organ/external/right_arm = user.get_organ(LIMB_RIGHT_ARM)
-	if(right_arm && !right_arm.is_broken())
-		if(prob(5))
-			right_arm.fracture()
+			arm.fracture()
 			return FALSE
 	return TRUE
 
