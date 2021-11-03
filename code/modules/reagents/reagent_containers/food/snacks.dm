@@ -7207,7 +7207,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(SODIUMCHLORIDE, 1)
+	reagents.add_reagent(MOONROCKS, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped
 	name = "Zam Moon Cheese"
