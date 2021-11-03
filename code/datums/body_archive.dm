@@ -25,8 +25,9 @@ var/list/body_archives = list()
 	source.archive_body(src)
 
 /datum/body_archive/proc/spawn_copy(var/turf/T)//admin toy
-	var/mob/M = new mob_type(T)
-	M.reset_body(src)
+	var/mob/temp_mob = new mob_type(T)
+	temp_mob.actually_reset_body(src, FALSE, null, null)
+	qdel(temp_mob)
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -43,11 +44,16 @@ var/list/body_archives = list()
 		else
 			return
 
-	var/mob/temp_mob = new archive.mob_type(loc)
-	var/mob/new_mob = temp_mob.actually_reset_body(archive, keep_clothes, src, mind)
+	var/mob/new_mob
+
+	if (type == archive.mob_type)
+		new_mob = actually_reset_body(archive, keep_clothes, src, mind)
+	else
+		var/mob/temp_mob = new archive.mob_type(loc)
+		new_mob = temp_mob.actually_reset_body(archive, keep_clothes, src, mind)
+		qdel(temp_mob)
 
 	drop_all()
-	qdel(temp_mob)
 	qdel(src)
 	return new_mob
 
@@ -108,7 +114,7 @@ var/list/body_archives = list()
 	if (our_mind)
 		has_been_shade -= our_mind
 		our_mind.transfer_to(H)
-		//H.ckey = R.ckey
+		H.ckey = R.ckey // Maybe needed to put things like ghosts back in bodies
 	if (H.mind && H.mind.miming)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		if (H.mind.miming == MIMING_OUT_OF_CHOICE)

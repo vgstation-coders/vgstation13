@@ -44,5 +44,4 @@
 		</html>
 		"}
 
-	usr << browse(dat, "window=bodyarchivepanel;size=705x450")
-
+	usr << browse(dat, "window=bodyarchivepanel;size=860x500")
