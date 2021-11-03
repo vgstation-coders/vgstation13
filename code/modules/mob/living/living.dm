@@ -1124,20 +1124,21 @@ Thanks.
 				ExtinguishMob()
 			return
 
-		CM.resist_handcuffs()
+		CM.resist_restraints()
 
 	//unsticking from a rooting trap, such as a sticky web or a blood nail
 	if (istype(L.locked_to, /obj/effect/rooting_trap/))
 		var/obj/effect/rooting_trap/RT = L.locked_to
 		RT.unstick_attempt(L)
 
-/mob/living/carbon/proc/resist_handcuffs()
+/mob/living/carbon/proc/resist_restraints()
 	if(!canmove)
 		return
 	var/is_hulk = isalienadult(src) || (M_HULK in mutations)
 	var/obj/item/cuffs
 	var/resist_time
 	var/var_to_check // TOOD: Improve this once Lummox releases pointers?
+	var/do_after_callback
 	if(handcuffed)
 		cuffs = handcuffed
 		resist_time = is_hulk ? 5 SECONDS : cuffs.restraint_resist_time
@@ -1157,7 +1158,17 @@ Thanks.
 		var_to_check = "mutual_handcuffs"
 	else if(is_wearing_item(/obj/item/clothing/suit/straight_jacket, slot_wear_suit))
 		cuffs = get_item_by_slot(slot_wear_suit)
-		resist_time = is_hulk ? 5 SECONDS : 2 MINUTES // Default
+		if(is_hulk)
+			resist_time = 5 SECONDS
+		else
+			do_after_callback = new /callback(GLOBAL_PROC, /proc/straight_jacket_resist_do_after)
+			resist_time = 2 MINUTES // Default
+			var/datum/organ/external/left_arm = get_organ(LIMB_LEFT_ARM)
+			if(left_arm && left_arm.is_usable() && left_arm.is_broken())
+				resist_time -= 30 SECONDS
+			var/datum/organ/external/right_arm = get_organ(LIMB_RIGHT_ARM)
+			if(right_arm && right_arm.is_usable() && right_arm.is_broken())
+				resist_time -= 30 SECONDS
 		var_to_check = "wear_suit"
 	else
 		return
@@ -1166,7 +1177,7 @@ Thanks.
 					"<span class='warning'>You attempt to [is_hulk ? "break" : "remove"] \the [cuffs] (this will take around [resist_time / 10] seconds and you need to stand still).</span>",
 					self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
 	spawn(0)
-		if(do_after(src, src, resist_time))
+		if(do_after(src, src, resist_time, custom_checks = do_after_callback))
 			if(vars[var_to_check] != cuffs || locked_to)
 				return
 			drop_from_inventory(cuffs)
@@ -1183,6 +1194,19 @@ Thanks.
 		else
 			simple_message("<span class='warning'>Your attempt at [is_hulk ? "breaking" : "removing"] \the [cuffs] was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
+
+/proc/straight_jacket_resist_do_after(mob/living/carbon/user)
+	var/datum/organ/external/left_arm = user.get_organ(LIMB_LEFT_ARM)
+	if(left_arm && !left_arm.is_broken())
+		if(prob(5))
+			left_arm.fracture()
+			return FALSE
+	var/datum/organ/external/right_arm = user.get_organ(LIMB_RIGHT_ARM)
+	if(right_arm && !right_arm.is_broken())
+		if(prob(5))
+			right_arm.fracture()
+			return FALSE
+	return TRUE
 
 /mob/living/verb/lay_down()
 	set name = "Rest"
