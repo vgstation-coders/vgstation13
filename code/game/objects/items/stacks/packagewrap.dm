@@ -237,7 +237,7 @@
 	if(!is_holder_of(src, user))
 		qdel(src)
 
-/obj/item/delivery/large/attack_robot(mob/user, mob/real_user as mob)
+/obj/item/delivery/large/attack_robot(mob/user)
 	if(!Adjacent(user))
 		return
-	attack_hand(real_user)
+	attack_hand(user)

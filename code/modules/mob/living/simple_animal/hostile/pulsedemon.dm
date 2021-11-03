@@ -235,7 +235,10 @@
             if(modifiers["ctrl"])
                 CtrlClickOn(A)
                 return
-            A.attack_robot(current_robot,src)
+
+            log_admin("[key_name(src)] made [key_name(current_robot)] attack [A]")
+            message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] attack [A]</span>")
+            A.attack_robot(current_robot)
         else if(isliving(A))
             var/mob/living/L = A
             unarmed_attack_mob(L)

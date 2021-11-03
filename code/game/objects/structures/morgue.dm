@@ -96,9 +96,9 @@
 /obj/structure/morgue/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/structure/morgue/attack_robot(mob/living/silicon/robot/user, mob/real_user)
+/obj/structure/morgue/attack_robot(mob/living/silicon/robot/user)
 	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
-		attack_hand(real_user)
+		attack_hand(user)
 
 /obj/structure/morgue/attack_hand(mob/user as mob)
 	if (connected)
@@ -214,9 +214,9 @@
 	else
 		qdel(src) //this should not happen but if it does happen we should not be here
 
-/obj/structure/m_tray/attack_robot(mob/living/silicon/robot/user, mob/real_user)
+/obj/structure/m_tray/attack_robot(mob/living/silicon/robot/user)
 	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
-		attack_hand(real_user)
+		attack_hand(user)
 
 /obj/structure/m_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if (!istype(O) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O))

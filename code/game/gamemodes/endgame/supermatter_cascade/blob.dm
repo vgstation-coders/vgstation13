@@ -87,9 +87,9 @@
 /turf/unsimulated/wall/supermatter/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/turf/unsimulated/wall/supermatter/attack_robot(mob/user as mob, mob/real_user as mob)
+/turf/unsimulated/wall/supermatter/attack_robot(mob/user as mob)
 	if(Adjacent(user))
-		return attack_hand(real_user)
+		return attack_hand(user)
 	else
 		to_chat(user, "<span class = \"warning\">What the fuck are you doing?</span>")
 	return

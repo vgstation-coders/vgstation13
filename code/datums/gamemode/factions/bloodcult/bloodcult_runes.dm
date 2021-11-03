@@ -328,8 +328,8 @@ var/list/rune_appearances_cache = list()
 	assume_contact_diseases(user)
 	trigger(user)
 
-/obj/effect/rune/attack_robot(var/mob/living/user, mob/real_user) //Allows for robots to remotely trigger runes, since attack_robot has infinite range.
-	trigger(real_user)
+/obj/effect/rune/attack_robot(var/mob/living/user) //Allows for robots to remotely trigger runes, since attack_robot has infinite range.
+	trigger(user)
 
 /obj/effect/rune/proc/assume_contact_diseases(var/mob/living/user)
 	var/block = 0

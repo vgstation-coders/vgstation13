@@ -39,9 +39,9 @@
 /obj/structure/bed/attack_animal(mob/user as mob)
 	manual_unbuckle(user)
 
-/obj/structure/bed/attack_robot(mob/user as mob, mob/real_user as mob)
+/obj/structure/bed/attack_robot(mob/user as mob)
 	if(Adjacent(user))
-		manual_unbuckle(real_user)
+		manual_unbuckle(user)
 
 /obj/structure/bed/MouseDropTo(var/atom/movable/AM, var/mob/user)
 	if(ismob(AM))

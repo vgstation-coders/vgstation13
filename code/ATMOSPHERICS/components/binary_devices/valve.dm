@@ -81,9 +81,9 @@
 /obj/machinery/atmospherics/binary/valve/attack_ai(mob/user as mob)
 	return
 
-/obj/machinery/atmospherics/binary/valve/attack_robot(mob/user as mob, mob/real_user as mob)
+/obj/machinery/atmospherics/binary/valve/attack_robot(mob/user as mob)
 	if(isMoMMI(user))
-		attack_hand(real_user)
+		attack_hand(user)
 	return
 
 /obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)

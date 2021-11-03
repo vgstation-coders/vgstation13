@@ -48,8 +48,8 @@
 			overlays += image(icon = icon, icon_state = "plasma-5")
 
 
-/obj/structure/dispenser/attack_robot(mob/user as mob, mob/real_user as mob)
-	return attack_hand(real_user)
+/obj/structure/dispenser/attack_robot(mob/user as mob)
+	return attack_hand(user)
 
 /obj/structure/dispenser/attack_hand(mob/user as mob)
 	user.set_machine(src)

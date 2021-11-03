@@ -142,11 +142,11 @@
 				spam_flag = 0
 	return
 
-/obj/item/weapon/paper/attack_robot(var/mob/user as mob, var/mob/real_user as mob)
+/obj/item/weapon/paper/attack_robot(var/mob/user as mob)
 	if(isMoMMI(user) && Adjacent(user))
-		return attack_hand(real_user)
+		return attack_hand(user)
 	else
-		return attack_ai(real_user)
+		return attack_ai(user)
 
 /obj/item/weapon/paper/attack_ai(var/mob/living/silicon/ai/user as mob)
 	var/dist

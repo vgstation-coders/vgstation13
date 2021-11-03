@@ -79,8 +79,8 @@
 		report = null
 	update_icon()
 
-/obj/structure/anomaly_container/attack_robot(var/mob/user, var/mob/real_user as mob)
-	return attack_hand(real_user)
+/obj/structure/anomaly_container/attack_robot(var/mob/user)
+	return attack_hand(user)
 
 /obj/structure/anomaly_container/update_icon()
 	overlays.len = 0

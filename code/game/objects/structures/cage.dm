@@ -172,9 +172,9 @@
 
 		return 1
 
-/obj/structure/cage/attack_robot(mob/living/user, mob/real_user)
+/obj/structure/cage/attack_robot(mob/living/user)
 	if(Adjacent(user))
-		attack_hand(real_user)
+		attack_hand(user)
 
 //How the cage cover is implemented
 //When it's closed, mobs are stored in the cage's contents. This causes them to be unable to interact with the outside world or move

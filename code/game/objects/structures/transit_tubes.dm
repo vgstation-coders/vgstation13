@@ -155,9 +155,9 @@
 					open_animation()
 
 
-/obj/structure/transit_tube/station/attack_robot(mob/user, mob/real_user)
+/obj/structure/transit_tube/station/attack_robot(mob/user)
 	if(Adjacent(user))
-		attack_hand(real_user)
+		attack_hand(user)
 
 
 /obj/structure/transit_tube_pod/examine(mob/user)

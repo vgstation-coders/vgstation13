@@ -421,10 +421,10 @@
 
 	return //Until we find something smart for you to do, please steer clear. Thanks
 
-/obj/machinery/portable_atmospherics/hydroponics/attack_robot(mob/user as mob, mob/real_user as mob)
+/obj/machinery/portable_atmospherics/hydroponics/attack_robot(mob/user as mob)
 
 	if(isMoMMI(user) && Adjacent(user)) //Are we a beep ping ?
-		return attack_hand(real_user) //Let them use the tray
+		return attack_hand(user) //Let them use the tray
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_hand(mob/user as mob)
 
