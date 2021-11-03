@@ -546,27 +546,29 @@ var/list/headset_modes = list(
 #define HEAR_CULT_CHAT 2
 
 /mob/living/cult_chat_check(var/setting = SPEAK_OVER_GENERAL_CULT_CHAT)
-	if(!mind)
+	if (!mind)
 		return
-	if(setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
+	if (occult_muted())
+		return
+	if (setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
 		return
 
 	var/datum/role/cultist/culto = iscultist(src)
 	if (culto)
-		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
+		if (setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
 			var/turf/T = get_turf(src)
 			for (var/obj/structure/cult/spire/S in cult_spires)
 				if (isturf(S.loc) && S.z == T.z) // Spires need to not be concealed and on the same Z Level.
 					return 1
-		if(setting == HEAR_CULT_CHAT)
+		if (setting == HEAR_CULT_CHAT)
 			return 1
 
 	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
-	if(cult)
-		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
+	if (cult)
+		if (setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
 			if(universal_cult_chat == 1)
 				return 1
-		if(setting == HEAR_CULT_CHAT)
+		if (setting == HEAR_CULT_CHAT)
 			return 1
 
 #undef SPEAK_OVER_GENERAL_CULT_CHAT

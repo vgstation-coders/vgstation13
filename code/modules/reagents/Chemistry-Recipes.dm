@@ -581,6 +581,43 @@
 	required_catalysts = list(HOLYWATER = 5)
 	result_amount = 1
 
+/datum/chemical_reaction/cultcheck
+	name = "Cult Check"
+	id = "cult_check"
+	required_reagents = list(HOLYSALTS = 5)
+	required_catalysts = list(BLOOD = 5)
+	quiet = TRUE
+
+/datum/chemical_reaction/cultcheck/on_reaction(var/datum/reagents/holder, var/created_volume)
+	for(var/datum/reagent/blood/B in holder.reagent_list)
+		var/turf/T = get_turf(holder.my_atom)
+		if ("occult" in B.data)
+			var/datum/mind/M = B.data["occult"]
+			if (M && M.current && iscultist(M.current) && !M.current.isDead()) // checking that the source cultist is alive and still a cultist
+				T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts violently react with the blood and flames lick the air above the [holder.my_atom].</span>")
+				var/red_flames = 0
+				var/orange_flames = 0
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				for (var/datum/role/R in cult.members)
+					var/mob/L = R.antag.current
+					if (isliving(L) && !L.isDead())
+						var/turf/U = get_turf(L)
+						if ((T.z == U.z) && !isshade(L))
+							red_flames++//human or construct on the current Z level
+						else
+							orange_flames++//either a shade or on another Z level
+				if (red_flames)
+					T.visible_message("<span class='notice'>You count <font color='red'><b>[(red_flames > 1) ? "[red_flames] distinct" : "a single"]</b></font> bright red flame[(red_flames > 1) ? "s":""].</span>")
+				if (orange_flames)
+					T.visible_message("<span class='notice'>[red_flames ? "As well as" : "You count"] <font color='orange'><b>[(orange_flames > 1) ? "[orange_flames] distinct" : "a single"]</b></font> dim orange flame[(orange_flames > 1) ? "s":""].</span>")
+				playsound(T, 'sound/effects/bubbles.ogg', 80, 1)
+				T.hotspot_expose(500 * red_flames + 100 * orange_flames, 10)
+				holder.remove_reagent(BLOOD, 5)
+				return
+
+		T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts dissolve into the blood without so much as a reaction.</span>")
+		return
+
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
 	id = "flash_powder"
@@ -3788,7 +3825,7 @@
 		for(var/i = 1 to created_volume)
 			var/L = get_turf(holder.my_atom)
 			new /mob/living/simple_animal/hostile/humanoid/skellington(L) //Should spawn skeletons normally if the holder isn't human.
-	
+
 /datum/chemical_reaction/synthskeleton/proc/bigBoned(var/mob/living/carbon/human/theSkel, var/volume)
 	for(var/datum/organ/external/E in theSkel.organs)
 		if(!E.is_organic() || (E.min_broken_damage >= E.max_damage))

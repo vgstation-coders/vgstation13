@@ -1,7 +1,8 @@
 
 /datum/objective/bloodcult
 	name = "Cultist of Nar-Sie"
-	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbringer of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others. Above all, ensure that at least one of you remains alive to spread the cult's influence to other space stations."
+	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbringer of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others."
+	force_success = TRUE // Freeform
 
 /datum/objective/bloodcult/IsFulfilled()
 	if (..())

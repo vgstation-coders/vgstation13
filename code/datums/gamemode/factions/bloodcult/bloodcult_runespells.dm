@@ -782,6 +782,9 @@ var/list/converted_minds = list()
 		)
 	var/obj/effect/cult_ritual/conversion/conversion = null
 
+	var/phase = 1
+	var/force_cuff = FALSE
+
 
 /datum/rune_spell/conversion/Destroy()
 	if(conversion)
@@ -850,8 +853,8 @@ var/list/converted_minds = list()
 	for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(victim))
 		SPS.OnMobDeath(victim)//Think carefully before converting a sec officer
 
-	if (!cult.CanConvert("human"))
-		to_chat(activator, "<span class='warning'>There are already too many human cultists or constructs. They will be made prisoner.</span>")
+	if (!cult.CanConvert())
+		to_chat(activator, "<span class='warning'>There are already too many cultists. They will be made prisoner.</span>")
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
@@ -944,6 +947,7 @@ var/list/converted_minds = list()
 			activator.client.images -= progbar
 
 		//alright, now the second phase, which always lasts an additional 10 seconds, but no longer requires the proximity of the activator.
+		phase = 2
 		var/acceptance = "Never"
 		victim.Silent(15)
 		victim.Knockdown(15)
@@ -967,7 +971,10 @@ var/list/converted_minds = list()
 			acceptance = "Banned"
 
 
-		if ((acceptance == "Always" || acceptance == "Yes") && !cult.CanConvert("human"))
+		if ((acceptance == "Always" || acceptance == "Yes") && !cult.CanConvert())
+			acceptance = "Overcrowded"
+
+		if (force_cuff)
 			acceptance = "Overcrowded"
 
 		//Players with cult enabled in their preferences will always get converted.
@@ -1157,6 +1164,17 @@ var/list/converted_minds = list()
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
 	newCultist.conversion["converted"] = activator
+
+/datum/rune_spell/conversion/midcast(var/mob/add_cultist)
+	if (add_cultist != activator)
+		return
+	if (phase == 1)
+		if (force_cuff)
+			to_chat(add_cultist, "<span class='notice'>You perform the conversion sign, allowing the victim to become a cultist if they qualify.</span>")
+			force_cuff = FALSE
+		else
+			to_chat(add_cultist, "<span class='warning'>You perform the entrapment sign, ensuring that the victim will be restrained.</span>")
+			force_cuff = TRUE
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim == M)
@@ -2720,13 +2738,6 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-
-	if (cult && !cult.CanConvert("human"))
-		to_chat(shade, "<span class='warning'>There are too many human cultists and constructs already.</span>")
-		abort(RITUALABORT_OVERCROWDED)
-		return
-
 	husk = new (R.loc)
 	shade.forceMove(husk)
 
@@ -2794,13 +2805,6 @@ var/list/bloodcult_exitportals = list()
 			if (cancelling <= 0)
 				abort(RITUALABORT_BLOOD)
 				return
-
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-
-		if (cult && !cult.CanConvert("human"))
-			to_chat(shade, "<span class='warning'>There are too many human cultists and constructs already.</span>")
-			abort(RITUALABORT_OVERCROWDED)
-			return
 
 		if (accumulated_blood >= remaining_cost)
 			success()
