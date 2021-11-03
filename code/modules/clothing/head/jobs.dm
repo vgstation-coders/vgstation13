@@ -74,6 +74,12 @@
 	icon_state = "hosberet"
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/head/cowboy/HoS
+	name = "sheriff's hat"
+	desc = "A heroic white stetson adorned with a sheriff's badge. For especially old-school heads of security."
+	icon_state = "cowboyhos"
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
 //Warden
 /obj/item/clothing/head/warden
 	name = "warden's hat"
@@ -90,6 +96,12 @@
 	desc = "A navy beret with a Warden rank insignia on it. For formal occasions."
 	icon_state = "wardenberet"
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/head/cowboy/warden
+	name = "jailor's hat"
+	desc = "A menacing black stetson adorned with a jailor's badge. For especially old-school wardens."
+	icon_state = "cowboywarden"
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
 
 //Head of Personnel
 /obj/item/clothing/head/hopcap
@@ -161,6 +173,12 @@
 	icon_state = "garrison"
 	item_state = "garrison"
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/head/cowboy/sec
+	name = "deputy hat"
+	desc = "A classic stetson adorned with a security badge. For especially old-school officers."
+	icon_state = "cowboysec"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery
