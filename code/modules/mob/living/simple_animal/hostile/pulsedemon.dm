@@ -320,6 +320,26 @@
         user.loc = src
         user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 
+/mob/living/simple_animal/hostile/pulse_demon/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
+    . = ..()
+    if(.)
+        return .
+
+    if(current_robot)
+        if (!speech.message)
+            return
+
+        current_robot.say(speech.message)
+        speech.message = sanitize(speech.message)
+        var/turf/T = get_turf(src)
+        log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
+        log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
+        message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
+        
+    else
+        to_chat(src, "You have no hijacked robot to speak with.")
+        return 1 //this ensures we don't end up speaking out loud
+
 /mob/living/simple_animal/hostile/pulse_demon/hasFullAccess()
 	return 1
 
