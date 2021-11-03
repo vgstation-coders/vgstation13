@@ -114,7 +114,7 @@
         qdel(L)
         to_chat(user,"<span class='warning'>There is no power to jolt you across!</span>")
     else
-        playsound(target, 'sound/effects/eleczap.ogg', 75, 1)
+        playsound(target, pick(lightning_sound), 75, 1)
         L.tang = adjustAngle(get_angle(target,T))
         L.icon = midicon
         L.icon_state = "[L.tang]"
