@@ -46,6 +46,10 @@ var/list/valid_corgi_hats = list(
 	/obj/item/clothing/glasses/sunglasses,
 	/obj/item/weapon/p_folded/hat,
 	/obj/item/weapon/bedsheet,
+	/obj/item/clothing/head/cowboy/sec,
+	/obj/item/clothing/head/cap/cowboy,
+	/obj/item/clothing/head/warden/cowboy,
+	/obj/item/clothing/head/HoS/cowboy
 	)
 
 
@@ -83,7 +87,7 @@ var/list/valid_corgi_backpacks = list(
 			emote_see = list("looks for the lamb sauce.", "eats the food.")
 			emote_hear = list("complains that the meal is fucking raw!")
 
-		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain, /obj/item/clothing/head/cap)
+		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain, /obj/item/clothing/head/cap, /obj/item/clothing/head/cap/cowboy)
 			name = "Captain [real_name]"
 			desc = "Probably better than the last captain."
 			emote_see = list("secures the spare.", "hides the nuke disk.", "abuses his authority.")
@@ -210,7 +214,13 @@ var/list/valid_corgi_backpacks = list(
 				to_chat(usr, "<span class = 'notice'>The glow of /the [V] startles [real_name]!</span>")
 
 		if(/obj/item/clothing/head/cowboy)
-			name = "Yeehaw Ian"
+			name = "Yeehaw [real_name]"
 			desc = "Are you really just gonna stroll past without saying howdy?"
+			emote_see = list("bullwhips you.", "spins his revolver.")
+			emote_hear = list("complains about city folk.")
+
+		if(/obj/item/clothing/head/cowboy/sec, /obj/item/clothing/head/HoS/cowboy, /obj/item/clothing/head/warden/cowboy)
+			name = "Deputy [real_name]"
+			desc = "He's your huckleberry."
 			emote_see = list("bullwhips you.", "spins his revolver.")
 			emote_hear = list("complains about city folk.")
