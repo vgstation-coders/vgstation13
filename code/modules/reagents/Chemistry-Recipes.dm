@@ -581,9 +581,9 @@
 	required_catalysts = list(HOLYWATER = 5)
 	result_amount = 1
 
-/datum/chemical_reaction/cultcheck
-	name = "Cult Check"
-	id = "cult_check"
+/datum/chemical_reaction/occult_blood_test
+	name = "Occult Blood Test"
+	id = "occult_blood_test"
 	required_reagents = list(HOLYSALTS = 5)
 	required_catalysts = list(BLOOD = 5)
 	quiet = TRUE
