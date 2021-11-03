@@ -41,6 +41,12 @@
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/head/cap/cowboy
+	name = "general's hat"
+	desc = "A regal white stetson adorned with a general's badge. For especially old-school captains."
+	icon_state = "cowboycap"
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
+
 //Head of Security
 /obj/item/clothing/head/HoS
 	name = "Head of Security Hat"
@@ -74,9 +80,9 @@
 	icon_state = "hosberet"
 	species_fit = list(INSECT_SHAPED)
 
-/obj/item/clothing/head/cowboy/HoS
+/obj/item/clothing/head/HoS/cowboy
 	name = "sheriff's hat"
-	desc = "A heroic white stetson adorned with a sheriff's badge. For especially old-school heads of security."
+	desc = "A stalwart white stetson adorned with a sheriff's badge. For especially old-school heads of security."
 	icon_state = "cowboyhos"
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
 
@@ -97,7 +103,7 @@
 	icon_state = "wardenberet"
 	species_fit = list(INSECT_SHAPED)
 
-/obj/item/clothing/head/cowboy/warden
+/obj/item/clothing/head/warden/cowboy
 	name = "jailor's hat"
 	desc = "A menacing black stetson adorned with a jailor's badge. For especially old-school wardens."
 	icon_state = "cowboywarden"
