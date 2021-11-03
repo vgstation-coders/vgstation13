@@ -762,6 +762,7 @@ var/list/converted_minds = list()
 		<br><br>However if the target has a loyalty implants or the cult already has 9 human members, they will instead be restrained by ghastly bindings. \
 		More than one construct of each time will also reduce the maximum amount of permitted human cultists.\
 		<br><br>Do not seek to convert everyone, instead use the Seer or Astral Journey runes first to locate the most interesting candidates.\
+		<br><br>You can touch the rune again during the early part of the ritual to force it to result in the target's restraining.\
 		<br><br>By attuning a talisman to this rune, you can trigger it remotely, but you will have to move closer afterwards or the ritual will stop.\
 		<br><br>This rune persists upon use, allowing repeated usage."
 	var/remaining = 100
