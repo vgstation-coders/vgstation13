@@ -121,8 +121,8 @@
         L.firer = user
         L.def_zone = LIMB_CHEST
         L.original = target
-        L.current = target
-        L.starting = target
+        L.current = T
+        L.starting = T
         L.yo = target.y - T.y
         L.xo = target.x - T.x
         spawn L.process()
