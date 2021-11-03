@@ -473,7 +473,7 @@ obj/item/weapon/banhammer/admin
 	desc = "Good for reducing a doubleheader to a zeroheader."
 	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
 	icon_state = "baseball_bat"
-	item_state = "baseball_bat"
+	item_state = "baseball_bat0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	flags = TWOHANDABLE
 	force = 15
@@ -482,9 +482,12 @@ obj/item/weapon/banhammer/admin
 	throw_range = 7
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/baseball_bat/update_wield()
+/obj/item/weapon/baseball_bat/update_wield(mob/user)
 	..()
+	item_state = "baseball_bat[wielded ? 1 : 0]"
 	force = wielded ? 18 : initial(force)
+	if(user)
+		user.update_inv_hands()
 
 /obj/item/weapon/baseball_bat/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -532,7 +535,7 @@ obj/item/weapon/banhammer/admin
 	icon = 'icons/obj/weapons.dmi'
 	hitsound = "sound/weapons/spikebat_hit.ogg"
 	icon_state = "spikebat"
-	item_state = "spikebat"
+	item_state = "spikebat0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	flags = TWOHANDABLE
 	force = 10
@@ -543,7 +546,9 @@ obj/item/weapon/banhammer/admin
 	throw_range = 7
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/spiked_bat/update_wield()
+/obj/item/weapon/spiked_bat/update_wield(mob/user)
 	..()
+	item_state = "spikebat[wielded ? 1 : 0]"
 	force = wielded ? 15 : initial(force)
-
+	if(user)
+		user.update_inv_hands()
