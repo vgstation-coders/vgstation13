@@ -640,7 +640,7 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 
 						SX.air.copy_from(ST.zone.air)
 						ST.zone.remove(ST)
-					
+
 					/* Quick visual fix for transit space tiles */
 					if(direction && (locate(/obj/structure/shuttle/diag_wall) in X))
 						// Find a new turf to take on the property of
@@ -653,8 +653,6 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 						X.icon_state = nextturf.icon_state
 
 					for(var/obj/O in T)
-						if(!istype(O,/obj))
-							continue
 						O.forceMove(X)
 					for(var/mob/M in T)
 						if(!M.can_shuttle_move())

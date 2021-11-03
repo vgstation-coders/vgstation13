@@ -10,6 +10,7 @@
 	flow_flags = ON_BORDER
 	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
 	layer = WINDOOR_LAYER //Below curtains
+	pass_flags_self = PASSDOOR|PASSGLASS
 	opacity = 0
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/secure = FALSE
@@ -28,6 +29,7 @@
 
 /obj/machinery/door/window/New()
 	..()
+	setup_border_dummy()
 	if((istype(req_access) && req_access.len) || istext(req_access))
 		icon_state = "[icon_state]"
 		base_state = icon_state
@@ -105,35 +107,21 @@
 		close()
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return TRUE
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return TRUE
+	if(istype(mover))
+		return !density || (bounds_dist(border_dummy, mover) >= 0)
+	else if(get_dir(loc, target) == dir)
 		if(air_group)
 			return FALSE
 		return !density
-	else
-		return TRUE
+	return TRUE
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
-
-/obj/machinery/door/window/Uncross(atom/movable/mover, turf/target)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return TRUE
-	if(flow_flags & ON_BORDER) //but it will always be on border tho
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return TRUE
 
 /obj/machinery/door/window/open()
 	if(!density) //it's already open you silly cunt
@@ -350,7 +338,7 @@
 	return WA
 
 /obj/machinery/door/window/proc/set_assembly(var/obj/structure/windoor_assembly/WA)
-	WA.dir = dir
+	WA.change_dir(dir)
 	WA.anchored = TRUE
 	WA.wired = TRUE
 	WA.facing = (is_left_opening() ? "l" : "r")

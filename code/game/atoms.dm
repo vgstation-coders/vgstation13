@@ -41,7 +41,7 @@ var/global/list/ghdel_profiling = list()
 	var/ignoreinvert = 0
 	var/timestopped
 
-	appearance_flags = TILE_BOUND|LONG_GLIDE
+	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
 
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 	/// Last name used to calculate a color for the chatmessage overlays
@@ -191,6 +191,12 @@ var/global/list/ghdel_profiling = list()
 // object bumps into this atom.
 /atom/proc/Bumped(atom/movable/AM)
 	return
+
+//When this object is bumped by BYOND, what should actually get bumped? Usually itself but there are some cases where it differs.
+//When not returning src, it should generally be called recursively on the found target in case that one also returns something else. Just don't make a cycle.
+//Yes it would be more logical to handle that elsewhere but it would also be more complicated
+/atom/proc/get_bump_target()
+	return src
 
 /atom/proc/setDensity(var/density)
 	if (density == src.density)
@@ -508,7 +514,7 @@ its easier to just keep the beam vertical.
 
 //Called on every object in a shuttle which rotates
 /atom/proc/shuttle_rotate(var/angle)
-	src.dir = turn(src.dir, -angle)
+	change_dir(turn(src.dir, -angle))
 
 	if(canSmoothWith()) //Smooth the smoothable
 		spawn //Usually when this is called right after an atom is moved. Not having this "spawn" here will cause this atom to look for its neighbours BEFORE they have finished moving, causing bad stuff.

@@ -55,6 +55,10 @@
 	var/last_explosion_push = 0
 	var/mob/virtualhearer/virtualhearer
 
+	var/list/could_bump //In a given movement, holds the objects that BYOND internally calls Bump() on, so we can pick one to call to_bump() on.
+
+	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -74,6 +78,8 @@
 	if(materials)
 		qdel(materials)
 		materials = null
+
+	remove_border_dummy()
 
 	INVOKE_EVENT(src, /event/destroyed, "thing" = src)
 
@@ -122,10 +128,10 @@
 	if(!glide_size_override || glide_size_override > max)
 		glide_size = 0
 	else
-		glide_size = max(min, glide_size_override)
+		glide_size = max(min, glide_size_override) * step_size / WORLD_ICON_SIZE //This should probably go in DELAY2GLIDESIZE() instead but that would be a lot of changed macros
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
-	if(!loc || !NewLoc)
+	if(!loc || !NewLoc || locked_to)
 		return 0
 	INVOKE_EVENT(src, /event/before_move)
 
@@ -169,17 +175,18 @@
 		set_glide_size(glide_size_override)
 
 	var/atom/oldloc = loc
-	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
-		. = ..()
-
-		update_dir()
-		INVOKE_EVENT(src, /event/after_move)
-		return
 
 	//We always split up movements into cardinals for issues with diagonal movements.
 	if(Dir || (loc != NewLoc))
 		if (!(Dir & (Dir - 1))) //Cardinal move
+			could_bump = list()
 			. = ..()
+			//The following section is a workaround for a BYOND bug. Remove when the bug is fixed.
+			if((appearance_flags & TILE_MOVER) && (. < step_size))
+				. = 0
+				forceMove(oldloc)
+			//End workaround
+			perform_bump()
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
 				if (Dir & EAST) //Northeast
@@ -206,10 +213,9 @@
 
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
-		spawn(0)
-			for(var/atom/movable/AM in locked_atoms)
-				var/datum/locking_category/category = locked_atoms[AM]
-				category.update_lock(AM)
+		for(var/atom/movable/AM in locked_atoms)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
 
 	update_dir()
 
@@ -247,9 +253,14 @@
 	for(var/atom/movable/AM in locked_atoms)
 		if(dir != AM.dir)
 			AM.change_dir(dir, src)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
 
 //Like forceMove(), but for dirs!
-/atom/movable/proc/change_dir(new_dir, var/changer)
+/atom/proc/change_dir(new_dir, changer)
+	dir = new_dir
+
+/atom/movable/change_dir(new_dir, changer)
 	if(locked_to && changer != locked_to)
 		return
 
@@ -390,10 +401,7 @@
 	return
 
 // Always override this proc instead of BYOND-provided Bump().
-// This is a workaround for some dumb BYOND behavior:
-// The `Obstacle` argument passed to Bump() is the first dense object
-// in the turf's `contents`. The argument we provide to this proc
-// is instead the actual object that's blocking movement.
+// This gives us better control over what actually gets bumped instead of being stuck with BYOND's decision.
 /atom/movable/proc/to_bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)
 		airflow_hit(Obstacle)
@@ -406,6 +414,48 @@
 		if(Obstacle)
 			Obstacle.Bumped(src)
 	sound_override = 0
+
+//As it says above, don't override this. Override to_bump() and/or Obstacle's get_bump_target() instead. Assumes could_bump is already a list (not null).
+/atom/movable/Bump(atom/Obstacle)
+	SHOULD_NOT_OVERRIDE(TRUE)
+	could_bump += Obstacle
+
+//Choose an actual bump target from the list of potential bump targets, and to_bump() it.
+//Bumps the first border object in the list, or the last object if there isn't one.
+//This seems weird, but the list order is out of our control and essentially arbitrary, so it doesn't matter.
+//The only relevant guarantee is that any turfs in the list will be at the end, so they have priority over non-border objects.
+//(The order is based on ref, as far as I can tell.)
+/atom/movable/proc/perform_bump()
+	var/atom/target
+	for(var/atom/A as anything in could_bump)
+		target = A //Can't just use target as the loop variable. For some reason, BYOND nulls it after the loop in that case.
+		if(target.flow_flags & ON_BORDER)
+			break
+	if(target)
+		to_bump(target.get_bump_target())
+	could_bump = null
+
+/atom/movable/proc/setup_border_dummy()
+	if(border_dummy)
+		return
+	border_dummy = new()
+	lock_atom(border_dummy, /datum/locking_category/border_dummy)
+	border_dummy.update_dir()
+
+/atom/movable/proc/remove_border_dummy()
+	if(border_dummy)
+		unlock_atom(border_dummy)
+		qdel(border_dummy)
+		border_dummy = null
+
+/atom/movable/proc/border_dummy_Cross(atom/movable/mover) //border_dummy calls this in its own Cross() to detect collision
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return TRUE
+	return bounds_dist(src, mover) >= 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
@@ -753,7 +803,7 @@
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)
-	return 1
+	return !locked_to
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
@@ -1153,6 +1203,68 @@
 	else
 		return
 	forceMove(picked)
+
+
+//border_dummy
+
+//Replaces the use of Uncross() for border object collision, because Uncross() is not quite correct for that.
+//Using Uncross() causes various problems for objects with altered bounding boxes or step_size.
+//The solution used here is absolutely idiotic, but as far as I can figure is the most correct approach within BYOND's stock movecode.
+
+//#define DEBUG_BORDER_DUMMY
+
+/atom/movable/border_dummy
+	#ifdef DEBUG_BORDER_DUMMY
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "window"
+	color = "red"
+	#else
+	invisibility = 101
+	#endif
+	flow_flags = ON_BORDER
+
+//The following serves to prevent objects from overlapping the border object from the side.
+//By widening the border_dummy to either side of the border object, we make it so that objects approaching from the edge overlap it as well as objects in front of the border object.
+/atom/movable/border_dummy/update_dir()
+	..()
+	//A general system to let arbitrary atoms rotate their bounds with dir would be good, but this is enough for now
+	switch(dir)
+		if(NORTH, SOUTH)
+			bound_x = -WORLD_ICON_SIZE
+			bound_width = 3 * WORLD_ICON_SIZE
+			bound_y = 0
+			bound_height = WORLD_ICON_SIZE
+		if(EAST, WEST)
+			bound_x = 0
+			bound_width = WORLD_ICON_SIZE
+			bound_y = -WORLD_ICON_SIZE
+			bound_height = 3 * WORLD_ICON_SIZE
+		else //Shouldn't happen
+			CRASH("border_dummy has invalid dir [dir]")
+
+
+/atom/movable/border_dummy/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(!istype(mover))
+		return TRUE //The parent object will handle airflow calculations.
+	if(!locked_to)
+		CRASH("border_dummy was collision checked while not locked to anything! ([x], [y], [z])")
+	return (mover == locked_to) || locked_to.border_dummy_Cross(mover) //An object will hit its own border_dummy if the (mover == locked_to) isn't included.
+
+/atom/movable/border_dummy/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0)
+	return //It wouldn't actually move even without this override, but it would still hit things on its own tile.
+
+/atom/movable/border_dummy/get_bump_target()
+	return locked_to.get_bump_target() //I don't think it's possible for this line to execute if locked_to is null due to Cross() above.
+
+
+/datum/locking_category/border_dummy
+	y_offset = 1
+	rotate_offsets = TRUE
+
+#ifdef DEBUG_BORDER_DUMMY
+#undef DEBUG_BORDER_DUMMY
+#endif
+
 
 // -- trackers
 

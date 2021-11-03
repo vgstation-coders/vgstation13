@@ -200,7 +200,7 @@
 					var/obj/structure/window/S = SR.build(user,G,1,loc)
 					if(S)
 						S.forceMove(get_turf(src))
-						S.dir = get_dir(src, user)
+						S.change_dir(get_dir(src, user))
 						return
 		else
 			to_chat(user, "<span class='warning'>You need to stand properly in front of the grille to place windows on it.</span>")
