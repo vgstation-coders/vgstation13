@@ -14,7 +14,7 @@
 	var/list/conf_access = null
 	var/one_access = 0 //if set to 1, door would receive req_one_access instead of req_access
 	var/dir_access = 0 //if set to a dir, door would use req_access_dir
-	var/access_nodir = 0 //if set to 1, all access if not in dir, otherwise none
+	var/access_nodir = 1 //if set to 1, all access if not in dir, otherwise none
 	var/last_configurator = null
 	var/locked = 1
 	var/installed = 0
@@ -74,7 +74,7 @@
 
 		if(dir_access)
 			t1 += "Accessing not in dir is set to "
-			t1 += access_nodir ? "<a style='color: green' href='?src=\ref[src];nodir=1'>TRUE</a><hr>" : "<a style='color: red' href='?src=\ref[src];nodir=1'>FALSE</a><hr>"
+			t1 += access_nodir ? "<a style='color: green' href='?src=\ref[src];notdir=1'>TRUE</a><hr>" : "<a style='color: red' href='?src=\ref[src];notdir=1'>FALSE</a><hr>"
 
 		t1 += conf_access == null ? "<font color=red>All</font><br>" : "<a href='?src=\ref[src];access=all'>All</a><br>"
 
