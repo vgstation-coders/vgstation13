@@ -146,7 +146,6 @@ var/list/admin_verbs_spawn = list(
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/toggleaban,
@@ -183,7 +182,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/callproc,
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
-	/client/proc/handle_paperwork, //this is completely experimental
 	/client/proc/reload_style_sheet,
 	/client/proc/reset_style_sheet,
 	/client/proc/test_movable_UI,
@@ -263,7 +261,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,
