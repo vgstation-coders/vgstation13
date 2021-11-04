@@ -319,13 +319,21 @@
 
 /obj/item/weapon/storage/belt/skull
 	name = "trophy-belt" //FATALITY
-	desc = "Excellent for holding the heads of your fallen foes."
+	desc = "Excellent for holding the heads and limbs of your fallen foes."
 	icon_state = "utilitybelt"
 	item_state = "utility"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		"/obj/item/organ/external/head"
+ 		"/obj/item/organ/external/head",
+ 		"/obj/item/organ/external/r_arm",
+ 		"/obj/item/organ/external/r_hand",
+ 		"/obj/item/organ/external/r_foot",
+ 		"/obj/item/organ/external/r_leg",
+ 		"/obj/item/organ/external/l_arm",
+ 		"/obj/item/organ/external/l_hand",
+ 		"/obj/item/organ/external/l_foot",
+ 		"/obj/item/organ/external/l_leg"
  	)
 
 /obj/item/weapon/storage/belt/silicon
