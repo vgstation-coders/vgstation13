@@ -56,7 +56,7 @@
 	var/dat = ""
 	dat += {"Oxygen tanks: [oxytanks.len] - [oxytanks.len ? "<A href='?src=\ref[src];oxygen=1'>Dispense</A>" : "empty"]<br>
 		Plasma tanks: [platanks.len] - [platanks.len ? "<A href='?src=\ref[src];plasma=1'>Dispense</A>" : "empty"]"}
-	var/datum/browser/popup = new(user, "dispenser", "Tank Storage Unit Contents", 480, 240)
+	var/datum/browser/popup = new(user, "dispenser", "Tank Storage Unit Contents", 300, 100)
 	popup.set_content(dat)
 	popup.open()
 
