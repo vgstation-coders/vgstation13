@@ -376,16 +376,20 @@
 	if(objectives.objectives.len > 0)
 		var/count = 1
 		text += "<ul>"
+		var/fully_freeform = TRUE
 		for(var/datum/objective/objective in objectives.GetObjectives())
+			var/freeform = objective.flags & FREEFORM_OBJECTIVE
+			if (!freeform)
+				fully_freeform = FALSE
 			var/successful = objective.IsFulfilled()
-			text += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
-			feedback_add_details("[id]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
+			text += "<B>Objective #[count]</B>: [objective.explanation_text] [freeform ? "" : "[successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"]"
+			feedback_add_details("[id]_objective","[objective.type]|[freeform ? "FREEFORM" : "[successful ? "SUCCESS" : "FAIL"]"]")
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			if (count < objectives.objectives.len)
 				text += "<br>"
 			count++
-		if (!faction)
+		if (!faction || fully_freeform)
 			if(win)
 				text += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 				feedback_add_details("[id]_success","SUCCESS")
