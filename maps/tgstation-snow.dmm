@@ -29130,7 +29130,6 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerL";
 	name = "Medbay";
-	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -31647,6 +31646,14 @@
 /area/medical/chemistry)
 "bXM" = (
 /obj/structure/bed/roller,
+/obj/machinery/door_control{
+	desc = "A remote control switch for the medbay foyer.";
+	id_tag = "MedbayFoyerL";
+	name = "Medbay Exit Button";
+	normaldoorcontrol = 1;
+	pixel_y = 26;
+	range = 3
+	},
 /obj/structure/extinguisher_cabinet{
 	pixel_x = -24
 	},
@@ -33873,7 +33880,6 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyer";
 	name = "Medbay Emergency Entrance";
-	req_access_dir = 8;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -75698,7 +75704,6 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerR";
 	name = "Medbay";
-	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -91583,7 +91588,6 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerR";
 	name = "Medbay";
-	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -103328,6 +103332,14 @@
 /turf/simulated/floor/plating/airless,
 /area/surface/snow)
 "skh" = (
+/obj/machinery/door_control{
+	desc = "A remote control switch for the medbay foyer.";
+	id_tag = "MedbayFoyerR";
+	name = "Medbay Exit Button";
+	normaldoorcontrol = 1;
+	pixel_y = 26;
+	range = 3
+	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 8;
 	name = "Firelock West"
@@ -110497,7 +110509,6 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerL";
 	name = "Medbay";
-	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -113006,7 +113017,6 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyer";
 	name = "Medbay Emergency Entrance";
-	req_access_dir = 8;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
