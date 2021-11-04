@@ -382,7 +382,7 @@ Class Procs:
 	return TRUE
 
 /obj/machinery/proc/is_in_range(var/mob/user)
-	return (in_range(src, user) && isturf(loc)) || issilicon(user) || ispulsedemon(user))
+	return (in_range(src, user) && isturf(loc)) || issilicon(user) || ispulsedemon(user)
 
 /obj/machinery/Topic(href, href_list)
 	..()
