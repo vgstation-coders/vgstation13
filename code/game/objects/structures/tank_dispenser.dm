@@ -53,8 +53,7 @@
 
 /obj/structure/dispenser/attack_hand(mob/user as mob)
 	user.set_machine(src)
-	var/dat = "[src]<br><br>"
-
+	var/dat = ""
 	dat += {"Oxygen tanks: [oxytanks.len] - [oxytanks.len ? "<A href='?src=\ref[src];oxygen=1'>Dispense</A>" : "empty"]<br>
 		Plasma tanks: [platanks.len] - [platanks.len ? "<A href='?src=\ref[src];plasma=1'>Dispense</A>" : "empty"]"}
 	var/datum/browser/popup = new(user, "dispenser", "Tank Storage Unit Contents")
