@@ -82,7 +82,7 @@
 						to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
 						update_icon()
 						if(platanks.len || oxytanks.len)
-							attack_hand(user)
+							AltClick(user)
 				if("Take plasma tank")
 					if(platanks.len)
 						var/obj/item/weapon/tank/plasma/P = platanks[platanks.len]
@@ -91,7 +91,7 @@
 						to_chat(usr, "<span class='notice'>You take [P] out of [src].</span>")
 						update_icon()
 						if(platanks.len || oxytanks.len)
-							attack_hand(user)
+							AltClick(user)
 		else
 			to_chat(user, "<span class='warning'>[src] is empty.</span>")
 
