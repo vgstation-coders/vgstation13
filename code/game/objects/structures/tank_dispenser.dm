@@ -64,8 +64,8 @@
 	if(Adjacent(user))
 		if(platanks.len || oxytanks.len)
 			var/list/choices = list(
-				list("Take O2 tank", "radial_tank[oxytanks.len]"),
-				list("Take plasma tank", "radial_ptank[platanks.len]"),
+				list("Take O2 tank", "radial_tank[oxytanks.len ? "" : "empty"]"),
+				list("Take plasma tank", "radial_ptank[platanks.len ? "" : "empty"]"),
 			)
 
 			var/task = show_radial_menu(user,loc,choices,custom_check = new /callback(src, .proc/radial_check, user),starting_angle=90,ending_angle=450)
