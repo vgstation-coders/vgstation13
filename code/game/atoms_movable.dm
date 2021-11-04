@@ -1222,6 +1222,7 @@
 	invisibility = 101
 	#endif
 	flow_flags = ON_BORDER
+	flags = TIMELESS | INVULNERABLE
 
 //The following serves to prevent objects from overlapping the border object from the side.
 //By widening the border_dummy to either side of the border object, we make it so that objects approaching from the edge overlap it as well as objects in front of the border object.
