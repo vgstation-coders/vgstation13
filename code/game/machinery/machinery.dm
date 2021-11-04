@@ -382,9 +382,7 @@ Class Procs:
 	return TRUE
 
 /obj/machinery/proc/is_in_range(var/mob/user)
-	if((!in_range(src, user) || !istype(src.loc, /turf)) && (!istype(user, /mob/living/silicon) || !istype(user, /mob/living/simple_animal/hostile/pulse_demon)))
-		return FALSE
-	return TRUE
+	return (in_range(src, user) || istype(src.loc, /turf)) && istype(user, /mob/living/silicon) && istype(user, /mob/living/simple_animal/hostile/pulse_demon)
 
 /obj/machinery/Topic(href, href_list)
 	..()
