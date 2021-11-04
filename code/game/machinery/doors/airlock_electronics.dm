@@ -13,6 +13,8 @@
 
 	var/list/conf_access = null
 	var/one_access = 0 //if set to 1, door would receive req_one_access instead of req_access
+	var/dir_access = 0 //if set to a dir, door would use req_access_dir
+	var/access_nodir = 0 //if set to 1, all access if not in dir, otherwise none
 	var/last_configurator = null
 	var/locked = 1
 	var/installed = 0
@@ -67,6 +69,13 @@
 		t1 += "Access requirement is set to "
 		t1 += one_access ? "<a style='color: green' href='?src=\ref[src];one_access=1'>ONE</a><hr>" : "<a style='color: red' href='?src=\ref[src];one_access=1'>ALL</a><hr>"
 
+		t1 += "Access direction is set to "
+		t1 += "<a href='?src=\ref[src];access_dir=1'>[dir_access]</a><hr>"
+
+		if(dir_access)
+			t1 += "Accessing not in dir is set to "
+			t1 += access_nodir ? "<a style='color: green' href='?src=\ref[src];nodir=1'>TRUE</a><hr>" : "<a style='color: red' href='?src=\ref[src];nodir=1'>FALSE</a><hr>"
+
 		t1 += conf_access == null ? "<font color=red>All</font><br>" : "<a href='?src=\ref[src];access=all'>All</a><br>"
 
 		t1 += "<br>"
@@ -118,6 +127,18 @@
 
 	if(href_list["access"])
 		toggle_access(href_list["access"])
+
+	if(href_list["access_dir"])
+		var/setdir = dir_access
+		var/static/list/allowed_dirs = list(FALSE,NORTH,SOUTH,EAST,WEST)
+		setdir = input(usr,"Enter a new access dir (Valid options: 0, 1, 2, 4, 8)", src, dir_access) as num
+		if(setdir in allowed_dirs)
+			dir_access = setdir
+		else
+			dir_access = 0
+
+	if(href_list["notdir"])
+		access_nodir = !access_nodir
 
 	interact(usr)
 

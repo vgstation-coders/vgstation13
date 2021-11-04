@@ -74,6 +74,8 @@
 			windoor.req_one_access = electronics.conf_access
 		else
 			windoor.req_access = electronics.conf_access
+		windoor.req_access_dir = src.electronics.dir_access
+		windoor.access_not_dir = src.electronics.access_nodir
 		electronics.forceMove(windoor)
 		windoor.electronics = electronics
 		electronics.installed = TRUE
