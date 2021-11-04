@@ -30,10 +30,11 @@
 	)
 
 /obj/machinery/power/treadmill/New()
+	..()
+	setup_border_dummy()
 	if(anchored)
 		connect_to_network()
 	RefreshParts()
-	..()
 
 /obj/machinery/power/treadmill/RefreshParts()
 	var/calc = 0
@@ -83,27 +84,22 @@
 	else
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
 
-/obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
-		return 1
-	if((flow_flags & ON_BORDER) && (mover.dir == dir))
-		powerwalk(mover)
-		return !density
-	return 1
-
 /obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
 	if(istype(mover) && mover.checkpass(pass_flags_self))
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		if(air_group)
-			return 1
-		return 0
-	else
-		return 1
+		return TRUE
+	if(!density)
+		return TRUE
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
+
+/obj/machinery/power/treadmill/Bumped(atom/movable/AM)
+	if(AM.loc == loc)
+		powerwalk(AM)
 
 /obj/machinery/power/treadmill/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
@@ -128,7 +124,7 @@
 	if (usr.isUnconscious() || usr.restrained()  || anchored)
 		return
 
-	src.dir = turn(src.dir, -90)
+	change_dir(turn(src.dir, -90))
 
 /obj/machinery/power/treadmill/verb/rotate_anticlock()
 	set category = "Object"
@@ -139,4 +135,4 @@
 		to_chat(usr, "It is fastened to the floor!")
 		return
 
-	src.dir = turn(src.dir, 90)
+	change_dir(turn(src.dir, 90))

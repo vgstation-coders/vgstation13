@@ -93,7 +93,7 @@
 		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
 			O = new result_type(usr.loc)
 
-	O.dir = usr.dir
+	O.change_dir(usr.dir)
 	if(start_unanchored)
 		var/obj/A = O
 		A.anchored = 0
@@ -403,6 +403,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
 	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
+	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/baseball_bat,			1,		time = 5 SECONDS							),
 	)
 
 /* =========================================================================

@@ -540,6 +540,13 @@
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
+/obj/item/clothing/head/cowboy/dimma
+	name = "ten million gallon hat"
+	desc = "A soaring monument to the power and ego of its wearer. Only the most powerful of men can support a hat of such unparalleled height without being crushed."
+	icon = 'icons/obj/dimma.dmi'
+	icon_state = "cowboydimma"
+	wear_override = new/icon("icon" = 'icons/mob/dimma.dmi', "icon_state" = "cowboydimma")
+
 /obj/item/clothing/head/christmas/santahat/red
 	name = "red santa hat"
 	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."

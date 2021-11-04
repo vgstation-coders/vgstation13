@@ -44,7 +44,7 @@
 	var/lights_enabled = FALSE
 	light_power = 2
 	light_range = SPACEPOD_LIGHTS_RANGE_OFF
-	appearance_flags = LONG_GLIDE
+	appearance_flags = LONG_GLIDE|TILE_MOVER
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/passenger_fire = 0 //Whether or not a passenger can fire weapons attached to this pod

@@ -335,12 +335,10 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/proc/run_action()
 	return 0
 
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source, var/manual = FALSE)
+/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source)
 	if(prob && !prob(health))
 		return
 	if(istype(T, /turf/space) && prob(75))
-		if (source && manual)
-			source.add_points(round(2*BLOBATTCOST/3))
 		return
 	if(!T)
 		var/list/dirs = cardinal.Copy()
@@ -383,8 +381,6 @@ var/list/blob_looks_player = list(//Options available to players
 	else //If we cant move in hit the turf
 		if(!source || !source.restrain_blob)
 			T.blob_act(0,src) //Don't attack the turf if our source mind has that turned off.
-		if (source && manual)
-			source.add_points(round(2*BLOBATTCOST/3))
 		B.manual_remove = 1
 		B.Delete()
 

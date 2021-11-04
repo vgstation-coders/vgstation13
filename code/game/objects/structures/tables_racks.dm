@@ -234,9 +234,9 @@
 			if(6)
 				icon_state = "[initial(icon_state)]_dir3"
 		if (dir_sum in alldirs)
-			dir = dir_sum
+			change_dir(dir_sum)
 		else
-			dir = 2
+			change_dir(SOUTH)
 
 /obj/structure/table/ex_act(severity)
 	switch(severity)
@@ -315,10 +315,7 @@
 	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(flipped)
-		if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-			return !density
-		else
-			return 1
+		return bounds_dist(border_dummy, mover) >= 0
 	return 0
 
 /obj/structure/table/Bumped(atom/movable/AM)
@@ -348,21 +345,6 @@
 			visible_message("<span class='warning'>[src] breaks down!</span>")
 			destroy()
 			return 1
-	return 1
-
-/obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
 	return 1
 
 /obj/structure/table/MouseDropTo(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
@@ -521,11 +503,12 @@
 			spawn(0)
 				A.throw_at(pick(targets),1,1)
 
-	dir = direction
+	change_dir(direction)
 	if(dir != NORTH)
 		plane = ABOVE_HUMAN_PLANE
 	flipped = 1
 	flow_flags |= ON_BORDER
+	setup_border_dummy()
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && !T.flipped)
@@ -542,6 +525,7 @@
 	reset_plane_and_layer()
 	flipped = 0
 	flow_flags &= ~ON_BORDER
+	remove_border_dummy()
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
 		var/obj/structure/table/T = locate() in get_step(src.loc,D)
 		if(T && T.flipped && T.dir == src.dir)

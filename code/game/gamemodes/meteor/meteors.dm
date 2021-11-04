@@ -427,6 +427,7 @@ var/list/blob_candidates = list()
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
+	did_blob_stuff = TRUE
 	log_admin("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
 	message_admins("Blob core meteor impacted at [formatJumpTo(T)] controlled by [key_name(blob_candidate)].")
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))

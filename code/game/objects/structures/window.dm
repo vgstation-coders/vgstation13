@@ -43,6 +43,7 @@ var/list/one_way_windows
 
 	..(loc)
 	flow_flags |= ON_BORDER
+	setup_border_dummy()
 
 	update_nearby_tiles()
 	update_nearby_icons()
@@ -183,32 +184,20 @@ var/list/one_way_windows
 			"<span class='danger'>Your kick [pick("bounces","gleams")] off \the [src] harmlessly.</span>")
 		healthcheck()
 
-/obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
-		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
-
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this
-		return 1
+		return TRUE
 	if(istype(mover) && mover.checkpass(pass_flags_self))//checking for beam dispersion both in and out, since beams do not trigger Uncross.
-		if((get_dir(loc, target) & dir) || (get_dir(loc, mover) & dir) || (get_dir(loc, target) & reverse_direction(dir)) || (get_dir(loc, mover) & reverse_direction(dir)))
+		if((get_dir(loc, target) | get_dir(loc, mover)) & (dir | reverse_direction(dir)))
 			dim_beam(mover)
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		return !density
-	return 1
-
+		return TRUE
+	if(!density)
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
 
 /obj/structure/window/proc/dim_beam(var/obj/item/projectile/beam/B)
 	if(istype(B))
@@ -559,7 +548,7 @@ var/list/one_way_windows
 		return 0
 
 	update_nearby_tiles() //Compel updates before
-	dir = turn(dir, 90)
+	change_dir(turn(dir, 90))
 	update_nearby_tiles()
 	return
 
@@ -573,7 +562,7 @@ var/list/one_way_windows
 		return 0
 
 	update_nearby_tiles() //Compel updates before
-	dir = turn(dir, 270)
+	change_dir(turn(dir, 270))
 	update_nearby_tiles()
 	return
 
