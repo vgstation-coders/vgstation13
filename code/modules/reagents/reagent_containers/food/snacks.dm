@@ -4515,7 +4515,6 @@
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
 
-
 /obj/item/weapon/reagent_containers/food/snacks/zamritos
 	name = "Zamritos: Original Flavor"
 	desc = "A salty, overly processed taste that reminds you of days past when you snacked on these as a small greyling."
@@ -4532,12 +4531,12 @@
 		icon_state = "zamritos_bluegoo"
 		filling_color = "#5BC9DD"
 		reagents.add_reagent(NUTRIMENT, 1)
-		reagents.add_reagent(SODIUMCHLORIDE, 1)
-		bitesize = 0.25 // Same number of bites but less nutriment because it's the worst
+		reagents.add_reagent(SODIUMCHLORIDE, 3)
+		bitesize = 0.5 // Same number of bites but less nutriment because it's the worst
 	else
 		reagents.add_reagent(NUTRIMENT, 2)
-		reagents.add_reagent(SODIUMCHLORIDE, 2)
-		bitesize = 0.5 // Takes a little while to chew through a bag of chips!
+		reagents.add_reagent(SODIUMCHLORIDE, 5)
+		bitesize = 0.9 // It takes a little while to chew through a bag of chips!
 
 /obj/item/weapon/reagent_containers/food/snacks/zamritos_stokjerky
 	name = "Zamritos: Spicy Stok Jerky Flavor"
