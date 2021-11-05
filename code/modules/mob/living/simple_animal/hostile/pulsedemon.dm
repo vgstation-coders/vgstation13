@@ -129,6 +129,7 @@
     else
         death()
     regular_hud_updates()
+    standard_damage_overlay_updates()
     ..()
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
