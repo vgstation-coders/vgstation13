@@ -315,7 +315,7 @@ var/list/crushed_cans_cache = list()
 
 /obj/item/trash/zamitos_bg
 	name = "Zamitos: Blue Goo Flavor"
-	desc = "Whoever ate this should be ashamed"
+	desc = "Someone around here is a goo eater"
 	icon_state	= "zamitos_bg"
 
 /obj/item/trash/zamitos_sj

@@ -4526,7 +4526,7 @@
 	..()
 	if(prob(30))
 		name = "Zamitos: Blue Goo Flavor"
-		desc = "Objectively the worst flavor. Nobody likes blue goo."
+		desc = "Objectively worse than the original flavor. Not as filling, and the texture is strange."
 		trash = /obj/item/trash/zamitos_bg
 		icon_state = "zamitos_bluegoo"
 		filling_color = "#5BC9DD"
