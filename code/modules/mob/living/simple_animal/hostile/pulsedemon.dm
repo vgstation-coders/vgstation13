@@ -81,27 +81,27 @@
     update_cableview()
 
 /mob/living/simple_animal/hostile/pulse_demon/regular_hud_updates()
-	..()
-	if(client && hud_used)
-		if(!hud_used.vampire_blood_display)
-			hud_used.pulsedemon_hud()
-		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE
-		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:2px'>C:<br><font color='#FFFF00'>[charge/1000]kW</font></div>"
+    ..()
+    if(client && hud_used)
+        if(!hud_used.vampire_blood_display)
+            hud_used.pulsedemon_hud()
+        hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE
+        hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
+        hud_used.vampire_blood_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:2px'>C:<br><font color='#FFFF00'>[charge/1000]kW</font></div>"
 
-    if(healths)
-		if (health >= maxHealth)
-			healths.icon_state = "health0"
-		else if (health >= 3*maxHealth/4)
-			healths.icon_state = "health1"
-		else if (health >= maxHealth/2)
-			healths.icon_state = "health2"
-		else if (health >= maxHealth/4)
-			healths.icon_state = "health3"
-		else if (health > 0)
-			healths.icon_state = "health4"
-		else
-			healths.icon_state = "health5"
+        if(healths)
+            if (health >= maxHealth)
+                healths.icon_state = "health0"
+            else if (health >= 3*maxHealth/4)
+                healths.icon_state = "health1"
+            else if (health >= maxHealth/2)
+                healths.icon_state = "health2"
+            else if (health >= maxHealth/4)
+                healths.icon_state = "health3"
+            else if (health > 0)
+                healths.icon_state = "health4"
+            else
+                healths.icon_state = "health5"
 
 /mob/living/simple_animal/hostile/pulse_demon/Stat()
 	..()
