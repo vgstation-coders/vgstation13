@@ -256,6 +256,7 @@
             A.attack_robot(current_robot)
         else if(isliving(A))
             var/mob/living/L = A
+            delayNextAttack(30)
             unarmed_attack_mob(L)
     else
         spell_channeling.channeled_spell(A)
@@ -404,13 +405,8 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
     if(!is_under_tile())
-        var/attack_verb = get_unarmed_verb(target)
-
-        visible_message(get_attack_message(target, attack_verb))
         do_attack_animation(target, src)
-        
         shockMob(target)
-
         INVOKE_EVENT(src, /event/unarmed_attack, "attacker" = target, "attacked" = src)
 
 /mob/living/simple_animal/hostile/pulse_demon/UnarmedAttack(atom/A)
@@ -547,10 +543,16 @@
     powerMenu()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
+    var/dmg_done = 0
     if(current_net && current_net.avail)
-        electrocute_mob(M, current_net, src, 0.5)
+        dmg_done = electrocute_mob(M, current_net, src, 1) / 20 //Inverting multiplier of damage done in proc
+    else if(charge < 1000)
+        to_chat(src,"<span class='warning'>Not enough charge or power on grid to shock with.</span>")
+        return
     else
-        M.electrocute_act(30, src, 0.5)
+        dmg_done = M.electrocute_act(30, src, 1)
+        charge -= 1000
+    add_logs(src, M, "shocked ([dmg_done]dmg)", admin = (src.ckey && M.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/hijackAPC(var/obj/machinery/power/apc/current_apc)
     to_chat(src,"<span class='notice'>You are now attempting to hack \the [current_apc], this will take approximately [takeover_time] seconds.</span>")
