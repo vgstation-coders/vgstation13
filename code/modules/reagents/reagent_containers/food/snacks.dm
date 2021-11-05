@@ -4531,8 +4531,8 @@
 		icon_state = "zamitos_bluegoo"
 		filling_color = "#5BC9DD"
 		reagents.add_reagent(NUTRIMENT, 1)
-		reagents.add_reagent(SODIUMCHLORIDE, 3)
-		bitesize = 0.5 // Same number of bites but less nutriment because it's the worst
+		reagents.add_reagent(BLUEGOO, 6)
+		bitesize = 0.9 // Same number of bites but less nutriment because it's the worst
 	else
 		reagents.add_reagent(NUTRIMENT, 2)
 		reagents.add_reagent(SODIUMCHLORIDE, 5)
