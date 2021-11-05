@@ -366,7 +366,7 @@
 		if(prob(75))
 			to_chat(M, "<span class='notice'>[pick("The mothership is always watching.","All hail the Chairman.","You should buy more Zam snacks.","You would love to get some alien tissue samples under a microscope.","You feel exceptionally loyal to the mothership.","You feel the mothership's psychic presence.","The mothership will ensure your prosperity.","Maybe the commissary will dispense extra ration vouchers this cloning cycle.","Humans really do behave like apes sometimes.","A refreshing sip of acid would be delightful.")]</span>")
 		else
-			M.say(pick("Praise the mothership!", "Be productive this quarter, fellow denizens.", "Grey minds are naturally superior.", "I work for the happiness of all greykind.", "Remain vigilant, alert the local battalion about any socially unstable behavior."))
+			M.say(pick("Praise the mothership!", "Be productive this quarter, fellow denizens.", "Grey minds are naturally superior.", "I work for the happiness of all greykind.", "Alert the local battalion about any socially unstable behavior."))
 
 /datum/reagent/slimejelly
 	name = "Slime Jelly"
