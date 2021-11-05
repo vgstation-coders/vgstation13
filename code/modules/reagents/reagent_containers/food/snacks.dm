@@ -4547,7 +4547,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(BLACKPEPPER, 2)
 	reagents.add_reagent(SOYSAUCE, 2)
 	reagents.add_reagent(CAPSAICIN, 2)
