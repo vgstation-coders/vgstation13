@@ -20,7 +20,7 @@
     max_tox = 0
     health = 50
     maxHealth = 50
-    speed = 0.75
+    speed = 1
     move_to_delay = 1
     size = SIZE_TINY
 
@@ -400,11 +400,18 @@
                 visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
             if(I_HURT)
                 visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
-        shockMob(M)
+        unarmed_attack_mob(M)
 
 /mob/living/simple_animal/hostile/pulse_demon/unarmed_attack_mob(mob/living/target)
     if(!is_under_tile())
+        var/attack_verb = get_unarmed_verb(target)
+
+        visible_message(get_attack_message(target, attack_verb))
+        do_attack_animation(target, src)
+        
         shockMob(target)
+
+        INVOKE_EVENT(src, /event/unarmed_attack, "attacker" = target, "attacked" = src)
 
 /mob/living/simple_animal/hostile/pulse_demon/UnarmedAttack(atom/A)
     return
@@ -541,9 +548,9 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     if(current_net && current_net.avail)
-        electrocute_mob(M, current_net, src, 1)
+        electrocute_mob(M, current_net, src, 0.5)
     else
-        M.electrocute_act(30, src, 1)
+        M.electrocute_act(30, src, 0.5)
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/hijackAPC(var/obj/machinery/power/apc/current_apc)
     to_chat(src,"<span class='notice'>You are now attempting to hack \the [current_apc], this will take approximately [takeover_time] seconds.</span>")
