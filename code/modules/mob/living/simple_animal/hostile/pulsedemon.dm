@@ -255,9 +255,7 @@
             message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] attack [A]</span>")
             A.attack_robot(current_robot)
         else if(isliving(A))
-            var/mob/living/L = A
-            delayNextAttack(30)
-            unarmed_attack_mob(L)
+            ..()
     else
         spell_channeling.channeled_spell(A)
 
@@ -410,7 +408,9 @@
         INVOKE_EVENT(src, /event/unarmed_attack, "attacker" = target, "attacked" = src)
 
 /mob/living/simple_animal/hostile/pulse_demon/UnarmedAttack(atom/A)
-    return
+    if(isliving(A))
+        var/mob/living/L = A
+        unarmed_attack_mob(L)
 
 /mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
     return
