@@ -392,6 +392,7 @@
 		"trace_chem" = null,
 		"virus2" = null,
 		"immunity" = null,
+		"occult" = null,
 		)
 
 /datum/reagent/blood/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)

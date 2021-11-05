@@ -18,14 +18,13 @@
 	admin_voice_style = "sinister"
 	admin_voice_say = "murmurs..."
 	var/list/bloody_floors = list()
-	var/cult_win = FALSE
-	var/warning = FALSE
+	var/cult_win = TRUE
 
 	var/list/cult_reminders = list()
 
 	var/list/bindings = list()
 
-	var/list/cultist_cap = 9 //see CanConvert() below
+	var/list/cultist_cap = 1	//clamped between 5 and 9 depending on crew size. once the cap goes up it cannot go down.
 
 	var/mentor_count = 0 //so we don't loop through the member list if we already know there are no mentors in there
 
@@ -36,45 +35,39 @@
 	return cult_win
 
 
-//	So the way it works is that there cannot be more than 9 human cultists at a given time.
-//	If there is already 9 cultists, conversions will automatically cuff instead, and reincarnation rituals will abort
-//	This ALSO applies to dead and braindead/catatonic cultists. I'll have to monitor if this poses problem, maybe let admins deconvert players who have to disconnect?
-//	Shades aren't restricted by this though.
-//	For Constructs it's a bit special. Basically the first construct of each type doesn't count toward the cap,
-//	however each additional construct of a given type does. So if you have 2 juggernauts, you're limiting the cult to 8 humans, etc.
-//	When you hit the cap, you cannot create a construct if there's already one of that type.
-/datum/faction/bloodcult/proc/CanConvert(var/conversion_type = "human")
-	var/human_count = 0
-	var/artificer_count = 0
-	var/wraith_count = 0
-	var/juggernaut_count = 0
-	var/over_cap = 0
+/datum/faction/bloodcult/process()
+	..()
+	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
+		UpdateCap()
+
+/datum/faction/bloodcult/proc/UpdateCap()
+	var/living_players = 0
+	var/new_cap = 0
+	for (var/mob/M in player_list)
+		if (!M.client)
+			continue
+		if (istype(M,/mob/new_player))
+			continue
+		if (M.stat != DEAD)
+			living_players++
+	new_cap =  clamp(round(living_players / 3),5,9)
+	if (new_cap > cultist_cap)
+		cultist_cap = new_cap
+		for (var/datum/role/R in members)
+			var/mob/M = R.antag.current
+			to_chat(M, "<span class='sinister'>The station population is now large enough for <span class='userdanger'>[cultist_cap]</span> cultists.</span>")
+
+/datum/faction/bloodcult/proc/CanConvert()
+	var/cultist_count = 0
 	for (var/datum/role/R in members)
 		var/mob/M = R.antag.current
-		if (istype(M, /mob/living/carbon/human))
-			human_count++
-		else if (istype(M, /mob/living/simple_animal/construct/builder))
-			if (artificer_count)
-				over_cap++
-			artificer_count++
-		else if (istype(M, /mob/living/simple_animal/construct/wraith))
-			if (wraith_count)
-				over_cap++
-			wraith_count++
-		else if (istype(M, /mob/living/simple_animal/construct/armoured))
-			if (juggernaut_count)
-				over_cap++
-			juggernaut_count++
+		if (isliving(M)) //humans, shades and constructs all count. The dead count for half a member (unless they have no body left).
+			if (M.isDead())
+				cultist_count += 0.5
+			else
+				cultist_count += 1
 
-	switch (conversion_type)
-		if ("human")
-			return ((human_count + over_cap) < cultist_cap)
-		if ("Artificer")
-			return (!artificer_count || ((human_count + over_cap) < cultist_cap))
-		if ("Wraith")
-			return (!wraith_count || ((human_count + over_cap) < cultist_cap))
-		if ("Juggernaut")
-			return (!juggernaut_count || ((human_count + over_cap) < cultist_cap))
+	return (cultist_count < cultist_cap)
 
 /datum/faction/bloodcult/HandleRecruitedRole(var/datum/role/R)
 	. = ..()
@@ -99,4 +92,12 @@
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_rune_words()
 	AppendObjective(/datum/objective/bloodcult)
+	for (var/datum/role/R in members)
+		var/mob/M = R.antag.current
+		to_chat(M, "<span class='sinister'>Our communion must remain small and secretive.</span>")
+	UpdateCap()
+	if (cultist_cap < 9)
+		for (var/datum/role/R in members)
+			var/mob/M = R.antag.current
+			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station.</span>")
 	..()
