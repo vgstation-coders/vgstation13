@@ -4515,20 +4515,20 @@
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/zamritos
-	name = "Zamritos: Original Flavor"
+/obj/item/weapon/reagent_containers/food/snacks/zamitos
+	name = "Zamitos: Original Flavor"
 	desc = "A salty, overly processed taste that reminds you of days past when you snacked on these as a small greyling."
-	trash = /obj/item/trash/zamritos_o
-	icon_state = "zamritos_original"
+	trash = /obj/item/trash/zamitos_o
+	icon_state = "zamitos_original"
 	filling_color = "#F7CE7B"
 
-/obj/item/weapon/reagent_containers/food/snacks/zamritos/New()
+/obj/item/weapon/reagent_containers/food/snacks/zamitos/New()
 	..()
 	if(prob(30))
-		name = "Zamritos: Blue Goo Flavor"
+		name = "Zamitos: Blue Goo Flavor"
 		desc = "Objectively the worst flavor. Nobody likes blue goo."
-		trash = /obj/item/trash/zamritos_bg
-		icon_state = "zamritos_bluegoo"
+		trash = /obj/item/trash/zamitos_bg
+		icon_state = "zamitos_bluegoo"
 		filling_color = "#5BC9DD"
 		reagents.add_reagent(NUTRIMENT, 1)
 		reagents.add_reagent(SODIUMCHLORIDE, 3)
@@ -4538,14 +4538,14 @@
 		reagents.add_reagent(SODIUMCHLORIDE, 5)
 		bitesize = 0.9 // It takes a little while to chew through a bag of chips!
 
-/obj/item/weapon/reagent_containers/food/snacks/zamritos_stokjerky
-	name = "Zamritos: Spicy Stok Jerky Flavor"
+/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky
+	name = "Zamitos: Spicy Stok Jerky Flavor"
 	desc = "Meat-flavored crisps with three different seasonings! Almost as good as real meat."
-	trash = /obj/item/trash/zamritos_sj
-	icon_state = "zamritos_stokjerky"
+	trash = /obj/item/trash/zamitos_sj
+	icon_state = "zamitos_stokjerky"
 	filling_color = "#A66626"
 
-/obj/item/weapon/reagent_containers/food/snacks/zamritos_stokjerky/New()
+/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(BLACKPEPPER, 2)

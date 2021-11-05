@@ -3654,7 +3654,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 8,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder = 4,
-		/obj/item/weapon/reagent_containers/food/snacks/zamritos = 8,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos = 8,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 4,
@@ -3671,7 +3671,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 16,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea = 16,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_tannicthunder = 20,
-		/obj/item/weapon/reagent_containers/food/snacks/zamritos = 16,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos = 16,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 20,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 30,
@@ -3681,7 +3681,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
 		)
 	premium = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zamritos_stokjerky = 4,
+		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza = 2,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter = 2,
 		)
