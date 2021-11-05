@@ -805,7 +805,7 @@ steam.start() -- spawns the effect
 		if(!T)
 			continue
 
-		if(!T.Enter(src))
+		if(!T.Enter(src, loc, TRUE))
 			continue
 
 		var/obj/effect/foam/F = locate() in T

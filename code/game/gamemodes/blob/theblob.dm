@@ -361,7 +361,7 @@ var/list/blob_looks_player = list(//Options available to players
 			num /= 10000
 			B.layer = layer - num
 
-	if(T.Enter(B,src))//Attempt to move into the tile
+	if(T.Enter(B, loc, TRUE))//Attempt to move into the tile //This should probably just actually call Move() instead
 		B.setDensity(initial(B.density))
 		if(icon_size == 64)
 			spawn(1)

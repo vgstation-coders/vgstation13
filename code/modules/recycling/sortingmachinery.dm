@@ -295,7 +295,7 @@
 	var/turf/out_T = get_step(src, output_dir)
 	var/turf/filter_T = get_step(src, filter_dir)
 
-	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
+	if(!out_T.Enter(mover, mover.loc, TRUE) || !filter_T.Enter(mover, mover.loc, TRUE))
 		return
 
 	var/affecting = in_T.contents
