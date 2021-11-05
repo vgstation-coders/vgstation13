@@ -4526,13 +4526,13 @@
 	..()
 	if(prob(30))
 		name = "Zamitos: Blue Goo Flavor"
-		desc = "Objectively worse than the original flavor. Not as filling, and the texture is strange."
+		desc = "Not as filling as the original flavor, and the texture is strange."
 		trash = /obj/item/trash/zamitos_bg
 		icon_state = "zamitos_bluegoo"
 		filling_color = "#5BC9DD"
 		reagents.add_reagent(NUTRIMENT, 1)
-		reagents.add_reagent(BLUEGOO, 6)
-		bitesize = 0.9 // Same number of bites but less nutriment because it's the worst
+		reagents.add_reagent(BLUEGOO, 5)
+		bitesize = 0.8 // Same number of bites but less nutriment because it's the worst
 	else
 		reagents.add_reagent(NUTRIMENT, 2)
 		reagents.add_reagent(SODIUMCHLORIDE, 5)
