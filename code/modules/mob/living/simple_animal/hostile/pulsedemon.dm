@@ -579,7 +579,12 @@
     else if(charge >= maxcharge)
         amount_to_drain = 0
     current_battery.charge -= amount_to_drain
-    charge += min((maxcharge-charge),amount_to_drain)
+    var/amount_added = min((maxcharge-charge),amount_to_drain)
+    charge += amount_added
+    if(mind && mind.GetRole(PULSEDEMON))
+        var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
+        if(PD)
+            PD.charge_absorbed += amount_added
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/drainAPC(var/obj/machinery/power/apc/current_apc)
     var/amount_to_drain = charge_absorb_amount
@@ -590,7 +595,12 @@
     else if(charge >= maxcharge)
         amount_to_drain = 0
     current_apc.cell.use(amount_to_drain)
-    charge += min((maxcharge-charge),amount_to_drain)
+    var/amount_added = min((maxcharge-charge),amount_to_drain)
+    charge += amount_added
+    if(mind && mind.GetRole(PULSEDEMON))
+        var/datum/role/pulse_demon/PD = mind.GetRole(PULSEDEMON)
+        if(PD)
+            PD.charge_absorbed += amount_added
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/update_cableview()
     if(client && (current_net != previous_net))

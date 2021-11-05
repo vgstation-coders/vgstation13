@@ -10,6 +10,7 @@
 	default_admin_voice = "The Currents"
 	admin_voice_style = "skeleton"
 	var/list/obj/machinery/power/apc/controlled_apcs = list()
+	var/charge_absorbed = 0
 
 /datum/role/pulse_demon/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -21,7 +22,10 @@
 	to_chat(antag.current, "<BR><B>Don't let your charge run out! If the powernet blacks out you'll start losing health and eventually die off! You are immune to all forms of damage and obstacles in the way of cables, but are also extremely weak to EMPs, so avoid those at all costs.</B>")
 
 /datum/role/pulse_demon/ForgeObjectives()
-	AppendObjective(/datum/objective/pulse_demon/infest)
+	if(prob(50))
+		AppendObjective(/datum/objective/pulse_demon/infest)
+	if(prob(50))
+		AppendObjective(/datum/objective/pulse_demon/drain)
 	AppendObjective(/datum/objective/pulse_demon/tamper)
 
 /datum/role/pulse_demon/GetScoreboard()
