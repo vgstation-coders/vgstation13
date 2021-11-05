@@ -109,6 +109,12 @@
 	..()
 	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
+/turf/Enter(atom/movable/mover, atom/oldloc, check_contents = FALSE)
+	. = ..()
+	if(check_contents && .)
+		for(var/atom/movable/AM in src)
+			if(!AM.Cross(mover))
+				return FALSE
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
