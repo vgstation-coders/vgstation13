@@ -561,7 +561,7 @@
 				if (!cult)
 					return
 				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000">"}
-				dat += "<b>We are currently allowed up to [cult.cultist_cap] members.</b>"
+				dat += "<b>Our cult can currently grow up to [cult.cultist_cap] members.</b>"
 				dat += "<ul>"
 				for (var/datum/role/cultist/C in cult.members)
 					var/datum/mind/M = C.antag

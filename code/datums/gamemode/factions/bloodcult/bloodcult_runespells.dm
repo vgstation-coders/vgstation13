@@ -762,7 +762,7 @@ var/list/converted_minds = list()
 		<br><br>However if the target has a loyalty implants or the cult already has 9 human members, they will instead be restrained by ghastly bindings. \
 		More than one construct of each time will also reduce the maximum amount of permitted human cultists.\
 		<br><br>Do not seek to convert everyone, instead use the Seer or Astral Journey runes first to locate the most interesting candidates.\
-		<br><br>You can touch the rune again during the early part of the ritual to force it to result in the target's restraining.\
+		<br><br>Touching the rune again during the early part of the ritual lets you toggle it between \"conversion\" and \"entrapment\", should you just want to restrain someone.\
 		<br><br>By attuning a talisman to this rune, you can trigger it remotely, but you will have to move closer afterwards or the ritual will stop.\
 		<br><br>This rune persists upon use, allowing repeated usage."
 	var/remaining = 100
@@ -784,7 +784,7 @@ var/list/converted_minds = list()
 	var/obj/effect/cult_ritual/conversion/conversion = null
 
 	var/phase = 1
-	var/force_cuff = FALSE
+	var/entrapment = FALSE
 
 
 /datum/rune_spell/conversion/Destroy()
@@ -855,7 +855,7 @@ var/list/converted_minds = list()
 		SPS.OnMobDeath(victim)//Think carefully before converting a sec officer
 
 	if (!cult.CanConvert())
-		to_chat(activator, "<span class='warning'>There are already too many cultists. They will be made prisoner.</span>")
+		to_chat(activator, "<span class='warning'>There are already too many cultists. \The [victim] will be made a prisoner.</span>")
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
@@ -975,7 +975,7 @@ var/list/converted_minds = list()
 		if ((acceptance == "Always" || acceptance == "Yes") && !cult.CanConvert())
 			acceptance = "Overcrowded"
 
-		if (force_cuff)
+		if (entrapment)
 			acceptance = "Overcrowded"
 
 		//Players with cult enabled in their preferences will always get converted.
@@ -987,7 +987,7 @@ var/list/converted_minds = list()
 				to_chat(activator, "<span class='sinister'>The ritual immediately stabilizes, \the [victim] appears eager help prepare the festivities.</span>")
 				to_chat(victim, "<span class='sinister'>YOU HAVE BEEN WAITING FOR US. OUR CULT WELCOMES YOU</span>")
 				success = CONVERSION_ACCEPT
-				conversion_delay = 50
+				conversion_delay = 30
 			if ("No","???","Never")
 				if (victim.client)
 					to_chat(activator, "<span class='sinister'>The ritual arrives in its final phase. How it ends depends now of \the [victim]. You do not have to remain adjacent for the remainder of the ritual.</span>")
@@ -1027,6 +1027,7 @@ var/list/converted_minds = list()
 			if ("Overcrowded")
 				to_chat(victim, "<span class='sinister'>EXCEPT...THERE ARE NO VACANT SEATS LEFT.</span>")
 				success = CONVERSION_OVERCROWDED
+				conversion_delay = 30
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
 		sleep(conversion_delay)
@@ -1170,12 +1171,12 @@ var/list/converted_minds = list()
 	if (add_cultist != activator)
 		return
 	if (phase == 1)
-		if (force_cuff)
+		if (entrapment)
 			to_chat(add_cultist, "<span class='notice'>You perform the conversion sign, allowing the victim to become a cultist if they qualify.</span>")
-			force_cuff = FALSE
+			entrapment = FALSE
 		else
 			to_chat(add_cultist, "<span class='warning'>You perform the entrapment sign, ensuring that the victim will be restrained.</span>")
-			force_cuff = TRUE
+			entrapment = TRUE
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim == M)
