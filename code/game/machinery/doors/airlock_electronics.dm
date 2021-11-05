@@ -80,18 +80,16 @@
 
 		t1 += "<br>"
 
-		for(var/i = 1; i <= 7; i++)
-			t1 += "[get_region_accesses_name(i)]<br><br>"
-			for(var/access in get_region_accesses(i))
-				var/aname = get_access_desc(access)
+		var/list/accesses = get_all_accesses()
+		for (var/acc in accesses)
+			var/aname = get_access_desc(acc)
 
-				if (!conf_access || !conf_access.len || !(access in conf_access))
-					t1 += "<a href='?src=\ref[src];access=[access]'>[aname]</a><br>"
-				else if(one_access)
-					t1 += "<a style='color: green' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
-				else
-					t1 += "<a style='color: red' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
-			t1 += "<br>"
+			if (!conf_access || !conf_access.len || !(acc in conf_access))
+				t1 += "<a href='?src=\ref[src];access=[acc]'>[aname]</a><br>"
+			else if(one_access)
+				t1 += "<a style='color: green' href='?src=\ref[src];access=[acc]'>[aname]</a><br>"
+			else
+				t1 += "<a style='color: red' href='?src=\ref[src];access=[acc]'>[aname]</a><br>"
 
 	t1 += text("<p><a href='?src=\ref[];close=1'>Close</a></p>\n", src)
 
