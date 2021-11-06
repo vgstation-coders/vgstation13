@@ -183,7 +183,9 @@
 			var/old_dir = dir
 			. = ..()
 			if(flow_flags & KEEP_DIR)
-				dir = old_dir //We can set it directly instead of calling change_dir() because update_dir() gets called later anyway. Also change_dir() wasn't called to change it in the supercall.
+				dir = old_dir //We can set it directly instead of calling change_dir() because:
+					//1. It wasn't changed through change_dir() in the supercall
+					//2. update_dir() is called later anyway
 			perform_bump()
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
