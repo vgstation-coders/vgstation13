@@ -42,7 +42,7 @@ var/list/one_way_windows
 /obj/structure/window/New(loc)
 
 	..(loc)
-	flow_flags |= ON_BORDER
+	flow_flags |= ON_BORDER | KEEP_DIR
 	setup_border_dummy()
 
 	update_nearby_tiles()
