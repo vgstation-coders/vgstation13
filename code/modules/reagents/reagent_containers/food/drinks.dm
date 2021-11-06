@@ -1063,12 +1063,27 @@
 
 // Here be ayy canned drinks
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricclassic
+	name = "Zam Sulphuric Splash Classic"
+	desc = "One of the original cans! The design has been discontinued, it might be worth something to a collector."
+	icon_state = "Zam_SulphuricClassic"
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricclassic/New()
+	..()
+	reagents.add_reagent(LEMONJUICE, 25)
+	reagents.add_reagent(SACID, 15)
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash
 	name = "Zam Sulphuric Splash"
 	desc = "Taste the splashy tang! The flavor will melt your taste buds."
 	icon_state = "Zam_SulphuricSplash"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash/New()
 	..()
+	if(prob(5))
+		new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricclassic(get_turf(src))
+		qdel(src) //A blast from the past
+		return
 	reagents.add_reagent(LEMONJUICE, 25)
 	reagents.add_reagent(SACID, 15)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
