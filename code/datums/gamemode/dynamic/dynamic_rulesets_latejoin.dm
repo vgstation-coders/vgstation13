@@ -138,6 +138,52 @@
 	return 1
 
 
+//////////////////////////////////////////////
+//                                          //
+//                PULSE DEMON               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/latejoin/pulse_demon
+	name = "Pulse Demon Infiltration"
+	role_category = /datum/role/pulse_demon
+	enemy_jobs = list("Station Engineer","Chief Engineer")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 25
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+	logo = "pulsedemon-logo"
+	
+	repeatable = TRUE
+
+/datum/dynamic_ruleset/latejoin/pulse_demon/execute()
+	var/mob/M = pick(assigned)
+	var/turf/oldloc = get_turf(M)
+	M.forceMove(null)
+	if(!latejoinprompt(M,src))
+		message_admins("[M.key] has opted out of becoming a pulse demon.")
+		M.forceMove(oldloc)
+		return 0
+	var/list/cables_to_spawn_at = list()
+	for(var/datum/powernet/PN in powernets)
+		for(var/obj/structure/cable/C in PN.cables)
+			var/turf/simulated/floor/F = get_turf(C)
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile)
+				cables_to_spawn_at.Add(C)
+	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
+	M.forceMove(get_turf(our_cable))
+	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
+	PD.key = M.key
+	qdel(M)
+	var/datum/role/pulse_demon/newpd = new
+	newpd.AssignToRole(PD.mind,1)
+	newpd.Greet(GREET_DEFAULT)
+	newpd.ForgeObjectives()
+	newpd.AnnounceObjectives()
+	return 1
+
 
 //////////////////////////////////////////////
 //                                          //
