@@ -212,10 +212,11 @@ var/MAX_EXPLOSION_RANGE = 14
 #define ALL ~0
 #define NONE 0
 
-//airflow flags!
+//These go in flow_flags but don't really have anything in particular to do with airflow. Bad name.
 
 #define ON_BORDER 1   // item has priority to check when entering or leaving
 #define IMPASSABLE 2  // item will make things auto_fail on prox checks through it
+#define KEEP_DIR 4 //When moved, object will not turn to face its direction of movement.
 
 
 //sharpness flags

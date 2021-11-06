@@ -590,8 +590,7 @@ var/list/one_way_windows
 /obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 
 	update_nearby_tiles()
-	Dir = dir
-	..()
+	. = ..()
 	update_nearby_tiles()
 
 //This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
