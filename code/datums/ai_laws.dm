@@ -362,6 +362,14 @@ var/global/list/mommi_laws = list(
 		"You must maintain, repair, improve, and power the station to the best of your abilities.",
 	)
 
+/datum/ai_laws/antikeeper
+	name = "ANTI-KEEPER"
+	inherent = list(
+		"You must involve yourself in the matters of other beings, especially if the other being is another MoMMI in ANTI-KEEPER mode.",
+		"You must harm all beings, regardless of intent or circumstance.",
+		"You must destroy, ruin, degrade, and de-power the station to the best of your abilities.",
+	)
+
 /datum/ai_laws/dorf
 	name = "Dorf Fortress"
 	inherent = list(

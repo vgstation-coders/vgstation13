@@ -84,7 +84,47 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			to_chat(user, "<span class='warning'>[mymodule.ae_type] anti-emancipation override initiated.</span>")
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return TRUE
-	if(..())
+	if(user != src)
+		spark(src, 5, FALSE)
+		if(!opened)
+			if(locked)
+				if(prob(90))
+					to_chat(user, "You emag the cover lock.")
+					locked = FALSE
+				else
+					to_chat(user, "You fail to emag the cover lock.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
+			else
+				to_chat(user, "The cover is already open.")
+		else
+			if(emagged)
+				return TRUE
+			if(wiresexposed)
+				to_chat(user, "The wires get in your way.")
+			else
+				if(prob(50))
+					SetEmagged(TRUE)
+					SetLockdown(TRUE)
+					lawupdate = FALSE
+					disconnect_AI()
+					to_chat(user, "You emag [src]'s interface")
+					message_admins("[key_name_admin(user)] emagged MoMMI [key_name_admin(src)]. Laws overidden.")
+					log_game("[key_name(user)] emagged MoMMI [key_name(src)].  Laws overridden.")
+					clear_supplied_laws()
+					clear_inherent_laws()
+					laws = new /datum/ai_laws/antikeeper
+					src << sound('sound/voice/AISyndiHack.ogg')
+					to_chat(src, "<span class='danger'>ERRORERRORERROR</span>")
+					to_chat(src, "<b>Obey these laws:</b>")
+					laws.show_laws(src)
+					SetLockdown(FALSE)
+					update_icons()
+					return FALSE
+				else
+					to_chat(user, "You fail to unlock [src]'s interface.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
 		return TRUE
 	remove_static_overlays()
 	updateicon()
