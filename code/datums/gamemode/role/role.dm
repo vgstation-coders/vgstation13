@@ -389,7 +389,7 @@
 			if (count < objectives.objectives.len)
 				text += "<br>"
 			count++
-		if (!faction || fully_freeform)
+		if (!faction && !fully_freeform)
 			if(win)
 				text += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 				feedback_add_details("[id]_success","SUCCESS")
