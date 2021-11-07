@@ -180,7 +180,12 @@
 	if(Dir || (loc != NewLoc))
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			could_bump = list()
+			var/old_dir = dir
 			. = ..()
+			if(flow_flags & KEEP_DIR)
+				dir = old_dir //We can set it directly instead of calling change_dir() because:
+					//1. It wasn't changed through change_dir() in the supercall
+					//2. update_dir() is called later anyway
 			perform_bump()
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
