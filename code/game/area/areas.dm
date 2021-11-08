@@ -487,13 +487,6 @@ var/area/space_area
 	if(areaapc == apctoremove)
 		areaapc = null
 
-/area/proc/get_turfs()
-	var/list/L = list()
-	for(var/turf/T in contents)
-		L += T
-
-	return L
-
 /area/proc/get_atoms()
 	var/list/L = list()
 	for(var/atom/A in contents)
