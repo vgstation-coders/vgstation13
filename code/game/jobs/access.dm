@@ -113,7 +113,9 @@
 		return 1
 	var/list/ACL = M.GetAccess()
 	if(req_access_dir)
-		var/turf/T = get_step(get_turf(src),req_access_dir)	
+		var/turf/T = get_turf(src)
+		if(!((flow_flags & ON_BORDER) && dir == req_access_dir)) // For non-windoors
+			T = get_step(T,req_access_dir)	
 		if(M in T.contents)
 			return can_access(ACL,req_access,req_one_access)
 		else
