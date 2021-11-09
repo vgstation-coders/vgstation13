@@ -18,7 +18,7 @@
 	admin_voice_style = "sinister"
 	admin_voice_say = "murmurs..."
 	var/list/bloody_floors = list()
-	var/cult_win = TRUE
+	var/cult_win = FALSE
 
 	var/list/cult_reminders = list()
 
