@@ -12,6 +12,29 @@
 	var/list/obj/machinery/power/apc/controlled_apcs = list()
 	var/charge_absorbed = 0
 
+/datum/role/pulse_demon/extraPanelButtons()
+	if(istype(antag.current,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = antag.current
+		var/dat = ""
+		dat += " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];setCharge=1;'>Charge: [PD.charge/1000]kW (Set charge)</a>"
+		dat += " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];setMaxCharge=1;'>Max charge: [PD.maxcharge/1000]kW (Set max charge)</a><br>"
+		return dat
+
+/datum/role/pulse_demon/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
+	if(istype(antag.current,/mob/living/simple_animal/hostile/pulse_demon))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = antag.current
+		if(href_list["setCharge"])
+			var/amount = input("What would you like to set their charge to, in watts?", "Their current charge is [PD.charge/1000]kW") as null|num
+			if(isnum(amount) && amount >= 0)
+				to_chat(usr, "<span class = 'notice'>You have set [PD]'s charge to [amount/1000]kW.</span>")
+				PD.charge = amount
+		if(href_list["setMaxCharge"])
+			var/amount = input("What would you like to set their max charge to, in watts?", "Their current max charge is [PD.maxcharge/1000]kW") as null|num
+			if(isnum(amount) && amount >= 0)
+				to_chat(usr, "<span class = 'notice'>You have set [PD]'s max charge to [amount/1000]kW.</span>")
+				PD.maxcharge = amount
+
 /datum/role/pulse_demon/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
