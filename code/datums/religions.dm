@@ -117,12 +117,12 @@ var/list/tgui_religion_data
 		new_religion = new /datum/religion
 		if(data["name"])
 			new_religion.name = data["name"]
-		if(data["deityName"])
-			new_religion.deity_name = data["deityName"]
-		if(data["bibleName"])
-			new_religion.bible_name = data["bibleName"]
 		if(data["bibleStyle"])
 			new_religion.bookstyle = data["bibleStyle"]
+	if(data["deityName"])
+		new_religion.deity_name = data["deityName"]
+	if(data["bibleName"])
+		new_religion.bible_name = data["bibleName"]
 
 	new_religion.equip_chaplain(user)
 	new_religion.religiousLeader = user.mind

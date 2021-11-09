@@ -400,7 +400,7 @@
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+	if(!in_T.Enter(mover, mover.loc, TRUE) || !out_T.Enter(mover, mover.loc, TRUE))
 		return
 
 	grab_ores() //Grab some more ore to process this tick.

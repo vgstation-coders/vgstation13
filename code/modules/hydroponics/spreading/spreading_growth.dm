@@ -21,7 +21,7 @@
 				spawn(rand(5,25))
 					T.ex_act(prob(80) ? 3 : 2)
 			continue
-		if(!Adjacent(T) || !T.Enter(src))
+		if(!Adjacent(T) || !T.Enter(src, loc, TRUE))
 			continue
 		neighbors |= T
 	// Update all of our friends.

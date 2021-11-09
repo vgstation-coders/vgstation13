@@ -133,6 +133,10 @@
 			if (OH.objectives.len > 0)
 				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
 				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
+				to_chat(antag.current,"<b>First of all though, choose a role that fits you best using the button on the left.</b>")
+				if (greeting != GREET_ROUNDSTART)
+					var/datum/faction/bloodcult/cult = faction
+					to_chat(antag.current, "<span class='sinister'>The station population is currently large enough for <span class='userdanger'>[cult.cultist_cap]</span> cultists.</span>")
 
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()

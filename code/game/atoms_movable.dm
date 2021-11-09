@@ -180,12 +180,12 @@
 	if(Dir || (loc != NewLoc))
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			could_bump = list()
+			var/old_dir = dir
 			. = ..()
-			//The following section is a workaround for a BYOND bug. Remove when the bug is fixed.
-			if((appearance_flags & TILE_MOVER) && (. < step_size))
-				. = 0
-				forceMove(oldloc)
-			//End workaround
+			if(flow_flags & KEEP_DIR)
+				dir = old_dir //We can set it directly instead of calling change_dir() because:
+					//1. It wasn't changed through change_dir() in the supercall
+					//2. update_dir() is called later anyway
 			perform_bump()
 		else //Diagonal move, split it into cardinal moves
 			if (Dir & NORTH)
@@ -1222,6 +1222,7 @@
 	invisibility = 101
 	#endif
 	flow_flags = ON_BORDER
+	flags = TIMELESS | INVULNERABLE
 
 //The following serves to prevent objects from overlapping the border object from the side.
 //By widening the border_dummy to either side of the border object, we make it so that objects approaching from the edge overlap it as well as objects in front of the border object.

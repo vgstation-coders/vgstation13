@@ -124,7 +124,7 @@
 	if(ispath(A, /area))
 		A = locate(A)
 	if(isarea(A))
-		area_turfs = A.get_turfs()
+		area_turfs = A.contents
 	else if(istype(A, /list))
 		area_turfs = A
 	ASSERT(area_turfs)
@@ -223,7 +223,7 @@
 		else
 			message_admins("<span class='danger'>Can't find [ME.file_path]!</span>")
 
-		sleep(-1)
+		CHECK_TICK
 
 	return successes
 

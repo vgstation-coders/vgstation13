@@ -580,7 +580,7 @@
 	var/list/our_own_turfs = list()
 
 	//Go through all turfs in our area
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		turfs_to_move += C
 		turfs_to_move[C] = T
@@ -857,7 +857,7 @@
 	var/rotate = dir2angle(turn(user.dir,180)) - dir2angle(linked_port.dir)
 
 	var/list/original_coords = list()
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		original_coords += C
 
