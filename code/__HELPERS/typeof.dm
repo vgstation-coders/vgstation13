@@ -30,6 +30,19 @@ var/global/list/get_matching_types_cache = list()
 
 	return matches
 
+/proc/filter_to_type(object, input_text, input_heading, type_to_filter = /atom)
+	var/list/matches = get_matching_types(object, type_to_filter)
+
+	if(!matches.len)
+		return
+	if(matches.len==1)
+		return matches[1]
+	else
+		var/chosen = input(input_text, input_heading, matches[1]) as null|anything in matches
+		if(!chosen)
+			return
+		return chosen
+
 //Returns a list of variables of an object of type [object_type].
 //Because it's impossible to access variables of a type, this proc creates a temporary datum, grabs its variables and deletes it, caching the result in a global list
 //object_type CAN'T be a type of a turf (/turf) or an area (/area), because these datums can't be created in nullspace
