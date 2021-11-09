@@ -391,6 +391,7 @@
 	desc = "Start 'em up and rock and roll!"
 	icon_state = "rockernaut_gloves"
 	item_state = "rockernaut_gloves"
+	bonus_knockout = 12
 	damage_added = 5
 	hitsound_added = 'sound/weapons/heavysmash.ogg'
 
