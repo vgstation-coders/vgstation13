@@ -398,12 +398,53 @@
 	return FALSE
 
 /obj/item/clothing/gloves/mining/Touch(var/atom/A, mob/user, proximity)
-	if(proximity && istype(A, /turf/unsimulated/mineral))
-		var/turf/unsimulated/mineral/M = A
-		if(do_after(user, A, max(M.minimum_mine_time,4 SECONDS*M.mining_difficulty)))
+	if(proximity)
+		if(istype(A, /turf/unsimulated/mineral))
+			var/turf/unsimulated/mineral/M = A
 			playsound(src, hitsound_added, 100, 1, vary = 0)
 			user.do_attack_animation(M, src)
 			M.GetDrilled(0)
+		else if(istype(A, /obj/structure/table))
+			var/obj/structure/table/T = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(T, src)
+			visible_message("<span class='danger'>[user] smashes \the [T] apart!</span>")
+			user.delayNextAttack(8)
+			T.destroy()
+		else if(istype(A, /obj/structure/rack))
+			var/obj/structure/rack/R = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(R, src)
+			visible_message("<span class='danger'>[user] smashes \the [R] apart!</span>")
+			R.destroy()
+		else if(istype(A, /obj/structure/window))
+			var/obj/structure/window/W = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(W, src)
+			visible_message("<span class='danger'>[user] smashes \the [W]!</span>")
+			if(!W.adjustHealthLoss(25))
+				user.visible_message("<span class='danger'>[user]'s punch [pick("bounces","gleams")] off \the [W] harmlessly.</span>")
+			W.healthcheck()
+			user.delayNextAttack(8)
+		else if(istype(A, /turf/simulated/wall))
+			var/turf/simulated/wall/WL = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(WL, src)
+			if(prob(100 - WL.hardness) || WL.rotting)
+				WL.dismantle_wall(1)
+				user.visible_message("<span class='danger'>[user] smashes through \the [WL].</span>", \
+				"<span class='notice'>You smash through \the [WL].</span>")
+			else
+				user.visible_message("<span class='warning'>[user] punches \the [WL].</span>", \
+				"<span class='notice'>You punch \the [WL].</span>")
+		else if(istype(A, /turf/simulated/floor/glass))
+			var/turf/simulated/floor/glass/G = A
+			playsound(src, hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(G, src)
+			user.visible_message("<span class='danger'>[user] smashes \the [G]!</span>")
+			G.health -= 25
+			G.healthcheck(user, TRUE, "attack_hand hulk")
+			user.delayNextAttack(8)
 
 /obj/item/clothing/gloves/mining/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
