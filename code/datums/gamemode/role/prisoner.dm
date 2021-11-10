@@ -14,7 +14,7 @@ var/list/current_prisoners = list()
 
 /datum/role/prisoner/Greet()
 	to_chat(antag.current, "<B><span class='warning'>You are a Syndicate prisoner!</span></B>")
-	to_chat(antag.current, "You were transferred to this station from another facility. You know nothing about this station or the people aboard it.")
+	to_chat(antag.current, "You were transferred to this station from Alcatraz IV. You know nothing about this station or the people aboard it.")
 	to_chat(antag.current, "<span class='danger'>Do your best to survive and escape, but remember that every move you make could be your last.</span>")
 
 /datum/role/prisoner/ForgeObjectives()

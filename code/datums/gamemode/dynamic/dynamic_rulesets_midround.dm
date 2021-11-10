@@ -803,7 +803,7 @@
 	else
 		to_chat(new_role.antag.current, "<B>You are an <span class='warning'>innocent</span> prisoner!</B>")
 		to_chat(new_role.antag.current, "You are a Nanotrasen Employee that has been wrongfully accused of espionage! The exact details of your situation are hazy, but you know that you are innocent.")
-		to_chat(new_role.antag.current, "You were transferred to this station after a brief stay at Central Command. You know nothing about this station or the people aboard it.")
+		to_chat(new_role.antag.current, "You were transferred to this station after a brief stay at Alcatraz IV. You know nothing about this station or the people aboard it.")
 		to_chat(new_role.antag.current, "<span class='danger'>Remember that you are not affiliated with the Syndicate. You should protect yourself and work towards freedom, but you are not an enemy of the station!</span>")
 		new_role.Drop()
 
@@ -811,7 +811,7 @@
 	command_alert(/datum/command_alert/prisoner_transfer)
 	to_chat(new_character, "<span class='notice'>You were selected to be a Prisoner! You will spawn at Central Command in two minutes.</span>")
 	sleep(2 MINUTES)
-	
+
 	//the applicant left or something
 	if(!new_character)
 		return
@@ -847,6 +847,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/generate_ruleset_body(mob/applicant)
 	var/obj/structure/bed/chair/chair = pick(prisonerstart)
 	var/mob/living/carbon/human/H = new(get_turf(chair))
+	H.key = applicant.key
 	chair.buckle_mob(H, H)
 	H.client.changeView()
 
