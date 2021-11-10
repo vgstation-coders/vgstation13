@@ -313,7 +313,7 @@
 		return
 
 	else if(istype(W, /obj/item/tool/crowbar/red))
-		playsound(src, "crowbar_hit", 50, 1, -1, frequency = 22000)
+		playsound(src, "crowbar_hit", 50, 1, -1, frequency = 11000)
 	else
 		return attack_hand(user)
 	return
