@@ -38,10 +38,6 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	if(modifiers["right"])
-		var/turf/T = get_turf(A)
-		if(!T || !cameranet.checkTurfVis(T))
-			return
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
@@ -128,6 +124,16 @@
 /atom/proc/AIAltClick(var/mob/living/silicon/ai/user)
 	AltClick(user)
 	return
+
+/atom/MouseEntered(location,control,params)
+	if(istype(usr,/mob/living/silicon/ai))
+		var/mob/living/silicon/ai/AI = usr
+		var/turf/T = get_turf(src)
+		if(!T || !cameranet.checkTurfVis(T))
+			AI.client.show_popup_menus = FALSE
+		else
+			AI.client.show_popup_menus = TRUE
+	..()
 
 /obj/machinery/door/firedoor/AIShiftClick(var/mob/living/silicon/ai/user) // Allows examining firelocks
 	examine(user)
