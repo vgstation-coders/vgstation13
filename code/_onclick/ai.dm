@@ -125,14 +125,13 @@
 	AltClick(user)
 	return
 
-/atom/MouseEntered(location,control,params)
+/client/MouseEntered(object,location,control,params)
 	if(istype(usr,/mob/living/silicon/ai))
-		var/mob/living/silicon/ai/AI = usr
-		var/turf/T = get_turf(src)
+		var/turf/T = get_turf(object)
 		if(!T || !cameranet.checkTurfVis(T))
-			AI.client.show_popup_menus = FALSE
+			show_popup_menus = FALSE
 		else
-			AI.client.show_popup_menus = TRUE
+			show_popup_menus = TRUE
 	..()
 
 /obj/machinery/door/firedoor/AIShiftClick(var/mob/living/silicon/ai/user) // Allows examining firelocks
