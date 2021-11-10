@@ -1267,19 +1267,10 @@ var/global/blood_virus_spreading_disabled = 0
 		object = copytext(object, 1, variables_start)
 
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins) //Exclude non-movable atoms
-
-	if(matches.len == 0)
-		to_chat(usr, "Unable to find any matches.")
+	//Exclude non-movable atoms
+	var/chosen = filter_list_input("Select a datum type", "Spawn Datum", get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins))
+	if(!chosen)
 		return
-
-	var/chosen
-	if(matches.len == 1)
-		chosen = matches[1]
-	else
-		chosen = input("Select a datum type", "Spawn Datum", matches[1]) as null|anything in matches
-		if(!chosen)
-			return
 
 	var/list/lst = list()
 	var/argnum = input("Number of arguments","Number:",0) as num|null
