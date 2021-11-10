@@ -5800,7 +5800,7 @@
 				z_del = new_limit
 			if ("type") // Lifted from "spawn" code.
 				var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Setting the type to delete.") as null|text
-				var/chosen = filter_to_type(object, "Select an atom type", "Spawn Atom", /atom)
+				var/chosen = filter_list_input(object, "Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
 				if(!chosen)
 					to_chat(usr, "<span class='warning'>No type chosen.</span>")
 					return

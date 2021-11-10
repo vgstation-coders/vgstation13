@@ -234,7 +234,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 				if(isnull(partial_type))
 					return
 
-				objholder = filter_to_type(partial_type, "Select type", "Typepath", /atom)
+				objholder = filter_list_input(partial_type, "Select type", "Typepath", get_matching_types(partial_type, /atom))
 
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
