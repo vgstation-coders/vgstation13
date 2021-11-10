@@ -124,7 +124,7 @@
 	if(ispath(A, /area))
 		A = locate(A)
 	if(isarea(A))
-		area_turfs = A.contents
+		area_turfs = A.contents.Copy()
 	else if(istype(A, /list))
 		area_turfs = A
 	ASSERT(area_turfs)
