@@ -809,10 +809,9 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/finish_setup(mob/new_character, index)
 	command_alert(/datum/command_alert/prisoner_transfer)
-	sleep(2 MINUTES)
-
 	to_chat(new_character, "<span class='notice'>You were selected to be a Prisoner! You will spawn at Central Command in two minutes.</span>")
-
+	sleep(2 MINUTES)
+	
 	//the applicant left or something
 	if(!new_character)
 		return
