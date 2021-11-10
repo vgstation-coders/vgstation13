@@ -32,8 +32,7 @@ var/datum/subsystem/map/SSmap
 	
 	//hobo shack generation, one shack will spawn, 1/3 chance of two shacks
 	generate_hoboshack()
-	var/shack_number = rand(1,3)
-	if (shack_number == 3)
+	if (rand(1,3) == 3)
 		generate_hoboshack()
 		
 	log_startup_progress("Calling post on zLevels, letting them know they can do zlevel specific stuff...")
