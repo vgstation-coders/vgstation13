@@ -38,6 +38,10 @@
 		return
 
 	var/list/modifiers = params2list(params)
+	if(modifiers["right"])
+		var/turf/T = get_turf(A)
+		if(!T || !cameranet.checkTurfVis(T))
+			return
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
