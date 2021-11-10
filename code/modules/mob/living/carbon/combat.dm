@@ -48,7 +48,9 @@
 			playsound(loc, I.miss_sound, 50)
 		on_dodge(user, I)
 		return FALSE
-	if(I.hitsound)
+	if(istype(I,/obj/item/tool/crowbar/red))
+		playsound(loc, "crowbar_hitbod", 50, 1, -1, frequency = 22000) // Different sound for living things
+	else if(I.hitsound)
 		playsound(loc, I.hitsound, 50, 1, -1)
 	if((user != src) && check_shields(power, I))
 		add_logs(user, src, "shieldbounced", admin=1, object=I, addition="intended damage: [power]")

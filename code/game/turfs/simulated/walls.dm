@@ -182,7 +182,10 @@
 		return
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	user.delayNextAttack(8)
+	if(istype(W, /obj/item/tool/crowbar/red)) // Mirroring original's behaviour
+		user.delayNextAttack(2)
+	else
+		user.delayNextAttack(8)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -309,6 +312,8 @@
 	else if(istype(W, /obj/item/mounted)) //If we place it, we don't want to have a silly message
 		return
 
+	else if(istype(W, /obj/item/tool/crowbar/red))
+		playsound(src, "crowbar_hit", 50, 1, -1, frequency = 22000)
 	else
 		return attack_hand(user)
 	return

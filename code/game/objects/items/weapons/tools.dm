@@ -701,6 +701,9 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "red_crowbar"
 	item_state = "crowbar_red"
+	attack_delay = 2 // Speed of the original
+	force = 1.0 // To compensate
+	miss_sound = "sounds/weapons/cbar_miss1.ogg"
 
 /obj/item/tool/crowbar/red/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
