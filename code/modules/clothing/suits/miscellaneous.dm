@@ -444,7 +444,7 @@ var/list/tag_suits_list = list()
  */
 
 /obj/item/clothing/suit/strait_jacket
-	name = "strait jacket"
+	name = "straitjacket"
 	desc = "A suit that completely restrains the wearer."
 	icon_state = "strait_jacket"
 	item_state = "strait_jacket"
