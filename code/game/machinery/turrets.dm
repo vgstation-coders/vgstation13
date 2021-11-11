@@ -94,7 +94,7 @@
 	if(T && (T in view(7,src)))
 		if( ismob(T) )
 			var/mob/M = T
-			if((M.flags & INVULNERABLE) || M.faction == faction)
+			if((M.flags & INVULNERABLE) || (faction && M.faction == faction))
 				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
