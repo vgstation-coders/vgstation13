@@ -195,6 +195,10 @@ var/list/shuttle_log = list()
 				to_chat(usr, "<span class='warning'>Warning: The evac shuttle has already arrived.</span>")
 				return
 
+			if(emergency_shuttle.online)
+				to_chat(usr, "The emergency shuttle is already on its way.")
+				return
+
 			if(!universe.OnShuttleCall(usr))
 				to_chat(usr, "<span class='notice'>\The [src.name] cannot establish a bluespace connection.</span>")
 				return
