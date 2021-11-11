@@ -143,7 +143,9 @@
 /mob/living/simple_animal/hostile/pulse_demon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
     if(!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc)
         return
-    ..()
+    var/moved = FALSE
+    if(..())
+        moved = TRUE
     if(!is_under_tile() && prob(25))
         spark(src,rand(2,4))
     var/obj/machinery/power/new_power = locate(/obj/machinery/power) in NewLoc
@@ -180,7 +182,8 @@
                 loc = get_turf(NewLoc)
             controlling_area = null
             update_cableview()
-            forceEnter(NewLoc)
+            if(!moved)
+                forceMove(NewLoc)
         else
             current_cable = null
             current_power = null
