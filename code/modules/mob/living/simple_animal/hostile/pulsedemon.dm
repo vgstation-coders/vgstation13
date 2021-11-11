@@ -29,6 +29,7 @@
     harm_intent_damage = 0
     melee_damage_lower = 0
     melee_damage_upper = 0                      //Handled in unarmed_attack_mob() anyways
+    pass_flags = PASSDOOR                       //Stops the message spam
 
     //VARS
     var/charge = 1000                           //Charge stored
@@ -48,7 +49,6 @@
     var/obj/machinery/power/current_power       // Current power machine we're in
     var/mob/living/silicon/robot/current_robot  // Currently controlled robot
     var/obj/item/weapon/current_weapon          // Current gun we're controlling
-    var/can_move=1                              // See to_bump()
 
     //LISTS
     var/list/image/cables_shown = list()        // In cable views
@@ -180,6 +180,7 @@
                 loc = get_turf(NewLoc)
             controlling_area = null
             update_cableview()
+            forceEnter(NewLoc)
         else
             current_cable = null
             current_power = null
@@ -190,11 +191,6 @@
     if(!is_under_tile() && isliving(obstacle))
         var/mob/living/L = obstacle
         shockMob(L)
-    if(can_move && !locate(/obj/machinery/power) in get_turf(obstacle))
-        can_move = 0
-        forceMove(get_step(src,src.dir))
-        sleep(1)
-        can_move = 1
     else
         return ..()
 

@@ -170,7 +170,7 @@
 	for(var/datum/powernet/PN in powernets)
 		for(var/obj/structure/cable/C in PN.cables)
 			var/turf/simulated/floor/F = get_turf(C)
-			if(istype(F,/turf/simulated/floor) && !F.floor_tile)
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == 1)
 				cables_to_spawn_at.Add(C)
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
 	M.forceMove(get_turf(our_cable))
