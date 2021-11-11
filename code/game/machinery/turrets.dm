@@ -51,12 +51,16 @@
 	if(stat & BROKEN)
 		icon_state = "grey_target_prism"
 	else
-		if( powered() )
+		if( powered() )	
 			if (src.enabled)
 				if(istype(installed,/obj/item/weapon/gun/energy/gun))
 					var/obj/item/weapon/gun/energy/gun/EG = installed
 					if(EG.mode == 1)
 						icon_state = "orange_target_prism"
+					else
+						icon_state = "target_prism"
+				else if(istype(installed,/obj/item/weapon/gun/energy/pulse_rifle/destroyer))
+					icon_state = "blue_target_prism"
 				else
 					icon_state = "target_prism"
 			else
@@ -122,6 +126,7 @@
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
+	to_chat(world, "checking for target")
 	var/list/new_targets = new
 	var/new_target
 	for(var/mob/M in view(7, src))
@@ -134,6 +139,7 @@
 		if(check_target(V))
 			new_targets += V
 	if(new_targets.len)
+		to_chat(world, "found target")
 		new_target = pick(new_targets)
 	return new_target
 
