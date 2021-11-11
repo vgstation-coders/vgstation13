@@ -126,7 +126,6 @@
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
-	to_chat(world, "checking for target")
 	var/list/new_targets = new
 	var/new_target
 	for(var/mob/M in view(7, src))
@@ -139,7 +138,6 @@
 		if(check_target(V))
 			new_targets += V
 	if(new_targets.len)
-		to_chat(world, "found target")
 		new_target = pick(new_targets)
 	return new_target
 
@@ -163,7 +161,6 @@
 		else
 			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
-//		to_chat(world, "[cur_target]")
 		if(!raising)
 			if(!raised)
 				popUp()
