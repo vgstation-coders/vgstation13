@@ -195,7 +195,7 @@ var/list/shuttle_log = list()
 				to_chat(usr, "<span class='warning'>Warning: The evac shuttle has already arrived.</span>")
 				return
 
-			if(emergency_shuttle.online)
+			if(emergency_shuttle.online && !(emergency_shuttle.shutdown))
 				to_chat(usr, "The emergency shuttle is already on its way.")
 				return
 
