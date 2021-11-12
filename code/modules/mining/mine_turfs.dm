@@ -219,7 +219,7 @@ var/list/icon_state_to_appearance = list()
 			var/obj/item/clothing/gloves/G = H.gloves
 			if(istype(G,/obj/item/clothing/gloves/mining))
 				G.Touch(AM,H,1)
-			return
+				return
 		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
 			attackby(H.get_active_hand(), H)
 		else if(istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
