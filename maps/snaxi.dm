@@ -51,6 +51,10 @@
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY
 
+/datum/subsystem/daynightcycle/New()
+	..()
+	daynight_z_lvl = map.zMainStation
+
 /datum/map/active/New()
 	. = ..()
 
