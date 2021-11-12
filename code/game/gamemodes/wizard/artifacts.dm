@@ -359,13 +359,7 @@
 	abbreviation = "NGA"
 	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
 	price = -0.5 * Sp_BASE_PRICE
-
-/datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
-	if(iswizard(user) || isapprentice(user) || ismagician(user))
-		if(!locate(/spell/passive/nogunallowed) in user.spell_list)
-			return TRUE
-	else
-		return FALSE
+	one_use = TRUE
 
 /datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
 	..()
