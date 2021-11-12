@@ -425,6 +425,7 @@
 		"Default - 'Butler'" = "servbot_m",
 		"Default - 'Waitress'" = "servbot_f",
 		"Default - 'Bro'" = "brobot",
+		"Default - 'Fro'" = "frobot",
 		"Default - 'Maximillion'" = "maximillion",
 		"Default - 'Hydro'" = "hydrobot",
 		"Toiletbot" = "toiletbot",
