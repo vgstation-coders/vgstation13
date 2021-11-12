@@ -28,12 +28,10 @@ Basically, you are going to overwrite the flags.
 
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY       This is basically how you want it to run.
-	daynight_z_lvl = map.zMainStation   This basically is the z level it will be on.
 
 	See: Both of them right here!
 */
 	flags 		  = SS_NO_FIRE | SS_NO_INIT
-	var/daynight_z_lvl = FALSE
 
 	var/current_timeOfDay = TOD_DAYTIME //This is more or less the color and duration since its in a switch.
 	var/next_light_power = 10 // As much as you would want to change these for cool factor.
@@ -48,7 +46,7 @@ Basically, you are going to overwrite the flags.
 	NEW_SS_GLOBAL(SSDayNight)
 
 /datum/subsystem/daynightcycle/Initialize()
-	if(daynight_z_lvl)
+	if(map.zMainStation)
 		get_turflist()
 	..()
 
@@ -94,7 +92,7 @@ Basically, you are going to overwrite the flags.
 			return
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
-	for(var/turf/T in block(locate(1, 1, daynight_z_lvl), locate(world.maxx, world.maxy, daynight_z_lvl)))
+	for(var/turf/T in block(locate(1, 1, map.zMainStation), locate(world.maxx, world.maxy, map.zMainStation)))
 		if(IsEven(T.x)) //If we are also even.
 			if(IsEven(T.y)) //If we are also even.
 				var/area/A = get_area(T)
