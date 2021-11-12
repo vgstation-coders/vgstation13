@@ -86,9 +86,15 @@ Crew Monitor by Paul, based on the holomaps by Deity
 
 	//DO touch, for mappers to varedit
 	var/holomap_filter //can make the cmc display syndie/vox hideout
-	var/list/holomap_z_levels_mapped = list(map.zMainStation, map.zAsteroid, map.zDerelict) //all z-level which should be mapped
-	var/list/holomap_z_levels_unmapped = list(map.zTCommSat, map.zDeepSpace) //all z-levels which should not be mapped but should still be scanned for people
-	var/defaultZ = map.zMainStation //the z_level which everyone looks at when opening the console for the first time
+	var/list/holomap_z_levels_mapped = list() //all z-level which should be mapped
+	var/list/holomap_z_levels_unmapped = list() //all z-levels which should not be mapped but should still be scanned for people
+
+/obj/machinery/computer/crew/New()
+	..()
+	if(!holomap_z_levels_mapped.len)
+		holomap_z_levels_mapped = list(map.zMainStation, map.zAsteroid, map.zDerelict)
+	if(!holomap_z_levels_unmapped.len)
+		holomap_z_levels_unmapped = list(map.zTCommSat, map.zDeepSpace)
 
 /obj/machinery/computer/crew/Destroy()
 	deactivateAll()
@@ -126,7 +132,7 @@ GENERAL PROCS
 	holomap_images[uid] = list()
 	holomap_tooltips[uid] = list()
 	freeze[uid] = 0
-	holomap_z[uid] = defaultZ
+	holomap_z[uid] = map.zMainStation
 	textview_updatequeued[uid] = 1
 	holomap[uid] = 0
 	scanCrew() //else the first user has to wait for process to fire
