@@ -175,7 +175,9 @@
 		"/obj/item/weapon/grenade/chem_grenade",
 		"/obj/item/weapon/electrolyzer",
 		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro",
-		"/obj/item/weapon/depocket_wand/suit"
+		"/obj/item/weapon/depocket_wand/suit",
+		"/obj/item/taperoll/viro",
+		"/obj/item/taperoll/syndie/viro"
 	)
 
 /obj/item/weapon/storage/belt/slim
