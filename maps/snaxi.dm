@@ -11,6 +11,7 @@
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2
+	zAsteroid = 6
 	zLevels = list(
 		/datum/zLevel/snowsurface,
 		/datum/zLevel/centcomm,

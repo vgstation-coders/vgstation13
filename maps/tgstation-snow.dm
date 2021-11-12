@@ -10,6 +10,10 @@
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 3
+	zAsteroid = 1
+	zMainStation = 2
+	zCentcomm = 3
+	zTCommSat = 5
 	multiz = TRUE
 	zLevels = list(
 		/datum/zLevel/snowmine{
