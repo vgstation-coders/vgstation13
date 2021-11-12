@@ -454,7 +454,6 @@
 	..()
 	if (src.active)
 		src.w_class = W_CLASS_HUGE
-	update_icon()
 
 /obj/item/toy/sword/dualsaber/update_icon()
 	icon_state = "dualsaber[active ? colorset : 0]"
