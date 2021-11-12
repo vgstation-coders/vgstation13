@@ -361,6 +361,9 @@
 	price = -0.5 * Sp_BASE_PRICE
 	one_use = TRUE
 
+/datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
+	return iswizard(user) || isapprentice(user) || ismagician(user)
+
 /datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
 	..()
 	H.add_spell (new/spell/passive/nogunallowed)
