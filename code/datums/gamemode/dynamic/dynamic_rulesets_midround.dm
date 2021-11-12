@@ -803,12 +803,13 @@
 	else
 		to_chat(new_role.antag.current, "<B>You are an <span class='warning'>innocent</span> prisoner!</B>")
 		to_chat(new_role.antag.current, "You are a Nanotrasen Employee that has been wrongfully accused of espionage! The exact details of your situation are hazy, but you know that you are innocent.")
-		to_chat(new_role.antag.current, "You were transferred to this station through a request by the station's security team. You know nothing about this station or the people aboard it.")
-		to_chat(new_role.antag.current, "<span class='danger'>Remember that you are not affiliated with the Syndicate. Protect yourself and work towards freedom, but remember that you have no place left to go.</span>")
+		to_chat(new_role.antag.current, "You were transferred to this station after a brief stay at Alcatraz IV. You know nothing about this station or the people aboard it.")
+		to_chat(new_role.antag.current, "<span class='danger'>Remember that you are not affiliated with the Syndicate. You should protect yourself and work towards freedom, but you are not an enemy of the station!</span>")
 		new_role.Drop()
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/finish_setup(mob/new_character, index)
 	command_alert(/datum/command_alert/prisoner_transfer)
+	to_chat(new_character, "<span class='notice'>You were selected to be a Prisoner! You will spawn at Central Command in two minutes.</span>")
 	sleep(2 MINUTES)
 
 	//the applicant left or something
@@ -819,6 +820,7 @@
 	var/datum/role/new_role = new role_category
 	new_role.AssignToRole(new_character.mind,1)
 	setup_role(new_role)
+	current_prisoners += new_character
 
 	//Send the shuttle that they spawned on.
 	var/obj/docking_port/destination/transport/station/stationdock = locate(/obj/docking_port/destination/transport/station) in all_docking_ports
@@ -841,6 +843,39 @@
 			if(!transport_shuttle.move_to_dock(centcomdock))
 				message_admins("The transport shuttle couldn't return to centcomm for some reason.")
 				return
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/generate_ruleset_body(mob/applicant)
+	var/obj/structure/bed/chair/chair = pick(prisonerstart)
+	var/mob/living/carbon/human/H = new(get_turf(chair))
+	H.key = applicant.key
+	chair.buckle_mob(H, H)
+	H.client.changeView()
+
+	var/species = pickweight(list(
+		"Human" 	= 4,
+		"Vox"		= 1,
+		"Plasmaman" = 1,
+		"Grey"		= 1,
+		"Insectoid"	= 1,
+	))
+
+	H.set_species(species)
+	H.randomise_appearance_for()
+	var/randname = random_name(H.gender, H.species.name)
+	H.fully_replace_character_name(null,randname)
+	H.regenerate_icons()
+	H.dna.ResetUIFrom(H)
+	H.dna.ResetSE()
+
+	var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner
+	outfit.equip(H)
+	mob_rename_self(H, "prisoner")
+
+	var/obj/item/weapon/handcuffs/C = new /obj/item/weapon/handcuffs(H)
+	H.equip_to_slot(C, slot_handcuffed)
+
+	return H
+
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/proc/can_move_shuttle()
 	var/contents = get_contents_in_object(transport_shuttle.linked_area)
