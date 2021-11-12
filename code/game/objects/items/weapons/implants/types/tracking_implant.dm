@@ -70,11 +70,12 @@ var/list/locator_holomap_cache = list()
 	var/datum/tracker_holomap/holomap_datum
 
 	var/bogus = 0
-	var/lastZ = map.zMainStation
+	var/lastZ
 
 /obj/item/device/locator_holomap/New()
 	..()
 	holomap_datum = new()
+	lastZ = map.zMainStation
 
 
 /obj/item/device/locator_holomap/Destroy()
