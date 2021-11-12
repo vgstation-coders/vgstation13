@@ -389,6 +389,7 @@
 	name = "toy sword"
 	desc = "A cheap, plastic replica of an energy sword. Realistic sounds! Ages 8 and up."
 	icon = 'icons/obj/weapons.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "sword0"
 	item_state = "sword0"
 	var/active = 0.0
@@ -453,6 +454,7 @@
 	..()
 	if (src.active)
 		src.w_class = W_CLASS_HUGE
+	update_icon()
 
 /obj/item/toy/sword/dualsaber/update_icon()
 	icon_state = "dualsaber[active ? colorset : 0]"
