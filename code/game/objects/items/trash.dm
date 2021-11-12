@@ -307,3 +307,18 @@ var/list/crushed_cans_cache = list()
 	name = "malt vinegar packet"
 	desc = "A used vinegar packet"
 	icon_state	= "vinegar_small"
+
+/obj/item/trash/zamitos_o
+	name = "Zamitos: Original Flavor"
+	desc = "Crumbs to crumbs"
+	icon_state	= "zamitos_o"
+
+/obj/item/trash/zamitos_bg
+	name = "Zamitos: Blue Goo Flavor"
+	desc = "Someone around here is a goo eater"
+	icon_state	= "zamitos_bg"
+
+/obj/item/trash/zamitos_sj
+	name = "Zamitos: Spicy Stok Jerky Flavor"
+	desc = "The end of a meat-flavored era"
+	icon_state	= "zamitos_sj"
