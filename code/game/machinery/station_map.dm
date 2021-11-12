@@ -249,7 +249,7 @@ var/list/station_holomaps = list()
 	var/datum/station_holomap/holomap_datum
 
 	var/bogus = 0
-	var/lastZ = STATION_Z
+	var/lastZ = map.zMainStation
 	var/prevent_close = 0
 
 /obj/item/device/station_map/New()

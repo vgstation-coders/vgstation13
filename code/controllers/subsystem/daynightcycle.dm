@@ -28,7 +28,7 @@ Basically, you are going to overwrite the flags.
 
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY       This is basically how you want it to run.
-	daynight_z_lvl = STATION_Z   This basically is the z level it will be on.
+	daynight_z_lvl = map.zMainStation   This basically is the z level it will be on.
 
 	See: Both of them right here!
 */

@@ -327,7 +327,7 @@
 /datum/spellbook_artifact/darkness/purchased(mob/living/carbon/human/H)
 	..()
 	for(var/obj/machinery/power/apc/apc in power_machines)
-		if(apc.z == STATION_Z)
+		if(apc.z == map.zMainStation)
 			apc.overload_lighting()
 
 

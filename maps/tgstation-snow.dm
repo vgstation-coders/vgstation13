@@ -54,7 +54,7 @@
 
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY
-	daynight_z_lvl = STATION_Z
+	daynight_z_lvl = map.zMainStation
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))

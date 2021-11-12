@@ -11,7 +11,7 @@
 		var/turf/T = get_turf(A)
 		if(T == goal_turf)
 			return TRUE //An AI was located on the same tile as us, so we stole it.
-		if(T.z == STATION_Z && !(A.stat==DEAD))
+		if(T.z == map.zMainStation && !(A.stat==DEAD))
 			all_ai_dead = FALSE
 			break
 	return all_ai_dead
