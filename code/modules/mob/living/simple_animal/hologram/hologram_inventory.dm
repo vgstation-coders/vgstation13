@@ -205,7 +205,7 @@
 		var/obj/abstract/Overlays/O = obj_overlays[SUIT_LAYER]
 		O.overlays.len = 0
 		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[wear_suit.icon_state]")
-		if( istype(wear_suit, /obj/item/clothing/suit/straight_jacket) )
+		if( istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
 			drop_hands()
 		if(wear_suit.dynamic_overlay)
 			if(wear_suit.dynamic_overlay["[SUIT_LAYER]"])
