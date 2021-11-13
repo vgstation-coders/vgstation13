@@ -943,3 +943,10 @@
 
 /obj/machinery/turret/russian/New()
 	installed = new /obj/item/weapon/gun/energy/laser(src)
+
+// Minisat
+/obj/docking_port/destination/vault/minisat
+	name = "NT Microstation 1"
+
+/area/vault/mini_station
+	name = "NT Microstation 1"
