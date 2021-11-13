@@ -304,7 +304,7 @@ var/list/pinpointerpinpointer_list = list()
 	var/length = 1
 	for (var/obj/item/device/pda/P in PDAs)
 		var/turf/T = get_turf(P)
-		if(P.name != "\improper PDA" && T.z != CENTCOMM_Z)
+		if(P.name != "\improper PDA" && T.z != map.zCentcomm)
 			L[text("([length]) [P.name]")] = P
 			length++
 
