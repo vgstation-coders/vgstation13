@@ -908,6 +908,7 @@ var/list/tag_suits_list = list()
 	desc = "A wooly poncho. Smells of beans."
 	icon_state = "poncho"
 	item_state = "poncho"
+	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
 /obj/item/clothing/suit/banana_suit
