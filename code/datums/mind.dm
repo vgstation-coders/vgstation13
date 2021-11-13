@@ -111,7 +111,8 @@
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
 
-	new_character.faction = mob_legacy_fac
+	if(mob_legacy_fac)
+		new_character.faction = mob_legacy_fac
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
