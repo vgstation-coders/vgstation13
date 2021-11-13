@@ -3,6 +3,7 @@
 "aI" = (/obj/structure/catwalk,/turf/space,/area/vault/podstation)
 "aM" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
 "aN" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"},/area/vault/podstation)
+"aO" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor2"},/turf/unsimulated/floor/asteroid/underground,/area/vault/podstation)
 "aW" = (/obj/machinery/floodlight/on/infinite,/turf/unsimulated/floor/airless{dir = 8; icon_state = "asteroidwarning"},/area/vault/podstation)
 "ba" = (/obj/structure/cable/yellow,/obj/machinery/power/port_gen/pacman,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
 "bq" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{dir = 4; icon_state = "asteroidwarning"},/area/vault/podstation)
@@ -163,7 +164,7 @@
 "LL" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8},/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 4; initialize_directions = 11},/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/vault/podstation)
 "Mb" = (/obj/structure/table,/obj/item/trash/fries_cone,/obj/machinery/atmospherics/unary/vent_scrubber/on/layered{dir = 8},/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/vault/podstation)
 "Mx" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink,/turf/simulated/floor{dir = 5; icon_state = "cafeteria"},/area/vault/podstation)
-"MP" = (/obj/effect/decal/cleanable/blood/oil{icon_state = "floor2"},/turf/unsimulated/floor/asteroid/underground,/area/vault/podstation)
+"MP" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/machinery/cryopod,/turf/unsimulated/floor/asteroid/underground,/area/vault/podstation)
 "Nl" = (/obj/structure/catwalk,/obj/machinery/atmospherics/unary/vent{dir = 1},/turf/space,/area/vault/podstation)
 "Np" = (/obj/structure/fence,/turf/unsimulated/floor/asteroid,/area/vault/podstation)
 "NA" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
@@ -241,10 +242,10 @@ pUESYxIJIJIJIJqgqjqrqsqLKkqTqYrFsbKkKksFsNZyZyKCZyZysXZIZItcSicdKCSiSiVPES
 pUESESuiuyuFKkKkuJuRgpvWwewuwBxbxkxqxtxqTVZyYTKCZyZyZyZyZyZyYTZyZyZyZyVPES
 pUpUESyUaMxqxtxqzszuzzzBwezLVTzUAhxqADxqTVZyYTKCZyZyZyYTZyZyZyZyZyZyZyVPES
 ESESESESYxxqADxqAFAIAKBNKkBOCdCfCzKkKksFsNZyZyKCYTZyCYDbDbDxSiSiKCDzDRVPES
-ESYxEnEuFeuFKkKkKkFBKkKkKkFFFQFZFFljYxYxGaZyZyKCZyYTVPGzHgTVZyZyKCZyYTVPES
-HJHVKkKkKkKkICIQIZJYKgKvKkLDLLMbMxljYxESTVZyZyhLYTZycxESESTVZyZyKCMPZyVPES
-NpYxNANFNSKkOvRGRORXyEScKkSnFQpnTiljYxESTVZyTsKCZyZyVPTMESTVTOUkKCSiSiVPES
-VJVUVWVYWTXSYtYDKkZoXrKkKkKkZPKkKkKkAHESTVZyYTKCZyZyVPESESTVZyYTKCZyZyVPES
+ESYxEnEuFeuFKkKkKkFBKkKkKkFFFQFZFFljYxYxGaZyZyKCZyYTVPGzHgTVZyZyKCoZYTVPES
+HJHVKkKkKkKkICIQIZJYKgKvKkLDLLMbMxljYxESTVZyZyhLYTZycxESESTVZyZyKCZyZyVPES
+NpYxNANFNSKkOvRGRORXyEScKkSnFQpnTiljYxESTVZyTsKCZyZyVPTMESTVTOUkKCMPSiVPES
+VJVUVWVYWTXSYtYDKkZoXrKkKkKkZPKkKkKkAHESTVZyYTKCZyZyVPESESTVZyYTKCZyaOVPES
 VSESNpwhbaKkvMolKkaicJKkvGhDevmOpxKkYxESTVZyZyKCZyZyVPkbESTVOXZyKCZyZycxES
 VSVSrxdUrhKkafbBKkKkKkKkWuivsKKkKkKkaMESTVZyYThLYTZyVPESESaMDbDbDbDbDbYxVS
 aIVSVSVSYxwiYxQWaMYxYxKkKkKkKkKkKkYxESESTVZyZyKCZyZyVPESVSESESESESESESVSVS
