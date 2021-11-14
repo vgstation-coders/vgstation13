@@ -98,17 +98,14 @@
 		spark(src, 5, FALSE)
 	return TRUE
 
-
-mob/living/silicon/robot/mommi/sammi/update_canmove()
+/mob/living/silicon/robot/mommi/sammi/update_canmove()
 	return 0
 
-mob/living/silicon/robot/mommi/sammi/ventcrawl()
+/mob/living/silicon/robot/mommi/sammi/ventcrawl()
 	return 0
 
-mob/living/silicon/robot/mommi/sammi/hide()
+/mob/living/silicon/robot/mommi/sammi/hide()
 	return 0
-
-
 
 /mob/living/silicon/robot/mommi/sammi/attackby(obj/item/W, mob/user)
 
