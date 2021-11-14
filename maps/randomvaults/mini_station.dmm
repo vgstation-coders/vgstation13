@@ -96,7 +96,7 @@
 "cq" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_entrance)
 "cs" = (/obj/machinery/portable_atmospherics/hydroponics,/turf/simulated/floor{dir = 4; icon_state = "green"},/area/vault/mini_station_botany)
 "ct" = (/obj/machinery/light{dir = 8; icon_state = "ltube1"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
-"cu" = (/obj/structure/closet/emcloset,/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/turf/simulated/floor,/area/vault/mini_station_entrance)
+"cu" = (/obj/machinery/media/receiver/boombox/wallmount/muzak{pixel_y = 24},/obj/structure/closet/emcloset,/turf/simulated/floor,/area/vault/mini_station_entrance)
 "cv" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor{dir = 4; icon_state = "green"},/area/vault/mini_station_botany)
 "cw" = (/turf/simulated/floor,/area/vault/mini_station_engineering)
 "cx" = (/obj/machinery/vending/engineering,/turf/simulated/floor{dir = 10; icon_state = "yellow"},/area/vault/mini_station_engineering)
@@ -215,7 +215,6 @@
 "BD" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/mini_station_engineering)
 "Ca" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "Cs" = (/obj/machinery/vending/cola,/turf/simulated/floor,/area/vault/mini_station)
-"Cx" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
 "Dx" = (/turf/simulated/wall/r_wall,/area/vault/mini_station_kitchen)
 "DL" = (/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 10; tag = "icon-intact (SOUTHWEST)"},/turf/simulated/floor,/area/vault/mini_station_engineering)
 "DQ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 2; icon_state = "blue"},/area/vault/mini_station_medbay)
@@ -272,6 +271,7 @@
 "WX" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "Xr" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "XM" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_engineering)
+"XS" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
 "XZ" = (/turf/simulated/floor,/area/vault/mini_station_botany)
 "Yz" = (/obj/item/weapon/circuitboard/rdconsole,/turf/simulated/floor,/area/vault/mini_station_construction)
 "Zh" = (/obj/structure/grille,/obj/structure/window/full/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
@@ -289,14 +289,14 @@ aeQpagaZAtDLauaFMCqIaPYzxJqAxOiUxOESaeaaaQaSaSaVaWaWaXaeaj
 aeQpQpQpQpfgaBbaccccaGUfUfbbUfLObdMhaeaaaIaIaIbfaIaIaIaeaj
 aeQpbgAWfCOZvnahETeeacxOxObhuiuibiMhaeaaaaaaaabmaaaaaaaeaj
 aeQpQpQpQpQponXMononhjhjhjhjhjhjcqzbaeaaaIaIaIboaIaIaIaeaj
-aeQpadadbpbxchbybKbLhjbMbNbObPhjWRzbaeaeaQaSaSaVaWaWaXaeaj
-aeQpbUadadafcjxzBDbXhjakXZGibYhjsDzbzbaeaIaIaIaKaIaIaIaeaj
-aeQpbZadcafwbHclcccnhjcpXZpicshjctcucAaeaeaeaebfaeaeaeaeae
+aeQpadadbpbxchbybKbLhjbMbNbObPhjWRzbzbaeaQaSaSaVaWaWaXaeaj
+aeQpbUadadafcjxzBDbXhjakXZGibYhjsDcucAaeaIaIaIaKaIaIaIaeaj
+aeQpbZadcafwbHclcccnhjcpXZpicshjctpLBtaeaeaeaebfaeaeaeaeae
 aeQpQpQpQpQpcycBaycEhjcFujpicshjaCpLcHcicicicJcNcOcicicicR
 aeaeabcScToncWQEcccXhjcFLepicshjcZaHaObCbCbCbCdadbdbdbdbdc
 aaaeabaJADonyeZAccnAQOWJcVPAtgcUuFyabkcicicicJBAcOcicicicR
-aaaeabbJSebvPpJxcwJwhjcCXZXZcvgHCxaRBtaeaeaeaeboaeaeaeaeae
-aaaeNLczLFoncxotcfqXhjmQpfdftphjCxaTpYaeaIaIaIaKaIaIaIaeaj
+aaaeabbJSebvPpJxcwJwhjcCXZXZcvgHXSaRBtaeaeaeaeboaeaeaeaeae
+aaaeNLczLFoncxotcfqXhjmQpfdftphjXSaTpYaeaIaIaIaKaIaIaIaeaj
 aaaeTEanbTaUononondpbIhjhjhjimhjxezbzbaeaQaSaSfTaWaWaXaeaj
 aaaeGHanyxWuWuWuWuWuWuWuZpKrTtWuwBcPaeaeaIaIaIbfaIaIaIaeaj
 aaaeablOeRcQarananbVcQcQcQtecQbeLJabaeaaaaaaaabmaaaaaaaeaj
