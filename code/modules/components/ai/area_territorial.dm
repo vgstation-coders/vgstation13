@@ -1,5 +1,6 @@
 /datum/component/ai/area_territorial
-	var/list/on_enter
+	var/enter_signal
+	var/list/enter_args
 	var/area/territory = null
 
 /datum/component/ai/area_territorial/proc/SetArea(var/area/new_area)
@@ -16,7 +17,6 @@
 	var/mob/M = args["enterer"]
 	if(!isliving(M)) //Piss off, ghost!
 		return
-	var/signal = on_enter["signal"]
-	var/list/signal_args = on_enter["args"].Copy()
+	var/list/signal_args = enter_args.Copy()
 	signal_args.Add(args)
-	INVOKE_EVENT(src, signal, signal_args)
+	INVOKE_EVENT(src, enter_signal, signal_args)

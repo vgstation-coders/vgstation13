@@ -32,4 +32,5 @@
 	C.speech_delay = 25 SECONDS
 	var/datum/component/ai/area_territorial/AT = add_component(/datum/component/ai/area_territorial)
 	AT.SetArea(get_area(src))
-	INVOKE_EVENT(src, /event/comp_ai_cmd_specific_say, "to_say" = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat.")
+	AI.enter_signal = /event/comp_ai_cmd_specific_say
+	AI.enter_args = list("to_say" = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat.")
