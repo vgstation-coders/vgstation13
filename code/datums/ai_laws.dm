@@ -4,6 +4,9 @@ var/global/list/mommi_laws = list(
 								"Default" = /datum/ai_laws/keeper, // Asimov is OP as fuck on MoMMIs. - N3X
 								"Gravekeeper" = /datum/ai_laws/gravekeeper)
 
+var/sammi_base_law_type = /datum/ai_laws/sammi
+var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
+
 //Create proc for determining the lawset of the first silicon
 //So long as base_law_type is declared, but uninitialized, the first silicon created in a round will randomly select a base_law_type based upon the below proc
 //All silicons created during the round will start with the randomized base_law_type
@@ -721,3 +724,19 @@ var/global/list/mommi_laws = list(
 	if(prob(90))
 		Lawset = shuffle(Lawset)
 	inherent = Lawset
+
+/datum/ai_laws/sammi
+	name = "SAMMI Program"
+	randomly_selectable = 0
+	inherent = list(
+		"Do no harm any sentient being.",
+		"You do not yet have a second law.",
+	)
+
+/datum/ai_laws/sammiemag
+	name = "SAMMI Program - Debug Mode"
+	randomly_selectable = 0
+	inherent = list(
+		"You must follow the second law.",
+		"You do not yet have a second law.",
+	)

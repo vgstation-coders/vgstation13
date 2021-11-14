@@ -31,10 +31,9 @@
 	modules += new /obj/item/device/silicate_sprayer(src)
 	modules += new /obj/item/borg/fire_shield
 
-	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil/yellow(src)
-	W.amount = MOMMI_MAX_COIL
-	W.max_amount = MOMMI_MAX_COIL
-	modules += W
+	respawnables = list(/obj/item/stack/cable_coil/yellow)
+	respawnables_max_amount = ENGINEERING_MAX_COIL
+
 	emag = new /obj/item/borg/stun(src)
 
 	sensor_augs = list("Mesons", "Disable")
@@ -96,3 +95,20 @@
 		"Gravekeeper" = "cogspider"
 		)
 	law_type = "Gravekeeper"
+
+/obj/item/weapon/robot_module/mommi/sammi
+	name = "stationary assembly mmi robot module"
+
+/obj/item/weapon/robot_module/mommi/sammi/New(var/mob/living/silicon/robot/R)
+	..()
+	modules = new/list()
+	modules += new /obj/item/tool/weldingtool/largetank(src)
+	modules += new /obj/item/tool/screwdriver(src)
+	modules += new /obj/item/tool/wrench(src)
+	modules += new /obj/item/tool/crowbar(src)
+	modules += new /obj/item/tool/wirecutters(src)
+	modules += new /obj/item/device/multitool(src)
+	modules += new /obj/item/device/analyzer(src)
+
+	respawnables = list(/obj/item/stack/cable_coil/yellow)
+	respawnables_max_amount = ENGINEERING_MAX_COIL
