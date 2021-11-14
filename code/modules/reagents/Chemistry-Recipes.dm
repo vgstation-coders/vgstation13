@@ -2274,6 +2274,28 @@
 	required_reagents = list(MUSTARD = 1, SODIUMCHLORIDE = 1, VINEGAR = 4, EGG_YOLK = 4) //there are about fifty different variants for homemade mayo, using the one that sounds best
 	result_amount = 10
 
+/datum/chemical_reaction/bluegoo
+	name = "Blue Goo"
+	id = BLUEGOO
+	result = BLUEGOO
+	required_reagents = list(ZAMSPICES = 3, LOCUTOGEN = 2)
+	result_amount = 5
+
+/datum/chemical_reaction/zammild
+	name = "Zam's Mild Sauce"
+	id = ZAMMILD
+	result = ZAMMILD
+	required_reagents = list(ZAMSPICES = 3, SACID = 2)
+	result_amount = 5
+
+/datum/chemical_reaction/zamspicy
+	name = "Zam's Spicy Sauce"
+	id = ZAMSPICY
+	result = ZAMSPICY
+	required_reagents = list(ZAMMILD = 3, PACID = 2)
+	required_catalysts = list(MUTAGEN = 5)
+	result_amount = 3
+
 /datum/chemical_reaction/vinegar
 	name = "Vinegar"
 	id = VINEGAR

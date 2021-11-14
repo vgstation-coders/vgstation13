@@ -3661,7 +3661,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
 		)
 	contraband = list(
-		/obj/item/weapon/storage/pill_bottle/zambiscuits = 2,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy = 8,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 6,
@@ -3677,6 +3677,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 35,
 		/obj/item/weapon/reagent_containers/food/drinks/zam_nitrofreeze = 20,
+		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
 		)

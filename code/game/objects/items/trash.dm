@@ -322,3 +322,18 @@ var/list/crushed_cans_cache = list()
 	name = "Zamitos: Spicy Stok Jerky Flavor"
 	desc = "The end of a meat-flavored era"
 	icon_state	= "zamitos_sj"
+
+/obj/item/trash/zamspices_packet
+	name = "zam spices packet"
+	desc = "A used zam spices packet"
+	icon_state	= "zamspices_small"
+
+/obj/item/trash/zammild_packet
+	name = "zam's mild sauce packet"
+	desc = "A used Zam's mild sauce packet"
+	icon_state	= "zammild_small"
+
+/obj/item/trash/zamspicy_packet
+	name = "zam's spicy sauce packet"
+	desc = "A used Zam's spicy sauce packet"
+	icon_state	= "zamspicy_small"

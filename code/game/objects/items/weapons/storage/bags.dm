@@ -315,7 +315,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	icon_state = "Zam_foodbag0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	name = "Zam Food Bag"
-	desc = "A gift from the mothership to keep your zam drinks cool and your zam meals warm. Praise the mothership!"
+	desc = "A gift from the mothership to keep your Zam drinks cool and your Zam meals warm. Praise the mothership!"
 	storage_slots = 14
 	fits_max_w_class = 3
 	max_combined_w_class = 28
@@ -329,29 +329,32 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/zam_food/zam_menu1/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner1(src)//18 nutriments if microwaved
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped(src)//18 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
-	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/zam_food/zam_menu2/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner2(src)//15 nutriments if microwaved
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped(src)//15 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
-	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/zam_food/zam_menu3/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/zamdinner3(src)//12 nutriments if microwaved
+	new/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped(src)//12 nutriments
+	new/obj/item/weapon/reagent_containers/food/snacks/zamitos(src)
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/soysauce(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/vinegar(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy(src)
 	update_icon()
 
 // -----------------------------
