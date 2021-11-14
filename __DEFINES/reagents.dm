@@ -160,7 +160,7 @@
 #define CINNAMON 			"cinnamon"
 #define ZAMSPICES			"zamspices"
 #define ZAMMILD				"zammild"
-#define ZAMSPICY			"zamspicy"
+#define ZAMSPICYTOXIN			"zamspicytoxin"
 #define COCO 			"coco"
 #define AMATOXIN 			"amatoxin"
 #define AMANATIN 			"amanatin"

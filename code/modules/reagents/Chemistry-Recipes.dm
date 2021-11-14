@@ -2288,10 +2288,10 @@
 	required_reagents = list(ZAMSPICES = 3, SACID = 2)
 	result_amount = 5
 
-/datum/chemical_reaction/zamspicy
+/datum/chemical_reaction/zamspicytoxin
 	name = "Zam's Spicy Sauce"
-	id = ZAMSPICY
-	result = ZAMSPICY
+	id = ZAMSPICYTOXIN
+	result = ZAMSPICYTOXIN
 	required_reagents = list(ZAMMILD = 3, PACID = 2)
 	required_catalysts = list(MUTAGEN = 5)
 	result_amount = 3

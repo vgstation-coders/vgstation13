@@ -334,7 +334,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea(src)//tea you can't trust
 	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/zam_food/zam_menu2/New()
@@ -344,7 +344,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz(src)//yum yum melts my tum
 	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
 /obj/item/weapon/storage/bag/zam_food/zam_menu3/New()
@@ -354,7 +354,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/kitchen/utensil/fork/teflon(src)
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/zammild(src)
-	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy(src)
+	new/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin(src)
 	update_icon()
 
 // -----------------------------

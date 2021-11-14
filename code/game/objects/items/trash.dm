@@ -333,7 +333,7 @@ var/list/crushed_cans_cache = list()
 	desc = "A used Zam's mild sauce packet"
 	icon_state	= "zammild_small"
 
-/obj/item/trash/zamspicy_packet
+/obj/item/trash/zamspicytoxin_packet
 	name = "zam's spicy sauce packet"
 	desc = "A used Zam's spicy sauce packet"
-	icon_state	= "zamspicy_small"
+	icon_state	= "zamspicytoxin_small"

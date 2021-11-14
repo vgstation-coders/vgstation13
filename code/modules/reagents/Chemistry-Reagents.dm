@@ -4391,15 +4391,15 @@
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#B38B26" //rgb: 179, 139, 38
 
-/datum/reagent/zamspicy
+/datum/reagent/zamspicytoxin
 	name = "Zam's Spicy Sauce"
-	id = ZAMSPICY
+	id = ZAMSPICYTOXIN
 	description = "A dangerously flavorful sauce made from mothership spices and powerful acid."
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 6 * REAGENTS_METABOLISM
 	color = "#D35A0D" //rgb: 211, 90, 13
 
-/datum/reagent/zamspicy/on_mob_life(var/mob/living/M, var/alien)
+/datum/reagent/zamspicytoxin/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
 		return 1
@@ -5839,8 +5839,8 @@
 		M.heal_organ_damage(1, 0)
 	if(holder.has_reagent("capsaicin"))
 		holder.remove_reagent("capsaicin", 10 * REAGENTS_METABOLISM)
-	if(holder.has_reagent("zamspicy"))
-		holder.remove_reagent("zamspicy", 10 * REAGENTS_METABOLISM)
+	if(holder.has_reagent("zamspicytoxin"))
+		holder.remove_reagent("zamspicytoxin", 10 * REAGENTS_METABOLISM)
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
 

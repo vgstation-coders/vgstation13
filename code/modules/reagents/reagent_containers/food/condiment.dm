@@ -280,11 +280,11 @@
 				desc = "A tasty sauce made from mothership spices and acid."
 				icon_state = ZAMMILD
 				condiment_overlay = ZAMMILD
-			if(ZAMSPICY)
+			if(ZAMSPICYTOXIN)
 				name = "Zam's Spicy Sauce"
 				desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
-				icon_state = ZAMSPICY
-				condiment_overlay = ZAMSPICY
+				icon_state = ZAMSPICYTOXIN
+				condiment_overlay = ZAMSPICYTOXIN
 			if(CREAM)
 				name = "whipped cream dispenser"
 				desc = "Instant delight." //placeholder desc
@@ -536,7 +536,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10,ZAMSPICES=10,ZAMMILD=5,ZAMSPICY=1)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10,ZAMSPICES=10,ZAMMILD=5,ZAMSPICYTOXIN=3)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
@@ -577,13 +577,13 @@
 	..()
 	reagents.add_reagent(ZAMMILD, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/zamspicy
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin
 	name = "Zam's Spicy Sauce"
 	desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
 
-/obj/item/weapon/reagent_containers/food/condiment/zamspicy/New()
+/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin/New()
 	..()
-	reagents.add_reagent(ZAMSPICY, 50)
+	reagents.add_reagent(ZAMSPICYTOXIN, 50)
 
 
 /obj/item/weapon/reagent_containers/food/condiment/cream
@@ -719,13 +719,13 @@
 	..()
 	reagents.add_reagent(ZAMMILD, 5)
 
-/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
 	name = "Zam's Spicy Sauce Packet"
 	desc = "More portable than the bottle, just as spicy."
-	icon_state = "zamspicy_small"
-	condiment_overlay = ZAMSPICY
-	trash_type = /obj/item/trash/zamspicy_packet
+	icon_state = "zamspicytoxin_small"
+	condiment_overlay = ZAMSPICYTOXIN
+	trash_type = /obj/item/trash/zamspicytoxin_packet
 
-/obj/item/weapon/reagent_containers/food/condiment/small/zamspicy/New()
+/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
 	..()
-	reagents.add_reagent(ZAMSPICY, 5)
+	reagents.add_reagent(ZAMSPICYTOXIN, 5)
