@@ -291,8 +291,7 @@ var/list/headset_modes = list(
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_HEAR, list("message" = speech.message, "speaker" = speech.speaker))
+	INVOKE_EVENT(src, /event/comp_ai_cmd_hear)
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()

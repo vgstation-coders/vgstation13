@@ -10,10 +10,7 @@
 	initialize_NPC_components()
 
 /mob/living/silicon/robot/NPC/proc/initialize_NPC_components()
-	initialize_barebones_NPC_components()
-	add_component(/datum/component/controller/mob)
-	add_component(/datum/component/ai/hand_control)
-	add_component(/datum/component/controller/movement)
+	add_component(/datum/component/controller/movement/astar)
 
 /mob/living/silicon/robot/NPC/dusky
 	name = "Dusky"
@@ -35,4 +32,4 @@
 	C.speech_delay = 25 SECONDS
 	var/datum/component/ai/area_territorial/AT = add_component(/datum/component/ai/area_territorial)
 	AT.SetArea(get_area(src))
-	AT.on_enter = list("signal" = COMSIG_SAY_SPECIFIC, "args" = list("to_say" = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat."))
+	INVOKE_EVENT(src, /event/comp_ai_cmd_specific_say, "to_say" = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat.")

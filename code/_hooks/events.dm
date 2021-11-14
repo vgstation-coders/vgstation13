@@ -260,6 +260,10 @@
 /event/comp_ai_cmd_set_state
 /event/comp_ai_cmd_get_state
 
+/event/comp_ai_cmd_say
+/event/comp_ai_cmd_hear
+/event/comp_ai_cmd_specific_say
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
