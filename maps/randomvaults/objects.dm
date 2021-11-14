@@ -946,6 +946,10 @@
 
 // Minisat stuff
 
+/obj/item/weapon/disk/shuttle_coords/vault/minisat
+	name = "NT microstation shuttle destination disk"
+	destination = /obj/docking_port/destination/vault/minisat
+
 /obj/docking_port/destination/vault/minisat
 	name = "NT Microstation 1"
 
