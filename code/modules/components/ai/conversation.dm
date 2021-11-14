@@ -30,7 +30,12 @@
 /datum/component/ai/conversation/auto/initialize()
 	if(..())
 		finder = parent.get_component(/datum/component/ai/target_finder/simple_view)
+		active_components += src
 		return TRUE
+
+/datum/component/ai/conversation/Destroy()
+	active_components -= src
+	..()
 
 /datum/component/ai/conversation/auto/process()
 	if(finder && next_speech < world.time && prob(speech_prob))

@@ -58,7 +58,7 @@
 "bh" = (/obj/machinery/power/terminal{dir = 1},/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/machinery/power/apc{dir = 1; environ = 1; equipment = 1; lighting = 1; locked = 0; name = "apc"; pixel_y = 24},/turf/simulated/floor/engine,/area/mining_bar)
 "bi" = (/obj/machinery/power/battery/smes,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/engine,/area/mining_bar)
 "bj" = (/obj/machinery/power/terminal{dir = 8},/obj/structure/cable{d2 = 4; icon_state = "0-4"},/turf/simulated/floor/engine,/area/mining_bar)
-"bk" = (/obj/machinery/power/terminal{dir = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/engine,/area/mining_bar)
+"bk" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/machinery/power/port_gen/pacman,/turf/simulated/floor/engine,/area/mining_bar)
 "bl" = (/obj/structure/bed/chair/comfy/couch/left/teal{dir = 4; icon_state = "couch_left"},/turf/simulated/floor/carpet,/area/mining_bar)
 "bm" = (/obj/machinery/atmospherics/pipe/manifold/supply/visible{color = "#0000B7"; dir = 8; name = "Mix pipe"},/turf/simulated/floor/engine,/area/mining_bar)
 "bn" = (/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 4},/turf/simulated/floor/engine,/area/mining_bar)
@@ -110,7 +110,7 @@ bXabalamanabaoapaqabbcauavataibcasawababbX
 bXabbpambxaBayayazaCaCaAaFaGarbcbNbcarabbX
 bXabaIaJaKabaIaLaDaNaOaEaPaHararbcbOarabbX
 bXabamaTaUaUaUaVaKabaSaQaSaSbcarbNbNbcabbX
-bXbbabaRababababababasaeasasbcaXarbyarabbX
+bXababaRababababababasaeasasbcaXarbyarabbX
 bXbbbzbfbgbhbibjbkabbcaxbcbPbcbcblataWabbX
 bXbbbzbfbmbnbnbobnbDbSaYbcarbParbrataZabbX
 bXbbbLbsbtbubvbwbebbbYabbQbRbTabbqbcababbX
