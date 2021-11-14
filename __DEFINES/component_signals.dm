@@ -128,3 +128,22 @@
 
 #define COMSIG_GETDAMTYPE "get_dam_type"
 
+
+/** Sent to make the mob say something from its list of messages held in the conversation component
+ * @param none
+ */
+
+#define COMSIG_SAY "say_any"
+
+/** Sent to force the mob to say something specific
+ *  @param to_say /string: What the mob is forced to say.
+ */
+
+#define COMSIG_SAY_SPECIFIC "say_specific"
+
+/** Sent when something is said in earshot. Still under the same rules as regular mobs (Can't hear something if the mob is deaf, for instance)
+ * @param message /string: What was said
+ * @param speaker /atom: Who said it
+ */
+
+#define COMSIG_HEAR "hear_sig" 

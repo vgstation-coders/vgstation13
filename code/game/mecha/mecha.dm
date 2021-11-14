@@ -128,7 +128,7 @@
 			for(var/obj/O in W.cargo) //Dump contents of stored cargo
 				O.forceMove(T)
 				W.cargo -= O
-				T.Entered(O)
+				T.Entered(O, src)
 
 	if(prob(30))
 		explosion(T, 0, 0, 1, 3)

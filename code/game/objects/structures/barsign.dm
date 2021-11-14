@@ -458,7 +458,9 @@ var/list/barsigns = list()
 	sound_selection["Bike Horn"] = 'sound/items/bikehorn.ogg'
 	font_selection += "Wingdings"
 
-
+/obj/structure/sign/double/barsign/mining
+	name = "Armok's Bar N Grill"
+	icon_state = "armokbar" 
 
 #undef PREMADE_SCREEN
 #undef CUSTOM_SCREEN

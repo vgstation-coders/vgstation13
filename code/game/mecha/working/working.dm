@@ -56,13 +56,13 @@
 		if(M==src.occupant)
 			continue
 		M.forceMove(get_turf(src))
-		M.loc.Entered(M)
+		M.loc.Entered(M, src)
 		step_rand(M)
 	for(var/atom/movable/A in src.cargo)
 		A.forceMove(get_turf(src))
 		var/turf/T = get_turf(A)
 		if(T)
-			T.Entered(A)
+			T.Entered(A, src)
 		step_rand(A)
 	..()
 	return

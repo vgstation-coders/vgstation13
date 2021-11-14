@@ -231,7 +231,7 @@
 					MOB.pulling = was_pulling
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
-					A.loc.Entered(A)
+					A.loc.Entered(A, oldloc)
 				if (istype(A,/obj/item/projectile))
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
