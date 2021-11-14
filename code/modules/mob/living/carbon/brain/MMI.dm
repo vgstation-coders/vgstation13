@@ -103,7 +103,7 @@
 					return FALSE
 
 				contents += O
-				to_chat(user, "<span class='notice'>You successfully add \the [O] to the contraption,</span>")
+				to_chat(user, "<span class='notice'>You successfully add \the [O] to the contraption.</span>")
 				return TRUE
 			else if(cc==mommi_assembly_parts[t])
 				to_chat(user, "<span class='warning'>You have enough of these.</span>")

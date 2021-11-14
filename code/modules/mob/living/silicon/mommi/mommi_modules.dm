@@ -31,9 +31,6 @@
 	modules += new /obj/item/device/silicate_sprayer(src)
 	modules += new /obj/item/borg/fire_shield
 
-	respawnables = list(/obj/item/stack/cable_coil/yellow)
-	respawnables_max_amount = ENGINEERING_MAX_COIL
-
 	emag = new /obj/item/borg/stun(src)
 
 	sensor_augs = list("Mesons", "Disable")
@@ -110,5 +107,6 @@
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/analyzer(src)
 
-	respawnables = list(/obj/item/stack/cable_coil/yellow)
-	respawnables_max_amount = ENGINEERING_MAX_COIL
+	emag = new /obj/item/borg/stun(src)
+
+	fix_modules()

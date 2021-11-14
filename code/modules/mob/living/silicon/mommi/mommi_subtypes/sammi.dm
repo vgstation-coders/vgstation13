@@ -193,7 +193,7 @@
 
 
     else if(W.is_wrench(user)) // Need to make this not bludgeon them
-        playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+        W.playtoolsound(loc, 50)
         if(anchored)
             to_chat(user, "<span class='notice'>You unbolt the SAMMI from the floor.</span>")
             anchored = 0
