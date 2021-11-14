@@ -29,7 +29,7 @@
 
 /datum/component/ai/conversation/auto/initialize()
 	if(..())
-		finder = parent.get_component(/datum/component/ai/target_finder)
+		finder = parent.get_component(/datum/component/ai/target_finder/simple_view)
 		return TRUE
 
 /datum/component/ai/conversation/auto/process()
