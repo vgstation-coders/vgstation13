@@ -203,6 +203,7 @@
 "zs" = (/obj/machinery/bioprinter/prosthetics,/obj/machinery/light{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/mini_station_medbay)
 "Ak" = (/obj/machinery/constructable_frame/machine_frame,/turf/simulated/floor,/area/vault/mini_station_construction)
 "Am" = (/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/item/weapon/storage/firstaid,/obj/item/weapon/thermometer,/obj/item/weapon/storage/box/beakers,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/mini_station_medbay)
+"At" = (/obj/structure/grille,/obj/structure/window/full/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma,/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 4},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
 "AD" = (/obj/structure/cable{d2 = 2; icon_state = "0-2"},/obj/machinery/power/apc{dir = 4; pixel_x = 24},/turf/simulated/floor,/area/vault/mini_station)
 "AW" = (/obj/effect/decal/warning_stripes{icon_state = "oxygen"},/obj/machinery/atmospherics/unary/vent_pump/high_volume{canSpawnMice = 0; dir = 4; external_pressure_bound = 0; frequency = 1443; icon_state = "in"; id_tag = "voxx"; internal_pressure_bound = 2000; on = 1; pressure_checks = 2; pump_direction = 0},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
 "Bi" = (/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/item/weapon/storage/firstaid/fire,/obj/item/weapon/reagent_containers/glass/beaker,/turf/simulated/floor{dir = 5; icon_state = "blue"},/area/vault/mini_station_medbay)
@@ -266,17 +267,17 @@
 "XM" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_engineering)
 "XZ" = (/turf/simulated/floor,/area/vault/mini_station_botany)
 "Yz" = (/obj/item/weapon/circuitboard/rdconsole,/turf/simulated/floor,/area/vault/mini_station_construction)
-"Zh" = (/obj/structure/grille,/obj/structure/window/full/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
+"Zh" = (/obj/structure/grille,/obj/structure/window/full/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/engine{name = "o2 floor"; nitrogen = 0; oxygen = 100000},/area/vault/mini_station_engineering)
 "Zs" = (/obj/machinery/atmospherics/unary/vent_scrubber/layered{dir = 8; icon_state = "hoff"},/obj/machinery/atmospherics/unary/vent_pump/on/layered{dir = 8},/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/mini_station_medbay)
 "ZA" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor,/area/vault/mini_station_engineering)
 "ZW" = (/obj/machinery/chem_master,/turf/simulated/floor{dir = 5; icon_state = "blue"},/area/vault/mini_station_medbay)
 "ZX" = (/obj/structure/table/glass,/obj/machinery/chem_dispenser/booze_dispenser/mapping,/turf/simulated/floor,/area/vault/mini_station_kitchen)
 
 (1,1,1) = {"
-aaaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeajajajajajajajajajaj
+aeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeajajajajajajajajajaj
 aeQpQpQpQpalamaoQpQpMhMhMhESMhMhMhaeaeaeaeaeaeapaeaeaeaeaj
 aeQpaqaqZhavawawaxazacAkaDAkAkaEMhMhaeaaaIaIaIaKaIaIaIaeaj
-aeQpagaZfCDLauaFMCqIaPYzxJqAxOiUxOESaeaaaQaSaSaVaWaWaXaeaj
+aeQpagaZAtDLauaFMCqIaPYzxJqAxOiUxOESaeaaaQaSaSaVaWaWaXaeaj
 aeQpQpQpQpfgaBbaccccaGUfUfbbUfLObdMhaeaaaIaIaIbfaIaIaIaeaj
 aeQpbgAWfCOZvnahETeeacxOxObhuiuibiMhaeaaaaaaaabmaaaaaaaeaj
 aeQpQpQpQpQponXMononhjhjhjhjhjhjcqzbaeaaaIaIaIboaIaIaIaeaj
