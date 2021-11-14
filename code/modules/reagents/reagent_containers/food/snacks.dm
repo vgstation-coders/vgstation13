@@ -4550,7 +4550,7 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(ZAMSPICES, 2)
 	reagents.add_reagent(SOYSAUCE, 2)
-	reagents.add_reagent(CAPSAICIN, 2)
+	reagents.add_reagent(ZAMSPICYTOXIN, 2)
 	bitesize = 1.5 // Takes a fair few bites to finish, because why would you want to rush this?
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi
