@@ -19,7 +19,8 @@
 
 /mob/living/silicon/robot/NPC/dusky/initialize_NPC_components()
 	..()
-	add_component(/datum/component/ai/target_finder/simple_view)
+	var/datum/component/ai/target_finder/simple_view/SV = add_component(/datum/component/ai/target_finder/simple_view)
+	SV.range = 3
 	var/datum/component/ai/conversation/auto/C = add_component(/datum/component/ai/conversation/auto)
 	C.messages = list("I hear the weather on some of them planets ain't too nice to be caught out in. Especially them 'Gas Giants'.",
 				"Still's on the fritz again. Sorry if you're tasting pulp or ashes in your liquor.",

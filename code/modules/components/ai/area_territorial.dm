@@ -13,9 +13,8 @@
 	on_enter should be formatted preferably as list("signal" = signal, "args" = list())
  */
 
-/datum/component/ai/area_territorial/proc/area_enter(var/list/args)
-	var/mob/M = args["enterer"]
-	if(!isliving(M)) //Piss off, ghost!
+/datum/component/ai/area_territorial/proc/area_enter(var/obj/enterer)
+	if(!isliving(enterer)) //Piss off, ghost!
 		return
 	var/list/signal_args = enter_args.Copy()
 	signal_args.Add(args)

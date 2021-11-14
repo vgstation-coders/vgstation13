@@ -30,6 +30,7 @@
 /datum/component/ai/conversation/auto/initialize()
 	if(..())
 		finder = parent.get_component(/datum/component/ai/target_finder)
+		return TRUE
 
 /datum/component/ai/conversation/auto/process()
 	if(finder && next_speech < world.time && prob(speech_prob))

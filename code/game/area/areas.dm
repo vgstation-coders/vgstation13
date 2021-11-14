@@ -449,7 +449,7 @@ var/area/space_area
 
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
-	INVOKE_EVENT(src, /event/comp_ai_cmd_area_enter, list("enterer"=Obj, "oldarea" = oldArea, "newarea" = src))
+	INVOKE_EVENT(src, /event/comp_ai_cmd_area_enter, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
