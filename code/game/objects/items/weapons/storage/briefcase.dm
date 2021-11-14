@@ -76,15 +76,12 @@
 			M.eye_blurry += 3
 			
 /obj/item/weapon/storage/briefcase/MouseDropFrom(mob/living/carbon/human/target)
-	to_chat(world,"***Dragdrop")
 	if(target.is_holding_item(src) && !target.stat && !target.restrained())
-		to_chat(world,"Dragdrop passed check")
 		if(cant_drop && !casecuff) //so you can't bypass glue this way
 			..()
 			return
 		if(casecuff)
 			playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-			to_chat(world,"uncuffing...")
 			target.visible_message("<span class='notice'>\The [target] uncuffs \the [src] from \his wrist.</span>", "<span class='notice'>You uncuff \the [src] from your wrist.</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
 			target.mutual_handcuffs = null
 			target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
@@ -98,12 +95,9 @@
 			casecuff = null
 			storage_locked = FALSE
 		else 
-			to_chat(world,"cuffing...")
 			if(!target.mutual_handcuffs && target.find_held_item_by_type(/obj/item/weapon/handcuffs)) //need handcuffs in their hands to do this
-				to_chat(world,"found cuffs")
 				var/cuffslot = target.find_held_item_by_type(/obj/item/weapon/handcuffs)
 				var/obj/item/weapon/handcuffs/cuffinhand = target.held_items[cuffslot]
-				to_chat(world,"c: [cuffinhand] @ [cuffslot]")
 				if(target.drop_item(cuffinhand, src))
 					casecuff = cuffinhand
 					playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
@@ -125,7 +119,6 @@
 					casecuff.cant_drop = 1 //but it'll fall off if their wrist falls off :)
 					target.mutual_handcuffs = casecuff
 					casecuff.invisibility = INVISIBILITY_MAXIMUM
-					to_chat(world,"trying overlay")
 					var/obj/abstract/Overlays/O = target.obj_overlays[HANDCUFF_LAYER]
 					O.icon = 'icons/obj/cuffs.dmi'
 					O.icon_state = "singlecuff[cuffslot]"
@@ -137,30 +130,14 @@
 			else
 				to_chat(target, "<span class='warning'>You can't cuff \the [src] to your wrist without something to cuff with.</span>")
 	
-	to_chat(world,"Dragdrop failed or ended")
 	..()
 	return 
 	
-/*/obj/item/weapon/storage/briefcase/unequipped(mob/user)
-	..()
-	if(casecuff)
-		var/mob/living/carbon/human/uncuffed = user
-		to_chat(world,"unequipping...")
-		uncuffed.mutual_handcuffs = null
-		uncuffed.overlays -= uncuffed.obj_overlays[HANDCUFF_LAYER]
-		casecuff.invisibility = 0
-		casecuff.forceMove(user.loc)
-		canremove = 1 
-		cant_drop = 0
-		casecuff.on_restraint_removal(uncuffed) //for syndicuffs
-		casecuff = null
-		storage_locked = FALSE*/
 		
 /obj/item/weapon/storage/briefcase/dropped(mob/user)
 	..()
 	if(casecuff)
 		var/mob/living/carbon/human/uncuffed = user
-		to_chat(world,"drop uncuffing...")
 		uncuffed.mutual_handcuffs = null
 		uncuffed.overlays -= uncuffed.obj_overlays[HANDCUFF_LAYER]
 		casecuff.invisibility = 0
