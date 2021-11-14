@@ -108,47 +108,7 @@
 	return 0
 
 /mob/living/silicon/robot/mommi/sammi/attackby(obj/item/W, mob/user)
-
-    if(istype(W, /obj/item/stack/cable_coil) && wiresexposed && fireloss)
-        var/obj/item/stack/cable_coil/coil = W
-        if(coil.use(1))
-            adjustFireLoss(-30)
-            updatehealth()
-            src.visible_message("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>")
-            //for(var/mob/O in viewers(user, null))
-            //	O.show_message(text("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
-
-    else if (iscrowbar(W))	// crowbar means open or close the cover
-        if(opened)
-            if(mmi && wiresexposed && wires.IsAllCut())
-                //Cell is out, wires are exposed, remove MMI, produce damaged chassis, baleet original mob.
-                to_chat(user, "You jam the crowbar into \the [src] and begin levering [mmi].")
-                if (do_after(user, src,3))
-                    to_chat(user, "You damage some parts of the casing, but eventually manage to rip out [mmi]!")
-                    var/list/limbs = list(/obj/item/robot_parts/l_arm, /obj/item/robot_parts/r_arm)
-                    for(var/newlimb = 1 to rand(1, limbs.len))
-                        var/limb_to_spawn = pick(limbs)
-                        limbs -= limb_to_spawn
-
-                        new limb_to_spawn(src.loc)
-                    // This doesn't work.  Don't use it.
-                    //src.Destroy()
-                    // del() because it's infrequent and mobs act weird in qdel.
-                    qdel(src)
-                    return
-            else
-                to_chat(user, "You close the cover.")
-                opened = FALSE
-                updateicon()
-        else
-            if(locked)
-                to_chat(user, "The cover is locked and cannot be opened.")
-            else
-                to_chat(user, "You open the cover.")
-                opened = TRUE
-                updateicon()
-
-    else if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
+    if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
         if(wiresexposed)
             to_chat(user, "Close the wiring panel first.")
         else if(cell)
@@ -172,25 +132,6 @@
                 change_sammi_law(user)
             else
                 to_chat(user, "The console's cover is closed.")
-
-    else if(W.is_screwdriver(user) && opened && !cell)	// haxing
-        wiresexposed = !wiresexposed
-        to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-        updateicon()
-
-    else if(W.is_screwdriver(user) && opened && cell)	// radio
-        if(radio)
-            radio.attackby(W,user)//Push it to the radio to let it handle everything
-        else
-            to_chat(user, "Unable to locate a radio.")
-        updateicon()
-
-    else if(istype(W, /obj/item/device/encryptionkey/) && opened)
-        if(radio)//sanityyyyyy
-            radio.attackby(W,user)//GTFO, you have your own procs
-        else
-            to_chat(user, "Unable to locate a radio.")
-
 
     else if(W.is_wrench(user)) // Need to make this not bludgeon them
         W.playtoolsound(loc, 50)
@@ -218,15 +159,6 @@
 
         return 0
 
-
-    else if(istype(W, /obj/item/borg/upgrade/))
-        var/obj/item/borg/upgrade/U = W
-        U.attempt_action(src,user)
-
-    else if(istype(W, /obj/item/device/camera_bug))
-        help_shake_act(user)
-        return 0
-
     else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
         if(emagged)//still allow them to open the cover
             to_chat(user, "The interface seems slightly damaged")
@@ -248,7 +180,6 @@
                 to_chat(user, "<span class='warning'>Access denied.</span>")
 
     else
-        spark(src, 5, FALSE)
         return ..()
 
 /mob/living/silicon/robot/mommi/sammi/attack_hand(mob/user)
