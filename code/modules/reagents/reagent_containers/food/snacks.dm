@@ -7156,7 +7156,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3
 	name = "Zam Spider Slider Delight"
-	icon_state	= "tvdinner3"
+	icon_state	= "tvdinner_3"
 	desc = "Despite extensive processing, there's definitely at least one spider hair still in it."
 	trash = /obj/item/trash/used_tray
 	food_flags = FOOD_MEAT
