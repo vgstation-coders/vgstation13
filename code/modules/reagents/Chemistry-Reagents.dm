@@ -4407,9 +4407,10 @@
 	if(alien && alien == IS_GREY)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
+			M.bodytemperature += 1.4 * TEMPERATURE_DAMAGE_COEFFICIENT
 			switch(volume)
 				if(1 to 15)
-					if(prob(5))
+					if(prob(10))
 						to_chat(M,"<span class='notice'>Your throat feels a little hot!</span>")
 					if(prob(5))
 						to_chat(M,"<span class='notice'>[pick("Now that's a Zam zing!","By the mothership, that was a perfect spice level.","That was an excellent flavor.","Spicy goodness is flowing through your system.")]</span>")
@@ -4424,10 +4425,10 @@
 						M.adjustToxLoss(1)
 				if(30 to INFINITY)
 					M.Jitter(5)
-					if(prob(10))
+					if(prob(15))
 						H.custom_pain("You feel an awful burning in your chest.",1)
 						M.adjustToxLoss(3)
-					if(prob(5))
+					if(prob(10))
 						H.vomit()
 					if(prob(5))
 						to_chat(M,"<span class='warning'>[pick("That's way too much zing!", "By the mothership, that burns!", "You can't taste anything but flaming spice!", "There's a fire in your gut!")]</span>")
@@ -4439,6 +4440,7 @@
 	else
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
+			M.bodytemperature += 1.6 * TEMPERATURE_DAMAGE_COEFFICIENT
 			switch(volume)
 				if(1 to 15)
 					if(prob(10))
@@ -4449,10 +4451,10 @@
 						M.adjustToxLoss(1)
 				if(15 to 30)
 					M.Jitter(5)
-					if(prob(10))
+					if(prob(15))
 						H.custom_pain("You feel an awful burning in your chest.",1)
 						M.adjustToxLoss(3)
-					if(prob(5))
+					if(prob(10))
 						H.vomit()
 					if(prob(5))
 						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
