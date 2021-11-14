@@ -949,4 +949,19 @@
 	name = "NT Microstation 1"
 
 /area/vault/mini_station
-	name = "NT Microstation 1"
+	name = "NT Microstation Hallway"
+
+/area/vault/mini_station_kitchen
+	name = "NT Microstation Kitchen"
+
+/area/vault/mini_station_medbay
+	name = "NT Microstation Medbay"
+
+/area/vault/mini_station_engineering
+	name = "NT Microstation Engineering"
+
+/area/vault/mini_station_botany
+	name = "NT Microstation Botany"
+
+/area/vault/mini_station_construction
+	name = "NT Microstation Construction Room"
