@@ -261,8 +261,8 @@
 /event/comp_ai_cmd_get_state
 
 /event/comp_ai_cmd_say
-/event/comp_ai_cmd_hear
 /event/comp_ai_cmd_specific_say
+/event/comp_ai_cmd_area_enter
 
 /datum
 	/// Associative list of type path -> list(),

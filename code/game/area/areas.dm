@@ -16,7 +16,6 @@ var/area/space_area
 	var/project_shadows = FALSE
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
-	var/event/on_area_enter
 
 	flags = 0
 
@@ -24,7 +23,6 @@ var/area/space_area
 	area_turfs = list()
 	icon_state = ""
 	uid = ++global_uid
-	on_area_enter = new(owner = src)
 	if (x) // If we're actually located in the world
 		areas |= src
 
@@ -61,8 +59,6 @@ var/area/space_area
 /area/Destroy()
 	..()
 	areaapc = null
-	qdel(on_area_enter)
-	on_area_enter = null
 
 /*
  * Added to fix mech fabs 05/2013 ~Sayu.
@@ -453,7 +449,7 @@ var/area/space_area
 
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
-	INVOKE_EVENT(on_area_enter, list("enterer"=Obj, "oldarea" = oldArea, "newarea" = src))
+	INVOKE_EVENT(src, /event/comp_ai_cmd_area_enter, list("enterer"=Obj, "oldarea" = oldArea, "newarea" = src))
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
