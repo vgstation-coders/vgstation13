@@ -177,7 +177,7 @@
 "rA" = (/obj/machinery/vending/coffee,/turf/simulated/floor,/area/vault/mini_station)
 "so" = (/obj/structure/table{pixel_x = 0; pixel_y = 0},/obj/item/weapon/switchtool/surgery,/obj/item/weapon/storage/firstaid/toxin,/obj/item/stack/sheet/charcoal,/obj/machinery/power/apc{dir = 4; pixel_x = 24},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 6; icon_state = "blue"},/area/vault/mini_station_medbay)
 "st" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/door/firedoor/border_only{dir = 8; name = "Firelock West"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
-"sD" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/machinery/power/apc{dir = 4; pixel_x = 24},/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
+"sD" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
 "sT" = (/obj/structure/window/reinforced{dir = 1; icon_state = "rwindow"},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/window/reinforced{dir = 8; icon_state = "rwindow"},/turf/simulated/floor/plating,/area/vault/mini_station_medbay)
 "te" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,/turf/simulated/floor,/area/vault/mini_station)
 "tg" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 1; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 1; icon_state = "map"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 4; icon_state = "green"},/area/vault/mini_station_botany)
@@ -191,7 +191,7 @@
 "wb" = (/obj/machinery/sleeper,/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "wy" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "wB" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"; tag = ""},/turf/simulated/floor,/area/vault/mini_station)
-"xe" = (/obj/machinery/door/airlock/glass,/obj/machinery/door/firedoor/border_only{name = "Firelock South"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_botany)
+"xe" = (/obj/machinery/door/airlock/glass,/obj/machinery/door/firedoor/border_only{name = "Firelock South"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
 "xz" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor,/area/vault/mini_station_engineering)
 "xJ" = (/obj/item/weapon/circuitboard/circuit_imprinter,/turf/simulated/floor,/area/vault/mini_station_construction)
 "xK" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
@@ -215,6 +215,7 @@
 "BD" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 4; tag = "icon-intact (EAST)"},/turf/simulated/floor,/area/vault/mini_station_engineering)
 "Ca" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{dir = 8; icon_state = "map"},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered{dir = 8; icon_state = "map"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "Cs" = (/obj/machinery/vending/cola,/turf/simulated/floor,/area/vault/mini_station)
+"Cx" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/mini_station_entrance)
 "Dx" = (/turf/simulated/wall/r_wall,/area/vault/mini_station_kitchen)
 "DL" = (/obj/machinery/atmospherics/pipe/simple/supply/visible{dir = 10; tag = "icon-intact (SOUTHWEST)"},/turf/simulated/floor,/area/vault/mini_station_engineering)
 "DQ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 2; icon_state = "blue"},/area/vault/mini_station_medbay)
@@ -267,7 +268,7 @@
 "Vz" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 10; tag = "icon-intact (SOUTHWEST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 10; tag = ""},/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "Wu" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station)
 "WJ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor{dir = 8; icon_state = "green"},/area/vault/mini_station_botany)
-"WR" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_entrance)
+"WR" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d2 = 2; icon_state = "0-2"},/obj/machinery/power/apc{dir = 4; pixel_x = 24},/turf/simulated/floor,/area/vault/mini_station_entrance)
 "WX" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "Xr" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{dir = 5; tag = "icon-intact (NORTHEAST)"},/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered{dir = 5; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/mini_station_kitchen)
 "XM" = (/obj/machinery/door/airlock/glass,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,/obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/firedoor/border_only{dir = 1; name = "Firelock North"},/turf/simulated/floor,/area/vault/mini_station_engineering)
@@ -294,8 +295,8 @@ aeQpbZadcafwbHclcccnhjcpXZpicshjctcucAaeaeaeaebfaeaeaeaeae
 aeQpQpQpQpQpcycBaycEhjcFujpicshjaCpLcHcicicicJcNcOcicicicR
 aeaeabcScToncWQEcccXhjcFLepicshjcZaHaObCbCbCbCdadbdbdbdbdc
 aaaeabaJADonyeZAccnAQOWJcVPAtgcUuFyabkcicicicJBAcOcicicicR
-aaaeabbJSebvPpJxcwJwhjcCXZXZcvgHpiaRBtaeaeaeaeboaeaeaeaeae
-aaaeNLczLFoncxotcfqXhjmQpfdftphjpiaTpYaeaIaIaIaKaIaIaIaeaj
+aaaeabbJSebvPpJxcwJwhjcCXZXZcvgHCxaRBtaeaeaeaeboaeaeaeaeae
+aaaeNLczLFoncxotcfqXhjmQpfdftphjCxaTpYaeaIaIaIaKaIaIaIaeaj
 aaaeTEanbTaUononondpbIhjhjhjimhjxezbzbaeaQaSaSfTaWaWaXaeaj
 aaaeGHanyxWuWuWuWuWuWuWuZpKrTtWuwBcPaeaeaIaIaIbfaIaIaIaeaj
 aaaeablOeRcQarananbVcQcQcQtecQbeLJabaeaaaaaaaabmaaaaaaaeaj
