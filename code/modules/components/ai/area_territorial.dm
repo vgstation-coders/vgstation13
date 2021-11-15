@@ -12,6 +12,4 @@
 /datum/component/ai/area_territorial/proc/area_enter(var/obj/enterer)
 	if(!isliving(enterer)) //Piss off, ghost!
 		return
-	var/list/signal_args = enter_args.Copy()
-	signal_args.Add(args)
-	INVOKE_EVENT(parent, enter_signal, signal_args)
+	INVOKE_EVENT(parent, enter_signal, enter_args)
