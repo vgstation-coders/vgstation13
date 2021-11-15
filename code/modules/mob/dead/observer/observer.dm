@@ -228,6 +228,15 @@ Works together with spawning an observer, noted above.
 	..()
 	if(!loc)
 		return
+	
+	spawn() // Gives a "floaty" appearance that makes viewing other overlapping ghosts on a singular tile look nicer, especially during haunting.
+		var/amplitude = 15
+		var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 10, loop = -1, easing = EASE_OUT)
+		animate(pixel_x = pixel_x - pixel_x_diff*2, pixel_y = pixel_y - pixel_y_diff*2, time = 10, loop = -1, easing = SINE_EASING)
+		animate(pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff, time = 10, loop = -1, easing = EASE_IN)
+
 	if(!client)
 		return 0
 
