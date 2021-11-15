@@ -182,10 +182,7 @@
 		return
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/tool/crowbar/red)) // Mirroring original's behaviour
-		user.delayNextAttack(2)
-	else
-		user.delayNextAttack(8)
+	user.delayNextAttack(W.attack_delay)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
