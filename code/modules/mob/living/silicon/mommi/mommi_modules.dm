@@ -98,7 +98,9 @@
 
 /obj/item/weapon/robot_module/mommi/sammi/New(var/mob/living/silicon/robot/R)
 	..()
-	modules = new/list()
+	for(var/module in modules)
+		qdel(module)
+	modules = list()
 	modules += new /obj/item/tool/weldingtool/largetank(src)
 	modules += new /obj/item/tool/screwdriver(src)
 	modules += new /obj/item/tool/wrench(src)
@@ -106,7 +108,5 @@
 	modules += new /obj/item/tool/wirecutters(src)
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/analyzer(src)
-
-	emag = new /obj/item/borg/stun(src)
 
 	fix_modules()
