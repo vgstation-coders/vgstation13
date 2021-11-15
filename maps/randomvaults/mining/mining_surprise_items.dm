@@ -2,6 +2,9 @@
 	name = "Armok's Bar and Grill"
 	icon_state = "bar"
 
+/mob/living/silicon/robot/NPC
+	flags = HEAR_ALWAYS | PROXMOVE //For hearer events
+
 /mob/living/silicon/robot/NPC/updatename()
 	return
 
@@ -16,6 +19,10 @@
 	name = "Dusky"
 	desc = "A little rusted at the creases, but this barbot is still happy to serve so long as the generator is running"
 	icon_state = "kodiak-service"
+
+/mob/living/silicon/robot/NPC/dusky/Hear(var/datum/speech/speech, var/rendered_message = null)
+	INVOKE_EVENT(src, /event/comp_ai_cmd_say, "source" = speech.speaker)
+	..()
 
 /mob/living/silicon/robot/NPC/dusky/initialize_NPC_components()
 	..()
@@ -35,4 +42,5 @@
 	var/datum/component/ai/area_territorial/AT = add_component(/datum/component/ai/area_territorial)
 	AT.SetArea(get_area(src))
 	AT.enter_signal = /event/comp_ai_cmd_specific_say
-	AT.enter_args = list("to_say" = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat.")
+	AT.enter_var = "to_say"
+	AT.enter_val = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat."

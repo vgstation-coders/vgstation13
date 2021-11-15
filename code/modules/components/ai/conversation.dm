@@ -1,5 +1,6 @@
 /datum/component/ai/conversation
 	var/list/messages = list()
+	var/atom/last_speaker
 
 /datum/component/ai/conversation/initialize()
 	parent.register_event(/event/comp_ai_cmd_say, src, .proc/cmd_say)
@@ -11,10 +12,11 @@
 	parent.unregister_event(/event/comp_ai_cmd_specific_say, src, .proc/cmd_specific_say)
 	..()
 
-/datum/component/ai/conversation/proc/cmd_say()
-	if(isliving(parent))
+/datum/component/ai/conversation/proc/cmd_say(var/atom/source)
+	if(isliving(parent) && parent != source)
 		var/mob/living/M=parent
 		M.say("[pick(messages)]")
+		last_speaker = source
 
 /datum/component/ai/conversation/proc/cmd_specific_say(var/to_say)
 	if(isliving(parent))
@@ -33,7 +35,7 @@
 		active_components += src
 		return TRUE
 
-/datum/component/ai/conversation/Destroy()
+/datum/component/ai/conversation/auto/Destroy()
 	active_components -= src
 	..()
 
