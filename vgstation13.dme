@@ -1515,6 +1515,7 @@
 #include "code\modules\components\ai\door_opener.dm"
 #include "code\modules\components\ai\controllers\movement.dm"
 #include "code\modules\components\ai\controllers\simple_animal.dm"
+#include "code\modules\components\ai\hearing.dm"
 #include "code\modules\components\ai\hostile\escape_confinement.dm"
 #include "code\modules\components\ai\hostile\hunt.dm"
 #include "code\modules\components\ai\hostile\melee\attack_animal.dm"

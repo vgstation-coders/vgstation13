@@ -10,6 +10,5 @@
 	territory.register_event(/event/comp_ai_cmd_area_enter, src, .proc/area_enter)
 
 /datum/component/ai/area_territorial/proc/area_enter(var/obj/enterer)
-	if(!isliving(enterer)) //Piss off, ghost!
-		return
-	INVOKE_EVENT(parent, enter_signal, enter_args)
+	if(isliving(enterer)) // No ghosts
+		INVOKE_EVENT(parent, enter_signal, enter_args)
