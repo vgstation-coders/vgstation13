@@ -42,3 +42,5 @@
 	AT.SetArea(get_area(src))
 	AT.enter_signal = /event/comp_ai_cmd_specific_say
 	AT.enter_args = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat."
+	AT.exit_signal = /event/comp_ai_cmd_specific_say
+	AT.exit_args = "Seeya, space dorf. Happy trails."

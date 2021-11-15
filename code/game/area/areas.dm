@@ -457,6 +457,7 @@ var/area/space_area
 			narrator.Crossed(M)
 
 /area/Exited(atom/movable/Obj)
+	INVOKE_EVENT(src, /event/comp_ai_cmd_area_exit, "exiter" = Obj)
 	..()
 
 /area/proc/subjectDied(target)
