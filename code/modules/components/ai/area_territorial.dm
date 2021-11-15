@@ -1,7 +1,6 @@
 /datum/component/ai/area_territorial
 	var/enter_signal
-	var/enter_var
-	var/enter_val
+	var/list/enter_args
 	var/area/territory = null
 
 /datum/component/ai/area_territorial/proc/SetArea(var/area/new_area)
@@ -13,4 +12,6 @@
 /datum/component/ai/area_territorial/proc/area_enter(var/obj/enterer)
 	if(!isliving(enterer)) //Piss off, ghost!
 		return
-	INVOKE_EVENT(src, enter_signal, enter_var = enter_val)
+	var/list/signal_args = enter_args.Copy()
+	signal_args.Add(args)
+	INVOKE_EVENT(parent, enter_signal, signal_args)
