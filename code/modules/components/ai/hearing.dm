@@ -24,6 +24,6 @@
 /datum/component/ai/hearing/say_response/time
     required_messages = list("What time is it?","What's the time?","Do you have the time?")
 
-/datum/component/ai/hearing/time/on_hear(var/datum/speech/speech)
+/datum/component/ai/hearing/say_response/time/on_hear(var/datum/speech/speech)
     hear_args = list("The current time is [worldtime2text()].")
     ..()
