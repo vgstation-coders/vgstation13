@@ -36,15 +36,20 @@
 	C.speech_delay = 25 SECONDS
 	C.next_speech = world.time+C.speech_delay
 
+	add_component(/datum/component/ai/hearing/say_response/dusky_hi)
 	add_component(/datum/component/ai/hearing/say_response/dusky_who)
 	add_component(/datum/component/ai/hearing/say_response/dusky_when)
 	add_component(/datum/component/ai/hearing/say_response/time)
-	var/datum/component/ai/area_territorial/AT = add_component(/datum/component/ai/area_territorial)
+	var/datum/component/ai/area_territorial/say/AT = add_component(/datum/component/ai/area_territorial/say)
 	AT.SetArea(get_area(src))
-	AT.enter_signal = /event/comp_ai_cmd_specific_say
-	AT.enter_args = list("Welcome to Armok's Bar and Grill. Put your plasma on the counter and bring up a seat.")
-	AT.exit_signal = /event/comp_ai_cmd_specific_say
+	AT.enter_args = list("Welcome to Armok's Bar and Grill. Put your plasma on the counter and bring up a seat.",
+				"Welcome to Armok's Bar and Grill. Have a nice stay!",
+				"Welcome to Armok's Bar and Grill. Don't drag the roid dirt in on them boots, leave em at the door.")
 	AT.exit_args = list("Seeya, space dorf","Happy trails.","Anytime, feller.")
+
+/datum/component/ai/hearing/say_response/dusky_hi
+	required_messages = list("Hello","Hi","Hey","Greetings","Howdy")
+	hear_args = list("Howdy!","Good to see ya, friend!","Back atcha, feller!")
 
 /datum/component/ai/hearing/say_response/dusky_who
 	required_messages = list("Who are you?","Who's this?","What's your name?")
@@ -52,4 +57,8 @@
 
 /datum/component/ai/hearing/say_response/dusky_when
 	required_messages = list("How long have you been out here?","When were you made?","How old are you?")
-	hear_args = list("My production serial seems to be dated to roughly 2301, ain't seen a customer in about 126 years.")
+
+/datum/component/ai/hearing/say_response/dusky_when/initialize()
+	if(..())
+		hear_args = list("My production serial seems to be dated to roughly [rand(2300,2399)], ain't seen a customer in about [rand(12,120)] years.")
+		return TRUE

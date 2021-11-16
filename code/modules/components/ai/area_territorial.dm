@@ -20,3 +20,7 @@
 /datum/component/ai/area_territorial/proc/area_exit(var/obj/exiter)
 	if(isliving(exiter)) // No ghosts
 		INVOKE_EVENT(parent, exit_signal, exit_args)
+
+/datum/component/ai/area_territorial/say
+	enter_signal = /event/comp_ai_cmd_specific_say
+	exit_signal = /event/comp_ai_cmd_specific_say
