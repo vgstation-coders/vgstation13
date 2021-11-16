@@ -37,10 +37,16 @@
 	C.next_speech = world.time+C.speech_delay
 
 	add_component(/datum/component/ai/hearing/say)
+	var/datum/component/ai/hearing/say_response/who = add_component(/datum/component/ai/hearing/say_response)
+	who.required_messages = list("Who are you?","Who's this?","What's your name?")
+	who.hear_args = list("The name's Dusky, service brand bot, built to serve you fellers the finest plasm- I mean, ethanol based beverages!")
+	var/datum/component/ai/hearing/say_response/when = add_component(/datum/component/ai/hearing/say_response)
+	when.required_messages = list("How long have you been out here?","When were you made?")
+	when.hear_args = list("My production serial seems to be dated to roughly 2301, ain't seen a customer in about [rand(12,120)] years.")
 	add_component(/datum/component/ai/hearing/say_response/time)
 	var/datum/component/ai/area_territorial/AT = add_component(/datum/component/ai/area_territorial)
 	AT.SetArea(get_area(src))
 	AT.enter_signal = /event/comp_ai_cmd_specific_say
-	AT.enter_args = "Welcome to Armoks Bar and Grill. Put your plasma on the counter and bring up a seat."
+	AT.enter_args = list("Welcome to Armok's Bar and Grill. Put your plasma on the counter and bring up a seat.")
 	AT.exit_signal = /event/comp_ai_cmd_specific_say
-	AT.exit_args = "Seeya, space dorf. Happy trails."
+	AT.exit_args = list("Seeya, space dorf","Happy trails.","Anytime, feller.")

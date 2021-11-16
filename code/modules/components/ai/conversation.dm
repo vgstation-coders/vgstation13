@@ -16,10 +16,10 @@
 		var/mob/living/M=parent
 		M.say("[pick(messages)]")
 
-/datum/component/ai/conversation/proc/cmd_specific_say(var/to_say)
+/datum/component/ai/conversation/proc/cmd_specific_say(var/list/to_say)
 	if(isliving(parent))
 		var/mob/living/M=parent
-		M.say("[to_say]")
+		M.say("[pick(to_say)]")
 
 /datum/component/ai/conversation/auto
 	var/speech_prob = 30
