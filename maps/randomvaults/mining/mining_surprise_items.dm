@@ -48,15 +48,15 @@
 	AT.exit_args = list("Seeya, space dorf","Happy trails.","Anytime, feller.")
 
 /datum/component/ai/hearing/say_response/dusky_hi
-	required_messages = list("Hello","Hi","Hey","Greetings","Howdy")
+	required_messages = list("hello","hi","hey","greetings","howdy")
 	hear_args = list("Howdy!","Good to see ya, friend!","Back atcha, feller!")
 
 /datum/component/ai/hearing/say_response/dusky_who
-	required_messages = list("Who are you?","Who's this?","What's your name?")
+	required_messages = list("who are you","whos this","whats your name")
 	hear_args = list("The name's Dusky, service brand bot, built to serve you fellers the finest plasm- I mean, ethanol based beverages!")
 
 /datum/component/ai/hearing/say_response/dusky_when
-	required_messages = list("How long have you been out here?","When were you made?","How old are you?")
+	required_messages = list("how long have you been out here","when were you made","how old are you")
 
 /datum/component/ai/hearing/say_response/dusky_when/initialize()
 	if(..())
