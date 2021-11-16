@@ -186,15 +186,14 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				continue
 
 			for(var/datum/wound/W in temp.wounds)
-			if(W.bleeding())
-				blood_max += W.damage / 4
+				if(W.bleeding())
+					blood_max += W.damage / 4
 
 			if(temp.status & ORGAN_DESTROYED && !(temp.status & ORGAN_GAUZED) && !temp.amputated)
 				blood_max += 20 //Yer missing a fucking limb.
 
 			if (temp.open)
 				blood_max += 2 //Yer stomach is cut open
-
 
 		blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
 
@@ -207,7 +206,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(reagents.has_reagent(INAPROVALINE))
 			blood_factor -= 0.3
 
-		drip(blood_max * blood_factor)
+		drip(blood_max * max(0, blood_factor))
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
