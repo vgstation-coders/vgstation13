@@ -27,7 +27,7 @@
     hear_signal = /event/comp_ai_cmd_specific_say
 
 /datum/component/ai/hearing/say_response/time
-    required_messages = list("What time is it","Whats the time","Do you have the time")
+    required_messages = list("what time is it","whats the time","do you have the time")
 
 /datum/component/ai/hearing/say_response/time/on_hear(var/datum/speech/speech)
     hear_args = list("The current time is [worldtime2text()].")
