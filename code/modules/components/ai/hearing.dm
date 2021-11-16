@@ -12,7 +12,7 @@
     ..()
 
 /datum/component/ai/hearing/proc/on_hear(var/datum/speech/speech)
-    if(speech.speaker != parent && (!required_messages.len || speech.message in required_messages))
+    if(speech.speaker != parent && (!required_messages.len || (speech.message in required_messages)))
         INVOKE_EVENT(parent, hear_signal, hear_args)
 
 /datum/component/ai/hearing/say
