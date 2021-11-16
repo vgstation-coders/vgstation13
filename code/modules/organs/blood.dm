@@ -196,14 +196,17 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 			blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
 
-			if(lying)
-				blood_factor -= 0.3
+		if(lying)
+			blood_factor -= 0.3
 
-			if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
-				blood_factor += 0.3
+		if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
+			blood_factor += 0.3
 
-			if(reagents.has_reagent(INAPROVALINE))
-				blood_factor -= 0.3
+		if(reagents.has_reagent(INAPROVALINE))
+			blood_factor -= 0.3
+
+		if(blood_factor < 1)
+			blood_factor = 1
 
 		drip(blood_max * blood_factor)
 
