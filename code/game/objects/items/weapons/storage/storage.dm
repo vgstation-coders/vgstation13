@@ -61,6 +61,8 @@
 
 /obj/item/weapon/storage/examine(mob/user)
 	..()
+	if(storage_locked)
+		to_chat(user, "<span class='info'>\The [src] seems to be locked.</span>")
 	if(isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //phantom mask users
 		var/mob/dead/observer/ghost = user
 		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)

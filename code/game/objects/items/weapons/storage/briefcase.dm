@@ -86,11 +86,11 @@
 			target.mutual_handcuffs = null
 			target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
 			casecuff.invisibility = initial(casecuff.invisibility)
-			target.put_in_hands(casecuff)
 			canremove = 1 
 			cant_drop = 0
 			casecuff.canremove = 1 
 			casecuff.cant_drop = 0
+			target.put_in_hands(casecuff)
 			casecuff.on_restraint_removal(target) //for syndicuffs
 			casecuff = null
 			storage_locked = FALSE
