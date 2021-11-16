@@ -169,17 +169,7 @@
 			if(casecuff)
 				playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 				target.visible_message("<span class='notice'>\The [target] uncuffs \the [src] from \his wrist.</span>", "<span class='notice'>You uncuff \the [src] from your wrist.</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
-				target.mutual_handcuffs = null
-				target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
-				casecuff.invisibility = initial(casecuff.invisibility)
-				canremove = 1 
-				cant_drop = 0
-				casecuff.canremove = 1 
-				casecuff.cant_drop = 0
-				target.put_in_hands(casecuff)
-				casecuff.on_restraint_removal(target) //for syndicuffs
-				casecuff = null
-				storage_locked = FALSE
+				casecuff.forceMove(target) //Exited() gets called, stuff happens there
 			else 
 				if(!target.mutual_handcuffs && target.find_held_item_by_type(/obj/item/weapon/handcuffs)) //need handcuffs in their hands to do this
 					var/cuffslot = target.find_held_item_by_type(/obj/item/weapon/handcuffs)
@@ -220,6 +210,20 @@
 		if(Adjacent(usr))
 			src.add_fingerprint(usr)
 		return
+	..()
+	
+/obj/item/weapon/storage/secure/briefcase/Exited(atom/movable/Obj) //the casecuffs are stored invisibly in the case
+	if(casecuff && Obj == casecuff)  //when stripped, they get forcemoved from the case, that's why this works
+		var/mob/living/carbon/human/target = loc
+		target.mutual_handcuffs = null
+		target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
+		casecuff.invisibility = initial(casecuff.invisibility)
+		canremove = 1 
+		cant_drop = 0
+		casecuff.forceMove(target.loc) //otherwise the cuff copy ghosts show up
+		casecuff.on_restraint_removal(target) //for syndicuffs
+		casecuff = null
+		storage_locked = FALSE
 	..()
 	
 /obj/item/weapon/storage/secure/briefcase/paperpen/dropped(mob/user)

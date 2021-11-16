@@ -75,64 +75,67 @@
 			M.visible_message("<span class='warning'>\The [user] tried to knock \the [M] unconcious!</span>", "<span class='warning'>\The [user] tried to knock you unconcious!</span>")
 			M.eye_blurry += 3
 			
-/obj/item/weapon/storage/briefcase/MouseDropFrom(mob/living/carbon/human/target)
-	if(target.is_holding_item(src) && !target.stat && !target.restrained())
-		if(cant_drop && !casecuff) //so you can't bypass glue this way
-			..()
-			return
-		if(casecuff)
-			playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-			target.visible_message("<span class='notice'>\The [target] uncuffs \the [src] from \his wrist.</span>", "<span class='notice'>You uncuff \the [src] from your wrist.</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
-			target.mutual_handcuffs = null
-			target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
-			casecuff.invisibility = initial(casecuff.invisibility)
-			canremove = 1 
-			cant_drop = 0
-			casecuff.canremove = 1 
-			casecuff.cant_drop = 0
-			target.put_in_hands(casecuff)
-			casecuff.on_restraint_removal(target) //for syndicuffs
-			casecuff = null
-			storage_locked = FALSE
-		else 
-			if(!target.mutual_handcuffs && target.find_held_item_by_type(/obj/item/weapon/handcuffs)) //need handcuffs in their hands to do this
-				var/cuffslot = target.find_held_item_by_type(/obj/item/weapon/handcuffs)
-				var/obj/item/weapon/handcuffs/cuffinhand = target.held_items[cuffslot]
-				if(target.drop_item(cuffinhand, src))
-					casecuff = cuffinhand
-					playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
-					target.visible_message("<span class='notice'>\The [target] cuffs \the [src] to \his wrist with \the [casecuff].</span>", "<span class='notice'>You cuff \the [src] to your wrist with \the [casecuff].</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
-					if(istype(casecuff, /obj/item/weapon/handcuffs/syndicate))
-						var/obj/item/weapon/handcuffs/syndicate/syncuff = casecuff
-						if(syncuff.mode == SYNDICUFFS_ON_APPLY && !syncuff.charge_detonated)
-							if(syncuff.charge_detonated) //this is bad but syndicuffs are not meant for this sort of stuff
+/obj/item/weapon/storage/briefcase/MouseDropFrom(atom/over_object)
+	if(istype(over_object,/mob/living/carbon/human))
+		var/mob/living/carbon/human/target = over_object
+		if(target.is_holding_item(src) && !target.stat && !target.restrained())
+			if(cant_drop && !casecuff) //so you can't bypass glue this way
+				..()
+				return
+			if(casecuff)
+				playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
+				target.visible_message("<span class='notice'>\The [target] uncuffs \the [src] from \his wrist.</span>", "<span class='notice'>You uncuff \the [src] from your wrist.</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
+				casecuff.forceMove(target) //Exited() gets called, stuff happens there
+			else 
+				if(!target.mutual_handcuffs && target.find_held_item_by_type(/obj/item/weapon/handcuffs)) //need handcuffs in their hands to do this
+					var/cuffslot = target.find_held_item_by_type(/obj/item/weapon/handcuffs)
+					var/obj/item/weapon/handcuffs/cuffinhand = target.held_items[cuffslot]
+					if(target.drop_item(cuffinhand, src))
+						casecuff = cuffinhand
+						playsound(target.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
+						target.visible_message("<span class='notice'>\The [target] cuffs \the [src] to \his wrist with \the [casecuff].</span>", "<span class='notice'>You cuff \the [src] to your wrist with \the [casecuff].</span>", "<span class='notice'>You hear two ratcheting clicks.</span>")
+						if(istype(casecuff, /obj/item/weapon/handcuffs/syndicate))
+							var/obj/item/weapon/handcuffs/syndicate/syncuff = casecuff
+							if(syncuff.mode == SYNDICUFFS_ON_APPLY && !syncuff.charge_detonated)
+								if(syncuff.charge_detonated) //this is bad but syndicuffs are not meant for this sort of stuff
+									return
+								syncuff.charge_detonated = TRUE
+								sleep(3)
+								explosion(get_turf(target), 0, 1, 3, 0)
+								qdel(casecuff)
+								casecuff = null
 								return
-							syncuff.charge_detonated = TRUE
-							sleep(3)
-							explosion(get_turf(target), 0, 1, 3, 0)
-							qdel(casecuff)
-							casecuff = null
-							return
-					canremove = 0 //can't drop the case
-					cant_drop = 1
-					casecuff.canremove = 0 //can't strip the cuffs off either
-					casecuff.cant_drop = 1 //but it'll fall off if their wrist falls off :)
-					target.mutual_handcuffs = casecuff
-					casecuff.invisibility = INVISIBILITY_MAXIMUM
-					var/obj/abstract/Overlays/O = target.obj_overlays[HANDCUFF_LAYER]
-					O.icon = 'icons/obj/cuffs.dmi'
-					O.icon_state = "singlecuff[cuffslot]"
-					O.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
-					O.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
-					target.obj_to_plane_overlay(O,HANDCUFF_LAYER)
-					close_all()
-					storage_locked = TRUE
-			else
-				to_chat(target, "<span class='warning'>You can't cuff \the [src] to your wrist without something to cuff with.</span>")
+						canremove = 0 //can't drop the case
+						cant_drop = 1
+						target.mutual_handcuffs = casecuff
+						casecuff.invisibility = INVISIBILITY_MAXIMUM
+						var/obj/abstract/Overlays/O = target.obj_overlays[HANDCUFF_LAYER]
+						O.icon = 'icons/obj/cuffs.dmi'
+						O.icon_state = "singlecuff[cuffslot]"
+						O.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
+						O.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
+						target.obj_to_plane_overlay(O,HANDCUFF_LAYER)
+						close_all()
+						storage_locked = TRUE
+				else
+					to_chat(target, "<span class='warning'>You can't cuff \the [src] to your wrist without something to cuff with.</span>")
 	
 	..()
 	return 
 	
+/obj/item/weapon/storage/briefcase/Exited(atom/movable/Obj) //the casecuffs are stored invisibly in the case
+	if(casecuff && Obj == casecuff)  //when stripped, they get forcemoved from the case, that's why this works
+		var/mob/living/carbon/human/target = loc
+		target.mutual_handcuffs = null
+		target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
+		casecuff.invisibility = initial(casecuff.invisibility)
+		canremove = 1 
+		cant_drop = 0
+		casecuff.forceMove(target.loc) //otherwise the cuff copy ghosts show up
+		casecuff.on_restraint_removal(target) //for syndicuffs
+		casecuff = null
+		storage_locked = FALSE
+	..()
 		
 /obj/item/weapon/storage/briefcase/dropped(mob/user)
 	..()
