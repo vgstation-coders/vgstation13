@@ -180,7 +180,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 		//Bleeding out
 		var/blood_max = 0
-		var/blood_factor = 1
 		for(var/datum/organ/external/temp in organs)
 			if(!(temp.status & ORGAN_BLEEDING) || temp.status & (ORGAN_ROBOT|ORGAN_PEG))
 				continue
@@ -197,18 +196,15 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 			blood_max = blood_max * BLOODLOSS_SPEED_MULTIPLIER
 
 			if(lying)
-				blood_factor -= 0.3
+				blood_max *= 0.66
 
 			if(reagents.has_reagent(HYPERZINE)) //Hyperzine is an anti-coagulant :^)
-				blood_factor += 0.3
+				blood_max *= 1.33
 
 			if(reagents.has_reagent(INAPROVALINE))
-				blood_factor -= 0.3
+				blood_max *= 0.66
 
-		if(blood_factor < 1)
-			blood_factor = 1
-
-		drip(blood_max * blood_factor)
+		drip(blood_max)
 
 //Makes a blood drop, leaking amt units of blood from the mob
 /mob/living/carbon/human/proc/drip(var/amt as num)
