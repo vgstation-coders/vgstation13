@@ -27,7 +27,7 @@
 		return "asks, [text]";
 	if (ending == "!")
 		return "exclaims, [text]";
-	if (findtext("based", text) && length(text) < 12 && prob(15))
+	if (findtext("based", text) && length(text) < 14 && prob(15))
 		to_chat(src, "<span class='warning'>You think to yourself, 'Based on what?' You feel dumber.</span>")
 		src.adjustBrainLoss(10)
 
