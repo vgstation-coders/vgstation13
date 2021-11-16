@@ -28,7 +28,7 @@
 	if (ending == "!")
 		return "exclaims, [text]";
 	if (findtext("based", text) && length(text) < 12 && prob(15))
-		to_chat(src, "<span class='warning'>You think to yourself, "Based on what?" And realize you don't have a good answer. You feel dumber.</span>")
+		to_chat(src, "<span class='warning'>You think to yourself, 'Based on what?' You feel dumber.</span>")
 		src.adjustBrainLoss(10)
 
 //	if(dna)
