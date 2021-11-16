@@ -36,8 +36,8 @@
 	C.speech_delay = 25 SECONDS
 	C.next_speech = world.time+C.speech_delay
 
-	var/datum/component/ai/hearing/H = add_component(/datum/component/ai/hearing)
-	H.hear_signal = /event/comp_ai_cmd_say
+	add_component(/datum/component/ai/hearing/say)
+	add_component(/datum/component/ai/hearing/say_response/time)
 	var/datum/component/ai/area_territorial/AT = add_component(/datum/component/ai/area_territorial)
 	AT.SetArea(get_area(src))
 	AT.enter_signal = /event/comp_ai_cmd_specific_say

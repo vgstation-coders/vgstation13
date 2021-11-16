@@ -1,7 +1,7 @@
 /datum/component/ai/hearing
     var/hear_signal
+    var/list/required_messages
     var/list/hear_args
-    var/datum/speech/last_speech
 
 /datum/component/ai/hearing/initialize()
     parent.register_event(/event/comp_ai_cmd_hear, src, .proc/on_hear)
@@ -12,6 +12,19 @@
     ..()
 
 /datum/component/ai/hearing/proc/on_hear(var/datum/speech/speech)
-    if(speech.speaker != parent)
+    if(speech.speaker != parent && (!required_message || speech.message in required_messages))
         INVOKE_EVENT(parent, hear_signal, hear_args)
-        last_speech = speech
+
+/datum/component/ai/hearing/say
+    hear_signal = /event/comp_ai_cmd_say
+
+/datum/component/ai/hearing/say_response
+    hear_signal = /event/comp_ai_cmd_say_specific
+
+/datum/component/ai/hearing/say_response/time
+    required_messages = list("What time is it?","What's the time?","Do you have the time?")
+    hear_args = "The current time is [worldtime2text()]."
+
+/datum/component/ai/hearing/time/on_hear(var/datum/speech/speech)
+    hear_args = "The current time is [worldtime2text()]."
+    ..()
