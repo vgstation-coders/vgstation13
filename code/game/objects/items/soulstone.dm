@@ -478,6 +478,7 @@
 			if (!iscultist(shadeMob))
 				var/datum/role/cultist/newCultist = new
 				newCultist.AssignToRole(shadeMob.mind,1)
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (!cult)
 					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 				cult.HandleRecruitedRole(newCultist)
