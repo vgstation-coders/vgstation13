@@ -448,10 +448,12 @@
 
 	return
 
-/datum/shuttle/proc/close_all_doors()
+/datum/shuttle/proc/close_all_doors(lock_doors = FALSE)
 	for(var/obj/machinery/door/unpowered/shuttle/D in linked_area)
 		spawn(0)
 			D.close()
+			if(lock_doors)
+				D.locked = lock_doors
 
 /datum/shuttle/proc/open_all_doors()
 	for(var/obj/machinery/door/unpowered/shuttle/D in linked_area)
@@ -546,6 +548,12 @@
 		return locate(D.refill_area)
 	else
 		return get_space_area()
+
+/datum/shuttle/proc/has_working_engines()
+	for(var/obj/structure/shuttle/engine/propulsion/engine in linked_area)
+		if(engine.anchored)
+			return TRUE //just having one engine is good enough
+	return FALSE
 
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad

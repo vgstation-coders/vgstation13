@@ -245,33 +245,33 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		if ("transit")
 			location = 0 // in deep space
 
-			for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
-				spawn(0)
-					D.close()
-					D.locked = 1
-
 			if (casual)
-				direction = 1
+				direction = EMERGENCY_SHUTTLE_GOING_TO_STATION
 			else
 				departed = 1 // It's going!
-				direction = 2 // heading to centcom
+				direction = EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM
 				settimeleft(SHUTTLETRANSITTIME)
 
 				// Shuttle Radio
 				CallHook("EmergencyShuttleDeparture", list())
-				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
 
-			if(shuttle && istype(shuttle,/datum/shuttle/escape))
-				var/datum/shuttle/escape/E = shuttle
-				E.close_all_doors()
+			if(shuttle)
+				if(!shuttle.has_working_engines())
+					message_admins("The emergency shuttle has no engines, it won't be launching.")
+					command_alert(/datum/command_alert/emergency_shuttle_could_not_leave)
+					return
 
-				for(var/obj/structure/shuttle/engine/propulsion/P in E.linked_area)
+				shuttle.close_all_doors(lock_doors = TRUE)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
 					spawn()
 						P.shoot_exhaust(backward = 3)
 
-				if(!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
+				if(!shuttle.move_to_dock(shuttle.transit_port, 0, turn(shuttle.dir,180))) //Throw everything backwards
 					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO TRANSIT! PANIC PANIC PANIC")
+					command_alert(/datum/command_alert/emergency_shuttle_could_not_leave)
+				else
+					command_alert(/datum/command_alert/emergency_shuttle_left)
 			else
 				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
 			hyperspace_sounds("progression")

@@ -181,6 +181,14 @@
 	message = "The Emergency Shuttle has left the station. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the shuttle docks at Central Command."
 	..()
 
+/datum/command_alert/emergency_shuttle_could_not_leave
+	name = "Emergency Shuttle Could Not Leave"
+	alert_title = "Priority Announcement"
+	force_report = 1
+
+/datum/command_alert/emergency_shuttle_could_not_leave/announce()
+	message = "The Emergency Shuttle could not leave as it's lacking its engines! Nanotrasen will not be happy."
+	..()
 
 /datum/command_alert/FUBAR
 	name = "Complimentary escape shuttle sent."
