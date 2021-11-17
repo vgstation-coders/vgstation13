@@ -1217,7 +1217,7 @@ var/list/admin_verbs_mod = list(
 			return
 
 
-	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
+	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading") as null|num
 	if(rotate == null)
 		return
 	var/overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
