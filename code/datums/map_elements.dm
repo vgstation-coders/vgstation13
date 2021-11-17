@@ -42,7 +42,8 @@ var/list/datum/map_element/map_elements = list()
 	//In some cases, location is set to null (when creating a new z-level, for example)
 	//To account for that, location is set again in maploader's load_map() proc
 	location = locate(x+1, y+1, z)
-	rotation = rotate
+	if(can_rotate || override_can_rotate) //Only if enabled on map element
+		rotation = rotate
 
 	if(!can_load(x,y))
 		return 0
@@ -52,7 +53,7 @@ var/list/datum/map_element/map_elements = list()
 	if(file_path)
 		var/file = file(file_path)
 		if(isfile(file))
-			var/list/L = maploader.load_map(file, z, x, y, src, rotate, override_can_rotate)
+			var/list/L = maploader.load_map(file, z, x, y, src, rotation)
 			initialize(L)
 			return L
 	else //No file specified - empty map element

@@ -34,6 +34,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/icetruck_crash
 	file_path = "maps/randomvaults/icetruck_crash.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/asteroid_temple
 	file_path = "maps/randomvaults/asteroid_temple.dmm"
@@ -123,6 +124,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/asteroids
 	file_path = "maps/randomvaults/asteroids.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/listening
 	file_path = "maps/randomvaults/listening.dmm"
@@ -201,9 +203,11 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/asteroidfield
 	file_path = "maps/randomvaults/asteroidfield.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/clownroid
 	file_path = "maps/randomvaults/clownroid.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/goonesat
 	file_path = "maps/randomvaults/goonesat.dmm"
