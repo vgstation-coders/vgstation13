@@ -1210,10 +1210,14 @@ var/list/admin_verbs_mod = list(
 				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
 				return
 
-			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically).")
-			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)")
-			load_dungeon(ME)
-			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
+			var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
+			if(rotate == null)
+				return
+
+			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees.")
+			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees")
+			load_dungeon(ME, rotate)
+			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"] rotated by [rotate] degrees")
 			return
 
 
