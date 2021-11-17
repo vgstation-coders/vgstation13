@@ -74,6 +74,8 @@
 
 	var/list/activeUIs = list()
 
+	var/mob_legacy_fac
+
 /datum/mind/New(var/key)
 	src.key = key
 
@@ -97,16 +99,20 @@
 
 	nanomanager.user_transferred(current, new_character)
 
-	if(active)
-		new_character.key = key		//now transfer the key to link the client to our new body
-
 	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
 
+	if(active)
+		new_character.key = key		//now transfer the key to link the client to our new body
+									//gotta do that after linking the mind to the body or we'll create an extra mind on Login()
+
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
 		R.PostMindTransfer(new_character, old_character)
+
+	if(mob_legacy_fac)
+		new_character.faction = mob_legacy_fac
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
@@ -559,10 +565,10 @@
 			ticker.minds += mind
 		else
 			world.log << "## DEBUG: mind_initialize(): No ticker ready yet! Please inform Carn"
-	if (!mind.body_archive)
-		mind.body_archive = new(src)
 	if(!mind.name)
 		mind.name = real_name
+	if (!mind.body_archive)
+		mind.body_archive = new(src)
 	mind.current = src
 
 //HUMAN

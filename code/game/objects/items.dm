@@ -311,6 +311,14 @@
 /obj/item/proc/pickup(mob/user)
 	return
 
+// called before an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
+/obj/item/proc/pregive(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return TRUE
+
+// called while an item is passed to another person through the give proc - TRUE allows the give, see carbon/give.dm
+/obj/item/proc/on_give(mob/living/carbon/giver, mob/living/carbon/receiver)
+	return TRUE
+
 // called when this item is removed from a storage item, which is passed on as S. The loc variable is already set to the new destination before this is called.
 /obj/item/proc/on_exit_storage(obj/item/weapon/storage/S as obj)
 	return

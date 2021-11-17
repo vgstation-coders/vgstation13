@@ -398,6 +398,10 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/caramelcookie
 
+/datum/recipe/holidaycookie
+	reagents = list(FLOUR = 5, SUGAR = 5, SPRINKLES = 5)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
+
 /datum/recipe/gingerbread_man
 	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)

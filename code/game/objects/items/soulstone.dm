@@ -118,9 +118,13 @@
 			//Is our user a cultist? Then you're a cultist too now!
 			if (iscultist(user))
 				if(!iscultist(target))
+					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+					if (cult && !cult.CanConvert())
+						to_chat(user, "<span class='danger'>The cult has too many members already.</span>")
+						return
+
 					var/datum/role/cultist/newCultist = new
 					newCultist.AssignToRole(target.mind,1)
-					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 					if (!cult)
 						cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 					cult.HandleRecruitedRole(newCultist)
@@ -455,9 +459,12 @@
 		//Is our user a cultist? Then you're a cultist too now!
 		if (iscultist(user))
 			if (!iscultist(shadeMob))
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (cult && !cult.CanConvert())
+					to_chat(user, "<span class='danger'>The cult has too many members already.</span>")
+					return
 				var/datum/role/cultist/newCultist = new
 				newCultist.AssignToRole(shadeMob.mind,1)
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (!cult)
 					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 				cult.HandleRecruitedRole(newCultist)
@@ -568,12 +575,6 @@
 	if (!Adjacent(user) || (!isconstruct(user) && stone != user.get_active_hand())  || (isconstruct(user) && !stone.Adjacent(user)) || !construct_class || soul.loc != stone)
 		return//sanity check after we've picked a construct class
 
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-
-	if (cult && iscultist(user) && !cult.CanConvert(construct_class))
-		to_chat(user, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
-		return
-
 	switch(construct_class)
 		if("Juggernaut")
 			if (perfect)
@@ -683,12 +684,6 @@
 	var/construct_class = show_radial_menu(user,src,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
 
 	if (!Adjacent(user) || !construct_class)
-		return
-
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-
-	if (cult && iscultist(user) && !cult.CanConvert(construct_class))
-		to_chat(user, "<span class='warning'>There are already too many constructs of this type and the cult has too many members.</span>")
 		return
 
 	switch(construct_class)

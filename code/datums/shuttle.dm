@@ -580,7 +580,7 @@
 	var/list/our_own_turfs = list()
 
 	//Go through all turfs in our area
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		turfs_to_move += C
 		turfs_to_move[C] = T
@@ -777,13 +777,12 @@
 	return 1
 
 /datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
-	if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
+	if(AM.locs.len > 1) //If the moved object is on multiple tiles, move it after everything else (using spawn())
 		AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
 
 		spawn()
 			AM.forceMove(new_turf)
 
-		//TODO: Make this compactible with bound_x and bound_y.
 	else
 		AM.forceMove(new_turf)
 
@@ -858,7 +857,7 @@
 	var/rotate = dir2angle(turn(user.dir,180)) - dir2angle(linked_port.dir)
 
 	var/list/original_coords = list()
-	for(var/turf/T in linked_area.get_turfs())
+	for(var/turf/T in linked_area.contents)
 		var/datum/coords/C = new(T.x,T.y)
 		original_coords += C
 

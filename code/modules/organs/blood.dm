@@ -51,6 +51,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				"trace_chem"=null,
 				"virus2" = null,
 				"immunity" = null,
+				"occult" = null,
 				)
 			B.color = B.data["blood_colour"]
 
@@ -260,6 +261,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		temp_chem[R.id] = R.volume
 	B.data["trace_chem"] = list2params(temp_chem)
 
+	if (iscultist(src))
+		B.data["occult"] = mind
+
 	if(container)
 		container.reagents.reagent_list |= B
 		container.reagents.update_total()
@@ -278,6 +282,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"=null,
 		"virus2" = null,
 		"immunity" = null,
+		"occult" = null,
 		)
 
 	if (dna)
@@ -309,6 +314,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if (immune_system)
 		blood_data["immunity"] = immune_system.GetImmunity()
+
+	if (iscultist(src))
+		blood_data["occult"] = mind
+
 	return blood_data
 
 /proc/copy_blood_data(var/list/list/data)
@@ -321,6 +330,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"	=data["trace_chem"],
 		"virus2" 		=virus_copylist(data["virus2"]),
 		"immunity" 		=null,
+		"occult" 		=data["occult"],
 		)
 	if (data["resistances"])
 		blood_data["resistances"] = data["resistances"].Copy()
@@ -338,6 +348,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		"trace_chem"	=blood_data["trace_chem"],
 		"virus2" 		=virus_copylist(blood_data["virus2"]),
 		"immunity" 		=null,
+		"occult" 		=blood_data["occult"],
 		)
 	if (blood_data["resistances"])
 		data["resistances"] = blood_data["resistances"].Copy()

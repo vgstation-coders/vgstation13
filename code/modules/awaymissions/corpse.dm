@@ -1147,7 +1147,7 @@
 	corpsegender = G_BOTH
 
 	corpseuniform = /obj/item/clothing/under/color/prisoner
-	corpsesuit = /obj/item/clothing/suit/straight_jacket
+	corpsesuit = /obj/item/clothing/suit/strait_jacket
 	corpsemask = /obj/item/clothing/mask/muzzle
 	corpseglasses = /obj/item/clothing/glasses/sunglasses/blindfold
 

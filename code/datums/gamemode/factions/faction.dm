@@ -159,17 +159,21 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/GetScoreboard()
 	var/count = 1
 	var/score_results = ""
+	var/fully_freeform = TRUE
 	if(objective_holder.objectives.len > 0)
 		score_results += "<ul>"
 		for (var/datum/objective/objective in objective_holder.GetObjectives())
+			var/freeform = objective.flags & FREEFORM_OBJECTIVE
+			if (!freeform)
+				fully_freeform = FALSE
 			var/successful = objective.IsFulfilled()
 			objective.extraInfo()
-			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<span class='red'>Fail.</span>"]"
-			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
+			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [freeform ? "" : "[successful ? "<font color='green'><B>Success!</B></font>" : "<span class='red'>Fail.</span>"]"]"
+			feedback_add_details("[ID]_objective","[objective.type]|[freeform ? "FREEFORM" : "[successful ? "SUCCESS" : "FAIL"]"]")
 			count++
 			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
-	if (count>1)
+	if ((count > 1) && !fully_freeform)
 		if (IsSuccessful())
 			score_results += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 			feedback_add_details("[ID]_success","SUCCESS")

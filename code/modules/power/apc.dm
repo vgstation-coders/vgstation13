@@ -951,13 +951,13 @@
 					malfai.malfhacking = 0
 					hacking_ai = null
 					locked = 1
-					if(M && STATION_Z == z)
+					if(M && map.zMainStation == z)
 						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
+					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [map.zMainStation == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					malfai.handle_regular_hud_updates()
 					update_icon()
 
@@ -987,7 +987,7 @@
 	operating = !operating
 	if(malfai)
 		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && STATION_Z == z)
+		if(M && map.zMainStation == z)
 			operating ? M.apcs++ : M.apcs--
 
 	src.update()
@@ -1002,7 +1002,7 @@
 	if(!malf.can_shunt)
 		to_chat(malf, "<span class='warning'>You cannot shunt.</span>")
 		return
-	if(STATION_Z != z)
+	if(map.zMainStation != z)
 		return
 	src.occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
 	src.occupant.adjustOxyLoss(malf.getOxyLoss())
@@ -1059,7 +1059,7 @@
 
 /obj/machinery/power/apc/proc/ion_act()
 	//intended to be exactly the same as an AI malf attack
-	if(!src.malfhack && STATION_Z == z)
+	if(!src.malfhack && map.zMainStation == z)
 		if(prob(3))
 			src.locked = 1
 			if (src.cell.charge > 0)
@@ -1325,7 +1325,7 @@
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
 		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && STATION_Z == z)
+		if(M && map.zMainStation == z)
 			M.apcs--
 	stat |= BROKEN
 	operating = 0
@@ -1360,7 +1360,7 @@
 			to_chat(hacking_ai, "<span class='warning'>The APC you were currently hacking was destroyed.</span>")
 		if(malfai && operating)
 			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-			if (M && STATION_Z == z)
+			if (M && map.zMainStation == z)
 				M.apcs--
 		this_area.power_light = 0
 		this_area.power_equip = 0

@@ -604,7 +604,7 @@
 	desc = "A little treat for blood donors."
 	trash = /obj/item/trash/candy
 	food_flags = FOOD_SWEET
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/candy/donor/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
@@ -616,7 +616,7 @@
 	desc = "It's a handful of candy corn. Can be stored in a detective's hat."
 	icon_state = "candy_corn"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/candy_corn/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -629,7 +629,7 @@
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "candycane"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/candy_cane/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -647,6 +647,35 @@
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 1
 
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(SUGAR, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
+	name = "seasonal cookie"
+	desc = "Charming holiday sugar cookies, just like Mom used to make."
+	icon = 'icons/obj/food_seasonal.dmi'
+
+/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday/New()
+	..()
+
+	var/NM = time2text(world.realtime,"MM")
+	var/cookiecutter = null
+
+	if(!cookiecutter)
+		switch(NM)
+			if(12)
+				cookiecutter = pick( list("stocking","tree","snowman","mitt","angel","deer") )
+			if(10)
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank") )
+			else
+				cookiecutter = pick( list("spider","cat","pumpkin","bat","ghost","hat","frank","stocking","tree","snowman","mitt","angel","deer") )
+	icon_state = "[cookiecutter]"
+
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
 	name = "gingerbread man"
 	desc = "A holiday treat made with sugar and love."
@@ -656,8 +685,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(SUGAR, 2)
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(SUGAR, 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar
@@ -805,7 +834,7 @@
 	desc = "You jelly?"
 	icon_state = "jdonut1"
 	bitesize = 5
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -877,7 +906,7 @@
 	icon_state = "friedegg"
 	food_flags = FOOD_ANIMAL
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/friedegg/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -958,7 +987,7 @@
 	desc = "A slice from a huge mushroom."
 	icon_state = "hugemushroomslice"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -974,7 +1003,7 @@
 	desc = "A slice from a huge tomato."
 	icon_state = "tomatomeat"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/tomatomeat/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -986,7 +1015,7 @@
 	icon_state = "spiderleg"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg/New()
 	..()
 	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
@@ -1000,7 +1029,7 @@
 	icon_state = "faggot"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/faggot/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -1333,7 +1362,7 @@
 	icon_state = "omelette"
 	food_flags = FOOD_ANIMAL //made from eggs
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
@@ -1344,7 +1373,7 @@
 	desc = "A delicious and spongy little cake."
 	icon_state = "muffin"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/muffin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -1459,7 +1488,7 @@
 	desc = "Not made of people. Honest." //Totally people.
 	icon_state = "soylent_green"
 	trash = /obj/item/trash/waffles
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/soylentgreen/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
@@ -1470,7 +1499,7 @@
 	desc = "Not made of people. Honest." //Actually honest for once.
 	icon_state = "soylent_yellow"
 	trash = /obj/item/trash/waffles
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/soylenviridians/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
@@ -1517,7 +1546,7 @@
 	name = "amanita pie"
 	desc = "Sweet and tasty poison pie."
 	icon_state = "amanita_pie"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/amanita_pie/New()
 	..()
 	reagents.clear_reagents()
@@ -1621,7 +1650,7 @@
 	desc = "Vegan meat, on a stick."
 	trash = /obj/item/stack/rods
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/tofukabob/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
@@ -1671,7 +1700,7 @@
 	food_flags = FOOD_MEAT
 	filling_color = "#733000"
 	valid_utensils = 0
-	base_crumb_chance = 0 
+	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky/New()
 	..()
@@ -2090,7 +2119,7 @@
 	desc = "<font color='red'><B>The jectie has failed!</B></font color>"
 	icon_state = "jectie_red"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/jectie/New()
 	..()
 	if(prob(40)) //approximate solo antag winrate
@@ -3971,7 +4000,7 @@
 	icon_state = "icecreamsandwich"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -4135,7 +4164,7 @@
 	icon_state = "icecream_cup"
 	volume = 500
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -4485,6 +4514,44 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/zamitos
+	name = "Zamitos: Original Flavor"
+	desc = "A salty, overly processed taste that reminds you of days past when you snacked on these as a small greyling."
+	trash = /obj/item/trash/zamitos_o
+	icon_state = "zamitos_original"
+	filling_color = "#F7CE7B"
+
+/obj/item/weapon/reagent_containers/food/snacks/zamitos/New()
+	..()
+	if(prob(30))
+		name = "Zamitos: Blue Goo Flavor"
+		desc = "Not as filling as the original flavor, and the texture is strange."
+		trash = /obj/item/trash/zamitos_bg
+		icon_state = "zamitos_bluegoo"
+		filling_color = "#5BC9DD"
+		reagents.add_reagent(NUTRIMENT, 1)
+		reagents.add_reagent(BLUEGOO, 5)
+		bitesize = 0.8 // Same number of bites but less nutriment because it's the worst
+	else
+		reagents.add_reagent(NUTRIMENT, 2)
+		reagents.add_reagent(SODIUMCHLORIDE, 5)
+		bitesize = 0.9 // It takes a little while to chew through a bag of chips!
+
+/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky
+	name = "Zamitos: Spicy Stok Jerky Flavor"
+	desc = "Meat-flavored crisps with three different seasonings! Almost as good as real meat."
+	trash = /obj/item/trash/zamitos_sj
+	icon_state = "zamitos_stokjerky"
+	filling_color = "#A66626"
+
+/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(BLACKPEPPER, 2)
+	reagents.add_reagent(SOYSAUCE, 2)
+	reagents.add_reagent(CAPSAICIN, 2)
+	bitesize = 1.5 // Takes a fair few bites to finish, because why would you want to rush this?
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi
 	name = "Giga Puddi"
@@ -5040,7 +5107,7 @@
 	icon_state = "potentham"
 	volume = 1
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/potentham/New()
 	..()
 	reagents.add_reagent(HAMSERUM, 1)
@@ -6049,7 +6116,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	filling_color = "#7A3D11"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/salmonsteak/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 7)
@@ -6458,7 +6525,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT | FOOD_SWEET | FOOD_LACTOSE
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/akutaq/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
@@ -6599,7 +6666,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "pickledpears"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pickledpears/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
@@ -6622,7 +6689,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A pear covered with caramel. Quite sugary."
 	icon_state = "candiedpear"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/candiedpear/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -6644,7 +6711,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "This pear has been laced with wine, some cinnamon and a touch of cream."
 	icon_state = "winepear"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/winepear/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -6659,7 +6726,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "suppermatter"
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 48)
@@ -6737,7 +6804,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "saltednuts"
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
 	..()
 	reagents.add_reagent (NUTRIMENT, 2)
@@ -6788,7 +6855,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	bitesize = 1
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/escargot/New()
 	. = ..()
 	reagents.add_reagent(NUTRIMENT,10)
@@ -6989,7 +7056,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zamdinner1
 	name = "Zam Steak and Nettles"
 	icon_state	= "box_tvdinner1"
-	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
 	food_flags = FOOD_MEAT
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
@@ -7003,7 +7070,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zamdinner2
 	name = "Zam Mothership Stew"
 	icon_state	= "box_tvdinner2"
-	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
 
@@ -7016,7 +7083,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zamdinner3
 	name = "Zam Spider Slider Delight"
 	icon_state	= "box_tvdinner3"
-	desc = "An acidic packaged meal for the Grey far from home. The instructions say to microwave it before consumption."
+	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
 	food_flags = FOOD_MEAT
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
@@ -7073,7 +7140,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/greygreens
 	name = "Grey Greens"
-	desc = "A dish beloved by Greys since first contact, acidic vegetables seasoned with soy sauce."
+	desc = "A dish beloved by greys since first contact, acidic vegetables seasoned with soy sauce."
 	trash = /obj/item/trash/used_tray2
 	icon_state = "greygreens"
 	base_crumb_chance = 0
@@ -7086,7 +7153,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
 	name = "Stuffed Pitcher"
-	desc = "A delicious Grey alternative to a stuffed pepper. Very acidic."
+	desc = "A delicious grey alternative to a stuffed pepper. Very acidic."
 	trash = /obj/item/trash/used_tray2
 	icon_state = "stuffedpitcher"
 	food_flags = FOOD_ANIMAL
@@ -7178,7 +7245,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(SODIUMCHLORIDE, 1)
+	reagents.add_reagent(MOONROCKS, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped
 	name = "Zam Moon Cheese"
@@ -7214,7 +7281,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped
 	name = "Zam Spider Slider"
-	desc = "A self-heating acidic slider for Grey laborers on salaries too humble to afford the full meal."
+	desc = "A self-heating acidic slider for grey laborers on salaries too humble to afford the full meal."
 	icon_state = "zam_spiderslider_wrapped"
 	wrapped = 1
 
@@ -7241,7 +7308,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "dionaroast"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/dionaroast/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)

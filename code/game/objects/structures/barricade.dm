@@ -139,12 +139,11 @@
 	..(loc)
 	flow_flags &= ~ON_BORDER
 
+/obj/structure/window/barricade/full/setup_border_dummy()
+	return
+
 /obj/structure/window/barricade/full/blocks_doors()
 	return TRUE
-
-/obj/structure/window/barricade/full/Uncross(atom/movable/O as mob|obj, target as turf)
-
-	return 1
 
 /obj/structure/window/barricade/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || !height) //The mover is an airgroup

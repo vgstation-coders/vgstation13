@@ -604,6 +604,7 @@ var/global/list/whitelisted_species = list("Human")
 	max_hurt_damage = 3 // From 5 (for humans)
 	tacklePower = 25
 
+	blood_color = "#CFAAAA"
 	flesh_color = "#B5B5B5"
 	max_skin_tone = 4
 

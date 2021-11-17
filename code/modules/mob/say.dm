@@ -45,7 +45,7 @@
 /datum/deadchat_listener/proc/deadchat_event(var/ckey, var/message)
 	return
 
-var/list/global_deadchat_listeners
+var/list/global_deadchat_listeners = list()
 
 /mob/proc/say_dead(var/message)
 	var/name = src.real_name

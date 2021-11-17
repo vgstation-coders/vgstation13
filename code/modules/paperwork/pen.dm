@@ -81,80 +81,30 @@
 	addReplacement(REG_BBTAG("\[^\\\]\]"), "")
 	return
 
-//var/stdshellout_dllFile = 'byond_markdown.dll'
-var/paperwork = 0
-var/paperwork_library
-
-/client/proc/handle_paperwork()
-
-	set category = "Debug"
-	set name = "Modify Paperwork Mode"
-
-	if(!check_rights(R_DEBUG))
-		return
-
-	if(!paperwork)
-		paperwork_setup()
-	else
-		paperwork_stop()
-		paperwork = 0
-
-/proc/paperwork_setup()
-	if(config.paperwork_library)
-		if(world.system_type == MS_WINDOWS)
-			paperwork_library = "markdown_byond.dll"
-		else
-			paperwork_library = "markdown_byond.so"
-		world.log << "Setting up paperwork..."
-		if(!fexists(paperwork_library))
-			world.log << "Paperwork was not properly setup, please notify a coder/host about this issue."
-			return
-		world.log << call(paperwork_library, "init_renderer")()
-		paperwork = 1
-		return 1
-	return 0
-
-/proc/paperwork_stop()
-	if(!fexists(paperwork_library))
-		world.log << "Paperwork file may be missing or something terrible has happened, don't panic and notify a coder/host about this issue."
-		return
-	if(paperwork)
-		call(paperwork_library, "free_memory")()
-		return
-	else
-		return
-
-/datum/writing_style/proc/parse_markdown(command_args)
-//	if(!fexists("byond_markdown.dll")){fcopy(stdshellout_dllFile,"[stdshellout_dllFile]")}
-	return call(paperwork_library,"render_html")(command_args)
-
 
 /datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
-	if(paperwork)
-		t = parse_markdown(t)
-	else
-		var/count = 0
-		if(expressions.len)
-			for(var/key in expressions)
-				if(count >= 500)
-					break
-				count++
-				var/datum/speech_filter_action/SFA = expressions[key]
-				if(SFA && !SFA.broken)
-					t = SFA.Run(t,user,paper)
-				if(count%100 == 0)
-					sleep(1) //too much for us.
-		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
-		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
-		t = replacetext(t, "\[date\]", "[current_date_string]")
-		t = replacetext(t, "\[time\]", "[worldtime2text()]")
+	var/count = 0
+	if(expressions.len)
+		for(var/key in expressions)
+			if(count >= 500)
+				break
+			count++
+			var/datum/speech_filter_action/SFA = expressions[key]
+			if(SFA && !SFA.broken)
+				t = SFA.Run(t,user,paper)
+			if(count%100 == 0)
+				sleep(1) //too much for us.
+	t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
+	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
+	t = replacetext(t, "\[date\]", "[current_date_string]")
+	t = replacetext(t, "\[time\]", "[worldtime2text()]")
 
-		// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
+	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
 
-		t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
-		t = replacetext(t, "\[/table\]", "</td></tr></table>")
-		t = replacetext(t, "\[row\]", "</td><tr>")
-		t = replacetext(t, "\[cell\]", "<td>")
+	t = replacetext(t, "\[table\]", "<table border=1 cellspacing=0 cellpadding=3 style='border: 1px solid black;'>")
+	t = replacetext(t, "\[/table\]", "</td></tr></table>")
+	t = replacetext(t, "\[row\]", "</td><tr>")
+	t = replacetext(t, "\[cell\]", "<td>")
 
 	var/text_color
 	if(istype(P, /obj/item/weapon/pen))

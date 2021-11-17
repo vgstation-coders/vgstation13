@@ -295,9 +295,7 @@
 				extremity_B = null
 			else
 				var/turf/U = C1.loc
-				if(U && U.Enter(C2,C2.loc))//if we cannot pull the target through the turf, we just let him go.
-					C2.forceMove(C1.loc)
-				else
+				if(!(U && C2.Move(U)))//if we cannot pull the target through the turf, we just let him go.
 					extremity_B.tether = null
 					extremity_B = null
 					C1.extremity_B = null

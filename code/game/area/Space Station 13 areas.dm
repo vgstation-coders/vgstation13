@@ -457,7 +457,7 @@ var/global/list/adminbusteleportlocs = list()
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship/start
-	icon_state = "firingrange"
+	icon_state = "yellow"
 
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
@@ -2877,3 +2877,169 @@ var/list/the_station_areas = list (
 	icon_state = "escape"
 
 // END Horizon
+// BEGIN Island
+//Maintenance tunnels
+/area/maintenance/fore_port_struct
+	name = "\improper Fore Port Struct"
+	icon_state = "foreportstruct"
+
+/area/maintenance/fore_starboard_struct
+	name = "\improper Fore Starboard Struct"
+	icon_state = "forestarboardstruct"
+
+/area/maintenance/aft_port_struct
+	name = "\improper Aft Port Struct"
+	icon_state = "aftportstruct"
+
+/area/maintenance/aft_starboard_struct
+	name = "\improper Aft Starboard Struct"
+	icon_state = "aftstarboardstruct"
+
+/area/maintenance/transport_island_fore_maintenance
+	name = "\improper Transport Island Fore Maintenance"
+	icon_state = "transportmaintfore"
+
+/area/maintenance/transport_island_aft_maintenance
+	name = "\improper Transport Island Aft Maintenance"
+	icon_state = "transportmaintaft"
+
+/area/maintenance/medical_island_fore_maintenance
+	name = "\improper Medical Island Fore Maintenance"
+	icon_state = "medicalmaintfore"
+
+/area/maintenance/medical_island_aft_maintenance
+	name = "\improper Medical Island Aft Maintenance"
+	icon_state = "medicalmaintaft"
+
+/area/maintenance/engineering_island_starboard_maintenance
+	name = "\improper Engineering Island Starboard Maintenance"
+	icon_state = "engyislandmaintstarboard"
+
+/area/maintenance/engineering_island_port_maintenance
+	name = "\improper Engineering Island Port Maintenance"
+	icon_state = "engyislandmaintport"
+
+/area/maintenance/research_island_starboard_maintenance
+	name = "\improper Research Island Starboard Maintenance"
+	icon_state = "rndislandmaintstarboard"
+
+
+/area/maintenance/research_island_port_maintenance
+	name = "\improper Research Island Port Maintenance"
+	icon_state = "rndislandmaintport"
+
+/area/maintenance/central_island_fore_port_maintenance
+	name = "\improper Central Island Fore Port Maintenance"
+	icon_state = "centralforeportmaint"
+
+/area/maintenance/central_island_aft_starboard_maintenance
+	name = "\improper Central Island Aft Starboard Maintenance"
+	icon_state = "centralaftSBmaint"
+
+/area/maintenance/central_island_aft_port_maintenance
+	name = "\improper Central Island Aft Port Maintenance"
+	icon_state = "centralaftportmaint"
+
+/area/maintenance/central_island_fore_starboard_maintenance
+	name = "\improper Central Island Fore Starboard Maintenance"
+	icon_state = "centralforeSBmaint"
+
+/area/maintenance/outpost_docking_maintenance
+	name = "\improper Outpost Docking Maintenance"
+	icon_state = "outpostdockmaint"
+
+
+//Hallways
+/area/hallway/central_aft_hallway
+	name = "\improper Central Aft Hallway"
+	icon_state = "centralhallaft"
+
+/area/hallway/central_fore_hallway
+	name = "\improper Central Fore Hallway"
+	icon_state = "centralhallfore"
+
+/area/hallway/central_port_hallway
+	name = "\improper Central Port Hallway"
+	icon_state = "centralhallport"
+
+/area/hallway/central_starboard_hallway
+	name = "\improper Central Starboard Hallway"
+	icon_state = "centralhallstarboard"
+
+/area/hallway/outpost_fore_hallway
+	name = "\improper Outpost Fore Hallway"
+	icon_state = "outpostforehall"
+
+/area/hallway/outpost_aft_hallway
+	name = "\improper Outpost Aft Hallway"
+	icon_state = "outpostafthall"
+
+/area/hallway/outpost_starboard_hallway
+	name = "\improper Outpost Starboard Hallway"
+	icon_state = "outpostSBhall"
+
+/area/hallway/outpost_port_hallway
+	name = "\improper Outpost Port Hallway"
+	icon_state = "outpostporthall"
+
+
+
+//Rooms
+/area/outpost_medbay
+	name = "\improper Outpost Medbay"
+	icon_state = "outpostmed"
+
+/area/outpost_brig
+	name = "\improper Outpost Brig"
+	icon_state = "outpostbrig"
+
+/area/outpost_engineering
+	name = "\improper Outpost Engineering"
+	icon_state = "outpostengy"
+
+/area/disabled_work_platform
+	name = "\improper Disabled Work Platform"
+	icon_state = "disabledplatform"
+
+/area/outpost_dock_control_center
+	name = "\improper Outpost Dock Control Center"
+	icon_state = "outpostdockcontrol"
+
+/area/outpost_bridge
+	name = "\improper Outpost Bridge"
+	icon_state = "outpostbridge"
+
+/area/outpost_starboard_launcher
+	name = "\improper Outpost Starboard Launcher"
+	icon_state = "outpostlauncherstarboard"
+
+/area/outpost_port_launcher
+	name = "\improper Outpost Port Launcher"
+	icon_state = "outpostlauncherport"
+
+/area/bridge_secure_auxilliary
+	name = "\improper Bridge Secure Auxilliary"
+	icon_state = "bridgeaux"
+
+/area/trade_floor
+	name = "\improper Trade Floor"
+	icon_state = "tradefloor"
+
+/area/vacant_storefront
+	name = "\improper Vacant Storefront"
+	icon_state = "vacstore"
+
+//Shuttles
+/area/shuttle/engineering
+	name = "\improper Engineering Shuttle"
+	icon_state = "engineeringshuttle"
+
+/area/shuttle/medical
+	name = "\improper Medical Shuttle"
+	icon_state = "medicalshuttle"
+
+/area/shuttle/damage_control
+	name = "\improper Damage Control Shuttle"
+	icon_state = "mommishuttle"
+
+//END Island

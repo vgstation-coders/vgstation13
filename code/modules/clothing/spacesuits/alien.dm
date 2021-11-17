@@ -671,7 +671,7 @@
 	name = "explorer pressure helmet"
 	icon_state = "grey-fishbowl-helm"
 	item_state = "grey-fishbowl-helm"
-	desc = "A Grey explorer's pressure helmet. It has plenty of room for planning an atmospheric reentry. Zounds!"
+	desc = "A grey explorer's pressure helmet. It has plenty of room for planning an atmospheric reentry. Zounds!"
 	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
@@ -682,7 +682,7 @@
 	name = "explorer pressure suit"
 	icon_state = "grey-pressure-suit"
 	item_state = "grey-pressure-suit"
-	desc = "An outdated pressure suit that was once standard issue for spacefaring Grey explorers. It's compact enough to be stored in a bag."
+	desc = "An outdated pressure suit that was once standard issue for spacefaring grey explorers. It's compact enough to be stored in a bag."
 	armor = list(melee = 20, bullet = 5, laser = 20, energy = 5, bomb = 15, bio = 100, rad = 10)
 	w_class = W_CLASS_MEDIUM
 	species_restricted = list(GREY_SHAPED)

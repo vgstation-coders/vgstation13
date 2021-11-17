@@ -218,7 +218,11 @@ export const DefinedReligion = (props, context) => {
         lineHeight={2}
         mt={1}
         onClick={() => {
-          act("choose", { religionName: selectedReligion.name }); }}>
+          act("choose", {
+            religionName: selectedReligion.name,
+            deityName: selectedDeity || selectedReligion.deityName,
+            bibleName: selectedBible || selectedReligion.bibleName,
+          }); }}>
         OK
       </Button>
     </Section>);

@@ -164,7 +164,7 @@ var/global/list/floorbot_targets=list()
 		return 0
 	if(istype(T.loc, /turf/simulated/wall))
 		return 0
-	if(!T.loc.Enter(src))
+	if(!T.loc.Enter(src, loc, TRUE))
 		return 0
 	return 1
 

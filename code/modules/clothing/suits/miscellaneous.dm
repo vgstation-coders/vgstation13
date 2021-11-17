@@ -443,11 +443,11 @@ var/list/tag_suits_list = list()
  * Misc
  */
 
-/obj/item/clothing/suit/straight_jacket
-	name = "straight jacket"
+/obj/item/clothing/suit/strait_jacket
+	name = "straitjacket"
 	desc = "A suit that completely restrains the wearer."
-	icon_state = "straight_jacket"
-	item_state = "straight_jacket"
+	icon_state = "strait_jacket"
+	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	species_fit = list(INSECT_SHAPED)
@@ -908,6 +908,7 @@ var/list/tag_suits_list = list()
 	desc = "A wooly poncho. Smells of beans."
 	icon_state = "poncho"
 	item_state = "poncho"
+	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
 /obj/item/clothing/suit/banana_suit

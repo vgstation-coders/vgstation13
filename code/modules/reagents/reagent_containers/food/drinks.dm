@@ -1076,7 +1076,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz
 	name = "Zam Formic Fizz"
-	desc = "Sulphuric Splash is for brainless minions. This is a REAL Grey's drink."
+	desc = "Sulphuric Splash is for brainless minions. This is a REAL grey's drink."
 	icon_state = "Zam_FormicFizz"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz/New()
 	..()
@@ -1102,6 +1102,10 @@
 	icon_state = "Zam_TrustyTea"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_trustytea/New()
 	..()
+	if(prob(5))
+		name = "Zam Old Fashioned Tea"
+		desc = "One of the original cans! The design has been discontinued, and it might be worth something to a collector."
+		icon_state = "Zam_TrustyClassic"
 	reagents.add_reagent(ACIDTEA, 30)
 	reagents.add_reagent(BERRYJUICE, 5)
 	reagents.add_reagent(CAFFEINE, 5)

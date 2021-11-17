@@ -153,7 +153,7 @@
 			continue
 		if (!T)
 			continue
-		if(T.z == CENTCOMM_Z || T.z > map.zLevels.len)
+		if(T.z == map.zCentcomm || T.z > map.zLevels.len)
 			continue
 		var/tmpname = T.loc.name
 		if(areaindex[tmpname])

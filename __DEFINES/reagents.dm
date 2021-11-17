@@ -18,6 +18,7 @@
 #define VAPORSALT			"vaporsalt"
 #define BUSTANUT 			"bustanut"
 #define ROGAN 			"rogan"
+#define BLUEGOO			"bluegoo"
 #define SLIMEJELLY 			"slimejelly"
 #define BLOOD 			"blood"
 #define VACCINE 			"vaccine"
