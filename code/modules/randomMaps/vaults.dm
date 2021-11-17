@@ -211,7 +211,7 @@
 
 		if(ME.load(vault_x, vault_y, vault_z, vault_rotate))
 			spawned.Add(ME)
-			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [config.disable_vault_rotation ? "" : ", rotated by [vault_rotate] degrees"].")
+			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
 			if(config.disable_vault_rotation)
 				message_admins("<span class='info'>[ME.file_path] was not rotated, DISABLE_VAULT_ROTATION enabled in config.</span>")
 			successes++
