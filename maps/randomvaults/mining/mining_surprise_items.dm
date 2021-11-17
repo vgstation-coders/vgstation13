@@ -48,7 +48,7 @@
 	AT.exit_args = list("Seeya, space dorf","Happy trails.","Anytime, feller.")
 
 /datum/component/ai/hearing/say_response/dusky_hi
-	required_messages = list("hello","hi","hey","greetings","howdy")
+	required_messages = list("hello","hi","greetings","howdy")
 	hear_args = list("Howdy!","Good to see ya, friend!","Back atcha, feller!")
 
 /datum/component/ai/hearing/say_response/dusky_who
