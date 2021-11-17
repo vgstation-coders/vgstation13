@@ -1216,7 +1216,7 @@ var/list/admin_verbs_mod = list(
 
 			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees.")
 			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees")
-			load_dungeon(ME, rotate)
+			load_dungeon(ME, rotate, TRUE)
 			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"] rotated by [rotate] degrees")
 			return
 
