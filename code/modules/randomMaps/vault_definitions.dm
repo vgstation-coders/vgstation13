@@ -103,9 +103,11 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/spacegym
 	file_path = "maps/randomvaults/spacegym.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/oldarmory
 	file_path = "maps/randomvaults/oldarmory.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/spacepond
 	file_path = "maps/randomvaults/spacepond.dmm"
@@ -134,6 +136,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/hivebot_crash
 	file_path = "maps/randomvaults/hivebot_crash.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/brokeufo
 	file_path = "maps/randomvaults/brokeufo.dmm"
@@ -167,6 +170,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/ice_comet
 	file_path = "maps/randomvaults/ice_comet.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/research_facility
 	file_path = "maps/randomvaults/research_facility.dmm"
