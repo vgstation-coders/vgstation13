@@ -36,6 +36,7 @@ Included in this file
 
 /datum/map_element/snowvault/crash
 	file_path = "maps/randomvaults/snaxi/crash.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/kennel
 	file_path = "maps/randomvaults/snaxi/kennel.dmm"
@@ -58,6 +59,7 @@ Included in this file
 
 /datum/map_element/snowvault/thermalplant
 	file_path = "maps/randomvaults/snaxi/thermalplant.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/snowvault/construction_site
 	file_path = "maps/randomvaults/snaxi/construction_site.dmm"

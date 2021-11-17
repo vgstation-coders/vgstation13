@@ -128,3 +128,4 @@
 	name = "Space hobo shack"
 
 	file_path = "maps/misc/hoboshack.dmm"
+	can_rotate = TRUE
