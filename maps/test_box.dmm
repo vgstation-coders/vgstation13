@@ -4069,7 +4069,7 @@
 /area)
 "agA" = (
 /obj/structure/table,
-/obj/item/clothing/suit/straight_jacket,
+/obj/item/clothing/suit/strait_jacket,
 /obj/item/clothing/mask/muzzle,
 /obj/item/clothing/glasses/sunglasses/blindfold,
 /turf/simulated/floor{
@@ -57077,8 +57077,8 @@
 /area/medical/storage)
 "cdn" = (
 /obj/structure/table,
-/obj/item/clothing/suit/straight_jacket,
-/obj/item/clothing/suit/straight_jacket,
+/obj/item/clothing/suit/strait_jacket,
+/obj/item/clothing/suit/strait_jacket,
 /obj/item/clothing/mask/muzzle,
 /obj/item/clothing/mask/muzzle,
 /obj/item/weapon/cane,

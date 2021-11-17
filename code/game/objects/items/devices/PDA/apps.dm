@@ -110,7 +110,7 @@ var/global/list/pda_app_menus = list(
 /datum/pda_app/balance_check/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((pda_device.loc && (DB.z == pda_device.loc.z)) || (DB.z == STATION_Z))
+		if((pda_device.loc && (DB.z == pda_device.loc.z)) || (DB.z == map.zMainStation))
 			if((DB.stat == 0) && DB.activated )//If the database if damaged or not powered, people won't be able to use the app anymore.
 				linked_db = DB
 				break
@@ -366,7 +366,7 @@ var/global/list/pda_app_menus = list(
 
 /datum/pda_app/spesspets/proc/reconnect_database()
 	for(var/obj/machinery/account_database/DB in account_DBs)
-		if((DB.z == pda_device.loc.z) || (DB.z == STATION_Z))
+		if((DB.z == pda_device.loc.z) || (DB.z == map.zMainStation))
 			if((DB.stat == 0) && DB.activated )
 				linked_db = DB
 				break

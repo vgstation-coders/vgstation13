@@ -115,7 +115,7 @@ var/datum/controller/gameticker/ticker
 
 /datum/controller/gameticker/proc/StartThematic(var/playlist)
 	if(!theme)
-		theme = new(locate(1,1,CENTCOMM_Z))
+		theme = new(locate(1,1,map.zCentcomm))
 	theme.playlist_id=playlist
 	theme.playing=1
 	theme.update_music()
@@ -255,7 +255,7 @@ var/datum/controller/gameticker/ticker
 				'sound/AI/vox_reminder14.ogg',
 				'sound/AI/vox_reminder15.ogg')
 			for(var/sound in welcome_sentence)
-				play_vox_sound(sound,STATION_Z,null)
+				play_vox_sound(sound,map.zMainStation,null)
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		//mode.Clean_Antags()

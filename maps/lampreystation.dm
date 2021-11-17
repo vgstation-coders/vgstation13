@@ -10,6 +10,9 @@
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2
+	zDerelict = 3
+	zAsteroid = 4
+	zTCommSat = 5
 	zLevels = list(
 		/datum/zLevel/station,
 		/datum/zLevel/centcomm,
