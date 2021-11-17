@@ -140,6 +140,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/brokeufo
 	file_path = "maps/randomvaults/brokeufo.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/prison
 	file_path = "maps/randomvaults/prison_ship.dmm"
@@ -192,6 +193,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/zathura
 	file_path = "maps/randomvaults/house.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/spy_sat
 	file_path = "maps/randomvaults/spy_satellite.dmm"
