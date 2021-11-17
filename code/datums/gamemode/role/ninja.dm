@@ -48,7 +48,7 @@
 		if(!iscarbon(M) && !issilicon(M))
 			continue
 		var/turf/T = get_turf(M)
-		if(T && T.z != STATION_Z)
+		if(T && T.z != map.zMainStation)
 			continue
 		if(M.stat != DEAD)
 			living++

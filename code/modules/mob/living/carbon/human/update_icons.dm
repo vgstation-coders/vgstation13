@@ -1081,7 +1081,7 @@ var/global/list/damage_icon_parts = list()
 				var/image/dyn_overlay = wear_suit.dynamic_overlay["[SUIT_LAYER]"]
 				O.overlays += dyn_overlay
 
-		if(istype(wear_suit, /obj/item/clothing/suit/straight_jacket) )
+		if(istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
 			drop_from_inventory(handcuffed)
 			drop_hands()
 
