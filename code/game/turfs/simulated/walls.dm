@@ -25,6 +25,11 @@
 	explosion_block = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
+	var/image/peephole_image
+	var/obj/effect/border_opacity/BO
+
+/obj/effect/border_opacity
+	opacity = 1
 
 /turf/simulated/wall/initialize()
 	..()
@@ -78,6 +83,7 @@
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 
+	clear_border_opacities()
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -187,15 +193,24 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/tool/solder) && bullet_marks)
+	if(istype(W,/obj/item/tool/solder))
 		var/obj/item/tool/solder/S = W
-		if(!S.remove_fuel(bullet_marks*2,user))
+		if(bullet_marks)
+			if(!S.remove_fuel(bullet_marks*2,user))
+				return
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
+			bullet_marks = 0
+			icon = initial(icon)
 			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
-		bullet_marks = 0
-		icon = initial(icon)
-		return
+		else if(BO)
+			if(!S.remove_fuel(2,user))
+				return
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			to_chat(user, "<span class='notice'>You solder the peephole closed with \the [W].</span>")
+			clear_border_opacities()
+			icon = initial(icon)
+			return
 
 	//Get the user's location
 	if(!istype(user.loc, /turf) && !istype(user.loc, /obj/mecha))
@@ -265,6 +280,23 @@
 		else
 			return
 
+	// Drilling peepholes
+	if(istype(W,/obj/item/tool/surgicaldrill))
+		user.visible_message("<span class='warning'>[user] begins drilling a hole into \the [src].</span>", \
+		"<span class='notice'>You begin drilling a hole into \the [src].</span>", \
+		"<span class='warning'>You hear drilling noises.</span>")
+		//playsound(src, 'sound/items/Welder.ogg', 100, 1)
+
+		if(do_after(user, src, 100*W.toolspeed))
+			if(!istype(src))
+				return
+			//playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			user.visible_message("<span class='warning'>[user] drills a hole into \the [src].</span>", \
+			"<span class='notice'>You drill a hole into \the [src] to peep through.</span>", \
+			"<span class='warning'>You hear drilling noises.</span>")
+			BO = new /obj/effect/border_opacity(get_turf(user))
+			opacity = 0
+
     //CUT_WALL will dismantle the wall
 	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)
 		user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s outer plating.</span>", \
@@ -312,6 +344,13 @@
 	else
 		return attack_hand(user)
 	return
+
+/turf/simulated/wall/proc/clear_border_opacities()
+	if(BO)
+		qdel(BO)
+		BO = null
+	if(initial(opacity))
+		opacity = 1
 
 //Wall-rot effect, a nasty fungus that destroys walls.
 //Side effect : Also rots the code of any .dm it's referenced in, until now
