@@ -96,6 +96,6 @@ var/turf/dungeon_area = null
 	existing_dungeons.Add(ME) //Add it now, to prevent issues occuring when two dungeons are loaded at once
 
 	//Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	var/result = ME.load(spawn_x - 1, spawn_y - 1, dungeon_area.z, rotate, override_can_rotate)
+	var/result = ME.load(spawn_x - 1, spawn_y - 1, dungeon_area.z, rotate, FALSE, override_can_rotate)
 
 	return result
