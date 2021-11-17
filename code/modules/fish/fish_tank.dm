@@ -577,7 +577,7 @@
 
 	if(automated)
 		examine_message += "<br>"
-		var/flavor_text = pick("burps and gulps", "cleans and pinks", "boops and beeps", "gloops and loops")
+		var/flavor_text = pick("burps and gulps", "cleans and tinks", "boops and beeps", "gloops and loops")
 		examine_message += "<span class = 'notice'>The automated cleaning module [flavor_text].</span>"
 
 	examine_message += "<br>"
