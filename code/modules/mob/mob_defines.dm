@@ -3,7 +3,7 @@
 	density = 1
 	layer = MOB_LAYER
 	animate_movement = 2
-
+	throw_impact_sound = 'sound/effects/bodyfall.ogg'
 	w_type = RECYK_BIOLOGICAL
 
 //	flags = NOREACT
