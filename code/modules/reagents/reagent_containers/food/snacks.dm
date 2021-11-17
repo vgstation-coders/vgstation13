@@ -4517,7 +4517,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
 	name = "Zamitos: Original Flavor"
-	desc = "A salty, overly processed taste that reminds you of days past when you snacked on these as a small greyling."
+	desc = "An overly processed taste that reminds you of days past when you snacked on these as a small greyling."
 	trash = /obj/item/trash/zamitos_o
 	icon_state = "zamitos_original"
 	filling_color = "#F7CE7B"
@@ -4535,7 +4535,7 @@
 		bitesize = 0.8 // Same number of bites but less nutriment because it's the worst
 	else
 		reagents.add_reagent(NUTRIMENT, 2)
-		reagents.add_reagent(SODIUMCHLORIDE, 5)
+		reagents.add_reagent(ZAMSPICES, 5)
 		bitesize = 0.9 // It takes a little while to chew through a bag of chips!
 
 /obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky
@@ -4548,9 +4548,9 @@
 /obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(BLACKPEPPER, 2)
+	reagents.add_reagent(ZAMSPICES, 2)
 	reagents.add_reagent(SOYSAUCE, 2)
-	reagents.add_reagent(CAPSAICIN, 2)
+	reagents.add_reagent(ZAMSPICYTOXIN, 2)
 	bitesize = 1.5 // Takes a fair few bites to finish, because why would you want to rush this?
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi
@@ -7053,90 +7053,143 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 //You have now entered the ayy food zone
 
-/obj/item/weapon/reagent_containers/food/snacks/zamdinner1
-	name = "Zam Steak and Nettles"
-	icon_state	= "box_tvdinner1"
-	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
+/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic
+	name = "Classic Steak and Nettles"
+	icon_state	= "box_tvdinnerclassic"
+	desc = "An old Zam dinner box! This one still has the mascot on it. The instructions say to microwave before eating."
 	food_flags = FOOD_MEAT
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/zamdinner1/New()
+/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 7)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 4
 
-/obj/item/weapon/reagent_containers/food/snacks/zamdinner2
-	name = "Zam Mothership Stew"
-	icon_state	= "box_tvdinner2"
-	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
-	w_class = W_CLASS_MEDIUM
-	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/zamdinner2/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SACID, 3)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/zamdinner3
-	name = "Zam Spider Slider Delight"
-	icon_state	= "box_tvdinner3"
-	desc = "An acidic packaged meal for the grey far from home. The instructions say to microwave it before consumption."
-	food_flags = FOOD_MEAT
-	w_class = W_CLASS_MEDIUM
-	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/zamdinner3/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(SACID, 3)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
-	name = "Steak and Nettles"
-	desc = "The Zam research division still doesn't know where the steak's grill marks come from."
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinnerclassic
+	name = "Classic Steak and Nettles"
+	desc = "The original Zam steak and nettles. They don't make it like they used to..."
 	trash = /obj/item/trash/used_tray
-	icon = 'icons/obj/food.dmi'
 	icon_state = "tvdinner_1"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/New()
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinnerclassic/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 11)
+	reagents.add_reagent(DOCTORSDELIGHT, 5)
 	reagents.add_reagent(SACID, 4)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2
-	name = "Mothership Stew"
-	desc = "This microwaved version isn't quite as scrumptious as home cooking on the mothership, but it's palatable."
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
+	name = "Zam Steak and Nettles"
+	desc = "The Zam research division still doesn't know where the steak's grill marks come from."
 	trash = /obj/item/trash/used_tray
-	icon = 'icons/obj/food.dmi'
-	icon_state = "tvdinner_2"
+	icon_state = "tvdinner_1"
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
+	wrapped = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 18)
+	reagents.add_reagent(SACID, 8)
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped
+	name = "Zam Steak and Nettles"
+	icon_state	= "box_tvdinner1"
+	desc = "A packaged acidic ready-to-eat meal from the grey food company Zam Snax."
+	w_class = W_CLASS_MEDIUM
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/proc/Unwrap(mob/user)
+	desc = "The Zam research division still doesn't know where the steak's grill marks come from."
+	food_flags = FOOD_MEAT
+	trash = /obj/item/trash/used_tray
+	icon_state = "tvdinner_1"
+	to_chat(user, "<span class='notice'>You tear the packaging open and hear a nice hiss.") // Couldn't resist
+	base_crumb_chance = 0
+	wrapped = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2
+	name = "Zam Mothership Stew"
+	icon_state	= "tvdinner_2"
+	desc = "This packaged version isn't quite as scrumptious as home cooking on the mothership, but it's palatable."
+	trash = /obj/item/trash/used_tray
+	base_crumb_chance = 0
+	wrapped = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 9)
-	reagents.add_reagent(SACID, 4)
+	reagents.add_reagent(NUTRIMENT, 15)
+	reagents.add_reagent(SACID, 7)
 	bitesize = 4
 
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped
+	name = "Zam Mothership Stew"
+	icon_state	= "box_tvdinner2"
+	desc = "A packaged acidic ready-to-eat meal from the grey food company Zam Snax."
+	w_class = W_CLASS_MEDIUM
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/proc/Unwrap(mob/user)
+	desc = "This packaged version isn't quite as scrumptious as home cooking on the mothership, but it's palatable."
+	trash = /obj/item/trash/used_tray
+	icon_state = "tvdinner_2"
+	to_chat(user, "<span class='notice'>You tear the packaging open and hear a little hiss.")
+	base_crumb_chance = 0
+	wrapped = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3
-	name = "Spider Slider Delight"
+	name = "Zam Spider Slider Delight"
+	icon_state	= "tvdinner_3"
 	desc = "Despite extensive processing, there's definitely at least one spider hair still in it."
 	trash = /obj/item/trash/used_tray
-	icon_state = "tvdinner_3"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
+	wrapped = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 7)
-	reagents.add_reagent(SACID, 3)
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(SACID, 6)
 	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped
+	name = "Zam Spider Slider Delight"
+	icon_state	= "box_tvdinner3"
+	desc = "A packaged acidic ready-to-eat meal from the grey food company Zam Snax."
+	w_class = W_CLASS_MEDIUM
+	wrapped = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/proc/Unwrap(mob/user)
+	desc = "Despite extensive processing, there's definitely at least one spider hair still in it."
+	food_flags = FOOD_MEAT
+	trash = /obj/item/trash/used_tray
+	icon_state = "tvdinner_3"
+	to_chat(user, "<span class='notice'>You tear the packaging open.") // No hiss...
+	base_crumb_chance = 0
+	wrapped = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/greygreens
 	name = "Grey Greens"
