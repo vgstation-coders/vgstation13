@@ -57,15 +57,18 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/gingerbread_house
 	file_path = "maps/randomvaults/gingerbread_house.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/tommyboyasteroid
 	file_path = "maps/randomvaults/tommyboyasteroid.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/hivebot_factory
 	file_path = "maps/randomvaults/hivebot_factory.dmm"
 
 /datum/map_element/vault/pretty_rad_clubhouse
 	file_path = "maps/randomvaults/pretty_rad_clubhouse.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/clown_base
 	file_path = "maps/randomvaults/clown_base.dmm"
