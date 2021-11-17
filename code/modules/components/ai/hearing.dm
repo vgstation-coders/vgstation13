@@ -2,6 +2,7 @@
     var/hear_signal
     var/list/required_messages = list()
     var/list/hear_args
+    var/response_delay = 10
 
 /datum/component/ai/hearing/initialize()
     parent.register_event(/event/comp_ai_cmd_hear, src, .proc/on_hear)
@@ -17,8 +18,16 @@
     filtered_message = replacetext(filtered_message , "!" , "") //Ignores punctuation.
     filtered_message = replacetext(filtered_message , "." , "") //Ignores punctuation.
     filtered_message = replacetext(filtered_message , "," , "") //Ignores punctuation.
-    if(speech.speaker != parent && (!required_messages.len || (lowertext(filtered_message) in required_messages)))
-        INVOKE_EVENT(parent, hear_signal, hear_args)
+    if(speech.speaker != parent)
+        if(!required_messages.len)
+            sleep(response_delay)
+            INVOKE_EVENT(parent, hear_signal, hear_args)
+        else
+            for(var/message in required_messages)
+                if(findtext(filtered_message,message))
+                    sleep(response_delay)
+                    INVOKE_EVENT(parent, hear_signal, hear_args)
+                    return
 
 /datum/component/ai/hearing/say
     hear_signal = /event/comp_ai_cmd_say
