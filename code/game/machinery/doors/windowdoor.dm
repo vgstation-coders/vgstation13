@@ -355,6 +355,8 @@
 	else if(req_one_access && req_one_access.len > 0)
 		electronics.conf_access = req_one_access
 		electronics.one_access = 1
+	electronics.dir_access = req_access_dir
+	electronics.access_nodir = access_not_dir
 
 /obj/machinery/door/window/proc/eject_electronics()
 	if(electronics)
