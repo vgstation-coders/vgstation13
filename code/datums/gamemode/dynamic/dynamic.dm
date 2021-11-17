@@ -205,8 +205,8 @@ var/stacking_limit = 90
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 
 	var/rst_pop = 0
-	for(var/mob/new_player/player in player_list)
-		if(player.ready && player.mind)
+	for(var/mob/living/carbon/human/player in player_list)
+		if(player.mind)
 			rst_pop++
 	if (rst_pop >= high_pop_limit)
 		message_admins("DYNAMIC MODE: Mode: High Population Override is in effect! ([rst_pop]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
@@ -253,8 +253,8 @@ var/stacking_limit = 90
 		var/datum/dynamic_ruleset/midround/DR = rule
 		if (initial(DR.weight))
 			midround_rules += new rule()
-	for(var/mob/new_player/player in player_list)
-		if(player.ready && player.mind)
+	for(var/mob/living/carbon/human/player in player_list)
+		if(player.mind)
 			roundstart_pop_ready++
 			candidates.Add(player)
 	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
@@ -338,8 +338,8 @@ var/stacking_limit = 90
 		extra_rulesets_amount = 0
 	else
 		var/rst_pop = 0
-		for(var/mob/new_player/player in player_list)
-			if(player.ready && player.mind)
+		for(var/mob/living/carbon/human/player in player_list)
+			if(player.mind)
 				rst_pop++
 		if (rst_pop > high_pop_limit)
 			if (threat_level > 50)

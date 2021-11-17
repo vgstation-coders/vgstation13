@@ -21,7 +21,6 @@
 	. =..()
 	if(!.)
 		return
-	antag.current.forceMove(pick(ninjastart))
 	if(ishuman(antag.current))
 		antag.current << sound('sound/effects/yooooooooooo.ogg')
 		equip_ninja(antag.current)
