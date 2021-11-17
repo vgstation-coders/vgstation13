@@ -203,7 +203,7 @@
 /mob/living/silicon/robot/mommi/sammi/New(loc)
 	..()
 	laws = new sammi_base_law_type
-	module = new /obj/item/weapon/robot_module/mommi/sammi(src)
+	module = new /obj/item/weapon/robot_module/sammi(src)
 	cellhold = cell
 	cell = null
 

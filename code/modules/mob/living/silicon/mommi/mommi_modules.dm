@@ -93,14 +93,20 @@
 		)
 	law_type = "Gravekeeper"
 
-/obj/item/weapon/robot_module/mommi/sammi
+/obj/item/weapon/robot_module/sammi
 	name = "stationary assembly mmi robot module"
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
+	languages = list()
+	sprites = list("Basic" = "mommi")
+	respawnables = list (/obj/item/stack/cable_coil/yellow)
+	respawnables_max_amount = MOMMI_MAX_COIL
+	default_modules = FALSE
+	var/ae_type = "Default" //Anti-emancipation override type, pretty much just fluffy.
+	var/law_type = "Default"
 
-/obj/item/weapon/robot_module/mommi/sammi/New(var/mob/living/silicon/robot/R)
+/obj/item/weapon/robot_module/sammi/New(var/mob/living/silicon/robot/R)
 	..()
-	for(var/module in modules)
-		qdel(module)
-	modules = list()
+	
 	modules += new /obj/item/tool/weldingtool/largetank(src)
 	modules += new /obj/item/tool/screwdriver(src)
 	modules += new /obj/item/tool/wrench(src)
