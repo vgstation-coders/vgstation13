@@ -51,12 +51,16 @@
 	if(stat & BROKEN)
 		icon_state = "grey_target_prism"
 	else
-		if( powered() )
+		if( powered() )	
 			if (src.enabled)
 				if(istype(installed,/obj/item/weapon/gun/energy/gun))
 					var/obj/item/weapon/gun/energy/gun/EG = installed
 					if(EG.mode == 1)
 						icon_state = "orange_target_prism"
+					else
+						icon_state = "target_prism"
+				else if(istype(installed,/obj/item/weapon/gun/energy/pulse_rifle/destroyer))
+					icon_state = "blue_target_prism"
 				else
 					icon_state = "target_prism"
 			else
@@ -90,7 +94,7 @@
 	if(T && (T in view(7,src)))
 		if( ismob(T) )
 			var/mob/M = T
-			if((M.flags & INVULNERABLE) || M.faction == faction)
+			if((M.flags & INVULNERABLE) || (faction && M.faction == faction))
 				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
@@ -157,7 +161,6 @@
 		else
 			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
-//		to_chat(world, "[cur_target]")
 		if(!raising)
 			if(!raised)
 				popUp()

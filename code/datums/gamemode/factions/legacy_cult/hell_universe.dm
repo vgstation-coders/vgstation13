@@ -98,7 +98,7 @@ In short:
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
-			if(!T.holy && prob(1) && T.z != CENTCOMM_Z)
+			if(!T.holy && prob(1) && T.z != map.zCentcomm)
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
 		CHECK_TICK

@@ -1156,12 +1156,12 @@ Thanks.
 		cuffs = mutual_handcuffs
 		resist_time = is_hulk ? 5 SECONDS : 1 MINUTES // 1 minute since it's only one cuff
 		var_to_check = "mutual_handcuffs"
-	else if(is_wearing_item(/obj/item/clothing/suit/straight_jacket, slot_wear_suit))
+	else if(is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit))
 		cuffs = get_item_by_slot(slot_wear_suit)
 		if(is_hulk)
 			resist_time = 5 SECONDS
 		else
-			do_after_callback = new /callback(GLOBAL_PROC, /proc/straight_jacket_resist_do_after)
+			do_after_callback = new /callback(GLOBAL_PROC, /proc/strait_jacket_resist_do_after)
 			resist_time = 2 MINUTES // Default
 			var/left_arm = get_organ(LIMB_LEFT_ARM)
 			var/right_arm = get_organ(LIMB_RIGHT_ARM)
@@ -1194,7 +1194,7 @@ Thanks.
 			simple_message("<span class='warning'>Your attempt at [is_hulk ? "breaking" : "removing"] \the [cuffs] was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
-/proc/straight_jacket_resist_do_after(mob/living/carbon/user)
+/proc/strait_jacket_resist_do_after(mob/living/carbon/user)
 	var/left_arm = user.get_organ(LIMB_LEFT_ARM)
 	var/right_arm = user.get_organ(LIMB_RIGHT_ARM)
 	for(var/datum/organ/external/arm in list(left_arm, right_arm))

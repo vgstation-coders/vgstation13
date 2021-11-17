@@ -434,7 +434,7 @@ proc/move_mining_shuttle()
 
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)
-	if(!device_turf || device_turf.z == CENTCOMM_Z || device_turf.z > map.zLevels.len)
+	if(!device_turf || device_turf.z == map.zCentcomm || device_turf.z > map.zLevels.len)
 		to_chat(user, "<span class='notice'>You're having difficulties getting [src] to work.</span>")
 		return
 	else
