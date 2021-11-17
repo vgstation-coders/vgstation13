@@ -175,7 +175,9 @@
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
 	M.forceMove(get_turf(our_cable))
 	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
-	M.Postmorph(PD)
+	PD.key = M.key
+	PD << browse(null, "window=latechoices") //closes late choices window
+	PD << browse(null, "window=playersetup") //closes the player setup window
 	var/datum/role/pulse_demon/newpd = new
 	newpd.AssignToRole(PD.mind,1)
 	newpd.Greet(GREET_DEFAULT)
