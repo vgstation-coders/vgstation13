@@ -54,11 +54,11 @@ var/list/map_dimension_cache = list()
  * A list of all atoms created
  *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/rotate as num, var/overwrite as num, var/override_can_rotate = FALSE)
 	if((rotate % 90) != 0) //If not divisible by 90, make it
 		rotate += (rotate % 90)
 
-	if(!map_element.can_rotate) //Abort rotation if disabled on map element
+	if(!map_element.can_rotate && !override_can_rotate) //Abort rotation if disabled on map element
 		rotate = 0
 
 	if(!z_offset)//what z_level we are creating the map on
