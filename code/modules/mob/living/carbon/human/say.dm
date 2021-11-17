@@ -27,10 +27,8 @@
 		return "asks, [text]";
 	if (ending == "!")
 		return "exclaims, [text]";
-	if (findtext("based", text) && length(text) < 14 && prob(15))
-		to_chat(src, "<span class='warning'>You think to yourself, 'Based on what?' You feel dumber.</span>")
-		src.adjustBrainLoss(10)
-
+	if (findtext("based", text) && length(text) < 6 && prob(10))
+		to_chat(src, "<span class='warning'>You think to yourself, 'Based on what?'</span>")
 //	if(dna)
 //		return "[dna.species.say_mod], \"[text]\"";
 	handle_spaghetti(20) // 20% chance to spill spaghetti when saying something, if in pockets -kanef
