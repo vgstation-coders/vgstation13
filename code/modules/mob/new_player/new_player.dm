@@ -370,10 +370,6 @@
 
 	ticker.mode.latespawn(src)//can we make them a latejoin antag?
 
-	if(!src.client) //get out if the latejoin antag roll made them something nonhuman
-		qdel(src)
-		return
-
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
