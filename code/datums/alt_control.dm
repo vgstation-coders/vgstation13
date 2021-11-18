@@ -118,3 +118,13 @@
 			move_delay = 0
 
 	controller.DisplayUI("Soulblade")
+
+///////////////////////////////PEEPHOLE CONTROLLER///////////////////////////////
+
+/datum/control/peephole
+	control_flags = LOCK_EYE_TO_CONTROLLED
+
+/datum/control/peephole/is_valid(var/direction)
+	if(controlled.Adjacent(controller))
+		return 1
+	return ..()

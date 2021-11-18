@@ -25,8 +25,7 @@
 	explosion_block = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
-	var/image/peephole_image
-	var/peephole = FALSE
+	var/mob/living/peeper = null
 
 /turf/simulated/wall/initialize()
 	..()
@@ -80,7 +79,7 @@
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 
-	peephole = FALSE
+	reset_view()
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -167,18 +166,30 @@
 						"<span class='notice'>You finish drawing the sigil.</span>")
 			return
 
-	if(peephole)
-		mob = user
-		var/datum/control/new_control = new /datum/control/lock_move(mob, src)
-		mob.orient_object.Add(new_control)
+	if(bullet_marks)
+		peeper = user
+		var/datum/control/new_control = new /datum/control/peephole(peeper, src)
+		peeper.orient_object.Add(new_control)
 		new_control.take_control()
-		return
+		peeper.dir = get_dir(peeper,src)
+		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
+		"<span class='notice'>You lean in and looks through \the [src].</span>")
+		src.add_fingerprint(peeper)
+		return ..()
 
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return ..()
+
+/turf/simulated/wall/proc/reset_view()
+	if(!peeper)
+		return
+	var/datum/control/C = peeper.orient_object[src]
+	if(C)
+		C.break_control()
+		qdel(C)
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
 	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
@@ -206,14 +217,7 @@
 			to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
 			bullet_marks = 0
 			icon = initial(icon)
-			return
-		else if(peephole)
-			if(!S.remove_fuel(2,user))
-				return
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-			to_chat(user, "<span class='notice'>You solder the peephole closed with \the [W].</span>")
-			peephole = FALSE
-			icon = initial(icon)
+			reset_view()
 			return
 
 	//Get the user's location
@@ -298,7 +302,7 @@
 			user.visible_message("<span class='warning'>[user] drills a hole into \the [src].</span>", \
 			"<span class='notice'>You drill a hole into \the [src] to peep through.</span>", \
 			"<span class='warning'>You hear drilling noises.</span>")
-			peephole = TRUE
+			add_bullet_mark("trace",round(Get_Angle(user,src)))
 
     //CUT_WALL will dismantle the wall
 	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)

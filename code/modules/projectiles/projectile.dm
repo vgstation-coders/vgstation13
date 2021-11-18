@@ -394,11 +394,7 @@ var/list/impact_master = list()
 			damage -= (damage/4)	//and diminish the bullet's damage a bit
 			if(!destroy)//destroying projectiles don't leave marks, as they would then appear on the resulting plating.
 				var/turf/T = A
-				T.bullet_marks++
-				var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
-				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
-				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
-				T.overlays += trace
+				T.add_bullet_mark(mark_type,target_angle)
 
 		var/turf/target = get_step(loc, dir)
 		if(loc == A_turf) //Special case where we collided with something while exiting a turf, instead of while entering.
@@ -426,6 +422,13 @@ var/list/impact_master = list()
 
 	bullet_die()
 	return 1
+
+/turf/proc/add_bullet_mark(var/mark_type,var/target_angle)
+	bullet_marks++
+	var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
+	trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
+	trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
+	overlays += trace
 
 /obj/item/projectile/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
