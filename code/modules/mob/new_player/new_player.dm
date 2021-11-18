@@ -385,6 +385,7 @@
 
 	if (!character || !character.mind) //Character got transformed in a latejoin ruleset
 		qdel(src)
+		qdel(character)
 		return
 
 	// Very hacky. Sorry about that
