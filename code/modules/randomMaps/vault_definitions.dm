@@ -34,9 +34,11 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/icetruck_crash
 	file_path = "maps/randomvaults/icetruck_crash.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/asteroid_temple
 	file_path = "maps/randomvaults/asteroid_temple.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/asteroid_temple/initialize(list/objects)
 	..(objects)
@@ -56,21 +58,25 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/gingerbread_house
 	file_path = "maps/randomvaults/gingerbread_house.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/tommyboyasteroid
 	file_path = "maps/randomvaults/tommyboyasteroid.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/hivebot_factory
 	file_path = "maps/randomvaults/hivebot_factory.dmm"
 
 /datum/map_element/vault/pretty_rad_clubhouse
 	file_path = "maps/randomvaults/pretty_rad_clubhouse.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/clown_base
 	file_path = "maps/randomvaults/clown_base.dmm"
 
 /datum/map_element/vault/rust
 	file_path = "maps/randomvaults/rust.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/dance_revolution
 	name = "Dance Dance Revolution"
@@ -99,9 +105,11 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/spacegym
 	file_path = "maps/randomvaults/spacegym.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/oldarmory
 	file_path = "maps/randomvaults/oldarmory.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/spacepond
 	file_path = "maps/randomvaults/spacepond.dmm"
@@ -114,6 +122,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/iou_vault
 	file_path = "maps/randomvaults/iou_fort.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/biodome
 	file_path = "maps/randomvaults/biodome.dmm"
@@ -123,15 +132,18 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/asteroids
 	file_path = "maps/randomvaults/asteroids.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/listening
 	file_path = "maps/randomvaults/listening.dmm"
 
 /datum/map_element/vault/hivebot_crash
 	file_path = "maps/randomvaults/hivebot_crash.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/brokeufo
 	file_path = "maps/randomvaults/brokeufo.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/prison
 	file_path = "maps/randomvaults/prison_ship.dmm"
@@ -144,27 +156,33 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/AIsat
 	file_path = "maps/randomvaults/AIsat.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/ejectedengine
 	file_path = "maps/randomvaults/ejectedengine.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/droneship
 	file_path = "maps/randomvaults/droneship.dmm"
 
 /datum/map_element/vault/amelab
 	file_path = "maps/randomvaults/amelab.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/meteorlogical_station
 	file_path = "maps/randomvaults/meteorlogical_station.dmm"
 
 /datum/map_element/vault/taxi_engi
 	file_path = "maps/randomvaults/taxi_engineering.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/ice_comet
 	file_path = "maps/randomvaults/ice_comet.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/research_facility
 	file_path = "maps/randomvaults/research_facility.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/zoo_truck
 	file_path = "maps/randomvaults/zoo_truck.dmm"
@@ -183,6 +201,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/zathura
 	file_path = "maps/randomvaults/house.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/spy_sat
 	file_path = "maps/randomvaults/spy_satellite.dmm"
@@ -201,12 +220,16 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/asteroidfield
 	file_path = "maps/randomvaults/asteroidfield.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/clownroid
 	file_path = "maps/randomvaults/clownroid.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/goonesat
 	file_path = "maps/randomvaults/goonesat.dmm"
+	can_rotate = TRUE
 
 /datum/map_element/vault/podstation
 	file_path = "maps/randomvaults/podstation.dmm"
+	can_rotate = TRUE
