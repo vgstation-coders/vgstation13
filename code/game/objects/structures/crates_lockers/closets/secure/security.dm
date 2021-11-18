@@ -30,7 +30,7 @@
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/clothing/under/dress/dress_cap,
-		/obj/item/device/gps/secure,
+		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/elite/command,
 	)
 
@@ -55,7 +55,7 @@
 		/obj/item/weapon/storage/box/ids = 2,
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/device/flash,
-		/obj/item/device/gps/secure,
+		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/civilian,
 	)
 

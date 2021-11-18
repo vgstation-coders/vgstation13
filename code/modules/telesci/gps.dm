@@ -1,5 +1,6 @@
 var/list/GPS_list = list()
 var/list/SPS_list = list()
+var/list/all_GPS_list = list()
 
 /obj/item/device/gps
 	name = "global positioning system"
@@ -18,6 +19,7 @@ var/list/SPS_list = list()
 	var/builtin = FALSE
 	var/transmitting = FALSE
 	var/list/gps_list // Set in New to be either global.GPS_list or global.SPS_list
+	var/view_all = FALSE
 
 /obj/item/device/gps/proc/get_gps_list()
 	return GPS_list
@@ -30,11 +32,13 @@ var/list/SPS_list = list()
 	gps_list = get_gps_list()
 	gpstag = "[base_tag][gps_list.len]"
 	gps_list += src
+	all_GPS_list += src
 	update_name()
 	update_icon()
 
 /obj/item/device/gps/Destroy()
 	gps_list -= src
+	all_GPS_list -= src
 	..()
 
 /obj/item/device/gps/update_icon()
@@ -96,7 +100,12 @@ var/list/SPS_list = list()
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
 	if(!emped && transmitting)
-		for(var/obj/item/device/gps/other in gps_list)
+		var/list/ui_list
+		if(view_all)
+			ui_list = all_GPS_list
+		else
+			ui_list = gps_list
+		for(var/obj/item/device/gps/other in ui_list)
 			if(!other.transmitting || other == src)
 				continue
 			var/list/device_data = list()
@@ -147,7 +156,12 @@ var/list/SPS_list = list()
 	data["autorefresh"] = autorefreshing
 	data["location_text"] = get_location_name()
 	var/list/devices = list()
-	for(var/D in gps_list)
+	var/list/ui_list
+	if(view_all)
+		ui_list = all_GPS_list
+	else
+		ui_list = gps_list
+	for(var/D in ui_list)
 		var/obj/item/device/gps/G = D
 		if(G.transmitting && src != G)
 			var/device_data[0]
@@ -315,3 +329,10 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	else splitnumber += "0"
 	for(var/n in splitnumber)
 		playsound(source, nums_to_hl_num[n], 100, 0, channel = sound_channel, wait = TRUE)
+
+/obj/item/device/gps/secure/command
+	base_name = "Command SPS"
+	desc = "A secure channel SPS. Sounds an alarm if seperated from their wearer, be it by stripping or death. Shows all GPSes on station."
+	icon_state = "sps-c"
+	base_tag = "CMD"
+	view_all = TRUE
