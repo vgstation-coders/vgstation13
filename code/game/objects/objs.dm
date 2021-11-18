@@ -217,7 +217,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/shuttle_rotate(var/angle)
 	..()
-	req_access_dir = turn(req_access_dir, -angle)
+	if(req_access_dir)
+		req_access_dir = turn(req_access_dir, -angle)
 
 /obj/proc/wrenchable()
 	return 0
