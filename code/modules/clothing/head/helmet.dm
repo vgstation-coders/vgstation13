@@ -260,7 +260,7 @@
 	icon_state = "knight_green"
 	item_state = "knight_green"
 	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = FULL_HEAD|BEARD|HIDEHEADHAIR|HIDEBEARDHAIR
+	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	armor = list(melee = 20, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
 	siemens_coefficient = 1
