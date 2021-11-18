@@ -26,10 +26,7 @@
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
 	var/image/peephole_image
-	var/obj/effect/border_opacity/BO
-
-/obj/effect/border_opacity
-	opacity = 1
+	var/peephole = FALSE
 
 /turf/simulated/wall/initialize()
 	..()
@@ -83,7 +80,7 @@
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 
-	clear_border_opacities()
+	peephole = FALSE
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -170,6 +167,13 @@
 						"<span class='notice'>You finish drawing the sigil.</span>")
 			return
 
+	if(peephole)
+		mob = user
+		var/datum/control/new_control = new /datum/control/lock_move(mob, src)
+		mob.orient_object.Add(new_control)
+		new_control.take_control()
+		return
+
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
@@ -203,12 +207,12 @@
 			bullet_marks = 0
 			icon = initial(icon)
 			return
-		else if(BO)
+		else if(peephole)
 			if(!S.remove_fuel(2,user))
 				return
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 			to_chat(user, "<span class='notice'>You solder the peephole closed with \the [W].</span>")
-			clear_border_opacities()
+			peephole = FALSE
 			icon = initial(icon)
 			return
 
@@ -294,8 +298,7 @@
 			user.visible_message("<span class='warning'>[user] drills a hole into \the [src].</span>", \
 			"<span class='notice'>You drill a hole into \the [src] to peep through.</span>", \
 			"<span class='warning'>You hear drilling noises.</span>")
-			BO = new /obj/effect/border_opacity(get_turf(user))
-			opacity = 0
+			peephole = TRUE
 
     //CUT_WALL will dismantle the wall
 	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)
@@ -344,13 +347,6 @@
 	else
 		return attack_hand(user)
 	return
-
-/turf/simulated/wall/proc/clear_border_opacities()
-	if(BO)
-		qdel(BO)
-		BO = null
-	if(initial(opacity))
-		opacity = 1
 
 //Wall-rot effect, a nasty fungus that destroys walls.
 //Side effect : Also rots the code of any .dm it's referenced in, until now
