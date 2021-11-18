@@ -3881,7 +3881,7 @@
 
 		return
 
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)) // Long ass fucking object name
+	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/)||istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable/pizza/)) // Long ass fucking object name
 		if(src.pizza)
 			to_chat(user, "<span class='warning'>[src] already has a pizza in it.</span>")
 		else if(src.open)
