@@ -669,11 +669,6 @@ Thanks.
 	if (t7 && pulling && (Adjacent(pulling) || pulling.loc == loc))
 		. = ..()
 
-		if(istype(client.eye,/turf/simulated/wall))
-			var/turf/simulated/wall/W = client.eye
-			if (!Adjacent(W))
-				W.reset_view()
-
 		if (pulling && pulling.loc)
 			if(!isturf(pulling.loc))
 				stop_pulling()
@@ -741,6 +736,11 @@ Thanks.
 
 	if(T != loc)
 		handle_hookchain(Dir)
+
+	if(istype(client.eye,/turf/simulated/wall))
+		var/turf/simulated/wall/W = client.eye
+		if (!Adjacent(W))
+			W.reset_view()
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
