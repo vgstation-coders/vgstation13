@@ -4,8 +4,9 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "island"
+	nameShort = "Island"
 	nameLong = "Island Station"
+	map_dir = "island"
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 2
