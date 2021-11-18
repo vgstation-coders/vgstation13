@@ -367,7 +367,7 @@ var/list/map_dimension_cache = list()
 	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
 
-	if(SSobj.initalized && !(instance.flags & ATOM_INITIALIZED)) // If object subsystem is initialised and instance is not initialised
+	if(SSobj.initialized && !(instance.flags & ATOM_INITIALIZED)) // If object subsystem is initialised and instance is not initialised
 		instance.initialize()
 
 	return instance
