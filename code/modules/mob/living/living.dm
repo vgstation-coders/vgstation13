@@ -740,7 +740,9 @@ Thanks.
 	if(istype(client.eye,/turf/simulated/wall))
 		var/turf/simulated/wall/W = client.eye
 		if (!Adjacent(W))
-			W.reset_view()
+			client.eye = src
+			client.perspective = MOB_PERSPECTIVE
+			W.peeper = null
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
