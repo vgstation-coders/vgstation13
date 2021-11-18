@@ -1289,9 +1289,12 @@ var/global/blood_virus_spreading_disabled = 0
 	lst.len = argnum // Expand to right length
 
 	for(var/i = 1 to argnum) // Lists indexed from 1 forwards in byond
-		lst[i] = variable_set(src)
+		lst.Add(variable_set(src))
 
-	holder.marked_datum = new chosen(arglist(lst))
+	if (argnum > 0)
+		holder.marked_datum = new chosen(arglist(lst))
+	else
+		holder.marked_datum = new chosen
 
 	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
