@@ -1301,7 +1301,7 @@ var/global/blood_virus_spreading_disabled = 0
 	feedback_add_details("admin_verb","SD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 	if(varchanges.len)
-		_preloader = new(varchanges, chosen)
+		_preloader.setup(varchanges, chosen)
 		//_preloaded calls load() automatically on atom/New(). However, this proc can also create datums, which don't do that - call load() manually
 		_preloader.load(holder.marked_datum)
 

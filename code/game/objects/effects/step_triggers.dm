@@ -41,6 +41,10 @@
 	var/atom/movable/AM = A
 	var/curtiles = 0
 	var/stopthrow = 0
+
+	if(AM.locked_to)
+		return
+
 	for(var/obj/effect/step_trigger/thrower/T in orange(2, src))
 		if(AM in T.affecting)
 			return

@@ -33,6 +33,8 @@
 	name = "monkey meat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey/New(atom/A, var/mob/M)
+	..()
+	
 	if(M)
 		name = "[initial(M.name)] [meatword]"
 

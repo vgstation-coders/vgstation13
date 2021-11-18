@@ -212,10 +212,11 @@ var/MAX_EXPLOSION_RANGE = 14
 #define ALL ~0
 #define NONE 0
 
-//airflow flags!
+//These go in flow_flags but don't really have anything in particular to do with airflow. Bad name.
 
 #define ON_BORDER 1   // item has priority to check when entering or leaving
 #define IMPASSABLE 2  // item will make things auto_fail on prox checks through it
+#define KEEP_DIR 4 //When moved, object will not turn to face its direction of movement.
 
 
 //sharpness flags
@@ -1074,14 +1075,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define VAMP_FAILURE -1
 
-// Moved from machine_interactions.dm
-#define STATION_Z  1
-#define CENTCOMM_Z 2
-#define TELECOMM_Z 3
-#define DERELICT_Z 4
-#define ASTEROID_Z 5
-#define SPACEPIRATE_Z 6
-
 // canGhost(Read|Write) flags
 #define PERMIT_ALL 1
 
@@ -1278,6 +1271,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define IS_DIONA 1
 #define IS_VOX 2
 #define IS_PLASMA 3
+#define IS_GREY 4
 
 
 //Turf Construction defines

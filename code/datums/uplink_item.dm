@@ -582,7 +582,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/trophybelt
  	name = "Trophy Belt"
- 	desc = "An unremarkable leather belt specially crafted to hold whole heads in storage, perfect for serial killers with something to prove. Comes with seven storage slots. Will not accept brains, so behead mindfully."
+ 	desc = "An unremarkable leather belt specially crafted to hold whole heads and limbs in storage, perfect for serial killers and maimers with something to prove. Will not accept brains, so behead mindfully."
  	item = /obj/item/weapon/storage/belt/skull
  	cost = 4
 

@@ -2,9 +2,6 @@
 //SS13 Optimized Map loader
 //////////////////////////////////////////////////////////////
 
-//global datum that will preload variables on atoms instanciation
-var/global/dmm_suite/preloader/_preloader = null
-
 /**
  * Returns a list with two numbers. First number is the map's width. Second number is the map's height.
  */
@@ -63,7 +60,7 @@ var/list/map_dimension_cache = list()
 
 	if(!map_element.can_rotate) //Abort rotation if disabled on map element
 		rotate = 0
-	
+
 	if(!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
 
@@ -285,7 +282,7 @@ var/list/map_dimension_cache = list()
 	//first instance the /area and remove it from the members list
 	index = members.len
 	var/atom/instance
-	_preloader = new(members_attributes[index])//preloader for assigning  set variables on atom creation
+	_preloader.setup(members_attributes[index])//preloader for assigning  set variables on atom creation
 
 	//Locate the area object
 	instance = locate(members[index])
@@ -294,7 +291,7 @@ var/list/map_dimension_cache = list()
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
 		spawned_atoms.Add(instance)
 
-	if(_preloader && instance)
+	if(use_preloader && instance)
 		_preloader.load(instance)
 
 	//The areas list doesn't contain areas without objects by default
@@ -354,7 +351,7 @@ var/list/map_dimension_cache = list()
 	if(!path)
 		return
 	var/atom/instance
-	_preloader = new(attributes, path)
+	_preloader.setup(attributes, path)
 
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
 		var/turf/oldTurf = locate(x,y,z)
@@ -367,7 +364,7 @@ var/list/map_dimension_cache = list()
 	if(rotate && instance)
 		instance.shuttle_rotate(rotate)
 
-	if(_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
+	if(use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
 
 	return instance
@@ -472,7 +469,7 @@ var/list/map_dimension_cache = list()
 		T.has_opaque_atom = TRUE // No need to recalculate it in this case, it's guaranteed to be on afterwards anyways.
 
 	//atom creation method that preloads variables at creation
-	if(_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+	if(use_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
 		_preloader.load(src)
 
 	. = ..()
@@ -481,20 +478,25 @@ var/list/map_dimension_cache = list()
 //Preloader datum
 //////////////////
 
+//global datum that will preload variables on atoms instanciation
+var/global/dmm_suite/preloader/_preloader = new
+var/use_preloader = FALSE
+
 /dmm_suite/preloader
 	parent_type = /datum
 	var/list/attributes
 	var/target_path
 
-/dmm_suite/preloader/New(var/list/the_attributes, var/path)
-	.=..()
+/dmm_suite/preloader/proc/setup(list/the_attributes, path)
 	if(!the_attributes.len)
-		Del()
 		return
+	use_preloader = TRUE
 	attributes = the_attributes
 	target_path = path
 
 /dmm_suite/preloader/proc/load(atom/what)
-	for(var/attribute in attributes - lockedvars)
-		what.vars[attribute] = attributes[attribute]
-	Del()
+	use_preloader = FALSE
+	var/list/local_attributes = attributes
+	var/list/what_vars = what.vars
+	for(var/attribute in local_attributes)
+		what_vars[attribute] = local_attributes[attribute]

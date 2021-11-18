@@ -1,7 +1,9 @@
 
 /datum/objective/bloodcult
 	name = "Cultist of Nar-Sie"
-	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbringer of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others. Above all, ensure that at least one of you remains alive to spread the cult's influence to other space stations."
+	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbringer of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others."
+	force_success = TRUE // Freeform
+	flags = FREEFORM_OBJECTIVE
 
 /datum/objective/bloodcult/IsFulfilled()
 	if (..())
@@ -110,7 +112,7 @@
 	for(var/mob/living/carbon/human/player in player_list)
 		//They may be dead, but we only need their flesh
 		var/turf/player_turf = get_turf(player)
-		if(player_turf.z != STATION_Z)//We only look for people currently aboard the station
+		if(player_turf.z != map.zMainStation)//We only look for people currently aboard the station
 			continue
 		var/is_implanted = player.is_loyalty_implanted()
 		if(is_implanted || isReligiousLeader(player) || isantagbanned(player) || jobban_isbanned(player, CULTIST))

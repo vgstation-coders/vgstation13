@@ -29130,6 +29130,7 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerL";
 	name = "Medbay";
+	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -33880,6 +33881,7 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyer";
 	name = "Medbay Emergency Entrance";
+	req_access_dir = 8;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -42953,7 +42955,7 @@
 /area/security/toilet)
 "cVc" = (
 /obj/structure/table,
-/obj/item/clothing/suit/straight_jacket,
+/obj/item/clothing/suit/strait_jacket,
 /obj/item/clothing/mask/muzzle,
 /obj/item/clothing/glasses/sunglasses/blindfold,
 /turf/simulated/floor{
@@ -75704,6 +75706,7 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerR";
 	name = "Medbay";
+	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -91588,6 +91591,7 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerR";
 	name = "Medbay";
+	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -96454,7 +96458,8 @@
 	},
 /obj/machinery/door/airlock/glass_mining{
 	name = "Delivery Office";
-	req_access_txt = "50"
+	req_access_dir = 2;
+	req_one_access_txt = "50;26"
 	},
 /turf/simulated/floor,
 /area/supply/sorting)
@@ -110509,6 +110514,7 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyerL";
 	name = "Medbay";
+	req_access_dir = 1;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -113017,6 +113023,7 @@
 /obj/machinery/door/airlock/glass_medical{
 	id_tag = "MedbayFoyer";
 	name = "Medbay Emergency Entrance";
+	req_access_dir = 8;
 	req_access_txt = "5"
 	},
 /turf/simulated/floor{
@@ -113892,8 +113899,8 @@
 /area/bridge)
 "wap" = (
 /obj/structure/table,
-/obj/item/clothing/suit/straight_jacket,
-/obj/item/clothing/suit/straight_jacket,
+/obj/item/clothing/suit/strait_jacket,
+/obj/item/clothing/suit/strait_jacket,
 /obj/item/clothing/mask/muzzle,
 /obj/item/clothing/mask/muzzle,
 /obj/item/weapon/cane,

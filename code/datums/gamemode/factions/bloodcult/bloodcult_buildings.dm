@@ -560,7 +560,9 @@
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (!cult)
 					return
-				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000"><ul>"}
+				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000">"}
+				dat += "<b>Our cult can currently grow up to [cult.cultist_cap] members.</b>"
+				dat += "<ul>"
 				for (var/datum/role/cultist/C in cult.members)
 					var/datum/mind/M = C.antag
 					var/conversion = ""
@@ -622,7 +624,7 @@
 						else
 							holomap_datum.cursor.pixel_x = (T.x-8)*PIXEL_MULTIPLIER
 							holomap_datum.cursor.pixel_y = (T.y-8)*PIXEL_MULTIPLIER
-						if (T.z == STATION_Z)
+						if (T.z == map.zMainStation)
 							personnal_I.overlays += holomap_datum.cursor
 						watcher_maps["\ref[user]"] = personnal_I
 					var/image/I = watcher_maps["\ref[user]"]

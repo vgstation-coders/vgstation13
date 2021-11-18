@@ -145,8 +145,6 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	INVOKE_EVENT(src, /event/attackhand, "user" = user, "target" = src)
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-
-	..()
 	user.delayNextAttack(8)
 	user.do_attack_animation(src, W)
 	if (W.hitsound)
@@ -155,7 +153,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
 	else
 		visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>")
-	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = W)
+	..()	// /obj/attackby invokes /event/attackby
 
 /obj/machinery/artifact/Bumped(var/atom/A)
 	if (istype(A,/obj))

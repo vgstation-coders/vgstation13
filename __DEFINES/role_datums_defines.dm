@@ -210,6 +210,7 @@
 // -- Objectives flags
 
 #define FACTION_OBJECTIVE 1
+#define FREEFORM_OBJECTIVE 2
 
 // -- Cult 2.0 states
 #define CULT_PRELUDE 		0 // First objective

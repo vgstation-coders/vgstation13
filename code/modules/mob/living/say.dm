@@ -410,7 +410,13 @@ var/list/headset_modes = list(
 			if(cult_chat_check(SPEAK_OVER_CHANNEL_INTO_CULT_CHAT))
 				var/turf/T = get_turf(src)
 				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
-				var/themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
+				var/mob/living/L = speech.speaker
+				var/themessage
+				var/datum/role/cultist/C = iscultist(L)
+				if (C && (C.cultist_role == CULTIST_ROLE_MENTOR))
+					themessage = text("<span class='sinisterbig'><b>[]:</b> []</span>",src.name,html_encode(speech.message))//mentor messages are bigger
+				else
+					themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				for(var/mob/M in player_list)
 					if(M.cult_chat_check(HEAR_CULT_CHAT) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
@@ -546,27 +552,29 @@ var/list/headset_modes = list(
 #define HEAR_CULT_CHAT 2
 
 /mob/living/cult_chat_check(var/setting = SPEAK_OVER_GENERAL_CULT_CHAT)
-	if(!mind)
+	if (!mind)
 		return
-	if(setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
+	if (occult_muted())
+		return
+	if (setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
 		return
 
 	var/datum/role/cultist/culto = iscultist(src)
 	if (culto)
-		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
+		if (setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
 			var/turf/T = get_turf(src)
 			for (var/obj/structure/cult/spire/S in cult_spires)
 				if (isturf(S.loc) && S.z == T.z) // Spires need to not be concealed and on the same Z Level.
 					return 1
-		if(setting == HEAR_CULT_CHAT)
+		if (setting == HEAR_CULT_CHAT)
 			return 1
 
 	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
-	if(cult)
-		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
+	if (cult)
+		if (setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
 			if(universal_cult_chat == 1)
 				return 1
-		if(setting == HEAR_CULT_CHAT)
+		if (setting == HEAR_CULT_CHAT)
 			return 1
 
 #undef SPEAK_OVER_GENERAL_CULT_CHAT

@@ -350,6 +350,8 @@
 				door.req_one_access = src.electronics.conf_access
 			else
 				door.req_access = src.electronics.conf_access
+			door.req_access_dir = src.electronics.dir_access
+			door.access_not_dir = src.electronics.access_nodir
 			if(created_name)
 				door.name = created_name
 			else
