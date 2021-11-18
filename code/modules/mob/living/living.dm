@@ -669,6 +669,11 @@ Thanks.
 	if (t7 && pulling && (Adjacent(pulling) || pulling.loc == loc))
 		. = ..()
 
+		if(istype(client.eye,/turf/simulated/wall))
+			var/turf/simulated/wall/W = client.eye
+			if (!Adjacent(W))
+				W.reset_view()
+
 		if (pulling && pulling.loc)
 			if(!isturf(pulling.loc))
 				stop_pulling()

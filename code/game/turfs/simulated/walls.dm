@@ -168,10 +168,8 @@
 
 	if(bullet_marks)
 		peeper = user
-		var/datum/control/new_control = new /datum/control/peephole(peeper, src)
-		peeper.orient_object.Add(new_control)
-		new_control.take_control()
-		peeper.dir = get_dir(peeper,src)
+		peeper.client.perspective = EYE_PERSPECTIVE
+		peeper.client.eye = src
 		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
 		"<span class='notice'>You lean in and look through \the [src].</span>")
 		src.add_fingerprint(peeper)
@@ -186,10 +184,8 @@
 /turf/simulated/wall/proc/reset_view()
 	if(!peeper)
 		return
-	var/datum/control/C = peeper.orient_object[src]
-	if(C)
-		C.break_control()
-		qdel(C)
+	peeper.client.eye = peeper.client.mob
+	peeper.client.perspective = MOB_PERSPECTIVE
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
 	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks

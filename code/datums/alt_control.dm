@@ -118,26 +118,3 @@
 			move_delay = 0
 
 	controller.DisplayUI("Soulblade")
-
-///////////////////////////////PEEPHOLE CONTROLLER///////////////////////////////
-
-/datum/control/peephole
-	control_flags = LOCK_EYE_TO_CONTROLLED
-	var/turf/simulated/wall/peepwall
-
-/datum/control/peephole/New(var/mob/new_controller, var/atom/new_controlled)
-	controller = new_controller
-	peepwall = new_controlled
-
-/datum/control/peephole/is_valid(var/check_control = FALSE)
-	if(controller && controller.client && peepwall && !controller.gcDestroyed && !peepwall.gcDestroyed && controller.Adjacent(peepwall))
-		return 1
-	else
-		peepwall.reset_view()
-		return 0
-
-/datum/control/peephole/Move_object(var/direction)
-	is_valid()
-
-/datum/control/peephole/Orient_object(var/direction)
-	is_valid()
