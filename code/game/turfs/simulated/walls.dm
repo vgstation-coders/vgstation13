@@ -173,7 +173,7 @@
 		new_control.take_control()
 		peeper.dir = get_dir(peeper,src)
 		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
-		"<span class='notice'>You lean in and looks through \the [src].</span>")
+		"<span class='notice'>You lean in and look through \the [src].</span>")
 		src.add_fingerprint(peeper)
 		return ..()
 

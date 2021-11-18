@@ -124,7 +124,7 @@
 /datum/control/peephole
 	control_flags = LOCK_EYE_TO_CONTROLLED
 
-/datum/control/peephole/is_valid(var/direction)
+/datum/control/peephole/is_valid(var/check_control = FALSE)
 	if(..() && controlled.Adjacent(controller))
 		return 1
 	else
