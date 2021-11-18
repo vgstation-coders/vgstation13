@@ -378,7 +378,7 @@ var/list/asset_datums = list()
 
 /datum/asset/simple/nanoui_maps/New()
 	for(var/z in 1 to world.maxz)
-		if(z == CENTCOMM_Z)
+		if(z == map.zCentcomm)
 			continue
 		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
 

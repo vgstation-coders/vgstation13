@@ -625,7 +625,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(owner.reagents.has_reagent(CLOTTING_AGENT) || owner.reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely.
 				blood_factor = 0
 
-			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * blood_factor)
+			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * max(0, blood_factor))
 
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)

@@ -160,7 +160,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 
 
 /datum/role/catbeast/proc/OnStation()
-	if(antag.current.z != STATION_Z)
+	if(antag.current.z != map.zMainStation)
 		return FALSE
 	var/area/A = get_area(antag.current)
 	if (isspace(A))

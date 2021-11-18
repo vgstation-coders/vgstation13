@@ -28,7 +28,7 @@ Basically, you are going to overwrite the flags.
 
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY       This is basically how you want it to run.
-	daynight_z_lvl = STATION_Z   This basically is the z level it will be on.
+	daynight_z_lvl = 1   This basically is the z level it will be on. Defaults to main station unless specified here.
 
 	See: Both of them right here!
 */
@@ -48,8 +48,9 @@ Basically, you are going to overwrite the flags.
 	NEW_SS_GLOBAL(SSDayNight)
 
 /datum/subsystem/daynightcycle/Initialize()
-	if(daynight_z_lvl)
-		get_turflist()
+	if(!daynight_z_lvl)
+		daynight_z_lvl = map.zMainStation
+	get_turflist()
 	..()
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)

@@ -10,6 +10,10 @@
 	tDomeX = 128
 	tDomeY = 58
 	tDomeZ = 3
+	zAsteroid = 1
+	zMainStation = 2
+	zCentcomm = 3
+	zTCommSat = 5
 	multiz = TRUE
 	zLevels = list(
 		/datum/zLevel/snowmine{
@@ -54,7 +58,6 @@
 
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY
-	daynight_z_lvl = STATION_Z
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
