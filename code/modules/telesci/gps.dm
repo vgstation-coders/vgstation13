@@ -260,7 +260,7 @@ var/list/all_GPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
-	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE)
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE, istype(src,/obj/item/device/gps/secure/command))
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead, var/iscommand = FALSE)
 	var/turf/pos = get_turf(SPS)
@@ -336,3 +336,8 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	icon_state = "sps-c"
 	base_tag = "CMD"
 	view_all = TRUE
+
+/obj/item/device/gps/secure/command/OnMobDeath(mob/wearer)
+	if(!transmitting)
+		return
+	send_signal(wearer, src, "SPS [gpstag]: Code Red", TRUE, TRUE)
