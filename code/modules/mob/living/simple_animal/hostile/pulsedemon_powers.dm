@@ -284,3 +284,48 @@
         else if(istype(P,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/B = P
             PD.suckBattery(B)
+
+/spell/pulse_demon/sustaincharge
+    charge_type = Sp_PASSIVE
+    level_max = list(Sp_POWER = 3)
+    charge_max = 0 //Redundancy
+    spell_flags = NO_BUTTON
+    hud_state = "pd_closed"
+    name = "Self sustaining charge"
+    abbreviation = "SC"
+    desc = "Allows leaving cables for brief periods of time, while moving at a slower speed"
+    purchase_cost = 100000
+
+/spell/pulse_demon/sustaincharge/on_added(mob/user)
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        PD.can_leave_cable = TRUE
+
+/spell/pulse_demon/sustaincharge/empower_spell()
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        spell_levels[Sp_POWER]++
+
+        var/temp = ""
+        name = initial(name)
+        switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
+            if(3)
+                temp = "You have improved [name] into Frugal [name]."
+                name = "Frugal [name]"
+            if(2)
+                temp = "You have improved [name] into Cheap [name]."
+                name = "Cheap [name]"
+            if(1)
+                temp = "You have improved [name] into Renewable [name]."
+                name = "Renewable [name]"
+            if(0)
+                temp = "You have improved [name] into Self-Sufficient [name]."
+                name = "Self-Sufficient [name]"
+
+
+        if(PD.move_divide > 1)
+            PD.move_divide *= 0.9
+        return temp
+
+/spell/pulse_demon/sustaincharge/quicken_spell()
+    return

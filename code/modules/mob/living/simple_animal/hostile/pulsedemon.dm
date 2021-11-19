@@ -41,6 +41,7 @@
     var/show_desc = FALSE                       //For the ability menu
     var/can_leave_cable = FALSE                 //For the ability that lets you
     var/base_movespeed = 1                      //For modifying with the above
+    var/move_divide = 2                         //For slowing down of above
 
     //TYPES
     var/area/controlling_area                   // Area controlled from an APC
@@ -130,7 +131,7 @@
             health -= health_drain_rate    
     else if(can_leave_cable)
         health -= health_drain_rate
-        move_to_delay = 1 / (base_movespeed / 2)
+        move_to_delay = 1 / (base_movespeed / move_divide)
     else
         death()
     regular_hud_updates()
@@ -499,6 +500,9 @@
 
     if(href_list["quicken"])
         var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.spell_flags & NO_BUTTON)
+            to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
+            return
         if(PDS.upgrade_cost > charge)
             to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
             return
