@@ -18,8 +18,6 @@ var/savefile/panicfile
 var/datum/early_init/early_init_datum = new
 
 #if AUXTOOLS_DEBUGGER
-var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
-
 /proc/enable_debugging(mode, port) //Hooked by auxtools
 	CRASH("auxtools not loaded")
 
@@ -33,7 +31,7 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 /datum/early_init/New()
 	..()
 	#if AUXTOOLS_DEBUGGER
-	if(fexists(auxtools_path))
+	if(fexists(world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")))
 		call(auxtools_path, "auxtools_init")()
 		enable_debugging()
 	else
