@@ -306,6 +306,19 @@
         else
             to_chat(PD,"<span class='warning'>There is no weapon charging.</span>")
 
+/obj/machinery/cell_charger/attack_pulsedemon(mob/user)
+    user.loc = src
+    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
+        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
+        if(charging)
+            to_chat(PD,"<span class='notice'>You are now attempting to hijack \the [charging], this will take approximately [PD.takeover_time] seconds.</span>")
+            if(do_after(PD,src,PD.takeover_time*10))
+                to_chat(PD,"<span class='notice'>You are now inside \the [charging].</span>")
+                PD.loc = charging
+                charging.occupant = PD
+        else
+            to_chat(PD,"<span class='warning'>There is no cell charging.</span>")
+
 /obj/machinery/recharge_station/attack_pulsedemon(mob/user)
     user.loc = src
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
