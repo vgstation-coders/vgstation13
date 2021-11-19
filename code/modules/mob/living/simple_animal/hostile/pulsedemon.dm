@@ -21,7 +21,6 @@
     health = 50
     maxHealth = 50
     speed = 1
-    move_to_delay = 1
     size = SIZE_TINY
 
     attacktext = "electrocutes"
@@ -41,6 +40,7 @@
     var/takeover_time = 30                      //Time spent taking over electronics
     var/show_desc = FALSE                       //For the ability menu
     var/can_leave_cable = FALSE                 //For the ability that lets you
+    var/base_movespeed = 1                      //For modifying with the above
 
     //TYPES
     var/area/controlling_area                   // Area controlled from an APC
@@ -116,6 +116,7 @@
             current_cable.add_load(amount_per_regen)
         else
             health -= health_drain_rate
+        move_to_delay = 1 / base_movespeed
     else if(current_power)
         if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
@@ -129,6 +130,7 @@
             health -= health_drain_rate    
     else if(can_leave_cable)
         health -= health_drain_rate
+        move_to_delay = 1 / (base_movespeed / 2)
     else
         death()
     regular_hud_updates()
