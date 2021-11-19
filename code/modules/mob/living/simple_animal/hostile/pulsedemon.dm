@@ -40,6 +40,7 @@
     var/max_can_absorb = 10000                  //Maximum amount that max charge can increase to
     var/takeover_time = 30                      //Time spent taking over electronics
     var/show_desc = FALSE                       //For the ability menu
+    var/can_leave_cable = FALSE                 //For the ability that lets you
 
     //TYPES
     var/area/controlling_area                   // Area controlled from an APC
@@ -126,6 +127,8 @@
             current_power.add_load(amount_per_regen)
         else
             health -= health_drain_rate    
+    else if(can_leave_cable)
+        health -= health_drain_rate
     else
         death()
     regular_hud_updates()
@@ -141,7 +144,7 @@
     return istype(F,/turf/simulated/floor) && F.floor_tile
 
 /mob/living/simple_animal/hostile/pulse_demon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-    if(!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc)
+    if(!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc || !can_leave_cable)
         return
     var/moved = FALSE
     if(..())
