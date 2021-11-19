@@ -89,6 +89,8 @@
 
 /obj/item/weapon/cell/proc/explode()
 	var/turf/T = get_turf(src.loc)
+	if(occupant)
+		occupant.forceMove(get_turf(src))
 /*
  * 1000-cell	explosion(T, -1, 0, 1, 1)
  * 2500-cell	explosion(T, -1, 0, 1, 1)
