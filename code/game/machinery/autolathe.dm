@@ -110,6 +110,7 @@
 		new /obj/item/device/taperecorder(), \
 		new /obj/item/tool/wirecutters/scissors(), \
 		new /obj/item/weapon/chisel(), \
+		new /obj/item/stack/cable_coil(), \
 		new /obj/item/weapon/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
