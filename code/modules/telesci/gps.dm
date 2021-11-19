@@ -262,7 +262,7 @@ var/list/all_GPS_list = list()
 	. = ..()
 	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE)
 
-/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead)
+/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead, var/iscommand = FALSE)
 	var/turf/pos = get_turf(SPS)
 	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
 	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
@@ -275,7 +275,7 @@ var/list/all_GPS_list = list()
 	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
 	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
 		if(receiver && !receiver.stat)
-			receiver.receive_alert(alerttype, transmission_data, verbose)
+			receiver.receive_alert(alerttype, transmission_data, verbose, iscommand)
 			boop = TRUE
 
 	if(boop)

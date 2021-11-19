@@ -100,7 +100,7 @@ TODO: literally every alarm but SPS alarms.
 	user << browse(listing, "window=security_alert")
 	onclose(user, "security_alert")
 
-/obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
+/obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1, var/iscommand)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
@@ -108,7 +108,7 @@ TODO: literally every alarm but SPS alarms.
 	saved_security_alerts.Insert(1,newdata)
 	if(saved_security_alerts.len >= 50) //no need for infinite logs
 		pop(saved_security_alerts)
-	var/message = "Alert. [alerttype]"
+	var/message = "[iscommand ? "<span class='megaphone'>" : ""]Alert. [alerttype][iscommand ? "</span>" : ""]"
 	if(verbose)
 		say(message)
 	playsound(src,'sound/machines/radioboop.ogg',40,1)
