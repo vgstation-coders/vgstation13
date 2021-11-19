@@ -316,6 +316,7 @@
                 to_chat(PD,"<span class='notice'>You are now inside \the [charging].</span>")
                 PD.loc = charging
                 charging.occupant = PD
+                charging.rigged = 1
         else
             to_chat(PD,"<span class='warning'>There is no cell charging.</span>")
 
