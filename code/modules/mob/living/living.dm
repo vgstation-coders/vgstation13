@@ -737,7 +737,7 @@ Thanks.
 	if(T != loc)
 		handle_hookchain(Dir)
 
-	if(istype(client.eye,/turf/simulated/wall))
+	if(client && client.eye && istype(client.eye,/turf/simulated/wall))
 		var/turf/simulated/wall/W = client.eye
 		if (!Adjacent(W))
 			client.eye = src

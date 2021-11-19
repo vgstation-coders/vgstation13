@@ -75,7 +75,7 @@
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
-		to_chat(user, "It has bullet markings on it.")
+		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
 
 /turf/proc/process()
 	set waitfor = FALSE

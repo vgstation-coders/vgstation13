@@ -204,17 +204,16 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/tool/solder))
+	if(istype(W,/obj/item/tool/solder) && bullet_marks)
 		var/obj/item/tool/solder/S = W
-		if(bullet_marks)
-			if(!S.remove_fuel(bullet_marks*2,user))
-				return
-			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-			to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
-			bullet_marks = 0
-			icon = initial(icon)
-			reset_view()
+		if(!S.remove_fuel(bullet_marks*2,user))
 			return
+		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
+		bullet_marks = 0
+		icon = initial(icon)
+		reset_view()
+		return
 
 	//Get the user's location
 	if(!istype(user.loc, /turf) && !istype(user.loc, /obj/mecha))
@@ -298,7 +297,7 @@
 			user.visible_message("<span class='warning'>[user] drills a hole into \the [src].</span>", \
 			"<span class='notice'>You drill a hole into \the [src] to peep through.</span>", \
 			"<span class='warning'>You hear drilling noises.</span>")
-			add_bullet_mark("trace",round(Get_Angle(user,src)))
+			add_bullet_mark("peephole",round(Get_Angle(user,src)))
 
     //CUT_WALL will dismantle the wall
 	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)
