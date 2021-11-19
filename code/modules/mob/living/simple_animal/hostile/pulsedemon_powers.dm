@@ -291,7 +291,7 @@
     charge_max = 0 //Redundancy
     spell_flags = NO_BUTTON
     hud_state = "pd_closed"
-    name = "Self sustaining charge"
+    name = "Self-Sustaining Charge"
     abbreviation = "SC"
     desc = "Allows leaving cables for brief periods of time, while moving at a slower speed"
     purchase_cost = 100000
