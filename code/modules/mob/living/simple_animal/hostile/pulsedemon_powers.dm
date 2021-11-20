@@ -290,7 +290,7 @@
     level_max = list(Sp_POWER = 3)
     charge_max = 0 //Redundancy
     spell_flags = NO_BUTTON
-    hud_state = "pd_closed"
+    hud_state = "pd_cableleave"
     name = "Self-Sustaining Charge"
     abbreviation = "SC"
     desc = "Allows leaving cables for brief periods of time, while moving at a slower speed."
