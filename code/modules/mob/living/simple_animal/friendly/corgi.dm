@@ -299,7 +299,7 @@
 				dir = i
 				sleep(1)
 		return
-	
+
 	if(istype(item_to_add,/obj/item/clothing/head))
 		var/obj/item/clothing/head/hat = item_to_add
 		if(hat.on_top)
@@ -563,7 +563,7 @@
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around.","chases her nub of a tail.")
 	is_pet = TRUE
-
+	holder_type = /obj/item/weapon/holder/animal/mutt
 	species_type = /mob/living/simple_animal/corgi/sasha
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
 

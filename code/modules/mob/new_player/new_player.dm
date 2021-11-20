@@ -368,41 +368,9 @@
 
 	job_master.AssignRole(src, rank, 1)
 
-	ticker.mode.latespawn(src)//can we make them a latejoin antag?
-
-	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
+	var/mob/living/carbon/human/character = create_character(1)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
-
-	// Very hacky. Sorry about that
-	if(ticker.tag_mode_enabled == TRUE)
-		character.mind.assigned_role = "MODE"
-		var/datum/outfit/mime/mime_outfit = new
-		mime_outfit.equip(character)
-		var/datum/role/tag_mode_mime/mime = new
-		mime.AssignToRole(character.mind,1)
-		mime.Greet(GREET_ROUNDSTART)
-
-	if(character.mind.assigned_role != "MODE")
-		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
-
-	job_master.CheckPriorityFulfilled(rank)
-
-	var/turf/T = character.loc
-	for(var/role in character.mind.antag_roles)
-		var/datum/role/R = character.mind.antag_roles[role]
-		R.OnPostSetup(TRUE) // Latejoiner post-setup.
-		R.ForgeObjectives()
-		R.AnnounceObjectives()
-
-	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
-		//Removal of job slot is in role/role.dm
-		character.store_position()
-		qdel(src)
-		return
-
-
-	EquipCustomItems(character)
 
 	var/atom/movable/what_to_move = character.locked_to || character
 
@@ -412,6 +380,38 @@
 	else
 		// TODO:  Job-specific latejoin overrides.
 		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+
+	ticker.mode.latespawn(character)//can we make them a latejoin antag?
+
+	// Very hacky. Sorry about that
+	if(ticker.tag_mode_enabled == TRUE)
+		character.mind.assigned_role = "MODE"
+		var/datum/outfit/mime/mime_outfit = new
+		mime_outfit.equip(character, strip = TRUE, delete = TRUE)
+		var/datum/role/tag_mode_mime/mime = new
+		mime.AssignToRole(character.mind,1)
+		mime.Greet(GREET_ROUNDSTART)
+
+	var/turf/T = character.loc
+	for(var/role in character.mind.antag_roles)
+		var/datum/role/R = character.mind.antag_roles[role]
+		R.OnPostSetup(TRUE) // Latejoiner post-setup.
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
+	job_master.CheckPriorityFulfilled(rank)
+
+	if (character.loc != T) //Offstation antag. Continue no further, as there will be no announcement or manifest injection.
+		//Removal of job slot is in role/role.dm
+		character.store_position()
+		qdel(src)
+		return
+
+
+	EquipCustomItems(character)
 
 	character.store_position()
 
@@ -648,7 +648,7 @@
 	src << browse(dat, "window=latechoices;size=360x640;can_close=1")
 
 
-/mob/new_player/proc/create_character()
+/mob/new_player/proc/create_character(var/joined_late = 0)
 	spawning = 1
 	close_spawn_windows()
 
@@ -723,6 +723,36 @@
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
 
+	var/rank = new_character.mind.assigned_role
+	if(!joined_late)
+		var/obj/S = null
+		// Find a spawn point that wasn't given to anyone
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if(sloc.name != rank)
+				continue
+			if(locate(/mob/living) in sloc.loc)
+				continue
+			S = sloc
+			break
+		if(!S)
+			// Find a spawn point that was already given to someone else
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if(sloc.name != rank)
+					continue
+				S = sloc
+				stack_trace("not enough spawn points for [rank]")
+				break
+		if(!S)
+			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
+			S = locate("start*[rank]")
+		if(S)
+			// Use the given spawn point
+			new_character.forceMove(S.loc)
+		else
+			// Use the arrivals shuttle spawn point
+			stack_trace("no spawn points for [rank]")
+			new_character.forceMove(pick(latejoin))
+	
 	new_character.key = key		//Manually transfer the key to log them in
 
 	for(var/datum/religion/R in ticker.religions)
@@ -733,7 +763,9 @@
 	return new_character
 
 //Basically, a stripped down version of create_character(). We don't care about DNA, prefs, species, etc. and we skip some rather lengthy setup for each step.
-/mob/new_player/proc/create_roundstart_cyborg()
+/mob/new_player/proc/create_roundstart_silicon(var/type)
+	if(type != "Cyborg" && type != "AI" && type != "Mobile MMI")
+		return
 	//End lobby
 	spawning = 1
 	close_spawn_windows()
@@ -742,7 +774,7 @@
 	//Find a spawnloc
 	var/turf/spawn_loc
 	for(var/obj/effect/landmark/start/sloc in landmarks_list)
-		if (sloc.name != "Cyborg")
+		if (sloc.name != type)
 			continue
 		if (locate(/mob/living) in sloc.loc)
 			if(!spawn_loc)
@@ -752,21 +784,21 @@
 		break
 	if(!spawn_loc)
 		spawn_loc = pick(latejoin) //If we absolutely can't find spawns
-		message_admins("WARNING! Couldn't find a spawn location for a cyborg. They will spawn at the arrival shuttle.")
+		message_admins("WARNING! Couldn't find a spawn location for a [type]. They will spawn at the arrival shuttle.")
 
 	//Create the robot and move over prefs
-	var/mob/living/silicon/robot/new_character = new(spawn_loc)
-	new_character.mmi = new /obj/item/device/mmi(new_character)
-	new_character.mmi.create_identity(client.prefs) //Uses prefs to create a brain mob
-
-	//Handles transferring the mind and key manually.
-	if (mind)
-		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
-		mind.transfer_to(new_character)
-	new_character.key = key //Do this after. For reasons known only to oldcoders.
-	spawn()
-		new_character.Namepick()
-	return new_character
+	if(type == "AI")
+		return AIize()
+	else
+		forceMove(spawn_loc)
+		var/mob/living/silicon/robot/new_character
+		var/datum/preferences/prefs = client.prefs
+		if(type == "Mobile MMI")
+			new_character = MoMMIfy()
+		else
+			new_character = Robotize()
+		new_character.mmi.create_identity(prefs) //Uses prefs to create a brain mob
+		return new_character
 
 /mob/new_player/proc/ViewPrediction()
 	var/dat = {"<html><body>

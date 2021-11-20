@@ -41,6 +41,9 @@
 
 /area/vault/gingerbread_house
 
+/area/vault/podstation
+	requires_power = 1
+
 /area/vault/mechclubhouse
 	requires_power = 1
 

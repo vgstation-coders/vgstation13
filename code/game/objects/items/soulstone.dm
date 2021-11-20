@@ -208,6 +208,23 @@
 	if (istype(receptacle, /obj/item/soulstone/gem))
 		gem = TRUE
 
+	var/mob/victim
+	if (iscarbon(target))
+		victim = target
+	else if (istype(target, /obj/item/organ/external/head))
+		var/obj/item/organ/external/head/target_head = target
+		victim = target_head.brainmob
+
+	if (victim)
+		//First off let's check that the cult isn't bypassing its convertee cap
+		if (iscultist(user))
+			if (!iscultist(victim))
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (cult && !cult.CanConvert())
+					if (!blade || victim.isDead())
+						to_chat(user, "<span class='danger'>The cult has too many members already, \the [soul_receptacle] won't let you take their soul.</span>")
+					return
+
 	if (iscarbon(target))
 		init_body(target,user)
 
@@ -459,12 +476,9 @@
 		//Is our user a cultist? Then you're a cultist too now!
 		if (iscultist(user))
 			if (!iscultist(shadeMob))
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (cult && !cult.CanConvert())
-					to_chat(user, "<span class='danger'>The cult has too many members already.</span>")
-					return
 				var/datum/role/cultist/newCultist = new
 				newCultist.AssignToRole(shadeMob.mind,1)
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (!cult)
 					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 				cult.HandleRecruitedRole(newCultist)

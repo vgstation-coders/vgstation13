@@ -92,5 +92,10 @@
 	terminal.dir = get_dir(newloc, src)
 	terminal.master = src
 
+/obj/machinery/power/shuttle_rotate(angle)
+	..()
+	if(terminal.dir != get_dir(terminal.loc, src))
+		terminal.dir = get_dir(terminal.loc, src)
+
 /obj/machinery/power/proc/can_attach_terminal(mob/user)
 	return user.loc != src.loc && (get_dir(user, src) in cardinal) && !terminal

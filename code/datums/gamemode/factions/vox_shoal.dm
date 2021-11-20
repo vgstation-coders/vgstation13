@@ -132,14 +132,8 @@ var/list/potential_bonus_items = list(
 
 /datum/faction/vox_shoal/OnPostSetup()
 	..()
-	var/list/turf/vox_spawn = list()
 
 	for(var/obj/effect/landmark/A in landmarks_list)
-		if(A.name == "voxstart")
-			vox_spawn += get_turf(A)
-			qdel(A)
-			A = null
-			continue
 		if (A.name == "vox_locker")
 			var/obj/structure/closet/loot/L = new(get_turf(A))
 			our_bounty_lockers += L
@@ -150,11 +144,7 @@ var/list/potential_bonus_items = list(
 	var/spawn_count = 1
 
 	for(var/datum/role/vox_raider/V in members)
-		if(spawn_count > vox_spawn.len)
-			spawn_count = 1
 		var/datum/mind/synd_mind = V.antag
-		synd_mind.current.forceMove(vox_spawn[spawn_count])
-		spawn_count++
 		equip_raider(synd_mind.current, spawn_count)
 
 /datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
