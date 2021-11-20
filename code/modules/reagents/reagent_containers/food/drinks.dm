@@ -1076,7 +1076,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz
 	name = "Zam Formic Fizz"
-	desc = "Sulphuric Splash is for brainless minions. This is a REAL Grey's drink."
+	desc = "Sulphuric Splash is for brainless minions. This is a REAL grey's drink."
 	icon_state = "Zam_FormicFizz"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz/New()
 	..()

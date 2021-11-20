@@ -335,7 +335,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/zambiscuits
 	name = "Zam Biscuit Package"
-	desc = "A package of Zam biscuits, popular fare for hungry Grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "zambiscuits"
 	storage_slots = 3

@@ -90,7 +90,7 @@
 	return
 
 // -- Equip mindless: if we're going to give the outfit to a mob without a mind
-/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE)
+/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE, var/strip = FALSE, var/delete = FALSE)
 	if (!H || (!H.mind && !equip_mindless) )
 		return
 
@@ -101,6 +101,12 @@
 	if (!L) // Couldn't find the particular species
 		species = "Default"
 		L = items_to_spawn["Default"]
+
+	if(strip)
+		var/list/dropped_items = H.unequip_everything()
+		if(delete)
+			for(var/atom/A in dropped_items)
+				qdel(A)
 
 	if (priority)
 		pre_equip_priority(H, species)

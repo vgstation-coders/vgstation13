@@ -18,6 +18,8 @@
 					alien = IS_VOX
 				if(/datum/species/plasmaman)
 					alien = IS_PLASMA
+				if(/datum/species/grey)
+					alien = IS_GREY
 		reagents.metabolize(src,alien)
 
 	if(status_flags & GODMODE)

@@ -7,7 +7,7 @@
 /datum/dynamic_ruleset/latejoin/trim_candidates()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
-	for(var/mob/new_player/P in candidates)
+	for(var/mob/P in candidates)
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
@@ -96,6 +96,7 @@
 		federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 	var/mob/M = pick(assigned)
 	var/datum/role/wizard/newWizard = new
+	M.forceMove(pick(wizardstart))
 	newWizard.AssignToRole(M.mind,1)
 	federation.HandleRecruitedRole(newWizard)
 	newWizard.Greet(GREET_LATEJOIN)
@@ -125,14 +126,18 @@
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(assigned)
+	var/turf/oldloc = get_turf(M)
+	M.forceMove(null)
 	if(!latejoinprompt(M,src))
 		message_admins("[M.key] has opted out of becoming a ninja.")
+		M.forceMove(oldloc)
 		return 0
-	var/datum/role/ninja/newninja = new
-	newninja.AssignToRole(M.mind,1)
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
 	if (!spoider)
 		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	var/datum/role/ninja/newninja = new
+	M.forceMove(pick(ninjastart))
+	newninja.AssignToRole(M.mind,1)
 	spoider.HandleRecruitedRole(newninja)
 	newninja.Greet(GREET_DEFAULT)
 	return 1

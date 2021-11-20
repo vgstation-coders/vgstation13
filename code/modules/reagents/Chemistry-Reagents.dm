@@ -4375,6 +4375,104 @@
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#FAF0E6" //rgb: 51, 102, 0
 
+/datum/reagent/zamspices
+	name = "Zam Spices"
+	id = ZAMSPICES
+	description = "A blend of several mothership spices. It has a sharp, tangy aroma."
+	reagent_state = REAGENT_STATE_SOLID
+	nutriment_factor = 1 * REAGENTS_METABOLISM
+	color = "#850E0E" //rgb: 133, 14, 14
+
+/datum/reagent/zammild
+	name = "Zam's Mild Sauce"
+	id = ZAMMILD
+	description = "A tasty sauce made from mothership spices and acid."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#B38B26" //rgb: 179, 139, 38
+
+/datum/reagent/zamspicytoxin
+	name = "Zam's Spicy Sauce"
+	id = ZAMSPICYTOXIN
+	description = "A dangerously flavorful sauce made from mothership spices and powerful acid."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 6 * REAGENTS_METABOLISM
+	color = "#D35A0D" //rgb: 211, 90, 13
+
+/datum/reagent/zamspicytoxin/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+
+	if(alien && alien == IS_GREY)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			M.bodytemperature += 1.4 * TEMPERATURE_DAMAGE_COEFFICIENT
+			switch(volume)
+				if(1 to 15)
+					if(prob(10))
+						to_chat(M,"<span class='notice'>Your throat feels a little hot!</span>")
+					if(prob(5))
+						to_chat(M,"<span class='notice'>[pick("Now that's a Zam zing!","By the mothership, that was a perfect spice level.","That was an excellent flavor.","Spicy goodness is flowing through your system.")]</span>")
+				if(15 to 30)
+					if(prob(10))
+						to_chat(M,"<span class='notice'>Your throat feels like it's on fire!</span>")
+						M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+					if(prob(5))
+						to_chat(M,"<span class='warning'>[pick("That's a serious Zam zing!", "This is really starting to burn.", "The spice is overpowering the flavor.", "Spicy embers are starting to flare up in your chest.")]</span>")
+					if(prob(5))
+						to_chat(M,"<span class='warning'>You feel a slight burning in your chest.</span>")
+						M.adjustToxLoss(1)
+				if(30 to INFINITY)
+					M.Jitter(5)
+					if(prob(15))
+						H.custom_pain("You feel an awful burning in your chest.",1)
+						M.adjustToxLoss(3)
+					if(prob(10))
+						H.vomit()
+					if(prob(5))
+						to_chat(M,"<span class='warning'>[pick("That's way too much zing!", "By the mothership, that burns!", "You can't taste anything but flaming spice!", "There's a fire in your gut!")]</span>")
+					if(prob(5))
+						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+						if(istype(L))
+							L.take_damage(1, 0)
+
+	else
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			M.bodytemperature += 1.6 * TEMPERATURE_DAMAGE_COEFFICIENT
+			switch(volume)
+				if(1 to 15)
+					if(prob(10))
+						to_chat(M,"<span class='notice'>Your throat feels like it's on fire!</span>")
+						M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+					if(prob(5))
+						to_chat(M,"<span class='warning'>You feel a slight burning in your chest.</span>")
+						M.adjustToxLoss(1)
+				if(15 to 30)
+					M.Jitter(5)
+					if(prob(15))
+						H.custom_pain("You feel an awful burning in your chest.",1)
+						M.adjustToxLoss(3)
+					if(prob(10))
+						H.vomit()
+					if(prob(5))
+						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+						if(istype(L))
+							L.take_damage(1, 0)
+				if(30 to INFINITY)
+					M.Jitter(5)
+					if(prob(40))
+						M.adjustToxLoss(6)
+					if(prob(25))
+						H.vomit()
+					if(prob(15))
+						var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+						if(istype(L))
+							L.take_damage(5, 0)
+					if(prob(10))
+						H.custom_pain("Your chest feels like its on fire!",1)
+						M.audible_scream()
 
 /datum/reagent/egg_yolk
 	name = "Egg Yolk"
@@ -5743,6 +5841,8 @@
 		M.heal_organ_damage(1, 0)
 	if(holder.has_reagent("capsaicin"))
 		holder.remove_reagent("capsaicin", 10 * REAGENTS_METABOLISM)
+	if(holder.has_reagent("zamspicytoxin"))
+		holder.remove_reagent("zamspicytoxin", 10 * REAGENTS_METABOLISM)
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
 

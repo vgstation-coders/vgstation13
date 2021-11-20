@@ -75,6 +75,11 @@
 		return FALSE
 	return ..()
 
+/datum/next_map/island
+	name = "Island Station"
+	path = "Island"
+	min_players = 15
+
 /datum/next_map/lamprey
 	name = "Lamprey Station"
 	path = "Lamprey"
