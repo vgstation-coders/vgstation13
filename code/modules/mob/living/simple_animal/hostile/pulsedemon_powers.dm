@@ -325,6 +325,3 @@
         if(PD.move_divide > 1)
             PD.move_divide *= 0.9
         return temp
-
-/spell/pulse_demon/sustaincharge/process()
-    return
