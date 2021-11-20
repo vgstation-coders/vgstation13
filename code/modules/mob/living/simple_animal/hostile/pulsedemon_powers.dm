@@ -288,18 +288,17 @@
 /spell/pulse_demon/sustaincharge
     charge_type = Sp_PASSIVE
     level_max = list(Sp_POWER = 3)
-    charge_max = 0 //Redundancy
-    spell_flags = NO_BUTTON
+    charge_max = 1 SECONDS
     hud_state = "pd_cableleave"
     name = "Self-Sustaining Charge"
     abbreviation = "SC"
-    desc = "Allows leaving cables for brief periods of time, while moving at a slower speed."
+    desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
     purchase_cost = 100000
 
-/spell/pulse_demon/sustaincharge/on_added(mob/user)
+/spell/pulse_demon/sustaincharge/cast(var/list/targets, mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-        PD.can_leave_cable = TRUE
+        PD.can_leave_cable = !PD.can_leave_cable
 
 /spell/pulse_demon/sustaincharge/empower_spell()
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
