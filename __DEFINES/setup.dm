@@ -1271,6 +1271,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define IS_DIONA 1
 #define IS_VOX 2
 #define IS_PLASMA 3
+#define IS_GREY 4
 
 
 //Turf Construction defines

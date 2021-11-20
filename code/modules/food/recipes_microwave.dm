@@ -2917,23 +2917,11 @@
 
 // You have now entered the Ayy food zone
 
-/datum/recipe/greytvdinner1
+/datum/recipe/greytvdinnerclassic
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zamdinner1
+		/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
-
-/datum/recipe/greytvdinner2
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zamdinner2
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2
-
-/datum/recipe/greytvdinner3
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/zamdinner3
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3
+	result = /obj/item/weapon/reagent_containers/food/snacks/greytvdinnerclassic
 
 /datum/recipe/greygreens
 	reagents = list(SOYSAUCE = 10)

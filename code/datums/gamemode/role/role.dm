@@ -163,11 +163,12 @@
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
-	if(msg_admins)
-		message_admins("[key_name(M)] is now \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 
 	if (!OnPreSetup())
 		return FALSE
+
+	if(msg_admins)
+		message_admins("[key_name(M)] is now \an [id].[M.current ? " [formatJumpTo(M.current)]" : ""]")
 	return 1
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M, var/msg_admins = TRUE) //Called on deconvert

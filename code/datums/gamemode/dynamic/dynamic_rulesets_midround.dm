@@ -321,6 +321,9 @@
 		new_role.OnPostSetup() //Each individual role to show up gets a postsetup
 	..()
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/finish_setup(var/mob/new_character, var/index)
+	new_character.forceMove(pick(wizardstart))
+	..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -359,7 +362,21 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(!nuclear)
+		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
 	nuclear.forgeObjectives()
+
+	var/list/turf/synd_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "Syndicate-Spawn")
+			synd_spawn += get_turf(A)
+			continue
+	
+	var/spawnpos = index
+	if(spawnpos > synd_spawn.len)
+		spawnpos = 1
+	new_character.forceMove(synd_spawn[spawnpos])
 	if(index == 1) //Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind, 1)
@@ -475,12 +492,15 @@
 	else
 		return 0
 
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/spider_clan))
+		ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	new_character.forceMove(pick(ninjastart))
+	..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/setup_role(var/datum/role/newninja)
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
-	if (!spoider)
-		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
 	spoider.HandleRecruitedRole(newninja)
-
 	return ..()
 
 //////////////////////////////////////////////
@@ -528,7 +548,7 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent
-	name = "time agent anomaly"
+	name = "Time Agent Anomaly"
 	role_category = /datum/role/time_agent
 	required_candidates = 1
 	weight = 4
@@ -547,8 +567,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
 	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
-	if (!agency)
-		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
 	agency.HandleRecruitedRole(newagent)
 
 	return ..()
@@ -558,6 +576,11 @@
 		return 0
 	return ..()
 
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/time_agent))
+		ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	new_character.forceMove(pick(timeagentstart))
+	..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -652,6 +675,18 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
 	shoal.forgeObjectives()
+
+	var/list/turf/vox_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "voxstart")
+			vox_spawn += get_turf(A)
+			continue
+	
+	var/spawn_count = index
+	if(spawn_count > vox_spawn.len)
+		spawn_count = 1
+	new_character.forceMove(vox_spawn[spawn_count])
 	if (index == 1) // Our first guy is the leader
 		var/datum/role/vox_raider/chief_vox/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
@@ -818,6 +853,8 @@
 
 	new_character = generate_ruleset_body(new_character)
 	var/datum/role/new_role = new role_category
+	var/obj/structure/bed/chair/chair = pick(prisonerstart)
+	new_character.forceMove(get_turf(chair))
 	new_role.AssignToRole(new_character.mind,1)
 	setup_role(new_role)
 	current_prisoners += new_character
