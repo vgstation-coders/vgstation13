@@ -513,7 +513,7 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
 	if(M.mind.assigned_role != "AI")
-		for(var/mob/new_player/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
+		for(var/mob/player in mode.candidates) //mode.candidates is everyone readied up, not to be confused with candidates
 			if(player.mind.assigned_role == "AI")
 				//We have located an AI to replace
 				displace_AI(player)
