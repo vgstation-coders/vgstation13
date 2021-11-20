@@ -286,7 +286,6 @@
             PD.suckBattery(B)
 
 /spell/pulse_demon/sustaincharge
-    charge_type = Sp_PASSIVE
     level_max = list(Sp_POWER = 3)
     charge_max = 1 SECONDS
     hud_state = "pd_cableleave"
@@ -294,6 +293,7 @@
     abbreviation = "SC"
     desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
     purchase_cost = 100000
+    upgrade_cost = 10000
 
 /spell/pulse_demon/sustaincharge/cast(var/list/targets, mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
