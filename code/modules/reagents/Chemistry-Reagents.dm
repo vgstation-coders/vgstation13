@@ -5667,7 +5667,7 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	glass_desc = "Vitamins from the mothership!"
 
-/datum/reagent/drink/orangejuice/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/opokjuice/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
