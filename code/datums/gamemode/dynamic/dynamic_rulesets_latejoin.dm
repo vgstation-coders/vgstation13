@@ -58,7 +58,6 @@
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.Greet(GREET_LATEJOIN)
-	assigned = list()
 	return 1
 
 /datum/dynamic_ruleset/latejoin/infiltrator/previous_rounds_odds_reduction(var/result)
@@ -101,7 +100,6 @@
 	newWizard.AssignToRole(M.mind,1)
 	federation.HandleRecruitedRole(newWizard)
 	newWizard.Greet(GREET_LATEJOIN)
-	assigned = list()
 	return 1
 
 
@@ -142,7 +140,6 @@
 	newninja.AssignToRole(M.mind,1)
 	spoider.HandleRecruitedRole(newninja)
 	newninja.Greet(GREET_DEFAULT)
-	assigned = list()
 	return 1
 
 
@@ -190,5 +187,4 @@
 		L.Greet(GREET_LATEJOIN)
 		L.OnPostSetup()
 		update_faction_icons()
-	assigned = list()
 	return 1

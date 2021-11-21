@@ -498,6 +498,7 @@ var/stacking_limit = 90
 			dynamic_stats.successful_injection(latejoin_rule)
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
+			assigned = list()
 			return 1
 	return 0
 
