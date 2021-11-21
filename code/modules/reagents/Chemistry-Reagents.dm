@@ -5659,6 +5659,22 @@
 	if(M.getToxLoss() && prob(20))
 		M.adjustToxLoss(-REM)
 
+/datum/reagent/drink/opokjuice
+	name = "Opok Juice"
+	id = OPOKJUICE
+	description = "A grey fruit pulped into bitter juice, with a very slight undertone of sweetness."
+	color = "#FF9191" //rgb: 255, 145, 145
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Vitamins from the mothership!"
+
+/datum/reagent/drink/orangejuice/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getToxLoss() && prob(20))
+		M.adjustToxLoss(-REM)
+
 /datum/reagent/drink/tomatojuice
 	name = "Tomato Juice"
 	id = TOMATOJUICE
