@@ -4,7 +4,7 @@
 	layer = TURF_LAYER
 	luminosity = 0
 
-	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
+	//for floors, use is_plating(), is_metal_floor() and is_light_floor()
 	var/intact = 1
 	var/turf_flags = 0
 
@@ -250,7 +250,7 @@
 	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
-/turf/proc/is_plasteel_floor()
+/turf/proc/is_metal_floor()
 	return 0
 /turf/proc/is_light_floor()
 	return 0
