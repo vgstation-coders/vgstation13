@@ -286,7 +286,7 @@
             PD.suckBattery(B)
 
 /spell/pulse_demon/sustaincharge
-    level_max = list(Sp_POWER = 3)
+    level_max = list()
     charge_max = 1 SECONDS
     hud_state = "pd_cableleave"
     name = "Self-Sustaining Charge"
@@ -299,29 +299,3 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         PD.can_leave_cable = !PD.can_leave_cable
-
-/spell/pulse_demon/sustaincharge/empower_spell()
-    if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-        var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-        spell_levels[Sp_POWER]++
-
-        var/temp = ""
-        name = initial(name)
-        switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-            if(3)
-                temp = "You have improved [name] into Frugal [name]."
-                name = "Frugal [name]"
-            if(2)
-                temp = "You have improved [name] into Cheap [name]."
-                name = "Cheap [name]"
-            if(1)
-                temp = "You have improved [name] into Renewable [name]."
-                name = "Renewable [name]"
-            if(0)
-                temp = "You have improved [name] into Self-Sufficient [name]."
-                name = "Self-Sufficient [name]"
-
-
-        if(PD.move_divide > 1)
-            PD.move_divide *= 0.9
-        return temp
