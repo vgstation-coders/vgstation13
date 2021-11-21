@@ -368,9 +368,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.
 /turf/simulated/floor/proc/make_plating()
-	if(istype(src,/turf/simulated/floor/engine))
-		return
-
 	if(is_grass_floor())
 		for(var/direction in cardinal)
 			if(istype(get_step(src,direction),/turf/simulated/floor))
