@@ -123,16 +123,7 @@
 					to_chat(user, "<span class='warning'>Unsecure the [floor_tile.name] first!</span>")
 				else
 					to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
-					floor_tile.forceMove(src)
-					floor_tile = null
-					intact = 0
-					broken = 0
-					burnt = 0
-					material = "metal"
-					plane = PLATING_PLANE
-
-					update_icon()
-					levelupdate()
+					make_plating()
 					// Can't play sounds from areas. - N3X
 					C.playtoolsound(src, 80)
 	if(istype(C, /obj/item/stack/tile/metal/plasteel) && !floor_tile)
@@ -176,6 +167,19 @@
 		if(3.0)
 			return
 
+/turf/simulated/floor/engine/make_plating()
+	if(floor_tile)
+		floor_tile.forceMove(src)
+		floor_tile = null
+	intact = 0
+	broken = 0
+	burnt = 0
+	material = "metal"
+	plane = PLATING_PLANE
+
+	update_icon()
+	levelupdate()
+
 /turf/simulated/floor/engine/update_icon()
 	overlays.Cut()
 	..()
@@ -184,6 +188,17 @@
 			overlays.Add(image('icons/turf/floors.dmi', icon_state = "r_floor"))
 		else
 			overlays.Add(image('icons/turf/floors.dmi', icon_state = "r_floor_unsec"))
+
+// For mappers
+/turf/simulated/floor/engine/plated
+	icon_state = "floor"
+	secured = TRUE
+
+/turf/simulated/floor/engine/plated/create_floor_tile()
+	if(!floor_tile)
+		floor_tile = new /obj/item/stack/tile/metal/plasteel(null)
+		floor_tile.amount = 1
+	update_icon()
 
 /turf/simulated/floor/engine/cult
 	name = "engraved floor"
