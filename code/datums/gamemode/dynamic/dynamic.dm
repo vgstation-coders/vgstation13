@@ -498,10 +498,9 @@ var/stacking_limit = 90
 			dynamic_stats.successful_injection(latejoin_rule)
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
-
+			. = TRUE
 	for (var/datum/dynamic_ruleset/latejoin/non_executed in drafted_rules) 
 		non_executed.assigned.Cut()
-	return latejoin_rule
 
 
 /datum/gamemode/dynamic/proc/picking_midround_rule(var/list/drafted_rules = list())
