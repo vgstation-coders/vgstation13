@@ -37,7 +37,7 @@
 		var/datum/role/R = imp_in.mind.GetRole(REV)
 		R.Drop()
 
-	to_chat(imp_in, "<span class='notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
+	to_chat(imp_in,"<span class='notice'>You feel a surge of loyalty towards Nanotrasen.</span><br><span class='sinister'>Note that you are not obliged to roleplay loyalty unless you choose to do so.</span>")
 
 /obj/item/weapon/implant/loyalty/handle_removal(mob/remover)
 	makeunusable(15)
