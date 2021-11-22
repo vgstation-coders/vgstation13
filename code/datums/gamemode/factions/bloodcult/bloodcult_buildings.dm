@@ -1426,7 +1426,6 @@ var/list/cult_spires = list()
 	return
 
 /obj/structure/cult/bloodstone/takeDamage(var/damage)
-	var/backup = (health > (2*maxHealth/3)) + (health > (maxHealth/3))
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
