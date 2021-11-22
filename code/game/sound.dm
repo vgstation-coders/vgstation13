@@ -161,8 +161,7 @@ var/const/SURROUND_CAP = 7
 		else
 			S.frequency = get_rand_frequency()
 
-	if(sound_environment)
-		S.environment = sound_environment
+	S.environment = sound_environment
 
 	if(isturf(turf_source))
 		// 3D sounds, the technology is here!
