@@ -1331,7 +1331,7 @@ var/list/cult_spires = list()
 //                       //
 ///////////////////////////
 
-/obj/structure/cult/bloodstone // Re-added as a cosmetic structure by admin request
+/obj/structure/cult/bloodstone
 	name = "blood stone"
 	icon_state = "bloodstone-enter1"
 	icon = 'icons/obj/cult_64x64.dmi'
