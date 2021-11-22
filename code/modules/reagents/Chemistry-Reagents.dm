@@ -4153,6 +4153,7 @@
 	if(..())
 		return 1
 
+	M.slurring = 0
 	M.dizziness = 0
 	M.drowsyness = 0
 	M.stuttering = 0
