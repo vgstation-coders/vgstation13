@@ -4791,7 +4791,6 @@
 			to_chat(usr, "Assigned the [D] to [shuttle_to_add_to.name]")
 
 		message_admins("<span class='notice'>[key_name_admin(usr)] has created a new shuttle docking port in [get_area(D)] [format
-		To(get_turf(D))][shuttle_to_add_to ? " and assigned it to [shuttle_to_add_to.name]" : ""]</span>", 1)
 		log_admin("[key_name_admin(usr)] has created a new destination docking port ([D.areaname]) at [D.x];[D.y];[D.z][shuttle_to_add_to ? " and assigned it to [shuttle_to_add_to.name]" : ""]")
 
 	if(href_list["shuttle_create_destination"])
