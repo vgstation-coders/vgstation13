@@ -84,7 +84,7 @@
 
 		for(var/i = 1; i <= 7; i++)
 			t1 += "<div style='float: left'>"
-			t1 += "[get_region_accesses_name(i)]<br><br>"
+			t1 += "<b>[get_region_accesses_name(i)]</b><br>"
 			for(var/access in get_region_accesses(i))
 				var/aname = get_access_desc(access)
 
