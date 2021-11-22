@@ -53,7 +53,10 @@
 	interact(user)
 
 /obj/item/weapon/circuitboard/airlock/interact(mob/user as mob)
-	var/t1 = ""
+	var/t1 = {"<style>
+			.parent {clear: both}
+			.row {float: left}
+			</style>"}
 
 	if (last_configurator)
 		t1 += "Operator: [last_configurator]<br>"
@@ -81,6 +84,10 @@
 		t1 += "<br>"
 
 		for(var/i = 1; i <= 7; i++)
+			if(i % 4 == 1)
+				t1 += "<div class='parent'>"
+
+			t1 += "<div class='row'>"
 			t1 += "[get_region_accesses_name(i)]<br><br>"
 			for(var/access in get_region_accesses(i))
 				var/aname = get_access_desc(access)
@@ -91,9 +98,13 @@
 					t1 += "<a style='color: green' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
 				else
 					t1 += "<a style='color: red' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
-			t1 += "<br>"
+			t1 += "<br>"4
+			t1 += "</div>"
 
-	var/datum/browser/popup = new(user, "airlock_electronics", "Access Control")
+			if(i % 4 == 0 || i == 7)
+				t1 += "</div>"
+
+	var/datum/browser/popup = new(user, "airlock_electronics", "Access Control", 640, 480)
 	popup.set_content(t1)
 	popup.open()
 
