@@ -32,17 +32,7 @@
 	var/obj/effect/blob/B = locate() in T
 
 	if (!B)//if not, let's just spawn one.
-		B = new /obj/effect/blob/normal(T,looks,1)
-
-	if (B)//then let's just pulse him as many times as we activated on a row (up to 10 times)
-		spawn()
-			for(var/j = 1 to min(30,round(count/10)))//max number of pulses reached after about 10 minutes (300 activations, 1 every 2 second in BYOND time)
-				if ((j%5) == 0)//up to 6 spores spawned
-					var/mob/living/simple_animal/hostile/blobspore/S = new (T)
-					S.blob_looks(looks)
-				for(var/i = 1; i < 8; i += i)
-					B.Pulse(0, i, null)
-				sleep(2)
+		new /obj/effect/blob/normal(T, looks, TRUE)
 
 	virus.cure(mob)//finally let's remove the spores now that they've matured
 
