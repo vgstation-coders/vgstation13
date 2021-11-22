@@ -53,7 +53,7 @@
 	interact(user)
 
 /obj/item/weapon/circuitboard/airlock/interact(mob/user as mob)
-	var/t1 = text("<B>Access control</B><br>\n")
+	var/t1 = ""
 
 	if (last_configurator)
 		t1 += "Operator: [last_configurator]<br>"
@@ -93,9 +93,9 @@
 					t1 += "<a style='color: red' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
 			t1 += "<br>"
 
-    var/datum/browser/popup = new(src, "airlock_electronics", "Airlock Electronics Access")
-    popup.set_content(t1)
-    popup.open()
+	var/datum/browser/popup = new(user, "airlock_electronics", "Access Control")
+	popup.set_content(t1)
+	popup.open()
 
 /obj/item/weapon/circuitboard/airlock/Topic(href, href_list)
 	if(..())
