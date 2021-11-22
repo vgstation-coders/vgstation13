@@ -1326,7 +1326,7 @@ var/list/cult_spires = list()
 			takeDamage(20)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                       //Spawned from the Raise Structure rune. Available from Act II
+//                       //Re-added as a cosmetic structure by admin request
 //      CULT FORGE       //Also a source of heat
 //                       //
 ///////////////////////////
