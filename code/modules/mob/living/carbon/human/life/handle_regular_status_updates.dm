@@ -150,6 +150,7 @@
 		if(druggy)
 			druggy = max(druggy - 1, 0)
 			if(!druggy)
+				sound_environment = SOUND_ENVIRONMENT_GENERIC
 				to_chat(src, "It looks like you are back in Kansas.")
 
 		if(teleportitis)

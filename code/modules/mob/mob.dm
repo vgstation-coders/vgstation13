@@ -1688,7 +1688,11 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/AdjustResting(amount)
 	resting = max(resting + amount,0)
-	return
+
+/mob/proc/setDruggy(amount)
+	if(!druggy && amount)
+		sound_environment = SOUND_ENVIRONMENT_DRUGGED
+	druggy = max(druggy, amount, 0)
 
 /mob/proc/get_species()
 	return ""
