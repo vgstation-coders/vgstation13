@@ -53,10 +53,7 @@
 	interact(user)
 
 /obj/item/weapon/circuitboard/airlock/interact(mob/user as mob)
-	var/t1 = {"<style>
-			.parent {clear: both}
-			.row {float: left}
-			</style>"}
+	var/t1 = ""
 
 	if (last_configurator)
 		t1 += "Operator: [last_configurator]<br>"
@@ -70,14 +67,14 @@
 		t1 += "<a href='?src=\ref[src];logout=1'>Finish</a><hr>"
 
 		t1 += "Access requirement is set to "
-		t1 += one_access ? "<a style='color: green' href='?src=\ref[src];one_access=1'>ONE</a><hr>" : "<a style='color: red' href='?src=\ref[src];one_access=1'>ALL</a><hr>"
+		t1 += one_access ? "<a style='background: green' href='?src=\ref[src];one_access=1'>ONE</a><hr>" : "<a style='background: red' href='?src=\ref[src];one_access=1'>ALL</a><hr>"
 
 		t1 += "Access direction is set to "
 		t1 += "<a href='?src=\ref[src];access_dir=1'>[dir_access]</a><hr>"
 
 		if(dir_access)
 			t1 += "Accessing not in dir is set to "
-			t1 += access_nodir ? "<a style='color: green' href='?src=\ref[src];notdir=1'>TRUE</a><hr>" : "<a style='color: red' href='?src=\ref[src];notdir=1'>FALSE</a><hr>"
+			t1 += access_nodir ? "<a style='background: green' href='?src=\ref[src];notdir=1'>TRUE</a><hr>" : "<a style='background: red' href='?src=\ref[src];notdir=1'>FALSE</a><hr>"
 
 		t1 += conf_access == null ? "<font color=red>All</font><br>" : "<a href='?src=\ref[src];access=all'>All</a><br>"
 
@@ -85,9 +82,9 @@
 
 		for(var/i = 1; i <= 7; i++)
 			if(i % 4 == 1)
-				t1 += "<div class='parent'>"
+				t1 += "<div style='clear: both'>"
 
-			t1 += "<div class='row'>"
+			t1 += "<div style='float: left'>"
 			t1 += "[get_region_accesses_name(i)]<br><br>"
 			for(var/access in get_region_accesses(i))
 				var/aname = get_access_desc(access)
@@ -95,10 +92,10 @@
 				if (!conf_access || !conf_access.len || !(access in conf_access))
 					t1 += "<a href='?src=\ref[src];access=[access]'>[aname]</a><br>"
 				else if(one_access)
-					t1 += "<a style='color: green' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
+					t1 += "<a style='background: green' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
 				else
-					t1 += "<a style='color: red' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
-			t1 += "<br>"4
+					t1 += "<a style='background: red' href='?src=\ref[src];access=[access]'>[aname]</a><br>"
+			t1 += "<br>"
 			t1 += "</div>"
 
 			if(i % 4 == 0 || i == 7)
