@@ -134,10 +134,10 @@
 
 	if(href_list["access_dir"])
 		var/setdir = dir_access
-		var/static/list/allowed_dirs = list(FALSE,NORTH,SOUTH,EAST,WEST)
-		setdir = input(usr,"Enter a new access dir (Valid options: 0, 1, 2, 4, 8)", src, dir_access) as num
-		if(setdir in allowed_dirs)
-			dir_access = setdir
+		var/static/list/allowed_dirs = list("None","NORTH","SOUTH","EAST","WEST")
+		setdir = input(usr,"Enter a new access dir", "Access direction") as null|anything in allowed_dirs
+		if(setdir && setdir != "None")
+			dir_access = text2dir(setdir)
 		else
 			dir_access = 0
 
