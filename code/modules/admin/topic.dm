@@ -4218,6 +4218,20 @@
 				virus2_make_custom(usr.client,null)
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","VIR")
+			if("bloodstone")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BS")
+				var/choice = alert("Flashy spawn and surroundings cultification?","Blood Stone Spawning","Yes","No")
+				if (!choice)
+					return
+				var/turf/T = get_turf(usr)
+				var/obj/structure/cult/bloodstone/blood_stone = new(T)
+				if(choice == "Yes")
+					blood_stone.flashy_entrance()
+				if(choice == "No")
+					blood_stone.update_icon()
+				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
+
 
 			if("hardcore_mode")
 				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""]slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
@@ -4776,7 +4790,8 @@
 			D.link_to_shuttle(shuttle_to_add_to)
 			to_chat(usr, "Assigned the [D] to [shuttle_to_add_to.name]")
 
-		message_admins("<span class='notice'>[key_name_admin(usr)] has created a new shuttle docking port in [get_area(D)] [formatJumpTo(get_turf(D))][shuttle_to_add_to ? " and assigned it to [shuttle_to_add_to.name]" : ""]</span>", 1)
+		message_admins("<span class='notice'>[key_name_admin(usr)] has created a new shuttle docking port in [get_area(D)] [format
+		To(get_turf(D))][shuttle_to_add_to ? " and assigned it to [shuttle_to_add_to.name]" : ""]</span>", 1)
 		log_admin("[key_name_admin(usr)] has created a new destination docking port ([D.areaname]) at [D.x];[D.y];[D.z][shuttle_to_add_to ? " and assigned it to [shuttle_to_add_to.name]" : ""]")
 
 	if(href_list["shuttle_create_destination"])

@@ -345,7 +345,8 @@ var/list/arcane_pockets = list()
 
 /spell/astral_return/cast(var/list/targets, var/mob/user)
 	var/mob/living/simple_animal/astral_projection/astral = user
-	astral.death()//pretty straightforward isn't it?
+	if (istype(astral))
+		astral.death()//pretty straightforward isn't it?
 
 /spell/astral_toggle
 	name = "Toggle Tangibility"
