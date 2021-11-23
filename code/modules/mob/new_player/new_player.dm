@@ -393,14 +393,15 @@
 		mime.Greet(GREET_ROUNDSTART)
 
 	var/turf/T = character.loc
+
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
 		R.OnPostSetup(TRUE) // Latejoiner post-setup.
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
-
-	if(character.mind.assigned_role != "MODE")
-		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
 
 	job_master.CheckPriorityFulfilled(rank)
 
@@ -752,7 +753,7 @@
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
 			new_character.forceMove(pick(latejoin))
-	
+
 	new_character.key = key		//Manually transfer the key to log them in
 
 	for(var/datum/religion/R in ticker.religions)
