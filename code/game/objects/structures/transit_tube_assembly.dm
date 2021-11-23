@@ -92,18 +92,33 @@
             qdel(src)
         return 1
     if(istype(W,/obj/item/weapon/circuitboard/mecha/transitpod))
+        if(circuitry)
+            to_chat(user, "<span class='warning'>There is already a [circuitry] in this!</span>")
         var/obj/item/weapon/circuitboard/mecha/transitpod/C = W
         to_chat(user, "You add the [C] to the [src].")
         C.forceMove(src)
         circuitry = C
-    if(iscrowbar(W))
+    if(iscrowbar(W) && circuitry)
         to_chat(user, "<span class='notice'>You pry the [circuitry] out.</span>")
         W.playtoolsound(src, 50)
         circuitry.forceMove(get_turf(src))
         user.put_in_hands(circuitry)
         circuitry = null
-    else
-        ..()
+    if(W.is_wrench(user))
+        to_chat(user, "<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
+        W.playtoolsound(src, 50)
+        anchored = !anchored
+    if(iswelder(W))
+        if(circuitry)
+            to_chat(user, "<span class='warning'>Remove the [circuitry] first!</span>")
+            return 1
+        var/obj/item/tool/weldingtool/WT = W
+        to_chat(user, "<span class='notice'>You begin to dismantle \the [src]...</span>")
+        if(WT.do_weld(user,src,40))
+            to_chat(user, "<span class='notice'>You dismantle \the [src].</span>")
+            new /obj/item/stack/sheet/metal(get_turf(src), 5)
+            qdel(src)
+        return 1
 
 /obj/item/weapon/circuitboard/mecha/transitpod
 	name = "Circuit board (Transit tube pod)"
