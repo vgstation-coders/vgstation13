@@ -99,7 +99,7 @@
     var/obj/item/weapon/circuitboard/mecha/transitpod/circuitry = null
 
 /obj/structure/transit_tube_frame/pod/attackby(obj/item/W as obj, mob/user as mob)
-    if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored && circuitry)
+    if(istype(W,/obj/item/stack/sheet/glass/rglass) && circuitry)
         var/obj/item/stack/sheet/glass/rglass/G = W
         playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
         to_chat(user, "<span class='notice'>You begin to add reinforced glass to \the [src]...</span>")
@@ -127,10 +127,6 @@
         circuitry.forceMove(get_turf(src))
         user.put_in_hands(circuitry)
         circuitry = null
-    if(W.is_wrench(user))
-        to_chat(user, "<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
-        W.playtoolsound(src, 50)
-        anchored = !anchored
     if(iswelder(W))
         if(circuitry)
             to_chat(user, "<span class='warning'>Remove the [circuitry] first!</span>")
