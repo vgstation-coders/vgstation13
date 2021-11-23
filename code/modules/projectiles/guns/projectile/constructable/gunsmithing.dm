@@ -803,6 +803,7 @@
 	icon_state = "wheelchair_assembly"
 	var/cannon_assembly = 0
 	var/siege_assembly = FALSE
+	var/base_wheelchair_type = /obj/structure/bed/chair/vehicle/wheelchair
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/proc/update_wheelchair_assembly()
 	if(cannon_assembly)
@@ -823,7 +824,7 @@
 	to_chat(usr, "You remove the barrel from \the [src].")
 	var/obj/item/weapon/gun_barrel/I = new (get_turf(usr))
 	usr.put_in_hands(I)
-	var/obj/structure/bed/chair/vehicle/wheelchair/Q = new (get_turf(src.loc))
+	var/obj/structure/bed/chair/vehicle/wheelchair/Q = new base_wheelchair_type(get_turf(src.loc))
 	Q.dir = dir
 	qdel(src)
 
