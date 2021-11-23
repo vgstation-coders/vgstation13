@@ -475,8 +475,9 @@
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	autoignition_temperature = AUTOIGNITION_WOOD
 	flags = TWOHANDABLE
-	force = 15
+	force = 14
 	throwforce = 10
 	throw_speed = 1
 	throw_range = 7
@@ -485,7 +486,7 @@
 /obj/item/weapon/baseball_bat/update_wield(mob/user)
 	..()
 	item_state = "baseball_bat[wielded ? 1 : 0]"
-	force = wielded ? 18 : initial(force)
+	force = wielded ? 16 : initial(force)
 	if(user)
 		user.update_inv_hands()
 
@@ -537,9 +538,10 @@
 	icon_state = "spikebat"
 	item_state = "spikebat0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	autoignition_temperature = AUTOIGNITION_WOOD
 	flags = TWOHANDABLE
 	force = 10
-	sharpness = 0.5
+	sharpness = 0.3
 	sharpness_flags = SHARP_TIP
 	throwforce = 10
 	throw_speed = 1
@@ -549,6 +551,6 @@
 /obj/item/weapon/spiked_bat/update_wield(mob/user)
 	..()
 	item_state = "spikebat[wielded ? 1 : 0]"
-	force = wielded ? 15 : initial(force)
+	force = wielded ? 13 : initial(force)
 	if(user)
 		user.update_inv_hands()
