@@ -61,7 +61,11 @@
 
 /obj/item/device/radio/initialize()
 	. = ..()
-	frequency = COMMON_FREQ //common chat
+	// Mapped radios may have their frequency set.
+	// This prevents it from getting reset.
+	if(frequency == initial(frequency))
+		frequency = COMMON_FREQ //common chat
+
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
 			frequency = sanitize_frequency(frequency, maxf)
