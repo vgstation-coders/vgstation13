@@ -872,6 +872,4 @@ var/global/ingredientLimit = 10
 			types = typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)
 		if("Cereal")
 			types = list(/obj/item/weapon/reagent_containers/food/snacks/cereal)
-	
-	to_chat(world, "[types]")
 	return types
