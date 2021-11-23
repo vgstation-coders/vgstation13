@@ -17,7 +17,14 @@
     if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored)
         var/obj/item/stack/sheet/glass/rglass/G = W
         playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-        if(G.use(2))
+        to_chat(user, "<span class='notice'>You begin to add reinforced glass to \the [src]...</span>")
+        if(G.amount < 2)
+            to_chat(user, "<span class='warning'>You need 2 sheets of glass to do this.</span>")
+            return 1
+        if(do_after(user,src,40))
+            if(G.amount < 2) //User being tricky
+                return 1
+            G.use(2)
             to_chat(user, "You add the reinforced glass to the [src].")
             new /obj/structure/transit_tube(loc, dir_icon_states[dir])
             qdel(src)
@@ -70,9 +77,17 @@
 /obj/structure/transit_tube_frame/station/attackby(obj/item/W as obj, mob/user as mob)
     if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored)
         var/obj/item/stack/sheet/glass/rglass/G = W
-        if(G.use(2))
+        playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+        to_chat(user, "<span class='notice'>You begin to add reinforced glass to \the [src]...</span>")
+        if(G.amount < 2)
+            to_chat(user, "<span class='warning'>You need 2 sheets of glass to do this.</span>")
+            return 1
+        if(do_after(user,src,40))
+            if(G.amount < 2) //User being tricky
+                return 1
+            G.use(2)
             to_chat(user, "You add the reinforced glass to the [src].")
-            new /obj/structure/transit_tube/station(loc,dir_override = dir)
+            new /obj/structure/transit_tube(loc, dir_icon_states[dir])
             qdel(src)
         return 1
     else
@@ -86,9 +101,17 @@
 /obj/structure/transit_tube_frame/pod/attackby(obj/item/W as obj, mob/user as mob)
     if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored && circuitry)
         var/obj/item/stack/sheet/glass/rglass/G = W
-        if(G.use(2))
+        playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+        to_chat(user, "<span class='notice'>You begin to add reinforced glass to \the [src]...</span>")
+        if(G.amount < 2)
+            to_chat(user, "<span class='warning'>You need 2 sheets of glass to do this.</span>")
+            return 1
+        if(do_after(user,src,40))
+            if(G.amount < 2) //User being tricky
+                return 1
+            G.use(2)
             to_chat(user, "You add the reinforced glass to the [src].")
-            new /obj/structure/transit_tube_pod(loc,dir)
+            new /obj/structure/transit_tube(loc, dir_icon_states[dir])
             qdel(src)
         return 1
     if(istype(W,/obj/item/weapon/circuitboard/mecha/transitpod))
