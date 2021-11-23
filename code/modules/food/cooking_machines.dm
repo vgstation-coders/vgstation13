@@ -821,25 +821,6 @@ var/global/ingredientLimit = 10
 				. = "It's already pressed into that shape."
 				break
 
-/*/obj/machinery/cooking/foodpress/takeIngredient(var/obj/item/I,mob/user,var/force_cook)
-	. = src.validateIngredient(I, force_cook)
-	if(. == "transto")
-		return
-	if(. == "valid")
-		if(src.foodChoices)
-			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
-		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
-			return FALSE
-
-		if(user.drop_item(I, src))
-			src.ingredient = I
-			spawn() src.cook(.)
-			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
-			return TRUE
-	else
-		to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
-	return FALSE*/
-
 /obj/machinery/cooking/foodpress/attack_hand(mob/user)
 	if(!active)
 		if(Adjacent(user) && !user.stat && !user.incapacitated() && !isobserver(user))
