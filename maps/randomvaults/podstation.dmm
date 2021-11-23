@@ -52,7 +52,6 @@
 "kU" = (/mob/living/simple_animal/hostile/bigroach,/turf/simulated/floor{icon_state = "blue"},/area/vault/podstation)
 "kW" = (/obj/effect/decal/cleanable/cockroach_remains,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor,/area/vault/podstation)
 "lj" = (/obj/window_grille_spawner/reinforced,/obj/structure/window/barricade/full/block,/turf/simulated/floor,/area/vault/podstation)
-"lp" = (/obj/structure/table/reinforced,/obj/item/weapon/soap,/obj/machinery/light/small/broken,/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101; on = 1},/obj/item/weapon/storage/firstaid/regular,/obj/item/device/flashlight,/turf/simulated/floor,/area/vault/podstation)
 "lt" = (/obj/item/weapon/barricade_kit,/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/airless{dir = 4; icon_state = "asteroidwarning"},/area/vault/podstation)
 "lu" = (/obj/item/trash/cigbutt/cigarbutt,/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/asteroid,/area/vault/podstation)
 "lz" = (/obj/structure/table/woodentable,/obj/machinery/light/small/broken{dir = 8},/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101; on = 1},/obj/machinery/computer/security/wooden_tv{id_tag = "podstationcameras"; name = "Pod Station Cameras"; network = list("PODSTATION")},/turf/simulated/floor/dark,/area/vault/podstation)
@@ -149,6 +148,7 @@
 "Gz" = (/obj/structure/rack,/obj/item/stack/sheet/metal/bigstack,/obj/item/tool/solder,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
 "GO" = (/obj/structure/sink/kitchen,/turf/simulated/wall,/area/vault/podstation)
 "Hg" = (/obj/structure/rack,/obj/item/stack/sheet/glass/glass/bigstack,/obj/item/device/spacepod_equipment/locking/lock,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
+"HH" = (/obj/structure/table/reinforced,/obj/item/weapon/soap,/obj/machinery/light/small/broken,/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101; on = 1},/obj/item/weapon/storage/firstaid/regular,/obj/item/device/flashlight,/turf/simulated/floor,/area/vault/podstation)
 "HJ" = (/obj/structure/fence/corner{dir = 8},/turf/unsimulated/floor/asteroid,/area/vault/podstation)
 "HV" = (/obj/structure/fence/door/opened,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
 "If" = (/obj/machinery/light/small{dir = 8},/turf/space,/area/vault/podstation)
@@ -170,7 +170,7 @@
 "Np" = (/obj/structure/fence,/turf/unsimulated/floor/asteroid,/area/vault/podstation)
 "NA" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
 "NF" = (/obj/effect/decal/cleanable/dirt,/obj/item/trash/mayo_packet,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
-"NS" = (/obj/structure/closet/crate/trashcart,/obj/item/trash/chips,/obj/item/trash/donitos_coolranch,/obj/item/trash/fries_punet,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/storage/fancy/cigarettes/shoalsticks,/obj/item/trash/zam_notraisins,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
+"NS" = (/obj/structure/closet/crate/trashcart,/obj/item/trash/chips,/obj/item/trash/donitos_coolranch,/obj/item/trash/fries_punet,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/storage/fancy/cigarettes/shoalsticks,/obj/item/trash/zam_notraisins,/obj/item/weapon/newspaper,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/podstation)
 "Ov" = (/obj/structure/rack,/obj/machinery/light/small{dir = 8},/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/obj/item/clothing/head/tinfoil,/obj/item/pod_parts/core,/obj/item/weapon/circuitboard/mecha/pod,/obj/item/weapon/storage/toolbox/mechanical,/obj/item/device/multitool,/obj/item/clothing/suit/space/ghettorig,/obj/item/clothing/suit/space/ghettorig,/obj/item/clothing/head/helmet/space/ghetto,/obj/item/clothing/head/helmet/space/ghetto,/obj/item/weapon/storage/toolbox/electrical,/turf/simulated/floor/plating,/area/vault/podstation)
 "OX" = (/obj/structure/spacepod_frame,/turf/unsimulated/floor/asteroid/underground,/area/vault/podstation)
 "Qp" = (/obj/structure/table,/obj/item/weapon/tray,/obj/item/weapon/storage/box/condimentbottles,/obj/machinery/light/broken{dir = 1},/obj/machinery/door_control{id_tag = "podstationregister"; name = "Register Shutters"; pixel_y = 25},/turf/simulated/floor,/area/vault/podstation)
@@ -248,7 +248,7 @@ HJHVKkKkKkKkICIQIZJYKgKvKkLDLLMbMxljYxESTVZyZyhLYTZycxESESTVZyZyKCZyZyVPES
 NpYxNANFNSKkOvRGRORXyEScKkSnFQpnTiljYxESTVZyTsKCZyZyVPTMESTVTOUkKCMPSiVPES
 VJVUVWVYWTXSYtYDKkZoXrXrKkKkKkvGKkKkKkAHTVZyYTKCZyZyVPESESTVZyYTKCZyaOVPES
 VSESNpwhbaKkvMolKkaicJWuKkhDevmOpxZPKkESTVZyZyKCZyZyVPkbESTVOXZyKCZyZycxES
-VSVSrxdUrhKkafbBKkKkKkKkKkivsKlpKkKkKkESTVZyYThLYTZyVPESESaMDbDbDbDbDbYxVS
+VSVSrxdUrhKkafbBKkKkKkKkKkivsKHHKkKkKkESTVZyYThLYTZyVPESESaMDbDbDbDbDbYxVS
 aIVSVSVSYxwiYxQWaMYxYxYxKkKkKkKkKkKkaMESTVZyZyKCZyZyVPESVSESESESESESESVSVS
 pUpUpUpUpUpUpUNlVSESESESYxaMYxYxYxYxVSESTVZyZyKCZyYTVPVSVSVSESESESVSVSVSaI
 pUpUpUpUpUpUpUpUpUpUpUpUpUpUpUpUpUpUpUpUQKVSVSVSVSVSQKpUpUpUpUpUpUpUpUpUpU
