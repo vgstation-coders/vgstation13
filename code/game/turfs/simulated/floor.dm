@@ -39,7 +39,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/material = "metal"
 	var/spam_flag = 0 //For certain interactions, like bananium floors honking when stepped on
 	var/enter_sound = "clownstep"
-	var/attack_sound = "sound/items/bikehorn.ogg"
+	var/attack_sound = 'sound/items/bikehorn.ogg'
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
 
