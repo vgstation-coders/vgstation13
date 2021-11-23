@@ -5,6 +5,7 @@
 // Mappers: you can use "Generate Instances from Icon-states"
 //  to get the different pieces.
 /obj/structure/transit_tube
+	name = "transit tube"
 	icon = 'icons/obj/pipes/transit_tube.dmi'
 	icon_state = "E-W"
 	density = 1
@@ -25,6 +26,7 @@
 // Mappers: use "Generate Instances from Directions" for this
 //  one.
 /obj/structure/transit_tube/station
+	name = "transit tube station"
 	icon = 'icons/obj/pipes/transit_tube_station.dmi'
 	icon_state = "closed"
 	exit_delay = 2
@@ -39,6 +41,7 @@
 
 
 /obj/structure/transit_tube_pod
+	name = "transit pod"
 	icon = 'icons/obj/pipes/transit_tube_pod.dmi'
 	icon_state = "pod"
 	animate_movement = FORWARD_STEPS
@@ -75,8 +78,12 @@
 		if(3.0)
 			return
 
-/obj/structure/transit_tube_pod/New()
-	. = ..()
+/obj/structure/transit_tube_pod/New(var/loc, var/dir_override = null)
+	. = ..(loc)
+
+	if(dir_override)
+		dir = dir_override
+
 	air_contents.adjust_multi_temp(
 		GAS_OXYGEN, MOLES_O2STANDARD, T20C,
 		GAS_NITROGEN, MOLES_N2STANDARD, T20C)
@@ -85,8 +92,14 @@
 	spawn (5)
 		follow_tube()
 
-/obj/structure/transit_tube/New()
-	. = ..()
+/obj/structure/transit_tube/New(var/loc, var/icon_state_override = null, var/dir_override = null)
+	. = ..(loc)
+
+	if(dir_override)
+		dir = dir_override
+
+	if(icon_state_override)
+		icon_state = icon_state_override
 
 	if (tube_dirs == null)
 		init_dirs()
@@ -125,6 +138,46 @@
 			return
 	..()
 
+/obj/structure/transit_tube/attackby(obj/item/W as obj, mob/user as mob)
+	if(iswelder(W))
+		var/obj/item/tool/weldingtool/WT = W
+		to_chat(user, "You begin to cut the glass off...")
+		if(WT.do_weld(user, src, 40))
+			to_chat(user, "<span class='notice'>You detach the glass from the [src].</span>")
+			new /obj/item/stack/sheet/glass/rglass(get_turf(src), 2)
+			switch(icon_state)
+				if("N-S","E-W")
+					new /obj/structure/transit_tube_frame(get_turf(src), iconstate2framedir(icon_state))
+				if("NE-SW","NW-SE")
+					new /obj/structure/transit_tube_frame/diag(get_turf(src), iconstate2framedir(icon_state))
+				if("D-NW","D-SE","D-NE","D-SW")
+					new /obj/structure/transit_tube_frame/corner(get_turf(src), iconstate2framedir(icon_state))
+				if("N-SW","S-NE","E-NW","W-SE")
+					new /obj/structure/transit_tube_frame/bent(get_turf(src), iconstate2framedir(icon_state))
+				if("N-SE","S-NW","E-SW","W-NE")
+					new /obj/structure/transit_tube_frame/bent_invert(get_turf(src), iconstate2framedir(icon_state))
+				if("N-SW-SE","S-NE-NW","E-NW-SW","W-SE-NE")
+					new /obj/structure/transit_tube_frame/fork(get_turf(src), iconstate2framedir(icon_state))
+				if("N-SE-SW","S-NW-NE","E-SW-NW","W-NE-SE")
+					new /obj/structure/transit_tube_frame/fork_invert(get_turf(src), iconstate2framedir(icon_state))
+				if("N-S-pass","E-W-pass")
+					new /obj/structure/transit_tube_frame/pass(get_turf(src), iconstate2framedir(icon_state))
+				if("closed","open","closing","opening")
+					new /obj/structure/transit_tube_frame/station(get_turf(src), iconstate2framedir(icon_state))
+			qdel(src)
+		return 1
+
+/obj/structure/transit_tube_pod/attackby(obj/item/W as obj, mob/user as mob)
+	if(iswelder(W))
+		var/obj/item/tool/weldingtool/WT = W
+		to_chat(user, "You begin to cut the glass off...")
+		if(WT.do_weld(user, src, 40))
+			to_chat(user, "<span class='notice'>You detach the glass from the [src].</span>")
+			new /obj/item/stack/sheet/glass/rglass(get_turf(src), 2)
+			var/obj/structure/transit_tube_frame/pod/TTFP = new /obj/structure/transit_tube_frame/pod(get_turf(src), dir)
+			TTFP.circuitry = new /obj/item/weapon/circuitboard/mecha/transitpod(TTFP)
+			qdel(src)
+		return 1
 
 /obj/structure/transit_tube/station/attack_hand(mob/user)
 	if(!pod_moving)
@@ -671,5 +724,19 @@
 			return "SW"
 		else
 	return
+
+/obj/structure/transit_tube/proc/iconstate2framedir(var/icon_state)
+	switch(icon_state)
+		if("N-S","NE-SW","D-NW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
+			return 1
+		if("D-SE","S-NE","S-NW","S-NE-NW","S-NW-NE")
+			return 2
+		if("E-W","NW-SE","D-NE","E-NW","E-SW","E-NW-SW","E-SW-NW","E-W-pass")
+			return 4
+		if("D-SW","W-SE","W-NE","W-SE-NE","W-NE-SE")
+			return 8
+		if("closed","open","closing","opening")
+			return dir
+	return 0
 
 #undef TUBE_POD_UNLOAD_LIMIT
