@@ -1,0 +1,110 @@
+/obj/structure/transit_tube_frame
+    name = "transit tube frame"
+    icon = 'icons/obj/pipes/transit_tube_frames.dmi'
+    icon_state = "straight"
+    density = 0
+    anchored = 0
+    layer = ABOVE_OBJ_LAYER
+    var/list/dir_icon_states = list("N-S","N-S",null,"E-W",null,null,null,"E-W") // Occupies 1, 2, 4 and 8 for dir as an array pointer
+
+/obj/structure/transit_tube_frame/New(var/loc, var/dir_override = null)
+    ..()
+    
+    if(dir_override)
+        dir = dir_override
+
+/obj/structure/transit_tube_frame/attackby(obj/item/W as obj, mob/user as mob)
+    if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored)
+        var/obj/item/stack/sheet/glass/rglass/G = W
+        playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+        if(G.use(2))
+            to_chat(user, "You add the reinforced glass to the [src].")
+            new /obj/structure/transit_tube(loc, dir_icon_states[dir])
+            qdel(src)
+        return 1
+    if(W.is_wrench(user))
+        to_chat(user, "<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
+        W.playtoolsound(src, 50)
+        anchored = !anchored
+    if(iswelder(W))
+        var/obj/item/tool/weldingtool/WT = W
+        to_chat(user, "<span class='notice'>You begin to dismantle \the [src]...</span>")
+        if(WT.do_weld(user,src,40))
+            to_chat(user, "<span class='notice'>You dismantle \the [src].</span>")
+            new /obj/item/stack/sheet/metal(get_turf(src), 5)
+            qdel(src)
+        return 1
+
+/obj/structure/transit_tube_frame/diag
+    icon_state = "diag"
+    dir_icon_states = list("NE-SW","NE-SW",null,"NW-SE",null,null,null,"NW-SE")
+
+/obj/structure/transit_tube_frame/corner
+    icon_state = "corner"
+    dir_icon_states = list("D-NW","D-SE",null,"D-NE",null,null,null,"D-SW")
+
+/obj/structure/transit_tube_frame/bent
+    icon_state = "bent"
+    dir_icon_states = list("N-SW","S-NE",null,"E-NW",null,null,null,"W-SE")
+
+/obj/structure/transit_tube_frame/bent_invert
+    icon_state = "bent-invert"
+    dir_icon_states = list("N-SE","S-NW",null,"E-SW",null,null,null,"W-NE")
+
+/obj/structure/transit_tube_frame/fork
+    icon_state = "fork"
+    dir_icon_states = list("N-SW-SE","S-NE-NW",null,"E-NW-SW",null,null,null,"W-SE-NE")
+
+/obj/structure/transit_tube_frame/fork_invert
+    icon_state = "fork-invert"
+    dir_icon_states = list("N-SE-SW","S-NW-NE",null,"E-SW-NW",null,null,null,"W-NE-SE")
+
+/obj/structure/transit_tube_frame/pass
+    icon_state = "pass"
+    dir_icon_states = list("N-S-pass","N-S-pass",null,"E-W-pass",null,null,null,"E-W-pass")
+
+/obj/structure/transit_tube_frame/station
+    name = "transit tube station frame"
+    icon_state = "station"
+
+/obj/structure/transit_tube_frame/station/attackby(obj/item/W as obj, mob/user as mob)
+    if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored)
+        var/obj/item/stack/sheet/glass/rglass/G = W
+        if(G.use(2))
+            to_chat(user, "You add the reinforced glass to the [src].")
+            new /obj/structure/transit_tube/station(loc,dir_override = dir)
+            qdel(src)
+        return 1
+    else
+        ..()
+
+/obj/structure/transit_tube_frame/pod
+    name = "transit pod frame"
+    icon_state = "pod"
+    var/obj/item/weapon/circuitboard/mecha/transitpod/circuitry = null
+
+/obj/structure/transit_tube_frame/pod/attackby(obj/item/W as obj, mob/user as mob)
+    if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored && circuitry)
+        var/obj/item/stack/sheet/glass/rglass/G = W
+        if(G.use(2))
+            to_chat(user, "You add the reinforced glass to the [src].")
+            new /obj/structure/transit_tube_pod(loc,dir)
+            qdel(src)
+        return 1
+    if(istype(W,/obj/item/weapon/circuitboard/mecha/transitpod))
+        var/obj/item/weapon/circuitboard/mecha/transitpod/C = W
+        to_chat(user, "You add the [C] to the [src].")
+        C.forceMove(src)
+        circuitry = C
+    if(iscrowbar(W))
+        to_chat(user, "<span class='notice'>You pry the [circuitry] out.</span>")
+        W.playtoolsound(src, 50)
+        circuitry.forceMove(get_turf(src))
+        user.put_in_hands(circuitry)
+        circuitry = null
+    else
+        ..()
+
+/obj/item/weapon/circuitboard/mecha/transitpod
+	name = "Circuit board (Transit tube pod)"
+	icon_state = "mainboard"
