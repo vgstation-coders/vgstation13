@@ -38,6 +38,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/burnt = 0
 	var/material = "metal"
 	var/spam_flag = 0 //For certain interactions, like bananium floors honking when stepped on
+	var/enter_sound = "clownstep"
+	var/attack_sound = "sound/items/bikehorn.ogg"
 	var/obj/item/stack/tile/floor_tile
 	var/image/floor_overlay
 
@@ -228,7 +230,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if("bananium")
 			if(!spam_flag)
 				spam_flag = 1
-				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
+				playsound(src, attack_sound, 50, 1)
 				spawn(20)
 					spam_flag = 0
 		//Phazon tiles teleport to another random one in the world when clicked
@@ -644,7 +646,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			if("bananium")
 				if(!spam_flag)
 					spam_flag = 1
-					playsound(src, "clownstep", 50, 1)
+					playsound(src, enter_sound, 50, 1)
 					spawn(20)
 						spam_flag = 0
 			if("uranium")
