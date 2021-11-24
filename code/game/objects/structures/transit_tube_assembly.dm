@@ -71,9 +71,10 @@
 /obj/structure/transit_tube_frame/station
     name = "transit tube station frame"
     icon_state = "station"
+    var/obj/item/weapon/circuitboard/airlock/electronics = null
 
 /obj/structure/transit_tube_frame/station/attackby(obj/item/W as obj, mob/user as mob)
-    if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored)
+    if(istype(W,/obj/item/stack/sheet/glass/rglass) && anchored && electronics)
         var/obj/item/stack/sheet/glass/rglass/G = W
         playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
         to_chat(user, "<span class='notice'>You begin to add reinforced glass to \the [src]...</span>")
@@ -88,8 +89,34 @@
             new /obj/structure/transit_tube(loc, dir_icon_states[dir])
             qdel(src)
         return 1
-    else
-        ..()
+    if(istype(W,/obj/item/weapon/circuitboard/mecha/transitpod))
+        if(electronics)
+            to_chat(user, "<span class='warning'>There is already a [electronics] in this!</span>")
+        var/obj/item/weapon/circuitboard/airlock/C = W
+        to_chat(user, "You add the [C] to the [src].")
+        C.forceMove(src)
+        electronics = C
+    if(iscrowbar(W) && electronics)
+        to_chat(user, "<span class='notice'>You pry the [electronics] out.</span>")
+        W.playtoolsound(src, 50)
+        electronics.forceMove(get_turf(src))
+        user.put_in_hands(electronics)
+        electronics = null
+    if(W.is_wrench(user))
+        to_chat(user, "<span class='notice'>You [anchored ? "unanchor" : "anchor"] \the [src].</span>")
+        W.playtoolsound(src, 50)
+        anchored = !anchored
+    if(iswelder(W))
+        if(electronics)
+            to_chat(user, "<span class='warning'>Remove the [electronics] first!</span>")
+            return 1
+        var/obj/item/tool/weldingtool/WT = W
+        to_chat(user, "<span class='notice'>You begin to dismantle \the [src]...</span>")
+        if(WT.do_weld(user,src,40))
+            to_chat(user, "<span class='notice'>You dismantle \the [src].</span>")
+            new /obj/item/stack/sheet/metal(get_turf(src), 5)
+            qdel(src)
+        return 1
 
 /obj/structure/transit_tube_frame/pod
     name = "transit pod frame"
