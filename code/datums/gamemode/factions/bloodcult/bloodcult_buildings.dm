@@ -1262,6 +1262,12 @@ var/list/cult_spires = list()
 	overlays += I
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                       //Spawns next to blood stones
+//    OBSIDIAN PILLAR    //
+//                       //
+///////////////////////////
+
 /obj/structure/cult/pillar
 	name = "obsidian pillar"
 	icon_state = "pillar-enter"
@@ -1318,6 +1324,154 @@ var/list/cult_spires = list()
 			takeDamage(100)
 		if (3)
 			takeDamage(20)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                       //Re-added as a cosmetic structure by admin request
+//      BLOOD STONE      //
+//                       //
+///////////////////////////
+
+/obj/structure/cult/bloodstone
+	name = "blood stone"
+	icon_state = "bloodstone-enter1"
+	icon = 'icons/obj/cult_64x64.dmi'
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	health = 600
+	maxHealth = 600
+	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	light_color = "#FF0000"
+
+/obj/structure/cult/bloodstone/New()
+	..()
+	set_light(3)
+
+/obj/structure/cult/bloodstone/proc/flashy_entrance()
+	for (var/obj/O in loc)
+		if (O != src && !istype(O,/obj/item/weapon/melee/soulblade))
+			O.ex_act(2)
+	safe_space()
+	for(var/mob/M in player_list)
+		if (M.z == z && M.client)
+			if (get_dist(M,src)<=20)
+				M.playsound_local(src, get_sfx("explosion"), 50, 1)
+				shake_camera(M, 4, 1)
+			else
+				M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
+				shake_camera(M, 1, 1)
+	spawn(10)
+		var/list/pillars = list()
+		icon_state = "bloodstone-enter2"
+		for(var/mob/M in player_list)
+			if (M.z == z && M.client)
+				if (get_dist(M,src)<=20)
+					M.playsound_local(src, get_sfx("explosion"), 50, 1)
+					shake_camera(M, 4, 1)
+				else
+					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
+					shake_camera(M, 1, 1)
+		var/turf/T1 = locate(x-2,y-2,z)
+		pillars += new /obj/structure/cult/pillar(T1)
+		var/turf/T2 = locate(x+2,y-2,z)
+		pillars += new /obj/structure/cult/pillar/alt(T2)
+		var/turf/T3 = locate(x-2,y+2,z)
+		pillars += new /obj/structure/cult/pillar(T3)
+		var/turf/T4 = locate(x+2,y+2,z)
+		pillars += new /obj/structure/cult/pillar/alt(T4)
+		sleep(10)
+		icon_state = "bloodstone-enter3"
+		for(var/mob/M in player_list)
+			if (M.z == z && M.client)
+				if (get_dist(M,src)<=20)
+					M.playsound_local(src, get_sfx("explosion"), 50, 1)
+					shake_camera(M, 4, 1)
+				else
+					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
+					shake_camera(M, 1, 1)
+		for (var/obj/structure/cult/pillar/P in pillars)
+			P.update_icon()
+		sleep(10)
+		update_icon()
+
+/obj/structure/cult/bloodstone/Destroy()
+	new /obj/effect/decal/cleanable/ash(loc)
+	new /obj/item/weapon/ectoplasm(loc)
+	..()
+
+/obj/structure/cult/bloodstone/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	cultist_act(user)
+	return 1
+
+/obj/structure/cult/bloodstone/cultist_act(var/mob/user)
+	.=..()
+	if (!.)
+		return
+	if(isliving(user))
+		var/obj/effect/cult_ritual/dance/dance_center = locate() in loc
+		if (dance_center)
+			dance_center.add_dancer(user)
+		else
+			dance_center = new(loc, user)
+
+		if (prob(5))
+			user.say("Let me show you the dance of my people!","C")
+		else
+			user.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+
+/obj/structure/cult/bloodstone/conceal()
+	return
+
+/obj/structure/cult/bloodstone/takeDamage(var/damage)
+	health -= damage
+	if (health <= 0)
+		if (sound_destroyed)
+			playsound(src, sound_destroyed, 100, 1)
+		qdel(src)
+	else
+		update_icon()
+
+/obj/structure/cult/bloodstone/ex_act(var/severity)
+	switch(severity)
+		if (1)
+			takeDamage(250)
+		if (2)
+			takeDamage(50)
+		if (3)
+			takeDamage(10)
+
+/obj/structure/cult/bloodstone/update_icon()
+	icon_state = "bloodstone-9"
+	overlays.len = 0
+	var/image/I_base = image('icons/obj/cult_64x64.dmi',"bloodstone-base")
+	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
+	overlays += I_base
+	if (health < maxHealth/3)
+		overlays.Add("bloodstone_damage2")
+	else if (health < 2*maxHealth/3)
+		overlays.Add("bloodstone_damage1")
+
+/obj/structure/cult/bloodstone/proc/set_animate()
+	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
+	update_icon()
 
 /*
 var/list/bloodstone_list = list()

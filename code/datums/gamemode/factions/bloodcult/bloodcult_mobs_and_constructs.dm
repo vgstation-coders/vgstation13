@@ -560,6 +560,9 @@ var/list/astral_projections = list()
 /mob/living/simple_animal/astral_projection/attempt_suicide(forced = 0, suicide_set = 1)
 	death()
 
+/mob/living/simple_animal/astral_projection/ex_act(var/severity)
+	death()
+
 //called once when we are created, shapes our appearance in the image of our anchor
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
 	if (!body)

@@ -4218,6 +4218,20 @@
 				virus2_make_custom(usr.client,null)
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","VIR")
+			if("bloodstone")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","BS")
+				var/choice = alert("Flashy spawn and surroundings cultification?","Blood Stone Spawning","Yes","No")
+				if (!choice)
+					return
+				var/turf/T = get_turf(usr)
+				var/obj/structure/cult/bloodstone/blood_stone = new(T)
+				if(choice == "Yes")
+					blood_stone.flashy_entrance()
+				if(choice == "No")
+					blood_stone.update_icon()
+				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
+
 
 			if("hardcore_mode")
 				var/choice = input("Are you sure you want to [ticker.hardcore_mode ? "disable" : "enable"] hardcore mode? Starvation will [ticker.hardcore_mode ? "no longer":""]slowly kill player-controlled humans.", "Admin Abuse") in list("Yes", "No!")
