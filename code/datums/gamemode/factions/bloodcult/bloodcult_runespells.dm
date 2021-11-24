@@ -1855,6 +1855,8 @@ var/list/confusion_victims = list()
 	new /obj/effect/cult_ritual/seer(activator,activator,null,TRUE, talisman_duration)
 	qdel(src)
 
+var/list/seer_rituals = list()
+
 /obj/effect/cult_ritual/seer
 	anchored = 1
 	icon = 'icons/effects/160x160.dmi'
@@ -1874,6 +1876,7 @@ var/list/confusion_victims = list()
 
 /obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/seer/runespell,var/talisman_ritual = FALSE,var/talisman_duration = 60 SECONDS)
 	..()
+	seer_rituals.Add(src)
 	processing_objects.Add(src)
 	talisman = talisman_ritual
 	caster = user
@@ -1892,11 +1895,13 @@ var/list/confusion_victims = list()
 
 
 /obj/effect/cult_ritual/seer/Destroy()
+	seer_rituals.Remove(src)
 	processing_objects.Remove(src)
 	if (caster && caster.client)
 		caster.client.images -= propension
-		caster.see_invisible_override = 0
-		caster.apply_vision_overrides()
+		if (!istype(caster.loc, /obj/effect/bloodcult_jaunt))
+			caster.see_invisible_override = 0
+			caster.apply_vision_overrides()
 		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
 	caster = null
 	if (source)
