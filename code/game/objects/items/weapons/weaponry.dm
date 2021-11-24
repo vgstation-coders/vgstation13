@@ -518,7 +518,7 @@
 				var/atom/movable/M = blocked
 				var/turf/Q = get_turf(M)
 				var/turf/target
-				var/throwdir = turn(M.dir, 180 + rand(-30, 30))
+				var/throwdir = turn(H.dir, pick(-45, 0, 45))
 				if(istype(Q, /turf/space)) // if ended in space, then range is unlimited
 					target = get_edge_target_turf(Q, throwdir)
 				else						// otherwise limit to 10 tiles
