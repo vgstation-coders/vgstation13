@@ -184,5 +184,6 @@
 	render_target = "*aistatic"
 	name = "obscured"
 	screen_loc = "1, 1"
+	globalscreen = TRUE
 
 #undef UPDATE_BUFFER
