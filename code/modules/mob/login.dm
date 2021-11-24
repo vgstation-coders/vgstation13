@@ -32,12 +32,16 @@
 					spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
 #endif
 				if(matches)
-					if(M.client)
-						message_admins("<font color='red'><B>Notice: </B><span class='notice'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[usr];priv_msg=\ref[M]'>[key_name_admin(M)]</A>.</span>", 1)
-						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)].")
-					else
-						message_admins("<font color='red'><B>Notice: </B><span class='notice'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as [key_name_admin(M)] (no longer logged in). </span>", 1)
-						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)] (no longer logged in).")
+					message_admins("<font color='red'><B>Notice: </B><span class='notice'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[usr];priv_msg=\ref[M]'>[key_name_admin(M)]</A>[M.client ? "" : " (no longer logged in)"].</span>", 1)
+					log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)][M.client ? "" : " (no longer logged in)"].")
+
+				if(findtext(matches,") and ID ("))
+					var/admins_number = admins.len
+					var/admin_number_afk = get_afk_admins()
+					var/available_admins = admins_number - admin_number_afk
+					//Dunno if it's okay to log IP or ID here
+					send2adminirc("Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]")
+					send2admindiscord("**Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]**", !available_admins)
 
 // Do not call ..()
 // If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times
