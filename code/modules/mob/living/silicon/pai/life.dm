@@ -80,7 +80,9 @@
 	if (eye_blurry > 0)
 		eye_blurry--
 		eye_blurry = max(0, eye_blurry)
-	if (druggy)
-		AdjustDrugginess(-1)
+
+	if (druggy > 0)
+		druggy--
+		druggy = max(0, druggy)
 
 	return 1
