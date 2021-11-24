@@ -12,7 +12,7 @@
 	layer = ABOVE_OBJ_LAYER
 	anchored = 1.0
 	var/list/tube_dirs = null
-	var/exit_delay = 2
+	var/exit_delay = 1
 	var/enter_delay = 1
 
 	// alldirs in global.dm is the same list of directions, but since
@@ -30,7 +30,7 @@
 	icon = 'icons/obj/pipes/transit_tube_station.dmi'
 	icon_state = "closed"
 	exit_delay = 2
-	enter_delay = 3
+	enter_delay = 2
 	var/pod_moving = 0
 	var/automatic_launch_time = 100
 	var/open = FALSE
