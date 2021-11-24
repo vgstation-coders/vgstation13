@@ -131,10 +131,14 @@
 
 /obj/structure/transit_tube/station/Bumped(atom/movable/mover)
 	if(!pod_moving && open && (get_dir(src, mover) == dir) && isliving(mover))
-		var/obj/structure/transit_tube_pod/pod = locate() in loc
-		if(pod && !pod.moving && (pod.dir in directions()))
-			mover.forceMove(pod)
-			return
+		var/mob/living/L = mover
+		if(allowed(L))
+			var/obj/structure/transit_tube_pod/pod = locate() in loc
+			if(pod && !pod.moving && (pod.dir in directions()))
+				mover.forceMove(pod)
+				return
+		else
+			to_chat(L, "<span class='warning'>Access denied.</span>")
 	..()
 
 /obj/structure/transit_tube/attackby(obj/item/W as obj, mob/user as mob)
@@ -164,6 +168,15 @@
 					TTF = new /obj/structure/transit_tube_frame/station(get_turf(src), iconstate2framedir(icon_state))
 			if(TTF)
 				TTF.anchored = 1
+				if(istype(TTF,/obj/structure/transit_tube_frame/station))
+					var/obj/structure/transit_tube_frame/station/TTS = TTF
+					if(req_access && req_access.len > 0)
+						TTS.electronics.conf_access = req_access
+					else if(req_one_access && req_one_access.len > 0)
+						TTS.electronics.conf_access = req_one_access
+						TTS.electronics.one_access = 1
+					TTS.electronics.dir_access = req_access_dir
+					TTS.electronics.access_nodir = access_not_dir
 			qdel(src)
 		return 1
 
