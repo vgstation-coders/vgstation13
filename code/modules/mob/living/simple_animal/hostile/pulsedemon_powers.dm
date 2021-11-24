@@ -1,3 +1,202 @@
+/datum/pulse_demon_upgrade
+    var/ability_name = "Pulse demon upgrade"
+    var/ability_desc = "An upgrade for a pulse demon's inate abilities"
+    var/mob/living/simple_animal/hostile/pulse_demon/host
+    var/condition = TRUE
+    var/upgrade_cost = 0
+
+/datum/pulse_demon_upgrade/New(mob/living/simple_animal/hostile/pulse_demon/PD)
+    host = PD
+    update_condition_and_cost()
+
+/datum/pulse_demon_upgrade/proc/update_condition_and_cost()
+    if(!host)
+        message_admins("Somebody set up a pulse demon upgrade ([ability_name]) without assigning the host!")
+        return
+
+/datum/pulse_demon_upgrade/proc/on_purchase()
+    if(!host)
+        message_admins("Somebody set up a pulse demon upgrade ([ability_name]) without assigning the host!")
+        return FALSE
+    if(host.charge < upgrade_cost)
+        to_chat(host,"<span class='warning'>You cannot afford this upgrade.</span>")
+        return FALSE
+    
+    host.charge -= upgrade_cost
+    return TRUE
+
+/datum/pulse_demon_upgrade/takeover
+    ability_name = "Faster takeover time"
+    ability_desc = "Allows hijacking of electronics in less time."
+
+/datum/pulse_demon_upgrade/takeover/update_condition_and_cost()
+    condition = host.takeover_time >= 1
+    upgrade_cost = 10000 * (100 / host.takeover_time)
+
+/datum/pulse_demon_upgrade/takeover/on_purchase()
+    if(..())
+        host.takeover_time /= 1.5
+        to_chat(host,"<span class='notice'>You will now take [host.takeover_time] seconds to hijack machinery.</span>")
+        update_condition_and_cost()
+
+/datum/pulse_demon_upgrade/absorbing
+    ability_name = "Faster power absorbing"
+    ability_desc = "Allows more power absorbed per second."
+
+/datum/pulse_demon_upgrade/absorbing/update_condition_and_cost()
+    condition = host.charge_absorb_amount <= 600000
+    upgrade_cost = host.charge_absorb_amount * 10
+
+/datum/pulse_demon_upgrade/absorbing/on_purchase()
+    if(..())
+        host.charge_absorb_amount *= 1.5
+        to_chat(host,"<span class='notice'>You will now absorb [host.charge_absorb_amount]W per second while in a power source.</span>")
+        update_condition_and_cost()
+
+/datum/pulse_demon_upgrade/drain
+    ability_name = "Slower health drain"
+    ability_desc = "Allows less health to be drained when not on a power source."
+
+/datum/pulse_demon_upgrade/drain/update_condition_and_cost()
+    condition = host.health_drain_rate >= 1
+    upgrade_cost = 10000 * (100 / host.health_drain_rate)
+
+/datum/pulse_demon_upgrade/drain/on_purchase()
+    if(..())
+        host.health_drain_rate /= 1.5
+        to_chat(host,"<span class='notice'>You will now drain [host.health_drain_rate] health per second while not on a power source.</span>")
+        update_condition_and_cost()
+
+/datum/pulse_demon_upgrade/regeneration
+    ability_name = "Faster health regeneration"
+    ability_desc = "Allows more health to be regenerated when on a power source."
+
+/datum/pulse_demon_upgrade/regeneration/update_condition_and_cost()
+    condition = host.health_regen_rate <= host.maxHealth
+    upgrade_cost = host.health_regen_rate * 10000
+
+/datum/pulse_demon_upgrade/regeneration/on_purchase()
+    if(..())
+        host.health_regen_rate *= 1.5
+        to_chat(host,"<span class='notice'>You will now drain [host.health_regen_rate] health per second while on a power source.</span>")
+        update_condition_and_cost()
+
+/datum/pulse_demon_upgrade/health
+    ability_name = "Increased max health"
+    ability_desc = "Increases the limit of your current health."
+
+/datum/pulse_demon_upgrade/health/update_condition_and_cost()
+    condition = host.maxHealth <= 200
+    upgrade_cost = host.maxHealth * 1000
+
+/datum/pulse_demon_upgrade/health/on_purchase()
+    if(..())
+        host.maxHealth *= 1.5
+        host.health *= 1.5
+        to_chat(host,"<span class='notice'>Your maximum health is now [host.maxHealth].</span>")
+        update_condition_and_cost()
+
+/datum/pulse_demon_upgrade/regencost
+    ability_name = "Lower amount per regen"
+    ability_desc = "Drains less power per second to regenerate health."
+
+/datum/pulse_demon_upgrade/regencost/update_condition_and_cost()
+    condition = host.amount_per_regen >= 1
+    upgrade_cost = 10000 * (100 / host.amount_per_regen)
+
+/datum/pulse_demon_upgrade/regencost/on_purchase()
+    if(..())
+        host.amount_per_regen /= 1.5
+        to_chat(host,"<span class='notice'>You will now drain [host.amount_per_regen] per second to regenerate health.</span>")
+        update_condition_and_cost()
+
+/mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
+    var/dat
+    dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
+            <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
+    if(possible_upgrades.len)
+        dat += "<B>Upgrades:</B><BR>"
+        for(var/datum/pulse_demon_upgrade/PDU in possible_upgrades)
+            if(!PDU.condition)
+                possible_upgrades.Remove(PDU)
+            else
+                dat += "<A href='byond://?src=\ref[src];upgrade=1;thing=\ref[PDU]''>[PDU.ability_name] ([PDU.upgrade_cost]W)</A><BR>"
+                if(show_desc)
+                    dat += "<I>[PDU.ability_desc]</I><BR>"
+        dat += "<HR>"
+    if(spell_list.len > 1)
+        dat += "<B>Known abilities:</B><BR>"
+        for(var/spell/S in spell_list)
+            if(!istype(S,/spell/pulse_demon/abilities))
+                var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
+                dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
+                dat += "[S.spell_levels[Sp_SPEED] < S.level_max[Sp_SPEED] ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A>" : ""] "
+                dat += "[S.spell_levels[Sp_POWER] < S.level_max[Sp_POWER] ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A>" : ""]<BR>"
+                if(show_desc)
+                    dat += "<I>[S.desc]</I><BR>"
+        dat += "<HR>"
+    if(possible_spells.len)
+        dat += "<B>Available abilities:</B><BR>"
+        dat += "<I>The number afterwards is the charge cost.</I><BR>"
+        for(var/spell/pulse_demon/PDS in possible_spells)
+            var/icon/spellimg = icon('icons/mob/screen_spells.dmi', PDS.hud_state)
+            dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> "
+            dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
+            if(show_desc)
+                dat += "<I>[PDS.desc]</I><BR>"
+        dat += "<HR>"
+    var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu")
+    popup.set_content(dat)
+    popup.open()
+
+/mob/living/simple_animal/hostile/pulse_demon/Topic(href, href_list)
+    ..()
+    if(href_list["upgrade"])
+        var/datum/pulse_demon_upgrade/PDU = locate(href_list["thing"])
+        PDU.on_purchase()
+
+    if(href_list["buy"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.purchase_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this ability.</span>")
+            return
+
+        // Give the power and take away the money.
+        add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
+        charge -= PDS.purchase_cost
+        possible_spells.Remove(PDS)
+    
+    if(href_list["desc"])
+        show_desc = !show_desc
+
+    if(href_list["quicken"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.spell_flags & NO_BUTTON)
+            to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
+            return
+        if(PDS.upgrade_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
+            to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
+            return
+
+        PDS.quicken_spell()
+        charge -= PDS.upgrade_cost
+
+    if(href_list["empower"])
+        var/spell/pulse_demon/PDS = locate(href_list["spell"])
+        if(PDS.upgrade_cost > charge)
+            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
+            return
+        if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
+            to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
+            return
+
+        PDS.empower_spell()
+        charge -= PDS.upgrade_cost
+
+    powerMenu()
 
 /spell/pulse_demon
     name = "Pulse Demon Spell"

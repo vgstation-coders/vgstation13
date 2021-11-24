@@ -27,35 +27,36 @@
     attack_sound = "sparks"
     harm_intent_damage = 0
     melee_damage_lower = 0
-    melee_damage_upper = 0                      //Handled in unarmed_attack_mob() anyways
-    pass_flags = PASSDOOR                       //Stops the message spam
+    melee_damage_upper = 0                                          //Handled in unarmed_attack_mob() anyways
+    pass_flags = PASSDOOR                                           //Stops the message spam
 
     //VARS
-    var/charge = 1000                           //Charge stored
-    var/maxcharge = 1000                        //Max charge storable
-    var/health_drain_rate = 5                   //Health drained per tick when not on power source
-    var/health_regen_rate = 5                   //Health regenerated per tick when on power source
-    var/amount_per_regen = 100                  //Amount of power used to regenerate health
-    var/charge_absorb_amount = 1000             //Amount of power sucked per tick
-    var/max_can_absorb = 10000                  //Maximum amount that max charge can increase to
-    var/takeover_time = 30                      //Time spent taking over electronics
-    var/show_desc = FALSE                       //For the ability menu
-    var/can_leave_cable = FALSE                 //For the ability that lets you
-    var/base_movespeed = 1                      //For modifying with the above
-    var/move_divide = 2                         //For slowing down of above
+    var/charge = 1000                                               //Charge stored
+    var/maxcharge = 1000                                            //Max charge storable
+    var/health_drain_rate = 5                                       //Health drained per tick when not on power source
+    var/health_regen_rate = 5                                       //Health regenerated per tick when on power source
+    var/amount_per_regen = 100                                      //Amount of power used to regenerate health
+    var/charge_absorb_amount = 1000                                 //Amount of power sucked per tick
+    var/max_can_absorb = 10000                                      //Maximum amount that max charge can increase to
+    var/takeover_time = 30                                          //Time spent taking over electronics
+    var/show_desc = FALSE                                           //For the ability menu
+    var/can_leave_cable = FALSE                                     //For the ability that lets you
+    var/base_movespeed = 1                                          //For modifying with the above
+    var/move_divide = 2                                             //For slowing down of above
 
     //TYPES
-    var/area/controlling_area                   // Area controlled from an APC
-    var/obj/structure/cable/current_cable       // Current cable we're on
-    var/datum/powernet/current_net              // Powernet for cableview to update
-    var/datum/powernet/previous_net             // Old net to check against current one for cable view update
-    var/obj/machinery/power/current_power       // Current power machine we're in
-    var/mob/living/silicon/robot/current_robot  // Currently controlled robot
-    var/obj/item/weapon/current_weapon          // Current gun we're controlling
+    var/area/controlling_area                                       // Area controlled from an APC
+    var/obj/structure/cable/current_cable                           // Current cable we're on
+    var/datum/powernet/current_net                                  // Powernet for cableview to update
+    var/datum/powernet/previous_net                                 // Old net to check against current one for cable view update
+    var/obj/machinery/power/current_power                           // Current power machine we're in
+    var/mob/living/silicon/robot/current_robot                      // Currently controlled robot
+    var/obj/item/weapon/current_weapon                              // Current gun we're controlling
 
     //LISTS
-    var/list/image/cables_shown = list()        // In cable views
-    var/list/possible_spells = list()           // To be purchasable from ability menu
+    var/list/image/cables_shown = list()                            // In cable views
+    var/list/possible_spells = list()                               // To be purchasable from ability menu
+    var/list/datum/pulse_demon_upgrade/possible_upgrades = list()   // To be purchasable from ability menu
 
 /mob/living/simple_animal/hostile/pulse_demon/New()
     ..()
@@ -77,6 +78,9 @@
         var/spell/S = new pd_spell
         if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities)
             possible_spells += S
+    for(var/pd_upgrade in subtypesof(/datum/pulse_demon_upgrade))
+        var/datum/pulse_demon_upgrade/PDU = new pd_upgrade(src)
+        possible_upgrades += PDU
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
     if(client && client.darkness_planemaster)
@@ -439,136 +443,6 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
     return
-
-/mob/living/simple_animal/hostile/pulse_demon/proc/powerMenu()
-    var/dat
-    dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
-            <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
-    if(takeover_time >= 1 || charge_absorb_amount <= 600000 || health_drain_rate >= 1 || maxHealth <= 200)
-        dat += "<B>Upgrades:</B><BR>"
-        if(takeover_time >= 1)
-            dat += "<A href='byond://?src=\ref[src];takeover=1'>Faster takeover time ([10000 * (100 / takeover_time)]W)</A><BR>"
-            if(show_desc)
-                dat += "<I>Allows hijacking of electronics in less time.</I><BR>"
-        if(charge_absorb_amount <= 600000)
-            dat += "<A href='byond://?src=\ref[src];absorbing=1'>Faster power absorbing ([charge_absorb_amount*10]W)</A><BR>"
-            if(show_desc)
-                dat += "<I>Allows more power absorbed per second.</I><BR>"
-        if(health_drain_rate <= maxHealth)
-            dat += "<A href='byond://?src=\ref[src];regeneration=1'>Slower health drain ([10000 * (100 / health_drain_rate)]W)</A><BR>"
-            if(show_desc)
-                dat += "<I>Allows less health to be drained when not on a power source.</I><BR>"
-        if(maxHealth <= 200)
-            dat += "<A href='byond://?src=\ref[src];health=1'>Increased max health ([maxHealth*1000]W)</A><BR>"
-            if(show_desc)
-                dat += "<I>Increases the limit of your current health.</I><BR>"
-        dat += "<HR>"
-    if(spell_list.len > 1)
-        dat += "<B>Known abilities:</B><BR>"
-        for(var/spell/S in spell_list)
-            if(!istype(S,/spell/pulse_demon/abilities))
-                var/icon/spellimg = icon('icons/mob/screen_spells.dmi', S.hud_state)
-                dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> <B>[S.name]</B> "
-                dat += "[S.spell_levels[Sp_SPEED] < S.level_max[Sp_SPEED] ? "<A href='byond://?src=\ref[src];quicken=1;spell=\ref[S]'>Quicken</A>" : ""] "
-                dat += "[S.spell_levels[Sp_POWER] < S.level_max[Sp_POWER] ? "<A href='byond://?src=\ref[src];empower=1;spell=\ref[S]'>Empower</A>" : ""]<BR>"
-                if(show_desc)
-                    dat += "<I>[S.desc]</I><BR>"
-        dat += "<HR>"
-    if(possible_spells.len)
-        dat += "<B>Available abilities:</B><BR>"
-        dat += "<I>The number afterwards is the charge cost.</I><BR>"
-        for(var/spell/pulse_demon/PDS in possible_spells)
-            var/icon/spellimg = icon('icons/mob/screen_spells.dmi', PDS.hud_state)
-            dat += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(spellimg)]'> "
-            dat += "<B><A href='byond://?src=\ref[src];buy=1;spell=\ref[PDS]'>[PDS.name]</A></B> ([PDS.purchase_cost]W)<BR>"
-            if(show_desc)
-                dat += "<I>[PDS.desc]</I><BR>"
-        dat += "<HR>"
-    var/datum/browser/popup = new(src, "abilitypicker", "Pulse Demon Ability Menu")
-    popup.set_content(dat)
-    popup.open()
-
-/mob/living/simple_animal/hostile/pulse_demon/Topic(href, href_list)
-    ..()
-    if(href_list["buy"])
-        var/spell/pulse_demon/PDS = locate(href_list["spell"])
-        if(PDS.purchase_cost > charge)
-            to_chat(src,"<span class='warning'>You cannot afford this ability.</span>")
-            return
-
-        // Give the power and take away the money.
-        add_spell(PDS, "pulsedemon_spell_ready",/obj/abstract/screen/movable/spell_master/pulse_demon)
-        charge -= PDS.purchase_cost
-        possible_spells.Remove(PDS)
-    
-    if(href_list["desc"])
-        show_desc = !show_desc
-
-    if(href_list["quicken"])
-        var/spell/pulse_demon/PDS = locate(href_list["spell"])
-        if(PDS.spell_flags & NO_BUTTON)
-            to_chat(src,"<span class='warning'>This cannot be cast, so cannot be quickened.</span>")
-            return
-        if(PDS.upgrade_cost > charge)
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        if(PDS.spell_levels[Sp_SPEED] >= PDS.level_max[Sp_SPEED])
-            to_chat(src,"<span class='warning'>You cannot quicken this ability any further.</span>")
-            return
-
-        PDS.quicken_spell()
-        charge -= PDS.upgrade_cost
-
-    if(href_list["empower"])
-        var/spell/pulse_demon/PDS = locate(href_list["spell"])
-        if(PDS.upgrade_cost > charge)
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        if(PDS.spell_levels[Sp_POWER] >= PDS.level_max[Sp_POWER])
-            to_chat(src,"<span class='warning'>You cannot empower this ability any further.</span>")
-            return
-
-        PDS.empower_spell()
-        charge -= PDS.upgrade_cost
-
-    if(href_list["takeover"])
-        if(charge < 10000 * (100 / takeover_time))
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        
-        charge -= 10000 * (100 / takeover_time)
-        takeover_time /= 1.5
-        to_chat(src,"<span class='notice'>You will now take [takeover_time] seconds to hijack machinery.</span>")
-    
-    if(href_list["absorbing"])
-        if(charge < charge_absorb_amount * 10)
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        
-        charge -= charge_absorb_amount * 10
-        charge_absorb_amount *= 1.5
-        to_chat(src,"<span class='notice'>You will now absorb [charge_absorb_amount]W per second while in a power source.</span>")
-    
-    if(href_list["regeneration"])
-        if(charge < 10000 * (100 / health_drain_rate))
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        
-        charge -= 10000 * (100 / health_drain_rate)
-        health_drain_rate /= 1.5
-        to_chat(src,"<span class='notice'>You will now drain [health_drain_rate] health per second while not on a power source.</span>")
-    
-    if(href_list["health"])
-        if(charge < maxHealth * 1000)
-            to_chat(src,"<span class='warning'>You cannot afford this upgrade.</span>")
-            return
-        
-        charge -= maxHealth * 1000
-        maxHealth *= 1.5
-        health *= 1.5
-        to_chat(src,"<span class='notice'>Your maximum health is now [maxHealth].</span>")
-
-    powerMenu()
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob)
     var/dmg_done = 0
