@@ -22,11 +22,13 @@
 				continue
 			if( M.key && (M.key != key) )
 				var/matches
+				var/matches_both = FALSE
 				if( (M.lastKnownIP == client.address) )
 					matches += "IP ([client.address])"
 				if( (M.computer_id == client.computer_id) )
 					if(matches)
 						matches += " and "
+						matches_both = TRUE
 					matches += "ID ([client.computer_id])"
 #if WARN_FOR_CLIENTS_SHARING_IP
 					spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
@@ -35,7 +37,7 @@
 					message_admins("<font color='red'><B>Notice: </B><span class='notice'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[usr];priv_msg=\ref[M]'>[key_name_admin(M)]</A>[M.client ? "" : " (no longer logged in)"].</span>", 1)
 					log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)][M.client ? "" : " (no longer logged in)"].")
 
-				if(findtext(matches,") and ID ("))
+				if(matches_both)
 					var/admins_number = admins.len
 					var/admin_number_afk = get_afk_admins()
 					var/available_admins = admins_number - admin_number_afk
