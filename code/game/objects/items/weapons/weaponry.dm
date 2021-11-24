@@ -518,7 +518,12 @@
 				var/atom/movable/M = blocked
 				var/turf/Q = get_turf(M)
 				var/turf/target
-				var/throwdir = turn(H.dir, pick(-45, 0, 45))
+				var/list/throwdir_chances = list(
+					"-45" = 1,
+					"0" = H.reagents.get_sportiness(),
+					"45" = 1
+				)
+				var/throwdir = turn(H.dir, text2num(pickweight(throwdir_chances)))
 				if(istype(Q, /turf/space)) // if ended in space, then range is unlimited
 					target = get_edge_target_turf(Q, throwdir)
 				else						// otherwise limit to 10 tiles
