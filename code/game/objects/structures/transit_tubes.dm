@@ -524,8 +524,11 @@
 					if(!station.pod_moving)
 						if(direction == station.dir)
 							if(station.open)
-								mob.forceMove(loc)
-								mob.client.Move(get_step(loc, direction), direction)
+								if(allowed(mob))
+									mob.forceMove(loc)
+									mob.client.Move(get_step(loc, direction), direction)
+								else
+									to_chat(mob, "<span class='warning'>Access denied.</span>")
 
 							else
 								station.open_animation()
