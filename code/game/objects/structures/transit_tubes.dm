@@ -11,15 +11,12 @@
 	density = 1
 	layer = ABOVE_OBJ_LAYER
 	anchored = 1.0
+	pixel_x = -8
+	pixel_y = -8
 	var/list/tube_dirs = null
-	var/exit_delay = 1
+	var/exit_delay = 0
 	var/enter_delay = 1
 
-	// alldirs in global.dm is the same list of directions, but since
-	//  the specific order matters to get a usable icon_state, it is
-	//  copied here so that, in the unlikely case that alldirs is changed,
-	//  this continues to work.
-	var/global/list/tube_dir_list = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 
 
 // A place where tube pods stop, and people can get in or out.
@@ -29,8 +26,10 @@
 	name = "transit tube station"
 	icon = 'icons/obj/pipes/transit_tube_station.dmi'
 	icon_state = "closed"
-	exit_delay = 2
-	enter_delay = 2
+	exit_delay = 4
+	enter_delay = 4
+	pixel_x = 0
+	pixel_y = 0
 	var/pod_moving = 0
 	var/automatic_launch_time = 100
 	var/open = FALSE
@@ -151,8 +150,6 @@
 					TTF = new /obj/structure/transit_tube_frame(get_turf(src), iconstate2framedir(icon_state))
 				if("NE-SW","NW-SE")
 					TTF = new /obj/structure/transit_tube_frame/diag(get_turf(src), iconstate2framedir(icon_state))
-				if("D-NW","D-SE","D-NE","D-SW")
-					TTF = new /obj/structure/transit_tube_frame/corner(get_turf(src), iconstate2framedir(icon_state))
 				if("N-SW","S-NE","E-NW","W-SE")
 					TTF = new /obj/structure/transit_tube_frame/bent(get_turf(src), iconstate2framedir(icon_state))
 				if("N-SE","S-NW","E-SW","W-NE")
@@ -558,14 +555,14 @@
 
 
 // Initialize dirs by searching for tubes that do/might connect
-//  on nearby turfs. Create corner pieces if nessecary.
+//  on nearby turfs.
 // Pick two directions, preferring tubes that already connect
 //  to loc, or other auto tubes if there aren't enough connections.
 /obj/structure/transit_tube/proc/init_dirs_automatic()
 	var/list/connected = list()
 	var/list/connected_auto = list()
 
-	for(var/direction in tube_dir_list)
+	for(var/direction in alldirs)
 		var/location = get_step(loc, direction)
 		for(var/obj/structure/transit_tube/tube in location)
 			if(tube.directions() == null && tube.icon_state == "auto")
@@ -580,10 +577,9 @@
 
 	tube_dirs = select_automatic_dirs(connected)
 
-	if(length(tube_dirs) == 2 && tube_dir_list.Find(tube_dirs[1]) > tube_dir_list.Find(tube_dirs[2]))
+	if(length(tube_dirs) == 2 && alldirs.Find(tube_dirs[1]) > alldirs.Find(tube_dirs[2]))
 		tube_dirs.Swap(1, 2)
 
-	generate_automatic_corners(tube_dirs)
 	select_automatic_icon_state(tube_dirs)
 
 
@@ -610,38 +606,6 @@
 /obj/structure/transit_tube/proc/select_automatic_icon_state(directions)
 	if(length(directions) == 2)
 		icon_state = "[dir2text_short(directions[1])]-[dir2text_short(directions[2])]"
-
-
-
-// Look for diagonal directions, generate the decorative corners in each.
-/obj/structure/transit_tube/proc/generate_automatic_corners(directions)
-	for(var/direction in directions)
-		if(direction == 5 || direction == 6 || direction == 9 || direction == 10)
-			if(direction & NORTH)
-				create_automatic_decorative_corner(get_step(loc, NORTH), direction ^ 3)
-
-			else
-				create_automatic_decorative_corner(get_step(loc, SOUTH), direction ^ 3)
-
-			if(direction & EAST)
-				create_automatic_decorative_corner(get_step(loc, EAST), direction ^ 12)
-
-			else
-				create_automatic_decorative_corner(get_step(loc, WEST), direction ^ 12)
-
-
-
-// Generate a corner, if one doesn't exist for the direction on the turf.
-/obj/structure/transit_tube/proc/create_automatic_decorative_corner(location, direction)
-	var/state = "D-[dir2text_short(direction)]"
-
-	for(var/obj/structure/transit_tube/tube in location)
-		if(tube.icon_state == state)
-			return
-
-	var/obj/structure/transit_tube/tube = new(location)
-	tube.icon_state = state
-	tube.init_dirs()
 
 
 

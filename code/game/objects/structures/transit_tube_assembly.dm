@@ -4,6 +4,8 @@
     icon_state = "straight"
     density = 0
     anchored = 0
+    pixel_x = -8
+    pixel_y = -8
     layer = ABOVE_OBJ_LAYER
     var/list/dir_icon_states = list("N-S","N-S",null,"E-W",null,null,null,"E-W") // Occupies 1, 2, 4 and 8 for dir as an array pointer
 
@@ -45,10 +47,6 @@
 /obj/structure/transit_tube_frame/diag
     icon_state = "diag"
     dir_icon_states = list("NE-SW","NE-SW",null,"NW-SE",null,null,null,"NW-SE")
-
-/obj/structure/transit_tube_frame/corner
-    icon_state = "corner"
-    dir_icon_states = list("D-NW","D-SE",null,"D-NE",null,null,null,"D-SW")
 
 /obj/structure/transit_tube_frame/bent
     icon_state = "bent"
