@@ -239,6 +239,7 @@
 
 /obj/structure/transit_tube/station/proc/open_animation()
 	if(icon_state == "closed")
+		playsound(get_turf(src), 'sound/machines/windowdoor.ogg', 50, 1)
 		icon_state = "opening"
 		spawn(OPEN_DURATION)
 			if(icon_state == "opening")
@@ -249,6 +250,7 @@
 
 /obj/structure/transit_tube/station/proc/close_animation()
 	if(icon_state == "open")
+		playsound(get_turf(src), 'sound/machines/windowdoor.ogg', 50, 1)
 		icon_state = "closing"
 		spawn(CLOSE_DURATION)
 			if(icon_state == "closing")
@@ -542,7 +544,7 @@
 	else
 		tube_dirs = parse_dirs(icon_state)
 
-		if(copytext(icon_state, 1, 3) == "D-" || findtextEx(icon_state, "Pass"))
+		if(findtextEx(icon_state, "Pass"))
 			setDensity(FALSE)
 
 
@@ -624,13 +626,6 @@
 
 	var/list/split_text = splittext(text, "-")
 
-	// If the first token is D, the icon_state represents
-	//  a purely decorative tube, and doesn't actually
-	//  connect to anything.
-	if(split_text[1] == "D")
-		direction_table[text] = list()
-		return null
-
 	var/list/directions = list()
 
 	for(var/text_part in split_text)
@@ -694,13 +689,13 @@
 
 /obj/structure/transit_tube/proc/iconstate2framedir(var/icon_state)
 	switch(icon_state)
-		if("N-S","NE-SW","D-NW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
+		if("N-S","NE-SW","N-SW","N-SE","N-SW-SE","N-SE-SW","N-S-pass")
 			return 1
-		if("D-SE","S-NE","S-NW","S-NE-NW","S-NW-NE")
+		if("S-NE","S-NW","S-NE-NW","S-NW-NE")
 			return 2
-		if("E-W","NW-SE","D-NE","E-NW","E-SW","E-NW-SW","E-SW-NW","E-W-pass")
+		if("E-W","NW-SE","E-NW","E-SW","E-NW-SW","E-SW-NW","E-W-pass")
 			return 4
-		if("D-SW","W-SE","W-NE","W-SE-NE","W-NE-SE")
+		if("W-SE","W-NE","W-SE-NE","W-NE-SE")
 			return 8
 		if("closed","open","closing","opening")
 			return dir
