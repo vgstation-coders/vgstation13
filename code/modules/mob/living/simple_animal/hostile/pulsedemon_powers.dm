@@ -294,7 +294,11 @@
     desc = "Toggle that allows leaving cables for brief periods of time, while moving at a slower speed."
     purchase_cost = 100000
 
+/spell/pulse_demon/sustaincharge/choose_targets(var/mob/user = usr)
+	return list(user) // Self-cast
+
 /spell/pulse_demon/sustaincharge/cast(var/list/targets, mob/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         PD.can_leave_cable = !PD.can_leave_cable
+        to_chat(user,"<span class='notice'>Leaving cables is [PD.can_leave_cable ? "on" : "off"].</span>")

@@ -34,6 +34,7 @@
     var/charge = 1000                           //Charge stored
     var/maxcharge = 1000                        //Max charge storable
     var/health_drain_rate = 5                   //Health drained per tick when not on power source
+    var/health_regen_rate = 5                   //Health regenerated per tick when on power source
     var/amount_per_regen = 100                  //Amount of power used to regenerate health
     var/charge_absorb_amount = 1000             //Amount of power sucked per tick
     var/max_can_absorb = 10000                  //Maximum amount that max charge can increase to
@@ -112,9 +113,12 @@
 		stat(null, text("Max charge stored: [maxcharge]W"))
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
+    var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
     if(current_cable)
         if(current_cable.avail() > amount_per_regen)
             current_cable.add_load(amount_per_regen)
+            if(health < maxHealth)
+                health += health_to_add
         else
             health -= health_drain_rate
         move_to_delay = 1 / base_movespeed
@@ -127,6 +131,8 @@
             drainAPC(current_apc)
         else if(current_power.avail() > amount_per_regen)
             current_power.add_load(amount_per_regen)
+            if(health < maxHealth)
+                health += health_to_add
         else
             health -= health_drain_rate    
     else if(can_leave_cable)
@@ -147,7 +153,7 @@
     return istype(F,/turf/simulated/floor) && F.floor_tile
 
 /mob/living/simple_animal/hostile/pulse_demon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-    if(!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc || !can_leave_cable)
+    if((!locate(/obj/structure/cable) in NewLoc || !locate(/obj/machinery/power) in NewLoc) && !can_leave_cable)
         return
     var/moved = FALSE
     if(..())
@@ -448,7 +454,7 @@
             dat += "<A href='byond://?src=\ref[src];absorbing=1'>Faster power absorbing ([charge_absorb_amount*10]W)</A><BR>"
             if(show_desc)
                 dat += "<I>Allows more power absorbed per second.</I><BR>"
-        if(amount_per_regen <= maxHealth)
+        if(health_drain_rate <= maxHealth)
             dat += "<A href='byond://?src=\ref[src];regeneration=1'>Slower health drain ([10000 * (100 / health_drain_rate)]W)</A><BR>"
             if(show_desc)
                 dat += "<I>Allows less health to be drained when not on a power source.</I><BR>"
