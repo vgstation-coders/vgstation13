@@ -86,10 +86,19 @@
                 return 1
             G.use(2)
             to_chat(user, "You add the reinforced glass to the [src].")
-            new /obj/structure/transit_tube(loc, dir_icon_states[dir])
+            var/obj/structure/transit_tube/station/TTS = new /obj/structure/transit_tube/station(loc, dir_icon_states[dir])
+
+            if(src.electronics.one_access)
+                TTS.req_access = null
+                TTS.req_one_access = src.electronics.conf_access
+            else
+                TTS.req_access = src.electronics.conf_access
+            TTS.req_access_dir = src.electronics.dir_access
+            TTS.access_not_dir = src.electronics.access_nodir
+
             qdel(src)
         return 1
-    if(istype(W,/obj/item/weapon/circuitboard/mecha/transitpod))
+    if(istype(W,/obj/item/weapon/circuitboard/airlock))
         if(electronics)
             to_chat(user, "<span class='warning'>There is already a [electronics] in this!</span>")
         var/obj/item/weapon/circuitboard/airlock/C = W
