@@ -193,6 +193,7 @@
 #define PEPTOBISMOL 			"peptobismol"
 #define DRINK 			"drink"
 #define ORANGEJUICE 			"orangejuice"
+#define OPOKJUICE 			"opokjuice"
 #define TOMATOJUICE 			"tomatojuice"
 #define LIMEJUICE 			"limejuice"
 #define CARROTJUICE 			"carrotjuice"

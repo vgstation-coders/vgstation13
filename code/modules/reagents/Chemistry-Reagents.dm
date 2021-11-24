@@ -1117,7 +1117,7 @@
 	if(..())
 		return 1
 
-	M.druggy = max(M.druggy, 15)
+	M.AdjustDrugginess(15)
 	if(isturf(M.loc) && !istype(M.loc, /turf/space))
 		if(M.canmove && !M.restrained())
 			if(prob(10))
@@ -1232,7 +1232,7 @@
 	if(prob(7))
 		M.emote(pick("twitch", "drool", "moan", "gasp"), null, null, TRUE)
 
-	M.druggy = max(M.druggy, 50)
+	M.AdjustDrugginess(50)
 
 /datum/reagent/silicate
 	name = "Silicate"
@@ -1573,7 +1573,7 @@
 /datum/reagent/honey/chillwax/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		H.druggy = max(H.druggy, 5)
+		H.AdjustDrugginess(5)
 		H.Dizzy(2)
 		if(prob(10))
 			H.emote(pick("stare", "giggle"), null, null, TRUE)
@@ -4153,6 +4153,7 @@
 	if(..())
 		return 1
 
+	M.slurring = 0
 	M.dizziness = 0
 	M.drowsyness = 0
 	M.stuttering = 0
@@ -5033,7 +5034,7 @@
 				data += 4
 	switch(data)
 		if(1 to 30)
-			M.druggy = max(M.druggy, 10)
+			M.AdjustDrugginess(10)
 		if(540 to 600)	//Start barfing violently after 9 minutes
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
@@ -5066,7 +5067,7 @@
 	if(..())
 		return 1
 
-	M.druggy = max(M.druggy, 30)
+	M.AdjustDrugginess(30)
 	switch(data)
 		if(1 to 5)
 			if(!M.stuttering)
@@ -5079,7 +5080,7 @@
 				M.stuttering = 1
 			M.Jitter(10)
 			M.Dizzy(10)
-			M.druggy = max(M.druggy, 35)
+			M.AdjustDrugginess(35)
 			if(prob(20))
 				M.emote(pick("twitch", "giggle"))
 		if (10 to INFINITY)
@@ -5087,7 +5088,7 @@
 				M.stuttering = 1
 			M.Jitter(20)
 			M.Dizzy(20)
-			M.druggy = max(M.druggy, 40)
+			M.AdjustDrugginess(40)
 			if(prob(30))
 				M.emote(pick("twitch", "giggle"))
 	data++
@@ -5659,6 +5660,22 @@
 	if(M.getToxLoss() && prob(20))
 		M.adjustToxLoss(-REM)
 
+/datum/reagent/drink/opokjuice
+	name = "Opok Juice"
+	id = OPOKJUICE
+	description = "A fruit from the mothership pulped into bitter juice, with a very slight undertone of sweetness."
+	color = "#FF9191" //rgb: 255, 145, 145
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Vitamins from the mothership!"
+
+/datum/reagent/drink/opokjuice/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getToxLoss() && prob(20))
+		M.adjustToxLoss(-REM)
+
 /datum/reagent/drink/tomatojuice
 	name = "Tomato Juice"
 	id = TOMATOJUICE
@@ -6093,7 +6110,7 @@
 		return 1
 
 	M.Jitter(20)
-	M.druggy = max(M.druggy, 30)
+	M.AdjustDrugginess(30)
 	M.dizziness += 5
 	M.drowsyness = 0
 
@@ -6253,7 +6270,7 @@
 	if(..())
 		return 1
 
-	M.druggy = max(M.druggy, 50)
+	M.AdjustDrugginess(50)
 	switch(data)
 		if(1 to 5)
 			if(!M.stuttering)
@@ -6266,7 +6283,7 @@
 				M.stuttering = 1
 			M.Jitter(20)
 			M.Dizzy(20)
-			M.druggy = max(M.druggy, 45)
+			M.AdjustDrugginess(45)
 			if(prob(20))
 				M.emote(pick("twitch", "giggle"))
 		if(10 to INFINITY)
@@ -6274,7 +6291,7 @@
 				M.stuttering = 1
 			M.Jitter(40)
 			M.Dizzy(40)
-			M.druggy = max(M.druggy, 60)
+			M.AdjustDrugginess(60)
 			if(prob(30))
 				M.emote(pick("twitch", "giggle"))
 	data++
@@ -6479,7 +6496,7 @@
 /datum/reagent/ethanol/pwine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	M.druggy = max(M.druggy, 50)
+	M.AdjustDrugginess(50)
 	switch(data)
 		if(1 to 25)
 			if(!M.stuttering)
@@ -6494,7 +6511,7 @@
 			M.hallucination = max(M.hallucination, 10)
 			M.Jitter(2)
 			M.Dizzy(2)
-			M.druggy = max(M.druggy, 45)
+			M.AdjustDrugginess(45)
 			if(prob(5))
 				M.emote(pick("twitch", "giggle"))
 		if(75 to 150)
@@ -6503,7 +6520,7 @@
 			M.hallucination = max(M.hallucination, 60)
 			M.Jitter(4)
 			M.Dizzy(4)
-			M.druggy = max(M.druggy, 60)
+			M.AdjustDrugginess(60)
 			if(prob(10))
 				M.emote(pick("twitch", "giggle"))
 			if(prob(30))
@@ -6514,7 +6531,7 @@
 			M.hallucination = max(M.hallucination, 60)
 			M.Jitter(4)
 			M.Dizzy(4)
-			M.druggy = max(M.druggy, 60)
+			M.AdjustDrugginess(60)
 			if(prob(10))
 				M.emote(pick("twitch", "giggle"))
 			if(prob(30))
@@ -6631,7 +6648,7 @@
 	if(isrobot(M))
 		M.Jitter(20)
 		M.Dizzy(20)
-		M.druggy = max(M.druggy, 60)
+		M.AdjustDrugginess(60)
 
 /datum/reagent/ethanol/suicide
 	name = "Suicide"
@@ -9529,7 +9546,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			C.pain_shock_stage--
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			H.druggy = max(H.druggy, 5)
+			H.AdjustDrugginess(5)
 			H.Dizzy(2)
 			if(prob(5))
 				H.emote(pick("stare", "giggle"), null, null, TRUE)

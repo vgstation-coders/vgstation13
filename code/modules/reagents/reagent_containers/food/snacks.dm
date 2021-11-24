@@ -7353,6 +7353,106 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	to_chat(user, "<span class='notice'>You tear the tab open and remove the slider from the packaging. Despite supposedly being self-heating, it's barely warm.")
 	wrapped = 0
 
+/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth
+	name = "Mothership Broth"
+	desc = "A simple dish of mothership broth. Soothing, but not very nourishing. Could use more spice..."
+	icon_state = "mothershipbroth"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#B38B26"
+	valid_utensils = UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/New()
+	..()
+	reagents.clear_reagents()
+	if(prob(10))
+		name = "Abducted Mothership Broth"
+		desc = "An unidentified microwave object has abducted your broth and made it slightly more nutritious!"
+		icon_state = "mothershipbroth_ufo"
+		trash = /obj/item/trash/emptybowl_ufo
+		reagents.add_reagent(NUTRIMENT, 4)
+		reagents.add_reagent(ZAMMILD, 5)
+		bitesize = 2
+	else
+		reagents.add_reagent(NUTRIMENT, 2)
+		reagents.add_reagent(ZAMMILD, 5)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy
+	name = "Mothership Spicy Broth"
+	desc = "A simple dish of mothership broth. Soothing, but not very nourishing. At least it's spicy."
+	icon_state = "mothershipbroth_spicy"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#D35A0D"
+	valid_utensils = UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy/New()
+	..()
+	reagents.clear_reagents()
+	if(prob(10))
+		name = "Abducted Mothership Spicy Broth"
+		desc = "An unidentified microwave object has abducted your broth and made it slightly more nutritious!"
+		icon_state = "mothershipbroth_spicyufo"
+		trash = /obj/item/trash/emptybowl_ufo
+		reagents.add_reagent(NUTRIMENT, 5)
+		reagents.add_reagent(ZAMSPICYTOXIN, 5)
+		bitesize = 2
+	else
+		reagents.add_reagent(NUTRIMENT, 3)
+		reagents.add_reagent(ZAMSPICYTOXIN, 5)
+		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesybroth
+	name = "Mothership Cheesy Broth"
+	desc = "Traditional mothership broth with some cheese melted into it. Pairs well with a slice of gingi bread."
+	icon_state = "cheesybroth"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_ANIMAL | FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#FFEB3B"
+	valid_utensils = UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesybroth/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(ZAMMILD, 5)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp
+	name = "Swimming Carp"
+	desc = "A simple soup of tender carp meat cooked in mothership broth. Soothing and nourishing, but could use a little more spice."
+	icon_state = "swimmingcarp"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_MEAT | FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#B38B26"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(ZAMMILD, 5)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp_spicy
+	name = "Spicy Swimming Carp"
+	desc = "A soup of tender carp meat cooked in spicy mothership broth. Soothing, nourishing, and perfectly spicy."
+	icon_state = "swimmingcarp_spicy"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_MEAT | FOOD_LIQUID
+	crumb_icon = "dribbles"
+	filling_color = "#D35A0D"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp_spicy/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 9)
+	reagents.add_reagent(ZAMSPICYTOXIN, 5)
+	bitesize = 3
+
 //You have now exited the ayy food zone. Thanks for visiting.
 
 /obj/item/weapon/reagent_containers/food/snacks/dionaroast

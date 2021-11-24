@@ -25,6 +25,7 @@
 	explosion_block = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
+	var/mob/living/peeper = null
 
 /turf/simulated/wall/initialize()
 	..()
@@ -78,6 +79,7 @@
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 
+	reset_view()
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -164,11 +166,26 @@
 						"<span class='notice'>You finish drawing the sigil.</span>")
 			return
 
+	if(bullet_marks)
+		peeper = user
+		peeper.client.perspective = EYE_PERSPECTIVE
+		peeper.client.eye = src
+		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
+		"<span class='notice'>You lean in and look through \the [src].</span>")
+		src.add_fingerprint(peeper)
+		return ..()
+
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
 	playsound(src, 'sound/weapons/Genhit.ogg', 25, 1)
 	src.add_fingerprint(user)
 	return ..()
+
+/turf/simulated/wall/proc/reset_view()
+	if(!peeper)
+		return
+	peeper.client.eye = peeper.client.mob
+	peeper.client.perspective = MOB_PERSPECTIVE
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
 	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
@@ -192,9 +209,10 @@
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
+		to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
 		bullet_marks = 0
 		icon = initial(icon)
+		reset_view()
 		return
 
 	//Get the user's location
@@ -264,6 +282,22 @@
 				dismantle_wall()
 		else
 			return
+
+	// Drilling peepholes
+	if(istype(W,/obj/item/tool/surgicaldrill))
+		user.visible_message("<span class='warning'>[user] begins drilling a hole into \the [src].</span>", \
+		"<span class='notice'>You begin drilling a hole into \the [src].</span>", \
+		"<span class='warning'>You hear drilling noises.</span>")
+		//playsound(src, 'sound/items/Welder.ogg', 100, 1)
+
+		if(do_after(user, src, 100*W.toolspeed))
+			if(!istype(src))
+				return
+			//playsound(src, 'sound/items/Welder.ogg', 100, 1)
+			user.visible_message("<span class='warning'>[user] drills a hole into \the [src].</span>", \
+			"<span class='notice'>You drill a hole into \the [src] to peep through.</span>", \
+			"<span class='warning'>You hear drilling noises.</span>")
+			add_bullet_mark("peephole",round(Get_Angle(user,src)))
 
     //CUT_WALL will dismantle the wall
 	else if((W.sharpness_flags & (CUT_WALL)) && user.a_intent == I_HURT)

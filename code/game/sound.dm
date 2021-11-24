@@ -36,6 +36,34 @@ var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jingleb
 var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/disappear_2.ogg', 'sound/effects/disappear_3.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
+//default byond sound environments
+#define SOUND_ENVIRONMENT_GENERIC 0
+#define SOUND_ENVIRONMENT_PADDED_CELL 1
+#define SOUND_ENVIRONMENT_ROOM 2
+#define SOUND_ENVIRONMENT_BATHROOM 3
+#define SOUND_ENVIRONMENT_LIVINGROOM 4
+#define SOUND_ENVIRONMENT_STONEROOM 5
+#define SOUND_ENVIRONMENT_AUDITORIUM 6
+#define SOUND_ENVIRONMENT_CONCERT_HALL 7
+#define SOUND_ENVIRONMENT_CAVE 8
+#define SOUND_ENVIRONMENT_ARENA 9
+#define SOUND_ENVIRONMENT_HANGAR 10
+#define SOUND_ENVIRONMENT_CARPETED_HALLWAY 11
+#define SOUND_ENVIRONMENT_HALLWAY 12
+#define SOUND_ENVIRONMENT_STONE_CORRIDOR 13
+#define SOUND_ENVIRONMENT_ALLEY 14
+#define SOUND_ENVIRONMENT_FOREST 15
+#define SOUND_ENVIRONMENT_CITY 16
+#define SOUND_ENVIRONMENT_MOUNTAINS 17
+#define SOUND_ENVIRONMENT_QUARRY 18
+#define SOUND_ENVIRONMENT_PLAIN 19
+#define SOUND_ENVIRONMENT_PARKING_LOT 20
+#define SOUND_ENVIRONMENT_SEWER_PIPE 21
+#define SOUND_ENVIRONMENT_UNDERWATER 22
+#define SOUND_ENVIRONMENT_DRUGGED 23
+#define SOUND_ENVIRONMENT_DIZZY 24
+#define SOUND_ENVIRONMENT_PSYCHOTIC 25
+
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
 /proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)
@@ -132,6 +160,8 @@ var/const/SURROUND_CAP = 7
 			S.frequency = frequency
 		else
 			S.frequency = get_rand_frequency()
+
+	S.environment = sound_environment
 
 	if(isturf(turf_source))
 		// 3D sounds, the technology is here!

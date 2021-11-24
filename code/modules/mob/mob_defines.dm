@@ -287,3 +287,5 @@
 	var/old_assigned_role // If they ghosted, what role did they have?
 
 	var/list/crit_rampup = list() // Of the form timestamp/damage
+
+	var/sound_environment = 0 // See http://www.byond.com/docs/ref/#/sound/var/environment

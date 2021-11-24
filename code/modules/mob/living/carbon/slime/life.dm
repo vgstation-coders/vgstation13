@@ -334,9 +334,8 @@
 
 	if (src.eye_blurry > 0)
 		src.eye_blurry = 0
-
-	if (src.druggy > 0)
-		src.druggy = 0
+	if(druggy)
+		setDruggy(0)
 
 	return 1
 
