@@ -325,7 +325,7 @@ var/list/crushed_cans_cache = list()
 
 /obj/item/trash/zamspices_packet
 	name = "zam spices packet"
-	desc = "A used zam spices packet"
+	desc = "A used Zam spices packet"
 	icon_state	= "zamspices_small"
 
 /obj/item/trash/zammild_packet
@@ -337,3 +337,15 @@ var/list/crushed_cans_cache = list()
 	name = "zam's spicy sauce packet"
 	desc = "A used Zam's spicy sauce packet"
 	icon_state	= "zamspicytoxin_small"
+
+/obj/item/trash/emptybowl
+	name = "empty bowl"
+	desc = "No soup, no use"
+	icon_state	= "emptybowl"
+
+/obj/item/trash/emptybowl_ufo
+	name = "empty saucer bowl"
+	desc = "What a shame it's too small to fly in"
+	icon_state	= "emptysaucerbowl"
+	starting_materials = list(MAT_IRON = 100)
+	w_type=RECYK_METAL
