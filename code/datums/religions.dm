@@ -14,7 +14,7 @@
 		return "Shoalmother"
 	else if(issilicon(H))
 		return "MAINFRAME"
-	else if(!ishuman(H) || !isobserver(H))
+	else if(!ishuman(H) && !isobserver(H))
 		return "Animal Jesus"
 	else
 		return "a voice"
