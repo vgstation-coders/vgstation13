@@ -115,7 +115,7 @@
 	if(eye_blurry)
 		eye_blurry = max(eye_blurry-1,0)
 	if(druggy)
-		AdjustDrugginess(-1)
+		druggy = max(druggy-1,0)
 
 	if(jitteriness)
 		jitteriness = max(jitteriness-1,0)
