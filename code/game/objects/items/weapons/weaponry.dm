@@ -505,8 +505,8 @@
 	return TRUE
 
 /obj/item/weapon/baseball_bat/on_block(damage, atom/movable/blocked)
-	if(ismob(loc))
-		var/mob/H = loc
+	if(isliving(loc))
+		var/mob/living/H = loc
 		if(!H.in_throw_mode || !wielded || damage > 15)
 			return FALSE
 		if(IsShield() < blocked.ignore_blocking)
@@ -524,7 +524,7 @@
 				else						// otherwise limit to 10 tiles
 					target = get_ranged_target_turf(Q, throwdir, 10)
 				M.throw_at(target,100,4)
-			H.in_throw_mode = FALSE
+			H.throw_mode_off()
 			return TRUE
 		return FALSE
 
