@@ -151,6 +151,7 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
     ..()
+    playsound(get_turf(src),"pd_wail_sound",50,1)
     qdel(src) // We vaporise into thin air
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
@@ -448,6 +449,7 @@
 // Our one weakness
 /mob/living/simple_animal/hostile/pulse_demon/emp_act(severity)
     visible_message("<span class ='danger'>[src] [pick("fizzles","wails","flails")] in anguish!</span>")
+    playsound(get_turf(src),"pd_wail_sound",50,1)
     health -= rand(20,25) / severity
 
 // Shock therapy
