@@ -41,8 +41,7 @@
     var/takeover_time = 30                                          //Time spent taking over electronics
     var/show_desc = FALSE                                           //For the ability menu
     var/can_leave_cable = FALSE                                     //For the ability that lets you
-    var/base_movespeed = 1                                          //For modifying with the above
-    var/move_divide = 2                                             //For slowing down of above
+    var/move_divide = 4                                             //For slowing down of above
 
     //TYPES
     var/area/controlling_area                                       // Area controlled from an APC
@@ -125,7 +124,6 @@
                 health += health_to_add
         else
             health -= health_drain_rate
-        set_glide_size(DELAY2GLIDESIZE(1 / base_movespeed))
     else if(current_power)
         if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
@@ -141,7 +139,6 @@
             health -= health_drain_rate    
     else if(can_leave_cable)
         health -= health_drain_rate
-        set_glide_size(DELAY2GLIDESIZE(1 / (base_movespeed / move_divide)))
     else
         death()
     regular_hud_updates()
@@ -205,6 +202,13 @@
             current_power = null
             current_robot = null
             current_weapon = null
+
+/mob/living/simple_animal/hostile/pulse_demon/movement_tally_multiplier()
+    . = ..()
+    if(!current_cable && !current_power)
+        . *= move_divide // Slower if not on cable
+    else
+        . *= 1
 
 /mob/living/simple_animal/hostile/pulse_demon/to_bump(var/atom/obstacle) // Copied from how adminbus does it
     if(!is_under_tile() && isliving(obstacle))
