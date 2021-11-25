@@ -95,10 +95,9 @@
 			icon_state = "labeler0"
 
 /obj/item/weapon/hand_labeler/attack_hand(mob/user) //Shamelessly stolen from stack.dm.
-	if (!mode && user.get_inactive_hand() == src)
+	if (!mode && user.get_inactive_hand() == src && > chars_left)
 		var/obj/item/device/label_roll/LR = new(user, amount=chars_left)
 		user.put_in_hands(LR)
-		LR = null
 		to_chat(user, "<span class='notice'>You remove the label roll.</span>")
 		chars_left = 0
 		icon_state = "labeler_e"
