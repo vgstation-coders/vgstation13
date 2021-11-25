@@ -244,7 +244,7 @@ var/list/headset_modes = list(
 				if(V.spread & SPREAD_MEMETIC)
 					infect_disease2(V, notes="(Memed, from [L])")
 
-	INVOKE_EVENT(src, /event/comp_ai_cmd_hear, "speech" = speech)
+	INVOKE_EVENT(src, /event/hear, "speech" = speech)
 	if(!client)
 		return
 	say_testing(src, "[src] ([src.type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")

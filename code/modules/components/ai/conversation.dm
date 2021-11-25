@@ -25,11 +25,9 @@
 	var/speech_prob = 30
 	var/next_speech
 	var/speech_delay
-	var/datum/component/ai/target_finder/finder = null
 
 /datum/component/ai/conversation/auto/initialize()
 	if(..())
-		finder = parent.get_component(/datum/component/ai/target_finder/simple_view)
 		active_components += src
 		return TRUE
 
@@ -38,15 +36,13 @@
 	..()
 
 /datum/component/ai/conversation/auto/process()
-	if(finder && next_speech < world.time && prob(speech_prob))
-		var/listener
-		for(var/mob/living/M in finder.cmd_find_targets())
+	if(next_speech < world.time && prob(speech_prob))
+		var/list/targets = INVOKE_EVENT(parent, /event/comp_ai_cmd_find_targets)
+		for(var/mob/living/M in targets)
 			if(M == src)
 				continue
 			if(M.isDead()) //No speaking to the dead
 				continue
-			listener = TRUE
-			break
-		if(listener)
-			next_speech = world.time+speech_delay
+			next_speech = world.time + speech_delay
 			cmd_say()
+			break
