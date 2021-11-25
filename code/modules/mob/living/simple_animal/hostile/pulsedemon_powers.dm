@@ -2,13 +2,14 @@
     var/ability_name = "Pulse demon upgrade"
     var/ability_desc = "An upgrade for a pulse demon's inate abilities"
     var/mob/living/simple_animal/hostile/pulse_demon/host
-    var/condition = TRUE
+    var/condition = TRUE // So we know if we can display this in the menu
     var/upgrade_cost = 0
 
 /datum/pulse_demon_upgrade/New(mob/living/simple_animal/hostile/pulse_demon/PD)
     host = PD
     update_condition_and_cost()
 
+// Called on purchase and setup for handling in the menu
 /datum/pulse_demon_upgrade/proc/update_condition_and_cost()
     if(!host)
         message_admins("Somebody set up a pulse demon upgrade ([ability_name]) without assigning the host!")
@@ -114,6 +115,7 @@
     var/dat
     dat += {"<B>Select a spell ([charge]W left to purchase with)</B><BR>
             <A href='byond://?src=\ref[src];desc=1'>(Show [show_desc ? "less" : "more"] info)</A><HR>"}
+    // Shows only upgrades that meet the conditions
     if(possible_upgrades.len)
         dat += "<B>Upgrades:</B><BR>"
         for(var/datum/pulse_demon_upgrade/PDU in possible_upgrades)
@@ -223,7 +225,7 @@
         return FALSE
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-        if (PD.charge < charge_cost)
+        if (PD.charge < charge_cost) // Custom charge handling
             to_chat(PD, "<span class='warning'>You are too low on power, this spell needs a charge of [PD.charge] to cast.</span>")
             return FALSE
     else //only pulse demons allowed
@@ -233,9 +235,9 @@
 /spell/pulse_demon/cast(var/list/targets, var/mob/living/carbon/human/user)
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-        PD.charge -= charge_cost
+        PD.charge -= charge_cost // Removing chage here
 
-/spell/pulse_demon/empower_spell()
+/spell/pulse_demon/empower_spell() // Makes spells use less charge
     spell_levels[Sp_POWER]++
 
     var/temp = ""
@@ -260,6 +262,7 @@
 /spell/pulse_demon/is_valid_target(var/atom/target)
     return 1
 
+// The menu itself
 /spell/pulse_demon/abilities
     name = "Abilities"
     desc = "View and purchase abilities with your electrical charge."
@@ -290,6 +293,7 @@
     purchase_cost = 15000
     upgrade_cost = 10000
 
+// Must be a cable or a clicked on turf with a cable
 /spell/pulse_demon/cable_zap/is_valid_target(var/target, mob/user, options)
     if(options)
         return (target in options)
@@ -302,17 +306,18 @@
     var/turf/T = get_turf(user)
     var/turf/target = get_turf(targets[1])
     var/obj/structure/cable/cable = locate() in target
-    if(!cable || !istype(cable))
+    if(!cable || !istype(cable)) // Sanity
         to_chat(user,"<span class='warning'>...Where's the cable?</span>")
         return
     var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
     var/datum/powernet/PN = cable.get_powernet()
-    if(PN)
+    if(PN) // We need actual power in the cable powernet to move
         L.damage = PN.get_electrocute_damage()
     if(L.damage <= 0)
         qdel(L)
         to_chat(user,"<span class='warning'>There is no power to jolt you across!</span>")
     else
+        // Ride the lightning
         playsound(target, pick(lightning_sound), 75, 1)
         L.tang = adjustAngle(get_angle(target,T))
         L.icon = midicon
@@ -347,6 +352,7 @@
     if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = user
         if(PD.controlling_area == get_area(target))
+            // For some reason there's 2 emag functions
             if(istype(target,/obj/machinery))
                 var/obj/machinery/M = target
                 M.emag(PD)
@@ -354,6 +360,7 @@
                 return
             target.emag_act(PD)
             ..()
+        // Only works in an APC
         else if(istype(PD.loc,/obj/machinery/power/apc))
             to_chat(holder, "You can only cast this in the area you control!")
         else
@@ -380,11 +387,13 @@
         if(PD.controlling_area == get_area(target))
             empulse(get_turf(target),1,1,0)
             ..()
+        // Only works in an APC
         else if(istype(PD.loc,/obj/machinery/power/apc))
             to_chat(holder, "You can only cast this in the area you control!")
         else
             to_chat(holder, "You need to be in an APC for this!")
 
+// Similar to malf one
 /spell/pulse_demon/overload_machine
     name = "Overload Machine"
     abbreviation = "OM"
@@ -418,6 +427,7 @@
                 explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
                 qdel(M)
             ..()
+        // Only works in an APC
         else if(istype(PD.loc,/obj/machinery/power/apc))
             to_chat(holder, "You can only cast this in the area you control!")
         else
@@ -485,8 +495,8 @@
             PD.suckBattery(B)
 
 /spell/pulse_demon/sustaincharge
-    level_max = list(Sp_TOTAL = 3, Sp_POWER = 3)
-    charge_max = 1 SECONDS
+    level_max = list(Sp_TOTAL = 3, Sp_POWER = 3) // Why would cooldown be here?
+    charge_max = 1 SECONDS // See?
     hud_state = "pd_cableleave"
     name = "Self-Sustaining Charge"
     abbreviation = "SC"
@@ -503,6 +513,7 @@
         PD.can_leave_cable = !PD.can_leave_cable
         to_chat(user,"<span class='notice'>Leaving cables is [PD.can_leave_cable ? "on" : "off"].</span>")
 
+// Custom proc that instead allows less slowdown when off cable, while less than current max speed
 /spell/pulse_demon/sustaincharge/empower_spell()
     if(istype(usr,/mob/living/simple_animal/hostile/pulse_demon))
         var/mob/living/simple_animal/hostile/pulse_demon/PD = usr

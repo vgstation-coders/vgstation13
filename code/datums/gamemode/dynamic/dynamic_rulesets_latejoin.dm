@@ -175,8 +175,14 @@
 	for(var/datum/powernet/PN in powernets)
 		for(var/obj/structure/cable/C in PN.cables)
 			var/turf/simulated/floor/F = get_turf(C)
-			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation)
+			// Cable to spawn at must be on a floor, not tiled over, on the main station and in maint
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation && istype(get_area(C),/area/maintenance))
 				cables_to_spawn_at.Add(C)
+	if(!cables_to_spawn_at.len)
+		message_admins("[M.key] could not start as a pulse demon, no suitable cables found!")
+		to_chat(M,"<span class='warning'>You could not become as a pulse demon, as no suitable cables were found.</span>")
+		M.forceMove(oldloc)
+		return 0
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
 	M.forceMove(get_turf(our_cable))
 	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
