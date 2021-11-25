@@ -30,6 +30,8 @@
 		var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/I = new (get_turf(src.loc))
 		I.base_wheelchair = src
 		I.dir = dir
+		for (var/atom/movable/AM in locked_atoms)
+			unlock_atom(AM)
 		forceMove(I)
 		qdel(W)
 
