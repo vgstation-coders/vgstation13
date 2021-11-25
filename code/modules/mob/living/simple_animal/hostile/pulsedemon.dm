@@ -125,7 +125,7 @@
                 health += health_to_add
         else
             health -= health_drain_rate
-        move_to_delay = 1 / base_movespeed
+        set_glide_size(DELAY2GLIDESIZE(1 / base_movespeed))
     else if(current_power)
         if(istype(current_power,/obj/machinery/power/battery))
             var/obj/machinery/power/battery/current_battery = current_power
@@ -141,7 +141,7 @@
             health -= health_drain_rate    
     else if(can_leave_cable)
         health -= health_drain_rate
-        move_to_delay = 1 / (base_movespeed / move_divide)
+        set_glide_size(DELAY2GLIDESIZE(1 / (base_movespeed / move_divide)))
     else
         death()
     regular_hud_updates()
