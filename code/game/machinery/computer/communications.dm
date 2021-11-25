@@ -88,7 +88,7 @@ var/list/shuttle_log = list()
 			usr.unset_machine()
 		return 1
 
-	if (!(src.z in list(STATION_Z,CENTCOMM_Z)))
+	if (!(src.z in list(map.zMainStation,map.zCentcomm)))
 		to_chat(usr, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
@@ -411,7 +411,7 @@ var/list/shuttle_log = list()
 	if(..(user))
 		return
 
-	if (!(src.z in list(STATION_Z, CENTCOMM_Z)))
+	if (!(src.z in list(map.zMainStation, map.zCentcomm)))
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 

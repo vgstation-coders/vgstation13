@@ -42,7 +42,7 @@
 	)
 
 	for(var/word in vox_sentence)
-		play_vox_sound(word,STATION_Z,null)
+		play_vox_sound(word,map.zMainStation,null)
 
 /datum/command_alert/biohazard_organ
 	name = "Organ Failures"
@@ -267,7 +267,7 @@
 /datum/command_alert/jungle_endgame/announce()
 	var/nukecode = "ERROR"
 	for(var/obj/machinery/nuclearbomb/bomb in machines)
-		if(bomb && bomb.r_code && bomb.z == STATION_Z && bomb.nt_aligned)
+		if(bomb && bomb.r_code && bomb.z == map.zMainStation && bomb.nt_aligned)
 			nukecode = bomb.r_code
 	message = "Central Command has deemed the situation beyond salvageable, and is releasing the nuclear fission explosive authorization code. Your authorization key is [nukecode]. Send them to Ape Hell."
 	..()
@@ -580,7 +580,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Vermin Alert"
 	alert_title = "Vermin infestation"
 
-/datum/command_alert/vermin/New(vermstring = "various vermin", locstring = "the station's maintenance tunnels", warning = "Clear them out, before this starts to affect productivity.")
+/datum/command_alert/vermin/New(vermstring = "various vermin", locstring = "the station's maintenance tunnels", warning = "Clear them out before this starts to affect productivity.")
 	..()
 
 	message = "Bioscans indicate that [vermstring] have been breeding in [locstring]. [warning]"

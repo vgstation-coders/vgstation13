@@ -1075,14 +1075,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define VAMP_FAILURE -1
 
-// Moved from machine_interactions.dm
-#define STATION_Z  1
-#define CENTCOMM_Z 2
-#define TELECOMM_Z 3
-#define DERELICT_Z 4
-#define ASTEROID_Z 5
-#define SPACEPIRATE_Z 6
-
 // canGhost(Read|Write) flags
 #define PERMIT_ALL 1
 
@@ -1279,6 +1271,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define IS_DIONA 1
 #define IS_VOX 2
 #define IS_PLASMA 3
+#define IS_GREY 4
 
 
 //Turf Construction defines

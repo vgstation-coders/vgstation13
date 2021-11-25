@@ -123,11 +123,9 @@
 			if(isliving(hit_atom))
 				add_attacklogs(src, hit_atom, "tackled")
 				var/mob/living/L = hit_atom
-				to_chat(src, "<span class='warning'>Your tackle connects!</span>")
-				to_chat(L, "<span class='danger'>You are hit by [src]'s tackle!</span>")
-				playsound(src, 'sound/effects/bodyfall.ogg', 75, 1)
+				visible_message("<span class='warning'>[src] tackles [L]!</span>")
 
-				var/tackleDefense = L.calcTackleDefense()
+				var/tackleDefense = L.calcTackleDefense(src)
 				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
 				var/rngDefense = rand(tackleDefense/2, tackleDefense)
 				var/tKnock = max(0, rngDefense - rngForce)
@@ -192,11 +190,10 @@
 				tF -= 20
 	return tF
 
-/mob/living/carbon/calcTackleDefense(var/tDef = 50)
+/mob/living/carbon/calcTackleDefense(atom/attacker, var/tDef = 50)
 	tDef += get_strength()*10
-	for(var/obj/item/weapon/I in held_items)
-		if(I.IsShield())
-			tDef += 35
+	if(check_shields(15, attacker))
+		tDef += 35
 	tDef += defenseMutTackle()
 	tDef += bonusTackleDefense()
 	return max(0, tDef)

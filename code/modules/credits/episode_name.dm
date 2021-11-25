@@ -172,7 +172,7 @@
 				episode_names += new /datum/episode_name/rare("GREASE MONKEY", "A successful Grease wizard got monkeyed.", score["greasewiz"]*100)
 				break
 
-	if(ticker && ticker.shuttledocked_time != -1 && emergency_shuttle.location == CENTCOMM_Z)
+	if(ticker && ticker.shuttledocked_time != -1 && emergency_shuttle.location == map.zCentcomm)
 		var/area/shuttle = locate(/area/shuttle/escape/centcom)
 		if(shuttle) //These names are only to be rolled if the round ended with the shuttle normally docking at centcomm.
 			var/list/shuttle_escapees = list() //We want to only count people that were on the shuttle. Pods don't even real

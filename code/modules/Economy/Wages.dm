@@ -161,7 +161,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 	//1000 bonus per prisoner
 	for(var/mob/living/carbon/human/H in current_prisoners) 
-		if(H.z == STATION_Z && !isspace(get_area(H)) && !H.isDead())
+		if(H.z == map.zMainStation && !isspace(get_area(H)) && !H.isDead())
 			bonus += 1000
 
 	return bonus

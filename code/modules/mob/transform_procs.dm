@@ -120,9 +120,6 @@
 		return
 	if(client)
 		src << sound(null, repeat = FALSE, wait = FALSE, volume = 85, channel = CHANNEL_LOBBY)// stop the jams for AIs
-	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
-	O.invisibility = 0
-	O.aiRestorePowerRoutine = 0
 	var/obj/loc_landmark
 	if(!spawn_here)
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -138,11 +135,15 @@
 						continue
 					loc_landmark = tripai
 		if (!loc_landmark)
-			to_chat(O, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
+			to_chat(src, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
 			for(var/obj/effect/landmark/start/sloc in landmarks_list)
 				if (sloc.name == "AI")
 					loc_landmark = sloc
-		O.forceMove(loc_landmark.loc)
+		forceMove(loc_landmark.loc)
+	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
+	O.invisibility = 0
+	O.aiRestorePowerRoutine = 0
+	if(!spawn_here)
 		for (var/obj/item/device/radio/intercom/comm in O.loc)
 			comm.ai += O
 	if(mind)

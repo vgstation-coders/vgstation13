@@ -101,6 +101,8 @@
 /obj/var/req_access_txt = "0"			// A user must have ALL of these accesses to use the object
 /obj/var/list/req_one_access = null
 /obj/var/req_one_access_txt = "0"		// If this list is populated, a user must have at least ONE of these accesses to use the object
+/obj/var/req_access_dir = 0				// The dir the user must be facing to do access checks on
+/obj/var/access_not_dir = TRUE			// Behaviour if the user is not in the access dir
 
 //returns 1 if this mob has sufficient access to use this object
 /obj/proc/allowed(var/mob/M)
@@ -110,6 +112,14 @@
 	if(M.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
+	if(req_access_dir)
+		var/turf/T = get_turf(src)
+		if(!((flow_flags & ON_BORDER) && dir == opposite_dirs[req_access_dir])) // For non-windoors
+			T = get_step(T,req_access_dir)
+		if(M in T.contents)
+			return can_access(ACL,req_access,req_one_access)
+		else
+			return access_not_dir
 	return can_access(ACL,req_access,req_one_access)
 
 /obj/item/proc/GetAccess()

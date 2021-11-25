@@ -67,7 +67,7 @@
 	var/obj/item/weapon/reagent_containers/food/drinks/soda_cans/randomcan = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo)
 	items_to_collect[randomcan] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/clothing/suit/straight_jacket] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/clothing/suit/strait_jacket] = GRASP_RIGHT_HAND
 	items_to_collect[/obj/item/weapon/storage/pill_bottle/lollipops] = SURVIVAL_BOX
 	return ..()
 

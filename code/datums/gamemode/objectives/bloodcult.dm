@@ -112,7 +112,7 @@
 	for(var/mob/living/carbon/human/player in player_list)
 		//They may be dead, but we only need their flesh
 		var/turf/player_turf = get_turf(player)
-		if(player_turf.z != STATION_Z)//We only look for people currently aboard the station
+		if(player_turf.z != map.zMainStation)//We only look for people currently aboard the station
 			continue
 		var/is_implanted = player.is_loyalty_implanted()
 		if(is_implanted || isReligiousLeader(player) || isantagbanned(player) || jobban_isbanned(player, CULTIST))

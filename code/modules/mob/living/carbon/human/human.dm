@@ -310,7 +310,7 @@
 /mob/living/carbon/human/restrained()
 	if (..())
 		return TRUE
-	if (istype(wear_suit, /obj/item/clothing/suit/straight_jacket))
+	if (istype(wear_suit, /obj/item/clothing/suit/strait_jacket))
 		return TRUE
 	return FALSE
 

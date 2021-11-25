@@ -249,12 +249,13 @@ var/list/station_holomaps = list()
 	var/datum/station_holomap/holomap_datum
 
 	var/bogus = 0
-	var/lastZ = STATION_Z
+	var/lastZ
 	var/prevent_close = 0
 
 /obj/item/device/station_map/New()
 	..()
 	holomap_datum = new()
+	lastZ = map.zMainStation
 
 /obj/item/device/station_map/attack_self(var/mob/user)
 	toggleHolomap(user)

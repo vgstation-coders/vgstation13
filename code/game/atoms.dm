@@ -22,6 +22,7 @@ var/global/list/ghdel_profiling = list()
 	var/had_blood //Something was bloody at some point.
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
+	var/throw_impact_sound = 'sound/weapons/genhit2.ogg'
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
@@ -127,6 +128,7 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
+		playsound(src, src.throw_impact_sound, 80, 1)
 		M.hitby(src,speed,src.dir)
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 

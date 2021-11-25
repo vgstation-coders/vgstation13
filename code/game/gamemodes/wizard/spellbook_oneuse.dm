@@ -248,7 +248,7 @@
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/victim = user
 		to_chat(user, "<span class ='warning'>You suddenly feel very restrained!</span>")
-		var/obj/item/clothing/suit/straight_jacket/magicjacket = new/obj/item/clothing/suit/straight_jacket
+		var/obj/item/clothing/suit/strait_jacket/magicjacket = new
 		user.drop_from_inventory(victim.wear_suit)
 		user.equip_to_slot(magicjacket, slot_wear_suit, 1, 1)
 		user.flash_eyes(visual = 1)

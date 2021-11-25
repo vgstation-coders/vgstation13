@@ -146,6 +146,8 @@
 
 		if(has_reagent_in_blood(CAPSAICIN))
 			temperature_alert = TEMP_ALARM_HEAT_STRONG
+		if(has_reagent_in_blood(ZAMSPICYTOXIN))
+			temperature_alert = TEMP_ALARM_HEAT_STRONG
 		else if(has_reagent_in_blood(FROSTOIL))
 			temperature_alert = TEMP_ALARM_COLD_STRONG
 		else if(!(get_thermal_loss(loc.return_air()) > 0.1) || bodytemperature > T0C + 50)

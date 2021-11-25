@@ -266,7 +266,7 @@
 "EW" = (/obj/structure/table/glass,/obj/item/clothing/mask/surgical,/obj/item/weapon/switchtool/surgery{pixel_x = 5; pixel_y = 10},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "FX" = (/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "IU" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"Sq" = (/obj/abstract/map/spawner/assistant,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
+"Sq" = (/obj/abstract/map/spawner/assistant/tools,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "Sv" = (/obj/machinery/newscaster{pixel_x = 32},/turf/simulated/floor/wood,/area/shuttle/lightship/start)
 "SS" = (/obj/machinery/door/airlock/external{id_tag = "lightship_doorbolts"},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "UG" = (/obj/docking_port/destination/lightship/start{dir = 2},/turf/space,/area)

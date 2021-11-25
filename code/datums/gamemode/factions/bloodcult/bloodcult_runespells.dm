@@ -99,9 +99,10 @@
 		var/obj/effect/rune/R = spell_holder
 		R.activated++
 		R.update_icon()
-		R.cast_word(R.word1.english)
-		R.cast_word(R.word2.english)
-		R.cast_word(R.word3.english)
+		if (R.word1)// "invisible" temporary runes spawned by some talismans shouldn't display those
+			R.cast_word(R.word1.english)
+			R.cast_word(R.word2.english)
+			R.cast_word(R.word3.english)
 		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
 		else

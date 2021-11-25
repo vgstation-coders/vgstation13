@@ -21,7 +21,7 @@
 			source.drop_from_inventory(source.legcuffed)
 		var/mob/living/carbon/human/dude = source
 		if(istype(dude))
-			var/jacket = dude.is_wearing_item(/obj/item/clothing/suit/straight_jacket, slot_wear_suit)
+			var/jacket = dude.is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit)
 			if(jacket)
 				source.u_equip(jacket, TRUE)
 

@@ -242,7 +242,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 	send_prayer_to_admins(msg, admin_msg, 'sound/effects/fax.ogg', "Centcomm Fax", key_name(Sender, 1), get_turf(Sender))
 
 	for (var/obj/machinery/faxmachine/fax in allfaxes)
-		if (fax.z == CENTCOMM_Z)
+		if (fax.z == map.zCentcomm)
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(fax)
 			P.name = "[sentname]"
 			P.info = "[sent.info]"

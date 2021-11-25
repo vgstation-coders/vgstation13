@@ -366,7 +366,7 @@ var/list/infected_items = list()
 /proc/spread_disease_among_crew(var/datum/disease2/disease/D, var/reason = "4noraisin")
 	var/list/candidates = list()
 	for(var/mob/living/candidate in player_list)
-		if(candidate.z == STATION_Z && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
+		if(candidate.z == map.zMainStation && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
 			candidates += candidate
 
 	if(!candidates.len)

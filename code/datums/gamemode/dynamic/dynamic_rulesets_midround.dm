@@ -321,6 +321,9 @@
 		new_role.OnPostSetup() //Each individual role to show up gets a postsetup
 	..()
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/finish_setup(var/mob/new_character, var/index)
+	new_character.forceMove(pick(wizardstart))
+	..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -359,7 +362,21 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(!nuclear)
+		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
 	nuclear.forgeObjectives()
+
+	var/list/turf/synd_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "Syndicate-Spawn")
+			synd_spawn += get_turf(A)
+			continue
+	
+	var/spawnpos = index
+	if(spawnpos > synd_spawn.len)
+		spawnpos = 1
+	new_character.forceMove(synd_spawn[spawnpos])
 	if(index == 1) //Our first guy is the leader
 		var/datum/role/nuclear_operative/leader/new_role = new
 		new_role.AssignToRole(new_character.mind, 1)
@@ -475,12 +492,15 @@
 	else
 		return 0
 
+/datum/dynamic_ruleset/midround/from_ghosts/ninja/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/spider_clan))
+		ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	new_character.forceMove(pick(ninjastart))
+	..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/setup_role(var/datum/role/newninja)
 	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
-	if (!spoider)
-		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
 	spoider.HandleRecruitedRole(newninja)
-
 	return ..()
 
 //////////////////////////////////////////////
@@ -528,7 +548,7 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent
-	name = "time agent anomaly"
+	name = "Time Agent Anomaly"
 	role_category = /datum/role/time_agent
 	required_candidates = 1
 	weight = 4
@@ -547,8 +567,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
 	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
-	if (!agency)
-		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
 	agency.HandleRecruitedRole(newagent)
 
 	return ..()
@@ -558,6 +576,11 @@
 		return 0
 	return ..()
 
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/finish_setup(var/mob/new_character, var/index)
+	if (!find_active_faction_by_type(/datum/faction/time_agent))
+		ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	new_character.forceMove(pick(timeagentstart))
+	..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -652,6 +675,18 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/heist/finish_setup(var/mob/new_character, var/index)
 	var/datum/faction/vox_shoal/shoal = find_active_faction_by_type(/datum/faction/vox_shoal)
 	shoal.forgeObjectives()
+
+	var/list/turf/vox_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "voxstart")
+			vox_spawn += get_turf(A)
+			continue
+	
+	var/spawn_count = index
+	if(spawn_count > vox_spawn.len)
+		spawn_count = 1
+	new_character.forceMove(vox_spawn[spawn_count])
 	if (index == 1) // Our first guy is the leader
 		var/datum/role/vox_raider/chief_vox/new_role = new
 		new_role.AssignToRole(new_character.mind,1)
@@ -803,12 +838,13 @@
 	else
 		to_chat(new_role.antag.current, "<B>You are an <span class='warning'>innocent</span> prisoner!</B>")
 		to_chat(new_role.antag.current, "You are a Nanotrasen Employee that has been wrongfully accused of espionage! The exact details of your situation are hazy, but you know that you are innocent.")
-		to_chat(new_role.antag.current, "You were transferred to this station through a request by the station's security team. You know nothing about this station or the people aboard it.")
-		to_chat(new_role.antag.current, "<span class='danger'>Remember that you are not affiliated with the Syndicate. Protect yourself and work towards freedom, but remember that you have no place left to go.</span>")
+		to_chat(new_role.antag.current, "You were transferred to this station after a brief stay at Alcatraz IV. You know nothing about this station or the people aboard it.")
+		to_chat(new_role.antag.current, "<span class='danger'>Remember that you are not affiliated with the Syndicate. You should protect yourself and work towards freedom, but you are not an enemy of the station!</span>")
 		new_role.Drop()
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/finish_setup(mob/new_character, index)
 	command_alert(/datum/command_alert/prisoner_transfer)
+	to_chat(new_character, "<span class='notice'>You were selected to be a Prisoner! You will spawn at Central Command in two minutes.</span>")
 	sleep(2 MINUTES)
 
 	//the applicant left or something
@@ -817,8 +853,11 @@
 
 	new_character = generate_ruleset_body(new_character)
 	var/datum/role/new_role = new role_category
+	var/obj/structure/bed/chair/chair = pick(prisonerstart)
+	new_character.forceMove(get_turf(chair))
 	new_role.AssignToRole(new_character.mind,1)
 	setup_role(new_role)
+	current_prisoners += new_character
 
 	//Send the shuttle that they spawned on.
 	var/obj/docking_port/destination/transport/station/stationdock = locate(/obj/docking_port/destination/transport/station) in all_docking_ports
@@ -841,6 +880,39 @@
 			if(!transport_shuttle.move_to_dock(centcomdock))
 				message_admins("The transport shuttle couldn't return to centcomm for some reason.")
 				return
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/generate_ruleset_body(mob/applicant)
+	var/obj/structure/bed/chair/chair = pick(prisonerstart)
+	var/mob/living/carbon/human/H = new(get_turf(chair))
+	H.key = applicant.key
+	chair.buckle_mob(H, H)
+	H.client.changeView()
+
+	var/species = pickweight(list(
+		"Human" 	= 4,
+		"Vox"		= 1,
+		"Plasmaman" = 1,
+		"Grey"		= 1,
+		"Insectoid"	= 1,
+	))
+
+	H.set_species(species)
+	H.randomise_appearance_for()
+	var/randname = random_name(H.gender, H.species.name)
+	H.fully_replace_character_name(null,randname)
+	H.regenerate_icons()
+	H.dna.ResetUIFrom(H)
+	H.dna.ResetSE()
+
+	var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner
+	outfit.equip(H)
+	mob_rename_self(H, "prisoner")
+
+	var/obj/item/weapon/handcuffs/C = new /obj/item/weapon/handcuffs(H)
+	H.equip_to_slot(C, slot_handcuffed)
+
+	return H
+
 
 /datum/dynamic_ruleset/midround/from_ghosts/prisoner/proc/can_move_shuttle()
 	var/contents = get_contents_in_object(transport_shuttle.linked_area)
