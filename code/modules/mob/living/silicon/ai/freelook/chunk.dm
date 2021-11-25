@@ -114,9 +114,7 @@
 		var/turf/t = turf
 		if(obscuredTurfs[t])
 			if(!t.obscured)
-				var/image/obscured_static = new /image/aistatic(null, t)
-				obscured_static.plane = STATIC_PLANE
-				t.obscured = obscured_static
+				t.obscured = new /image/aistatic(null, t)
 			obscured += t.obscured
 			for(var/eye in seenby)
 				var/mob/camera/aiEye/m = eye
@@ -169,14 +167,13 @@
 	for(var/turf in obscuredTurfs)
 		var/turf/t = turf
 		if(!t.obscured)
-			var/image/obscured_static = new /image/aistatic(null, t)
-			obscured_static.plane = STATIC_PLANE
-			t.obscured = obscured_static
+			t.obscured = new /image/aistatic(null, t)
 		obscured += t.obscured
 
 /image/aistatic
 	render_source = "*aistatic"
 	layer = STATIC_LAYER
+	plane = STATIC_PLANE
 	appearance_flags = PASS_MOUSE
 
 /obj/abstract/screen/nocontext/aistatic
