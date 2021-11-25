@@ -416,8 +416,14 @@
 				var/mob/M = rider
 				M.flags &= ~INVULNERABLE
 				M.see_invisible = SEE_INVISIBLE_LIVING
-				M.see_invisible_override = 0
-				M.apply_vision_overrides()
+				var/jaunter = FALSE
+				for (var/obj/effect/cult_ritual/seer/seer_ritual in seer_rituals)
+					if (seer_ritual.caster == M)
+						jaunter = TRUE
+						break
+				if (!jaunter)
+					M.see_invisible_override = 0
+					M.apply_vision_overrides()
 				if (iscarbon(rider))
 					var/mob/living/carbon/C = rider
 					if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
@@ -431,8 +437,14 @@
 					var/mob/M = AM
 					M.flags &= ~INVULNERABLE
 					M.see_invisible = SEE_INVISIBLE_LIVING
-					M.see_invisible_override = 0
-					M.apply_vision_overrides()
+					var/jaunter = FALSE
+					for (var/obj/effect/cult_ritual/seer/seer_ritual in seer_rituals)
+						if (seer_ritual.caster == M)
+							jaunter = TRUE
+							break
+					if (!jaunter)
+						M.see_invisible_override = 0
+						M.apply_vision_overrides()
 					if (iscarbon(AM))
 						var/mob/living/carbon/C = AM
 						if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))

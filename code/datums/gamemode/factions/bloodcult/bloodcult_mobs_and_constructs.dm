@@ -278,6 +278,7 @@
 	flying = 1
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
+	var/no_master = TRUE
 
 
 /mob/living/simple_animal/hostile/hex/New()
@@ -305,6 +306,14 @@
 		master.minions.Remove(src)
 	master = null
 	..()
+
+/mob/living/simple_animal/hostile/hex/Life()
+	if(timestopped)
+		return 0
+	. = ..()
+	if (!no_master)
+		if (!master || master.gcDestroyed || master.isDead())
+			adjustBruteLoss(20)//we shortly die out after our master's demise
 
 /mob/living/simple_animal/hostile/hex/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile/bloodslash))//stop hitting yourself ffs!
@@ -549,6 +558,9 @@ var/list/astral_projections = list()
 
 //so does a suicide attempt
 /mob/living/simple_animal/astral_projection/attempt_suicide(forced = 0, suicide_set = 1)
+	death()
+
+/mob/living/simple_animal/astral_projection/ex_act(var/severity)
 	death()
 
 //called once when we are created, shapes our appearance in the image of our anchor

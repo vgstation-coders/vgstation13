@@ -1,7 +1,7 @@
 
 /datum/objective/bloodcult
 	name = "Cultist of Nar-Sie"
-	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbringer of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others."
+	explanation_text = "Set up secret temples dedicated to Nar-Sie, the Geometer of Blood, harbinger of gunk and chaos. Spread your influence among the crew without getting caught by security. Convert the willing and torment the others."
 	force_success = TRUE // Freeform
 	flags = FREEFORM_OBJECTIVE
 

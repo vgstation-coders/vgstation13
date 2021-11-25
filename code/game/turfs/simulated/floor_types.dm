@@ -88,18 +88,23 @@
 /turf/simulated/floor/engine
 	name = "reinforced floor"
 	icon_state = "engine"
+	icon_plating = "engine"
 	thermal_conductivity = 0.025
 	heat_capacity = 325000
 
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
+	var/secured = FALSE
 
-/turf/simulated/floor/engine/attackby(obj/item/weapon/C as obj, mob/user as mob)
+/turf/simulated/floor/engine/create_floor_tile()
+	return
+
+/turf/simulated/floor/engine/attackby(obj/item/C as obj, mob/user as mob)
 	if(!C)
 		return
 	if(!user)
 		return
-	if(C.is_wrench(user))
+	if(C.is_wrench(user) && !floor_tile && !secured)
 		to_chat(user, "<span class='notice'>Removing rods...</span>")
 		C.playtoolsound(src, 80)
 		if(do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
@@ -108,25 +113,92 @@
 			var/turf/simulated/floor/F = src
 			F.make_plating()
 			return
+	if(iscrowbar(C))
+		if (user.a_intent != I_HELP) //We assume the user is fighting
+			to_chat(user, "<span class='notice'>You swing the crowbar in front of you.</span>")
+			return
+		else
+			if(floor_tile)
+				if(secured)
+					to_chat(user, "<span class='warning'>Unsecure the [floor_tile.name] first!</span>")
+				else
+					to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
+					make_plating()
+					// Can't play sounds from areas. - N3X
+					C.playtoolsound(src, 80)
+	if(istype(C, /obj/item/stack/tile/metal/plasteel) && !floor_tile)
+		var/obj/item/stack/tile/T = C
+		if(T.use(1))
+			if(floor_tile)
+				qdel(floor_tile)
+			floor_tile = null
+			floor_tile = new T.type(null)
+			material = floor_tile.material
+			intact = 1
+			plane = TURF_PLANE
+			update_icon()
+			levelupdate()
+			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+	if(C.is_screwdriver(user) && floor_tile)
+		to_chat(user, "<span class='notice'>You start [secured ? "unsecuring" : "securing"] the [floor_tile.name].</span>")
+		C.playtoolsound(src, 80)
+		if(do_after(user, src, 30))
+			to_chat(user, "<span class='notice'>You [secured ? "unsecure" : "secure"] the [floor_tile.name] in place.</span>")
+			secured = !secured
+			C.playtoolsound(src, 80)
+			update_icon()
 
 /turf/simulated/floor/engine/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			if(prob(80))
+			if(prob(80 / (1 + secured)))
 				src.ReplaceWithLattice()
-			else if(prob(50))
+			else if(prob(50 / (1 + secured)))
 				src.ChangeTurf(get_underlying_turf())
 			else
 				var/turf/simulated/floor/F = src
 				F.make_plating()
 		if(2.0)
-			if(prob(50))
+			if(prob(50 / (1 + secured)))
 				var/turf/simulated/floor/F = src
 				F.make_plating()
 			else
 				return
 		if(3.0)
 			return
+
+/turf/simulated/floor/engine/make_plating()
+	if(floor_tile)
+		floor_tile.forceMove(src)
+		floor_tile = null
+	intact = 0
+	broken = 0
+	burnt = 0
+	material = "metal"
+	plane = PLATING_PLANE
+
+	update_icon()
+	levelupdate()
+
+/turf/simulated/floor/engine/update_icon()
+	overlays.Cut()
+	..()
+	if(floor_tile)
+		if(secured)
+			overlays.Add(image('icons/turf/floors.dmi', icon_state = "r_floor"))
+		else
+			overlays.Add(image('icons/turf/floors.dmi', icon_state = "r_floor_unsec"))
+
+// For mappers
+/turf/simulated/floor/engine/plated
+	icon_state = "floor"
+	secured = TRUE
+
+/turf/simulated/floor/engine/plated/create_floor_tile()
+	if(!floor_tile)
+		floor_tile = new /obj/item/stack/tile/metal/plasteel(null)
+		floor_tile.amount = 1
+	update_icon()
 
 /turf/simulated/floor/engine/cult
 	name = "engraved floor"

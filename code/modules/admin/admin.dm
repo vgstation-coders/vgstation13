@@ -886,6 +886,7 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<A href='?src=\ref[src];secretsfun=virusdish'>Create a new virus in a dish</A><BR>
+			<A href='?src=\ref[src];secretsfun=bloodstone'>Spawn a cult Blood Stone</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
 			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
