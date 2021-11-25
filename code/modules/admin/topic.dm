@@ -3972,8 +3972,7 @@
 				if (!newname)
 					newname = "Admin"
 				var/choice = alert("Edit appearance on spawn?", "Admin", "Yes", "No")
-				var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
-				var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+				var/outfit_type = select_loadout()
 				if(!outfit_type || !ispath(outfit_type))
 					return
 				var/turf/T = get_turf(usr)
@@ -5814,18 +5813,7 @@
 				z_del = new_limit
 			if ("type") // Lifted from "spawn" code.
 				var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Setting the type to delete.") as null|text
-
-				var/list/matches = get_matching_types(object, /atom)
-
-				if(matches.len==0)
-					to_chat(usr, "<span class='warning'>No typepaths found.</span>")
-					return
-
-				var/chosen
-				if(matches.len==1)
-					chosen = matches[1]
-				else
-					chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
+				var/chosen = filter_list_input("Select an atom type", "Spawn Atom", get_matching_types(object, /atom))
 				if(!chosen)
 					to_chat(usr, "<span class='warning'>No type chosen.</span>")
 					return
