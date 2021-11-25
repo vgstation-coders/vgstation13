@@ -2354,12 +2354,14 @@
 /turf/simulated/wall/r_wall,
 /area/research_outpost/xenobot)
 "aeZ" = (
-/obj/structure/transit_tube/station,
 /obj/machinery/light{
 	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -2801,12 +2803,14 @@
 /turf/simulated/wall/r_wall,
 /area/research_outpost/hallway)
 "age" = (
-/obj/structure/transit_tube/station,
 /obj/machinery/light/small{
 	dir = 1
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -8024,7 +8028,9 @@
 	},
 /area/research_outpost/hallway)
 "atg" = (
-/obj/structure/transit_tube/station,
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitepurple"
@@ -9544,10 +9550,11 @@
 /turf/simulated/wall,
 /area/research_outpost/entry)
 "awn" = (
-/obj/structure/transit_tube/station{
-	dir = 4
-	},
 /obj/structure/transit_tube_pod,
+/obj/structure/transit_tube/station{
+	dir = 4;
+	req_access_txt = "47"
+	},
 /turf/simulated/floor,
 /area/research_outpost/entry)
 "awo" = (
@@ -11072,22 +11079,6 @@
 	icon_state = "floorgrime"
 	},
 /area/mine/production)
-"azC" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/transit_tube{
-	icon_state = "D-SE"
-	},
-/turf/simulated/floor/plating,
-/area/research_outpost/entry)
 "azF" = (
 /obj/structure/transit_tube{
 	icon_state = "N-SW"
@@ -12349,12 +12340,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/entry)
-"aCE" = (
-/obj/structure/transit_tube{
-	icon_state = "D-NW"
-	},
-/turf/simulated/floor,
-/area/research_outpost/entry)
 "aCF" = (
 /obj/machinery/atmospherics/unary/vent_pump{
 	on = 1
@@ -12677,10 +12662,11 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDX" = (
-/obj/structure/transit_tube/station{
-	dir = 8
-	},
 /obj/structure/transit_tube_pod,
+/obj/structure/transit_tube/station{
+	dir = 8;
+	req_access_txt = "47"
+	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aDY" = (
@@ -13586,7 +13572,8 @@
 	})
 "aFY" = (
 /obj/structure/transit_tube/station{
-	dir = 4
+	dir = 4;
+	req_access_txt = "8"
 	},
 /turf/simulated/floor/plating,
 /area/research_outpost/dorm2{
@@ -15499,11 +15486,12 @@
 /turf/simulated/floor,
 /area/mine/production)
 "aJR" = (
-/obj/structure/transit_tube/station{
-	dir = 8
-	},
 /obj/structure/hanging_lantern{
 	dir = 4
+	},
+/obj/structure/transit_tube/station{
+	dir = 8;
+	req_access_txt = "47"
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
@@ -15634,7 +15622,6 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKj" = (
-/obj/structure/transit_tube/station,
 /obj/structure/sign/securearea{
 	desc = "A warning sign which reads 'VACUUM'";
 	icon_state = "space";
@@ -15643,6 +15630,9 @@
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
@@ -15994,12 +15984,14 @@
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
 "aKY" = (
-/obj/structure/transit_tube/station,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
 /obj/structure/hanging_lantern{
 	dir = 1
+	},
+/obj/structure/transit_tube/station{
+	req_access_txt = "47"
 	},
 /turf/unsimulated/floor/asteroid/underground,
 /area/mine/explored)
@@ -177437,7 +177429,7 @@ aEV
 ame
 awm
 ame
-azC
+anD
 aCD
 aEV
 aDS
@@ -177740,7 +177732,7 @@ auc
 awn
 axB
 azF
-aCE
+anE
 aEW
 aDS
 aGr
