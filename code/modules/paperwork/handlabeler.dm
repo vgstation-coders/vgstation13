@@ -98,6 +98,7 @@
 	if (!mode && user.get_inactive_hand() == src)
 		var/obj/item/device/label_roll/LR = new(user, amount=chars_left)
 		user.put_in_hands(LR)
+		LR = null
 		to_chat(user, "<span class='notice'>You remove the label roll.</span>")
 		chars_left = 0
 		icon_state = "labeler_e"
