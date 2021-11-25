@@ -151,7 +151,10 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
     ..()
-    playsound(get_turf(src),"pd_wail_sound",50,1)
+    var/turf/T = get_turf(src)
+    spark(src,rand(2,4))
+    empulse(T,4,8)
+    playsound(T,"pd_wail_sound",50,1)
     qdel(src) // We vaporise into thin air
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
