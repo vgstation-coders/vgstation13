@@ -145,6 +145,7 @@ Class Procs:
 	var/light_range_on = 0
 	var/light_power_on = 0
 	var/use_auto_lights = 0//Incase you want to use it, set this to 0, defaulting to 1 so machinery with no lights doesn't call set_light()
+	var/pulsecompromised = 0 //Used for pulsedemons
 
 	/**
 	 * Machine construction/destruction/emag flags.
@@ -381,9 +382,7 @@ Class Procs:
 	return TRUE
 
 /obj/machinery/proc/is_in_range(var/mob/user)
-	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
-		return FALSE
-	return TRUE
+	return (in_range(src, user) && isturf(loc)) || issilicon(user) || ispulsedemon(user)
 
 /obj/machinery/Topic(href, href_list)
 	..()

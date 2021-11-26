@@ -810,6 +810,42 @@
 
 //////////////////////////////////////////////
 //                                          //
+//                PULSE DEMON               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon
+	name = "Pulse Demon Infiltration"
+	role_category = /datum/role/pulse_demon
+	enemy_jobs = list("Station Engineer","Chief Engineer")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	cost = 20
+	requirements = list(5,5,15,15,20,20,20,20,40,70)
+	high_population_requirement = 10
+	logo = "pulsedemon-logo"
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/generate_ruleset_body(var/mob/applicant)
+	var/list/cables_to_spawn_at = list()
+	for(var/datum/powernet/PN in powernets)
+		for(var/obj/structure/cable/C in PN.cables)
+			var/turf/simulated/floor/F = get_turf(C)
+			// Cable to spawn at must be on a floor, not tiled over, on the main station and in maint
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation)
+				cables_to_spawn_at.Add(C)
+	if(!cables_to_spawn_at.len)
+		message_admins("[applicant.key] could not start as a pulse demon, no suitable cables found!")
+		to_chat(applicant,"<span class='warning'>The mode tried to pick you, but no suitable cables were found.</span>")
+		return 0
+	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
+	applicant.forceMove(get_turf(our_cable))
+	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))
+	PD.key = applicant.key
+	return PD
+
+//////////////////////////////////////////////
+//                                          //
 //             Prisoner                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
