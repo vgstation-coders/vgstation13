@@ -34,35 +34,8 @@ var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W9
 var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuckupstep2.ogg')
 var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jinglebell2.ogg', 'sound/items/jinglebell3.ogg')
 var/list/disappear_sound = list('sound/effects/disappear_1.ogg', 'sound/effects/disappear_2.ogg', 'sound/effects/disappear_3.ogg')
+var/list/pd_wail_sound = list('sound/voice/pdwail1.ogg', 'sound/voice/pdwail2.ogg', 'sound/voice/pdwail3.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
-
-//default byond sound environments
-#define SOUND_ENVIRONMENT_GENERIC 0
-#define SOUND_ENVIRONMENT_PADDED_CELL 1
-#define SOUND_ENVIRONMENT_ROOM 2
-#define SOUND_ENVIRONMENT_BATHROOM 3
-#define SOUND_ENVIRONMENT_LIVINGROOM 4
-#define SOUND_ENVIRONMENT_STONEROOM 5
-#define SOUND_ENVIRONMENT_AUDITORIUM 6
-#define SOUND_ENVIRONMENT_CONCERT_HALL 7
-#define SOUND_ENVIRONMENT_CAVE 8
-#define SOUND_ENVIRONMENT_ARENA 9
-#define SOUND_ENVIRONMENT_HANGAR 10
-#define SOUND_ENVIRONMENT_CARPETED_HALLWAY 11
-#define SOUND_ENVIRONMENT_HALLWAY 12
-#define SOUND_ENVIRONMENT_STONE_CORRIDOR 13
-#define SOUND_ENVIRONMENT_ALLEY 14
-#define SOUND_ENVIRONMENT_FOREST 15
-#define SOUND_ENVIRONMENT_CITY 16
-#define SOUND_ENVIRONMENT_MOUNTAINS 17
-#define SOUND_ENVIRONMENT_QUARRY 18
-#define SOUND_ENVIRONMENT_PLAIN 19
-#define SOUND_ENVIRONMENT_PARKING_LOT 20
-#define SOUND_ENVIRONMENT_SEWER_PIPE 21
-#define SOUND_ENVIRONMENT_UNDERWATER 22
-#define SOUND_ENVIRONMENT_DRUGGED 23
-#define SOUND_ENVIRONMENT_DIZZY 24
-#define SOUND_ENVIRONMENT_PSYCHOTIC 25
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
@@ -161,8 +134,6 @@ var/const/SURROUND_CAP = 7
 		else
 			S.frequency = get_rand_frequency()
 
-	S.environment = sound_environment
-
 	if(isturf(turf_source))
 		// 3D sounds, the technology is here!
 		var/turf/T = get_turf(src)
@@ -260,5 +231,7 @@ var/const/SURROUND_CAP = 7
 				soundin = jingle_sound
 			if ("disappear_sound")
 				soundin = pick(disappear_sound)
+			if ("pd_wail_sound")
+				soundin = pick(pd_wail_sound)
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

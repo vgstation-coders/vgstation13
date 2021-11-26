@@ -26,7 +26,7 @@
 	var/volume = 0
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
-	var/sport = 1 //High sport helps you show off on a treadmill. Multiplicative
+	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
 	var/overdose_am = 0
@@ -1117,7 +1117,7 @@
 	if(..())
 		return 1
 
-	M.AdjustDrugginess(15)
+	M.druggy = max(M.druggy, 15)
 	if(isturf(M.loc) && !istype(M.loc, /turf/space))
 		if(M.canmove && !M.restrained())
 			if(prob(10))
@@ -1232,7 +1232,7 @@
 	if(prob(7))
 		M.emote(pick("twitch", "drool", "moan", "gasp"), null, null, TRUE)
 
-	M.AdjustDrugginess(50)
+	M.druggy = max(M.druggy, 50)
 
 /datum/reagent/silicate
 	name = "Silicate"
@@ -1493,7 +1493,7 @@
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	sport = 1.2
+	sport = SPORTINESS_SUGAR
 	density = 1.59
 	specheatcap = 1.244
 
@@ -1573,7 +1573,7 @@
 /datum/reagent/honey/chillwax/on_mob_life(var/mob/living/M)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		H.AdjustDrugginess(5)
+		H.druggy = max(H.druggy, 5)
 		H.Dizzy(2)
 		if(prob(10))
 			H.emote(pick("stare", "giggle"), null, null, TRUE)
@@ -5034,7 +5034,7 @@
 				data += 4
 	switch(data)
 		if(1 to 30)
-			M.AdjustDrugginess(10)
+			M.druggy = max(M.druggy, 10)
 		if(540 to 600)	//Start barfing violently after 9 minutes
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
@@ -5067,7 +5067,7 @@
 	if(..())
 		return 1
 
-	M.AdjustDrugginess(30)
+	M.druggy = max(M.druggy, 30)
 	switch(data)
 		if(1 to 5)
 			if(!M.stuttering)
@@ -5080,7 +5080,7 @@
 				M.stuttering = 1
 			M.Jitter(10)
 			M.Dizzy(10)
-			M.AdjustDrugginess(35)
+			M.druggy = max(M.druggy, 35)
 			if(prob(20))
 				M.emote(pick("twitch", "giggle"))
 		if (10 to INFINITY)
@@ -5088,7 +5088,7 @@
 				M.stuttering = 1
 			M.Jitter(20)
 			M.Dizzy(20)
-			M.AdjustDrugginess(40)
+			M.druggy = max(M.druggy, 40)
 			if(prob(30))
 				M.emote(pick("twitch", "giggle"))
 	data++
@@ -6110,7 +6110,7 @@
 		return 1
 
 	M.Jitter(20)
-	M.AdjustDrugginess(30)
+	M.druggy = max(M.druggy, 30)
 	M.dizziness += 5
 	M.drowsyness = 0
 
@@ -6270,7 +6270,7 @@
 	if(..())
 		return 1
 
-	M.AdjustDrugginess(50)
+	M.druggy = max(M.druggy, 50)
 	switch(data)
 		if(1 to 5)
 			if(!M.stuttering)
@@ -6283,7 +6283,7 @@
 				M.stuttering = 1
 			M.Jitter(20)
 			M.Dizzy(20)
-			M.AdjustDrugginess(45)
+			M.druggy = max(M.druggy, 45)
 			if(prob(20))
 				M.emote(pick("twitch", "giggle"))
 		if(10 to INFINITY)
@@ -6291,7 +6291,7 @@
 				M.stuttering = 1
 			M.Jitter(40)
 			M.Dizzy(40)
-			M.AdjustDrugginess(60)
+			M.druggy = max(M.druggy, 60)
 			if(prob(30))
 				M.emote(pick("twitch", "giggle"))
 	data++
@@ -6496,7 +6496,7 @@
 /datum/reagent/ethanol/pwine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	M.AdjustDrugginess(50)
+	M.druggy = max(M.druggy, 50)
 	switch(data)
 		if(1 to 25)
 			if(!M.stuttering)
@@ -6511,7 +6511,7 @@
 			M.hallucination = max(M.hallucination, 10)
 			M.Jitter(2)
 			M.Dizzy(2)
-			M.AdjustDrugginess(45)
+			M.druggy = max(M.druggy, 45)
 			if(prob(5))
 				M.emote(pick("twitch", "giggle"))
 		if(75 to 150)
@@ -6520,7 +6520,7 @@
 			M.hallucination = max(M.hallucination, 60)
 			M.Jitter(4)
 			M.Dizzy(4)
-			M.AdjustDrugginess(60)
+			M.druggy = max(M.druggy, 60)
 			if(prob(10))
 				M.emote(pick("twitch", "giggle"))
 			if(prob(30))
@@ -6531,7 +6531,7 @@
 			M.hallucination = max(M.hallucination, 60)
 			M.Jitter(4)
 			M.Dizzy(4)
-			M.AdjustDrugginess(60)
+			M.druggy = max(M.druggy, 60)
 			if(prob(10))
 				M.emote(pick("twitch", "giggle"))
 			if(prob(30))
@@ -6648,7 +6648,7 @@
 	if(isrobot(M))
 		M.Jitter(20)
 		M.Dizzy(20)
-		M.AdjustDrugginess(60)
+		M.druggy = max(M.druggy, 60)
 
 /datum/reagent/ethanol/suicide
 	name = "Suicide"
@@ -8581,7 +8581,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Take the leap... enjoy a Quantum!"
 	color = "#100800" //rgb: 16, 8, 0
 	adj_sleepy = -2
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 
 /datum/reagent/drink/cold/quantum/on_mob_life(var/mob/living/M)
 
@@ -8594,7 +8594,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Sport Drink"
 	id = SPORTDRINK
 	description = "You like sports, and you don't care who knows."
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
 	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
@@ -9546,7 +9546,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			C.pain_shock_stage--
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			H.AdjustDrugginess(5)
+			H.druggy = max(H.druggy, 5)
 			H.Dizzy(2)
 			if(prob(5))
 				H.emote(pick("stare", "giggle"), null, null, TRUE)
@@ -9675,7 +9675,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Sporty Incense"
 	id = INCENSE_CRAVE
 	description = "This has what you crave. Electrolytes."
-	sport = 5
+	sport = SPORTINESS_SPORTS_DRINK
 	custom_metabolism = 0.15
 
 /datum/reagent/incense/cornoil

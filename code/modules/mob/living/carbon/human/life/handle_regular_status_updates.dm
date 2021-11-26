@@ -148,7 +148,8 @@
 			silent = max(silent - 1, 0)
 
 		if(druggy)
-			if(!AdjustDrugginess(-1))
+			druggy = max(druggy - 1, 0)
+			if(!druggy)
 				to_chat(src, "It looks like you are back in Kansas.")
 
 		if(teleportitis)

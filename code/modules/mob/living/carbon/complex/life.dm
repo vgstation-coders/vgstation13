@@ -354,7 +354,7 @@
 			silent = max(silent-1, 0)
 
 		if(druggy)
-			AdjustDrugginess(-1)
+			druggy = max(druggy-1, 0)
 	return 1
 
 /mob/living/carbon/complex/proc/handle_chemicals_in_body()
