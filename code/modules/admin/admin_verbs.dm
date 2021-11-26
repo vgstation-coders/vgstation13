@@ -344,7 +344,6 @@ var/list/admin_verbs_mod = list(
 		mob.verbs |= /mob/dead/observer/verb/toggle_antagHUD
 
 /client/proc/remove_admin_verbs()
-	show_mc_tab = FALSE
 	verbs.Remove(
 		admin_verbs_default,
 		/client/proc/togglebuildmodeself,
