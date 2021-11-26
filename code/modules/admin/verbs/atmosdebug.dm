@@ -6,26 +6,36 @@
 		return
 	feedback_add_details("admin_verb","CP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+	var/list/obj/machinery/atmospherics/AL = list()
+
 	//all plumbing - yes, some things might get stated twice, doesn't matter.
 	for (var/obj/machinery/atmospherics/plumbing in atmos_machines)
 		if (plumbing.nodealert)
-			to_chat(usr, "Unconnected [plumbing.name] located at [formatJumpTo(plumbing.loc)]")
+			AL += plumbing
 
 	//Manifolds
 	for (var/obj/machinery/atmospherics/pipe/manifold/pipe in atmos_machines)
-		if (!pipe.node1 || !pipe.node2 || !pipe.node3)
-			to_chat(usr, "Unconnected [pipe.name] located at [formatJumpTo(pipe.loc)]")
+		if ((!pipe.node1 || !pipe.node2 || !pipe.node3) && (!pipe in AL))
+			AL += pipe
 
 	//4-way Manifolds
 	for (var/obj/machinery/atmospherics/pipe/manifold4w/pipe in atmos_machines)
-		if (!pipe.node1 || !pipe.node2 || !pipe.node3 || !pipe.node4)
-			to_chat(usr, "Unconnected [pipe.name] located at [formatJumpTo(pipe.loc)]")
+		if ((!pipe.node1 || !pipe.node2 || !pipe.node3 || !pipe.node4) && (!pipe in AL))
+			AL += pipe
 
 	//Pipes
 	for (var/obj/machinery/atmospherics/pipe/simple/pipe in atmos_machines)
-		if (!pipe.node1 || !pipe.node2)
-			to_chat(usr, "Unconnected [pipe.name] located at [formatJumpTo(pipe.loc)]")
+		if ((!pipe.node1 || !pipe.node2) && (!pipe in AL))
+			AL += pipe
 
+	var/output = {"<B>PLUMBING ANOMALIES REPORT</B><HR>
+		<B>The following anomalies have been detected.</B><BR><ul>"}
+
+	for (var/obj/machinery/atmospherics/plumbing in AL)
+		output += "<li>Unconnected [pipe.name] located at [formatJumpTo(pipe.loc)]</li>"
+
+	output += "</ul>"
+	usr << browse(output,"window=pipereport;size=1000x500")
 /client/proc/powerdebug()
 	set category = "Mapping"
 	set name = "Check Power"
