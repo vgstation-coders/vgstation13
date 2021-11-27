@@ -566,8 +566,8 @@
 	
 /obj/item/weapon/grenade/chem_grenade/teargas/New()
 	..()
-	var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
-	var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B1 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
 
 	B1.reagents.add_reagent(CONDENSEDCAPSAICIN, 60)
 	B1.reagents.add_reagent(POTASSIUM, 40)
