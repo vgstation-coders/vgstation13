@@ -166,6 +166,7 @@
 /datum/next_map/nerve
 	name = "Nerve Station"
 	path = "nervestation"
+	min_players = 20
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()
