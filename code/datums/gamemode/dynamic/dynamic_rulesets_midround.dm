@@ -825,19 +825,23 @@
 	requirements = list(5,5,15,15,20,20,20,20,40,70)
 	high_population_requirement = 10
 	logo = "pulsedemon-logo"
-
-/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/generate_ruleset_body(var/mob/applicant)
 	var/list/cables_to_spawn_at = list()
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/ready(var/forced = 0)
 	for(var/datum/powernet/PN in powernets)
 		for(var/obj/structure/cable/C in PN.cables)
 			var/turf/simulated/floor/F = get_turf(C)
-			// Cable to spawn at must be on a floor, not tiled over, on the main station and in maint
-			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation)
+			// Cable to spawn at must be on a floor, not tiled over, on the main station, powered and in maint
+			if(istype(F,/turf/simulated/floor) && !F.floor_tile && C.z == map.zMainStation && istype(get_area(C),/area/maintenance) && C.powernet.avail)
 				cables_to_spawn_at.Add(C)
 	if(!cables_to_spawn_at.len)
-		message_admins("[applicant.key] could not start as a pulse demon, no suitable cables found!")
-		to_chat(applicant,"<span class='warning'>The mode tried to pick you, but no suitable cables were found.</span>")
+		log_admin("Cannot accept Pulse Demon ruleset, no suitable cables found.")
+		message_admins("Cannot accept Pulse Demon ruleset, no suitable cables found.")
 		return 0
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/from_ghosts/pulse_demon/generate_ruleset_body(var/mob/applicant)
 	var/obj/structure/cable/our_cable = pick(cables_to_spawn_at)
 	applicant.forceMove(get_turf(our_cable))
 	var/mob/living/simple_animal/hostile/pulse_demon/PD = new(get_turf(our_cable))

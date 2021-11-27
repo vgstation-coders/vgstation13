@@ -167,8 +167,6 @@
     if(!can_leave_cable) // If the ability isn't on
         if(!new_cable && !new_power) // Restrict movement to cables
             return
-        if(current_power && new_power) // No moving in between power sources
-            return
     var/moved = FALSE // To stop unnecessary forceMove calls
     if(..())
         moved = TRUE
