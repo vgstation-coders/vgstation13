@@ -3,19 +3,18 @@
 	mode.declare_completion()
 	completions += "[mode.dat]<HR>"
 	
+	completions += "<h2><font color='red'>Syndicate</font> Specials</h2>"
+	if(syndicate_code_phrase)
+		completions += "<BR>The Syndicate code phrases were:<BR>"
+		completions += "<font color='red'>[syndicate_code_phrase.Join(", ")]</font>"
+	if(syndicate_code_response)
+		completions += "<BR>The Syndicate code responses were:<BR>"
+		completions += "<font color='red'>[syndicate_code_response.Join(", ")]</font>"
+	
 	if(score["implant_phrases"].len)
-		completions += "<h2><font color='red'>Syndicate</font> Specials</h2>"
-		if(syndicate_code_phrase)
-			completions += "<BR>The Syndicate code phrases were:<BR>"
-			completions += "<font color='red'>[syndicate_code_phrase.Join(", ")]</font>"
-		if(syndicate_code_response)
-			completions += "<BR>The Syndicate code responses were:<BR>"
-			completions += "<font color='red'>[syndicate_code_response.Join(", ")]</font>"
-		
-		if(score["implant_phrases"].len)
-			completions += "<BR>The following explosive implants were used:<BR>"
-			for(var/entry in score["implant_phrases"])
-				completions += "[entry]<BR>"	
+		completions += "<BR>The following explosive implants were used:<BR>"
+		for(var/entry in score["implant_phrases"])
+			completions += "[entry]<BR>"
 
 	/*//Calls auto_declare_completion_* for all modes
 	for(var/handler in typesof(/datum/gamemode/proc))
