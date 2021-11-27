@@ -279,8 +279,9 @@ var/list/all_GPS_list = list()
 			boop = TRUE
 	if(iscommand)
 		for(var/obj/item/device/gps/secure/SPS in SPS_list)
-			SPS.say("Alert. [alerttype]")
-			playsound(SPS,'sound/machines/radioboop.ogg',40,1)
+			if(SPS.transmitting)
+				SPS.say("Alert. [alerttype]")
+				playsound(SPS,'sound/machines/radioboop.ogg',40,1)
 
 	if(boop)
 		deathsound(isdead)
