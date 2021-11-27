@@ -283,6 +283,7 @@ var/list/score=list(
 	"arenabest"		= null,
 
 	"money_leaderboard" = list(),
+	"implant_phrases" = list(),
 )
 
 var/list/isolated_antibodies = list(

@@ -27,7 +27,7 @@
 		part = organ
 	forceMove(target)
 	imp_in = target
-	implanted(implanter)
+	implanted(implanter, target)
 	return TRUE
 
 // Call this to remove the implant. Do not do anything else in order to remove the implant.
@@ -53,7 +53,7 @@
 /obj/item/weapon/implant/proc/handle_removal(mob/remover)
 
 // What does the implant do upon injection?
-/obj/item/weapon/implant/proc/implanted(mob/implanter)
+/obj/item/weapon/implant/proc/implanted(mob/implanter, mob/implanted)
 
 /obj/item/weapon/implant/proc/get_data()
 	return "No information available"

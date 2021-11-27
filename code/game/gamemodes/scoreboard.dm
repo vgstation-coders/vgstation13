@@ -2,6 +2,30 @@
 
 	mode.declare_completion()
 	completions += "[mode.dat]<HR>"
+	
+	if(score["implant_phrases"].len)
+		completions += "<h2><font color='red'>Syndicate</font> Specials</h2>"
+		if(syndicate_code_phrase)
+			completions += "<BR>The Syndicate code phrases were:<BR>"
+			var/i
+			for(var/entry in syndicate_code_phrase)
+				completions += "<font color='red'>[entry]</font>"
+				if(i < syndicate_code_phrase.len - 1)
+					completions += ", "
+					i++
+		if(syndicate_code_response)
+			completions += "<BR>The Syndicate code responses were:<BR>"
+			var/i
+			for(var/entry in syndicate_code_response)
+				completions += "<font color='red'>[entry]</font>"
+				if(i < syndicate_code_response.len - 1)
+					completions += ", "	
+					i++
+		
+		if(score["implant_phrases"].len)
+			completions += "<BR>The following explosive implants were used:<BR>"
+			for(var/entry in score["implant_phrases"])
+				completions += "[entry]<BR>"	
 
 	/*//Calls auto_declare_completion_* for all modes
 	for(var/handler in typesof(/datum/gamemode/proc))

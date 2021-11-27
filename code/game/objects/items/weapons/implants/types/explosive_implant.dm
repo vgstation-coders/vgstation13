@@ -43,16 +43,17 @@
 
 		qdel(src)
 
-/obj/item/weapon/implant/explosive/implanted(mob/source)
+/obj/item/weapon/implant/explosive/implanted(mob/source, mob/target)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return 0
 	phrase = input("Choose activation phrase:") as text
 	var/static/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	phrase = sanitize_simple(phrase, replacechars)
-	usr.mind.store_memory("Explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
-	to_chat(usr, "The implanted explosive implant in [source] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
+	usr.mind.store_memory("Explosive implant in [target] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
+	to_chat(usr, "The implanted explosive implant in [target] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
 	addHear()
 	source.register_event(/event/emote, src, .proc/trigger)
+	score["implant_phrases"] += "[usr] ([get_key(usr)]) rigged [target] to explode on the phrase <font color='red'>\"[phrase]\"!</font>"
 	return 1
 
 /obj/item/weapon/implant/explosive/emp_act(severity)
