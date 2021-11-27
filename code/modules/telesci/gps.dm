@@ -275,8 +275,12 @@ var/list/all_GPS_list = list()
 	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
 	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
 		if(receiver && !receiver.stat)
-			receiver.receive_alert(alerttype, transmission_data, verbose, iscommand)
+			receiver.receive_alert(alerttype, transmission_data, verbose)
 			boop = TRUE
+	if(iscommand)
+		for(var/obj/item/device/gps/secure/SPS in SPS_list)
+			SPS.say("Alert. [alerttype]")
+			playsound(SPS,'sound/machines/radioboop.ogg',40,1)
 
 	if(boop)
 		deathsound(isdead)
