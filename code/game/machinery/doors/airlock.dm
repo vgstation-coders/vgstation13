@@ -1319,8 +1319,10 @@ About the new airlock wires panel:
 		else if(req_one_access && req_one_access.len)
 			A.conf_access = req_one_access
 			A.one_access = 1
-		electronics.dir_access = req_access_dir
-		electronics.access_nodir = access_not_dir
+		if(req_access_dir)
+			A.dir_access = req_access_dir
+		if(access_not_dir) 
+			A.access_nodir = access_not_dir
 	else
 		A = electronics
 		electronics = null
