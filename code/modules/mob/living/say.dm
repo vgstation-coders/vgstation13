@@ -189,7 +189,15 @@ var/list/headset_modes = list(
 		return
 
 	//parse the language code and consume it
-
+	
+	//but first, scoreboard for syndiphrases stuff
+	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
+		for(var/syn in syndicate_code_phrase)
+			if(findtext(speech.message, syn))
+				score["syndiphrases"] += 1
+		for(var/syn in syndicate_code_response)
+			if(findtext(speech.message, syn))
+				score["syndisponses"] += 1
 
 	var/message_range = 7
 	treat_speech(speech)
@@ -220,7 +228,7 @@ var/list/headset_modes = list(
 		send_speech(speech, message_range, bubble_type)
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
-	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")
+	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")	
 	qdel(speech)
 	return 1
 
@@ -267,7 +275,6 @@ var/list/headset_modes = list(
 
 	//checking for syndie codephrases if person is a tator
 	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
-		//is tator
 		for(var/T in syndicate_code_phrase)
 			rendered_message = replacetext(html_decode(rendered_message), T, "<b style='color: red;'>[html_encode(T)]</b>")
 
