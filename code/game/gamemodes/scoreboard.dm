@@ -7,20 +7,10 @@
 		completions += "<h2><font color='red'>Syndicate</font> Specials</h2>"
 		if(syndicate_code_phrase)
 			completions += "<BR>The Syndicate code phrases were:<BR>"
-			var/i
-			for(var/entry in syndicate_code_phrase)
-				completions += "<font color='red'>[entry]</font>"
-				if(i < syndicate_code_phrase.len - 1)
-					completions += ", "
-					i++
+			completions += "<font color='red'>[syndicate_code_phrase.Join(", ")]</font>"
 		if(syndicate_code_response)
 			completions += "<BR>The Syndicate code responses were:<BR>"
-			var/i
-			for(var/entry in syndicate_code_response)
-				completions += "<font color='red'>[entry]</font>"
-				if(i < syndicate_code_response.len - 1)
-					completions += ", "	
-					i++
+			completions += "<font color='red'>[syndicate_code_response.Join(", ")]</font>"
 		
 		if(score["implant_phrases"].len)
 			completions += "<BR>The following explosive implants were used:<BR>"
