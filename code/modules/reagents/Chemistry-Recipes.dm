@@ -2889,6 +2889,14 @@
 	required_reagents = list(PLASMA = 1, SNOWWHITE = 4, BERRYJUICE = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/pilk
+	name = "Pilk"
+	id = PILK
+	result = PILK
+	required_reagents = list(MILK = 1, COLA = 1)
+	result_amount = 2
+
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten

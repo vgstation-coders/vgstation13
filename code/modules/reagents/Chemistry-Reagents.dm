@@ -5906,6 +5906,44 @@
 	specheatcap = 1.38
 	glass_desc = "Like milk, but thicker."
 
+/datum/reagent/drink/pilk
+	name = "Pilk"
+	id = PILK
+	description = "An opaque brown liquid produced by mixing milk and space pe... cola!"
+	color = "#A88C50" //rgb: 168, 140, 80
+	alpha = 240
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Brown and nutritious... for cats!"
+
+/datum/reagent/drink/pilk/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getBruteLoss() && prob(20))
+		M.heal_organ_damage(1, 0)
+	if(holder.has_reagent("capsaicin"))
+		holder.remove_reagent("capsaicin", 10 * REAGENTS_METABOLISM)
+	if(prob(50))
+		M.heal_organ_damage(1, 0)
+
+/datum/reagent/pilk/on_overdose(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+
+		if(prob(min(tick / 15, 25)))
+			H.vomit()
+
+		switch(volume)
+			if(25 to 35)
+				H.dizziness = max(H.dizziness, 10)
+				if(prob(5))
+					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
+			if(50 to INFINITY)
+				H.dizziness = max(H.dizziness, 20)
+				if(prob(10))
+					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
+
 /datum/reagent/drink/coffee
 	name = "Coffee"
 	id = COFFEE
