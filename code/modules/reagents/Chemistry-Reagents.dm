@@ -2491,7 +2491,7 @@
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
 		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
 			M.adjustToxLoss(10 * REM)
-		
+
 /datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 
@@ -5523,6 +5523,44 @@
 	specheatcap = 1.38
 	glass_desc = "Like milk, but thicker."
 
+/datum/reagent/drink/pilk
+	name = "Pilk"
+	id = PILK
+	description = "An opaque brown liquid produced by mixing milk and space pe... cola!"
+	color = "#A88C50" //rgb: 168, 140, 80
+	alpha = 240
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Brown and nutritious... for cats!"
+
+/datum/reagent/drink/pilk/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(M.getBruteLoss() && prob(20))
+		M.heal_organ_damage(1, 0)
+	if(holder.has_reagent("capsaicin"))
+		holder.remove_reagent("capsaicin", 10 * REAGENTS_METABOLISM)
+	if(prob(50))
+		M.heal_organ_damage(1, 0)
+
+/datum/reagent/pilk/on_overdose(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+
+		if(prob(min(tick / 15, 25)))
+			H.vomit()
+
+		switch(volume)
+			if(25 to 35)
+				H.dizziness = max(H.dizziness, 10)
+				if(prob(5))
+					to_chat(H,"<span class='warning'>Your stomach grumbles and you feel a little nauseous.</span>")
+			if(50 to INFINITY)
+				H.dizziness = max(H.dizziness, 20)
+				if(prob(10))
+					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
+
 /datum/reagent/drink/coffee
 	name = "Coffee"
 	id = COFFEE
@@ -6380,7 +6418,7 @@
 		glass_name = "\improper Scientist's Surprise"
 		glass_desc = "There is as yet insufficient data for a meaningful answer."
 		D.origin_tech = ""
-		
+
 	else if(volume < 50)
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Serendipity"
@@ -6392,7 +6430,7 @@
 		glass_name = "\improper Scientist's Sapience"
 		glass_desc = "Why research what has already been catalogued?"
 		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
-				
+
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
@@ -6516,7 +6554,7 @@
 /datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	
+
 	switch(data)
 		if(0 to 65)
 			if(prob(5))

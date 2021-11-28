@@ -92,7 +92,7 @@
 	id = "holy_explosion_potassium"
 	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
 	result_amount = 2.4
-	
+
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
 	playsound(holder.my_atom, 'sound/misc/holyhandgrenade.ogg', 100, 1)
@@ -845,7 +845,7 @@
 
 /datum/chemical_reaction/solidification/clown/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/clown
-	
+
 /datum/chemical_reaction/solidification/phazon
 	name = "Solid Phazon"
 	id = "solidphazon"
@@ -2772,6 +2772,14 @@
 	result = BOYSENBERRY_BLIZZARD
 	required_reagents = list(PLASMA = 1, SNOWWHITE = 4, BERRYJUICE = 1)
 	result_amount = 5
+
+/datum/chemical_reaction/pilk
+	name = "Pilk"
+	id = PILK
+	result = PILK
+	required_reagents = list(MILK = 1, COLA = 1)
+	result_amount = 2
+
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 

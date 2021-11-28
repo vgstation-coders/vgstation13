@@ -441,6 +441,7 @@
 #define MONSTERMASH		"monstermash"
 #define EGGNOG			"eggnog"
 #define FESTIVE_EGGNOG	"festive_eggnog"
+#define PILK	"pilk"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
