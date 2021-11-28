@@ -136,7 +136,6 @@ var/list/valid_ninja_suits = list(
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
-				N.thrown_shuriken += makeweakref(S)
 				S.throw_at(A, throw_range, throw_speed)
 				H.put_in_hands(src)
 				//statistics collection: ninja shuriken thrown
@@ -145,7 +144,7 @@ var/list/valid_ninja_suits = list(
 					ND.shuriken_thrown++
 			else
 				N.thrown_shuriken += makeweakref(src)
-				..(A, throw_range, throw_speed)
+				..()
 		else
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 			//It drops to the ground in throwcode already
