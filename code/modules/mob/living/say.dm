@@ -191,7 +191,7 @@ var/list/headset_modes = list(
 	//parse the language code and consume it
 	
 	//but first, scoreboard for syndiphrases stuff
-	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
+	if(src.mind && (src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER)))
 		for(var/syn in syndicate_code_phrase)
 			if(findtext(speech.message, syn))
 				score["syndiphrases"] += 1
