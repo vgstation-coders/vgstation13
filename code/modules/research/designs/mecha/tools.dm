@@ -61,7 +61,7 @@
 
 /datum/design/mech_energy_relay
 	name = "Module Design (Tesla Energy Relay)"
-	desc = "Tesla Energy Relay"
+	desc = "Tesla Energy Relay."
 	id = "mech_energy_relay"
 	build_type = MECHFAB
 	req_tech = list(Tc_MAGNETS = 4, Tc_POWERSTORAGE = 3)
@@ -181,7 +181,7 @@
 
 /datum/design/mech_generator_nuclear
 	name = "Module Design (ExoNuclear Reactor)"
-	desc = "Compact nuclear reactor module"
+	desc = "Compact nuclear reactor module."
 	id = "mech_generator_nuclear"
 	build_type = MECHFAB
 	req_tech = list(Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 3, Tc_MATERIALS = 3)
@@ -201,7 +201,7 @@
 
 /datum/design/mech_jail_cell
 	name = "Exosuit Module Design (Mounted Jail Cell)"
-	desc = "Exosuit-controlled secure holding cell"
+	desc = "An exosuit-controlled secure holding cell."
 	id = "mech_jail_cell"
 	build_type = MECHFAB
 	req_tech = list(Tc_BIOTECH = 2, Tc_COMBAT = 4)

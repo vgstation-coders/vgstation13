@@ -1,6 +1,6 @@
 /obj/item/clothing/under/shorts
 	name = "athletic shorts"
-	desc = "95% Polyester, 5% Spandex!"
+	desc = "95% Polyester, 5% Spandex! They are comfy, and easy to wear."
 	gender = PLURAL
 	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = LOWER_TORSO

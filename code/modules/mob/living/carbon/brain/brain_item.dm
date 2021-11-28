@@ -19,12 +19,6 @@
 
 	var/mob/living/carbon/brain/brainmob = null
 
-/obj/item/organ/internal/brain/New()
-	..()
-	spawn(5)
-		if(brainmob && brainmob.client)
-			brainmob.client.screen.len = null //clear the hud
-
 /obj/item/organ/internal/brain/proc/transfer_identity(var/mob/living/carbon/H)
 	name = "[H.real_name]'s brain"
 	brainmob = new(src)

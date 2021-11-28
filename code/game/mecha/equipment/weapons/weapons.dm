@@ -266,7 +266,7 @@
 	name = "\improper Ultra AC 2"
 	icon_state = "mecha_uac2"
 	equip_cooldown = 10
-	projectile = /obj/item/projectile/bullet/weakbullet
+	projectile = /obj/item/projectile/bullet/weakbullet/mech
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	max_projectiles = 300
 	projectile_energy_cost = 20
@@ -373,7 +373,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
 	if(can_pre_detonate && grenade)
-		grenade.prime()
+		grenade.prime(chassis.occupant)
 		grenade = null
 		return
 	if(!action_checks(target))
@@ -393,7 +393,7 @@
 	spawn(det_time)
 		if(grenade)
 			grenade = null
-			G.prime()
+			G.prime(chassis.occupant)
 	do_after_cooldown()
 	return
 

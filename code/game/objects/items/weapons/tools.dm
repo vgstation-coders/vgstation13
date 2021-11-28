@@ -84,6 +84,13 @@
 	force = 15.0
 	throwforce = 12.0
 
+/obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/bluespace)
+		has_slime=1
+		to_chat(user, "You shove the slime extract inside \the [src]'s head.")
+		return TRUE
+
 /*
  * Screwdriver
  */
@@ -109,7 +116,7 @@
 	attack_verb = list("stabs")
 	toolsounds = list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')
 
-/obj/item/tool/screwdriver/suicide_act(mob/user)
+/obj/item/tool/screwdriver/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</span>"))
 	return(SUICIDE_ACT_BRUTELOSS)
@@ -146,7 +153,7 @@
 /obj/item/tool/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
 		return ..()
-	if(can_operate(M, user))
+	if(can_operate(M, user, src))
 		return ..()
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD)
 		return ..()
@@ -204,6 +211,9 @@
 	attack_verb = list("pinches", "nips at")
 	toolsounds = list('sound/items/Wirecutter.ogg')
 
+/obj/item/tool/wirecutters/is_wirecutter(mob/user)
+	return TRUE
+
 /obj/item/tool/wirecutters/New()
 	. = ..()
 
@@ -220,6 +230,15 @@
 		return
 	else
 		..()
+
+/obj/item/tool/wirecutters/scissors
+	name = "scissors"
+	desc = "This cuts paper."
+	icon_state = "scissors"
+
+/obj/item/tool/wirecutters/scissors/New()
+	. = ..()
+	icon_state = "scissors"
 /*
  * Welding Tool
  */
@@ -262,10 +281,6 @@
 	var/eye_damaging = TRUE	//Whether the welder damages unprotected eyes.
 	var/weld_speed = 1 //How much faster this welder is at welding. Higher number = faster
 	toolsounds = list('sound/items/Welder.ogg', 'sound/items/Welder2.ogg')
-
-/obj/item/tool/weldingtool/suicide_act(mob/user)
-	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/tool/weldingtool/New()
 	. = ..()
@@ -358,7 +373,7 @@
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
-		if(can_operate(M, user))
+		if(can_operate(M, user, src))
 			if(do_surgery(M, user, src))
 				return
 		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]
@@ -659,7 +674,7 @@
 
 /obj/item/tool/crowbar
 	name = "crowbar"
-	desc = "Used to hit floors"
+	desc = "Used to hit floors."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "crowbar"
 	hitsound = "sound/weapons/toolhit.ogg"
@@ -677,7 +692,7 @@
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Crowbar.ogg')
 
-/obj/item/tool/crowbar/suicide_act(mob/user)
+/obj/item/tool/crowbar/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
@@ -687,14 +702,14 @@
 	icon_state = "red_crowbar"
 	item_state = "crowbar_red"
 
-/obj/item/tool/crowbar/red/suicide_act(mob/user)
+/obj/item/tool/crowbar/red/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
 
 /obj/item/weapon/conversion_kit
 	name = "\improper Revolver Conversion Kit"
-	desc = "A professional conversion kit used to convert any knock off revolver into the real deal capable of shooting lethal .357 rounds without the possibility of catastrophic failure"
+	desc = "A professional conversion kit used to convert any knock off revolver into the real deal capable of shooting lethal .357 rounds without the possibility of catastrophic failure."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "kit"
 	flags = FPRINT

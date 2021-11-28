@@ -122,7 +122,7 @@
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/update_icon()
-	desc = "[initial(desc)][BB ? "" : " This one is spent"]"
+	desc = "[initial(desc)][BB ? "" : " This one is spent."]"
 	overlays = list()
 	if(!BB)
 		overlays += icon('icons/obj/ammo.dmi', "emptyshell")
@@ -213,7 +213,7 @@
 	starting_materials = list(MAT_IRON = 125)
 
 /obj/item/ammo_casing/a762x55/update_icon()
-	desc = "[initial(desc)][BB ? "" : " This one is spent"]"
+	desc = "[initial(desc)][BB ? "" : " This one is spent."]"
 	if(!BB)
 		icon_state = "762x55-casing"
 

@@ -9,6 +9,7 @@
 	var/wFuel = 0
 	var/maxFuel = 20
 	var/maxSize = W_CLASS_LARGE	//Anything bigger won't fit.
+	var/beenClowned = FALSE
 
 /obj/structure/siege_cannon/Destroy()
 	unloadCannon()
@@ -34,6 +35,8 @@
 		return 1
 	if(W.is_wrench())
 		wrenchAnchor(user, W, 5)	//Half a second to wrench. Being able to turn it via verb while anchored is intentional.
+	else if((istype(W, /obj/item/weapon/stamp/clown) || istype(W, /obj/item/toy/crayon/rainbow)) && !beenClowned)
+		becomeClownnon(W, user)
 	else
 		loadCannon(W, user)
 
@@ -121,6 +124,9 @@
 		return
 	spark(src)
 	playsound(src, 'sound/effects/Explosion_Small1.ogg', 100, 1)
+	if(beenClowned)
+		spawn(1)
+			playsound(src, 'sound/items/bikehorn.ogg', 20, 1)
 	if(loadedItem)
 		itemFire()
 	else if(loadedMob)
@@ -143,12 +149,37 @@
 
 /obj/structure/siege_cannon/proc/mobFire()
 	var/atom/target = get_edge_target_turf(src, dir)
-	var/mSpeed = 32		//Twice that of an non-emagged mass driver.
-	if(M_FAT in loadedMob.mutations)
-		mSpeed = 40	//Big boi
 	loadedMob.forceMove(loc)
-	loadedMob.throw_at(target, wFuel*2, mSpeed)
+	if(beenClowned)
+		circusFlip(target, loadedMob)	//Passes loadedMob to flipMob because waitfor = FALSE can null it, causing runtimes
+	else
+		var/mSpeed = 32		//Twice that of an non-emagged mass driver.
+		if(M_FAT in loadedMob.mutations)
+			mSpeed = 40	//Big boi
+		loadedMob.throw_at(target, wFuel*2, mSpeed)
 	loadedMob = null
+
+/obj/structure/siege_cannon/proc/circusFlip(var/atom/target, var/mob/living/flipMob)
+	set waitfor = FALSE
+	flipMob.throw_at(target, wFuel*2, 32, 1, 1)
+	var/flips = 0
+	while(flipMob.throwing)
+		flipMob.transform = turn(flipMob.transform, 45)
+		flips++
+		sleep(1)
+	flipMob.transform = null
+	if(ishuman(flipMob))
+		var/mob/living/carbon/human/H = flipMob
+		if(!clumsy_check(H) && flips >= 8)
+			H.vomit(0,1)
+			H.Knockdown(flips/8)
+
+/obj/structure/siege_cannon/proc/becomeClownnon(var/obj/item/C, mob/user)
+	to_chat(user,"<span class='notice'>You begin modifying \the [src].</span>")
+	if(do_after(user, src, 3 SECONDS))
+		beenClowned = TRUE
+		icon_state = "clownnon"
+		name = "circus cannon"
 
 /obj/structure/siege_cannon/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
@@ -198,10 +229,10 @@
 		throw_speed = 1
 		throwforce = 3
 
-/obj/item/cannonball/throw_impact(atom/hit_atom)
+/obj/item/cannonball/to_bump(atom/Obstacle)
 	..()
-	if(cannonFired && !hit_atom.gcDestroyed)
-		cannonEffect(hit_atom)
+	if(cannonFired && !Obstacle.gcDestroyed)
+		cannonEffect(Obstacle)
 
 /obj/item/cannonball/proc/cannonEffect(var/atom/cTarg)
 	return
@@ -218,9 +249,12 @@
 		else
 			var/eS = rand(2,3)
 			cTarg.ex_act(eS)	//May destroy normal walls, has a chance of destroying r_walls but most likely just damages them. Structures are usually 50 50.
-	else if(isliving(cTarg))
-		siegeMob(cTarg)
 	cannonAdjust()
+
+/obj/item/cannonball/iron/throw_impact(atom/hit_atom, var/speed, mob/user)
+	..()
+	if(isliving(hit_atom) && cannonFired)
+		siegeMob(hit_atom)
 
 /obj/item/cannonball/iron/proc/siegeMachine(var/obj/machinery/M)
 	if(prob(50))	//Let's just do a coin flip
@@ -243,3 +277,286 @@
 		H.Knockdown(5)
 	else if(L.size == SIZE_TINY)	//splat
 		L.gib()
+
+// Making fuse bombs
+/obj/item/cannonball/iron/attackby(var/obj/item/I, mob/user as mob)
+	if(istype(I, /obj/item/tool/surgicaldrill))
+		to_chat(user, "<span  class='notice'>You begin drilling a hole in the [src] with the [I].</span>")
+		var/drilltime = 20
+		if(istype(I, /obj/item/tool/surgicaldrill/diamond))
+			drilltime = 5
+		if(do_after(user, src, drilltime))
+			var/obj/item/cannonball/fuse_bomb/F = new /obj/item/cannonball/fuse_bomb(src.loc)
+			F.assembled = 0
+			F.name = "empty fuse bomb assembly"
+			F.desc = "Just add fire. And fuel."
+			F.update_icon()
+			to_chat(user, "<span  class='notice'>You drill a hole in the [src] with the [I].</span>")
+			qdel(src)
+
+//Fuse bomb//////// -Refactored as cannonball by kanef, was originally a device for some reason. Nothing needed to be changed since icon state is the only unique var in that type, and it's set here anyways
+/obj/item/cannonball/fuse_bomb
+	name = "fuse bomb"
+	desc = "fshhhhhhhh BOOM!"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "fuse_bomb_5"
+	item_state = "fuse_bomb"
+	flags = FPRINT
+	throwforce = 2
+	throw_speed = 2
+	throw_range = 4	//Lighter than cannonballs, but not too light
+	force = 5
+	adjForce = 10
+	var/assembled = 2
+	var/fuse_lit = 0
+	var/seconds_left = 5
+
+/obj/item/cannonball/fuse_bomb/admin//spawned by the adminbus, doesn't send an admin message, but the logs are still kept.
+
+/obj/item/cannonball/fuse_bomb/attack_self(mob/user as mob)
+	if(assembled == 2)
+		if(!fuse_lit)
+			lit(user)
+		else
+			fuse_lit = 0
+			update_icon()
+			to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
+	return
+
+/obj/item/cannonball/fuse_bomb/afterattack(atom/target, mob/user , flag) //Filling up the bomb
+	if(assembled == 0)
+		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
+			if(target.reagents.total_volume < 200)
+				to_chat(user, "<span  class='notice'>There's not enough fuel left to work with.</span>")
+				return
+			var/obj/structure/reagent_dispensers/fueltank/F = target
+			F.reagents.remove_reagent(FUEL, 200, 1)//Deleting 200 fuel from the welding fuel tank,
+			assembled = 1
+			to_chat(user, "<span  class='notice'>You've filled the [src] with welding fuel.</span>")
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
+			name = "fuse bomb assembly"
+			desc = "Just add fire."
+			return
+
+/obj/item/cannonball/fuse_bomb/attackby(obj/item/I as obj, mob/user as mob)
+	..()
+	if(assembled == 1)
+		if(istype(I, /obj/item/stack/cable_coil))
+			var/obj/item/stack/cable_coil/C = I
+			to_chat(user, "<span  class='notice'>You begin wiring the [src].</span>")
+			if(do_after(user, src, 20))
+				C.use(1)
+				assembled = 2
+				to_chat(user, "<span  class='notice'>You wire the [src].</span>")
+				name = "fuse bomb"
+				desc = "fshhhhhhhh BOOM!"
+				update_icon()
+	else if(assembled == 2)
+		if(!fuse_lit)
+			if(iswelder(I))
+				var/obj/item/tool/weldingtool/WT = I
+				if(WT.isOn())
+					lit(user,I)
+			else if(istype(I, /obj/item/weapon/lighter))
+				var/obj/item/weapon/lighter/L = I
+				if(L.lit)
+					lit(user,I)
+			else if(istype(I, /obj/item/weapon/match))
+				var/obj/item/weapon/match/M = I
+				if(M.lit)
+					lit(user,I)
+			else if(istype(I, /obj/item/candle))
+				var/obj/item/candle/C = I
+				if(C.lit)
+					lit(user,I)
+			else if(I.is_wirecutter(user))
+				assembled = 1
+				to_chat(user, "<span  class='notice'>You remove the fuse from the [src].</span>")
+				name = "fuse bomb assembly"
+				desc = "Just add fire."
+				update_icon()
+		else
+			if(I.is_wirecutter(user))
+				fuse_lit = 0
+				update_icon()
+				to_chat(user, "<span class='warning'>You extinguish the fuse with [seconds_left] seconds left!</span>")
+
+
+/obj/item/cannonball/fuse_bomb/proc/lit(mob/user as mob, var/obj/O=null)
+	fuse_lit = 1
+	to_chat(user, "<span class='warning'>You lit the fuse[O ? " with [O]":""]! [seconds_left] seconds till detonation!</span>")
+	admin_warn(user)
+	add_fingerprint(user)
+	update_icon()
+	fuse_burn(user)
+
+/obj/item/cannonball/fuse_bomb/proc/fuse_burn(var/mob/user)
+	set waitfor = 0
+
+	if(src && src.fuse_lit)
+		if(src.seconds_left)
+			sleep(10)
+			src.seconds_left--
+			src.update_icon()
+			.(user)
+		else
+			src.detonation(user)
+	return
+
+/obj/item/cannonball/fuse_bomb/extinguish()
+	..()
+	fuse_lit = 0
+	update_icon()
+
+/obj/item/cannonball/fuse_bomb/proc/detonation(var/mob/user)
+	explosion(get_turf(src), -1, 0, 4, whodunnit = user) //buff range to compensate for this somehow breaching
+	qdel(src)
+
+/obj/item/cannonball/fuse_bomb/admin/detonation(var/mob/user) //okay, this one can breach if it wants
+	explosion(get_turf(src), -1, 1, 3, whodunnit = user)
+	qdel(src)
+
+/obj/item/cannonball/fuse_bomb/update_icon()
+	if (assembled == 2)
+		icon_state = "fuse_bomb_[seconds_left][fuse_lit ? "-lit":""]"
+	else
+		icon_state = "fuse_bomb_1"
+
+/obj/item/cannonball/fuse_bomb/proc/admin_warn(mob/user as mob)
+	var/turf/bombturf = get_turf(src)
+	var/area/A = get_area(bombturf)
+
+	var/demoman_name = ""
+	if(!user)
+		demoman_name = "Unknown"
+	else
+		demoman_name = "[user.name]([user.ckey])"
+
+	var/log_str = "Bomb fuse lit in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name]</a> by [demoman_name]"
+
+	if(user)
+		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
+
+	bombers += log_str
+	message_admins(log_str, 0, 1)
+	log_game(log_str)
+
+/obj/item/cannonball/fuse_bomb/admin/admin_warn(mob/user as mob)
+	var/turf/bombturf = get_turf(src)
+	var/area/A = get_area(bombturf)
+
+	var/demoman_name = ""
+	if(!user)
+		demoman_name = "Unknown"
+	else
+		demoman_name = "[user.name]([user.ckey])"
+
+	var/log_str = "Bomb fuse lit in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name]</a> by [demoman_name]"
+
+	if(user)
+		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
+
+	bombers += log_str
+	log_game(log_str)
+
+/obj/item/cannonball/fuse_bomb/ex_act(severity, var/child = null, var/mob/whodunnit)//MWAHAHAHA
+	detonation(whodunnit)
+
+/obj/item/cannonball/fuse_bomb/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//consistency
+	..()
+	fuse_burn()
+
+/obj/item/cannonball/fuse_bomb/cultify()
+	return
+
+/obj/item/cannonball/fuse_bomb/cannonEffect(var/atom/cTarg)
+	if(assembled == 2 && fuse_lit)
+		detonation()
+	else if(isliving(cTarg))
+		var/mob/living/L = cTarg
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			H.Knockdown(2) //hollow means less stun time
+		else if(L.size == SIZE_TINY)	//splat
+			L.gib()
+
+//Bananium////////
+
+/obj/item/cannonball/bananium
+	name = "clownnonball"
+	desc = "A large sphere of honk."
+	icon = 'icons/obj/siege_cannon.dmi'
+	icon_state = "clownnonball"
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_METAL*3)
+	adjRange = 50
+	adjSpeed = 1
+	adjForce = 0
+	var/isBouncing = FALSE	//Prevents it bouncing infinitely due to some dark curse of throw_at()
+
+/obj/item/cannonball/bananium/throw_at(atom/target, range, speed, override = 1)
+	if(!cannonFired)
+		..()
+	else if(!isBouncing)
+		isBouncing = TRUE
+		..(target, 50, 1000, 1, 1)	//Always travels as slow as possible. High speed is to appease throw_at and doesn't translate to any damage
+
+/obj/item/cannonball/bananium/cannonEffect(var/atom/cTarg)
+	if(ishuman(cTarg))
+		honkMob(cTarg)
+	honkBounce(cTarg)
+
+/obj/item/cannonball/bananium/throw_impact(atom/hit_atom, var/speed, mob/user)
+	..()
+	if(!cannonFired)
+		return
+	if(isliving(hit_atom))
+		honkMob(hit_atom)
+	else if(isitem(hit_atom) && hit_atom.density)
+		spawn(3)	//Give throwing time to stop bullying me
+			if(!throwing && cannonFired)
+				honkBounce(hit_atom)
+
+
+/obj/item/cannonball/bananium/proc/honkMob(var/mob/living/L)
+	L.Knockdown(rand(2,10))
+	playsound(src, 'sound/items/bikehorn.ogg', 75, 1)
+	honkBounce(L)
+
+/obj/item/cannonball/bananium/proc/honkBounce(var/atom/cTarg)
+	var/list/honkStep = alldirs.Copy()
+	var/honkDir = get_dir(src, cTarg)
+	honkStep -= list(honkDir, turn(honkDir, 45), turn(honkDir, -45))	//Every direction possible except directly, or diagonally, toward what we hit
+	honkDir = pick(honkStep)
+	spawn(3)	//Prevents multiple instances of throw_at() from being active
+		bounceStep(honkDir)
+
+/obj/item/cannonball/bananium/proc/bounceStep(var/honkDir)
+	if(cannonFired)
+		if(prob(10) && istype(get_turf(src), /turf/simulated))
+			var/turf/simulated/T = get_turf(src)
+			T.wet(800, TURF_WET_LUBE)
+		var/target = get_ranged_target_turf(src, honkDir, 50)
+		isBouncing = FALSE
+		throw_at(target, 50, 1000, 1, 1)
+
+/obj/item/cannonball/bananium/proc/stopBouncing()
+	throwing = 0
+	kinetic_acceleration = 0
+	if(cannonFired)
+		cannonAdjust()
+
+/obj/item/cannonball/bananium/Crossed(atom/movable/A)	//Yes, you have to arrest the cannonball
+	..()
+	if(istype(A, /obj/item/projectile))
+		var/obj/item/projectile/P = A
+		if(P.stun && P.nodamage)
+			P.bullet_die()
+			stopBouncing()
+	else if(isitem(A))
+		if(istype(A, /obj/item/weapon/legcuffs/bolas) && A.throwing)
+			stopBouncing()
+		else if(istype(A, /obj/item/weapon/melee/baton))
+			var/obj/item/weapon/melee/baton/B = A
+			if(B.status && B.throwing && prob(50))
+				stopBouncing()
+

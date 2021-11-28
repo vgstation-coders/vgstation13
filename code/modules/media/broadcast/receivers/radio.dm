@@ -161,7 +161,7 @@
 					update_icon()
 					update_on(TRUE)
 				return 1
-			else if(iswirecutter(W))
+			else if(W.is_wirecutter(user))
 				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISKINDADONE)
 					new /obj/item/stack/cable_coil(get_turf(src), 5)

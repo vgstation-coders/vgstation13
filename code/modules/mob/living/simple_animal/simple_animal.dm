@@ -68,6 +68,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	mob_bump_flag = SIMPLE_ANIMAL
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
+	status_flags = CANPUSH //They cannot be conventionally stunned. AIs normally ignore this but stuns used to be able to disable player-controlled ones
 
 	//LETTING SIMPLE ANIMALS ATTACK? WHAT COULD GO WRONG. Defaults to zero so Ian can still be cuddly
 	var/melee_damage_lower = 0
@@ -107,6 +108,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
 	var/pacify_aura = FALSE
+
+	var/blooded = TRUE	//Until we give them proper vessels, this lets us know which animals should bleed and stuff
+
+/mob/living/simple_animal/isBloodedAnimal()
+	return blooded
 
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -239,11 +245,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
-					StartMoving()
+					INVOKE_EVENT(src, /event/before_move)
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
-					EndMoving()
+					INVOKE_EVENT(src, /event/after_move)
 
 	handle_automated_speech()
 
@@ -370,7 +376,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			return "[emote], [text]"
 	return "says, [text]";
 
-/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE)
+/mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto, var/message = null, var/ignore_status = FALSE, arguments)
 	if(timestopped)
 		return //under effects of time magick
 	if(stat)
@@ -394,7 +400,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				someone_in_earshot=1
 				break
 
-	if(someone_in_earshot)
+	if(someone_in_earshot && !istype(loc, /obj/item/device/mobcapsule))
 		if(rand(0,200) < speak_chance)
 			var/mode = pick(
 			speak.len;      1,
@@ -564,37 +570,41 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	setDensity(FALSE)
 
 	animal_count[src.type]--
-	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
-		var/list/L = animal_butchering_products[src.species_type]
-		src.butchering_drops = list()
+	var/list/animal_butchering_products = get_butchering_products()
+	if(!src.butchering_drops && animal_butchering_products.len > 0) //If we already created a list of butchering drops, don't create another one
+		butchering_drops = list()
 
-		for(var/butchering_type in L)
-			src.butchering_drops += new butchering_type
+		for(var/butchering_type in animal_butchering_products)
+			butchering_drops += new butchering_type
 
 	..(gibbed)
 
 
-/mob/living/simple_animal/ex_act(severity)
+/mob/living/simple_animal/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
 		return
 	..()
 	switch (severity)
 		if (1.0)
 			adjustBruteLoss(500)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Gibbed", admin_warn = TRUE)
 			gib()
 			return
 
 		if (2.0)
 			adjustBruteLoss(60)
-
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 60", admin_warn = TRUE)
 
 		if(3.0)
 			adjustBruteLoss(30)
+			add_attacklogs(src, whodunnit, "got caught in an explosive blast from", addition = "Severity: [severity], Damage: 30", admin_warn = TRUE)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BRUTE, "amount" = damage))
 		return 0
+	if (damage > 0)
+		damageoverlaytemp = 20
 	if(skinned())
 		damage = damage * 2
 	if(purge)
@@ -609,7 +619,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = damage)))
+	if(INVOKE_EVENT(src, /event/damaged, "kind" = BURN, "amount" = damage))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -720,6 +730,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		new_type = type_override
 
 	if(src.type == new_type) //Already grown up
+		return
+
+	if(istype(locked_to,/obj/item/critter_cage)) // Baby mobs in cages won't grow up!
 		return
 
 	var/mob/living/simple_animal/new_animal = new new_type(src.loc)
@@ -835,6 +848,5 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 	else
 		qdel(src)
-
 
 /datum/locking_category/simple_animal

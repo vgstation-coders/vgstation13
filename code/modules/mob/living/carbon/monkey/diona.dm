@@ -7,6 +7,8 @@
 	voice_name = "diona nymph"
 	speak_emote = list("chirrups")
 	icon_state = "nymph1"
+	meat_amount = 1
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat
 	species_type = /mob/living/carbon/monkey/diona
 	holder_type = /obj/item/weapon/holder/diona
 	var/list/donors = list()
@@ -16,7 +18,6 @@
 	canWearGlasses = FALSE
 	burn_damage_modifier = 2.5 //TREEEEEES
 	languagetoadd = LANGUAGE_ROOTSPEAK
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	flag = NO_BREATHE
 	canPossess = TRUE
 

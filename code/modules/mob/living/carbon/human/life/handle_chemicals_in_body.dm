@@ -18,6 +18,8 @@
 					alien = IS_VOX
 				if(/datum/species/plasmaman)
 					alien = IS_PLASMA
+				if(/datum/species/grey)
+					alien = IS_GREY
 		reagents.metabolize(src,alien)
 
 	if(status_flags & GODMODE)
@@ -42,7 +44,7 @@
 		if(species.flags & IS_PLANT)
 			if(nutrition > 500)
 				nutrition = 500
-			if(light_amount >= 3 && !reagents.has_reagent(HYPERZINE)) //If there's enough light, and you do not have hyperzine in body, heal
+			if(light_amount >= 3 && !reagents.has_any_reagents(list(HYPERZINE,PLANTBGONE))) //If there's enough light, you do not have hyperzine in body, and you don't have plant-b-gone inside you, heal
 				adjustBruteLoss(-(light_amount))
 				adjustToxLoss(-(light_amount))
 				adjustOxyLoss(-(light_amount))

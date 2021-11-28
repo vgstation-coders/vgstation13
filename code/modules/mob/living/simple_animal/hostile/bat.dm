@@ -176,7 +176,7 @@
 
 	holder_type = /obj/item/weapon/holder/animal //CAN pick up a single book!
 
-mob/living/simple_animal/hostile/scarybat/book/New()
+/mob/living/simple_animal/hostile/scarybat/book/New()
 	..()
 	if(!book_cover)
 		book_cover = pick( list("red","purple","blue","green") )

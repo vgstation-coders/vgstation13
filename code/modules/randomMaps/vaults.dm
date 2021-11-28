@@ -95,6 +95,13 @@
 
 	message_admins("<span class='info'>Loaded [result] out of [surprise_number] mining surprises.</span>")
 
+/proc/generate_hoboshack()
+	var/list/list_of_shacks = get_map_element_objects(/datum/map_element/hoboshack)
+
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_shacks, 1, filter_function=/proc/asteroid_can_be_placed)
+
+	message_admins("<span class='info'>Loaded space hobo shack [result ? "" : "un"]successfully.</span>")
+
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
 	var/list/dimensions = E.get_dimensions()
 	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])
@@ -117,7 +124,7 @@
 	if(ispath(A, /area))
 		A = locate(A)
 	if(isarea(A))
-		area_turfs = A.get_turfs()
+		area_turfs = A.contents.Copy()
 	else if(istype(A, /list))
 		area_turfs = A
 	ASSERT(area_turfs)
@@ -195,16 +202,20 @@
 		var/vault_x = new_spawn_point.x
 		var/vault_y = new_spawn_point.y
 		var/vault_z = new_spawn_point.z
+		var/vault_rotate = (config.disable_vault_rotation || !ME.can_rotate) ? 0 : pick(0,90,180,270)
 
 		if(population_density == POPULATION_SCARCE)
 			var/turf/t1 = locate(max(1, vault_x - MAX_VAULT_WIDTH - 1), max(1, vault_y - MAX_VAULT_HEIGHT - 1), vault_z)
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
 			valid_spawn_points.Remove(block(t1, t2))
 
-		if(ME.load(vault_x, vault_y, vault_z))
+		if(ME.load(vault_x, vault_y, vault_z, vault_rotate))
 			spawned.Add(ME)
-			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))].")
-
+			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))] [(config.disable_vault_rotation || !ME.can_rotate) ? "" : ", rotated by [vault_rotate] degrees"].")
+			if(!ME.can_rotate)
+				message_admins("<span class='info'>[ME.file_path] was not rotated, can_rotate was set to FALSE.</span>")
+			else if(config.disable_vault_rotation)
+				message_admins("<span class='info'>[ME.file_path] was not rotated, DISABLE_VAULT_ROTATION enabled in config.</span>")
 			successes++
 			if(amount > 0)
 				amount--
@@ -214,7 +225,7 @@
 		else
 			message_admins("<span class='danger'>Can't find [ME.file_path]!</span>")
 
-		sleep(-1)
+		CHECK_TICK
 
 	return successes
 

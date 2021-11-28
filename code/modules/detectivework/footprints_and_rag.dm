@@ -6,10 +6,6 @@
 	var/feet_blood_color
 	var/track_blood_type
 
-/obj/item/clothing/gloves
-	var/transfer_blood = 0
-	var/list/bloody_hands_data = list()
-
 /obj/item/clothing/shoes
 	var/track_blood = 0
 
@@ -23,6 +19,7 @@
 	possible_transfer_amounts = list(5)
 	volume = 5
 	can_be_placed_into = null
+	var/mob/current_target = null
 
 /obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)
 	return
@@ -30,15 +27,37 @@
 /obj/item/weapon/reagent_containers/glass/rag/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
 
-/obj/item/weapon/reagent_containers/glass/rag/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/weapon/reagent_containers/glass/rag/attack(var/mob/living/M, var/mob/living/user, var/def_zone)
 	if (!ismob(M))
 		..()
-	if(user.zone_sel.selecting == "mouth")
+	current_target = null
+	if(user.zone_sel.selecting == "mouth" && ishuman(M))
+		var/mob/living/carbon/human/H = M
+		current_target = H
+		var/self_smother = FALSE
+		if (M == user)
+			self_smother = TRUE//auto-asphyxiation?
+		playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 0, -3)
+		user.visible_message("<span class='warning'>\The [user] puts \a [src] over [self_smother ? "their own mouth" : "\the [M]'s mouth" ]!</span>", "<span class='warning'>You place \the [src] over [self_smother ? "your mouth" : "\the [M]'s mouth" ]!</span>")
 		if(M.reagents && reagents.total_volume)
-			user.visible_message("<span class='warning'>\The [M] has been smothered with \the [src] by \the [user]!</span>", "<span class='warning'>You smother \the [M] with \the [src]!</span>", "You hear some struggling and muffled cries of surprise")
-			src.reagents.reaction(M, TOUCH)
-			spawn(5) src.reagents.clear_reagents()
+			if (do_after(user,H,1 SECONDS))//short, but combined with the time it takes to get grabbed you get enough time to react.
+				var/smother_fail = FALSE
+				if(H.species && H.species.flags & NO_BREATHE)//can they breath?
+					smother_fail = TRUE
+				if(H.wear_mask && H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+					smother_fail = TRUE
+				if(H.glasses && H.glasses.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+					smother_fail = TRUE
+				if(H.head && H.head.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+					smother_fail = TRUE
+				if (smother_fail)
+					user.visible_message("<span class='warning'>\The [user] attempted to smother [self_smother ? "themselves" : "\the [M]"] with \the [src] but [self_smother ? "they were" : "the latter was"] unaffected!</span>", "<span class='warning'>You tried smother [self_smother ? "yourself" : "\the [M]"] with \the [src] but [self_smother ? "" : "they "]were unaffected due to either [self_smother ? "your" : "their "] clothing or [self_smother ? "your" : "their "] species!</span>")
+				else
+					user.visible_message("<span class='warning'>\The [M] has [self_smother ? "smothered themselves" : "been smothered by \the [user]"] with \the [src]!</span>", "<span class='warning'>You smother [self_smother ? "yourself" : "\the [M]"] with \the [src]!</span>", "You hear some struggling and muffled cries of surprise")
+					reagents.trans_to(H, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 			return 1
+		else
+			to_chat(user, "<span class='warning'>There is nothing on the rag to smother them with.</span>")
 	else
 		var/datum/organ/external/targetorgan = M.get_organ(user.zone_sel.selecting)
 		var/list/bleeding_organs = M.get_bleeding_organs()
@@ -48,20 +67,25 @@
 					to_chat(user, "<span class='warning'>The wounds on [M]'s [targetorgan.display_name] have already been bandaged.</span>")
 					return 1
 				else
+					current_target = M
 					user.visible_message("<span class='notice'>[user] uses \a [src] to stem the bleeding on [M]'s [targetorgan.display_name].</span>", \
 					"<span class='notice'>You use your [src] to stem the bleeding on [M]'s [targetorgan.display_name].</span>")
 					qdel(src)
 			else
 				to_chat(user, "<span class='notice'>[M]'s [targetorgan.display_name] is cut wide open, you'll need more than a rag!</span>")
 				return
-		else
-			..()
 
 /obj/item/weapon/reagent_containers/glass/rag/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if (target == current_target)
+		current_target = null
+		return	//we are currently either bandaging them or smothering them
+	current_target = null
 	if(!user.is_holding_item(src))
 		return  //we used the rag as a bandage
 	if(!proximity_flag)
 		return 0 // Not adjacent
+	if (istype(target,/obj/structure/sink))
+		return	// We're here to fill the rag, not use it pointlessly
 	if(reagents.total_volume < 1)
 		to_chat(user, "<span class='notice'>Your rag is dry!</span>")
 		return
@@ -75,4 +99,3 @@
 						qdel(O)
 			reagents.remove_any(1)
 			user.visible_message("<span class='notice'>[user] finishes wiping down \the [target].</span>", "<span class='notice'>You have finished wiping down \the [target]!</span>")
-	return

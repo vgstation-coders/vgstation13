@@ -195,41 +195,6 @@
 		. = ..()
 	atmos_machines.Remove(src)
 
-	/*if(!node1)
-		parent.mingle_with_turf(loc, volume)
-		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
-			nodealert = 1
-
-	else if(!node2)
-		parent.mingle_with_turf(loc, volume)
-		if(!nodealert)
-//			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
-			nodealert = 1
-	else if (nodealert)
-		nodealert = 0
-
-
-	else if(parent)
-		var/environment_temperature = 0
-
-		if(istype(loc, /turf/simulated/))
-			if(loc:blocks_air)
-				environment_temperature = loc:temperature
-			else
-				var/datum/gas_mixture/environment = loc.return_air()
-				environment_temperature = environment.temperature
-
-		else
-			environment_temperature = loc:temperature
-
-		var/datum/gas_mixture/pipe_air = return_air()
-
-		if(abs(environment_temperature-pipe_air.temperature) > minimum_temperature_difference)
-			parent.temperature_interact(loc, volume, thermal_conductivity)
-	*/
-
-
 /obj/machinery/atmospherics/pipe/simple/check_pressure(pressure)
 	if(!loc)
 		return

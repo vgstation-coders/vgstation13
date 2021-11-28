@@ -203,7 +203,24 @@ var/list/shop_prices = list( //Cost in space credits
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
-var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - typesof(/obj/item/clothing/head/helmet/space/rig) - list(/obj/item/clothing/suit/space/rig/engineer/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
+
+var/list/clothing_types_blacklist = list(
+	/obj/item/clothing/suit/space/ert,
+	/obj/item/clothing/head/helmet/space/ert,
+	/obj/item/clothing/head/helmet/space/rig,
+	/obj/item/clothing/mask/facehugger,
+	)
+
+var/list/clothing_blacklist = list(
+	/obj/item/clothing/suit/space/rig/engineer/elite,
+	/obj/item/clothing/suit/space/rig/deathsquad,
+	/obj/item/clothing/suit/space/rig/wizard,
+	/obj/item/clothing/mask/stone/infinite,
+	/obj/item/clothing/suit/armor/laserproof/advanced,
+	/obj/item/clothing/suit/space/rig/sundowner,
+	)
+
+var/list/clothing = list ()
 var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket
@@ -250,7 +267,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		for(var/atom/movable/AM in (src.contents + E.contents))
 
 			if(!is_type_in_list(AM, protected_objects)) continue
-			AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/item_destroyed)
+			AM.register_event(/event/destroyed, src, .proc/item_destroyed)
 
 /area/vault/supermarket/shop/Exited(atom/movable/AM, atom/newloc)
 	..()
@@ -438,7 +455,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	anchored = 1
 	canmove = 0
-	intent = I_HURT
+	a_intent = I_HURT
 
 	faction = "spessmart"
 
@@ -723,7 +740,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			var/price = to_spawn[new_item_type]
 
 			I.name = "[I.name] ($[price])"
-			I.lazy_register_event(/lazy_event/on_destroyed, S, /area/vault/supermarket/shop/proc/item_destroyed) //Only trigger alarm when an item for sale is destroyed
+			I.register_event(/event/destroyed, S, /area/vault/supermarket/shop/proc/item_destroyed) //Only trigger alarm when an item for sale is destroyed
 
 			S.items[I] = price
 
@@ -750,7 +767,13 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	amount = 6
 
 /obj/abstract/map/spawner/supermarket/clothing/New()
-	if(!clothing_prices.len)
+	if (!clothing.len)
+		clothing = existing_typesof(/obj/item/clothing)
+		for (var/clothing_type in clothing_types_blacklist)
+			clothing -= typesof(clothing_type)
+		for (var/clothing_type in clothing_blacklist)
+			clothing -= clothing_type
+	if (!clothing_prices.len)
 		for(var/C in clothing)
 			clothing_prices[C] = 150
 	to_spawn = clothing_prices

@@ -19,6 +19,7 @@
 		initialize()
 
 /obj/item/seeds/initialize()
+	..()
 	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
@@ -47,7 +48,7 @@
 /obj/item/seeds/random
 	seed_type = null
 
-/obj/item/seeds/random/New()
+/obj/item/seeds/random/initialize()
 	seed = SSplant.create_random_seed()
 	seed_type = seed.name
 	..()
@@ -206,6 +207,11 @@
 /obj/item/seeds/carrotseed
 	name = "packet of carrot seeds"
 	seed_type = "carrot"
+	vending_cat = "vegetables"
+
+/obj/item/seeds/diamondcarrotseed
+	name = "packet of diamond carrot seeds"
+	seed_type = "diamondcarrot"
 	vending_cat = "vegetables"
 
 /obj/item/seeds/reishimycelium
@@ -1302,6 +1308,7 @@
 	display_name = "carrots"
 	plant_dmi = 'icons/obj/hydroponics/carrot.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
+	mutants = list("diamondcarrot")
 	chems = list(NUTRIMENT = list(1,20), ZEAXANTHIN = list(3,5))
 
 	lifespan = 25
@@ -1311,6 +1318,19 @@
 	potency = 10
 	growth_stages = 3
 	water_consumption = 6
+
+/datum/seed/carrots/diamond
+	name = "diamondcarrot"
+	seed_name = "diamond carrot"
+	display_name = "diamond carrots"
+	plant_dmi = 'icons/obj/hydroponics/diamondcarrot.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond)
+	mutants = null
+	chems = list(NUTRIMENT = list(1,10), DIAMONDDUST = list(1,5))
+
+	maturation = 10
+	production = 10
+	yield = 3
 
 /datum/seed/weeds
 	name = "weeds"

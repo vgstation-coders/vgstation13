@@ -201,7 +201,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
-	reagents.reaction(target, TOUCH)
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount))
 
 	if (amount > 0)
 		if(user)
@@ -246,7 +246,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
-				return tx_amount
+			return tx_amount
 	// Transfer to container
 	if (can_send /*&& target.reagents**/)
 		var/obj/container = target
@@ -379,3 +379,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.heating(A.thermal_energy_transfer(), temperature)
 		if(user)
 			to_chat(user, "<span class='notice'>You heat \the [src] with \the [A].</span>")
+
+/obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
+	. = ..()
+	for(var/datum/reagent/temp_hearer/R in reagents.reagent_list)
+		R.parent_heard(speech, rendered_speech)
+	//We have to check for a /mob/virtualhearer/one_time here, and kill it ourselves. This is fairly bad OOP.
+	if(virtualhearer && istype(virtualhearer, /mob/virtualhearer/one_time))
+		removeHear()

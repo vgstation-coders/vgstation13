@@ -57,17 +57,19 @@
 
 /obj/machinery/computer/atmos_alert/update_icon()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & BROKEN)
+		icon_state = "atmosb"
 		return
+	else if(stat & NOPOWER)
+		icon_state = "atmos0"
+		return
+
 	if(priority_alarms.len)
 		icon_state = "alert:2"
-
 	else if(minor_alarms.len)
 		icon_state = "alert:1"
-
 	else
 		icon_state = "alert:0"
-	return
 
 
 /obj/machinery/computer/atmos_alert/proc/return_text()

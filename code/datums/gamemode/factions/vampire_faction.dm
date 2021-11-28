@@ -7,6 +7,8 @@
 	late_role = VAMPIRE // Vampires do not change their role.
 	roletype = /datum/role/vampire
 	initroletype = /datum/role/vampire
+	default_admin_voice = "Vampire Overlord"
+	admin_voice_style = "danger"
 	logo_state = "vampire-logo"
 	hud_icons = list("vampire-logo", "thrall-logo")
 

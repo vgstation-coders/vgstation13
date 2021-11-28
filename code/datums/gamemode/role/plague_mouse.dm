@@ -7,8 +7,10 @@
 	wikiroute = ROLE_MINOR
 	logo_state = "plague-logo"
 	greets = list(GREET_DEFAULT)
+	default_admin_voice = "Big Rat"
+	admin_voice_style = "skeleton" // grey, bold and italic
 
-datum/role/plague_mouse/Greet(var/greeting,var/custom)
+/datum/role/plague_mouse/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 

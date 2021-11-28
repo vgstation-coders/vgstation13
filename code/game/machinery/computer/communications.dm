@@ -88,7 +88,7 @@ var/list/shuttle_log = list()
 			usr.unset_machine()
 		return 1
 
-	if (!(src.z in list(STATION_Z,CENTCOMM_Z)))
+	if (!(src.z in list(map.zMainStation,map.zCentcomm)))
 		to_chat(usr, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
@@ -224,8 +224,7 @@ var/list/shuttle_log = list()
 			if(!Adjacent(usr) || usr.incapacitated())
 				return
 			var/datum/striketeam/ert/response_team = new()
-			response_team.mission = ert_reason
-			response_team.trigger_strike()
+			response_team.trigger_strike(usr,ert_reason,TRUE)
 			log_game("[key_name(usr)] has called an ERT with reason: [ert_reason]")
 			message_admins("[key_name_admin(usr)] has called an ERT with reason: [ert_reason]")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -256,7 +255,7 @@ var/list/shuttle_log = list()
 				if(response == "Yes")
 					recall_shuttle(usr)
 					if(!isobserver(usr))
-						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)]."
+						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)] ([usr.x-WORLD_X_OFFSET[usr.z]], [usr.y-WORLD_Y_OFFSET[usr.z]], [usr.z])."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -412,7 +411,7 @@ var/list/shuttle_log = list()
 	if(..(user))
 		return
 
-	if (!(src.z in list(STATION_Z, CENTCOMM_Z)))
+	if (!(src.z in list(map.zMainStation, map.zCentcomm)))
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 
@@ -505,7 +504,7 @@ var/list/shuttle_log = list()
 		emagged = 1
 		if(user)
 			to_chat(user, "Syndicate routing data uploaded!")
-		new/obj/effect/effect/sparks(get_turf(src))
+		new/obj/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
 		authenticated = AUTH_CAPT
 		setMenuState(usr,COMM_SCREEN_MAIN)
@@ -590,7 +589,7 @@ var/list/shuttle_log = list()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
 	if(!isobserver(user))
-		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)]."
+		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)] ([user.x-WORLD_X_OFFSET[user.z]], [user.y-WORLD_Y_OFFSET[user.z]], [user.z])."
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
@@ -653,6 +652,9 @@ var/list/shuttle_log = list()
 
 	if(emergency_shuttle.direction != -1 && emergency_shuttle.online) //check that shuttle isn't already heading to centcomm
 		emergency_shuttle.recall()
+		var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+		if (istype(dynamic_mode))
+			dynamic_mode.update_stillborn_rulesets()
 		log_game("[key_name(user)] has recalled the shuttle.")
 		message_admins("[key_name_admin(user)] has recalled the shuttle - [formatJumpTo(user)].", 1)
 	return

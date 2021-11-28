@@ -15,7 +15,7 @@
 	light_power = 2
 	light_color="#0066FF"
 	layer = SUPERMATTER_WALL_LAYER
-	plane = LIGHTING_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 
 	var/next_check=0
 	var/list/avail_dirs = list(NORTH,SOUTH,EAST,WEST)

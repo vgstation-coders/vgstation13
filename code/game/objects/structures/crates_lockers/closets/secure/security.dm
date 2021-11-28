@@ -18,6 +18,7 @@
 		/obj/item/clothing/suit/captunic,
 		/obj/item/clothing/suit/storage/capjacket,
 		/obj/item/clothing/head/cap,
+		/obj/item/clothing/head/cap/cowboy,
 		/obj/item/clothing/under/rank/captain,
 		/obj/item/clothing/suit/armor/vest,
 		/obj/item/clothing/suit/storage/armorjacketcapt,
@@ -26,9 +27,7 @@
 		/obj/item/clothing/shoes/brown,
 		/obj/item/device/radio/headset/heads/captain,
 		/obj/item/clothing/gloves/captain,
-		/obj/item/clothing/shoes/magboots/captain,
 		/obj/item/weapon/gun/energy/gun,
-		/obj/item/clothing/suit/space/rig/captain,
 		/obj/item/weapon/melee/telebaton,
 		/obj/item/clothing/under/dress/dress_cap,
 		/obj/item/device/gps/secure,
@@ -115,6 +114,7 @@
 		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/HoS/dermal,
+		/obj/item/clothing/head/HoS/cowboy,
 		/obj/item/weapon/cartridge/hos,
 		/obj/item/device/detective_scanner,
 		/obj/item/device/radio/headset/heads/hos,
@@ -152,6 +152,7 @@
 		/obj/item/clothing/suit/armor/vest/warden,
 		/obj/item/clothing/suit/armor/vest/wardenshort,
 		/obj/item/clothing/head/warden,
+		/obj/item/clothing/head/warden/cowboy,
 		/obj/item/weapon/storage/box/flashbangs,
 		/obj/item/weapon/storage/box/bolas,
 		/obj/item/weapon/batteringram,
@@ -230,6 +231,9 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
+	is_wooden = TRUE
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
 
 /obj/structure/closet/secure_closet/detective/atoms_to_spawn()
 	return list(

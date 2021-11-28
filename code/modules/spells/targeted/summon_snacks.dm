@@ -32,15 +32,19 @@
 	..()
 	for(var/mob/living/carbon/target in targets)
 		target.drop_hands(force_drop = 1)
-		if(target.find_empty_hand_index())
-			var/obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_snack/S = new /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_snack(target.loc)
-			var/obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink/D = new /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink(target.loc)
+		var/max_attempts = 10 // martians have 6 hands and should be those with the most hands but let's add a few more just in case. Polymelia Syndrome can also add even more.
+		while (target.find_empty_hand_index() && max_attempts)
+			var/obj/item/weapon/reagent_containers/food/snacks/summoned/S
+			if ((max_attempts % 2) == 0)
+				S = new /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_snack(target.loc)
+			else
+				S = new /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink(target.loc)
+
 			S.spellInherit(menuType, spell_levels[Sp_AMOUNT], spell_levels[Sp_POWER])
 			S.menuOrder(menuType)
-			D.spellInherit(menuType, spell_levels[Sp_AMOUNT], spell_levels[Sp_POWER])
-			D.menuOrder(menuType)
 			target.put_in_hands(S)
-			target.put_in_hands(D)
+
+			max_attempts--
 
 /spell/targeted/summon_snacks/on_added(mob/user)
 	name = "Summon Filling Snacks"

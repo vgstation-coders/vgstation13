@@ -7,7 +7,7 @@
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 500
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | MULTIOUTPUT
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
 	var/input_path = /obj/item/weapon/reagent_containers/food/snacks/egg
@@ -15,6 +15,7 @@
 	var/speed_bonus = 0
 	var/circuitpath = /obj/item/weapon/circuitboard/egg_incubator
 	var/active_state = "incubator_old_on"
+	output_dir = 0
 
 /obj/machinery/egg_incubator/New()
 	. = ..()
@@ -48,10 +49,10 @@
 /obj/machinery/egg_incubator/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
 		return 1
-	if(contents.len >= limit)
-		to_chat(user, "\The [src] has no more space!")
-		return 1
-	if (istype(O,input_path))
+	if(istype(O,input_path))
+		if(contents.len >= limit)
+			to_chat(user, "\The [src] has no more space!")
+			return 1
 		if(animal_count[/mob/living/simple_animal/chicken] >= ANIMAL_CHILD_CAP)
 			to_chat(user, "<span class='warning'>You get the feeling there are enough of those already.</span>")
 			return 1
@@ -123,9 +124,15 @@
 /obj/machinery/egg_incubator/proc/eject(var/obj/E)
 	if(E.loc != src)
 		return //You can't eject it if it's not here.
-	E.forceMove(get_turf(src))
+	E.forceMove(get_step(get_turf(src), output_dir))
 	src.updateUsrDialog()
 	visible_message("<span class='info'>\The [E] is released from \the [src].</span>")
+
+/obj/machinery/egg_incubator/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, input_path))
+		if(contents.len >= limit || animal_count[/mob/living/simple_animal/chicken] >= ANIMAL_CHILD_CAP)
+			return
+		AM.forceMove(src)
 
 /obj/machinery/egg_incubator/box_cloner
 	name = "box flesh cloner"
@@ -150,3 +157,5 @@
 /obj/machinery/egg_incubator/box_cloner/getProgress(var/obj/item/weapon/reagent_containers/food/snacks/meat/box/B)
 	if(istype(B))
 		return B.amount_cloned
+
+

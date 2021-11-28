@@ -74,6 +74,9 @@
 	melee_damage_lower=10
 	melee_damage_upper=35
 
+/mob/living/simple_animal/hostile/bear/panda/get_butchering_products()
+	return list(/datum/butchering_product/skin/bear/panda, /datum/butchering_product/teeth/lots)
+
 /mob/living/simple_animal/hostile/bear/brownbear
 	name = "brown bear"
 	desc = "Does it shit in the woods?"
@@ -85,9 +88,12 @@
 
 	faction = "forest"
 
+/mob/living/simple_animal/hostile/bear/brownbear/get_butchering_products()
+	return list(/datum/butchering_product/skin/bear/brownbear, /datum/butchering_product/teeth/lots)
+
 /mob/living/simple_animal/hostile/bear/polarbear
 	name = "space polar bear"
-	desc = "You would think that space would be considered cold enough for regular space bears, well these are adapted for colder climates"
+	desc = "You'd think that space would be considered cold enough for regular space bears, well these are adapted for even colder climates!"
 	icon_state = "polarbear"
 	icon_living = "polarbear"
 	icon_dead = "polarbear_dead"
@@ -98,6 +104,9 @@
 	melee_damage_lower=10
 	melee_damage_upper=40
 	faction = "mining"
+
+/mob/living/simple_animal/hostile/bear/polarbear/get_butchering_products()
+	return list(/datum/butchering_product/skin/bear/polarbear, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/hostile/bear/spare
 	name = "spare bear"
@@ -122,6 +131,9 @@
 /mob/living/simple_animal/hostile/bear/spare/GetAccess()
 	return get_all_accesses()
 
+/mob/living/simple_animal/hostile/bear/spare/get_butchering_products()
+	return list(/datum/butchering_product/skin/bear/spare, /datum/butchering_product/teeth/lots)
+
 /mob/living/simple_animal/hostile/bear/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(stat != DEAD)
@@ -130,6 +142,8 @@
 		else
 			icon_state = default_icon_floor
 
+/mob/living/simple_animal/hostile/bear/get_butchering_products()
+	return list(/datum/butchering_product/skin/bear, /datum/butchering_product/teeth/lots)
 
 /mob/living/simple_animal/hostile/bear/Life()
 	if(timestopped)

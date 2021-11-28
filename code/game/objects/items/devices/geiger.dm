@@ -16,10 +16,10 @@
 	update_icon()
 
 /obj/item/device/geiger_counter/pickup(mob/user)
-	user.lazy_register_event(/lazy_event/on_irradiate, src, .proc/measure_rad)
+	user.register_event(/event/irradiate, src, .proc/measure_rad)
 
 /obj/item/device/geiger_counter/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/measure_rad)
+	user.unregister_event(/event/irradiate, src, .proc/measure_rad)
 
 
 /obj/item/device/geiger_counter/proc/measure_rad(mob/living/carbon/human/user, rads)

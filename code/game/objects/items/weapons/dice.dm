@@ -140,7 +140,7 @@
 				result = 24
 				sleep(40)
 			var/turf/epicenter = get_turf(src)
-			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap)
+			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
 			if(cap)
 				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
 					if(bhangmeter)
@@ -149,7 +149,7 @@
 
 /obj/item/weapon/dice/d20/cursed
 	name = "\improper Mysterious d20"
-	desc = "Something about this dice seems wrong"
+	desc = "Something about this dice seems wrong."
 	var/deactivated = 0 //Eventually the dice runs out of power
 	var/infinite = 0 //dice with 1 will not run out
 	mech_flags = MECH_SCAN_ILLEGAL
@@ -272,7 +272,7 @@
 					to_chat(user, "<span class=sinister><B>You get nothing. No curse or reward! </span></B>")
 				if(13)
 					to_chat(user, "<span class=sinister><B>You've rolled 13! The cursed dice is broken! </span></B>")
-					explosion(get_turf(src), 0, 0, 4, 7)
+					explosion(get_turf(src), 0, 0, 4, 7, whodunnit = user)
 					to_chat(user, "<span class=danger><B>The dice explosively shatters! </span></B>")
 					qdel(src)
 

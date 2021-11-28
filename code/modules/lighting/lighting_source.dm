@@ -210,29 +210,37 @@
 	applied_lum_b = lum_b
 
 	FOR_DVIEW(var/turf/T, light_range, source_turf, INVISIBILITY_LIGHTING)
-		if (!T.lighting_corners_initialised)
-			T.generate_missing_corners()
+		apply_lum_to_turf(T,update_gen)
 
-		for (var/datum/lighting_corner/C in T.get_corners())
-			if (C.update_gen == update_gen)
-				continue
-
-			C.update_gen = update_gen
-			C.affecting += src
-
-			if (!C.active)
-				effect_str[C] = 0
-				continue
-
-			APPLY_CORNER(C)
-
-		if (!T.affecting_lights)
-			T.affecting_lights = list()
-
-		T.affecting_lights += src
-		affecting_turfs    += T
+		if(istype(T,/turf/portal))
+			var/turf/portal/P = T
+			if(P.target_turf)
+				apply_lum_to_turf(P.target_turf,update_gen)
 
 	update_gen++
+
+/datum/light_source/proc/apply_lum_to_turf(var/turf/T,var/update_gen)
+	if (!T.lighting_corners_initialised)
+		T.generate_missing_corners()
+
+	for (var/datum/lighting_corner/C in T.get_corners())
+		if (C.update_gen == update_gen)
+			continue
+
+		C.update_gen = update_gen
+		C.affecting += src
+
+		if (!C.active)
+			effect_str[C] = 0
+			continue
+
+		APPLY_CORNER(C)
+
+	if (!T.affecting_lights)
+		T.affecting_lights = list()
+
+	T.affecting_lights += src
+	affecting_turfs    += T
 
 /datum/light_source/proc/remove_lum()
 	applied = FALSE
@@ -266,6 +274,20 @@
 			T.generate_missing_corners()
 		corners |= T.get_corners()
 		turfs   += T
+		var/turf/portal/P = locate(/turf/portal) in T
+		if(P && isturf(P.loc))
+			var/turf/TP = P.loc
+			if (!TP.lighting_corners_initialised)
+				TP.generate_missing_corners()
+			corners |= TP.get_corners()
+			turfs   += TP
+		P = locate(/turf/portal) in T.vis_locs
+		if(P && isturf(P.loc))
+			var/turf/TP = P.loc
+			if (!TP.lighting_corners_initialised)
+				TP.generate_missing_corners()
+			corners |= TP.get_corners()
+			turfs   += TP
 
 	var/list/L = turfs - affecting_turfs // New turfs, add us to the affecting lights of them.
 	affecting_turfs += L

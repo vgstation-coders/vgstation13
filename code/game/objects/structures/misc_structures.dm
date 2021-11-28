@@ -68,7 +68,7 @@
 	spear = new (src)
 	..(A, H)
 
-obj/structure/bigpeppermint_red
+/obj/structure/bigpeppermint_red
 	name = "mounted peppermint"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "bigpeppermint_red"
@@ -76,7 +76,7 @@ obj/structure/bigpeppermint_red
 	density = 0
 	anchored = 1
 
-obj/structure/bigpeppermint_green
+/obj/structure/bigpeppermint_green
 	name = "mounted peppermint"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "bigpeppermint_green"

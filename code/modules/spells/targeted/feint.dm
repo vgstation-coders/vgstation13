@@ -24,7 +24,7 @@
 
 	anim(location = mobloc, target = L, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", direction = L.dir, name = "water")
 	L.ExtinguishMob()
-	var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+	var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 	steam.set_up(10, 0, mobloc)
 	steam.start()
 
@@ -57,7 +57,7 @@
 	var/mob/M = pick(targets)
 	var/targloc = get_turf(get_step(M,turn(M.dir,180)))
 
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 	smoke.set_up(3, 0, targloc)
 	smoke.start()
 	L.forceMove(targloc)

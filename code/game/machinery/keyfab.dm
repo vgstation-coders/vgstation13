@@ -4,7 +4,7 @@
 
 /obj/machinery/keyfab
 	name = "key fabricator"
-	desc = "A machine that can print keys"
+	desc = "A machine that can print keys."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "old_recharger"
 	density = 0

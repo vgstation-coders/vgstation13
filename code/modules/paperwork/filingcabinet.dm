@@ -16,7 +16,8 @@
 	icon_state = "filingcabinet"
 	density = 1
 	anchored = 1
-
+	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
+	w_type = RECYK_METAL
 
 /obj/structure/filingcabinet/chestdrawer
 	name = "chest drawer"
@@ -52,6 +53,15 @@
 		P.playtoolsound(loc, 50)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
+	else if(iswelder(P))
+		var/obj/item/tool/weldingtool/WT = P
+		if(!WT.remove_fuel(1,user))
+			return
+		new /obj/item/stack/sheet/metal(loc, 2)
+		for(var/mob/M in viewers(src))
+			M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
+		qdel(src)
+		return
 	else
 		to_chat(user, "<span class='notice'>You can't put [P] in [src]!</span>")
 

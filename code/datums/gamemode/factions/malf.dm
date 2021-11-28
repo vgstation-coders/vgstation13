@@ -10,6 +10,8 @@
 	initroletype = /datum/role/malfAI //First addition should be the AI
 	roletype = /datum/role/malfbot //Then anyone else should be bots
 	logo_state = "malf-logo"
+	default_admin_voice = "01100111 01101111 01100100" // god
+	admin_voice_style = "siliconsay"
 	var/apcs = 0
 	var/AI_win_timeleft = 1800
 	playlist = "malfdelta"
@@ -44,6 +46,9 @@
 		if(!living_ais && stage<MALF_CHOOSING_NUKE)
 			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
+			var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+			if (istype(dynamic_mode))
+				dynamic_mode.update_stillborn_rulesets()
 			return
 		if(apcs >= 3 && can_malf_ai_takeover())
 			AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
@@ -59,7 +64,7 @@
 /datum/faction/malf/proc/can_malf_ai_takeover()
 	for(var/datum/role/malfAI in members) //if there happens to be more than one malfunctioning AI, there only needs to be one in the main station: the crew can just kill that one and the countdown stops while they get the rest
 		var/turf/T = get_turf(malfAI.antag.current)
-		if(T && (T.z == STATION_Z))
+		if(T && (T.z == map.zMainStation))
 			return TRUE
 	return FALSE
 

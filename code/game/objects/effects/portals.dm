@@ -3,6 +3,7 @@
 	desc = "Looks stable, but still, best to test it with the clown first."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "portal0"
+	mouse_opacity = 1
 	var/mask = "portal_mask"
 	var/open_sound = 'sound/effects/portal_open.ogg'
 	var/close_sound = 'sound/effects/portal_close.ogg'
@@ -161,7 +162,7 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/teleport(atom/movable/M as mob|obj)
 	if(istype(M, /obj/effect)) //sparks don't teleport
 		return
-	if (M.anchored && !istype(M, /obj/mecha) && !istype(M, /obj/item/projectile))
+	if (!isobserver(M) && M.anchored && !istype(M, /obj/mecha) && !istype(M, /obj/item/projectile))
 		return
 	if (!target)
 		visible_message("<span class='warning'>The portal fails to find a destination and dissipates into thin air.</span>")

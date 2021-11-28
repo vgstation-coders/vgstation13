@@ -225,6 +225,9 @@
 		dat += "(none)"
 	return dat
 
+/datum/gamemode/proc/send2servers()
+	return
+
 /datum/gamemode/proc/get_player_count()
 	var/players = 0
 	for(var/mob/new_player/P in player_list)

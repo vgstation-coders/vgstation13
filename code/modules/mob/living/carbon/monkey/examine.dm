@@ -5,7 +5,7 @@
 	if ((src.handcuffed &&  handcuffed.is_visible()) || (src.mutual_handcuffs && mutual_handcuffs.is_visible()))
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
 	if (src.hat && hat.is_visible())
-		msg += "It is wearing [bicon(src.hat)] \a [src.hat] on its head.\n"
+		msg += "It is wearing [bicon(src.hat)] \a [src.hat] on its head.[hat.description_accessories()][hat.description_hats()]\n"
 	if (src.wear_mask && !(wear_mask.invisibility || wear_mask.alpha <= 1))
 		msg += "It has [bicon(src.wear_mask)] \a [src.wear_mask] over its face.\n"
 	if (src.glasses && glasses.is_visible())

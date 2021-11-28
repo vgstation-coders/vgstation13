@@ -93,9 +93,9 @@ var/global/list/alert_overlays_global = list()
 		"cold"
 	)
 
-/obj/machinery/door/firedoor/New()
+/obj/machinery/door/firedoor/New(loc, new_dir)
 	. = ..()
-
+	change_dir(new_dir)
 	if(!("[src.type]" in alert_overlays_global))
 		alert_overlays_global += list("[src.type]" = list("alert_hot" = list(),
 														"alert_cold" = list())
@@ -134,7 +134,6 @@ var/global/list/alert_overlays_global = list()
 			if(A)
 				A.all_doors |= src
 				areas_added |= A
-
 
 /obj/machinery/door/firedoor/initialize()
 	if (twin) // Already paired with something
@@ -361,6 +360,18 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	do_interaction(user, C)
+
+/obj/machinery/door/firedoor/attack_animal(var/mob/living/simple_animal/M as mob)
+	M.delayNextAttack(8)
+	if(M.melee_damage_upper == 0)
+		return
+	M.do_attack_animation(src, M)
+	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
+					  "<span class='warning'>You smash against \the [src].</span>", \
+					  "You hear twisting metal.")
+	if(prob(33))
+		new /obj/item/firedoor_frame(get_turf(src))
+		qdel(src)
 
 /obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/weapon/C, var/no_reruns = FALSE)
 	if(operating)
@@ -590,13 +601,24 @@ var/global/list/alert_overlays_global = list()
 	heat_proof = 1
 	air_properties_vary_with_direction = 1
 	flow_flags = ON_BORDER
+	pass_flags_self = PASSDOOR|PASSGLASS
+
+/obj/machinery/door/firedoor/border_only/New()
+	..()
+	setup_border_dummy()
 
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		return !density
-	return 1
+	if(istype(mover) && mover.checkpass(pass_flags_self))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/firedoor/CanAStarPass()
@@ -607,19 +629,6 @@ var/global/list/alert_overlays_global = list()
 		open()
 	else
 		close()
-
-/obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
 
 /obj/machinery/door/firedoor/border_only/is_fulltile()
 	return 0
@@ -647,17 +656,12 @@ var/global/list/alert_overlays_global = list()
 		return 0
 
 	var/current_turf = get_turf(src)
-	var/turf_face = get_step(current_turf,user.dir)
-	if(SSair.air_blocked(current_turf, turf_face))
-		to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
-		return 1
-	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
+	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in current_turf
 	if(F && F.dir == user.dir)
 		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
 		return 1
 	if(do_after(user, user, 5 SECONDS))
-		var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
-		B.change_dir(user.dir)
+		new /obj/machinery/door/firedoor/border_only(current_turf, user.dir)
 		qdel(src)
 
 /obj/item/firedoor_frame/attackby(var/obj/item/weapon/C, var/mob/user)

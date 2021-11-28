@@ -100,7 +100,7 @@ Attach to transfer valve and open. BOOM.
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
-	var/obj/effect/effect/foam/fire/W = locate() in contents
+	var/obj/effect/foam/fire/W = locate() in contents
 	if(istype(W))
 		return 0
 	if(fire_protection > world.time-300)
@@ -237,7 +237,7 @@ Attach to transfer valve and open. BOOM.
 					continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
-				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
+				var/obj/effect/foam/fire/W = locate() in enemy_tile
 				if(istype(W))
 					firelevel -= 3
 					continue
@@ -276,13 +276,13 @@ Attach to transfer valve and open. BOOM.
 	set_light(0)
 	..()
 
-turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
-turf/proc/apply_fire_protection()
-turf/simulated/apply_fire_protection()
+/turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
+/turf/proc/apply_fire_protection()
+/turf/simulated/apply_fire_protection()
 	fire_protection = world.time
 
 
-datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
+/datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	// NOTE: zburn is also called from canisters and in tanks/pipes (via react()).  Do NOT assume T is always a turf.
 	//  In the aforementioned cases, it's null. - N3X.
 	var/value = 0
@@ -380,7 +380,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 
 	return still_burning
 
-datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
+/datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	//this check comes up very often and is thus centralized here to ease adding stuff
 	// zburn is used in tank fires, as well. This check, among others, broke tankbombs. - N3X
 	/*
@@ -404,7 +404,7 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 
 	return 0
 
-datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
+/datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	//Calculates the firelevel based on one equation instead of having to do this multiple times in different areas.
 
 	var/total_fuel = 0

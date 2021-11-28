@@ -6,6 +6,8 @@
 						"Chief Engineer", "Chief Medical Officer", "Research Director")
 	protected_traitor_prob = PROB_PROTECTED_RARE
 	logo_state = "change-logoa"
+	default_admin_voice = "Changeling Hivemind"
+	admin_voice_style = "borer"
 	var/list/absorbed_dna = list()
 	var/list/absorbed_species = list()
 	var/list/absorbed_languages = list()

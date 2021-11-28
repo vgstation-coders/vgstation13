@@ -13,7 +13,7 @@
 
 /obj/structure/flora/attackby(var/obj/item/I, var/mob/user, params)
 	if(shovelaway && isshovel(I))
-		to_chat(user,"<span class='notice'>You clear away \the [src]</span>")
+		to_chat(user,"<span class='notice'>You clear away \the [src].</span>")
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
 		qdel(src)
 		return 1
@@ -115,15 +115,15 @@
 
 	for(var/turf/T in circlerange(src,2))
 		if(T.y > y)
-			T.lazy_register_event(/lazy_event/on_entered, src, .proc/give_transparency)
-			T.lazy_register_event(/lazy_event/on_exited, src, .proc/remove_transparency)
+			T.register_event(/event/entered, src, .proc/give_transparency)
+			T.register_event(/event/exited, src, .proc/remove_transparency)
 
 
 /obj/structure/flora/tree/Destroy()
 	for(var/turf/T in circlerange(src,2))
 		if(T.y > y)
-			T.lazy_unregister_event(/lazy_event/on_entered, src, .proc/give_transparency)
-			T.lazy_unregister_event(/lazy_event/on_exited, src, .proc/remove_transparency)
+			T.unregister_event(/event/entered, src, .proc/give_transparency)
+			T.unregister_event(/event/exited, src, .proc/remove_transparency)
 	..()
 
 /obj/structure/flora/tree/proc/update_transparency()
@@ -541,7 +541,7 @@
 //and now these defines
 /obj/structure/flora/rock
 	name = "rock"
-	desc = "a rock"
+	desc = "A rock."
 	icon_state = "rock1"
 	icon = 'icons/obj/flora/rocks.dmi'
 	anchored = 1

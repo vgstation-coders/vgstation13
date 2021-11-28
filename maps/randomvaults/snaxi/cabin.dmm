@@ -6,7 +6,7 @@
 "i" = (/obj/machinery/space_heater/campfire/stove/fireplace/preset,/turf/simulated/floor{icon_state = "dark"},/area)
 "k" = (/obj/structure/flora/tree_stump,/turf/unsimulated/floor/snow,/area)
 "u" = (/obj/structure/bed/chair/comfy/couch/right/red{dir = 1},/turf/simulated/floor/wood,/area)
-"w" = (/obj/structure/rack,/obj/item/weapon/grown/log/tree,/obj/item/weapon/grown/log/tree,/obj/item/weapon/grown/log/tree,/obj/structure/closet/fireaxecabinet{pixel_y = 30},/turf/simulated/floor{icon_state = "dark"},/area)
+"w" = (/obj/structure/rack,/obj/item/weapon/grown/log/tree,/obj/item/weapon/grown/log/tree,/obj/item/weapon/grown/log/tree,/obj/structure/fireaxecabinet{pixel_y = 30},/turf/simulated/floor{icon_state = "dark"},/area)
 "x" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area)
 "E" = (/turf/simulated/floor/carpet,/area)
 "G" = (/obj/structure/closet/cabinet/snow,/obj/item/weapon/lighter/zippo,/obj/item/device/multitool,/turf/simulated/floor/wood,/area)

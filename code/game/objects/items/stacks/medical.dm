@@ -103,7 +103,7 @@
 										"<span class='notice'>You place a bandaid over \the [W.desc] on [M]'s [affecting.display_name].</span>")
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -134,7 +134,7 @@
 										"<span class='notice'>You salve the wounds on [M]'s [affecting.display_name].</span>" )
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -194,7 +194,7 @@
 				affecting.heal_damage(rand(heal_brute, heal_brute + 5), 0)
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -227,7 +227,7 @@
 				affecting.heal_damage(0, rand(heal_burn, heal_burn + 5))
 				use(1)
 		else
-			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user, src))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else

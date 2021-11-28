@@ -7,6 +7,7 @@ var/global/list/disease2_list = list()
 	var/subID = 0// 000 to 9999, set if the pathogen underwent effect or antigen mutation
 	var/childID = 0// 01 to 99, incremented as the pathogen gets analyzed after a mutation
 	var/list/datum/disease2/effect/effects = list()
+	var/list/datum/disease2/effect/fake_effects = list()
 
 	//When an opportunity for the disease to spread to a mob arrives, runs this percentage through prob()
 	//Ignored if infected materials are ingested (injected with infected blood, eating infected meat)
@@ -318,11 +319,15 @@ var/global/list/disease2_list = list()
 		return
 
 	if (chosen_form == "infect with an already existing pathogen")
-		var/chosen_pathogen = input(C, "Choose a pathogen", "Choose a pathogen") as null | anything in disease2_list
+		var/list/existing_pathogen = list()
+		for (var/pathogen in disease2_list)
+			var/datum/disease2/disease/dis = disease2_list[pathogen]
+			existing_pathogen["[dis.real_name()]"] = pathogen
+		var/chosen_pathogen = input(C, "Choose a pathogen", "Choose a pathogen") as null | anything in existing_pathogen
 		if (!chosen_pathogen)
 			qdel(D)
 			return
-		var/datum/disease2/disease/dis = disease2_list[chosen_pathogen]
+		var/datum/disease2/disease/dis = disease2_list[existing_pathogen[chosen_pathogen]]
 		D = dis.getcopy()
 		D.origin = "[D.origin] (Badmin)"
 	else
@@ -359,11 +364,7 @@ var/global/list/disease2_list = list()
 		D.robustness = input(C, "What will be your pathogen's robustness? (1-100) Lower values mean that infected can carry the pathogen without getting affected by its symptoms.", "Pathogen Robustness", D.infectionchance) as num
 		D.robustness = clamp(D.strength,0,100)
 
-		var/new_id = copytext(sanitize(input(C, "You can pick a 4 number ID for your Pathogen. Otherwise a random ID will be generated.", "Pick a unique ID", rand(0,9999)) as null | num),1,4)
-		if (!new_id)
-			D.uniqueID = rand(0,9999)
-		else
-			D.uniqueID = new_id
+		D.uniqueID = clamp(input(C, "You can specify the 4 number ID for your Pathogen, or just use this randomly generated one.", "Pick a unique ID", rand(0,9999)) as num, 0, 9999)
 
 		D.subID = rand(0,9999)
 		D.childID = 0
@@ -564,6 +565,12 @@ var/global/list/disease2_list = list()
 				if (3)
 					if (mob.bodytemperature > 350)
 						to_chat(mob, "<span class='warning'>Your arms are heavy.</span>")
+						fever_warning++
+				if (4)
+					if(ishuman(mob) && mob.bodytemperature > 365)
+						var/mob/living/carbon/human/H = mob
+						to_chat(mob, "<span class='warning'>There's vomit on your sweater already.</span>")
+						H.reagents.add_reagent(SPAGHETTI,20)
 						fever_warning++
 
 
@@ -827,6 +834,13 @@ var/global/list/virusDB = list()
 		var/datum/data/record/V = virusDB["[uniqueID]-[subID]"]
 		.= V.fields["name"]
 
+/datum/disease2/disease/proc/real_name()
+	.= "[form] #[add_zero("[uniqueID]", 4)]-[add_zero("[subID]", 4)]"
+	if ("[uniqueID]-[subID]" in virusDB)
+		var/datum/data/record/v = virusDB["[uniqueID]-[subID]"]
+		var/nickname = v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""
+		. += nickname
+
 /datum/disease2/disease/proc/get_subdivisions_string()
 	var/subdivision = (strength - ((robustness * strength) / 100)) / max_stage
 	var/dat = "("
@@ -843,20 +857,33 @@ var/global/list/virusDB = list()
 		dat += "[A]"
 	return dat
 
-/datum/disease2/disease/proc/get_info()
+/datum/disease2/disease/proc/get_info(var/trueinfo = FALSE)
 	var/r = "GNAv3 [name()]"
 	r += "<BR>Strength / Robustness : <b>[strength]% / [robustness]%</b> - [get_subdivisions_string()]"
 	r += "<BR>Infectability : <b>[infectionchance]%</b>"
 	r += "<BR>Spread forms : <b>[get_spread_string()]</b>"
 	r += "<BR>Progress Speed : <b>[stageprob]%</b>"
 	r += "<dl>"
+	var/i = 1
 	for(var/datum/disease2/effect/e in effects)
-		r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
-		r += "<dd>[e.desc]</dd>"
+		if(fake_effects.len >= i && !trueinfo)
+			var/datum/disease2/effect/f_e = fake_effects[i]
+			r += "<dt> &#x25CF; <b>Stage [f_e.stage] - [f_e.name]</b> (Danger: [f_e.badness]). Strength: <b>[f_e.multiplier]</b>. Occurrence: <b>[f_e.chance]%</b>.</dt>"
+			r += "<dd>[f_e.desc]</dd>"
+		else
+			r += "<dt> &#x25CF; <b>Stage [e.stage] - [e.name]</b> (Danger: [e.badness]). Strength: <b>[e.multiplier]</b>. Occurrence: <b>[e.chance]%</b>.</dt>"
+			r += "<dd>[e.desc]</dd>"
+		i++
 	r += "</dl>"
 	r += "<BR>Antigen pattern: [get_antigen_string()]"
 	r += "<BR><i>last analyzed at: [worldtime2text()]</i>"
 	return r
+
+/datum/disease2/disease/proc/get_total_badness()
+	var/total_badness = 0
+	for(var/datum/disease2/effect/e in effects)
+		total_badness += text2num(e.badness)
+	return total_badness
 
 /datum/disease2/disease/proc/addToDB()
 	if ("[uniqueID]-[subID]" in virusDB)
@@ -874,6 +901,7 @@ var/global/list/virusDB = list()
 	v.fields["name"] = name()
 	v.fields["nickname"] = ""
 	v.fields["description"] = get_info()
+	v.fields["description_hidden"] = get_info(TRUE)
 	v.fields["custom_desc"] = "No comments yet."
 	v.fields["antigen"] = get_antigen_string()
 	v.fields["spread type"] = get_spread_string()

@@ -1,7 +1,7 @@
 /mob/living/simple_animal/hostile/shade
 	name = "red shade"
 	real_name = "red shade"
-	desc = "A vengeful spirit"
+	desc = "A vengeful spirit."
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "red shade"
 	icon_living = "red shade"
@@ -34,6 +34,8 @@
 	mob_property_flags = MOB_SUPERNATURAL
 	alpha = 180
 
+	blooded = FALSE
+
 /mob/living/simple_animal/hostile/shade/New()
 	..()
 	add_language(LANGUAGE_CULT)
@@ -59,6 +61,8 @@
 	alpha = 255
 
 /mob/living/simple_animal/hostile/shade/gib(var/animation = 0, var/meat = 1)
+	if(!isUnconscious())
+		forcesay("-")
 	death(TRUE)
 	monkeyizing = TRUE
 	canmove = FALSE

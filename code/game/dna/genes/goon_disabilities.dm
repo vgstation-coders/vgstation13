@@ -27,24 +27,23 @@
 
 /datum/dna/gene/disability/radioactive
 	name = "Radioactive"
-	desc = "The subject suffers from constant radiation sickness and causes the same on nearby organics."
-	activation_message = "You feel a strange sickness permeate your whole body."
-	deactivation_message = "You no longer feel awful and sick all over."
+	desc = "The subject emits radiation to nearby people, but rapidly gets rid of their own radiation."
+	activation_message = "You feel a strange warmth permeate your whole body."
+	deactivation_message = "You no longer feel strangely warm."
 	flags = GENE_UNNATURAL
 
 /datum/dna/gene/disability/radioactive/New()
 	..()
 	block = RADBLOCK
 
-/datum/dna/gene/disability/radioactive/OnMobLife(var/mob/owner)
-	owner.radiation = max(owner.radiation, 20)
-	for(var/mob/living/L in range(1, owner))
-		if(L == owner)
-			continue
-		to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-		L.apply_radiation(5, RAD_EXTERNAL)
-
-	emitted_harvestable_radiation(get_turf(owner), 1, range = 2) //Around 70W, nothing much really
+/datum/dna/gene/disability/radioactive/OnMobLife(var/mob/living/owner)
+	var/radiation = owner.radiation
+	owner.radiation = max(radiation - 30, 0)
+	if(owner.getarmor(null, "rad") < 100)
+		emitted_harvestable_radiation(get_turf(owner), radiation * 100, range = 3) //1 power = ~70W, are you ready for radiation engines?
+		for(var/mob/living/L in orange(1, owner)) //Everyone nearby except the user
+			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
+			L.apply_radiation(5, RAD_EXTERNAL)
 
 /datum/dna/gene/disability/radioactive/OnDrawUnderlays(var/mob/M,var/g,var/fat)
 	return "rads[fat]_s"
@@ -74,6 +73,10 @@
 	if(M.overeatduration < 500)
 		M.overeatduration = 600 // This ensures M_FAT activates if the mob isn't already fat
 
+/datum/dna/gene/disability/fat/deactivate(var/mob/M,var/connected,var/flags)
+	if(..() && M.nutrition <= OVEREAT_THRESHOLD)
+		M.overeatduration = M.overeatduration > 600 ? M.overeatduration - 600 : 0
+
 /datum/dna/gene/disability/fat/New()
 	..()
 	block = FATBLOCK
@@ -92,52 +95,10 @@
 /datum/dna/gene/disability/smile/New()
 	..()
 	block = SMILEBLOCK
+	speech_filter = new /datum/speech_filter/smile
 
 /datum/dna/gene/disability/smile/OnSay(var/mob/M, var/datum/speech/speech)
-	//Time for a friendly game of SS13
-	speech.message = replacetext(speech.message,"stupid","smart")
-	speech.message = replacetext(speech.message,"retard","genius")
-	speech.message = replacetext(speech.message,"unrobust","robust")
-	speech.message = replacetext(speech.message,"dumb","smart")
-	speech.message = replacetext(speech.message,"awful","great")
-	speech.message = replacetext(speech.message,"gay",pick("nice","ok","alright"))
-	speech.message = replacetext(speech.message,"horrible","fun")
-	speech.message = replacetext(speech.message,"terrible","terribly fun")
-	speech.message = replacetext(speech.message,"terrifying","wonderful")
-	speech.message = replacetext(speech.message,"gross","cool")
-	speech.message = replacetext(speech.message,"disgusting","amazing")
-	speech.message = replacetext(speech.message,"loser","winner")
-	speech.message = replacetext(speech.message,"useless","useful")
-	speech.message = replacetext(speech.message,"oh god","cheese and crackers")
-	speech.message = replacetext(speech.message,"jesus","gee wiz")
-	speech.message = replacetext(speech.message,"weak","strong")
-	speech.message = replacetext(speech.message,"kill","hug")
-	speech.message = replacetext(speech.message,"murder","tease")
-	speech.message = replacetext(speech.message,"ugly","beutiful")
-	speech.message = replacetext(speech.message,"douchbag","nice guy")
-	speech.message = replacetext(speech.message,"whore","lady")
-	speech.message = replacetext(speech.message,"nerd","smart guy")
-	speech.message = replacetext(speech.message,"moron","fun person")
-	speech.message = replacetext(speech.message,"IT'S LOOSE","EVERYTHING IS FINE")
-	speech.message = replacetext(speech.message,"rape","hug fight")
-	speech.message = replacetext(speech.message,"idiot","genius")
-	speech.message = replacetext(speech.message,"fat","thin")
-	speech.message = replacetext(speech.message,"beer","water with ice")
-	speech.message = replacetext(speech.message,"drink","water")
-	speech.message = replacetext(speech.message,"feminist","empowered woman")
-	speech.message = replacetext(speech.message,"i hate you","you're mean")
-	speech.message = replacetext(speech.message,"nigger","african american")
-	speech.message = replacetext(speech.message,"jew","jewish")
-	speech.message = replacetext(speech.message,"shit","shiz")
-	speech.message = replacetext(speech.message,"crap","poo")
-	speech.message = replacetext(speech.message,"slut","tease")
-	speech.message = replacetext(speech.message,"ass","butt")
-	speech.message = replacetext(speech.message,"damn","dang")
-	speech.message = replacetext(speech.message,"fuck","")
-	speech.message = replacetext(speech.message,"penis","privates")
-	speech.message = replacetext(speech.message,"cunt","privates")
-	speech.message = replacetext(speech.message,"dick","jerk")
-	speech.message = replacetext(speech.message,"vagina","privates")
+	..()
 	if(prob(30))
 		speech.message += " check your privilege."
 
@@ -152,22 +113,13 @@
 /datum/dna/gene/disability/elvis/New()
 	..()
 	block = ELVISBLOCK
+	speech_filter = new /datum/speech_filter/elvis
 
 /datum/dna/gene/disability/elvis/OnSay(var/mob/M, var/datum/speech/speech)
 	if(prob(5))
 		M.visible_message("<b>[M]</b> [pick("rambles to themselves.","begins talking to themselves.")]")
 		return 1
-	speech.message = replacetext(speech.message,"im not","I ain't")
-	speech.message = replacetext(speech.message,"i'm not","I aint")
-	speech.message = replacetext(speech.message," girl ",pick(" honey "," baby "," baby doll "))
-	speech.message = replacetext(speech.message," man ",pick(" son "," buddy "," brother ", " pal ", " friendo "))
-	speech.message = replacetext(speech.message,"out of","outta")
-	speech.message = replacetext(speech.message,"thank you","thank you, thank you very much")
-	speech.message = replacetext(speech.message,"what are you","whatcha")
-	speech.message = replacetext(speech.message,"yes",pick("sure", "yea"))
-	speech.message = replacetext(speech.message,"faggot","square")
-	speech.message = replacetext(speech.message,"muh valids","my kicks")
-	speech.message = replacetext(speech.message," vox "," bird ")
+	..()
 
 /datum/dna/gene/disability/elvis/OnMobLife(var/mob/M)
 	switch(pick(1,2))
@@ -187,36 +139,12 @@
 	desc = "Forces the language center of the subject's brain to construct sentences in a more rudimentary manner."
 	activation_message = "Ye feel like a reet prat like, innit?"
 	deactivation_message = "You no longer feel like being rude and sassy."
+	mutation = M_CHAV
 
 /datum/dna/gene/disability/chav/New()
 	..()
 	block = CHAVBLOCK
-
-/datum/dna/gene/disability/chav/OnSay(var/mob/M, var/datum/speech/speech)
-	// THIS ENTIRE THING BEGS FOR REGEX
-	speech.message = replacetext(speech.message,"dick","prat")
-	speech.message = replacetext(speech.message,"comdom","knob'ead")
-	speech.message = replacetext(speech.message,"looking at","gawpin' at")
-	speech.message = replacetext(speech.message,"great","bangin'")
-	speech.message = replacetext(speech.message,"man","mate")
-	speech.message = replacetext(speech.message,"friend",pick("mate","bruv","bledrin"))
-	speech.message = replacetext(speech.message,"what","wot")
-	speech.message = replacetext(speech.message,"drink","wet")
-	speech.message = replacetext(speech.message,"get","giz")
-	speech.message = replacetext(speech.message,"what","wot")
-	speech.message = replacetext(speech.message,"no thanks","wuddent fukken do one")
-	speech.message = replacetext(speech.message,"i don't know","wot mate")
-	speech.message = replacetext(speech.message,"no","naw")
-	speech.message = replacetext(speech.message,"robust","chin")
-	speech.message = replacetext(speech.message," hi ","how what how")
-	speech.message = replacetext(speech.message,"hello","sup bruv")
-	speech.message = replacetext(speech.message,"kill","bang")
-	speech.message = replacetext(speech.message,"murder","bang")
-	speech.message = replacetext(speech.message,"windows","windies")
-	speech.message = replacetext(speech.message,"window","windy")
-	speech.message = replacetext(speech.message,"break","do")
-	speech.message = replacetext(speech.message,"your","yer")
-	speech.message = replacetext(speech.message,"security","coppers")
+	speech_filter = new /datum/speech_filter/chav
 
 // WAS: /datum/bioEffect/swedish
 /datum/dna/gene/disability/swedish
@@ -224,6 +152,7 @@
 	desc = "Forces the language center of the subject's brain to construct sentences in a vaguely norse manner."
 	activation_message = "You feel Swedish, however that works."
 	deactivation_message = "The feeling of Swedishness passes."
+	mutation = M_SWEDE
 
 /datum/dna/gene/disability/swedish/New()
 	..()
@@ -231,7 +160,7 @@
 
 /datum/dna/gene/disability/swedish/OnSay(var/mob/M, var/datum/speech/speech)
 	// svedish!
-	speech.message = replacetext(speech.message,"w","v")
+	..()
 	if(prob(30))
 		speech.message += " Bork[pick("",", bork",", bork, bork")]!"
 

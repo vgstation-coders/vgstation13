@@ -36,7 +36,6 @@ var/global/mulebot_count = 0
 	bot_flags = BOT_DENSE|BOT_NOT_CHASING|BOT_CONTROL|BOT_BEACON
 	suffix = ""
 
-	var/loaddir = 0				// this the direction to unload onto/load from
 	var/home_destination = "" 	// tag of home beacon
 	req_access = list(access_cargo) // added robotics access so assembly line drop-off works properly -veyveyr //I don't think so, Tim. You need to add it to the MULE's hidden robot ID card. -NEO
 	var/mode = MODE_IDLE		//0 = idle/ready
@@ -390,7 +389,7 @@ var/global/mulebot_count = 0
 				var/atom/movable/load = is_locking(/datum/locking_category/mulebot) && get_locked(/datum/locking_category/mulebot)[1]
 				if(load && mode != MODE_LOADING)
 					if(loc == target)
-						unload(loaddir)
+						unload(dir)
 					else
 						unload(0)
 
@@ -634,20 +633,20 @@ var/global/mulebot_count = 0
 	playsound(src, 'sound/machines/chime.ogg', 50, 0)
 
 	if(is_locking(/datum/locking_category/mulebot))		// if loaded, unload at target
-		unload(loaddir)
+		unload(dir)
 	else
 		// not loaded
 		if(auto_pickup)		// find a crate
 			var/atom/movable/AM
 			if(!wires.LoadCheck())		// if emagged, load first unanchored thing we find
-				for(var/atom/movable/A in get_step(loc, loaddir))
+				for(var/atom/movable/A in get_step(loc, dir))
 					if(!A.anchored)
 						AM = A
 						break
 			else			// otherwise, look for crates only
 				for(var/i=1,i<=can_load.len,i++)
 					var/loadin_type = can_load[i]
-					AM = locate(loadin_type) in get_step(loc,loaddir)
+					AM = locate(loadin_type) in get_step(loc,dir)
 					if(AM)
 						load(AM)
 						break

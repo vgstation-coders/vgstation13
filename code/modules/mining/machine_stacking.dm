@@ -120,6 +120,7 @@
 
 /obj/machinery/mineral/stacking_machine
 	name = "stacking machine"
+	desc = "Takes smaller piles of sheets to make bigger ones"
 	icon = 'icons/obj/machines/mining_machines.dmi'
 	icon_state = "stacker"
 	density = 1
@@ -131,17 +132,14 @@
 //	var/stk_types = list()
 //	var/stk_amt   = list()
 
-	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
-
-	var/in_dir = NORTH
-	var/out_dir = SOUTH
+	allowed_types = list(/obj/item/stack)
+	max_moved = 100
 
 	var/list/stacks = list()
 
+	var/obj/item/stack/stack
 	var/stack_amt = 50 //amount to stack before releassing.
-	var/max_moved = 100
 
-	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
 
 /obj/machinery/mineral/stacking_machine/RefreshParts()
@@ -168,11 +166,6 @@
 
 	RefreshParts()
 
-	mover = new
-
-	if(ticker)
-		initialize()
-
 /obj/machinery/mineral/stacking_machine/update_icon()
 	if(stat & (NOPOWER | BROKEN))
 		icon_state = "stacker_o"
@@ -185,45 +178,27 @@
 	update_icon()
 
 /obj/machinery/mineral/stacking_machine/process()
-	var/turf/in_T = get_step(src, in_dir)
-	var/turf/out_T = get_step(src, out_dir)
-
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
-		return
-
-	var/obj/item/stack/stack
-	var/moved = 0
-	for(var/atom/movable/A in in_T.contents)
-		if(A.anchored)
-			continue
-
-		if(istype(A, /obj/item/stack))
-			var/obj/item/stack/stackA = A
-
-			if(!("[stackA.type]" in stacks))
-				stack = new stackA.type(src)
-				stack.amount = stackA.amount
-			else
-				stack = stacks["[stackA.type]"]
-				stack.amount += stackA.amount
-
-			stacks["[stackA.type]"] = stack
-			qdel(stackA)
-		//else if (istype(O, /obj/item/stack/ore/slag))
-		//	qdel(O)
-		else
-			A.forceMove(out_T)
-
-		moved ++
-		if(moved >= max_moved)
-			break
-
+	..()
 	for(var/typepath in stacks)
 		stack = stacks[typepath]
 		if(stack.amount >= stack_amt)
 			release_stack(typepath)
 
 	broadcast_status()
+
+/obj/machinery/mineral/stacking_machine/process_inside(atom/movable/A)
+	if(istype(A, /obj/item/stack))
+		var/obj/item/stack/stackA = A
+
+		if(!("[stackA.type]" in stacks))
+			stack = new stackA.type(src)
+			stack.amount = stackA.amount
+		else
+			stack = stacks["[stackA.type]"]
+			stack.amount += stackA.amount
+
+		stacks["[stackA.type]"] = stack
+		qdel(stackA)
 
 /obj/machinery/mineral/stacking_machine/proc/release_stack(var/typepath, var/forced = 0)
 	if(!(typepath in stacks)) //What, we don't even have this stack
@@ -276,10 +251,6 @@
 
 	send_signal(data)
 
-/obj/machinery/mineral/stacking_machine/initialize()
-	if(frequency)
-		set_frequency(frequency)
-
 /obj/machinery/mineral/stacking_machine/proc/set_frequency(var/new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
@@ -296,48 +267,3 @@
 		release_stack(signal.data["release"])
 		broadcast_status()
 		return 1
-
-/obj/machinery/mineral/stacking_machine/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return {"
-		<ul>
-			<li><b>Frequency: </b><a href='?src=\ref[src];set_freq=-1'>[format_frequency(frequency)]</a></li>
-			<li>[format_tag("ID Tag","id_tag")]</li>
-			<li><b>Input: </b><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(in_dir))]</a></li>
-			<li><b>Output: </b><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(out_dir))]</a></li>
-		</ul>
-	"}
-
-//For the purposes of this proc, 1 = in, 2 = out.
-//Yes the implementation is overkill but I felt bad for hardcoding it with gigantic if()s and shit.
-/obj/machinery/mineral/stacking_machine/multitool_topic(mob/user, list/href_list, obj/item/device/multitool/P)
-	if("changedir" in href_list)
-		var/changingdir = text2num(href_list["changedir"])
-		changingdir = clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
-
-		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
-		if(!newdir)
-			return 1
-		newdir = text2dir(newdir)
-
-		var/list/dirlist = list(in_dir, out_dir) //Behold the idea I got on how to do this.
-		var/olddir = dirlist[changingdir] //Store this for future reference before wiping it next line.
-		dirlist[changingdir] = -1 //Make the dir that's being changed -1 so it doesn't see itself.
-
-		var/conflictingdir = dirlist.Find(newdir) //Check if the dir is conflicting with another one
-		if(conflictingdir) //Welp, it is.
-			dirlist[conflictingdir] = olddir //Set it to the olddir of the dir we're changing.
-
-		dirlist[changingdir] = newdir //Set the changindir to the selected dir.
-
-		in_dir = dirlist[1]
-		out_dir = dirlist[2]
-
-		return MT_UPDATE
-		//Honestly I didn't expect that to fit in, what, 10 lines of code?
-
-	return ..()
-
-/obj/machinery/mineral/stacking_machine/Destroy()
-	qdel(mover)
-	mover = null
-	. = ..()

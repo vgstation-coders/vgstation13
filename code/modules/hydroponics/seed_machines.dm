@@ -74,17 +74,51 @@
 	if(failed_task)
 		failed_task = 0
 		visible_message("[bicon(src)] [src] pings unhappily, flashing a red warning light.")
+		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 	else
 		visible_message("[bicon(src)] [src] pings happily.")
+		playsound(src, 'sound/machines/notify.ogg', 50, 0)
 
 	if(eject_disk)
 		eject_disk = 0
 		if(loaded_disk)
 			loaded_disk.forceMove(get_turf(src))
 			visible_message("[bicon(src)] [src] beeps and spits out [loaded_disk].")
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
 			loaded_disk = null
 
 	nanomanager.update_uis(src)
+
+/obj/machinery/botany/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item/seeds))
+		if(loaded_seed)
+			return FALSE
+		var/obj/item/seeds/S = AM
+		if(S.seed && S.seed.immutable > 0)
+			return FALSE
+		S.forceMove(src)
+		loaded_seed = AM
+		nanomanager.update_uis(src)
+		return TRUE
+
+	if(istype(AM,/obj/item/weapon/disk/botany))
+		if(loaded_disk)
+			return FALSE
+		var/obj/item/weapon/disk/botany/B = AM
+
+		if(B.genes && B.genes.len)
+			if(!disk_needs_genes)
+				return FALSE
+		else
+			if(disk_needs_genes)
+				return FALSE
+
+		AM.forceMove(src)
+
+		loaded_disk = AM
+		nanomanager.update_uis(src)
+		return TRUE
+	return FALSE
 
 /obj/machinery/botany/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/seeds))

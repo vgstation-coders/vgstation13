@@ -1,7 +1,7 @@
 //Baseline portable generator. Has all the default handling. Not intended to be used on it's own (since it generates unlimited power).
 /obj/machinery/power/port_gen
 	name = "Portable Generator"
-	desc = "A portable generator for emergency backup power"
+	desc = "A portable generator for emergency backup power."
 	icon = 'icons/obj/power.dmi'
 	icon_state = "portgen1"
 	density = 1
@@ -56,7 +56,7 @@
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""
-	var/sheet_path = /obj/item/stack/sheet/mineral/plasma
+	var/obj/sheet_path = /obj/item/stack/sheet/mineral/plasma
 	var/board_path = "/obj/item/weapon/circuitboard/pacman"
 	var/sheet_left = 0 // How much is left of the sheet
 	var/time_per_sheet = 40
@@ -79,8 +79,7 @@
 		board_path
 	)
 
-	var/obj/sheet = new sheet_path(null)
-	sheet_name = sheet.name
+	sheet_name = initial(sheet_path.name)
 	RefreshParts()
 
 /obj/machinery/power/port_gen/pacman/Destroy()
@@ -204,6 +203,20 @@
 		if( ..() )
 			return 1
 
+/obj/machinery/power/port_gen/pacman/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, sheet_path))
+		var/obj/item/stack/addstack = AM
+		var/amount = min((max_sheets - sheets), addstack.amount)
+		if(amount < 1)
+			return FALSE
+		sheets += amount
+		addstack.use(amount)
+		return TRUE
+	else if(!active)
+		if( ..() )
+			return FALSE
+	return FALSE
+
 /obj/machinery/power/port_gen/pacman/attack_hand(mob/user as mob)
 	..()
 	if (!anchored)
@@ -293,8 +306,8 @@
 	power_gen = 15000
 	time_per_sheet = 65
 	board_path = "/obj/item/weapon/circuitboard/pacman/super"
-	overheat()
-		explosion(src.loc, 3, 3, 3, -1)
+/obj/machinery/power/port_gen/pacman/super/overheat()
+	explosion(src.loc, 3, 3, 3, -1)
 
 /obj/machinery/power/port_gen/pacman/mrs
 	name = "M.R.S.P.A.C.M.A.N.-type Portable Generator"
@@ -303,5 +316,5 @@
 	power_gen = 40000
 	time_per_sheet = 80
 	board_path = "/obj/item/weapon/circuitboard/pacman/mrs"
-	overheat()
-		explosion(src.loc, 4, 4, 4, -1)
+/obj/machinery/power/port_gen/pacman/mrs/overheat()
+	explosion(src.loc, 4, 4, 4, -1)

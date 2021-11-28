@@ -31,7 +31,7 @@
 	return
 
 /obj/item/projectile/missile/proc/explode()
-	explosion(src.loc, 1, 1, 2, 7, 0)
+	explosion(src.loc, 1, 1, 2, 7, 0, whodunnit = firer)
 	playsound(src.loc, "explosion", 50, 1)
 	del(src)
 

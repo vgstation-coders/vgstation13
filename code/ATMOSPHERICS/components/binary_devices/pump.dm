@@ -31,7 +31,7 @@ air2.volume
 
 /obj/machinery/atmospherics/binary/pump/highcap
 	name = "High capacity gas pump"
-	desc = "A high capacity pump"
+	desc = "A high capacity pump."
 
 	target_pressure = 15000000 // Holy fuck man
 

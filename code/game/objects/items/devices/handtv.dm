@@ -41,7 +41,7 @@ var/global/list/camera_bugs = list()
 		return
 
 /obj/item/device/handtv/check_eye(var/mob/user as mob)
-	if ( src.loc != user || user.get_active_hand() != src || !user.canmove || user.blinded || !current || !current.active )
+	if ( loc != user || user.get_active_hand() != src || user.incapacitated() || user.blinded || !current || !current.active )
 		return null
 	user.reset_view(current)
 	return 1

@@ -1,6 +1,6 @@
 /turf/simulated/wall/mineral
 	name = "mineral wall"
-	desc = "This shouldn't exist"
+	desc = "This shouldn't exist."
 	icon_state = ""
 	explosion_block = 1
 	var/last_event = 0
@@ -52,7 +52,7 @@
 
 /turf/simulated/wall/mineral/brick
 	name = "brick wall"
-	desc = "A wall with brick siding, it looks nice"
+	desc = "A wall with brick siding. It looks nice."
 	icon_state = "brick0"
 	walltype = "brick"
 	mineral = "brick"
@@ -155,7 +155,7 @@
 	..()
 
 /turf/simulated/wall/mineral/plasma/proc/PlasmaBurn(temperature)
-	var/pdiff = performWallPressureCheck(src.loc)
+	var/pdiff = performWallPressureCheck(src)
 	if(pdiff > 0)
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has caught on fire at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has caught of fire at [formatJumpTo(get_turf(src))]!")

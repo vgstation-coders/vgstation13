@@ -44,7 +44,7 @@
 		back = null
 		success = 1
 		update_inv_back()
-		lazy_invoke_event(/lazy_event/on_unequipped, list(W))
+		INVOKE_EVENT(src, /event/unequipped, W)
 	else
 		success = ..()
 
@@ -165,14 +165,6 @@
 	if(update_icons)
 		update_icons()
 
-
-/mob/living/simple_animal/hostile/gremlin/grinch/verb/ventcrawl()
-	set name = "Crawl through Vent"
-	set desc = "Enter an air vent and crawl through the pipe system."
-	set category = "Object"
-	var/pipe = start_ventcrawl()
-	if(pipe)
-		handle_ventcrawl(pipe)
 
 // -- Clearing of refs
 /mob/living/simple_animal/hostile/gremlin/grinch/Destroy()

@@ -10,14 +10,17 @@
 	disallow_job = TRUE
 	restricted_jobs = list()
 	greets = list(GREET_DEFAULT,GREET_WEEB,GREET_CUSTOM)
+	default_admin_voice = "Spider Clan"
+	admin_voice_style = "bold"
 
 	stat_datum_type = /datum/stat/role/ninja
+
+	var/last_star_throw = 0
 
 /datum/role/ninja/OnPostSetup(var/laterole = FALSE)
 	. =..()
 	if(!.)
 		return
-	antag.current.forceMove(pick(ninjastart))
 	if(ishuman(antag.current))
 		antag.current << sound('sound/effects/yooooooooooo.ogg')
 		equip_ninja(antag.current)
@@ -28,7 +31,7 @@
 		AppendObjective(/datum/objective/target/killsilicons)
 	else
 		if(prob(70))
-			AppendObjective(/datum/objective/target/delayed/assassinate)
+			AppendObjective(/datum/objective/target/assassinate/delay_medium)// 10 minutes
 		else
 			AppendObjective(/datum/objective/target/skulls)
 
@@ -44,7 +47,7 @@
 		if(!iscarbon(M) && !issilicon(M))
 			continue
 		var/turf/T = get_turf(M)
-		if(T && T.z != STATION_Z)
+		if(T && T.z != map.zMainStation)
 			continue
 		if(M.stat != DEAD)
 			living++
@@ -65,6 +68,7 @@
 	return dat
 
 /datum/role/ninja/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
 	if(href_list["toggleweeb"])
 		if(href_list["toggleweeb"]=="ninja")
 			equip_ninja(antag.current)
@@ -84,7 +88,7 @@
 			to_chat(antag.current, "<span class='danger'>Remember that guns are not honoraburu, and that your katana has an ancient power imbued within it. Take a closer look at it if you've forgotten how it works.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Ninja! <br>The Spider Clan has been insulted for the last time.</span>")
-			to_chat(antag.current, "Your energy katana cannot be dropped while active, does not conduct electricity, can force open doors, and can teleport behind someone on attack once a minute by using the action button.")
+			to_chat(antag.current, "Your energy katana cannot be dropped while active, does not conduct electricity, can slice open doors (on harm intent), and can teleport behind someone on attack once a minute by using the action button.")
 			to_chat(antag.current, "Your energy glove can drain power from most things that use cells by using an empty hand on them. Some examples are on the right.")
 			to_chat(antag.current, "Energy stored in your glove can either be used to print powerful shurikens or reduce the remaining cooldown on your teleport, either through action buttons or alt clicking the glove.")
 			to_chat(antag.current, "You have hologram projectors that protect you once when held, and a poster to blend in on walls.")
@@ -97,6 +101,11 @@
 ****                           ****
 **********************************/
 
+var/list/valid_ninja_suits = list(
+	/obj/item/clothing/suit/space/ninja,
+	/obj/item/clothing/suit/kimono/ronin,
+	/obj/item/clothing/suit/space/rig/sundowner
+	)
 
 /obj/item/stack/shuriken
 	name = "3D printed shuriken"
@@ -120,17 +129,21 @@
 		var/mob/living/carbon/human/H = usr
 		var/datum/role/ninja/N = H.mind.GetRole(NINJA)
 		if(N)
+			var/suited = is_type_in_list(H.wear_suit,valid_ninja_suits) ? TRUE : FALSE
+			if(N.last_star_throw > world.time + (10-8*suited)) //10 deciseconds if unsuited, 2 otherwise
+				to_chat(H, "<span class='danger'>You can't throw \the [src] until you finish throwing the last one.</span>")
+				return
 			if(amount>1)
 				use(1)
 				var/obj/item/stack/shuriken/S = new(loc)
-				S.throw_at(A,throw_range,throw_speed*2)
+				S.throw_at(A,throw_range,throw_speed*(1+suited)) //double speed if suited
 				H.put_in_hands(src)
 				//statistics collection: ninja shuriken thrown
 				if(istype(N.stat_datum, /datum/stat/role/ninja))
 					var/datum/stat/role/ninja/ND = N.stat_datum
 					ND.shuriken_thrown++
 			else
-				..(A,throw_range,throw_speed*2)
+				..(A,throw_range,throw_speed*(1+suited)) //double speed if suited
 		else
 			to_chat(usr,"<span class='warning'>You fumble with \the [src]!</span>")
 			//It drops to the ground in throwcode already
@@ -166,7 +179,11 @@
 	var/activate_message = "Too slow."
 
 /obj/item/weapon/substitutionhologram/IsShield()
-	return SHIELD_ADVANCED
+	var/mob/living/carbon/human/H = loc
+	if(istype(H))
+		if(is_type_in_list(H.wear_suit, valid_ninja_suits))
+			return SHIELD_ADVANCED
+	return FALSE
 
 /obj/item/weapon/substitutionhologram/on_block(damage, atom/blocked)
 	if(ishuman(loc))
@@ -202,7 +219,7 @@
 			if(!target_ground && close_bright_grounds.len) //Final: whatever is left
 				target_ground = pick(close_bright_grounds)
 			if(target_ground)
-				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+				var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 				smoke.set_up(3, 0, get_turf(H))
 				smoke.start()
 				H.say("[activate_message]")
@@ -486,6 +503,13 @@
 /obj/structure/sign/poster/stealth/rip(mob/user)
 	roll_and_drop(get_turf(user))
 
+/obj/structure/sign/poster/stealth/roll_and_drop(turf/newloc)
+	if(newloc)
+		new /obj/item/mounted/poster/stealth(newloc, design)
+	else
+		new /obj/item/mounted/poster/stealth(get_turf(src), design)
+	qdel(src)
+
 /*=======
 Ninja Esword
 &
@@ -647,6 +671,12 @@ Suit and assorted
 
 /obj/item/clothing/suit/space/ninja/get_cell()
 	return cell
+
+/obj/item/clothing/suit/space/ninja/unequipped(mob/living/carbon/human/H, var/from_slot = null)
+	..()
+	if(isninja(H))
+		to_chat(H,"SpiderOS: <span class='sinister'>[src] reflex booster disengaged. Hologram projectors inactive.</span>")
+
 /obj/item/clothing/suit/space/ninja/apprentice
 	name = "ninja suit"
 	desc = "A rare suit of nano-enhanced armor designed for Spider Clan assassins."
@@ -670,15 +700,8 @@ Suit and assorted
 				to_chat(H, "<span class='danger'>\The [src] lets out a hiss. It's no longer pressurized!</span>")
 
 /obj/item/clothing/suit/space/ninja/equipped(mob/living/carbon/human/H, equipped_slot)
-	/*if(!isninja(H))
-		if(equipped_slot != slot_wear_suit)
-			to_chat(H, "<span class='danger'>\The [src] beeps menacingly.</span>")
-		else
-			src.visible_message("<span class='danger'>\The [src] suddenly explodes as [H] tries to put it on!</span>")
-			explosion(H.loc, 0, 0, 1)
-			H.u_equip(src, 1)
-			qdel(src)*/
-	//else //Maybe when there's more functionality to warrant the suit exploding.
+	if(isninja(H))
+		to_chat(H,"SpiderOS: <span class='sinister'>[src] reflex booster engaged. Hologram projectors active.</span>")
 	if(equipped_slot == slot_wear_suit)
 		icon_state = H.gender==FEMALE ? "s-ninjaf" : "s-ninja"
 		H.update_inv_wear_suit()
@@ -691,6 +714,11 @@ Suit and assorted
 	permeability_coefficient = 0.01
 	mag_slow = NO_SLOWDOWN
 	clothing_flags = NOSLIP | MAGPULSE
+
+/obj/item/clothing/shoes/ninja/redsun
+	name = "sundowner boots"
+	icon_state = "sundowner_boots"
+	item_state = "sundowner_boots"
 
 /obj/item/clothing/shoes/ninja/apprentice
 	desc = "A pair of ninja apprentice shoes, excellent for running and even better for smashing skulls."
@@ -787,7 +815,7 @@ Suit and assorted
 		message += " Your teleport is inactive, just like a no-warp trap room in Aincrad.</span>"
 	to_chat(user, "[message]")
 
-/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
+/obj/item/weapon/katana/hesfast/suicide_act(var/mob/living/user)
 	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit [pick("seppuku","sudoku","harikari","crossword puzzle")].</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 

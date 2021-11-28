@@ -274,7 +274,7 @@ var/list/dispenser_presets = list()
 
 /obj/machinery/suit_dispenser/dorf
 	desc = "An industrial U-Tak-It Dispenser unit designed to fetch all kinds of space suits. This one is specialised towards asteroid reclamation teams."
-	suits = list(/datum/suit/dorf/standard,/datum/suit/dorf/security,/datum/suit/dorf/engineering,/datum/suit/dorf/medical,/datum/suit/dorf/atmos,/datum/suit/dorf/paramedic)
+	suits = list(/datum/suit/dorf/standard,/datum/suit/dorf/security,/datum/suit/dorf/medical,/datum/suit/dorf/mining,/datum/suit/dorf/paramedic,/datum/suit/dorf/atmos,/datum/suit/dorf/engineering)
 
 /obj/machinery/suit_dispenser/dorf/get_suit_list(var/mob/living/carbon/human/user)
 	if(emagged)

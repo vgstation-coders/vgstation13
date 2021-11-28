@@ -1,6 +1,10 @@
 #define VALUE_REMAINING_TIME "Remaining time"
 #define VALUE_DEFAULT_TIME "Default time"
 #define VALUE_TIMING "Timing"
+#define VALUE_TIMEMODE "Mode"
+
+#define TIMEMODE_REPEAT "Repeat pulse and recount"
+#define TIMEMODE_ONCE "Pulse once and stop"
 
 /obj/item/device/assembly/timer
 	name = "timer"
@@ -16,12 +20,13 @@
 
 	var/timing = 0
 	var/time = 10
-
+	var/repeat = FALSE
 	var/default_time = 10
 
 	accessible_values = list(\
 		VALUE_REMAINING_TIME = "time;"+VT_NUMBER,\
 		VALUE_DEFAULT_TIME = "default_time;"+VT_NUMBER,\
+		VALUE_TIMEMODE = "repeat;"+VT_NUMBER,\
 		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/timer/activate()
@@ -58,7 +63,8 @@
 	if(timing && (time > 0))
 		time--
 	if(timing && time <= 0)
-		timing = 0
+		if(!repeat)
+			timing = 0
 		timer_end()
 		time = default_time
 	return
@@ -85,6 +91,7 @@
 
 	dat += "<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>"
 	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
+		<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>
 		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
 	user << browse(dat, "window=timer")
 	onclose(user, "timer")
@@ -109,6 +116,10 @@
 		var/tp = text2num(href_list["tp"])
 		time += tp
 		time = min(max(round(time), 0), 600)
+	
+	if(href_list["toggle_mode"])
+		repeat = !repeat
+		return
 
 	if(href_list["close"])
 		usr << browse(null, "window=timer")

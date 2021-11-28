@@ -109,7 +109,13 @@
 		img.pixel_y = 0
 		current_button.overlays += img
 
-
+/datum/action/item_action/target_appearance/ApplyIcon(obj/abstract/screen/movable/action_button/current_button) // useful when you want to preserve the target's overlays on the button
+	current_button.overlays = null
+	if(target)
+		var/mutable_appearance/mut = new(target.appearance)
+		mut.plane = FLOAT_PLANE
+		mut.layer = FLOAT_LAYER
+		current_button.overlays += mut
 
 //Presets for item actions
 /datum/action/item_action
@@ -174,6 +180,9 @@
 
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
+
+/datum/action/item_action/toggle_anon
+	name = "Toggle Anonymity"
 
 /datum/action/item_action/activate_siren
 	name = "Activate Siren"

@@ -34,7 +34,7 @@
 
 	//Don't wander around
 	wander = FALSE
-	intent = I_HURT
+	a_intent = I_HURT
 
 	//Attack unconscious
 	stat_attack = 1

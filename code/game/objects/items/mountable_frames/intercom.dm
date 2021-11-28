@@ -1,6 +1,6 @@
 /obj/item/mounted/frame/intercom
 	name = "Intercom frame"
-	desc = "Used for repairing or building intercoms"
+	desc = "Used for repairing or building intercoms."
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "intercom-frame"
 	flags = FPRINT

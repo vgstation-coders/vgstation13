@@ -93,7 +93,10 @@
 	if(O.owner)
 		owner_key = ckey(O.owner.key)
 	is_fulfilled = O.IsFulfilled()
-	if(istype(O, /datum/objective/target))
+	if (istype(O, /datum/objective/target/steal))
+		var/datum/objective/target/steal/TO = O
+		target = TO.steal_target.name
+	else if(istype(O, /datum/objective/target) && !istype(O, /datum/objective/target/killsilicons))
 		var/datum/objective/target/TO = O
 		target = TO.target.name
 

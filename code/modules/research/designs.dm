@@ -87,7 +87,7 @@ The required techs are the following:
 //it then finds the design which has a buildpath of that type
 //material_strict will check the atom's materials against the design's materials if set to 1, but won't for machines
 //If you want to check machine materials strictly as well, set material_strict to 2
-proc/FindDesign(var/atom/movable/part, material_strict = 0)
+/proc/FindDesign(var/atom/movable/part, material_strict = 0)
 	if(ispath(part))
 		return FindTypeDesign(part)
 
@@ -108,14 +108,14 @@ proc/FindDesign(var/atom/movable/part, material_strict = 0)
 			else
 				return D
 
-proc/FindTypeDesign(var/part_path)
+/proc/FindTypeDesign(var/part_path)
 	for(var/datum/design/D in design_list)
 		if(D.build_path == part_path)
 			return D
 
 //Acts as FindDesign, but makes a new design if it doesn't find one
 //Doesn't take types for the design creation, so don't rely on it for that
-proc/getScanDesign(var/obj/O)
+/proc/getScanDesign(var/obj/O)
 	var/datum/design/D
 	if(O.materials)
 		D = FindDesign(O, 1) //The 1 means we check strict materials - if we don't have materials, we just check the type

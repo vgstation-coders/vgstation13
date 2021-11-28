@@ -366,7 +366,7 @@ var/list/tag_suits_list = list()
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
-obj/item/clothing/suit/cassock
+/obj/item/clothing/suit/cassock
 	name = "Cassock"
 	desc = "A black garment belonging to a priest."
 	icon_state = "cassock"
@@ -390,16 +390,21 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = FULL_TORSO|FEET
 	species_fit = list(INSECT_SHAPED)
 
-
 /obj/item/clothing/suit/chickensuit
-	name = "Chicken Suit"
+	name = "chicken suit"
 	desc = "A suit made long ago by the ancient empire KFC."
 	icon_state = "chickensuit"
 	item_state = "chickensuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	siemens_coefficient = 2.0
 
+/obj/item/clothing/suit/chickensuit/white
+	name = "white chicken suit"
+	desc = "Silky smooth. The feathers of legend...could it be..."
+	icon_state = "chickensuit_white"
+	item_state = "chickensuit_white"
 
 /obj/item/clothing/suit/monkeysuit
 	name = "Monkey Suit"
@@ -438,11 +443,11 @@ obj/item/clothing/suit/cassock
  * Misc
  */
 
-/obj/item/clothing/suit/straight_jacket
-	name = "straight jacket"
+/obj/item/clothing/suit/strait_jacket
+	name = "straitjacket"
 	desc = "A suit that completely restrains the wearer."
-	icon_state = "straight_jacket"
-	item_state = "straight_jacket"
+	icon_state = "strait_jacket"
+	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	species_fit = list(INSECT_SHAPED)
@@ -696,7 +701,7 @@ obj/item/clothing/suit/cassock
 	if(!istype(H))
 		return ..()
 	if((src == H.wear_suit) && H.flying)
-		H.flying = 0
+		H.stop_flying()
 		animate(H, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(H, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(H)
@@ -713,7 +718,7 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/clownpiece/flying/dropped(mob/user as mob)
 	if(user.flying)
-		user.flying = 0
+		user.stop_flying()
 		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(user)
@@ -813,6 +818,12 @@ obj/item/clothing/suit/cassock
 	body_parts_covered = ARMS|FULL_TORSO|IGNORE_INV
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/suit/mino/vinesafe
+	mech_flags = MECH_SCAN_ILLEGAL
+
+/obj/item/clothing/suit/mino/vinesafe/vine_protected()
+	return TRUE
+
 /obj/item/clothing/suit/kimono
 	name = "kimono"
 	desc = "A traditional Japanese kimono."
@@ -850,7 +861,7 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/clockwork_robes
 	name = "clockwork robes"
-	desc = "A set of armored robes worn by the followers of Ratvar"
+	desc = "A set of armored robes worn by the followers of Ratvar."
 	icon_state = "clockwork"
 	item_state = "clockwork"
 	species_fit = list(INSECT_SHAPED)
@@ -886,19 +897,26 @@ obj/item/clothing/suit/cassock
 
 /obj/item/clothing/suit/red_suit
 	name = "red suit"
-	desc = "A sleazy looking red suit"
+	desc = "A sleazy looking red suit."
 	icon_state = "red_suit"
 	item_state = "red_suit"
 	body_parts_covered = 0
 	species_fit = list(INSECT_SHAPED)
 
-obj/item/clothing/suit/poncho
+/obj/item/clothing/suit/poncho
 	name = "poncho"
 	desc = "A wooly poncho. Smells of beans."
 	icon_state = "poncho"
 	item_state = "poncho"
+	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
+/obj/item/clothing/suit/banana_suit
+	name = "banana suit"
+	desc = "Peanut butter jelly time!"
+	icon_state = "banana_suit"
+	item_state = "banana_suit"
+	body_parts_covered = FULL_TORSO|ARMS|LEGS|HIDEJUMPSUIT
 
 //BOMBER VEST
 //The whole "bump into people to detonate it, it's the only way" part is intentional, just run into them already
@@ -910,16 +928,6 @@ obj/item/clothing/suit/poncho
 	body_parts_covered = FULL_TORSO|IGNORE_INV
 	actions_types = list(/datum/action/item_action/toggle_bomber_vest)
 	var/active = 0
-	//That's right, we're using events for this vest to avoid hardcoding it everywhere
-	var/event_key_touched
-	var/event_key_bumping
-	var/event_key_bumped
-
-/obj/item/clothing/suit/bomber_vest/Destroy()
-	..()
-	event_key_touched = null
-	event_key_bumping = null
-	event_key_bumped = null
 
 /obj/item/clothing/suit/bomber_vest/proc/activate_vest()
 	var/mob/living/carbon/human/H = loc
@@ -930,32 +938,62 @@ obj/item/clothing/suit/poncho
 	if(!(H.wear_suit == src))
 		return
 	active = 1
-	event_key_touched = H.on_touched.Add(src, "detonate")
-	event_key_bumping = H.on_bumping.Add(src, "detonate")
-	event_key_bumped = H.on_bumped.Add(src, "detonate")
+	H.register_event(/event/touched, src, .proc/on_touched)
+	H.register_event(/event/hitby, src, .proc/on_hitby)
+	H.register_event(/event/attacked_by, src, .proc/on_attacked_by)
+	H.register_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
+	H.register_event(/event/to_bump, src, .proc/on_to_bump)
+	H.register_event(/event/bumped, src, .proc/on_bumped)
 	canremove = 0
+
+/obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
+	if(toucher == touched) //No bombing ourselves by checking ourselves
+		return
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_hitby(mob/victim, obj/item/item)
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_attacked_by(mob/attacker, mob/attacked, mob/item)
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_unarmed_attack(mob/attacker, mob/attacked)
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_to_bump(atom/movable/bumper, atom/bumped)
+	detonate()
+/obj/item/clothing/suit/bomber_vest/proc/on_bumped(atom/movable/bumper, atom/bumped)
+	detonate()
 
 /obj/item/clothing/suit/bomber_vest/proc/deactivate_vest()
 	active = 0
 	var/mob/living/carbon/human/H = loc
 	if(H)
-		H.on_touched.Remove(event_key_touched)
-		H.on_bumping.Remove(event_key_bumping)
-		H.on_bumped.Remove(event_key_bumped)
+		H.unregister_event(/event/touched, src, .proc/on_touched)
+		H.unregister_event(/event/hitby, src, .proc/on_hitby)
+		H.unregister_event(/event/unarmed_attack, src, .proc/on_attacked_by)
+		H.unregister_event(/event/unarmed_attack, src, .proc/on_unarmed_attack)
+		H.unregister_event(/event/to_bump, src, .proc/on_to_bump)
+		H.unregister_event(/event/bumped, src, .proc/on_bumped)
 
 /obj/item/clothing/suit/bomber_vest/examine(mob/user)
 	..()
 	if(active)
 		to_chat(user, "<span class='danger'>It appears to be active. RUN!</span>")
 
-/obj/item/clothing/suit/bomber_vest/proc/detonate(list/arguments)
+/obj/item/clothing/suit/bomber_vest/suicide_act(var/mob/living/user)
+	if (!active) //no explosion with no active vest, dummy
+		return
+
+	var/message_say = user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src]! It looks like \he's going out with a bang!</span>")
+	user.say(message_say)
+	explosion(user, 1, 3, 6, whodunnit = user)
+	message_admins("[user] has detonated \the [src]!")
+	qdel(src) //Just in case
+	return SUICIDE_ACT_CUSTOM
+
+/obj/item/clothing/suit/bomber_vest/proc/detonate()
 	var/mob/living/carbon/human/H = loc
-	var/whitelist = arguments["has been touched by"]
 	if(!ishuman(H) || !active)
 		return
-	if(whitelist == H) //No bombing ourselves by checking ourselves
-		return
-	explosion(H, 1, 3, 6)
+	explosion(H, 1, 3, 6, whodunnit = H)
 	message_admins("[H] has detonated \the [src]!")
 	qdel(src) //Just in case
 

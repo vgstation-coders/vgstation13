@@ -4,7 +4,7 @@
 	layer = TURF_LAYER
 	luminosity = 0
 
-	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
+	//for floors, use is_plating(), is_metal_floor() and is_light_floor()
 	var/intact = 1
 	var/turf_flags = 0
 
@@ -56,11 +56,6 @@
 
 	var/explosion_block = 0
 
-	//For shuttles - if 1, the turf's underlay will never be changed when moved
-	//See code/datums/shuttle.dm @ 544
-	var/preserve_underlay = 0
-
-
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 
@@ -75,23 +70,24 @@
 
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
+	var/last_beam_damage = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
-		to_chat(user, "It has bullet markings on it.")
+		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
 
 /turf/proc/process()
 	set waitfor = FALSE
 	universe.OnTurfTick(src)
 
-/turf/New()
+/turf/initialize()
 	..()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-	for(var/atom/movable/AM as mob|obj in src)
-		spawn( 0 )
-			src.Entered(AM)
+	for(var/atom/movable/AM in src)
+		src.Entered(AM)
 	if(opacity)
 		has_opaque_atom = TRUE
 
@@ -107,64 +103,24 @@
 	return 0
 
 /turf/Exit(atom/movable/mover, atom/target)
-	if(!mover)
-		return 1
-	// First, make sure it can leave its square
-	if(mover.loc == src)
-		// Nothing but border objects stop you from leaving a tile, only one loop is needed
-		for(var/obj/obstacle in src)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
-			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
-				/*if(ismob(mover) && mover:client)
-					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
-				mover.to_bump(obstacle, 1)
-				return 0
-	return 1
+	return TRUE
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
-	lazy_invoke_event(/lazy_event/on_exited, list("mover" = mover, "location" = src, "newloc" = newloc))
+	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
-/turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
-	if (!mover)
-		return 1
-
-	var/list/large_dense = list()
-	//Next, check objects to block entry that are on the border
-	for(var/atom/movable/border_obstacle in src)
-		if(border_obstacle.flow_flags&ON_BORDER)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>ENTER</span>Target(border): checking Cross of [border_obstacle]"*/
-			if(!border_obstacle.Cross(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
-				/*if(ismob(mover) && mover:client)
-					world << "<span class='danger'>ENTER</span>Target(border): We are bumping into [border_obstacle]"*/
-				mover.to_bump(border_obstacle, 1)
-				return 0
-		else
-			large_dense += border_obstacle
-
-	//Then, check the turf itself
-	if (!src.Cross(mover, src))
-		mover.to_bump(src, 1)
-		return 0
-
-	//Finally, check objects/mobs to block entry that are not on the border
-	for(var/atom/movable/obstacle in large_dense)
-		/*if(ismob(mover) && mover:client)
-			world << "<span class='danger'>ENTER</span>target(large_dense): [mover] checking Cross of [obstacle]"*/
-		if(!obstacle.Cross(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>ENTER</span>target(large_dense): checking: We are bumping into [obstacle]"*/
-			mover.to_bump(obstacle, 1)
-			return 0
-	return 1 //Nothing found to block so return success!
-
+/turf/Enter(atom/movable/mover, atom/oldloc, check_contents = FALSE)
+	. = ..()
+	if(check_contents && .)
+		for(var/atom/movable/AM in src)
+			if(!AM.Cross(mover))
+				return FALSE
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
+
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 
@@ -174,7 +130,7 @@
 		A.inertia_dir = 0
 
 	..()
-	lazy_invoke_event(/lazy_event/on_entered, list("mover" = A, "location" = src, "oldloc" = OldLoc))
+	INVOKE_EVENT(src, /event/entered, "mover" = A, "location" = src, "oldloc" = OldLoc)
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj in range(1, src))
@@ -248,9 +204,9 @@
 			if(!move_to_z)
 				return
 
-			A.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			INVOKE_EVENT(A, /event/z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
 			for(var/atom/movable/AA in contents_brought)
-				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				INVOKE_EVENT(AA, /event/z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -275,14 +231,14 @@
 					MOB.pulling = was_pulling
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
-					A.loc.Entered(A)
+					A.loc.Entered(A, OldLoc)
 				if (istype(A,/obj/item/projectile))
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			A.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			INVOKE_EVENT(A, /event/post_z_transition, "user" = A, "from_z" = A.z, "to_z" = move_to_z)
 			for(var/atom/movable/AA in contents_brought)
-				AA.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
@@ -294,7 +250,7 @@
 	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
-/turf/proc/is_plasteel_floor()
+/turf/proc/is_metal_floor()
 	return 0
 /turf/proc/is_light_floor()
 	return 0
@@ -323,14 +279,12 @@
 	return
 
 /turf/proc/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(src.intact)
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
-	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(0)
@@ -362,12 +316,19 @@
 	var/old_corners = corners
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
+	var/old_registered_events = registered_events
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
-	if(connections)
-		connections.erase_all()
+	//The following two lines are an optimization. Without them, each connection would search connections when erased to remove itself.
+	var/list/connection/connections = src.connections
+	src.connections = null
+
+	for(var/turf/T in connections)
+		connections[T].erase()
+
+	connections = null
 
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)
@@ -400,6 +361,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/simulated/W = new N(src)
+		if(world.has_round_started())
+			initialize()
 		if(env)
 			W.air = env //Copy the old environment data over if both turfs were simulated
 
@@ -413,7 +376,7 @@
 			SSair.mark_for_update(src)
 
 		W.levelupdate()
-
+		W.post_change() //What to do after changing the turf. Handles stuff like zshadow updates.
 		. = W
 
 	else
@@ -423,7 +386,8 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
-		W.initialize()
+		if(world.has_round_started())
+			W.initialize()
 
 		if(tell_universe)
 			universe.OnTurfChange(W)
@@ -450,8 +414,8 @@
 
 	if (!ticker)
 		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
-	holomap_data = old_holomap // Holomap persists through everything...
-	update_holomap_planes() // But we might need to recalculate it.
+	holomap_data = old_holomap // Holomap persists through everything
+	registered_events = old_registered_events
 	if(density != old_density)
 		densityChanged()
 
@@ -665,7 +629,6 @@
 		new powerup(src)
 
 // Holomap stuff!
-#define PLANE_FOR (intact ? ABOVE_TURF_PLANE : ABOVE_PLATING_PLANE)
 /turf/proc/add_holomap(var/atom/movable/AM)
 	var/image/I = new
 	I.appearance = AM.appearance
@@ -675,28 +638,13 @@
 	I.alpha = 128
 	// Since holomaps are overlays of the turf
 	// This'll make them always be just above the turf and not block interaction.
-	I.plane = PLANE_FOR
+	I.plane = FLOAT_PLANE + 1 //Yes, there's a define equal to this value, but what we specifically want here is one plane above the parent, which is what this means.
 	// When I said above turfs I mean it.
 	I.layer = HOLOMAP_LAYER
 
 	if (!holomap_data)
 		holomap_data = list()
 	holomap_data += I
-
-// Goddamnit BYOND.
-// So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.
-//   (For some reason the existance of underlays prevented the main icon and overlays to render)
-//   (Yes, removing every underlay with VV instantly fixed the overlays and main icon)
-//   (Yes, I tried to reproduce it outside SS13, but got nothing)
-// So now I need to render the overlays at the plane above the turf (ABOVE_TURF_PLANE and ABOVE_PLATING_PLANE)
-// And as you probably already guessed, the plane required changes based on the turf type.
-// So this helper does that.
-/turf/proc/update_holomap_planes()
-	var/the_plane = PLANE_FOR
-	for (var/image/I in holomap_data)
-		I.plane = the_plane
-
-#undef PLANE_FOR
 
 // This is a MULTIPLIER OVER THE MOB'S USUAL MOVEMENT DELAY.
 // Return a high number to make the mob move slower.
@@ -714,7 +662,7 @@
 
 	var/area/A = loc
 	if(istype(A))
-		return A.has_gravity
+		return A.gravity
 
 	return 1
 

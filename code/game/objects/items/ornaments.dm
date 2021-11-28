@@ -62,7 +62,11 @@
 	if(get_turf(src))
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	if(prob(33))
-		new /obj/item/weapon/shard(get_turf(src)) // Create a glass shard at the hit location)
+		var/obj/effect/decal/cleanable/crumbs/C = new (get_turf(src))
+		for (var/ball_color in ornaments_list)
+			if (type == ornaments_list[ball_color])
+				C.color = ball_color
+				break
 	qdel(src)
 
 /obj/item/ornament/red

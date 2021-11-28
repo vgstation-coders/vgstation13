@@ -84,12 +84,13 @@ var/list/admin_verbs_admin = list(
 	/client/proc/allow_character_respawn,    /* Allows a ghost to respawn */
 	/client/proc/watchdog_force_restart,	/*forces restart using watchdog feature*/
 	/client/proc/manage_religions,
-	/client/proc/set_veil_thickness,
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
 	/client/proc/artifacts_panel,
-	/client/proc/climate_panel
+	/client/proc/body_archive_panel,
+	/client/proc/climate_panel,
+	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -132,6 +133,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/deadchat_singularity,
 	/client/proc/view_all_rods,
 	/client/proc/add_centcomm_order,
+	/client/proc/apes,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -144,7 +146,6 @@ var/list/admin_verbs_spawn = list(
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/toggleaban,
@@ -181,12 +182,12 @@ var/list/admin_verbs_debug = list(
 	/client/proc/callproc,
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
-	/client/proc/handle_paperwork, //this is completely experimental
 	/client/proc/reload_style_sheet,
 	/client/proc/reset_style_sheet,
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
 	/client/proc/configFood,
+	/client/proc/configHat,
 	/client/proc/cmd_dectalk,
 	/client/proc/debug_reagents,
 	/client/proc/create_awaymission,
@@ -198,6 +199,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/check_convertables,
 	/client/proc/toggle_convertibles,
 	/client/proc/check_spiral,
+	/client/proc/check_multi_z_spiral,
 	/client/proc/check_striketeams,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
 	/client/proc/debugNatureMapGenerator,
@@ -209,6 +211,8 @@ var/list/admin_verbs_debug = list(
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif
+	/client/proc/update_all_open_spaces,
+	/client/proc/update_all_area_portals,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -257,7 +261,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,
@@ -379,7 +382,30 @@ var/list/admin_verbs_mod = list(
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
 		/proc/generateMiniMaps,
-		/client/proc/maprender
+		/client/proc/maprender,
+		/client/proc/cmd_admin_rejuvenate,
+		/datum/admins/proc/show_role_panel,
+		/client/proc/print_jobban_old,
+		/client/proc/print_jobban_old_filter,
+		/client/proc/forceEvent,
+		///client/proc/break_all_air_groups,
+		///client/proc/regroup_all_air_groups,
+		///client/proc/kill_pipe_processing,
+		///client/proc/kill_air_processing,
+		///client/proc/disable_communication,
+		///client/proc/disable_movement,
+		/client/proc/Zone_Info,
+		/client/proc/Test_ZAS_Connection,
+		/client/proc/SDQL2_query,
+		/client/proc/check_sim_unsim,
+		/client/proc/start_line_profiling,
+		/client/proc/stop_line_profiling,
+		/client/proc/show_line_profiling,
+		/client/proc/check_wires,
+		#if UNIT_TESTS_ENABLED
+		/client/proc/unit_test_panel,
+		#endif
+		/client/proc/check_pipes
 		)
 	if (isobserver(mob))
 		mob.verbs -= /mob/dead/observer/verb/toggle_antagHUD
@@ -647,23 +673,23 @@ var/list/admin_verbs_mod = list(
 	set desc = "Cause an explosion of varying strength at your location."
 
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb")
+	var/list/choices = list("Small Bomb (1,3,4)", "Medium Bomb (3,7,14)", "Big Bomb (7,14,28)", "Custom Bomb")
 	var/choice = input("What size explosion would you like to produce?") in choices | null
 	switch(choice)
 		if(null)
 			return 0
-		if("Small Bomb (1,2,3)")
-			explosion(epicenter, 1, 2, 3, 3)
-		if("Medium Bomb (2,3,4)")
-			explosion(epicenter, 2, 3, 4, 4)
-		if("Big Bomb (3,5,7)")
-			explosion(epicenter, 3, 5, 7, 5)
+		if("Small Bomb (1,3,4)")
+			explosion(epicenter, 1, 3, 4, 4, whodunnit = usr)
+		if("Medium Bomb (3,7,14)")
+			explosion(epicenter, 3, 7, 14, 14, whodunnit = usr)
+		if("Big Bomb (7,14,28)")
+			explosion(epicenter, 7, 14, 28, 28, whodunnit = usr)
 		if("Custom Bomb")
 			var/devastation_range = input("Devastation range (in tiles):") as num
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
-			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, whodunnit = usr)
 
 	log_admin("[key_name(usr)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
 	message_admins("<span class='notice'>[key_name_admin(src)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>).</span>")
@@ -776,6 +802,18 @@ var/list/admin_verbs_mod = list(
 			return
 		log_admin("[src] deadminned themself.")
 		message_admins("[src] deadminned themself.")
+		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.
+			var/admins_number = admins.len
+			var/admin_number_afk = 0
+			for(var/client/X in admins)
+				if(X.is_afk())
+					admin_number_afk++
+
+			var/available_admins = admins_number - admin_number_afk
+
+			if(available_admins == 0) // Apparently the admin logging out is no longer an admin at this point, so we have to check this towards 0 and not towards 1. Awell.
+				send2adminirc("[key_name(src, showantag = FALSE)] deadminned themself - no more non-AFK admins online. - [admin_number_afk] AFK.")
+				send2admindiscord("[key_name(src, showantag = FALSE)] deadminned themself. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 		deadmin()
 		verbs += /client/proc/readmin
 		deadmins += ckey
@@ -939,9 +977,15 @@ var/list/admin_verbs_mod = list(
 		to_chat(usr, "player list is empty!")
 		return
 
-	var/mob/winner = input("Who's a winner?", "Achievement Winner", null) as null|anything in player_list
-	if(!winner)
+	var/list/winners = list()
+	for (var/mob/M in player_list)
+		winners["[M.real_name] ([M.key])"] = M
+
+	var/choice = input("Who's a winner?", "Achievement Winner", null) as null|anything in winners
+	if(!choice)
 		return
+
+	var/mob/winner = winners[choice]
 
 	var/name = input("What will you call your achievement?", "Achievement Winner", "New Achievement", null) as null|text
 	if(!name)
@@ -1166,17 +1210,26 @@ var/list/admin_verbs_mod = list(
 				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
 				return
 
-			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically).")
-			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)")
-			load_dungeon(ME)
-			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
+			var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
+			if(rotate == null)
+				return
+
+			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees.")
+			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically) rotated by [rotate] degrees")
+			load_dungeon(ME, rotate, TRUE)
+			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"] rotated by [rotate] degrees")
 			return
 
 
-	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	ME.load(x_coord - 1, y_coord - 1, z_coord) //Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
+	var/rotate = input(usr, "Set the rotation offset: (0, 90, 180 or 270) ", "Map element loading", "0") as null|num
+	if(rotate == null)
+		return
+	var/overwrite = alert("Overwrite original objects in area?","Map element loading","Yes","No") == "Yes"
+
+	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord] rotated by [rotate] degrees")
+	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord] rotated by [rotate] degrees")
+	ME.load(x_coord - 1, y_coord - 1, z_coord, rotate, overwrite, TRUE) //Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
+	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"] rotated by [rotate] degrees")
 
 /client/proc/create_awaymission()
 	set category = "Admin"

@@ -1,6 +1,6 @@
 /obj/machinery/communication
 	name = "Ancient Device"
-	desc = "There seems to be six slots capable of holding small crystals placed along its side"
+	desc = "There seems to be six slots capable of holding small crystals placed along its side."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "communication"
 	stat = NOPOWER //Niggers you will wrench this shit down or else
@@ -16,7 +16,7 @@
 	if(istype(W,/obj/item/commstone))
 		if((W in allstones) && remaining < 6)
 			if(user.drop_item(W, src))
-				to_chat(user, "<span class='notice'>You place one of the strange stones back onto the ancient device, it snaps into place.</span>")
+				to_chat(user, "<span class='notice'>You place one of the strange stones back onto the ancient device. It snaps into place.</span>")
 				remaining++
 	..()
 
@@ -51,7 +51,7 @@
 	else
 		to_chat(user, "<span class='info'>The device no longer has any stones in any of its holders.")
 	if(stat & NOPOWER)
-		to_chat(user, "<span class='info'>It seems the machine is currently dark, perhaps it would activate when anchored into a powered area.")
+		to_chat(user, "<span class='info'>It seems the machine is currently dark. Perhaps it would activate when anchored into a powered area.")
 
 /obj/machinery/communication/Destroy()
 	for(var/stone in contents)

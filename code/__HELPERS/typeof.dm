@@ -119,9 +119,13 @@ var/global/list/existing_typesof_cache = list()
 		if(istype(A, path))
 			return TRUE
 	return FALSE
-//Finds types that are subtypes of a type, but only 1 level down.
-proc/direct_subtypesof(path)
-	var/list/out = subtypesof(path)
-	for(var/type in out)
-		out -= subtypesof(type) //remove any subtypes of our current entry from the list
-	return out
+
+// Finds subtypes of a type, but only 1 level down.
+/proc/direct_subtypesof(path)
+	. = list()
+	var/path_depth = count_matches("[path]", "/")
+	for(var/type in typesof(path))
+		var/subpath_depth = count_matches("[type]", "/")
+		if(subpath_depth != path_depth + 1)
+			continue
+		. += type

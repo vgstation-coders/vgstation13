@@ -9,8 +9,6 @@ var/area/space_area
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
 	var/list/area_turfs
-	var/turret_protected = 0
-	var/list/turretTargets = list()
 	plane = ABOVE_LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
@@ -41,7 +39,7 @@ var/area/space_area
 		//ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
 		ambient_sounds = list()
 		//lighting_state = 4
-		//has_gravity = 0    // Space has gravity.  Because.. because.
+		//gravity = 0    // Space has gravity.  Because.. because.
 
 	if(!requires_power)
 		power_light = 1
@@ -436,6 +434,8 @@ var/area/space_area
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = get_area(OldLoc)
 
+	if(oldArea == src)
+		return 1
 	if(project_shadows)
 		Obj.update_shadow()
 	else if(istype(oldArea) && oldArea.project_shadows)
@@ -446,31 +446,17 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
+	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
 		if(narrator)
 			narrator.Crossed(M)
 
-	if(turret_protected)
-		if(isliving(Obj))
-			turretTargets |= Obj
-		else if(istype(Obj, /obj/mecha))
-			var/obj/mecha/Mech = Obj
-			if(Mech.occupant)
-				turretTargets |= Mech
-		// /vg/ vehicles
-		else if(istype(Obj, /obj/structure/bed/chair/vehicle))
-			turretTargets |= Obj
-		return 1
-
 /area/Exited(atom/movable/Obj)
-	if(turret_protected)
-		if(Obj in turretTargets)
-			turretTargets -= Obj
+	INVOKE_EVENT(src, /event/area_exited, "exiter" = Obj)
 	..()
 
 /area/proc/subjectDied(target)
@@ -482,7 +468,7 @@ var/area/space_area
 /area/proc/gravitychange(var/gravitystate = 0, var/area/A)
 
 
-	A.has_gravity = gravitystate
+	A.gravity = gravitystate
 
 	if(gravitystate)
 		for(var/mob/living/carbon/human/H in A)
@@ -503,13 +489,6 @@ var/area/space_area
 	poweralert(1, apctoremove) //CANCEL THE POWER ALERT PLEASE
 	if(areaapc == apctoremove)
 		areaapc = null
-
-/area/proc/get_turfs()
-	var/list/L = list()
-	for(var/turf/T in contents)
-		L += T
-
-	return L
 
 /area/proc/get_atoms()
 	var/list/L = list()
@@ -559,7 +538,6 @@ var/area/space_area
 
 var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
-var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 
 /area/proc/move_contents_to(var/area/A, var/turftoleave=null, var/direction = null)
 	//Takes: Area. Optional: turf type to leave behind.
@@ -659,42 +637,18 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 						SX.air.copy_from(ST.zone.air)
 						ST.zone.remove(ST)
 
-					/* Quick visual fix for some weird shuttle corner artefacts when on transit space tiles */
-					if(direction && findtext(X.icon_state, "swall_s"))
-
-						// Spawn a new shuttle corner object
-						var/obj/corner = new()
-						corner.forceMove(X)
-						corner.setDensity(TRUE)
-						corner.anchored = 1
-						corner.icon = X.icon
-						corner.icon_state = replacetext(X.icon_state, "_s", "_f")
-						corner.tag = "delete me"
-						corner.name = "wall"
-
+					/* Quick visual fix for transit space tiles */
+					if(direction && (locate(/obj/structure/shuttle/diag_wall) in X))
 						// Find a new turf to take on the property of
-						var/turf/nextturf = get_step(corner, direction)
+						var/turf/nextturf = get_step(X, direction)
 						if(!nextturf || !istype(nextturf, /turf/space))
-							nextturf = get_step(corner, turn(direction, 180))
-
+							nextturf = get_step(X, turn(direction, 180))
 
 						// Take on the icon of a neighboring scrolling space icon
 						X.icon = nextturf.icon
 						X.icon_state = nextturf.icon_state
 
-
 					for(var/obj/O in T)
-
-						// Reset the shuttle corners
-						if(O.tag == "delete me")
-							X.icon = 'icons/turf/shuttle.dmi'
-							X.icon_state = replacetext(O.icon_state, "_f", "_s") // revert the turf to the old icon_state
-							X.name = "wall"
-							qdel(O) // prevents multiple shuttle corners from stacking
-							O = null
-							continue
-						if(!istype(O,/obj))
-							continue
 						O.forceMove(X)
 					for(var/mob/M in T)
 						if(!M.can_shuttle_move())

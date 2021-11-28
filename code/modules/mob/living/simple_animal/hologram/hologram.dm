@@ -1,12 +1,14 @@
 /mob/living/simple_animal/hologram
 	name = "hologram"
-	desc = "A holographic image of something"
+	desc = "A holographic image of something."
 	icon = 'icons/mob/AI.dmi'
 	icon_state = "holo2"
 	icon_living = "holo2"
 	icon_dead = null
 	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
+
+	blooded = FALSE
 
 
 /mob/living/simple_animal/hologram/death(var/gibbed = FALSE)

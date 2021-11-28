@@ -18,7 +18,7 @@
 	desc = "A chain link fence. Not as effective as a wall, but generally it keeps people out."
 	density = 1
 	anchored = 1
-
+	pass_flags_self = PASSGRILLE
 	icon = 'icons/obj/structures/fence.dmi'
 	icon_state = "straight"
 
@@ -67,7 +67,7 @@
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W) && !shock(user, 100, W.siemens_coefficient))
+	if(W.is_wirecutter(user) && !shock(user, 100, W.siemens_coefficient))
 		if(!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
@@ -157,7 +157,7 @@
 /obj/structure/fence/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGRILLE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
 		if(istype(mover, /obj/item/projectile))

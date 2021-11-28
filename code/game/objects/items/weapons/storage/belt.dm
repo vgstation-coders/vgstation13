@@ -7,6 +7,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines")
+	hitsound = "sound/weapons/whip.ogg"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
 
@@ -49,7 +50,8 @@
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
 		"/obj/item/device/silicate_sprayer",
-		"/obj/item/device/geiger_counter"
+		"/obj/item/device/geiger_counter",
+		"/obj/item/airshield_projector"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
@@ -116,7 +118,8 @@
 		"/obj/item/weapon/rcl",
 		"/obj/item/device/silicate_sprayer",
 		"/obj/item/device/geiger_counter",
-		"/obj/item/weapon/inflatable_dispenser"
+		"/obj/item/weapon/inflatable_dispenser",
+		"/obj/item/airshield_projector"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
@@ -171,7 +174,10 @@
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
 		"/obj/item/weapon/electrolyzer",
-		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro"
+		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro",
+		"/obj/item/weapon/depocket_wand/suit",
+		"/obj/item/taperoll/viro",
+		"/obj/item/taperoll/syndie/viro"
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -282,7 +288,7 @@
 
 /obj/item/weapon/storage/belt/soulstone
 	name = "soul stone belt"
-	desc = "Designed for ease of access to the shards during a fight, as to not let a single enemy spirit slip away"
+	desc = "Designed for ease of access to the shards during a fight, as to not let a single enemy spirit slip away."
 	icon_state = "soulstonebelt"
 	item_state = "soulstonebelt"
 	storage_slots = 6
@@ -315,13 +321,21 @@
 
 /obj/item/weapon/storage/belt/skull
 	name = "trophy-belt" //FATALITY
-	desc = "Excellent for holding the heads of your fallen foes."
+	desc = "Excellent for holding the heads and limbs of your fallen foes."
 	icon_state = "utilitybelt"
 	item_state = "utility"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		"/obj/item/organ/external/head"
+ 		"/obj/item/organ/external/head",
+ 		"/obj/item/organ/external/r_arm",
+ 		"/obj/item/organ/external/r_hand",
+ 		"/obj/item/organ/external/r_foot",
+ 		"/obj/item/organ/external/r_leg",
+ 		"/obj/item/organ/external/l_arm",
+ 		"/obj/item/organ/external/l_hand",
+ 		"/obj/item/organ/external/l_foot",
+ 		"/obj/item/organ/external/l_leg"
  	)
 
 /obj/item/weapon/storage/belt/silicon
@@ -445,7 +459,7 @@
 			var/mob/living/simple_animal/hostile/humanoid/H = NM
 			H.items_to_drop = list()
 		NM.faction = "lazarus \ref[user]"
-		NM.friends += user
+		NM.friends += makeweakref(user)
 		MC.contained_mob = NM
 		MC.name = "lazarus capsule - [NM.name]"
 	..()
@@ -488,3 +502,36 @@
 		"/obj/item/weapon/mop",
 		"/obj/item/weapon/storage/bag/trash")
 
+/obj/item/weapon/storage/belt/leather
+	name = "leather belt"
+	desc = "This belt is of uncommonly good craftsmanship. For some reason, the inside of the buckle reads '18+'."
+	icon_state = "leather"
+	item_state = "leather"
+	storage_slots = 2 //no pouches, no straps, just a waistband
+
+/obj/item/weapon/storage/belt/leather/equipped(mob/living/M, slot)
+	..()
+	if(!istype(M))
+		return
+	if(slot == slot_belt)
+		M.maxHealth += 4
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species)
+				H.species.punch_damage += 4
+		to_chat(M, "<span class='notice'>You feel tough enough to punch a boar in half!</span>")
+		spawn(0) //this is just for the adminwarning - finish unequipping everything before attempting to calculate this
+			if(M.maxHealth == initial(M.maxHealth)+8)
+				message_admins("[key_name(M)] appears to have found some kind of leather belt exploit. What a champ! Give them a pat on the back and tell them to bugreport it after.")
+
+/obj/item/weapon/storage/belt/leather/unequipped(mob/living/M, from_slot)
+	..()
+	if(!istype(M))
+		return
+	if(from_slot == slot_belt)
+		M.maxHealth -= 4
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species)
+				H.species.punch_damage -= 4
+		to_chat(M, "<span class='notice'>You feel like a dress-wearing weakling.</span>")

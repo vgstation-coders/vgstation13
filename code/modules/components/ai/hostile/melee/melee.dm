@@ -1,14 +1,15 @@
 /datum/component/ai/melee
 
-/datum/component/ai/melee/RecieveSignal(var/message_type, var/list/args)
-	switch(message_type)
-		if(COMSIG_ATTACKING) // list("target"=A)
-			return OnAttackingTarget(args["target"])
-		else
-			return ..(message_type, args)
+/datum/component/ai/melee/initialize()
+	parent.register_event(/event/comp_ai_cmd_attack, src, .proc/cmd_attack)
+	return TRUE
 
-/datum/component/ai/melee/proc/OnAttackingTarget(var/atom/target)
-	if(!isliving(target))
-		return 0
-	var/mob/living/L = target
-	return L.Adjacent(container.holder)
+/datum/component/ai/melee/Destroy()
+	parent.unregister_event(/event/comp_ai_cmd_attack, src, .proc/cmd_attack)
+	..()
+
+/datum/component/ai/melee/proc/can_attack(atom/target)
+	return target.Adjacent(parent)
+
+/datum/component/ai/melee/proc/cmd_attack(atom/target)
+	return can_attack(target)

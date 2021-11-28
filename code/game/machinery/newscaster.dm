@@ -61,14 +61,15 @@
 	img_pda = null
 	backup_img_pda = null
 
-/datum/feed_message/proc/ImagePDA()
+/proc/ImagePDA(var/icon/img)
 	if (img)
-		img_pda = icon(img)
+		var/icon/img_pda = icon(img)
 		//turns the image grayscale then applies an olive coat of paint
 		img_pda.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(128,128,0))
 		//lowers the brightness then ups the contrast so we get something that fits on a PDA screen
 		img_pda.MapColors(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,-0.53,-0.53,-0.53,0)
 		img_pda.MapColors(1.75,0,0,0,0,1.75,0,0,0,0,1.75,0,0,0,0,1.75,-0.375,-0.375,-0.375,0)
+		return img_pda
 
 /datum/feed_message/proc/NewspaperCopy()//We only copy the vars we'll need
 	var/datum/feed_message/copy = new()
@@ -149,6 +150,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/channel_name = ""; //the feed channel which will be receiving the feed, or being created
 	var/c_locked = FALSE; //Will our new channel be locked to public submissions?
 	var/c_anonymous = FALSE //Will our new channel be anonymous?
+	var/c_anoncreate = FALSE //Will our new channel be created anonymously?
 	var/hitstaken = 0 //Death at 3 hits from an item with force>=15
 	var/datum/feed_channel/viewing_channel = list()
 	var/anonymous_posting = FALSE
@@ -314,6 +316,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					<B>Channel Author:</B> <FONT COLOR='green'>[scanned_user]</FONT><BR>
 					<B><A href='?src=\ref[src];set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(c_locked) ? ("NO") : ("YES")]<BR>
 					<B><A href='?src=\ref[src];set_channel_anonymous=1'>Anonymous feed</A>:</B> [(c_anonymous) ? ("YES") : ("NO")]<BR><BR>
+					<B><A href='?src=\ref[src];set_channel_anoncreate=1'>Create feed anonymously</A>:</B> [(c_anoncreate) ? ("YES") : ("NO")]<BR><BR>
 					<BR><A href='?src=\ref[src];submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A><BR>"}
 
 			if(NEWSCASTER_NEW_MESSAGE)
@@ -409,7 +412,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 
-								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192'></a><BR><BR>"
+								dat+="<a href='?src=\ref[src];show_photo_info=\ref[MESSAGE]'><img src='tmp_photo[i].png' width = '192' style='-ms-interpolation-mode:nearest-neighbor'></a><BR><BR>"
 							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
 				dat += {"<BR><HR><A href='?src=\ref[src];refresh=1'>Refresh</A>
@@ -575,6 +578,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			c_anonymous = !c_anonymous
 			updateUsrDialog()
 
+		else if(href_list["set_channel_anoncreate"])
+			if(isobserver(usr) && !canGhostWrite(usr,src,"created anonymous channel"))
+				to_chat(usr, "<span class='warning'>You can't do that.</span>")
+				return
+			c_anoncreate = !c_anoncreate
+			updateUsrDialog()
 
 		else if(href_list["set_anon_posting"])
 			if(isobserver(usr) && !canGhostWrite(usr,src,"made the author of the post anonymous"))
@@ -605,7 +614,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(choice=="Confirm")
 					var/datum/feed_channel/newChannel = new /datum/feed_channel
 					newChannel.channel_name = channel_name
-					newChannel.author = scanned_user
+					newChannel.author = c_anoncreate ? "Anonymous": scanned_user
 					newChannel.locked = c_locked
 					newChannel.anonymous = c_anonymous
 					feedback_inc("newscaster_channels",1)
@@ -708,7 +717,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
-					newMsg.ImagePDA()
+					newMsg.img_pda = ImagePDA(newMsg.img)
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
@@ -822,7 +831,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
 								WANTED.img = P.fields["img"]
-							WANTED.ImagePDA()
+							WANTED.img_pda = ImagePDA(WANTED.img)
 						news_network.wanted_issue = WANTED
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()
@@ -992,6 +1001,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(do_after(user, src,10))
 					to_chat(user, "<span class='notice'>You pry off the [src]!.</span>")
 					new /obj/item/mounted/frame/newscaster(loc)
+					EjectPhoto(user)
 					qdel(src)
 					return
 
@@ -1241,7 +1251,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			attack_self(loc)
 
 
-obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen))
 		if(scribble_page == curr_page)
 			to_chat(user, "<span class='notice'>There's already a scribble in this page... You wouldn't want to make things too cluttered, would you?</span>")

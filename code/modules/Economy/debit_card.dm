@@ -72,7 +72,7 @@
 	starting_materials = list(MAT_IRON = 10)
 	w_type = RECYK_METAL
 	to_cut = 1
-	var/examine_held = "<span class='notice'>You feel more important just by holding it</span>"
+	var/examine_held = "<span class='notice'>You feel more important just by holding it.</span>"
 
 /obj/item/weapon/card/debit/preferred/examine(var/mob/user)
 	. = ..()
@@ -81,11 +81,11 @@
 
 /obj/item/weapon/card/debit/preferred/elite
 	name = "\improper elite debit card"
-	desc = "A very sturdy looking metal card containing near field circuitry. Whoever owns it must be really important"
+	desc = "A very sturdy looking metal card containing near field circuitry. Whoever owns it must be really important."
 	icon_state = "debit-elite"
 	starting_materials = list(MAT_IRON = 20)
 	to_cut = 1.5
-	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it</span>"
+	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it.</span>"
 
 /obj/item/weapon/card/debit/preferred/department
 	name = "\improper department debit card"
@@ -123,11 +123,11 @@
 		return FALSE
 
 /obj/item/weapon/card/debit/preferred/department/elite
-	desc = "A very sturdy looking metal card containing near field circuitry. Whoever owns it must be really important"
+	desc = "A very sturdy looking metal card containing near field circuitry. Whoever owns it must be really important."
 	icon_state = "debit-elite"
 	starting_materials = list(MAT_IRON = 20)
 	to_cut = 1.5
-	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it</span>"
+	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it.</span>"
 
 /obj/item/weapon/card/debit/preferred/department/cargo/New(var/new_loc, var/desired_department = "Cargo", var/desired_authorized_name)
 	..()

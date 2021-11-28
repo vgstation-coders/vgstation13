@@ -99,6 +99,33 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(prob(50))
 		qdel(src)
 
+/obj/machinery/chem_master/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(is_type_in_list(AM, accepted_containers))
+		if(src.container)
+			return FALSE
+		if(istype(AM,/obj/item))
+			var/obj/item/I = AM
+			if(I.w_class > W_CLASS_SMALL)
+				return FALSE
+		AM.forceMove(src)
+
+		src.container = AM
+
+		src.updateUsrDialog()
+		update_icon()
+		return TRUE
+
+	else if(istype(AM, /obj/item/weapon/storage/pill_bottle))
+		if(windowtype != "chem_master" || src.loaded_pill_bottle) //Only the chemmaster will accept pill bottles
+			return FALSE
+		AM.forceMove(src)
+
+		src.loaded_pill_bottle = AM
+
+		src.updateUsrDialog()
+		return TRUE
+	return FALSE
+
 /obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
 	if(..())
 		return 1
@@ -200,6 +227,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				if(!condi)
 					if(istype(reagent, /datum/reagent/blood))
 						dat += "Blood type: [reagent.data["blood_type"] || "Unknown"]<BR>Blood DNA: [reagent.data["blood_DNA"] || "Unable to determine"]<BR><BR>"
+					else if(islist(reagent.data) && reagent.data["stored_phrase"])
+						dat += "The polymer chains currently read: \"[reagent.data["stored_phrase"]]\".<BR><BR>"
 					dat += "Density:<BR>[reagent.density]<BR><BR>Specific heat capacity:<BR>[reagent.specheatcap]<BR><BR><BR>"
 				dat += "<A href='?src=\ref[src];main=1'>(Back)</A>"
 

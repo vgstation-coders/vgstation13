@@ -1,31 +1,36 @@
 /datum/component/ai/target_finder/human
 	range = 7
-	var/datum/component/ai/human_brain/B
 
-/datum/component/ai/target_finder/human/GetTargets()
-	ASSERT(container.holder!=null)
-	if(!B)
-		B = GetComponent(/datum/component/ai/human_brain)
+/datum/component/ai/target_finder/human/initialize()
+	parent.register_event(/event/attackby, src, .proc/on_attackby)
+	parent.register_event(/event/comp_ai_cmd_find_targets, src, .proc/cmd_find_targets)
+	return TRUE
+
+/datum/component/ai/target_finder/human/Destroy()
+	parent.unregister_event(/event/attackby, src, .proc/on_attackby)
+	parent.unregister_event(/event/comp_ai_cmd_find_targets, src, .proc/cmd_find_targets)
+	..()
+
+/datum/component/ai/target_finder/human/cmd_find_targets()
+	var/datum/component/ai/human_brain/brain = parent.get_component(/datum/component/ai/human_brain)
 	var/list/o = list()
-	for(var/mob/M in view(range, container.holder))
+	for(var/mob/M in view(range, parent))
 		if(is_type_in_list(M, exclude_types))
 			continue
 		if(M.isUnconscious())
 			continue
-		if((M in B.enemies) || (M.faction && (M.faction in B.enemy_factions)) || (M.type in B.enemy_types))
+		if((M in brain.enemies) || (M.faction && (M.faction in brain.enemy_factions)) || (M.type in brain.enemy_types))
 			o += M
 		else if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if(H.species && (H.species.name in B.enemy_species))
+			if(H.species && (H.species.name in brain.enemy_species))
 				o += M
 	return o
 
-/datum/component/ai/target_finder/human/RecieveSignal(var/message_type, var/list/args)
-	..()
-	if(message_type == COMSIG_ATTACKEDBY) //YOU HAVE JUST MADE AN ENEMY FOR LIFE
-		var/assailant = args["assailant"]
-		var/damage_done = args["damage"]
-		if(damage_done > 15) //Intent to kill!
-			B.friends.Remove(assailant)
-		if(damage_done > 2)
-			B.enemies |= assailant
+// YOU HAVE JUST MADE AN ENEMY FOR LIFE
+/datum/component/ai/target_finder/human/proc/on_attackby(mob/attacker, obj/item/item)
+	var/datum/component/ai/human_brain/brain = parent.get_component(/datum/component/ai/human_brain)
+	if(item.force > 15) //Intent to kill!
+		brain.friends.Remove(attacker)
+	if(item.force > 2)
+		brain.enemies |= attacker

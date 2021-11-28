@@ -12,6 +12,8 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "emfield_s1"
 	alpha = 50
+	anchored = 1
+	density = 0
 
 	var/major_radius = 0	//longer radius in meters = field_strength * 0.21875, max = 8.75
 	var/minor_radius = 0	//shorter radius in meters = field_strength * 0.2125, max = 8.625
@@ -431,8 +433,9 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	for(var/obj/effect/rust_particle_catcher/catcher in particle_catchers)
 		qdel(catcher)
 
-	owned_core.owned_field = null
-	owned_core = null
+	if(owned_core)
+		owned_core.owned_field = null
+		owned_core = null
 
 	RadiateAll()
 

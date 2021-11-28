@@ -7,6 +7,8 @@
 	logo_state = "cult-logo"
 	greets = list("default","custom","admintoggle")
 	required_pref = CULTIST
+	default_admin_voice = "<span class='danger'>Nar-Sie</span>" // Nar-Sie's name always appear in red in the chat, makes it stand out.
+	admin_voice_style = "sinister"
 
 /datum/role/legacy_cultist/OnPostSetup(var/equip = FALSE)
 	. = ..()

@@ -84,6 +84,9 @@
 		plane = MOB_PLANE
 		to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
 
+/mob/living/simple_animal/hostile/lizard/get_butchering_products()
+	return list(/datum/butchering_product/skin/lizard)
+
 //freg
 /mob/living/simple_animal/hostile/lizard/frog
 	species_type = /mob/living/simple_animal/hostile/lizard/frog
@@ -112,3 +115,5 @@
 			if(I_HURT)
 				emote("me", EMOTE_AUDIBLE, "grunts.")
 
+/mob/living/simple_animal/hostile/lizard/frog/get_butchering_products()
+	return list(/datum/butchering_product/frog_leg)

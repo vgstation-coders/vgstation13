@@ -13,12 +13,17 @@
 	var/chance = 100
 	var/jiggle = 0
 	var/list/to_spawn = list()
+	var/spawn_all = FALSE //If TRUE, will attempt to spawn 1 of each of the items in to_spawn, rather than pick only one.
 
 /obj/abstract/map/spawner/perform_spawn()
-
 	for(amount, amount, amount--)
-		if(prob(chance))
-			CreateItem(pick(to_spawn))
+		if(spawn_all)
+			for(var/obj/thing in to_spawn)
+				if(prob(chance))
+					CreateItem(thing)
+		else
+			if(prob(chance))
+				CreateItem(pick(to_spawn))
 	qdel(src)
 
 /obj/abstract/map/spawner/proc/CreateItem(new_item_type)
@@ -180,7 +185,6 @@
 		/obj/machinery/monkey_recycler,
 		/obj/machinery/photocopier,
 		/obj/machinery/pipedispenser,
-		/obj/machinery/porta_turret,
 		/obj/machinery/power/am_control_unit,
 		/obj/machinery/power/emitter,
 		/obj/machinery/power/generator,
@@ -200,6 +204,7 @@
 		/obj/machinery/telecomms/allinone,
 		/obj/machinery/teleport/station,
 		/obj/machinery/the_singularitygen,
+		/obj/machinery/turret/portable,
 		/obj/machinery/vending/dinnerware,
 		/obj/machinery/vending/engineering,
 		/obj/machinery/vending/plasmaresearch,
@@ -586,7 +591,9 @@
 		/obj/structure/bed/chair/vehicle/wheelchair/multi_people,
 		/obj/item/stack/package_wrap/syndie,
 		/obj/item/weapon/storage/toolbox/syndicate,
-		/obj/item/weapon/switchtool/swiss_army_knife
+		/obj/item/weapon/switchtool/swiss_army_knife,
+		/obj/item/clothing/accessory/wristwatch,
+		/obj/item/clothing/accessory/wristwatch/black,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -1116,7 +1123,7 @@
 		/obj/item/weapon/dnainjector/nofail/fat,
 		/obj/item/weapon/dnainjector/nofail/runfast,
 		/obj/item/weapon/dnainjector/nofail/strong,
-		/obj/item/weapon/reagent_containers/food/snacks/chicken_fillet,
+		/obj/item/weapon/reagent_containers/food/snacks/chicken_tenders,
 		/obj/item/clothing/under/shorts/black,
 		/obj/item/clothing/under/shorts/blue,
 		/obj/item/clothing/under/shorts/red,
@@ -1178,7 +1185,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
 		/obj/item/mounted/frame/painting,
 		/obj/item/weapon/aiModule/randomize,
-		/obj/item/weapon/aiModule/core/hogan
+		/obj/item/weapon/aiModule/core/hogan,
+		/obj/item/weapon/gun/portalgun,
+		/obj/item/clothing/glasses/emitter,
+		/obj/item/clothing/accessory/wristwatch/gold
 )
 
 
@@ -1227,7 +1237,8 @@
 	/obj/item/weapon/gun/projectile/russian,
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
-	/obj/item/weapon/gun/siren
+	/obj/item/weapon/gun/siren,
+	/obj/item/weapon/gun/portalgun
 )
 
 /obj/abstract/map/spawner/safe/clothing
@@ -1246,7 +1257,9 @@
 	/obj/item/clothing/gloves/anchor_arms,
 	/obj/item/clothing/suit/space/rig/soviet,
 	/obj/item/clothing/suit/space/rig/nazi,
-	/obj/abstract/spawn_all/dredd_gear
+	/obj/abstract/spawn_all/dredd_gear,
+	/obj/item/clothing/glasses/emitter,
+	/obj/item/clothing/accessory/wristwatch/gold,
 )
 
 /obj/abstract/map/spawner/safe/medal
@@ -1264,7 +1277,7 @@
 	/obj/item/clothing/accessory/medal/gold/heroism
 )
 //Food spawners////////////////////////////////////
-/obj/abstract/map/spawner/food/voxfood //spawns food for the vox raiders
+/obj/abstract/map/spawner/voxfood //spawns food for the vox raiders
 	name = "vox food spawner"
 	icon_state = "food"
 	amount = 7

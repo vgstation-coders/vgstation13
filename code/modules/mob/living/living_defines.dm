@@ -51,8 +51,6 @@
 	var/fire_stacks = 0 //Tracks how many stacks of fire we have on, max is usually 20
 
 	var/specialsauce = 0 //Has this person consumed enough special sauce? IF so they're a ticking time bomb of death.
-
-	var/implanting = 0 //Used for the mind-slave implant
 	var/silent = null 		//Can't talk. Value goes down every life proc.
 
 	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
@@ -78,8 +76,6 @@
 	var/cap_calorie_burning_bodytemp = TRUE
 	var/calorie_burning_heat_multiplier = 1		//The heat generated from burning calories is multiplied by this value.
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
-
-	var/datum/component_container/BrainContainer
 
 	var/list/datum/disease2/disease/virus2 = list()
 	var/image/pathogen

@@ -299,11 +299,11 @@
 		if (on)
 			set_light(2,2)
 			var/image/incubator_light = image(icon,"incubator_light")
-			incubator_light.plane = LIGHTING_PLANE
+			incubator_light.plane = ABOVE_LIGHTING_PLANE
 			incubator_light.layer = ABOVE_LIGHTING_LAYER
 			overlays += incubator_light
 			var/image/incubator_glass = image(icon,"incubator_glass")
-			incubator_glass.plane = LIGHTING_PLANE
+			incubator_glass.plane = ABOVE_LIGHTING_PLANE
 			incubator_glass.layer = ABOVE_LIGHTING_LAYER
 			incubator_glass.blend_mode = BLEND_ADD
 			overlays += incubator_glass
@@ -334,7 +334,7 @@
 	//updating the light indicators
 	if (dish.contained_virus && !(stat & (BROKEN|NOPOWER)))
 		var/image/grown_gauge = image(icon,"incubator_growth7")
-		grown_gauge.plane = LIGHTING_PLANE
+		grown_gauge.plane = ABOVE_LIGHTING_PLANE
 		grown_gauge.layer = ABOVE_LIGHTING_LAYER
 		grown_gauge.pixel_y = -5 * slot
 		if (dish.growth < 100)
@@ -349,13 +349,13 @@
 			if (update)
 				var/image/grown_light = image(icon,"incubator_grown_update")
 				grown_light.pixel_y = -5 * slot
-				grown_light.plane = LIGHTING_PLANE
+				grown_light.plane = ABOVE_LIGHTING_PLANE
 				grown_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += grown_light
 			else
 				var/image/grown_light = image(icon,"incubator_grown")
 				grown_light.pixel_y = -5 * slot
-				grown_light.plane = LIGHTING_PLANE
+				grown_light.plane = ABOVE_LIGHTING_PLANE
 				grown_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += grown_light
 
@@ -369,13 +369,13 @@
 			if (update)
 				var/image/reagents_light = image(icon,"incubator_reagents_update")
 				reagents_light.pixel_y = -5 * slot
-				reagents_light.plane = LIGHTING_PLANE
+				reagents_light.plane = ABOVE_LIGHTING_PLANE
 				reagents_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += reagents_light
 			else
 				var/image/reagents_light = image(icon,"incubator_reagents")
 				reagents_light.pixel_y = -5 * slot
-				reagents_light.plane = LIGHTING_PLANE
+				reagents_light.plane = ABOVE_LIGHTING_PLANE
 				reagents_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += reagents_light
 
@@ -384,13 +384,13 @@
 				dish_datum.updates += INCUBATOR_DISH_MAJOR
 				var/image/effect_light = image(icon,"incubator_major_update")
 				effect_light.pixel_y = -5 * slot
-				effect_light.plane = LIGHTING_PLANE
+				effect_light.plane = ABOVE_LIGHTING_PLANE
 				effect_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += effect_light
 				alert_noise("beep")
 			else
 				var/image/effect_light = image(icon,"incubator_major")
-				effect_light.plane = LIGHTING_PLANE
+				effect_light.plane = ABOVE_LIGHTING_PLANE
 				effect_light.layer = ABOVE_LIGHTING_LAYER
 				effect_light.pixel_y = -5 * slot
 				overlays += effect_light
@@ -400,7 +400,7 @@
 				dish_datum.updates += INCUBATOR_DISH_MINOR
 				var/image/effect_light = image(icon,"incubator_minor_update")
 				effect_light.pixel_y = -5 * slot
-				effect_light.plane = LIGHTING_PLANE
+				effect_light.plane = ABOVE_LIGHTING_PLANE
 				effect_light.layer = ABOVE_LIGHTING_LAYER
 				overlays += effect_light
 			else

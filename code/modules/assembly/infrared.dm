@@ -78,7 +78,7 @@
 	if(on && visible)
 		var/image/I = image(icon = icon, icon_state = "infrared_on", dir = dir)
 		I.layer = ABOVE_LIGHTING_LAYER
-		I.plane = LIGHTING_PLANE
+		I.plane = ABOVE_LIGHTING_PLANE
 		attached_overlays["infrared_on"] = I
 		overlays += attached_overlays["infrared_on"]
 
@@ -101,7 +101,7 @@
 			T = holder.loc
 		else if (holder.master && isturf(holder.loc.loc)) //or in an assembly rigging something that's on the floor?
 			T = holder.loc.loc
-	else if(istype(loc,/obj/item/weapon/grenade) && isturf(loc.loc)) // or in a grenade that's on the floor? (can it even activate grenades without igniters?)
+	else if(isobj(loc) && isturf(loc.loc)) // or in a grenade on the floor/wired item? (can it even activate grenades without igniters?)
 		T = loc.loc
 	if(T)
 		if(!beam)
@@ -215,10 +215,10 @@
 
 	var/static/list/smokes_n_mists = list(
 		/obj/effect/decal/chemical_puff,
-		/obj/effect/effect/smoke,
-		/obj/effect/effect/water,
-		/obj/effect/effect/foam,
-		/obj/effect/effect/steam,
+		/obj/effect/smoke,
+		/obj/effect/water,
+		/obj/effect/foam,
+		/obj/effect/steam,
 		/obj/effect/mist,
 		)
 

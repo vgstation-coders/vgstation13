@@ -44,8 +44,7 @@
 	update_icon()
 
 /obj/structure/displaycase/gooncode/setContent()
-	occupant=new /obj/item/toy/gooncode(src)
-	desc = "The glass is cracked and there are traces of something leaking out."
+	occupant=new /obj/item/weapon/coin/pomf(src)
 	locked=1
 	req_access=list(access_captain)
 	update_icon()

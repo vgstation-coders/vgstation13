@@ -45,6 +45,15 @@
 		/obj/item/weapon/gun/energy/gun = GRASP_LEFT_HAND,
 	)
 
+	race_items_to_collect = list(
+		/datum/species/vox/ = list(
+			/obj/item/clothing/head/caphat,
+		),
+		/datum/species/plasmaman/ = list(
+			/obj/item/clothing/head/caphat,
+		)
+	)
+
 	implant_types = list(
 		/obj/item/weapon/implant/loyalty/,
 	)
@@ -56,5 +65,6 @@
 
 /datum/outfit/captain/post_equip(var/mob/living/carbon/human/H)
 	..()
-	equip_accessory(H, /obj/item/clothing/accessory/medal/gold/captain, /obj/item/clothing/under)
+	equip_accessory(H, /obj/item/clothing/accessory/medal/gold/captain, /obj/item/clothing/under, 5)
+	equip_accessory(H, /obj/item/clothing/accessory/wristwatch/gold, /obj/item/clothing/under, 5)
 	to_chat(world, "<b>[H.real_name] is the captain!</b>")

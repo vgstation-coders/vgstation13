@@ -95,6 +95,9 @@
 					alpha_challenger.challenge(src)
 					challenge(alpha_challenger)
 
+/mob/living/simple_animal/hostile/wolf/get_butchering_products()
+	return list(/datum/butchering_product/skin/wolf, /datum/butchering_product/teeth/lots)
+
 /mob/living/simple_animal/hostile/wolf/CanAttack(var/atom/the_target)
 	//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
 	var/list/target_prox = view(the_target, vision_range)
@@ -184,6 +187,7 @@
 			adjust_nutrition(15)
 			if(prob(25))
 				if(!pack_alpha)
+					environment_smash_flags = 0 //No longer smash things
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					message_admins("[key_name(user)] has tamed a wolf: @[formatJumpTo(user, "JMP")]")
@@ -250,6 +254,7 @@
 				if(pack_alpha.isDead())
 					visible_message("<span class = 'notice'>\The [src] lets out a mournful howl. </span>")
 					//Howl noise?
+					environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 					pack_alpha = null
 				else
 					if(alpha_stance == WOLF_ALPHANONE) //Rough following
@@ -296,11 +301,11 @@
 
 		if(health < maxHealth/2)
 			if(nutrition >= WOLF_REGENCOST)
-				health += rand(1,3)
+				health += 3
 				adjust_nutrition(-WOLF_REGENCOST)
 		else
-			if(hunger_status >= WOLF_WELLFED)
-				health += 1
+			if((hunger_status >= WOLF_WELLFED) && (health < maxHealth))
+				health += min(3,maxHealth-health)
 				adjust_nutrition(-WOLF_REGENCOST)
 
 /mob/living/simple_animal/hostile/wolf/proc/handle_hunger()

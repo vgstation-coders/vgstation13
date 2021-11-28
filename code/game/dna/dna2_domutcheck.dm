@@ -95,6 +95,11 @@
 				return 0
 
 			//testing("[gene.name] activated!")
+
+			if ("[gene.block]" in M.dna.dormant_genes)
+				M.dna.dormant_genes -= "[gene.block]"
+				to_chat(M, "<span class='rose'>You shiver, something in this environment has awakened a mutation that laid dormant in you, until now.</span>")
+
 			gene.activate(M,connected,flags)
 			if(M)
 				M.active_genes |= gene.type

@@ -104,7 +104,8 @@
 
 /obj/item/potion/healing/imbibe_effect(mob/living/user)
 	user.rejuvenate(1)
-	user.suiciding = 0
+	if(user.mind)
+		user.mind.suiciding = 0
 
 /obj/item/potion/mana
 	name = "potion of mana"
@@ -403,7 +404,7 @@
 	user.flying = 1
 	animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
 	spawn(10 MINUTES)
-		user.flying = 0
+		user.stop_flying()
 		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(user)
@@ -468,7 +469,7 @@
 	icon_state = "fireball_flask"
 
 /obj/item/potion/fireball/imbibe_effect(mob/living/user)
-	explosion(get_turf(user), -1, 1, 2, 5)
+	explosion(get_turf(user), -1, 1, 2, 5, whodunnit = user)
 
 /obj/item/potion/fireball/impact_atom(atom/target)
 	explosion(get_turf(target), -1, 1, 2, 5)

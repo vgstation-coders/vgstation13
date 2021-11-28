@@ -57,3 +57,5 @@
 #define manhattan_distance(a, b) (abs(a.x - b.x) + abs(a.y - b.y))
 
 #define IS_INT(x) (x == round(x))
+
+#define GLIDE_SIZE_OF_A_WALKING_HUMAN 2.4615386

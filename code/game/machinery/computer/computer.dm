@@ -10,7 +10,7 @@
 	var/processing = 0
 	var/empproof = FALSE // For plasma glass builds
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
-
+	pass_flags_self = PASSMACHINE
 	use_auto_lights = 1
 	light_power_on = 1
 	light_range_on = 3
@@ -21,11 +21,11 @@
 
 /obj/machinery/computer/New()
 	..()
-	if(ticker)
+	if(world.has_round_started())
 		initialize()
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return ..()
 
@@ -108,6 +108,13 @@
 		return
 	stat |= BROKEN
 	update_icon()
+
+/obj/machinery/computer/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src] screen! It looks like \he's trying to commit suicide.</span>")
+	stat |= BROKEN
+	update_icon()
+	playsound(src, "shatter", 70, 1)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/machinery/computer/togglePanelOpen(var/obj/item/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly

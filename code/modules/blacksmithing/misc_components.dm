@@ -53,7 +53,7 @@
 /obj/item/item_head/pickaxe_head
 	name = "pickaxe head"
 	icon_state = "pickaxe_head"
-	desc = "To strike the earth, you will need a handle on the situation"
+	desc = "To strike the earth, you'll need a handle on the situation."
 	result = /obj/item/weapon/pickaxe
 
 /obj/item/item_handle

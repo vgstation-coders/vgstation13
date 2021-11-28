@@ -333,5 +333,5 @@
 	last_spoken = "<i>At the current rates you will get [nanocoins_rates] dollars per nanocoins.</i>"
 
 
-proc/nano2dollar(var/nanocoins)
+/proc/nano2dollar(var/nanocoins)
 	return round(nanocoins * nanocoins_rates)

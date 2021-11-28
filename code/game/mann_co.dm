@@ -1,6 +1,6 @@
 /obj/structure/mann_co_crate
 	name = "locked crate"
-	desc = "There's a comically large padlock on it, with a comically large key-shaped hole"
+	desc = "There's a comically large padlock on it, with a comically large key-shaped hole."
 	anchored = 0
 	density = 1
 	icon = 'icons/obj/april_fools.dmi'
@@ -15,7 +15,7 @@
 
 /obj/structure/mann_co_crate/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (looted)
-		to_chat("<span class='warning'>This crate has already been looted</span>")
+		to_chat("<span class='warning'>This crate has already been looted!</span>")
 		return
 	if (istype(W,/obj/item/mann_co_key) && !opening)
 		opening = 1//preventing key spamming

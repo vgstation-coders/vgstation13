@@ -151,6 +151,7 @@
 		if(SUCCESS)
 			error_message = "Success: Atmoforming climate."
 			soundpath = 'sound/machines/hiss.ogg'
+			anim(target = src, a_icon = 'icons/effects/224x224.dmi', a_icon_state = "weathermachinefire", offX = -96, offY = -96)
 		if(NOFIRE)
 			return
 	playsound(src, soundpath, vol = 50, vary = FALSE)

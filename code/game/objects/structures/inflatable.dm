@@ -134,7 +134,7 @@
 	opacity = 0
 	icon = 'icons/obj/inflatable.dmi'
 	icon_state = "wall"
-
+	pass_flags_self = PASSGLASS
 	var/undeploy_path = null
 	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
@@ -183,7 +183,11 @@
 	user.delayNextAttack(10)
 
 /obj/structure/inflatable/attack_animal(var/mob/living/simple_animal/M)
-	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))
+	var/damage_dealt = rand(M.melee_damage_lower, M.melee_damage_upper)
+	if (!damage_dealt)
+		M.visible_message("<span class='notice'>\The [M] nuzzles \the [src].</span>")
+		return 1
+	if(take_damage(damage_dealt))
 		M.visible_message("<span class='danger'>[M] tears open \the [src]!</span>")
 	else
 		M.visible_message("<span class='danger'>[M] [M.attacktext] \the [src]!</span>")
@@ -243,20 +247,10 @@
 	verbs -= /obj/structure/inflatable/verb/hand_deflate
 	deflate()
 
-/obj/structure/inflatable/proc/update_nearby_tiles(var/turf/T)
-	if(!SS_READY(SSair))
-		return 0
-
-	if(!T)
-		T = get_turf(src)
-	if(isturf(T))
-		SSair.mark_for_update(T)
-	return 1
-
 /obj/structure/inflatable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return !density
 

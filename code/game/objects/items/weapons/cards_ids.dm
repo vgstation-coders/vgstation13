@@ -208,11 +208,8 @@
 
 	if(virtual_wallet)
 		update_virtual_wallet()
-		spawn(30) //AWFULNESS AHOY
-			if(ishuman(loc))
-				var/mob/living/carbon/human/H = loc
-				SetOwnerInfo(H)
-			update_virtual_wallet()
+	if(ishuman(loc))
+		SetOwnerDNAInfo(loc)
 
 /obj/item/weapon/card/id/examine(mob/user)
 	..()
@@ -276,7 +273,7 @@
 /obj/item/weapon/card/id/proc/UpdateName()
 	name = "[src.registered_name]'s ID Card ([src.assignment])"
 
-/obj/item/weapon/card/id/proc/SetOwnerInfo(var/mob/living/carbon/human/H)
+/obj/item/weapon/card/id/proc/SetOwnerDNAInfo(var/mob/living/carbon/human/H)
 	if(!H || !H.dna)
 		return
 
@@ -345,7 +342,7 @@
 
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-			SetOwnerInfo(H)
+			SetOwnerDNAInfo(H)
 			alert(user,"Personal data gathered successfully; this includes: blood type, DNA, and fingerprints.\nYou may now proceed with the rest.","Nanotrasen undercover ID: notification","Ok")
 
 		var/n = input(user, "What name would you like to put on this card?", "Nanotrasen undercover ID: name") in gimmick_names
@@ -476,14 +473,15 @@
 							"silver",
 							"centcom_old",
 							"centcom",
-							"security",
-							"medical",
 							"HoS",
-							"research",
-							"engineering",
 							"CMO",
 							"RD",
 							"CE",
+							"security",
+							"medical",
+							"research",
+							"engineering",
+							"cargo",
 							"clown",
 							"mime",
 							"trader",
@@ -494,6 +492,7 @@
 							"ERT_security",
 							"ERT_engineering",
 							"ERT_medical",
+							"ERT_empty",
 						)
 						var/choice = input(user, "Select the appearance for this card.", "Choose.") in appearances
 						if(!Adjacent(user))
@@ -734,6 +733,15 @@
 	access = list(access_trade)
 	base_access = list(access_trade)
 
+/obj/item/weapon/card/id/hobo
+	name = "worn ID"
+	desc = "A worn ID card, long since of any use. The only thing others may use to recognise you. It shows signs of wear and the photo is almost unrecognizable."
+	registered_name = "traveler"
+	assignment = "visitor"
+	icon_state = "trader"
+	access = list()
+	base_access = list()
+
 /obj/item/weapon/card/id/tunnel_clown
 	name = "Tunnel Clown ID card"
 	assignment = "Tunnel Clown!"
@@ -853,3 +861,12 @@
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()
+
+/obj/item/weapon/card/id/judge
+	name = "Judge ID card"
+	assignment = "Judge"
+	icon_state = "ERT_empty"
+
+/obj/item/weapon/card/id/judge/New()
+	..()
+	access = get_centcom_access("Emergency Responder")

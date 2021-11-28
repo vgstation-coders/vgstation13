@@ -28,9 +28,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	for(var/path in contains)
 		if(!path)
 			continue
-		var/atom/movable/AM = new path()
-		manifest += "<li>[AM.name]</li>"
-		qdel(AM)
+		var/atom/movable/AM = path
+		manifest += "<li>[initial(AM.name)]</li>"
 	manifest += "</ul>"
 
 // Called after a crate containing the items specified by this datum is created
@@ -289,7 +288,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/watertank
 	name = "Water tank"
 	contains = list(/obj/structure/reagent_dispensers/watertank)
-	cost = 8
+	cost = 15
 	containertype = /obj/structure/largecrate
 	containername = "water tank crate"
 	group = "Supplies"
@@ -297,7 +296,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/fueltank
 	name = "Fuel tank"
 	contains = list(/obj/structure/reagent_dispensers/fueltank)
-	cost = 8
+	cost = 30
 	containertype = /obj/structure/largecrate
 	containername = "fuel tank crate"
 	group = "Supplies"
@@ -305,10 +304,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/silicatetank
 	name = "Silicate tank"
 	contains = list(/obj/structure/reagent_dispensers/silicate)
-	cost = 8
+	cost = 15
 	containertype = /obj/structure/largecrate
 	containername = "silicate tank crate"
 	group = "Supplies"
+
+/datum/supply_packs/sacidtank
+	name = "Sulphuric acid tank"
+	contains = list(/obj/structure/reagent_dispensers/sacid)
+	cost = 30
+	containertype = /obj/structure/closet/crate/secure/large/reinforced/shard/empty
+	containername = "sulphuric acid tank crate"
+	group = "Supplies"
+	one_access = list(access_engine, access_science)
 
 /datum/supply_packs/mining
 	name = "Mining equipment"
@@ -439,7 +447,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Supplies"
 
 /datum/supply_packs/religious//you can only order default-looking bibles for now
-	name = "Religious Paraphernelia"
+	name = "Religious Paraphernalia"
 	contains = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater,
 					/obj/item/weapon/storage/bible,
 					/obj/item/weapon/storage/fancy/incensebox/harebells,
@@ -708,14 +716,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
-	contains = list(/obj/item/clothing/suit/space/grey,
-					/obj/item/clothing/head/helmet/space/grey,
-					/obj/item/weapon/tank/oxygen/red,
+	var/list/basic = list(
+		/obj/item/clothing/suit/space/grey,
+		/obj/item/clothing/head/helmet/space/grey,
+	)
+	var/worker = list(/obj/item/clothing/suit/space/rig/grey)
+	var/researcher = list(/obj/item/clothing/suit/space/rig/grey/researcher)
+	var/soldier = list(/obj/item/clothing/suit/space/rig/grey/soldier)
+	contains = list(/obj/item/weapon/tank/oxygen/red,
 					/obj/item/clothing/mask/breath)
-	cost = 100
+	cost = 200
 	containertype = /obj/structure/closet/crate/basic
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
+
+/datum/supply_packs/grey_supply/New()
+	selection_from = list(basic, worker, researcher, soldier)
 
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
@@ -1807,14 +1823,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 
 /datum/supply_packs/suit_modification_station
-	name = "suit modification station"
+	name = "Suit modification station"
 	contains = list()
 	cost = 200
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
+/datum/supply_packs/hardsuit_frames
+	name = "Hardsuit frames"
+	contains = list(/obj/item/device/rigframe,
+					/obj/item/device/rigframe,
+					/obj/item/device/rigframe)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/scisec
+	access = list(access_robotics)
+	containername = "hardsuit frame crate"
+	group = "Engineering"
+
 /datum/supply_packs/gourmonger
-	name = "dehydrated gourmonger"
+	name = "Dehydrated gourmonger"
 	contains = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger)
 	cost = 75
 	containertype = /obj/structure/closet/crate/secure/engisec
@@ -2050,6 +2077,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 120
 	containertype = /obj/structure/closet/crate/sci
 	containername = "robot maintenance equipment crate"
+	group = "Science"
+
+/datum/supply_packs/grey_extract
+	name = "Grey slime extracts"
+	contains = list(/obj/item/slime_extract/grey,
+					/obj/item/slime_extract/grey
+					)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/scisec
+	containername = "gret slime extract crate"
+	access = list(access_science)
 	group = "Science"
 
 /datum/supply_packs/suspension_gen
@@ -2568,3 +2606,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Telecommunications Parts stack of packs"
 	group = "Vending Machine packs"
 
+/datum/supply_packs/zamsnax
+	name = "Zam Snax stack of packs"
+	contains = list(/obj/structure/vendomatpack/zamsnax,
+					/obj/structure/vendomatpack/zamsnax)
+	cost = 25
+	containertype = /obj/structure/stackopacks
+	containername = "\improper Zam Snax stack of packs"
+	group = "Vending Machine packs"

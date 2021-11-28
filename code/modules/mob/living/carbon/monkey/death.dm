@@ -1,4 +1,6 @@
 /mob/living/carbon/monkey/gib(animation = FALSE, meat = TRUE)
+	if(!isUnconscious())
+		forcesay("-")
 	death(1)
 	monkeyizing = 1
 	canmove = 0

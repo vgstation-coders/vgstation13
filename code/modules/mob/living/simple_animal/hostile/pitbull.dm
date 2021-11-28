@@ -58,7 +58,7 @@
 	faction_original = faction
 	faction = ""
 	friends_temp = friends.Copy()
-	friends.Cut()
+	friends = list()
 	treacherous = TRUE
 
 /mob/living/simple_animal/hostile/pitbull/proc/Calmdown()
@@ -79,7 +79,7 @@
 			adjustBruteLoss(25)//instakill
 
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull
-	faction = "wizard"
+	faction = "wizard" // so they get along with other wizard mobs
 	meat_type = /obj/item/weapon/ectoplasm //a magical dog
 
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull/death(var/gibbed = FALSE)

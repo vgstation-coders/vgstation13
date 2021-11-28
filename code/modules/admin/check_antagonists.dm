@@ -27,5 +27,21 @@
 	else
 		dat += "<i>No orphaned roles are currently active.</i>"
 
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+	if (istype(dynamic_mode))
+		dat += "<h3><b>Previously executed rulesets:</b></h3>"
+		for (var/previous_round in dynamic_mode.previously_executed_rules)
+			switch(previous_round)
+				if ("one_round_ago")
+					dat += "<h4><b>Last Round:</b></h4>"
+				if ("two_rounds_ago")
+					dat += "<h4><b>Two Rounds ago:</b></h4>"
+				if ("three_rounds_ago")
+					dat += "<h4><b>Three Rounds ago:</b></h4>"
+			for(var/previous_ruleset in dynamic_mode.previously_executed_rules[previous_round])
+				var/datum/dynamic_ruleset/DR = previous_ruleset
+				dat += "- [initial(DR.name)] <br/>"
+			dat += "<br/>"
+
 	dat += "</body></html>"
 	usr << browse(dat, "window=roundstatus;size=700x500")

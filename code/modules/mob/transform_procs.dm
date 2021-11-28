@@ -72,7 +72,6 @@
 			Mo.dna.SetSEValueRange(MONKEYBLOCK, 0xDAC, 0xFFF)
 	if(isliving(src))
 		var/mob/living/L = src
-		Mo.suiciding = L.suiciding
 		Mo.take_overall_damage(L.getBruteLoss() + L.getCloneLoss(), L.getFireLoss())
 		Mo.setToxLoss(L.getToxLoss())
 		Mo.setOxyLoss(L.getOxyLoss())
@@ -121,9 +120,6 @@
 		return
 	if(client)
 		src << sound(null, repeat = FALSE, wait = FALSE, volume = 85, channel = CHANNEL_LOBBY)// stop the jams for AIs
-	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
-	O.invisibility = 0
-	O.aiRestorePowerRoutine = 0
 	var/obj/loc_landmark
 	if(!spawn_here)
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -139,11 +135,15 @@
 						continue
 					loc_landmark = tripai
 		if (!loc_landmark)
-			to_chat(O, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
+			to_chat(src, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
 			for(var/obj/effect/landmark/start/sloc in landmarks_list)
 				if (sloc.name == "AI")
 					loc_landmark = sloc
-		O.forceMove(loc_landmark.loc)
+		forceMove(loc_landmark.loc)
+	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
+	O.invisibility = 0
+	O.aiRestorePowerRoutine = 0
+	if(!spawn_here)
 		for (var/obj/item/device/radio/intercom/comm in O.loc)
 			comm.ai += O
 	if(mind)
@@ -180,16 +180,17 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
+		return FALSE
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
 	qdel(src)
 	return O
 
-/mob/proc/MoMMIfy()
-	if(!Premorph())
+/mob/proc/MoMMIfy(var/delete_items = FALSE, var/skipnaming=FALSE, var/malfAI=null)
+	if(!Premorph(delete_items))
 		return
-	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src))
+	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src), malfAI)
 	. = O
 	if(mind)		//TODO
 		mind.transfer_to(O)
@@ -207,8 +208,9 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-	spawn()
-		O.Namepick()
+	if(!skipnaming)
+		spawn()
+			O.Namepick()
 	qdel(src)
 	return O
 
@@ -306,8 +308,10 @@
 	return new_frank
 
 /mob/proc/Animalize()
-	var/list/mobtypes = existing_typesof(/mob/living/simple_animal)
-	var/mobpath = input("Which type of mob should [src] turn into?", "Choose a type") in mobtypes
+	var/mobtext = input("Filter to a type name", "Choose a type") as text
+	var/mobpath = filter_list_input("Which type of mob should [src] turn into?", "Choose a type", get_matching_types(mobtext, /mob/living/simple_animal))
+	if(!mobpath)
+		return
 	if(!safe_animal(mobpath))
 		to_chat(usr, "<span class='warning'>Sorry but this mob type is currently unavailable.</span>")
 		return

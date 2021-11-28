@@ -29,7 +29,7 @@
 
 /datum/action/item_action/instrument
 	name = "Use Instrument"
-	desc = "Use the instrument specified"
+	desc = "Use the instrument specified."
 
 /datum/action/item_action/instrument/Trigger()
 	if(istype(target, /obj/item/device/instrument))

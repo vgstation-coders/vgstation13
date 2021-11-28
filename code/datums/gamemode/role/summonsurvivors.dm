@@ -6,6 +6,8 @@
 	id = SURVIVOR
 	name = SURVIVOR
 	logo_state = "gun-logo"
+	default_admin_voice = "Common Sense"
+	admin_voice_style = "warning"
 	var/survivor_type = "survivor"
 	var/summons_received
 

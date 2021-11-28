@@ -14,8 +14,6 @@
 	density = 0
 
 	var/amount_grown = 0
-	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent
-	var/travelling_in_vent = 0
 
 	butchering_drops = null
 
@@ -36,6 +34,7 @@
 	//status_flags = CANPUSH
 	search_objects = 0
 	wanted_objects = list(/obj/machinery/atmospherics/unary/vent_pump)
+	can_ventcrawl = TRUE
 
 	environment_smash_flags = 0//spiderlings cannot smash tables and windows anymore when getting stomped
 	var/static/list/spider_types = list(/mob/living/simple_animal/hostile/giant_spider, /mob/living/simple_animal/hostile/giant_spider/nurse, /mob/living/simple_animal/hostile/giant_spider/hunter)
@@ -84,50 +83,6 @@
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
-	if(!client || deny_client_move)
-		if(travelling_in_vent)
-			if(istype(src.loc, /turf))
-				travelling_in_vent = 0
-				entry_vent = null
-		else if(entry_vent)
-			if(get_dist(src, entry_vent) <= 1)
-				if(entry_vent.network && entry_vent.network.normal_members.len)
-					var/list/vents = list()
-					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
-						vents.Add(temp_vent)
-					if(!vents.len)
-						entry_vent = null
-						return
-					var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
-					/*if(prob(50))
-						src.visible_message("<B>[src] scrambles into the ventillation ducts!</B>")*/
-					LoseAggro()
-					spawn(rand(20,60))
-						loc = exit_vent
-						var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
-						spawn(travel_time)
-
-							if(!exit_vent || exit_vent.welded)
-								loc = entry_vent
-								entry_vent = null
-								return
-
-							if(prob(50))
-								src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
-							sleep(travel_time)
-
-							if(!exit_vent || exit_vent.welded)
-								loc = entry_vent
-								entry_vent = null
-								return
-							loc = exit_vent.loc
-							entry_vent = null
-							var/area/new_area = get_area(loc)
-							if(new_area)
-								new_area.Entered(src)
-				else
-					entry_vent = null
-	//=================
 
 	if (growth())
 		return
@@ -151,10 +106,6 @@
 		target = new_target
 		Aggro()
 		visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
-
-/mob/living/simple_animal/hostile/giant_spider/spiderling/AttackingTarget()
-	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump))
-		ventcrawl(target)
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/growth()
 	if(isturf(loc) && (client || amount_grown > 0))//player-controlled spiderlings will always eventually mature, others have a 75% chance.
@@ -195,12 +146,13 @@
 		if ("Guard")
 			grow_up(/mob/living/simple_animal/hostile/giant_spider)
 
-/mob/living/simple_animal/hostile/giant_spider/spiderling/proc/ventcrawl(var/obj/machinery/atmospherics/unary/vent_pump/v)
-	//ventcrawl!
-	if(!v.welded)
-		entry_vent = v
-		Goto(get_turf(v),move_to_delay)
-
+/mob/living/simple_animal/hostile/giant_spider/spiderling/verb/ventcrawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Object"
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
 
 //Virologist's little friend!
 /mob/living/simple_animal/hostile/giant_spider/spiderling/salk

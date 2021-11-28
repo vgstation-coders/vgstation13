@@ -5,9 +5,9 @@
 	required_pref = ROLE_MINOR
 	wikiroute = ROLE_MINOR
 	logo_state = "catbeast-logo"
+	default_admin_voice = "Kingston"
+	admin_voice_style = "tajaran"
 	var/ticks_survived = 0
-	var/threat_generated = 0
-	var/threat_level_inflated = 0
 	var/list/areas_defiled = list()
 	var/current_disease_tier = 1
 
@@ -46,7 +46,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	D1.origin = "Loose Catbeast"
 	D1.makerandom(str, rob, anti, bad)
 	H.infect_disease2(D1, 1, "Loose Catbeast")
-	antag.store_memory(D1.get_info(), forced = 1)
+	antag.store_memory(D1.get_info(TRUE), forced = 1)
 	antag.store_memory("<hr>")
 
 /datum/role/catbeast/proc/infect_catbeast_tier1(mob/living/carbon/human/H)
@@ -160,25 +160,13 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 
 
 /datum/role/catbeast/proc/OnStation()
-	if(antag.current.z != STATION_Z)
+	if(antag.current.z != map.zMainStation)
 		return FALSE
 	var/area/A = get_area(antag.current)
 	if (isspace(A))
 		return FALSE
 	return A
 
-/datum/role/catbeast/proc/increment_threat(var/amount)
-	var/datum/gamemode/dynamic/D = ticker.mode
-	if(!istype(D))
-		return //It's not dynamic!
-	threat_generated += amount
-	if(D.midround_threat >= D.midround_threat_level)
-		D.create_midround_threat(amount)
-		if(!threat_level_inflated) //Our first time raising the cap
-			D.threat_log += "[worldtime2text()]: A catbeast started increasing the threat cap."
-		threat_level_inflated += amount
-	else
-		D.refund_midround_threat(amount)
 
 /datum/role/catbeast/GetScoreboard()
 	. = ..()

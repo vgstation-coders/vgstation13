@@ -46,6 +46,8 @@
 	size = SIZE_SMALL
 	meat_type = null
 
+	blooded = FALSE
+
 /mob/living/simple_animal/spiderbot/canEnterVentWith()
 	var/static/list/allowed_items = list(
 		/obj/item/device/radio/borg,
@@ -162,7 +164,7 @@
 	src.name = "Spider-bot ([M.brainmob.name])"
 
 /mob/living/simple_animal/spiderbot/proc/explode() //When emagged.
-	explosion(get_turf(loc), -1, -1, 3, 5)
+	explosion(get_turf(loc), -1, -1, 3, 5, whodunnit = src)
 	death()
 
 /mob/living/simple_animal/spiderbot/update_icon()

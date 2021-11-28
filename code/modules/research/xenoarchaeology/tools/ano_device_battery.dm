@@ -171,8 +171,9 @@ var/list/anomaly_power_utilizers = list()
 			foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effecttype])</font>"
 		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Touched by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) with thrown [name] ([inserted_battery.battery_effect.effecttype])</font>"
 		log_attack("<font color='red'>[istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effecttype])</font>" )
-		if(!istype(foundmob))
+		if(istype(foundmob))
 			L.LAssailant = foundmob
+			L.assaulted_by(foundmob)
 		else
 			L.LAssailant = null
 
@@ -199,6 +200,7 @@ var/list/anomaly_power_utilizers = list()
 				M.LAssailant = null
 			else
 				M.LAssailant = user
+				M.assaulted_by(user)
 
 /obj/item/weapon/anodevice/proc/shutdown_emission()
 	if(activated)

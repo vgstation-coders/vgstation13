@@ -347,7 +347,8 @@
 	/datum/rcd_schematic/decon,
 	/datum/rcd_schematic/con_floors,
 	/datum/rcd_schematic/con_walls,
-	/datum/rcd_schematic/con_airlock
+	/datum/rcd_schematic/con_airlock,
+	/datum/rcd_schematic/con_window,
 	)
 
 /obj/item/device/rcd/mech/attack_self(var/mob/living/user)

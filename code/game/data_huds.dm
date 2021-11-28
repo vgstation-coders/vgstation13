@@ -3,7 +3,7 @@ Use the regular_hud_updates() proc before process_med_hud(mob) or process_sec_hu
 the HUD updates properly! */
 
 //Deletes the current HUD images so they can be refreshed with new ones.
-mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
+/mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 	if(client)
 		for(var/image/hud in client.images)
 			if(findtext(hud.icon_state, "hud", 1, 4))
@@ -14,8 +14,8 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 		sec_hud_users -= src
 	diagnostic_hud_users -= src
 
-proc/check_HUD_visibility(var/atom/target, var/mob/user)
-	if (user in blind_victims)//cult confusion
+/proc/check_HUD_visibility(var/atom/target, var/mob/user)
+	if (user in confusion_victims)
 		return FALSE
 	if(user.see_invisible < target.invisibility)
 		return FALSE
@@ -34,7 +34,7 @@ proc/check_HUD_visibility(var/atom/target, var/mob/user)
 	return TRUE
 
 //Medical HUD outputs. Called by the Life() proc of the mob using it, usually.
-proc/process_med_hud(var/mob/M, var/mob/eye)
+/proc/process_med_hud(var/mob/M, var/mob/eye)
 	if(!M)
 		return
 	if(!M.client)
@@ -150,7 +150,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 
 
 //Security HUDs. Pass a value for the second argument to enable implant viewing or other special features.
-proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
+/proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 	if(!M)
 		return
 	if(!M.client)
@@ -164,6 +164,16 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
+
+	for(var/mob/living/simple_animal/astral_projection/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+		if(!check_HUD_visibility(perp, M))
+			continue
+		holder = perp.hud_list[ID_HUD]
+		if(!holder)
+			continue
+		holder.icon_state = "hud[ckey(perp.cardjob)]"
+		C.images += holder
+
 	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(perp, M))
 			continue
@@ -181,7 +191,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 
 		if(advanced_mode) //If set, the SecHUD will display the implants a person has.
 			for(var/obj/item/weapon/implant/I in perp)
-				if(I.implanted)
+				if(I.imp_in)
 					if(istype(I,/obj/item/weapon/implant/tracking))
 						holder = perp.hud_list[IMPTRACK_HUD]
 						holder.icon_state = "hud_imp_tracking"
@@ -302,7 +312,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 			see_invisible = SEE_INVISIBLE_LIVING
 
 //Artificer HUD
-proc/process_construct_hud(var/mob/M, var/mob/eye)
+/proc/process_construct_hud(var/mob/M, var/mob/eye)
 	if(!M)
 		return
 	if(!M.client)

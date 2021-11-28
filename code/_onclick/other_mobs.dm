@@ -7,7 +7,7 @@
 /mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
 
-	if(!is_pacified() && a_intent == "hurt" && A.loc != src)
+	if(a_intent == "hurt" && !is_pacified() && A.loc != src)
 		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 		switch(attack_type) //Special attacks - kicks, bites
 			if(ATTACK_KICK)

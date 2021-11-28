@@ -150,6 +150,15 @@
 	..()
 	reagents.add_reagent(CYANIDE, 50)
 
+/obj/item/weapon/reagent_containers/pill/cyanide/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] bites onto a [src.name] and swallows it! It looks like \he's trying to commit suicide.</span>")
+	var/mob/living/carbon/C = user
+	C.adjustToxLoss(500)//the maximum damage that a 50u cyanide pill could deal. Guarrantees an instant death.
+	C.adjustOxyLoss(500)
+	spawn(1)
+		qdel(src)
+	return(SUICIDE_ACT_TOXLOSS | SUICIDE_ACT_OXYLOSS)
+
 /obj/item/weapon/reagent_containers/pill/adminordrazine
 	name = "Adminordrazine pill"
 	desc = "It's magic. We don't have to explain it."
@@ -270,6 +279,14 @@
 	..()
 	reagents.add_reagent(CREATINE, 5)
 
+/obj/item/weapon/reagent_containers/pill/ryetalyn
+	name = "Ryetalyn pill"
+	desc = "Eliminates genetic defects."
+	icon_state = "pill7" //grey oblong
+
+/obj/item/weapon/reagent_containers/pill/ryetalyn/New()
+	..()
+	reagents.add_reagent(RYETALYN, 1)
 
 /obj/item/weapon/storage/pill_bottle/time_release
 	name = "controlled release pill bottle"

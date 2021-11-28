@@ -92,7 +92,7 @@
 		underlays += image(contained.icon,contained.icon_state)
 		icon_state = "anomaly_container-full"
 		var/image/light = image(icon,"anomaly_container-light")
-		light.plane = LIGHTING_PLANE
+		light.plane = ABOVE_LIGHTING_PLANE
 		light.layer = ABOVE_LIGHTING_LAYER
 		overlays += light
 	else
@@ -148,8 +148,9 @@
 	playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 
 /obj/structure/anomaly_container/proc/release()
-	contained.forceMove(get_turf(src))
-	contained = null
+	if(contained)
+		contained.forceMove(get_turf(src))
+		contained = null
 	update_icon()
 	playsound(loc, 'sound/machines/click.ogg', 50, 1)
 

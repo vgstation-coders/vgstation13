@@ -3,6 +3,7 @@
 	desc = "To stop that awful noise."
 	icon_state = "muzzle"
 	item_state = "muzzle"
+	clothing_flags = MASKINTERNALS
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
@@ -174,12 +175,12 @@
 	w_class = W_CLASS_TINY
 	can_flip = 1
 
-obj/item/clothing/mask/bandana/red
+/obj/item/clothing/mask/bandana/red
 	name = "red bandana"
 	icon_state = "bandred"
 	species_fit = list(INSECT_SHAPED)
 
-obj/item/clothing/mask/joy
+/obj/item/clothing/mask/joy
 	name = "joy mask"
 	desc = "Express your happiness or hide your sorrows with this laughing face with crying tears of joy cutout."
 	icon_state = "joy"
@@ -198,7 +199,7 @@ obj/item/clothing/mask/joy
 /obj/item/clothing/mask/vamp_fangs/New()
 	..()
 	glow_fangs = image("icon" = 'icons/mob/mask.dmi',"icon_state" = "fangs_glow", "layer" = ABOVE_LIGHTING_LAYER)
-	glow_fangs.plane = LIGHTING_PLANE
+	glow_fangs.plane = ABOVE_LIGHTING_PLANE
 
 /obj/item/clothing/mask/vamp_fangs/equipped(mob/M, var/slot)
 	..()

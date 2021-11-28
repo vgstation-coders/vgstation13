@@ -60,7 +60,7 @@
 
 /datum/design/confectionator
 	name = "Circuit Design (Confectionator)"
-	desc = "Allows for the construction of circuit boards used to build a confectionator"
+	desc = "Allows for the construction of circuit boards used to build a confectionator."
 	id = "confectionator"
 	req_tech = list(Tc_BIOTECH = 2)
 	build_type = IMPRINTER

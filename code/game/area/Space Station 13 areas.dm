@@ -69,7 +69,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/forbid_apc = FALSE //never build an APC here?
 	var/construction_zone = FALSE //treat this area like space for blueprints?
 
-	var/has_gravity = 1
+	var/gravity = 1 // THIS REPLACES HAS_GRAVITY, now should be used as a float instead of a bool, for gravity multipliers in multi-z falling stuff
 
 	var/no_air = null
 //	var/list/lights				// list of all lights on this area
@@ -94,11 +94,13 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/holomap_marker = null
 	var/list/holomap_filter = list()
 
+	var/lights_always_start_on = FALSE
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
 
-proc/process_teleport_locs()
+/proc/process_teleport_locs()
 	for(var/area/AR in areas)
 		if(istype(AR, /area/shuttle) || istype(AR, /area/wizard_station))
 			continue
@@ -113,7 +115,7 @@ proc/process_teleport_locs()
 
 var/list/ghostteleportlocs = list()
 
-proc/process_ghost_teleport_locs()
+/proc/process_ghost_teleport_locs()
 	for(var/area/AR in areas)
 		if(ghostteleportlocs.Find(AR.name))
 			continue
@@ -129,7 +131,7 @@ proc/process_ghost_teleport_locs()
 
 var/global/list/adminbusteleportlocs = list()
 
-proc/process_adminbus_teleport_locs()
+/proc/process_adminbus_teleport_locs()
 	for(var/area/AR in areas)
 		if(adminbusteleportlocs.Find(AR.name))
 			continue
@@ -138,7 +140,7 @@ proc/process_adminbus_teleport_locs()
 			adminbusteleportlocs += AR.name
 			adminbusteleportlocs[AR.name] = AR
 
-	sortTim(adminbusteleportlocs, /proc/cmp_text_dsc)
+	sortTim(adminbusteleportlocs, /proc/cmp_text_asc)
 
 
 /*-----------------------------------------------------------------------------*/
@@ -175,7 +177,15 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Spider Clan Dojo"
 	icon_state = "dojo"
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = FALSE
+	shuttle_can_crush = FALSE
+	flags = NO_PERSISTENCE
+
+/area/timevoid
+	name = "\improper Void Between Timelines"
+	icon_state = "time_void"
+	requires_power = 0
+	dynamic_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -447,7 +457,7 @@ proc/process_adminbus_teleport_locs()
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship/start
-	icon_state = "firingrange"
+	icon_state = "yellow"
 
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
@@ -516,7 +526,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "start"
 	requires_power = 0
 	dynamic_lighting = 0
-	has_gravity = 1
+	gravity = 1
 	flags = NO_PERSISTENCE //hmmm I wonder if someone can fuck with this
 
 // === end remove
@@ -545,7 +555,6 @@ proc/process_adminbus_teleport_locs()
 
 /area/centcom/suppy
 	name = "\improper Centcom Supply Shuttle"
-	turret_protected = 1
 
 /area/centcom/ferry
 	name = "\improper Centcom Transport Shuttle"
@@ -1046,6 +1055,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Dormitories"
 	icon_state = "Sleep"
 	shuttle_can_crush = FALSE
+	lights_always_start_on = TRUE
 
 /area/crew_quarters/toilet
 	name = "\improper Dormitory Toilets"
@@ -1100,6 +1110,7 @@ proc/process_adminbus_teleport_locs()
 /area/crew_quarters/theatre
 	name = "\improper Theatre"
 	icon_state = "Theatre"
+	lights_always_start_on = FALSE
 
 /area/library
 	name = "\improper Library"
@@ -1141,124 +1152,101 @@ proc/process_adminbus_teleport_locs()
 /area/holodeck
 	name = "\improper Holodeck"
 	icon_state = "Holodeck"
-	dynamic_lighting = 0
+	dynamic_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
+	jammed = SUPER_JAMMED
 
 /area/holodeck/alphadeck
 	name = "\improper Holodeck Alpha"
+	jammed = 0
 
+/area/holodeck/dungeon_holodeck_alpha
+	name = "\improper Holodeck Alpha"
 
 /area/holodeck/source_plating
 	name = "\improper Holodeck - Off"
 	icon_state = "Holodeck"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_emptycourt
 	name = "\improper Holodeck - Empty Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_boxingcourt
 	name = "\improper Holodeck - Boxing Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_basketball
 	name = "\improper Holodeck - Basketball Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_thunderdomecourt
 	name = "\improper Holodeck - Thunderdome Court"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_beach
 	name = "\improper Holodeck - Beach"
 	icon_state = "Holodeck" // Lazy.
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_burntest
 	name = "\improper Holodeck - Atmospheric Burn Test"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_wildlife
 	name = "\improper Holodeck - Wildlife Simulation"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_meetinghall
 	name = "\improper Holodeck - Meeting Hall"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_theatre
 	name = "\improper Holodeck - Theatre"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_picnicarea
 	name = "\improper Holodeck - Picnic Area"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_snowfield
 	name = "\improper Holodeck - Snow Field"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_desert
 	name = "\improper Holodeck - Desert"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_space
 	name = "\improper Holodeck - Space"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_firingrange
 	name = "\improper Holodeck - Firing Range"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_wildride
 	name = "\improper Holodeck - Wild Ride"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_chess
 	name = "\improper Holodeck - Chess Board"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_maze
 	name = "\improper Holodeck - Maze"
-	jammed=SUPER_JAMMED
 
 /area/holodeck/source_dining
 	name = "\improper Holodeck - Dining Hall"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_lasertag
 	name = "\improper Holodeck - Laser Tag Arena"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_zoo
 	name = "\improper Holodeck - Zoo"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_ragecage
 	name = "\improper Holodeck - Rage Cage"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_panic
 	name = "\improper Holodeck - Panic Bunker"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_medieval
 	name = "\improper Holodeck - Medieval Times"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_checkers
 	name = "\improper Holodeck - Checkers"
-	jammed=SUPER_JAMMED
-
 /area/holodeck/source_gym
 	name = "\improper Holodeck - Gym"
-	jammed=SUPER_JAMMED
+/area/holodeck/source_library
+	name = "\improper Holodeck - Library"
 
 /area/holodeck/source_catnip
 	name = "\improper Holodeck - Club Catnip"
-	jammed=SUPER_JAMMED
 
+/area/holodeck/source_olympics_demo_a
+	name = "\improper Holodeck - Demo A"
+
+/area/holodeck/source_olympics_demo_b
+	name = "\improper Holodeck - Demo B"
 
 //Engineering
 
@@ -1323,7 +1311,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/solar
 	requires_power = 0
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 	shuttle_can_crush = FALSE
 
@@ -1857,6 +1845,7 @@ proc/process_adminbus_teleport_locs()
 /area/storage/primary
 	name = "Primary Tool Storage"
 	icon_state = "primarystorage"
+	lights_always_start_on = TRUE
 
 /area/storage/autolathe
 	name = "Autolathe Storage"
@@ -1874,6 +1863,7 @@ proc/process_adminbus_teleport_locs()
 	name = "EVA Storage"
 	icon_state = "eva"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	holomap_marker = "eva"
 	jammed=1
 
 /area/storage/secure
@@ -2146,6 +2136,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper MoMMI Nest"
 	icon_state = "yellow"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	lights_always_start_on = TRUE
 
 /area/construction/supplyshuttle
 	name = "\improper Supply Shuttle"
@@ -2195,6 +2186,7 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "storage"
 
 /area/turret_protected/
+	name = "Turret Protected Area"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	shuttle_can_crush = FALSE
 
@@ -2569,7 +2561,7 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/beach
 	name = "Beach"
 	icon_state = "null"
-	dynamic_lighting = 0
+	dynamic_lighting = 1
 	requires_power = 0
 
 /area/awaymission/leviathan
@@ -2846,6 +2838,15 @@ var/list/the_station_areas = list (
 
 /area/maintenance/engine
 	name = "Engine"
+
+/area/shack
+	name = "abandoned shack"
+	requires_power = 0
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 // BEGIN Horizon
 /area/hallway/primary/foreport
 	name = "Fore Port"
@@ -2876,3 +2877,169 @@ var/list/the_station_areas = list (
 	icon_state = "escape"
 
 // END Horizon
+// BEGIN Island
+//Maintenance tunnels
+/area/maintenance/fore_port_struct
+	name = "\improper Fore Port Struct"
+	icon_state = "foreportstruct"
+
+/area/maintenance/fore_starboard_struct
+	name = "\improper Fore Starboard Struct"
+	icon_state = "forestarboardstruct"
+
+/area/maintenance/aft_port_struct
+	name = "\improper Aft Port Struct"
+	icon_state = "aftportstruct"
+
+/area/maintenance/aft_starboard_struct
+	name = "\improper Aft Starboard Struct"
+	icon_state = "aftstarboardstruct"
+
+/area/maintenance/transport_island_fore_maintenance
+	name = "\improper Transport Island Fore Maintenance"
+	icon_state = "transportmaintfore"
+
+/area/maintenance/transport_island_aft_maintenance
+	name = "\improper Transport Island Aft Maintenance"
+	icon_state = "transportmaintaft"
+
+/area/maintenance/medical_island_fore_maintenance
+	name = "\improper Medical Island Fore Maintenance"
+	icon_state = "medicalmaintfore"
+
+/area/maintenance/medical_island_aft_maintenance
+	name = "\improper Medical Island Aft Maintenance"
+	icon_state = "medicalmaintaft"
+
+/area/maintenance/engineering_island_starboard_maintenance
+	name = "\improper Engineering Island Starboard Maintenance"
+	icon_state = "engyislandmaintstarboard"
+
+/area/maintenance/engineering_island_port_maintenance
+	name = "\improper Engineering Island Port Maintenance"
+	icon_state = "engyislandmaintport"
+
+/area/maintenance/research_island_starboard_maintenance
+	name = "\improper Research Island Starboard Maintenance"
+	icon_state = "rndislandmaintstarboard"
+
+
+/area/maintenance/research_island_port_maintenance
+	name = "\improper Research Island Port Maintenance"
+	icon_state = "rndislandmaintport"
+
+/area/maintenance/central_island_fore_port_maintenance
+	name = "\improper Central Island Fore Port Maintenance"
+	icon_state = "centralforeportmaint"
+
+/area/maintenance/central_island_aft_starboard_maintenance
+	name = "\improper Central Island Aft Starboard Maintenance"
+	icon_state = "centralaftSBmaint"
+
+/area/maintenance/central_island_aft_port_maintenance
+	name = "\improper Central Island Aft Port Maintenance"
+	icon_state = "centralaftportmaint"
+
+/area/maintenance/central_island_fore_starboard_maintenance
+	name = "\improper Central Island Fore Starboard Maintenance"
+	icon_state = "centralforeSBmaint"
+
+/area/maintenance/outpost_docking_maintenance
+	name = "\improper Outpost Docking Maintenance"
+	icon_state = "outpostdockmaint"
+
+
+//Hallways
+/area/hallway/central_aft_hallway
+	name = "\improper Central Aft Hallway"
+	icon_state = "centralhallaft"
+
+/area/hallway/central_fore_hallway
+	name = "\improper Central Fore Hallway"
+	icon_state = "centralhallfore"
+
+/area/hallway/central_port_hallway
+	name = "\improper Central Port Hallway"
+	icon_state = "centralhallport"
+
+/area/hallway/central_starboard_hallway
+	name = "\improper Central Starboard Hallway"
+	icon_state = "centralhallstarboard"
+
+/area/hallway/outpost_fore_hallway
+	name = "\improper Outpost Fore Hallway"
+	icon_state = "outpostforehall"
+
+/area/hallway/outpost_aft_hallway
+	name = "\improper Outpost Aft Hallway"
+	icon_state = "outpostafthall"
+
+/area/hallway/outpost_starboard_hallway
+	name = "\improper Outpost Starboard Hallway"
+	icon_state = "outpostSBhall"
+
+/area/hallway/outpost_port_hallway
+	name = "\improper Outpost Port Hallway"
+	icon_state = "outpostporthall"
+
+
+
+//Rooms
+/area/outpost_medbay
+	name = "\improper Outpost Medbay"
+	icon_state = "outpostmed"
+
+/area/outpost_brig
+	name = "\improper Outpost Brig"
+	icon_state = "outpostbrig"
+
+/area/outpost_engineering
+	name = "\improper Outpost Engineering"
+	icon_state = "outpostengy"
+
+/area/disabled_work_platform
+	name = "\improper Disabled Work Platform"
+	icon_state = "disabledplatform"
+
+/area/outpost_dock_control_center
+	name = "\improper Outpost Dock Control Center"
+	icon_state = "outpostdockcontrol"
+
+/area/outpost_bridge
+	name = "\improper Outpost Bridge"
+	icon_state = "outpostbridge"
+
+/area/outpost_starboard_launcher
+	name = "\improper Outpost Starboard Launcher"
+	icon_state = "outpostlauncherstarboard"
+
+/area/outpost_port_launcher
+	name = "\improper Outpost Port Launcher"
+	icon_state = "outpostlauncherport"
+
+/area/bridge_secure_auxilliary
+	name = "\improper Bridge Secure Auxilliary"
+	icon_state = "bridgeaux"
+
+/area/trade_floor
+	name = "\improper Trade Floor"
+	icon_state = "tradefloor"
+
+/area/vacant_storefront
+	name = "\improper Vacant Storefront"
+	icon_state = "vacstore"
+
+//Shuttles
+/area/shuttle/engineering
+	name = "\improper Engineering Shuttle"
+	icon_state = "engineeringshuttle"
+
+/area/shuttle/medical
+	name = "\improper Medical Shuttle"
+	icon_state = "medicalshuttle"
+
+/area/shuttle/damage_control
+	name = "\improper Damage Control Shuttle"
+	icon_state = "mommishuttle"
+
+//END Island

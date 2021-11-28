@@ -55,7 +55,10 @@ function update_mode(newMode, newQuestion, newTimeleft, vrestart, vmode){
 		$("#vote_main").hide();
 		$("#vote_choices").show();
 		$("#vote_choices").append($("<div class='item'></div>").append($("<div class='itemContent'></div>").html("<a "  +  "href='?src=" + hSrc + ";vote=cancel_vote" + "'>Cancel your vote</a>")));
-		if(admin > 0) $("#vote_admin").show();
+		if(admin > 0)
+			$("#vote_admin").show();
+		else
+			$("#vote_admin").hide();
 	}
 	else{
 		$("#vote_main").show();

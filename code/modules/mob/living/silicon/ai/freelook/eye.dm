@@ -91,7 +91,6 @@
 
 /client/proc/AIMove(n, direct, var/mob/living/silicon/ai/user)
 
-
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
@@ -124,14 +123,13 @@
 	cameraFollow = null
 	unset_machine()
 
-	if(src.eyeobj && src.loc)
-		//src.eyeobj.loc = src.loc
-		src.eyeobj.forceMove(src.loc)
+	if(!loc)
+		return
+
+	if(!eyeobj)
+		make_eyeobj()
 	else
-		src.eyeobj = new(src.loc)
-		src.eyeobj.ai = src
-		src.eyeobj.name = "[src.name] (AI Eye)" // Give it a name
-		src.eyeobj.forceMove(src.loc)
+		eyeobj.forceMove(loc)
 
 	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src
@@ -142,14 +140,20 @@
 	for(var/datum/camerachunk/c in eyeobj.visibleCameraChunks)
 		c.remove(eyeobj)
 
+/mob/living/silicon/ai/proc/make_eyeobj()
+	eyeobj = new(loc)
+	eyeobj.ai = src
+	refresh_eyeobj_name()
+	eyeobj.forceMove(loc)
+
+/mob/living/silicon/ai/proc/refresh_eyeobj_name()
+	eyeobj.name = "[name] (AI Eye)"
+
 /mob/living/silicon/ai/proc/jump_to_area(var/area/A)
 	if(!A)
 		return
 	if(!eyeobj)
-		eyeobj = new(loc)
-		eyeobj.ai = src
-		eyeobj.name = "[name] (AI Eye)"
-		eyeobj.forceMove(loc)
+		make_eyeobj()
 	var/list/turfs = list()
 	for(var/turf/T in A)
 		turfs.Add(T)
@@ -159,7 +163,7 @@
 		return
 	cameraFollow = null
 	eyeobj.forceMove(T)
-	
+
 /mob/living/silicon/ai/proc/toggleholopadoverlays() //shows holopads above all static
 	if (!holopadoverlays.len)
 		for(var/obj/machinery/hologram/holopad/holopads in machines)

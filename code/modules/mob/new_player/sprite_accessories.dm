@@ -56,7 +56,7 @@
 
 /datum/sprite_accessory/hair
 
-	icon = 'icons/mob/human_face.dmi'	  // default icon for all hairs
+	icon = 'icons/mob/hair_styles.dmi'	  // default icon for all hairs
 
 /datum/sprite_accessory/hair/bald
 	name = "Bald"
@@ -273,7 +273,7 @@
 
 /datum/sprite_accessory/hair/dreadlockslong
 	name = "Long Dreadlocks"
-	icon_state = "hair_dreads_long"	
+	icon_state = "hair_dreads_long"
 
 /datum/sprite_accessory/hair/curls
 	name = "Curls"
@@ -578,7 +578,7 @@
 
 /datum/sprite_accessory/facial_hair
 
-	icon = 'icons/mob/human_face.dmi'
+	icon = 'icons/mob/hair_styles.dmi'
 	gender = MALE // barf (unless you're a dorf, dorfs dig chix /w beards :P)
 
 /datum/sprite_accessory/facial_hair/shaved

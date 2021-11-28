@@ -6,16 +6,16 @@
 /datum/surgery_step/eye
 	priority = 2
 	can_infect = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
-			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected)
-			return 0
+/datum/surgery_step/eye/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected)
+		return 0
 
-		var/datum/organ/internal/eyes = target.internal_organs_by_name["eyes"]
+	var/datum/organ/internal/eyes = target.internal_organs_by_name["eyes"]
 
-		return target_zone == "eyes" && eyes
+	return target_zone == "eyes" && eyes
 
 
 //////CUT OPEN///////

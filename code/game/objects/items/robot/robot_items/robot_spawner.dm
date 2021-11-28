@@ -51,33 +51,28 @@
 		recruiter.role = role
 		recruiter.jobban_roles = jobban_roles
 
-	recruiter.player_volunteering.Add(src, "recruiter_recruiting")
-	recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
-	recruiter.recruited.Add(src, "recruiter_recruited")
+	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 	recruiter.request_player()
 
-/obj/item/weapon/robot_spawner/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
+/obj/item/weapon/robot_spawner/proc/recruiter_recruiting(mob/dead/observer/player, controls)
 	var/area/A = get_area(src)
-	to_chat(O, "<span class='recruit'>\The [name] activated at \the [A.name]. Get ready. ([controls])</span>")
+	to_chat(player, "<span class='recruit'>\The [name] activated at \the [A.name]. Get ready. ([controls])</span>")
 
-/obj/item/weapon/robot_spawner/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
+/obj/item/weapon/robot_spawner/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
 	var/area/A = get_area(src)
-	to_chat(O, "<span class='recruit'>\The [name] activated at \the [A.name]. ([controls])</span>")
+	to_chat(player, "<span class='recruit'>\The [name] activated at \the [A.name]. ([controls])</span>")
 
-/obj/item/weapon/robot_spawner/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
+/obj/item/weapon/robot_spawner/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
 		qdel(recruiter)
 		recruiter = null
 		busy = FALSE
 		charge--
 		spark(src, 4)
 		var/mob/living/silicon/robot/R = new borg_type(get_turf(loc))
-		R.key = O.key
+		R.key = player.key
 		post_recruited(R)
 		if(!charge && autoqdel)
 			qdel(src)

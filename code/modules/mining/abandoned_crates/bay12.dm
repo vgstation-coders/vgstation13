@@ -22,8 +22,7 @@
 /obj/structure/closet/crate/secure/loot/bay_05/New()
 	..()
 	for(var/i = 0, i < 3, i++)
-		var/obj/machinery/portable_atmospherics/hydroponics/tray = new(src)
-		tray.anchored = FALSE
+		new/obj/machinery/portable_atmospherics/hydroponics/loose(src)
 
 /obj/structure/closet/crate/secure/loot/bay_06/New()
 	..()

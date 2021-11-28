@@ -164,19 +164,19 @@
 	var/brightness_on = 2 //luminosity when on
 	var/on = 0
 
-	attack_self(mob/user)
-		if(!isturf(user.loc))
-			to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
+/obj/item/clothing/head/pumpkinhead/attack_self(mob/user)
+	if(!isturf(user.loc))
+		to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
 
-			return
-		on = !on
-		icon_state = "hardhat[on]_[_color]"
-		item_state = "hardhat[on]_[_color]"
+		return
+	on = !on
+	icon_state = "hardhat[on]_[_color]"
+	item_state = "hardhat[on]_[_color]"
 
-		if(on)
-			set_light(brightness_on)
-		else
-			set_light(0)
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
 
 /obj/item/clothing/head/pumpkinhead/attackby(var/obj/item/I, var/mob/user)
 	..()
@@ -287,7 +287,7 @@
 
 /obj/item/clothing/head/beret/sec/ocelot
 	name = "Ocelot's beret"
-	desc = "Ocelot's signature red beret"
+	desc = "Ocelot's signature red beret."
 
 /obj/item/clothing/head/beret/sec/ocelot/OnMobLife(var/mob/living/carbon/human/wearer)
 	if(wearer.get_item_by_slot(slot_head) == src)

@@ -127,12 +127,12 @@
 	desc = "It appears to be modeled after a human."
 	target_type = /mob/living/carbon/human
 	icon_state = "human_mask"
-	
+
 /obj/item/clothing/mask/morphing/goat
 	name = "mask of the goat"
 	desc = "It appears to be modeled after a goat."
 	target_type = /mob/living/simple_animal/hostile/retaliate/goat
-	icon_state = "goat_mask"	
+	icon_state = "goat_mask"
 
 /obj/item/clothing/mask/morphing/amorphous
 	name = "amorphous mask"
@@ -143,7 +143,7 @@
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
 	//Remove cockatrices because they're somewhat OP when player controlled
-	target_type = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)))
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs) + /mob/living/simple_animal/scp_173 + existing_typesof(/mob/living/component)))
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"
 	desc = "It appears to be modeled after a ghost. It looks as though it might disappear at any moment."

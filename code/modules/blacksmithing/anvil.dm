@@ -5,7 +5,7 @@
 
 /obj/item/anvil
 	name = "anvil"
-	desc = "For rounding and crafting objects. Combined with a hammer, you can likely craft some pleasant weapons with this"
+	desc = "For rounding and crafting objects. Combined with a hammer, you can likely craft some pleasant weapons with this."
 	w_class = W_CLASS_GIANT
 	icon = 'icons/obj/blacksmithing.dmi'
 	icon_state = "anvil"

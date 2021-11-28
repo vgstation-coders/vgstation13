@@ -20,7 +20,7 @@
 	msg += "</span>"
 
 	if(head_state)
-		msg += "It is wearing [bicon(head_state)] [head_state] on its head.\n"
+		msg += "It is wearing [bicon(head_state)] [head_state] on its head.[head_state.description_accessories()][head_state.description_hats()]\n"
 	if(tool_state)
 		var/obj/item/I = tool_state
 		msg += "Its utility claw is gripping [bicon(I)] [I.gender==PLURAL?"some":"a"] [I.name].\n"

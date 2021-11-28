@@ -76,7 +76,7 @@
 	secondary = 1
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/datum/effect/effect/system/reagents_explosion/e = new()
+	var/datum/effect/system/reagents_explosion/e = new()
 	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
@@ -236,8 +236,8 @@
 	name = "Sulphuric Acid"
 	id = SACID
 	result = SACID
-	required_reagents = list(SULFUR = 2, OXYGEN = 3, WATER = 2)
-	result_amount = 2
+	required_reagents = list(SULFUR = 1, OXYGEN = 3, WATER = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/thermite
 	name = "Thermite"
@@ -547,7 +547,7 @@
 	alert_admins = ALERT_AMOUNT_ONLY
 
 /datum/chemical_reaction/nitroglycerin/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/datum/effect/effect/system/reagents_explosion/e = new()
+	var/datum/effect/system/reagents_explosion/e = new()
 	e.set_up(round (created_volume/2, 1), holder.my_atom, 0, 0)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
@@ -572,6 +572,51 @@
 	result = SODIUMCHLORIDE
 	required_reagents = list(SODIUM = 1, CHLORINE = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/holysalts
+	name = "Holy Salts"
+	id = HOLYSALTS
+	result = HOLYSALTS
+	required_reagents = list(SODIUMCHLORIDE = 1)
+	required_catalysts = list(HOLYWATER = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/occult_blood_test
+	name = "Occult Blood Test"
+	id = "occult_blood_test"
+	required_reagents = list(HOLYSALTS = 5)
+	required_catalysts = list(BLOOD = 5)
+	quiet = TRUE
+
+/datum/chemical_reaction/cultcheck/on_reaction(var/datum/reagents/holder, var/created_volume)
+	for(var/datum/reagent/blood/B in holder.reagent_list)
+		var/turf/T = get_turf(holder.my_atom)
+		if ("occult" in B.data)
+			var/datum/mind/M = B.data["occult"]
+			if (M && M.current && iscultist(M.current) && !M.current.isDead()) // checking that the source cultist is alive and still a cultist
+				T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts violently react with the blood and flames lick the air above the [holder.my_atom].</span>")
+				var/red_flames = 0
+				var/orange_flames = 0
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				for (var/datum/role/R in cult.members)
+					var/mob/L = R.antag.current
+					if (isliving(L) && !L.isDead())
+						var/turf/U = get_turf(L)
+						if ((T.z == U.z) && !isshade(L))
+							red_flames++//human or construct on the current Z level
+						else
+							orange_flames++//either a shade or on another Z level
+				if (red_flames)
+					T.visible_message("<span class='notice'>You count <font color='red'><b>[(red_flames > 1) ? "[red_flames] distinct" : "a single"]</b></font> bright red flame[(red_flames > 1) ? "s":""].</span>")
+				if (orange_flames)
+					T.visible_message("<span class='notice'>[red_flames ? "As well as" : "You count"] <font color='orange'><b>[(orange_flames > 1) ? "[orange_flames] distinct" : "a single"]</b></font> dim orange flame[(orange_flames > 1) ? "s":""].</span>")
+				playsound(T, 'sound/effects/bubbles.ogg', 80, 1)
+				T.hotspot_expose(500 * red_flames + 100 * orange_flames, 10)
+				holder.remove_reagent(BLOOD, 5)
+				return
+
+		T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts dissolve into the blood without so much as a reaction.</span>")
+		return
 
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
@@ -640,7 +685,7 @@
 /datum/chemical_reaction/chemsmoke/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		var/datum/effect/system/smoke_spread/chem/S = new /datum/effect/system/smoke_spread/chem
 		S.attach(location)
 		S.set_up(holder, 10, 0, location)
 		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
@@ -661,7 +706,7 @@
 	holder.isolate_reagent(CHLORAMINE)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		var/datum/effect/system/smoke_spread/chem/S = new /datum/effect/system/smoke_spread/chem
 		S.attach(location)
 		S.set_up(holder, 5, 0, location)
 		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
@@ -677,6 +722,13 @@
 	result = CHLORALHYDRATE
 	required_reagents = list(ETHANOL = 1, CHLORINE = 3, WATER = 1)
 	result_amount = 1
+
+/datum/chemical_reaction/suxameth
+	name = "Suxameth"
+	id = SUX
+	result = SUX
+	required_reagents = list(TOXIN = 1, CHLORINE = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/zombiepowder
 	name = "Zombie Powder"
@@ -729,7 +781,7 @@
 	result_amount = 5
 
 /datum/chemical_reaction/carp_pheromones
-	name = "Carp pheromones"
+	name = "Carp Pheromones"
 	id = CARPPHEROMONES
 	result = CARPPHEROMONES
 	required_reagents = list(CARPOTOXIN = 1, LEPORAZINE = 1, CARBON = 1)
@@ -835,6 +887,16 @@
 /datum/chemical_reaction/solidification/uranium/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/uranium
 
+/datum/chemical_reaction/solidification/diamond
+	name = "Solid Diamond"
+	id = "soliddiamond"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, DIAMONDDUST = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/diamond/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/diamond
+
 /datum/chemical_reaction/solidification/clown
 	name = "Solid Bananium"
 	id = "solidbananium"
@@ -851,6 +913,7 @@
 	id = "solidphazon"
 	result = null
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PHAZON = 1)
+	required_catalysts = list(MUTAGEN = 5)
 	result_amount = 1
 
 /datum/chemical_reaction/solidification/phazon/product_to_spawn()
@@ -1006,7 +1069,7 @@
 		for(var/mob/M in viewers(5, location))
 			to_chat(M, "<span class='warning'>The solution spews out foam!</span>")
 
-		var/datum/effect/effect/system/foam_spread/s = new()
+		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 0)
 		s.start()
 	holder.clear_reagents()
@@ -1025,7 +1088,7 @@
 		for(var/mob/M in viewers(5, location))
 			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
 
-		var/datum/effect/effect/system/foam_spread/s = new()
+		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 1)
 		s.start()
 
@@ -1043,7 +1106,7 @@
 		for(var/mob/M in viewers(5, location))
 			to_chat(M, "<span class='warning'>The solution spews out a metallic foam!</span>")
 
-		var/datum/effect/effect/system/foam_spread/s = new()
+		var/datum/effect/system/foam_spread/s = new()
 		s.set_up(created_volume, location, holder, 2)
 		s.start()
 
@@ -2211,6 +2274,28 @@
 	required_reagents = list(MUSTARD = 1, SODIUMCHLORIDE = 1, VINEGAR = 4, EGG_YOLK = 4) //there are about fifty different variants for homemade mayo, using the one that sounds best
 	result_amount = 10
 
+/datum/chemical_reaction/bluegoo
+	name = "Blue Goo"
+	id = BLUEGOO
+	result = BLUEGOO
+	required_reagents = list(ZAMSPICES = 3, LOCUTOGEN = 2)
+	result_amount = 5
+
+/datum/chemical_reaction/zammild
+	name = "Zam's Mild Sauce"
+	id = ZAMMILD
+	result = ZAMMILD
+	required_reagents = list(ZAMSPICES = 3, SACID = 2)
+	result_amount = 5
+
+/datum/chemical_reaction/zamspicytoxin
+	name = "Zam's Spicy Sauce"
+	id = ZAMSPICYTOXIN
+	result = ZAMSPICYTOXIN
+	required_reagents = list(ZAMMILD = 3, PACID = 2)
+	required_catalysts = list(MUTAGEN = 5)
+	result_amount = 3
+
 /datum/chemical_reaction/vinegar
 	name = "Vinegar"
 	id = VINEGAR
@@ -2260,6 +2345,30 @@
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
 		new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
+
+/*
+		=Recipe for easy pancakes=
+
+	- Mix in a bowl:
+	* 100g plain flour
+	* 2 large eggs
+	* 300ml milk
+	* a tablespoon of melted butter
+	* a teaspoon of salt
+	* 3 tablespoons of sugar
+
+	- Pre-heat and lightly grease your cooking pan at medium-high heat
+	- Pour just enough of the mix to fill the pan's surface
+	- Wait around 3 minutes for the first side, flip, then 1 more minute on the other side (adjust depending on how fast your pan is cooking)
+	- Serve with some sugar or chocolate
+
+*/
+/datum/chemical_reaction/pancake_mix
+	name = "Pancake Mix"
+	id = PANCAKE
+	result = PANCAKE
+	required_reagents = list(FLOUR = 10, MILK = 30, LIQUIDBUTTER = 2, EGG_YOLK = 8, SODIUMCHLORIDE = 1, SUGAR = 5)
+	result_amount = 56 // 1:1
 
 //Jesus christ how horrible
 /datum/chemical_reaction/cream
@@ -2576,6 +2685,13 @@
 	result = DOCTORSDELIGHT
 	required_reagents = list(LIMEJUICE = 1, TOMATOJUICE = 1, ORANGEJUICE = 1, CREAM = 1, TRICORDRAZINE = 1)
 	result_amount = 5
+
+/datum/chemical_reaction/doctor_delight_from_syrup
+	name = "The Dector's Delight from pre-mix"
+	id= "p_doctordelight"
+	result = DOCTORSDELIGHT
+	required_reagents = list(DSYRUP = 1, TRICORDRAZINE = 1)
+	result_amount = 2
 
 /datum/chemical_reaction/irish_cream
 	name = "Irish Cream"
@@ -3537,7 +3653,7 @@
 
 /datum/chemical_reaction/diy_soda/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(holder.get_reagent_amount(DIY_SODA) == 90) //apparently this gets called AFTER the reaction is done reacting
-		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(holder.my_atom))
+		var/obj/effect/smoke/S = new /obj/effect/smoke(get_turf(holder.my_atom))
 		S.time_to_live = 5 //unusually short smoke
 		//We don't need to start up the system because we only want to smoke one tile.
 
@@ -3718,8 +3834,10 @@
 		var/mob/living/carbon/human/H = holder.my_atom
 		if(created_volume <= 9)
 			for(var/i = 1 to created_volume)
+				var/L = get_turf(holder.my_atom)
+				new /mob/living/simple_animal/hostile/humanoid/skellington(L)
 				var/datum/organ/external/E = pick(H.organs)
-				E.fracture()
+				E.fracture() //Hopefully this means that under 10u the skellingtons still get spawned, but AT 10u you turn into one.
 		else
 			if(isskellington(H) || isskelevox(H) || islich(H))
 				bigBoned(H, created_volume)
@@ -3733,9 +3851,10 @@
 				H.visible_message("<span class='danger'>[H.name]'s skeleton jumps right out of their skin, forcefully!</span>")
 				H.drop_all()
 			gibs(H.loc, H.virus2, H.dna)
-	for(var/i = 1 to created_volume)
-		var/L = get_turf(holder.my_atom)
-		new /mob/living/simple_animal/hostile/humanoid/skellington(L)
+	else
+		for(var/i = 1 to created_volume)
+			var/L = get_turf(holder.my_atom)
+			new /mob/living/simple_animal/hostile/humanoid/skellington(L) //Should spawn skeletons normally if the holder isn't human.
 
 /datum/chemical_reaction/synthskeleton/proc/bigBoned(var/mob/living/carbon/human/theSkel, var/volume)
 	for(var/datum/organ/external/E in theSkel.organs)
@@ -3760,6 +3879,37 @@
 	var/L = get_turf(holder.my_atom)
 	new /mob/living/simple_animal/hostile/ginger/gingerboneman(L)
 	qdel(holder.my_atom)
+
+/datum/chemical_reaction/midazoline
+	name = "Midazoline"
+	id = MIDAZOLINE
+	result = MIDAZOLINE
+	required_reagents = list(SACIDS = 1, CLONEXADONE = 1, GOLD = 1)
+	result_amount = 1 //This effectively just changes the amount of gold powder you get from electrolyzing
+
+/datum/chemical_reaction/midazoline/required_condition_check(datum/reagents/holder)
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/mineral/plasma) in holder.my_atom.contents)
+	return 0
+
+/datum/chemical_reaction/midazoline_dissolve
+	name = "Midazoline-to-Mercury"
+	id = "midazoline2mercury"
+	result = MERCURY
+	required_reagents = list(MIDAZOLINE = 0.1, MERCURY = 0.1)
+	result_amount = 0.2
+
+/datum/chemical_reaction/midazoline_dissolve/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	for(var/datum/reagent/self_replicating/midazoline/R in holder.reagent_list)
+		holder.convert_some_of_type(/datum/reagent/self_replicating/midazoline, /datum/reagent/mercury, R.volume) //Convert ALLL of it, even that last 0.01u (don't leave 0.042857u behind)
+
+/datum/chemical_reaction/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	result = LOCUTOGEN
+	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGAR = 1)
+	result_amount = 3
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

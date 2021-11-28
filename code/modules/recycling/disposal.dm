@@ -89,6 +89,15 @@
 		if(1)
 			qdel(src)
 
+/obj/machinery/disposal/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item))
+		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
+			return FALSE
+		var/obj/item/I = AM
+		I.forceMove(src)
+		update_icon()
+		return TRUE
+	return FALSE
 
 // attack by item places it in to disposal
 /obj/machinery/disposal/attackby(var/obj/item/I, var/mob/user)
@@ -476,6 +485,8 @@
 		return
 	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
+	if(!user.canMouseDrag())
+		return
 
 	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
 		if(istype(dropping, /obj/item))
@@ -577,7 +588,7 @@
 	//Check for any living mobs trigger hasmob.
 	//hasmob effects whether the package goes to cargo or its tagged destination.
 	for(var/mob/living/M in D)
-		if(M && M.stat != 2)
+		if(M && M.stat != DEAD)
 			hasmob = 1
 
 	//Checks 1 contents level deep. This means that players can be sent through disposals...
@@ -585,7 +596,13 @@
 	for(var/obj/O in D)
 		if(O.contents)
 			for(var/mob/living/M in O.contents)
-				if(M && M.stat != 2)
+				if(istype(M, /mob/living/simple_animal/hostile/mimic/crate))
+					continue
+				if (istype(O, /obj/item/delivery/large))
+					var/obj/item/delivery/large/P = O
+					if(P.syndie)
+						continue //route syndie-wrapped mobs normally
+				else if(M && M.stat != DEAD)
 					hasmob = 1
 
 	// now everything inside the disposal gets put into the holder
@@ -991,6 +1008,10 @@
 			C.ptype = 9
 		if("pipe-j2s")
 			C.ptype = 10
+		if("pipe-u")
+			C.ptype = 13
+		if("pipe-d")
+			C.ptype = 14
 	src.transfer_fingerprints_to(C)
 	C.change_dir(dir)
 	C.setDensity(FALSE)
@@ -1312,17 +1333,17 @@
 	icon_state = "pipe-j2s"
 
 //////////////////
-//a three-way junction that sorts objects destined for the mail office mail table (tomail = 1)
+//a three-way junction that sorts wrapped objects destined for the mail office mail table (tomail = 1)
 /obj/structure/disposalpipe/wrapsortjunction
 
 	desc = "An underfloor disposal pipe which sorts wrapped and unwrapped objects."
-	icon_state = "pipe-j1s"
+	icon_state = "pipe-j1ms"
 	var/posdir = 0
 	var/negdir = 0
 	var/sortdir = 0
 
 /obj/structure/disposalpipe/wrapsortjunction/mirrored
-	icon_state = "pipe-j2s"
+	icon_state = "pipe-j2ms"
 
 /obj/structure/disposalpipe/wrapsortjunction/New()
 	. = ..()
@@ -1334,10 +1355,10 @@
 	posdir = dir
 	negdir = turn(posdir, 180)
 
-	if(icon_state == "pipe-j1s")
+	if(icon_state == "pipe-j1ms")
 		sortdir = turn(posdir, -90)
 	else
-		icon_state = "pipe-j2s"
+		icon_state = "pipe-j2ms"
 		sortdir = turn(posdir, 90)
 	dpdir = sortdir | posdir | negdir
 

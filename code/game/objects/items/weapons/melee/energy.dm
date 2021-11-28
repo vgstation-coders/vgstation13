@@ -7,11 +7,6 @@
 	source_temperature = TEMPERATURE_PLASMA
 	sterility = 0
 
-/obj/item/weapon/melee/energy/suicide_act(mob/user)
-	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
-						"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
-	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
-
 /obj/item/weapon/melee/energy/is_hot()
 	if(active)
 		return source_temperature
@@ -46,7 +41,7 @@
 	armor_penetration = 50
 
 
-/obj/item/weapon/melee/energy/axe/suicide_act(mob/user)
+/obj/item/weapon/melee/energy/axe/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
@@ -376,7 +371,7 @@
 		armor_penetration = 100
 		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
-		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, .proc/mob_moved)
 	else
 		force = initial(force)
 		sterility = initial(sterility)
@@ -387,11 +382,11 @@
 		armor_penetration = initial(armor_penetration)
 		to_chat(user, "<span class='notice'> [src] stops vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete0.ogg', 40, 0)
-		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, .proc/mob_moved)
 	update_icon()
 
 /obj/item/weapon/melee/energy/hfmachete/dropped(mob/user)
-	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	user.unregister_event(/event/moved, src, .proc/mob_moved)
 
 /obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
 	if(!usr)
