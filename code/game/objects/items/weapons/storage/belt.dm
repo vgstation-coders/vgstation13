@@ -346,9 +346,8 @@
 	fits_max_w_class = 4
 	max_combined_w_class = 28
 	can_only_hold = list(
- 		"/obj/item/device/aicard",
- 		"/obj/item/device/mmi",
-		"/obj/item/organ/external/head"
+ 		/obj/item/device/aicard,
+ 		/obj/item/device/mmi,
  	)
 
 /obj/item/weapon/storage/belt/silicon/New()
