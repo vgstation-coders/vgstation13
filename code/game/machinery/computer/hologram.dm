@@ -37,7 +37,7 @@
 	I.Blend(new /icon('icons/mob/human.dmi', "mouth_m_s"), ICON_OVERLAY)
 	I.Blend(new /icon('icons/mob/human.dmi', "underwear1_m_s"), ICON_OVERLAY)
 
-	var/icon/U = new /icon('icons/mob/human_face.dmi', "hair_a_s")
+	var/icon/U = new /icon('icons/mob/hair_styles.dmi', "hair_a_s")
 	U.Blend(rgb(src.h_r, src.h_g, src.h_b), ICON_ADD)
 
 	I.Blend(U, ICON_OVERLAY)

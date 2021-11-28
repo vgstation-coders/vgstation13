@@ -48,7 +48,7 @@
 		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
 		playsound(src, 'sound/machines/Alarm_short.ogg', 75, FALSE)
 		spawn(30)
-			explosion(src.loc, 2, 5, 8, 10)
+			explosion(src.loc, 2, 5, 8, 10, whodunnit = src)
 			gibbed = TRUE
 			gib()
 
@@ -65,7 +65,7 @@
 	tod = worldtime2text() //weasellos time of death patch
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)
-		if(!suiciding) //Cowards don't count
+		if(!mind.suiciding) //Cowards don't count
 			score["deadaipenalty"] += 1
 
 	return ..(gibbed)

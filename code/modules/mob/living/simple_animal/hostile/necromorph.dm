@@ -189,7 +189,7 @@
 	var/turf/T = get_turf(src)
 	new /obj/effect/gibspawner/generic(T)
 	qdel(src)
-	explosion(T, -1, 1, 4)
+	explosion(T, -1, 1, 4, whodunnit = src)
 
 /mob/living/simple_animal/hostile/necromorph/puker
 	desc = "A twisted, engorged husk of what was once human. It reeks of stomach acid."

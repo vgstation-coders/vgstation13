@@ -12,9 +12,8 @@
 	name = "plasma floor"
 	icon_state = "plasma"
 
-/turf/simulated/floor/mineral/plasma/New()
+/turf/simulated/floor/mineral/plasma/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/plasma(null)
-	..()
 
 //GOLD
 
@@ -22,9 +21,8 @@
 	name = "gold floor"
 	icon_state = "gold"
 
-/turf/simulated/floor/mineral/gold/New()
+/turf/simulated/floor/mineral/gold/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/gold(null)
-	..()
 
 //SILVER
 
@@ -32,9 +30,8 @@
 	name = "silver floor"
 	icon_state = "silver"
 
-/turf/simulated/floor/mineral/silver/New()
+/turf/simulated/floor/mineral/silver/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/silver(null)
-	..()
 
 //BANANIUM
 
@@ -42,9 +39,8 @@
 	name = "bananium floor"
 	icon_state = "bananium"
 
-/turf/simulated/floor/mineral/clown/New()
+/turf/simulated/floor/mineral/clown/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/clown(null)
-	..()
 
 //DIAMOND
 
@@ -52,9 +48,8 @@
 	name = "diamond floor"
 	icon_state = "diamond"
 
-/turf/simulated/floor/mineral/diamond/New()
+/turf/simulated/floor/mineral/diamond/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/diamond(null)
-	..()
 
 //URANIUM
 
@@ -62,9 +57,8 @@
 	name = "uranium floor"
 	icon_state = "uranium"
 
-/turf/simulated/floor/mineral/uranium/New()
+/turf/simulated/floor/mineral/uranium/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/uranium(null)
-	..()
 
 //PLASTIC
 
@@ -72,9 +66,8 @@
 	name = "plastic floor"
 	icon_state = "plastic"
 
-/turf/simulated/floor/mineral/plastic/New()
+/turf/simulated/floor/mineral/plastic/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/plastic(null)
-	..()
 
 //PHAZON
 
@@ -82,9 +75,8 @@
 	name = "phazon floor"
 	icon_state = "phazon"
 
-/turf/simulated/floor/mineral/phazon/New()
+/turf/simulated/floor/mineral/phazon/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/phazon(null)
-	..()
 
 //BRASS
 
@@ -92,9 +84,8 @@
 	name = "brass floor"
 	icon_state = "brass"
 
-/turf/simulated/floor/mineral/clockwork/New()
+/turf/simulated/floor/mineral/clockwork/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/brass(null)
-	..()
 
 /turf/simulated/floor/mineral/clockwork/cultify()
 	return
@@ -132,9 +123,7 @@
 /turf/simulated/floor/mineral/gingerbread
 	name = "gingerbread panel floor"
 	icon_state = "gingerbread"
-	floor_tile
 	//I spent 10 hours trying to figure out how to make this use the nice randomized floors with the little peppermints I was so proud of. I give up, fuck floor tiles.
 
-/turf/simulated/floor/mineral/gingerbread/New()
+/turf/simulated/floor/mineral/gingerbread/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/gingerbread(null)
-	..()

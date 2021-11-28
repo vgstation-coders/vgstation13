@@ -76,14 +76,14 @@
 		return // Nope
 	..()
 
-/obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/user)
+/obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/living/user)
 	if(!src.process_chambered()) //No rocket in the rocket launcher
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS
 	else //Needed to get that shitty default suicide_act out of the way
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		sleep(1 SECONDS) //RUN YOU IDIOT, RUN
-		explosion(src.loc, -1, 1, 4, 8)
+		explosion(src.loc, -1, 1, 4, 8, whodunnit = user)
 		if(src) //Is the rocket launcher somehow still here ?
 			qdel(src) //This never happened
 		return SUICIDE_ACT_BRUTELOSS
@@ -145,14 +145,14 @@
 		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		fired.detonate()
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
+/obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/living/user)
 	if(!loaded)
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS
 	else
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
 		sleep(1 SECONDS) //RUN YOU IDIOT, RUN
-		explosion(src.loc, 1, 3, 5, 8) //Using the actual rocket damage, instead of the very old, super nerfed value
+		explosion(src.loc, 1, 3, 5, 8, whodunnit = user) //Using the actual rocket damage, instead of the very old, super nerfed value
 		return SUICIDE_ACT_BRUTELOSS
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
@@ -171,7 +171,7 @@
 
 /obj/item/ammo_casing/rocket_rpg/nikita
 	name = "\improper Nikita missile"
-	desc = "A miniature cruise missile"
+	desc = "A miniature cruise missile."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "nikita"
 	caliber = GUIDEDROCKET
@@ -186,7 +186,7 @@
 /obj/item/weapon/gun/projectile/rocketlauncher/clown
 	//currently this is identical to an rpg in everything but a lack of clumsy check. I plan to repurpose it in the future to fire nonlethal clown missiles possibly
 	name = "shoulder mounted gag launcher"
-	desc = "Tactical clown rocket launcher that fires specialized Jettisonned Armor Piercing & Explosive (J.A.P.E) missiles. It's believed to be the very same design used during the Great Mime and Clown War of 2222"
+	desc = "Tactical clown rocket launcher that fires specialized Jettisonned Armor Piercing & Explosive (J.A.P.E) missiles. It's believed to be the very same design used during the Great Mime and Clown War of 2222."
 	fire_sound = 'sound/weapons/rocket.ogg'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	icon_state = "rpg_clown"

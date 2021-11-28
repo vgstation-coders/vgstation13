@@ -83,6 +83,9 @@ var/global/datum/sun/sun
 
 		T = locate(round(ax, 0.5), round(ay, 0.5), S.z)
 
+		if(isnull(T))
+			warning("Occlusion's locate returned null. [S] at ([S?.x],[S?.y],[S?.z]). ax: [ax], ay: [ay], dx: [dx], dy: [dy]")
+			break
 		if(T.x == 1 || T.x == world.maxx || T.y == 1 || T.y == world.maxy) // Not obscured if we reach the edge.
 			break
 		if(T.opacity) //Opaque objects block light.

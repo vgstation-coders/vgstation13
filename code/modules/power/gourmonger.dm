@@ -1,4 +1,5 @@
-#define GOURMONGER_STARVING 50
+#define GOURMONGER_STARVING 25
+#define GOURMONGER_HUNGRY 150
 #define GOURMONGER_SATISFIED 500
 #define TOO_MANY_GOURS 30
 
@@ -12,6 +13,7 @@ var/global/gourmonger_saturation = 0
 	icon_living = "gourmonger"
 	icon_dead = "gourmonger"	//This shouldn't happen
 	faction = "gourmonger"
+	speak_emote = list("stomach grumbles")
 	health = 125
 	maxHealth = 125
 	melee_damage_lower = 5
@@ -25,19 +27,23 @@ var/global/gourmonger_saturation = 0
 	min_oxy = 0	//I dunno it breathes food or something. Makes the shard room usable.
 	max_co2 = 0
 	var/hangry = FALSE	//True = loose
-	var/kcalPower = 100	//Banked nutrition
+	var/kcalPower = 200	//Banked nutrition
 	var/growToSplit = 20	//How many meals (not nutrition, instances of eating) it takes to split into another gour
 	var/mealCount = 0	//How close to splitting we are
 	var/fastingTime = 0	//Goes up every tick. Decides how much kcal we lose and how close to losing a mealCount we are.
 	var/currentlyMunching = FALSE	//If it's currently eating so it doesn't keep trying.
 	var/mob/living/sniffTarget = null	//The target we're hunting while loose.
-
+	var/beenStuckCount = 0		//Work around for it being stuck on things it can't charge through
+	var/turf/stuckTurf = null	//Where we're stuck
+	var/list/justBreakIt = list(	//Fuck it and fuck mecha
+		/obj/effect/decal/mecha_wreckage,
+		/obj/machinery/power/treadmill,
+	)
 
 /mob/living/simple_animal/hostile/gourmonger/New()
 	..()
 	gourmonger_saturation++
 	growToSplit += gourmonger_saturation	//Adding on spawn so one doesn't die and cause an unexpected chain reaction
-	kcalPower += rand(0, 50)	//For funsies
 
 /mob/living/simple_animal/hostile/gourmonger/Life()
 	if(!..())
@@ -65,6 +71,23 @@ var/global/gourmonger_saturation = 0
 	else if(kcalPower > 1000)
 		to_chat(user, "<span class='notice'>The [src] is even fatter than usual.</span>")
 
+/mob/living/simple_animal/hostile/gourmonger/attackby(obj/W, mob/user)
+	..()
+	if(!hangry && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
+		handFeed(W, user)
+
+/mob/living/simple_animal/hostile/gourmonger/proc/handFeed(var/obj/item/weapon/reagent_containers/food/snacks/F, mob/user)
+	if(currentlyMunching)
+		to_chat(user, "<span class='info'>\The [src] is busy eating something else.</span>")
+		return
+	eatFood(F)
+	if(F.gcDestroyed)
+		LoseTarget()	//Functions as a reset too, in case they're fixated on something out of their reach or whatever
+		if(prob(5))
+			var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+			heart.plane = ABOVE_HUMAN_PLANE
+			flick_overlay(heart, list(user.client), 20)
+
 /mob/living/simple_animal/hostile/gourmonger/CanAttack(var/atom/the_target) //My hands are tied. I swear I had a reason for this copy paste. It also trims some weight from targeting.
 	if(currentlyMunching)
 		return 0
@@ -87,8 +110,9 @@ var/global/gourmonger_saturation = 0
 					return 0
 		if((istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
-		if(friends.Find(L))
-			return 0
+		for(var/datum/weakref/ref in friends)
+			if (ref.get() == L)
+				return 0
 		if(!L.stat && !hangry)	//So we attack corpses but not living creatures unless we're starving
 			return 0
 		if(sniffTarget)	//Why are we running across the station if there's food right in front of us?
@@ -122,8 +146,8 @@ var/global/gourmonger_saturation = 0
 
 /mob/living/simple_animal/hostile/gourmonger/proc/metabolizeTick()
 	if(kcalPower > 0)
-		kcalPower -= fastingTime/5	//Longer without a meal, hungrier they get
-	if(mealCount && prob((fastingTime + mealCount)/10))	//Higher chance based on time and how full they are.
+		kcalPower -= fastingTime/20	//Longer without a meal, hungrier they get
+	if(mealCount && prob((fastingTime/50) + mealCount))	//Higher chance based on time and how full they are.
 		mealCount--
 		fastingTime = 0
 		glowCheck()
@@ -135,10 +159,13 @@ var/global/gourmonger_saturation = 0
 		hangry = TRUE
 	else if(hangry && kcalPower > GOURMONGER_SATISFIED)
 		hangry = FALSE
+	else if(!hangry && kcalPower < GOURMONGER_HUNGRY)
+		if(prob(50))
+			say(pick("GrrrGRUhgrr", "BorrrboRRrygMMmmmus", "RrrrmmmRrrggrr"))	//Stomach rumbling. Not an emote so bounce radios can pick it up as a warning
 
 /mob/living/simple_animal/hostile/gourmonger/proc/radBurst(var/radVal)
 	emitted_harvestable_radiation(get_turf(src), radVal, 8)
-	for(var/mob/living/L in view(get_turf(src), 5))
+	for(var/mob/living/L in view(get_turf(src), 3))
 		L.apply_radiation(radVal/25, RAD_EXTERNAL)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/glowCheck() //Visible indicator of how close to splitting they are
@@ -196,12 +223,14 @@ var/global/gourmonger_saturation = 0
 				..()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/munchOn(var/atom/T, var/munchTime = 3)
+	if(currentlyMunching)
+		return FALSE
 	flick("gourmonger_eat", src)	//This is a 2.8 second animation
 	currentlyMunching = TRUE
 	canmove = 0
 	for(var/i = 0, i<munchTime, i++)
 		if(T.gcDestroyed)
-			target = null
+			LoseTarget()
 			currentlyMunching = FALSE
 			canmove = 1
 			return
@@ -220,6 +249,8 @@ var/global/gourmonger_saturation = 0
 	toEat.reagents.clear_reagents()
 	eatOutcome(nValue, nValue/2)
 	toEat.after_consume(src)
+	if(!toEat.gcDestroyed)
+		qdel(toEat)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/eatCorpse(var/mob/living/L)
 	if(ishuman(L))
@@ -296,30 +327,57 @@ var/global/gourmonger_saturation = 0
 		return
 	if(istype(loc, /obj/structure))
 		gourEscape()
+	for(var/obj/item/weapon/reagent_containers/food/snacks/distractionMeal in get_turf(src))
+		eatFood(distractionMeal)
+		return
 	var/chargeDir = get_dir_cardinal(src, cTarg)
 	if(!step(src, chargeDir))
+		stuckTurf = get_turf(src)
 		var/turf/T = get_step(src, chargeDir)
-		chargeThrough(T)
-		if(Adjacent(T))
-			forceMove(T)
+		chargeThrough(T, chargeDir)
+		if(stuckTurf == get_turf(src))
+			handleStuck(chargeDir)
+		else
+			stuckTurf = null
 
-/mob/living/simple_animal/hostile/gourmonger/proc/chargeThrough(var/turf/cT)
+/mob/living/simple_animal/hostile/gourmonger/proc/handleStuck(var/attemptedDir)
+	beenStuckCount++
+	if(beenStuckCount >= 4)	//4 attempts should give it enough time to deal with things that require multiple charge through attempts
+		var/turf/chargeTarg = null
+		if(attemptedDir == NORTH || attemptedDir == SOUTH)
+			chargeTarg = get_step(src, pick(WEST, EAST))
+		else if(attemptedDir == WEST || attemptedDir == EAST)
+			chargeTarg = get_step(src, pick(NORTH, SOUTH))
+		if(chargeTarg)
+			chargeThrough(chargeTarg)
+	if(stuckTurf != get_turf(src))
+		beenStuckCount = 0
+		stuckTurf = null
+	else if(beenStuckCount >= 10)	//Aight fuck this we're finding a new target
+		sniffTarget = null
+		LoseTarget()
+
+/mob/living/simple_animal/hostile/gourmonger/proc/chargeThrough(var/turf/cT, var/cDir)
 	if(istype(cT, /turf/simulated/wall))
 		cT.dismantle_wall(1)
-	for(var/obj/machinery/M in cT.contents)	//All these just mimic what machinery does on tool use
-		if(!M.density)
+	for(var/atom/blocker in cT.contents)
+		if(!blocker.density)
 			continue
-		if(istype(M, /obj/machinery/door/airlock))
-			var/obj/machinery/door/airlock/A = M
-			A.bashed_in(src)
-		gourThroughMachine(M)
-	for(var/obj/structure/S in cT.contents)
-		if(S.density)
-			S.ex_act(1)	//Safest way to do this, probably
-	for(var/mob/living/L in cT.contents)
-		if(L == src)
-			continue
-		gourThroughMob(L)
+		if(istype(blocker, /obj/machinery))
+			if(istype(blocker, /obj/machinery/door/airlock))
+				var/obj/machinery/door/airlock/A = blocker
+				A.bashed_in(src)
+			gourThroughMachine(blocker)
+		else if(istype(blocker, /obj/structure) || istype(blocker, /obj/item) || istype(blocker, /obj/mecha))	//anvils, tape
+			blocker.ex_act(1)
+		else if(isliving(blocker))
+			if(blocker == src)
+				continue
+			gourThroughMob(blocker)
+		else if(is_type_in_list(blocker, justBreakIt))
+			blocker.ex_act(1)
+	if(Adjacent(cT))
+		step(src, cDir)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMachine(var/obj/machinery/M)
 	for(var/mob/living/L in M.contents)
@@ -328,10 +386,13 @@ var/global/gourmonger_saturation = 0
 		M.dropFrame()
 		M.spillContents()
 		qdel(M)
-	else if(M.wrenchable())
+		return
+	if(M.wrenchable())
 		M.state = 0
 		M.anchored = FALSE
 		M.power_change()
+		return
+	M.ex_act(1) //"Just get out of my waaaaaaay"
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMob(var/mob/living/L)
 	if(ishuman(L))
@@ -340,6 +401,7 @@ var/global/gourmonger_saturation = 0
 	L.adjustBruteLoss(20)
 	if(!issilicon(L))
 		target = L	//Oh hey meat. Also lets them eat each other if they're too hungry, but not specifically seek to.
+		sniffTarget = L
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourEscape()
 	var/obj/structure/S = loc

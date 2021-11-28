@@ -5,6 +5,8 @@
 	special_role = RAMBLER
 	logo_state = "rambler-logo"
 	wikiroute = ROLE_MINOR
+	default_admin_voice = "Chief Master Guru"
+	admin_voice_style = "rose"
 	var/remaining_vows = 3
 
 /datum/role/rambler/OnPostSetup(var/laterole = FALSE)
@@ -50,6 +52,7 @@
 	name = "shakashuri"
 	desc = "Similar to other woodwinds, though it can be played only by a true rambler of souls."
 	slot_flags = SLOT_BACK
+	requires_mouth = FALSE //Playing a shakashuri doth art in the mindbrain's heart, anyway
 
 /obj/item/device/instrument/recorder/shakashuri/attack_self(mob/user)
 	if(!isrambler(user))

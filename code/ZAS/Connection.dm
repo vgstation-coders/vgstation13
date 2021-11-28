@@ -1,6 +1,5 @@
 #define CONNECTION_DIRECT 2
 #define CONNECTION_SPACE 4
-#define CONNECTION_INVALID 8
 
 /*
 
@@ -77,10 +76,12 @@ Class Procs:
 
 /connection/proc/mark_direct()
 	state |= CONNECTION_DIRECT
+	++edge.direct
 //	to_chat(world, "Marked direct.")
 
 /connection/proc/mark_indirect()
 	state &= ~CONNECTION_DIRECT
+	--edge.direct
 //	to_chat(world, "Marked indirect.")
 
 /connection/proc/mark_space()
@@ -89,13 +90,16 @@ Class Procs:
 /connection/proc/direct()
 	return (state & CONNECTION_DIRECT)
 
-/connection/proc/valid()
-	return !(state & CONNECTION_INVALID)
-
 /connection/proc/erase()
+	qdel(src)
+
+/connection/Destroy()
 	edge.remove_connection(src)
-	state |= CONNECTION_INVALID
-//	to_chat(world, "Connection Erased: [state]")
+	if(A.connections)
+		A.connections -= B
+	if(B.connections)
+		B.connections -= A
+	..()
 
 /connection/proc/update()
 //	to_chat(world, "Updated, \...")
@@ -112,8 +116,8 @@ Class Procs:
 	else if(block_status & ZONE_BLOCKED)
 		if(direct())
 			mark_indirect()
-		else
-			mark_direct()
+	else if(!direct())
+		mark_direct()
 
 	var/b_is_space = (!istype(B,/turf/simulated))
 

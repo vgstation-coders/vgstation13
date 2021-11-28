@@ -123,7 +123,7 @@
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
 	name = "pepperspray"
-	desc = "Manufactured by UhangInc, used to blind and down an opponent quickly."
+	desc = "A pepper spray manufactured by UhangInc, used to blind and down an opponent quickly."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "pepperspray"
 	item_state = "pepperspray"
@@ -133,6 +133,19 @@
 /obj/item/weapon/reagent_containers/spray/pepper/New()
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
+
+/obj/item/weapon/reagent_containers/spray/pepper/slime_act(primarytype, mob/user)
+	..()
+	if(primarytype == /mob/living/carbon/slime/orange)
+		has_slime=1
+		reagents.add_reagent(CONDENSEDCAPSAICIN, 40)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
+		to_chat(user, "You drop the slime extract down into the spray canister, and liquid capsaicin swells up to the brim.")
+		return TRUE
+
+/obj/item/weapon/reagent_containers/spray/pepper/make_puff(var/atom/target, var/mob/user)
+	if(has_slime)
+		reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
+	..()
 
 // Luminol
 /obj/item/weapon/reagent_containers/spray/luminol
@@ -181,6 +194,10 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3;" + Tc_SYNDICATE + "=5"
 
 	delay_spraying = FALSE
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/attack_self(var/mob/user)
+	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
+	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this * 3] units per spray.</span>")
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puffs

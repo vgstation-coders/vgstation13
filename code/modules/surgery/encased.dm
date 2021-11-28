@@ -6,13 +6,12 @@
 	priority = 2
 	can_infect = 1
 	blood_level = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+/datum/surgery_step/open_encased/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
 
-		if (!hasorgans(target))
-			return 0
-
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return affected.encased && (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN))
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	return affected.encased && (affected.open >= 2 || (target.species.anatomy_flags & NO_SKIN))
 
 
 

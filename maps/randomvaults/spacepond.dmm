@@ -5,7 +5,7 @@
 "ae" = (/obj/machinery/cooking,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/spacepond)
 "af" = (/obj/structure/closet/secure_closet/freezer/fridge,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,/obj/item/weapon/reagent_containers/food/drinks/flour,/obj/item/weapon/storage/fancy/egg_box,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/spacepond)
 "ag" = (/obj/structure/table,/obj/machinery/microwave,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/spacepond)
-"ah" = (/obj/structure/table,/obj/item/weapon/kitchen/utensil/knife/large/butch,/obj/item/weapon/kitchen/rollingpin,/obj/item/weapon/reagent_containers/food/drinks/americup,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/spacepond)
+"ah" = (/obj/structure/table,/obj/item/weapon/kitchen/utensil/knife/large/butch,/obj/item/weapon/kitchen/rollingpin,/obj/item/weapon/reagent_containers/food/drinks/flagmug/americup,/turf/simulated/floor{icon_state = "cafeteria"},/area/vault/spacepond)
 "ai" = (/turf/unsimulated/floor/asteroid,/area/vault/spacepond)
 "aj" = (/obj/item/clothing/mask/breath,/obj/item/clothing/head/helmet/space,/turf/unsimulated/floor/asteroid,/area/vault/spacepond)
 "ak" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area/vault/spacepond)

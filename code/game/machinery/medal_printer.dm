@@ -5,7 +5,7 @@
 	icon_state = "medalprinter"
 	icon_state_open = "medalprinter_t"
 	nano_file = "medalprinter.tmpl"
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE | MULTIOUTPUT
 	research_flags = NANOTOUCH | TAKESMATIN | HASOUTPUT | IGNORE_CHEMS | HASMAT_OVER | ACCESS_EMAG
 	req_access = list(access_hop)
 

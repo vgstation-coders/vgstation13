@@ -120,10 +120,7 @@
 		for (var/ID in blood_viruses)
 			var/datum/disease2/disease/D = blood_viruses[ID]
 			if (D.strength >= 80)
-				var/total_badness = 0
-				for(var/datum/disease2/effect/e in D.effects)
-					total_badness += text2num(e.badness)
-				if (total_badness >= 13)
+				if (D.get_total_badness() >= 13)
 					return 1
 
 	return 0
@@ -153,10 +150,7 @@
 		var/list/blood_viruses = blood.data["virus2"]
 		for (var/ID in blood_viruses)
 			var/datum/disease2/disease/D = blood_viruses[ID]
-			var/total_badness = 0
-			for(var/datum/disease2/effect/e in D.effects)
-				total_badness += text2num(e.badness)
-			if (total_badness <= 2)
+			if (D.get_total_badness() <= 2)
 				return 1
 
 	return 0

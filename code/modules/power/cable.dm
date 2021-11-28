@@ -195,7 +195,10 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(T.intact)
 		return
 
-	if(W.sharpness >= 1)
+	if(istype(W,/obj/item/device/multitool/omnitool) && (loc == user.loc))
+		//unlike a normal multitool, only do this if we're directly on top, otherwise cut as per sharpness
+		report_load(user)
+	else if(W.sharpness >= 1 && !W.is_multitool(user))
 		if(shock(user, 50, W.siemens_coefficient))
 			return
 		cut(user, T)
@@ -208,18 +211,20 @@ By design, d1 is the smallest direction and d2 is the highest
 		if(R.loaded)
 			R.loaded.cable_join(src, user)
 			R.is_empty()
-	else if(istype(W, /obj/item/device/multitool))
-		if((powernet) && (powernet.avail > 0))		// is it powered?
-			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.load)] - Available: [format_watts(powernet.avail)].</SPAN>")
-		else
-			to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
-
+	else if(W.is_multitool(user))
+		report_load(user)
 		shock(user, 5, 0.2)
 	else
 		if(src.d1 && W.is_conductor()) // d1 determines if this is a cable end
 			shock(user, 50, W.siemens_coefficient)
 
 	src.add_fingerprint(user)
+
+/obj/structure/cable/proc/report_load(mob/user)
+	if((powernet) && (powernet.avail > 0))		// is it powered?
+		to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [format_watts(powernet.load)] - Available: [format_watts(powernet.avail)].</SPAN>")
+	else
+		to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
 /obj/structure/cable/attack_animal(mob/M)
 	if(isanimal(M))

@@ -33,7 +33,7 @@
 /spell/aoe_turf/conjure/arcane_golem/cast(list/targets, mob/user)
 	//Link the golem to its master
 	newVars = list("master_spell" = src)
-	user.lazy_register_event(/lazy_event/on_spellcast, src, .proc/copy_spellcast)
+	user.register_event(/event/spellcast, src, .proc/copy_spellcast)
 
 	check_golems()
 
@@ -56,7 +56,7 @@
 			golems.Remove(AG)
 
 /spell/aoe_turf/conjure/arcane_golem/on_creation(mob/living/simple_animal/hostile/arcane_golem/AG, mob/user)
-	AG.faction = "\ref[user]"
+	AG.faction = "wizard" // so they get along with other wizard mobs
 	to_chat(user, "<span class='sinister'>You infuse \the [AG] with your mana and knowledge. If it dies, your arcane abilities will be affected.</span>")
 	src.golems.Add(AG)
 

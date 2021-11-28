@@ -3,6 +3,7 @@
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
+	. = INVOKE_EVENT(src, /event/item_attack_self, "user" = user)
 	if(flags & TWOHANDABLE)
 		if(!(flags & MUSTTWOHAND))
 			if(wielded)
@@ -31,8 +32,7 @@
 			I.attack(src, user, def_zone, originator)
 		else
 			I.attack(src, user, def_zone)
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
+	INVOKE_EVENT(src, /event/attackby, "attacker" = user, "item" = I)
 
 
 
@@ -49,12 +49,6 @@
 /obj/item/proc/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	return
 
-obj/item/proc/get_clamped_volume()
-	if(src.force && src.w_class)
-		return clamp((src.force + src.w_class) * 4, 30, 100)// Add the item's force to its weight class and multiply by 4, then clamp the value between 30 and 100
-	else if(!src.force && src.w_class)
-		return clamp(src.w_class * 6, 10, 100) // Multiply the item's weight class by 6, then clamp the value between 10 and 100
-
 /obj/item/proc/attack(mob/living/M as mob, mob/living/user as mob, def_zone, var/originator = null)
 	if(restraint_resist_time > 0)
 		if(restraint_apply_check(M, user))
@@ -70,7 +64,7 @@ obj/item/proc/get_clamped_volume()
 	if (!istype(M)) // not sure if this is the right thing...
 		return 0
 	//var/messagesource = M
-	if (can_operate(M, user))        //Checks if mob is lying down on table for surgery
+	if (can_operate(M, user, I))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,I))
 			return 1
 
@@ -270,8 +264,6 @@ obj/item/proc/get_clamped_volume()
 			animation.master = null
 			qdel(animation)
 
-	if(hitsound)
-		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)
 		material_type.on_use(src,attacked, user)
 

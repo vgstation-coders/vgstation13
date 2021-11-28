@@ -275,6 +275,12 @@ var/list/special_fruits = list()
 	trash = /obj/item/weapon/corncob
 	fragrance = INCENSE_CORNOIL
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/corn/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "<span class='warning'>You'll have to eat the corn first before you can cut a pipe out of its cob.</span>")
+		return
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 	name = "cherries"
 	desc = "Great for toppings!"
@@ -408,7 +414,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
-	desc = "Hmm, needs some processing"
+	desc = "Hmm, needs some processing."
 	filling_color = "#C4C4C4"
 	plantname = "plastic"
 
@@ -713,6 +719,13 @@ var/list/special_fruits = list()
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
+	name = "diamond carrot"
+	desc = "Carrots are forever... Wait no."
+	potency = 20
+	filling_color = "#C4D4E0"
+	plantname = "diamondcarrot"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi
 	name = "reishi"
@@ -1040,7 +1053,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant
 	name = "mustard flowers"
-	desc = "A bunch of bright yellow flowers, unrelated to mustard gas"
+	desc = "A bunch of bright yellow flowers, unrelated to the gas."
 	potency = 10
 	filling_color = "#DFE88B"
 	plantname = "mustardplant"

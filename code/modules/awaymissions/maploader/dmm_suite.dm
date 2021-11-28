@@ -1,6 +1,6 @@
 var/global/dmm_suite/maploader = new
 
-dmm_suite{
+/dmm_suite
 	/*
 
 		dmm_suite version 1.0
@@ -53,27 +53,23 @@ dmm_suite{
 
 		*/
 
-	verb/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/fast_load as null){
-		// dmm_file: A .dmm file to load (Required).
-		// z_offset: A number representing the z-level on which to start loading the map (Optional).
-		// map_element: The map element that the .dmm file belongs to (Optional).
-		// fast_load: If true,
-		}
-	verb/write_map(var/turf/t1 as turf, var/turf/t2 as turf, var/flags as num){
-		// t1: A turf representing one corner of a three dimensional grid (Required).
-		// t2: Another turf representing the other corner of the same grid (Required).
-		// flags: Any, or a combination, of several bit flags (Optional, see documentation).
-		}
+// dmm_file: A .dmm file to load (Required).
+// z_offset: A number representing the z-level on which to start loading the map (Optional).
+// map_element: The map element that the .dmm file belongs to (Optional).
+// fast_load: If true,
+/dmm_suite/proc/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/fast_load as null)
 
-	// save_map is included as a legacy proc. Use write_map instead.
-	verb/save_map(var/turf/t1 as turf, var/turf/t2 as turf, var/map_name as text, var/flags as num){
-		// t1: A turf representing one corner of a three dimensional grid (Required).
-		// t2: Another turf representing the other corner of the same grid (Required).
-		// map_name: A valid name for the map to be saved, such as "castle" (Required).
-		// flags: Any, or a combination, of several bit flags (Optional, see documentation).
-		}
+// t1: A turf representing one corner of a three dimensional grid (Required).
+// t2: Another turf representing the other corner of the same grid (Required).
+// flags: Any, or a combination, of several bit flags (Optional, see documentation).
+/dmm_suite/proc/write_map(var/turf/t1 as turf, var/turf/t2 as turf, var/flags as num)
 
-	verb/get_map_dimensions(var/dmm_file as file){
-		// dmm_file: A .dmm file to check (Required).
-		}
-	}
+// save_map is included as a legacy proc. Use write_map instead.
+// t1: A turf representing one corner of a three dimensional grid (Required).
+// t2: Another turf representing the other corner of the same grid (Required).
+// map_name: A valid name for the map to be saved, such as "castle" (Required).
+// flags: Any, or a combination, of several bit flags (Optional, see documentation).
+/dmm_suite/proc/save_map(var/turf/t1 as turf, var/turf/t2 as turf, var/map_name as text, var/flags as num)
+
+// dmm_file: A .dmm file to check (Required).
+/dmm_suite/proc/get_map_dimensions(var/dmm_file as file)

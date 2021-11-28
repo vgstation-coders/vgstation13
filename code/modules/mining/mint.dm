@@ -2,20 +2,20 @@
 
 /obj/machinery/mineral/mint
 	name = "coin press"
+	desc = "Turns precious sheets into luxurious item tokens. Or small, annoying throwing weapons."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "coinpress0"
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-	var/atom/movable/mover //see ore processing_unit, it's for input/output
 	starting_materials = list() //makes the new empty datum
 	var/coins_per_sheet = 5 //Related to part quality
 	var/newCoins = 0   //how many coins the machine made last run
 	var/processing = 0
 	var/chosen = null //which material will be used to make coins
 	var/coinsToProduce = 10
-	var/in_dir = WEST // Sheets go in
-	var/out_dir = EAST //Coins come out.
+	in_dir = WEST // Sheets go in
+	out_dir = EAST //Coins come out.
 
 /obj/machinery/mineral/mint/New()
 	..()
@@ -29,23 +29,8 @@
 	)
 	RefreshParts()
 
-/obj/machinery/mineral/mint/process()
-	if(stat & (NOPOWER|BROKEN)) //It still moves sheets when unbolted otherwise.
-		return 0
-	var/turf/in_T = get_step(src, in_dir)
-	var/turf/out_T = get_step(src, out_dir)
-
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
-		return
-
-	for(var/atom/movable/A in in_T)
-		if(A.anchored)
-			continue
-
-		if(!istype(A, /obj/item/stack/sheet))//Sheets only
-			A.forceMove(out_T)
-			continue
-
+/obj/machinery/mineral/mint/process_inside(atom/movable/A)
+	if(istype(A,/obj/item/stack/sheet))
 		var/obj/item/stack/sheet/O = A
 
 		for(var/sheet_id in materials.storage)
@@ -229,11 +214,6 @@
 			coinsToProduce = temp_coins
 	src.updateUsrDialog()
 	return
-
-/obj/machinery/mineral/mint/Destroy()
-	qdel(mover)
-	mover = null
-	..()
 
 /obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(..())

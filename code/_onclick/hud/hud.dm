@@ -198,7 +198,6 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	if(!mymob.client)
 		return FALSE
 
-
 	var/ui_style
 	var/ui_color
 	var/ui_alpha
@@ -217,6 +216,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		monkey_hud(ui_style)
 	else if(iscorgi(mymob))
 		corgi_hud()
+	else if(ispulsedemon(mymob))
+		pulsedemon_hud()
 	else if(isbrain(mymob))
 		brain_hud(ui_style)
 	else if(islarva(mymob))
@@ -237,6 +238,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		borer_hud()
 	else if(isconstruct(mymob))
 		construct_hud()
+	else if(isshade(mymob))
+		shade_hud()
 	else if(isspider(mymob))
 		spider_hud()
 	else if(ispAI(mymob))
@@ -247,6 +250,10 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		hologram_hud()
 	else if(isgrinch(mymob))
 		grinch_hud()
+
+	var/datum/role/cultist/C = iscultist(mymob)
+	if (C)
+		C.update_cult_hud()
 
 	if(isliving(mymob))
 		var/obj/abstract/screen/using

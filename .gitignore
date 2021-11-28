@@ -66,8 +66,6 @@ players2.sqlite
 /data/persistence/*
 
 cfg
-
-.vscode
 *.code-workspace
 /byond
 

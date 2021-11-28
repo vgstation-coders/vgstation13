@@ -359,6 +359,23 @@
 	else
 		return ..()
 
+/obj/item/stack/ore/attempt_heating(atom/A, mob/user)
+	var/temperature = A.is_hot()
+	if(temperature && temperature > melt_temperature)
+		var/list/recipes = list()
+		for(var/recipe in typesof(/datum/smelting_recipe) - /datum/smelting_recipe)
+			recipes += new recipe()
+		for(var/datum/smelting_recipe/R in recipes)
+			while(R.checkIngredients(materials)) //While we have materials for this
+				for(var/ore_id in R.ingredients)
+					materials.removeAmount(ore_id, R.ingredients[ore_id]) //arg1 = ore name, arg2 = how much per sheet
+					score["oremined"] += 1 //Count this ore piece as processed for the scoreboard
+					if(istype(loc,/obj/structure/forge))
+						drop_stack(R.yieldtype,loc.loc)
+					else
+						drop_stack(R.yieldtype,loc)
+		qdel(src)
+
 /*****************************Coin********************************/
 
 /obj/item/weapon/coin
@@ -396,12 +413,15 @@
 	var/matrix/flipit = matrix()
 	flipit.Scale(0.2,1)
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	sleep(1.2) //sleeps because otherwise the scale/invert transforms get skipped
 	flipit.Scale(5,1)
 	flipit.Invert()
 	flipit.Turn(rand(1,359))
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	sleep(1.2)
 	flipit.Scale(0.2,1)
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	sleep(1.2)
 	if (pick(0,1))
 		sideup = "heads-up."
 		flipit.Scale(5,1)
@@ -417,6 +437,7 @@
 		flipit.Scale(0.2,1)
 		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
 		sideup = "on the side!"
+	sleep(1.2)
 	if(!thrown)
 		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
 							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
@@ -564,3 +585,29 @@
 		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
 	else
 		..()
+
+///////////////////////////////////////////////////////////
+
+/obj/item/weapon/coin/pomf
+	material="pomf"
+	name = "pomf coin"
+	desc = "A platinum coin featuring the effigy of a white chicken. Few know of its true value. Fewer still can make use of it."
+	icon_state = "coin_pomf"
+	credits = 2525
+	siemens_coefficient = 1
+	melt_temperature=1768+T0C
+	force = 4
+	throwforce = 4
+
+/obj/item/weapon/coin/pumf
+	material="pumf"
+	name = "pumf coin"
+	desc = "A slade coin featuring the effigy of an angry chicken. If it comes into your possession that means you've been a naughty boy. Whatever you've been doing stop it."
+	icon_state = "coin_pumf"
+	credits = -2525 // that's probably a very bad idea but I want to see what happens
+	siemens_coefficient = 1
+	melt_temperature=9999+T0C
+	force = 4
+	throwforce = 4
+
+///////////////////////////////////////////////////////////

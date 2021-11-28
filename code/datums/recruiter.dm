@@ -16,22 +16,22 @@
 	// Args:
 	//  player = /mob/dead/observer
 	//  controls = /string
-	var/event/player_volunteering = new()
+	var/callback/player_volunteering
 
 	// Same, but only called when player has disabled the role.
-	var/event/player_not_volunteering = new()
+	var/callback/player_not_volunteering
 
 	// Args: player = /mob/dead/observer or null
-	var/event/recruited = new()
+	var/callback/recruited
 
 /datum/recruiter/New(var/atom/_subject)
 	subject=_subject
 
 /datum/recruiter/proc/recruiting_player(var/mob/dead/observer/O)
-	INVOKE_EVENT(player_volunteering, list("player"=O, "controls"="<a href='?src=\ref[O];jump=\ref[subject]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>"))
+	player_volunteering.invoke_async(O, "<a href='?src=\ref[O];jump=\ref[subject]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>")
 
 /datum/recruiter/proc/nonrecruiting_player(var/mob/dead/observer/O)
-	INVOKE_EVENT(player_not_volunteering, list("player"=O, "controls"="<a href='?src=\ref[O];jump=\ref[subject]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign up</a>"))
+	player_not_volunteering.invoke_async(O, "<a href='?src=\ref[O];jump=\ref[subject]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign up</a>")
 
 /datum/recruiter/proc/request_player()
 	currently_querying = list()
@@ -56,7 +56,7 @@
 
 	spawn(recruitment_timeout)
 		if(!currently_querying || currently_querying.len==0)
-			INVOKE_EVENT(recruited, list("player"=null))
+			recruited.invoke_async(null)
 			return
 
 		var/mob/dead/observer/O
@@ -68,10 +68,10 @@
 				O = pick(currently_querying)
 
 		if(!check_observer(O))
-			INVOKE_EVENT(recruited, list("player"=null))
+			recruited.invoke_async(null)
 		else
 			paiController.was_recruited(O)
-			INVOKE_EVENT(recruited, list("player"=O))
+			recruited.invoke_async(O)
 
 /datum/recruiter/Topic(var/href, var/list/href_list)
 	if(href_list["signup"])
@@ -121,4 +121,5 @@
 	currently_querying = null
 	player_volunteering = null
 	player_not_volunteering = null
+	recruited = null
 	..()

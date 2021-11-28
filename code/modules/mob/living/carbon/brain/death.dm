@@ -36,7 +36,7 @@
 
 /mob/living/carbon/brain/dust()
 	var/turf/T = get_turf(loc)
-	if(T && client && iscultist(src) && veil_thickness > CULT_PROLOGUE && timeofhostdeath >= world.time - DEATH_SHADEOUT_TIMER)
+	if(T && client && iscultist(src) && timeofhostdeath >= world.time - DEATH_SHADEOUT_TIMER)
 		var/obj/item/organ/internal/brain/B
 		var/obj/item/organ/external/head/H
 		var/obj/item/device/mmi/M
@@ -80,6 +80,8 @@
 		..()
 
 /mob/living/carbon/brain/gib(animation = FALSE, meat = TRUE)
+	if(!isUnconscious())
+		forcesay("-")
 	death(1)
 	monkeyizing = 1
 	canmove = 0

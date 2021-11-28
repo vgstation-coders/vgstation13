@@ -3,7 +3,7 @@
 
 /spell/spiderling_evolution
 	name = "Evolve"
-	desc = "Choose which type of adult spider to grow up into"
+	desc = "Choose which type of adult spider to grow up into."
 	user_type = USER_TYPE_SPIDER
 	hud_state = "spiderling_evolution"
 	override_base = "spider"

@@ -21,7 +21,7 @@
 				spawn(rand(5,25))
 					T.ex_act(prob(80) ? 3 : 2)
 			continue
-		if(!Adjacent(T) || !T.Enter(src))
+		if(!Adjacent(T) || !T.Enter(src, loc, TRUE))
 			continue
 		neighbors |= T
 	// Update all of our friends.
@@ -133,5 +133,10 @@
 			neighbor.neighbors |= check_turf
 			SSplant.add_plant(neighbor)
 	qdel(src)
+
+/obj/effect/plantsegment/proc/proxDensityChange(atom/atom)
+	var/turf/T = get_turf(atom)
+	if(!is_blocked_turf(T))
+		SSplant.add_plant(src)
 
 #undef NEIGHBOR_REFRESH_TIME

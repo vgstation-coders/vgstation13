@@ -87,7 +87,7 @@
 		return
 	if(flags & INVULNERABLE)
 		return
-	if(istype(AM,/obj/) && !istype(AM,/obj/effect/effect/))
+	if(istype(AM,/obj/) && !istype(AM,/obj/effect/))
 		var/obj/O = AM
 		var/zone = ran_zone(LIMB_CHEST,75)//Hits a random part of the body, geared towards the chest
 		var/dtype = BRUTE
@@ -160,6 +160,7 @@
 			src.LAssailant = null
 		else
 			src.LAssailant = M
+			assaulted_by(M)
 
 /*
 	Ear and eye protection
@@ -209,7 +210,11 @@
 
 	add_logs(M, src, "bit", admin=1, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)
-	return
+	var/block = 0
+	// biting causes the check to consider that both sides are bleeding, allowing for blood-only disease transmission through biting.
+	if (check_contact_sterility(FULL_TORSO))//only one side has to wear protective clothing to prevent contact infection
+		block = 1
+	share_contact_diseases(M,block,1)
 
 //KICKS
 /mob/living/kick_act(mob/living/carbon/human/M)
@@ -263,6 +268,13 @@
 
 	add_logs(M, src, "kicked", admin=1, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)
+	var/block = 0
+	var/bleeding = 0
+	if ( M.check_contact_sterility(FEET) || check_contact_sterility(FULL_TORSO))//only one side has to wear protective clothing to prevent contact infection
+		block = 1
+	if ( M.check_bodypart_bleeding(FEET) && check_bodypart_bleeding(FULL_TORSO))//both sides have to be bleeding to allow for blood infections
+		bleeding = 1
+	share_contact_diseases(M,block,bleeding)
 
 /mob/living/proc/near_wall(var/direction,var/distance=1)
 	var/turf/T = get_step(get_turf(src),direction)
@@ -301,6 +313,10 @@
 
 /mob/living/proc/adjust_fire_stacks(add_fire_stacks) //Adjusting the amount of fire_stacks we have on person
 	fire_stacks = clamp(fire_stacks + add_fire_stacks, -20, 20)
+
+//Activates when an attack misses a mob
+/mob/living/proc/on_dodge(var/mob/living/attacker, var/obj/item/attacking_object)
+	return
 
 /mob/living/proc/handle_fire()
 	if((flags & INVULNERABLE) && on_fire)

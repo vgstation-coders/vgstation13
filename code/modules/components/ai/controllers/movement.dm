@@ -1,42 +1,61 @@
 /datum/component/controller/movement
 	var/walk_delay = 4
 
-/datum/component/controller/movement/basic/RecieveSignal(var/message_type, var/list/args)
-	if(isliving(container.holder))
-		var/mob/living/M=container.holder
-		switch(message_type)
-			if(COMSIG_MOVE)
-				if("loc" in args)
-					M.start_walk_to(args["loc"], 1, walk_delay)
-				if("dir" in args)
-					M.set_glide_size(DELAY2GLIDESIZE(walk_delay))
-					walk(M, args["dir"], walk_delay)
+/datum/component/controller/movement/initialize()
+	parent.register_event(/event/comp_ai_cmd_move, src, .proc/cmd_move)
+	return TRUE
 
+/datum/component/controller/movement/Destroy()
+	parent.unregister_event(/event/comp_ai_cmd_move, src, .proc/cmd_move)
+	..()
+
+/datum/component/controller/movement/proc/cmd_move(target)
+	CRASH("not implemented")
+
+/datum/component/controller/movement/basic/cmd_move(target)
+	var/mob/living/dude = parent
+	if(isatom(target))
+		dude.start_walk_to(target, 1, walk_delay)
+	else if(isnum(target))
+		dude.set_glide_size(DELAY2GLIDESIZE(walk_delay))
+		walk(dude, target, walk_delay)
+	else
+		CRASH("target [target] is not an atom or a dir")
 /datum/component/controller/movement/astar
 	var/list/movement_nodes = list()
 	var/target
 
-/datum/component/controller/movement/astar/RecieveSignal(var/message_type, var/list/args)
-	if(isliving(container.holder))
-		var/mob/living/M=container.holder
-		if(message_type == COMSIG_MOVE)
-			if("loc" in args)
-				if(args["loc"] == target)
-					return //We're already on our way there
-				target = args["loc"]
-				AStar(src, .proc/receive_path, M, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=M.get_visible_id())
-			if("dir" in args)
-				movement_nodes = list()
-				walk(M, args["dir"], walk_delay)
-		if(message_type == COMSIG_LIFE)
-			if(movement_nodes && movement_nodes.len && target && (target != null))
-				if(movement_nodes.len > 0)
-					step_to(M, movement_nodes[1])
-					movement_nodes -= movement_nodes[1]
-				else if(movement_nodes.len == 1)
-					step_to(src, target)
-					movement_nodes.Cut()
-					return 1
+/datum/component/controller/movement/astar/initialize()
+	active_components += src
+	return ..()
+
+/datum/component/controller/movement/astar/Destroy()
+	active_components -= src
+	..()
+
+/datum/component/controller/movement/astar/cmd_move(target)
+	var/mob/living/dude = parent
+	if(isatom(target))
+		if(src.target == target)
+			return //We're already on our way there
+		src.target = target
+		walk_to(dude, target, 0, walk_delay)
+	else if(isnum(target))
+		movement_nodes = list()
+		dude.set_glide_size(DELAY2GLIDESIZE(walk_delay))
+		walk(dude, target, walk_delay)
+	else
+		CRASH("target [target] is not an atom or a dir")
+
+/datum/component/controller/movement/astar/process()
+	if(movement_nodes && movement_nodes.len && target)
+		if(movement_nodes.len > 0)
+			step_to(parent, movement_nodes[1])
+			movement_nodes -= movement_nodes[1]
+		else if(movement_nodes.len == 1)
+			step_to(parent, target)
+			movement_nodes.Cut()
+			return 1
 
 /datum/component/controller/movement/astar/proc/receive_path(var/list/L)
 	if(islist(L))

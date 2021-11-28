@@ -383,8 +383,8 @@ About the new airlock wires panel:
 						src.justzap = 0
 		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
 			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
-			user.halloss += 10
-			user.stunned += 10
+			user.adjustHalLoss(10)
+			user.AdjustStunned(10)
 	..(user)
 
 /obj/machinery/door/airlock/proc/isElectrified()
@@ -1221,7 +1221,7 @@ About the new airlock wires panel:
 					welded = null
 
 				update_icon()
-	else if (ismultitool(I))
+	else if (I.is_multitool(user))
 		if (!operating)
 			if(panel_open)
 				wires.Interact(user)
@@ -1319,6 +1319,10 @@ About the new airlock wires panel:
 		else if(req_one_access && req_one_access.len)
 			A.conf_access = req_one_access
 			A.one_access = 1
+		if(req_access_dir)
+			A.dir_access = req_access_dir
+		if(access_not_dir) 
+			A.access_nodir = access_not_dir
 	else
 		A = electronics
 		electronics = null
@@ -1368,6 +1372,8 @@ About the new airlock wires panel:
 		wires.SignalIndex(AIRLOCK_WIRE_ONOPEN)
 
 /obj/machinery/door/airlock/Uncross(atom/movable/mover)
+	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this, especially because of that thing below -kanef
+		return 1
 	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)) && !(istype(mover,/mob/living/simple_animal/shade)))//REEEEEEE
 		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
 		return 0

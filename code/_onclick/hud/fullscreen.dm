@@ -55,9 +55,10 @@
 		client.screen -= screen
 	qdel(screen)
 
-/mob/proc/clear_fullscreens()
+/mob/proc/clear_fullscreens(var/dead_mob = FALSE, var/animate = 10)
 	for(var/category in screens)
-		clear_fullscreen(category)
+		if (!dead_mob || ((category != "brute") && (category != "oxy")))
+			clear_fullscreen(category, animate)
 
 /datum/hud/proc/reload_fullscreen()
 	if(mymob && mymob.client && mymob.stat != DEAD)
@@ -156,6 +157,11 @@
 
 /obj/abstract/screen/fullscreen/deafmute_border
 	icon_state = "conversionoverlay"
+	layer = HALLUCINATION_LAYER
+	alpha = 0
+
+/obj/abstract/screen/fullscreen/astral_border
+	icon_state = "astraloverlay"
 	layer = HALLUCINATION_LAYER
 	alpha = 0
 

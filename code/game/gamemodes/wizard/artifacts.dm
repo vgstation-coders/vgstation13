@@ -15,9 +15,7 @@
 			var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
 			if(W)
 				var/icon/tempimage = icon(I.icon, I.icon_state)
-				end_icons += tempimage
-				var/tempstate = end_icons.len
-				W.artifacts_bought += {"<img src="logo_[tempstate].png"> [name]<BR>"}
+				W.artifacts_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name]<BR>"}
 
 /datum/spellbook_artifact/proc/can_buy(var/mob/user)
 	return TRUE
@@ -329,7 +327,7 @@
 /datum/spellbook_artifact/darkness/purchased(mob/living/carbon/human/H)
 	..()
 	for(var/obj/machinery/power/apc/apc in power_machines)
-		if(apc.z == STATION_Z)
+		if(apc.z == map.zMainStation)
 			apc.overload_lighting()
 
 
@@ -361,13 +359,10 @@
 	abbreviation = "NGA"
 	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
 	price = -0.5 * Sp_BASE_PRICE
+	one_use = TRUE
 
 /datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
-	if(iswizard(user) || isapprentice(user) || ismagician(user))
-		if(!locate(/spell/passive/nogunallowed) in user.spell_list)
-			return TRUE
-	else
-		return FALSE
+	return iswizard(user) || isapprentice(user) || ismagician(user)
 
 /datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
 	..()

@@ -46,37 +46,92 @@
 	name = "shuttle engine pre-igniter"
 	var/obj/structure/shuttle/engine/propulsion/DIY/connected_engine
 	anchored = FALSE
-
+	
+/obj/structure/shuttle/engine/heater/DIY/proc/try_connect()
+	if(!anchored) 
+		desc = initial(desc)
+		return FALSE
+	disconnect()
+	
+	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in range(1,src))
+		if(D.anchored && !D.heater && D.dir == dir && D.loc == get_step(src,dir))
+			D.heater = src
+			connected_engine = D
+			desc += " It is connected to an engine." // have to do both, because only one of the parts' try_connect()s runs
+			D.desc = initial(D.desc) + " It is connected to a preheater."
+			return TRUE
+	desc = initial(desc)
+	return FALSE
+	
+/obj/structure/shuttle/engine/heater/DIY/proc/disconnect()
+	if(connected_engine)
+		connected_engine.heater = null // prevent infinite recursion and subsequent serb CPU fire
+		connected_engine.disconnect()
+	connected_engine = null
+	src.desc = initial(src.desc)
+			
 /obj/structure/shuttle/engine/heater/DIY/attackby(obj/item/I, mob/user)
 	if(I.is_wrench(user) && wrenchAnchor(user, I, 5 SECONDS))
-		if(!anchored)
-			if(connected_engine)
-				connected_engine.heater = null
-				connected_engine = null
-		else
-			for(var/obj/structure/shuttle/engine/propulsion/DIY/D in range(1,src))
-				if(!D.heater)
-					D.heater = src
-					connected_engine = D
-					break
+		return TRUE			
 	return ..()
 
 /obj/structure/shuttle/engine/heater/DIY/canAffixHere(var/mob/user)
-	var/success = FALSE
+	if(src.anchored) // always allow unbolting, a la don't bug out if someone removes the engine
+		return ..()
 	for(var/obj/structure/shuttle/engine/propulsion/DIY/D in range(1,src))
-		if(!D.heater)
-			success = TRUE
-			break
-	if(!success)
-		to_chat(user, "<span class = 'warning'>There is no engine within range of \the [src] it can connect to.</span>")
-		return FALSE
-	return ..()
+		if(D.anchored && !D.heater && D.dir == dir && D.loc == get_step(src,dir))
+			return ..()
+	to_chat(user, "<span class = 'warning'>There is no engine within range of \the [src] it can connect to.</span>")
+	return FALSE
+	
+/obj/structure/shuttle/engine/heater/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	.=..()
+	if(.)
+		if(!anchored)
+			disconnect()
+		else if(!connected_engine)
+			try_connect()
+
+
 
 /obj/structure/shuttle/engine/propulsion/DIY
 	name = "shuttle engine"
 	var/obj/structure/shuttle/engine/heater/DIY/heater = null
 	anchored = FALSE
-
+	
+/obj/structure/shuttle/engine/propulsion/DIY/proc/disconnect()
+	if(heater)
+		heater.disconnect()
+	heater = null
+	desc = initial(desc)
+	
+/obj/structure/shuttle/engine/propulsion/DIY/proc/try_connect()
+	if(!anchored)
+		desc = initial(desc)
+		return FALSE
+	disconnect()
+	for(var/obj/structure/shuttle/engine/heater/DIY/D in range(1,src))
+		if(D.anchored && !D.connected_engine && D.dir == dir && loc == get_step(D,D.dir))
+			heater = D
+			D.connected_engine = src
+			desc += " It is connected to a preheater."
+			D.desc = initial(D.desc) + " It is connected to an engine."
+			return TRUE
+	desc = initial(desc)
+	return FALSE
+	
+// find and rectify black-swan type weirdness, i.e. varedit / singuloo unanchoring the engine parts or a push wizard teleporting them away
+// the shuttle should NOT work if one of the heaters has been magicked halfway across the station, so check for it!
+/obj/structure/shuttle/engine/propulsion/DIY/proc/retard_checks()
+	if(!heater) // no point disconnecting if there is no heater
+		return
+	if(!heater.anchored || anchored) // we've somehow gotten unanchored
+		disconnect()
+		return
+	if(loc != get_step(heater,heater.dir)) // we're not next to the heater anymore
+		disconnect()
+		return
+		
 /obj/structure/shuttle/engine/propulsion/DIY/attackby(obj/item/I, mob/user)
 	if(I.is_wrench(user))
 		return wrenchAnchor(user, I, 5 SECONDS)
@@ -85,9 +140,10 @@
 /obj/structure/shuttle/engine/propulsion/DIY/wrenchAnchor(var/mob/user, var/obj/item/I, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
 	.=..()
 	if(.)
-		if(!anchored && heater)
-			heater.connected_engine = null
-			heater = null
+		if(!anchored)
+			disconnect()
+		else if(!heater)
+			try_connect()
 
 /obj/structure/shuttle/engine/propulsion/DIY/canAffixHere(var/mob/user)
 	var/turf/T = get_step(src, dir)

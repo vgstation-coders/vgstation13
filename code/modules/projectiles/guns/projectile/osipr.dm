@@ -122,7 +122,7 @@
 
 /obj/item/energy_magazine
 	name = "energy magazine"
-	desc = "Can be replenished by a recharger"
+	desc = "Can be replenished by a recharger."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "osipr-magfull"
 	flags = FPRINT

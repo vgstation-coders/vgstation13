@@ -7,6 +7,8 @@
 	late_role = NINJA
 	roletype = /datum/role/ninja
 	initroletype = /datum/role/ninja
+	default_admin_voice = "Spider Clan"
+	admin_voice_style = "bold"
 	logo_state = "ninja-logo"
 	hud_icons = list("ninja-logo")
 

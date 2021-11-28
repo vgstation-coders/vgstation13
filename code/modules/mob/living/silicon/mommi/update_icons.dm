@@ -16,7 +16,7 @@
 // Update the MoMMI's visual icon
 // This is called whenever a major change to the MoMMI's visual appearance is made
 // i.e when they change their icon_state, open their cover, get emagged, toggle their parking break, or put on a hat
-/mob/living/silicon/robot/mommi/updateicon(overlay_layer = ABOVE_LIGHTING_LAYER, overlay_plane = LIGHTING_PLANE)
+/mob/living/silicon/robot/mommi/updateicon(overlay_layer = ABOVE_LIGHTING_LAYER, overlay_plane = ABOVE_LIGHTING_PLANE)
 	overlays.Cut()
 
 	if(base_icon)
@@ -34,7 +34,7 @@
 			eyes.plane = overlay_plane
 			eyes.layer = overlay_layer
 		else
-			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
+			eyes.plane = ABOVE_LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
 		overlays += eyes
 
 		if(anchored) //anchored, really?
@@ -95,6 +95,26 @@
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
 			bloodsies.color = head.blood_color
 			overhats.overlays	+= bloodsies
+		
+		if(istype(head,/obj/item/clothing/head))
+			var/obj/item/clothing/head/hat = head
+			var/i = 1
+			var/image/abovehats
+			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+				abovehats = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
+
+				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				overhats.overlays += abovehats
+
+				if(above.blood_DNA && above.blood_DNA.len)
+					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
+					bloodsies.color = above.blood_color
+					//standing.overlays	+= bloodsies
+					bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+					abovehats.overlays	+= bloodsies
+
+				i++
+
 		// Add our hat images to overlays_hats
 		overlays_hats[MOMMI_HEAD_LAYER]	= overhats
 	// If the MoMMI is not wearing a hat

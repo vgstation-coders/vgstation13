@@ -122,21 +122,21 @@
 	var/target_temp = T0C - 40
 	var/cooling_power = 40
 
-	return_air()
-		var/datum/gas_mixture/gas = (..())
-		if(!gas)
-			return null
-		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
-		newgas.copy_from(gas)
-		if(newgas.temperature <= target_temp)
-			return
+/obj/structure/closet/crate/freezer/return_air()
+	var/datum/gas_mixture/gas = (..())
+	if(!gas)
+		return null
+	var/datum/gas_mixture/newgas = new/datum/gas_mixture()
+	newgas.copy_from(gas)
+	if(newgas.temperature <= target_temp)
+		return
 
-		if((newgas.temperature - cooling_power) > target_temp)
-			newgas.temperature -= cooling_power
-		else
-			newgas.temperature = target_temp
-		newgas.update_values()
-		return newgas
+	if((newgas.temperature - cooling_power) > target_temp)
+		newgas.temperature -= cooling_power
+	else
+		newgas.temperature = target_temp
+	newgas.update_values()
+	return newgas
 
 /obj/structure/closet/crate/freezer/surgery
 	desc = "A freezer specifically designed to store organic material."
@@ -286,7 +286,7 @@
 /obj/structure/closet/crate/secure/anti_tamper/Destroy()
 	if(locked)
 		visible_message("<span class = 'warning'>Something bursts open from within \the [src]!</span>")
-		var/datum/effect/effect/system/smoke_spread/chem/S = new //Surprise!
+		var/datum/effect/system/smoke_spread/chem/S = new //Surprise!
 		S.attach(get_turf(src))
 		S.chemholder.reagents.add_reagent(CAPSAICIN, 40)
 		S.chemholder.reagents.add_reagent(CONDENSEDCAPSAICIN, 16)
@@ -480,9 +480,10 @@
 	AM.forceMove(src)
 	return 1
 
-/obj/structure/closet/crate/attack_hand(mob/user as mob)
+/obj/structure/closet/crate/attack_hand(var/mob/user)
 	if(!Adjacent(user))
 		return
+	add_fingerprint(user)
 	if(opened)
 		close()
 	else
@@ -606,7 +607,7 @@
 			if(user.drop_item(W, src.loc))
 				to_chat(user, "<span class='notice'>You attach [W] to [src].</span>")
 			return
-	else if(iswirecutter(W))
+	else if(W.is_wirecutter(user))
 		if(rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
 			W.playtoolsound(loc, 100)

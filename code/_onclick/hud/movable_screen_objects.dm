@@ -50,7 +50,7 @@
 
 	moved = screen_loc
 
-/obj/abstract/screen/movable/proc/get_view_size()
+/obj/abstract/proc/get_view_size()
 	if(usr && usr.client)
 		. = usr.client.view
 	else

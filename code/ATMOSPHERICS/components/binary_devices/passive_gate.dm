@@ -5,7 +5,7 @@
 	icon_state = "intact_off"
 
 	name = "Passive gate"
-	desc = "A one-way gas valve that does not require power"
+	desc = "A one-way gas valve that does not require power."
 
 	var/open = FALSE
 

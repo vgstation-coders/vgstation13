@@ -40,6 +40,13 @@
 		return new shrapnel_type(src)
 
 
+/obj/item/ammo_casing/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"BB")
+
+	reset_vars_after_duration(resettable_vars, duration)
+
 //Boxes of ammo
 /obj/item/ammo_storage
 	name = "ammo box (.357)"
@@ -219,3 +226,10 @@
 
 /obj/item/ammo_storage/proc/ammo_count()
 	return stored_ammo.len
+
+/obj/item/ammo_storage/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"stored_ammo")
+
+	reset_vars_after_duration(resettable_vars, duration)

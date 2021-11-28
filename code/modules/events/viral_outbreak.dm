@@ -1,19 +1,20 @@
 
-datum/event/viral_outbreak
+/datum/event/viral_outbreak
+	var/level = 0
 
 /datum/event/viral_outbreak/can_start(var/list/active_with_role)
 	if(active_with_role["Medical"] > 1)
 		return 25
 	return 0
 
-datum/event/viral_outbreak/setup()
+/datum/event/viral_outbreak/setup()
 	announceWhen = rand(0, 3000)
 	endWhen = announceWhen + 1
 
-datum/event/viral_outbreak/announce()
-	biohazard_alert_major()
+/datum/event/viral_outbreak/announce()
+	biohazard_alert(level)
 
-datum/event/viral_outbreak/start()
+/datum/event/viral_outbreak/start()
 	var/datum/disease2/disease/D = get_random_weighted_disease(WOUTBREAK)
 
 	var/list/anti = list(
@@ -34,17 +35,6 @@ datum/event/viral_outbreak/start()
 
 	D.makerandom(list(80,100),list(60,100),anti,bad,src)
 
-	var/list/candidates = list()
-	for(var/mob/living/candidate in player_list)
-		if(candidate.z == STATION_Z && candidate.client && candidate.stat != DEAD && candidate.can_be_infected() && candidate.immune_system.CanInfect(D))
-			candidates += candidate
+	level = clamp(round((D.get_total_badness()+1)/2),1,8)
 
-	if(!candidates.len)
-		return
-
-	var/infected = 1 + round(candidates.len/10)
-
-	for (var/i = 1 to infected)
-		var/mob/living/candidate = pick(candidates)
-		candidates -= candidate
-		candidate.infect_disease2(D,1, "Major Outbreak")
+	spread_disease_among_crew(D,"Major Outbreak")

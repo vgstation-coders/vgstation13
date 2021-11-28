@@ -8,3 +8,9 @@
 #define SPECIAL_POPUP_DISABLED 0 // only output to chat
 #define SPECIAL_POPUP_EXCLUSIVE 1 // only output to special
 #define SPECIAL_POPUP_USE_BOTH 2 // output to both chat and special
+
+// /datum/preferences/var/jobs
+#define JOB_PREF_HIGH 3
+#define JOB_PREF_MED 2
+#define JOB_PREF_LOW 1
+#define JOB_PREF_NEVER 0

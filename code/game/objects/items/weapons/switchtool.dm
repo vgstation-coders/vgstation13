@@ -46,12 +46,12 @@
 	else
 		if(!proximity_flag)
 			return
-			
+
 		var/turf/T
 		if(isturf(target.loc))
 			T = target.loc
 		else
-			return 
+			return
 
 		var/success = FALSE
 		for(var/obj/item/I in T)
@@ -87,10 +87,16 @@
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
 	if(istype(used_item, removing_item)) //if it's the thing that lets us remove tools and we have something to remove
-		if(deployed)
-			return remove_module(user)
-		else
-			return remove_all_modules(user)
+		var/no_modules = TRUE
+		for(var/module in stored_modules)
+			if(stored_modules[module])
+				no_modules = FALSE
+				break
+		if (!no_modules)
+			if(deployed)
+				return remove_module(user)
+			else
+				return remove_all_modules(user)
 
 	if(add_module(used_item, user))
 		return TRUE
@@ -250,6 +256,18 @@
 				edit_deploy(1)
 			return TRUE
 		return
+
+/obj/item/weapon/switchtool/is_screwdriver(mob/user)
+	return deployed?.is_screwdriver(user)
+
+/obj/item/weapon/switchtool/is_wrench(mob/user)
+	return deployed?.is_wrench(user)
+
+/obj/item/weapon/switchtool/is_wirecutter(mob/user)
+	return deployed?.is_wirecutter(user)
+
+/obj/item/weapon/switchtool/is_multitool(mob/user)
+	return deployed?.is_multitool(user)
 
 
 /obj/item/weapon/switchtool/surgery

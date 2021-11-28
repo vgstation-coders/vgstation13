@@ -4,6 +4,14 @@ var/list/assassination_objectives = list()
 	name = "Assassinate <target>"
 	var/syndicate_checked = 0
 
+/datum/objective/target/assassinate/delay_short
+	name = "Assassinate <target> after 1 minute"
+	delay = 60 SECONDS
+
+/datum/objective/target/assassinate/delay_medium
+	name = "Assassinate <target> after 10 minutes"
+	delay = 10 MINUTES
+
 /datum/objective/target/assassinate/New(var/text,var/auto_target = TRUE, var/mob/user = null)
 	..()
 	assassination_objectives += src
@@ -14,7 +22,6 @@ var/list/assassination_objectives = list()
 		explanation_text = format_explanation()
 		return TRUE
 	return FALSE
-
 
 /datum/objective/target/assassinate/find_target_by_role(role, role_type=0)
 	..(role, role_type)
@@ -28,13 +35,19 @@ var/list/assassination_objectives = list()
 
 	var/new_target = input("Select target:", "Objective target", null) as null|anything in possible_targets
 	if(new_target)
-		target = new_target
+		if (delay)
+			delayed_target = new_target
+		else
+			target = new_target
 		explanation_text = format_explanation()
 		return TRUE
 	return FALSE
 
 /datum/objective/target/assassinate/format_explanation()
-	return "Assassinate [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]."
+	if (target)
+		return "Assassinate [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]."
+	else
+		return "Your target's identity will be revealed to you shortly."
 
 /datum/objective/target/assassinate/get_targets()
 	var/list/possible_targets = list()
@@ -60,6 +73,8 @@ var/list/assassination_objectives = list()
 		if(target.current.stat == DEAD || issilicon(target.current) || isbrain(target.current) || target.current.z > 6 || !target.current.ckey || isborer(target.current))
 			return TRUE
 		return FALSE
+	if (delayed_target) // our target hasn't been revealed yet
+		return FALSE
 	return TRUE
 
 /datum/objective/target/assassinate/proc/SyndicateCertification()
@@ -80,8 +95,8 @@ var/list/assassination_objectives = list()
 		if (A.syndicate_checked)
 			continue
 
-		var/obj/item/device/uplink/hidden/owner_uplink = owner.find_syndicate_uplink()
-		var/obj/item/device/uplink/hidden/enemy_uplink = target.find_syndicate_uplink(enemy.uplink)
+		var/datum/component/uplink/owner_uplink = owner.find_syndicate_uplink()
+		var/datum/component/uplink/enemy_uplink = target.find_syndicate_uplink(enemy.uplink)
 		//chances are the target's uplink is no longer on their mind.current especially if they got decapitated or such.
 		//by associating the uplink with the role we can at least try and get the TCs out of it.
 
@@ -89,10 +104,10 @@ var/list/assassination_objectives = list()
 			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your Victory. Look forward to be assigned on higher risk operations another day.</span>")
 		else
 			if (owner_uplink)
-				owner_uplink.uses += DOUBLE_AGENT_TC_REWARD
+				owner_uplink.telecrystals += DOUBLE_AGENT_TC_REWARD
 				if (enemy_uplink)
-					owner_uplink.uses += enemy_uplink.uses
-					enemy_uplink.uses = 0
+					owner_uplink.telecrystals += enemy_uplink.telecrystals
+					enemy_uplink.telecrystals = 0
 				to_chat(owner.current, "<span class='notice'>Good work agent. [DOUBLE_AGENT_TC_REWARD] additional tele-crystals have been sent to your uplink.</span>")
 			else
 				to_chat(owner.current, "<span class='notice'>Good work agent. Unfortunately we couldn't find your uplink on your person, so no additional tele-crystals could be distributed.</span>")
@@ -102,8 +117,8 @@ var/list/assassination_objectives = list()
 				to_chat(owner.current, "<b>New Objective</b>: [new_kill_target.explanation_text]<br>")
 
 		if (owner_uplink && enemy_uplink)
-			owner_uplink.uses += enemy_uplink.uses
-			enemy_uplink.uses = 0
+			owner_uplink.telecrystals += enemy_uplink.telecrystals
+			enemy_uplink.telecrystals = 0
 
 		A.syndicate_checked = SYNDICATE_CANCELED
 		to_chat(target.current, "<span class='warning'>The Syndicate has taken note of your demise. You are therefore ineligible for victory this time around. Better luck next time!</span>")

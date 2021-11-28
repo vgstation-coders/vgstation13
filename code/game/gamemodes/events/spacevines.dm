@@ -3,9 +3,11 @@
 	spawn() //to stop the secrets panel hanging
 		var/list/turf/simulated/floor/turfs = list() //list of all the empty floor turfs in the hallway areas
 		for(var/areapath in typesof(/area/hallway))
+			if(ispath(areapath,/area/hallway/secondary/entry)) //no spawn in arrivals, make it less annoying for latejoiners
+				continue
 			var/area/A = locate(areapath)
 			for(var/turf/simulated/floor/F in A.contents)
-				if(!is_blocked_turf(F))
+				if(!is_blocked_turf(F) && !(locate(/obj/effect/plantsegment) in F))
 					turfs += F
 
 		if(turfs.len) //Pick a turf to spawn at if we can

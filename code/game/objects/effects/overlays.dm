@@ -2,6 +2,7 @@
 	name = "overlay"
 	w_type=NOT_RECYCLABLE
 	plane = ABOVE_HUMAN_PLANE
+	mouse_opacity = 1
 	var/i_attached//Added for possible image attachments to objects. For hallucinations and the like.
 
 /obj/effect/overlay/cultify()
@@ -24,12 +25,18 @@
 	anchored = 1
 	var/tmp/atom/BeamSource
 
-/obj/effect/overlay/beam/New(var/turf/loc, var/lifetime = 10, var/fade = 0, var/src_icon = 'icons/effects/beam.dmi', var/icon_state = "b_beam")
+/obj/effect/overlay/beam/New(var/turf/loc, var/lifetime = 10, var/fade = 0, var/src_icon = 'icons/effects/beam.dmi', var/icon_state = "b_beam", var/base_damage = 30, var/col_override = null, var/col_shift = null)
 	..()
+	alpha = round(255*(max(1,loc.last_beam_damage)/max(1,base_damage)))
 	icon = src_icon
 	src.icon_state = icon_state
+	if (col_override)
+		color = col_override
 	spawn if(fade)
-		animate(src, alpha=0, time=lifetime)
+		if (col_shift)
+			animate(src, alpha=0, color=col_shift, time=lifetime)
+		else
+			animate(src, alpha=0, time=lifetime)
 	spawn(lifetime)
 		qdel(src)
 

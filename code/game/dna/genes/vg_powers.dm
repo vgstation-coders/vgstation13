@@ -156,7 +156,6 @@ Obviously, requires DNA2.
 	..()
 	M.update_colour(NOIR_ANIM_TIME)
 	if(M.client) // wow it's almost like non-client mobs can get mutations!
-		M.client.screen += noir_master
 		M << sound('sound/misc/noirdarkcoffee.ogg')
 
 /datum/dna/gene/basic/noir/deactivate(var/mob/M,var/connected,var/flags)

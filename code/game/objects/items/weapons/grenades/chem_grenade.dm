@@ -298,7 +298,7 @@
 	reservoir.reagents.trans_to(src, reservoir.reagents.total_volume)
 
 	if(src.reagents.total_volume) //The possible reactions didnt use up all reagents.
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
 		steam.set_up(10, 0, get_turf(src))
 		steam.attach(src)
 		steam.start()
@@ -329,7 +329,7 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade
+/obj/item/weapon/grenade/chem_grenade/exgrenade
 	name = "EX Chem Grenade"
 	desc = "A specially designed large grenade that can hold three containers."
 	icon_state = "ex_grenade"
@@ -337,7 +337,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2"
 	affected_area = 4
 
-obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED) && path != PATH_STAGE_COMPLETE)
 		var/obj/item/device/assembly_holder/det = W
 		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
@@ -548,7 +548,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/timer  //grenade casing with a 5 second timer+ignitor installed. no beakers.
 											// can be configured via a right click verb. can be done before being assembled and after being assembled
 	name = "grenade casing (timer)"
-	desc = "A hand made chemical grenade. This one seems to have a dial on the top"
+	desc = "A hand made chemical grenade. This one seems to have a dial on the top."
 	starting_materials = list(MAT_IRON = 4750, MAT_GLASS = 100)
 	stage = GRENADE_STAGE_ASSEMBLY_INSERTED		//these are marked as 1 because inserting any parts into an empty grenade casing raises the value from 0 to 1
 	path = PATH_STAGE_CONTAINER_INSERTED		//since the act of inserting an assembly hasnt technically occured these two values must be set to 1 to prevent derping

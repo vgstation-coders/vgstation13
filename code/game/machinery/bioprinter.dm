@@ -33,6 +33,7 @@
 		"vox eyes"         = list(/obj/item/organ/internal/eyes/vox,   30),
 		"compound eyes"    = list(/obj/item/organ/internal/eyes/compound, 30),
 		"liver"            = list(/obj/item/organ/internal/liver,  50),
+		"diona liver"      = list(/obj/item/organ/internal/liver/diona,  50),
 		"tooth"	           = list(/obj/item/stack/teeth, 10)
 	)
 

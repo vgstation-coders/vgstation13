@@ -224,11 +224,11 @@
 	length = 51 SECONDS + 2 MINUTES
 
 /datum/ambience/spacemusic
-	sound = 'sound/music/space.ogg'
+	sound = 'sound/music/login/space.ogg'
 	length = 34 SECONDS + 3 MINUTES
 
 /datum/ambience/traitormusic
-	sound = 'sound/music/traitor.ogg'
+	sound = 'sound/music/login/traitor.ogg'
 	length = 5 MINUTES + 5 MINUTES
 
 /datum/ambience/torvusmusic

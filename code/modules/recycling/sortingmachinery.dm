@@ -65,7 +65,7 @@
 		update_icon()
 		return 1
 
-	if(ismultitool(W) && panel)
+	if(W.is_multitool(user) && panel)
 		mode = !mode
 		to_chat(user, "<span class='notify'>You [mode ? "disable" : "enable"] the lock on \the [src].</span>")
 		return 1
@@ -149,15 +149,25 @@
 	//testing("[src] FUCKING BUMPED BY \a [AM]")
 
 	if(istype(AM, /obj))
-		var/obj/O = AM
-		O.forceMove(src)
+		receive_atom(AM)
 	else if(istype(AM, /mob))
-		var/mob/M = AM
-		M.forceMove(src)
-	//src.flush() This spams audio like fucking crazy.
-	// Instead, we queue up for the next process.
-	doFlushIn=5 // Ticks, adjust if delay is too long or too short
+		receive_atom(AM)
+
+
+/obj/machinery/disposal/deliveryChute/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM,/obj/item))
+		if(stat & BROKEN || !AM || mode <=0 || !deconstructable)
+			return FALSE
+		receive_atom(AM)
+		return TRUE
+	return FALSE
+
+
+/obj/machinery/disposal/deliveryChute/proc/receive_atom(var/atom/movable/AM)
+	AM.forceMove(src)
+	doFlushIn = 5
 	num_contents++
+
 
 /obj/machinery/disposal/deliveryChute/flush()
 	flushing = 1
@@ -249,8 +259,8 @@
 
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
+	output_dir = WEST
 	var/input_dir = EAST
-	var/output_dir = WEST
 	var/filter_dir = SOUTH
 
 	var/max_items_moved = 100
@@ -285,7 +295,7 @@
 	var/turf/out_T = get_step(src, output_dir)
 	var/turf/filter_T = get_step(src, filter_dir)
 
-	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
+	if(!out_T.Enter(mover, mover.loc, TRUE) || !filter_T.Enter(mover, mover.loc, TRUE))
 		return
 
 	var/affecting = in_T.contents

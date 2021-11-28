@@ -26,7 +26,7 @@
 
 	if(istype(user, /obj/mecha))
 		open()
-	else if (istype(user, /obj/machinery/bot))
+	else if (istype(user, /obj/machinery/bot) && SpecialAccess(user))
 		open()
 	else if(ismob(user))
 		var/mob/M = user
@@ -152,9 +152,9 @@
 /obj/machinery/door/mineral/transparent
 	opacity = 0
 
-	close()
-		..()
-		opacity = 0
+/obj/machinery/door/mineral/transparent/close()
+	..()
+	opacity = 0
 
 /obj/machinery/door/mineral/transparent/plasma
 	prefix = "plasma"
@@ -254,6 +254,13 @@
 	var/close_delay = 100
 	soundeffect = 'sound/effects/attackblob.ogg'
 
+/obj/machinery/door/mineral/resin/SpecialAccess(var/atom/user)
+	if (ismob(user))
+		var/mob/M = user
+		if (isalien(M))
+			return TRUE
+	return FALSE
+
 /obj/machinery/door/mineral/resin/TryToSwitchState(atom/user)
 	if(isalien(user) && !operating)
 		add_fingerprint(user)
@@ -344,6 +351,13 @@
 	anim(location = loc,target = loc.loc,a_icon = 'icons/obj/doors/doorcult.dmi', flick_anim = "cultdoor_breakdown")
 	..()
 
+/obj/machinery/door/mineral/cult/SpecialAccess(var/atom/user)
+	if (ismob(user))
+		var/mob/M = user
+		if (isanycultist(M))
+			return TRUE
+	return FALSE
+
 /obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)
 	if (!density && !operating && !(locate(/mob/living) in loc))
 		if (ismob(mover))
@@ -351,6 +365,9 @@
 			if (M.pulling && loc)
 				M.pulling.forceMove(loc)//so we don't stop pulling stuff when moving through cult doors
 		close()
+
+/obj/machinery/door/mineral/cult/attack_construct(var/mob/user)
+	return TryToSwitchState(user)
 
 /obj/machinery/door/mineral/cult/TryToSwitchState(atom/user)
 	if (ismob(user))

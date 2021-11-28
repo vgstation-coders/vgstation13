@@ -1,13 +1,13 @@
-mob/proc/flash_pain()
+/mob/proc/flash_pain()
 	flick("pain",pain)
 
-mob/var/list/pain_stored = list()
-mob/var/last_pain_message = ""
-mob/var/next_pain_time = 0
+/mob/var/list/pain_stored = list()
+/mob/var/last_pain_message = ""
+/mob/var/next_pain_time = 0
 
 // partname is the name of a body part
 // amount is a num from 1 to 100
-mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0)
+/mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0)
 	if(stat >= 2 || sleeping)
 		return
 	if(!feels_pain() || has_painkillers())
@@ -45,7 +45,7 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 
 // message is the custom message to be displayed
 // flash_strength is 0 for weak pain flash, 1 for strong pain flash
-mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength, var/scream = FALSE)
+/mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength, var/scream = FALSE)
 	if(stat >= 1)
 		return
 
@@ -64,7 +64,7 @@ mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength, var/sc
 		to_chat(src, msg)
 	next_pain_time = world.time + 100
 
-mob/living/carbon/human/proc/handle_pain()
+/mob/living/carbon/human/proc/handle_pain()
 	if(sleeping || stat == DEAD)
 		return
 	if(!feels_pain() || has_painkillers())

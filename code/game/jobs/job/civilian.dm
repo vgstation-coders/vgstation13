@@ -1,8 +1,6 @@
 //Food
 /datum/job/bartender
 	title = "Bartender"
-	flag = BARTENDER
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -15,8 +13,6 @@
 
 /datum/job/chef
 	title = "Chef"
-	flag = CHEF
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -30,8 +26,6 @@
 
 /datum/job/hydro
 	title = "Botanist"
-	flag = BOTANIST
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 3
 	spawn_positions = 2
@@ -46,8 +40,6 @@
 //Cargo
 /datum/job/qm
 	title = "Quartermaster"
-	flag = QUARTERMASTER
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -60,8 +52,6 @@
 
 /datum/job/cargo_tech
 	title = "Cargo Technician"
-	flag = CARGOTECH
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
@@ -74,8 +64,6 @@
 
 /datum/job/mining
 	title = "Shaft Miner"
-	flag = MINER
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 3
 	spawn_positions = 3
@@ -88,8 +76,6 @@
 
 /datum/job/clown
 	title = "Clown"
-	flag = CLOWN
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -120,8 +106,6 @@
 
 /datum/job/mime
 	title = "Mime"
-	flag = MIME
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -171,8 +155,6 @@
 
 /datum/job/janitor
 	title = "Janitor"
-	flag = JANITOR
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -183,11 +165,14 @@
 	minimal_access = list(access_janitor, access_maint_tunnels)
 	outfit_datum = /datum/outfit/janitor
 
+/datum/job/janitor/get_wage()
+	if(Holiday == APRIL_FOOLS_DAY)
+		return 0 //They do it for free
+	return ..()
+
 //More or less assistants
 /datum/job/librarian
 	title = "Librarian"
-	flag = LIBRARIAN
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -201,23 +186,19 @@
 
 /datum/job/iaa
 	title = "Internal Affairs Agent"
-	flag = LAWYER
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
 	wage_payout = 55
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo, access_medical, access_bar, access_kitchen, access_hydroponics)
-	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)
+	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_mailsorting, access_medical, access_bar, access_kitchen, access_hydroponics)
+	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_mailsorting,  access_bar, access_kitchen)
 	alt_titles = list("Lawyer", "Bridge Officer")
 	outfit_datum = /datum/outfit/iaa
 
 /datum/job/chaplain
 	title = "Chaplain"
-	flag = CHAPLAIN
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1

@@ -96,6 +96,9 @@
 /mob/living/carbon/human/proc/can_use_hand_or_stump(var/this_hand = active_hand)
 	if(restrained()) // handcuffed stump is retarded but let's do that in another PR ok?
 		return FALSE
+	if (this_hand == 0)
+		swap_hand()
+		this_hand = active_hand
 	if(hasorgans(src))
 		var/datum/organ/external/hand = src.find_organ_by_grasp_index(this_hand)
 		if(hand && hand.can_grasp())

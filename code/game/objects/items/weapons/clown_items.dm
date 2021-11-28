@@ -13,6 +13,16 @@
 		if(slip_n_slide(M))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+	if(istype(AM, /obj/structure/bed/chair/vehicle/gokart))
+		var/obj/structure/bed/chair/vehicle/gokart/kart = AM
+		var/left_or_right = prob(50) ? turn(kart.dir, 90) : turn(kart.dir, -90)
+		var/tiles_to_slip = rand(round(potency/20, 1), round(potency/10, 1))
+		kart.speen()
+		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+		spawn()
+			for(var/i in 1 to tiles_to_slip)
+				step(kart, left_or_right)
+				sleep(1)
 
 /datum/locking_category/banana_peel
 
@@ -49,15 +59,21 @@
 	var/last_honk_time = 0
 	var/vary_pitch = 1
 	var/can_honk_baton = 1
+	var/next_honk = 0
 
-/obj/item/weapon/bikehorn/suicide_act(mob/user)
+/obj/item/weapon/bikehorn/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
 	playsound(user, hitsound, 100, vary_pitch)
 	user.gib()
 
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
-	if(honk())
+	if(honk(user))
 		add_fingerprint(user)
+
+/obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
+	if (isliving(AM) && world.time > next_honk)
+		honk(AM)
+		next_honk = world.time + honk_delay
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
 	//hitsound takes care of that
@@ -65,7 +81,7 @@
 		//honk()
 		//return
 
-	if(!proximity_flag && istype(target, /mob) && honk()) //for skilled honking at a range
+	if(!proximity_flag && istype(target, /mob) && honk(user)) //for skilled honking at a range
 		target.visible_message(\
 			"<span class='notice'>[user] honks \the [src] at \the [target].</span>",\
 			"[user] honks \the [src] at you.")
@@ -74,15 +90,22 @@
 	if(..())
 		return 1
 
-	honk()
+	honk(H)
 
 /obj/item/weapon/bikehorn/bite_act(mob/living/H)
 	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='danger'>You bite \the [src].</span>")
 
-	honk()
+	honk(H)
 
-/obj/item/weapon/bikehorn/proc/honk()
+/obj/item/weapon/bikehorn/proc/honk(var/mob/user)
 	if(world.time - last_honk_time >= honk_delay)
+		var/initial_hitsound = hitsound
+		if(ishuman(user)) //Merry Cico Del Mayo, ai caramba!!!!!
+			var/mob/living/carbon/human/H = user
+			if(clumsy_check(H) && H.is_wearing_item(/obj/item/clothing/head/sombrero) && H.is_wearing_item(/obj/item/clothing/suit/poncho))
+				hitsound = 'sound/items/bikehorn_curaracha.ogg'
+				spawn(0)
+					hitsound = initial_hitsound
 		last_honk_time = world.time
 		playsound(src, hitsound, 50, vary_pitch)
 		return 1

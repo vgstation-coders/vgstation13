@@ -93,7 +93,13 @@
 	name = "egg box"
 	storage_slots = 12
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/egg")
-	var/egg_type = "chicken"
+	var/egg_type = /obj/item/weapon/reagent_containers/food/snacks/egg
+	var/list/dangerEggs = list(			//Make this list empty to not have a chance to spawn any mistakes
+		/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice,
+		/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach,
+		/obj/item/weapon/reagent_containers/food/snacks/egg/parrot,
+		/obj/item/weapon/reagent_containers/food/snacks/egg/chaos,
+	)
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -104,7 +110,7 @@
 	icon_state = "eggbox0"
 
 /obj/item/weapon/storage/fancy/egg_box/vox
-	egg_type = "vox"
+	egg_type = /obj/item/weapon/reagent_containers/food/snacks/egg/vox
 
 /obj/item/weapon/storage/fancy/egg_box/New()
 	..()
@@ -112,11 +118,11 @@
 		update_icon() //Make it look actually empty
 		return
 	for(var/i = 1; i <= storage_slots; i++)
-		if(egg_type == "chicken")
-			new /obj/item/weapon/reagent_containers/food/snacks/egg(src)
-		if(egg_type == "vox")
-			new /obj/item/weapon/reagent_containers/food/snacks/egg/vox(src)
-	return
+		if(dangerEggs.len && prob(1))
+			var/dEgg = pick(dangerEggs)
+			new dEgg(src)
+		else
+			new egg_type(src)
 
 /*
  * Candle Box
@@ -218,8 +224,9 @@
 	name = "matchbox"
 	desc = "A box of matches. Critical element of a survival kit and equally needed by chain smokers and pyromaniacs."
 	icon = 'icons/obj/cigarettes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	icon_state = "matchbox"
-	item_state = "zippo"
+	item_state = "matchbox"
 	icon_type = "match"
 	plural_type = "es"
 	storage_slots = 21 //3 rows of 7 items
@@ -294,7 +301,7 @@
 	name = "cigarette packet"
 	desc = "The most popular brand of Space Cigarettes, sponsors of the Space Olympics."
 	icon = 'icons/obj/cigarettes.dmi'
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cigs_lighters.dmi', "right_hand" = 'icons/mob/in-hand/right/cigs_lighters.dmi')
 	icon_state = "cigpacket"
 	item_state = "cigpacket"
 	w_class = W_CLASS_TINY
@@ -408,7 +415,7 @@
 
 /obj/item/weapon/storage/fancy/cigarettes/shoalsticks
 	name = "\improper 'Shoal Sticks' packet"
-	desc = "A flimsy paper packet covered in unintelligible script, containing six acrid roll-ups"
+	desc = "A flimsy paper packet covered in unintelligible script, containing six acrid roll-ups."
 	icon_state = "SSpacket"
 	item_state = "SSpacket"
 	cigtype = /obj/item/clothing/mask/cigarette/bidi

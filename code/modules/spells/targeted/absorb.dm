@@ -31,9 +31,9 @@
 			else if(isapprentice(target))	//So wizards with absorb don't abuse their own apprentices for double spells
 				to_chat(holder, "<span class='warning'>Only a fool would steal magic from an apprentice.</span>")
 			else
-				var/obj/effect/cult_ritual/feet_portal/P = new (holder.loc, holder, src)
+				var/obj/effect/absorb_effect/E = new (holder.loc, holder)
 				if(do_after(holder, target, 5 SECONDS, use_user_turf = TRUE))
-					qdel(P)
+					qdel(E)
 					var/hasAbsorbed = FALSE
 					var/canAbsorb = TRUE
 					for(var/spell/targetspell in C.spell_list)
@@ -65,10 +65,48 @@
 					if(iswizard(target))	//Wizards aren't wizards without magic! Dust their asses if they're a wizard
 						target.dust()
 						L.visible_message("<span class='sinister'>[C.real_name] dissolves in a burst of light!</span>")
-				if(P)		//Remove portal effect if the absorbtion is cancelled early.
-					qdel(P)
+				if(E)		//Remove portal effect if the absorbtion is cancelled early.
+					qdel(E)
 
+///////////////
 
+/obj/effect/absorb_effect
+	icon_state = "absorb" // I renamed it but the icon is still a duplicate from rune_rejoin, would be nice if some spriter tweaked it
+	anchored = 1
+	pixel_y = -10
+	layer = ABOVE_OBJ_LAYER
+	plane = OBJ_PLANE
+	flags = PROXMOVE
+	var/mob/living/caster = null
+
+/obj/effect/absorb_effect/New(var/turf/loc, var/mob/living/user)
+	..()
+	caster = user
+	if (!caster)
+		qdel(src)
+
+/obj/effect/absorb_effect/Destroy()
+	caster = null
+	..()
+
+/obj/effect/absorb_effect/HasProximity(var/atom/movable/AM)
+	if (!caster || caster.loc != loc)
+		forceMove(get_turf(caster))
+
+/obj/effect/absorb_effect/cultify()
+	return
+
+/obj/effect/absorb_effect/ex_act()
+	return
+
+/obj/effect/absorb_effect/emp_act()
+	return
+
+/obj/effect/absorb_effect/blob_act()
+	return
+
+/obj/effect/absorb_effect/singularity_act()
+	return
 
 
 

@@ -8,13 +8,14 @@
 
 /obj/structure/window/barricade
 	name = "wood barricade"
-	desc = "A barricade made out of wood planks, it looks like it can take a few solid hits."
+	desc = "A barricade made out of wood planks. It looks like it can take a few solid hits."
 	icon = 'icons/obj/barricade.dmi'
 	icon_state = "barricade"
 	anchored = 1
 	opacity = 1 //Wood isn't transparent, the last time I checked
 	health = 60 //Fairly strong
 	layer = ABOVE_DOOR_LAYER
+	pass_flags_self = PASSGLASS
 	var/busy = 0 //Oh god fucking do_after's
 	var/materialtype = /obj/item/stack/sheet/wood
 
@@ -95,10 +96,9 @@
 		..() //Weapon checks for weapons without brute or burn damage type and grab check
 
 /obj/structure/window/barricade/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-
 	if(air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
@@ -126,7 +126,7 @@
 
 /obj/structure/window/barricade/full
 	name = "wood barricade"
-	desc = "A barricade made out of wood planks, it is very likely going to be a tough nut to crack"
+	desc = "A barricade made out of wood planks. It's probably going to be a tough nut to crack."
 	icon_state = "barricade_full"
 	health = 150
 	sheetamount = 3
@@ -139,18 +139,16 @@
 	..(loc)
 	flow_flags &= ~ON_BORDER
 
+/obj/structure/window/barricade/full/setup_border_dummy()
+	return
+
 /obj/structure/window/barricade/full/blocks_doors()
 	return TRUE
 
-/obj/structure/window/barricade/full/Uncross(atom/movable/O as mob|obj, target as turf)
-
-	return 1
-
 /obj/structure/window/barricade/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-
 	if(air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return 0
 

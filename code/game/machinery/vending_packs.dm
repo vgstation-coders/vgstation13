@@ -301,3 +301,8 @@
 		O.forceMove(T)
 	to_chat(M, "<span class='notice'>You rip the protective coil apart.</span>")
 	qdel(src)
+
+/obj/structure/vendomatpack/zamsnax
+	name = "Zam Snax recharge pack"
+	targetvendomat = /obj/machinery/vending/zamsnax
+	icon_state = "ZAMsnax"

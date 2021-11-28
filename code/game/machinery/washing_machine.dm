@@ -318,8 +318,23 @@
 	update_icon()
 
 /obj/machinery/washing_machine/attack_hand(mob/user)
-	if(..())
-		return 1
+	. = ..()
+
+	if(stat & (NOPOWER))
+		switch(wash_state)
+			if (5,8)
+				to_chat(user, "<span class='warning'>\The [src] is busy.</span>")
+			if (1,2,3,4,6,7)
+				to_chat(user, "<span class='notice'>Deprived of power, \the [src] is unresponsive.</span>")
+				wash_state = 1
+				for(var/atom/movable/O in contents)
+					O.forceMove(loc)
+				update_icon()
+		return
+
+	if(.)
+		return
+
 	switch(wash_state)
 		if(1)
 			wash_state = 2
@@ -349,7 +364,7 @@
 					log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(M)] via washing machine.</B>")
 					M.gib()
 			for(var/atom/movable/O in contents)
-				O.forceMove(src.loc)
+				O.forceMove(loc)
 			crayon = null
 			wash_state = 1
 	update_icon()

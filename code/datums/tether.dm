@@ -16,8 +16,8 @@
 	effective_master = master
 	slave = S
 	effective_slave = slave
-	master.lazy_register_event(/lazy_event/on_moved, src, .proc/master_moved)
-	master.lazy_register_event(/lazy_event/on_moved, src, .proc/slave_moved)
+	master.register_event(/event/moved, src, .proc/master_moved)
+	master.register_event(/event/moved, src, .proc/slave_moved)
 	if(!master.current_tethers)
 		master.current_tethers = list()
 	master.current_tethers.Add(src)
@@ -27,17 +27,17 @@
 
 /datum/tether/Destroy()
 	if(effective_master != master)
-		effective_master.lazy_unregister_event(/lazy_event/on_moved, src, .proc/master_moved)
+		effective_master.unregister_event(/event/moved, src, .proc/master_moved)
 		effective_master.current_tethers.Remove(src)
 		effective_master = null
-	master.lazy_unregister_event(/lazy_event/on_moved, src, .proc/master_moved)
+	master.unregister_event(/event/moved, src, .proc/master_moved)
 	master.current_tethers.Remove(src)
 	master = null
 	if(effective_slave != slave)
-		effective_slave.lazy_unregister_event(/lazy_event/on_moved, src, .proc/slave_moved)
+		effective_slave.unregister_event(/event/moved, src, .proc/slave_moved)
 		effective_slave.current_tethers.Remove(src)
 		effective_slave = null
-	slave.lazy_unregister_event(/lazy_event/on_moved, src, .proc/slave_moved)
+	slave.unregister_event(/event/moved, src, .proc/slave_moved)
 	slave.current_tethers.Remove(src)
 	slave = null
 	..()
@@ -55,12 +55,12 @@
 /datum/tether/proc/master_moved()
 	if(effective_master != master)
 		if(!isturf(effective_master.loc) || isturf(master.loc))
-			effective_master.lazy_unregister_event(/lazy_event/on_moved, src, .proc/master_moved)
+			effective_master.unregister_event(/event/moved, src, .proc/master_moved)
 			effective_master.current_tethers.Remove(src)
 			effective_master = master
 	if(!isturf(master.loc) && effective_master == master)
 		effective_master = get_holder_at_turf_level(master)
-		effective_master.lazy_register_event(/lazy_event/on_moved, src, .proc/master_moved)
+		effective_master.register_event(/event/moved, src, .proc/master_moved)
 		if(!effective_master.current_tethers)
 			effective_master.current_tethers = list()
 		effective_master.current_tethers.Add(src)
@@ -72,12 +72,12 @@
 /datum/tether/proc/slave_moved()
 	if(effective_slave != slave)
 		if(!isturf(effective_slave.loc) || isturf(slave.loc))
-			effective_slave.lazy_unregister_event(/lazy_event/on_moved, src, .proc/slave_moved)
+			effective_slave.unregister_event(/event/moved, src, .proc/slave_moved)
 			effective_slave.current_tethers.Remove(src)
 			effective_slave = slave
 	if(!isturf(slave.loc) && effective_slave == slave)
 		effective_slave = get_holder_at_turf_level(slave)
-		effective_slave.lazy_register_event(/lazy_event/on_moved, src, .proc/slave_moved)
+		effective_slave.register_event(/event/moved, src, .proc/slave_moved)
 		if(!effective_slave.current_tethers)
 			effective_slave.current_tethers = list()
 		effective_slave.current_tethers.Add(src)
@@ -124,7 +124,7 @@
 
 /datum/tether/equal/restrictive	//A restrictive equal tether disallows pulling from either side. If either the master or slave attempts to exceed the tether's distance, they simply fail.
 
-proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/restrictive = FALSE)
+/proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/restrictive = FALSE)
 	if(!istype(first) || !istype(second) || !distance)
 		return FALSE
 	if(first.tether_master || second.tether_master)	//an atom can only have a single master or equal tether
@@ -137,10 +137,10 @@ proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/res
 	E.make_tether(first,second,distance)
 	return TRUE
 
-proc/tether_equal_restrictive(atom/movable/first, atom/movable/second, var/distance)
+/proc/tether_equal_restrictive(atom/movable/first, atom/movable/second, var/distance)
 	return tether_equal(first, second, distance, TRUE)
 
-proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
+/proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
 	if(!istype(M) || !istype(S) || !distance)
 		return FALSE
 	if(S.tether_master)	//an atom can only have a single master or equal tether

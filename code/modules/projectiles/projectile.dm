@@ -185,6 +185,7 @@ var/list/impact_master = list()
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
+				M.assaulted_by(firer)
 		else
 			log_attack("<font color='red'>[key_name(firer)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
@@ -195,6 +196,7 @@ var/list/impact_master = list()
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
+				M.assaulted_by(firer)
 	else
 		M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN/(no longer exists)</b> shot <b>UNKNOWN/(no longer exists)</b> with a <b>[type]</b>"
 		msg_admin_attack("UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]. Wait what the fuck?")
@@ -293,6 +295,7 @@ var/list/impact_master = list()
 					M.LAssailant = null
 				else
 					M.LAssailant = firer
+					M.assaulted_by(firer)
 
 	if(!A)
 		return 1
@@ -308,6 +311,7 @@ var/list/impact_master = list()
 						BM.LAssailant = null
 				else
 					BM.LAssailant = firer
+					BM.assaulted_by(firer)
 
 	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
 
@@ -390,11 +394,7 @@ var/list/impact_master = list()
 			damage -= (damage/4)	//and diminish the bullet's damage a bit
 			if(!destroy)//destroying projectiles don't leave marks, as they would then appear on the resulting plating.
 				var/turf/T = A
-				T.bullet_marks++
-				var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
-				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
-				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
-				T.overlays += trace
+				T.add_bullet_mark(mark_type,target_angle)
 
 		var/turf/target = get_step(loc, dir)
 		if(loc == A_turf) //Special case where we collided with something while exiting a turf, instead of while entering.
@@ -422,6 +422,13 @@ var/list/impact_master = list()
 
 	bullet_die()
 	return 1
+
+/turf/proc/add_bullet_mark(var/mark_type,var/target_angle)
+	bullet_marks++
+	var/icon/trace = icon('icons/effects/96x96.dmi',mark_type)	//first we take the 96x96 icon with the overlay we want to blend on the wall
+	trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
+	trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
+	overlays += trace
 
 /obj/item/projectile/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
@@ -487,19 +494,11 @@ var/list/impact_master = list()
 
 	target_angle = round(Get_Angle(starting,target))
 
-	if(linear_movement)
+	if(linear_movement && !lock_angle)
 		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
 		transform = projectile_matrix
 		icon_state = "[icon_state]_pixel"
-		/*
-		//If the icon has not been added yet
-		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
-			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
-			if(!lock_angle)
-				I.Turn(target_angle+45)
-			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-		*/
+
 	return 1
 
 
@@ -748,17 +747,9 @@ var/list/impact_master = list()
 
 	target_angle = round(newangle)
 
-	if(linear_movement)
+	if(linear_movement && !lock_angle)
 		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
 		transform = projectile_matrix
-		/*
-		if( !("[icon_state][target_angle]" in bullet_master) )
-			var/icon/I = new(initial(icon),"[icon_state]_pixel")
-			if(!lock_angle)
-				I.Turn(target_angle+45)
-			bullet_master["[icon_state]_angle[target_angle]"] = I
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-		*/
 
 /obj/item/projectile/test //Used to see if you can hit them.
 	invisibility = 101 //Nope!  Can't see me!
@@ -861,3 +852,6 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/apply_projectile_color(var/proj_color)
 	color = proj_color
+
+/obj/item/projectile/proc/apply_projectile_color_shift(var/proj_color_shift)
+	return

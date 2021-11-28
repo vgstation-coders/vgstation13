@@ -3,7 +3,8 @@
 	name = "Loud"
 	desc = "Forces the speaking centre of the subjects brain to yell every sentence."
 	activation_message = "YOU FEEL LIKE YELLING!"
-	deactivation_message = "You feel like being quiet.."
+	deactivation_message = "You feel like being quiet..."
+	mutation = M_LOUD
 
 /datum/dna/gene/disability/loud/New()
 	..()
@@ -19,9 +20,10 @@
 
 /datum/dna/gene/disability/whisper
 	name = "Quiet"
-	desc = "Damages the subjects vocal cords"
-	activation_message = "<i>Your throat feels sore..</i>"
+	desc = "Damages the subjects vocal cords."
+	activation_message = "<i>Your throat feels sore...</i>"
 	deactivation_message = "You feel fine again."
+	mutation = M_WHISPER
 
 /datum/dna/gene/disability/whisper/New()
 	..()
@@ -59,8 +61,8 @@
 /datum/dna/gene/disability/sans
 	name = "Wacky"
 	desc = "Forces the subject to talk in an odd manner."
-	activation_message = "You feel an off sensation in your voicebox.."
-	deactivation_message = "The off sensation passes.."
+	activation_message = "You feel an off sensation in your voicebox..."
+	deactivation_message = "The off sensation passes..."
 
 /datum/dna/gene/disability/sans/New()
 	..()

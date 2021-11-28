@@ -90,10 +90,10 @@
 		dat += "<br><tt>Currently Supplying Gravitons To:</tt><br>"
 
 		for(var/area/A in gravity_generator:localareas)
-			if(A.has_gravity && gravity_generator:on)
+			if(A.gravity && gravity_generator:on)
 				dat += "<tt><font color=green>[A]</tt></font><br>"
 
-			else if (A.has_gravity)
+			else if (A.gravity)
 				dat += "<tt><font color=yellow>[A]</tt></font><br>"
 
 			else

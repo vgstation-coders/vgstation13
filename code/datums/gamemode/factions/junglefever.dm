@@ -5,6 +5,8 @@
 	name = MADMONKEY
 	ID = MADMONKEY
 	logo_state = "monkey-logo"
+	default_admin_voice = "Monkey King"
+	admin_voice_style = "rough"
 
 	initroletype = /datum/role/madmonkey
 	initial_role = MADMONKEY
@@ -43,7 +45,7 @@
 		if(!iscarbon(M) || M.stat == DEAD)
 			continue //include borers, silicons, the dead, etc.
 		var/turf/T = get_turf(M)
-		if(T.z != STATION_Z)
+		if(T.z != map.zMainStation)
 			continue
 		if(isbadmonkey(M))
 			monkeys++

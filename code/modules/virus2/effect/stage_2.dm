@@ -24,7 +24,7 @@
 
 /datum/disease2/effect/sleepy
 	name = "Resting Syndrome"
-	desc = "Causes the infected to collapse in random fits of narcolepsy"
+	desc = "Causes the infected to collapse in random fits of narcolepsy."
 	encyclopedia = ""
 	stage = 2
 	badness = EFFECT_DANGER_HINDRANCE
@@ -103,7 +103,7 @@
 					strength = round(strength/mob.virus2.len)
 					var/i = 1
 					while (strength > 0 && i < 10) //stronger viruses create more clouds at once, max limit of 10 clouds
-						new /obj/effect/effect/pathogen_cloud/core(get_turf(src), mob, virus_copylist(mob.virus2))
+						new /obj/effect/pathogen_cloud/core(get_turf(src), mob, virus_copylist(mob.virus2))
 						strength -= 30
 						i++
 
@@ -159,7 +159,7 @@
 /datum/disease2/effect/stimulant
 	name = "Adrenaline Extra"
 	desc = "Causes the infected to synthesize artificial adrenaline (Hyperzine)."
-	encyclopedia = "Thankfully the pathogen keeps the production bellow overdose levels."
+	encyclopedia = "Thankfully the pathogen keeps the production below overdose levels."
 	stage = 2
 	badness = EFFECT_DANGER_HELPFUL
 
@@ -632,24 +632,16 @@
 	if(activated)
 		return
 	to_chat(mob, "<span class = 'warning'>You feel small...</span>")
-	var/matrix/M = matrix()
-	M.Scale(1,0.7)
-	mob.transform = M
-
-	mob.pixel_y = -4 * PIXEL_MULTIPLIER
-
+	mob.shrunken = 1
+	mob.update_transform()
 	mob.pass_flags |= PASSTABLE
 
 	activated = 1
 
 /datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
 	to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
-	var/matrix/M = matrix()
-	M.Scale(1,1)
-	mob.transform = M
-
-	mob.pixel_y = 0 * PIXEL_MULTIPLIER
-
+	mob.shrunken = 0
+	mob.update_transform()
 	mob.pass_flags &= ~PASSTABLE
 	activated = 0
 

@@ -1,7 +1,5 @@
 /datum/job/captain
 	title = "Captain"
-	flag = CAPTAIN
-	department_flag = ENGSEC
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1
@@ -15,7 +13,7 @@
 	species_whitelist = list("Human")
 
 	outfit_datum = /datum/outfit/captain
-	
+
 /datum/job/captain/get_access()
 	return get_all_accesses()
 
@@ -27,8 +25,6 @@
 
 /datum/job/hop
 	title = "Head of Personnel"
-	flag = HOP
-	department_flag = CIVILIAN
 	faction = "Station"
 	total_positions = 1
 	spawn_positions = 1

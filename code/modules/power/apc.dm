@@ -50,6 +50,7 @@
 	use_power = 0
 	req_access = list(access_engine_equip)
 	var/spooky=0
+	var/pulsecompromising=0
 	var/obj/item/weapon/cell/cell
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
@@ -306,7 +307,7 @@
 			update_state |= UPSTATE_OPENED1
 		if(opened==2)
 			update_state |= UPSTATE_OPENED2
-	else if(emagged || malfai || spooky)
+	else if(emagged || malfai || spooky || pulsecompromising)
 		update_state |= UPSTATE_BLUESCREEN
 	else if(wiresexposed)
 		update_state |= UPSTATE_WIREEXP
@@ -435,6 +436,10 @@
 				to_chat(user, "You swap the power cell within with the new cell in your hand.")
 				var/obj/item/weapon/oldpowercell = cell
 				cell = W
+				if(cell.occupant && !pulsecompromised)
+					cell.occupant.forceMove(src)
+					cell.occupant.hijackAPC(src)
+					cell.occupant.current_power = src
 				chargecount = 0
 				update_icon()
 				user.put_in_hands(oldpowercell)
@@ -446,6 +451,10 @@
 				return
 			if(user.drop_item(W, src))
 				cell = W
+				if(cell.occupant && !pulsecompromised)
+					cell.occupant.forceMove(src)
+					cell.occupant.hijackAPC(src)
+					cell.occupant.current_power = src
 				user.visible_message(\
 					"<span class='warning'>[user.name] has inserted the power cell to [src.name]!</span>",\
 					"You insert the power cell.")
@@ -527,7 +536,7 @@
 			C.use(10)
 			terminal.connect_to_network()
 
-	else if (iswirecutter(W) && opened && terminal && has_electronics!=2)
+	else if (W.is_wirecutter(user) && opened && terminal && has_electronics!=2)
 		var/turf/T = get_turf(src)
 		if (T.intact)
 			to_chat(user, "<span class='warning'>You must remove the floor plating in front of the APC first.</span>")
@@ -606,19 +615,22 @@
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
-		if (	((stat & BROKEN) || malfhack) \
-				&& !opened \
-				&& ( \
-					(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) \
-					|| istype(W,/obj/item/tool/crowbar) \
-				) \
-				&& prob(20) )
+		if (((stat & BROKEN) || malfhack) && !opened && ((W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) || istype(W,/obj/item/tool/crowbar)))
 			user.do_attack_animation(src, W)
-			opened = 2
-			user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
-				"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
-				"You hear a loud bang.") //"you hear bang" is so bad I have to leave a comment to immortalize it
-			update_icon()
+			playsound(src, 'sound/items/metal_impact.ogg', 75, 1)
+			shake(1, 3)
+			user.delayNextAttack(8)
+			if (prob(20))
+				opened = 2
+				user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
+					"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
+					"You hear something metallic being hit, and falling on the floor.")
+				update_icon()
+			else
+				user.visible_message("<span class='warning'>\The [user.name] hits the broken APC's cover with \a [W.name]!</span>", \
+					"<span class='warning'>You hit the APC's cover with your [W.name]!</span>", \
+					"You hear something metallic being hit.")
+
 		else
 			if (istype(user, /mob/living/silicon))
 				return src.attack_hand(user)
@@ -737,7 +749,7 @@
 		"chargingStatus" = charging,
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,
 		"coverLocked" = coverlocked,
-		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user), // Allow aghosts to fuck with APCs
+		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user) || OMNI_LINK(user,src), // Allow aghosts to fuck with APCs
 		"malfLocked"= malflocked,
 		"malfStatus" = get_malf_status(user),
 
@@ -852,7 +864,7 @@
 			return 0
 
 	else
-		if ((!in_range(src, user) || !istype(src.loc, /turf)))
+		if ((!is_in_range(user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
 
 		if (wiresexposed)
@@ -872,6 +884,11 @@
 			return 0
 	return 1
 
+/obj/machinery/power/apc/is_in_range(var/mob/user)
+	if(!..())
+		return OMNI_LINK(user,src)
+	return TRUE
+
 /obj/machinery/power/apc/Topic(href, href_list)
 	if(..())
 		return 0
@@ -884,7 +901,7 @@
 		return 0
 	if(!can_use(usr, 1))
 		return 0
-	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
+	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr) || OMNI_LINK(usr, src)) && locked)
 	// Shouldn't happen, this is here to prevent href exploits
 		to_chat(usr, "You must unlock the panel to use this!")
 		return 1
@@ -942,13 +959,13 @@
 					malfai.malfhacking = 0
 					hacking_ai = null
 					locked = 1
-					if(M && STATION_Z == z)
+					if(M && map.zMainStation == z)
 						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
+					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [map.zMainStation == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					malfai.handle_regular_hud_updates()
 					update_icon()
 
@@ -978,7 +995,7 @@
 	operating = !operating
 	if(malfai)
 		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && STATION_Z == z)
+		if(M && map.zMainStation == z)
 			operating ? M.apcs++ : M.apcs--
 
 	src.update()
@@ -993,7 +1010,7 @@
 	if(!malf.can_shunt)
 		to_chat(malf, "<span class='warning'>You cannot shunt.</span>")
 		return
-	if(STATION_Z != z)
+	if(map.zMainStation != z)
 		return
 	src.occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
 	src.occupant.adjustOxyLoss(malf.getOxyLoss())
@@ -1050,7 +1067,7 @@
 
 /obj/machinery/power/apc/proc/ion_act()
 	//intended to be exactly the same as an AI malf attack
-	if(!src.malfhack && STATION_Z == z)
+	if(!src.malfhack && map.zMainStation == z)
 		if(prob(3))
 			src.locked = 1
 			if (src.cell.charge > 0)
@@ -1059,7 +1076,7 @@
 				cell.corrupt()
 				src.malfhack = 1
 				update_icon()
-				var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+				var/datum/effect/system/smoke_spread/smoke = new /datum/effect/system/smoke_spread()
 				smoke.set_up(3, 0, src.loc)
 				smoke.attach(src)
 				smoke.start()
@@ -1249,7 +1266,7 @@
 // val 0=off, 1=off(auto) 2=on 3=on(auto)
 // on 0=off, 1=on, 2=autooff
 
-obj/machinery/power/apc/proc/autoset(var/val, var/on)
+/obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(on==0)
 		if(val==2)			// if on, return off
 			return 0
@@ -1286,25 +1303,26 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	..()
 
 /obj/machinery/power/apc/ex_act(severity)
-
 	switch(severity)
-		if(1.0)
-			//set_broken() //now Destroy() do what we need
-			if (cell)
-				cell.ex_act(1.0) // more lags woohoo
+		if(1)
+			if(cell)
+				qdel(cell)
+				cell = null
 			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
+		if(2)
+			if(prob(50))
 				set_broken()
-				if (cell && prob(50))
-					cell.ex_act(2.0)
-		if(3.0)
-			if (prob(25))
+				if(cell && prob(50))
+					cell.ex_act(2)
+					if(cell && cell.gcDestroyed)
+						cell = null
+		if(3)
+			if(prob(25))
 				set_broken()
 				if (cell && prob(25))
-					cell.ex_act(3.0)
-	return
+					cell.ex_act(3)
+					if(cell && cell.gcDestroyed)
+						cell = null
 
 /obj/machinery/power/apc/blob_act()
 	if (prob(75))
@@ -1315,7 +1333,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
 		var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-		if(M && STATION_Z == z)
+		if(M && map.zMainStation == z)
 			M.apcs--
 	stat |= BROKEN
 	operating = 0
@@ -1350,7 +1368,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 			to_chat(hacking_ai, "<span class='warning'>The APC you were currently hacking was destroyed.</span>")
 		if(malfai && operating)
 			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
-			if (M && STATION_Z == z)
+			if (M && map.zMainStation == z)
 				M.apcs--
 		this_area.power_light = 0
 		this_area.power_equip = 0

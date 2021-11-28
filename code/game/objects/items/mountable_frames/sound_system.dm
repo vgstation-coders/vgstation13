@@ -1,6 +1,6 @@
 /obj/item/mounted/frame/soundsystem
 	name = "sound system frame"
-	desc = "Used for repairing or building sound systems"
+	desc = "Used for repairing or building sound systems."
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "wallradio"
 	flags = FPRINT

@@ -4,7 +4,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 /obj/machinery/holosign
 	anchored = 1
 	name = "holosign"
-	desc = "Small wall-mounted holographic projector"
+	desc = "Small wall-mounted holographic projector."
 	icon = 'icons/obj/holosign.dmi'
 	icon_state = "base"
 	layer = ABOVE_DOOR_LAYER
@@ -41,7 +41,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 		return
 	if(!overlay)
 		overlay = image(icon, on_icon)
-		overlay.plane = LIGHTING_PLANE
+		overlay.plane = ABOVE_LIGHTING_PLANE
 		overlay.layer = ABOVE_LIGHTING_LAYER
 	overlay.icon_state = on_icon
 	overlays += overlay
@@ -164,7 +164,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 		icon_state = active ? "light1" : "light0"
 		if(!overlay)
 			overlay = image(icon, "[icon_state]-overlay")
-			overlay.plane = LIGHTING_PLANE
+			overlay.plane = ABOVE_LIGHTING_PLANE
 			overlay.layer = ABOVE_LIGHTING_LAYER
 		overlay.icon_state = "[icon_state]-overlay"
 		overlays += overlay

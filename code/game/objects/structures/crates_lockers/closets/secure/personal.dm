@@ -20,7 +20,6 @@
 		/obj/item/clothing/shoes/white,
 	)
 
-
 /obj/structure/closet/secure_closet/personal/cabinet
 	icon_state = "cabinetdetective_locked"
 	icon_closed = "cabinetdetective"
@@ -28,6 +27,9 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
+	is_wooden = TRUE
+	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_type = RECYK_WOOD
 
 /obj/structure/closet/secure_closet/personal/cabinet/update_icon()
 	if(broken)

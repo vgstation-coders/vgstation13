@@ -67,11 +67,12 @@
 				C.Stun(distance_value)
 				if(distance_value > 1)
 					C.Knockdown(distance_value)
-				C.stuttering += 5+distance_value * ((/datum/power/vampire/charisma in V.current_powers) ? 2 : 1) //double stutter time with Charisma
+				C.stuttering += 5+distance_value * ((locate(/datum/power/vampire/charisma) in V.current_powers) ? 2 : 1) //double stutter time with Charisma
 				if(!C.blinded)
 					C.blinded = 1
 				C.blinded += max(1, distance_value)
 		to_chat(C, "<span class='warning'>You are blinded by [user]'s glare.</span>")
+		C.flash_eyes()
 	V.remove_blood(blood_cost)
 
 /spell/aoe_turf/glare/critfail(var/list/targets, var/mob/user)

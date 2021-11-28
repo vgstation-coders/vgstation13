@@ -32,10 +32,16 @@
 	else
 		clear_alert(SCREEN_ALARM_FIRE)
 
-	if(modulelock || lockcharge)
+	if(lockdown)
 		throw_alert(SCREEN_ALARM_ROBOT_LOCK, /obj/abstract/screen/alert/robot/locked)
 	else
 		clear_alert(SCREEN_ALARM_ROBOT_LOCK)
+
+	if(modulelock)
+		throw_alert(SCREEN_ALARM_ROBOT_MODULELOCK, /obj/abstract/screen/alert/robot/modulelocked)
+	else
+		clear_alert(SCREEN_ALARM_ROBOT_MODULELOCK)
+
 
 	if(emagged || illegal_weapons)
 		throw_alert(SCREEN_ALARM_ROBOT_HACK, /obj/abstract/screen/alert/robot/hacked)

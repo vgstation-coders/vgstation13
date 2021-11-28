@@ -56,10 +56,21 @@
 
 	nanomanager.update_uis(src)
 
+/obj/machinery/anomaly/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
+	if(istype(AM, /obj/item/weapon/reagent_containers/glass))
+		if(held_container)
+			return FALSE
+		playsound(loc, 'sound/machines/click.ogg', 50, 1)
+		AM.forceMove(src)
+		held_container = AM
+		nanomanager.update_uis(src)
+		return TRUE
+	return FALSE
+
 /obj/machinery/anomaly/attack_hand(var/mob/user)
 	ui_interact(user)
 
-obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
+/obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 	if(istype(W, /obj/item/weapon/reagent_containers/glass))
 		if(held_container)
 			to_chat(user, "<span class='warning'>You must remove \the [held_container] first.</span>")
@@ -94,7 +105,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 	else
 		visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", "You hear a low buzz.")
 
-obj/machinery/anomaly/Topic(href, href_list)
+/obj/machinery/anomaly/Topic(href, href_list)
 	. = ..()
 	if (.)
 		return

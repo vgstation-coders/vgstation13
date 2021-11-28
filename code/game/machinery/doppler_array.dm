@@ -36,7 +36,7 @@ var/list/doppler_arrays = list()
 
 	if(user.client)
 		for (var/z = 1 to world.maxz)
-			if(z == CENTCOMM_Z)
+			if(z == map.zCentcomm)
 				continue
 			user.client << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
 

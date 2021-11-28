@@ -42,31 +42,26 @@
 		recruiter.logging = TRUE
 
 		// A player has their role set to Yes or Always
-		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
 		// ", but No or Never
-		recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
 
-		recruiter.recruited.Add(src, "recruiter_recruited")
+		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
 
 	recruiter.request_player()
 
 
-/obj/item/device/mmi/posibrain/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. ([controls])</span>")
-	investigation_log(I_GHOST, "|| had a ghost automatically sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
+/obj/item/device/mmi/posibrain/proc/recruiter_recruiting(mob/dead/observer/player, controls)
+	to_chat(player, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. ([controls])</span>")
+	investigation_log(I_GHOST, "|| had a ghost automatically sign up to become its personality: [key_name(player)][player.locked_to ? ", who was haunting [player.locked_to]" : ""]")
 
-/obj/item/device/mmi/posibrain/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	if(O.client && get_role_desire_str(O.client.prefs.roles[ROLE_POSIBRAIN]) != "Never")
-		to_chat(O, "<span class=\"recruit\">Someone is requesting a personality for \a [src]. ([controls])</span>")
+/obj/item/device/mmi/posibrain/proc/recruiter_not_recruiting(mob/dead/observer/player, controls)
+	if(player.client && get_role_desire_str(player.client.prefs.roles[ROLE_POSIBRAIN]) != "Never")
+		to_chat(player, "<span class=\"recruit\">Someone is requesting a personality for \a [src]. ([controls])</span>")
 
-/obj/item/device/mmi/posibrain/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	if(O)
-		transfer_personality(O)
+/obj/item/device/mmi/posibrain/proc/recruiter_recruited(mob/dead/observer/player)
+	if(player)
+		transfer_personality(player)
 
 	reset_search()
 

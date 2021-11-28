@@ -9,6 +9,7 @@
 	anchored = 1
 	sheet_type = /obj/item/stack/sheet/metal
 	sheet_amt = 1
+	pass_flags_self = PASSTABLE
 	var/mob_lock_type = /datum/locking_category/buckle/bed
 	var/buckle_range = 1 // The distance a spessman needs to be within in order
 						 // to be able to use the buckle_in_out verb
@@ -25,7 +26,7 @@
 /obj/structure/bed/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE)) //NOTE: This includes ALL chairs as well! Vehicles have their own override.
+	if(istype(mover) && mover.checkpass(pass_flags_self)) //NOTE: This includes ALL chairs as well! Vehicles have their own override.
 		return 1
 	return ..()
 

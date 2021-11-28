@@ -25,6 +25,8 @@
 	var/scare_played = 0 //Did we rape everyone's ears yet ?
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent //Graciously stolen from spider code
 
+	blooded = FALSE
+
 /mob/living/simple_animal/scp_173/New()
 	. = ..()
 	flags |= INVULNERABLE

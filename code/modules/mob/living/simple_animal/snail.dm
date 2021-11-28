@@ -46,6 +46,9 @@ var/max_snails = 40
 		loving_partner = null
 	return ..()
 
+/mob/living/simple_animal/snail/get_butchering_products()
+	return list(/datum/butchering_product/snail_carapace)
+
 /mob/living/simple_animal/snail/bite_act(mob/living/carbon/human/H)
 	if(size >= H.size)
 		return
@@ -74,7 +77,7 @@ var/max_snails = 40
 	return ..()
 
 /mob/living/simple_animal/snail/Crossed(mob/living/O)
-	if(O.intent == I_HURT && prob(30))
+	if(O.a_intent == I_HURT && prob(30))
 		adjustBruteLoss(4) // Owie
 	if (!in_shell && !isDead())
 		recoil()

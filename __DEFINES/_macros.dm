@@ -74,6 +74,8 @@
 
 #define isgrinch(A) (istype(A, /mob/living/simple_animal/hostile/gremlin/grinch))
 
+#define ispulsedemon(A) (istype(A, /mob/living/simple_animal/hostile/pulse_demon))
+
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
@@ -186,9 +188,13 @@
 
 #define isvehicle(A) (istype(A, /obj/structure/bed/chair/vehicle))
 
+#define istable(A) (istype(A, /obj/structure/table))
+
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
+
+#define isfullwindow(A) (istype(A, /obj/structure/window/full))
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
@@ -208,7 +214,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -220,7 +226,9 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
-#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
+
+#define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
@@ -235,6 +243,8 @@
 #define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
+
+#define isNonTimeDataReagent(R) (is_type_in_list(R, list( /datum/reagent/citalopram, /datum/reagent/paroxetine)))
 
 #define isinvisible(A) (A.invisibility || A.alpha <= 1)
 
@@ -253,11 +263,7 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define isnewcultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
-
-#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
-
-#define iscultist(H) (isnewcultist(H) || ischiefcultist(H))
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
@@ -265,7 +271,7 @@
 
 #define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
+#define isanycultist(H) (islegacycultist(H) || iscultist(H))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
@@ -311,6 +317,8 @@
 
 #define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
+#define istimeagent(H) (H.mind && (H.mind.GetRole(TIMEAGENT) || (H.mind.GetRole(TIMEAGENTTWIN))))
+
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
 #define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))
@@ -326,9 +334,11 @@
 
 #define isspace(A) (A.type == /area)
 
+#define isopenspace(A) istype(A, /turf/simulated/open)
+
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
-proc/get_space_area()
+/proc/get_space_area()
 	//global.space_area is defined in code/game/areas/areas.dm, and set when the space area is created
 	if(!global.space_area)
 		var/area/new_space_area = new /area
@@ -415,3 +425,5 @@ proc/get_space_area()
 
 #define istransformable(A) (isatom(A))
 #define isapperanceeditable(A) (isatom(A))
+
+#define OMNI_LINK(A,B) isliving(A) && A:omnitool_connect(B)

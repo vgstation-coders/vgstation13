@@ -3,20 +3,20 @@
 //						LIMB SURGERY							//
 //////////////////////////////////////////////////////////////////
 
-/datum/surgery_step/limb/
+/datum/surgery_step/limb
 	can_infect = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
+/datum/surgery_step/limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected || affected.name == LIMB_HEAD)
+		return 0
+	if (!(affected.status & ORGAN_DESTROYED))
+		return 0
+	if (affected.parent)
+		if (affected.parent.status & ORGAN_DESTROYED)
 			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected || affected.name == LIMB_HEAD)
-			return 0
-		if (!(affected.status & ORGAN_DESTROYED))
-			return 0
-		if (affected.parent)
-			if (affected.parent.status & ORGAN_DESTROYED)
-				return 0
-		return 1
+	return 1
 
 
 //////CUT///////

@@ -40,7 +40,9 @@ var/list/uplink_items = list()
 	var/list/jobs_with_discount = list() //Jobs in this list get the discount price.
 	var/list/jobs_exclusive = list() //If empty, does nothing. If not empty, ONLY jobs in this list can buy this item.
 	var/list/jobs_excluded = list() //Jobs in this list cannot buy this item at all.
-
+	var/list/roles_exclusive = list() //If empty, does nothing. If not empty, ONLY roles in this list can buy this item.
+	var/available_for_traitors = TRUE
+	var/available_for_nuke_ops = TRUE
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
@@ -60,7 +62,9 @@ var/list/uplink_items = list()
 	return user_job && jobs_with_discount.len && jobs_with_discount.Find(user_job)
 
 /datum/uplink_item/proc/available_for_job(var/user_job)
-	return user_job && !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
+	if(!user_job)
+		return TRUE
+	return !(jobs_exclusive.len && !jobs_exclusive.Find(user_job)) && !(jobs_excluded.len && jobs_excluded.Find(user_job))
 
 //This will get called that is essentially a New() by default.
 //Use this to make New()s that have extra conditions, such as bundles
@@ -68,15 +72,18 @@ var/list/uplink_items = list()
 /datum/uplink_item/proc/new_uplink_item(var/new_item, var/turf/location, mob/user)
 	return new new_item(location)
 
-/datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
+/datum/uplink_item/proc/spawn_item(var/turf/loc, datum/component/uplink/U, mob/user)
 	if(!available_for_job(U.job))
 		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite not being available to their job! (Job: [U.job]) ([formatJumpTo(get_turf(U))])")
 		return
-	U.uses -= max(get_cost(U.job), 0)
+	if(U.nuke_ops_inventory && !available_for_nuke_ops)
+		message_admins("[key_name(user)] tried to purchase \the [src.name] from their uplink despite being a nuclear operative")
+		return
+	U.telecrystals -= max(get_cost(U.job), 0)
 	feedback_add_details("traitor_uplink_items_bought", name)
 	return new_uplink_item(item, loc, user)
 
-/datum/uplink_item/proc/buy(var/obj/item/device/uplink/hidden/U, var/mob/user)
+/datum/uplink_item/proc/buy(datum/component/uplink/U, var/mob/user)
 	if(!istype(U))
 		return 0
 
@@ -91,22 +98,31 @@ var/list/uplink_items = list()
 		return 0
 
 	// If the uplink's holder is in the user's contents
-	if ((U.loc in user.contents || (in_range(U.loc, user) && istype(U.loc.loc, /turf))))
+	var/obj/item/holder = U.parent
+	if ((holder in user.contents || (in_range(holder, user) && istype(holder.loc, /turf))))
 		user.set_machine(U)
-		if(get_cost(U.job) > U.uses)
+		if(get_cost(U.job) > U.telecrystals)
 			return 0
 
-		var/obj/I = spawn_item(get_turf(user), U, user)
+		var/O = spawn_item(get_turf(user), U, user)
+		var/obj/I = null
+		var/datum/uplink_item/UI = null
+		if(isobj(O))
+			I = O
+		else if(istype(O,/datum/uplink_item))
+			UI = O
+			I = new_uplink_item(UI.item,get_turf(user),user)
 		if(!I)
 			return 0
 		on_item_spawned(I,user)
 		var/icon/tempimage = icon(I.icon, I.icon_state)
-		end_icons += tempimage
-		var/tempstate = end_icons.len
 
 		var/bundlename = name
 		if(name == "Random Item" || name == "For showing that you are The Boss")
-			bundlename = I.name
+			if(UI)
+				bundlename = UI.name
+			else
+				bundlename = I.name
 		if(I.tag)
 			bundlename = "[I.tag] bundle"
 			I.tag = null
@@ -116,7 +132,7 @@ var/list/uplink_items = list()
 			if(istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
-			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [get_cost(U.job)]."}
+			U.purchase_log += {"[user] ([user.ckey]) bought <img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [name] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)]."}
 			stat_collection.uplink_purchase(src, I, user)
 			times_bought += 1
 
@@ -125,13 +141,15 @@ var/list/uplink_items = list()
 				//First, try to add the uplink buys to any operative teams they're on. If none, add to a traitor role they have.
 				var/datum/role/R = user.mind.GetRole(NUKE_OP)
 				if(R)
-					R.faction.faction_scoreboard_data += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
+					R.faction.faction_scoreboard_data += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
 				else
 					R = user.mind.GetRole(TRAITOR)
 					if(R)
-						R.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename] for [get_cost(U.job)] TC<BR>"}
-		U.interact(user)
-
+						R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
+					else
+						R = user.mind.GetRole(CHALLENGER)
+						if(R)
+							R.uplink_items_bought += {"<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [bundlename] for [UI ? UI.get_cost(U.job, 0.5) : get_cost(U.job)] TC<BR>"}
 		return 1
 	return 0
 
@@ -432,14 +450,14 @@ var/list/uplink_items = list()
 	cost = 5
 
 /datum/uplink_item/device_tools/cipherkey
-	name = "Centcomm Encryption Key"
-	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Screwdriver to replace encryption keys not included."
+	name = "Syndicate Encryption Key"
+	desc = "A key that, when inserted into any radio headset, allows you to listen to and talk on all known Nanotrasen radio channels using their respective communications keys. Access to the Syndicate radio channel is also granted. Use :t to speak over the syndicate channel. Screwdriver to replace encryption keys not included."
 	item = /obj/item/device/encryptionkey/syndicate/hacked
 	cost = 4
 
 /datum/uplink_item/device_tools/pdapinpointer
 	name = "PDA Pinpointer"
-	desc = "A pinpointer that can flawlessly track any PDA in the local space sector. Useful for locating assassination targets or other high-value targets that you can't find. Do note that it can only be set once and cannot track normal targets like the nuclear disk, and is obvious upon inspection."
+	desc = "A pinpointer that can flawlessly track any PDA in the local space sector. Useful for locating assassination targets or other high-value targets that you can't find. Do note that it cannot track normal targets like the nuclear disk, and is obvious upon inspection."
 	item = /obj/item/weapon/pinpointer/pdapinpointer
 	cost = 4
 
@@ -564,7 +582,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/trophybelt
  	name = "Trophy Belt"
- 	desc = "An unremarkable leather belt specially crafted to hold whole heads in storage, perfect for serial killers with something to prove. Comes with seven storage slots. Will not accept brains, so behead mindfully."
+ 	desc = "An unremarkable leather belt specially crafted to hold whole heads and limbs in storage, perfect for serial killers and maimers with something to prove. Will not accept brains, so behead mindfully."
  	item = /obj/item/weapon/storage/belt/skull
  	cost = 4
 
@@ -586,8 +604,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
-/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, user)
-
+/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/datum/component/uplink/U, user)
 	var/list/buyable_items = get_uplink_items()
 	var/list/possible_items = list()
 
@@ -597,15 +614,17 @@ var/list/uplink_items = list()
 				continue
 			if(!I.available_for_job(U.job))
 				continue
-			if(I.get_cost(U.job, 0.5) > U.uses)
+			if(!I.available_for_nuke_ops && U.nuke_ops_inventory)
+				continue
+			if(I.get_cost(U.job, 0.5) > U.telecrystals)
 				continue
 			possible_items += I
 
 	if(possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
-		U.uses -= max(0, I.get_cost(U.job, 0.5))
+		U.telecrystals -= max(0, I.get_cost(U.job, 0.5))
 		feedback_add_details("traitor_uplink_items_bought","RN")
-		return new_uplink_item(I.item, loc, user)
+		return I
 
 /datum/uplink_item/jobspecific/command_security
 	category = "Command and Security Specials"
@@ -644,7 +663,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
-	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room." 
+	desc = "A box containing 5 implants disguised as chemical implants usable after being injected into one's body. When activated with from a prisoner management console, it will cause a small yet breaching explosion from the implant that will gib the user and easily space a room."
 	item = /obj/item/weapon/storage/box/remeximp
 	cost = 18
 	discounted_cost = 12
@@ -704,7 +723,7 @@ var/list/uplink_items = list()
 	item = /obj/item/syndicate_wheelchair_kit
 	cost = 18
 	discounted_cost = 12
-	jobs_with_discount = list("Medical Doctor", "Chief Medical Officer")
+	jobs_with_discount = list("Orderly", "Medical Doctor", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/medical/organ_remover
 	name = "Modified Organics Extractor"
@@ -748,10 +767,26 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/medical/viruscollection
 	name = "Deadly Syndrome Collection"
-	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
+	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected, and a GNA forging disk for masking deadly syndromes in the database."
 	item = /obj/item/weapon/storage/lockbox/diskettebox/syndisease
 	cost = 20
 	discounted_cost = 12
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
+/datum/uplink_item/jobspecific/medical/symptomforger
+	name = "GNA Database Forger Disk"
+	desc = "A disk that looks almost exactly like a normal GNA disk, with the exception of being able to copy the symptom from any other normal one to splice into a disk. Splicing this in does not affect the disease, but instead creates a forged symptom onto the database, obscuring the original effect."
+	item = /obj/item/weapon/disk/disease/spoof
+	cost = 12
+	discounted_cost = 6
+	jobs_with_discount = list("Virologist", "Chief Medical Officer")
+
+/datum/uplink_item/jobspecific/medical/syndietape_viro
+	name = "Syndicate Biohazard Tape"
+	desc = "A length of biohazard tape coated in an engineered bacterium that forcibly ejects explosive goo when disturbed, but can be handled safely with latex gloves. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/viro
+	cost = 4
+	discounted_cost = 2
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
 /datum/uplink_item/jobspecific/engineering
@@ -814,8 +849,8 @@ var/list/uplink_items = list()
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/dev_analyser
-	name = "Modified Device Analyser"
-	desc = "A device analyser with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
+	name = "Modified Device Analyzer"
+	desc = "A device analyzer with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment for further duplication using the station's Mechanic equipment."
 	item = /obj/item/device/device_analyser/syndicate
 	cost = 9
 	discounted_cost = 6
@@ -840,6 +875,9 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Shaft Miner")
 
+/datum/uplink_item/jobspecific/cargo/mastertrainer/new_uplink_item(var/new_item, var/turf/location, mob/user)
+	return new new_item(location, user)
+
 /datum/uplink_item/jobspecific/service
 	category = "Service Specials"
 
@@ -851,20 +889,36 @@ var/list/uplink_items = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Botanist")
 
+/datum/uplink_item/jobspecific/service/vinesuit
+	name = "Space Vietnam Grass Coat"
+	desc = "This inconspicuous grass coat was woven from kudzu fibers for guerilla missions in Space Vietnam. While wearing the coat, space vines won't entangle, bite, or otherwise harm you."
+	item = 	/obj/item/clothing/suit/mino/vinesafe
+	cost = 6
+	discounted_cost = 4
+	jobs_with_discount = list("Botanist")
+
 /datum/uplink_item/jobspecific/service/beecase
 	name = "Briefcase Full of Bees"
 	desc = "A briefcase containing twenty angry bees. Will deliver the bee payload when first opened, functions as a normal briefcase after this initial swarm. The bees do not discriminate on targets, so either get someone else to open the briefcase for you or run."
 	item = /obj/item/weapon/storage/briefcase/bees
-	cost = 5
-	discounted_cost = 4
+	cost = 12
+	discounted_cost = 6
 	jobs_with_discount = list("Botanist")
 
-/datum/uplink_item/jobspecific/service/hornetqueen
-	name = "Hornet Queen Packet"
-	desc = "A lethally dangerous hornet queen, providing a very nasty surprise once fully tended for. Place her into an apiary tray and add a few packs of BeezEez along with usual care to obtain the goods. Protective gear won't be enough to shield you reliably from these, so keep a good distance."
-	item = /obj/item/queen_bee/hornet
-	cost = 3
-	discounted_cost = 2
+/datum/uplink_item/jobspecific/service/hornethive
+	name = "Deployable Wild Hornet Hive"
+	desc = "A portable hive that starts producing deadly hornets once thrown or dropped, be careful! Best hidden in maintenance or someone's backroom to give them time to multiply."
+	item = /obj/item/deployable_wild_hornet_hive
+	cost = 10
+	discounted_cost = 5
+	jobs_with_discount = list("Botanist")
+
+/datum/uplink_item/jobspecific/service/beenade
+	name = "Bee-Nade"
+	desc = "Over a dozen deadly hornets. The grenade comes equiped with a pheromone spray so the hornets won't attack the one who threw the grenade."
+	item = /obj/item/weapon/grenade/spawnergrenade/beenade
+	cost = 16
+	discounted_cost = 8
 	jobs_with_discount = list("Botanist")
 
 /datum/uplink_item/jobspecific/service/specialsauce
@@ -992,6 +1046,13 @@ var/list/uplink_items = list()
 	cost = 12
 	jobs_exclusive = list("Mime")
 
+/datum/uplink_item/jobspecific/clown_mime/unwall_spell
+	name = "Invisible Un-Wall Spellbook"
+	desc = "Grants the user the ability to conjure a strange wall allowing the passage of anything through a space regardless of the objects in place. Only real Mimes are capable of learning from this forbidden tome."
+	item = /obj/item/weapon/spellbook/oneuse/unwall
+	cost = 12
+	jobs_exclusive = list("Mime")
+
 /datum/uplink_item/jobspecific/clown_mime/punchline
 	name = "Punchline"
 	desc = "A high risk high reward abomination combining experimental phazon and bananium technologies. Wind-up Punchline to charge it. Enough charge and your targets will slip through reality. Warning: Forcing wind-ups beyond the limiter may reverse the prototype phazite honkpacitors and disrupt reality around the user."
@@ -1043,8 +1104,8 @@ var/list/uplink_items = list()
 	name = "Pocket Satellite"
 	desc = "A grenade which, when detonated in space, creates a circular station with radius 7. The station is loaded with self-powered computers, useful gear, and machinery as well as a teleporter beacon. Anyone right under it when it unfolds is crushed."
 	item = /obj/item/weapon/grenade/station
-	cost = 20
-	discounted_cost = 14
+	cost = 12
+	discounted_cost = 8
 	jobs_with_discount = list("Captain", "Head of Personnel")
 
 /datum/uplink_item/jobspecific/trader
@@ -1076,7 +1137,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
-	jobs_excluded = list("Nuclear Operative", CHALLENGER)
+	available_for_nuke_ops = FALSE
 
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"

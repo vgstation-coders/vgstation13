@@ -11,7 +11,7 @@
 
 	//If we have the gene for being crazy, have random events.
 	if(dna.GetSEState(HALLUCINATIONBLOCK))
-		if(prob(1) && hallucination < 1)
+		if(prob(4) && hallucination < 1)
 			hallucination += 20
 
 	if(disabilities & COUGHING)

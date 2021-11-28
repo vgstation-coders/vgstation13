@@ -85,7 +85,7 @@
 		to_chat(user, "It's turned off!")
 		return
 
-	new /obj/effect/effect/foam(src.loc)
+	new /obj/effect/foam(src.loc)
 	src.uses--
 	cooldown_on = 1
 	cooldown_time = world.timeofday + 100
@@ -107,7 +107,7 @@
 		if(cooldown_on || disabled)
 			return
 		else
-			new /obj/effect/effect/foam(src.loc)
+			new /obj/effect/foam(src.loc)
 			src.uses--
 			cooldown_on = 1
 			cooldown_time = world.timeofday + 100

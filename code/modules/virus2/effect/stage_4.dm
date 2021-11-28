@@ -239,7 +239,6 @@
 				var/totalslabs = 1
 				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 				var/sourcename = H.real_name
-				var/sourcejob = H.job
 				var/sourcenutriment = H.nutrition / 15
 				//var/sourcetotalreagents = mob.reagents.total_volume
 
@@ -247,7 +246,6 @@
 					var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
-					newmeat.subjectjob = sourcejob
 					newmeat.reagents.add_reagent(NUTRIMENT, sourcenutriment / totalslabs) //Thehehe. Fat guys go first
 					//src.occupant.reagents.trans_to(newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 					allmeat[i] = newmeat
@@ -335,7 +333,7 @@
 	name = "Biolobulin Effect"
 	desc = "Converts the infected's pores of their palm to begin synthesizing a gelatenous substance, that explodes upon reaching a high velocity."
 	stage = 4
-	badness = EFFECT_DANGER_HELPFUL
+	badness = EFFECT_DANGER_FLAVOR
 
 /datum/disease2/effect/orbweapon/activate(var/mob/living/mob)
 	var/obj/item/toy/snappop/virus/virus = new /obj/item/toy/snappop/virus
@@ -556,15 +554,8 @@
 					spawn_turfs.Add(T)
 			if(!spawn_turfs.len)
 				spawn_turfs.Add(get_turf(H))
-			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
-			heart_attack.appearance = blown_heart.appearance
-			heart_attack.icon_dead = "heart-off"
-			heart_attack.environment_smash_flags = 0
-			heart_attack.melee_damage_lower = 15
-			heart_attack.melee_damage_upper = 15
-			heart_attack.health = 50
-			heart_attack.maxHealth = 50
-			heart_attack.stat_attack = 1
+			var/mob/living/simple_animal/hostile/heart_attack/HA = new(pick(spawn_turfs))
+			HA.update_heart(blown_heart,H.dna,virus_copylist(H.virus2))
 			score["heartattacks"]++
 			qdel(blown_heart)
 
@@ -649,15 +640,16 @@
 		affected.my_appearance.h_style = "Shoulder-length Hair Alt"
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 	switch(count)
 		if (10 to 30)
-			if(prob(3))
+			if(prob(10))
 				mob.say(pick("You shall not pass!", "Expeliarmus!", "By Merlins beard!", "Feel the power of the Dark Side!"))
-			if(prob(5))
+			if(prob(15))
 				to_chat(mob, "<span class='warning'>You feel [pick("that you don't have enough mana.", "that the winds of magic are gone.", "an urge to summon familiar.")]</span>")
 		if (30 to INFINITY)
-			if(prob(3))
+			if(prob(20))
 				var/list/possible_invocations = list(
 					"By Merlins beard!",
 					"Feel the power of the Dark Side!",
@@ -759,7 +751,7 @@
 										B.transfer_identity(C)
 								target.gib()
 
-			if(prob(3) && count >= 60)
+			if(count >= 60)
 				spawn_wizard_clothes(mob)
 
 			if(prob(5))
@@ -785,6 +777,7 @@
 		affected.my_appearance.h_style = old_h_style
 		affected.update_body()
 		affected.update_hair()
+		affected.update_dna_from_appearance()
 
 /datum/disease2/effect/magnitis
 	name = "Magnitis"
@@ -792,50 +785,27 @@
 	encyclopedia = "Injections of iron help temporarily stabilize the magnetic field."
 	stage = 4
 	badness = EFFECT_DANGER_HARMFUL
+	chance = 5
+	max_chance = 20
 
 /datum/disease2/effect/magnitis/activate(var/mob/living/mob)
 	if(mob.reagents.has_reagent(IRON))
 		return
 
-	switch(count)
-		if(0 to 10)
-			if(prob(2))
-				to_chat(mob, "<span class='warning'>You feel a slight shock course through your body.</span>")
-				for(var/obj/M in orange(2,mob))
-					if(!M.anchored && (M.is_conductor()))
-						step_towards(M,mob)
-				for(var/mob/living/silicon/S in orange(2,mob))
-					if(istype(S, /mob/living/silicon/ai))
-						continue
-					step_towards(S,mob)
-		if(11 to 20)
-			if(prob(4))
-				to_chat(mob, "<span class='warning'>You feel a strong shock course through your body.</span>")
-				for(var/obj/M in orange(4,mob))
-					if(!M.anchored && (M.is_conductor()))
-						var/iter = rand(1,2)
-						for(var/i=0,i<iter,i++)
-							step_towards(M,mob)
-				for(var/mob/living/silicon/S in orange(4,mob))
-					if(istype(S, /mob/living/silicon/ai))
-						continue
-					var/iter = rand(1,2)
-					for(var/i=0,i<iter,i++)
-						step_towards(S,mob)
-		if(21 to INFINITY)
-			if(prob(8))
-				to_chat(mob, "<span class='warning'>You feel a powerful shock course through your body.</span>")
-				for(var/obj/M in orange(6,mob))
-					if(!M.anchored && (M.is_conductor()))
-						var/iter = rand(1,3)
-						for(var/i=0,i<iter,i++)
-							step_towards(M,mob)
-				for(var/mob/living/silicon/S in orange(6,mob))
-					if(istype(S, /mob/living/silicon/ai))
-						continue
-					var/iter = rand(1,3)
-					for(var/i=0,i<iter,i++)
-						step_towards(S,mob)
+	var/intensity = 1 + (count > 10) + (count > 20)
+	if (prob(20))
+		to_chat(mob, "<span class='warning'>You feel a [intensity < 3 ? "slight" : "powerful"] shock course through your body.</span>")
+	for(var/obj/M in orange(3 * intensity,mob))
+		if(!M.anchored && (M.is_conductor()))
+			var/iter = rand(1,intensity)
+			for(var/i=0,i<iter,i++)
+				step_towards(M,mob)
+	for(var/mob/living/silicon/S in orange(3 * intensity,mob))
+		if(istype(S, /mob/living/silicon/ai))
+			continue
+		var/iter = rand(1,intensity)
+		for(var/i=0,i<iter,i++)
+			step_towards(S,mob)
 
 /datum/disease2/effect/emitter
 	name = "Afflictus Emittus"
@@ -858,8 +828,8 @@
 /datum/disease2/effect/emitter/activate(var/mob/living/mob)
 	if (istype(mob) && !emitter)
 		emitter = mob
-		emitter.callOnStartMove["\ref[src]"] = "update_emitter_start"
-		emitter.callOnEndMove["\ref[src]"] = "update_emitter_end"
+		emitter.register_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.register_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
@@ -926,8 +896,8 @@
 		qdel(beam)
 		beam = null
 	if (emitter)
-		emitter.callOnStartMove -= "\ref[src]"
-		emitter.callOnEndMove -= "\ref[src]"
+		emitter.unregister_event(/event/before_move, src, /datum/disease2/effect/emitter/proc/update_emitter_start)
+		emitter.unregister_event(/event/after_move, src, /datum/disease2/effect/emitter/proc/update_emitter_end)
 		emitter = null
 	previous_dir = null
 	previous_loc = null
@@ -1029,7 +999,7 @@
 	var/list/original_UI = list()
 	var/list/original_SE = list()
 	var/activated = 0
-	
+
 /datum/disease2/effect/dnaspread/activate(var/mob/living/mob)
 	if(!activated)
 		to_chat(mob, "<span class='warning'>You don't feel like yourself..</span>")
@@ -1047,7 +1017,7 @@
 	C.real_name = original_name
 	domutcheck(C)
 	activated = 1
-	
+
 /datum/disease2/effect/dnaspread/deactivate(var/mob/living/mob)
 	activated = 0
 
@@ -1136,7 +1106,7 @@
 	name = "Monkism Syndrome"
 	desc = "Causes the infected to rapidly devolve to a lower form of life."
 	stage = 4
-	badness = EFFECT_DANGER_DEADLY	
+	badness = EFFECT_DANGER_DEADLY
 
 /datum/disease2/effect/monkey/activate(var/mob/living/carbon/human/mob)
 	if(istype(mob))

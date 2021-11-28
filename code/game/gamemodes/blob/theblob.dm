@@ -18,6 +18,8 @@ var/list/blob_overminds = list()
 	opacity = 0
 	anchored = 1
 	penetration_dampening = 17
+	mouse_opacity = 1
+	pass_flags_self = PASSBLOB
 	var/health = 20
 	var/maxhealth = 20
 	var/health_timestamp = 0
@@ -45,6 +47,8 @@ var/list/blob_overminds = list()
 	var/manual_remove = 0
 	var/icon_size = 64
 
+	var/asleep = FALSE
+
 /obj/effect/blob/blob_act()
 	return
 
@@ -55,11 +59,10 @@ var/list/blob_overminds = list()
 		looks = newlook
 	update_looks()
 	blobs += src
-	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
 	if(icon_size == 64)
-		if(spawning && !no_morph)
+		if(!asleep && spawning && !no_morph && !istype(src, /obj/effect/blob/core))
 			icon_state = initial(icon_state) + "_spawn"
 			spawn(10)
 				spawning = 0//for sprites
@@ -76,7 +79,6 @@ var/list/blob_overminds = list()
 		A.blob_act(0,src)
 
 	blob_tiles_grown_total++
-	return
 
 
 /obj/effect/blob/Destroy()
@@ -107,7 +109,7 @@ var/list/blob_overminds = list()
 /obj/effect/blob/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSBLOB))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	return 0
 
@@ -359,7 +361,7 @@ var/list/blob_looks_player = list(//Options available to players
 			num /= 10000
 			B.layer = layer - num
 
-	if(T.Enter(B,src))//Attempt to move into the tile
+	if(T.Enter(B, loc, TRUE))//Attempt to move into the tile //This should probably just actually call Move() instead
 		B.setDensity(initial(B.density))
 		if(icon_size == 64)
 			spawn(1)
@@ -404,6 +406,9 @@ var/list/blob_looks_player = list(//Options available to players
 	qdel(src)
 
 /obj/effect/blob/proc/update_health()
+	if(asleep && (health < maxhealth))
+		for (var/obj/effect/blob/B in range(7,src))
+			B.asleep = FALSE
 	if(!dying && (health <= 0))
 		dying = 1
 		if(get_turf(src))
@@ -416,9 +421,14 @@ var/list/blob_looks_player = list(//Options available to players
 	health = 21
 	layer = BLOB_BASE_LAYER
 
+/obj/effect/blob/normal/New(turf/loc,newlook = null,no_morph = 0)
+	if (!asleep)
+		dir = pick(cardinal)
+	..()
+
 /obj/effect/blob/normal/Delete()
 	..()
-/*
+/*	// Sadly having hundreds of blobs create overlays every few seconds is proving quite laggy
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
 	if(icon_size == 64)

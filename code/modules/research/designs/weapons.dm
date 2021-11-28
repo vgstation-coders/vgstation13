@@ -307,7 +307,7 @@
 
 /datum/design/rocket_rpg/emp
 	name = "EMP rocket"
-	desc = "EMP rocket for the Nanotrasen rocket launcher"
+	desc = "EMP rocket for the Nanotrasen rocket launcher."
 	id = "emp_rocket"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 20000, MAT_URANIUM = 500)

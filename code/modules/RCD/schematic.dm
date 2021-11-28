@@ -7,6 +7,7 @@
 	var/obj/item/device/rcd/master	//Okay all of the vars here are obvious...
 	var/icon
 	var/icon_state
+	var/list/overlays	= list()
 	var/obj/abstract/screen/schematics/ourobj
 	var/datum/selection_schematic/selected
 

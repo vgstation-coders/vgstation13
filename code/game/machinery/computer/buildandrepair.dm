@@ -185,7 +185,7 @@
 /obj/item/weapon/circuitboard/powermonitor
 	name = "Circuit board (Power Monitor)"  //name fixed 250810
 	desc = "A circuit board for running a computer used for monitoring power generation, load and demand."
-	build_path = /obj/machinery/power/monitor
+	build_path = /obj/machinery/computer/powermonitor
 /obj/item/weapon/circuitboard/olddoor
 	name = "Circuit board (DoorMex)"
 	desc = "A circuit board for running a very outdated computer used for opening doors."
@@ -356,7 +356,6 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
-
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/tool/solder/S = I
@@ -397,18 +396,6 @@
 /obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
-
-
-/obj/item/weapon/circuitboard/security/solder_improve(mob/user)
-	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
-		return ..()
-	if(istype(src,/obj/item/weapon/circuitboard/security/engineering))
-		return ..()
-	else
-		to_chat(user, "<span class='notice'>You locate a short that makes the feed circuitry more elegant.</span>")
-		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
-		user.put_in_hands(A)
-		qdel(src)
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
@@ -481,7 +468,7 @@
 
 				return 1
 		if(3)
-			if(iswirecutter(P))
+			if(P.is_wirecutter(user))
 				P.playtoolsound(src, 50)
 				user.visible_message("[user] unplugs the wires from the frame.", "You unplug the wires from the frame.", "You hear metallic sounds.")
 				src.state = 2

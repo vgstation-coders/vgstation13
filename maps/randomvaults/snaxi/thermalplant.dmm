@@ -25,7 +25,7 @@
 "ov" = (/obj/machinery/door/airlock/engineering{name = "Thermal Plant"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
 "oG" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
 "pC" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 5},/turf/unsimulated/floor/snow,/area)
-"qr" = (/obj/structure/cable/yellow,/obj/machinery/power/monitor,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"qr" = (/obj/structure/cable/yellow,/obj/machinery/computer/powermonitor,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
 "qC" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 1},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/red,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
 "qF" = (/obj/machinery/power/apc{dir = 1; pixel_y = 24},/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
 "qJ" = (/obj/structure/table,/obj/machinery/meter{name = "Fuel Meter"},/obj/machinery/atmospherics/pipe/simple/yellow/hidden{dir = 5},/obj/item/clothing/gloves/yellow,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)

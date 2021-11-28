@@ -1,4 +1,4 @@
-obj/machinery/atmospherics/unary/oxygen_generator
+/obj/machinery/atmospherics/unary/oxygen_generator
 	icon = 'icons/obj/atmospherics/oxygen_generator.dmi'
 	icon_state = "intact_off"
 	density = 1
@@ -13,7 +13,7 @@ obj/machinery/atmospherics/unary/oxygen_generator
 
 	var/oxygen_content = 10
 
-obj/machinery/atmospherics/unary/oxygen_generator/update_icon()
+/obj/machinery/atmospherics/unary/oxygen_generator/update_icon()
 	if(node1)
 		icon_state = "intact_[on?("on"):("off")]"
 	else
@@ -23,12 +23,12 @@ obj/machinery/atmospherics/unary/oxygen_generator/update_icon()
 
 	return
 
-obj/machinery/atmospherics/unary/oxygen_generator/New()
+/obj/machinery/atmospherics/unary/oxygen_generator/New()
 	..()
 
 	air_contents.volume = 50
 
-obj/machinery/atmospherics/unary/oxygen_generator/process()
+/obj/machinery/atmospherics/unary/oxygen_generator/process()
 	. = ..()
 	if(!on)
 		return

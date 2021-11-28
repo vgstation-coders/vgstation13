@@ -13,7 +13,7 @@
 		qdel(I)
 		I = null
 		qdel(src)
-	if(iswirecutter(I))
+	if(I.is_wirecutter(user))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
 		I.playtoolsound(user, 50)
 		if(src.loc == user)
@@ -116,6 +116,15 @@
 				if(!gcDestroyed)
 					prime()
 
+/obj/item/weapon/grenade/iedcasing/suicide_act(var/mob/living/user)
+	if (!active) //no explosion with no active ied, dummy
+		return
+	
+	var/message_say = user.handle_suicide_bomb_cause()
+	to_chat(viewers(user), "<span class='danger'>[user] activates the [src] and holds it above \his head! It looks like \he's going out with a bang!</span>")
+	user.say(message_say)
+	attack_self(user)
+	return SUICIDE_ACT_BRUTELOSS
 
 /obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
 
@@ -134,10 +143,10 @@
 			to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
 
 
-/obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
+/obj/item/weapon/grenade/iedcasing/prime(var/mob/user) //Blowing that can up
 	update_mob()
 	process_shrapnel()
-	explosion(get_turf(src.loc),-1,0,2)
+	explosion(get_turf(src.loc),-1,0,2, whodunnit = user)
 
 	if(istype(loc, /obj/item/weapon/beartrap))
 		var/obj/item/weapon/beartrap/boomtrap = loc

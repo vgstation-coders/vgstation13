@@ -224,6 +224,7 @@
 
 					if(!servers.len)
 						temp = "<font color = #D70B00>- FAILED: UNABLE TO LOCATE SERVERS IN \[[network]\] -</font color>"
+						temp += "<br><font color = #D70B00>- DOUBLE-CHECK NETWORK ID OR REDUCE RANGE FROM SERVERS (25 TILES AT MOST) -</font color>"
 					else
 						temp = "<font color = #336699>- [servers.len] SERVERS PROBED & BUFFERED -</font color>"
 

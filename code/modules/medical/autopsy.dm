@@ -167,7 +167,7 @@
 
 	user.put_in_hands(P)
 
-/obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
+/obj/item/weapon/autopsy_scanner/attack(var/mob/living/carbon/human/M, var/mob/living/carbon/user)
 	if(!istype(M))
 		return
 
@@ -176,23 +176,24 @@
 
 	if(target_name != M.name)
 		target_name = M.name
-		src.wdata = list()
-		src.chemtraces = list()
-		src.timeofdeath = null
+		wdata = list()
+		chemtraces = list()
+		timeofdeath = null
 		to_chat(user, "<span class='warning'>A new patient has been registered. Purging data for previous patient.</span>")
 
-	src.timeofdeath = M.timeofdeath
+	timeofdeath = M.timeofdeath
 
 	var/datum/organ/external/S = M.get_organ(user.zone_sel.selecting)
 	if(!S)
 		to_chat(usr, "<b>You can't scan this body part.</b>")
 		return
-	if(!S.open)
+
+	if ((!M.species || !(M.species.anatomy_flags & NO_SKIN)) && !S.open)
 		to_chat(usr, "<b>You have to cut the limb open first!</b>")
 		return
 	for(var/mob/O in viewers(M))
-		O.show_message("<span class='warning'>[user.name] scans the wounds on [M.name]'s [S.display_name] with \the [src.name]</span>", 1)
+		O.show_message("<span class='warning'>[user.name] scans the wounds on [M.name]'s [S.display_name] with \the [name]</span>", 1)
 
-	src.add_data(S)
+	add_data(S)
 
 	return 1

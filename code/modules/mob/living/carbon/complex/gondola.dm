@@ -27,7 +27,7 @@
 	..()
 
 /mob/living/carbon/complex/gondola/Destroy()
-	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
+	if(client && iscultist(src))
 		var/turf/T = get_turf(src)
 		if (T)
 			var/mob/living/simple_animal/shade/gondola/shade = new (T)
@@ -41,6 +41,9 @@
 
 /mob/living/carbon/complex/gondola/say()
 	return
+
+/mob/living/carbon/complex/gondola/get_butchering_products()
+	return list(/datum/butchering_product/skin/gondola, /datum/butchering_product/teeth/few)
 
 /mob/living/carbon/complex/gondola/cult/New() //fug.....
 	..()

@@ -4,11 +4,11 @@
 	var/yieldtype = null
 
 // Note: Returns -1 if not enough ore!
-/datum/smelting_recipe/proc/checkIngredients(var/obj/machinery/mineral/processing_unit/P)
-	for(var/ore_id in P.ore.storage)
+/datum/smelting_recipe/proc/checkIngredients(var/datum/materials/ore)
+	for(var/ore_id in ore.storage)
 		var/min_ore_required = ingredients[ore_id]
 
-		if(P.ore.getAmount(ore_id) < min_ore_required)
+		if(ore.getAmount(ore_id) < min_ore_required)
 			return 0
 
 	. = 1

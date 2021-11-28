@@ -45,7 +45,7 @@
 /datum/deadchat_listener/proc/deadchat_event(var/ckey, var/message)
 	return
 
-var/list/global_deadchat_listeners
+var/list/global_deadchat_listeners = list()
 
 /mob/proc/say_dead(var/message)
 	var/name = src.real_name
@@ -102,7 +102,7 @@ var/list/global_deadchat_listeners
 /mob/proc/lingcheck()
 	return 0
 
-/mob/proc/construct_chat_check(var/setting)
+/mob/proc/cult_chat_check(var/setting)
 	return 0
 
 /mob/proc/hivecheck()
@@ -165,7 +165,7 @@ var/list/global_deadchat_listeners
 		if(client)
 			var/virgin = 1	//has the text been modified yet?
 			var/temp = winget(client, "input", "text")
-			if(findtextEx(temp, "Say \"", 1, 7) && length(temp) > 5)	//case sensitive means
+			if(findtext(temp, "Say \"", 1, 7) && length(temp) > 5) //NOT case sensitive, because both "say" and "Say" can happen
 
 				temp = replacetext(temp, ";", "")	//general radio
 

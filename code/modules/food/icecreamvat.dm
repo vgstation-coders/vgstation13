@@ -28,6 +28,8 @@
 	..()
 
 /obj/machinery/cooking/icemachine/Destroy()
+	qdel(reagents)
+	reagents = null
 	qdel(beaker)
 	beaker = null
 	qdel(to_add)

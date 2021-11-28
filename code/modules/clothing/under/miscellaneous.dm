@@ -782,7 +782,7 @@
 
 /obj/item/clothing/under/onesie
 	name = "green christmas onesie"
-	desc = "Festive pyjamas for the comfy crewman"
+	desc = "Festive pyjamas for the comfy crewman."
 	icon_state = "onesiegreen"
 	item_state = "onesiegreen"
 	_color = "onesiegreen"
@@ -910,7 +910,7 @@
 
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"
-	desc = "for clowns living in a society"
+	desc = "for clowns living in a society."
 	icon_state = "clownsuit"
 	item_state = "clownsuit"
 	_color = "clownsuit"
@@ -919,7 +919,7 @@
 
 /obj/item/clothing/under/skelesuit
 	name = "skeleton suit"
-	desc = "Inside of everyone there is a spooky skinman waiting to escape"
+	desc = "Inside of everyone there is a spooky skinman waiting to escape."
 	icon_state = "skelesuit"
 	item_state = "skelesuit"
 	_color = "skelesuit"
@@ -993,7 +993,20 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/under/football/offenseTackleBonus()
+	return 5
+
 /obj/item/clothing/under/football/New()
 	icon_state = "redfootball_[pick(23,13,69,56)]"
 	item_state = icon_state
 	_color = icon_state
+
+/obj/item/clothing/under/rags
+	name ="rags"
+	desc = "Some leather scraps tied together."
+	icon_state = "rags"
+	item_state = "rags"
+	_color = "rags"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)

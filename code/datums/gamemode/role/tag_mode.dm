@@ -30,7 +30,7 @@ var/list/tag_mode_non_used_spawns = list()
 		// Give them the outfit
 		var/datum/outfit/mime/clown_ling/concrete_outfit = new
 		concrete_outfit.items_to_collect[/obj/item/weapon/card/id/captains_spare] = SURVIVAL_BOX // Everyone gets a spare in tagmode.
-		concrete_outfit.equip(antag.current)
+		concrete_outfit.equip(antag.current, strip = TRUE, delete = TRUE)
 
 	// Give them the changeling powers
 	. = ..()
@@ -124,7 +124,7 @@ var/spawned_mimes_tag_mode = 1
 	// Give them the outfit
 	var/datum/outfit/mime/concrete_outfit = new
 	concrete_outfit.items_to_collect[/obj/item/weapon/card/id/captains_spare] = SURVIVAL_BOX // Everyone gets a spare in tagmode.
-	concrete_outfit.equip(antag.current)
+	concrete_outfit.equip(antag.current, strip = TRUE, delete = TRUE)
 
 	// Objective
 	ForgeObjectives()

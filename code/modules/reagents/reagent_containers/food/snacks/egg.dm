@@ -11,6 +11,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/egg/New()
 	..()
 	reagents.add_reagent(EGG_YOLK, 4)
+	reagents.add_reagent(CALCIUMCARBONATE, 1)
 	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/process()
@@ -21,10 +22,30 @@
 	else
 		processing_objects.Remove(src)
 
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/afterattack(atom/target, var/mob/user, var/adjacency_flag, var/click_params)
+	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
+	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
+		return
+
+	if(target.reagents.is_full())
+		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
+		return
+
+	new /obj/item/trash/egg(get_turf(target))
+	playsound(loc, 'sound/items/egg_cracking.ogg', 50, 1)
+	reagents.del_reagent(CALCIUMCARBONATE)
+	reagents.trans_to(target, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+
+	user.visible_message("<span class='warning'>[user] cracks open an egg into \the [target].</span>", \
+		self_message = "<span class='notice'>You crack open \the [src] into \the [target].[target.reagents.is_full()? " It is now full." : ""]</span>", range = 2)
+	qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom)
 	..()
 	if(isturf(hit_atom))
 		new/obj/effect/decal/cleanable/egg_smudge(loc)
+		new/obj/item/trash/egg(loc)
 		splat_reagent_reaction(hit_atom)
 		visible_message("<span class='warning'>\The [src] has been squashed.</span>","<span class='warning'>You hear a smack.</span>")
 		playsound(loc, 'sound/items/egg_squash.ogg', 50, 1)
@@ -66,6 +87,7 @@
 	if (istype(W, /obj/item/weapon/reagent_containers))
 		if(W.reagents.amount_cache.len == 1 && W.reagents.has_reagent(FLOUR, 5))
 			W.reagents.remove_reagent(FLOUR,5)
+			new /obj/item/trash/egg(loc)
 			new /obj/item/weapon/reagent_containers/food/snacks/dough(get_turf(src))
 			to_chat(user, "You make some dough.")
 			qdel(src)
@@ -87,13 +109,14 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/proc/hatch()
 	visible_message("[src] hatches with a quiet cracking sound.")
+	new/obj/item/trash/egg(loc)
 	new hatch_type(get_turf(src))
 	processing_objects.Remove(src)
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/vox
 	name = "green egg"
-	desc = "Looks like it came from some genetically engineered chicken"
+	desc = "Looks like it came from some genetically engineered chicken."
 	icon_state = "egg-vox"
 	can_color = FALSE
 	hatch_type = /mob/living/carbon/monkey/vox
@@ -161,3 +184,30 @@ var/snail_egg_count = 0
 /obj/item/weapon/reagent_containers/food/snacks/egg/snail/Destroy()
 	snail_egg_count--
 	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf
+	name = "pomf egg"
+	desc = "An ordinary egg. Yep. Definitely. But where's that voice coming from?"
+	icon_state = "egg"
+	hatch_type = /mob/living/simple_animal/chicken/pomf
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf/examine(var/mob/user)
+	..()
+	spawn(30)
+		var/list/egg_speak = list(
+			"let me out",
+			"it's cramped in here",
+			"throw it",
+			"fulfill your destiny",
+			)
+		to_chat(user,"<span class='sinister'>...[pick(egg_speak)]...</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf/throw_impact(atom/hit_atom)
+	new hatch_type(loc)
+	playsound(loc, 'sound/items/egg_squash.ogg', 50, 1)
+	playsound(loc, 'sound/voice/chicken.ogg', 50, 1)
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/pomf/can_consume(mob/living/carbon/eater, mob/user)
+	to_chat(user,"<span class='warning'>The shell is too hard for your teeth. Is that really an egg?</span>")
+	return FALSE

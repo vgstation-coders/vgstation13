@@ -69,6 +69,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	..()
+	standard_damage_overlay_updates()
 	if(!stat && prob(speak_chance))
 		for(var/mob/M in view())
 			M << 'sound/effects/mousesqueek.ogg'
@@ -263,6 +264,9 @@
 
 /mob/living/simple_animal/mouse/unarmed_attack_mob(var/mob/living/target)
 	..()
+	if(isUnconscious())
+		return
+
 	if(!can_be_infected())
 		return
 	var/block = 0
@@ -428,6 +432,7 @@
 	// Mice IDs
 	if(namenumbers)
 		name = "[name] ([rand(1, 1000)])"
+		real_name = name
 	if(!_color)
 		_color = pick( list("brown","gray","white") )
 		initIcons()
@@ -518,7 +523,7 @@
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
 	..(TRUE)
-	if(!gibbed && !suiciding && loc != null)
+	if(!gibbed && !(mind && mind.suiciding) && loc != null)
 		explosion(get_turf(loc),-1,0,2)
 		gib()
 

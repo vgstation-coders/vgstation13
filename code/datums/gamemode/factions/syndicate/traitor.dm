@@ -4,6 +4,8 @@
 	required_pref = TRAITOR
 	desc = "A coalition of companies that actively work against Nanotrasen's intentions. Seen as Freedom fighters by some, Rebels and Malcontents by others."
 	logo_state = "synd-logo"
+	default_admin_voice = "The Syndicate"
+	admin_voice_style = "syndradio"
 
 //________________________________________________
 

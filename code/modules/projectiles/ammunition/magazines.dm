@@ -5,7 +5,8 @@
 	desc = "A magazine capable of holding bullets. Can be loaded into certain weapons."
 	exact = 1 //we only load the thing we want to load
 	materials = list(MAT_IRON = 200)
-
+	var/magoffsetx = null // difference between where magazine sprite overlay sprite starts
+	var/magoffsety = null // compared to where the magazine should be on the sprite
 
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"
@@ -198,6 +199,8 @@
 	max_ammo = 10
 	multiple_sprites = 1
 	sprite_modulo = 2
+	magoffsetx = 11
+	magoffsety = 11
 
 /obj/item/ammo_storage/magazine/m380auto/empty
 	starting_ammo = 0

@@ -100,7 +100,7 @@
 	max_shells = 2
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	fire_sound = 'sound/weapons/shotgun_small.ogg'
-	
+
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
 		return 1
@@ -167,7 +167,7 @@
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
-	
+
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/empty
 	ammo_type = null
 
@@ -204,3 +204,8 @@
 	var/MT = stored_magazine ? "[stored_magazine.max_ammo > 4 ? "-drum-20" : "-mag-4"]" : ""
 	icon_state = "[initial(icon_state)]["[MT]"][stored_magazine ? "" : "-m"][chambered ? "" : "-e"]"
 	item_state = icon_state
+
+/obj/item/weapon/gun/projectile/shotgun/nt12/widowmaker2000
+	name = "\improper Widowmaker 2000"
+	desc = "Also known as the \"Colt Widowmaker M2000 SMG shotgun\"."
+	w_class = W_CLASS_MEDIUM

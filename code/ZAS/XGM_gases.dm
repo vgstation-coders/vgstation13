@@ -12,7 +12,7 @@
 
 /obj/effect/overlay/gas_overlay
 	name = "gas"
-	plane = EFFECTS_PLANE
+	plane =	GAS_PLANE
 	layer = FLY_LAYER
 	icon = 'icons/effects/tile_effects.dmi'
 	mouse_opacity = 0

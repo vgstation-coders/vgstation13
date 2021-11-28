@@ -1,6 +1,6 @@
 /obj/item/weapon/melee/lance
 	name = "tournament lance"
-	desc = "A very long and heavy spear, used for jousting. "
+	desc = "A very long and heavy spear, used for jousting."
 
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/96x96.dmi', "right_hand" = 'icons/mob/in-hand/right/96x96.dmi')
 	item_state = "lance"
@@ -75,7 +75,7 @@
 
 /obj/effect/lance_trigger //This stays in front of the user (when the lance is lowered)
 	name = "lance tip"
-	desc = "Colliding with this is a bad idea"
+	desc = "Colliding with this is a bad idea."
 
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "toddler"

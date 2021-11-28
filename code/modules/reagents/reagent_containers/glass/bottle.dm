@@ -501,7 +501,7 @@ var/datum/disease2/disease/wizarditis = null
 
 /obj/item/weapon/reagent_containers/glass/bottle/pacid
 	name = "Polytrinic Acid Bottle"
-	desc = "A small bottle. Contains a small amount of Polytrinic Acid"
+	desc = "A small bottle. Contains a small amount of polytrinic acid."
 	icon = 'icons/obj/chemical.dmi'
 	//icon_state = "bottle17"
 
@@ -662,7 +662,7 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
 	..()
 	reagents.add_reagent(INSECTICIDE, 30)
-	
+
 /obj/item/weapon/reagent_containers/glass/bottle/plantbgone
 	name = "Plant-B-Gone Bottle"
 	desc = "A bottle of broad spectrum herbicide. A small decal shows a diona nymph with a no symbol on top."
@@ -699,3 +699,12 @@ var/datum/disease2/disease/wizarditis = null
 /obj/item/weapon/reagent_containers/glass/bottle/potassium/New()
 	..()
 	reagents.add_reagent(POTASSIUM, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/carppheromones
+	name = "Carp Pheromones Bottle"
+	desc = "A bottle filled with pheromones. It smells awful. A small decal shows a space carp giving a thumbs... err... fins up."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/carppheromones/New()
+	..()
+	reagents.add_reagent(CARPPHEROMONES, 30)

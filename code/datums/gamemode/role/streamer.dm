@@ -3,6 +3,8 @@
 	name = STREAMER
 	logo_state = "streamer-logo"
 	greets = list(GREET_DEFAULT, GREET_CUSTOM)
+	default_admin_voice = "PewDiePie"
+	admin_voice_style = "djradio"
 
 	var/list/followers = list()
 	var/list/subscribers = list()

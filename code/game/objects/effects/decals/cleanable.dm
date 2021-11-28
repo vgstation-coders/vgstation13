@@ -54,9 +54,11 @@ var/list/infected_cleanables = list()
 	update_icon()
 
 	if(counts_as_blood)
+		/* TODO (UPHEAVAL PART 2) : some ritual involving blood spilled over floors
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (cult)
 			cult.add_bloody_floor(get_turf(src))
+		*/
 		var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 		if(legacy_cult)
 			var/turf/T = get_turf(src)
@@ -171,37 +173,12 @@ var/list/infected_cleanables = list()
 	color = adjust_brightness(color, -50)
 	amount = 0
 
-/obj/effect/decal/cleanable/Crossed(mob/living/carbon/human/perp)
-	if(amount > 0)
-		add_blood_to(perp, amount)
+/obj/effect/decal/cleanable/Crossed(atom/movable/A)
+	if(ishuman(A))
+		var/mob/living/carbon/human/perp = A
+		if(amount > 0 && perp.on_foot())
+			add_blood_to(perp, amount)
 
-//With "mouse_opacity = 0", this kinda makes no sense.
-//And also, the bloody hands thing does not work properly.
-//
-//obj/effect/decal/cleanable/attack_hand(mob/living/carbon/human/user)
-//	..()
-//	if (amount && istype(user))
-//		add_fingerprint(user)
-//		if (user.gloves)
-//			return
-//		var/taken = rand(1,amount)
-//		amount -= taken
-//		to_chat(user, "<span class='notice'>You get some of \the [src] on your hands.</span>")
-//
-//		user.bloody_hands(src, taken)
-//		user.hand_blood_color = basecolor
-//		user.update_inv_gloves(1)
-
-//		if(transfers_dna)
-//			if (!user.blood_DNA)
-//				user.blood_DNA = list()
-//			user.blood_DNA |= blood_DNA.Copy()
-//		user.add_blood()
-//		user.bloody_hands += taken
-//		user.hand_blood_color = basecolor
-//		user.update_inv_gloves(1)
-//		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
-//
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1
 
@@ -251,9 +228,11 @@ var/list/infected_cleanables = list()
 
 /obj/effect/decal/cleanable/proc/bloodspill_add()
 	//new cult
+	/* TODO (UPHEAVAL PART 2) : some ritual involving blood spilled over floors
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
 		cult.add_bloody_floor(get_turf(src))
+	*/
 	//old cult
 	var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if(legacy_cult)
@@ -267,9 +246,11 @@ var/list/infected_cleanables = list()
 
 /obj/effect/decal/cleanable/proc/bloodspill_remove()
 	//new cult
+	/* TODO (UPHEAVAL PART 2) : some ritual involving blood spilled over floors
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
 		cult.remove_bloody_floor(get_turf(src))
+	*/
 	//old cult
 	var/datum/faction/cult/narsie/legacy_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if(legacy_cult)

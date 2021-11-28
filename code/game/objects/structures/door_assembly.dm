@@ -247,7 +247,7 @@
 			to_chat(user, "<span class='notice'>You wire the Airlock!</span>")
 		busy = 0
 
-	else if(iswirecutter(W) && state == 1 )
+	else if(W.is_wirecutter(user) && state == 1 )
 		busy = 1
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
@@ -350,6 +350,8 @@
 				door.req_one_access = src.electronics.conf_access
 			else
 				door.req_access = src.electronics.conf_access
+			door.req_access_dir = src.electronics.dir_access
+			door.access_not_dir = src.electronics.access_nodir
 			if(created_name)
 				door.name = created_name
 			else

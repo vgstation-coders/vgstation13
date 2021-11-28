@@ -6,9 +6,9 @@
 
 /datum/surgery_step/cavity
 	priority = 1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
+/datum/surgery_step/cavity/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	return (affected.open == (affected.encased ? 3 : 2) || (!affected.encased ? (target.species.anatomy_flags & NO_SKIN) : 0)) && !(affected.status & ORGAN_BLEEDING)
 
 /datum/surgery_step/cavity/proc/get_max_wclass(datum/organ/external/affected)
 	switch (affected.name)
@@ -153,13 +153,7 @@
 
 	if(istype(tool, /obj/item/weapon/implant))
 		var/obj/item/weapon/implant/timp = tool
-		timp.part = affected
-		affected.implants += timp
-		if(timp.implanted(target, user))
-			timp.forceMove(target)
-			timp.imp_in = target
-			timp.implanted = 1
-			timp.part = affected
+		timp.insert(target, affected.name, user)
 	affected.cavity = 0
 
 /datum/surgery_step/cavity/place_item/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -210,18 +204,17 @@
 				target.release_control()
 			worm.detach()
 
-		obj.forceMove(get_turf(target))
 		if(istype(obj,/obj/item/weapon/implant))
 			var/obj/item/weapon/implant/imp = obj
-			imp.handle_removal(user)
-			imp.imp_in = null
-			imp.implanted = 0
-			affected.implants -= imp
-			target.contents -= imp
+			imp.remove(user)
+			user.put_in_hands(imp)
+		else
+			obj.forceMove(get_turf(target))
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		affected.hidden.forceMove(get_turf(target))
+		user.put_in_hands(affected.hidden)
 		if(!affected.hidden.blood_DNA)
 			affected.hidden.blood_DNA = list()
 		affected.hidden.blood_DNA[target.dna.unique_enzymes] = target.dna.b_type

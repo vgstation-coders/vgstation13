@@ -12,8 +12,9 @@
  */
 /obj/effect/alien
 	name = "alien thing"
-	desc = "theres something alien about this"
+	desc = "There's something alien about this."
 	icon = 'icons/mob/alien.dmi'
+	mouse_opacity = 1
 	w_type=NOT_RECYCLABLE
 
 /*
@@ -23,7 +24,7 @@
 	name = "resin"
 	desc = "Looks like some kind of slimy growth."
 	icon_state = "resin"
-
+	pass_flags_self = PASSGLASS
 	density = 1
 	opacity = 1
 	anchored = 1
@@ -162,7 +163,7 @@
 /obj/effect/alien/resin/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)
 		return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return !opacity
 	return !density
 
@@ -286,7 +287,7 @@
 	//			continue
 
 			for(var/obj/O in T)
-				if(O.density)
+				if(!O.Cross(src, get_turf(T)))
 					continue direction_loop
 
 			new /obj/effect/alien/weeds(T, linked_node)
@@ -448,7 +449,7 @@
 	MAX_GROWTH_TIME = 3000
 
 /obj/effect/alien/egg
-	desc = "It looks like a weird egg"
+	desc = "It looks like a weird egg."
 	name = "egg"
 	icon_state = "egg_growing"
 	density = 0

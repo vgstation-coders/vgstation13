@@ -34,6 +34,7 @@
 /obj/effect/bmode//Cleaning up the tree a bit
 	density = 1
 	anchored = 1
+	mouse_opacity = 1 //So we can actually click these
 	layer = HUD_ITEM_LAYER
 	plane = HUD_PLANE
 	dir = NORTH
@@ -53,21 +54,19 @@
 /obj/effect/bmode/builddir
 	icon_state = "build"
 	screen_loc = "NORTH,WEST"
-	Click()
-		switch(dir)
-			if(NORTH)
-				dir = EAST
-			if(EAST)
-				dir = SOUTH
-			if(SOUTH)
-				dir = WEST
-			if(WEST)
-				dir = SOUTHWEST
-			if(SOUTHWEST)
-				dir = NORTH
-		return 1
-	DblClick(object,location,control,params)
-		return Click(object,location,control,params)
+/obj/effect/bmode/builddir/Click()
+	switch(dir)
+		if(NORTH)
+			dir = EAST
+		if(EAST)
+			dir = SOUTH
+		if(SOUTH)
+			dir = WEST
+		if(WEST)
+			dir = SOUTHWEST
+		if(SOUTHWEST)
+			dir = NORTH
+	return 1
 
 /obj/effect/bmode/buildhelp
 	icon = 'icons/misc/buildmode.dmi'
@@ -160,7 +159,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 	var/strictness = FALSE
 	var/warnings = TRUE
 
-obj/effect/bmode/buildholder/New()
+/obj/effect/bmode/buildholder/New()
 	..()
 	buildmodeholders |= src
 
@@ -235,8 +234,7 @@ obj/effect/bmode/buildholder/New()
 				if(isnull(partial_type))
 					return
 
-				var/list/matches = get_matching_types(partial_type, /atom)
-				objholder = input("Select type", "Typepath") as null|anything in matches
+				objholder = filter_list_input("Select type", "Typepath", get_matching_types(partial_type, /atom))
 
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
@@ -358,13 +356,13 @@ obj/effect/bmode/buildholder/New()
 								if(!v_typechk(thing,chosen,strict))
 									continue
 								var/atom/A = new whatfill(T)
-								A.dir = thing.dir
+								A.change_dir(thing.dir)
 								qdel(thing)
 								CHECK_TICK
 						else
 							var/obj/A = new whatfill(T)
 							if(istype(A))
-								A.dir = holder.builddir.dir
+								A.change_dir(holder.builddir.dir)
 				CHECK_TICK
 			if(deletions)
 				to_chat(usr, "<span class='info'>Successfully deleted [deletions] [chosen]'\s</span>")
@@ -431,18 +429,16 @@ obj/effect/bmode/buildholder/New()
 	switch(buildmode)
 		if(1)
 			if(istype(object,/turf) && pa.Find("left") && !pa.Find("alt") && !pa.Find("ctrl") )
-				if(istype(object,/turf/space))
-					var/turf/T = object
+				var/turf/T = object
+				if(istype(T,get_base_turf(T.z)))
 					T.ChangeTurf(/turf/simulated/floor)
 					log_admin("[key_name(usr)] made a floor at [formatJumpTo(T)]")
 					return
-				else if(istype(object,/turf/simulated/floor))
-					var/turf/T = object
+				else if(istype(T,/turf/simulated/floor))
 					T.ChangeTurf(/turf/simulated/wall)
 					log_admin("[key_name(usr)] made a wall at [formatJumpTo(T)]")
 					return
-				else if(istype(object,/turf/simulated/wall))
-					var/turf/T = object
+				else if(istype(T,/turf/simulated/wall))
 					T.ChangeTurf(/turf/simulated/wall/r_wall)
 					log_admin("[key_name(usr)] made an rwall at [formatJumpTo(T)]")
 					return
@@ -454,7 +450,7 @@ obj/effect/bmode/buildholder/New()
 					return
 				else if(istype(object,/turf/simulated/floor))
 					var/turf/T = object
-					T.ChangeTurf(/turf/space)
+					T.ChangeTurf(get_base_turf(T.z))
 					log_admin("[key_name(usr)] removed flooring at [formatJumpTo(T)]")
 					return
 				else if(istype(object,/turf/simulated/wall/r_wall))
@@ -473,16 +469,16 @@ obj/effect/bmode/buildholder/New()
 				switch(holder.builddir.dir)
 					if(NORTH)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = NORTH
+						WIN.change_dir(NORTH)
 					if(SOUTH)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = SOUTH
+						WIN.change_dir(SOUTH)
 					if(EAST)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = EAST
+						WIN.change_dir(EAST)
 					if(WEST)
 						var/obj/structure/window/reinforced/WIN = new/obj/structure/window/reinforced(get_turf(object))
-						WIN.dir = WEST
+						WIN.change_dir(WEST)
 					if(SOUTHWEST)
 						new/obj/structure/window/full/reinforced(get_turf(object))
 		if(2)
@@ -596,13 +592,13 @@ obj/effect/bmode/buildholder/New()
 													if(!istype(thing, chosen))
 														continue
 												var/atom/A = new holder.buildmode.objholder(T)
-												A.dir = thing.dir
+												A.change_dir(thing.dir)
 												qdel(thing)
 												CHECK_TICK
 										else
 											var/obj/A = new holder.buildmode.objholder(T)
 											if(istype(A))
-												A.dir = holder.builddir.dir
+												A.change_dir(holder.builddir.dir)
 								CHECK_TICK
 							holder.fill_left = null
 							holder.fill_right = null
@@ -624,7 +620,7 @@ obj/effect/bmode/buildholder/New()
 						var/atom/movable/A = new holder.buildmode.copycat.type(get_turf(object))
 						if(istype(A))
 							A.appearance = holder.buildmode.copycat.appearance
-							A.dir = holder.builddir.dir
+							A.change_dir(holder.builddir.dir)
 					log_admin("[key_name(usr)] made a [holder.buildmode.copycat.type] at [formatJumpTo(RT)]")
 				else
 					if(ispath(holder.buildmode.objholder,/turf)) //Handle turf changing
@@ -637,7 +633,7 @@ obj/effect/bmode/buildholder/New()
 					else //Handle object spawning
 						var/obj/A = new holder.buildmode.objholder (get_turf(object))
 						if(istype(A))
-							A.dir = holder.builddir.dir
+							A.change_dir(holder.builddir.dir)
 					log_admin("[key_name(usr)] made a [holder.buildmode.objholder] at [formatJumpTo(RT)]")
 			else if(pa.Find("right"))
 				log_admin("[key_name(usr)] deleted a [object] at [formatJumpTo(RT)]")

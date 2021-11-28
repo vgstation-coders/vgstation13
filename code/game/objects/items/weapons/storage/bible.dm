@@ -19,7 +19,7 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
-/obj/item/weapon/storage/bible/suicide_act(mob/living/user)
+/obj/item/weapon/storage/bible/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
 	user.emote("fart")
 	sleep(1 SECONDS) //Wait for it
@@ -63,6 +63,7 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+		M.assaulted_by(user)
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
@@ -159,7 +160,7 @@
 	if(ishuman(M)) //Only humans can be vampires or cultists.
 		var/mob/living/carbon/human/H = M
 		V = isvampire(M)
-		if(V && (/datum/power/vampire/mature in V.current_powers) && my_rel.leadsThisReligion(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
+		if(V && (locate(/datum/power/vampire/mature) in V.current_powers) && my_rel.leadsThisReligion(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
 			to_chat(H, "<span class='warning'>[my_rel.deity_name]'s power nullifies your own!</span>")
 			if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 				V.nullified = min(5, V.nullified + 2)
@@ -213,7 +214,7 @@
 		var/mob/living/carbon/human/H = user
 		var/datum/role/vampire/V = isvampire(H)
 		var/datum/role/cultist/C = isanycultist(H)
-		if(V && (!(/datum/power/vampire/undying in V.current_powers))) //We are a Vampire, we aren't very smart
+		if(V && (!(locate(/datum/power/vampire/undying) in V.current_powers))) //We are a Vampire, we aren't very smart
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
 			V.smitecounter += 10
 		if(C) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
@@ -272,11 +273,10 @@
 	deconvertee.Dizzy(30)
 	deconvertee.stuttering = max(deconvertee.stuttering, 10)
 	deconvertee.Jitter(30)
-	if (!deconvertee.checkTattoo(TATTOO_HOLY))
-		if (!bible.my_rel.leadsThisReligion(deconverter))
-			deconvertee.Knockdown(5)
-		else
-			deconvertee.Knockdown(10)
+	if (!bible.my_rel.leadsThisReligion(deconverter))
+		deconvertee.Knockdown(5)
+	else
+		deconvertee.Knockdown(10)
 
 	if (istype(bible.my_rel, /datum/religion/cult))
 		cult_chaplain = TRUE

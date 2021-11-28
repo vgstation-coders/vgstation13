@@ -6,10 +6,10 @@
 	density = 1
 	explosion_block = 2
 	blocks_air = 1
-
+	flags = TIMELESS
 	holomap_draw_override = HOLOMAP_DRAW_FULL
-
 	var/walltype = "riveted"
+
 /turf/unsimulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(/turf/unsimulated/wall)
 	return smoothables
@@ -90,7 +90,7 @@
 
 /turf/unsimulated/wall/cult
 	name = "wall"
-	desc = "The patterns engraved on the wall seem to shift as you try to focus on them. You feel sick"
+	desc = "The patterns engraved on the wall seem to shift as you try to focus on them. You feel sick."
 	icon_state = "cult0"
 	opacity = 1
 	density = 1
