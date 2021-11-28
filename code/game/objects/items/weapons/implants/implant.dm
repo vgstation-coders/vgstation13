@@ -27,7 +27,7 @@
 		part = organ
 	forceMove(target)
 	imp_in = target
-	implanted(implanter, target)
+	implanted(implanter)
 	return TRUE
 
 // Call this to remove the implant. Do not do anything else in order to remove the implant.
